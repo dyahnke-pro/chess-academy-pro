@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2173 lines · 15 exports · 62 importers · 46 tests · 1 audits**
+**2175 lines · 16 exports · 63 importers · 46 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -58,6 +58,7 @@
 - `src/services/principleVoice.test.ts`
 - `src/services/principleVoice.ts`
 - `src/services/principleVoiceGuarded.test.ts`
+- `src/services/queenChased.ts`
 - `src/services/recordRevs.gate.test.ts`
 - `src/services/replayFence.bowdler1000.test.ts`
 - `src/services/replayFence.sicilian1200.test.ts`
@@ -109,6 +110,9 @@
 
 ### `captureIsTrade` (function) — 1 call site
 - `src/services/misconceptionClassifier.ts:344`
+
+### `tempoTargets` (function) — 1 call site
+- `src/services/queenChased.ts:69`
 
 ### `planTargets` (function) — 2 call sites
 - `src/services/principleAttribution.section14.test.ts:153`

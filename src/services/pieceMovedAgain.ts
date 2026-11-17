@@ -43,7 +43,7 @@ export interface MovedAgain {
   mover: Color;
 }
 
-interface Tracked {
+export interface Tracked {
   /** Where the piece started (its identity). */
   origin: string;
   moves: number;
@@ -64,14 +64,15 @@ function placement(fen: string): string {
   return fen.split(' ')[0];
 }
 
-/** The read on the move `san` played after `history` (every move from the
- *  start position), or null. `student` seats the words; `costCp` is what
- *  the move cost its mover against the best move, null when unknown. */
-export function pieceMovedAgain(history: readonly string[], san: string, student: Color, costCp: number | null): MovedAgain | null {
-  if (history.length >= OPENING_PLIES) return null;
+/** EVERY PIECE'S TRIPS SO FAR, read off the game's own moves from the start:
+ *  each piece keyed by the square it stands on now, with where it started,
+ *  how many moves it has made and every square it has stood on. The one
+ *  tracker — the piece moved again and the queen chased in the opening
+ *  (`queenChased`) count with it. Null when the moves do not play. */
+export function pieceTrips(history: readonly string[]): { board: Chess; pieces: Map<string, Tracked> } | null {
   const board = new Chess();
   const pieces = new Map<string, Tracked>();
-  const track = (mv: Move, fenBefore: string): Tracked | null => {
+  const track = (mv: Move, fenBefore: string): void => {
     let t = pieces.get(mv.from);
     if (!t) { t = { origin: mv.from, moves: 0, stood: [mv.from], firstFen: null }; }
     pieces.delete(mv.from);
@@ -79,7 +80,6 @@ export function pieceMovedAgain(history: readonly string[], san: string, student
     t.moves += 1;
     t.stood.push(mv.to);
     pieces.set(mv.to, t);
-    return t;
   };
   try {
     for (const s of history) {
@@ -96,6 +96,17 @@ export function pieceMovedAgain(history: readonly string[], san: string, student
       }
     }
   } catch { return null; }
+  return { board, pieces };
+}
+
+/** The read on the move `san` played after `history` (every move from the
+ *  start position), or null. `student` seats the words; `costCp` is what
+ *  the move cost its mover against the best move, null when unknown. */
+export function pieceMovedAgain(history: readonly string[], san: string, student: Color, costCp: number | null): MovedAgain | null {
+  if (history.length >= OPENING_PLIES) return null;
+  const trips = pieceTrips(history);
+  if (!trips) return null;
+  const { board, pieces } = trips;
   const fenBefore = board.fen();
   let mv: Move;
   try { mv = board.move(san); } catch { return null; }

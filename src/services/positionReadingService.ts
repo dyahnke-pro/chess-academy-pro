@@ -1133,25 +1133,50 @@ export function findRookLift(fen: string, color: Color): { rook: Square; to: Squ
   return null;
 }
 
-/** BLOCKADE — a friendly knight or bishop sitting DIRECTLY in front of an enemy
- *  passed pawn, the square from which it can neither be pushed past nor easily
- *  evicted. Naroditsky's "the knight is a perfect blockader". Returns the
- *  blockading piece's square + the pawn it holds. Pure geometry (G3). */
-export function findBlockade(fen: string, color: Color): { blocker: Square; pawn: Square } | null {
+/** A BLOCKADE: a piece of the blockading side standing DIRECTLY in front of an
+ *  enemy pawn that is passed or isolated, so the pawn cannot move. */
+export interface Blockade {
+  blocker: Square;
+  /** The blockading piece's type. */
+  piece: PieceSymbol;
+  pawn: Square;
+  passed: boolean;
+  isolated: boolean;
+}
+
+/** EVERY BLOCKADE `color` holds: each enemy passed or isolated pawn with a
+ *  piece of `color` (not a pawn) on the square directly in front of it —
+ *  passers first, in the structure's order. The one blockade read: the
+ *  knight-or-bishop blockade of a passer (`findBlockade`) and the move that
+ *  sets or lifts one (`blockade`) both read it. Pure geometry (G3). */
+export function findBlockades(fen: string, color: Color): Blockade[] {
   let chess: Chess;
-  try { chess = new Chess(fen); } catch { return null; }
+  try { chess = new Chess(fen); } catch { return []; }
   const enemy: Color = color === 'w' ? 'b' : 'w';
-  const enemyPassers = findPassedPawns(fen, enemy);
+  const passed = findPassedPawns(fen, enemy);
+  const isolated = findWeakPawns(fen, enemy).isolated;
   const enemyForward = enemy === 'w' ? 1 : -1;
-  for (const pawn of enemyPassers) {
+  const out: Blockade[] = [];
+  for (const pawn of [...passed, ...isolated.filter((sq) => !passed.includes(sq))]) {
     const f = pawn.charCodeAt(0) - 97;
     const r = Number(pawn[1]) + enemyForward;
     if (r < 1 || r > 8) continue;
     const front = `${String.fromCharCode(97 + f)}${r}` as Square;
     const p = chess.get(front);
-    if (p && p.color === color && (p.type === 'n' || p.type === 'b')) return { blocker: front, pawn };
+    if (p && p.color === color && p.type !== 'p') {
+      out.push({ blocker: front, piece: p.type, pawn, passed: passed.includes(pawn), isolated: isolated.includes(pawn) });
+    }
   }
-  return null;
+  return out;
+}
+
+/** BLOCKADE — a friendly knight or bishop sitting DIRECTLY in front of an enemy
+ *  passed pawn, the square from which it can neither be pushed past nor easily
+ *  evicted. Naroditsky's "the knight is a perfect blockader". Returns the
+ *  blockading piece's square + the pawn it holds. Pure geometry (G3). */
+export function findBlockade(fen: string, color: Color): { blocker: Square; pawn: Square } | null {
+  const b = findBlockades(fen, color).find((x) => x.passed && (x.piece === 'n' || x.piece === 'b'));
+  return b ? { blocker: b.blocker, pawn: b.pawn } : null;
 }
 
 /** STRUCTURE TRANSFER (census: "structure transfer on the opening name"): the

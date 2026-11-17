@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7846 lines · 123 exports · 95 importers · 71 tests · 8 audits**
+**7858 lines · 123 exports · 96 importers · 72 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -92,6 +92,7 @@
 - `src/services/learnMoveTeaching.ts`
 - `src/services/liveVoiceDefects.test.ts`
 - `src/services/materialSites.test.ts`
+- `src/services/minorMatchup.test.ts`
 - `src/services/mistakeNarration.ts`
 - `src/services/moveAllowed.ts`
 - `src/services/moveInsight.ts`
@@ -233,7 +234,7 @@
 - `src/services/pieceActivity.test.ts:40`
 - `src/services/pieceActivity.test.ts:48`
 
-### `assemblePositionAssessment` (function) — 22 call sites
+### `assemblePositionAssessment` (function) — 23 call sites
 - `src/services/coachApi.ts:2550`
 - `src/services/coachApi.ts:2725`
 - `src/services/coachApi.ts:6679`
@@ -254,6 +255,7 @@
 - `src/services/groundedAnswer.test.ts:1010`
 - `src/services/liveVoiceDefects.test.ts:101`
 - `src/services/liveVoiceDefects.test.ts:142`
+- `src/services/minorMatchup.test.ts:82`
 - `src/services/tacticsContextIdentity.test.ts:106`
 - `src/test/everySurfaceSpeaks.test.ts:127`
 
@@ -1123,7 +1125,7 @@
 - `src/services/coachApi.ts:6279`
 
 ### `seatPieceReferences` (re-export) — 40 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9377`
+- `src/components/Coach/CoachTeachPage.tsx:9380`
 - `src/services/coachFeatureService.ts:5420`
 - `src/services/coachFeatureService.ts:5509`
 - `src/services/coachFeatureService.ts:6555`
@@ -1220,6 +1222,7 @@
 - `src/services/kingTopicAnswer.test.ts`
 - `src/services/liveVoiceDefects.test.ts`
 - `src/services/materialSites.test.ts`
+- `src/services/minorMatchup.test.ts`
 - `src/services/oneWorstPiece.test.ts`
 - `src/services/pieceActivity.test.ts`
 - `src/services/piecePurpose.test.ts`

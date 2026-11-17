@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**176 lines · 8 exports · 6 importers · 2 tests · 3 audits**
+**159 lines · 6 exports · 6 importers · 2 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -30,50 +30,43 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `PIN_PRESSURE_PRINCIPLE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `findPinPressure` (function) — 14 call sites
-- `src/services/moveFundamentals.ts:385`
+### `findPinPressure` (function) — 15 call sites
+- `src/services/moveFundamentals.ts:425`
 - `src/services/pinBreak.test.ts:46`
 - `src/services/pinPressure.test.ts:18`
 - `src/services/pinPressure.test.ts:27`
 - `src/services/pinPressure.test.ts:31`
-- `src/services/pinPressure.test.ts:43`
+- `src/services/pinPressure.test.ts:36`
+- `src/services/pinPressure.test.ts:44`
 - `src/services/pinPressure.test.ts:64`
 - `src/services/pinPressure.test.ts:69`
-- `src/services/positionFacts.ts:1995`
-- `src/services/principleAttribution.ts:894`
-- `src/services/principleAttribution.ts:903`
-- `src/services/principleAttribution.ts:928`
-- `src/services/principleAttribution.ts:931`
+- `src/services/positionFacts.ts:2135`
+- `src/services/principleAttribution.ts:948`
+- `src/services/principleAttribution.ts:957`
+- `src/services/principleAttribution.ts:982`
+- `src/services/principleAttribution.ts:985`
 - `src/services/thinkingTargetsStep.ts:211`
-
-### `isPinPressureMove` (function) — 2 call sites
-- `src/services/pinPressure.test.ts:36`
-- `src/services/pinPressure.test.ts:37`
-
-### `pinPressureThreat` (function) — 1 call site
-- `src/services/pinPressure.test.ts:56`
 
 ### `PIN_PRESSURE_WARNING` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `pieceName` (function) — 17 call sites
+### `pieceName` (function) — 16 call sites
 - `scripts/pro-repertoire/build-all-naroditsky-plans.mjs:279`
 - `scripts/pro-repertoire/build-all-naroditsky-plans.mjs:284`
 - `scripts/pro-repertoire/build-all-naroditsky-plans.mjs:292`
 - `scripts/pro-repertoire/build-all-naroditsky-plans.mjs:294`
-- `src/services/positionFacts.ts:1996`
-- `src/services/positionFacts.ts:2003`
-- `src/services/positionFacts.ts:2035`
-- `src/services/positionFacts.ts:2036`
+- `src/services/positionFacts.ts:2136`
+- `src/services/positionFacts.ts:2143`
+- `src/services/positionFacts.ts:2180`
+- `src/services/positionFacts.ts:2181`
 - `src/services/tacticClassifier.ts:36`
 - `src/services/tacticClassifier.ts:166`
 - `src/services/tacticClassifier.ts:168`
-- `src/services/tacticClassifier.ts:221`
-- `src/services/tacticClassifier.ts:264`
-- `src/services/tacticClassifier.ts:292`
-- `src/services/tacticClassifier.ts:330`
-- `src/services/tacticClassifier.ts:383`
-- `src/services/tacticClassifier.ts:441`
+- `src/services/tacticClassifier.ts:230`
+- `src/services/tacticClassifier.ts:258`
+- `src/services/tacticClassifier.ts:296`
+- `src/services/tacticClassifier.ts:349`
+- `src/services/tacticClassifier.ts:407`
 
 ## Tests
 

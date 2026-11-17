@@ -44,6 +44,46 @@ describe('perpetualCheck: checks the king cannot run from', () => {
   });
 });
 
+// A SET-UP BOARD (David 2026-11-17: "a set-up board" for the perpetual — no
+// game in the corpus has the side a rook down saving itself this cleanly).
+// White has two rooks on the seventh, two knights and two pawns against
+// Black's queen and two pawns: seven points up. With White to move it is mate
+// in two (Ra8+ …Qd8 Rxd8#). With Black to move the queen checks from f2 and
+// f1 forever: Kh2 has only h1 and back, g1 and g2 are covered, and no white
+// piece reaches f1, f2, g1 or g2 to take or block.
+// Stockfish 16 (/usr/games/stockfish), depth 22, Black to move: score cp 0,
+// pv d4f2 h2h1 f2f1 h1h2 — a draw. White to move, depth 20: mate 2.
+const SAVE = '6k1/RR4pp/8/8/3q4/6PP/7K/NN6 b - - 0 1';
+const DRAW_READ = [{ cp: 0, mate: null, moves: ['h2h1', 'f2f1', 'h1h2', 'f1f2'] }];
+
+describe('perpetualCheck on a set-up board: a rook and more down, the checks save the game', () => {
+  it('the queen\'s checks from f2 and f1 come back to the same board (chess.js, the computer\'s own search)', () => {
+    const p = perpetualCheck(SAVE);
+    expect(p).toMatchObject({ side: 'b', king: 'h2', down: 7 });
+    expect(p!.from.map((f) => f.square)).toEqual(['f2', 'f1']);
+    expect(p!.checks).toEqual(['Qf2+', 'Qf1+', 'Qf2+']);
+    // The checks repeat: playing the line lands on a board already seen.
+    const c = new Chess(SAVE);
+    const seen = [c.fen().split(' ').slice(0, 4).join(' ')];
+    for (const u of p!.line) { c.move({ from: u.slice(0, 2), to: u.slice(2, 4) }); seen.push(c.fen().split(' ').slice(0, 4).join(' ')); }
+    expect(new Set(seen).size).toBeLessThan(seen.length);
+  });
+  it('said as the draw that saves the game, for the side behind', () => {
+    expect(perpetualLine(perpetualCheck(SAVE)!, true, false, SAVE)).toBe('Their king on h2 cannot escape your queen. Checks from f2 and f1 come back to the same position, a perpetual check. You are behind on material, and the draw saves the game.');
+  });
+  it('Qf2+ starts it, both seats, with the engine\'s draw read', () => {
+    const mine = readBoard('perpetualCheck', { fenBefore: SAVE, san: 'Qf2+', student: 'b', replies: DRAW_READ });
+    expect(mine?.seat).toBe('student');
+    expect(mine?.text).toBe('A perpetual: your queen goes back and forth between f2 and f1, and every move of their king on h2 runs into the next check. You are behind on material, and the draw saves the game.');
+    const theirs = readBoard('perpetualCheck', { fenBefore: SAVE, san: 'Qf2+', student: 'w', replies: DRAW_READ });
+    expect(theirs?.seat).toBe('opponent');
+    expect(theirs?.text).toMatch(/your king on h2 .*They are behind on material, and the draw saves the game for them\.$/);
+  });
+  it('a quiet queen move starts nothing (negative control)', () => {
+    expect(perpetualStartedBy(SAVE, 'Qd6')).toBeNull();
+  });
+});
+
 describe('both seats, through the one registry', () => {
   it('said for the student who gives the checks, when no engine read says more', () => {
     const f = readBoard('perpetualCheck', { fenBefore: FEN, san: 'Qb8+', student: 'w', replies: [] });
