@@ -48,8 +48,15 @@ describe('rule 1 — one decision, one gap', () => {
       expect(stakeWc(f.stakes)).toBeLessThanOrEqual(g + 1e-9);
     }
     const said = lessonThought(input, newLessonVoice(), null);
-    // Developing with tempo is the tempo idea, not the plain develop.
-    expect(said).toMatch(new RegExp(`^${introHead('student', 'Nc3', 'now')}develops into the game with tempo`));
+    // Developing with tempo is the tempo idea, not the plain develop: the turn
+    // leads with the queen hit and the time it wins. Since 2026-11-17 the
+    // queen-chase computer says it deeper (the queen's early trip, nothing
+    // developed behind it, the move it spends running), so the plain
+    // "develops into the game" never leads.
+    expect(said).toMatch(/^Their queen .*d5/);
+    expect(said).toMatch(/knight on c3 (?:attacks|hits) it/);
+    expect(said).toMatch(/(?:gain a move|spend developing)/);
+    expect(said).not.toMatch(new RegExp(`^${introHead('student', 'Nc3', 'now')}develops into the game,`));
   });
   it('with no fan to measure the gap, the whole group is unmeasured — never a partial gap', () => {
     const facts = moveThoughtFacts({ plainThreatsSeen: false, ...scandinavianNc3(null), phrases: null }).filter((f) => f.group === 'move');
