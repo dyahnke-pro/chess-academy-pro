@@ -311,7 +311,7 @@ export function temptingRefutations(args: Parameters<typeof temptingRefuted>[0])
 
 /** The one board-true difference between two moves from the same board. */
 export interface MoveDifference {
-  kind: 'loose' | 'activity' | 'structure';
+  kind: 'loose' | 'activity' | 'structure' | 'file';
   /** From the seat of the side that moved. */
   text: string;
   /** The same difference with no move and no square — Learn's held form,
@@ -393,6 +393,22 @@ function newFaultsAfter(fenBefore: string, m: Move, follow: readonly string[] | 
  * seat; the move named first (`a`) is the one the difference favours. Null
  * when the board shows none — then the two are not compared out loud.
  */
+/** A pawn capture that leaves its own file with no pawn of the mover's on it,
+ *  with a rook of the mover's standing on that file. */
+function opensRookFile(fenBefore: string, m: Move): { file: string; rook: string } | null {
+  if (m.piece !== 'p' || !m.captured || m.from[0] === m.to[0]) return null;
+  const file = m.from[0];
+  let after: Chess;
+  try { after = new Chess(fenBefore); after.move(m.san); } catch { return null; }
+  let rook: string | null = null;
+  for (let r = 1; r <= 8; r++) {
+    const p = after.get(`${file}${r}` as Square);
+    if (p?.color === m.color && p.type === 'p') return null;
+    if (p?.color === m.color && p.type === 'r' && !rook) rook = `${file}${r}`;
+  }
+  return rook ? { file, rook } : null;
+}
+
 export function moveDifference(
   fenBefore: string, sanA: string, sanB: string, own: 'your' | 'their',
   /** REQUIRED: the line the surface read after each move (UCI, the reply
@@ -420,6 +436,25 @@ export function moveDifference(
       // statement" — "the other leaves one loose" named nothing).
       held: `${own === 'your' ? 'yours' : 'theirs'} keeps ${own} ${NAME[cmp.piece] ?? 'piece'} on ${cmp.square} guarded, and the other leaves it loose`,
       heldOther: `the other keeps ${own} ${NAME[cmp.piece] ?? 'piece'} on ${cmp.square} guarded, and ${own === 'your' ? 'yours' : 'theirs'} leaves it loose` };
+  }
+  // A PAWN CAPTURE THAT OPENS A FILE FOR THE MOVER'S OWN ROOK (Danya aEKS
+  // 14…fxe4: "it opens the f-file for the rook"; …dxe4 keeps it shut): the
+  // board's reason one recapture is the better of two that both hold.
+  const opA = opensRookFile(fenBefore, a);
+  const opB = opensRookFile(fenBefore, bm);
+  if (opA && !opB) {
+    const rook = `${own} rook on ${opA.rook}`;
+    return { kind: 'file', favours: a.san, other: bm.san, squares: [opA.rook, `${opA.file}${a.color === 'w' ? 8 : 1}`],
+      text: `${a.san} opens the ${opA.file}-file for ${rook}, and ${bm.san} keeps it shut`,
+      held: `${own === 'your' ? 'yours' : 'theirs'} opens the ${opA.file}-file for ${rook}`,
+      heldOther: `the other opens the ${opA.file}-file for ${rook}` };
+  }
+  if (opB && !opA) {
+    const rook = `${own} rook on ${opB.rook}`;
+    return { kind: 'file', favours: bm.san, other: a.san, squares: [opB.rook, `${opB.file}${bm.color === 'w' ? 8 : 1}`],
+      text: `${bm.san} opens the ${opB.file}-file for ${rook}, and ${a.san} keeps it shut`,
+      held: `${own === 'your' ? 'yours' : 'theirs'} opens the ${opB.file}-file for ${rook}`,
+      heldOther: `the other opens the ${opB.file}-file for ${rook}` };
   }
   // Developing or castling first is the fundamentals' lesson (said by their
   // own computers on the move itself); between two moves of one worth it

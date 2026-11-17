@@ -11,8 +11,10 @@ describe('both keep the win is one claim, whatever the moves', () => {
       reads: [read('f3e5', 738), read('e2a6', 699), read('e2c4', 629), read('d2g5', 615)] });
     const b = readBoardAll('alsoGood', { fenBefore: 'rn1q1rk1/pp6/2pbb1pp/3p1p2/3PB3/2N1P3/PPP3PP/R1BQK2R b KQ - 0 14', san: 'fxe4', student: 'b', rating: 1500,
       reads: [read('f5e4', -638), read('d5e4', -576), read('d8h4', -352), read('b8d7', -184)] });
-    const both = [...a, ...b].filter((f) => /take your pick/.test(f.text));
-    expect(both.length).toBe(2);
-    expect(new Set(both.flatMap((f) => f.claims))).toEqual(new Set(['also-good:both-win']));
+    expect(a.map((f) => f.text).join(' ')).toMatch(/take your pick/);
+    expect(a.flatMap((f) => f.claims)).toEqual(['also-good:both-win']);
+    // …and where the board separates them, it says how (Danya: "it opens the
+    // f-file, a road for the rooks").
+    expect(b.map((f) => f.text).join(' ')).toMatch(/fxe4 opens the f-file for your rook on f8, and dxe4 keeps it shut/);
   });
 });
