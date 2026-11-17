@@ -27,7 +27,7 @@ import { INACCURACY_CP } from './engineConstants';
 const VAL: Readonly<Record<string, number>> = MATERIAL_VALUE;
 const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
-type TradeCall = 'good' | 'bad' | 'ahead' | 'behind';
+type TradeCall = 'good' | 'bad' | 'ahead' | 'behind' | 'mixed';
 
 interface TradeRead {
   /** From the MOVER's side. */
@@ -125,6 +125,28 @@ export function recaptureDamage(after: Chess, sq: Square): 'doubled' | 'isolated
   if (isolated) return 'isolated';
   if (kingCover) return 'king-cover';
   return null;
+}
+
+/** The file a pawn recapture on `sq` opens for the recapturing side's rook:
+ *  every pawn retake leaves the file it came from with none of that side's
+ *  pawns on it and one of its rooks already standing there (Danya, lyUZ 7.Qxb6
+ *  axb6: "the trade hands Black the half-open a-file"). Null otherwise, or when
+ *  a piece can take back instead. */
+export function recaptureOpensFile(after: Chess, sq: Square): string | null {
+  const caps = after.moves({ verbose: true }).filter((m) => m.to === sq && m.captured);
+  if (caps.length === 0 || caps.some((m) => m.piece !== 'p')) return null;
+  const side = after.turn();
+  let file: string | null = null;
+  for (const m of caps) {
+    after.move(m);
+    const f = m.from[0];
+    const onFile = after.board().flat().filter((c) => c && c.square[0] === f && c.color === side);
+    after.undo();
+    if (onFile.some((c) => c!.type === 'p') || !onFile.some((c) => c!.type === 'r')) return null;
+    if (file && file !== f) return null;
+    file = f;
+  }
+  return file;
 }
 
 function noteAt(notes: readonly PieceQualityNote[], sq: string): PieceQualityNote | null {
@@ -235,6 +257,14 @@ export function readTrade(
   if (mv.piece === 'b' && mv.captured === 'n' && bishopCount(board0, mover) === 2 && bishopCount(board0, enemy) < 2) {
     bad.push({ why: `it gives up the bishop pair`, key: 'pair-given', sq: [mv.from] });
   }
+  // A BISHOP FOR A KNIGHT AGAINST A SIDE THAT KEEPS BOTH ITS BISHOPS hands
+  // that side the pair (Danya, QUk 10.Nxc5 Bxc5 dxc5: "White gets the bishop
+  // pair and a great position"; the judge heard only the doubled c-pawns).
+  if (mv.piece === 'b' && mv.captured === 'n' && bishopCount(board0, enemy) === 2) {
+    bad.push({ why: `it hands ${you ? 'them' : 'you'} the bishop pair`, key: 'pair-handed', sq: [mv.from] });
+  }
+  const opened = recaptureOpensFile(new Chess(after.fen()), mv.to);
+  if (opened) bad.push({ why: `taking back opens the ${opened}-file for ${theirs('rook')}`, key: 'opens-file', sq: [mv.to] });
   const damage = recaptureDamage(new Chess(after.fen()), mv.to);
   if (damage === 'doubled') good.push({ why: `taking back doubles ${theirs('pawns')}`, key: 'doubles', sq: [mv.to] });
   if (damage === 'isolated') good.push({ why: `taking back leaves ${theirs('pawn')} on ${mv.to} isolated`, key: 'isolates', sq: [mv.to] });
@@ -253,7 +283,10 @@ export function readTrade(
   // A trade that removes their BEST piece still stands on its own.
   const edge0 = settledLeadFor(fenBefore, mover, priorMove);
   const STRUCTURAL = new Set(['doubles', 'isolates', 'cover']);
-  if (edge0 <= -1 && good.length && !bad.length && good.every((g) => STRUCTURAL.has(g.key))) {
+  // What the recapture hands the side that is ahead (the pair, a file) only
+  // adds to "trades help you": the count still leads the verdict.
+  const HANDED = new Set(['pair-handed', 'opens-file']);
+  if (edge0 <= -1 && good.length && bad.every((b) => HANDED.has(b.key)) && good.every((g) => STRUCTURAL.has(g.key))) {
     // Say BOTH halves — the dent and the count — because that weighing is the
     // lesson (Naroditsky at this exact move: "you take, inviting the trade —
     // White can't exploit it").
@@ -291,6 +324,17 @@ export function readTrade(
   if (bad.length && !good.length && costly) {
     const b = bad[0];
     return { call: 'bad', text: `${subject} is a poor trade${forWhom} — ${b.why}.`, squares: b.sq, key: `trade:bad:${b.key}`, moverIsStudent, headsMove: true };
+  }
+  // A STRUCTURE TRADED FOR A STRUCTURE IS THE LESSON, said as the weighing
+  // (Danya weighs exactly these: doubled pawns against the bishop pair or the
+  // file the recapture opens). Any other mix stays silent — not a lesson.
+  const WEIGHED = new Set(['pair-handed', 'pair-given', 'opens-file']);
+  // One gain against one handed-over asset is a weighing too ("Bxf6 takes
+  // off the knight bearing down on your king, but hands them the bishop pair").
+  const gS = good.length === 1 ? good[0] : undefined;
+  const bW = bad.length === 1 && WEIGHED.has(bad[0].key) ? bad[0] : undefined;
+  if (gS && bW) {
+    return { call: 'mixed', text: `${subject} cuts both ways${forWhom}: ${gS.why}, but ${bW.why}.`, squares: [...new Set([...gS.sq, ...bW.sq])], key: `trade:mixed:${gS.key}:${bW.key}`, moverIsStudent, headsMove: true };
   }
   if (good.length || bad.length) return null; // mixed — not a lesson
   // Neutral pieces: the material count decides who the trade helps.

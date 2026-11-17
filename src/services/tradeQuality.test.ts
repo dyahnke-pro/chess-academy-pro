@@ -90,3 +90,21 @@ describe('readTrade — a retake that wins nothing back is no trade (2026-11-04)
     expect(readTrade(fen, 'Bxf6', 'b', null, { to: 'f6', captured: 'n' }, true)).not.toBeNull();
   });
 });
+
+// Danya's speedruns, 2026-11-17: the judge heard only the doubled pawns.
+describe('a trade weighs the doubled pawns against what the recapture hands over', () => {
+  it('B for N against a side that keeps both bishops hands it the pair (QUk 10…Bxc5)', async () => {
+    const { readTrade } = await import('./tradeQuality');
+    const fen = 'r3kb1r/qp1b1ppp/p1n1p2n/2NpP3/3P4/3B1N2/PPP2PPP/R1BQR1K1 b kq - 0 10';
+    const r = readTrade(fen, 'Bxc5', 'w', 120, { to: 'c5', captured: 'p' }, true);
+    expect(r?.text ?? '').not.toMatch(/is a good trade for them/);
+    expect(r?.text ?? '').toMatch(/bishop pair/);
+  });
+  it('a pawn retake that opens the file for their rook (lyUZ 7.Qxb6 axb6)', async () => {
+    const { readTrade } = await import('./tradeQuality');
+    const fen = 'r1b1kb1r/pp2pppp/1qn2n2/3p4/2pP1B2/1QP1P3/PP1N1PPP/R3KBNR w KQkq - 0 7';
+    const r = readTrade(fen, 'Qxb6', 'b', 30, null, true);
+    expect(r?.text ?? '').not.toMatch(/is a good trade for them/);
+    expect(r?.text ?? '').toMatch(/a-file/);
+  });
+});

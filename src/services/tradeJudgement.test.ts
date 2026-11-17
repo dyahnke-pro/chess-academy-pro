@@ -8,8 +8,11 @@ const at = (moves: string[]): string => { const c = new Chess(); for (const m of
 describe('tradeJudgement (P3, T3)', () => {
   it('the Ruy exchange: the one trade judge names what it does — taking back doubles their pawns', () => {
     const t = tradeJudgement(at(['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'Nf6']), 'Bxc6', 'dxc6', 'w', 0, undefined, null, true);
-    expect(t?.reason).toBe('good');
+    // The Exchange Ruy's real trade-off, both halves (Danya's speedruns,
+    // 2026-11-17): the doubled pawns against the bishop pair it hands them.
+    expect(t?.reason).toBe('mixed');
     expect(t?.text).toMatch(/doubles their pawns/);
+    expect(t?.text).toMatch(/bishop pair/);
   });
   it('silent without a recapture on the same square', () => {
     expect(tradeJudgement('4k3/8/5n2/3n4/8/2N5/8/R3K3 w - - 0 1', 'Nxd5', null, 'w', 0, undefined, null, true)).toBeNull();
