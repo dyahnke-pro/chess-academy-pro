@@ -22,10 +22,18 @@
 - Never a stronger or weaker coach (§ LEARN FOCUS: harder means subtler). A steered move must be one the human model gives real weight at that rating, and cost the coach no more than the plant budget allows.
 - A find on a steered board counts half, a miss in full (the existing `replyMadeAChance` rule); the opponent's strength never learns from it.
 - Silent, like the carry: no callout. The door explains the miss as it does any other.
-- One computer: the plant's search generalised over the skill list, not a second planner.
+- One computer: the plant's search generalised over the skill list, not a second planner. Mapped 2026-11-17: `findFocusPlant` (`src/coach/focus/focusPlant.ts`) already reads the coach's natural slips, smallest cost first, reads the board each leaves, and keeps one only when that board poses the asked pattern with nothing easier beside it. The change is one test: `yourChancesAt` (does this board pose a tactic at the rung) becomes the record's own board read, `moveInsight.positionPosed` (does this board pose this skill). The multi-move steer for structures is the part that is new: read the coach's line two or three moves past the slip, not only the board right after it.
 - Audit: a seeded red skill (e.g. a bad-bishop hold rate) must appear posed in the next game more often than on a control device, with the coach's moves still inside its model.
 
-## 🏃 WO-SPEEDRUN-02 — the full speedrun sweep, three series (David 2026-11-17: "Once this is working, and all subsequent builds are done, I want another sweep for teaching points. But a full sweep of speed runs 'oh my lands, the sensei, and theory speed run'. But we finish this build completely first.")
+## 🏃 WO-SPEEDRUN-02 — the full speedrun sweep, three series: The Sensei, Top Theory, Master Class (David 2026-11-17: "Once this is working, and all subsequent builds are done, I want another sweep for teaching points. But a full sweep of speed runs 'oh my lands, the sensei, and theory speed run'. But we finish this build completely first.")
+
+**The series, read off his channel (2026-11-17).** Two are playlists:
+- The Sensei SpeedRun: 114 videos. 96 have boards in the voiced notes; 78 had transcripts on disk, the rest are being pulled.
+- Top Theory Speedrun: 81 videos. 73 have boards; 80 had transcripts.
+
+- Master Class Speedrun: 92 videos. 82 have boards; 63 had transcripts. (David 2026-11-17, "Do masterclass": the series he called "oh my lands", his catchphrase, not a playlist name.)
+
+Missing transcripts across the three: 66, listed for the pull (YouTube refused this server on 2026-11-17, "sign in to confirm you're not a bot"; retry spaced out, or David drops them in the Drive folder).
 
 Queued; starts only after WO-SPEEDRUN-01 has shipped and its prod audits are read. The same measure as WO-SPEEDRUN-01, over every game of his three speedrun series, not a sample:
 - list his teaching points;
@@ -91,6 +99,8 @@ The beginner register touches chat in one place only: a move written in words in
 **The audit asks the computers about their calculations** (David 2026-11-17: "make sure the computers can answer questions about their calculations"): `scripts/audit-speedrun-chat-prod.mjs` puts 12 of Danya's boards, one per built computer, to the chat, with three questions each: the computer's own calculation, a follow-up on it, and "calculate the main line". On a fresh device (an empty record, so the beginner register) the last must still come back as the line.
 
 **His viewers' questions, asked of our coach** (David 2026-11-17: "Ask the questions Danya's viewers asked during the speed runs. See if our coach can produce answers similar to his"). The captions carry no board, so `scripts/danya-viewer-questions.mjs` finds it: the moves he says are lined up with the game's moves from the voiced notes, and a question is kept only when its move is legal for the right seat on that board. Of 317 question moments in 251 videos, 32 were placed; read against their boards, 24 held (8 dropped: the opponent's move put on his turn, the bishop to g4 read as the pawn, garbled captions, an off-topic answer, duplicates). `audit-danya-viewer-questions-prod.mjs` asks the 24 through the chat and sets each answer beside his.
+
+Then, as a guide (David 2026-11-17: "Use those questions as a guide. Ask similar questions but specific to the current board"), `audit-lib/viewer-question-forms.mjs` makes the same kinds of question for any board, in chess.js: "why not <the biggest capture or check>?", "should I take on <square>?", "what if they play <their biggest capture> next?", "does <pawn move> weaken <square>?" (the square given up that matters most: central, near the king), "what am I supposed to do here?". Both audits ask them on every board, and each answer must be about the move or square asked.
 
 ## 📖 WO-OPENINGS-REWRITE-01 — every opening tab rewritten, one computed beat a move, thin openings first; Levy's taught lines (David 2026-11-11: "How well do the opening tabs teach the trompowski?" → "I want you to find as many Levy taught lines as possible. We also need to make sure every other opening is strong. This should have already been done. This concerns me." → "Also check master DB to find his lines. I want a full rewrite of the opening tab. But it needs to be done deterministically. I want 1 beat per move explaining the why, the move order, this is our chance to teach like Naroditski, and we don't do it. We start with the thin openings." → "And yes. Ok to swarm")
 

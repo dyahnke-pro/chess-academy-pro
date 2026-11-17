@@ -23,6 +23,8 @@
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import { STOCK } from './audit-lib/chat-replay-cases.mjs';
+import { boardQuestions, formFails } from './audit-lib/viewer-question-forms.mjs';
 
 /** Kept: [video, ply, the question as asked here when the caption needs it]. */
 const KEEP = [
@@ -96,12 +98,24 @@ for (const c of cases) {
   const shared = [...named(danya)].filter((s) => named(r.answer).has(s));
   results.push({ video: c.video, ply: c.ply, fen: c.fen, question: c.question, coach: r.answer, danya, shared, secs: r.secs, row: r.row });
   console.log(`\n══ ${c.video} ply ${c.ply} — ${c.question}\n   COACH (${r.secs}s): ${r.answer.slice(0, 700)}\n   DANYA: ${danya}\n   shared squares: ${shared.join(' ') || '—'}  row: ${r.row ? `${r.row.parsedKind ?? '—'} → ${r.row.servedIntent ?? '—'}` : 'NONE'}`);
+  // The same kinds of question, made for this board.
+  for (const v of boardQuestions(c.fen, { avoid: c.sans })) {
+    const g = await ask(v.ask);
+    const f = formFails(v, g.answer);
+    if (!g.answer) f.push('no answer');
+    if (STOCK.test(g.answer)) f.push('stock line');
+    results.push({ video: c.video, ply: c.ply, fen: c.fen, question: v.ask, form: v.form, coach: g.answer, secs: g.secs, row: g.row, fails: f });
+    console.log(`   ${f.length ? '❌' : '✅'} ${v.form} (${g.secs}s) ${v.ask}\n      → ${g.answer.slice(0, 500)}${f.length ? `\n      ✗ ${f.join('; ')}` : ''}`);
+  }
 }
 const dir = path.join('audit-reports', `danya-viewer-questions-${new Date().toISOString().replace(/[:.]/g, '-')}`);
 fs.mkdirSync(dir, { recursive: true });
 fs.writeFileSync(path.join(dir, 'report.json'), JSON.stringify(results, null, 2));
+const theirs = results.filter((r) => r.danya);
+const made = results.filter((r) => r.form);
 const answered = results.filter((r) => r.coach).length;
-console.log(`\nVIEWER QUESTIONS answered ${answered}/${results.length}, sharing a square with Danya ${results.filter((r) => r.shared.length).length}/${results.length}\nreport: ${dir}/report.json`);
+console.log(`\nHIS VIEWERS' QUESTIONS answered ${theirs.filter((r) => r.coach).length}/${theirs.length}, sharing a square with his answer ${theirs.filter((r) => r.shared.length).length}/${theirs.length}`);
+console.log(`THE SAME KINDS, MADE FOR EACH BOARD clean ${made.filter((r) => !r.fails.length).length}/${made.length}\nreport: ${dir}/report.json`);
 try { await get('/close'); } catch { /* gone */ }
 driver.kill();
 process.exit(answered === results.length ? 0 : 1);

@@ -27,6 +27,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { Chess } from 'chess.js';
 import { STOCK } from './audit-lib/chat-replay-cases.mjs';
+import { boardQuestions, formFails } from './audit-lib/viewer-question-forms.mjs';
 
 const PORT = Number(process.env.HAND_PORT ?? 7793);
 const only = (process.argv.find((a) => a.startsWith('--only=')) ?? '').slice(7).split(',').filter(Boolean);
@@ -136,12 +137,22 @@ for (const b of BOARDS) {
   await get(`/goto?path=${encodeURIComponent(`/coach/session/explain-position?fen=${encodeURIComponent(b.fen)}`)}&ms=12000`);
   for (let i = 0; i < 40 && !(await usable('chat-text-input')); i += 1) await sleep(1000);
   const qs = [...b.asks.map((a, i) => ({ id: i === 0 ? 'calc' : 'follow', ...a })),
-    { id: 'deep', q: `Calculate the main line after ${b.san} for me, move by move.`, deep: true }];
+    { id: 'deep', q: `Calculate the main line after ${b.san} for me, move by move.`, deep: true },
+    // Danya's viewers' kinds of question, made for this board (David 2026-11-17).
+    ...boardQuestions(b.fen, { avoid: [b.san] }).map((v) => ({ id: `viewer:${v.form}`, q: v.ask, viewer: v }))];
   for (const q of qs) {
     const r = await ask(q.q);
     const f = fails(r.answer, q.q);
     if (q.want && !q.want.test(r.answer)) f.push(`no ${b.computer} calculation (${q.want})`);
-    if (q.deep && sanTokens(r.answer).length < 3) f.push(`deep question answered with ${sanTokens(r.answer).length} moves, not the line`);
+    if (q.viewer) f.push(...formFails(q.viewer, r.answer));
+    // The line, not squares: at least three moves, two of them written as a
+    // piece move or a capture (a plain square like "b6" is also a pawn move,
+    // and an answer that only names squares must not pass as a line).
+    if (q.deep) {
+      const t = sanTokens(r.answer);
+      const strong = t.filter((m) => /^[KQRBN]|x|^O-O/.test(m)).length;
+      if (t.length < 3 || strong < 2) f.push(`deep question answered with ${t.length} moves (${strong} piece moves or captures), not the line`);
+    }
     results.push({ board: b.id, computer: b.computer, id: q.id, ask: q.q, ...r, fails: f });
     console.log(`${f.length ? '❌' : '✅'} ${b.id}/${q.id} (${r.secs}s) ${q.q}\n   → ${r.answer.slice(0, 700)}${f.length ? `\n   ✗ ${f.join('; ')}` : ''}\n   row: ${r.row ? `read=${r.row.parsedKind ?? '—'} served=${r.row.servedIntent ?? '—'} outcome=${r.row.outcome ?? '—'}` : 'NONE'}`);
   }
