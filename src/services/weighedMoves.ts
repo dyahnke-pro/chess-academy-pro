@@ -76,6 +76,10 @@ export const SAME_WORTH = 0.03;
 export const GOOD_MOVE = 0.05;
 /** Both moves keep a won game (expected score) — "take your pick". */
 export const BOTH_WIN = 0.85;
+/** …and below this, the game is lost whatever is played: two moves of the
+ *  same worth "hold" nothing (Danya kYbh2 24.Re2 at −3: "Re2 and Be4 both
+ *  hold here"). About −2.5 pawns: past it nothing is "held". */
+export const BOTH_LOSE = 0.3;
 /** A sibling square is one the eye weighs at least this share as much as the
  *  square the piece went to. */
 export const SIBLING_SHARE = 0.5;
@@ -535,6 +539,7 @@ export function alsoGood(args: { fenBefore: string; san: string; student: Color;
   const playedEs = es(playedRead);
   const best = Math.max(...args.reads.map(es));
   if (best - playedEs > GOOD_MOVE) return null;
+  if (playedEs < BOTH_LOSE) return null;
   const w = seatWords(mover, args.student);
   let bothWin: { c: CandidateMove; gap: number } | null = null;
   for (const { c, read, real } of readCandidates(args.fenBefore, played, args.reads, args.rating)) {

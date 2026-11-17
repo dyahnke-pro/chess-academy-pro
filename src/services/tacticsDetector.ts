@@ -334,7 +334,7 @@ function findBackRankWeakness(chess: Chess): TacticPattern[] {
         type: 'back_rank',
         beneficiary: enemy,
         involvedSquares: [kingSq, invader.to, invader.from],
-        description: `The king on ${kingSq} has no escape square and the back rank can be invaded from ${invader.from}`,
+        description: `The king on ${kingSq} has no square off the back rank, and the back rank can be invaded from ${invader.from}`,
       });
     }
   }

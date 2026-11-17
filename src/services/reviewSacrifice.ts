@@ -123,7 +123,13 @@ export function enemyKingStuckInCenter(fen: string, moverColorWB: 'w' | 'b'): bo
   const castledLong = kingSq !== null && kingSq === `c${backRank}`
     && board.get(`d${backRank}` as Parameters<typeof board.get>[0])?.type === 'r'
     && board.get(`d${backRank}` as Parameters<typeof board.get>[0])?.color === enemy;
-  const central = kingSq !== null && !castledLong
+  // A KING ON THE f-FILE is in the centre only while its own rook still sits
+  // in the h-corner — it walked there instead of castling (Danya S-ZY 26…Kf8:
+  // "their king is still in the centre" of a king that had castled, behind
+  // f7, g7 and h7, with no rooks left).
+  const hRook = board.get(`h${backRank}` as Parameters<typeof board.get>[0]);
+  const fFileOut = kingSq !== null && kingSq[0] === 'f' && !(hRook?.type === 'r' && hRook.color === enemy);
+  const central = kingSq !== null && !castledLong && !fFileOut
     && ['c', 'd', 'e', 'f'].includes(kingSq[0])
     && (enemy === 'w' ? ['1', '2'].includes(kingSq[1]) : ['7', '8'].includes(kingSq[1]));
   // A king whose side is ON MOVE and can castle right now is one move from

@@ -288,3 +288,14 @@ describe('the same-worth opener rotates on the board (prod focus audit 2026-11-0
     expect(stems.size).toBeGreaterThan(1);
   });
 });
+
+describe('two moves of the same worth in a lost game hold nothing', () => {
+  it('no "both hold" at −4', () => {
+    const fen = 'r1bq1rk1/pp1pppbp/2n2np1/4P3/Q4B2/2P5/PP3PPP/RN2KBNR b KQ - 0 10';
+    const reads: WeighRead[] = [
+      { evaluation: 420, mate: null, moves: ['f6d5', 'f4g3'] },
+      { evaluation: 410, mate: null, moves: ['f6h5', 'f4g3'] },
+    ];
+    expect(alsoGood({ fenBefore: fen, san: 'Nh5', student: 'b', rating: 1500, reads })).toBeNull();
+  });
+});

@@ -226,6 +226,6 @@ describe('a detector description is seat-free at the source (hand walk 2340)', (
     const fen = '4r1k1/5ppp/8/8/8/8/5PPP/3R2K1 b - - 0 20';
     const br = detectTactics(fen).tactics.find((t) => t.type === 'back_rank');
     expect(br?.description).toMatch(/^The king on g1/);
-    expect(seatPieceReferences(br!.description, fen, 'w')).toMatch(/^Your king has no escape square/);
+    expect(seatPieceReferences(br!.description, fen, 'w')).toMatch(/^Your king has no square off the back rank/);
   });
 });

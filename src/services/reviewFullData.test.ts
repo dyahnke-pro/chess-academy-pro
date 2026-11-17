@@ -604,7 +604,9 @@ describe('the engine line decides the take-back (review walk oct3b, g2 ply 49)',
 // moment in Review — the pin a quiet move would have stopped, the guard a
 // move tied down.
 describe('Review reads the new computers too', () => {
-  const GAME = ['e4', 'e5', 'Nf3', 'd6', 'd4', 'Nf6', 'Nc3', 'Nc6', 'Be2', 'Bg4'];
+  // a3, not Be2: after Be2 the bishop stands between the knight and the queen,
+  // and …Bg4 no longer pins anything (the speedrun fix below).
+  const GAME = ['e4', 'e5', 'Nf3', 'd6', 'd4', 'Nf6', 'Nc3', 'Nc6', 'a3', 'Bg4'];
   const fens = fensAfter(GAME);
   const at = (ply: number, prev: string | null): string[] => facetLines(computeMoveFacets({ secondReads: NO_SECOND_READ, 
     seenFundamentals: new Set(), teaching: { ...NO_TEACHING_CONTEXT, prevFenBefore: prev },
@@ -614,13 +616,27 @@ describe('Review reads the new computers too', () => {
     prevCap: { square: null, capturedValue: 0, net: 0 }, allSans: GAME, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
   }));
 
-  it('…Bg4 after Be2 is the pin h3 would have stopped', () => {
+  it('…Bg4 after a3 is the pin h3 would have stopped', () => {
     const f = at(10, fens[7]).find((x) => x.startsWith('[timing] That is the pin'));
     expect(f).toBe('[timing] That is the pin a quiet move would have stopped — Bg4 would pin your knight on f3, and after h3 the pawn covers g4.');
   });
 
   it('NEGATIVE CONTROL: without the student’s previous board there is nothing to compare', () => {
     expect(at(10, null).some((x) => x.startsWith('[timing] That is the pin'))).toBe(false);
+  });
+  // Danya speedrun hv0P9kotpJw 6…Bb4: the stop was for a pin on the bishop on
+  // d2; after 6.Nc3 the bishop pins the KNIGHT instead.
+  it('a pin that lands on a different piece is not the one a quiet move would have stopped', () => {
+    const G = 'd4 e5 dxe5 Nc6 Nf3 Qe7 Bf4 Qb4+ Bd2 Qxb2 Nc3 Bb4'.split(' ');
+    const fs = fensAfter(G);
+    const lines = facetLines(computeMoveFacets({ secondReads: NO_SECOND_READ,
+      seenFundamentals: new Set(), teaching: { ...NO_TEACHING_CONTEXT, prevFenBefore: fs[9] },
+      fenBefore: fs[10], fenAfter: fs[11], san: 'Bb4', ply: 12,
+      moverColor: 'black', playerColor: 'white', studentColorWB: 'w',
+      evaluation: 0, preMoveEval: 0, costCp: null, heardVerdict: null, classification: null, bestMoveSan: null,
+      prevCap: { square: null, capturedValue: 0, net: 0 }, allSans: G, forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
+    }));
+    expect(lines.some((x) => /would pin your dark-squared bishop|would pin your bishop/.test(x))).toBe(false);
   });
 });
 

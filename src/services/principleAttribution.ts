@@ -31,7 +31,7 @@ import { sideMaterial } from './pieceValues';
 import { sideToMoveAs } from './threatOut';
 import { lineWithReasons } from './lineReasons';
 import { Chess, type Color, type Square, type Move, type PieceSymbol } from 'chess.js';
-import { signedLegalSeeFor, bishopHemmedByOwnPawns, signedCaptureRead } from './positionReadingService';
+import { signedLegalSeeFor, bishopHemmedByOwnPawns, signedCaptureRead, legalSeeGainFor } from './positionReadingService';
 import { settledLeadFor } from './material';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { findContinuationsAtPly } from './openingDetectionService';
@@ -384,8 +384,20 @@ function tempoTargets(chess: Chess, m: Move, attacker: Color): Square[] {
     // Bb5 eyeing a knight that b7 defends is a pin to answer, not a tempo.
     if (attackedNow && !attackedBefore && hangsBy(c, p.square) > 0) out.push(p.square);
   }
+  // A KICK THEY CAN IGNORE FOR MORE IS NO TEMPO (Danya 1Rejj 9…Nd4: "c3 comes
+  // with a threat on your knight on d4" — and the knight takes the queen on f3
+  // with check). The side kicked has a capture worth more than the piece hit.
+  if (out.length) {
+    const hitWorth = Math.max(...out.map((sq) => PIECE_WORTH[c.get(sq)?.type ?? 'p'] ?? 0));
+    const fen = c.fen();
+    for (const p of pieces(c, attacker)) {
+      if (p.type === 'k') continue;
+      if (legalSeeGainFor(fen, p.square, enemy) > hitWorth) return [];
+    }
+  }
   return out;
 }
+const PIECE_WORTH: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 /** A kick available to `opp` right now: a pawn advance or a developing minor
  *  move that attacks a `mover` piece with tempo. Returns the first such move. */
 function kickAvailable(chess: Chess, opp: Color, targetSq?: string): { san: string; hits: Square[] } | null {

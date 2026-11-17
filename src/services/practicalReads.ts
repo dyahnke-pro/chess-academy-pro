@@ -13,6 +13,7 @@ import { play, piecesOf, type StructureRead } from './structureJudgementKit';
 import { squaresProof } from './proof';
 import { legalSeeGainFor, legalSeeGainOn, landingIsSafe, asIfToMove } from './positionReadingService';
 import { MATERIAL_VALUE, materialBalance } from './pieceValues';
+import { quietBalance } from './material';
 import { andList } from '../utils/andList';
 
 /** A move the engine counts as sound. */
@@ -314,16 +315,21 @@ export function queenTradeRead(fenBefore: string, san: string, student: Color, c
   const kind = queenTrade(before, r, student);
   if (!kind) return null;
   // The lead with the queens set aside — the trade removes one each.
-  const up = balanceFor(fenBefore, student) - 9 * (piecesOf(before, student, 'q').length - piecesOf(before, other(student), 'q').length);
+  const upBefore = balanceFor(fenBefore, student) - 9 * (piecesOf(before, student, 'q').length - piecesOf(before, other(student), 'q').length);
+  // …AND AFTER IT, with the capture on offer counted (Danya kYbh2 13…Rxd8:
+  // "Trading queens a piece up" — the piece was the bishop on c3 that bxc3
+  // takes straight back). The lead is the smaller of the two reads.
+  const quietAfter = quietBalance(r.after.fen()) * (student === 'w' ? 1 : -1);
+  const upAfter = quietAfter - 9 * (piecesOf(r.after, student, 'q').length - piecesOf(r.after, other(student), 'q').length);
   const verb = kind === 'made' ? 'Trading' : 'Offering to trade';
-  if (up >= 3 && cpLoss < SOUND_CP) {
+  if (Math.min(upBefore, upAfter) >= 3 && cpLoss < SOUND_CP) {
     // The lead named by what it is: three pawns are not "a piece" (Danya S-ZY
     // 28.Qxc7+, White three pawns up).
     const lead = leadWords(before, student);
     const text = `${verb} queens ${lead.up} up is the safe road: with the queens off nothing of theirs can threaten your king, and ${lead.extra} ${lead.extra.endsWith('s') ? 'win' : 'wins'} the ending.`;
     return withProof('queen-trade-ahead', text, [r.mv.to], 'queen-trade');
   }
-  if (up >= 1 && up < 3 && cpLoss >= COSTLY_CP && !pawnEndingAfterTrade(r.after.fen())) {
+  if (upBefore >= 1 && upBefore < 3 && cpLoss >= COSTLY_CP && !pawnEndingAfterTrade(r.after.fen())) {
     const text = `Only a pawn or two up, the queen trade is no shortcut — it cost you here. A piece up, trade queens freely; with a pawn or two, keep them on unless the trade leads to a won pawn ending.`;
     return withProof('queen-trade-early', text, [r.mv.to], 'queen-trade');
   }

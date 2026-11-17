@@ -43,7 +43,7 @@ import { principleLine, principleContrastLine } from './moveFundamentals';
 import { threatStoppedBy } from './opponentMovePurpose';
 import { recordedMoveCost } from './moveCost';
 import { trickSidestepped } from './forkTrick';
-import { findProphylaxis, prophylaxisProof } from './prophylaxis';
+import { findProphylaxis, prophylaxisProof, theirWantedMoves } from './prophylaxis';
 import { newTiedDefender, tiedDefenderLine, tiedDefenderProof } from './tiedDefender';
 import { lineProof, lineProofFromUci, legalLineProof, proofForStudent, squaresProof, isProof, NO_PROOF, type Proof } from './proof';
 import { readBoardAll, readKey } from './boardComputers';
@@ -1566,7 +1566,11 @@ export function computeMoveFacets(
   // the student's would have taken away, and the student did not play it.
   if (!isStudent && studentColorWB && ctx.teaching.prevFenBefore && ply >= 2) {
     const ph = findProphylaxis(ctx.teaching.prevFenBefore);
-    if (ph && ph.intent.san === san && ctx.allSans[ply - 2] !== ph.prevention.san) {
+    // …and it lands on the SAME piece now (Danya hv0P 6…Bb4: the stop was
+    // for a pin on the bishop on d2, and after Nc3 the bishop pins the knight
+    // instead — "Bb4 would pin your dark-squared bishop" named the wrong piece).
+    const landed = ph ? theirWantedMoves(fenBefore, studentColorWB).find((w) => w.san === ph.intent.san) : undefined;
+    if (ph && ph.intent.san === san && ctx.allSans[ply - 2] !== ph.prevention.san && landed?.hit[0]?.square === ph.victim.square) {
       const f = made('findProphylaxis', 'timing', `That is the ${ph.kind === 'pin' ? 'pin' : 'kick'} a quiet move would have stopped — ${prophylaxisProof(ph).full}.`);
       facets.push(f);
       recProof(f, prophylaxisProof(ph));

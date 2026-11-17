@@ -244,11 +244,18 @@ describe('buildCausalChain — a pinned guard is no guard (WO-STORY-MATRIX-01 P1
 // guard, and 26…Kc8 did not fix it. The old pattern read only the last move.
 describe('the removed defender, an earlier move', () => {
   const SANS = ["e4","e5","Nf3","d6","d4","exd4","Bc4","c5","c3","dxc3","Nxc3","h6","O-O","Nf6","e5","dxe5","Qxd8+","Kxd8","Nxe5","Be6","Rd1+","Ke7","Be3","Bxc4","Nxc4","Nc6","Bxc5+","Ke8","Re1+","Kd7","Rad1+","Kc7","Nb5+","Kb8","Ncd6","Bxd6","Bxd6+","Kc8","Rc1","a6","Nc7","Rb8","Nxa6","Ra8","Re7","Rxa6","Rc7+","Kd8","Rxb7","Ra7","Bc7+","Kc8"];
+  // Corrected 2026-11-17 (Danya speedrun regrade): in this position Rxc6+ is
+  // met by …Kxb7 — White's own rook on b7 hangs — and the engine plays Rxa7.
+  // "They can win the knight on c6" was never true here.
+  it('his game: the knight on c6 is not won — their rook on b7 hangs in turn', () => {
+    expect(findAllowedChain(SANS, SANS.length, 'b')).toBeNull();
+  });
   it('names the earlier move that pulled the guard, and says when', () => {
-    const ch = findAllowedChain(SANS, SANS.length, 'b');
+    const S = 'e4 d5 exd5 Nf6 d4 Nxd5 Nf3 Bf5 Nc3 Qc8 Be2 h6'.split(' ');
+    const ch = findAllowedChain(S, S.length, 'b');
     expect(ch?.nodes[0].kind).toBe('defender-removed');
     expect(ch?.nodes[0].data.movesEarlier).toBe(1);
-    expect(renderCausalChain(ch, { register: 'review', studentColor: 'b', rating: 1500 })[0]).toBe('A move earlier, your Ra7 pulled the rook off a6 — the only piece guarding c6.');
+    expect(renderCausalChain(ch, { register: 'review', studentColor: 'b', rating: 1500 })[0]).toBe('A move earlier, your Qc8 pulled the queen off d8 — the only piece guarding d5.');
   });
 });
 

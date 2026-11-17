@@ -170,3 +170,14 @@ describe('buried own bishop', () => {
     expect(out.find((a) => a.id === 'buried-own-bishop')).toBeUndefined();
   });
 });
+
+// Danya speedrun 1Rejj6niwvo, 9…Nd4: "That hands them a tempo: c3 comes with a
+// threat on your knight on d4" — c3 drops the queen to …Nxf3+.
+describe('a kick the kicked side can ignore for more is no tempo', () => {
+  it('9…Nd4: c3 is not their tempo', () => {
+    const h = ['e4', 'c5', 'Qh5', 'Nf6', 'Qxc5', 'Nxe4', 'Qh5', 'Nc6', 'Bc4', 'e6', 'Qf3', 'd5', 'Bb5', 'Bc5', 'Nh3', 'O-O', 'd3', 'Nd4'];
+    const out = attributePrinciples({ theory: false, replySan: null, historySans: h, bestSan: 'Qa5+', classification: 'mistake' });
+    const tempo = out.find((a) => a.id === 'tempo-handed');
+    expect(tempo?.evidence.moves ?? []).not.toContain('c3');
+  });
+});
