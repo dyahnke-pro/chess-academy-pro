@@ -19221,13 +19221,13 @@
                                                    "node": {
                                                     "san": "h5",
                                                     "movedBy": "black",
-                                                    "idea": "Black pushes the h-pawn to h5, grabbing kingside space and getting the knight ready for f5. Don't push your own h-pawn in reply: let Black's pawn come to h4, then h3 fixes it in place.",
+                                                    "idea": "Black pushes the h-pawn to h5, and that leaves a hole on g5. Don't answer with h4 yourself: if Black pushes on to h4, the pawn becomes a target once your knight reaches f3, and h3 fixes it in place.",
                                                     "children": [
                                                      {
                                                       "node": {
                                                        "san": "Bg5",
                                                        "movedBy": "white",
-                                                       "idea": "The bishop goes to g5, a square Black's h-pawn can no longer kick it from now that it has walked past to h5. From g5 it already eyes the knight on e7.",
+                                                       "idea": "The bishop takes the hole on g5. Black's h-pawn has already walked past it, so nothing can kick it, and it eyes the knight on e7.",
                                                        "children": [
                                                         {
                                                          "node": {
@@ -19251,7 +19251,7 @@
                                                                   "node": {
                                                                    "san": "Ng3",
                                                                    "movedBy": "white",
-                                                                   "idea": "Black's knight on f5 is the piece that hurts: it presses on d4 and clogs the kingside where you want to attack. Ng3 offers to trade it. If Black takes on g3, recapture with the h-pawn, away from the centre but toward your attack.",
+                                                                   "idea": "The knight on f5 is the only minor piece Black has in play, and it presses on d4 and clogs the kingside. When your opponent is behind in development, trading off the one piece that is out often makes the position collapse, so Ng3 offers the trade. If Black takes on g3, recapture away from the centre with the f-pawn: it opens the f-file straight at f7.",
                                                                    "children": [
                                                                     {
                                                                      "node": {
@@ -19287,7 +19287,7 @@
                                                                                     "node": {
                                                                                      "san": "a3",
                                                                                      "movedBy": "white",
-                                                                                     "idea": "a3 prepares b4 to question the pawn on c5. If it takes on d4, the c-file opens toward a king with no safe home. If it pushes on to c4, d4 is no longer under pressure and your hands are free on the kingside.",
+                                                                                     "idea": "a3 prepares b4 to question the pawn on c5. If it takes on d4, the c-file opens toward a king with no safe home. If it pushes on to c4, d4 is no longer under pressure and your hands are free on the kingside. There's no hurry to take on f5: that trade stays on offer, and keeping the tension keeps your options open.",
                                                                                      "children": [
                                                                                       {
                                                                                        "node": {
@@ -19323,7 +19323,7 @@
                                                                                                       "node": {
                                                                                                        "san": "h3",
                                                                                                        "movedBy": "white",
-                                                                                                       "idea": "A quiet move against Black's idea: the knight on h6 wants g4 to hit your bishop on f6. h3 takes g4 away first.",
+                                                                                                       "idea": "h3 stops the knight on h6 from reaching g4 and kicking your bishop off f6, where it sits like a splinter in Black's position. Quiet prophylaxis like this often pays off later in ways you can't see yet.",
                                                                                                        "children": [
                                                                                                         {
                                                                                                          "node": {
@@ -19443,7 +19443,7 @@
                                                                                                                                                                   "node": {
                                                                                                                                                                    "san": "Rc6",
                                                                                                                                                                    "movedBy": "white",
-                                                                                                                                                                   "idea": "The rook comes to c6, the last piece into the attack, eyeing the pawn on e6 and the king behind it. The tempting knight to c6 hits the queen, but it blocks your own c-file and lets Black's queen take on f6.",
+                                                                                                                                                                   "idea": "Your queen on h5 pins the f7-pawn to the king, so the pawn on e6 has no real defender. The rook to c6 brings the last piece in to hit it. The knight to c6 looks tempting because it attacks the queen, but that's a threat for its own sake: it blocks your c-file and lets Black's queen take on f6.",
                                                                                                                                                                    "children": [
                                                                                                                                                                     {
                                                                                                                                                                      "node": {
@@ -19467,7 +19467,7 @@
                                                                                                                                                                               "node": {
                                                                                                                                                                                "san": "Nxd7",
                                                                                                                                                                                "movedBy": "white",
-                                                                                                                                                                               "idea": "After the check, don't reach for another one. Look at the captures first: the plain capture on d7 wins, because the knight hits the queen on f6 and the rook on f8 at once.",
+                                                                                                                                                                               "idea": "After the check, look past the obvious moves. The knight check on c6 lets the king slip out to d6, and the rook to c7 runs into Rd8. Go through checks, captures and threats, and don't skip the plain captures: Nxd7 hits the queen on f6 and the rook on f8 at once. And h3 pays off here: without it, a rook check on c1 would end in mate on your back rank.",
                                                                                                                                                                                "children": [
                                                                                                                                                                                 {
                                                                                                                                                                                  "node": {
@@ -19524,7 +19524,7 @@
                                                                                                                                                                                  }
                                                                                                                                                                                 }
                                                                                                                                                                                ],
-                                                                                                                                                                               "shortIdea": "After the check, don't reach for another one."
+                                                                                                                                                                               "shortIdea": "After the check, look past the obvious moves."
                                                                                                                                                                               }
                                                                                                                                                                              }
                                                                                                                                                                             ]
@@ -19537,7 +19537,7 @@
                                                                                                                                                                      }
                                                                                                                                                                     }
                                                                                                                                                                    ],
-                                                                                                                                                                   "shortIdea": "The rook comes to c6, the last piece into the attack, eyeing the pawn on e6 and the king behind it."
+                                                                                                                                                                   "shortIdea": "Your queen on h5 pins the f7-pawn to the king, so the pawn on e6 has no real defender."
                                                                                                                                                                   }
                                                                                                                                                                  }
                                                                                                                                                                 ]
@@ -19602,7 +19602,7 @@
                                                                                                          }
                                                                                                         }
                                                                                                        ],
-                                                                                                       "shortIdea": "A quiet move against Black's idea: the knight on h6 wants g4 to hit your bishop on f6."
+                                                                                                       "shortIdea": "h3 stops the knight on h6 from reaching g4 and kicking your bishop off f6, where it sits like a splinter in Black's position."
                                                                                                       }
                                                                                                      }
                                                                                                     ]
@@ -19644,7 +19644,7 @@
                                                                      }
                                                                     }
                                                                    ],
-                                                                   "shortIdea": "Black's knight on f5 is the piece that hurts: it presses on d4 and clogs the kingside where you want to attack."
+                                                                   "shortIdea": "The knight on f5 is the only minor piece Black has in play, and it presses on d4 and clogs the kingside."
                                                                   }
                                                                  }
                                                                 ]
@@ -19657,11 +19657,11 @@
                                                          }
                                                         }
                                                        ],
-                                                       "shortIdea": "The bishop goes to g5, a square Black's h-pawn can no longer kick it from now that it has walked past to h5."
+                                                       "shortIdea": "The bishop takes the hole on g5."
                                                       }
                                                      }
                                                     ],
-                                                    "shortIdea": "Black pushes the h-pawn to h5, grabbing kingside space and getting the knight ready for f5."
+                                                    "shortIdea": "Black pushes the h-pawn to h5, and that leaves a hole on g5."
                                                    }
                                                   }
                                                  ]
