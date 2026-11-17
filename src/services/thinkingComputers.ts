@@ -257,6 +257,7 @@ export const THINK_STEP: Record<ComputerName, ThinkAnswer> = {
   minorMatchup: 'assess',
   flexibleMove: 'candidates',
   exchangeSacrifice: 'calculate',
+  pawnMajority: 'assess',
   intoTheirCamp: 'assess',
   tradeOfferAt: 'assess',
   fileTradeAt: 'assess',

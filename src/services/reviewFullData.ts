@@ -1698,6 +1698,9 @@ export function computeMoveFacets(
       // The exchange sacrifice, both seats: the rook given on purpose and what
       // it buys, off the same read per candidate.
       add(readBoardAll('exchangeSacrifice', { fenBefore, san, student: studentColorWB, reads: ctx.teaching.weigh.reads })[0]);
+      // The pawn majority, both seats: made, crippled, given up or set moving,
+      // a recapture read against the board before the trade began.
+      add(readBoardAll('pawnMajority', { fenBefore, san, student: studentColorWB, prior: ply >= 2 && ctx.teaching.prevFenBefore ? { fenBefore: ctx.teaching.prevFenBefore, san: ctx.allSans[ply - 2] } : null })[0]);
     }
     if (!isStudent) {
       // Their move took an attacker off a piece you had to look after.

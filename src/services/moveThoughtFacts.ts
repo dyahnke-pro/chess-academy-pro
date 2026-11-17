@@ -75,6 +75,7 @@ import type { AnalysisLine } from '../types';
 import { gambitIdea } from './gambitIdea';
 import { campIdea } from './intoTheirCamp';
 import { exchangeSacIdea } from './exchangeSacrifice';
+import { majorityIdea } from './pawnMajority';
 
 export interface MoveThoughtInput {
   fenBefore: string;
@@ -823,6 +824,12 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     // read per candidate vouching, and what it buys.
     for (const f of readBoardAll('exchangeSacrifice', { fenBefore: i.fenBefore, san: i.san, student, reads: weighReads })) {
       facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: exchangeSacIdea(f.claims[0] ?? ''), weight: 62 });
+    }
+    // THE PAWN MAJORITY, both seats (Danya's "White gets a queenside majority,
+    // you get a kingside majority"): made, crippled, given up or set moving —
+    // a recapture read against the board before their move began the trade.
+    for (const f of readBoardAll('pawnMajority', { fenBefore: i.fenBefore, san: i.san, student, prior: i.theirLast })) {
+      facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: majorityIdea(f.claims[0] ?? ''), weight: 50 });
     }
     // Getting into their camp, both seats (Danya's speedruns): a piece gets in
     // and hits what they cannot keep, the rooks on the seventh, a rook lift or

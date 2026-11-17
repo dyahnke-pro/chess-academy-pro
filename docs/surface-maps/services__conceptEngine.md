@@ -51,11 +51,11 @@
 - `src/data/endgame-side-correctness.test.ts:51`
 - `src/data/grounding/groundingLib.ts:56`
 - `src/data/groundingMistakes.test.ts:38`
-- `src/services/boardComputers.ts:452`
-- `src/services/boardComputers.ts:1854`
-- `src/services/boardComputers.ts:1872`
-- `src/services/boardComputers.ts:1888`
-- `src/services/boardComputers.ts:1906`
+- `src/services/boardComputers.ts:460`
+- `src/services/boardComputers.ts:1887`
+- `src/services/boardComputers.ts:1905`
+- `src/services/boardComputers.ts:1921`
+- `src/services/boardComputers.ts:1939`
 - `src/services/conceptEngine.test.ts:19`
 - `src/services/conceptEngine.test.ts:20`
 - `src/services/groundedMoveWhy.ts:83`
@@ -162,7 +162,7 @@
 - `src/services/tacticTypeUnification.test.ts:207`
 - `src/test/auditConceptGameplayCues.test.ts:24`
 
-### `materialBalance` (re-export) — 67 call sites
+### `materialBalance` (re-export) — 68 call sites
 - `scripts/pro-repertoire/mine-alapin-traps.mjs:41`
 - `scripts/pro-repertoire/mine-alapin-traps.mjs:90`
 - `scripts/pro-repertoire/mine-alapin-traps.mjs:94`
@@ -224,6 +224,7 @@
 - `src/services/narratedContinuation.test.ts:18`
 - `src/services/narratedContinuation.test.ts:20`
 - `src/services/opponentMoveReads.ts:447`
+- `src/services/pawnMajority.ts:130`
 - `src/services/pieceValues.ts:46`
 - `src/services/positionReadingService.ts:1828`
 - `src/services/practicalReads.ts:31`
