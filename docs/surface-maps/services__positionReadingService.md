@@ -422,8 +422,8 @@
 - `src/services/threatAnswer.ts:220`
 - `src/services/tiedDefender.ts:45`
 - `src/services/tiedDefender.ts:52`
-- `src/services/weighedMoves.ts:616`
-- `src/services/weighedMoves.ts:684`
+- `src/services/weighedMoves.ts:644`
+- `src/services/weighedMoves.ts:712`
 
 ### `asIfToMove` (function) — 27 call sites
 - `src/coach/focus/focusChances.ts:306`

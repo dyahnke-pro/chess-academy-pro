@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**775 lines · 4 exports · 50 importers · 26 tests · 0 audits**
+**775 lines · 4 exports · 51 importers · 26 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -62,6 +62,7 @@
 - `src/services/threatAnswerEvidence.ts`
 - `src/services/threatSaidOnce.os1.test.ts`
 - `src/services/weaknessAnalyzer.ts`
+- `src/services/weighedMoves.ts`
 - `src/test/narrationScanner.ts`
 
 ## Exports and every call site
@@ -79,7 +80,7 @@
 - `src/services/tacticLineRotation.test.ts:34`
 - `src/services/tacticLineRotation.test.ts:39`
 
-### `detectTactics` (function) — 118 call sites
+### `detectTactics` (function) — 119 call sites
 - `src/components/Tactics/PatternSchoolPage.tsx:69`
 - `src/missions/patterns/agreement.test.ts:48`
 - `src/missions/patterns/agreement.test.ts:65`
@@ -197,6 +198,7 @@
 - `src/services/threatAnswerEvidence.ts:213`
 - `src/services/threatSaidOnce.os1.test.ts:17`
 - `src/services/weaknessAnalyzer.ts:1184`
+- `src/services/weighedMoves.ts:239`
 - `src/test/narrationScanner.ts:135`
 
 ## Tests

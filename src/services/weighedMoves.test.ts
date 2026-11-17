@@ -308,3 +308,13 @@ describe('a kick that loses the pawn is no kick', () => {
   });
 });
 
+
+describe('the tempting move says what it looks like (Danya: "Bg5 looks like a pin, but …")', () => {
+  it('a bishop to g5 against a knight with the queen behind it looks like a pin', async () => {
+    const { tryLooksLike } = await import('./weighedMoves');
+    const c = new Chess();
+    for (const m of ['e4', 'e5', 'Nf3', 'Nc6', 'd4', 'exd4', 'Nxd4', 'Nf6', 'Nc3', 'Bb4']) c.move(m);
+    expect(tryLooksLike(c.fen(), 'Bg5', 'w')).toBe('a pin');
+    expect(tryLooksLike(c.fen(), 'Be2', 'w')).toBeNull();
+  });
+});

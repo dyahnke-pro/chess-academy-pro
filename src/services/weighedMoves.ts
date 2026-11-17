@@ -33,6 +33,7 @@ import { costReason, reasonSans, reasonWinWords, type CostReason } from './costR
 import { lineShape, lineShapePlies, orList, andList, type LineSeat } from '../utils/andList';
 import { contrastMoves } from './moveContrast';
 import { findHangingPieces } from './tacticClassifier';
+import { detectTactics } from './tacticsDetector';
 import { legalSeeGainFor } from './positionReadingService';
 import { exchangeEnd } from './material';
 import { describeStructure, newPawnWeaknesses } from './boardStructure';
@@ -225,6 +226,24 @@ export interface TemptingRefuted {
   claims: string[];
 }
 
+const LOOKS: Partial<Record<string, string>> = { pin: 'a pin', fork: 'a fork', skewer: 'a skewer', discovered_attack: 'a discovered attack' };
+
+/** The motif a candidate sets up for its mover, made by the piece that moved
+ *  (`detectTactics` on the board after it): the look that makes it tempting.
+ *  Null when it sets up none. */
+export function tryLooksLike(fenBefore: string, san: string, mover: Color): string | null {
+  let after: Chess;
+  let to: string;
+  try { after = new Chess(fenBefore); to = after.move(san).to; } catch { return null; }
+  let tactics;
+  try { tactics = detectTactics(after.fen()).tactics; } catch { return null; }
+  for (const t of tactics) {
+    const word = LOOKS[t.type];
+    if (word && t.beneficiary === mover && t.involvedSquares[0] === to) return word;
+  }
+  return null;
+}
+
 /** The square the blow lands on (the line's last move), for the claim the
  *  deliberation makes about the same loss. */
 function blowSquare(sans: readonly string[]): string | null {
@@ -287,9 +306,18 @@ export function temptingRefutations(args: Parameters<typeof temptingRefuted>[0])
     // ends "they play a1, making a queen" has said its gain.
     const won = r.mate ? null : reasonWinWords(r, lineShapePlies(sans, r.fen, 'first'));
     const result = r.mate ? (markSaysMate(sans[sans.length - 1]) ? '' : ' — and it\'s mate') : won ? ` — ${w.otherWho} win ${won}` : '';
-    const lead = mover === args.student
-      ? rotateStem([`${c.san} is tempting here, but it fails`, `${c.san} looks natural, but it doesn't work`], stemKeyOf(`${args.fenBefore}|${c.uci}`))
-      : rotateStem([`${c.san} was tempting for them, but it fails`, `${c.san} looked natural for them, but it doesn't work`], stemKeyOf(`${args.fenBefore}|${c.uci}`));
+    // WHAT IT LOOKS LIKE (David 2026-11-17, Danya: "Bg5 looks like a pin, but
+    // it drops the knight on d4"): the motif the try sets up on the board,
+    // said in the lead — the reason someone would play it.
+    const look = tryLooksLike(args.fenBefore, c.san, mover);
+    const stem = stemKeyOf(`${args.fenBefore}|${c.uci}`);
+    const lead = look
+      ? (mover === args.student
+        ? rotateStem([`${c.san} looks like ${look}, but it fails`, `${c.san} sets up ${look}, but it doesn't work`], stem)
+        : rotateStem([`${c.san} looked like ${look} for them, but it fails`, `${c.san} would have set up ${look} for them, but it doesn't work`], stem))
+      : mover === args.student
+        ? rotateStem([`${c.san} is tempting here, but it fails`, `${c.san} looks natural, but it doesn't work`], stem)
+        : rotateStem([`${c.san} was tempting for them, but it fails`, `${c.san} looked natural for them, but it doesn't work`], stem);
     const text = `${lead}: ${lineShape(sans, w.otherLine, r.fen, 'first')}${result}.`;
     const sq = blowSquare(sans);
     const key = temptingKey(c.uci);
