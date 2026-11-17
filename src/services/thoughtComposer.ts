@@ -88,7 +88,9 @@ export type ThoughtSource =
    *  on a board with no move to explain (Learn how to think's step boards). */
   | 'boardRead'
   /** Two pieces hanging: the one lost anyway takes something first (`desperado.ts`). */
-  | 'desperado';
+  | 'desperado'
+  /** A check that goes nowhere: blocked or side-stepped, and it cost (`emptyCheck.ts`). */
+  | 'emptyCheck';
 
 /** ONE FACT, the composer's only input — the one fact shape (`coachFact.ts`),
  *  its step derived from its kind, with what this composer ranks by: the
@@ -196,6 +198,7 @@ export const SOURCE_DEPTH: Record<ThoughtSource, 'hidden' | 'why'> = {
   gambitIdea: 'why',
   boardRead: 'why',
   desperado: 'hidden',
+  emptyCheck: 'why',
   deepFact: 'hidden', binding: 'hidden', bestLine: 'hidden', notYet: 'hidden', prophylaxis: 'hidden', baitSet: 'hidden',
   // What their move aims at now is the attack itself, one claim with the
   // other lines on its square (decision baseline 2026-11-12: "Their Qd8 is

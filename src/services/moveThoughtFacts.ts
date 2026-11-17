@@ -62,6 +62,7 @@ import { moveOrder } from './moveOrder';
 import { readBoardAll, readKey } from './boardComputers';
 import { thinkStepOf } from './thinkingComputers';
 import { desperadoAt, desperadoLine } from './desperado';
+import { emptyCheckAt, emptyCheckLine } from './emptyCheck';
 import type { ThinkingStep } from './thinkingSteps';
 import type { WeighRead } from './weighedMoves';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
@@ -440,6 +441,13 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   {
     const d = desperadoAt(i.fenBefore, i.san, i.reads?.before[0]?.moves[0] ?? null);
     if (d) add('defence-idea', 'desperadoAt', 'desperado', 'rescue', desperadoLine(d, mine ? 'your' : 'their'), undefined, [d.from, d.to, d.other.square], 66, false, [`desperado:${d.from}${d.to}`]);
+  }
+
+  // A CHECK THAT GOES NOWHERE (Danya Ytkf3): it cost half a pawn and the
+  // engine's answer is a block or a king step.
+  {
+    const e = emptyCheckAt(i.fenBefore, i.san, i.costCp, i.reads?.after[0]?.moves[0] ?? null);
+    if (e) add('method', 'emptyCheckAt', 'emptyCheck', 'check', emptyCheckLine(e, mine ? 'your' : 'their'), undefined, e.squares, 58, false, [`empty-check:${e.squares.join('')}`]);
   }
 
   // TRANSPOSITION AND ANALOGY (gaps A7, A11): "this transposes into the
