@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**210 lines · 3 exports · 9 importers · 3 tests · 0 audits**
+**219 lines · 5 exports · 10 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/services/coachFeatureService.ts`
+- `src/services/exchangeSacrifice.ts`
 - `src/services/kingCentreFFile.test.ts`
 - `src/services/nextPlans.ts`
 - `src/services/planChoice.ts`
@@ -23,6 +24,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewWalk2065.test.ts`
 
 ## Exports and every call site
+
+### `SAC_COST_BAR_CP` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `sacrificeCompensation` (function) — 19 call sites
 - `src/data/patternRegistry.ts:133`
@@ -56,7 +60,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planStopped.ts:61`
 - `src/services/reviewConcepts.ts:221`
 - `src/services/reviewFullData.ts:1095`
-- `src/services/reviewFullData.ts:1747`
+- `src/services/reviewFullData.ts:1765`
 - `src/services/reviewSacrifice.test.ts:114`
 - `src/services/reviewSacrifice.test.ts:124`
 - `src/services/reviewSacrifice.test.ts:128`
@@ -69,6 +73,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewSacrifice.test.ts:78`
 - `src/services/reviewSacrifice.test.ts:82`
 - `src/services/reviewWalk2065.test.ts:38`
+
+### `besideKing` (function) — 1 call site
+- `src/services/exchangeSacrifice.ts:121`
 
 ## Tests
 

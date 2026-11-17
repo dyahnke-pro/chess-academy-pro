@@ -74,6 +74,8 @@ import { moveThreat } from './moveThreat';
 import type { AnalysisLine } from '../types';
 import { gambitIdea } from './gambitIdea';
 import { campIdea } from './intoTheirCamp';
+import { exchangeSacIdea } from './exchangeSacrifice';
+import { majorityIdea } from './pawnMajority';
 
 export interface MoveThoughtInput {
   fenBefore: string;
@@ -812,6 +814,11 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       for (const f of readBoardAll('stalemateTrick', { fenBefore: i.fenBefore, san: i.san, student })) {
         facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'rescue', weight: 70 });
       }
+      // The fortress, both seats: a piece down and a draw the board explains,
+      // read off the engine's lines after the move.
+      for (const f of readBoardAll('fortress', { fenBefore: i.fenBefore, san: i.san, student, replies })) {
+        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'eval', weight: 60 });
+      }
       // Checks that come back to the same board (a perpetual) and the
       // discovered-check see-saw (a windmill), both seats.
       for (const f of readBoardAll('perpetualCheck', { fenBefore: i.fenBefore, san: i.san, student, replies })) {
@@ -826,6 +833,18 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     // per candidate the weighing reads (`weighReads`).
     for (const f of readBoardAll('flexibleMove', { fenBefore: i.fenBefore, san: i.san, student, reads: weighReads })) {
       facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'order', weight: 52 });
+    }
+    // THE EXCHANGE SACRIFICE, both seats (Danya's "give up the rook, because
+    // in return you get a monster"): the rook given on purpose, the engine's
+    // read per candidate vouching, and what it buys.
+    for (const f of readBoardAll('exchangeSacrifice', { fenBefore: i.fenBefore, san: i.san, student, reads: weighReads })) {
+      facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: exchangeSacIdea(f.claims[0] ?? ''), weight: 62 });
+    }
+    // THE PAWN MAJORITY, both seats (Danya's "White gets a queenside majority,
+    // you get a kingside majority"): made, crippled, given up or set moving —
+    // a recapture read against the board before their move began the trade.
+    for (const f of readBoardAll('pawnMajority', { fenBefore: i.fenBefore, san: i.san, student, prior: i.theirLast })) {
+      facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: majorityIdea(f.claims[0] ?? ''), weight: 50 });
     }
     // Getting into their camp, both seats (Danya's speedruns): a piece gets in
     // and hits what they cannot keep, the rooks on the seventh, a rook lift or

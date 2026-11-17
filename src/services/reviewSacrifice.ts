@@ -39,7 +39,7 @@ const NO_COMPENSATION_BELOW_CP = -150;
 
 /** The cost, in the mover's centipawns, above which a sacrifice has not paid
  *  for itself — the review's inaccuracy bar. */
-const SAC_COST_BAR_CP = 50;
+export const SAC_COST_BAR_CP = 50;
 
 export function sacrificeCompensation(
   fenAfter: string,
@@ -172,11 +172,8 @@ export function describeSacBreaksKingShield(fenBefore: string, san: string): str
   }
   if (!mv || !mv.captured) return null;
   const enemy: 'w' | 'b' = mv.color === 'w' ? 'b' : 'w';
-  const kingSq = findKing(board, enemy); // AFTER the move — king hasn't moved on a capture
-  if (!kingSq) return null;
-  const df = Math.abs(mv.to.charCodeAt(0) - kingSq.charCodeAt(0));
-  const dr = Math.abs(Number(mv.to[1]) - Number(kingSq[1]));
-  if (df > 1 || dr > 1 || (df === 0 && dr === 0)) return null; // must be adjacent to the king
+  // AFTER the move — the king hasn't moved on a capture.
+  if (!besideKing(board, mv.to, enemy)) return null; // must be adjacent to the king
   // AN ATTACK NEEDS ATTACKERS (review walk 2065, 2026-09-26: Rxc7+ with the
   // rook as White's last piece — after Kxc7 it was a pawn ending, and the coach
   // said "the attack rolls straight on"). The sac rips the shield only if some
@@ -190,6 +187,18 @@ export function describeSacBreaksKingShield(fenBefore: string, san: string): str
     ? 'You give up the exchange — a rook for a minor piece'
     : `You give up the ${PIECE_NOUN[mv.piece] ?? 'piece'}`;
   return `${give}, but you tear the ${capName} away from beside their king and the attack rolls straight on`;
+}
+
+/** Does `square` stand beside `color`'s king — one of the eight squares
+ *  around it? The one test of "the piece beside their king" for the
+ *  sacrifice reads (the shield a sac rips, and the exchange sacrifice's
+ *  `exchangeSacrifice`). */
+export function besideKing(board: Chess, square: string, color: 'w' | 'b'): boolean {
+  const kingSq = findKing(board, color);
+  if (!kingSq) return false;
+  const df = Math.abs(square.charCodeAt(0) - kingSq.charCodeAt(0));
+  const dr = Math.abs(Number(square[1]) - Number(kingSq[1]));
+  return df <= 1 && dr <= 1 && !(df === 0 && dr === 0);
 }
 
 /** Squares of the king of `color`, or null. */

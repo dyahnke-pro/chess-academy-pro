@@ -76,6 +76,9 @@ import { minorMatchup } from './minorMatchup';
 import { stalemateTrick, stalemateTrickLine } from './stalemateWatch';
 import { intoTheirCamp, intoTheirCampLine } from './intoTheirCamp';
 import { flexibleMove, flexibleMoveLine, flexibleMoveSquares } from './flexibleMove';
+import { exchangeSacrifice, exchangeSacrificeLine, exchangeSacrificeSquares } from './exchangeSacrifice';
+import { pawnMajority, pawnMajorityLine, pawnMajoritySquares } from './pawnMajority';
+import { fortress, fortressLine, fortressSquares } from './fortress';
 import { pawnCutsGuard, type PawnLineRead } from './pawnLines';
 import { chainBase } from './chainBase';
 import { pinnedPawnGuard } from './pinnedPawnGuard';
@@ -318,6 +321,28 @@ export interface BoardContexts {
    *  best. `reads`: the engine's lines from the board before the move, one per
    *  candidate, the move played among them (`WeighRead`); null where none. */
   flexibleMove: { fenBefore: string; san: string; student: Color; reads: readonly WeighRead[] | null };
+  /** THE EXCHANGE SACRIFICE (`exchangeSacrifice`, Danya's "give up the
+   *  rook, because in return you get a monster"): the move `san` on
+   *  `fenBefore` (either seat) gives a rook for a minor (or a minor and a
+   *  pawn), lost by the legal exchange, with the engine reading it no worse
+   *  than the best — and what it buys on the board. `reads`: the engine's
+   *  lines from the board before the move, one per candidate, the move played
+   *  among them (`WeighRead`); null where none. */
+  exchangeSacrifice: { fenBefore: string; san: string; student: Color; reads: readonly WeighRead[] | null };
+  /** THE PAWN MAJORITY ON A WING (`pawnMajority`, Danya's "White gets a
+   *  queenside majority, you get a kingside majority"): the move `san` on
+   *  `fenBefore` (either seat) makes, cripples, gives up or sets moving a
+   *  wing majority. `prior`: the move before it (its board and SAN), so a
+   *  recapture is read against the board before the trade began; null where
+   *  there was none. */
+  pawnMajority: { fenBefore: string; san: string; student: Color; prior: { fenBefore: string; san: string } | null };
+  /** THE FORTRESS (`fortress`, Danya's "a fortress plus an active king can
+   *  draw even down material when there's no way in"): the move `san` on
+   *  `fenBefore` (either seat) leaves an ending a piece or more down that the
+   *  engine reads a draw, for a reason the board shows. `replies`: the
+   *  engine's lines from the board after the move, best first (White-POV
+   *  cp); [] where none. */
+  fortress: { fenBefore: string; san: string; student: Color; replies: readonly ReplyLine[] };
   /** WHAT A PAWN MOVE DID TO THE LINES (`pawnLines`, S4 pawns): the square the pawn landed on cut an enemy slider off from a piece it
    *  guarded, which is hanging now and was not before. */
   pawnCutsGuard: { fenBefore: string; san: string; student: Color };
@@ -1698,6 +1723,84 @@ export const BOARD_COMPUTERS = {
       learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_NA,
       weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
+    },
+  },
+  exchangeSacrifice: {
+    // His "give up the rook, because in return you get a monster" and "take
+    // with the rook, sacrificing the exchange to keep the light bishop as the
+    // main attacker": the exchange given on purpose and what it buys, both seats.
+    read: ({ fenBefore, san, student, reads }, fact) => safe(() => {
+      const x = exchangeSacrifice(fenBefore, san, reads);
+      if (!x) return null;
+      const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
+      const mine = x.side === student;
+      const text = exchangeSacrificeLine(x, mine, fenAfter);
+      const squares = exchangeSacrificeSquares(x);
+      // The trade played out is the proof: the move, their capture, the take-back.
+      const proof = legalLineProof(fenBefore, x.line, lineSeatAt(fenBefore, student), true) ?? squaresProof(text, squares) ?? NO_PROOF.description;
+      // One claim with the exchange for the key attacker (`exchangeIdeas`):
+      // the same rook given on the same square is one idea.
+      return fact({ key: x.key, claims: [x.key, `exchange-for-attacker:${x.square}`], text, proof, squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter,
+        ...(isProof(proof) && proof.line ? { lines: [proof.line] } : {}) });
+    }),
+    computer: 'exchangeSacrifice',
+    kind: 'sac-why',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: S4_LEARN_OWED,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
+    },
+  },
+  pawnMajority: {
+    // His "White gets a queenside pawn majority, you get a kingside majority"
+    // and "kingside pawn majority you could push with g4": the wing majority
+    // a move makes, cripples, gives up or sets moving, both seats.
+    read: ({ fenBefore, san, student, prior }, fact) => safe(() => {
+      const x = pawnMajority(fenBefore, san, prior);
+      if (!x) return null;
+      const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
+      const text = pawnMajorityLine(x, student, fenAfter);
+      const squares = pawnMajoritySquares(x);
+      // A split is one trade: its two majorities are one claim.
+      const claims = x.split ? [x.key, `pawn-majority:created:${x.split.side}:${x.split.wing}`] : [x.key];
+      return fact({ key: x.key, claims, text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+        seat: x.majority.side === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
+    }),
+    computer: 'pawnMajority',
+    kind: 'structure',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: S4_LEARN_OWED,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
+    },
+  },
+  fortress: {
+    // His "a fortress plus an active king can draw even down material when
+    // there's no way in": the draw a piece down, and the board's reason,
+    // both seats.
+    read: ({ fenBefore, san, student, replies }, fact) => safe(() => {
+      const f = fortress(fenBefore, san, replies);
+      if (!f) return null;
+      const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
+      const mine = f.defender === student;
+      const text = fortressLine(f, mine, fenAfter);
+      const squares = fortressSquares(f);
+      return fact({ key: f.key, claims: [f.key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
+    }),
+    computer: 'fortress',
+    kind: 'judgement',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: S4_LEARN_OWED,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the board said once — no question of the student\'s posed' },
     },
   },
   pawnCutsGuard: {

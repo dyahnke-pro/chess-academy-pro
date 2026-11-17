@@ -293,6 +293,25 @@ export function lockedPawnPairs(chess: Chess): Array<{ white: string; black: str
   return out;
 }
 
+/** A wing of the board: the queenside is the a- to d-files, the kingside
+ *  the e- to h-files. */
+export type Wing = 'queenside' | 'kingside';
+
+/**
+ * EVERY PAWN BY SIDE AND WING — the one read of a wing majority: the split
+ * majorities of the structure signature count it, and the majority computer
+ * (`pawnMajority`) reads which side has more pawns on a wing, on how many
+ * files.
+ */
+export function wingPawns(chess: Chess): Record<Color, Record<Wing, string[]>> {
+  const out: Record<Color, Record<Wing, string[]>> = { w: { queenside: [], kingside: [] }, b: { queenside: [], kingside: [] } };
+  for (const p of pieces(chess)) {
+    if (p.type !== 'p') continue;
+    out[p.color][fileIndex(fileOf(p.square)) <= 3 ? 'queenside' : 'kingside'].push(p.square);
+  }
+  return out;
+}
+
 export function structureSignature(fen: string): StructureSignature | null {
   const s = describeStructure(fen);
   if (!s) return null;
@@ -312,21 +331,16 @@ export function structureSignature(fen: string): StructureSignature | null {
   // Split majorities (strict counts, queenside = files a–d).
   let queensideMajority: Color | null = null;
   if (chess) {
-    const allPawns = pieces(chess).filter((p) => p.type === 'p');
     // The one locked-pawn reader (`lockedPawnPairs`), counted on c–f.
     const centreFiles = new Set(lockedPawnPairs(chess).map((p) => p.white[0]).filter((f) => 'cdef'.includes(f)));
     lockedCenter = centreFiles.size >= 2;
 
-    const countWing = (c: Color, wing: 'q' | 'k'): number =>
-      allPawns.filter(
-        (p) =>
-          p.color === c &&
-          (wing === 'q' ? fileIndex(fileOf(p.square)) <= 3 : fileIndex(fileOf(p.square)) >= 4),
-      ).length;
-    const wq = countWing('w', 'q');
-    const bq = countWing('b', 'q');
-    const wk = countWing('w', 'k');
-    const bk = countWing('b', 'k');
+    // The one wing read (`wingPawns`), counted.
+    const wings = wingPawns(chess);
+    const wq = wings.w.queenside.length;
+    const bq = wings.b.queenside.length;
+    const wk = wings.w.kingside.length;
+    const bk = wings.b.kingside.length;
     if (wq > bq && bk > wk) queensideMajority = 'w';
     else if (bq > wq && wk > bk) queensideMajority = 'b';
   }

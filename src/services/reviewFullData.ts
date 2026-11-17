@@ -1704,6 +1704,15 @@ export function computeMoveFacets(
       // engine holds as good as each other, the one that keeps the important
       // moves open — off the record's one read per candidate.
       add(readBoardAll('flexibleMove', { fenBefore, san, student: studentColorWB, reads: ctx.teaching.weigh.reads })[0]);
+      // The exchange sacrifice, both seats: the rook given on purpose and what
+      // it buys, off the same read per candidate.
+      add(readBoardAll('exchangeSacrifice', { fenBefore, san, student: studentColorWB, reads: ctx.teaching.weigh.reads })[0]);
+      // The pawn majority, both seats: made, crippled, given up or set moving,
+      // a recapture read against the board before the trade began.
+      add(readBoardAll('pawnMajority', { fenBefore, san, student: studentColorWB, prior: ply >= 2 && ctx.teaching.prevFenBefore ? { fenBefore: ctx.teaching.prevFenBefore, san: ctx.allSans[ply - 2] } : null })[0]);
+      // The fortress, both seats: a piece down and a draw the board explains,
+      // off the stored score after the move.
+      add(readBoardAll('fortress', { fenBefore, san, student: studentColorWB, replies: ctx.evaluation == null ? [] : [{ cp: storedMate(ctx.evaluation) == null ? ctx.evaluation : null, mate: storedMate(ctx.evaluation), moves: ctx.playedLineUci }] })[0]);
     }
     if (!isStudent) {
       // Their move took an attacker off a piece you had to look after.
