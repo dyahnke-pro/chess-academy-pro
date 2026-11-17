@@ -71,6 +71,7 @@ import { lineCut } from './lineCut';
 import { harmlessPin, harmlessPinLine } from './harmlessPin';
 import { queenNet, queenNetLine } from './queenNet';
 import { bothSaved, bothSavedLine, type ReplyLine } from './bothSaved';
+import { perpetualCheck, perpetualStartedBy, perpetualLine, winningAnyway, windmill, windmillStartedBy, windmillLine } from './repeatingChecks';
 import { pawnCutsGuard, type PawnLineRead } from './pawnLines';
 import { chainBase } from './chainBase';
 import { pinnedPawnGuard } from './pinnedPawnGuard';
@@ -281,6 +282,14 @@ export interface BoardContexts {
    *  move `san` on `fenBefore` (either seat). `replies`: the engine's lines
    *  from the board after it, best first (White-POV cp); [] where none. */
   bothSaved: { fenBefore: string; san: string; student: Color; replies: readonly ReplyLine[] };
+  /** A PERPETUAL CHECK (`repeatingChecks`): the move `san` on `fenBefore`
+   *  (either seat) starts one, or leaves the side to move one it can force.
+   *  `replies`: the engine's lines from the board after the move (White-POV
+   *  cp), to stay quiet where the side with the checks is winning anyway. */
+  perpetualCheck: { fenBefore: string; san: string; student: Color; replies: readonly ReplyLine[] };
+  /** A WINDMILL (`repeatingChecks`): the move `san` on `fenBefore` (either
+   *  seat) turns one, or leaves the side to move one. */
+  windmill: { fenBefore: string; san: string; student: Color };
   /** WHAT A PAWN MOVE DID TO THE LINES (`pawnLines`, S4 pawns): the square the pawn landed on cut an enemy slider off from a piece it
    *  guarded, which is hanging now and was not before. */
   pawnCutsGuard: { fenBefore: string; san: string; student: Color };
@@ -1485,6 +1494,68 @@ export const BOARD_COMPUTERS = {
     surfaces: {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
       learn: { not: 'owed — not in the Learn turn door yet (CoachTeachPage reads none of its lanes); the composer and Review say it' },
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
+    },
+  },
+  perpetualCheck: {
+    // His "list the checking squares and check whether the king can run"
+    // (8QxDmN): checks that come back to the same board, the king with no way
+    // out, both seats. The move that starts it, or the one that allows it.
+    read: ({ fenBefore, san, student, replies }, fact) => safe(() => {
+      const fenAfter = boardAfter(fenBefore, san);
+      if (!fenAfter) return null;
+      const mover = new Chess(fenBefore).turn();
+      const started = perpetualStartedBy(fenBefore, san);
+      const p = started ?? perpetualCheck(fenAfter);
+      if (!p || winningAnyway(replies, p.side)) return null;
+      const mine = p.side === student;
+      const text = perpetualLine(p, mine, !!started, fenAfter);
+      const from = started ? fenBefore : fenAfter;
+      const proof = legalLineProof(from, p.line, lineSeatAt(from, student), true) ?? NO_PROOF.description;
+      const squares = [...p.from.map((f) => f.square), p.king];
+      // One claim with the windmill (the same checks, read for what they win):
+      // a move says one of them.
+      return fact({ key: p.key, claims: [p.key, `repeating-checks:${p.side}`], text, proof, squares, stakes: null,
+        // The checks are the side to move's next moves when it did not start them.
+        seat: mine ? 'student' : 'opponent', namesStudentMove: !started && mine && p.side !== mover, thread: LOCAL_THREAD, fen: fenAfter,
+        ...(isProof(proof) && proof.line ? { lines: [proof.line] } : {}) });
+    }),
+    computer: 'perpetualCheck',
+    kind: 'tactic',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: S4_LEARN_OWED,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
+    },
+  },
+  windmill: {
+    // His "windmills are often overrated" (-Y5bZ): the piece that checks,
+    // steps out with a discovered check and takes, and comes back — both seats.
+    read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const fenAfter = boardAfter(fenBefore, san);
+      if (!fenAfter) return null;
+      const mover = new Chess(fenBefore).turn();
+      const started = windmillStartedBy(fenBefore, san);
+      const w = started ?? windmill(fenAfter);
+      if (!w) return null;
+      const mine = w.side === student;
+      const text = windmillLine(w, mine, !!started, fenAfter);
+      const from = started ? fenBefore : fenAfter;
+      const proof = legalLineProof(from, w.line, lineSeatAt(from, student), true) ?? NO_PROOF.description;
+      const squares = [w.sail.square, w.axle.square, ...w.takes.map((t) => t.square)];
+      return fact({ key: w.key, claims: [w.key, `repeating-checks:${w.side}`], text, proof, squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: !started && mine && w.side !== mover, thread: LOCAL_THREAD, fen: fenAfter,
+        ...(isProof(proof) && proof.line ? { lines: [proof.line] } : {}) });
+    }),
+    computer: 'windmill',
+    kind: 'tactic',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: S4_LEARN_OWED,
       tactics: TACTICS_NA,
       weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
     },

@@ -792,6 +792,14 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       for (const f of readBoardAll('bothSaved', { fenBefore: i.fenBefore, san: i.san, student, replies })) {
         facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'rescue', weight: 64 });
       }
+      // Checks that come back to the same board (a perpetual) and the
+      // discovered-check see-saw (a windmill), both seats.
+      for (const f of readBoardAll('perpetualCheck', { fenBefore: i.fenBefore, san: i.san, student, replies })) {
+        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'tactic', weight: 66 });
+      }
+      for (const f of readBoardAll('windmill', { fenBefore: i.fenBefore, san: i.san, student })) {
+        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'tactic', weight: 68 });
+      }
     }
     // What the pawn move did to the lines through its squares, the piece at a
     // chain's base, the pawn guard pinned to its king (S4 pawns).

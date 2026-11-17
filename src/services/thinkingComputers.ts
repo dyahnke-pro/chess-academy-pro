@@ -251,6 +251,8 @@ export const THINK_STEP: Record<ComputerName, ThinkAnswer> = {
   harmlessPin: 'their-move-changed',
   queenNet: 'calculate',
   bothSaved: 'answer-danger',
+  perpetualCheck: 'forcing-moves',
+  windmill: 'forcing-moves',
   tradeOfferAt: 'assess',
   fileTradeAt: 'assess',
   pawnEndingTradeAt: 'assess',
