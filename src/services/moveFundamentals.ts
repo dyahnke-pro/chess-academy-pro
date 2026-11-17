@@ -1002,6 +1002,10 @@ export function computeMoveFundamentals(
     if (
       kSq && rankOf(kSq) === backRank && shieldFiles.includes(fileOf(mv.to))
       && relRank(mv.to, mover) === 3 && relRank(mv.from, mover) === 2
+      // The square the pawn left is the flight square: it must be one the
+      // king can step to (Danya PHAm: "a3 gives your king luft" with the king
+      // on c1 — a2 is not next to it).
+      && Math.abs(fileOf(mv.from).charCodeAt(0) - fileOf(kSq).charCodeAt(0)) <= 1
     ) {
       out.push({
         id: 'luft',

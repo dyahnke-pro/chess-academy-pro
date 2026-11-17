@@ -197,6 +197,10 @@ describe('computeMoveFundamentals — positional fundamentals (audit 2026-09-11)
     expect(luft, 'h3 in front of the castled king makes luft').toBeTruthy();
     expect(luft!.led).toContain('luft');
   });
+  it('no luft from a square the king cannot step to (Danya PHAm 14.a3, king on c1)', () => {
+    const funds = computeMoveFundamentals('r1bq3r/pp2k3/2pp1p1n/4p3/1n1PP3/2N2N1P/PPPQBPP1/2KR3R w - - 3 14', 'a3', 'white');
+    expect(funds.some((f) => f.id === 'luft')).toBe(false);
+  });
 });
 
 describe('a pawn move that opens a bishop (hand walk 2026-09-24)', () => {
