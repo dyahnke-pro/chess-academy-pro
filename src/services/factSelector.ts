@@ -202,7 +202,7 @@ export function selectFacts<F extends CoachFact>(
   const said = alreadySaid ?? new Set<string>();
   const bar = order ? order.bar : barForTier(tier);
   const rankOf = (f: F): number => (order ? (order.rank.get(f.id) ?? 0) : facetRank(f.text, signals));
-  const scored = facts.map((f, i) => ({ f, text: f.text, i, rank: rankOf(f), sq: f.squares, family: f.kind as string }));
+  const scored = facts.map((f, i) => ({ f, text: f.text, i, rank: rankOf(f), sq: f.squares, family: f.kind as string, claims: f.claims ?? [] }));
   // Highest rank first; authoring order breaks ties so the result is stable.
   const byRank = [...scored].sort((a, b) => (b.rank - a.rank) || (a.i - b.i));
 
@@ -218,8 +218,14 @@ export function selectFacts<F extends CoachFact>(
     // Only facts that actually named squares can coincide. A fact with no
     // coupled squares is never collapsed — we cannot prove it is the same claim,
     // and silence must never be a guess.
+    // …OR THE SAME CLAIM IN THE SHARED VOCABULARY: two computers that make one
+    // claim say so at emission ("this move presses c2", `moveIdeaClaim`), so a
+    // rook that gets in and "hits their pawns on c2 and h2" and the chain base
+    // "your rook hits c2" are one hit, whatever their kinds (decision
+    // baseline, Sicilian Closed …Re2). The lesson composer folds them the same
+    // way (`buildVoicePackage` reads the same claims).
     const g = cand.sq.length > 0
-      ? groups.find((grp) => sameClaim(grp[0], cand))
+      ? groups.find((grp) => sameClaim(grp[0], cand) || grp.some((x) => x.claims.some((c) => cand.claims.includes(c))))
       : undefined;
     if (g) g.push(cand); else groups.push([cand]);
   }

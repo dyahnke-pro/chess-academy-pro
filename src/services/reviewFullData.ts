@@ -1604,6 +1604,9 @@ export function computeMoveFacets(
     recProof(raw, isProof(f.proof) ? f.proof : null);
     recSquares(raw, f.squares);
     recStakes(raw, f.stakes);
+    // The claims ride along: two computers that make one claim ("this move
+    // presses c2") fold into one at the door, as they do in a lesson.
+    if (f.claims.length) raw.claims = [...f.claims];
     raw.identity = identity;
   };
   if (isStudent && studentColorWB) {
