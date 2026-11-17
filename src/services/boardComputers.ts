@@ -71,6 +71,7 @@ import { lineCut } from './lineCut';
 import { harmlessPin, harmlessPinLine } from './harmlessPin';
 import { queenNet, queenNetLine } from './queenNet';
 import { bothSaved, bothSavedLine, type ReplyLine } from './bothSaved';
+import { flexibleMove, flexibleMoveLine, flexibleMoveSquares } from './flexibleMove';
 import { pawnCutsGuard, type PawnLineRead } from './pawnLines';
 import { chainBase } from './chainBase';
 import { pinnedPawnGuard } from './pinnedPawnGuard';
@@ -281,6 +282,11 @@ export interface BoardContexts {
    *  move `san` on `fenBefore` (either seat). `replies`: the engine's lines
    *  from the board after it, best first (White-POV cp); [] where none. */
   bothSaved: { fenBefore: string; san: string; student: Color; replies: readonly ReplyLine[] };
+  /** THE FLEXIBLE MOVE (`flexibleMove`, the option principle): the move `san`
+   *  on `fenBefore` (either seat) against the moves the engine holds near the
+   *  best. `reads`: the engine's lines from the board before the move, one per
+   *  candidate, the move played among them (`WeighRead`); null where none. */
+  flexibleMove: { fenBefore: string; san: string; student: Color; reads: readonly WeighRead[] | null };
   /** WHAT A PAWN MOVE DID TO THE LINES (`pawnLines`, S4 pawns): the square the pawn landed on cut an enemy slider off from a piece it
    *  guarded, which is hanging now and was not before. */
   pawnCutsGuard: { fenBefore: string; san: string; student: Color };
@@ -1485,6 +1491,32 @@ export const BOARD_COMPUTERS = {
     surfaces: {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
       learn: { not: 'owed — not in the Learn turn door yet (CoachTeachPage reads none of its lanes); the composer and Review say it' },
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
+    },
+  },
+  flexibleMove: {
+    // The option principle (Adams 1939, Berliner 1999): of moves as good as
+    // each other, the one that keeps the most important moves open — his
+    // "Bishop to c4 this early commits the bishop", "play d3 before castling,
+    // it keeps the castling decision open". Both seats.
+    read: ({ fenBefore, san, student, reads }, fact) => safe(() => {
+      const f = flexibleMove(fenBefore, san, reads);
+      if (!f) return null;
+      const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
+      const mine = new Chess(fenBefore).turn() === student;
+      const text = flexibleMoveLine(f, mine ? 'your' : 'their', fenAfter);
+      if (!text) return null;
+      const squares = flexibleMoveSquares(f);
+      return fact({ key: f.key, claims: [f.key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
+    }),
+    computer: 'flexibleMove',
+    kind: 'move-order',
+    phase: NOT_ENDING,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: S4_LEARN_OWED,
       tactics: TACTICS_NA,
       weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
     },

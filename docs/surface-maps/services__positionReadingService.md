@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2806 lines · 78 exports · 153 importers · 28 tests · 2 audits**
+**2806 lines · 78 exports · 154 importers · 28 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -60,6 +60,7 @@
 - `src/services/factStakes.ts`
 - `src/services/falseAlarm.ts`
 - `src/services/fileTrade.ts`
+- `src/services/flexibleMove.ts`
 - `src/services/forkTrick.ts`
 - `src/services/gambitIdea.ts`
 - `src/services/gameEndReads.ts`
@@ -317,7 +318,7 @@
 - `src/services/orderByThreat.ts:110`
 - `src/services/prophylaxis.ts:105`
 
-### `legalSeeGainFor` (function) — 143 call sites
+### `legalSeeGainFor` (function) — 145 call sites
 - `src/coach/focus/castlingWatch.ts:159`
 - `src/coach/focus/castlingWatch.ts:161`
 - `src/coach/focus/focusChances.ts:388`
@@ -369,6 +370,8 @@
 - `src/services/exchangeLedger.ts:571`
 - `src/services/exchangeLedger.ts:572`
 - `src/services/falseAlarm.ts:62`
+- `src/services/flexibleMove.ts:148`
+- `src/services/flexibleMove.ts:205`
 - `src/services/groundedAnswer.ts:1319`
 - `src/services/groundedAnswer.ts:1381`
 - `src/services/guardRemoval.ts:95`

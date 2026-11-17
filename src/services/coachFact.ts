@@ -472,6 +472,7 @@ export const COMPUTER_CATALOG = {
   emptyCheckAt: { file: 'services/emptyCheck.ts', says: 'a check that cost half a pawn and is answered by a block or a king step: the checking piece has to move again' },
   harmlessPin: { file: 'services/harmlessPin.ts', says: 'a pin the move just made that will not hold: a pawn guards the pinned piece and the engine\'s line ends the pin within two of their moves (castling, a piece between, a pawn kick)' },
   queenNet: { file: 'services/queenNet.ts', says: 'the move takes a safe square from the other side\'s raiding (or attacked) queen and leaves it one safe square or none, each square read by the legal exchange' },
+  flexibleMove: { file: 'services/flexibleMove.ts', says: 'of two moves the engine holds near the best, the one that keeps more of the mover\'s important moves open (a minor\'s good squares, a pawn break, a castling side): the move kept what the other would have closed, or closed what the other kept' },
   bothSaved: { file: 'services/bothSaved.ts', says: 'two of the mover\'s pieces hanging, and the move steps one of them to a square that guards the other, both safe after it by the legal exchange or the engine\'s own replies' },
   desperadoAt: { file: 'services/desperado.ts', says: 'two of the mover\'s pieces hanging, and the engine\'s best move sells the one that is lost anyway: it captures on its way out' },
   pawnCutsGuard: { file: 'services/pawnLines.ts', says: 'the square a pawn lands on cuts an enemy slider off from a piece it guarded, which has no guard now' },

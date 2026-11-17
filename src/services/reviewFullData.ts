@@ -1681,6 +1681,10 @@ export function computeMoveFacets(
       add(readBoardAll('harmlessPin', { fenBefore, san, student: studentColorWB, line: ctx.playedLineUci })[0]);
       add(readBoardAll('queenNet', { fenBefore, san, student: studentColorWB })[0]);
       add(readBoardAll('bothSaved', { fenBefore, san, student: studentColorWB, replies: ctx.playedLineUci.length ? [{ cp: ctx.evaluation != null && storedMate(ctx.evaluation) == null ? ctx.evaluation : null, mate: null, moves: ctx.playedLineUci }] : [] })[0]);
+      // The flexible move, both seats (the option principle): of moves the
+      // engine holds as good as each other, the one that keeps the important
+      // moves open — off the record's one read per candidate.
+      add(readBoardAll('flexibleMove', { fenBefore, san, student: studentColorWB, reads: ctx.teaching.weigh.reads })[0]);
     }
     if (!isStudent) {
       // Their move took an attacker off a piece you had to look after.
