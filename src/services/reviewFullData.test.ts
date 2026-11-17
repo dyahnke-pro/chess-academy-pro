@@ -748,3 +748,12 @@ describe('"and they missed it" only when their reply let the win go', () => {
     expect(rb3(-150).join(' ')).toMatch(/they missed it/);
   });
 });
+
+describe('a king attacks only what nothing guards (Danya Review tapes)', () => {
+  it('Kf2 on the guarded f3 pawn is no pressure, and no pawn is "worth more than the king"', async () => {
+    const { describeMoveInfluence } = await import('./reviewFullData');
+    const a = describeMoveInfluence('rn1q1rk1/pp3pp1/2pb1n1p/4p3/6b1/1BN2p1N/PPPP2PP/R1BQKR2 w Q - 0 11', 'rn1q1rk1/pp3pp1/2pb1n1p/4p3/6b1/1BN2p1N/PPPP1KPP/R1BQ1R2 b - - 1 11', 'Kf2') ?? '';
+    const b = describeMoveInfluence('rn1qk2r/pbpp1ppp/8/1p2p3/P3n3/B7/2Pb1PPP/R2QK1NR w KQkq - 0 9', 'rn1qk2r/pbpp1ppp/8/1p2p3/P3n3/B7/2PbKPPP/R2Q2NR b kq - 1 9', 'Ke2') ?? '';
+    expect(`${a} ${b}`).not.toMatch(/worth more than the king/);
+  }, 30_000);
+});

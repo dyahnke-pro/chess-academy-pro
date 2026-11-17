@@ -1906,7 +1906,10 @@ export function describeMoveInfluence(fenBefore: string, fenAfter: string, san: 
           // a defended piece worth no more than the eyeing one is a description.
           const IV: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
           const loose = a.attackers(cell.square, enemyWB).length === 0;
-          const bigger = (IV[cell.type] ?? 0) > (IV[pc.type] ?? 0);
+          // A KING TAKES ONLY WHAT NOTHING GUARDS (Danya Review tapes: "Their
+          // king now hits your f-pawn on f3, which is worth more than the
+          // king"): for a king, only a loose piece is pressure.
+          const bigger = pc.type !== 'k' && (IV[cell.type] ?? 0) > (IV[pc.type] ?? 0);
           if ((loose || bigger) && !pressReason) {
             // …and the pressure says WHY it is pressure (review audit
             // 2026-10-14: the line stated the eyeing and left the reason out).
