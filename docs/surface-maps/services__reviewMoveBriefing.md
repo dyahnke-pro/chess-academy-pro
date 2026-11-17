@@ -117,7 +117,7 @@
 ### `newLessonVoice` (function) — 48 call sites
 - `src/hooks/useTeachWalkthrough.ts:902`
 - `src/hooks/useTeachWalkthrough.ts:903`
-- `src/services/danyaBench.measure.test.ts:460`
+- `src/services/danyaBench.measure.test.ts:466`
 - `src/services/decisionStakes.test.ts:50`
 - `src/services/exchangeNotFinished.test.ts:281`
 - `src/services/gamesCourse.ts:367`

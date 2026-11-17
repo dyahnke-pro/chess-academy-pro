@@ -61,7 +61,7 @@
 - `src/services/boardDelta.test.ts:15`
 - `src/services/boardDelta.test.ts:68`
 - `src/services/coachFeatureService.ts:2302`
-- `src/services/danyaBench.measure.test.ts:428`
+- `src/services/danyaBench.measure.test.ts:434`
 - `src/services/exchangeIdeas.test.ts:238`
 - `src/services/forkTrick.test.ts:62`
 - `src/services/hangingLine.test.ts:73`
