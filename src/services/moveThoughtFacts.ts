@@ -60,6 +60,7 @@ import type { LearnLane } from './learnTurnDoor';
 import { computeMustDefend } from './threatOut';
 import { moveOrder } from './moveOrder';
 import { readBoardAll, readKey } from './boardComputers';
+import { detectTactics } from './tacticsDetector';
 import { thinkStepOf } from './thinkingComputers';
 import { desperadoAt, desperadoLine } from './desperado';
 import { emptyCheckAt, emptyCheckLine } from './emptyCheck';
@@ -862,7 +863,7 @@ export function lessonThought(shown: Omit<MoveThoughtInput, 'phrases' | 'tense' 
   const facts = moveThoughtFacts({ ...input, phrases: voice.phrases });
   const alt = refuted ? refutedFact(refuted, input.fenBefore, input.moverIsStudent !== false ? 'student' : 'opponent') : null;
   const purpose = purposeFact(input, voice);
-  return composeThought([...facts, ...(alt ? [alt] : []), ...(purpose ? [purpose] : []), ...studentMoveFacts(input)], 'lesson', voice, NOT_LED, null).spoken;
+  return composeThought([...facts, ...(alt ? [alt] : []), ...(purpose ? [purpose] : []), ...studentMoveFacts(input), ...lessonBoardFacts(input)], 'lesson', voice, NOT_LED, null).spoken;
 }
 
 /** The story's lines that are about the move itself (its price, what their
@@ -947,6 +948,60 @@ const STEP_BOARD_READS: ReadonlyArray<{ idea: IdeaKind; read: (b: StepBoard, stu
   { idea: 'threat', read: (b, student) => (b.theirLast ? readBoardAll('obligationLifted', { fenBefore: b.theirLast.fenBefore, fenAfter: b.fen, student }) : []) },
   { idea: 'weakness', read: (b, student) => (b.theirLast ? readBoardAll('structureTheirMove', { fenBefore: b.theirLast.fenBefore, san: b.theirLast.san, student }) : []) },
 ];
+
+/** THE BOARD READS A LESSON'S MOVE CARRIES (WO-SPEEDRUN-01: "It's not just
+ *  how to think that needs unification. It's all coach surfaces"): the same
+ *  registry reads Review makes on a move, in the same seats — the opponent's
+ *  move lifts an obligation, lets a pinned piece of yours walk out, lets your
+ *  pin be broken, sets a queen grab, changes the structure; your move plays the
+ *  engine's order or its priority. A read of the board ITSELF (a pin break, a
+ *  queen grab, the structure) speaks on the move only when THE MOVE MADE IT:
+ *  the same read on the board before the move did not find it. A lesson walks
+ *  every move of a line, and a standing fact said on every move is a recital. */
+const LESSON_MOVE_READS: ReadonlyArray<{ idea: IdeaKind; seat: 'opponent' | 'student'; standing: boolean; read: (fen: string, i: Omit<MoveThoughtInput, 'phrases'>, student: 'w' | 'b', fenAfter: string) => CoachFact[] }> = [
+  { idea: 'threat', seat: 'opponent', standing: false, read: (_f, i, student, fenAfter) => readBoardAll('obligationLifted', { fenBefore: i.fenBefore, fenAfter, student }) },
+  { idea: 'weakness', seat: 'opponent', standing: false, read: (_f, i, student) => readBoardAll('structureTheirMove', { fenBefore: i.fenBefore, san: i.san, student }) },
+  { idea: 'unpin', seat: 'opponent', standing: true, read: (fen, _i, student) => readBoardAll('pinBreakOwn', { fen, student }) },
+  { idea: 'unpin', seat: 'opponent', standing: true, read: (fen, _i, student) => {
+    let pins: string[] = [];
+    try { pins = detectTactics(fen).tactics.filter((t) => t.type === 'pin' && t.beneficiary === student && t.involvedSquares[1]).map((t) => t.involvedSquares[1]); } catch { pins = []; }
+    return pins.flatMap((pinned) => readBoardAll('pinBreakTheirs', { fen, student, pinned }));
+  } },
+  { idea: 'tactic', seat: 'opponent', standing: true, read: (fen) => readBoardAll('queenGrabTrap', { fen }) },
+  { idea: 'order', seat: 'student', standing: false, read: (_f, i) => { const pv = i.reads?.before[0]?.moves ?? []; return pv.length >= 2 ? readBoardAll('enablingMove', { fen: i.fenBefore, pv }) : []; } },
+  { idea: 'weakness', seat: 'student', standing: false, read: (_f, i, student) => { const b = i.reads?.before[0]?.moves[0]; return b ? readBoardAll('priorityFirst', { fen: i.fenBefore, student, bestUci: b }) : []; } },
+  { idea: 'weakness', seat: 'student', standing: true, read: (fen, _i, student) => readBoardAll('structureBoard', { fen, student }) },
+  // The geometry a move leaves (an overload, a line through two pieces), read
+  // as Review reads it after either seat's move, on the engine's line after it.
+  { idea: 'tactic', seat: 'student', standing: true, read: (fen, i, student) => readBoardAll('tacticGeometry', { fen, me: student, pv: i.reads?.after[0]?.moves ?? [], register: 'live' }) },
+  { idea: 'tactic', seat: 'opponent', standing: true, read: (fen, i, student) => readBoardAll('tacticGeometry', { fen, me: student, pv: i.reads?.after[0]?.moves ?? [], lastOpponentMove: { fenBefore: i.fenBefore, san: i.san }, register: 'live' }) },
+];
+
+/** The lesson's board reads on its move (`LESSON_MOVE_READS`), each a fact. */
+export function lessonBoardFacts(i: Omit<MoveThoughtInput, 'phrases'>): ThoughtFact[] {
+  if (i.moverIsStudent === undefined) return [];
+  let fenAfter: string;
+  try { const c = new Chess(i.fenBefore); c.move(i.san.replace(/[!?]+$/, '')); fenAfter = c.fen(); } catch { return []; }
+  const mover = sideOf(i.fenBefore);
+  const student: 'w' | 'b' = i.moverIsStudent === (mover === 'w') ? 'w' : 'b';
+  const seat = i.moverIsStudent ? 'student' : 'opponent';
+  const out: ThoughtFact[] = [];
+  for (const r of LESSON_MOVE_READS) {
+    if (r.seat !== seat) continue;
+    let facts: CoachFact[];
+    try { facts = r.read(fenAfter, i, student, fenAfter); } catch { facts = []; }
+    if (r.standing && facts.length) {
+      let before: ReadonlySet<string>;
+      try { before = new Set(r.read(i.fenBefore, i, student, fenAfter).map((f) => f.id)); } catch { before = new Set(); }
+      facts = facts.filter((f) => !before.has(f.id));
+    }
+    for (const f of facts) {
+      const { heldForm: _held, ...fact } = f;
+      out.push({ ...fact, namesStudentMove: false, source: 'boardRead', idea: r.idea, weight: 50 });
+    }
+  }
+  return out;
+}
 
 /** THE STEP'S TEACHING (David 2026-11-17: "Make sure how to think gets these
  *  computers … a unified coach structure. That is a non negotiable rule."). A

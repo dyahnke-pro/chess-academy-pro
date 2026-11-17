@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**775 lines · 4 exports · 49 importers · 26 tests · 0 audits**
+**775 lines · 4 exports · 50 importers · 26 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -28,6 +28,7 @@
 - `src/services/misconceptionClassifier.ts`
 - `src/services/mistakeNarration.ts`
 - `src/services/moveInsight.ts`
+- `src/services/moveThoughtFacts.ts`
 - `src/services/oneSkewerRule.test.ts`
 - `src/services/openingGenerator.ts`
 - `src/services/openingSlip.ts`
@@ -78,7 +79,7 @@
 - `src/services/tacticLineRotation.test.ts:34`
 - `src/services/tacticLineRotation.test.ts:39`
 
-### `detectTactics` (function) — 117 call sites
+### `detectTactics` (function) — 118 call sites
 - `src/components/Tactics/PatternSchoolPage.tsx:69`
 - `src/missions/patterns/agreement.test.ts:48`
 - `src/missions/patterns/agreement.test.ts:65`
@@ -105,6 +106,7 @@
 - `src/services/mistakeNarration.ts:396`
 - `src/services/moveInsight.ts:117`
 - `src/services/moveInsight.ts:1065`
+- `src/services/moveThoughtFacts.ts:967`
 - `src/services/oneSkewerRule.test.ts:18`
 - `src/services/openingGenerator.ts:3594`
 - `src/services/openingSlip.ts:122`

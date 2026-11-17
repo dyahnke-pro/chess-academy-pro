@@ -282,7 +282,7 @@ const TACTICS_NA = { not: 'a puzzle position poses one tactic; this computer exp
 const WEAK_OWED = { not: 'owed — one-coach P3: the record keeps the proof' } as const;
 /** A lesson composes each move from the move's own facts (`moveThoughtFacts`)
  *  and reads no registry yet. */
-const LESSON_OWED = { not: 'owed — WO-STORY-MATRIX-01 P1-9/P1-12: a lesson composes a move from moveThoughtFacts; this read joins it as a CoachFact' } as const;
+const LESSON_BOARD = { wired: 'services/moveThoughtFacts.ts' } as const;
 /** A taught line is a model line: no student move of theirs to judge. */
 const LESSON_NO_STUDENT_MOVE = { not: 'it reads the student\'s own move; a lesson\'s line is a model line with no move of theirs to judge' } as const;
 
@@ -360,7 +360,7 @@ export const BOARD_COMPUTERS = {
     computer: 'findPinBreaks',
     kind: 'tactic',
     phase: ANY,
-    surfaces: { lesson: LESSON_OWED, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED, think: THINK },
+    surfaces: { lesson: LESSON_BOARD, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED, think: THINK },
   },
   pinBreakTheirs: {
     // Their piece the student pins can walk out the same way.
@@ -374,7 +374,7 @@ export const BOARD_COMPUTERS = {
     computer: 'findPinBreaks',
     kind: 'tactic',
     phase: ANY,
-    surfaces: { lesson: LESSON_OWED, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: { not: 'owed — a pin puzzle could say the pin is illusory' }, weaknesses: WEAK_OWED, think: { not: 'the pin the student\'s move just made: a step board\'s own pins are read by pinBreakOwn' } },
+    surfaces: { lesson: LESSON_BOARD, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: { not: 'owed — a pin puzzle could say the pin is illusory' }, weaknesses: WEAK_OWED, think: { not: 'the pin the student\'s move just made: a step board\'s own pins are read by pinBreakOwn' } },
   },
   prophylaxis: {
     read: ({ fen, engineFirstMoves }, fact) => safe(() => {
@@ -404,7 +404,7 @@ export const BOARD_COMPUTERS = {
     computer: 'findEnablingMove',
     kind: 'move-order',
     phase: ANY,
-    surfaces: { lesson: LESSON_OWED, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED, think: THINK },
+    surfaces: { lesson: LESSON_BOARD, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED, think: THINK },
   },
   tiedDefender: {
     // Their guard the student's move tied down — a fact about the student's
@@ -434,7 +434,7 @@ export const BOARD_COMPUTERS = {
     computer: 'obligationLifted',
     kind: 'their-read',
     phase: ANY,
-    surfaces: { lesson: LESSON_OWED, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED, think: THINK },
+    surfaces: { lesson: LESSON_BOARD, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED, think: THINK },
   },
   openingStory: {
     // HOW A STRONG COACH EXPLAINS AN OPENING (OS-3): the fork, what it is, the
@@ -454,7 +454,7 @@ export const BOARD_COMPUTERS = {
     kind: 'opening',
     phase: NOT_ENDING,
     surfaces: {
-      lesson: LESSON_OWED,
+      lesson: LESSON_BOARD,
       learn: LEARN,
       review: { wired: 'services/coachFeatureService.ts' },
       play: PLAY_ASK,
@@ -649,7 +649,7 @@ export const BOARD_COMPUTERS = {
     computer: 'buildPriorityFirst',
     kind: 'priority',
     phase: ANY,
-    surfaces: { lesson: LESSON_OWED, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED, think: THINK },
+    surfaces: { lesson: LESSON_BOARD, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED, think: THINK },
   },
   lastTimeHere: {
     // MEMORY BY POSITION (David 2026-10-15): the book-departure rows already
@@ -691,7 +691,7 @@ export const BOARD_COMPUTERS = {
     computer: 'findQueenGrabTraps',
     kind: 'tactic',
     phase: ANY,
-    surfaces: { lesson: LESSON_OWED, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED, think: THINK },
+    surfaces: { lesson: LESSON_BOARD, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED, think: THINK },
   },
   trapped: {
     read: ({ fen, student }, fact) => safe(() => {
@@ -762,14 +762,14 @@ export const BOARD_COMPUTERS = {
     computer: 'theirMoveStructure',
     kind: 'judgement',
     phase: ANY,
-    surfaces: { lesson: LESSON_OWED, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: { not: 'about the opponent\'s last move; chat reads the board judgements (structureBoard)' }, tactics: STRUCT_TACTICS, weaknesses: STRUCT_WEAK, think: THINK },
+    surfaces: { lesson: LESSON_BOARD, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: { not: 'about the opponent\'s last move; chat reads the board judgements (structureBoard)' }, tactics: STRUCT_TACTICS, weaknesses: STRUCT_WEAK, think: THINK },
   },
   structureBoard: {
     read: ({ fen, student }, fact) => safe(() => boardStructure(fen, student).map((r) => structureFact(r, fact, fen, 'student'))),
     computer: 'boardStructure',
     kind: 'judgement',
     phase: ANY,
-    surfaces: { lesson: LESSON_OWED, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: { wired: 'services/groundedAnswer.ts' }, tactics: STRUCT_TACTICS, weaknesses: STRUCT_WEAK, think: THINK },
+    surfaces: { lesson: LESSON_BOARD, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: { wired: 'services/groundedAnswer.ts' }, tactics: STRUCT_TACTICS, weaknesses: STRUCT_WEAK, think: THINK },
   },
   structureLines: {
     read: ({ fen, student, lines, namesMoves }, fact) => safe(() => linesStructure(fen, student, lines, namesMoves).map((r) => structureFact(r, fact, fen, 'student'))),
@@ -794,7 +794,7 @@ export const BOARD_COMPUTERS = {
     computer: 'planThreadTurn',
     kind: 'plan-now',
     phase: ANY,
-    surfaces: { lesson: LESSON_OWED, learn: LEARN, review: { wired: 'services/coachFeatureService.ts' }, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED, think: { not: 'a plan carried across a game\'s moves; a step board is one position' } },
+    surfaces: { lesson: { not: 'a lesson says ONE plan, the one the strongest games show where its line ends (openingGenerator.lessonPlanOutro → computedPlanAt); the per-move plan thread follows a game the student plays' }, learn: LEARN, review: { wired: 'services/coachFeatureService.ts' }, play: PLAY_ASK, chat: CHAT_OWED, tactics: TACTICS_NA, weaknesses: WEAK_OWED, think: { not: 'a plan carried across a game\'s moves; a step board is one position' } },
   },
   tacticGeometry: {
     read: (ctx, fact) => safe(() => geometryReads(ctx).map((r) => fact({
@@ -810,7 +810,7 @@ export const BOARD_COMPUTERS = {
     phase: ANY,
     surfaces: {
       // Learn and chat's position reads both go through the one producer.
-      lesson: LESSON_OWED,
+      lesson: LESSON_BOARD,
       // Learn and chat's position reads both go through the one producer.
       learn: { wired: 'services/thinkAloud.ts' },
       review: REVIEW,

@@ -552,9 +552,17 @@ export function kickFails(ctx: GeometryContext): GeometryRead | null {
   const net = ledger && ledger.netPawns > 0 ? netPieceWords(ledger.studentWon, ledger.opponentWon) : null;
   if (!net) return null;
   const what = `winning ${net}`;
+  // The kicking pawn taken on its own square is "it", never the square twice
+  // in one sentence ("…the pawn to d4 … the c-pawn takes d4").
+  const punish = shown.punish.to === shown.kick.to
+    ? sayMoveClause(shown.punish.san, afterKick.fen()).replace(new RegExp(` takes ${shown.kick.to}$`), ' simply takes it')
+    : sayMoveClause(shown.punish.san, afterKick.fen());
+  // The kicking pawn by its file ("the d-pawn"): one sentence names two
+  // squares at most (the squares are lit on the board).
+  const kicker = shown.kick.piece === 'p' ? `the ${shown.kick.from[0]}-pawn` : sayMoveNoun(shown.kick.san, after.fen());
   const text = tense(ctx,
-    `After ${sayMoveNoun(mv.san, ctx.fen)}, kicking it with ${sayMoveNoun(shown.kick.san, after.fen())} doesn't work here: ${sayMoveClause(shown.punish.san, afterKick.fen())}, ${what}.`,
-    `After ${sayMoveNoun(mv.san, ctx.fen)}, kicking it with ${sayMoveNoun(shown.kick.san, after.fen())} would not have worked: ${sayMoveClause(shown.punish.san, afterKick.fen())}, ${what}.`);
+    `After ${sayMoveNoun(mv.san, ctx.fen)}, kicking it with ${kicker} doesn't work here: ${punish}, ${what}.`,
+    `After ${sayMoveNoun(mv.san, ctx.fen)}, kicking it with ${kicker} would not have worked: ${punish}, ${what}.`);
   const proof = legalLineProof(ctx.fen, [mv.san, shown.kick.san, shown.punish.san], lineSeatAt(ctx.fen, ctx.me), true);
   if (!proof) return null;
   return {

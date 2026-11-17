@@ -89,4 +89,8 @@
 // 2026-11-15-full-depth — no ply or rating cut on any line a lesson speaks
 // (David: "I want full depth narration"); the refuted alternative's line runs
 // to where the line rule (`lineTrust`) stops naming it.
-export const WALKTHROUGH_GEN_REV = '2026-11-15-full-depth';
+// 2026-11-17-speedrun — the Danya speedrun regrade's producer fixes, and a
+// lesson's move reads the same board computers Review does (a pin break, an
+// obligation lifted, a queen grab, the structure, the engine's order and its
+// priority, the tactic geometry) — each only when the move made it.
+export const WALKTHROUGH_GEN_REV = '2026-11-17-speedrun';

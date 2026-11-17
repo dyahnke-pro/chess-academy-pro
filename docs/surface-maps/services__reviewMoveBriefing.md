@@ -52,13 +52,13 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `signedBand` (const) — 1 call site
-- `src/services/moveThoughtFacts.ts:778`
+- `src/services/moveThoughtFacts.ts:779`
 
 ### `evalReading` (function) — 4 call sites
 - `src/services/evalReading.test.ts:11`
 - `src/services/evalReading.test.ts:17`
 - `src/services/evalReading.test.ts:23`
-- `src/services/moveThoughtFacts.ts:775`
+- `src/services/moveThoughtFacts.ts:776`
 
 ### `moveAspects` (function) — 13 call sites
 - `src/services/captureLeadsTo.test.ts:26`
@@ -68,8 +68,8 @@
 - `src/services/exchangeNotFinished.test.ts:25`
 - `src/services/exchangeNotFinished.test.ts:295`
 - `src/services/midExchangeStructure.test.ts:13`
-- `src/services/moveThoughtFacts.ts:229`
-- `src/services/moveThoughtFacts.ts:1189`
+- `src/services/moveThoughtFacts.ts:230`
+- `src/services/moveThoughtFacts.ts:1244`
 - `src/services/reviewMoveBriefing.test.ts:71`
 - `src/services/reviewMoveBriefing.test.ts:73`
 - `src/test/captureSaidOnce.gate.test.ts:190`
@@ -101,12 +101,12 @@
 - `src/test/captureSaidOnce.gate.test.ts:186`
 
 ### `toClause` (function) — 3 call sites
-- `src/services/moveThoughtFacts.ts:356`
+- `src/services/moveThoughtFacts.ts:357`
 - `src/services/reviewMoveBriefing.test.ts:182`
 - `src/services/reviewMoveBriefing.test.ts:185`
 
 ### `joinReview` (function) — 3 call sites
-- `src/services/moveThoughtFacts.ts:356`
+- `src/services/moveThoughtFacts.ts:357`
 - `src/services/reviewMoveBriefing.test.ts:184`
 - `src/services/reviewMoveBriefing.test.ts:185`
 
@@ -149,8 +149,8 @@
 - `src/services/moveThoughtFacts.test.ts:419`
 - `src/services/moveThoughtFacts.test.ts:434`
 - `src/services/moveThoughtFacts.test.ts:447`
-- `src/services/moveThoughtFacts.ts:881`
-- `src/services/moveThoughtFacts.ts:958`
+- `src/services/moveThoughtFacts.ts:882`
+- `src/services/moveThoughtFacts.ts:1013`
 - `src/services/openingGenerator.ts:2058`
 - `src/services/openingGenerator.ts:2628`
 - `src/services/pieceRoute.test.ts:52`

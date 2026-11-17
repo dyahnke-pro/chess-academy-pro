@@ -243,7 +243,7 @@
 ### `pvSanToUci` (function) — 3 call sites
 - `src/services/misconceptionClassifier.ts:568`
 - `src/services/mistakePuzzleService.ts:1171`
-- `src/services/moveThoughtFacts.ts:562`
+- `src/services/moveThoughtFacts.ts:563`
 
 ### `pvUciToSan` (function) — 18 call sites
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:88`

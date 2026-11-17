@@ -55,6 +55,10 @@ export function findEnablingMove(fen: string, pvUci: readonly string[]): Enablin
   // itself (Danya -Am8 26.Qxh5: "Qh7 first … your queen is in the way" with
   // the queen on h6 — the move that went first was the queen's own).
   if (b.from === a.to) return null;
+  // B taking on the square A went to is a trade there, not a road A cleared
+  // (gotham-jelena …d5: "d5 first, then Qxd5" — the queen takes back the pawn
+  // that was exchanged, it does not travel a road the push opened).
+  if (b.to === a.to) return null;
   // B could not be played on the starting board…
   const legalNow = start.moves({ verbose: true }).some((m) => m.from === b.from && m.to === b.to);
   if (legalNow) return null;
@@ -73,7 +77,9 @@ export function enablingMoveProof(e: EnablingMove): Proof {
   return {
     kind: 'squares', exact: true,
     short: `${e.first.san} clears ${e.opened}`,
-    full: `right now ${piece} cannot reach ${e.then.to} — ${blocker} is in the way, and ${e.first.san} clears it`,
+    // One idea a sentence, the square named once (the line around it names
+    // both moves): "your d-pawn stands in the way of your queen".
+    full: `${blocker} stands in the way of ${piece}, and moving it clears the road`,
     squares: [e.opened, e.then.from, e.then.to],
   };
 }

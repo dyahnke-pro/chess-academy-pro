@@ -144,7 +144,7 @@ describe('9. their usual reply is unavailable', () => {
   const fen = 'rn3rk1/p1p1qpp1/1p2b2p/3p4/3P4/4PN2/PP3PPP/2RQKB1R w K - 2 12';
   it('the pawn kick against the posted piece loses material', () => {
     const r = proven(kickFails(live(fen, ['d1a4'])));
-    expect(r.text).toBe("After the queen to a4, kicking it with the pawn to b5 doesn't work here: the bishop takes b5, winning a pawn.");
+    expect(r.text).toBe("After the queen to a4, kicking it with the b-pawn doesn't work here: the bishop simply takes it, winning a pawn.");
   });
   it('held, it says whose piece and names no move (prod walk 2026-10-19)', () => {
     const r = proven(kickFails(live(fen, ['d1a4'])));

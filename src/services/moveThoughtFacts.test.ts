@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { introHead } from '../test/introPattern';
 import { Chess } from 'chess.js';
-import { lessonThought, moveThoughtFacts, LESSON_STUDENT_LANE } from './moveThoughtFacts';
+import { lessonThought, lessonBoardFacts, moveThoughtFacts, LESSON_STUDENT_LANE } from './moveThoughtFacts';
 import { newLessonVoice, BRIEFING_LINE_PLIES } from './reviewMoveBriefing';
 import { captureContextsAlong } from './pvPlayback';
 import { NO_PREV_CAPTURE } from './captureRun';
@@ -446,5 +446,19 @@ describe('a quiet move is stopped only with what it would have done', () => {
     const reads = { before: linesOf(c.before), after: linesOf(c.after), passBefore: linesOf(c.passBefore), passAfter: linesOf(c.passAfter) };
     const text = lessonThought({ story: false, theory: true, fenBefore: c.fen, san: c.san, prev: NO_PREV_CAPTURE, moverIsStudent: true, line: ['Bd6', 'd4'], history: ['e4', 'e5', 'Nf3', 'd5'], theirLast: null, reads, costCp: 26 }, newLessonVoice(), null);
     expect(text).not.toMatch(/stops …Nf6/);
+  });
+});
+
+describe('a lesson move carries the board reads Review makes, only when the move made them (WO-SPEEDRUN-01)', () => {
+  // sicilianClosed1000 23…Bxe4: their d3 pawn can now take and open the d-file,
+  // and Black's rook on d8 already covers every square their rooks could use.
+  const BXE4 = 'r2r4/pb4k1/1p5p/2p5/3bB3/2NP1R2/PPP4P/5R1K b - - 3 23';
+  const input = (fenBefore: string, san: string) => ({ theory: true, story: false, fenBefore, san, prev: NO_PREV_CAPTURE, moverIsStudent: true, line: null, theirLast: null, history: [], reads: null, costCp: null, tense: 'now' as const, plainThreatsSeen: false });
+  it('the move that makes it says it', () => {
+    expect(lessonBoardFacts(input(BXE4, 'Bxe4')).map((f) => f.text).join(' ')).toMatch(/Let them open the d-file/);
+  });
+  it('a quiet move after it does not say it again', () => {
+    const c = new Chess(BXE4); c.move('Bxe4'); c.move('Kg2');
+    expect(lessonBoardFacts(input(c.fen(), 'a5')).map((f) => f.text).join(' ')).not.toMatch(/open the d-file/);
   });
 });

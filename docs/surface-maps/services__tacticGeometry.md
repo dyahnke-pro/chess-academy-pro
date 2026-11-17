@@ -4,17 +4,19 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**768 lines · 20 exports · 4 importers · 1 tests · 0 audits**
+**776 lines · 20 exports · 6 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6896) — names `tacticGeometry`
+- **The standard post-deploy ritual** (CLAUDE.md:7044) — names `tacticGeometry`
 
 ## Who calls in
 
 - `src/coach/focus/focusChances.ts`
+- `src/coach/focus/focusPlant.ts`
 - `src/services/boardComputers.ts`
 - `src/services/missedTacticService.ts`
+- `src/services/setUpChance.ts`
 - `src/services/tacticGeometry.test.ts`
 
 ## Exports and every call site
@@ -28,19 +30,24 @@
 ### `GeometryContext` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `pvGain` (function) — 4 call sites
-- `src/coach/focus/focusChances.ts:482`
-- `src/coach/focus/focusChances.ts:585`
-- `src/coach/focus/focusChances.ts:601`
+### `pvGain` (function) — 7 call sites
+- `src/coach/focus/focusChances.ts:509`
+- `src/coach/focus/focusChances.ts:618`
+- `src/coach/focus/focusChances.ts:634`
+- `src/coach/focus/focusPlant.ts:332`
+- `src/services/setUpChance.ts:141`
+- `src/services/setUpChance.ts:255`
 - `src/services/tacticGeometry.test.ts:212`
 
-### `pvGainDepth` (function) — 6 call sites
-- `src/coach/focus/focusChances.ts:594`
-- `src/coach/focus/focusChances.ts:599`
-- `src/coach/focus/focusChances.ts:806`
-- `src/services/tacticGeometry.test.ts:281`
-- `src/services/tacticGeometry.test.ts:282`
+### `pvGainDepth` (function) — 8 call sites
+- `src/coach/focus/focusChances.ts:627`
+- `src/coach/focus/focusChances.ts:632`
+- `src/coach/focus/focusChances.ts:858`
+- `src/services/setUpChance.ts:160`
+- `src/services/setUpChance.ts:191`
 - `src/services/tacticGeometry.test.ts:285`
+- `src/services/tacticGeometry.test.ts:286`
+- `src/services/tacticGeometry.test.ts:289`
 
 ### `pinnerIsPinned` (function) — 2 call sites
 - `src/services/tacticGeometry.test.ts:46`
@@ -98,13 +105,13 @@
 - `src/services/tacticGeometry.test.ts:200`
 
 ### `geometryReads` (function) — 2 call sites
-- `src/services/boardComputers.ts:622`
+- `src/services/boardComputers.ts:800`
 - `src/services/tacticGeometry.test.ts:206`
 
 ### `geometryMotif` (function) — 3 call sites
 - `src/services/missedTacticService.ts:602`
 - `src/services/missedTacticService.ts:672`
-- `src/services/tacticGeometry.test.ts:231`
+- `src/services/tacticGeometry.test.ts:235`
 
 ## Tests
 

@@ -414,8 +414,8 @@
 - `src/services/tacticGeometry.ts:453`
 - `src/services/tacticGeometry.ts:539`
 - `src/services/tacticGeometry.ts:540`
-- `src/services/tacticGeometry.ts:594`
-- `src/services/tacticGeometry.ts:673`
+- `src/services/tacticGeometry.ts:602`
+- `src/services/tacticGeometry.ts:681`
 - `src/services/tacticVerification.ts:101`
 - `src/services/takingTheAttacker.test.ts:16`
 - `src/services/thinkAloud.ts:292`

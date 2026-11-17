@@ -8,7 +8,7 @@ describe('enablingMove — A first because it opens the road for B', () => {
     const e = findEnablingMove(fen, ['e2e3', 'h7h6', 'f1d3']);
     expect(e?.opened).toBe('e2');
     // Each piece by what it is (one bishop, one e-pawn), f1 and e2 lit.
-    expect(enablingMoveLine(e!)).toBe('e3 first, then Bd3: right now your bishop cannot reach d3 — your e-pawn is in the way, and e3 clears it.');
+    expect(enablingMoveLine(e!)).toBe('e3 first, then Bd3: your e-pawn stands in the way of your bishop, and moving it clears the road.');
   });
 
   it('silent when B was already playable', () => {
@@ -22,5 +22,12 @@ describe('the same piece twice is no enabling move', () => {
     // Qh6-h7, …Nh5, Qh7xh5: the road h7→h5 runs through h6, where the queen
     // itself stood.
     expect(findEnablingMove('k7/8/5n1Q/8/8/8/8/6K1 w - - 0 1', ['h6h7', 'f6h5', 'h7h5'])).toBeNull();
+  });
+});
+
+describe('a trade on the square is no road', () => {
+  it('d5 exd5 Qxd5: the queen takes back on d5, the push cleared no road for it (gotham-jelena)', () => {
+    // White: Kg1, Qd1, pawn d4; Black: Kg8, pawn e6. d5 exd5 Qxd5 — d1–d5 ran through d4.
+    expect(findEnablingMove('6k1/8/4p3/8/3P4/8/8/3Q2K1 w - - 0 1', ['d4d5', 'e6d5', 'd1d5'])).toBeNull();
   });
 });
