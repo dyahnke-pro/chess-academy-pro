@@ -17,6 +17,7 @@ import { bookTeachingFor } from './thinkingBookTeaching';
 import { calculateKit } from './thinkingCalculateStep';
 import { candidatesKit } from './thinkingCandidatesStep';
 import { assessKit } from './thinkingAssessStep';
+import { thinkingStepTeaching } from './movePurposeEngine';
 
 /** The app's one loose-piece computer, in the shape the targets kit takes. */
 const looseSquares: LooseSquares = (fen, color) => findLoosePieces(fen, color).map((p) => p.square);
@@ -43,8 +44,9 @@ export const BUILT_THINKING_STEPS: readonly BuiltStep[] = (Object.keys(STEP_KITS
   tier: THINKING_STEPS[step].tier,
   tags: THINKING_STEPS[step].tags,
   // The books' own words on the habit ride on every kit (silent when the
-  // books have no passage for the step).
-  kit: (): StepKit => engineGated({ ...(STEP_KITS[step] as () => StepKit)(), book: () => bookTeachingFor(step) }),
+  // books have no passage for the step), and so does the coach's own
+  // teaching: every computer that serves this step (one coach).
+  kit: (): StepKit => engineGated({ ...(STEP_KITS[step] as () => StepKit)(), book: () => bookTeachingFor(step), teach: (pos) => thinkingStepTeaching(step, pos) }),
 }));
 
 /**

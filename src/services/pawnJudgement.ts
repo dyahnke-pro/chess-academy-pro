@@ -25,6 +25,20 @@ import {
 const fileName = (sq: string): string => sq[0];
 const fullmove = (fen: string): number => Number(fen.split(' ')[5] ?? '1') || 1;
 
+/** One quiet move of the student's that adds an attacker and leaves the pawn
+ *  on `sq` lost by the count. */
+function fallsToOneMore(fen: string, sq: string, student: Color): boolean {
+  const start = withTurn(fen, student);
+  const c = start ? board(start) : null;
+  if (!c) return false;
+  for (const m of c.moves({ verbose: true })) {
+    if (m.captured) continue;
+    const after = play(start as string, m.san);
+    if (after && pressureCount(after.after.fen(), sq as Square)?.verdict === 'winnable') return true;
+  }
+  return false;
+}
+
 /** SECOND WEAKNESS — their weak pawn holds today, and a second weak pawn sits
  *  on the other wing: two weaknesses far apart are more than their pieces can
  *  guard. Board read; past the opening only. */
@@ -37,6 +51,11 @@ export function secondWeakness(fen: string, student: Color): StructureRead | nul
   for (const p1 of weak) {
     const pc = pressureCount(fen, p1);
     if (!pc || pc.attackers < 1 || pc.verdict === 'winnable') continue;
+    // A pawn one more attacker away from falling does not "hold for now": the
+    // move that adds the attacker is the priority (Danya bench 2026-11-17:
+    // "Their a4 pawn is defended enough today" said beside "aim at it: Nc3
+    // does").
+    if (fallsToOneMore(fen, p1, student)) continue;
     const p2 = weak.find((q) => q !== p1 && Math.abs(fileIdx(q) - fileIdx(p1)) >= 3);
     if (!p2) continue;
     const text = rotateStem([

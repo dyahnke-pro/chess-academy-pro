@@ -18,7 +18,6 @@ import { MATERIAL_VALUE } from './pieceValues';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { strongestByDelta, weakestByDelta, type PieceValue } from './pieceValueRead';
 type TradeReason = 'their-best' | 'gave-best' | 'good' | 'bad' | 'ahead' | 'behind' | 'mixed';
-type TradeReason = 'their-best' | 'gave-best' | 'good' | 'bad' | 'ahead' | 'behind';
 
 interface TradeJudgement {
   reason: TradeReason;

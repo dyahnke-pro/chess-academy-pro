@@ -59,3 +59,15 @@ describe('a square is taken only by a pawn that stays', () => {
   });
 });
 
+
+// How-to-think probe 2026-11-17: Black's …d5 stands on the square White's d5
+// wanted (hitting the knight on c6). It keeps their pawn off d5 — never
+// "Your d5 stops d5".
+describe('a move that stands on the square their move wanted', () => {
+  it('keeps their piece off it, and never names itself as the stop', () => {
+    const fen = 'r1bqkbnr/pp1p1ppp/2n5/4p3/3PP3/5N2/PP3PPP/RNBQKB1R b KQkq - 0 5';
+    const stops = moveStops(fen, 'd5', true);
+    const d5 = stops.find((s) => s.squares.includes('c6'));
+    expect(d5?.clause).toBe('keeps their pawn off d5, where it would hit your knight on c6');
+  });
+});

@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6719 lines · 33 exports · 73 importers · 88 tests · 4 audits**
+**6757 lines · 34 exports · 74 importers · 89 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-- **Why determinism** (CLAUDE.md:425) — names `coachFeatureService`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4810) — names `coachFeatureService`
-- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5885) — names `coachFeatureService`
-- **The standard post-deploy ritual** (CLAUDE.md:6951) — names `coachFeatureService`
+- **Why determinism** (CLAUDE.md:445) — names `coachFeatureService`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4830) — names `coachFeatureService`
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5905) — names `coachFeatureService`
+- **The standard post-deploy ritual** (CLAUDE.md:6972) — names `coachFeatureService`
 
 ## Who calls in
 
@@ -77,6 +77,7 @@
 - `src/services/reviewRealSweep.test.ts`
 - `src/services/reviewRefuted.test.ts`
 - `src/services/reviewRegister.test.ts`
+- `src/services/reviewStemVariety.test.ts`
 - `src/services/reviewUnpinOnce.test.ts`
 - `src/services/reviewWalk1500.test.ts`
 - `src/services/reviewWalk900.test.ts`
@@ -108,7 +109,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `generateNarrativeSummary` (function) — 4 call sites
-- `src/components/Coach/CoachGameReview.tsx:554`
+- `src/components/Coach/CoachGameReview.tsx:583`
 - `src/services/moveCost.keyMoments.test.ts:43`
 - `src/services/moveCost.keyMoments.test.ts:45`
 - `src/services/recapSeat.test.ts:17`
@@ -131,8 +132,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `segmentMarks` (function) — 4 call sites
-- `src/components/Coach/CoachGameReview.tsx:2406`
-- `src/components/Coach/CoachGameReview.tsx:3195`
+- `src/components/Coach/CoachGameReview.tsx:2337`
+- `src/components/Coach/CoachGameReview.tsx:3127`
 - `src/services/coachFeatureService.segmentMarks.test.ts:19`
 - `src/test/marksSweep.gate.test.ts:206`
 
@@ -141,7 +142,7 @@
 - `src/services/namedMoveArrows.test.ts:71`
 
 ### `foldReviewRefrains` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:1832`
+- `src/components/Coach/CoachGameReview.tsx:1859`
 - `src/services/reviewLedgerCounters.test.ts:69`
 - `src/services/reviewLedgerCounters.test.ts:81`
 
@@ -158,7 +159,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildReviewCitations` (function) — 8 call sites
-- `src/components/Coach/CoachGameReview.tsx:614`
+- `src/components/Coach/CoachGameReview.tsx:643`
 - `src/services/coachFeatureService.test.ts:731`
 - `src/services/coachFeatureService.test.ts:739`
 - `src/services/coachFeatureService.test.ts:771`
@@ -290,12 +291,12 @@
 - `src/services/reviewZugzwang.test.ts:22`
 - `src/test/computedOrderWired.test.ts:59`
 - `src/test/everySurfaceSpeaks.test.ts:94`
-- `src/test/replayGame.ts:185`
+- `src/test/replayGame.ts:190`
 - `src/test/reviewExplore.continuity.test.ts:50`
 - `src/test/reviewExplore.continuity.test.ts:62`
 
 ### `buildReviewSegmentsYielding` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:1831`
+- `src/components/Coach/CoachGameReview.tsx:1858`
 - `src/services/reviewBuildYields.test.ts:35`
 
 ### `defaultIntroText` (function) — 4 call sites
@@ -317,7 +318,7 @@
 - `src/test/mateSaidOnce.gate.test.ts:69`
 
 ### `frameOpeningForStudent` (function) — 9 call sites
-- `src/components/Coach/CoachGameReview.tsx:4246`
+- `src/components/Coach/CoachGameReview.tsx:4176`
 - `src/services/coachFeatureService.test.ts:801`
 - `src/services/coachFeatureService.test.ts:804`
 - `src/services/coachFeatureService.test.ts:811`
@@ -343,10 +344,10 @@
 - `src/services/coachFeatureService.test.ts:626`
 
 ### `pendingRecapture` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8866`
-- `src/components/Coach/CoachTeachPage.tsx:8969`
-- `src/components/Coach/CoachTeachPage.tsx:11937`
-- `src/components/Coach/CoachTeachPage.tsx:12339`
+- `src/components/Coach/CoachTeachPage.tsx:8875`
+- `src/components/Coach/CoachTeachPage.tsx:8978`
+- `src/components/Coach/CoachTeachPage.tsx:11946`
+- `src/components/Coach/CoachTeachPage.tsx:12348`
 - `src/services/coachFeatureService.test.ts:912`
 - `src/services/coachFeatureService.test.ts:913`
 - `src/services/phaseTransitionDetector.test.ts:575`
@@ -364,8 +365,11 @@
 - `src/services/reviewRegister.test.ts:119`
 - `src/services/reviewWalk1500.test.ts:17`
 
+### `varyRepeatedStemsForTests` (const) — 1 call site
+- `src/services/reviewStemVariety.test.ts:28`
+
 ### `openingNameForKey` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:246`
+- `src/components/Coach/CoachGameReview.tsx:274`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:42`
 
 ### `generateReviewNarration` (function) — 20 call sites
@@ -385,7 +389,7 @@
 - `src/services/reviewDepth.eval.measure.test.ts:233`
 - `src/services/reviewFullGameNarration.harness.test.ts:157`
 - `src/services/reviewHabitClosesTurn.test.ts:53`
-- `src/services/reviewNarrationBuild.ts:105`
+- `src/services/reviewNarrationBuild.ts:109`
 - `src/services/reviewRealSweep.test.ts:187`
 - `src/services/reviewRefuted.test.ts:28`
 - `src/services/reviewRefuted.test.ts:34`
@@ -496,6 +500,7 @@
 - `src/services/reviewRealSweep.test.ts`
 - `src/services/reviewRefuted.test.ts`
 - `src/services/reviewRegister.test.ts`
+- `src/services/reviewStemVariety.test.ts`
 - `src/services/reviewTheirHabit.test.ts`
 - `src/services/reviewTurnLength.test.ts`
 - `src/services/reviewUnpinOnce.test.ts`

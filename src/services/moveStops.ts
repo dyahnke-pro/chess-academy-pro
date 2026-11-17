@@ -105,7 +105,15 @@ export function moveStops(fenBefore: string, san: string, mine: boolean): MoveSt
     const would = w.kind === 'pin' ? `would pin ${piece(v)}${rest[0] ? ` against ${piece(rest[0])}` : ''}`
       : w.kind === 'fork' ? `would fork ${[v, ...rest].map(piece).join(' and ')}`
         : `would hit ${piece(v)}`;
-    out.push({ kind: w.kind, san: dot(w.san), would, clause: `stops ${dot(w.san)}, which ${would}`, squares: [w.to, ...w.hit.map((h) => h.square)] });
+    // THE MOVE STANDS ON THE SQUARE THEIR MOVE WANTED: it keeps their piece
+    // off it ("Your …d5 keeps their pawn off d5, where it would hit your
+    // knight on c6"), never "Your d5 stops d5" (How-to-think probe 2026-11-17).
+    let mover: string | null = null;
+    try { mover = NAME[new Chess(fenBefore).get(w.from)?.type ?? ''] ?? null; } catch { mover = null; }
+    const clause = w.to === moved.to && mover
+      ? `keeps ${mine ? 'their' : 'your'} ${mover} off ${w.to}, where it ${would}`
+      : `stops ${dot(w.san)}, which ${would}`;
+    out.push({ kind: w.kind, san: dot(w.san), would, clause, squares: [w.to, ...w.hit.map((h) => h.square)] });
   }
   const checksAfter = winningChecks(fenAfter, me);
   for (const c of winningChecks(fenBefore, me)) {

@@ -10,7 +10,10 @@ import { stockfishEngine } from './stockfishEngine';
 import { deepFact } from './threeFacts';
 import { uciToSans } from './structureJudgementKit';
 import { answerQuestionThought, type QuestionAnswer, type ThoughtQuestion } from '../coach/questionThought';
-import { captureRunOfMoves, type PrevCaptureContext } from './captureRun';
+import { captureRunOfMoves, NO_PREV_CAPTURE, type PrevCaptureContext } from './captureRun';
+import { stepThought } from './moveThoughtFacts';
+import type { ThinkingStep } from './thinkingSteps';
+import type { LessonPositionCandidate } from './thinkingPositions';
 
 const DEPTH = 14;
 const BUDGET_MS = 900;
@@ -130,4 +133,73 @@ export async function askedMoveThought(
   const reason = q === 'opponent-move' ? null : decisiveReason({ fenBefore, san, reads, seat, prevCapture: captureRunOfMoves(null, board.history), asksToSee: seat === 'student' ? await calculationProven() : false, namesStudentMoves: true });
   const answer = answerQuestionThought(q, { fen: board.fen, history: board.history, studentColor: board.studentColor, bestUci: uci, reads, reason });
   return answer ? { ...answer, reason } : null;
+}
+
+/** WHICH MOVE A STEP'S TEACHING IS ABOUT (Learn how to think, one coach). A
+ *  `Record`: a new step fails to compile until it says. `their-last` — the
+ *  move that made the board (it changed something); `played` — the student's
+ *  own move from it, when the board came from their game (is it safe?);
+ *  `best` — the move the board asks for (the puzzle's answer, else the
+ *  engine's best). */
+const STEP_MOVE: Record<ThinkingStep, 'their-last' | 'played' | 'best'> = {
+  assess: 'best',
+  'their-move-changed': 'their-last',
+  'am-i-safe': 'best',
+  'answer-danger': 'best',
+  'their-targets': 'best',
+  'forcing-moves': 'best',
+  'hit-two': 'best',
+  candidates: 'best',
+  calculate: 'best',
+  'is-my-move-safe': 'played',
+};
+
+/** THE STEP'S TEACHING ON ONE LESSON BOARD — the same facts every surface
+ *  says, read through the one composer and kept to this step's computers
+ *  (`stepThought`, `THINK_STEP`), after the student's answer closes. Reads
+ *  the engine for the move it is about; null when nothing on this board
+ *  serves the step (the answer's own reasons stand alone then). */
+export async function thinkingStepTeaching(step: ThinkingStep, pos: LessonPositionCandidate): Promise<string | null> {
+  const want = STEP_MOVE[step];
+  let fenBefore: string | null = null;
+  let san: string | null = null;
+  let mover: 'student' | 'opponent' = 'student';
+  if (want === 'their-last') {
+    if (pos.beforeFen && pos.prevSan) { fenBefore = pos.beforeFen; san = pos.prevSan; mover = 'opponent'; }
+  } else if (want === 'played' && pos.playedSan) {
+    fenBefore = pos.fen; san = pos.playedSan;
+  }
+  // The engine's best line from the step board: the move the board asks for,
+  // and the line the board computers read.
+  let boardRead: readonly AnalysisLine[] = [];
+  try { boardRead = (await stockfishEngine.analyzeWithBudget(pos.fen, DEPTH, BUDGET_MS)).topLines ?? []; } catch { boardRead = []; }
+  if (!san) {
+    fenBefore = pos.fen;
+    san = pos.line?.[0] ?? null;
+    const u = boardRead[0]?.moves[0];
+    if (!san && u) { try { san = new Chess(pos.fen).move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san; } catch { san = null; } }
+  }
+  let asked: Parameters<typeof stepThought>[2] = null;
+  if (fenBefore && san) {
+    const reads = await readIntentReads(fenBefore, san, fenBefore === pos.fen && boardRead.length ? boardRead : undefined);
+    let line: string[] | null = null;
+    try {
+      const after = new Chess(fenBefore); after.move(san);
+      const top = reads?.after[0]?.moves ?? [];
+      line = top.length ? uciToSans(after.fen(), top) : null;
+    } catch { line = null; }
+    asked = {
+      fenBefore, san, moverIsStudent: mover === 'student', prev: NO_PREV_CAPTURE, line,
+      theirLast: mover === 'student' && pos.beforeFen && pos.prevSan ? { fenBefore: pos.beforeFen, san: pos.prevSan } : null,
+      history: [], story: false, reads, costCp: null, theory: false, plainThreatsSeen: false,
+    };
+  }
+  const board = {
+    fen: pos.fen,
+    pv: boardRead[0]?.moves ?? [],
+    played: pos.playedSan ?? null,
+    theirLast: pos.beforeFen && pos.prevSan ? { fenBefore: pos.beforeFen, san: pos.prevSan } : null,
+  };
+  const text = stepThought(step, board, asked).spoken.trim();
+  return text || null;
 }

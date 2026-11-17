@@ -23,6 +23,7 @@
 //      interface talk).
 // Surfaces differ only in which steps they ask for and whose record they
 // read; the order and the choice are this file's.
+import { stripThink, THINK_MARK } from '../utils/thinkPause';
 import type { SaidSet } from './gameStory';
 import { emitEverything, everythingListening } from './everythingEvents';
 import { stakeValue } from './factStakes';
@@ -81,7 +82,11 @@ export type ThoughtSource =
   /** What the move threatens two or three moves deep (`moveThreat`): the null-move line that wins material the board did not offer before. */
   | 'moveThreat'
   /** A gambit's idea and the engine's verdict (`gambitIdea`): what is given, what comes back, whether it pays. */
-  | 'gambitIdea';
+  | 'gambitIdea'
+  /** A standing read of the board through the one registry (`boardComputers`):
+   *  a piece trapped, a pin to walk out of, a queen grab, the structure — read
+   *  on a board with no move to explain (Learn how to think's step boards). */
+  | 'boardRead';
 
 /** ONE FACT, the composer's only input — the one fact shape (`coachFact.ts`),
  *  its step derived from its kind, with what this composer ranks by: the
@@ -187,6 +192,7 @@ export const SOURCE_DEPTH: Record<ThoughtSource, 'hidden' | 'why'> = {
   // A threat is the move's reason: what it asks the opponent to answer.
   moveThreat: 'why',
   gambitIdea: 'why',
+  boardRead: 'why',
   deepFact: 'hidden', binding: 'hidden', bestLine: 'hidden', notYet: 'hidden', prophylaxis: 'hidden', baitSet: 'hidden',
   // What their move aims at now is the attack itself, one claim with the
   // other lines on its square (decision baseline 2026-11-12: "Their Qd8 is
@@ -342,7 +348,7 @@ export function speaksBehindLead(f: ThoughtFact, leadSquares: ReadonlySet<string
 
 /** ONE THOUGHT from the facts a move earned. */
 export function composeThought(
-  facts: readonly ThoughtFact[],
+  given: readonly ThoughtFact[],
   surface: ThoughtSurface,
   memory: ThoughtMemory | null,
   ledOutside: ReadonlySet<ThoughtStep>,
@@ -350,6 +356,14 @@ export function composeThought(
    *  null on a lesson (the same for everyone) and an asked question. */
   record: ThoughtRecord | null,
 ): ComposedThought {
+  // NO THINK PAUSE ON A COMPOSED THOUGHT: Learn's pause ("question ‖ answer",
+  // the answer waiting for the student's move) belongs to Learn's live turn.
+  // A lesson, Review, chat and a How-to-think step say the question and its
+  // answer as one line — the mark is never spoken or shown (the priority read
+  // reached a How-to-think step as "What's the priority here? ‖ Their pawn…").
+  const facts = given.map((f) => (f.text.includes(THINK_MARK) || (f.alsoText ?? '').includes(THINK_MARK)
+    ? { ...f, text: stripThink(f.text), ...(f.alsoText !== undefined ? { alsoText: stripThink(f.alsoText) } : {}) }
+    : f));
   const reg = THOUGHT_REGISTER[surface];
   const held: ComposedThought['held'] = [];
   // ONE CLAIM, THE WORDS THAT SAY MORE: a fact whose idea another fact on the

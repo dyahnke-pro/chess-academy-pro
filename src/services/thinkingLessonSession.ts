@@ -54,6 +54,11 @@ export interface StepKit {
   /** Optional: the book's own words on this habit (verbatim public-domain
    *  passage, fetched by id) — read once, after the worked example. */
   book?: () => Promise<string | null>;
+  /** THE STEP'S TEACHING, ONE COACH (David 2026-11-17, non-negotiable): the
+   *  facts the coach's computers say on every other surface, kept to this
+   *  step (`thinkingStepTeaching`) — said once per board, after the answer
+   *  closes. Null: nothing on this board serves the step. */
+  teach?: (pos: LessonPositionCandidate) => Promise<string | null>;
   /** Optional (plan C1, follow-up chains): after a RIGHT answer on a Guide or
    *  Solo board, the questions only understanding answers about one key
    *  square ("tap its attackers" -> "its defenders" -> "who takes first").
@@ -306,6 +311,7 @@ export class ThinkingLessonSession {
       if (stage === 'show') {
         this.publish({ shown: [...pos.key] });
         await this.deps.say(this.kit.showLine(pos.fen, pos.key, rot));
+        await this.teachBoard(pos);
         // The books on the same habit, once per lesson, after the example the
         // student just watched (David 2026-10-04: "make use of the books").
         if (!this.bookRead) {
@@ -518,6 +524,13 @@ export class ThinkingLessonSession {
    * answered right, unhelped, in a row from the first (0 = no chain, or the
    * first link missed). One evidence shape (`AnswerDetail`), every surface.
    */
+  /** The step's teaching on this board, said once the answer has closed. */
+  private async teachBoard(pos: ChosenLessonPosition): Promise<void> {
+    if (this.stopped || !this.kit.teach) return;
+    const words = await this.kit.teach(pos).catch(() => null);
+    if (words && !this.stopped) await this.deps.say(words);
+  }
+
   private async settle(pos: ChosenLessonPosition, stage: LessonStage): Promise<void> {
     const root = this.settled;
     this.settled = null;
@@ -564,6 +577,7 @@ export class ThinkingLessonSession {
     }
     this.link = null;
     if (chainSq && !this.stopped) this.publish({ focus: [] });
+    await this.teachBoard(pos);
 
     const answer: AnsweredQuestion = {
       step: this.kit.step, stage, position: pos,

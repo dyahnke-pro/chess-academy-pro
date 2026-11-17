@@ -411,3 +411,27 @@ describe('the lesson ends on unlabeled boards from earlier steps (David 2026-10-
     expect(h.views.some((x) => x.choosing)).toBe(false);
   });
 });
+
+// ONE COACH (David 2026-11-17, non-negotiable): after each board's answer the
+// step is taught with the coach's own computers (`StepKit.teach`) — said once
+// per board, after the answer closes.
+describe('ThinkingLessonSession — the coach\'s teaching rides every board', () => {
+  it('says the step teaching after each answer, once per board', async () => {
+    const h = harness();
+    const taughtOn: string[] = [];
+    const kit = { ...targetsKit(loose), teach: async (pos: LessonPositionCandidate) => { taughtOn.push(pos.fen); return `TEACH ${pos.fen.split(' ')[0]}`; } };
+    const s = new ThinkingLessonSession(kit, cands, new Set(), h.deps);
+    const done = s.run('grey');
+    for (let n = 0; n < 3; n++) {
+      const v = await waitAsking(h);
+      for (const sq of targetsKit(loose).keyFor(v.fen!)!.key) await s.tap(sq);
+    }
+    s.stop();
+    await done;
+    expect(taughtOn.length).toBeGreaterThanOrEqual(3);
+    expect(new Set(taughtOn).size).toBe(taughtOn.length);
+    // Said after the board's answer: never before the first question.
+    const first = h.said.findIndex((l) => l.startsWith('TEACH'));
+    expect(first).toBeGreaterThan(0);
+  });
+});

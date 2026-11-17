@@ -403,6 +403,26 @@ It is also why an enum split is fatal rather than cosmetic. `discovery` vs
 `discovered_attack` broke no detector — it broke the SHARED VOCABULARY, so the
 computer still taught and silently stopped diagnosing, with every test green.
 
+## 🔒🔒 ONE COACH, HOW TO THINK INCLUDED — every computer answers for every surface (David 2026-11-17: "Make sure how to think gets these computers. It should because we have a unified coach structure. That is a non negotiable rule.")
+
+A computer that teaches on Learn, Review, the lessons or chat teaches inside
+"Learn how to think" too. Two tables make it impossible to leave one out:
+- **`thinkingComputers.THINK_STEP`** — a `Record` over the ONE catalog
+  (`COMPUTER_CATALOG`): every computer names the thinking step its facts
+  serve, or says in words why a step board can never carry them. A new
+  computer does not compile until it answers.
+- **`boardComputers` surface `think`** — every registry computer answers the
+  How-to-think surface: wired, or a reason.
+
+The step's teaching is the SAME facts every surface says — the one composer
+(`moveThoughtFacts.stepThought`) plus the registry's reads of the step board,
+kept to that step's computers — said after the board's answer closes
+(`StepKit.teach` ← `movePurposeEngine.thinkingStepTeaching`). How to think
+never grows its own copy of a computer. Gate:
+`src/services/thinkingComputers.gate.test.ts` (every row answered, every step
+served, a wired registry computer serves a step, and on real boards each
+step is taught only by its own computers).
+
 ## Why determinism
 
 Not tidiness. Determinism is what lets the CODE MAKE A WRONG ANSWER IMPOSSIBLE

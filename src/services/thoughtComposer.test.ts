@@ -18,6 +18,15 @@ function fact(over: Partial<ThoughtFact> & Pick<ThoughtFact, 'text' | 'idea'>): 
 const said = (facts: ThoughtFact[], record: ThoughtRecord | null = null): string => composeThought(facts, 'lesson', null, NOT_LED, record).spoken;
 
 describe('the one composer (WO-ONE-COACH-01)', () => {
+  // Learn's think pause ("question ‖ answer") belongs to Learn's live turn: a
+  // composed thought says the question and its answer as one line (a How-to-
+  // think step said "What's the priority here? ‖ Their pawn on a4…").
+  it('never says the think-pause mark', () => {
+    const out = said([fact({ idea: 'weakness', text: "What's the priority here? \u2016 Their pawn on a4 is isolated. \u2016" })]);
+    expect(out).not.toContain('\u2016');
+    expect(out.startsWith("What's the priority here?")).toBe(true);
+  });
+
   it('says the steps in his order, whatever order the facts arrive in', () => {
     const out = said([
       fact({ step: 'choices', idea: 'choice', text: 'Most people play Bc4 here, and it walks into a fork.' }),

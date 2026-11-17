@@ -60,6 +60,8 @@ import type { LearnLane } from './learnTurnDoor';
 import { computeMustDefend } from './threatOut';
 import { moveOrder } from './moveOrder';
 import { readBoardAll, readKey } from './boardComputers';
+import { thinkStepOf } from './thinkingComputers';
+import type { ThinkingStep } from './thinkingSteps';
 import type { WeighRead } from './weighedMoves';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { BLUNDER_CP, INACCURACY_CP, MATE_EVAL_VALUE, MISTAKE_CP } from './engineConstants';
@@ -867,6 +869,58 @@ export function questionThought(asked: Omit<MoveThoughtInput, 'phrases' | 'tense
   // A story line about the board, not the move ("both kings are on the
   // kingside"), answers no question about a move: the lesson's thread only.
   return composeThought(all.filter((f) => groups.has(f.group) && !(f.source === 'openingStory' && !MOVE_STEPS_OF_STORY.has(f.step))), 'chat', voice, NOT_LED, null);
+}
+
+/** A "Learn how to think" step board: the board the question was asked on
+ *  (the student to move), the engine's best line from it (UCI, [] unknown),
+ *  the student's own move from it where the board came from their game, and
+ *  the opponent's move that made it. */
+export interface StepBoard {
+  fen: string;
+  pv: readonly string[];
+  played: string | null;
+  theirLast: { fenBefore: string; san: string } | null;
+}
+
+/** THE REGISTRY READS A STEP BOARD CARRIES: every board computer whose
+ *  context a step board can fill, each as the idea it states. One list, so a
+ *  computer reached here is reached on every step whose table row names it. */
+const STEP_BOARD_READS: ReadonlyArray<{ idea: IdeaKind; read: (b: StepBoard, student: 'w' | 'b') => CoachFact[] }> = [
+  { idea: 'rescue', read: (b, student) => readBoardAll('trapped', { fen: b.fen, student }) },
+  { idea: 'unpin', read: (b, student) => readBoardAll('pinBreakOwn', { fen: b.fen, student }) },
+  { idea: 'tactic', read: (b) => readBoardAll('queenGrabTrap', { fen: b.fen }) },
+  { idea: 'weakness', read: (b, student) => readBoardAll('structureBoard', { fen: b.fen, student }) },
+  { idea: 'prevent', read: (b) => (b.pv.length ? readBoardAll('prophylaxis', { fen: b.fen, engineFirstMoves: [b.pv[0]] }) : []) },
+  { idea: 'order', read: (b) => (b.pv.length >= 3 ? readBoardAll('enablingMove', { fen: b.fen, pv: b.pv }) : []) },
+  { idea: 'weakness', read: (b, student) => (b.pv.length ? readBoardAll('priorityFirst', { fen: b.fen, student, bestUci: b.pv[0] }) : []) },
+  { idea: 'tactic', read: (b, student) => readBoardAll('tacticGeometry', { fen: b.fen, me: student, pv: b.pv, ...(b.theirLast ? { lastOpponentMove: b.theirLast } : {}), register: 'live' }) },
+  { idea: 'guard', read: (b, student) => (b.played ? readBoardAll('countMethod', { fenBefore: b.fen, playedSan: b.played, student, costCp: null }) : []) },
+  { idea: 'threat', read: (b, student) => (b.theirLast ? readBoardAll('obligationLifted', { fenBefore: b.theirLast.fenBefore, fenAfter: b.fen, student }) : []) },
+  { idea: 'weakness', read: (b, student) => (b.theirLast ? readBoardAll('structureTheirMove', { fenBefore: b.theirLast.fenBefore, san: b.theirLast.san, student }) : []) },
+];
+
+/** THE STEP'S TEACHING (David 2026-11-17: "Make sure how to think gets these
+ *  computers … a unified coach structure. That is a non negotiable rule."). A
+ *  "Learn how to think" step is taught with the same facts every surface says:
+ *  the one composer's facts on the step's move (`asked`, null on a board with
+ *  no move to explain) and the registry's reads of the step board, kept to
+ *  the computers that serve THIS step (`THINK_STEP`), in the thought's order. */
+export function stepThought(step: ThinkingStep, board: StepBoard, asked: Omit<MoveThoughtInput, 'phrases' | 'tense'> | null): ComposedThought {
+  const voice = newLessonVoice();
+  const all: ThoughtFact[] = [];
+  if (asked) {
+    const input: Omit<MoveThoughtInput, 'phrases'> = { ...asked, tense: 'now' };
+    voice.story.reach(plyOfFen(input.fenBefore));
+    all.push(...moveThoughtFacts({ ...input, phrases: voice.phrases }), ...studentMoveFacts(input));
+  }
+  const student = sideOf(board.fen);
+  for (const r of STEP_BOARD_READS) {
+    for (const f of r.read(board, student)) {
+      const { heldForm: _held, ...fact } = f;
+      all.push({ ...fact, namesStudentMove: false, source: 'boardRead', idea: r.idea, weight: 50 });
+    }
+  }
+  return composeThought(all.filter((f) => thinkStepOf(f.computer) === step), 'lesson', voice, NOT_LED, null);
 }
 
 /** WHAT LEARN'S STUDENT-MOVE LANES MAY SAY IN A LESSON, AND AS WHICH IDEA
