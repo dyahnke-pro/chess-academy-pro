@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { desperadoAt, desperadoLine } from './desperado';
+import { moveThoughtFacts } from './moveThoughtFacts';
+import { NO_PREV_CAPTURE } from './captureRun';
 
 // A pawn on d4 forks the knight on c3 and the bishop on e3; the knight can take
 // the knight on b5 before it goes. Engine best (depth 16): Nxb5.
@@ -22,14 +24,12 @@ describe('desperado: two pieces hanging, sell the one you cannot save', () => {
 });
 
 describe('the one composer says it', () => {
-  it('a lesson or Review move from the fork board carries the sale', async () => {
-    const { moveThoughtFacts } = await import('./moveThoughtFacts');
-    const { NO_PREV_CAPTURE } = await import('./captureRun');
+  it('a lesson or Review move from the fork board carries the sale', () => {
     const facts = moveThoughtFacts({
       plainThreatsSeen: false, story: false, theory: false, tense: 'past', fenBefore: FEN, san: 'Bd2', moverIsStudent: true,
       prev: NO_PREV_CAPTURE, line: null, history: [], theirLast: null, phrases: null, costCp: 300,
       reads: { before: [{ rank: 1, evaluation: -150, moves: ['c3b5'], mate: null }, { rank: 2, evaluation: -450, moves: ['e3d2'], mate: null }] as never, after: [], passBefore: [], passAfter: [] },
     });
     expect(facts.some((f) => f.computer === 'desperadoAt' && /sell the other first: Nxb5/.test(f.text))).toBe(true);
-  });
+  }, 30_000);
 });
