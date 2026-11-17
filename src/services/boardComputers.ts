@@ -78,6 +78,7 @@ import { intoTheirCamp, intoTheirCampLine } from './intoTheirCamp';
 import { flexibleMove, flexibleMoveLine, flexibleMoveSquares } from './flexibleMove';
 import { exchangeSacrifice, exchangeSacrificeLine, exchangeSacrificeSquares } from './exchangeSacrifice';
 import { pawnMajority, pawnMajorityLine, pawnMajoritySquares } from './pawnMajority';
+import { fortress, fortressLine, fortressSquares } from './fortress';
 import { pawnCutsGuard, type PawnLineRead } from './pawnLines';
 import { chainBase } from './chainBase';
 import { pinnedPawnGuard } from './pinnedPawnGuard';
@@ -333,6 +334,13 @@ export interface BoardContexts {
    *  recapture is read against the board before the trade began; null where
    *  there was none. */
   pawnMajority: { fenBefore: string; san: string; student: Color; prior: { fenBefore: string; san: string } | null };
+  /** THE FORTRESS (`fortress`, Danya's "a fortress plus an active king can
+   *  draw even down material when there's no way in"): the move `san` on
+   *  `fenBefore` (either seat) leaves an ending a piece or more down that the
+   *  engine reads a draw, for a reason the board shows. `replies`: the
+   *  engine's lines from the board after the move, best first (White-POV
+   *  cp); [] where none. */
+  fortress: { fenBefore: string; san: string; student: Color; replies: readonly ReplyLine[] };
   /** WHAT A PAWN MOVE DID TO THE LINES (`pawnLines`, S4 pawns): the square the pawn landed on cut an enemy slider off from a piece it
    *  guarded, which is hanging now and was not before. */
   pawnCutsGuard: { fenBefore: string; san: string; student: Color };
@@ -1752,6 +1760,30 @@ export const BOARD_COMPUTERS = {
       learn: S4_LEARN_OWED,
       tactics: TACTICS_NA,
       weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
+    },
+  },
+  fortress: {
+    // His "a fortress plus an active king can draw even down material when
+    // there's no way in": the draw a piece down, and the board's reason,
+    // both seats.
+    read: ({ fenBefore, san, student, replies }, fact) => safe(() => {
+      const f = fortress(fenBefore, san, replies);
+      if (!f) return null;
+      const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
+      const mine = f.defender === student;
+      const text = fortressLine(f, mine, fenAfter);
+      const squares = fortressSquares(f);
+      return fact({ key: f.key, claims: [f.key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
+    }),
+    computer: 'fortress',
+    kind: 'judgement',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: S4_LEARN_OWED,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the board said once — no question of the student\'s posed' },
     },
   },
   pawnCutsGuard: {

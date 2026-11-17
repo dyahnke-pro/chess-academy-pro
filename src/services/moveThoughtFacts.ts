@@ -804,6 +804,11 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       for (const f of readBoardAll('stalemateTrick', { fenBefore: i.fenBefore, san: i.san, student })) {
         facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'rescue', weight: 70 });
       }
+      // The fortress, both seats: a piece down and a draw the board explains,
+      // read off the engine's lines after the move.
+      for (const f of readBoardAll('fortress', { fenBefore: i.fenBefore, san: i.san, student, replies })) {
+        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'eval', weight: 60 });
+      }
       // Checks that come back to the same board (a perpetual) and the
       // discovered-check see-saw (a windmill), both seats.
       for (const f of readBoardAll('perpetualCheck', { fenBefore: i.fenBefore, san: i.san, student, replies })) {

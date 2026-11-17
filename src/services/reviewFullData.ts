@@ -1701,6 +1701,9 @@ export function computeMoveFacets(
       // The pawn majority, both seats: made, crippled, given up or set moving,
       // a recapture read against the board before the trade began.
       add(readBoardAll('pawnMajority', { fenBefore, san, student: studentColorWB, prior: ply >= 2 && ctx.teaching.prevFenBefore ? { fenBefore: ctx.teaching.prevFenBefore, san: ctx.allSans[ply - 2] } : null })[0]);
+      // The fortress, both seats: a piece down and a draw the board explains,
+      // off the stored score after the move.
+      add(readBoardAll('fortress', { fenBefore, san, student: studentColorWB, replies: ctx.evaluation == null ? [] : [{ cp: storedMate(ctx.evaluation) == null ? ctx.evaluation : null, mate: storedMate(ctx.evaluation), moves: ctx.playedLineUci }] })[0]);
     }
     if (!isStudent) {
       // Their move took an attacker off a piece you had to look after.

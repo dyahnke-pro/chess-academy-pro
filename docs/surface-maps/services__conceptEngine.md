@@ -51,11 +51,11 @@
 - `src/data/endgame-side-correctness.test.ts:51`
 - `src/data/grounding/groundingLib.ts:56`
 - `src/data/groundingMistakes.test.ts:38`
-- `src/services/boardComputers.ts:460`
-- `src/services/boardComputers.ts:1887`
-- `src/services/boardComputers.ts:1905`
-- `src/services/boardComputers.ts:1921`
-- `src/services/boardComputers.ts:1939`
+- `src/services/boardComputers.ts:468`
+- `src/services/boardComputers.ts:1919`
+- `src/services/boardComputers.ts:1937`
+- `src/services/boardComputers.ts:1953`
+- `src/services/boardComputers.ts:1971`
 - `src/services/conceptEngine.test.ts:19`
 - `src/services/conceptEngine.test.ts:20`
 - `src/services/groundedMoveWhy.ts:83`
