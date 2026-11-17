@@ -2,8 +2,10 @@
 // (their long bishop staring at a wall), a piece in front of its own pawn, the
 // semi-outpost, the masked weakness, a square valued for safety and route,
 // file entry squares covered, not plugging your own open file, squares your
-// unmoved pawns leave open, the mutual-restriction ledger, and a file the
-// exchange opens for the defender.
+// unmoved pawns leave open, and a file the exchange opens for the defender.
+// (The rim-knight "mutual restriction" read is DELETED, 2026-11-17: a knight
+// on the rim is always the END of the bishop's diagonal, so it blocks nothing —
+// the claim was false on every board it could see.)
 //
 // Board facts only (chess.js + outpost + position reading), said from the
 // student's seat, each carrying the squares or the line it rests on. Silent
@@ -375,54 +377,6 @@ export function unmovedUnits(fenBefore: string, san: string, student: Color): St
         // Held: why the square was free, never the pawn move that fixes it.
         heldForm: { text: `Their ${PIECE_NOUN[r.mv.piece]} reaches ${x} because no pawn of yours covers that square yet.`, squares: [x], proof: squaresProof(`no pawn of yours covers ${x}`, [x]) ?? proof },
       };
-    }
-  }
-  return null;
-}
-
-/** Squares a knight on `sq` can go to: not its own pieces, not hit by an enemy pawn. */
-function knightExits(c: NonNullable<ReturnType<typeof board>>, sq: string): number {
-  const p = c.get(sq as Square);
-  if (!p) return 0;
-  const them = other(p.color);
-  let n = 0;
-  for (const [df, dr] of [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]]) {
-    const t = sqAt(fileIdx(sq) + df, rankNum(sq) + dr);
-    if (!t || c.get(t)?.color === p.color) continue;
-    if (c.attackers(t, them).some((s) => c.get(s)?.type === 'p')) continue;
-    n++;
-  }
-  return n;
-}
-
-/** THE MUTUAL-RESTRICTION LEDGER — a rim knight that blocks a bishop: the
- *  bishop is shut, the knight is stuck. Said for either seat. */
-export function mutualRestriction(fen: string, student: Color): StructureRead | null {
-  const c = board(fen);
-  if (!c) return null;
-  for (const knightSide of [other(student), student]) {
-    const bishopSide = other(knightSide);
-    for (const k of piecesOf(c, knightSide, 'n')) {
-      if (k[0] !== 'a' && k[0] !== 'h') continue;
-      if (knightExits(c, k) > 1) continue;
-      for (const b of piecesOf(c, bishopSide, 'b')) {
-        const df = Math.sign(fileIdx(k) - fileIdx(b));
-        const dr = Math.sign(rankNum(k) - rankNum(b));
-        if (Math.abs(fileIdx(k) - fileIdx(b)) !== Math.abs(rankNum(k) - rankNum(b)) || df === 0) continue;
-        if (firstOnRay(c, b, df, dr) !== k) continue;
-        // A knight at the END of the diagonal blocks nothing — the bishop just
-        // attacks it (Danya LJa5 8…dxe4: "Their knight on h3 blocks your
-        // light-squared bishop" with c8–h3 the bishop's whole diagonal).
-        const beyondF = fileIdx(k) + df; const beyondR = rankNum(k) + dr;
-        if (beyondF < 0 || beyondF > 7 || beyondR < 1 || beyondR > 8) continue;
-        const theirs = knightSide !== student;
-        const text = theirs
-          ? `Their knight on ${k} blocks your bishop on ${b}, a fair price: the knight is stuck on the rim.`
-          : `Your knight on ${k} blocks their bishop on ${b}: a stuck knight for a shut-in bishop is a fair trade.`;
-        const proof = squaresProof(`the knight on ${k} stands on the bishop's diagonal from ${b} and has few safe squares`, [k, b]);
-        if (!proof) continue;
-        return { act: 'mutual-restriction', squares: [k, b], proof, key: `mutual:${k}:${b}`, text };
-      }
     }
   }
   return null;

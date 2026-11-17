@@ -227,7 +227,11 @@ describe('DIAGNOSE — the one tactic classifier names what these reads teach', 
   it('interference, deflection and clearance reach the record instead of the sentinel', () => {
     expect(detectTacticType(INTERFERE, 'b4d5', ['b4d5', 'g7g6', 'b2d4', 'h7h6'])).toBe('interference');
     expect(detectTacticType(DECOY, 'b4b5', ['b4b5', 'c6b5', 'd1d3', 'g7g6', 'd3b5', 'a8b8'])).toBe('deflection');
-    expect(detectTacticType(CLEARANCE, 'd4e6', ['d4e6', 'd8d7', 'b2f6', 'h7h6'])).toBe('clearance');
+    // No h-pawn: the rook can step out, so Bxf6 lands only what the clearance
+    // opened. With h7 on the board the rook is trapped (…Qd1+ throws the
+    // queen away) and the line is named for the trapped rook.
+    expect(detectTacticType('3q2kr/8/4pn2/8/3N4/8/1B3PPP/R5K1 w - - 0 1', 'd4e6', ['d4e6', 'd8d7', 'b2f6', 'h8h7'])).toBe('clearance');
+    expect(detectTacticType(CLEARANCE, 'd4e6', ['d4e6', 'd8d7', 'b2f6', 'h7h6'])).toBe('trapped_piece');
     expect(geometryMotif(INTERFERE, ['b4d5', 'g7g6', 'h2h3', 'h7h6'])).toBeNull();
   });
 });

@@ -37,7 +37,6 @@ export type StructureAct =
   | 'file-entry-covered'
   | 'dont-plug-file'
   | 'unmoved-units'
-  | 'mutual-restriction'
   | 'file-opened-for-defender'
   | 'small-edges'
   | 'fighting-line'
@@ -67,7 +66,7 @@ export const STRUCTURE_ROLE: Record<StructureAct, 'teach' | 'describe'> = {
   'break-trades-weak-pawn': 'teach', 'dont-repair': 'teach', 'piece-blocks-own-pawn': 'teach',
   'safe-square-route': 'teach', 'masked-weakness': 'teach', 'mirrored-asymmetry': 'teach',
   'file-entry-covered': 'teach', 'dont-plug-file': 'teach', 'unmoved-units': 'teach',
-  'mutual-restriction': 'teach', 'file-opened-for-defender': 'teach', 'small-edges': 'teach',
+  'file-opened-for-defender': 'teach', 'small-edges': 'teach',
   'fighting-line': 'teach', 'king-committed': 'teach',
   'rooks-on-seventh': 'teach', 'king-to-centre': 'teach', 'pawn-for-development': 'teach',
   'pawn-back': 'teach', 'defends-both': 'teach', 'missed-defends-both': 'teach', 'knight-jump-apart': 'teach',

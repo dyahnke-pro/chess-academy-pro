@@ -10,6 +10,8 @@
 import { Chess, type PieceSymbol, type Square } from 'chess.js';
 import { findHangingBySee } from './positionReadingService';
 import { PIECE_NAMES } from '../types/tacticTypes';
+import { withArticle } from '../utils/andList';
+import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
 export interface Desperado {
   /** The sale: the engine's best move, a capture by a hanging piece. */
@@ -49,11 +51,22 @@ export function desperadoAt(fenBefore: string, san: string, bestUci: string | nu
   };
 }
 
-/** Said from the mover's seat (`own`: your / their). */
-export function desperadoLine(d: Desperado, own: 'your' | 'their'): string {
+/** Said from the mover's seat (`own`: your / their), in the human voice:
+ *  one idea a sentence, three phrasings rotated on the board (`rotateStem`). */
+export function desperadoLine(d: Desperado, own: 'your' | 'their', fen: string): string {
   const p = NAME[d.piece];
-  const o = `${own} ${NAME[d.other.piece]} on ${d.other.square}`;
+  const took = withArticle(NAME[d.captured]);
+  const o = `${NAME[d.other.piece]} on ${d.other.square}`;
+  const key = stemKeyOf(`${fen}|${d.san}`);
   return d.found
-    ? `Two of ${own} pieces were hanging, and only one could be saved — so the ${p} takes a ${NAME[d.captured]} on its way out. Sell the piece you cannot save.`
-    : `Two of ${own} pieces were hanging, the ${p} on ${d.from} and ${o}. Only one can be saved, so sell the other first: ${d.san} takes a ${NAME[d.captured]} on its way out.`;
+    ? rotateStem([
+      `Two of ${own} pieces were hanging, and only one could be saved. So the ${p} takes ${took} on its way out.`,
+      `The ${p} was lost anyway, so it grabs ${took} first. When two pieces hang, sell the one you can't save.`,
+      `Two pieces were hanging and only one could stay. The ${p} sells itself for ${took}.`,
+    ], key)
+    : rotateStem([
+      `Two of ${own} pieces were hanging: the ${p} on ${d.from} and the ${o}. Only one can be saved, so sell the other first. ${d.san} takes ${took} on its way out.`,
+      `The ${p} on ${d.from} and the ${o} were both hanging. One of them was going anyway. ${d.san} sells the ${p} for ${took} before it goes.`,
+      `With the ${p} and the ${o} both hanging, one is lost whatever happens. Make it cost something: ${d.san} takes ${took} first.`,
+    ], key);
 }

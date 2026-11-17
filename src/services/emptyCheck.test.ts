@@ -9,7 +9,12 @@ describe('a check that goes nowhere (Danya Ytkf3: "…Qh4+ is simply blocked by 
   it('says the block and that the queen has to move again', () => {
     const e = emptyCheckAt(FEN, 'Qh4+', 90, 'g2g3');
     expect(e?.kind).toBe('block');
-    expect(emptyCheckLine(e!, 'your')).toBe('Qh4+ is a check that goes nowhere: they simply block with g3, and your queen has to move again. A check is worth giving only when it wins something.');
+    const l = emptyCheckLine(e!, 'your', FEN);
+    expect(l).toMatch(/block it with g3/);
+    expect(l).toMatch(/queen/);
+    // Learn never names the move just played: the piece leads, not "Qh4+".
+    expect(l).not.toMatch(/Qh4/);
+    expect(l).not.toMatch(/ — /);
   });
   it('silent when the check cost nothing, or the answer takes the checker', () => {
     expect(emptyCheckAt(FEN, 'Qh4+', 20, 'g2g3')).toBeNull();

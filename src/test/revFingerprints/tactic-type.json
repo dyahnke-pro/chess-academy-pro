@@ -1,7 +1,7 @@
 {
-  "rev": "2026-11-12-zwischenzug-sound-capture",
+  "rev": "2026-11-17-speedrun-producer-fixes",
   "parts": {
     "puzzles": "00e30cfb971ab1f7",
-    "lichess": "bb0a8abfdc528c3d"
+    "lichess": "3470abfde0ac778b"
   }
 }

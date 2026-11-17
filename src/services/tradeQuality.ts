@@ -149,6 +149,17 @@ export function recaptureOpensFile(after: Chess, sq: Square): string | null {
   return file;
 }
 
+/** The piece the side to move would take back on `sq` with: its least
+ *  valuable legal capturer there (the trade's natural retake), or null. */
+function cheapestRetaker(after: Chess, sq: Square): PieceSymbol | null {
+  let best: PieceSymbol | null = null;
+  for (const m of after.moves({ verbose: true })) {
+    if (m.to !== sq || !m.captured) continue;
+    if (!best || (VAL[m.piece] ?? 99) < (VAL[best] ?? 99)) best = m.piece;
+  }
+  return best;
+}
+
 function noteAt(notes: readonly PieceQualityNote[], sq: string): PieceQualityNote | null {
   return notes.find((n) => n.square === sq) ?? null;
 }
@@ -260,7 +271,9 @@ export function readTrade(
   // A BISHOP FOR A KNIGHT AGAINST A SIDE THAT KEEPS BOTH ITS BISHOPS hands
   // that side the pair (Danya, QUk 10.Nxc5 Bxc5 dxc5: "White gets the bishop
   // pair and a great position"; the judge heard only the doubled c-pawns).
-  if (mv.piece === 'b' && mv.captured === 'n' && bishopCount(board0, enemy) === 2) {
+  // Only when their natural retake is NOT a bishop: taking back with one of
+  // the pair ends the pair (walk oct2a F13: …Bxf6 Bxf6 — no pair handed).
+  if (mv.piece === 'b' && mv.captured === 'n' && bishopCount(board0, enemy) === 2 && cheapestRetaker(new Chess(after.fen()), mv.to) !== 'b') {
     bad.push({ why: `it hands ${you ? 'them' : 'you'} the bishop pair`, key: 'pair-handed', sq: [mv.from] });
   }
   const opened = recaptureOpensFile(new Chess(after.fen()), mv.to);

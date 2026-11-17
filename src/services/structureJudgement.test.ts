@@ -6,7 +6,7 @@ import {
 } from './pawnJudgement';
 import {
   restriction, pieceBlocksOwnPawn, semiOutpost, maskedWeakness, safeSquareRoute, fileEntryCovered,
-  dontPlugFile, unmovedUnits, mutualRestriction, fileOpenedForDefender,
+  dontPlugFile, unmovedUnits, fileOpenedForDefender,
 } from './squareJudgement';
 import {
   rightIdeaWrongPiece, keepPlanChangeRoute, planOverOneMove, placementFutureLine, smallEdges, fightingLine,
@@ -206,13 +206,6 @@ describe('squareJudgement', () => {
     expect(unmovedUnits(fromSans(['e4', 'Nf6', 'e5', 'Nd5', 'd4', 'd6', 'c4', 'Nb6', 'f4', 'dxe5', 'fxe5', 'Nc6', 'Be3']), 'Bf5', 'w')).toBeNull();
   });
 
-  it('mutual-restriction ledger: their h5 knight blocks your e2 bishop', () => {
-    const fen = legal('6k1/6pp/5p2/7n/8/4P3/4BPPP/6K1 w - - 0 20');
-    const r = voiced(mutualRestriction(fen, 'w'));
-    expect(r.text).toBe('Their knight on h5 blocks your bishop on e2, a fair price: the knight is stuck on the rim.');
-    // A free knight is not a stuck one.
-    expect(mutualRestriction(legal('6k1/6pp/8/7n/8/8/4BPPP/6K1 w - - 0 20'), 'w')).toBeNull();
-  });
 
   it('a file opened for the defender: after fxg3 their f1 rook owns the f-file', () => {
     const fen = legal('6k1/pp3ppp/8/7n/8/6B1/PP3PPP/5RK1 b - - 0 20');

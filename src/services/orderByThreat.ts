@@ -22,6 +22,7 @@ import { Chess, type Color } from 'chess.js';
 import { theirWantedMoves, type TheirWant } from './prophylaxis';
 import { seatPieceWords } from './pieceRef';
 import { legalSeeGainFor } from './positionReadingService';
+import { PIECE_NAMES } from '../types/tacticTypes';
 
 export interface OrderPoint {
   /** The follow-up that has to wait, as said ("…e6"). */
@@ -45,7 +46,13 @@ function wonAfter(c: Chess, me: Color): number {
   return best;
 }
 
-export function orderByThreat(fenBefore: string, san: string, line: readonly string[], mine: boolean): OrderPoint | null {
+/** `yPv`: the engine's line after the follow-up played first (UCI, its
+ *  reply first) — from the fan read before the move; null where the surface
+ *  has none. It is how a CHECK the order prevents is found: a check is no
+ *  board "want" (it wins nothing on its own), so only the engine can say it
+ *  is the answer (Najdorf …a6: "…e5 at once allows Bb5+", David 2026-11-17:
+ *  "Why cut that corner? Model Bb5+"). */
+export function orderByThreat(fenBefore: string, san: string, line: readonly string[], mine: boolean, yPv: readonly string[] | null): OrderPoint | null {
   const followSan = line[1];
   if (!followSan) return null;
   let me: Color;
@@ -89,5 +96,58 @@ export function orderByThreat(fenBefore: string, san: string, line: readonly str
     const dotThem = (s: string): string => (them === 'b' ? `…${s}` : s);
     return { follow: dotMe(y.san), answer: dotThem(w.san), would, squares: [y.to, w.to, ...w.hit.map((h) => h.square)] };
   }
-  return null;
+  return checkOrder(fenBefore, san, me, x, y, mine, yPv);
+}
+
+const WORTH: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+
+/** THE CHECK THE ORDER PREVENTS. The engine's answer to the follow-up played
+ *  first is a check; after the move played, that check is illegal or drops
+ *  the checking piece. Said with what the check sets up when the engine's
+ *  line shows it: their next piece move after the check is answered, and the
+ *  most valuable piece of the mover's it hits. */
+function checkOrder(
+  fenBefore: string, san: string, me: Color,
+  x: { from: string; to: string; fen: string },
+  y: { from: string; to: string; fen: string; san: string },
+  mine: boolean, yPv: readonly string[] | null,
+): OrderPoint | null {
+  if (!yPv || yPv.length === 0) return null;
+  const uciMove = (c: Chess, u: string) => { try { return c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { return null; } };
+  const c = new Chess(y.fen);
+  const r = uciMove(c, yPv[0]);
+  if (!r || !c.inCheck()) return null;
+  // The check must not simply lose for them after the follow-up.
+  if (wonAfter(c, me) >= 1) return null;
+  // After the move played, the check is gone: illegal, or the checker drops.
+  const cx = new Chess(x.fen);
+  const rx = uciMove(cx, yPv[0]);
+  if (rx && legalSeeGainFor(cx.fen(), rx.to, me) < Math.min(1, WORTH[rx.piece])) return null;
+  // X must still be playable after Y and the check is answered (a real swap).
+  const own = mine ? 'your' : 'their';
+  const theirs = mine ? 'their' : 'your';
+  let rest = '';
+  const squares = [y.to, r.to];
+  const block = yPv[1] ? uciMove(c, yPv[1]) : null;
+  const next = block && yPv[2] ? uciMove(c, yPv[2]) : null;
+  if (block && next && next.piece !== 'p' && !next.captured) {
+    // The target it hits: fewest guards first, then the most valuable, then
+    // the most central file (the Najdorf's d6, not the g7 the bishop holds as well).
+    let hit: { square: string; piece: string; key: number } | null = null;
+    for (const row of c.board()) for (const cell of row) {
+      if (!cell || cell.color !== me || cell.type === 'k') continue;
+      if (!c.attackers(cell.square, next.color).includes(next.to)) continue;
+      const file = cell.square.charCodeAt(0) - 97;
+      const key = -c.attackers(cell.square, me).length * 100 + WORTH[cell.type] * 10 - Math.abs(file - 3.5);
+      if (!hit || key > hit.key) hit = { square: cell.square, piece: cell.type, key };
+    }
+    const answered = block.piece === 'k' ? `${own} king steps aside` : `${mine ? 'you block' : 'they block'} it`;
+    const mover = `${theirs} ${PIECE_NAMES[next.piece]}`;
+    rest = `, and once ${answered}, ${mover} comes to ${next.to}${hit ? `, hitting ${seatPieceWords(c.fen(), hit.square, own, `${own} piece on ${hit.square}`)}` : ''}`;
+    squares.push(next.to, ...(hit ? [hit.square] : []));
+  }
+  const them: Color = me === 'w' ? 'b' : 'w';
+  const dot = (side: Color, s: string): string => (side === 'b' ? `…${s}` : s);
+  void fenBefore; void san;
+  return { follow: dot(me, y.san), answer: dot(them, r.san), would: `would give check from ${r.to}${rest}`, squares };
 }

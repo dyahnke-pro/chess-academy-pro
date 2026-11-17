@@ -1,9 +1,9 @@
 {
-  "rev": "2026-11-13-rook-files",
+  "rev": "2026-11-17-speedrun-producer-fixes",
   "parts": {
-    "chesscom-1038626480": "fb2ffeaaf852d3d1",
+    "chesscom-1038626480": "e707aad3f0d9af77",
     "chesscom-1042725180": "652971640d9f203f",
     "chesscom-1044361526": "f5dca866802baa8a",
-    "lichess-motifs": "7e151a6178599be3"
+    "lichess-motifs": "00a4d5e683e564f4"
   }
 }

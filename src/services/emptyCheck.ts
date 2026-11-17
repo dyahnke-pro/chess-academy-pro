@@ -9,6 +9,7 @@
 // when it wins something. PURE: chess.js.
 import { Chess, type PieceSymbol } from 'chess.js';
 import { PIECE_NAMES } from '../types/tacticTypes';
+import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
 export interface EmptyCheck {
   san: string;
@@ -38,9 +39,18 @@ export function emptyCheckAt(fenBefore: string, san: string, costCp: number | nu
   return { san: mv.san, piece: mv.piece, reply: r.san, kind, squares: [mv.to, r.to] };
 }
 
-/** From the checking side's seat. */
-export function emptyCheckLine(e: EmptyCheck, own: 'your' | 'their'): string {
+/** From the checking side's seat, in the human voice: lead with the piece,
+ *  never the move's name (Learn says "your queen", not the move just played),
+ *  three phrasings rotated on the board. */
+export function emptyCheckLine(e: EmptyCheck, own: 'your' | 'their', fen: string): string {
   const who = own === 'your' ? 'they' : 'you';
-  const answer = e.kind === 'block' ? `${who} simply block with ${e.reply}` : `${who} step aside with ${e.reply}`;
-  return `${e.san} is a check that goes nowhere: ${answer}, and ${own} ${NAME[e.piece]} has to move again. A check is worth giving only when it wins something.`;
+  const Who = who[0].toUpperCase() + who.slice(1);
+  const p = NAME[e.piece];
+  const ans = e.kind === 'block' ? `block it with ${e.reply}` : `step aside with ${e.reply}`;
+  const Own = own[0].toUpperCase() + own.slice(1);
+  return rotateStem([
+    `${Own} ${p}'s check goes nowhere: ${who} simply ${ans}. Now the ${p} has to move again. A check only helps when it wins something.`,
+    `${Who} ${ans}, and that check is over. ${Own} ${p} is left to move a second time. Give check when it gains something, not because it's there.`,
+    `That check by ${own} ${p} runs out at once, since ${who} ${ans}. The ${p} has spent a move for nothing.`,
+  ], stemKeyOf(`${fen}|${e.san}`));
 }

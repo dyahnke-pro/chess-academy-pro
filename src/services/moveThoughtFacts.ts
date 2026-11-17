@@ -426,7 +426,8 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   }
   // THE ORDER, READ OFF THE BOARD (gap B1): the mover's next move in the line,
   // played first, would let them pin, fork or kick — this order does not.
-  const order = outFirst ? null : orderByThreat(i.fenBefore, i.san, i.line ?? follow[0] ?? [], mine);
+  const orderLine = i.line ?? follow[0] ?? [];
+  const order = outFirst ? null : orderByThreat(i.fenBefore, i.san, orderLine, mine, followPvOf(i.fenBefore, orderLine[1], i.reads?.before ?? []));
   if (order && orderMatters(i.fenBefore, i.san, order.follow, i.reads?.before ?? [])) {
     const does = order.would.replace(/^would (\w+)/, (_m, v: string) => `${v}s`);
     const said = rotateStem([
@@ -440,14 +441,14 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   // the engine's best move is a capture by one of two hanging pieces.
   {
     const d = desperadoAt(i.fenBefore, i.san, i.reads?.before[0]?.moves[0] ?? null);
-    if (d) add('defence-idea', 'desperadoAt', 'desperado', 'rescue', desperadoLine(d, mine ? 'your' : 'their'), undefined, [d.from, d.to, d.other.square], 66, false, [`desperado:${d.from}${d.to}`]);
+    if (d) add('defence-idea', 'desperadoAt', 'desperado', 'rescue', desperadoLine(d, mine ? 'your' : 'their', i.fenBefore), undefined, [d.from, d.to, d.other.square], 66, false, [`desperado:${d.from}${d.to}`]);
   }
 
   // A CHECK THAT GOES NOWHERE (Danya Ytkf3): it cost half a pawn and the
   // engine's answer is a block or a king step.
   {
     const e = emptyCheckAt(i.fenBefore, i.san, i.costCp, i.reads?.after[0]?.moves[0] ?? null);
-    if (e) add('method', 'emptyCheckAt', 'emptyCheck', 'check', emptyCheckLine(e, mine ? 'your' : 'their'), undefined, e.squares, 58, false, [`empty-check:${e.squares.join('')}`]);
+    if (e) add('method', 'emptyCheckAt', 'emptyCheck', 'check', emptyCheckLine(e, mine ? 'your' : 'their', i.fenBefore), undefined, e.squares, 58, false, [`empty-check:${e.squares.join('')}`]);
   }
 
   // TRANSPOSITION AND ANALOGY (gaps A7, A11): "this transposes into the
@@ -893,6 +894,15 @@ export function questionThought(asked: Omit<MoveThoughtInput, 'phrases' | 'tense
  *  first? It would allow Bb5" with Bb5 losing, "Rg4 first … allow …d5"
  *  with Rg4 as good). X outside the fan is worse than all of it; with no
  *  read the board's reason stands alone. */
+/** The engine's line after `follow` played instead (its reply first), read
+ *  off the fan before the move; null when the fan does not hold it. */
+function followPvOf(fenBefore: string, follow: string | undefined, fan: readonly AnalysisLine[]): string[] | null {
+  if (!follow) return null;
+  let u: string;
+  try { const mv = new Chess(fenBefore).move(follow.replace(/^…/, '')); u = `${mv.from}${mv.to}${mv.promotion ?? ''}`; } catch { return null; }
+  const l = fan.find((x) => x.moves[0] === u);
+  return l ? l.moves.slice(1) : null;
+}
 const ORDER_MATTERS_CP = 50;
 function orderMatters(fenBefore: string, san: string, follow: string, fan: readonly AnalysisLine[]): boolean {
   if (fan.length === 0) return true;

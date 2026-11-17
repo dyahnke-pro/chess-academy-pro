@@ -54,7 +54,7 @@ import type { ClassifiedTactic, MistakePuzzle, MoveAnnotation } from '../types';
 // and a first move that makes a new threat (task 172: "taking on d5 can wait"
 // of a capture that lost the knight). A kick that only makes a capture sound
 // (…c5, Qc3, …Qxb6) is the sequence it is, no longer filed as a zwischenzug.
-export const TACTIC_TYPE_REV = '2026-11-12-zwischenzug-sound-capture';
+export const TACTIC_TYPE_REV = '2026-11-17-speedrun-producer-fixes';
 
 interface TacticTypeBackfillResult {
   /** Rows read across both stores. */

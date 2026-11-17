@@ -86,13 +86,21 @@ describe('TACTIC_TYPE_AUTHORITY — who decides each motif is DECLARED, exhausti
     const GEOMETRY_FIXTURES: Array<{ tactic: TacticType; fen: string; line: string[] }> = [
       { tactic: 'interference', fen: '3r2k1/5ppp/8/8/1N1nP3/8/1Q3PPP/6K1 w - - 0 1', line: ['b4d5', 'g7g6', 'b2d4', 'h7h6'] },
       { tactic: 'deflection', fen: 'r7/p4ppk/2b5/8/1P6/6P1/P1P2P1P/3Q2K1 w - - 0 1', line: ['b4b5', 'c6b5', 'd1d3', 'g7g6', 'd3b5', 'a8b8'] },
-      { tactic: 'clearance', fen: '3q2kr/7p/4pn2/8/3N4/8/1B3PPP/R5K1 w - - 0 1', line: ['d4e6', 'd8d7', 'b2f6', 'h7h6'] },
+      // No h-pawn: the rook on h8 can step out, so Bxf6 lands only what the
+      // clearance opened. With the pawn on h7 the rook is TRAPPED by Bxf6 (its
+      // one "rescue", …Qd1+, throws the queen away) and the line is named for
+      // the trapped rook — the test below.
+      { tactic: 'clearance', fen: '3q2kr/8/4pn2/8/3N4/8/1B3PPP/R5K1 w - - 0 1', line: ['d4e6', 'd8d7', 'b2f6', 'h8h7'] },
       // Re8+ first, THEN Bxd5 — the capture was there all along (the in-between move).
       { tactic: 'zwischenzug', fen: '6k1/5pp1/7p/3n4/8/1B6/5PPP/4R1K1 w - - 0 1', line: ['e1e8', 'g8h7', 'b3d5'] },
     ];
     const members = ALL_TACTICS.filter((t) => TACTIC_TYPE_AUTHORITY[t] === 'geometry').sort();
     expect(members).toEqual(GEOMETRY_FIXTURES.map((f) => f.tactic).sort());
     for (const f of GEOMETRY_FIXTURES) expect(detectTacticType(f.fen, f.line[0], f.line), f.tactic).toBe(f.tactic);
+  });
+
+  it('a clearance that traps a rook is named for the rook (a queen thrown away is no rescue)', () => {
+    expect(detectTacticType('3q2kr/7p/4pn2/8/3N4/8/1B3PPP/R5K1 w - - 0 1', 'd4e6', ['d4e6', 'd8d7', 'b2f6', 'h7h6'])).toBe('trapped_piece');
   });
 
   it('the old geometry is DEAD in product code — no non-test file imports it (source scan)', () => {

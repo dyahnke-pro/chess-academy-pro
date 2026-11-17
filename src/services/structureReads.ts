@@ -21,7 +21,7 @@ import {
 } from './pawnJudgement';
 import {
   restriction, pawnFreeze, pieceBlocksOwnPawn, semiOutpost, maskedWeakness, safeSquareRoute, fileEntryCovered,
-  dontPlugFile, unmovedUnits, mutualRestriction, fileOpenedForDefender,
+  dontPlugFile, unmovedUnits, fileOpenedForDefender,
 } from './squareJudgement';
 import {
   rightIdeaWrongPiece, keepPlanChangeRoute, planOverOneMove, placementFutureLine, fightingLine,
@@ -170,7 +170,6 @@ export function boardStructure(fen: string, student: Color): StructureRead[] {
     safe(() => pieceBlocksOwnPawn(fen, student)),
     safe(() => fileEntryCovered(fen, student)),
     safe(() => mirroredAsymmetry(fen, student)),
-    safe(() => mutualRestriction(fen, student)),
   ].filter((r): r is StructureRead => r !== null);
 }
 
