@@ -1,8 +1,8 @@
 {
  "about": "Which teaching computer reaches which surface, by a static call path from each surface root (scripts/computer-reach.mjs; the list is scripts/computer-reach/computers.json). learn: yes = through the focus runner, door = computed in a Learn turn and decided by Learn's turn door (spoken when the door keeps it); a door-only row says why in `door` (an adapter of computers the other surfaces read, or Learn-only by design).",
  "graph": {
-  "files": 1651,
-  "nodes": 16277
+  "files": 1655,
+  "nodes": 16320
  },
  "totals": {
   "computers": 346,
@@ -31,12 +31,12 @@
     "no": 125
    },
    "tapped": {
-    "yes": 158,
-    "no": 188
+    "yes": 159,
+    "no": 187
    },
    "tactics": {
-    "yes": 104,
-    "no": 242
+    "yes": 174,
+    "no": 172
    }
   }
  },
@@ -273,13 +273,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -488,13 +489,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ],
    "folded": [
@@ -540,13 +542,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -869,6 +872,7 @@
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -884,13 +888,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -906,12 +911,14 @@
    "lesson": "no",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "insights"
    ],
    "registry": [
     "countMethod"
@@ -1069,6 +1076,7 @@
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -1084,13 +1092,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -1133,6 +1142,7 @@
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ],
    "folded": [
@@ -1179,6 +1189,7 @@
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -1201,6 +1212,7 @@
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -1237,13 +1249,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ],
    "registry": [
@@ -1285,13 +1298,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -1352,14 +1366,15 @@
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
-   "tapped": "no",
-   "tactics": "no",
+   "tapped": "yes",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -1447,6 +1462,7 @@
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -1482,13 +1498,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -1504,13 +1521,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -1533,6 +1551,7 @@
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -1555,6 +1574,7 @@
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -1570,13 +1590,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -1630,13 +1651,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -1679,6 +1701,7 @@
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -1818,6 +1841,7 @@
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -1921,6 +1945,7 @@
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -1959,6 +1984,7 @@
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -2026,13 +2052,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -2265,6 +2292,7 @@
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -2280,13 +2308,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -2359,13 +2388,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -2443,13 +2473,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -2607,13 +2638,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -2644,7 +2676,7 @@
       "lesson": "yes",
       "chat": "yes",
       "tapped": "no",
-      "tactics": "no"
+      "tactics": "yes"
      }
     }
    },
@@ -2703,13 +2735,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -2732,6 +2765,7 @@
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -2850,13 +2884,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -2890,13 +2925,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -3196,13 +3232,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -3225,6 +3262,7 @@
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ],
    "folded": [
@@ -3335,6 +3373,7 @@
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -3350,13 +3389,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -3514,13 +3554,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -3635,13 +3676,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -3657,13 +3699,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -3818,13 +3861,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -3840,12 +3884,14 @@
    "lesson": "no",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "insights"
    ],
    "registry": [
     "obligationLifted"
@@ -3958,13 +4004,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -3999,13 +4046,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -4037,13 +4085,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -4059,13 +4108,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ],
    "registry": [
@@ -4188,13 +4238,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ],
    "registry": [
@@ -4233,13 +4284,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -4278,13 +4330,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -4300,13 +4353,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ],
    "registry": [
@@ -4325,13 +4379,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -4354,6 +4409,7 @@
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -4405,13 +4461,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -4427,13 +4484,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -4540,13 +4598,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -4582,13 +4641,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -4604,13 +4664,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -4649,13 +4710,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -4693,13 +4755,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -4825,12 +4888,14 @@
    "lesson": "no",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "insights"
    ],
    "registry": [
     "priorityFirst"
@@ -4863,7 +4928,7 @@
       "lesson": "yes",
       "chat": "yes",
       "tapped": "no",
-      "tactics": "no"
+      "tactics": "yes"
      }
     }
    },
@@ -5241,13 +5306,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -5340,13 +5406,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ],
    "registry": [
@@ -5365,13 +5432,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -5481,12 +5549,14 @@
    "lesson": "no",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "insights"
    ],
    "registry": [
     "queenGrabTrap"
@@ -5527,13 +5597,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -5693,13 +5764,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ],
    "folded": [
@@ -5900,13 +5972,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -5980,12 +6053,14 @@
    "lesson": "no",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "insights"
    ],
    "registry": [
     "trapped"
@@ -6021,13 +6096,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -6043,13 +6119,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -6104,10 +6181,12 @@
    "lesson": "no",
    "chat": "no",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
-    "playSilent"
+    "openingsPage",
+    "playSilent",
+    "insights"
    ]
   },
   {
@@ -6122,13 +6201,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -6151,6 +6231,7 @@
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -6203,13 +6284,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -6243,13 +6325,14 @@
    "lesson": "no",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "insights"
    ],
    "registry": [
     "structureBoard"
@@ -6267,13 +6350,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ],
    "registry": [
@@ -6292,13 +6376,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ],
    "registry": [
@@ -6317,10 +6402,12 @@
    "lesson": "no",
    "chat": "no",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
-    "playSilent"
+    "openingsPage",
+    "playSilent",
+    "insights"
    ],
    "registry": [
     "structureTheirMove"
@@ -6444,12 +6531,14 @@
    "lesson": "no",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "insights"
    ],
    "registry": [
     "tacticGeometry"
@@ -7027,6 +7116,7 @@
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -7042,12 +7132,14 @@
    "lesson": "no",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "insights"
    ],
    "registry": [
     "threatCost"
@@ -7065,12 +7157,14 @@
    "lesson": "no",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "insights"
    ]
   },
   {
@@ -7119,13 +7213,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -7141,13 +7236,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -7163,13 +7259,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -7208,13 +7305,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -7230,13 +7328,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },

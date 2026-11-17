@@ -140,9 +140,9 @@ export function recaptureOpensFile(after: Chess, sq: Square): string | null {
   for (const m of caps) {
     after.move(m);
     const f = m.from[0];
-    const onFile = after.board().flat().filter((c) => c && c.square[0] === f && c.color === side);
+    const onFile = after.board().flat().flatMap((c) => (c && c.square[0] === f && c.color === side ? [c] : []));
     after.undo();
-    if (onFile.some((c) => c!.type === 'p') || !onFile.some((c) => c!.type === 'r')) return null;
+    if (onFile.some((c) => c.type === 'p') || !onFile.some((c) => c.type === 'r')) return null;
     if (file && file !== f) return null;
     file = f;
   }
