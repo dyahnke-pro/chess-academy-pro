@@ -107,7 +107,7 @@
 - `src/services/mistakeNarration.ts:396`
 - `src/services/moveInsight.ts:117`
 - `src/services/moveInsight.ts:1065`
-- `src/services/moveThoughtFacts.ts:1077`
+- `src/services/moveThoughtFacts.ts:1084`
 - `src/services/oneSkewerRule.test.ts:18`
 - `src/services/openingGenerator.ts:3594`
 - `src/services/openingSlip.ts:122`
@@ -138,7 +138,7 @@
 - `src/services/reviewDepth.eval.measure.test.ts:258`
 - `src/services/reviewFullData.ts:884`
 - `src/services/reviewFullData.ts:980`
-- `src/services/reviewFullData.ts:1692`
+- `src/services/reviewFullData.ts:1694`
 - `src/services/reviewMoveBriefing.ts:137`
 - `src/services/reviewMoveBriefing.ts:138`
 - `src/services/reviewNarrationFidelity.test.ts:227`

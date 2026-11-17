@@ -41,11 +41,11 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `storyPlanAfter` (function) — 2 call sites
-- `src/services/moveThoughtFacts.ts:504`
-- `src/services/moveThoughtFacts.ts:579`
+- `src/services/moveThoughtFacts.ts:505`
+- `src/services/moveThoughtFacts.ts:580`
 
 ### `openingStoryAt` (function) — 14 call sites
-- `src/services/boardComputers.ts:598`
+- `src/services/boardComputers.ts:605`
 - `src/services/holeKey.test.ts:15`
 - `src/services/learnBoardTeaching.test.ts:219`
 - `src/services/openingStory.test.ts:23`

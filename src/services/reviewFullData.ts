@@ -1680,6 +1680,8 @@ export function computeMoveFacets(
       // has to vouch for stays unsaid here).
       add(readBoardAll('harmlessPin', { fenBefore, san, student: studentColorWB, line: ctx.playedLineUci })[0]);
       add(readBoardAll('queenNet', { fenBefore, san, student: studentColorWB })[0]);
+      // Getting into their camp, both seats (Danya's speedruns).
+      add(readBoardAll('intoTheirCamp', { fenBefore, san, student: studentColorWB })[0]);
       add(readBoardAll('bothSaved', { fenBefore, san, student: studentColorWB, replies: ctx.playedLineUci.length ? [{ cp: ctx.evaluation != null && storedMate(ctx.evaluation) == null ? ctx.evaluation : null, mate: null, moves: ctx.playedLineUci }] : [] })[0]);
     }
     if (!isStudent) {

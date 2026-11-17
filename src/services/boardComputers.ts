@@ -71,6 +71,7 @@ import { lineCut } from './lineCut';
 import { harmlessPin, harmlessPinLine } from './harmlessPin';
 import { queenNet, queenNetLine } from './queenNet';
 import { bothSaved, bothSavedLine, type ReplyLine } from './bothSaved';
+import { intoTheirCamp, intoTheirCampLine } from './intoTheirCamp';
 import { pawnCutsGuard, type PawnLineRead } from './pawnLines';
 import { chainBase } from './chainBase';
 import { pinnedPawnGuard } from './pinnedPawnGuard';
@@ -281,6 +282,12 @@ export interface BoardContexts {
    *  move `san` on `fenBefore` (either seat). `replies`: the engine's lines
    *  from the board after it, best first (White-POV cp); [] where none. */
   bothSaved: { fenBefore: string; san: string; student: Color; replies: readonly ReplyLine[] };
+  /** GETTING INTO THEIR CAMP (`intoTheirCamp`, Danya's speedruns): the move
+   *  `san` on `fenBefore` (either seat) gets a piece into their half and hits
+   *  what they cannot keep, puts the rooks on the seventh, lifts or swings a
+   *  rook toward their king, connects the rooks — or, on move 12, leaves them
+   *  still cut off. */
+  intoTheirCamp: { fenBefore: string; san: string; student: Color };
   /** WHAT A PAWN MOVE DID TO THE LINES (`pawnLines`, S4 pawns): the square the pawn landed on cut an enemy slider off from a piece it
    *  guarded, which is hanging now and was not before. */
   pawnCutsGuard: { fenBefore: string; san: string; student: Color };
@@ -1481,6 +1488,30 @@ export const BOARD_COMPUTERS = {
     }),
     computer: 'bothSaved',
     kind: 'defence-idea',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: { not: 'owed — not in the Learn turn door yet (CoachTeachPage reads none of its lanes); the composer and Review say it' },
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
+    },
+  },
+  intoTheirCamp: {
+    // His "you infiltrate with the rook to d7", "you reach the seventh",
+    // "you lift the rook to f3", "the queen to d2, connecting the rooks".
+    read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const x = intoTheirCamp(fenBefore, san);
+      if (!x) return null;
+      const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
+      const mine = new Chess(fenBefore).turn() === student;
+      const text = intoTheirCampLine(x, mine ? 'your' : 'their', fenAfter);
+      // One claim with the structure read's doubled seventh, so a turn says it once.
+      const claims = x.kind === 'seventh-doubled' ? [x.key] : [x.key, `camp:${x.kind}:${x.moved.to}`];
+      return fact({ key: x.key, claims, text, proof: squaresProof(text, x.squares) ?? NO_PROOF.description, squares: x.squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
+    }),
+    computer: 'intoTheirCamp',
+    kind: 'move-job',
     phase: ANY,
     surfaces: {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,

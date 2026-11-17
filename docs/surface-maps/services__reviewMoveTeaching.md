@@ -129,7 +129,7 @@
 - `src/services/falseJobs.test.ts:86`
 - `src/services/falseJobs.test.ts:106`
 - `src/services/learnBoardTeaching.ts:1259`
-- `src/services/moveThoughtFacts.ts:361`
+- `src/services/moveThoughtFacts.ts:362`
 - `src/services/pinIsAPin.test.ts:16`
 - `src/services/reviewMoveTeaching.oppositeWings.test.ts:13`
 - `src/services/reviewMoveTeaching.oppositeWings.test.ts:18`
@@ -150,7 +150,7 @@
 
 ### `nameEndgamePhase` (function) — 7 call sites
 - `src/services/coachFeatureService.ts:4278`
-- `src/services/reviewFullData.ts:1796`
+- `src/services/reviewFullData.ts:1798`
 - `src/services/reviewMoveTeaching.test.ts:140`
 - `src/services/reviewMoveTeaching.test.ts:142`
 - `src/services/reviewMoveTeaching.test.ts:147`

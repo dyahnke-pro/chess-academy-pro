@@ -22,7 +22,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `pinnedPawnGuard` (function) — 4 call sites
 - `scripts/audit-speedrun-chat-prod.mjs:56`
-- `src/services/boardComputers.ts:1542`
+- `src/services/boardComputers.ts:1573`
 - `src/services/pinnedPawnGuard.test.ts:8`
 - `src/services/pinnedPawnGuard.test.ts:18`
 

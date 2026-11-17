@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2806 lines · 78 exports · 153 importers · 28 tests · 2 audits**
+**2806 lines · 78 exports · 154 importers · 28 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -67,6 +67,7 @@
 - `src/services/guardRemoval.ts`
 - `src/services/holdResource.ts`
 - `src/services/inaccuracyCall.ts`
+- `src/services/intoTheirCamp.ts`
 - `src/services/isolatedOneOwner.test.ts`
 - `src/services/kickMap.ts`
 - `src/services/kingAttackReads.ts`
@@ -317,7 +318,7 @@
 - `src/services/orderByThreat.ts:110`
 - `src/services/prophylaxis.ts:105`
 
-### `legalSeeGainFor` (function) — 143 call sites
+### `legalSeeGainFor` (function) — 145 call sites
 - `src/coach/focus/castlingWatch.ts:159`
 - `src/coach/focus/castlingWatch.ts:161`
 - `src/coach/focus/focusChances.ts:388`
@@ -375,6 +376,8 @@
 - `src/services/guardRemoval.ts:139`
 - `src/services/guardRemoval.ts:155`
 - `src/services/guardRemoval.ts:160`
+- `src/services/intoTheirCamp.ts:163`
+- `src/services/intoTheirCamp.ts:200`
 - `src/services/kickMap.ts:47`
 - `src/services/kickMap.ts:54`
 - `src/services/kingAttackReads.ts:147`
@@ -750,9 +753,10 @@
 - `src/services/positionReadingService.test.ts:821`
 - `src/services/positionReadingService.test.ts:824`
 
-### `findRookLift` (function) — 6 call sites
+### `findRookLift` (function) — 7 call sites
 - `src/services/danyaBehaviors.ts:845`
 - `src/services/groundedAnswer.ts:6979`
+- `src/services/intoTheirCamp.ts:220`
 - `src/services/positionReadingService.test.ts:827`
 - `src/services/positionReadingService.test.ts:830`
 - `src/services/rookLiftPinned.test.ts:5`
