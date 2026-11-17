@@ -77,6 +77,8 @@ describe('OpeningPlayMode — live punishment callout wiring', () => {
 
   it('renders the callout (move withheld) and Show-the-line reveals + speaks it', async () => {
     const speakSpy = vi.spyOn(voiceService, 'speak').mockResolvedValue(undefined);
+    // The one line walker speaks each ply's why aloud as it plays the line.
+    const readSpy = vi.spyOn(voiceService, 'speakReadAloud').mockResolvedValue(undefined);
     render(<OpeningPlayMode opening={buildOpeningRecord({ id: 'callout-test', name: 'Vienna Game', pgn: 'e4 f5 exf5', color: 'white' })} onExit={vi.fn()} />);
 
     // Real timers: wait out the ~3s pregame, then play a move so the game
@@ -102,9 +104,10 @@ describe('OpeningPlayMode — live punishment callout wiring', () => {
       expect(screen.getByTestId('punish-callout-text').textContent ?? '').toMatch(/exf5/);
     });
     // The reveal was spoken (voice fired with the move-naming line).
-    expect(speakSpy).toHaveBeenCalled();
-    const spokenReveal = speakSpy.mock.calls.some((c) => c[0].includes('exf5'));
-    expect(spokenReveal).toBe(true);
+    await waitFor(() => {
+      const spoken = [...speakSpy.mock.calls, ...readSpy.mock.calls].map((c) => String(c[0]));
+      expect(spoken.some((t) => t.includes('exf5'))).toBe(true);
+    }, { timeout: 8000 });
     // The bar's Play line has nothing left to reveal (no Why line yet) — greyed,
     // never hidden, so every board keeps the same six buttons.
     expect(screen.getByTestId('show-the-line')).toBeDisabled();

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, within } from '@testing-library/react';
+import { waitFor, render, screen, fireEvent, within } from '@testing-library/react';
 import { Chess } from 'chess.js';
 import { ReplyTree } from './ReplyTree';
 import { useAppStore } from '../../stores/appStore';
@@ -112,7 +112,9 @@ describe('ReplyTree', () => {
     clubMock.mockResolvedValue([C3, H4]);
     const { unmount } = render(<ReplyTree opening={opening} lineIndex={1} onOpen={vi.fn()} />);
     expect(await screen.findByTestId('reply-6-h4')).toBeTruthy();
-    expect(rowOrder()).toEqual(['4.Bd3', '4.h4', '4.c3']);
+    // The rows land before the band order settles (the record reads are async).
+    await waitFor(() => expect(rowOrder()).toEqual(['4.Bd3', '4.h4', '4.c3']));
+    await waitFor(() => expect(auditMock.mock.calls.some(([e]) => (e as { kind: string }).kind === 'club-replies-ordered')).toBe(true));
     expect(within(screen.getByTestId('reply-6-h4')).getByTestId('reply-tag-club')).toBeTruthy();
     expect(within(screen.getByTestId('reply-6-Bd3')).getByTestId('reply-tag-main')).toBeTruthy();
     // The order is observable: one audit row says what was chosen, for which band.
@@ -126,7 +128,7 @@ describe('ReplyTree', () => {
     useAppStore.setState({ activeProfile: buildUserProfile({ currentRating: 1900 }) });
     render(<ReplyTree opening={opening} lineIndex={1} onOpen={vi.fn()} />);
     expect(await screen.findByTestId('reply-6-h4')).toBeTruthy();
-    expect(rowOrder()).toEqual(['4.Bd3', '4.c3', '4.h4']);
+    await waitFor(() => expect(rowOrder()).toEqual(['4.Bd3', '4.c3', '4.h4']));
   });
 
   it('puts a reply the student met in their own games first, and says so', async () => {

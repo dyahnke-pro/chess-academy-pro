@@ -634,12 +634,14 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   const punishPending = !!punishCue && !punishRevealed;
   // THE LINE JUST STATED (the one Play-line button plays it): the punish line
   // while its callout waits, else the line Why proved.
-  const { state: stateLines, playStated } = lineWalk;
+  const { state: stateLines, playStated, walk: walkLine } = lineWalk;
   useEffect(() => {
-    stateLines(punishPending && punishLine ? [punishLine] : whyLine ? [whyLine] : []);
-  }, [stateLines, punishPending, punishLine, whyLine]);
+    stateLines(whyLine ? [whyLine] : []);
+  }, [stateLines, whyLine]);
+  // While the callout waits the button IS the reveal: it walks the punish line
+  // it holds directly (never through the stated slot, which lags a render).
   const playLine = punishPending
-    ? (): void => { revealPunishLine(); playStated?.(); }
+    ? (): void => { revealPunishLine(); if (punishLine) walkLine(punishLine); }
     : playStated;
 
   const goToFirstMove = useCallback(() => {
