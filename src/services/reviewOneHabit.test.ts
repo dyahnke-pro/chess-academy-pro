@@ -33,7 +33,9 @@ describe('a Review turn says one plan for each side', () => {
     const g = games.find((x) => x.id.startsWith('colle800')) as FixtureGame;
     const segs = reviewSegments(g, g.rating);
     const turn = segs.find((s) => s.ply === 27)?.narration ?? '';
-    expect(turn).toMatch(/build toward: an attack on their king/);
+    // The plan's idea, not one of its rotated stems ("Here is what you build
+    // toward:" / "The plan for you here:" rotate on the game's plan count).
+    expect(turn).toMatch(/(build toward|plan for you here): an attack on their king/);
     expect(turn).not.toMatch(/pawn majority/);
     // …and once heard, the static majority plan does not come back later
     // (held for the turn, it was said two plies on).
