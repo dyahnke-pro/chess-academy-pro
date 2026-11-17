@@ -425,7 +425,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   // THE ORDER, READ OFF THE BOARD (gap B1): the mover's next move in the line,
   // played first, would let them pin, fork or kick — this order does not.
   const order = outFirst ? null : orderByThreat(i.fenBefore, i.san, i.line ?? follow[0] ?? [], mine);
-  if (order) {
+  if (order && orderMatters(i.fenBefore, i.san, order.follow, i.reads?.before ?? [])) {
     const does = order.would.replace(/^would (\w+)/, (_m, v: string) => `${v}s`);
     const said = rotateStem([
       `Why not ${order.follow} first? It would allow ${order.answer}, which ${does}`,
@@ -869,6 +869,27 @@ export function questionThought(asked: Omit<MoveThoughtInput, 'phrases' | 'tense
   // A story line about the board, not the move ("both kings are on the
   // kingside"), answers no question about a move: the lesson's thread only.
   return composeThought(all.filter((f) => groups.has(f.group) && !(f.source === 'openingStory' && !MOVE_STEPS_OF_STORY.has(f.step))), 'chat', voice, NOT_LED, null);
+}
+
+/** THE ORDER MATTERS ONLY WHEN THE ENGINE SAYS SO: "Why not X first?" is
+ *  said only when X first is at least half a pawn worse than the move played
+ *  by the fan read before the move (Danya speedrun tapes: "Why not …d5
+ *  first? It would allow Bb5" with Bb5 losing, "Rg4 first … allow …d5"
+ *  with Rg4 as good). X outside the fan is worse than all of it; with no
+ *  read the board's reason stands alone. */
+const ORDER_MATTERS_CP = 50;
+function orderMatters(fenBefore: string, san: string, follow: string, fan: readonly AnalysisLine[]): boolean {
+  if (fan.length === 0) return true;
+  const uci = (m: string): string | null => { try { const mv = new Chess(fenBefore).move(m.replace(/^…/, '')); return `${mv.from}${mv.to}${mv.promotion ?? ''}`; } catch { return null; } };
+  const y = uci(follow);
+  const p = uci(san);
+  if (!y || !p) return false;
+  const sgn = sideOf(fenBefore) === 'w' ? 1 : -1;
+  const cp = (l: AnalysisLine): number => (l.mate != null ? Math.sign(l.mate) * (10_000 - Math.abs(l.mate)) : l.evaluation) * sgn;
+  const yl = fan.find((l) => l.moves[0] === y);
+  if (!yl) return true;
+  const pl = fan.find((l) => l.moves[0] === p) ?? fan[0];
+  return cp(pl) - cp(yl) >= ORDER_MATTERS_CP;
 }
 
 /** A "Learn how to think" step board: the board the question was asked on
