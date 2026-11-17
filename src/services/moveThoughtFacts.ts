@@ -797,6 +797,11 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       for (const f of readBoardAll('bothSaved', { fenBefore: i.fenBefore, san: i.san, student, replies })) {
         facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'rescue', weight: 64 });
       }
+      // The stalemate trick, both seats: the side behind leaves a capture that
+      // stalemates it.
+      for (const f of readBoardAll('stalemateTrick', { fenBefore: i.fenBefore, san: i.san, student })) {
+        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'rescue', weight: 70 });
+      }
       // Checks that come back to the same board (a perpetual) and the
       // discovered-check see-saw (a windmill), both seats.
       for (const f of readBoardAll('perpetualCheck', { fenBefore: i.fenBefore, san: i.san, student, replies })) {
@@ -816,7 +821,11 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     // and hits what they cannot keep, the rooks on the seventh, a rook lift or
     // swing, the rooks connected — or still cut off on move 12.
     for (const f of readBoardAll('intoTheirCamp', { fenBefore: i.fenBefore, san: i.san, student })) {
-      facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: campIdea(f.claims[0] ?? ''), weight: 58 });
+      // Getting in and hitting what they cannot keep weighs like a move's job;
+      // the rooks seeing each other is a development note, below the move's
+      // own reason (decision baseline: it led Bxg5, which wins the queen).
+      const idea = campIdea(f.claims[0] ?? '');
+      facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea, weight: idea === 'develop' ? 40 : 50 });
     }
     // What the pawn move did to the lines through its squares, the piece at a
     // chain's base, the pawn guard pinned to its king (S4 pawns).

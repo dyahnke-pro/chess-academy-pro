@@ -27,6 +27,7 @@ import { lineIsForcing } from './lineTrust';
 import { proofCut } from './exchangeLedger';
 import { actsFromItsSquare, exchangeEnd } from './material';
 import { threatVisibility } from './learnRecordTerms';
+import { campNamesDeep } from './intoTheirCamp';
 
 const PIECE: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -140,6 +141,13 @@ const LATER = ['', '', ' a move later', ' two moves later', ' three moves later'
  * it hits something worth naming. The nearer one wins.
  */
 export function deepFact(fenBefore: string, san: string, line: readonly string[] | null, moverIsStudent: boolean): DeepFact | null {
+  const d = deepFactRead(fenBefore, san, line, moverIsStudent);
+  // ONE IDEA ONCE, on every surface that reads the deep fact: the camp read
+  // of this move already names what it takes or hits (`campNamesDeep`).
+  return d && !campNamesDeep(fenBefore, san, d) ? d : null;
+}
+
+function deepFactRead(fenBefore: string, san: string, line: readonly string[] | null, moverIsStudent: boolean): DeepFact | null {
   if (!line || line.length < 2) return null;
   const now = play(fenBefore, san);
   if (!now) return null;

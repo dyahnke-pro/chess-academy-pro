@@ -22,7 +22,7 @@ describe('infiltration: a piece gets into their half and hits what they cannot k
     const x = intoTheirCamp(RD7, 'Rd7');
     expect(x).toMatchObject({ kind: 'infiltration', moved: { piece: 'r', from: 'd1', to: 'd7' }, route: { kind: 'open-file', file: 'd' } });
     expect(x!.targets.map((t) => t.square)).toEqual(['e7']);
-    expect(line(RD7, 'Rd7', 'your')).toMatch(/Your rook .*d7 through the open d-file.*the pawn on e7/);
+    expect(line(RD7, 'Rd7', 'your')).toMatch(/Your rook .*through the open d-file.*their pawn on e7/);
   });
   it('a rook that can simply be taken on the entry square says nothing (Rd8, the b8 rook takes it)', () => {
     expect(intoTheirCamp(RD7, 'Rd8')).toBeNull();
@@ -31,14 +31,14 @@ describe('infiltration: a piece gets into their half and hits what they cannot k
   it('their rook on d3, said from the student\'s seat', () => {
     const FEN = '3r1rk1/pp3ppp/2n1b3/4P3/8/1BP2N1P/P4PP1/R3R1K1 b - - 10 22';
     expect(intoTheirCamp(FEN, 'Rd3')).toMatchObject({ kind: 'infiltration', targets: [{ square: 'c3' }] });
-    expect(line(FEN, 'Rd3', 'their')).toMatch(/^Their rook .*d3.*your half|^Their rook .*your camp/);
-    expect(line(FEN, 'Rd3', 'their')).toMatch(/the pawn on c3/);
+    expect(line(FEN, 'Rd3', 'their')).toMatch(/^Their rook .*your half|^Their rook .*your camp/);
+    expect(line(FEN, 'Rd3', 'their')).toMatch(/your pawn on c3/);
   });
   // vc-3UqPa5eV2e0-41, "The knight jumps into the c6 outpost, deep in their position."
   it('the knight jumps into the hole on c6 and hits the queen on b8', () => {
     const FEN = 'rq2k1r1/3nbp2/p2p4/N2npBpp/2R5/4B3/1PP2PPP/Q3R1K1 w q - 2 21';
     expect(intoTheirCamp(FEN, 'Nc6')).toMatchObject({ kind: 'infiltration', route: { kind: 'hole' } });
-    expect(line(FEN, 'Nc6', 'your')).toMatch(/knight .*c6.*a hole no pawn of theirs can attack.*the queen on b8/);
+    expect(line(FEN, 'Nc6', 'your')).toMatch(/knight .*their queen on b8/);
   });
   // vc-3nyxVHwDCTY-74, "your rook infiltrates to c2 with check" — a check is the sharper fact's.
   it('a rook that comes in with check is left to the check', () => {
@@ -52,7 +52,7 @@ describe('the seventh rank', () => {
     const FEN = '8/1ppkb3/4p1r1/2P4p/3PR3/6pP/P5P1/5RK1 w - - 2 45';
     const x = intoTheirCamp(FEN, 'Rf7');
     expect(x).toMatchObject({ kind: 'infiltration', targets: [{ square: 'e7', won: false }] });
-    expect(line(FEN, 'Rf7', 'your')).toMatch(/Your rook .*seventh .*f7 through the open f-file\. It presses the bishop on e7 from the side\./);
+    expect(line(FEN, 'Rf7', 'your')).toMatch(/Your rook .*seventh .*f7 through the open f-file\. It presses their bishop on e7 from the side\./);
   });
   // vc-1rcEbI44WqE-99, "you double on the seventh with the rook to f7" — the
   // existing `rooksOnSeventh` read, called as it stands.
@@ -61,7 +61,7 @@ describe('the seventh rank', () => {
     const x = intoTheirCamp(FEN, 'Rff7');
     expect(x).toMatchObject({ kind: 'seventh-doubled', rooks: ['f7', 'h7'], key: 'rooks-on-seventh' });
     expect(line(FEN, 'Rff7', 'your')).toMatch(/^Both your rooks are on the seventh now/);
-    expect(line(FEN, 'Rff7', 'their')).toMatch(/^Both their rooks are on the seventh now, on f7 and h7\. They hit the pawns on b7 and c7 from the side\. Your king/);
+    expect(line(FEN, 'Rff7', 'their')).toMatch(/^Both their rooks are on the seventh now, on f7 and h7\. They hit your pawns on b7 and c7 from the side\. Your king/);
   });
 });
 
@@ -86,7 +86,7 @@ describe('the rook lift and the swing', () => {
   it('the rook on a3 swings to g3 and looks up the g-file at the pawn on g7', () => {
     const FEN = 'r3r1k1/pb3ppp/8/2p1N3/3pPB2/R7/2q2PPP/4R1K1 w - - 6 21';
     expect(intoTheirCamp(FEN, 'Rg3')).toMatchObject({ kind: 'swing', targets: [{ square: 'g7' }] });
-    expect(line(FEN, 'Rg3', 'your')).toMatch(/g3.*the pawn on g7.*king on g8|g3, toward their king on g8\. Up the g-file it hits the pawn on g7/);
+    expect(line(FEN, 'Rg3', 'your')).toMatch(/g3.*their pawn on g7.*king on g8|g3, toward their king on g8\. Up the g-file it hits their pawn on g7/);
   });
 });
 
@@ -139,6 +139,6 @@ describe('one registry, one composer', () => {
       plainThreatsSeen: false, story: false, theory: false, tense: 'past', fenBefore: RD7, san: 'Rd7', moverIsStudent: true,
       prev: NO_PREV_CAPTURE, line: null, history: [], theirLast: null, phrases: null, costCp: 0, reads: null,
     } as never);
-    expect(facts.some((f) => f.computer === 'intoTheirCamp' && /d7/.test(f.text))).toBe(true);
+    expect(facts.some((f) => f.computer === 'intoTheirCamp' && f.squares.includes('d7'))).toBe(true);
   });
 });

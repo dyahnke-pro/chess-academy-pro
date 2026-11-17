@@ -73,6 +73,7 @@ import { queenNet, queenNetLine } from './queenNet';
 import { bothSaved, bothSavedLine, type ReplyLine } from './bothSaved';
 import { perpetualCheck, perpetualStartedBy, perpetualLine, winningAnyway, windmill, windmillStartedBy, windmillLine } from './repeatingChecks';
 import { minorMatchup } from './minorMatchup';
+import { stalemateTrick, stalemateTrickLine } from './stalemateWatch';
 import { intoTheirCamp, intoTheirCampLine } from './intoTheirCamp';
 import { flexibleMove, flexibleMoveLine, flexibleMoveSquares } from './flexibleMove';
 import { pawnCutsGuard, type PawnLineRead } from './pawnLines';
@@ -285,6 +286,11 @@ export interface BoardContexts {
    *  move `san` on `fenBefore` (either seat). `replies`: the engine's lines
    *  from the board after it, best first (White-POV cp); [] where none. */
   bothSaved: { fenBefore: string; san: string; student: Color; replies: readonly ReplyLine[] };
+  /** THE STALEMATE TRICK (`stalemateWatch`): the move `san` on `fenBefore`
+   *  (either seat) by the side behind leaves the other side a capture that
+   *  stalemates it — a chance for the side behind, a capture to leave for the
+   *  side ahead. */
+  stalemateTrick: { fenBefore: string; san: string; student: Color };
   /** A PERPETUAL CHECK (`repeatingChecks`): the move `san` on `fenBefore`
    *  (either seat) starts one, or leaves the side to move one it can force.
    *  `replies`: the engine's lines from the board after the move (White-POV
@@ -1495,6 +1501,29 @@ export const BOARD_COMPUTERS = {
       weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
     },
   },
+  stalemateTrick: {
+    // The losing side's half of the stalemate watch: the bait whose capture
+    // stalemates its own king. Both seats: a chance to save the game, or the
+    // capture the winning side must leave alone.
+    read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const t = stalemateTrick(fenBefore, san);
+      if (!t) return null;
+      const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
+      const mine = t.side === student;
+      const text = stalemateTrickLine(t, mine, fenAfter);
+      return fact({ key: t.key, claims: [t.key], text, proof: squaresProof(text, t.squares) ?? NO_PROOF.description, squares: t.squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
+    }),
+    computer: 'stalemateTrick',
+    kind: 'tactic',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: { wired: 'services/learnSharedFacts.ts' },
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
+    },
+  },
   bothSaved: {
     // His "rook and knight both hang: find a knight move that also defends
     // the rook" (FozbG 27.Ne7). The sibling of the desperado.
@@ -1610,7 +1639,11 @@ export const BOARD_COMPUTERS = {
       const mine = new Chess(fenBefore).turn() === student;
       const text = intoTheirCampLine(x, mine ? 'your' : 'their', fenAfter);
       // One claim with the structure read's doubled seventh, so a turn says it once.
-      const claims = x.kind === 'seventh-doubled' ? [x.key] : [x.key, `camp:${x.kind}:${x.moved.to}`];
+      // Each piece it hits is the move's pressure on that square — the same
+      // claim the board teacher and the chain base make ("your rook hits their
+      // pawn on c2"), so a turn says the hit once.
+      const hits = x.targets.map((t) => moveIdeaClaim(fenBefore, san, 'pressure', [t.square])).filter((c): c is string => !!c);
+      const claims = x.kind === 'seventh-doubled' ? [x.key] : [x.key, `camp:${x.kind}:${x.moved.to}`, ...hits];
       return fact({ key: x.key, claims, text, proof: squaresProof(text, x.squares) ?? NO_PROOF.description, squares: x.squares, stakes: null,
         seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
     }),

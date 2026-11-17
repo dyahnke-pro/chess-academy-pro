@@ -14,6 +14,7 @@
 //
 // PURE: chess.js and the engine reads the surface hands in (the score of the
 // board, to stay quiet where the side with the checks is winning anyway).
+import { MATERIAL_VALUE, sideMaterial } from './pieceValues';
 import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'chess.js';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
@@ -23,7 +24,6 @@ import { andList } from '../utils/andList';
 import type { ReplyLine } from './bothSaved';
 
 const NAME = PIECE_NAMES as Readonly<Record<PieceSymbol, string>>;
-const VALUE: Readonly<Record<PieceSymbol, number>> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 
 /** The perpetual: up to this many checks in a row (8 plies, the brief). */
 const MAX_CHECKS = 4;
@@ -70,9 +70,7 @@ export interface Windmill {
 const posKey = (c: Chess): string => c.fen().split(' ').slice(0, 4).join(' ');
 
 function material(c: Chess, side: Color): number {
-  let n = 0;
-  for (const row of c.board()) for (const p of row) if (p && p.color === side) n += VALUE[p.type];
-  return n;
+  return sideMaterial(c.fen(), side);
 }
 
 function kingSquare(c: Chess, side: Color): Square | null {
@@ -133,7 +131,7 @@ function defend(c: Chess, path: string[], checksLeft: number, b: Budget): Node {
   if (!b.tick()) return { v: 0, pv: [] };
   // The replies most likely to escape first (a capture of a checking piece,
   // then a block), so an escape ends the read early.
-  const escapeFirst = (m: Move): number => (m.captured ? 10 + VALUE[m.captured] : m.piece === 'k' ? 0 : 1);
+  const escapeFirst = (m: Move): number => (m.captured ? 10 + MATERIAL_VALUE[m.captured] : m.piece === 'k' ? 0 : 1);
   const replies = c.moves({ verbose: true }).sort((x, y) => escapeFirst(y) - escapeFirst(x));
   if (replies.length === 0) return { v: c.isCheckmate() ? 2 : 0, pv: [] };
   let worst: Node | null = null;
@@ -298,7 +296,7 @@ function sails(c: Chess, sail: Square, left: number, b: Budget, battery: boolean
   for (const m of c.moves({ verbose: true, square: sail }).filter(isCheck)) {
     c.move(m);
     const disc = discovered(c, m);
-    const gain = m.captured ? VALUE[m.captured] : 0;
+    const gain = m.captured ? MATERIAL_VALUE[m.captured] : 0;
     const r: WNode = c.isCheckmate() ? { net: MATE, pv: [], takes: [] } : turns(c, m.to, left - 1, b, !disc, best.net - gain);
     c.undo();
     if (b.out) return NONE;
@@ -317,7 +315,7 @@ function turns(c: Chess, sail: Square, left: number, b: Budget, battery: boolean
   let worst: WNode | null = null;
   for (const m of c.moves({ verbose: true })) {
     c.move(m);
-    const loss = m.captured ? VALUE[m.captured] : 0;
+    const loss = m.captured ? MATERIAL_VALUE[m.captured] : 0;
     const r = m.to === sail ? NONE : sails(c, sail, left, b, battery);
     c.undo();
     if (b.out) return NONE;
@@ -385,7 +383,7 @@ export function windmillStartedBy(fenBefore: string, san: string): Windmill | nu
   const r = turns(c, m.to, MAX_SAILS - 1, b, !disc, -Infinity);
   c.undo();
   if (b.out) return null;
-  const node: WNode = { net: r.net + (m.captured ? VALUE[m.captured] : 0), pv: [m, ...r.pv], takes: take ? [m, ...r.takes] : r.takes };
+  const node: WNode = { net: r.net + (m.captured ? MATERIAL_VALUE[m.captured] : 0), pv: [m, ...r.pv], takes: take ? [m, ...r.takes] : r.takes };
   return windmillOf(c, m, node);
 }
 
@@ -402,7 +400,7 @@ export function windmillLine(w: Windmill, mine: boolean, started: boolean, fen: 
     return rotateStem([
       `Watch out for the windmill. Their ${sail} checks, steps away with a discovered check from their ${axle} on ${w.axle.square}, and takes on ${loot}.`,
       `Their ${sail} and their ${axle} on ${w.axle.square} make a windmill: every time the ${sail} steps out, the ${axle} checks your king, and the ${sail} eats ${what}.`,
-      `Your king is caught in a windmill. The ${axle} on ${w.axle.square} checks each time their ${sail} moves, so the ${sail} picks off ${what} for free.`,
+      `Your king is caught in a windmill. The ${axle} on ${w.axle.square} checks each time their ${sail} moves, so the ${sail} picks off ${what} one by one.`,
     ], stemKeyOf(fen));
   }
   const lead = started ? `That starts a windmill. ` : '';

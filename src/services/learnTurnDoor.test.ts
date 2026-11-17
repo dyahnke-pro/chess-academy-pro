@@ -93,9 +93,14 @@ describe('G8.5 — no lane without a live producer, no producer without a lane',
   const viaPhaseWave = /decidePhaseWave\(/.test(TEACH_CODE) && /lane: 'phase'/.test(readFileSync('src/hooks/usePhaseNarration.ts', 'utf8'))
     ? new Set<LearnLane>(['phase']) : new Set<LearnLane>();
 
+  // The shared fact set (one coach) enters on the 'thought' lane — it counts
+  // while the page hands its facts through `sharedFactsForLearn`.
+  const viaShared = /sharedFactsForLearn\(/.test(TEACH_CODE) && /lane: 'thought'/.test(readFileSync('src/services/learnSharedFacts.ts', 'utf8'))
+    ? new Set<LearnLane>(['thought']) : new Set<LearnLane>();
+
   it('every lane in the table is fed by live code in CoachTeachPage', () => {
     for (const lane of Object.keys(LEARN_LANES) as LearnLane[]) {
-      if (VIA_BACKWARD_LOOK.has(lane) || viaStory.has(lane) || viaPhaseWave.has(lane)) continue;
+      if (VIA_BACKWARD_LOOK.has(lane) || viaStory.has(lane) || viaPhaseWave.has(lane) || viaShared.has(lane)) continue;
       const fed = new RegExp(`queueSpokenHint\\([^;]*'${lane}'|deferIf\\([^;]*'${lane}'|lane: '${lane}'|'${lane}' as const`).test(TEACH_CODE)
         || (pageCallsBoard && new RegExp(`lane: '${lane}'|teachingFact\\('${lane}'`).test(BOARD_CODE));
       expect(fed, `lane '${lane}' is in the table and nothing feeds it`).toBe(true);

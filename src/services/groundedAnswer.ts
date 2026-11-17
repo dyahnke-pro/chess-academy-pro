@@ -52,6 +52,7 @@ import { boardPlanFacts } from './boardPlanFacts';
 import { structurePlan } from './nextPlans';
 import { structureSignature } from './boardStructure';
 import { boardStructure } from './structureReads';
+import { minorMatchupOn, minorMatchupLine } from './minorMatchup';
 import { materialEdgeWords } from './reviewPositionalAssessment';
 import { strategicWhyLed, strategicWhyImperative } from './moveFundamentals';
 import { bestMoveReason, threatMadeWhy } from './deliberation';
@@ -1749,6 +1750,17 @@ export function assemblePositionAssessment(opts: {
         for (const sq of r.squares) if (/^[a-h][1-8]$/.test(sq) && !keySquares.includes(sq)) keySquares.push(sq);
       }
     } catch { /* the structure read is a bonus, never a blocker */ }
+  }
+  // KNIGHT AGAINST BISHOP, standing — the same computer the move thought
+  // speaks when a move makes the matchup, read here for the board as it is.
+  if (opts.fen) {
+    try {
+      const mm = minorMatchupOn(opts.fen);
+      if (mm) {
+        parts.push(minorMatchupLine(mm, sc, opts.fen));
+        for (const sq of [mm.knight.square, mm.bishop.square]) if (!keySquares.includes(sq)) keySquares.push(sq);
+      }
+    } catch { /* the matchup read is a bonus, never a blocker */ }
   }
 
   if (parts.length === 0) return null;

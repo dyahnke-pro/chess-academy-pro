@@ -116,8 +116,6 @@
   "src/services/perspectiveRule.ts::BANNED_PRONOUNS",
   "src/services/pieceArmyEngine.ts::isArmySolvable",
   "src/services/pieceSetService.tsx::getPieceSetConfig",
-  "src/services/pinPressure.ts::isPinPressureMove",
-  "src/services/pinPressure.ts::pinPressureThreat",
   "src/services/planJudgement.ts::smallEdges",
   "src/services/playedMoveGrade.ts::clearMovePriceMemo",
   "src/services/positionFactsCache.ts::clearPositionFactsCache",

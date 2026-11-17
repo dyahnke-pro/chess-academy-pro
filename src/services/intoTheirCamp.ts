@@ -183,6 +183,18 @@ function infiltration(c: Chess, before: Chess, mv: { piece: PieceSymbol; from: S
 
 /** The camp idea `san` carries on `fenBefore`, or null. Both seats: the
  *  mover is whoever is to move. */
+/** ONE IDEA ONCE: does the camp read of `san` already name what a deep fact
+ *  would say it takes or hits next? The rook that gets in "hits the pawns on c2
+ *  and h2", so "it takes their pawn on c2 next" says it again (decision
+ *  baseline, Sicilian Closed …Re2). Read by the move thought and by Review's
+ *  move briefing, so both hold the deep fact the same way. */
+export function campNamesDeep(fenBefore: string, san: string, deep: { target: string; follow: { san: string; to: string } }): boolean {
+  const x = intoTheirCamp(fenBefore, san);
+  if (!x) return false;
+  const hit = new Set<string>(x.targets.map((t) => t.square));
+  return hit.has(deep.target) || (/x/.test(deep.follow.san) && hit.has(deep.follow.to));
+}
+
 export function intoTheirCamp(fenBefore: string, san: string): IntoTheirCamp | null {
   let before: Chess;
   let c: Chess;
@@ -265,10 +277,11 @@ export function intoTheirCamp(fenBefore: string, san: string): IntoTheirCamp | n
   return null;
 }
 
-const named = (t: CampTarget): string => `the ${NAME[t.piece]} on ${t.square}`;
-function targetList(ts: readonly CampTarget[]): string {
-  if (ts.length > 1 && ts.every((t) => t.piece === ts[0].piece)) return `the ${NAME[ts[0].piece]}s on ${andList(ts.map((t) => t.square))}`;
-  return andList(ts.map(named));
+/** The pieces, said by whose they are ("your rook on e8", "their pawns on
+ *  c2 and h2"); `the` for the mover's own pieces in the way. */
+function targetList(ts: readonly CampTarget[], whose: 'your' | 'their' | 'the'): string {
+  if (ts.length > 1 && ts.every((t) => t.piece === ts[0].piece)) return `${whose} ${NAME[ts[0].piece]}s on ${andList(ts.map((t) => t.square))}`;
+  return andList(ts.map((t) => `${whose} ${NAME[t.piece]} on ${t.square}`));
 }
 
 /** Said from the mover's seat (`own`: your / their; `foe`: their / your).
@@ -281,8 +294,9 @@ export function intoTheirCampLine(x: IntoTheirCamp, own: 'your' | 'their', fenAf
   switch (x.kind) {
     case 'infiltration': {
       const file = x.route && x.route.kind !== 'hole' ? ` through the ${x.route.kind === 'open-file' ? 'open' : 'half-open'} ${x.route.file}-file` : '';
-      const hole = x.route?.kind === 'hole' ? `, a hole no pawn of ${foe === 'their' ? 'theirs' : 'yours'} can attack,` : '';
-      const hits = x.targets.length ? targetList(x.targets) : '';
+      // A hole it got in through is the outpost computer's idea ("lands on the
+      // d6 outpost, a square none of your pawns can attack"): said once, there.
+      const hits = x.targets.length ? targetList(x.targets, foe) : '';
       const box = x.boxedKing ? ` ${cap(foe)} king is shut in on ${x.boxedKing}.` : '';
       if (x.moved.piece === 'r' && relRank(x.moved.to, colorOf(fenAfter, true)) === 7 && !x.targets.some((t) => t.won)) {
         // On the seventh, pressing what is still guarded: a seat, not a win.
@@ -293,14 +307,14 @@ export function intoTheirCampLine(x: IntoTheirCamp, own: 'your' | 'their', fenAf
         ], key);
       }
       return rotateStem([
-        `${cap(own)} ${p} gets in on ${x.moved.to}${file}${hole} and hits ${hits}.${box}`,
-        `${cap(own)} ${p} comes into ${foe} camp on ${x.moved.to}${file}${hole ? hole.replace(/,$/, '') : ''}. From there it hits ${hits}.${box}`,
-        `${cap(own)} ${p} lands on ${x.moved.to}${file}, deep in ${foe} half${hole ? hole.replace(/,$/, '') : ''}. It hits ${hits}.${box}`,
+        `${cap(own)} ${p} gets into ${foe} camp${file} and hits ${hits}.${box}`,
+        `${cap(own)} ${p} comes into ${foe} camp${file}. From there it hits ${hits}.${box}`,
+        `${cap(own)} ${p} lands deep in ${foe} half${file}. It hits ${hits}.${box}`,
       ], key);
     }
     case 'seventh-doubled': {
       if (own === 'your' && x.seventhText) return x.seventhText;
-      const pawns = x.targets.length ? ` They hit ${targetList(x.targets)} from the side.` : '';
+      const pawns = x.targets.length ? ` They hit ${targetList(x.targets, foe)} from the side.` : '';
       const box = x.boxedKing ? ` ${cap(foe)} king is boxed on the back rank.` : '';
       return `Both ${own} rooks are on the seventh now, on ${andList(x.rooks)}.${pawns}${box}`;
     }
@@ -314,10 +328,10 @@ export function intoTheirCampLine(x: IntoTheirCamp, own: 'your' | 'their', fenAf
     }
     case 'swing': {
       const king = x.squares[3];
-      const cover = named(x.targets[0]).replace(/^the /, '');
+      const cover = `${NAME[x.targets[0].piece]} on ${x.targets[0].square}`;
       return rotateStem([
-        `${cap(own)} rook swings across from ${x.moved.from} to ${x.moved.to}. From there it looks up the ${x.moved.to[0]}-file at the ${cover} in front of ${foe} king on ${king}.`,
-        `The rook on ${x.moved.from} slides over to ${x.moved.to}, toward ${foe} king on ${king}. Up the ${x.moved.to[0]}-file it hits the ${cover}, part of the king's cover.`,
+        `${cap(own)} rook swings across from ${x.moved.from} to ${x.moved.to}. From there it looks up the ${x.moved.to[0]}-file at ${foe} ${cover} in front of the king on ${king}.`,
+        `The rook on ${x.moved.from} slides over to ${x.moved.to}, toward ${foe} king on ${king}. Up the ${x.moved.to[0]}-file it hits ${foe} ${cover}, part of the king's cover.`,
       ], key);
     }
     case 'connect': {
@@ -330,7 +344,7 @@ export function intoTheirCampLine(x: IntoTheirCamp, own: 'your' | 'their', fenAf
     }
     case 'cut-off': {
       const [a, b] = x.rooks;
-      const way = targetList(x.between);
+      const way = targetList(x.between, 'the');
       const verb = x.between.length > 1 ? 'stand' : 'stands';
       return rotateStem([
         `${cap(own)} rooks are still cut off from each other: ${way} ${verb} between them.`,

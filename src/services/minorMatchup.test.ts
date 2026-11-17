@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { minorMatchup, minorMatchupOn, minorMatchupLine } from './minorMatchup';
+import { assemblePositionAssessment } from './groundedAnswer';
 import { readBoard } from './boardComputers';
 import { moveThoughtFacts } from './moveThoughtFacts';
 import { NO_PREV_CAPTURE } from './captureRun';
@@ -77,6 +78,9 @@ describe('minorMatchup: the good knight against the bad bishop', () => {
     const st = minorMatchupOn(fen);
     expect(st?.better).toBe('knight');
     expect(minorMatchupLine(st!, 'w', fen)).toMatch(/^It is their knight against your bishop\./);
+    // One coach: the chat's "how do I stand?" says the same standing read.
+    const chat = assemblePositionAssessment({ evalCp: 0, mateIn: null, studentColor: 'white', fen });
+    expect(chat?.facts).toContain('It is their knight against your bishop.');
   });
 });
 

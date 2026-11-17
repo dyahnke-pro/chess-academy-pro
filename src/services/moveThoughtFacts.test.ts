@@ -317,11 +317,11 @@ describe('a deep fact that takes the attacked piece is not said twice', () => {
   it('…Re2 attacking c2 does not also say it takes c2 next', () => {
     const fen = '4rr2/p6k/1p1N3p/2p5/8/3P4/PPP4P/6RK b - - 2 28';
     const facts = moveThoughtFacts({ plainThreatsSeen: false, story: false, theory: true, fenBefore: fen, san: 'Re2', prev: NO_PREV_CAPTURE, moverIsStudent: true, line: ['Ne4', 'Rxc2'], history: [], theirLast: null, reads: null, costCp: null, tense: 'now', phrases: newLessonVoice().phrases });
-    const deep = facts.find((f) => f.source === 'deepFact');
-    // The square it takes rides on the fact, so the composer's one-idea-per-
-    // square rule holds it behind the move's own attack on c2.
-    expect(deep?.text).toContain('taking their pawn on c2 next');
-    expect(deep?.squares).toContain('c2');
+    // The rook gets into their camp and "hits the pawns on c2 and h2": the
+    // deep fact "takes their pawn on c2 next" would say it again, so it is
+    // held (`campNamesDeep`) and c2 is said once, by the camp read.
+    expect(facts.find((f) => f.source === 'deepFact')).toBeUndefined();
+    expect(facts.find((f) => f.computer === 'intoTheirCamp')?.text).toMatch(/hits their pawns on c2 and h2/);
   });
 });
 

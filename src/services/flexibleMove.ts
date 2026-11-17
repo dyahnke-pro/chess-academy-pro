@@ -34,6 +34,9 @@
 //
 // PURE: chess.js, the human model's eye (`eyeRead`) and the engine reads the
 // surface hands in.
+import { homeSquaresOf } from './development';
+import { sideToMoveAs } from './threatOut';
+import { sideMaterial } from './pieceValues';
 import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'chess.js';
 import { isPawnBreak } from './pawnBreak';
 import { eyeRead, squareIsSound, SIBLING_SHARE, type WeighRead } from './weighedMoves';
@@ -47,15 +50,17 @@ import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 /** A rival within this many centipawns of the engine's best is as good as the
  *  best for the choice of order: the engine's own noise at its depth. */
 const FLEX_NEAR_CP = 30;
+/** AN INACCURACY BY COMMITTING TOO EARLY (David 2026-11-17: "Flexible move
+ *  should maybe also fire if the less flexible move is made. An inaccuracy"):
+ *  a move up to this much worse than the best still gets the fact — as
+ *  'committed', the reason it cost — when a near-best rival kept the options it
+ *  closed and its own line loses no material (then the material is the reason). */
+const FLEX_INACCURACY_CP = 100;
 /** The opening's moves (`weighedMoves`' own twelve): past them the options are
  *  the middlegame's plans, not the order of development. */
 const FLEX_UNTIL_MOVE = 12;
 
 const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
-const HOME: Record<Color, Record<'n' | 'b', readonly Square[]>> = {
-  w: { n: ['b1', 'g1'], b: ['c1', 'f1'] },
-  b: { n: ['b8', 'g8'], b: ['c8', 'f8'] },
-};
 
 /** A pawn, on the legal exchange's scale (`legalSeeGainFor`). */
 const PAWN = 1;
@@ -63,6 +68,10 @@ const PAWN = 1;
  *  squares: settling it gives up at least two (the bishop's b5, c4, e2 — not
  *  a knight's f3 or h3). */
 const SETTLE_MIN = 3;
+/** On an inaccuracy the move cost something, so a minor with two good squares
+ *  had a real choice to keep: settling it early is the reason (Danya's "Bc4
+ *  this early commits the bishop", e4 c5 Bc4, 35 points under Nf3). */
+const SETTLE_MIN_INACCURACY = 2;
 /** Squares taken from a minor that stays at home: a choice narrowed only when
  *  at least this many go (e6 takes e6 and f5 from the c8 bishop). */
 const SHUT_MIN = 2;
@@ -96,15 +105,6 @@ function moveOn(fen: string, move: string): Move | null {
 
 function uciOf(m: Pick<Move, 'from' | 'to' | 'promotion'>): string {
   return `${m.from}${m.to}${m.promotion ?? ''}`;
-}
-
-/** The same board with `side` to move (no en passant): the options a side
- *  still has once the other has answered nothing. */
-function withTurn(fen: string, side: Color): string {
-  const p = fen.split(' ');
-  p[1] = side;
-  p[3] = '-';
-  return p.join(' ');
 }
 
 /** Is the castling side live for `me`: the right kept, at most one of the
@@ -164,7 +164,7 @@ export function flexOptions(fen: string): FlexOption[] {
   const out: FlexOption[] = [];
   const eye = new Map(eyeRead(fen, DEFAULT_STUDENT_RATING).map((r) => [r.uci, r.p]));
   for (const piece of ['n', 'b'] as const) {
-    for (const home of HOME[me][piece]) {
+    for (const home of homeSquaresOf(piece, me)) {
       const at = b.get(home);
       if (!at || at.type !== piece || at.color !== me) continue;
       const steps = b.moves({ square: home, verbose: true }).filter((m) => !m.captured);
@@ -223,14 +223,15 @@ function usedBy(m: Move): string | null {
 
 /** The options `move` removes from `options` (read on `fenBefore`). Null when
  *  the move does not play, takes, checks or promotes — a different idea. */
-function removedBy(fenBefore: string, options: readonly FlexOption[], move: string): { move: Move; removed: Map<string, FlexOption> } | null {
+function removedBy(fenBefore: string, options: readonly FlexOption[], move: string, settleMin = SETTLE_MIN): { move: Move; removed: Map<string, FlexOption> } | null {
   const m = moveOn(fenBefore, move);
   if (!m || m.captured || m.promotion) return null;
   const b = boardOf(fenBefore);
   if (!b) return null;
   b.move(m.san);
   if (b.inCheck()) return null;
-  const fenAfter = withTurn(b.fen(), m.color);
+  const fenAfter = sideToMoveAs(b.fen(), m.color);
+  if (!fenAfter) return null;
   const after = boardOf(fenAfter);
   if (!after) return null;
   const breaks = breaksOn(fenAfter, false);
@@ -250,7 +251,7 @@ function removedBy(fenBefore: string, options: readonly FlexOption[], move: stri
       const settled = o.home === m.from;
       const had = options.filter((x) => x.kind === 'square' && x.home === o.home).length;
       const lost = [...raw.values()].filter((x) => x.kind === 'square' && x.home === o.home).length;
-      if (settled ? had < SETTLE_MIN : lost < SHUT_MIN) continue;
+      if (settled ? had < settleMin : lost < SHUT_MIN) continue;
     }
     removed.set(k, o);
   }
@@ -268,7 +269,24 @@ export interface FlexibleMove {
   /** Every good square still open to the minor the difference is about, after
    *  the move that kept it (the full choice, the rival's square included). */
   choice: Square[];
+  /** The move cost more than a near-equal move would (an inaccuracy): the
+   *  committing is the reason it cost, and the rival is said as better. */
+  inaccuracy: boolean;
   key: string;
+}
+
+/** Does the mover come out a pawn or more down along this line (its first
+ *  four plies), against the board before it? */
+function lineLosesMaterial(fenBefore: string, uci: readonly string[], me: Color): boolean {
+  const them: Color = me === 'w' ? 'b' : 'w';
+  const balance = (c: Chess): number => sideMaterial(c.fen(), me) - sideMaterial(c.fen(), them);
+  let c: Chess;
+  try { c = new Chess(fenBefore); } catch { return false; }
+  const start = balance(c);
+  for (const u of uci.slice(0, 4)) {
+    try { c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { break; }
+  }
+  return balance(c) <= start - 1;
 }
 
 /**
@@ -286,11 +304,15 @@ export function flexibleMove(fenBefore: string, san: string, reads: readonly Wei
   const played = moveOn(fenBefore, san);
   if (!played) return null;
   const playedUci = uciOf(played);
-  const scored = reads.filter((r) => !!r.moves[0]).map((r) => ({ uci: r.moves[0], cp: seatCp(r, me) }));
+  const scored = reads.filter((r) => !!r.moves[0]).map((r) => ({ uci: r.moves[0], cp: seatCp(r, me), moves: r.moves }));
   if (scored.length < 2) return null;
   const best = Math.max(...scored.map((s) => s.cp));
   const mine = scored.find((s) => s.uci === playedUci);
-  if (!mine || best - mine.cp > FLEX_NEAR_CP) return null;
+  if (!mine || best - mine.cp > FLEX_INACCURACY_CP) return null;
+  const inaccuracy = best - mine.cp > FLEX_NEAR_CP;
+  // An inaccuracy that loses material along its own line has that for its
+  // reason, not the options it closed.
+  if (inaccuracy && lineLosesMaterial(fenBefore, mine.moves, me)) return null;
   // Read nothing on the board until there is a comparison to make: the move a
   // quiet one, and a quiet rival of another piece near the best.
   const quiet = (m: Move | null): m is Move => !!m && !m.captured && !m.promotion && !/[+#]/.test(m.san);
@@ -300,13 +322,14 @@ export function flexibleMove(fenBefore: string, san: string, reads: readonly Wei
   if (rivals.length === 0) return null;
   const options = flexOptions(fenBefore);
   if (options.length === 0) return null;
-  const p = removedBy(fenBefore, options, san);
+  const settleMin = inaccuracy ? SETTLE_MIN_INACCURACY : SETTLE_MIN;
+  const p = removedBy(fenBefore, options, san, settleMin);
   if (!p) return null;
   type Cand = { verdict: 'kept' | 'committed'; rival: Move; differ: FlexOption[]; order: number };
   const cands: Cand[] = [];
   scored.forEach((s, order) => {
     if (s.uci === playedUci || best - s.cp > FLEX_NEAR_CP) return;
-    const r = removedBy(fenBefore, options, s.uci);
+    const r = removedBy(fenBefore, options, s.uci, settleMin);
     // The same piece to another square is the square choice (`squareChoice`).
     if (!r || r.move.from === played.from) return;
     // What either move plays itself is a choice made, not one taken away:
@@ -316,7 +339,7 @@ export function flexibleMove(fenBefore: string, san: string, reads: readonly Wei
     const rSet = new Map([...r.removed].filter(([k]) => !usedEither.has(k)));
     const pIn = [...pSet.keys()].every((k) => rSet.has(k));
     const rIn = [...rSet.keys()].every((k) => pSet.has(k));
-    if (pIn && rSet.size > pSet.size) {
+    if (pIn && rSet.size > pSet.size && !inaccuracy) {
       cands.push({ verdict: 'kept', rival: r.move, differ: [...rSet].filter(([k]) => !pSet.has(k)).map(([, o]) => o), order });
     } else if (rIn && pSet.size > rSet.size) {
       cands.push({ verdict: 'committed', rival: r.move, differ: [...pSet].filter(([k]) => !rSet.has(k)).map(([, o]) => o), order });
@@ -333,7 +356,7 @@ export function flexibleMove(fenBefore: string, san: string, reads: readonly Wei
   let choice: Square[] = [];
   if (lead[0]?.kind === 'square') {
     const home = lead[0].home;
-    const kept = c.verdict === 'kept' ? p.removed : removedBy(fenBefore, options, uciOf(c.rival))?.removed ?? new Map();
+    const kept = c.verdict === 'kept' ? p.removed : removedBy(fenBefore, options, uciOf(c.rival), settleMin)?.removed ?? new Map();
     choice = options.filter((o): o is Extract<FlexOption, { kind: 'square' }> => o.kind === 'square' && o.home === home && !kept.has(keyOf(o))).map((o) => o.to);
   }
   return {
@@ -342,6 +365,7 @@ export function flexibleMove(fenBefore: string, san: string, reads: readonly Wei
     rival: { san: c.rival.san, uci: uciOf(c.rival), piece: c.rival.piece, castle: castleOf(c.rival) },
     differ: c.differ,
     choice,
+    inaccuracy,
     key: `flexible:${c.verdict}:${playedUci}:${uciOf(c.rival)}`,
   };
 }
@@ -377,10 +401,25 @@ function rivalWords(r: FlexibleMove['rival']): string {
  *  the squares; the rival is named, a move as good as the one played. Rotated
  *  on the board after the move. */
 export function flexibleMoveLine(f: FlexibleMove, own: 'your' | 'their', fenAfter: string): string {
+  const said = flexibleMoveWords(f, own, fenAfter);
+  // An inaccuracy: the rival was not just as good, it was better.
+  return f.inaccuracy ? said.replace(/ was just as good\b/g, ' was the better move') : said;
+}
+
+/** A minor by what it is: the bishop by its colour, the knight by its wing. */
+function minorName(piece: PieceSymbol, home: Square): string {
+  if (piece === 'b') return `${(home.charCodeAt(0) + Number(home[1])) % 2 === 0 ? 'dark' : 'light'}-squared bishop`;
+  if (piece === 'n') return home[0] === 'b' ? "queen's knight" : "king's knight";
+  return NAME[piece];
+}
+
+function flexibleMoveWords(f: FlexibleMove, own: 'your' | 'their', fenAfter: string): string {
   const who = own === 'your' ? 'you' : 'they';
   const other = own === 'your' ? 'they' : 'you';
   const theirs = other === 'they' ? 'theirs' : 'yours';
-  const Moved = openSentence(moveWords(f.played, own));
+  // The move was just named by the turn ("You go e3, …"): the line never
+  // names it again — a third "e5" in one turn is a square read back.
+  const Moved = 'That move';
   const rival = rivalWords(f.rival);
   const Rival = openSentence(rival);
   const g = mainGroup(f.differ);
@@ -388,10 +427,24 @@ export function flexibleMoveLine(f: FlexibleMove, own: 'your' | 'their', fenAfte
   const first = g.at(0);
   if (!first) return '';
   if (first.kind === 'square') {
-    // The minor by name: "your other knight" when the move just said moved
-    // one of the same kind, so the two are never confused.
-    const minor = `${own} ${f.played.piece === first.piece && f.played.from !== first.home ? 'other ' : ''}${NAME[first.piece]}`;
+    // The minor by what it is ("your dark-squared bishop", "your king's
+    // knight"), never by its square: the squares it keeps or loses are the
+    // ones said, and a sentence names at most two (humanSquares). "Other"
+    // when the move just said moved one of the same kind.
+    const minor = `${own} ${f.played.piece === first.piece && f.played.from !== first.home ? 'other ' : ''}${minorName(first.piece, first.home)}`;
     const sqs = g.map((o) => (o as Extract<FlexOption, { kind: 'square' }>).to);
+    // It leaves out the square the taking move lands on: "e6 and f5 are no
+    // longer open" says e6 a second time, where "f5 is no longer open" is what
+    // the bishop lost.
+    const taker = f.verdict === 'kept' ? f.rival.uci.slice(2, 4) : f.played.to;
+    const shown = sqs.filter((q) => q !== taker);
+    const Shown = openSentence(andList(shown));
+    // After a sentence about the move, "it" would be the moved piece: the
+    // minor is named again ("The bishop can still go to e6 or f5").
+    const The = `The ${NAME[first.piece]}`;
+    const the = `the ${NAME[first.piece]}`;
+    const are = shown.length > 1 ? 'are' : 'is';
+    const were = shown.length > 1 ? 'were' : 'was';
     // The rival (kept) or the move (committed) developed this same minor:
     // it settled the piece's square. Else it took squares from the piece.
     const settler = f.verdict === 'kept' ? f.rival.uci.slice(0, 2) : f.played.from;
@@ -399,27 +452,28 @@ export function flexibleMoveLine(f: FlexibleMove, own: 'your' | 'their', fenAfte
       const all = f.choice.length ? f.choice : sqs;
       if (f.verdict === 'kept') {
         return rotateStem([
-          `${Moved} keeps ${minor}'s choice open: it can still go to ${orList(all)}. ${Rival} first would have settled it before ${who} know where it belongs.`,
-          `${Rival} was just as good, but it would have settled ${minor} before ${who} know where it belongs. ${Moved} leaves it the choice of ${orList(all)}.`,
-          `Make the move that keeps the most choices. ${Moved} still leaves ${minor} the choice of ${orList(all)}, where ${rival} would have settled it already.`,
+          `${Moved} keeps ${minor}'s choice open. ${The} can still go to ${orList(all)}. ${Rival} first would have settled it before ${who} know where it belongs.`,
+          `${Rival} was just as good, but it would have settled ${minor} before ${who} know where it belongs. ${Moved} leaves it the choice. ${The} can still go to ${orList(all)}.`,
+          `Make the move that keeps the most choices. ${Moved} still leaves ${minor} its choice, where ${rival} would have settled it already. ${The} can go to ${orList(all)}.`,
         ], key);
       }
-      const were = sqs.length > 1 ? 'were' : 'was';
       return rotateStem([
-        `${Moved} settles its square early, while ${andList(sqs)} ${were} still open to it. ${Rival} was just as good and kept that choice for later.`,
-        `${Rival} was just as good and kept ${minor}'s choice of ${orList([...sqs, f.played.to])}. ${Moved} settles it before ${who} know where it belongs.`,
+        shown.length ? `${Moved} settles ${minor} early. ${Rival} was just as good and kept that choice for later. ${Shown} ${were} still open to ${the}.` : `${Moved} settles ${minor} early. ${Rival} was just as good and kept that choice for later.`,
+        `${Rival} was just as good and kept ${minor}'s choice open. ${Moved} settles it before ${who} know where it belongs.`,
       ], key);
     }
-    const those = sqs.length > 1 ? 'those squares' : 'that square';
+    const those = shown.length > 1 ? 'those squares' : 'that square';
     if (f.verdict === 'kept') {
+      if (!shown.length) return `${Moved} keeps ${minor} free, where ${rival} would have shut it in.`;
       return rotateStem([
-        `${Moved} leaves ${minor} on ${first.home} free to go to ${orList(sqs)}. ${Rival} would have taken ${those} from it.`,
-        `${Rival} was just as good, but it would have taken ${andList(sqs)} from ${minor} on ${first.home}. ${Moved} keeps ${those} open.`,
+        `${Moved} keeps ${minor}'s squares open. ${The} can still go to ${orList(shown)}. ${Rival} would have taken ${those} from it.`,
+        `${Rival} was just as good, but it would have boxed in ${minor}. ${Moved} keeps ${the}'s squares open. It can still go to ${orList(shown)}.`,
       ], key);
     }
+    if (!shown.length) return `${Moved} shuts ${minor} in. ${Rival} was just as good and left it free.`;
     return rotateStem([
-      `${Moved} takes ${andList(sqs)} from ${minor} on ${first.home}. ${Rival} was just as good and left ${those} open.`,
-      `${Rival} was just as good and kept ${andList(sqs)} open for ${minor} on ${first.home}. ${Moved} takes ${sqs.length > 1 ? 'them' : 'it'} away.`,
+      `${Moved} takes squares from ${minor}. ${Shown} ${are} no longer open to ${the}. ${Rival} was just as good and left ${those} open.`,
+      `${Rival} was just as good and kept ${minor}'s squares open. ${Moved} takes them away. ${Shown} ${are} no longer open to ${the}.`,
     ], key);
   }
   if (first.kind === 'break') {
