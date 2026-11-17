@@ -670,6 +670,7 @@ async function playGame(context, listener, engine, student, phase, index) {
   tape.turns = events.filter((e) => e.kind === 'learn-focus-turn').map((e) => { const r = parse(e.details); return r ? { ...r, at: e.receivedAt ?? e.timestamp ?? 0 } : null; }).filter(Boolean);
   tape.gradeRewards = events.filter((e) => e.kind === 'learn-reward').map((e) => parse(e.details)).filter(Boolean);
   tape.steers = events.filter((e) => e.kind === 'focus-steer').map((e) => ({ fen: e.fen, ...(parse(e.details) ?? {}) }));
+  tape.skillSteers = events.filter((e) => e.kind === 'skill-steer').map((e) => ({ fen: e.fen, ...(parse(e.details) ?? {}) }));
   tape.punishes = events.filter((e) => e.kind === 'focus-punish').map((e) => ({ fen: e.fen, ...(parse(e.details) ?? {}) }));
   tape.plants = events.filter((e) => e.kind === 'focus-plant').map((e) => ({ fen: e.fen, ...(parse(e.details) ?? {}) }));
   tape.castle = events.filter((e) => e.kind === 'castle-watch').map((e) => parse(e.details)).filter(Boolean);
@@ -819,7 +820,7 @@ async function main() {
         name: `${phase}-g${i + 1}`, phase, seat: null, moves: [], pauses: [], notes: [`crashed: ${String(e).slice(0, 200)}`], taps: [],
         chosen: [], turns: [], steers: [], punishes: [], plants: [], castle: [], kingRows: 0, replay: null, rowsBefore: [], doorRows: [], heldFreePlay: [], spoken: [], resultRows: [], gameRow: null, pageErrors: [String(e).slice(0, 200)], plies: 0,
       }));
-      tape.gifts = await giftsIn(engine, tape.steers ?? []);
+      tape.gifts = await giftsIn(engine, [...(tape.steers ?? []), ...(tape.skillSteers ?? [])]);
       tapes.push(tape);
       await writeFile(`${OUT_DIR}/tape-${tape.name}.json`, JSON.stringify(tape, null, 2));
       const pick = tape.chosen[0];
@@ -930,6 +931,12 @@ async function main() {
     const refusedSteers = (t.steers ?? []).filter((x) => x.refused);
     check(`${g} F7 no steered coach move gave material away`, gifts.length === 0,
       `${(t.gifts ?? []).length} steer(s) checked${gifts.length ? `; GIFTS ${gifts.map((x) => `${x.played} −${x.drop}`).join(', ')}` : ''}; ${refusedSteers.length} refused on the deeper read${refusedSteers.length ? ` (${refusedSteers.map((x) => `${x.refused} ${x.deepCost}cp`).join(', ')})` : ''}`);
+    // F25 THE SKILL STEER (WO-SET-WEAKNESS-01): every steer set up a skill the
+    // record named as needed (red or grey), inside the coach's strength window.
+    const skillSteers = t.skillSteers ?? [];
+    const badSkill = skillSteers.filter((x) => !Array.isArray(x.skills) || x.skills.length === 0 || !x.skills.every((k) => (x.needs ?? []).includes(k)) || !(x.cpLoss <= x.windowCp));
+    check(`${g} F25 every skill steer set up a needed skill inside the window`, badSkill.length === 0,
+      `${skillSteers.length} steer(s): ${skillSteers.map((x) => `${x.played} → ${(x.skills ?? []).join('+')} (${x.cpLoss}cp/${x.windowCp})`).join(', ') || '—'}${badSkill.length ? `; BAD ${badSkill.map((x) => x.played).join(', ')}` : ''}`);
     // F8: a miss that stands is punished — Play on at rungs 0–1, every miss at 2–3.
     const standing = rung !== null && rung >= 2
       ? t.turns.filter((r) => r.outcome === 'missed' && !r.retry).map((r) => r.ply)
