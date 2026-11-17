@@ -105,7 +105,7 @@ describe('OpeningPlayMode — live punishment callout wiring', () => {
     });
     // The reveal was spoken (voice fired with the move-naming line).
     await waitFor(() => {
-      const spoken = [...speakSpy.mock.calls, ...readSpy.mock.calls].map((c) => String(c[0]));
+      const spoken = [...speakSpy.mock.calls, ...readSpy.mock.calls].map((c) => c[0]);
       expect(spoken.some((t) => t.includes('exf5'))).toBe(true);
     }, { timeout: 8000 });
     // The bar's Play line has nothing left to reveal (no Why line yet) — greyed,
