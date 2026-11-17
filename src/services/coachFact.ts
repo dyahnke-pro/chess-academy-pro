@@ -477,6 +477,10 @@ export const COMPUTER_CATALOG = {
   castlingTakenAway: { file: 'services/castlingTakenAway.ts', says: 'the move just played took castling away: a square the king must cross or land on is now covered, by the piece that moved or along the line it opened' },
   castlingWing: { file: 'services/castlingWing.ts', says: 'which way the king castled against their pawns: toward files they have no pawn on (roads for their rooks) or away from them' },
   pieceMovedAgain: { file: 'services/pieceMovedAgain.ts', says: 'one piece moved again while the others wait at home: two moves where one would do, back on a square it stood on, its third trip with minors undeveloped' },
+  tradeOfferAt: { file: 'services/tradeOffer.ts', says: 'a quiet queen, bishop or knight move that offers an even trade while the mover is ahead: every trade brings the won ending closer' },
+  fileTradeAt: { file: 'services/fileTrade.ts', says: 'a rook trade for an open file: the challenge (trade, it is even; step off, the file is the mover\'s) or the trade that hands the file to the mover\'s other rook or queen' },
+  pawnEndingTradeAt: { file: 'services/pawnEndingTrade.ts', says: 'a capture that trades the last pieces, along the engine\'s line, into a king-and-pawn ending the mover is pawns up and winning' },
+  tradeKeptAt: { file: 'services/tradeKept.ts', says: 'an even trade on offer that the move kept off the board, with the board\'s reason: the piece guards a man, presses the king, the mover is behind, or the offered piece threatens nothing' },
   pawnBreak: { file: 'services/pawnBreak.ts', says: 'the pawn break and what it is for: the pawn it strikes (the base of their chain), the file it opens for the rooks, the bishop it frees' },
 } satisfies Record<string, CatalogRow>;
 
