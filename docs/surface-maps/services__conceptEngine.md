@@ -100,8 +100,8 @@
 - `src/services/endgameTechnique.test.ts:61`
 - `src/services/endgameTechnique.test.ts:74`
 - `src/services/endgameTechnique.test.ts:224`
-- `src/services/groundedAnswer.ts:4172`
-- `src/services/groundedAnswer.ts:7026`
+- `src/services/groundedAnswer.ts:4187`
+- `src/services/groundedAnswer.ts:7041`
 
 ### `conceptForBoard` (function) — 12 call sites
 - `src/services/claimKeyParity.test.ts:24`
@@ -134,7 +134,7 @@
 - `src/services/puzzleConceptExplanation.ts:143`
 - `src/services/puzzleConceptHint.ts:108`
 - `src/services/refutedAlternative.ts:172`
-- `src/services/tacticTypeUnification.test.ts:61`
+- `src/services/tacticTypeUnification.test.ts:59`
 
 ### `positionalConcepts` (function) — 3 call sites
 - `src/services/conceptEngine.test.ts:178`
@@ -142,7 +142,7 @@
 - `src/services/conceptVocabulary.test.ts:63`
 
 ### `definitionKey` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8726`
+- `src/components/Coach/CoachTeachPage.tsx:8723`
 - `src/services/learnWalkBlumenfeld.test.ts:142`
 - `src/services/positionFacts.ts:1506`
 - `src/services/positionFacts.ts:1508`
@@ -153,13 +153,13 @@
 - `src/services/reviewFullData.ts:763`
 
 ### `tacticInvariant` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8729`
+- `src/components/Coach/CoachTeachPage.tsx:8726`
 - `src/services/dnaLineNarrator.ts:57`
 - `src/services/projectedLineVoice.ts:99`
 - `src/services/puzzleConceptExplanation.ts:132`
 - `src/services/reviewFullData.ts:758`
 - `src/services/tacticAlertService.ts:148`
-- `src/services/tacticTypeUnification.test.ts:207`
+- `src/services/tacticTypeUnification.test.ts:205`
 - `src/test/auditConceptGameplayCues.test.ts:24`
 
 ### `materialBalance` (re-export) — 68 call sites
@@ -223,8 +223,8 @@
 - `src/services/narratedContinuation.test.ts:16`
 - `src/services/narratedContinuation.test.ts:18`
 - `src/services/narratedContinuation.test.ts:20`
-- `src/services/opponentMoveReads.ts:447`
-- `src/services/pawnMajority.ts:130`
+- `src/services/opponentMoveReads.ts:449`
+- `src/services/pawnMajority.ts:131`
 - `src/services/pieceValues.ts:46`
 - `src/services/positionReadingService.ts:1853`
 - `src/services/practicalReads.ts:31`

@@ -68,7 +68,7 @@ import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
 import { transferClause, recordMotif, withTransfer, studentMoveAfterReply } from '../../services/motifLedger';
-import { FACT_ROLE, looseClaim, nextLooseSpells, plyOfFen, buildVoicePackage, coachTurn, decidePhaseWave, learnFact, type LaneFact, type LearnFactParts, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, STORY_LANE, DNA_BEAT, VERDICT_TURN_CP, instantWaitsForVerdict, type FactStakes, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind, type VoiceOwner, type ChanceHold } from '../../services/coachDecider';
+import { FACT_ROLE, looseClaim, nextLooseSpells, plyOfFen, buildVoicePackage, coachTurn, decidePhaseWave, learnFact, type LaneFact, type LearnFactParts, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, STORY_LANE, DNA_BEAT, VERDICT_TURN_CP, instantWaitsForVerdict, type FactStakes, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind, type VoiceOwner, type ChanceHold, learnThoughtTurn, type LearnTurnMove } from '../../services/coachDecider';
 import { buildPositionalRead } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
@@ -76,9 +76,6 @@ import { cheaperAttackerHit, gambitPoint, kingPawnUnderFire, type CheaperHit, mi
 import { habitSaidKey, learnMoveReason, learnReasonDue, learnReplyWait, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, promiseEvent, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, learnHangingWarning, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, tacticStakesFor, refutedAlternativeClaims, type TeachingFact, type ThreatProducer } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, slipAnswerText, gainedBishopPair, BISHOP_PAIR_POINT, BISHOP_PAIR_CLAIMS } from '../../services/playCommentary';
 import { captureRunAfterMove, captureRunOfPgn, NO_PREV_CAPTURE } from '../../services/captureRun';
-import { moveThoughtFacts } from '../../services/moveThoughtFacts';
-import type { IntentReads } from '../../services/moveIntent';
-import { sharedFactsForLearn } from '../../services/learnSharedFacts';
 
 /** A LINE A LEARN PRODUCER QUEUES for the late wave, as it knows it — made
  *  the one fact by `queueSpokenHint` (WO-STORY-MATRIX-01 P1-6e). */
@@ -12548,7 +12545,7 @@ export function CoachTeachPage({ mode }: {
                 const mid = await midTurnRead;
                 // The student move's reads in the shape every surface's fact set takes
                 // (`IntentReads`), filled where the quiet-move read builds them.
-                let sharedReads: IntentReads | null = null;
+                let sharedReads: LearnTurnMove['reads'] | null = null;
                 // THE PUNISHING LINE lands on the live grade now that the
                 // post-move read is in (C3): the saved Learn game then carries
                 // the same `pv` shape the sweep persists, and the record path
@@ -13484,24 +13481,24 @@ export function CoachTeachPage({ mode }: {
                       if (h.length < 2) return null;
                       try { const b = new Chess(); for (const san of h.slice(0, -2)) b.move(san); return { fenBefore: b.fen(), san: h[h.length - 2] }; } catch { return null; }
                     })();
-                    const reads: IntentReads = sharedReads ?? { before: preStudentRead.topLines, after: mid.topLines, passBefore: [], passAfter: [] };
-                    const facts = moveThoughtFacts({
-                      fenBefore, san: move.san, moverIsStudent: true, plainThreatsSeen: false, tense: 'past', theory: true, story: true,
-                      prev: captureRunOfPgn(move.pgn, move.history.length - 1) ?? NO_PREV_CAPTURE, line: null, history: move.history.slice(0, -1), theirLast,
-                      phrases: null, reads, costCp: studentCpLoss,
-                    });
-                    // And THEIR reply, the same set from the other seat (both seats).
                     const afterReply = samePosition(nextBoardFen ?? '', fenAfterReply) ? await nextBoardRead : null;
-                    const replyFacts = reply && afterReply?.topLines?.length ? moveThoughtFacts({
-                      fenBefore: move.fen, san: reply, moverIsStudent: false, plainThreatsSeen: false, tense: 'past', theory: true, story: true,
-                      prev: captureRunOfPgn(move.pgn, move.history.length) ?? NO_PREV_CAPTURE, line: null, history: move.history, theirLast: { fenBefore, san: move.san },
-                      phrases: null, reads: { before: mid.topLines, after: afterReply.topLines, passBefore: [], passAfter: [] }, costCp: null,
-                    }) : [];
                     if (liveFenRef.current === fenAfterReply) {
                       const said = new Set(queued.lines.map((l) => l.computer as string));
-                      for (const parts of sharedFactsForLearn([...facts, ...replyFacts], { fenNow: fenAfterReply, student: playerColor === 'white' ? 'w' : 'b', saidComputers: said })) {
-                        queueSpokenHint(fenAfterReply, parts);
-                      }
+                      const parts = learnThoughtTurn({
+                        studentMove: {
+                          fenBefore, san: move.san, history: move.history.slice(0, -1), theirLast, costCp: studentCpLoss,
+                          prev: captureRunOfPgn(move.pgn, move.history.length - 1) ?? NO_PREV_CAPTURE,
+                          reads: sharedReads ?? { before: preStudentRead.topLines, after: mid.topLines, passBefore: [], passAfter: [] },
+                        },
+                        // And THEIR reply, the same set from the other seat (both seats).
+                        reply: reply && afterReply?.topLines?.length ? {
+                          fenBefore: move.fen, san: reply, history: move.history, theirLast: { fenBefore, san: move.san }, costCp: null,
+                          prev: captureRunOfPgn(move.pgn, move.history.length) ?? NO_PREV_CAPTURE,
+                          reads: { before: mid.topLines, after: afterReply.topLines, passBefore: [], passAfter: [] },
+                        } : null,
+                        fenNow: fenAfterReply, student: playerColor === 'white' ? 'w' : 'b', saidComputers: said,
+                      });
+                      for (const p of parts) queueSpokenHint(fenAfterReply, p);
                     }
                   }
                 } catch { /* the shared facts are a bonus, never a blocker */ }

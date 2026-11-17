@@ -1762,6 +1762,21 @@ export function assemblePositionAssessment(opts: {
       }
     } catch { /* the matchup read is a bonus, never a blocker */ }
   }
+  // BLOCKADES, standing — the one blockade read (`findBlockades`) the move
+  // thought speaks when a move sets one, read here for the board as it is:
+  // a piece parked in front of a passed or isolated pawn, both seats.
+  if (opts.fen) {
+    try {
+      for (const holder of [sc, sc === 'w' ? 'b' : 'w'] as const) {
+        const mine = holder === sc;
+        for (const b of findBlockades(opts.fen, holder)) {
+          const kind = b.passed ? 'passed pawn' : 'isolated pawn';
+          parts.push(`${mine ? 'Your' : 'Their'} ${MOVER_WORD[b.piece]} on ${b.blocker} blockades ${mine ? 'their' : 'your'} ${kind} on ${b.pawn}: the pawn cannot move forward while the ${MOVER_WORD[b.piece]} sits there.`);
+          for (const sq of [b.blocker, b.pawn]) if (!keySquares.includes(sq)) keySquares.push(sq);
+        }
+      }
+    } catch { /* the blockade read is a bonus, never a blocker */ }
+  }
 
   if (parts.length === 0) return null;
   const sources = tactics ? ['engine:stockfish', 'board:chess.js'] : ['engine:stockfish'];
@@ -6561,7 +6576,7 @@ export function assembleLastGameAnswer(g: LastGameLike | null): GroundedAnswer |
 // safety logic that nothing ever read — deleted; countMaterial/
 // centralPieceCount now live alongside the rest of this file's static reads.
 // ─────────────────────────────────────────────────────────────────────────────
-import { findPieceQuality, goodPieceReason, findWeakPawns, findWeakSquares, campHoles, holeTargets, developmentRead, kingSafetyRead, countMaterial, centralPieceCount, findColorComplexWeakness, findMinorityAttack } from './positionReadingService';
+import { findBlockades, findPieceQuality, goodPieceReason, findWeakPawns, findWeakSquares, campHoles, holeTargets, developmentRead, kingSafetyRead, countMaterial, centralPieceCount, findColorComplexWeakness, findMinorityAttack } from './positionReadingService';
 import { rotateStem } from '../utils/rotateStem';
 import { isOutpost } from './outpost';
 import { findQueenGrabTraps, queenGrabTrapLine } from './queenGrabTrap';

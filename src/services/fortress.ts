@@ -27,6 +27,7 @@ import { sideMaterial, MATERIAL_VALUE } from './pieceValues';
 import { CONVERSION_EDGE } from './conversionMethod';
 import type { ReplyLine } from './bothSaved';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
+import { withArticle } from '../utils/andList';
 
 /** The engine's read of a draw: within this of level, White-POV. */
 const FORTRESS_DRAW_CP = 50;
@@ -135,9 +136,9 @@ export function fortressLine(f: Fortress, mine: boolean, fenAfter: string): stri
   const bishop = `${mine ? 'their' : 'your'} ${r.shade === 'light' ? 'dark' : 'light'}-squared bishop`;
   // A sentence names at most two squares: more pawns are said by colour.
   const pawns = r.pawns.length === 1
-    ? `${own} pawn on ${r.pawns[0]} stands on a ${r.shade} square, where ${bishop} can never attack it.`
+    ? `${own} pawn on ${r.pawns[0]} stands on ${withArticle(`${r.shade} square`)}, where ${bishop} can never attack it.`
     : r.pawns.length === 2
       ? `${own} pawns on ${r.pawns[0]} and ${r.pawns[1]} stand on ${r.shade} squares, where ${bishop} can never attack them.`
-      : `every pawn of ${mine ? 'yours' : 'theirs'} stands on a ${r.shade} square, where ${bishop} can never attack it.`;
+      : `every pawn of ${mine ? 'yours' : 'theirs'} stands on ${withArticle(`${r.shade} square`)}, where ${bishop} can never attack it.`;
   return `${lead} ${pawns}`;
 }

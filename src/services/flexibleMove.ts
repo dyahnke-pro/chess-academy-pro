@@ -384,14 +384,6 @@ function mainGroup(differ: readonly FlexOption[]): FlexOption[] {
   return differ.filter((o) => o.kind === 'castle');
 }
 
-/** How the move is said, from the mover's seat: "your knight to f3",
- *  "their d-pawn to d3", "castling". */
-function moveWords(m: { piece: PieceSymbol; to: Square; castle: 'k' | 'q' | null }, own: 'your' | 'their'): string {
-  if (m.castle) return 'castling';
-  if (m.piece === 'p') return `${own} ${m.to[0]}-pawn to ${m.to}`;
-  return `${own} ${NAME[m.piece]} to ${m.to}`;
-}
-
 /** The rival as a player says it: castling by its side, else its move. */
 function rivalWords(r: FlexibleMove['rival']): string {
   return r.castle === 'k' ? 'castling short' : r.castle === 'q' ? 'castling long' : r.san;

@@ -33,6 +33,7 @@
 import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'chess.js';
 import { legalSeeGainFor } from './positionReadingService';
 import { MATERIAL_VALUE } from './pieceValues';
+import { withArticle } from '../utils/andList';
 import { expectedScore, seatCp } from './winChance';
 import { GAIN_HOLDS_PLIES, settledNetForLine } from './exchangeLedger';
 import { describeStructure, newPawnWeaknesses, pawnsOf } from './boardStructure';
@@ -238,7 +239,7 @@ export function exchangeSacrificeLine(x: ExchangeSacrifice, mine: boolean, fenAf
   const oppPossessive = mine ? 'theirs' : 'yours';
   const minor = NAME[x.minor];
   const key = stemKeyOf(`${fenAfter}|exchange-sac`);
-  const forWhat = x.pawn ? `a ${minor} and a pawn` : `a ${minor}`;
+  const forWhat = x.pawn ? `${withArticle(minor)} and a pawn` : withArticle(minor);
   const lead = x.tookMinor
     ? rotateStem([
       `That gives up the exchange: ${own} rook for ${opp} ${minor} on ${x.square}.`,

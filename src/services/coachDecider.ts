@@ -59,6 +59,9 @@ export type { FactStakes, LaneFact, LearnFactParts, LearnLane, SpokenLine, TurnD
 export { decidePhaseWave } from './learnTurnDoor';
 // THE ONE MAKER of a Learn fact, called where the fact is made (P1-6e).
 export { learnFact } from './learnTurnDoor';
+// ONE COACH IN LEARN: the shared fact set for the turn's two moves, as Learn
+// facts on the `thought` lane (`learnSharedFacts`), through this one door.
+export { learnThoughtTurn, type LearnTurnMove } from './learnSharedFacts';
 export type { LiveTurn } from './learnTurnDoor';
 // A fact's role (teach / describe) — surfaces read it through this door, never reviewFacetRank directly.
 export { FACT_ROLE } from './reviewFacetRank';

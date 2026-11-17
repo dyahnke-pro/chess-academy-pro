@@ -9,8 +9,11 @@
 //     (LEARN NAMES NO MOVE UNASKED): every move its words or its lines name is
 //     checked on the board the student moves on next, and the door holds it.
 // The door decides what speaks, exactly as for every other Learn fact.
-// A LEAF over chess.js and the fact shapes.
+// Learn reaches the shared set through this one door (`learnThoughtTurn`):
+// the page hands over the two moves and their reads, never the set itself.
 import type { ThoughtFact } from './thoughtComposer';
+import { moveThoughtFacts, type MoveThoughtInput } from './moveThoughtFacts';
+import type { IntentReads } from './moveIntent';
 import type { LearnFactParts } from './learnTurnDoor';
 import { namedSan, namesMoves, namesPlayableStudentMove, studentMovesInLine, type NamedMove } from './studentMoveNaming';
 
@@ -69,4 +72,33 @@ export function sharedFactsForLearn(
     });
   }
   return out;
+}
+
+/** One move of a Learn turn, as the shared set reads it. */
+export interface LearnTurnMove {
+  fenBefore: string;
+  san: string;
+  history: readonly string[];
+  prev: MoveThoughtInput['prev'];
+  theirLast: MoveThoughtInput['theirLast'];
+  reads: IntentReads;
+  costCp: number | null;
+}
+
+/** THE LEARN TURN'S SHARED FACTS — the student's move and their reply, each
+ *  read by the one fact set (both seats), as Learn facts on the `thought`
+ *  lane (`sharedFactsForLearn`). */
+export function learnThoughtTurn(args: {
+  studentMove: LearnTurnMove;
+  reply: LearnTurnMove | null;
+  fenNow: string;
+  student: 'w' | 'b';
+  saidComputers: ReadonlySet<string>;
+}): Array<LearnFactParts & { gradeFen: string }> {
+  const read = (m: LearnTurnMove, moverIsStudent: boolean): ThoughtFact[] => moveThoughtFacts({
+    fenBefore: m.fenBefore, san: m.san, moverIsStudent, plainThreatsSeen: false, tense: 'past', theory: true, story: true,
+    prev: m.prev, line: null, history: [...m.history], theirLast: m.theirLast, phrases: null, reads: m.reads, costCp: m.costCp,
+  });
+  const facts = [...read(args.studentMove, true), ...(args.reply ? read(args.reply, false) : [])];
+  return sharedFactsForLearn(facts, { fenNow: args.fenNow, student: args.student, saidComputers: args.saidComputers });
 }

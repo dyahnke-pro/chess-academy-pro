@@ -290,8 +290,10 @@ export function obligationLifts(prevFen: string, studentSan: string, theirSanPla
       `Notice what their ${PIECE[mv.piece]} gave up by going to ${mv.to}: ${name} no longer hangs, so the move you owed it is free again.`,
       `Their ${PIECE[mv.piece]} going to ${mv.to} lifts the pressure: ${name} is safe now, and this move is yours to spend.`,
     ], stemKeyOf(after.fen()));
-    const squares = [x.square, mv.from, mv.to];
-    const body = `From ${mv.from} their ${PIECE[mv.piece]} hit ${x.square}, but from ${mv.to} it no longer wins it`;
+    // The squares the words name: the piece that was hanging and where their
+    // piece went. Where it came from is never said, so it is never marked.
+    const squares = [x.square, mv.to];
+    const body = `From ${mv.to} their ${PIECE[mv.piece]} no longer wins ${x.square}`;
     const proof = squaresProof(body, squares);
     if (!proof) continue;
     return {

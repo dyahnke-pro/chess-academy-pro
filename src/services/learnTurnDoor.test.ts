@@ -95,7 +95,7 @@ describe('G8.5 — no lane without a live producer, no producer without a lane',
 
   // The shared fact set (one coach) enters on the 'thought' lane — it counts
   // while the page hands its facts through `sharedFactsForLearn`.
-  const viaShared = /sharedFactsForLearn\(/.test(TEACH_CODE) && /lane: 'thought'/.test(readFileSync('src/services/learnSharedFacts.ts', 'utf8'))
+  const viaShared = /learnThoughtTurn\(/.test(TEACH_CODE) && /lane: 'thought'/.test(readFileSync('src/services/learnSharedFacts.ts', 'utf8'))
     ? new Set<LearnLane>(['thought']) : new Set<LearnLane>();
 
   it('every lane in the table is fed by live code in CoachTeachPage', () => {

@@ -322,7 +322,7 @@ export function intoTheirCampLine(x: IntoTheirCamp, own: 'your' | 'their', fenAf
       const king = x.squares[2];
       return rotateStem([
         `${cap(own)} rook lifts to ${x.moved.to}. From there it can swing along the rank toward ${foe} king on ${king}.`,
-        `The rook on ${x.moved.from} comes up to ${x.moved.to}, a rook lift. Next it swings across to attack ${foe} king on ${king}.`,
+        `${cap(own)} rook comes up from ${x.moved.from}, a rook lift. Next it swings across to attack ${foe} king on ${king}.`,
         `${cap(own)} rook leaves the back rank for ${x.moved.to}. It can now swing over toward ${foe} king on ${king}.`,
       ], key);
     }
@@ -331,7 +331,7 @@ export function intoTheirCampLine(x: IntoTheirCamp, own: 'your' | 'their', fenAf
       const cover = `${NAME[x.targets[0].piece]} on ${x.targets[0].square}`;
       return rotateStem([
         `${cap(own)} rook swings across from ${x.moved.from} to ${x.moved.to}. From there it looks up the ${x.moved.to[0]}-file at ${foe} ${cover} in front of the king on ${king}.`,
-        `The rook on ${x.moved.from} slides over to ${x.moved.to}, toward ${foe} king on ${king}. Up the ${x.moved.to[0]}-file it hits ${foe} ${cover}, part of the king's cover.`,
+        `${cap(own)} rook slides over to ${x.moved.to}, toward ${foe} king on ${king}. Up the ${x.moved.to[0]}-file it hits ${foe} ${cover}, part of the king's cover.`,
       ], key);
     }
     case 'connect': {

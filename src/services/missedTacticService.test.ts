@@ -77,19 +77,6 @@ describe('detectTacticType', () => {
     expect(result).toBe('pin');
   });
 
-    it('legacy geometry: "removing the guard" fired on a capture that LOSES material (kept only on the legacy tail)', () => {
-    // The old one-ply geometry called any capture of a last defender
-    // "removing the guard" — even when the capture itself is a losing trade
-    // (the guard is defended by a pricier piece that just recaptures). The
-    // unified classifier refuses that: a removal must not lose on the capture
-    // and the unguarded piece must actually be under attack
-    // (tacticTypeUnification.test.ts has the REAL fixture).
-    // Black knight on c6 defends bishop on e5.
-    // White rook captures knight: Rxc6 removes the guard.
-    // After Rxc6, bishop on e5 is undefended.
-    const fen = '4k3/8/2n5/4b3/8/8/8/2R1K3 w - - 0 1';
-  });
-
   it('returns tactical_sequence for invalid input', () => {
     expect(detectTacticType('invalid fen', 'e2e4')).toBe('tactical_sequence');
   });
@@ -320,10 +307,6 @@ describe('legacy geometry — clearance (theme-only now; the classifier never pr
     const fen = '6k1/8/8/5b2/3N4/8/8/3R2K1 w - - 0 1';
     expect(detectTacticType(fen, 'd4e6')).not.toBe('clearance');
   });
-
-  it('the old geometry rejected clearance when the destination is not defended', () => {
-    const fen = '6k1/8/8/8/3N4/8/8/3R2K1 w - - 0 1';
-  });
 });
 
 describe('legacy geometry — x_ray (the static shape is never named; the recapture through is, below)', () => {
@@ -332,10 +315,6 @@ describe('legacy geometry — x_ray (the static shape is never named; the recapt
     // winnability — the shape tacticsDetector deliberately declined to name.
     const fen = '7k/1r6/8/1P6/8/8/8/1R4K1 w - - 0 1';
     expect(detectTacticType(fen, 'b1b4')).not.toBe('x_ray');
-  });
-
-  it('the old geometry rejected x-ray when the piece behind is worth less than 3', () => {
-    const fen = '7k/1p6/8/1P6/8/8/8/1R4K1 w - - 0 1';
   });
 });
 

@@ -207,10 +207,10 @@
 - `src/services/exchangeIdeas.ts:655`
 - `src/services/exchangeLedger.ts:563`
 - `src/services/factStakes.ts:254`
-- `src/services/groundedAnswer.ts:2159`
-- `src/services/groundedAnswer.ts:2959`
-- `src/services/groundedAnswer.ts:3625`
-- `src/services/groundedAnswer.ts:7344`
+- `src/services/groundedAnswer.ts:2174`
+- `src/services/groundedAnswer.ts:2974`
+- `src/services/groundedAnswer.ts:3640`
+- `src/services/groundedAnswer.ts:7359`
 - `src/services/inaccuracyCall.ts:1107`
 - `src/services/latentDanger.ts:192`
 - `src/services/liteMoves.test.ts:118`
@@ -228,7 +228,7 @@
 - `src/services/bookMoveWhy.ts:460`
 - `src/services/bookMoveWhy.ts:479`
 - `src/services/coachFeatureService.ts:3797`
-- `src/services/groundedAnswer.ts:7409`
+- `src/services/groundedAnswer.ts:7424`
 - `src/services/moveIntent.ts:469`
 - `src/services/moveIntent.ts:486`
 - `src/services/moveIntent.ts:556`
@@ -250,11 +250,11 @@
 - `src/services/computedVoiceGrounding.test.ts:75`
 - `src/services/danyaBehaviors.ts:683`
 - `src/services/forkTrick.ts:71`
-- `src/services/groundedAnswer.ts:2984`
-- `src/services/groundedAnswer.ts:3114`
-- `src/services/groundedAnswer.ts:3244`
-- `src/services/groundedAnswer.ts:3423`
-- `src/services/groundedAnswer.ts:7319`
+- `src/services/groundedAnswer.ts:2999`
+- `src/services/groundedAnswer.ts:3129`
+- `src/services/groundedAnswer.ts:3259`
+- `src/services/groundedAnswer.ts:3438`
+- `src/services/groundedAnswer.ts:7334`
 - `src/services/holdResource.ts:95`
 - `src/services/latentFork.ts:146`
 - `src/services/latentFork.ts:218`
@@ -290,8 +290,8 @@
 - `src/services/groundedAnswer.ts:593`
 - `src/services/groundedAnswer.ts:922`
 - `src/services/groundedAnswer.ts:1120`
-- `src/services/groundedAnswer.ts:7717`
-- `src/services/groundedAnswer.ts:7776`
+- `src/services/groundedAnswer.ts:7732`
+- `src/services/groundedAnswer.ts:7791`
 - `src/services/mistakeNarration.ts:550`
 - `src/services/opponentMovePurpose.ts:23`
 - `src/services/playCommentary.ts:904`
@@ -312,7 +312,7 @@
 - `src/services/structureReads.ts:137`
 
 ### `signedCaptureRead` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12980`
+- `src/components/Coach/CoachTeachPage.tsx:12977`
 - `src/services/learnBoardTeaching.ts:1586`
 - `src/services/principleAttribution.ts:359`
 - `src/services/principleAttribution.ts:862`
@@ -376,8 +376,8 @@
 - `src/services/exchangeLedger.ts:562`
 - `src/services/exchangeLedger.ts:571`
 - `src/services/exchangeLedger.ts:572`
-- `src/services/exchangeSacrifice.ts:166`
-- `src/services/exchangeSacrifice.ts:176`
+- `src/services/exchangeSacrifice.ts:167`
+- `src/services/exchangeSacrifice.ts:177`
 - `src/services/falseAlarm.ts:62`
 - `src/services/flexibleMove.ts:148`
 - `src/services/flexibleMove.ts:205`
@@ -499,8 +499,8 @@
 - `src/services/opponentMoveReads.ts:150`
 - `src/services/opponentMoveReads.ts:189`
 - `src/services/opponentMoveReads.ts:284`
-- `src/services/opponentMoveReads.ts:498`
-- `src/services/opponentMoveReads.ts:513`
+- `src/services/opponentMoveReads.ts:500`
+- `src/services/opponentMoveReads.ts:515`
 - `src/services/pieceCage.ts:38`
 - `src/services/practicalReads.ts:160`
 - `src/services/practicalReads.ts:189`
@@ -509,7 +509,7 @@
 - `src/services/thinkingExchangeChain.ts:59`
 
 ### `signedLegalSeeFor` (function) — 40 call sites
-- `src/components/Coach/CoachTeachPage.tsx:931`
+- `src/components/Coach/CoachTeachPage.tsx:928`
 - `src/services/computedMaterialTruth.corpus.test.ts:199`
 - `src/services/computedMaterialTruth.corpus.test.ts:203`
 - `src/services/computedMaterialTruth.corpus.test.ts:206`
@@ -523,8 +523,8 @@
 - `src/services/gameEndReads.ts:169`
 - `src/services/gameEndReads.ts:272`
 - `src/services/gameEndReads.ts:273`
-- `src/services/groundedAnswer.ts:6820`
-- `src/services/groundedAnswer.ts:7381`
+- `src/services/groundedAnswer.ts:6835`
+- `src/services/groundedAnswer.ts:7396`
 - `src/services/inaccuracyCall.ts:265`
 - `src/services/inaccuracyCall.ts:1005`
 - `src/services/inaccuracyCall.ts:2041`
@@ -534,11 +534,11 @@
 - `src/services/liteMoves.test.ts:139`
 - `src/services/minorMatchup.ts:78`
 - `src/services/opponentMoveReads.ts:214`
-- `src/services/opponentMoveReads.ts:383`
-- `src/services/opponentMoveReads.ts:446`
-- `src/services/opponentMoveReads.ts:498`
-- `src/services/opponentMoveReads.ts:522`
-- `src/services/opponentMoveReads.ts:523`
+- `src/services/opponentMoveReads.ts:385`
+- `src/services/opponentMoveReads.ts:448`
+- `src/services/opponentMoveReads.ts:500`
+- `src/services/opponentMoveReads.ts:524`
+- `src/services/opponentMoveReads.ts:525`
 - `src/services/principleAttribution.ts:351`
 - `src/services/principleAttribution.ts:896`
 - `src/services/principleAttribution.ts:920`
@@ -565,8 +565,8 @@
 - `src/missions/patterns/knight-fork.ts:59`
 - `src/services/computedMaterialTruth.corpus.test.ts:136`
 - `src/services/computedMaterialTruth.corpus.test.ts:148`
-- `src/services/groundedAnswer.ts:3123`
-- `src/services/groundedAnswer.ts:3176`
+- `src/services/groundedAnswer.ts:3138`
+- `src/services/groundedAnswer.ts:3191`
 - `src/services/pawnJudgement.ts:88`
 - `src/services/pawnJudgement.ts:91`
 - `src/services/pinPressure.ts:68`
@@ -576,7 +576,7 @@
 ### `seeSequence` (function) — 7 call sites
 - `src/services/exchangeIdeas.ts:194`
 - `src/services/exchangeIdeas.ts:616`
-- `src/services/groundedAnswer.ts:2179`
+- `src/services/groundedAnswer.ts:2194`
 - `src/services/planChoice.ts:161`
 - `src/services/positionReadingService.test.ts:553`
 - `src/services/positionReadingService.test.ts:559`
@@ -587,21 +587,21 @@
 - `src/services/danyaExploitability.test.ts:51`
 - `src/services/danyaExploitability.test.ts:55`
 - `src/services/danyaExploitability.test.ts:90`
-- `src/services/groundedAnswer.ts:6728`
+- `src/services/groundedAnswer.ts:6743`
 - `src/services/positionReadingService.test.ts:938`
 - `src/services/theirMoveCost.ts:39`
 
 ### `findHangingBySee` (function) — 29 call sites
 - `src/coach/chatTurnAnswers.ts:211`
-- `src/components/Coach/CoachTeachPage.tsx:9171`
-- `src/components/Coach/CoachTeachPage.tsx:9177`
+- `src/components/Coach/CoachTeachPage.tsx:9168`
+- `src/components/Coach/CoachTeachPage.tsx:9174`
 - `src/services/bothSaved.ts:73`
 - `src/services/computedMaterialTruth.corpus.test.ts:216`
 - `src/services/computedMaterialTruth.corpus.test.ts:226`
 - `src/services/conversionMethod.ts:65`
 - `src/services/desperado.ts:38`
-- `src/services/groundedAnswer.ts:2648`
-- `src/services/groundedAnswer.ts:3785`
+- `src/services/groundedAnswer.ts:2663`
+- `src/services/groundedAnswer.ts:3800`
 - `src/services/moveInsight.ts:263`
 - `src/services/oneHanging.test.ts:12`
 - `src/services/oneHanging.test.ts:21`
@@ -626,8 +626,8 @@
 - `src/services/boardPlanFacts.ts:92`
 - `src/services/danyaBehaviors.ts:671`
 - `src/services/groundedAnswer.ts:492`
-- `src/services/groundedAnswer.ts:3808`
-- `src/services/groundedAnswer.ts:6949`
+- `src/services/groundedAnswer.ts:3823`
+- `src/services/groundedAnswer.ts:6964`
 - `src/services/planChoice.ts:116`
 - `src/services/positionReadingService.test.ts:90`
 - `src/services/positionReadingService.test.ts:96`
@@ -665,7 +665,7 @@
 - `src/services/danyaBehaviors.ts:229`
 - `src/services/danyaBehaviors.ts:553`
 - `src/services/danyaExploitability.test.ts:100`
-- `src/services/groundedAnswer.ts:7035`
+- `src/services/groundedAnswer.ts:7050`
 - `src/services/minorMatchup.ts:88`
 - `src/services/nextPlans.ts:127`
 - `src/services/pieceValueRead.ts:532`
@@ -695,7 +695,7 @@
 ### `findWeakSquares` (function) — 9 call sites
 - `src/services/computedTruth.fuzz.test.ts:114`
 - `src/services/danyaExploitability.test.ts:66`
-- `src/services/groundedAnswer.ts:6720`
+- `src/services/groundedAnswer.ts:6735`
 - `src/services/planChoice.ts:89`
 - `src/services/positionReadingService.test.ts:345`
 - `src/services/positionReadingService.test.ts:350`
@@ -704,9 +704,9 @@
 - `src/services/positionalTruth.corpus.test.ts:73`
 
 ### `campHoles` (function) — 3 call sites
-- `src/services/groundedAnswer.ts:6717`
-- `src/services/groundedAnswer.ts:6718`
-- `src/services/groundedAnswer.ts:6928`
+- `src/services/groundedAnswer.ts:6732`
+- `src/services/groundedAnswer.ts:6733`
+- `src/services/groundedAnswer.ts:6943`
 
 ### `holeTargets` (function) — 8 call sites
 - `src/services/boardPlanFacts.ts:103`
@@ -715,12 +715,12 @@
 - `src/services/danyaExploitability.test.ts:69`
 - `src/services/danyaExploitability.test.ts:70`
 - `src/services/danyaExploitability.test.ts:91`
-- `src/services/groundedAnswer.ts:7002`
+- `src/services/groundedAnswer.ts:7017`
 - `src/services/minorMatchup.ts:94`
 
 ### `findColorComplexWeakness` (function) — 8 call sites
 - `src/services/computedTruth.fuzz.test.ts:154`
-- `src/services/groundedAnswer.ts:6759`
+- `src/services/groundedAnswer.ts:6774`
 - `src/services/positionalRead.ts:402`
 - `src/services/positionalTruth.corpus.test.ts:97`
 - `src/services/positionalTruth.corpus.test.ts:102`
@@ -730,8 +730,8 @@
 
 ### `findMinorityAttack` (function) — 11 call sites
 - `src/services/computedTruth.fuzz.test.ts:174`
-- `src/services/groundedAnswer.ts:6771`
-- `src/services/groundedAnswer.ts:6773`
+- `src/services/groundedAnswer.ts:6786`
+- `src/services/groundedAnswer.ts:6788`
 - `src/services/learnWalkBlumenfeld.test.ts:120`
 - `src/services/minorityLeverCheck.test.ts:9`
 - `src/services/positionReadingService.test.ts:930`
@@ -750,13 +750,13 @@
 - `src/services/danyaExploitability.test.ts:24`
 - `src/services/danyaExploitability.test.ts:29`
 - `src/services/danyaExploitability.test.ts:32`
-- `src/services/groundedAnswer.ts:6983`
+- `src/services/groundedAnswer.ts:6998`
 - `src/services/positionReadingService.test.ts:800`
 - `src/services/positionReadingService.test.ts:805`
 
 ### `findKnightReroute` (function) — 7 call sites
 - `src/services/danyaBehaviors.ts:814`
-- `src/services/groundedAnswer.ts:6990`
+- `src/services/groundedAnswer.ts:7005`
 - `src/services/moveInsight.ts:344`
 - `src/services/positionReadingService.test.ts:794`
 - `src/services/positionReadingService.test.ts:810`
@@ -765,13 +765,13 @@
 
 ### `findFianchetto` (function) — 4 call sites
 - `src/services/danyaBehaviors.ts:859`
-- `src/services/groundedAnswer.ts:6992`
+- `src/services/groundedAnswer.ts:7007`
 - `src/services/positionReadingService.test.ts:821`
 - `src/services/positionReadingService.test.ts:824`
 
 ### `findRookLift` (function) — 7 call sites
 - `src/services/danyaBehaviors.ts:845`
-- `src/services/groundedAnswer.ts:6991`
+- `src/services/groundedAnswer.ts:7006`
 - `src/services/intoTheirCamp.ts:232`
 - `src/services/positionReadingService.test.ts:827`
 - `src/services/positionReadingService.test.ts:830`
@@ -781,24 +781,25 @@
 ### `Blockade` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `findBlockades` (function) — 4 call sites
+### `findBlockades` (function) — 5 call sites
 - `src/services/blockade.test.ts:85`
 - `src/services/blockade.ts:103`
 - `src/services/blockade.ts:104`
 - `src/services/blockade.ts:112`
+- `src/services/groundedAnswer.ts:1772`
 
 ### `findBlockade` (function) — 8 call sites
 - `src/services/blockade.test.ts:83`
 - `src/services/blockade.test.ts:86`
 - `src/services/danyaBehaviors.ts:870`
-- `src/services/groundedAnswer.ts:6993`
+- `src/services/groundedAnswer.ts:7008`
 - `src/services/positionReadingService.test.ts:819`
 - `src/services/positionReadingService.test.ts:833`
 - `src/services/positionalTruth.corpus.test.ts:128`
 - `src/services/positionalTruth.corpus.test.ts:130`
 
 ### `structureTransfer` (function) — 7 call sites
-- `src/services/groundedAnswer.ts:6957`
+- `src/services/groundedAnswer.ts:6972`
 - `src/services/learnBoardTeaching.ts:1506`
 - `src/services/positionReadingService.test.ts:946`
 - `src/services/positionReadingService.test.ts:947`
@@ -808,7 +809,7 @@
 
 ### `strongestPiece` (function) — 3 call sites
 - `src/services/groundedAnswer.ts:484`
-- `src/services/groundedAnswer.ts:6881`
+- `src/services/groundedAnswer.ts:6896`
 - `src/services/positionReadingService.test.ts:361`
 
 ### `goodPieceClause` (function) — 3 call sites
@@ -824,7 +825,7 @@
 
 ### `goodPieceReason` (function) — 2 call sites
 - `src/services/danyaBehaviors.ts:237`
-- `src/services/groundedAnswer.ts:7051`
+- `src/services/groundedAnswer.ts:7066`
 
 ### `findWeakPawns` (function) — 25 call sites
 - `src/services/concessionBeat.ts:249`
@@ -832,11 +833,11 @@
 - `src/services/concessionBeat.ts:254`
 - `src/services/danyaBehaviors.ts:409`
 - `src/services/danyaBehaviors.ts:441`
-- `src/services/groundedAnswer.ts:2650`
-- `src/services/groundedAnswer.ts:6678`
-- `src/services/groundedAnswer.ts:6925`
-- `src/services/groundedAnswer.ts:6962`
-- `src/services/groundedAnswer.ts:6963`
+- `src/services/groundedAnswer.ts:2665`
+- `src/services/groundedAnswer.ts:6693`
+- `src/services/groundedAnswer.ts:6940`
+- `src/services/groundedAnswer.ts:6977`
+- `src/services/groundedAnswer.ts:6978`
 - `src/services/isolatedOneOwner.test.ts:17`
 - `src/services/isolatedOneOwner.test.ts:21`
 - `src/services/moveInsight.ts:338`
@@ -870,8 +871,8 @@
 ### `pressuredTargets` (function) — 5 call sites
 - `src/services/computedMaterialTruth.corpus.test.ts:178`
 - `src/services/danyaBehaviors.ts:739`
-- `src/services/groundedAnswer.ts:6902`
-- `src/services/groundedAnswer.ts:6903`
+- `src/services/groundedAnswer.ts:6917`
+- `src/services/groundedAnswer.ts:6918`
 - `src/services/positionReadingService.test.ts:742`
 
 ### `findPassedPawns` (function) — 18 call sites
@@ -880,11 +881,11 @@
 - `src/services/danyaBehaviors.ts:444`
 - `src/services/danyaBehaviors.ts:581`
 - `src/services/danyaBehaviors.ts:593`
-- `src/services/groundedAnswer.ts:2624`
-- `src/services/groundedAnswer.ts:2625`
-- `src/services/groundedAnswer.ts:6790`
-- `src/services/groundedAnswer.ts:6791`
-- `src/services/groundedAnswer.ts:7761`
+- `src/services/groundedAnswer.ts:2639`
+- `src/services/groundedAnswer.ts:2640`
+- `src/services/groundedAnswer.ts:6805`
+- `src/services/groundedAnswer.ts:6806`
+- `src/services/groundedAnswer.ts:7776`
 - `src/services/positionReadingService.test.ts:750`
 - `src/services/positionReadingService.test.ts:756`
 - `src/services/positionalRead.ts:333`
@@ -899,7 +900,7 @@
 - `src/services/danyaExploitability.test.ts:183`
 - `src/services/danyaExploitability.test.ts:187`
 - `src/services/danyaExploitability.test.ts:190`
-- `src/services/groundedAnswer.ts:7010`
+- `src/services/groundedAnswer.ts:7025`
 - `src/services/replayFence.najdorf1500.test.ts:56`
 
 ### `rookBehindPasser` (function) — 6 call sites
@@ -908,7 +909,7 @@
 - `src/services/danyaExploitability.test.ts:200`
 - `src/services/danyaExploitability.test.ts:203`
 - `src/services/danyaExploitability.test.ts:226`
-- `src/services/groundedAnswer.ts:7012`
+- `src/services/groundedAnswer.ts:7027`
 
 ### `oppositionRead` (function) — 6 call sites
 - `src/services/danyaBehaviors.ts:649`
@@ -916,21 +917,21 @@
 - `src/services/danyaExploitability.test.ts:212`
 - `src/services/danyaExploitability.test.ts:216`
 - `src/services/danyaExploitability.test.ts:218`
-- `src/services/groundedAnswer.ts:7011`
+- `src/services/groundedAnswer.ts:7026`
 
 ### `bestMinorToKeep` (function) — 5 call sites
 - `src/services/danyaBehaviors.ts:888`
-- `src/services/groundedAnswer.ts:7013`
+- `src/services/groundedAnswer.ts:7028`
 - `src/services/positionReadingService.test.ts:762`
 - `src/services/replayFence.bowdler1000.test.ts:19`
 - `src/services/replayFence.bowdler1000.test.ts:23`
 
 ### `bishopPair` (function) — 7 call sites
 - `src/services/danyaBehaviors.ts:700`
-- `src/services/groundedAnswer.ts:2631`
-- `src/services/groundedAnswer.ts:2632`
-- `src/services/groundedAnswer.ts:6779`
-- `src/services/groundedAnswer.ts:6780`
+- `src/services/groundedAnswer.ts:2646`
+- `src/services/groundedAnswer.ts:2647`
+- `src/services/groundedAnswer.ts:6794`
+- `src/services/groundedAnswer.ts:6795`
 - `src/services/positionReadingService.test.ts:769`
 - `src/services/positionReadingService.test.ts:770`
 
@@ -946,7 +947,7 @@
 - `src/services/boardPlanFacts.ts:96`
 - `src/services/danyaBehaviors.ts:711`
 - `src/services/groundedAnswer.ts:486`
-- `src/services/groundedAnswer.ts:6934`
+- `src/services/groundedAnswer.ts:6949`
 - `src/services/pinReaders.test.ts:132`
 - `src/services/positionReadingService.test.ts:175`
 - `src/services/positionReadingService.test.ts:185`
@@ -956,20 +957,20 @@
 ### `ownsMoreSpace` (function) — 3 call sites
 - `src/services/danyaBehaviors.ts:764`
 - `src/services/deliberation.ts:956`
-- `src/services/groundedAnswer.ts:6750`
+- `src/services/groundedAnswer.ts:6765`
 
 ### `computeTerritory` (function) — 2 call sites
-- `src/services/groundedAnswer.ts:6747`
+- `src/services/groundedAnswer.ts:6762`
 - `src/services/positionalReason.ts:124`
 
 ### `findAttackTargets` (function) — 4 call sites
-- `src/services/groundedAnswer.ts:6917`
+- `src/services/groundedAnswer.ts:6932`
 - `src/services/positionReadingService.test.ts:373`
 - `src/services/positionReadingService.test.ts:976`
 - `src/services/positionReadingService.test.ts:978`
 
 ### `findPawnGrabs` (function) — 3 call sites
-- `src/services/groundedAnswer.ts:6919`
+- `src/services/groundedAnswer.ts:6934`
 - `src/services/positionReadingService.test.ts:515`
 - `src/services/positionReadingService.test.ts:525`
 
@@ -980,7 +981,7 @@
 - `src/services/danyaBehaviors.ts:274`
 - `src/services/danyaBehaviors.ts:292`
 - `src/services/danyaBehaviors.ts:850`
-- `src/services/groundedAnswer.ts:6699`
+- `src/services/groundedAnswer.ts:6714`
 - `src/services/oneKingShield.test.ts:11`
 - `src/services/oneKingShield.test.ts:12`
 - `src/services/pinReaders.test.ts:155`
@@ -999,17 +1000,17 @@
 - `src/services/gamePhaseService.test.ts:15`
 - `src/services/gamePhaseService.test.ts:21`
 - `src/services/gamePhaseService.ts:26`
-- `src/services/groundedAnswer.ts:6595`
+- `src/services/groundedAnswer.ts:6610`
 - `src/services/liveTacticsContext.ts:291`
 
 ### `centralPieceCount` (function) — 1 call site
-- `src/services/groundedAnswer.ts:6658`
+- `src/services/groundedAnswer.ts:6673`
 
 ### `developmentRead` (function) — 8 call sites
 - `src/services/danyaBehaviors.ts:464`
 - `src/services/danyaBehaviors.ts:465`
-- `src/services/groundedAnswer.ts:6666`
-- `src/services/groundedAnswer.ts:6669`
+- `src/services/groundedAnswer.ts:6681`
+- `src/services/groundedAnswer.ts:6684`
 - `src/services/positionReadingService.test.ts:484`
 - `src/services/positionReadingService.test.ts:491`
 - `src/services/positionalRead.ts:262`
@@ -1042,7 +1043,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `findForcingCandidates` (function) — 5 call sites
-- `src/services/groundedAnswer.ts:3794`
+- `src/services/groundedAnswer.ts:3809`
 - `src/services/positionReadingService.test.ts:607`
 - `src/services/positionReadingService.test.ts:618`
 - `src/services/positionReadingService.test.ts:622`

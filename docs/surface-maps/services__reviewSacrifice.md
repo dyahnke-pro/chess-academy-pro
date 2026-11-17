@@ -75,7 +75,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewWalk2065.test.ts:38`
 
 ### `besideKing` (function) — 1 call site
-- `src/services/exchangeSacrifice.ts:121`
+- `src/services/exchangeSacrifice.ts:122`
 
 ## Tests
 

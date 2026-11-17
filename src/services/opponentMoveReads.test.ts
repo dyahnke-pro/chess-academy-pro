@@ -61,7 +61,9 @@ describe('obligationLifts — the piece that no longer hangs', () => {
   it('their bishop retreating from d6 frees the move you owed e5', () => {
     const r = voiced(obligationLifts(PREV, 'Nb5', 'Be7', 'w'));
     expect(r.text).toMatch(/pawn on e5/);
-    expect(r.squares).toEqual(['e5', 'd6', 'e7']);
+    // Only the squares the words name: where the bishop came from is never said.
+    expect(r.squares).toEqual(['e5', 'e7']);
+    for (const sq of r.squares) expect(r.text).toContain(sq);
   });
   it('stays silent when their move leaves the attacker where it was', () => {
     expect(obligationLifts(PREV, 'Nb5', 'h6', 'w')).toBeNull();

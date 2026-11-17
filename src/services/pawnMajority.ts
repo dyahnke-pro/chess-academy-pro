@@ -32,6 +32,7 @@ import { inFluxAfter } from './boardState';
 import { materialBalance } from './pieceValues';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { openSentence } from '../utils/openSentence';
+import { withArticle } from '../utils/andList';
 import type { IdeaKind } from './ideaKind';
 
 export interface WingMajority {
@@ -214,7 +215,7 @@ export function pawnMajorityLine(x: PawnMajority, student: Color, fenAfter: stri
         const s = x.split;
         const sOwn = s.side === student ? 'your' : 'their';
         const sWho = s.side === student ? 'you' : 'they';
-        const head = `That trade splits the pawns: ${mine ? 'you get' : 'they get'} a ${g.wing} majority, ${ratio}, and ${sWho} get one on the ${s.wing}.`;
+        const head = `That trade splits the pawns: ${mine ? 'you get' : 'they get'} ${withArticle(`${g.wing} majority`)}, ${ratio}, and ${sWho} get one on the ${s.wing}.`;
         const poss = (o: string): string => (o === 'your' ? 'yours' : 'theirs');
         const leads = g.healthy && s.healthy && g.lead && s.lead
           ? `Each can make a passed pawn: ${poss(own)} with the pawn on ${g.lead}, ${poss(sOwn)} with the pawn on ${s.lead}.`
@@ -226,10 +227,10 @@ export function pawnMajorityLine(x: PawnMajority, student: Color, fenAfter: stri
         return `${head} ${leads}`;
       }
       if (!g.healthy) {
-        return `That gives ${who} a ${g.wing} majority, ${ratio}, but the doubled pawns on the ${g.doubled[0]}-file mean it cannot make a passed pawn.`;
+        return `That gives ${who} ${withArticle(`${g.wing} majority`)}, ${ratio}, but the doubled pawns on the ${g.doubled[0]}-file mean it cannot make a passed pawn.`;
       }
       return rotateStem([
-        `That gives ${who} a ${g.wing} majority: ${ratio}. Pushed together, those pawns make a passed one, and ${lead} is the one that can run.`,
+        `That gives ${who} ${withArticle(`${g.wing} majority`)}: ${ratio}. Pushed together, those pawns make a passed one, and ${lead} is the one that can run.`,
         `${openSentence(own)} pawns are ${ratio} on the ${g.wing} now, a majority that can make a passed pawn. ${lead ? openSentence(lead) : 'Its lead pawn'} leads it.`,
       ], k);
     }

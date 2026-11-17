@@ -14,8 +14,6 @@
  * pinned — none is authored from memory (G3 applies to test boards too).
  */
 import { describe, it, expect } from 'vitest';
-import { readdirSync, readFileSync, statSync } from 'node:fs';
-import { join, resolve } from 'node:path';
 import { Chess } from 'chess.js';
 import { detectTacticType, TACTIC_TYPE_AUTHORITY } from './missedTacticService';
 import { conceptForLine, tacticInvariant } from './conceptEngine';

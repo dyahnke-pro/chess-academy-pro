@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7858 lines · 123 exports · 96 importers · 72 tests · 8 audits**
+**7873 lines · 123 exports · 96 importers · 72 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -1125,7 +1125,7 @@
 - `src/services/coachApi.ts:6279`
 
 ### `seatPieceReferences` (re-export) — 40 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9385`
+- `src/components/Coach/CoachTeachPage.tsx:9382`
 - `src/services/coachFeatureService.ts:5423`
 - `src/services/coachFeatureService.ts:5512`
 - `src/services/coachFeatureService.ts:6558`
