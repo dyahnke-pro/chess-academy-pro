@@ -241,6 +241,9 @@ export const THINK_STEP: Record<ComputerName, ThinkAnswer> = {
   compensation: 'assess',
   pawnBreak: 'assess',
   desperadoAt: 'answer-danger',
+  harmlessPin: 'their-move-changed',
+  queenNet: 'calculate',
+  bothSaved: 'answer-danger',
   emptyCheckAt: 'is-my-move-safe',
 };
 

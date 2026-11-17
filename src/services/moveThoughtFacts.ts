@@ -731,6 +731,20 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     for (const f of readBoardAll('oppositeBishops', { fenBefore: i.fenBefore, san: i.san, student })) {
       facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'plan', weight: 50 });
     }
+    // DEFENCE, both seats (Danya's speedruns, 2026-11-17): a pin that will
+    // not hold, the queen's escapes counted, two hanging pieces one move saves.
+    for (const f of readBoardAll('harmlessPin', { fenBefore: i.fenBefore, san: i.san, student, line: i.reads?.after[0]?.moves ?? [] })) {
+      facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'unpin', weight: 56 });
+    }
+    for (const f of readBoardAll('queenNet', { fenBefore: i.fenBefore, san: i.san, student })) {
+      facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'tactic', weight: 62 });
+    }
+    {
+      const replies = (i.reads?.after ?? []).map((l) => ({ cp: l.evaluation, mate: l.mate ?? null, moves: l.moves }));
+      for (const f of readBoardAll('bothSaved', { fenBefore: i.fenBefore, san: i.san, student, replies })) {
+        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'rescue', weight: 64 });
+      }
+    }
     // THE PLAN'S NEXT STEPS and COMPENSATION (2026-11-12, the writers' "Bd3
     // and Qc2, both aimed at h7" and "a pawn down but slightly better"), off
     // the lesson's read after the move. A lesson shows its line: every move
