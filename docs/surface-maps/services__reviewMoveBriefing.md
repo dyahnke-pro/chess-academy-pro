@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**753 lines · 14 exports · 28 importers · 20 tests · 0 audits**
+**754 lines · 14 exports · 29 importers · 21 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **⏰ Standing notes** (CLAUDE.md:3243) — names `buildReviewMoveBriefing`
-- **The standard post-deploy ritual** (CLAUDE.md:6966) — names `Aspect`
+- **⏰ Standing notes** (CLAUDE.md:3263) — names `buildReviewMoveBriefing`
+- **The standard post-deploy ritual** (CLAUDE.md:6987) — names `Aspect`
 
 ## Who calls in
 
@@ -41,6 +41,7 @@
 - `src/test/captureSaidOnce.gate.test.ts`
 - `src/test/composerSaysOnce.test.ts`
 - `src/test/replayGame.ts`
+- `src/utils/hasRook.test.ts`
 
 ## Exports and every call site
 
@@ -51,15 +52,15 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `signedBand` (const) — 1 call site
-- `src/services/moveThoughtFacts.ts:757`
+- `src/services/moveThoughtFacts.ts:775`
 
 ### `evalReading` (function) — 4 call sites
 - `src/services/evalReading.test.ts:11`
 - `src/services/evalReading.test.ts:17`
 - `src/services/evalReading.test.ts:23`
-- `src/services/moveThoughtFacts.ts:754`
+- `src/services/moveThoughtFacts.ts:772`
 
-### `moveAspects` (function) — 12 call sites
+### `moveAspects` (function) — 13 call sites
 - `src/services/captureLeadsTo.test.ts:26`
 - `src/services/countedWhenTradeEnds.test.ts:38`
 - `src/services/countedWhenTradeEnds.test.ts:52`
@@ -67,11 +68,12 @@
 - `src/services/exchangeNotFinished.test.ts:25`
 - `src/services/exchangeNotFinished.test.ts:295`
 - `src/services/midExchangeStructure.test.ts:13`
-- `src/services/moveThoughtFacts.ts:225`
-- `src/services/moveThoughtFacts.ts:1086`
+- `src/services/moveThoughtFacts.ts:229`
+- `src/services/moveThoughtFacts.ts:1177`
 - `src/services/reviewMoveBriefing.test.ts:71`
 - `src/services/reviewMoveBriefing.test.ts:73`
 - `src/test/captureSaidOnce.gate.test.ts:190`
+- `src/utils/hasRook.test.ts:17`
 
 ### `buildReviewMoveBriefing` (function) — 23 call sites
 - `src/services/captureRun.test.ts:46`
@@ -99,19 +101,19 @@
 - `src/test/captureSaidOnce.gate.test.ts:186`
 
 ### `toClause` (function) — 3 call sites
-- `src/services/moveThoughtFacts.ts:352`
+- `src/services/moveThoughtFacts.ts:356`
 - `src/services/reviewMoveBriefing.test.ts:182`
 - `src/services/reviewMoveBriefing.test.ts:185`
 
 ### `joinReview` (function) — 3 call sites
-- `src/services/moveThoughtFacts.ts:352`
+- `src/services/moveThoughtFacts.ts:356`
 - `src/services/reviewMoveBriefing.test.ts:184`
 - `src/services/reviewMoveBriefing.test.ts:185`
 
 ### `LessonVoice` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `newLessonVoice` (function) — 45 call sites
+### `newLessonVoice` (function) — 46 call sites
 - `src/hooks/useTeachWalkthrough.ts:902`
 - `src/hooks/useTeachWalkthrough.ts:903`
 - `src/services/danyaBench.measure.test.ts:460`
@@ -147,7 +149,8 @@
 - `src/services/moveThoughtFacts.test.ts:419`
 - `src/services/moveThoughtFacts.test.ts:434`
 - `src/services/moveThoughtFacts.test.ts:447`
-- `src/services/moveThoughtFacts.ts:860`
+- `src/services/moveThoughtFacts.ts:878`
+- `src/services/moveThoughtFacts.ts:946`
 - `src/services/openingGenerator.ts:2058`
 - `src/services/openingGenerator.ts:2628`
 - `src/services/pieceRoute.test.ts:52`
@@ -156,7 +159,7 @@
 - `src/services/walkthroughLlmNarrator.ts:96`
 - `src/services/writtenVsComputed.measure.test.ts:43`
 - `src/test/composerSaysOnce.test.ts:15`
-- `src/test/replayGame.ts:134`
+- `src/test/replayGame.ts:139`
 
 ### `forkLessonVoice` (function) — 2 call sites
 - `src/services/lessonVoice.story.test.ts:44`
@@ -196,6 +199,7 @@
 - `src/services/writtenVsComputed.measure.test.ts`
 - `src/test/captureSaidOnce.gate.test.ts`
 - `src/test/composerSaysOnce.test.ts`
+- `src/utils/hasRook.test.ts`
 
 ## Audits that reach it
 

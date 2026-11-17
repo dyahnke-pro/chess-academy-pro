@@ -282,7 +282,8 @@ describe('the rule rides with the middlegame purpose, once (B1)', () => {
   it('the first outpost says why outposts matter', async () => {
     const { principleLine } = await import('./moveFundamentals');
     const r = principleLine(fen, 'Ne3', 'black', new Set(), 0, true);
-    expect(r?.text).toMatch(/e3 outpost.* — no pawn can chase it away, so they have to give up a piece to get rid of it/);
+    expect(r?.text).toMatch(/e3 outpost.* — they would have to give up a piece to get rid of it/);
+    expect(r?.text).not.toMatch(/no pawn can chase it away/);
     expect(r?.text).not.toMatch(/whole game/);
     expect(r?.id.split('|')).toContain('mg-rule:outpost');
   });

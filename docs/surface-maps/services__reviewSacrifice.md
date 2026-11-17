@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**204 lines · 3 exports · 8 importers · 2 tests · 0 audits**
+**210 lines · 3 exports · 9 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/services/coachFeatureService.ts`
+- `src/services/kingCentreFFile.test.ts`
 - `src/services/nextPlans.ts`
 - `src/services/planChoice.ts`
 - `src/services/planStopped.ts`
@@ -25,8 +26,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `sacrificeCompensation` (function) — 19 call sites
 - `src/data/patternRegistry.ts:133`
-- `src/services/coachFeatureService.ts:3142`
-- `src/services/reviewFullData.ts:1073`
+- `src/services/coachFeatureService.ts:3802`
+- `src/services/reviewFullData.ts:1218`
 - `src/services/reviewSacrifice.test.ts:14`
 - `src/services/reviewSacrifice.test.ts:18`
 - `src/services/reviewSacrifice.test.ts:22`
@@ -44,24 +45,25 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewSacrifice.test.ts:102`
 - `src/services/reviewWalk2065.test.ts:39`
 
-### `enemyKingStuckInCenter` (function) — 13 call sites
-- `src/services/coachFeatureService.ts:3436`
-- `src/services/coachFeatureService.ts:3462`
-- `src/services/coachFeatureService.ts:3486`
-- `src/services/nextPlans.ts:280`
-- `src/services/planChoice.ts:77`
-- `src/services/planStopped.ts:52`
-- `src/services/reviewConcepts.ts:220`
-- `src/services/reviewFullData.ts:967`
-- `src/services/reviewFullData.ts:1559`
-- `src/services/reviewFullData.ts:1685`
+### `enemyKingStuckInCenter` (function) — 14 call sites
+- `src/services/coachFeatureService.ts:4051`
+- `src/services/coachFeatureService.ts:4077`
+- `src/services/coachFeatureService.ts:4101`
+- `src/services/kingCentreFFile.test.ts:9`
+- `src/services/kingCentreFFile.test.ts:12`
+- `src/services/nextPlans.ts:356`
+- `src/services/planChoice.ts:81`
+- `src/services/planStopped.ts:61`
+- `src/services/reviewConcepts.ts:221`
+- `src/services/reviewFullData.ts:1095`
+- `src/services/reviewFullData.ts:1723`
 - `src/services/reviewSacrifice.test.ts:114`
 - `src/services/reviewSacrifice.test.ts:124`
 - `src/services/reviewSacrifice.test.ts:128`
 
 ### `describeSacBreaksKingShield` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:3173`
-- `src/services/reviewFullData.ts:1091`
+- `src/services/coachFeatureService.ts:3833`
+- `src/services/reviewFullData.ts:1241`
 - `src/services/reviewSacrifice.test.ts:61`
 - `src/services/reviewSacrifice.test.ts:66`
 - `src/services/reviewSacrifice.test.ts:78`
@@ -70,6 +72,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Tests
 
+- `src/services/kingCentreFFile.test.ts`
 - `src/services/reviewSacrifice.test.ts`
 - `src/services/reviewWalk2065.test.ts`
 

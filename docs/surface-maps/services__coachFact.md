@@ -4,15 +4,16 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**582 lines · 16 exports · 30 importers · 9 tests · 0 audits**
+**584 lines · 16 exports · 32 importers · 10 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
 - **❤️ THE HEART OF THE APP — the coach THINKS OUT LOUD FOR the student (David 2026-10-07: "THIS IS THE HEART AND SOUL OF THE APP! THIS IS THE BEHAVIOR THAT TEACHES. THIS IS WHAT ALL THE COMPUTERS ARE BUILT FOR! SO WE CAN THINK OUT LOUD FOR THE USER!")** (CLAUDE.md:31) — names `coachFact`
-- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1512) — names `coachFact`
-- **🔒🔒 THE WHY STANDARD — FOUR MEASURES, NOT ONE NUMBER (David 2026-10-14: "Do we need 90%?" → "I like both plans")** (CLAUDE.md:2809) — names `FACT_GROUP`
-- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5906) — names `HeldForm`
-- **The standard post-deploy ritual** (CLAUDE.md:6942) — names `coachFact`
+- **🔒🔒 ONE COACH, HOW TO THINK INCLUDED — every computer answers for every surface (David 2026-11-17: "Make sure how to think gets these computers. It should because we have a unified coach structure. That is a non negotiable rule.")** (CLAUDE.md:411) — names `COMPUTER_CATALOG`
+- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1555) — names `coachFact`
+- **🔒🔒 THE WHY STANDARD — FOUR MEASURES, NOT ONE NUMBER (David 2026-10-14: "Do we need 90%?" → "I like both plans")** (CLAUDE.md:2852) — names `FACT_GROUP`
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5949) — names `HeldForm`
+- **The standard post-deploy ritual** (CLAUDE.md:6986) — names `coachFact`
 
 ## Who calls in
 
@@ -43,6 +44,8 @@
 - `src/services/reviewFullData.ts`
 - `src/services/teachingFact.ts`
 - `src/services/teachingMoves.ts`
+- `src/services/thinkingComputers.gate.test.ts`
+- `src/services/thinkingComputers.ts`
 - `src/services/thoughtComposer.ts`
 - `src/test/doorFact.ts`
 - `src/test/learnDoorFixtures.ts`
@@ -73,59 +76,59 @@
 
 ### `stepOf` (function) — 17 call sites
 - `src/services/boardComputers.test.ts:78`
-- `src/services/coachFact.test.ts:79`
-- `src/services/coachFact.test.ts:80`
-- `src/services/coachFeatureService.ts:2681`
-- `src/services/coachFeatureService.ts:3267`
+- `src/services/coachFact.test.ts:81`
+- `src/services/coachFact.test.ts:82`
+- `src/services/coachFeatureService.ts:2691`
+- `src/services/coachFeatureService.ts:3296`
 - `src/services/learnTurnDoor.ts:337`
-- `src/services/learnTurnDoor.ts:1016`
-- `src/services/learnTurnDoor.ts:1073`
-- `src/services/learnTurnDoor.ts:1094`
-- `src/services/learnTurnDoor.ts:1098`
-- `src/services/learnTurnDoor.ts:1152`
-- `src/services/learnTurnDoor.ts:1178`
-- `src/services/learnTurnDoor.ts:1188`
-- `src/services/learnTurnDoor.ts:1192`
-- `src/services/learnTurnDoor.ts:1328`
-- `src/services/learnTurnDoor.ts:1352`
-- `src/services/learnTurnDoor.ts:1405`
+- `src/services/learnTurnDoor.ts:1023`
+- `src/services/learnTurnDoor.ts:1080`
+- `src/services/learnTurnDoor.ts:1101`
+- `src/services/learnTurnDoor.ts:1105`
+- `src/services/learnTurnDoor.ts:1159`
+- `src/services/learnTurnDoor.ts:1185`
+- `src/services/learnTurnDoor.ts:1195`
+- `src/services/learnTurnDoor.ts:1199`
+- `src/services/learnTurnDoor.ts:1335`
+- `src/services/learnTurnDoor.ts:1359`
+- `src/services/learnTurnDoor.ts:1412`
 
 ### `placeFact` (function) — 19 call sites
-- `src/services/boardComputers.ts:776`
-- `src/services/boardComputers.ts:1199`
+- `src/services/boardComputers.ts:788`
+- `src/services/boardComputers.ts:1222`
 - `src/services/learnTurnDoor.ts:755`
-- `src/services/moveThoughtFacts.ts:198`
-- `src/services/moveThoughtFacts.ts:546`
-- `src/services/moveThoughtFacts.ts:566`
-- `src/services/moveThoughtFacts.ts:635`
-- `src/services/moveThoughtFacts.ts:649`
-- `src/services/moveThoughtFacts.ts:1002`
-- `src/services/moveThoughtFacts.ts:1034`
-- `src/services/moveThoughtFacts.ts:1051`
+- `src/services/moveThoughtFacts.ts:206`
+- `src/services/moveThoughtFacts.ts:568`
+- `src/services/moveThoughtFacts.ts:588`
+- `src/services/moveThoughtFacts.ts:657`
+- `src/services/moveThoughtFacts.ts:671`
+- `src/services/moveThoughtFacts.ts:1098`
+- `src/services/moveThoughtFacts.ts:1130`
+- `src/services/moveThoughtFacts.ts:1147`
 - `src/services/openingStory.ts:419`
 - `src/services/positionFacts.ts:556`
 - `src/services/reviewFacet.ts:85`
 - `src/services/reviewFacet.ts:113`
 - `src/services/reviewFacet.ts:125`
 - `src/services/teachingFact.ts:91`
-- `src/services/thoughtComposer.ts:150`
+- `src/services/thoughtComposer.ts:159`
 - `src/test/doorFact.ts:22`
 
 ### `stakesOf` (function) — 19 call sites
-- `src/services/boardComputers.ts:777`
-- `src/services/boardComputers.ts:1199`
-- `src/services/coachFact.test.ts:105`
-- `src/services/coachFact.test.ts:111`
-- `src/services/coachFact.test.ts:112`
+- `src/services/boardComputers.ts:789`
+- `src/services/boardComputers.ts:1222`
+- `src/services/coachFact.test.ts:107`
+- `src/services/coachFact.test.ts:113`
+- `src/services/coachFact.test.ts:114`
 - `src/services/learnTurnDoor.ts:756`
-- `src/services/moveThoughtFacts.ts:199`
-- `src/services/moveThoughtFacts.ts:546`
-- `src/services/moveThoughtFacts.ts:567`
-- `src/services/moveThoughtFacts.ts:636`
-- `src/services/moveThoughtFacts.ts:650`
-- `src/services/moveThoughtFacts.ts:1003`
-- `src/services/moveThoughtFacts.ts:1035`
-- `src/services/moveThoughtFacts.ts:1052`
+- `src/services/moveThoughtFacts.ts:207`
+- `src/services/moveThoughtFacts.ts:568`
+- `src/services/moveThoughtFacts.ts:589`
+- `src/services/moveThoughtFacts.ts:658`
+- `src/services/moveThoughtFacts.ts:672`
+- `src/services/moveThoughtFacts.ts:1099`
+- `src/services/moveThoughtFacts.ts:1131`
+- `src/services/moveThoughtFacts.ts:1148`
 - `src/services/openingStory.ts:420`
 - `src/services/positionFacts.ts:564`
 - `src/services/reviewFacet.ts:96`
@@ -161,6 +164,7 @@
 - `src/services/oneGroupTable.gate.test.ts`
 - `src/services/oppositeBishops.test.ts`
 - `src/services/pawnBreak.test.ts`
+- `src/services/thinkingComputers.gate.test.ts`
 
 ## Audits that reach it
 

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**147 lines · 3 exports · 2 importers · 1 tests · 0 audits**
+**181 lines · 3 exports · 2 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,22 +17,23 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `threatPurpose` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:5646`
+### `threatPurpose` (function) — 5 call sites
+- `src/services/coachFeatureService.ts:5724`
 - `src/services/threatPurpose.test.ts:26`
 - `src/services/threatPurpose.test.ts:31`
 - `src/services/threatPurpose.test.ts:37`
+- `src/services/threatPurpose.test.ts:109`
 
 ### `lineBuilds` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:5647`
+- `src/services/coachFeatureService.ts:5725`
 - `src/services/threatPurpose.test.ts:88`
 - `src/services/threatPurpose.test.ts:91`
 - `src/services/threatPurpose.test.ts:95`
 - `src/services/threatPurpose.test.ts:98`
 
 ### `lineRestatesClaim` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:5527`
-- `src/services/coachFeatureService.ts:5613`
+- `src/services/coachFeatureService.ts:5605`
+- `src/services/coachFeatureService.ts:5691`
 - `src/services/threatPurpose.test.ts:50`
 - `src/services/threatPurpose.test.ts:51`
 - `src/services/threatPurpose.test.ts:55`
@@ -43,6 +44,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Tests
 
+- `src/services/reviewDeepIdeaStem.test.ts`
 - `src/services/threatPurpose.test.ts`
 
 ## Audits that reach it

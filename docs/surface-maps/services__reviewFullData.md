@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1988 lines · 12 exports · 23 importers · 30 tests · 0 audits**
+**1995 lines · 12 exports · 23 importers · 30 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1401) — names `reviewFullData`
+- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1444) — names `reviewFullData`
 
 ## Who calls in
 
@@ -39,10 +39,10 @@
 ## Exports and every call site
 
 ### `positionalVerdictLine` (function) — 1 call site
-- `src/services/coachFeatureService.ts:2973`
+- `src/services/coachFeatureService.ts:3002`
 
 ### `prematureBreakWhy` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1180`
+- `src/services/coachFeatureService.ts:1181`
 - `src/services/prematureBreak.test.ts:15`
 - `src/services/prematureBreak.test.ts:25`
 - `src/services/prematureBreak.test.ts:30`
@@ -56,11 +56,11 @@
 ### `NO_TEACHING_CONTEXT` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `computeMoveFacets` (function) — 59 call sites
+### `computeMoveFacets` (function) — 60 call sites
 - `src/services/batch2Wiring.test.ts:55`
 - `src/services/boardDelta.test.ts:15`
 - `src/services/boardDelta.test.ts:68`
-- `src/services/coachFeatureService.ts:2283`
+- `src/services/coachFeatureService.ts:2285`
 - `src/services/danyaBench.measure.test.ts:428`
 - `src/services/exchangeIdeas.test.ts:236`
 - `src/services/forkTrick.test.ts:62`
@@ -98,10 +98,11 @@
 - `src/services/reviewFullData.test.ts:547`
 - `src/services/reviewFullData.test.ts:562`
 - `src/services/reviewFullData.test.ts:586`
-- `src/services/reviewFullData.test.ts:609`
+- `src/services/reviewFullData.test.ts:611`
 - `src/services/reviewFullData.test.ts:632`
-- `src/services/reviewFullData.test.ts:709`
-- `src/services/reviewFullData.test.ts:734`
+- `src/services/reviewFullData.test.ts:648`
+- `src/services/reviewFullData.test.ts:725`
+- `src/services/reviewFullData.test.ts:750`
 - `src/services/reviewOneLoosePiece.test.ts:14`
 - `src/services/reviewOwedComputers.test.ts:15`
 - `src/services/reviewOwedComputers.test.ts:72`
@@ -141,12 +142,14 @@
 ### `INFLUENCE_LOOSE_TAIL_RE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `describeMoveInfluence` (function) — 7 call sites
-- `src/services/reviewFullData.test.ts:656`
-- `src/services/reviewFullData.test.ts:661`
-- `src/services/reviewFullData.test.ts:673`
-- `src/services/reviewFullData.test.ts:684`
-- `src/services/reviewFullData.test.ts:696`
+### `describeMoveInfluence` (function) — 9 call sites
+- `src/services/reviewFullData.test.ts:672`
+- `src/services/reviewFullData.test.ts:677`
+- `src/services/reviewFullData.test.ts:689`
+- `src/services/reviewFullData.test.ts:700`
+- `src/services/reviewFullData.test.ts:712`
+- `src/services/reviewFullData.test.ts:771`
+- `src/services/reviewFullData.test.ts:772`
 - `src/services/reviewNarrationFidelity.test.ts:48`
 - `src/services/reviewNarrationFidelity.test.ts:60`
 

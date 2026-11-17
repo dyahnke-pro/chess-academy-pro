@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **The tools are COMPUTERS** (CLAUDE.md:387) — names `detectTactics`
-- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5715) — names `detectTactics`
+- **The tools are COMPUTERS** (CLAUDE.md:392) — names `detectTactics`
+- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5766) — names `detectTactics`
 
 ## Who calls in
 
@@ -72,8 +72,8 @@
 - `src/services/tacticLineRotation.test.ts:22`
 
 ### `tacticDescription` (function) — 5 call sites
-- `src/services/lookaheadPlan.ts:136`
-- `src/services/reviewFullData.ts:954`
+- `src/services/lookaheadPlan.ts:137`
+- `src/services/reviewFullData.ts:967`
 - `src/services/tacticLineRotation.test.ts:31`
 - `src/services/tacticLineRotation.test.ts:34`
 - `src/services/tacticLineRotation.test.ts:39`
@@ -84,29 +84,29 @@
 - `src/missions/patterns/agreement.test.ts:65`
 - `src/services/boardConcepts.ts:296`
 - `src/services/computerAccuracy.audit.test.ts:117`
-- `src/services/conceptEngine.ts:479`
-- `src/services/conceptEngine.ts:720`
+- `src/services/conceptEngine.ts:519`
+- `src/services/conceptEngine.ts:760`
 - `src/services/danyaBehaviors.ts:491`
 - `src/services/discussionPractice.ts:60`
 - `src/services/discussionPractice.ts:105`
 - `src/services/discussionPractice.ts:148`
-- `src/services/learnRecordTerms.ts:169`
+- `src/services/learnRecordTerms.ts:178`
 - `src/services/learnWalkOct3c.test.ts:91`
 - `src/services/learnWalkOct3c.test.ts:97`
 - `src/services/liveNoteTruth.test.ts:59`
 - `src/services/liveTacticsContext.ts:362`
 - `src/services/liveTacticsContext.ts:510`
-- `src/services/lookaheadPlan.ts:1447`
-- `src/services/lookaheadPlan.ts:1510`
+- `src/services/lookaheadPlan.ts:1472`
+- `src/services/lookaheadPlan.ts:1535`
 - `src/services/looseClaim.test.ts:18`
-- `src/services/misconceptionClassifier.ts:107`
-- `src/services/misconceptionClassifier.ts:140`
-- `src/services/misconceptionClassifier.ts:307`
+- `src/services/misconceptionClassifier.ts:109`
+- `src/services/misconceptionClassifier.ts:142`
+- `src/services/misconceptionClassifier.ts:310`
 - `src/services/mistakeNarration.ts:396`
 - `src/services/moveInsight.ts:117`
 - `src/services/moveInsight.ts:1065`
 - `src/services/oneSkewerRule.test.ts:18`
-- `src/services/openingGenerator.ts:3581`
+- `src/services/openingGenerator.ts:3594`
 - `src/services/openingSlip.ts:122`
 - `src/services/pinBreak.ts:175`
 - `src/services/pinGeometry.test.ts:72`
@@ -124,20 +124,20 @@
 - `src/services/playCommentary.ts:662`
 - `src/services/playedConcept.ts:59`
 - `src/services/playedConcept.ts:66`
-- `src/services/positionFacts.ts:1388`
-- `src/services/pvPlayback.ts:394`
-- `src/services/pvPlayback.ts:414`
+- `src/services/positionFacts.ts:1397`
+- `src/services/pvPlayback.ts:425`
+- `src/services/pvPlayback.ts:445`
 - `src/services/relationClaimCost.report.test.ts:52`
 - `src/services/replayFence.alekhine1500.test.ts:36`
 - `src/services/replayFence.alekhine1500.test.ts:88`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:61`
 - `src/services/reviewCorpusNote.test.ts:61`
 - `src/services/reviewDepth.eval.measure.test.ts:258`
-- `src/services/reviewFullData.ts:871`
-- `src/services/reviewFullData.ts:967`
-- `src/services/reviewFullData.ts:1637`
-- `src/services/reviewMoveBriefing.ts:111`
-- `src/services/reviewMoveBriefing.ts:112`
+- `src/services/reviewFullData.ts:884`
+- `src/services/reviewFullData.ts:980`
+- `src/services/reviewFullData.ts:1673`
+- `src/services/reviewMoveBriefing.ts:137`
+- `src/services/reviewMoveBriefing.ts:138`
 - `src/services/reviewNarrationFidelity.test.ts:227`
 - `src/services/reviewOpponentCommentary.ts:74`
 - `src/services/reviewWalk1500.test.ts:23`

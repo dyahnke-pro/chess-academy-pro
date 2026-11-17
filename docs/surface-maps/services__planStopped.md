@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**138 lines · 2 exports · 2 importers · 1 tests · 0 audits**
+**148 lines · 2 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,16 +17,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `planStoppedProof` (function) — 2 call sites
+### `planStoppedProof` (function) — 3 call sites
 - `src/services/planStopped.test.ts:14`
-- `src/services/planThread.ts:179`
+- `src/services/planStopped.test.ts:74`
+- `src/services/planThread.ts:183`
 
 ### `planStoppedLine` (function) — 5 call sites
 - `src/services/planStopped.test.ts:50`
 - `src/services/planStopped.test.ts:53`
 - `src/services/planStopped.test.ts:61`
 - `src/services/planStopped.test.ts:65`
-- `src/services/planThread.ts:204`
+- `src/services/planThread.ts:208`
 
 ## Tests
 

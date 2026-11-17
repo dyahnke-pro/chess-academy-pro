@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**377 lines · 9 exports · 8 importers · 7 tests · 0 audits**
+**383 lines · 9 exports · 8 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -23,7 +23,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Exports and every call site
 
-### `methodRead` (function) — 17 call sites
+### `methodRead` (function) — 19 call sites
 - `src/services/boardPlanFacts.ts:149`
 - `src/services/deferredAnswers.realGame.test.ts:12`
 - `src/services/deferredAnswers.realGame.test.ts:26`
@@ -39,19 +39,21 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planChoice.test.ts:138`
 - `src/services/planChoice.test.ts:162`
 - `src/services/planChoice.test.ts:174`
-- `src/services/planThread.ts:252`
+- `src/services/planChoice.test.ts:193`
+- `src/services/planChoice.test.ts:196`
+- `src/services/planThread.ts:256`
 - `src/test/thinkMarkClosed.gate.test.ts:61`
 
 ### `planWorth` (function) — 3 call sites
 - `src/services/planChoice.test.ts:181`
-- `src/services/planThread.ts:263`
-- `src/services/planThread.ts:264`
+- `src/services/planThread.ts:267`
+- `src/services/planThread.ts:268`
 
 ### `whyThisPlan` (function) — 4 call sites
 - `src/services/boardPlanFacts.ts:153`
 - `src/services/planChoice.test.ts:20`
 - `src/services/planChoice.test.ts:26`
-- `src/services/planThread.ts:256`
+- `src/services/planThread.ts:260`
 
 ### `RouteArrow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -64,7 +66,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `methodPlanSentence` (function) — 2 call sites
 - `src/services/boardPlanFacts.ts:150`
-- `src/services/planThread.ts:253`
+- `src/services/planThread.ts:257`
 
 ### `methodLine` (function) — 9 call sites
 - `src/services/deferredAnswers.realGame.test.ts:12`

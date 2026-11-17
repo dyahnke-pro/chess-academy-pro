@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6757 lines · 34 exports · 74 importers · 89 tests · 4 audits**
+**6782 lines · 35 exports · 75 importers · 90 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -52,6 +52,7 @@
 - `src/services/oneLinePerPly.test.ts`
 - `src/services/opponentBuildMoot.test.ts`
 - `src/services/proofBacklog.report.test.ts`
+- `src/services/replyAnswersAttack.test.ts`
 - `src/services/reviewAuditFixes.test.ts`
 - `src/services/reviewBetterLineWhy.test.ts`
 - `src/services/reviewBuildYields.test.ts`
@@ -346,8 +347,8 @@
 ### `pendingRecapture` (function) — 14 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8875`
 - `src/components/Coach/CoachTeachPage.tsx:8978`
-- `src/components/Coach/CoachTeachPage.tsx:11946`
-- `src/components/Coach/CoachTeachPage.tsx:12348`
+- `src/components/Coach/CoachTeachPage.tsx:11948`
+- `src/components/Coach/CoachTeachPage.tsx:12350`
 - `src/services/coachFeatureService.test.ts:912`
 - `src/services/coachFeatureService.test.ts:913`
 - `src/services/phaseTransitionDetector.test.ts:575`
@@ -408,6 +409,11 @@
 - `src/services/oneLinePerPly.test.ts:36`
 - `src/services/oneLinePerPly.test.ts:38`
 - `src/services/oneLinePerPly.test.ts:39`
+
+### `replyAnswersAttack` (function) — 3 call sites
+- `src/services/replyAnswersAttack.test.ts:11`
+- `src/services/replyAnswersAttack.test.ts:14`
+- `src/services/replyAnswersAttack.test.ts:17`
 
 ### `advantageWasMissed` (re-export) — 6 call sites
 - `src/services/advantageWasMissed.test.ts:8`
@@ -472,6 +478,7 @@
 - `src/services/planArc.test.ts`
 - `src/services/proofBacklog.report.test.ts`
 - `src/services/recapSeat.test.ts`
+- `src/services/replyAnswersAttack.test.ts`
 - `src/services/reviewAuditFixes.test.ts`
 - `src/services/reviewBetterLineWhy.test.ts`
 - `src/services/reviewBuildYields.test.ts`
