@@ -228,3 +228,15 @@ describe('a stopped capture names what it takes once', () => {
     expect(text).not.toMatch(/which would take/);
   });
 });
+
+// Danya Review tapes: "You played c3 first, so that h5 comes next" — a pawn
+// move the played move neither guards nor unblocks is not its doing.
+describe('a prepared pawn move is the move\'s own doing', () => {
+  const FEN = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3';
+  const l = (u: string, cp: number): AnalysisLine => ({ rank: 1, evaluation: cp, moves: u.split(' '), mate: null });
+  const LINE = { ...DEFAULT_INTENT, prepare: 'line' as const };
+  it('c3 does not "prepare h5" on the other wing', () => {
+    const out = moveIntent(FEN, 'c3', { before: [l('c2c3 g8f6', 40)], after: [l('g8f6 h2h4 f6g4 h4h5', 40)], passBefore: [], passAfter: [] }, 'student', LINE);
+    expect(out?.prepares?.san ?? '').not.toBe('h5');
+  });
+});

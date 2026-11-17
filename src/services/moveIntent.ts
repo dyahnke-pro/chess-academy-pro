@@ -515,7 +515,21 @@ export function moveIntent(
   // — now …g6 doesn't work" never said …g6 was hitting the f5-knight): read
   // on the board before the move, the mover passing.
   const threatDid = prevents ? whatTheStopDid(fenBefore, prevents.uci, opp) : null;
-  const text = phrase(playedSan, prevents, prepares, seat, mover, fenAfter, prepares ? whatItDoes(fenAfter, prepares.uci, mover) : null, why, threatDid, !!opts.holdPrepared, !!opts.holdPlayed);
+  // A PREPARED PAWN MOVE WITH NO POINT IS THIS MOVE'S DOING ONLY WHEN THE
+  // MOVE GUARDS ITS SQUARE OR CLEARED ITS ROAD ("c3 prepares d4"): Danya
+  // Review tapes said "You played c3 first, so that h5 comes next" (2 games).
+  const playedFrom = playedUci.slice(0, 2);
+  if (prepares && /^[a-h]/.test(prepares.san) && !whatItDoes(fenAfter, prepares.uci, mover)) {
+    let supports = false;
+    try { supports = new Chess(fenAfter).attackers(prepares.uci.slice(2, 4) as Square, mover).includes(playedUci.slice(2, 4) as Square); } catch { supports = false; }
+    if (!supports && !pathOf(prepares.uci).includes(playedFrom)) prepares = null;
+  }
+  // …AND IT "FREES" A PIECE ONLY WHEN IT STOOD IN THAT PIECE'S ROAD: "You
+  // played Nc3 first, to free your dark-squared bishop for Bf4" with the c1–f4
+  // road already open (Danya NnQm). Otherwise the prepared move just comes.
+  const done = prepares ? whatItDoes(fenAfter, prepares.uci, mover) : null;
+  const does = done?.develops && prepares && !pathOf(prepares.uci).includes(playedFrom) ? { ...done, develops: undefined } : done;
+  const text = phrase(playedSan, prevents, prepares, seat, mover, fenAfter, does, why, threatDid, !!opts.holdPrepared, !!opts.holdPlayed);
   // Nothing worth saying (a held move with no point): no intent at all.
   if (!text) return null;
   return { prevents, prepares, text, squares, about: seat };
