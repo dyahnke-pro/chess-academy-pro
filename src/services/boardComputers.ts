@@ -1571,6 +1571,8 @@ export const BOARD_COMPUTERS = {
       learn: S4_LEARN_OWED,
       tactics: TACTICS_NA,
       weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
+    },
+  },
   minorMatchup: {
     // The minors' matchup (David 2026-11-17): "you trade into a good knight
     // against their bad bishop", both seats, on the move that makes it.
@@ -1589,6 +1591,8 @@ export const BOARD_COMPUTERS = {
       learn: { not: 'owed — not in the Learn turn door yet (CoachTeachPage reads none of its lanes); the composer and Review say it' },
       tactics: { not: 'a puzzle poses one tactic; the minors\' matchup is the game\'s structure' },
       weaknesses: { not: 'a reading of the board said once — no question of the student\'s posed' },
+    },
+  },
   flexibleMove: {
     // The option principle (Adams 1939, Berliner 1999): of moves as good as
     // each other, the one that keeps the most important moves open — his

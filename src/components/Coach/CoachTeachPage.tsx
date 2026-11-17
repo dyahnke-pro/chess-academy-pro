@@ -75,7 +75,7 @@ import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { cheaperAttackerHit, gambitPoint, kingPawnUnderFire, type CheaperHit, mistakeTurnLine, NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, namesPlayableStudentMove, studentMovesInLine, type NamesStudentMove } from '../../services/learnBoardTeaching';
 import { habitSaidKey, learnMoveReason, learnReasonDue, learnReplyWait, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, promiseEvent, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, learnHangingWarning, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, tacticStakesFor, refutedAlternativeClaims, type TeachingFact, type ThreatProducer } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, slipAnswerText, gainedBishopPair, BISHOP_PAIR_POINT, BISHOP_PAIR_CLAIMS } from '../../services/playCommentary';
-import { captureRunAfterMove, captureRunOfPgn } from '../../services/captureRun';
+import { captureRunAfterMove, captureRunOfPgn, NO_PREV_CAPTURE } from '../../services/captureRun';
 import { moveThoughtFacts } from '../../services/moveThoughtFacts';
 import type { IntentReads } from '../../services/moveIntent';
 import { sharedFactsForLearn } from '../../services/learnSharedFacts';
@@ -13482,14 +13482,14 @@ export function CoachTeachPage({ mode }: {
                     const reads: IntentReads = sharedReads ?? { before: preStudentRead.topLines, after: mid.topLines, passBefore: [], passAfter: [] };
                     const facts = moveThoughtFacts({
                       fenBefore, san: move.san, moverIsStudent: true, plainThreatsSeen: false, tense: 'past', theory: true, story: true,
-                      prev: captureRunOfPgn(move.pgn, move.history.length - 1), line: null, history: move.history.slice(0, -1), theirLast,
+                      prev: captureRunOfPgn(move.pgn, move.history.length - 1) ?? NO_PREV_CAPTURE, line: null, history: move.history.slice(0, -1), theirLast,
                       phrases: null, reads, costCp: studentCpLoss,
                     });
                     // And THEIR reply, the same set from the other seat (both seats).
                     const afterReply = samePosition(nextBoardFen ?? '', fenAfterReply) ? await nextBoardRead : null;
                     const replyFacts = reply && afterReply?.topLines?.length ? moveThoughtFacts({
                       fenBefore: move.fen, san: reply, moverIsStudent: false, plainThreatsSeen: false, tense: 'past', theory: true, story: true,
-                      prev: captureRunOfPgn(move.pgn, move.history.length), line: null, history: move.history, theirLast: { fenBefore, san: move.san },
+                      prev: captureRunOfPgn(move.pgn, move.history.length) ?? NO_PREV_CAPTURE, line: null, history: move.history, theirLast: { fenBefore, san: move.san },
                       phrases: null, reads: { before: mid.topLines, after: afterReply.topLines, passBefore: [], passAfter: [] }, costCp: null,
                     }) : [];
                     if (liveFenRef.current === fenAfterReply) {
