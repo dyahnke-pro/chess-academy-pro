@@ -13,6 +13,8 @@ import { developedMinorCount } from './development';
 import { quietBalance } from './material';
 import { materialBalance } from './pieceValues';
 import { evalBand, evalBandWords } from './evalBand';
+import { initiativeRead } from './initiativeRead';
+import { boardEdgeWords } from '../utils/countWords';
 
 export interface Assessment {
   /** Whose compensation it is, from the student's seat. */
@@ -35,7 +37,8 @@ const NUM = ['no', 'one', 'two', 'three', 'four'];
 /** The assessment after a move, on `fenAfter`, with the engine's value of it
  *  from the student's seat (cp) and the engine's line from there (UCI, the
  *  side to move first). Null unless one side is down material and still level
- *  or better, with a board reason for it — and null while a trade is still
+ *  or better, with a board reason for it (`compensationReasons`, or the
+ *  initiative in the line, `initiativeRead`) — and null while a trade is still
  *  going: when the line's next move is a capture or a check, the material on
  *  the board is not the material the position settles on (Bxg5 said "two
  *  pawns down" with …Qxg5 Qxg5 to come). No line, no read. */
@@ -61,7 +64,16 @@ export function compensation(fenAfter: string, student: Color, studentCp: number
   if (mine <= -1 && studentCp >= -50) { comp = student; down = Math.round(-mine); }
   else if (mine >= 1 && studentCp <= 50) { comp = student === 'w' ? 'b' : 'w'; down = Math.round(mine); }
   if (!comp || down < 1) return null;
+  const other: Color = comp === 'w' ? 'b' : 'w';
   const { reasons, squares } = compensationReasons(board, comp, student);
+  // THE INITIATIVE PAYS TOO (WO-DANYA-READS-01 #2, his "White's initiative
+  // rages on" two pawns down): the compensated side making the threats in the
+  // engine's own line.
+  const ini = initiativeRead(fenAfter, [{ moves: line }]);
+  if (ini && ini.side === comp) {
+    reasons.push(`${comp === student ? 'you have' : 'they have'} the initiative`);
+    for (const sq of ini.squares) if (!squares.includes(sq)) squares.push(sq);
+  }
   if (!reasons.length) return null;
   const compCp = comp === student ? studentCp : -studentCp;
   const band = evalBandWords(evalBand(compCp), compCp >= 0 ? 'better' : 'worse');
@@ -69,7 +81,14 @@ export function compensation(fenAfter: string, student: Color, studentCp: number
   const pawns = down === 1 ? 'a pawn' : `${NUM[down] ?? down} pawns`;
   const bandWords = band === 'level' ? 'it is about level' : `${who === 'you' ? "you're" : "they're"} ${band}`;
   const why = reasons.length === 1 ? reasons[0] : `${reasons.slice(0, -1).join(', ')} and ${reasons.at(-1)}`;
-  const text = `${who === 'you' ? "You're" : "They're"} ${pawns} down, but ${bandWords}: ${why}.`;
+  // A deficit the board shows as a mix of pieces is named by its pieces, from
+  // the side that has more ("They're up material: a piece for a pawn") —
+  // "two pawns down" for a knight given for a pawn counted points, not pawns.
+  const words = boardEdgeWords(fenAfter, other, down);
+  const head = words.startsWith('material:')
+    ? `${who === 'you' ? "They're" : "You're"} up ${words}`
+    : `${who === 'you' ? "You're" : "They're"} ${pawns} down`;
+  const text = `${head}, but ${bandWords}: ${why}.`;
   return { who, down, band, reasons, squares, text };
 }
 
