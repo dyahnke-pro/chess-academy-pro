@@ -20,7 +20,7 @@
 // Every break is the one break reader's (`isPawnBreak` + `pawnBreak`): a push
 // that strikes nothing or opens nothing is a pawn move, not a break.
 // PURE: chess.js and the board readers; the engine's line is an input.
-import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
+import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'chess.js';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { isPawnBreak, pawnBreak } from './pawnBreak';
 import { legalSeeGainFor } from './positionReadingService';
@@ -54,7 +54,7 @@ export interface BreakPrep {
  */
 export function breakPrep(fenBefore: string, san: string, lineAfter: readonly string[]): BreakPrep | null {
   let after: Chess;
-  let mv;
+  let mv: Move;
   try { after = new Chess(fenBefore); mv = after.move(san); } catch { return null; }
   if (mv.captured || after.inCheck()) return null;
   // A move that is a break itself is the break reader's to say.
@@ -67,7 +67,7 @@ export function breakPrep(fenBefore: string, san: string, lineAfter: readonly st
   for (let k = 0; k < lineAfter.length && k < 4; k += 1) {
     const u = lineAfter[k];
     const fenHere = walk.fen();
-    let m;
+    let m: Move;
     try { m = walk.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { return null; }
     if (m.color !== me) {
       // A capture in between changes the board the break is played on.
@@ -119,7 +119,7 @@ export function breakPrep(fenBefore: string, san: string, lineAfter: readonly st
     function mk(reason: ReadyReason, file: string | null): BreakPrep {
       return {
         prep: { san: mv.san, from: mv.from, to: mv.to, piece: mv.piece },
-        brk: { san: m!.san, from: brkFrom, to: brkTo },
+        brk: { san: m.san, from: brkFrom, to: brkTo },
         between: mine,
         reason, file,
         squares: [...new Set([mv.from, mv.to, brkFrom, brkTo])],
@@ -191,7 +191,7 @@ export interface BreakStop {
  */
 export function breakStopped(fenBefore: string, san: string): BreakStop | null {
   let after: Chess;
-  let mv;
+  let mv: Move;
   try { after = new Chess(fenBefore); mv = after.move(san); } catch { return null; }
   if (after.inCheck()) return null;
   const me: Color = mv.color;
