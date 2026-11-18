@@ -27,6 +27,7 @@
 //
 // G0 throughout: every branch is arithmetic or chess.js geometry over an engine
 // line. Nothing here asks a model anything.
+import { isTheoryLine } from './bookDeparture';
 import { mateStakes, costStakes, type FactStakes } from './factStakes';
 import { Chess } from 'chess.js';
 import { findConcession, findStudentDrawback } from './concessionBeat';
@@ -526,6 +527,12 @@ export function moverQuality(args: {
 /** Whether the student's slip on this move is SPOKEN in Learn: a mistake or a
  *  blunder always is; an inaccuracy only where their own record earns it
  *  (`inaccuracyVoice` — this phase and this skill first). */
+/** The last move of `historySans` is the one that left the opening book —
+ *  read by the ONE theory reader Learn uses for "in book" (`isTheoryLine`). */
+function leftTheBook(historySans: readonly string[]): boolean {
+  return historySans.length > 0 && !isTheoryLine(historySans) && isTheoryLine(historySans.slice(0, -1));
+}
+
 export function slipSpoken(args: Parameters<typeof moverQuality>[0] & {
   fenBefore: string; playedSan: string; bestSan: string | null; historySans: readonly string[];
   /** REQUIRED — the student's rating: above 2000 an inaccuracy is an error
@@ -535,6 +542,12 @@ export function slipSpoken(args: Parameters<typeof moverQuality>[0] & {
 }): boolean {
   if (moverQuality(args) !== 'inaccuracy') return true;
   if (learnErrorBarCp(args.rating) <= INACCURACY_CP) return true;
+  // AN INACCURACY THAT LEAVES THE BOOK IS SAID AT EVERY RATING (David
+  // 2026-11-18: "I want learn to call out opening theory inaccuracies and
+  // explaining why a move was inaccurate"). The move that leaves theory at a
+  // cost is the turn the opening's lesson is about: the error computer says
+  // why it is inaccurate and the book move says what theory plays instead.
+  if (leftTheBook(args.historySans)) return true;
   return inaccuracySpeaks({ fenBefore: args.fenBefore, playedSan: args.playedSan, bestSan: args.bestSan, historySans: args.historySans, ply: args.historySans.length - 1 });
 }
 

@@ -74,3 +74,4 @@ describe('the door holds for a verdict only when the grade says one', () => {
     expect(late.pkg.spoken.startsWith('Bishop to b3 was a mistake')).toBe(true);
   });
 });
+
