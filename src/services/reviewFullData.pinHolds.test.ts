@@ -22,7 +22,7 @@ describe('the review pin facet carries its hold', () => {
       evaluation: 40, preMoveEval: 35, costCp: null, heardVerdict: null,
       classification: 'book', bestMoveSan: null,
       prevCap: { square: null, capturedValue: 0, net: 0 },
-      allSans: sans, forcedRunStartPly: null, playedLineEarlierUci: null, playedLineUci: [], bestLineUci: [], secondReads: NO_SECOND_READ,
+      allSans: sans, forcedRunStartPly: null, forcedRunFact: null, playedLineEarlierUci: null, playedLineUci: [], bestLineUci: [], secondReads: NO_SECOND_READ,
       replyBestSan: null, replyEvaluation: null,
     }));
     const pin = facets.find((f) => f.startsWith('[tactic]') && /pin/i.test(f));
@@ -49,7 +49,7 @@ describe('the review pin facet carries its hold', () => {
       evaluation: 40, preMoveEval: 35, costCp: null, heardVerdict: null,
       classification: 'book', bestMoveSan: null,
       prevCap: { square: null, capturedValue: 0, net: 0 },
-      allSans: sans, forcedRunStartPly: null, playedLineEarlierUci: null, playedLineUci: [], bestLineUci: [], secondReads: NO_SECOND_READ,
+      allSans: sans, forcedRunStartPly: null, forcedRunFact: null, playedLineEarlierUci: null, playedLineUci: [], bestLineUci: [], secondReads: NO_SECOND_READ,
       replyBestSan: null, replyEvaluation: null,
     })).find((f) => f.startsWith('[tactic]') && /pin/i.test(f));
     const bySaid = [0, 1, 2, 3].map((n) => pinAt(6, n));

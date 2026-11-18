@@ -75,7 +75,7 @@ describe('Review and Learn speak the one producer', () => {
       moverColor: 'black', playerColor: 'black', studentColorWB: 'b',
       evaluation: -300, preMoveEval: -300, costCp: null, heardVerdict: null, classification: 'good', bestMoveSan: null,
       prevCap: { square: null, capturedValue: 0, net: 0 }, allSans: [],
-      forcedRunStartPly: null, playedLineEarlierUci: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
+      forcedRunStartPly: null, forcedRunFact: null, playedLineEarlierUci: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
     }));
     const loose = facets.filter((f) => f.startsWith('[loose]')).join(' ');
     expect(loose).toContain(hangingLine({ fen: KC7_AFTER, squares: ['d1'], viewer: 'b', lostGuard: false, still: false })!);

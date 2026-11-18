@@ -72,3 +72,24 @@ describe('explainMatingSacMechanism (David 2026-07-20 — the WHY behind the sac
     expect(clause).toMatch(/mate/i);
   });
 });
+
+describe('the forced run in the one basket (unification)', () => {
+  it('the registry gives it on the move that starts it, from the mating side\'s seat, and only there', async () => {
+    const { readBoard } = await import('./boardComputers');
+    const { Chess } = await import('chess.js');
+    const fenAt = (n: number): string => { const c = new Chess(); for (const m of OPERA_SANS.slice(0, n)) c.move(m); return c.fen(); };
+    const at = (n: number, student: 'w' | 'b') => readBoard('forcedRun', { fenBefore: fenAt(n), san: OPERA_SANS[n], student, history: OPERA_SANS.slice(0, n), line: OPERA_SANS.slice(n + 1), evalsAfter: null });
+    // With no engine scores a reply is proven forced only when it is the only
+    // legal move, so the run is proven from Qb8+.
+    const start = OPERA_SANS.indexOf('Qb8+');
+    expect(at(start, 'w')?.seat).toBe('student');
+    expect(at(start, 'b')?.seat).toBe('opponent');
+    expect(at(start, 'w')?.text).toMatch(/forced/);
+    expect(at(start - 2, 'w')).toBeNull();
+    expect(at(start + 1, 'w')).toBeNull();
+  }, 60_000);
+  it('no line ahead, no forced run', async () => {
+    const { readBoard } = await import('./boardComputers');
+    expect(readBoard('forcedRun', { fenBefore: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', san: 'e4', student: 'w', history: [], line: null, evalsAfter: null })).toBeNull();
+  }, 60_000);
+});

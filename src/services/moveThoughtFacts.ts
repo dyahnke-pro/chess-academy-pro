@@ -61,6 +61,9 @@ import type { LearnLane } from './learnTurnDoor';
 import { computeMustDefend } from './threatOut';
 import { moveOrder } from './moveOrder';
 import { readBoardAll, readKey } from './boardComputers';
+import { pvLineFromUci } from './pvPlayback';
+/** A line decisive for its mover: two and a half pawns or mate (Review's deep-threat floor). */
+const DECISIVE_LINE_CP = 250;
 import { detectTactics } from './tacticsDetector';
 import { thinkStepOf } from './thinkingComputers';
 import { desperadoAt, desperadoLine } from './desperado';
@@ -848,6 +851,24 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       // a minor piece's reroute (f3–d2–c4).
       for (const f of readBoardAll('pieceItinerary', { fenBefore: i.fenBefore, san: i.san, student, history: i.history })) {
         facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'route', weight: 56 });
+      }
+      // The forced finish, both seats: the move that begins a checking run to
+      // mate in the moves that follow.
+      for (const f of readBoardAll('forcedRun', { fenBefore: i.fenBefore, san: i.san, student, history: i.history, line: i.line, evalsAfter: null })) {
+        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'mate', weight: 90 });
+      }
+      // What a threat is really for, both seats: the engine's decisive line
+      // through the move, when its first move looks aimed at one piece and
+      // the line wins another.
+      {
+        const uci = (() => { try { const m = new Chess(i.fenBefore).move(i.san); return m ? `${m.from}${m.to}${m.promotion ?? ''}` : null; } catch { return null; } })();
+        const read = uci ? i.reads?.before.find((l) => l.moves[0] === uci) ?? null : null;
+        const moverWhite = i.fenBefore.split(' ')[1] !== 'b';
+        const moverCp = read ? (read.mate !== null && read.mate !== undefined ? (read.mate > 0 === moverWhite ? 100_000 : -100_000) : (moverWhite ? read.evaluation : -read.evaluation)) : null;
+        const line = read && moverCp !== null && moverCp >= DECISIVE_LINE_CP ? pvLineFromUci(i.fenBefore, read.moves) : null;
+        for (const f of readBoardAll('threatPurpose', { line, student })) {
+          facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'threat', weight: 74 });
+        }
       }
       // The fortress, both seats: a piece down and a draw the board explains,
       // read off the engine's lines after the move.

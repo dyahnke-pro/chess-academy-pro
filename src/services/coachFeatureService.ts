@@ -49,7 +49,7 @@ import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './revie
 import { detectOpening, detectOpeningByOrder } from './openingDetectionService';
 import { pickStoryGame } from './reviewStoryGame';
 import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShield } from './reviewSacrifice';
-import { detectForcedMatingSequence, explainMatingSacMechanism } from './reviewForcedSequence';
+import { explainMatingSacMechanism } from './reviewForcedSequence';
 import { assessPositionalEdge, verdictBand } from './reviewPositionalAssessment';
 import { classifyPhase } from './gamePhaseService';
 import { inaccuracySpeaks, loadInaccuracyVoice } from './inaccuracyVoice';
@@ -71,7 +71,7 @@ import { mainConceptLine } from './slipDepth';
 import { flipSideToMove, sideToMoveAs } from './threatOut';
 import { mateStakes, isSacrifice } from './factStakes';
 import { sacrificeLedger, type BestAmong, type SacrificeLedgerRead } from './sacrificeLedger';
-import { threatPurpose, lineRestatesClaim, lineBuilds } from './threatPurpose';
+import { lineRestatesClaim, lineBuilds } from './threatPurpose';
 import type { BestOfEngine, DeepReadEngine } from './gameAnalysisService';
 import { costReason as readCostReason, costReasonRow, type CostReason, type CostReasonRow, type LineRead } from './costReason';
 import { lineTrust, NAME_NEAR_PLIES } from './lineTrust';
@@ -2079,7 +2079,10 @@ function* reviewSegmentSteps(
   // FORCED-SEQUENCE framing (the forcing-move / "calculate to the end" concept):
   // if the game ends in a forced checking run, frame it at its first move so the
   // student learns to SEE a forced finish, then the walk plays it out. Board-true.
-  const forcedRun = detectForcedMatingSequence(sansForRun, moves.slice(0, usable).map((mm) => (typeof mm.evaluation === 'number' ? mm.evaluation : null)));
+  // The forced finish is read from the basket at each move (`forcedRun`); the
+  // walk keeps where it began, for the verdict that a mating move is no fault.
+  const gameEvals = moves.slice(0, usable).map((mm) => (typeof mm.evaluation === 'number' ? mm.evaluation : null));
+  let forcedRunStart: number | null = null;
   const studentColorWB: 'w' | 'b' | null = playerColor === 'white' ? 'w' : playerColor === 'black' ? 'b' : null;
   // Prev-capture context so the PlyFacts material calc can tell a RECAPTURE
   // (even trade → 0) from a genuine win (David 2026-07-20 Opera nitpick). Holds
@@ -2176,6 +2179,8 @@ function* reviewSegmentSteps(
       && !inaccuracySpeaks({ fenBefore: fenChain[i].fenBefore, playedSan: m0.san, bestSan: betterMoveSan(m0.bestMove, m0.san, fenChain[i].fenBefore), ply: m0.ply - 1 });
     const m = quietSlip ? { ...m0, classification: null } : m0;
     const fenPair = fenChain[i];
+    const forcedRunFact = readBoard('forcedRun', { fenBefore: fenPair.fenBefore, san: m.san, student: playerColor === 'black' ? 'b' : 'w', history: sansForRun.slice(0, i), line: sansForRun.slice(i + 1), evalsAfter: gameEvals });
+    if (forcedRunFact) forcedRunStart = m.ply;
     const fullMove = Math.ceil(m.ply / 2);
     const moverColor: 'white' | 'black' = m.ply % 2 === 1 ? 'white' : 'black';
     // N2 — the student's computed need at this ply. Only the STUDENT's plies
@@ -2354,7 +2359,8 @@ function* reviewSegmentSteps(
         replyEvaluation: i + 1 < moves.length ? moves[i + 1].evaluation ?? null : null,
         prevCap,
         allSans: sansForRun,
-        forcedRunStartPly: forcedRun ? forcedRun.startPly : null,
+        forcedRunStartPly: forcedRunStart,
+        forcedRunFact,
       }, verdictReasonOut);
       // THE EXACT HOLE FOR THE FACT THAT NAMES IT (2026-09-21). The
       // `[principle]` fact IS the attributed fundamental, so ranking it by
@@ -3903,19 +3909,12 @@ function* reviewSegmentSteps(
       narrationSource = 'flag';
     }
     // FORCED-FINISH framing — at the first move of a forced checking run to mate,
-    // teach the "it's forced, calculate to the end" concept, then let the walk
-    // play it out. Prepends to a sac/flag line, else sets it. Board-true (the run
-    // is detected from inCheck() + the check markers). The mate move itself is
-    // still named by the conversion beat at the end.
-    if (forcedRun && m.ply === forcedRun.startPly) {
-      const framing = "Here's the finish — from this move on it's forced. Every move is a check, the king has no square to run to, and it ends in mate. Watch it land.";
-      // A move that FORCES MATE is not an inaccuracy/mistake/blunder in any way
-      // that matters — even if the engine sees a faster mate. Drop the negative
-      // "a more precise move was available" stem (David 2026-07-24 Opera read:
-      // "Bxd7+ [inaccuracy] … the precise move was Bxf6" ON a mating move). Keep
-      // a genuine sac description (prepend); replace a negative flag stem.
+    // the basket's fact (`forcedRun`) leads the move, then the walk plays it out.
+    // A move that FORCES MATE is not an inaccuracy in any way that matters, so a
+    // negative flag stem gives way to it (David 2026-07-24 Opera read).
+    if (forcedRunFact) {
       const flaggedNegative = m.classification === 'inaccuracy' || m.classification === 'mistake' || m.classification === 'blunder';
-      narration = (narration && !flaggedNegative) ? `${framing} ${narration}` : framing;
+      narration = (narration && !flaggedNegative) ? `${forcedRunFact.text} ${narration}` : forcedRunFact.text;
       narrationSource = narrationSource ?? 'flag';
     }
     // THE THREAT CALL-OUT (David 2026-07-21, emphatic: "The coach should
@@ -5771,7 +5770,7 @@ async function augmentWithProjections(
       // that builds nothing a sentence can name is not told at all.
       // Its REAL purpose — what the line wins, when that is not what their
       // first move looks aimed at (missed computers, 2026-10-08).
-      const purpose = (() => { try { return threatPurpose(line, studentColorWB); } catch { return null; } })();
+      const purpose = readBoard('threatPurpose', { line, student: studentColorWB })?.text ?? null;
       const builds = oppRun || matesOut ? null : lineBuilds(line);
       if (!oppRun && !matesOut && !builds && !purpose) continue;
       deepOppSaid.add(oppKey);

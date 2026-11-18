@@ -21,7 +21,8 @@
 import { ideaClaim, type IdeaKind } from './ideaKind';
 import { Chess, type Color, type Move } from 'chess.js';
 import { legalSeeGainFor } from './positionReadingService';
-import { NO_PROOF, squaresProof, isProof, legalLineProof, type FactProof } from './proof';
+import { NO_PROOF, squaresProof, isProof, legalLineProof, lineProofFromUci, type FactProof } from './proof';
+import { lineSeatAt } from '../utils/andList';
 import type { FactStakes } from './factStakes';
 import { LOCAL_THREAD, placeFact, stakesOf, type CoachFact, type ComputerName, type FactSeat } from './coachFact';
 import { threadKey } from './gameStory';
@@ -34,7 +35,6 @@ import { findQueenGrabTraps, queenGrabTrapLine, queenGrabTrapProof } from './que
 import { looseClaims, provenThreatLine, threatStakes } from './threatProof';
 import { threatAnswer } from './threatAnswer';
 import { namesMoves, namedSan, namesPlayableStudentMove } from './studentMoveNaming';
-import { lineSeatAt } from '../utils/andList';
 import { trappedOnBoard } from './reviewTeachingPoints';
 import { bookDeparture } from './bookDeparture';
 import { openingSlip, mastersBook } from './openingSlip';
@@ -84,6 +84,9 @@ import { exchangeSacrifice, exchangeSacrificeLine, exchangeSacrificeSquares } fr
 import { pawnMajority, pawnMajorityLine, pawnMajoritySquares } from './pawnMajority';
 import { fortress, fortressLine, fortressSquares } from './fortress';
 import { itineraryAt, itineraryLine } from './reviewPieceItinerary';
+import { forcedRunAt, FORCED_RUN_LINE } from './reviewForcedSequence';
+import { threatPurpose } from './threatPurpose';
+import type { PvLine } from './pvPlayback';
 import { oppositionTaken, oppositionLine, oppositionSquares } from './oppositionRead';
 import { zugzwangMade, zugzwangSyncLine, zugzwangSyncProof } from './zugzwangRead';
 import { theoreticalEndingMade, theoreticalEndingMadeLine } from './theoreticalEnding';
@@ -422,6 +425,16 @@ export interface BoardContexts {
    *  reroute — two or more hops to an advanced square — read off the game so
    *  far (`history`, from the start; a board with no game behind it has none). */
   pieceItinerary: { fenBefore: string; san: string; student: Color; history: readonly string[] };
+  /** THE FORCED MATING RUN (`forcedRun`): the move `san` on `fenBefore`
+   *  (either seat) begins a checking run to mate in the moves that follow
+   *  (`line`), read off the game so far (`history`). `evalsAfter`: the score
+   *  after each ply of history + move + line, or null. */
+  forcedRun: { fenBefore: string; san: string; student: Color; history: readonly string[]; line: readonly string[] | null; evalsAfter: ReadonlyArray<number | null> | null };
+  /** A THREAT'S REAL PURPOSE (`threatPurpose`): the decisive line `line`
+   *  (either seat, its first move the threat) looks aimed at one piece and
+   *  wins another, mates, or trades queens into a won ending. The caller
+   *  hands only a line it has read as decisive for the side that moves first. */
+  threatPurpose: { line: PvLine | null; student: Color };
   /** THE OPPOSITION TAKEN (`oppositionRead`, Danya's "it is Black who has
    *  the opposition"): the king move `san` on `fenBefore` (either seat) takes
    *  the opposition in a king-and-pawn ending, with what it forces.
@@ -2232,6 +2245,52 @@ export const BOARD_COMPUTERS = {
       learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_NA,
       weaknesses: { not: 'a reading of the game behind the move — no question of the student\'s posed' },
+    },
+  },
+  forcedRun: {
+    // The finish that is forced, both seats: the move that begins a checking
+    // run to mate.
+    read: ({ fenBefore, san, student, history, line, evalsAfter }, fact) => safe(() => {
+      const r = forcedRunAt(history, san, line, evalsAfter);
+      if (!r) return null;
+      const mine = r.mater === student;
+      const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
+      return fact({ key: `forced-run:${r.startPly}:${r.length}`, claims: ['forced-run'], text: FORCED_RUN_LINE,
+        proof: NO_PROOF.stated, squares: [], stakes: mateStakes(mine ? 'you' : 'them', 2, true),
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
+    }),
+    computer: 'detectForcedMatingSequence',
+    kind: 'forced',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: { wired: 'services/coachFeatureService.ts' }, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the line ahead — no question of the student\'s posed' },
+    },
+  },
+  threatPurpose: {
+    // What a threat is really for, both seats: the decisive line's first
+    // move looks aimed at one piece, and the line wins something else.
+    read: ({ line, student }, fact) => safe(() => {
+      if (!line || line.plies.length < 3) return null;
+      const text = threatPurpose(line, student);
+      if (!text) return null;
+      const first = line.plies[0];
+      const mine = (first.moverColor === 'white' ? 'w' : 'b') === student;
+      const squares = [first.uci.slice(0, 2), first.uci.slice(2, 4)];
+      return fact({ key: `purpose:${line.plies.map((p) => p.uci).join(' ')}`, claims: [`purpose:${first.uci}`], text,
+        proof: lineProofFromUci(first.fenBefore, line.plies.map((p) => p.uci), lineSeatAt(first.fenBefore, student)) ?? NO_PROOF.stated, squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: first.fenBefore });
+    }),
+    computer: 'threatPurpose',
+    kind: 'threat',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: { wired: 'services/coachFeatureService.ts' }, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of a line — no question of the student\'s posed' },
     },
   },
   oppositionRead: {

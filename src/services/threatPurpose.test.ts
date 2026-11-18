@@ -109,3 +109,17 @@ describe('the real point is what the moving piece itself wins', () => {
     expect(threatPurpose(line, 'b') ?? '').not.toMatch(/real point/);
   });
 });
+
+describe('threat purpose in the one basket (unification)', () => {
+  it('reads either seat: the mover\'s own threat is said from the student\'s side', async () => {
+    const { readBoard } = await import('./boardComputers');
+    const fen = '3r2k1/5ppp/8/8/8/8/P2N1PPP/6K1 b - - 0 1';
+    const line = lineOf(fen, ['Rxd2', 'a3', 'Rd1#']);
+    const theirs = readBoard('threatPurpose', { line, student: 'w' });
+    expect(theirs?.seat).toBe('opponent');
+    expect(theirs?.text).toMatch(/^Their Rxd2 looks aimed at your knight on d2, but its real point is mate\./);
+    const mine = readBoard('threatPurpose', { line, student: 'b' });
+    expect(mine?.seat).toBe('student');
+    expect(mine?.text).toMatch(/^Your Rxd2 looks aimed at their knight on d2, but its real point is mate\./);
+  }, 60_000);
+});

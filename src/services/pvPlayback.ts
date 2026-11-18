@@ -1000,3 +1000,25 @@ export function plyFactsSentence(f: PlyFacts, san: string, moverIsStudent?: bool
     return `${subject} ${andList(parts)}.`;
 }
 
+
+/** AN ENGINE LINE REPLAYED WITH THE SAME FACTS, no engine (the basket's
+ *  readers of a stored line): each ply's facts from `computePlyFacts`, a
+ *  recapture read as one. Evals are unknown here, so the root and terminal
+ *  reads are left empty and the line is not taken as verified. Null on an
+ *  unplayable move. */
+export function pvLineFromUci(fen: string, uci: readonly string[]): PvLine | null {
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return null; }
+  const plies: PvPly[] = [];
+  let prev: PrevCaptureContext = NO_PREV_CAPTURE;
+  for (const u of uci) {
+    const fenBefore = board.fen();
+    let mv;
+    try { mv = board.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { return null; }
+    if (!mv) return null;
+    const facts = computePlyFacts(fenBefore, board.fen(), { captured: mv.captured, san: mv.san, color: mv.color, promotion: mv.promotion }, prev);
+    prev = afterCapture(prev, mv);
+    plies.push({ san: mv.san, uci: u, moverColor: mv.color === 'w' ? 'white' : 'black', fenBefore, fenAfter: board.fen(), facts });
+  }
+  return { plies, rootEvalCp: 0, terminalEvalCp: null, delivers: false, closeAlternative: null };
+}

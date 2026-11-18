@@ -22,7 +22,7 @@ const facets = (): string[] => facetLines(computeMoveFacets({
   evaluation: mateEvalFor(1), preMoveEval: -150, costCp: 900, heardVerdict: null,
   classification: 'blunder', bestMoveSan: 'Ke8',
   prevCap: { square: null, capturedValue: 0, net: 0 }, allSans: [],
-  forcedRunStartPly: null, playedLineEarlierUci: null, playedLineUci: ['h2e5'], bestLineUci: ['d7e8'],
+  forcedRunStartPly: null, forcedRunFact: null, playedLineEarlierUci: null, playedLineUci: ['h2e5'], bestLineUci: ['d7e8'],
   replyBestSan: 'Qe5#', replyEvaluation: mateEvalFor(1),
 }));
 

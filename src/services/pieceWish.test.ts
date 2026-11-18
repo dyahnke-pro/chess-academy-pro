@@ -58,7 +58,7 @@ describe('ONE computer: Review\'s worst-piece facet and Learn\'s wish say the sa
     const facets = computeMoveFacets({ secondReads: NO_SECOND_READ, seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore: before, fenAfter: after, san, ply: 36, moverColor: 'black', playerColor: 'black', studentColorWB: 'b',
       evaluation: null, preMoveEval: null, costCp: null, heardVerdict: null, classification: 'good', bestMoveSan: null, prevCap: { square: null, capturedValue: 0, net: 0 },
-      allSans: SI5, forcedRunStartPly: null, playedLineEarlierUci: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null });
+      allSans: SI5, forcedRunStartPly: null, forcedRunFact: null, playedLineEarlierUci: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null });
     const worst = facets.find((f) => f.tag === 'worst');
     expect(worst?.text).toBe(pieceWish(after, 'b', 'b2')?.text);
     expect(worst?.text).toMatch(/It wants c4/);

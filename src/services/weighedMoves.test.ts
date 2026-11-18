@@ -257,7 +257,7 @@ describe('through the one registry, to every surface', () => {
       evaluation: 78, preMoveEval: 70, costCp: null, heardVerdict: null,
       classification: 'good', bestMoveSan: null,
       prevCap: { square: null, capturedValue: 0, net: 0 },
-      allSans: [], forcedRunStartPly: null, playedLineEarlierUci: null, playedLineUci: [], bestLineUci: [], secondReads: NO_SECOND_READ,
+      allSans: [], forcedRunStartPly: null, forcedRunFact: null, playedLineEarlierUci: null, playedLineUci: [], bestLineUci: [], secondReads: NO_SECOND_READ,
       replyBestSan: null, replyEvaluation: null,
     }));
     expect(oneStem(lines('b').join('\n'))).toContain(oneStem('Nxe4 is tempting here, but it fails: they play dxe4 — they win a knight for a pawn.'));
@@ -269,7 +269,7 @@ describe('through the one registry, to every surface', () => {
       evaluation: 78, preMoveEval: 70, costCp: null, heardVerdict: null,
       classification: 'good', bestMoveSan: null,
       prevCap: { square: null, capturedValue: 0, net: 0 },
-      allSans: [], forcedRunStartPly: null, playedLineEarlierUci: null, playedLineUci: [], bestLineUci: [], secondReads: NO_SECOND_READ,
+      allSans: [], forcedRunStartPly: null, forcedRunFact: null, playedLineEarlierUci: null, playedLineUci: [], bestLineUci: [], secondReads: NO_SECOND_READ,
       replyBestSan: null, replyEvaluation: null,
     }));
     expect(bare.join('\n')).not.toContain('tempting');

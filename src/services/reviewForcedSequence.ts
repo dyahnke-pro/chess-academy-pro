@@ -169,3 +169,27 @@ function squaresBetween(from: string, to: string): string[] {
   }
   return out;
 }
+
+/** THE FORCED RUN THIS MOVE STARTS, either seat: the game so far (`history`),
+ *  the move `san`, and the moves that follow it (`line`, the game's own or a
+ *  line the surface shows). The one detector above, read at the move: true
+ *  only on the move that begins a proven checking run to mate. `evalsAfter`:
+ *  the evaluation after each ply of the whole run (history, the move, the
+ *  line), White's view, or null where the surface has none (then a reply is
+ *  proven forced only when it was the only legal move). */
+export function forcedRunAt(
+  history: readonly string[],
+  san: string,
+  line: readonly string[] | null,
+  evalsAfter: ReadonlyArray<number | null> | null,
+): { startPly: number; length: number; mater: 'w' | 'b' } | null {
+  if (!line || line.length === 0) return null;
+  const sans = [...history, san, ...line];
+  const run = detectForcedMatingSequence(sans, evalsAfter ?? sans.map(() => null));
+  if (!run || run.startPly !== history.length + 1) return null;
+  const mater: 'w' | 'b' = (sans.length - 1) % 2 === 0 ? 'w' : 'b';
+  return { ...run, mater };
+}
+
+/** The forced run said: what it is and what it asks of the player. */
+export const FORCED_RUN_LINE = 'From here it is forced. Every move is a check, the king has no safe square, and it ends in mate.';

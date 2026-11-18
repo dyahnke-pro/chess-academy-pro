@@ -18,18 +18,18 @@ function queens(fen: string): number {
 
 /** What their first move appears to aim at: the piece it takes, else the most
  *  valuable student piece (not the king) it attacks from its new square. */
-function apparentTarget(line: PvLine, student: Color): { piece: PieceSymbol; square: Square } | null {
+function apparentTarget(line: PvLine, victim: Color): { piece: PieceSymbol; square: Square } | null {
   const first = line.plies[0];
   if (!first) return null;
   const to = first.uci.slice(2, 4) as Square;
   const before = new Chess(first.fenBefore);
   const took = before.get(to);
-  if (took && took.color === student) return { piece: took.type, square: to };
+  if (took && took.color === victim) return { piece: took.type, square: to };
   const after = new Chess(first.fenAfter);
-  const them: Color = student === 'w' ? 'b' : 'w';
+  const them: Color = victim === 'w' ? 'b' : 'w';
   let best: { piece: PieceSymbol; square: Square } | null = null;
   for (const cell of after.board().flat()) {
-    if (!cell || cell.color !== student || cell.type === 'k') continue;
+    if (!cell || cell.color !== victim || cell.type === 'k') continue;
     if (!after.attackers(cell.square, them).includes(to)) continue;
     if (!best || VALUE[cell.type] > VALUE[best.piece]) best = { piece: cell.type, square: cell.square };
   }
@@ -38,21 +38,27 @@ function apparentTarget(line: PvLine, student: Color): { piece: PieceSymbol; squ
 
 export function threatPurpose(line: PvLine, student: Color): string | null {
   if (line.plies.length < 3) return null;
+  // Either seat: the side that moves first is the one whose threat it is; the
+  // other side's pieces are its targets.
+  const mover: Color = line.plies[0].moverColor === 'white' ? 'w' : 'b';
+  const victim: Color = mover === 'w' ? 'b' : 'w';
+  const mine = mover === student;
+  const theirs = mine ? 'their' : 'your';
   let apparent: { piece: PieceSymbol; square: Square } | null;
-  try { apparent = apparentTarget(line, student); } catch { return null; }
+  try { apparent = apparentTarget(line, victim); } catch { return null; }
   if (!apparent) return null;
   const firstSan = line.plies[0].san;
-  const looks = `Their ${firstSan} looks aimed at your ${NAME[apparent.piece]} on ${apparent.square}`;
+  const looks = `${mine ? 'Your' : 'Their'} ${firstSan} looks aimed at ${theirs} ${NAME[apparent.piece]} on ${apparent.square}`;
   const last = line.plies[line.plies.length - 1];
   if (last.facts.isMate) return `${looks}, but its real point is mate.`;
   // A queen trade inside the line, into the decisive ending the caller verified.
   const startQ = queens(line.plies[0].fenBefore);
   const endQ = queens(last.fenAfter);
-  if (startQ === 2 && endQ === 0) return `${looks}, but its real point is trading queens into an ending they win.`;
-  // The biggest student piece the line actually wins, if it is a different one.
+  if (startQ === 2 && endQ === 0) return `${looks}, but its real point is trading queens into an ending ${mine ? 'you win' : 'they win'}.`;
+  // The biggest piece the line actually wins, if it is a different one.
   const won = piecesWonByMover(line);
   if (!won || won.square === apparent.square || VALUE[won.piece] < VALUE[apparent.piece]) return null;
-  return `${looks}, but its real point is your ${NAME[won.piece]} on ${won.square}.`;
+  return `${looks}, but its real point is ${theirs} ${NAME[won.piece]} on ${won.square}.`;
 }
 
 /** WHAT A QUIET DECISIVE LINE BUILDS (David 2026-11-07: "I want specificity

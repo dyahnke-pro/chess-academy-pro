@@ -238,7 +238,7 @@ describe('the aggregator and the one door', () => {
     const facets = ((m) => { const r = facetRecords(m); for (const [k, v] of r.proofs) (proofs as Map<string, unknown>).set(k, v); return facetLines(m); })(computeMoveFacets({ secondReads: NO_SECOND_READ, seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore, fenAfter: c.fen(), san: 'exf5', ply: 11, moverColor: 'white', playerColor: 'white', studentColorWB: 'w',
       evaluation: 30, preMoveEval: 30, costCp: 0, heardVerdict: null, classification: 'good', bestMoveSan: null, prevCap: { square: null, capturedValue: 0, net: 0 },
-      allSans: sans, forcedRunStartPly: null, playedLineEarlierUci: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null }));
+      allSans: sans, forcedRunStartPly: null, forcedRunFact: null, playedLineEarlierUci: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null }));
     const f = facets.find((x) => x.startsWith('[trade-idea]') && /keeps the pawn count/.test(x));
     expect(f).toBeDefined();
     expect(isProof(proofs.get(f))).toBe(true);

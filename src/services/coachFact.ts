@@ -248,6 +248,7 @@ export const COMPUTER_CATALOG = {
   bindingFact: { file: 'services/threeFacts.ts', says: 'what their last move aimed at, and how this move meets it' },
   theirTarget: { file: 'services/threeFacts.ts', says: 'what their move newly aims at among your pieces, said on their move when your reply does not answer it' },
   pieceRoute: { file: 'services/pieceRoute.ts', says: 'the trip the moved piece takes down the line that follows' },
+  threatPurpose: { file: 'services/threatPurpose.ts', says: 'what a threat is really for: its first move looks aimed at one piece, the decisive line wins another, mates, or trades into a won ending, either seat' },
   itineraryAt: { file: 'services/reviewPieceItinerary.ts', says: 'the journey a minor piece took in the game to the square it just reached (f3–d2–c4), either seat' },
   pieceOutFirst: { file: 'services/pieceOutFirst.ts', says: 'a bishop or queen brought out before its own pawn push closes its road (…Bf5 before …e6)' },
   lineCut: { file: 'services/lineCut.ts', says: "a queen, rook or bishop of the mover's whose line the moved piece now blocks — a centre square, a guard or an attack lost" },

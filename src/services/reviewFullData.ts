@@ -229,6 +229,8 @@ interface MoveFactContext {
   allSans: string[];
   /** 1-based ply where a forced mating run begins (from detectForcedMatingSequence), or null. */
   forcedRunStartPly: number | null;
+  /** The basket's forced-run fact at this ply (`forcedRun`), or null. */
+  forcedRunFact: CoachFact | null;
   /** The fundamentals the (student, flagged) move neglected — attributed on the
    *  board by principleAttribution; the `[principle]` facet speaks them. */
   fundamentals?: PrincipleAttribution[];
@@ -1827,8 +1829,8 @@ export function computeMoveFacets(
   }
 
   // ── 8. FORCED MATING RUN — this ply begins a forced checking finish ──
-  if (ctx.forcedRunStartPly != null && ply === ctx.forcedRunStartPly) {
-    const ff = made('detectForcedMatingSequence', 'forced', 'From here it is a forced checking run to mate — every move a check, no escape.');
+  if (ctx.forcedRunFact) {
+    const ff = made('detectForcedMatingSequence', 'forced', ctx.forcedRunFact.text);
     facets.push(ff);
     recStakes(ff, mateStakes(matingSideIsStudent(ctx.allSans, studentColorWB) ? 'you' : 'them', 2, true));
   }
