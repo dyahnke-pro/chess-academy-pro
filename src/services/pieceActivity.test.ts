@@ -2,6 +2,8 @@ import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import { assemblePieceActivityAnswer, answerBoardQuestion } from './groundedAnswer';
 import { classifyBoardQuestion } from './boardQuestionRouter';
+import { pieceActivity, activityEdge, activityEdgeLine } from './pieceActivity';
+import { legalSeeGainFor } from './positionReadingService';
 
 describe('piece-activity: worst-placed / least-active piece (loop audit 2026-09-09)', () => {
   it('routes "worst-placed piece" phrasings to piece-activity, not a deflect', () => {
@@ -46,5 +48,47 @@ describe('piece-activity: worst-placed / least-active piece (loop audit 2026-09-
 
   it('returns null when the side has no officers (K+P endgame)', () => {
     expect(assemblePieceActivityAnswer('8/8/8/4k3/4P3/4K3/8/8 w - - 0 1', 'worst piece?', 'white')).toBeNull();
+  });
+});
+
+// ── THE TWO ARMIES COMPARED (`pieceActivity`, WO-DANYA-READS-01 #2) — on the
+// boards of Danya's Chess.com articles (reference only, never quoted).
+
+describe('pieceActivity: whose pieces are in play', () => {
+  it('a knight with no safe square: every move it has loses it (queen-the-supporting-actress #1)', () => {
+    const fen = 'r2q1r1k/1pp1p1bp/pn4p1/3nPbN1/3P3P/Q1N1B3/PP2BP2/2KR3R w - - 0 20';
+    const a = pieceActivity(fen)!;
+    const n = a.b.officers.find((o) => o.square === 'd5')!;
+    expect(n.state).toBe('stuck');
+    expect(n.safe).toBe(0);
+    // Board truth: each of its moves is lost by the legal exchange.
+    const asBlack = fen.replace(' w ', ' b ');
+    for (const m of new Chess(asBlack).moves({ square: 'd5', verbose: true })) {
+      const after = new Chess(asBlack); after.move(m.san);
+      expect(legalSeeGainFor(after.fen(), m.to, 'w'), m.san).toBeGreaterThan(0);
+    }
+    const e = activityEdge(fen)!;
+    expect(e.side).toBe('w');
+    expect(activityEdgeLine(e, 'w')).toContain('their knight on d5 has no safe square');
+  });
+
+  it('a queen cut off in the other camp is stranded, and a pinned knight says the pin (how-to-ignore-a-threat-and-win #3)', () => {
+    const fen = '6k1/p5b1/1p1p1pQ1/5p2/1nP1qP1P/5NP1/5BK1/8 b - - 0 32';
+    const e = activityEdge(fen)!;
+    expect(e.side).toBe('b');
+    const line = activityEdgeLine(e, 'b');
+    expect(line).toContain('Their queen on g6 is stranded with one safe square');
+    expect(line).toContain('their knight on f3 is pinned to its king');
+  });
+
+  it('three minors at home against an army in play (the-rubinstein-maneuver #1)', () => {
+    const fen = 'rnbqrbk1/1p3ppp/2pp1n2/p5B1/P1BNP3/2N5/1PP2PPP/R2QR1K1 w - - 0 11';
+    expect(activityEdgeLine(activityEdge(fen)!, 'w')).toBe("Their knight on b8, bishop on c8 and bishop on f8 haven't moved. Your pieces are all in play.");
+  });
+
+  it('negative controls: the start, a side in check, a king-and-pawn ending', () => {
+    expect(activityEdge(new Chess().fen())).toBeNull();
+    expect(pieceActivity('rnbqkbnr/ppppp1pp/8/5p1Q/4P3/8/PPPP1PPP/RNB1KBNR b KQkq - 1 2')).toBeNull();
+    expect(activityEdge('8/8/8/4k3/4P3/4K3/8/8 w - - 0 1')).toBeNull();
   });
 });
