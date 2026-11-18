@@ -96,10 +96,21 @@ export function threatProof(fen: string, student: 'w' | 'b', squares: readonly s
   };
 }
 
-/** The threat line with its proof — the conclusion only when none is found. */
+/** The threat line with its proof — the conclusion only when none is found.
+ *  A warning that already says the piece is unguarded ("…is hit, and nothing
+ *  guards it") takes only the proof's new half, the capture and what it wins:
+ *  the prod Review audit (2026-11-18) heard "nothing guards it" twice in one
+ *  turn — "Your rook on a1 is hit, and nothing guards it … It is attacked once
+ *  and nothing guards it: Rxa1 — they win a rook." */
 export function provenThreatLine(line: string, fen: string, student: 'w' | 'b', squares: readonly string[]): { text: string; proof: Proof | null } {
   const proof = threatProof(fen, student, squares);
-  return { text: proof ? withProof(line, proof) : line, proof };
+  if (!proof) return { text: line, proof };
+  if (proof.kind === 'count' && /\bnothing guards\b/i.test(line) && /\bnothing guards it\b/.test(proof.full)) {
+    // The count is said already; the capture and its result are the new half.
+    const tail = proof.full.endsWith(`: ${proof.short}`) ? proof.short : null;
+    return { text: tail ? withProof(line, { ...proof, full: tail }) : line, proof };
+  }
+  return { text: withProof(line, proof), proof };
 }
 
 /** WHAT A THREAT PUTS AT STAKE (unity U10): the same exchange read, as the

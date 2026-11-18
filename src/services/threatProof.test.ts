@@ -58,3 +58,19 @@ describe('threatProof — the cost a threat warning claims, proven on the board'
     for (const t of said) expect(t).not.toMatch(/^[KQRBN]?[a-h]?[1-8]?x[a-h][1-8]\S* takes /);
   });
 });
+
+// THE COUNT IS SAID ONCE (prod Review audit 2026-11-18): a warning that
+// already says "nothing guards it" took the proof's full form after it, so the
+// turn said "nothing guards it" twice. It now takes the capture and its result.
+describe('provenThreatLine on a warning that already says the piece is unguarded', () => {
+  const FEN = '6k1/r7/8/8/8/6P1/5P1P/R5K1 w - - 0 1';
+  it('adds the capture and what it wins, never the count again', () => {
+    const r = provenThreatLine('Your rook on a1 is hit, and nothing guards it. It is lost unless it moves or gets a guard.', FEN, 'w', ['a1']);
+    expect(r.text.match(/nothing guards it/g)?.length).toBe(1);
+    expect(r.text).toMatch(/Rxa1/);
+  });
+  it('a warning that does not say the count still gets the full proof', () => {
+    const r = provenThreatLine('Careful — your rook on a1 is in trouble.', FEN, 'w', ['a1']);
+    expect(r.text).toMatch(/nothing guards it/);
+  });
+});
