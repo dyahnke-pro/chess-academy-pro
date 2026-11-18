@@ -121,8 +121,13 @@ function rooksOf(board: Chess, color: Color): string[] {
  * The pawn break `san` on `fenBefore`, read for what it is for. `whose` words
  * it from the mover's seat ('your' when the student moved). `lastTo` — the
  * square the opponent's last move landed on (a recapture is no break).
+ * `namesStudentMove` — REQUIRED: false on Learn's own seat, where the move the
+ * student just played is "your move", never its name (David 2026-11-09: "the
+ * user knows that, they see it play out"; the prod Learn audit 2026-11-18
+ * heard "E-pawn takes d5 is a pawn break in the centre"). Their move and every
+ * surface that names moves (Review, lessons, an asked read) pass true.
  */
-export function pawnBreak(fenBefore: string, san: string, whose: 'your' | 'their', lastTo: string | null): PawnBreak | null {
+export function pawnBreak(fenBefore: string, san: string, whose: 'your' | 'their', lastTo: string | null, namesStudentMove: boolean): PawnBreak | null {
   if (Number(fenBefore.split(' ')[5] ?? '1') < BREAK_FROM_MOVE) return null;
   if (!isPawnBreak(fenBefore, san, lastTo)) return null;
   const before = new Chess(fenBefore);
@@ -229,7 +234,7 @@ export function pawnBreak(fenBefore: string, san: string, whose: 'your' | 'their
   // centre strike that opens nothing fires 83 times where he names no break
   // for 3 where he does).
   if (opens.length === 0 && !base) return null;
-  const lead = `${me === 'b' ? '…' : ''}${mv.san}`;
+  const lead = whose === 'your' && !namesStudentMove ? 'your move' : `${me === 'b' ? '…' : ''}${mv.san}`;
   const theirs = whose === 'your' ? 'their' : 'your';
   const target = `${theirs} pawn on ${struck}${base ? ', the base of the pawn chain' : centre ? ' in the centre' : ''}`;
   // Its verb by what the pawn does: attacks it, or stands where it can be

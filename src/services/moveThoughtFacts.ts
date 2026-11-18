@@ -766,7 +766,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       if (!i.theirLast) return null;
       try { return new Chess(i.theirLast.fenBefore).move(i.theirLast.san).to; } catch { return null; }
     })();
-    for (const f of readBoardAll('pawnBreak', { fenBefore: i.fenBefore, san: i.san, student, lastTo })) {
+    for (const f of readBoardAll('pawnBreak', { fenBefore: i.fenBefore, san: i.san, student, lastTo, namesStudentMoves: true })) {
       facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'file', weight: 55 });
     }
     // One piece moved again while the others wait at home (S4, his "the

@@ -24,7 +24,7 @@ const KINGSIDE = 'r1bq1rk1/ppp1bppp/2np1n2/4p3/2B1PP2/2NP1N2/PPP3PP/R1BQ1RK1 w -
 describe('pawnBreak — the break and what it is for', () => {
   it('names the base of the chain it strikes and the file the trade opens', () => {
     const { fen, lastTo } = at(FRENCH);
-    const r = pawnBreak(fen, 'c5', 'your', lastTo);
+    const r = pawnBreak(fen, 'c5', 'your', lastTo, true);
     expect(r?.text).toBe('A pawn break: …c5 attacks their pawn on d4, the base of the pawn chain. If they take, it half-opens the c-file for your rooks.');
     expect(r?.squares).toEqual(expect.arrayContaining(['c7', 'c5', 'd4']));
     // The proof is the break and the capture that trades, played from the board.
@@ -32,7 +32,7 @@ describe('pawnBreak — the break and what it is for', () => {
   });
 
   it('a capture that opens a file beside their castled king says so', () => {
-    const r = pawnBreak(KINGSIDE, 'fxe5', 'your', 'e7');
+    const r = pawnBreak(KINGSIDE, 'fxe5', 'your', 'e7', true);
     // The SAN says the capture; the line says it once (captureSaidOnce.gate).
     expect(r?.text).toBe('fxe5 is a pawn break in the centre, and it half-opens the f-file for your rook already on it, toward their king.');
     expect(r?.squares).toContain('e5');
@@ -43,26 +43,26 @@ describe('pawnBreak — the break and what it is for', () => {
   it('a push that strikes a pawn that cannot take back still says what it attacks', () => {
     // e5 is the base of the e5-f6 chain and pinned to its king by the rook on
     // e8, so it cannot take …d6: the break takes nothing, it attacks.
-    const r = pawnBreak('4r1k1/3p4/5P2/4P3/8/8/8/4K3 b - - 0 20', 'd6', 'your', null);
+    const r = pawnBreak('4r1k1/3p4/5P2/4P3/8/8/8/4K3 b - - 0 20', 'd6', 'your', null, true);
     expect(r?.text).toContain('it attacks their pawn on e5, the base of the pawn chain');
   });
 
   it('their break is said from the student\'s seat', () => {
     const { fen, lastTo } = at(FRENCH);
-    expect(pawnBreak(fen, 'c5', 'their', lastTo)?.text).toBe('A pawn break: …c5 attacks your pawn on d4, the base of the pawn chain. If you take, it half-opens the c-file for their rooks.');
+    expect(pawnBreak(fen, 'c5', 'their', lastTo, true)?.text).toBe('A pawn break: …c5 attacks your pawn on d4, the base of the pawn chain. If you take, it half-opens the c-file for their rooks.');
   });
 
   it('is silent where there is no break, or nothing it is for', () => {
     const { fen, lastTo } = at(FRENCH);
     // A pawn move that touches no pawn.
-    expect(pawnBreak(fen, 'a6', 'your', lastTo)).toBeNull();
+    expect(pawnBreak(fen, 'a6', 'your', lastTo, true)).toBeNull();
     // Before move 6 the opening's own pawn moves are its story's (the French's …c5 on move 3).
     const early = at(['e4', 'e6', 'd4', 'd5', 'e5']);
-    expect(pawnBreak(early.fen, 'c5', 'your', early.lastTo)).toBeNull();
+    expect(pawnBreak(early.fen, 'c5', 'your', early.lastTo, true)).toBeNull();
     // A recapture answers their break; it is not one.
     const recap = new Chess(KINGSIDE);
     recap.move('fxe5');
-    expect(pawnBreak(recap.fen(), 'dxe5', 'your', 'e5')).toBeNull();
+    expect(pawnBreak(recap.fen(), 'dxe5', 'your', 'e5', true)).toBeNull();
   });
 
   it('a pawn that takes a piece is a capture, not a break', () => {
@@ -70,12 +70,12 @@ describe('pawnBreak — the break and what it is for', () => {
     // touching b7, and still it is a capture of a piece.
     const { fen, lastTo } = at(['e4', 'e5', 'Nf3', 'Nc6', 'c3', 'Nf6', 'd3', 'd6', 'b4', 'Be7', 'b5', 'O-O']);
     expect(isPawnBreak(fen, 'bxc6', lastTo)).toBe(true);
-    expect(pawnBreak(fen, 'bxc6', 'your', lastTo)).toBeNull();
+    expect(pawnBreak(fen, 'bxc6', 'your', lastTo, true)).toBeNull();
   });
 
   it('names a square only when it is the point, and every square it names is on the board', () => {
     for (const [fen, san, lastTo] of [[at(FRENCH).fen, 'c5', at(FRENCH).lastTo], [KINGSIDE, 'fxe5', 'e7']] as const) {
-      const r = pawnBreak(fen, san, 'your', lastTo)!;
+      const r = pawnBreak(fen, san, 'your', lastTo, true)!;
       const named = r.text.match(/\b[a-h][1-8]\b/g) ?? [];
       expect(new Set(named).size).toBeLessThanOrEqual(2);
       for (const sq of named) expect(r.squares).toContain(sq);
@@ -100,5 +100,20 @@ describe('pawnBreak — the break and what it is for', () => {
     expect(readBoard('pawnBreak', { fenBefore: fen, san: 'c5', student: 'w', lastTo })?.seat).toBe('opponent');
     expect(TEACHING_MOVES['pawn-break']).toContain('S-BREAK');
     expect(FACT_GROUP['pawn-break']).toBe('move');
+  });
+});
+
+// LEARN NAMES NO MOVE THE STUDENT JUST PLAYED (David 2026-11-09). The prod
+// Learn audit (2026-11-18) heard "E-pawn takes d5 is a pawn break in the
+// centre, and it opens the e-file for your rooks" on the student's own move:
+// the break computer always led with the SAN.
+describe('pawnBreak on Learn\'s own seat', () => {
+  it('says "your move", never the move\'s name; their move and Review keep it', () => {
+    const { fen, lastTo } = at(FRENCH);
+    const learn = pawnBreak(fen, 'c5', 'your', lastTo, false)?.text ?? '';
+    expect(learn).not.toMatch(/c5/);
+    expect(learn).toMatch(/your move attacks their pawn on d4|^Your move is a pawn break/);
+    expect(pawnBreak(fen, 'c5', 'your', lastTo, true)?.text).toMatch(/…c5/);
+    expect(pawnBreak(fen, 'c5', 'their', lastTo, false)?.text).toMatch(/…c5/);
   });
 });

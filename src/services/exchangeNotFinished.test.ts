@@ -248,7 +248,7 @@ describe('a pawn break opens what is open when the trade is over', () => {
   it('b4: after …axb4 the a-pawn can take back, so the b-file is not what opens', () => {
     // The a-pawn takes back in the lesson's line, but a piece can take on b4
     // too, so which file opens is their choice of capturer: neither is named.
-    const text = pawnBreak(QG_EXCHANGE_B4, 'b4', 'your', null)?.text ?? '';
+    const text = pawnBreak(QG_EXCHANGE_B4, 'b4', 'your', null, true)?.text ?? '';
     expect(text).not.toMatch(/b-file/);
   });
 });

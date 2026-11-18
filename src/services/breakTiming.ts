@@ -79,7 +79,7 @@ export function breakPrep(fenBefore: string, san: string, lineAfter: readonly st
       if (mine >= 2) return null;
       continue;
     }
-    const pb = pawnBreak(fenHere, m.san, 'your', null);
+    const pb = pawnBreak(fenHere, m.san, 'your', null, true);
     if (!pb) { mine += 1; if (mine >= 2) return null; continue; }
     // THE REASON: what the preparing move changed for this break.
     const brkFrom = m.from as Square;
@@ -165,7 +165,7 @@ export function breakDueNow(fen: string, me: Color, bestUci: string | null): { t
     if (b.turn() !== me) return null;
     san = b.move({ from: bestUci.slice(0, 2), to: bestUci.slice(2, 4), promotion: bestUci[4] }).san;
   } catch { return null; }
-  const pb = pawnBreak(fen, san, 'your', null);
+  const pb = pawnBreak(fen, san, 'your', null, true);
   if (!pb) return null;
   const key = stemKeyOf(`${fen}|break-due|${bestUci}`);
   const lead = rotateStem(['Now is the moment to strike.', 'The time to break is now.'], key);
@@ -208,7 +208,7 @@ export function breakStopped(fenBefore: string, san: string): BreakStop | null {
     const count = (c: Chess): string => `${stackedAttackers(c, b.to, me).length}:${stackedAttackers(c, b.to, them).length}`;
     if (mv.to !== b.to && mv.to !== path && count(beforeBoard) === count(after)) continue;
     // Their break must be worth something and land safely before the move.
-    if (!pawnBreak(asThem, b.san, 'their', null)) continue;
+    if (!pawnBreak(asThem, b.san, 'their', null, true)) continue;
     board.move(b);
     const safeBefore = legalSeeGainFor(board.fen(), b.to, me) <= 0;
     board.undo();

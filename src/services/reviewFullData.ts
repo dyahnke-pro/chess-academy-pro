@@ -1665,7 +1665,7 @@ export function computeMoveFacets(
         if (!ctx.teaching.prevFenBefore || ply < 2 || !ctx.allSans[ply - 2]) return null;
         try { return new Chess(ctx.teaching.prevFenBefore).move(ctx.allSans[ply - 2]).to; } catch { return null; }
       })();
-      add(readBoardAll('pawnBreak', { fenBefore, san, student: studentColorWB, lastTo })[0]);
+      add(readBoardAll('pawnBreak', { fenBefore, san, student: studentColorWB, lastTo, namesStudentMoves: true })[0]);
       // Opposite-coloured bishops settled by this move, and what they mean.
       add(readBoardAll('oppositeBishops', { fenBefore, san, student: studentColorWB })[0]);
       // Knight against bishop made by this move, and which minor is better.
