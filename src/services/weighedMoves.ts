@@ -300,7 +300,10 @@ export function temptingRefutations(args: Parameters<typeof temptingRefuted>[0])
     // Whatever the line goes on to play, the first reply taking the piece is
     // the giveaway: Qxe6+ Nxe6 is the queen given for a pawn even when the
     // line runs on a move ("…and you answer Kh2"; Capablanca, Danya's article).
-    if (t.reason.plies[0]?.uci.slice(2, 4) === c.to && t.reason.netForWinner >= 5) continue;
+    // A rook's worth (net four or more: a rook for a pawn) is the bar — the
+    // article board, Korchnoi–Salov: "Rxg5+ was tempting for them … you play
+    // fxg5" was a rook handed over with check.
+    if (t.reason.plies[0]?.uci.slice(2, 4) === c.to && t.reason.netForWinner >= 4) continue;
     out.push({ ...t, real });
   }
   // THE MOST TEMPTING IS THE ONE A PLAYER WOULD MOST OFTEN PLAY — the eye's

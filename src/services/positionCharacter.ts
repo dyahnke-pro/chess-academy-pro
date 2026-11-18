@@ -17,7 +17,8 @@
 // changing, and a coach that announces every flicker is noise.
 import { Chess } from 'chess.js';
 import { quietBalance } from './material';
-import { legalSeeGainFor } from './positionReadingService';
+import { legalSeeGainFor, findOpenFiles } from './positionReadingService';
+import { lockedPawnPairs, wingPawns } from './boardStructure';
 
 export type Character = 'tactical' | 'positional' | 'conversion' | 'defence';
 
@@ -188,4 +189,68 @@ export function characterTurn(state: CharacterState, said: Readonly<Partial<Reco
   const quietButConcrete = step.switched.to === 'positional'
     && (r.immediate.length > 0 || (gap !== null && gap >= SHARP_GAP_CP) || looseOnBoard(r.fen));
   return mateOnBoard || quietOnCheck || quietButConcrete ? { next: step.next, switched: null } : step;
+}
+
+// ── THE KIND OF POSITION ON ONE BOARD, for the read's story ─────────────────
+//
+// David 2026-11-18 (the read's verdict). Danya never stops at "you're better":
+// "a clean pawn up, but the open board and few pieces give Black drawing
+// chances"; "the position is locked; neither side seems in danger"; "with
+// Black totally devoid of counterplay, he makes sure to improve all of his
+// pieces to the fullest extent before doing anything concrete". Three
+// readings off the board and the engine's number, the first that holds,
+// said from the student's seat.
+
+export type BoardKind = 'drawing-chances' | 'locked' | 'no-counterplay';
+
+/** The student's edge, centipawns, that counts as better; past the upper bar
+ *  the game is decided and no "drawing chances" are said. */
+const BETTER_CP = 80;
+const DRAWISH_BELOW_CP = 400;
+/** Locked, and close enough that nobody is in danger yet. */
+const LOCKED_CLOSE_CP = 150;
+
+/** How many squares the side's pieces (not pawns or the king) reach. */
+function pieceReach(c: Chess, side: 'w' | 'b'): number {
+  const parts = c.fen().split(' ');
+  parts[1] = side; parts[3] = '-';
+  try { return new Chess(parts.join(' ')).moves({ verbose: true }).filter((m) => m.piece !== 'p' && m.piece !== 'k').length; } catch { return 0; }
+}
+
+const squareShade = (sq: string): number => (sq.charCodeAt(0) - 97 + Number(sq[1])) % 2;
+
+/** THE KIND OF POSITION for `student` ('w'/'b'), whose edge is `studentCp`
+ *  (centipawns, the student's seat; null when unread). Null when none holds. */
+export function boardKind(fen: string, student: 'w' | 'b', studentCp: number | null): { kind: BoardKind; text: string } | null {
+  let c: Chess;
+  try { c = new Chess(fen); } catch { return null; }
+  const all = c.board().flat().filter((p): p is NonNullable<typeof p> => !!p);
+  const better = studentCp !== null && studentCp >= BETTER_CP;
+  if (better && studentCp! < DRAWISH_BELOW_CP) {
+    const heavy = all.filter((p) => p.type === 'q' || p.type === 'r');
+    const minors = all.filter((p) => p.type === 'b' || p.type === 'n');
+    const bishops = minors.filter((p) => p.type === 'b');
+    const opposite = heavy.length === 0 && minors.length === 2 && bishops.length === 2
+      && bishops[0].color !== bishops[1].color && squareShade(bishops[0].square) !== squareShade(bishops[1].square);
+    if (opposite) return { kind: 'drawing-chances', text: 'You\'re better, but the bishops run on opposite colours: with only pawns besides, they have real drawing chances.' };
+    const wings = wingPawns(c);
+    const on = (w: 'queenside' | 'kingside'): number => wings.w[w].length + wings.b[w].length;
+    if (heavy.length + minors.length <= 2 && (on('queenside') === 0) !== (on('kingside') === 0)) {
+      return { kind: 'drawing-chances', text: 'You\'re better, but with so little left and every pawn on one wing, they have real drawing chances.' };
+    }
+  }
+  // Locked and close: "nobody is in danger" is false on a board one side is
+  // winning (Desperado, Black clearly worse in a bind with an h-file attack
+  // coming).
+  if ((studentCp === null || Math.abs(studentCp) < LOCKED_CLOSE_CP) && lockedPawnPairs(c).length >= 3 && findOpenFiles(fen).open.length === 0) {
+    return { kind: 'locked', text: 'The position is locked: the pawns hold each other and no file is open, so nobody is in danger yet. The play is slow, behind the pawns.' };
+  }
+  if (better) {
+    const mine = pieceReach(c, student);
+    const theirs = pieceReach(c, student === 'w' ? 'b' : 'w');
+    if (mine >= 10 && theirs * 2 < mine) {
+      return { kind: 'no-counterplay', text: 'They have no counterplay, so there is no hurry: improve every piece before doing anything concrete.' };
+    }
+  }
+  return null;
 }

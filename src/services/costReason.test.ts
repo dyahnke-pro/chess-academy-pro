@@ -19,6 +19,21 @@ describe('costReason — one walker, both seats', () => {
     expect(r?.trust).toMatchObject({ name: true, why: 'near' });
     expect(r?.plies[0].san).toBe('dxe5');
   });
+  it('the other line is counted to the blow\'s depth: a pawn it wins later does not cancel a knight lost now (Korchnoi–Salov, Nxb5)', () => {
+    // Nxb5 …Qe8 Qf3 …Qxb5 wins the knight on move 3. The best move's line
+    // wins Black a pawn only on its tenth ply; counted over its whole length
+    // it cancelled half the knight, and the reason walked on to move 19.
+    const fen = 'r2q2k1/p4pbp/6r1/1p1P1bPQ/2p2P2/2N1B3/PP5P/R4RK1 w - - 0 21';
+    const r = costReason({
+      fenBefore: fen, playedSan: 'Nxb5', mover: 'w', student: 'w', costCp: 360,
+      after: { uci: ['d8e8', 'h5f3', 'e8b5', 'h2h4', 'g6d6', 'a1d1', 'b5d7', 'e3c5', 'f5g4', 'f3e4', 'a8e8', 'e4e8', 'd7e8', 'f1e1', 'e8d7', 'c5d6', 'h7h6', 'd1c1'], source: 'deep', seconds: [['d8e8', 'h5f3', 'e8b5', 'd5d6', 'a8d8', 'a2a4']] },
+      // The best move's own line: Black wins a pawn there too, but on ply 10.
+      before: null, priorMove: null, against: ['h5f3', 'b5b4', 'c3e4', 'd8d7', 'a1e1', 'a8c8', 'e3c1', 'c4c3', 'b2c3', 'b4c3', 'h2h3', 'f5e4', 'e1e4', 'g6d6', 'f3g4', 'd6d5', 'g4d7', 'd5d7', 'f1e1'],
+    });
+    expect(r?.plies.map((p) => p.san)).toEqual(['Qe8', 'Qf3', 'Qxb5']);
+    expect(r?.trust.name).toBe(true);
+  });
+
   it('a deep line that ends mid-fight still has its reason (the first blow that holds)', () => {
     // After …dxe5 the line runs on to d4, where the e5 pawn can take: the
     // line's END proves nothing, its first blow still does.

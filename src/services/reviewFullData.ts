@@ -354,6 +354,8 @@ export function computeMoveFacets(
   // say-once identity. A fact with no clean square records none, so a
   // highlight never appears without a board-true square behind it.
   const facets: ReviewFacet[] = [];
+  /** The mate this move allowed, once the verdict has said it (its moves). */
+  let allowedMateHere: number | null = null;
   const made = (computer: ComputerName, tag: FacetTag, text: string): ReviewFacet => reviewFacet(computer, tag, text, ctx.fenAfter, ctx.fenBefore);
   const put = (computer: ComputerName, tag: FacetTag, text: string): ReviewFacet => { const f = made(computer, tag, text); facets.push(f); return f; };
   const recIncoming = (facet: ReviewFacet, beneficiary: 'w' | 'b' | undefined): void => {
@@ -646,12 +648,19 @@ export function computeMoveFacets(
     // the better move's reason and the proof — the same reads Learn speaks;
     // Review names the better move because the game is over.
     const opponentMoved = ctx.studentColorWB !== null && (ctx.moverColor === 'white' ? 'w' : 'b') !== ctx.studentColorWB;
+    // THE MATE THE MOVE ALLOWED (Review prod audit 2026-11-18, ply 68: "Your
+    // Ke6 was a blunder. It let them play Qe5#." — the record's own read was
+    // a mate against the mover, and the one error computer was handed none, so
+    // it worded the mate as an ordinary reply and the mate came second).
+    const storedAfter = storedMate(ctx.evaluation);
+    const allowedMate = storedAfter !== null && (ctx.moverColor === 'white' ? storedAfter < 0 : storedAfter > 0) ? Math.abs(storedAfter) : null;
+    allowedMateHere = allowedMate;
     const ew = bestSan && fellShort
       ? errorWhy({
         secondReads: ctx.secondReads, costCp: ctx.costCp,
         fenBefore, playedSan: san, moverColor: ctx.moverColor,
         bestSan, bestLineUci: ctx.bestLineUci, replyLineUci: costsPoints ? ctx.playedLineUci : [],
-        missedMate: null, allowedMate: null,
+        missedMate: null, allowedMate,
         bestMate: moverGaveUpMate(ctx.preMoveEval, ctx.evaluation, ctx.moverColor) ? 'forced' : null,
         quality: ctx.classification === 'inaccuracy' ? 'inaccuracy' : ctx.classification === 'blunder' ? 'blunder' : 'mistake',
         priorMove: priorMoveLeadingTo(ply >= 2 && ctx.teaching.prevFenBefore ? { fenBefore: ctx.teaching.prevFenBefore, san: ctx.allSans[ply - 2] } : null, fenBefore),
@@ -715,7 +724,11 @@ export function computeMoveFacets(
     const strongerSentence = reason && ew?.bestSan
       ? rotateStem([`${ew.bestSan} was stronger: ${reason}`, `${ew.bestSan} was the better move: ${reason}`, `Better was ${ew.bestSan}: ${reason}`], ply)
       : null;
-    const after = [whyBad, consequence, strongerSentence, !consequence && !reason && !failedSaid ? answer : null]
+    // A FORCED MATE LEADS ITS LINE: the verdict and the mate it allowed are one
+    // sentence ("Your Ke6 was a blunder — it walks into a forced mate: they
+    // play Qe5#"), never the grade alone with the mate a sentence later.
+    const mateRides = allowedMate !== null && !!consequence;
+    const after = [whyBad, mateRides ? null : consequence, strongerSentence, !consequence && !reason && !failedSaid ? answer : null]
       .filter((t): t is string => !!t)
       .map((t) => ` ${openSentence(t)}.`)
       .join('');
@@ -733,7 +746,7 @@ export function computeMoveFacets(
     // — they come out two pawns up"); review dropped it.
     const tailSaid = consequence && ew?.tail ? (opponentMoved ? seatPieces(toOtherSeat(ew.tail)) : seatPieces(ew.tail)) : '';
     const praiseBit = positive ? praiseWhy(ctx.classification, ctx.preMoveEval, ctx.evaluation, ctx.moverColor) : '';
-    const qf = put('errorWhy', positive ? 'praise' : 'quality', `${verdictSentence(ctx.classification, isStudent, san)}${swingBit}${praiseBit}.${after}${heardNow?.ridesVerdict ? ` ${heardNow.text}` : ''}${failedSaid ? ` ${failedSaid}` : ''}${tailSaid}`);
+    const qf = put('errorWhy', positive ? 'praise' : 'quality', `${verdictSentence(ctx.classification, isStudent, san)}${swingBit}${praiseBit}${mateRides ? ` — ${continueSentence(consequence)}` : ''}.${after}${heardNow?.ridesVerdict ? ` ${heardNow.text}` : ''}${failedSaid ? ` ${failedSaid}` : ''}${tailSaid}`);
     // The verdict's proof is the line its words name: the better move's own
     // line when the reason came from it, the line after the move when the
     // punishment did.
@@ -922,6 +935,10 @@ export function computeMoveFacets(
     };
     for (const tac of t.tactics) {
       if (tac.type === 'none' || !tac.description) continue;
+      // THE MATE IS SAID ONCE: the verdict already said the mate this move
+      // allowed ("— it walks into a forced mate: they play Qe5#"); "They have
+      // mate in one with their queen" a sentence later says it twice.
+      if (tac.type === 'mate_threat' && allowedMateHere !== null && ctx.studentColorWB !== null && tac.beneficiary !== (ctx.moverColor === 'white' ? 'w' : 'b')) continue;
       // A fork SHAPE is tempo-blind — the static scanner reports it whether or
       // not the owner ever executes it and whether or not it wins anything.
       // Verify it (tempo + SEE) before speaking it as a fact (David 2026-07-23:

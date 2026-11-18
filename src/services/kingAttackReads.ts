@@ -593,6 +593,11 @@ export function kingSquareByChecks(fen: string, me: Color, bestSan: string | nul
     if (alt.piece !== 'k' || alt.to === bm.to || alt.san.startsWith('O-O')) continue;
     const a = playLine(fen, [alt.san]);
     if (!a) continue;
+    // A square that walks into MATE is not a square that "wins them time":
+    // the mate is the error computer's to say (Review prod audit 2026-11-18,
+    // ply 68: "the king belongs on e8, not e6: there their queen checks" one
+    // sentence after Ke6 allowed Qe5#).
+    if (load(a.board.fen())?.moves().some((m) => m.endsWith('#'))) continue;
     const checks = checksAfter(a.board.fen());
     if (checks.length <= bestChecks) continue;
     const queen = checks.find((c) => c.piece === 'q') ?? checks[0];

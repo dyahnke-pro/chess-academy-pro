@@ -1,9 +1,13 @@
 /**
  * BOARD READ FACTS — every fact the app's computers make about one board, for
  * the read (David 2026-11-18: "Read this position" in his manner): the
- * board's own reads (`computePositionFacts`, every candidate before any door),
- * the tempting moves refuted by their own lines (`temptingOnBoard`), and what
- * the engine's best move does (`moveThoughtFacts` on the board after it).
+ * standing and the kind of position (`boardKind`), the target (`targetSelector`,
+ * both seats), the board's own reads (`computePositionFacts`, every candidate
+ * before any door), the plan (`boardPlan`: the siege, the quiet steps, the
+ * second front) and theirs, the tempting moves refuted by their own lines or
+ * by what they give up (`temptingOnBoard`, `positionalReason.boardReason`) — ours and
+ * their best try after our move — and what the engine's best move does
+ * (`moveThoughtFacts` on the board after it).
  *
  * `readDecider.decideRead` picks which of them a read says and orders them.
  * The engine is a parameter, so the app (Stockfish in a worker) and the
@@ -12,10 +16,17 @@
  */
 import { Chess } from 'chess.js';
 import { computePositionFacts, type PositionFactsInput } from './positionFacts';
-import { stakeValue } from './factStakes';
-import { factDepth } from './thoughtComposer';
-import { temptingOnBoard, candidateMoves, type WeighRead } from './weighedMoves';
+import { temptingOnBoard, candidateMoves, TEMPTING_COST_CP, type WeighRead } from './weighedMoves';
+import { seatCp } from './winChance';
+import { boardReason } from './positionalReason';
+import { phaseOfFen } from './boardConcepts';
+import { boardKind } from './positionCharacter';
+import { standingTarget, opponentTargets, targetLine } from './targetSelector';
+import { siegeOf, stepsOf, switchWing } from './boardPlan';
+import { planSteps, planStepsText } from './planSteps';
+import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { moveThoughtFacts } from './moveThoughtFacts';
+import { standingReading } from './reviewMoveBriefing';
 import { NO_PREV_CAPTURE } from './captureRun';
 import type { ReadFact } from './readDecider';
 import type { AnalysisLine, StockfishAnalysis } from '../types';
@@ -25,12 +36,14 @@ import type { ImportanceTier } from './narrationImportance';
 /** One engine read of a board: its lines, best first. Null when unread. */
 export type BoardReader = (fen: string) => Promise<readonly AnalysisLine[] | null>;
 
-export interface BoardFact extends ReadFact {
-  group: string;
-  squares: readonly string[];
-  /** The candidate's id in `computePositionFacts` (position facts only). */
-  id: string | null;
-}
+export type BoardFact = ReadFact;
+
+/** What a read never says beside a forced mate: plans, conversion advice and
+ *  the kind of position. */
+const BESIDE_MATE: ReadonlySet<string> = new Set(['convert', 'compensation', 'eval', 'character', 'siege', 'plan-steps', 'plan-race', 'structure-plan', 'switch-wing', 'their-plan', 'refuted-positional']);
+
+/** The best move's facts that say who stands better, not what the move does. */
+const VERDICT_KINDS: ReadonlySet<string> = new Set(['eval', 'compensation', 'convert']);
 
 export interface BoardReadInput {
   fen: string;
@@ -84,15 +97,74 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardRead> {
     fen: i.fen, moverColor: side, studentColor: i.studentColor, rating: i.rating, analysis: asAnalysis(i.before), history: [...i.history],
     studentNeedContext: i.studentNeedContext, ...(i.extra ?? {}),
   });
+  const them: 'w' | 'b' = i.studentColor === 'w' ? 'b' : 'w';
+  const mine = side === i.studentColor;
+  const whose = mine ? 'your' : 'their';
+  const povCp = top.mate == null ? top.evaluation * (i.studentColor === 'w' ? 1 : -1) : null;
+  // A FORCED MATE IS THE STORY: no plan, no "finish developing", no kind of
+  // position beside it (every-surface gate D, "plans beside mate").
+  const mateOnBoard = top.mate != null;
+  const done = (): BoardRead => ({ facts: mateOnBoard ? facts.filter((f) => !BESIDE_MATE.has(f.kind)) : facts, tier: pf.importance.tier });
+
+  // THE STANDING and THE KIND OF POSITION: who stands better and why, read
+  // off this board (his read opens on it), and what kind of play it asks for.
+  // A forced mate is the concept read's, not a score's.
+  // Whose mate it is, off the score's sign (White's seat); never on a puzzle
+  // still being solved, where "there is a mate" is the hint.
+  if (mateOnBoard && !i.withhold) {
+    const studentMates = (top.evaluation > 0) === (i.studentColor === 'w');
+    facts.push({ from: 'position', kind: 'standing', text: studentMates ? 'There is a forced mate here for you.' : 'They have a forced mate here.' });
+  }
+  if (povCp !== null) {
+    facts.push({ from: 'position', kind: 'standing', text: standingReading(i.fen, povCp, i.studentColor, i.before) });
+    const k = boardKind(i.fen, i.studentColor, povCp);
+    if (k) facts.push({ from: 'position', kind: 'character', text: k.text });
+  }
+  // THE TARGET the board turns on, for the side to move when it is the
+  // student, and the student's own pawn the other side can win.
+  const target = mine ? standingTarget(i.fen, side, povCp, top.moves[0] ?? null) : null;
+  if (target) facts.push({ from: 'position', kind: 'target', text: targetLine(target, i.fen, 'your') });
+  const theirTarget = opponentTargets(i.fen, them).find((t) => t.attackers.length + t.reachers.length > t.guards.length);
+  if (theirTarget) facts.push({ from: 'position', kind: 'their-target', text: targetLine(theirTarget, i.fen, 'their') });
+
   for (const c of pf.candidates) {
     if (i.withhold && c.kind === 'deliberation') continue;
-    facts.push({ from: 'position', kind: c.kind, group: c.group, text: c.text, squares: c.squares ?? [], stake: stakeValue(c.stakes), depth: null, id: c.id });
+    facts.push({ from: 'position', kind: c.kind, text: c.text });
   }
-  const done = (): BoardRead => ({ facts, tier: pf.importance.tier });
-  if (i.withhold) return done();
 
-  // The tempting moves, each read to its own line — the student's turn only.
-  if (i.readTempting && side === i.studentColor) {
+  // THE PLAN ON THE BOARD (his "attack down the c-file at the knight on c6"),
+  // over the board's own engine lines: the siege, the quiet steps (a plain
+  // trade allowed), the second front when the target holds. Not on a puzzle
+  // still being solved: a plan names its moves.
+  if (!i.withhold) {
+    const siege = siegeOf(i.fen, i.before, whose);
+    if (siege) facts.push({ from: 'position', kind: 'siege', text: siege.text });
+    const steps = stepsOf(i.fen, i.before, whose);
+    if (steps) facts.push({ from: 'position', kind: 'plan-steps', text: steps.text });
+    const second = mine ? switchWing(i.fen, side, 'your') : null;
+    if (second) facts.push({ from: 'position', kind: 'switch-wing', text: second.text });
+    // THEIR PLAN: their next quiet moves in the engine's line, after our best
+    // move and their reply.
+    if (top.moves.length > 2) {
+      try {
+        const b = new Chess(i.fen);
+        b.move({ from: top.moves[0].slice(0, 2), to: top.moves[0].slice(2, 4), promotion: top.moves[0][4] });
+        b.move({ from: top.moves[1].slice(0, 2), to: top.moves[1].slice(2, 4), promotion: top.moves[1][4] });
+        const p = planSteps(b.fen(), top.moves.slice(2), top.moves[1], 3, true);
+        // planSteps reads the side NOT to move on the board it is given — the
+        // other side here, so "their plan" is ours when the side to move is
+        // theirs. Said from the student's seat.
+        if (p) facts.push({ from: 'position', kind: 'their-plan', text: planStepsText(p, mine ? 'their' : 'your') });
+      } catch { /* an unplayable line shows no plan */ }
+    }
+  }
+
+  // The tempting moves, each read to its own line — the student's turn only,
+  // never on a puzzle still being solved (ruling a move out narrows the answer).
+  // A move that loses nothing yet still costs a pawn or more is refuted by what
+  // it gives up (`positionalReason`): his "b5 at once allows …e5, with strong
+  // central counterplay and a dead bishop".
+  if (!i.withhold && i.readTempting && mine) {
     const tempting: WeighRead[] = [{ evaluation: top.evaluation, mate: top.mate, moves: top.moves }];
     for (const c of candidateMoves(i.fen, i.rating, { played: null, scored: null })) {
       if (c.uci === top.moves[0]) continue;
@@ -102,26 +174,62 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardRead> {
       const t = (await i.read(after.fen()).catch(() => null))?.[0];
       if (t) tempting.push({ evaluation: t.evaluation, mate: t.mate, moves: [c.uci, ...t.moves], earlier: t.earlier?.moves ? [c.uci, ...t.earlier.moves] : null });
     }
-    for (const t of temptingOnBoard({ fen: i.fen, student: i.studentColor, rating: i.rating, reads: tempting, priorMove: null })) {
-      facts.push({ from: 'tempting', kind: 'refuted', group: 'choices', text: t.text, squares: [], stake: null, depth: null, id: null });
+    const refuted = temptingOnBoard({ fen: i.fen, student: i.studentColor, rating: i.rating, reads: tempting, priorMove: null });
+    for (const t of refuted) facts.push({ from: 'tempting', kind: 'refuted', text: t.text });
+    const bestSan = sanOf(i.fen, top.moves[0]);
+    for (const r of tempting.slice(1)) {
+      const san = sanOf(i.fen, r.moves[0]);
+      if (!san || refuted.some((t) => t.san === san)) continue;
+      if (seatCp(tempting[0], side) - seatCp(r, side) < TEMPTING_COST_CP) continue;
+      // The board after the two moves, said in the present (the concession
+      // reads a move already played: "it took your last defender").
+      const why = boardReason(i.fen, san, bestSan, phaseOfFen(i.fen) ?? 'middlegame');
+      if (!why) continue;
+      const lead = rotateStem([`${san} looks natural, but it isn't the move`, `${san} is tempting here, but it doesn't hold up`], stemKeyOf(`${i.fen}|positional|${san}`));
+      facts.push({ from: 'tempting', kind: 'refuted-positional', text: `${lead}: ${why.note.replace(/^./, (x) => x.toLowerCase())}` });
     }
   }
 
-  // What the best move does, read on the board after it.
+  // What the best move does, read on the board after it; and their best try
+  // there, refuted by its own line (his "…Nd8 would have led to immediate
+  // calamity, as Black cannot stop the rook penetration to c7").
   const uci = top.moves[0];
   if (uci) {
     const board = new Chess(i.fen);
     let san: string;
     try { san = board.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] ?? 'q' }).san; } catch { return done(); }
-    const after = await i.read(board.fen()).catch(() => null);
+    const fenB = board.fen();
+    const after = await i.read(fenB).catch(() => null);
     if (after) {
       for (const f of moveThoughtFacts({
-        fenBefore: i.fen, san, moverIsStudent: side === i.studentColor, namesPlayedMove: true, plainThreatsSeen: false, tense: i.tense, theory: false, story: false,
+        fenBefore: i.fen, san, moverIsStudent: mine, namesPlayedMove: true, plainThreatsSeen: false, tense: i.tense, theory: false, story: false,
         prev: NO_PREV_CAPTURE, line: top.moves, history: [], theirLast: null, phrases: null, reads: { before: [...i.before], after: [...after], passBefore: [], passAfter: [] }, costCp: 0,
       })) {
-        facts.push({ from: 'bestMove', kind: f.kind, group: f.group, text: f.text, squares: f.squares ?? [], stake: stakeValue(f.stakes), depth: factDepth(f), id: null });
+        // A puzzle still being solved keeps only who stands better: what the
+        // best move does is the answer.
+        if (i.withhold && !VERDICT_KINDS.has(f.kind)) continue;
+        facts.push({ from: 'bestMove', kind: f.kind, text: f.text });
+      }
+      if (!i.withhold && i.readTempting && mine && after[0]) {
+        const theirs: WeighRead[] = [{ evaluation: after[0].evaluation, mate: after[0].mate, moves: after[0].moves }];
+        for (const c of candidateMoves(fenB, i.rating, { played: null, scored: null })) {
+          if (c.uci === after[0].moves[0]) continue;
+          const b2 = new Chess(fenB);
+          try { b2.move({ from: c.from, to: c.to, promotion: c.uci[4] }); } catch { continue; }
+          if (b2.isGameOver()) continue;
+          const t = (await i.read(b2.fen()).catch(() => null))?.[0];
+          if (t) theirs.push({ evaluation: t.evaluation, mate: t.mate, moves: [c.uci, ...t.moves], earlier: t.earlier?.moves ? [c.uci, ...t.earlier.moves] : null });
+        }
+        for (const t of temptingOnBoard({ fen: fenB, student: i.studentColor, rating: i.rating, reads: theirs, priorMove: { fenBefore: i.fen, san } })) {
+          facts.push({ from: 'tempting', kind: 'their-refuted', text: t.text });
+        }
       }
     }
   }
   return done();
+}
+
+function sanOf(fen: string, uci: string | undefined): string | null {
+  if (!uci) return null;
+  try { return new Chess(fen).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }).san; } catch { return null; }
 }

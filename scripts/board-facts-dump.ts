@@ -81,6 +81,9 @@ async function main(): Promise<void> {
     if (done.has(r.id)) continue;
     const out: Record<string, unknown> = { id: r.id, fen: r.fen };
     try {
+      // A fresh search per board, so a board's read never depends on the boards before it.
+      engine.send('ucinewgame');
+      cache.clear();
       const side = new Chess(r.fen).turn();
       const before = await read(r.fen);
       out.lines = before.map((l) => ({ moves: l.moves.slice(0, 10), cp: l.evaluation, mate: l.mate }));

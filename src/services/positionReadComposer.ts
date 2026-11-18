@@ -122,9 +122,8 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
   } catch { /* corpus unavailable — the computed read stands alone */ }
 
   // 2. THE READ — every fact the computers make about this board, and the
-  //    ones HIS reads of positions say, in his order (`readDecider`, fitted on
-  //    his written reads and his videos). Nothing is joined in a fixed order:
-  //    the decider is the only thing that picks.
+  //    ones his order asks for, one a step (`readDecider`: the story, the
+  //    calm answer, the tempting move refuted). The habit closes it below.
   let decidingMoment = false;
   let readLines: string[] = [];
   const before = [...(i.analysis?.topLines ?? [])].sort((x, y) => x.rank - y.rank);

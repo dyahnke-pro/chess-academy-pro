@@ -149,9 +149,10 @@ function walk(
    *  alone "you give up a rook and a pawn for a rook and a bishop" was false,
    *  White ended a queen up). The played move, when the line follows it. */
   countFrom: { fenBefore: string; san: string } | null,
-  /** What the other move's line gives the winner too (`otherNet`): a blow is
-   *  the reason only past it. */
-  given: number,
+  /** What the other move's line gives the winner too (`otherNet`), counted
+   *  to the same depth as the blow it is set against (the blow's plies after
+   *  the move): a blow is the reason only past it. */
+  given: (plies: number) => number,
 ): Omit<CostReason, 'seat' | 'kind'> | null {
   const { sans, plies } = replay(fen, read.uci);
   if (sans.length === 0) return null;
@@ -178,10 +179,10 @@ function walk(
     if (!p || p.plies < 1) continue;
     if (p.mate) {
       const mater = plies[Math.min(p.plies, plies.length) - 1]?.moverColor;
-      if (mater === (winner === 'w' ? 'white' : 'black') && given < 100) proof = p;
+      if (mater === (winner === 'w' ? 'white' : 'black') && given(p.plies) < 100) proof = p;
       continue;
     }
-    if (!p.ledger?.settled || sign * p.ledger.netPawns - given < need) continue;
+    if (!p.ledger?.settled || sign * p.ledger.netPawns - given(p.plies) < need) continue;
     const at = plies[Math.min(p.plies, plies.length) - 1]?.fenAfter;
     if (at && p.sans.length <= plies.length) {
       const blowLead = lead(at, winner);
@@ -271,13 +272,17 @@ export function costReason(args: {
   try { const c = new Chess(args.fenBefore); c.move(args.playedSan); fenAfter = c.fen(); } catch { fenAfter = null; }
   if (fenAfter && args.after) {
     const against = args.against ?? args.before?.uci ?? null;
-    const a = walk(fenAfter, args.after, other, args.student, need, null, { fenBefore: args.fenBefore, san: args.playedSan }, otherNet(args.fenBefore, against, other, args.student, null));
+    // Like with like (Korchnoi–Salov, Nxb5 …Qe8 Qf3 …Qxb5): a pawn the best
+    // line wins on its tenth move does not cancel a knight lost on the third.
+    // The other line is counted to the same depth: its own move plus as many
+    // plies as the blow.
+    const a = walk(fenAfter, args.after, other, args.student, need, null, { fenBefore: args.fenBefore, san: args.playedSan }, (n) => otherNet(args.fenBefore, against?.slice(0, n + 1) ?? null, other, args.student, null));
     if (a) return { seat, kind: 'allowed', ...a };
   }
   if (args.before) {
     const playedUci = (() => { try { const m = new Chess(args.fenBefore).move(args.playedSan); return `${m.from}${m.to}${m.promotion ?? ''}`; } catch { return null; } })();
     const against = args.against ?? (args.after && playedUci ? [playedUci, ...args.after.uci] : null);
-    const b = walk(args.fenBefore, args.before, args.mover, args.student, need, args.priorMove, null, otherNet(args.fenBefore, against, args.mover, args.student, args.priorMove));
+    const b = walk(args.fenBefore, args.before, args.mover, args.student, need, args.priorMove, null, (n) => otherNet(args.fenBefore, against?.slice(0, n) ?? null, args.mover, args.student, args.priorMove));
     if (b) return { seat, kind: 'missed', ...b };
   }
   return null;

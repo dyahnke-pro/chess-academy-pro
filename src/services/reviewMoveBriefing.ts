@@ -195,6 +195,12 @@ export function evalReading(fenAfter: string, povBeforeCp: number | null, povAft
   if (!bandChanged && Math.abs(swing) < 40) return null;
   return explainEval(fenAfter, povAfterCp, studentWB, lastMove, lines);
 }
+/** THE STANDING OF A BOARD — who stands better and why, read off the board
+ *  itself rather than off a move that changed it (the read's verdict, David
+ *  2026-11-18: his read of a board opens on it). */
+export function standingReading(fen: string, studentPovCp: number, studentWB: 'w' | 'b', lines: readonly InitiativeLine[] | null): string {
+  return explainEval(fen, studentPovCp, studentWB, null, lines);
+}
 /** The DELTA — how this move moved the eval (student POV cp swing). Null when it
  *  barely moved (a quiet move keeps its silence rather than "held the balance"
  *  every ply). */

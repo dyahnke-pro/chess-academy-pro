@@ -1,34 +1,57 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { decideRead, saidRate, type ReadFact } from './readDecider';
+import { decideRead, type ReadFact } from './readDecider';
 
-// Every fact the app's computers made on Korchnoi's board from Danya's
-// "How to avoid blunders" read (the dump's own output, a3 to play), with what
-// the old read said (`keptToday`: the composer joined every kept fact in a
-// fixed order, a dozen structure plans among them).
+// Every fact the app's computers made on Korchnoi's board from Danya's "How to
+// avoid blunders" (a3 to play), with what the old read said (`keptToday`: the
+// composer joined every kept fact, a dozen structure plans among them).
 interface FixtureFact extends ReadFact { keptToday: boolean }
 const board = JSON.parse(readFileSync('src/test/fixtures/read-korchnoi-board.json', 'utf8')) as { facts: FixtureFact[] };
-const facts: FixtureFact[] = board.facts.map((f) => ({ ...f, depth: f.depth ?? null, stake: f.stake ?? null }));
 
-describe('the read decider (fitted on his reads of positions)', () => {
-  it('says the move that matters on Korchnoi\'s board, not the board\'s generic plans', () => {
-    const said = decideRead(facts).map((f) => f.text);
-    // His read is about a3 covering b4 before b4 lands. It is said.
-    expect(said.some((t) => /a3/.test(t) && /covers b4/.test(t))).toBe(true);
-    // The old read also said a minority attack on a board where none is the
-    // point, and a structure plan for every piece. The decider says neither.
-    const old = facts.filter((f) => f.keptToday).map((f) => f.text);
-    expect(old.some((t) => /minority attack/.test(t))).toBe(true);
-    expect(said.some((t) => /minority attack/.test(t))).toBe(false);
-    expect(said.length).toBeLessThan(old.length / 2);
+describe('the read decider: his order, one fact a step', () => {
+  it('Korchnoi\'s board: the verdict, then a3 and why, then Nxb5 refuted — nothing else', () => {
+    const said = decideRead(board.facts).map((f) => f.text);
+    expect(said).toHaveLength(3);
+    expect(said[0]).toMatch(/pawn down.*bishop pair/);
+    expect(said[1]).toMatch(/^a3 first.*covers b4/);
+    expect(said[2]).toMatch(/^Nxb5 .*Qe8/);
+    // The old read said a minority attack and a dozen structure plans.
+    expect(board.facts.filter((f) => f.keptToday).some((f) => /minority attack/.test(f.text))).toBe(true);
+    expect(said.some((t) => /minority attack|plan from here/.test(t))).toBe(false);
   });
 
-  it('a kind his reads never say stays quiet; ties keep their order; one statement of each', () => {
-    const unseen: ReadFact = { from: 'position', kind: 'no-such-kind', text: 'x', depth: null, stake: null };
-    expect(saidRate(unseen)).toBeLessThan(0.3);
-    expect(decideRead([unseen])).toEqual([]);
-    const keep = facts.find((f) => decideRead([f]).length === 1);
-    expect(keep).toBeDefined();
-    if (keep) expect(decideRead([keep, { ...keep }])).toHaveLength(1);
+  it('a step with nothing to say stays empty; a fact is said once', () => {
+    expect(decideRead([{ from: 'position', kind: 'structure-plan', text: 'x' }])).toEqual([]);
+    const f: ReadFact = { from: 'tempting', kind: 'refuted', text: 'y' };
+    expect(decideRead([f, { ...f }])).toHaveLength(1);
+  });
+
+  it('one idea once: a story line whose squares were all named already is not said', () => {
+    const facts: ReadFact[] = [
+      { from: 'position', kind: 'standing', text: 'Roughly balanced — your isolated pawn on c4 is attacked twice.' },
+      { from: 'position', kind: 'their-target', text: 'The target is your pawn on c4: it is isolated.' },
+      { from: 'bestMove', kind: 'move-job', text: 'You play Rf4 — it adds a second guard to your pawn on c4.' },
+    ];
+    expect(decideRead(facts).map((f) => f.kind)).toEqual(['standing', 'move-job']);
+  });
+
+  it('the second front follows the story\'s own target, never another pawn', () => {
+    const base: ReadFact[] = [
+      { from: 'position', kind: 'priority', text: 'Their pawn on d5 is isolated. Aim at it.' },
+      { from: 'position', kind: 'switch-wing', text: 'Their pawn on h7 holds, but it ties down a piece. Open a second front: the c5 break.' },
+    ];
+    expect(decideRead(base).map((f) => f.kind)).toEqual(['priority']);
+    const onTarget: ReadFact = { from: 'position', kind: 'switch-wing', text: 'Their pawn on d5 holds, but it ties down two pieces. Open a second front: the g4 break.' };
+    expect(decideRead([base[0], onTarget]).map((f) => f.kind)).toEqual(['priority', 'switch-wing']);
+  });
+
+  it('the best move\'s job that hits the story\'s target outranks its other jobs (Karpov–Spassky, Rd3)', () => {
+    const facts: ReadFact[] = [
+      { from: 'position', kind: 'priority', text: 'Their pawn on d5 is isolated. Aim at it: Rd3 does.' },
+      { from: 'bestMove', kind: 'move-job', text: 'You play Rd3 — it adds a second guard to your bishop on c3.' },
+      { from: 'bestMove', kind: 'board-teacher', text: 'You play Rd3, which presses down the half-open d-file at their pawn on d5.' },
+    ];
+    expect(decideRead(facts).map((f) => f.kind)).toEqual(['priority', 'board-teacher']);
   });
 });
+

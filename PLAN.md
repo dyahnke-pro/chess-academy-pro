@@ -29,6 +29,12 @@ The full list and the measurement are in `docs/plans/2026-11-18-danya-board-read
 
 Nothing reads a board automatically before a puzzle is solved; the read speaks only when the student taps for it (David 2026-11-18).
 
+**The read decider, rebuilt bare in his order (David 2026-11-18: "strip the decider so its bare, and just have it chose the facts that we compute in this order").** Read off his own written read of Korchnoi–Salov ("How to avoid blunders"): (1) the story: who stands better and why, then what their last move does; (2) the calm answer: the best move and what it does; (3) the tempting move, what it is counting on, and the reply that refutes it; (4) why it was easy to miss; (5) the habit that catches it. `readDecider.READ_STEPS` says one computed fact per step, in that order; `boardReadFacts` is the one fact set (the board's reads, the tempting moves, the best move's job), shared with the offline dump. The fitted table is deleted. Next: one position at a time, his read beside ours.
+
+**Missing computers for the read (David: "mark that missing computer to build later"):**
+- **Why it was easy to miss:** the reason a tactic slips past a player (a double attack on two pieces that look well placed, hidden inside a tense fight). His step 4; nothing computes it.
+- **What the tempting move is counting on:** the reply the player expected (Korchnoi played Nxb5 counting on …Bxb2). The tempting-move read says the refutation, never the hoped-for line.
+
 ## 🗣️ WO-LEARN-MOMENT-01 — Learn speaks like a coach at the board: on an error, on a right move at a real decision, and quiet otherwise (David 2026-11-18: "learn narrations are needed only when the player makes an error of some kind … And it knows when not to say anything" → "Or it can be used to reenforce proper move behavior" → "It gets more quiet if you make all the right moves. But it speaks on errors" → "Make all of the fixes now at once")
 
 - **Measured first** on three games with stored reads (Danya, David, the 800 Colle): the error computer said "head on to f6" where Qe5 threatened mate, "win a knight" for a capture both moves made, and "it eyed f7, but the king holds it" on a move whose cost was a missed queen win. Fixed in the one computer (`errorWhy`): what the better move wins comes first, a capture is said by what it takes, the eyed-guess yields to a real miss.

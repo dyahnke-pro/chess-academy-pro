@@ -33,7 +33,11 @@ export interface PlanSteps {
  *  `line` is UCI, their reply first; `played` the move that made `fenAfter`
  *  (UCI), or null when unknown. Null when the line is not quiet, or the
  *  mover's next moves are fewer than two. */
-export function planSteps(fenAfter: string, line: readonly string[], lastMove: string | null, maxSteps = 3): PlanSteps | null {
+export function planSteps(fenAfter: string, line: readonly string[], lastMove: string | null, maxSteps = 3,
+  /** A plain trade in the stretch — a capture taken straight back on its
+   *  square — is part of the plan, not a fight (the board read's plan: the
+   *  engine's line often trades a pair on the way). Off for a move's own plan. */
+  allowTrades = false): PlanSteps | null {
   const board = new Chess(fenAfter);
   const mover: Color = board.turn() === 'w' ? 'b' : 'w';
   const steps: PlanStep[] = [];
@@ -44,8 +48,13 @@ export function planSteps(fenAfter: string, line: readonly string[], lastMove: s
     let mv;
     try { mv = board.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u.slice(4, 5) || undefined }); } catch { break; }
     played.push(u);
-    // A capture or a check in the plan's stretch is a fight, not a plan.
-    if (mv.captured || mv.san.includes('+') || mv.san.includes('#')) return null;
+    // A capture or a check in the plan's stretch is a fight, not a plan —
+    // except a plain trade when the caller allows one: the capture, and the
+    // recapture on the same square that answers it.
+    const retakes = (j: number): boolean => !!line[j] && line[j].slice(2, 4) === mv.to;
+    const prevTook = i > 0 && played.length >= 2 && (() => { const pu = line[i - 1]; return pu.slice(2, 4) === mv.to; })();
+    if (mv.san.includes('+') || mv.san.includes('#')) return null;
+    if (mv.captured && !(allowTrades && (retakes(i + 1) || prevTook))) return null;
     if (mv.color !== mover) continue;
     steps.push({ san: mv.san, piece: PIECE[mv.piece], to: mv.to, castle: mv.san.startsWith('O-O'), brk: mv.piece === 'p' && isPawnBreak(before, mv.san, null) });
   }
