@@ -22,7 +22,7 @@ import { characterTurn } from './positionCharacter';
 import { readZugzwang, zugzwangProof, zugzwangSentence, type ZugzwangRead } from './zugzwang';
 import { phaseTurnsOf } from './phaseTransitionDetector';
 import { detectImmediateTactics } from './liveTacticsContext';
-import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
+import { buildReviewMoveTeaching, buildReviewConversionTeaching } from './reviewMoveTeaching';
 import { plyFactsClause, moveOnlyRestates, computePvLine, afterCapture, NO_PREV_CAPTURE, tacticWord, type PvLine, type PvEngine, type PrevCaptureContext, type MoveScorer } from './pvPlayback';
 import { countWord, lineSeatAt, lineShape, lineWinnerFor, withArticle } from '../utils/andList';
 import { BRIEFING_LINE_PLIES, buildReviewMoveBriefing } from './reviewMoveBriefing';
@@ -75,7 +75,7 @@ import { lineRestatesClaim, lineBuilds } from './threatPurpose';
 import type { BestOfEngine, DeepReadEngine } from './gameAnalysisService';
 import { costReason as readCostReason, costReasonRow, type CostReason, type CostReasonRow, type LineRead } from './costReason';
 import { lineTrust, NAME_NEAR_PLIES } from './lineTrust';
-import { describeNotableMove, describeConcessions, findTrappedPiece, describeSimplifyingTrade, describeTradeConsequence, buildReviewDeepestLookahead, buildMissedShotSignal } from './reviewTeachingPoints';
+import { describeNotableMove, describeConcessions, describeSimplifyingTrade, describeTradeConsequence, buildReviewDeepestLookahead, buildMissedShotSignal } from './reviewTeachingPoints';
 import { detectBadHabits } from './badHabitDetector';
 import { db } from '../db/schema';
 import { voiceFacts } from './coachApi';
@@ -4265,18 +4265,14 @@ function* reviewSegmentSteps(
     // square, for EITHER side's rook/queen: theirs → you've boxed it in; your
     // own → the warning. Board-true (findTrappedPiece, conservative detector).
     if (narration === null && studentColorWB !== null) {
-      const enemyOfStudent: 'w' | 'b' = studentColorWB === 'w' ? 'b' : 'w';
       // …and only when the engine's line after the move really takes it
       // (WO-OUTCOME-01: "that piece is coming off the board" is an outcome).
+      // Theirs first, then yours — the registry's one read and its words.
       const line = m.pv?.afterPlayed ?? null;
-      const theirsTrapped = findTrappedPiece(fenPair.fenAfter, enemyOfStudent, line);
-      const mineTrapped = theirsTrapped ? null : findTrappedPiece(fenPair.fenAfter, studentColorWB, line);
-      const hit = theirsTrapped ?? mineTrapped;
-      if (hit && !trappedAnnounced.has(`${theirsTrapped ? 'e' : 's'}:${hit.square}`)) {
-        trappedAnnounced.add(`${theirsTrapped ? 'e' : 's'}:${hit.square}`);
-        narration = theirsTrapped
-          ? `Stop and look at their ${hit.piece} on ${hit.square} — it's trapped. The ${hit.attackerPiece} on ${hit.attackerSquare} attacks it, and every square it could run to is covered. That piece is coming off the board. The only question is the price.`
-          : `Careful — your ${hit.piece} on ${hit.square} is trapped. The ${hit.attackerPiece} on ${hit.attackerSquare} attacks it, and every escape square is covered. Start looking for the cheapest way to give it up, or a counter-blow that changes the subject.`;
+      const hit = readBoard('trappedPiece', { fen: fenPair.fenAfter, student: studentColorWB, lineUci: line ?? [] });
+      if (hit && !trappedAnnounced.has(readKey(hit))) {
+        trappedAnnounced.add(readKey(hit));
+        narration = hit.text;
         narrationSource = 'per-move';
       }
     }
@@ -4298,8 +4294,8 @@ function* reviewSegmentSteps(
       // §7: the endgame is named once per game (the first quiet student move
       // that's in a readable endgame) — the story's phase edge.
       if (narration === null && !phaseCrossed(story.current(), 'endgame')) {
-        const phase = nameEndgamePhase(fenPair.fenAfter);
-        if (phase) { narration = `You've reached ${phase}.`; story.note(m.ply, [{ kind: 'phase', edge: 'endgame' }]); narrationSource = 'endgame'; }
+        const phase = readBoard('endgamePhase', { fen: fenPair.fenAfter, student: studentColorWB ?? 'w' });
+        if (phase) { narration = phase.text; story.note(m.ply, [{ kind: 'phase', edge: 'endgame' }]); narrationSource = 'endgame'; }
       }
       // MIDDLEGAME silence gap (David 2026-07-20: "narration was missing on a
       // lot of moves"). Past the opening, a quiet student move that isn't a
