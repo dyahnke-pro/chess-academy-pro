@@ -96,6 +96,8 @@ import { pieceWish } from './pieceWish';
 import { theirMoveCost } from './theirMoveCost';
 import { threatStoppedBy, playItAnyway } from './opponentMovePurpose';
 import { trickSidestepped } from './forkTrick';
+import { habitsOf } from './thinkAloud';
+import { knownAttack } from './attackLibrary';
 import { lineProof } from './proof';
 import { holeKey } from './conceptKey';
 import { describeStructure } from './boardStructure';
@@ -499,6 +501,15 @@ export interface BoardContexts {
   /** THE FORK TRICK A QUIET MOVE SIDESTEPPED (`trickSidestepped`), either
    *  seat: `san` on `fenBefore` took the other side's fork trick off the board. */
   trickSidestepped: { fenBefore: string; san: string; student: Color };
+  /** WHAT A SIDE KEEPS DOING (`theirHabit`, `yourHabit`): the same mistake
+   *  twice in the moves so far (`history`, from the start), with the plan
+   *  against it; `sound`: the plies the grader called sound (never a habit's
+   *  evidence), empty where no grades are in hand. One fact per habit. */
+  theirHabit: { history: readonly string[]; student: Color; sound: ReadonlySet<number> };
+  yourHabit: { history: readonly string[]; student: Color; sound: ReadonlySet<number> };
+  /** A KNOWN ATTACKING STRUCTURE (`knownAttack`) on `fen` for the student, by
+   *  its conditions; `studentCp`: the student's score, or null. */
+  knownAttack: { fen: string; student: Color; studentCp: number | null };
   /** THE OPPOSITION TAKEN (`oppositionRead`, Danya's "it is Black who has
    *  the opposition"): the king move `san` on `fenBefore` (either seat) takes
    *  the opposition in a king-and-pawn ending, with what it forces.
@@ -2714,6 +2725,59 @@ export const BOARD_COMPUTERS = {
       weaknesses: { not: 'what a move was for — no question of the student\'s posed' },
     },
   },
+  theirHabit: {
+    read: ({ history, student, sound }, fact) => safe(() => {
+      const side: Color = student === 'w' ? 'b' : 'w';
+      const hs = habitsOf(history, side, 'their', sound);
+      if (hs.length === 0) return null;
+      return hs.map((h) => fact({ key: `theirHabit:${h.kind}`, claims: [`habit:their:${h.kind}`], text: h.text, proof: NO_PROOF.description, squares: [], stakes: null,
+        seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenOfGame(history) }));
+    }),
+    computer: 'opponentHabits',
+    kind: 'their-habit',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: { wired: 'services/thinkAloud.ts' },
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the game — no question of the student\'s posed' },
+    },
+  },
+  yourHabit: {
+    read: ({ history, student, sound }, fact) => safe(() => {
+      const side: Color = student;
+      const hs = habitsOf(history, side, 'your', sound);
+      if (hs.length === 0) return null;
+      return hs.map((h) => fact({ key: `yourHabit:${h.kind}`, claims: [`habit:your:${h.kind}`], text: h.text, proof: NO_PROOF.description, squares: [], stakes: null,
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenOfGame(history) }));
+    }),
+    computer: 'habitsOf',
+    kind: 'your-habit',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: { wired: 'services/thinkAloud.ts' },
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the game — no question of the student\'s posed' },
+    },
+  },
+  knownAttack: {
+    read: ({ fen, student, studentCp }, fact) => safe(() => {
+      const ka = knownAttack(fen, student, studentCp);
+      if (!ka) return null;
+      return fact({ key: ka.claim, claims: [ka.claim], text: ka.text, proof: ka.proof, squares: [...ka.squares], stakes: null,
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'knownAttack',
+    kind: 'attack-pattern',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: { wired: 'services/thinkAloud.ts' },
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the game — no question of the student\'s posed' },
+    },
+  },
   oppositionRead: {
     // His "1.Kd6 meets with 1...Kd8, when it is Black who has the opposition":
     // the king move that takes it, what it forces, both seats.
@@ -3314,6 +3378,14 @@ export function readBoard<K extends ComputerId>(id: K, ctx: BoardContexts[K]): B
 
 /** A basket fact said once per walk: `told` is the walk's own ledger of the
  *  facts already said (a lecture, a line), keyed by the fact's key. */
+/** The board after a game's moves from the start (the start board if a move
+ *  does not play). */
+function fenOfGame(history: readonly string[]): string {
+  const c = new Chess();
+  try { for (const m of history) c.move(m); } catch { /* the board as far as it plays */ }
+  return c.fen();
+}
+
 export function sayOnce(f: CoachFact | null, told: Set<string> | null): string | null {
   if (!f) return null;
   const k = readKey(f);

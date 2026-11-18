@@ -927,6 +927,14 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       for (const f of readBoardAll('trickSidestepped', { fenBefore: i.fenBefore, san: i.san, student })) {
         facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'prevent', weight: 58 });
       }
+      // What each side keeps doing, through this move, and the attacking
+      // structure the board offers the student.
+      {
+        const game = [...i.history, i.san];
+        for (const f of readBoardAll('theirHabit', { history: game, student, sound: new Set<number>() })) facts.push({ ...f, source: 'teachingMove', idea: 'plan', weight: 54 });
+        for (const f of readBoardAll('yourHabit', { history: game, student, sound: new Set<number>() })) facts.push({ ...f, source: 'teachingMove', idea: 'plan', weight: 54 });
+        for (const f of readBoardAll('knownAttack', { fen: i.fenBefore, student, studentCp: null })) facts.push({ ...f, source: 'teachingMove', idea: 'attack-king', weight: 64 });
+      }
       // The fortress, both seats: a piece down and a draw the board explains,
       // read off the engine's lines after the move.
       for (const f of readBoardAll('fortress', { fenBefore: i.fenBefore, san: i.san, student, replies })) {

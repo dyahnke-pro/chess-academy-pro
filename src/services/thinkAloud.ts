@@ -23,7 +23,6 @@ import { criticalityThresholds } from './criticalityScan';
 import { lineSeatAt } from '../utils/andList';
 import { kingAttackReads, type KingRead } from './kingAttackReads';
 import { readTheirMove, READ_FACT_KIND } from './opponentMoveReads';
-import { knownAttack } from './attackLibrary';
 import { tempoCount } from './tempoCount';
 import { homeMinorCount } from './development';
 import { legalSeeGainFor } from './positionReadingService';
@@ -371,15 +370,15 @@ export function depthClauses(args: {
   const out: DepthClause[] = [];
   try {
     // Learn's history carries no grades: the board alone reads the habit.
-    const habit = opponentHabits(args.history, args.studentColor === 'w' ? 'b' : 'w', NO_SOUND_PLIES)[0];
+    const habit = readBoardAll('theirHabit', { history: args.history, student: args.studentColor, sound: NO_SOUND_PLIES })[0];
     // A HABIT IS SAID ONCE A GAME (Black walk 2026-10-19: "you keep pushing the
     // pawns in front of your own king — two… three… four so far" on every
     // move). The claim is keyed by the habit, never by its count, so the
     // rising number cannot slip a repeat past the say-once ledger.
-    if (habit) out.push({ kind: 'their-habit', text: habit.text, claim: `habit:their:${habit.kind}` });
+    if (habit) out.push({ kind: 'their-habit', text: habit.text, claim: habit.claims[0] });
     // …and the student's own, read by the same computer (A-plan P4).
-    const mine = habitsOf(args.history, args.studentColor, 'your', NO_SOUND_PLIES)[0];
-    if (mine) out.push({ kind: 'your-habit', text: mine.text, claim: `habit:your:${mine.kind}` });
+    const mine = readBoardAll('yourHabit', { history: args.history, student: args.studentColor, sound: NO_SOUND_PLIES })[0];
+    if (mine) out.push({ kind: 'your-habit', text: mine.text, claim: mine.claims[0] });
     if (args.lastStudentMove) {
       // Counted on the board as it stands now, after their reply.
       const h = holeAccess(args.lastStudentMove.fenBefore, args.lastStudentMove.san, args.fen);
@@ -420,8 +419,8 @@ export function depthClauses(args: {
     if (toMove === args.studentColor) {
       const top = args.topLines[0];
       const cp = top ? (top.mate != null ? (top.mate > 0 ? 100000 : -100000) : top.evaluation) * (args.studentColor === 'w' ? 1 : -1) : null;
-      const ka = knownAttack(args.fen, args.studentColor, cp);
-      if (ka) out.push({ kind: 'attack-pattern', text: ka.text, proof: ka.proof, squares: ka.squares, claim: ka.claim });
+      const ka = readBoard('knownAttack', { fen: args.fen, student: args.studentColor, studentCp: cp });
+      if (ka && isProof(ka.proof)) out.push({ kind: 'attack-pattern', text: ka.text, proof: ka.proof, squares: [...ka.squares], claim: readKey(ka) });
     }
     // His habits of thought that name no move: keep the tension, which side to
     // castle, "any move is fine". The ones that name the engine's move (the

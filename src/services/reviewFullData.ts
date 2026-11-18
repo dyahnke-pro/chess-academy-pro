@@ -12,7 +12,6 @@
  * and the gaps are visible. Each facet is a labeled prose clause.
  */
 import { playedUci } from './planSteps';
-import { opponentHabits, habitsOf } from './thinkAloud';
 import { openSentence, continueSentence, sentenceEach } from '../utils/openSentence';
 import { lastMoveFromSan } from './material';
 import { settledExchange, moverLineProof } from './exchangeLedger';
@@ -80,7 +79,6 @@ import { exchangeIdeas } from './exchangeIdeas';
 import { minorsAtHome } from './development';
 import { slipAnswerText, studentMovePoint } from './playCommentary';
 import { readTheirMove, READ_FACT_KIND } from './opponentMoveReads';
-import { knownAttack } from './attackLibrary';
 import { studentMoveStructure, theirMoveStructure, boardStructure, type StructureRead } from './structureReads';
 import type { AnalysisLine, HeardVerdict } from '../types';
 
@@ -1420,26 +1418,23 @@ export function computeMoveFacets(
   // that made it a habit, with the plan against it. The one habit computer
   // Learn reads (`opponentHabits`); said once a game per habit (identity).
   if (!isStudent && studentColorWB) {
-    const opp: Color = studentColorWB === 'w' ? 'b' : 'w';
-    const now = opponentHabits(ctx.allSans.slice(0, ply), opp, ctx.teaching.soundPlies);
-    const before = new Set(opponentHabits(ctx.allSans.slice(0, ply - 1), opp, ctx.teaching.soundPlies).map((h) => h.kind));
-    const fresh = now.find((h) => !before.has(h.kind));
+    const before = new Set(readBoardAll('theirHabit', { history: ctx.allSans.slice(0, ply - 1), student: studentColorWB, sound: ctx.teaching.soundPlies }).map(readKey));
+    const fresh = readBoardAll('theirHabit', { history: ctx.allSans.slice(0, ply), student: studentColorWB, sound: ctx.teaching.soundPlies }).find((h) => !before.has(readKey(h)));
     if (fresh) {
       const f = made('opponentHabits', 'their-habit', fresh.text);
       facets.push(f);
-      f.identity = `their-habit:${fresh.kind}`;
+      f.identity = `their-habit:${readKey(fresh).split(':')[1]}`;
     }
   }
   // …and the student's own, by the same computer (A-plan P4): the move that
   // made it twice is the one to name it on.
   if (isStudent && studentColorWB) {
-    const now = habitsOf(ctx.allSans.slice(0, ply), studentColorWB, 'your', ctx.teaching.soundPlies);
-    const before = new Set(habitsOf(ctx.allSans.slice(0, ply - 1), studentColorWB, 'your', ctx.teaching.soundPlies).map((h) => h.kind));
-    const fresh = now.find((h) => !before.has(h.kind));
+    const before = new Set(readBoardAll('yourHabit', { history: ctx.allSans.slice(0, ply - 1), student: studentColorWB, sound: ctx.teaching.soundPlies }).map(readKey));
+    const fresh = readBoardAll('yourHabit', { history: ctx.allSans.slice(0, ply), student: studentColorWB, sound: ctx.teaching.soundPlies }).find((h) => !before.has(readKey(h)));
     if (fresh) {
       const f = made('habitsOf', 'your-habit', fresh.text);
       facets.push(f);
-      f.identity = `your-habit:${fresh.kind}`;
+      f.identity = `your-habit:${readKey(fresh).split(':')[1]}`;
     }
   }
 
@@ -1508,13 +1503,13 @@ export function computeMoveFacets(
   // conditions — once a game per hook.
   if (isStudent && studentColorWB) {
     const cp = ctx.preMoveEval != null ? ctx.preMoveEval * (studentColorWB === 'w' ? 1 : -1) : null;
-    const ka = knownAttack(fenBefore, studentColorWB, cp);
+    const ka = readBoard('knownAttack', { fen: fenBefore, student: studentColorWB, studentCp: cp });
     if (ka) {
       const f = made('knownAttack', 'attack-pattern', ka.text);
       facets.push(f);
-      recProof(f, ka.proof);
+      recProof(f, isProof(ka.proof) ? ka.proof : null);
       recSquares(f, ka.squares);
-      f.identity = `hint:${ka.claim}`;
+      f.identity = `hint:${readKey(ka)}`;
     }
   }
   // …and THE STRUCTURE JUDGEMENTS (batch 6, `structureReads`) — the same
