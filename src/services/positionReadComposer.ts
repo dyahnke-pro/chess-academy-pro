@@ -8,6 +8,7 @@ import { Chess } from 'chess.js';
 //
 // G0: every sentence returned is computed; the caller's model only phrases
 // them, most-important-first, in the order returned.
+import { readHabit } from './methodBeat';
 import { buildFedTacticsContext, speakDeepestLookahead } from './liveTacticsContext';
 import { readPosition } from './positionalRead';
 import { detectPhase } from './narratedContinuation';
@@ -190,7 +191,16 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
   //    "you're threatening to win my bishop" to the student whose bishop it was.
   const lookaheadLine = tactics ? speakDeepestLookahead(tactics, READ_SEAT, studentCC, true, i.studentWeaknesses) : null;
 
-  return [noteLine, phaseLine, positionFactsBlock, ...readLines, lookaheadLine ?? '']
+  // 6. THE HABIT THAT CLOSES THE READ (WO-DANYA-READS-01 group 9): what
+  //    decides this board, as the routine that finds it next time. Never on a
+  //    puzzle still being solved: "run CCT" would say there is a shot.
+  const habitLine = marks ? null : readHabit({
+    studentShot: (tactics?.immediate ?? []).some((t) => t.side === 'student'),
+    theirThreat: (tactics?.threats ?? []).length > 0,
+    decidingMoment,
+  })?.text ?? null;
+
+  return [noteLine, phaseLine, positionFactsBlock, ...readLines, lookaheadLine ?? '', habitLine ?? '']
     .map((t) => t.trim())
     .filter(Boolean)
     .filter((t) => !reveals(t, marks))

@@ -486,6 +486,31 @@ export const CANDIDATES_HABIT = 'The habit that catches this: name two or three 
  * still decides whether the habit is owed; a correction already passed the
  * student's error bar, so the forcing scan is owed at any cost here.
  */
+/** THE HABIT THAT CLOSES A BOARD READ (WO-DANYA-READS-01 group 9, David
+ *  2026-11-18). A correction ends on its habit (`correctionHabit`); a read of
+ *  the board did not. One fixed line per habit (repetition builds the habit),
+ *  chosen by what decides THIS board: a forcing shot for the student is the
+ *  forcing scan, their threat is "their move first", an only-move moment is
+ *  "slow down". A quiet board gets none — empty beats generic. */
+export const READ_HABIT: Readonly<Record<'forcing-scan' | 'opponent-threat' | 'slow-down', string>> = {
+  'forcing-scan': 'Habit for positions like this: CCT — every check, every capture, every threat, in that order, before you consider a quiet move.',
+  'opponent-threat': 'Make this the routine — their threat before your plan. Ask what they are trying to do before you ask what you want.',
+  'slow-down': 'Positions like this are the ones to spend your clock on: when one move decides it, notice it early and slow down.',
+};
+export function readHabit(s: {
+  /** A tactic on the board for the student, to play now. */
+  studentShot: boolean;
+  /** A threat of theirs the student must meet. */
+  theirThreat: boolean;
+  /** The one door ranks this a deciding moment (only move / critical). */
+  decidingMoment: boolean;
+}): { habit: 'forcing-scan' | 'opponent-threat' | 'slow-down'; text: string } | null {
+  const habit = s.studentShot ? 'forcing-scan' as const
+    : s.theirThreat ? 'opponent-threat' as const
+      : s.decidingMoment ? 'slow-down' as const : null;
+  return habit ? { habit, text: READ_HABIT[habit] } : null;
+}
+
 export function correctionHabit(s: {
   bestSan: string | null;
   cpLossCp: number;
