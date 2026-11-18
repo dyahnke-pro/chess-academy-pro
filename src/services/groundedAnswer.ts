@@ -12,6 +12,7 @@
  * Pure + side-effect-free so it's trivially testable and can't regress the
  * live chat. Wiring it into `getCoachChatResponse` is the next step.
  */
+import { candidateCct, candidateCctSentence } from './candidateCct';
 import { realMasterMoves } from './realMasterMoves';
 import { purposeFromLine } from './movePurpose';
 import { costWords } from './engineConstants';
@@ -2440,6 +2441,13 @@ export function assembleCandidateMoveAnswer(opts: {
   // Name WHAT the candidate does when the geometry is concrete (not a bare
   // "attacks"), so the student hears the reason, not just the grade.
   if (geo && !geo.startsWith('attacks')) parts.push(`It ${geo}.`);
+  // THE BLUNDER CHECK ON THE CANDIDATE (WO-DANYA-READS-01 group 10): their
+  // checks, winning captures and double attacks once it lands — or that it
+  // passes. Not beside the error computer's own account of what it allows.
+  if (!errorCall) {
+    const cct = candidateCct(fen, candNorm);
+    if (cct) parts.push(candidateCctSentence(cct));
+  }
   const evalText = evalPhrase(opts.candidateEvalCp, opts.candidateMateIn, mover, opts.studentColor);
   if (evalText && !/ still wins, /.test(verdict)) parts.push(`After it, ${evalText}.`);
   if (lineText && !errorCall) parts.push(lineText);
