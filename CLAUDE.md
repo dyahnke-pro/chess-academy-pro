@@ -5905,6 +5905,14 @@ with Hint), the coach's Try again full, a retry find the smaller reward; rungs
 0–1 pause and take back, 2–3 never pause; the clue keeps fixed words.
 Opening theory in Learn is said on a slip, never on a calm book move.
 
+THE OTHER SURFACES ARE THE SAME COACH (David 2026-11-18: "Unify the other
+coach surfaces as well"): the opening Play rung's slip reveal is the one error
+computer (`errorCallFor`) plus the one habit (`correctionHabit`), and the puzzle
+family's wrong-try reader (`refuteWrongTry` — Tactics, My Mistakes, Deep run,
+Calculation, Setup, Endgame lessons) asks the one error computer before any
+private template. The tablebase trainer keeps its own why: its verdict is a
+tablebase result, not an engine line. Gate: `oneCoachSurfaces.gate.test.ts`.
+
 REVIEW NEVER REPEATS LEARN WORD FOR WORD (`dropHeardInLearn`): the review build
 reads the game's own `coachTranscript` (`learnHeardFor`) into the walk's say-once
 ledger; the deeper form — the line, the better move's reason, the theory — still

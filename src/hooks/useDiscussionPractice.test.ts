@@ -138,7 +138,7 @@ describe('useDiscussionPractice — Learn (interruptive)', () => {
     // The GROUNDED reveal is narrated + shown (not the classifier's LLM note):
     // classification + the best move + the engine's why (David 2026-07-10). The
     // teaching card is used because this test does NOT pass onReveal.
-    expect(result.current.teach).toMatch(/best move was/i);
+    expect(result.current.teach).toMatch(/ was the move/);
     expect(result.current.teach).toMatch(/blunder|mistake/i);
     expect(voiceService.speakForced).toHaveBeenCalledWith(result.current.teach);
   });
@@ -166,7 +166,7 @@ describe('useDiscussionPractice — Learn (interruptive)', () => {
     expect(result.current.prompt).toBeNull();
     expect(result.current.teach).toBeNull();
     expect(reveals).toHaveLength(1);
-    expect(reveals[0]).toMatch(/best move was/i);
+    expect(reveals[0]).toMatch(/ was the move/);
   });
 
   it('records response_mode=hint when the student taps Hint', async () => {

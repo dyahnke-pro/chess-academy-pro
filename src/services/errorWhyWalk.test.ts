@@ -26,7 +26,7 @@ describe('what a move allowed is what they NET', () => {
 
 describe('a grade with nothing beside it is held (the walk heard "Bd6 was imprecise.")', () => {
   it('no why, no cost that fits → no call', () => {
-    const v = callInaccuracyDetailed(withOneSearch({ namesBetterMove: false, priorMove: null, replyLineUci: [], replySan: null,
+    const v = callInaccuracyDetailed(withOneSearch({ errorBarCp: 100, namesBetterMove: false, priorMove: null, replyLineUci: [], replySan: null,
       side: 'student', moverColor: 'black', cpLoss: 210, moverEvalAfterCp: -800,
       fenBefore: '3r4/2R4p/p1rP2p1/2Pk1p2/NP6/7P/P5P1/6K1 b - - 2 36', playedSan: 'Rc8', bestSan: 'Rcxd6' }));
     expect(v.call).toBeNull();

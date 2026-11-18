@@ -50,7 +50,7 @@ describe('review — the habit closes the turn', () => {
   });
 
   it('the line played out comes before the habit, never after it', async () => {
-    const narration = await generateReviewNarration({
+    const narration = await generateReviewNarration({ learnHeard: null,
       moves: buildMoves(), playerColor: 'white', openingName: 'Philidor Defense', result: '1-0', playerRating: 1200, coachNarration: 'silent',
     });
     const text = narration.segments.find((s) => s.ply === 5)?.narration ?? '';

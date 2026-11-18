@@ -55,7 +55,7 @@ describe('review — the better-line why on flagged moves', () => {
   it('a line that settles nothing is not recited (WO-LAYERS-01: a line is spoken only as proof)', async () => {
     // Ng5 d5 exd5 Na5 — …Nxd5 still wins the pawn back, so the line proves
     // no material point, and the move's own verdict has already been said.
-    const narration = await generateReviewNarration({
+    const narration = await generateReviewNarration({ learnHeard: null,
       moves: buildMoves(), playerColor: 'white', openingName: 'Italian Game', result: '1-0', playerRating: 1500, coachNarration: 'silent',
     });
     const text = narration.segments.find((s) => s.ply === 7)?.narration ?? '';
@@ -71,7 +71,7 @@ describe('review — the better-line why on flagged moves', () => {
       bestMove: 'f3g5',
       topLines: [{ moves: ['f3g5', 'h7h6', 'g5f7', 'd8e7'], evaluation: 90 }],
     } as never);
-    const narration = await generateReviewNarration({
+    const narration = await generateReviewNarration({ learnHeard: null,
       moves: buildMoves(), playerColor: 'white', openingName: 'Italian Game', result: '1-0', playerRating: 1500, coachNarration: 'silent',
     });
     const text = narration.segments.find((s) => s.ply === 7)?.narration ?? '';
@@ -81,7 +81,7 @@ describe('review — the better-line why on flagged moves', () => {
 
   it('stays silent when the flagged move has no recorded best move', async () => {
     const moves = buildMoves().map((m) => (m.ply === 7 ? { ...m, bestMove: null } : m));
-    const narration = await generateReviewNarration({
+    const narration = await generateReviewNarration({ learnHeard: null,
       moves,
       playerColor: 'white',
       openingName: 'Italian Game',

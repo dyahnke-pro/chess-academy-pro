@@ -143,7 +143,7 @@ describe('Learn walk oct3a #40', () => {
   it('a coach move that drops +5.75 to +4.25 is not "a mistake" — backwardLook passes the eval through', () => {
     const fenBefore = 'r2qk2r/p2b1p1n/7p/1p1QP1p1/2PP4/3P2B1/P3BPPP/1R2K2R w Kkq - 0 18';
     const after = new Chess(fenBefore); after.move('c5');
-    const look = backwardLook(withOneSearch({ priorMove: null, replySan: null, fenBefore, fenAfter: after.fen(),
+    const look = backwardLook(withOneSearch({ errorBarCp: 100, priorMove: null, replySan: null, fenBefore, fenAfter: after.fen(),
       playedSan: 'c5', bestSan: 'e6', bestPvUci: ['e5e6', 'd7e6', 'd5b5'], cpLoss: 150,
       moverEvalAfterCp: 425, studentColor: 'white', side: 'coach', dictated: true }));
     expect(look?.line ?? '').not.toMatch(/is a mistake/);
@@ -180,7 +180,7 @@ describe('Learn walk oct3a #86', () => {
   it('a pawn the engine does not take is not "won" by the knight', () => {
     const fenBefore = '2r1k3/p2p1ppr/1q3n1p/5N2/1n2p3/6P1/3Q1P1P/R4RK1 b - - 1 25';
     const after = new Chess(fenBefore); after.move('g6');
-    const look = backwardLook(withOneSearch({ priorMove: null, replySan: 'Nd6+', fenBefore, fenAfter: after.fen(),
+    const look = backwardLook(withOneSearch({ errorBarCp: 100, priorMove: null, replySan: 'Nd6+', fenBefore, fenAfter: after.fen(),
       playedSan: 'g6', bestSan: 'Nd3', bestPvUci: [], replyPvUci: ['f5d6', 'e8d8', 'd6c8', 'd8c8'],
       cpLoss: 120, moverEvalAfterCp: 190, studentColor: 'black' }));
     expect(look?.line ?? '').not.toMatch(/knight on f5 wins it/);

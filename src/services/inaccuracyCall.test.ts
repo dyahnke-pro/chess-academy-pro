@@ -401,7 +401,7 @@ describe('clearly better after the move is a cleaner way, not a mistake', () => 
     expect(call?.said ?? '').toMatch(/^Your move keeps you clearly on top/);
   });
   it('where the better move is withheld (Learn), the bare "keeps you on top" is held, never said (prod Learn 2026-10-17)', () => {
-    const v = callInaccuracyDetailed(withOneSearch({ namesBetterMove: false, priorMove: null,
+    const v = callInaccuracyDetailed(withOneSearch({ errorBarCp: 100, namesBetterMove: false, priorMove: null,
       fenBefore: '5rk1/1qpn1pbp/prN3p1/2pP4/2P5/Q3B2P/P4PP1/3RR1K1 w - - 0 24', playedSan: 'Bxc5', bestSan: 'Bf4',
       cpLoss: 115, moverEvalAfterCp: 194, side: 'student', moverColor: 'white', replyLineUci: [], replySan: null,
     }));

@@ -29,6 +29,7 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - ✅ the moment rule in the door (`learnMoment`, `quiet-turn`), page sets `decision` from the grade; audit row LQ
 - ✅ Review reads the game's Learn transcript into its say-once ledger (`dropHeardInLearn`)
 - ✅ one mate scale (`mateScale.ts`, seven private copies gone, gate); defence lines vetoed beside a forced mate
+- ✅ the other surfaces on the one coach: the Play rung's slip reveal (`errorCallFor` + `correctionHabit`), the puzzle family's wrong tries (the one error computer first); tablebase trainer stays on tablebase verdicts
 - 🟠 fold the Learn turn rule into `decide()` (one rule behind the one door): Learn's waves, owners and chance holds have no twin elsewhere — next build
 
 ## 000zi. WO-SET-WEAKNESS-01 — the coach steers its own natural moves toward a board that asks the student's red/grey skills, any skill, not only tactics (David 2026-11-17, PLAN.md)

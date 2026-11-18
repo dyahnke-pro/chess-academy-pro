@@ -12,7 +12,7 @@ const after21 = '2r1qr1k/pp5p/4P3/8/4pN2/4P1Q1/bPP2P2/2KR2N1 b - - 0 21';
 
 describe('the why of a move that let them attack the king', () => {
   it('20.Qg3+: their checks in the line are the why, and the line is drawn', () => {
-    const look = backwardLook(withOneSearch({
+    const look = backwardLook(withOneSearch({ errorBarCp: 100,
       fenBefore: before20, fenAfter: after20, playedSan: 'Qg3+', priorMove: null as never,
       bestSan: 'Nge2', bestPvUci: ['g1e2', 'f8f7', 'h2h4'],
       replyPvUci: ['g8h8', 'g3h3', 'a2b3', 'h3h6', 'b3c2', 'd1d6', 'c2b3', 'c1b1', 'c8c1', 'b1c1', 'e8c8', 'c1d2', 'c8c2', 'd2e1'],
@@ -26,7 +26,7 @@ describe('the why of a move that let them attack the king', () => {
     expect(look.punishLine?.uci).not.toContain("g3h3");
   });
   it('21.e6: the mate it allowed is drawn to the mate', () => {
-    const look = backwardLook(withOneSearch({
+    const look = backwardLook(withOneSearch({ errorBarCp: 100,
       fenBefore: before21, fenAfter: after21, playedSan: 'e6', priorMove: null as never,
       bestSan: 'Nge2', bestPvUci: ['g1e2', 'c8c2'],
       replyPvUci: ['c8c2', 'c1c2', 'e8a4', 'c2c1', 'f8c8', 'c1d2', 'c8d8', 'f4d5', 'd8d5', 'd2c3', 'a4c4'],
@@ -41,7 +41,7 @@ describe('the why of a move that let them attack the king', () => {
   it('the mate it allowed is not said the same way every time (prod focus audit 2026-11-09: four in one game)', () => {
     // The same board on other move counters: the words rotate on the board,
     // never by chance.
-    const said = (n: number): string => backwardLook(withOneSearch({
+    const said = (n: number): string => backwardLook(withOneSearch({ errorBarCp: 100,
       fenBefore: before21.replace(/ \d+$/, ` ${n}`), fenAfter: after21, playedSan: 'e6', priorMove: null as never,
       bestSan: 'Nge2', bestPvUci: ['g1e2', 'c8c2'],
       replyPvUci: ['c8c2', 'c1c2', 'e8a4', 'c2c1', 'f8c8', 'c1d2', 'c8d8', 'f4d5', 'd8d5', 'd2c3', 'a4c4'],

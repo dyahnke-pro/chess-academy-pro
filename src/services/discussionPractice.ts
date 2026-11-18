@@ -12,8 +12,9 @@ import { continueSentence } from '../utils/openSentence';
 import { Chess, type Square } from 'chess.js';
 import { detectSlip, slipSeverityLabel, type SlipInput, type SlipResult } from './slipDetector';
 import { detectTactics } from './tacticsDetector';
-import { assembleEngineReasoning } from './groundedAnswer';
 import { buildReviewMoveTeaching } from './reviewMoveTeaching';
+import { errorCallFor, NO_SECOND_READ } from './inaccuracyCall';
+import { correctionHabit } from './methodBeat';
 import {
   classifyMisconception,
   type ClassifyMisconceptionInput,
@@ -117,67 +118,60 @@ export function findMoverTactic(
 }
 
 /**
- * buildSlipReveal — the FULL grounded teach shown after the "why did you play
- * that?" picker (David 2026-07-10: "I want the best move to be told, along with
- * the why behind it" + "I need to know if it's a blunder or mistake"). Composes,
- * all from the board + engine (G0, never invented):
- *   1. the CLASSIFICATION — "That was a blunder." / "a mistake."
- *   2. WHAT the move let slip — a hanging mover piece, when there is one.
- *   3. the BEST move + the engine's REASONING walk (assembleEngineReasoning over
- *      the engine PV) — the thing the student should have played, and why.
- * Falls back gracefully: no PV → just names the best move; no hang → skips (2).
+ * buildSlipReveal — the teach shown after the "why did you play that?" picker
+ * (David 2026-07-10: "I want the best move to be told, along with the why
+ * behind it" + "I need to know if it's a blunder or mistake").
+ *
+ * ONE COACH (David 2026-11-18: "Unify the other coach surfaces as well"): the
+ * grade, what the move allowed with its line, why it failed and the better
+ * move with what it does come from the ONE error computer every surface asks
+ * (`errorCallFor` → `errorWhy`), and the correction closes on the ONE habit
+ * (`correctionHabit`). This used to be its own copy — a hanging-piece read, an
+ * engine walk reworded "The engine plays" → "The best move was", and no habit.
+ * A cost under every grade still names the better move with its board job.
  */
 export function buildSlipReveal(args: {
   cpLoss: number;
   fenBefore: string;
   fenAfter: string;
+  playedSan: string;
   moverColor: 'w' | 'b';
   bestSan?: string;
   /** The engine's best line in SAN from `fenBefore` (index 0 = the best move). */
   bestPvSan?: string[];
-  /** White-perspective eval at the best line's end, for the verdict clause. */
-  evalCp?: number | null;
-  mateIn?: number | null;
+  /** Their reply line after the played move (UCI), when the surface has it;
+   *  otherwise the board's own answer is read. */
+  replyPvUci?: readonly string[];
 }): string {
-  const parts: string[] = [];
-
-  const severity = slipSeverityLabel(args.cpLoss);
-  if (severity) parts.push(`That was ${severity === 'inaccuracy' ? 'an' : 'a'} ${severity}.`);
-
-  // What the move let slip — a hanging mover piece (precise, side-aware).
-  const det = detectTactics(args.fenAfter);
-  const hang = det.hangingPieces.find((hp) => hp.color === args.moverColor);
-  if (hang) parts.push(`It leaves the ${PIECE_LABEL[hang.piece] ?? 'piece'} on ${hang.square} hanging.`);
-
-  // The best move + the engine's reasoning walk — the headline teach.
   const moverFull: 'white' | 'black' = args.moverColor === 'w' ? 'white' : 'black';
-  const reasoning = args.bestPvSan && args.bestPvSan.length > 0
-    ? assembleEngineReasoning({
-        fenBefore: args.fenBefore,
-        pvSan: args.bestPvSan,
-        moverColor: moverFull,
-        evalCp: args.evalCp ?? null,
-        mateIn: args.mateIn ?? null,
-        studentSide: moverFull,
-      })
-    : null;
-  if (reasoning) {
-    // Reframe "The engine plays X" → "The best move was X" for a slip teach.
-    parts.push(reasoning.facts.replace(/^The engine plays /, 'The best move was '));
-  } else if (args.bestSan) {
-    // NO engine PV (the review path hands in only the best SAN) — a bare "The
-    // best move was Bd3." names the move but never TEACHES why (David 2026-07-25
-    // N3: "needs the real MECHANISM — what Bd3 threatens/achieves"). Add the
-    // move's board-true mechanism from the same universal teacher the walk uses
-    // (what it attacks / the file it opens / the square it fights for) — no
-    // extra engine call, G0-grounded.
-    const mech = buildReviewMoveTeaching(args.fenBefore, args.bestSan, true);
-    parts.push(mech ? `The best move was ${args.bestSan}. ${mech}` : `The best move was ${args.bestSan}.`);
-  } else if (!hang) {
-    parts.push('There was better.');
+  const bestLineUci: string[] = [];
+  try {
+    const c = new Chess(args.fenBefore);
+    for (const san of args.bestPvSan ?? (args.bestSan ? [args.bestSan] : [])) {
+      const m = c.move(san);
+      if (!m) break;
+      bestLineUci.push(`${m.from}${m.to}${m.promotion ?? ''}`);
+    }
+  } catch { /* the playable prefix */ }
+  const quality = slipSeverityLabel(args.cpLoss);
+  const call = quality ? errorCallFor({
+    secondReads: NO_SECOND_READ,
+    fenBefore: args.fenBefore, playedSan: args.playedSan, moverColor: moverFull,
+    bestUci: bestLineUci[0] ?? null, bestLineUci,
+    replyLineUci: args.replyPvUci ?? null,
+    quality, missedMate: null, allowedMate: null, cpLoss: args.cpLoss,
+    // The move is past: the better move is named with its job.
+    namesBetterMove: true,
+  }) : null;
+  if (call) {
+    const habit = correctionHabit({ bestSan: args.bestSan ?? null, cpLossCp: args.cpLoss, ignoredThreat: false, slip: null, allowed: call.allowed });
+    return `That was ${call.sentence} ${habit.text}`.trim();
   }
-
-  return parts.join(' ').trim();
+  if (args.bestSan) {
+    const mech = buildReviewMoveTeaching(args.fenBefore, args.bestSan, true);
+    return mech ? `The best move was ${args.bestSan}. ${mech}` : `The best move was ${args.bestSan}.`;
+  }
+  return 'There was better.';
 }
 
 /**

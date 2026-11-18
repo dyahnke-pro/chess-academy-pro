@@ -47,7 +47,7 @@ describe('their deep idea is not one formula said all game', () => {
       c.move(san);
       return { ply: i + 1, san, isCoachMove: (i + 1) % 2 === 0, classification: 'good', evaluation: -20, preMoveEval: -20, bestMove: null, fenAfter: c.fen() } as unknown as ReviewMoveInput;
     });
-    const n = await generateReviewNarration({ moves, playerColor: 'white', openingName: null, result: '0-1', playerRating: 1500, coachNarration: 'full', uncapped: true });
+    const n = await generateReviewNarration({ learnHeard: null, moves, playerColor: 'white', openingName: null, result: '0-1', playerRating: 1500, coachNarration: 'full', uncapped: true });
     const text = n.segments.map((s) => s.narration ?? '').join(' ');
     const counts = STEMS.map((re) => (text.match(re) ?? []).length);
     const total = counts.reduce((a, b) => a + b, 0);

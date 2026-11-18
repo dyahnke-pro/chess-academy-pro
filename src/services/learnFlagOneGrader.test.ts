@@ -46,7 +46,7 @@ describe('the backward look names a drawback only on a graded fault', () => {
   it('39.Qb8 at +8.6 → +7.7 carries no "drawback" sentence', async () => {
     const { backwardLook } = await import('./backwardLook');
     const after = new Chess(FEN); after.move('Qb8');
-    const look = backwardLook(withOneSearch({
+    const look = backwardLook(withOneSearch({ errorBarCp: 100,
       fenBefore: FEN, fenAfter: after.fen(), playedSan: 'Qb8', priorMove: null,
       bestSan: 'Qb4+', bestPvUci: base.bestPvUci, replyPvUci: base.playedPvUci, replySan: 'Ke8',
       cpLoss: 90, studentColor: 'white', moverEvalAfterCp: 770,
@@ -61,7 +61,7 @@ describe('what a move allowed is said only of a graded fault', () => {
     const { backwardLook } = await import('./backwardLook');
     const before = 'Q2n1k1r/2R3pp/4pq2/3p1b2/8/P4N2/B4PPP/R5K1 w - - 1 26';
     const after = new Chess(before); after.move('Rac1');
-    const look = backwardLook(withOneSearch({
+    const look = backwardLook(withOneSearch({ errorBarCp: 100,
       fenBefore: before, fenAfter: after.fen(), playedSan: 'Rac1', priorMove: null,
       bestSan: 'Re1', bestPvUci: ['a1e1', 'h7h5', 'c7c8', 'f8f7', 'f3e5', 'f7g8', 'c8d8', 'f6d8', 'a8d8', 'g8h7', 'd8c7', 'h8f8'],
       replyPvUci: ['h7h6', 'c7d7', 'f8e8', 'f3e5', 'h8f8', 'd7c7', 'f6e5', 'a8a4', 'd8c6', 'a4c6', 'e8d8'],

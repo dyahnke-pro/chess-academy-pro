@@ -71,6 +71,8 @@ export type { LooseSpells } from './conceptKey';
 export type { FacetRole } from './reviewFacetRank';
 export type { ChanceHold, VoiceOwner } from './learnTurnDoor';
 export type { LearnDecision } from './coachDecisionEvents';
+// The student's error bar (David 2026-11-18) — the surface reads it through the door.
+export { learnErrorBarCp } from './slipDetector';
 
 /** HOW A SURFACE LISTENS — and it is not cosmetic, it decides what silence MEANS.
  *

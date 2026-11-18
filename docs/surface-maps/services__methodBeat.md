@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**516 lines · 17 exports · 20 importers · 9 tests · 1 audits**
+**516 lines · 17 exports · 21 importers · 9 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:393) — names `methodBeat`
 - **Why determinism** (CLAUDE.md:445) — names `methodBeat`
 - **G4.5.16 TEACH THE METHOD, NOT ONLY THE BOARD (David 2026-09-16: "Calling out pins and forks isn't teaching. Future moves, how to think, threat identification, that is teaching").** (CLAUDE.md:1589) — names `methodBeat`
-- **🔒🔒 LEARN SPEAKS ON A MOMENT, AND IS QUIET OTHERWISE (David 2026-11-18: "So learn narrations are needed only when the player makes an error of some kind … And it knows when not to say anything. Like a chess coach." → "Or it can be used to reenforce proper move behavior" → "It gets more quiet if you make all the right moves. But it speaks on errors").** (CLAUDE.md:5886) — names `methodBeat`
+- **🔒🔒 LEARN SPEAKS ON A MOMENT, AND IS QUIET OTHERWISE (David 2026-11-18: "So learn narrations are needed only when the player makes an error of some kind … And it knows when not to say anything. Like a chess coach." → "Or it can be used to reenforce proper move behavior" → "It gets more quiet if you make all the right moves. But it speaks on errors").** (CLAUDE.md:5886) — names `correctionHabit`, `methodBeat`
 
 ## Who calls in
 
@@ -19,6 +19,7 @@
 - `src/components/Puzzles/PuzzleBoard.tsx`
 - `src/services/coachDecider.ts`
 - `src/services/coachFeatureService.ts`
+- `src/services/discussionPractice.ts`
 - `src/services/groundedAnswer.ts`
 - `src/services/learnBoardTeaching.ts`
 - `src/services/learnFundamentalNarration.ts`
@@ -61,7 +62,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `methodBeatRead` (function) — 4 call sites
-- `src/services/coachDecider.ts:573`
+- `src/services/coachDecider.ts:575`
 - `src/services/methodBeat.live.test.ts:151`
 - `src/services/methodBeat.need.test.ts:4`
 - `src/services/methodBeat.test.ts:4`
@@ -89,8 +90,8 @@
 - `src/services/slipQuestion.test.ts:53`
 
 ### `habitSaidKey` (function) — 5 call sites
+- `src/components/Coach/CoachTeachPage.tsx:10811`
 - `src/components/Coach/CoachTeachPage.tsx:10812`
-- `src/components/Coach/CoachTeachPage.tsx:10813`
 - `src/services/learnBoardTeaching.ts:272`
 - `src/services/learnBoardTeaching.ts:1232`
 - `src/services/slipQuestion.test.ts:53`
@@ -144,7 +145,8 @@
 ### `CANDIDATES_HABIT` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `correctionHabit` (function) — 1 call site
+### `correctionHabit` (function) — 2 call sites
+- `src/services/discussionPractice.ts:167`
 - `src/services/learnBoardTeaching.ts:1231`
 
 ## Tests

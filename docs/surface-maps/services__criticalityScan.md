@@ -11,7 +11,7 @@
 - **The tools are COMPUTERS** (CLAUDE.md:394) — names `criticalityScan`
 - **STRENGTH IS MEASURED FROM MOVE ONE AND SET ONCE PER GAME (David 2026-09-18: "The coach can match in real time as they play on the board for the first time." → 2026-10-22: "Same rating throughout the game. Algo up or down per game only.")** (CLAUDE.md:576) — names `criticalityScan`
 - **🔒🔒 THE COMPUTER DECIDES WHAT IS SPOKEN — importance is COMPUTED, not left to the LLM (David 2026-08-26, LOCKED). And DNA runs through BOTH the computer AND the LLM.** (CLAUDE.md:4548) — names `criticalityScan`, `scanCriticality`
-- **The standard post-deploy ritual** (CLAUDE.md:7009) — names `CriticalMoment`, `scanCriticality`
+- **The standard post-deploy ritual** (CLAUDE.md:7017) — names `CriticalMoment`, `scanCriticality`
 
 ## Who calls in
 

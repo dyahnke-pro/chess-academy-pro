@@ -84,7 +84,7 @@ describe('F17 — the tempo verdict names the kick they PLAYED', () => {
 describe('F16/F23/F31 — a grade says what the move cost, and whether they took it', () => {
   it('…Qd7 names what it let them do, and that Nf1 missed it', async () => {
     const { callInaccuracyDetailed } = await import('./inaccuracyCall');
-    const v = callInaccuracyDetailed(withOneSearch({ namesBetterMove: true, priorMove: null,
+    const v = callInaccuracyDetailed(withOneSearch({ errorBarCp: 100, namesBetterMove: true, priorMove: null,
       fenBefore: fenAt(29), playedSan: 'Qd7', bestSan: 'Rad8',
       bestLineUci: ['a8d8', 'd2f1', 'f6d7', 'a2a4', 'c7b8', 'f1g3'],
       cpLoss: 374, side: 'student', moverColor: 'black',
@@ -103,7 +103,7 @@ describe('F16/F23/F31 — a grade says what the move cost, and whether they took
   });
   it('with no reply line the grade names the cost it can prove and the square it gave up', async () => {
     const { callInaccuracyDetailed } = await import('./inaccuracyCall');
-    const v = callInaccuracyDetailed(withOneSearch({ namesBetterMove: true, priorMove: null,
+    const v = callInaccuracyDetailed(withOneSearch({ errorBarCp: 100, namesBetterMove: true, priorMove: null,
       fenBefore: fenAt(29), playedSan: 'Qd7', bestSan: 'Rad8', bestLineUci: [],
       cpLoss: 374, side: 'student', moverColor: 'black', replyLineUci: [], replySan: null,
     }));

@@ -1719,14 +1719,16 @@ export function errorCallFor(args: {
   moverColor: 'white' | 'black';
   bestUci: string | null;
   bestLineUci: readonly string[];
-  replyLineUci: readonly string[];
+  /** The line after the played move, or null when the surface has none — the
+   *  board's own answer is read then (`errorWhy`). */
+  replyLineUci: readonly string[] | null;
   quality: MoveQuality | null;
   missedMate: number | null;
   allowedMate: number | null;
   cpLoss: number | null;
   namesBetterMove: boolean;
   tense?: 'past' | 'would';
-}): { sentence: string; line: WalkableLine | null } | null {
+}): { sentence: string; line: WalkableLine | null; allowed: boolean } | null {
   if (args.quality !== 'inaccuracy' && args.quality !== 'mistake' && args.quality !== 'blunder') return null;
   let bestSan: string | null = null;
   if (args.bestUci && args.bestUci.length >= 4) {
@@ -1752,7 +1754,9 @@ export function errorCallFor(args: {
     } catch { /* the playable prefix */ }
     line = sans.length ? walkableLine(shown.fen, sans, sans[0]) : null;
   }
-  return { sentence, line };
+  // Whether the cost was what the move ALLOWED (a reply that wins) — the
+  // habit that closes a correction reads it (`correctionHabit`).
+  return { sentence, line, allowed: !!ew.consequence || !!ew.failed };
 }
 
 /** A material cost clause ("win a piece for a pawn") is only what the move LET

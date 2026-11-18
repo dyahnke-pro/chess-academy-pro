@@ -101,7 +101,7 @@ describe('proof backlog — which producers owe a proof', { timeout: 600_000 }, 
     // so a change to the door is diffed by TEXT, not only by counts.
     const tape: Array<{ game: string | undefined; intro: string; plies: Array<{ ply: number; text: string }> }> = [];
     for (const g of picked) {
-      const n = await generateReviewNarration({
+      const n = await generateReviewNarration({ learnHeard: null,
         moves: synthMoves(pgnToSans(g.pgn ?? '')), playerColor: g.studentSide === 'black' ? 'black' : 'white',
         openingName: null, result: '*', playerRating: 1500, coachNarration: 'silent', uncapped: true,
       });

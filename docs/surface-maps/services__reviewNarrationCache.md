@@ -22,7 +22,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `reviewNarrationCacheKey` (function) — 10 call sites
-- `src/services/reviewNarrationBuild.ts:97`
+- `src/services/reviewNarrationBuild.ts:118`
 - `src/services/reviewNarrationCache.test.ts:21`
 - `src/services/reviewNarrationCache.test.ts:28`
 - `src/services/reviewNarrationCache.test.ts:30`
@@ -34,14 +34,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewNarrationCache.test.ts:43`
 
 ### `getCachedReviewNarration` (function) — 5 call sites
-- `src/services/reviewNarrationBuild.ts:106`
+- `src/services/reviewNarrationBuild.ts:127`
 - `src/services/reviewNarrationCache.test.ts:22`
 - `src/services/reviewNarrationCache.test.ts:24`
 - `src/services/reviewNarrationCache.test.ts:45`
 - `src/services/reviewNarrationCache.test.ts:49`
 
 ### `storeReviewNarration` (function) — 3 call sites
-- `src/services/reviewNarrationBuild.ts:122`
+- `src/services/reviewNarrationBuild.ts:144`
 - `src/services/reviewNarrationCache.test.ts:23`
 - `src/services/reviewNarrationCache.test.ts:50`
 

@@ -10,7 +10,7 @@
 
 - **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4644) — names `coachDecisionEvents`
 - **🔒🔒 LEARN SPEAKS ON A MOMENT, AND IS QUIET OTHERWISE (David 2026-11-18: "So learn narrations are needed only when the player makes an error of some kind … And it knows when not to say anything. Like a chess coach." → "Or it can be used to reenforce proper move behavior" → "It gets more quiet if you make all the right moves. But it speaks on errors").** (CLAUDE.md:5888) — names `LearnTurnTag`
-- **The standard post-deploy ritual** (CLAUDE.md:7023) — names `coachDecisionEvents`
+- **The standard post-deploy ritual** (CLAUDE.md:7031) — names `coachDecisionEvents`
 
 ## Who calls in
 
@@ -49,7 +49,7 @@
 - `src/test/replaySources.ts:16`
 
 ### `emitCoachDecision` (function) — 1 call site
-- `src/services/coachDecider.ts:361`
+- `src/services/coachDecider.ts:363`
 
 ### `NeedScoreRow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

@@ -89,7 +89,7 @@ describe('the finished Review walk reports every line it says, with the facet th
       return { ply: i + 1, san, isCoachMove: (i + 1) % 2 === 0, classification: 'book', evaluation: -20, preMoveEval: -20, bestMove: null, fenAfter: c.fen() } as unknown as ReviewMoveInput;
     });
     const rows = listen();
-    const n = await generateReviewNarration({ moves, playerColor: 'white', openingName: null, result: '1-0', playerRating: 1500, coachNarration: 'silent', uncapped: true });
+    const n = await generateReviewNarration({ learnHeard: null, moves, playerColor: 'white', openingName: null, result: '1-0', playerRating: 1500, coachNarration: 'silent', uncapped: true });
     const walk = rows.filter((r) => r.door === 'review-walk');
     const narrated = n.segments.filter((s) => (s.narration ?? '').trim());
     expect(walk.length).toBe(narrated.length);

@@ -35,7 +35,7 @@ describe('uncapped verdict facet — spoken only when it CHANGES (R10)', () => {
         bestMove: null, fenAfter: c.fen(),
       } as unknown as ReviewMoveInput;
     });
-    const n = await generateReviewNarration({
+    const n = await generateReviewNarration({ learnHeard: null,
       moves, playerColor: 'white', openingName: null, result: '1-0',
       playerRating: 1500, coachNarration: 'silent', uncapped: true,
     });
@@ -61,7 +61,7 @@ describe('teaching refrains speak ONCE per review (David 2026-07-22)', () => {
         bestMove: null, fenAfter: c.fen(),
       } as unknown as ReviewMoveInput;
     });
-    const n = await generateReviewNarration({
+    const n = await generateReviewNarration({ learnHeard: null,
       moves, playerColor: 'white', openingName: null, result: '1-0',
       playerRating: 1500, coachNarration: 'silent', uncapped: true,
     });
@@ -113,7 +113,7 @@ describe('uncapped narration never leaks a facet tag or a mate-sentinel eval (pr
         bestMove: null, fenAfter: c.fen(),
       } as unknown as ReviewMoveInput;
     });
-    const n = await generateReviewNarration({
+    const n = await generateReviewNarration({ learnHeard: null,
       moves, playerColor: 'white', openingName: null, result: '1-0',
       playerRating: 1400, coachNarration: 'silent', uncapped: true,
     });
@@ -151,7 +151,7 @@ describe('deep threat AGAINST the student (#5c)', () => {
       } as unknown as ReviewMoveInput;
     });
 
-    const n = await generateReviewNarration({
+    const n = await generateReviewNarration({ learnHeard: null,
       moves,
       playerColor: 'white',
       openingName: null,

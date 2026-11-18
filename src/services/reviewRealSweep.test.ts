@@ -184,7 +184,7 @@ describe.skipIf(!ON)('real-engine amateur sweep — every line board-true, nothi
     const sample: Array<{ game: string; ply: number; san: string; line: string }> = [];
     for (const g of games) {
       const { moves, studentWB, rating } = inputsFor(g);
-      const narration = await generateReviewNarration({
+      const narration = await generateReviewNarration({ learnHeard: null,
         moves, playerColor: studentWB === 'w' ? 'white' : 'black',
         openingName: null, result: g.winner === 'white' ? '1-0' : g.winner === 'black' ? '0-1' : '1/2-1/2',
         playerRating: rating, coachNarration: 'full', uncapped: true, gameId: null,

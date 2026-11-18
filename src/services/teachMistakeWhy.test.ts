@@ -49,7 +49,7 @@ describe('a mistake turn says what the move allowed, what the better move did, a
   });
 
   it('under a mistake\'s cost the grade speaks only on a mechanism, never on a bare cost', () => {
-    const call = (replyLineUci: string[]) => callInaccuracyDetailed({
+    const call = (replyLineUci: string[]) => callInaccuracyDetailed({ errorBarCp: 100,
       secondReads: NO_SECOND_READ,
       namesBetterMove: false, fenBefore: BEFORE, playedSan: 'Bc3', bestSan: 'a4', bestLineUci: BEST, cpLoss: 88,
       missedMate: null, bestMate: null, allowedMate: null, moverEvalAfterCp: -15,

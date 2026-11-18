@@ -113,7 +113,7 @@ describe('the label is graded from the price\'s own two scores', () => {
     // A different read says White stands +7 after Kg5. "after + cost" built a
     // before of +8.3 out of two searches and called the move fine; the price's
     // own scores (-0.04 → -1.37) make it a mistake.
-    const v = callInaccuracyDetailed({
+    const v = callInaccuracyDetailed({ errorBarCp: 100,
       secondReads: NO_SECOND_READ,
       namesBetterMove: false,
       fenBefore: KG5, playedSan: 'Kg5', bestSan: 'e5', bestLineUci: ['e4e5'],

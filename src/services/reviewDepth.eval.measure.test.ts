@@ -230,7 +230,7 @@ describe.runIf(ON)('review narration — accuracy and depth over David\'s games'
           ...(flagged && (afterPlayed.length || afterBest.length) ? { pv: { afterPlayed, afterBest, depth: DEPTH } } : {}),
         };
       });
-      const narration = await generateReviewNarration({
+      const narration = await generateReviewNarration({ learnHeard: null,
         moves, playerColor: seat, openingName: null, result: g.result, playerRating: rating, coachNarration: 'full', uncapped: UNCAPPED, gameId: g.id,
       });
 

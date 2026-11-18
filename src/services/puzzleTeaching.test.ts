@@ -21,8 +21,9 @@ describe('refuteWrongTry — a wrong puzzle move is answered by their line', () 
       wrongSan: 'Kd1',
       analyse: fixed(['a8a1', 'd1e2', 'h8g7']),
     });
-    expect(r?.kind).toBe('material');
-    expect(r?.text).toBe("Kd1? Then they play Rxa1+ — they win a rook.");
+    // The one error computer words it, as Learn and Review do (2026-11-18).
+    expect(r?.kind).toBe('geometry');
+    expect(r?.text).toMatch(/^Kd1\? .*Rxa1\+.*rook/);
   });
   it('the line starts with THEIR reply — the right answer is never named', async () => {
     const r = await refuteWrongTry({

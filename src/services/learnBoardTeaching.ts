@@ -1229,7 +1229,8 @@ export function slipQuestion(
   allowed: boolean,
 ): { text: string; key: string } {
   const h = correctionHabit({ bestSan, cpLossCp: cpLoss, ignoredThreat: false, allowed, slip: { fenBefore, san: playedSan, lostSquare: lostSquare ?? null, guardLeft, student, punishLine } });
-  return { text: h.text, key: habitSaidKey(h.habit) };
+  const key = habitSaidKey(h.habit);
+  return { text: h.text, key };
 }
 
 /** The one answer-the-danger question (`safetyHabits`). */

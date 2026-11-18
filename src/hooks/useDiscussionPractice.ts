@@ -415,7 +415,6 @@ export function useDiscussionPractice(
       let evalAfterW: number;
       let bestUci: string | undefined;
       let bestPvUci: string[] | undefined;
-      let bestLineEvalW: number | undefined;
       let bestLineMate: number | null | undefined;
       /** The post-move read was a mate score — its eval is a sentinel, not a
        *  number the attributor may subtract (C3). */
@@ -440,7 +439,6 @@ export function useDiscussionPractice(
         // responses (and test mocks) can omit it — reading [0] of undefined
         // would throw and abort the whole slip check (2026-07-10 regression).
         bestPvUci = before.topLines?.[0]?.moves ?? (before.bestMove ? [before.bestMove] : []);
-        bestLineEvalW = before.isMate ? undefined : before.evaluation;
         bestLineMate = before.isMate ? before.mateIn : null;
         afterIsMate = after.isMate;
         replyPvUci = after.topLines?.[0]?.moves ?? (after.bestMove ? [after.bestMove] : []);
@@ -658,11 +656,10 @@ export function useDiscussionPractice(
         cpLoss,
         fenBefore: args.fenBefore,
         fenAfter: args.fenAfter,
+        playedSan: args.playedSan,
         moverColor: moverChar,
         bestSan,
         bestPvSan,
-        evalCp: bestLineEvalW ?? null,
-        mateIn: bestLineMate ?? null,
       });
       const severity = slipSeverityLabel(cpLoss) ?? undefined;
 
@@ -821,7 +818,7 @@ export function useDiscussionPractice(
     // Review path has no fresh PV, so the reasoning walk falls back to naming
     // the best move; the classification + hanging-piece read still compute.
     const reveal = buildSlipReveal({
-      cpLoss: args.cpLoss, fenBefore: args.fenBefore, fenAfter: args.fenAfter,
+      cpLoss: args.cpLoss, fenBefore: args.fenBefore, fenAfter: args.fenAfter, playedSan: args.playedSan,
       moverColor: moverChar, bestSan: args.bestSan,
       bestPvSan: args.bestSan ? [args.bestSan] : undefined,
     });

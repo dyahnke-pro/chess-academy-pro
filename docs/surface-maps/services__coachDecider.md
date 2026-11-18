@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**747 lines · 26 exports · 25 importers · 20 tests · 31 audits**
+**749 lines · 27 exports · 25 importers · 20 tests · 31 audits**
 
 ## Locked rules that govern this surface
 
@@ -34,12 +34,13 @@
 - **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4802) — names `decide`
 - **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5826) — names `decide`
 - **🔒🔒 SUPERSEDED 2026-08-05 — THE MID-GAME CARDS ARE GONE FROM LEARN. The RECORD stays; the INTERRUPTION does not.** (CLAUDE.md:5862) — names `decide`
-- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5993) — names `decide`
-- **Deployment Policy** (CLAUDE.md:6262) — names `decide`
-- **🔒🔒 THE ACCURACY BAR IS 100% — every board claim true, no stopping short (David 2026-10-01: "We go until 100% accuracy. No reason to stop short. Set the new bar in memory")** (CLAUDE.md:6546) — names `decide`
-- **🔒🔒 AUDIT LIKE DAVID — PICTURE FIRST, INSTRUMENT SECOND, ENGINE ON EVERY CLAIM (David 2026-10-19: "learn from this audit … get as good as me. lets see some recursive self improvement")** (CLAUDE.md:6605) — names `decide`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6904) — names `coachDecider`
-- **The standard post-deploy ritual** (CLAUDE.md:7023) — names `coachDecider`, `decide`
+- **🔒🔒 LEARN SPEAKS ON A MOMENT, AND IS QUIET OTHERWISE (David 2026-11-18: "So learn narrations are needed only when the player makes an error of some kind … And it knows when not to say anything. Like a chess coach." → "Or it can be used to reenforce proper move behavior" → "It gets more quiet if you make all the right moves. But it speaks on errors").** (CLAUDE.md:5897) — names `learnErrorBarCp`
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:6001) — names `decide`
+- **Deployment Policy** (CLAUDE.md:6270) — names `decide`
+- **🔒🔒 THE ACCURACY BAR IS 100% — every board claim true, no stopping short (David 2026-10-01: "We go until 100% accuracy. No reason to stop short. Set the new bar in memory")** (CLAUDE.md:6554) — names `decide`
+- **🔒🔒 AUDIT LIKE DAVID — PICTURE FIRST, INSTRUMENT SECOND, ENGINE ON EVERY CLAIM (David 2026-10-19: "learn from this audit … get as good as me. lets see some recursive self improvement")** (CLAUDE.md:6613) — names `decide`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6912) — names `coachDecider`
+- **The standard post-deploy ritual** (CLAUDE.md:7031) — names `coachDecider`, `decide`
 
 ## Who calls in
 
@@ -75,8 +76,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `coachTurn` (function) — 22 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10260`
-- `src/components/Coach/CoachTeachPage.tsx:12366`
+- `src/components/Coach/CoachTeachPage.tsx:10259`
+- `src/components/Coach/CoachTeachPage.tsx:12365`
 - `src/services/coachFeatureService.cpLossSign.test.ts:68`
 - `src/services/coachFeatureService.ts:3248`
 - `src/services/learnTurnDoor.mission.test.ts:27`
@@ -228,8 +229,8 @@
 - `src/services/thinkingSteps.test.ts:61`
 
 ### `instantWaitsForVerdict` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12149`
-- `src/components/Coach/CoachTeachPage.tsx:12189`
+- `src/components/Coach/CoachTeachPage.tsx:12148`
+- `src/components/Coach/CoachTeachPage.tsx:12188`
 - `src/services/verdictLeads.test.ts:15`
 - `src/services/verdictLeads.test.ts:16`
 - `src/services/verdictLeads.test.ts:19`
@@ -240,7 +241,7 @@
 
 ### `buildVoicePackage` (re-export) — 95 call sites
 - `src/components/Coach/CoachGameReview.tsx:1964`
-- `src/components/Coach/CoachTeachPage.tsx:9009`
+- `src/components/Coach/CoachTeachPage.tsx:9008`
 - `src/hooks/usePositionNarration.ts:323`
 - `src/services/coachFeatureService.ts:3492`
 - `src/services/coachFeatureService.ts:3505`
@@ -339,29 +340,29 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `describeTurnDecision` (re-export) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8815`
-- `src/components/Coach/CoachTeachPage.tsx:8822`
-- `src/components/Coach/CoachTeachPage.tsx:10380`
-- `src/components/Coach/CoachTeachPage.tsx:12423`
-- `src/components/Coach/CoachTeachPage.tsx:12513`
+- `src/components/Coach/CoachTeachPage.tsx:8814`
+- `src/components/Coach/CoachTeachPage.tsx:8821`
+- `src/components/Coach/CoachTeachPage.tsx:10379`
+- `src/components/Coach/CoachTeachPage.tsx:12422`
+- `src/components/Coach/CoachTeachPage.tsx:12512`
 - `src/services/learnTurnDoor.ts:1564`
 
 ### `describeVoicePackage` (re-export) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12209`
-- `src/components/Coach/CoachTeachPage.tsx:12513`
+- `src/components/Coach/CoachTeachPage.tsx:12208`
+- `src/components/Coach/CoachTeachPage.tsx:12512`
 - `src/services/voicePackage.test.ts:38`
 - `src/services/voicePackage.ts:658`
 
 ### `keptLines` (re-export) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:1733`
+- `src/components/Coach/CoachTeachPage.tsx:1732`
 - `src/services/learnTurnDoor.test.ts:225`
 - `src/services/learnTurnDoor.test.ts:231`
 - `src/services/learnTurnDoor.test.ts:237`
 - `src/services/voicePackage.ts:721`
 
 ### `markableSquares` (re-export) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8843`
-- `src/components/Coach/CoachTeachPage.tsx:12457`
+- `src/components/Coach/CoachTeachPage.tsx:8842`
+- `src/components/Coach/CoachTeachPage.tsx:12456`
 - `src/services/voicePackage.test.ts:293`
 - `src/services/voicePackage.test.ts:302`
 - `src/services/voicePackage.test.ts:312`
@@ -371,12 +372,12 @@
 - `src/services/voicePackage.ts:177`
 
 ### `spokenSentenceKeys` (re-export) — 25 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8832`
-- `src/components/Coach/CoachTeachPage.tsx:10829`
-- `src/components/Coach/CoachTeachPage.tsx:10833`
-- `src/components/Coach/CoachTeachPage.tsx:10857`
-- `src/components/Coach/CoachTeachPage.tsx:12222`
-- `src/components/Coach/CoachTeachPage.tsx:12436`
+- `src/components/Coach/CoachTeachPage.tsx:8831`
+- `src/components/Coach/CoachTeachPage.tsx:10828`
+- `src/components/Coach/CoachTeachPage.tsx:10832`
+- `src/components/Coach/CoachTeachPage.tsx:10856`
+- `src/components/Coach/CoachTeachPage.tsx:12221`
+- `src/components/Coach/CoachTeachPage.tsx:12435`
 - `src/services/claimKeysLooseCount.test.ts:34`
 - `src/services/coachFeatureService.ts:3508`
 - `src/services/holeOneKey.test.ts:26`
@@ -407,7 +408,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `decidePhaseWave` (re-export) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8796`
+- `src/components/Coach/CoachTeachPage.tsx:8795`
 - `src/services/learnTurnDoor.mission.test.ts:48`
 - `src/services/learnTurnDoor.mission.test.ts:49`
 - `src/services/learnTurnDoor.phaseWave.test.ts:46`
@@ -425,22 +426,22 @@
 - `src/test/learnDoorFixtures.ts:72`
 
 ### `learnFact` (re-export) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10311`
-- `src/components/Coach/CoachTeachPage.tsx:10463`
+- `src/components/Coach/CoachTeachPage.tsx:10310`
+- `src/components/Coach/CoachTeachPage.tsx:10462`
 - `src/hooks/usePhaseNarration.ts:238`
 - `src/services/learnTurnDoor.ts:799`
 - `src/test/learnDoorFixtures.ts:36`
 
 ### `learnThoughtTurn` (re-export) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:13500`
+- `src/components/Coach/CoachTeachPage.tsx:13499`
 - `src/services/learnSharedFacts.ts:91`
 
 ### `FACT_ROLE` (re-export) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `looseClaim` (re-export) — 12 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9458`
-- `src/components/Coach/CoachTeachPage.tsx:9521`
+- `src/components/Coach/CoachTeachPage.tsx:9457`
+- `src/components/Coach/CoachTeachPage.tsx:9520`
 - `src/services/conceptKey.ts:83`
 - `src/services/looseStill.test.ts:24`
 - `src/services/looseStill.test.ts:35`
@@ -453,7 +454,7 @@
 - `src/services/positionFacts.ts:1865`
 
 ### `nextLooseSpells` (re-export) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9175`
+- `src/components/Coach/CoachTeachPage.tsx:9174`
 - `src/services/conceptKey.ts:70`
 - `src/services/looseStill.test.ts:31`
 - `src/services/looseStill.test.ts:32`
@@ -462,11 +463,11 @@
 - `src/services/looseStill.test.ts:67`
 
 ### `plyOfFen` (re-export) — 36 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8605`
-- `src/components/Coach/CoachTeachPage.tsx:8612`
-- `src/components/Coach/CoachTeachPage.tsx:8619`
-- `src/components/Coach/CoachTeachPage.tsx:8642`
-- `src/components/Coach/CoachTeachPage.tsx:9061`
+- `src/components/Coach/CoachTeachPage.tsx:8604`
+- `src/components/Coach/CoachTeachPage.tsx:8611`
+- `src/components/Coach/CoachTeachPage.tsx:8618`
+- `src/components/Coach/CoachTeachPage.tsx:8641`
+- `src/components/Coach/CoachTeachPage.tsx:9060`
 - `src/services/autoAnalyzeGame.ts:196`
 - `src/services/capabilityDateRepair.test.ts:17`
 - `src/services/capabilityDateRepair.test.ts:18`
@@ -498,6 +499,14 @@
 - `src/services/positionFacts.ts:1865`
 - `src/services/threatProof.ts:130`
 - `src/utils/plyOfFen.ts:3`
+
+### `learnErrorBarCp` (re-export) — 6 call sites
+- `src/components/Coach/CoachTeachPage.tsx:12710`
+- `src/services/backwardLook.ts:537`
+- `src/services/learnErrorBar.test.ts:8`
+- `src/services/learnErrorBar.test.ts:9`
+- `src/services/learnErrorBar.test.ts:10`
+- `src/services/slipDetector.ts:152`
 
 ## Tests
 

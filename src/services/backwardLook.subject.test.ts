@@ -11,7 +11,7 @@ describe('the drawback lane names the student\'s move as theirs', () => {
     // Black to move: …e6 leaves the knight on f6 to g4–g5.
     const fenBefore = 'r1bqkb1r/pppppppp/2n2n2/8/4P1P1/2N5/PPPP1P1P/R1BQKBNR b KQkq - 0 3';
     const after = new Chess(fenBefore); after.move('e6');
-    const look = backwardLook(withOneSearch({
+    const look = backwardLook(withOneSearch({ errorBarCp: 100,
       priorMove: null, replySan: null,
       fenBefore, fenAfter: after.fen(), playedSan: 'e6', bestSan: null,
       cpLoss: 180, studentColor: 'black',

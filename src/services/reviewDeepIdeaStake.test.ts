@@ -33,7 +33,7 @@ describe('a deep idea says why it matters', () => {
       const ply = i + 1;
       return { ply, san, isCoachMove: ply % 2 === 0, classification: 'good', evaluation: -30, preMoveEval: -20, bestMove: null, fenAfter: c.fen() } as unknown as ReviewMoveInput;
     });
-    const n = await generateReviewNarration({ moves, playerColor: 'white', openingName: null, result: '0-1', playerRating: 1500, coachNarration: 'silent' });
+    const n = await generateReviewNarration({ learnHeard: null, moves, playerColor: 'white', openingName: null, result: '0-1', playerRating: 1500, coachNarration: 'silent' });
     const said = n.segments.find((s) => s.ply === 4)?.narration ?? '';
     expect(said).not.toMatch(/swings the game/);
     expect(said).not.toMatch(/starts with Ne7/);
@@ -52,7 +52,7 @@ describe('a deep idea says why it matters', () => {
       const ply = i + 1;
       return { ply, san, isCoachMove: ply % 2 === 0, classification: 'good', evaluation: -30, preMoveEval: -20, bestMove: null, fenAfter: c.fen() } as unknown as ReviewMoveInput;
     });
-    const n = await generateReviewNarration({ moves, playerColor: 'white', openingName: null, result: '0-1', playerRating: 1500, coachNarration: 'silent' });
+    const n = await generateReviewNarration({ learnHeard: null, moves, playerColor: 'white', openingName: null, result: '0-1', playerRating: 1500, coachNarration: 'silent' });
     const said = n.segments.find((s) => s.ply === 4)?.narration ?? '';
     expect(said).toMatch(/starts with Qf6, and it sets up a pin when the bishop goes to b4\./);
     expect(said).not.toMatch(/swings the game/);

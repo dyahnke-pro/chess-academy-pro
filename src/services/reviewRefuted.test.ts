@@ -25,13 +25,13 @@ describe('no gem in review', () => {
   });
 
   it('the student AVOIDED the known slip: the review does not name it', async () => {
-    const n = await generateReviewNarration({ moves: moves([...SPINE, 'Nxe4', 'Nf6']), playerColor: 'white', openingName: null, result: '*', playerRating: 400, coachNarration: 'silent', uncapped: true });
+    const n = await generateReviewNarration({ learnHeard: null, moves: moves([...SPINE, 'Nxe4', 'Nf6']), playerColor: 'white', openingName: null, result: '*', playerRating: 400, coachNarration: 'silent', uncapped: true });
     const said = n.segments.map((s) => s.narration ?? '').join(' ');
     expect(said).not.toMatch(/known mistake|loses to exf3|\bf3\b/);
   });
 
   it('the opponent PLAYED the known slip: the review does not teach the gem', async () => {
-    const n = await generateReviewNarration({ moves: moves([...SPINE, 'f3', 'exf3']), playerColor: 'black', openingName: null, result: '*', playerRating: 400, coachNarration: 'silent', uncapped: true });
+    const n = await generateReviewNarration({ learnHeard: null, moves: moves([...SPINE, 'f3', 'exf3']), playerColor: 'black', openingName: null, result: '*', playerRating: 400, coachNarration: 'silent', uncapped: true });
     const said = n.segments.map((s) => s.narration ?? '').join(' ');
     expect(said).not.toMatch(/known mistake|punished it with exf3|the crush was/);
   });

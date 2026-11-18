@@ -145,7 +145,7 @@ describe('review corpus sweep — no board-untrue line hides in any path (David 
     it(`every emitted narration line is board-true — ${game.id}`, async () => {
       const violations: Violation[] = [];
       const moves = synthMoves(game.sans);
-      const narration = await generateReviewNarration({
+      const narration = await generateReviewNarration({ learnHeard: null,
         moves, playerColor: game.studentWB === 'w' ? 'white' : 'black',
         openingName: null, result: '*', playerRating: 1500,
         coachNarration: 'silent', uncapped: true,

@@ -154,7 +154,7 @@ describe.runIf(HARNESS_ON)('offline full-game narration harness', () => {
       };
     });
 
-    const narration = await generateReviewNarration({
+    const narration = await generateReviewNarration({ learnHeard: null,
       moves,
       playerColor: STUDENT,
       openingName: OPENING,

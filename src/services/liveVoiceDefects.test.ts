@@ -176,26 +176,26 @@ describe('L4 — a refusal names the guard that refused', () => {
     // not even an inaccuracy. The floor band is 50..<100: an inaccuracy the
     // coach deliberately does not stop for. That these two report differently
     // is the whole point of the change.
-    expect(callInaccuracyDetailed(withOneSearch({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null, ...base, cpLoss: 40 })).declined).toBe('quality-not-worth-saying');
-    expect(callInaccuracyDetailed(withOneSearch({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null, ...base, cpLoss: 60 })).declined).toBe('under-the-floor');
-    expect(callInaccuracyDetailed(withOneSearch({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null, ...base, cpLoss: 184, bestSan: null })).declined).toBe('no-better-move-supplied');
+    expect(callInaccuracyDetailed(withOneSearch({ errorBarCp: 100, namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null, ...base, cpLoss: 40 })).declined).toBe('quality-not-worth-saying');
+    expect(callInaccuracyDetailed(withOneSearch({ errorBarCp: 100, namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null, ...base, cpLoss: 60 })).declined).toBe('under-the-floor');
+    expect(callInaccuracyDetailed(withOneSearch({ errorBarCp: 100, namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null, ...base, cpLoss: 184, bestSan: null })).declined).toBe('no-better-move-supplied');
     // PLAYING THE BEST MOVE is SHADOWED by the quality guard and never reaches
     // its own arm: `classifyMove({ wasBest: true })` returns 'best', which is
     // not in WORTH_SAYING, so the first guard answers. Asserted as it ACTUALLY
     // behaves rather than as the arm reads — a test written to the code's
     // apparent shape instead of its measured one is how a dead branch acquires
     // a green test and outlives the reason it was added.
-    expect(callInaccuracyDetailed(withOneSearch({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null, ...base, cpLoss: 184, playedSan: 'Bc5' })).declined).toBe('quality-not-worth-saying');
+    expect(callInaccuracyDetailed(withOneSearch({ errorBarCp: 100, namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null, ...base, cpLoss: 184, playedSan: 'Bc5' })).declined).toBe('quality-not-worth-saying');
     // Bh6 needs the g7 pawn out of the way, so it is illegal here. (Qh4 is
     // NOT — the e-pawn is on e5, so the d8-h4 diagonal is open. Checked against
     // chess.js rather than eyeballed, which is the same discipline this whole
     // work order is about.)
-    expect(callInaccuracyDetailed(withOneSearch({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null, ...base, cpLoss: 184, bestSan: 'Bh6' })).declined).toBe('best-move-illegal-here');
-    expect(callInaccuracyDetailed(withOneSearch({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null, ...base, cpLoss: 184 })).declined).toBeUndefined();
+    expect(callInaccuracyDetailed(withOneSearch({ errorBarCp: 100, namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null, ...base, cpLoss: 184, bestSan: 'Bh6' })).declined).toBe('best-move-illegal-here');
+    expect(callInaccuracyDetailed(withOneSearch({ errorBarCp: 100, namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null, ...base, cpLoss: 184 })).declined).toBeUndefined();
   });
 
   it('backwardLook publishes the reason its coach lane declined', () => {
-    const got = backwardLook(withOneSearch({ priorMove: null, replySan: null,
+    const got = backwardLook(withOneSearch({ errorBarCp: 100, priorMove: null, replySan: null,
       fenBefore, fenAfter: fenBefore, playedSan: 'Nf6', bestSan: null,
       cpLoss: 184, studentColor: 'black', side: 'coach',
     }));

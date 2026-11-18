@@ -106,16 +106,6 @@ export async function refuteWrongTry(args: {
         fenAfter, uci: [...uci], arrows: lineArrows(fenAfter, uci, 'puzzleTeaching.refute'),
       };
     }
-    // Their line answers the student's move: a take-back on its square is a trade.
-    const w = lineWins(fenAfter, line, them, undefined, { fenBefore: args.fenBefore, san: args.wrongSan }, [earlier], { minPlies: 1 });
-    if (w) {
-      const uci = line.slice(0, w.plies.length);
-      return {
-        kind: 'material',
-        text: `${san}? Then ${lineShape(w.sans, 'they', fenAfter, 'first')}${w.afterLine ? ` — they win ${w.afterLine}` : ''}.`,
-        fenAfter, uci: [...uci], arrows: lineArrows(fenAfter, uci, 'puzzleTeaching.refute'),
-      };
-    }
   }
 
   // WHY THE TRY FAILS, from the one error computer (2026-10-10) — never the
@@ -135,6 +125,23 @@ export async function refuteWrongTry(args: {
     return { kind: chanceGone && !g.mechanism ? 'chance-gone' : 'geometry', text: `${san}? ${text}`, fenAfter, uci: [...proof], arrows: lineArrows(fenAfter, proof, 'puzzleTeaching.refute') };
   };
   if (geo?.mechanism) return geometry(geo);
+  // ONE COACH (David 2026-11-18: "Unify the other coach surfaces as well"):
+  // what their reply wins is the one error computer's to say, in the words
+  // Learn and Review use; the private material template below is only the
+  // fallback for a line that computer could not word.
+  if (geo && line && line.length) return geometry(geo);
+  if (line && line.length) {
+    // Their line answers the student's move: a take-back on its square is a trade.
+    const w = lineWins(fenAfter, line, them, undefined, { fenBefore: args.fenBefore, san: args.wrongSan }, [earlier], { minPlies: 1 });
+    if (w) {
+      const uci = line.slice(0, w.plies.length);
+      return {
+        kind: 'material',
+        text: `${san}? Then ${lineShape(w.sans, 'they', fenAfter, 'first')}${w.afterLine ? ` — they win ${w.afterLine}` : ''}.`,
+        fenAfter, uci: [...uci], arrows: lineArrows(fenAfter, uci, 'puzzleTeaching.refute'),
+      };
+    }
+  }
 
   // NOTHING LOST — BUT THE WIN SLIPPED (hand walk 2026-10-01: "…a6" in a fork
   // puzzle drew only the old nudge). In a puzzle a slow move fails because it

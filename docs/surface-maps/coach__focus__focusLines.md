@@ -9,7 +9,7 @@
 ## Locked rules that govern this surface
 
 - **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:228) — names `focusLines`
-- **The standard post-deploy ritual** (CLAUDE.md:7081) — names `focusLines`
+- **The standard post-deploy ritual** (CLAUDE.md:7089) — names `focusLines`
 
 ## Who calls in
 
@@ -73,7 +73,7 @@
 - `src/coach/focus/focusRunner.ts:410`
 
 ### `playOutPrompt` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:14127`
+- `src/components/Coach/CoachTeachPage.tsx:14126`
 
 ## Tests
 
