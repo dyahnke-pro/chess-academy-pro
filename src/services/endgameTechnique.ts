@@ -16,6 +16,7 @@
  * known-answer set every detector is proven on (`endgameTechnique.test.ts`).
  */
 import { Chess, type Square } from 'chess.js';
+import { kingsInOpposition } from './oppositionRead';
 
 type Side = 'white' | 'black';
 
@@ -100,20 +101,13 @@ interface OppositionResult {
 export function detectOpposition(fen: string): OppositionResult | null {
   const board = scan(fen);
   if (!board) return null;
-  const { w, b } = board.kings;
-  const df = Math.abs(w.f - b.f);
-  const dr = Math.abs(w.r - b.r);
-  const sameFile = df === 0;
-  const sameRank = dr === 0;
-  if (!sameFile && !sameRank) return null;
-  const gap = sameFile ? dr - 1 : df - 1; // empty squares between the kings
-  // Opposition needs an ODD gap (1, 3, 5) with the kings aligned. An even gap is
-  // NOT the opposition.
-  if (gap < 1 || gap % 2 === 0) return null;
-  const kind: 'direct' | 'distant' = gap === 1 ? 'direct' : 'distant';
+  // The one geometry (`oppositionRead.kingsInOpposition`); the diagonal kind
+  // is the pawn-ending read's own, not this concept's.
+  const geo = kingsInOpposition(sqName(board.kings.w), sqName(board.kings.b));
+  if (!geo || geo.kind === 'diagonal') return null;
   // The side NOT to move holds the opposition.
   const holder: Side = board.toMove === 'w' ? 'black' : 'white';
-  return { kind, holder };
+  return { kind: geo.kind, holder };
 }
 
 // ─── KEY SQUARES (K+P vs K) ──────────────────────────────────────────────────

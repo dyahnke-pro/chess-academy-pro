@@ -33,6 +33,7 @@ import { kingCover } from './kingSafety';
 import { worstPieceNote } from './nextPlans';
 import { unmarked } from '../utils/sanMark';
 import { liteMoves, makeLite, undoLite } from './liteMoves';
+import { oppositionOn } from './oppositionRead';
 
 /** Centipawn-free piece values for SEE + material reasoning (king ~ ∞). */
 const PIECE_VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
@@ -1496,20 +1497,11 @@ export function rookBehindPasser(fen: string, color: Color): { rook: Square; paw
 export function oppositionRead(fen: string, color: Color): { holds: boolean } | null {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
-  let wk: Square | null = null;
-  let bk: Square | null = null;
-  for (const row of chess.board()) for (const cell of row) {
-    if (!cell) continue;
-    if (cell.type !== 'k' && cell.type !== 'p') return null; // not a pure pawn ending
-    if (cell.type === 'k') { if (cell.color === 'w') wk = cell.square; else bk = cell.square; }
-  }
-  if (!wk || !bk) return null;
-  const wf = wk.charCodeAt(0) - 97; const wr = Number(wk[1]);
-  const bf = bk.charCodeAt(0) - 97; const br = Number(bk[1]);
-  const directFile = wf === bf && Math.abs(wr - br) === 2;
-  const directRank = wr === br && Math.abs(wf - bf) === 2;
-  if (!directFile && !directRank) return null;
-  return { holds: chess.turn() !== color };
+  if (chess.board().flat().some((cell) => !!cell && cell.type !== 'k' && cell.type !== 'p')) return null; // not a pure pawn ending
+  // The one geometry (`oppositionRead.oppositionOn`), direct kind only here.
+  const o = oppositionOn(chess);
+  if (!o || o.kind !== 'direct') return null;
+  return { holds: o.holder === color };
 }
 
 /** The friendly MINOR piece (bishop/knight) a teacher would tell you to KEEP —
