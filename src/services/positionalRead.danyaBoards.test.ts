@@ -48,7 +48,8 @@ describe('positionalRead — a stranded minor (Danya, the positional rook lift #
   it('White\'s bishop on h6: g7, f8 and g5 all covered', () => {
     const o = readPosition('2kr2r1/1b5p/p2pn1qB/1pp1p1p1/4P3/1PPPQNP1/1P3P1R/3RK3 b - - 0 25', 'black')
       .find((x) => x.key === 'opponent-stranded-b');
-    expect(o?.text).toBe('Their bishop on h6 is stranded: f8, g5 and g7 are all covered, so it has no safe square — attack it and it has nowhere to go.');
+    expect(o?.text).toBe('Their bishop on h6 is stranded: every square it can go to is covered, so it has no safe square — attack it and it has nowhere to go.');
+    expect([...(o?.squares ?? [])]).toEqual(['h6', 'f8', 'g5', 'g7']);
   });
   it('a knight on a fifth-rank post is not stranded, nor a piece at home', () => {
     const post = readPosition('r3r1k1/pppq1ppn/3p3p/3PpN2/4PnPP/4QPN1/PPP5/2KR3R w - - 0 19', 'white');
@@ -76,5 +77,13 @@ describe('positionalRead — two covered squares are "both"', () => {
   it('the discovered check reloaded #1: Bh6 with f8 and g7 covered', () => {
     const o = readPosition('3rr1k1/1bqnbp1p/ppp1p1pB/6N1/3P3Q/3B4/PPP2PPP/3RR1K1 w - - 0 18', 'white').find((x) => x.key === 'student-stranded-b');
     expect(o?.text).toMatch(/f8 and g7 are both covered/);
+  });
+});
+
+describe('positionalRead — three isolated pawns are counted, not listed', () => {
+  it('how to survive a chess disaster #4: three of theirs', () => {
+    const o = readPosition('2R5/7p/1p2Nq1k/rb6/5p2/6P1/5bBP/2Q4K w - - 0 36', 'white').find((x) => x.key.startsWith('opponent-iso-'));
+    expect(o?.text).toBe('They have three isolated pawns — long-term targets worth playing against.');
+    expect(o?.squares?.length).toBe(3);
   });
 });

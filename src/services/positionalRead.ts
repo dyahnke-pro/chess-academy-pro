@@ -369,14 +369,17 @@ function observationsFor(
     if (!cell || cell.color !== color || (cell.type !== 'n' && cell.type !== 'b')) continue;
     const st = strandedAt(fen, cell.square);
     if (!st) continue;
-    const squares = andList(st.squares);
-    const covered = st.squares.length > 2 ? 'are all' : st.squares.length === 2 ? 'are both' : 'is';
+    // Two squares are named; three or more are "every square it can go to",
+    // lit on the board (a list of squares read out is the robot, David
+    // 2026-11-05).
+    const where = st.squares.length > 2 ? 'every square it can go to is covered'
+      : st.squares.length === 2 ? `${andList(st.squares)} are both covered` : `${st.squares[0]} is covered`;
     out.push({
       key: `${side}-stranded-${cell.type}`, side, kind: 'piece', rank: rank('piece'),
       squares: [cell.square, ...st.squares],
       text: own
-        ? `Your ${NAME[cell.type]} on ${cell.square} is stranded: ${squares} ${covered} covered, so it has no safe square — if it is attacked it has nowhere to go.`
-        : `Their ${NAME[cell.type]} on ${cell.square} is stranded: ${squares} ${covered} covered, so it has no safe square — attack it and it has nowhere to go.`,
+        ? `Your ${NAME[cell.type]} on ${cell.square} is stranded: ${where}, so it has no safe square — if it is attacked it has nowhere to go.`
+        : `Their ${NAME[cell.type]} on ${cell.square} is stranded: ${where}, so it has no safe square — attack it and it has nowhere to go.`,
     });
   }
   // Same rule as the join: a piece still on its starting square is not a
@@ -439,14 +442,17 @@ function observationsFor(
   // file's (the other lanes' say-once key), the rest ride as aliases.
   if (weak.isolated.length > 0) {
     const iso = weak.isolated;
-    const many = iso.length > 1;
+    const n = iso.length;
+    // One or two are named; three or more are counted and lit (a list of
+    // squares read out is the robot, David 2026-11-05).
+    const who = n > 2 ? `${countWord(n)} isolated pawns` : `pawn${n > 1 ? 's' : ''} on ${andList(iso)}`;
     out.push({
       key: `${side}-iso-${iso[0][0]}`, side, kind: 'structure', rank: rank('structure'),
       aliases: iso.slice(1).map((sq) => `${side}-iso-${sq[0]}`),
       squares: [...iso],
       text: own
-        ? `Your pawn${many ? 's' : ''} on ${andList(iso)} ${many ? 'are' : 'is'} isolated — no friendly pawn can ever defend ${many ? 'them' : 'it'}, so a piece has to.`
-        : `Their pawn${many ? 's' : ''} on ${andList(iso)} ${many ? 'are' : 'is'} isolated — ${many ? 'those are long-term targets' : 'that is a long-term target'} worth playing against.`,
+        ? (n > 2 ? `You have ${who} — no friendly pawn can ever defend them, so pieces have to.` : `Your ${who} ${n > 1 ? 'are' : 'is'} isolated — no friendly pawn can ever defend ${n > 1 ? 'them' : 'it'}, so a piece has to.`)
+        : (n > 2 ? `They have ${who} — long-term targets worth playing against.` : `Their ${who} ${n > 1 ? 'are' : 'is'} isolated — ${n > 1 ? 'those are long-term targets' : 'that is a long-term target'} worth playing against.`),
     });
   }
   const doubledFiles = [...new Set(weak.doubled.map((sq) => sq[0]))].sort();
