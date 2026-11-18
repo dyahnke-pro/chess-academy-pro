@@ -336,14 +336,16 @@ export function backRankWeakness(fen: string, defender: Color): BackRank | null 
     try { hit = c.attackers(s, attacker); } catch { hit = []; }
     if (hit.length === 0) return null; // luft
   }
-  const probeFen = sideToMoveAs(fen, attacker);
-  if (!probeFen) return null;
-  const probe = new Chess(probeFen);
   // A check along the rank from a piece that comes from afar — a queen
   // already standing by the king is a king attack, not the back rank.
   const close = new Set<string>(kingNeighbourhood(king));
-  const checks = probe.moves({ verbose: true }).filter((m) => (m.piece === 'r' || m.piece === 'q') && rankOf(m.to) === home && !close.has(m.from)
-    && m.san.includes('+') && !m.san.includes('#'));
+  const heavy = piecesOf(c, attacker, ['r', 'q']).filter((p) => !close.has(p.square));
+  if (heavy.length === 0) return null;
+  const probeFen = sideToMoveAs(fen, attacker);
+  if (!probeFen) return null;
+  const probe = new Chess(probeFen);
+  const checks = heavy.flatMap((p) => probe.moves({ square: p.square, verbose: true }) as Move[])
+    .filter((m) => rankOf(m.to) === home && m.san.includes('+') && !m.san.includes('#'));
   const found: BackRank[] = [];
   for (const m of checks) {
     const after = new Chess(probeFen);
