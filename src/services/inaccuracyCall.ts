@@ -38,7 +38,7 @@ import { Chess, type Square } from 'chess.js';
 import { planFromUci, isCostClause } from './lookaheadPlan';
 import { classifyMove, type MoveQuality } from './moveRating';
 import type { SameSearchScores } from './moveCost';
-import { MISTAKE_CP, BLUNDER_CP, DECIDED_EVAL_CP, costWords, GRADE_WORD, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
+import { BLUNDER_CP, DECIDED_EVAL_CP, costWords, GRADE_WORD, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
 import { MATERIAL_VALUE } from './pieceValues';
 import { mateLine } from './lineCalc';
 import { costReason, reasonSans, reasonWinWords, type CostReason } from './costReason';
