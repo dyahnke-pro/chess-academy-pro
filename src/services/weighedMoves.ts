@@ -45,9 +45,35 @@ import { pieceRef } from './pieceRef';
 import { openSentence } from '../utils/openSentence';
 import { temptingKey } from './conceptKey';
 import { INACCURACY_CP } from './engineConstants';
+import { withMover } from '../utils/sideToMove';
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+
+/** A move that WALKS INTO MATE is weighed from this share of the eye's read
+ *  (Danya, "how to avoid blunders" 39.Kh3??: "the checkmate check" — the king
+ *  move sat at 2% of the eye, under `CANDIDATE_BAR`, and Nxf4# was never
+ *  warned about). Only a move that MAKES the mate: the other side had no mate
+ *  in one before it (`walksIntoMate`), so a board with a mate already
+ *  threatened does not turn every move into a temptation. */
+export const MATE_WALK_BAR = 0.01;
+
+/** The move `uci` on `fen` lets the other side mate in one where, before it,
+ *  they had no mate in one (the mover's turn handed over). chess.js only. */
+export function walksIntoMate(fen: string, uci: string): boolean {
+  const b = boardOf(fen);
+  if (!b) return false;
+  const mover = b.turn();
+  const mates = (c: Chess): boolean => c.moves({ verbose: true }).some((m) => m.san.endsWith('#'));
+  try {
+    const after = new Chess(fen);
+    after.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] });
+    if (after.isGameOver() || !mates(after)) return false;
+  } catch { return false; }
+  const before = withMover(fen, mover === 'w' ? 'b' : 'w');
+  if (!before) return false;
+  try { return !mates(new Chess(before)); } catch { return false; }
+}
 
 /** A move the eye weighs: at this share of the eye's read or above, a player
  *  at the rating looks at it. A BAR, not a cap — every move that clears it is
@@ -163,7 +189,7 @@ export function candidateMoves(fen: string, rating: number, opts: { played: stri
     const e = eye.get(uci) ?? 0;
     const p = full ? full.get(uci) ?? 0 : null;
     const isPlayed = uci === playedUci;
-    if (!isPlayed && e < CANDIDATE_BAR && (p === null || p < CANDIDATE_BAR)) continue;
+    if (!isPlayed && e < CANDIDATE_BAR && (p === null || p < CANDIDATE_BAR) && !(e >= MATE_WALK_BAR && walksIntoMate(fen, uci))) continue;
     out.push({ uci, san: m.san, from: m.from, to: m.to, piece: m.piece, eye: e, p, played: isPlayed });
   }
   return out.sort((x, y) => y.eye - x.eye);
@@ -178,7 +204,7 @@ function readOf(reads: readonly WeighRead[], uci: string): WeighRead | null {
  *  model's share among the moves read (`real` — what a player at the rating
  *  would PLAY of them, the cost included), kept when either clears the bar,
  *  most natural-looking first. */
-function readCandidates(fen: string, played: Move, reads: readonly WeighRead[], rating: number): Array<{ c: CandidateMove; read: WeighRead; real: number }> {
+function readCandidates(fen: string, played: Move, reads: readonly WeighRead[], rating: number): Array<{ c: CandidateMove; read: WeighRead; real: number; mateWalk: boolean }> {
   const mover = played.color;
   const playedUci = uciOf(played);
   const eye = new Map(eyeRead(fen, rating).map((r) => [r.uci, r.p]));
@@ -187,7 +213,7 @@ function readCandidates(fen: string, played: Move, reads: readonly WeighRead[], 
   // temptation weighed as two. The first read of a move is its read.
   const uniq = reads.filter((r, i) => !!r.moves[0] && reads.findIndex((x) => x.moves[0] === r.moves[0]) === i);
   const real = new Map(humanMoveProbabilities(fen, uniq.map((r) => ({ uci: r.moves[0], cp: seatCp(r, mover) })), rating).map((r) => [r.uci, r.p]));
-  const out: Array<{ c: CandidateMove; read: WeighRead; real: number }> = [];
+  const out: Array<{ c: CandidateMove; read: WeighRead; real: number; mateWalk: boolean }> = [];
   for (const read of uniq) {
     const uci = read.moves[0];
     if (!uci || uci === playedUci) continue;
@@ -195,8 +221,9 @@ function readCandidates(fen: string, played: Move, reads: readonly WeighRead[], 
     if (!m) continue;
     const e = eye.get(uci) ?? 0;
     const p = real.get(uci) ?? 0;
-    if (e < CANDIDATE_BAR && p < CANDIDATE_BAR) continue;
-    out.push({ c: { uci, san: m.san, from: m.from, to: m.to, piece: m.piece, eye: e, p, played: false }, read, real: p });
+    const mateWalk = e >= MATE_WALK_BAR && walksIntoMate(fen, uci);
+    if (e < CANDIDATE_BAR && p < CANDIDATE_BAR && !mateWalk) continue;
+    out.push({ c: { uci, san: m.san, from: m.from, to: m.to, piece: m.piece, eye: e, p, played: false }, read, real: p, mateWalk });
   }
   return out.sort((x, y) => y.c.eye - x.c.eye);
 }
@@ -289,8 +316,12 @@ export function temptingRefutations(args: Parameters<typeof temptingRefuted>[0])
   if (!playedRead) return [];
   const out: Array<TemptingRefuted & { real: number }> = [];
   // A temptation is a move someone at the rating would really play (`real`).
-  for (const { c, read, real } of readCandidates(args.fenBefore, played, args.reads, args.rating)) {
-    if (real < TEMPTING_P_FLOOR) continue;
+  for (const { c, read, real, mateWalk } of readCandidates(args.fenBefore, played, args.reads, args.rating)) {
+    // A move that walks into mate is weighed by the eye alone: the full model
+    // prices the mate in, so its share collapses whatever the eye's pull (Kh3
+    // at 2% of the eye, 0.04% once the mate is counted) — the blunder a
+    // checkmate check exists to catch.
+    if (real < TEMPTING_P_FLOOR && !mateWalk) continue;
     const t = refuteCandidate(args.fenBefore, c, read, playedRead, args.student, args.priorMove);
     if (!t) continue;
     // A PIECE SIMPLY GIVEN AWAY IS NOT A TEMPTATION: their first reply takes
