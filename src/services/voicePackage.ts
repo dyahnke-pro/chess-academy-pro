@@ -260,6 +260,10 @@ const DEPENDENT = /^(?:Remember —|Here's how:)/;
  *  repeat, this one has no referent and goes too (OS-11 #7 — the tails spoke
  *  alone and cut the line playing). */
 const ANAPHOR = /\b(?:it|its|them|this|that|these|those)\b/i;
+/** A GRADE IS A LEAD-IN (prod Learn 2026-11-18, ply 27: "… Your move was a
+ *  mistake." with its reason dropped as already heard). Said with nothing after
+ *  it in its own fact, it is a grade with no why — and no why, no grade. */
+const BARE_GRADE = /^(?:Your move|Their move|Your \S+|Their \S+) (?:was|is) (?:a blunder|a mistake|imprecise)\.$/;
 /** A piece named "the bishop" (no square) points back at the dropped sentence
  *  when that sentence named a bishop (prod Learn audit 2026-11-08: the pin's
  *  lead was a repeat and dropped, and "Moving the bishop would let your rook
@@ -547,6 +551,10 @@ export function buildVoicePackage(
       mine.add(k);
       fresh.push(s);
       prevKept = true;
+    }
+    while (fresh.length > 0 && BARE_GRADE.test(fresh[fresh.length - 1].trim())) {
+      mine.delete(sayKey(fresh.pop() as string));
+      why.add('duplicate');
     }
     if (f.whole && why.size > 0) { dropped.push({ fact: f, reason: 'part already said' }); continue; }
     for (const k of mine) seen.add(k);

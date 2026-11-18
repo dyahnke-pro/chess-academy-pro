@@ -178,7 +178,7 @@ export function namedStep(h: TeachingFact): TeachingFact {
   const step = h.claims.map((c) => stepForMethodClaim(c)).find((x) => x !== null);
   if (!step) return h;
   const name = THINKING_STEPS[step].name;
-  const tail = rotateStem([`That is the “${name}” habit.`, `Habit: “${name}”`], stemKeyOf(h.text));
+  const tail = rotateStem([`That is the “${name}” habit.`, `That's what “${name}” is for.`], stemKeyOf(h.text));
   return { ...h, text: `${h.text.trim().replace(/[.!]?$/, '.')} ${tail}` };
 }
 

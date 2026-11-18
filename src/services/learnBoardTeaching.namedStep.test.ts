@@ -11,7 +11,14 @@ const hint = (text: string, claims: string[]): TeachingFact =>
 describe('a method line names its thinking step', () => {
   it('blunder check → "Is my move safe?", from the claim, never the prose', () => {
     const out = namedStep(hint('Before you let go of a piece, ask what they can take', ['method:blunder-check']));
-    expect(out.text).toMatch(/^Before you let go of a piece, ask what they can take\. (That is the “Is my move safe\?” habit\.|Habit: “Is my move safe\?”)$/);
+    expect(out.text).toMatch(/^Before you let go of a piece, ask what they can take\. (That is the “Is my move safe\?” habit\.|That's what “Is my move safe\?” is for\.)$/);
+  });
+  it('every rotation is a sentence a person says — never a label ("Habit: …")', () => {
+    for (const t of ['Before you let go of a piece, ask what they can take', 'Check what their last move attacks', 'Look at every capture they have', 'Count who guards the square']) {
+      const out = namedStep(hint(t, ['method:blunder-check'])).text;
+      expect(out).not.toMatch(/Habit:/);
+      expect(out).toMatch(/[.!?]$/);
+    }
   });
   it('a line with no method claim is untouched', () => {
     const h = hint('Recapture toward the centre.', ['recapture-e5']);

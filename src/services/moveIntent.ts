@@ -496,6 +496,17 @@ export function moveIntent(
       if (m.captured && materialDeficit(fenBefore, mover) >= (MATERIAL_VALUE[m.captured] ?? 0)) prepares = null;
     } catch { /* keep */ }
   }
+  // A PREPARED PAWN MOVE WITH NO POINT IS THIS MOVE'S DOING ONLY WHEN THE
+  // MOVE GUARDS ITS SQUARE OR CLEARED ITS ROAD ("c3 prepares d4"): Danya
+  // Review tapes said "You played c3 first, so that h5 comes next" (2 games).
+  // It runs BEFORE the nothing-to-say check (prod Learn 2026-11-18: dropped
+  // after it, it left "Your move prepares .").
+  const playedFrom = playedUci.slice(0, 2);
+  if (prepares && /^[a-h]/.test(prepares.san) && !whatItDoes(fenAfter, prepares.uci, mover)) {
+    let supports = false;
+    try { supports = new Chess(fenAfter).attackers(prepares.uci.slice(2, 4) as Square, mover).includes(playedUci.slice(2, 4) as Square); } catch { supports = false; }
+    if (!supports && !pathOf(prepares.uci).includes(playedFrom)) prepares = null;
+  }
   // A QUIET MOVE IS STOPPED ONLY WITH WHAT IT WOULD HAVE DONE (blind grade
   // 2026-11-13, Nxe5 "stops …Nf6" — …Nf6 is still a sound move, and nothing
   // said what it would have hit). A capture, a check or mate says itself.
@@ -515,15 +526,6 @@ export function moveIntent(
   // — now …g6 doesn't work" never said …g6 was hitting the f5-knight): read
   // on the board before the move, the mover passing.
   const threatDid = prevents ? whatTheStopDid(fenBefore, prevents.uci, opp) : null;
-  // A PREPARED PAWN MOVE WITH NO POINT IS THIS MOVE'S DOING ONLY WHEN THE
-  // MOVE GUARDS ITS SQUARE OR CLEARED ITS ROAD ("c3 prepares d4"): Danya
-  // Review tapes said "You played c3 first, so that h5 comes next" (2 games).
-  const playedFrom = playedUci.slice(0, 2);
-  if (prepares && /^[a-h]/.test(prepares.san) && !whatItDoes(fenAfter, prepares.uci, mover)) {
-    let supports = false;
-    try { supports = new Chess(fenAfter).attackers(prepares.uci.slice(2, 4) as Square, mover).includes(playedUci.slice(2, 4) as Square); } catch { supports = false; }
-    if (!supports && !pathOf(prepares.uci).includes(playedFrom)) prepares = null;
-  }
   // …AND IT "FREES" A PIECE ONLY WHEN IT STOOD IN THAT PIECE'S ROAD: "You
   // played Nc3 first, to free your dark-squared bishop for Bf4" with the c1–f4
   // road already open (Danya NnQm). Otherwise the prepared move just comes.
