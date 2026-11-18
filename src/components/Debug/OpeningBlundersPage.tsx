@@ -15,6 +15,8 @@ import { Chess } from 'chess.js';
 import { ArrowLeft, ChevronRight, Target, Flame } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
+import { BOARD_EXTRA_CLASS } from '../Board/PlayLineButton';
 import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import { useEndgamePlayout } from '../../hooks/useEndgamePlayout';
 import { useClickToMove } from '../../hooks/useClickToMove';
@@ -946,6 +948,37 @@ function PuzzleView({ puzzle, onExit, onResult, onNext }: PuzzleViewProps): JSX.
 
   const controls = (
     <div className="flex flex-col gap-3 px-2 pb-2">
+      {/* THE ONE BOARD BAR (WO-PLATFORM-01): the trap's own controls ride in
+          the extras row. */}
+      <CoachBoardBar
+        keepRef={keepRef}
+        onBack={null}
+        onForward={null}
+        onHint={playout.hintMove && !playout.hintRevealed ? () => playout.revealHint() : null}
+        onRead={null}
+        onWhy={null}
+        onPlayLine={null}
+        testIds={{ hint: 'opening-blunder-hint' }}
+        extras={<>
+          {!walkthroughMoves && !walkthroughLoading && !walkthroughError && (
+            // Reconstructs the move sequence from start to the puzzle
+            // position via Lichess explorer probe and animates it ply-by-ply.
+            <button onClick={() => void startWalkthrough()} className={BOARD_EXTRA_CLASS} data-testid="opening-blunder-show-opening">Show the opening</button>
+          )}
+          {playout.isComplete && mode === 'puzzle' && (
+            // Keep playing the solved position against Stockfish — the same
+            // free-play substrate the piece-mate fundamentals use.
+            <button onClick={startPlayOut} className={BOARD_EXTRA_CLASS} data-testid="opening-blunder-play-out">Play it out vs Stockfish</button>
+          )}
+          <button onClick={() => playout.reset()} className={BOARD_EXTRA_CLASS}>Reset</button>
+          {/* Reveal-on-wrong: after 2 wrong attempts the playout can
+              auto-play the rest of the line. */}
+          {playout.wrongAttempts >= 2 && !playout.isComplete && (
+            <button onClick={() => playout.reveal()} className={BOARD_EXTRA_CLASS} data-testid="opening-blunder-reveal">Reveal line</button>
+          )}
+          <button onClick={onNext} className={BOARD_EXTRA_CLASS} data-testid="opening-blunder-next">Next trap</button>
+        </>}
+      />
       <div className="rounded-xl border border-theme-border bg-theme-surface p-3 flex flex-col gap-2">
         {!playout.isComplete && playout.expectedSan && (
           <p className="text-sm text-theme-text">
@@ -975,19 +1008,6 @@ function PuzzleView({ puzzle, onExit, onResult, onNext }: PuzzleViewProps): JSX.
             Free play — Stockfish is defending. Keep going.
           </p>
         )}
-        {/* Play-it-out CTA: when the curated puzzle has just been
-            solved, give the user the option to keep playing the
-            position against Stockfish instead of moving on. Same
-            free-play substrate the piece-mate fundamentals use. */}
-        {playout.isComplete && mode === 'puzzle' && (
-          <button
-            onClick={startPlayOut}
-            className="px-3 py-2 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-sm font-medium hover:bg-emerald-500/25"
-            data-testid="opening-blunder-play-out"
-          >
-            Play it out vs Stockfish
-          </button>
-        )}
         {playout.wrongAttempts > 0 && !playout.isComplete && (
           <p className="text-[11px] text-amber-400">
             {playout.wrongAttempts === 1
@@ -997,18 +1017,6 @@ function PuzzleView({ puzzle, onExit, onResult, onNext }: PuzzleViewProps): JSX.
         )}
         {!playout.isComplete && <WrongTryNote text={playout.wrongTryText} />}
       </div>
-      {/* Optional "Show the opening" affordance — reconstructs the
-          move sequence from start to the puzzle position via Lichess
-          explorer probe and animates it ply-by-ply. No jump-cut. */}
-      {!walkthroughMoves && !walkthroughLoading && !walkthroughError && (
-        <button
-          onClick={() => void startWalkthrough()}
-          className="px-3 py-2 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-sm font-medium hover:bg-cyan-500/20"
-          data-testid="opening-blunder-show-opening"
-        >
-          Show the opening
-        </button>
-      )}
       {walkthroughLoading && (
         <p className="text-[11px] text-theme-text-muted text-center">Finding the line…</p>
       )}
@@ -1020,42 +1028,6 @@ function PuzzleView({ puzzle, onExit, onResult, onNext }: PuzzleViewProps): JSX.
           Showing the opening · ply {walkthroughPly}/{walkthroughMoves?.length ?? 0}
         </p>
       )}
-      <div ref={keepRef} className="flex gap-2">
-        <button
-          onClick={() => playout.reset()}
-          className="flex-1 px-3 py-2 rounded-lg bg-theme-surface text-sm text-theme-text hover:bg-theme-bg"
-        >
-          Reset
-        </button>
-        {playout.hintMove && !playout.hintRevealed && (
-          <button
-            onClick={() => playout.revealHint()}
-            className="flex-1 px-3 py-2 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-400 text-sm font-medium"
-            data-testid="opening-blunder-hint"
-          >
-            Hint
-          </button>
-        )}
-        {/* Reveal-on-wrong: after 2 wrong attempts the student can
-            ask the playout to auto-play the rest of the line. Same
-            affordance as CuratedMatingLessonView. */}
-        {playout.wrongAttempts >= 2 && !playout.isComplete && (
-          <button
-            onClick={() => playout.reveal()}
-            className="flex-1 px-3 py-2 rounded-lg bg-cyan-500/15 border border-cyan-500/30 text-cyan-400 text-sm font-medium"
-            data-testid="opening-blunder-reveal"
-          >
-            Reveal line
-          </button>
-        )}
-        <button
-          onClick={onNext}
-          className="flex-1 px-3 py-2 rounded-lg bg-theme-accent text-theme-bg text-sm font-semibold"
-          data-testid="opening-blunder-next"
-        >
-          Next trap
-        </button>
-      </div>
     </div>
   );
 

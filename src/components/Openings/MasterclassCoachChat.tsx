@@ -3,7 +3,7 @@ import { useRememberedThread } from '../../hooks/useRememberedThread';
 import { useNavigate } from 'react-router-dom';
 import { MessageCircle, X } from 'lucide-react';
 import { ChatMessage } from '../Coach/ChatMessage';
-import { PlayLineButton } from '../Board/PlayLineButton';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
 import { ChatInput } from '../Coach/ChatInput';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { useLineWalk } from '../../hooks/useLineWalk';
@@ -159,9 +159,10 @@ export function MasterclassCoachChat({ openingId, variationName }: MasterclassCo
       </div>
       <div className="flex-1 min-h-0 overflow-y-auto px-3 py-2 space-y-2">
         {(lineWalk.walkFen || lineWalk.stated.length > 0) && (
-          <div className="w-48 mx-auto flex flex-col gap-1" data-testid="masterclass-walk-board">
+          <div className="w-full max-w-xs mx-auto flex flex-col gap-1" data-testid="masterclass-walk-board">
             <ConsistentChessboard fen={lineWalk.walkFen ?? lineWalk.stated[0]?.startFen ?? ''} arrows={lineWalk.walkArrows} interactive={false} boardOrientation={walkSide} showLastMoveHighlight />
-            <PlayLineButton onPlay={lineWalk.playStated} testId="masterclass-play-line" wide />
+            {/* THE ONE BOARD BAR (WO-PLATFORM-01). */}
+            <CoachBoardBar onBack={null} onForward={null} onHint={null} onRead={null} onWhy={null} onPlayLine={lineWalk.playStated} testIds={{ line: 'masterclass-play-line' }} />
           </div>
         )}
         {messages.map((m) => (

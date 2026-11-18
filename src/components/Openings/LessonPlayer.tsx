@@ -3,6 +3,8 @@ import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties }
 import { Chess } from 'chess.js';
 import { ConsistentChessboard, type BoardArrow } from '../Chessboard/ConsistentChessboard';
 import { LessonScaffold } from './LessonScaffold';
+import { BOARD_EXTRA_CLASS } from '../Board/PlayLineButton';
+import { Play, Pause } from 'lucide-react';
 import { useStrictNarration } from '../../hooks/useStrictNarration';
 import { voiceService } from '../../services/voiceService';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
@@ -408,14 +410,22 @@ function LessonPlayerAt({ script, onExit, onComplete, onContinueToNext, startBea
         />
       }
       narration={beat.say}
-      controls={{
-        onPrev: prev,
-        onTogglePlay: toggleAutoPlay,
-        onNext: atEnd ? () => goToStep(0) : next,
-        isPlaying: isAutoPlaying,
-        canPrev: !atStart,
-        canNext: true,
-        playLabel: 'Play lesson',
+      bar={{
+        onBack: atStart ? null : prev,
+        onForward: atEnd ? () => goToStep(0) : next,
+        onHint: null,
+        onRead: null,
+        onWhy: null,
+        onPlayLine: null,
+        testIds: { back: 'lesson-prev', forward: 'lesson-next' },
+        extras: (<>
+          <button type="button" onClick={toggleAutoPlay} className={BOARD_EXTRA_CLASS} aria-label={isAutoPlaying ? 'Pause' : 'Play lesson'} data-testid="lesson-play-pause">
+            {isAutoPlaying ? <Pause size={12} /> : <Play size={12} />}{isAutoPlaying ? 'Pause' : 'Play'}
+          </button>
+          {atEnd && onContinueToNext && (
+            <button type="button" onClick={onContinueToNext} data-testid="lesson-continue-next" className={BOARD_EXTRA_CLASS}>Now Learn it →</button>
+          )}
+        </>),
       }}
       chat={{
         fen: displayFen,
@@ -423,18 +433,6 @@ function LessonPlayerAt({ script, onExit, onComplete, onContinueToNext, startBea
         pgn: beat.moves.join(' '),
         playerColor: orientation,
       }}
-      footer={
-        atEnd && onContinueToNext ? (
-          <button
-            type="button"
-            onClick={onContinueToNext}
-            data-testid="lesson-continue-next"
-            className="w-full py-3 rounded-2xl border-2 border-amber-500/40 bg-amber-500/10 text-amber-200 font-semibold"
-          >
-            Now Learn it →
-          </button>
-        ) : undefined
-      }
     />
   );
 }

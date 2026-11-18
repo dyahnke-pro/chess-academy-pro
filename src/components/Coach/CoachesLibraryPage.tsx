@@ -15,9 +15,11 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Chess } from 'chess.js';
 import {
   ArrowLeft, BookOpen, Play, Pause, ChevronLeft, ChevronRight,
-  SkipBack, SkipForward, RotateCcw, Library, Search, X, List, ChevronRight as Chevron,
+  RotateCcw, Library, Search, X, List, ChevronRight as Chevron,
 } from 'lucide-react';
 import { ConsistentChessboard, type BoardArrow } from '../Chessboard/ConsistentChessboard';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
+import { BOARD_EXTRA_CLASS } from '../Board/PlayLineButton';
 import { useProseReader, type ProseUnit } from '../../hooks/useProseReader';
 import { admitArrow } from '../../services/arrowDoor';
 import { useThinkingLesson } from '../../hooks/useThinkingLesson';
@@ -252,66 +254,32 @@ function LivingBoardView({ board }: { board: LivingBoard }): JSX.Element {
           squareStyles={picked ? { [picked]: { background: 'rgba(129,140,248,0.45)' } } : {}}
         />
       </div>
+      {/* THE ONE BOARD BAR (WO-PLATFORM-01): Back / Forward step the line;
+          reset, find-the-move and test-me ride in the extras row. */}
+      <div className="max-w-[20rem] mx-auto mt-1.5">
+        <CoachBoardBar
+          onBack={atStart ? null : () => setIndex((i) => Math.max(0, i - 1))}
+          onForward={atEnd ? null : () => setIndex((i) => Math.min(board.moves.length, i + 1))}
+          onHint={null}
+          onRead={null}
+          onWhy={null}
+          onPlayLine={null}
+          testIds={{ back: 'living-board-prev', forward: 'living-board-next' }}
+          extras={<>
+            <button type="button" onClick={() => setIndex(0)} disabled={atStart} className={BOARD_EXTRA_CLASS} aria-label="Reset to the diagram" data-testid="living-board-reset"><RotateCcw size={12} /></button>
+            {answer && atStart && !finding && misses === 0 && !findLine && (
+              <button type="button" onClick={() => { setFinding(true); setFindLine(null); }} className={BOARD_EXTRA_CLASS} data-testid="living-board-find-move">Find the book's move</button>
+            )}
+            {questionKit && atStart && !tested && !finding && (
+              <button type="button" onClick={testMe} className={BOARD_EXTRA_CLASS} data-testid="living-board-test-me">Test yourself on this position</button>
+            )}
+          </>}
+        />
+      </div>
       <p className="text-center text-[11px] text-amber-300/80 italic mt-2">
         {finding ? 'What does the book play here? Make the move.' : atEnd ? 'The line, played out.' : board.caption}
       </p>
       {findLine && <p className="text-center text-xs text-theme-text mt-1" data-testid="living-board-find-line">{findLine}</p>}
-      <div className="flex items-center justify-center gap-4 mt-1.5">
-        <button
-          type="button"
-          onClick={() => setIndex(0)}
-          disabled={atStart}
-          className="p-1.5 rounded-lg text-theme-text-muted hover:text-amber-300 disabled:opacity-25 transition-colors"
-          aria-label="Reset to the diagram"
-          data-testid="living-board-reset"
-        >
-          <RotateCcw size={18} />
-        </button>
-        <button
-          type="button"
-          onClick={() => setIndex((i) => Math.max(0, i - 1))}
-          disabled={atStart}
-          className="p-1.5 rounded-lg text-theme-text-muted hover:text-amber-300 disabled:opacity-25 transition-colors"
-          aria-label="Previous move"
-          data-testid="living-board-prev"
-        >
-          <SkipBack size={18} />
-        </button>
-        <button
-          type="button"
-          onClick={() => setIndex((i) => Math.min(board.moves.length, i + 1))}
-          disabled={atEnd}
-          className="px-3 py-1.5 rounded-lg bg-amber-500/15 border border-amber-400/40 text-amber-300 text-xs font-semibold hover:bg-amber-500/25 disabled:opacity-30 transition-colors flex items-center gap-1.5"
-          aria-label="Play the next move"
-          data-testid="living-board-next"
-        >
-          <SkipForward size={16} /> Play move
-        </button>
-      </div>
-      {answer && atStart && !finding && misses === 0 && !findLine && (
-        <div className="flex justify-center mt-2">
-          <button
-            type="button"
-            onClick={() => { setFinding(true); setFindLine(null); }}
-            className="px-3 py-1.5 rounded-lg bg-amber-500/15 border border-amber-400/40 text-amber-300 text-xs font-semibold hover:bg-amber-500/25 transition-colors"
-            data-testid="living-board-find-move"
-          >
-            Find the book's move
-          </button>
-        </div>
-      )}
-      {questionKit && atStart && !tested && !finding && (
-        <div className="flex justify-center mt-2">
-          <button
-            type="button"
-            onClick={testMe}
-            className="px-3 py-1.5 rounded-lg bg-indigo-500/15 border border-indigo-400/40 text-indigo-300 text-xs font-semibold hover:bg-indigo-500/25 transition-colors"
-            data-testid="living-board-test-me"
-          >
-            Test yourself on this position
-          </button>
-        </div>
-      )}
     </div>
   );
 }

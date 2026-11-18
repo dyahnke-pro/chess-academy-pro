@@ -70,7 +70,8 @@ describe('PatternSchoolPage', () => {
     fireEvent.click(screen.getByTestId('pattern-toggle-fork'));
     await waitFor(() => expect(screen.getByTestId('mock-board').getAttribute('data-arrows')).toBe('b5c7'));
     expect(screen.queryByTestId('pattern-find-it-fork')).toBeNull();
-    expect(screen.queryByTestId('pattern-show-it-fork')).toBeNull();
+    // The board bar's Hint ("Show me") greys, never hides (WO-PLATFORM-01).
+    expect(screen.getByTestId('pattern-show-it-fork')).toBeDisabled();
   });
 
   it('IDENTIFY is a question first: no arrow until they find it or ask to be shown', async () => {

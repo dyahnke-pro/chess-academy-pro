@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Lightbulb, Play, SkipForward, Pause, ChevronLeft } from 'lucide-react';
 import { Chess } from 'chess.js';
 import { ChessBoard } from '../Board/ChessBoard';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
+import { BOARD_EXTRA_CLASS } from '../Board/PlayLineButton';
 import {
   buildTacticCreateQueue,
   updateContextDepth,
@@ -381,6 +383,26 @@ export function TacticCreatePage(): JSX.Element {
             />
           </div>
 
+          {/* THE ONE BOARD BAR (WO-PLATFORM-01): the replay's own controls
+              ride in the extras row. */}
+          <div className="w-full md:max-w-[420px] mx-auto">
+            <CoachBoardBar
+              onBack={null}
+              onForward={null}
+              onHint={null}
+              onRead={null}
+              onWhy={null}
+              onPlayLine={null}
+              extras={!replayPlaying ? (<>
+                <button onClick={handleStartReplay} className={BOARD_EXTRA_CLASS} data-testid="start-replay"><Play size={12} />Replay Game</button>
+                <button onClick={handleSkipReplay} className={BOARD_EXTRA_CLASS} data-testid="skip-replay"><SkipForward size={12} />Skip to Puzzle</button>
+              </>) : (<>
+                <button onClick={handleTogglePause} className={BOARD_EXTRA_CLASS}>{replayPaused ? <Play size={12} /> : <Pause size={12} />}{replayPaused ? 'Resume' : 'Pause'}</button>
+                <button onClick={handleSkipReplay} className={BOARD_EXTRA_CLASS}><SkipForward size={12} />Skip</button>
+              </>)}
+            />
+          </div>
+
           {/* Voice subtitle */}
           {subtitle && (
             <AnimatePresence mode="wait">
@@ -439,50 +461,6 @@ export function TacticCreatePage(): JSX.Element {
             </div>
           )}
 
-          {/* Controls */}
-          <div className="flex justify-center gap-3">
-            {!replayPlaying ? (
-              <>
-                <button
-                  onClick={handleStartReplay}
-                  className="px-6 py-3 rounded-xl font-semibold text-sm flex items-center gap-2"
-                  style={{ background: '#a78bfa', color: 'var(--color-bg)' }}
-                  data-testid="start-replay"
-                >
-                  <Play size={16} />
-                  Replay Game
-                </button>
-                <button
-                  onClick={handleSkipReplay}
-                  className="px-6 py-3 rounded-xl font-semibold text-sm flex items-center gap-2 border"
-                  style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
-                  data-testid="skip-replay"
-                >
-                  <SkipForward size={16} />
-                  Skip to Puzzle
-                </button>
-              </>
-            ) : (
-              <div className="flex gap-2">
-                <button
-                  onClick={handleTogglePause}
-                  className="px-4 py-2 rounded-lg text-xs flex items-center gap-1.5 border"
-                  style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-muted)' }}
-                >
-                  {replayPaused ? <Play size={12} /> : <Pause size={12} />}
-                  {replayPaused ? 'Resume' : 'Pause'}
-                </button>
-                <button
-                  onClick={handleSkipReplay}
-                  className="px-4 py-2 rounded-lg text-xs flex items-center gap-1.5 border"
-                  style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-muted)' }}
-                >
-                  <SkipForward size={12} />
-                  Skip
-                </button>
-              </div>
-            )}
-          </div>
         </motion.div>
       )}
 

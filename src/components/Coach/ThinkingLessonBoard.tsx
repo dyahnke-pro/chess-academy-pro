@@ -4,6 +4,8 @@
 import type { CSSProperties } from 'react';
 import type { Square } from 'chess.js';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
+import { BOARD_EXTRA_CLASS } from '../Board/PlayLineButton';
 import type { LessonView } from '../../hooks/useThinkingLesson';
 
 interface ThinkingLessonBoardProps {
@@ -57,6 +59,25 @@ export function ThinkingLessonBoard({ view, onTap, onDontKnow, onNothing, onStop
         squareStyles={lessonSquareStyles(view)}
         onSquareClick={(a) => { if (view.asking) onTap(a.square as Square); }}
       />
+      {/* THE ONE BOARD BAR (WO-PLATFORM-01): the lesson's own answers and
+          End lesson ride in the extras row. */}
+      <CoachBoardBar
+        onBack={null}
+        onForward={null}
+        onHint={null}
+        onRead={null}
+        onWhy={null}
+        onPlayLine={null}
+        extras={<>
+          {view.nothing && (
+            // On EVERY question of a step that can be empty — never only on the
+            // empty boards, or its presence would give the answer away.
+            <button type="button" onClick={onNothing} disabled={!view.asking} className={BOARD_EXTRA_CLASS} data-testid="thinking-lesson-nothing">Nothing here</button>
+          )}
+          <button type="button" onClick={onDontKnow} disabled={!view.asking && !view.choosing} className={BOARD_EXTRA_CLASS} data-testid="thinking-lesson-dont-know">I don&apos;t know</button>
+          <button type="button" onClick={onStop} className={BOARD_EXTRA_CLASS} data-testid="thinking-lesson-stop">End lesson</button>
+        </>}
+      />
       {view.prompt && (view.asking || view.choosing) && (
         <p className="text-sm text-center font-semibold" data-testid="thinking-lesson-prompt">{view.prompt}</p>
       )}
@@ -76,38 +97,6 @@ export function ThinkingLessonBoard({ view, onTap, onDontKnow, onNothing, onStop
           ))}
         </div>
       )}
-      <div className="flex gap-2">
-        {view.nothing && (
-          // On EVERY question of a step that can be empty — never only on the
-          // empty boards, or its presence would give the answer away.
-          <button
-            type="button"
-            onClick={onNothing}
-            disabled={!view.asking}
-            className="flex-1 py-2 rounded-xl border-2 border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-sm font-semibold disabled:opacity-40"
-            data-testid="thinking-lesson-nothing"
-          >
-            Nothing here
-          </button>
-        )}
-        <button
-          type="button"
-          onClick={onDontKnow}
-          disabled={!view.asking && !view.choosing}
-          className="flex-1 py-2 rounded-xl border-2 border-amber-500/30 bg-amber-500/10 text-amber-400 text-sm font-semibold disabled:opacity-40"
-          data-testid="thinking-lesson-dont-know"
-        >
-          I don&apos;t know
-        </button>
-        <button
-          type="button"
-          onClick={onStop}
-          className="px-4 py-2 rounded-xl border-2 border-slate-500/30 bg-slate-500/10 text-slate-300 text-sm font-semibold"
-          data-testid="thinking-lesson-stop"
-        >
-          End lesson
-        </button>
-      </div>
     </div>
   );
 }

@@ -6,9 +6,9 @@ import { useChessGame } from '../../hooks/useChessGame';
 import { EngineLines } from '../Board/EngineLines';
 import { LichessLines } from '../Board/LichessLines';
 import { AnalysisToggles } from '../Board/AnalysisToggles';
-import { BoardControls } from '../Board/BoardControls';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
+import { BOARD_EXTRA_CLASS } from '../Board/PlayLineButton';
 import { ExplanationCard } from './ExplanationCard';
-import { HintButton } from '../Coach/HintButton';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useSettings } from '../../hooks/useSettings';
 import { useHintSystem } from '../../hooks/useHintSystem';
@@ -32,6 +32,8 @@ import {
   CheckCircle,
   XCircle,
   Trophy,
+  ChevronsLeft,
+  ChevronsRight,
 } from 'lucide-react';
 
 interface PracticeModeProps {
@@ -586,54 +588,48 @@ export function PracticeMode({ opening, variationIndex, customLine, lessonPgn, o
         </div>
       </div>
 
-      {/* Move navigation */}
-      <div className="px-4">
-        <BoardControls
-          onFirst={() => { setCurrentMoveIndex(0); setComputerLastMove(null); }}
-          onPrev={() => { if (currentMoveIndex > 0) { setCurrentMoveIndex((i) => i - 1); setComputerLastMove(null); } }}
-          onNext={() => { if (currentMoveIndex < expectedMoves.length) { setCurrentMoveIndex((i) => i + 1); } }}
-          onLast={() => { setCurrentMoveIndex(expectedMoves.length); }}
-          canGoPrev={currentMoveIndex > 0}
-          canGoNext={currentMoveIndex < expectedMoves.length}
+      {/* THE ONE BOARD BAR (WO-PLATFORM-01): Back / Forward step the line,
+          Hint is the practice hint ladder; first / last and Undo ride in
+          the extras row. */}
+      <div className="px-4 w-full md:max-w-[420px] md:mx-auto">
+        <CoachBoardBar
+          onBack={currentMoveIndex > 0 ? () => { setCurrentMoveIndex((i) => i - 1); setComputerLastMove(null); } : null}
+          onForward={currentMoveIndex < expectedMoves.length ? () => { setCurrentMoveIndex((i) => i + 1); } : null}
+          onHint={isPlayerTurn(currentMoveIndex) && currentMoveIndex < expectedMoves.length && !showWrongMove && settings.showHints && !hintState.isAnalyzing && hintState.level < 3 ? handleHint : null}
+          hintLabel={hintState.level === 3 ? 'Shown' : undefined}
+          hintLevel={hintState.level}
+          onRead={null}
+          onWhy={null}
+          onPlayLine={null}
+          testIds={{ back: 'nav-prev', forward: 'nav-next', hint: 'hint-button' }}
+          extras={<>
+            <button onClick={() => { setCurrentMoveIndex(0); setComputerLastMove(null); }} disabled={currentMoveIndex === 0} className={BOARD_EXTRA_CLASS} aria-label="First move" data-testid="nav-first"><ChevronsLeft size={12} /></button>
+            <button onClick={() => { setCurrentMoveIndex(expectedMoves.length); }} disabled={currentMoveIndex >= expectedMoves.length} className={BOARD_EXTRA_CLASS} aria-label="Last move" data-testid="nav-last"><ChevronsRight size={12} /></button>
+            {showWrongMove && (
+              <button data-testid="undo-btn" onClick={handleUndo} className={BOARD_EXTRA_CLASS}>Undo</button>
+            )}
+          </>}
         />
       </div>
 
       {/* Bottom: prompt */}
       <div className="px-4 pb-safe-4 min-h-[80px]">
         {showWrongMove ? (
-          <div className="flex flex-col gap-2">
-            <ExplanationCard
-              text={mistakeExplanation}
-              visible={true}
-              variant="error"
-            />
-            <button
-              data-testid="undo-btn"
-              onClick={handleUndo}
-              className="w-full py-2 rounded-xl bg-theme-surface border border-theme-border text-sm text-theme-text font-medium"
-            >
-              Undo
-            </button>
-          </div>
+          <ExplanationCard
+            text={mistakeExplanation}
+            visible={true}
+            variant="error"
+          />
         ) : (
           isPlayerTurn(currentMoveIndex) && currentMoveIndex < expectedMoves.length && (
             <div className="rounded-2xl backdrop-blur-xl bg-theme-surface/90 border border-white/15 p-4 shadow-lg">
               <p className="text-sm text-theme-text text-center font-medium" data-testid="practice-prompt">
                 What's the best move?
               </p>
-              {settings.showHints && (
-                <div className="mt-2 flex flex-col items-center gap-2">
-                  <HintButton
-                    currentLevel={hintState.level}
-                    onRequestHint={handleHint}
-                    disabled={hintState.isAnalyzing}
-                  />
-                  {hintState.nudgeText && (
-                    <p className="text-xs text-amber-500 text-center max-w-xs" data-testid="hint-nudge">
-                      {hintState.nudgeText}
-                    </p>
-                  )}
-                </div>
+              {settings.showHints && hintState.nudgeText && (
+                <p className="mt-2 text-xs text-amber-500 text-center max-w-xs mx-auto" data-testid="hint-nudge">
+                  {hintState.nudgeText}
+                </p>
               )}
             </div>
           )

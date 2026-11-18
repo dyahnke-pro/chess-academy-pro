@@ -30,7 +30,7 @@ import { logAppAudit } from '../../services/appAuditor';
 import { useAppStore } from '../../stores/appStore';
 import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
 import type { StockfishAnalysis } from '../../types';
-import { PlayLineButton } from '../Board/PlayLineButton';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
 import { useLineWalk } from '../../hooks/useLineWalk';
 import type { TacticsLiveContext } from '../../coach/types';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
@@ -336,7 +336,8 @@ export function ExplainPositionSessionView({
 
   const controls = (
     <div className="flex flex-col gap-2">
-    <PlayLineButton onPlay={lineWalk.playStated} testId="explain-walk-line-btn" wide />
+    {/* THE ONE BOARD BAR (WO-PLATFORM-01). */}
+    <CoachBoardBar onBack={null} onForward={null} onHint={null} onRead={null} onWhy={null} onPlayLine={lineWalk.playStated} testIds={{ line: 'explain-walk-line-btn' }} />
     <ChatInput
       onSend={(text) => void handleFollowUp(text)}
       disabled={loading}

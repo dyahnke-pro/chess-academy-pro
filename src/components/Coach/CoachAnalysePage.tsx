@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { ControlledChessBoard } from '../Board/ControlledChessBoard';
 import { ChatInput } from './ChatInput';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
-import { PlayLineButton } from '../Board/PlayLineButton';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
 import { useLineWalk } from '../../hooks/useLineWalk';
 import { useChessGame } from '../../hooks/useChessGame';
 import { useBoardContext } from '../../hooks/useBoardContext';
@@ -332,7 +332,10 @@ export function CoachAnalysePage(): JSX.Element {
             onMove={handleMoveOnBoard}
           />
           )}
-          <div className="mt-1"><PlayLineButton onPlay={lineWalk.playStated} testId="analyse-walk-line-btn" wide /></div>
+          <div className="mt-1">
+            {/* THE ONE BOARD BAR (WO-PLATFORM-01). */}
+            <CoachBoardBar onBack={null} onForward={null} onHint={null} onRead={null} onWhy={null} onPlayLine={lineWalk.playStated} testIds={{ line: 'analyse-walk-line-btn' }} />
+          </div>
         </div>
       </div>
 

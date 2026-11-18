@@ -5,7 +5,7 @@ import { BOARD_BUTTON_CLASS, PlayLineButton } from './PlayLineButton';
 /** The six core buttons — the same six, in the same order, on every board. */
 type BoardBarButton = 'back' | 'forward' | 'hint' | 'read' | 'why' | 'line';
 
-interface CoachBoardBarProps {
+export interface CoachBoardBarProps {
   /** Each core action: a handler, or null when it does not apply here — a
    *  null button is GREYED, never hidden, so every board looks identical
    *  (David 2026-10-07: "Keep the boards identical … Greyed out"). */

@@ -9,7 +9,8 @@ import { useChessGame } from '../../hooks/useChessGame';
 import { EngineLines } from '../Board/EngineLines';
 import { LichessLines } from '../Board/LichessLines';
 import { AnalysisToggles } from '../Board/AnalysisToggles';
-import { BoardControls } from '../Board/BoardControls';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
+import { BOARD_EXTRA_CLASS } from '../Board/PlayLineButton';
 import { useSettings } from '../../hooks/useSettings';
 import { AnnotationCard } from './AnnotationCard';
 import { voiceService } from '../../services/voiceService';
@@ -24,7 +25,7 @@ import { generateWalkthroughNarrations } from '../../services/walkthroughLlmNarr
 import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import { logAppAudit } from '../../services/appAuditor';
 import type { OpeningRecord, OpeningVariation, OpeningMoveAnnotation, AnalysisLine, LichessCloudEval } from '../../types';
-import { ArrowLeft, Play, Pause, Info } from 'lucide-react';
+import { ArrowLeft, Play, Pause, Info, ChevronsLeft, ChevronsRight } from 'lucide-react';
 import { narrationArrowsThroughDoor } from '../../services/arrowDoor';
 
 interface WalkthroughModeProps {
@@ -844,79 +845,59 @@ export function WalkthroughMode({
     </>
   ) : undefined;
 
+  // THE ONE BOARD BAR (WO-PLATFORM-01): Back / Forward step the
+  // walkthrough; first / last, play/pause and the narration speed ride in
+  // the extras row.
   const controls = (
-    <div className="flex flex-col gap-2">
-      <BoardControls
-        onFirst={handleFirst}
-        onPrev={handlePrev}
-        onNext={handleNext}
-        onLast={handleLast}
-        canGoPrev={currentMoveIndex > 0}
-        canGoNext={currentMoveIndex < expectedMoves.length}
-        extraLeft={
-          <button
-            onClick={toggleAutoPlay}
-            className="p-2 rounded-lg border text-theme-text hover:bg-theme-surface transition-colors"
-            style={{ borderColor: 'var(--color-border)' }}
-            aria-label={isAutoPlaying ? 'Pause' : 'Play'}
-            data-testid="walkthrough-play-pause"
-          >
-            {isAutoPlaying ? <Pause size={16} /> : <Play size={16} />}
-          </button>
-        }
-      />
-      <div className="relative flex items-center justify-center gap-2">
-        <span className="text-[9px] text-theme-text-muted uppercase tracking-wide">
-          Voice Narration
-        </span>
-        <button
-          onClick={cycleSpeed}
-          className="px-2.5 py-1 rounded-lg border text-xs font-medium hover:bg-theme-surface transition-colors"
-          style={{
-            borderColor: 'var(--color-border)',
-            color: 'var(--color-text-muted)',
-          }}
-          aria-label={`Speed: ${autoPlaySpeed}`}
-          data-testid="walkthrough-speed-toggle"
-        >
+    <CoachBoardBar
+      onBack={currentMoveIndex > 0 ? handlePrev : null}
+      onForward={currentMoveIndex < expectedMoves.length ? handleNext : null}
+      onHint={null}
+      onRead={null}
+      onWhy={null}
+      onPlayLine={null}
+      testIds={{ back: 'nav-prev', forward: 'nav-next' }}
+      extras={<>
+        <button onClick={toggleAutoPlay} className={BOARD_EXTRA_CLASS} aria-label={isAutoPlaying ? 'Pause' : 'Play'} data-testid="walkthrough-play-pause">
+          {isAutoPlaying ? <Pause size={12} /> : <Play size={12} />}
+        </button>
+        <button onClick={handleFirst} disabled={currentMoveIndex === 0} className={BOARD_EXTRA_CLASS} aria-label="First move" data-testid="nav-first"><ChevronsLeft size={12} /></button>
+        <button onClick={handleLast} disabled={currentMoveIndex >= expectedMoves.length} className={BOARD_EXTRA_CLASS} aria-label="Last move" data-testid="nav-last"><ChevronsRight size={12} /></button>
+        <button onClick={cycleSpeed} className={BOARD_EXTRA_CLASS} aria-label={`Speed: ${autoPlaySpeed}`} data-testid="walkthrough-speed-toggle">
           {autoPlaySpeed.charAt(0).toUpperCase() + autoPlaySpeed.slice(1)}
         </button>
-        <button
-          onClick={() => setShowSpeedInfo((v) => !v)}
-          className="p-1 rounded-full hover:bg-theme-surface transition-colors"
-          style={{ color: 'var(--color-text-muted)' }}
-          aria-label="Speed info"
-          data-testid="walkthrough-speed-info-btn"
-        >
-          <Info size={13} />
-        </button>
-        {showSpeedInfo && (
-          <>
-            <div
-              className="fixed inset-0 z-40"
-              onClick={() => setShowSpeedInfo(false)}
-            />
-            <div
-              className="absolute bottom-full right-0 mb-2 w-64 rounded-xl border p-3 shadow-xl z-50 text-xs leading-relaxed"
-              style={{
-                background: 'var(--color-surface)',
-                borderColor: 'var(--color-border)',
-                color: 'var(--color-text)',
-              }}
-              data-testid="walkthrough-speed-info-popup"
-            >
-              <p className="font-semibold mb-1.5">Voice Narration Speed</p>
-              <ul className="space-y-1.5">
-                <li><span className="font-medium">Learn</span> — Slow and thorough. Full explanations read aloud, arrows appear progressively, long pauses to absorb.</li>
-                <li><span className="font-medium">Study</span> — Same content but faster pacing.</li>
-                <li><span className="font-medium">Review</span> — Quick refresher. Annotations trimmed, arrows appear all at once, minimal pauses.</li>
-                <li><span className="font-medium">Drill</span> — Just the moves. No narration, no voice. Pure repetition.</li>
-              </ul>
-            </div>
-          </>
-        )}
-      </div>
-    </div>
+        <span className="relative">
+          <button onClick={() => setShowSpeedInfo((v) => !v)} className={BOARD_EXTRA_CLASS} aria-label="Speed info" data-testid="walkthrough-speed-info-btn">
+            <Info size={12} />
+          </button>
+          {showSpeedInfo && (
+            <>
+              <div
+                className="fixed inset-0 z-40"
+                onClick={() => setShowSpeedInfo(false)}
+              />
+              <div
+                className="absolute bottom-full right-0 mb-2 w-64 rounded-xl border p-3 shadow-xl z-50 text-xs leading-relaxed"
+                style={{
+                  background: 'var(--color-surface)',
+                  borderColor: 'var(--color-border)',
+                  color: 'var(--color-text)',
+                }}
+                data-testid="walkthrough-speed-info-popup"
+              >
+                <p className="font-semibold mb-1.5">Voice Narration Speed</p>
+                <ul className="space-y-1.5">
+                  <li><span className="font-medium">Learn</span> — Slow and thorough. Full explanations read aloud, arrows appear progressively, long pauses to absorb.</li>
+                  <li><span className="font-medium">Study</span> — Same content but faster pacing.</li>
+                  <li><span className="font-medium">Review</span> — Quick refresher. Annotations trimmed, arrows appear all at once, minimal pauses.</li>
+                  <li><span className="font-medium">Drill</span> — Just the moves. No narration, no voice. Pure repetition.</li>
+                </ul>
+              </div>
+            </>
+          )}
+        </span>
+      </>}
+    />
   );
 
   const belowControls = autoPlaySpeed !== 'drill' ? (

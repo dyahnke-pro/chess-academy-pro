@@ -5,7 +5,8 @@ import { ControlledChessBoard } from '../Board/ControlledChessBoard';
 import { EngineLines } from '../Board/EngineLines';
 import { LichessLines } from '../Board/LichessLines';
 import { AnalysisToggles } from '../Board/AnalysisToggles';
-import { BoardControls } from '../Board/BoardControls';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
+import { BOARD_EXTRA_CLASS } from '../Board/PlayLineButton';
 import { ExplanationCard } from './ExplanationCard';
 import { useChessGame } from '../../hooks/useChessGame';
 import { usePieceSound } from '../../hooks/usePieceSound';
@@ -27,6 +28,8 @@ import {
   XCircle,
   ChevronLeft,
   ChevronRight as ChevronRightIcon,
+  ChevronsLeft,
+  ChevronsRight,
 } from 'lucide-react';
 
 interface TrainModeProps {
@@ -512,35 +515,35 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
         )}
       </div>
 
-      {/* Move navigation */}
-      <div className="px-4">
-        <BoardControls
-          onFirst={() => { setCurrentMoveIndex(0); setComputerLastMove(null); }}
-          onPrev={() => { if (currentMoveIndex > 0) { setCurrentMoveIndex((i) => i - 1); setComputerLastMove(null); } }}
-          onNext={() => { if (currentMoveIndex < expectedMoves.length) { setCurrentMoveIndex((i) => i + 1); } }}
-          onLast={() => { setCurrentMoveIndex(expectedMoves.length); }}
-          canGoPrev={currentMoveIndex > 0}
-          canGoNext={currentMoveIndex < expectedMoves.length}
+      {/* THE ONE BOARD BAR (WO-PLATFORM-01): Back / Forward step the line;
+          first / last and Restart Line ride in the extras row. */}
+      <div className="px-4 w-full md:max-w-[420px] md:mx-auto">
+        <CoachBoardBar
+          onBack={currentMoveIndex > 0 ? () => { setCurrentMoveIndex((i) => i - 1); setComputerLastMove(null); } : null}
+          onForward={currentMoveIndex < expectedMoves.length ? () => { setCurrentMoveIndex((i) => i + 1); } : null}
+          onHint={null}
+          onRead={null}
+          onWhy={null}
+          onPlayLine={null}
+          testIds={{ back: 'nav-prev', forward: 'nav-next' }}
+          extras={<>
+            <button onClick={() => { setCurrentMoveIndex(0); setComputerLastMove(null); }} disabled={currentMoveIndex === 0} className={BOARD_EXTRA_CLASS} aria-label="First move" data-testid="nav-first"><ChevronsLeft size={12} /></button>
+            <button onClick={() => { setCurrentMoveIndex(expectedMoves.length); }} disabled={currentMoveIndex >= expectedMoves.length} className={BOARD_EXTRA_CLASS} aria-label="Last move" data-testid="nav-last"><ChevronsRight size={12} /></button>
+            {showWrongMove && (
+              <button data-testid="undo-btn" onClick={handleUndo} className={BOARD_EXTRA_CLASS}>Restart Line</button>
+            )}
+          </>}
         />
       </div>
 
       {/* Bottom: prompt */}
       <div className="px-4 pb-safe-4 min-h-[80px]">
         {showWrongMove ? (
-          <div className="flex flex-col gap-2">
-            <ExplanationCard
-              text={mistakeExplanation}
-              visible={true}
-              variant="error"
-            />
-            <button
-              data-testid="undo-btn"
-              onClick={handleUndo}
-              className="w-full py-2 rounded-xl bg-theme-surface border border-theme-border text-sm text-theme-text font-medium"
-            >
-              Restart Line
-            </button>
-          </div>
+          <ExplanationCard
+            text={mistakeExplanation}
+            visible={true}
+            variant="error"
+          />
         ) : showHintAfterUndo && isPlayerTurn(currentMoveIndex) ? (
           <ExplanationCard
             text={hintText}

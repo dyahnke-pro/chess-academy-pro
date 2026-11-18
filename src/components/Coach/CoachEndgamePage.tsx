@@ -22,9 +22,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Chess, type Square } from 'chess.js';
-import { ArrowLeft, Crown, ChevronLeft, ChevronRight, RotateCw, Lightbulb, MessageCircle } from 'lucide-react';
+import { ArrowLeft, Crown, ChevronRight, RotateCw, Lightbulb, MessageCircle } from 'lucide-react';
 import type { PieceDropHandlerArgs } from 'react-chessboard';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
+import { BOARD_EXTRA_CLASS } from '../Board/PlayLineButton';
 import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import { ScrollHintBar } from '../Common/ScrollHintBar';
 import { useTeachWalkthrough } from '../../hooks/useTeachWalkthrough';
@@ -889,6 +891,16 @@ function LessonView({
         }
         controls={
           <div className="flex flex-col gap-3 px-2">
+            {/* THE ONE BOARD BAR (WO-PLATFORM-01). */}
+            <CoachBoardBar
+              onBack={null}
+              onForward={null}
+              onHint={null}
+              onRead={null}
+              onWhy={null}
+              onPlayLine={null}
+              extras={<button onClick={onExit} className={BOARD_EXTRA_CLASS}>Back to patterns</button>}
+            />
             <div className="text-sm leading-relaxed text-theme-text">
               <span className="font-semibold">{pattern.name}.</span> {pattern.narration.intro}
             </div>
@@ -911,12 +923,6 @@ function LessonView({
             <div className="text-[11px] text-amber-400/80 mt-2">
               No practice puzzles available for this pattern yet — Lichess doesn&apos;t tag this one in their puzzle DB. The position above shows the canonical setup.
             </div>
-            <button
-              onClick={onExit}
-              className="mt-2 px-4 py-2 rounded-lg bg-theme-surface text-sm font-medium text-theme-text hover:bg-theme-bg"
-            >
-              Back to patterns
-            </button>
           </div>
         }
       />
@@ -941,6 +947,7 @@ function LessonView({
     />
   );
 
+  const canBailOut = wrongAttempts >= 2;
   let controls: React.ReactNode;
   if (phase === 'fork') {
     // Board-play primary. The student drags a piece on the board to
@@ -948,7 +955,6 @@ function LessonView({
     // drops a "Show options" bail-out reveals the MC choices so
     // the student isn't permanently stuck — but they only appear
     // on request, not by default.
-    const canBailOut = wrongAttempts >= 2;
     controls = (
       <div className="flex flex-col gap-2 px-2">
         <div className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-2.5 flex items-start gap-2">
@@ -967,32 +973,11 @@ function LessonView({
               : `${wrongAttempts} wrong tries — drag a different piece.`}
           </div>
         )}
-        <div className="flex items-center gap-3 px-1">
-          {matingHintMove && !matingHintRevealed && (
-            <button
-              onClick={revealMatingHint}
-              className="flex items-center gap-1 text-xs text-amber-400 hover:text-amber-300"
-              data-testid="endgame-mating-hint"
-            >
-              <Lightbulb size={11} />
-              Hint
-            </button>
-          )}
-          {matingHintRevealed && matingHintMove && (
-            <span className="text-[11px] text-amber-400/80 italic">
-              Move highlighted on the board.
-            </span>
-          )}
-          {canBailOut && !showBailoutOptions && (
-            <button
-              onClick={() => setShowBailoutOptions(true)}
-              className="text-xs text-cyan-400 hover:text-cyan-300 underline"
-              data-testid="endgame-show-options"
-            >
-              Show options
-            </button>
-          )}
-        </div>
+        {matingHintRevealed && matingHintMove && (
+          <span className="text-[11px] text-amber-400/80 italic px-1">
+            Move highlighted on the board.
+          </span>
+        )}
         {showBailoutOptions && (
           <div className="flex flex-col gap-2">
             <div className="text-[10px] font-semibold uppercase tracking-wider text-theme-text-muted px-1">
@@ -1026,46 +1011,39 @@ function LessonView({
         {leafOutro && (
           <div className="text-sm leading-relaxed text-theme-text">{leafOutro}</div>
         )}
-        <div className="flex gap-2">
-          <button
-            onClick={() => onPracticeMore(lessonWrongAttempts === 0)}
-            className="flex-1 px-4 py-2 rounded-lg bg-theme-accent text-theme-bg text-sm font-semibold"
-            data-testid="endgame-practice-more"
-          >
-            Practice more
-          </button>
-          <button
-            onClick={onReshuffle}
-            className="px-3 py-2 rounded-lg bg-theme-surface text-sm font-medium text-theme-text hover:bg-theme-bg"
-            data-testid="endgame-reshuffle"
-            aria-label="Reshuffle from start"
-          >
-            <RotateCw size={16} />
-          </button>
-          <button
-            onClick={onExit}
-            className="flex-1 px-4 py-2 rounded-lg bg-theme-surface text-sm font-medium text-theme-text hover:bg-theme-bg"
-          >
-            Back to patterns
-          </button>
-        </div>
       </div>
     );
   } else {
-    // Narration / animation in progress — minimal controls.
-    controls = (
-      <div className="flex justify-center px-2">
-        <button
-          onClick={() => walkthrough.skipNarration()}
-          className="px-4 py-2 rounded-lg bg-theme-surface text-sm text-theme-text-muted hover:bg-theme-bg"
-        >
-          Skip
-        </button>
-      </div>
-    );
+    // Narration / animation in progress — the bar's extras carry Skip.
+    controls = null;
   }
 
-  return <ChessLessonLayout header={header} board={board} controls={controls} />;
+  // THE ONE BOARD BAR (WO-PLATFORM-01): the same six buttons as every board;
+  // the lesson's own controls ride in the extras row.
+  const bar = (
+    <CoachBoardBar
+      onBack={null}
+      onForward={null}
+      onHint={phase === 'fork' && matingHintMove && !matingHintRevealed ? revealMatingHint : null}
+      onRead={null}
+      onWhy={null}
+      onPlayLine={null}
+      testIds={{ hint: 'endgame-mating-hint' }}
+      extras={phase === 'fork' ? (
+        canBailOut && !showBailoutOptions ? (
+          <button onClick={() => setShowBailoutOptions(true)} className={BOARD_EXTRA_CLASS} data-testid="endgame-show-options">Show options</button>
+        ) : undefined
+      ) : isLeaf ? (<>
+        <button onClick={() => onPracticeMore(lessonWrongAttempts === 0)} className={BOARD_EXTRA_CLASS} data-testid="endgame-practice-more">Practice more</button>
+        <button onClick={onReshuffle} className={BOARD_EXTRA_CLASS} data-testid="endgame-reshuffle" aria-label="Reshuffle from start"><RotateCw size={12} /></button>
+        <button onClick={onExit} className={BOARD_EXTRA_CLASS}>Back to patterns</button>
+      </>) : (
+        <button onClick={() => walkthrough.skipNarration()} className={BOARD_EXTRA_CLASS}>Skip</button>
+      )}
+    />
+  );
+
+  return <ChessLessonLayout header={header} board={board} controls={<div className="flex flex-col gap-3">{bar}{controls}</div>} />;
 }
 
 // ─── Curated mating lesson — playable fallback for untagged patterns ──
@@ -1211,31 +1189,6 @@ function CuratedMatingLessonView({
         <div className="text-sm leading-relaxed text-theme-text" data-testid="curated-mating-result">
           {endLine}
         </div>
-        {canNext ? (
-          <button
-            onClick={goNext}
-            className="px-4 py-2 rounded-lg bg-theme-accent text-theme-bg text-sm font-semibold"
-            data-testid="curated-mating-next-position"
-          >
-            Try the {positions[safeIndex + 1].movesToMate
-              ? `mate-in-${positions[safeIndex + 1].movesToMate}`
-              : 'next position'}
-          </button>
-        ) : null}
-        <div className="flex gap-2">
-          <button
-            onClick={playout.reset}
-            className="flex-1 px-4 py-2 rounded-lg bg-theme-surface text-sm font-medium text-theme-text hover:bg-theme-bg"
-          >
-            Play it again
-          </button>
-          <button
-            onClick={onExit}
-            className="flex-1 px-4 py-2 rounded-lg bg-theme-surface text-sm font-medium text-theme-text hover:bg-theme-bg"
-          >
-            Back to patterns
-          </button>
-        </div>
       </div>
     );
   } else if (playout.phase === 'opponent-replying') {
@@ -1249,33 +1202,6 @@ function CuratedMatingLessonView({
   } else {
     controls = (
       <div className="flex flex-col gap-2 px-2">
-        {positions.length > 1 && (
-          <div
-            className="flex items-center justify-between text-[11px] text-theme-text-muted px-1"
-            data-testid="curated-mating-position-strip"
-          >
-            <button
-              onClick={goPrev}
-              disabled={!canPrev}
-              className="px-2 py-1 rounded hover:bg-theme-surface disabled:opacity-30"
-              aria-label="Previous position"
-            >
-              <ChevronLeft size={12} />
-            </button>
-            <span className="font-mono">
-              {safeIndex + 1}/{positions.length}
-              {current.movesToMate ? ` · M${current.movesToMate}` : ''}
-            </span>
-            <button
-              onClick={goNext}
-              disabled={!canNext}
-              className="px-2 py-1 rounded hover:bg-theme-surface disabled:opacity-30"
-              aria-label="Next position"
-            >
-              <ChevronRight size={12} />
-            </button>
-          </div>
-        )}
         <div className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-2.5 flex items-start gap-2">
           <Lightbulb size={14} className="text-cyan-400 flex-shrink-0 mt-0.5" />
           <div className="flex-1">
@@ -1308,35 +1234,50 @@ function CuratedMatingLessonView({
           </div>
         )}
         <WrongTryNote text={playout.wrongTryText} />
-        <div className="flex items-center gap-3 px-1">
-          {playout.hintMove && !playout.hintRevealed && (
-            <button
-              onClick={playout.revealHint}
-              className="flex items-center gap-1 text-xs text-amber-400 hover:text-amber-300"
-              data-testid="curated-mating-hint"
-            >
-              <Lightbulb size={11} />
-              Hint
-            </button>
-          )}
-          {playout.hintRevealed && playout.hintMove && (
-            <span className="text-[11px] text-amber-400/80 italic">
-              Move highlighted on the board.
-            </span>
-          )}
-          {playout.wrongAttempts >= 2 && (
-            <button
-              onClick={playout.reveal}
-              className="text-xs text-cyan-400 hover:text-cyan-300 underline"
-              data-testid="curated-mating-reveal"
-            >
-              Reveal the line
-            </button>
-          )}
-        </div>
+        {playout.hintRevealed && playout.hintMove && (
+          <span className="text-[11px] text-amber-400/80 italic px-1">
+            Move highlighted on the board.
+          </span>
+        )}
       </div>
     );
   }
 
-  return <ChessLessonLayout header={header} board={board} controls={controls} />;
+  // THE ONE BOARD BAR (WO-PLATFORM-01): Back / Forward step between the
+  // lesson's positions; the lesson's own controls ride in the extras row.
+  const solving = !playout.isComplete && playout.phase !== 'opponent-replying';
+  const bar = (
+    <CoachBoardBar
+      onBack={solving && positions.length > 1 && canPrev ? goPrev : null}
+      onForward={solving && positions.length > 1 && canNext ? goNext : null}
+      onHint={solving && playout.hintMove && !playout.hintRevealed ? playout.revealHint : null}
+      onRead={null}
+      onWhy={null}
+      onPlayLine={null}
+      testIds={{ hint: 'curated-mating-hint' }}
+      extras={playout.isComplete ? (<>
+        {canNext && (
+          <button onClick={goNext} className={BOARD_EXTRA_CLASS} data-testid="curated-mating-next-position">
+            Try the {positions[safeIndex + 1].movesToMate
+              ? `mate-in-${positions[safeIndex + 1].movesToMate}`
+              : 'next position'}
+          </button>
+        )}
+        <button onClick={playout.reset} className={BOARD_EXTRA_CLASS}>Play it again</button>
+        <button onClick={onExit} className={BOARD_EXTRA_CLASS}>Back to patterns</button>
+      </>) : solving ? (<>
+        {positions.length > 1 && (
+          <span className="px-1 text-[11px] text-theme-text-muted font-mono" data-testid="curated-mating-position-strip">
+            {safeIndex + 1}/{positions.length}
+            {current.movesToMate ? ` · M${current.movesToMate}` : ''}
+          </span>
+        )}
+        {playout.wrongAttempts >= 2 && (
+          <button onClick={playout.reveal} className={BOARD_EXTRA_CLASS} data-testid="curated-mating-reveal">Reveal the line</button>
+        )}
+      </>) : undefined}
+    />
+  );
+
+  return <ChessLessonLayout header={header} board={board} controls={<div className="flex flex-col gap-3">{bar}{controls}</div>} />;
 }

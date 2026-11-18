@@ -9,9 +9,10 @@ import {
   XCircle,
   RotateCcw,
   ArrowLeft,
-  Lightbulb,
+  Pause,
 } from 'lucide-react';
 import { LessonScaffold } from './LessonScaffold';
+import { BOARD_EXTRA_CLASS } from '../Board/PlayLineButton';
 import { voiceService } from '../../services/voiceService';
 import { useCoachBoardStore } from '../../stores/coachBoardStore';
 import { mentionedMoveArrows, narrationSidesOf } from '../../services/mentionedMoveArrows';
@@ -803,27 +804,6 @@ export function PlayableLinePlayer({
         title={line.title}
         subtitle="Watch & Learn"
         onExit={onExit}
-        headerAction={
-          onAdvanceToLearn ? (
-            <button
-              onClick={onAdvanceToLearn}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-theme-accent text-white text-xs font-medium hover:opacity-90 transition-opacity"
-              data-testid="advance-to-learn"
-            >
-              <SkipForward size={14} />
-              Learn
-            </button>
-          ) : (
-            <button
-              onClick={skipToMemory}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-theme-accent text-white text-xs font-medium hover:opacity-90 transition-opacity"
-              data-testid="skip-to-memory"
-            >
-              <SkipForward size={14} />
-              Practice
-            </button>
-          )
-        }
         progress={{ current: Math.max(0, demoMoveIndex + 1), total: line.moves.length }}
         board={
           <ConsistentChessboard
@@ -836,14 +816,24 @@ export function PlayableLinePlayer({
           />
         }
         narration={currentAnnotation}
-        controls={{
-          onPrev: () => stepDemo(-1),
-          onTogglePlay: togglePlayPause,
-          onNext: () => stepDemo(1),
-          isPlaying,
-          canPrev: demoMoveIndex >= 0,
-          canNext: demoMoveIndex < line.moves.length - 1,
-          playTestId: 'demo-play-pause',
+        bar={{
+          onBack: demoMoveIndex >= 0 ? () => stepDemo(-1) : null,
+          onForward: demoMoveIndex < line.moves.length - 1 ? () => stepDemo(1) : null,
+          onHint: null,
+          onRead: null,
+          onWhy: null,
+          onPlayLine: null,
+          testIds: { back: 'lesson-prev', forward: 'lesson-next' },
+          extras: (<>
+            <button type="button" onClick={togglePlayPause} className={BOARD_EXTRA_CLASS} aria-label={isPlaying ? 'Pause' : 'Play'} data-testid="demo-play-pause">
+              {isPlaying ? <Pause size={12} /> : <Play size={12} />}{isPlaying ? 'Pause' : 'Play'}
+            </button>
+            {onAdvanceToLearn ? (
+              <button onClick={onAdvanceToLearn} className={BOARD_EXTRA_CLASS} data-testid="advance-to-learn"><SkipForward size={12} />Learn</button>
+            ) : (
+              <button onClick={skipToMemory} className={BOARD_EXTRA_CLASS} data-testid="skip-to-memory"><SkipForward size={12} />Practice</button>
+            )}
+          </>),
         }}
         chat={{
           fen: demoFen,
@@ -870,31 +860,18 @@ export function PlayableLinePlayer({
             : 'Your Turn — Replay from Memory'
       }
       onExit={onExit}
-      headerAction={
-        <>
-          {mode === 'watch' && (
-            <button
-              onClick={handleReplayDemo}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-theme-surface hover:bg-theme-border text-theme-text-muted text-xs font-medium transition-colors"
-              data-testid="replay-demo"
-            >
-              <RotateCcw size={14} />
-              Watch Again
-            </button>
-          )}
-          {mode === 'practice' && !memoryComplete && (
-            <button
-              onClick={() => setShowHint(true)}
-              disabled={showHint || showCorrectFlash || showWrongFlash}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-theme-surface hover:bg-theme-border text-theme-text-muted text-xs font-medium transition-colors disabled:opacity-40"
-              data-testid="practice-hint"
-            >
-              <Lightbulb size={14} />
-              Hint
-            </button>
-          )}
-        </>
-      }
+      bar={{
+        onBack: null,
+        onForward: null,
+        onHint: mode === 'practice' && !memoryComplete && !showHint && !showCorrectFlash && !showWrongFlash ? () => setShowHint(true) : null,
+        onRead: null,
+        onWhy: null,
+        onPlayLine: null,
+        testIds: { hint: 'practice-hint' },
+        extras: mode === 'watch' ? (
+          <button onClick={handleReplayDemo} className={BOARD_EXTRA_CLASS} data-testid="replay-demo"><RotateCcw size={12} />Watch Again</button>
+        ) : undefined,
+      }}
       progress={{ current: memoryMoveIndex, total: expectedMoves.length, tone: 'green' }}
       board={
         <ConsistentChessboard

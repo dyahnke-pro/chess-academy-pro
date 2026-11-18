@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Chess } from 'chess.js';
-import { ChevronLeft, SkipForward, Target, CheckCircle2, XCircle } from 'lucide-react';
+import { ChevronLeft, ChevronRight, SkipForward, Target, CheckCircle2, XCircle } from 'lucide-react';
 import { ChessBoard } from '../Board/ChessBoard';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
+import { BOARD_EXTRA_CLASS } from '../Board/PlayLineButton';
 import { getOpeningById } from '../../services/openingService';
 import {
   buildDrillLines,
@@ -158,6 +160,28 @@ export function CourseTrainerPage(): JSX.Element {
         )}
       </div>
 
+      {/* THE ONE BOARD BAR (WO-PLATFORM-01): the same six buttons as every
+          board; the trainer's own controls ride in the extras row. */}
+      <div className="max-w-lg mx-auto w-full">
+        <CoachBoardBar
+          onBack={null}
+          onForward={null}
+          onHint={null}
+          onRead={null}
+          onWhy={null}
+          onPlayLine={null}
+          extras={<>
+            {status === 'wrong' && (
+              <button onClick={nextLine} className={BOARD_EXTRA_CLASS} data-testid="trainer-next-after-wrong">Next line<ChevronRight size={12} /></button>
+            )}
+            {status === 'lineDone' && (
+              <button onClick={nextLine} className={BOARD_EXTRA_CLASS} data-testid="trainer-next">Next line<ChevronRight size={12} /></button>
+            )}
+            <button onClick={nextLine} className={BOARD_EXTRA_CLASS} data-testid="trainer-skip"><SkipForward size={12} /> Skip this line</button>
+          </>}
+        />
+      </div>
+
       {/* Prompt / feedback */}
       <div className="max-w-lg mx-auto w-full min-h-[3rem]">
         {status === 'playing' && (
@@ -167,19 +191,13 @@ export function CourseTrainerPage(): JSX.Element {
           <div className="flex flex-col items-center gap-2" data-testid="trainer-wrong">
             <p className="text-sm font-semibold text-rose-400 flex items-center gap-1"><XCircle size={16} /> Not the move here.</p>
             {hint && <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>The line goes <span className="font-mono font-bold text-theme-text">{hint}</span>.</p>}
-            <button onClick={nextLine} className="mt-1 rounded-xl bg-indigo-500/20 border-2 border-indigo-400/60 px-5 py-2 font-bold text-indigo-100" data-testid="trainer-next-after-wrong">Next line →</button>
           </div>
         )}
         {status === 'lineDone' && (
           <div className="flex flex-col items-center gap-2" data-testid="trainer-linedone">
             <p className="text-sm font-semibold text-emerald-400 flex items-center gap-1"><CheckCircle2 size={16} /> Line complete.</p>
-            <button onClick={nextLine} className="mt-1 rounded-xl bg-indigo-500/20 border-2 border-indigo-400/60 px-5 py-2 font-bold text-indigo-100" data-testid="trainer-next">Next line →</button>
           </div>
         )}
-      </div>
-
-      <div className="max-w-lg mx-auto w-full flex justify-center">
-        <button onClick={nextLine} className="text-xs text-theme-text-muted hover:text-theme-text flex items-center gap-1" data-testid="trainer-skip"><SkipForward size={12} /> Skip this line</button>
       </div>
     </>,
   );

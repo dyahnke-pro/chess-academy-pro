@@ -43,6 +43,7 @@ import {
   GraduationCap,
 } from 'lucide-react';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
 import { useChessGame, type MoveResult } from '../../hooks/useChessGame';
 import { useSettings } from '../../hooks/useSettings';
 import type { MoveQuality } from '../Board/ChessBoard';
@@ -886,6 +887,11 @@ export function SrsTrainerPage(): JSX.Element {
                   </div>
                 </div>
               )}
+            </div>
+            {/* THE ONE BOARD BAR (WO-PLATFORM-01) — the same six buttons as
+                every board; nothing here steps, hints or reads yet. */}
+            <div className="mt-2">
+              <CoachBoardBar onBack={null} onForward={null} onHint={null} onRead={null} onWhy={null} onPlayLine={null} />
             </div>
           </div>
         </div>

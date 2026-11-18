@@ -70,8 +70,8 @@ describe('EndgameLessonTab', () => {
       />,
     );
     fireEvent.click(screen.getByTestId(`endgame-lesson-${target.id}`));
-    const prevButton = screen.getByText('Prev').closest('button');
-    expect(prevButton?.disabled).toBe(true);
+    // The board bar's Back (WO-PLATFORM-01) is the old Prev.
+    expect(screen.getByTestId('endgame-lesson-prev')).toBeDisabled();
     expect(screen.getByText(/^1\/\d+$/)).toBeInTheDocument();
   });
 
@@ -92,7 +92,7 @@ describe('EndgameLessonTab', () => {
     // We assert progression rather than exact total — the DB-driven
     // drill count can shift if puzzles.json or themes change.
     expect(screen.getByText(/^1\/\d+$/)).toBeInTheDocument();
-    fireEvent.click(screen.getByText('Next'));
+    fireEvent.click(screen.getByTestId('endgame-lesson-next'));
     expect(screen.getByText(/^2\/\d+$/)).toBeInTheDocument();
   });
 });

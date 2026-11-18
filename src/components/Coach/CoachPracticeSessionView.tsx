@@ -15,6 +15,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ArrowLeft, CheckCircle2, XCircle, Sparkles } from 'lucide-react';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
+import { BOARD_EXTRA_CLASS } from '../Board/PlayLineButton';
 import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import { useChessGame } from '../../hooks/useChessGame';
 import { useAppStore } from '../../stores/appStore';
@@ -164,23 +166,24 @@ export function CoachPracticeSessionView({
 
   const controls = (
     <div className="flex flex-col gap-2">
+      {/* THE ONE BOARD BAR (WO-PLATFORM-01). */}
+      <CoachBoardBar
+        onBack={null}
+        onForward={null}
+        onHint={null}
+        onRead={null}
+        onWhy={null}
+        onPlayLine={null}
+        extras={feedback.kind === 'correct' || feedback.kind === 'reveal' ? (
+          <button onClick={handleExit} className={BOARD_EXTRA_CLASS} data-testid="practice-return-chat">Return to chat</button>
+        ) : undefined}
+      />
       {feedbackBanner}
-      <div className="flex items-center justify-center gap-2">
-        {(feedback.kind === 'correct' || feedback.kind === 'reveal') && (
-          <button
-            onClick={handleExit}
-            className="px-4 py-2 rounded-xl bg-theme-accent text-theme-bg text-sm font-medium"
-            data-testid="practice-return-chat"
-          >
-            Return to chat
-          </button>
-        )}
-        {feedback.kind === 'wrong' && (
-          <div className="text-xs text-theme-text-muted">
-            Board reset — try a different move.
-          </div>
-        )}
-      </div>
+      {feedback.kind === 'wrong' && (
+        <div className="text-xs text-theme-text-muted text-center">
+          Board reset — try a different move.
+        </div>
+      )}
     </div>
   );
 

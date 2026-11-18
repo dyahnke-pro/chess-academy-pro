@@ -8,6 +8,8 @@ import { db } from '../../db/schema';
 import { useAppStore } from '../../stores/appStore';
 import { PageHelp } from '../Layout/PageHelp';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
+import { BOARD_EXTRA_CLASS } from '../Board/PlayLineButton';
 import { buildFedTacticsContext } from '../../services/liveTacticsContext';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import {
@@ -560,18 +562,32 @@ export function AnalysisPracticePage(): JSX.Element {
                 onPieceDrop={(a) => onPieceDrop(a.sourceSquare, a.targetSquare ?? '')}
               />
             </div>
+            {/* THE ONE BOARD BAR (WO-PLATFORM-01): Hint is the reading hint
+                ladder; Talk to Coach and Next ride in the extras row. */}
+            <CoachBoardBar
+              onBack={null}
+              onForward={null}
+              onHint={!grade && hintTier < 3 ? showHint : null}
+              onRead={null}
+              onWhy={null}
+              onPlayLine={null}
+              testIds={{ hint: 'analysis-practice-hint-btn' }}
+              extras={<>
+                <button type="button" onClick={handleTalkToCoach} className={BOARD_EXTRA_CLASS} data-testid="analysis-practice-talk-btn" aria-label="Talk to Coach about this position">
+                  <Mic size={12} /> Talk to Coach
+                </button>
+                {/* On a correct read the surface auto-advances; only the miss path needs a button. */}
+                {grade && grade.verdict !== 'correct' && (
+                  <button onClick={next} className={BOARD_EXTRA_CLASS} data-testid="analysis-practice-next">
+                    {qIndex + 1 >= position.questions.length ? 'New position' : 'Next question'}
+                    <ArrowRight size={12} />
+                  </button>
+                )}
+              </>}
+            />
             <p className="text-xs text-center" style={{ color: 'var(--color-text-muted)' }}>
               Answer by typing, clicking a square, or playing the move on the board.
             </p>
-            <button
-              type="button"
-              onClick={handleTalkToCoach}
-              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border-2 bg-rose-500/10 border-rose-500/30 text-rose-400 font-semibold hover:opacity-80 transition-all text-sm"
-              data-testid="analysis-practice-talk-btn"
-              aria-label="Talk to Coach about this position"
-            >
-              <Mic size={18} /> Talk to Coach
-            </button>
           </div>
 
           {/* Right column — discussion / answer panel */}
@@ -616,15 +632,6 @@ export function AnalysisPracticePage(): JSX.Element {
                 </div>
                 <div className="flex gap-2 mt-3">
                   <button
-                    onClick={showHint}
-                    disabled={hintTier >= 3}
-                    className="px-4 py-2.5 rounded-xl border-2 font-semibold disabled:opacity-40 flex items-center gap-2"
-                    style={{ borderColor: 'rgba(245,158,11,0.4)', background: 'rgba(245,158,11,0.1)', color: 'var(--color-text)' }}
-                    data-testid="analysis-practice-hint-btn"
-                  >
-                    <HelpCircle size={16} /> Hint
-                  </button>
-                  <button
                     onClick={() => void gradeAnswer(answer)}
                     disabled={!answer.trim()}
                     className="flex-1 px-4 py-2.5 rounded-xl border-2 font-semibold disabled:opacity-40"
@@ -647,18 +654,6 @@ export function AnalysisPracticePage(): JSX.Element {
                 <div className="rounded-xl p-3 text-sm" style={{ background: 'var(--color-bg)', color: 'var(--color-text)' }} data-testid="analysis-practice-answer">
                   <span style={{ color: 'var(--color-text-muted)' }}>Answer: </span>{grade.correctAnswer}
                 </div>
-                {/* On a correct read the surface auto-advances; only the miss path needs a button. */}
-                {grade.verdict !== 'correct' && (
-                  <button
-                    onClick={next}
-                    className="w-full px-4 py-2.5 rounded-xl border-2 font-semibold flex items-center justify-center gap-2"
-                    style={{ borderColor: 'rgba(99,102,241,0.5)', background: 'rgba(99,102,241,0.12)', color: 'var(--color-text)' }}
-                    data-testid="analysis-practice-next"
-                  >
-                    {qIndex + 1 >= position.questions.length ? 'New position' : 'Next question'}
-                    <ArrowRight size={16} />
-                  </button>
-                )}
               </div>
             )}
           </div>
