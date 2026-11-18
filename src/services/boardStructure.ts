@@ -95,7 +95,8 @@ function fileOf(square: string): string { return square[0]; }
 function rankOf(square: string): number { return Number(square[1]); }
 function fileIndex(f: string): number { return FILES.indexOf(f as typeof FILES[number]); }
 
-function computePawnFacts(all: Located[]): PawnStructureFacts {
+/** `ep` is the board's en-passant square (the FEN's fourth field), or null. */
+function computePawnFacts(all: Located[], ep: string | null): PawnStructureFacts {
   const pawns: Record<Color, Located[]> = { w: [], b: [] };
   for (const p of all) if (p.type === 'p') pawns[p.color].push(p);
 
@@ -147,7 +148,14 @@ function computePawnFacts(all: Located[]): PawnStructureFacts {
         if (Math.abs(efi - fi) > 1) return false;
         return c === 'w' ? rankOf(e.square) > r : rankOf(e.square) < r;
       });
-      if (!blocked) passedPawns[c].push(p.square);
+      // A PAWN THAT CAN STILL BE TAKEN EN PASSANT IS NOT PASSED (Danya's
+      // article boards, 2026-11-18: "c4 creates a passed pawn on c4" with
+      // …bxc3 e.p. on the board). The pawn that just stepped two squares past
+      // an enemy pawn beside it can be captured by that pawn this move — it
+      // has not got past it yet.
+      const epTarget = !!ep && fileOf(ep) === fileOf(p.square) && rankOf(ep) === r + (c === 'w' ? -1 : 1);
+      const takenEnPassant = epTarget && enemy.some((e) => rankOf(e.square) === r && Math.abs(fileIndex(fileOf(e.square)) - fi) === 1);
+      if (!blocked && !takenEnPassant) passedPawns[c].push(p.square);
     }
   }
 
@@ -243,7 +251,8 @@ export function describeStructure(fen: string): StructureFacts | null {
   }
   const all = pieces(chess);
   return {
-    pawns: computePawnFacts(all),
+    // chess.js writes the en-passant square only when the capture is legal.
+    pawns: computePawnFacts(all, /^[a-h][36]$/.test(chess.fen().split(' ')[3] ?? '') ? chess.fen().split(' ')[3] : null),
     outposts: computeOutposts(chess, all),
     kings: computeKingFacts(all, chess),
     material: computeMaterialFacts(all),
