@@ -899,6 +899,21 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     const bestBefore = i.reads?.before[0];
     const readCost = bestBefore && after0r && bestBefore.mate == null && after0r.mate == null
       ? Math.max(0, seatCp(bestBefore, moverOfMove) - seatCp(after0r, moverOfMove)) : null;
+    // Pressure on their target, both seats (his "doubling rooks is always a
+    // good way to begin", Alekhine's gun): the pawn no pawn can guard, the
+    // count, and the siege the engine's line builds on its file.
+    for (const f of readBoardAll('targetPressure', { fenBefore: i.fenBefore, san: i.san, student, lineAfter: i.reads?.after[0]?.moves ?? [], costCp: i.costCp ?? readCost })) {
+      facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'pressure', weight: 54 });
+    }
+    // The pawn break and when it is due, both seats (his "first the queen to
+    // c1, then b4-b5", "a4 stops …b5 for good"): the move that gets a break
+    // ready, and the move that takes theirs away.
+    for (const f of readBoardAll('breakPrep', { fenBefore: i.fenBefore, san: i.san, student, lineAfter: i.reads?.after[0]?.moves ?? [], costCp: i.costCp ?? readCost })) {
+      facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'prepare', weight: 54 });
+    }
+    for (const f of readBoardAll('breakStopped', { fenBefore: i.fenBefore, san: i.san, student, costCp: i.costCp ?? readCost })) {
+      facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'prevent', weight: 56 });
+    }
     for (const f of readBoardAll('knightSquareTaken', { fenBefore: i.fenBefore, san: i.san, student, costCp: i.costCp ?? readCost })) {
       facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'develop', weight: 46, altFen: i.fenBefore });
     }

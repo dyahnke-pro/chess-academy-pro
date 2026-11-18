@@ -53,6 +53,8 @@ import { structurePlan } from './nextPlans';
 import { structureSignature } from './boardStructure';
 import { boardStructure } from './structureReads';
 import { minorMatchupOn, minorMatchupLine } from './minorMatchup';
+import { standingTarget, targetLine, targetSquares } from './targetSelector';
+import { breakDueNow } from './breakTiming';
 import { materialEdgeWords } from './reviewPositionalAssessment';
 import { strategicWhyLed, strategicWhyImperative } from './moveFundamentals';
 import { bestMoveReason, threatMadeWhy } from './deliberation';
@@ -547,13 +549,19 @@ export function assembleBoardPlanAnswer(
   // A file lever is covered only when it names one file and the method takes that same file.
   const fileCovered = (l: { phrase: string }): boolean => { const f = /^put a rook on the ([a-h]) file$/.exec(l.phrase)?.[1]; return !!f && !!pf.method?.includes(`open ${f}-file`); };
   const topK = pf.levers.filter((l) => !(pf.method && (covered(l) || (l.kind === 'file' && fileCovered(l))))).map((l) => l.phrase).filter(keep);
+  // THEIR TARGET (WO-DANYA-READS-01 #3): the pawn no pawn of theirs can guard
+  // that the engine's best move goes after — what the plan works against,
+  // said ahead of the plan's own steps. Not beside an urgent step.
+  const tgt = lead ? null : standingTarget(fen, myC, null, bestUci);
+  const tgtText = tgt ? `${targetLine(tgt, fen, 'your')} ` : '';
   if (headK && topK.length) {
     // The method opens with the forcing scan itself (planChoice step zero), so
     // its answer is the urgency — never said twice.
-    return { facts: `${pf.method ? '' : urgent}${headK} Beyond that: ${andList(topK)}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    return { facts: `${pf.method ? '' : urgent}${tgtText}${headK} Beyond that: ${andList(topK)}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
-  if (headK) return { facts: `${pf.method ? '' : urgent}${headK}`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
-  if (topK.length) return { facts: `${urgent}${urgent ? 'Then' : 'No single trump yet —'} the plan is to ${andList(topK)}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  if (headK) return { facts: `${pf.method ? '' : urgent}${tgtText}${headK}`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  if (topK.length) return { facts: `${urgent}${tgtText}${urgent ? 'Then' : tgt ? 'So' : 'No single trump yet —'} the plan is to ${andList(topK)}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+  if (tgt) return { facts: tgtText.trim(), bestMoveSan: null, bestMoveFromTo: null, sources: src };
   return urgent ? { facts: urgent.trim(), bestMoveSan: null, bestMoveFromTo: null, sources: src } : null;
 }
 
@@ -1721,6 +1729,27 @@ export function assemblePositionAssessment(opts: {
     }
   }
 
+  // THEIR TARGET, FIRST (WO-DANYA-READS-01 #3): the pawn of theirs no pawn
+  // can guard that the engine's best move goes after — named before any
+  // weakness of the student's own, with the count of attackers and guards.
+  const keySquaresEarly: string[] = [];
+  if (opts.fen && !urgent) {
+    try {
+      const t = standingTarget(opts.fen, sc, studentEvalCp, opts.bestUci);
+      if (t) {
+        parts.push(targetLine(t, opts.fen, 'your'));
+        keySquaresEarly.push(...targetSquares(t));
+      }
+      // THE BREAK THAT IS DUE: the engine's best move is a pawn break, said
+      // with what it strikes and opens.
+      const due = breakDueNow(opts.fen, sc, opts.bestUci);
+      if (due) {
+        parts.push(due.text);
+        keySquaresEarly.push(...due.squares);
+      }
+    } catch { /* the target read is a bonus, never a blocker */ }
+  }
+
   // THE PLAN, ON DEMAND (David 2026-09-13: "Play with coach needs to on demand
   // when asked through the text field"). An assessment answers "how do I stand"
   // with the eval + the sharp fact above; a student who asks it on the play
@@ -1732,7 +1761,7 @@ export function assemblePositionAssessment(opts: {
   // Key squares the read NAMED, carried out structurally so the caller can
   // lead the eye with `[BOARD: highlight:sq:yellow]` — coupled from each
   // observation's OWN declared `squares`, never scraped from the prose (G0).
-  const keySquares: string[] = [];
+  const keySquares: string[] = [...keySquaresEarly];
   if (opts.fen) {
     try {
       const already = parts.join(' ').toLowerCase();
