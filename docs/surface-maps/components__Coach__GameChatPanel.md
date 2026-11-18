@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1783 lines · 2 exports · 7 importers · 5 tests · 6 audits**
+**1784 lines · 2 exports · 7 importers · 5 tests · 6 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6941) — names `GameChatPanel`
+- **The standard post-deploy ritual** (CLAUDE.md:7007) — names `GameChatPanel`
 
 ## Who calls in
 

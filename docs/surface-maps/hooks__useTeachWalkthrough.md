@@ -45,7 +45,7 @@
 - `src/hooks/findMatchingTraps.test.ts:67`
 
 ### `useTeachWalkthrough` (function) — 18 call sites
-- `src/components/Coach/CoachEndgamePage.tsx:118`
+- `src/components/Coach/CoachEndgamePage.tsx:120`
 - `src/components/Coach/CoachTeachPage.tsx:1093`
 - `src/hooks/useTeachWalkthrough.test.tsx:87`
 - `src/hooks/useTeachWalkthrough.test.tsx:96`
