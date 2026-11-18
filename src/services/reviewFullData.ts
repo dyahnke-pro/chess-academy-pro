@@ -40,9 +40,7 @@ import { assessPositionalEdge, phaseVerdictLine } from './reviewPositionalAssess
 import type { RefutedAlternative } from './refutedAlternative';
 import type { ReviewIntent } from './reviewMoveIntent';
 import { principleLine, principleContrastLine } from './moveFundamentals';
-import { threatStoppedBy } from './opponentMovePurpose';
 import { recordedMoveCost } from './moveCost';
-import { trickSidestepped } from './forkTrick';
 import { findProphylaxis, prophylaxisProof, theirWantedMoves } from './prophylaxis';
 import { newTiedDefender, tiedDefenderLine, tiedDefenderProof } from './tiedDefender';
 import { lineProof, lineProofFromUci, legalLineProof, proofForStudent, squaresProof, isProof, NO_PROOF, type Proof } from './proof';
@@ -82,7 +80,6 @@ import { exchangeIdeas } from './exchangeIdeas';
 import { minorsAtHome } from './development';
 import { slipAnswerText, studentMovePoint } from './playCommentary';
 import { readTheirMove, READ_FACT_KIND } from './opponentMoveReads';
-import { playItAnyway } from './opponentMovePurpose';
 import { knownAttack } from './attackLibrary';
 import { studentMoveStructure, theirMoveStructure, boardStructure, type StructureRead } from './structureReads';
 import type { AnalysisLine, HeardVerdict } from '../types';
@@ -1449,12 +1446,12 @@ export function computeMoveFacets(
   // ── 7d. WHY DID THEY PLAY THAT? (S3) — on the opponent's move, the threat of
   // the student's it took off the board. The same static computer Learn reads.
   const stop = !isStudent && studentColorWB && ctx.teaching.prevFenBefore
-    ? threatStoppedBy(ctx.teaching.prevFenBefore, fenBefore, san, studentColorWB)
+    ? readBoard('threatStopped', { studentFenBefore: ctx.teaching.prevFenBefore, studentFenAfter: fenBefore, reply: san, student: studentColorWB })
     : null;
   if (stop) {
     const f = made('threatStoppedBy', 'stopped', stop.text);
     facets.push(f);
-    recSquares(f, [stop.threat.from, stop.threat.landing]);
+    recSquares(f, stop.squares.slice(0, 2));
   }
   // …and what THEIR move gave up that the student can use — the same board
   // computer Learn speaks (`theirMoveCost`): a new hole a knight reaches,
@@ -1498,13 +1495,13 @@ export function computeMoveFacets(
       f.identity = `hint:${r.claim}`;
     }
     // "Can you play it anyway?" — their reply stopped your threat on paper.
-    const any = stop && lines.length > 0 ? playItAnyway(stop, fenAfter, lines, studentColorWB) : null;
+    const any = stop && ctx.teaching.prevFenBefore ? readBoard('playItAnyway', { studentFenBefore: ctx.teaching.prevFenBefore, studentFenAfter: fenBefore, reply: san, fenNow: fenAfter, lines, student: studentColorWB }) : null;
     if (any) {
       const f = made('playItAnyway', 'prevent-test', any.text);
       facets.push(f);
-      recProof(f, lineProof({ fen: fenAfter, sans: any.line }, lineSeatAt(fenAfter, studentColorWB)));
+      recProof(f, isProof(any.proof) ? any.proof : null);
       recSquares(f, any.squares);
-      f.identity = `hint:anyway:${any.san}`;
+      f.identity = `hint:${readKey(any)}`;
     }
   }
   // A KNOWN ATTACKING STRUCTURE on the board the student moved from, by its
@@ -1550,7 +1547,7 @@ export function computeMoveFacets(
   // …and the fork trick, both seats — the same computer Learn's composer reads
   // (re-walk 1380: 7.Bb3 sidestepping …Nxe4 Nxe4 d5 said nothing).
   if (studentColorWB && !stop) {
-    const trick = trickSidestepped(fenBefore, san, moverWB, isStudent ? 'their' : 'your');
+    const trick = readBoard('trickSidestepped', { fenBefore, san, student: studentColorWB });
     if (trick) {
       const f = made('trickSidestepped', 'stopped', trick.text);
       facets.push(f);

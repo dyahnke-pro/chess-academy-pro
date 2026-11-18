@@ -17,13 +17,12 @@ import { settledNetForLine } from './exchangeLedger';
 import { sayMoveClause } from './spokenMove';
 import { countWords } from '../utils/countWords';
 import { pvSans, hookCreated, holeAccess } from './moveInsight';
-import { walkableLine, lineProof, NO_PROOF, type FactProof, type Proof } from './proof';
+import { walkableLine, lineProof, isProof, NO_PROOF, type FactProof, type Proof } from './proof';
 import { findProphylaxis, prophylaxisKey, prophylaxisThreatProof } from './prophylaxis';
 import { criticalityThresholds } from './criticalityScan';
 import { lineSeatAt } from '../utils/andList';
 import { kingAttackReads, type KingRead } from './kingAttackReads';
 import { readTheirMove, READ_FACT_KIND } from './opponentMoveReads';
-import { threatStoppedBy, playItAnyway } from './opponentMovePurpose';
 import { knownAttack } from './attackLibrary';
 import { tempoCount } from './tempoCount';
 import { homeMinorCount } from './development';
@@ -32,7 +31,7 @@ import type { Stakes } from './factStakes';
 import type { GamePromise } from './learnBoardTeaching';
 import { speedRunReads, SPEED_RUN_KIND } from './speedRunReads';
 import { namesMoves, type NamesStudentMove } from './studentMoveNaming';
-import { readBoardAll, readKey } from './boardComputers';
+import { readBoard, readBoardAll, readKey } from './boardComputers';
 import type { TacticType } from '../types';
 import { orderReads } from './orderReads';
 import { inBetweenMove } from './inBetweenMove';
@@ -412,10 +411,8 @@ export function depthClauses(args: {
       if (args.nameMove && prev) {
         try {
           const mid = new Chess(prev.fenBefore); mid.move(prev.san);
-          const stop = threatStoppedBy(prev.fenBefore, mid.fen(), args.lastOpponentMove.san, args.studentColor);
-          const any = stop ? playItAnyway(stop, args.fen, args.topLines, args.studentColor) : null;
-          const proof = any ? lineProof({ fen: args.fen, sans: any.line }, lineSeatAt(args.fen, args.studentColor)) : null;
-          if (any && proof) out.push({ kind: 'prevent-test', text: any.text, proof, squares: any.squares, lines: [{ fen: args.fen, sans: any.line }], claim: `anyway:${any.san}` });
+          const any = readBoard('playItAnyway', { studentFenBefore: prev.fenBefore, studentFenAfter: mid.fen(), reply: args.lastOpponentMove.san, fenNow: args.fen, lines: args.topLines, student: args.studentColor });
+          if (any && isProof(any.proof)) out.push({ kind: 'prevent-test', text: any.text, proof: any.proof, squares: [...any.squares], lines: (any.lines ?? []).map((l) => ({ fen: l.fen, sans: [...l.sans] })), claim: readKey(any) });
         } catch { /* a bonus */ }
       }
     }

@@ -34,8 +34,6 @@ import type { GamePromise } from './learnBoardTeaching';
 import { planHere, strategicWhyImperative, strategicReason, strategicPlanPointer, strategicClaims, strategicSquares, principleLine, principleContrastLine, isForcedReply, MOVE_FUNDAMENTAL_TAG } from './moveFundamentals';
 import { isTheoryLine } from './bookDeparture';
 import { refutedFromFan, candidatesFromAmateur, type FanLine, type RefutedAlternative } from './refutedAlternativeCore';
-import { threatStoppedBy } from './opponentMovePurpose';
-import { trickSidestepped } from './forkTrick';
 import { phaseVerdictLine, phaseVerdictKeys, phaseStockKey } from './reviewPositionalAssessment';
 import { stemKeyOf, rotateStem } from '../utils/rotateStem';
 import { findPinPressure, PIN_PRESSURE_PRINCIPLE, PIN_PRESSURE_WARNING, pieceName, type PinPressure } from './pinPressure';
@@ -1139,7 +1137,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     : null;
   // S3 — the opponent's reply took the student's threat off the board.
   const stoppedReply = studentToMove && lm && input.opponentLastMove
-    ? threatStoppedBy(lm.fenBefore, input.opponentLastMove.fenBefore, input.opponentLastMove.san, studentColor)
+    ? readBoard('threatStopped', { studentFenBefore: lm.fenBefore, studentFenAfter: input.opponentLastMove.fenBefore, reply: input.opponentLastMove.san, student: studentColor })
     : null;
   // The fork trick, both seats (re-walk 1380: 7.Bb3 sidestepping …Nxe4 Nxe4
   // d5 said nothing): the student's own move took theirs off the board, or
@@ -1149,21 +1147,15 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     // Both moves the sentence names, on the board BEFORE their reply: the
     // reply itself, and the student's threat it stopped (played as if it were
     // the student's turn — the threat is what their move had set up).
-    const before = input.opponentLastMove.fenBefore;
-    stoppedHere.push({
-      computer: 'threatStoppedBy',
-      text: stoppedReply.text,
-      squares: [stoppedReply.threat.from, stoppedReply.threat.landing, ...moveSquares(before, stoppedReply.reply).slice(1)],
-      lines: [{ fen: before, sans: [stoppedReply.reply] }, { fen: sideToMoveFlipped(before), sans: [stoppedReply.threat.san] }],
-    });
+    stoppedHere.push({ computer: 'threatStoppedBy', text: stoppedReply.text, squares: stoppedReply.squares, lines: stoppedReply.lines ?? [] });
   }
   if (studentToMove && lm) {
-    const own = trickSidestepped(lm.fenBefore, lm.san, studentColor, 'their');
-    if (own) stoppedHere.push({ ...own, computer: 'trickSidestepped' });
+    const own = readBoard('trickSidestepped', { fenBefore: lm.fenBefore, san: lm.san, student: studentColor });
+    if (own) stoppedHere.push({ text: own.text, squares: own.squares, computer: 'trickSidestepped' });
   }
   if (studentToMove && input.opponentLastMove && !stoppedReply) {
-    const theirs = trickSidestepped(input.opponentLastMove.fenBefore, input.opponentLastMove.san, opponentColor, 'your');
-    if (theirs) stoppedHere.push({ ...theirs, computer: 'trickSidestepped' });
+    const theirs = readBoard('trickSidestepped', { fenBefore: input.opponentLastMove.fenBefore, san: input.opponentLastMove.san, student: studentColor });
+    if (theirs) stoppedHere.push({ text: theirs.text, squares: theirs.squares, computer: 'trickSidestepped' });
   }
   // S4 — who's better, and why, at the turn of the game.
   // The move that produced `fen` — material in the verdict is read settled.

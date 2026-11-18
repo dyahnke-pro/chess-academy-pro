@@ -94,6 +94,9 @@ import { findMinorityAttack, findColorComplexWeakness } from './positionReadingS
 import { planRaceClause, planRaceProof } from './planRace';
 import { pieceWish } from './pieceWish';
 import { theirMoveCost } from './theirMoveCost';
+import { threatStoppedBy, playItAnyway } from './opponentMovePurpose';
+import { trickSidestepped } from './forkTrick';
+import { lineProof } from './proof';
 import { holeKey } from './conceptKey';
 import { describeStructure } from './boardStructure';
 import { exchangeStakes } from './factStakes';
@@ -485,6 +488,17 @@ export interface BoardContexts {
    *  bishop, or gave up castling — the student's to use. The key starts with
    *  the cost's kind (`hole:`, `bishop:` …). */
   theirCost: { fenBefore: string; san: string; student: Color };
+  /** THE THREAT THEIR REPLY STOPPED (`threatStopped`): the student's move
+   *  (`studentFenBefore` → `studentFenAfter`) made a threat, and their reply
+   *  `reply` took it off the board. */
+  threatStopped: { studentFenBefore: string; studentFenAfter: string; reply: string; student: Color };
+  /** CAN YOU PLAY IT ANYWAY? (`playItAnyway`): their reply stopped the
+   *  student's threat on paper, and on `fenNow` the engine's lines (`lines`,
+   *  White-POV) say the move still works. */
+  playItAnyway: { studentFenBefore: string; studentFenAfter: string; reply: string; fenNow: string; lines: ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate: number | null }>; student: Color };
+  /** THE FORK TRICK A QUIET MOVE SIDESTEPPED (`trickSidestepped`), either
+   *  seat: `san` on `fenBefore` took the other side's fork trick off the board. */
+  trickSidestepped: { fenBefore: string; san: string; student: Color };
   /** THE OPPOSITION TAKEN (`oppositionRead`, Danya's "it is Black who has
    *  the opposition"): the king move `san` on `fenBefore` (either seat) takes
    *  the opposition in a king-and-pawn ending, with what it forces.
@@ -2637,6 +2651,67 @@ export const BOARD_COMPUTERS = {
       learn: { wired: 'services/learnBoardTeaching.ts' },
       tactics: TACTICS_NA,
       weaknesses: { not: 'what their move gave up — no question of the student\'s posed' },
+    },
+  },
+  threatStopped: {
+    // What their reply was for: the threat of the student's it took away.
+    read: ({ studentFenBefore, studentFenAfter, reply, student }, fact) => safe(() => {
+      const stop = threatStoppedBy(studentFenBefore, studentFenAfter, reply, student);
+      if (!stop) return null;
+      const replySquares = ((): string[] => { try { const m = new Chess(studentFenAfter).move(reply); return [m.from, m.to]; } catch { return []; } })();
+      const squares = [stop.threat.from, stop.threat.landing, ...replySquares.slice(1)];
+      const flipped = ((): string => { const p = studentFenAfter.split(' '); p[1] = p[1] === 'w' ? 'b' : 'w'; p[3] = '-'; return p.join(' '); })();
+      return fact({ key: `stopped:${stop.threat.san}:${reply}`, claims: [`stopped:${stop.threat.landing}`], text: stop.text, proof: squaresProof(stop.text, squares) ?? NO_PROOF.description, squares, stakes: null,
+        seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: studentFenAfter,
+        lines: [{ fen: studentFenAfter, sans: [reply] }, { fen: flipped, sans: [stop.threat.san] }] });
+    }),
+    computer: 'threatStoppedBy',
+    kind: 'stopped',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'what a move was for — no question of the student\'s posed' },
+    },
+  },
+  playItAnyway: {
+    read: ({ studentFenBefore, studentFenAfter, reply, fenNow, lines, student }, fact) => safe(() => {
+      const stop = threatStoppedBy(studentFenBefore, studentFenAfter, reply, student);
+      const any = stop && lines.length > 0 ? playItAnyway(stop, fenNow, lines, student) : null;
+      if (!any) return null;
+      const proof = lineProof({ fen: fenNow, sans: any.line }, lineSeatAt(fenNow, student));
+      if (!proof) return null;
+      return fact({ key: `anyway:${any.san}`, claims: [`anyway:${any.san}`], text: any.text, proof, squares: [...any.squares], stakes: null,
+        seat: 'student', namesStudentMove: true, thread: LOCAL_THREAD, fen: fenNow, lines: [{ fen: fenNow, sans: any.line }] });
+    }),
+    computer: 'playItAnyway',
+    kind: 'prevent-test',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'what a move was for — no question of the student\'s posed' },
+    },
+  },
+  trickSidestepped: {
+    // The fork trick a quiet move took off the board, either seat.
+    read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const mover: Color = new Chess(fenBefore).turn();
+      const trick = trickSidestepped(fenBefore, san, mover, mover === student ? 'their' : 'your');
+      if (!trick) return null;
+      return fact({ key: `trick:${san}:${trick.squares.join('-')}`, claims: [`trick:${trick.squares[0] ?? san}`], text: trick.text, proof: squaresProof(trick.text, trick.squares) ?? NO_PROOF.description, squares: [...trick.squares], stakes: null,
+        seat: mover === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore });
+    }),
+    computer: 'trickSidestepped',
+    kind: 'stopped',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'what a move was for — no question of the student\'s posed' },
     },
   },
   oppositionRead: {

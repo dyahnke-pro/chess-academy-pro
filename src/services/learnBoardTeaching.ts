@@ -95,8 +95,6 @@ export function warmOpeningStory(fen: string): void {
 }
 import { ruledOutSans, extractMentionedSanSpans } from './arrowEngine';
 import { slipAnswerText, studentMovePoint } from './playCommentary';
-import { threatStoppedBy } from './opponentMovePurpose';
-import { trickSidestepped } from './forkTrick';
 import { gameArcs } from './lookaheadPlan';
 import { studentMoveStructure } from './structureReads';
 import { piecePoints, mateStakes, exchangeStakes, forkPoints, piecesOn, type FactStakes } from './factStakes';
@@ -918,10 +916,9 @@ export function theirMovePoint(history: readonly string[], ply: number, student:
   const fenBefore = replayTo(history, ply);
   if (!fenBefore || ply < 0 || ply >= history.length) return null;
   const prev = ply >= 1 ? replayTo(history, ply - 1) : null;
-  const stop = prev ? threatStoppedBy(prev, fenBefore, history[ply], student) : null;
+  const stop = prev ? readBoard('threatStopped', { studentFenBefore: prev, studentFenAfter: fenBefore, reply: history[ply], student }) : null;
   if (stop) return stop.text;
-  const mover: 'w' | 'b' = student === 'w' ? 'b' : 'w';
-  return trickSidestepped(fenBefore, history[ply], mover, 'your')?.text ?? null;
+  return readBoard('trickSidestepped', { fenBefore, san: history[ply], student })?.text ?? null;
 }
 
 /** "What did their move do? Do I have to deal with it?" — what it cost them,

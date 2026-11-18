@@ -9,7 +9,7 @@
 // their bishop off g4") and stacking two that said one thing.
 import { plyOfFen } from '../utils/plyOfFen';
 import { introWithGerund, introWithPredicate, type IntroTense } from '../utils/moveIntro';
-import { Chess } from 'chess.js';
+import { Chess, type Color } from 'chess.js';
 import { NO_PREV_CAPTURE, type PrevCaptureContext } from './captureRun';
 import { NO_FOLLOW } from './exchangeLedger';
 import { sayIdea, type PhraseMemory } from '../utils/phraseMemory';
@@ -906,6 +906,26 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       // What their move cost them, for the student to use.
       for (const f of readBoardAll('theirCost', { fenBefore: i.fenBefore, san: i.san, student })) {
         facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'weakness', weight: 58 });
+      }
+      // What the move was for: the threat of the other side's it stopped (with
+      // whether that threat can be played anyway), and the fork trick it
+      // sidestepped, both seats.
+      if (i.theirLast) {
+        const fenAfterThis = (() => { try { const c = new Chess(i.fenBefore); c.move(i.san); return c.fen(); } catch { return null; } })();
+        const other: Color = student === 'w' ? 'b' : 'w';
+        const mover: Color = new Chess(i.fenBefore).turn();
+        const threatOwner = mover === student ? other : student;
+        for (const f of readBoardAll('threatStopped', { studentFenBefore: i.theirLast.fenBefore, studentFenAfter: i.fenBefore, reply: i.san, student: threatOwner })) {
+          facts.push({ ...f, seat: mover === student ? 'student' : 'opponent', namesStudentMove: false, source: 'teachingMove', idea: 'prevent', weight: 60 });
+        }
+        if (fenAfterThis && i.reads?.after.length) {
+          for (const f of readBoardAll('playItAnyway', { studentFenBefore: i.theirLast.fenBefore, studentFenAfter: i.fenBefore, reply: i.san, fenNow: fenAfterThis, lines: i.reads.after, student: threatOwner })) {
+            facts.push({ ...f, source: 'teachingMove', idea: 'threat', weight: 62 });
+          }
+        }
+      }
+      for (const f of readBoardAll('trickSidestepped', { fenBefore: i.fenBefore, san: i.san, student })) {
+        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'prevent', weight: 58 });
       }
       // The fortress, both seats: a piece down and a draw the board explains,
       // read off the engine's lines after the move.
