@@ -208,6 +208,8 @@ interface MoveFactContext {
    *  2026-10-02, ply 85: "the stronger move was Rd3" and nothing else). Pass []
    *  when the line is unknown. */
   playedLineUci: readonly string[];
+  /** The record's second read of the played line (`pv.earlierPlayed`), or null. */
+  playedLineEarlierUci: readonly string[] | null;
   /** REQUIRED — the record's own second reads of those two lines (the same
    *  searches two depths shallower, `recordSecondReads`), so a line past two
    *  moves is named on the same rule as every surface (`lineTrust`). A record
@@ -1714,10 +1716,11 @@ export function computeMoveFacets(
         add(readBoardAll('kingSiege', { fenBefore, san, student: studentColorWB, replies })[0]);
         add(readBoardAll('backRankWeakness', { fenBefore, san, student: studentColorWB })[0]);
         add(readBoardAll('loadedDiscovery', { fenBefore, san, student: studentColorWB })[0]);
-        add(readBoardAll('kingSacrifice', { fenBefore, san, student: studentColorWB, replies })[0]);
+        const seconds = ctx.playedLineEarlierUci && ctx.playedLineEarlierUci.length > 0 ? [ctx.playedLineEarlierUci] : [];
+        add(readBoardAll('kingSacrifice', { fenBefore, san, student: studentColorWB, replies, seconds })[0]);
         // The hidden combination (group 8): material given away from the
         // king and won back with interest, or mate, by the played line.
-        add(readBoardAll('deepCombination', { fenBefore, san, student: studentColorWB, replies })[0]);
+        add(readBoardAll('deepCombination', { fenBefore, san, student: studentColorWB, replies, seconds })[0]);
       }
       // The flexible move, both seats (the option principle): of moves the
       // engine holds as good as each other, the one that keeps the important

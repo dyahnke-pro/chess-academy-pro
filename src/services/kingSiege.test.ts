@@ -128,19 +128,19 @@ describe('the reads reach the coach', () => {
     const u = readBoardUrgency(MIRACLE, 'white', 'f8d6');
     expect(u?.mate).toEqual(['Qxd1#']);
     expect(urgencyLead(u)).toMatch(/^They threaten mate: Qxd1 is mate/);
-    const read = assemblePositionAssessment({ tempting: null, evalCp: 150, mateIn: null, studentColor: 'white', fen: MIRACLE, bestUci: 'f8d6' });
+    const read = assemblePositionAssessment({ line: null, tempting: null, evalCp: 150, mateIn: null, studentColor: 'white', fen: MIRACLE, bestUci: 'f8d6' });
     expect(read?.facts).toContain('They threaten mate: Qxd1');
   });
 
   it('the position read says the back rank and the siege', () => {
     expect(kingReadsOn(NO_LUFT, 'w', 0).map((r) => r.text).join(' ')).toMatch(/no luft|back rank is thin/);
-    const read = assemblePositionAssessment({ tempting: null, evalCp: 300, mateIn: null, studentColor: 'white', fen: KNOCKOUT, bestUci: null });
+    const read = assemblePositionAssessment({ line: null, tempting: null, evalCp: 300, mateIn: null, studentColor: 'white', fen: KNOCKOUT, bestUci: null });
     expect(read?.facts).toMatch(/four of your pieces/i);
     expect(read?.keySquares).toContain('b8');
   });
 
   it('the registry speaks the sacrifice for the move, with its line', () => {
-    const facts = readBoardAll('kingSacrifice', { fenBefore: GREEK, san: 'Bxh7+', student: 'w', replies: [{ cp: 319, mate: null, moves: GREEK_LINE }] });
+    const facts = readBoardAll('kingSacrifice', { fenBefore: GREEK, san: 'Bxh7+', student: 'w', replies: [{ cp: 319, mate: null, moves: GREEK_LINE }], seconds: [GREEK_LINE] });
     expect(facts).toHaveLength(1);
     expect(facts[0].text).toContain('drag their king out to h7');
     expect(facts[0].kind).toBe('sac-why');

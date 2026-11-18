@@ -321,7 +321,7 @@ describe('WIRED BOTH WAYS — every lane answers, and each surface carries the f
       moverColor: 'black', playerColor: 'black', studentColorWB: 'b',
       evaluation: 0, preMoveEval: 0, costCp: 0, heardVerdict: null, classification: 'good', bestMoveSan: 'Nf6',
       prevCap: { square: null, capturedValue: 0, net: 0 }, allSans: 'c4 e5 Nc3 Nf6'.split(' '),
-      forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
+      forcedRunStartPly: null, playedLineEarlierUci: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
     }));
     const f = facets.find((x) => x.startsWith('[timing]') && /nothing hits/.test(x));
     expect(f, facets.join('\n')).toBeTruthy();

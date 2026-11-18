@@ -16,6 +16,13 @@ import { lessonBoardFacts } from './moveThoughtFacts';
 import { NO_PREV_CAPTURE } from './captureRun';
 import { temptingKey } from './conceptKey';
 
+/** The tempting move's stem rotates over three phrasings a seat; a test reads
+ *  the claim, not which phrasing the board drew. */
+const oneStem = (t: string | null | undefined): string => (t ?? '')
+  .replace(/ (?:is tempting here, but it fails|looks natural, but it doesn't work|is the obvious try, but it doesn't hold up)/g, ' STEM')
+  .replace(/ (?:was tempting for them, but it fails|looked natural for them, but it doesn't work|was the obvious try for them, but it doesn't hold up)/g, ' STEM-THEM');
+
+
 interface Board { id: string; fen: string; reads: WeighRead[] }
 const FX = JSON.parse(readFileSync('src/test/fixtures/danya-article-tempting.json', 'utf8')) as Board[];
 const board = (id: string): Board => {
@@ -30,7 +37,7 @@ const sanOf = (fen: string, uci: string): string => new Chess(fen).move({ from: 
 describe('the tempting move on the board, refuted by its own line', () => {
   it('understanding-the-back-rank#4: Nd4 walks into the back rank — the rook on d6 takes it once the e1 rook falls', () => {
     const t = first(board('understanding-the-back-rank#4'));
-    expect(t?.text).toBe('Nd4 is tempting here, but it fails: they play Rxe1+, you answer Qxe1 and they play Rxd4 — they win a knight.');
+    expect(oneStem(t?.text)).toBe(oneStem('Nd4 is tempting here, but it fails: they play Rxe1+, you answer Qxe1 and they play Rxd4 — they win a knight.'));
     // Every move of the line is legal from the board, in order.
     const c = new Chess(board('understanding-the-back-rank#4').fen);
     for (const san of ['Nd4', 'Rxe1+', 'Qxe1', 'Rxd4']) expect(() => c.move(san)).not.toThrow();
@@ -40,14 +47,14 @@ describe('the tempting move on the board, refuted by its own line', () => {
     const b = board('the-discovered-check-reloaded#1');
     const said = temptingOnBoard({ fen: b.fen, student: 'w', rating: 1500, reads: b.reads, priorMove: null });
     // The most tempting is said first: Nxf7 takes a pawn and hits the rook.
-    expect(said[0]?.text).toBe("Nxf7 looks natural, but it doesn't work: they play Bxh4, you answer Nxd8 and they play Qxd8 — they win a queen and a knight for a rook and a pawn.");
-    expect(said.map((t) => t.text)).toContain("Ne4 looks natural, but it doesn't work: they play Bxh4 — they win a queen.");
+    expect(oneStem(said[0]?.text)).toBe(oneStem("Nxf7 looks natural, but it doesn't work: they play Bxh4, you answer Nxd8 and they play Qxd8 — they win a queen and a knight for a rook and a pawn."));
+    expect(said.map((t) => oneStem(t.text))).toContain(oneStem("Ne4 looks natural, but it doesn't work: they play Bxh4 — they win a queen."));
     expect(said[0]?.claims).toContain(temptingKey('g5f7'));
   });
 
   it('miracle-on-the-chess-board#3: the queen grabs the rook on d6 and the back rank falls', () => {
     const t = first(board('miracle-on-the-chess-board#3'));
-    expect(t?.text).toBe("Qxd6 looks natural, but it doesn't work: they play Qxd1#.");
+    expect(oneStem(t?.text)).toBe(oneStem("Qxd6 looks natural, but it doesn't work: they play Qxd1#."));
     expect(t?.claims).toContain('rule-out:mate:d1');
   });
 
@@ -71,7 +78,7 @@ describe('negative controls — a tempting move that works is never called refut
     const b = board('how-to-avoid-blunders-part-1#1');
     const said = temptingOnBoard({ fen: b.fen, student: 'b', rating: 1500, reads: b.reads, priorMove: null });
     expect(said.map((t) => t.san)).not.toContain('Bxg5');
-    expect(said[0]?.text).toBe("Nxa3 looks natural, but it doesn't work: they play Bxa3 — they win a knight for a pawn.");
+    expect(oneStem(said[0]?.text)).toBe(oneStem("Nxa3 looks natural, but it doesn't work: they play Bxa3 — they win a knight for a pawn."));
   });
 
   it('a queen simply given for a pawn is no temptation, and a loss the line does not explain is not said (Capablanca: Qxe6+, Bxe6+)', () => {
@@ -120,13 +127,13 @@ describe('wired to the surfaces that read a board', () => {
     const b = board('understanding-the-back-rank#4');
     const best = bestOfReads(b.fen, b.reads)!;
     const studentColor = side(b.fen) === 'w' ? 'white' : 'black';
-    const a = assemblePositionAssessment({ fen: b.fen, evalCp: best.read.evaluation, mateIn: best.read.mate, studentColor, bestUci: best.read.moves[0], tempting: { rating: 1500, reads: b.reads } });
-    expect(a?.facts).toContain('Nd4 is tempting here, but it fails');
+    const a = assemblePositionAssessment({ line: null, fen: b.fen, evalCp: best.read.evaluation, mateIn: best.read.mate, studentColor, bestUci: best.read.moves[0], tempting: { rating: 1500, reads: b.reads } });
+    expect(oneStem(a?.facts)).toContain(oneStem('Nd4 is tempting here, but it fails'));
     // Without the reads the read has no temptation to say (it never guesses one).
-    const none = assemblePositionAssessment({ fen: b.fen, evalCp: best.read.evaluation, mateIn: best.read.mate, studentColor, bestUci: best.read.moves[0], tempting: null });
+    const none = assemblePositionAssessment({ line: null, fen: b.fen, evalCp: best.read.evaluation, mateIn: best.read.mate, studentColor, bestUci: best.read.moves[0], tempting: null });
     expect(none?.facts ?? '').not.toContain('Nd4');
     // On the opponent's turn it would be their move not yet played: nothing.
-    const theirs = assemblePositionAssessment({ fen: b.fen, evalCp: best.read.evaluation, mateIn: best.read.mate, studentColor: studentColor === 'white' ? 'black' : 'white', bestUci: best.read.moves[0], tempting: { rating: 1500, reads: b.reads } });
+    const theirs = assemblePositionAssessment({ line: null, fen: b.fen, evalCp: best.read.evaluation, mateIn: best.read.mate, studentColor: studentColor === 'white' ? 'black' : 'white', bestUci: best.read.moves[0], tempting: { rating: 1500, reads: b.reads } });
     expect(theirs?.facts ?? '').not.toContain('Nd4');
   });
 

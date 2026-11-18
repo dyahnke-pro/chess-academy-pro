@@ -70,14 +70,14 @@ describe('the tree', () => {
     const student = moverOf(r.fen);
     const t = ifTheyPlay({ fen: r.fen, replies: r.read, rating: 1500, student, seconds: [], played: 'f6e5', landed: null });
     expect(t?.branches.find((b) => b.reply.uci === 'f6e5')?.played).toBe(true);
-    const f = readBoardAll('ifTheyPlay', { fen: r.fen, replies: r.read, rating: 1500, student, seconds: [], played: 'f6e5', tense: 'live', liveBoard: null, landed: null });
+    const f = readBoardAll('ifTheyPlay', { fen: r.fen, replies: r.read, rating: 1500, student, seconds: [], played: 'f6e5', tense: 'live', liveBoard: null, madeBy: null });
     expect(f.map((x) => x.text).join(' ')).not.toContain('take on e5');
   });
 
   it('after the game went on, only what a branch would have won is said', () => {
     const r = row('6JsSbmpj7UQ', 42);
     const student = moverOf(r.fen);
-    const f = readBoardAll('ifTheyPlay', { fen: r.fen, replies: r.read, rating: 1500, student, seconds: [], played: 'g7h6', tense: 'past', liveBoard: null, landed: null });
+    const f = readBoardAll('ifTheyPlay', { fen: r.fen, replies: r.read, rating: 1500, student, seconds: [], played: 'g7h6', tense: 'past', liveBoard: null, madeBy: null });
     // The recapture on h6 they did play is the line; the trade it would have
     // been is not said. Both captures on d4 lose a bishop for a pawn. Qxd4
     // unveils nothing (the rook on d1 stands behind its own queen): no
@@ -90,7 +90,7 @@ describe('the tree', () => {
     // keyed on the board and the reply, so a replay says them the same way.
     const r = row('6JsSbmpj7UQ', 42);
     const student = moverOf(r.fen);
-    const say = () => readBoardAll('ifTheyPlay', { fen: r.fen, replies: r.read, rating: 1500, student, seconds: [], played: 'g7h6', tense: 'past', liveBoard: null, landed: null })[0]?.text ?? '';
+    const say = () => readBoardAll('ifTheyPlay', { fen: r.fen, replies: r.read, rating: 1500, student, seconds: [], played: 'g7h6', tense: 'past', liveBoard: null, madeBy: null })[0]?.text ?? '';
     const t = say();
     const openers = t.split(/(?<=\.) /).map((x) => x.split(' ').slice(0, 2).join(' '));
     expect(new Set(openers).size).toBeGreaterThan(1);
@@ -101,7 +101,7 @@ describe('the tree', () => {
     const { temptingKey } = await import('./conceptKey');
     const r = row('6JsSbmpj7UQ', 42);
     const student = moverOf(r.fen);
-    const f = readBoardAll('ifTheyPlay', { fen: r.fen, replies: r.read, rating: 1500, student, seconds: [], played: 'g7h6', tense: 'past', liveBoard: null, landed: null });
+    const f = readBoardAll('ifTheyPlay', { fen: r.fen, replies: r.read, rating: 1500, student, seconds: [], played: 'g7h6', tense: 'past', liveBoard: null, madeBy: null });
     // Both captures on d4 lose a bishop for a pawn: each is ruled out.
     const t = ifTheyPlay({ fen: r.fen, replies: r.read, rating: 1500, student, seconds: [], played: 'g7h6', landed: null })!;
     const d4 = t.branches.filter((b) => b.reply.to === 'd4' && b.kind === 'wins').map((b) => temptingKey(b.reply.uci));
@@ -111,7 +111,7 @@ describe('the tree', () => {
 
   it('no read, no tree — never a guess', () => {
     const r = row('1rcEbI44WqE', 47);
-    expect(readBoardAll('ifTheyPlay', { fen: r.fen, replies: null, rating: 1500, student: 'w', seconds: [], played: null, tense: 'live', liveBoard: null, landed: null })).toEqual([]);
+    expect(readBoardAll('ifTheyPlay', { fen: r.fen, replies: null, rating: 1500, student: 'w', seconds: [], played: null, tense: 'live', liveBoard: null, madeBy: null })).toEqual([]);
     expect(ifTheyPlay({ fen: r.fen, replies: [], rating: 1500, student: 'w', seconds: [], played: null, landed: null })).toBeNull();
   });
 
@@ -128,7 +128,7 @@ describe('the one registry', () => {
   it('is the one fact: a reply tree (said in the line\'s step), from the mover\'s seat, proven by its own moves', () => {
     const r = row('358seoKegqA', 14);
     const student = moverOf(r.fen);
-    const [f] = readBoardAll('ifTheyPlay', { fen: r.fen, replies: r.read, rating: 1500, student, seconds: [], played: null, tense: 'live', liveBoard: null, landed: null });
+    const [f] = readBoardAll('ifTheyPlay', { fen: r.fen, replies: r.read, rating: 1500, student, seconds: [], played: null, tense: 'live', liveBoard: null, madeBy: null });
     // Its own kind since 2026-11-05 (the reply tree is M-REPLY-TREE, not a
     // bare line), still said in the line's step.
     expect(f.kind).toBe('reply-tree');
@@ -139,7 +139,7 @@ describe('the one registry', () => {
     expect(isProof(f.proof)).toBe(true);
     expect(f.text).toContain('Qxd8+ trades queens');
     // From the other seat, the same tree is theirs: "they", never "you".
-    const [g] = readBoardAll('ifTheyPlay', { fen: r.fen, replies: r.read, rating: 1500, student: new Chess(r.fen).turn(), seconds: [], played: null, tense: 'live', liveBoard: null, landed: null });
+    const [g] = readBoardAll('ifTheyPlay', { fen: r.fen, replies: r.read, rating: 1500, student: new Chess(r.fen).turn(), seconds: [], played: null, tense: 'live', liveBoard: null, madeBy: null });
     expect(g.seat).toBe('opponent');
     expect(g.text).toMatch(/^If you /);
   });
@@ -148,7 +148,7 @@ describe('the one registry', () => {
     const r = row('fGBhk9oqdbg', 22);
     const student = moverOf(r.fen);
     const live = new Chess(r.fen); live.move('Be6');
-    const facts = readBoardAll('ifTheyPlay', { fen: r.fen, replies: r.read, rating: 1500, student, seconds: [], played: 'c8e6', tense: 'past', liveBoard: live.fen(), landed: null });
+    const facts = readBoardAll('ifTheyPlay', { fen: r.fen, replies: r.read, rating: 1500, student, seconds: [], played: 'c8e6', tense: 'past', liveBoard: live.fen(), madeBy: null });
     const came = facts.find((f) => f.namesStudentMove);
     expect(came?.text).toContain('f5 wins a bishop');
     // What the answer does, never the move (prod focus audit 2026-11-07:
@@ -194,7 +194,7 @@ describe('the bait (WO-COACH-NEXT-TO-YOU-01 C4: induce mistakes)', () => {
   });
   it('is said once: the bait fact carries the trap, and the tree no longer repeats its branch', () => {
     const r = row('fGBhk9oqdbg', 22);
-    const ctx = { fen: r.fen, replies: r.read, rating: 1500, student: moverOf(r.fen), seconds: [], played: null, tense: 'live' as const, liveBoard: null, landed: null };
+    const ctx = { fen: r.fen, replies: r.read, rating: 1500, student: moverOf(r.fen), seconds: [], played: null, tense: 'live' as const, liveBoard: null, madeBy: null };
     const [bait] = readBoardAll('baitSet', ctx);
     expect(bait).toMatchObject({ kind: 'trap-set', group: 'bait', seat: 'student' });
     expect(bait.text).toMatch(/^This sets a trap/);

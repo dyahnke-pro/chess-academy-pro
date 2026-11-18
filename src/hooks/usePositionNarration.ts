@@ -16,7 +16,6 @@ import type { StockfishAnalysis } from '../types';
 import { DEFAULT_STUDENT_RATING } from '../services/ratingBands';
 import { useStudentNeed } from './useStudentNeed';
 import { composePositionRead, READ_SEAT } from '../services/positionReadComposer';
-import { temptingReads } from '../services/movePurposeEngine';
 
 interface UsePositionNarrationArgs {
   fen: string;
@@ -221,14 +220,6 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
 
       const profile = await db.profiles.get('main');
       const rating = profile?.currentRating ?? DEFAULT_STUDENT_RATING;
-      // The moves the student is drawn to, each read on its own, so the read
-      // can say which natural move fails and why (WO-DANYA-READS-01 group 4).
-      // Never on a puzzle still being solved (the composer would hold it).
-      const topLine = stockfishAnalysis?.topLines?.find((l) => l.rank === 1) ?? null;
-      const tempting = topLine && !args.withhold
-        ? await temptingReads(args.fen, rating, topLine).then((reads) => (reads ? { rating, reads } : null)).catch(() => null)
-        : null;
-      if (token !== activeTokenRef.current) return;
 
       // ── THE FACTS, IN CODE — composed in ONE place (positionReadComposer):
       //    the note, the phase, the position facts, the positional read and
@@ -248,7 +239,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
         isCancelled: () => token !== activeTokenRef.current,
         corpusNotes: args.corpusNotes,
         withhold: args.withhold,
-        tempting,
+        readTempting: true,
       });
       if (token !== activeTokenRef.current) return;
       if (!facts) {

@@ -76,7 +76,7 @@ describe('the reasons reach the surfaces', () => {
 
   it('the position read carries the reason (the-knockout-blow #2)', () => {
     const fen = '3rr3/pp1k2pp/2n1p3/3p1q2/8/1P3NP1/1PP1QPP1/3RR1K1 w - - 0 19';
-    const a = assemblePositionAssessment({ evalCp: 116, mateIn: null, studentColor: 'white', fen, bestUci: 'c2c3', line: 'c2c3 d7c7 b3b4 a7a6 b4b5 a6b5 e2b5 d5d4'.split(' ') })!;
+    const a = assemblePositionAssessment({ tempting: null, evalCp: 116, mateIn: null, studentColor: 'white', fen, bestUci: 'c2c3', line: 'c2c3 d7c7 b3b4 a7a6 b4b5 a6b5 e2b5 d5d4'.split(' ') })!;
     expect(a.facts).toContain('Their king on d7 is still in the middle, and it can no longer castle.');
     expect(a.keySquares).toContain('d7');
   });

@@ -25,7 +25,7 @@
 //
 // PURE: chess.js, the exchange ledger and the engine line the surface hands in.
 import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'chess.js';
-import { MATERIAL_VALUE, sideMaterial } from './pieceValues';
+import { sideMaterial } from './pieceValues';
 import { legalSeeGainFor } from './positionReadingService';
 import { mateThreatsAgainst } from './threatOut';
 import { settledNetForLine, gainWords, promotedIn, type PieceLetter } from './exchangeLedger';

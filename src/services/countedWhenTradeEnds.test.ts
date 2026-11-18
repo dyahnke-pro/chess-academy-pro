@@ -109,7 +109,7 @@ describe('structure is read when the exchange is over (the boards the sheets pri
     expect(moveDifference(boardAt(PETROV, 17), 'O-O', 'dxc4', 'your', { a: null, b: null })?.text ?? '').not.toMatch(/doubled/);
   });
   it('Three Knights …d5: no "half-opens the d-file" — …cxd5 puts a pawn back on d5', () => {
-    expect(pawnBreak(boardAt(THREE_KNIGHTS, 13), 'd5', 'your', 'd3')?.text ?? '').not.toMatch(/d-file/);
+    expect(pawnBreak(boardAt(THREE_KNIGHTS, 13), 'd5', 'your', 'd3', true)?.text ?? '').not.toMatch(/d-file/);
   });
   it('King\'s Gambit Declined fxe5: the f-file half-opens, and not toward the king on g8', () => {
     const t = buildReviewMoveTeachingFact(boardAt(KGD, 16), 'fxe5', true)?.text ?? '';

@@ -218,7 +218,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingFact[] {
     const theirLast = i.history.length >= 2 ? i.history[i.history.length - 2] : null;
     const tookOn = theirLast ? /x([a-h][1-8])/.exec(theirLast)?.[1] ?? null : null;
     if (faultCp === 0 && tookOn && to === tookOn && i.san.includes('x')) {
-      const rc = recaptureChoice(i.fenBefore, i.san, i.reply);
+      const rc = recaptureChoice(i.fenBefore, i.san, i.reply, i.namesStudentMoves);
       // The right recapture chosen answers the capture-toward-centre
       // question — held (P4 dual-use).
       if (rc) out.push(teachingFact('recapture', { computer: 'recaptureChoice', kind: 'rule', ...mine, names: NAMES_NO_MOVE, proof: squaresProof(rc, [to]) ?? NO_PROOF.stated, text: rc, squares: [to], claims: [`recapture-${to}`] }, { event: null, arrows: [], evidence: { tag: 'capture-toward-centre' as const, posedImportance: 60 } }));

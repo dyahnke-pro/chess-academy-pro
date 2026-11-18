@@ -56,7 +56,7 @@ import { packageForRegister } from './hintRegister';
 import { FUNDAMENTAL_TAG } from './principleAttribution';
 import { castleByHandMove, kingFromCentre, keptHome, kingSquares } from './kingWalk';
 import { knownSlip, knownSlipIndexNow, knownSlipsAt, type KnownSlipContext } from './knownSlips';
-import { ifTheyPlay, treeSentence, sayable, baitBranch, baitSentence, everyTakeLoses, everyTakeSentence, type ReplyRead, type ReplyBranch, type TreeTense } from './ifTheyPlay';
+import { ifTheyPlay, treeSentence, sayable, baitBranch, baitSentence, everyTakeLoses, everyTakeSentence, type ReplyRead, type ReplyBranch, type TreeTense, landedSquare } from './ifTheyPlay';
 import { mateStakes } from './factStakes';
 import { MOTIF_OF_TACTIC, MOTIFS } from '../data/tacticMotifs';
 import { temptingRefuted, temptingOnBoard, alsoGood, squareChoice, type WeighRead } from './weighedMoves';
@@ -108,6 +108,7 @@ import { secondAttacker, secondAttackerLine } from './secondAttacker';
 import { outOfReach, outOfReachLine } from './outOfReach';
 import { poisonedPiece, poisonedPieceLine } from './poisonedPiece';
 import { deepCombination, deepCombinationLine, deepCombinationSquares } from './deepCombination';
+import { lineTrust } from './lineTrust';
 import { everyMate, everyMateLine } from './everyMate';
 import { pieceCage } from './pieceCage';
 import { opensCheck } from './opensCheck';
@@ -257,7 +258,7 @@ export interface BoardContexts {
    *  or after the game went on. REQUIRED `liveBoard`: the board the student
    *  moves on now (Learn), where an answer they could play is held in a form
    *  that names no move; null on a surface with no live board. */
-  ifTheyPlay: { fen: string; replies: readonly ReplyRead[] | null; rating: number; student: Color; seconds: ReadonlyArray<readonly string[] | null>; played: string | null; tense: TreeTense; liveBoard: string | null; /** The square the move that made `fen` landed on (SAN destination), or null. */ landed: string | null };
+  ifTheyPlay: { fen: string; replies: readonly ReplyRead[] | null; rating: number; student: Color; seconds: ReadonlyArray<readonly string[] | null>; played: string | null; tense: TreeTense; liveBoard: string | null; /** The move that made `fen` (SAN), or null: the square it landed on is read from it here. */ madeBy: string | null };
   /** THE BAIT (WO-COACH-NEXT-TO-YOU-01 C4): the same read of every reply as
    *  the reply tree — the bait is its likely reply that loses. */
   baitSet: BoardContexts['ifTheyPlay'];
@@ -352,12 +353,21 @@ export interface BoardContexts {
    *  gives up material by the other king, is taken, and the engine's line
    *  after it (`replies[0]`, UCI, the reply first) proves it — what it opens
    *  and the forced follow-up. Either seat. */
-  kingSacrifice: { fenBefore: string; san: string; student: Color; replies: readonly ReplyLine[] };
+  kingSacrifice: { fenBefore: string; san: string; student: Color; replies: readonly ReplyLine[];
+    /** REQUIRED — other reads of the top line after the move (each from the
+     *  reply), `[]` where the surface has one: the line is named by the ONE
+     *  naming rule (`lineTrust`). */
+    seconds: ReadonlyArray<readonly string[]> };
   /** THE HIDDEN COMBINATION (`deepCombination`, WO-DANYA-READS-01 group 8):
    *  the move `san` gives up material away from the other king, and the
    *  engine's line after it (`replies[0]`, UCI, the reply first) forces it
    *  back with interest, or mates. Either seat. */
-  deepCombination: { fenBefore: string; san: string; student: Color; replies: readonly ReplyLine[] };
+  deepCombination: { fenBefore: string; san: string; student: Color; replies: readonly ReplyLine[];
+    /** REQUIRED — other reads of the top line after the move (each from the
+     *  reply), `[]` where the surface has one: the line is named by the ONE
+     *  naming rule (`lineTrust`; review audit 2026-11-18: "Nxe5 looks like it
+     *  drops your knight … two moves later, you play Qxh8" on one read). */
+    seconds: ReadonlyArray<readonly string[]> };
   /** GETTING INTO THEIR CAMP (`intoTheirCamp`, Danya's speedruns): the move
    *  `san` on `fenBefore` (either seat) gets a piece into their half and hits
    *  what they cannot keep, puts the rooks on the seventh, lifts or swings a
@@ -598,6 +608,22 @@ function sideToMove(fen: string): Color {
 }
 
 /** The board after one move, or null when it does not play there. */
+/** THE ONE NAMING RULE on a sacrifice's spoken line (SAN from `fenBefore`,
+ *  the move first): `seconds` are other reads after the move, so each is
+ *  checked with the move in front. */
+function sacLineNamed(fenBefore: string, sanLine: readonly string[], seconds: ReadonlyArray<readonly string[]>, winner: Color): boolean {
+  const c = new Chess(fenBefore);
+  const uci: string[] = [];
+  for (const s of sanLine) {
+    let m;
+    try { m = c.move(s); } catch { return false; }
+    if (!m) return false;
+    uci.push(`${m.from}${m.to}${m.promotion ?? ''}`);
+  }
+  if (uci.length === 0) return false;
+  return lineTrust({ fen: fenBefore, uci, plies: uci.length, winner, seconds: seconds.map((s) => [uci[0], ...s]) }).name;
+}
+
 function boardAfter(fen: string, san: string): string | null {
   try { const b = new Chess(fen); b.move(san); return b.fen(); } catch { return null; }
 }
@@ -1343,7 +1369,7 @@ export const BOARD_COMPUTERS = {
     // where the line proves them (`lineTrust`).
     read: (c, fact) => safe(() => {
       if (!c.replies || c.replies.length === 0) return null;
-      const t = ifTheyPlay({ fen: c.fen, replies: c.replies, rating: c.rating, student: c.student, seconds: c.seconds, played: c.played, landed: c.landed });
+      const t = ifTheyPlay({ fen: c.fen, replies: c.replies, rating: c.rating, student: c.student, seconds: c.seconds, played: c.played, landed: c.madeBy ? landedSquare(c.madeBy) : null });
       if (!t || t.branches.length === 0) return null;
       const moverIsStudent = t.replier !== c.student;
       const seat: FactSeat = moverIsStudent ? 'student' : 'opponent';
@@ -1428,7 +1454,7 @@ export const BOARD_COMPUTERS = {
     // that falls for it is a chance on the board — the focus's question.
     read: (c, fact) => safe(() => {
       if (!c.replies || c.replies.length === 0) return null;
-      const t = ifTheyPlay({ fen: c.fen, replies: c.replies, rating: c.rating, student: c.student, seconds: c.seconds, played: c.played, landed: c.landed });
+      const t = ifTheyPlay({ fen: c.fen, replies: c.replies, rating: c.rating, student: c.student, seconds: c.seconds, played: c.played, landed: c.madeBy ? landedSquare(c.madeBy) : null });
       if (!t) return null;
       const b = baitBranch(t, c.student);
       if (!b || b.played) return null;
@@ -1437,7 +1463,7 @@ export const BOARD_COMPUTERS = {
       if (!text) return null;
       const key = `bait:${b.reply.uci}>${b.answer.uci}`;
       return fact({
-        key, claims: [key, `reply-tree:${b.reply.uci}`, ...(c.landed && b.reply.capture && b.reply.to === c.landed ? [`bait-take:${c.landed}`] : [])], text,
+        key, claims: [key, `reply-tree:${b.reply.uci}`, ...((landedOn) => (landedOn && b.reply.capture && b.reply.to === landedOn ? [`bait-take:${landedOn}`] : []))(c.madeBy ? landedSquare(c.madeBy) : null)], text,
         proof: legalLineProof(c.fen, b.uci, lineSeatAt(c.fen, c.student)) ?? NO_PROOF.description,
         squares: nameAnswer ? [b.reply.to, b.answer.to] : [b.reply.to],
         stakes: b.kind === 'mate' ? mateStakes('you', b.blowPlies + 1, true) : { points: b.winPawns ?? 0, plies: b.blowPlies + 1 },
@@ -1838,7 +1864,7 @@ export const BOARD_COMPUTERS = {
       const fenAfter = boardAfter(fenBefore, san);
       if (!fenAfter) return null;
       const top = replies[0];
-      const whiteCp = !top ? null : seatCp({ evaluation: top.cp, mate: top.mate }, 'w');
+      const whiteCp = !top || (top.cp === null && top.mate === null) ? null : seatCp({ evaluation: top.cp ?? 0, mate: top.mate }, 'w');
       const out: CoachFact[] = [];
       for (const defender of ['w', 'b'] as const) {
         const atkCp = whiteCp === null ? null : defender === 'b' ? whiteCp : -whiteCp;
@@ -1923,14 +1949,14 @@ export const BOARD_COMPUTERS = {
   kingSacrifice: {
     // His "Bxh7+ gives up the bishop, but after Kxh7 Ng5+ the king is out in
     // the open" — what the sacrifice opens and the follow-up that proves it.
-    read: ({ fenBefore, san, student, replies }, fact) => safe(() => {
+    read: ({ fenBefore, san, student, replies, seconds }, fact) => safe(() => {
       const top = replies[0];
       if (!top) return null;
       const mover = sideToMove(fenBefore);
       const moverCp = top.cp === null ? null : mover === 'w' ? top.cp : -top.cp;
       const moverMate = top.mate === null ? null : mover === 'w' ? top.mate : -top.mate;
       const k = kingSacrifice(fenBefore, san, top.moves, moverCp, moverMate);
-      if (!k) return null;
+      if (!k || !sacLineNamed(fenBefore, k.line, seconds, k.mover)) return null;
       const text = kingSacrificeLine(k, student);
       const proof = legalLineProof(fenBefore, k.line, lineSeatAt(fenBefore, student), k.outcome === 'mate') ?? NO_PROOF.description;
       const squares = kingSacrificeSquares(k);
@@ -1951,14 +1977,14 @@ export const BOARD_COMPUTERS = {
   deepCombination: {
     // His "Nxe5! looks like it drops the queen, but after …Bxd1 Bxf7+ Ke7 Nd5
     // is mate" — what is given, the forced follow-up, and what it wins.
-    read: ({ fenBefore, san, student, replies }, fact) => safe(() => {
+    read: ({ fenBefore, san, student, replies, seconds }, fact) => safe(() => {
       const top = replies[0];
       if (!top) return null;
       const mover = sideToMove(fenBefore);
       const moverCp = top.cp === null ? null : mover === 'w' ? top.cp : -top.cp;
       const moverMate = top.mate === null ? null : mover === 'w' ? top.mate : -top.mate;
       const d = deepCombination(fenBefore, san, top.moves, moverCp, moverMate);
-      if (!d) return null;
+      if (!d || !sacLineNamed(fenBefore, d.line, seconds, d.mover)) return null;
       const text = deepCombinationLine(d, student, fenBefore);
       const proof = legalLineProof(fenBefore, d.line, lineSeatAt(fenBefore, student), d.outcome === 'mate') ?? NO_PROOF.description;
       const mine = d.mover === student;

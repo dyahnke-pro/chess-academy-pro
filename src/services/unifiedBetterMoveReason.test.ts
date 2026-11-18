@@ -43,7 +43,7 @@ describe('one reason for the better move, on every surface', () => {
       evaluation: 418, preMoveEval: 679, costCp: null, heardVerdict: null, classification: 'mistake',
       bestMoveSan: 'Rxf8+', prevCap: { square: null, capturedValue: 0, net: 0 },
       allSans: [...LINE, 'gxh5'], forcedRunStartPly: null,
-      playedLineUci: [], bestLineUci: BEST_LINE, replyBestSan: null, replyEvaluation: null,
+      playedLineEarlierUci: null, playedLineUci: [], bestLineUci: BEST_LINE, replyBestSan: null, replyEvaluation: null,
     }));
     const quality = facets.find((f) => f.startsWith('[quality]')) ?? '';
     expect(quality).toMatch(/Rxf8\+ was (?:stronger|the better move)|Better was Rxf8\+/);

@@ -242,10 +242,13 @@ export function breakStoppedLine(s: BreakStop, fenBefore: string, whose: 'your' 
     `This stops ${other} ${brk} break before it comes.`,
     `It takes the ${brk} break away from ${whose === 'your' ? 'them' : 'you'}.`,
   ], key);
+  // The break is named once, in the lead (the human voice: never the same
+  // square three times in one line — "…d5 break … …d5 would now just drop the
+  // pawn on d5", the decision baseline 2026-11-18).
   const how = s.how === 'illegal'
     ? s.stop.to === s.brk.to
-      ? `${openSentence(whose)} ${NAME[s.stop.piece]} takes ${s.brk.to} first, so ${brk} can't be played.`
-      : `${openSentence(brk)} can't be played now.`
-    : `${openSentence(brk)} would now just drop the pawn on ${s.brk.to}.`;
+      ? `${openSentence(whose)} ${NAME[s.stop.piece]} takes that square first, so the break can't be played.`
+      : `The break can't be played now.`
+    : `The pawn would just be lost there now.`;
   return `${lead} ${how}`;
 }

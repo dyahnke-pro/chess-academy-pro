@@ -88,7 +88,7 @@ describe('pawnBreak — the break and what it is for', () => {
 
   it('reaches every surface through the one registry, as the S-BREAK teaching move', () => {
     const { fen, lastTo } = at(FRENCH);
-    const f = readBoard('pawnBreak', { fenBefore: fen, san: 'c5', student: 'b', lastTo });
+    const f = readBoard('pawnBreak', { fenBefore: fen, san: 'c5', student: 'b', lastTo, namesStudentMoves: true });
     expect(f?.kind).toBe('pawn-break');
     expect(f?.seat).toBe('student');
     expect(f?.namesStudentMove).toBe(false);
@@ -97,7 +97,7 @@ describe('pawnBreak — the break and what it is for', () => {
     const reached = new Chess(fen);
     reached.move('c5');
     expect(f?.fen).toBe(reached.fen());
-    expect(readBoard('pawnBreak', { fenBefore: fen, san: 'c5', student: 'w', lastTo })?.seat).toBe('opponent');
+    expect(readBoard('pawnBreak', { fenBefore: fen, san: 'c5', student: 'w', lastTo, namesStudentMoves: true })?.seat).toBe('opponent');
     expect(TEACHING_MOVES['pawn-break']).toContain('S-BREAK');
     expect(FACT_GROUP['pawn-break']).toBe('move');
   });

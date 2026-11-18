@@ -19,6 +19,13 @@ import { NO_SECOND_READ } from './inaccuracyCall';
 import { facetLines } from '../test/reviewFacetLines';
 import { buildRejectedTempting } from './playCommentary';
 
+/** The tempting move's stem rotates over three phrasings a seat; a test reads
+ *  the claim, not which phrasing the board drew. */
+const oneStem = (t: string | null | undefined): string => (t ?? '')
+  .replace(/ (?:is tempting here, but it fails|looks natural, but it doesn't work|is the obvious try, but it doesn't hold up)/g, ' STEM')
+  .replace(/ (?:was tempting for them, but it fails|looked natural for them, but it doesn't work|was the obvious try for them, but it doesn't hold up)/g, ' STEM-THEM');
+
+
 interface Fixture { video: string; ply: number; fenBefore: string; played: string; reads: WeighRead[] }
 const FX = JSON.parse(readFileSync('src/test/fixtures/danya-weighed-reads.json', 'utf8')) as Fixture[];
 const game = (video: string): Fixture => {
@@ -73,31 +80,31 @@ describe('(A) the tempting move, refuted — on his games', () => {
   it('7…Ng4 (8urm2D1HhX8): …Nxe4 fails to dxe4', () => {
     const g = game('8urm2D1HhX8');
     const r = temptingRefuted({ fenBefore: g.fenBefore, san: g.played, student: seat(g.fenBefore), rating: 1500, reads: g.reads, priorMove: null });
-    expect(r?.text).toBe('Nxe4 is tempting here, but it fails: they play dxe4 — they win a knight for a pawn.');
+    expect(oneStem(r?.text)).toBe(oneStem('Nxe4 is tempting here, but it fails: they play dxe4 — they win a knight for a pawn.'));
     // One loss is ruled out once, whichever computer said it (the
     // deliberation's claim for the same square).
     expect(r?.claims).toEqual(['tempting:f6e4', 'rule-out:e4']);
     // From the other seat the words turn: their temptation, your refutation.
-    expect(temptingRefuted({ fenBefore: g.fenBefore, san: g.played, student: other(seat(g.fenBefore)), rating: 1500, reads: g.reads, priorMove: null })?.text)
-      .toBe('Nxe4 was tempting for them, but it fails: you play dxe4 — you win a knight for a pawn.');
+    expect(oneStem(temptingRefuted({ fenBefore: g.fenBefore, san: g.played, student: other(seat(g.fenBefore)), rating: 1500, reads: g.reads, priorMove: null })?.text))
+      .toBe(oneStem('Nxe4 was tempting for them, but it fails: you play dxe4 — you win a knight for a pawn.'));
   });
 
   it('14.Nc3 (Di-5aO2lddU): e3 drops the knight on a4', () => {
     const g = game('Di-5aO2lddU');
-    expect(temptingRefuted({ fenBefore: g.fenBefore, san: g.played, student: seat(g.fenBefore), rating: 1500, reads: g.reads, priorMove: null })?.text)
-      .toBe("e3 looks natural, but it doesn't work: they play Qxa4 — they win a knight.");
+    expect(oneStem(temptingRefuted({ fenBefore: g.fenBefore, san: g.played, student: seat(g.fenBefore), rating: 1500, reads: g.reads, priorMove: null })?.text))
+      .toBe(oneStem("e3 looks natural, but it doesn't work: they play Qxa4 — they win a knight."));
   });
 
   it('17…Rb8 (HvrXmUORIcQ): …b6 drops the rook — and it is said before the queen capture that drops more', () => {
     const g = game('HvrXmUORIcQ');
-    expect(temptingRefuted({ fenBefore: g.fenBefore, san: g.played, student: seat(g.fenBefore), rating: 1500, reads: g.reads, priorMove: null })?.text)
-      .toBe("b6 looks natural, but it doesn't work: they play Qxa8 — they win a rook.");
+    expect(oneStem(temptingRefuted({ fenBefore: g.fenBefore, san: g.played, student: seat(g.fenBefore), rating: 1500, reads: g.reads, priorMove: null })?.text))
+      .toBe(oneStem("b6 looks natural, but it doesn't work: they play Qxa8 — they win a rook."));
   });
 
   it('3…g6 (HiCeU8tIh0U): …Nf6 does not stop the mate', () => {
     const g = game('HiCeU8tIh0U');
     const r = temptingRefuted({ fenBefore: g.fenBefore, san: g.played, student: seat(g.fenBefore), rating: 1500, reads: g.reads, priorMove: null });
-    expect(r?.text).toBe("Nf6 is tempting here, but it fails: they play Qxf7#.");
+    expect(oneStem(r?.text)).toBe(oneStem("Nf6 is tempting here, but it fails: they play Qxf7#."));
     expect(r?.claims).toContain('rule-out:mate:f7');
   });
 
@@ -107,7 +114,7 @@ describe('(A) the tempting move, refuted — on his games', () => {
       // c3 (his) and c4 (…dxc3 en passant) lose the same pawn the same way;
       // since later trades stopped reading as material given back
       // (2026-11-13), both are refuted and the likelier, c4, is said.
-      .toMatch(/^c[34] (is tempting here, but it fails|looks natural, but it doesn't work): they play dxc3, you answer bxc3 and they play Rxc3 — they win a pawn\.$/);
+      .toMatch(/^c[34] (is tempting here, but it fails|looks natural, but it doesn't work|is the obvious try, but it doesn't hold up): they play dxc3, you answer bxc3 and they play Rxc3 — they win a pawn\.$/);
   });
 
   it('nothing is ruled out without a read of the move played', () => {
@@ -240,7 +247,7 @@ describe('through the one registry, to every surface', () => {
     const g = game('8urm2D1HhX8');
     const facts = moveThoughtFacts({ plainThreatsSeen: false, story: false, theory: true, tense: 'now', fenBefore: g.fenBefore, san: g.played, moverIsStudent: true, prev: NO_PREV_CAPTURE, line: null, theirLast: null, history: [], phrases: null,
       reads: { before: g.reads.map((r, i) => ({ rank: i + 1, evaluation: r.evaluation, mate: r.mate, moves: [...r.moves] })), passBefore: [], after: [], passAfter: [] }, costCp: null });
-    expect(facts.filter((f) => f.source === 'weighed').map((f) => f.text)).toContain('Nxe4 is tempting here, but it fails: they play dxe4 — they win a knight for a pawn.');
+    expect(facts.filter((f) => f.source === 'weighed').map((f) => oneStem(f.text))).toContain(oneStem('Nxe4 is tempting here, but it fails: they play dxe4 — they win a knight for a pawn.'));
   });
 
   it('Review says them off the record\'s reads, both seats', () => {
@@ -254,11 +261,11 @@ describe('through the one registry, to every surface', () => {
       evaluation: 78, preMoveEval: 70, costCp: null, heardVerdict: null,
       classification: 'good', bestMoveSan: null,
       prevCap: { square: null, capturedValue: 0, net: 0 },
-      allSans: [], forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], secondReads: NO_SECOND_READ,
+      allSans: [], forcedRunStartPly: null, playedLineEarlierUci: null, playedLineUci: [], bestLineUci: [], secondReads: NO_SECOND_READ,
       replyBestSan: null, replyEvaluation: null,
     }));
-    expect(lines('b').join('\n')).toContain('Nxe4 is tempting here, but it fails: they play dxe4 — they win a knight for a pawn.');
-    expect(lines('w').join('\n')).toContain('Nxe4 was tempting for them, but it fails: you play dxe4 — you win a knight for a pawn.');
+    expect(oneStem(lines('b').join('\n'))).toContain(oneStem('Nxe4 is tempting here, but it fails: they play dxe4 — they win a knight for a pawn.'));
+    expect(oneStem(lines('w').join('\n'))).toContain(oneStem('Nxe4 was tempting for them, but it fails: you play dxe4 — you win a knight for a pawn.'));
     // No reads on the record: the engine half is silent, never guessed.
     const bare = facetLines(computeMoveFacets({ seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore: g.fenBefore, fenAfter: after.fen(), san: g.played, ply: 14,
@@ -266,7 +273,7 @@ describe('through the one registry, to every surface', () => {
       evaluation: 78, preMoveEval: 70, costCp: null, heardVerdict: null,
       classification: 'good', bestMoveSan: null,
       prevCap: { square: null, capturedValue: 0, net: 0 },
-      allSans: [], forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], secondReads: NO_SECOND_READ,
+      allSans: [], forcedRunStartPly: null, playedLineEarlierUci: null, playedLineUci: [], bestLineUci: [], secondReads: NO_SECOND_READ,
       replyBestSan: null, replyEvaluation: null,
     }));
     expect(bare.join('\n')).not.toContain('tempting');

@@ -41,7 +41,7 @@ describe('breakStopped', () => {
     const s = breakStopped(A4, 'a4');
     expect(s?.brk.san).toBe('b5');
     expect(s?.how).toBe('drops-pawn');
-    expect(breakStoppedLine(s!, A4, 'your')).toMatch(/…b5 would now just drop the pawn on b5\./);
+    expect(breakStoppedLine(s!, A4, 'your')).toMatch(/…b5 break.*The pawn would just be lost there now\./);
   });
 
   it('Bf7 takes …g6 away', () => {

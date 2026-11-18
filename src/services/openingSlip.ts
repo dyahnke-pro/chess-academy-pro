@@ -314,12 +314,15 @@ function bookJob(fen: string, bookSan: string, playedSan: string, student: Color
  * `book`), or null when the move is the book's or the board says it does not
  * matter. `student` is REQUIRED: every sentence is said from their seat.
  */
-/** The book move with its job, when the tactics do not change (`plain`). */
-function plainBook(fen: string, bookSan: string, playedSan: string, playedTo: string, bookTo: string, student: Color, W: { The: string; move: string }, key: number, kind: 'order' | 'line'): OpeningSlip {
+/** The book move with its job, when the tactics do not change (`plain`).
+ *  Never bare: without the book square's job there is nothing to teach, so
+ *  nothing is said (the book move named only WITH its job). */
+function plainBook(fen: string, bookSan: string, playedSan: string, playedTo: string, bookTo: string, student: Color, W: { The: string; move: string }, key: number, kind: 'order' | 'line'): OpeningSlip | null {
+  const job = bookJob(fen, bookSan, playedSan, student);
+  if (!job) return null;
   const B = sayMoveNoun(bookSan, fen);
   const lead = rotateStem([`${W.The} plays ${B} here.`, `${openSentence(B)} was ${W.move}.`], key);
-  const job = bookJob(fen, bookSan, playedSan, student);
-  return { kind, bookSan, text: [lead, job?.text].filter(Boolean).join(' '), squares: [...new Set([playedTo, bookTo, ...(job?.squares ?? [])])], created: null, lost: null };
+  return { kind, bookSan, text: `${lead} ${job.text}`, squares: [...new Set([playedTo, bookTo, ...job.squares])], created: null, lost: null };
 }
 
 export function openingSlip(i: {
@@ -347,7 +350,7 @@ export function openingSlip(i: {
     if (!bk) return null;
     const created = createdShot(bk.board, played.board, played.mv, student);
     const job = bookJob(fen, sameSan, played.mv.san, student);
-    if (!created && !job && !i.plain) return null;
+    if (!created && !job) return null;
     const B = sayMoveNoun(sameSan, fen);
     const piece = NAME[played.mv.piece];
     const lead = rotateStem([

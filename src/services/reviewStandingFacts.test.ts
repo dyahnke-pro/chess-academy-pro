@@ -19,7 +19,7 @@ const facts = (san: string): string[] => {
     evaluation: 300, preMoveEval: 300, costCp: 0, heardVerdict: null,
     classification: 'great', bestMoveSan: null,
     prevCap: { square: null, capturedValue: 0, net: 0 },
-    allSans: [], forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], secondReads: NO_SECOND_READ,
+    allSans: [], forcedRunStartPly: null, playedLineEarlierUci: null, playedLineUci: [], bestLineUci: [], secondReads: NO_SECOND_READ,
     replyBestSan: null, replyEvaluation: null,
   }));
 };

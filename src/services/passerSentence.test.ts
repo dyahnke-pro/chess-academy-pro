@@ -40,7 +40,7 @@ describe('a passed pawn is said as what the board makes of it', () => {
       .toBe('Your passed pawn on a2 is a long-term trump — every trade that clears its path makes it stronger.');
   });
   it('the position read never tells you to blockade a passer your piece already blockades', () => {
-    const r = assemblePositionAssessment({ tempting: null, evalCp: -876, mateIn: null, studentColor: 'white', fen: '2kr4/ppp3Pp/4RP1B/2r5/5P2/8/PP1p3P/3K4 w - - 0 30', bestUci: 'e6e3' });
+    const r = assemblePositionAssessment({ line: null, tempting: null, evalCp: -876, mateIn: null, studentColor: 'white', fen: '2kr4/ppp3Pp/4RP1B/2r5/5P2/8/PP1p3P/3K4 w - - 0 30', bestUci: 'e6e3' });
     expect(r?.facts ?? '').not.toMatch(/d2 is the danger/);
     expect((r?.facts ?? '').match(/d2/g)?.length ?? 0).toBeLessThanOrEqual(1);
   });

@@ -65,7 +65,7 @@ import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 import { FUNDAMENTAL_HABIT, habitIsOwed, type MethodHabit } from './methodBeat';
 import { noteSlip } from './learnBoardTeaching';
 import { readBoard, readBoardAll, readKey } from './boardComputers';
-import { replyReadsFromFan, repliesNotWeighed, landedSquare, type ReplyRead } from './ifTheyPlay';
+import { replyReadsFromFan, repliesNotWeighed, type ReplyRead } from './ifTheyPlay';
 import { proofCut, describeProofResult, NO_FOLLOW, type LineProof } from './exchangeLedger';
 import { computeMoveFacets, prematureBreakWhy, INFLUENCE_LOOSE_TAIL_RE, positionalVerdictLine } from './reviewFullData';
 import { mainConceptLine } from './slipDepth';
@@ -2352,6 +2352,7 @@ function* reviewSegmentSteps(
         bestMoveSan,
         bestLineUci: m.bestMove ? [m.bestMove, ...(m.pv?.afterBest ?? [])] : [],
         playedLineUci: m.pv?.afterPlayed ?? [],
+        playedLineEarlierUci: m.pv?.earlierPlayed ?? null,
         secondReads: recordSecondReads(m.pv),
         replyBestSan: i + 1 < moves.length ? uciToSanAt(moves[i + 1].bestMove ?? null, fenPair.fenAfter) : null,
         replyEvaluation: i + 1 < moves.length ? moves[i + 1].evaluation ?? null : null,
@@ -5403,7 +5404,7 @@ async function augmentWithProjections(
       try { const m = next ? new Chess(s.fenAfter).move(next.san) : null; played = m ? `${m.from}${m.to}${m.promotion ?? ''}` : null; } catch { played = null; }
       const treeCtx = {
         fen: s.fenAfter, replies, rating, student: studentColorWB,
-        seconds: [s.recordReplyLine ?? null, s.recordReplyEarlier ?? null], played, tense: 'past' as const, liveBoard: null, landed: landedSquare(s.san),
+        seconds: [s.recordReplyLine ?? null, s.recordReplyEarlier ?? null], played, tense: 'past' as const, liveBoard: null, madeBy: s.san,
       };
       // THE BAIT (WO-COACH-NEXT-TO-YOU-01 C4): the trap the student's move set,
       // said before the tree's other branches (the tree no longer repeats it).

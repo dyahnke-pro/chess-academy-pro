@@ -57,7 +57,7 @@ describe('the in-between move', () => {
 describe('the reply tree tells two of a kind apart', () => {
   it('"with the knight" names which knight when both can take (…Bxd2+ in the Queen’s Indian)', () => {
     const fen = 'rn1qk2r/pbpp1ppp/1p2pn2/8/2PP4/5NP1/PP1bPPBP/RN1QK2R w KQkq - 0 7';
-    const tree: ReplyTree = { fen, replier: 'w', branches: [], held: [], bestCp: 20 };
+    const tree: ReplyTree = { fen, replier: 'w', branches: [], held: [], bestCp: 20, landed: null, baitTakes: [] };
     const branch: ReplyBranch = {
       reply: { uci: 'f3d2', san: 'Nfxd2', from: 'f3', to: 'd2', capture: true, check: false, castle: false },
       p: 0.1, engineBest: false, played: false, answer: { uci: 'b7g2', san: 'Bxg2', to: 'g2', piece: 'b' }, kind: 'job',

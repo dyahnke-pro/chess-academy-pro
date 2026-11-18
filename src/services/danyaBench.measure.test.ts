@@ -436,7 +436,7 @@ const reviewFacets = once((p: Position): string[] => {
     moverColor: p.mover === 'w' ? 'white' : 'black', playerColor: p.student === 'w' ? 'white' : 'black',
     studentColorWB: p.student, evaluation: p.reply ? evalOf(p.reply) : null,
     preMoveEval: best ? evalOf(best) : null, costCp: costCp(p), heardVerdict: null, classification: null,
-    bestMoveSan: bestSan, bestLineUci: best?.pv ?? [], playedLineUci: playedUci ? [playedUci, ...(p.reply?.pv ?? [])] : [],
+    bestMoveSan: bestSan, bestLineUci: best?.pv ?? [], playedLineEarlierUci: null, playedLineUci: playedUci ? [playedUci, ...(p.reply?.pv ?? [])] : [],
     secondReads: NO_SECOND_READ, replyBestSan: replySan, replyEvaluation: p.reply ? evalOf(p.reply) : null,
     prevCap: p.prev, allSans: [...p.note.lineSan, ...p.ahead], forcedRunStartPly: null, seenFundamentals: new Set(),
     teaching: NO_TEACHING_CONTEXT,

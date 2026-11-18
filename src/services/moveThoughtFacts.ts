@@ -61,7 +61,6 @@ import type { LearnLane } from './learnTurnDoor';
 import { computeMustDefend } from './threatOut';
 import { moveOrder } from './moveOrder';
 import { readBoardAll, readKey } from './boardComputers';
-import { landedSquare } from './ifTheyPlay';
 import { detectTactics } from './tacticsDetector';
 import { thinkStepOf } from './thinkingComputers';
 import { desperadoAt, desperadoLine } from './desperado';
@@ -826,6 +825,9 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     }
     {
       const replies = (i.reads?.after ?? []).map((l) => ({ cp: l.evaluation, mate: l.mate ?? null, moves: l.moves }));
+      // The top line's second read (the search two depths shallower): a
+      // sacrifice's line is named by the one naming rule.
+      const topSeconds = ((e) => (e && e.length > 0 ? [e] : []))(i.reads?.after[0]?.earlier?.moves);
       for (const f of readBoardAll('bothSaved', { fenBefore: i.fenBefore, san: i.san, student, replies })) {
         facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'rescue', weight: 64 });
       }
@@ -881,12 +883,12 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       for (const f of readBoardAll('loadedDiscovery', { fenBefore: i.fenBefore, san: i.san, student })) {
         facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'tactic', weight: 66 });
       }
-      for (const f of readBoardAll('kingSacrifice', { fenBefore: i.fenBefore, san: i.san, student, replies })) {
+      for (const f of readBoardAll('kingSacrifice', { fenBefore: i.fenBefore, san: i.san, student, replies, seconds: topSeconds })) {
         facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'attack-king', weight: 70 });
       }
       // The hidden combination (group 8), both seats: material given away from
       // the king, and the forced line that wins it back with interest or mates.
-      for (const f of readBoardAll('deepCombination', { fenBefore: i.fenBefore, san: i.san, student, replies })) {
+      for (const f of readBoardAll('deepCombination', { fenBefore: i.fenBefore, san: i.san, student, replies, seconds: topSeconds })) {
         const mate = !!(f.stakes && 'mate' in f.stakes && f.stakes.mate);
         facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: mate ? 'mate' : 'win-material', weight: 70 });
       }
@@ -1038,13 +1040,13 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     const student = mine ? sideOf(i.fenBefore) : sideOf(fenAfter);
     let next: string | null = null;
     try { const m = i.line?.[0] ? new Chess(fenAfter).move(i.line[0]) : null; next = m ? `${m.from}${m.to}${m.promotion ?? ''}` : null; } catch { next = null; }
-    for (const f of readBoardAll('ifTheyPlay', { fen: fenAfter, replies: every.replies, rating: every.rating, student, seconds: (i.reads?.after ?? []).map((l) => l.moves), played: next, tense: 'live', liveBoard: null, landed: landedSquare(i.san) })) {
+    for (const f of readBoardAll('ifTheyPlay', { fen: fenAfter, replies: every.replies, rating: every.rating, student, seconds: (i.reads?.after ?? []).map((l) => l.moves), played: next, tense: 'live', liveBoard: null, madeBy: i.san })) {
       const { heldForm: _held, ...fact } = f;
       facts.push({ ...fact, namesStudentMove: false, source: 'ifTheyPlay', idea: fact.stakes && 'mate' in fact.stakes && fact.stakes.mate ? 'mate' : 'choice', weight: 60 });
     }
     // THE BAIT (WO-COACH-NEXT-TO-YOU-01 C4): the trap the student's move set —
     // the reply many players at this level choose that loses.
-    for (const f of readBoardAll('baitSet', { fen: fenAfter, replies: every.replies, rating: every.rating, student, seconds: (i.reads?.after ?? []).map((l) => l.moves), played: next, tense: 'live', liveBoard: null, landed: landedSquare(i.san) })) {
+    for (const f of readBoardAll('baitSet', { fen: fenAfter, replies: every.replies, rating: every.rating, student, seconds: (i.reads?.after ?? []).map((l) => l.moves), played: next, tense: 'live', liveBoard: null, madeBy: i.san })) {
       facts.push({ ...f, namesStudentMove: false, source: 'baitSet', idea: f.stakes && 'mate' in f.stakes && f.stakes.mate ? 'mate' : 'choice', weight: 60 });
     }
   }

@@ -75,7 +75,7 @@ describe('deepCombination — the sacrifice the shallow read does not show', () 
   });
   it('the position read says the hidden sacrifice of the best line', () => {
     const l = line('the-tactical-detector#0');
-    const read = assemblePositionAssessment({ evalCp: l.top.evaluation, mateIn: l.top.mate, studentColor: 'white', fen: l.fen, bestUci: l.top.moves[0], line: l.top.moves });
+    const read = assemblePositionAssessment({ tempting: null, evalCp: l.top.evaluation, mateIn: l.top.mate, studentColor: 'white', fen: l.fen, bestUci: l.top.moves[0], line: l.top.moves });
     expect(read?.facts).toContain('Nf6+ gives up your knight on f6');
     expect(read?.keySquares).toContain('f6');
   });
@@ -83,12 +83,16 @@ describe('deepCombination — the sacrifice the shallow read does not show', () 
     const l = line('the-blitz-chess-manifesto#1');
     const b = best(l);
     const replies = [{ cp: l.top.evaluation, mate: l.top.mate, moves: l.top.moves.slice(1) }];
-    const [mine] = readBoardAll('deepCombination', { fenBefore: l.fen, san: b.san, student: 'w', replies });
+    // A second read that plays the same line, so the one naming rule names it.
+    const seconds = [replies[0].moves];
+    const [mine] = readBoardAll('deepCombination', { fenBefore: l.fen, san: b.san, student: 'w', replies, seconds });
     expect(mine).toMatchObject({ computer: 'deepCombination', seat: 'student' });
     expect(mine.stakes).toMatchObject({ points: 2 });
-    const [theirs] = readBoardAll('deepCombination', { fenBefore: l.fen, san: b.san, student: 'b', replies });
+    const [theirs] = readBoardAll('deepCombination', { fenBefore: l.fen, san: b.san, student: 'b', replies, seconds });
     expect(theirs.seat).toBe('opponent');
     expect(theirs.text).toContain('their rook on f7');
+    // On one read a line past two moves is not named (lineTrust).
+    expect(readBoardAll('deepCombination', { fenBefore: l.fen, san: b.san, student: 'w', replies, seconds: [] })).toEqual([]);
   });
 });
 
@@ -159,7 +163,7 @@ describe('poisonedPiece, by the line — every capture of the piece loses', () =
     const student = new Chess(f.before).turn();
     const [p] = readBoardAll('poisonedPiece', { fenBefore: f.before, san, student, fan: { replies: replyReadsFromFan(f.fen, f.reads), rating: 1500 } });
     expect(p.claims).toContain('bait-take:a4');
-    const [bait] = readBoardAll('baitSet', { fen: f.fen, replies: replyReadsFromFan(f.fen, f.reads), rating: 1500, student, seconds: [], played: null, tense: 'live', liveBoard: null, landed: 'a4' });
+    const [bait] = readBoardAll('baitSet', { fen: f.fen, replies: replyReadsFromFan(f.fen, f.reads), rating: 1500, student, seconds: [], played: null, tense: 'live', liveBoard: null, madeBy: san });
     expect(bait.claims).toContain('bait-take:a4');
     // With no read of every reply, only the mate version can speak.
     expect(readBoardAll('poisonedPiece', { fenBefore: f.before, san, student, fan: null })).toEqual([]);

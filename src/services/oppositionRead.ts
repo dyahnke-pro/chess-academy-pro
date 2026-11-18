@@ -27,6 +27,7 @@ import { Chess, type Color, type Square } from 'chess.js';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { orList } from '../utils/andList';
 import { raceCountOn } from './raceCount';
+import { sideToMoveAs } from './threatOut';
 
 export type OppositionKind = 'direct' | 'distant' | 'diagonal';
 

@@ -15,7 +15,7 @@ const facetsFor = (fenBefore: string, san: string): string[] => {
     seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
     fenBefore, fenAfter: c.fen(), san, ply: 2, moverColor: 'black', playerColor: 'white', studentColorWB: 'w',
     evaluation: 0, preMoveEval: 0, costCp: null, heardVerdict: null, classification: 'good', bestMoveSan: null, prevCap: { square: null, capturedValue: 0, net: 0 },
-    allSans: ['Bb5', san], forcedRunStartPly: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
+    allSans: ['Bb5', san], forcedRunStartPly: null, playedLineEarlierUci: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null,
   }));
 };
 

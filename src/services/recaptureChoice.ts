@@ -113,7 +113,12 @@ export function recaptureChoice(
   fenBefore: string,
   playedSan: string,
   /** Their actual answer to the recapture, SAN without dots, when known. */
-  theirReply: string | null = null,
+  theirReply: string | null,
+  /** REQUIRED — may the line name the recapture played? Review and the
+   *  lessons name it ("Nxd4 — the knight lands …"); Learn never names the
+   *  student's own move, so there it is "that recapture" (LEARN NAMES NO
+   *  MOVE UNASKED). */
+  namesPlayedMove: boolean,
 ): string | null {
   let played: Move; const b = new Chess(fenBefore);
   try { played = b.move(playedSan); } catch { return null; }
@@ -135,17 +140,15 @@ export function recaptureChoice(
   // The SAN says which piece takes back ("exd5" is spoken "e-pawn takes
   // d5"); "exd5, taking back with the e-pawn" said the capture twice (David
   // 2026-10-30).
-  // THE PLAYED MOVE IS NEVER NAMED HERE (prod Review audit 2026-11-18: "You
-  // played exd5 — … exd5, not Qxd5, which would …"): Review's turn names it
-  // in its lead, and Learn never names the student's own move, so the line
-  // says what the recapture does and what the other one would cost.
+  // LEARN NEVER NAMES THE STUDENT'S OWN MOVE: there the line says what "that
+  // recapture" does and what the other one would cost.
   const plusWords = (x: string): string => openSentence(x.replace(/^it /, 'that recapture '));
-  if (good && bad) return `${plusWords(good)}. ${openSentence(`${O} ${bad}`)}.`;
+  if (good && bad) return namesPlayedMove ? `${P} — ${good}. ${openSentence(`${O} ${bad}`)}.` : `${plusWords(good)}. ${openSentence(`${O} ${bad}`)}.`;
   // A PLACEMENT ALONE IS THE BOARD (Review noise walk 2026-10-20: "Nxe5,
   // taking back with the knight: the knight lands in the centre on e5" said
   // with no contrast). Where the piece lands earns a line only against what
   // the other recapture would cost; on its own only a consequence speaks.
-  if (good && !PLACEMENT_ONLY.test(good)) return `${plusWords(good)}.`;
-  if (bad) return `Not ${O}, which ${bad}.`;
+  if (good && !PLACEMENT_ONLY.test(good)) return namesPlayedMove ? `${P}: ${good}.` : `${plusWords(good)}.`;
+  if (bad) return namesPlayedMove ? `${P}, not ${O}, which ${bad}.` : `Not ${O}, which ${bad}.`;
   return null;
 }

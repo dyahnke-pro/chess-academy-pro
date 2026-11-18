@@ -38,6 +38,10 @@ function exportedFns(src: string): string[] {
 // narration renderers, and computers already reached THROUGH another chat lane.
 // Adding a name here is a deliberate, reviewed exception; keep it justified.
 const NOT_A_CHAT_LANE = new Set<string>([
+  // a check inside the weak-pawn read (WO-DANYA-READS-01, 2026-11-18): an
+  // isolated pawn is said only when the other side can bring a piece to bear
+  // on it; the fact the chat says is the weak pawn, never this test
+  'canBeAimedAt',
   // the one "does that move just drop something" helper (WO-SPEEDRUN-01 S2):
   // a check other reads run, never a fact said on its own
   'bestCaptureGainFor',

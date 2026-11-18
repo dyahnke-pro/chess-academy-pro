@@ -9,7 +9,8 @@ import { Chess } from 'chess.js';
 // G0: every sentence returned is computed; the caller's model only phrases
 // them, most-important-first, in the order returned.
 import { readHabit } from './methodBeat';
-import { temptingOnBoard, type WeighRead } from './weighedMoves';
+import { temptingOnBoard } from './weighedMoves';
+import { temptingReads } from './movePurposeEngine';
 import { buildFedTacticsContext, speakDeepestLookahead } from './liveTacticsContext';
 import { readPosition } from './positionalRead';
 import { detectPhase } from './narratedContinuation';
@@ -66,11 +67,12 @@ interface PositionReadInput {
    *  the move) stays quiet, and any line naming the move or its squares is
    *  dropped — the read teaches the POSITION, never the answer. */
   withhold: string | null;
-  /** REQUIRED — the reads of the moves a player is drawn to here
-   *  (`movePurposeEngine.temptingReads`) and the rating the eye was read at,
-   *  or null where the caller took none. The tempting move that fails is said
-   *  from it (WO-DANYA-READS-01 group 4). */
-  tempting: { rating: number; reads: readonly WeighRead[] } | null;
+  /** REQUIRED — read the moves a player is drawn to here
+   *  (`movePurposeEngine.temptingReads`, at `rating`, from the engine's best
+   *  line in `analysis`) so the tempting move that fails is said
+   *  (WO-DANYA-READS-01 group 4). The composer reads them itself, so a
+   *  surface never imports the computer. Never on a withheld board. */
+  readTempting: boolean;
 }
 
 /** The SAN and the two squares a withheld move would reveal. */
@@ -175,9 +177,12 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
   //    own line. The student's turn only, and never on a puzzle still being
   //    solved — ruling a move out narrows the answer.
   let temptingLine = '';
-  if (i.tempting && !marks && i.fen.split(' ')[1] === studentCC) {
+  const topLine = i.analysis?.topLines?.find((l) => l.rank === 1) ?? null;
+  if (i.readTempting && topLine && !marks && !i.withhold && i.fen.split(' ')[1] === studentCC) {
+    const reads = await temptingReads(i.fen, i.rating, topLine).catch(() => null);
+    if (i.isCancelled()) return '';
     try {
-      const t = temptingOnBoard({ fen: i.fen, student: studentCC, rating: i.tempting.rating, reads: i.tempting.reads, priorMove: null })[0];
+      const t = reads ? temptingOnBoard({ fen: i.fen, student: studentCC, rating: i.rating, reads, priorMove: null })[0] : undefined;
       if (t && !positionFactsBlock.includes(t.san)) temptingLine = t.text;
     } catch { temptingLine = ''; }
   }

@@ -13,7 +13,7 @@ const at = (key: string): P => {
 describe('recaptureChoice — which piece takes back, and why', () => {
   it('knight, not queen: "a queen on d4 would be vulnerable to …c5"', () => {
     const p = at('IMBSR0A9nJs:11');
-    const out = recaptureChoice(p.fen, p.san);
+    const out = recaptureChoice(p.fen, p.san, null, false);
     expect(out).toMatch(/^The knight lands in the centre on d4\./);
     expect(out).not.toMatch(/Nxd4/); // the played move is the turn's to name (or Learn's never)
     expect(out).toMatch(/Qxd4 would put the queen on d4, where …c5 hits it/);
@@ -23,26 +23,28 @@ describe('recaptureChoice — which piece takes back, and why', () => {
     // They answered Nxd4 with …c5, which hits the knight too — so "a queen on
     // d4 would be hit by …c5" is no difference between the two recaptures.
     const p = at('IMBSR0A9nJs:11');
-    expect(recaptureChoice(p.fen, p.san, 'c5') ?? '').not.toMatch(/c5 hits it/);
+    expect(recaptureChoice(p.fen, p.san, 'c5', false) ?? '').not.toMatch(/c5 hits it/);
   });
 
   it('queen, not the pawn: "keeping the structure intact"', () => {
     const p = at('Dj_hLEdDpAg:12');
-    expect(recaptureChoice(p.fen, p.san)).toBe('Not …bxc6, which would double your pawns on the c-file.');
+    expect(recaptureChoice(p.fen, p.san, null, false)).toBe('Not …bxc6, which would double your pawns on the c-file.');
+    // Review and the lessons name the recapture played; Learn never does.
+    expect(recaptureChoice(p.fen, p.san, null, true)).toBe('…Qxc6, not …bxc6, which would double your pawns on the c-file.');
   });
 
   it('never names a better recapture — a faulty one is the grade\'s to explain', () => {
     const p = at('CQFSXmfxMV8:47');
-    expect(recaptureChoice(p.fen, p.san) ?? '').not.toMatch(/Better to take back/);
+    expect(recaptureChoice(p.fen, p.san, null, false) ?? '').not.toMatch(/Better to take back/);
   });
 
   it('says nothing for a move that is not a capture', () => {
-    expect(recaptureChoice('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'e4')).toBeNull();
+    expect(recaptureChoice('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'e4', null, false)).toBeNull();
   });
 
   it('says nothing when only one piece can take back', () => {
     // 1.e4 d5 2.exd5 — only the queen can take back on d5.
-    expect(recaptureChoice('rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2', 'Qxd5')).toBeNull();
+    expect(recaptureChoice('rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2', 'Qxd5', null, false)).toBeNull();
   });
 });
 
@@ -50,7 +52,7 @@ describe('recaptureChoice — only a difference is spoken', () => {
   it('two pawn recaptures that both double the c-pawns never blame just one', () => {
     // White pawns b2 c2 d2; Black's knight has taken on c3.
     const fen = '4k3/8/8/8/8/2n5/1PPP4/4K3 w - - 0 1';
-    const line = recaptureChoice(fen, 'dxc3');
+    const line = recaptureChoice(fen, 'dxc3', null, false);
     expect(line ?? '').not.toMatch(/double/);
   });
 });
@@ -59,7 +61,7 @@ describe('recaptureChoice — a placement alone is not a reason (Review noise wa
   it('…Nxe5 with no cost on the other recapture says nothing, not "the knight lands in the centre on e5"', () => {
     // 1.e4 c5 2.Nf3 Nc6 3.d4 cxd4 4.Nxd4 e5?! … reduced: Black takes back on e5 with knight or d-pawn.
     const fen = 'r1bqkb1r/pp3ppp/2np1n2/4P3/8/2N5/PPP2PPP/R1BQKBNR b KQkq - 0 6';
-    const out = recaptureChoice(fen, 'Nxe5');
+    const out = recaptureChoice(fen, 'Nxe5', null, false);
     expect(out ?? '').not.toMatch(/lands in the centre/);
   });
 });

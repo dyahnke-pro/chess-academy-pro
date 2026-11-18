@@ -354,7 +354,6 @@ import { samePosition, positionOf } from '../../utils/samePosition';
 import { legalLineProof, lineProof, lineProofFromUci, isProof, squaresProof, walkableLine, NO_PROOF, type FactProof } from '../../services/proof';
 import { lineSeatAt, withArticle } from '../../utils/andList';
 import { readBoard, readBoardAll, readKey, adoptPlanTrial, type PlanThread, type BoardContexts } from '../../services/boardComputers';
-import { landedSquare } from '../../services/ifTheyPlay';
 import type { CoachFact, ComputerName, HeldForm } from '../../services/coachFact';
 import { splitThink, stripThink, resolveOwed, THINK_MARK } from '../../utils/thinkPause';
 import { scheduleMarks } from '../../services/markPacing';
@@ -10185,7 +10184,7 @@ export function CoachTeachPage({ mode }: {
       try {
         const m = new Chess(args.fenBeforeReply).move(h[h.length - 1]);
         const played = m ? `${m.from}${m.to}${m.promotion ?? ''}` : null;
-        return readBoardAll('ifTheyPlay', { fen: args.fenBeforeReply, replies: read.scored, rating: read.rating, student: studentCC, seconds: [], played, tense: 'past', liveBoard: args.fenAfterReply, landed: h.length >= 2 ? landedSquare(h[h.length - 2]) : null })
+        return readBoardAll('ifTheyPlay', { fen: args.fenBeforeReply, replies: read.scored, rating: read.rating, student: studentCC, seconds: [], played, tense: 'past', liveBoard: args.fenAfterReply, madeBy: h.length >= 2 ? h[h.length - 2] : null })
           .map((f) => ({ namesStudentMove: f.namesStudentMove, lane: 'ifTheyPlay' as const, computer: f.computer, text: f.text, fen: f.fen, squares: f.squares, claims: f.claims, proof: f.proof, ...(f.heldForm ? { heldForm: f.heldForm } : {}) }));
       } catch { return []; }
     })();
@@ -10202,7 +10201,7 @@ export function CoachTeachPage({ mode }: {
       try {
         const m = new Chess(args.fenBeforeReply).move(h[h.length - 1]);
         const played = m ? `${m.from}${m.to}${m.promotion ?? ''}` : null;
-        return readBoardAll('baitSet', { fen: args.fenBeforeReply, replies: read.scored, rating: read.rating, student: studentCC, seconds: [], played, tense: 'past', liveBoard: args.fenAfterReply, landed: h.length >= 2 ? landedSquare(h[h.length - 2]) : null })
+        return readBoardAll('baitSet', { fen: args.fenBeforeReply, replies: read.scored, rating: read.rating, student: studentCC, seconds: [], played, tense: 'past', liveBoard: args.fenAfterReply, madeBy: h.length >= 2 ? h[h.length - 2] : null })
           .map((f) => ({ namesStudentMove: f.namesStudentMove, lane: 'baitSet' as const, computer: f.computer, text: f.text, fen: f.fen, squares: f.squares, claims: f.claims, proof: f.proof, stakes: f.stakes, ...(f.lines ? { lines: f.lines } : {}) }));
       } catch { return []; }
     })();

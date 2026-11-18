@@ -25,8 +25,10 @@ describe('the tempting move that fails is never capped by a count (G4.5, 2026-10
     // One claim for the one move ruled out, wherever it is said first
     // (`conceptKey.temptingKey`, wire-19 2026-11-08): the question before the
     // move and the weighed moves after it share the key.
-    expect(readFileSync('src/services/playCommentary.ts', 'utf8')).toMatch(/claim: temptingKey\(/);
-    expect(readFileSync('src/services/weighedMoves.ts', 'utf8')).toMatch(/temptingKey\(c\.uci\)/);
+    // The question before the move reads the weighed move itself
+    // (`temptingOnBoard`), so its claim is the key the weighed move carries.
+    expect(readFileSync('src/services/playCommentary.ts', 'utf8')).toMatch(/claim: t\.key/);
+    expect(readFileSync('src/services/weighedMoves.ts', 'utf8')).toMatch(/const key = temptingKey\(c\.uci\)/);
   });
 });
 
