@@ -757,6 +757,66 @@ function landsSafely(fen: string, from: Square, to: Square, owner: Color): boole
   } catch { return false; }
 }
 
+/** A knight or bishop of `color` that can stand on the empty `target` within
+ *  two moves and hold it: each step a legal move, the stop on the way not
+ *  simply won, the landing safe (`landsSafely`). The same reach as
+ *  `minorRouteToSquare` + `landsSafely`, searched from the target outward (a
+ *  knight's squares, a bishop's open diagonals) so it stays cheap on every ply
+ *  of a review walk. Returns the piece that gets there. */
+function minorSettles(fen: string, target: Square, color: Color, owner: Color): 'n' | 'b' | null {
+  // A check on the board now does not change which squares a minor can
+  // settle on for good: read with `color` to move either way.
+  const start = asIfToMove(fen, color) ?? forceTurn(fen, color);
+  let chess: Chess;
+  try { chess = new Chess(start); } catch { return null; }
+  const isMinor = (sq: Square, t: 'n' | 'b'): boolean => { const p = chess.get(sq); return !!p && p.color === color && p.type === t; };
+  const legal = (from: Square, to: Square): boolean => {
+    try { return chess.moves({ square: from, verbose: true }).some((m) => m.to === to && !m.captured); } catch { return false; }
+  };
+  const holdsStop = (from: Square, mid: Square): boolean => {
+    try {
+      const b = new Chess(start);
+      const piece = b.remove(from);
+      if (!piece) return false;
+      b.put(piece, mid);
+      return legalSeeGainFor(b.fen(), mid, owner) <= 0;
+    } catch { return false; }
+  };
+  const viaThen = (from: Square, mid: Square): boolean => {
+    try {
+      const b = new Chess(start);
+      const piece = b.remove(from);
+      if (!piece) return false;
+      b.put(piece, mid);
+      return landsSafely(b.fen(), mid, target, owner);
+    } catch { return false; }
+  };
+  for (const t of ['n', 'b'] as const) {
+    for (const a of chess.attackers(target, color)) {
+      if (isMinor(a, t) && legal(a, target) && landsSafely(fen, a, target, owner)) return t;
+    }
+  }
+  const tf = target.charCodeAt(0) - 97;
+  const tr = Number(target[1]);
+  const at = (f: number, r: number): Square | null => (f < 0 || f > 7 || r < 1 || r > 8 ? null : `${String.fromCharCode(97 + f)}${r}` as Square);
+  const mids: { mid: Square; t: 'n' | 'b' }[] = [];
+  for (const [df, dr] of KNIGHT_STEPS) { const m = at(tf + df, tr + dr); if (m && !chess.get(m)) mids.push({ mid: m, t: 'n' }); }
+  for (const [df, dr] of [[1, 1], [1, -1], [-1, 1], [-1, -1]]) {
+    for (let k = 1; k < 8; k += 1) {
+      const m = at(tf + df * k, tr + dr * k);
+      if (!m || chess.get(m)) break;
+      mids.push({ mid: m, t: 'b' });
+    }
+  }
+  for (const { mid, t } of mids) {
+    for (const a of chess.attackers(mid, color)) {
+      if (!isMinor(a, t) || !legal(a, mid) || !holdsStop(a, mid)) continue;
+      if (viaThen(a, mid)) return t;
+    }
+  }
+  return null;
+}
+
 interface ColorComplexWeakness {
   /** The side whose complex is weak. */
   side: Color;
@@ -811,15 +871,23 @@ export function findColorComplexWeakness(fen: string): ColorComplexWeakness[] {
       // THE WEAKNESS IS ONE THEY CAN USE NOW (Danya article boards 2026-11-18:
       // "your dark squares are weak … their knight can settle there" on board
       // after board where no knight could get to one). A hole of the complex
-      // must be one their minor reaches within two moves and holds
-      // (`holeTargets`: empty, no minor of ours covering it, landing safe),
+      // must be one their minor reaches within two moves and holds (empty, no
+      // minor of ours covering it, landing safe — `holeTargets`' own test),
       // and off the rim — a piece parked on the a- or h-file is not what
       // makes a colour complex hurt.
-      const usable = holeTargets(fen, side, enemy)
-        .filter((h) => cHoles.includes(h) && h[0] !== 'a' && h[0] !== 'h');
-      if (usable.length === 0) continue;
-      const route = minorRouteToSquare(fen, usable[0], enemy, 2);
-      const by = route?.piece === 'b' ? 'bishop' : 'knight';
+      // The same test as `holeTargets`, cheapest checks first and stopping at
+      // the first hole that passes (this runs on every ply of a review walk).
+      const ownerMinorCovers = (sq: Square): boolean =>
+        chess.attackers(sq, side).some((a) => { const t = chess.get(a)?.type; return t === 'n' || t === 'b'; });
+      let by: 'knight' | 'bishop' | null = null;
+      for (const h of cHoles) {
+        if (h[0] === 'a' || h[0] === 'h' || chess.get(h) || ownerMinorCovers(h)) continue;
+        const piece = minorSettles(fen, h, enemy, side);
+        if (!piece) continue;
+        by = piece === 'b' ? 'bishop' : 'knight';
+        break;
+      }
+      if (!by) continue;
       out.push({ side, complex, squares: cHoles, by });
     }
   }
@@ -1340,10 +1408,10 @@ export function canBeAimedAt(fen: string, sq: Square, by: Color): boolean {
   for (const m of board.moves({ verbose: true })) {
     if (m.captured || !attacker(m.piece)) continue;
     board.move({ from: m.from, to: m.to, promotion: m.promotion });
-    const hits = board.attackers(sq, by).includes(m.to as Square);
+    const hits = board.attackers(sq, by).includes(m.to);
     const after = board.fen();
     board.undo();
-    if (hits && legalSeeGainFor(after, m.to as Square, foe) <= 0) return true;
+    if (hits && legalSeeGainFor(after, m.to, foe) <= 0) return true;
   }
   return false;
 }

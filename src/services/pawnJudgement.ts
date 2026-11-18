@@ -407,7 +407,7 @@ export function mirroredAsymmetry(fen: string, student: Color): StructureRead | 
     // and with no piece of the student's anywhere near). A bishop of the
     // hole's colour, or a knight within three knight's moves of it — the hole
     // is long-term, so the road may be long, but it has to exist.
-    if (!campHoles(fen, enemy, student).includes(m2 as Square)) continue;
+    if (!campHoles(fen, enemy, student).includes(m2)) continue;
     const canSit = piecesOf(c, student, 'b').some((b) => shade(b) === shade(m2))
       || piecesOf(c, student, 'n').some((n) => knightSteps(n, m2) <= 3);
     if (!canSit) continue;
