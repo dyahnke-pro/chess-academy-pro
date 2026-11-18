@@ -86,7 +86,11 @@ import { fortress, fortressLine, fortressSquares } from './fortress';
 import { itineraryAt, itineraryLine } from './reviewPieceItinerary';
 import { forcedRunAt, FORCED_RUN_LINE } from './reviewForcedSequence';
 import { threatPurpose } from './threatPurpose';
-import { temptingCaptureRead } from './reviewTeachingPoints';
+import { temptingCaptureRead, attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop } from './reviewTeachingPoints';
+import { nameEndgamePhase } from './reviewMoveTeaching';
+import { imageryFor } from './factImagery';
+import { stemKeyOf } from '../utils/rotateStem';
+import { openSentence } from '../utils/openSentence';
 import type { PvLine } from './pvPlayback';
 import { oppositionTaken, oppositionLine, oppositionSquares } from './oppositionRead';
 import { zugzwangMade, zugzwangSyncLine, zugzwangSyncProof } from './zugzwangRead';
@@ -442,6 +446,15 @@ export interface BoardContexts {
    *  `line`: the line walked from `fenBefore`, starting with `san`, or null.
    *  `student`: null where the line has no seat (a theory lecture). */
   temptingCapture: { fenBefore: string; san: string; student: Color | null; line: readonly string[] | null };
+  /** BOARD READS from the student's seat on the board `fen` (after a move):
+   *  the most contested piece counted (`count`), the piece guarding their
+   *  king (`royal`), a rook on the seventh (`rook7`), their bad bishop
+   *  (`badBishop`), the ending reached (`endgamePhase`). */
+  count: { fen: string; student: Color };
+  royal: { fen: string; student: Color };
+  rook7: { fen: string; student: Color };
+  badBishop: { fen: string; student: Color };
+  endgamePhase: { fen: string; student: Color };
   /** THE OPPOSITION TAKEN (`oppositionRead`, Danya's "it is Black who has
    *  the opposition"): the king move `san` on `fenBefore` (either seat) takes
    *  the opposition in a king-and-pawn ending, with what it forces.
@@ -2320,6 +2333,91 @@ export const BOARD_COMPUTERS = {
       learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_NA,
       weaknesses: { not: 'a capture left alone — no question of the student\'s posed' },
+    },
+  },
+  count: {
+    read: ({ fen, student }, fact) => safe(() => {
+      const text = (() => { const t = attackerDefenderCount(fen, student); return t ? `${openSentence(t)}.` : null; })();
+      if (!text) return null;
+      return fact({ key: `count:${text}`, claims: [`count:${fen.split(' ')[0]}`], text, proof: NO_PROOF.description, squares: [], stakes: null,
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'attackerDefenderCount',
+    kind: 'count',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a count on the board, no question of the student\'s posed' },
+    },
+  },
+  royal: {
+    read: ({ fen, student }, fact) => safe(() => {
+      const text = (() => { const t = royalDefenderTarget(fen, student); return t ? `${openSentence(t)}.` : null; })();
+      if (!text) return null;
+      return fact({ key: `royal:${text}`, claims: [`royal:${fen.split(' ')[0]}`], text, proof: NO_PROOF.description, squares: [], stakes: null,
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'royalDefenderTarget',
+    kind: 'royal',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the board, no question of the student\'s posed' },
+    },
+  },
+  rook7: {
+    read: ({ fen, student }, fact) => safe(() => {
+      const text = (() => { const t = rookOnSeventh(fen, student); return t ? `${openSentence(t)}.` : null; })();
+      if (!text) return null;
+      return fact({ key: `rook7:${text}`, claims: [`rook7:${fen.split(' ')[0]}`], text, proof: NO_PROOF.description, squares: [], stakes: null,
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'rookOnSeventh',
+    kind: 'rook7',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the board, no question of the student\'s posed' },
+    },
+  },
+  badBishop: {
+    read: ({ fen, student }, fact) => safe(() => {
+      const text = (() => { const t = badEnemyBishop(fen, student); if (!t) return null; const image = imageryFor('badbishop', stemKeyOf(`${fen}|badbishop`)); return `${openSentence(t)}.${image ? ` ${image}` : ''}`; })();
+      if (!text) return null;
+      return fact({ key: `badBishop:${text}`, claims: [`badBishop:${fen.split(' ')[0]}`], text, proof: NO_PROOF.description, squares: [], stakes: null,
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'badEnemyBishop',
+    kind: 'badbishop',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the board, no question of the student\'s posed' },
+    },
+  },
+  endgamePhase: {
+    read: ({ fen }, fact) => safe(() => {
+      const text = (() => { const p = nameEndgamePhase(fen); return p ? `You've reached ${p}.` : null; })();
+      if (!text) return null;
+      return fact({ key: `endgamePhase:${text}`, claims: [`endgamePhase:${fen.split(' ')[0]}`], text, proof: NO_PROOF.description, squares: [], stakes: null,
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'nameEndgamePhase',
+    kind: 'endgame',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'the ending named, no question of the student\'s posed' },
     },
   },
   oppositionRead: {

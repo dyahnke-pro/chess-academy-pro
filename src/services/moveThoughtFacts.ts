@@ -875,6 +875,21 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       for (const f of readBoardAll('temptingCapture', { fenBefore: i.fenBefore, san: i.san, student, line: i.line ? [i.san, ...i.line] : null })) {
         facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'win-material', weight: 62 });
       }
+      // The board after the move, from the student's seat: the contested
+      // piece counted, the piece guarding their king, a rook on the seventh,
+      // their bad bishop, the ending reached.
+      {
+        const fenAfterMove = (() => { try { const c = new Chess(i.fenBefore); c.move(i.san); return c.fen(); } catch { return null; } })();
+        if (fenAfterMove) {
+          const onBoard = { fen: fenAfterMove, student };
+          const add = (f: CoachFact, idea: IdeaKind, weight: number): void => { facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea, weight }); };
+          for (const f of readBoardAll('count', onBoard)) add(f, 'win-material', 60);
+          for (const f of readBoardAll('royal', onBoard)) add(f, 'pressure', 58);
+          for (const f of readBoardAll('rook7', onBoard)) add(f, 'pressure', 56);
+          for (const f of readBoardAll('badBishop', onBoard)) add(f, 'weakness', 52);
+          for (const f of readBoardAll('endgamePhase', onBoard)) add(f, 'plan', 50);
+        }
+      }
       // The fortress, both seats: a piece down and a draw the board explains,
       // read off the engine's lines after the move.
       for (const f of readBoardAll('fortress', { fenBefore: i.fenBefore, san: i.san, student, replies })) {

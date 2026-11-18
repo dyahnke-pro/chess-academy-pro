@@ -46,7 +46,7 @@ import { trickSidestepped } from './forkTrick';
 import { findProphylaxis, prophylaxisProof, theirWantedMoves } from './prophylaxis';
 import { newTiedDefender, tiedDefenderLine, tiedDefenderProof } from './tiedDefender';
 import { lineProof, lineProofFromUci, legalLineProof, proofForStudent, squaresProof, isProof, NO_PROOF, type Proof } from './proof';
-import { readBoardAll, readKey } from './boardComputers';
+import { readBoard, readBoardAll, readKey } from './boardComputers';
 import { knownSlipsAt, type KnownSlipIndex } from './knownSlips';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import type { WeighRead } from './weighedMoves';
@@ -67,10 +67,9 @@ import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShi
 import { explainMatingSacMechanism } from './reviewForcedSequence';
 import { buildMiddlegameOrientation } from './reviewStrategicOrientation';
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
-import { nameEndgamePhase } from './reviewMoveTeaching';
 import { planRaceClause, planRaceProof, pawnSquareTaken, pawnSquareRaceProof } from './planRace';
 import { kingReadsForBestLine } from './kingAttackReads';
-import { attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop, passedPawnPush, findTrappedPiece } from './reviewTeachingPoints';
+import { passedPawnPush, findTrappedPiece } from './reviewTeachingPoints';
 import { pieceWish } from './pieceWish';
 import { hangingLine, lostLastGuard } from './hangingLine';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
@@ -81,7 +80,6 @@ import { errorWhy, priorMoveLeadingTo, replyKeptWin, type SecondReads } from './
 import { toOtherSeat } from '../utils/seatPronouns';
 import { andList, countWord, lineSeatAt, withArticle } from '../utils/andList';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
-import { imageryFor } from './factImagery';
 import { exchangeIdeas } from './exchangeIdeas';
 import { minorsAtHome } from './development';
 import { slipAnswerText, studentMovePoint } from './playCommentary';
@@ -360,6 +358,14 @@ export function computeMoveFacets(
   let allowedMateHere: number | null = null;
   const made = (computer: ComputerName, tag: FacetTag, text: string): ReviewFacet => reviewFacet(computer, tag, text, ctx.fenAfter, ctx.fenBefore);
   const put = (computer: ComputerName, tag: FacetTag, text: string): ReviewFacet => { const f = made(computer, tag, text); facets.push(f); return f; };
+  /** A basket fact said as one of this move's facets, its squares and stakes
+   *  carried (the one writer's words). */
+  const basketFacet = (f: (CoachFact & { kind: FacetTag }) | null): void => {
+    if (!f) return;
+    const raw = put(f.computer, f.kind, f.text);
+    recSquares(raw, f.squares);
+    recStakes(raw, f.stakes);
+  };
   const recIncoming = (facet: ReviewFacet, beneficiary: 'w' | 'b' | undefined): void => {
     if (!beneficiary || !ctx.studentColorWB) return;
     if (beneficiary !== ctx.studentColorWB) asIncoming(facet);
@@ -1152,17 +1158,11 @@ export function computeMoveFacets(
 
   // ── 6b. THE MISSING TEACHING POINTS (Naroditsky message catalog) ──
   if (studentColorWB) {
-    const count = attackerDefenderCount(fenAfter, studentColorWB);
-    if (count) put('attackerDefenderCount', 'count', `${cap(count)}.`);
-    const royal = royalDefenderTarget(fenAfter, studentColorWB);
-    if (royal) put('royalDefenderTarget', 'royal', `${cap(royal)}.`);
-    const rook7 = rookOnSeventh(fenAfter, studentColorWB);
-    if (rook7) put('rookOnSeventh', 'rook7', `${cap(rook7)}.`);
-    const badB = badEnemyBishop(fenAfter, studentColorWB);
-    if (badB) {
-      const image = imageryFor('badbishop', stemKeyOf(`${fenAfter}|badbishop`));
-      put('badEnemyBishop', 'badbishop', `${cap(badB)}.${image ? ` ${image}` : ''}`);
-    }
+    const onBoard = { fen: fenAfter, student: studentColorWB };
+    basketFacet(readBoard('count', onBoard));
+    basketFacet(readBoard('royal', onBoard));
+    basketFacet(readBoard('rook7', onBoard));
+    basketFacet(readBoard('badBishop', onBoard));
     // THE PIECE THAT WANTS A BETTER SQUARE — which piece, where it wants to go
     // and why, read by the ONE wish computer Learn's piece-activity behaviour
     // reads (`pieceWish`, wire-19 2026-11-08). The old line here named the
@@ -1895,8 +1895,7 @@ export function computeMoveFacets(
   }
 
   // ── 12. ENDGAME PHASE ──
-  const phase = nameEndgamePhase(fenAfter);
-  if (phase) put('nameEndgamePhase', 'endgame', `You've reached ${phase}.`);
+  if (studentColorWB) basketFacet(readBoard('endgamePhase', { fen: fenAfter, student: studentColorWB }));
 
   // THE SQUARES ARE THE PROOF of a claim whose computer handed in no line
   // (one-coach P3): the squares it read off the board, marked on Why. Never
