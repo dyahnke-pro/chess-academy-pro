@@ -4,18 +4,19 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**137 lines · 8 exports · 17 importers · 3 tests · 1 audits**
+**152 lines · 9 exports · 18 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:394) — names `criticalityScan`
-- **STRENGTH IS MEASURED FROM MOVE ONE AND SET ONCE PER GAME (David 2026-09-18: "The coach can match in real time as they play on the board for the first time." → 2026-10-22: "Same rating throughout the game. Algo up or down per game only.")** (CLAUDE.md:539) — names `criticalityScan`
-- **🔒🔒 THE COMPUTER DECIDES WHAT IS SPOKEN — importance is COMPUTED, not left to the LLM (David 2026-08-26, LOCKED). And DNA runs through BOTH the computer AND the LLM.** (CLAUDE.md:4511) — names `criticalityScan`, `scanCriticality`
-- **The standard post-deploy ritual** (CLAUDE.md:6933) — names `CriticalMoment`, `scanCriticality`
+- **STRENGTH IS MEASURED FROM MOVE ONE AND SET ONCE PER GAME (David 2026-09-18: "The coach can match in real time as they play on the board for the first time." → 2026-10-22: "Same rating throughout the game. Algo up or down per game only.")** (CLAUDE.md:576) — names `criticalityScan`
+- **🔒🔒 THE COMPUTER DECIDES WHAT IS SPOKEN — importance is COMPUTED, not left to the LLM (David 2026-08-26, LOCKED). And DNA runs through BOTH the computer AND the LLM.** (CLAUDE.md:4548) — names `criticalityScan`, `scanCriticality`
+- **The standard post-deploy ritual** (CLAUDE.md:7009) — names `CriticalMoment`, `scanCriticality`
 
 ## Who calls in
 
 - `src/services/accuracyService.ts`
+- `src/services/coachFeatureService.ts`
 - `src/services/conceptEngine.ts`
 - `src/services/criticalMoment.ts`
 - `src/services/criticalityScan.test.ts`
@@ -54,8 +55,8 @@
 - `src/services/conceptEngine.ts:596`
 - `src/services/criticalMoment.ts:197`
 - `src/services/criticalityScan.test.ts:20`
-- `src/services/moveThoughtFacts.ts:1093`
-- `src/services/narrationImportance.ts:139`
+- `src/services/moveThoughtFacts.ts:1429`
+- `src/services/narrationImportance.ts:153`
 - `src/services/positionFacts.ts:651`
 - `src/services/refutedAlternative.ts:139`
 - `src/services/refutedAlternative.ts:147`
@@ -68,8 +69,8 @@
 - `src/services/speedRunReads.ts:550`
 - `src/services/speedRunReads.ts:615`
 - `src/services/speedRunReads.ts:737`
-- `src/services/studentNeedLoader.ts:140`
-- `src/services/thinkAloud.ts:546`
+- `src/services/studentNeedLoader.ts:141`
+- `src/services/thinkAloud.ts:551`
 
 ### `ONLY_MOVE_CP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -83,6 +84,9 @@
 - `src/services/criticalityScan.test.ts:90`
 - `src/services/mistakeLineGrowth.ts:77`
 - `src/services/mistakeLineGrowth.ts:85`
+
+### `criticalityFromCandidates` (function) — 1 call site
+- `src/services/coachFeatureService.ts:3247`
 
 ## Tests
 

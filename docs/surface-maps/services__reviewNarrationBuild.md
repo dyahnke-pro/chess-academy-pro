@@ -4,38 +4,45 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**238 lines · 9 exports · 4 importers · 6 tests · 0 audits**
+**260 lines · 10 exports · 5 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **G4.5.1 THE COMPUTER CUTS AT NARRATION TIME — never a branch in code (David 2026-09-16: "we don't make a cut on the code side, the computer that ranks the narrations does. At narrations time. If the battery is more important than the pin, then the pin stays quiet and the battery wins").** (CLAUDE.md:1449) — names `isReviewUncapped`
+- **G4.5.1 THE COMPUTER CUTS AT NARRATION TIME — never a branch in code (David 2026-09-16: "we don't make a cut on the code side, the computer that ranks the narrations does. At narrations time. If the battery is more important than the pin, then the pin stays quiet and the battery wins").** (CLAUDE.md:1469) — names `isReviewUncapped`
+- **🔒🔒 LEARN SPEAKS ON A MOMENT, AND IS QUIET OTHERWISE (David 2026-11-18: "So learn narrations are needed only when the player makes an error of some kind … And it knows when not to say anything. Like a chess coach." → "Or it can be used to reenforce proper move behavior" → "It gets more quiet if you make all the right moves. But it speaks on errors").** (CLAUDE.md:5909) — names `learnHeardFor`
 
 ## Who calls in
 
 - `src/components/Coach/CoachGameReview.tsx`
 - `src/services/reviewNarrationBuild.test.ts`
+- `src/services/reviewReadsLearn.test.ts`
 - `src/services/shallowLinesNotNarrated.test.ts`
 - `src/test/reviewExplore.continuity.test.ts`
 
 ## Exports and every call site
 
-### `isReviewUncapped` (function) — 6 call sites
-- `src/components/Coach/CoachGameReview.tsx:645`
-- `src/components/Coach/CoachGameReview.tsx:1356`
-- `src/components/Coach/CoachGameReview.tsx:1682`
-- `src/components/Coach/CoachGameReview.tsx:1832`
-- `src/components/Coach/CoachGameReview.tsx:2218`
+### `isReviewUncapped` (function) — 5 call sites
+- `src/components/Coach/CoachGameReview.tsx:676`
+- `src/components/Coach/CoachGameReview.tsx:1385`
+- `src/components/Coach/CoachGameReview.tsx:1711`
+- `src/components/Coach/CoachGameReview.tsx:1861`
 - `src/services/reviewDepth.eval.measure.test.ts:36`
 
-### `reviewMoveInputsFrom` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:609`
+### `reviewMoveInputsFrom` (function) — 3 call sites
+- `src/components/Coach/CoachGameReview.tsx:640`
 - `src/services/shallowLinesNotNarrated.test.ts:17`
+- `src/services/shallowLinesNotNarrated.test.ts:32`
 
 ### `ReviewNarrationRequest` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `learnHeardFor` (function) — 3 call sites
+- `src/services/reviewReadsLearn.test.ts:49`
+- `src/services/reviewReadsLearn.test.ts:50`
+- `src/services/reviewReadsLearn.test.ts:51`
+
 ### `getOrBuildReviewNarration` (function) — 6 call sites
-- `src/components/Coach/CoachGameReview.tsx:658`
+- `src/components/Coach/CoachGameReview.tsx:689`
 - `src/services/reviewNarrationBuild.test.ts:40`
 - `src/services/reviewNarrationBuild.test.ts:47`
 - `src/services/reviewNarrationBuild.test.ts:49`
@@ -46,14 +53,14 @@
 - `src/services/gameAnalysisService.ts:3282`
 
 ### `storySeed` (function) — 5 call sites
-- `src/components/Coach/CoachGameReview.tsx:657`
+- `src/components/Coach/CoachGameReview.tsx:688`
 - `src/services/reviewNarrationBuild.test.ts:79`
 - `src/services/reviewNarrationBuild.test.ts:85`
 - `src/services/reviewNarrationBuild.test.ts:89`
 - `src/services/reviewNarrationBuild.test.ts:90`
 
 ### `exploreSeed` (function) — 6 call sites
-- `src/components/Coach/CoachGameReview.tsx:1821`
+- `src/components/Coach/CoachGameReview.tsx:1850`
 - `src/services/reviewNarrationBuild.test.ts:125`
 - `src/services/reviewNarrationBuild.test.ts:141`
 - `src/services/reviewNarrationBuild.test.ts:149`
@@ -61,11 +68,11 @@
 - `src/test/reviewExplore.continuity.test.ts:60`
 
 ### `storyAtMerge` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:698`
+- `src/components/Coach/CoachGameReview.tsx:729`
 - `src/services/reviewNarrationBuild.test.ts:102`
 
 ### `mergeReviewNarration` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:707`
+- `src/components/Coach/CoachGameReview.tsx:738`
 - `src/services/reviewNarrationBuild.test.ts:98`
 
 ## Tests
@@ -73,6 +80,7 @@
 - `src/services/exchangeLedger.test.ts`
 - `src/services/prepareReview.test.ts`
 - `src/services/reviewNarrationBuild.test.ts`
+- `src/services/reviewReadsLearn.test.ts`
 - `src/services/shallowLinesNotNarrated.test.ts`
 - `src/test/oneStoryState.gate.test.ts`
 - `src/test/reviewExplore.continuity.test.ts`

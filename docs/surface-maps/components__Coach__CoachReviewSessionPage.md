@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**374 lines · 5 exports · 2 importers · 2 tests · 3 audits**
+**375 lines · 5 exports · 2 importers · 2 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,21 +26,21 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `adaptGameRecordExplained` (re-export) — 5 call sites
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:89`
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:97`
-- `src/services/reviewGameAdapter.ts:70`
-- `src/services/reviewGameAdapter.ts:86`
-- `src/services/reviewNarrationBuild.ts:138`
+- `src/services/reviewGameAdapter.ts:72`
+- `src/services/reviewGameAdapter.ts:88`
+- `src/services/reviewNarrationBuild.ts:168`
 
 ### `adaptGameRecord` (re-export) — 4 call sites
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:39`
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:75`
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:79`
-- `src/services/reviewGameAdapter.ts:82`
+- `src/services/reviewGameAdapter.ts:84`
 
 ### `describeGameForStudent` (re-export) — 4 call sites
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:103`
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:105`
-- `src/services/reviewGameAdapter.ts:47`
-- `src/services/reviewGameAdapter.ts:74`
+- `src/services/reviewGameAdapter.ts:49`
+- `src/services/reviewGameAdapter.ts:76`
 
 ## Tests
 

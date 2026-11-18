@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**17621 lines · 3 exports · 4 importers · 85 tests · 12 audits**
+**17634 lines · 3 exports · 4 importers · 86 tests · 12 audits**
 
 ## Locked rules that govern this surface
 
 - **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1782) — names `CoachTeachPage`
 - **G8.5 NOTHING BUILT-BUT-UNWIRED, NO ORPHANS LEFT BEHIND (David 2026-09-29, LOCKED: "You need to FULLY understand ALL code related to your builds. No more leaving things built but not wired, or changes made but leaving orphan components." → "Yes. Lock that in").** (CLAUDE.md:1927) — names `CoachTeachPage`
 - **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3821) — names `CoachTeachPage`
-- **The standard post-deploy ritual** (CLAUDE.md:6960) — names `CoachTeachPage`
+- **The standard post-deploy ritual** (CLAUDE.md:6998) — names `CoachTeachPage`
 
 ## Who calls in
 
@@ -65,6 +65,7 @@
 - `src/services/learnFundamentalNamesNoMove.test.ts`
 - `src/services/learnGameRecord.test.tsx`
 - `src/services/learnMemory.test.ts`
+- `src/services/learnMoment.test.ts`
 - `src/services/learnPhaseFocus.test.ts`
 - `src/services/learnTurnDoor.test.ts`
 - `src/services/learnWalkOct3b.test.ts`

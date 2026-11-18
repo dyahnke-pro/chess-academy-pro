@@ -4,18 +4,21 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**290 lines · 12 exports · 17 importers · 14 tests · 1 audits**
+**302 lines · 13 exports · 19 importers · 15 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4560) — names `coachDecisionEvents`
-- **The standard post-deploy ritual** (CLAUDE.md:6864) — names `coachDecisionEvents`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4644) — names `coachDecisionEvents`
+- **🔒🔒 LEARN SPEAKS ON A MOMENT, AND IS QUIET OTHERWISE (David 2026-11-18: "So learn narrations are needed only when the player makes an error of some kind … And it knows when not to say anything. Like a chess coach." → "Or it can be used to reenforce proper move behavior" → "It gets more quiet if you make all the right moves. But it speaks on errors").** (CLAUDE.md:5888) — names `LearnTurnTag`
+- **The standard post-deploy ritual** (CLAUDE.md:7023) — names `coachDecisionEvents`
 
 ## Who calls in
 
 - `src/services/appAuditor.ts`
 - `src/services/coachDecider.ts`
 - `src/services/coachDecisionEmits.test.ts`
+- `src/services/coachFeatureService.cpLossSign.test.ts`
+- `src/services/learnMoment.test.ts`
 - `src/services/learnTurnDoor.mission.test.ts`
 - `src/services/learnTurnDoor.phaseWave.test.ts`
 - `src/services/learnTurnDoor.story.test.ts`
@@ -29,35 +32,36 @@
 - `src/services/settledPrice.bf4.test.ts`
 - `src/services/verdictTurnGrade.test.ts`
 - `src/test/computedOrderWired.test.ts`
-- `src/test/decisionRows.baseline.test.ts`
+- `src/test/replaySources.ts`
 
 ## Exports and every call site
 
 ### `CoachDecisionRow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `onCoachDecision` (function) — 6 call sites
-- `src/services/appAuditor.ts:2285`
+### `onCoachDecision` (function) — 7 call sites
+- `src/services/appAuditor.ts:2290`
 - `src/services/coachDecisionEmits.test.ts:33`
 - `src/services/coachDecisionEmits.test.ts:96`
+- `src/services/coachFeatureService.cpLossSign.test.ts:44`
 - `src/services/proofBacklog.report.test.ts:98`
 - `src/test/computedOrderWired.test.ts:26`
-- `src/test/decisionRows.baseline.test.ts:80`
+- `src/test/replaySources.ts:16`
 
 ### `emitCoachDecision` (function) — 1 call site
-- `src/services/coachDecider.ts:357`
+- `src/services/coachDecider.ts:361`
 
 ### `NeedScoreRow` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `onNeedScore` (function) — 4 call sites
-- `src/services/appAuditor.ts:2237`
+- `src/services/appAuditor.ts:2242`
 - `src/services/coachDecisionEmits.test.ts:121`
 - `src/services/coachDecisionEmits.test.ts:148`
 - `src/services/positionFacts.liveFundamental.test.ts:50`
 
 ### `emitNeedScore` (function) — 1 call site
-- `src/services/needScore.ts:504`
+- `src/services/needScore.ts:507`
 
 ### `resetCoachDecisionListeners` (function) — 5 call sites
 - `src/services/coachDecisionEmits.test.ts:32`
@@ -75,29 +79,36 @@
 ### `LearnTurnTag` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `onLearnTurn` (function) — 14 call sites
-- `src/services/appAuditor.ts:2311`
-- `src/services/learnPhaseFocus.test.ts:98`
-- `src/services/learnPhaseFocus.test.ts:110`
-- `src/services/learnTurnDoor.mission.test.ts:33`
-- `src/services/learnTurnDoor.mission.test.ts:66`
+### `LearnDecision` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `onLearnTurn` (function) — 16 call sites
+- `src/services/appAuditor.ts:2316`
+- `src/services/learnMoment.test.ts:32`
+- `src/services/learnPhaseFocus.test.ts:112`
+- `src/services/learnTurnDoor.mission.test.ts:34`
+- `src/services/learnTurnDoor.mission.test.ts:67`
+- `src/services/learnTurnDoor.mission.test.ts:99`
 - `src/services/learnTurnDoor.phaseWave.test.ts:38`
-- `src/services/learnTurnDoor.story.test.ts:42`
-- `src/services/learnTurnDoor.test.ts:610`
-- `src/services/learnTurnDoor.test.ts:623`
-- `src/services/learnTurnDoor.thought.test.ts:198`
+- `src/services/learnTurnDoor.story.test.ts:29`
+- `src/services/learnTurnDoor.story.test.ts:44`
+- `src/services/learnTurnDoor.test.ts:626`
+- `src/services/learnTurnDoor.test.ts:639`
+- `src/services/learnTurnDoor.thought.test.ts:201`
 - `src/services/settledPrice.bf4.test.ts:74`
 - `src/services/verdictTurnGrade.test.ts:53`
-- `src/services/verdictTurnGrade.test.ts:60`
-- `src/services/verdictTurnGrade.test.ts:66`
+- `src/services/verdictTurnGrade.test.ts:61`
+- `src/services/verdictTurnGrade.test.ts:67`
 
 ### `emitLearnTurn` (function) — 2 call sites
-- `src/services/learnTurnDoor.ts:1369`
-- `src/services/learnTurnDoor.ts:1399`
+- `src/services/learnTurnDoor.ts:1480`
+- `src/services/learnTurnDoor.ts:1510`
 
 ## Tests
 
 - `src/services/coachDecisionEmits.test.ts`
+- `src/services/coachFeatureService.cpLossSign.test.ts`
+- `src/services/learnMoment.test.ts`
 - `src/services/learnPhaseFocus.test.ts`
 - `src/services/learnTurnDoor.mission.test.ts`
 - `src/services/learnTurnDoor.phaseWave.test.ts`
@@ -110,7 +121,6 @@
 - `src/services/verdictTurnGrade.test.ts`
 - `src/test/algoAuditContract.test.ts`
 - `src/test/computedOrderWired.test.ts`
-- `src/test/decisionRows.baseline.test.ts`
 
 ## Audits that reach it
 
