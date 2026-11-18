@@ -119,7 +119,7 @@ describe('boardComputers — the one registry', () => {
     });
     __setLocalDbForTests({ positions });
     try {
-      const f = readBoard('bookMove', { history, student: 'w' });
+      const f = readBoard('bookMove', { history, student: 'w', plain: false });
       expect(f?.role).toBe('teach');
       expect(f?.skill).toBe('left-book-early');
       // The board the student left the book on, after their move.

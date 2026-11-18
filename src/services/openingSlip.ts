@@ -314,7 +314,23 @@ function bookJob(fen: string, bookSan: string, playedSan: string, student: Color
  * `book`), or null when the move is the book's or the board says it does not
  * matter. `student` is REQUIRED: every sentence is said from their seat.
  */
-export function openingSlip(i: { fen: string; playedSan: string; book: OpeningBook; student: Color }): OpeningSlip | null {
+/** The book move with its job, when the tactics do not change (`plain`). */
+function plainBook(fen: string, bookSan: string, playedSan: string, playedTo: string, bookTo: string, student: Color, W: { The: string; move: string }, key: number, kind: 'order' | 'line'): OpeningSlip {
+  const B = sayMoveNoun(bookSan, fen);
+  const lead = rotateStem([`${W.The} plays ${B} here.`, `${openSentence(B)} was ${W.move}.`], key);
+  const job = bookJob(fen, bookSan, playedSan, student);
+  return { kind, bookSan, text: [lead, job?.text].filter(Boolean).join(' '), squares: [...new Set([playedTo, bookTo, ...(job?.squares ?? [])])], created: null, lost: null };
+}
+
+export function openingSlip(i: {
+  fen: string; playedSan: string; book: OpeningBook; student: Color;
+  /** REQUIRED — say the book move even when the tactics do not change. Learn
+   *  passes true: its door says it only on a turn the move cost something,
+   *  inside the correction (David 2026-11-18, "I like the first idea"). The
+   *  Openings Play rung passes false: there an order or a different line stays
+   *  silent unless it hands over or gives up a shot. */
+  plain: boolean;
+}): OpeningSlip | null {
   const { fen, playedSan, book, student } = i;
   const clean = (s: string): string => s.replace(/[+#]/g, '');
   if (book.moves.length === 0 || book.moves.some((m) => clean(m) === clean(playedSan))) return null;
@@ -331,7 +347,7 @@ export function openingSlip(i: { fen: string; playedSan: string; book: OpeningBo
     if (!bk) return null;
     const created = createdShot(bk.board, played.board, played.mv, student);
     const job = bookJob(fen, sameSan, played.mv.san, student);
-    if (!created && !job) return null;
+    if (!created && !job && !i.plain) return null;
     const B = sayMoveNoun(sameSan, fen);
     const piece = NAME[played.mv.piece];
     const lead = rotateStem([
@@ -351,7 +367,7 @@ export function openingSlip(i: { fen: string; playedSan: string; book: OpeningBo
     if (!bk) return null;
     const created = createdShot(bk.board, played.board, played.mv, student);
     const lost = orderReason(fen, order.line, order.at, played, student);
-    if (!created && !lost) return null;
+    if (!created && !lost) return i.plain ? plainBook(fen, bookSan, played.mv.san, played.mv.to, bk.mv.to, student, W, key, 'order') : null;
     const B = sayMoveNoun(bookSan, fen);
     const early = rotateStem([
       `${openSentence(X)} comes ${order.at === 2 ? 'a move' : 'two moves'} early.`,
@@ -371,7 +387,7 @@ export function openingSlip(i: { fen: string; playedSan: string; book: OpeningBo
   if (!bk) return null;
   const created = createdShot(bk.board, played.board, played.mv, student);
   const lost = created ? null : lostShot(bk, played.board, student);
-  if (!created && !lost) return null;
+  if (!created && !lost) return i.plain ? plainBook(fen, bookSan, played.mv.san, played.mv.to, bk.mv.to, student, W, key, 'line') : null;
   const B = sayMoveNoun(bookSan, fen);
   const text = created
     ? `${created.clause} ${rotateStem([`${openSentence(B)} was ${W.move}.`, `${W.The} plays ${B} here.`], key)}`
@@ -449,6 +465,6 @@ export function bookMoveRead(history: readonly string[], student: Color, proLine
   const san = history[history.length - 1];
   if (book.moves.some((m) => cleanSan(m) === cleanSan(san))) return { left: false, text: null, squares: [] };
   if (mover !== student) return { left: true, text: leftBookSentence('They', san, fen, book.source), squares: [] };
-  const s = openingSlip({ fen, playedSan: san, book, student });
+  const s = openingSlip({ fen, playedSan: san, book, student, plain: false });
   return { left: true, text: s?.text ?? null, squares: s?.squares ?? [] };
 }

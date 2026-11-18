@@ -10106,7 +10106,7 @@ export function CoachTeachPage({ mode }: {
     // THE BOOK MOVE AND ITS JOB — its own lane on the "but" beat, so the door
     // orders it as a teaching fact (David 2026-10-14: "make sure this new
     // computer routes to the dna"), never glued to the opening name.
-    const bookMoveRead = readBoard('bookMove', { history: args.historyAfterReply, student: studentCC });
+    const bookMoveRead = readBoard('bookMove', { history: args.historyAfterReply, student: studentCC, plain: true });
     // OPENING THEORY, CALCULATED, on the student's move and the reply.
     // LEARN STAYS QUIET IN BOOK; THE OPENING'S THEORY IS READY FOR A SLIP
     // (David 2026-11-12: "Learn should have all those things ready to go at a

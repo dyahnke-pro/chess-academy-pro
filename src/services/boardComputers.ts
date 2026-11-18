@@ -156,7 +156,9 @@ export interface BoardContexts {
   queenGrabTrap: { fen: string };
   /** The book move the student just left, with the job it does on the board
    *  (the student's own departure, the move it happened or the reply after). */
-  bookMove: { history: readonly string[]; student: Color };
+  bookMove: { history: readonly string[]; student: Color;
+    /** REQUIRED — see `openingSlip`'s `plain`: Learn true, elsewhere false. */
+    plain: boolean };
   /** Opening theory, calculated, on the last two moves of `history` (the
    *  student's move and the reply): main move, other tries, reply, score. */
   openingTheory: { history: readonly string[]; student: Color };
@@ -695,12 +697,12 @@ export const BOARD_COMPUTERS = {
     // Play rung reads the same computer with the pro's book. Theory is
     // knowledge, not a find: the book move is named once the student has left
     // it. Graded on the board the student left (prod Learn audit 2026-10-14).
-    read: ({ history, student }, fact) => safe(() => {
+    read: ({ history, student, plain }, fact) => safe(() => {
       const dep = bookDeparture(history);
       if (!dep || dep.mover !== student || history.length - dep.ply > 1) return null;
       const book = mastersBook(history.slice(0, dep.ply - 1));
       if (!book) return null;
-      const w = openingSlip({ fen: dep.fen, playedSan: dep.san, book, student });
+      const w = openingSlip({ fen: dep.fen, playedSan: dep.san, book, student, plain });
       if (!w) return null;
       const spokenOn = boardAfter(dep.fen, dep.san);
       if (!spokenOn) return null;

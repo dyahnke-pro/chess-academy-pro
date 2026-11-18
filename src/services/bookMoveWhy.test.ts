@@ -79,12 +79,12 @@ describe('the book-move why routes through the door on the DNA "but" beat (David
     });
     __setLocalDbForTests({ positions });
     try {
-      const read = readBoard('bookMove', { history, student: 'w' });
+      const read = readBoard('bookMove', { history, student: 'w', plain: false });
       // THE OPENING SLIP (2026-11-08): the same knight to another square —
       // why the book square was better, and what the student's left undone.
       expect(read?.text).toBe('Your knight belongs on e2 here. It adds a second guard to your knight on c3, which their dark-squared bishop pins. The knight to f3 leaves it guarded once.');
       // Not their departure, not the student's seat: nothing.
-      expect(readBoard('bookMove', { history, student: 'b' })).toBeNull();
+      expect(readBoard('bookMove', { history, student: 'b', plain: false })).toBeNull();
       const fen = c.fen();
       const out = decideTurn([
         { lane: 'bookMove', text: read!.text, fen, squares: read!.squares, claims: read!.claims, role: 'teach', namesStudentMove: NAMES_NO_MOVE, proof: read!.proof },
@@ -118,7 +118,7 @@ describe('the book-move line is graded on the board it speaks of (prod Learn aud
     const afterReply = c.fen();
     __setLocalDbForTests({ positions });
     try {
-      const read = readBoard('bookMove', { history: [...played, 'hxg4'], student: 'b' });
+      const read = readBoard('bookMove', { history: [...played, 'hxg4'], student: 'b', plain: false });
       // A different line, said because it hands them a shot: the bishop on g4
       // the reply then took (2026-11-08: silent unless the tactics change).
       expect(read?.text).toBe('Your bishop on g4 can be won by their pawn on h3. The bishop to h5 was the book move.');

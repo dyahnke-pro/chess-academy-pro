@@ -36,7 +36,7 @@ describe.skipIf(!RUN || !existsSync(DROP) || !existsSync(MASTERS))('opening slip
       bump('he-left');
       const book = mastersBook(sans.slice(0, dep.ply - 1));
       if (!book) { bump('no-book'); continue; }
-      const slip = openingSlip({ fen: dep.fen, playedSan: dep.san, book, student: seat });
+      const slip = openingSlip({ fen: dep.fen, playedSan: dep.san, book, student: seat, plain: false });
       const old = dep.mainSan ? bookMoveWhy(dep.fen, dep.mainSan, dep.san, seat) : null;
       bump(slip ? `slip:${slip.kind}:${(slip.created ?? slip.lost)?.kind ?? 'job'}` : 'silent');
       if (old && !slip) bump('old-spoke-now-silent');

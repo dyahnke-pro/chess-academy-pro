@@ -1406,7 +1406,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       if (order && input.namesBestMove) speak(order);
       if (input.opponentLastMove) speak(readBoard('obligationLifted', { fenBefore: input.opponentLastMove.fenBefore, fenAfter: fen, student: studentColor }));
       // The book move is theory: said only where it was asked for.
-      if (input.theory && input.history?.length) speak(readBoard('bookMove', { history: input.history, student: studentColor }));
+      if (input.theory && input.history?.length) speak(readBoard('bookMove', { history: input.history, student: studentColor, plain: false }));
       const own = input.lastMove;
       // The count, only when the student's last move lost it.
       if (own) speak(readBoard('countMethod', { fenBefore: own.fenBefore, playedSan: own.san, student: studentColor, costCp: own.cpLoss }));

@@ -23,7 +23,7 @@ const bookAt = (history: readonly string[], moves: readonly string[]): OpeningBo
 });
 const slip = (history: readonly string[], played: string, moves: readonly string[]): ReturnType<typeof openingSlip> => {
   const fen = board(history);
-  return openingSlip({ fen, playedSan: played, book: bookAt(history, moves), student: new Chess(fen).turn() });
+  return openingSlip({ fen, playedSan: played, book: bookAt(history, moves), student: new Chess(fen).turn(), plain: false });
 };
 
 describe('ORDER — a book move played early', () => {
@@ -125,7 +125,7 @@ describe('the Play rung reads the same computer, move by move (bookMoveRead)', (
     const course = bookFromLines(najdorf, ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6']);
     expect(course?.source).toBe('course');
     // 6.Bc4 leaves the pawn on e4 to their knight on f6 (the line plays Nc3).
-    const s = openingSlip({ fen, playedSan: 'Bc4', book: course!, student: 'w' });
+    const s = openingSlip({ fen, playedSan: 'Bc4', book: course!, student: 'w', plain: false });
     expect(s?.text).toBe('Nothing guards your pawn on e4, and their knight on f6 can take it. This line plays the knight to c3 here.');
   });
   it('the student\'s move off his line says the opening slip — 5.Bd3 hands them the pawn on e4', () => {
@@ -135,5 +135,24 @@ describe('the Play rung reads the same computer, move by move (bookMoveRead)', (
   });
   it('a board his lines never reach, with the masters\' moves not in memory: no claim', () => {
     expect(bookMoveRead(['d4', 'd5', 'c4'], 'w', najdorf)).toBeNull();
+  });
+});
+
+// THE CORRECTION CARRIES THE BOOK (David 2026-11-18: "I like the first idea").
+// A different line or order with no tactical change was silent; Learn now has
+// the plain book move ready, and its door says it only on a costly turn.
+describe('plain: the book move with its job, ready for Learn\'s correction', () => {
+  const ITALIAN = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5'];
+  const plainSlip = (plain: boolean): ReturnType<typeof openingSlip> => {
+    const fen = board(ITALIAN);
+    return openingSlip({ fen, playedSan: 'Na3', book: bookAt(ITALIAN, ['c3', 'O-O', 'd3']), student: 'w', plain });
+  };
+  it('a different line with nothing tactical: silent on the Play rung', () => {
+    expect(plainSlip(false)).toBeNull();
+  });
+  it('the same move with plain: the book move is named', () => {
+    const s = plainSlip(true);
+    expect(s?.text).toMatch(/c3|C3|pawn to c3/i);
+    expect(s?.bookSan).toBe('c3');
   });
 });
