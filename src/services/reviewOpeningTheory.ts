@@ -27,7 +27,7 @@ import { openingIdentityLine, warmOpeningIdentity } from './openingIdentity';
 import { buildReviewMoveTeaching } from './reviewMoveTeaching';
 import { withSubject, openSentence } from '../utils/openSentence';
 import { identifyingTokens } from './danyaTeachingService';
-import { explainTemptingCapture } from './reviewTeachingPoints';
+import { readBoard, sayOnce } from './boardComputers';
 import repertoire from '../data/repertoire.json';
 import { bookMoveWhy } from './bookMoveWhy';
 import { openingEquivalence } from './openingEquivalence';
@@ -404,7 +404,7 @@ export async function buildOpeningTheoryLecture(
           const parts: string[] = [];
           const w = moveWhy(prevFen, p.san, opts.studentColor);
           if (w) parts.push(w);
-          const tempt = explainTemptingCapture(prevFen, p.san, 'neutral', line.slice(i).map((q) => q.san), toldTemptations);
+          const tempt = sayOnce(readBoard('temptingCapture', { fenBefore: prevFen, san: p.san, student: null, line: line.slice(i).map((q) => q.san) }), toldTemptations);
           if (tempt) parts.push(tempt);
           prevFen = p.fenAfter;
           return { san: p.san, fenAfter: p.fenAfter, why: parts.length ? parts.join(' ') : null };
@@ -442,7 +442,7 @@ export async function buildOpeningTheoryLecture(
           const parts: string[] = [];
           const w = moveWhy(prev, p.san, opts.studentColor);
           if (w) parts.push(w);
-          const tempt = explainTemptingCapture(prev, p.san, 'neutral', cont.slice(i).map((q) => q.san), toldTemptations);
+          const tempt = sayOnce(readBoard('temptingCapture', { fenBefore: prev, san: p.san, student: null, line: cont.slice(i).map((q) => q.san) }), toldTemptations);
           if (tempt) parts.push(tempt);
           steps.push({ san: p.san, fenAfter: p.fenAfter, why: parts.length ? parts.join(' ') : null });
           prev = p.fenAfter;

@@ -425,6 +425,20 @@ export function explainTemptingCapture(
   return text;
 }
 
+/** THE TEMPTING CAPTURE read once, no memory: its words and the capture it is
+ *  about (from-to and victim), so the caller's own say-once ledger decides a
+ *  repeat. The registry's `temptingCapture` reads this. */
+export function temptingCaptureRead(
+  fen: string,
+  chosenSan: string,
+  perspective: 'you' | 'they' | 'neutral',
+  lineSans: readonly string[] | null,
+): { text: string; key: string } | null {
+  const key: { k: string | null } = { k: null };
+  const text = temptingCaptureText(fen, chosenSan, perspective, lineSans, null, key);
+  return text && key.k ? { text, key: key.k } : null;
+}
+
 function temptingCaptureText(
   fen: string,
   chosenSan: string,

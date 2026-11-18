@@ -870,6 +870,11 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
           facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'threat', weight: 74 });
         }
       }
+      // Why not just take? Both seats: the tempting capture the move leaves
+      // alone, and why it fails.
+      for (const f of readBoardAll('temptingCapture', { fenBefore: i.fenBefore, san: i.san, student, line: i.line ? [i.san, ...i.line] : null })) {
+        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'win-material', weight: 62 });
+      }
       // The fortress, both seats: a piece down and a draw the board explains,
       // read off the engine's lines after the move.
       for (const f of readBoardAll('fortress', { fenBefore: i.fenBefore, san: i.san, student, replies })) {

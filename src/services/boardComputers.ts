@@ -86,6 +86,7 @@ import { fortress, fortressLine, fortressSquares } from './fortress';
 import { itineraryAt, itineraryLine } from './reviewPieceItinerary';
 import { forcedRunAt, FORCED_RUN_LINE } from './reviewForcedSequence';
 import { threatPurpose } from './threatPurpose';
+import { temptingCaptureRead } from './reviewTeachingPoints';
 import type { PvLine } from './pvPlayback';
 import { oppositionTaken, oppositionLine, oppositionSquares } from './oppositionRead';
 import { zugzwangMade, zugzwangSyncLine, zugzwangSyncProof } from './zugzwangRead';
@@ -435,6 +436,12 @@ export interface BoardContexts {
    *  wins another, mates, or trades queens into a won ending. The caller
    *  hands only a line it has read as decisive for the side that moves first. */
   threatPurpose: { line: PvLine | null; student: Color };
+  /** WHY NOT JUST TAKE? (`temptingCapture`): on `fenBefore` the mover plays
+   *  `san` and leaves the most tempting capture alone — the capture loses
+   *  material, opens a file at the mover's king, or the capturer is trapped.
+   *  `line`: the line walked from `fenBefore`, starting with `san`, or null.
+   *  `student`: null where the line has no seat (a theory lecture). */
+  temptingCapture: { fenBefore: string; san: string; student: Color | null; line: readonly string[] | null };
   /** THE OPPOSITION TAKEN (`oppositionRead`, Danya's "it is Black who has
    *  the opposition"): the king move `san` on `fenBefore` (either seat) takes
    *  the opposition in a king-and-pawn ending, with what it forces.
@@ -2293,6 +2300,28 @@ export const BOARD_COMPUTERS = {
       weaknesses: { not: 'a reading of a line — no question of the student\'s posed' },
     },
   },
+  temptingCapture: {
+    // The capture the mover leaves alone, and why it fails, both seats (or
+    // no seat, side names from the board).
+    read: ({ fenBefore, san, student, line }, fact) => safe(() => {
+      const mover: Color = new Chess(fenBefore).turn();
+      const r = temptingCaptureRead(fenBefore, san, student === null ? 'neutral' : mover === student ? 'you' : 'they', line);
+      if (!r) return null;
+      const squares = [r.key.slice(0, 2), r.key.slice(2, 4)];
+      return fact({ key: r.key, claims: [`tempting-capture:${r.key}`], text: r.text,
+        proof: squaresProof(r.text, squares) ?? NO_PROOF.stated, squares, stakes: null,
+        seat: student === null || mover === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore });
+    }),
+    computer: 'explainTemptingCapture',
+    kind: 'tactic',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: { wired: 'services/projectedLineVoice.ts' }, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a capture left alone — no question of the student\'s posed' },
+    },
+  },
   oppositionRead: {
     // His "1.Kd6 meets with 1...Kd8, when it is Black who has the opposition":
     // the king move that takes it, what it forces, both seats.
@@ -2889,4 +2918,14 @@ export function readBoardAll<K extends ComputerId>(id: K, ctx: BoardContexts[K])
 /** The one call a surface makes — the first fact, or null. */
 export function readBoard<K extends ComputerId>(id: K, ctx: BoardContexts[K]): BoardFact<K> | null {
   return readBoardAll(id, ctx)[0] ?? null;
+}
+
+/** A basket fact said once per walk: `told` is the walk's own ledger of the
+ *  facts already said (a lecture, a line), keyed by the fact's key. */
+export function sayOnce(f: CoachFact | null, told: Set<string> | null): string | null {
+  if (!f) return null;
+  const k = readKey(f);
+  if (told?.has(k)) return null;
+  told?.add(k);
+  return f.text;
 }

@@ -34,7 +34,7 @@ import { openSentence, withSubject } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { plyFactsSentence, type PlyFacts } from './pvPlayback';
 import { buildReviewMoveTeaching } from './reviewMoveTeaching';
-import { explainTemptingCapture } from './reviewTeachingPoints';
+import { readBoard, sayOnce } from './boardComputers';
 import { opponentReplySentence } from './puzzleConceptExplanation';
 import { proofCut } from './exchangeLedger';
 import { tacticInvariant } from './conceptEngine';
@@ -150,7 +150,7 @@ export function projectedLineVoice(
     }
     const parts = [base ? sentence(base) : null];
     if (i === motifAt && motif) parts.push(motif);
-    if (opts.explainTemptation) parts.push(explainTemptingCapture(p.fenBefore, p.san, 'you', sans.slice(i), toldTemptations));
+    if (opts.explainTemptation) parts.push(sayOnce(readBoard('temptingCapture', { fenBefore: p.fenBefore, san: p.san, student: new Chess(p.fenBefore).turn(), line: sans.slice(i) }), toldTemptations));
     const out = parts.filter((x): x is string => !!x && x.trim().length > 0).join(' ').trim();
     return out.length > 0 ? out : null;
   });

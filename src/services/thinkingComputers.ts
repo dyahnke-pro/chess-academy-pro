@@ -38,6 +38,7 @@ export const THINK_STEP: Record<ComputerName, ThinkAnswer> = {
   pieceRoute: 'assess',
   itineraryAt: 'assess',
   threatPurpose: 'answer-danger',
+  explainTemptingCapture: 'candidates',
   pieceOutFirst: 'assess',
   lineCut: 'is-my-move-safe',
   pieceCage: 'assess',
