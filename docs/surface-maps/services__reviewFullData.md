@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2094 lines · 12 exports · 23 importers · 31 tests · 0 audits**
+**2097 lines · 12 exports · 23 importers · 31 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -39,7 +39,7 @@
 ## Exports and every call site
 
 ### `positionalVerdictLine` (function) — 1 call site
-- `src/services/coachFeatureService.ts:3043`
+- `src/services/coachFeatureService.ts:3044`
 
 ### `prematureBreakWhy` (function) — 7 call sites
 - `src/services/coachFeatureService.ts:1222`
@@ -113,8 +113,8 @@
 - `src/services/tacticGeometry.test.ts:272`
 - `src/services/tacticGeometry.test.ts:277`
 - `src/services/unifiedBetterMoveReason.test.ts:39`
-- `src/services/weighedMoves.test.ts:250`
-- `src/services/weighedMoves.test.ts:263`
+- `src/services/weighedMoves.test.ts:257`
+- `src/services/weighedMoves.test.ts:270`
 - `src/test/teach02Wired.test.ts:28`
 - `src/test/teach02Wired.test.ts:68`
 

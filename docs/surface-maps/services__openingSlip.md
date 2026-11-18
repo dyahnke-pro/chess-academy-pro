@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**471 lines · 6 exports · 4 importers · 4 tests · 0 audits**
+**474 lines · 6 exports · 4 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,7 +26,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `openingSlip` (function) — 5 call sites
-- `src/services/boardComputers.ts:817`
+- `src/services/boardComputers.ts:844`
 - `src/services/openingSlip.measure.test.ts:39`
 - `src/services/openingSlip.test.ts:26`
 - `src/services/openingSlip.test.ts:128`
@@ -38,7 +38,7 @@
 - `src/services/openingSlip.test.ts:125`
 
 ### `mastersBook` (function) — 2 call sites
-- `src/services/boardComputers.ts:815`
+- `src/services/boardComputers.ts:842`
 - `src/services/openingSlip.measure.test.ts:37`
 
 ### `bookMoveRead` (function) — 5 call sites

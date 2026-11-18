@@ -105,7 +105,7 @@
 - `src/services/positionFacts.weakness.test.ts:71`
 
 ### `clauseClaims` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11573`
+- `src/components/Coach/CoachTeachPage.tsx:11572`
 - `src/hooks/usePhaseNarration.door.test.ts:78`
 - `src/hooks/usePhaseNarration.ts:471`
 - `src/services/raceAimOneVoice.test.ts:20`
@@ -120,12 +120,12 @@
 - `src/services/positionFacts.test.ts:314`
 - `src/services/positionFacts.test.ts:374`
 - `src/services/positionFacts.test.ts:375`
-- `src/services/positionReadComposer.ts:165`
+- `src/services/positionReadComposer.ts:167`
 - `src/services/whyBestMove.ts:152`
 
 ### `computePositionFacts` (function) — 113 call sites
 - `src/coach/boardTurnAnswer.ts:177`
-- `src/components/Coach/CoachTeachPage.tsx:11414`
+- `src/components/Coach/CoachTeachPage.tsx:11413`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:271`
 - `src/hooks/usePhaseNarration.ts:433`
@@ -214,7 +214,7 @@
 - `src/services/positionFacts.weakness.test.ts:66`
 - `src/services/positionFacts.weakness.test.ts:67`
 - `src/services/positionFactsRegistry.test.ts:9`
-- `src/services/positionReadComposer.ts:137`
+- `src/services/positionReadComposer.ts:139`
 - `src/services/raceAimOneVoice.test.ts:17`
 - `src/services/setUpChance.test.ts:109`
 - `src/services/speedRunReads.scale.test.ts:37`
@@ -239,7 +239,7 @@
 - `src/test/teach02Wired.test.ts:140`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11691`
+- `src/components/Coach/CoachTeachPage.tsx:11690`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
@@ -257,8 +257,8 @@
 - `src/services/positionFacts.afterLine.test.ts:25`
 
 ### `conceptInstanceKey` (re-export) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9381`
-- `src/components/Coach/CoachTeachPage.tsx:9520`
+- `src/components/Coach/CoachTeachPage.tsx:9380`
+- `src/components/Coach/CoachTeachPage.tsx:9519`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/claimKeysLooseCount.test.ts:31`

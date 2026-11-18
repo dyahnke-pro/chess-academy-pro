@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**228 lines · 2 exports · 3 importers · 6 tests · 0 audits**
+**233 lines · 2 exports · 3 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,7 +22,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `composePositionRead` (function) — 3 call sites
-- `src/hooks/usePositionNarration.ts:237`
+- `src/hooks/usePositionNarration.ts:228`
 - `src/services/positionReadComposer.withhold.test.ts:18`
 - `src/test/everySurfaceSpeaks.test.ts:131`
 

@@ -84,8 +84,8 @@
 - `src/services/boardComputers.test.ts:80`
 - `src/services/coachFact.test.ts:86`
 - `src/services/coachFact.test.ts:87`
-- `src/services/coachFeatureService.ts:2732`
-- `src/services/coachFeatureService.ts:3349`
+- `src/services/coachFeatureService.ts:2733`
+- `src/services/coachFeatureService.ts:3350`
 - `src/services/learnTurnDoor.ts:344`
 - `src/services/learnTurnDoor.ts:1072`
 - `src/services/learnTurnDoor.ts:1129`
@@ -100,17 +100,17 @@
 - `src/services/learnTurnDoor.ts:1463`
 
 ### `placeFact` (function) — 20 call sites
-- `src/services/boardComputers.ts:1215`
-- `src/services/boardComputers.ts:2766`
+- `src/services/boardComputers.ts:1242`
+- `src/services/boardComputers.ts:2793`
 - `src/services/learnTurnDoor.ts:804`
-- `src/services/moveThoughtFacts.ts:212`
-- `src/services/moveThoughtFacts.ts:633`
-- `src/services/moveThoughtFacts.ts:653`
-- `src/services/moveThoughtFacts.ts:722`
-- `src/services/moveThoughtFacts.ts:736`
-- `src/services/moveThoughtFacts.ts:1425`
-- `src/services/moveThoughtFacts.ts:1457`
-- `src/services/moveThoughtFacts.ts:1474`
+- `src/services/moveThoughtFacts.ts:211`
+- `src/services/moveThoughtFacts.ts:632`
+- `src/services/moveThoughtFacts.ts:652`
+- `src/services/moveThoughtFacts.ts:721`
+- `src/services/moveThoughtFacts.ts:735`
+- `src/services/moveThoughtFacts.ts:1427`
+- `src/services/moveThoughtFacts.ts:1459`
+- `src/services/moveThoughtFacts.ts:1476`
 - `src/services/openingStory.ts:422`
 - `src/services/positionFacts.ts:548`
 - `src/services/reviewFacet.ts:85`
@@ -122,20 +122,20 @@
 - `src/test/doorFact.ts:22`
 
 ### `stakesOf` (function) — 19 call sites
-- `src/services/boardComputers.ts:1216`
-- `src/services/boardComputers.ts:2766`
+- `src/services/boardComputers.ts:1243`
+- `src/services/boardComputers.ts:2793`
 - `src/services/coachFact.test.ts:112`
 - `src/services/coachFact.test.ts:118`
 - `src/services/coachFact.test.ts:119`
 - `src/services/learnTurnDoor.ts:805`
-- `src/services/moveThoughtFacts.ts:213`
-- `src/services/moveThoughtFacts.ts:633`
-- `src/services/moveThoughtFacts.ts:654`
-- `src/services/moveThoughtFacts.ts:723`
-- `src/services/moveThoughtFacts.ts:737`
-- `src/services/moveThoughtFacts.ts:1426`
-- `src/services/moveThoughtFacts.ts:1458`
-- `src/services/moveThoughtFacts.ts:1475`
+- `src/services/moveThoughtFacts.ts:212`
+- `src/services/moveThoughtFacts.ts:632`
+- `src/services/moveThoughtFacts.ts:653`
+- `src/services/moveThoughtFacts.ts:722`
+- `src/services/moveThoughtFacts.ts:736`
+- `src/services/moveThoughtFacts.ts:1428`
+- `src/services/moveThoughtFacts.ts:1460`
+- `src/services/moveThoughtFacts.ts:1477`
 - `src/services/openingStory.ts:423`
 - `src/services/positionFacts.ts:556`
 - `src/services/reviewFacet.ts:96`

@@ -60,7 +60,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/nextPlans.structureIdeaKey.test.ts:13`
 - `src/services/passerSentence.test.ts:30`
 - `src/services/positionFacts.ts:1227`
-- `src/services/positionReadComposer.ts:197`
+- `src/services/positionReadComposer.ts:202`
 - `src/services/positionalRead.race.test.ts:10`
 - `src/services/positionalRead.test.ts:28`
 - `src/services/positionalRead.test.ts:43`
@@ -105,7 +105,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/everySurfaceSpeaks.test.ts:123`
 
 ### `buildPositionalRead` (function) — 17 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10022`
+- `src/components/Coach/CoachTeachPage.tsx:10021`
 - `src/services/claimChecker.measure.test.ts:134`
 - `src/services/learnWalkBlumenfeld.test.ts:127`
 - `src/services/learnWalkNimzo.test.ts:35`

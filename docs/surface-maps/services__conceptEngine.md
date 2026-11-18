@@ -51,13 +51,13 @@
 - `src/data/endgame-side-correctness.test.ts:51`
 - `src/data/grounding/groundingLib.ts:56`
 - `src/data/groundingMistakes.test.ts:38`
-- `src/services/boardComputers.ts:595`
-- `src/services/boardComputers.ts:1928`
-- `src/services/boardComputers.ts:1956`
-- `src/services/boardComputers.ts:2515`
-- `src/services/boardComputers.ts:2533`
-- `src/services/boardComputers.ts:2549`
-- `src/services/boardComputers.ts:2567`
+- `src/services/boardComputers.ts:606`
+- `src/services/boardComputers.ts:1955`
+- `src/services/boardComputers.ts:1983`
+- `src/services/boardComputers.ts:2542`
+- `src/services/boardComputers.ts:2560`
+- `src/services/boardComputers.ts:2576`
+- `src/services/boardComputers.ts:2594`
 - `src/services/conceptEngine.test.ts:19`
 - `src/services/conceptEngine.test.ts:20`
 - `src/services/groundedMoveWhy.ts:83`
@@ -144,22 +144,22 @@
 - `src/services/conceptVocabulary.test.ts:63`
 
 ### `definitionKey` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8724`
+- `src/components/Coach/CoachTeachPage.tsx:8723`
 - `src/services/learnWalkBlumenfeld.test.ts:142`
 - `src/services/positionFacts.ts:1495`
 - `src/services/positionFacts.ts:1497`
 - `src/services/positionFacts.ts:1958`
 - `src/services/positionFacts.ts:1962`
-- `src/services/reviewFullData.ts:759`
-- `src/services/reviewFullData.ts:762`
-- `src/services/reviewFullData.ts:763`
+- `src/services/reviewFullData.ts:761`
+- `src/services/reviewFullData.ts:764`
+- `src/services/reviewFullData.ts:765`
 
 ### `tacticInvariant` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8727`
+- `src/components/Coach/CoachTeachPage.tsx:8726`
 - `src/services/dnaLineNarrator.ts:57`
 - `src/services/projectedLineVoice.ts:99`
 - `src/services/puzzleConceptExplanation.ts:132`
-- `src/services/reviewFullData.ts:758`
+- `src/services/reviewFullData.ts:760`
 - `src/services/tacticAlertService.ts:148`
 - `src/services/tacticTypeUnification.test.ts:205`
 - `src/test/auditConceptGameplayCues.test.ts:24`

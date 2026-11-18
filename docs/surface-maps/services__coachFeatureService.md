@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6842 lines · 36 exports · 76 importers · 92 tests · 4 audits**
+**6843 lines · 36 exports · 76 importers · 92 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -353,10 +353,10 @@
 - `src/services/coachFeatureService.test.ts:626`
 
 ### `pendingRecapture` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8885`
-- `src/components/Coach/CoachTeachPage.tsx:8990`
-- `src/components/Coach/CoachTeachPage.tsx:11961`
-- `src/components/Coach/CoachTeachPage.tsx:12364`
+- `src/components/Coach/CoachTeachPage.tsx:8884`
+- `src/components/Coach/CoachTeachPage.tsx:8989`
+- `src/components/Coach/CoachTeachPage.tsx:11960`
+- `src/components/Coach/CoachTeachPage.tsx:12363`
 - `src/services/coachFeatureService.test.ts:912`
 - `src/services/coachFeatureService.test.ts:913`
 - `src/services/phaseTransitionDetector.test.ts:575`
@@ -428,7 +428,7 @@
 - `src/services/advantageWasMissed.test.ts:11`
 - `src/services/advantageWasMissed.test.ts:14`
 - `src/services/advantageWasMissed.test.ts:15`
-- `src/services/reviewFullData.ts:700`
+- `src/services/reviewFullData.ts:702`
 - `src/services/reviewWithholding.ts:13`
 
 ### `detectBadHabits` (re-export) — 7 call sites
