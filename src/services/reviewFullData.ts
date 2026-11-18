@@ -30,7 +30,7 @@ import { uciToSanAt } from './liveFundamental';
 import { landedTacticFor, plyFactsForMove, type PrevCaptureContext } from './pvPlayback';
 import { captureRunAfterMove } from './captureRun';
 import { definitionKey, tacticInvariant } from './conceptEngine';
-import { findMinorityAttack, findColorComplexWeakness, signedLegalSeeFor, seeSequence } from './positionReadingService';
+import { signedLegalSeeFor, seeSequence } from './positionReadingService';
 import { detectTactics, tacticDescription } from './tacticsDetector';
 import { verifyForkOnBoard } from './tacticVerification';
 import { seatPieceReferences, detectNewThreat } from './groundedAnswer';
@@ -67,10 +67,8 @@ import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShi
 import { explainMatingSacMechanism } from './reviewForcedSequence';
 import { buildMiddlegameOrientation } from './reviewStrategicOrientation';
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
-import { planRaceClause, planRaceProof, pawnSquareTaken, pawnSquareRaceProof } from './planRace';
+import { pawnSquareTaken, pawnSquareRaceProof } from './planRace';
 import { kingReadsForBestLine } from './kingAttackReads';
-import { passedPawnPush, findTrappedPiece } from './reviewTeachingPoints';
-import { pieceWish } from './pieceWish';
 import { hangingLine, lostLastGuard } from './hangingLine';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
 import type { SaidSet } from './gameStory';
@@ -78,7 +76,7 @@ import { renderFundamentalVerdict } from './principleVoice';
 import { fundamentalReply, sameReplyAsGrade } from './mistakeTurnLine';
 import { errorWhy, priorMoveLeadingTo, replyKeptWin, type SecondReads } from './inaccuracyCall';
 import { toOtherSeat } from '../utils/seatPronouns';
-import { andList, countWord, lineSeatAt, withArticle } from '../utils/andList';
+import { andList, lineSeatAt, withArticle } from '../utils/andList';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { exchangeIdeas } from './exchangeIdeas';
 import { minorsAtHome } from './development';
@@ -1119,18 +1117,12 @@ export function computeMoveFacets(
   }
 
   // ── 6. KING SAFETY (enemy king exposed in the centre) ──
-  if (studentColorWB && enemyKingStuckInCenter(fenAfter, studentColorWB)) {
-    put('enemyKingStuckInCenter', 'king', 'Their king is stuck in the centre with a central file open on it.');
-  }
+  if (studentColorWB) basketFacet(readBoard('kingInCentre', { fen: fenAfter, student: studentColorWB }));
 
   // ── 6a. TRAPPED PIECE — either side (David 2026-07-21: "the trapped piece
   // was the queen!!!"). Story-level event: a rook/queen with no safe square.
   if (studentColorWB) {
-    const enemyWB: Color = studentColorWB === 'w' ? 'b' : 'w';
-    const trapTheirs = findTrappedPiece(fenAfter, enemyWB, ctx.playedLineUci);
-    if (trapTheirs) { const f = made('findTrappedPiece', 'trapped', `Their ${trapTheirs.piece} on ${trapTheirs.square} is trapped — attacked by the ${trapTheirs.attackerPiece} on ${trapTheirs.attackerSquare}, and every escape square is covered. It's coming off the board.`); facets.push(f); recSquares(f, [trapTheirs.square, trapTheirs.attackerSquare]); recStakes(f, exchangeStakes(fenAfter, [trapTheirs.square])); }
-    const trapMine = findTrappedPiece(fenAfter, studentColorWB, ctx.playedLineUci);
-    if (trapMine) { const f = made('findTrappedPiece', 'trapped', `Careful — your ${trapMine.piece} on ${trapMine.square} is trapped: attacked by the ${trapMine.attackerPiece} on ${trapMine.attackerSquare} with no safe square. Look for the cheapest way out.`); facets.push(f); recSquares(f, [trapMine.square, trapMine.attackerSquare]); recStakes(f, exchangeStakes(fenAfter, [trapMine.square])); }
+    for (const f of readBoardAll('trappedPiece', { fen: fenAfter, student: studentColorWB, lineUci: ctx.playedLineUci })) basketFacet(f);
   }
 
   // ── 6a. TRADES, DEFENCE, NUGGETS (computers batch 5) — the same reads the
@@ -1170,38 +1162,19 @@ export function computeMoveFacets(
     // the piece the student's own move just put there: that move's point is
     // speaking.
     const movedTo = isStudent ? ((): string | null => { try { return new Chess(fenBefore).move(san).to; } catch { return null; } })() : null;
-    const wish = pieceWish(fenAfter, studentColorWB, movedTo);
-    if (wish) { const f = put('pieceWish', 'worst', wish.text); recSquares(f, [wish.square, ...wish.via, wish.target]); }
-    const passer = struct?.pawns.passedPawns[studentColorWB][0] ?? null; // reuse §5's struct
+    basketFacet(readBoard('worstPiece', { fen: fenAfter, student: studentColorWB, movedTo }));
     // Not on the move that PUSHES it — the move's own point says "pushes your
     // passed pawn" (amateur review walk 2026-09-27: both, one ply).
-    let pushedThisPasser = false;
-    try { const pm = new Chess(fenBefore).move(san); pushedThisPasser = pm.piece === 'p' && pm.to === passer; } catch { pushedThisPasser = false; }
-    const passNote = pushedThisPasser ? null : passedPawnPush(fenAfter, studentColorWB, passer);
-    if (passNote) { const f = made('passedPawnPush', 'passer', `${cap(passNote)}.`); facets.push(f); recSquares(f, [passer]); }
+    const pushed = ((): string | null => { try { const pm = new Chess(fenBefore).move(san); return pm.piece === 'p' ? pm.to : null; } catch { return null; } })();
+    basketFacet(readBoard('passerPush', { fen: fenAfter, student: studentColorWB, pushed }));
 
     // ── 6c. WIDENED BOARD AWARENESS ON REVIEW (David 2026-09-13: "I also want
     // these changes on review") — the same minority-attack + colour-complex
     // computers the Learn/Play read gained, in the retrospective register. Both
     // sides: a weakness in the opponent's camp is the student's plan; one in the
     // student's own camp is what to shore up. Deduped once per game by the caller.
-    const enemyWB2: Color = studentColorWB === 'w' ? 'b' : 'w';
-    const myMinority = findMinorityAttack(fenAfter, studentColorWB);
-    if (myMinority) { const f = made('findMinorityAttack', 'minority', `You have a minority attack on the ${myMinority.flank} — ${myMinority.leverSan} makes contact and leaves them a weak pawn on ${myMinority.target}.`); facets.push(f); recSquares(f, [myMinority.target]); }
-    const theirMinority = findMinorityAttack(fenAfter, enemyWB2);
-    if (theirMinority) { const f = made('findMinorityAttack', 'minority', `They have a minority attack on the ${theirMinority.flank} — ${theirMinority.leverSan} is the lever, leaving you a weak pawn on ${theirMinority.target} to watch.`); facets.push(f); recSquares(f, [theirMinority.target]); }
-    for (const cc of findColorComplexWeakness(fenAfter)) {
-      // Two holes are named; more are counted and lit (David 2026-11-05: a
-      // list of squares read out is the robot).
-      const sqs = cc.squares.length <= 2 ? andList([...cc.squares]) : `${countWord(cc.squares.length)} squares`;
-      if (cc.side === enemyWB2) { const f = made('findColorComplexWeakness', 'complex', `Their ${cc.complex} squares are weak: ${sqs} ${cc.squares.length === 1 ? 'is a hole' : 'are holes'} no bishop of theirs covers. ${cc.by === 'knight' ? 'A knight belongs on one' : 'Your bishop can work on them'}.`); facets.push(f); recSquares(f, cc.squares); break; }
-    }
-    for (const cc of findColorComplexWeakness(fenAfter)) {
-      const text = cc.squares.length <= 2
-        ? `Your ${cc.complex} squares are weak: with no bishop of that colour, no pawn or bishop of yours can cover ${andList([...cc.squares])}.`
-        : `Your ${cc.complex} squares are weak: with no bishop of that colour, ${countWord(cc.squares.length)} of them have no pawn or bishop of yours to cover them.`;
-      if (cc.side === studentColorWB) { const f = made('findColorComplexWeakness', 'complex', text); facets.push(f); recSquares(f, cc.squares); break; }
-    }
+    for (const f of readBoardAll('minority', { fen: fenAfter, student: studentColorWB })) basketFacet(f);
+    for (const f of readBoardAll('colourComplex', { fen: fenAfter, student: studentColorWB })) basketFacet(f);
     // FORWARD PLANS are not read here: the walk runs the ONE plan thread
     // (`planThreadTurn`, the same as Learn) on each of their moves — the stop
     // with its proof, then one plan, held while it stands.
@@ -1211,8 +1184,10 @@ export function computeMoveFacets(
     // unless the two sides are running the SAME kind of plan toward the same kind
     // of terminal event — a cross-kind tempo number (pawn pushes vs rook moves)
     // is incomparable, and a confidently wrong number is worse than silence.
-    const race = planRaceClause(fenAfter, studentColorWB, 'review');
-    if (race) { const f = made('planRaceClause', 'plan-race', `${cap(race)}.`); facets.push(f); recProof(f, planRaceProof(fenAfter, studentColorWB)); }
+    {
+      const race = readBoard('raceOfPlans', { fen: fenAfter, student: studentColorWB });
+      if (race) { basketFacet(race); const raw = facets[facets.length - 1]; recProof(raw, isProof(race.proof) ? race.proof : null); }
+    }
   }
 
   // ── 7. SACRIFICE — compensation + mechanism + king-shield removal ──

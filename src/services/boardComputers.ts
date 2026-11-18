@@ -88,6 +88,14 @@ import { forcedRunAt, FORCED_RUN_LINE } from './reviewForcedSequence';
 import { threatPurpose } from './threatPurpose';
 import { temptingCaptureRead, attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop } from './reviewTeachingPoints';
 import { nameEndgamePhase } from './reviewMoveTeaching';
+import { passedPawnPush, findTrappedPiece } from './reviewTeachingPoints';
+import { enemyKingStuckInCenter } from './reviewSacrifice';
+import { findMinorityAttack, findColorComplexWeakness } from './positionReadingService';
+import { planRaceClause, planRaceProof } from './planRace';
+import { pieceWish } from './pieceWish';
+import { describeStructure } from './boardStructure';
+import { exchangeStakes } from './factStakes';
+import { andList as listAnd, countWord } from '../utils/andList';
 import { imageryFor } from './factImagery';
 import { stemKeyOf } from '../utils/rotateStem';
 import { openSentence } from '../utils/openSentence';
@@ -455,6 +463,21 @@ export interface BoardContexts {
   rook7: { fen: string; student: Color };
   badBishop: { fen: string; student: Color };
   endgamePhase: { fen: string; student: Color };
+  /** MORE BOARD READS from the student's seat after a move: their king stuck
+   *  in the centre (`kingInCentre`), a rook or queen with no safe square,
+   *  either side (`trappedPiece`, the played line read for the escape), the
+   *  piece that wants a better square (`worstPiece`, never the one the
+   *  student's move just put there: `movedTo`), the passed pawn to push
+   *  (`passerPush`, not on the move that pushes it: `pushed`), a minority
+   *  attack and a weak colour complex either side (`minority`,
+   *  `colourComplex`), and the race of two same-kind plans (`raceOfPlans`). */
+  kingInCentre: { fen: string; student: Color };
+  trappedPiece: { fen: string; student: Color; lineUci: readonly string[] };
+  worstPiece: { fen: string; student: Color; movedTo: string | null };
+  passerPush: { fen: string; student: Color; pushed: string | null };
+  minority: { fen: string; student: Color };
+  colourComplex: { fen: string; student: Color };
+  raceOfPlans: { fen: string; student: Color };
   /** THE OPPOSITION TAKEN (`oppositionRead`, Danya's "it is Black who has
    *  the opposition"): the king move `san` on `fenBefore` (either seat) takes
    *  the opposition in a king-and-pawn ending, with what it forces.
@@ -2418,6 +2441,173 @@ export const BOARD_COMPUTERS = {
       learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_NA,
       weaknesses: { not: 'the ending named, no question of the student\'s posed' },
+    },
+  },
+  kingInCentre: {
+    read: ({ fen, student }, fact) => safe(() => {
+      if (!enemyKingStuckInCenter(fen, student)) return null;
+      const text = 'Their king is stuck in the centre with a central file open on it.';
+      return fact({ key: `king-centre:${fen.split(' ')[0]}`, claims: ['king-centre'], text, proof: NO_PROOF.description, squares: [], stakes: null,
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'enemyKingStuckInCenter',
+    kind: 'king',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the board — no question of the student\'s posed' },
+    },
+  },
+  trappedPiece: {
+    // A rook or queen with no safe square, either side.
+    read: ({ fen, student, lineUci }, fact) => safe(() => {
+      const enemy: Color = student === 'w' ? 'b' : 'w';
+      const out: CoachFact[] = [];
+      const theirs = findTrappedPiece(fen, enemy, lineUci);
+      if (theirs) {
+        const text = `Their ${theirs.piece} on ${theirs.square} is trapped — attacked by the ${theirs.attackerPiece} on ${theirs.attackerSquare}, and every escape square is covered. It's coming off the board.`;
+        const squares = [theirs.square, theirs.attackerSquare];
+        out.push(fact({ key: `trapped:${theirs.square}`, claims: [`trapped:${theirs.square}`], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: exchangeStakes(fen, [theirs.square]),
+          seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen }));
+      }
+      const mine = findTrappedPiece(fen, student, lineUci);
+      if (mine) {
+        const text = `Careful — your ${mine.piece} on ${mine.square} is trapped: attacked by the ${mine.attackerPiece} on ${mine.attackerSquare} with no safe square. Look for the cheapest way out.`;
+        const squares = [mine.square, mine.attackerSquare];
+        out.push(fact({ key: `trapped:${mine.square}`, claims: [`trapped:${mine.square}`], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: exchangeStakes(fen, [mine.square]),
+          seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen }));
+      }
+      return out.length ? out : null;
+    }),
+    computer: 'findTrappedPiece',
+    kind: 'trapped',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the board — no question of the student\'s posed' },
+    },
+  },
+  worstPiece: {
+    read: ({ fen, student, movedTo }, fact) => safe(() => {
+      const wish = pieceWish(fen, student, movedTo);
+      if (!wish) return null;
+      const squares = [wish.square, ...wish.via, wish.target];
+      return fact({ key: `wish:${wish.square}:${wish.target}`, claims: [`wish:${wish.square}`], text: wish.text, proof: squaresProof(wish.text, squares) ?? NO_PROOF.description, squares, stakes: null,
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'pieceWish',
+    kind: 'worst',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the board — no question of the student\'s posed' },
+    },
+  },
+  passerPush: {
+    read: ({ fen, student, pushed }, fact) => safe(() => {
+      const passer = describeStructure(fen)?.pawns.passedPawns[student][0] ?? null;
+      if (!passer || passer === pushed) return null;
+      const note = passedPawnPush(fen, student, passer);
+      if (!note) return null;
+      const text = `${openSentence(note)}.`;
+      return fact({ key: `passer:${passer}`, claims: [`passer:${passer}`], text, proof: squaresProof(text, [passer]) ?? NO_PROOF.description, squares: [passer], stakes: null,
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'passedPawnPush',
+    kind: 'passer',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the board — no question of the student\'s posed' },
+    },
+  },
+  minority: {
+    // A minority attack, either side.
+    read: ({ fen, student }, fact) => safe(() => {
+      const enemy: Color = student === 'w' ? 'b' : 'w';
+      const out: CoachFact[] = [];
+      const mine = findMinorityAttack(fen, student);
+      if (mine) {
+        const text = `You have a minority attack on the ${mine.flank} — ${mine.leverSan} makes contact and leaves them a weak pawn on ${mine.target}.`;
+        out.push(fact({ key: `minority:${student}:${mine.target}`, claims: [`minority:${mine.target}`], text, proof: squaresProof(text, [mine.target]) ?? NO_PROOF.description, squares: [mine.target], stakes: null,
+          seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen }));
+      }
+      const theirs = findMinorityAttack(fen, enemy);
+      if (theirs) {
+        const text = `They have a minority attack on the ${theirs.flank} — ${theirs.leverSan} is the lever, leaving you a weak pawn on ${theirs.target} to watch.`;
+        out.push(fact({ key: `minority:${enemy}:${theirs.target}`, claims: [`minority:${theirs.target}`], text, proof: squaresProof(text, [theirs.target]) ?? NO_PROOF.description, squares: [theirs.target], stakes: null,
+          seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen }));
+      }
+      return out.length ? out : null;
+    }),
+    computer: 'findMinorityAttack',
+    kind: 'minority',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the board — no question of the student\'s posed' },
+    },
+  },
+  colourComplex: {
+    // A weak colour complex, either side: two holes are named, more are
+    // counted and lit.
+    read: ({ fen, student }, fact) => safe(() => {
+      const enemy: Color = student === 'w' ? 'b' : 'w';
+      const all = findColorComplexWeakness(fen);
+      const out: CoachFact[] = [];
+      const theirs = all.find((cc) => cc.side === enemy);
+      if (theirs) {
+        const sqs = theirs.squares.length <= 2 ? listAnd([...theirs.squares]) : `${countWord(theirs.squares.length)} squares`;
+        const text = `Their ${theirs.complex} squares are weak: ${sqs} ${theirs.squares.length === 1 ? 'is a hole' : 'are holes'} no bishop of theirs covers. ${theirs.by === 'knight' ? 'A knight belongs on one' : 'Your bishop can work on them'}.`;
+        out.push(fact({ key: `complex:${enemy}:${theirs.complex}`, claims: [`complex:${enemy}:${theirs.complex}`], text, proof: squaresProof(text, theirs.squares) ?? NO_PROOF.description, squares: [...theirs.squares], stakes: null,
+          seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen }));
+      }
+      const mine = all.find((cc) => cc.side === student);
+      if (mine) {
+        const text = mine.squares.length <= 2
+          ? `Your ${mine.complex} squares are weak: with no bishop of that colour, no pawn or bishop of yours can cover ${listAnd([...mine.squares])}.`
+          : `Your ${mine.complex} squares are weak: with no bishop of that colour, ${countWord(mine.squares.length)} of them have no pawn or bishop of yours to cover them.`;
+        out.push(fact({ key: `complex:${student}:${mine.complex}`, claims: [`complex:${student}:${mine.complex}`], text, proof: squaresProof(text, mine.squares) ?? NO_PROOF.description, squares: [...mine.squares], stakes: null,
+          seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen }));
+      }
+      return out.length ? out : null;
+    }),
+    computer: 'findColorComplexWeakness',
+    kind: 'complex',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the board — no question of the student\'s posed' },
+    },
+  },
+  raceOfPlans: {
+    read: ({ fen, student }, fact) => safe(() => {
+      const race = planRaceClause(fen, student, 'review');
+      if (!race) return null;
+      const text = `${openSentence(race)}.`;
+      return fact({ key: `race:${fen.split(' ')[0]}`, claims: ['plan-race'], text, proof: planRaceProof(fen, student) ?? NO_PROOF.description, squares: [], stakes: null,
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'planRaceClause',
+    kind: 'plan-race',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the board — no question of the student\'s posed' },
     },
   },
   oppositionRead: {

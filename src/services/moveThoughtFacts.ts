@@ -62,6 +62,12 @@ import { computeMustDefend } from './threatOut';
 import { moveOrder } from './moveOrder';
 import { readBoardAll, readKey } from './boardComputers';
 import { pvLineFromUci } from './pvPlayback';
+/** A SAN line from a board, as UCI (moves it cannot play end it). */
+function sansToUci(fen: string, sans: readonly string[]): string[] {
+  const out: string[] = [];
+  try { const c = new Chess(fen); for (const s of sans) { const m = c.move(s); out.push(`${m.from}${m.to}${m.promotion ?? ''}`); } } catch { /* stop at the first move that does not play */ }
+  return out;
+}
 /** A line decisive for its mover: two and a half pawns or mate (Review's deep-threat floor). */
 const DECISIVE_LINE_CP = 250;
 import { detectTactics } from './tacticsDetector';
@@ -888,6 +894,13 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
           for (const f of readBoardAll('rook7', onBoard)) add(f, 'pressure', 56);
           for (const f of readBoardAll('badBishop', onBoard)) add(f, 'weakness', 52);
           for (const f of readBoardAll('endgamePhase', onBoard)) add(f, 'plan', 50);
+          for (const f of readBoardAll('kingInCentre', onBoard)) add(f, 'pressure', 62);
+          for (const f of readBoardAll('trappedPiece', { ...onBoard, lineUci: i.line ? sansToUci(fenAfterMove, i.line) : [] })) add(f, 'win-material', 80);
+          for (const f of readBoardAll('worstPiece', { ...onBoard, movedTo: (() => { try { return new Chess(i.fenBefore).move(i.san).to; } catch { return null; } })() })) add(f, 'route', 48);
+          for (const f of readBoardAll('passerPush', { ...onBoard, pushed: (() => { try { const m = new Chess(i.fenBefore).move(i.san); return m.piece === 'p' ? m.to : null; } catch { return null; } })() })) add(f, 'passed-pawn', 58);
+          for (const f of readBoardAll('minority', onBoard)) add(f, 'plan', 52);
+          for (const f of readBoardAll('colourComplex', onBoard)) add(f, 'weakness', 50);
+          for (const f of readBoardAll('raceOfPlans', onBoard)) add(f, 'plan', 60);
         }
       }
       // The fortress, both seats: a piece down and a draw the board explains,
