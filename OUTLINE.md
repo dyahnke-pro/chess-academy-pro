@@ -21,6 +21,13 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 
 ---
 
+## 000zk. WO-DANYA-READS-01 — every idea Danya reads off a board, computed — TOP OF THE LIST (David 2026-11-18, `docs/plans/2026-11-18-danya-board-reads-gaps.md`)
+- ✅ measured: 202 of his article boards, 673 ideas — 28% said right, 10% wrong, 62% missed; 261 of our lines false or pointless
+- 🔴 step 1: fix the false-line producers ("First, take X", colour-complex / passer / minority-attack slogans, verdicts against the engine)
+- 🟠 step 2: second pass on his full line notes (needs David's go: agents)
+- 🔴 step 3: build the ten groups — king attack · reasons behind the eval + initiative · plans + their targets · tempting move refuted · endgame technique · trades · practical chances · hidden combinations/traps · the habit on a read · the blunder check
+- 🔴 step 4: re-run the 202 boards every round as the yardstick
+
 ## 000zj. WO-LEARN-MOMENT-01 — Learn speaks on an error or a real decision, quiet otherwise; Review never repeats Learn (David 2026-11-18, PLAN.md)
 - ✅ the one error computer: what the better move wins (a mate threat, a piece), a capture said by what it takes, no "eyed" guess on a real miss
 - ✅ every correction ends on its habit (`correctionHabit`, total, fixed words)

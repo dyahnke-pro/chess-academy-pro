@@ -167,11 +167,19 @@ export function buildSlipReveal(args: {
     const habit = correctionHabit({ bestSan: args.bestSan ?? null, cpLossCp: args.cpLoss, ignoredThreat: false, slip: null, allowed: call.allowed });
     return `That was ${call.sentence} ${habit.text}`.trim();
   }
-  if (args.bestSan) {
-    const mech = buildReviewMoveTeaching(args.fenBefore, args.bestSan, true);
-    return mech ? `The best move was ${args.bestSan}. ${mech}` : `The best move was ${args.bestSan}.`;
-  }
-  return 'There was better.';
+  return args.bestSan ? answerShown(args.fenBefore, args.bestSan) : 'There was better.';
+}
+
+/**
+ * THE ANSWER, SHOWN — the one sentence every surface says when the student has
+ * run out of tries or the move is past and no grade fits: the better move in
+ * SAN with its board job (`buildReviewMoveTeaching`). One wording, so no
+ * surface keeps a private "The best move was …" (the Play-tab practice reveal
+ * read out raw engine notation, "The best move was g1f3").
+ */
+export function answerShown(fenBefore: string, bestSan: string): string {
+  const mech = buildReviewMoveTeaching(fenBefore, bestSan, true);
+  return mech ? `The best move was ${bestSan}. ${mech}` : `The best move was ${bestSan}.`;
 }
 
 /**

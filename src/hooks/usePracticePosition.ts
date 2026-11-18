@@ -3,6 +3,15 @@ import { stockfishEngine } from '../services/stockfishEngine';
 import type { MoveResult } from './useChessGame';
 import type { BoardAnnotationCommand } from '../types';
 import { liveMovePrice } from '../services/playedMoveGrade';
+import { answerShown } from '../services/discussionPractice';
+import { Chess } from 'chess.js';
+
+/** The engine's move said as a player says it (SAN), never raw UCI. */
+function uciToSan(fen: string, uci: string): string | null {
+  try {
+    return new Chess(fen).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] })?.san ?? null;
+  } catch { return null; }
+}
 
 /** The depth a practice answer is read and priced at. */
 const PRACTICE_DEPTH = 16;
@@ -93,7 +102,7 @@ export function usePracticePosition(): UsePracticePositionReturn {
         exitPractice();
         return {
           type: 'reveal',
-          message: `The best move was ${bestMoveUci}. Let's move on!`,
+          message: answerShown(practicePosition.fen, uciToSan(practicePosition.fen, bestMoveUci) ?? bestMoveUci),
           bestMoveUci,
         };
       }

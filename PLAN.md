@@ -13,6 +13,16 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## 📚 WO-DANYA-READS-01 — every idea Danya reads off a board, computed — TOP OF THE LIST (David 2026-11-18: "If not, that goes top of list. But keep that list! It is VERY important all of that gets done")
+
+The full list and the measurement are in `docs/plans/2026-11-18-danya-board-reads-gaps.md`. On 202 of his article boards (673 ideas) we say 28% correctly, 10% wrongly and miss 62%, and 261 of our lines were flagged false or pointless. Order of work:
+1. Fix the few false-line producers ("First, take X", the colour-complex, passer and minority-attack slogans, verdicts that contradict the engine).
+2. Run the second pass on his full line notes (ask David first: agents).
+3. Build the ten computer groups, worst first: the king attack; the reasons behind the evaluation (activity, initiative); plans and the opponent's targets; why the tempting move fails; endgame technique; trades; practical chances; hidden combinations and traps; the habit; the blunder check.
+4. Re-run the 202 boards after every round as the yardstick.
+
+Nothing reads a board automatically before a puzzle is solved; the read speaks only when the student taps for it (David 2026-11-18).
+
 ## 🗣️ WO-LEARN-MOMENT-01 — Learn speaks like a coach at the board: on an error, on a right move at a real decision, and quiet otherwise (David 2026-11-18: "learn narrations are needed only when the player makes an error of some kind … And it knows when not to say anything" → "Or it can be used to reenforce proper move behavior" → "It gets more quiet if you make all the right moves. But it speaks on errors" → "Make all of the fixes now at once")
 
 - **Measured first** on three games with stored reads (Danya, David, the 800 Colle): the error computer said "head on to f6" where Qe5 threatened mate, "win a knight" for a capture both moves made, and "it eyed f7, but the king holds it" on a move whose cost was a missed queen win. Fixed in the one computer (`errorWhy`): what the better move wins comes first, a capture is said by what it takes, the eyed-guess yields to a real miss.
