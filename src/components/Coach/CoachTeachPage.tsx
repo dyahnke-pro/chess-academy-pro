@@ -68,7 +68,7 @@ import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
 import { trapPlayPosition } from '../../services/trapPlayPosition';
 import { transferClause, recordMotif, withTransfer, studentMoveAfterReply } from '../../services/motifLedger';
-import { FACT_ROLE, looseClaim, nextLooseSpells, plyOfFen, buildVoicePackage, coachTurn, decidePhaseWave, learnFact, type LaneFact, type LearnFactParts, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, STORY_LANE, DNA_BEAT, VERDICT_TURN_CP, instantWaitsForVerdict, type FactStakes, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind, type VoiceOwner, type ChanceHold, learnThoughtTurn, type LearnTurnMove } from '../../services/coachDecider';
+import { type LearnDecision, FACT_ROLE, looseClaim, nextLooseSpells, plyOfFen, buildVoicePackage, coachTurn, decidePhaseWave, learnFact, type LaneFact, type LearnFactParts, DANGER_LANES, describeTurnDecision, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys, STORY_LANE, DNA_BEAT, VERDICT_TURN_CP, instantWaitsForVerdict, type FactStakes, type SpokenLine, type TurnDecision, type VoicePackage, type VoiceFactKind, type VoiceOwner, type ChanceHold, learnThoughtTurn, type LearnTurnMove } from '../../services/coachDecider';
 import { buildPositionalRead } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
@@ -8755,7 +8755,7 @@ export function CoachTeachPage({ mode }: {
   /** The student move's turn as its waves stand: the board they read, its
    *  cost, its trade and what they have said — read by the phase wave, which
    *  is one more wave of this turn, never a turn of its own. */
-  const liveTurnRef = useRef<{ fen: string; ply: number; midExchange: string | null; slip: () => number | null; settled: () => boolean; price: () => PriceSearch | null; said: () => string; owner: VoiceOwner } | null>(null);
+  const liveTurnRef = useRef<{ fen: string; ply: number; midExchange: string | null; decision: LearnDecision | null; slip: () => number | null; settled: () => boolean; price: () => PriceSearch | null; said: () => string; owner: VoiceOwner } | null>(null);
   /** THE TURN'S HOLDS (`decideTurn`): one set per turn board, shared by the
    *  instant, late and phase waves; a new board starts a new turn and a fresh
    *  set, so a held claim is free again once the turn moves on. */
@@ -8791,7 +8791,7 @@ export function CoachTeachPage({ mode }: {
       // The turn the report was read on must still be the turn the student is
       // in: once they have moved, its board is gone and so is its wave.
       const live = t && samePosition(t.fen, liveFenRef.current ?? '')
-        ? { fen: t.fen, ply: t.ply, slipCp: t.slip(), priceSettled: t.settled(), price: t.price(), midExchange: t.midExchange, said: t.said(), holds: turnHoldsFor(t.fen) }
+        ? { fen: t.fen, ply: t.ply, slipCp: t.slip(), priceSettled: t.settled(), price: t.price(), midExchange: t.midExchange, decision: t.decision, said: t.said(), holds: turnHoldsFor(t.fen) }
         : null;
       const d = decidePhaseWave(facts, fen, live, { priorKeys: learnMemRef.current.story.heard(live?.fen ?? fen).sentences, priorLead: prior, green: provenTagsRef.current, beginner: beginnerRef.current, owner: live && t ? t.owner : 'open', chance: live ? chanceHoldAt(live.fen) : null });
       // A pointer said in the phase wave prompts the move it points at.
@@ -8954,6 +8954,8 @@ export function CoachTeachPage({ mode }: {
     studentColor: 'white' | 'black';
     /** The slip this turn says (`saidSlipCp`), null when the grade is quiet. */
     slipCp: number | null;
+    /** The move was right at a real decision (`LearnTurnTag.decision`). */
+    decision: LearnDecision | null;
     /** The price is settled (`MovePrice.settled`); false holds every affirm. */
     priceSettled: boolean;
     /** How the price was searched (`MovePrice.search`), null before it lands. */
@@ -10255,7 +10257,7 @@ export function CoachTeachPage({ mode }: {
         ]).map(({ f, lane }) => ({ namesStudentMove: f.namesStudentMove, lane, computer: f.computer, text: f.text, fen: f.fen, squares: f.squares, claims: f.claims, proof: f.proof }));
       } catch { return []; }
     })();
-    const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, slipCp: args.slipCp, priceSettled: args.priceSettled, price: args.priceSearch, midExchange: midExchangeOn }, facts: [
+    const instantDecision = coachTurn({ posture: 'learn', turn: { kind: 'instant', ply: args.historyAfterReply.length - 1, slipCp: args.slipCp, priceSettled: args.priceSettled, price: args.priceSearch, midExchange: midExchangeOn, decision: args.decision }, facts: [
       ...(tacticLine ? [{ lane: 'tactic' as const, computer: tacticComputer, namesStudentMove: namesPlayableStudentMove(tacticLines?.[0] ? studentMovesInLine(tacticLines[0].fen, tacticLines[0].sans, studentCC, args.fenAfterReply) : NAMES_NO_MOVE), text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares, stakes: tacticStakes, claims: tacticClaim || tacticLoose.length ? [...(tacticClaim ? [tacticClaim] : []), ...tacticLoose] : undefined, lines: tacticLines, proof: (isProof(tacticFactProof) ? tacticFactProof : null) ?? (tacticLines?.[0] ? lineProof(tacticLines[0], lineSeatAt(tacticLines[0].fen, studentCC)) : null) ?? squaresProof(tacticLine, tacticSquares) ?? tacticFactProof ?? NO_PROOF.withheld }] : []),
       ...(threatLine ? [{ namesStudentMove: namesPlayableStudentMove(threatNames), lane: 'threat' as const, computer: threatComputer, text: threatLine, fen: args.fenAfterReply, squares: threatSquares, ...(threatSkill ? { skill: threatSkill } : {}), claims: [...new Set([...(threatClaim ? [threatClaim] : []), ...threatClaims, ...(threatCostRead?.claims ?? [])])], stakes: threatCostRead?.stakes ?? undefined, proof: (isProof(threatFactProof) ? threatFactProof : null) ?? squaresProof(threatLine, threatSquares) ?? NO_PROOF.description }] : []),
       ...(countRead ? [{ namesStudentMove: false, lane: 'countMethod' as const, computer: countRead.computer, text: countRead.text, fen: args.fenAfterReply, squares: countRead.squares, claims: countRead.claims, stakes: countRead.stakes ?? undefined, role: countRead.role, proof: countRead.proof }] : []),
@@ -10634,6 +10636,10 @@ export function CoachTeachPage({ mode }: {
     // reads this — never the raw cost — so no wave holds for a verdict the
     // grade never says. Cleared once the late wave has decided no verdict.
     let turnSlipCp: number | null = null;
+    // A RIGHT MOVE AT A REAL DECISION (David 2026-11-18): the only move that
+    // held or the clearly best one, never a recapture. With no slip said and
+    // no decision, the turn is quiet (`learnMoment`).
+    let turnDecision: LearnDecision | null = null;
     // Whether the pre-move fan graded the move a fault (the early-read cue).
     let studentGradeFault = false;
     // A found move's earned praise, said inside the found-move lane's own
@@ -10754,6 +10760,7 @@ export function CoachTeachPage({ mode }: {
         // aloud unless it is a fault.
         const prevSan = move.history.length >= 2 ? move.history[move.history.length - 2] : null;
         const isRecapture = !!prevSan && new RegExp(`x${move.to}(?![1-8])`).test(prevSan) && move.san.includes('x');
+        turnDecision = grade && !grade.fault && !isRecapture && (grade.reason === 'only-move' || grade.reason === 'clear-best') ? grade.reason : null;
         // THE REWARD LAYER (David 2026-10-01): only a move that took finding
         // chimes — the grade above already says what it was; `learnRewardFor`
         // only says which grades earn one. Fired before the spoken grade so
@@ -11956,7 +11963,7 @@ export function CoachTeachPage({ mode }: {
             // This turn, for the phase wave (`liveTurnRef`).
             liveTurnRef.current = {
               fen: fenAfterReply, ply: move.history.length, midExchange: pendingRecapture([...move.history, reply]),
-              slip: () => turnSlipCp, settled: () => studentPriceSettled, price: () => studentPriceSearch, said: () => instantSpokenText,
+              slip: () => turnSlipCp, settled: () => studentPriceSettled, price: () => studentPriceSearch, said: () => instantSpokenText, decision: turnDecision,
               owner: turnOwner,
             };
             /** The claims of what this turn SPOKE — the book chip reads them. */
@@ -12167,6 +12174,7 @@ export function CoachTeachPage({ mode }: {
                     moveTo: im.to,
                     studentColor: playerColor,
                     slipCp: turnSlipCp,
+                    decision: turnDecision,
                     priceSettled: studentPriceSettled,
                     priceSearch: studentPriceSearch,
                     owner: turnOwner,
@@ -12357,7 +12365,7 @@ export function CoachTeachPage({ mode }: {
                   // the per-game novelty set, not by a number.
                   const lateDecision = coachTurn({
                     posture: 'learn',
-                    turn: { kind: 'late', ply: move.history.length, slipCp: turnSlipCp, priceSettled: studentPriceSettled, price: studentPriceSearch, midExchange: pendingRecapture([...move.history, reply]) },
+                    turn: { kind: 'late', ply: move.history.length, slipCp: turnSlipCp, priceSettled: studentPriceSettled, price: studentPriceSearch, midExchange: pendingRecapture([...move.history, reply]), decision: turnDecision },
                     facts: lines
                       // A threat alert already said a tactic is on the board;
                       // "it has turned sharp — there is a tactic" beside it is

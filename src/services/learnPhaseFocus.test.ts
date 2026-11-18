@@ -72,8 +72,10 @@ describe('a costly move is a verdict turn in every wave (replay 2026-10-19, 8.Bx
   const FEN = 'r1bq2nr/pp2pkbp/2np2p1/8/4P3/2N2N2/PP3PPP/R1BQ1RK1 w - - 0 9';
   it('a plan waits when the move cost three points, whichever lane gave the grade', () => {
     const plan = { lane: 'planArc' as const, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'So the plan: put a rook on the open c-file.', fen: FEN, squares: ['a1', 'c1'] };
-    expect(decideTurn([plan], '', undefined, null, null, false, { kind: 'late', ply: 15, slipCp: 300, priceSettled: true, price: null, midExchange: null }).spoke).not.toContain('planArc');
-    expect(decideTurn([plan], '', undefined, null, null, false, { kind: 'late', ply: 15, slipCp: null, priceSettled: true, price: null, midExchange: null }).spoke).toContain('planArc');
+    expect(decideTurn([plan], '', undefined, null, null, false, { kind: 'late', ply: 15, slipCp: 300, priceSettled: true, price: null, midExchange: null, decision: null }).spoke).not.toContain('planArc');
+    // A calm move says no plan of the student's own (David 2026-11-18: Learn
+    // speaks on an error, a real decision, their new plan or a phase change).
+    expect(decideTurn([plan], '', undefined, null, null, false, { kind: 'late', ply: 15, slipCp: null, priceSettled: true, price: null, midExchange: null, decision: null }).spoke).not.toContain('planArc');
   });
 });
 
@@ -82,36 +84,34 @@ describe('a warning that costs nothing yet waits behind a costly move (OS-1 repl
   // verdict queued behind it was never heard.
   const notYet = { lane: 'threat' as const, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'No rush yet — keep an eye on the long diagonal.', fen: MIDDLEGAME, squares: ['a1', 'h8'] };
   it('is held on a verdict turn and said on a calm one', () => {
-    expect(decideTurn([notYet], '', undefined, null, null, false, { kind: 'instant', ply: 43, slipCp: 450, priceSettled: true, price: null, midExchange: null }).spoke).not.toContain('threat');
-    expect(decideTurn([notYet], '', undefined, null, null, false, { kind: 'instant', ply: 43, slipCp: null, priceSettled: true, price: null, midExchange: null }).spoke).toContain('threat');
+    expect(decideTurn([notYet], '', undefined, null, null, false, { kind: 'instant', ply: 43, slipCp: 450, priceSettled: true, price: null, midExchange: null, decision: null }).spoke).not.toContain('threat');
+    // …and on a calm move too: their threat is said at the miss, never before
+    // the move (David 2026-11-18).
+    expect(decideTurn([notYet], '', undefined, null, null, false, { kind: 'instant', ply: 43, slipCp: null, priceSettled: true, price: null, midExchange: null, decision: null }).spoke).not.toContain('threat');
   });
   it('a danger that costs something now still speaks on the verdict turn', () => {
     const now = { ...notYet, text: 'Watch out — your rook is attacked.', stakes: { points: 5, plies: 1 } };
-    expect(decideTurn([now], '', undefined, null, null, false, { kind: 'instant', ply: 43, slipCp: 450, priceSettled: true, price: null, midExchange: null }).spoke).toContain('threat');
+    expect(decideTurn([now], '', undefined, null, null, false, { kind: 'instant', ply: 43, slipCp: 450, priceSettled: true, price: null, midExchange: null, decision: null }).spoke).toContain('threat');
   });
 });
 
 describe('a trade in progress is a now turn (Learn walk 2026-10-19, 12…Nxb3 / 13…Bxg3)', () => {
   const plan = { lane: 'planArc' as const, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'So the plan: break open with the pawn push that is ready now.', fen: MIDDLEGAME, squares: ['d4', 'd5'] };
   const tactic = { lane: 'tactic' as const, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'There is a tactic on f7 for you.', fen: MIDDLEGAME, squares: ['f7'], stakes: { points: 3, plies: 1 } };
-  it('a plan waits while the recapture is owed, and says why; a tactic still speaks', async () => {
-    const { onLearnTurn } = await import('./coachDecisionEvents');
-    const rows: Array<{ heldWhy?: Record<string, string> }> = [];
-    const off = onLearnTurn((r) => rows.push(r as { heldWhy?: Record<string, string> }));
-    try {
-      const d = decideTurn([plan, tactic], '', undefined, null, null, false, { kind: 'instant', ply: 23, slipCp: null, priceSettled: true, price: null, midExchange: 'b3' });
-      expect(d.spoke).not.toContain('planArc');
-      expect(d.spoke).toContain('tactic');
-      expect(rows.at(-1)?.heldWhy?.planArc).toBe('mid-exchange');
-    } finally { off(); }
-    expect(decideTurn([plan], '', undefined, null, null, false, { kind: 'instant', ply: 23, slipCp: null, priceSettled: true, price: null, midExchange: null }).spoke).toContain('planArc');
+  it('a tactic still speaks while the recapture is owed; a plan waits', () => {
+    // A calm or reinforced move says no plan at all now (the moment rule); the
+    // trade's own hold is left for the correction turn, where a tactic worth
+    // more than the slip still speaks mid-trade.
+    const c = decideTurn([plan, tactic], '', undefined, null, null, false, { kind: 'instant', ply: 23, slipCp: 120, priceSettled: true, price: null, midExchange: 'b3', decision: null });
+    expect(c.spoke).toContain('tactic');
+    expect(c.spoke).not.toContain('planArc');
   });
   it('a costly-move hold is reported as a verdict turn, never as a mate turn', async () => {
     const { onLearnTurn } = await import('./coachDecisionEvents');
     const rows: Array<{ heldWhy?: Record<string, string> }> = [];
     const off = onLearnTurn((r) => rows.push(r as { heldWhy?: Record<string, string> }));
     try {
-      decideTurn([plan], '', undefined, null, null, false, { kind: 'late', ply: 15, slipCp: 300, priceSettled: true, price: null, midExchange: null });
+      decideTurn([plan], '', undefined, null, null, false, { kind: 'late', ply: 15, slipCp: 300, priceSettled: true, price: null, midExchange: null, decision: null });
       expect(rows.at(-1)?.heldWhy?.planArc).toBe('verdict-turn');
     } finally { off(); }
   });
@@ -122,7 +122,7 @@ describe('the student\'s own move keeps its reason on a shared claim (V6, 2026-1
   it('a board read of the same squares does not subsume what the move did', () => {
     const own = { lane: 'movePoint' as const, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'Your knight on f3 now hits e5, the pawn their knight on c6 guards.', fen: FEN, squares: ['f3', 'e5', 'c6'] };
     const read = { lane: 'countMethod' as const, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'Count before you take on e5: one attacker, one defender.', fen: FEN, squares: ['f3', 'e5', 'c6'] };
-    const d = decideTurn([own, read], '', undefined, null, null, false, { kind: 'late', ply: 7, slipCp: null, priceSettled: true, price: null, midExchange: null });
+    const d = decideTurn([own, read], '', undefined, null, null, false, { kind: 'late', ply: 7, slipCp: null, priceSettled: true, price: null, midExchange: null, decision: 'clear-best' });
     expect(d.spoke).toContain('movePoint');
   });
 });

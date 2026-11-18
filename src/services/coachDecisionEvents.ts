@@ -273,7 +273,15 @@ export type LearnTurnTag = {
    *  captured and the student can take back there (`pendingRecapture`, the
    *  one in-flux definition) — or null. Plans and ideas wait until it is done. */
   midExchange: string | null;
+  /** REQUIRED: the student's move was a right move at a real decision — the
+   *  only move that held, or the clearly best one (`gradePlayedMove`'s
+   *  reason), never a recapture — or null. A turn with no correction and no
+   *  decision is quiet (`learnMoment`, David 2026-11-18). */
+  decision: LearnDecision | null;
 };
+
+/** A right move at a real decision (`LearnTurnTag.decision`). */
+export type LearnDecision = 'only-move' | 'clear-best';
 
 const learnTurnListeners = new Set<(row: LearnTurnRow) => void>();
 

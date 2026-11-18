@@ -32,7 +32,7 @@
 import { cutMarksWithWords } from './markAnchors';
 import { fadeText, fadeLevelOf, type FadeLevels } from './fadeText';
 import { isProof, type FactProof, type Proof } from './proof';
-import { emitLearnTurn, type LearnTurnTag, type PriceSearch } from './coachDecisionEvents';
+import { emitLearnTurn, type LearnDecision, type LearnTurnTag, type PriceSearch } from './coachDecisionEvents';
 import { emitEverything, everythingListening } from './everythingEvents';
 import { COMPUTER_ROLES, saidBeforeTheMove } from './computerRoles';
 import { buildVoicePackage, joinSpoken, type SpokenLine, type VoiceFact, type VoiceFactKind, type VoicePackage } from './voicePackage';
@@ -60,7 +60,7 @@ export type { VoicePackage, VoiceFactKind } from './voicePackage';
 export type { FactStakes } from './factStakes';
 
 /** Why the door held a lane on a turn. */
-type HoldReason = 'mission' | 'names-chance' | 'names-move' | 'held-this-turn' | 'mate-turn' | 'verdict-turn' | 'mid-exchange' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'same-step' | 'second-thought' | 'marginal' | 'contradicts' | 'out-of-phase' | 'price-unsettled' | 'one-method';
+type HoldReason = 'mission' | 'quiet-turn' | 'names-chance' | 'names-move' | 'held-this-turn' | 'mate-turn' | 'verdict-turn' | 'mid-exchange' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'same-step' | 'second-thought' | 'marginal' | 'contradicts' | 'out-of-phase' | 'price-unsettled' | 'one-method';
 
 /** WHO OWNS THE VOICE OF THIS TURN (WO-MISSIONS-01, WO-LEARN-FOCUS-01).
  *  - `open`: no focus, no mission — the door decides.
@@ -358,6 +358,46 @@ function fallbackReason(claims: readonly string[] | undefined): boolean {
  *  there only when it costs something now (`presentDanger`, OS-1 replay
  *  2026-10-19): "No rush yet" waits for a calm move. */
 const VERDICT_TURN_STEPS: ReadonlySet<ThoughtStep> = new Set<ThoughtStep>(['yours', 'habit']);
+
+/** THE TURN'S MOMENT — WHEN LEARN SPEAKS AT ALL (David 2026-11-18: "So learn
+ *  narrations are needed only when the player makes an error of some kind …
+ *  And it knows when not to say anything. Like a chess coach." → "Or it can
+ *  be used to reenforce proper move behavior" → "It gets more quiet if you
+ *  make all the right moves. But it speaks on errors"). A turn is a
+ *  CORRECTION when the grade fired at the student's bar (its said slip, or the
+ *  verdict / blunder-check fact the grade made), a DECISION when the move was
+ *  right at a real decision (`LearnTurnTag.decision`), and QUIET otherwise. A
+ *  quiet turn says only what speaks at any moment (`speaksAnyMoment`); a
+ *  decision turn adds the move's one reason. A turn with no tag (a bare door
+ *  in a test) is not gated. */
+export type LearnMoment = 'correction' | 'decision' | 'quiet';
+const CORRECTION_LANES: ReadonlySet<LearnLane> = new Set<LearnLane>(['mistake', 'blunderCheck']);
+export function learnMoment(turn: LearnTurnTag | null, facts: readonly LaneFact[]): LearnMoment | null {
+  if (!turn) return null;
+  if (turn.slipCp !== null || facts.some((f) => CORRECTION_LANES.has(f.lane) && f.text.trim() !== '')) return 'correction';
+  return turn.decision !== null ? 'decision' : 'quiet';
+}
+/** What speaks at any moment: the phase change and what the game is now
+ *  about, their new plan once it emerges, the only-move moment ("slow down"),
+ *  and the stalemate a winning student is one move from giving. */
+function speaksAnyMoment(f: LaneFact): boolean {
+  if (f.lane === 'phase' || f.lane === 'character' || f.lane === 'stalemate') return true;
+  if (f.lane === 'planArc') return f.claims.some((c) => /^plan:(?!student:)[^:]+:[^:]+:emerge$/.test(c));
+  return f.kind === 'key-moment';
+}
+/** The lanes that ARE a right move's reinforcement: the only move found, the
+ *  held move answered, the opponent's slip punished. */
+const DECISION_LANES: ReadonlySet<LearnLane> = new Set<LearnLane>(['foundMove', 'heldMove', 'slipAnswer']);
+/** Does a fact speak on this turn's moment? On a correction every fact goes
+ *  on to the verdict turn's own holds; on a decision the move's reason (its
+ *  one slot) and the reinforcement lanes; on a quiet turn only what speaks at
+ *  any moment. */
+export function speaksOnMoment(f: LaneFact, moment: LearnMoment): boolean {
+  if (speaksAnyMoment(f)) return true;
+  if (moment === 'correction') return true;
+  if (moment === 'decision') return DECISION_LANES.has(f.lane) || (f.step === 'yours' && DNA_BEAT[f.lane] !== 'but');
+  return false;
+}
 
 /** WHICH LANE CARRIES EACH BEAT OF THE OPENING'S STORY — the lane is the beat's
  *  place in the turn. A new beat fails to compile until it is placed. */
@@ -1095,10 +1135,12 @@ export function decideTurn(
   // lead was picked, then held by the mate rule, and the row named a lead that
   // never spoke). One predicate, read by the lead pick and the speak loop.
   const midExchange = turn ? turn.midExchange : null;
+  const moment = learnMoment(turn, facts);
   const priceUnsettled = !!turn && !turn.priceSettled;
   // ONE ANSWER PER HELD FACT: why it waits (the hold and its reason used to be
   // two computations, and a costly-move hold was reported as 'mate-turn').
   const holdWhy = (x: Survivor): HoldReason | null => {
+    if (moment !== null && !speaksOnMoment(x.src, moment)) return 'quiet-turn';
     // AN AFFIRM NEVER SPEAKS ON AN UNSETTLED PRICE: it can wait a turn; a
     // move praised at depth 14 and a mistake at 16 is the coach lying twice.
     if (priceUnsettled && DNA_BEAT[x.lane] === 'affirm') return 'price-unsettled';
@@ -1482,6 +1524,8 @@ export interface LiveTurn {
   /** How the move's price was searched, once it has landed. */
   price: PriceSearch | null;
   midExchange: string | null;
+  /** The move was right at a real decision (`LearnTurnTag.decision`). */
+  decision: LearnDecision | null;
   /** Everything the turn's earlier waves said out loud. */
   said: string;
   /** The turn's holds (`decideTurn`'s `turnHolds`). */
@@ -1509,7 +1553,7 @@ export function decidePhaseWave(
   return decideTurn(
     facts,
     live.said, ctx.priorKeys, ctx.priorLead ?? null, ctx.green ?? null, ctx.beginner,
-    { kind: 'phase', ply: live.ply, slipCp: live.slipCp, priceSettled: live.priceSettled, price: live.price, midExchange: live.midExchange },
+    { kind: 'phase', ply: live.ply, slipCp: live.slipCp, priceSettled: live.priceSettled, price: live.price, midExchange: live.midExchange, decision: live.decision },
     live.holds,
     ctx.owner,
     ctx.chance,

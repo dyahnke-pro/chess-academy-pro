@@ -17,7 +17,10 @@ import { decideTurn, type LaneFixture } from '../test/learnDoorFixtures';
 import { onLearnTurn } from './coachDecisionEvents';
 
 const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
-const LATE = { kind: 'late' as const, ply: 14, slipCp: null, priceSettled: true, price: null, midExchange: null };
+// The thought's mechanics run on a turn Learn speaks on (the moment rule, David
+// 2026-11-18: a calm turn says nothing). A correction priced at zero isolates
+// them from the verdict's own holds, which `learnPhaseFocus.test` covers.
+const LATE = { kind: 'late' as const, ply: 14, slipCp: 0, priceSettled: true, price: null, midExchange: null, decision: null };
 
 function fact(lane: LearnLane, text: string, squares: readonly string[], extra: Partial<LaneFixture> = {}): LaneFixture {
   return { lane, text, fen: FEN, squares, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, role: 'teach', ...extra };

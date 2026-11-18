@@ -19,7 +19,8 @@ const FACTS: LaneFixture[] = [
   { lane: 'threat', text: 'Watch e4 — their knight could take it.', fen: FEN, squares: ['e4'], stakes: { points: 1, plies: 1 }, proof: NO_PROOF.stated, namesStudentMove: NAMES_NO_MOVE },
   { lane: 'openingIdea', text: 'Both sides aim for the d-pawn break in this opening.', fen: FEN, squares: ['d4'], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE },
 ];
-const turn = { kind: 'late' as const, ply: 4, slipCp: null, priceSettled: true, price: null, midExchange: null };
+// A correction turn: the grade fired, so the door speaks (the moment rule, David 2026-11-18).
+const turn = { kind: 'late' as const, ply: 4, slipCp: 120, priceSettled: true, price: null, midExchange: null, decision: null };
 
 describe('the Learn door under a mission', () => {
   it('missions OFF (open): the door speaks as before', () => {
@@ -42,7 +43,7 @@ describe('the Learn door under a mission', () => {
   });
 
   it('the phase wave is silenced the same way', () => {
-    const live = { fen: FEN, ply: 4, slipCp: null, priceSettled: true, price: null, midExchange: null, said: '', holds: new Set<string>() };
+    const live = { fen: FEN, ply: 4, slipCp: null, priceSettled: true, price: null, midExchange: null, decision: null, said: '', holds: new Set<string>() };
     const report = [{ text: 'The opening is over: both sides are developed.', claims: ['phase:middlegame'], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE, factKind: 'speedrun-read' }];
     const open = decidePhaseWave(report, FEN, live, { priorKeys: new Set(), priorLead: null, green: null, beginner: false, owner: 'open', chance: null });
     const silent = decidePhaseWave(report, FEN, { ...live, holds: new Set<string>() }, { priorKeys: new Set(), priorLead: null, green: null, beginner: false, owner: 'mission', chance: null });

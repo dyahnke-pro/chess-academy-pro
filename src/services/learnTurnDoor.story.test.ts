@@ -24,26 +24,27 @@ describe('the opening story in the door', () => {
     expect(DNA_BEAT[STORY_LANE['structure-cost']]).toBe('but');
     expect(DNA_BEAT[STORY_LANE.identity]).toBe('name');
   });
-  it('a calm opening move speaks the story, the crossroads last', () => {
-    const d = decideTurn([roads, theirs, cost], '', undefined, null, null, false, { kind: 'instant', ply: 12, slipCp: null, priceSettled: true, price: null, midExchange: null });
-    expect(d.spoke).toEqual(expect.arrayContaining([STORY_LANE['structure-cost'], STORY_LANE['their-setup'], STORY_LANE.fork]));
-    const said = d.pkg.spoken;
-    expect(said.indexOf('price of')).toBeLessThan(said.indexOf('English Attack'));
-    expect(said.indexOf('English Attack')).toBeLessThan(said.indexOf('crossroads'));
+  it('a calm opening move says no story — Learn speaks on an error or a real decision (David 2026-11-18)', () => {
+    const rows: Array<{ heldWhy?: Record<string, string> }> = [];
+    const off = onLearnTurn((r) => rows.push(r as { heldWhy?: Record<string, string> }));
+    try {
+      const d = decideTurn([roads, theirs, cost], '', undefined, null, null, false, { kind: 'instant', ply: 12, slipCp: null, priceSettled: true, price: null, midExchange: null, decision: null });
+      expect(d.spoke).toEqual([]);
+      expect(rows.at(-1)?.heldWhy?.[STORY_LANE.fork]).toBe('quiet-turn');
+    } finally { off(); }
   });
   it('a verdict turn keeps the story for a calm move; the price of the move rides with its verdict', () => {
-    const d = decideTurn([roads, theirs, cost], '', undefined, null, null, false, { kind: 'late', ply: 12, slipCp: 300, priceSettled: true, price: null, midExchange: null });
+    const d = decideTurn([roads, theirs, cost], '', undefined, null, null, false, { kind: 'late', ply: 12, slipCp: 300, priceSettled: true, price: null, midExchange: null, decision: null });
     expect(d.spoke).not.toContain(STORY_LANE.fork);
     expect(d.spoke).not.toContain(STORY_LANE['their-setup']);
     expect(d.spoke).toContain(STORY_LANE['structure-cost']);
   });
-  it('a trade in progress keeps the whole story, with the reason', () => {
+  it('a trade in progress keeps even the move\'s price for after it, with the reason', () => {
     const rows: Array<{ heldWhy?: Record<string, string> }> = [];
     const off = onLearnTurn((r) => rows.push(r as { heldWhy?: Record<string, string> }));
     try {
-      const d = decideTurn([roads, theirs, cost], '', undefined, null, null, false, { kind: 'instant', ply: 12, slipCp: null, priceSettled: true, price: null, midExchange: 'd5' });
+      const d = decideTurn([roads, theirs, cost], '', undefined, null, null, false, { kind: 'instant', ply: 12, slipCp: 300, priceSettled: true, price: null, midExchange: 'd5', decision: null });
       expect(d.spoke).toEqual([]);
-      expect(rows.at(-1)?.heldWhy?.[STORY_LANE.fork]).toBe('mid-exchange');
       expect(rows.at(-1)?.heldWhy?.[STORY_LANE['structure-cost']]).toBe('mid-exchange');
     } finally { off(); }
   });

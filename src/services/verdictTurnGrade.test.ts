@@ -30,7 +30,7 @@ const verdict = (cp: number): LaneFixture => ({ lane: 'mistake', text: 'Bishop t
 const rows: LearnTurnRow[] = [];
 let off: (() => void) | null = null;
 afterEach(() => { off?.(); off = null; rows.length = 0; });
-const turn = (kind: 'instant' | 'late', slipCp: number | null) => ({ kind, ply: 23, slipCp, priceSettled: true, price: null, midExchange: null });
+const turn = (kind: 'instant' | 'late', slipCp: number | null) => ({ kind, ply: 23, slipCp, priceSettled: true, price: null, midExchange: null, decision: null });
 
 describe('saidSlipCp — the one grade the door reads', () => {
   it('12.Bb3 at an UNSETTLED 104: no slip is said yet, so it is not a verdict turn', () => {
@@ -49,12 +49,13 @@ describe('saidSlipCp — the one grade the door reads', () => {
 });
 
 describe('the door holds for a verdict only when the grade says one', () => {
-  it('21.Rg5: a quiet grade holds nothing for a verdict — plan and character speak', () => {
+  it('21.Rg5: a quiet grade holds nothing for a verdict — the character speaks, the student\'s plan waits for a moment Learn speaks on', () => {
     off = onLearnTurn((r) => rows.push(r));
     const slip = saidSlipCp({ costCp: 127, scores: { bestWhiteCp: -500, playedWhiteCp: -627 }, settled: true }, ctx);
     const d = decideTurn([plan, character], '', undefined, null, null, false, turn('late', slip));
     expect(Object.values(rows.at(-1)?.heldWhy ?? {})).not.toContain('verdict-turn');
-    expect(d.spoke).toContain('planArc');
+    expect(d.spoke).toContain('character');
+    expect(rows.at(-1)?.heldWhy?.planArc).toBe('quiet-turn');
   });
   it('12.Bb3 unsettled: the instant wave is not a verdict turn', () => {
     off = onLearnTurn((r) => rows.push(r));

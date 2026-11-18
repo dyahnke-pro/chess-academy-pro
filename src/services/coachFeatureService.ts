@@ -110,7 +110,7 @@ import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { costWords, describeEvalCp, isMateEval, storedMate, moverGaveUpMate, COST_REASON_DEPTH } from './engineConstants';
 import { isContested } from './narrationImportance';
 import { mateDescription } from './matePatterns';
-import { buildVoicePackage, spokenSentenceKeys, type SpokenLine } from './voicePackage';
+import { buildVoicePackage, heardSentenceKeys, spokenSentenceKeys, withoutHeard, type SpokenLine } from './voicePackage';
 import { extractMentionedSans, squaresNamedNotMoves } from './arrowEngine';
 import { cutMarksWithWords, markItems } from './markAnchors';
 import type { PacedMark } from './markPacing';
@@ -598,6 +598,23 @@ type ReviewFlag = 'orientationShown' | 'assessmentShown' | 'psychologyReadDone' 
  *  free-board move) never says a refrain in full twice. Before the seed the
  *  build's own plies fold on a ledger of their own: they are the walk's past,
  *  which the walk keeps, and nothing they say enters the story. */
+/** REVIEW NEVER REPEATS LEARN WORD FOR WORD (David 2026-11-18: "how do we
+ *  ensure learn and review don't speak the same facts? Remember review is a
+ *  deeper dive than learn"). Learn's spoken lines for this game join the
+ *  walk's say-once ledger: each sentence already heard leaves the move's
+ *  narration; what Review says deeper stays, because it is not the same
+ *  sentence. A move left with nothing keeps no narration rather than an empty
+ *  one. */
+export function dropHeardInLearn(segments: ReviewMoveSegment[], learnHeard: readonly string[] | null): void {
+  if (!learnHeard || learnHeard.length === 0) return;
+  const heard = heardSentenceKeys(learnHeard);
+  for (const s of segments) {
+    if (!s.narration) continue;
+    const rest = withoutHeard(s.narration, heard);
+    s.narration = rest || null;
+  }
+}
+
 export function foldReviewRefrains(segments: ReviewMoveSegment[], story: StoryStore, seed: StorySeed | null): void {
   const said = storyLedger(story, REVIEW_SAID.refrain);
   let ledger = seed ? emptyRefrainLedger() : new Set<string>(said);
@@ -6365,6 +6382,12 @@ export async function generateReviewNarration(params: {
    *  when this build replaces the plies ahead of a walk in progress
    *  (`buildReviewSegments`' `spokenBefore`). */
   spokenBefore?: StorySeed | null;
+  /** REQUIRED: every line Learn spoke in this game (the game's own
+   *  `coachTranscript`), or null when the game was not played in Learn. Review
+   *  is the deeper dive (David 2026-11-18): a sentence Learn already said is
+   *  never said again word for word; its deeper form — the line, the better
+   *  move's reason, the theory — still speaks. */
+  learnHeard: readonly string[] | null;
 }): Promise<ReviewNarration> {
   const { moves, playerColor, openingName, result, coachNarration, playerRating, uncapped } = params;
   const complete = params.complete !== false;
@@ -6553,6 +6576,7 @@ export async function generateReviewNarration(params: {
   // 20. Walking the finished segments IN PLY ORDER makes the first mention in
   // READING order the full one, by construction.
   foldReviewRefrains(segments, story, params.spokenBefore ?? null);
+  dropHeardInLearn(segments, params.learnHeard ?? null);
 
 
   // HOUSE-VOICE PASS (David 2026-07-19: "does NOT sound like Danya"). The

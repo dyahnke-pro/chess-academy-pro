@@ -70,6 +70,7 @@ export { looseClaim, nextLooseSpells, plyOfFen } from './conceptKey';
 export type { LooseSpells } from './conceptKey';
 export type { FacetRole } from './reviewFacetRank';
 export type { ChanceHold, VoiceOwner } from './learnTurnDoor';
+export type { LearnDecision } from './coachDecisionEvents';
 
 /** HOW A SURFACE LISTENS — and it is not cosmetic, it decides what silence MEANS.
  *

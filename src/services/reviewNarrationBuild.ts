@@ -94,6 +94,21 @@ interface ReviewNarrationResult {
 
 const inflight = new Map<string, Promise<ReviewNarrationResult>>();
 
+/** Every line Learn spoke in this game, off the game's own transcript (the
+ *  `coach-narration-spoken` entries carry the full spoken text), or null when
+ *  the game has none — a game played anywhere but Learn. */
+export async function learnHeardFor(gameId: string | null): Promise<string[] | null> {
+  if (!gameId) return null;
+  try {
+    const game = await db.games.get(gameId);
+    const entries = game?.coachTranscript?.entries;
+    if (!entries) return null;
+    return entries.filter((e) => e.kind === 'coach-narration-spoken' && e.summary.trim() !== '').map((e) => e.summary);
+  } catch {
+    return null;
+  }
+}
+
 /** The cached narration for these inputs, else a fresh build (stored when it
  *  produced segments). Concurrent asks for the same game+key share one build. */
 export function getOrBuildReviewNarration(req: ReviewNarrationRequest): Promise<ReviewNarrationResult> {
@@ -113,6 +128,7 @@ export function getOrBuildReviewNarration(req: ReviewNarrationRequest): Promise<
       if (hit) return { narration: hit, cacheHit: true, key };
     }
     const narration = await generateReviewNarration({
+      learnHeard: await learnHeardFor(req.gameId),
       moves: req.moves,
       playerColor: req.playerColor,
       openingName: req.openingName,

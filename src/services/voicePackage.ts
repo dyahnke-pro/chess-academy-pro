@@ -635,6 +635,24 @@ export function spokenSentenceKeys(pkg: { kept: VoiceFact[] }): string[] {
   return out;
 }
 
+/** WHAT A SURFACE ALREADY SAID, AS THE LEDGER KEYS IT — every sentence of
+ *  every line, keyed exactly as the dedupe inside `buildVoicePackage`. Review
+ *  reads Learn's spoken lines for the same game through it (David 2026-11-18:
+ *  Review is the deeper dive and never repeats Learn except deeper). */
+export function heardSentenceKeys(lines: readonly string[]): Set<string> {
+  const out = new Set<string>();
+  for (const l of lines) for (const s of sentencesOf(l)) out.add(sayKey(s));
+  return out;
+}
+
+/** A line with every sentence already heard taken out, the rest kept whole
+ *  and in order — the same sentences, the same keys, as the ledger. */
+export function withoutHeard(text: string, heard: ReadonlySet<string>): string {
+  if (heard.size === 0) return text;
+  const kept = sentencesOf(text).filter((s) => !heard.has(sayKey(s)));
+  return kept.join(' ').trim();
+}
+
 /** One-line summary for the audit stream, built from the SAME object that was
  *  spoken — the property that was missing when the log and the voice diverged. */
 export function describeVoicePackage(pkg: VoicePackage): string {
