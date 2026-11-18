@@ -16,7 +16,7 @@
  */
 import { evalBand, evalBandWords } from './evalBand';
 import { settledLeadFor, type LastMove } from './material';
-import { openSentence } from '../utils/openSentence';
+import { openSentence, continueSentence } from '../utils/openSentence';
 import { goodPieceIdeaKey } from './positionReadingService';
 import { Chess, type Color } from 'chess.js';
 import { describeStructure } from './boardStructure';
@@ -330,7 +330,7 @@ export function phaseVerdictLine(
   const [lead, ...more] = a.reasons;
   const joinFirst = a.verdict !== 'balanced' && !/ — /.test(lead);
   const why = joinFirst ? sentences(more) : sentences(a.reasons);
-  const verdict = joinFirst ? `${standing}, because ${lead.charAt(0).toLowerCase()}${lead.slice(1)}` : standing;
+  const verdict = joinFirst ? `${standing}, because ${continueSentence(lead)}` : standing;
   // ONE COMPARISON, not a list: the other side of the scale, and what it
   // weighs. Level → the two sides' trumps hold each other; slightly → theirs
   // keeps it close; clearly or decisive → it is not enough.
