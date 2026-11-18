@@ -27,7 +27,8 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - 🔴 3 · a working platform — WO-PLATFORM-01: one board bar, same name, look, feel and code on every board, no exceptions
   - ✅ puzzle boards (PuzzleBoard, MistakePuzzleBoard, Setup trainer) on the one bar; "Teach me this position" → the bar's Read; ShowMeButton deleted; gate `oneCoachSurfaces.gate`
   - 🔴 25 more non-kid board screens with their own button rows (openings players, calculation, endgame lessons, analysis practice, pattern school, find-square, model games, SRS trainer, course trainer, …) + a gate that every interactive board renders the bar
-  - 🟠 kids' boards: the one bar, or their "simpler for kids" rule? (David's call)
+  - 🟡 kids' boards — LAST step of the platform work (David 2026-11-18: "I agree with kids. Save for end"): the same `CoachBoardBar` component and look, only the buttons that work on that screen (Hint everywhere, Read on puzzles and guided games in plain words, Back where a move can be undone), bigger for small fingers
+  - 🟡 POSSIBLE LATER BUILD (David 2026-11-18): simplify the regular board bar the same way — show only the buttons that work on that screen instead of greying the rest
 
 ## 000zk. WO-DANYA-READS-01 — every idea Danya reads off a board, computed — TOP OF THE LIST (David 2026-11-18, `docs/plans/2026-11-18-danya-board-reads-gaps.md`)
 - ✅ measured: 202 of his article boards, 673 ideas — 28% said right, 10% wrong, 62% missed; 261 of our lines false or pointless
