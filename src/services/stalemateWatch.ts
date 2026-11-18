@@ -141,19 +141,15 @@ export function stalemateTraps(fen: string, only?: readonly string[]): Stalemate
   return out;
 }
 
-/** THEIR MOVE SETS THE TRAP, or YOUR UNDERPROMOTION DODGES IT — the two-move
- *  stalemate trick in words, from the student's seat. `student` is the
- *  student's colour; `dodged` is the student's underpromotion that avoids it. */
-export function stalemateTrapLine(trap: StalemateTrap, student: 'w' | 'b', dodged: string | null): string {
+/** THEIR MOVE SETS THE TRAP — the two-move stalemate trick in words, from the
+ *  student's seat (`student` is the student's colour). The underpromotion
+ *  that dodges it is said by `promotionChoice`. */
+export function stalemateTrapLine(trap: StalemateTrap, student: 'w' | 'b'): string {
   const dot = (san: string, side: 'w' | 'b'): string => `${side === 'b' ? '…' : ''}${san}`;
   const other: 'w' | 'b' = trap.side === 'w' ? 'b' : 'w';
   const natural = dot(trap.natural, trap.side);
   const check = dot(trap.check, other);
   const capture = dot(trap.capture, trap.side);
-  if (dodged) {
-    const piece = PIECE_NAME[dodged.match(/=([NBRQ])/)?.[1]?.toLowerCase() ?? 'r'];
-    return `${dot(dodged, trap.side)}, not ${natural}: a new queen walks into ${check}, and taking the ${trap.bait} with ${capture} is stalemate. The ${piece} does the job and leaves their king no such way out.`;
-  }
   return trap.side === student
     ? `Their move sets a stalemate trap: if you play ${natural}, ${check} comes, and taking the ${trap.bait} with ${capture} is stalemate — a won game drawn.`
     : `You set a stalemate trap: if they play ${natural}, ${check} comes, and taking your ${trap.bait} with ${capture} is stalemate.`;

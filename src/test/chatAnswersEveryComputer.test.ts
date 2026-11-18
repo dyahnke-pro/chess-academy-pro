@@ -47,6 +47,13 @@ const CASES: Case[] = [
   { id: 'fortress', q: 'why-best-move', history: [], fen: '8/p7/8/1PP1p3/4K3/2b3k1/8/8 w - - 0 49', san: 'c6', student: 'w',
     reads: reads([line(0, 'c5c6 c3a5', 1)], [line(0, 'c3a5', 1)]), ctx: { replies: [{ cp: 0, mate: null, moves: ['c3a5'] }] } },
   { id: 'minorMatchup', q: 'why-best-move', history: [], fen: 'r4rk1/p4ppp/4pn2/2P5/1pp1BP2/4B1P1/PP5P/R2R2K1 b - - 0 17', san: 'Nxe4', student: 'b', reads: null, ctx: {} },
+  // ENDGAME TECHNIQUE (WO-DANYA-READS-01 #5): Danya's Saavedra board, the
+  // textbook Lucena, his Fahrni–Alapin line, the trébuchet and a runner.
+  { id: 'promotionChoice', q: 'why-best-move', history: [], fen: '8/2P5/8/8/3r4/8/2K5/k7 w - - 9 6', san: 'c8=R', student: 'w', reads: null, ctx: {} },
+  { id: 'theoreticalEnding', q: 'why-best-move', history: [], fen: '1K1k4/1P6/8/8/8/8/r7/2R5 w - - 0 1', san: 'Rc4', student: 'w', reads: null, ctx: { afterCp: null } },
+  { id: 'oppositionRead', q: 'why-best-move', history: [], fen: '3k4/8/p1P5/P2K4/8/8/8/8 w - - 0 4', san: 'Kd6', student: 'w', reads: null, ctx: { afterCp: null } },
+  { id: 'zugzwangRead', q: 'why-best-move', history: [], fen: '8/8/8/3k4/2pP4/3K4/8/8 w - - 0 1', san: 'Kc3', student: 'w', reads: null, ctx: { after: null, passAfter: null } },
+  { id: 'raceCount', q: 'why-best-move', history: [], fen: '8/8/2P5/8/8/4K1p1/8/k7 w - - 0 1', san: 'Kd3', student: 'w', reads: null, ctx: {} },
   { id: 'windmill', q: 'why-best-move', history: [], fen: '1q3rk1/1p3pp1/2p4p/3Ppb2/1PP2Q1P/5P2/8/B4BRK b - - 0 29', san: 'exf4', student: 'b', reads: null, ctx: {} },
 ];
 
