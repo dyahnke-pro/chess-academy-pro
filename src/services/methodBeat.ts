@@ -21,7 +21,7 @@ import { openSentence } from '../utils/openSentence';
 import { isDecidingMoment } from './nextMoveAdvice';
 import type { ImportanceTier } from './narrationImportance';
 import type { Proof } from './proof';
-import { slipHabit, type SlipRead } from './safetyHabits';
+import { BLUNDER_CHECK_QUESTION, slipHabit, type SlipRead } from './safetyHabits';
 
 export interface MethodSignals {
   /** The moment's importance tier, from the one deciding computer. */
@@ -345,7 +345,7 @@ interface LiveMethodBeat { text: string; key: string; habit: LiveHabit; proof?: 
  *  beat asked "their threat first, your idea second" under `opponent-threat` —
  *  one habit, two keys, so a Learn game could teach it twice in two wordings
  *  (the thinking steps already filed `answer-danger` under `opponent-threat`). */
-export type HabitId = LiveHabit | 'blunder-check' | 'what-it-guarded';
+export type HabitId = LiveHabit | 'blunder-check' | 'what-it-guarded' | 'slow-down';
 /** The say-once claim a caller carries forward in its `alreadySaid` set. */
 export function liveHabitKey(habit: HabitId): string { return `method:${habit}`; }
 /** The same claim as the spoken-sentence ledger keys it — `voicePackage.claimKey`
@@ -466,4 +466,50 @@ function beat(habit: LiveHabit, stems: string[], ply: number): LiveMethodBeat {
 /** Text-only form (no say-once) — kept for callers that do not carry a set. */
 export function liveMethodBeatFor(s: LiveMethodSignals, plyForVariety = 0, said?: ReadonlySet<string>): string | null {
   return liveMethodBeat(s, plyForVariety, said)?.text ?? null;
+}
+
+/** THE HABIT A CANDIDATE-MOVE MISS CLOSES ON — the retrospective form of the
+ *  live candidates beat, one fixed sentence. */
+export const CANDIDATES_HABIT = 'The habit that catches this: name two or three candidate moves before you pick one, then compare them.';
+
+/**
+ * THE HABIT EVERY CORRECTION CLOSES ON (David 2026-11-18: "the same habit
+ * phrase every time" — repetition is how a habit is built). The method beat's
+ * own order — their threat played past, the slip's question, the forcing scan
+ * when the move that was there was forcing — and when none of those names the
+ * miss, the move was a choice weighed badly: name the candidates first.
+ *
+ * TOTAL, so no correction ends without its habit (the Learn preview of
+ * 2026-11-18: one habit on sixteen corrections — the slip question fired only
+ * when a piece was lost). FIXED WORDS (the first stem, never rotated) and NO
+ * say-once: the same miss closes on the same sentence every time. The record
+ * still decides whether the habit is owed; a correction already passed the
+ * student's error bar, so the forcing scan is owed at any cost here.
+ */
+export function correctionHabit(s: {
+  bestSan: string | null;
+  cpLossCp: number;
+  /** The fundamentals attributor found a threat played past. */
+  ignoredThreat: boolean;
+  /** REQUIRED — the slip read, or null when the surface has none. */
+  slip: SlipRead | null;
+  /** REQUIRED — the move ALLOWED something (the error computer named what
+   *  their reply does), as against only missing a better move. A move that
+   *  allowed a threat or an x-ray with no piece lost is caught by the blunder
+   *  check — their checks, captures and threats once it lands — never by the
+   *  candidate list (the Learn preview of 2026-11-18: 31…f5 let Qb7 threaten
+   *  mate and closed on "name two or three candidate moves"). */
+  allowed: boolean;
+}): { habit: MethodHabit; text: string } {
+  // The method beat's own order: their threat played past first, then the
+  // slip's question. A move that allowed something with no piece lost is the
+  // blunder check; only a move that MISSED something reads the forcing scan or
+  // the candidates.
+  const read = methodBeatRead({
+    tier: 'swing', cpLossCp: s.cpLossCp, bestSan: s.allowed ? null : s.bestSan, ignoredThreat: s.ignoredThreat,
+    isStudentMove: true, habitNeed: { 'forcing-scan': 'open' }, slip: s.slip,
+  }, 0);
+  if (read) return read;
+  if (s.allowed) return { habit: 'blunder-check', text: BLUNDER_CHECK_QUESTION };
+  return { habit: 'candidates', text: CANDIDATES_HABIT };
 }

@@ -49,7 +49,7 @@ import { openSentence } from '../utils/openSentence';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { replyPunishment } from './moveAllowed';
 import { whyItFailed } from './whyItFailed';
-import { sideToMoveAs } from './threatOut';
+import { mateThreatsAgainst, sideToMoveAs } from './threatOut';
 import { lineProofFromUci, walkableLine, type Proof } from './proof';
 import type { WalkableLine } from '../types';
 import { signedLegalSeeFor, legalSeeGain } from './positionReadingService';
@@ -264,6 +264,25 @@ function bestWinsOnBoard(fen: string, bestSan: string): boolean {
     const mv = new Chess(fen).move(bestSan);
     return !!mv?.captured && signedLegalSeeFor(fen, mv.to, mv.color) > 0;
   } catch { return false; }
+}
+
+/** WHAT A QUIET BETTER MOVE WINS: material its own line keeps (the one reason
+ *  walker, said only on the naming rule), or a mate it threatens next move.
+ *  Null when it wins neither — then its route or plan is the reason. */
+function betterMoveWins(fenBefore: string, bestSan: string, moverColor: 'white' | 'black', missed: CostReason | null): string | null {
+  // A CAPTURE IS SAID BY WHAT IT TAKES (hand walk 2026-09-24: "Bxd8 takes the
+  // queen", never "wins a rook"; preview 2026-11-18: Qxf4 and Bxf4 both took
+  // the knight back, so "Bxf4 wins a knight" would be false). This reader is
+  // for the QUIET better move, whose route reading hides what it wins.
+  if (isCaptureLead(fenBefore, bestSan)) return null;
+  if (missed && !missed.mate && missed.trust.name) return `it would win ${reasonWinWords(missed, [])} ${movesOn(Math.ceil(missed.blowPlies / 2))}`;
+  try {
+    const c = new Chess(fenBefore);
+    if (!c.move(bestSan) || c.isGameOver() || c.inCheck()) return null;
+    const mates = mateThreatsAgainst(c.fen(), moverColor === 'white' ? 'b' : 'w').moves;
+    if (mates.length > 0) return `it would threaten mate on ${mates[0].to}`;
+  } catch { return null; }
+  return null;
 }
 
 function boardHalfReason(fenBefore: string, bestSan: string, moverColor: 'white' | 'black', priorMove: PriorMove): string | null {
@@ -1248,15 +1267,18 @@ export function errorWhy(args: {
             // stays first: it is a different lesson, the move order.
             const escape = fact?.kind === 'checks-first' ? null : betterMovesTheTarget(args.fenBefore, args.playedSan, bestSan, replyLineUci, args.moverColor);
             if (escape) return escape;
+            if (fact?.kind === 'checks-first') return phraseBetterMove(fact);
+            // A CONCRETE WIN OUTRANKS A ROUTE (David 2026-11-18, the Learn
+            // preview: "head on to f6, and take the pawn when it arrives" was
+            // said where the same line threatens mate on g7, and "take the
+            // knight on f4" where Bxf4 wins it outright). The reasons were
+            // picked by a fixed order with the line's route reading first, so
+            // the win this computer also had never spoke. What the better move
+            // WINS is its reason before any walk of its pieces.
+            const win = betterMoveWins(args.fenBefore, bestSan, args.moverColor, missedReason());
+            if (win) return win;
             if (fact) return phraseBetterMove(fact);
             return betterGuardsTheLine(args.fenBefore, args.playedSan, bestSan, replyLineUci, args.moverColor)
-              // WHAT THE BETTER MOVE'S LINE WINS, by the one reason walker
-              // (WO-DECIDER-02): said short, the board walks it, and only
-              // where the naming rule lets the line be named.
-              ?? (() => {
-                const r = missedReason();
-                return r && !r.mate && r.trust.name ? `it would win ${reasonWinWords(r, [])} ${movesOn(Math.ceil(r.blowPlies / 2))}` : null;
-              })()
               ?? (args.bestLineUci?.length ? boardHalfReason(args.fenBefore, bestSan, args.moverColor, args.priorMove) : null);
           })();
   // NAMED WITH ITS REASON, OR NOT NAMED (Learn walk, fresh Nimzo game,
@@ -1273,9 +1295,18 @@ export function errorWhy(args: {
   // own): held by a defender, a piece left hanging, a defender abandoned, an
   // in-between check, a fork walked into. Its outcome is read off the same
   // reply line by the same ledger.
-  const failedRead = caused && args.allowedMate === null
+  const failedRaw = caused && args.allowedMate === null
     ? (() => { try { return whyItFailed({ fenBefore: args.fenBefore, playedSan: args.playedSan, studentColor: args.moverColor, playedLineUci: replyLineUci.length ? replyLineUci : null }); } catch { return null; } })()
     : null;
+  // A GUESS AT THE MOVE'S AIM IS NEVER THE WHY OF A MOVE THAT MISSED SOMETHING
+  // (Danya's speedrun 25.Ne5, 1.6 pawns: "That eyed the pawn on f7, but the
+  // king holds it" — nobody took on f7; Rc2's line won a queen for a rook and
+  // a pawn). The held-by-defender reading explains an illusory threat; when
+  // the better move's own line wins material (named or not), the miss is the
+  // cost and the eyed target was never it.
+  const failedRead = failedRaw?.kind === 'held-by-defender' && bestSan
+    && (missedReason() !== null || betterMoveWins(args.fenBefore, bestSan, args.moverColor, null) !== null || bestWinsOnBoard(args.fenBefore, bestSan))
+    ? null : failedRaw;
   // "They missed it" only when their actual reply neither took it nor is the
   // engine line's first move (which takes it a move later — walk 900).
   const failed = failedRead

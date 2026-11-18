@@ -139,6 +139,9 @@ import type { CoachGameMove, KeyMoment, ReviewState, GameAccuracy, MoveClassific
 
 interface CoachGameReviewProps {
   moves: CoachGameMove[];
+  /** The board the game began on — REQUIRED, so a game from a set-up position
+   *  is reviewed from its own board, its first move included. */
+  startFen: string;
   keyMoments: KeyMoment[];
   playerColor: 'white' | 'black';
   result: string;
@@ -266,7 +269,7 @@ function exploreWalkable(line: ExploreLine): WalkableLine | null {
 
 export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const {
-    moves, playerColor, result,
+    moves, startFen, playerColor, result,
     playerRating,
     onPlayAgain, onBackToCoach, onPracticeInChat,
     pgn, onNeedMoreGraded,
@@ -634,7 +637,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // parallel with the legacy narrativeSummary fetch; if the walk
   // narration succeeds we render the walk UI, otherwise the summary
   // card's paragraph is the graceful fallback.
-  const reviewMoveInputs = useMemo<ReviewMoveInput[]>(() => reviewMoveInputsFrom(moves), [moves]);
+  const reviewMoveInputs = useMemo<ReviewMoveInput[]>(() => reviewMoveInputsFrom(moves, startFen), [moves, startFen]);
 
   // Grounded preview spine (Phase 1c) — the student's flagged moves as
   // structured citations (position + played/suggested squares), computed from

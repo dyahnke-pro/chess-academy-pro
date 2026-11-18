@@ -29,7 +29,7 @@
 //   5. ORDER — most-important-first, with the student's weaknesses raised.
 // Steps 1–2 decide WHETHER, 3–5 decide WHAT. Silence at any step is a computed
 // verdict with a reason attached — never an absence.
-import { boardVeto, type BoardState } from './boardState';
+import { boardVeto, isMateKind, type BoardState } from './boardState';
 import { computeImportance, type ImportanceSignals, type ImportanceTier, type ImportanceVerdict } from './narrationImportance';
 import { selectFacts, supportedFacts, barForTier, type QuietFact } from './factSelector';
 import { fadeLevelOf, type FadeLevel, type FadeLevels } from './fadeText';
@@ -479,10 +479,15 @@ export function decide(
   // habit is still owed is the habit's own standing, read below.
   const provenQuiet: QuietFact[] = [];
   const faded = new Map<DoorFact, FadeLevel>();
+  // The squares the mate's own teaching facts name — what a fact must touch to
+  // be part of the mate's story beside it.
+  const mateSquares = bundle.board.mateOnBoard
+    ? new Set(bundle.facts.filter((f) => isMateKind(f.kind) && FACT_ROLE[f.kind] === 'teach').flatMap((f) => [...(f.squares ?? []), ...mateLineSquares(f.lines)]))
+    : undefined;
   const live = bundle.facts.filter((f) => {
     // 2a — THE BOARD (`boardState`), before anything is weighed: a claim the
     // board forbids here is not a candidate at all.
-    const veto = boardVeto(f.kind, bundle.board, f.squares);
+    const veto = boardVeto(f.kind, bundle.board, f.squares, FACT_ROLE[f.kind] === 'teach' ? mateSquares : undefined);
     if (veto) { provenQuiet.push({ text: f.text, why: veto }); return false; }
     if (HABIT_KINDS.has(f.kind)) return true;
     // THE FADE, one rule with Learn (`fadeText`): amber speaks its short form,
@@ -718,4 +723,19 @@ export function instantWaitsForVerdict(input: {
   if (threatStakes(input.fenAfterReply, input.student, [])?.mate) return false;
   if (mateInOne(input.fenAfterReply)) return false;
   return input.moveCostCp !== null ? input.moveCostCp >= VERDICT_TURN_CP : input.verdictUrgent;
+}
+
+/** The squares a mate's own line lands on — every move's arrival square, the
+ *  mating one included — read off the line it carries, so a board fact about
+ *  those squares is part of the mate's story without widening the mate fact's
+ *  own squares (a wider set let a smaller fact subsume the mate, Légal 5.Nxe5). */
+function mateLineSquares(lines: ReadonlyArray<{ fen: string; sans: readonly string[] }> | undefined): string[] {
+  const out: string[] = [];
+  for (const l of lines ?? []) {
+    try {
+      const c = new Chess(l.fen);
+      for (const san of l.sans) { const m = c.move(san); if (!m) break; out.push(m.to); }
+    } catch { /* a line that will not play names no squares */ }
+  }
+  return out;
 }

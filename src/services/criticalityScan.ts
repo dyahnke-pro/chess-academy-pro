@@ -105,14 +105,29 @@ export async function scanCriticality(
   evaluate: EvaluateMulti,
   opts: CriticalityOpts = {},
 ): Promise<CriticalMoment | null> {
+  try { if (new Chess(fen).isGameOver()) return null; } catch { return null; }
+  const raw = await evaluate(fen, opts.multiPV ?? 3);
+  return criticalityFromCandidates(fen, raw, opts);
+}
+
+/**
+ * THE SAME READ FROM LINES ALREADY IN HAND (Saavedra review 2026-11-18): Review
+ * keeps each move's candidate reads (`weighed`) and could not call the engine
+ * from its synchronous walk, so it handed the decider no decision at all — an
+ * only move that wins read the same as a quiet one. One computer, two doors:
+ * the live scan asks the engine, Review passes what it stored.
+ */
+export function criticalityFromCandidates(
+  fen: string,
+  raw: ReadonlyArray<{ uci: string; san?: string; cp: number }>,
+  opts: CriticalityOpts = {},
+): CriticalMoment | null {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
   if (chess.isGameOver()) return null;
   const mover = chess.turn();
   const sign = mover === 'w' ? 1 : -1;
   const legalCount = chess.moves().length;
-
-  const raw = await evaluate(fen, opts.multiPV ?? 3);
   if (!raw.length) return null;
 
   const candidates: ScoredMove[] = raw

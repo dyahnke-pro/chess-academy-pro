@@ -73,7 +73,7 @@ import { queenNet, queenNetLine } from './queenNet';
 import { bothSaved, bothSavedLine, type ReplyLine } from './bothSaved';
 import { perpetualCheck, perpetualStartedBy, perpetualLine, winningAnyway, windmill, windmillStartedBy, windmillLine } from './repeatingChecks';
 import { minorMatchup } from './minorMatchup';
-import { stalemateTrick, stalemateTrickLine } from './stalemateWatch';
+import { stalemateTrick, stalemateTraps, stalemateTrapLine, stalemateTrickLine } from './stalemateWatch';
 import { intoTheirCamp, intoTheirCampLine } from './intoTheirCamp';
 import { flexibleMove, flexibleMoveLine, flexibleMoveSquares } from './flexibleMove';
 import { exchangeSacrifice, exchangeSacrificeLine, exchangeSacrificeSquares } from './exchangeSacrifice';
@@ -1547,9 +1547,24 @@ export const BOARD_COMPUTERS = {
     // stalemates its own king. Both seats: a chance to save the game, or the
     // capture the winning side must leave alone.
     read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
+      const mover: Color = new Chess(fenBefore).turn();
+      // TWO MOVES DEEP (Saavedra review 2026-11-18): an underpromotion that
+      // dodges the trick a queen walks into — its reason — and a move that
+      // sets the trick for the other side's natural move.
+      const under = /=[RBN]/.test(san) ? stalemateTraps(fenBefore, [san.replace(/=[RBN]/, '=Q')])[0] ?? null : null;
+      const movedTo = ((): string | null => { try { return new Chess(fenBefore).move(san).to; } catch { return null; } })();
+      const setTrap = !under ? stalemateTraps(fenAfter).find((tr) => tr.checkFrom === movedTo) ?? null : null;
+      const deep = under ?? setTrap;
+      if (deep) {
+        const text = stalemateTrapLine(deep, student, under ? san : null);
+        const squares = [...new Set([...(under ? [san.match(/[a-h][1-8]/)?.[0] ?? ''] : []), ...deep.squares].filter(Boolean))];
+        const key = `stalemate-trap:${deep.natural}:${deep.check}:${fenAfter.split(' ')[0]}`;
+        return fact({ key, claims: [key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+          seat: mover === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
+      }
       const t = stalemateTrick(fenBefore, san);
       if (!t) return null;
-      const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
       const mine = t.side === student;
       const text = stalemateTrickLine(t, mine, fenAfter);
       return fact({ key: t.key, claims: [t.key], text, proof: squaresProof(text, t.squares) ?? NO_PROOF.description, squares: t.squares, stakes: null,

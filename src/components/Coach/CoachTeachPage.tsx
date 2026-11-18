@@ -12881,13 +12881,14 @@ export function CoachTeachPage({ mode }: {
                         slipPrefix: () => (fund ? noteSlip(learnMemRef.current.story, fund.id, move.history.length) : ''),
                         plainTail: definitionOn(fenAfterReply)(look.pattern),
                         concession,
-                        // The habit's question, once a game: OFFERED under its
-                        // key with its words, the game's when the door keeps them.
+                        // The habit's question, on every correction in the same
+                        // words (David 2026-11-18): OFFERED under its key with
+                        // its words, the game's when the door keeps them.
                         slipQuestion: () => {
                           if (fund?.id === 'ignored-threat' || look.stakes?.mate) return null;
-                          const q = slipQuestion(fenBefore, move.san, look.lostSquare, playerColor === 'white' ? 'w' : 'b', new Set(learnMemRef.current.story.heard(fenAfterReply).sentences), move.history.length, look.guardLeft ?? null, look.punishLine ?? null);
-                          if (q) learnMemRef.current.story.offer(fenAfterReply, { text: q.text, sentences: [q.key] });
-                          return q?.text ?? null;
+                          const q = slipQuestion(fenBefore, move.san, look.lostSquare, playerColor === 'white' ? 'w' : 'b', look.guardLeft ?? null, look.punishLine ?? null, studentBestSan ?? null, cpLoss, !!look.punishLine);
+                          learnMemRef.current.story.offer(fenAfterReply, { text: q.text, sentences: [q.key] });
+                          return q.text;
                         },
                       });
                       const line = turnLine.body;

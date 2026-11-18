@@ -26,6 +26,8 @@ interface AdaptedReviewProps {
   playerRating: number;
   opponentRating: number;
   pgn: string;
+  /** The board the game began on (the `[FEN]` header, else the standard start). */
+  startFen: string;
 }
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -181,5 +183,6 @@ function adaptReplayedGame(
     playerRating: playerColor === 'white' ? game.whiteElo ?? 1500 : game.blackElo ?? 1500,
     opponentRating: playerColor === 'white' ? game.blackElo ?? 1500 : game.whiteElo ?? 1500,
     pgn: game.pgn,
+    startFen,
   };
 }

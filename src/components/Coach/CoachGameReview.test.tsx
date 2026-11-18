@@ -275,6 +275,7 @@ function renderReview(overrides?: {
   return render(
     <CoachGameReviewComponent
       moves={overrides?.moves ?? mockMoves}
+      startFen="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
       keyMoments={overrides?.keyMoments ?? mockKeyMoments}
       playerColor={overrides?.playerColor ?? 'white'}
       result={overrides?.result ?? 'win'}

@@ -94,6 +94,7 @@ const ASK: Record<ChanceKind, readonly string[]> = {
   take: ['Count their defenders — is anything of theirs loose?', 'Is anything of theirs loose?'],
   save: ['Is everything of yours safe?', 'Check your pieces — is anything loose?'],
   leave: ['Is everything of yours safe?'],
+  allow: ['What can they do after your move?'],
   shot: ['Checks, captures and threats — is there a shot?', 'Is there a forcing move here?'],
   motif: ['What does their last move threaten?', 'What is their last move aiming at?'],
   'mate-threat': ['What is their last move aiming at?', 'How safe is your king right now?'],
@@ -121,11 +122,13 @@ export const SHOT_CLUE = 'Hold on — there is a forcing move that wins material
  *  so the retry is a real find. One fixed line per kind: the same words every
  *  miss is how a habit is built (§ MISSIONS). The square is named only once
  *  the moment is past (the shown answer, the credit, the recap). */
-export const CLUE: Record<'save' | 'saveCheaper' | 'leave' | 'leaveCheaper' | 'motif' | 'mateThreat', string> = {
+export const CLUE: Record<'save' | 'saveCheaper' | 'leave' | 'leaveCheaper' | 'allow' | 'allowMate' | 'motif' | 'mateThreat', string> = {
   save: 'Hold on — a piece of yours is loose. Before every move, check each of your pieces: is it attacked, and is it guarded?',
   saveCheaper: 'Hold on — a cheaper piece of theirs is attacking a piece of yours. Before every move, look at what their cheaper pieces hit: a guard does not save a piece from a cheaper attacker.',
   leave: 'Hold on — that move leaves a piece of yours loose. Before you play a move, check that every piece is still guarded after it.',
   leaveCheaper: 'Hold on — that move puts a piece of yours where a cheaper piece of theirs attacks it. Before you play a move, look at what their cheaper pieces can hit after it.',
+  allow: 'Hold on — that move walks into their tactic. Before you play a move, ask what their checks, captures and threats would be after it.',
+  allowMate: 'Hold on — that move lets them threaten mate. Before you play a move, ask what their checks, captures and threats would be after it.',
   motif: 'Hold on — that move lets their tactic land. Before every move, ask what their checks, captures and threats would be.',
   mateThreat: 'Hold on — they threaten mate, and that move does not stop it. Before every move, ask what their last move threatens.',
 };
@@ -137,6 +140,8 @@ export function clueLine(ch: FocusChance, ply: number): string {
       return cheaperAttacker(ch) ? CLUE.saveCheaper : CLUE.save;
     case 'leave':
       return cheaperAttacker(ch) ? CLUE.leaveCheaper : CLUE.leave;
+    case 'allow':
+      return ch.tag === 'missed-their-mate' ? CLUE.allowMate : CLUE.allow;
     case 'take':
       return pick([
         'Hold on — one of their pieces has more attackers than defenders. Count them.',
@@ -183,6 +188,8 @@ export function conclusionLine(ch: FocusChance, m?: FocusMove): string {
     }
     case 'leave':
       return `every piece of yours is covered.`;
+    case 'allow':
+      return 'their reply has nothing now.';
     case 'take':
       return `their ${piece(ch.piece?.type)} on ${ch.piece?.square} had ${ch.counts && ch.counts.defenders > 0 ? `only ${countWord(ch.counts.defenders)} defender${ch.counts.defenders === 1 ? '' : 's'}` : 'no defender'}.`;
     case 'shot':
@@ -286,6 +293,13 @@ export function spotLine(ch: FocusChance, ctx: { beforeTheirMove: string | null;
       }
       return `That move left your ${piece(p.type)} on ${p.square} with nothing guarding it. Next time, before every move, check that each of your pieces is still guarded after it.`;
     }
+    case 'allow': {
+      const a = ch.attacker;
+      if (!a) return null;
+      return ch.tag === 'missed-their-mate'
+        ? `After your move, their ${piece(a.type)} to ${a.square} threatened mate. Next time, before you play, look at every check and threat they get after it.`
+        : `After your move, their ${piece(a.type)} to ${a.square} started a tactic. Next time, before you play, look at every check, capture and threat they get after it.`;
+    }
     case 'take': {
       const p = ch.piece;
       if (!p) return null;
@@ -319,6 +333,8 @@ export function shownLine(ch: FocusChance): string {
     case 'save':
     case 'leave':
       return `The arrow shows a move that keeps your ${piece(ch.piece?.type)} on ${ch.piece?.square} safe.`;
+    case 'allow':
+      return 'The arrow shows a move that does not let their tactic in.';
     case 'take':
       return `Their ${piece(ch.piece?.type)} on ${ch.piece?.square} was free — the arrow takes it.`;
     case 'shot':
@@ -343,6 +359,7 @@ export function recapLabel(ch: FocusChance, ply: number): string {
     case 'mate-for-you': return `${move} — a forced mate`;
     case 'save': return `${move} — your ${piece(ch.piece?.type)} on ${ch.piece?.square} was loose`;
     case 'leave': return `${move} — your ${piece(ch.piece?.type)} on ${ch.piece?.square} was left loose`;
+    case 'allow': return ch.tag === 'missed-their-mate' ? `${move} — your move let them threaten mate` : `${move} — your move walked into their tactic`;
     case 'motif': {
       const m = motifOfTag(ch.tag);
       return `${move} — their ${m ? MOTIF_WORD[m] : 'tactic'}`;

@@ -473,7 +473,9 @@ describe('the grade carries the missed pattern (B3)', () => {
     const fen = 'r1bqkbnr/ppp2ppp/2n5/3p2B1/3PN3/5N2/PPP1PPPP/R2QKB1R b KQkq - 1 5';
     const call = callInaccuracy(withOneSearch({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null, fenBefore: fen, playedSan: 'Be7', bestSan: 'f6',
       bestLineUci: ['f7f6', 'e4f6', 'g8f6', 'e2e3', 'f8e7', 'c2c3', 'e8g8', 'f1d3'], cpLoss: 300, moverEvalAfterCp: -60, side: 'student', moverColor: 'black' }));
-    expect(call?.said).toMatch(/win a piece/);
+    // What the line wins, said by its pieces (2026-11-18: a quiet better
+    // move is said by what it wins — "a knight for a pawn").
+    expect(call?.said).toMatch(/win a (piece|knight)/);
     expect(call?.pattern).toBeUndefined();
   });
 });

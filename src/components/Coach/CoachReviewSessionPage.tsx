@@ -349,6 +349,7 @@ export function CoachReviewSessionPage(): JSX.Element {
         // useCoachMemoryStore.hintRequests).
         gameId={gameId}
         moves={adapted.moves}
+        startFen={adapted.startFen}
         keyMoments={adapted.keyMoments}
         playerColor={adapted.playerColor}
         result={adapted.result}

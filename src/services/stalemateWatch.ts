@@ -84,6 +84,24 @@ export function stalemateTrick(fenBefore: string, san: string): StalemateTrick |
 
 const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
+/** A NATURAL MOVE THAT WALKS INTO A STALEMATE TRICK, two moves deep (Saavedra
+ *  review 2026-11-18: after …Rd4, c8=Q runs into …Rc4+ and Qxc4 is
+ *  stalemate). `natural` is the move, `check` their check that offers a piece,
+ *  `capture` the capture of it that stalemates. Board-true: chess.js plays
+ *  every move and asks `isStalemate`. */
+export interface StalemateTrap {
+  natural: string;
+  check: string;
+  capture: string;
+  /** The natural move's square and the bait's square. */
+  squares: string[];
+  /** The checking piece — the bait — and the square it checks from. */
+  bait: string;
+  checkFrom: string;
+  /** Who would play the natural move (and fall in). */
+  side: 'w' | 'b';
+}
+
 /** The trick in words, from the student's seat: `mine` when the student set it. */
 export function stalemateTrickLine(t: StalemateTrick, mine: boolean, fenAfter: string): string {
   let c: Chess | null = null;
@@ -96,4 +114,47 @@ export function stalemateTrickLine(t: StalemateTrick, mine: boolean, fenAfter: s
   return mine
     ? `You are behind, but there is a trick: if they take ${bait}, it is stalemate. Your king would have no move and nothing else of yours could move, so the game is drawn.`
     : `Careful — taking ${bait} would be stalemate. Their king would have no move and nothing else of theirs could move, so a won game becomes a draw. Leave the bait alone.`;
+}
+
+/** Every natural move (a promotion or a capture) of the side to move on `fen`
+ *  that walks into a stalemate trick: a check that offers a piece whose capture
+ *  stalemates the checker. `only`, when given, limits the moves read. */
+export function stalemateTraps(fen: string, only?: readonly string[]): StalemateTrap[] {
+  let c: Chess;
+  try { c = new Chess(fen); } catch { return []; }
+  const out: StalemateTrap[] = [];
+  const bare = (x: string): string => x.replace(/[+#!?]+$/, '');
+  for (const m of c.moves({ verbose: true })) {
+    if (only ? !only.some((o) => bare(o) === bare(m.san)) : !(m.promotion || m.captured)) continue;
+    const a = new Chess(fen); a.move(m.san);
+    if (a.isGameOver()) continue;
+    for (const ch of a.moves({ verbose: true })) {
+      if (!ch.san.includes('+')) continue;
+      const b = new Chess(a.fen()); b.move(ch.san);
+      for (const cap of b.moves({ verbose: true })) {
+        if (!cap.captured || cap.to !== ch.to) continue;
+        const d = new Chess(b.fen()); d.move(cap.san);
+        if (d.isStalemate()) out.push({ natural: m.san, check: ch.san, capture: cap.san, squares: [m.to, ch.to], bait: PIECE_NAME[ch.piece], checkFrom: ch.from, side: m.color });
+      }
+    }
+  }
+  return out;
+}
+
+/** THEIR MOVE SETS THE TRAP, or YOUR UNDERPROMOTION DODGES IT — the two-move
+ *  stalemate trick in words, from the student's seat. `student` is the
+ *  student's colour; `dodged` is the student's underpromotion that avoids it. */
+export function stalemateTrapLine(trap: StalemateTrap, student: 'w' | 'b', dodged: string | null): string {
+  const dot = (san: string, side: 'w' | 'b'): string => `${side === 'b' ? '…' : ''}${san}`;
+  const other: 'w' | 'b' = trap.side === 'w' ? 'b' : 'w';
+  const natural = dot(trap.natural, trap.side);
+  const check = dot(trap.check, other);
+  const capture = dot(trap.capture, trap.side);
+  if (dodged) {
+    const piece = PIECE_NAME[dodged.match(/=([NBRQ])/)?.[1]?.toLowerCase() ?? 'r'];
+    return `${dot(dodged, trap.side)}, not ${natural}: a new queen walks into ${check}, and taking the ${trap.bait} with ${capture} is stalemate. The ${piece} does the job and leaves their king no such way out.`;
+  }
+  return trap.side === student
+    ? `Their move sets a stalemate trap: if you play ${natural}, ${check} comes, and taking the ${trap.bait} with ${capture} is stalemate — a won game drawn.`
+    : `You set a stalemate trap: if they play ${natural}, ${check} comes, and taking your ${trap.bait} with ${capture} is stalemate.`;
 }

@@ -23,13 +23,13 @@
 // (3) the standing threat (bar flat NOW, piece hangs next move), (4) the quiet
 // lesson (plan in a calm position). The composition below catches all four.
 import { criticalityThresholds, type CriticalMoment } from './criticalityScan';
-import { DECIDED_EVAL_CP } from './engineConstants';
+import { DECIDED_EVAL_CP, isMateEval } from './engineConstants';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 
 export interface ImportanceSignals {
   /** Prospective decision-leverage — `scanCriticality`'s read of THIS position
    *  (rating-scaled severity + gap). null when no scan was run. */
-  decision: Pick<CriticalMoment, 'severity' | 'gapCp'> | null;
+  decision: (Pick<CriticalMoment, 'severity' | 'gapCp'> & Partial<Pick<CriticalMoment, 'best' | 'runnerUp'>>) | null;
   /** Realized swing of the move JUST PLAYED, mover-POV COST in cp (>0 = the move
    *  made things worse). null for a prospective-only read (no move to grade). */
   cpLossCp: number | null;
@@ -86,7 +86,21 @@ export interface ImportanceVerdict {
  *  a decided game is not important (kills the "+8→+5" false positive). WDL is
  *  the honest read; the eval magnitude is the fallback when WDL is absent. */
 const DECIDED_WDL = 900;      // per-mille win or loss
-const MATE_CP = 100000;
+
+/** The result a mover's score stands for: winning, losing, or still open. */
+function resultOf(moverCp: number): 'win' | 'loss' | 'open' {
+  return moverCp >= DECIDED_EVAL_CP ? 'win' : moverCp <= -DECIDED_EVAL_CP ? 'loss' : 'open';
+}
+
+/** THE RESULT HINGES ON THE MOVE (Saavedra review 2026-11-18): the best move
+ *  keeps one result and the runner-up gives another — a win only one move
+ *  keeps is not a decided game, it is the decision. Read off the decision's
+ *  own candidates; a decision without them hinges on nothing we can show. */
+export function resultHinges(decision: ImportanceSignals['decision']): boolean {
+  if (!decision?.best) return false;
+  const runner = decision.runnerUp ? decision.runnerUp.moverCp : -Infinity;
+  return resultOf(decision.best.moverCp) !== resultOf(runner);
+}
 
 export function isContested(
   evalCpWhitePov: number | null,
@@ -162,10 +176,12 @@ export function computeImportance(
       const big = s.cpLossCp >= th.blunder;
       bump(big ? 90 : 70, big ? 'blunder' : 'swing', `realized swing ${(s.cpLossCp / 100).toFixed(1)}p`);
     }
-    if (s.decision) {
-      if (s.decision.severity === 'only-move') bump(85, 'only-move', 'only move holds');
-      else if (s.decision.severity === 'critical') bump(65, 'critical', 'a decision hinges here');
-    }
+  }
+  // THE DECISION speaks while the game is open — and in a "decided" one when
+  // the result hinges on it: every other move gives the win back.
+  if (s.decision && (contested || resultHinges(s.decision))) {
+    if (s.decision.severity === 'only-move') bump(85, 'only-move', 'only move holds');
+    else if (s.decision.severity === 'critical') bump(65, 'critical', 'a decision hinges here');
   }
 
   // MUST-DEFEND is NOT gated by contested (B#1, deep-dive 2026-09-12). A live
@@ -196,7 +212,10 @@ export function computeImportance(
   if (s.standingChance && contested) bump(45, 'teaching', 'a tactic you can set up');
 
   // A forced mate outranks everything, contested-gate or not.
-  if (s.evalCpWhitePov != null && Math.abs(s.evalCpWhitePov) >= MATE_CP) {
+  // ONE READER OF "IS THIS A MATE" (Saavedra review 2026-11-18): Review hands
+  // the engine's stored eval (±(30000 − n)), Learn ±100000. A private 100000
+  // bar never fired on Review's mates.
+  if (isMateEval(s.evalCpWhitePov)) {
     bump(100, 'mate', 'forced mate on the board');
   }
 

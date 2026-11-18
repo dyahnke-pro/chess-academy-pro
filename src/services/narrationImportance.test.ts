@@ -154,3 +154,26 @@ describe('standingDanger — the carve-out that used to live outside the door', 
     expect(computeImportance({ ...quiet }).rank).toBe(computeImportance({ ...quiet, standingDanger: false }).rank);
   });
 });
+
+describe('a forced mate in the engine\'s stored scale is a mate (Saavedra review 2026-11-18)', () => {
+  it('Review hands the stored eval (±(30000 − n)), Learn ±100000: both are the mate tier', async () => {
+    const { mateEvalFor } = await import('./engineConstants');
+    expect(computeImportance({ ...quiet, evalCpWhitePov: mateEvalFor(5) }).tier).toBe('mate');
+    expect(computeImportance({ ...quiet, evalCpWhitePov: -mateEvalFor(5) }).tier).toBe('mate');
+    expect(computeImportance({ ...quiet, evalCpWhitePov: 100000 }).tier).toBe('mate');
+    expect(computeImportance({ ...quiet, evalCpWhitePov: 900, wdl: [990, 10, 0] }).tier).not.toBe('mate');
+  });
+});
+
+describe('the result hinges on the move (Saavedra review 2026-11-18)', () => {
+  const won: ImportanceSignals = { ...quiet, evalCpWhitePov: 3500, wdl: null };
+  const mv = (moverCp: number) => ({ uci: 'c7c8r', san: 'c8=R', moverCp });
+  it('an only move in a won position, the runner-up a draw: the decision speaks', () => {
+    const v = computeImportance({ ...won, decision: { severity: 'only-move', gapCp: 3500, best: mv(3500), runnerUp: mv(0) } });
+    expect(v.tier).toBe('only-move');
+  });
+  it('the runner-up still wins: a decided game, the gap is not news', () => {
+    const v = computeImportance({ ...won, decision: { severity: 'only-move', gapCp: 1500, best: mv(3500), runnerUp: mv(2000) } });
+    expect(v.tier).not.toBe('only-move');
+  });
+});

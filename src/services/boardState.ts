@@ -90,7 +90,8 @@ const STANDING: ReadonlySet<FactKind> = new Set<FactKind>([
 ]);
 
 /** Beside a mate, what may still speak: the mate itself and the verdict on the
- *  move that allowed or found it. */
+ *  move that allowed or found it (and, through `boardVeto`'s `mateSquares`, a
+ *  teaching fact about the mate's own squares). */
 const BESIDE_MATE: ReadonlySet<FactKind> = new Set<FactKind>([
   'tactic', 'forced', 'move', 'quality', 'praise', 'key-moment', 'deliberation', 'concept',
   'refuted', 'sac', 'sac-why',
@@ -125,12 +126,31 @@ const ABOUT_THE_FLUX_SQUARE: ReadonlySet<FactKind> = new Set<FactKind>([
 
 type BoardVeto = 'in-flux' | 'beside-mate';
 
+/** The kinds that speak beside a mate in their own right — the mate's facts. */
+export function isMateKind(kind: FactKind): boolean {
+  return BESIDE_MATE.has(kind);
+}
+
 /** Why the board forbids this claim here, or null when it may be said. A fact
  *  of unknown kind is never vetoed — silence must never be a guess. `squares`
  *  are the ones the fact is about, coupled at emission (never scraped). */
-export function boardVeto(kind: FactKind | null, state: BoardState, squares?: readonly string[]): BoardVeto | null {
+export function boardVeto(
+  kind: FactKind | null,
+  state: BoardState,
+  squares?: readonly string[],
+  /** The squares the mate's own facts name (the move, the mating square). A
+   *  fact that teaches about the move on those squares is part of the mate's
+   *  story — "Kb3 threatens mate on c1, and whatever stops it leaves a piece
+   *  loose" — and speaks beside it (Saavedra review 2026-11-18). A standing
+   *  fact never does: it describes the board the mate makes moot. Callers pass
+   *  it only for teaching facts. */
+  mateSquares?: ReadonlySet<string>,
+): BoardVeto | null {
   if (kind === null) return null;
-  if (state.mateOnBoard && !BESIDE_MATE.has(kind)) return 'beside-mate';
+  if (state.mateOnBoard && !BESIDE_MATE.has(kind)) {
+    const aboutMate = !STANDING.has(kind) && !!mateSquares && !!squares?.some((s) => mateSquares.has(s));
+    if (!aboutMate) return 'beside-mate';
+  }
   if (state.inFlux && STANDING.has(kind)) return 'in-flux';
   if (state.inFlux && squares?.includes(state.inFlux) && !ABOUT_THE_FLUX_SQUARE.has(kind)) return 'in-flux';
   return null;

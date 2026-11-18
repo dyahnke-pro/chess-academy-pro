@@ -60,6 +60,9 @@ export type ChanceKind =
   | 'save'
   /** defend: your move left a piece of yours to be won (judged on the move). */
   | 'leave'
+  /** defend: your move walked into their tactic — their reply on the engine's
+   *  own line threatens mate or wins material (judged on the move). */
+  | 'allow'
   /** exploit: a piece of theirs can be won. */
   | 'take'
   /** exploit: a forcing line wins material. */
@@ -75,6 +78,7 @@ export type ChanceKind =
 export const CHANCE_SEAT: Record<ChanceKind, FocusSeat> = {
   save: 'defend',
   leave: 'defend',
+  allow: 'defend',
   take: 'exploit',
   shot: 'exploit',
   motif: 'defend',
@@ -92,6 +96,7 @@ export const CHANCE_SEAT: Record<ChanceKind, FocusSeat> = {
 export const PLANTABLE: Record<ChanceKind, boolean> = {
   save: true,
   leave: false,
+  allow: false,
   take: true,
   shot: true,
   motif: true,
@@ -566,8 +571,16 @@ export function leftLoose(m: FocusMove): FocusChance | null {
     // 7.Bd2 was clued "that leaves your knight on f5 … loose" — the probe
     // above flips the turn, which a king in check cannot have, and read 0.
     if (!couldKeep(m.fenBefore, was, m.student)) continue;
-    // A capture worth at least as much is a trade, not a piece left loose.
-    if (cpLoss === null && played.captured && MATERIAL_VALUE[played.captured] >= MATERIAL_VALUE[p.type]) continue;
+    // ON NET MATERIAL, PRICED OR NOT: what the move itself took is counted
+    // first, so a capture taken back is a trade, never a piece left loose
+    // (alert check 2026-11-18, 800 Colle 18.Bxg6: a knight taken, …Nxg6 back,
+    // and "that move leaves a piece of yours loose" — the trade test ran only
+    // when the move had no engine price, and this one was costly because it
+    // missed Rxe5). The same count `decidingBlunder` runs.
+    // With no price the count alone stands, as before: a capture worth at
+    // least as much is a trade.
+    const took = played.captured ? MATERIAL_VALUE[played.captured] : 0;
+    if (cpLoss === null ? took >= MATERIAL_VALUE[p.type] : gain - took < LOOSE_GAIN) continue;
     const attacker = cheapestAttacker(after, p.square, foe);
     if (!attacker) continue;
     const best = bestLine(m.lines, m.student);
@@ -581,6 +594,51 @@ export function leftLoose(m: FocusMove): FocusChance | null {
     };
   }
   return null;
+}
+
+/**
+ * YOUR MOVE WALKED INTO THEIR TACTIC (David 2026-11-18: the alert must fire
+ * when a move lets their shot land — his 31…f5 let Qb7 threaten Qg7#, and only
+ * a piece left loose was ever alerted). PROVEN, never guessed: only when the
+ * read before the move already holds the played move's own line, the move
+ * costs a miss there, and THEIR reply on that line either threatens mate (one
+ * that was not standing before your move) or wins material by the line's own
+ * count. A piece your move left loose is `leftLoose`'s, not this.
+ */
+export function walkedInto(m: FocusMove): FocusChance | null {
+  if (!m.lines || m.lines.length === 0) return null;
+  let played;
+  try { played = new Chess(m.fenBefore).move(m.san); } catch { return null; }
+  const uci = `${played.from}${played.to}${played.promotion ?? ''}`;
+  const line = m.lines.find((l) => l.moves[0] === uci);
+  if (!line || line.moves.length < 2) return null;
+  const cost = cpLossFromLines(m.fenBefore, m.san, m.lines);
+  if (cost === null || cost < MISSED_CP) return null;
+  const after = board(m.fenAfter);
+  if (!after) return null;
+  const r = line.moves[1];
+  let reply;
+  try { reply = after.move({ from: r.slice(0, 2), to: r.slice(2, 4), promotion: r[4] }); } catch { return null; }
+  if (!reply) return null;
+  const foe = other(m.student);
+  const attacker = { type: reply.piece, square: reply.to };
+  if (!after.inCheck() && mateThreatsAgainst(m.fenBefore, m.student).moves.length === 0) {
+    const mates = mateThreatsAgainst(after.fen(), m.student).moves;
+    if (mates.length > 0) {
+      return {
+        seat: CHANCE_SEAT.allow, kind: 'allow', tag: 'missed-their-mate',
+        key: `allow:mate:${reply.to}`, squares: [reply.to, mates[0].to], attacker,
+        answerUci: bestLine(m.lines, m.student)?.line.moves[0] ?? null, line: line.moves, difficulty: 1,
+      };
+    }
+  }
+  const gain = pvGain(m.fenAfter, line.moves.slice(1), foe, SHOT_PLIES);
+  if (gain === null || gain < LOOSE_GAIN || gain >= 100) return null;
+  return {
+    seat: CHANCE_SEAT.allow, kind: 'allow', tag: 'missed-opponents-threat',
+    key: `allow:win:${reply.to}`, squares: [reply.to], attacker,
+    answerUci: bestLine(m.lines, m.student)?.line.moves[0] ?? null, line: line.moves, gain, difficulty: 1,
+  };
 }
 
 // ─── shots ───────────────────────────────────────────────────────────────────
@@ -805,6 +863,9 @@ export function judgeChance(ch: FocusChance, m: FocusMove): ChanceVerdict {
       const v = threatAnswerOutcome({ fen: m.fenBefore, playedSan: m.san, pattern: ch.pattern, targets: ch.targets, engine: { evalBeforeCp: null, cpLoss } });
       return !v ? 'exempt' : v.outcome === 'held' ? 'found' : 'missed';
     }
+    case 'allow':
+      if (near) return 'found';
+      return walkedInto(m) ? 'missed' : 'found';
     case 'leave': {
       // Judged on the move that answers it: the miss itself, or the retry
       // after Try again. Returning 'missed' for every move (as this once did)
@@ -858,7 +919,7 @@ export function solvePlies(ch: FocusChance, fenBefore: string): number {
       const depth = c && ch.line ? pvGainDepth(fenBefore, ch.line, c.turn(), Math.min(ch.gain ?? SHOT_GAIN, SHOT_GAIN), SHOT_PLIES) : null;
       return Math.max(1, 2 * (depth ?? 1) - 1);
     }
-    case 'take': case 'save': case 'leave': case 'motif': case 'mate-threat':
+    case 'take': case 'save': case 'leave': case 'allow': case 'motif': case 'mate-threat':
       return 1;
   }
 }

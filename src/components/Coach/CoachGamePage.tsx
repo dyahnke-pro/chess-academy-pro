@@ -102,6 +102,7 @@ import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
 import { detectMissedTactics } from '../../services/missedTacticService';
 import { recordFinishedGame } from '../../services/autoAnalyzeGame';
 import { reconstructMovesFromGame } from '../../services/gameReconstructionService';
+import { startFenFromHeaders } from '../../services/gamePgnReplay';
 import { voiceService } from '../../services/voiceService';
 import { computeWhyBestMoveDetail } from '../../services/whyBestMove';
 import type {
@@ -4010,6 +4011,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       <div className="flex flex-col md:flex-row h-full overflow-hidden" data-testid="coach-game-page">
         <CoachGameReview
           moves={reviewMoves}
+          startFen={startFenFromHeaders(reviewGame.pgn) ?? new Chess().fen()}
           keyMoments={[]}
           gameId={reviewGameId}
           playerColor={reviewPlayerColor}
@@ -4141,6 +4143,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       <div className="flex flex-col md:flex-row h-full overflow-hidden" data-testid="coach-game-page">
         <CoachGameReview
           moves={gameState.moves}
+          startFen={initialGameFen ?? new Chess().fen()}
           keyMoments={gameState.keyMoments}
           // THE GAME'S OWN ID (walk 5, R9). Without it the review counted this
           // game's freshly-swept rows as a PRIOR game and said "the last one

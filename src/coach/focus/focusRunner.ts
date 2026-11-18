@@ -34,7 +34,7 @@ import type { RewardKind } from '../../services/rewardEvents';
 import { NO_RUN, stepRun, TEMPO_HAD_LINE, TEMPO_LET_OFF_LINE, TEMPO_RUN_MIN, type TempoRun } from './tempoRun';
 import { positionKey } from '../../services/positionProvenance';
 import {
-  chancesAt, decidingBlunder, judgeChance, leftLoose, PLANTABLE, solvePlies,
+  chancesAt, decidingBlunder, judgeChance, leftLoose, PLANTABLE, solvePlies, walkedInto,
   type ChanceDifficulty, type ChanceVerdict, type FocusChance, type FocusMove, type ReadLine,
 } from './focusChances';
 import { askLine, clueLine, creditLine, endLine, recapLabel, shownLine, spotLine } from './focusLines';
@@ -209,6 +209,7 @@ export interface FocusRunState {
 const FIND_REWARD: Record<FocusChance['kind'], { reward: RewardKind; rank: number }> = {
   save: { reward: 'saved', rank: 2 },
   leave: { reward: 'saved', rank: 2 },
+  allow: { reward: 'saved', rank: 2 },
   motif: { reward: 'saved', rank: 2 },
   take: { reward: 'punished', rank: 3 },
   shot: { reward: 'punished', rank: 3 },
@@ -787,8 +788,8 @@ function onMoved(s0: FocusRunState, m: FocusMove): FocusStep {
   const plantedOf = (c: FocusChance): boolean => !!b?.planted && c.seat === b.planted;
   const halfOf = (c: FocusChance): boolean => (steered && c.seat === 'defend') || plantedOf(c);
   const verdicts: Array<{ chance: FocusChance; v: ChanceVerdict }> = (b?.chances ?? []).map((chance) => ({ chance, v: judgeChance(chance, m) }));
-  const left = leftLoose(m);
-  if (left && !verdicts.some((x) => x.chance.key === left.key || (x.v === 'missed' && x.chance.kind === 'save'))) verdicts.push({ chance: left, v: 'missed' });
+  const left = leftLoose(m) ?? walkedInto(m);
+  if (left && !verdicts.some((x) => x.chance.key === left.key || (x.v === 'missed' && (x.chance.kind === 'save' || x.chance.kind === 'motif' || x.chance.kind === 'mate-threat')))) verdicts.push({ chance: left, v: 'missed' });
   const carried = verdicts.filter((x) => x.v === 'exempt').map((x) => ({ key: x.chance.key, prompted, steered: halfOf(x.chance), asked: b?.askedChance === x.chance.key }));
   // A miss on your side asks the next plant for the same pattern.
   let plant = s.plant;

@@ -18,9 +18,20 @@ describe('a quick-sweep line is not narrated from', () => {
       move({ afterPlayed: ['a1a2'], afterBest: ['b1b2'], depth: 12 }),
       move({ afterPlayed: ['a1a2'], afterBest: ['b1b2'], depth: 16 }),
       move({ afterPlayed: ['a1a2'], afterBest: ['b1b2'] }),
-    ]);
+    ], 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
     expect(shallow.pv).toBeUndefined();
     expect(deep.pv?.afterPlayed).toEqual(['a1a2']);
     expect(legacy.pv?.afterPlayed).toEqual(['a1a2']);
+  });
+});
+
+describe('a game from a set-up position is reviewed from its own board', () => {
+  it('the first move carries the game\'s start, and the walk reads it there (Saavedra c7)', async () => {
+    const { buildReviewSegmentsForTests } = await import('./coachFeatureService');
+    const start = '8/8/1KP5/3r4/8/8/8/k7 w - - 0 1';
+    const inputs = reviewMoveInputsFrom([{ ...move({ afterPlayed: [], afterBest: [] }), san: 'c7', fen: '8/2P5/1K6/3r4/8/8/8/k7 b - - 0 1' }], start);
+    expect(inputs[0].fenBefore).toBe(start);
+    // uncapped walks every facet on the first move: on the standard start c7 is illegal and threw.
+    expect(() => buildReviewSegmentsForTests(inputs, 'white', null, true, 1500)).not.toThrow();
   });
 });

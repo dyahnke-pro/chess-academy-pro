@@ -39,7 +39,7 @@ export type { ThreatProducer } from './learnRecordTerms';
 // direct import per computer — surfaceComposition's ceiling).
 export { mistakeTurnLine } from './mistakeTurnLine';
 export { NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, namesPlayableStudentMove, studentMovesInLine, type NamesStudentMove } from './studentMoveNaming';
-import { habitSaidKey, liveHabitKey } from './methodBeat';
+import { correctionHabit, habitSaidKey, liveHabitKey } from './methodBeat';
 export { habitSaidKey } from './methodBeat';
 import { stepForMethodClaim, THINKING_STEPS } from './thinkingSteps';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
@@ -66,7 +66,7 @@ import { tradeJudgement } from './tradeJudgement';
 import { lastMoveFromSan } from './material';
 import type { PieceValue } from './pieceValueRead';
 import { kneeJerk } from './kneeJerk';
-import { autopilotGuard, blunderCheck, keepPressing, slipHabit, BLUNDER_CHECK_QUESTION } from './safetyHabits';
+import { autopilotGuard, blunderCheck, keepPressing, BLUNDER_CHECK_QUESTION } from './safetyHabits';
 export { BLUNDER_CHECK_QUESTION };
 import { pawnEndingTrade, outsidePasserDecoy, spareTempoWasted, kingCourse } from './endgamePawnReads';
 import { readZugzwang, zugzwangProof, zugzwangSentence } from './zugzwang';
@@ -1198,15 +1198,20 @@ export function studentMoveIsPrompted(clauseKinds: readonly string[], moveAdvice
  *     and went unanswered (`answer-danger`);
  *   · otherwise THIS move made it losable — the blunder check
  *     (`is-my-move-safe`).
- * Once per step per game (`said`), so it stays a routine, not a refrain.
+ * A slip that lost nothing gets its habit too: the forcing scan when the move
+ * that was there was forcing, else the candidate moves (`correctionHabit`, the
+ * one reader Review's method beat shares).
+ *
+ * EVERY CORRECTION, THE SAME WORDS (David 2026-11-18: "the same habit phrase
+ * every time"). The "once per step per game" rule this replaces is DELETED:
+ * on the Learn preview it left 15 of 16 corrections without a habit. The key is
+ * still the habit's claim, so one turn never says one habit twice.
  */
 export function slipQuestion(
   fenBefore: string,
   playedSan: string,
   lostSquare: string | null | undefined,
   student: 'w' | 'b',
-  said: Set<string>,
-  stemKey: number,
   /** The square or piece the moved piece stopped guarding, when that is why the
    *  move failed (`BackwardLook.guardLeft`). REQUIRED — `null` when it is not —
    *  so every caller answers: a guard left is caught by its own question. */
@@ -1215,16 +1220,16 @@ export function slipQuestion(
    *  REQUIRED — `null` when there is none — so the habit says how the piece
    *  actually fell (`slipHabit`, WO-DEPTH-01). */
   punishLine: { fen: string; uci: readonly string[] } | null,
-): { text: string; key: string } | null {
-  // The one reading (`slipHabit`, shared with Review's method beat); ONE
-  // SAY-ONCE KEY PER HABIT, shared with every lane that teaches it — the habit
-  // is said once a game whichever path says it first (`habitSaidKey`).
-  const h = slipHabit({ fenBefore, san: playedSan, lostSquare: lostSquare ?? null, guardLeft, student, punishLine }, stemKey);
-  if (!h) return null;
-  const key = habitSaidKey(h.habit);
-  if (said.has(key)) return null;
-  said.add(key);
-  return { text: h.text, key };
+  /** REQUIRED — the move that was there, SAN, or null when it is unknown. */
+  bestSan: string | null,
+  /** REQUIRED — what the move cost, centipawns. */
+  cpLoss: number,
+  /** REQUIRED — the grade named what the move allowed (their reply does
+   *  something), not only a better move it missed (`correctionHabit`). */
+  allowed: boolean,
+): { text: string; key: string } {
+  const h = correctionHabit({ bestSan, cpLossCp: cpLoss, ignoredThreat: false, allowed, slip: { fenBefore, san: playedSan, lostSquare: lostSquare ?? null, guardLeft, student, punishLine } });
+  return { text: h.text, key: habitSaidKey(h.habit) };
 }
 
 /** The one answer-the-danger question (`safetyHabits`). */

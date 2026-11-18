@@ -38,10 +38,16 @@ export function isReviewUncapped(): boolean {
 
 /** The review's per-ply input, from the adapted moves. The one mapping — the
  *  page and every pre-build read it, so the cache key cannot drift. */
-export function reviewMoveInputsFrom(moves: readonly CoachGameMove[]): ReviewMoveInput[] {
+export function reviewMoveInputsFrom(
+  moves: readonly CoachGameMove[],
+  /** The board the game began on — REQUIRED, so a game from a set-up position
+   *  reads its first move on its own board. */
+  startFen: string,
+): ReviewMoveInput[] {
   return moves.map((m, i) => ({
     ply: i + 1,
     san: m.san,
+    ...(i === 0 ? { fenBefore: startFen } : {}),
     isCoachMove: m.isCoachMove,
     classification: m.classification ?? null,
     evaluation: m.evaluation,
@@ -148,7 +154,7 @@ export async function prebuildReviewNarration(gameId: string, reason: string): P
     const started = Date.now();
     const res = await getOrBuildReviewNarration({
       gameId,
-      moves: reviewMoveInputsFrom(adapted.moves),
+      moves: reviewMoveInputsFrom(adapted.moves, adapted.startFen),
       playerColor: adapted.playerColor,
       // The page passes no opening key, so its `?? openingNameForKey(...)`
       // fallback resolves to null — the same value here.

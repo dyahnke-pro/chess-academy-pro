@@ -27,6 +27,7 @@ import { plyFactsClause, moveOnlyRestates, computePvLine, afterCapture, NO_PREV_
 import { countWord, lineSeatAt, lineShape, lineWinnerFor, withArticle } from '../utils/andList';
 import { BRIEFING_LINE_PLIES, buildReviewMoveBriefing } from './reviewMoveBriefing';
 import { moveThoughtFacts } from './moveThoughtFacts';
+import { criticalityFromCandidates } from './criticalityScan';
 import { composeThought, speaksBehindLead, NOT_LED, type ThoughtStep, type ThoughtRecord } from './thoughtComposer';
 import { FUNDAMENTAL_IDEA, type IdeaKind } from './ideaKind';
 import { explainEvalByPieceQuality, worstPieceMobility, phraseBadPiece, type PieceQualityResult } from './pieceQuality';
@@ -791,6 +792,12 @@ export interface ReviewNarration {
 export interface ReviewMoveInput {
   ply: number;
   san: string;
+  /** The board this move was played from. Carried on the FIRST move of every
+   *  game (`reviewMoveInputsFrom`, from the game's own start), so a game from a
+   *  set-up position — an endgame play-out, a puzzle played on, an odds game —
+   *  reads its first move on its own board (Saavedra review 2026-11-18: "c7"
+   *  read on the standard start, illegal there, the move went silent). */
+  fenBefore?: string;
   isCoachMove: boolean;
   classification: ReviewMoveSegment['classification'];
   evaluation: number | null;
@@ -880,16 +887,16 @@ function buildFenChain(moves: ReviewMoveInput[]): { fenBefore: string; fenAfter:
   // STANDARD board — as this used to — truncated custom-start games at the first
   // move that's illegal on a standard board (the two-knights-odds game where
   // 3.O-O is legal only without the g1-knight). fenBefore[i] chains from the
-  // prior ply's fenAfter; fenBefore[0] falls back to the standard start (only the
-  // move-1 beat is affected, and its teaching is start-position-generic). A
-  // legacy input without fenAfter drops to a guarded replay so nothing breaks.
+  // prior ply's fenAfter; fenBefore[0] is the game's own start, carried on the
+  // first input (`fenBefore`). A legacy input without fenAfter drops to a
+  // guarded replay so nothing breaks.
   const START = new Chess().fen();
   const chain: { fenBefore: string; fenAfter: string }[] = [];
   if (moves.length > 0 && moves[0].fenAfter) {
     for (let i = 0; i < moves.length; i += 1) {
       const fenAfter = moves[i].fenAfter;
       if (!fenAfter) break;
-      chain.push({ fenBefore: i > 0 ? moves[i - 1].fenAfter : START, fenAfter });
+      chain.push({ fenBefore: i > 0 ? moves[i - 1].fenAfter : moves[0].fenBefore ?? START, fenAfter });
     }
     return chain;
   }
@@ -3212,8 +3219,17 @@ function* reviewSegmentSteps(
       // are a SINGLE call now — review does not compose them itself, so it
       // cannot drift from the surface that adopts the decider next.
       const habitScratch = new Set(spokenHabits);
+      // THE DECISION AT THIS MOVE, from the reads Review already keeps (Saavedra
+      // review 2026-11-18): the best move with its eval and the candidates a
+      // player weighs. It used to be null here, so a win only one move keeps
+      // read the same as a quiet move.
+      const storedCandidates = [
+        ...(m.bestMove && typeof m.bestMoveEval === 'number' ? [{ uci: m.bestMove, cp: m.bestMoveEval }] : []),
+        ...(m.weighed?.reads ?? []).filter((r) => r.moves[0] && r.moves[0] !== m.bestMove).map((r) => ({ uci: r.moves[0], cp: r.evaluation })),
+      ];
+      const storedDecision = storedCandidates.length > 1 ? criticalityFromCandidates(fenPair.fenBefore, storedCandidates) : null;
       const decision = coachTurn({ signals: {
-          decision: null,          // no per-ply criticality scan in the review pass
+          decision: storedDecision,
           cpLossCp: realCpLossCp,
           threatNet: 0,
           teachingBeat: fundamentalLed || !!causalLead,
