@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7329 lines · 39 exports · 51 importers · 72 tests · 19 audits**
+**7353 lines · 39 exports · 51 importers · 72 tests · 19 audits**
 
 ## Locked rules that govern this surface
 
@@ -229,7 +229,7 @@
 
 ### `translateToEnglish` (function) — 4 call sites
 - `src/coach/coachService.ts:584`
-- `src/components/Coach/CoachTeachPage.tsx:4525`
+- `src/components/Coach/CoachTeachPage.tsx:4526`
 - `src/services/coachSessionRouter.ts:119`
 - `src/services/coachSettingsAction.ts:262`
 
@@ -257,9 +257,9 @@
 - `src/services/coachApi.strip.test.ts:58`
 
 ### `speakableFacts` (function) — 9 call sites
-- `src/hooks/usePositionNarration.ts:273`
-- `src/hooks/usePositionNarration.ts:287`
-- `src/hooks/usePositionNarration.ts:290`
+- `src/hooks/usePositionNarration.ts:283`
+- `src/hooks/usePositionNarration.ts:297`
+- `src/hooks/usePositionNarration.ts:300`
 - `src/services/coachApi.speakableFacts.test.ts:16`
 - `src/services/coachApi.speakableFacts.test.ts:19`
 - `src/services/coachApi.speakableFacts.test.ts:30`
@@ -275,7 +275,7 @@
 - `src/components/Puzzles/PuzzleBoard.solveTeaching.test.tsx:102`
 - `src/components/Puzzles/PuzzleBoard.tsx:98`
 - `src/hooks/usePositionNarration.degrade.test.ts:54`
-- `src/hooks/usePositionNarration.ts:260`
+- `src/hooks/usePositionNarration.ts:270`
 - `src/services/coachApi.computedOnly.test.ts:20`
 - `src/services/coachChatText.ts:221`
 - `src/services/coachFeatureService.ts:355`

@@ -353,10 +353,10 @@
 - `src/services/coachFeatureService.test.ts:626`
 
 ### `pendingRecapture` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8884`
-- `src/components/Coach/CoachTeachPage.tsx:8989`
-- `src/components/Coach/CoachTeachPage.tsx:11964`
-- `src/components/Coach/CoachTeachPage.tsx:12367`
+- `src/components/Coach/CoachTeachPage.tsx:8885`
+- `src/components/Coach/CoachTeachPage.tsx:8990`
+- `src/components/Coach/CoachTeachPage.tsx:11961`
+- `src/components/Coach/CoachTeachPage.tsx:12364`
 - `src/services/coachFeatureService.test.ts:912`
 - `src/services/coachFeatureService.test.ts:913`
 - `src/services/phaseTransitionDetector.test.ts:575`
@@ -433,7 +433,7 @@
 
 ### `detectBadHabits` (re-export) — 7 call sites
 - `src/services/badHabitDetector.ts:21`
-- `src/services/coachApi.ts:5324`
+- `src/services/coachApi.ts:5346`
 - `src/services/coachFeatureService.test.ts:131`
 - `src/services/coachFeatureService.test.ts:152`
 - `src/services/coachFeatureService.test.ts:171`

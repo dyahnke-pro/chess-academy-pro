@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**139 lines · 7 exports · 6 importers · 4 tests · 0 audits**
+**139 lines · 7 exports · 7 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -17,6 +17,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/questionThought.test.ts`
 - `src/services/danyaBench.measure.test.ts`
 - `src/services/movePurposeEngine.ts`
+- `src/test/chatAnswersEveryComputer.test.ts`
 - `src/test/chatAnswersInFull.gate.test.ts`
 
 ## Exports and every call site
@@ -42,20 +43,23 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `QuestionAnswer` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `answerQuestionThought` (function) — 7 call sites
+### `answerQuestionThought` (function) — 9 call sites
 - `src/coach/questionThought.test.ts:33`
 - `src/coach/questionThought.test.ts:71`
 - `src/coach/questionThought.test.ts:74`
 - `src/coach/questionThought.test.ts:78`
 - `src/services/danyaBench.measure.test.ts:476`
 - `src/services/danyaBench.measure.test.ts:478`
-- `src/services/movePurposeEngine.ts:127`
+- `src/services/movePurposeEngine.ts:170`
+- `src/test/chatAnswersEveryComputer.test.ts:76`
+- `src/test/chatAnswersEveryComputer.test.ts:93`
 
 ## Tests
 
 - `src/coach/boardTurnAnswer.planOrder.test.ts`
 - `src/coach/questionThought.test.ts`
 - `src/services/danyaBench.measure.test.ts`
+- `src/test/chatAnswersEveryComputer.test.ts`
 - `src/test/chatAnswersInFull.gate.test.ts`
 
 ## Audits that reach it

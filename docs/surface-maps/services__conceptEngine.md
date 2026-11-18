@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**894 lines · 12 exports · 26 importers · 10 tests · 13 audits**
+**891 lines · 12 exports · 26 importers · 10 tests · 13 audits**
 
 ## Locked rules that govern this surface
 
 - **The tools are COMPUTERS** (CLAUDE.md:392) — names `conceptEngine`
-- **The standard post-deploy ritual** (CLAUDE.md:6984) — names `conceptEngine`
+- **The standard post-deploy ritual** (CLAUDE.md:7030) — names `conceptEngine`
 
 ## Who calls in
 
@@ -42,7 +42,7 @@
 
 ## Exports and every call site
 
-### `sideToMove` (function) — 19 call sites
+### `sideToMove` (function) — 21 call sites
 - `src/components/Coach/ExplainPositionSessionView.tsx:157`
 - `src/components/Coach/ExplainPositionSessionView.tsx:158`
 - `src/components/Coach/ExplainPositionSessionView.tsx:255`
@@ -51,11 +51,13 @@
 - `src/data/endgame-side-correctness.test.ts:51`
 - `src/data/grounding/groundingLib.ts:56`
 - `src/data/groundingMistakes.test.ts:38`
-- `src/services/boardComputers.ts:485`
-- `src/services/boardComputers.ts:1993`
-- `src/services/boardComputers.ts:2011`
-- `src/services/boardComputers.ts:2027`
-- `src/services/boardComputers.ts:2045`
+- `src/services/boardComputers.ts:595`
+- `src/services/boardComputers.ts:1928`
+- `src/services/boardComputers.ts:1956`
+- `src/services/boardComputers.ts:2515`
+- `src/services/boardComputers.ts:2533`
+- `src/services/boardComputers.ts:2549`
+- `src/services/boardComputers.ts:2567`
 - `src/services/conceptEngine.test.ts:19`
 - `src/services/conceptEngine.test.ts:20`
 - `src/services/groundedMoveWhy.ts:83`
@@ -100,8 +102,8 @@
 - `src/services/endgameTechnique.test.ts:61`
 - `src/services/endgameTechnique.test.ts:74`
 - `src/services/endgameTechnique.test.ts:224`
-- `src/services/groundedAnswer.ts:4187`
-- `src/services/groundedAnswer.ts:7041`
+- `src/services/groundedAnswer.ts:4404`
+- `src/services/groundedAnswer.ts:7258`
 
 ### `conceptForBoard` (function) — 12 call sites
 - `src/services/claimKeyParity.test.ts:24`
@@ -115,7 +117,7 @@
 - `src/services/conceptEngine.test.ts:209`
 - `src/services/conceptEngine.test.ts:282`
 - `src/services/liveTacticsContext.ts:123`
-- `src/services/positionFacts.ts:1053`
+- `src/services/positionFacts.ts:1045`
 
 ### `conceptForLine` (function) — 17 call sites
 - `src/services/conceptCoverage.report.test.ts:59`
@@ -142,18 +144,18 @@
 - `src/services/conceptVocabulary.test.ts:63`
 
 ### `definitionKey` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8723`
+- `src/components/Coach/CoachTeachPage.tsx:8724`
 - `src/services/learnWalkBlumenfeld.test.ts:142`
-- `src/services/positionFacts.ts:1506`
-- `src/services/positionFacts.ts:1508`
-- `src/services/positionFacts.ts:1969`
-- `src/services/positionFacts.ts:1973`
+- `src/services/positionFacts.ts:1495`
+- `src/services/positionFacts.ts:1497`
+- `src/services/positionFacts.ts:1958`
+- `src/services/positionFacts.ts:1962`
 - `src/services/reviewFullData.ts:759`
 - `src/services/reviewFullData.ts:762`
 - `src/services/reviewFullData.ts:763`
 
 ### `tacticInvariant` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8726`
+- `src/components/Coach/CoachTeachPage.tsx:8727`
 - `src/services/dnaLineNarrator.ts:57`
 - `src/services/projectedLineVoice.ts:99`
 - `src/services/puzzleConceptExplanation.ts:132`
@@ -162,7 +164,7 @@
 - `src/services/tacticTypeUnification.test.ts:205`
 - `src/test/auditConceptGameplayCues.test.ts:24`
 
-### `materialBalance` (re-export) — 68 call sites
+### `materialBalance` (re-export) — 71 call sites
 - `scripts/pro-repertoire/mine-alapin-traps.mjs:41`
 - `scripts/pro-repertoire/mine-alapin-traps.mjs:90`
 - `scripts/pro-repertoire/mine-alapin-traps.mjs:94`
@@ -204,7 +206,7 @@
 - `scripts/pro-repertoire/mine-ruy-traps.mjs:94`
 - `scripts/pro-repertoire/mine-ruy-traps.mjs:103`
 - `src/services/captureRun.ts:85`
-- `src/services/compensation.ts:57`
+- `src/services/compensation.ts:60`
 - `src/services/conceptEngine.test.ts:24`
 - `src/services/conceptEngine.test.ts:26`
 - `src/services/conceptEngine.test.ts:28`
@@ -226,7 +228,10 @@
 - `src/services/opponentMoveReads.ts:449`
 - `src/services/pawnMajority.ts:131`
 - `src/services/pieceValues.ts:46`
-- `src/services/positionReadingService.ts:1853`
+- `src/services/positionReadingService.ts:2046`
+- `src/services/practicalChance.ts:102`
+- `src/services/practicalChance.ts:112`
+- `src/services/practicalChance.ts:200`
 - `src/services/practicalReads.ts:31`
 - `src/services/sideMaterial.test.ts:12`
 - `src/services/tradeWords.ts:36`

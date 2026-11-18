@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**199 lines · 2 exports · 3 importers · 5 tests · 0 audits**
+**228 lines · 2 exports · 3 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4978) — names `composePositionRead`
+- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:5021) — names `composePositionRead`
 
 ## Who calls in
 
@@ -22,7 +22,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `composePositionRead` (function) — 3 call sites
-- `src/hooks/usePositionNarration.ts:228`
+- `src/hooks/usePositionNarration.ts:237`
 - `src/services/positionReadComposer.withhold.test.ts:18`
 - `src/test/everySurfaceSpeaks.test.ts:131`
 
@@ -31,6 +31,7 @@
 - `src/hooks/usePositionNarration.corpus.test.ts`
 - `src/services/liveNeedWire.test.ts`
 - `src/services/positionReadComposer.withhold.test.ts`
+- `src/services/readHabit.test.ts`
 - `src/test/corpusScope.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
 

@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**455 lines · 6 exports · 4 importers · 3 tests · 0 audits**
+**471 lines · 6 exports · 4 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-_No CLAUDE.md section names this file or its exports. That is itself worth knowing: nothing is written down, so the blast radius below is the only guide._
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5940) — names `openingSlip`
 
 ## Who calls in
 
@@ -25,11 +25,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `OpeningBook` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `openingSlip` (function) — 4 call sites
-- `src/services/boardComputers.ts:430`
+### `openingSlip` (function) — 5 call sites
+- `src/services/boardComputers.ts:817`
 - `src/services/openingSlip.measure.test.ts:39`
 - `src/services/openingSlip.test.ts:26`
 - `src/services/openingSlip.test.ts:128`
+- `src/services/openingSlip.test.ts:148`
 
 ### `bookFromLines` (function) — 3 call sites
 - `src/services/openingSlip.test.ts:108`
@@ -37,7 +38,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingSlip.test.ts:125`
 
 ### `mastersBook` (function) — 2 call sites
-- `src/services/boardComputers.ts:428`
+- `src/services/boardComputers.ts:815`
 - `src/services/openingSlip.measure.test.ts:37`
 
 ### `bookMoveRead` (function) — 5 call sites
@@ -51,6 +52,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/services/openingSlip.measure.test.ts`
 - `src/services/openingSlip.test.ts`
+- `src/services/openingSlipTurn.test.ts`
 - `src/test/learnNamesNoMoveUnasked.gate.test.ts`
 
 ## Audits that reach it

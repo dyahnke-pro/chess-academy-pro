@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**368 lines · 3 exports · 8 importers · 10 tests · 1 audits**
+**378 lines · 3 exports · 9 importers · 10 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1254) — names `usePositionNarration`
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4192) — names `usePositionNarration`
-- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4530) — names `usePositionNarration`
-- **The standard post-deploy ritual** (CLAUDE.md:6403) — names `usePositionNarration`
+- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1723) — names `usePositionNarration`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4682) — names `usePositionNarration`
+- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:5020) — names `usePositionNarration`
+- **The standard post-deploy ritual** (CLAUDE.md:7034) — names `usePositionNarration`
 
 ## Who calls in
 
@@ -21,6 +21,7 @@
 - `src/components/Openings/OpeningPlayMode.tsx`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx`
 - `src/components/Puzzles/PuzzleBoard.tsx`
+- `src/components/Tactics/TacticSetupBoard.tsx`
 - `src/hooks/usePositionNarration.degrade.test.ts`
 - `src/hooks/usePositionNarration.test.ts`
 
@@ -35,13 +36,14 @@
 - `src/hooks/usePositionNarration.test.ts:402`
 - `src/hooks/usePositionNarration.test.ts:404`
 
-### `usePositionNarration` (function) — 18 call sites
-- `src/components/Coach/CoachGamePage.tsx:1747`
-- `src/components/Coach/CoachGameReview.tsx:2313`
-- `src/components/Coach/CoachTeachPage.tsx:8189`
-- `src/components/Openings/OpeningPlayMode.tsx:560`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:685`
-- `src/components/Puzzles/PuzzleBoard.tsx:296`
+### `usePositionNarration` (function) — 20 call sites
+- `src/components/Coach/CoachGamePage.tsx:1637`
+- `src/components/Coach/CoachGameReview.tsx:2241`
+- `src/components/Coach/CoachTeachPage.tsx:8733`
+- `src/components/Openings/OpeningPlayMode.tsx:625`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:714`
+- `src/components/Puzzles/PuzzleBoard.tsx:303`
+- `src/components/Tactics/TacticSetupBoard.tsx:321`
 - `src/hooks/usePositionNarration.degrade.test.ts:85`
 - `src/hooks/usePositionNarration.test.ts:126`
 - `src/hooks/usePositionNarration.test.ts:137`
@@ -54,6 +56,7 @@
 - `src/hooks/usePositionNarration.test.ts:315`
 - `src/hooks/usePositionNarration.test.ts:348`
 - `src/hooks/usePositionNarration.test.ts:388`
+- `src/test/corpusScope.test.ts:67`
 
 ## Tests
 

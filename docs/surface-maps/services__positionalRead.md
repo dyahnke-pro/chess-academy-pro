@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**702 lines · 8 exports · 20 importers · 13 tests · 1 audits**
+**729 lines · 8 exports · 23 importers · 16 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,6 +21,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/learnWalkNimzo.test.ts`
 - `src/services/narrationAdversarial.test.ts`
 - `src/services/nextPlans.structureIdeaKey.test.ts`
+- `src/services/passerSentence.test.ts`
 - `src/services/positionFacts.ts`
 - `src/services/positionReadComposer.ts`
 - `src/services/positionalRead.fileStep.test.ts`
@@ -28,35 +29,38 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.justMoved.test.ts`
 - `src/services/positionalRead.race.test.ts`
 - `src/services/positionalRead.test.ts`
+- `src/services/positionalTruth.corpus.test.ts`
 - `src/services/recaptureChoice.ts`
 - `src/services/replayFence.modern1690.test.ts`
 - `src/services/replayFence.najdorf1500.test.ts`
+- `src/services/rimKnightWords.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
 
 ## Exports and every call site
 
 ### `rookReachesFile` (function) — 3 call sites
-- `src/services/danyaBehaviors.ts:746`
-- `src/services/learnBoardTeaching.ts:1557`
-- `src/services/recaptureChoice.ts:62`
+- `src/services/danyaBehaviors.ts:722`
+- `src/services/learnBoardTeaching.ts:1619`
+- `src/services/recaptureChoice.ts:63`
 
 ### `castleIsOneMoveAway` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:324`
-- `src/services/replayFence.modern1690.test.ts:139`
+- `src/services/danyaBehaviors.ts:302`
 - `src/services/replayFence.modern1690.test.ts:140`
 - `src/services/replayFence.modern1690.test.ts:141`
+- `src/services/replayFence.modern1690.test.ts:142`
 
-### `readPosition` (function) — 48 call sites
-- `src/coach/chatTurnAnswers.ts:270`
-- `src/services/groundedAnswer.ts:1720`
-- `src/services/lookaheadPlan.ts:1226`
-- `src/services/lookaheadPlan.ts:1495`
-- `src/services/lookaheadPlan.ts:1572`
+### `readPosition` (function) — 53 call sites
+- `src/coach/chatTurnAnswers.ts:271`
+- `src/services/groundedAnswer.ts:1935`
+- `src/services/lookaheadPlan.ts:1261`
+- `src/services/lookaheadPlan.ts:1530`
+- `src/services/lookaheadPlan.ts:1607`
 - `src/services/narrationAdversarial.test.ts:85`
 - `src/services/narrationAdversarial.test.ts:176`
 - `src/services/nextPlans.structureIdeaKey.test.ts:13`
-- `src/services/positionFacts.ts:1215`
-- `src/services/positionReadComposer.ts:177`
+- `src/services/passerSentence.test.ts:30`
+- `src/services/positionFacts.ts:1227`
+- `src/services/positionReadComposer.ts:197`
 - `src/services/positionalRead.race.test.ts:10`
 - `src/services/positionalRead.test.ts:28`
 - `src/services/positionalRead.test.ts:43`
@@ -92,14 +96,18 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.test.ts:369`
 - `src/services/positionalRead.test.ts:378`
 - `src/services/positionalRead.test.ts:383`
+- `src/services/positionalTruth.corpus.test.ts:142`
+- `src/services/positionalTruth.corpus.test.ts:146`
+- `src/services/positionalTruth.corpus.test.ts:150`
 - `src/services/replayFence.najdorf1500.test.ts:27`
 - `src/services/replayFence.najdorf1500.test.ts:38`
+- `src/services/rimKnightWords.test.ts:13`
 - `src/test/everySurfaceSpeaks.test.ts:123`
 
 ### `buildPositionalRead` (function) — 17 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9993`
+- `src/components/Coach/CoachTeachPage.tsx:10022`
 - `src/services/claimChecker.measure.test.ts:134`
-- `src/services/learnWalkBlumenfeld.test.ts:126`
+- `src/services/learnWalkBlumenfeld.test.ts:127`
 - `src/services/learnWalkNimzo.test.ts:35`
 - `src/services/narrationAdversarial.test.ts:104`
 - `src/services/narrationAdversarial.test.ts:177`
@@ -111,15 +119,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionalRead.test.ts:176`
 - `src/services/positionalRead.test.ts:187`
 - `src/services/positionalRead.test.ts:192`
-- `src/services/replayFence.modern1690.test.ts:195`
-- `src/services/replayFence.modern1690.test.ts:199`
-- `src/services/replayFence.modern1690.test.ts:207`
+- `src/services/replayFence.modern1690.test.ts:196`
+- `src/services/replayFence.modern1690.test.ts:200`
+- `src/services/replayFence.modern1690.test.ts:208`
 
 ### `attackerCanUseFile` (function) — 1 call site
-- `src/services/danyaBehaviors.ts:297`
+- `src/services/danyaBehaviors.ts:275`
 
 ### `heavyPieceToFile` (function) — 4 call sites
-- `src/services/danyaBehaviors.ts:304`
+- `src/services/danyaBehaviors.ts:282`
 - `src/services/positionalRead.fileStep.test.ts:10`
 - `src/services/positionalRead.fileStep.test.ts:16`
 - `src/services/positionalRead.fileStep.test.ts:20`
@@ -139,13 +147,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/learnWalkNimzo.test.ts`
 - `src/services/narrationAdversarial.test.ts`
 - `src/services/nextPlans.structureIdeaKey.test.ts`
+- `src/services/passerSentence.test.ts`
 - `src/services/positionalRead.fileStep.test.ts`
 - `src/services/positionalRead.ideaKey.test.ts`
 - `src/services/positionalRead.justMoved.test.ts`
 - `src/services/positionalRead.race.test.ts`
 - `src/services/positionalRead.test.ts`
+- `src/services/positionalTruth.corpus.test.ts`
 - `src/services/replayFence.modern1690.test.ts`
 - `src/services/replayFence.najdorf1500.test.ts`
+- `src/services/rimKnightWords.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
 
 ## Audits that reach it

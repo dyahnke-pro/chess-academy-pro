@@ -27,8 +27,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/boardPlanFacts.ts:149`
 - `src/services/deferredAnswers.realGame.test.ts:12`
 - `src/services/deferredAnswers.realGame.test.ts:26`
-- `src/services/groundedAnswer.ts:3821`
-- `src/services/groundedAnswer.ts:6969`
+- `src/services/groundedAnswer.ts:3998`
+- `src/services/groundedAnswer.ts:7146`
 - `src/services/namesStudentMove.leaks.test.ts:28`
 - `src/services/namesStudentMove.leaks.test.ts:34`
 - `src/services/oneWorstPiece.test.ts:30`
@@ -42,7 +42,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planChoice.test.ts:193`
 - `src/services/planChoice.test.ts:196`
 - `src/services/planThread.ts:256`
-- `src/test/thinkMarkClosed.gate.test.ts:61`
+- `src/test/thinkMarkClosed.gate.test.ts:60`
 
 ### `planWorth` (function) — 3 call sites
 - `src/services/planChoice.test.ts:181`
@@ -70,20 +70,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `methodLine` (function) — 9 call sites
 - `src/services/deferredAnswers.realGame.test.ts:12`
-- `src/services/groundedAnswer.ts:3823`
+- `src/services/groundedAnswer.ts:4000`
 - `src/services/namesStudentMove.leaks.test.ts:29`
 - `src/services/oneWorstPiece.test.ts:32`
 - `src/services/planChoice.test.ts:34`
 - `src/services/planChoice.test.ts:139`
 - `src/services/planChoice.test.ts:164`
 - `src/services/planChoice.test.ts:174`
-- `src/test/thinkMarkClosed.gate.test.ts:63`
+- `src/test/thinkMarkClosed.gate.test.ts:62`
 
 ### `methodSquares` (function) — 1 call site
 - `src/services/planChoice.test.ts:170`
 
 ### `weaknessLine` (function) — 1 call site
-- `src/services/groundedAnswer.ts:6970`
+- `src/services/groundedAnswer.ts:7147`
 
 ## Tests
 

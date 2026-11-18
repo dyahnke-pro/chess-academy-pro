@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**516 lines · 17 exports · 21 importers · 9 tests · 1 audits**
+**541 lines · 19 exports · 23 importers · 10 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -32,8 +32,10 @@
 - `src/services/methodSignals.ts`
 - `src/services/mustDefendHabit.test.ts`
 - `src/services/positionFacts.ts`
+- `src/services/positionReadComposer.ts`
 - `src/services/puzzleMethod.test.ts`
 - `src/services/puzzleMethod.ts`
+- `src/services/readHabit.test.ts`
 - `src/services/thinkingSteps.test.ts`
 - `src/services/thinkingSteps.ts`
 
@@ -56,7 +58,7 @@
 
 ### `habitIsOwed` (function) — 2 call sites
 - `src/services/coachFeatureService.ts:3722`
-- `src/services/positionFacts.ts:1250`
+- `src/services/positionFacts.ts:1239`
 
 ### `HABIT_KIND` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -90,8 +92,8 @@
 - `src/services/slipQuestion.test.ts:53`
 
 ### `habitSaidKey` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10811`
 - `src/components/Coach/CoachTeachPage.tsx:10812`
+- `src/components/Coach/CoachTeachPage.tsx:10813`
 - `src/services/learnBoardTeaching.ts:272`
 - `src/services/learnBoardTeaching.ts:1232`
 - `src/services/slipQuestion.test.ts:53`
@@ -114,10 +116,10 @@
 - `src/services/methodSignals.test.ts:75`
 - `src/services/methodSignals.test.ts:76`
 - `src/services/mustDefendHabit.test.ts:15`
-- `src/services/positionFacts.ts:1101`
+- `src/services/positionFacts.ts:1093`
 
 ### `liveMethodBeatFor` (function) — 24 call sites
-- `src/services/groundedAnswer.ts:3888`
+- `src/services/groundedAnswer.ts:4065`
 - `src/services/methodBeat.live.test.ts:15`
 - `src/services/methodBeat.live.test.ts:19`
 - `src/services/methodBeat.live.test.ts:20`
@@ -145,6 +147,16 @@
 ### `CANDIDATES_HABIT` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `READ_HABIT` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `readHabit` (function) — 5 call sites
+- `src/services/positionReadComposer.ts:216`
+- `src/services/readHabit.test.ts:9`
+- `src/services/readHabit.test.ts:12`
+- `src/services/readHabit.test.ts:15`
+- `src/services/readHabit.test.ts:18`
+
 ### `correctionHabit` (function) — 2 call sites
 - `src/services/discussionPractice.ts:167`
 - `src/services/learnBoardTeaching.ts:1231`
@@ -158,6 +170,7 @@
 - `src/services/methodSignals.test.ts`
 - `src/services/mustDefendHabit.test.ts`
 - `src/services/puzzleMethod.test.ts`
+- `src/services/readHabit.test.ts`
 - `src/services/slipQuestion.test.ts`
 - `src/services/thinkingSteps.test.ts`
 
