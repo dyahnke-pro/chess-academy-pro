@@ -143,6 +143,7 @@ import { opensCheck } from './opensCheck';
 import { captureOrder, type OrderRead } from './captureOrder';
 import { knightSquareTaken } from './knightSquareTaken';
 import { seatCp } from './winChance';
+import { principleLine, principleContrastLine } from './moveFundamentals';
 
 type CoachSurface = 'learn' | 'review' | 'lesson' | 'play' | 'chat' | 'tactics' | 'weaknesses' | 'think';
 
@@ -173,6 +174,14 @@ type MakeFact = (parts: ReadParts) => CoachFact;
  *  surface that keeps one key for a read (Review's `hint:` ledger, Learn's
  *  threat and tactic keys, the plan thread's offered claims) reads it here,
  *  never off the words. */
+/** What a principle read's key says (`principle` / `principleContrast`). */
+export function principleKey(f: CoachFact): { id: string; first: boolean; headsMove: boolean; follow: boolean } {
+  const k = readKey(f);
+  const bar = k.indexOf('|');
+  const head = k.slice(0, bar);
+  return { id: k.slice(bar + 1), first: head[0] === '1', headsMove: head[1] === 'h', follow: head === 'follow' };
+}
+
 export function readKey(f: CoachFact): string {
   return f.id.slice(f.id.indexOf(':') + 1);
 }
@@ -533,6 +542,11 @@ export interface BoardContexts {
   /** WHAT SEPARATES TWO GOOD MOVES (`contrast`): the student's sound `san`
    *  and the engine's `bestSan` on `fenBefore`, and what one leaves undefended. */
   contrast: { fenBefore: string; san: string; bestSan: string; student: Color };
+  /** The rule a clean move kept. `taught` is the surface's say-once ledger of
+   *  rules: full the first time, a stem after. */
+  principle: { fenBefore: string; san: string; student: Color; taught: ReadonlySet<string>; stemKey: number; namesPlayedMove: boolean };
+  /** The rule the engine's move kept, where the clean move kept none. */
+  principleContrast: { fenBefore: string; san: string; bestSan: string | null; student: Color; taught: ReadonlySet<string>; stemKey: number };
   theirRead: TheirReadCtx;
   theirPreventTest: TheirReadCtx;
   theirTrigger: TheirReadCtx;
@@ -2905,6 +2919,52 @@ export const BOARD_COMPUTERS = {
       learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_NA,
       weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
+    },
+  },
+  principle: {
+    // The key carries what a surface keeps of the read: whether this is the
+    // first statement of the rule this game (`1`) or a stem (`0`), whether it
+    // leads the move (`h`), and the rule's id — `principleKey` reads it back.
+    // The rule's full-again follow-up is its own fact (key `follow|<id>`).
+    read: ({ fenBefore, san, student, taught, stemKey, namesPlayedMove }, fact) => safe(() => {
+      const r = principleLine(fenBefore, san, student === 'w' ? 'white' : 'black', taught, stemKey, namesPlayedMove);
+      if (!r) return null;
+      const fen = boardAfter(fenBefore, san) ?? fenBefore;
+      const out: CoachFact[] = [fact({ key: `${r.first ? '1' : '0'}${r.headsMove ? 'h' : '-'}|${r.id}`, claims: [`rule:${r.id}`], text: r.text, proof: NO_PROOF.stated, squares: r.squares, stakes: null,
+        seat: 'student', namesStudentMove: namesPlayedMove, thread: LOCAL_THREAD, fen, ...(r.names ? { marks: { play: r.names } } : {}) })];
+      if (r.follow) out.push(fact({ key: `follow|${r.id}`, claims: [`rule-follow:${r.id}`], text: r.follow, proof: NO_PROOF.stated, squares: r.squares, stakes: null,
+        seat: 'student', namesStudentMove: namesPlayedMove, thread: LOCAL_THREAD, fen }));
+      return out;
+    }),
+    computer: 'principleLine',
+    kind: 'rule',
+    phase: ANY,
+    surfaces: {
+      lesson: { not: 'the rule a move kept is said once a game from the live read and Review, which hold the ledger of rules already taught' },
+      review: REVIEW, play: PLAY_ASK, chat: COMPOSER,
+      think: { not: 'the rule a move kept is said once a game from the live read and Review, which hold the ledger of rules already taught' },
+      learn: COMPOSER,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a clean move\'s why — no question of the student\'s missed' },
+    },
+  },
+  principleContrast: {
+    read: ({ fenBefore, san, bestSan, student, taught, stemKey }, fact) => safe(() => {
+      const r = principleContrastLine(fenBefore, san, bestSan, student === 'w' ? 'white' : 'black', taught, stemKey);
+      if (!r) return null;
+      return fact({ key: `${r.first ? '1' : '0'}-|${r.id}`, claims: [`rule:${r.id}`], text: r.text, proof: NO_PROOF.stated, squares: r.squares, stakes: null,
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
+    }),
+    computer: 'principleContrastLine',
+    kind: 'rule',
+    phase: ANY,
+    surfaces: {
+      lesson: { not: 'the rule the better move kept is said once a game from the live read and Review, which hold the ledger of rules already taught' },
+      review: REVIEW, play: PLAY_ASK, chat: COMPOSER,
+      think: { not: 'the rule the better move kept is said once a game from the live read and Review, which hold the ledger of rules already taught' },
+      learn: COMPOSER,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a clean move\'s why — no question of the student\'s missed' },
     },
   },
   contrast: {

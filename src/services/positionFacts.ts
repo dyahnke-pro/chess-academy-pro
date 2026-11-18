@@ -30,7 +30,7 @@ import type { StockfishAnalysis, TacticType } from '../types';
 import { computeCriticality, criticalitySignalsFromAnalysis, type CriticalityRead } from './criticality';
 import { Chess, type Square } from 'chess.js';
 import type { GamePromise } from './learnBoardTeaching';
-import { planHere, strategicWhyImperative, strategicReason, strategicPlanPointer, strategicClaims, strategicSquares, principleLine, principleContrastLine, isForcedReply, MOVE_FUNDAMENTAL_TAG } from './moveFundamentals';
+import { planHere, strategicWhyImperative, strategicReason, strategicPlanPointer, strategicClaims, strategicSquares, isForcedReply, MOVE_FUNDAMENTAL_TAG } from './moveFundamentals';
 import { isTheoryLine } from './bookDeparture';
 import { refutedFromFan, candidatesFromAmateur, type FanLine, type RefutedAlternative } from './refutedAlternativeCore';
 import { phaseVerdictLine, phaseVerdictKeys, phaseStockKey } from './reviewPositionalAssessment';
@@ -60,7 +60,7 @@ import { detectLatentDanger, latentDangerClause, detectTradeCreatesPin, tradeDan
 import { detectKingExposure, kingExposureClause, detectCentralKingDanger, centralKingDangerClause, type KingExposure, type CentralKingDanger } from './kingSafety';
 import { buildOpponentIntent, opponentIntentFacts, type OpponentIntent } from './opponentIntent';
 import { planAimKey, structurePlanFact } from './nextPlans';
-import { readBoard, readKey } from './boardComputers';
+import { readBoard, readKey, principleKey } from './boardComputers';
 import { detectTactics } from './tacticsDetector';
 import { structurePlanEvent, planChangeSentence } from './planThread';
 import { matchClauseKind, matchTacticPattern, matchTag, boostFor, type WeaknessSignal } from './weaknessSignal';
@@ -590,8 +590,11 @@ function oneEach(facts: readonly ClauseFact[]): ClauseFact[] {
 }
 
 /** What made a read, carried with it to the fact. */
-function madeBy<T extends object, C extends ComputerName>(x: T | null | undefined, computer: C): (T & { computer: C }) | null {
-  return x ? { ...x, computer } : null;
+/** The rule read the live clauses carry: its computer, id, words, squares and
+ *  the move it names (`principle` / `principleContrast` in the registry). */
+function ruleRead(f: CoachFact | null): { computer: ComputerName; id: string; text: string; squares: readonly string[]; names: { from: string; to: string } | null } | null {
+  if (!f) return null;
+  return { computer: f.computer, id: principleKey(f).id, text: f.text, squares: f.squares, names: f.marks?.play ?? null };
 }
 
 /** THE CLAIM KEYS of the `i`th spoken clause — the ONE answer every lane that
@@ -1129,10 +1132,10 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     // Learn tape praised "O-O-O does what the opening asks" one line after
     // another lane called O-O-O a mistake: the grade had not reached here yet.
     && (lmBook || ((gradedLoss(lm) ?? Infinity) < 50))
-    ? (madeBy(principleLine(lm.fenBefore, lm.san, studentSeat, input.taughtPrinciples, stemKeyOf(lm.fenBefore), input.namesPlayedMove), 'principleLine')
+    ? ruleRead(readBoard('principle', { fenBefore: lm.fenBefore, san: lm.san, student: studentColor, taught: input.taughtPrinciples, stemKey: stemKeyOf(lm.fenBefore), namesPlayedMove: input.namesPlayedMove })
       // A clean move that kept no opening rule: the rule the engine's move kept
       // (never on a book move — theory is not corrected).
-      ?? (lmBook || !lm.reads ? null : madeBy(principleContrastLine(lm.fenBefore, lm.san, uciToSanAt(lm.fenBefore, lm.reads.bestMoveUci), studentSeat, input.taughtPrinciples, stemKeyOf(lm.fenBefore)), 'principleContrastLine')))
+      ?? (lmBook || !lm.reads ? null : readBoard('principleContrast', { fenBefore: lm.fenBefore, san: lm.san, bestSan: uciToSanAt(lm.fenBefore, lm.reads.bestMoveUci), student: studentColor, taught: input.taughtPrinciples, stemKey: stemKeyOf(lm.fenBefore) })))
     : null;
   // S3 — the opponent's reply took the student's threat off the board.
   const stoppedReply = studentToMove && lm && input.opponentLastMove

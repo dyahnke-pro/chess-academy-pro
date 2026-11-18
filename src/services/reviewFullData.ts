@@ -35,12 +35,11 @@ import { describeStructure } from './boardStructure';
 import { assessPositionalEdge, phaseVerdictLine } from './reviewPositionalAssessment';
 import type { RefutedAlternative } from './refutedAlternative';
 import type { ReviewIntent } from './reviewMoveIntent';
-import { principleLine, principleContrastLine } from './moveFundamentals';
 import { recordedMoveCost } from './moveCost';
 import { findProphylaxis, prophylaxisProof, theirWantedMoves } from './prophylaxis';
 import { newTiedDefender, tiedDefenderLine, tiedDefenderProof } from './tiedDefender';
 import { lineProof, lineProofFromUci, legalLineProof, proofForStudent, squaresProof, isProof, NO_PROOF, type Proof } from './proof';
-import { readBoard, readBoardAll, readKey } from './boardComputers';
+import { readBoard, readBoardAll, readKey, principleKey } from './boardComputers';
 import { knownSlipsAt, type KnownSlipIndex } from './knownSlips';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import type { WeighRead } from './weighedMoves';
@@ -348,11 +347,12 @@ export function computeMoveFacets(
   const put = (computer: ComputerName, tag: FacetTag, text: string): ReviewFacet => { const f = made(computer, tag, text); facets.push(f); return f; };
   /** A basket fact said as one of this move's facets, its squares and stakes
    *  carried (the one writer's words). */
-  const basketFacet = (f: (CoachFact & { kind: FacetTag }) | null): void => {
-    if (!f) return;
+  const basketFacet = <F extends (CoachFact & { kind: FacetTag }) | null>(f: F): F extends null ? null : ReviewFacet => {
+    if (!f) return null as F extends null ? null : ReviewFacet;
     const raw = put(f.computer, f.kind, f.text);
     recSquares(raw, f.squares);
     recStakes(raw, f.stakes);
+    return raw as F extends null ? null : ReviewFacet;
   };
   const recIncoming = (facet: ReviewFacet, beneficiary: 'w' | 'b' | undefined): void => {
     if (!beneficiary || !ctx.studentColorWB) return;
@@ -1334,22 +1334,24 @@ export function computeMoveFacets(
   if (isStudent && (ctx.classification === null || ctx.classification === 'book' || ctx.classification === 'good')) {
     // Full the first time a principle speaks this game, a short stem after —
     // the one helper Learn's composer reads (`principleLine`).
-    const own = principleLine(fenBefore, san, moverColor, ctx.teaching.principlesTaught, stemKeyOf(fenBefore), true);
-    const lead = own
+    const seat = moverColor === 'white' ? 'w' : 'b';
+    const own = readBoardAll('principle', { fenBefore, san, student: seat, taught: ctx.teaching.principlesTaught, stemKey: stemKeyOf(fenBefore), namesPlayedMove: true });
+    const ownLead = own.find((x) => !principleKey(x).follow) ?? null;
+    const lead = ownLead
       // A clean move that kept no opening rule: the rule the engine's move
       // kept (review walk 2026-10-02 — h4, g4, h5 were owed and silent). Never
       // on a book move: theory is not corrected.
-      ?? (ctx.classification === 'book' ? null : principleContrastLine(fenBefore, san, ctx.bestMoveSan ?? null, moverColor, ctx.teaching.principlesTaught, stemKeyOf(fenBefore)));
+      ?? (ctx.classification === 'book' ? null : readBoard('principleContrast', { fenBefore, san, bestSan: ctx.bestMoveSan ?? null, student: seat, taught: ctx.teaching.principlesTaught, stemKey: stemKeyOf(fenBefore) }));
     if (lead) {
-      const f = made('principleLine', 'rule', lead.text);
-      if (own?.headsMove) f.headsMove = true;
-      if (own?.follow) f.follow = own.follow;
-      facets.push(f);
+      const k = principleKey(lead);
+      const f = basketFacet(lead);
+      if (ownLead && k.headsMove) f.headsMove = true;
+      const follow = own.find((x) => principleKey(x).follow);
+      if (follow) f.follow = follow.text;
       // The FIRST statement of a principle carries its say-once identity; a
       // stem is its own move's fact and must not be eaten by that ledger.
-      f.identity = lead.first ? `rule:${lead.id}` : `rule-stem:${ply}:${lead.id}`;
-      inRuleFamily(f, lead.id);
-      recSquares(f, lead.squares);
+      f.identity = k.first ? `rule:${k.id}` : `rule-stem:${ply}:${k.id}`;
+      inRuleFamily(f, k.id);
     } else {
       // WHAT THE MOVE IS FOR, when it kept no rule — Learn's move-point
       // computer, called (review walk 2026-10-02: 7.g4 owed and silent while
