@@ -90,7 +90,7 @@ import { readTheirMove, READ_FACT_KIND } from './opponentMoveReads';
 import { playItAnyway } from './opponentMovePurpose';
 import { knownAttack } from './attackLibrary';
 import { studentMoveStructure, theirMoveStructure, boardStructure, type StructureRead } from './structureReads';
-import type { HeardVerdict } from '../types';
+import type { AnalysisLine, HeardVerdict } from '../types';
 
 /** Has `color`'s king reached a castled square (g/c file on its back rank)? */
 function kingCastled(chess: Chess, color: Color): boolean {
@@ -1725,6 +1725,22 @@ export function computeMoveFacets(
         add(readBoardAll('theoreticalEnding', { fenBefore, san, student: studentColorWB, afterCp })[0]);
         add(readBoardAll('raceCount', { fenBefore, san, student: studentColorWB })[0]);
         add(readBoardAll('promotionChoice', { fenBefore, san, student: studentColorWB })[0]);
+      }
+      // THE KEY DEFENDER and PRACTICAL CHANCES, both seats (WO-DANYA-READS-01
+      // #6, #7): the trade that takes off the piece doing a job alone, and the
+      // worse side's move that makes the way through long — off the stored
+      // cost, the score before the move and the line after it. The record
+      // keeps one line after the move, so only the long way through can be
+      // proved here; one good reply and the free-looking grab need the
+      // engine's ranked replies, which the lesson and chat hand in.
+      {
+        const m = ctx.evaluation == null ? null : storedMate(ctx.evaluation);
+        const afterLine: AnalysisLine | null = ctx.evaluation == null ? null
+          : { rank: 1, evaluation: m != null ? (m > 0 ? 100000 : -100000) : ctx.evaluation, mate: m, moves: [...ctx.playedLineUci] };
+        add(readBoardAll('keyDefender', { fenBefore, san, student: studentColorWB, costCp: ctx.costCp, after: afterLine })[0]);
+        const pm = ctx.preMoveEval == null ? null : storedMate(ctx.preMoveEval);
+        const standCp = ctx.preMoveEval == null || pm != null ? null : ctx.preMoveEval * (moverWB === 'w' ? 1 : -1);
+        add(readBoardAll('practicalChance', { fenBefore, san, student: studentColorWB, reads: { moverCp: standCp, costCp: ctx.costCp, after: afterLine ? [afterLine] : [] } })[0]);
       }
     }
     if (!isStudent) {

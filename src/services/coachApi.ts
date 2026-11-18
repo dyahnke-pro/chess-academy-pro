@@ -2548,7 +2548,7 @@ async function serveGroundedPositionDefault(
   const sc: 'white' | 'black' =
     grounding.studentColor ?? ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
   const assess = assemblePositionAssessment({
-    bestUci: grounding.engineBestMoveUci ?? null,
+    bestLineUci: grounding.currentFen && grounding.engineBestMoveUci ? enginePlanUci(grounding.currentFen, grounding.enginePlan?.pvSan, grounding.engineBestMoveUci) : null, bestUci: grounding.engineBestMoveUci ?? null,
     evalCp: grounding.engineEvalCp,
     mateIn: grounding.engineMateIn,
     tactics: grounding.tactics,
@@ -2724,7 +2724,7 @@ async function computeLiveBoardVerdict(
   // in time; a whitelist could not have caught that, only dispatching early.
   if (assessQ) {
     const assess = assemblePositionAssessment({
-      bestUci: grounding.engineBestMoveUci ?? null,
+      bestLineUci: grounding.currentFen && grounding.engineBestMoveUci ? enginePlanUci(grounding.currentFen, grounding.enginePlan?.pvSan, grounding.engineBestMoveUci) : null, bestUci: grounding.engineBestMoveUci ?? null,
       evalCp: grounding.engineEvalCp,
       mateIn: grounding.engineMateIn,
       tactics: grounding.tactics,
@@ -6679,7 +6679,7 @@ export async function getCoachChatResponse(
             const sc: 'white' | 'black' =
               grounding.studentColor ?? (grounding.currentFen.split(' ')[1] === 'b' ? 'black' : 'white');
             const assess = assemblePositionAssessment({
-              bestUci: grounding.engineBestMoveUci ?? null,
+              bestLineUci: grounding.currentFen && grounding.engineBestMoveUci ? enginePlanUci(grounding.currentFen, grounding.enginePlan?.pvSan, grounding.engineBestMoveUci) : null, bestUci: grounding.engineBestMoveUci ?? null,
               evalCp: grounding.engineEvalCp,
               mateIn: grounding.engineMateIn,
               tactics: grounding.tactics,
@@ -6807,7 +6807,7 @@ export async function getCoachChatResponse(
             grounding.studentColor ??
             ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
           const assessed = assemblePositionAssessment({
-            bestUci: grounding.engineBestMoveUci ?? null,
+            bestLineUci: grounding.currentFen && grounding.engineBestMoveUci ? enginePlanUci(grounding.currentFen, grounding.enginePlan?.pvSan, grounding.engineBestMoveUci) : null, bestUci: grounding.engineBestMoveUci ?? null,
             evalCp: grounding.engineEvalCp,
             mateIn: grounding.engineMateIn,
             tactics: grounding.tactics,

@@ -30,12 +30,12 @@ describe('a finished game is assessed as its result', async () => {
   const { assemblePositionAssessment } = await import('./groundedAnswer');
   it('after …Rxd1# the student (Black) hears they won, nothing else', () => {
     const c = new Chess(); for (const s of [...GAME, 'd1=Q+', 'Bxd1', 'Rxd1#']) c.move(s);
-    const a = assemblePositionAssessment({ bestUci: null, evalCp: 0, mateIn: null, studentColor: 'black', fen: c.fen() });
+    const a = assemblePositionAssessment({ bestLineUci: null, bestUci: null, evalCp: 0, mateIn: null, studentColor: 'black', fen: c.fen() });
     expect(a?.facts).toBe('Checkmate — you won.');
   });
   it('a live board is still assessed (negative control)', () => {
     const c = new Chess(); for (const s of GAME) c.move(s);
-    const a = assemblePositionAssessment({ bestUci: null, evalCp: 0, mateIn: null, studentColor: 'black', fen: c.fen() });
+    const a = assemblePositionAssessment({ bestLineUci: null, bestUci: null, evalCp: 0, mateIn: null, studentColor: 'black', fen: c.fen() });
     expect(a?.facts).not.toMatch(/Checkmate/);
   });
 });

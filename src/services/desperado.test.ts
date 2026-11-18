@@ -36,6 +36,35 @@ describe('desperado: two pieces hanging, sell the one you cannot save', () => {
   });
 });
 
+// ONE PIECE LOST ANYWAY: the knight on a8 is attacked by the queen and both
+// its squares are pawns of theirs; no move saves it. Stockfish (depth 16):
+// Nxb6, the knight taking a pawn on its way out.
+const LOST = 'N2qk3/p1p5/1p6/8/8/8/8/4K3 w - - 0 1';
+
+describe('desperado: one piece lost anyway', () => {
+  it('names the sale when the knight could not be saved', () => {
+    const d = desperadoAt(LOST, 'Ke2', 'a8b6');
+    expect(d?.other).toBeNull();
+    expect(d?.found).toBe(false);
+    expect(desperadoLine(d!, 'your', LOST)).toMatch(/Nxb6/);
+    expect(desperadoLine(d!, 'your', LOST)).toMatch(/(lost anyway|Nothing could save)/);
+  });
+  it('credits it when played', () => {
+    const d = desperadoAt(LOST, 'Nxb6', 'a8b6');
+    expect(d?.found).toBe(true);
+    expect(desperadoLine(d!, 'your', LOST)).not.toMatch(/Nxb6/);
+  });
+  it('a piece that can still be saved is no desperado (negative control)', () => {
+    // The b6 pawn gone: the knight walks out to b6.
+    expect(desperadoAt('N2qk3/p1p5/8/8/8/8/8/4K3 w - - 0 1', 'Nb6', 'a8b6')).toBeNull();
+  });
+  it('taking the attacker, or a piece worth more, is a trade, never a sale', () => {
+    // Two white pieces hang to the d2 queen, and the bishop takes it: winning a
+    // queen is no desperado (Danya, "How to Ruin Your Pawn Structure").
+    expect(desperadoAt('1r2k2r/4bp2/p2pbp1p/1p2p3/4P1P1/P3BP2/1PPq3P/1K1R1B1R w k - 0 18', 'Bxd2', 'e3d2')).toBeNull();
+  });
+});
+
 describe('the one composer says it', () => {
   it('a lesson or Review move from the fork board carries the sale', () => {
     const facts = moveThoughtFacts({

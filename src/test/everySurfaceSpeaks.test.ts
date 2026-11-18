@@ -124,7 +124,7 @@ export async function sweep(): Promise<Violation[]> {
       const beat = buildPlayCommentary({ fen: p.fenAfter, studentColor: g.side, midExchangeOn: board.inFlux, saidExplainers: new Set(), skipSquares: new Set() } as unknown as Parameters<typeof buildPlayCommentary>[0]);
       if (beat?.spoken) check(v, game, p.ply, 'learn commentary', beat.spoken, board);
       const tctx = buildTacticsLiveContext(p.fenAfter, analysis(p.after), sc, rating);
-      const assess = assemblePositionAssessment({ bestUci: null, evalCp: p.after.evaluation, mateIn: p.after.topLines[0]?.mate ?? null, tactics: tctx, studentColor: g.side, fen: p.fenAfter });
+      const assess = assemblePositionAssessment({ bestLineUci: null, bestUci: null, evalCp: p.after.evaluation, mateIn: p.after.topLines[0]?.mate ?? null, tactics: tctx, studentColor: g.side, fen: p.fenAfter });
       if (assess) check(v, game, p.ply, 'chat assessment', assess.facts, board);
       const tac = assembleTacticsAnswer(tctx, g.side);
       if (tac) check(v, game, p.ply, 'chat tactics', tac.facts, board);

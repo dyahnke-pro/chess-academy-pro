@@ -98,14 +98,6 @@ export function gradedLoss(lm: Pick<LastMoveInput, 'cpLoss' | 'reads'>): number 
   return lm.cpLoss ?? lm.reads?.price?.costCp ?? null;
 }
 
-/** The student's move as the one that led to `fen`, or null when it did not. */
-function priorLeadingTo(lm: { fenBefore: string; san: string }, fen: string): ReturnType<typeof lastMoveFromSan> {
-  try {
-    const c = new Chess(lm.fenBefore);
-    c.move(lm.san);
-    return c.fen().split(' ')[0] === fen.split(' ')[0] ? lastMoveFromSan(lm.fenBefore, lm.san) : null;
-  } catch { return null; }
-}
 
 export interface LastMoveInput {
   fenBefore: string;
@@ -1185,10 +1177,9 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     : [];
 
   // TRADES, JUDGED (David 2026-09-27: "how well the trade benefits the
-  // user"). The move just played on either side, and — with the student to
-  // move — their worst piece against the opponent's best when one can reach
-  // the other. The verdict never contradicts the engine: the student's own
-  // move carries its graded cost; the opponent's is judged on the board alone.
+  // user"). The student's move just played, with its graded cost — no cost,
+  // no verdict — and, with the student to move, their worst piece against
+  // the opponent's best when one can reach the other.
   const tradeClauses: ClauseFact[] = [];
   let tradeTargetKey: string | null = null;
   try {
@@ -1198,13 +1189,11 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       // The trade's move is named, so it is drawn.
       if (t) tradeClauses.push(clause('readTrade', fen, { kind: 'trade', text: t.text, squares: t.squares, lines: [{ fen: lm.fenBefore, sans: [lm.san] }] }));
     }
-    if (input.opponentLastMove) {
-      const t = readTrade(input.opponentLastMove.fenBefore, input.opponentLastMove.san, studentColor, null,
-        lm ? priorLeadingTo(lm, input.opponentLastMove.fenBefore) : null, true);
-      if (t) tradeClauses.push(clause('readTrade', fen, { kind: 'trade', text: t.text, squares: t.squares, lines: [{ fen: input.opponentLastMove.fenBefore, sans: [input.opponentLastMove.san] }] }));
-    }
+    // Their trade is not judged here: who a trade helps is the engine's call
+    // (WO-DANYA-READS-01 #6), and this read holds no priced move of theirs —
+    // a read before minus a read after is not a price (`gradedLoss`).
     if (studentToMove) {
-      const tt = findTradeTarget(fen, studentColor);
+      const tt = findTradeTarget(fen, studentColor, analysis.topLines?.[0]?.moves ?? null);
       if (tt && !(said?.has(tt.key))) {
         tradeTargetKey = tt.key;
         tradeClauses.push(clause('findTradeTarget', fen, { kind: 'trade', text: tt.text, squares: tt.squares, claim: tt.key }));

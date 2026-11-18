@@ -83,6 +83,7 @@ import { readOpposition, oppositionLine, oppositionSquares } from './oppositionR
 import { zugzwangOn, zugzwangSyncLine } from './zugzwangRead';
 import { raceCountOn, raceCountLine, raceCountSquares } from './raceCount';
 import { promotionChoicesOn, promotionChoiceLine } from './promotionChoice';
+import { keyDefenderPlan, keyDefenderLine, defenderSquares } from './keyDefender';
 import type { EndgameRuleMaterial } from '../coach/questionIntents';
 
 // Pure board-fact constants — universal chess values, leaf-local so this module
@@ -1597,6 +1598,10 @@ export function assemblePositionAssessment(opts: {
    *  (see `readBoardUrgency`: a "First, …" step stands only when it is the
    *  engine's own priority). */
   bestUci: string | null;
+  /** REQUIRED — the engine's best line on `fen` (UCI, `bestUci` first), or
+   *  null when the surface has none: the plan a standing read names (the
+   *  trade of their key defender) must be the engine's own line. */
+  bestLineUci: readonly string[] | null;
 }): GroundedAnswer | null {
   const { tactics, studentColor } = opts;
   const sc: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
@@ -1771,6 +1776,15 @@ export function assemblePositionAssessment(opts: {
     } catch { /* a bonus, never a blocker */ }
     try {
       for (const pc of promotionChoicesOn(fen, opts.bestUci)) add(promotionChoiceLine(pc, sc, false), [pc.from, pc.to]);
+    } catch { /* a bonus, never a blocker */ }
+    // THE KEY DEFENDER, standing (WO-DANYA-READS-01 #6): the piece of theirs
+    // doing a job alone, when the engine's best line trades it off — the same
+    // computer the move thought speaks when a move does it.
+    try {
+      if (opts.bestLineUci && opts.bestLineUci.length > 0 && whiteCp !== null) {
+        const plan = keyDefenderPlan(fen, { rank: 1, evaluation: whiteCp, mate: typeof opts.mateIn === 'number' && opts.mateIn !== 0 ? opts.mateIn : null, moves: [...opts.bestLineUci] });
+        if (plan) add(keyDefenderLine(plan, plan.defender.side !== sc, true, fen), defenderSquares(plan));
+      }
     } catch { /* a bonus, never a blocker */ }
   }
   if (opts.fen) {

@@ -66,8 +66,8 @@ describe('every producer of a played move\'s reason says "your move" in Learn', 
   it('the trade computer', async () => {
     const { readTrade } = await import('./tradeQuality');
     const fen = '2r1kb1r/pp1b1ppp/5q2/3PNn2/1PB5/1P6/3BNPPP/R2QK2R w KQk - 7 19';
-    expect(readTrade(fen, 'Nxd7', 'w', null, null, false)?.text).toMatch(/^Your move trades pieces while you're ahead/);
-    expect(readTrade(fen, 'Nxd7', 'w', null, null, true)?.text).toMatch(/^Nxd7 trades pieces while you're ahead/);
+    expect(readTrade(fen, 'Nxd7', 'w', 0, null, false)?.text).toMatch(/^Your move trades pieces while you're ahead/);
+    expect(readTrade(fen, 'Nxd7', 'w', 0, null, true)?.text).toMatch(/^Nxd7 trades pieces while you're ahead/);
   });
   it('the king-attack computer', async () => {
     const { kingAttack } = await import('./kingAttack');

@@ -931,12 +931,12 @@ describe('assembleEndgameAnswer — Phase 5 (voice the tablebase verdict)', () =
 // top tactic) from the STUDENT's perspective. White-perspective eval in.
 describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)', () => {
   it('voices the eval from the student POV (White)', () => {
-    const a = assemblePositionAssessment({ bestUci: null, evalCp: 120, mateIn: null, studentColor: 'white' });
+    const a = assemblePositionAssessment({ bestLineUci: null, bestUci: null, evalCp: 120, mateIn: null, studentColor: 'white' });
     expect(a!.facts).toMatch(/You're clearly better\./);
     expect(a!.sources).toEqual(['engine:stockfish']);
   });
   it('flips perspective for Black (white-positive eval = Black worse)', () => {
-    const a = assemblePositionAssessment({ bestUci: null, evalCp: 120, mateIn: null, studentColor: 'black' });
+    const a = assemblePositionAssessment({ bestLineUci: null, bestUci: null, evalCp: 120, mateIn: null, studentColor: 'black' });
     expect(a!.facts).toMatch(/You're clearly worse\./);
   });
   it('calls a balanced position balanced', () => {
@@ -945,15 +945,15 @@ describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)
     // times a game must not always be the same recording), and pinning the
     // literal string would make the gate a spelling test rather than a
     // correctness one.
-    expect(assemblePositionAssessment({ bestUci: null, evalCp: 10, mateIn: null, studentColor: 'white' })!.facts)
+    expect(assemblePositionAssessment({ bestLineUci: null, bestUci: null, evalCp: 10, mateIn: null, studentColor: 'white' })!.facts)
       .toMatch(/balanced|level|concrete/i);
   });
   it('voices a forced mate for / against the student', () => {
-    expect(assemblePositionAssessment({ bestUci: null, evalCp: null, mateIn: 3, studentColor: 'white' })!.facts).toContain('You have a forced mate in 3.');
-    expect(assemblePositionAssessment({ bestUci: null, evalCp: null, mateIn: 3, studentColor: 'black' })!.facts).toContain('forced mate against you in 3');
+    expect(assemblePositionAssessment({ bestLineUci: null, bestUci: null, evalCp: null, mateIn: 3, studentColor: 'white' })!.facts).toContain('You have a forced mate in 3.');
+    expect(assemblePositionAssessment({ bestLineUci: null, bestUci: null, evalCp: null, mateIn: 3, studentColor: 'black' })!.facts).toContain('forced mate against you in 3');
   });
   it('appends the top live-tactics fact (a hanging student piece) alongside the eval', () => {
-    const a = assemblePositionAssessment({ bestUci: null,
+    const a = assemblePositionAssessment({ bestLineUci: null, bestUci: null,
       evalCp: -250, mateIn: null, studentColor: 'white',
       // A pawn each: K+N v K is insufficient material — a finished game, which
       // the assessor now reports as its result (question walk 2026-09-27).
@@ -968,8 +968,8 @@ describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)
     expect(a!.sources).toContain('board:chess.js');
   });
   it('returns null when there is nothing computed to say (no eval, no tactic)', () => {
-    expect(assemblePositionAssessment({ bestUci: null, evalCp: null, mateIn: null, studentColor: 'white' })).toBeNull();
-    expect(assemblePositionAssessment({ bestUci: null, evalCp: null, mateIn: null, studentColor: 'white', tactics: tactics() })).toBeNull();
+    expect(assemblePositionAssessment({ bestLineUci: null, bestUci: null, evalCp: null, mateIn: null, studentColor: 'white' })).toBeNull();
+    expect(assemblePositionAssessment({ bestLineUci: null, bestUci: null, evalCp: null, mateIn: null, studentColor: 'white', tactics: tactics() })).toBeNull();
   });
   it('gives a board-true material read (not ONLY a hang note) when the engine is cold but a FEN is present (loop 2026-09-09)', () => {
     // Live teach-QA deflect: inside a walkthrough (no warm eval) "why is this
@@ -978,7 +978,7 @@ describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)
     // passed, the no-eval branch adds a real material assessment instead of
     // degrading to the lone hang note.
     const fen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2';
-    const a = assemblePositionAssessment({ bestUci: null,
+    const a = assemblePositionAssessment({ bestLineUci: null, bestUci: null,
       evalCp: null, mateIn: null, studentColor: 'black', fen,
       tactics: tactics({ fen, hanging: [{ square: 'e5', piece: 'p', color: 'b' }] }),
     });
@@ -993,7 +993,7 @@ describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)
     // readPosition reports. The assessment must carry the plan, not just the
     // eval number, when the student asks for a read on the play board.
     const fen = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 b kq - 0 6';
-    const a = assemblePositionAssessment({ bestUci: null, evalCp: 20, mateIn: null, studentColor: 'black', fen });
+    const a = assemblePositionAssessment({ bestLineUci: null, bestUci: null, evalCp: 20, mateIn: null, studentColor: 'black', fen });
     expect(a).not.toBeNull();
     // The eval verdict still LEADS (the direct "how do I stand" answer)…
     expect(a!.facts).toMatch(/balanced|level|concrete|edge|better|worse/i);
@@ -1007,7 +1007,7 @@ describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)
     // emit [BOARD: highlight:e8:yellow] on any live board. Without this the
     // on-demand read spoke but the board stayed bare.
     const fen = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 b kq - 0 6';
-    const a = assemblePositionAssessment({ bestUci: null, evalCp: 20, mateIn: null, studentColor: 'black', fen });
+    const a = assemblePositionAssessment({ bestLineUci: null, bestUci: null, evalCp: 20, mateIn: null, studentColor: 'black', fen });
     expect(a!.keySquares).toBeDefined();
     expect(a!.keySquares).toContain('e8');
     // every entry is a real square token, never a move or prose fragment
