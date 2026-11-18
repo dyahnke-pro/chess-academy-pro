@@ -1,6 +1,33 @@
 # WO-DANYA-READS-01 — every idea Danya reads off a board, computed (David 2026-11-18: "If not, that goes top of list. But keep that list! It is VERY important all of that gets done")
 
-**Status: TOP OF THE LIST. Nothing on it is built yet.**
+**Status: TOP OF THE LIST. Step 1 done; groups 1, 2, 4, 5, 8, 9, 10 built and merged on branch `urg-wt` (2026-11-18, not on main yet); groups 3, 6, 7 in progress.**
+
+### Progress (2026-11-18), measured on the 209 boards with true depth-16 reads
+
+The stored engine lines in the research file were SHALLOW (the dump script matched `seldepth`); all 209 boards were re-read at a true depth 16 (`scripts/board-read-dump.ts` fixed). Several "wrong verdict" lines were that bad data, not the code.
+
+| Fix | Before | After |
+|---|---|---|
+| "First, take X" said where the engine's best move does not take | 82 | 36 (each left is the engine's own move) |
+| Verdict off the one eval ladder (`evalBand`) | 59 | 0 |
+| "Material is even — nothing is decided yet" | 139 | 0 |
+| Light/dark-square weakness | 71 | 24 |
+| Passed-pawn slogans | 59 | 25 |
+| Minority attack | 28 | 3 |
+| Second front | 11 | 3 |
+| Rim knight called "stuck" | 13 | 0 (said as the squares it reaches) |
+| Passer taken en passant, pinned piece "best placed" | 2 | 0 |
+
+| Group | Built | Fires on |
+|---|---|---|
+| 1 King attack | `kingSiege`, `backRankWeakness`, `loadedDiscovery`, `kingSacrifice`, their mate threat first | 11 boards |
+| 2 Evaluation reasons | `pieceActivity`, `initiativeRead`, `verdictWithReasons`, compensation counts the initiative | 81 boards; 33 of 69 even-material boards now get a reason |
+| 4 Tempting move fails | `temptingOnBoard`, `refutationOf`; `costReason` follows the line's own recaptures | 98 boards (was 0) |
+| 5 Endgame technique | opposition, zugzwang, named endings, race count, promotion choice | merged |
+| 8 Hidden combinations | `deepCombination`, bait on a natural capture, poisoned piece by the line | 6 position reads, 9 bait, 3 poisoned |
+| 9 Habit closes a read | `readHabit` | merged |
+| 10 Blunder check | `candidateCct` in "what if I play X" | merged |
+
 
 ## The measurement (2026-11-17/18, four agents)
 
