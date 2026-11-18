@@ -13,6 +13,8 @@
 // to read.
 import { Chess, type Move, type Square } from 'chess.js';
 import { routeVia, routeWaypoints } from '../utils/routeWords';
+import { findWorstPlacedPiece, worstReason } from './nextPlans';
+import { pieceScope } from './positionReadingService';
 
 const PIECE: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -27,6 +29,10 @@ export interface PieceRoute {
   verb: string;
   /** Where the piece stands now, then each square it goes on to. */
   path: string[];
+  /** The piece was the mover's worst-placed piece (`findWorstPlacedPiece`)
+   *  and the trip ends where it covers more squares: what was wrong with it,
+   *  and how many squares it covers before and after. Null otherwise. */
+  worst: { reason: string; scopeBefore: number; scopeAfter: number } | null;
 }
 
 export function pieceRoute(fenBefore: string, san: string, line: readonly string[] | null): PieceRoute | null {
@@ -42,6 +48,8 @@ export function pieceRoute(fenBefore: string, san: string, line: readonly string
    *  that waits longer has finished its trip (the Vienna's Nc3 … Ne2 ten moves
    *  on is a new plan, not one trip). */
   let waited = 0;
+  /** The board when the piece reached its last square. */
+  let endFen = board.fen();
   for (let i = 0; i + 1 < line.length; i += 2) {
     let reply: Move;
     try { reply = board.move(line[i]); } catch { break; }
@@ -61,6 +69,7 @@ export function pieceRoute(fenBefore: string, san: string, line: readonly string
     if (next.captured && reply.to !== next.to) break;
     if (path.includes(next.to)) break;
     path.push(next.to);
+    endFen = board.fen();
     at = next.to;
     waited = 0;
     if (next.captured) break;
@@ -69,9 +78,36 @@ export function pieceRoute(fenBefore: string, san: string, line: readonly string
   // move, which the deep fact says when it hits something.
   if (path.length < 3) return null;
   const dest = path[path.length - 1];
+  const worst = worstAtStart(fenBefore, first.from, dest, new Chess(endFen));
+  const via = routeVia(routeWaypoints(path));
+  // THE WORST PIECE, RESCUED (WO-DANYA-READS-01 #3, his "have I improved all
+  // of my pieces?"): the trip of the piece that was doing least is said as
+  // the rescue it is, with what was wrong and what it covers at the end.
+  if (worst) {
+    const gain = `where it covers ${worst.scopeAfter} squares instead of ${worst.scopeBefore}`;
+    return {
+      text: `rescuing the worst-placed ${PIECE[first.piece]}, which ${worst.reason}: it goes on to ${dest}${via}, ${gain}`,
+      verb: `rescues the worst-placed ${PIECE[first.piece]}, which ${worst.reason}: it goes on to ${dest}${via}, ${gain}`,
+      path, worst,
+    };
+  }
   return {
-    text: `sending the ${PIECE[first.piece]} on to ${dest}${routeVia(routeWaypoints(path))}`,
-    verb: `sends the ${PIECE[first.piece]} on to ${dest}${routeVia(routeWaypoints(path))}`,
-    path,
+    text: `sending the ${PIECE[first.piece]} on to ${dest}${via}`,
+    verb: `sends the ${PIECE[first.piece]} on to ${dest}${via}`,
+    path, worst: null,
   };
+}
+
+/** The moved piece was its side's worst-placed piece on the board before the
+ *  move, and on the board where the trip ends it covers more squares than it
+ *  did. `end`: the board after the trip's last move. */
+function worstAtStart(fenBefore: string, from: Square, dest: string, end: Chess): PieceRoute['worst'] {
+  let before: Chess;
+  try { before = new Chess(fenBefore); } catch { return null; }
+  const w = findWorstPlacedPiece(before, before.turn());
+  if (!w || w.sq !== from) return null;
+  const scopeBefore = pieceScope(before, from);
+  const scopeAfter = pieceScope(end, dest as Square);
+  if (scopeAfter <= scopeBefore) return null;
+  return { reason: worstReason(w), scopeBefore, scopeAfter };
 }

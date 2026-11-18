@@ -48,7 +48,7 @@ function isLightSquare(sq: string): boolean {
 /** A minor or bigger that the other side wins at least two pawns' worth of
  *  by SEE. Only ATTACKED pieces reach the (costly) SEE — the full-board
  *  `findHangingBySee` sweep was ~15 ms a ply, a second across a review. */
-function pieceEnPrise(chess: Chess, fen: string): boolean {
+export function pieceEnPrise(chess: Chess, fen: string): boolean {
   for (const row of chess.board()) {
     for (const c of row) {
       if (!c || c.type === 'p' || c.type === 'k') continue;

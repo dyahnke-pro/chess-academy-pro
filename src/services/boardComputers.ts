@@ -75,6 +75,8 @@ import { perpetualCheck, perpetualStartedBy, perpetualLine, winningAnyway, windm
 import { minorMatchup } from './minorMatchup';
 import { stalemateTrick, stalemateTraps, stalemateTrapLine, stalemateTrickLine } from './stalemateWatch';
 import { intoTheirCamp, intoTheirCampLine } from './intoTheirCamp';
+import { pressureOf, pressureLine } from './targetSelector';
+import { breakPrep, breakPrepLine, breakStopped, breakStoppedLine } from './breakTiming';
 import { flexibleMove, flexibleMoveLine, flexibleMoveSquares } from './flexibleMove';
 import { exchangeSacrifice, exchangeSacrificeLine, exchangeSacrificeSquares } from './exchangeSacrifice';
 import { pawnMajority, pawnMajorityLine, pawnMajoritySquares } from './pawnMajority';
@@ -323,6 +325,21 @@ export interface BoardContexts {
    *  rook toward their king, connects the rooks — or, on move 12, leaves them
    *  still cut off. */
   intoTheirCamp: { fenBefore: string; san: string; student: Color };
+  /** PRESSURE ON THEIR TARGET (`pressureOf`, Danya's articles): the move
+   *  brings a piece against a pawn of theirs no pawn can guard, and the siege
+   *  the engine's line builds on its file (doubled rooks, Alekhine's gun).
+   *  `lineAfter`: the engine's line from the board after the move, reply
+   *  first; `costCp`: what the move cost against the best (the gate: an
+   *  instruction is never handed out on a move the engine refutes). */
+  targetPressure: { fenBefore: string; san: string; student: Color; lineAfter: readonly string[]; costCp: number | null };
+  /** THE BREAK, READIED (`breakPrep`): the move gets a pawn break ready that
+   *  the engine's line plays next — it clears or guards the square the pawn
+   *  lands on, or puts a rook on the file the break opens. Gated on the cost. */
+  breakPrep: { fenBefore: string; san: string; student: Color; lineAfter: readonly string[]; costCp: number | null };
+  /** THE BREAK, STOPPED (`breakStopped`): the move takes away a break of the
+   *  other side's that was worth something — it can no longer be played, or
+   *  the pawn is simply lost on its square. Gated on the cost. */
+  breakStopped: { fenBefore: string; san: string; student: Color; costCp: number | null };
   /** THE FLEXIBLE MOVE (`flexibleMove`, the option principle): the move `san`
    *  on `fenBefore` (either seat) against the moves the engine holds near the
    *  best. `reads`: the engine's lines from the board before the move, one per
@@ -606,6 +623,10 @@ function squareChoiceClaim(fenBefore: string, san: string): string | null {
     return `square:${mv.from}${mv.to}${mv.promotion ?? ''}`;
   } catch { return null; }
 }
+
+/** A move that costs more than this against the engine's best is not a
+ *  plan step the coach hands out (targetPressure, breakPrep, breakStopped). */
+const PRESSURE_COST_CP = 50;
 
 export const BOARD_COMPUTERS = {
   pinBreakOwn: {
@@ -1742,6 +1763,75 @@ export const BOARD_COMPUTERS = {
         seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
     }),
     computer: 'intoTheirCamp',
+    kind: 'move-job',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
+    },
+  },
+  breakPrep: {
+    // His "first the queen must come to c1, then b4-b5": the move that gets
+    // the break ready, said with what it changed.
+    read: ({ fenBefore, san, student, lineAfter, costCp }, fact) => safe(() => {
+      if (costCp === null || costCp > PRESSURE_COST_CP) return null;
+      const x = breakPrep(fenBefore, san, lineAfter);
+      if (!x) return null;
+      const mine = new Chess(fenBefore).turn() === student;
+      const text = breakPrepLine(x, fenBefore, mine ? 'your' : 'their');
+      return fact({ key: x.key, claims: [x.key], text, proof: squaresProof(text, x.squares) ?? NO_PROOF.description, squares: x.squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
+    }),
+    computer: 'breakPrep',
+    kind: 'move-job',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
+    },
+  },
+  breakStopped: {
+    // His "a4, stopping …b5 once and for all": prophylaxis against a break.
+    read: ({ fenBefore, san, student, costCp }, fact) => safe(() => {
+      if (costCp === null || costCp > PRESSURE_COST_CP) return null;
+      const x = breakStopped(fenBefore, san);
+      if (!x) return null;
+      const mine = new Chess(fenBefore).turn() === student;
+      const text = breakStoppedLine(x, fenBefore, mine ? 'your' : 'their');
+      // One claim with the opening story's stop of the masters' break
+      // (`moveStops.stopsBreak`, claim `stops-break:<san>`): a turn says it once.
+      const dot = `${new Chess(fenBefore).turn() === 'w' ? '…' : ''}${x.brk.san}`;
+      return fact({ key: x.key, claims: [x.key, `stops-break:${dot}`], text, proof: squaresProof(text, x.squares) ?? NO_PROOF.description, squares: x.squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
+    }),
+    computer: 'breakStopped',
+    kind: 'stopped',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
+    },
+  },
+  targetPressure: {
+    // His "doubling rooks is always a good way to begin", "there is no better
+    // time to bring out the Gun!" — the pressure on a pawn no pawn can guard.
+    read: ({ fenBefore, san, student, lineAfter, costCp }, fact) => safe(() => {
+      if (costCp === null || costCp > PRESSURE_COST_CP) return null;
+      const x = pressureOf(fenBefore, san, lineAfter);
+      if (!x) return null;
+      const mine = new Chess(fenBefore).turn() === student;
+      const text = pressureLine(x, fenBefore, mine ? 'your' : 'their');
+      const hit = moveIdeaClaim(fenBefore, san, 'pressure', [x.target]);
+      return fact({ key: x.key, claims: [x.key, ...(hit ? [hit] : [])], text, proof: squaresProof(text, x.squares) ?? NO_PROOF.description, squares: x.squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
+    }),
+    computer: 'pressureOf',
     kind: 'move-job',
     phase: ANY,
     surfaces: {

@@ -58,4 +58,20 @@ describe('the lesson beat says the trip', () => {
     }, voice, null);
     expect(text).toMatch(/sending the knight on to e3, by way of f1|sends the knight on to e3, by way of f1/);
   });
+
+  // Larsen's game (Danya's "Mastering intuition, part 2", reference only):
+  // the knight on a5 is stuck on the rim; Stockfish 18's third line sends it
+  // to e4 by way of c4 and d6.
+  it('the worst-placed piece\'s trip is said as its rescue, with the squares it gains', () => {
+    const fen = 'r2q1rk1/pb3nbp/1p4p1/n1pp1p2/P2P1P2/2P1PN1Q/1P3R1P/R1BBN1K1 b - - 0 19';
+    const r = pieceRoute(fen, 'Nc4', 'f2g2 c4d6 e1d3 d6e4 d1c2'.split(' '));
+    expect(r?.path).toEqual(['c4', 'd6', 'e4']);
+    expect(r?.worst?.reason).toBe('is stuck on the rim');
+    expect(r?.text).toMatch(/^rescuing the worst-placed knight, which is stuck on the rim: it goes on to e4, by way of d6, where it covers 8 squares instead of 4$/);
+  });
+
+  it('a trip by a piece that was not the worst is the plain trip', () => {
+    const r = pieceRoute(fenAt(ITALIAN, 16), 'Nbd2', ITALIAN.slice(17));
+    expect(r?.worst).toBeNull();
+  });
 });

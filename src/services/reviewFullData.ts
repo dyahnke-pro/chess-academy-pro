@@ -1688,6 +1688,12 @@ export function computeMoveFacets(
       // has to vouch for stays unsaid here).
       add(readBoardAll('harmlessPin', { fenBefore, san, student: studentColorWB, line: ctx.playedLineUci })[0]);
       add(readBoardAll('queenNet', { fenBefore, san, student: studentColorWB })[0]);
+      // The pawn no pawn can guard, the pressure on it and the siege the
+      // line builds on its file; the break the move readies or takes away,
+      // both seats — off the game's line after the move, gated on its cost.
+      add(readBoardAll('targetPressure', { fenBefore, san, student: studentColorWB, lineAfter: ctx.playedLineUci, costCp: ctx.costCp })[0]);
+      add(readBoardAll('breakPrep', { fenBefore, san, student: studentColorWB, lineAfter: ctx.playedLineUci, costCp: ctx.costCp })[0]);
+      add(readBoardAll('breakStopped', { fenBefore, san, student: studentColorWB, costCp: ctx.costCp })[0]);
       // Getting into their camp, both seats (Danya's speedruns).
       add(readBoardAll('intoTheirCamp', { fenBefore, san, student: studentColorWB })[0]);
       // The early queen chased with tempo, both seats, off the game's own
