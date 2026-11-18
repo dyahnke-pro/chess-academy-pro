@@ -13,7 +13,7 @@ describe('S4 pawn computers in the composer', () => {
     ['chainBase', 'r3kb1r/1p3p2/2n3b1/1p2P2p/2p2p1P/P1P1pP2/1P2N1P1/RN2KB1R b KQkq - 1 18', 'Bh6', true],
     ['pawnCutsGuard', 'r2q1rk1/pp3pbp/3p1np1/N3pb2/2p5/4B3/PP1QPPPP/R3KB1R b KQ - 1 13', 'c3', true],
   ] as const)('%s speaks on its board', (computer, fenBefore, san, moverIsStudent) => {
-    const facts = moveThoughtFacts({ ...base, fenBefore, san, moverIsStudent });
+    const facts = moveThoughtFacts({ namesPlayedMove: true, ...base, fenBefore, san, moverIsStudent });
     expect(facts.some((f) => f.computer === computer)).toBe(true);
   });
 });
@@ -27,7 +27,7 @@ describe('S4 pawn computers answer a question about the move', () => {
     ['chainBase', 'structure', 'r3kb1r/1p3p2/2n3b1/1p2P2p/2p2p1P/P1P1pP2/1P2N1P1/RN2KB1R b KQkq - 1 18', 'Bh6', true, /base of your (pawn )?chain/],
     ['pawnCutsGuard', 'tactics', 'r2q1rk1/pp3pbp/3p1np1/N3pb2/2p5/4B3/PP1QPPPP/R3KB1R b KQ - 1 13', 'c3', true, /knight on a5/],
   ] as const)('%s: questionThought (%s) carries its line', (computer, group, fenBefore, san, moverIsStudent, said) => {
-    const t = questionThought({ ...ask, fenBefore, san, moverIsStudent }, new Set([group]), null, null);
+    const t = questionThought({ namesPlayedMove: true, ...ask, fenBefore, san, moverIsStudent }, new Set([group]), null, null);
     const kept = t.kept.find((f) => f.computer === computer);
     expect(kept, `held: ${t.held.filter((h) => h.fact.computer === computer).map((h) => h.why).join(',')}`).toBeDefined();
     expect(t.spoken).toMatch(said);

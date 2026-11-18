@@ -88,6 +88,12 @@ export interface MoveThoughtInput {
    *  'now' for a move being shown (a lesson, a question), 'past' for a move
    *  already played (Review's walk), built in that tense where it is made. */
   tense: IntroTense;
+  /** REQUIRED — may the words name the move being read? Review, the lessons
+   *  and chat name it ("You went for Rxd3, which …"); Learn never names the
+   *  student's own move once it is played (LEARN NAMES NO MOVE UNASKED — "the
+   *  user knows that, they see it play out"), so there the student's move is
+   *  "your move". Their move is named on every surface. */
+  namesPlayedMove: boolean;
   /** Whose move it is. Undefined: a caller that does not know whose line
    *  this is — the move is said seat-free ("Nf3: it …"), in the student's
    *  words, as the briefing always did. */
@@ -188,8 +194,10 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
    *  seat-free "Nf3: it …". */
   // The words around the move rotate, said like a person (`moveIntro`, David
   // 2026-11-09: "mix up the phrasing whenever possible").
-  const lead = (clause: string): string => (i.moverIsStudent === undefined ? `${san}: it ${clause}` : introWithPredicate(seat, san, clause, i.tense));
-  const gerund = (clause: string): string => (i.moverIsStudent === undefined ? `${san}: ${clause}` : introWithGerund(seat, san, clause, i.tense));
+  // The student's move, unnamed where the surface does not name it.
+  const unnamed = i.moverIsStudent === true && !i.namesPlayedMove;
+  const lead = (clause: string): string => (unnamed ? `Your move ${clause}` : i.moverIsStudent === undefined ? `${san}: it ${clause}` : introWithPredicate(seat, san, clause, i.tense));
+  const gerund = (clause: string): string => (unnamed ? `With your move you were ${clause}` : i.moverIsStudent === undefined ? `${san}: ${clause}` : introWithGerund(seat, san, clause, i.tense));
   /** The squares an idea is about beyond the move itself. */
   const beyond = (sqs: readonly string[]): string[] => [...new Set(sqs)].filter((s) => s !== from && s !== to);
   const facts: ThoughtFact[] = [];
@@ -366,7 +374,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     const subjectLed = /^(The|A|An|This|That|Their|Your)\b/.test(teacher.text);
     // Its develop reading is its last resort ("the knight develops to d2,
     // joining the game") — the move read back, said only when nothing else is.
-    add('board-teacher', 'buildReviewMoveTeachingFact', 'boardTeacher', teacher.idea, joinReview([toClause(teacher.text)], i.moverIsStudent, i.san, i.tense),
+    add('board-teacher', 'buildReviewMoveTeachingFact', 'boardTeacher', teacher.idea, unnamed ? gerund(toClause(teacher.text)) : joinReview([toClause(teacher.text)], i.moverIsStudent, i.san, i.tense),
       subjectLed ? teacher.text : `It also ${continueSentence(teacher.text)}`, teacher.squares, 50, teacher.idea === 'develop' || teacher.restates === true);
   }
 
@@ -1519,5 +1527,8 @@ export function onlyMove(fenBefore: string, playedUci: string, lines: readonly (
   let secondSan: string;
   try { const u = lines[1].moves[0]; secondSan = new Chess(fenBefore).move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san; } catch { return null; }
   const pawns = Math.round(gap / 100);
-  return { secondSan, gives: pawns >= 3 ? 'gives up far more' : pawns === 2 ? 'gives up about two pawns' : 'gives up about a pawn' };
+  // WHAT IT GIVES UP, SAID AS MATERIAL (Learn prod audit 2026-11-18: "the
+  // next best, h5, gives up far more" named nothing): the gap in the pieces a
+  // player counts in.
+  return { secondSan, gives: pawns >= 5 ? "gives up more than a rook's worth" : pawns >= 3 ? "gives up about a piece's worth" : pawns === 2 ? 'gives up about two pawns' : 'gives up about a pawn' };
 }

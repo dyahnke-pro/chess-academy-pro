@@ -224,7 +224,7 @@ export async function thinkingStepTeaching(step: ThinkingStep, pos: LessonPositi
       const top = reads?.after[0]?.moves ?? [];
       line = top.length ? uciToSans(after.fen(), top) : null;
     } catch { line = null; }
-    asked = {
+    asked = { namesPlayedMove: true,
       fenBefore, san, moverIsStudent: mover === 'student', prev: NO_PREV_CAPTURE, line,
       theirLast: mover === 'student' && pos.beforeFen && pos.prevSan ? { fenBefore: pos.beforeFen, san: pos.prevSan } : null,
       history: [], story: false, reads, costCp: null, theory: false, plainThreatsSeen: false,

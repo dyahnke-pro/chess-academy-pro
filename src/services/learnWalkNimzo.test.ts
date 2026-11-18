@@ -22,6 +22,9 @@ describe('one say-once ledger across the balance sheet and the positional read',
     const keys = phaseVerdictKeys(fen, 'b', 80, new Set());
     expect(line).toMatch(/isolated/);
     expect(keys).toContain('opponent-iso-a');
+    // The verdict says its reason (Learn prod audit 2026-11-18: "you're clearly
+    // worse. They're up a piece." never joined): verdict, "because", the reason.
+    expect(line).toMatch(/you're [a-z ]+, because /);
   });
   it('a reason already heard is not spoken again by the balance sheet', () => {
     const line = phaseVerdictLine(fen, 'b', 80, 'middlegame', new Set(['opponent-iso-a']));

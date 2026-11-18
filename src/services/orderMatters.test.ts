@@ -10,7 +10,7 @@ import type { AnalysisLine } from '../types';
 const at = (sans: string[]): string => { const c = new Chess(); for (const s of sans) c.move(s); return c.fen(); };
 const FEN = at(['e4', 'e5', 'Nf3', 'Nc6', 'Nc3', 'Nf6', 'd4', 'Bb4', 'd5', 'Ne7', 'Bd3', 'd6', 'O-O']);
 const line = (uci: string, cp: number): AnalysisLine => ({ rank: 1, evaluation: cp, moves: [uci], mate: null } as unknown as AnalysisLine);
-const said = (fan: AnalysisLine[]): string => moveThoughtFacts({
+const said = (fan: AnalysisLine[]): string => moveThoughtFacts({ namesPlayedMove: true,
   plainThreatsSeen: false, story: false, theory: false, tense: 'now', fenBefore: FEN, san: 'Bxc3', moverIsStudent: true,
   prev: NO_PREV_CAPTURE, line: ['bxc3', 'Ng6'], history: [], theirLast: null, phrases: null, costCp: null,
   reads: { before: fan, after: [], passBefore: [], passAfter: [] },

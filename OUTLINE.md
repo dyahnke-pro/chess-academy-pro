@@ -22,7 +22,7 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 ---
 
 ## 000zl. THE ORDER (David 2026-11-18: "making sure we have the working computers is always step one, then working narrations. Then a working platform. These are the next three things to do")
-- 🔴 1 · working computers — WO-DANYA-READS-01 (000zk)
+- 🟠 1 · working computers — WO-DANYA-READS-01 (000zk): all ten groups on main (b0c70f2); the yardstick re-run and the second pass owed
 - 🔴 2 · working narrations — every surface's lines read against the board after the computers land
 - 🔴 3 · a working platform — WO-PLATFORM-01: one board bar, same name, look, feel and code on every board, no exceptions
   - ✅ puzzle boards (PuzzleBoard, MistakePuzzleBoard, Setup trainer) on the one bar; "Teach me this position" → the bar's Read; ShowMeButton deleted; gate `oneCoachSurfaces.gate`
@@ -32,9 +32,9 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 
 ## 000zk. WO-DANYA-READS-01 — every idea Danya reads off a board, computed — TOP OF THE LIST (David 2026-11-18, `docs/plans/2026-11-18-danya-board-reads-gaps.md`)
 - ✅ measured: 202 of his article boards, 673 ideas — 28% said right, 10% wrong, 62% missed; 261 of our lines false or pointless
-- 🔴 step 1: fix the false-line producers ("First, take X", colour-complex / passer / minority-attack slogans, verdicts against the engine)
+- ✅ step 1: false-line producers fixed ("First, take X" 82→36, verdict off the eval ladder 59→0, "material is even" 139→0, slogans cut)
 - 🟠 step 2: second pass on his full line notes (needs David's go: agents)
-- 🔴 step 3: build the ten groups — king attack · reasons behind the eval + initiative · plans + their targets · tempting move refuted · endgame technique · trades · practical chances · hidden combinations/traps · the habit on a read · the blunder check
+- ✅ step 3: the ten groups built and on main (b0c70f2) — king attack · reasons behind the eval + initiative · plans + their targets · tempting move refuted · endgame technique · trades · practical chances · hidden combinations/traps · the habit on a read · the blunder check
 - 🔴 step 4: re-run the 202 boards every round as the yardstick
 
 ## 000zj. WO-LEARN-MOMENT-01 — Learn speaks on an error or a real decision, quiet otherwise; Review never repeats Learn (David 2026-11-18, PLAN.md)

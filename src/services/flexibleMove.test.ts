@@ -126,7 +126,7 @@ describe('the one registry and the one composer', () => {
     expect(theirs?.text).not.toMatch(/\b(we|our|us)\b/i);
   });
   it('a lesson or Review move carries it', () => {
-    const facts = moveThoughtFacts({
+    const facts = moveThoughtFacts({ namesPlayedMove: true,
       plainThreatsSeen: false, story: false, theory: false, tense: 'past', fenBefore: NC3.fen, san: NC3.san, moverIsStudent: true,
       prev: NO_PREV_CAPTURE, line: null, history: [], theirLast: null, phrases: null, costCp: 0,
       reads: { before: NC3.reads.map((l, k) => ({ rank: k + 1, evaluation: l.evaluation, moves: [...l.moves], mate: null })), after: [], passBefore: [], passAfter: [] } as never,

@@ -1,6 +1,6 @@
 # WO-DANYA-READS-01 — every idea Danya reads off a board, computed (David 2026-11-18: "If not, that goes top of list. But keep that list! It is VERY important all of that gets done")
 
-**Status: TOP OF THE LIST. Step 1 done; groups 1, 2, 3, 4, 5, 8, 9, 10 built and merged on branch `urg-wt` (2026-11-18, not on main yet); groups 6 and 7 in progress.**
+**Status: TOP OF THE LIST. Step 1 done; all ten groups built and on `main` (b0c70f2, 2026-11-18), every gate green. A sacrifice's line (deep combination, king sacrifice) is named only by the one naming rule (`lineTrust`). Still owed: step 2 (the second pass, David's go) and step 4 (re-run the boards as the yardstick).**
 
 ### Progress (2026-11-18), measured on the 209 boards with true depth-16 reads
 

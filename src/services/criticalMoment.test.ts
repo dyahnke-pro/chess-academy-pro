@@ -198,6 +198,13 @@ describe('criticalMoment — two registers, one claim', () => {
     expect(criticalMomentAsk(two, 0)).not.toMatch(/two moves keeps/);
   });
 
+  it('the two-move moment says why it matters: slow down (Learn prod audit 2026-11-18)', () => {
+    for (let ply = 0; ply < 4; ply += 1) {
+      expect(criticalMomentStatement(two, ply, null)).toMatch(/, so (?:slow down|it's worth|take the extra)/);
+      expect(criticalMomentStatement(two, ply, { san: 'Bg5', fenBefore: 'rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2' })).toMatch(/, so (?:slow down|it's worth|take the extra)/);
+    }
+  });
+
   it('rotates the STEM on the ply and never the CLAIM — and never Math.random', () => {
     const texts = new Set<string>();
     for (let ply = 0; ply < 8; ply += 1) texts.add(criticalMomentStatement(one, ply, null) as string);

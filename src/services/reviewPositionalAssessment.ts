@@ -322,7 +322,15 @@ export function phaseVerdictLine(
   // is isolated — a target they can pile on and their passed a-pawn on a4 is a
   // long-term trump" ran two reasons together around a dash).
   const sentences = (clauses: readonly string[]): string => clauses.map((c) => ` ${openSentence(c)}.`).join('');
-  const why = sentences(a.reasons);
+  // THE VERDICT SAYS ITS REASON (Learn prod audit 2026-11-18: "you're clearly
+  // worse. They're up a piece." — the verdict and its cause in two sentences
+  // that never meet): the first reason is joined to the verdict with
+  // "because"; the rest follow, a sentence each. A level board has no cause
+  // to join, so its reasons stand on their own.
+  const [lead, ...more] = a.reasons;
+  const joinFirst = a.verdict !== 'balanced' && !/ — /.test(lead);
+  const why = joinFirst ? sentences(more) : sentences(a.reasons);
+  const verdict = joinFirst ? `${standing}, because ${lead.charAt(0).toLowerCase()}${lead.slice(1)}` : standing;
   // ONE COMPARISON, not a list: the other side of the scale, and what it
   // weighs. Level → the two sides' trumps hold each other; slightly → theirs
   // keeps it close; clearly or decisive → it is not enough.
@@ -341,9 +349,9 @@ export function phaseVerdictLine(
   })();
   // Rotated on the board — the verdict and its reasons never vary.
   return rotateStem([
-    `Taking stock as the ${phase} begins: ${standing}.${why}${inReturn}`,
-    `The ${phase} starts here, so take stock: ${standing}.${why}${inReturn}`,
-    `Before the ${phase} gets going, the balance sheet: ${standing}.${why}${inReturn}`,
+    `Taking stock as the ${phase} begins: ${verdict}.${why}${inReturn}`,
+    `The ${phase} starts here, so take stock: ${verdict}.${why}${inReturn}`,
+    `Before the ${phase} gets going, the balance sheet: ${verdict}.${why}${inReturn}`,
   ], stemKeyOf(fen));
 }
 

@@ -8,7 +8,7 @@ import { NO_PREV_CAPTURE } from './captureRun';
 
 const fenOf = (sans: string[]): string => { const c = new Chess(); for (const s of sans) c.move(s); return c.fen(); };
 const said = (history: string[], san: string, own: boolean): string[] =>
-  moveThoughtFacts({ plainThreatsSeen: false, story: false, theory: false, tense: 'past', fenBefore: fenOf(history), san, moverIsStudent: own, prev: NO_PREV_CAPTURE, line: null, history, theirLast: null, phrases: null, reads: null, costCp: null })
+  moveThoughtFacts({ namesPlayedMove: true, plainThreatsSeen: false, story: false, theory: false, tense: 'past', fenBefore: fenOf(history), san, moverIsStudent: own, prev: NO_PREV_CAPTURE, line: null, history, theirLast: null, phrases: null, reads: null, costCp: null })
     .map((f) => `${f.computer}: ${f.text}`);
 
 describe('the opening computers in the composer', () => {
@@ -30,7 +30,7 @@ describe('the opening computers in the composer', () => {
 // a move question through `questionThought`, the same composer.
 describe('the opening computers answer in chat (questionThought)', () => {
   const ask = (history: string[], san: string, own: boolean, groups: FactGroup[]): string[] => {
-    const t = questionThought({ plainThreatsSeen: false, story: false, theory: false, fenBefore: fenOf(history), san, moverIsStudent: own, prev: NO_PREV_CAPTURE, line: null, history, theirLast: null, reads: null, costCp: null }, new Set(groups), null, null);
+    const t = questionThought({ namesPlayedMove: true, plainThreatsSeen: false, story: false, theory: false, fenBefore: fenOf(history), san, moverIsStudent: own, prev: NO_PREV_CAPTURE, line: null, history, theirLast: null, reads: null, costCp: null }, new Set(groups), null, null);
     return [...t.kept].filter((f) => groups.includes(f.group)).map((f) => `${f.computer}: ${f.text}`);
   };
   it('Ytkf3 6.f3 — "why f3?" carries the castling it took away', () => {

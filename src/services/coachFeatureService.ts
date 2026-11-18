@@ -2734,7 +2734,7 @@ function* reviewSegmentSteps(
         const leadSquares = new Set(stepLeads.flatMap((f) => [...f.squares]));
         const phrasesHere = new Map(thoughtPhrases);
         const memoryHere = { keys: new Set(thoughtKeys) };
-        const thoughtFacts = moveThoughtFacts({ theory: REVIEW_WALK_TEACHES_THEORY, story: false, tense: 'past',
+        const thoughtFacts = moveThoughtFacts({ namesPlayedMove: true, theory: REVIEW_WALK_TEACHES_THEORY, story: false, tense: 'past',
           plainThreatsSeen: seesPlainThreats(reviewRecord.plainThreats),
           fenBefore: fenPair.fenBefore, san: m.san, moverIsStudent: mine, prev: prevCap,
           line: moves.slice(i + 1, i + 1 + BRIEFING_LINE_PLIES).map((x) => x.san),

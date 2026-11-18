@@ -110,7 +110,7 @@ describe('both seats, through the one registry', () => {
 
 describe('the one composer says it', () => {
   it('a lesson or Review move that starts the checks carries the perpetual', () => {
-    const facts = moveThoughtFacts({
+    const facts = moveThoughtFacts({ namesPlayedMove: true,
       plainThreatsSeen: false, story: false, theory: false, tense: 'past', fenBefore: FEN, san: 'Qb8+', moverIsStudent: true,
       prev: NO_PREV_CAPTURE, line: null, history: [], theirLast: null, phrases: null, costCp: 0,
       reads: { before: [], after: [], passBefore: [], passAfter: [] } as never,

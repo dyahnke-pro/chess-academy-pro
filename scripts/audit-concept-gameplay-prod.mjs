@@ -829,7 +829,16 @@ async function main() {
         const ANY_MOMENT = new Set(['phase', 'character', 'planArc', 'positionFacts', 'stalemate']);
         const QUIET_OK = new Set(['phase', 'character', 'stalemate']);
         const unnamed = turns.filter((t) => !('turnMoment' in t)).length;
-        const loud = turns.filter((t) => t.turnMoment === 'quiet' && (t.spoke ?? []).some((l) => !ANY_MOMENT.has(l)));
+        // The door's rule (`learnTurnDoor.speaksAnyMoment`): a fact of kind
+        // key-moment (the only-move moment, "slow down") speaks on any turn,
+        // whatever its lane — so a quiet turn may carry as many off-list lanes
+        // as it spoke key-moment facts, and no more.
+        const loud = turns.filter((t) => {
+          if (t.turnMoment !== 'quiet') return false;
+          const off = (t.spoke ?? []).filter((l) => !ANY_MOMENT.has(l));
+          const keyMoments = (t.spokeKinds ?? []).filter((k) => k === 'key-moment').length;
+          return off.length > keyMoments;
+        });
         const by = {};
         for (const t of turns) by[String(t.turnMoment)] = (by[String(t.turnMoment)] ?? 0) + 1;
         const quietSpoke = turns.filter((t) => t.turnMoment === 'quiet' && (t.spoke ?? []).some((l) => !QUIET_OK.has(l))).length;

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**368 lines · 6 exports · 13 importers · 11 tests · 0 audits**
+**376 lines · 6 exports · 13 importers · 11 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -29,12 +29,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `verdictBand` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:1186`
+- `src/services/coachFeatureService.ts:1239`
 - `src/services/exchangeLedger.test.ts:99`
 - `src/services/exchangeLedger.test.ts:101`
 
 ### `assessPositionalEdge` (function) — 29 call sites
-- `src/services/coachFeatureService.ts:3865`
+- `src/services/coachFeatureService.ts:4134`
 - `src/services/exchangeLedger.test.ts:68`
 - `src/services/exchangeLedger.test.ts:69`
 - `src/services/exchangeLedger.test.ts:76`
@@ -44,7 +44,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/phaseVerdict.test.ts:10`
 - `src/services/planPrescriptions.test.ts:50`
 - `src/services/planPrescriptions.test.ts:57`
-- `src/services/reviewFullData.ts:1037`
+- `src/services/reviewFullData.ts:1060`
 - `src/services/reviewPositionalAssessment.test.ts:4`
 - `src/services/reviewPositionalAssessment.test.ts:7`
 - `src/services/reviewPositionalAssessment.test.ts:9`
@@ -65,8 +65,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/walkOct2a.test.ts:89`
 
 ### `materialEdgeWords` (function) — 5 call sites
-- `src/services/groundedAnswer.ts:2602`
-- `src/services/groundedAnswer.ts:2603`
+- `src/services/groundedAnswer.ts:2854`
+- `src/services/groundedAnswer.ts:2855`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:31`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:34`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:37`
@@ -75,12 +75,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/learnTurnDoor.phaseWave.test.ts:123`
 - `src/services/phaseVerdict.test.ts:37`
 - `src/services/phaseVerdict.test.ts:39`
-- `src/services/positionFacts.ts:1169`
+- `src/services/positionFacts.ts:1176`
 
 ### `phaseVerdictLine` (function) — 14 call sites
 - `src/services/learnTurnDoor.phaseWave.test.ts:121`
 - `src/services/learnWalkNimzo.test.ts:21`
-- `src/services/learnWalkNimzo.test.ts:27`
+- `src/services/learnWalkNimzo.test.ts:30`
 - `src/services/phaseVerdict.test.ts:16`
 - `src/services/phaseVerdict.test.ts:18`
 - `src/services/phaseVerdict.test.ts:23`
@@ -88,16 +88,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/phaseVerdict.test.ts:36`
 - `src/services/phaseVerdict.test.ts:37`
 - `src/services/phaseVerdict.test.ts:39`
-- `src/services/positionFacts.ts:1166`
-- `src/services/reviewFullData.ts:1638`
+- `src/services/positionFacts.ts:1173`
+- `src/services/reviewFullData.ts:1808`
 - `src/services/reviewPositionalAssessment.test.ts:88`
 - `src/services/reviewPositionalAssessment.test.ts:93`
 
 ### `phaseVerdictKeys` (function) — 4 call sites
 - `src/services/learnTurnDoor.phaseWave.test.ts:123`
 - `src/services/learnWalkNimzo.test.ts:22`
-- `src/services/learnWalkNimzo.test.ts:31`
-- `src/services/positionFacts.ts:1169`
+- `src/services/learnWalkNimzo.test.ts:34`
+- `src/services/positionFacts.ts:1176`
 
 ## Tests
 

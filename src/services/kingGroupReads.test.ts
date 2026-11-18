@@ -8,7 +8,7 @@ import { NO_PREV_CAPTURE } from './captureRun';
 import type { FactGroup } from './coachFact';
 import { newLessonVoice } from './reviewMoveBriefing';
 
-const facts = (fenBefore: string, san: string, moverIsStudent: boolean) => moveThoughtFacts({
+const facts = (fenBefore: string, san: string, moverIsStudent: boolean) => moveThoughtFacts({ namesPlayedMove: true,
   plainThreatsSeen: false, story: false, theory: false, fenBefore, san, prev: NO_PREV_CAPTURE, moverIsStudent,
   line: null, history: [], theirLast: null, reads: null, costCp: null, tense: 'now', phrases: newLessonVoice().phrases,
 });
@@ -40,7 +40,7 @@ describe('the king group in the composer', () => {
 });
 
 describe('the king group answers in chat (questionThought, the move group)', () => {
-  const ask = (fenBefore: string, san: string, groups: readonly FactGroup[] = ['move']): string => questionThought({
+  const ask = (fenBefore: string, san: string, groups: readonly FactGroup[] = ['move']): string => questionThought({ namesPlayedMove: true,
     plainThreatsSeen: false, story: false, theory: false, fenBefore, san, prev: NO_PREV_CAPTURE, moverIsStudent: true,
     line: null, history: [], theirLast: null, reads: null, costCp: null,
   }, new Set(groups), null, null).spoken;

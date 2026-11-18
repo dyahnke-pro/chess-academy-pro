@@ -136,7 +136,7 @@ describe('the one registry and the one composer', () => {
     expect(readBoard('minorMatchup', { fenBefore: DANYA_NXE4, san: 'Nxe4', student: 'w' })?.seat).toBe('opponent');
   });
   it('a lesson or Review move that makes the matchup carries it', () => {
-    const facts = moveThoughtFacts({
+    const facts = moveThoughtFacts({ namesPlayedMove: true,
       plainThreatsSeen: false, story: false, theory: false, tense: 'past', fenBefore: DANYA_NXE4, san: 'Nxe4', moverIsStudent: true,
       prev: NO_PREV_CAPTURE, line: null, history: [], theirLast: null, phrases: null, costCp: 0, reads: null,
     });

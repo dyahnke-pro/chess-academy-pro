@@ -23,7 +23,7 @@ function scandinavianNc3(reads: { before: AnalysisLine[]; after: AnalysisLine[];
   for (const s of sans) { fens.push(c.fen()); c.move(s); }
   return {
     story: false,
-    theory: true, tense: 'now' as const,
+    theory: true, tense: 'now' as const, namesPlayedMove: true,
     fenBefore: fens[4], san: 'Nc3', prev: captureContextsAlong(fens[0], sans)[4], moverIsStudent: true as const,
     line: ['Qa5', 'd4', 'Nf6'], history: sans.slice(0, 4), theirLast: { fenBefore: fens[3], san: 'Qxd5' }, reads, costCp: 0,
   };

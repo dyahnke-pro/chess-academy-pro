@@ -12,7 +12,7 @@ import type { ComposedThought } from './thoughtComposer';
 
 const line = (evaluation: number, moves: string[], rank = 1): AnalysisLine => ({ rank, evaluation, moves, mate: null });
 const ask = (fenBefore: string, san: string, cont: string[] | null, groups: FactGroup[], reads: { before: AnalysisLine[]; after: AnalysisLine[] } | null): ComposedThought =>
-  questionThought({ story: false, theory: false, fenBefore, san, moverIsStudent: true, prev: NO_PREV_CAPTURE, line: cont, theirLast: null, history: [],
+  questionThought({ namesPlayedMove: true, story: false, theory: false, fenBefore, san, moverIsStudent: true, prev: NO_PREV_CAPTURE, line: cont, theirLast: null, history: [],
     reads: reads ? { ...reads, passBefore: [], passAfter: [] } : null, costCp: null, plainThreatsSeen: false }, new Set(groups), null, null);
 const textsOf = (c: ComposedThought): string => [c.spoken, ...c.kept.map((f) => f.text), ...c.held.map((h) => h.fact.text)].join(' | ');
 
