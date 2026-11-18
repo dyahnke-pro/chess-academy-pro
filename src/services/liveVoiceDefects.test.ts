@@ -158,7 +158,7 @@ describe('L4 — a refusal names the guard that refused', () => {
     // The backlog concluded the floor was "mis-scaled or inverted" from a log
     // line reading "under the floor". It is neither — MISTAKE_CP is 100.
     for (const cpLoss of [122, 184]) {
-      expect(callInaccuracy(withOneSearch({ namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null,
+      expect(callInaccuracy(withOneSearch({ errorBarCp: 100, namesBetterMove: true, priorMove: null, replyLineUci: [], replySan: null,
         fenBefore, playedSan: 'Nf6', bestSan: 'Bc5', bestLineUci: ['f8c5', 'c2c3'],
         cpLoss, missedMate: null, allowedMate: null, side: 'coach', moverColor: 'black',
       }))).not.toBeNull();

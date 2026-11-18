@@ -21,7 +21,7 @@ const GAME = 'e4 c5 Ne2 Nc6 Nbc3 e5 Ng3 Nf6 Bc4 d6 h3 Be7 Bb5 O-O O-O Nd4 Bc4 Be
 const at = (plies: number): string => { const c = new Chess(); for (const m of GAME.slice(0, plies)) c.move(m); return c.fen(); };
 const BEFORE_BB3 = at(22);
 const TURN_BOARD = at(24); // after 12.Bb3 Nxb3
-const ctx = { studentColor: 'white' as const, fenBefore: BEFORE_BB3, playedSan: 'Bb3', bestSan: 'Nxe7+', historySans: GAME.slice(0, 23) };
+const ctx = { studentColor: 'white' as const, fenBefore: BEFORE_BB3, playedSan: 'Bb3', bestSan: 'Nxe7+', historySans: GAME.slice(0, 23), rating: 1400 };
 
 const plan: LaneFixture = { lane: 'planArc', text: 'Your plan is the f-file: the pawn on f2 goes to f4 to open it for your rook.', fen: TURN_BOARD, squares: ['f2', 'f4', 'f1'], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE };
 const character: LaneFixture = { lane: 'character', text: 'The centre is closed, so the game is about the wings.', fen: TURN_BOARD, proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE };

@@ -12,7 +12,7 @@ describe("their slip names what it lets you do, never your move (Learn names no 
   it('25…Kg8: the grade and a pointer, no Nhf6+ line', () => {
     const c = new Chess(); for (const s of SANS) c.move(s);
     const fenBefore = c.fen();
-    const said = callInaccuracy(withOneSearch({
+    const said = callInaccuracy(withOneSearch({ errorBarCp: 100,
       namesBetterMove: true, priorMove: null, fenBefore, playedSan: 'Kg8', bestSan: 'Kg7',
       bestLineUci: ['f7g7'], cpLoss: 160, side: 'coach', moverColor: 'black',
       replyLineUci: ['h7f6', 'e7f6', 'd5f6', 'g8g7', 'f6g4'], replySan: null, moverEvalAfterCp: -160,

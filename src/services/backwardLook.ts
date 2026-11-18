@@ -39,6 +39,7 @@ export { priorMoveLeadingTo } from './inaccuracyCall';
 import { describeConcessions } from './reviewTeachingPoints';
 import { INACCURACY_CP, BLUNDER_CP } from './engineConstants';
 import { classifyMove } from './moveRating';
+import { learnErrorBarCp } from './slipDetector';
 import { moverFault } from './accuracyService';
 import { logAppAudit } from './appAuditor';
 
@@ -132,6 +133,9 @@ export function backwardLook(args: {
   replyKeptWin?: boolean | null;
   /** Centipawns the move cost, from the MOVER's own perspective. */
   cpLoss: number;
+  /** REQUIRED — the student's error bar (`learnErrorBarCp`): a move under it
+   *  is corrected only when the board shows the mechanism that failed. */
+  errorBarCp: number;
   /** The MOVER's colour — the student's on the default path, the coach's when
    *  `side` is 'coach'. Named for the common case; read as "whose move this
    *  is about". */
@@ -220,6 +224,7 @@ export function backwardLook(args: {
         bestSan: args.bestSan,
         bestLineUci: args.bestPvUci,
         cpLoss: args.cpLoss,
+        errorBarCp: args.errorBarCp,
         missedMate: args.missedMate ?? null,
         bestMate: args.bestMate ?? null,
         allowedMate: args.allowedMate ?? null,
@@ -348,6 +353,7 @@ export function backwardLook(args: {
             bestSan: args.bestSan,
             bestLineUci: args.bestPvUci,
             cpLoss: args.cpLoss,
+            errorBarCp: args.errorBarCp,
             missedMate: args.missedMate ?? null,
         bestMate: args.bestMate ?? null,
             allowedMate: args.allowedMate ?? null,
@@ -407,6 +413,7 @@ export function backwardLook(args: {
         bestSan: args.bestSan,
         bestLineUci: args.bestPvUci,
         cpLoss: args.cpLoss,
+        errorBarCp: args.errorBarCp,
         missedMate: args.missedMate ?? null,
         bestMate: args.bestMate ?? null,
         allowedMate: args.allowedMate ?? null,
@@ -521,8 +528,13 @@ export function moverQuality(args: {
  *  (`inaccuracyVoice` — this phase and this skill first). */
 export function slipSpoken(args: Parameters<typeof moverQuality>[0] & {
   fenBefore: string; playedSan: string; bestSan: string | null; historySans: readonly string[];
+  /** REQUIRED — the student's rating: above 2000 an inaccuracy is an error
+   *  the coach corrects (David 2026-11-18), the grade still holding one with
+   *  no proven reason; below it the record decides (`inaccuracySpeaks`). */
+  rating: number;
 }): boolean {
   if (moverQuality(args) !== 'inaccuracy') return true;
+  if (learnErrorBarCp(args.rating) <= INACCURACY_CP) return true;
   return inaccuracySpeaks({ fenBefore: args.fenBefore, playedSan: args.playedSan, bestSan: args.bestSan, historySans: args.historySans, ply: args.historySans.length - 1 });
 }
 
@@ -535,6 +547,7 @@ export function slipSpoken(args: Parameters<typeof moverQuality>[0] & {
  *  and the turn spoke nothing). */
 export function saidSlipCp(price: MovePrice | null, ctx: {
   studentColor: 'white' | 'black'; fenBefore: string; playedSan: string; bestSan: string | null; historySans: readonly string[];
+  rating: number;
 }): number | null {
   if (!price || !price.settled || !price.scores || price.costCp <= 0) return null;
   const quality = moverQuality({ cpLoss: price.costCp, scores: price.scores, studentColor: ctx.studentColor });

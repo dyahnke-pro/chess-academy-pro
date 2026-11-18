@@ -30,7 +30,7 @@ describe('a plan of several pieces is never one move\'s own reason', () => {
   });
 
   it('the Learn verdict on the student\'s …Nxd4 names …Nb4 without lending it the plan', () => {
-    const call = callInaccuracy(withOneSearch({ namesBetterMove: true,
+    const call = callInaccuracy(withOneSearch({ errorBarCp: 100, namesBetterMove: true,
       fenBefore: FEN, playedSan: 'Nxd4', bestSan: 'Nb4', bestLineUci: NB4_LINE,
       cpLoss: 90, side: 'student', moverColor: 'black', moverEvalAfterCp: -150,
       replyLineUci: ['f3d4', 'e6e5', 'd4f5'], replySan: 'Nxd4', priorMove: null,

@@ -345,7 +345,8 @@ import { tacticalReadFromLines, temptingTurnClause, uncertaintyClause, candidate
 import { findHangingBySee, signedLegalSeeFor, signedCaptureRead } from '../../services/positionReadingService';
 import { BehaviorScheduler, detectBehaviors, WISH_KEY_PREFIX, WISHES_A_GAME } from '../../services/danyaBehaviors';
 import { stockfishCache } from '../../services/stockfishCache';
-import { COACH_TURN_DEPTH, NEXT_BOARD_READ_MS } from '../../services/engineConstants';
+import { COACH_TURN_DEPTH, MISTAKE_CP, NEXT_BOARD_READ_MS } from '../../services/engineConstants';
+import { learnErrorBarCp } from '../../services/slipDetector';
 import type { StockfishAnalysis } from '../../types';
 import { fetchLichessExplorer } from '../../services/lichessExplorerService';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, replyMadeAChance, studentPlayingRating } from '../../services/coachGameEngine';
@@ -12100,7 +12101,7 @@ export function CoachTeachPage({ mode }: {
               if (searched !== null) {
                 studentCpLoss = searched.costCp;
                 studentPriceSettled = searched.settled;
-                turnSlipCp = studentMoveInBook ? null : saidSlipCp(searched, { studentColor: playerColor, fenBefore, playedSan: move.san, bestSan: preStudentRead?.bestMove ? uciMoveToSan(preStudentRead.bestMove, fenBefore) : null, historySans: move.history });
+                turnSlipCp = studentMoveInBook ? null : saidSlipCp(searched, { studentColor: playerColor, fenBefore, playedSan: move.san, bestSan: preStudentRead?.bestMove ? uciMoveToSan(preStudentRead.bestMove, fenBefore) : null, historySans: move.history, rating: activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING });
                 studentPriceSearch = searched.search ?? null;
                 // A fan too shallow to grade the move (`gradePlayedMove`) left
                 // the live grade and the heard verdict unwritten: they take the
@@ -12335,7 +12336,7 @@ export function CoachTeachPage({ mode }: {
                 const settledPrice = await priceRead;
                 if (settledPrice) {
                   studentCpLoss = settledPrice.costCp; studentPriceSettled = settledPrice.settled; studentPriceSearch = settledPrice.search ?? null;
-                  turnSlipCp = studentMoveInBook ? null : saidSlipCp(settledPrice, { studentColor: playerColor, fenBefore, playedSan: move.san, bestSan: preStudentRead?.bestMove ? uciMoveToSan(preStudentRead.bestMove, fenBefore) : null, historySans: move.history });
+                  turnSlipCp = studentMoveInBook ? null : saidSlipCp(settledPrice, { studentColor: playerColor, fenBefore, playedSan: move.san, bestSan: preStudentRead?.bestMove ? uciMoveToSan(preStudentRead.bestMove, fenBefore) : null, historySans: move.history, rating: activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING });
                 }
                 if (liveFenRef.current !== fenAfterReply) { noteLateDropped('moved-before-price'); return; }
                 // ONE LATE WAVE, SPOKEN (OS-18): the door decides it and the voice says it
@@ -12696,8 +12697,10 @@ export function CoachTeachPage({ mode }: {
                       studentColor: playerColor,
                       ...mateContext(preStudentRead, mid, playerColor),
                       fenBefore, playedSan: move.san, bestSan: studentBestSan ?? null, historySans: move.history,
+                      rating: activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING,
                     });
                     const look = quietSlip ? null : backwardLook({
+                      errorBarCp: learnErrorBarCp(activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING),
                       fenBefore,
                       fenAfter: move.fen,
                       playedSan: move.san,
@@ -13411,6 +13414,7 @@ export function CoachTeachPage({ mode }: {
                       ? (mid.mateIn !== null && mid.mateIn * sign < 0 ? -100_000 : 100_000)
                       : mid.evaluation * sign;
                     const look = coachBeforeCp <= -500 || cpLoss === null ? null : backwardLook({
+                      errorBarCp: MISTAKE_CP,
                       fenBefore: cm.fenBefore,
                       fenAfter: cm.fenAfter,
                       playedSan: cm.playedSan,

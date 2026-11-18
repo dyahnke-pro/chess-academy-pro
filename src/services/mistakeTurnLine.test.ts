@@ -91,7 +91,7 @@ describe('8.Bxf7+ on the live producers: one loss, one habit', () => {
   const reply = 'e8f7 f3g5 f7f8 c3d5 g7f6 d1b3 f6g5 c1g5 h7h6 g5d2'.split(' ');
   const scores = { bestWhiteCp: -32, playedWhiteCp: -236 };
   it('the grade names the square it lost, so the fundamental keeps only its HOW', () => {
-    const look = backwardLook({ secondReads: NO_SECOND_READ, fenBefore, fenAfter, playedSan: 'Bxf7+', priorMove: { fenBefore: priorFen, san: 'Bg7' }, bestSan: 'e5', bestPvUci: best, replyPvUci: reply, replySan: 'Kxf7', cpLoss: 204, scores, moverEvalAfterCp: -236, studentColor: 'white' });
+    const look = backwardLook({ errorBarCp: 100, secondReads: NO_SECOND_READ, fenBefore, fenAfter, playedSan: 'Bxf7+', priorMove: { fenBefore: priorFen, san: 'Bg7' }, bestSan: 'e5', bestPvUci: best, replyPvUci: reply, replySan: 'Kxf7', cpLoss: 204, scores, moverEvalAfterCp: -236, studentColor: 'white' });
     expect(look?.lostSquare).toBe('f7');
     const fund = learnFundamentalVerdict({ fenBefore, betterNamed: look?.namesBetter ?? null, namesBetterMove: false, replySan: 'Kxf7', historySans: [...H, 'Bxf7+'], playedSan: 'Bxf7+', bestSan: 'e5', studentColor: 'white', price: { costCp: 204, scores, settled: true }, bestPvUci: best, playedPvUci: reply }, new Set());
     expect(fund?.square).toBe('f7');
@@ -122,7 +122,7 @@ describe('20.Qxf4 on the live producers: one answer, one reason', () => {
   const best = 'g5f4 f7f6 c3d4 b6d4 a1c1 c8d7 f4h6 e8e7'.split(' ');
   const reply = 'f7f6 g5f6 g7f6 f4f6 a8a7 c3d4 e8f8 f6g5'.split(' ');
   const scores = { bestWhiteCp: -117, playedWhiteCp: -292 };
-  const look = backwardLook({ secondReads: NO_SECOND_READ, fenBefore, fenAfter, playedSan: 'Qxf4', priorMove: { fenBefore: priorFen, san: 'Nxf4' }, bestSan: 'Bxf4', bestPvUci: best, replyPvUci: reply, replySan: 'f6', cpLoss: 175, scores, moverEvalAfterCp: -292, studentColor: 'white' });
+  const look = backwardLook({ errorBarCp: 100, secondReads: NO_SECOND_READ, fenBefore, fenAfter, playedSan: 'Qxf4', priorMove: { fenBefore: priorFen, san: 'Nxf4' }, bestSan: 'Bxf4', bestPvUci: best, replyPvUci: reply, replySan: 'f6', cpLoss: 175, scores, moverEvalAfterCp: -292, studentColor: 'white' });
   const fund = learnFundamentalVerdict({ fenBefore, betterNamed: look?.namesBetter ?? null, namesBetterMove: false, replySan: 'f6', historySans: [...SANS, 'Qxf4'], playedSan: 'Qxf4', bestSan: 'Bxf4', studentColor: 'white', price: { costCp: 175, scores, settled: true }, bestPvUci: best, playedPvUci: reply }, new Set());
 
   it('the fundamental and the grade name the same answer, so the grade says it once', () => {

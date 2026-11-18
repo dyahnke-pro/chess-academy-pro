@@ -143,3 +143,15 @@ export function detectSlip(input: SlipInput): SlipResult {
     shouldCount: input.learned,
   };
 }
+
+/** THE STUDENT'S ERROR BAR IN LEARN (David 2026-11-18: "intermediate is maybe 1
+ *  pawn", "above 2000 should include inaccuracies", the beginner bar at a pawn
+ *  and a half). A move that costs this much is an error the coach corrects; one
+ *  that costs less speaks only when the board shows the mechanism that failed
+ *  (`callInaccuracy`'s floor). The ONE bar every Learn grade reads. */
+export function learnErrorBarCp(rating: number | undefined | null): number {
+  const tier = coreRatingTier(rating);
+  if (tier === 'advanced') return SLIP_CP.inaccuracy;
+  if (tier === 'intermediate') return SLIP_CP.mistake;
+  return 150;
+}

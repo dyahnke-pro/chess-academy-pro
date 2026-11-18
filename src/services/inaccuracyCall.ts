@@ -646,6 +646,10 @@ export function callInaccuracyDetailed(args: {
   bestLineUci?: readonly string[];
   /** Centipawns the played move cost its own side, mover's perspective. */
   cpLoss: number;
+  /** REQUIRED — the cost below which this grade speaks only on a mechanism the
+   *  board shows: the student's bar (`learnErrorBarCp`) on their own move, a
+   *  mistake's cost on the coach's. */
+  errorBarCp: number;
   /** Mate the mover missed / walked into — `classifyMove` treats either as a
    *  blunder regardless of the centipawns, and so must this. */
   missedMate?: number | null;
@@ -724,7 +728,7 @@ export function callInaccuracyDetailed(args: {
   // the bishop off e3, a knight-fork square). Below a mistake's cost the call
   // speaks only when the move failed by a MECHANISM the board shows
   // (`errorWhy.failed`), never on a bare cost or the better move alone.
-  const underFloor = !forcedMate && Math.max(0, args.cpLoss) < MISTAKE_CP;
+  const underFloor = !forcedMate && Math.max(0, args.cpLoss) < args.errorBarCp;
   if (underFloor && args.side === 'coach') return { call: null, declined: 'under-the-floor' };
   if (!args.bestSan) return { call: null, declined: 'no-better-move-supplied' };
   // SHADOWED, and kept as a precondition rather than a live path: `classifyMove`
