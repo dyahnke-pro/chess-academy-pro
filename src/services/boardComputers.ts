@@ -19,7 +19,8 @@
 //
 // PURE: every computer here is pure; this module adds no chess of its own.
 import { ideaClaim, type IdeaKind } from './ideaKind';
-import { Chess, type Color } from 'chess.js';
+import { Chess, type Color, type Move, type Square } from 'chess.js';
+import { legalSeeGainFor } from './positionReadingService';
 import { NO_PROOF, squaresProof, isProof, legalLineProof, type FactProof } from './proof';
 import type { FactStakes } from './factStakes';
 import { LOCAL_THREAD, placeFact, stakesOf, type CoachFact, type ComputerName, type FactSeat } from './coachFact';
@@ -55,7 +56,7 @@ import { packageForRegister } from './hintRegister';
 import { FUNDAMENTAL_TAG } from './principleAttribution';
 import { castleByHandMove, kingFromCentre, keptHome, kingSquares } from './kingWalk';
 import { knownSlip, knownSlipIndexNow, knownSlipsAt, type KnownSlipContext } from './knownSlips';
-import { ifTheyPlay, treeSentence, sayable, baitBranch, baitSentence, type ReplyRead, type ReplyBranch, type TreeTense } from './ifTheyPlay';
+import { ifTheyPlay, treeSentence, sayable, baitBranch, baitSentence, everyTakeLoses, everyTakeSentence, type ReplyRead, type ReplyBranch, type TreeTense } from './ifTheyPlay';
 import { mateStakes } from './factStakes';
 import { MOTIF_OF_TACTIC, MOTIFS } from '../data/tacticMotifs';
 import { temptingRefuted, alsoGood, squareChoice, type WeighRead } from './weighedMoves';
@@ -104,6 +105,7 @@ import { queenHunt, queenHuntLine } from './queenHunt';
 import { secondAttacker, secondAttackerLine } from './secondAttacker';
 import { outOfReach, outOfReachLine } from './outOfReach';
 import { poisonedPiece, poisonedPieceLine } from './poisonedPiece';
+import { deepCombination, deepCombinationLine, deepCombinationSquares } from './deepCombination';
 import { everyMate, everyMateLine } from './everyMate';
 import { pieceCage } from './pieceCage';
 import { opensCheck } from './opensCheck';
@@ -252,7 +254,7 @@ export interface BoardContexts {
    *  or after the game went on. REQUIRED `liveBoard`: the board the student
    *  moves on now (Learn), where an answer they could play is held in a form
    *  that names no move; null on a surface with no live board. */
-  ifTheyPlay: { fen: string; replies: readonly ReplyRead[] | null; rating: number; student: Color; seconds: ReadonlyArray<readonly string[] | null>; played: string | null; tense: TreeTense; liveBoard: string | null };
+  ifTheyPlay: { fen: string; replies: readonly ReplyRead[] | null; rating: number; student: Color; seconds: ReadonlyArray<readonly string[] | null>; played: string | null; tense: TreeTense; liveBoard: string | null; /** The square the move that made `fen` landed on (SAN destination), or null. */ landed: string | null };
   /** THE BAIT (WO-COACH-NEXT-TO-YOU-01 C4): the same read of every reply as
    *  the reply tree — the bait is its likely reply that loses. */
   baitSet: BoardContexts['ifTheyPlay'];
@@ -339,6 +341,11 @@ export interface BoardContexts {
    *  after it (`replies[0]`, UCI, the reply first) proves it — what it opens
    *  and the forced follow-up. Either seat. */
   kingSacrifice: { fenBefore: string; san: string; student: Color; replies: readonly ReplyLine[] };
+  /** THE HIDDEN COMBINATION (`deepCombination`, WO-DANYA-READS-01 group 8):
+   *  the move `san` gives up material away from the other king, and the
+   *  engine's line after it (`replies[0]`, UCI, the reply first) forces it
+   *  back with interest, or mates. Either seat. */
+  deepCombination: { fenBefore: string; san: string; student: Color; replies: readonly ReplyLine[] };
   /** GETTING INTO THEIR CAMP (`intoTheirCamp`, Danya's speedruns): the move
    *  `san` on `fenBefore` (either seat) gets a piece into their half and hits
    *  what they cannot keep, puts the rooks on the seventh, lifts or swings a
@@ -468,7 +475,7 @@ export interface BoardContexts {
   outOfReach: { fenBefore: string; san: string; student: Color; altUcis: readonly string[] };
   /** THE POISONED PIECE (`poisonedPiece`): after the move a piece that looks
    *  loose cannot be taken — every capture walks into mate in one or two. */
-  poisonedPiece: { fenBefore: string; san: string; student: Color };
+  poisonedPiece: { fenBefore: string; san: string; student: Color; /** The read of every reply after the move (the lesson's `everyAfter`), or null: a capture that loses by the line, not only by mate. */ fan: { replies: readonly ReplyRead[]; rating: number } | null };
   /** EVERY MATE (`everyMate`): the move mates, and another move mated too. */
   everyMate: { fenBefore: string; san: string; student: Color };
 }
@@ -551,6 +558,9 @@ function structureFact(r: StructureRead, fact: MakeFact, fen: string, seat: Fact
 const KING_LEARN_OWED = { not: 'owed — Learn\'s door (learnTurnDoor) reads its own lanes; this read joins it as a lane' } as const;
 const STRUCT_TACTICS = { not: 'a structural judgement is about a game\'s plan; a puzzle poses one tactic' } as const;
 const STRUCT_WEAK = { not: 'owed — the weakness record keeps tags, not the structure read; the held rows ride recordTeachingEvidence' } as const;
+
+/** The piece a poisoned-by-the-line sentence names. */
+const POISON_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
 function safe<T>(f: () => T | null): T | null {
   try { return f(); } catch { return null; }
@@ -1307,7 +1317,7 @@ export const BOARD_COMPUTERS = {
     // where the line proves them (`lineTrust`).
     read: (c, fact) => safe(() => {
       if (!c.replies || c.replies.length === 0) return null;
-      const t = ifTheyPlay({ fen: c.fen, replies: c.replies, rating: c.rating, student: c.student, seconds: c.seconds, played: c.played });
+      const t = ifTheyPlay({ fen: c.fen, replies: c.replies, rating: c.rating, student: c.student, seconds: c.seconds, played: c.played, landed: c.landed });
       if (!t || t.branches.length === 0) return null;
       const moverIsStudent = t.replier !== c.student;
       const seat: FactSeat = moverIsStudent ? 'student' : 'opponent';
@@ -1392,7 +1402,7 @@ export const BOARD_COMPUTERS = {
     // that falls for it is a chance on the board — the focus's question.
     read: (c, fact) => safe(() => {
       if (!c.replies || c.replies.length === 0) return null;
-      const t = ifTheyPlay({ fen: c.fen, replies: c.replies, rating: c.rating, student: c.student, seconds: c.seconds, played: c.played });
+      const t = ifTheyPlay({ fen: c.fen, replies: c.replies, rating: c.rating, student: c.student, seconds: c.seconds, played: c.played, landed: c.landed });
       if (!t) return null;
       const b = baitBranch(t, c.student);
       if (!b || b.played) return null;
@@ -1401,7 +1411,7 @@ export const BOARD_COMPUTERS = {
       if (!text) return null;
       const key = `bait:${b.reply.uci}>${b.answer.uci}`;
       return fact({
-        key, claims: [key, `reply-tree:${b.reply.uci}`], text,
+        key, claims: [key, `reply-tree:${b.reply.uci}`, ...(c.landed && b.reply.capture && b.reply.to === c.landed ? [`bait-take:${c.landed}`] : [])], text,
         proof: legalLineProof(c.fen, b.uci, lineSeatAt(c.fen, c.student)) ?? NO_PROOF.description,
         squares: nameAnswer ? [b.reply.to, b.answer.to] : [b.reply.to],
         stakes: b.kind === 'mate' ? mateStakes('you', b.blowPlies + 1, true) : { points: b.winPawns ?? 0, plies: b.blowPlies + 1 },
@@ -1872,6 +1882,35 @@ export const BOARD_COMPUTERS = {
         ...(isProof(proof) && proof.line ? { lines: [proof.line] } : {}) });
     }),
     computer: 'kingSacrifice',
+    kind: 'sac-why',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
+    },
+  },
+  deepCombination: {
+    // His "Nxe5! looks like it drops the queen, but after …Bxd1 Bxf7+ Ke7 Nd5
+    // is mate" — what is given, the forced follow-up, and what it wins.
+    read: ({ fenBefore, san, student, replies }, fact) => safe(() => {
+      const top = replies[0];
+      if (!top) return null;
+      const mover = sideToMove(fenBefore);
+      const moverCp = top.cp === null ? null : mover === 'w' ? top.cp : -top.cp;
+      const moverMate = top.mate === null ? null : mover === 'w' ? top.mate : -top.mate;
+      const d = deepCombination(fenBefore, san, top.moves, moverCp, moverMate);
+      if (!d) return null;
+      const text = deepCombinationLine(d, student, fenBefore);
+      const proof = legalLineProof(fenBefore, d.line, lineSeatAt(fenBefore, student), d.outcome === 'mate') ?? NO_PROOF.description;
+      const mine = d.mover === student;
+      const stakes = d.outcome === 'mate' ? mateStakes(mine ? 'you' : 'them', d.line.length, true) : d.outcome === 'ahead' ? { points: d.net, plies: d.line.length } : null;
+      return fact({ key: d.key, claims: [d.key], text, proof, squares: deepCombinationSquares(d), stakes,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: mine, thread: LOCAL_THREAD, fen: fenBefore,
+        ...(isProof(proof) && proof.line ? { lines: [proof.line] } : {}) });
+    }),
+    computer: 'deepCombination',
     kind: 'sac-why',
     phase: ANY,
     surfaces: {
@@ -2512,12 +2551,31 @@ export const BOARD_COMPUTERS = {
   poisonedPiece: {
     // His "if …fxg5, Bxh5+ Rxh5 Qxh5 is mate, so the g5 bishop can't be
     // taken" (S4 king group): the mate read by brute force, so it is exact.
-    read: ({ fenBefore, san, student }, fact) => safe(() => {
+    read: ({ fenBefore, san, student, fan }, fact) => safe(() => {
       const p = poisonedPiece(fenBefore, san);
-      if (!p) return null;
       const mine = new Chess(fenBefore).turn() === student;
-      const text = poisonedPieceLine(p, mine ? 'your' : 'their', fenBefore);
       const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
+      if (!p) {
+        // BY THE LINE (WO-DANYA-READS-01 group 8): the piece that just landed
+        // looks free, and every capture of it loses what the read proves.
+        if (!fan || fan.replies.length === 0) return null;
+        let mv: Move;
+        try { mv = new Chess(fenBefore).move(san); } catch { return null; }
+        if (mv.piece === 'k') return null;
+        const replier: Color = mv.color === 'w' ? 'b' : 'w';
+        const free = legalSeeGainFor(fenAfter, mv.to as Square, replier) >= 1;
+        const b = everyTakeLoses({ fen: fenAfter, replies: fan.replies, rating: fan.rating, student, seconds: [], landed: mv.to }, free);
+        if (!b) return null;
+        const text = everyTakeSentence({ fen: fenAfter, replier }, b, POISON_NAME[mv.piece], student, true);
+        if (!text) return null;
+        const key = `poisoned:${mv.to}`;
+        const proof = legalLineProof(fenAfter, b.uci, lineSeatAt(fenAfter, student), b.kind === 'mate') ?? squaresProof(text, [mv.to]) ?? NO_PROOF.description;
+        return fact({ key, claims: [key, `bait-take:${mv.to}`, `reply-tree:${b.reply.uci}`], text, proof, squares: [mv.to],
+          stakes: b.kind === 'mate' ? mateStakes(mine ? 'you' : 'them', b.blowPlies + 1, true) : { points: b.winPawns ?? 0, plies: b.blowPlies + 1 },
+          seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter,
+          ...(isProof(proof) && proof.line ? { lines: [proof.line] } : {}) });
+      }
+      const text = poisonedPieceLine(p, mine ? 'your' : 'their', fenBefore);
       const key = `poisoned:${p.square}`;
       const proof = legalLineProof(fenAfter, [p.capture, ...p.mate], lineSeatAt(fenAfter, student), true) ?? squaresProof(text, [p.square]) ?? NO_PROOF.description;
       return fact({ key, claims: [key], text, proof, squares: [p.square], stakes: mateStakes(mine ? 'you' : 'them', 1 + 2 * Math.ceil(p.mate.length / 2), false),

@@ -23,6 +23,7 @@ import { computeMustDefend, mateThreatsAgainst } from './threatOut';
 import { whyNotLegal } from './whyNotLegal';
 import { readBoardUrgency, urgencyLead, threatsAgainst } from './boardUrgency';
 import { kingReadsOn } from './kingSiege';
+import { combinationReadOn } from './deepCombination';
 import { mechanismContrast, moveMissed, pvSans } from './moveInsight';
 import { walkableLine } from './proof';
 import { settledLeadFor, type LastMove } from './material';
@@ -1843,6 +1844,21 @@ export function assemblePositionAssessment(opts: {
         for (const q of r.squares) if (/^[a-h][1-8]$/.test(q) && !keySquares.includes(q)) keySquares.push(q);
       }
     } catch { /* the king read is a bonus, never a blocker */ }
+  }
+  // THE HIDDEN SACRIFICE (WO-DANYA-READS-01 group 8): the engine's best line
+  // gives material up — by the other king (`kingSacrifice`, what it opens) or
+  // anywhere else (`deepCombination`) — and the forced follow-up wins it back
+  // with interest, or mates. Either seat: the side to move's line.
+  if (opts.fen && opts.line) {
+    try {
+      const whiteMate = typeof opts.mateIn === 'number' && opts.mateIn !== 0 ? opts.mateIn : null;
+      const whiteCp = whiteMate === null && typeof opts.evalCp === 'number' ? opts.evalCp : null;
+      const combo = combinationReadOn(opts.fen, sc, opts.line, whiteCp, whiteMate);
+      if (combo) {
+        parts.push(combo.text);
+        for (const q of combo.squares) if (/^[a-h][1-8]$/.test(q) && !keySquares.includes(q)) keySquares.push(q);
+      }
+    } catch { /* the combination read is a bonus, never a blocker */ }
   }
   // ENDGAME TECHNIQUE, standing (WO-DANYA-READS-01 #5) — the same computers
   // the move thought speaks when a move makes them, read here for the board

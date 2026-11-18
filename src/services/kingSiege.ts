@@ -534,6 +534,10 @@ export function kingSacrifice(fenBefore: string, san: string, line: readonly str
   let rep: Move;
   try { rep = c.move({ from: u0.slice(0, 2), to: u0.slice(2, 4), promotion: u0[4] }); } catch { return null; }
   if (!rep.captured) return null;
+  // Taking straight back on the square is a trade, not a sacrifice (Danya's
+  // article boards, 2026-11-18: Rd8+ Rxd8 Rxd8+ was said as "gives up your
+  // rook" — rook for rook).
+  if (line[1] && line[1].slice(2, 4) === mv.to) return null;
   const sans = [mv.san, rep.san];
   const follow: string[] = [];
   let lastForcing = 1;
@@ -593,7 +597,9 @@ export function kingSacrificeLine(s: KingSacrifice, student: Color): string {
     : s.opens.kind === 'shelter'
       ? `to rip away the pawn on ${s.opens.square} in front of ${victim} king`
       : `to pull ${victim} ${pieceWord(s.opens.piece)} away from the king`;
-  const after = `After ${s.accepted}, ${andList(s.follow)} ${s.follow.length === 1 ? 'follows' : 'follow'}`;
+  // Black's moves carry the dots ("…Rxd6"), so whose move each is stays clear.
+  const dot = (san: string, color: Color): string => (color === 'b' ? `…${san}` : san);
+  const after = `After ${dot(s.accepted, other(s.mover))}, ${andList(s.follow.map((m) => dot(m, s.mover)))} ${s.follow.length === 1 ? 'follows' : 'follow'}`;
   const ends = s.outcome === 'mate'
     ? 'and it ends in mate'
     : s.outcome === 'ahead'
@@ -601,7 +607,7 @@ export function kingSacrificeLine(s: KingSacrifice, student: Color): string {
       : s.outcome === 'material'
       ? (mine ? 'and you win the material back' : 'and they win the material back')
       : (mine ? 'and the attack is worth more than the piece' : 'and their attack is worth more than the piece');
-  return `${s.san} gives up ${own} ${NAME[s.given]} ${opens}. ${after}, ${ends}.`;
+  return `${dot(s.san, s.mover)} gives up ${own} ${NAME[s.given]} ${opens}. ${after}, ${ends}.`;
 }
 
 export function kingSacrificeSquares(s: KingSacrifice): string[] {

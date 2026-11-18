@@ -25,7 +25,7 @@
 //
 // Pure: chess.js, the human model, the one reason walker, the one job reader.
 import { unmarked } from '../utils/sanMark';
-import { Chess, type Color, type Move } from 'chess.js';
+import { Chess, type Color, type Move, type Square } from 'chess.js';
 import { humanMoveProbabilities } from './humanMove';
 import { costReason, reasonWinWords, type CostReason } from './costReason';
 import { lineTrust, type LineTrust } from './lineTrust';
@@ -122,6 +122,13 @@ export interface ReplyTree {
   /** The replier's best score over every legal reply (their view): how sound
    *  the move that made this board was. */
   bestCp: number;
+  /** The square the move that made this board landed on, or null. */
+  landed: string | null;
+  /** THE BAIT TAKEN (WO-DANYA-READS-01 group 8): the captures of the piece
+   *  that just landed — the natural reply, the capture or the recapture a
+   *  club player makes — likely at this level (`BAIT_TAKE_P`) but outside the
+   *  walk, read the same way as a branch. Only the bait reads them. */
+  baitTakes: ReplyBranch[];
 }
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -136,7 +143,8 @@ function playUci(c: Chess, u: string): Move | null {
  * says nothing). `rating` — the replier's (REQUIRED: the human model reads it).
  * `seconds` — other reads of `fen` (lines that open with a reply), which may
  * vouch for a longer answer line. `played` — the reply the line goes on with,
- * or null.
+ * or null. `landed` — REQUIRED, the square the move that made `fen` landed
+ * on (null for castling or no move): taking that piece is the natural reply.
  */
 export function ifTheyPlay(args: {
   fen: string;
@@ -145,6 +153,7 @@ export function ifTheyPlay(args: {
   student: Color;
   seconds: ReadonlyArray<readonly string[] | null | undefined>;
   played: string | null;
+  landed: string | null;
 }): ReplyTree | null {
   let board: Chess;
   try { board = new Chess(args.fen); } catch { return null; }
@@ -168,7 +177,20 @@ export function ifTheyPlay(args: {
     if ('why' in b) held.push({ uci: u, why: b.why });
     else branches.push(b);
   }
-  return { fen: args.fen, replier, branches, held, bestCp };
+  // The captures of the piece that just landed, outside the walk.
+  const baitTakes: ReplyBranch[] = [];
+  if (args.landed) {
+    for (const q of [...probs].sort((a, b) => b.p - a.p)) {
+      if (q.p < BAIT_TAKE_P || walk.includes(q.uci) || q.uci.slice(2, 4) !== args.landed) continue;
+      const read = byUci.get(q.uci);
+      if (!read) continue;
+      const mv = (() => { try { return new Chess(args.fen).move({ from: q.uci.slice(0, 2), to: q.uci.slice(2, 4), promotion: q.uci[4] }); } catch { return null; } })();
+      if (!mv?.captured) continue;
+      const b = branchOf(args, read, mover, bestCp, q.p, q.uci === best?.uci, best?.pv ?? null);
+      if (!('why' in b)) baitTakes.push(b);
+    }
+  }
+  return { fen: args.fen, replier, branches, held, bestCp, landed: args.landed, baitTakes };
 }
 
 function branchOf(
@@ -356,11 +378,22 @@ function branchParts(t: ReplyTree, b: ReplyBranch, student: Color, tense: TreeTe
  *  trap that only works if they blunder and costs the student if they don't
  *  is not a bait. The most likely such reply; null when there is none. */
 export const BAIT_P = 0.2;
+/** THE BAIT TAKEN (WO-DANYA-READS-01 group 8, his "the natural …Nxg6 walks
+ *  into mate"): taking the piece that just landed is the reply a club player
+ *  reaches for first, so it is a trap at a lower bar than any other reply.
+ *  Measured on his 207 article boards with a depth-10 read of every reply at
+ *  1500: six captures of the landed piece lose to a proven answer, all six
+ *  between 0.08 and 0.2, so the frequency bar alone said none of them. */
+export const BAIT_TAKE_P = 0.08;
 const BAIT_SOUND_CP = 50;
+/** Does the branch take the piece that just landed? */
+function takesLanded(t: ReplyTree, b: ReplyBranch): boolean {
+  return b.reply.capture && t.landed !== null && b.reply.to === t.landed;
+}
 export function baitBranch(t: ReplyTree, student: Color): ReplyBranch | null {
   if (t.replier === student || t.bestCp > BAIT_SOUND_CP) return null;
-  return t.branches
-    .filter((b) => b.p >= BAIT_P && b.trust.name && (b.kind === 'mate' || (b.kind === 'wins' && (b.winPawns ?? 0) >= 1)))
+  return [...t.branches, ...t.baitTakes]
+    .filter((b) => (b.p >= BAIT_P || (takesLanded(t, b) && b.p >= BAIT_TAKE_P)) && b.trust.name && (b.kind === 'mate' || (b.kind === 'wins' && (b.winPawns ?? 0) >= 1)))
     .sort((a, b) => b.p - a.p)[0] ?? null;
 }
 
@@ -373,14 +406,89 @@ export function baitSentence(t: ReplyTree, b: ReplyBranch, student: Color, tense
   const mover: Color = t.replier === 'w' ? 'b' : 'w';
   const who = b.p >= 0.5 ? 'most' : 'many';
   const reply = dots(b.reply.san, t.replier);
-  const lead = tense === 'live' ? `This sets a trap: ${who} players at this level answer ${reply}` : `That set a trap: ${who} players at this level answer ${reply} there`;
+  // Below the frequency bar the bait is the natural capture, said as one —
+  // never "many players" of a reply most do not play.
+  const taken = b.p < BAIT_P ? (() => { try { return new Chess(t.fen).get(b.reply.to as Square); } catch { return undefined; } })() : undefined;
+  const takenWord = taken ? `the ${NAME[taken.type]} on ${b.reply.to}` : null;
   const loses = b.kind === 'mate' ? 'walks into mate' : b.win ? `loses ${b.win}` : null;
+  const past = (s: string): string => (tense === 'live' ? s : s.replace(/^loses/, 'would have lost').replace(/^walks/, 'would have walked'));
+  if (takenWord) {
+    // "This sets a trap: taking the knight on g6 looks natural, but after
+    // …Nxg6, Qh7+ forces mate."
+    const looks = tense === 'live' ? 'looks' : 'looked';
+    const open = `${tense === 'live' ? 'This sets' : 'That set'} a trap: taking ${takenWord} ${looks} natural`;
+    if (!nameAnswer) return loses ? `${open}, but ${reply} ${past(loses)}.` : null;
+    const ans = answerWords(b, mover, mover === student ? 'you' : 'they', tense, boardAfterReply(t, b));
+    return ans ? `${open}, but after ${reply}, ${ans}.` : null;
+  }
+  const lead = tense === 'live' ? `This sets a trap: ${who} players at this level answer ${reply}` : `That set a trap: ${who} players at this level answer ${reply} there`;
   if (!nameAnswer) {
     if (!loses) return null;
-    return `${lead}, and it ${tense === 'live' ? loses : loses.replace(/^loses/, 'would have lost').replace(/^walks/, 'would have walked')}.`;
+    return `${lead}, and it ${past(loses)}.`;
   }
   const ans = answerWords(b, mover, mover === student ? 'you' : 'they', tense, boardAfterReply(t, b));
   return ans ? `${lead}, and ${ans}.` : null;
+}
+
+/** THE PIECE THAT CANNOT BE TAKEN, BY THE LINE (WO-DANYA-READS-01 group 8 —
+ *  `poisonedPiece` reads the mates by brute force; this reads the rest): the
+ *  piece that just landed on `t.landed` looks free (the legal exchange wins it
+ *  for them, `free`), yet EVERY capture of it gives up a proven amount — the
+ *  read of every reply scores each capture a mistake against their best, and
+ *  the capture's own line wins material that holds or mates. The move must be
+ *  sound (their best reply leaves them no better). The most likely capture's
+ *  branch is the one said; null when any capture is safe. */
+export function everyTakeLoses(
+  args: { fen: string; replies: readonly ReplyRead[]; rating: number; student: Color; seconds: ReadonlyArray<readonly string[] | null | undefined>; landed: string | null },
+  free: boolean,
+): ReplyBranch | null {
+  if (!free || !args.landed || args.replies.length === 0) return null;
+  let board: Chess;
+  try { board = new Chess(args.fen); } catch { return null; }
+  const replier = board.turn();
+  const mover: Color = replier === 'w' ? 'b' : 'w';
+  const bestCp = Math.max(...args.replies.map((r) => r.cp));
+  if (bestCp > BAIT_SOUND_CP) return null;
+  const best = args.replies.find((r) => r.cp === bestCp) ?? null;
+  const takes = board.moves({ verbose: true }).filter((m) => m.to === args.landed && m.captured);
+  if (takes.length === 0) return null;
+  const probs = humanMoveProbabilities(args.fen, args.replies.map((r) => ({ uci: r.uci, cp: r.cp })), args.rating);
+  const pOf = new Map(probs.map((q) => [q.uci, q.p]));
+  const byUci = new Map(args.replies.map((r) => [r.uci, r]));
+  const out: ReplyBranch[] = [];
+  for (const m of takes) {
+    const u = `${m.from}${m.to}${m.promotion ?? ''}`;
+    const read = byUci.get(u);
+    if (!read) return null;
+    const b = branchOf({ ...args, played: null }, read, mover, bestCp, pOf.get(u) ?? 0, u === best?.uci, best?.pv ?? null);
+    if ('why' in b || !b.trust.name || !(b.kind === 'mate' || (b.kind === 'wins' && (b.winPawns ?? 0) >= 1))) return null;
+    out.push(b);
+  }
+  return out.sort((a, b) => b.p - a.p)[0] ?? null;
+}
+
+/** The piece that cannot be taken, said from the student's seat: "Your
+ *  knight on e5 looks loose, but it can't be taken. After …Nxe5, Qa4+ wins a
+ *  bishop." `nameAnswer` false while the answer is still the student's to
+ *  play: what the capture loses is said, never the move that wins it. */
+export function everyTakeSentence(t: { fen: string; replier: Color }, b: ReplyBranch, piece: string, student: Color, nameAnswer: boolean): string | null {
+  const mover: Color = t.replier === 'w' ? 'b' : 'w';
+  const own = mover === student ? 'your' : 'their';
+  const sq = b.reply.to;
+  const reply = dots(b.reply.san, t.replier);
+  const key = stemKeyOf(`${t.fen}|everyTake|${sq}`);
+  const open = rotateStem([
+    `${openSentence(`${own} ${piece} on ${sq}`)} looks loose, but it can't be taken.`,
+    `${openSentence(`${own} ${piece} on ${sq}`)} looks free, and it isn't.`,
+    `Taking ${own} ${piece} on ${sq} is a mistake.`,
+  ], key);
+  if (!nameAnswer) {
+    const loses = b.kind === 'mate' ? 'walks into mate' : b.win ? `loses ${b.win}` : null;
+    return loses ? `${open} ${openSentence(reply)} ${loses}.` : null;
+  }
+  const tree: ReplyTree = { fen: t.fen, replier: t.replier, branches: [b], held: [], bestCp: 0, landed: sq, baitTakes: [] };
+  const ans = answerWords(b, mover, mover === student ? 'you' : 'they', 'live', boardAfterReply(tree, b));
+  return ans ? `${open} After ${reply}, ${ans}.` : null;
 }
 
 /** The branches said, a sentence each: "If they take on e5, you take back
@@ -437,3 +545,11 @@ export function replyReadsFromFan(fen: string, lines: ReadonlyArray<{ evaluation
   return [...out.values()];
 }
 
+
+/** The square a move in SAN lands on (its destination), or null for castling:
+ *  the piece a natural reply takes (`ifTheyPlay`'s `landed`). */
+export function landedSquare(san: string): string | null {
+  if (/^O-O/.test(san.replace(/^…/, ''))) return null;
+  const m = san.match(/[a-h][1-8]/g);
+  return m ? m[m.length - 1] : null;
+}

@@ -67,7 +67,7 @@ describe.runIf(RUN)('the reply tree on Danya\'s branches', () => {
         if (byCp.includes(r.x)) top3 += 1;
         const turn = new Chess(r.fen).turn();
         const student = turn === 'w' ? 'b' : 'w';
-        const t = ifTheyPlay({ fen: r.fen, replies, rating, student, seconds: [], played: null });
+        const t = ifTheyPlay({ fen: r.fen, replies, rating, student, seconds: [], played: null, landed: null });
         if (!t) continue;
         const seen = new Set([...t.branches.map((b) => b.reply.uci), ...t.held.map((h) => h.uci)]);
         if (seen.has(r.x)) walked += 1;
@@ -115,7 +115,7 @@ describe.runIf(RUN)('the reply tree on Danya\'s branches', () => {
           const student = new Chess(r.fen).turn() === 'w' ? 'b' : 'w';
           const probs = humanMoveProbabilities(r.fen, replies.map((q) => ({ uci: q.uci, cp: q.cp })), rating).sort((a, b) => b.p - a.p);
           ranks.push(probs.findIndex((q) => q.uci === v.x) + 1);
-          const t = ifTheyPlay({ fen: r.fen, replies, rating, student, seconds: [], played: null });
+          const t = ifTheyPlay({ fen: r.fen, replies, rating, student, seconds: [], played: null, landed: null });
           if (!t) continue;
           if ([...t.branches.map((b) => b.reply.uci), ...t.held.map((h) => h.uci)].includes(v.x)) walked += 1;
           const b = t.branches.find((q) => q.reply.uci === v.x);
