@@ -73,6 +73,7 @@ import { queenNet, queenNetLine } from './queenNet';
 import { bothSaved, bothSavedLine, type ReplyLine } from './bothSaved';
 import { perpetualCheck, perpetualStartedBy, perpetualLine, winningAnyway, windmill, windmillStartedBy, windmillLine } from './repeatingChecks';
 import { minorMatchup } from './minorMatchup';
+import { kingSiege, siegeSpeaks, siegeLine, siegeSquares, backRankWeakness, backRankLine, backRankSquares, loadedDiscovery, discoverySpeaks, discoveryLine, discoverySquares, kingSacrifice, kingSacrificeLine, kingSacrificeSquares } from './kingSiege';
 import { stalemateTrick, stalemateTraps, stalemateTrapLine, stalemateTrickLine } from './stalemateWatch';
 import { intoTheirCamp, intoTheirCampLine } from './intoTheirCamp';
 import { pressureOf, pressureLine } from './targetSelector';
@@ -319,6 +320,25 @@ export interface BoardContexts {
    *  the closed board and the outpost, or the open board for the bishop — or
    *  that leaves a bishop the wrong colour for its rook's pawn. */
   minorMatchup: { fenBefore: string; san: string; student: Color };
+  /** THE KING UNDER SIEGE (`kingSiege`, WO-DANYA-READS-01 group 1): after
+   *  the move `san` on `fenBefore` (either seat), a king its attackers now
+   *  outnumber — the pieces aimed at it against its defenders, and the ones
+   *  too far to help. `replies`: the engine's lines after the move (White-POV
+   *  cp), to stay quiet for a side the engine has losing; [] where none. */
+  kingSiege: { fenBefore: string; san: string; student: Color; replies: readonly ReplyLine[] };
+  /** THE BACK RANK (`kingSiege.backRankWeakness`): after the move, a king
+   *  with no luft whose back rank one piece holds — taken off, the check is
+   *  mate. Either seat. */
+  backRankWeakness: { fenBefore: string; san: string; student: Color };
+  /** THE LOADED DISCOVERY (`kingSiege.loadedDiscovery`): after the move, a
+   *  piece that is all that stands between its own slider and the other king,
+   *  and takes a piece with the check. Either seat. */
+  loadedDiscovery: { fenBefore: string; san: string; student: Color };
+  /** THE SACRIFICE AT THE KING (`kingSiege.kingSacrifice`): the move `san`
+   *  gives up material by the other king, is taken, and the engine's line
+   *  after it (`replies[0]`, UCI, the reply first) proves it — what it opens
+   *  and the forced follow-up. Either seat. */
+  kingSacrifice: { fenBefore: string; san: string; student: Color; replies: readonly ReplyLine[] };
   /** GETTING INTO THEIR CAMP (`intoTheirCamp`, Danya's speedruns): the move
    *  `san` on `fenBefore` (either seat) gets a piece into their half and hits
    *  what they cannot keep, puts the rooks on the seventh, lifts or swings a
@@ -1742,6 +1762,123 @@ export const BOARD_COMPUTERS = {
       learn: LEARN_VIA_THOUGHT,
       tactics: { not: 'a puzzle poses one tactic; the minors\' matchup is the game\'s structure' },
       weaknesses: { not: 'a reading of the board said once — no question of the student\'s posed' },
+    },
+  },
+  kingSiege: {
+    // His "four pieces in the attack and only the knight to defend; the
+    // rook on a8 cannot get over in time" — both kings, the move that makes it.
+    read: ({ fenBefore, san, student, replies }, fact) => safe(() => {
+      const fenAfter = boardAfter(fenBefore, san);
+      if (!fenAfter) return null;
+      const top = replies[0];
+      const whiteCp = !top ? null : top.mate !== null ? (top.mate > 0 ? 10000 : -10000) : top.cp;
+      const out: CoachFact[] = [];
+      for (const defender of ['w', 'b'] as const) {
+        const atkCp = whiteCp === null ? null : defender === 'b' ? whiteCp : -whiteCp;
+        const now = kingSiege(fenAfter, defender);
+        if (!now || !siegeSpeaks(fenAfter, now, atkCp)) continue;
+        const was = kingSiege(fenBefore, defender);
+        if (was && siegeSpeaks(fenBefore, was, atkCp)) continue;
+        const text = siegeLine(now, student, fenAfter);
+        const squares = siegeSquares(now);
+        const attacker = defender === 'w' ? 'b' : 'w';
+        out.push(fact({ key: now.key, claims: [now.key, `king-attack:${now.king}`], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+          seat: attacker === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter }));
+      }
+      return out.length ? out : null;
+    }),
+    computer: 'kingSiege',
+    kind: 'king-read',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the board said once — no question of the student\'s posed' },
+    },
+  },
+  backRankWeakness: {
+    // His "the back rank is weak: no luft, and only the rook holds it".
+    read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const fenAfter = boardAfter(fenBefore, san);
+      if (!fenAfter) return null;
+      const out: CoachFact[] = [];
+      for (const defender of ['w', 'b'] as const) {
+        const now = backRankWeakness(fenAfter, defender);
+        if (!now || backRankWeakness(fenBefore, defender)) continue;
+        const text = backRankLine(now, student, fenAfter);
+        const squares = backRankSquares(now);
+        const attackerIsStudent = defender !== student;
+        out.push(fact({ key: now.key, claims: [now.key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+          seat: attackerIsStudent ? 'student' : 'opponent', namesStudentMove: attackerIsStudent, thread: LOCAL_THREAD, fen: fenAfter }));
+      }
+      return out.length ? out : null;
+    }),
+    computer: 'backRankWeakness',
+    kind: 'king-read',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the board said once — no question of the student\'s posed' },
+    },
+  },
+  loadedDiscovery: {
+    // His "the knight is all that blocks the bishop: every knight move is
+    // check, so it takes what it likes".
+    read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const fenAfter = boardAfter(fenBefore, san);
+      if (!fenAfter) return null;
+      const out: CoachFact[] = [];
+      for (const side of ['w', 'b'] as const) {
+        const now = loadedDiscovery(fenAfter, side);
+        if (!now || !discoverySpeaks(now)) continue;
+        const was = loadedDiscovery(fenBefore, side);
+        if (was && discoverySpeaks(was) && was.key === now.key) continue;
+        const text = discoveryLine(now, student, fenAfter);
+        const squares = discoverySquares(now);
+        out.push(fact({ key: now.key, claims: [now.key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+          seat: side === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter }));
+      }
+      return out.length ? out : null;
+    }),
+    computer: 'loadedDiscovery',
+    kind: 'tactic',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
+    },
+  },
+  kingSacrifice: {
+    // His "Bxh7+ gives up the bishop, but after Kxh7 Ng5+ the king is out in
+    // the open" — what the sacrifice opens and the follow-up that proves it.
+    read: ({ fenBefore, san, student, replies }, fact) => safe(() => {
+      const top = replies[0];
+      if (!top) return null;
+      const mover = sideToMove(fenBefore);
+      const moverCp = top.cp === null ? null : mover === 'w' ? top.cp : -top.cp;
+      const moverMate = top.mate === null ? null : mover === 'w' ? top.mate : -top.mate;
+      const k = kingSacrifice(fenBefore, san, top.moves, moverCp, moverMate);
+      if (!k) return null;
+      const text = kingSacrificeLine(k, student);
+      const proof = legalLineProof(fenBefore, k.line, lineSeatAt(fenBefore, student), k.outcome === 'mate') ?? NO_PROOF.description;
+      const squares = kingSacrificeSquares(k);
+      return fact({ key: k.key, claims: [k.key], text, proof, squares, stakes: null,
+        seat: k.mover === student ? 'student' : 'opponent', namesStudentMove: k.mover === student, thread: LOCAL_THREAD, fen: fenBefore,
+        ...(isProof(proof) && proof.line ? { lines: [proof.line] } : {}) });
+    }),
+    computer: 'kingSacrifice',
+    kind: 'sac-why',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
     },
   },
   intoTheirCamp: {

@@ -55,7 +55,7 @@
 - `src/services/conceptEngine.ts:596`
 - `src/services/criticalMoment.ts:197`
 - `src/services/criticalityScan.test.ts:20`
-- `src/services/moveThoughtFacts.ts:1429`
+- `src/services/moveThoughtFacts.ts:1444`
 - `src/services/narrationImportance.ts:153`
 - `src/services/positionFacts.ts:651`
 - `src/services/refutedAlternative.ts:139`

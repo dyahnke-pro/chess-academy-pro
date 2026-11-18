@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**617 lines · 16 exports · 38 importers · 16 tests · 0 audits**
+**621 lines · 16 exports · 38 importers · 16 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,8 +12,8 @@
 - **🔒🔒 ONE COACH, HOW TO THINK INCLUDED — every computer answers for every surface (David 2026-11-17: "Make sure how to think gets these computers. It should because we have a unified coach structure. That is a non negotiable rule.")** (CLAUDE.md:411) — names `COMPUTER_CATALOG`
 - **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1555) — names `coachFact`
 - **🔒🔒 THE WHY STANDARD — FOUR MEASURES, NOT ONE NUMBER (David 2026-10-14: "Do we need 90%?" → "I like both plans")** (CLAUDE.md:2852) — names `FACT_GROUP`
-- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5949) — names `HeldForm`
-- **The standard post-deploy ritual** (CLAUDE.md:6986) — names `coachFact`
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5995) — names `HeldForm`
+- **The standard post-deploy ritual** (CLAUDE.md:7032) — names `coachFact`
 
 ## Who calls in
 
@@ -78,39 +78,39 @@
 
 ### `isCoachFactKind` (function) — 2 call sites
 - `src/services/coachMoment.measure.test.ts:43`
-- `src/services/learnTurnDoor.ts:748`
+- `src/services/learnTurnDoor.ts:788`
 
 ### `stepOf` (function) — 17 call sites
 - `src/services/boardComputers.test.ts:78`
 - `src/services/coachFact.test.ts:86`
 - `src/services/coachFact.test.ts:87`
-- `src/services/coachFeatureService.ts:2708`
-- `src/services/coachFeatureService.ts:3316`
+- `src/services/coachFeatureService.ts:2732`
+- `src/services/coachFeatureService.ts:3349`
 - `src/services/learnTurnDoor.ts:344`
-- `src/services/learnTurnDoor.ts:1032`
-- `src/services/learnTurnDoor.ts:1089`
-- `src/services/learnTurnDoor.ts:1110`
-- `src/services/learnTurnDoor.ts:1114`
-- `src/services/learnTurnDoor.ts:1168`
-- `src/services/learnTurnDoor.ts:1194`
-- `src/services/learnTurnDoor.ts:1204`
-- `src/services/learnTurnDoor.ts:1208`
-- `src/services/learnTurnDoor.ts:1344`
-- `src/services/learnTurnDoor.ts:1368`
-- `src/services/learnTurnDoor.ts:1421`
+- `src/services/learnTurnDoor.ts:1072`
+- `src/services/learnTurnDoor.ts:1129`
+- `src/services/learnTurnDoor.ts:1152`
+- `src/services/learnTurnDoor.ts:1156`
+- `src/services/learnTurnDoor.ts:1210`
+- `src/services/learnTurnDoor.ts:1236`
+- `src/services/learnTurnDoor.ts:1246`
+- `src/services/learnTurnDoor.ts:1250`
+- `src/services/learnTurnDoor.ts:1386`
+- `src/services/learnTurnDoor.ts:1410`
+- `src/services/learnTurnDoor.ts:1463`
 
 ### `placeFact` (function) — 20 call sites
-- `src/services/boardComputers.ts:1101`
-- `src/services/boardComputers.ts:2225`
-- `src/services/learnTurnDoor.ts:764`
+- `src/services/boardComputers.ts:1121`
+- `src/services/boardComputers.ts:2377`
+- `src/services/learnTurnDoor.ts:804`
 - `src/services/moveThoughtFacts.ts:211`
 - `src/services/moveThoughtFacts.ts:613`
 - `src/services/moveThoughtFacts.ts:633`
 - `src/services/moveThoughtFacts.ts:702`
 - `src/services/moveThoughtFacts.ts:716`
-- `src/services/moveThoughtFacts.ts:1338`
-- `src/services/moveThoughtFacts.ts:1370`
-- `src/services/moveThoughtFacts.ts:1387`
+- `src/services/moveThoughtFacts.ts:1353`
+- `src/services/moveThoughtFacts.ts:1385`
+- `src/services/moveThoughtFacts.ts:1402`
 - `src/services/openingStory.ts:422`
 - `src/services/positionFacts.ts:556`
 - `src/services/reviewFacet.ts:85`
@@ -122,20 +122,20 @@
 - `src/test/doorFact.ts:22`
 
 ### `stakesOf` (function) — 19 call sites
-- `src/services/boardComputers.ts:1102`
-- `src/services/boardComputers.ts:2225`
+- `src/services/boardComputers.ts:1122`
+- `src/services/boardComputers.ts:2377`
 - `src/services/coachFact.test.ts:112`
 - `src/services/coachFact.test.ts:118`
 - `src/services/coachFact.test.ts:119`
-- `src/services/learnTurnDoor.ts:765`
+- `src/services/learnTurnDoor.ts:805`
 - `src/services/moveThoughtFacts.ts:212`
 - `src/services/moveThoughtFacts.ts:613`
 - `src/services/moveThoughtFacts.ts:634`
 - `src/services/moveThoughtFacts.ts:703`
 - `src/services/moveThoughtFacts.ts:717`
-- `src/services/moveThoughtFacts.ts:1339`
-- `src/services/moveThoughtFacts.ts:1371`
-- `src/services/moveThoughtFacts.ts:1388`
+- `src/services/moveThoughtFacts.ts:1354`
+- `src/services/moveThoughtFacts.ts:1386`
+- `src/services/moveThoughtFacts.ts:1403`
 - `src/services/openingStory.ts:423`
 - `src/services/positionFacts.ts:564`
 - `src/services/reviewFacet.ts:96`

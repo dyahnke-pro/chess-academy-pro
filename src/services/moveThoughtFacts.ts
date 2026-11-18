@@ -849,6 +849,21 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       for (const f of readBoardAll('windmill', { fenBefore: i.fenBefore, san: i.san, student })) {
         facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'tactic', weight: 68 });
       }
+      // THE KINGS (WO-DANYA-READS-01 group 1), both seats: the king the move
+      // leaves outnumbered, a back rank one piece now holds, a discovered
+      // check loaded, and a sacrifice at the king with the line that proves it.
+      for (const f of readBoardAll('kingSiege', { fenBefore: i.fenBefore, san: i.san, student, replies })) {
+        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'attack-king', weight: 64 });
+      }
+      for (const f of readBoardAll('backRankWeakness', { fenBefore: i.fenBefore, san: i.san, student })) {
+        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'king-safety', weight: 66 });
+      }
+      for (const f of readBoardAll('loadedDiscovery', { fenBefore: i.fenBefore, san: i.san, student })) {
+        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'tactic', weight: 66 });
+      }
+      for (const f of readBoardAll('kingSacrifice', { fenBefore: i.fenBefore, san: i.san, student, replies })) {
+        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'attack-king', weight: 70 });
+      }
     }
     // THE FLEXIBLE MOVE, both seats (the option principle): of moves as good
     // as each other, the one that keeps the important moves open — the read
