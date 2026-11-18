@@ -38,7 +38,6 @@ import { stemKeyOf, rotateStem } from '../utils/rotateStem';
 import { findPinPressure, PIN_PRESSURE_PRINCIPLE, PIN_PRESSURE_WARNING, pieceName, type PinPressure } from './pinPressure';
 import { findGuardRemovals, GUARD_REMOVAL_PRINCIPLE, GUARD_REMOVAL_WARNING, type GuardRemoval } from './guardRemoval';
 import { type ImportanceVerdict, type ImportanceSignals } from './narrationImportance';
-import { boardStructure } from './structureReads';
 import { takingTheAttackerAnswers } from './positionReadingService';
 import { readPosition } from './positionalRead';
 import { boardPlanFacts, leverSentence } from './boardPlanFacts';
@@ -60,7 +59,7 @@ import { detectLatentDanger, latentDangerClause, detectTradeCreatesPin, tradeDan
 import { detectKingExposure, kingExposureClause, detectCentralKingDanger, centralKingDangerClause, type KingExposure, type CentralKingDanger } from './kingSafety';
 import { buildOpponentIntent, opponentIntentFacts, type OpponentIntent } from './opponentIntent';
 import { planAimKey, structurePlanFact } from './nextPlans';
-import { readBoard, readKey, principleKey } from './boardComputers';
+import { readBoard, readBoardAll, readKey, principleKey } from './boardComputers';
 import { detectTactics } from './tacticsDetector';
 import { structurePlanEvent, planChangeSentence } from './planThread';
 import { matchClauseKind, matchTacticPattern, matchTag, boostFor, type WeaknessSignal } from './weaknessSignal';
@@ -1224,8 +1223,8 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       }
     } catch { /* a read is a bonus, never a blocker */ }
     try {
-      for (const r of boardStructure(fen, studentColor)) {
-        askedPlanClauses.push(clause('boardStructure', fen, { kind: 'structure-plan', text: r.text, squares: [...r.squares] }));
+      for (const r of readBoardAll('structureBoard', { fen, student: studentColor })) {
+        askedPlanClauses.push(clause(r.computer, fen, { kind: 'structure-plan', text: r.text, squares: [...r.squares] }));
       }
     } catch { /* same */ }
   }

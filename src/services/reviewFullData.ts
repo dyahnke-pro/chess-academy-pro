@@ -37,7 +37,6 @@ import type { RefutedAlternative } from './refutedAlternative';
 import type { ReviewIntent } from './reviewMoveIntent';
 import { recordedMoveCost } from './moveCost';
 import { findProphylaxis, prophylaxisProof, theirWantedMoves } from './prophylaxis';
-import { newTiedDefender, tiedDefenderLine, tiedDefenderProof } from './tiedDefender';
 import { lineProof, lineProofFromUci, legalLineProof, proofForStudent, squaresProof, isProof, NO_PROOF, type Proof } from './proof';
 import { readBoard, readBoardAll, readKey, principleKey } from './boardComputers';
 import { knownSlipsAt, type KnownSlipIndex } from './knownSlips';
@@ -1528,12 +1527,15 @@ export function computeMoveFacets(
   }
   // …and the GUARD THE STUDENT'S MOVE TIED DOWN (tiedDefender), still tied.
   if (isStudent && studentColorWB) {
-    const tie = newTiedDefender(fenBefore, fenAfter, studentColorWB);
+    // Still tied after their reply (the registry's one read) — a guard their
+    // reply untied is not said tied.
+    const reply = ctx.allSans[ply];
+    const fenAfterReply = reply ? (() => { try { const c = new Chess(fenAfter); return c.move(reply) ? c.fen() : fenAfter; } catch { return fenAfter; } })() : fenAfter;
+    const tie = readBoard('tiedDefender', { fenBefore, fenAfterMove: fenAfter, fenAfterReply, student: studentColorWB });
     if (tie) {
-      const f = made('newTiedDefender', 'point', tiedDefenderLine(tie));
-      facets.push(f);
-      recProof(f, tiedDefenderProof(tie));
-      recSquares(f, [tie.defender.square, tie.target.square]);
+      const f = put(tie.computer, 'point', tie.text);
+      if (isProof(tie.proof)) recProof(f, tie.proof);
+      recSquares(f, tie.squares);
     }
   }
 
