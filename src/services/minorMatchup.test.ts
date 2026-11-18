@@ -79,7 +79,7 @@ describe('minorMatchup: the good knight against the bad bishop', () => {
     expect(st?.better).toBe('knight');
     expect(minorMatchupLine(st!, 'w', fen)).toMatch(/^It is their knight against your bishop\./);
     // One coach: the chat's "how do I stand?" says the same standing read.
-    const chat = assemblePositionAssessment({ bestUci: null, line: null, evalCp: 0, mateIn: null, studentColor: 'white', fen });
+    const chat = assemblePositionAssessment({ bestUci: null, line: null, tempting: null, evalCp: 0, mateIn: null, studentColor: 'white', fen });
     expect(chat?.facts).toContain('It is their knight against your bishop.');
   });
 });

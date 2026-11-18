@@ -6,7 +6,7 @@ import { assemblePositionAssessment } from './groundedAnswer';
 // said a rook down with a pawn about to queen, and on a Greek gift with the
 // material level. It is advice for the side ahead in material.
 const read = (fen: string, evalCp: number, bestUci: string): string =>
-  assemblePositionAssessment({ evalCp, mateIn: null, studentColor: fen.split(' ')[1] === 'w' ? 'white' : 'black', fen, bestUci })?.facts ?? '';
+  assemblePositionAssessment({ tempting: null, evalCp, mateIn: null, studentColor: fen.split(' ')[1] === 'w' ? 'white' : 'black', fen, bestUci })?.facts ?? '';
 
 describe('"trade pieces, not pawns" only when the student is ahead in material', () => {
   it('a rook down, winning by queening: never "trade pieces"', () => {

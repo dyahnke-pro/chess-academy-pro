@@ -58,7 +58,7 @@ import { knownSlip, knownSlipIndexNow, knownSlipsAt, type KnownSlipContext } fro
 import { ifTheyPlay, treeSentence, sayable, baitBranch, baitSentence, type ReplyRead, type ReplyBranch, type TreeTense } from './ifTheyPlay';
 import { mateStakes } from './factStakes';
 import { MOTIF_OF_TACTIC, MOTIFS } from '../data/tacticMotifs';
-import { temptingRefuted, alsoGood, squareChoice, type WeighRead } from './weighedMoves';
+import { temptingRefuted, temptingOnBoard, alsoGood, squareChoice, type WeighRead } from './weighedMoves';
 import { costStakes } from './factStakes';
 import { pawnBreak } from './pawnBreak';
 import { oppositeBishops } from './oppositeBishops';
@@ -263,6 +263,13 @@ export interface BoardContexts {
    *  surface has none; `priorMove` — the move before, so a recapture is half
    *  a trade. The tempting candidate that fails, with its refutation. */
   temptingRefuted: { fenBefore: string; san: string; student: Color; rating: number; reads: readonly WeighRead[] | null; priorMove: { fenBefore: string; san: string } | null };
+  /** THE TEMPTING MOVE ON THE BOARD (`weighedMoves.temptingOnBoard`,
+   *  WO-DANYA-READS-01 group 4): before the side to move plays, the move a
+   *  player at `rating` is drawn to that fails, against the engine's best.
+   *  `reads` — one read per candidate from `fen`, the best move among them
+   *  (a fan, or a MultiPV whose lines each read their first move); null where
+   *  the surface has none. */
+  temptingNow: { fen: string; student: Color; rating: number; reads: readonly WeighRead[] | null; priorMove: { fenBefore: string; san: string } | null };
   /** Two moves of the same worth and the board's difference between them. */
   alsoGood: { fenBefore: string; san: string; student: Color; rating: number; reads: readonly WeighRead[] | null };
   /** Which square for the piece: its other squares and what goes wrong there
@@ -1442,6 +1449,37 @@ export const BOARD_COMPUTERS = {
     kind: 'refuted',
     phase: ANY,
     surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_NA, weaknesses: { not: 'a move not played poses nothing to record; the move played is graded by its own cost' }, think: THINK },
+  },
+  temptingNow: {
+    // His "Ng5+ is tempting, but after …Kg7 and …Rg3 Black parries the
+    // threats" — said of the board before anyone moves: the move a player is
+    // drawn to, measured against the engine's best, refuted by its own line
+    // (the one reason walker, the one wording, the same claim as the move
+    // ruled out after it is played). It names a move of the side to move: on
+    // the student's turn that is a move still theirs to choose, so a live
+    // board holds it (Learn names no move unasked); an asked read says it.
+    read: ({ fen, student, rating, reads, priorMove }, fact) => safe(() => {
+      if (!reads || reads.length < 2) return null;
+      const r = temptingOnBoard({ fen, student, rating, reads, priorMove })[0];
+      if (!r) return null;
+      const mine = new Chess(fen).turn() === student;
+      return fact({ key: r.key, claims: r.claims, text: r.text, proof: r.proof ?? squaresProof(r.text, r.squares) ?? NO_PROOF.description, squares: r.squares,
+        stakes: costStakes(r.costCp), seat: mine ? 'student' : 'opponent', namesStudentMove: mine, thread: LOCAL_THREAD, fen,
+        ...(r.proof?.line ? { lines: [r.proof.line] } : {}) });
+    }),
+    computer: 'temptingOnBoard',
+    kind: 'refuted',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' },
+      learn: { not: 'before the move it names the student\'s own next move (held); once played, temptingRefuted says the same claim about the move played' },
+      review: { not: 'Review walks moves already played: temptingRefuted says the same claim against the move played' },
+      play: PLAY_ASK,
+      chat: { wired: 'services/groundedAnswer.ts' },
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a move not played poses nothing to record' },
+      think: THINK,
+    },
   },
   alsoGood: {
     // His "Qe7 or Qc6 — Qc6, the bishop is still great" (2.3%): two moves of

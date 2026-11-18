@@ -24,7 +24,8 @@ import { rotateStem } from '../utils/rotateStem';
 import { Chess } from 'chess.js';
 import { computePlyFacts, afterCapture, NO_PREV_CAPTURE, type PvPly, type PrevCaptureContext } from './pvPlayback';
 import { detectTactics } from './tacticsDetector';
-import { sayMoveClause, sayMoveNoun } from './spokenMove';
+import { sayMoveNoun } from './spokenMove';
+import { refutationOf } from './weighedMoves';
 import type { TacticPattern } from '../types/tacticTypes';
 
 type VerdictKind = 'mate' | 'winning' | 'edge' | 'equal';
@@ -57,6 +58,11 @@ export interface TemptingMove {
   evalDropCp: number;
   /** The engine's refutation after the tempting move is played. */
   refutation: PvPly[];
+  /** WHY IT FAILS — the one reason walker's account of the refutation, in
+   *  the one wording every tempting-move surface says
+   *  (`weighedMoves.refutationOf`): "they play Nxd5 — they win a queen for a
+   *  pawn". A move with no proven reason is no tempting move here. */
+  because: string;
 }
 
 export interface TacticalRead {
@@ -298,7 +304,7 @@ function replayUci(fen: string, uciMoves: readonly string[]): PvPly[] {
  */
 export function tacticalReadFromLines(
   fen: string,
-  topLines: ReadonlyArray<{ moves: string[]; evaluation: number }>,
+  topLines: ReadonlyArray<{ moves: string[]; evaluation: number; mate?: number | null }>,
   studentColor: 'white' | 'black',
   opts: { dropThresholdCp?: number; requireForcing?: boolean } = {},
 ): TacticalRead | null {
@@ -357,7 +363,14 @@ export function tacticalReadFromLines(
   if (t) {
     const refLine = topLines.find((l) => l.moves?.[0] === t.uci);
     const refutation = refLine ? replayUci(fen, refLine.moves.slice(0, 4)) : [];
-    tempting = { san: t.san, uci: t.uci, appeal: t.appeal, evalDropCp: t.evalDropCp, refutation };
+    // "…AND IT FAILS" MUST BE PROVEN (WO-DANYA-READS-01 group 4): the line
+    // after the move wins material or mates, by the one reason walker; a
+    // worse score alone was said as "it falls apart" with no reason.
+    const why = refutationOf({
+      fen, uci: t.uci, student: studentColor === 'white' ? 'w' : 'b', priorMove: null,
+      reads: topLines.filter((l) => l.moves.length > 0).map((l) => ({ evaluation: l.evaluation, mate: l.mate ?? null, moves: l.moves })),
+    });
+    if (why) tempting = { san: t.san, uci: t.uci, appeal: t.appeal, evalDropCp: t.evalDropCp, refutation, because: why.because };
   }
 
   return {
@@ -388,36 +401,12 @@ const APPEAL_AFFIRM: Record<string, string> = {
 /** A move renderer: the SAN and the position it is played from (null = none). */
 type SayAt = (san: string, fen: string | null) => string;
 
-/** The position after `san` from `fen`, or null when either is missing or illegal. */
-function fenAfter(fen: string | null, san: string): string | null {
-  if (!fen) return null;
-  try { const c = new Chess(fen); c.move(san); return c.fen(); } catch { return null; }
-}
-
-/** The destination square written in a SAN, or null. */
-function sanTo(san: string): string | null {
-  const m = san.replace(/[+#!?]+$/, '').replace(/=[QRBN]$/, '').match(/([a-h][1-8])$/);
-  return m ? m[1] : null;
-}
-
-/** The affirm→but→refute turn, one wording for every caller. The capture names
- *  its square and the reply names its mover: "You'd love to grab it with the
- *  knight taking on e4 — but the knight takes e4" (hand walk 2000) left the
- *  student asking whose knight took what. */
-function temptingTurn(fen: string | null, san: string, appeal: string, replySan: string | null, say: SayAt, sayN: SayAt): string {
-  const to = sanTo(san);
-  // The reply is played from the position AFTER the tempting move.
-  const replyFen = fenAfter(fen, san);
-  // A capture already says its square ("the knight taking on e4") — the old
-  // "grab it" named nothing.
+/** The affirm→but→refute turn, one wording for every caller: what draws the
+ *  eye, then why it fails in the one reason's words (`TemptingMove.because`).
+ *  A capture already says its square ("the knight taking on e4"). */
+function temptingTurn(fen: string | null, san: string, appeal: string, because: string, sayN: SayAt): string {
   const lead = appeal === 'capture' ? `You’d love to play ${sayN(san, fen)}` : `You’d love to ${APPEAL_AFFIRM[appeal] ?? 'play it'} with ${sayN(san, fen)}`;
-  const takesBack = replySan !== null && to !== null && replySan.includes('x') && sanTo(replySan) === to;
-  const refutation = replySan === null
-    ? ' — but it doesn’t hold'
-    : takesBack
-      ? ' — but they take back and it falls apart'
-      : ` — but they answer ${say(replySan, replyFen)} and it falls apart`;
-  return `${lead}${refutation}.`;
+  return `${lead}, but it fails: ${because}.`;
 }
 
 /**
@@ -429,12 +418,9 @@ function temptingTurn(fen: string | null, san: string, appeal: string, replySan:
  */
 export function temptingTurnClause(read: TacticalRead, opts: { spoken?: boolean } = {}): string | null {
   if (!read.tempting) return null;
-  const say: SayAt = (san, fen) => (opts.spoken ? sayMoveClause(san, fen) : san);
   // NOUN slot — subject, or object of a preposition. See `sayMoveNoun`.
   const sayN: SayAt = (san, fen) => (opts.spoken ? sayMoveNoun(san, fen) : san);
-  const ref = read.tempting.refutation;
-  const reply = ref.length > 1 ? ref[1] : (ref.length > 0 ? ref[0] : undefined);
-  return temptingTurn(read.fen, read.tempting.san, read.tempting.appeal, reply?.san ?? null, say, sayN);
+  return temptingTurn(read.fen, read.tempting.san, read.tempting.appeal, read.tempting.because, sayN);
 }
 
 /**

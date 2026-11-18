@@ -1193,6 +1193,15 @@ const LESSON_MOVE_READS: ReadonlyArray<{ idea: IdeaKind; seat: 'opponent' | 'stu
     return pins.flatMap((pinned) => readBoardAll('pinBreakTheirs', { fen, student, pinned }));
   } },
   { idea: 'tactic', seat: 'opponent', standing: true, read: (fen) => readBoardAll('queenGrabTrap', { fen }) },
+  // After their move, the student's turn: the move a player is drawn to that
+  // fails (WO-DANYA-READS-01 group 4), read off the fan after the move — each
+  // line a read of its first move. The same claim the move ruled out after the
+  // student's move makes (`temptingKey`), so it is said once.
+  { idea: 'choice', seat: 'opponent', standing: false, read: (fen, i, student) => {
+    const after = i.reads?.after ?? [];
+    return after.length >= 2 ? readBoardAll('temptingNow', { fen, student, rating: DEFAULT_STUDENT_RATING, priorMove: { fenBefore: i.fenBefore, san: i.san },
+      reads: after.map((l) => ({ evaluation: l.evaluation, mate: l.mate, moves: l.moves, earlier: l.earlier?.moves ?? null })) }) : [];
+  } },
   { idea: 'order', seat: 'student', standing: false, read: (_f, i) => { const pv = i.reads?.before[0]?.moves ?? []; return pv.length >= 2 ? readBoardAll('enablingMove', { fen: i.fenBefore, pv }) : []; } },
   { idea: 'weakness', seat: 'student', standing: false, read: (_f, i, student) => { const b = i.reads?.before[0]?.moves[0]; return b ? readBoardAll('priorityFirst', { fen: i.fenBefore, student, bestUci: b }) : []; } },
   { idea: 'weakness', seat: 'student', standing: true, read: (fen, _i, student) => readBoardAll('structureBoard', { fen, student }) },

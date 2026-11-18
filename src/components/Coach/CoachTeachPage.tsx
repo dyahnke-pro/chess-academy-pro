@@ -11653,17 +11653,13 @@ export function CoachTeachPage({ mode }: {
                     // alongside whichever beat fired above — it warns about a
                     // DIFFERENT move, so nothing leaks.
                     {
+                      // Every line of the read is a read of its first move:
+                      // the one computer weighs them (`temptingOnBoard`).
                       const rtLines = (studentBest?.topLines ?? [])
-                        .slice(0, 4)
                         .filter((l) => typeof l.moves?.[0] === 'string' && typeof l.evaluation === 'number')
-                        .map((l) => ({
-                          uci: l.moves[0],
-                          replyUci: typeof l.moves[1] === 'string' ? l.moves[1] : null,
-                          evalCp: playerColor === 'white' ? l.evaluation : -l.evaluation,
-                          searchedShort: l.searchedShort,
-                        }));
+                        .map((l) => ({ moves: l.moves, evaluation: l.evaluation, mate: l.mate, searchedShort: l.searchedShort }));
                       const rt = rtLines.length >= 2
-                        ? buildRejectedTempting({ fen: probe.fen(), studentColor: playerColor, lines: rtLines, baitSquare: m.to })
+                        ? buildRejectedTempting({ fen: probe.fen(), studentColor: playerColor, lines: rtLines, rating, baitSquare: m.to })
                         : null;
                       if (rt) {
                         captureEvent('rejected_tempting_offered', { surface: 'coach-teach', tempting: rt.temptingSan, refutation: rt.refutationSan });

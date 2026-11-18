@@ -50,10 +50,15 @@ describe('every other question reads its answer against the move', () => {
   });
   it('the bait question: left alone, said in the past; taken, left to the verdict', async () => {
     const { buildRejectedTempting } = await import('./playCommentary');
-    const fen = 'rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
-    const mk = () => buildRejectedTempting({ fen, studentColor: 'white', baitSquare: 'd5', lines: [{ uci: 'e4e5', replyUci: 'c7c5', evalCp: 40 }, { uci: 'e4d5', replyUci: 'd8d5', evalCp: -140 }] })!;
+    const { readFileSync } = await import('node:fs');
+    // Naroditsky's article board (miracle-on-the-chess-board #3): Qxd6 grabs the rook, …Qxd1# mates.
+    const fx = (JSON.parse(readFileSync('src/test/fixtures/danya-article-tempting.json', 'utf8')) as Array<{ id: string; fen: string; reads: Array<{ evaluation: number; mate: number | null; moves: string[] }> }>)
+      .find((x) => x.id === 'miracle-on-the-chess-board#3')!;
+    const fen = fx.fen;
+    const mk = () => buildRejectedTempting({ fen, studentColor: 'white', baitSquare: 'd6', rating: 1500, lines: fx.reads })!;
     const after = (san: string): string => { const c = new Chess(fen); c.move(san); return c.fen(); };
-    expect(resolveOwed(splitThink(mk().spoken)![1], { fenBefore: fen, san: 'e5', fenNow: after('e5') })).toBe('The pawn on d5 was bait: exd5 runs into Qxd5.');
-    expect(resolveOwed(splitThink(mk().spoken)![1], { fenBefore: fen, san: 'exd5', fenNow: after('exd5') })).toBe('');
+    const best = new Chess(fen).move({ from: fx.reads[0].moves[0].slice(0, 2), to: fx.reads[0].moves[0].slice(2, 4) }).san;
+    expect(resolveOwed(splitThink(mk().spoken)![1], { fenBefore: fen, san: best, fenNow: after(best) })).toBe('The rook on d6 was bait: after Qxd6, they play Qxd1#.');
+    expect(resolveOwed(splitThink(mk().spoken)![1], { fenBefore: fen, san: 'Qxd6', fenNow: after('Qxd6') })).toBe('');
   });
 });

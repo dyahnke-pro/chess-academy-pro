@@ -13,6 +13,7 @@
  * live chat. Wiring it into `getCoachChatResponse` is the next step.
  */
 import { candidateCct, candidateCctSentence } from './candidateCct';
+import { temptingOnBoard, type WeighRead } from './weighedMoves';
 import { realMasterMoves } from './realMasterMoves';
 import { purposeFromLine } from './movePurpose';
 import { costWords } from './engineConstants';
@@ -1635,6 +1636,12 @@ export function assemblePositionAssessment(opts: {
    *  first), or null where there is none: who has the initiative is read off
    *  it (`verdictWithReasons`). */
   line: readonly string[] | null;
+  /** REQUIRED — the reads of the moves a player is drawn to on `fen`
+   *  (`movePurposeEngine.temptingReads`: the engine's best line and one read
+   *  per candidate the eye weighs) and the rating the eye was read at, or null
+   *  where the surface has none. The tempting move that fails is said from it
+   *  (`weighedMoves.temptingOnBoard`, WO-DANYA-READS-01 group 4). */
+  tempting: { rating: number; reads: readonly WeighRead[] } | null;
 }): GroundedAnswer | null {
   const { tactics, studentColor } = opts;
   const sc: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
@@ -1818,6 +1825,20 @@ export function assemblePositionAssessment(opts: {
         keySquaresEarly.push(...due.squares);
       }
     } catch { /* the target read is a bonus, never a blocker */ }
+  }
+
+  // WHY THE TEMPTING MOVE FAILS (WO-DANYA-READS-01 group 4; his "Ng5+ is
+  // tempting, but after …Kg7 and …Rg3 Black parries the threats"): the move a
+  // player at this level is drawn to, measured against the engine's best and
+  // refuted by its own line — the one reason walker and the one wording the
+  // move ruled out after it is played speaks. Said for the student's own turn
+  // only: on theirs it would be a move of the opponent's not yet played.
+  if (opts.fen && opts.tempting) {
+    try {
+      const mine = new Chess(opts.fen).turn() === sc;
+      const t = mine ? temptingOnBoard({ fen: opts.fen, student: sc, rating: opts.tempting.rating, reads: opts.tempting.reads, priorMove: null })[0] : undefined;
+      if (t && separate(t.text)) parts.push(t.text);
+    } catch { /* the temptation is a bonus, never a blocker */ }
   }
 
   // THE PLAN, ON DEMAND (David 2026-09-13: "Play with coach needs to on demand

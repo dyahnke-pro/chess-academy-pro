@@ -14,6 +14,7 @@ import { captureRunOfMoves, NO_PREV_CAPTURE, type PrevCaptureContext } from './c
 import { stepThought } from './moveThoughtFacts';
 import type { ThinkingStep } from './thinkingSteps';
 import type { LessonPositionCandidate } from './thinkingPositions';
+import { candidateMoves, type WeighRead } from './weighedMoves';
 
 const DEPTH = 14;
 const BUDGET_MS = 900;
@@ -34,6 +35,48 @@ async function readIntentReads(fenBefore: string, san: string, beforeRead?: read
   const passBefore = await read(nullMoveFen(fenBefore));
   const passAfter = await read(nullMoveFen(fenAfter));
   return { before, after, passBefore, passAfter };
+}
+
+/** A candidate's own read: the board after it, searched on its own. */
+const TEMPTING_DEPTH = 12;
+const TEMPTING_BUDGET_MS = 300;
+
+/**
+ * THE READS THE BOARD'S TEMPTING MOVES NEED (`weighedMoves.temptingOnBoard`,
+ * WO-DANYA-READS-01 group 4), for a surface that asked about a board and holds
+ * only the engine's best line: that line, and one read per move the eye
+ * weighs at `rating` (`candidateMoves` — the human model, never a capture
+ * scan), each the board after the candidate searched on its own with the
+ * candidate in front. A MultiPV of three almost never holds the move a player
+ * is tempted by — the reason the board read never said one. Null when the
+ * engine gave nothing.
+ */
+export async function temptingReads(fen: string, rating: number, bestLine: { evaluation: number; mate: number | null; moves: readonly string[] } | null): Promise<WeighRead[] | null> {
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return null; }
+  if (board.isGameOver()) return null;
+  let best = bestLine && bestLine.moves.length ? { evaluation: bestLine.evaluation, mate: bestLine.mate, moves: [...bestLine.moves] } : null;
+  if (!best) {
+    try {
+      const top = ((await stockfishEngine.analyzeWithBudget(fen, DEPTH, BUDGET_MS)).topLines ?? []).find((l) => l.rank === 1);
+      best = top && top.moves.length ? { evaluation: top.evaluation, mate: top.mate, moves: [...top.moves] } : null;
+    } catch { best = null; }
+  }
+  if (!best) return null;
+  const reads: WeighRead[] = [best];
+  for (const c of candidateMoves(fen, rating, { played: null, scored: null })) {
+    if (c.uci === best.moves[0]) continue;
+    const after = new Chess(fen);
+    try { after.move({ from: c.from, to: c.to, promotion: c.uci[4] }); } catch { continue; }
+    // A candidate that ends the game is read off the board, not searched.
+    if (after.isCheckmate()) { reads.push({ evaluation: after.turn() === 'w' ? -100000 : 100000, mate: null, moves: [c.uci] }); continue; }
+    if (after.isGameOver()) { reads.push({ evaluation: 0, mate: null, moves: [c.uci] }); continue; }
+    try {
+      const top = ((await stockfishEngine.analyzeWithBudget(after.fen(), TEMPTING_DEPTH, TEMPTING_BUDGET_MS)).topLines ?? []).find((l) => l.rank === 1);
+      if (top) reads.push({ evaluation: top.evaluation, mate: top.mate, moves: [c.uci, ...top.moves], earlier: top.earlier?.moves ? [c.uci, ...top.earlier.moves] : null });
+    } catch { /* this candidate unread — the others still are */ }
+  }
+  return reads.length >= 2 ? reads : null;
 }
 
 /** The purpose of `san`, reading every position it needs. Null on any engine

@@ -7,6 +7,9 @@ import { withoutTags } from '../utils/thinkPause';
 import { Chess } from 'chess.js';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact } from './playCommentary';
 import { captureRunOfMoves } from './captureRun';
+import { readFileSync } from 'node:fs';
+
+const TEMPTING_FX = JSON.parse(readFileSync('src/test/fixtures/danya-article-tempting.json', 'utf8')) as Array<{ id: string; fen: string; reads: Array<{ evaluation: number; mate: number | null; moves: string[] }> }>;
 
 describe('buildPlayCommentary', () => {
   // The "trade off their best piece" beat was REMOVED 2026-08-26 — the
@@ -88,56 +91,47 @@ describe('buildPlayCommentary', () => {
 });
 
 describe('buildRejectedTempting', () => {
-  // Scandinavian shape: after e4 d5, exd5 (a capture) is playable but the
-  // fixture scores it 180cp below the best line with ...Qxd5 as the reply.
-  const fen = 'rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+  // From Naroditsky's article (miracle-on-the-chess-board, diagram 3): Qxd6
+  // grabs the rook, and …Qxd1# mates on the back rank. Stockfish reads at
+  // depth 12 — the best line and one per move the eye weighs.
+  const jose = TEMPTING_FX.find((x) => x.id === 'miracle-on-the-chess-board#3')!;
+  const lines = jose.reads.map((r) => ({ moves: r.moves, evaluation: r.evaluation, mate: r.mate }));
 
-  it('names the tempting capture AND its refutation, never the best move', () => {
-    const rt = buildRejectedTempting({
-      fen,
-      studentColor: 'white',
-      lines: [
-        { uci: 'e4e5', replyUci: 'c7c5', evalCp: 40 },
-        { uci: 'e4d5', replyUci: 'd8d5', evalCp: -140 },
-      ],
-    });
-    expect(rt?.temptingSan).toBe('exd5');
-    expect(rt?.refutationSan).toBe('Qxd5');
-    expect(rt?.facts).toContain('exd5');
-    expect(rt?.facts).toContain('Qxd5');
-    expect(rt?.facts).not.toContain('e5 '); // the best move stays unnamed
+  it('names the tempting capture AND what its refutation does, never the best move', () => {
+    const rt = buildRejectedTempting({ fen: jose.fen, studentColor: 'white', lines, rating: 1500 });
+    expect(rt?.temptingSan).toBe('Qxd6');
+    expect(rt?.refutationSan).toBe('Qxd1#');
+    expect(rt?.facts).toContain('they play Qxd1#');
+    const best = new Chess(jose.fen).move({ from: lines[0].moves[0].slice(0, 2), to: lines[0].moves[0].slice(2, 4) }).san;
+    expect(rt?.facts).not.toContain(best);
   });
 
   it('a cut line gives no amount: the gap was not searched to the turn depth (OS-11)', () => {
-    const lines = [{ uci: 'e4e5', replyUci: 'c7c5', evalCp: 40 }, { uci: 'e4d5', replyUci: 'd8d5', evalCp: -140 }];
-    expect(buildRejectedTempting({ fen, studentColor: 'white', lines })?.hint.detail).toMatch(/gives up/);
-    const cut = buildRejectedTempting({ fen, studentColor: 'white', lines: lines.map((l, i) => (i === 1 ? { ...l, searchedShort: true } : l)) });
+    expect(buildRejectedTempting({ fen: jose.fen, studentColor: 'white', lines, rating: 1500 })?.hint.detail).toMatch(/gives up/);
+    const cut = buildRejectedTempting({ fen: jose.fen, studentColor: 'white', lines: lines.map((l) => (l.moves[0] === 'f8d6' ? { ...l, searchedShort: true } : l)), rating: 1500 });
     expect(cut?.hint.detail).toBe('That line falls short of the best move.');
   });
 
-  it('a quiet alternative is not "tempting" — silence', () => {
-    // Second line is a quiet knight move, not a capture or check.
-    const rt = buildRejectedTempting({
-      fen,
-      studentColor: 'white',
-      lines: [
-        { uci: 'e4e5', replyUci: 'c7c5', evalCp: 40 },
-        { uci: 'g1f3', replyUci: 'd5e4', evalCp: -140 },
-      ],
-    });
+  it('a quiet tempting move is not this beat\'s question — silence', () => {
+    // Nd4 walks into the back rank, but it is neither a capture nor a check.
+    const b = TEMPTING_FX.find((x) => x.id === 'understanding-the-back-rank#4')!;
+    expect(buildRejectedTempting({ fen: b.fen, studentColor: 'white', lines: b.reads.map((r) => ({ moves: r.moves, evaluation: r.evaluation, mate: r.mate })), rating: 1500 })).toBeNull();
+  });
+
+  it('a recapture that wins nothing is no refutation: exd5 Qxd5 is the Scandinavian main line', () => {
+    // The old beat read the refutation off the line's second move alone and
+    // said "It wins a pawn, but Qxd5 refutes it" on these lines.
+    const fen = 'rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+    const rt = buildRejectedTempting({ fen, studentColor: 'white', rating: 1500, lines: [
+      { moves: ['e4e5', 'c7c5'], evaluation: 40, mate: null },
+      { moves: ['e4d5', 'd8d5'], evaluation: -140, mate: null },
+    ] });
     expect(rt).toBeNull();
   });
 
-  it('an eval gap under 1.5 pawns is a preference, not a refutation — silence', () => {
-    const rt = buildRejectedTempting({
-      fen,
-      studentColor: 'white',
-      lines: [
-        { uci: 'e4e5', replyUci: 'c7c5', evalCp: 40 },
-        { uci: 'e4d5', replyUci: 'd8d5', evalCp: -60 },
-      ],
-    });
-    expect(rt).toBeNull();
+  it('a capture as good as the best move is not refuted — silence', () => {
+    const same = lines.map((l) => (l.moves[0] === 'f8d6' ? { ...l, evaluation: lines[0].evaluation, mate: lines[0].mate } : l));
+    expect(buildRejectedTempting({ fen: jose.fen, studentColor: 'white', lines: same, rating: 1500 })).toBeNull();
   });
 });
 
@@ -536,21 +530,19 @@ describe('a capture is never described as its side effect (hand walk 2026-09-25)
 });
 
 describe('the spoken form is the student\'s, never the prompt package (2026-09-30)', () => {
-  const fen = 'rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
-  const lines = [
-    { uci: 'e4e5', replyUci: 'c7c5', evalCp: 40 },
-    { uci: 'e4d5', replyUci: 'd8d5', evalCp: -140 },
-  ];
-  it('asks "why not" first, then refutes — no instruction text', () => {
-    const rt = buildRejectedTempting({ fen, studentColor: 'white', lines });
-    expect(withoutTags(rt?.spoken ?? '')).toBe('Why not exd5? ‖ It wins a pawn, but Qxd5 refutes it. ‖');
+  const jose = TEMPTING_FX.find((x) => x.id === 'miracle-on-the-chess-board#3')!;
+  const fen = jose.fen;
+  const lines = jose.reads.map((r) => ({ moves: r.moves, evaluation: r.evaluation, mate: r.mate }));
+  it('asks "why not" first, then the one reason — no instruction text', () => {
+    const rt = buildRejectedTempting({ fen, studentColor: 'white', lines, rating: 1500 });
+    expect(withoutTags(rt?.spoken ?? '')).toBe('Why not Qxd6? ‖ It fails: they play Qxd1#. ‖');
     expect(rt?.spoken).not.toMatch(/Do NOT|exactly as given|TEMPTING BUT/);
-    expect(rt?.refutation).toMatchObject({ from: 'd8', to: 'd5' });
+    expect(rt?.refutation).toMatchObject({ from: 'c2', to: 'd1' });
   });
   it('a capture on the square their last move landed on is their BAIT', () => {
-    const rt = buildRejectedTempting({ fen, studentColor: 'white', lines, baitSquare: 'd5' });
+    const rt = buildRejectedTempting({ fen, studentColor: 'white', lines, rating: 1500, baitSquare: 'd6' });
     expect(rt?.bait).toBe(true);
-    expect(withoutTags(rt?.spoken ?? '')).toBe('Can you take the pawn on d5? ‖ No — it\'s bait: exd5 runs into Qxd5. ‖');
+    expect(withoutTags(rt?.spoken ?? '')).toBe('Can you take the rook on d6? ‖ No — it\'s bait: they play Qxd1#. ‖');
   });
   it('the priority is asked, then named with the move that serves it', () => {
     const pf = buildPriorityFirst({ fen: '6k1/pp3ppp/8/3p4/8/8/PP1N1PPP/1N4K1 w - - 0 20', studentColor: 'white', bestUci: 'b1c3' });

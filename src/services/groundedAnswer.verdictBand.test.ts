@@ -5,7 +5,7 @@ import { describe, it, expect } from 'vitest';
 import { assemblePositionAssessment } from './groundedAnswer';
 
 const read = (fen: string, evalCp: number | null, studentColor: 'white' | 'black'): string =>
-  assemblePositionAssessment({ evalCp, mateIn: null, tactics: null, studentColor, fen, bestUci: null })?.facts ?? '';
+  assemblePositionAssessment({ tempting: null, evalCp, mateIn: null, tactics: null, studentColor, fen, bestUci: null })?.facts ?? '';
 
 // a-guide-to-underpromotion #0: White's c-pawn queens against the rook; the
 // engine has White clearly better (+2.6) with four points less on the board.

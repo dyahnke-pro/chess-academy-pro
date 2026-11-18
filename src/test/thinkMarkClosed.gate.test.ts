@@ -33,16 +33,15 @@ function closes(text: string): void {
 
 describe('each producer closes its think pause', () => {
   it('rejected tempting move (playCommentary)', () => {
-    const rt = buildRejectedTempting({
-      fen: 'rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2',
-      studentColor: 'white',
-      lines: [{ uci: 'e4e5', replyUci: 'c7c5', evalCp: 40 }, { uci: 'e4d5', replyUci: 'd8d5', evalCp: -140 }],
-    });
+    // Naroditsky's article board (miracle-on-the-chess-board #3): Qxd6 grabs the rook, …Qxd1# mates.
+    const fx = (JSON.parse(fs.readFileSync('src/test/fixtures/danya-article-tempting.json', 'utf8')) as Array<{ id: string; fen: string; reads: Array<{ evaluation: number; mate: number | null; moves: string[] }> }>)
+      .find((x) => x.id === 'miracle-on-the-chess-board#3')!;
+    const rt = buildRejectedTempting({ fen: fx.fen, studentColor: 'white', rating: 1500, lines: fx.reads });
     expect(rt).not.toBeNull();
     closes(rt!.spoken);
     for (const reg of ['subtle', 'moderate', 'obvious'] as const) closes(packageForRegister(rt!.hint, reg));
     // The tiers the register adds are part of the answer, never said before it.
-    expect(splitThink(packageForRegister(rt!.hint, 'obvious'))?.[0]).toBe('Why not exd5?');
+    expect(splitThink(packageForRegister(rt!.hint, 'obvious'))?.[0]).toBe('Why not Qxd6?');
   });
 
   it('priority first (playCommentary)', () => {

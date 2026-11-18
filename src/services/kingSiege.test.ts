@@ -128,13 +128,13 @@ describe('the reads reach the coach', () => {
     const u = readBoardUrgency(MIRACLE, 'white', 'f8d6');
     expect(u?.mate).toEqual(['Qxd1#']);
     expect(urgencyLead(u)).toMatch(/^They threaten mate: Qxd1 is mate/);
-    const read = assemblePositionAssessment({ evalCp: 150, mateIn: null, studentColor: 'white', fen: MIRACLE, bestUci: 'f8d6' });
+    const read = assemblePositionAssessment({ tempting: null, evalCp: 150, mateIn: null, studentColor: 'white', fen: MIRACLE, bestUci: 'f8d6' });
     expect(read?.facts).toContain('They threaten mate: Qxd1');
   });
 
   it('the position read says the back rank and the siege', () => {
     expect(kingReadsOn(NO_LUFT, 'w', 0).map((r) => r.text).join(' ')).toMatch(/no luft|back rank is thin/);
-    const read = assemblePositionAssessment({ evalCp: 300, mateIn: null, studentColor: 'white', fen: KNOCKOUT, bestUci: null });
+    const read = assemblePositionAssessment({ tempting: null, evalCp: 300, mateIn: null, studentColor: 'white', fen: KNOCKOUT, bestUci: null });
     expect(read?.facts).toMatch(/four of your pieces/i);
     expect(read?.keySquares).toContain('b8');
   });

@@ -182,9 +182,13 @@ function readCandidates(fen: string, played: Move, reads: readonly WeighRead[], 
   const mover = played.color;
   const playedUci = uciOf(played);
   const eye = new Map(eyeRead(fen, rating).map((r) => [r.uci, r.p]));
-  const real = new Map(humanMoveProbabilities(fen, reads.filter((r) => !!r.moves[0]).map((r) => ({ uci: r.moves[0], cp: seatCp(r, mover) })), rating).map((r) => [r.uci, r.p]));
+  // ONE READ A MOVE: a fan can report the same move twice (a bound line beside
+  // the settled one at the same depth); a move counted twice is one
+  // temptation weighed as two. The first read of a move is its read.
+  const uniq = reads.filter((r, i) => !!r.moves[0] && reads.findIndex((x) => x.moves[0] === r.moves[0]) === i);
+  const real = new Map(humanMoveProbabilities(fen, uniq.map((r) => ({ uci: r.moves[0], cp: seatCp(r, mover) })), rating).map((r) => [r.uci, r.p]));
   const out: Array<{ c: CandidateMove; read: WeighRead; real: number }> = [];
-  for (const read of reads) {
+  for (const read of uniq) {
     const uci = read.moves[0];
     if (!uci || uci === playedUci) continue;
     const m = moveOn(fen, uci);
@@ -218,6 +222,10 @@ export interface TemptingRefuted {
    *  material or mates for the other side, named per `lineTrust`. */
   reason: CostReason;
   text: string;
+  /** The refutation alone, no lead and no stop: "they play dxe4 — they win a
+   *  knight for a pawn" — for a surface that has already named the move
+   *  ("Why not Nxe4?") and answers with the one reason. */
+  because: string;
   squares: string[];
   proof: Proof | null;
   /** Its say-once key, and the rule-out claim the deliberation makes for the
@@ -277,56 +285,23 @@ export function temptingRefuted(args: {
 export function temptingRefutations(args: Parameters<typeof temptingRefuted>[0]): TemptingRefuted[] {
   const played = moveOn(args.fenBefore, args.san);
   if (!played) return [];
-  const mover = played.color;
   const playedRead = readOf(args.reads, uciOf(played));
   if (!playedRead) return [];
-  const playedCp = seatCp(playedRead, mover);
-  const w = seatWords(mover, args.student);
   const out: Array<TemptingRefuted & { real: number }> = [];
   // A temptation is a move someone at the rating would really play (`real`).
   for (const { c, read, real } of readCandidates(args.fenBefore, played, args.reads, args.rating)) {
     if (real < TEMPTING_P_FLOOR) continue;
-    const cost = playedCp - seatCp(read, mover);
-    if (cost < TEMPTING_COST_CP) continue;
-    const seconds = read.earlier && read.earlier[0] === c.uci ? [read.earlier.slice(1)] : [];
-    const r = costReason({
-      fenBefore: args.fenBefore, playedSan: c.san, mover, student: args.student, costCp: cost,
-      after: { uci: read.moves.slice(1), source: 'deep', seconds }, before: null, priorMove: args.priorMove,
-      // Measured against the move played: a loss its own line shares is no reason.
-      against: playedRead.moves,
-    });
-    if (!r || r.kind !== 'allowed' || !r.trust.name) continue;
+    const t = refuteCandidate(args.fenBefore, c, read, playedRead, args.student, args.priorMove);
+    if (!t) continue;
     // A PIECE SIMPLY GIVEN AWAY IS NOT A TEMPTATION: their first reply takes
     // the piece that moved, a rook's worth or more for nothing much (…Qxf2+
     // Kxf2). The eye likes the capture with check; no player weighs it. A
     // knight taken for a pawn (…Nxe4 dxe4) is the classic one, and stays.
-    if (r.blowPlies === 1 && r.plies[0]?.uci.slice(2, 4) === c.to && r.netForWinner >= 5) continue;
-    const sans = reasonSans(r);
-    // What it wins beyond what the line, as said, already names: a line that
-    // ends "they play a1, making a queen" has said its gain.
-    const won = r.mate ? null : reasonWinWords(r, lineShapePlies(sans, r.fen, 'first'));
-    const result = r.mate ? (markSaysMate(sans[sans.length - 1]) ? '' : ' — and it\'s mate') : won ? ` — ${w.otherWho} win ${won}` : '';
-    // WHAT IT LOOKS LIKE (David 2026-11-17, Danya: "Bg5 looks like a pin, but
-    // it drops the knight on d4"): the motif the try sets up on the board,
-    // said in the lead — the reason someone would play it.
-    const look = tryLooksLike(args.fenBefore, c.san, mover);
-    const stem = stemKeyOf(`${args.fenBefore}|${c.uci}`);
-    const lead = look
-      ? (mover === args.student
-        ? rotateStem([`${c.san} looks like ${look}, but it fails`, `${c.san} sets up ${look}, but it doesn't work`], stem)
-        : rotateStem([`${c.san} looked like ${look} for them, but it fails`, `${c.san} would have set up ${look} for them, but it doesn't work`], stem))
-      : mover === args.student
-        ? rotateStem([`${c.san} is tempting here, but it fails`, `${c.san} looks natural, but it doesn't work`], stem)
-        : rotateStem([`${c.san} was tempting for them, but it fails`, `${c.san} looked natural for them, but it doesn't work`], stem);
-    const text = `${lead}: ${lineShape(sans, w.otherLine, r.fen, 'first')}${result}.`;
-    const sq = blowSquare(sans);
-    const key = temptingKey(c.uci);
-    out.push({
-      real, san: c.san, uci: c.uci, eye: c.eye, costCp: Math.round(cost), reason: r, text,
-      squares: [...new Set([c.from, c.to, ...(sq ? [sq] : [])])],
-      proof: lineProof({ fen: args.fenBefore, sans: [c.san, ...r.plies.map((p) => p.san)] }, w.moverLine),
-      key, claims: [key, ...(sq ? [r.mate ? `rule-out:mate:${sq}` : `rule-out:${sq}`] : [])],
-    });
+    // Whatever the line goes on to play, the first reply taking the piece is
+    // the giveaway: Qxe6+ Nxe6 is the queen given for a pawn even when the
+    // line runs on a move ("…and you answer Kh2"; Capablanca, Danya's article).
+    if (t.reason.plies[0]?.uci.slice(2, 4) === c.to && t.reason.netForWinner >= 5) continue;
+    out.push({ ...t, real });
   }
   // THE MOST TEMPTING IS THE ONE A PLAYER WOULD MOST OFTEN PLAY — the eye's
   // pull and the cost together (`real`): …b6 dropping the rook is played
@@ -337,6 +312,109 @@ export function temptingRefutations(args: Parameters<typeof temptingRefuted>[0])
   // over …d5 dropping a pawn — both refuted once later trades stopped reading
   // as material given back, 2026-11-13).
   return out.sort((x, y) => Number(y.reason.mate) - Number(x.reason.mate) || y.real - x.real).map(({ real: _real, ...t }) => t);
+}
+
+/** WHY ONE CANDIDATE FAILS, against the move it is measured with (`against`:
+ *  the move played, or the engine's best) — the one reason walker and the one
+ *  wording every tempting-move surface says. Null when it costs under a pawn
+ *  against it, when its line proves no material or mate (`costReason`), or
+ *  when the line may not be named (`lineTrust`). */
+function refuteCandidate(fenBefore: string, c: Pick<CandidateMove, 'uci' | 'san' | 'from' | 'to' | 'eye'>, read: WeighRead, against: WeighRead, student: Color, priorMove: { fenBefore: string; san: string } | null): TemptingRefuted | null {
+  const mover: Color = fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
+  const w = seatWords(mover, student);
+  const cost = seatCp(against, mover) - seatCp(read, mover);
+  if (cost < TEMPTING_COST_CP) return null;
+  const seconds = read.earlier && read.earlier[0] === c.uci ? [read.earlier.slice(1)] : [];
+  const r = costReason({
+    fenBefore, playedSan: c.san, mover, student, costCp: cost,
+    after: { uci: read.moves.slice(1), source: 'deep', seconds }, before: null, priorMove,
+    // Measured against the other move's line: a loss its own line shares is no reason.
+    against: against.moves,
+  });
+  if (!r || r.kind !== 'allowed' || !r.trust.name) return null;
+  const sans = reasonSans(r);
+  // What it wins beyond what the line, as said, already names: a line that
+  // ends "they play a1, making a queen" has said its gain.
+  const won = r.mate ? null : reasonWinWords(r, lineShapePlies(sans, r.fen, 'first'));
+  const result = r.mate ? (markSaysMate(sans[sans.length - 1]) ? '' : ' — and it\'s mate') : won ? ` — ${w.otherWho} win ${won}` : '';
+  // WHAT IT LOOKS LIKE (David 2026-11-17, Danya: "Bg5 looks like a pin, but
+  // it drops the knight on d4"): the motif the try sets up on the board,
+  // said in the lead — the reason someone would play it.
+  const look = tryLooksLike(fenBefore, c.san, mover);
+  const stem = stemKeyOf(`${fenBefore}|${c.uci}`);
+  const lead = look
+    ? (mover === student
+      ? rotateStem([`${c.san} looks like ${look}, but it fails`, `${c.san} sets up ${look}, but it doesn't work`], stem)
+      : rotateStem([`${c.san} looked like ${look} for them, but it fails`, `${c.san} would have set up ${look} for them, but it doesn't work`], stem))
+    : mover === student
+      ? rotateStem([`${c.san} is tempting here, but it fails`, `${c.san} looks natural, but it doesn't work`], stem)
+      : rotateStem([`${c.san} was tempting for them, but it fails`, `${c.san} looked natural for them, but it doesn't work`], stem);
+  const because = `${lineShape(sans, w.otherLine, r.fen, 'first')}${result}`;
+  const sq = blowSquare(sans);
+  const key = temptingKey(c.uci);
+  return {
+    san: c.san, uci: c.uci, eye: c.eye, costCp: Math.round(cost), reason: r, text: `${lead}: ${because}.`, because,
+    squares: [...new Set([c.from, c.to, ...(sq ? [sq] : [])])],
+    proof: lineProof({ fen: fenBefore, sans: [c.san, ...r.plies.map((p) => p.san)] }, w.moverLine),
+    key, claims: [key, ...(sq ? [r.mate ? `rule-out:mate:${sq}` : `rule-out:${sq}`] : [])],
+  };
+}
+
+/**
+ * WHY THIS ONE MOVE FAILS, for a surface that has already chosen the move it
+ * warns about (Learn's register: "You'd love to play Qxd5 …"): the same
+ * reason and wording as (A), measured against the engine's best of `reads`.
+ * Null when the line does not prove it — then the surface says nothing about
+ * that move failing.
+ */
+export function refutationOf(args: { fen: string; uci: string; student: Color; reads: readonly WeighRead[]; priorMove: { fenBefore: string; san: string } | null }): TemptingRefuted | null {
+  const best = bestOfReads(args.fen, args.reads);
+  const read = readOf(args.reads, args.uci);
+  const m = moveOn(args.fen, args.uci);
+  if (!best || !read || !m || best.read === read) return null;
+  return refuteCandidate(args.fen, { uci: args.uci, san: m.san, from: m.from, to: m.to, eye: 0 }, read, best.read, args.student, args.priorMove);
+}
+
+/** The engine's best move among `reads` for the side to move on `fen` — the
+ *  read that scores highest from the mover's seat — or null. */
+export function bestOfReads(fen: string, reads: readonly WeighRead[]): { read: WeighRead; san: string } | null {
+  const b = boardOf(fen);
+  if (!b) return null;
+  const mover = b.turn();
+  let best: { read: WeighRead; san: string; cp: number } | null = null;
+  for (const r of reads) {
+    const m = r.moves[0] ? moveOn(fen, r.moves[0]) : null;
+    if (!m) continue;
+    const cp = seatCp(r, mover);
+    if (!best || cp > best.cp) best = { read: r, san: m.san, cp };
+  }
+  return best ? { read: best.read, san: best.san } : null;
+}
+
+/**
+ * (A′) THE TEMPTING MOVE ON THE BOARD, BEFORE ANYTHING IS PLAYED — the board
+ * read's half of (A): his "Ng5+ is tempting, but after …Kg7 and …Rg3 Black
+ * parries" and "the greedy Rxc7 Nxc7 Bxc6?? loses to …Qc3" are said about the
+ * board in front of the player, where no move has been played yet. The
+ * candidates the eye weighs for the side to move, each measured against the
+ * engine's BEST move (the best of the reads), refuted by its own line — the
+ * one reason walker and the one wording of (A) (`temptingRefutations`), so a
+ * temptation said before the move and the same one said after it are one
+ * claim (`temptingKey`). Most tempting first; empty when nothing fails.
+ */
+export function temptingOnBoard(args: {
+  fen: string;
+  student: Color;
+  rating: number;
+  /** One read per candidate from `fen` (the best move among them): the fan a
+   *  surface read, or a MultiPV whose every line reads its first move. */
+  reads: readonly WeighRead[];
+  /** The move that led to `fen`, so a recapture is half a trade. */
+  priorMove: { fenBefore: string; san: string } | null;
+}): TemptingRefuted[] {
+  const best = bestOfReads(args.fen, args.reads);
+  if (!best) return [];
+  return temptingRefutations({ fenBefore: args.fen, san: best.san, student: args.student, rating: args.rating, reads: args.reads, priorMove: args.priorMove });
 }
 
 // ── (L) TWO GOOD MOVES, AND WHAT SEPARATES THEM ─────────────────────────────

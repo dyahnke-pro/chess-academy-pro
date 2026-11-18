@@ -103,7 +103,7 @@ describe('a package whose fen does not match the consumer\'s board cannot produc
     expect(assembleTacticsAnswer(inconsistent, 'white')).toBeNull();
     // And with an ask that would take the "danger note" branch.
     expect(assembleTacticsAnswer(inconsistent, 'white', 'is there a fork?')?.facts ?? '').not.toContain('g7');
-    const assess = assemblePositionAssessment({ bestUci: null, line: null, evalCp: -250, mateIn: null, studentColor: 'white', tactics: inconsistent });
+    const assess = assemblePositionAssessment({ bestUci: null, line: null, tempting: null, evalCp: -250, mateIn: null, studentColor: 'white', tactics: inconsistent });
     expect(assess?.facts ?? '').not.toContain('g7');
   });
 
