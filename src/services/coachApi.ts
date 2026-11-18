@@ -79,11 +79,19 @@ import { walkableLine } from './proof';
 import { mateInOneMoveOnBoard } from './boardState';
 import { classifyMatePattern, explainMate } from './matePatterns';
 import { getFundamentalCounts, FUNDAMENTAL_LABEL, fundamentalDevice } from './fundamentalsCatalog';
-import type { FundamentalId } from './principleAttribution';
+import { pvSanToUci, type FundamentalId } from './principleAttribution';
 import { matchRouteByTopic } from './navigationRouter';
 import { APP_ROUTES_MANIFEST } from '../data/appRoutesManifest';
 import trapClassifications from '../data/trap-line-classifications.json';
 const TRAP_KINDS = (trapClassifications as { classifications: Record<string, string> }).classifications;
+
+/** The engine's best line from the board the chat is about, UCI: the plan's
+ *  PV (built from `currentFen` when the student is to move), or null. */
+function engineLineOf(g: { currentFen?: string | null; enginePlan?: { pvSan: ReadonlyArray<string> } | null }): string[] | null {
+  if (!g.currentFen || !g.enginePlan || g.enginePlan.pvSan.length === 0) return null;
+  const uci = pvSanToUci(g.currentFen, g.enginePlan.pvSan);
+  return uci.length ? uci : null;
+}
 import { lookupTablebase } from './lichessTablebaseService';
 import { matchEndgameLesson, getEndgamePrinciples } from './endgameLessonsService';
 import { toOtherSeat } from '../utils/seatPronouns';
@@ -2549,6 +2557,7 @@ async function serveGroundedPositionDefault(
     grounding.studentColor ?? ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
   const assess = assemblePositionAssessment({
     bestUci: grounding.engineBestMoveUci ?? null,
+    line: engineLineOf(grounding),
     evalCp: grounding.engineEvalCp,
     mateIn: grounding.engineMateIn,
     tactics: grounding.tactics,
@@ -2725,6 +2734,7 @@ async function computeLiveBoardVerdict(
   if (assessQ) {
     const assess = assemblePositionAssessment({
       bestUci: grounding.engineBestMoveUci ?? null,
+      line: engineLineOf(grounding),
       evalCp: grounding.engineEvalCp,
       mateIn: grounding.engineMateIn,
       tactics: grounding.tactics,
@@ -6680,6 +6690,7 @@ export async function getCoachChatResponse(
               grounding.studentColor ?? (grounding.currentFen.split(' ')[1] === 'b' ? 'black' : 'white');
             const assess = assemblePositionAssessment({
               bestUci: grounding.engineBestMoveUci ?? null,
+              line: engineLineOf(grounding),
               evalCp: grounding.engineEvalCp,
               mateIn: grounding.engineMateIn,
               tactics: grounding.tactics,
@@ -6808,6 +6819,7 @@ export async function getCoachChatResponse(
             ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
           const assessed = assemblePositionAssessment({
             bestUci: grounding.engineBestMoveUci ?? null,
+            line: engineLineOf(grounding),
             evalCp: grounding.engineEvalCp,
             mateIn: grounding.engineMateIn,
             tactics: grounding.tactics,

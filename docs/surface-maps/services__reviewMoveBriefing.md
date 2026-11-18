@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**754 lines · 14 exports · 30 importers · 22 tests · 0 audits**
+**731 lines · 14 exports · 31 importers · 23 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
 - **⏰ Standing notes** (CLAUDE.md:3263) — names `buildReviewMoveBriefing`
-- **The standard post-deploy ritual** (CLAUDE.md:6987) — names `Aspect`
+- **The standard post-deploy ritual** (CLAUDE.md:7033) — names `Aspect`
 
 ## Who calls in
 
@@ -37,6 +37,7 @@
 - `src/services/reviewMoveBriefing.test.ts`
 - `src/services/reviewMoveThought.test.ts`
 - `src/services/threeFacts.briefing.test.ts`
+- `src/services/verdictWithReasons.test.ts`
 - `src/services/walkthroughLlmNarrator.ts`
 - `src/services/writtenVsComputed.measure.test.ts`
 - `src/test/captureSaidOnce.gate.test.ts`
@@ -53,13 +54,14 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `signedBand` (const) — 1 call site
-- `src/services/moveThoughtFacts.ts:895`
+- `src/services/moveThoughtFacts.ts:950`
 
-### `evalReading` (function) — 4 call sites
+### `evalReading` (function) — 5 call sites
 - `src/services/evalReading.test.ts:11`
 - `src/services/evalReading.test.ts:17`
 - `src/services/evalReading.test.ts:23`
-- `src/services/moveThoughtFacts.ts:892`
+- `src/services/moveThoughtFacts.ts:947`
+- `src/services/verdictWithReasons.test.ts:70`
 
 ### `moveAspects` (function) — 13 call sites
 - `src/services/captureLeadsTo.test.ts:26`
@@ -69,8 +71,8 @@
 - `src/services/exchangeNotFinished.test.ts:25`
 - `src/services/exchangeNotFinished.test.ts:295`
 - `src/services/midExchangeStructure.test.ts:13`
-- `src/services/moveThoughtFacts.ts:231`
-- `src/services/moveThoughtFacts.ts:1362`
+- `src/services/moveThoughtFacts.ts:234`
+- `src/services/moveThoughtFacts.ts:1417`
 - `src/services/reviewMoveBriefing.test.ts:71`
 - `src/services/reviewMoveBriefing.test.ts:73`
 - `src/test/captureSaidOnce.gate.test.ts:190`
@@ -79,7 +81,7 @@
 ### `buildReviewMoveBriefing` (function) — 23 call sites
 - `src/services/captureRun.test.ts:46`
 - `src/services/captureRun.test.ts:58`
-- `src/services/coachFeatureService.ts:2184`
+- `src/services/coachFeatureService.ts:2208`
 - `src/services/guardPressure.test.ts:42`
 - `src/services/materialSites.test.ts:20`
 - `src/services/reviewMoveBriefing.test.ts:13`
@@ -102,12 +104,12 @@
 - `src/test/captureSaidOnce.gate.test.ts:186`
 
 ### `toClause` (function) — 3 call sites
-- `src/services/moveThoughtFacts.ts:366`
+- `src/services/moveThoughtFacts.ts:369`
 - `src/services/reviewMoveBriefing.test.ts:182`
 - `src/services/reviewMoveBriefing.test.ts:185`
 
 ### `joinReview` (function) — 3 call sites
-- `src/services/moveThoughtFacts.ts:366`
+- `src/services/moveThoughtFacts.ts:369`
 - `src/services/reviewMoveBriefing.test.ts:184`
 - `src/services/reviewMoveBriefing.test.ts:185`
 
@@ -152,8 +154,8 @@
 - `src/services/moveThoughtFacts.test.ts:419`
 - `src/services/moveThoughtFacts.test.ts:434`
 - `src/services/moveThoughtFacts.test.ts:447`
-- `src/services/moveThoughtFacts.ts:998`
-- `src/services/moveThoughtFacts.ts:1131`
+- `src/services/moveThoughtFacts.ts:1053`
+- `src/services/moveThoughtFacts.ts:1186`
 - `src/services/openingGenerator.ts:2058`
 - `src/services/openingGenerator.ts:2628`
 - `src/services/pieceRoute.test.ts:52`
@@ -200,6 +202,7 @@
 - `src/services/reviewMoveBriefing.test.ts`
 - `src/services/reviewMoveThought.test.ts`
 - `src/services/threeFacts.briefing.test.ts`
+- `src/services/verdictWithReasons.test.ts`
 - `src/services/writtenVsComputed.measure.test.ts`
 - `src/test/captureSaidOnce.gate.test.ts`
 - `src/test/composerSaysOnce.test.ts`

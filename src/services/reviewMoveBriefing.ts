@@ -27,13 +27,14 @@
 import { introWithGerund, introWithPredicate, type IntroTense } from '../utils/moveIntro';
 import { evalBand, evalBandWords } from './evalBand';
 import { openSentence, continueSentence } from '../utils/openSentence';
-import { settledLeadFor, type LastMove } from './material';
+import type { LastMove } from './material';
+import { verdictWithReasons, reasonClauses, type ReasonKind } from './verdictWithReasons';
+import type { InitiativeLine } from './initiativeRead';
 import { hasRook } from '../utils/hasRook';
 import { Chess } from 'chess.js';
 import { MATERIAL_VALUE } from './pieceValues';
 import { actsFromItsSquare, exchangeEnd } from './material';
 import { gainHoldsInLine, materialDeficit, netPieceWords, GAIN_HOLDS_PLIES, NO_FOLLOW, type FollowLines } from './exchangeLedger';
-import { boardEdgeWords } from '../utils/countWords';
 import { computePlyFacts, structureDelta, tacticWord, type PrevCaptureContext } from './pvPlayback';
 import { takeBackAhead } from './captureRun';
 // The previous-move context is part of this input's contract, so it travels
@@ -145,11 +146,6 @@ function newNamedTactic(fenBefore: string, fenAfter: string, toSquare: string | 
   }
 }
 
-/** Net material (student − opponent, points), with the exchange the last
- *  capture started played out — a recapture midpoint is not "up a piece". */
-function materialNet(fen: string, studentWB: 'w' | 'b', lastMove: LastMove | null): number {
-  try { return settledLeadFor(fen, studentWB, lastMove); } catch { return 0; }
-}
 /** Signed eval band (student POV): 0 balanced, ±1 touch, ±2 clear, ±3 decisive. */
 /** The band WITH its side: +slightly and −slightly are different standings. */
 /** The standing's band, signed from the student's seat — the claim a
@@ -162,44 +158,23 @@ function evalVerdict(studentPovCp: number): string {
   if (band === 'level') return 'roughly balanced';
   return `you're ${evalBandWords(band, studentPovCp > 0 ? 'better' : 'worse')}`;
 }
-/** The board-true imbalances that EXPLAIN the eval sign — material, king safety,
- *  pawn structure — ordered by magnitude, filtered to the eval's side (David
- *  2026-09-07: "why does Stockfish call it balanced / tipping"). */
-function evalWhy(fen: string, studentPovCp: number, studentWB: 'w' | 'b', lastMove: LastMove | null): string[] {
-  const oppWB: 'w' | 'b' = studentWB === 'w' ? 'b' : 'w';
-  const s = describeStructure(fen);
-  const cands: { text: string; mag: number; sign: number }[] = [];
-  const net = materialNet(fen, studentWB, lastMove);
-  if (net >= 1) cands.push({ text: `you're up ${boardEdgeWords(fen, studentWB, net)}`, mag: net, sign: 1 });
-  else if (net <= -1) cands.push({ text: `you're down ${boardEdgeWords(fen, oppWB, -net)}`, mag: -net, sign: -1 });
-  if (s) {
-    const kd = s.kings.shieldPawns[studentWB] - s.kings.shieldPawns[oppWB];
-    if (kd >= 2) cands.push({ text: 'their king is the more exposed', mag: 1.8, sign: 1 });
-    else if (kd <= -2) cands.push({ text: 'your king is the more exposed', mag: 1.8, sign: -1 });
-    if (s.pawns.passedPawns[studentWB].length) cands.push({ text: `you have a passed pawn on ${s.pawns.passedPawns[studentWB][0]}`, mag: 1.2, sign: 1 });
-    if (s.pawns.passedPawns[oppWB].length) cands.push({ text: `they have a passed pawn on ${s.pawns.passedPawns[oppWB][0]}`, mag: 1.2, sign: -1 });
-    if (s.pawns.isolatedPawns[oppWB].length) cands.push({ text: "they're left with an isolated pawn", mag: 0.7, sign: 1 });
-    if (s.pawns.isolatedPawns[studentWB].length) cands.push({ text: "you're left with an isolated pawn", mag: 0.7, sign: -1 });
-  }
-  if (Math.abs(studentPovCp) < 50) {
-    // Balanced: the WHY is the TENSION — a plus offset by a minus. A lone
-    // one-sided imbalance would contradict "balanced" (other factors must
-    // compensate), so say nothing rather than mislead.
-    const plus = cands.find((c) => c.sign > 0);
-    const minus = cands.find((c) => c.sign < 0);
-    if (plus && minus) return [plus.text, minus.text];
-    if (cands.length === 0) return ['the material is level and neither king is in danger'];
-    return [];
-  }
-  const sign = studentPovCp > 0 ? 1 : -1;
-  const matching = cands.filter((c) => c.sign === sign).sort((a, b) => b.mag - a.mag);
-  return matching.length === 0
-    ? [sign > 0 ? 'your pieces are the more active' : 'their pieces are the more active']
-    : matching.map((c) => c.text).slice(0, 2);
+/** The board-true reasons that EXPLAIN the eval — the one reasons computer
+ *  (`verdictWithReasons`, WO-DANYA-READS-01 #2): material, the kings, whose
+ *  pieces are in play, the initiative, a running passer, the bishop pair,
+ *  space, knight against bishop, a weak pawn under fire — only those that
+ *  fit the verdict's side (David 2026-09-07: "why does Stockfish call it
+ *  balanced / tipping"). None that fits → none said: the old fallback "your
+ *  pieces are the more active" counted no piece. `lines`: the engine's lines
+ *  from `fen` (the initiative), or null. */
+function evalWhy(fen: string, studentPovCp: number, studentWB: 'w' | 'b', lastMove: LastMove | null, lines: readonly InitiativeLine[] | null): string[] {
+  const whiteCp = studentWB === 'w' ? studentPovCp : -studentPovCp;
+  const v = verdictWithReasons({ fen, evalCp: whiteCp, mate: null, lines, student: studentWB, lastMove, said: NOTHING_SAID });
+  return v ? reasonClauses(v) : [];
 }
+const NOTHING_SAID: ReadonlySet<ReasonKind> = new Set<ReasonKind>();
 /** The eval VERDICT + WHY as a lead sentence. */
-function explainEval(fen: string, studentPovCp: number, studentWB: 'w' | 'b', lastMove: LastMove | null): string {
-  const why = evalWhy(fen, studentPovCp, studentWB, lastMove);
+function explainEval(fen: string, studentPovCp: number, studentWB: 'w' | 'b', lastMove: LastMove | null, lines: readonly InitiativeLine[] | null): string {
+  const why = evalWhy(fen, studentPovCp, studentWB, lastMove, lines);
   const verdict = evalVerdict(studentPovCp);
   const V = openSentence(verdict);
   return why.length ? `${V} — ${why.join(', ')}.` : `${V}.`;
@@ -209,11 +184,11 @@ function explainEval(fen: string, studentPovCp: number, studentWB: 'w' | 'b', la
  *  mantra every ply. One producer for Review's briefing and the lesson
  *  composer (WO-OPENINGS-REWRITE-01: the writers said it on 15% of beats the
  *  lesson composer never had it for). Null when the standing did not move. */
-export function evalReading(fenAfter: string, povBeforeCp: number | null, povAfterCp: number, swingCp: number | null, studentWB: 'w' | 'b', lastMove: LastMove | null): string | null {
+export function evalReading(fenAfter: string, povBeforeCp: number | null, povAfterCp: number, swingCp: number | null, studentWB: 'w' | 'b', lastMove: LastMove | null, lines: readonly InitiativeLine[] | null): string | null {
   const swing = swingCp ?? (povBeforeCp != null ? povAfterCp - povBeforeCp : 0);
   const bandChanged = povBeforeCp != null && signedBand(povAfterCp) !== signedBand(povBeforeCp);
   if (!bandChanged && Math.abs(swing) < 40) return null;
-  return explainEval(fenAfter, povAfterCp, studentWB, lastMove);
+  return explainEval(fenAfter, povAfterCp, studentWB, lastMove, lines);
 }
 /** The DELTA — how this move moved the eval (student POV cp swing). Null when it
  *  barely moved (a quiet move keeps its silence rather than "held the balance"
@@ -619,7 +594,9 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
       ? (input.studentColorWB === 'w' ? input.evalBeforeWhiteCp : -input.evalBeforeWhiteCp)
       : null;
     const swing = input.studentSwingCp ?? (povBefore != null ? povAfter - povBefore : 0);
-    evalLead = evalReading(fenAfter, povBefore, povAfter, input.studentSwingCp ?? null, input.studentColorWB, { to: mv.to, captured: mv.captured ?? null }) ?? '';
+    // The briefing's `line` is the game's own continuation, not the engine's
+    // best play, so the initiative is not read off it.
+    evalLead = evalReading(fenAfter, povBefore, povAfter, input.studentSwingCp ?? null, input.studentColorWB, { to: mv.to, captured: mv.captured ?? null }, null) ?? '';
     if (evalLead) deltaTail = deltaTailClause(swing) ?? '';
   }
 
