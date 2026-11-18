@@ -88,6 +88,8 @@ import { zugzwangMade, zugzwangSyncLine, zugzwangSyncProof } from './zugzwangRea
 import { theoreticalEndingMade, theoreticalEndingMadeLine } from './theoreticalEnding';
 import { raceCountMade, raceCountLine, raceCountSquares } from './raceCount';
 import { promotionPlayed, promotionChoiceLine, queenMissedLine } from './promotionChoice';
+import { defenderTradeMade, keyDefenderLine, defenderSquares } from './keyDefender';
+import { practicalChance, practicalChanceLine, practicalChanceSquares, type PracticalReads } from './practicalChance';
 import { pawnCutsGuard, type PawnLineRead } from './pawnLines';
 import { chainBase } from './chainBase';
 import { pinnedPawnGuard } from './pinnedPawnGuard';
@@ -426,6 +428,20 @@ export interface BoardContexts {
    *  `fenBefore` (either seat) — an underpromotion and the reason the queen
    *  fails, or a queen made where the board needed a lesser piece. */
   promotionChoice: { fenBefore: string; san: string; student: Color };
+  /** THE KEY DEFENDER TRADED (`keyDefender`, Danya's "exchanging your
+   *  opponent's most important piece removes the cog that makes his position
+   *  run"): the move `san` on `fenBefore` (either seat) takes, or puts on the
+   *  board, an even trade of a piece of the other side's that does a job no
+   *  other piece of theirs does. `costCp`: the engine's cost of the move for
+   *  its mover; `after`: the engine's best line after it (White's view). No
+   *  read, nothing said — the engine must agree the trade helps. */
+  keyDefender: { fenBefore: string; san: string; student: Color; costCp: number | null; after: AnalysisLine | null };
+  /** PRACTICAL CHANCES (`practicalChance`, Danya's "ask your opponent some
+   *  questions; give him an opportunity to falter"): the worse side's sound
+   *  move `san` on `fenBefore` (either seat) leaves one good reply, sets a
+   *  capture that looks free and gives the edge back, or makes the way through
+   *  long — each proved on the engine's lines after the move. */
+  practicalChance: { fenBefore: string; san: string; student: Color; reads: PracticalReads };
   /** WHAT A PAWN MOVE DID TO THE LINES (`pawnLines`, S4 pawns): the square the pawn landed on cut an enemy slider off from a piece it
    *  guarded, which is hanging now and was not before. */
   pawnCutsGuard: { fenBefore: string; san: string; student: Color };
@@ -2254,6 +2270,59 @@ export const BOARD_COMPUTERS = {
     kind: 'technique',
     phase: ANY,
     surfaces: ENDING_SURFACES,
+  },
+  keyDefender: {
+    // His "exchanging your opponent's strongest (or most important) piece often
+    // removes the cog that makes his position run": the defender doing a job
+    // alone, and the trade that takes it off, both seats.
+    read: ({ fenBefore, san, student, costCp, after }, fact) => safe(() => {
+      const t = defenderTradeMade(fenBefore, san, costCp, after);
+      if (!t) return null;
+      const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
+      const mine = t.defender.side !== student;
+      const text = keyDefenderLine(t, mine, false, fenBefore);
+      const squares = defenderSquares(t);
+      return fact({ key: t.key, claims: [t.key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter, role: 'teach' });
+    }),
+    computer: 'defenderTradeMade',
+    kind: 'trade',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: { not: 'a puzzle poses one tactic; trading off a key defender is a game move\'s plan' },
+      weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
+    },
+  },
+  practicalChance: {
+    // His "ask your opponent some questions; give him an opportunity to
+    // falter" and "the complications are not all that easy to calculate": the
+    // worse side's move that leaves one good reply, sets a grab that gives the
+    // edge back, or makes the way through long, both seats.
+    read: ({ fenBefore, san, student, reads }, fact) => safe(() => {
+      const p = practicalChance(fenBefore, san, reads);
+      if (!p) return null;
+      const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
+      const mine = p.side === student;
+      const text = practicalChanceLine(p, mine, fenBefore);
+      const squares = practicalChanceSquares(p);
+      // The engine's line after the move is the proof: their reply, then their
+      // way through. On the opponent's seat that line starts with the
+      // student's own answer, which is theirs to find: the squares only.
+      const proof = (mine ? legalLineProof(fenAfter, p.bestLine.slice(0, 8), lineSeatAt(fenAfter, student)) : null) ?? squaresProof(text, squares) ?? NO_PROOF.description;
+      return fact({ key: p.key, claims: [p.key], text, proof, squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter, role: 'teach' });
+    }),
+    computer: 'practicalChance',
+    kind: 'move-job',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: { not: 'a puzzle poses one tactic with a known answer; practical chances are a worse side\'s game move' },
+      weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
+    },
   },
   pawnCutsGuard: {
     // His "…c4 cuts the line between the b3 queen and the f7 bishop", "…c3

@@ -194,8 +194,9 @@ export function readTrade(
    *  The verdict never contradicts the engine: "poor" needs a real cost (≥30),
    *  "good" needs a move the grader would not call an inaccuracy
    *  (< `INACCURACY_CP`, prod Review 2026-10-29: "Their Bxf5 was an
-   *  inaccuracy … Their Bxf5 is a good trade for them"). Null = no read,
-   *  board only. */
+   *  inaccuracy … Their Bxf5 is a good trade for them"). Null = no read, and
+   *  then NO verdict: every verdict says whom the trade helps, and that is the
+   *  engine's to agree with, never the board's alone (WO-DANYA-READS-01 #6). */
   cpLoss: number | null,
   /** The move that LED to `fenBefore`. REQUIRED (oct3a review walk ply 16:
    *  "you were still 3 points behind" with …exd4 taking the knight straight
@@ -233,6 +234,8 @@ export function readTrade(
     if (!canRetake || retake < 0 || (startsExchange && retake === 0)) return null;
   }
 
+  // WHO A TRADE HELPS IS THE ENGINE'S CALL: no read of the move, no verdict.
+  if (cpLoss === null) return null;
   const mover = mv.color;
   const enemy: Color = mover === 'w' ? 'b' : 'w';
   const board0 = new Chess(fenBefore);
@@ -299,7 +302,8 @@ export function readTrade(
   // What the recapture hands the side that is ahead (the pair, a file) only
   // adds to "trades help you": the count still leads the verdict.
   const HANDED = new Set(['pair-handed', 'opens-file']);
-  if (edge0 <= -1 && good.length && bad.every((b) => HANDED.has(b.key)) && good.every((g) => STRUCTURAL.has(g.key))) {
+  // The student trading while behind is a fault only at a real cost.
+  if (edge0 <= -1 && good.length && bad.every((b) => HANDED.has(b.key)) && good.every((g) => STRUCTURAL.has(g.key)) && (!you || cpLoss >= 30)) {
     // Say BOTH halves — the dent and the count — because that weighing is the
     // lesson (Naroditsky at this exact move: "you take, inviting the trade —
     // White can't exploit it").
@@ -328,8 +332,8 @@ export function readTrade(
   const playedMove = namesPlayedMove ? mv.san : 'Your move';
   const subject = you ? playedMove : `Their ${mv.san}`;
   const forWhom = you ? '' : ' for them';
-  const sound = cpLoss === null || cpLoss < INACCURACY_CP;
-  const costly = cpLoss === null || cpLoss >= 30;
+  const sound = cpLoss < INACCURACY_CP;
+  const costly = cpLoss >= 30;
   if (good.length && !bad.length && sound) {
     const g = good[0];
     return { call: 'good', text: `${subject} is a good trade${forWhom} — ${g.why}.`, squares: g.sq, key: `trade:good:${g.key}`, moverIsStudent, headsMove: true };
@@ -352,7 +356,9 @@ export function readTrade(
   if (good.length || bad.length) return null; // mixed — not a lesson
   // Neutral pieces: the material count decides who the trade helps.
   const edge = edge0;
-  if (edge >= 2) {
+  // "Every trade brings a won ending closer" only on a trade the engine
+  // calls sound: a costly swap while ahead gave some of the lead back.
+  if (edge >= 2 && sound) {
     return {
       call: 'ahead',
       text: you
@@ -366,7 +372,8 @@ export function readTrade(
   // of Nxd7 … Bxe6+ … Nxf8 — heard "trades pieces while you're behind, so keep
   // pieces on"). The count is a rule of thumb; a trade that costs nothing is
   // not the mistake the rule warns about.
-  if (edge <= -2 && (!you || (cpLoss !== null && cpLoss >= 30))) {
+  // …and "that helps you" for their trade while behind only when it cost them.
+  if (edge <= -2 && costly) {
     return {
       call: 'behind',
       text: you
@@ -389,11 +396,17 @@ interface TradeTarget {
  * the student has a piece the quality read calls bad, the opponent has one it
  * calls good, they are the same value class (minor/minor, rook/rook), and the
  * bad piece can capture the good one now or after one move. A principle with
- * no route to it is not advice.
+ * no route to it is not advice — and no engine behind it is no advice either
+ * (WO-DANYA-READS-01 #6: "this trade helps you" must agree with the engine):
+ * the engine's best line on `fen` (`bestLine`, UCI, the student to move) must
+ * make that trade, the bad piece taking the good one within the student's
+ * first two moves. Null line, nothing said.
  */
-export function findTradeTarget(fen: string, studentColor: Color): TradeTarget | null {
+export function findTradeTarget(fen: string, studentColor: Color, bestLine: readonly string[] | null): TradeTarget | null {
+  if (!bestLine || bestLine.length === 0) return null;
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
+  if (chess.turn() !== studentColor) return null;
   const notes = findPieceQuality(fen);
   const worst = notes.filter((n) => n.color === studentColor && n.quality === 'bad');
   const best = notes.filter((n) => n.color !== studentColor && n.quality === 'good');
@@ -401,6 +414,7 @@ export function findTradeTarget(fen: string, studentColor: Color): TradeTarget |
     for (const b of best) {
       if (VAL[w.piece] !== VAL[b.piece]) continue;
       if (!canReach(chess, w.square, b.square, studentColor)) continue;
+      if (!lineTrades(fen, bestLine, w.square, b.square, studentColor)) continue;
       return {
         text: `Their ${NAME[b.piece]} on ${b.square} is their best piece, and your ${NAME[w.piece]} on ${w.square} is your worst — look for a way to trade them.`,
         squares: [b.square, w.square],
@@ -409,6 +423,29 @@ export function findTradeTarget(fen: string, studentColor: Color): TradeTarget |
     }
   }
   return null;
+}
+
+/** Does `line` from `fen` have the piece now on `from` take the piece on
+ *  `target` (never moved before then) within `side`'s first two moves? */
+function lineTrades(fen: string, line: readonly string[], from: Square, target: Square, side: Color): boolean {
+  let c: Chess;
+  try { c = new Chess(fen); } catch { return false; }
+  let at: Square = from;
+  let mine = 0;
+  for (const u of line) {
+    let m;
+    try { m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { return false; }
+    if (m.from === target && m.color !== side) return false;
+    if (m.color === side) {
+      mine += 1;
+      if (m.from === at && m.to === target) return true;
+      if (m.from === at) at = m.to;
+      if (mine >= 2) return false;
+    } else if (m.to === at) {
+      return false;
+    }
+  }
+  return false;
 }
 
 /** Can the piece on `from` capture on `target` now, or after one quiet move? */

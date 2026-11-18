@@ -133,7 +133,12 @@ function reasonFor(input: TradeKeptInput, c: Chess, cap: Move): KeptReason | nul
       const m = new Chess(input.theirLast.fenBefore).move(input.theirLast.san);
       // A retake is no offer: the piece came there by taking.
       const offered = !m.captured && m.to === cap.to;
-      const gain = readTrade(input.fenBefore, cap.san, me, null, input.priorMove, true);
+      // The trade's cost from the lines: its own line's score, or — when the
+      // engine did not list it — at least the gap to its last listed line.
+      const capLine = input.before.find((l) => l.moves[0] === uciOf(cap));
+      const best = input.before.length ? scoreFor(input.before[0], me) : null;
+      const capCost = best === null ? null : Math.max(0, best - scoreFor(capLine ?? input.before[input.before.length - 1], me));
+      const gain = readTrade(input.fenBefore, cap.san, me, capCost, input.priorMove, true);
       if (offered && gain?.call !== 'good' && computeMustDefend(input.fenBefore, me).pieces.length === 0) return { kind: 'no-threat' };
     } catch { /* not a move on that board */ }
   }

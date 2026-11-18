@@ -457,7 +457,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   // the engine's best move is a capture by one of two hanging pieces.
   {
     const d = desperadoAt(i.fenBefore, i.san, i.reads?.before[0]?.moves[0] ?? null);
-    if (d) add('defence-idea', 'desperadoAt', 'desperado', 'rescue', desperadoLine(d, mine ? 'your' : 'their', i.fenBefore), undefined, [d.from, d.to, d.other.square], 66, false, [`desperado:${d.from}${d.to}`]);
+    if (d) add('defence-idea', 'desperadoAt', 'desperado', 'rescue', desperadoLine(d, mine ? 'your' : 'their', i.fenBefore), undefined, [d.from, d.to, ...(d.other ? [d.other.square] : [])], 66, false, [`desperado:${d.from}${d.to}`]);
   }
 
   // A CHECK THAT GOES NOWHERE (Danya Ytkf3): it cost half a pawn and the
@@ -481,13 +481,32 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       try { const m = new Chess(i.theirLast.fenBefore).move(i.theirLast.san); return { to: m.to, captured: m.captured ?? null }; } catch { return null; }
     })();
     const base = { fenBefore: i.fenBefore, san: i.san, student: studentWB, costCp: i.costCp };
+    // The move's cost from one search, or — where the surface priced nothing
+    // (chat's "why that move?") — read off the fan before it when the move is
+    // in it: the best line's score less the move's own.
+    const b0 = i.reads.before[0];
+    const playedUci = (() => { try { const m = new Chess(i.fenBefore).move(i.san); return `${m.from}${m.to}${m.promotion ?? ''}`; } catch { return null; } })();
+    const playedLine = playedUci ? i.reads.before.find((l) => l.moves[0] === playedUci) : undefined;
+    const costHere = i.costCp ?? (b0 && playedLine ? Math.max(0, seatCp(b0, mover) - seatCp(playedLine, mover)) : null);
     const trades = [
       ...readBoardAll('tradeOffer', { ...base, afterCp }).map((f) => ({ f, idea: 'trade' as IdeaKind, weight: 64 })),
       ...readBoardAll('fileTrade', { ...base, line: a0?.moves ?? null }).map((f) => ({ f, idea: 'file' as IdeaKind, weight: 66 })),
       ...readBoardAll('pawnEndingTrade', { ...base, after: a0 }).map((f) => ({ f, idea: 'trade' as IdeaKind, weight: 70 })),
       ...readBoardAll('tradeKept', { fenBefore: i.fenBefore, san: i.san, student: studentWB, before: i.reads.before, priorMove, theirLast: i.theirLast }).map((f) => ({ f, idea: 'choice' as IdeaKind, weight: 58 })),
+      // THE KEY DEFENDER (Danya group 6): the trade that takes off the piece
+      // doing a job no other piece of theirs does, with the engine's word.
+      ...readBoardAll('keyDefender', { ...base, costCp: costHere, after: a0 }).map((f) => ({ f, idea: 'trade' as IdeaKind, weight: 68 })),
     ];
     for (const { f, idea, weight } of trades) facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea, weight });
+    // PRACTICAL CHANCES (Danya group 7): worse, the move makes them find
+    // something — one good reply, a grab that gives the edge back, or a long
+    // way through — read on the engine's replies to it.
+    {
+      const standCp = b0 && b0.mate == null ? seatCp(b0, mover) : null;
+      for (const f of readBoardAll('practicalChance', { fenBefore: i.fenBefore, san: i.san, student: studentWB, reads: { moverCp: standCp, costCp: costHere, after: i.reads.after } })) {
+        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'choice', weight: 70 });
+      }
+    }
   }
 
   // TRANSPOSITION AND ANALOGY (gaps A7, A11): "this transposes into the

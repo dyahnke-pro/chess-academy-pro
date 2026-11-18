@@ -79,7 +79,7 @@ import { walkableLine } from './proof';
 import { mateInOneMoveOnBoard } from './boardState';
 import { classifyMatePattern, explainMate } from './matePatterns';
 import { getFundamentalCounts, FUNDAMENTAL_LABEL, fundamentalDevice } from './fundamentalsCatalog';
-import { pvSanToUci, type FundamentalId } from './principleAttribution';
+import { type FundamentalId } from './principleAttribution';
 import { matchRouteByTopic } from './navigationRouter';
 import { APP_ROUTES_MANIFEST } from '../data/appRoutesManifest';
 import trapClassifications from '../data/trap-line-classifications.json';
@@ -87,10 +87,12 @@ const TRAP_KINDS = (trapClassifications as { classifications: Record<string, str
 
 /** The engine's best line from the board the chat is about, UCI: the plan's
  *  PV (built from `currentFen` when the student is to move), or null. */
-function engineLineOf(g: { currentFen?: string | null; enginePlan?: { pvSan: ReadonlyArray<string> } | null }): string[] | null {
-  if (!g.currentFen || !g.enginePlan || g.enginePlan.pvSan.length === 0) return null;
-  const uci = pvSanToUci(g.currentFen, g.enginePlan.pvSan);
-  return uci.length ? uci : null;
+/** The engine's best line on the grounded board, UCI, through the ONE
+ *  converter (`enginePlanUci`: the plan's moves, kept only when it starts with
+ *  the engine's best move). Null with no board or no best move. */
+function engineLineOf(g: { currentFen?: string | null; enginePlan?: { pvSan: ReadonlyArray<string> } | null; engineBestMoveUci?: string | null }): string[] | null {
+  if (!g.currentFen || !g.engineBestMoveUci) return null;
+  return enginePlanUci(g.currentFen, g.enginePlan?.pvSan, g.engineBestMoveUci);
 }
 import { lookupTablebase } from './lichessTablebaseService';
 import { matchEndgameLesson, getEndgamePrinciples } from './endgameLessonsService';

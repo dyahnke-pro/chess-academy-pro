@@ -54,6 +54,16 @@ const CASES: Case[] = [
   { id: 'oppositionRead', q: 'why-best-move', history: [], fen: '3k4/8/p1P5/P2K4/8/8/8/8 w - - 0 4', san: 'Kd6', student: 'w', reads: null, ctx: { afterCp: null } },
   { id: 'zugzwangRead', q: 'why-best-move', history: [], fen: '8/8/8/3k4/2pP4/3K4/8/8 w - - 0 1', san: 'Kc3', student: 'w', reads: null, ctx: { after: null, passAfter: null } },
   { id: 'raceCount', q: 'why-best-move', history: [], fen: '8/8/2P5/8/8/4K1p1/8/k7 w - - 0 1', san: 'Kd3', student: 'w', reads: null, ctx: {} },
+  // TRADES AND PRACTICAL CHANCES (WO-DANYA-READS-01 #6, #7): Danya's
+  // "Turn Off the Autopilot" board (Bh3 offers the trade of the d7 knight, the
+  // only guard of c5) and Deep Blue–Kasparov 1997 (…Qe3 leaves one reply).
+  { id: 'keyDefender', q: 'why-best-move', history: [], fen: '1q3r1k/3nrp1p/3N4/p1pPP3/Pp3Q2/1P1b4/6BP/2R1R2K w - - 0 30', san: 'Bh3', student: 'w',
+    reads: reads([line(302, 'g2h3 b8a8 f4f3 d3g6 h3d7 e7d7', 1), line(234, 'f4f3 e7e5 e1e5', 2), line(218, 'e1g1 d3g6 g1e1', 3)], [line(301, 'e7e5 d6f7 h8g7 e1e5 d7e5 f4e5 b8e5 f7e5', 1)]),
+    ctx: { costCp: 0, after: line(301, 'e7e5 d6f7 h8g7 e1e5 d7e5 f4e5 b8e5 f7e5', 1) } },
+  { id: 'practicalChance', q: 'why-best-move', history: [], fen: '1r6/5kp1/RqQb1p1p/1p1PpP2/1Pp1B3/2P4P/6P1/5K2 b - - 0 45', san: 'Qe3', student: 'b',
+    reads: reads([line(112, 'b6e3 c6d6 b8e8', 1), line(372, 'b6c6 d5c6 b8c8', 2), line(514, 'b6a6 c6a6 f7e7', 3)],
+      [line(100, 'c6d6 b8e8 d6c7 e8e7 c7c6 e3e4', 1), line(0, 'c6d7 f7g8 d7d6 b8f8', 2), line(0, 'e4f3 e3c1 f1f2 c1d2', 3)]),
+    ctx: { reads: { moverCp: -112, costCp: 0, after: [line(100, 'c6d6 b8e8 d6c7 e8e7 c7c6 e3e4', 1), line(0, 'c6d7 f7g8 d7d6 b8f8', 2), line(0, 'e4f3 e3c1 f1f2 c1d2', 3)] } } },
   { id: 'windmill', q: 'why-best-move', history: [], fen: '1q3rk1/1p3pp1/2p4p/3Ppb2/1PP2Q1P/5P2/8/B4BRK b - - 0 29', san: 'exf4', student: 'b', reads: null, ctx: {} },
 ];
 

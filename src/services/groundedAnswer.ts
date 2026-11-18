@@ -93,6 +93,7 @@ import { readOpposition, oppositionLine, oppositionSquares } from './oppositionR
 import { zugzwangOn, zugzwangSyncLine } from './zugzwangRead';
 import { raceCountOn, raceCountLine, raceCountSquares } from './raceCount';
 import { promotionChoicesOn, promotionChoiceLine } from './promotionChoice';
+import { keyDefenderPlan, keyDefenderLine, defenderSquares } from './keyDefender';
 import type { EndgameRuleMaterial } from '../coach/questionIntents';
 
 // Pure board-fact constants — universal chess values, leaf-local so this module
@@ -1913,6 +1914,15 @@ export function assemblePositionAssessment(opts: {
     } catch { /* a bonus, never a blocker */ }
     try {
       for (const pc of promotionChoicesOn(fen, opts.bestUci)) add(promotionChoiceLine(pc, sc, false), [pc.from, pc.to]);
+    } catch { /* a bonus, never a blocker */ }
+    // THE KEY DEFENDER, standing (WO-DANYA-READS-01 #6): the piece of theirs
+    // doing a job alone, when the engine's best line trades it off — the same
+    // computer the move thought speaks when a move does it.
+    try {
+      if (opts.line && opts.line.length > 0 && whiteCp !== null) {
+        const plan = keyDefenderPlan(fen, { rank: 1, evaluation: whiteCp, mate: typeof opts.mateIn === 'number' && opts.mateIn !== 0 ? opts.mateIn : null, moves: [...opts.line] });
+        if (plan) add(keyDefenderLine(plan, plan.defender.side !== sc, true, fen), defenderSquares(plan));
+      }
     } catch { /* a bonus, never a blocker */ }
   }
   // The passers the read already spoke — its sentence says a passer's blockade
