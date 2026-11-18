@@ -78,7 +78,11 @@ function playLine(fen: string, uci: readonly string[]): ProjectedLinePly[] {
 }
 
 const MOTIF = /\b(lands?|landing|sets? up|setting up) an? /i;
-const PLAIN_REPLY = /^(They (have to )?(answer|take|play)\b|[^ ]+ — checkmate\.$)/;
+// A plain reply, in every phrasing the reply stems rotate through
+// (`puzzleConceptExplanation`: "they answer X" / "they reply X", and "they get
+// out of check with X" / "they answer the check with X" — 7668a50 rotated
+// them; a list that knew only the first counted the second as commentary).
+const PLAIN_REPLY = /^(They (have to )?(answer|take|play|reply)\b|They get out of check with |[^ ]+ is forced\.$|[^ ]+ — checkmate\.$)/;
 const TRAINS = /trains on .* pressure they have to answer/i;
 const KING = /steps toward safety|king marches up/i;
 

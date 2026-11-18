@@ -83,6 +83,7 @@ import { flexibleMove, flexibleMoveLine, flexibleMoveSquares } from './flexibleM
 import { exchangeSacrifice, exchangeSacrificeLine, exchangeSacrificeSquares } from './exchangeSacrifice';
 import { pawnMajority, pawnMajorityLine, pawnMajoritySquares } from './pawnMajority';
 import { fortress, fortressLine, fortressSquares } from './fortress';
+import { itineraryAt, itineraryLine } from './reviewPieceItinerary';
 import { oppositionTaken, oppositionLine, oppositionSquares } from './oppositionRead';
 import { zugzwangMade, zugzwangSyncLine, zugzwangSyncProof } from './zugzwangRead';
 import { theoreticalEndingMade, theoreticalEndingMadeLine } from './theoreticalEnding';
@@ -416,6 +417,11 @@ export interface BoardContexts {
    *  engine's lines from the board after the move, best first (White-POV
    *  cp); [] where none. */
   fortress: { fenBefore: string; san: string; student: Color; replies: readonly ReplyLine[] };
+  /** THE PIECE'S ITINERARY (`pieceItinerary`, Danya's knight "f3–d2–c4"):
+   *  the move `san` on `fenBefore` (either seat) completes a minor piece's
+   *  reroute — two or more hops to an advanced square — read off the game so
+   *  far (`history`, from the start; a board with no game behind it has none). */
+  pieceItinerary: { fenBefore: string; san: string; student: Color; history: readonly string[] };
   /** THE OPPOSITION TAKEN (`oppositionRead`, Danya's "it is Black who has
    *  the opposition"): the king move `san` on `fenBefore` (either seat) takes
    *  the opposition in a king-and-pawn ending, with what it forces.
@@ -2202,6 +2208,30 @@ export const BOARD_COMPUTERS = {
       learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_NA,
       weaknesses: { not: 'a reading of the board said once — no question of the student\'s posed' },
+    },
+  },
+  pieceItinerary: {
+    // The piece's journey in the game, both seats: the move that completes a
+    // minor piece's reroute to an advanced square.
+    read: ({ fenBefore, san, student, history }, fact) => safe(() => {
+      const r = itineraryAt(fenBefore, history, san);
+      if (!r) return null;
+      const mine = r.mover === student;
+      const text = itineraryLine(r.itin, mine);
+      const squares = r.itin.route.slice(-3);
+      const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
+      return fact({ key: `itinerary:${r.itin.route.join('-')}`, claims: [`itinerary:${squares[squares.length - 1]}`], text,
+        proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
+    }),
+    computer: 'itineraryAt',
+    kind: 'judgement',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: { wired: 'services/coachFeatureService.ts' }, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the game behind the move — no question of the student\'s posed' },
     },
   },
   oppositionRead: {

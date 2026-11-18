@@ -54,7 +54,12 @@ export function planSteps(fenAfter: string, line: readonly string[], lastMove: s
     const retakes = (j: number): boolean => !!line[j] && line[j].slice(2, 4) === mv.to;
     const prevTook = i > 0 && played.length >= 2 && (() => { const pu = line[i - 1]; return pu.slice(2, 4) === mv.to; })();
     if (mv.san.includes('+') || mv.san.includes('#')) return null;
-    if (mv.captured && !(allowTrades && (retakes(i + 1) || prevTook))) return null;
+    if (mv.captured) {
+      // A plain trade is passed over: neither the capture nor the recapture
+      // is a step of the plan, and neither is called a break.
+      if (allowTrades && (retakes(i + 1) || prevTook)) continue;
+      return null;
+    }
     if (mv.color !== mover) continue;
     steps.push({ san: mv.san, piece: PIECE[mv.piece], to: mv.to, castle: mv.san.startsWith('O-O'), brk: mv.piece === 'p' && isPawnBreak(before, mv.san, null) });
   }

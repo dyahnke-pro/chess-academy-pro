@@ -1,8 +1,8 @@
 {
  "about": "Which teaching computer reaches which surface, by a static call path from each surface root (scripts/computer-reach.mjs; the list is scripts/computer-reach/computers.json). learn: yes = through the focus runner, door = computed in a Learn turn and decided by Learn's turn door (spoken when the door keeps it); a door-only row says why in `door` (an adapter of computers the other surfaces read, or Learn-only by design).",
  "graph": {
-  "files": 1704,
-  "nodes": 16991
+  "files": 1707,
+  "nodes": 17016
  },
  "totals": {
   "computers": 345,
@@ -31,8 +31,8 @@
     "no": 122
    },
    "tapped": {
-    "yes": 159,
-    "no": 186
+    "yes": 183,
+    "no": 162
    },
    "tactics": {
     "yes": 174,
@@ -270,7 +270,7 @@
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
-   "tapped": "no",
+   "tapped": "yes",
    "tactics": "yes",
    "app": true,
    "other": [
@@ -486,7 +486,7 @@
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
-   "tapped": "no",
+   "tapped": "yes",
    "tactics": "yes",
    "app": true,
    "other": [
@@ -885,7 +885,7 @@
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
-   "tapped": "no",
+   "tapped": "yes",
    "tactics": "yes",
    "app": true,
    "other": [
@@ -1295,7 +1295,7 @@
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
-   "tapped": "no",
+   "tapped": "yes",
    "tactics": "yes",
    "app": true,
    "other": [
@@ -2675,7 +2675,7 @@
       "review": "yes",
       "lesson": "yes",
       "chat": "yes",
-      "tapped": "no",
+      "tapped": "yes",
       "tactics": "yes"
      }
     }
@@ -2734,7 +2734,7 @@
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
-   "tapped": "no",
+   "tapped": "yes",
    "tactics": "yes",
    "app": true,
    "other": [
@@ -2883,7 +2883,7 @@
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
-   "tapped": "no",
+   "tapped": "yes",
    "tactics": "yes",
    "app": true,
    "other": [
@@ -2924,7 +2924,7 @@
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
-   "tapped": "no",
+   "tapped": "yes",
    "tactics": "yes",
    "app": true,
    "other": [
@@ -3215,7 +3215,7 @@
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
-   "tapped": "no",
+   "tapped": "yes",
    "tactics": "yes",
    "app": true,
    "other": [
@@ -3537,7 +3537,7 @@
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
-   "tapped": "no",
+   "tapped": "yes",
    "tactics": "yes",
    "app": true,
    "other": [
@@ -3659,7 +3659,7 @@
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
-   "tapped": "no",
+   "tapped": "yes",
    "tactics": "yes",
    "app": true,
    "other": [
@@ -4030,7 +4030,7 @@
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
-   "tapped": "no",
+   "tapped": "yes",
    "tactics": "yes",
    "app": true,
    "other": [
@@ -4069,7 +4069,7 @@
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
-   "tapped": "no",
+   "tapped": "yes",
    "tactics": "yes",
    "app": true,
    "other": [
@@ -4092,7 +4092,7 @@
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
-   "tapped": "no",
+   "tapped": "yes",
    "tactics": "yes",
    "app": true,
    "other": [
@@ -4222,7 +4222,7 @@
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
-   "tapped": "no",
+   "tapped": "yes",
    "tactics": "yes",
    "app": true,
    "other": [
@@ -4337,7 +4337,7 @@
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
-   "tapped": "no",
+   "tapped": "yes",
    "tactics": "yes",
    "app": true,
    "other": [
@@ -4445,7 +4445,7 @@
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
-   "tapped": "no",
+   "tapped": "yes",
    "tactics": "yes",
    "app": true,
    "other": [
@@ -4582,7 +4582,7 @@
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
-   "tapped": "no",
+   "tapped": "yes",
    "tactics": "yes",
    "app": true,
    "other": [
@@ -4625,7 +4625,7 @@
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
-   "tapped": "no",
+   "tapped": "yes",
    "tactics": "yes",
    "app": true,
    "other": [
@@ -4648,7 +4648,7 @@
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
-   "tapped": "no",
+   "tapped": "yes",
    "tactics": "yes",
    "app": true,
    "other": [
@@ -4913,7 +4913,7 @@
       "review": "yes",
       "lesson": "yes",
       "chat": "yes",
-      "tapped": "no",
+      "tapped": "yes",
       "tactics": "yes"
      }
     }
@@ -5752,7 +5752,7 @@
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
-   "tapped": "no",
+   "tapped": "yes",
    "tactics": "yes",
    "app": true,
    "other": [
@@ -6343,7 +6343,7 @@
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
-   "tapped": "no",
+   "tapped": "yes",
    "tactics": "yes",
    "app": true,
    "other": [
@@ -7210,7 +7210,7 @@
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
-   "tapped": "no",
+   "tapped": "yes",
    "tactics": "yes",
    "app": true,
    "other": [
@@ -7233,7 +7233,7 @@
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
-   "tapped": "no",
+   "tapped": "yes",
    "tactics": "yes",
    "app": true,
    "other": [
@@ -7256,7 +7256,7 @@
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
-   "tapped": "no",
+   "tapped": "yes",
    "tactics": "yes",
    "app": true,
    "other": [

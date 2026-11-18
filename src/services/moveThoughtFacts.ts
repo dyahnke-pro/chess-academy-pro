@@ -844,6 +844,11 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       for (const f of readBoardAll('stalemateTrick', { fenBefore: i.fenBefore, san: i.san, student })) {
         facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'rescue', weight: 70 });
       }
+      // The piece's journey in the game, both seats: the move that completes
+      // a minor piece's reroute (f3–d2–c4).
+      for (const f of readBoardAll('pieceItinerary', { fenBefore: i.fenBefore, san: i.san, student, history: i.history })) {
+        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'route', weight: 56 });
+      }
       // The fortress, both seats: a piece down and a draw the board explains,
       // read off the engine's lines after the move.
       for (const f of readBoardAll('fortress', { fenBefore: i.fenBefore, san: i.san, student, replies })) {

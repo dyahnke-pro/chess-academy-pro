@@ -57,3 +57,25 @@ describe('detectPieceItineraries — the REAL reroute from the game (G3)', () =>
     expect(asBlack.size).toBeGreaterThanOrEqual(1);
   });
 });
+
+describe('the itinerary in the one basket (unification)', () => {
+  // White's queen knight walks b1–d2–f1–e3–d5; Black's queen knight walks b8–d7–f8–e6–d4.
+  const game = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'd3', 'd6', 'c3', 'Nf6', 'Nbd2', 'a6', 'Nf1', 'Ba7', 'Ne3', 'Ne7', 'O-O', 'Ng6', 'h3', 'Nf4', 'Nd5'];
+  it('the registry reads it at the move, both seats, off the game behind it', async () => {
+    const { readBoard } = await import('./boardComputers');
+    const { Chess } = await import('chess.js');
+    const fenAt = (n: number): string => { const c = new Chess(); for (const m of game.slice(0, n)) c.move(m); return c.fen(); };
+    let mine = null; let theirs = null;
+    for (let n = 0; n < game.length; n++) {
+      const f = readBoard('pieceItinerary', { fenBefore: fenAt(n), san: game[n], student: 'w', history: game.slice(0, n) });
+      if (f && f.seat === 'student') mine ??= f;
+      if (f && f.seat === 'opponent') theirs ??= f;
+    }
+    expect(mine?.text).toMatch(/knight/);
+    expect(theirs?.text).toMatch(/^Their knight has gone/);
+  }, 60_000);
+  it('a board with no game behind it has no itinerary', async () => {
+    const { readBoard } = await import('./boardComputers');
+    expect(readBoard('pieceItinerary', { fenBefore: '8/8/8/8/8/8/8/K6k w - - 0 1', san: 'Kb1', student: 'w', history: ['e4'] })).toBeNull();
+  }, 60_000);
+});

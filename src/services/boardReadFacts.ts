@@ -80,13 +80,13 @@ function asAnalysis(lines: readonly AnalysisLine[]): StockfishAnalysis {
   };
 }
 
-export interface BoardRead {
+export interface BoardFactSet {
   facts: BoardFact[];
   /** The one door's importance tier for the board (null when unread). */
   tier: ImportanceTier | null;
 }
 
-export async function boardReadFacts(i: BoardReadInput): Promise<BoardRead> {
+export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
   const side: 'w' | 'b' = i.fen.split(' ')[1] === 'b' ? 'b' : 'w';
   const facts: BoardFact[] = [];
   const top = i.before[0];
@@ -104,7 +104,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardRead> {
   // A FORCED MATE IS THE STORY: no plan, no "finish developing", no kind of
   // position beside it (every-surface gate D, "plans beside mate").
   const mateOnBoard = top.mate != null;
-  const done = (): BoardRead => ({ facts: mateOnBoard ? facts.filter((f) => !BESIDE_MATE.has(f.kind)) : facts, tier: pf.importance.tier });
+  const done = (): BoardFactSet => ({ facts: mateOnBoard ? facts.filter((f) => !BESIDE_MATE.has(f.kind)) : facts, tier: pf.importance.tier });
 
   // THE STANDING and THE KIND OF POSITION: who stands better and why, read
   // off this board (his read opens on it), and what kind of play it asks for.
@@ -180,6 +180,9 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardRead> {
     for (const r of tempting.slice(1)) {
       const san = sanOf(i.fen, r.moves[0]);
       if (!san || refuted.some((t) => t.san === san)) continue;
+      // What a move gives up explains a QUIET move; a capture or a check that
+      // fails is refuted by its line or not at all.
+      if (/x|\+|#/.test(san)) continue;
       if (seatCp(tempting[0], side) - seatCp(r, side) < TEMPTING_COST_CP) continue;
       // The board after the two moves, said in the present (the concession
       // reads a move already played: "it took your last defender").

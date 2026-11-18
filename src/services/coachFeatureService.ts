@@ -47,7 +47,6 @@ import { findWorstPlacedPiece, planAimKey } from './nextPlans';
 import { transferClause, transferMotifOf, recordMotif, withTransfer, motifSaidInstances, type MotifLedger } from './motifLedger';
 import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { detectOpening, detectOpeningByOrder } from './openingDetectionService';
-import { detectPieceItineraries } from './reviewPieceItinerary';
 import { pickStoryGame } from './reviewStoryGame';
 import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShield } from './reviewSacrifice';
 import { detectForcedMatingSequence, explainMatingSacMechanism } from './reviewForcedSequence';
@@ -1700,9 +1699,6 @@ function* reviewSegmentSteps(
   // `tradeIdeaSpoken` flag in the story — no seed carried it before 8d).
   // §1 piece-route itineraries — the student's REAL reroutes in this game
   // ("f3–d2–c4"), keyed by the ply the maneuver completes (G3, from the moves).
-  const pieceItineraries = playerColor
-    ? detectPieceItineraries(moves.map((m) => m.san), playerColor)
-    : new Map<number, { text: string }>();
   const fenChain = buildFenChain(moves);
   const usable = fenChain.length;
   // Hoisted above the selector (2026-09-21): the attribution pre-pass needs the
@@ -4202,7 +4198,7 @@ function* reviewSegmentSteps(
       && moverColor === playerColor
       && (m.classification === null || m.classification === 'book' || m.classification === 'good')
     ) {
-      const itin = pieceItineraries.get(m.ply);
+      const itin = readBoard('pieceItinerary', { fenBefore: fenChain[i].fenBefore, san: m.san, student: moverColor === 'white' ? 'w' : 'b', history: moves.slice(0, i).map((x) => x.san) });
       if (itin) { narration = itin.text; narrationSource = 'per-move'; }
     }
     // §6 STORY-AS-EVIDENCE — once per game, name a cited master game for this

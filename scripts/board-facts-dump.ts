@@ -43,6 +43,7 @@ class Engine {
     return new Promise((resolve) => {
       const best = new Map<number, AnalysisLine>();
       const early = new Map<number, string[]>();
+      const reached = new Map<number, number>();
       const white = fen.split(' ')[1] === 'w';
       this.waiters.push((line) => {
         // `^info depth`, never `.*depth`: a greedy `.*` lands on `seldepth`, and
@@ -50,7 +51,10 @@ class Engine {
         const m = /\b(lower|upper)bound\b/.test(line) ? null : /^info depth (\d+) .*?multipv (\d+) score (cp|mate) (-?\d+).* pv (.+)$/.exec(line);
         // The app's second read: a shallower iteration of the same search (`earlier`).
         if (m && Number(m[1]) === Math.max(1, DEPTH - 4)) early.set(Number(m[2]), m[5].split(' '));
-        if (m && Number(m[1]) === DEPTH) {
+        // The deepest iteration each line reached: a forced mate ends the
+        // search before DEPTH (the Opera game finish read no lines at all).
+        if (m && Number(m[1]) <= DEPTH && Number(m[1]) >= (reached.get(Number(m[2])) ?? 0)) {
+          reached.set(Number(m[2]), Number(m[1]));
           const raw = Number(m[4]);
           const pov = white ? raw : -raw;
           best.set(Number(m[2]), { rank: Number(m[2]), evaluation: m[3] === 'cp' ? pov : (pov > 0 ? 100000 : -100000), mate: m[3] === 'mate' ? pov : null, moves: m[5].split(' '), earlier: early.has(Number(m[2])) ? { moves: early.get(Number(m[2])) } : undefined } as unknown as AnalysisLine);
@@ -89,7 +93,7 @@ async function main(): Promise<void> {
       out.lines = before.map((l) => ({ moves: l.moves.slice(0, 10), cp: l.evaluation, mate: l.mate }));
       // The SAME facts the app reads (`boardReadFacts`), built 'past' as the fitter's tables were.
       const pf = await boardReadFacts({ fen: r.fen, studentColor: side, rating: 1800, before, read, withhold: false, readTempting: true,
-        tense: 'past', history: [], theory: false, studentNeedContext: null });
+        tense: 'now', history: [], theory: false, studentNeedContext: null });
       const facts = pf.facts.map((f) => ({ ...f, codes: codes(f.kind) }));
       const bestUci = before[0]?.moves[0];
       if (bestUci) out.best = new Chess(r.fen).move({ from: bestUci.slice(0, 2), to: bestUci.slice(2, 4), promotion: bestUci[4] ?? 'q' }).san;

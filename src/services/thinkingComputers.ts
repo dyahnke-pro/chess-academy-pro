@@ -36,6 +36,7 @@ export const THINK_STEP: Record<ComputerName, ThinkAnswer> = {
   bindingFact: 'answer-danger',
   theirTarget: 'their-move-changed',
   pieceRoute: 'assess',
+  itineraryAt: 'assess',
   pieceOutFirst: 'assess',
   lineCut: 'is-my-move-safe',
   pieceCage: 'assess',

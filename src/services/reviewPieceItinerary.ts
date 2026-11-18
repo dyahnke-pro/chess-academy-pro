@@ -13,7 +13,7 @@ import type { PieceSymbol } from 'chess.js';
 
 const PIECE_LABEL: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
 
-interface PieceItinerary {
+export interface PieceItinerary {
   /** 1-based ply where the maneuver completes (the last hop). */
   ply: number;
   pieceType: 'n' | 'b' | 'r' | 'q';
@@ -111,4 +111,29 @@ export function detectPieceItineraries(
   // Chronological — you learn as you go.
   found.sort((a, b) => a.ply - b.ply);
   return new Map(found.map((it) => [it.ply, it]));
+}
+
+/** THE ITINERARY THIS MOVE COMPLETES, either seat: the game so far (`history`)
+ *  and the move `san`; the mover's minor piece that, with this move, has taken
+ *  two or more hops to an advanced square. The one detector above, read at
+ *  the move (the registry's `pieceItinerary`). */
+export function itineraryAt(fenBefore: string, history: readonly string[], san: string): { itin: PieceItinerary; mover: 'w' | 'b' } | null {
+  // The game behind the move must be the one on the board: replayed from the
+  // start, it reaches `fenBefore` (a lesson from a set-up board has no game).
+  const replay = new Chess();
+  try { for (const m of history) replay.move(m); } catch { return null; }
+  if (replay.fen().split(' ').slice(0, 4).join(' ') !== fenBefore.split(' ').slice(0, 4).join(' ')) return null;
+  const mover = replay.turn();
+  const it = detectPieceItineraries([...history, san], mover === 'w' ? 'white' : 'black').get(history.length + 1);
+  return it ? { itin: it, mover } : null;
+}
+
+/** The itinerary said from the speaker's seat. */
+export function itineraryLine(it: PieceItinerary, mine: boolean): string {
+  const shown = it.route.slice(-3);
+  const label = PIECE_LABEL[it.pieceType];
+  const to = it.route[it.route.length - 1];
+  return mine
+    ? it.text
+    : `Their ${label} has gone ${shown.join('–')}. It took the long road to ${to} instead of settling for its first square.`;
 }
