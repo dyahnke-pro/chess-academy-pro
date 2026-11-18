@@ -43,7 +43,9 @@ class Engine {
       const best = new Map<number, AnalysisLine>();
       const white = fen.split(' ')[1] === 'w';
       this.waiters.push((line) => {
-        const m = /^info .*depth (\d+) .*multipv (\d+) score (cp|mate) (-?\d+).* pv (.+)$/.exec(line);
+        // `^info depth`, never `.*depth`: a greedy `.*` lands on `seldepth`, and
+        // the lines kept were whichever iteration searched 16 deep selectively.
+        const m = /^info depth (\d+) .*?multipv (\d+) score (cp|mate) (-?\d+).* pv (.+)$/.exec(line);
         if (m && Number(m[1]) === DEPTH) {
           const raw = Number(m[4]);
           const pov = white ? raw : -raw;
