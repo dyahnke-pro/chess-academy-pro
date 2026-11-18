@@ -21,11 +21,11 @@ describe('a drill\'s wrong try is refuted by the one wrong-try computer', () => 
   });
   it('a move that drops a piece names what they win', async () => {
     const fen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 2';
-    expect(await drillWrongTryReason(fen, 'Ng5', null)).toBe('Ng5? Then they play Qxg5 — they win a knight.');
+    expect(await drillWrongTryReason(fen, 'Ng5', null)).toBe('Ng5? That leaves your knight on g5 hanging — the queen on d8 just takes it.');
   });
   it('reads the judge\'s engine line when it has one', async () => {
     const fen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 2';
-    expect(await drillWrongTryReason(fen, 'Ng5', ['d8g5'])).toBe('Ng5? Then they play Qxg5 — they win a knight.');
+    expect(await drillWrongTryReason(fen, 'Ng5', ['d8g5'])).toBe('Ng5? That leaves your knight on g5 hanging — the queen on d8 just takes it.');
   });
   it('says nothing when the board shows nothing concrete', async () => {
     expect(await drillWrongTryReason('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'a3', null)).toBeNull();
