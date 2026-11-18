@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**713 lines · 13 exports · 27 importers · 18 tests · 2 audits**
+**721 lines · 13 exports · 28 importers · 19 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -36,6 +36,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/ruleGradeFen.test.ts`
 - `src/services/speedRunReads.scale.test.ts`
 - `src/services/thoughtComposer.ts`
+- `src/services/voicePackage.bareGrade.test.ts`
 - `src/services/voicePackage.dependentFact.test.ts`
 - `src/services/voicePackage.orphanTail.test.ts`
 - `src/services/voicePackage.test.ts`
@@ -52,8 +53,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `markableSquares` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8824`
-- `src/components/Coach/CoachTeachPage.tsx:12428`
+- `src/components/Coach/CoachTeachPage.tsx:8842`
+- `src/components/Coach/CoachTeachPage.tsx:12448`
 - `src/services/voicePackage.test.ts:293`
 - `src/services/voicePackage.test.ts:302`
 - `src/services/voicePackage.test.ts:312`
@@ -67,17 +68,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `claimKey` (const) — 6 call sites
 - `src/services/everythingEvents.test.ts:55`
 - `src/services/learnTurnDoor.factId.test.ts:44`
-- `src/services/learnTurnDoor.test.ts:990`
+- `src/services/learnTurnDoor.test.ts:996`
 - `src/services/slipQuestion.test.ts:45`
 - `src/services/slipQuestion.test.ts:54`
-- `src/services/thoughtComposer.ts:407`
+- `src/services/thoughtComposer.ts:472`
 
-### `buildVoicePackage` (function) — 92 call sites
-- `src/components/Coach/CoachGameReview.tsx:1935`
-- `src/components/Coach/CoachTeachPage.tsx:8988`
+### `buildVoicePackage` (function) — 94 call sites
+- `src/components/Coach/CoachGameReview.tsx:1961`
+- `src/components/Coach/CoachTeachPage.tsx:9006`
 - `src/hooks/usePositionNarration.ts:323`
-- `src/services/coachFeatureService.ts:3410`
-- `src/services/coachFeatureService.ts:3423`
+- `src/services/coachFeatureService.ts:3459`
+- `src/services/coachFeatureService.ts:3472`
 - `src/services/coachSurfaceScorecard.report.test.ts:113`
 - `src/services/coachSurfaceScorecard.report.test.ts:135`
 - `src/services/computedVoiceAudit.report.test.ts:310`
@@ -87,7 +88,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/dnaDoor.test.ts:51`
 - `src/services/holeOneKey.test.ts:26`
 - `src/services/laneReachability.test.ts:97`
-- `src/services/learnTurnDoor.ts:980`
+- `src/services/learnTurnDoor.ts:996`
 - `src/services/openingStoryWholeBeat.test.ts:65`
 - `src/services/openingStoryWholeBeat.test.ts:70`
 - `src/services/outpostOneKey.test.ts:22`
@@ -95,9 +96,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/ruleGradeFen.test.ts:9`
 - `src/services/ruleGradeFen.test.ts:12`
 - `src/services/speedRunReads.scale.test.ts:41`
-- `src/services/thoughtComposer.ts:388`
-- `src/services/thoughtComposer.ts:399`
-- `src/services/thoughtComposer.ts:479`
+- `src/services/thoughtComposer.ts:453`
+- `src/services/thoughtComposer.ts:464`
+- `src/services/thoughtComposer.ts:549`
+- `src/services/voicePackage.bareGrade.test.ts:17`
+- `src/services/voicePackage.bareGrade.test.ts:24`
 - `src/services/voicePackage.dependentFact.test.ts:22`
 - `src/services/voicePackage.dependentFact.test.ts:25`
 - `src/services/voicePackage.dependentFact.test.ts:28`
@@ -167,39 +170,39 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts:596`
 
 ### `spokenSentenceKeys` (function) — 24 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8813`
-- `src/components/Coach/CoachTeachPage.tsx:10804`
-- `src/components/Coach/CoachTeachPage.tsx:10808`
-- `src/components/Coach/CoachTeachPage.tsx:10832`
-- `src/components/Coach/CoachTeachPage.tsx:12193`
-- `src/components/Coach/CoachTeachPage.tsx:12407`
+- `src/components/Coach/CoachTeachPage.tsx:8831`
+- `src/components/Coach/CoachTeachPage.tsx:10821`
+- `src/components/Coach/CoachTeachPage.tsx:10825`
+- `src/components/Coach/CoachTeachPage.tsx:10849`
+- `src/components/Coach/CoachTeachPage.tsx:12213`
+- `src/components/Coach/CoachTeachPage.tsx:12427`
 - `src/services/claimKeysLooseCount.test.ts:34`
-- `src/services/coachFeatureService.ts:3426`
+- `src/services/coachFeatureService.ts:3475`
 - `src/services/holeOneKey.test.ts:26`
 - `src/services/learnTurnDoor.phaseWave.test.ts:134`
-- `src/services/learnTurnDoor.test.ts:661`
-- `src/services/learnTurnDoor.test.ts:683`
+- `src/services/learnTurnDoor.test.ts:667`
+- `src/services/learnTurnDoor.test.ts:689`
 - `src/services/looseStill.test.ts:45`
 - `src/services/looseStill.test.ts:48`
 - `src/services/os11RootCauses5And6.replay.test.ts:34`
 - `src/services/os11RootCauses5And6.replay.test.ts:47`
 - `src/services/outpostOneKey.test.ts:20`
-- `src/services/thoughtComposer.ts:400`
-- `src/services/thoughtComposer.ts:486`
-- `src/services/thoughtComposer.ts:490`
+- `src/services/thoughtComposer.ts:465`
+- `src/services/thoughtComposer.ts:556`
+- `src/services/thoughtComposer.ts:560`
 - `src/services/voicePackage.test.ts:399`
 - `src/services/voicePackage.test.ts:408`
 - `src/services/voicePackage.test.ts:420`
 - `src/services/voicePackage.test.ts:498`
 
 ### `describeVoicePackage` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12180`
-- `src/components/Coach/CoachTeachPage.tsx:12484`
+- `src/components/Coach/CoachTeachPage.tsx:12200`
+- `src/components/Coach/CoachTeachPage.tsx:12504`
 - `src/services/voicePackage.test.ts:38`
 
 ### `joinSpoken` (function) — 4 call sites
-- `src/services/learnTurnDoor.ts:1357`
-- `src/services/thoughtComposer.ts:502`
+- `src/services/learnTurnDoor.ts:1373`
+- `src/services/thoughtComposer.ts:572`
 - `src/services/voicePackage.test.ts:578`
 - `src/services/voicePackage.test.ts:587`
 
@@ -208,10 +211,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/voicePackage.test.ts:615`
 
 ### `keptLines` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:1723`
-- `src/services/learnTurnDoor.test.ts:220`
-- `src/services/learnTurnDoor.test.ts:226`
-- `src/services/learnTurnDoor.test.ts:232`
+- `src/components/Coach/CoachTeachPage.tsx:1732`
+- `src/services/learnTurnDoor.test.ts:225`
+- `src/services/learnTurnDoor.test.ts:231`
+- `src/services/learnTurnDoor.test.ts:237`
 
 ### `stripMoveNumbers` (re-export) — 12 call sites
 - `scripts/convert-lichess-tsv.mjs:19`
@@ -244,6 +247,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/ruleGradeFen.test.ts`
 - `src/services/slipQuestion.test.ts`
 - `src/services/speedRunReads.scale.test.ts`
+- `src/services/voicePackage.bareGrade.test.ts`
 - `src/services/voicePackage.dependentFact.test.ts`
 - `src/services/voicePackage.orphanTail.test.ts`
 - `src/services/voicePackage.test.ts`
