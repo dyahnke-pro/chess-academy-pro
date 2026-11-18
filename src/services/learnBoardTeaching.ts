@@ -54,7 +54,7 @@ import { orderTeaching } from './orderTeaching';
 import { kingAttack } from './kingAttack';
 import { ruleException } from './ruleException';
 import { falseAlarm } from './falseAlarm';
-import { theirMoveCost } from './theirMoveCost';
+import { readBoard, readKey } from './boardComputers';
 import { pushOrHold } from './pushOrHold';
 import { mastersPlanRead, planStillAhead, type MastersPlanRead } from './mastersPlanRead';
 import { masterMovesCachedSync } from './masterPlayLookup';
@@ -75,7 +75,7 @@ import { stalemateWatch } from './stalemateWatch';
 import { criticalMomentFound, readCriticalMoment, type CriticalFanLine } from './criticalMoment';
 import { SAID_BEFORE_MOVE } from './computerRoles';
 import { fileClaimed, oppositeWingsRace } from './planRace';
-import { conceptInstanceKey, holeKey, tacticGeometryKey } from './conceptKey';
+import { conceptInstanceKey, tacticGeometryKey } from './conceptKey';
 import { sayYourMove, sayMoveNoun } from './spokenMove';
 import { deepFact, theirTarget, binding, moveHit } from './threeFacts';
 import { countWarning } from './countMethod';
@@ -429,28 +429,26 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingFact[] {
 /** What THEIR move cost them, for the student to use — "…e6 opens a square your
  *  knight jumps into", "the passive …d6 blocks in the bishop". */
 export function theirMoveTeaching(fenBefore: string, san: string, student: 'w' | 'b'): TeachingFact | null {
-  const cost = theirMoveCost(fenBefore, san, student);
+  const cost = readBoard('theirCost', { fenBefore, san, student });
   if (!cost) return null;
+  const kind = readKey(cost).split(':')[0];
   // A hole your knight can use: its first hop, as the move to play.
-  const arrows: ArrowClaim[] = cost.kind === 'hole' && cost.squares.length >= 2
+  const arrows: ArrowClaim[] = kind === 'hole' && cost.squares.length >= 2
     ? [{ from: cost.squares[1], to: cost.squares[2] ?? cost.squares[0], role: 'play', source: 'learn.theirMoveCost' }]
     : [];
-  const after = boardAfterMove(fenBefore, san);
+  const after = cost.fen;
   return teachingFact('theirMoveCost', {
     // The hole's first knight hop is the student's move to play (its arrow is 'play').
     computer: 'theirMoveCost', kind: 'their-cost', seat: 'opponent', fen: after, names: namesMoves(student, after, ...arrows.filter((x) => x.role === 'play').map((x) => ({ from: x.from, to: x.to }))), proof: NO_PROOF.description, text: cost.text, squares: cost.squares,
-    // ONE HOLE, ONE KEY (dup map #5): a hole is said under `hole:<sq>` by every
-    // computer that names it, so the opening story's "…b5 has a cost for them"
-    // and this line are one claim, said once (Colle replay 2026-11-05, 10.Re1).
-    claims: [cost.kind === 'hole' && cost.squares[0] ? holeKey(cost.squares[0]) : `cost-${cost.kind}-${cost.squares[0]}`],
+    claims: cost.claims,
     // A lasting cost (a hole, a shut bishop, castling gone) is a consequence,
     // the why of their move — never an aside (A-plan P6: held 2 of 4).
     role: 'teach',
     // The hole without the knight's first hop: a pointer at the student's next
     // decision, said by the record (`HeldForm.points`).
-    ...(cost.heldText ? { heldForm: { text: cost.heldText, proof: NO_PROOF.description, squares: cost.squares.slice(0, 1), points: 'misplaced-piece' } } : {}),
+    ...(cost.heldForm ? { heldForm: cost.heldForm } : {}),
   }, {
-    event: { name: 'coach_their_move_cost_named', props: { surface: 'coach-teach', kind: cost.kind } },
+    event: { name: 'coach_their_move_cost_named', props: { surface: 'coach-teach', kind } },
     arrows,
   });
 }

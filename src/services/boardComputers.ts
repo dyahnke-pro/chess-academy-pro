@@ -93,6 +93,8 @@ import { enemyKingStuckInCenter } from './reviewSacrifice';
 import { findMinorityAttack, findColorComplexWeakness } from './positionReadingService';
 import { planRaceClause, planRaceProof } from './planRace';
 import { pieceWish } from './pieceWish';
+import { theirMoveCost } from './theirMoveCost';
+import { holeKey } from './conceptKey';
 import { describeStructure } from './boardStructure';
 import { exchangeStakes } from './factStakes';
 import { andList as listAnd, countWord } from '../utils/andList';
@@ -478,6 +480,11 @@ export interface BoardContexts {
   minority: { fen: string; student: Color };
   colourComplex: { fen: string; student: Color };
   raceOfPlans: { fen: string; student: Color };
+  /** WHAT THEIR MOVE COST THEM (`theirCost`): their move `san` on
+   *  `fenBefore` opened a hole a knight of the student's reaches, shut in a
+   *  bishop, or gave up castling — the student's to use. The key starts with
+   *  the cost's kind (`hole:`, `bishop:` …). */
+  theirCost: { fenBefore: string; san: string; student: Color };
   /** THE OPPOSITION TAKEN (`oppositionRead`, Danya's "it is Black who has
    *  the opposition"): the king move `san` on `fenBefore` (either seat) takes
    *  the opposition in a king-and-pawn ending, with what it forces.
@@ -2608,6 +2615,28 @@ export const BOARD_COMPUTERS = {
       learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_NA,
       weaknesses: { not: 'a reading of the board — no question of the student\'s posed' },
+    },
+  },
+  theirCost: {
+    read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const cost = theirMoveCost(fenBefore, san, student);
+      if (!cost) return null;
+      const after = boardAfter(fenBefore, san) ?? fenBefore;
+      // ONE HOLE, ONE KEY: a hole is said under `hole:<sq>` by every computer
+      // that names it, so the opening story's line and this one are one claim.
+      const claim = cost.kind === 'hole' && cost.squares[0] ? holeKey(cost.squares[0]) : `cost-${cost.kind}-${cost.squares[0]}`;
+      return fact({ key: `${cost.kind}:${cost.squares.join('-')}`, claims: [claim], text: cost.text, proof: NO_PROOF.description, squares: [...cost.squares], stakes: null,
+        seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: after, role: 'teach',
+        ...(cost.heldText ? { heldForm: { text: cost.heldText, proof: NO_PROOF.description, squares: cost.squares.slice(0, 1), points: 'misplaced-piece' } } : {}) });
+    }),
+    computer: 'theirMoveCost',
+    kind: 'their-cost',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: { wired: 'services/learnBoardTeaching.ts' },
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'what their move gave up — no question of the student\'s posed' },
     },
   },
   oppositionRead: {

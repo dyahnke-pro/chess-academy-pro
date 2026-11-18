@@ -81,7 +81,6 @@ import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { exchangeIdeas } from './exchangeIdeas';
 import { minorsAtHome } from './development';
 import { slipAnswerText, studentMovePoint } from './playCommentary';
-import { theirMoveCost } from './theirMoveCost';
 import { readTheirMove, READ_FACT_KIND } from './opponentMoveReads';
 import { playItAnyway } from './opponentMovePurpose';
 import { knownAttack } from './attackLibrary';
@@ -1462,14 +1461,14 @@ export function computeMoveFacets(
   // their bishop shut in, castling lost (David 2026-10-02: "teachings on
   // opponents moves" — Review said what their move stopped, never what it cost).
   if (!isStudent && studentColorWB) {
-    const cost = theirMoveCost(fenBefore, san, studentColorWB);
+    const cost = readBoard('theirCost', { fenBefore, san, student: studentColorWB });
     // ONE PRODUCER FOR A HOLE THEIR MOVE GAVE (lead 2026-10-20): the walk's
     // opening story says it ("…e5 has a cost for them"), and only when a knight
     // is two moves from it and would hit something there.
-    if (cost && cost.kind !== 'hole') {
+    if (cost && !readKey(cost).startsWith('hole:')) {
       const f = made('theirMoveCost', 'their-cost', cost.text);
       facets.push(f);
-      f.identity = `their-cost:${cost.kind}:${cost.squares[0] ?? ''}`;
+      f.identity = `their-cost:${readKey(cost).split(':')[0]}:${cost.squares[0] ?? ''}`;
       recSquares(f, cost.squares);
     }
   }

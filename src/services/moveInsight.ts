@@ -33,7 +33,7 @@ import { sayMoveClause } from './spokenMove';
 import { andList } from '../utils/andList';
 import { countWords } from '../utils/countWords';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
-import { theirMoveCost } from './theirMoveCost';
+import { readBoard } from './boardComputers';
 import { openingWindowOpen } from './moveFundamentals';
 import { readConversion } from './conversionMethod';
 import { minorsAtHome } from './development';
@@ -619,7 +619,7 @@ export function theirMoveChanged(fenBefore: string, san: string, studentColor: '
     squares.push(ours[0].square);
   }
   if (parts.length === 0) {
-    const cost = theirMoveCost(fenBefore, san, studentColor);
+    const cost = readBoard('theirCost', { fenBefore, san, student: studentColor });
     if (cost) { parts.push(cap(cost.text.replace(/\.?$/, '.'))); squares.push(...cost.squares); }
   }
   return parts.length > 0 ? { text: parts.join(' '), squares } : null;

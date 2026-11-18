@@ -903,6 +903,10 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
           for (const f of readBoardAll('raceOfPlans', onBoard)) add(f, 'plan', 60);
         }
       }
+      // What their move cost them, for the student to use.
+      for (const f of readBoardAll('theirCost', { fenBefore: i.fenBefore, san: i.san, student })) {
+        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'weakness', weight: 58 });
+      }
       // The fortress, both seats: a piece down and a draw the board explains,
       // read off the engine's lines after the move.
       for (const f of readBoardAll('fortress', { fenBefore: i.fenBefore, san: i.san, student, replies })) {
