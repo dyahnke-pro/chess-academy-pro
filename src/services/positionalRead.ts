@@ -52,10 +52,26 @@ import {
 /** What makes a bad piece bad, said after its name in players' words ("Their
  *  bishop is their problem piece, hemmed in behind its own pawns") — never the
  *  note's label with its reason in brackets read aloud. */
-function badPieceWords(note: { kind: PieceQualityKind; reason: string }): string {
+function badPieceWords(note: { kind: PieceQualityKind; reason: string; square: string }): string {
   if (note.kind === 'bad-bishop') return 'hemmed in behind its own pawns';
-  if (note.kind === 'rim-knight') return 'stuck on the rim';
+  // The rim, said as the squares it reaches (Danya's article boards,
+  // 2026-11-18): "stuck" was false where the engine's best move IS that
+  // knight's way out (Nhf5) — a knight on the rim is short of squares, not
+  // trapped, and the count is true on every board.
+  if (note.kind === 'rim-knight') return `out on the rim, where it reaches only ${knightReach(note.square)} squares`;
   return note.reason;
+}
+
+/** Squares a knight on `square` reaches on an empty board — the rim's cost. */
+function knightReach(square: string): number {
+  const f = square.charCodeAt(0) - 97;
+  const r = Number(square[1]) - 1;
+  let n = 0;
+  for (const [df, dr] of [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]]) {
+    const ff = f + df; const rr = r + dr;
+    if (ff >= 0 && ff < 8 && rr >= 0 && rr < 8) n += 1;
+  }
+  return n;
 }
 
 const NAME: Record<string, string> = {
