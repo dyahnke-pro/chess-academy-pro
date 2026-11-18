@@ -1715,6 +1715,9 @@ export function computeMoveFacets(
         add(readBoardAll('backRankWeakness', { fenBefore, san, student: studentColorWB })[0]);
         add(readBoardAll('loadedDiscovery', { fenBefore, san, student: studentColorWB })[0]);
         add(readBoardAll('kingSacrifice', { fenBefore, san, student: studentColorWB, replies })[0]);
+        // The hidden combination (group 8): material given away from the
+        // king and won back with interest, or mate, by the played line.
+        add(readBoardAll('deepCombination', { fenBefore, san, student: studentColorWB, replies })[0]);
       }
       // The flexible move, both seats (the option principle): of moves the
       // engine holds as good as each other, the one that keeps the important

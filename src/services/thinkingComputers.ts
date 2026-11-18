@@ -260,6 +260,7 @@ export const THINK_STEP: Record<ComputerName, ThinkAnswer> = {
   backRankWeakness: 'their-targets',
   loadedDiscovery: 'forcing-moves',
   kingSacrifice: 'calculate',
+  deepCombination: 'calculate',
   flexibleMove: 'candidates',
   exchangeSacrifice: 'calculate',
   pawnMajority: 'assess',

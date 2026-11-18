@@ -65,7 +65,7 @@ import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 import { FUNDAMENTAL_HABIT, habitIsOwed, type MethodHabit } from './methodBeat';
 import { noteSlip } from './learnBoardTeaching';
 import { readBoard, readBoardAll, readKey } from './boardComputers';
-import { replyReadsFromFan, repliesNotWeighed, type ReplyRead } from './ifTheyPlay';
+import { replyReadsFromFan, repliesNotWeighed, landedSquare, type ReplyRead } from './ifTheyPlay';
 import { proofCut, describeProofResult, NO_FOLLOW, type LineProof } from './exchangeLedger';
 import { computeMoveFacets, prematureBreakWhy, INFLUENCE_LOOSE_TAIL_RE, positionalVerdictLine } from './reviewFullData';
 import { mainConceptLine } from './slipDepth';
@@ -5403,7 +5403,7 @@ async function augmentWithProjections(
       try { const m = next ? new Chess(s.fenAfter).move(next.san) : null; played = m ? `${m.from}${m.to}${m.promotion ?? ''}` : null; } catch { played = null; }
       const treeCtx = {
         fen: s.fenAfter, replies, rating, student: studentColorWB,
-        seconds: [s.recordReplyLine ?? null, s.recordReplyEarlier ?? null], played, tense: 'past' as const, liveBoard: null,
+        seconds: [s.recordReplyLine ?? null, s.recordReplyEarlier ?? null], played, tense: 'past' as const, liveBoard: null, landed: landedSquare(s.san),
       };
       // THE BAIT (WO-COACH-NEXT-TO-YOU-01 C4): the trap the student's move set,
       // said before the tree's other branches (the tree no longer repeats it).

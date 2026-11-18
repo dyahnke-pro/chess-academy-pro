@@ -61,6 +61,7 @@ import type { LearnLane } from './learnTurnDoor';
 import { computeMustDefend } from './threatOut';
 import { moveOrder } from './moveOrder';
 import { readBoardAll, readKey } from './boardComputers';
+import { landedSquare } from './ifTheyPlay';
 import { detectTactics } from './tacticsDetector';
 import { thinkStepOf } from './thinkingComputers';
 import { desperadoAt, desperadoLine } from './desperado';
@@ -864,6 +865,12 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       for (const f of readBoardAll('kingSacrifice', { fenBefore: i.fenBefore, san: i.san, student, replies })) {
         facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'attack-king', weight: 70 });
       }
+      // The hidden combination (group 8), both seats: material given away from
+      // the king, and the forced line that wins it back with interest or mates.
+      for (const f of readBoardAll('deepCombination', { fenBefore: i.fenBefore, san: i.san, student, replies })) {
+        const mate = !!(f.stakes && 'mate' in f.stakes && f.stakes.mate);
+        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: mate ? 'mate' : 'win-material', weight: 70 });
+      }
     }
     // THE FLEXIBLE MOVE, both seats (the option principle): of moves as good
     // as each other, the one that keeps the important moves open — the read
@@ -915,7 +922,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       ...readBoardAll('secondAttacker', { fenBefore: i.fenBefore, san: i.san, student }).map((f) => ({ f, idea: (readKey(f).endsWith(':mate') ? 'mate' : 'win-material') as IdeaKind, weight: 72 })),
       // Out of an attack it is the piece's rescue said with more; else its square.
       ...readBoardAll('outOfReach', { fenBefore: i.fenBefore, san: i.san, student, altUcis: (i.reads?.before ?? []).map((l) => l.moves[0] ?? '') }).map((f) => ({ f, idea: (readKey(f).endsWith(':rescue') ? 'rescue' : 'outpost') as IdeaKind, weight: 86 })),
-      ...readBoardAll('poisonedPiece', { fenBefore: i.fenBefore, san: i.san, student }).map((f) => ({ f, idea: 'mate' as IdeaKind, weight: 80 })),
+      ...readBoardAll('poisonedPiece', { fenBefore: i.fenBefore, san: i.san, student, fan: i.reads?.everyAfter ?? null }).map((f) => ({ f, idea: (f.stakes && 'mate' in f.stakes && f.stakes.mate ? 'mate' : 'win-material') as IdeaKind, weight: 80 })),
     ];
     for (const { f, idea, weight } of moveReads) facts.push({ ...f, namesStudentMove: false, source: 'boardRead', idea, weight });
     // DANYA'S METHOD POINTS (S4, 2026-11-17), through the one registry: the
@@ -1012,13 +1019,13 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     const student = mine ? sideOf(i.fenBefore) : sideOf(fenAfter);
     let next: string | null = null;
     try { const m = i.line?.[0] ? new Chess(fenAfter).move(i.line[0]) : null; next = m ? `${m.from}${m.to}${m.promotion ?? ''}` : null; } catch { next = null; }
-    for (const f of readBoardAll('ifTheyPlay', { fen: fenAfter, replies: every.replies, rating: every.rating, student, seconds: (i.reads?.after ?? []).map((l) => l.moves), played: next, tense: 'live', liveBoard: null })) {
+    for (const f of readBoardAll('ifTheyPlay', { fen: fenAfter, replies: every.replies, rating: every.rating, student, seconds: (i.reads?.after ?? []).map((l) => l.moves), played: next, tense: 'live', liveBoard: null, landed: landedSquare(i.san) })) {
       const { heldForm: _held, ...fact } = f;
       facts.push({ ...fact, namesStudentMove: false, source: 'ifTheyPlay', idea: fact.stakes && 'mate' in fact.stakes && fact.stakes.mate ? 'mate' : 'choice', weight: 60 });
     }
     // THE BAIT (WO-COACH-NEXT-TO-YOU-01 C4): the trap the student's move set —
     // the reply many players at this level choose that loses.
-    for (const f of readBoardAll('baitSet', { fen: fenAfter, replies: every.replies, rating: every.rating, student, seconds: (i.reads?.after ?? []).map((l) => l.moves), played: next, tense: 'live', liveBoard: null })) {
+    for (const f of readBoardAll('baitSet', { fen: fenAfter, replies: every.replies, rating: every.rating, student, seconds: (i.reads?.after ?? []).map((l) => l.moves), played: next, tense: 'live', liveBoard: null, landed: landedSquare(i.san) })) {
       facts.push({ ...f, namesStudentMove: false, source: 'baitSet', idea: f.stakes && 'mate' in f.stakes && f.stakes.mate ? 'mate' : 'choice', weight: 60 });
     }
   }

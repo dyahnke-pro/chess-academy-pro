@@ -114,7 +114,7 @@ describe('kingSacrifice — what it opens and the line that proves it', () => {
     expect(k!.opens).toEqual({ kind: 'king-out', square: 'h7' });
     expect(k!.follow).toEqual(['Ng5+']);
     expect(k!.outcome).toBe('attack');
-    expect(kingSacrificeLine(k!, 'w')).toBe('Bxh7+ gives up your bishop to drag their king out to h7. After Kxh7, Ng5+ follows, and the attack is worth more than the piece.');
+    expect(kingSacrificeLine(k!, 'w')).toBe('Bxh7+ gives up your bishop to drag their king out to h7. After …Kxh7, Ng5+ follows, and the attack is worth more than the piece.');
   });
 
   it('is silent when the engine does not score it, and for a quiet developing move', () => {
