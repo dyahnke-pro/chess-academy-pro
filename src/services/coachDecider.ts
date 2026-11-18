@@ -726,16 +726,20 @@ export function instantWaitsForVerdict(input: {
   return input.moveCostCp !== null ? input.moveCostCp >= VERDICT_TURN_CP : input.verdictUrgent;
 }
 
-/** The squares a mate's own line lands on — every move's arrival square, the
- *  mating one included — read off the line it carries, so a board fact about
+/** The squares the MATING side's moves land on in a mate's own line — the
+ *  mating move included — read off the line it carries, so a board fact about
  *  those squares is part of the mate's story without widening the mate fact's
- *  own squares (a wider set let a smaller fact subsume the mate, Légal 5.Nxe5). */
+ *  own squares (a wider set let a smaller fact subsume the mate, Légal 5.Nxe5).
+ *  The defender's replies are not the mate's story: with their squares in, a
+ *  "move your queen away from theirs" line rode beside "you have mate in one"
+ *  (Gotham–Jelena baseline, 2026-11-18). */
 function mateLineSquares(lines: ReadonlyArray<{ fen: string; sans: readonly string[] }> | undefined): string[] {
   const out: string[] = [];
   for (const l of lines ?? []) {
     try {
       const c = new Chess(l.fen);
-      for (const san of l.sans) { const m = c.move(san); if (!m) break; out.push(m.to); }
+      const mater = c.turn();
+      for (const san of l.sans) { const mover = c.turn(); const m = c.move(san); if (!m) break; if (mover === mater) out.push(m.to); }
     } catch { /* a line that will not play names no squares */ }
   }
   return out;

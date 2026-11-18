@@ -13,6 +13,17 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## 🗣️ WO-LEARN-MOMENT-01 — Learn speaks like a coach at the board: on an error, on a right move at a real decision, and quiet otherwise (David 2026-11-18: "learn narrations are needed only when the player makes an error of some kind … And it knows when not to say anything" → "Or it can be used to reenforce proper move behavior" → "It gets more quiet if you make all the right moves. But it speaks on errors" → "Make all of the fixes now at once")
+
+- **Measured first** on three games with stored reads (Danya, David, the 800 Colle): the error computer said "head on to f6" where Qe5 threatened mate, "win a knight" for a capture both moves made, and "it eyed f7, but the king holds it" on a move whose cost was a missed queen win. Fixed in the one computer (`errorWhy`): what the better move wins comes first, a capture is said by what it takes, the eyed-guess yields to a real miss.
+- **The habit** is total (`correctionHabit`): every correction ends on one, in fixed words.
+- **The alert** (`focusChances`): a trade is never "a loose piece" (net material, `LOOSE_GAIN`); a move that walks into their tactic is a miss of kind `allow` (`walkedInto`), proven off the played move's own line.
+- **The bar** is the student's level (`learnErrorBarCp`): 150 / 100 / 50.
+- **The moment** (`learnMoment`): correction / decision / quiet; a quiet turn says only the phase change, their emerging plan, the only-move moment and a stalemate warning. Row field `turnMoment`; audit row LQ.
+- **Review reads Learn** (`learnHeardFor` → `dropHeardInLearn`): a sentence Learn said is not said again word for word.
+- **One mate scale** (`mateScale.ts`); a defence (must-defend, a fundamental, the defence idea) never rides beside a forced mate.
+- **Owed — the last unification step:** the Learn turn rule still sits beside `decide()` behind the one door (`coachTurn`, `DOOR_RULE`). It keeps Learn's waves, mission / focus owners and chance holds, which no other surface has; folding them into `decide()` moves ~1,500 lines and ~40 tests, and is the next build.
+
 ## 🎯 WO-TIE-01 — add what is missing and tie every loose end (David 2026-11-17: "This is the build where we add what is missing and tie ALL lose ends together" → "Remember we have a unified coach. So all computers feed the coach to all surfaces. It's only the narrations that differ. Same with chat." → "let's find a happy medium" on agents vs solo)
 
 **One coach:** every computer feeds the ONE fact set (`moveThoughtFacts` + the registry); each surface's rules decide what is said (Play silent, Learn names no move unasked, theory in Review's button). A computer only one screen's own code reads is the loose end.

@@ -12,6 +12,7 @@ import type { Proof } from './proof';
 import { lineProofFromUci } from './proof';
 import type { ScoredMove } from './pvPlayback';
 import { lineSeatAt } from '../utils/andList';
+import { MATE_CP } from './mateScale';
 
 /** The best of exactly these moves, from one search (UCI `searchmoves`). */
 export type BestAmong = (fen: string, ucis: readonly string[]) => Promise<ScoredMove | null>;
@@ -22,7 +23,6 @@ export interface SacrificeLedgerRead {
   squares: string[];
 }
 
-const MATE_CP = 10_000;
 
 function studentPov(m: ScoredMove, student: 'w' | 'b'): number {
   const white = m.mate != null ? (m.mate > 0 ? MATE_CP : -MATE_CP) : m.evaluation;

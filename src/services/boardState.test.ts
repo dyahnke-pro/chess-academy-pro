@@ -72,3 +72,17 @@ describe('boardState — the board decides what may be said (hand walks 2026-09-
     expect(boardVeto(null, { inFlux: 'e4', mateOnBoard: true })).toBeNull();
   });
 });
+
+// A DEFENCE IS NEVER THE MATE'S STORY (Gotham–Jelena baseline 2026-11-18):
+// "their queen on d8 attacks your queen on c8 … move the queen away" shared d8
+// with the student's mate in one and rode beside "you have mate in one".
+describe('beside a mate, a defence is moot', () => {
+  it('must-defend and a fundamental are vetoed even on the mate\'s squares', async () => {
+    const { boardVeto } = await import('./boardState');
+    const state = { inFlux: null, mateOnBoard: true };
+    const mate = new Set(['d8']);
+    expect(boardVeto('must-defend', state, ['d8', 'c8'], mate)).toBe('beside-mate');
+    expect(boardVeto('fundamental', state, ['d8'], mate)).toBe('beside-mate');
+    expect(boardVeto('defence-idea', state, ['d8'], mate)).toBe('beside-mate');
+  });
+});

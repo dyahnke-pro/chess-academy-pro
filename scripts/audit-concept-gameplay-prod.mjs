@@ -593,8 +593,11 @@ async function main() {
     // spoke ONLY because the door faded the lanes that carry it.
     const REAL_RECORD = realRecord;
     const fadedTurns = learnTurnRows(listener).filter((r) => (r.faded ?? []).length > 0).length;
-    record('C. a SPOKEN line carries a computed concept INVARIANT (the concept was voiced mid-GAME)',
-      !!hit || (REAL_RECORD && fadedTurns > 0),
+    // Since the moment rule (David 2026-11-18) the concept speaks only on a
+    // turn Learn speaks on — a correction or a real decision — so a clean game
+    // may never voice it: REPORTED, and LQ holds the rule itself.
+    record('C. a SPOKEN line carries a computed concept INVARIANT — REPORTED (Learn is quiet on a calm move)',
+      true,
       hit ? hit.replace(/\s+/g, ' ').slice(0, 180) : `none of ${lines.length} lines${REAL_RECORD ? ` — real record: ${fadedTurns} turn(s) faded a proven skill` : ''}`);
     // Board NARRATION only (a line that names a square or a piece) — the
     // coach's opening greeting ("What are we working on today?") is not a
@@ -651,7 +654,9 @@ async function main() {
     // chosen over the next one; the method — their weakness, your worst piece,
     // your pawn break — is asked once a game; steps of the plan are credited.
     const plan = planTally(tape);
-    record('V10. every plan says why it was chosen, and the method is asked once a game', plan.everyPlanHasWhy && plan.methodAsked,
+    // A plan is said only on a turn Learn speaks on (the moment rule): the
+    // method is owed only where a plan was stated.
+    record('V10. every plan says why it was chosen, and the method is asked once a game where a plan was said', plan.everyPlanHasWhy && (plan.stated === 0 || plan.methodAsked),
       `${plan.stated} plan statement(s) (${plan.methodOwed} the method leads), ${plan.why} why(s), method asked ${plan.method}×, ${plan.steps} step(s) credited`);
     // REASON VARIETY (David 2026-10-14): no reason formula said more than
     // twice in one game — the third "nothing's defending it" is a template.
@@ -815,6 +820,22 @@ async function main() {
         record('LW. the door ranks by his measured rates: every row names its worth source, and some lanes are learned', missingWorth === 0 && src.learned > 0,
           `${missingWorth} row(s) without worthFrom; worth from — learned ${src.learned}, lane ${src.lane}, stake ${src.stake}`);
       }
+      // LEARN SPEAKS ON A MOMENT, QUIET OTHERWISE (David 2026-11-18: "It gets
+      // more quiet if you make all the right moves. But it speaks on errors").
+      // Every row names its moment (correction / decision / quiet), and on a
+      // quiet turn only what speaks at any moment spoke: the phase change, the
+      // character, their emerging plan, the only-move moment, the stalemate.
+      {
+        const ANY_MOMENT = new Set(['phase', 'character', 'planArc', 'positionFacts', 'stalemate']);
+        const QUIET_OK = new Set(['phase', 'character', 'stalemate']);
+        const unnamed = turns.filter((t) => !('turnMoment' in t)).length;
+        const loud = turns.filter((t) => t.turnMoment === 'quiet' && (t.spoke ?? []).some((l) => !ANY_MOMENT.has(l)));
+        const by = {};
+        for (const t of turns) by[String(t.turnMoment)] = (by[String(t.turnMoment)] ?? 0) + 1;
+        const quietSpoke = turns.filter((t) => t.turnMoment === 'quiet' && (t.spoke ?? []).some((l) => !QUIET_OK.has(l))).length;
+        record('LQ. Learn is quiet on a calm move: every row names its moment, and a quiet turn speaks only what speaks at any moment', unnamed === 0 && loud.length === 0,
+          `${unnamed} row(s) without a moment; moments — ${Object.entries(by).map(([k, v]) => `${k} ${v}`).join(', ')}; ${loud.length} quiet turn(s) spoke a moment lane${loud.length ? ` — ${loud[0].spoke.join(',')}` : ''}; ${quietSpoke} quiet turn(s) spoke a plan or an only-move line`);
+      }
       // THE TURN'S MOMENT (WO-COACH-NEXT-TO-YOU-01 C1): every row names the
       // moment the move to come got (question / build / bait / none) and
       // whether their move was read — the field the record dial (C2) reads.
@@ -825,7 +846,9 @@ async function main() {
         const missing = turns.filter((t) => !('moment' in t) || !MOMENTS.has(t.moment) || typeof t.readTheirMove !== 'boolean').length;
         const by = {}; let read = 0;
         for (const t of turns) { by[String(t.moment)] = (by[String(t.moment)] ?? 0) + 1; if (t.readTheirMove) read += 1; }
-        record('LM. every Learn turn names its moment for the move to come, and whether their move was read', missing === 0 && turns.some((t) => t.moment),
+        // A calm turn says nothing about the move to come (the moment rule),
+        // so a game with no forward moment is honest; the field must exist.
+        record('LM. every Learn turn names its moment for the move to come, and whether their move was read', missing === 0,
           `${missing} row(s) without a valid moment; moments — ${Object.entries(by).map(([k, v]) => `${k} ${v}`).join(', ')}; their move read on ${read} of ${turns.length}`);
       }
       record('LD3. nothing FADES before the student has held anything (grey teaches in full)', fadeBeforeEvidence.length === 0, `${fadeBeforeEvidence.length} of ${turns.length} rows faded with no held evidence or lack the field; ${fadedTotal} faded in all, after ${heldSeen} held answer(s)`);

@@ -89,6 +89,12 @@ const STANDING: ReadonlySet<FactKind> = new Set<FactKind>([
   'castling',
 ]);
 
+/** A defence or a principle is never the mate's story, whatever squares it
+ *  shares with the line: beside a forced mate the defence is moot ("move the
+ *  queen away from their queen on d8" beside "you have mate in one",
+ *  Gotham–Jelena baseline 2026-11-18). */
+const NOT_THE_MATES_STORY: ReadonlySet<FactKind> = new Set<FactKind>(['must-defend', 'fundamental', 'defence-idea']);
+
 /** Beside a mate, what may still speak: the mate itself and the verdict on the
  *  move that allowed or found it (and, through `boardVeto`'s `mateSquares`, a
  *  teaching fact about the mate's own squares). */
@@ -148,7 +154,7 @@ export function boardVeto(
 ): BoardVeto | null {
   if (kind === null) return null;
   if (state.mateOnBoard && !BESIDE_MATE.has(kind)) {
-    const aboutMate = !STANDING.has(kind) && !!mateSquares && !!squares?.some((s) => mateSquares.has(s));
+    const aboutMate = !STANDING.has(kind) && !NOT_THE_MATES_STORY.has(kind) && !!mateSquares && !!squares?.some((s) => mateSquares.has(s));
     if (!aboutMate) return 'beside-mate';
   }
   if (state.inFlux && STANDING.has(kind)) return 'in-flux';

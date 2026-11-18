@@ -21,6 +21,16 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 
 ---
 
+## 000zj. WO-LEARN-MOMENT-01 — Learn speaks on an error or a real decision, quiet otherwise; Review never repeats Learn (David 2026-11-18, PLAN.md)
+- ✅ the one error computer: what the better move wins (a mate threat, a piece), a capture said by what it takes, no "eyed" guess on a real miss
+- ✅ every correction ends on its habit (`correctionHabit`, total, fixed words)
+- ✅ the alert never calls a trade loose; a move that walks into their tactic is a miss (`walkedInto`, kind `allow`)
+- ✅ the error bar is the student's level (1.5 pawns / 1 pawn / inaccuracies)
+- ✅ the moment rule in the door (`learnMoment`, `quiet-turn`), page sets `decision` from the grade; audit row LQ
+- ✅ Review reads the game's Learn transcript into its say-once ledger (`dropHeardInLearn`)
+- ✅ one mate scale (`mateScale.ts`, seven private copies gone, gate); defence lines vetoed beside a forced mate
+- 🟠 fold the Learn turn rule into `decide()` (one rule behind the one door): Learn's waves, owners and chance holds have no twin elsewhere — next build
+
 ## 000zi. WO-SET-WEAKNESS-01 — the coach steers its own natural moves toward a board that asks the student's red/grey skills, any skill, not only tactics (David 2026-11-17, PLAN.md)
 - 🟡 queued after WO-SPEEDRUN-02: multi-move steer inside the human model, half credit, silent, one planner (the focus plant generalised)
 

@@ -183,6 +183,10 @@ export interface LearnTurnRow {
   moment?: string | null;
   /** Their move was read beside it (moment 1, the thought's first step). */
   readTheirMove?: boolean;
+  /** WHETHER LEARN SPEAKS THIS TURN (`learnMoment`, David 2026-11-18): a
+   *  correction, a right move at a real decision, or quiet; null on a bare
+   *  door with no turn. A quiet turn speaks only what speaks at any moment. */
+  turnMoment?: 'correction' | 'decision' | 'quiet' | null;
   held: string[];
   /** Lanes that spoke short because the skill is proven (the fade). */
   faded: string[];

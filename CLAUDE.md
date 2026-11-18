@@ -5874,6 +5874,44 @@ should never have had. Gate: `learnSilentCapture.test.ts`.
 PLAY staying a pure playing surface. What changed is only the delivery:
 commentary, not cards.
 
+### 🔒🔒 LEARN SPEAKS ON A MOMENT, AND IS QUIET OTHERWISE (David 2026-11-18: "So learn narrations are needed only when the player makes an error of some kind … And it knows when not to say anything. Like a chess coach." → "Or it can be used to reenforce proper move behavior" → "It gets more quiet if you make all the right moves. But it speaks on errors").
+
+Every Learn turn has ONE moment (`learnTurnDoor.learnMoment`, on the row as
+`turnMoment`), and the door holds every fact that does not belong to it
+(`speaksOnMoment`, hold reason `quiet-turn`):
+- **CORRECTION** — the grade fired at the student's bar (`saidSlipCp`, or the
+  verdict / blunder-check fact). The one error computer (`errorWhy`) says what
+  the move allowed, with its line on the board, why the tempting move fails,
+  the better move once it is past and what it does; the habit closes it
+  (`methodBeat.correctionHabit`, total — fixed words, said on every correction:
+  repetition builds the habit).
+- **DECISION** — a right move at a real decision (`LearnTurnTag.decision`: the
+  grade's `only-move` / `clear-best`, never a fault, never a recapture). The
+  move's one reason speaks, and the found / held / punished-slip lanes. A
+  proven skill fades as always.
+- **QUIET** — everything else. Only what speaks at any moment: the phase change
+  and the character, their new plan once it emerges (`plan:<their seat>:…:emerge`),
+  the only-move moment ("slow down", `key-moment`), a stalemate a winning
+  student is one move from giving.
+
+THE ERROR BAR IS THE STUDENT'S LEVEL (`slipDetector.learnErrorBarCp`): under
+1000 a pawn and a half, 1000–2000 a pawn, above 2000 inaccuracies (a smaller
+slip speaks only on a mechanism the board shows, `errorWhy.failed`). Their
+threats are never said before the move (explain at the miss); THE TACTIC ALERT
+fires after a missed shot, engine-proven, with the take-back offer — including
+a move that WALKS INTO their tactic (`focusChances.walkedInto`, kind `allow`).
+The focus's own rules stand unchanged: own Takeback weighs a miss half (full
+with Hint), the coach's Try again full, a retry find the smaller reward; rungs
+0–1 pause and take back, 2–3 never pause; the clue keeps fixed words.
+Opening theory in Learn is said on a slip, never on a calm book move.
+
+REVIEW NEVER REPEATS LEARN WORD FOR WORD (`dropHeardInLearn`): the review build
+reads the game's own `coachTranscript` (`learnHeardFor`) into the walk's say-once
+ledger; the deeper form — the line, the better move's reason, the theory — still
+speaks. Gates: `learnMoment.test.ts`, `reviewReadsLearn.test.ts`,
+`learnErrorBar.test.ts`, `walkedInto.test.ts`; audit row LQ in
+`audit-concept-gameplay-prod.mjs`.
+
 ### 🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).
 
 🔴 **This REPLACES the 2026-09-24 "LEARN NAMES THE MOVE — WITH ITS REASON"

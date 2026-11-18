@@ -27,9 +27,9 @@ import { proofCut, describeProofResult } from './exchangeLedger';
 import { andList, lineSeatAt, lineShape } from '../utils/andList';
 import { costWords } from './engineConstants';
 import { unmarked } from '../utils/sanMark';
+import { MATE_CP } from './mateScale';
 
 const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
-const MATE_CP = 100000;
 /** An option is "just as good" as what was played inside this band. */
 const SAME_BAND_CP = 50;
 

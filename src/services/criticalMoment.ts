@@ -34,13 +34,13 @@ import { decisiveReason, reasonPosed } from './decisiveReason';
 import { takesBack, type PrevCaptureContext } from './captureRun';
 import { emitDecisiveReason } from './decisiveReasonEvents';
 import type { AnalysisLine } from '../types';
+import { MATE_CP } from './mateScale';
 
 /** A mate is scored flat, for BOTH sides, on purpose: three moves that all mate
  *  are three moves that all win, so nothing hinges and the coach stays silent.
  *  Distance-weighting them would manufacture a "two moves keep the mate" fork
  *  out of mate-in-3 versus mate-in-5, which is not a decision worth stopping a
  *  student for. */
-const MATE_CP = 100_000;
 
 /** The fan, as every producer in the app already carries it (white-POV cp). */
 export interface CriticalFanLine {

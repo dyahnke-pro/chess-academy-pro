@@ -27,6 +27,7 @@ import type { StockfishAnalysis } from '../types';
 import { winPercent } from './accuracyService';
 import { findHangingPieces } from './tacticClassifier';
 import { emitSearchDepth, type SearchDepthRow } from './searchDepthEvents';
+import { MATE_CP } from './mateScale';
 
 /** What the search is FOR. A new purpose fails to compile until it has a policy. */
 type SearchPurpose = 'live' | 'question' | 'review' | 'sacrifice';
@@ -56,7 +57,6 @@ export const SEARCH_POLICY: Record<SearchPurpose, SearchPolicy> = {
   sacrifice: { minDepth: 16, maxDepth: 26, step: 2, budgetMs: 12000, stableFor: 3, winBand: 3 },
 };
 
-const MATE_CP = 10_000;
 
 /** How sharp the position is, 0-3: one point each for the side to move being
  *  in check, a loose piece on the board, several forcing moves, and unequal

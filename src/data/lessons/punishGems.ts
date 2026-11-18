@@ -68,7 +68,8 @@ function hasNarrationFor(id: string): boolean {
  *  "positional" edge surfaced as a weapon: only 54 of 344 mined gems and 15 of
  *  45 gambit gems were real traps. */
 export const TRAP_BAR_CP = 300;
-export const MATE_CP = 100000;
+export { MATE_CP } from '../../services/mateScale';
+import { MATE_CP } from '../../services/mateScale';
 export function isWeaponGem(gem: PunishGem): boolean {
   return gem.tier === 'confirmed' && gem.engineCp !== null && gem.engineCp >= TRAP_BAR_CP;
 }

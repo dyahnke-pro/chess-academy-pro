@@ -1477,7 +1477,7 @@ export function decideTurn(
   for (const f of facts) if (f.text.trim()) worthFrom[f.lane] ??= worthSource(f);
   const pointersSaid = [...new Set(keep.flatMap((f) => (f.claims ?? []).filter((c) => c.startsWith('pointer:')).map((c) => c.slice('pointer:'.length))))];
   const pointers = pointersSaid.length || pointersHeld.length ? { pointers: { said: pointersSaid, heldByRecord: [...pointersHeld] } } : {};
-  if (offered.length > 0) emitLearnTurn({ ...pointers, spokeKinds, worthFrom, offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, moment: momentSaid, readTheirMove, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], heldWhy: { ...heldWhy }, refusedWhy: { ...refusedWhy }, ownMove, ownLanes, ownProven, turn, decidedAt: Date.now(), decideMs: Date.now() - decideStart });
+  if (offered.length > 0) emitLearnTurn({ ...pointers, spokeKinds, worthFrom, offered: [...offered], spoke: [...spoke], lead: lead?.lane ?? null, moment: momentSaid, readTheirMove, turnMoment: moment, held: [...held], faded: [...faded], unproven: unprovenLanes.length, unprovenLanes: [...unprovenLanes], proofUnsaid: [...proofUnsaid], heldWithProof: [...heldWithProof], heldStaked: [...heldStaked], heldWhy: { ...heldWhy }, refusedWhy: { ...refusedWhy }, ownMove, ownLanes, ownProven, turn, decidedAt: Date.now(), decideMs: Date.now() - decideStart });
   reportEverything(facts.map((x) => voicedAs.get(x.id) ?? x), turn, new Set(pkg.kept.flatMap((k) => (k.factId ? [k.factId] : []))), (f) =>
     pkg.dropped.find((d) => d.fact.factId === f.id)?.reason ?? heldWhy[f.lane] ?? refusedWhy[f.lane] ?? null);
   return { pkg, offered, spoke, lead, held, faded, proofOf, unproven: unprovenLanes.length, unprovenLanes, pointed: pointersSaid.length > 0 };
@@ -1507,7 +1507,7 @@ function ownedTurn(facts: readonly LaneFact[], turn: LearnTurnTag | null, decide
   const held = [...new Set(offered)];
   const heldWhy: Partial<Record<LearnLane, HoldReason>> = {};
   for (const l of held) heldWhy[l] = 'mission';
-  if (offered.length > 0) emitLearnTurn({ spokeKinds: [], worthFrom: {}, offered: [...offered], spoke: [], lead: null, held: [...held], faded: [], unproven: 0, unprovenLanes: [], proofUnsaid: [], heldWithProof: [], heldStaked: [], heldWhy, refusedWhy: {}, ownMove: null, ownLanes: [], ownProven: false, turn, decidedAt: Date.now(), decideMs: Date.now() - decideStart });
+  if (offered.length > 0) emitLearnTurn({ spokeKinds: [], worthFrom: {}, offered: [...offered], spoke: [], lead: null, turnMoment: learnMoment(turn, facts), held: [...held], faded: [], unproven: 0, unprovenLanes: [], proofUnsaid: [], heldWithProof: [], heldStaked: [], heldWhy, refusedWhy: {}, ownMove: null, ownLanes: [], ownProven: false, turn, decidedAt: Date.now(), decideMs: Date.now() - decideStart });
   reportEverything(facts, turn, new Set(), (f) => heldWhy[f.lane] ?? null);
   return { pkg: { spoken: '', kept: [], dropped: [] }, offered, spoke: [], lead: null, held, faded: [], proofOf: new Map(), unproven: 0, unprovenLanes: [] };
 }

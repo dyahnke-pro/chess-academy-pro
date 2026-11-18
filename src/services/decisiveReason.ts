@@ -29,6 +29,7 @@ import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { markSaysMate, unmarked } from '../utils/sanMark';
 import { costReason, reasonSans, reasonWinWords } from './costReason';
 import { takesBack, type PrevCaptureContext } from './captureRun';
+import { MATE_CP } from './mateScale';
 
 export type ReasonKind = 'the' | 'a' | 'close';
 export type ReasonSource = 'material' | 'stops' | 'prepares' | 'description';
@@ -72,7 +73,6 @@ export const CLOSE_GAP_CP = 40;
 /** A reason must account for this share of the gap to be THE reason. */
 const COVERS_SHARE = 0.6;
 
-const MATE_CP = 100_000;
 /** A gap this large is decisive; when forcing play cannot show it, the whole
  *  engine line is read for it. */
 /** A mate this short is the reason itself; a longer one is too when the

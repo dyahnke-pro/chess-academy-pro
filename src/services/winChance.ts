@@ -25,10 +25,10 @@
  */
 
 /** Lichess's slope (https://lichess.org/page/accuracy). */
+import { MATE_CP } from './mateScale';
 const SLOPE = 0.00368208;
 
 /** A forced mate, as centipawns, when a line's value is read for a seat. */
-const MATE_CP = 100000;
 
 /** Lichess's winning chances, −1..1, for the side `cp` is from. */
 export function winningChances(cp: number): number {
