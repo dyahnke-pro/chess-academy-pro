@@ -11,7 +11,7 @@
 import type { Color, Square } from 'chess.js';
 import { noPawnCanChallenge } from './outpost';
 import { holeKey } from './conceptKey';
-import { findWeakPawns, pressureCount, capturesWinMaterial, legalSeeGainFor } from './positionReadingService';
+import { findWeakPawns, pressureCount, capturesWinMaterial, legalSeeGainFor, campHoles } from './positionReadingService';
 import { squaresProof, legalLineProof } from './proof';
 import { heldOf } from './planJudgement';
 import { costStakes } from './factStakes';
@@ -39,9 +39,46 @@ function fallsToOneMore(fen: string, sq: string, student: Color): boolean {
   return false;
 }
 
+/** A piece of the student's bears on `sq` now, or will within two quiet moves
+ *  of one piece, each landing safely — the second front can be opened. */
+function canAimAt(fen: string, sq: string, student: Color): boolean {
+  const c = board(fen);
+  if (!c) return false;
+  if (c.attackers(sq as Square, student).length > 0) return true;
+  const start = withTurn(fen, student);
+  const s = start ? board(start) : null;
+  if (!s) return false;
+  const enemy = other(student);
+  // A piece's quiet, safe steps from `pos` (a fen with the student to move).
+  const steps = (pos: string, from?: string): { fen: string; to: string }[] => {
+    const b = board(pos);
+    if (!b) return [];
+    const out: { fen: string; to: string }[] = [];
+    for (const m of b.moves({ verbose: true })) {
+      if (m.captured || m.piece === 'p' || m.piece === 'k' || (from && m.from !== from)) continue;
+      const after = play(pos, m.san);
+      if (!after || legalSeeGainFor(after.after.fen(), m.to, enemy) > 0) continue;
+      out.push({ fen: after.after.fen(), to: m.to });
+    }
+    return out;
+  };
+  const bears = (pos: string, at: string): boolean => board(pos)?.attackers(sq as Square, student).includes(at as Square) ?? false;
+  // Within two moves of one piece: the second front is a plan, not a hope.
+  for (const one of steps(s.fen())) {
+    if (bears(one.fen, one.to)) return true;
+    const again = withTurn(one.fen, student);
+    if (again && steps(again, one.to).some((two) => bears(two.fen, two.to))) return true;
+  }
+  return false;
+}
+
 /** SECOND WEAKNESS — their weak pawn holds today, and a second weak pawn sits
  *  on the other wing: two weaknesses far apart are more than their pieces can
- *  guard. Board read; past the opening only. */
+ *  guard. Board read; past the opening only. The principle needs both halves
+ *  on the board (Danya article boards 2026-11-18: "open a second front against
+ *  d5" while a pawn queened on f8): their pieces are TIED to the first pawn —
+ *  as many guards as attackers, so none can leave — and a piece of the
+ *  student's can reach the second one within two moves. */
 export function secondWeakness(fen: string, student: Color): StructureRead | null {
   const c = board(fen);
   if (!c || fullmove(fen) < 12) return null;
@@ -50,13 +87,13 @@ export function secondWeakness(fen: string, student: Color): StructureRead | nul
   const weak = [...new Set([...w.isolated, ...w.backward])];
   for (const p1 of weak) {
     const pc = pressureCount(fen, p1);
-    if (!pc || pc.attackers < 1 || pc.verdict === 'winnable') continue;
+    if (!pc || pc.verdict !== 'balanced-tension') continue;
     // A pawn one more attacker away from falling does not "hold for now": the
     // move that adds the attacker is the priority (Danya bench 2026-11-17:
     // "Their a4 pawn is defended enough today" said beside "aim at it: Nc3
     // does").
     if (fallsToOneMore(fen, p1, student)) continue;
-    const p2 = weak.find((q) => q !== p1 && Math.abs(fileIdx(q) - fileIdx(p1)) >= 3);
+    const p2 = weak.find((q) => q !== p1 && Math.abs(fileIdx(q) - fileIdx(p1)) >= 3 && canAimAt(fen, q, student));
     if (!p2) continue;
     const text = rotateStem([
       `Don't rush their ${p1} pawn: it holds for now. Their ${p2} pawn on the other wing is a second weakness, and their pieces can't guard both.`,
@@ -319,6 +356,27 @@ export function dontRepair(
   return null;
 }
 
+/** Knight moves from `a` to `b` on an empty board. */
+function knightSteps(a: string, b: string): number {
+  const key = (f: number, r: number): string => `${f},${r}`;
+  const goal = key(fileIdx(b), rankNum(b));
+  let frontier: [number, number][] = [[fileIdx(a), rankNum(a)]];
+  const seen = new Set([key(fileIdx(a), rankNum(a))]);
+  for (let d = 0; d <= 6; d += 1) {
+    if (frontier.some(([f, r]) => key(f, r) === goal)) return d;
+    const next: [number, number][] = [];
+    for (const [f, r] of frontier) {
+      for (const [df, dr] of [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]]) {
+        const nf = f + df; const nr = r + dr;
+        if (nf < 0 || nf > 7 || nr < 1 || nr > 8 || seen.has(key(nf, nr))) continue;
+        seen.add(key(nf, nr)); next.push([nf, nr]);
+      }
+    }
+    frontier = next;
+  }
+  return 7;
+}
+
 /** THE MIRRORED-SQUARE ASYMMETRY — in a near-symmetric structure, a pawn of
  *  yours can still guard your central square, while no pawn of theirs can ever
  *  guard its mirror: a lasting hole for them that you do not have. */
@@ -344,6 +402,15 @@ export function mirroredAsymmetry(fen: string, student: Color): StructureRead | 
       .filter((p) => Math.abs(fileIdx(p) - f) === 1 && (student === 'w' ? rankNum(p) < myRank : rankNum(p) > myRank))
       .sort((a, b) => Math.abs(rankNum(a) - myRank) - Math.abs(rankNum(b) - myRank));
     if (guards.length === 0) continue;
+    // A HOLE IS ONLY A HOLE TO A PIECE THAT CAN USE IT (Danya article boards
+    // 2026-11-18: "so that square stays a hole for them" said in a rook ending
+    // and with no piece of the student's anywhere near). A bishop of the
+    // hole's colour, or a knight within three knight's moves of it — the hole
+    // is long-term, so the road may be long, but it has to exist.
+    if (!campHoles(fen, enemy, student).includes(m2)) continue;
+    const canSit = piecesOf(c, student, 'b').some((b) => shade(b) === shade(m2))
+      || piecesOf(c, student, 'n').some((n) => knightSteps(n, m2) <= 3);
+    if (!canSit) continue;
     const guard = guards[0];
     const proof = squaresProof(`your ${guard} pawn can still guard ${m}, but no pawn of theirs can reach a square that guards ${m2}`, [guard, m, m2]);
     if (!proof) continue;

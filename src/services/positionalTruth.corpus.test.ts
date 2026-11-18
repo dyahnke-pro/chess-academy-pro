@@ -23,6 +23,7 @@ import {
   findColorComplexWeakness,
   findMinorityAttack,
 } from './positionReadingService';
+import { readPosition } from './positionalRead';
 
 describe('positionalTruth — knight outpost', () => {
   it('flags a pawn-defended knight no enemy pawn can challenge', () => {
@@ -92,9 +93,10 @@ describe('positionalTruth — weak colour complex (2026-09-13 add)', () => {
   it('fires when the bishop of that colour is gone and ≥2 own-camp holes are that colour', () => {
     // Black has a light bishop (c8) but NO dark bishop; d6/f6/h6 are dark holes
     // in Black's camp → a dark-square complex weakness for Black.
-    // White keeps a knight — the piece that can settle on those holes (a hole
-    // nothing of theirs can use is not a weakness: hand walk 2026-09-27).
-    const cc = findColorComplexWeakness('2b3k1/pp3p1p/4p1p1/8/8/8/8/N3K3 w - - 0 1');
+    // White's knight on e4 — the piece that can settle on those holes, one
+    // step from d6 and f6 (a hole nothing of theirs can reach is not a
+    // weakness: hand walk 2026-09-27; Danya article boards 2026-11-18).
+    const cc = findColorComplexWeakness('2b3k1/pp3p1p/4p1p1/8/4N3/8/8/4K3 w - - 0 1');
     expect(cc.some((c) => c.side === 'b' && c.complex === 'dark' && c.squares.includes('d6'))).toBe(true);
   });
   it('does NOT fire when a bishop of that colour still covers the squares', () => {
@@ -106,8 +108,10 @@ describe('positionalTruth — weak colour complex (2026-09-13 add)', () => {
 
 describe('positionalTruth — minority attack (2026-09-13 add)', () => {
   it('names the lever + target when a real minority is ready to strike', () => {
-    // White a2,b4 vs Black a7,b7,c6 → b5 hits c6 (Carlsbad archetype).
-    const ma = findMinorityAttack('6k1/pp3ppp/2p1p3/8/1P6/4P3/P4PPP/6K1 w - - 0 1', 'w');
+    // White a4,b4 vs Black a7,b7,c6 → b5 hits c6 (Carlsbad archetype): a4
+    // holds b5, b7 takes back, and c6 is left backward on the half-open
+    // c-file. (With the pawn still on a2, …cxb5 simply wins it.)
+    const ma = findMinorityAttack('6k1/pp3ppp/2p1p3/8/PP6/4P3/5PPP/6K1 w - - 0 1', 'w');
     expect(ma).toEqual({ flank: 'queenside', leverSan: 'b5', leverFrom: 'b4', leverTo: 'b5', target: 'c6' });
   });
   it('does NOT fire without a pawn minority on the flank', () => {
@@ -128,5 +132,22 @@ describe('positionalTruth — passers and blockade', () => {
     expect(findBlockade(fen, 'b')).toEqual({ blocker: 'd6', pawn: 'd5' });
     // and white is not "blockading" anything of black's here
     expect(findBlockade(fen, 'w')).toBeNull();
+  });
+});
+
+// Danya article boards 2026-11-18: "isolated — a long-term target" / "so a
+// piece has to" said for a pawn nothing of the other side could reach.
+describe('positionalTruth — an isolated pawn is a target only when it can be reached', () => {
+  it('silent for a far pawn nothing of theirs reaches in a move (a7, their bishop on the other colour)', () => {
+    const said = readPosition('8/p7/5p1p/6p1/1PK3P1/kBp2P1P/2P5/1n6 b - - 0 54', 'black').map((o) => o.text).join(' ');
+    expect(said).not.toMatch(/a7 is isolated/);
+  });
+  it('in an ending the king is an attacker: b6 with their king a step away', () => {
+    const said = readPosition('8/8/1p1k4/5ppp/PPK1p3/6P1/5PP1/8 b - - 0 40', 'black').map((o) => o.text).join(' ');
+    expect(said).toMatch(/b6 is isolated/);
+  });
+  it('still said when a piece of theirs bears on it: White\'s a3, hit by the knight on c4', () => {
+    const said = readPosition('2r2rk1/p2qbppp/4p3/3pP1N1/2nP3P/P2R4/5PP1/2BQR1K1 b - - 0 20', 'black').map((o) => o.text).join(' ');
+    expect(said).toMatch(/Their pawn on a3 is isolated/);
   });
 });

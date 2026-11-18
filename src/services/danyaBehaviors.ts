@@ -603,8 +603,9 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         return !occ || occ.color === student; // empty or self — not enemy-blockaded
       };
       const live = passers.find(canAdvance);
-      if (live) {
-        return { fact: passerTrumpSentence(live, true), squares: [live], keys: [`passer-${live}`, `student-passer-${live[0]}`] };
+      const fact = live ? passerTrumpSentence(fen, live, true) : null;
+      if (live && fact) {
+        return { fact, squares: [live], keys: [`passer-${live}`, `student-passer-${live[0]}`] };
       }
       return null;
     },
