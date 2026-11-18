@@ -62,7 +62,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `methodBeatRead` (function) — 4 call sites
-- `src/services/coachDecider.ts:575`
+- `src/services/coachDecider.ts:579`
 - `src/services/methodBeat.live.test.ts:151`
 - `src/services/methodBeat.need.test.ts:4`
 - `src/services/methodBeat.test.ts:4`

@@ -58,7 +58,7 @@
 - `src/services/narrationImportance.test.ts:120`
 
 ### `computeImportance` (function) — 46 call sites
-- `src/services/coachDecider.ts:279`
+- `src/services/coachDecider.ts:283`
 - `src/services/importanceStudentTerm.test.ts:17`
 - `src/services/importanceStudentTerm.test.ts:18`
 - `src/services/importanceStudentTerm.test.ts:32`

@@ -2,8 +2,7 @@ import { useState, useCallback } from 'react';
 import { stockfishEngine } from '../services/stockfishEngine';
 import type { MoveResult } from './useChessGame';
 import type { BoardAnnotationCommand } from '../types';
-import { liveMovePrice } from '../services/playedMoveGrade';
-import { answerShown } from '../services/discussionPractice';
+import { answerShown, liveMovePrice } from '../services/coachDecider';
 import { Chess } from 'chess.js';
 
 /** The engine's move said as a player says it (SAN), never raw UCI. */

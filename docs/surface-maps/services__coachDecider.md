@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**749 lines · 27 exports · 25 importers · 20 tests · 31 audits**
+**753 lines · 29 exports · 26 importers · 20 tests · 33 audits**
 
 ## Locked rules that govern this surface
 
@@ -47,6 +47,7 @@
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/hooks/usePhaseNarration.door.test.ts`
 - `src/hooks/usePhaseNarration.ts`
+- `src/hooks/usePracticePosition.ts`
 - `src/services/coachDecider.test.ts`
 - `src/services/coachDecisionEmits.test.ts`
 - `src/services/coachFeatureService.ts`
@@ -508,6 +509,36 @@
 - `src/services/learnErrorBar.test.ts:10`
 - `src/services/slipDetector.ts:152`
 
+### `answerShown` (re-export) — 4 call sites
+- `src/hooks/usePracticePosition.ts:104`
+- `src/services/discussionPractice.ts:170`
+- `src/services/discussionPractice.ts:180`
+- `src/test/oneCoachSurfaces.gate.test.ts:79`
+
+### `liveMovePrice` (re-export) — 22 call sites
+- `src/components/Coach/CoachTeachPage.tsx:13387`
+- `src/components/Coach/CoachTeachPage.tsx:13406`
+- `src/hooks/useDiscussionPractice.ts:462`
+- `src/hooks/usePracticePosition.ts:90`
+- `src/services/exploredMoveGrade.ts:42`
+- `src/services/moveRating.ts:412`
+- `src/services/onePrice.test.ts:53`
+- `src/services/onePrice.test.ts:55`
+- `src/services/onePrice.test.ts:68`
+- `src/services/onePrice.test.ts:69`
+- `src/services/onePrice.test.ts:76`
+- `src/services/onePrice.test.ts:81`
+- `src/services/onePrice.test.ts:91`
+- `src/services/onePrice.test.ts:105`
+- `src/services/playedMoveGrade.ts:305`
+- `src/services/settledPrice.bf4.test.ts:42`
+- `src/services/settledPrice.bf4.test.ts:56`
+- `src/services/settledPrice.bf4.test.ts:62`
+- `src/services/studentMovePrice.test.ts:64`
+- `src/services/studentMovePrice.test.ts:70`
+- `src/services/takenBackPuzzles.ts:59`
+- `src/test/onePrice.gate.test.ts:57`
+
 ## Tests
 
 - `scripts/ship-check-lib/green-memory.test.ts`
@@ -538,6 +569,7 @@ A browser-driven prod audit that exercises this surface through the UI will NOT
 appear here — check the post-deploy matrix in CLAUDE.md for those._
 
 - `scripts/audit-ai-consent-persist.mjs`
+- `scripts/audit-analysis-practice-loop.mjs`
 - `scripts/audit-campaign-gate1.mjs`
 - `scripts/audit-campaign-tracks-prod.mjs`
 - `scripts/audit-coach-all-questions-prod.mjs`
@@ -568,3 +600,4 @@ appear here — check the post-deploy matrix in CLAUDE.md for those._
 - `scripts/audit-record-grid.mjs`
 - `scripts/audit-review-overhaul-prod.mjs`
 - `scripts/audit-review-reopen-probe.mjs`
+- `scripts/audit-tactics-analysis-practice.mjs`

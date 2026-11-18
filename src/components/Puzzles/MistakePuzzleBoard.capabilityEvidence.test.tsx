@@ -150,7 +150,7 @@ describe('MistakePuzzleBoard writes capability evidence at the solve', () => {
     await act(async () => { latestOnMove!(mv('a2', 'a3', 'a3')); });   // wrong first
     await act(async () => { await sleep(1700); });
     const showMe = await screen.findByTestId('show-solution-button');
-    await act(async () => { showMe!.click(); });
+    await act(async () => { showMe.click(); });
     await solveCleanly();
     expect(recordCapabilityEvidence).toHaveBeenCalledWith(expect.objectContaining({ cpLoss: 150, prompted: false }));
   });
@@ -163,7 +163,7 @@ describe('MistakePuzzleBoard writes capability evidence at the solve', () => {
 
     const showMe = await screen.findByTestId('show-solution-button');
     expect(showMe).not.toBeNull();
-    await act(async () => { showMe!.click(); });
+    await act(async () => { showMe.click(); });
     await solveCleanly();
 
     expect(recordCapabilityEvidence).toHaveBeenCalledTimes(1);
@@ -179,7 +179,7 @@ describe('MistakePuzzleBoard writes capability evidence at the solve', () => {
     await screen.findByTestId('mock-board');
     await act(async () => { await sleep(150); });
     const showMe = await screen.findByTestId('show-solution-button');
-    await act(async () => { showMe!.click(); });
+    await act(async () => { showMe.click(); });
     await solveCleanly();
     expect(onResolved).toHaveBeenCalledTimes(1);
     expect(onResolved).toHaveBeenCalledWith(false, expect.any(Number));

@@ -681,7 +681,7 @@ async function main() {
     let showMe = 0;
     const showMeDeadline = Date.now() + 45_000;
     while (Date.now() < showMeDeadline) {
-      showMe = await page.locator('[data-testid="show-me-button"]').count();
+      showMe = await page.locator('[data-testid="show-solution-button"]').count();
       if (showMe > 0) break;
       // Skip replay if the button is present.
       const skipBtn = page.locator('[data-testid="skip-replay"]');
@@ -857,21 +857,21 @@ async function main() {
     let showMeReady = false;
     const showMeDeadline = Date.now() + 30_000;
     while (Date.now() < showMeDeadline) {
-      if (await page.locator('[data-testid="show-me-button"]').count() > 0) { showMeReady = true; break; }
+      if (await page.locator('[data-testid="show-solution-button"]').count() > 0) { showMeReady = true; break; }
       const skipBtn = page.locator('[data-testid="skip-replay"]');
       if (await skipBtn.count() > 0) { await skipBtn.click({ force: true }); await page.waitForTimeout(1500); }
       else { await page.waitForTimeout(1500); }
     }
     record('Show Me button reachable from playing state', showMeReady, `ready=${showMeReady}`);
     if (showMeReady) {
-      await page.locator('[data-testid="show-me-button"]').first().click({ force: true });
+      await page.locator('[data-testid="show-solution-button"]').first().click({ force: true });
       await page.waitForTimeout(1500);
       // After Show Me, the button should be in a revealed state
       // (Eye-icon variant disabled). hintState.level >= 3 → revealed
       // prop true → button disabled/changed.
-      const revealedAttr = await page.locator('[data-testid="show-me-button"]').first()
+      const revealedAttr = await page.locator('[data-testid="show-solution-button"]').first()
         .getAttribute('data-revealed').catch(() => null);
-      const disabled = await page.locator('[data-testid="show-me-button"]').first()
+      const disabled = await page.locator('[data-testid="show-solution-button"]').first()
         .isDisabled().catch(() => false);
       record('Show Me transitions to revealed state after single tap',
         revealedAttr === 'true' || disabled === true,
