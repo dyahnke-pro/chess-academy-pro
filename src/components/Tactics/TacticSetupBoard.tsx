@@ -2,11 +2,12 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { positionAsk, positionPosed, pvSans } from '../../services/moveInsight';
 import { shownSolution, walkableLine } from '../../services/proof';
 import { useLineWalk } from '../../hooks/useLineWalk';
-import { PlayLineButton } from '../Board/PlayLineButton';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
+import { usePositionNarration } from '../../hooks/usePositionNarration';
 import { BoardQuestionBox } from '../Board/BoardQuestionBox';
 import { Chess } from 'chess.js';
 import { ChessBoard } from '../Board/ChessBoard';
-import { HintButton } from '../Coach/HintButton';
+import { Eye } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useHintSystem } from '../../hooks/useHintSystem';
 import { useWrongTryRefutation } from '../../hooks/useWrongTryRefutation';
@@ -314,6 +315,23 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
   // starts a question — then it holds until they tap Next (a question box
   // that vanishes two seconds after it appears answers nothing).
   const [ended, setEnded] = useState(false);
+  // READ — the one read every board shares (the bar's Read button). Before the
+  // puzzle ends it teaches the position and withholds the move to find; a
+  // read before the first answer makes that answer prompted.
+  const teach = usePositionNarration({
+    fen,
+    pgn: '',
+    moveNumber: Number(fen.split(' ')[5] ?? 1),
+    playerColor: orientation,
+    openingName: null,
+    corpusNotes: true, // the tactics drill is a kept corpus surface
+    withhold: ended ? null : knownMove?.san ?? null,
+  });
+  const handleRead = useCallback((): void => {
+    if (!answeredRef.current) promptedRef.current = true;
+    voiceService.stop();
+    void teach.narrate();
+  }, [teach]);
   const [held, setHeld] = useState(false);
   const heldRef = useRef(false);
   const resultRef = useRef<boolean | null>(null);
@@ -572,31 +590,32 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
         />
         )}
       </div>
-      <div className="px-1"><PlayLineButton onPlay={lineWalk.playStated} testId="setup-walk-line-btn" wide /></div>
 
-      {/* Hint and Show Solution share ONE row so both sit above the bottom
-          nav on a short phone (David 2026-10-04); the ladder text goes below. */}
-      {(boardState === 'thinking' || boardState === 'incorrect') && (
-        <div ref={keepRef} className="flex flex-wrap items-center justify-between gap-2">
-          {boardState === 'thinking' && isPlayerTurn && settings.showHints ? (
-            <div className="flex flex-col items-start gap-2" data-testid="setup-hint-area">
-              <HintButton
-                currentLevel={hintTier}
-                onRequestHint={handleHint}
-                disabled={hintState.isAnalyzing}
-              />
-            </div>
-          ) : <span />}
+      {/* THE ONE BOARD BAR (David 2026-11-18: "unified means same name,
+          looks, feel, code all the same. No exceptions"): the same six
+          buttons as Learn, Play and Review; Solution in the extras row. */}
+      <CoachBoardBar
+        keepRef={keepRef}
+        onBack={null}
+        onForward={null}
+        onHint={boardState === 'thinking' && isPlayerTurn && settings.showHints && !hintState.isAnalyzing && hintTier < 3 ? handleHint : null}
+        hintLabel={hintTier === 3 ? 'Shown' : undefined}
+        hintLevel={hintTier}
+        onRead={handleRead}
+        reading={teach.isNarrating}
+        onWhy={null}
+        onPlayLine={lineWalk.playStated}
+        testIds={{ hint: 'hint-button', read: 'read-position-btn', why: 'why-button', line: 'setup-walk-line-btn' }}
+        extras={boardState === 'thinking' || boardState === 'incorrect' ? (
           <button
             onClick={handleShowSolution}
-            className="text-xs underline opacity-70 hover:opacity-100"
-            style={{ color: 'var(--color-text-muted)' }}
+            className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap transition-colors border-cyan-500/30 text-cyan-400"
             data-testid="setup-show-solution"
           >
-            Show Solution
+            <Eye size={12} /><span>Solution</span>
           </button>
-        </div>
-      )}
+        ) : undefined}
+      />
       {boardState === 'thinking' && isPlayerTurn && settings.showHints && (hintTier >= 3 ? hintState.nudgeText : ladderText) && (
         <p className="text-xs text-amber-500 max-w-sm" data-testid="hint-nudge" data-tier={hintTier}>
           {hintTier >= 3 ? hintState.nudgeText : ladderText}

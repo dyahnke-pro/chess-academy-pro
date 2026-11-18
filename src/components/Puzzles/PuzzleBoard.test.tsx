@@ -214,12 +214,12 @@ describe('PuzzleBoard', () => {
     expect(screen.getByTestId('board-wrapper')).toBeInTheDocument();
   });
 
-  it('shows puzzle controls area when playing', async () => {
+  it('shows the one board bar when playing', async () => {
     const puzzle = makePuzzle();
     render(<PuzzleBoard puzzle={puzzle} onComplete={vi.fn()} surface="classic" />);
 
     await waitFor(
-      () => expect(screen.getByTestId('puzzle-controls')).toBeInTheDocument(),
+      () => expect(screen.getByTestId('coach-board-bar')).toBeInTheDocument(),
       { timeout: 2000 },
     );
   });

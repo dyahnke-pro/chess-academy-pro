@@ -21,6 +21,14 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 
 ---
 
+## 000zl. THE ORDER (David 2026-11-18: "making sure we have the working computers is always step one, then working narrations. Then a working platform. These are the next three things to do")
+- 🔴 1 · working computers — WO-DANYA-READS-01 (000zk)
+- 🔴 2 · working narrations — every surface's lines read against the board after the computers land
+- 🔴 3 · a working platform — WO-PLATFORM-01: one board bar, same name, look, feel and code on every board, no exceptions
+  - ✅ puzzle boards (PuzzleBoard, MistakePuzzleBoard, Setup trainer) on the one bar; "Teach me this position" → the bar's Read; ShowMeButton deleted; gate `oneCoachSurfaces.gate`
+  - 🔴 25 more non-kid board screens with their own button rows (openings players, calculation, endgame lessons, analysis practice, pattern school, find-square, model games, SRS trainer, course trainer, …) + a gate that every interactive board renders the bar
+  - 🟠 kids' boards: the one bar, or their "simpler for kids" rule? (David's call)
+
 ## 000zk. WO-DANYA-READS-01 — every idea Danya reads off a board, computed — TOP OF THE LIST (David 2026-11-18, `docs/plans/2026-11-18-danya-board-reads-gaps.md`)
 - ✅ measured: 202 of his article boards, 673 ideas — 28% said right, 10% wrong, 62% missed; 261 of our lines false or pointless
 - 🔴 step 1: fix the false-line producers ("First, take X", colour-complex / passer / minority-attack slogans, verdicts against the engine)

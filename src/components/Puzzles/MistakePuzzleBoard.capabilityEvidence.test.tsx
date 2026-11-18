@@ -149,7 +149,7 @@ describe('MistakePuzzleBoard writes capability evidence at the solve', () => {
     await act(async () => { await sleep(150); }); // the source-game read before play opens
     await act(async () => { latestOnMove!(mv('a2', 'a3', 'a3')); });   // wrong first
     await act(async () => { await sleep(1700); });
-    const showMe = (await screen.findByTestId('puzzle-hint-area')).querySelector('button');
+    const showMe = await screen.findByTestId('show-solution-button');
     await act(async () => { showMe!.click(); });
     await solveCleanly();
     expect(recordCapabilityEvidence).toHaveBeenCalledWith(expect.objectContaining({ cpLoss: 150, prompted: false }));
@@ -161,8 +161,7 @@ describe('MistakePuzzleBoard writes capability evidence at the solve', () => {
     await screen.findByTestId('mock-board');
     await act(async () => { await sleep(150); }); // the source-game read before play opens
 
-    const hintArea = await screen.findByTestId('puzzle-hint-area');
-    const showMe = hintArea.querySelector('button');
+    const showMe = await screen.findByTestId('show-solution-button');
     expect(showMe).not.toBeNull();
     await act(async () => { showMe!.click(); });
     await solveCleanly();
@@ -179,7 +178,7 @@ describe('MistakePuzzleBoard writes capability evidence at the solve', () => {
     render(<MistakePuzzleBoard puzzle={buildMistakePuzzle()} onResolved={onResolved} onComplete={vi.fn()} skipReplayContext />);
     await screen.findByTestId('mock-board');
     await act(async () => { await sleep(150); });
-    const showMe = (await screen.findByTestId('puzzle-hint-area')).querySelector('button');
+    const showMe = await screen.findByTestId('show-solution-button');
     await act(async () => { showMe!.click(); });
     await solveCleanly();
     expect(onResolved).toHaveBeenCalledTimes(1);

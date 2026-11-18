@@ -13,6 +13,12 @@
 > the index. Update `OUTLINE.md` in the SAME COMMIT as the work, or the next
 > session picks up something already finished.
 
+## 🧭 THE ORDER — computers, then narrations, then the platform (David 2026-11-18: "making sure we have the working computers is always step one, then working narrations. Then a working platform. These are the next three things to do")
+
+1. **Working computers** — WO-DANYA-READS-01 below.
+2. **Working narrations** — every surface's spoken lines read against their boards once the computers land.
+3. **A working platform — WO-PLATFORM-01** (David 2026-11-18: "unified means same name, looks, feel, code all the same. No exceptions"). Every board wears the one board bar (`CoachBoardBar`). Done: the three puzzle boards — "Teach me this position" is the bar's Read, their private hint / show-me / play-line buttons are gone (`ShowMeButton` deleted), Solution rides in the extras row; gate `oneCoachSurfaces.gate.test.ts`. Open: 25 more non-kid board screens with their own button rows, then a gate that every interactive board renders the bar. The kids' boards are David's call (their "simpler for kids" rule).
+
 ## 📚 WO-DANYA-READS-01 — every idea Danya reads off a board, computed — TOP OF THE LIST (David 2026-11-18: "If not, that goes top of list. But keep that list! It is VERY important all of that gets done")
 
 The full list and the measurement are in `docs/plans/2026-11-18-danya-board-reads-gaps.md`. On 202 of his article boards (673 ideas) we say 28% correctly, 10% wrongly and miss 62%, and 261 of our lines were flagged false or pointless. Order of work:

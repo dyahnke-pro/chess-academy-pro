@@ -29,6 +29,7 @@ vi.mock('../../services/stockfishEngine', () => ({
 vi.mock('../../hooks/stockfishFenCache', () => ({
   getCachedStockfish: vi.fn(() => undefined),
   setCachedStockfish: vi.fn(),
+  __resetStockfishFenCacheForTests: vi.fn(),
 }));
 
 // API-leak guard (WO-TEST-CLEANUP-01 Part A) — intercepts modern
@@ -115,8 +116,8 @@ describe('TacticSetupBoard', () => {
     const puzzle = buildSetupPuzzle();
     render(<TacticSetupBoard puzzle={puzzle} sequence={0} onComplete={vi.fn()} />);
 
-    expect(screen.getByTestId('setup-hint-area')).toBeInTheDocument();
-    expect(screen.getByTestId('hint-button')).toBeInTheDocument();
+    // The one board bar's Hint, live.
+    expect(screen.getByTestId('hint-button')).toBeEnabled();
     expect(screen.getByTestId('hint-button')).toHaveTextContent('Hint');
   });
 
@@ -125,8 +126,8 @@ describe('TacticSetupBoard', () => {
     const puzzle = buildSetupPuzzle();
     render(<TacticSetupBoard puzzle={puzzle} sequence={0} onComplete={vi.fn()} />);
 
-    expect(screen.queryByTestId('setup-hint-area')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('hint-button')).not.toBeInTheDocument();
+    // The bar keeps every button on screen: a hint that does not apply is greyed.
+    expect(screen.getByTestId('hint-button')).toBeDisabled();
   });
 
   it('climbs the ladder one tier per tap — the answer only on the third (hand walk 2026-10-03)', async () => {

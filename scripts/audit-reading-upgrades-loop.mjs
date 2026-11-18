@@ -338,7 +338,7 @@ async function driveSetupTrainer(page, pass) {
     await sleep(1000);
   }
   if (started) {
-    const hintBtn = await page.locator('[data-testid="setup-hint-area"] button').count();
+    const hintBtn = await page.locator('[data-testid="hint-button"]:not([disabled])').count();
     return { reached: true, pass: true, detail: `board mounted; hint button=${hintBtn > 0}` };
   }
   if (summary) return { reached: true, pass: false, detail: 'went straight to summary — no setup positions at that depth' };

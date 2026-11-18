@@ -81,3 +81,26 @@ describe('the unified coach never grows a second voice', () => {
     expect(said).not.toMatch(/[a-h][1-8][a-h][1-8]/);
   });
 });
+
+// ONE BOARD BAR ON THE PUZZLE BOARDS (David 2026-11-18: "Puzzle board needs to
+// be changed to read this position … unified means same name, looks, feel,
+// code all the same. No exceptions"). The puzzle family kept its own row —
+// "Teach", "Teach me this position", "Teach me", its own hint and show-me
+// buttons. It now renders the bar Learn, Play and Review render.
+describe('the puzzle boards wear the one board bar', () => {
+  const PUZZLE_BOARDS = [
+    'src/components/Puzzles/PuzzleBoard.tsx',
+    'src/components/Puzzles/MistakePuzzleBoard.tsx',
+    'src/components/Tactics/TacticSetupBoard.tsx',
+  ];
+  it.each(PUZZLE_BOARDS)('%s renders CoachBoardBar and no private read, hint or line button', (p) => {
+    const src = code(p);
+    expect(src).toMatch(/<CoachBoardBar\b/);
+    expect(src).not.toMatch(/<HintButton\b|<ShowMeButton\b|<PlayLineButton\b|teach-position-button/);
+  });
+  it('no board offers a "Teach me" read: the read is the bar\'s Read', () => {
+    // ("Teach me" the opening picker's lesson verb is not a board read.)
+    expect(ALL.filter((p) => /Teach me this position/.test(code(p)))).toEqual([]);
+    for (const p of PUZZLE_BOARDS) expect(code(p)).not.toMatch(/['">]\s*Teach( me)?\s*['"<]/);
+  });
+});

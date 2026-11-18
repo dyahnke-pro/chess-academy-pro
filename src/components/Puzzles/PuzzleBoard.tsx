@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo, type ReactNode } from 'react';
 import { useLineWalk } from '../../hooks/useLineWalk';
 import { useLiveMarks } from '../../hooks/useLiveMarks';
-import { PlayLineButton } from '../Board/PlayLineButton';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
 import { BoardQuestionBox } from '../Board/BoardQuestionBox';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { autopilotRecapture, lastMoveAlong, positionAsk, positionPosed } from '../../services/moveInsight';
@@ -9,7 +9,6 @@ import { spokenLineArrows } from '../../services/arrowEngine';
 import { captureEvent } from '../../services/analytics';
 import { Chess } from 'chess.js';
 import { ControlledChessBoard } from '../Board/ControlledChessBoard';
-import { HintButton } from '../Coach/HintButton';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useSettings } from '../../hooks/useSettings';
 import { useChessGame } from '../../hooks/useChessGame';
@@ -459,6 +458,18 @@ export function PuzzleBoard({
     });
   }, [terminal, puzzle.id, state, settings.voiceEnabled, solveGeometry, conceptExplanation]);
 
+  // WHY? — the bar's proof button: once the puzzle is resolved, why the
+  // solution works (the same computed line the board spoke at the end).
+  const whyLine = terminal
+    ? conceptExplanation?.spoken ?? (state === 'correct' && solveGeometry ? `That ${solveGeometry}.` : null)
+    : null;
+  const handleWhy = useCallback((): void => {
+    if (!whyLine) return;
+    voiceService.stop();
+    setSubtitle(whyLine);
+    void voiceComputed(whyLine).then((say) => { void voiceService.speak(say, { sentenceFirst: true }); });
+  }, [whyLine]);
+
   // A question asked once the puzzle is over holds the advance: the board
   // waits on the solved position until the student taps Next, instead of
   // moving on under their question (WO-CHAT-01 — the tactics screens answer).
@@ -848,65 +859,45 @@ export function PuzzleBoard({
           {subtitle}
         </p>
       )}
-      <div className="px-1"><PlayLineButton onPlay={lineWalk.playStated} testId="puzzle-walk-line-btn" wide /></div>
-
-      {/* ONE control row (David 2026-10-04: on a short phone the old two rows
-          pushed Hint / Show solution under the bottom nav). The puzzle's own
-          buttons on the left, Flip and Ask on the right; every label one line.
-          After it resolves, the full read stays one tap away. */}
-      <div ref={keepRef} className="flex flex-wrap items-center gap-1.5">
-        {state === 'playing' && (
-          <div className="flex min-w-0 items-center gap-1.5" data-testid="puzzle-controls">
-            {settings.showHints && (
-              <div className="flex flex-col items-start gap-2" data-testid="puzzle-hint-area">
-                <HintButton
-                  currentLevel={hintState.level}
-                  onRequestHint={handleRequestHint}
-                  disabled={hintState.isAnalyzing}
-                />
-              </div>
-            )}
-            <button
-              onClick={handleTeach}
-              disabled={teach.isNarrating}
-              className="flex items-center gap-1.5 whitespace-nowrap px-2.5 py-1.5 text-xs text-theme-text-muted hover:text-theme-text rounded-lg border border-theme-border hover:bg-theme-surface transition-colors disabled:opacity-50"
-              data-testid="teach-position-button"
-            >
-              {teach.isNarrating ? 'Reading…' : 'Teach'}
-            </button>
+      {/* THE ONE BOARD BAR (David 2026-11-18: "unified means same name,
+          looks, feel, code all the same. No exceptions"). The puzzle's own
+          row — "Teach", "Teach me this position", its own hint button and a
+          separate wide Play-line button — is gone; the puzzle wires the same
+          six buttons Learn, Play and Review show. Solution, Flip and the mic
+          ride in the bar's one extras row. */}
+      <CoachBoardBar
+        keepRef={keepRef}
+        onBack={null}
+        onForward={null}
+        onHint={state === 'playing' && settings.showHints && !hintState.isAnalyzing && hintState.level < 3 ? handleRequestHint : null}
+        hintLabel={hintState.level === 3 ? 'Shown' : undefined}
+        hintLevel={hintState.level}
+        onRead={handleTeach}
+        reading={teach.isNarrating}
+        onWhy={whyLine ? handleWhy : null}
+        onPlayLine={lineWalk.playStated}
+        testIds={{ hint: 'hint-button', read: 'read-position-btn', why: 'why-button', line: 'puzzle-walk-line-btn' }}
+        extras={<>
+          {state === 'playing' && (
             <button
               onClick={handleShowSolution}
-              className={`flex items-center gap-1.5 whitespace-nowrap px-2.5 py-1.5 text-xs rounded-lg border transition-colors ${ladderTop ? 'animate-pulse border-amber-400/60 text-amber-200 bg-amber-500/10' : 'text-theme-text-muted hover:text-theme-text border-theme-border hover:bg-theme-surface'}`}
+              className={`flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap transition-colors ${ladderTop ? 'animate-pulse border-amber-400/60 text-amber-200 bg-amber-500/10' : 'border-cyan-500/30 text-cyan-400'}`}
               data-testid="show-solution-button"
             >
-              <Eye size={14} />
-              Solution
+              <Eye size={12} /><span>Solution</span>
             </button>
-          </div>
-        )}
-        {terminal && (
-          <button
-            onClick={handleTeach}
-            disabled={teach.isNarrating}
-            className="flex items-center gap-1.5 whitespace-nowrap px-3 py-1.5 text-xs text-theme-text-muted hover:text-theme-text rounded-lg border border-theme-border hover:bg-theme-surface transition-colors disabled:opacity-50"
-            data-testid="teach-position-button"
-          >
-            {teach.isNarrating ? 'Reading the position…' : 'Teach me this position'}
-          </button>
-        )}
-        <div className="ml-auto flex shrink-0 items-center gap-1.5">
+          )}
           <button
             onClick={game.flipBoard}
-            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md bg-theme-surface text-theme-text-muted hover:bg-theme-border hover:text-theme-text transition-colors"
-            title="Flip board"
+            className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap transition-colors border-cyan-500/30 text-cyan-400"
             aria-label="Flip board"
             data-testid="flip-button"
           >
-            <RotateCcw size={14} />
+            <RotateCcw size={12} /><span>Flip</span>
           </button>
           <VoiceChatMic fen={game.position} turn={game.turn} playerColor={userColor} compact />
-        </div>
-      </div>
+        </>}
+      />
       {state === 'playing' && hintState.nudgeText && (
         <p className="text-xs text-amber-500" data-testid="hint-nudge">
           {hintState.nudgeText}

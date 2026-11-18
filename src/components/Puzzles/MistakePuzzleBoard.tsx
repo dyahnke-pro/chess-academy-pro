@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useLineWalk } from '../../hooks/useLineWalk';
 import { useLiveMarks, type LiveMarks } from '../../hooks/useLiveMarks';
-import { PlayLineButton } from '../Board/PlayLineButton';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
 import { BoardQuestionBox } from '../Board/BoardQuestionBox';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { positionAsk, positionPosed } from '../../services/moveInsight';
@@ -24,8 +24,7 @@ import { gameOpponentStrength, studentPlayingRating } from '../../services/engin
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
 import { getPieceNameOnSquare } from '../../utils/puzzleHints';
-import { CheckCircle, XCircle, AlertTriangle, Volume2, Clock, User, BookOpen, Play, HelpCircle, Eye, EyeOff, Target, ChevronRight } from 'lucide-react';
-import { ShowMeButton } from '../Coach/ShowMeButton';
+import { CheckCircle, XCircle, AlertTriangle, Volume2, Clock, User, BookOpen, Play, Eye, EyeOff, Target, ChevronRight } from 'lucide-react';
 import { useStruggleDetection } from '../../hooks/useStruggleDetection';
 import { detectTacticType } from '../../services/missedTacticService';
 import { usePuzzleMeter } from '../../hooks/usePuzzleMeter';
@@ -721,6 +720,21 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
     corpusNotes: true, // the tactics drill is a kept corpus surface
     withhold: state === 'correct' ? null : puzzle.bestMoveSan,
   });
+  // The bar's Hint: one step of the ladder. Help before answering makes the
+  // solve prompted; the ladder's last step is the answer shown.
+  const handleHintStep = useCallback((): void => {
+    if (!answeredRef.current) toldBeforeAnswerRef.current = true;
+    if (hintState.level >= 2) answerShownRef.current = true;
+    requestHint();
+  }, [hintState.level, requestHint]);
+  // Solution: straight to the answer (tier 3 — the best move's arrow).
+  const handleShowAnswer = useCallback((): void => {
+    if (!answeredRef.current) toldBeforeAnswerRef.current = true;
+    answerShownRef.current = true;
+    if (hintState.level < 1) requestHint();
+    if (hintState.level < 2) requestHint();
+    if (hintState.level < 3) requestHint();
+  }, [hintState.level, requestHint]);
   const handleTeach = useCallback(() => {
     // Taught before answering → the answer is `prompted` (neither proven nor
     // failed): the student was helped, and the record says so.
@@ -1227,7 +1241,6 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
         />
         )}
       </div>
-      <div className="px-1"><PlayLineButton onPlay={lineWalk.playStated} testId="mistake-walk-line-btn" wide /></div>
 
       {/* Keep-playing status (R4) */}
       {state === 'freeplay' && (
@@ -1242,42 +1255,34 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
         </div>
       )}
 
-      {/* ONE row: [show me] beside Teach me, so both sit above the bottom nav
-          on a short phone (David 2026-10-04). */}
-      {(state === 'playing' || state === 'correct') && (
-        <div ref={keepRef} className="flex flex-wrap items-center justify-between gap-2">
-          {state === 'playing' && settings.showHints && (
-            <div className="flex flex-col items-start gap-2" data-testid="puzzle-hint-area">
-              <ShowMeButton
-                onShow={() => {
-                  // Told before answering -> the solve is `prompted` (refs, not
-                  // hintState.level: `resetHints()` zeroes the level on the very
-                  // move that solves). Told after a miss -> the miss stands.
-                  if (!answeredRef.current) toldBeforeAnswerRef.current = true;
-                  answerShownRef.current = true;
-                  // Skip the hint ladder — jump straight to tier 3 (best
-                  // move arrow + final answer). requestHint() bumps one
-                  // tier; three consecutive calls reach tier 3.
-                  if (hintState.level < 1) requestHint();
-                  if (hintState.level < 2) requestHint();
-                  if (hintState.level < 3) requestHint();
-                }}
-                disabled={hintState.isAnalyzing}
-                revealed={hintState.level >= 3}
-              />
-            </div>
-          )}
+      {/* THE ONE BOARD BAR (David 2026-11-18: "unified means same name,
+          looks, feel, code all the same. No exceptions"). "Teach me", "Show
+          me" and the separate Play-line button are gone: the same six buttons
+          as Learn, Play and Review. Hint climbs the ladder a step; Solution
+          shows the answer at once; Why? says why the move was best. */}
+      <CoachBoardBar
+        keepRef={keepRef}
+        onBack={null}
+        onForward={null}
+        onHint={state === 'playing' && settings.showHints && !hintState.isAnalyzing && hintState.level < 3 ? handleHintStep : null}
+        hintLabel={hintState.level === 3 ? 'Shown' : undefined}
+        hintLevel={hintState.level}
+        onRead={handleTeach}
+        reading={teach.isNarrating}
+        onWhy={state === 'correct' ? () => { void speakBestMoveWhy(); } : null}
+        onPlayLine={lineWalk.playStated}
+        testIds={{ hint: 'hint-button', read: 'read-position-btn', why: 'why-button', line: 'mistake-walk-line-btn' }}
+        extras={state === 'playing' && settings.showHints ? (
           <button
-            onClick={handleTeach}
-            disabled={teach.isNarrating}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-theme-surface hover:bg-theme-border text-theme-text-muted hover:text-theme-accent text-sm transition-colors border border-theme-border disabled:opacity-50 disabled:cursor-wait"
-            data-testid="teach-position-button"
+            onClick={handleShowAnswer}
+            disabled={hintState.isAnalyzing || hintState.level >= 3}
+            className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-cyan-500/30 text-cyan-400"
+            data-testid="show-solution-button"
           >
-            <HelpCircle size={14} />
-            <span className="whitespace-nowrap">{teach.isNarrating ? 'Reading…' : 'Teach me'}</span>
+            <Eye size={12} /><span>Solution</span>
           </button>
-        </div>
-      )}
+        ) : undefined}
+      />
 
       {state === 'playing' && hintState.nudgeText && (
         <p className="text-xs text-amber-500 max-w-sm" data-testid="hint-nudge">
