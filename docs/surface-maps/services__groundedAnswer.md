@@ -277,9 +277,9 @@
 - `src/services/passerSentence.test.ts:43`
 - `src/services/promotionChoice.test.ts:65`
 - `src/services/tacticsContextIdentity.test.ts:106`
-- `src/services/temptingOnBoard.test.ts:130`
-- `src/services/temptingOnBoard.test.ts:133`
-- `src/services/temptingOnBoard.test.ts:136`
+- `src/services/temptingOnBoard.test.ts:126`
+- `src/services/temptingOnBoard.test.ts:129`
+- `src/services/temptingOnBoard.test.ts:132`
 - `src/services/theoreticalEnding.test.ts:73`
 - `src/services/verdictWithReasons.test.ts:79`
 - `src/services/winningVerdictTradeDown.test.ts:9`

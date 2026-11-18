@@ -113,8 +113,8 @@
 - `src/services/tacticGeometry.test.ts:272`
 - `src/services/tacticGeometry.test.ts:277`
 - `src/services/unifiedBetterMoveReason.test.ts:39`
-- `src/services/weighedMoves.test.ts:257`
-- `src/services/weighedMoves.test.ts:270`
+- `src/services/weighedMoves.test.ts:253`
+- `src/services/weighedMoves.test.ts:266`
 - `src/test/teach02Wired.test.ts:28`
 - `src/test/teach02Wired.test.ts:68`
 

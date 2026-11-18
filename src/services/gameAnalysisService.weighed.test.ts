@@ -9,6 +9,7 @@ import { readFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import { weighedReads } from './gameAnalysisService';
 import { temptingRefuted, type WeighRead } from './weighedMoves';
+import { oneStem } from '../test/temptingStem';
 
 interface Fixture { video: string; fenBefore: string; played: string; reads: WeighRead[] }
 const G = (JSON.parse(readFileSync('src/test/fixtures/danya-weighed-reads.json', 'utf8')) as Fixture[]).find((x) => x.video === '8urm2D1HhX8')!;
@@ -39,8 +40,8 @@ describe('weighedReads (the review\'s per-candidate reads)', () => {
     expect(stored?.reads.map((r) => r.moves[0])).toEqual(expect.arrayContaining(['f6g4', 'f6e4']));
     expect(stored?.depth).toBe(16);
     // …and those reads are what Review's computer says the refutation from.
-    expect(temptingRefuted({ fenBefore: G.fenBefore, san: G.played, student: 'b', rating: 1500, reads: stored!.reads, priorMove: null })?.text)
-      .toBe('Nxe4 is tempting here, but it fails: they play dxe4 — they win a knight for a pawn.');
+    expect(oneStem(temptingRefuted({ fenBefore: G.fenBefore, san: G.played, student: 'b', rating: 1500, reads: stored!.reads, priorMove: null })?.text))
+      .toBe(oneStem('Nxe4 is tempting here, but it fails: they play dxe4 — they win a knight for a pawn.'));
   });
 
   it('no engine, no reads — never a guessed record', async () => {

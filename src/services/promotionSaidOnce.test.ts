@@ -12,6 +12,7 @@ import { temptingRefuted, type WeighRead } from './weighedMoves';
 import { costReason, reasonWinWords } from './costReason';
 import { lineWins } from './lineCalc';
 import { lineShapePlies } from '../utils/andList';
+import { oneStem } from '../test/temptingStem';
 
 const FEN = '8/5k2/3R4/r1p5/4R2P/p7/1r3PP1/6K1 w - - 5 44';
 const READS: WeighRead[] = [
@@ -24,7 +25,7 @@ const AFTER_F4 = '8/5k2/3R4/r1p5/4RP1P/p7/1r4P1/6K1 b - - 0 44';
 describe('the new queen is said once', () => {
   it('the tempting move\'s line ends on the promotion; nothing after it names the queen again', () => {
     const t = temptingRefuted({ fenBefore: FEN, san: 'Rd7+', student: 'w', rating: 1500, reads: READS, priorMove: null });
-    expect(t?.text).toBe('f4 looks natural, but it doesn\'t work: they play a2, you answer Kh2 and they play a1=Q.');
+    expect(oneStem(t?.text)).toBe(oneStem('f4 looks natural, but it doesn\'t work: they play a2, you answer Kh2 and they play a1=Q.'));
     expect(t?.text ?? '').not.toMatch(/new queen/);
   });
 

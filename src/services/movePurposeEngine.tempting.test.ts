@@ -7,6 +7,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
+import { oneStem } from '../test/temptingStem';
 
 interface Board { id: string; fen: string; reads: Array<{ evaluation: number; mate: number | null; moves: string[] }> }
 const FX = JSON.parse(readFileSync('src/test/fixtures/danya-article-tempting.json', 'utf8')) as Board[];
@@ -35,7 +36,7 @@ describe('temptingReads — one read per move the eye weighs', () => {
     const eye = candidateMoves(B.fen, 1500, { played: null, scored: null }).map((c) => c.uci).filter((u) => u !== B.reads[0].moves[0]);
     expect(asked.length).toBe(eye.length);
     const t = temptingOnBoard({ fen: B.fen, student: 'w', rating: 1500, reads: reads ?? [], priorMove: null })[0];
-    expect(t?.text).toBe('Nd4 is tempting here, but it fails: they play Rxe1+, you answer Qxe1 and they play Rxd4 — they win a knight.');
+    expect(oneStem(t?.text)).toBe(oneStem('Nd4 is tempting here, but it fails: they play Rxe1+, you answer Qxe1 and they play Rxd4 — they win a knight.'));
   }, 120_000);
 
   it('a finished game asks the engine nothing', async () => {

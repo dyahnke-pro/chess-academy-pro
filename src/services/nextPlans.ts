@@ -725,7 +725,7 @@ export function passerTrumpSentence(fen: string, square: string, own: boolean): 
         : '';
       return own
         ? `Your passed pawn on ${square} is ${n} from queening${aside} — every move counts now.`
-        : `Their passed pawn on ${square} is ${n} from queening${aside} — every move has to answer it.`;
+        : `Their passed pawn on ${square} is ${n} from queening${aside}. Put ${chess.board().flat().some((c) => !!c && c.type !== 'p' && c.type !== 'k' && c.color !== pawn.color) ? 'a piece' : 'your king'} in front of it before it runs.`;
     }
     if (race?.kind === 'passer-race') {
       if (!own) return null;
