@@ -62,7 +62,7 @@ describe('promotionChoice — the move played', () => {
   });
 
   it('the position read says which piece to make', () => {
-    const a = assemblePositionAssessment({ evalCp: 500, mateIn: null, tactics: null, studentColor: 'white', fen: JONES, bestUci: 'd7d8n' });
+    const a = assemblePositionAssessment({ tempting: null, evalCp: 500, mateIn: null, tactics: null, studentColor: 'white', fen: JONES, bestUci: 'd7d8n' });
     expect(a?.facts).toMatch(/make a knight, not a queen/);
   });
 });

@@ -237,6 +237,7 @@ export const THINK_STEP: Record<ComputerName, ThinkAnswer> = {
   ifTheyPlay: 'calculate',
   baitBranch: 'calculate',
   temptingRefuted: 'candidates',
+  temptingOnBoard: 'candidates',
   alsoGood: 'candidates',
   squareChoice: 'candidates',
   oppositeBishops: 'assess',

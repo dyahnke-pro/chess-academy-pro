@@ -61,7 +61,7 @@ describe('oppositionRead — what it decides, on his board', () => {
   });
 
   it('the position read says it from the student\'s seat', () => {
-    const a = assemblePositionAssessment({ evalCp: 500, mateIn: null, tactics: null, studentColor: 'white', fen: AFTER_KD6, bestUci: null });
+    const a = assemblePositionAssessment({ tempting: null, evalCp: 500, mateIn: null, tactics: null, studentColor: 'white', fen: AFTER_KD6, bestUci: null });
     expect(a?.facts).toMatch(/opposition/);
   });
 });

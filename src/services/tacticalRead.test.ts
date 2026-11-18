@@ -227,17 +227,30 @@ describe('tacticalReadFromLines', () => {
     expect(read?.bestMoveSan).toBe('Nf3');
     expect(read?.tempting?.san).toBe('Qxd5');
     expect(read?.tempting?.refutation[1]?.san).toBe('Nxd5');
+    expect(read?.tempting?.because).toBe('they play Nxd5 — they win a queen for a pawn');
   });
 
   it('requireForcing DROPS a non-forcing (central-develop) tempting move', () => {
+    // White to move: Nc3 is natural, and …Bxa1 takes the rook it stops guarding
+    // (b2 gone, the bishop on g7 sees down to a1 once the knight leaves b1).
+    const fen = 'rnbqk1nr/pppppp1p/6p1/8/8/8/P1PPPPPP/RNBQKBNR w KQkq - 0 3';
+    const lines = [
+      { moves: ['b1a3', 'e7e5'], evaluation: -60 },
+      { moves: ['b1c3', 'g7c3', 'd2c3'], evaluation: -350 },  // Nc3?? Bxc3 — central, quiet
+    ];
+    const forced = tacticalReadFromLines(fen, lines, 'white', { requireForcing: true });
+    expect(forced?.tempting ?? null).toBeNull();            // quiet move filtered out
+    const open = tacticalReadFromLines(fen, lines, 'white', { requireForcing: false });
+    expect(open?.tempting?.san ?? null).toBe(null);         // and a line that wins nothing is no refutation
+  });
+
+  it('a worse score alone is not "it fails": the line must win material or mate', () => {
+    // Nc3 from the start position, scored worse, with nothing won in its line.
     const lines = [
       { moves: ['e2e4', 'e7e5'], evaluation: 30 },
-      { moves: ['b1c3', 'e7e5'], evaluation: -200 },  // Nc3 — central, worse, but quiet
+      { moves: ['b1c3', 'e7e5'], evaluation: -200 },
     ];
-    const forced = tacticalReadFromLines(START, lines, 'white', { requireForcing: true });
-    expect(forced?.tempting).toBeNull();            // quiet move filtered out
-    const open = tacticalReadFromLines(START, lines, 'white', { requireForcing: false });
-    expect(open?.tempting?.san).toBe('Nc3');        // flagged when forcing not required
+    expect(tacticalReadFromLines(START, lines, 'white', { requireForcing: false })?.tempting).toBeNull();
   });
 
   it('returns null when there is nothing to read', () => {
@@ -257,6 +270,7 @@ describe('temptingTurnClause + uncertaintyClause (DNA register — David 2026-08
     tempting: {
       san: 'Nxe5', uci: 'f3e5', appeal: 'capture', evalDropCp: 220,
       refutation: [{ san: 'd6' }, { san: 'Qa4' }],
+      because: 'they play Qa4 — they win a knight',
     },
     closeAlternative: { san: 'Bc4', gapCp: 20 },
   } as unknown as TacticalRead;
@@ -264,7 +278,8 @@ describe('temptingTurnClause + uncertaintyClause (DNA register — David 2026-08
   it('builds the but-turn: affirm the tempting move, then refute it', () => {
     const c = temptingTurnClause(read)!;
     expect(c).toContain('Nxe5');
-    expect(c).toMatch(/but they answer Qa4 and it falls apart/);
+    // Why it fails is the one reason's words (`refutationOf`), never "it falls apart".
+    expect(c).toBe('You’d love to play Nxe5, but it fails: they play Qa4 — they win a knight.');
   });
 
   it('builds the honest hedge naming the close alternative', () => {

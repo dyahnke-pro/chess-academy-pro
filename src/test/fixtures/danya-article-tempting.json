@@ -1,0 +1,529 @@
+[
+ {
+  "id": "how-to-avoid-blunders-part-1#1",
+  "fen": "2r2rk1/p2qbppp/4p3/3pP1N1/2nP3P/P2R4/5PP1/2BQR1K1 b - - 0 20",
+  "reads": [
+   {
+    "evaluation": -14,
+    "mate": null,
+    "moves": [
+     "e7g5",
+     "h4g5",
+     "d7b5",
+     "d3h3",
+     "b5b1",
+     "g1h2",
+     "c8c6",
+     "e1h1",
+     "f8c8",
+     "d1h5"
+    ]
+   },
+   {
+    "evaluation": 15,
+    "mate": null,
+    "moves": [
+     "f7f5",
+     "e5f6",
+     "f8f6",
+     "d3f3",
+     "f6f3",
+     "d1f3",
+     "e7g5",
+     "c1g5",
+     "c4d6",
+     "f3g4"
+    ]
+   },
+   {
+    "evaluation": 17,
+    "mate": null,
+    "moves": [
+     "f7f6",
+     "e5f6",
+     "f8f6",
+     "d3f3",
+     "f6f3",
+     "d1f3",
+     "e7g5",
+     "c1g5",
+     "d7f7",
+     "f3g4"
+    ]
+   },
+   {
+    "evaluation": 369,
+    "mate": null,
+    "moves": [
+     "c4a3",
+     "c1a3",
+     "h7h6",
+     "g5f3",
+     "a7a5",
+     "a3e7",
+     "d7e7",
+     "d1a1",
+     "c8c2",
+     "a1a5"
+    ]
+   },
+   {
+    "evaluation": 370,
+    "mate": null,
+    "moves": [
+     "e7a3",
+     "c1a3",
+     "h7h6",
+     "g5f3",
+     "a7a5",
+     "a3f8",
+     "c4b2",
+     "d1d2",
+     "b2d3",
+     "d2d3"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "how-to-play-a-brilliancy#3",
+  "fen": "4r1k1/1p4p1/pPp2r1p/P1Pp1p2/3P1Pn1/2NR1P2/3Q2Bq/R4K2 b - - 0 31",
+  "reads": [
+   {
+    "evaluation": 134,
+    "mate": null,
+    "moves": [
+     "e8e4",
+     "a1e1",
+     "e4e1",
+     "d2e1",
+     "h2f4",
+     "e1d2",
+     "f4d2",
+     "d3d2",
+     "g4e3",
+     "f1e1"
+    ]
+   },
+   {
+    "evaluation": 397,
+    "mate": null,
+    "moves": [
+     "g4e3",
+     "d3e3",
+     "e8e3",
+     "d2e3",
+     "f6g6",
+     "e3g1",
+     "h2f4",
+     "c3e2",
+     "f4d2",
+     "f3f4"
+    ]
+   },
+   {
+    "evaluation": 643,
+    "mate": null,
+    "moves": [
+     "h2g2",
+     "f1g2",
+     "g4e3",
+     "d3e3",
+     "e8e3",
+     "d2e3",
+     "f6f8",
+     "e3e5",
+     "h6h5"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "joseacute-rauacutel-capablancas-greatest-positional-wins-part-2#1",
+  "fen": "5n2/5k1p/1p1qpp2/r7/2BP3P/4Q1P1/5P2/4R1K1 w - - 0 41",
+  "reads": [
+   {
+    "evaluation": 187,
+    "mate": null,
+    "moves": [
+     "d4d5",
+     "e6e5",
+     "c4b3",
+     "f7g7",
+     "h4h5",
+     "d6c5",
+     "e3f3",
+     "c5b4",
+     "e1c1",
+     "a5c5"
+    ]
+   },
+   {
+    "evaluation": -302,
+    "mate": null,
+    "moves": [
+     "c4e6",
+     "d6e6",
+     "e3c3",
+     "e6d7",
+     "e1b1",
+     "d7d6",
+     "c3b3",
+     "f8e6",
+     "b3b6",
+     "d6b6"
+    ]
+   },
+   {
+    "evaluation": -542,
+    "mate": null,
+    "moves": [
+     "e3e6",
+     "f8e6",
+     "g1h2",
+     "d6d4",
+     "c4e6",
+     "f7f8",
+     "h2g2",
+     "a5e5",
+     "e1c1",
+     "e5e6"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "miracle-on-the-chess-board#3",
+  "fen": "5Q2/5p1p/1pPr2p1/6k1/8/3pP2P/2q2PP1/3R1K2 w - - 0 44",
+  "reads": [
+   {
+    "evaluation": 80,
+    "mate": null,
+    "moves": [
+     "f1g1",
+     "d6c6",
+     "f8f7",
+     "c2d1",
+     "g1h2",
+     "d1e2"
+    ]
+   },
+   {
+    "evaluation": 0,
+    "mate": null,
+    "moves": [
+     "f2f4",
+     "g5h4",
+     "f8d6",
+     "c2d1",
+     "f1f2",
+     "d1e2",
+     "f2g1",
+     "e2e1",
+     "g1h2",
+     "e1g3"
+    ]
+   },
+   {
+    "evaluation": -340,
+    "mate": null,
+    "moves": [
+     "f2f3",
+     "c2d1",
+     "f1f2",
+     "d1c2",
+     "f2g3",
+     "c2c6",
+     "f8e7",
+     "d6f6",
+     "f3f4",
+     "g5h5"
+    ]
+   },
+   {
+    "evaluation": -485,
+    "mate": null,
+    "moves": [
+     "d1d3",
+     "c2b1",
+     "f1e2",
+     "b1d3",
+     "e2f3",
+     "d6c6",
+     "f8e7",
+     "c6f6",
+     "f3g3",
+     "d3d6"
+    ]
+   },
+   {
+    "evaluation": -100000,
+    "mate": -1,
+    "moves": [
+     "f8f7",
+     "c2d1"
+    ]
+   },
+   {
+    "evaluation": -100000,
+    "mate": -1,
+    "moves": [
+     "f8d6",
+     "c2d1"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "the-discovered-check-reloaded#1",
+  "fen": "3rr1k1/1bqnbp1p/ppp1p1pB/6N1/3P3Q/3B4/PPP2PPP/3RR1K1 w - - 0 18",
+  "reads": [
+   {
+    "evaluation": 144,
+    "mate": null,
+    "moves": [
+     "h4h3",
+     "e7g5",
+     "h6g5",
+     "d8c8",
+     "c2c3",
+     "c6c5",
+     "d4c5",
+     "d7c5",
+     "d3c2",
+     "e6e5"
+    ]
+   },
+   {
+    "evaluation": -112,
+    "mate": null,
+    "moves": [
+     "g5e6",
+     "f7e6",
+     "h4g4",
+     "d7f8",
+     "e1e6",
+     "g8h8",
+     "d3g6",
+     "f8g6",
+     "e6g6",
+     "h7g6"
+    ]
+   },
+   {
+    "evaluation": -510,
+    "mate": null,
+    "moves": [
+     "g5f7",
+     "e7h4",
+     "f7d8",
+     "c7d8",
+     "d3c4",
+     "d7f8",
+     "e1e4",
+     "h4f6",
+     "e4f4",
+     "c6c5"
+    ]
+   },
+   {
+    "evaluation": -578,
+    "mate": null,
+    "moves": [
+     "g5f3",
+     "e7h4",
+     "f3h4",
+     "c6c5",
+     "h4g6",
+     "h7g6",
+     "h6g5",
+     "d8b8",
+     "c2c3",
+     "c5d4"
+    ]
+   },
+   {
+    "evaluation": -615,
+    "mate": null,
+    "moves": [
+     "g5e4",
+     "e7h4",
+     "g2g3",
+     "f7f5",
+     "e4g5"
+    ]
+   },
+   {
+    "evaluation": -642,
+    "mate": null,
+    "moves": [
+     "g5h7",
+     "e7h4",
+     "h6g5",
+     "h4g5",
+     "h7g5",
+     "c7f4",
+     "g5f3",
+     "c6c5",
+     "f3e5",
+     "c5d4"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "the-knockout-blow#1",
+  "fen": "1b3rk1/2r2qpp/p7/1p3B2/1P5P/P1Q1Pb2/1B3P2/3RK1R1 w - - 0 24",
+  "reads": [
+   {
+    "evaluation": 594,
+    "mate": null,
+    "moves": [
+     "g1g7",
+     "f7g7",
+     "f5e6",
+     "g8h8",
+     "c3g7",
+     "c7g7",
+     "d1d7",
+     "h7h5",
+     "b2g7",
+     "h8h7"
+    ]
+   },
+   {
+    "evaluation": 594,
+    "mate": null,
+    "moves": [
+     "c3g7",
+     "f7g7",
+     "f5e6",
+     "g8h8",
+     "g1g7",
+     "c7g7",
+     "d1d7",
+     "h7h5",
+     "b2g7",
+     "h8h7"
+    ]
+   },
+   {
+    "evaluation": -300,
+    "mate": null,
+    "moves": [
+     "f5h7",
+     "g8h7",
+     "c3d3",
+     "g7g6",
+     "h4h5",
+     "f3h5",
+     "f2f4",
+     "f8e8",
+     "d3d4"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "understanding-the-back-rank#4",
+  "fen": "4r1k1/pp3ppp/2br1n2/7q/8/1PQ2NR1/P4PPP/2B1R1K1 w - - 0 22",
+  "reads": [
+   {
+    "evaluation": 10,
+    "mate": null,
+    "moves": [
+     "g3g5",
+     "e8e1",
+     "c3e1",
+     "h5h6",
+     "h2h3",
+     "f6e4",
+     "g5g4",
+     "h6e6",
+     "c1b2",
+     "e4f6"
+    ]
+   },
+   {
+    "evaluation": -1,
+    "mate": null,
+    "moves": [
+     "e1e8",
+     "f6e8",
+     "h2h3",
+     "d6d1",
+     "g1h2",
+     "h5f5",
+     "c1b2",
+     "f5f4",
+     "c3e5",
+     "f4e5"
+    ]
+   },
+   {
+    "evaluation": -4,
+    "mate": null,
+    "moves": [
+     "c1f4",
+     "e8e1",
+     "c3e1",
+     "d6d8",
+     "g3g5",
+     "h5h6",
+     "g5g4",
+     "d8e8",
+     "f4h6",
+     "e8e1"
+    ]
+   },
+   {
+    "evaluation": -30,
+    "mate": null,
+    "moves": [
+     "c1e3",
+     "g7g6",
+     "g3g5",
+     "f6e4",
+     "g5h5",
+     "e4c3",
+     "h5e5",
+     "e8e5",
+     "f3e5",
+     "a7a6"
+    ]
+   },
+   {
+    "evaluation": -350,
+    "mate": null,
+    "moves": [
+     "f3e5",
+     "d6d1",
+     "g3e3",
+     "f6d5",
+     "g2g4",
+     "h5h4",
+     "e1d1",
+     "d5c3",
+     "e3c3",
+     "c6b5"
+    ]
+   },
+   {
+    "evaluation": -546,
+    "mate": null,
+    "moves": [
+     "f3d4",
+     "e8e1",
+     "c3e1",
+     "d6d4",
+     "f2f3",
+     "h5d5",
+     "e1c3",
+     "d4d1",
+     "g1f2",
+     "f6e8"
+    ]
+   }
+  ]
+ }
+]

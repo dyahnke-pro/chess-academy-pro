@@ -163,12 +163,18 @@ function walk(
   // the need, is the reason (measured this way on David's 337 costly moves).
   let proof: ReturnType<typeof proofCut> = null;
   for (let k = 1; k <= sans.length && !proof; k += 1) {
+    // A PREFIX IS SETTLED THE WAY THE LINE GOES ON, never by a recapture the
+    // line does not play (Danya's article board, the-anatomy-of-a-brilliancy
+    // #3: e4 …Nxc4 Be2 …Rd7 Bxh5 was counted as …Nxc4 Bxc4 — "they win a queen
+    // for a knight" — while the line takes their queen back on h5). The
+    // ledger plays a forced recapture past the line's end only.
+    const rest = k < sans.length ? sans.slice(k) : undefined;
     const p = countFrom
       ? (() => {
-        const q = proofCut(countFrom.fenBefore, [countFrom.san, ...sans.slice(0, k)], student);
+        const q = proofCut(countFrom.fenBefore, [countFrom.san, ...sans.slice(0, k)], student, null, rest);
         return q ? { ...q, plies: q.plies - 1, sans: q.sans.slice(1) } : null;
       })()
-      : proofCut(fen, sans.slice(0, k), student, prior);
+      : proofCut(fen, sans.slice(0, k), student, prior, rest);
     if (!p || p.plies < 1) continue;
     if (p.mate) {
       const mater = plies[Math.min(p.plies, plies.length) - 1]?.moverColor;
@@ -300,6 +306,11 @@ export function reasonWinWords(r: CostReason, said: readonly number[]): string |
   const took = winnerIsLedgerStudent ? r.ledger.studentWon : r.ledger.opponentWon;
   const gave = winnerIsLedgerStudent ? r.ledger.opponentWon : r.ledger.studentWon;
   const made = winnerIsLedgerStudent ? r.ledger.studentPromoted : r.ledger.opponentPromoted;
+  // THE LOSER'S OWN PROMOTION IS MATERIAL BACK (Danya's underpromotion board:
+  // Rd8 …Rxd3 f8=N+ was said "they win a bishop" — the new knight makes it a
+  // pawn). The pieces taken no longer say the gain; the net does.
+  const loserMade = winnerIsLedgerStudent ? r.ledger.opponentPromoted : r.ledger.studentPromoted;
+  if (loserMade.length > 0) return count();
   // The line's first move is the winner's: their reply (allowed) or their
   // own best move (missed).
   const winner = r.plies[0]?.moverColor;

@@ -463,6 +463,7 @@ export const COMPUTER_CATALOG = {
   ifTheyPlay: { file: 'services/ifTheyPlay.ts', says: 'if they X, you play Y: the replies likely at this level (the human model) and the engine\'s best, each with the answer its own line proves — a recapture, a block, a job, a win or a mate' },
   baitBranch: { file: 'services/ifTheyPlay.ts', says: 'the bait: the student\'s sound move left a reply many players at this level choose that loses material or walks into mate (WO-COACH-NEXT-TO-YOU-01 C4)' },
   temptingRefuted: { file: 'services/weighedMoves.ts', says: 'the natural move a player weighs here that fails, with the engine line that refutes it' },
+  temptingOnBoard: { file: 'services/weighedMoves.ts', says: 'before anyone moves: the move a player at this level is drawn to that fails against the engine\'s best, with the line that refutes it' },
   alsoGood: { file: 'services/weighedMoves.ts', says: 'two moves of the same worth and the one thing the board shows between them' },
   squareChoice: { file: 'services/weighedMoves.ts', says: 'which square for the piece: its other squares a player weighs, and what goes wrong on each' },
   oppositeBishops: { file: 'services/oppositeBishops.ts', says: 'opposite-coloured bishops whatever else is on: with queens or rooks the attacker\'s game (the bishop that hits the other king\'s squares), bishops and pawns the drawish ending' },

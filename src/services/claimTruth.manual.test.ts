@@ -29,15 +29,15 @@ describe('bait only when taking is actually wrong (items 37, 144)', () => {
   it('no "bait" when the best move captures on the same square', () => {
     const out = buildRejectedTempting({
       fen: 'r7/2prqpk1/1p2pNp1/p3Pn1p/5Q1P/5N2/PPP2PP1/2KR4 w - - 0 22', studentColor: 'white', baitSquare: 'd7',
-      lines: [{ uci: 'd1d7', replyUci: 'e7d7', evalCp: 658 }, { uci: 'f6d7', replyUci: 'a8d8', evalCp: 412 }, { uci: 'd1g1', replyUci: 'd7d8', evalCp: 69 }],
-    } as never);
+      rating: 1500, lines: [{ moves: ['d1d7', 'e7d7'], evaluation: 658, mate: null }, { moves: ['f6d7', 'a8d8'], evaluation: 412, mate: null }, { moves: ['d1g1', 'd7d8'], evaluation: 69, mate: null }],
+    });
     expect(out?.spoken ?? '').not.toMatch(/bait|refutes/);
   });
   it('no "runs into" when the tempting line still leaves the student clearly ahead', () => {
     const out = buildRejectedTempting({
       fen: 'r1bq1rk1/ppp2pbp/3p1n1B/2nPp1pP/4P1P1/2N2P2/PPPQ4/R3KBNR w KQ - 0 12', studentColor: 'white', baitSquare: 'g5',
-      lines: [{ uci: 'd2g5', replyUci: 'f6e8', evalCp: 589 }, { uci: 'h6g5', replyUci: 'h7h6', evalCp: 322 }, { uci: 'h6g7', replyUci: 'g8g7', evalCp: 229 }],
-    } as never);
+      rating: 1500, lines: [{ moves: ['d2g5', 'f6e8'], evaluation: 589, mate: null }, { moves: ['h6g5', 'h7h6'], evaluation: 322, mate: null }, { moves: ['h6g7', 'g8g7'], evaluation: 229, mate: null }],
+    });
     expect(out?.spoken ?? '').not.toMatch(/bait|runs into|refutes/);
   });
 });

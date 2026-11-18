@@ -116,3 +116,26 @@ describe('a trade later in the line does not void the blow', () => {
     expect(r && allowedClause(r, 'b')).toMatch(/^lets them win a queen for a bishop/);
   });
 });
+
+// Two defects found on Danya's article boards (WO-DANYA-READS-01 group 4),
+// each a false win said by every surface that reads the one reason.
+describe('the reason is the line as played, its promotions counted', () => {
+  it('a prefix is settled by the line\'s own moves, not a recapture it does not play (the-anatomy-of-a-brilliancy#3)', () => {
+    // 29.e4 …Nxc4 — the line goes Be2 …Rd7 Bxh5, taking their queen back; it
+    // was counted as …Nxc4 Bxc4 and said "they win a queen for a knight".
+    const fen = 'r5k1/1br2p1p/1n2p1p1/2p4q/2Q5/6P1/P2BPP1P/3RRBK1 w - - 0 29';
+    const r = costReason({ fenBefore: fen, playedSan: 'e4', mover: 'w', student: 'w', costCp: 605,
+      after: { uci: ['b6c4', 'f1e2', 'c7d7', 'e2h5', 'c4d2', 'h5e2', 'd7a2'], source: 'deep', seconds: [] }, before: null, priorMove: null, against: null });
+    expect(r?.ledger?.opponentWon ?? []).not.toEqual(['q']);
+    expect(r === null || !(r.plies.some((p) => p.san === 'Bxh5') && r.ledger?.studentWon.join('') === 'n')).toBe(true);
+  });
+
+  it('the losing side\'s promotion is material back (a-guide-to-underpromotion#2: Rd8 …Rxd3 f8=N+)', async () => {
+    const { reasonWinWords } = await import('./costReason');
+    const fen = '5R2/5P1k/4N1p1/3pn3/1b6/3Br3/1PK5/8 w - - 0 48';
+    const r = costReason({ fenBefore: fen, playedSan: 'Rd8', mover: 'w', student: 'w', costCp: 186,
+      after: { uci: ['e3d3', 'f7f8n', 'b4f8', 'e6f8', 'h7g7', 'b2b4', 'd3e3', 'f8e6', 'g7f6'], source: 'deep', seconds: [] }, before: null, priorMove: null, against: null });
+    expect(r?.ledger?.studentPromoted).toEqual(['n']);
+    expect(r && reasonWinWords(r, [0, 1])).toBe('a pawn');
+  });
+});

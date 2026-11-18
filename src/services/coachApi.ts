@@ -141,7 +141,9 @@ import { askBackAtCatchAll, type ChatKind } from '../coach/chatTurn';
 // the deployed app's services via page.evaluate. No-op for real users.
 // Side-effect import keeps the audit script free of source-path knowledge.
 import './masterPlayAuditBridge';
-import { askedBestMove, askedMoveThought, moveDeepFact, movePurpose, moveReason } from './movePurposeEngine';
+import { askedBestMove, askedMoveThought, moveDeepFact, movePurpose, moveReason, temptingReads } from './movePurposeEngine';
+import type { WeighRead } from './weighedMoves';
+import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { reasonPosed } from './decisiveReason';
 import { emitDecisiveReason } from './decisiveReasonEvents';
 import { withArticle, orList } from '../utils/andList';
@@ -156,6 +158,20 @@ function enginePlanUci(fen: string, pvSan: ReadonlyArray<string> | undefined, be
     for (const san of pvSan) { const m = c.move(san); uci.push(`${m.from}${m.to}${m.promotion ?? ''}`); }
   } catch { /* the playable prefix */ }
   return uci[0] === bestUci ? uci : [bestUci];
+}
+
+/** THE TEMPTING MOVE'S READS FOR AN ASKED BOARD READ (WO-DANYA-READS-01
+ *  group 4): the engine's best line the surface threaded and one read per move
+ *  the eye weighs at the student's rating (`temptingReads`), so the assessment
+ *  can say which natural move fails and why. Null with no board or no best
+ *  move — the assessment then says what it has. */
+async function temptingForAsk(g: { currentFen?: string | null; engineBestMoveUci?: string; engineEvalCp?: number; engineMateIn?: number; enginePlan?: { pvSan: ReadonlyArray<string> } }): Promise<{ rating: number; reads: readonly WeighRead[] } | null> {
+  const fen = g.currentFen;
+  const best = g.engineBestMoveUci;
+  if (!fen || !best) return null;
+  const rating = (await db.profiles.get('main').catch(() => undefined))?.currentRating ?? DEFAULT_STUDENT_RATING;
+  const reads = await temptingReads(fen, rating, { evaluation: g.engineEvalCp ?? 0, mate: g.engineMateIn ?? null, moves: enginePlanUci(fen, g.enginePlan?.pvSan, best) }).catch(() => null);
+  return reads ? { rating, reads } : null;
 }
 
 /** The move the chat last named as best, and the board it was named on — so
@@ -2553,6 +2569,9 @@ async function serveGroundedPositionDefault(
     mateIn: grounding.engineMateIn,
     tactics: grounding.tactics,
     studentColor: sc,
+    // The default answer to a board question nobody asked as an assessment:
+    // no extra engine reads for the tempting move here.
+    tempting: null,
     // Pass the FEN so a no-engine-eval fallback (e.g. inside a walkthrough) gives
     // a board-true material read instead of degrading to a lone hanging-piece
     // note — the exact deflect David hit live (2026-09-09): "why is this move
@@ -2730,6 +2749,7 @@ async function computeLiveBoardVerdict(
       tactics: grounding.tactics,
       studentColor: sc,
       fen: grounding.currentFen, // board-true material read when the engine is cold (see above)
+      tempting: await temptingForAsk(grounding),
     });
     if (assess) {
       const v = await voice(assess.facts, 'assessment');
@@ -6685,6 +6705,7 @@ export async function getCoachChatResponse(
               tactics: grounding.tactics,
               studentColor: sc,
               fen: grounding.currentFen,
+              tempting: await temptingForAsk(grounding),
             });
             if (assess && (typeof grounding.engineEvalCp === 'number' || typeof grounding.engineMateIn === 'number')) {
               // THE WAY, NOT ONLY THE VERDICT (contract 2026-10-10: "how do I
@@ -6813,6 +6834,7 @@ export async function getCoachChatResponse(
             tactics: grounding.tactics,
             studentColor: sc,
             fen: grounding.currentFen,
+            tempting: await temptingForAsk(grounding),
           });
           // The warnings the board earns now: a stalemating move while winning,
           // the three ways to meet a check.

@@ -70,7 +70,7 @@ describe('theoreticalEnding — the move that made it', () => {
   });
 
   it('the position read names the ending and its squares', () => {
-    const a = assemblePositionAssessment({ evalCp: -1, mateIn: null, tactics: null, studentColor: 'white', fen: PHILIDOR_60, bestUci: null });
+    const a = assemblePositionAssessment({ tempting: null, evalCp: -1, mateIn: null, tactics: null, studentColor: 'white', fen: PHILIDOR_60, bestUci: null });
     expect(a?.facts).toMatch(/Philidor/);
     expect(a?.keySquares).toEqual(expect.arrayContaining(['f4', 'c3']));
   });

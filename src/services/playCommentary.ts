@@ -28,13 +28,13 @@ import { packageForRegister, type HintPackage } from './hintRegister';
 import { CAPTURE_VALUE } from './pieceValues';
 import { quietMovePoint } from './reviewMoveTeaching';
 import { pawnHit } from './trappedPiece';
-import { kickKey, temptingKey } from './conceptKey';
+import { kickKey } from './conceptKey';
+import { temptingOnBoard } from './weighedMoves';
 import { settledExchange } from './exchangeLedger';
 import { captureRead, findWeakPawns } from './positionReadingService';
 import { seatBare } from '../utils/seatPieces';
 import { mateDescription } from './matePatterns';
 import { withArticle } from '../utils/andList';
-import { afterCaptureSan } from '../utils/captureWords';
 import { takesBack, type PrevCaptureContext } from './captureRun';
 
 type CommentaryKind =
@@ -358,19 +358,29 @@ export function buildInstantReplyLine(m: {
 
 /**
  * THE REJECTED TEMPTING MOVE — the speedrun beat "if you play the tempting
- * Knight to c5, Black can push e5". Deterministic: the tempting candidate is
- * a CAPTURE or CHECK the engine's multipv scored ≥1.5 pawns worse than the
- * best line, and the refutation is that line's own reply. Unlike the other
- * beats this one NAMES both moves — it is a warning the video delivers
- * openly, not a quiz — but it never names the BEST move (the honesty
- * contract holds).
+ * Knight to c5, Black can push e5", asked before the move ("Why not Nxe4?").
+ * The candidate and WHY IT FAILS are the one computer's
+ * (`weighedMoves.temptingOnBoard`, WO-DANYA-READS-01 group 4): a move the eye
+ * weighs, a pawn or more worse than the best line, refuted by its own line —
+ * said only when that line wins material or mates (`costReason`) and may be
+ * named (`lineTrust`). This beat asks only of a CAPTURE or a CHECK (the move
+ * that looks like it wins or forces something), and holds the answer with the
+ * question. It NAMES both moves — a warning the video delivers openly, not a
+ * quiz — but never the BEST move (the honesty contract holds).
+ *
+ * It used to read the refutation off the line's second move alone and say
+ * "…but Qxd5 refutes it" — a second wording of why a move fails, with no
+ * reason: exd5 Qxd5 is a recapture, the main line of the Scandinavian.
  */
 export function buildRejectedTempting(args: {
   fen: string;
   studentColor: 'white' | 'black';
-  /** Engine multipv lines, best first: first move + its reply (UCI), eval
-   *  from the STUDENT's perspective in centipawns. */
-  lines: Array<{ uci: string; replyUci?: string | null; evalCp: number; searchedShort?: boolean }>;
+  /** The engine's lines from `fen`, best first: each a read of its first move
+   *  (White's view, the analysis convention). `searchedShort`: the line was
+   *  cut before the turn's depth, so no amount is said. */
+  lines: ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate: number | null; searchedShort?: boolean }>;
+  /** The rating the eye weighs the candidates at. */
+  rating: number;
   /** Where the opponent's last move landed. A tempting capture ON it is
    *  their BAIT (census #48: "f4 invites exf4, then Bxf4+"). */
   baitSquare?: string | null;
@@ -384,73 +394,56 @@ export function buildRejectedTempting(args: {
     return null;
   }
   if (base.turn() !== me) return null;
-  const bestEval = args.lines[0].evalCp;
-  for (const line of args.lines.slice(1)) {
-    if (!line.replyUci || bestEval - line.evalCp < 150) continue;
+  const reads = args.lines.filter((l) => l.moves.length > 0).map((l) => ({ evaluation: l.evaluation, mate: l.mate, moves: [...l.moves] }));
+  const bestUci = args.lines[0].moves[0] ?? '';
+  const studentCp = (l: { evaluation: number; mate: number | null }): number => (l.mate != null ? (l.mate > 0 ? 100_000 : -100_000) : l.evaluation) * (me === 'w' ? 1 : -1);
+  for (const t of temptingOnBoard({ fen: args.fen, student: me, rating: args.rating, reads, priorMove: null })) {
+    const line = args.lines.find((l) => l.moves[0] === t.uci);
+    const reply = t.reason.plies[0];
+    if (!line || !reply) continue;
     try {
       const probe = new Chess(args.fen);
-      const tempting = probe.move({ from: line.uci.slice(0, 2) as Square, to: line.uci.slice(2, 4) as Square, promotion: (line.uci[4] as 'q' | undefined) ?? undefined });
-      if (!tempting) continue;
+      const tempting = probe.move({ from: t.uci.slice(0, 2) as Square, to: t.uci.slice(2, 4) as Square, promotion: (t.uci[4] as 'q' | undefined) ?? undefined });
       // Tempting = it LOOKS like it wins something or forces something.
-      const looksGood = tempting.captured !== undefined || probe.isCheck();
-      if (!looksGood) continue;
+      if (tempting.captured === undefined && !probe.isCheck()) continue;
       // Not bait, not refuted (manual claim check 2026-09-30, items 37, 144):
-      // "Can you take the rook on d7? No — it's bait" when Rxd7 was the BEST
-      // move, and "Bxg5 runs into h6" when Qxg5 won the pawn and Bxg5 still
-      // came out clearly ahead. The best move taking on the same square means
-      // the capture is right, just with another piece; a line that still
-      // leaves the student two pawns up is not refuted.
-      if (tempting.captured !== undefined && args.lines[0].uci.slice(2, 4) === tempting.to) continue;
-      if (line.evalCp >= 200) continue;
-      const fenBeforeRefutation = probe.fen();
-      const refutation = probe.move({ from: line.replyUci.slice(0, 2) as Square, to: line.replyUci.slice(2, 4) as Square, promotion: (line.replyUci[4] as 'q' | undefined) ?? undefined });
-      if (!refutation) continue;
-      const why = tempting.captured !== undefined
-        // Said after its SAN ("Bxg5 would not have worked: it …"), which
-        // already says the capture: the count, never the capture again.
-        ? `it ${afterCaptureSan({ kind: 'nets', captured: tempting.captured, free: false, gave: null }, 'verb')}`
-        : 'it comes with check';
-      // Tiered so the REGISTER decides how much of this is handed over
-      // (hintRegister.packageForRegister). The anchor carries both moves
-      // because the tempting move alone, without its refutation, would read as
-      // a recommendation — every tier has to stand on its own.
-      // THEIR BAIT, question first (David 2026-09-30): the piece their last
-      // move put en prise, taken, runs into the refutation.
+      // the best move taking on the same square means the capture is right,
+      // just with another piece; a line that still leaves the student two
+      // pawns up has not fallen apart.
+      if (tempting.captured !== undefined && bestUci.slice(2, 4) === tempting.to) continue;
+      if (studentCp(line) >= 200) continue;
       const bait = !!args.baitSquare && tempting.captured !== undefined && tempting.to === args.baitSquare;
-      // THE SPOKEN PACKAGE — question first, the answer, then what the
-      // register adds (2026-09-30: the old package carried prompt text —
-      // "Name X exactly as given. Do NOT…" — and Learn speaks it raw).
+      const piece = NAME[tempting.captured ?? 'p'] ?? 'piece';
+      const why = t.because;
+      // THE SPOKEN PACKAGE — question first, the answer (the one reason),
+      // then what the register adds (hintRegister.packageForRegister).
       const hint: HintPackage = {
-        ask: bait
-          ? `Can you take the ${NAME[tempting.captured ?? 'p'] ?? 'piece'} on ${tempting.to}?`
-          : `Why not ${tempting.san}?`,
-        anchor: bait
-          ? `No — it's bait: ${tempting.san} runs into ${refutation.san}.`
-          : `${openSentence(why)}, but ${refutation.san} refutes it.`,
+        ask: bait ? `Can you take the ${piece} on ${tempting.to}?` : `Why not ${tempting.san}?`,
+        anchor: bait ? `No — it's bait: ${why}.` : `It fails: ${why}.`,
         detail: args.lines[0].searchedShort || line.searchedShort
           ? 'That line falls short of the best move.'
-          : `That line gives up ${costWords(bestEval - line.evalCp)} against the best move.`,
+          : `That line gives up ${costWords(t.costCp)} against the best move.`,
         stakes: 'Before trusting a tempting move, calculate their most forcing reply.',
         // After the student's move: the bait taken is the verdict's to say;
         // left alone, the reason is said of the board it was asked on.
         resolve: (m) => {
           if (posKey(m.fenBefore) !== posKey(args.fen) || m.san.replace(/[+#]/g, '') === tempting.san.replace(/[+#]/g, '')) return null;
-          return bait
-            ? `The ${NAME[tempting.captured ?? 'p'] ?? 'piece'} on ${tempting.to} was bait: ${tempting.san} runs into ${refutation.san}.`
-            : `${tempting.san} would not have worked: ${why}, but ${refutation.san} refutes it.`;
+          return bait ? `The ${piece} on ${tempting.to} was bait: after ${tempting.san}, ${why}.` : `${tempting.san} would not have worked: ${why}.`;
         },
       };
+      const refutationFrom = reply.uci.slice(0, 2);
+      const refutationTo = reply.uci.slice(2, 4);
       return {
         temptingSan: tempting.san,
-        refutationSan: refutation.san,
+        refutationSan: reply.san,
         bait,
         spoken: askThenAnswer(hint.ask, hint.anchor, hint.resolve),
-        refutation: { from: refutation.from, to: refutation.to, fenBefore: fenBeforeRefutation },
+        refutation: { from: refutationFrom, to: refutationTo, fenBefore: reply.fenBefore },
         hint,
         facts: packageForRegister(hint, 'moderate'),
         // The same claim the weighed moves make of this move after it is
         // played (`temptingKey`): said once, whichever lane says it first.
-        claim: temptingKey(line.uci),
+        claim: t.key,
       };
     } catch { /* malformed line — try the next */ }
   }

@@ -98,7 +98,7 @@ describe('L2 — a claim about a piece that is not there is not made', () => {
     // NEGATIVE CONTROL: drop the `pieceIsOn(...)` term from the `.find(...)` in
     // `assemblePositionAssessment` and this reads "Your knight on b5 is hanging."
     const start = new Chess().fen();
-    const answer = assemblePositionAssessment({ bestUci: null,
+    const answer = assemblePositionAssessment({ bestUci: null, tempting: null,
       evalCp: null, mateIn: null, tactics: hangingKnightOnB5,
       studentColor: 'white', fen: start,
     });
@@ -139,7 +139,7 @@ describe('L3 — the voice never reports its own plumbing', () => {
     // matching case fails. Narration voice rule 2 bans interface references.
     const c = new Chess();
     for (const m of moves) c.move(m);
-    const answer = assemblePositionAssessment({ bestUci: null,
+    const answer = assemblePositionAssessment({ bestUci: null, tempting: null,
       evalCp: null, mateIn: null, tactics: null, studentColor: 'white', fen: c.fen(),
     });
     expect(answer?.facts ?? '').toMatch(re);

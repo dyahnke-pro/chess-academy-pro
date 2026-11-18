@@ -9,6 +9,7 @@ import { Chess } from 'chess.js';
 // G0: every sentence returned is computed; the caller's model only phrases
 // them, most-important-first, in the order returned.
 import { readHabit } from './methodBeat';
+import { temptingOnBoard, type WeighRead } from './weighedMoves';
 import { buildFedTacticsContext, speakDeepestLookahead } from './liveTacticsContext';
 import { readPosition } from './positionalRead';
 import { detectPhase } from './narratedContinuation';
@@ -65,6 +66,11 @@ interface PositionReadInput {
    *  the move) stays quiet, and any line naming the move or its squares is
    *  dropped — the read teaches the POSITION, never the answer. */
   withhold: string | null;
+  /** REQUIRED — the reads of the moves a player is drawn to here
+   *  (`movePurposeEngine.temptingReads`) and the rating the eye was read at,
+   *  or null where the caller took none. The tempting move that fails is said
+   *  from it (WO-DANYA-READS-01 group 4). */
+  tempting: { rating: number; reads: readonly WeighRead[] } | null;
 }
 
 /** The SAN and the two squares a withheld move would reveal. */
@@ -163,6 +169,19 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
   } catch { positionFactsBlock = ''; }
   if (i.isCancelled()) return '';
 
+  // 3b. WHY THE TEMPTING MOVE FAILS (WO-DANYA-READS-01 group 4; his "Ng5+ is
+  //    tempting, but after …Kg7 and …Rg3 Black parries the threats"): the
+  //    move a player is drawn to, against the engine's best, refuted by its
+  //    own line. The student's turn only, and never on a puzzle still being
+  //    solved — ruling a move out narrows the answer.
+  let temptingLine = '';
+  if (i.tempting && !marks && i.fen.split(' ')[1] === studentCC) {
+    try {
+      const t = temptingOnBoard({ fen: i.fen, student: studentCC, rating: i.tempting.rating, reads: i.tempting.reads, priorMove: null })[0];
+      if (t && !positionFactsBlock.includes(t.san)) temptingLine = t.text;
+    } catch { temptingLine = ''; }
+  }
+
   // 4. THE POSITIONAL READ — every ranked observation on both sides of the
   //    board, most useful first. NO cap (G4.5): the ranker orders, the student
   //    hears what it ranked. An observation whose square the facts above
@@ -174,7 +193,7 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
   // so nothing judged them, pointing the student away from the answer. When
   // the one door says the moment decides the game, they yield.
   if (!decidingMoment) try {
-    const already = `${noteLine} ${positionFactsBlock}`.toLowerCase();
+    const already = `${noteLine} ${positionFactsBlock} ${temptingLine}`.toLowerCase();
     for (const o of readPosition(i.fen, i.playerColor)) {
       const naming = o.text.toLowerCase().match(/[a-h][1-8]/)?.[0];
       if (naming && already.includes(naming)) continue;
@@ -200,7 +219,7 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
     decidingMoment,
   })?.text ?? null;
 
-  return [noteLine, phaseLine, positionFactsBlock, ...readLines, lookaheadLine ?? '', habitLine ?? '']
+  return [noteLine, phaseLine, positionFactsBlock, temptingLine, ...readLines, lookaheadLine ?? '', habitLine ?? '']
     .map((t) => t.trim())
     .filter(Boolean)
     .filter((t) => !reveals(t, marks))

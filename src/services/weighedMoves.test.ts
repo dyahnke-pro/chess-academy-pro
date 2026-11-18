@@ -60,8 +60,8 @@ describe('one claim for one ruled-out move (wire-19)', () => {
     // heard two claims.
     const g = game('8urm2D1HhX8');
     const s = seat(g.fenBefore) === 'w' ? 1 : -1;
-    const lines = g.reads.map((r) => ({ uci: r.moves[0], replyUci: r.moves[1] ?? null, evalCp: s * r.evaluation })).sort((a, b) => b.evalCp - a.evalCp);
-    const ask = buildRejectedTempting({ fen: g.fenBefore, studentColor: seat(g.fenBefore) === 'w' ? 'white' : 'black', lines });
+    const lines = [...g.reads].sort((a, b) => s * (b.evaluation - a.evaluation)).map((r) => ({ moves: [...r.moves], evaluation: r.evaluation, mate: r.mate }));
+    const ask = buildRejectedTempting({ fen: g.fenBefore, studentColor: seat(g.fenBefore) === 'w' ? 'white' : 'black', lines, rating: 1500 });
     const weighed = temptingRefuted({ fenBefore: g.fenBefore, san: g.played, student: seat(g.fenBefore), rating: 1500, reads: g.reads, priorMove: null });
     expect(ask?.temptingSan).toBe('Nxe4');
     expect(ask?.claim).toBe('tempting:f6e4');

@@ -13,6 +13,7 @@ import { Chess } from 'chess.js';
 import { assemblePositionAssessment } from '../src/services/groundedAnswer';
 import { buildTacticsLiveContext } from '../src/services/liveTacticsContext';
 import { moveThoughtFacts } from '../src/services/moveThoughtFacts';
+import { candidateMoves, type WeighRead } from '../src/services/weighedMoves';
 import { NO_PREV_CAPTURE } from '../src/services/captureRun';
 import type { AnalysisLine, StockfishAnalysis } from '../src/types';
 
@@ -45,7 +46,7 @@ class Engine {
       this.waiters.push((line) => {
         // `^info depth`, never `.*depth`: a greedy `.*` lands on `seldepth`, and
         // the lines kept were whichever iteration searched 16 deep selectively.
-        const m = /^info depth (\d+) .*?multipv (\d+) score (cp|mate) (-?\d+).* pv (.+)$/.exec(line);
+        const m = /\b(lower|upper)bound\b/.test(line) ? null : /^info depth (\d+) .*?multipv (\d+) score (cp|mate) (-?\d+).* pv (.+)$/.exec(line);
         if (m && Number(m[1]) === DEPTH) {
           const raw = Number(m[4]);
           const pov = white ? raw : -raw;
@@ -82,7 +83,18 @@ async function main(): Promise<void> {
       const before = await engine.analyse(r.fen);
       out.lines = before.map((l) => ({ moves: l.moves.slice(0, 8), cp: l.evaluation, mate: l.mate }));
       const tactics = buildTacticsLiveContext(r.fen, asAnalysis(before), side, 1800);
-      const read = assemblePositionAssessment({ evalCp: before[0]?.evaluation ?? null, mateIn: before[0]?.mate ?? null, tactics, studentColor: side === 'w' ? 'white' : 'black', fen: r.fen, bestUci: before[0]?.moves[0] ?? null });
+      // The tempting moves' reads, as the app takes them (`temptingReads`):
+      // the best line and the board after each move the eye weighs.
+      const tempting: WeighRead[] = before[0] ? [{ evaluation: before[0].evaluation, mate: before[0].mate, moves: before[0].moves }] : [];
+      for (const c of before[0] ? candidateMoves(r.fen, 1800, { played: null, scored: null }) : []) {
+        if (c.uci === before[0].moves[0]) continue;
+        const after = new Chess(r.fen);
+        after.move({ from: c.from, to: c.to, promotion: c.uci[4] });
+        if (after.isGameOver()) continue;
+        const top = (await engine.analyse(after.fen()))[0];
+        if (top) tempting.push({ evaluation: top.evaluation, mate: top.mate, moves: [c.uci, ...top.moves] });
+      }
+      const read = assemblePositionAssessment({ evalCp: before[0]?.evaluation ?? null, mateIn: before[0]?.mate ?? null, tactics, studentColor: side === 'w' ? 'white' : 'black', fen: r.fen, bestUci: before[0]?.moves[0] ?? null, tempting: tempting.length >= 2 ? { rating: 1800, reads: tempting } : null });
       out.positionRead = read?.facts ?? null;
       const bestUci = before[0]?.moves[0];
       if (bestUci) {
