@@ -21,6 +21,7 @@ import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { asIfToMove, legalSeeGainFor } from './positionReadingService';
 import { andList } from '../utils/andList';
 import { rotateStem } from '../utils/rotateStem';
+import { CAPTURE_VALUE } from './pieceValues';
 
 /** One engine line: UCI moves from the board's side to move. */
 export interface InitiativeLine { moves: readonly string[] }
@@ -50,7 +51,7 @@ export interface Initiative {
  *  engine's best play rather than a guess. */
 export const INITIATIVE_PLIES = 6;
 
-const VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+const VALUE = CAPTURE_VALUE;
 
 /** What `side` could win on `fen` if it were its move, on one enemy piece:
  *  the legal exchange's gain on its square (0 when nothing of `side`'s hits

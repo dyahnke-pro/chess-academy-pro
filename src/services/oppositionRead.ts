@@ -25,7 +25,7 @@
 // PURE: chess.js.
 import { Chess, type Color, type Square } from 'chess.js';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
-import { andList, orList } from '../utils/andList';
+import { orList } from '../utils/andList';
 import { raceCountOn } from './raceCount';
 
 export type OppositionKind = 'direct' | 'distant' | 'diagonal';
@@ -89,14 +89,14 @@ function pawnEndingOnly(c: Chess): { pawns: number } | null {
 
 /** `fen` with `side` to move (en passant cleared), or null when that board
  *  cannot be (the other king in check). */
+/** The board with `side` to move, through the ONE null-move rule
+ *  (`sideToMoveAs`: null when the side asked to pass is in check). */
 function withTurn(fen: string, side: Color): Chess | null {
-  const p = fen.split(' ');
-  p[1] = side; p[3] = '-';
+  const f = sideToMoveAs(fen, side);
+  if (!f) return null;
   try {
-    const c = new Chess(p.join(' '));
-    const k = kingSquares(c);
-    if (!k || c.attackers(k[other(side)], side).length > 0) return null;
-    return c;
+    const c = new Chess(f);
+    return kingSquares(c) ? c : null;
   } catch { return null; }
 }
 
@@ -257,5 +257,3 @@ export function oppositionTaken(fenBefore: string, san: string): { read: Opposit
   return { read, fenAfter: c.fen() };
 }
 
-/** Words for the spare moves (diagnostics and tests). */
-export function spareWords(o: OppositionRead): string { return andList(o.spare); }

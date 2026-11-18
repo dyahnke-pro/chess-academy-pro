@@ -36,6 +36,7 @@ import { seatBare } from '../utils/seatPieces';
 import { mateDescription } from './matePatterns';
 import { withArticle } from '../utils/andList';
 import { takesBack, type PrevCaptureContext } from './captureRun';
+import { seatCp } from './winChance';
 
 type CommentaryKind =
   | 'tactic'
@@ -396,7 +397,7 @@ export function buildRejectedTempting(args: {
   if (base.turn() !== me) return null;
   const reads = args.lines.filter((l) => l.moves.length > 0).map((l) => ({ evaluation: l.evaluation, mate: l.mate, moves: [...l.moves] }));
   const bestUci = args.lines[0].moves[0] ?? '';
-  const studentCp = (l: { evaluation: number; mate: number | null }): number => (l.mate != null ? (l.mate > 0 ? 100_000 : -100_000) : l.evaluation) * (me === 'w' ? 1 : -1);
+  const studentCp = (l: { evaluation: number; mate: number | null }): number => seatCp(l, me);
   for (const t of temptingOnBoard({ fen: args.fen, student: me, rating: args.rating, reads, priorMove: null })) {
     const line = args.lines.find((l) => l.moves[0] === t.uci);
     const reply = t.reason.plies[0];

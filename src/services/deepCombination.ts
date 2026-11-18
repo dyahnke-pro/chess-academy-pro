@@ -25,7 +25,7 @@
 //
 // PURE: chess.js, the exchange ledger and the engine line the surface hands in.
 import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'chess.js';
-import { MATERIAL_VALUE } from './pieceValues';
+import { MATERIAL_VALUE, sideMaterial } from './pieceValues';
 import { legalSeeGainFor } from './positionReadingService';
 import { mateThreatsAgainst } from './threatOut';
 import { settledNetForLine, gainWords, promotedIn, type PieceLetter } from './exchangeLedger';
@@ -74,9 +74,7 @@ export interface DeepCombination {
 }
 
 function material(c: Chess, color: Color): number {
-  let n = 0;
-  for (const row of c.board()) for (const x of row) if (x && x.color === color) n += MATERIAL_VALUE[x.type];
-  return n;
+  return sideMaterial(c.fen(), color);
 }
 
 function playUci(c: Chess, u: string): Move | null {
@@ -120,7 +118,7 @@ export function deepCombination(fenBefore: string, san: string, line: readonly s
   }
   if (sacAt < 1) return null;
   const take = moves[sacAt];
-  const givenSq = take.to as Square;
+  const givenSq = take.to;
   const givenPiece = take.captured as PieceSymbol;
   // The move that offers it: the mover's move that put the piece there in
   // this line, or the move before the take (it left the piece to be taken).
@@ -129,7 +127,7 @@ export function deepCombination(fenBefore: string, san: string, line: readonly s
   const offered = moves[offerAt];
   // A desperado spends a piece that was lost where it stood: a piece taken
   // on the square it moved to must have been safe on the square it left.
-  if (offered.color === mover && offered.to === givenSq && legalSeeGainFor(fenBefore, offered.from as Square, foe) > 0) return null;
+  if (offered.color === mover && offered.to === givenSq && legalSeeGainFor(fenBefore, offered.from, foe) > 0) return null;
   // Taking straight back on the square is a trade, not a sacrifice.
   const next = moves[sacAt + 1];
   if (!next || (next.captured && next.to === givenSq)) return null;
@@ -181,7 +179,7 @@ export function deepCombination(fenBefore: string, san: string, line: readonly s
   if (kingSacrifice(fenBefore, san, line, moverCp, moverMate)) return null;
   return {
     mover, san: first.san, given: { piece: givenPiece, square: givenSq },
-    lead: sans.slice(0, offerAt), offered: { san: offered.san, color: offered.color, to: offered.to as Square },
+    lead: sans.slice(0, offerAt), offered: { san: offered.san, color: offered.color, to: offered.to },
     accepted: sans.slice(offerAt + 1, sacAt + 1),
     takenFen: take.after, follow: proved.slice(sacAt + 1), line: proved, outcome, won, net: gained, key: `deep-combo:${first.from}${first.to}`,
   };

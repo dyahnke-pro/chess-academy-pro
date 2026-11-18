@@ -25,10 +25,11 @@
 import { Chess, type Color, type PieceSymbol, type Square, type Move } from 'chess.js';
 import { kingRing, kingNeighbourhood, bearsOnSquare, kingCover } from './kingSafety';
 import { sideToMoveAs, mateThreatsAgainst } from './threatOut';
-import { MATERIAL_VALUE } from './pieceValues';
+import { MATERIAL_VALUE, sideMaterial } from './pieceValues';
 import { andList, countWord } from '../utils/andList';
 import { openSentence } from '../utils/openSentence';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
+import { unmarked } from '../utils/sanMark';
 
 export interface SiegePiece { square: Square; piece: PieceSymbol }
 
@@ -344,7 +345,7 @@ export function backRankWeakness(fen: string, defender: Color): BackRank | null 
   const probeFen = sideToMoveAs(fen, attacker);
   if (!probeFen) return null;
   const probe = new Chess(probeFen);
-  const checks = heavy.flatMap((p) => probe.moves({ square: p.square, verbose: true }) as Move[])
+  const checks = heavy.flatMap((p) => probe.moves({ square: p.square, verbose: true }))
     .filter((m) => rankOf(m.to) === home && m.san.includes('+') && !m.san.includes('#'));
   const found: BackRank[] = [];
   for (const m of checks) {
@@ -354,15 +355,15 @@ export function backRankWeakness(fen: string, defender: Color): BackRank | null 
     if (replies.some((r) => r.piece === 'k')) continue;
     const guards = [...new Set(replies.map((r) => r.from))];
     if (guards.length !== 1) continue;
-    const g = after.get(guards[0] as Square);
+    const g = after.get(guards[0]);
     if (!g) continue;
     // The guard taken off: the same check is mate.
-    const bare = without(probeFen, guards[0] as Square);
+    const bare = without(probeFen, guards[0]);
     if (!bare || bare.turn() !== attacker) continue;
     let mates = false;
     try { const mv = bare.move({ from: m.from, to: m.to, promotion: m.promotion }); mates = !!mv && bare.isCheckmate(); } catch { mates = false; }
     if (!mates) continue;
-    found.push({ defender, king, check: { san: m.san, from: m.from, to: m.to }, guard: { square: guards[0] as Square, piece: g.type }, key: `back-rank:${king}:${guards[0]}` });
+    found.push({ defender, king, check: { san: m.san, from: m.from, to: m.to }, guard: { square: guards[0], piece: g.type }, key: `back-rank:${king}:${guards[0]}` });
   }
   found.sort((a, b) => a.check.to.localeCompare(b.check.to) || a.check.from.localeCompare(b.check.from));
   return found[0] ?? null;
@@ -370,7 +371,7 @@ export function backRankWeakness(fen: string, defender: Color): BackRank | null 
 
 export function backRankLine(b: BackRank, student: Color, fen: string): string {
   const mine = b.defender === student; // the student's own king
-  const mate = b.check.san.replace(/\+$/, '');
+  const mate = unmarked(b.check.san);
   return rotateStem(mine ? [
     `Your king on ${b.king} has no luft. Only your ${pieceWord(b.guard)} guards the back rank — if it leaves, ${mate} is mate.`,
     `Your back rank is thin: the king on ${b.king} has no flight square, and only your ${pieceWord(b.guard)} stops ${mate} from being mate.`,
@@ -431,7 +432,7 @@ export function loadedDiscovery(fen: string, side: Color): LoadedDiscovery | nul
             const line = new Set<string>();
             let ff = fileOf(king) + df; let rr = rankOf(king) + dr;
             while (sq(ff, rr) !== at) { line.add(sq(ff, rr)); ff += df; rr += dr; }
-            const moves = probe.moves({ square: blocker.square, verbose: true }) as Move[];
+            const moves = probe.moves({ square: blocker.square, verbose: true });
             const off = moves.filter((m) => !line.has(m.to));
             const checking = off.filter((m) => m.san.includes('+') || m.san.includes('#'));
             if (checking.length > 0) {
@@ -500,9 +501,7 @@ export interface KingSacrifice {
 
 /** Points of material for `color` on `c`. */
 function material(c: Chess, color: Color): number {
-  let n = 0;
-  for (const row of c.board()) for (const x of row) if (x && x.color === color) n += MATERIAL_VALUE[x.type];
-  return n;
+  return sideMaterial(c.fen(), color);
 }
 
 /**
@@ -525,7 +524,7 @@ export function kingSacrifice(fenBefore: string, san: string, line: readonly str
   if (!before) return null;
   const king = kingOf(before, foe);
   if (!king || !line[0]) return null;
-  const near = kingNeighbourhood(king).includes(mv.to as Square) || c.inCheck();
+  const near = kingNeighbourhood(king).includes(mv.to) || c.inCheck();
   if (!near) return null;
   const given = MATERIAL_VALUE[mv.piece] - (mv.captured ? MATERIAL_VALUE[mv.captured] : 0);
   if (given < 2 || mv.piece === 'k') return null;
@@ -577,12 +576,12 @@ export function kingSacrifice(fenBefore: string, san: string, line: readonly str
   if ((outcome === 'material' || outcome === 'ahead') && follow.length < 2) return null;
   // What it opened.
   let opens: KingSacrifice['opens'] | null = null;
-  if (rep.piece === 'k') opens = { kind: 'king-out', square: rep.to as Square };
-  else if (mv.captured === 'p' && Math.abs(fileOf(mv.to) - fileOf(king)) <= 1 && Math.abs(rankOf(mv.to) - rankOf(king)) <= 2) opens = { kind: 'shelter', square: mv.to as Square };
+  if (rep.piece === 'k') opens = { kind: 'king-out', square: rep.to };
+  else if (mv.captured === 'p' && Math.abs(fileOf(mv.to) - fileOf(king)) <= 1 && Math.abs(rankOf(mv.to) - rankOf(king)) <= 2) opens = { kind: 'shelter', square: mv.to };
   else {
     const ring = kingRing(king).filter((s) => s !== king);
-    const wasDefender = ring.some((s) => bearsFrom(before, rep.piece, rep.from as Square, s, rep.from as Square));
-    if (wasDefender && rep.piece !== 'p') opens = { kind: 'defender', piece: { square: rep.from as Square, piece: rep.piece } };
+    const wasDefender = ring.some((s) => bearsFrom(before, rep.piece, rep.from, s, rep.from));
+    if (wasDefender && rep.piece !== 'p') opens = { kind: 'defender', piece: { square: rep.from, piece: rep.piece } };
   }
   if (!opens) return null;
   return { mover, san: mv.san, given: mv.piece, took: mv.captured ?? null, accepted: rep.san, opens, follow, line: proved, outcome, key: `king-sac:${mv.from}${mv.to}` };

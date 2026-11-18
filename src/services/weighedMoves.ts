@@ -350,8 +350,8 @@ function refuteCandidate(fenBefore: string, c: Pick<CandidateMove, 'uci' | 'san'
       // Three phrasings a seat (the human voice: a game never repeats a
       // formula more than twice; two stems put three tempting moves on one
       // wording a quarter of the time — the prod Review audit 2026-11-18).
-      ? rotateStem([`${c.san} is tempting here, but it fails`, `${c.san} looks natural, but it doesn't work`, `${c.san} is the obvious try, but it falls short`], stem)
-      : rotateStem([`${c.san} was tempting for them, but it fails`, `${c.san} looked natural for them, but it doesn't work`, `${c.san} was the obvious try for them, but it falls short`], stem);
+      ? rotateStem([`${c.san} is tempting here, but it fails`, `${c.san} looks natural, but it doesn't work`, `${c.san} is the obvious try, but it doesn't hold up`], stem)
+      : rotateStem([`${c.san} was tempting for them, but it fails`, `${c.san} looked natural for them, but it doesn't work`, `${c.san} was the obvious try for them, but it doesn't hold up`], stem);
   const because = `${lineShape(sans, w.otherLine, r.fen, 'first')}${result}`;
   const sq = blowSquare(sans);
   const key = temptingKey(c.uci);

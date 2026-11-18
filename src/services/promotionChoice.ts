@@ -23,6 +23,8 @@
 // PURE: chess.js and the stalemate reader.
 import { Chess, type Color, type Move, type PieceSymbol } from 'chess.js';
 import { stalemateTraps, type StalemateTrap } from './stalemateWatch';
+import { withArticle } from '../utils/andList';
+import { openSentence } from '../utils/openSentence';
 
 type Promo = 'q' | 'r' | 'b' | 'n';
 
@@ -106,7 +108,7 @@ export function promotionChoiceFor(fen: string, from: string, to: string, engine
   if (!choice) return null;
   if (engineBest && engineBest.slice(0, 4) === `${from}${to}` && (engineBest[4] ?? 'q') !== choice.piece) return null;
   const alsoFails = (choice.reason.kind === 'queen-stalemates' || choice.reason.kind === 'queen-trap')
-    ? ORDER.filter((p) => p !== 'q' && ORDER.indexOf(p) < ORDER.indexOf(choice!.piece) && by.has(p) && fails(by.get(p) as PieceRead))
+    ? ORDER.filter((p) => p !== 'q' && ORDER.indexOf(p) < ORDER.indexOf(choice.piece) && by.has(p) && fails(by.get(p) as PieceRead))
     : [];
   return { side: c.turn(), from, to, piece: choice.piece, san: (by.get(choice.piece) as PieceRead).san, queenSan: q.san, reason: choice.reason, alsoFails,
     key: `promotion:${fen.split(' ')[0]}:${from}${to}` };
@@ -137,12 +139,12 @@ export function promotionChoiceLine(pc: PromotionChoice, student: Color, played:
   const mine = pc.side === student;
   const piece = NAME[pc.piece];
   const lead = played
-    ? (mine ? `You make a ${piece}, not a queen.` : `They make a ${piece}, not a queen.`)
-    : (mine ? `When the pawn on ${pc.from} promotes, make a ${piece}, not a queen.` : `When their pawn on ${pc.from} promotes, it should become a ${piece}, not a queen.`);
-  const also = pc.alsoFails.length ? ` A ${pc.alsoFails.map((p) => NAME[p]).join(' or a ')} fails the same way.` : '';
+    ? (mine ? `You make ${withArticle(piece)}, not a queen.` : `They make ${withArticle(piece)}, not a queen.`)
+    : (mine ? `When the pawn on ${pc.from} promotes, make ${withArticle(piece)}, not a queen.` : `When their pawn on ${pc.from} promotes, it should become ${withArticle(piece)}, not a queen.`);
+  const also = pc.alsoFails.length ? ` ${openSentence(pc.alsoFails.map((p) => withArticle(NAME[p])).join(' or '))} fails the same way.` : '';
   switch (pc.reason.kind) {
     case 'knight-mates':
-      return `${lead} The knight on ${pc.to} is checkmate, and a queen there is not.`;
+      return `${lead} The knight on ${pc.to} gives checkmate, and a queen there does not.`;
     case 'knight-forks':
       return `${lead} The knight on ${pc.to} gives check and hits the queen on ${pc.reason.target}, so the queen falls next move.`;
     case 'queen-stalemates':
@@ -176,14 +178,14 @@ export function queenMissedLine(pc: PromotionChoice, student: Color): string {
   const mine = pc.side === student;
   const piece = NAME[pc.piece];
   switch (pc.reason.kind) {
-    case 'knight-mates': return mine ? `A knight on ${pc.to} was checkmate; the queen is not.` : `A knight on ${pc.to} was checkmate for them; the queen is not.`;
+    case 'knight-mates': return mine ? `A knight on ${pc.to} would have given checkmate. The queen does not.` : `A knight on ${pc.to} would have given them checkmate. The queen does not.`;
     case 'knight-forks': return mine ? `A knight on ${pc.to} would have checked and won the queen on ${pc.reason.target}.` : `A knight on ${pc.to} would have checked and won your queen on ${pc.reason.target}.`;
-    case 'queen-stalemates': return mine ? `The queen is stalemate; a ${piece} would have kept the win.` : `The queen stalemates you; a ${piece} would have kept their win.`;
+    case 'queen-stalemates': return mine ? `The queen is stalemate. ${openSentence(withArticle(piece))} would have kept the win.` : `The queen stalemates you. ${openSentence(withArticle(piece))} would have kept their win.`;
     case 'queen-trap': {
       const t = pc.reason.trap;
       return mine
-        ? `The queen walks into ${t.check}, and taking the ${t.bait} is stalemate. A ${piece} on ${pc.to} would have kept the win.`
-        : `Their queen walks into ${t.check}, and taking the ${t.bait} is stalemate — your chance to save it. A ${piece} would have kept their win.`;
+        ? `The queen walks into ${t.check}, and taking the ${t.bait} is stalemate. ${openSentence(withArticle(piece))} on ${pc.to} would have kept the win.`
+        : `Their queen walks into ${t.check}, and taking the ${t.bait} is stalemate — your chance to save it. ${openSentence(withArticle(piece))} would have kept their win.`;
     }
     default: return '';
   }

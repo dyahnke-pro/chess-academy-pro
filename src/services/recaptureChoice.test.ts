@@ -14,7 +14,8 @@ describe('recaptureChoice — which piece takes back, and why', () => {
   it('knight, not queen: "a queen on d4 would be vulnerable to …c5"', () => {
     const p = at('IMBSR0A9nJs:11');
     const out = recaptureChoice(p.fen, p.san);
-    expect(out).toMatch(/Nxd4 — the knight lands in the centre on d4/);
+    expect(out).toMatch(/^The knight lands in the centre on d4\./);
+    expect(out).not.toMatch(/Nxd4/); // the played move is the turn's to name (or Learn's never)
     expect(out).toMatch(/Qxd4 would put the queen on d4, where …c5 hits it/);
   });
 
@@ -27,7 +28,7 @@ describe('recaptureChoice — which piece takes back, and why', () => {
 
   it('queen, not the pawn: "keeping the structure intact"', () => {
     const p = at('Dj_hLEdDpAg:12');
-    expect(recaptureChoice(p.fen, p.san)).toMatch(/…Qxc6, not …bxc6, which would double your pawns on the c-file/);
+    expect(recaptureChoice(p.fen, p.san)).toBe('Not …bxc6, which would double your pawns on the c-file.');
   });
 
   it('never names a better recapture — a faulty one is the grade\'s to explain', () => {

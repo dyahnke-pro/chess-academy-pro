@@ -19,7 +19,7 @@
 //
 // PURE: every computer here is pure; this module adds no chess of its own.
 import { ideaClaim, type IdeaKind } from './ideaKind';
-import { Chess, type Color, type Move, type Square } from 'chess.js';
+import { Chess, type Color, type Move } from 'chess.js';
 import { legalSeeGainFor } from './positionReadingService';
 import { NO_PROOF, squaresProof, isProof, legalLineProof, type FactProof } from './proof';
 import type { FactStakes } from './factStakes';
@@ -113,6 +113,7 @@ import { pieceCage } from './pieceCage';
 import { opensCheck } from './opensCheck';
 import { captureOrder, type OrderRead } from './captureOrder';
 import { knightSquareTaken } from './knightSquareTaken';
+import { seatCp } from './winChance';
 
 type CoachSurface = 'learn' | 'review' | 'lesson' | 'play' | 'chat' | 'tactics' | 'weaknesses' | 'think';
 
@@ -1837,7 +1838,7 @@ export const BOARD_COMPUTERS = {
       const fenAfter = boardAfter(fenBefore, san);
       if (!fenAfter) return null;
       const top = replies[0];
-      const whiteCp = !top ? null : top.mate !== null ? (top.mate > 0 ? 10000 : -10000) : top.cp;
+      const whiteCp = !top ? null : seatCp({ evaluation: top.cp, mate: top.mate }, 'w');
       const out: CoachFact[] = [];
       for (const defender of ['w', 'b'] as const) {
         const atkCp = whiteCp === null ? null : defender === 'b' ? whiteCp : -whiteCp;
@@ -2672,7 +2673,7 @@ export const BOARD_COMPUTERS = {
         try { mv = new Chess(fenBefore).move(san); } catch { return null; }
         if (mv.piece === 'k') return null;
         const replier: Color = mv.color === 'w' ? 'b' : 'w';
-        const free = legalSeeGainFor(fenAfter, mv.to as Square, replier) >= 1;
+        const free = legalSeeGainFor(fenAfter, mv.to, replier) >= 1;
         const b = everyTakeLoses({ fen: fenAfter, replies: fan.replies, rating: fan.rating, student, seconds: [], landed: mv.to }, free);
         if (!b) return null;
         const text = everyTakeSentence({ fen: fenAfter, replier }, b, POISON_NAME[mv.piece], student, true);

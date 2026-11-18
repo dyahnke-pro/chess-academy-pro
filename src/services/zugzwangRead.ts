@@ -27,6 +27,8 @@ import type { AnalysisLine } from '../types';
 import type { Proof } from './proof';
 import { passFen } from './zugzwang';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
+import { seatCp } from './winChance';
+import { MATERIAL_VALUE } from './pieceValues';
 
 /** Lines as the engine reads them: White's view, a mate as `mate`. */
 type Lines = ReadonlyArray<Pick<AnalysisLine, 'evaluation' | 'mate' | 'moves'>>;
@@ -55,15 +57,14 @@ export interface ZugzwangSync {
 }
 
 function cpOf(l: Pick<AnalysisLine, 'evaluation' | 'mate'>): number {
-  if (l.mate !== null && l.mate !== undefined && l.mate !== 0) return l.mate > 0 ? 100000 : -100000;
-  return l.evaluation;
+  return l.mate ? seatCp({ evaluation: l.evaluation, mate: l.mate }, 'w') : l.evaluation;
 }
 /** The result band: a win past `BAND_CP`, a draw within `DRAW_CP` of level,
  *  and nothing between — "+1.3" is neither a draw nor a win, so a gap that
  *  lands there claims no result. */
 function band(cp: number): number | null { return cp >= BAND_CP ? 1 : cp <= -BAND_CP ? -1 : Math.abs(cp) <= DRAW_CP ? 0 : null; }
 
-const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+const VALUE = MATERIAL_VALUE;
 
 function materialFor(c: Chess, side: Color): number {
   let s = 0;
@@ -232,7 +233,7 @@ export function zugzwangSyncProof(z: ZugzwangSync, student: Color): Proof {
     const d = dropWords(z.drops ?? 1);
     return { kind: 'count', exact: true, short: `every move gives up ${d}`, full: `every move ${who} have gives up ${d}, and passing gives up nothing` };
   }
-  return { kind: 'count', exact: false, short: `on move it ${RESULT[(z.onMove ?? 0) + 1]}`, full: `on move it ${RESULT[(z.onMove ?? 0) + 1]}; if ${who} could pass, ${who} would ${PASS[(z.ifPassed ?? 0) + 1]}` };
+  return { kind: 'count', exact: false, short: `on move it ${RESULT[(z.onMove ?? 0) + 1]}`, full: `on move it ${RESULT[(z.onMove ?? 0) + 1]}. If ${who} could pass, ${who} would ${PASS[(z.ifPassed ?? 0) + 1]}` };
 }
 
 /** THE MOVE THAT MADE IT (either seat): after `san`, the side to move is in

@@ -32,7 +32,7 @@ function hits(after: string, mv: Move, student: 'w' | 'b'): string[] {
   const out: string[] = [];
   for (const row of probe.board()) for (const sq of row) {
     if (!sq || sq.color !== student || sq.type === 'k') continue;
-    if (!probe.attackers(sq.square, mv.color).includes(mv.to as Square)) continue;
+    if (!probe.attackers(sq.square, mv.color).includes(mv.to)) continue;
     const free = legalSeeGainFor(after, sq.square, mv.color) > 0;
     if (free || (MATERIAL_VALUE[sq.type] ?? 0) > (MATERIAL_VALUE[mv.piece] ?? 0)) out.push(`${NAME[sq.type]} on ${sq.square}`);
   }
@@ -66,7 +66,7 @@ export function candidateCct(fen: string, candidateSan: string): CandidateCct | 
   const wins: CandidateCct['wins'] = [];
   const doubles: CandidateCct['doubles'] = [];
   for (const r of c.moves({ verbose: true })) {
-    if (r.captured && r.captured !== 'k' && legalSeeGainFor(afterCandidate, r.to as Square, r.color) > 0) {
+    if (r.captured && r.captured !== 'k' && legalSeeGainFor(afterCandidate, r.to, r.color) > 0) {
       wins.push({ san: r.san, piece: NAME[r.captured], square: r.to });
       continue;
     }
@@ -74,11 +74,11 @@ export function candidateCct(fen: string, candidateSan: string): CandidateCct | 
     b.move(r.san);
     const after = b.fen();
     // A check that only hands over the checking piece is no threat.
-    if (b.inCheck() && legalSeeGainFor(after, r.to as Square, student) <= 0) checks.push(r.san);
+    if (b.inCheck() && legalSeeGainFor(after, r.to, student) <= 0) checks.push(r.san);
     // A double attack counts only when the attacker cannot simply be taken
     // back at no loss (after 4.d3 …d5 hits e4 and c4, and exd5 just takes it).
     const h = hits(after, r, student);
-    if (h.length >= 2 && !takenBack(after, r.to as Square, student)) doubles.push({ san: r.san, targets: h });
+    if (h.length >= 2 && !takenBack(after, r.to, student)) doubles.push({ san: r.san, targets: h });
   }
   return { candidateSan: mine.san, checks, wins, doubles };
 }

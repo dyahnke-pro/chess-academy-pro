@@ -845,7 +845,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       // named ending reached or its step taken, the pawn race counted and
       // played out, and the piece a promotion makes.
       const afterLine = i.reads?.after[0] ?? null;
-      const afterCp = afterLine ? (afterLine.mate != null && afterLine.mate !== 0 ? (afterLine.mate > 0 ? 100000 : -100000) : afterLine.evaluation) : null;
+      const afterCp = afterLine ? (afterLine.mate ? seatCp(afterLine, 'w') : afterLine.evaluation) : null;
       for (const f of readBoardAll('oppositionRead', { fenBefore: i.fenBefore, san: i.san, student, afterCp })) {
         facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'king-activity', weight: 66 });
       }

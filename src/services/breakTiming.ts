@@ -82,8 +82,8 @@ export function breakPrep(fenBefore: string, san: string, lineAfter: readonly st
     const pb = pawnBreak(fenHere, m.san, 'your', null, true);
     if (!pb) { mine += 1; if (mine >= 2) return null; continue; }
     // THE REASON: what the preparing move changed for this break.
-    const brkFrom = m.from as Square;
-    const brkTo = m.to as Square;
+    const brkFrom = m.from;
+    const brkTo = m.to;
     // 1. The landing square: lost before the move, safe after it.
     const lostBefore = (() => {
       const b = sideToMoveAs(fenBefore, me);

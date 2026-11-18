@@ -173,10 +173,10 @@ export function raceCountOn(fen: string): RaceCount | null {
     const s = b.turn();
     if (queened[s]) {
       // The first queen is to move again: the other pawn is still on its way.
-      const q = queened[s] as string;
+      const q = queened[s];
       const o = other(s);
       if (queened[o]) {
-        winsQueen = queenWinsQueen(b, q, queened[o] as string);
+        winsQueen = queenWinsQueen(b, q, queened[o]);
       } else {
         const road: string[] = [];
         const d = o === 'w' ? 1 : -1;
@@ -241,7 +241,7 @@ export function raceCountLine(rc: RaceCount, student: Color): string {
 
 /** The squares a read shows: the runners and their queening squares. */
 export function raceCountSquares(rc: RaceCount): string[] {
-  return (['w', 'b'] as Color[]).flatMap((s) => (rc.runners[s] ? [rc.runners[s]!.square, rc.runners[s]!.promo] : []));
+  return (['w', 'b'] as Color[]).flatMap((s) => (rc.runners[s] ? [rc.runners[s].square, rc.runners[s].promo] : []));
 }
 
 /** THE MOVE THAT MADE THE RACE (either seat): after `san`, a race or a runner
