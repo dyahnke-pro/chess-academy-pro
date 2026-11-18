@@ -12,7 +12,7 @@ import { fundamentalOfLine, principleAlreadyTaught, type MoveFundamentalId } fro
 import type { Square } from 'chess.js';
 import { legalSeeGainOn } from './positionReadingService';
 import { lossBeyondBestAlternative } from './voluntaryLoss';
-import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice, seatPieceReferences, describeStudentThreat, detectNewThreat, describeThreatPrevention } from './groundedAnswer';
+import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice, seatPieceReferences, describeStudentThreat } from './groundedAnswer';
 import { selectTeaching, turnThesis, type SelectorPly } from './teachingSelector';
 import { coldStudent, computeNeed, fenKey, type StudentNeedContext, type NeedVerdict } from './needScore';
 import { loadStudentNeedContext } from './studentNeedLoader';
@@ -4012,30 +4012,21 @@ function* reviewSegmentSteps(
     // the alignment. All computed; nothing improvised.
     if (playerColor && moverColor !== playerColor) {
       const oppWB: 'w' | 'b' = moverColor === 'white' ? 'w' : 'b';
-      const oppThreat = detectNewThreat(fenPair.fenBefore, fenPair.fenAfter, oppWB);
-      // Dedupe on the threat's IDENTITY (kind + landing + victims), not its bare
-      // SAN (D#5). A persisting identical threat still dedupes (no re-announce
-      // each ply), but a genuinely-new threat that happens to share a SAN — a
-      // different Nf3 fork hitting different pieces — is no longer silenced.
-      const threatKey = oppThreat
-        ? `${oppThreat.san}|${oppThreat.kind}|${oppThreat.landing}|${[...oppThreat.targetSquares].sort().join(',')}`
-        : '';
-      if (oppThreat && !threatsAnnounced.has(threatKey)) {
+      const nextBest = i + 1 < usable ? uciToSanAt(moves[i + 1].bestMove, fenPair.fenAfter) : null;
+      const oppThreat = readBoard('newThreat', { fenBefore: fenPair.fenBefore, fenAfter: fenPair.fenAfter, mover: oppWB, student: oppWB === 'w' ? 'b' : 'w', answerSan: nextBest });
+      // Dedupe on the threat's IDENTITY (kind + landing + victims — its key),
+      // not its bare SAN (D#5). A persisting identical threat still dedupes (no
+      // re-announce each ply), but a genuinely-new threat that happens to share
+      // a SAN — a different Nf3 fork hitting different pieces — is not silenced.
+      const threatKey = oppThreat ? readKey(oppThreat) : '';
+      const drawn = oppThreat?.marks?.theirs;
+      if (oppThreat && drawn && !threatsAnnounced.has(threatKey)) {
         threatsAnnounced.add(threatKey);
-        // The concrete threat, board-computed (kind + detail). The REMEDIAL
-        // "the pattern to spot…" explainer (describeThreatRecognition) was
-        // REMOVED from this default in-game callout (David 2026-09-07: "Obvious,
-        // remedial, and unnecessary"). Depth now comes from the rating-scaled
-        // deep-threat PV pass (augmentWithProjections #5c — "spell the line for
-        // everyone"), and the WHY from the causal chain; recognition-teaching
-        // stays only in the EXPLICIT Learn "spot-it" drill, where it belongs.
-        let callOut = `Careful — their move threatens ${oppThreat.san}: it ${oppThreat.detail}.`;
-        segmentSpokenSquares.push([oppThreat.from, oppThreat.landing, ...oppThreat.targetSquares]);
-        const nextBest = i + 1 < usable ? uciToSanAt(moves[i + 1].bestMove, fenPair.fenAfter) : null;
-        if (nextBest) {
-          const prevention = describeThreatPrevention(fenPair.fenAfter, oppThreat, nextBest, oppWB);
-          if (prevention) callOut += ` The answer: ${prevention}.`;
-        }
+        // The concrete threat, board-computed (kind + detail), and the answer
+        // to it from the engine's stored best reply (the registry's one read).
+        const callOut = oppThreat.text;
+        segmentSpokenSquares.push([...oppThreat.squares]);
+        const targets = oppThreat.squares.slice(2);
         narration = narration ? `${narration} ${callOut}` : callOut;
         narrationSource = narrationSource ?? 'per-move';
         // Draw the danger (red): the threatened move from → landing, plus a ray
@@ -4045,10 +4036,10 @@ function* reviewSegmentSteps(
         // the board AFTER it lands — the piece is not on the landing square yet.
         const threatCtx = { fen: fenPair.fenAfter, studentColor: playerColor };
         let landedFen: string | null = null;
-        try { const lc = new Chess(fenPair.fenAfter); if (lc.move({ from: oppThreat.from, to: oppThreat.landing, promotion: 'q' })) landedFen = lc.fen(); } catch { landedFen = null; }
+        try { const lc = new Chess(fenPair.fenAfter); if (lc.move({ from: drawn.from, to: drawn.to, promotion: 'q' })) landedFen = lc.fen(); } catch { landedFen = null; }
         threatArrows = admitArrows([
-          { from: oppThreat.from, to: oppThreat.landing, role: 'theirs', vouchedBy: 'engine', source: 'review.oppThreat' },
-          ...(landedFen ? oppThreat.targetSquares.map((sq): ArrowClaim => ({ from: oppThreat.landing, to: sq, role: 'vision', fen: landedFen, source: 'review.oppThreat.ray' })) : []),
+          { from: drawn.from, to: drawn.to, role: 'theirs', vouchedBy: 'engine', source: 'review.oppThreat' },
+          ...(landedFen ? targets.map((sq): ArrowClaim => ({ from: drawn.to, to: sq, role: 'vision', fen: landedFen, source: 'review.oppThreat.ray' })) : []),
         ], threatCtx).arrows;
       }
     }

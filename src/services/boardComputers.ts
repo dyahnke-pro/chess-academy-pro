@@ -105,7 +105,8 @@ import { readTheirMove, READ_FACT_KIND, type EngineLine as ReadLine } from './op
 import { lineProof } from './proof';
 import { holeKey } from './conceptKey';
 import { describeStructure } from './boardStructure';
-import { exchangeStakes } from './factStakes';
+import { exchangeStakes, forkPoints, piecesOn } from './factStakes';
+import { detectNewThreat, describeThreatPrevention } from './groundedAnswer';
 import { andList as listAnd, countWord } from '../utils/andList';
 import { imageryFor } from './factImagery';
 import { stemKeyOf } from '../utils/rotateStem';
@@ -544,6 +545,10 @@ export interface BoardContexts {
   contrast: { fenBefore: string; san: string; bestSan: string; student: Color };
   /** The rule a clean move kept. `taught` is the surface's say-once ledger of
    *  rules: full the first time, a stem after. */
+  /** The new threat a move made (`mover` moved, `fenBefore` → `fenAfter`).
+   *  `answerSan`, when given, is the engine's reply that meets it — said as
+   *  the answer on the opponent's threat. */
+  newThreat: { fenBefore: string; fenAfter: string; mover: Color; student: Color; answerSan: string | null };
   principle: { fenBefore: string; san: string; student: Color; taught: ReadonlySet<string>; stemKey: number; namesPlayedMove: boolean };
   /** The rule the engine's move kept, where the clean move kept none. */
   principleContrast: { fenBefore: string; san: string; bestSan: string | null; student: Color; taught: ReadonlySet<string>; stemKey: number };
@@ -2919,6 +2924,40 @@ export const BOARD_COMPUTERS = {
       learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_NA,
       weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
+    },
+  },
+  newThreat: {
+    read: ({ fenBefore, fenAfter, mover, student, answerSan }, fact) => safe(() => {
+      const t = detectNewThreat(fenBefore, fenAfter, mover);
+      if (!t) return null;
+      const mine = mover === student;
+      const prevention = !mine && answerSan ? describeThreatPrevention(fenAfter, t, answerSan, mover) : null;
+      const text = mine
+        ? `${openSentence(`you're now threatening ${t.san} — it ${t.detail}`)}.`
+        : `Careful — their move threatens ${t.san}: it ${t.detail}.${prevention ? ` The answer: ${prevention}.` : ''}`;
+      // The proof is the geometry: the piece, where it lands, what it hits.
+      const squares = [t.from, t.landing, ...t.targetSquares];
+      return fact({ key: `${t.san}|${t.kind}|${t.landing}|${[...t.targetSquares].sort().join(',')}`, claims: [`threat:${t.landing}`], text,
+        proof: squaresProof(text, squares) ?? NO_PROOF.description, squares,
+        // The threat cashes on the threatener's next move: two plies away.
+        stakes: t.kind === 'mate'
+          ? mateStakes(mine ? 'you' : 'them', 2, false)
+          : t.kind === 'fork'
+            ? { points: forkPoints(piecesOn(fenAfter, t.targetSquares)), plies: 2 }
+            : { points: t.rank, plies: 2 },
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter,
+        marks: { theirs: { from: t.from, to: t.landing } } });
+    }),
+    computer: 'detectNewThreat',
+    kind: 'threat',
+    phase: ANY,
+    surfaces: {
+      lesson: { not: 'the lesson composer reads the new threat inside its move aspects (`reviewMoveBriefing`)' },
+      review: REVIEW, play: PLAY_ASK, chat: { not: 'chat answers a threat through its own threat lane (`groundedAnswer`)' },
+      think: { not: 'the thinking steps read the threat inside the move aspects' },
+      learn: { not: 'Learn reads the new threat through its threat lane and the move aspects' },
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'what a move threatens — the miss is filed by the threat lane' },
     },
   },
   principle: {

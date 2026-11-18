@@ -29,7 +29,7 @@ import { definitionKey, tacticInvariant } from './conceptEngine';
 import { signedLegalSeeFor, seeSequence } from './positionReadingService';
 import { detectTactics, tacticDescription } from './tacticsDetector';
 import { verifyForkOnBoard } from './tacticVerification';
-import { seatPieceReferences, detectNewThreat } from './groundedAnswer';
+import { seatPieceReferences } from './groundedAnswer';
 import { costStakes, exchangeStakes, forkPoints, piecesOn, isScenicPawnPin, isSacrifice, mateStakes, isStaked, type Stakes } from './factStakes';
 import { describeStructure } from './boardStructure';
 import { assessPositionalEdge, phaseVerdictLine } from './reviewPositionalAssessment';
@@ -1049,21 +1049,7 @@ export function computeMoveFacets(
   // identify my threat and call it out!!") — null-move scan for the biggest
   // threat this move CREATED: mate-in-one / safe royal fork / clean win.
   if (ctx.studentColorWB && ctx.moverColor === ctx.playerColor) {
-    const t = detectNewThreat(ctx.fenBefore, fenAfter, ctx.studentColorWB);
-    if (t) {
-      const threat = `you're now threatening ${t.san} — it ${t.detail}`;
-      const f = made('detectNewThreat', 'threat', `${openSentence(threat)}.`);
-      facets.push(f);
-      // The proof is the geometry: the threatened move's landing square and
-      // the squares it hits (marked on Why).
-      recSquares(f, [t.san.replace(/[+#]/g, '').slice(-2), ...t.targetSquares]);
-      // The student's next move cashes it (their opponent moves first: 2 plies).
-      recStakes(f, t.kind === 'mate'
-        ? mateStakes('you', 2, false)
-        : t.kind === 'fork'
-          ? { points: forkPoints(piecesOn(fenAfter, t.targetSquares)), plies: 2 }
-          : { points: t.rank, plies: 2 });
-    }
+    basketFacet(readBoard('newThreat', { fenBefore: ctx.fenBefore, fenAfter, mover: ctx.studentColorWB, student: ctx.studentColorWB, answerSan: null }));
   }
 
   // ── 4. POSITIONAL VERDICT + THE FULL ASSET LIST (no cap) ──

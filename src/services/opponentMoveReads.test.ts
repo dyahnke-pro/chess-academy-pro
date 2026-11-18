@@ -106,6 +106,13 @@ describe('wronglyExpected — the grab that was not free', () => {
   it('stays silent when the engine agrees the pawn was free', () => {
     expect(wronglyExpected(FEN, 'Qxb2', 'w', [line(['d1b1', 'b2a3', 'b1b7'], -180)])).toBeNull();
   });
+  it('says it in one sentence — a second "It wasn\'t: …" reads as nothing once a composer keeps part of the line (Colle baseline, move 28)', () => {
+    // 1.d4 d5 … 14.Ng5 Bxg5: their bishop takes the knight; Qg4 hits back.
+    const colle = ['d4', 'd5', 'Nf3', 'Nf6', 'e3', 'e6', 'Bd3', 'c5', 'c3', 'Nc6', 'O-O', 'Be7', 'Nbd2', 'a6', 'e4', 'O-O', 'e5', 'Nd7', 'Re1', 'b5', 'Nf1', 'Re8', 'Ng3', 'Nf8', 'Nh5', 'cxd4', 'Ng5'];
+    const r = voiced(wronglyExpected(after(colle), 'Bxg5', 'w', [line(['d1g4', 'g5h4', 'g4h4'], 300)]));
+    expect(r.text).toMatch(/queen to g4/);
+    expect(r.text.trim().split(/(?<=[.!?])\s+/)).toHaveLength(1);
+  });
 });
 
 describe('helpedYou — their move made yours possible', () => {

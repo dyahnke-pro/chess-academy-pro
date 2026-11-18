@@ -458,7 +458,9 @@ export function wronglyExpected(fenBefore: string, san: string, student: 'w' | '
   const grabbed = `the ${PIECE[mv.captured]} on ${mv.to}`;
   const text = rotateStem([
     `They took ${grabbed} expecting it to be free — it isn't: ${sayMoveNoun(replySan, after.fen())} hits back, and the grab costs them.`,
-    `${cap(grabbed)} looked free to them. It wasn't: ${sayMoveNoun(replySan, after.fen())} hits back.`,
+    // ONE sentence: a second one ("It wasn't: …") reads as nothing once the
+    // composer keeps only part of the line (Colle baseline, move 28).
+    `${cap(grabbed)} looked free to them, but ${sayMoveNoun(replySan, after.fen())} hits back.`,
   ], stemKeyOf(after.fen()));
   const squares = [mv.to, reply.from, reply.to];
   return {
