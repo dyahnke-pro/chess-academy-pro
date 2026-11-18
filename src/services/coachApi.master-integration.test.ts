@@ -280,7 +280,7 @@ describe('grounding — intent detection', () => {
     // hold is the contract itself: the LLM's text never surfaces, and the reply
     // is honest about what is not known.
     expect(r).not.toContain('Sure.');
-    expect(r).toMatch(/don'?t have an engine read|can'?t verify|nothing is decided yet/i);
+    expect(r).toMatch(/don'?t have an engine read|can'?t verify|Material is even\./i);
     expect(masterPlayCache.has(STARTING_FEN_4)).toBe(true);
   });
 });
@@ -337,7 +337,7 @@ describe('grounding — the grounded default (no free-compose)', () => {
     const { response, counters } = await ask('what should I play here?', ['I recommend Nh6. Masters favor e4.']);
     // Honest about the missing engine read (see the note above on why this is
     // no longer the literal stock string), and board-true about the rest.
-    expect(response).toMatch(/don'?t have an engine read|can'?t verify|nothing is decided yet/i);
+    expect(response).toMatch(/don'?t have an engine read|can'?t verify|Material is even\./i);
     expect(response).not.toContain('Nh6');       // the LLM's invented move NEVER reaches the user
     expect(counters.llmCalls).toBe(0);           // the LLM is never called to decide chess
   });
@@ -376,7 +376,7 @@ describe('grounding — the grounded default (no free-compose)', () => {
       '', undefined, 'chat_response', 1024, undefined, undefined,
       { currentFen: STARTING_FEN, surface: '/coach/teach', sessionId: 'test-session' },
     );
-    expect(r).toMatch(/don'?t have an engine read|can'?t verify|nothing is decided yet/i);
+    expect(r).toMatch(/don'?t have an engine read|can'?t verify|Material is even\./i);
     expect(r).not.toContain('Sicilian');  // the hallucinated naming NEVER surfaces
     expect(counters.llmCalls).toBe(0);
   });

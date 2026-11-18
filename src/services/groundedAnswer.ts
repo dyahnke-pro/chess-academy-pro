@@ -1622,16 +1622,19 @@ export function assemblePositionAssessment(opts: {
       ? pick(MATE_FOR_YOU, n).replace('{n}', String(n))
       : pick(MATE_AGAINST_YOU, n).replace('{n}', String(n)));
   } else if (typeof studentEvalCp === 'number') {
-    const mag = Math.abs(studentEvalCp) / 100;
     const ahead = studentEvalCp >= 0;
     // Rotation seed: the eval itself. The SAME position always reads the same
     // way — consistency matters more than novelty, and it keeps the TTS clip
     // cache warm — while different positions draw different stems, so a long
     // game never sounds like one recording (narration voice rule 9).
     const seed = Math.abs(Math.round(studentEvalCp));
-    if (mag < 0.3) parts.push(pick(BALANCED, seed));
-    else if (mag < 1.0) parts.push(pick(ahead ? SLIGHT_EDGE : SLIGHT_DEFICIT, seed));
-    else if (mag < 2.5) parts.push(pick(ahead ? CLEAR_EDGE : CLEAR_DEFICIT, seed));
+    // THE ONE LADDER (evalBand). This read kept its own 30/100/250 rungs, so
+    // +263 read "Decisive" here and "clearly better" in the move's own facts
+    // on the same board (Danya's article boards, 2026-11-18).
+    const band = evalBand(studentEvalCp);
+    if (band === 'level') parts.push(pick(BALANCED, seed));
+    else if (band === 'slightly') parts.push(pick(ahead ? SLIGHT_EDGE : SLIGHT_DEFICIT, seed));
+    else if (band === 'clearly') parts.push(pick(ahead ? CLEAR_EDGE : CLEAR_DEFICIT, seed));
     else parts.push(pick(ahead ? WINNING : LOSING, seed));
     // THE MATERIAL BESIDE THE EVAL (question walk 2026-09-27: "Did I get enough
     // for the pawn?" got "+0.3" and two weaknesses, never the pawn). When the
@@ -1649,10 +1652,18 @@ export function assemblePositionAssessment(opts: {
         const mine = sc === 'w' ? w : b; const theirs = sc === 'w' ? b : w;
         const diff = mine - theirs;
         const pts = (n: number): string => `${n} point${n === 1 ? '' : 's'}`;
-        if (diff < 0 && studentEvalCp >= -30) {
+        // The gap between the count and the verdict, read off the SAME band
+        // as the verdict: "holding your own" is the level band only — at
+        // +263 it undersold a won ending the sentence before had called
+        // decisive (Danya's article boards, 2026-11-18).
+        if (diff < 0 && band === 'level') {
           parts.push(`You're ${pts(-diff)} down in material (${mine} to ${theirs}) and still holding your own — the compensation is real.`);
-        } else if (diff > 0 && studentEvalCp <= 30) {
+        } else if (diff < 0 && ahead) {
+          parts.push(`You're ${pts(-diff)} down in material (${mine} to ${theirs}), but you're the better side — the position counts for more than the material.`);
+        } else if (diff > 0 && band === 'level') {
           parts.push(`You're ${pts(diff)} up in material (${mine} to ${theirs}), but the position gives it back — the extra material isn't the whole story.`);
+        } else if (diff > 0 && !ahead) {
+          parts.push(`You're ${pts(diff)} up in material (${mine} to ${theirs}), but the position is against you — the extra material isn't the whole story.`);
         } else if (diff !== 0) {
           parts.push(`Material: you're ${diff > 0 ? 'up' : 'down'} ${pts(Math.abs(diff))} (${mine} to ${theirs}).`);
         }
@@ -1683,8 +1694,13 @@ export function assemblePositionAssessment(opts: {
       // engine path. Missing the eval changes what else can be said, never the
       // standing of what is said — so the absence is a reason to say LESS, not
       // a reason to narrate the absence.
+      // A COUNT, NEVER A VERDICT: with no engine read nothing here knows
+      // whether anything is decided. "Material is even — nothing is decided
+      // yet" was said on boards the engine scores as clearly won (Danya's
+      // article boards, 2026-11-18); the count is the whole truth this
+      // branch holds.
       parts.push(diff === 0
-        ? `Material is even — nothing is decided yet; it's about the plans and the tactics.`
+        ? `Material is even.`
         : diff > 0
           ? `You're up ${diff} point${diff === 1 ? '' : 's'} of material — materially you're doing well here.`
           : `You're down ${-diff} point${-diff === 1 ? '' : 's'} of material here.`);
