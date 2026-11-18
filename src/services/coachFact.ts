@@ -600,6 +600,9 @@ export interface CoachFact {
    *  said without it — its own words, proof, squares and line, so a surface
    *  that holds the move back still says what stays true. */
   heldForm?: HeldForm;
+  /** ITS WORDS BEHIND A LINE THAT NAMED THE MOVE ("It also …"): a surface
+   *  that already said the move says this instead of naming it again. */
+  alsoText?: string;
   /** The moves it draws, each only when the fact is said: their move it
    *  warns about, the move it asks the student to play (engine-vouched), a
    *  route walked hop by hop on its own boards. */

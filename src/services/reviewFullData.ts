@@ -74,7 +74,6 @@ import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { exchangeIdeas } from './exchangeIdeas';
 import { minorsAtHome } from './development';
 import { slipAnswerText, studentMovePoint } from './playCommentary';
-import { studentMoveStructure, theirMoveStructure, boardStructure, type StructureRead } from './structureReads';
 import type { AnalysisLine, HeardVerdict } from '../types';
 
 /** Has `color`'s king reached a castled square (g/c file on its back rank)? */
@@ -1321,8 +1320,7 @@ export function computeMoveFacets(
     // Full the first time a principle speaks this game, a short stem after —
     // the one helper Learn's composer reads (`principleLine`).
     const seat = moverColor === 'white' ? 'w' : 'b';
-    const own = readBoardAll('principle', { fenBefore, san, student: seat, taught: ctx.teaching.principlesTaught, stemKey: stemKeyOf(fenBefore), namesPlayedMove: true });
-    const ownLead = own.find((x) => !principleKey(x).follow) ?? null;
+    const ownLead = readBoard('principle', { fenBefore, san, student: seat, taught: ctx.teaching.principlesTaught, stemKey: stemKeyOf(fenBefore), namesPlayedMove: true });
     const lead = ownLead
       // A clean move that kept no opening rule: the rule the engine's move
       // kept (review walk 2026-10-02 — h4, g4, h5 were owed and silent). Never
@@ -1332,8 +1330,7 @@ export function computeMoveFacets(
       const k = principleKey(lead);
       const f = basketFacet(lead);
       if (ownLead && k.headsMove) f.headsMove = true;
-      const follow = own.find((x) => principleKey(x).follow);
-      if (follow) f.follow = follow.text;
+      if (lead.alsoText) f.follow = lead.alsoText;
       // The FIRST statement of a principle carries its say-once identity; a
       // stem is its own move's fact and must not be eaten by that ledger.
       f.identity = k.first ? `rule:${k.id}` : `rule-stem:${ply}:${k.id}`;
@@ -1480,25 +1477,25 @@ export function computeMoveFacets(
   // (and the standing facts of the board it was played on); on theirs what it
   // did to the student's structure and squares. Each carries its proof.
   if (studentColorWB) {
-    const reads: Array<StructureRead & { computer: ComputerName }> = isStudent
+    const reads = isStudent
       ? [
-        ...studentMoveStructure({ fenBefore, san, student: studentColorWB, cpLoss: Math.max(0, ctx.costCp ?? 0), bestSan: ctx.bestMoveSan, bestUci: ctx.bestLineUci, reply: ctx.replyBestSan, namesBetterMove: true, namesStudentMoves: true }).map((r) => ({ ...r, computer: 'studentMoveStructure' as const })),
+        ...readBoardAll('structureMove', { fenBefore, san, student: studentColorWB, cpLoss: Math.max(0, ctx.costCp ?? 0), bestSan: ctx.bestMoveSan, bestUci: ctx.bestLineUci, reply: ctx.replyBestSan, namesBetterMove: true, namesStudentMoves: true }),
         // A STANDING FACT OF THE BOARD THE MOVE WAS PLAYED ON is said only
         // where the move left its squares as they were (prod Review
         // 2026-11-09, 39.Rxd6+: "Their d6 pawn is the key pawn: it guards
         // c5" was said as the rook took that pawn — history, not a fact).
-        ...boardStructure(fenBefore, studentColorWB).filter((r) => !touchedByMove(fenBefore, san, r.squares)).map((r) => ({ ...r, computer: 'boardStructure' as const })),
+        ...readBoardAll('structureBoard', { fen: fenBefore, student: studentColorWB }).filter((r) => !touchedByMove(fenBefore, san, r.squares)),
       ]
-      : theirMoveStructure(fenBefore, san, studentColorWB).map((r) => ({ ...r, computer: 'theirMoveStructure' as const }));
+      : readBoardAll('structureTheirMove', { fenBefore, san, student: studentColorWB });
     for (const r of reads) {
       const f = put(r.computer, 'judgement', r.text);
       // SAID ONCE BY ITS OWN KEY, as Learn's ledger says it ("Their king went
       // kingside … so the plan changes" spoke on three moves of one game).
-      f.identity = `once:${r.key}`;
+      f.identity = `once:${readKey(r)}`;
       // Behind a line that named the move it says "It also …", never the move again.
       if (r.alsoText) f.follow = r.alsoText;
       recSquares(f, r.squares);
-      recProof(f, r.proof);
+      if (isProof(r.proof)) recProof(f, r.proof);
       recStakes(f, r.stakes);
     }
   }

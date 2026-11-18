@@ -176,11 +176,11 @@ type MakeFact = (parts: ReadParts) => CoachFact;
  *  threat and tactic keys, the plan thread's offered claims) reads it here,
  *  never off the words. */
 /** What a principle read's key says (`principle` / `principleContrast`). */
-export function principleKey(f: CoachFact): { id: string; first: boolean; headsMove: boolean; follow: boolean } {
+export function principleKey(f: CoachFact): { id: string; first: boolean; headsMove: boolean } {
   const k = readKey(f);
   const bar = k.indexOf('|');
   const head = k.slice(0, bar);
-  return { id: k.slice(bar + 1), first: head[0] === '1', headsMove: head[1] === 'h', follow: head === 'follow' };
+  return { id: k.slice(bar + 1), first: head[0] === '1', headsMove: head[1] === 'h' };
 }
 
 export function readKey(f: CoachFact): string {
@@ -257,7 +257,8 @@ export interface BoardContexts {
    *  that can't block, interposition, the loaded line, the pinner pinned. */
   tacticGeometry: GeometryContext;
   /** The structure judgements of the student's move (batch 6). */
-  structureMove: { fenBefore: string; san: string; student: Color; cpLoss: number; bestSan: string | null; bestUci: readonly string[]; reply: string | null };
+  /** Writer settings: may the better move and the student's own move be named? */
+  structureMove: { fenBefore: string; san: string; student: Color; cpLoss: number; bestSan: string | null; bestUci: readonly string[]; reply: string | null; namesBetterMove: boolean; namesStudentMoves: boolean };
   /** What their move did to the student's structure and squares. */
   structureTheirMove: { fenBefore: string; san: string; student: Color };
   /** The standing structural facts, student to move. */
@@ -726,6 +727,7 @@ function structureFact(r: StructureRead, fact: MakeFact, fen: string, seat: Fact
     seat, namesStudentMove: !!r.heldForm, thread: LOCAL_THREAD, fen, role: STRUCTURE_ROLE[r.act],
     ...(r.proof.line ? { lines: [r.proof.line] } : {}),
     ...(r.heldForm ? { heldForm: { text: r.heldForm.text, proof: r.heldForm.proof, squares: [...r.heldForm.squares] } } : {}),
+    ...(r.alsoText ? { alsoText: r.alsoText } : {}),
   });
 }
 /** Learn's turn door reads its lanes, not the registry's composer reads; a
@@ -1340,8 +1342,9 @@ export const BOARD_COMPUTERS = {
     },
   },
   structureMove: {
-    // Learn's reader: the better move is held (David 2026-10-10).
-    read: (ctx, fact) => safe(() => studentMoveStructure({ ...ctx, namesBetterMove: false, namesStudentMoves: false }).map((r) => structureFact(r, fact, ctx.fenBefore, 'student'))),
+    // The surface says whether the better move and the move played may be
+    // named (Learn holds both, David 2026-10-10; Review names them).
+    read: (ctx, fact) => safe(() => studentMoveStructure(ctx).map((r) => structureFact(r, fact, ctx.fenBefore, 'student'))),
     computer: 'studentMoveStructure',
     kind: 'judgement',
     phase: ANY,
@@ -2964,16 +2967,13 @@ export const BOARD_COMPUTERS = {
     // The key carries what a surface keeps of the read: whether this is the
     // first statement of the rule this game (`1`) or a stem (`0`), whether it
     // leads the move (`h`), and the rule's id — `principleKey` reads it back.
-    // The rule's full-again follow-up is its own fact (key `follow|<id>`).
+    // Its full-again words behind a line that named the move ride `alsoText`.
     read: ({ fenBefore, san, student, taught, stemKey, namesPlayedMove }, fact) => safe(() => {
       const r = principleLine(fenBefore, san, student === 'w' ? 'white' : 'black', taught, stemKey, namesPlayedMove);
       if (!r) return null;
       const fen = boardAfter(fenBefore, san) ?? fenBefore;
-      const out: CoachFact[] = [fact({ key: `${r.first ? '1' : '0'}${r.headsMove ? 'h' : '-'}|${r.id}`, claims: [`rule:${r.id}`], text: r.text, proof: NO_PROOF.stated, squares: r.squares, stakes: null,
-        seat: 'student', namesStudentMove: namesPlayedMove, thread: LOCAL_THREAD, fen, ...(r.names ? { marks: { play: r.names } } : {}) })];
-      if (r.follow) out.push(fact({ key: `follow|${r.id}`, claims: [`rule-follow:${r.id}`], text: r.follow, proof: NO_PROOF.stated, squares: r.squares, stakes: null,
-        seat: 'student', namesStudentMove: namesPlayedMove, thread: LOCAL_THREAD, fen }));
-      return out;
+      return fact({ key: `${r.first ? '1' : '0'}${r.headsMove ? 'h' : '-'}|${r.id}`, claims: [`rule:${r.id}`], text: r.text, proof: NO_PROOF.stated, squares: r.squares, stakes: null,
+        seat: 'student', namesStudentMove: namesPlayedMove, thread: LOCAL_THREAD, fen, ...(r.names ? { marks: { play: r.names } } : {}), ...(r.follow ? { alsoText: r.follow } : {}) });
     }),
     computer: 'principleLine',
     kind: 'rule',
