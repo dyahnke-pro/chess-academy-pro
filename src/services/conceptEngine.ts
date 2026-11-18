@@ -171,6 +171,15 @@ function renderOppositionConcept(): ComputedConcept {
   );
 }
 
+/** The opposition on this board in the one opposition read's words
+ *  (`oppositionRead`: who holds it, the spare tempo, the squares it gives) —
+ *  the rule alone where that read has nothing to add. */
+function oppositionConcept(fen: string, student: 'w' | 'b'): ComputedConcept {
+  const o = ((): OppositionRead | null => { try { return readOpposition(fen); } catch { return null; } })();
+  if (!o) return renderOppositionConcept();
+  return technique('opposition', 'The opposition', oppositionLine(o, student, 'now', null), 'The opposition — force them back.', oppositionSquares(o));
+}
+
 /**
  * Render a detected tactic into a ComputedConcept: the board-true INSTANCE (the
  * detector's own description) + the computed INVARIANT. `importance` is left 0
@@ -218,9 +227,11 @@ import { detectTactics } from './tacticsDetector';
 import { classifyMatchup } from './endgameMatchup';
 import {
   detectOpposition, detectKeySquares, detectRuleOfSquare, detectRookPawnCorner, wrongBishopDrawText,
-  detectLucena, detectPhilidor, detectBackRankDefence, detectCutOff, detectRookBehindPasser,
+  detectCutOff, detectRookBehindPasser,
   detectBareKingMate, detectTwoPawnsVsKing,
 } from './endgameTechnique';
+import { theoreticalEndingOn, theoreticalEndingLine, type TheoreticalEnding } from './theoreticalEnding';
+import { readOpposition, oppositionLine, oppositionSquares, type OppositionRead } from './oppositionRead';
 
 const HELD_KIND_WORDS: Record<string, string> = {
   queen: 'queen', rook: 'rook', 'two-bishops': 'two bishops', 'bishop-knight': 'bishop and knight',
@@ -286,7 +297,10 @@ function bareKingConcept(fen: string, defending: boolean): ComputedConcept | nul
  * Every `full` states the geometry the detector proved plus the technique's
  * general rule; none claims a game result (the other king may still decide it).
  */
-function namedTechniqueFor(fen: string, cls: MatchupClass, defending: boolean): ComputedConcept | null {
+function namedTechniqueFor(fen: string, cls: MatchupClass, defending: boolean, student: 'w' | 'b'): ComputedConcept | null {
+  // THE NAMED ENDINGS SAY THEIR STEPS FROM ONE COMPUTER (`theoreticalEnding`):
+  // the same words, from the student's seat, on every surface.
+  const named = ((): TheoreticalEnding | null => { try { return theoreticalEndingOn(fen, null); } catch { return null; } })();
   if (cls === 'mating-material' || cls === 'minor-endgame') {
     const mate = bareKingConcept(fen, defending);
     if (mate) return mate;
@@ -312,10 +326,10 @@ function namedTechniqueFor(fen: string, cls: MatchupClass, defending: boolean): 
       );
     }
     const corner = detectRookPawnCorner(fen);
-    if (corner) {
+    if (corner && named?.name === 'rook-pawn') {
       return technique(
         'rook-pawn-corner', 'The rook-pawn draw',
-        `The ${corner.pawn} pawn is a rook pawn and the defending king holds the ${corner.corner} corner: it can never be driven out, and pushing the pawn only stalemates — a rook pawn alone cannot be forced through.`,
+        theoreticalEndingLine(named, student, false),
         'Rook pawn — the corner holds.', [corner.pawn, corner.corner], 0.65,
       );
     }
@@ -333,7 +347,7 @@ function namedTechniqueFor(fen: string, cls: MatchupClass, defending: boolean): 
       );
     }
     const opp = detectOpposition(fen);
-    if (opp) return renderOppositionConcept();
+    if (opp) return oppositionConcept(fen, student);
     if (ks) {
       return technique(
         'key-squares', 'The key squares',
@@ -350,37 +364,20 @@ function namedTechniqueFor(fen: string, cls: MatchupClass, defending: boolean): 
     // 4,000-puzzle probe: every distant hit there was noise, every direct hit
     // a real face-off).
     const opp = detectOpposition(fen);
-    return opp?.kind === 'direct' ? renderOppositionConcept() : null;
+    return opp?.kind === 'direct' ? oppositionConcept(fen, student) : null;
   }
   // Rook techniques: the pure rook ending, and R(+P) against a lone king
   // (classed as mating material) — cutting the king off is the same theorem
   // there. Each detector checks its own exact material.
   if (cls === 'rook-endgame' || cls === 'mating-material') {
-    const lucena = detectLucena(fen);
-    if (lucena) {
-      return technique(
-        'lucena', 'The Lucena position',
-        `This is the Lucena position: the ${lucena.pawn} pawn on the seventh with the king in front of it and the defending king cut off. The win is to build a bridge — lift the rook to the fourth rank, then walk the king out of the checks and shelter it behind that rook.`,
-        'Lucena — build the bridge.', [lucena.pawn], 0.75,
-      );
+    if (named?.name === 'lucena') {
+      return technique('lucena', 'The Lucena position', theoreticalEndingLine(named, student, false), 'Lucena — build the bridge.', [named.pawn], 0.75);
     }
-    const phil = detectPhilidor(fen);
-    if (phil) {
-      return technique(
-        'philidor', 'The Philidor defence',
-        phil.thirdRankSet
-          ? `A Philidor rook ending: the defending king sits in front of the ${phil.pawn} pawn and the rook already holds the third rank, so the attacking king cannot come forward. Hold that rank. The moment the pawn steps up, drop the rook back and check from behind.`
-          : `A Philidor rook ending: the defending king sits in front of the ${phil.pawn} pawn, which has not crossed the fifth rank. The drawing plan is the third-rank defence — put the rook on the third rank to fence the attacking king out, and once the pawn advances, check it from behind for as long as it takes.`,
-        'Philidor — hold the third rank.', [phil.pawn], 0.7,
-      );
+    if (named?.name === 'philidor') {
+      return technique('philidor', 'The Philidor defence', theoreticalEndingLine(named, student, false), 'Philidor — hold the third rank.', [named.pawn], 0.7);
     }
-    const brd = detectBackRankDefence(fen);
-    if (brd) {
-      return technique(
-        'back-rank-defence', 'The back-rank defence',
-        `The back-rank defence against the ${brd.pawn} pawn: the defending king sits on the queening square and the rook stays on the back rank, well away from it, ready to meet a check along that rank. Against a rook or knight pawn there is no room to break it — it holds.`,
-        'Back-rank defence — it holds.', [brd.pawn], 0.7,
-      );
+    if (named?.name === 'back-rank') {
+      return technique('back-rank-defence', 'The back-rank defence', theoreticalEndingLine(named, student, false), 'Back-rank defence — it holds.', [named.pawn], 0.7);
     }
     const cut = detectCutOff(fen);
     if (cut) {
@@ -444,7 +441,7 @@ export function endgameConceptFor(fen: string, student: 'w' | 'b'): ComputedConc
   // hands the student the opponent's plan.
   const defending = heldSide(fen) === student;
   try {
-    const named = namedTechniqueFor(fen, m.cls, defending);
+    const named = namedTechniqueFor(fen, m.cls, defending, student);
     if (named) return named;
   } catch { /* a predicate that throws teaches nothing — fall through to the principle */ }
   return renderMatchupConcept(m, defending);

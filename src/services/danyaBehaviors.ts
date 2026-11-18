@@ -61,10 +61,10 @@ import {
   landingIsSafe,
   kingActivation,
   rookBehindPasser,
-  oppositionRead,
 } from './positionReadingService';
 import { isolaniStructure, passerTrumpSentence } from './nextPlans';
 import { pieceRef } from './pieceRef';
+import { readOpposition, oppositionLine, oppositionSquares } from './oppositionRead';
 import { pieceWish } from './pieceWish';
 import { openSentence } from '../utils/openSentence';
 
@@ -254,7 +254,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       const oneMove = wish.via.length === 0;
       return {
         kind: 'wishlist', fact: wish.text, squares: [wish.square, wish.target], keys: [wishKey(wish.target)],
-        arrows: oneMove ? [{ from: wish.square, to: wish.target, role: 'play' }] : [],
+        arrows: oneMove ? [{ from: wish.square, to: wish.target, role: 'play', source: 'danyaBehaviors.wishlist' }] : [],
       };
     },
   },
@@ -646,14 +646,11 @@ export const DANYA_BEHAVIORS: Behavior[] = [
     weight: 150,
     detect: ({ fen, student, isEndgame }) => {
       if (!isEndgame) return null;
-      const op = oppositionRead(fen, student);
-      if (!op) return null;
-      return {
-        fact: op.holds
-          ? `You hold the opposition — they have to give ground, and that is how the king breaks through.`
-          : `They hold the opposition — you must give ground, so look for a pawn move or a flank route to hand the move back.`,
-        squares: [],
-      };
+      // The one opposition read (`oppositionRead`): the same sentence the
+      // position read and the move thought say, with what it forces.
+      const o = readOpposition(fen);
+      if (!o) return null;
+      return { fact: oppositionLine(o, student, 'now', null), squares: oppositionSquares(o) };
     },
   },
   {

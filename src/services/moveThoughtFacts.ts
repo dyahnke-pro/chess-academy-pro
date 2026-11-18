@@ -819,6 +819,28 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       for (const f of readBoardAll('fortress', { fenBefore: i.fenBefore, san: i.san, student, replies })) {
         facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'eval', weight: 60 });
       }
+      // ENDGAME TECHNIQUE, both seats (WO-DANYA-READS-01 #5): the opposition a
+      // king move takes, the zugzwang a move makes (the engine's read with the
+      // null-move read after it, or the bounded count in a pawn ending), the
+      // named ending reached or its step taken, the pawn race counted and
+      // played out, and the piece a promotion makes.
+      const afterLine = i.reads?.after[0] ?? null;
+      const afterCp = afterLine ? (afterLine.mate != null && afterLine.mate !== 0 ? (afterLine.mate > 0 ? 100000 : -100000) : afterLine.evaluation) : null;
+      for (const f of readBoardAll('oppositionRead', { fenBefore: i.fenBefore, san: i.san, student, afterCp })) {
+        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'king-activity', weight: 66 });
+      }
+      for (const f of readBoardAll('zugzwangRead', { fenBefore: i.fenBefore, san: i.san, student, after: i.reads?.after ?? null, passAfter: i.reads?.passAfter ?? null })) {
+        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'tempo', weight: 70 });
+      }
+      for (const f of readBoardAll('theoreticalEnding', { fenBefore: i.fenBefore, san: i.san, student, afterCp })) {
+        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'plan', weight: 64 });
+      }
+      for (const f of readBoardAll('raceCount', { fenBefore: i.fenBefore, san: i.san, student })) {
+        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'passed-pawn', weight: 64 });
+      }
+      for (const f of readBoardAll('promotionChoice', { fenBefore: i.fenBefore, san: i.san, student })) {
+        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'promote', weight: 72 });
+      }
       // Checks that come back to the same board (a perpetual) and the
       // discovered-check see-saw (a windmill), both seats.
       for (const f of readBoardAll('perpetualCheck', { fenBefore: i.fenBefore, san: i.san, student, replies })) {

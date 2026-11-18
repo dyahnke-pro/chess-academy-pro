@@ -1,0 +1,190 @@
+// promotionChoice — WHICH PIECE TO MAKE (WO-DANYA-READS-01 #5; Danya: "there
+// are only two circumstances under which it makes sense to underpromote:
+// promoting to a queen (or rook!) allows a stalemating combination, or
+// promoting to a knight is a better tactical choice based on its unique
+// movement"; "69.d8=N# — checkmate, enough said"; "before promoting to a
+// queen, make sure that you are not depriving the enemy king of its remaining
+// squares").
+//
+// For one promoting pawn move, every piece is played on the board (chess.js)
+// and the queen is held to the same checks:
+//   stalemate — the promotion leaves the other side no legal move, not in check;
+//   trap      — the promotion walks into a check that offers a piece whose
+//               capture stalemates (`stalemateTraps`, the Saavedra trick);
+//   mate      — the promotion is checkmate;
+//   fork      — a knight promotion that checks and attacks the queen, and every
+//               reply leaves the queen to take (no recapture).
+// The choice is an underpromotion only when the queen fails one of these and
+// the piece chosen does not: a knight that mates or wins the queen where the
+// queen does neither; the strongest piece that dodges the stalemate. When the
+// surface hands in the engine's best move and it is a promotion, the choice
+// must be the engine's piece — otherwise nothing is said.
+//
+// PURE: chess.js and the stalemate reader.
+import { Chess, type Color, type Move, type PieceSymbol } from 'chess.js';
+import { stalemateTraps, type StalemateTrap } from './stalemateWatch';
+
+type Promo = 'q' | 'r' | 'b' | 'n';
+
+export type PromotionReason =
+  | { kind: 'queen-stalemates' }
+  | { kind: 'queen-trap'; trap: StalemateTrap }
+  | { kind: 'knight-mates' }
+  | { kind: 'knight-forks'; target: string };
+
+export interface PromotionChoice {
+  side: Color;
+  /** The pawn's move, by square. */
+  from: string;
+  to: string;
+  /** The piece to make and its SAN. */
+  piece: Promo;
+  san: string;
+  /** The queen's SAN on the same square. */
+  queenSan: string;
+  reason: PromotionReason;
+  /** The pieces that fail as the queen does (a rook stalemating too). */
+  alsoFails: Promo[];
+  key: string;
+}
+
+interface PieceRead { san: string; stalemate: boolean; trap: StalemateTrap | null; mate: boolean; fork: string | null }
+
+function readPiece(fen: string, m: Move): PieceRead {
+  const b = new Chess(fen); b.move(m);
+  const stalemate = b.isStalemate();
+  const mate = b.isCheckmate();
+  const trap = !stalemate && !mate ? stalemateTraps(fen, [m.san])[0] ?? null : null;
+  let fork: string | null = null;
+  if (m.promotion === 'n' && b.inCheck() && !mate) {
+    const queen = b.board().flat().find((c) => c?.type === 'q' && c.color !== m.color);
+    if (queen) {
+      const knightSees = (from: string, to: string): boolean => {
+        const df = Math.abs(from.charCodeAt(0) - to.charCodeAt(0)); const dr = Math.abs(Number(from[1]) - Number(to[1]));
+        return (df === 1 && dr === 2) || (df === 2 && dr === 1);
+      };
+      if (knightSees(m.to, queen.square)) {
+        const every = b.moves({ verbose: true }).every((r) => {
+          const x = new Chess(b.fen()); x.move(r);
+          const q = x.board().flat().find((c) => c?.type === 'q' && c.color !== m.color);
+          if (!q) return false;
+          const take = x.moves({ verbose: true }).find((t) => t.from === m.to && t.to === q.square);
+          if (!take) return false;
+          const y = new Chess(x.fen()); y.move(take);
+          return !y.moves({ verbose: true }).some((t) => t.to === q.square);
+        });
+        if (every) fork = queen.square;
+      }
+    }
+  }
+  return { san: m.san, stalemate, trap, mate, fork };
+}
+
+const ORDER: Promo[] = ['q', 'r', 'b', 'n'];
+
+/** THE CHOICE for the pawn move `from`→`to` on `fen` (the side to move's), or
+ *  null when the queen is right or nothing proves otherwise. `engineBest`:
+ *  the engine's best move (UCI) or null. */
+export function promotionChoiceFor(fen: string, from: string, to: string, engineBest: string | null): PromotionChoice | null {
+  let c: Chess;
+  try { c = new Chess(fen); } catch { return null; }
+  const moves = c.moves({ verbose: true }).filter((m) => m.from === from && m.to === to && m.promotion);
+  if (moves.length === 0) return null;
+  const by = new Map<Promo, PieceRead>();
+  for (const m of moves) by.set(m.promotion as Promo, readPiece(fen, m));
+  const q = by.get('q');
+  if (!q) return null;
+  const fails = (p: PieceRead): boolean => p.stalemate || !!p.trap;
+  let choice: { piece: Promo; reason: PromotionReason } | null = null;
+  const n = by.get('n');
+  if (n && n.mate && !q.mate) choice = { piece: 'n', reason: { kind: 'knight-mates' } };
+  else if (n && n.fork && !q.mate) choice = { piece: 'n', reason: { kind: 'knight-forks', target: n.fork } };
+  else if (fails(q)) {
+    const ok = ORDER.slice(1).find((p) => { const r = by.get(p); return !!r && !fails(r); });
+    if (ok) choice = { piece: ok, reason: q.stalemate ? { kind: 'queen-stalemates' } : { kind: 'queen-trap', trap: q.trap as StalemateTrap } };
+  }
+  if (!choice) return null;
+  if (engineBest && engineBest.slice(0, 4) === `${from}${to}` && (engineBest[4] ?? 'q') !== choice.piece) return null;
+  const alsoFails = (choice.reason.kind === 'queen-stalemates' || choice.reason.kind === 'queen-trap')
+    ? ORDER.filter((p) => p !== 'q' && ORDER.indexOf(p) < ORDER.indexOf(choice!.piece) && by.has(p) && fails(by.get(p) as PieceRead))
+    : [];
+  return { side: c.turn(), from, to, piece: choice.piece, san: (by.get(choice.piece) as PieceRead).san, queenSan: q.san, reason: choice.reason, alsoFails,
+    key: `promotion:${fen.split(' ')[0]}:${from}${to}` };
+}
+
+/** Every promotion choice the side to move has on `fen` (one per pawn move). */
+export function promotionChoicesOn(fen: string, engineBest: string | null): PromotionChoice[] {
+  let c: Chess;
+  try { c = new Chess(fen); } catch { return []; }
+  const seen = new Set<string>();
+  const out: PromotionChoice[] = [];
+  for (const m of c.moves({ verbose: true })) {
+    if (!m.promotion) continue;
+    const k = `${m.from}${m.to}`;
+    if (seen.has(k)) continue;
+    seen.add(k);
+    const pc = promotionChoiceFor(fen, m.from, m.to, engineBest);
+    if (pc) out.push(pc);
+  }
+  return out;
+}
+
+const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+
+/** THE CHOICE IN WORDS, from the student's seat. `played`: the move was just
+ *  played (the reason is said of it), else it is the choice ahead. */
+export function promotionChoiceLine(pc: PromotionChoice, student: Color, played: boolean): string {
+  const mine = pc.side === student;
+  const piece = NAME[pc.piece];
+  const lead = played
+    ? (mine ? `You make a ${piece}, not a queen.` : `They make a ${piece}, not a queen.`)
+    : (mine ? `When the pawn on ${pc.from} promotes, make a ${piece}, not a queen.` : `When their pawn on ${pc.from} promotes, it should become a ${piece}, not a queen.`);
+  const also = pc.alsoFails.length ? ` A ${pc.alsoFails.map((p) => NAME[p]).join(' or a ')} fails the same way.` : '';
+  switch (pc.reason.kind) {
+    case 'knight-mates':
+      return `${lead} The knight on ${pc.to} is checkmate, and a queen there is not.`;
+    case 'knight-forks':
+      return `${lead} The knight on ${pc.to} gives check and hits the queen on ${pc.reason.target}, so the queen falls next move.`;
+    case 'queen-stalemates':
+      return `${lead} A queen on ${pc.to} would leave ${mine ? 'their' : 'your'} king no move and nothing else to move: stalemate.${also} The ${piece} does the job and leaves ${mine ? 'them' : 'you'} a move.`;
+    case 'queen-trap': {
+      const t = pc.reason.trap;
+      return `${lead} A queen on ${pc.to} walks into ${t.check}, and taking the ${t.bait} with ${t.capture} is stalemate.${also} The ${piece} does the same work without that trick.`;
+    }
+    default:
+      return lead;
+  }
+}
+
+/** THE MOVE THAT PROMOTED (either seat): the underpromotion played and its
+ *  reason, or the queen played where the board needed a lesser piece. */
+export function promotionPlayed(fenBefore: string, san: string): { choice: PromotionChoice; queenMissed: boolean } | null {
+  let c: Chess;
+  try { c = new Chess(fenBefore); } catch { return null; }
+  let m: Move;
+  try { m = c.move(san); } catch { return null; }
+  if (!m.promotion) return null;
+  const pc = promotionChoiceFor(fenBefore, m.from, m.to, null);
+  if (!pc) return null;
+  if (m.promotion === pc.piece) return { choice: pc, queenMissed: false };
+  if (m.promotion === 'q') return { choice: pc, queenMissed: true };
+  return null;
+}
+
+/** The queen played where a lesser piece was needed, in words. */
+export function queenMissedLine(pc: PromotionChoice, student: Color): string {
+  const mine = pc.side === student;
+  const piece = NAME[pc.piece];
+  switch (pc.reason.kind) {
+    case 'knight-mates': return mine ? `A knight on ${pc.to} was checkmate; the queen is not.` : `A knight on ${pc.to} was checkmate for them; the queen is not.`;
+    case 'knight-forks': return mine ? `A knight on ${pc.to} would have checked and won the queen on ${pc.reason.target}.` : `A knight on ${pc.to} would have checked and won your queen on ${pc.reason.target}.`;
+    case 'queen-stalemates': return mine ? `The queen is stalemate; a ${piece} would have kept the win.` : `The queen stalemates you; a ${piece} would have kept their win.`;
+    case 'queen-trap': {
+      const t = pc.reason.trap;
+      return mine
+        ? `The queen walks into ${t.check}, and taking the ${t.bait} is stalemate. A ${piece} on ${pc.to} would have kept the win.`
+        : `Their queen walks into ${t.check}, and taking the ${t.bait} is stalemate — your chance to save it. A ${piece} would have kept their win.`;
+    }
+    default: return '';
+  }
+}

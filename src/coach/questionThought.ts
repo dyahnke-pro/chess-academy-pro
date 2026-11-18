@@ -41,13 +41,13 @@ interface QuestionSpec {
  *  which move it is about and which ideas answer it. */
 export const QUESTION_IDEAS: Record<AskedQuestion, QuestionSpec> = {
   // What cannot wait, then the plan: the story, the structure, their plan.
-  plan: { move: 'board', groups: ['danger', 'tactics', 'story', 'structure', 'theirSide'] },
+  plan: { move: 'board', groups: ['danger', 'tactics', 'technique', 'story', 'structure', 'theirSide'] },
   // What is forcing on the board: what is attacked, the shots, the choices.
   tactics: { move: 'board', groups: ['danger', 'tactics', 'choices'] },
   // Why the best move: what it does, the moves it beats, the order, the line.
-  'why-best-move': { move: 'best', groups: ['move', 'choices', 'notYet', 'line', 'bait', 'story', 'structure', 'tactics', 'concepts', 'name'] },
+  'why-best-move': { move: 'best', groups: ['move', 'choices', 'notYet', 'line', 'bait', 'story', 'structure', 'tactics', 'technique', 'concepts', 'name'] },
   // Why they played it: what their move is after, and what it threatens.
-  'opponent-move': { move: 'their-last', groups: ['move', 'theirSide', 'danger', 'line', 'bait', 'story', 'structure', 'tactics', 'concepts', 'name'] },
+  'opponent-move': { move: 'their-last', groups: ['move', 'theirSide', 'danger', 'line', 'bait', 'story', 'structure', 'tactics', 'technique', 'concepts', 'name'] },
 };
 
 /** The order a board question says its read in: the groups it asks for, then

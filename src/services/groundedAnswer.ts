@@ -78,6 +78,11 @@ import { pieceIsOn } from './tacticsContextIdentity';
 import { clearsVolumeFloor } from './openingVolumeFloor';
 import { endgameConceptFor } from './conceptEngine';
 import { detectTwoPawnsVsKing } from './endgameTechnique';
+import { theoreticalEndingOn, theoreticalEndingLine } from './theoreticalEnding';
+import { readOpposition, oppositionLine, oppositionSquares } from './oppositionRead';
+import { zugzwangOn, zugzwangSyncLine } from './zugzwangRead';
+import { raceCountOn, raceCountLine, raceCountSquares } from './raceCount';
+import { promotionChoicesOn, promotionChoiceLine } from './promotionChoice';
 import type { EndgameRuleMaterial } from '../coach/questionIntents';
 
 // Pure board-fact constants — universal chess values, leaf-local so this module
@@ -1734,6 +1739,40 @@ export function assemblePositionAssessment(opts: {
   // lead the eye with `[BOARD: highlight:sq:yellow]` — coupled from each
   // observation's OWN declared `squares`, never scraped from the prose (G0).
   const keySquares: string[] = [];
+  // ENDGAME TECHNIQUE, standing (WO-DANYA-READS-01 #5) — the same computers
+  // the move thought speaks when a move makes them, read here for the board
+  // as it is: the named ending and its steps, the opposition and what it
+  // forces, the zugzwang (the bounded count in a pawn ending), the pawn race
+  // counted, and the piece a promotion should make. The ending's facts come
+  // before the general read: in an ending they are the reason.
+  if (opts.fen) {
+    const fen = opts.fen;
+    const whiteCp = typeof opts.mateIn === 'number' && opts.mateIn !== 0 ? (opts.mateIn > 0 ? 100000 : -100000) : typeof opts.evalCp === 'number' ? opts.evalCp : null;
+    const add = (text: string | null, squares: readonly string[]): void => {
+      if (!text) return;
+      parts.push(text);
+      for (const sq of squares) if (/^[a-h][1-8]$/.test(sq) && !keySquares.includes(sq)) keySquares.push(sq);
+    };
+    try {
+      const e = theoreticalEndingOn(fen, whiteCp);
+      if (e) add(theoreticalEndingLine(e, sc, true), e.squares);
+    } catch { /* a bonus, never a blocker */ }
+    try {
+      const o = readOpposition(fen);
+      if (o) add(oppositionLine(o, sc, 'now', whiteCp), oppositionSquares(o));
+    } catch { /* a bonus, never a blocker */ }
+    try {
+      const z = zugzwangOn(fen, null);
+      if (z) add(zugzwangSyncLine(z, sc, false), []);
+    } catch { /* a bonus, never a blocker */ }
+    try {
+      const r = raceCountOn(fen);
+      if (r) add(raceCountLine(r, sc), raceCountSquares(r));
+    } catch { /* a bonus, never a blocker */ }
+    try {
+      for (const pc of promotionChoicesOn(fen, opts.bestUci)) add(promotionChoiceLine(pc, sc, false), [pc.from, pc.to]);
+    } catch { /* a bonus, never a blocker */ }
+  }
   if (opts.fen) {
     try {
       const already = parts.join(' ').toLowerCase();

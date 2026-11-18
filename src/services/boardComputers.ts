@@ -79,6 +79,11 @@ import { flexibleMove, flexibleMoveLine, flexibleMoveSquares } from './flexibleM
 import { exchangeSacrifice, exchangeSacrificeLine, exchangeSacrificeSquares } from './exchangeSacrifice';
 import { pawnMajority, pawnMajorityLine, pawnMajoritySquares } from './pawnMajority';
 import { fortress, fortressLine, fortressSquares } from './fortress';
+import { oppositionTaken, oppositionLine, oppositionSquares } from './oppositionRead';
+import { zugzwangMade, zugzwangSyncLine, zugzwangSyncProof } from './zugzwangRead';
+import { theoreticalEndingMade, theoreticalEndingMadeLine } from './theoreticalEnding';
+import { raceCountMade, raceCountLine, raceCountSquares } from './raceCount';
+import { promotionPlayed, promotionChoiceLine, queenMissedLine } from './promotionChoice';
 import { pawnCutsGuard, type PawnLineRead } from './pawnLines';
 import { chainBase } from './chainBase';
 import { pinnedPawnGuard } from './pinnedPawnGuard';
@@ -345,6 +350,29 @@ export interface BoardContexts {
    *  engine's lines from the board after the move, best first (White-POV
    *  cp); [] where none. */
   fortress: { fenBefore: string; san: string; student: Color; replies: readonly ReplyLine[] };
+  /** THE OPPOSITION TAKEN (`oppositionRead`, Danya's "it is Black who has
+   *  the opposition"): the king move `san` on `fenBefore` (either seat) takes
+   *  the opposition in a king-and-pawn ending, with what it forces.
+   *  `afterCp`: the engine's score after the move (White's view), or null. */
+  oppositionRead: { fenBefore: string; san: string; student: Color; afterCp: number | null };
+  /** ZUGZWANG MADE (`zugzwangRead`, Danya's "moving it in any direction is
+   *  suicidal"): after `san` the side to move would rather pass. `after` and
+   *  `passAfter`: the engine's lines after the move and with the mover to move
+   *  again (White's view), or null — then the bounded count, pawn endings only. */
+  zugzwangRead: { fenBefore: string; san: string; student: Color; after: readonly AnalysisLine[] | null; passAfter: readonly AnalysisLine[] | null };
+  /** THE NAMED ENDING (`theoreticalEnding`, Lucena and Philidor with their
+   *  steps, the back-rank defence, the rook-pawn corner): the move `san`
+   *  reached one, built the bridge or took the third rank (either seat).
+   *  `afterCp`: the engine's score after the move (White's view), or null. */
+  theoreticalEnding: { fenBefore: string; san: string; student: Color; afterCp: number | null };
+  /** THE RACE COUNTED (`raceCount`): after `san` (either seat) a pawn the
+   *  other king cannot catch, or two racing, played out with chess.js —
+   *  queening with check, the first queen winning the second, a stalemate. */
+  raceCount: { fenBefore: string; san: string; student: Color };
+  /** WHICH PIECE TO MAKE (`promotionChoice`): the promotion `san` on
+   *  `fenBefore` (either seat) — an underpromotion and the reason the queen
+   *  fails, or a queen made where the board needed a lesser piece. */
+  promotionChoice: { fenBefore: string; san: string; student: Color };
   /** WHAT A PAWN MOVE DID TO THE LINES (`pawnLines`, S4 pawns): the square the pawn landed on cut an enemy slider off from a piece it
    *  guarded, which is hanging now and was not before. */
   pawnCutsGuard: { fenBefore: string; san: string; student: Color };
@@ -454,6 +482,14 @@ const THINK = { wired: 'services/moveThoughtFacts.ts' } as const;
 const LEARN_VIA_THOUGHT = { wired: 'services/moveThoughtFacts.ts' } as const;
 const THINK_BOOK = { not: 'opening book knowledge — taught by the opening lessons, not a step of thinking' } as const;
 const TACTICS_NA = { not: 'a puzzle position poses one tactic; this computer explains a game move' } as const;
+/** THE ENDGAME TECHNIQUE READS (WO-DANYA-READS-01 #5): read off a move by the
+ *  one composer and the Review walk; the position read says them standing. */
+const ENDING_SURFACES: Record<CoachSurface, SurfaceAnswer> = {
+  lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+  learn: LEARN_VIA_THOUGHT,
+  tactics: { not: 'a puzzle poses one tactic; endgame technique is the ending\'s plan' },
+  weaknesses: { not: 'a reading of the ending said once — no question of the student\'s posed' },
+};
 const WEAK_OWED = { not: 'owed — one-coach P3: the record keeps the proof' } as const;
 /** A lesson composes each move from the move's own facts (`moveThoughtFacts`)
  *  and reads no registry yet. */
@@ -1551,16 +1587,16 @@ export const BOARD_COMPUTERS = {
     read: ({ fenBefore, san, student }, fact) => safe(() => {
       const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
       const mover: Color = new Chess(fenBefore).turn();
-      // TWO MOVES DEEP (Saavedra review 2026-11-18): an underpromotion that
-      // dodges the trick a queen walks into — its reason — and a move that
-      // sets the trick for the other side's natural move.
-      const under = /=[RBN]/.test(san) ? stalemateTraps(fenBefore, [san.replace(/=[RBN]/, '=Q')])[0] ?? null : null;
+      // TWO MOVES DEEP (Saavedra review 2026-11-18): a move that sets the
+      // trick for the other side's natural move. The underpromotion that
+      // dodges it is the promotion choice's (`promotionChoice`), with the
+      // queen's other failures — one producer for which piece to make.
+      if (/=[RBN]/.test(san)) return null;
       const movedTo = ((): string | null => { try { return new Chess(fenBefore).move(san).to; } catch { return null; } })();
-      const setTrap = !under ? stalemateTraps(fenAfter).find((tr) => tr.checkFrom === movedTo) ?? null : null;
-      const deep = under ?? setTrap;
+      const deep = stalemateTraps(fenAfter).find((tr) => tr.checkFrom === movedTo) ?? null;
       if (deep) {
-        const text = stalemateTrapLine(deep, student, under ? san : null);
-        const squares = [...new Set([...(under ? [san.match(/[a-h][1-8]/)?.[0] ?? ''] : []), ...deep.squares].filter(Boolean))];
+        const text = stalemateTrapLine(deep, student);
+        const squares = [...new Set(deep.squares.filter(Boolean))];
         const key = `stalemate-trap:${deep.natural}:${deep.check}:${fenAfter.split(' ')[0]}`;
         return fact({ key, claims: [key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
           seat: mover === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
@@ -1818,6 +1854,100 @@ export const BOARD_COMPUTERS = {
       tactics: TACTICS_NA,
       weaknesses: { not: 'a reading of the board said once — no question of the student\'s posed' },
     },
+  },
+  oppositionRead: {
+    // His "1.Kd6 meets with 1...Kd8, when it is Black who has the opposition":
+    // the king move that takes it, what it forces, both seats.
+    read: ({ fenBefore, san, student, afterCp }, fact) => safe(() => {
+      const t = oppositionTaken(fenBefore, san);
+      if (!t) return null;
+      const text = oppositionLine(t.read, student, 'took', afterCp);
+      const squares = oppositionSquares(t.read);
+      return fact({ key: t.read.key, claims: [t.read.key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+        seat: t.read.holder === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: t.fenAfter });
+    }),
+    computer: 'oppositionTaken',
+    kind: 'technique',
+    phase: ANY,
+    surfaces: ENDING_SURFACES,
+  },
+  zugzwangRead: {
+    // His "this straightforward move already places White in Zugzwang": the
+    // move after which the side to move would rather pass, both seats.
+    read: ({ fenBefore, san, student, after, passAfter }, fact) => safe(() => {
+      const reads = after && passAfter && after.length > 0 && passAfter.length > 0 ? { lines: after, pass: passAfter } : null;
+      const z = zugzwangMade(fenBefore, san, reads);
+      if (!z) return null;
+      const text = zugzwangSyncLine(z.read, student, true);
+      const mover = new Chess(fenBefore).turn();
+      return fact({ key: z.read.key, claims: [z.read.key], text, proof: zugzwangSyncProof(z.read, student), squares: [], stakes: null,
+        seat: mover === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: z.fenAfter });
+    }),
+    computer: 'zugzwangMade',
+    kind: 'technique',
+    phase: ANY,
+    surfaces: ENDING_SURFACES,
+  },
+  theoreticalEnding: {
+    // His "the bridge-building maneuver", "Black does not have opposition, and
+    // a draw is inevitable": the named ending a move reaches, and its steps.
+    read: ({ fenBefore, san, student, afterCp }, fact) => safe(() => {
+      const m = theoreticalEndingMade(fenBefore, san, afterCp);
+      if (!m) return null;
+      const text = theoreticalEndingMadeLine(m, student);
+      const squares = m.ending.squares;
+      const mover = new Chess(fenBefore).turn();
+      return fact({ key: `${m.ending.key}:${m.step}`, claims: [m.ending.key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+        seat: mover === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: m.fenAfter });
+    }),
+    computer: 'theoreticalEndingMade',
+    kind: 'technique',
+    phase: ANY,
+    surfaces: ENDING_SURFACES,
+  },
+  raceCount: {
+    // His "Black's king is too far away to stop White's advanced pawn" and
+    // "the pawns promote simultaneously, but you know the rest": the race,
+    // counted and played out, both seats.
+    read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const r = raceCountMade(fenBefore, san);
+      if (!r) return null;
+      const text = raceCountLine(r.read, student);
+      const squares = raceCountSquares(r.read);
+      const proof = (r.read.line.length ? legalLineProof(r.fenAfter, r.read.line, lineSeatAt(r.fenAfter, student), true) : null) ?? squaresProof(text, squares) ?? NO_PROOF.description;
+      const side = r.read.first ?? (r.read.runners.w ? 'w' : 'b');
+      return fact({ key: r.read.key, claims: [r.read.key], text, proof, squares, stakes: null,
+        seat: side === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: r.fenAfter });
+    }),
+    computer: 'raceCountMade',
+    kind: 'technique',
+    phase: ANY,
+    surfaces: ENDING_SURFACES,
+  },
+  promotionChoice: {
+    // His "there are only two circumstances under which it makes sense to
+    // underpromote": the piece made and why the queen fails, both seats.
+    read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const p = promotionPlayed(fenBefore, san);
+      if (!p) return null;
+      const pc = p.choice;
+      const text = p.queenMissed ? queenMissedLine(pc, student) : promotionChoiceLine(pc, student, true);
+      const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
+      const squares = [pc.from, pc.to];
+      // The queen's trap keeps the stalemate trick's claim shape, so the
+      // trick said before the move (a lesson's line) and this are one idea.
+      const trapKey = pc.reason.kind === 'queen-trap' ? [`stalemate-trap:${pc.reason.trap.natural}:${pc.reason.trap.check}:${fenAfter.split(' ')[0]}`] : [];
+      const proof = pc.reason.kind === 'queen-trap'
+        ? legalLineProof(fenBefore, [pc.queenSan, pc.reason.trap.check, pc.reason.trap.capture], lineSeatAt(fenBefore, student), true) ?? NO_PROOF.description
+        : squaresProof(text, squares) ?? NO_PROOF.description;
+      return fact({ key: pc.key, claims: [pc.key, ...trapKey], text, proof, squares, stakes: null,
+        seat: pc.side === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter,
+        ...(isProof(proof) && proof.line ? { lines: [proof.line] } : {}) });
+    }),
+    computer: 'promotionPlayed',
+    kind: 'technique',
+    phase: ANY,
+    surfaces: ENDING_SURFACES,
   },
   pawnCutsGuard: {
     // His "…c4 cuts the line between the b3 queen and the f7 bishop", "…c3

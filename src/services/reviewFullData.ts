@@ -1713,6 +1713,19 @@ export function computeMoveFacets(
       // The fortress, both seats: a piece down and a draw the board explains,
       // off the stored score after the move.
       add(readBoardAll('fortress', { fenBefore, san, student: studentColorWB, replies: ctx.evaluation == null ? [] : [{ cp: storedMate(ctx.evaluation) == null ? ctx.evaluation : null, mate: storedMate(ctx.evaluation), moves: ctx.playedLineUci }] })[0]);
+      // ENDGAME TECHNIQUE, both seats (WO-DANYA-READS-01 #5): the opposition
+      // taken, the zugzwang made (the bounded count — the record keeps no
+      // null-move read), the named ending reached, the race counted, the piece
+      // a promotion makes — off the stored score after the move.
+      {
+        const m = ctx.evaluation == null ? null : storedMate(ctx.evaluation);
+        const afterCp = ctx.evaluation == null ? null : m != null ? (m > 0 ? 100000 : -100000) : ctx.evaluation;
+        add(readBoardAll('oppositionRead', { fenBefore, san, student: studentColorWB, afterCp })[0]);
+        add(readBoardAll('zugzwangRead', { fenBefore, san, student: studentColorWB, after: null, passAfter: null })[0]);
+        add(readBoardAll('theoreticalEnding', { fenBefore, san, student: studentColorWB, afterCp })[0]);
+        add(readBoardAll('raceCount', { fenBefore, san, student: studentColorWB })[0]);
+        add(readBoardAll('promotionChoice', { fenBefore, san, student: studentColorWB })[0]);
+      }
     }
     if (!isStudent) {
       // Their move took an attacker off a piece you had to look after.
