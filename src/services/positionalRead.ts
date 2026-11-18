@@ -32,7 +32,7 @@ import { describeStructure } from './boardStructure';
 import { homeMinorCount } from './development';
 import { isolaniStructure, passerTrumpSentence } from './nextPlans';
 import { Chess, type Color, type Square } from 'chess.js';
-import { countWord } from '../utils/andList';
+import { countWord, andList, fileList } from '../utils/andList';
 import {
   kingSafetyRead,
   developmentRead,
@@ -93,7 +93,11 @@ type ObservationKind =
   // WIDENED BOARD AWARENESS (David 2026-09-13: "increased scope … our strongest
   // narration tool"). Each is a concrete, board-provable feature, ranked by how
   // much it should lead a quiet-position read.
-  | 'minority' | 'passer' | 'complex' | 'file';
+  | 'minority' | 'passer' | 'complex' | 'file'
+  // THEIR BISHOP PAIR (Danya's article boards 2026-11-18: "White's two
+  // bishops are the long-term danger", "White has the two bishops" — five
+  // boards where the pair was the opponent's and the read never said it).
+  | 'pair';
 
 interface PositionalObservation {
   /** Dedupe key for the caller's said-set — keyed on the IDEA, never on a
@@ -131,7 +135,7 @@ const RANK: Record<ObservationKind, number> = {
   // A concrete plan with a legal lever outranks a static piece read; a passer
   // and a colour-complex weakness are notable assets/targets; a fully-open file
   // is the lowest of the new rungs (a where-rooks-belong pointer).
-  minority: 65, piece: 60, passer: 58, complex: 55, structure: 50, file: 45, lever: 40,
+  minority: 65, piece: 60, passer: 58, complex: 55, pair: 52, structure: 50, file: 45, lever: 40,
 };
 
 /** The same fact about the opponent is worth slightly less than about the
@@ -193,6 +197,24 @@ export function castleIsOneMoveAway(fen: string, color: Color): boolean {
   } catch {
     return false;
   }
+}
+
+/** `color`'s bishop pair on `fen`: two bishops on opposite-coloured squares
+ *  against at most one, the other side still holding a minor. The rival is
+ *  what the other side has against them, in words. Null otherwise. */
+export function theirBishopPair(fen: string, color: Color): { bishops: Square[]; rival: string } | null {
+  let b: Chess;
+  try { b = new Chess(fen); } catch { return null; }
+  const other: Color = color === 'w' ? 'b' : 'w';
+  const mine = b.findPiece({ type: 'b', color });
+  if (mine.length !== 2 || b.squareColor(mine[0]) === b.squareColor(mine[1])) return null;
+  const theirB = b.findPiece({ type: 'b', color: other }).length;
+  const theirN = b.findPiece({ type: 'n', color: other }).length;
+  if (theirB > 1 || theirB + theirN === 0) return null;
+  const rival = theirB === 1
+    ? (theirN > 0 ? `knight${theirN > 1 ? 's' : ''} and bishop` : 'lone bishop')
+    : `knight${theirN > 1 ? 's' : ''}`;
+  return { bishops: mine, rival: theirB === 0 && theirN === 2 ? 'two knights' : rival };
 }
 
 /** Every observation for one side. */
@@ -337,6 +359,25 @@ function observationsFor(
     });
   }
 
+  // THE BISHOP PAIR, THEIRS. The student's own pair is a plan (`nextPlans`
+  // "make your bishop pair count"); theirs is the long-term danger the student
+  // must play against. Two bishops on opposite colours against at most one,
+  // with a minor of the student's still on the board (the pair is a minor
+  // imbalance: two bishops against a knight and a bishop, or two knights).
+  if (!own) {
+    const pair = theirBishopPair(fen, color);
+    if (pair) {
+      out.push({
+        key: `${side}-bishop-pair`, side, kind: 'pair', rank: rank('pair'),
+        squares: pair.bishops,
+        text: rotateStem([
+          `They have the bishop pair against your ${pair.rival} — two bishops grow stronger as the board opens, so keep it closed or trade one of them off.`,
+          `Their two bishops are the long-term danger against your ${pair.rival}: every pawn that comes off opens a diagonal for them, so keep the position closed or trade a bishop.`,
+        ], stemKeyOf(`${fen.split(' ')[0]}|pair`)),
+      });
+    }
+  }
+
   const weak = findWeakPawns(fen, color);
   // An isolated d-pawn IS the isolani — the structure lane names it with its
   // plan ("you hold the isolated queen's pawn…"), so this read stays off it
@@ -354,21 +395,31 @@ function observationsFor(
   // now or one quiet move away.
   const enemyOf: Color = color === 'w' ? 'b' : 'w';
   weak.isolated = weak.isolated.filter((sq) => canBeAimedAt(fen, sq, enemyOf));
+  // EVERY WEAK PAWN, NEVER THE FIRST (G4.5; Danya's article board, the
+  // positional rook lift #1: White's doubled g-pawns in front of the king were
+  // the point, and the read named only the doubled b-pawns, the first file it
+  // met). One sentence a kind, every pawn of it named; the key is the first
+  // file's (the other lanes' say-once key), the rest ride as aliases.
   if (weak.isolated.length > 0) {
+    const iso = weak.isolated;
+    const many = iso.length > 1;
     out.push({
-      key: `${side}-iso-${weak.isolated[0][0]}`, side, kind: 'structure', rank: rank('structure'),
-      squares: [weak.isolated[0]],
+      key: `${side}-iso-${iso[0][0]}`, side, kind: 'structure', rank: rank('structure'),
+      aliases: iso.slice(1).map((sq) => `${side}-iso-${sq[0]}`),
+      squares: [...iso],
       text: own
-        ? `Your pawn on ${weak.isolated[0]} is isolated — no friendly pawn can ever defend it, so a piece has to.`
-        : `Their pawn on ${weak.isolated[0]} is isolated — that is a long-term target worth playing against.`,
+        ? `Your pawn${many ? 's' : ''} on ${andList(iso)} ${many ? 'are' : 'is'} isolated — no friendly pawn can ever defend ${many ? 'them' : 'it'}, so a piece has to.`
+        : `Their pawn${many ? 's' : ''} on ${andList(iso)} ${many ? 'are' : 'is'} isolated — ${many ? 'those are long-term targets' : 'that is a long-term target'} worth playing against.`,
     });
   }
-  if (weak.doubled.length > 0) {
+  const doubledFiles = [...new Set(weak.doubled.map((sq) => sq[0]))].sort();
+  if (doubledFiles.length > 0) {
     out.push({
-      key: `${side}-doubled-${weak.doubled[0][0]}`, side, kind: 'structure', rank: rank('structure'),
+      key: `${side}-doubled-${doubledFiles[0]}`, side, kind: 'structure', rank: rank('structure'),
+      aliases: doubledFiles.slice(1).map((f) => `${side}-doubled-${f}`),
       text: own
-        ? `Your pawns on the ${weak.doubled[0][0]}-file are doubled — they can't defend each other, so each one needs a neighbour or a piece to guard it.`
-        : `Their pawns on the ${weak.doubled[0][0]}-file are doubled — they can't defend each other, which makes them targets.`,
+        ? `Your pawns on ${fileList(doubledFiles)} are doubled — they can't defend each other, so each one needs a neighbour or a piece to guard it.`
+        : `Their pawns on ${fileList(doubledFiles)} are doubled — they can't defend each other, which makes them targets.`,
     });
   }
 
