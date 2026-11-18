@@ -931,12 +931,13 @@ describe('assembleEndgameAnswer — Phase 5 (voice the tablebase verdict)', () =
 // top tactic) from the STUDENT's perspective. White-perspective eval in.
 describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)', () => {
   it('voices the eval from the student POV (White)', () => {
-    const a = assemblePositionAssessment({ bestUci: null, evalCp: 120, mateIn: null, studentColor: 'white' });
+    // +1.2 is "slightly" on the one ladder (evalBand); +2.0 is clearly better.
+    const a = assemblePositionAssessment({ bestUci: null, evalCp: 200, mateIn: null, studentColor: 'white' });
     expect(a!.facts).toMatch(/You're clearly better\./);
     expect(a!.sources).toEqual(['engine:stockfish']);
   });
   it('flips perspective for Black (white-positive eval = Black worse)', () => {
-    const a = assemblePositionAssessment({ bestUci: null, evalCp: 120, mateIn: null, studentColor: 'black' });
+    const a = assemblePositionAssessment({ bestUci: null, evalCp: 200, mateIn: null, studentColor: 'black' });
     expect(a!.facts).toMatch(/You're clearly worse\./);
   });
   it('calls a balanced position balanced', () => {

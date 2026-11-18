@@ -117,3 +117,16 @@ describe('boardStructure — pure structural facts (Phase 0)', () => {
     });
   });
 });
+
+// Danya's article boards, 2026-11-18 (mastering-opposite-colored-bishops #1):
+// after c2-c4 the pawn has stepped past the b4 pawn, which takes it en passant.
+describe('a pawn that can be taken en passant is not passed', () => {
+  it('c4 with …bxc3 e.p. on the board is not a passed pawn', () => {
+    const s = describeStructure('7k/7p/4Pb2/8/1pP1p1P1/1B6/P6P/7K b - c3 0 40')!;
+    expect(s.pawns.passedPawns.w).not.toContain('c4');
+  });
+  it('positive control: once the en-passant chance is gone it is passed', () => {
+    const s = describeStructure('7k/7p/4Pb2/8/1pP1p1P1/1B6/P6P/7K b - - 0 40')!;
+    expect(s.pawns.passedPawns.w).toContain('c4');
+  });
+});

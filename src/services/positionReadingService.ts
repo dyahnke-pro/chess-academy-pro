@@ -34,6 +34,7 @@ import { worstPieceNote } from './nextPlans';
 import { unmarked } from '../utils/sanMark';
 import { liteMoves, makeLite, undoLite } from './liteMoves';
 import { oppositionOn } from './oppositionRead';
+import { absolutePinRay } from './pinGeometry';
 
 /** Centipawn-free piece values for SEE + material reasoning (king ~ ∞). */
 const PIECE_VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
@@ -562,6 +563,38 @@ export function bishopHemmedByOwnPawns(chess: Chess, square: Square, color: Colo
   return bishopBlockingPawns(chess, square, color).length === 2;
 }
 
+/** Does a pin to its own king leave the rook on `square` free along the line
+ *  a good-piece note credits it with — its file, or its rank? A rook pinned
+ *  along that very line still slides on it; pinned across it, it cannot leave
+ *  the pin (absolutePinRay: the one legal-pin read). */
+function pinAllows(chess: Chess, square: Square, line: 'file' | 'rank'): boolean {
+  const ray = absolutePinRay(chess, square);
+  if (!ray) return true;
+  return line === 'file' ? ray[0] === 0 : ray[1] === 0;
+}
+
+/** A knight on the rim that is doing a job from there: it bears on the enemy
+ *  king or a square beside it, or it attacks a piece of theirs that is
+ *  loose or worth more than a knight. Board geometry and chess.js. */
+function rimKnightWorks(chess: Chess, square: Square, color: Color): boolean {
+  const enemy: Color = color === 'w' ? 'b' : 'w';
+  const king = chess.board().flat().find((c) => c && c.type === 'k' && c.color === enemy)?.square ?? null;
+  const f = square.charCodeAt(0) - 97;
+  const r = Number(square[1]);
+  for (const [df, dr] of KNIGHT_STEPS) {
+    const tf = f + df;
+    const tr = r + dr;
+    if (tf < 0 || tf > 7 || tr < 1 || tr > 8) continue;
+    const to = `${String.fromCharCode(97 + tf)}${tr}` as Square;
+    if (king && Math.max(Math.abs(to.charCodeAt(0) - king.charCodeAt(0)), Math.abs(Number(to[1]) - Number(king[1]))) <= 1) return true;
+    const occ = chess.get(to);
+    if (!occ || occ.color !== enemy || occ.type === 'p' || occ.type === 'k') continue;
+    if ((MATERIAL_VALUE[occ.type] ?? 0) > (MATERIAL_VALUE.n ?? 3)) return true;
+    if (chess.attackers(to, enemy).length === 0) return true;
+  }
+  return false;
+}
+
 export function findPieceQuality(fen: string): PieceQualityNote[] {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return []; }
@@ -579,12 +612,21 @@ export function findPieceQuality(fen: string): PieceQualityNote[] {
       if (type === 'n') {
         // A KNIGHT ON THE RIM is a poor piece — the same verdict the
         // knight-to-the-rim fundamental speaks, so no other lane can call it
-        // "the piece doing the most work" (walk 900, Na3).
+        // "the piece doing the most work" (walk 900, Na3). Unless it is WORKING
+        // from there (Danya's article boards, 2026-11-18: a knight on h6 beside
+        // their king, on h5 hitting f6 in front of it, read as "your problem
+        // piece, stuck on the rim") — the rim is a fact about squares covered,
+        // and a knight bearing on the enemy king or winning a piece is doing
+        // its job where it stands.
         if (file === 0 || file === 7) {
-          notes.push({ square, piece: 'n', color, quality: 'bad', kind: 'rim-knight', reason: 'knight on the rim' });
+          if (!rimKnightWorks(chess, square, color)) notes.push({ square, piece: 'n', color, quality: 'bad', kind: 'rim-knight', reason: 'knight on the rim' });
           continue;
         }
-        if (isOutpost(chess, square, color, true)) notes.push({ square, piece: 'n', color, quality: 'good', kind: 'outpost', reason: 'knight outpost' });
+        // A PINNED PIECE IS NOT WORKING (Danya's article boards, 2026-11-18:
+        // a rook pinned to its king by their queen was "your best-placed
+        // piece"): a good-piece note says what the piece does from its
+        // square, and a pinned piece can do only what the pin allows.
+        if (isOutpost(chess, square, color, true) && !absolutePinRay(chess, square)) notes.push({ square, piece: 'n', color, quality: 'good', kind: 'outpost', reason: 'knight outpost' });
       }
 
       if (type === 'b') {
@@ -634,7 +676,7 @@ export function findPieceQuality(fen: string): PieceQualityNote[] {
           }
           const enemyKing = chess.board().flat().find((c2) => c2 && c2.type === 'k' && c2.color === enemy);
           const kingOnBack = !!enemyKing && Number(enemyKing.square[1]) === backRank;
-          if ((enemyPawnOnRank || kingOnBack) && standsSafe(fen, square, enemy)) {
+          if ((enemyPawnOnRank || kingOnBack) && standsSafe(fen, square, enemy) && pinAllows(chess, square, 'rank')) {
             notes.push({ square, piece: 'r', color, quality: 'good', kind: 'seventh-rank', reason: 'rook on the seventh rank' });
           }
         }
@@ -647,7 +689,7 @@ export function findPieceQuality(fen: string): PieceQualityNote[] {
         // f8-rook behind f7).
         const contested = ownPawns === 0 && enemyPawns === 0
           && chess.board().flat().some((c2) => !!c2 && c2.color === foe && (c2.type === 'r' || c2.type === 'q') && c2.square[0] === square[0]);
-        if (contested) { /* neither side's rook owns a file they share */ }
+        if (contested || !pinAllows(chess, square, 'file')) { /* neither side's rook owns a file they share; a pin off the file holds it there */ }
         else if (ownPawns === 0 && enemyPawns === 0) notes.push({ square, piece: 'r', color, quality: 'good', kind: 'open-file', reason: 'rook on the open file' });
         else if (ownPawns === 0 && enemyPawns > 0) notes.push({ square, piece: 'r', color, quality: 'good', kind: 'semi-open-file', reason: 'rook on a semi-open file' });
       }
