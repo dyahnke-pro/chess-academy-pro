@@ -996,7 +996,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     if (!standingSaid && after0 && after0.mate == null && before0 && before0.mate == null) {
       const pov = (cp: number): number => cp * (student === 'w' ? 1 : -1);
       const m = (() => { try { return new Chess(i.fenBefore).move(i.san); } catch { return null; } })();
-      const text = evalReading(fenAfter, pov(before0.evaluation), pov(after0.evaluation), null, student, m ? { to: m.to, captured: m.captured ?? null } : null);
+      const text = evalReading(fenAfter, pov(before0.evaluation), pov(after0.evaluation), null, student, m ? { to: m.to, captured: m.captured ?? null } : null, i.reads?.after ?? null);
       // ONE STANDING IS ONE CLAIM: "you're losing — you're down a pawn" said on
       // move after move was the same claim (the say-once memory holds it).
       if (text) add('eval', 'evalReading', 'evalRead', 'eval', text, undefined, [], 45, false, [`standing:${signedBand(pov(after0.evaluation))}`]);

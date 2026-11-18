@@ -57,6 +57,11 @@ import { boardStructure } from './structureReads';
 import { minorMatchupOn, minorMatchupLine } from './minorMatchup';
 import { standingTarget, targetLine, targetSquares } from './targetSelector';
 import { breakDueNow } from './breakTiming';
+import { verdictWithReasons, type ReasonKind } from './verdictWithReasons';
+
+/** The position read says the material count itself (the line beside the
+ *  verdict), so its reasons never say it again. */
+const SAID_MATERIAL: ReadonlySet<ReasonKind> = new Set<ReasonKind>(['material']);
 import { materialEdgeWords } from './reviewPositionalAssessment';
 import { strategicWhyLed, strategicWhyImperative } from './moveFundamentals';
 import { bestMoveReason, threatMadeWhy } from './deliberation';
@@ -1626,6 +1631,10 @@ export function assemblePositionAssessment(opts: {
    *  (see `readBoardUrgency`: a "First, …" step stands only when it is the
    *  engine's own priority). */
   bestUci: string | null;
+  /** REQUIRED — the engine's best line from `fen`, UCI (the side to move
+   *  first), or null where there is none: who has the initiative is read off
+   *  it (`verdictWithReasons`). */
+  line: readonly string[] | null;
 }): GroundedAnswer | null {
   const { tactics, studentColor } = opts;
   const sc: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
@@ -1742,6 +1751,24 @@ export function assemblePositionAssessment(opts: {
     } catch { /* bad fen — skip the material line */ }
   }
 
+  // THE REASONS BEHIND THE VERDICT (WO-DANYA-READS-01 #2, 2026-11-18): the
+  // board's own reasons for the engine's number — whose pieces are in play,
+  // who is making the threats, the kings, a running passer, the bishop pair,
+  // space, knight against bishop — the one or two that fit the verdict, never
+  // one against it. Material is said above, so it is not said again here.
+  const reasonSquares: string[] = [];
+  let reasonKinds: ReadonlySet<string> = new Set();
+  if (opts.fen && typeof opts.evalCp === 'number' && studentMateIn == null) {
+    try {
+      const v = verdictWithReasons({ fen: opts.fen, evalCp: opts.evalCp, mate: null, lines: opts.line && opts.line.length ? [{ moves: opts.line }] : null, student: sc, lastMove: null, said: SAID_MATERIAL });
+      if (v) {
+        parts.push(v.text);
+        reasonSquares.push(...v.squares);
+        reasonKinds = new Set(v.reasons.map((r) => r.kind));
+      }
+    } catch { /* the reasons are a bonus, never a blocker */ }
+  }
+
   // WHAT CANNOT WAIT LEADS THE WHY (one board read, 2026-10-08): with …d2
   // hitting a rook and a bishop, "blockade the passed pawn" was the advice
   // while the pawn could simply be taken. The urgency read speaks first; the
@@ -1804,7 +1831,7 @@ export function assemblePositionAssessment(opts: {
   // Key squares the read NAMED, carried out structurally so the caller can
   // lead the eye with `[BOARD: highlight:sq:yellow]` — coupled from each
   // observation's OWN declared `squares`, never scraped from the prose (G0).
-  const keySquares: string[] = [...keySquaresEarly];
+  const keySquares: string[] = [...new Set([...keySquaresEarly, ...reasonSquares])];
   // THE KINGS (WO-DANYA-READS-01 group 1): the pieces aimed at each king
   // against its defenders and the ones too far to help, a back rank one
   // piece holds, a loaded discovered check — the student's own king first.
@@ -1890,7 +1917,8 @@ export function assemblePositionAssessment(opts: {
   if (opts.fen) {
     try {
       const mm = minorMatchupOn(opts.fen);
-      if (mm) {
+      // Said once: the verdict's reasons already named the matchup.
+      if (mm && !reasonKinds.has('minor')) {
         parts.push(minorMatchupLine(mm, sc, opts.fen));
         for (const sq of [mm.knight.square, mm.bishop.square]) if (!keySquares.includes(sq)) keySquares.push(sq);
       }

@@ -49,3 +49,16 @@ describe('down is what the board and the quiet count agree on', () => {
     expect(a?.text).toMatch(/^You're two pawns down/);
   });
 });
+
+describe('compensation: the initiative pays (WO-DANYA-READS-01 #2)', () => {
+  it('a piece for a pawn down after the Fried Liver sacrifice, and White\'s moves keep hitting the king', () => {
+    // 1.e4 e5 2.Nf3 Nc6 3.Bc4 Nf6 4.Ng5 d5 5.exd5 Nxd5 6.Nxf7 Kxf7 7.Qf3+ Ke6 —
+    // +0.82 for White at depth 16. The line handed in is a legal line with a
+    // threat and two checks for White and none for Black (the computer reads
+    // whatever line it is handed).
+    const fen = 'r1bq1b1r/ppp3pp/2n1k3/3np3/2B5/5Q2/PPPP1PPP/RNB1K2R w KQ - 2 8';
+    const a = compensation(fen, 'w', 82, 'b1c3 c6e7 f3f7 e6d6 c3e4 d6c6'.split(' '));
+    // The deficit is named by its pieces, not counted as "two pawns".
+    expect(a?.text).toBe("They're up material: a piece for a pawn, but you're slightly better: you have the initiative.");
+  });
+});

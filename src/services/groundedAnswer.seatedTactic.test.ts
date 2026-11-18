@@ -11,7 +11,7 @@ describe('the assessment seats the tactic it names', () => {
     const c = new Chess();
     for (const m of ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Bxc6', 'dxc6', 'O-O', 'f6', 'd4', 'Bg4', 'c3']) c.move(m);
     const tactics = buildTacticsLiveContext(c.fen(), null, 'b', 800);
-    const a = assemblePositionAssessment({ bestUci: null, evalCp: 0, mateIn: null, tactics, studentColor: 'black', fen: c.fen() });
+    const a = assemblePositionAssessment({ bestUci: null, line: null, evalCp: 0, mateIn: null, tactics, studentColor: 'black', fen: c.fen() });
     expect(a?.facts ?? '').toMatch(/Your light-squared bishop pins their knight on f3 against their queen/);
     expect(a?.facts ?? '').not.toMatch(/(^|\. )Bishop on g4 pins knight/);
   });
