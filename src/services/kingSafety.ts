@@ -328,7 +328,7 @@ export function kingNeighbourhood(kingSq: string): Square[] {
 /** Does the piece on `pieceSq` genuinely bear on `targetSq` — i.e. it attacks it
  *  AND, if absolutely pinned, `targetSq` lies on its pin ray (the only squares a
  *  pinned piece can still act toward)? Caller has already confirmed the attack. */
-function bearsOnSquare(c: Chess, pieceSq: Square, targetSq: Square): boolean {
+export function bearsOnSquare(c: Chess, pieceSq: Square, targetSq: Square): boolean {
   const ray = absolutePinRay(c, pieceSq);
   if (!ray) return true;
   const df = (targetSq.charCodeAt(0) - 97) - (pieceSq.charCodeAt(0) - 97);

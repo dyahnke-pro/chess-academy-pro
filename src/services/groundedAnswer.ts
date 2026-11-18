@@ -21,6 +21,7 @@ import { MATERIAL_VALUE } from './pieceValues';
 import { computeMustDefend, mateThreatsAgainst } from './threatOut';
 import { whyNotLegal } from './whyNotLegal';
 import { readBoardUrgency, urgencyLead, threatsAgainst } from './boardUrgency';
+import { kingReadsOn } from './kingSiege';
 import { mechanismContrast, moveMissed, pvSans } from './moveInsight';
 import { walkableLine } from './proof';
 import { settledLeadFor, type LastMove } from './material';
@@ -1733,6 +1734,18 @@ export function assemblePositionAssessment(opts: {
   // lead the eye with `[BOARD: highlight:sq:yellow]` — coupled from each
   // observation's OWN declared `squares`, never scraped from the prose (G0).
   const keySquares: string[] = [];
+  // THE KINGS (WO-DANYA-READS-01 group 1): the pieces aimed at each king
+  // against its defenders and the ones too far to help, a back rank one
+  // piece holds, a loaded discovered check — the student's own king first.
+  if (opts.fen) {
+    try {
+      const cp = typeof studentMateIn === 'number' && studentMateIn !== 0 ? (studentMateIn > 0 ? 10000 : -10000) : studentEvalCp;
+      for (const r of kingReadsOn(opts.fen, sc, cp)) {
+        parts.push(r.text);
+        for (const q of r.squares) if (/^[a-h][1-8]$/.test(q) && !keySquares.includes(q)) keySquares.push(q);
+      }
+    } catch { /* the king read is a bonus, never a blocker */ }
+  }
   if (opts.fen) {
     try {
       const already = parts.join(' ').toLowerCase();

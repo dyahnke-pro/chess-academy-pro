@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2046 lines · 12 exports · 23 importers · 30 tests · 0 audits**
+**2056 lines · 12 exports · 23 importers · 31 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -39,10 +39,10 @@
 ## Exports and every call site
 
 ### `positionalVerdictLine` (function) — 1 call site
-- `src/services/coachFeatureService.ts:3019`
+- `src/services/coachFeatureService.ts:3043`
 
 ### `prematureBreakWhy` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1198`
+- `src/services/coachFeatureService.ts:1222`
 - `src/services/prematureBreak.test.ts:15`
 - `src/services/prematureBreak.test.ts:25`
 - `src/services/prematureBreak.test.ts:30`
@@ -60,7 +60,7 @@
 - `src/services/batch2Wiring.test.ts:55`
 - `src/services/boardDelta.test.ts:15`
 - `src/services/boardDelta.test.ts:68`
-- `src/services/coachFeatureService.ts:2302`
+- `src/services/coachFeatureService.ts:2326`
 - `src/services/danyaBench.measure.test.ts:434`
 - `src/services/exchangeIdeas.test.ts:238`
 - `src/services/forkTrick.test.ts:62`
@@ -189,6 +189,7 @@
 - `src/services/unifiedBetterMoveReason.test.ts`
 - `src/services/weighedMoves.test.ts`
 - `src/test/captureSaidOnce.gate.test.ts`
+- `src/test/oneCoachSurfaces.gate.test.ts`
 - `src/test/oneErrorComputer.gate.test.ts`
 - `src/test/oneFactShape.gate.test.ts`
 - `src/test/teach02Wired.test.ts`

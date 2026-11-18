@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**7885 lines · 123 exports · 96 importers · 73 tests · 8 audits**
+**7898 lines · 123 exports · 97 importers · 74 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -88,6 +88,7 @@
 - `src/services/keySquares.test.ts`
 - `src/services/kidGameCoach.ts`
 - `src/services/kingSafetyAnswer.test.ts`
+- `src/services/kingSiege.test.ts`
 - `src/services/kingTopicAnswer.test.ts`
 - `src/services/learnMoveTeaching.ts`
 - `src/services/liveVoiceDefects.test.ts`
@@ -234,7 +235,7 @@
 - `src/services/pieceActivity.test.ts:40`
 - `src/services/pieceActivity.test.ts:48`
 
-### `assemblePositionAssessment` (function) — 24 call sites
+### `assemblePositionAssessment` (function) — 26 call sites
 - `scripts/board-read-dump.ts:83`
 - `src/services/coachApi.ts:2550`
 - `src/services/coachApi.ts:2726`
@@ -254,6 +255,8 @@
 - `src/services/groundedAnswer.test.ts:981`
 - `src/services/groundedAnswer.test.ts:996`
 - `src/services/groundedAnswer.test.ts:1010`
+- `src/services/kingSiege.test.ts:131`
+- `src/services/kingSiege.test.ts:137`
 - `src/services/liveVoiceDefects.test.ts:101`
 - `src/services/liveVoiceDefects.test.ts:142`
 - `src/services/minorMatchup.test.ts:82`
@@ -1219,6 +1222,7 @@
 - `src/services/hardWalk.mates.test.ts`
 - `src/services/keySquares.test.ts`
 - `src/services/kingSafetyAnswer.test.ts`
+- `src/services/kingSiege.test.ts`
 - `src/services/kingTopicAnswer.test.ts`
 - `src/services/liveVoiceDefects.test.ts`
 - `src/services/materialSites.test.ts`

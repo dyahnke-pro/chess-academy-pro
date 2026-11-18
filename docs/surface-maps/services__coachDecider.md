@@ -494,9 +494,9 @@
 - `src/services/looseStill.test.ts:68`
 - `src/services/looseStill.test.ts:70`
 - `src/services/misconceptionService.ts:107`
-- `src/services/moveThoughtFacts.ts:1033`
-- `src/services/moveThoughtFacts.ts:1054`
-- `src/services/moveThoughtFacts.ts:1190`
+- `src/services/moveThoughtFacts.ts:1048`
+- `src/services/moveThoughtFacts.ts:1069`
+- `src/services/moveThoughtFacts.ts:1205`
 - `src/services/positionFacts.ts:1865`
 - `src/services/threatProof.ts:130`
 - `src/utils/plyOfFen.ts:3`

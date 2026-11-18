@@ -1700,6 +1700,16 @@ export function computeMoveFacets(
       // side is winning anyway.
       add(readBoardAll('windmill', { fenBefore, san, student: studentColorWB })[0]);
       add(readBoardAll('perpetualCheck', { fenBefore, san, student: studentColorWB, replies: ctx.evaluation == null ? [] : [{ cp: storedMate(ctx.evaluation) == null ? ctx.evaluation : null, mate: storedMate(ctx.evaluation), moves: ctx.playedLineUci }] })[0]);
+      // The kings (WO-DANYA-READS-01 group 1), both seats: a king the move
+      // leaves outnumbered, a back rank one piece holds, a loaded discovery,
+      // and a sacrifice at the king proven by the played line.
+      {
+        const replies = ctx.evaluation == null ? [] : [{ cp: storedMate(ctx.evaluation) == null ? ctx.evaluation : null, mate: storedMate(ctx.evaluation), moves: ctx.playedLineUci }];
+        add(readBoardAll('kingSiege', { fenBefore, san, student: studentColorWB, replies })[0]);
+        add(readBoardAll('backRankWeakness', { fenBefore, san, student: studentColorWB })[0]);
+        add(readBoardAll('loadedDiscovery', { fenBefore, san, student: studentColorWB })[0]);
+        add(readBoardAll('kingSacrifice', { fenBefore, san, student: studentColorWB, replies })[0]);
+      }
       // The flexible move, both seats (the option principle): of moves the
       // engine holds as good as each other, the one that keeps the important
       // moves open — off the record's one read per candidate.

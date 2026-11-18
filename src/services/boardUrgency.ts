@@ -12,9 +12,9 @@
  */
 import { capturedSquare } from '../utils/capturedSquare';
 import { Chess, type Square } from 'chess.js';
-import { computeMustDefend, flipSideToMove } from './threatOut';
+import { computeMustDefend, flipSideToMove, mateThreatsAgainst } from './threatOut';
 import { takingTheAttackerAnswers } from './positionReadingService';
-import { andList } from '../utils/andList';
+import { andList, orList } from '../utils/andList';
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -32,6 +32,11 @@ interface BoardUrgency {
   takeAttacker: { square: string; piece: string } | null;
   /** An opponent pawn that promotes on its next move. */
   promotion: { from: string; to: string } | null;
+  /** THEIR MATE THREAT, read first (WO-DANYA-READS-01 group 1): the moves
+   *  that would mate the student if it were the opponent's turn — the one
+   *  null-move read (`mateThreatsAgainst`), student to move only. A board
+   *  fact, exact, so it leads whatever the engine plays. */
+  mate: string[];
 }
 
 function promotingPawn(fen: string, them: 'w' | 'b'): { from: string; to: string } | null {
@@ -72,7 +77,8 @@ export function readBoardUrgency(fen: string, studentColor: 'white' | 'black', b
     ? { square: att, piece: attPiece.type }
     : null;
   const promotion = promotingPawn(fen, them);
-  if (!myMove || !bestUci || bestUci.length < 4) return { myMove, win, save, promotion, takeAttacker };
+  const mate = myMove ? [...new Set(mateThreatsAgainst(fen, me).moves.map((m) => m.san))] : [];
+  if (!myMove || !bestUci || bestUci.length < 4) return { myMove, win, save, promotion, takeAttacker, mate };
   // THE ENGINE ORDERS THE PRIORITIES (see the parameter). The best move takes
   // the piece, or it is not the first thing; it deals with the attacked piece
   // (moves it, takes the attacker, or leaves it no longer losable), or that is
@@ -100,6 +106,7 @@ export function readBoardUrgency(fen: string, studentColor: 'white' | 'black', b
     save: save.filter(answered),
     promotion,
     takeAttacker: takeAttacker && takeAttacker.square === to ? takeAttacker : null,
+    mate,
   };
 }
 
@@ -110,6 +117,13 @@ export function readBoardUrgency(fen: string, studentColor: 'white' | 'black', b
 export function urgencyLead(u: BoardUrgency | null): string | null {
   if (!u) return null;
   const parts: string[] = [];
+  // THEIR THREAT FIRST: a mate threat comes before anything you could take
+  // or save (WO-DANYA-READS-01 group 1: "Your rook on d1 is hanging" was
+  // said with …Qxd1 mate on the board).
+  if (u.mate.length > 0) {
+    const mates = u.mate.map((m) => m.replace(/#$/, ''));
+    parts.push(`They threaten mate: ${orList(mates)} ${mates.length === 1 ? 'is' : 'would be'} mate if you let it — stop that first.`);
+  }
   const biggestSave = u.save[0]?.value ?? 0;
   const winLeads = !!u.win && u.win.value >= biggestSave;
   if (u.win && winLeads) {
