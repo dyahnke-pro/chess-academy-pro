@@ -764,7 +764,7 @@ interface ColorComplexWeakness {
   complex: 'light' | 'dark';
   /** The holes of that colour the opponent can settle on. */
   squares: Square[];
-  /** The opponent's piece that can settle there — a knight when they have one. */
+  /** The opponent's piece that reaches a hole of the complex. */
   by: 'knight' | 'bishop';
 }
 
@@ -805,10 +805,22 @@ export function findColorComplexWeakness(fen: string): ColorComplexWeakness[] {
     }
     for (const complex of ['light', 'dark'] as const) {
       if (hasBishopOfColor[complex]) continue; // a bishop of that colour still covers it
-      const by = exploiter[complex];
-      if (!by) continue; // nothing of theirs can settle there
+      if (!exploiter[complex]) continue; // nothing of theirs can settle there
       const cHoles = sideHoles.filter((sq) => squareColor(sq) === complex);
-      if (cHoles.length >= 2) out.push({ side, complex, squares: cHoles, by });
+      if (cHoles.length < 2) continue;
+      // THE WEAKNESS IS ONE THEY CAN USE NOW (Danya article boards 2026-11-18:
+      // "your dark squares are weak … their knight can settle there" on board
+      // after board where no knight could get to one). A hole of the complex
+      // must be one their minor reaches within two moves and holds
+      // (`holeTargets`: empty, no minor of ours covering it, landing safe),
+      // and off the rim — a piece parked on the a- or h-file is not what
+      // makes a colour complex hurt.
+      const usable = holeTargets(fen, side, enemy)
+        .filter((h) => cHoles.includes(h) && h[0] !== 'a' && h[0] !== 'h');
+      if (usable.length === 0) continue;
+      const route = minorRouteToSquare(fen, usable[0], enemy, 2);
+      const by = route?.piece === 'b' ? 'bishop' : 'knight';
+      out.push({ side, complex, squares: cHoles, by });
     }
   }
   return out;
@@ -875,7 +887,8 @@ export function findMinorityAttack(fen: string, color: Color): MinorityAttack | 
         if (tf < 0 || tf > 7) continue;
         const diagSq = `${String.fromCharCode(97 + tf)}${toRank + fwd}` as Square;
         const occ = chess.get(diagSq);
-        if (occ && occ.type === 'p' && occ.color === enemy && flank.files.includes(tf)) {
+        if (occ && occ.type === 'p' && occ.color === enemy && flank.files.includes(tf)
+          && leverLeavesWeakPawn(chess, push, diagSq, color)) {
           // No check marks: the lever is read on a board with the side to move
           // FORCED, so a check the OTHER side already stands in rides along —
           // "b3+ is the lever" with Black's king in check from Qh4 (walk 5).
@@ -885,6 +898,55 @@ export function findMinorityAttack(fen: string, color: Color): MinorityAttack | 
     }
   }
   return null;
+}
+
+/**
+ * THE LEVER'S PROMISE, CHECKED ON THE BOARD (Danya article boards 2026-11-18:
+ * "a minority attack — g5 is the lever, and it would leave you a weak pawn on
+ * f4" with no pawn guarding f4, so the trade leaves no pawn there at all). A
+ * minority attack's point is the pawn the trade LEAVES: the lever takes the
+ * target, a pawn of theirs takes back, and the pawn now on the target's square
+ * is weak. Four facts, each read off the board:
+ *  - the lever stands — nothing of theirs wins it on its square (read as far
+ *    as the board allows: a king already in check takes nothing this move);
+ *  - a pawn of theirs guards the target, so a pawn takes back;
+ *  - no other pawn of theirs can ever guard that recaptured pawn (it is
+ *    backward or isolated);
+ *  - no pawn of ours stands on its file, so the file is half-open against it.
+ */
+function leverLeavesWeakPawn(
+  chess: Chess, push: { from: Square; to: Square }, target: Square, color: Color,
+): boolean {
+  const enemy: Color = color === 'w' ? 'b' : 'w';
+  const fwd = color === 'w' ? 1 : -1;
+  const tf = target.charCodeAt(0) - 97;
+  const tr = Number(target[1]);
+  let after: string;
+  try {
+    const c = new Chess(chess.fen());
+    c.move({ from: push.from, to: push.to });
+    after = c.fen();
+  } catch { return false; }
+  if (legalSeeGainFor(after, push.to, enemy) > 0) return false;
+  const pawnAt = (f: number, r: number, side: Color): boolean => {
+    if (f < 0 || f > 7 || r < 1 || r > 8) return false;
+    const p = chess.get(`${String.fromCharCode(97 + f)}${r}` as Square);
+    return !!p && p.type === 'p' && p.color === side;
+  };
+  const recapturers = [tf - 1, tf + 1].filter((f) => pawnAt(f, tr + fwd, enemy));
+  if (recapturers.length === 0) return false;
+  // One pawn takes back; any OTHER pawn of theirs on a neighbouring file behind
+  // the target (from their side) could still step up and guard it.
+  for (const f of [tf - 1, tf + 1]) {
+    for (let r = 1; r <= 8; r += 1) {
+      const behind = color === 'w' ? r > tr : r < tr;
+      if (!behind || !pawnAt(f, r, enemy)) continue;
+      const theRecapture = recapturers.length === 1 && f === recapturers[0] && r === tr + fwd;
+      if (!theRecapture) return false;
+    }
+  }
+  for (let r = 1; r <= 8; r += 1) if (pawnAt(tf, r, color)) return false;
+  return true;
 }
 
 /** How many squares the piece on `sq` attacks (its board scope) — turn-independent
@@ -1255,6 +1317,35 @@ const GOOD_PIECE_REASON: Record<PieceQualityKind, string | null> = {
 };
 export function goodPieceReason(kind: PieceQualityKind): string | null {
   return GOOD_PIECE_REASON[kind];
+}
+
+/** Can `by` get at the piece on `sq`? A piece of `by` (not a pawn; the king
+ *  only once the queens are off, when it is an attacker) attacks it now, or one quiet move puts a piece of `by` on a square
+ *  from which it attacks it and nothing wins that piece there. The reach a
+ *  weakness needs before it is a target (Danya article boards 2026-11-18:
+ *  "their pawn on a6 is isolated — a long-term target" with nothing able to
+ *  reach it). Read as far as the board allows: `by`'s own king in check
+ *  answers that first. */
+export function canBeAimedAt(fen: string, sq: Square, by: Color): boolean {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return false; }
+  const queensOff = !chess.board().flat().some((c) => !!c && c.type === 'q');
+  const attacker = (t: string | undefined): boolean => t !== 'p' && (t !== 'k' || queensOff);
+  const attacksNow = chess.attackers(sq, by).some((a) => attacker(chess.get(a)?.type));
+  if (attacksNow) return true;
+  const start = asIfToMove(fen, by);
+  if (!start) return false;
+  const board = new Chess(start);
+  const foe: Color = by === 'w' ? 'b' : 'w';
+  for (const m of board.moves({ verbose: true })) {
+    if (m.captured || !attacker(m.piece)) continue;
+    board.move({ from: m.from, to: m.to, promotion: m.promotion });
+    const hits = board.attackers(sq, by).includes(m.to as Square);
+    const after = board.fen();
+    board.undo();
+    if (hits && legalSeeGainFor(after, m.to as Square, foe) <= 0) return true;
+  }
+  return false;
 }
 
 export function findWeakPawns(fen: string, color: Color): { isolated: Square[]; doubled: Square[]; backward: Square[] } {

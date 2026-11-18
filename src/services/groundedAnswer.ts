@@ -1546,12 +1546,32 @@ const CLEAR_DEFICIT = [
   'You are clearly the worse side — look for counterplay.',
   'Clearly worse. Complicate before it simplifies.',
 ];
+const TRADE_DOWN = 'Decisive. Trade pieces, not pawns.';
 const WINNING = [
   "You're winning.",
   'This is won. Technique from here.',
   'Well ahead — take the simplest road home.',
-  'Decisive. Trade pieces, not pawns.',
+  TRADE_DOWN,
 ];
+/** The winning stems that are TRUE on this board. "Trade pieces, not pawns"
+ *  is advice for the side ahead in material — trading down makes an extra
+ *  piece count. Winning on a Greek gift with material level, or a rook down
+ *  with a pawn about to queen (Danya article boards 2026-11-18), it tells the
+ *  student to do the opposite of what wins, so it is a stem only when the
+ *  count is in the student's favour. */
+function winningStems(fen: string | null, side: 'w' | 'b'): readonly string[] {
+  let lead = 0;
+  try {
+    if (fen) {
+      for (const cell of new Chess(fen).board().flat()) {
+        if (!cell || cell.type === 'k') continue;
+        const v = REVIEW_PIECE_VALUE[cell.type] ?? 0;
+        lead += cell.color === side ? v : -v;
+      }
+    }
+  } catch { lead = 0; }
+  return lead > 0 ? WINNING : WINNING.filter((w) => w !== TRADE_DOWN);
+}
 const LOSING = [
   "You're losing.",
   'Badly behind. Only practical chances left.',
@@ -1632,7 +1652,7 @@ export function assemblePositionAssessment(opts: {
     if (mag < 0.3) parts.push(pick(BALANCED, seed));
     else if (mag < 1.0) parts.push(pick(ahead ? SLIGHT_EDGE : SLIGHT_DEFICIT, seed));
     else if (mag < 2.5) parts.push(pick(ahead ? CLEAR_EDGE : CLEAR_DEFICIT, seed));
-    else parts.push(pick(ahead ? WINNING : LOSING, seed));
+    else parts.push(pick(ahead ? winningStems(opts.fen ?? null, sc) : LOSING, seed));
     // THE MATERIAL BESIDE THE EVAL (question walk 2026-09-27: "Did I get enough
     // for the pawn?" got "+0.3" and two weaknesses, never the pawn). When the
     // count and the eval point different ways, the gap between them IS the
@@ -1733,6 +1753,9 @@ export function assemblePositionAssessment(opts: {
   // lead the eye with `[BOARD: highlight:sq:yellow]` — coupled from each
   // observation's OWN declared `squares`, never scraped from the prose (G0).
   const keySquares: string[] = [];
+  // The passers the read already spoke — its sentence says a passer's blockade
+  // itself (`passerTrumpSentence`), so the blockade read below skips them.
+  const passersRead = new Set<string>();
   if (opts.fen) {
     try {
       const already = parts.join(' ').toLowerCase();
@@ -1744,6 +1767,7 @@ export function assemblePositionAssessment(opts: {
         const naming = o.text.toLowerCase().match(/[a-h][1-8]/)?.[0];
         if (naming && already.includes(naming)) continue;
         reads.push(o.text);
+        if (o.kind === 'passer') for (const sq of o.squares ?? []) passersRead.add(sq);
         for (const sq of o.squares ?? []) {
           if (/^[a-h][1-8]$/.test(sq) && !keySquares.includes(sq)) keySquares.push(sq);
         }
@@ -1782,6 +1806,7 @@ export function assemblePositionAssessment(opts: {
       for (const holder of [sc, sc === 'w' ? 'b' : 'w'] as const) {
         const mine = holder === sc;
         for (const b of findBlockades(opts.fen, holder)) {
+          if (b.passed && passersRead.has(b.pawn)) continue;
           const kind = b.passed ? 'passed pawn' : 'isolated pawn';
           parts.push(`${mine ? 'Your' : 'Their'} ${MOVER_WORD[b.piece]} on ${b.blocker} blockades ${mine ? 'their' : 'your'} ${kind} on ${b.pawn}: the pawn cannot move forward while the ${MOVER_WORD[b.piece]} sits there.`);
           for (const sq of [b.blocker, b.pawn]) if (!keySquares.includes(sq)) keySquares.push(sq);

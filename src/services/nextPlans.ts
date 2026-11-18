@@ -682,12 +682,78 @@ export function passerTrumpClause(owner: string, square: string): string {
   return `${owner} passed pawn on ${square} is a long-term trump`;
 }
 
-/** A passer as the structure's long-term fact: yours a trump, theirs the danger. */
-export function passerTrumpSentence(square: string, own: boolean): string {
+/**
+ * A passer, said as what the board makes of it (Danya article boards
+ * 2026-11-18: "their passed pawn on d2 is the danger — get a piece in front of
+ * it" with the king already on d1; "a long-term trump" for a pawn one push from
+ * queening; "their passed pawn on f5 is the danger" while yours queens next
+ * move). One sentence per state, each read off the board:
+ *  - BLOCKADED — a piece of the other side stands in front: the blockade is the
+ *    fact (yours to break, theirs to keep);
+ *  - CLOSE — two pushes or fewer: the count, nothing long-term about it (a
+ *    piece of the pawn's own side in front steps aside first) — unless this
+ *    pawn is a runner in the race below, which says its count;
+ *  - A RACE — both sides have a runner (`detectPlanRace`): the race is the
+ *    fact, said once, from the student's side — their passer's sentence is
+ *    null;
+ *  - theirs five or more pushes away: a long-term asset, not the danger yet;
+ *  - a pawn ending: the king is the only stopper;
+ *  - otherwise the long-term trump (yours) or the pawn to blockade (theirs).
+ * `own` = the passer is the student's.
+ */
+export function passerTrumpSentence(fen: string, square: string, own: boolean): string | null {
+  let chess: Chess | null = null;
+  try { chess = new Chess(fen); } catch { chess = null; }
+  const pawn = chess?.get(square as Square);
+  if (chess && pawn && pawn.type === 'p') {
+    const block = passerBlock(fen, square, pawn.color);
+    const front = frontSquare(square, pawn.color);
+    if (block.kind === 'enemy' && front) {
+      const piece = STRUCT_PIECE_NOUN[block.piece ?? 'p'];
+      return own
+        ? `Your passed pawn on ${square} is blockaded by their ${piece} on ${front} — challenge or drive off that ${piece} before it can run.`
+        : `Their passed pawn on ${square} is held: your ${piece} on ${front} stands in front of it, and it cannot move while the ${piece} stays.`;
+    }
+    const student: Color = own ? pawn.color : (pawn.color === 'w' ? 'b' : 'w');
+    const race = detectPlanRace(fen, student);
+    const inRace = race?.kind === 'passer-race' && (own ? race.yourPawn : race.theirPawn) === square;
+    const left = pushesToPromote(chess, square, pawn.color);
+    if (left <= 2 && !inRace) {
+      const n = `${countWord(left)} push${left === 1 ? '' : 'es'}`;
+      const aside = block.kind === 'friendly' && front
+        ? ` once ${own ? 'your' : 'their'} ${STRUCT_PIECE_NOUN[block.piece ?? 'p']} on ${front} steps aside`
+        : '';
+      return own
+        ? `Your passed pawn on ${square} is ${n} from queening${aside} — every move counts now.`
+        : `Their passed pawn on ${square} is ${n} from queening${aside} — every move has to answer it.`;
+    }
+    if (race?.kind === 'passer-race') {
+      if (!own) return null;
+      const raceText = planRaceClause(fen, student, 'live');
+      if (raceText) return `${openSentence(raceText)}.`;
+    }
+    // A passer still at home is no danger yet (Danya article boards
+    // 2026-11-18: "their passed pawn on h7 is the danger … before it runs"
+    // with the queens on and six pushes to go): it is their long-term asset.
+    if (!own && left >= 5) {
+      return `${passerTrumpClause('Their', square)} for them — still ${countWord(left)} pushes from queening.`;
+    }
+    // No piece left to trade: "every trade that clears its path" names
+    // nothing on the board — the king is the only stopper.
+    const piecesLeft = chess.board().flat().some((c) => !!c && c.type !== 'p' && c.type !== 'k');
+    if (!piecesLeft) {
+      return own
+        ? `${passerTrumpClause('Your', square)} — with no pieces left, only their king can stop it.`
+        : `Their passed pawn on ${square} is the danger — with no pieces left, only your king can stop it.`;
+    }
+  }
   return own
     ? `${passerTrumpClause('Your', square)} — every trade that clears its path makes it stronger.`
-    : `Their passed pawn on ${square} is the danger — get a piece in front of it and blockade before it runs.`;
+    : theirPasserDanger(square);
 }
+
+const theirPasserDanger = (square: string): string =>
+  `Their passed pawn on ${square} is the danger — get a piece in front of it and blockade before it runs.`;
 
 // ── THE STRUCTURE'S PLAN (census 9, 2026-10-20) ─────────────────────────────
 // One file owns every sentence that says what a pawn structure asks of you:
@@ -817,7 +883,7 @@ export function structurePlanFact(fen: string, studentColor: Color): StructurePl
   }
   const theirs = mostAdvanced(s.pawns.passedPawns[opp], opp);
   if (theirs) {
-    return { id: 'passer-theirs', ideaKey: `opponent-passer-${theirs[0]}`, squares: [theirs], text: passerTrumpSentence(theirs, false) };
+    return { id: 'passer-theirs', ideaKey: `opponent-passer-${theirs[0]}`, squares: [theirs], text: passerTrumpSentence(fen, theirs, false) ?? theirPasserDanger(theirs) };
   }
 
   // THE ISOLANI — one definition and one sentence, shared with the named

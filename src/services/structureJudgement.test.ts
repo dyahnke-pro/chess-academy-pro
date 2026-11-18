@@ -104,7 +104,10 @@ describe('pawnJudgement', () => {
   });
 
   it('mirrored-square asymmetry: you can guard d4, they can never guard d5', () => {
-    const fen = legal('6k1/pp3ppp/8/8/2p5/2P5/PP3PPP/6K1 w - - 0 20');
+    // White's knight on f4 is one step from d5 — a hole is a hole to a piece
+    // that can use it (Danya article boards 2026-11-18; with kings and pawns
+    // only, nothing of White's could ever sit there).
+    const fen = legal('6k1/pp3ppp/8/8/2p2N2/2P5/PP3PPP/6K1 w - - 0 20');
     const r = voiced(mirroredAsymmetry(fen, 'w'));
     expect(r.text).toBe('Your c-pawn can still guard d4. They can never guard d5 the same way, so that square stays a hole for them.');
     // The symmetric start: nothing to say.

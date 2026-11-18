@@ -44,6 +44,7 @@ import {
   findMinorityAttack,
   findPassedPawns,
   findOpenFiles,
+  canBeAimedAt,
   bishopBlockingPawns,
   goodPieceIdeaKey,
   type PieceQualityKind,
@@ -331,6 +332,12 @@ function observationsFor(
   // can be a target like any isolated pawn.)
   const toGo = (sq: Square): number => (color === 'w' ? 8 - Number(sq[1]) : Number(sq[1]) - 1);
   weak.isolated = weak.isolated.filter((sq) => !(findPassedPawns(fen, color).includes(sq) && toGo(sq) <= 4));
+  // A WEAKNESS IS A TARGET ONLY WHEN THE OTHER SIDE CAN GET AT IT (Danya
+  // article boards 2026-11-18: "isolated — a long-term target" for a rim pawn
+  // nothing could reach, on board after board). A piece of theirs attacks it
+  // now or one quiet move away.
+  const enemyOf: Color = color === 'w' ? 'b' : 'w';
+  weak.isolated = weak.isolated.filter((sq) => canBeAimedAt(fen, sq, enemyOf));
   if (weak.isolated.length > 0) {
     out.push({
       key: `${side}-iso-${weak.isolated[0][0]}`, side, kind: 'structure', rank: rank('structure'),
@@ -386,14 +393,18 @@ function observationsFor(
   }
 
   // PASSED PAWN — no enemy pawn ahead on its own or an adjacent file.
-  const passers = findPassedPawns(fen, color);
-  if (passers.length > 0) {
+  // The most advanced passer first: it is the one the board is about.
+  const passers = findPassedPawns(fen, color)
+    .sort((a, b) => (color === 'w' ? Number(b[1]) - Number(a[1]) : Number(a[1]) - Number(b[1])));
+  // The sentence is the structure plan's own (nextPlans), so the two lanes
+  // that read this passer say one claim in one wording (hand walk 1200). Null
+  // for their passer in a race: the student's passer says the race once.
+  const passerText = passers.length > 0 ? passerTrumpSentence(fen, passers[0], own) : null;
+  if (passerText) {
     out.push({
       key: `${side}-passer-${passers[0][0]}`, side, kind: 'passer', rank: rank('passer'),
       squares: [passers[0]],
-      // The sentence is the structure plan's own (nextPlans), so the two lanes
-      // that read this passer say one claim in one wording (hand walk 1200).
-      text: passerTrumpSentence(passers[0], own),
+      text: passerText,
     });
   }
 
