@@ -71,6 +71,9 @@ describe('the standing read and the wiring', () => {
     expect(p?.defender.square).toBe('d7');
     expect(keyDefenderLine(p!, true, true, AUTOPILOT)).toMatch(/The plan is to trade it off/);
   });
+  it('the engine\'s best line on the resign board offers the rook trade at once', () => {
+    expect(keyDefenderPlan(RESIGN, RESIGN_BEST)?.defender.square).toBe('d8');
+  });
   it('the plan is judged on THIS board: a defender that moves before the trade is not named', () => {
     // Danya's back-rank board: in the line the d7 rook steps to f7 before Rc8
     // trades the d8 rook — what d8 guards now is gone by then.

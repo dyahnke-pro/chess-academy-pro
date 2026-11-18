@@ -117,8 +117,8 @@ export function movesToWin(fen: string, moves: readonly string[]): number | null
   for (let k = played.length - 1, g = gains.length - 1; k >= 0 && g >= 0; k -= 1) {
     const m = played[k];
     if (m.color === side) continue;
-    const next = played[k + 1];
-    if (m.captured && (!next || (next.captured && next.to === m.to))) gains.splice(g, 1);
+    const last = k + 1 >= played.length;
+    if (m.captured && (last || (played[k + 1].captured && played[k + 1].to === m.to))) gains.splice(g, 1);
     g -= 1;
   }
   for (let i = 0; i < gains.length; i += 1) {
