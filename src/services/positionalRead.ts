@@ -32,7 +32,8 @@ import { describeStructure } from './boardStructure';
 import { homeMinorCount } from './development';
 import { isolaniStructure, passerTrumpSentence } from './nextPlans';
 import { Chess, type Color, type Square } from 'chess.js';
-import { countWord } from '../utils/andList';
+import { strandedAt } from './trappedPiece';
+import { countWord, andList, fileList } from '../utils/andList';
 import {
   kingSafetyRead,
   developmentRead,
@@ -75,6 +76,11 @@ function knightReach(square: string): number {
   return n;
 }
 
+/** A board, or null when the FEN does not parse. */
+function chessOf(fen: string): Chess | null {
+  try { return new Chess(fen); } catch { return null; }
+}
+
 const NAME: Record<string, string> = {
   p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
 };
@@ -93,7 +99,11 @@ type ObservationKind =
   // WIDENED BOARD AWARENESS (David 2026-09-13: "increased scope … our strongest
   // narration tool"). Each is a concrete, board-provable feature, ranked by how
   // much it should lead a quiet-position read.
-  | 'minority' | 'passer' | 'complex' | 'file';
+  | 'minority' | 'passer' | 'complex' | 'file'
+  // THEIR BISHOP PAIR (Danya's article boards 2026-11-18: "White's two
+  // bishops are the long-term danger", "White has the two bishops" — five
+  // boards where the pair was the opponent's and the read never said it).
+  | 'pair';
 
 interface PositionalObservation {
   /** Dedupe key for the caller's said-set — keyed on the IDEA, never on a
@@ -131,7 +141,7 @@ const RANK: Record<ObservationKind, number> = {
   // A concrete plan with a legal lever outranks a static piece read; a passer
   // and a colour-complex weakness are notable assets/targets; a fully-open file
   // is the lowest of the new rungs (a where-rooks-belong pointer).
-  minority: 65, piece: 60, passer: 58, complex: 55, structure: 50, file: 45, lever: 40,
+  minority: 65, piece: 60, passer: 58, complex: 55, pair: 52, structure: 50, file: 45, lever: 40,
 };
 
 /** The same fact about the opponent is worth slightly less than about the
@@ -195,6 +205,24 @@ export function castleIsOneMoveAway(fen: string, color: Color): boolean {
   }
 }
 
+/** `color`'s bishop pair on `fen`: two bishops on opposite-coloured squares
+ *  against at most one, the other side still holding a minor. The rival is
+ *  what the other side has against them, in words. Null otherwise. */
+export function theirBishopPair(fen: string, color: Color): { bishops: Square[]; rival: string } | null {
+  let b: Chess;
+  try { b = new Chess(fen); } catch { return null; }
+  const other: Color = color === 'w' ? 'b' : 'w';
+  const mine = b.findPiece({ type: 'b', color });
+  if (mine.length !== 2 || b.squareColor(mine[0]) === b.squareColor(mine[1])) return null;
+  const theirB = b.findPiece({ type: 'b', color: other }).length;
+  const theirN = b.findPiece({ type: 'n', color: other }).length;
+  if (theirB > 1 || theirB + theirN === 0) return null;
+  const rival = theirB === 1
+    ? (theirN > 0 ? `knight${theirN > 1 ? 's' : ''} and bishop` : 'lone bishop')
+    : `knight${theirN > 1 ? 's' : ''}`;
+  return { bishops: mine, rival: theirB === 0 && theirN === 2 ? 'two knights' : rival };
+}
+
 /** Every observation for one side. */
 function observationsFor(
   fen: string,
@@ -225,6 +253,19 @@ function observationsFor(
   const centreCounts = own
     ? castleIsOneMoveAway(fen, color)
     : !castleIsOneMoveAway(fen, color) && fullMove >= 8;
+  // THEIR KING STUCK IN THE CENTRE (Danya, the knockout blow #2: "Black's
+  // king is stranded in the centre" — on d7, both castling rights gone, queens
+  // on): one step off the home rank is still the centre once it can no longer
+  // castle.
+  const rights = fen.split(' ')[2] ?? '-';
+  const canCastle = color === 'w' ? /[KQ]/.test(rights) : /[kq]/.test(rights);
+  if (!own && king && !canCastle && 'de'.includes(king.square[0]) && king.square[1] === (color === 'w' ? '2' : '7') && fullMove >= 8) {
+    out.push({
+      key: `${side}-king-centre`, side, kind: 'king', rank: rank('king'),
+      squares: [king.square],
+      text: `Their king on ${king.square} is stuck in the centre — it can no longer castle, so every line that opens toward it is worth looking at.`,
+    });
+  }
   if (king?.inCenter && !king.castled && centreCounts) {
     out.push({
       key: `${side}-king-centre`, side, kind: 'king', rank: rank('king'),
@@ -320,6 +361,27 @@ function observationsFor(
         : `Their ${NAME[outpost.piece] ?? 'piece'} on ${outpost.square} is well placed — ${goodPieceClause(outpost.kind, outpost.square)}.`,
     });
   }
+  // STRANDED (Danya, the positional rook lift #2: "White's bishop on h6 is
+  // stranded — every move loses it"): a minor deep in the other camp with
+  // squares to go to, every one of them covered. Not lost yet; one attack
+  // from it. The squares it could go to are what the words name.
+  for (const cell of chessOf(fen)?.board().flat() ?? []) {
+    if (!cell || cell.color !== color || (cell.type !== 'n' && cell.type !== 'b')) continue;
+    const st = strandedAt(fen, cell.square);
+    if (!st) continue;
+    // Two squares are named; three or more are "every square it can go to",
+    // lit on the board (a list of squares read out is the robot, David
+    // 2026-11-05).
+    const where = st.squares.length > 2 ? 'every square it can go to is covered'
+      : st.squares.length === 2 ? `${andList(st.squares)} are both covered` : `${st.squares[0]} is covered`;
+    out.push({
+      key: `${side}-stranded-${cell.type}`, side, kind: 'piece', rank: rank('piece'),
+      squares: [cell.square, ...st.squares],
+      text: own
+        ? `Your ${NAME[cell.type]} on ${cell.square} is stranded: ${where}, so it has no safe square — if it is attacked it has nowhere to go.`
+        : `Their ${NAME[cell.type]} on ${cell.square} is stranded: ${where}, so it has no safe square — attack it and it has nowhere to go.`,
+    });
+  }
   // Same rule as the join: a piece still on its starting square is not a
   // problem piece, it is a piece that has not been developed yet.
   const startRank = color === 'w' ? '1' : '8';
@@ -335,6 +397,25 @@ function observationsFor(
         ? `Your ${NAME[bad.piece] ?? 'piece'} on ${bad.square} is your problem piece, ${badPieceWords(bad)}, so improving it is a plan in itself.`
         : `Their ${NAME[bad.piece] ?? 'piece'} on ${bad.square} is their problem piece, ${badPieceWords(bad)}, and keeping it bad is worth as much as winning a pawn.`,
     });
+  }
+
+  // THE BISHOP PAIR, THEIRS. The student's own pair is a plan (`nextPlans`
+  // "make your bishop pair count"); theirs is the long-term danger the student
+  // must play against. Two bishops on opposite colours against at most one,
+  // with a minor of the student's still on the board (the pair is a minor
+  // imbalance: two bishops against a knight and a bishop, or two knights).
+  if (!own) {
+    const pair = theirBishopPair(fen, color);
+    if (pair) {
+      out.push({
+        key: `${side}-bishop-pair`, side, kind: 'pair', rank: rank('pair'),
+        squares: pair.bishops,
+        text: rotateStem([
+          `They have the bishop pair against your ${pair.rival} — two bishops grow stronger as the board opens, so keep it closed or trade one of them off.`,
+          `Their two bishops are the long-term danger against your ${pair.rival}: every pawn that comes off opens a diagonal for them, so keep the position closed or trade a bishop.`,
+        ], stemKeyOf(`${fen.split(' ')[0]}|pair`)),
+      });
+    }
   }
 
   const weak = findWeakPawns(fen, color);
@@ -354,21 +435,34 @@ function observationsFor(
   // now or one quiet move away.
   const enemyOf: Color = color === 'w' ? 'b' : 'w';
   weak.isolated = weak.isolated.filter((sq) => canBeAimedAt(fen, sq, enemyOf));
+  // EVERY WEAK PAWN, NEVER THE FIRST (G4.5; Danya's article board, the
+  // positional rook lift #1: White's doubled g-pawns in front of the king were
+  // the point, and the read named only the doubled b-pawns, the first file it
+  // met). One sentence a kind, every pawn of it named; the key is the first
+  // file's (the other lanes' say-once key), the rest ride as aliases.
   if (weak.isolated.length > 0) {
+    const iso = weak.isolated;
+    const n = iso.length;
+    // One or two are named; three or more are counted and lit (a list of
+    // squares read out is the robot, David 2026-11-05).
+    const who = n > 2 ? `${countWord(n)} isolated pawns` : `pawn${n > 1 ? 's' : ''} on ${andList(iso)}`;
     out.push({
-      key: `${side}-iso-${weak.isolated[0][0]}`, side, kind: 'structure', rank: rank('structure'),
-      squares: [weak.isolated[0]],
+      key: `${side}-iso-${iso[0][0]}`, side, kind: 'structure', rank: rank('structure'),
+      aliases: iso.slice(1).map((sq) => `${side}-iso-${sq[0]}`),
+      squares: [...iso],
       text: own
-        ? `Your pawn on ${weak.isolated[0]} is isolated — no friendly pawn can ever defend it, so a piece has to.`
-        : `Their pawn on ${weak.isolated[0]} is isolated — that is a long-term target worth playing against.`,
+        ? (n > 2 ? `You have ${who} — no friendly pawn can ever defend them, so pieces have to.` : `Your ${who} ${n > 1 ? 'are' : 'is'} isolated — no friendly pawn can ever defend ${n > 1 ? 'them' : 'it'}, so a piece has to.`)
+        : (n > 2 ? `They have ${who} — long-term targets worth playing against.` : `Their ${who} ${n > 1 ? 'are' : 'is'} isolated — ${n > 1 ? 'those are long-term targets' : 'that is a long-term target'} worth playing against.`),
     });
   }
-  if (weak.doubled.length > 0) {
+  const doubledFiles = [...new Set(weak.doubled.map((sq) => sq[0]))].sort();
+  if (doubledFiles.length > 0) {
     out.push({
-      key: `${side}-doubled-${weak.doubled[0][0]}`, side, kind: 'structure', rank: rank('structure'),
+      key: `${side}-doubled-${doubledFiles[0]}`, side, kind: 'structure', rank: rank('structure'),
+      aliases: doubledFiles.slice(1).map((f) => `${side}-doubled-${f}`),
       text: own
-        ? `Your pawns on the ${weak.doubled[0][0]}-file are doubled — they can't defend each other, so each one needs a neighbour or a piece to guard it.`
-        : `Their pawns on the ${weak.doubled[0][0]}-file are doubled — they can't defend each other, which makes them targets.`,
+        ? `Your pawns on ${fileList(doubledFiles)} are doubled — they can't defend each other, so each one needs a neighbour or a piece to guard it.`
+        : `Their pawns on ${fileList(doubledFiles)} are doubled — they can't defend each other, which makes them targets.`,
     });
   }
 

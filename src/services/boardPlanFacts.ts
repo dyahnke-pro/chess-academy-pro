@@ -95,7 +95,11 @@ export function boardPlanFacts(fen: string, side: 'white' | 'black', voice: 'you
   // A rook belongs on an open / half-open file.
   const files = findOpenFiles(fen);
   const rookFiles = [...new Set([...files.open, ...(myC === 'w' ? files.whiteSemiOpen : files.blackSemiOpen)])];
-  if (rookFiles.length) levers.push({ kind: 'file', phrase: `put a rook on the ${orList(rookFiles)} file`, squares: [] });
+  // …only for a side that HAS a rook (Danya's opposite-coloured-bishop boards,
+  // 2026-11-18: "put a rook on the e or a file" on a board of bishops,
+  // knights and pawns).
+  const hasRook = chess.board().flat().some((p) => p && p.color === myC && p.type === 'r');
+  if (rookFiles.length && hasRook) levers.push({ kind: 'file', phrase: `put a rook on the ${orList(rookFiles)} file`, squares: [] });
   // An outpost — a hole in THEIR camp a minor of yours can get to and hold
   // (the one bar, `holeTargets`), named for the piece that gets there: "plant
   // a knight" only where a knight arrives.

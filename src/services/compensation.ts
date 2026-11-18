@@ -29,7 +29,11 @@ export interface Assessment {
 }
 
 const kingOf = (board: Chess, c: Color): string | null => board.board().flat().find((p) => p && p.type === 'k' && p.color === c)?.square ?? null;
-const castled = (sq: string | null, c: Color): boolean => !!sq && sq[1] === (c === 'w' ? '1' : '8') && 'gcb'.includes(sq[0]);
+// A king tucked in the corner is castled too: g1 → h1 after O-O, c1 → b1 →
+// a1 after O-O-O (Danya's article board, mastering the queen sacrifice #2:
+// White's king on h1, Black's on e8, two pawns down — "the compensation is
+// real", and the read found no reason because h1 did not count).
+const castled = (sq: string | null, c: Color): boolean => !!sq && sq[1] === (c === 'w' ? '1' : '8') && 'abcgh'.includes(sq[0]);
 const middle = (sq: string | null): boolean => !!sq && 'de'.includes(sq[0]);
 const bishops = (board: Chess, c: Color): number => board.board().flat().filter((p) => p && p.type === 'b' && p.color === c).length;
 const NUM = ['no', 'one', 'two', 'three', 'four'];

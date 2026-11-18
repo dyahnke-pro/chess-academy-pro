@@ -45,3 +45,14 @@ describe('a rook\'s road is the file lever\'s idea', () => {
     expect(levers.filter((l) => l.kind === 'worst')).toEqual([]);
   });
 });
+
+describe('the open-file lever needs a rook (Danya, opposite-coloured bishops #3)', () => {
+  const file = (fen: string): string | undefined =>
+    boardPlanFacts(fen, 'white')?.levers.find((l) => l.kind === 'file')?.phrase;
+  it('bishops and pawns: no rook, no "put a rook on the file"', () => {
+    expect(file('8/4k3/1b3ppp/p2Bp3/4P3/2P3PP/1P2KP2/8 w - - 0 35')).toBeUndefined();
+  });
+  it('the same files with a rook on the board: the lever stands', () => {
+    expect(file('8/4k3/1b3ppp/p2Bp3/4P3/2P3PP/1P2KP2/7R w - - 0 35')).toMatch(/put a rook on the/);
+  });
+});

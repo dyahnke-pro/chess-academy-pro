@@ -9,7 +9,7 @@
 // Pure (chess.js + the SEE reader). Both seats.
 import { Chess, type Color, type Square } from 'chess.js';
 import { theirWantedMoves } from './prophylaxis';
-import { sideToMoveAs } from './threatOut';
+import { sideToMoveAs, mateThreatsAgainst } from './threatOut';
 import { legalSeeGainFor } from './positionReadingService';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { seatPieceWords } from './pieceRef';
@@ -17,7 +17,7 @@ import { seatPieceWords } from './pieceRef';
 export interface MoveStop {
   /** `square`: a development square taken from their knight. `break`: their
    *  masters' pawn break, which would now lose material. */
-  kind: 'pin' | 'kick' | 'fork' | 'check' | 'square' | 'break';
+  kind: 'pin' | 'kick' | 'fork' | 'check' | 'square' | 'break' | 'mate';
   /** Their move it stops, as they would have played it (SAN). */
   san: string;
   /** "would pin your knight on c3 against your queen" — from the mover's seat. */
@@ -67,6 +67,30 @@ function winningChecks(fen: string, me: Color): WinningCheck[] {
   return out;
 }
 
+function boardIsCheck(fen: string): boolean {
+  try { return new Chess(fen).inCheck(); } catch { return true; }
+}
+
+/** The move from→to, played on `fen` (its side to move), mates. */
+function stillMates(fen: string, from: string, to: string): boolean {
+  try {
+    const b = new Chess(fen);
+    b.move({ from, to, promotion: 'q' });
+    return b.isCheckmate();
+  } catch { return false; }
+}
+
+/** The square `vacated` the king now steps to when their move from→to gives
+ *  check on `fen` (the escape the move made), or null. */
+function escapeAfter(fen: string, from: string, to: string, vacated: string): string | null {
+  try {
+    const b = new Chess(fen);
+    b.move({ from, to, promotion: 'q' });
+    if (!b.inCheck()) return null;
+    return b.moves({ verbose: true }).some((x) => x.piece === 'k' && x.to === vacated) ? vacated : null;
+  } catch { return null; }
+}
+
 /** The opponent's ideas the move `san` on `fenBefore` takes away. `mine`:
  *  the student moved (words in the student's seat). */
 export function moveStops(fenBefore: string, san: string, mine: boolean): MoveStop[] {
@@ -114,6 +138,22 @@ export function moveStops(fenBefore: string, san: string, mine: boolean): MoveSt
       ? `keeps ${mine ? 'their' : 'your'} ${mover} off ${w.to}, where it ${would}`
       : `stops ${dot(w.san)}, which ${would}`;
     out.push({ kind: w.kind, san: dot(w.san), would, clause, squares: [w.to, ...w.hit.map((h) => h.square)] });
+  }
+  // THEIR MATE, STOPPED (Danya, how to play a brilliancy #2: "Rfd1 opens an
+  // escape square for the king" — …Qh2 was mate with the rook on f1). Their
+  // mate in one before the move (the turn handed over) that does not mate
+  // after it. A check of the mover's is not a stop: the mate comes back once
+  // the check is answered. Said with the square the king can now step to
+  // when the move made one.
+  if (!boardIsCheck(fenAfter)) {
+    for (const m of mateThreatsAgainst(fenBefore, me).moves) {
+      if (stillMates(fenAfter, m.from, m.to)) continue;
+      const plain = m.san.replace(/#$/, '');
+      const flight = escapeAfter(fenAfter, m.from, m.to, moved.from);
+      const kingWords = mine ? 'your king' : 'their king';
+      const would = flight ? `would be mate, and now ${kingWords} has ${flight}` : 'would be mate';
+      out.push({ kind: 'mate', san: dot(plain), would, clause: `stops ${dot(plain)}, which ${would}`, squares: [m.to, ...(flight ? [flight] : [])] });
+    }
   }
   const checksAfter = winningChecks(fenAfter, me);
   for (const c of winningChecks(fenBefore, me)) {
