@@ -55,6 +55,10 @@ describe('his habits of thought, computed (each checked against the existing com
     expect(threatStronger(fen, 'w', [line(['f1c4', 'd5d4'], 200), line(['c3d5'], 100)])).toBeNull();
     // Once a game: the read carries its claim.
     expect(threatStronger(fen, 'w', [line(['f1c4', 'e8e7'], 200), line(['c3d5'], 100)])?.claim).toBe('srr:threat-stronger');
+    // The pawn walks away later in the line (Korchnoi's board, 2026-11-18:
+    // a3 a5 Qf3 b4): the material did not keep, so nothing is said.
+    const korchnoi = 'r2q2k1/p4pbp/6r1/1p1P1bPQ/2p2P2/2N1B3/PP5P/R4RK1 w - - 0 21';
+    expect(threatStronger(korchnoi, 'w', [line(['a2a3', 'a7a5', 'h5f3', 'b5b4', 'a3b4', 'a5b4', 'a1a8', 'd8a8', 'c3b5', 'g7b2'], -130)])).toBeNull();
   });
   it('a piece held only by a tactic: outnumbered, yet taking it loses', () => {
     // the knight on e5 is hit by the rook on a5 and the queen on e7, guarded once by d4 — and Rxe5 dxe5 loses for them

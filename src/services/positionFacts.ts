@@ -145,7 +145,7 @@ import { captureRunAfterMove, captureRunOfMoves } from './captureRun';
 
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
-interface PositionFactsInput {
+export interface PositionFactsInput {
   /** REQUIRED: may this surface speak opening THEORY (the named opening this
    *  board equals, the book move)? Only where the student asked for it —
    *  Review's Theory button, chat, a lesson (David 2026-11-06: "Keep the

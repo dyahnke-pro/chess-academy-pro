@@ -9,12 +9,10 @@ import { Chess } from 'chess.js';
 // G0: every sentence returned is computed; the caller's model only phrases
 // them, most-important-first, in the order returned.
 import { readHabit } from './methodBeat';
-import { temptingOnBoard } from './weighedMoves';
-import { temptingReads } from './movePurposeEngine';
-import { buildFedTacticsContext, speakDeepestLookahead } from './liveTacticsContext';
-import { readPosition } from './positionalRead';
-import { detectPhase } from './narratedContinuation';
-import { computePositionFacts, clauseText, type LastMoveInput } from './positionFacts';
+import { buildFedTacticsContext } from './liveTacticsContext';
+import { boardReadFacts } from './boardReadFacts';
+import { decideRead } from './readDecider';
+import { stockfishEngine } from './stockfishEngine';
 import type { EvalBoardFn } from './perturbation';
 import { teachingSourceForBoard, generalizedTeaching, spokenBeatText } from './danyaTeachingService';
 import { lastMoveIfStudent, lastMoveIfOpponent, sansOfPgn } from './lastMoveOfLine';
@@ -29,13 +27,10 @@ import type { ImportanceTier } from './narrationImportance';
  *  piece — not a phrasing choice). `usePositionNarration` phrases in it too. */
 export const READ_SEAT = 'student' as const;
 
-/** The phase, as the coach names it opening a read — computed, one line each.
- *  A Record over the union so a fourth phase cannot ship without a sentence. */
-const PHASE_LINE: Record<ReturnType<typeof detectPhase>, string> = {
-  opening: 'Still in the opening.',
-  middlegame: 'This is the middlegame now.',
-  endgame: 'This is the endgame now.',
-};
+/** The engine read for each other board the read needs (a tempting move, the
+ *  board after the best move) — the tempting reads' own depth and budget. */
+const READ_DEPTH = 12;
+const READ_BUDGET_MS = 300;
 
 /** Moments where the position has one thing to say — positional observations
  *  stay quiet so they cannot point away from it. The one deciding door's own
@@ -102,8 +97,8 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
   const sans = sansOfPgn(i.pgn);
   const marks = withheldMarks(i.fen, i.withhold);
 
-  // The bounded tactics context — the engine's deepest look-ahead is read off
-  // it below. Reuses the analysis the caller already took (no extra engine
+  // The bounded tactics context — the habit that closes the read reads it.
+  // Reuses the analysis the caller already took (no extra engine
   // read); falls back to a FEN-only scan if that analysis is thin.
   const tactics = (await buildFedTacticsContext(
     i.fen,
@@ -126,96 +121,33 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
     if (src) noteLine = generalizedTeaching(src.origin, spokenBeatText(src.note)).trim();
   } catch { /* corpus unavailable — the computed read stands alone */ }
 
-  // 2. THE PHASE — a two-line computation.
-  const phaseLine = PHASE_LINE[detectPhase(i.fen, sans.length)];
-
-  // 3. POSITION FACTS — the computed board-truth supply (importance-gated,
-  //    DNA): the decision/intent read, the must-defend, the why-probe.
-  let positionFactsBlock = '';
+  // 2. THE READ — every fact the computers make about this board, and the
+  //    ones HIS reads of positions say, in his order (`readDecider`, fitted on
+  //    his written reads and his videos). Nothing is joined in a fixed order:
+  //    the decider is the only thing that picks.
   let decidingMoment = false;
-  try {
-    if (i.analysis?.topLines?.length) {
-      const lm = lastMoveIfStudent(sans, i.playerColor, i.fen);
-      const pf = await computePositionFacts({ theory: true, namesPlayedMove: true,
-      boardComputers: 'composer',
-        // The student TAPPED "read this position". Silence would be a dead
-        // button — the same reasoning that exempts this surface from the
-        // verbosity gate (CLAUDE.md §G5, third sanctioned exemption).
-        posture: 'walk',
-        // A tap is an ask (LEARN NAMES NO MOVE UNASKED): the read may walk the
-        // engine's line for the student's own move.
-        namesBestMove: true,
-        fen: i.fen,
-        moverColor: i.fen.split(' ')[1] === 'b' ? 'b' : 'w',
-        studentColor: studentCC,
-        rating: i.rating,
-        analysis: i.analysis,
-        evalBoard: i.evalBoard,
-        studentWeaknesses: i.studentWeaknesses,
-        // THE HEAT MAP + THE NEED TERM (B3): the student's last move when the
-        // PGN produces this board and the last mover is them; absent
-        // otherwise. Never graded here → `cpLoss: null`.
-        ...((): { lastMove?: LastMoveInput } => (lm ? { lastMove: lm } : {}))(),
-        // THEIR last move, when they made it — so the read of their move
-        // (computers batch 2: the quiet threat, the grab that was not free)
-        // reaches the student's tapped read as it does Learn.
-        ...((): { opponentLastMove?: { fenBefore: string; san: string } } => { const o = lastMoveIfOpponent(sans, i.playerColor, i.fen); return o ? { opponentLastMove: o } : {}; })(),
-        studentNeedContext: i.studentNeedContext,
-        history: sans,
-      });
-      decidingMoment = DECIDING_TIERS.has(pf.importance.tier);
-      positionFactsBlock = clauseText(
-        marks ? pf.clauses.filter((c) => c.kind !== 'deliberation' && !reveals(c.text, marks)) : pf.clauses,
-      ).join(' ');
-    }
-  } catch { positionFactsBlock = ''; }
+  let readLines: string[] = [];
+  const before = [...(i.analysis?.topLines ?? [])].sort((x, y) => x.rank - y.rank);
+  if (before.length) try {
+    const read = await boardReadFacts({
+      fen: i.fen, studentColor: studentCC, rating: i.rating, before, history: sans, theory: true, tense: 'now',
+      withhold: !!marks, readTempting: i.readTempting && !marks,
+      read: async (fen) => (await stockfishEngine.analyzeWithBudget(fen, READ_DEPTH, READ_BUDGET_MS)).topLines ?? null,
+      // THE HEAT MAP + THE NEED TERM (B3): the student's record and the
+      // last move on each side when the PGN produces this board.
+      studentNeedContext: i.studentNeedContext,
+      extra: {
+        evalBoard: i.evalBoard, studentWeaknesses: i.studentWeaknesses,
+        lastMove: lastMoveIfStudent(sans, i.playerColor, i.fen) ?? undefined,
+        opponentLastMove: lastMoveIfOpponent(sans, i.playerColor, i.fen) ?? undefined,
+      },
+    });
+    decidingMoment = read.tier !== null && DECIDING_TIERS.has(read.tier);
+    readLines = decideRead(read.facts).map((f) => f.text);
+  } catch { readLines = []; }
   if (i.isCancelled()) return '';
 
-  // 3b. WHY THE TEMPTING MOVE FAILS (WO-DANYA-READS-01 group 4; his "Ng5+ is
-  //    tempting, but after …Kg7 and …Rg3 Black parries the threats"): the
-  //    move a player is drawn to, against the engine's best, refuted by its
-  //    own line. The student's turn only, and never on a puzzle still being
-  //    solved — ruling a move out narrows the answer.
-  let temptingLine = '';
-  const topLine = i.analysis?.topLines?.find((l) => l.rank === 1) ?? null;
-  if (i.readTempting && topLine && !marks && !i.withhold && i.fen.split(' ')[1] === studentCC) {
-    const reads = await temptingReads(i.fen, i.rating, topLine).catch(() => null);
-    if (i.isCancelled()) return '';
-    try {
-      const t = reads ? temptingOnBoard({ fen: i.fen, student: studentCC, rating: i.rating, reads, priorMove: null })[0] : undefined;
-      if (t && !positionFactsBlock.includes(t.san)) temptingLine = t.text;
-    } catch { temptingLine = ''; }
-  }
-
-  // 4. THE POSITIONAL READ — every ranked observation on both sides of the
-  //    board, most useful first. NO cap (G4.5): the ranker orders, the student
-  //    hears what it ranked. An observation whose square the facts above
-  //    already named is skipped — say a thing once.
-  const readLines: string[] = [];
-  // A DECIDING MOMENT IS THE LESSON (2026-10-01). On a board with mate in two
-  // the read went on to "their passed pawn is the danger — blockade it" and
-  // "a long-term target": positional observations appended AFTER the decider,
-  // so nothing judged them, pointing the student away from the answer. When
-  // the one door says the moment decides the game, they yield.
-  if (!decidingMoment) try {
-    const already = `${noteLine} ${positionFactsBlock} ${temptingLine}`.toLowerCase();
-    for (const o of readPosition(i.fen, i.playerColor)) {
-      const naming = o.text.toLowerCase().match(/[a-h][1-8]/)?.[0];
-      if (naming && already.includes(naming)) continue;
-      readLines.push(o.text);
-    }
-  } catch { /* the read is a bonus, never a blocker */ }
-
-  // 5. THE DEEPEST LOOK-AHEAD — the PV scan, pre-composed as the exact spoken
-  //    line in code (G0: the engine decided, the voice only phrases). Null on
-  //    a quiet board.
-  //    ONE SEAT for the whole bundle (walk 6, P1): the facts computers speak
-  //    "you / they", so the look-ahead does too. A bundle mixing "they" and "I"
-  //    for the same side left the phraser to re-seat it, and it inverted it —
-  //    "you're threatening to win my bishop" to the student whose bishop it was.
-  const lookaheadLine = tactics ? speakDeepestLookahead(tactics, READ_SEAT, studentCC, true, i.studentWeaknesses) : null;
-
-  // 6. THE HABIT THAT CLOSES THE READ (WO-DANYA-READS-01 group 9): what
+  // 3. THE HABIT THAT CLOSES THE READ (WO-DANYA-READS-01 group 9): what
   //    decides this board, as the routine that finds it next time. Never on a
   //    puzzle still being solved: "run CCT" would say there is a shot.
   const habitLine = marks ? null : readHabit({
@@ -224,7 +156,7 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
     decidingMoment,
   })?.text ?? null;
 
-  return [noteLine, phaseLine, positionFactsBlock, temptingLine, ...readLines, lookaheadLine ?? '', habitLine ?? '']
+  return [noteLine, ...readLines, habitLine ?? '']
     .map((t) => t.trim())
     .filter(Boolean)
     .filter((t) => !reveals(t, marks))

@@ -70,3 +70,15 @@ describe('the wiring', () => {
     expect(facts.some((x) => x.computer === 'practicalChance' && /Only Qxd6/.test(x.text))).toBe(true);
   }, 60_000);
 });
+
+describe('the worse side is worse on the board, not always behind on material', () => {
+  it('no stem says "behind": Korchnoi\'s White is a pawn up and still worse (article board, 2026-11-18)', () => {
+    const p = practicalChance(KASPAROV, 'Qe3', { moverCp: -112, costCp: 0, after: AFTER_QE3 });
+    expect(p).not.toBeNull();
+    for (let k = 0; k < 40; k += 1) {
+      const fen = KASPAROV.replace(/ 45$/, ` ${45 + k}`);
+      expect(practicalChanceLine(p!, true, fen)).not.toMatch(/\bBehind\b/);
+      expect(practicalChanceLine(p!, false, fen)).not.toMatch(/\bBehind\b/);
+    }
+  });
+});

@@ -153,6 +153,29 @@ export function provokes(fen: string, lines: Lines): Read | null {
 
 // ── batch 2 (each checked against the existing computers first) ─────────────
 
+/** The capture on `square` still wins at every turn of `me` along `line`
+ *  (UCI, from `fen`), until the line itself takes there. False when the line
+ *  is too short to show it past their first reply, or a move fails to play. */
+function materialKeeps(fen: string, line: readonly string[], square: Square, me: 'w' | 'b'): boolean {
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return false; }
+  let checked = 0;
+  for (let i = 0; i < line.length; i += 1) {
+    const u = line[i];
+    if (i > 0 && board.turn() === me) {
+      if (u.slice(2, 4) === square && board.get(square)) return true;
+      if (legalSeeGainFor(board.fen(), square, me) <= 0) return false;
+      checked += 1;
+    }
+    try { board.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { return false; }
+  }
+  if (board.turn() === me) {
+    if (legalSeeGainFor(board.fen(), square, me) <= 0) return false;
+    checked += 1;
+  }
+  return checked > 0;
+}
+
 /** #39 THE THREAT IS STRONGER THAN THE EXECUTION: you can win material right
  *  now, and the engine prefers a quiet move that keeps it hanging. */
 export function threatStronger(fen: string, me: 'w' | 'b', lines: Lines): Read | null {
@@ -170,10 +193,11 @@ export function threatStronger(fen: string, me: 'w' | 'b', lines: Lines): Read |
   // the engine's move was a kick that won a piece for another reason). After the
   // engine's move AND their best reply, the same capture must still win —
   // otherwise the target simply walks away and the sentence is false.
-  const afterBest = play(fen, bestSan);
-  const replySan = afterBest ? sanOf(afterBest.board.fen(), best.moves[1]) : null;
-  const afterReply = afterBest && replySan ? play(afterBest.board.fen(), replySan) : null;
-  if (!afterReply || afterReply.board.turn() !== me || legalSeeGainFor(afterReply.board.fen(), grab.to, me) <= 0) return null;
+  // And it must keep through the engine's whole line, not one reply (article
+  // board 2026-11-18, Korchnoi: "the material will keep" on b5 while the line
+  // went a3 a5 Qf3 b4 — the pawn walked away two moves later). At every turn
+  // of ours in the line the capture still wins, until the line takes it.
+  if (!materialKeeps(fen, best.moves, grab.to, me)) return null;
   const gap = grabLine ? moverCp(fen, best) - moverCp(fen, grabLine) : null;
   // ONCE A GAME (claim): two consecutive moves heard it in the Learn tape.
   return { claim: 'srr:threat-stronger', promise: { key: `grab:${grab.to}`, piece: grab.piece, square: grab.to, takes: true, say: `Now you collect on ${grab.to} — the threat did its work first.` }, stakes: costStakes(gap) ?? { points: legalSeeGainFor(fen, grab.to, me), plies: 1 }, text: rot(fen, `You could take on ${grab.to} right now, but the threat is stronger than carrying it out — the material will keep, so keep it hanging over them and improve first.`, `The capture on ${grab.to} isn't going anywhere. Leave it hanging over them and make the useful move first: the threat is the stronger weapon.`, `Don't cash in on ${grab.to} yet. While the capture hangs over them they are tied up, so improve first and take it when it suits you.`), squares: [grab.to] };

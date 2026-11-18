@@ -228,7 +228,7 @@ export function practicalChanceLine(p: PracticalChance, moverIsStudent: boolean,
     parts.push(rotateStem([
       'You\'re worse here, so make them find something.',
       'When you\'re worse, set them problems.',
-      'Behind like this, the job is to make it hard for them.',
+      'With the position against you, the job is to make it hard for them.',
     ], key));
     if (p.only) parts.push(`Only ${p.only.san} keeps their edge, and anything else lets you back in.`);
     if (p.trap) parts.push(`${p.trap.san} looks free, but taking gives the edge back.`);
@@ -237,7 +237,7 @@ export function practicalChanceLine(p: PracticalChance, moverIsStudent: boolean,
   }
   parts.push(rotateStem([
     'They\'re worse, so they\'re setting you a problem.',
-    'Behind, they\'re trying to make it hard for you.',
+    'Worse here, they\'re trying to make it hard for you.',
   ], key));
   if (p.only) parts.push('Only one reply keeps your edge.');
   if (p.trap) parts.push('The capture that looks free gives the edge back.');

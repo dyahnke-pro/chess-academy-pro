@@ -16,10 +16,14 @@ import { readFileSync } from 'node:fs';
 
 const read = (p: string): string => readFileSync(p, 'utf8');
 
-/** The object literal(s) handed to computePositionFacts in a file. */
+/** The object literal(s) handed to computePositionFacts — or to the read's
+ *  `boardReadFacts`, which hands its own on — in a file. */
+const CALL = /(computePositionFacts|boardReadFacts)\(\{/g;
 function composerCalls(src: string): string[] {
   const out: string[] = [];
-  let i = src.indexOf('computePositionFacts({');
+  const starts = [...src.matchAll(CALL)].map((m) => m.index ?? 0);
+  let k = 0;
+  let i = starts.length ? starts[0] : -1;
   while (i >= 0) {
     let depth = 0;
     let j = src.indexOf('{', i);
@@ -28,7 +32,9 @@ function composerCalls(src: string): string[] {
       else if (src[j] === '}') { depth -= 1; if (depth === 0) break; }
     }
     out.push(src.slice(i, j + 1));
-    i = src.indexOf('computePositionFacts({', j);
+    k += 1;
+    while (k < starts.length && starts[k] < j) k += 1;
+    i = k < starts.length ? starts[k] : -1;
   }
   return out;
 }

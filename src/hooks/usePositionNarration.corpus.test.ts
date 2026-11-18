@@ -64,7 +64,7 @@ describe('position read corpus wiring', () => {
     // to the one phrasing chokepoint.
     const composer = readFileSync('src/services/positionReadComposer.ts', 'utf8');
     expect(composer).toContain('teachingSourceForBoard(sans, i.fen, i.openingName, i.playerColor)');
-    expect(composer).toMatch(/return \[noteLine, phaseLine, positionFactsBlock/);
+    expect(composer).toMatch(/return \[noteLine, \.\.\.readLines/);
     const src = readFileSync('src/hooks/usePositionNarration.ts', 'utf8');
     expect(src).toMatch(/const facts = await composePositionRead\(\{/);
     expect(src).toMatch(/voiceFacts\(facts, \{/);

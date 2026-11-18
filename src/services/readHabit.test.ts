@@ -26,6 +26,6 @@ describe('the board read closes on it', () => {
   it('composePositionRead ends on the habit, and never on a puzzle being solved', () => {
     const src = readFileSync('src/services/positionReadComposer.ts', 'utf8');
     expect(src).toMatch(/const habitLine = marks \? null : readHabit\(/);
-    expect(src).toMatch(/lookaheadLine \?\? '', habitLine \?\? ''\]/);
+    expect(src).toMatch(/\.\.\.readLines, habitLine \?\? ''\]/);
   });
 });
