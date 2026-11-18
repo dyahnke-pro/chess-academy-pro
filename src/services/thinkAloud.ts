@@ -22,7 +22,6 @@ import { findProphylaxis, prophylaxisKey, prophylaxisThreatProof } from './proph
 import { criticalityThresholds } from './criticalityScan';
 import { lineSeatAt } from '../utils/andList';
 import { kingAttackReads, type KingRead } from './kingAttackReads';
-import { readTheirMove, READ_FACT_KIND } from './opponentMoveReads';
 import { tempoCount } from './tempoCount';
 import { homeMinorCount } from './development';
 import { legalSeeGainFor } from './positionReadingService';
@@ -401,9 +400,11 @@ export function depthClauses(args: {
       const own = ownLastMove(args.history, args.fen);
       const prev = own && args.history.length >= 2 ? { fenBefore: own.fenBefore, san: own.san } : null;
       // Learn does not grade their move here: a criticism of it stays silent.
-      for (const r of readTheirMove({ fenBefore: args.lastOpponentMove.fenBefore, san: args.lastOpponentMove.san, student: args.studentColor, topLines: args.topLines, prev, theirMoveFlagged: null })) {
-        if (r.namesMove && !args.nameMove) continue;
-        out.push({ kind: READ_FACT_KIND[r.kind], text: r.text, proof: r.proof, squares: r.squares, ...(r.stakes ? { stakes: r.stakes } : {}), claim: r.claim });
+      const readCtx = { fenBefore: args.lastOpponentMove.fenBefore, san: args.lastOpponentMove.san, student: args.studentColor, lines: args.topLines, prev, flagged: null };
+      for (const r of [...readBoardAll('theirRead', readCtx), ...readBoardAll('theirPreventTest', readCtx), ...readBoardAll('theirTrigger', readCtx)]) {
+        if (r.namesStudentMove && !args.nameMove) continue;
+        if (!isProof(r.proof)) continue;
+        out.push({ kind: r.kind, text: r.text, proof: r.proof, squares: [...r.squares], ...(r.stakes ? { stakes: r.stakes } : {}), claim: r.claims[0] });
       }
       // "CAN YOU PLAY IT ANYWAY?" — their move stopped your threat on paper;
       // the engine says the move still works.

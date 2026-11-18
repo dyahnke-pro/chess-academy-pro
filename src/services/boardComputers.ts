@@ -98,6 +98,7 @@ import { threatStoppedBy, playItAnyway } from './opponentMovePurpose';
 import { trickSidestepped } from './forkTrick';
 import { habitsOf } from './thinkAloud';
 import { knownAttack } from './attackLibrary';
+import { readTheirMove, READ_FACT_KIND, type EngineLine as ReadLine } from './opponentMoveReads';
 import { lineProof } from './proof';
 import { holeKey } from './conceptKey';
 import { describeStructure } from './boardStructure';
@@ -172,6 +173,9 @@ type MakeFact = (parts: ReadParts) => CoachFact;
 export function readKey(f: CoachFact): string {
   return f.id.slice(f.id.indexOf(':') + 1);
 }
+
+/** What reading their move needs. */
+interface TheirReadCtx { fenBefore: string; san: string; student: Color; lines: readonly ReadLine[]; prev: { fenBefore: string; san: string } | null; flagged: boolean | null }
 
 /** Each computer's own context — what it needs from the surface, no more. */
 export interface BoardContexts {
@@ -510,6 +514,15 @@ export interface BoardContexts {
   /** A KNOWN ATTACKING STRUCTURE (`knownAttack`) on `fen` for the student, by
    *  its conditions; `studentCp`: the student's score, or null. */
   knownAttack: { fen: string; student: Color; studentCp: number | null };
+  /** READING THEIR MOVE (`readTheirMove`): what their move `san` on
+   *  `fenBefore` threatens quietly, needs, lifted, wrongly expected or handed
+   *  the student — one entry per kind of fact it makes. `lines`: the engine's
+   *  lines after their move (the student to move); `prev`: the student's own
+   *  move before it; `flagged`: their move graded a fault, or null. The key
+   *  is `<read kind>|<claim>`. */
+  theirRead: TheirReadCtx;
+  theirPreventTest: TheirReadCtx;
+  theirTrigger: TheirReadCtx;
   /** THE OPPOSITION TAKEN (`oppositionRead`, Danya's "it is Black who has
    *  the opposition"): the king move `san` on `fenBefore` (either seat) takes
    *  the opposition in a king-and-pawn ending, with what it forces.
@@ -2776,6 +2789,63 @@ export const BOARD_COMPUTERS = {
       learn: { wired: 'services/thinkAloud.ts' },
       tactics: TACTICS_NA,
       weaknesses: { not: 'a reading of the game — no question of the student\'s posed' },
+    },
+  },
+  theirRead: {
+    read: ({ fenBefore, san, student, lines, prev, flagged }, fact) => safe(() => {
+      const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
+      const out = readTheirMove({ fenBefore, san, student, topLines: lines, prev, theirMoveFlagged: flagged })
+        .filter((r) => READ_FACT_KIND[r.kind] === 'their-read')
+        .map((r) => fact({ key: `${r.kind}|${r.claim}`, claims: [r.claim], text: r.text, proof: r.proof, squares: [...r.squares], stakes: r.stakes ?? null,
+          seat: 'opponent', namesStudentMove: r.namesMove, thread: LOCAL_THREAD, fen: fenAfter }));
+      return out.length ? out : null;
+    }),
+    computer: 'readTheirMove',
+    kind: 'their-read',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: { wired: 'services/thinkAloud.ts' },
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of their move — no question of the student\'s posed' },
+    },
+  },
+  theirPreventTest: {
+    read: ({ fenBefore, san, student, lines, prev, flagged }, fact) => safe(() => {
+      const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
+      const out = readTheirMove({ fenBefore, san, student, topLines: lines, prev, theirMoveFlagged: flagged })
+        .filter((r) => READ_FACT_KIND[r.kind] === 'prevent-test')
+        .map((r) => fact({ key: `${r.kind}|${r.claim}`, claims: [r.claim], text: r.text, proof: r.proof, squares: [...r.squares], stakes: r.stakes ?? null,
+          seat: 'opponent', namesStudentMove: r.namesMove, thread: LOCAL_THREAD, fen: fenAfter }));
+      return out.length ? out : null;
+    }),
+    computer: 'readTheirMove',
+    kind: 'prevent-test',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: { wired: 'services/thinkAloud.ts' },
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of their move — no question of the student\'s posed' },
+    },
+  },
+  theirTrigger: {
+    read: ({ fenBefore, san, student, lines, prev, flagged }, fact) => safe(() => {
+      const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
+      const out = readTheirMove({ fenBefore, san, student, topLines: lines, prev, theirMoveFlagged: flagged })
+        .filter((r) => READ_FACT_KIND[r.kind] === 'their-trigger')
+        .map((r) => fact({ key: `${r.kind}|${r.claim}`, claims: [r.claim], text: r.text, proof: r.proof, squares: [...r.squares], stakes: r.stakes ?? null,
+          seat: 'opponent', namesStudentMove: r.namesMove, thread: LOCAL_THREAD, fen: fenAfter }));
+      return out.length ? out : null;
+    }),
+    computer: 'readTheirMove',
+    kind: 'their-trigger',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: { wired: 'services/thinkAloud.ts' },
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of their move — no question of the student\'s posed' },
     },
   },
   oppositionRead: {

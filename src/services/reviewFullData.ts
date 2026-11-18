@@ -78,7 +78,6 @@ import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { exchangeIdeas } from './exchangeIdeas';
 import { minorsAtHome } from './development';
 import { slipAnswerText, studentMovePoint } from './playCommentary';
-import { readTheirMove, READ_FACT_KIND } from './opponentMoveReads';
 import { studentMoveStructure, theirMoveStructure, boardStructure, type StructureRead } from './structureReads';
 import type { AnalysisLine, HeardVerdict } from '../types';
 
@@ -1481,13 +1480,14 @@ export function computeMoveFacets(
     // that says what their move allowed ("it makes the rook to e2 possible").
     const replySan = lines[0] ? uciToSanAt(fenAfter, lines[0].moves[0]) : null;
     const verdictSaidReply = !!verdictPunish && !!replySan && verdictPunish.replace(/^…/, '') === replySan;
-    for (const r of readTheirMove({ fenBefore, san, student: studentColorWB, topLines: lines, prev, theirMoveFlagged: negativeClass })) {
-      if (r.kind === 'helped-you' && verdictSaidReply) continue;
-      const f = put('readTheirMove', READ_FACT_KIND[r.kind], r.text);
-      recProof(f, r.proof);
+    const readCtx = { fenBefore, san, student: studentColorWB, lines, prev, flagged: negativeClass };
+    for (const r of [...readBoardAll('theirRead', readCtx), ...readBoardAll('theirPreventTest', readCtx), ...readBoardAll('theirTrigger', readCtx)]) {
+      if (readKey(r).startsWith('helped-you|') && verdictSaidReply) continue;
+      const f = put('readTheirMove', r.kind, r.text);
+      recProof(f, isProof(r.proof) ? r.proof : null);
       recStakes(f, r.stakes);
       recSquares(f, r.squares);
-      f.identity = `hint:${r.claim}`;
+      f.identity = `hint:${r.claims[0]}`;
     }
     // "Can you play it anyway?" — their reply stopped your threat on paper.
     const any = stop && ctx.teaching.prevFenBefore ? readBoard('playItAnyway', { studentFenBefore: ctx.teaching.prevFenBefore, studentFenAfter: fenBefore, reply: san, fenNow: fenAfter, lines, student: studentColorWB }) : null;

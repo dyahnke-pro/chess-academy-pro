@@ -935,6 +935,14 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
         for (const f of readBoardAll('yourHabit', { history: game, student, sound: new Set<number>() })) facts.push({ ...f, source: 'teachingMove', idea: 'plan', weight: 54 });
         for (const f of readBoardAll('knownAttack', { fen: i.fenBefore, student, studentCp: null })) facts.push({ ...f, source: 'teachingMove', idea: 'attack-king', weight: 64 });
       }
+      // Reading their move: what it threatens quietly, needs, lifted, wrongly
+      // expected or handed the student, off the engine's lines after it.
+      if (new Chess(i.fenBefore).turn() !== student) {
+        const readCtx = { fenBefore: i.fenBefore, san: i.san, student, lines: i.reads?.after ?? [], prev: i.theirLast, flagged: null };
+        for (const f of readBoardAll('theirRead', readCtx)) facts.push({ ...f, source: 'teachingMove', idea: 'threat', weight: 62 });
+        for (const f of readBoardAll('theirPreventTest', readCtx)) facts.push({ ...f, source: 'teachingMove', idea: 'threat', weight: 60 });
+        for (const f of readBoardAll('theirTrigger', readCtx)) facts.push({ ...f, source: 'teachingMove', idea: 'threat', weight: 60 });
+      }
       // The fortress, both seats: a piece down and a draw the board explains,
       // read off the engine's lines after the move.
       for (const f of readBoardAll('fortress', { fenBefore: i.fenBefore, san: i.san, student, replies })) {
