@@ -43,3 +43,38 @@ describe('positionalRead — every weak pawn, never the first', () => {
     expect(o?.text).toMatch(/on the f-file are doubled/);
   });
 });
+
+describe('positionalRead — a stranded minor (Danya, the positional rook lift #2)', () => {
+  it('White\'s bishop on h6: g7, f8 and g5 all covered', () => {
+    const o = readPosition('2kr2r1/1b5p/p2pn1qB/1pp1p1p1/4P3/1PPPQNP1/1P3P1R/3RK3 b - - 0 25', 'black')
+      .find((x) => x.key === 'opponent-stranded-b');
+    expect(o?.text).toBe('Their bishop on h6 is stranded: f8, g5 and g7 are all covered, so it has no safe square — attack it and it has nowhere to go.');
+  });
+  it('a knight on a fifth-rank post is not stranded, nor a piece at home', () => {
+    const post = readPosition('r3r1k1/pppq1ppn/3p3p/3PpN2/4PnPP/4QPN1/PPP5/2KR3R w - - 0 19', 'white');
+    expect(post.some((x) => x.key.endsWith('-stranded-n'))).toBe(false);
+    expect(readPosition('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'white').some((x) => x.key.includes('stranded'))).toBe(false);
+  });
+});
+
+describe('positionalRead — their king stuck in the centre (Danya, the knockout blow #2)', () => {
+  it('Black\'s king on d7, no castling, queens on', () => {
+    const o = readPosition('3rr3/pp1k2pp/2n1p3/3p1q2/8/1P3NP1/1PP1QPP1/3RR1K1 w - - 0 19', 'white')
+      .find((x) => x.key === 'opponent-king-centre');
+    expect(o?.text).toMatch(/^Their king on d7 is stuck in the centre/);
+  });
+  it('a king on d7 that still has a castling right is not stuck', () => {
+    expect(readPosition('r3r3/pp1k2pp/2n1p3/3p1q2/8/1P3NP1/1PP1QPP1/3RR1K1 w q - 0 19', 'white').some((x) => x.key === 'opponent-king-centre' && /stuck/.test(x.text))).toBe(false);
+  });
+});
+describe('positionalRead — a king on d7 with the queens off is an endgame king', () => {
+  it('no queens: no centre warning', () => {
+    expect(readPosition('3rr3/pp1k2pp/2n1p3/3p4/8/1P3NP1/1PP2PP1/3RR1K1 w - - 0 19', 'white').some((x) => x.key === 'opponent-king-centre')).toBe(false);
+  });
+});
+describe('positionalRead — two covered squares are "both"', () => {
+  it('the discovered check reloaded #1: Bh6 with f8 and g7 covered', () => {
+    const o = readPosition('3rr1k1/1bqnbp1p/ppp1p1pB/6N1/3P3Q/3B4/PPP2PPP/3RR1K1 w - - 0 18', 'white').find((x) => x.key === 'student-stranded-b');
+    expect(o?.text).toMatch(/f8 and g7 are both covered/);
+  });
+});

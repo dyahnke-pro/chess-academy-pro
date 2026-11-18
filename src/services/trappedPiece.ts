@@ -127,3 +127,48 @@ export function lineTakesPiece(fen: string, square: string, lineUci: readonly st
   }
   return false;
 }
+
+/**
+ * STRANDED — a knight or bishop deep in the other camp (on the other side's
+ * first three ranks: an outpost on the fifth rank is a post, not a stranding)
+ * with legal moves, every one of which loses it,
+ * while it is not yet lost where it stands (Danya, the positional rook lift
+ * #2: "White's bishop on h6 is stranded — every move loses it"). Not trapped
+ * yet — nothing cheaper hits it — but one attack away: the squares it could
+ * go to are the proof. Read on `fen` whoever is to move (the owner is handed
+ * the move). Null otherwise.
+ */
+export function strandedAt(fen: string, sq: string): { squares: string[] } | null {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  const piece = chess.get(sq as Square);
+  if (!piece || (piece.type !== 'n' && piece.type !== 'b')) return null;
+  const side = piece.color;
+  const enemy: Color = side === 'w' ? 'b' : 'w';
+  const rank = Number(sq[1]);
+  if (side === 'w' ? rank < 6 : rank > 3) return null;
+  const val = VAL[piece.type];
+  // Lost where it stands is trapped (`trappedAt`) or hanging, not stranded.
+  const atk = chess.attackers(sq as Square, enemy);
+  if (atk.some((a) => (VAL[chess.get(a)?.type ?? 'k'] ?? 99) < val)) return null;
+  if (atk.length > 0 && chess.attackers(sq as Square, side).length === 0) return null;
+  const ownerFen = sideToMoveAs(chess.fen(), side);
+  if (!ownerFen) return null;
+  const probe = new Chess(ownerFen);
+  if (probe.inCheck()) return null;
+  const moves = probe.moves({ verbose: true }).filter((x) => x.from === sq);
+  if (moves.length === 0) return null;
+  for (const m of moves) {
+    const after = new Chess(ownerFen);
+    after.move(m.san);
+    if (m.captured) {
+      if (legalSeeGainOn(after, m.to) - (VAL[m.captured] ?? 0) < 1) return null;
+      continue;
+    }
+    const hit = after.attackers(m.to, enemy);
+    if (hit.length === 0) return null;
+    const cheaper = hit.some((a) => (VAL[after.get(a)?.type ?? 'k'] ?? 99) < val);
+    if (!cheaper && after.attackers(m.to, side).length > 0) return null;
+  }
+  return { squares: [...new Set(moves.map((m) => m.to))].sort() };
+}

@@ -32,6 +32,7 @@ import { describeStructure } from './boardStructure';
 import { homeMinorCount } from './development';
 import { isolaniStructure, passerTrumpSentence } from './nextPlans';
 import { Chess, type Color, type Square } from 'chess.js';
+import { strandedAt } from './trappedPiece';
 import { countWord, andList, fileList } from '../utils/andList';
 import {
   kingSafetyRead,
@@ -73,6 +74,11 @@ function knightReach(square: string): number {
     if (ff >= 0 && ff < 8 && rr >= 0 && rr < 8) n += 1;
   }
   return n;
+}
+
+/** A board, or null when the FEN does not parse. */
+function chessOf(fen: string): Chess | null {
+  try { return new Chess(fen); } catch { return null; }
 }
 
 const NAME: Record<string, string> = {
@@ -247,6 +253,19 @@ function observationsFor(
   const centreCounts = own
     ? castleIsOneMoveAway(fen, color)
     : !castleIsOneMoveAway(fen, color) && fullMove >= 8;
+  // THEIR KING STUCK IN THE CENTRE (Danya, the knockout blow #2: "Black's
+  // king is stranded in the centre" — on d7, both castling rights gone, queens
+  // on): one step off the home rank is still the centre once it can no longer
+  // castle.
+  const rights = fen.split(' ')[2] ?? '-';
+  const canCastle = color === 'w' ? /[KQ]/.test(rights) : /[kq]/.test(rights);
+  if (!own && king && !canCastle && 'de'.includes(king.square[0]) && king.square[1] === (color === 'w' ? '2' : '7') && fullMove >= 8) {
+    out.push({
+      key: `${side}-king-centre`, side, kind: 'king', rank: rank('king'),
+      squares: [king.square],
+      text: `Their king on ${king.square} is stuck in the centre — it can no longer castle, so every line that opens toward it is worth looking at.`,
+    });
+  }
   if (king?.inCenter && !king.castled && centreCounts) {
     out.push({
       key: `${side}-king-centre`, side, kind: 'king', rank: rank('king'),
@@ -340,6 +359,24 @@ function observationsFor(
         // 2340: rook d8 "best-placed", then knight c6 "most work"). This names
         // the fact about the piece, which is true whichever wins that ranking.
         : `Their ${NAME[outpost.piece] ?? 'piece'} on ${outpost.square} is well placed — ${goodPieceClause(outpost.kind, outpost.square)}.`,
+    });
+  }
+  // STRANDED (Danya, the positional rook lift #2: "White's bishop on h6 is
+  // stranded — every move loses it"): a minor deep in the other camp with
+  // squares to go to, every one of them covered. Not lost yet; one attack
+  // from it. The squares it could go to are what the words name.
+  for (const cell of chessOf(fen)?.board().flat() ?? []) {
+    if (!cell || cell.color !== color || (cell.type !== 'n' && cell.type !== 'b')) continue;
+    const st = strandedAt(fen, cell.square);
+    if (!st) continue;
+    const squares = andList(st.squares);
+    const covered = st.squares.length > 2 ? 'are all' : st.squares.length === 2 ? 'are both' : 'is';
+    out.push({
+      key: `${side}-stranded-${cell.type}`, side, kind: 'piece', rank: rank('piece'),
+      squares: [cell.square, ...st.squares],
+      text: own
+        ? `Your ${NAME[cell.type]} on ${cell.square} is stranded: ${squares} ${covered} covered, so it has no safe square — if it is attacked it has nowhere to go.`
+        : `Their ${NAME[cell.type]} on ${cell.square} is stranded: ${squares} ${covered} covered, so it has no safe square — attack it and it has nowhere to go.`,
     });
   }
   // Same rule as the join: a piece still on its starting square is not a
