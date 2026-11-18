@@ -82,7 +82,7 @@ describe('the method\'s answers make the plan', () => {
   });
   it('chat answers "how do I find a plan" with the same plan', async () => {
     const { assemblePlanMethodAnswer } = await import('./groundedAnswer');
-    const a = assemblePlanMethodAnswer(FEN, 'black').facts;
+    const a = assemblePlanMethodAnswer(FEN, 'black', null).facts;
     expect(a).toMatch(/So the plan: put a rook on the open c-file\. Bring your knight on e8 to d4/);
     expect(a).not.toMatch(/Beyond that: plant a knight/);
   }, 60000);

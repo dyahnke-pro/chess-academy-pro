@@ -2548,6 +2548,7 @@ async function serveGroundedPositionDefault(
   const sc: 'white' | 'black' =
     grounding.studentColor ?? ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
   const assess = assemblePositionAssessment({
+    bestUci: grounding.engineBestMoveUci ?? null,
     evalCp: grounding.engineEvalCp,
     mateIn: grounding.engineMateIn,
     tactics: grounding.tactics,
@@ -2723,6 +2724,7 @@ async function computeLiveBoardVerdict(
   // in time; a whitelist could not have caught that, only dispatching early.
   if (assessQ) {
     const assess = assemblePositionAssessment({
+      bestUci: grounding.engineBestMoveUci ?? null,
       evalCp: grounding.engineEvalCp,
       mateIn: grounding.engineMateIn,
       tactics: grounding.tactics,
@@ -4320,7 +4322,7 @@ export async function getCoachChatResponse(
         if (grounding.methodQuestion && /\bplan/i.test(lastUserMessage() ?? '')) {
           const sc: 'white' | 'black' = grounding.studentColor
             ?? ((grounding.currentFen?.split(' ')[1] === 'b') ? 'black' : 'white');
-          const answer = assemblePlanMethodAnswer(grounding.currentFen ?? null, sc);
+          const answer = assemblePlanMethodAnswer(grounding.currentFen ?? null, sc, grounding.engineBestMoveUci ?? null);
           const voiced = await voice(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'method', preferRaw: true });
           return voiced ?? answer.facts;
         }
@@ -6198,7 +6200,7 @@ export async function getCoachChatResponse(
             : null;
           const board = pieceScoped && pureBoardAspect(grounding.cleanAsk ?? lastUserMessage()) === 'piece-plan'
             ? { answer: pieceScoped, aspect: 'piece-plan' as const }
-            : answerBoardQuestion(grounding.currentFen, grounding.cleanAsk ?? lastUserMessage(), sc);
+            : answerBoardQuestion(grounding.currentFen, grounding.cleanAsk ?? lastUserMessage(), sc, grounding.engineBestMoveUci ?? null);
           if (board) {
             void logAppAudit({
               kind: 'coach-grounded-answer',
@@ -6677,6 +6679,7 @@ export async function getCoachChatResponse(
             const sc: 'white' | 'black' =
               grounding.studentColor ?? (grounding.currentFen.split(' ')[1] === 'b' ? 'black' : 'white');
             const assess = assemblePositionAssessment({
+              bestUci: grounding.engineBestMoveUci ?? null,
               evalCp: grounding.engineEvalCp,
               mateIn: grounding.engineMateIn,
               tactics: grounding.tactics,
@@ -6804,6 +6807,7 @@ export async function getCoachChatResponse(
             grounding.studentColor ??
             ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
           const assessed = assemblePositionAssessment({
+            bestUci: grounding.engineBestMoveUci ?? null,
             evalCp: grounding.engineEvalCp,
             mateIn: grounding.engineMateIn,
             tactics: grounding.tactics,

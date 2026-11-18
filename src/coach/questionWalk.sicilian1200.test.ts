@@ -36,7 +36,7 @@ describe('the square form reaches the pawn lane', () => {
 describe('Q6 — every plan is its own sentence', () => {
   it('two plans never run together without a full stop', async () => {
     const { assembleBoardPlanAnswer } = await import('../services/groundedAnswer');
-    const f = assembleBoardPlanAnswer('r1q2rk1/pp2bppp/2nppn2/8/Q2PP3/2N1BB2/PP3PPP/3R1RK1 w - - 8 13', 'white', 'me')?.facts ?? '';
+    const f = assembleBoardPlanAnswer('r1q2rk1/pp2bppp/2nppn2/8/Q2PP3/2N1BB2/PP3PPP/3R1RK1 w - - 8 13', 'white', 'me', null)?.facts ?? '';
     expect(f).toMatch(/the plan from here|So the plan:/i);
     // A lower-case word followed by a capitalised "The plan" = a missing stop.
     expect(f).not.toMatch(/[a-z] The plan from here/);
@@ -101,7 +101,7 @@ describe('Colle run — the plan puts the hanging queen first', () => {
   const COLLE = 'r1bqrnk1/5ppp/p3p3/1p1pn1bN/3p2Q1/2PB4/PP3PPP/R1B1R1K1 w - - 0 16';
   it('a loose queen leads the plan answer', async () => {
     const { assembleBoardPlanAnswer } = await import('../services/groundedAnswer');
-    const f = assembleBoardPlanAnswer(COLLE, 'white', 'me')?.facts ?? '';
+    const f = assembleBoardPlanAnswer(COLLE, 'white', 'me', null)?.facts ?? '';
     // The queen leads; every other piece that can be taken is named with it
     // (one board read, 2026-10-08).
     // …and when the attacker can simply be taken, taking it IS the first move
@@ -110,7 +110,7 @@ describe('Colle run — the plan puts the hanging queen first', () => {
   });
   it('NEGATIVE CONTROL: with nothing loose, no "First," line', async () => {
     const { assembleBoardPlanAnswer } = await import('../services/groundedAnswer');
-    const f = assembleBoardPlanAnswer('r1q2rk1/pp2bppp/2nppn2/8/Q2PP3/2N1BB2/PP3PPP/3R1RK1 w - - 8 13', 'white', 'me')?.facts ?? '';
+    const f = assembleBoardPlanAnswer('r1q2rk1/pp2bppp/2nppn2/8/Q2PP3/2N1BB2/PP3PPP/3R1RK1 w - - 8 13', 'white', 'me', null)?.facts ?? '';
     expect(f).not.toMatch(/^First,/);
   });
 });

@@ -26,7 +26,7 @@ describe('Learn board truth — the real game', () => {
   });
 
   it('12…Nxb3: the urgency read sees the free knight and the attacked rook', () => {
-    const u = readBoardUrgency(at(24), 'white');
+    const u = readBoardUrgency(at(24), 'white', null);
     expect(u?.win?.square).toBe('b3');
     expect(u?.save[0]?.square).toBe('a1');
   });

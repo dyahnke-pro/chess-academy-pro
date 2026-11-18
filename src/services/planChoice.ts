@@ -142,11 +142,11 @@ function cctRead(
   holdCapture = false,
   bestUci: string | null = null,
 ): MethodRead['cct'] | null {
-  const u = readBoardUrgency(fen, student === 'w' ? 'white' : 'black');
+  // The engine's best decides what comes first (inside the one urgency read).
+  const u = readBoardUrgency(fen, student === 'w' ? 'white' : 'black', bestUci);
   if (!u) return null;
   const biggestSave = u.save[0]?.value ?? 0;
-  const engineTakes = !bestUci || bestUci.slice(2, 4) === u.win?.square;
-  if (u.win && u.win.value >= biggestSave && engineTakes) {
+  if (u.win && u.win.value >= biggestSave) {
     // FREE only when nothing guards it. A guarded piece that still falls is
     // said by what the ledger nets over the trades on its square (prod Review
     // 2026-10-29: "their pawn on g6 is free to take" with f7 guarding it — it

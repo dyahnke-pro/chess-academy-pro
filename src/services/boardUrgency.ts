@@ -44,7 +44,16 @@ function promotingPawn(fen: string, them: 'w' | 'b'): { from: string; to: string
   return mv ? { from: mv.from, to: mv.to } : null;
 }
 
-export function readBoardUrgency(fen: string, studentColor: 'white' | 'black'): BoardUrgency | null {
+/**
+ * @param bestUci REQUIRED — the engine's best move for the student on this
+ *   board, or null when no engine read exists. "First, X — that comes before
+ *   any plan" is a PRIORITY claim, and priority is the engine's to say: on
+ *   Danya's article boards the board-only read said "save your pawn on c3
+ *   first" where the engine's best was the king walk (Kg6, the race), 42 times
+ *   in 209 boards (WO-DANYA-READS-01 step 1). With a read, a "take first" or
+ *   "save first" stands only when the best move does it.
+ */
+export function readBoardUrgency(fen: string, studentColor: 'white' | 'black', bestUci: string | null): BoardUrgency | null {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
   const me: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
@@ -62,7 +71,36 @@ export function readBoardUrgency(fen: string, studentColor: 'white' | 'black'): 
   const takeAttacker = att && attPiece && attPiece.color === them && takingTheAttackerAnswers(fen, att as Square, me)
     ? { square: att, piece: attPiece.type }
     : null;
-  return { myMove, win, save, promotion: promotingPawn(fen, them), takeAttacker };
+  const promotion = promotingPawn(fen, them);
+  if (!myMove || !bestUci || bestUci.length < 4) return { myMove, win, save, promotion, takeAttacker };
+  // THE ENGINE ORDERS THE PRIORITIES (see the parameter). The best move takes
+  // the piece, or it is not the first thing; it deals with the attacked piece
+  // (moves it, takes the attacker, or leaves it no longer losable), or that is
+  // not the first thing either.
+  const to = bestUci.slice(2, 4);
+  const from = bestUci.slice(0, 2);
+  let after: string | null = null;
+  let forcing = false;
+  try {
+    const c = new Chess(fen);
+    const mv = c.move({ from: from as Square, to: to as Square, promotion: bestUci[4] ?? 'q' });
+    forcing = !!mv.captured || c.inCheck();
+    after = c.fen();
+  } catch { after = null; }
+  const stillLosable = after ? new Set(computeMustDefend(after, me).pieces.map((p) => p.square)) : null;
+  // Answered: the piece moves, its attacker is taken, or a QUIET move leaves it
+  // safe. A check or capture elsewhere is the engine playing something else
+  // first (miracle-on-the-chess-board#0: Bxf2+ with the knight "to save").
+  const answered = (p: { square: string; attacker: string | null }): boolean =>
+    p.square === from || (p.attacker !== null && p.attacker === to)
+    || (!forcing && stillLosable !== null && !stillLosable.has(p.square));
+  return {
+    myMove,
+    win: win && win.square === to ? win : null,
+    save: save.filter(answered),
+    promotion,
+    takeAttacker: takeAttacker && takeAttacker.square === to ? takeAttacker : null,
+  };
 }
 
 /** The one sentence that comes before any plan, or null when nothing is urgent.

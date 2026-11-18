@@ -29,7 +29,7 @@ describe('piece-activity: worst-placed / least-active piece (loop audit 2026-09-
 
   it('answers the same question through the full board-question dispatch', () => {
     const fen = 'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 3 3';
-    const out = answerBoardQuestion(fen, 'what is my worst placed piece?', 'white');
+    const out = answerBoardQuestion(fen, 'what is my worst placed piece?', 'white', null);
     expect(out).not.toBeNull();
     expect(out!.aspect).toBe('piece-activity');
     expect(out!.answer.facts.toLowerCase()).toContain('least active');

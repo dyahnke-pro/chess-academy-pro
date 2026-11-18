@@ -240,6 +240,8 @@ function dispatchPureAspect(
   fen: string,
   ask: string | null | undefined,
   studentColor: 'white' | 'black',
+  /** The engine's best move for the student, or null (see `readBoardUrgency`). */
+  bestUci: string | null,
 ): GroundedAnswer | null {
   // The aspect already encodes the side (opponent-threats vs my-threats,
   // king-safety-mine vs -theirs), so no separate side arg is needed.
@@ -262,14 +264,14 @@ function dispatchPureAspect(
       // "HOW do I attack the king?" on a king that is safe is answered with what
       // to do instead — build first — never only "it's safe" (replay 2026-10-08).
       if (king && /\b(?:attack|go\s+after|storm|hunt|break\s+open)\b/i.test(ask ?? '') && /looks safe/.test(king.facts)) {
-        const plan = assembleBoardPlanAnswer(fen, studentColor, 'me');
+        const plan = assembleBoardPlanAnswer(fen, studentColor, 'me', bestUci);
         if (plan) return { ...king, facts: `${king.facts} So there is no direct attack yet — build first. ${plan.facts}` };
       }
       return king;
     }
     case 'material': return assembleMaterialAnswer(fen, studentColor);
-    case 'my-plan': return assembleBoardPlanAnswer(fen, studentColor, 'me');
-    case 'opponent-plan': return assembleBoardPlanAnswer(fen, studentColor, 'opponent');
+    case 'my-plan': return assembleBoardPlanAnswer(fen, studentColor, 'me', bestUci);
+    case 'opponent-plan': return assembleBoardPlanAnswer(fen, studentColor, 'opponent', bestUci);
     case 'move-purpose': return assembleMovePurposeAnswer(fen, ask, studentColor);
     case 'checks': return assembleCheckStatusAnswer(fen, ask, studentColor);
     default: return null;
@@ -283,12 +285,14 @@ export function answerBoardQuestion(
   fen: string,
   ask: string | null | undefined,
   studentColor: 'white' | 'black',
+  /** REQUIRED — the engine's best move for the student, or null. */
+  bestUci: string | null,
 ): { answer: GroundedAnswer; aspect: QuestionAspect } | null {
   const focus = extractQuestionFocus(ask);
   if (!focus) return null;
   for (const aspect of focus.aspects) {
     if (!PURE_BOARD_ASPECTS.has(aspect)) continue;
-    const answer = dispatchPureAspect(aspect, fen, ask, studentColor);
+    const answer = dispatchPureAspect(aspect, fen, ask, studentColor, bestUci);
     if (answer) return { answer, aspect };
   }
   return null;
@@ -451,6 +455,9 @@ export function assembleBoardPlanAnswer(
   fen: string,
   studentColor: 'white' | 'black',
   side: 'me' | 'opponent',
+  /** REQUIRED — the engine's best move for the student, or null: the urgent
+   *  step ("First, …") stands only when the engine's best does it. */
+  bestUci: string | null,
 ): GroundedAnswer | null {
   try { new Chess(fen); } catch { return null; }
   const myC: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
@@ -514,7 +521,7 @@ export function assembleBoardPlanAnswer(
   // …AND WHAT YOU CAN WIN COMES BEFORE BOTH (one board read, 2026-10-08: the
   // plan warned "your queen on d1 can be taken" when White could simply take
   // the new queen on e1). One urgency computer, shared by every board answer.
-  const urgency = readBoardUrgency(fen, studentColor);
+  const urgency = readBoardUrgency(fen, studentColor, bestUci);
   const lead = urgencyLead(urgency);
   const urgent = lead ? `${lead} ` : '';
   // ONE ANSWER PER SQUARE: when the urgent step takes their piece, a plan line
@@ -952,7 +959,8 @@ export function assembleOpponentMoveAnswer(opts: {
   // A MOVE THAT HITS TWO PIECES OR WALKS TO PROMOTION IS NOT QUIET (live
   // replay 2026-10-08: "…d2 — a quiet move with no immediate tactical point",
   // the pawn attacking a rook and a bishop and one step from queening).
-  const urgency = readBoardUrgency(fen, studentColor);
+  // Only their move's threats are read here (no priority claim): no engine needed.
+  const urgency = readBoardUrgency(fen, studentColor, null);
   const hits = threatsAgainst(urgency, played.to, fen);
   if (hits && !clauses.some((c) => /attacks|threat/.test(c))) clauses.push(hits);
   const didPart = clauses.length > 0
@@ -1579,6 +1587,10 @@ export function assemblePositionAssessment(opts: {
    *  read instead of degrading to a lone hanging-piece note (David 2026-09-09
    *  loop: "is this winning for me?" answered only "your e5 pawn is hanging"). */
   fen?: string | null;
+  /** REQUIRED — the engine's best move for the student on `fen`, or null
+   *  (see `readBoardUrgency`: a "First, …" step stands only when it is the
+   *  engine's own priority). */
+  bestUci: string | null;
 }): GroundedAnswer | null {
   const { tactics, studentColor } = opts;
   const sc: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
@@ -1683,7 +1695,7 @@ export function assemblePositionAssessment(opts: {
   // hitting a rook and a bishop, "blockade the passed pawn" was the advice
   // while the pawn could simply be taken. The urgency read speaks first; the
   // tactics package and the positional read follow it.
-  const urgent = opts.fen ? urgencyLead(readBoardUrgency(opts.fen, studentColor)) : null;
+  const urgent = opts.fen ? urgencyLead(readBoardUrgency(opts.fen, studentColor, opts.bestUci)) : null;
   if (urgent) parts.push(urgent);
 
   // Add the single most relevant computed fact so the assessment names a WHY.
@@ -3773,10 +3785,10 @@ export function assemblePlanAnswer(opts: {
  *  the plan and why it comes first (the plan computer's own answer). With no
  *  board: the method itself, as a habit to carry to any position. */
 export const PLAN_METHOD_GENERAL = 'To find a plan, ask three things, in order. Where is their weakness — a pawn no pawn of theirs can protect, a hole they can never cover, a king left in the centre? Which of your pieces is worst — the one doing the least? Where is your pawn break — the pawn move that opens lines for your pieces? The plan is the one that hits the biggest target: a king before a pawn, a pawn that queens before a pawn that is merely weak. Then ask how many moves it takes, and whether they can stop it.';
-export function assemblePlanMethodAnswer(fen: string | null | undefined, studentColor: 'white' | 'black'): GroundedAnswer {
+export function assemblePlanMethodAnswer(fen: string | null | undefined, studentColor: 'white' | 'black', bestUci: string | null): GroundedAnswer {
   const general: GroundedAnswer = { facts: PLAN_METHOD_GENERAL, bestMoveSan: null, bestMoveFromTo: null, sources: ['method:plan'] };
   if (!fen) return general;
-  const plan = assembleBoardPlanAnswer(fen, studentColor, 'me');
+  const plan = assembleBoardPlanAnswer(fen, studentColor, 'me', bestUci);
   if (plan && /How do you find a plan\?/.test(plan.facts)) return plan;
   const read = methodRead(fen, studentColor === 'white' ? 'w' : 'b');
   if (!read) return plan ?? general;

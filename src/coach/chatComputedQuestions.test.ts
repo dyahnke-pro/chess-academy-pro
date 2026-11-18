@@ -18,10 +18,10 @@ const answer = (q: string): string => {
 describe('how to find a plan', () => {
   it('is a method question about planning, answered with the plan method on the board', () => {
     expect(fastPathLane('how do I find a plan?')).toBe('method');
-    expect(assemblePlanMethodAnswer(ISO, 'white').facts).toMatch(/^How do you find a plan\? .*Their weakness: their isolated pawn on d5\. .*So the plan: .*pile up on their pawn on d5\./i);
+    expect(assemblePlanMethodAnswer(ISO, 'white', null).facts).toMatch(/^How do you find a plan\? .*Their weakness: their isolated pawn on d5\. .*So the plan: .*pile up on their pawn on d5\./i);
   });
   it('with no board, the method itself', () => {
-    expect(assemblePlanMethodAnswer(null, 'white').facts).toBe(PLAN_METHOD_GENERAL);
+    expect(assemblePlanMethodAnswer(null, 'white', null).facts).toBe(PLAN_METHOD_GENERAL);
   });
   it('"why that plan?" and "what should I be planning" reach the plan lane', () => {
     expect(fastPathLane('why that plan?')).toBe('plan');

@@ -931,12 +931,12 @@ describe('assembleEndgameAnswer — Phase 5 (voice the tablebase verdict)', () =
 // top tactic) from the STUDENT's perspective. White-perspective eval in.
 describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)', () => {
   it('voices the eval from the student POV (White)', () => {
-    const a = assemblePositionAssessment({ evalCp: 120, mateIn: null, studentColor: 'white' });
+    const a = assemblePositionAssessment({ bestUci: null, evalCp: 120, mateIn: null, studentColor: 'white' });
     expect(a!.facts).toMatch(/You're clearly better\./);
     expect(a!.sources).toEqual(['engine:stockfish']);
   });
   it('flips perspective for Black (white-positive eval = Black worse)', () => {
-    const a = assemblePositionAssessment({ evalCp: 120, mateIn: null, studentColor: 'black' });
+    const a = assemblePositionAssessment({ bestUci: null, evalCp: 120, mateIn: null, studentColor: 'black' });
     expect(a!.facts).toMatch(/You're clearly worse\./);
   });
   it('calls a balanced position balanced', () => {
@@ -945,15 +945,15 @@ describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)
     // times a game must not always be the same recording), and pinning the
     // literal string would make the gate a spelling test rather than a
     // correctness one.
-    expect(assemblePositionAssessment({ evalCp: 10, mateIn: null, studentColor: 'white' })!.facts)
+    expect(assemblePositionAssessment({ bestUci: null, evalCp: 10, mateIn: null, studentColor: 'white' })!.facts)
       .toMatch(/balanced|level|concrete/i);
   });
   it('voices a forced mate for / against the student', () => {
-    expect(assemblePositionAssessment({ evalCp: null, mateIn: 3, studentColor: 'white' })!.facts).toContain('You have a forced mate in 3.');
-    expect(assemblePositionAssessment({ evalCp: null, mateIn: 3, studentColor: 'black' })!.facts).toContain('forced mate against you in 3');
+    expect(assemblePositionAssessment({ bestUci: null, evalCp: null, mateIn: 3, studentColor: 'white' })!.facts).toContain('You have a forced mate in 3.');
+    expect(assemblePositionAssessment({ bestUci: null, evalCp: null, mateIn: 3, studentColor: 'black' })!.facts).toContain('forced mate against you in 3');
   });
   it('appends the top live-tactics fact (a hanging student piece) alongside the eval', () => {
-    const a = assemblePositionAssessment({
+    const a = assemblePositionAssessment({ bestUci: null,
       evalCp: -250, mateIn: null, studentColor: 'white',
       // A pawn each: K+N v K is insufficient material — a finished game, which
       // the assessor now reports as its result (question walk 2026-09-27).
@@ -968,8 +968,8 @@ describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)
     expect(a!.sources).toContain('board:chess.js');
   });
   it('returns null when there is nothing computed to say (no eval, no tactic)', () => {
-    expect(assemblePositionAssessment({ evalCp: null, mateIn: null, studentColor: 'white' })).toBeNull();
-    expect(assemblePositionAssessment({ evalCp: null, mateIn: null, studentColor: 'white', tactics: tactics() })).toBeNull();
+    expect(assemblePositionAssessment({ bestUci: null, evalCp: null, mateIn: null, studentColor: 'white' })).toBeNull();
+    expect(assemblePositionAssessment({ bestUci: null, evalCp: null, mateIn: null, studentColor: 'white', tactics: tactics() })).toBeNull();
   });
   it('gives a board-true material read (not ONLY a hang note) when the engine is cold but a FEN is present (loop 2026-09-09)', () => {
     // Live teach-QA deflect: inside a walkthrough (no warm eval) "why is this
@@ -978,7 +978,7 @@ describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)
     // passed, the no-eval branch adds a real material assessment instead of
     // degrading to the lone hang note.
     const fen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2';
-    const a = assemblePositionAssessment({
+    const a = assemblePositionAssessment({ bestUci: null,
       evalCp: null, mateIn: null, studentColor: 'black', fen,
       tactics: tactics({ fen, hanging: [{ square: 'e5', piece: 'p', color: 'b' }] }),
     });
@@ -993,7 +993,7 @@ describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)
     // readPosition reports. The assessment must carry the plan, not just the
     // eval number, when the student asks for a read on the play board.
     const fen = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 b kq - 0 6';
-    const a = assemblePositionAssessment({ evalCp: 20, mateIn: null, studentColor: 'black', fen });
+    const a = assemblePositionAssessment({ bestUci: null, evalCp: 20, mateIn: null, studentColor: 'black', fen });
     expect(a).not.toBeNull();
     // The eval verdict still LEADS (the direct "how do I stand" answer)…
     expect(a!.facts).toMatch(/balanced|level|concrete|edge|better|worse/i);
@@ -1007,7 +1007,7 @@ describe('assemblePositionAssessment — Phase 1 (who is winning / eval readout)
     // emit [BOARD: highlight:e8:yellow] on any live board. Without this the
     // on-demand read spoke but the board stayed bare.
     const fen = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 b kq - 0 6';
-    const a = assemblePositionAssessment({ evalCp: 20, mateIn: null, studentColor: 'black', fen });
+    const a = assemblePositionAssessment({ bestUci: null, evalCp: 20, mateIn: null, studentColor: 'black', fen });
     expect(a!.keySquares).toBeDefined();
     expect(a!.keySquares).toContain('e8');
     // every entry is a real square token, never a move or prose fragment
@@ -1572,7 +1572,7 @@ describe('the plan lane: the worst piece needs a bar, not a mention', () => {
   it('stays quiet about a piece still on its home square in the opening', () => {
     // "improve your rook on h1" on move one is true and useless — the rook is
     // UNDEVELOPED, not misplaced, and that is a different lesson.
-    const a = assembleBoardPlanAnswer('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2', 'white', 'me');
+    const a = assembleBoardPlanAnswer('rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2', 'white', 'me', null);
     expect(a?.facts ?? '').not.toMatch(/improve your rook on h1/i);
   });
 
@@ -1583,14 +1583,14 @@ describe('the plan lane: the worst piece needs a bar, not a mention', () => {
     // (Knight on d7, not c6: on c6 it stood en prise to the d5 pawn, and a
     // plan computer that states strategy while a piece hangs is the walk-5 R7
     // defect — there the right answer is dxc6.)
-    const a = assembleBoardPlanAnswer('r4rk1/pp1n1ppp/8/3P4/8/2N5/PP3PPP/R4RK1 w - - 0 20', 'white', 'me');
+    const a = assembleBoardPlanAnswer('r4rk1/pp1n1ppp/8/3P4/8/2N5/PP3PPP/R4RK1 w - - 0 20', 'white', 'me', null);
     expect(a?.facts ?? '').toMatch(/passed pawn on d5/i);
     expect(a?.facts ?? '').toMatch(/here's how/i);
   });
 
   it('names it once the game has left the opening', () => {
     // Same idea, move 20: a piece that is still doing nothing there IS misplaced.
-    const a = assembleBoardPlanAnswer('3rkb1r/pp3ppp/2n1pn2/3q3b/3P4/4BN1P/PP2BPP1/RN1Q1RK1 w k - 1 20', 'white', 'me');
+    const a = assembleBoardPlanAnswer('3rkb1r/pp3ppp/2n1pn2/3q3b/3P4/4BN1P/PP2BPP1/RN1Q1RK1 w k - 1 20', 'white', 'me', null);
     // The plan method names the worst piece and its step (2026-10-15).
     expect(a?.facts ?? '').toMatch(/improve your|Your worst piece: your \w+ on [a-h][1-8]/i);
   });

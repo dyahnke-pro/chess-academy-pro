@@ -23,7 +23,7 @@ describe('answerBoardQuestion — grounded, routed, board-true', () => {
       ['what does pushing d5 accomplish?', 'move-purpose', /d5/i],
     ];
     for (const [ask, aspect, mustMatch] of cases) {
-      const out = answerBoardQuestion(fen, ask, 'white');
+      const out = answerBoardQuestion(fen, ask, 'white', null);
       expect(out, `no answer for: ${ask}`).not.toBeNull();
       expect(out!.aspect, `wrong aspect for: ${ask}`).toBe(aspect);
       expect(out!.answer.facts, `bad facts for "${ask}": ${out!.answer.facts}`).toMatch(mustMatch);
@@ -35,7 +35,7 @@ describe('answerBoardQuestion — grounded, routed, board-true', () => {
   it('every square a board answer names is real on the board', () => {
     const board = new Chess(fen);
     for (const ask of ['what is my bishop on c4 aiming at?', 'who controls e5?', 'what is my opponent threatening?']) {
-      const out = answerBoardQuestion(fen, ask, 'white')!;
+      const out = answerBoardQuestion(fen, ask, 'white', null)!;
       for (const sq of (out.answer.facts.match(/\b[a-h][1-8]\b/g) ?? [])) {
         // the named square is on the board (occupied or empty) — never invented notation
         expect(/^[a-h][1-8]$/.test(sq), `${sq} in "${out.answer.facts}"`).toBe(true);
@@ -49,7 +49,7 @@ describe('answerBoardQuestion — grounded, routed, board-true', () => {
   // Now grounded from structurePlan (boardPlan) + opponentIntentRead.
   it('my-plan: names the structural plan (passed pawn), not a best move', () => {
     const passer = '6k1/8/8/3P4/8/8/8/6K1 w - - 0 1'; // White passed pawn on d5
-    const out = answerBoardQuestion(passer, "what's my plan here?", 'white');
+    const out = answerBoardQuestion(passer, "what's my plan here?", 'white', null);
     expect(out, 'no my-plan answer').not.toBeNull();
     expect(out!.aspect).toBe('my-plan');
     expect(out!.answer.facts).toMatch(/d5|passed|break|file/i);
@@ -58,7 +58,7 @@ describe('answerBoardQuestion — grounded, routed, board-true', () => {
   });
   it('my-plan: synthesizes a multi-lever plan in a quiet middlegame (break / file / outpost / worst piece)', () => {
     const quiet = 'r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 7';
-    const out = answerBoardQuestion(quiet, "what's my plan here?", 'white');
+    const out = answerBoardQuestion(quiet, "what's my plan here?", 'white', null);
     expect(out, 'no my-plan answer').not.toBeNull();
     expect(out!.aspect).toBe('my-plan');
     // richer than a lone lever — at least one concrete plan verb + a real square/file
@@ -67,7 +67,7 @@ describe('answerBoardQuestion — grounded, routed, board-true', () => {
   });
   it("opponent-plan: names their trump/threat from the student's POV", () => {
     const theirPasser = '6k1/8/8/8/8/3p4/6K1/8 w - - 0 1'; // Black passed pawn on d3
-    const out = answerBoardQuestion(theirPasser, "what's their plan?", 'white');
+    const out = answerBoardQuestion(theirPasser, "what's their plan?", 'white', null);
     expect(out, 'no opponent-plan answer').not.toBeNull();
     expect(out!.aspect).toBe('opponent-plan');
     expect(out!.answer.facts).toMatch(/d3|passed|danger|threat/i);
@@ -76,14 +76,14 @@ describe('answerBoardQuestion — grounded, routed, board-true', () => {
     // Quiet Italian-ish middlegame, no passer/IQP/immediate threat — the
     // opponent lane must still name their levers (best piece / files / breaks).
     const quiet = 'r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 b - - 0 6';
-    const out = answerBoardQuestion(quiet, "what's their plan?", 'white');
+    const out = answerBoardQuestion(quiet, "what's their plan?", 'white', null);
     expect(out, 'no opponent-plan answer').not.toBeNull();
     expect(out!.aspect).toBe('opponent-plan');
     expect(out!.answer.facts.length).toBeGreaterThan(10);
   });
 
   it('returns null for a non-board / engine-only ask (existing lanes handle it)', () => {
-    expect(answerBoardQuestion(fen, 'how do I import my games?', 'white')).toBeNull();
-    expect(answerBoardQuestion(fen, 'what is the best move?', 'white')).toBeNull(); // engine lane
+    expect(answerBoardQuestion(fen, 'how do I import my games?', 'white', null)).toBeNull();
+    expect(answerBoardQuestion(fen, 'what is the best move?', 'white', null)).toBeNull(); // engine lane
   });
 });

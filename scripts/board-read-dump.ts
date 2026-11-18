@@ -80,7 +80,7 @@ async function main(): Promise<void> {
       const before = await engine.analyse(r.fen);
       out.lines = before.map((l) => ({ moves: l.moves.slice(0, 8), cp: l.evaluation, mate: l.mate }));
       const tactics = buildTacticsLiveContext(r.fen, asAnalysis(before), side, 1800);
-      const read = assemblePositionAssessment({ evalCp: before[0]?.evaluation ?? null, mateIn: before[0]?.mate ?? null, tactics, studentColor: side === 'w' ? 'white' : 'black', fen: r.fen });
+      const read = assemblePositionAssessment({ evalCp: before[0]?.evaluation ?? null, mateIn: before[0]?.mate ?? null, tactics, studentColor: side === 'w' ? 'white' : 'black', fen: r.fen, bestUci: before[0]?.moves[0] ?? null });
       out.positionRead = read?.facts ?? null;
       const bestUci = before[0]?.moves[0];
       if (bestUci) {

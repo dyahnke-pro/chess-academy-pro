@@ -144,7 +144,7 @@ describe('assemblePiecePlanAnswer — the plan for ONE named piece', () => {
     expect(assemblePiecePlanAnswer(START, 'plan for my bishop on d3', 'white', null)!.facts).toMatch(/don't have a bishop on d3/);
   });
   it('the board dispatcher routes the typo ask to this computer', () => {
-    const r = answerBoardQuestion(START, stripQuestionFiller('whats teh best plan for my bishp on f1'), 'white');
+    const r = answerBoardQuestion(START, stripQuestionFiller('whats teh best plan for my bishp on f1'), 'white', null);
     expect(r?.aspect).toBe('piece-plan');
     expect(r?.answer.facts).toMatch(/bishop on f1/);
   });
