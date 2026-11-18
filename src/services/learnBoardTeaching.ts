@@ -60,7 +60,6 @@ import { mastersPlanRead, planStillAhead, type MastersPlanRead } from './masters
 import { masterMovesCachedSync } from './masterPlayLookup';
 import { prefetchOpeningStory } from './openingStory';
 import { tempoCount } from './tempoCount';
-import { readTiming, timingClause } from './moveTiming';
 import { checkMethod } from './checkMethod';
 import { tradeJudgement } from './tradeJudgement';
 import { lastMoveFromSan } from './material';
@@ -322,10 +321,8 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingFact[] {
   // played at the right moment; a capture or a check is its own reason.
   if (i.cpLoss !== null && i.cpLoss < 50 && i.history.length >= 3 && !/[x+#]/.test(i.san)) {
     try {
-      const early = new Chess();
-      for (const san of i.history.slice(0, -3)) early.move(san);
-      const t = readTiming(early.fen(), i.fenBefore, i.san);
-      if (t) out.push(teachingFact('timing', { computer: 'readTiming', kind: 'point', ...mine, names: NAMES_NO_MOVE, proof: squaresProof(timingClause(t), [to, t.square]) ?? NO_PROOF.stated, text: `${timingClause(t)}.`, squares: [to, t.square], claims: [`timing:${i.san}`] }, { event: { name: 'coach_move_timing_named', props: { surface: 'coach-teach' } }, arrows: [],
+      const t = readBoard('timing', { fenBefore: i.fenBefore, san: i.san, history: i.history.slice(0, -1), student: i.fenBefore.split(' ')[1] === 'b' ? 'b' : 'w' });
+      if (t) out.push(teachingFact('timing', { computer: 'readTiming', kind: 'point', ...mine, names: NAMES_NO_MOVE, proof: t.proof, text: t.text, squares: t.squares, claims: t.claims }, { event: { name: 'coach_move_timing_named', props: { surface: 'coach-teach' } }, arrows: [],
         // A pawn push played at the right moment answers the mistimed-break question.
         ...(/^[a-h]/.test(i.san) ? { evidence: { tag: 'mistimed-pawn-break' as const, posedImportance: 70 } } : {}) }));
     } catch { /* a bonus, never a blocker */ }

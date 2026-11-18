@@ -19,7 +19,7 @@
 //
 // PURE: every computer here is pure; this module adds no chess of its own.
 import { ideaClaim, type IdeaKind } from './ideaKind';
-import { Chess, type Color, type Move } from 'chess.js';
+import { Chess, type Color, type Move, type Square } from 'chess.js';
 import { legalSeeGainFor } from './positionReadingService';
 import { NO_PROOF, squaresProof, isProof, legalLineProof, lineProofFromUci, type FactProof } from './proof';
 import { lineSeatAt } from '../utils/andList';
@@ -98,6 +98,9 @@ import { threatStoppedBy, playItAnyway } from './opponentMovePurpose';
 import { trickSidestepped } from './forkTrick';
 import { habitsOf } from './thinkAloud';
 import { knownAttack } from './attackLibrary';
+import { readTiming, timingClause } from './moveTiming';
+import { detectBluff, bluffClause } from './bluffDetector';
+import { contrastMoves, contrastClause } from './moveContrast';
 import { readTheirMove, READ_FACT_KIND, type EngineLine as ReadLine } from './opponentMoveReads';
 import { lineProof } from './proof';
 import { holeKey } from './conceptKey';
@@ -520,6 +523,16 @@ export interface BoardContexts {
    *  lines after their move (the student to move); `prev`: the student's own
    *  move before it; `flagged`: their move graded a fault, or null. The key
    *  is `<read kind>|<claim>`. */
+  /** THE TIMING (`timing`): the quiet move `san` on `fenBefore`, played a
+   *  move earlier (`history`: the moves before it, from the start), would
+   *  have lost material to a reply that no longer works. */
+  timing: { fenBefore: string; san: string; history: readonly string[]; student: Color };
+  /** THE BLUFF (`bluff`): their move `san` lands in the student's half hitting
+   *  things and wins nothing — `reply`: the student's best answer, or null. */
+  bluff: { fenBefore: string; san: string; reply: string | null; student: Color };
+  /** WHAT SEPARATES TWO GOOD MOVES (`contrast`): the student's sound `san`
+   *  and the engine's `bestSan` on `fenBefore`, and what one leaves undefended. */
+  contrast: { fenBefore: string; san: string; bestSan: string; student: Color };
   theirRead: TheirReadCtx;
   theirPreventTest: TheirReadCtx;
   theirTrigger: TheirReadCtx;
@@ -2846,6 +2859,77 @@ export const BOARD_COMPUTERS = {
       learn: { wired: 'services/thinkAloud.ts' },
       tactics: TACTICS_NA,
       weaknesses: { not: 'a reading of their move — no question of the student\'s posed' },
+    },
+  },
+  timing: {
+    // A quiet move played at the right moment (a capture or a check is its
+    // own reason, run J 2026-09-30).
+    read: ({ fenBefore, san, history, student }, fact) => safe(() => {
+      if (/[x+#]/.test(san) || history.length < 2) return null;
+      const early = new Chess();
+      for (const m of history.slice(0, -2)) early.move(m);
+      const t = readTiming(early.fen(), fenBefore, san);
+      if (!t) return null;
+      const to = new Chess(fenBefore).move(san).to;
+      const text = `${timingClause(t)}.`;
+      const mover: Color = new Chess(fenBefore).turn();
+      return fact({ key: `timing:${san}`, claims: [`timing:${san}`], text, proof: squaresProof(timingClause(t), [to, t.square]) ?? NO_PROOF.stated, squares: [to, t.square], stakes: null,
+        seat: mover === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore });
+    }),
+    computer: 'readTiming',
+    kind: 'timing',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
+    },
+  },
+  bluff: {
+    read: ({ fenBefore, san, reply, student }, fact) => safe(() => {
+      if (new Chess(fenBefore).turn() === student) return null;
+      const b = detectBluff(fenBefore, san, reply);
+      if (!b) return null;
+      const opening = Number(fenBefore.split(' ')[5] ?? '1') <= 10;
+      const text = `${bluffClause(b, opening)}.`;
+      const squares = [b.square, ...b.targets.map((x) => x.square)];
+      return fact({ key: `bluff:${san}:${b.square}`, claims: [`bluff:${b.square}`], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+        seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
+    }),
+    computer: 'detectBluff',
+    kind: 'bluff',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
+    },
+  },
+  contrast: {
+    read: ({ fenBefore, san, bestSan, student }, fact) => safe(() => {
+      const strip = (x: string): string => x.replace(/[+#!?]+$/, '');
+      if (strip(bestSan) === strip(san)) return null;
+      const c = contrastMoves(fenBefore, san, bestSan);
+      if (!c) return null;
+      const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
+      // The piece it names must stand on that square on the REAL board after
+      // the move played — the other candidate's board is hypothetical.
+      const p = new Chess(fenAfter).get(c.square as Square);
+      if (!p || p.type !== c.piece || p.color !== student) return null;
+      const text = `${contrastClause(c, fenAfter, student, san)}.`;
+      return fact({ key: `contrast:${san}:${bestSan}`, claims: [`contrast:${c.square}`], text, proof: squaresProof(text, [c.square]) ?? NO_PROOF.description, squares: [c.square], stakes: null,
+        seat: 'student', namesStudentMove: true, thread: LOCAL_THREAD, fen: fenAfter });
+    }),
+    computer: 'contrastMoves',
+    kind: 'contrast',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the move — no question of the student\'s posed' },
     },
   },
   oppositionRead: {

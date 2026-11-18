@@ -18,9 +18,6 @@ import { settledExchange, moverLineProof } from './exchangeLedger';
 import { threatProof } from './threatProof';
 import { inFluxAfter } from './boardState';
 import { readTrade } from './tradeQuality';
-import { readTiming, timingClause } from './moveTiming';
-import { contrastMoves, contrastClause } from './moveContrast';
-import { detectBluff, bluffClause } from './bluffDetector';
 import { forkConsequence } from './tacticVocabulary';
 import { pinConsequence } from './lookaheadPlan';
 import { squareRole } from './squareRole';
@@ -1239,15 +1236,7 @@ export function computeMoveFacets(
   const goodish = ctx.classification === null || ctx.classification === 'good' || ctx.classification === 'book'
     || ctx.classification === 'great' || ctx.classification === 'excellent';
   if (isStudent && goodish && ctx.bestMoveSan && ctx.bestMoveSan.replace(/[+#!?]+$/, '') !== san.replace(/[+#!?]+$/, '')) {
-    const c = contrastMoves(fenBefore, san, ctx.bestMoveSan);
-    // The piece it names must stand on that square on the REAL board after the
-    // move played — the other candidate's board is hypothetical.
-    const onBoard = c ? (() => { try { const p = new Chess(fenAfter).get(c.square as Square); return !!p && p.type === c.piece && p.color === studentColorWB; } catch { return false; } })() : false;
-    if (c && onBoard && studentColorWB) {
-      const t = made('contrastMoves', 'contrast', `${contrastClause(c, fenAfter, studentColorWB, san)}.`);
-      facets.push(t);
-      recSquares(t, [c.square]);
-    }
+    if (studentColorWB) basketFacet(readBoard('contrast', { fenBefore, san, bestSan: ctx.bestMoveSan, student: studentColorWB }));
   }
 
   // ── 7d. TIMING (WO-LAYERS-01 step 7) — the student's move, played a turn
@@ -1256,16 +1245,7 @@ export function computeMoveFacets(
   // "that was a blunder" (review walk 2065) credits the move the same breath
   // it condemns it.
   if (isStudent && !negativeClass && ctx.classification !== 'miss' && ply >= 3 && ctx.allSans.length >= ply) {
-    try {
-      const early = new Chess();
-      for (const m of ctx.allSans.slice(0, ply - 3)) early.move(m);
-      const t = readTiming(early.fen(), fenBefore, san);
-      if (t) {
-        const f = made('readTiming', 'timing', `${timingClause(t)}.`);
-        facets.push(f);
-        recSquares(f, [t.square]);
-      }
-    } catch { /* a replay that fails has no earlier board */ }
+    if (studentColorWB) basketFacet(readBoard('timing', { fenBefore, san, history: ctx.allSans.slice(0, ply - 1), student: studentColorWB }));
   }
 
   // ── 7e. ATTACK, SACRIFICES AND KINGS (kingAttackReads, batch 4) — on a
@@ -1322,12 +1302,7 @@ export function computeMoveFacets(
   // move: their piece lands in the student's half hitting things, and wins
   // nothing. Beginners spend tempo after tempo answering these.
   if (!isStudent && studentColorWB) {
-    const bluff = detectBluff(fenBefore, san, ctx.replyBestSan);
-    if (bluff) {
-      const t = made('detectBluff', 'bluff', `${bluffClause(bluff, ply <= 20)}.`);
-      facets.push(t);
-      recSquares(t, [bluff.square, ...bluff.targets.map((x) => x.square)]);
-    }
+    basketFacet(readBoard('bluff', { fenBefore, san, reply: ctx.replyBestSan, student: studentColorWB }));
   }
 
   // ── 7b. THE REFUTED ALTERNATIVE — "not X, because Y" (WO-LAYERS-01 step 3,

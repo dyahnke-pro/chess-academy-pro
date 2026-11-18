@@ -943,6 +943,15 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
         for (const f of readBoardAll('theirPreventTest', readCtx)) facts.push({ ...f, source: 'teachingMove', idea: 'threat', weight: 60 });
         for (const f of readBoardAll('theirTrigger', readCtx)) facts.push({ ...f, source: 'teachingMove', idea: 'threat', weight: 60 });
       }
+      // The quiet move played at the right moment, and the bluff of theirs
+      // that wins nothing.
+      for (const f of readBoardAll('timing', { fenBefore: i.fenBefore, san: i.san, history: i.history, student })) facts.push({ ...f, source: 'teachingMove', idea: 'tempo', weight: 56 });
+      for (const f of readBoardAll('bluff', { fenBefore: i.fenBefore, san: i.san, reply: null, student })) facts.push({ ...f, source: 'teachingMove', idea: 'threat', weight: 56 });
+      {
+        const bestUci = i.reads?.before[0]?.moves[0] ?? null;
+        const bestSan = bestUci ? (() => { try { return new Chess(i.fenBefore).move({ from: bestUci.slice(0, 2), to: bestUci.slice(2, 4), promotion: bestUci[4] }).san; } catch { return null; } })() : null;
+        if (bestSan && new Chess(i.fenBefore).turn() === student) for (const f of readBoardAll('contrast', { fenBefore: i.fenBefore, san: i.san, bestSan, student })) facts.push({ ...f, source: 'teachingMove', idea: 'plan', weight: 54 });
+      }
       // The fortress, both seats: a piece down and a draw the board explains,
       // read off the engine's lines after the move.
       for (const f of readBoardAll('fortress', { fenBefore: i.fenBefore, san: i.san, student, replies })) {

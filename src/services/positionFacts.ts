@@ -25,7 +25,6 @@ import { conceptInstanceKey, tacticGeometryKey, forkThreatKey, looseClaim, plyOf
 import { OPPOSITE_WINGS_CLAIM } from './planRace';
 import { layerStandings } from './teachingLayers';
 import { seatBare } from '../utils/seatPieces';
-import { detectBluff, bluffClause, type Bluff } from './bluffDetector';
 import { readConversion } from './conversionMethod';
 import type { StockfishAnalysis, TacticType } from '../types';
 import { computeCriticality, criticalitySignalsFromAnalysis, type CriticalityRead } from './criticality';
@@ -1228,7 +1227,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     } catch { /* same */ }
   }
   const composedAll = orderByValue(
-    [...buildClauses({ walkOwnsBestLine: !!input.namesBestMove && studentToMove && walksBestLine(fen, analysis.topLines ?? [], studentColor), refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt), proof: refutedAltProof(lm.fenBefore, refutedHere) } : null, rule: ruleHere && lm ? { computer: ruleHere.computer, id: ruleHere.id, text: ruleHere.text, squares: ruleHere.squares, names: ruleHere.names && !input.namesBestMove ? namesMoves(studentColor, input.fen, ruleHere.names) : NAMES_NO_MOVE, gradeFen: ((): string | undefined => { try { const c = new Chess(lm.fenBefore); return c.move(lm.san) ? c.fen() : undefined; } catch { return undefined; } })() } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down') && !(bestSanHere && isForcedReply(input.fen, bestSanHere)), criticalRead, criticalAnchor: studentToMove && input.opponentLastMove ? input.opponentLastMove : null, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, setUp, trapChance, studentSeat, tradeDanger, opponentIntent, statusText, structureText, structureSquares: planFact?.squares, structureClaim: planFact?.ideaKey, fundamentalText, fundamentalHeld, fundamentalNames: fundamentalText && bestSanHere && !input.namesBestMove ? namesMoves(studentColor, fen, namedSan(fen, bestSanHere)) : NAMES_NO_MOVE, fundamentalClaim, fundamentalSquares, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, namesMoves: !!input.namesBestMove, concept, methodBeat, methodKind, methodProof, methodSquares, bluff: studentToMove && input.opponentLastMove ? detectBluff(input.opponentLastMove.fenBefore, input.opponentLastMove.san, bestSanHere) : null, alreadySaid: said, looseSpells: input.looseSpells ?? null }), ...tradeClauses],
+    [...buildClauses({ walkOwnsBestLine: !!input.namesBestMove && studentToMove && walksBestLine(fen, analysis.topLines ?? [], studentColor), refuted: refutedHere && lm ? { fact: refutedHere, squares: moveSquares(lm.fenBefore, refutedHere.alt), proof: refutedAltProof(lm.fenBefore, refutedHere) } : null, rule: ruleHere && lm ? { computer: ruleHere.computer, id: ruleHere.id, text: ruleHere.text, squares: ruleHere.squares, names: ruleHere.names && !input.namesBestMove ? namesMoves(studentColor, input.fen, ruleHere.names) : NAMES_NO_MOVE, gradeFen: ((): string | undefined => { try { const c = new Chess(lm.fenBefore); return c.move(lm.san) ? c.fen() : undefined; } catch { return undefined; } })() } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down') && !(bestSanHere && isForcedReply(input.fen, bestSanHere)), criticalRead, criticalAnchor: studentToMove && input.opponentLastMove ? input.opponentLastMove : null, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, setUp, trapChance, studentSeat, tradeDanger, opponentIntent, statusText, structureText, structureSquares: planFact?.squares, structureClaim: planFact?.ideaKey, fundamentalText, fundamentalHeld, fundamentalNames: fundamentalText && bestSanHere && !input.namesBestMove ? namesMoves(studentColor, fen, namedSan(fen, bestSanHere)) : NAMES_NO_MOVE, fundamentalClaim, fundamentalSquares, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, namesMoves: !!input.namesBestMove, concept, methodBeat, methodKind, methodProof, methodSquares, bluff: studentToMove && input.opponentLastMove ? readBoard('bluff', { fenBefore: input.opponentLastMove.fenBefore, san: input.opponentLastMove.san, reply: bestSanHere, student: studentColor }) : null, alreadySaid: said, looseSpells: input.looseSpells ?? null }), ...tradeClauses],
     input.studentWeaknesses ?? [],
   );
 
@@ -1654,7 +1653,7 @@ function buildClauses(a: {
   speaks: boolean;
   mustDefend: MustDefend;
   /** The opponent's last move, read as a bluff (null = none, or no move given). */
-  bluff: Bluff | null;
+  bluff: CoachFact | null;
   /** WO-TEACH-02 — see `computePositionFacts`. */
   /** The alternative, plus its squares on the board it was an alternative ON
    *  (the student's pre-move board — coupled there, never from prose). */
@@ -1884,14 +1883,7 @@ function buildClauses(a: {
   // jumps to d4, a move designed to scare a beginner". Only when a real threat
   // is NOT standing (a must-defend above means something is genuinely hit).
   if (a.bluff && !(mustDefend.net >= 3)) {
-    const bluff = a.bluff;
-    {
-      ranked.push(clause('detectBluff', a.fen, {
-        kind: 'bluff',
-        text: `${bluffClause(bluff, openingPhase)}.`,
-        squares: [bluff.square, ...bluff.targets.map((t) => t.square)],
-      }));
-    }
+    ranked.push(clause('detectBluff', a.fen, { kind: 'bluff', text: a.bluff.text, squares: [...a.bluff.squares] }));
   }
   // WO-TEACH-02 — the same four teaching facts review carries as `[refuted]`,
   // `[rule]`, `[stopped]` and `[stock]`, ranked where their review twins sit.
