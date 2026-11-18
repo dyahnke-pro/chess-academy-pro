@@ -1,6 +1,6 @@
 # WO-DANYA-READS-01 — every idea Danya reads off a board, computed (David 2026-11-18: "If not, that goes top of list. But keep that list! It is VERY important all of that gets done")
 
-**Status: TOP OF THE LIST. Step 1 done; groups 1, 2, 4, 5, 8, 9, 10 built and merged on branch `urg-wt` (2026-11-18, not on main yet); groups 3, 6, 7 in progress.**
+**Status: TOP OF THE LIST. Step 1 done; groups 1, 2, 3, 4, 5, 8, 9, 10 built and merged on branch `urg-wt` (2026-11-18, not on main yet); groups 6 and 7 in progress.**
 
 ### Progress (2026-11-18), measured on the 209 boards with true depth-16 reads
 
@@ -22,6 +22,7 @@ The stored engine lines in the research file were SHALLOW (the dump script match
 |---|---|---|
 | 1 King attack | `kingSiege`, `backRankWeakness`, `loadedDiscovery`, `kingSacrifice`, their mate threat first | 11 boards |
 | 2 Evaluation reasons | `pieceActivity`, `initiativeRead`, `verdictWithReasons`, compensation counts the initiative | 81 boards; 33 of 69 even-material boards now get a reason |
+| 3 Plans | `breakTiming` (break prepared / stopped), `targetSelector` (pressure on a pawn no pawn guards, doubled rooks, Alekhine's gun), `pieceRoute` | merged |
 | 4 Tempting move fails | `temptingOnBoard`, `refutationOf`; `costReason` follows the line's own recaptures | 98 boards (was 0) |
 | 5 Endgame technique | opposition, zugzwang, named endings, race count, promotion choice | merged |
 | 8 Hidden combinations | `deepCombination`, bait on a natural capture, poisoned piece by the line | 6 position reads, 9 bait, 3 poisoned |
