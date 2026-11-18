@@ -62,3 +62,16 @@ describe('compensation: the initiative pays (WO-DANYA-READS-01 #2)', () => {
     expect(a?.text).toBe("They're up material: a piece for a pawn, but you're slightly better: you have the initiative.");
   });
 });
+
+describe('compensation: a king in the corner is castled (Danya, mastering the queen sacrifice #2)', () => {
+  const fen = 'r1b1k2r/ppppnpp1/4p2p/2bqP3/2N1NP2/2PB4/P3Q1PP/R4R1K b kq - 0 16';
+  it('White two pawns down, king on h1, theirs on e8: the king in the middle pays', () => {
+    // Stockfish depth 16: −0.36 for White, Black's best b6 (a quiet move).
+    const a = compensation(fen, 'b', 36, 'b7b6 c4d2 a8b8 e4g3'.split(' '));
+    expect(a?.text).toBe("They're two pawns down, but it is about level: your king is still in the middle.");
+  });
+  it('a king that never castled is not castled: on f1 the middle king pays nothing', () => {
+    const f1 = 'r1b1k2r/ppppnpp1/4p2p/2bqP3/2N1NP2/2PB4/P3Q1PP/R4K1R b kq - 0 16';
+    expect(compensation(f1, 'b', 36, 'b7b6 c4d2 a8b8 e4g3'.split(' '))).toBeNull();
+  });
+});
