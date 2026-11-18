@@ -166,11 +166,16 @@ const NOUN: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop',
 export function initiativeLine(i: Initiative, student: Color, key: number): string {
   const mine = i.side === student;
   const owner = mine ? 'their' : 'your';
-  const targets: string[] = [];
+  // The pieces hit, each once (a queen chased from square to square is one
+  // target); with three squares or more the pieces are named without them —
+  // the board lights where.
+  const hit: ForcingMove['target'][] = [];
   for (const f of i.forcing) {
-    const words = f.target.piece === 'k' ? `${owner} king` : `${owner} ${NOUN[f.target.piece]} on ${f.target.square}`;
-    if (!targets.includes(words)) targets.push(words);
+    const same = hit.find((t) => t.square === f.target.square || (t.piece === f.target.piece && (t.piece === 'k' || t.piece === 'q')));
+    if (!same) hit.push(f.target);
   }
+  const squared = hit.filter((t) => t.piece !== 'k').length <= 2;
+  const targets = hit.map((t) => (t.piece === 'k' ? `${owner} king` : squared ? `${owner} ${NOUN[t.piece]} on ${t.square}` : `${owner} ${NOUN[t.piece]}`));
   const hits = andList(targets);
   const stems = mine
     ? [

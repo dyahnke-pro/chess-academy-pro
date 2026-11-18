@@ -259,7 +259,7 @@
 - `src/services/liveVoiceDefects.test.ts:142`
 - `src/services/minorMatchup.test.ts:82`
 - `src/services/tacticsContextIdentity.test.ts:106`
-- `src/services/verdictWithReasons.test.ts:77`
+- `src/services/verdictWithReasons.test.ts:79`
 - `src/test/everySurfaceSpeaks.test.ts:127`
 
 ### `assembleAttackAssessment` (function) — 7 call sites
@@ -1060,7 +1060,7 @@
 - `src/services/moveInsight.ts:770`
 - `src/services/opponentMovePurpose.ts:64`
 - `src/services/reviewFullData.ts:1037`
-- `src/services/reviewMoveBriefing.ts:352`
+- `src/services/reviewMoveBriefing.ts:357`
 - `src/services/reviewNarrationFidelity.test.ts:141`
 - `src/services/reviewNarrationFidelity.test.ts:150`
 - `src/services/reviewNarrationFidelity.test.ts:162`

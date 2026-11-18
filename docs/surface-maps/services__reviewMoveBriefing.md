@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**731 lines · 14 exports · 31 importers · 23 tests · 0 audits**
+**736 lines · 14 exports · 31 importers · 23 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -61,7 +61,7 @@
 - `src/services/evalReading.test.ts:17`
 - `src/services/evalReading.test.ts:23`
 - `src/services/moveThoughtFacts.ts:947`
-- `src/services/verdictWithReasons.test.ts:70`
+- `src/services/verdictWithReasons.test.ts:72`
 
 ### `moveAspects` (function) — 13 call sites
 - `src/services/captureLeadsTo.test.ts:26`

@@ -177,7 +177,12 @@ function explainEval(fen: string, studentPovCp: number, studentWB: 'w' | 'b', la
   const why = evalWhy(fen, studentPovCp, studentWB, lastMove, lines);
   const verdict = evalVerdict(studentPovCp);
   const V = openSentence(verdict);
-  return why.length ? `${V} — ${why.join(', ')}.` : `${V}.`;
+  if (why.length === 0) return `${V}.`;
+  // A person names a square or two in a sentence, never a list: a second
+  // reason that would take the sentence past two squares is its own sentence.
+  const squaresIn = (t: string): number => new Set(t.match(/\b[a-h][1-8]\b/g) ?? []).size;
+  if (why.length > 1 && squaresIn(why.join(' ')) > 2) return `${V} — ${why[0]}. ${why.slice(1).map((w) => `${openSentence(w)}.`).join(' ')}`;
+  return `${V} — ${why.join(', ')}.`;
 }
 /** THE POSITION'S STANDING, SAID WHEN IT MOVED: the verdict and the board's
  *  reason for it, on a band change or a real swing (≥ 40cp) — never as a

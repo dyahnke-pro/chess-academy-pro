@@ -81,9 +81,9 @@ describe('pieceActivity: whose pieces are in play', () => {
     expect(line).toContain('their knight on f3 is pinned to its king');
   });
 
-  it('three minors at home against an army in play (the-rubinstein-maneuver #1)', () => {
+  it('three minors at home against an army in play, counted rather than listed (the-rubinstein-maneuver #1)', () => {
     const fen = 'rnbqrbk1/1p3ppp/2pp1n2/p5B1/P1BNP3/2N5/1PP2PPP/R2QR1K1 w - - 0 11';
-    expect(activityEdgeLine(activityEdge(fen)!, 'w')).toBe("Their knight on b8, bishop on c8 and bishop on f8 haven't moved. Your pieces are all in play.");
+    expect(activityEdgeLine(activityEdge(fen)!, 'w')).toBe("Three of their minor pieces haven't moved. Your pieces are all in play.");
   });
 
   it('negative controls: the start, a side in check, a king-and-pawn ending', () => {

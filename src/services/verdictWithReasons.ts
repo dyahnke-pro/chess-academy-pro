@@ -23,7 +23,8 @@
 // in. Dual use: the same reasons explain a position the student asks about and
 // a standing a move changed (Review's briefing, the lesson's thought).
 import { Chess, type Color, type Square } from 'chess.js';
-import { activityEdge, activityEdgeLine, type ActivityEdge } from './pieceActivity';
+import { activityEdge, activityEdgeLine, activityEdgeClause, type ActivityEdge } from './pieceActivity';
+import { openSentence } from '../utils/openSentence';
 import { initiativeRead, initiativeLine, type Initiative, type InitiativeLine } from './initiativeRead';
 import { settledBalance, quietBalance, type LastMove } from './material';
 import { kingCover, countKingAttack } from './kingSafety';
@@ -35,6 +36,7 @@ import { minorMatchupOn } from './minorMatchup';
 import { boardEdgeWords } from '../utils/countWords';
 import { andList } from '../utils/andList';
 import { stemKeyOf } from '../utils/rotateStem';
+import { evalBand } from './evalBand';
 
 export type ReasonKind =
   | 'material' | 'king-shelter' | 'king-centre' | 'king-attack' | 'activity' | 'initiative'
@@ -64,12 +66,9 @@ export interface VerdictWithReasons {
   squares: Square[];
 }
 
-/** The engine's margin that makes a side better (the one ladder, `evalBand`:
- *  under half a pawn is level). */
-const LEVEL_CP = 50;
 
 const other = (c: Color): Color => (c === 'w' ? 'b' : 'w');
-const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
+const cap = openSentence;
 const NUM = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
 const count = (n: number): string => NUM[n] ?? String(n);
 
@@ -218,7 +217,12 @@ export function boardReasons(fen: string, student: Color, lines: readonly Initia
       .sort();
     if (pawns.length > 0) {
       const own = OWN(x, student);
-      const clause = `${own} pawn${pawns.length === 1 ? '' : 's'} on ${andList(pawns)} give${pawns.length === 1 ? 's' : ''} ${WHO(x, student) === 'you' ? 'you' : 'them'} more space`;
+      const them = WHO(x, student) === 'you' ? 'you' : 'them';
+      // A square or two is named; more are "your centre pawns", the board
+      // lights which.
+      const clause = pawns.length === 1
+        ? `${own} pawn on ${pawns[0]} gives ${them} more space`
+        : pawns.length === 2 ? `${own} pawns on ${andList(pawns)} give ${them} more space` : `${own} centre pawns give ${them} more space`;
       out.push({ kind: 'space', side: x, weight: 40, clause, sentence: `${cap(clause)}.`, squares: pawns });
     }
   }
@@ -256,9 +260,7 @@ function times(n: number): string {
 
 /** The activity edge as a clause and a sentence (`pieceActivity`'s own words). */
 function activityLine(e: ActivityEdge, student: Color): { clause: string; text: string } {
-  const text = activityEdgeLine(e, student);
-  const first = text.split('. ')[0].replace(/\.$/, '');
-  return { clause: first.charAt(0).toLowerCase() + first.slice(1), text };
+  return { clause: activityEdgeClause(e, student), text: activityEdgeLine(e, student) };
 }
 
 /**
@@ -295,7 +297,8 @@ export function verdictWithReasons(input: {
   try { inCheck = new Chess(input.fen).inCheck(); } catch { return null; }
   const all = boardReasons(input.fen, input.student, inCheck ? null : input.lines, input.lastMove);
   if (all.length === 0) return null;
-  const favoured: Color | null = input.evalCp >= LEVEL_CP ? 'w' : input.evalCp <= -LEVEL_CP ? 'b' : null;
+  // The one ladder (`evalBand`): under half a pawn is level.
+  const favoured: Color | null = evalBand(input.evalCp) === 'level' ? null : input.evalCp > 0 ? 'w' : 'b';
   const sayable = all.filter((r) => !input.said.has(r.kind));
   const byWeight = (a: VerdictReason, b: VerdictReason): number => b.weight - a.weight;
   let picked: VerdictReason[] = [];

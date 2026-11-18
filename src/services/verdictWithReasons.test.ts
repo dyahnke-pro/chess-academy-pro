@@ -27,7 +27,9 @@ describe('verdictWithReasons', () => {
   it('space explains +1.21 (the-positional-sacrifice #1)', () => {
     const fen = 'rn1qr1k1/p4p2/1p1p1bpp/2pP4/4PP2/2N3N1/PP2Q1PP/R4RK1 w - - 0 15';
     const v = verdictWithReasons({ fen, evalCp: 121, mate: null, lines: lines('e2d2 f6c3 b2c3 b8d7 a1e1 d8h4 d2f2 a7a6'), student: 'w', lastMove: null, said: NONE })!;
-    expect(v.text).toBe('Your pawns on d5, e4 and f4 give you more space.');
+    // Three pawns are not listed square by square: the board lights them.
+    expect(v.text).toBe('Your centre pawns give you more space.');
+    expect(v.squares).toEqual(['d5', 'e4', 'f4']);
   });
 
   it('never a reason against the verdict: the side down the piece has the initiative, and the reason said is the piece (the-art-of-maneuvering #2)', () => {

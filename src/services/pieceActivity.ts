@@ -21,8 +21,9 @@
 // a8 has not moved.
 import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'chess.js';
 import { isMinorAtHome } from './development';
-import { findPieceQuality, legalSeeGainFor, type PieceQualityKind } from './positionReadingService';
+import { asIfToMove, findPieceQuality, legalSeeGainFor, type PieceQualityKind } from './positionReadingService';
 import { andList } from '../utils/andList';
+import { openSentence, continueSentence } from '../utils/openSentence';
 import { isPinnedPiece } from './nextPlans';
 
 export type OfficerState =
@@ -68,18 +69,6 @@ export type PieceActivity = Record<Color, SideActivity>;
 const OFFICERS = new Set<PieceSymbol>(['n', 'b', 'r', 'q']);
 const IDLE_STATES: ReadonlySet<OfficerState> = new Set<OfficerState>(['home', 'stuck', 'stranded', 'poor', 'pinned']);
 
-/** `fen` with `color` to move, en passant cleared — the way a piece's squares
- *  are counted whoever is on move. Null when the other king is in check (that
- *  board cannot exist). */
-function asMover(fen: string, color: Color): string | null {
-  const parts = fen.split(' ');
-  if (parts[1] === color) return fen;
-  try { if (new Chess(fen).inCheck()) return null; } catch { return null; }
-  parts[1] = color;
-  parts[3] = '-';
-  return parts.join(' ');
-}
-
 /** Every officer of both sides, read. Null on an unreadable FEN. */
 export function pieceActivity(fen: string): PieceActivity | null {
   let board: Chess;
@@ -91,7 +80,8 @@ export function pieceActivity(fen: string): PieceActivity | null {
   const out = {} as PieceActivity;
   for (const color of ['w', 'b'] as const) {
     const enemy: Color = color === 'w' ? 'b' : 'w';
-    const moverFen = asMover(fen, color);
+    // The one null-move (`asIfToMove`): null when that board cannot exist.
+    const moverFen = asIfToMove(fen, color);
     let moves: Move[] = [];
     let probe: Chess | null = null;
     let xray: Chess | null = null;
@@ -214,39 +204,87 @@ export function activityEdge(fen: string): ActivityEdge | null {
   return null;
 }
 
+/** One piece of the line: its words and how many squares they name. */
+interface Unit { text: string; named: number }
+
+/** Units packed into sentences, no sentence naming more than two squares (a
+ *  person names a square or two, never a list — the board lights the rest). */
+function pack(units: readonly Unit[]): string[] {
+  const out: string[] = [];
+  let cur: Unit[] = [];
+  let named = 0;
+  const flush = (): void => { if (cur.length) out.push(`${openSentence(andList(cur.map((u) => u.text)))}.`); cur = []; named = 0; };
+  for (const u of units) {
+    if (cur.length && named + u.named > 2) flush();
+    cur.push(u); named += u.named;
+  }
+  flush();
+  return out;
+}
+
+const NUM = ['no', 'one', 'two', 'three', 'four'];
+
+/** The passive side's idle pieces, as units. Pieces still at home share one
+ *  verb ("their knight on b8 and bishop on c8 haven't moved"); three or more
+ *  are counted ("three of their minor pieces haven't moved"). */
+function idleUnits(e: ActivityEdge, passive: string): Unit[] {
+  const home = e.idle.filter((o) => o.state === 'home');
+  const rest = e.idle.filter((o) => o.state !== 'home');
+  const units: Unit[] = [];
+  if (home.length === 1) units.push({ text: `${passive} ${idleWords(home[0])}`, named: 1 });
+  else if (home.length === 2) units.push({ text: `${passive} ${andList(home.map((o) => `${NOUN[o.piece]} on ${o.square}`))} haven't moved`, named: 2 });
+  else if (home.length > 2) units.push({ text: `${NUM[home.length] ?? home.length} of ${passive} minor pieces haven't moved`, named: 0 });
+  // Two pieces with the same trouble share it ("their bishop on c7 and
+  // knight on f6 each have one safe square").
+  const shared = (o: Officer): string => `${o.state}:${o.safe}:${o.quality ?? ''}`;
+  const done = new Set<Officer>();
+  for (const o of rest) {
+    if (done.has(o)) continue;
+    done.add(o);
+    const mate = rest.find((p) => !done.has(p) && shared(p) === shared(o) && (o.state === 'stuck' || o.state === 'stranded'));
+    if (!mate) { units.push({ text: `${passive} ${idleWords(o)}`, named: 1 }); continue; }
+    done.add(mate);
+    const has = o.safe === 0 ? 'have no safe square' : 'each have one safe square';
+    const where = o.state === 'stranded' ? ` and are stranded` : '';
+    units.push({ text: `${passive} ${NOUN[o.piece]} on ${o.square} and ${NOUN[mate.piece]} on ${mate.square} ${has}${where}`, named: 2 });
+  }
+  return units;
+}
+
+/** The active side's strong pieces, as units — rooks on one file share one
+ *  ("your rooks on f1 and f2 work on the half-open f-file"). */
+function strongUnits(e: ActivityEdge, active: string): Unit[] {
+  const said = new Set<Officer>();
+  const units: Unit[] = [];
+  for (const o of e.strong) {
+    if (said.has(o)) continue;
+    const mates = e.strong.filter((p) => p.piece === 'r' && o.piece === 'r' && p.quality === o.quality && p.square[0] === o.square[0] && (o.quality === 'open-file' || o.quality === 'semi-open-file'));
+    if (mates.length > 1) {
+      for (const m of mates) said.add(m);
+      units.push({ text: `${active} rooks on ${andList(mates.map((m) => m.square))} ${o.quality === 'open-file' ? `hold the open ${o.square[0]}-file` : `work on the half-open ${o.square[0]}-file`}`, named: mates.length });
+    } else { said.add(o); units.push({ text: `${active} ${strongWords(o)}`, named: 1 }); }
+  }
+  return units;
+}
+
 /** The edge said from the student's seat, leading with the pieces: "Their
- *  rook on a8 and bishop on c8 haven't moved, and their knight on a5 is stuck
- *  on the rim." / "Your bishop on h6 is stranded, with no safe square." The
- *  idle pieces carry the claim; a strong piece of the active side follows
- *  when there is one. */
+ *  knight on b8 and bishop on c8 haven't moved. Your pieces are all in play."
+ *  / "Your bishop on h6 is stranded with no safe square." The idle pieces
+ *  carry the claim; the active side's strong pieces follow when it has any. */
 export function activityEdgeLine(e: ActivityEdge, student: Color): string {
   const passive = e.side === student ? 'their' : 'your';
   const active = e.side === student ? 'your' : 'their';
-  const Cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
-  // Pieces still at home share one verb ("their rook on a8 and bishop on c8
-  // haven't moved"); every other idle piece says its own reason.
-  const home = e.idle.filter((o) => o.state === 'home');
-  const rest = e.idle.filter((o) => o.state !== 'home');
-  const clauses: string[] = [];
-  if (home.length === 1) clauses.push(`${passive} ${idleWords(home[0])}`);
-  else if (home.length > 1) clauses.push(`${passive} ${andList(home.map((o) => `${NOUN[o.piece]} on ${o.square}`))} haven't moved`);
-  for (const o of rest) clauses.push(`${passive} ${idleWords(o)}`);
-  let text = `${Cap(andList(clauses))}.`;
-  if (e.strong.length > 0) {
-    // Rooks on one file share the sentence ("your rooks on f1 and f2 work on
-    // the half-open f-file").
-    const said = new Set<Officer>();
-    const parts: string[] = [];
-    for (const o of e.strong) {
-      if (said.has(o)) continue;
-      const mates = e.strong.filter((p) => p.piece === 'r' && o.piece === 'r' && p.quality === o.quality && p.square[0] === o.square[0] && (o.quality === 'open-file' || o.quality === 'semi-open-file'));
-      if (mates.length > 1) {
-        for (const m of mates) said.add(m);
-        parts.push(`rooks on ${andList(mates.map((m) => m.square))} ${o.quality === 'open-file' ? `hold the open ${o.square[0]}-file` : `work on the half-open ${o.square[0]}-file`}`);
-      } else { said.add(o); parts.push(strongWords(o)); }
-    }
-    text += ` ${Cap(active)} ${andList(parts)}.`;
-  }
-  else if (e.activeIdle === 0) text += ` ${Cap(active)} pieces are all in play.`;
-  return text;
+  const sentences = pack(idleUnits(e, passive));
+  const strong = strongUnits(e, active);
+  if (strong.length > 0) sentences.push(...pack(strong));
+  else if (e.activeIdle === 0) sentences.push(`${openSentence(active)} pieces are all in play.`);
+  return sentences.join(' ');
+}
+
+/** The edge as a clause after a verdict, from the student's seat ("their
+ *  knight on b8 and bishop on c8 haven't moved"): the first sentence of the
+ *  idle pieces, two squares at most. */
+export function activityEdgeClause(e: ActivityEdge, student: Color): string {
+  const first = pack(idleUnits(e, e.side === student ? 'their' : 'your'))[0] ?? '';
+  return continueSentence(first.replace(/\.$/, ''));
 }
