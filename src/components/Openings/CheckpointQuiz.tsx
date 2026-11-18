@@ -2,6 +2,8 @@ import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CheckCircle, XCircle, HelpCircle, Swords } from 'lucide-react';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
+import { BOARD_EXTRA_CLASS } from '../Board/PlayLineButton';
 import { useAppStore } from '../../stores/appStore';
 import type { CheckpointQuizItem } from '../../types';
 
@@ -99,17 +101,32 @@ export function CheckpointQuiz({
         </div>
       </div>
 
-      {/* Move quiz: prominent CTA to open the full-screen practice board */}
-      {!isPlanQuiz && state === 'waiting' && (
-        <button
-          onClick={handlePracticeFullBoard}
-          className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium text-sm transition-colors mb-3"
-          style={{ background: 'rgb(168, 85, 247)', color: 'white' }}
-          data-testid="quiz-practice-full-board"
-        >
-          <Swords size={16} /> Practice on full board
-        </button>
-      )}
+      {/* THE ONE BOARD BAR (WO-PLATFORM-01): Hint is the quiz's hint; the
+          full-board practice and play-from-here ride in the extras row. */}
+      <div className="w-full max-w-xs mx-auto mb-3">
+        <CoachBoardBar
+          onBack={null}
+          onForward={null}
+          onHint={state === 'waiting' && !showHint ? () => setShowHint(true) : null}
+          onRead={null}
+          onWhy={null}
+          onPlayLine={null}
+          testIds={{ hint: 'quiz-hint-btn' }}
+          extras={<>
+            {/* Move quiz: open the full-screen practice board */}
+            {!isPlanQuiz && state === 'waiting' && (
+              <button onClick={handlePracticeFullBoard} className={BOARD_EXTRA_CLASS} data-testid="quiz-practice-full-board">
+                <Swords size={12} /> Practice on full board
+              </button>
+            )}
+            {state !== 'waiting' && onPlayPosition && (
+              <button onClick={() => onPlayPosition(quiz.fen)} className={BOARD_EXTRA_CLASS} data-testid="quiz-play-position">
+                <Swords size={12} /> Play from this position
+              </button>
+            )}
+          </>}
+        />
+      </div>
 
       {/* Multiple choice answers for plan quizzes */}
       {isPlanQuiz && quiz.choices && (
@@ -142,16 +159,6 @@ export function CheckpointQuiz({
         </div>
       )}
 
-      {state === 'waiting' && !showHint && (
-        <button
-          onClick={() => setShowHint(true)}
-          className="text-xs text-purple-400 hover:text-purple-300 transition-colors"
-          data-testid="quiz-hint-btn"
-        >
-          Need a hint?
-        </button>
-      )}
-
       {state === 'waiting' && showHint && (
         <p className="text-xs text-purple-300 bg-purple-500/10 rounded-lg px-2.5 py-1.5" data-testid="quiz-hint">
           {quiz.hint}
@@ -172,17 +179,6 @@ export function CheckpointQuiz({
             The answer is: {quiz.choices[quiz.correctIndex]}. {quiz.hint}
           </span>
         </div>
-      )}
-
-      {state !== 'waiting' && onPlayPosition && (
-        <button
-          onClick={() => onPlayPosition(quiz.fen)}
-          className="mt-3 flex items-center gap-2 text-sm font-medium text-purple-400 hover:text-purple-300 transition-colors"
-          data-testid="quiz-play-position"
-        >
-          <Swords size={14} />
-          Play from this position
-        </button>
       )}
     </div>
   );

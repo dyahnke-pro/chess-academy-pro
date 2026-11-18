@@ -166,8 +166,9 @@ describe('MiddlegamePlanStudy', () => {
 
   it('shows narration toggle button', () => {
     renderStudy();
+    // The board bar's Read (WO-PLATFORM-01) is the plan's read-aloud.
     expect(screen.getByTestId('narration-toggle')).toBeInTheDocument();
-    expect(screen.getByLabelText('Read aloud')).toBeInTheDocument();
+    expect(screen.getByLabelText('Read this position aloud')).toBeInTheDocument();
   });
 
   it('calls voiceService.speak when narration is toggled on', async () => {
@@ -189,10 +190,9 @@ describe('MiddlegamePlanStudy', () => {
     expect(voiceService.stop).toHaveBeenCalled();
   });
 
-  it('always shows bottom bar with practice button', () => {
+  it('always shows the board bar with the practice button', () => {
     renderStudy();
-    expect(screen.getByTestId('plan-bottom-bar')).toBeInTheDocument();
-    expect(screen.getByTestId('start-practice-btn')).toBeInTheDocument();
+    expect(screen.getByTestId('coach-board-bar')).toContainElement(screen.getByTestId('start-practice-btn'));
   });
 
   it('has a scrollable content area', () => {

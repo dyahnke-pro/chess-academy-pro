@@ -20,6 +20,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Chess } from 'chess.js';
 import { ChessBoard } from '../Board/ChessBoard';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
+import { BOARD_EXTRA_CLASS } from '../Board/PlayLineButton';
 import type { MoveResult } from '../../hooks/useChessGame';
 import { voiceService } from '../../services/voiceService';
 import {
@@ -231,6 +233,33 @@ export function EndgameTablebaseTrainer({ fen, studentColor, title, intro, onExi
         />
       </div>
 
+      {/* THE ONE BOARD BAR (WO-PLATFORM-01): Hint is the trainer's "Show me"
+          after a correctable slip; Watch / Let me try / Play it again ride
+          in the extras row. */}
+      <div className="w-full md:max-w-[420px] mx-auto">
+        <CoachBoardBar
+          onBack={null}
+          onForward={null}
+          onHint={phase === 'play' && feedback?.correctable ? () => { void showBestMove(); } : null}
+          hintLabel="Show me"
+          onRead={null}
+          onWhy={null}
+          onPlayLine={null}
+          testIds={{ hint: 'endgame-trainer-show-me' }}
+          extras={<>
+            {phase === 'watch' && !unreachable && walk && (
+              <button type="button" onClick={() => { void runWatch(); }} className={BOARD_EXTRA_CLASS} data-testid="endgame-trainer-watch">Watch it</button>
+            )}
+            {phase === 'watch' && !unreachable && walk && (
+              <button type="button" onClick={startPlay} className={BOARD_EXTRA_CLASS} data-testid="endgame-trainer-skip-to-play">Let me try</button>
+            )}
+            {phase === 'done' && (
+              <button type="button" onClick={startPlay} className={BOARD_EXTRA_CLASS} data-testid="endgame-trainer-again">Play it again</button>
+            )}
+          </>}
+        />
+      </div>
+
       <p className="text-sm text-theme-text-muted text-center" data-testid="endgame-trainer-status">
         {thinking ? 'Working it out…' : status}
       </p>
@@ -241,28 +270,6 @@ export function EndgameTablebaseTrainer({ fen, studentColor, title, intro, onExi
         </div>
       )}
 
-      <div className="flex items-center justify-center gap-2">
-        {phase === 'watch' && !unreachable && walk && (
-          <button type="button" onClick={() => { void runWatch(); }} className="rounded-xl border-2 border-green-500/30 bg-green-500/10 px-4 py-2 text-sm font-bold text-theme-text" data-testid="endgame-trainer-watch">
-            Watch it
-          </button>
-        )}
-        {phase === 'watch' && !unreachable && walk && (
-          <button type="button" onClick={startPlay} className="rounded-xl border-2 border-blue-500/30 bg-blue-500/10 px-4 py-2 text-sm font-bold text-theme-text" data-testid="endgame-trainer-skip-to-play">
-            Let me try
-          </button>
-        )}
-        {phase === 'play' && feedback?.correctable && (
-          <button type="button" onClick={() => { void showBestMove(); }} className="rounded-xl border-2 border-blue-500/30 bg-blue-500/10 px-4 py-2 text-sm font-bold text-theme-text" data-testid="endgame-trainer-show-me">
-            Show me
-          </button>
-        )}
-        {phase === 'done' && (
-          <button type="button" onClick={startPlay} className="rounded-xl border-2 border-green-500/30 bg-green-500/10 px-4 py-2 text-sm font-bold text-theme-text" data-testid="endgame-trainer-again">
-            Play it again
-          </button>
-        )}
-      </div>
     </div>
   );
 }

@@ -17,14 +17,13 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ArrowLeft,
-  ChevronLeft,
   ChevronRight,
   Check,
   AlertCircle,
-  Lightbulb,
 } from 'lucide-react';
 import type { CSSProperties } from 'react';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
 import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import { ImportGamesButton } from '../Games/ImportGamesButton';
 import { useEndgamePlayout } from '../../hooks/useEndgamePlayout';
@@ -299,6 +298,18 @@ function Lesson({ positions, index, onExit, onIndexChange }: LessonProps): JSX.E
 
   const controls = (
     <div className="flex flex-col gap-3 px-2 pb-4">
+      {/* THE ONE BOARD BAR (WO-PLATFORM-01): Back / Forward step between your
+          game positions. */}
+      <CoachBoardBar
+        onBack={index > 0 ? goPrev : null}
+        onForward={index < positions.length - 1 ? goNext : null}
+        onHint={!solved && position.bestMove && playout.hintMove && !playout.hintRevealed ? playout.revealHint : null}
+        onRead={null}
+        onWhy={null}
+        onPlayLine={null}
+        testIds={{ hint: 'from-games-hint' }}
+        extras={<span className="px-1 text-xs text-theme-text-muted font-mono">{index + 1}/{positions.length}</span>}
+      />
       <div className="rounded-xl border border-theme-border bg-theme-surface p-3 flex flex-col gap-2">
         <p className="text-sm text-theme-text">
           {studentSide === 'white' ? 'White' : 'Black'} to play. The move actually played
@@ -319,45 +330,12 @@ function Lesson({ positions, index, onExit, onIndexChange }: LessonProps): JSX.E
           </div>
         )}
         {!solved && position.bestMove && (
-          <div className="flex items-center gap-3">
-            <p className="text-[11px] text-cyan-400">
-              {playout.wrongAttempts > 0
-                ? 'Try again — drag or tap a piece.'
-                : 'Drag or tap a piece to play your move.'}
-            </p>
-            {playout.hintMove && !playout.hintRevealed && (
-              <button
-                onClick={playout.revealHint}
-                className="flex items-center gap-1 text-[11px] text-amber-400 hover:text-amber-300"
-                data-testid="from-games-hint"
-              >
-                <Lightbulb size={11} />
-                Hint
-              </button>
-            )}
-          </div>
+          <p className="text-[11px] text-cyan-400">
+            {playout.wrongAttempts > 0
+              ? 'Try again — drag or tap a piece.'
+              : 'Drag or tap a piece to play your move.'}
+          </p>
         )}
-      </div>
-      <div className="flex items-center justify-between gap-2">
-        <button
-          onClick={goPrev}
-          disabled={index === 0}
-          className="flex items-center gap-1 px-3 py-2 rounded-lg bg-theme-surface text-sm text-theme-text-muted hover:text-theme-text disabled:opacity-30"
-        >
-          <ChevronLeft size={16} />
-          Prev
-        </button>
-        <span className="text-xs text-theme-text-muted font-mono">
-          {index + 1}/{positions.length}
-        </span>
-        <button
-          onClick={goNext}
-          disabled={index === positions.length - 1}
-          className="flex items-center gap-1 px-3 py-2 rounded-lg bg-theme-surface text-sm text-theme-text-muted hover:text-theme-text disabled:opacity-30"
-        >
-          Next
-          <ChevronRight size={16} />
-        </button>
       </div>
     </div>
   );

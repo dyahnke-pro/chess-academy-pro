@@ -1,5 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { ControlledChessBoard } from '../Board/ControlledChessBoard';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
+import { BOARD_EXTRA_CLASS } from '../Board/PlayLineButton';
 import { EngineLines } from '../Board/EngineLines';
 import { useChessGame } from '../../hooks/useChessGame';
 import { useSettings } from '../../hooks/useSettings';
@@ -12,7 +14,7 @@ import { voiceService } from '../../services/voiceService';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { DiscussionPracticePanel } from './DiscussionPracticePanel';
 import { useAppStore } from '../../stores/appStore';
-import { ArrowLeft, MessageCircle, Volume2, VolumeX, Undo, Lightbulb, X } from 'lucide-react';
+import { ArrowLeft, MessageCircle, Undo, X } from 'lucide-react';
 import type {
   MiddlegamePlan,
   StockfishAnalysis,
@@ -456,21 +458,6 @@ export function MiddlegamePractice({
       {/* Board */}
       <div className="flex flex-col items-center justify-center px-4 py-2 overflow-hidden">
         <div className="relative w-full max-w-lg">
-          {/* Narration toggle — overlaid on the board so it sits at
-              the user's natural focal point. Backdrop-blur + surface
-              fill keeps it readable over light or dark squares. */}
-          <button
-            onClick={toggleNarration}
-            className={`absolute top-2 right-2 z-10 p-2 rounded-lg border border-theme-border/60 backdrop-blur-sm transition-colors shadow-md ${
-              isNarrating
-                ? 'bg-theme-accent text-white'
-                : 'bg-theme-surface/90 text-theme-text-muted hover:text-theme-text hover:bg-theme-surface'
-            }`}
-            aria-label={isNarrating ? 'Stop narration' : 'Read aloud'}
-            data-testid="narration-toggle"
-          >
-            {isNarrating ? <VolumeX size={18} /> : <Volume2 size={18} />}
-          </button>
           <ControlledChessBoard
             game={game}
             interactive={isPlayerTurn}
@@ -491,33 +478,27 @@ export function MiddlegamePractice({
         </div>
       </div>
 
-      {/* Practice controls — mirror the Get-a-Hint / Takeback surface
-          from CoachGamePage so practice behaves like the full Play
-          view the user already knows. */}
-      <div
-        className="flex-shrink-0 flex gap-2 px-4 py-2 border-t border-theme-border"
-        data-testid="middlegame-practice-controls"
-      >
-        <button
-          onClick={() => void handleGetHint()}
-          disabled={!isPlayerTurn || isHintActive || isCoachThinking}
-          className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-sm font-medium border border-theme-accent/50 text-theme-accent disabled:opacity-40"
-          data-testid="hint-btn"
-          aria-label="Get a hint"
-        >
-          <Lightbulb size={14} />
-          Get a Hint
-        </button>
-        <button
-          onClick={handleTakeback}
-          disabled={!canTakeback || isCoachThinking || isEngineMoving}
-          className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-sm font-medium border border-theme-border text-theme-text disabled:opacity-40"
-          data-testid="takeback-btn"
-          aria-label="Take back last move"
-        >
-          <Undo size={14} />
-          Takeback
-        </button>
+      {/* THE ONE BOARD BAR (WO-PLATFORM-01): Hint and Read are the
+          practice's own hint and read-aloud; Takeback rides in the extras. */}
+      <div className="flex-shrink-0 px-4 py-2 border-t border-theme-border" data-testid="middlegame-practice-controls">
+        <div className="w-full max-w-lg mx-auto">
+          <CoachBoardBar
+            onBack={null}
+            onForward={null}
+            onHint={isPlayerTurn && !isHintActive && !isCoachThinking ? () => void handleGetHint() : null}
+            onRead={toggleNarration}
+            reading={isNarrating}
+            onWhy={null}
+            onPlayLine={null}
+            testIds={{ hint: 'hint-btn', read: 'narration-toggle' }}
+            extras={
+              <button onClick={handleTakeback} disabled={!canTakeback || isCoachThinking || isEngineMoving} className={BOARD_EXTRA_CLASS} data-testid="takeback-btn" aria-label="Take back last move">
+                <Undo size={12} />
+                Takeback
+              </button>
+            }
+          />
+        </div>
       </div>
 
       {/* Coach Commentary */}

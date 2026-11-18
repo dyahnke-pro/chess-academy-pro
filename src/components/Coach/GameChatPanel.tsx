@@ -11,7 +11,7 @@ import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech } from '../../s
 import { dispatchCoachTurn, openTurnRead } from '../../coach/dispatchCoachTurn';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { useLineWalk, type LineWalk } from '../../hooks/useLineWalk';
-import { PlayLineButton } from '../Board/PlayLineButton';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
 import { detectNarrationToggle, applyNarrationToggle } from '../../services/coachAgentRunner';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { extractMoveArrows } from '../../services/coachMoveExtractor';
@@ -1716,9 +1716,10 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
           aria-label="In-game coach chat messages"
         >
           {!hostLineWalk && (ownLineWalk.walkFen || ownLineWalk.stated.length > 0) && (
-            <div className="w-48 mx-auto flex flex-col gap-1" data-testid="chat-panel-walk-board">
+            <div className="w-full max-w-xs mx-auto flex flex-col gap-1" data-testid="chat-panel-walk-board">
               <ConsistentChessboard fen={ownLineWalk.walkFen ?? ownLineWalk.stated[0]?.startFen ?? fen} arrows={ownLineWalk.walkArrows} interactive={false} boardOrientation={playerColor} showLastMoveHighlight />
-              <PlayLineButton onPlay={ownLineWalk.playStated} testId="chat-panel-play-line" wide />
+              {/* THE ONE BOARD BAR (WO-PLATFORM-01). */}
+              <CoachBoardBar onBack={null} onForward={null} onHint={null} onRead={null} onWhy={null} onPlayLine={ownLineWalk.playStated} testIds={{ line: 'chat-panel-play-line' }} />
             </div>
           )}
                     {isStreaming && (

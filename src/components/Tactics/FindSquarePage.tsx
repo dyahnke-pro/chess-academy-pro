@@ -5,6 +5,8 @@ import {
   Trophy, Volume2, VolumeX,
 } from 'lucide-react';
 import { ConsistentChessboard, type PiecePositionMap } from '../Chessboard/ConsistentChessboard';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
+import { BOARD_EXTRA_CLASS } from '../Board/PlayLineButton';
 import { TacticsPageHeader } from './TacticsPageHeader';
 import { voiceService } from '../../services/voiceService';
 import {
@@ -245,7 +247,7 @@ export function FindSquarePage(): JSX.Element {
         </button>
       </div>
 
-      {/* Target prompt + on-surface toggles */}
+      {/* Target prompt */}
       <div className="flex items-center gap-2 max-w-lg mx-auto w-full">
         <div
           className="flex-1 px-4 py-3 rounded-xl bg-theme-surface border-2 border-theme-accent/30 text-center"
@@ -261,30 +263,6 @@ export function FindSquarePage(): JSX.Element {
             </div>
           )}
         </div>
-        <button
-          type="button"
-          onClick={() => setCoordsShown((v) => !v)}
-          className="h-full p-3 rounded-xl border border-theme-border bg-theme-surface hover:border-theme-text-muted"
-          aria-pressed={coordsShown}
-          aria-label="Toggle coordinates"
-          data-testid="find-square-coords-toggle"
-          data-checked={coordsShown ? 'true' : 'false'}
-          title={coordsShown ? 'Hide coordinates' : 'Show coordinates'}
-        >
-          {coordsShown ? <Eye size={18} /> : <EyeOff size={18} />}
-        </button>
-        <button
-          type="button"
-          onClick={() => setVoiceMode((v) => !v)}
-          className="h-full p-3 rounded-xl border border-theme-border bg-theme-surface hover:border-theme-text-muted"
-          aria-pressed={voiceMode}
-          aria-label="Toggle voice"
-          data-testid="find-square-voice-toggle"
-          data-checked={voiceMode ? 'true' : 'false'}
-          title={voiceMode ? 'Mute voice' : 'Speak target'}
-        >
-          {voiceMode ? <Volume2 size={18} /> : <VolumeX size={18} />}
-        </button>
       </div>
 
       {/* Board — shrinks just enough that the streak row stays above the
@@ -301,37 +279,62 @@ export function FindSquarePage(): JSX.Element {
         />
       </div>
 
-      {/* Streak + sequence-mode toggle */}
-      <div ref={keepRef} className="flex items-center gap-3 max-w-lg mx-auto w-full">
-        <div
-          className="flex-1 flex items-center gap-2 px-3 py-2 rounded-xl bg-theme-surface border border-theme-border"
-          data-testid="find-square-streak"
-        >
-          <Trophy size={16} className={streak > 0 ? 'text-amber-400' : 'text-theme-text-muted'} />
-          <span className="text-sm">
-            Streak <span className="font-semibold text-theme-text tabular-nums" data-testid="find-square-streak-current">{streak}</span>
-          </span>
-          <span className="text-xs text-theme-text-muted ml-auto">
-            best <span className="font-medium text-theme-text tabular-nums" data-testid="find-square-streak-best">{bestStreak}</span>
-          </span>
-        </div>
-        <button
-          type="button"
-          onClick={() => {
-            setSequenceMode((v) => !v);
-            setStreak(0); // mode flip resets the streak to avoid cross-mode comparison
-          }}
-          className={`px-3 py-2 rounded-xl border text-sm font-medium transition-colors ${
-            sequenceMode
-              ? 'bg-theme-accent/15 border-theme-accent text-theme-accent'
-              : 'border-theme-border text-theme-text-muted hover:border-theme-text-muted'
-          }`}
-          aria-pressed={sequenceMode}
-          data-testid="find-square-sequence-toggle"
-        >
-          {sequenceMode ? <ChevronUp size={14} className="inline mr-1" /> : <ChevronDown size={14} className="inline mr-1" />}
-          Sequence
-        </button>
+      {/* THE ONE BOARD BAR (WO-PLATFORM-01): the drill's own toggles and
+          the streak ride in the extras row. */}
+      <div className="max-w-lg mx-auto w-full">
+        <CoachBoardBar
+          keepRef={keepRef}
+          onBack={null}
+          onForward={null}
+          onHint={null}
+          onRead={null}
+          onWhy={null}
+          onPlayLine={null}
+          extras={<>
+            <span className="flex items-center gap-1 px-1 text-[11px] text-theme-text-muted" data-testid="find-square-streak">
+              <Trophy size={12} className={streak > 0 ? 'text-amber-400' : 'text-theme-text-muted'} />
+              Streak <span className="font-semibold text-theme-text tabular-nums" data-testid="find-square-streak-current">{streak}</span>
+              · best <span className="font-medium text-theme-text tabular-nums" data-testid="find-square-streak-best">{bestStreak}</span>
+            </span>
+            <button
+              type="button"
+              onClick={() => setCoordsShown((v) => !v)}
+              className={BOARD_EXTRA_CLASS}
+              aria-pressed={coordsShown}
+              aria-label="Toggle coordinates"
+              data-testid="find-square-coords-toggle"
+              data-checked={coordsShown ? 'true' : 'false'}
+              title={coordsShown ? 'Hide coordinates' : 'Show coordinates'}
+            >
+              {coordsShown ? <Eye size={12} /> : <EyeOff size={12} />}
+            </button>
+            <button
+              type="button"
+              onClick={() => setVoiceMode((v) => !v)}
+              className={BOARD_EXTRA_CLASS}
+              aria-pressed={voiceMode}
+              aria-label="Toggle voice"
+              data-testid="find-square-voice-toggle"
+              data-checked={voiceMode ? 'true' : 'false'}
+              title={voiceMode ? 'Mute voice' : 'Speak target'}
+            >
+              {voiceMode ? <Volume2 size={12} /> : <VolumeX size={12} />}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setSequenceMode((v) => !v);
+                setStreak(0); // mode flip resets the streak to avoid cross-mode comparison
+              }}
+              className={`${BOARD_EXTRA_CLASS}${sequenceMode ? ' bg-theme-accent/15' : ''}`}
+              aria-pressed={sequenceMode}
+              data-testid="find-square-sequence-toggle"
+            >
+              {sequenceMode ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+              Sequence
+            </button>
+          </>}
+        />
       </div>
     </div>
   );

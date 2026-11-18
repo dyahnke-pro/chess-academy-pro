@@ -35,7 +35,8 @@ import {
 } from 'lucide-react';
 import type { CSSProperties } from 'react';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
-import { PlayLineButton } from '../Board/PlayLineButton';
+import { BOARD_EXTRA_CLASS } from '../Board/PlayLineButton';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
 import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import { TacticsPageHeader } from '../Tactics/TacticsPageHeader';
 import { useEndgamePlayout } from '../../hooks/useEndgamePlayout';
@@ -494,7 +495,22 @@ function AdaptivePuzzleRunner({
 
   const controls = (
     <div className="flex flex-col gap-3 px-2 pb-4">
-      <PlayLineButton onPlay={lineWalk.playStated} testId="calc-play-line" wide />
+      {/* THE ONE BOARD BAR (WO-PLATFORM-01). */}
+      <CoachBoardBar
+        keepRef={keepRef}
+        onBack={null}
+        onForward={null}
+        onHint={!playout.isComplete && playout.hintMove && !playout.hintRevealed ? playout.revealHint : null}
+        onRead={null}
+        onWhy={null}
+        onPlayLine={lineWalk.playStated}
+        testIds={{ hint: 'calc-hint', line: 'calc-play-line' }}
+        extras={<>
+          <button onClick={trackedReveal} disabled={playout.isComplete} className={BOARD_EXTRA_CLASS} data-testid="calculation-skip">Skip / Reveal</button>
+          <span className="px-1 text-xs text-theme-text-muted font-mono">{answered}/∞</span>
+          <button onClick={advance} disabled={!playout.isComplete} className={BOARD_EXTRA_CLASS} data-testid="calculation-next">Next</button>
+        </>}
+      />
       <div className="rounded-xl border border-theme-border bg-theme-surface p-3 flex flex-col gap-2">
         {fromGame && (
           <div
@@ -552,45 +568,12 @@ function AdaptivePuzzleRunner({
           />
         )}
         {!playout.isComplete && (
-          <div className="flex items-center gap-3">
-            <p className="text-[11px] text-cyan-400">
-              {playout.wrongAttempts > 0
-                ? 'Try again — drag or tap a piece.'
-                : 'Drag or tap a piece to play your move.'}
-            </p>
-            {playout.hintMove && !playout.hintRevealed && (
-              <button
-                onClick={playout.revealHint}
-                className="flex items-center gap-1 text-[11px] text-amber-400 hover:text-amber-300"
-                data-testid="calc-hint"
-              >
-                <Lightbulb size={11} />
-                Hint
-              </button>
-            )}
-          </div>
+          <p className="text-[11px] text-cyan-400">
+            {playout.wrongAttempts > 0
+              ? 'Try again — drag or tap a piece.'
+              : 'Drag or tap a piece to play your move.'}
+          </p>
         )}
-      </div>
-      <div ref={keepRef} className="flex items-center justify-between gap-2">
-        <button
-          onClick={trackedReveal}
-          disabled={playout.isComplete}
-          className="px-3 py-2 rounded-lg bg-theme-surface text-sm text-theme-text-muted hover:text-theme-text disabled:opacity-30"
-          data-testid="calculation-skip"
-        >
-          Skip / Reveal
-        </button>
-        <span className="text-xs text-theme-text-muted font-mono">
-          {answered}/∞
-        </span>
-        <button
-          onClick={advance}
-          disabled={!playout.isComplete}
-          className="px-4 py-2 rounded-lg bg-theme-accent text-theme-bg text-sm font-semibold disabled:opacity-30 disabled:cursor-not-allowed"
-          data-testid="calculation-next"
-        >
-          Next
-        </button>
       </div>
     </div>
   );

@@ -5,6 +5,12 @@ import { Play } from 'lucide-react';
 export const BOARD_BUTTON_CLASS =
   'flex flex-col items-center justify-center gap-0.5 min-h-[44px] px-1 py-1 rounded-lg border border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 disabled:hover:bg-transparent transition-colors';
 
+/** The extras row's button look — every screen-only control under the board
+ *  bar (Solution, Next, Restart, Skip…) wears this one class, so a control
+ *  looks the same on every board. */
+export const BOARD_EXTRA_CLASS =
+  'flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-cyan-500/30 text-cyan-400';
+
 interface PlayLineButtonProps {
   /** Plays the line the coach last stated, or null (greyed) when none. */
   onPlay: (() => void) | null;

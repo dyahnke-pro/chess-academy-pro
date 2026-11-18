@@ -1,5 +1,7 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { ControlledChessBoard } from '../Board/ControlledChessBoard';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
+import { BOARD_EXTRA_CLASS } from '../Board/PlayLineButton';
 import { useChessGame } from '../../hooks/useChessGame';
 import { MiddlegamePractice } from './MiddlegamePractice';
 import { voiceService } from '../../services/voiceService';
@@ -15,8 +17,6 @@ import {
   Swords,
   GitBranch,
   Flag,
-  Volume2,
-  VolumeX,
   Dumbbell,
 } from 'lucide-react';
 import type {
@@ -269,6 +269,29 @@ export function MiddlegamePlanStudy({
         </div>
       </div>
 
+      {/* THE ONE BOARD BAR (WO-PLATFORM-01): Read is the plan's read-aloud;
+          Practice This Plan rides in the extras row. */}
+      <div className="px-2 pt-2 flex justify-center flex-shrink-0">
+        <div className="w-full max-w-[400px]">
+          <CoachBoardBar
+            onBack={null}
+            onForward={null}
+            onHint={null}
+            onRead={toggleNarration}
+            reading={isNarrating}
+            onWhy={null}
+            onPlayLine={null}
+            testIds={{ read: 'narration-toggle' }}
+            extras={
+              <button onClick={() => setIsMiddlegamePracticing(true)} className={BOARD_EXTRA_CLASS} data-testid="start-practice-btn">
+                <Dumbbell size={12} />
+                Practice This Plan
+              </button>
+            }
+          />
+        </div>
+      </div>
+
       {/* Scrollable content */}
       <div className="flex-1 min-h-0 overflow-y-auto px-4 py-3" data-testid="plan-content-scroll">
         <AnimatePresence mode="wait">
@@ -427,32 +450,6 @@ export function MiddlegamePlanStudy({
         </AnimatePresence>
       </div>
 
-      {/* Bottom bar */}
-      <div
-        className="flex items-center gap-3 px-4 py-3 border-t border-theme-border flex-shrink-0 pb-safe-4"
-        data-testid="plan-bottom-bar"
-      >
-        <button
-          onClick={() => setIsMiddlegamePracticing(true)}
-          className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-sm bg-theme-accent text-white shadow-[0_0_16px_rgba(99,102,241,0.5)] hover:shadow-[0_0_24px_rgba(99,102,241,0.7)] transition-all"
-          data-testid="start-practice-btn"
-        >
-          <Dumbbell size={16} />
-          Practice This Plan
-        </button>
-        <button
-          onClick={toggleNarration}
-          className={`p-3 rounded-xl transition-colors ${
-            isNarrating
-              ? 'bg-theme-accent text-white'
-              : 'bg-theme-surface text-theme-text-muted hover:bg-theme-border/50'
-          }`}
-          aria-label={isNarrating ? 'Stop narration' : 'Read aloud'}
-          data-testid="narration-toggle"
-        >
-          {isNarrating ? <VolumeX size={18} /> : <Volume2 size={18} />}
-        </button>
-      </div>
     </div>
   );
 }

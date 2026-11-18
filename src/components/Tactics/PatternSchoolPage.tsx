@@ -4,6 +4,8 @@ import { ChevronDown, ChevronUp, Eye, Shield, Crosshair, Swords } from 'lucide-r
 import { TacticsPageHeader } from './TacticsPageHeader';
 import { Chess } from 'chess.js';
 import { ConsistentChessboard, type BoardArrow } from '../Chessboard/ConsistentChessboard';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
+import { BOARD_EXTRA_CLASS } from '../Board/PlayLineButton';
 import { admitArrow } from '../../services/arrowDoor';
 import { detectTactics } from '../../services/tacticsDetector';
 import { PATTERN_REGISTRY, type TacticPatternLesson } from '../../data/patternRegistry';
@@ -196,27 +198,24 @@ function PatternCard({ lesson }: { lesson: TacticPatternLesson }): JSX.Element {
                   arrows={askable && !revealed ? [] : example.arrows}
                   squareStyles={askable && !revealed ? {} : Object.fromEntries(example.targets.map((sq) => [sq, TARGET_SQUARE]))}
                 />
-              </div>
-              {askable && !revealed && (
-                <div className="flex gap-2 mt-2">
-                  <button
-                    type="button"
-                    onClick={findIt}
-                    className="flex-1 py-2 rounded-xl border-2 border-indigo-500/50 bg-indigo-500/20 font-semibold text-sm text-theme-text"
-                    data-testid={`pattern-find-it-${lesson.id}`}
-                  >
-                    Find it yourself
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setRevealed(true)}
-                    className="px-3 py-2 rounded-xl text-sm text-theme-text-muted"
-                    data-testid={`pattern-show-it-${lesson.id}`}
-                  >
-                    Show me
-                  </button>
+                {/* THE ONE BOARD BAR (WO-PLATFORM-01): Hint is "Show me";
+                    "Find it yourself" rides in the extras row. */}
+                <div className="mt-2">
+                  <CoachBoardBar
+                    onBack={null}
+                    onForward={null}
+                    onHint={askable && !revealed ? () => setRevealed(true) : null}
+                    hintLabel="Show me"
+                    onRead={null}
+                    onWhy={null}
+                    onPlayLine={null}
+                    testIds={{ hint: `pattern-show-it-${lesson.id}` }}
+                    extras={askable && !revealed ? (
+                      <button type="button" onClick={findIt} className={BOARD_EXTRA_CLASS} data-testid={`pattern-find-it-${lesson.id}`}>Find it yourself</button>
+                    ) : undefined}
+                  />
                 </div>
-              )}
+              </div>
             </div>
           )}
           <button

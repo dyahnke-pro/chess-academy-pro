@@ -17,8 +17,10 @@
  * (see CLAUDE.md → Strict Narration Timing).
  */
 import { useMemo, type CSSProperties } from 'react';
-import { ArrowLeft, Play, Pause, ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react';
+import { ArrowLeft, Play, Pause, RotateCcw } from 'lucide-react';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
+import { BOARD_EXTRA_CLASS } from '../Board/PlayLineButton';
 import { useWalkthroughRunner } from '../../hooks/useWalkthroughRunner';
 import type { WalkthroughSession } from '../../types/walkthrough';
 import { narrationArrowsThroughDoor } from '../../services/arrowDoor';
@@ -98,6 +100,25 @@ export function MiddlegamePlanInline({
           />
         </div>
 
+        {/* THE ONE BOARD BAR (WO-PLATFORM-01): Back / Forward step the plan;
+            play/pause and restart ride in the extras row. */}
+        <CoachBoardBar
+          onBack={runner.currentIndex > 0 ? runner.prev : null}
+          onForward={runner.isFinished ? null : runner.next}
+          onHint={null}
+          onRead={null}
+          onWhy={null}
+          onPlayLine={null}
+          extras={<>
+            {runner.isPlaying ? (
+              <button onClick={runner.pause} className={BOARD_EXTRA_CLASS} aria-label="Pause"><Pause size={12} /> Pause</button>
+            ) : (
+              <button onClick={runner.play} className={BOARD_EXTRA_CLASS} aria-label="Play"><Play size={12} /> {runner.isFinished ? 'Replay' : 'Play'}</button>
+            )}
+            <button onClick={runner.restart} className={BOARD_EXTRA_CLASS} aria-label="Restart"><RotateCcw size={12} /></button>
+          </>}
+        />
+
         {step?.narration && (
           <p className="text-sm text-theme-text leading-snug w-full">
             {step.narration}
@@ -134,48 +155,6 @@ export function MiddlegamePlanInline({
           </div>
         )}
 
-        <div className="flex items-center justify-center gap-3 pt-1">
-          <button
-            onClick={runner.prev}
-            disabled={runner.currentIndex <= 0}
-            className="flex items-center justify-center w-12 h-12 rounded-full bg-theme-surface border border-theme-border disabled:opacity-40"
-            aria-label="Previous move"
-          >
-            <ChevronLeft size={20} />
-          </button>
-          {runner.isPlaying ? (
-            <button
-              onClick={runner.pause}
-              className="flex items-center gap-2 px-6 h-12 rounded-full bg-cyan-500/20 border border-cyan-400/50 text-cyan-200"
-              aria-label="Pause"
-            >
-              <Pause size={18} /> Pause
-            </button>
-          ) : (
-            <button
-              onClick={runner.play}
-              className="flex items-center gap-2 px-6 h-12 rounded-full bg-cyan-500/20 border border-cyan-400/50 text-cyan-200"
-              aria-label="Play"
-            >
-              <Play size={18} /> {runner.isFinished ? 'Replay' : 'Play'}
-            </button>
-          )}
-          <button
-            onClick={runner.next}
-            disabled={runner.isFinished}
-            className="flex items-center justify-center w-12 h-12 rounded-full bg-theme-surface border border-theme-border disabled:opacity-40"
-            aria-label="Next move"
-          >
-            <ChevronRight size={20} />
-          </button>
-          <button
-            onClick={runner.restart}
-            className="flex items-center justify-center w-12 h-12 rounded-full bg-theme-surface border border-theme-border"
-            aria-label="Restart"
-          >
-            <RotateCcw size={18} />
-          </button>
-        </div>
       </div>
     </div>
   );

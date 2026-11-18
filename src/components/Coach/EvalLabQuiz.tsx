@@ -46,6 +46,8 @@ import {
 import type { CSSProperties } from 'react';
 import { Chess } from 'chess.js';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
+import { BOARD_EXTRA_CLASS } from '../Board/PlayLineButton';
 import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import { useEndgamePlayout } from '../../hooks/useEndgamePlayout';
 import { useClickToMove } from '../../hooks/useClickToMove';
@@ -465,6 +467,9 @@ function QuizItemRunner({
         }
         controls={
           <div className="flex flex-col gap-3 px-2 pb-4">
+            {/* THE ONE BOARD BAR (WO-PLATFORM-01) — the same bar on every
+                stage of the quiz. */}
+            <CoachBoardBar onBack={null} onForward={null} onHint={null} onRead={null} onWhy={null} onPlayLine={null} />
             <div className="rounded-xl border-2 border-cyan-500/30 bg-cyan-500/10 p-3 flex flex-col gap-2">
               <div className="flex items-center gap-2">
                 <Lightbulb size={14} className="text-cyan-400" />
@@ -519,16 +524,6 @@ function QuizItemRunner({
                 : `${playout.wrongAttempts} wrong tries.`}
             </p>
           )}
-          {playout.hintMove && !playout.hintRevealed && (
-            <button
-              onClick={playout.revealHint}
-              className="flex items-center gap-1 text-[11px] text-amber-400 hover:text-amber-300 self-start"
-              data-testid="eval-lab-hint"
-            >
-              <Lightbulb size={11} />
-              Hint
-            </button>
-          )}
         </div>
       </div>
     );
@@ -565,18 +560,28 @@ function QuizItemRunner({
           heldTheEval={heldTheEval}
           tablebaseFinal={tablebaseFinal}
         />
-        <button
-          onClick={onAdvance}
-          className="w-full px-4 py-2 rounded-lg bg-theme-accent text-theme-bg text-sm font-semibold"
-          data-testid="eval-lab-next"
-        >
-          Next position
-        </button>
       </div>
     );
   }
 
-  return <ChessLessonLayout header={header} board={board} controls={controls} />;
+  // THE ONE BOARD BAR (WO-PLATFORM-01): Hint in stage 1, Next position in
+  // the extras row once the position is revealed.
+  const bar = (
+    <CoachBoardBar
+      onBack={null}
+      onForward={null}
+      onHint={stage === 'stage1' && playout.hintMove && !playout.hintRevealed ? playout.revealHint : null}
+      onRead={null}
+      onWhy={null}
+      onPlayLine={null}
+      testIds={{ hint: 'eval-lab-hint' }}
+      extras={stage === 'reveal' ? (
+        <button onClick={onAdvance} className={BOARD_EXTRA_CLASS} data-testid="eval-lab-next">Next position</button>
+      ) : undefined}
+    />
+  );
+
+  return <ChessLessonLayout header={header} board={board} controls={<div className="flex flex-col gap-3 px-2">{bar}{controls}</div>} />;
 }
 
 // ─── Stage 0 button ────────────────────────────────────────────────

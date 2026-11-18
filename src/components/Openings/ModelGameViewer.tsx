@@ -7,8 +7,6 @@ import { voiceService } from '../../services/voiceService';
 import { captureEvent } from '../../services/analytics';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  ChevronLeft,
-  ChevronRight,
   ChevronsLeft,
   ChevronsRight,
   Play,
@@ -19,6 +17,7 @@ import {
 } from 'lucide-react';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { LessonScaffold } from './LessonScaffold';
+import { BOARD_EXTRA_CLASS } from '../Board/PlayLineButton';
 import type { ModelGame, ModelGameCriticalMoment, AnnotationArrow } from '../../types';
 import { narrationArrowsThroughDoor } from '../../services/arrowDoor';
 import type { BoardArrow } from '../../types';
@@ -378,79 +377,36 @@ export function ModelGameViewer({
     ? `${currentMove.moveNumber}${currentMove.isWhite ? '.' : '...'} ${currentMove.san}`
     : 'Starting Position';
 
-  const moveControls = (
-    <div className="flex items-center justify-center gap-2">
-      <button
-        onClick={goFirst}
-        disabled={isExploring}
-        className="p-2 rounded-full bg-theme-surface text-theme-text hover:bg-theme-border transition-colors disabled:opacity-30"
-        aria-label="First move"
-        data-testid="model-game-first"
-      >
-        <ChevronsLeft size={18} />
+  // THE ONE BOARD BAR (WO-PLATFORM-01): Back / Forward step the game;
+  // first / last, auto-play and explore ride in the extras row.
+  const bar = {
+    onBack: !isExploring && currentIndex >= 0 ? goPrev : null,
+    onForward: !isExploring && currentIndex < moves.length - 1 ? goNext : null,
+    onHint: null,
+    onRead: null,
+    onWhy: null,
+    onPlayLine: null,
+    testIds: { back: 'model-game-prev', forward: 'model-game-next' },
+    extras: (<>
+      <button onClick={goFirst} disabled={isExploring} className={BOARD_EXTRA_CLASS} aria-label="First move" data-testid="model-game-first"><ChevronsLeft size={12} /></button>
+      <button onClick={toggleAutoPlay} disabled={isExploring} className={BOARD_EXTRA_CLASS} aria-label={isAutoPlaying ? 'Pause' : 'Play'} data-testid="model-game-autoplay">
+        {isAutoPlaying ? <Pause size={12} /> : <Play size={12} />}{isAutoPlaying ? 'Pause' : 'Play'}
       </button>
-      <button
-        onClick={goPrev}
-        disabled={isExploring || currentIndex < 0}
-        className="p-2.5 rounded-full bg-theme-surface text-theme-text hover:bg-theme-border transition-colors disabled:opacity-30"
-        aria-label="Previous move"
-        data-testid="model-game-prev"
-      >
-        <ChevronLeft size={22} />
-      </button>
-      <button
-        onClick={toggleAutoPlay}
-        disabled={isExploring}
-        className="p-3.5 rounded-full bg-theme-accent text-white shadow-lg hover:opacity-90 transition-opacity disabled:opacity-40"
-        aria-label={isAutoPlaying ? 'Pause' : 'Play'}
-        data-testid="model-game-autoplay"
-      >
-        {isAutoPlaying ? <Pause size={24} /> : <Play size={24} />}
-      </button>
-      <button
-        onClick={goNext}
-        disabled={isExploring || currentIndex >= moves.length - 1}
-        className="p-2.5 rounded-full bg-theme-surface text-theme-text hover:bg-theme-border transition-colors disabled:opacity-30"
-        aria-label="Next move"
-        data-testid="model-game-next"
-      >
-        <ChevronRight size={22} />
-      </button>
-      <button
-        onClick={goLast}
-        disabled={isExploring}
-        className="p-2 rounded-full bg-theme-surface text-theme-text hover:bg-theme-border transition-colors disabled:opacity-30"
-        aria-label="Last move"
-        data-testid="model-game-last"
-      >
-        <ChevronsRight size={18} />
-      </button>
-      <div className="w-px h-6 bg-theme-border mx-1" />
+      <button onClick={goLast} disabled={isExploring} className={BOARD_EXTRA_CLASS} aria-label="Last move" data-testid="model-game-last"><ChevronsRight size={12} /></button>
       <button
         onClick={toggleExplore}
-        className={`p-2 rounded-full border transition-colors ${
-          isExploring
-            ? 'bg-purple-500/20 border-purple-500/40 text-purple-400'
-            : 'hover:bg-theme-surface border-theme-border text-theme-text-muted'
-        }`}
+        className={`${BOARD_EXTRA_CLASS}${isExploring ? ' bg-purple-500/20 border-purple-500/40 text-purple-400' : ''}`}
         aria-label={isExploring ? 'Exit explore mode' : 'Explore alternatives'}
         title={isExploring ? 'Exit explore' : 'What if...?'}
         data-testid="model-game-explore"
       >
-        <Compass size={18} />
+        <Compass size={12} />
       </button>
       {isExploring && exploreMoves.length > 0 && (
-        <button
-          onClick={undoExploreMove}
-          className="p-2 rounded-full hover:bg-theme-surface border border-theme-border transition-colors text-theme-text-muted"
-          aria-label="Undo explore move"
-          data-testid="model-game-explore-undo"
-        >
-          <RotateCcw size={18} />
-        </button>
+        <button onClick={undoExploreMove} className={BOARD_EXTRA_CLASS} aria-label="Undo explore move" data-testid="model-game-explore-undo"><RotateCcw size={12} /></button>
       )}
-    </div>
-  );
+    </>),
+  };
 
   return (
     <LessonScaffold
@@ -460,6 +416,7 @@ export function ModelGameViewer({
       subtitle={`${game.event}, ${game.year} · ${game.result}`}
       onExit={onExit}
       progress={{ current: currentIndex + 1, total: moves.length }}
+      bar={bar}
       board={
         <BoardVoiceOverlay fen={currentFen} className="w-full aspect-square">
           <ConsistentChessboard
@@ -493,7 +450,6 @@ export function ModelGameViewer({
           )}
         </div>
       }
-      customControls={moveControls}
       narrationRaw={
         <>
           <AnimatePresence mode="wait">

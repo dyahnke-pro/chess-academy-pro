@@ -5,6 +5,8 @@ import { ConsistentChessboard, type BoardArrow } from '../Chessboard/ConsistentC
 import type { MissionBriefing } from '../../missions/missionCard';
 import { briefingFor } from './briefingMirror';
 import { admitArrows } from '../../services/arrowDoor';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
+import { BOARD_EXTRA_CLASS } from '../Board/PlayLineButton';
 
 /** How long each demo move stays on the board. */
 export const DEMO_STEP_MS = 1200;
@@ -99,35 +101,43 @@ export function BriefingFlow({ title, briefing: authored, mode, orientation, onD
           onSquareClick={({ square }) => tap(square)}
         />
       </div>
-      {step === 'idea' && (
-        <>
-          <p className="text-sm text-theme-text" data-testid="mission-briefing-idea">{briefing.idea}</p>
-          <button onClick={() => { setFrame(0); setStep('demo'); }} className="flex items-center justify-center gap-1 rounded-xl bg-sky-500 px-4 py-3 text-sm font-semibold text-white min-h-[44px]" data-testid="mission-briefing-next">
-            Show me<ChevronRight size={16} />
-          </button>
-        </>
-      )}
-      {/* The demo can be skipped at any move (David 2026-10-23: "Unable to
-          skip the show me mate"). */}
-      {step === 'demo' && (
-        <button
-          onClick={() => setStep('try')}
-          className="flex items-center justify-center gap-1 rounded-xl bg-sky-500 px-4 py-3 text-sm font-semibold text-white min-h-[44px]"
-          data-testid="mission-briefing-try"
-        >
-          Your turn<ChevronRight size={16} />
-        </button>
-      )}
+      {/* THE ONE BOARD BAR (WO-PLATFORM-01): the briefing's steps ride in
+          the extras row — Show me, Your turn, Start the game. */}
+      <div className="w-full max-w-sm mx-auto">
+      <CoachBoardBar
+        onBack={null}
+        onForward={null}
+        onHint={null}
+        onRead={null}
+        onWhy={null}
+        onPlayLine={null}
+        extras={<>
+          {step === 'idea' && (
+            <button onClick={() => { setFrame(0); setStep('demo'); }} className={BOARD_EXTRA_CLASS} data-testid="mission-briefing-next">
+              Show me<ChevronRight size={12} />
+            </button>
+          )}
+          {/* The demo can be skipped at any move (David 2026-10-23: "Unable to
+              skip the show me mate"). */}
+          {step === 'demo' && (
+            <button onClick={() => setStep('try')} className={BOARD_EXTRA_CLASS} data-testid="mission-briefing-try">
+              Your turn<ChevronRight size={12} />
+            </button>
+          )}
+          {step === 'try' && tried && (
+            <button onClick={() => onDone(tried.right)} className={BOARD_EXTRA_CLASS} data-testid="mission-briefing-done">
+              Start the game<ChevronRight size={12} />
+            </button>
+          )}
+        </>}
+      />
+      </div>
+      {step === 'idea' && <p className="text-sm text-theme-text" data-testid="mission-briefing-idea">{briefing.idea}</p>}
       {step === 'try' && (
         <>
           {!tried && <p className="text-sm text-theme-text" data-testid="mission-briefing-ask">Your move — find it.</p>}
           {tried?.right && <p className="flex items-center gap-1 text-sm text-emerald-400" data-testid="mission-briefing-right"><Check size={16} />That's it.</p>}
           {tried && !tried.right && <p className="flex items-center gap-1 text-sm text-rose-400" data-testid="mission-briefing-shown"><X size={16} />Here is the move.</p>}
-          {tried && (
-            <button onClick={() => onDone(tried.right)} className="flex items-center justify-center gap-1 rounded-xl bg-sky-500 px-4 py-3 text-sm font-semibold text-white min-h-[44px]" data-testid="mission-briefing-done">
-              Start the game<ChevronRight size={16} />
-            </button>
-          )}
         </>
       )}
     </div>

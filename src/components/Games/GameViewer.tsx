@@ -2,9 +2,11 @@ import { useState, useCallback, useEffect, useMemo } from 'react';
 import { Chess } from 'chess.js';
 import { isTypingTarget } from '../../utils/isTypingTarget';
 import { ControlledChessBoard } from '../Board/ControlledChessBoard';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
+import { BOARD_EXTRA_CLASS } from '../Board/PlayLineButton';
 import { useChessGame } from '../../hooks/useChessGame';
 import { MoveTree } from '../Openings/MoveTree';
-import { ArrowLeft, ArrowRight, ChevronsLeft, ChevronsRight, Download, Bot, Loader2 } from 'lucide-react';
+import { ArrowLeft, ChevronsLeft, ChevronsRight, Download, Bot, Loader2 } from 'lucide-react';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import { requestGameReview } from '../../services/gameReviewService';
 import type { GameRecord, MoveAnnotation, MoveClassification } from '../../types';
@@ -192,6 +194,25 @@ export function GameViewer({ game, onClose }: GameViewerProps): JSX.Element {
         />
       </div>
 
+      {/* THE ONE BOARD BAR (WO-PLATFORM-01): Back / Forward step the game;
+          first / last ride in the extras row. */}
+      <div className="w-full md:max-w-[420px] mx-auto">
+        <CoachBoardBar
+          onBack={moveIdx > -1 ? () => setMoveIdx((i) => Math.max(i - 1, -1)) : null}
+          onForward={moveIdx < moves.length - 1 ? () => setMoveIdx((i) => Math.min(i + 1, moves.length - 1)) : null}
+          onHint={null}
+          onRead={null}
+          onWhy={null}
+          onPlayLine={null}
+          testIds={{ back: 'nav-prev', forward: 'nav-next' }}
+          extras={<>
+            <button onClick={() => setMoveIdx(-1)} className={BOARD_EXTRA_CLASS} aria-label="First move" data-testid="nav-start"><ChevronsLeft size={12} /></button>
+            <span className="text-xs px-1 text-theme-text-muted">{moveIdx + 1}/{moves.length}</span>
+            <button onClick={() => setMoveIdx(moves.length - 1)} className={BOARD_EXTRA_CLASS} aria-label="Last move" data-testid="nav-end"><ChevronsRight size={12} /></button>
+          </>}
+        />
+      </div>
+
       {/* Current move annotation */}
       {currentAnnotation && currentAnnotation.classification !== 'good' && currentAnnotation.classification !== 'book' && (
         <div
@@ -216,25 +237,6 @@ export function GameViewer({ game, onClose }: GameViewerProps): JSX.Element {
           </span>
         </div>
       )}
-
-      {/* Navigation controls */}
-      <div className="flex items-center justify-center gap-2">
-        <button onClick={() => setMoveIdx(-1)} className="p-2 rounded hover:bg-theme-surface" data-testid="nav-start">
-          <ChevronsLeft size={18} className="text-theme-text" />
-        </button>
-        <button onClick={() => setMoveIdx((i) => Math.max(i - 1, -1))} className="p-2 rounded hover:bg-theme-surface" data-testid="nav-prev">
-          <ArrowLeft size={18} className="text-theme-text" />
-        </button>
-        <span className="text-sm px-3 text-theme-text-muted">
-          {moveIdx + 1}/{moves.length}
-        </span>
-        <button onClick={() => setMoveIdx((i) => Math.min(i + 1, moves.length - 1))} className="p-2 rounded hover:bg-theme-surface" data-testid="nav-next">
-          <ArrowRight size={18} className="text-theme-text" />
-        </button>
-        <button onClick={() => setMoveIdx(moves.length - 1)} className="p-2 rounded hover:bg-theme-surface" data-testid="nav-end">
-          <ChevronsRight size={18} className="text-theme-text" />
-        </button>
-      </div>
 
       {/* Move list with classification markers */}
       {game.pgn && (

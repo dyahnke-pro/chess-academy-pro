@@ -20,17 +20,17 @@ import { finishBite } from '../../services/activeBite';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowLeft,
-  ChevronLeft,
   ChevronRight,
   Lightbulb,
   BookOpen,
   CheckCircle,
   RotateCw,
   Eye,
-  Volume2,
 } from 'lucide-react';
 import type { CSSProperties } from 'react';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
+import { CoachBoardBar } from '../Board/CoachBoardBar';
+import { BOARD_EXTRA_CLASS } from '../Board/PlayLineButton';
 import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import { ScrollHintBar } from '../Common/ScrollHintBar';
 import { useEndgamePlayout } from '../../hooks/useEndgamePlayout';
@@ -819,6 +819,38 @@ function PositionRunner({
 
   const controls = (
     <div className="flex flex-col gap-3 px-2 pb-4">
+      {/* THE ONE BOARD BAR (WO-PLATFORM-01): Back / Forward step the
+          lesson's positions, Read replays the narration; the lesson's own
+          controls ride in the extras row. */}
+      <CoachBoardBar
+        onBack={canPrev ? onPrev : null}
+        onForward={canNext ? onNext : null}
+        onHint={isPlayable && !playout.isComplete && playout.phase !== 'opponent-replying' && playout.hintMove && !playout.hintRevealed ? playout.revealHint : null}
+        onRead={narrationText ? onReplayNarration : null}
+        onWhy={null}
+        onPlayLine={null}
+        testIds={{ back: 'endgame-lesson-prev', forward: 'endgame-lesson-next', hint: 'endgame-hint', read: 'endgame-replay-narration' }}
+        extras={<>
+          <span className="px-1 text-xs text-theme-text-muted font-mono">{posIndex + 1}/{totalPositions}</span>
+          {isPlayable && playout.isComplete && (
+            <button onClick={playout.reset} className={BOARD_EXTRA_CLASS}><RotateCw size={12} />Try again</button>
+          )}
+          {isPlayable && playout.isComplete && offerPlayItOut && !playItOut && (
+            <button onClick={() => setPlayItOut(true)} className={BOARD_EXTRA_CLASS} data-testid="endgame-play-it-out">Play it out vs Stockfish →</button>
+          )}
+          {isPlayable && !playout.isComplete && playout.phase !== 'opponent-replying' && playout.wrongAttempts >= 2 && (
+            <button onClick={playout.reveal} className={BOARD_EXTRA_CLASS}><Eye size={12} />Reveal answer</button>
+          )}
+          {!canNext && (
+            // Last position — a "Done" that returns the student to the
+            // lesson picker instead of a dead-end Next.
+            <button onClick={onExit} className={BOARD_EXTRA_CLASS} data-testid="endgame-lesson-done">Done<CheckCircle size={12} /></button>
+          )}
+          {onReshuffleDrills && !canNext && (
+            <button onClick={onReshuffleDrills} className={BOARD_EXTRA_CLASS} data-testid="endgame-reshuffle-drills"><RotateCw size={12} />New drill set</button>
+          )}
+        </>}
+      />
       <PositionCard
         lesson={lesson}
         position={position}
@@ -828,58 +860,11 @@ function PositionRunner({
         playout={playout}
         isPlayable={isPlayable}
         isMastered={isMastered}
-        offerPlayItOut={offerPlayItOut}
         playItOutEngaged={playItOut}
-        onEngagePlayItOut={() => setPlayItOut(true)}
-        onReplayNarration={narrationText ? onReplayNarration : undefined}
         corpusNote={corpusNote}
       />
       {!playout.isComplete && <WrongTryNote text={playout.wrongTryText} />}
       {posIndex === 0 && <NarrationPanel lesson={lesson} />}
-      <div className="flex items-center justify-between gap-2">
-        <button
-          onClick={onPrev}
-          disabled={!canPrev}
-          className="flex items-center gap-1 px-3 py-2 rounded-lg bg-theme-surface text-sm text-theme-text-muted hover:text-theme-text disabled:opacity-30 disabled:cursor-not-allowed"
-        >
-          <ChevronLeft size={16} />
-          Prev
-        </button>
-        <span className="text-xs text-theme-text-muted font-mono">
-          {posIndex + 1}/{totalPositions}
-        </span>
-        {canNext ? (
-          <button
-            onClick={onNext}
-            className="flex items-center gap-1 px-3 py-2 rounded-lg bg-theme-accent text-theme-bg text-sm font-semibold"
-          >
-            Next
-            <ChevronRight size={16} />
-          </button>
-        ) : (
-          // Last position — flip to a "Done" CTA that returns the
-          // student to the lesson picker instead of a dead-end
-          // disabled Next button.
-          <button
-            onClick={onExit}
-            className="flex items-center gap-1 px-3 py-2 rounded-lg bg-green-500 text-theme-bg text-sm font-semibold"
-            data-testid="endgame-lesson-done"
-          >
-            Done
-            <CheckCircle size={16} />
-          </button>
-        )}
-      </div>
-      {onReshuffleDrills && !canNext && (
-        <button
-          onClick={onReshuffleDrills}
-          className="self-center flex items-center gap-1 px-3 py-2 rounded-lg bg-theme-surface text-xs text-cyan-400 hover:text-cyan-300"
-          data-testid="endgame-reshuffle-drills"
-        >
-          <RotateCw size={12} />
-          New drill set
-        </button>
-      )}
     </div>
   );
 
@@ -895,13 +880,7 @@ interface PositionCardProps {
   playout: ReturnType<typeof useEndgamePlayout>;
   isPlayable: boolean;
   isMastered: boolean;
-  offerPlayItOut: boolean;
   playItOutEngaged: boolean;
-  onEngagePlayItOut: () => void;
-  /** Manual replay button — when present, renders a small speaker
-   *  affordance next to the title so the user can re-trigger the
-   *  narration if it failed to play (or just wants it again). */
-  onReplayNarration?: () => void;
   /** Post-completion farmed-corpus note (written-only) — null until the
    *  playout completes and the corpus has something board-true to add. */
   corpusNote?: string | null;
@@ -916,10 +895,7 @@ function PositionCard({
   playout,
   isPlayable,
   isMastered,
-  offerPlayItOut,
   playItOutEngaged,
-  onEngagePlayItOut,
-  onReplayNarration,
   corpusNote,
 }: PositionCardProps): JSX.Element {
   return (
@@ -936,18 +912,6 @@ function PositionCard({
             </span>
           )}
           {position.title}
-          {onReplayNarration && (
-            <button
-              type="button"
-              onClick={onReplayNarration}
-              className="ml-1 inline-flex items-center justify-center w-6 h-6 rounded-md text-amber-400 hover:bg-amber-500/15 transition-colors"
-              aria-label="Replay narration"
-              title="Replay narration"
-              data-testid="endgame-replay-narration"
-            >
-              <Volume2 size={14} />
-            </button>
-          )}
         </h3>
         <span className={`text-[11px] font-mono font-semibold ${resultColor} flex-shrink-0`}>
           {resultLabel}
@@ -975,9 +939,7 @@ function PositionCard({
         <PlayoutStatus
           playout={playout}
           studentSide={studentSide}
-          offerPlayItOut={offerPlayItOut}
           playItOutEngaged={playItOutEngaged}
-          onEngagePlayItOut={onEngagePlayItOut}
         />
       ) : (
         <div className="text-[11px] text-theme-text-muted italic">
@@ -994,17 +956,13 @@ function PositionCard({
 interface PlayoutStatusProps {
   playout: ReturnType<typeof useEndgamePlayout>;
   studentSide: 'white' | 'black';
-  offerPlayItOut: boolean;
   playItOutEngaged: boolean;
-  onEngagePlayItOut: () => void;
 }
 
 function PlayoutStatus({
   playout,
   studentSide,
-  offerPlayItOut,
   playItOutEngaged,
-  onEngagePlayItOut,
 }: PlayoutStatusProps): JSX.Element {
   if (playout.isComplete) {
     return (
@@ -1018,24 +976,6 @@ function PlayoutStatus({
             : playout.firstTryPerfect
               ? 'Played perfectly'
               : 'Line played out'}
-        </div>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={playout.reset}
-            className="flex items-center gap-1 text-[11px] text-cyan-400 hover:text-cyan-300"
-          >
-            <RotateCw size={11} />
-            Try again
-          </button>
-          {offerPlayItOut && !playItOutEngaged && (
-            <button
-              onClick={onEngagePlayItOut}
-              className="flex items-center gap-1 text-[11px] text-amber-400 hover:text-amber-300"
-              data-testid="endgame-play-it-out"
-            >
-              Play it out vs Stockfish →
-            </button>
-          )}
         </div>
         <EndgameRecapCard
           studentMoves={playout.studentMoveLog}
@@ -1067,32 +1007,11 @@ function PlayoutStatus({
             : `${playout.wrongAttempts} wrong tries.`}
         </div>
       )}
-      <div className="flex items-center gap-3 mt-0.5">
-        {playout.hintMove && !playout.hintRevealed && (
-          <button
-            onClick={playout.revealHint}
-            className="flex items-center gap-1 text-[11px] text-amber-400 hover:text-amber-300 self-start"
-            data-testid="endgame-hint"
-          >
-            <Lightbulb size={11} />
-            Hint
-          </button>
-        )}
-        {playout.hintRevealed && playout.hintMove && (
-          <span className="text-[11px] text-amber-400/80 italic">
-            Move highlighted on the board.
-          </span>
-        )}
-        {playout.wrongAttempts >= 2 && (
-          <button
-            onClick={playout.reveal}
-            className="flex items-center gap-1 text-[11px] text-theme-text-muted hover:text-theme-text self-start"
-          >
-            <Eye size={11} />
-            Reveal answer
-          </button>
-        )}
-      </div>
+      {playout.hintRevealed && playout.hintMove && (
+        <span className="text-[11px] text-amber-400/80 italic">
+          Move highlighted on the board.
+        </span>
+      )}
     </div>
   );
 }
