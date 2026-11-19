@@ -819,21 +819,22 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     // and Qc2, both aimed at h7" and "a pawn down but slightly better"), off
     // the lesson's read after the move. A lesson shows its line: every move
     // named.
-    const after0 = i.reads?.after[0];
-    if (after0?.moves.length) {
-      for (const f of readBoardAll('planSteps', { fenAfter, line: after0.moves, student, played: playedUci(i.fenBefore, i.san) })) {
-        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'plan', weight: 52 });
-      }
-    }
     // THE ONE PLAN OF THE BOARD the move starts (`planOfTheBoard`): read on
     // the board before it, off the engine's best line there, only when the
     // move is shown, not played, and is that line's first move — the plan is
     // said as the board's, so a move already played (or another move) is
-    // not its first step.
+    // not its first step. It is said with the step of Danya's flow that led
+    // to it, and it IS the line's plan: the steps read after the move are
+    // the same line, so they are said only when the board's plan is not.
     const bestHere = i.reads?.before[0];
-    if (i.tense === 'now' && bestHere?.moves[0] && bestHere.moves[0].slice(0, 4) === `${from}${to}`) {
-      for (const f of readBoardAll('planOfTheBoard', { fen: i.fenBefore, lines: i.reads?.before ?? [], student, namesMoves: true })) {
-        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'plan', weight: 53 });
+    const boardPlan = i.tense === 'now' && bestHere?.moves[0] && bestHere.moves[0].slice(0, 4) === `${from}${to}`
+      ? readBoardAll('planOfTheBoard', { fen: i.fenBefore, lines: i.reads?.before ?? [], student, namesMoves: true })
+      : [];
+    for (const f of boardPlan) facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'plan', weight: 53 });
+    const after0 = i.reads?.after[0];
+    if (boardPlan.length === 0 && after0?.moves.length) {
+      for (const f of readBoardAll('planSteps', { fenAfter, line: after0.moves, student, played: playedUci(i.fenBefore, i.san) })) {
+        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'plan', weight: 52 });
       }
     }
     let standingSaid = false;

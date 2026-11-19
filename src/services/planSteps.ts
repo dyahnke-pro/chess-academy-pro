@@ -15,7 +15,10 @@ import { isUndevelopedInOpening } from '../utils/undeveloped';
 
 const PIECE: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king', p: 'pawn' };
 
-export interface PlanStep { san: string; piece: string; from: string; to: string; castle: boolean; brk: boolean }
+export interface PlanStep { san: string; piece: string; from: string; to: string; castle: boolean; brk: boolean;
+  /** The piece was taken on its square later in the line (a trade): a step
+   *  from that square is another piece's, never this road going on. */
+  lost?: true }
 /** ONE PIECE'S ROAD in the plan (Danya: "the knight reroutes to a3", "the
  *  queen must leave h5 for the queenside"): a piece the line moves two or more
  *  times in a row of its own steps, that does more work at the end of the road
@@ -107,7 +110,14 @@ export function planSteps(fenAfter: string, line: readonly string[], lastMove: s
       // is a step of the plan, and neither is called a break.
       if (allowTrades && (retakes(i + 1) || prevTook)) {
         if (mv.color === mover) { const was = walked.get(mv.from) ?? new Set([mv.from]); walked.delete(mv.from); walked.delete(mv.to); was.add(mv.to); walked.set(mv.to, was); }
-        else walked.delete(mv.to);
+        else {
+          walked.delete(mv.to);
+          // Their capture took the piece a step of ours put there: the road it
+          // was on ends (the knight a6-c5 taken on c5 and the d7 knight
+          // retaking does not carry on as "a6, c5 and then e6").
+          const took = [...steps].reverse().find((x) => x.to === mv.to);
+          if (took) took.lost = true;
+        }
         continue;
       }
       return null;
@@ -259,7 +269,7 @@ function pieceManeuver(fenStart: string, end: Chess, steps: readonly PlanStep[],
   for (let i = 0; i < steps.length; i += 1) {
     const chain = [steps[i]];
     for (let j = i + 1; j < steps.length; j += 1) {
-      if (steps[j].from === chain[chain.length - 1].to && steps[j].piece === steps[i].piece) chain.push(steps[j]);
+      if (steps[j].from === chain[chain.length - 1].to && steps[j].piece === steps[i].piece && !chain[chain.length - 1].lost) chain.push(steps[j]);
     }
     if (chain.length > best.length) best = chain;
   }
