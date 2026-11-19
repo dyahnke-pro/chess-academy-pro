@@ -57,6 +57,18 @@ export interface ReadFact {
   stakes?: number | null;
   /** It only restates what the board shows (the composer's quiet-move rule). */
   restates?: boolean;
+  /** The idea it states, as claim keys (`CoachFact.claims`): a fact sharing a
+   *  claim with one already said is that idea again, never said twice. */
+  claims?: readonly string[];
+  /** A try: the move (uci) the fact refutes. */
+  move?: string;
+  /** THE PICTURE'S VERDICT: the failed tries it names, in its own order — each
+   *  try's refutation is the verdict's "but", heard right after it. */
+  tries?: readonly string[];
+  /** THE PICTURE'S PLAN: the line it plays (uci, the side to move first) — the
+   *  pieces it moves and the squares it reaches, what its "because" and its
+   *  details are read against. */
+  line?: readonly string[];
 }
 
 export type ReadStep = 'verdict' | 'character' | 'priority' | 'their-move' | 'their-plan' | 'best-move' | 'tempting' | 'their-try' | 'plan' | 'concept' | 'second-front' | 'mate-pattern';
@@ -117,7 +129,11 @@ interface StepRow { step: ReadStep; kinds: readonly string[]; from?: readonly Re
    *  goal and a way the best line plays, over a description of a piece or a
    *  file (Danya's plans, 2026-11-19: "their rook on f1 is well placed" beat
    *  "the rook lift Re1-e3-b3"). */
-  first?: readonly string[] }
+  first?: readonly string[];
+  /** A CONCLUSION of the picture (WO-PICTURE-01 P5): what it rests on is said
+   *  right after it — the verdict's failed tries (`tries`), or the plan's
+   *  details and its "because" read against its line (`line`). */
+  supports?: 'tries' | 'line' }
 
 export const READ_STEPS: readonly StepRow[] = [
   // The standing with its reason; compensation and "convert" say the same
@@ -146,6 +162,28 @@ export const READ_STEPS: readonly StepRow[] = [
   // it is said move by move, a score sheet (the voice rule).
   { step: 'concept', kinds: ['concept', 'speedrun-read'], sayOnce: true },
   { step: 'second-front', kinds: ['switch-wing'], onTarget: ['switch-wing'], sayOnce: true },
+];
+
+/** THE PICTURE'S ORDER (WO-PICTURE-01 P5, Danya's read: "White is hanging on
+ *  the precipice, but it is very difficult to finish him off. …Qf6 is met by
+ *  Rh5 … …c4 fails to Nxg5 … so a rook lift"). When the board's conclusions
+ *  were read — the verdict after the tries, the plan that survives them — the
+ *  read says them as ONE argument: the verdict with its reason; the "but", each
+ *  failed try with the reply that refutes it; the plan, its details and its
+ *  "because" (their counterplay, the target, linked by its line); the move with
+ *  its jobs; then what the opponent wants and the lesson. The tries are said
+ *  only as the verdict's "but": a try the verdict does not name is not a step.
+ *  The target and their counterplay are said only as the because of a
+ *  conclusion they are linked to — unlinked, they stay in the picture. */
+export const PICTURE_STEPS: readonly StepRow[] = [
+  { step: 'verdict', kinds: ['verdict'], first: ['pictureVerdict'], supports: 'tries' },
+  { step: 'their-move', kinds: ['must-defend'], sayOnce: true },
+  { step: 'plan', kinds: ['plan-now', 'siege', 'plan-steps', 'plan-race', 'structure-plan'], first: ['picturePlan', 'planOfTheBoard'], supports: 'line' },
+  READ_STEPS.find((r) => r.step === 'best-move') as StepRow,
+  { step: 'character', kinds: ['character'] },
+  { step: 'their-plan', kinds: ['their-target', 'their-plan'], sayOnce: true },
+  { step: 'their-try', kinds: ['their-refuted'] },
+  { step: 'concept', kinds: ['concept', 'speedrun-read'], sayOnce: true },
 ];
 
 /** A puzzle still being solved: the verdict, the mate's pattern, a concept
@@ -187,6 +225,20 @@ export function decideRead<F extends ReadFact>(facts: readonly F[], ctx: ReadCon
   const out: F[] = [];
   let target = new Set<string>();
   const named = new Set<string>();
+  // ONE IDEA ONCE, BY ITS CLAIM: a fact sharing a claim key with one said is
+  // that idea in other words ("their …g6 break is dead", "it takes the …g6
+  // break away").
+  const claimed = new Set<string>();
+  const sameClaim = (f: F): boolean => (f.claims ?? []).some((c) => claimed.has(c));
+  const say = (f: F): void => {
+    out.push(f);
+    for (const sq of f.squares) named.add(sq);
+    for (const c of f.claims ?? []) claimed.add(c);
+  };
+  const picture = !ctx.puzzle && facts.some((f) => f.computer === 'pictureVerdict' && f.kind === 'verdict');
+  // A conclusion and what it rests on: their details are the supports the
+  // picture linked, never a same-piece detail stapled on as well.
+  const argued = new Set<F>();
   const onTarget = (f: F): boolean => f.squares.some((s) => target.has(s));
   // THE VERDICT'S REASON IS THE CLAIM (readers' flags 2026-11-19: beginner
   // chess strategy #6, how to survive a chess disaster #0): "you're losing —
@@ -201,7 +253,7 @@ export function decideRead<F extends ReadFact>(facts: readonly F[], ctx: ReadCon
     if (!race && f.kind !== 'target' && f.kind !== 'their-target') return false;
     return f.squares.some((sq) => verdictPawns.has(sq));
   };
-  const steps = ctx.puzzle ? PUZZLE_STEPS : READ_STEPS;
+  const steps = ctx.puzzle ? PUZZLE_STEPS : picture ? PICTURE_STEPS : READ_STEPS;
   for (const row of steps) {
     const candidates = facts.filter((x) =>
       row.kinds.includes(x.kind)
@@ -217,6 +269,7 @@ export function decideRead<F extends ReadFact>(facts: readonly F[], ctx: ReadCon
       // off the point of the shot.
       && !(ctx.puzzle && row.step === 'concept' && x.squares.length === 0)
       && !out.some((o) => o.text === x.text)
+      && !sameClaim(x)
       && !restatesVerdict(x)
       // ONE IDEA ONCE: a story line whose every square was named adds nothing.
       && (!row.sayOnce || x.squares.length === 0 || x.squares.some((sq) => !named.has(sq))));
@@ -229,15 +282,129 @@ export function decideRead<F extends ReadFact>(facts: readonly F[], ctx: ReadCon
       if (w > pickW || (w === pickW && (x.stakes ?? -1) > (pick?.stakes ?? -1))) { pick = x; pickW = w; }
     }
     if (!pick) continue;
-    out.push(pick);
-    for (const sq of pick.squares) named.add(sq);
+    say(pick);
     if (row.step === 'priority') target = new Set(pick.squares);
-    // The pawns the verdict's reason is about (a passer, a weak pawn).
-    if (row.step === 'verdict' && ctx.fen) {
+    // The pawns the verdict's reason is about (a passer, a weak pawn). The
+    // picture's verdict names tries, not pawns.
+    if (row.step === 'verdict' && ctx.fen && !picture) {
       try { const b = new Chess(ctx.fen); verdictPawns = new Set(pick.squares.filter((sq) => b.get(sq as Square)?.type === 'p')); } catch { /* an unreadable board names no pawn */ }
     }
+    if (row.supports) {
+      argued.add(pick);
+      for (const f of supportsOf(row.supports, pick, facts, ctx, out, sameClaim)) { say(f); argued.add(f); }
+    }
   }
-  return { facts: withDetails(out, facts, ctx), habit: habitOf(facts, ctx) };
+  return { facts: withDetails(out, facts, ctx, argued), habit: habitOf(facts, ctx) };
+}
+
+/** May this fact be said here at all: not a restatement, not on a withheld
+ *  square, not said already. */
+function sayable<F extends ReadFact>(f: F, ctx: ReadContext, out: readonly F[], sameClaim: (f: F) => boolean): boolean {
+  return !f.restates && !f.squares.some((s) => ctx.withheld.includes(s)) && !out.some((o) => o === f || o.text === f.text) && !sameClaim(f);
+}
+
+/** WHAT A CONCLUSION RESTS ON, in the order it is heard after it.
+ *  - The verdict's "but": each try it names, refuted by its own line, in the
+ *    verdict's order — a refutation the ranking holds under the bar is not
+ *    said (G4.5: the weights decide, no count).
+ *  - The plan's details, then its "because": a plan fact about a piece the
+ *    plan's line moves (the rook it lifts), then the target or their
+ *    counterplay the line goes after (below). */
+function supportsOf<F extends ReadFact>(kind: 'tries' | 'line', lead: F, facts: readonly F[], ctx: ReadContext, out: readonly F[], sameClaim: (f: F) => boolean): F[] {
+  const got: F[] = [];
+  const ok = (f: F): boolean => sayable(f, ctx, [...out, ...got], sameClaim) && !got.some((g) => (g.claims ?? []).some((c) => (f.claims ?? []).includes(c)));
+  if (kind === 'tries') {
+    for (const uci of lead.tries ?? []) {
+      const f = facts.find((x) => x.move === uci && x.kind === 'refuted' && ok(x));
+      if (f && readWeight(f, ctx) >= TABLE.bar) got.push(f);
+    }
+    return got;
+  }
+  if (!ctx.fen || !lead.line || lead.line.length === 0) return got;
+  // The plan's own pieces: one the plan names AND its line moves.
+  const moved = new Set([...movedPieces(ctx.fen, lead.line)].filter((sq) => lead.squares.includes(sq)));
+  // THE DETAILS: another plan fact about a piece this plan moves is the same
+  // plan said in more detail (the rook's road for "the rook lift"), never a
+  // rival plan about some other piece.
+  for (const f of facts) {
+    if (f === lead || !PLAN_KINDS.has(f.kind) || !ok(f)) continue;
+    if (f.squares.some((sq) => moved.has(sq))) got.push(f);
+  }
+  // THE BECAUSE: the target, or their counterplay, the plan's line goes after.
+  for (const f of facts) {
+    if (!BECAUSE_KINDS.has(f.kind) && f.computer !== 'pictureCounterplay') continue;
+    if (!ok(f)) continue;
+    if (lineReaches(ctx.fen, lead.line, f)) got.push(f);
+  }
+  return got;
+}
+
+/** The plan kinds: a plan said again in more detail is one of these. */
+const PLAN_KINDS: ReadonlySet<string> = new Set(['plan-now', 'siege', 'plan-steps', 'plan-race', 'structure-plan']);
+/** The target kinds: a target is said as a plan's "because" — the first square
+ *  each producer couples is the target itself. */
+const BECAUSE_KINDS: ReadonlySet<string> = new Set(['priority', 'target', 'their-target']);
+/** How many of the mover's moves down the line a link is looked for in (the
+ *  picture's own reach, `pictureVerdict.LINK_MOVES`). */
+const LINE_MOVES = 6;
+
+function playOn(b: Chess, u: string): ReturnType<Chess['move']> | null {
+  try { return b.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { return null; }
+}
+
+/** The squares the pieces the line moves stand on at the start (the mover's
+ *  own, within its reach), on the read's board. */
+function movedPieces(fen: string, line: readonly string[]): Set<string> {
+  const out = new Set<string>();
+  let b: Chess;
+  try { b = new Chess(fen); } catch { return out; }
+  const mover = b.turn();
+  // Where each of the mover's pieces now stands → where it started.
+  const origin = new Map<string, string>();
+  let k = 0;
+  for (const u of line) {
+    const m = playOn(b, u);
+    if (!m) break;
+    if (m.color !== mover) continue;
+    if (k >= LINE_MOVES) break;
+    k += 1;
+    const start = origin.get(m.from) ?? m.from;
+    origin.delete(m.from);
+    origin.set(m.to, start);
+    out.add(start);
+  }
+  return out;
+}
+
+/** DOES THE PLAN'S LINE GO AFTER THIS? Computed on the boards of the line, by
+ *  chess.js — never by the squares the two facts share:
+ *  - a target: a move of the plan's side lands on it or newly bears on it (to
+ *    win it, or to guard it when it is theirs to win);
+ *  - their counterplay (the break, `pictureCounterplay`: the pawn's square,
+ *    then the square it breaks to): before the break is played, a move of the
+ *    plan's side lands on the break's square or newly bears on it. */
+function lineReaches(fen: string, line: readonly string[], f: ReadFact): boolean {
+  let b: Chess;
+  try { b = new Chess(fen); } catch { return false; }
+  const mover = b.turn();
+  const breakMove = f.computer === 'pictureCounterplay' && f.squares.length >= 2 ? `${f.squares[0]}${f.squares[1]}` : null;
+  const at = breakMove ? f.squares[1] : f.squares[0];
+  if (!at) return false;
+  let k = 0;
+  for (const u of line) {
+    if (breakMove && u.slice(0, 4) === breakMove) return false;
+    const before = new Chess(b.fen());
+    const m = playOn(b, u);
+    if (!m) return false;
+    if (m.color !== mover) continue;
+    if (k >= LINE_MOVES) return false;
+    k += 1;
+    if (m.to === at) return true;
+    try {
+      if (b.attackers(at as Square, mover).includes(m.to as Square) && !before.attackers(at as Square, mover).includes(m.from as Square)) return true;
+    } catch { return false; }
+  }
+  return false;
 }
 
 /** THE DETAIL OF EACH STEP (WO-PICTURE-01 P4, David 2026-11-19: "Those are
@@ -250,7 +417,7 @@ export function decideRead<F extends ReadFact>(facts: readonly F[], ctx: ReadCon
  *  it belongs to. */
 const DETAIL_ROLES: ReadonlySet<PictureRole> = new Set(['asset', 'weakness', 'board', 'threat']);
 
-function withDetails<F extends ReadFact>(picked: readonly F[], all: readonly F[], ctx: ReadContext): F[] {
+function withDetails<F extends ReadFact>(picked: readonly F[], all: readonly F[], ctx: ReadContext, argued: ReadonlySet<F>): F[] {
   if (!ctx.fen) return [...picked];
   let board: Chess;
   try { board = new Chess(ctx.fen); } catch { return [...picked]; }
@@ -265,6 +432,7 @@ function withDetails<F extends ReadFact>(picked: readonly F[], all: readonly F[]
   const out: F[] = [];
   for (const lead of picked) {
     out.push(lead);
+    if (argued.has(lead)) continue;
     const pieces = new Set(lead.squares.filter((sq) => pieceAt(sq) !== null));
     if (pieces.size === 0) continue;
     for (const f of all) {

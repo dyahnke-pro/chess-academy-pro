@@ -37,7 +37,8 @@ import type { AnalysisLine, StockfishAnalysis } from '../types';
 import type { IntroTense } from '../utils/moveIntro';
 import type { ImportanceTier } from './narrationImportance';
 import { writerFor, momentPosture, plainThreatsSeenFor } from './writerRegister';
-import { readBoardAll } from './boardComputers';
+import { readBoardAll, pictureConclusionsOf } from './boardComputers';
+import { evalBand } from './evalBand';
 
 /** A read the student asked for ("read this position"): the asked answer's
  *  writer settings (`writerRegister`). */
@@ -152,7 +153,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
 
   for (const c of pf.candidates) {
     if (i.withhold && c.kind === 'deliberation') continue;
-    facts.push({ from: 'position', kind: c.kind, text: c.text, computer: c.computer, squares: c.squares, stakes: stakeValue(c.stakes) });
+    facts.push({ from: 'position', kind: c.kind, text: c.text, computer: c.computer, squares: c.squares, stakes: stakeValue(c.stakes), claims: c.claims });
   }
 
   // THE PLAN ON THE BOARD (his "attack down the c-file at the knight on c6"),
@@ -164,7 +165,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     // kingside, while Black's rooks are far from the king"): the siege on
     // either king, the student's own first.
     for (const f of readBoardAll('kingSiegeNow', { fen: i.fen, student: i.studentColor, studentCp: povCp })) {
-      facts.push({ from: 'position', kind: f.kind, text: f.text, computer: f.computer, squares: f.squares });
+      facts.push({ from: 'position', kind: f.kind, text: f.text, computer: f.computer, squares: f.squares, claims: f.claims });
     }
     const siege = siegeOf(i.fen, i.before, whose);
     if (siege) facts.push({ from: 'position', kind: 'siege', text: siege.text, computer: 'siege', squares: siege.squares });
@@ -213,19 +214,40 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
       if (t) tempting.push({ evaluation: t.evaluation, mate: t.mate, moves: [c.uci, ...t.moves], earlier: t.earlier?.moves ? [c.uci, ...t.earlier.moves] : null });
     }
     const refuted = temptingOnBoard({ fen: i.fen, student: i.studentColor, rating: i.rating, reads: tempting, priorMove: null, considered });
-    for (const t of refuted) facts.push({ from: 'tempting', kind: 'refuted', text: t.text, computer: 'temptingOnBoard', squares: [t.uci.slice(0, 2), t.uci.slice(2, 4)] });
+    for (const t of refuted) facts.push({ from: 'tempting', kind: 'refuted', text: t.text, computer: 'temptingOnBoard', squares: [t.uci.slice(0, 2), t.uci.slice(2, 4)], move: t.uci });
     // A check or capture that wins nothing ("Nxe7+ Rxe7 gives no relief"):
     // the same computer's forcing-move shape, never beside its material refutation.
     const standing = standingRefutations({ fen: i.fen, student: i.studentColor, rating: i.rating, reads: tempting, considered });
     const empty = standing.filter((t) => !refuted.some((r) => r.uci === t.uci));
-    for (const t of empty) facts.push({ from: 'tempting', kind: 'refuted', text: t.text, computer: 'temptingOnBoard', squares: t.squares });
-    // THE PICTURE'S CONCLUSIONS (WO-PICTURE-01 P3): the verdict read after
-    // these tries ("better, but hard to finish") and the try that survives
-    // them, off the refutations just made — kept in the read's facts for the
-    // decider (P5 speaks them).
+    for (const t of empty) facts.push({ from: 'tempting', kind: 'refuted', text: t.text, computer: 'temptingOnBoard', squares: t.squares, move: t.uci });
+    // THE PICTURE'S CONCLUSIONS (WO-PICTURE-01 P3 → P5): the verdict read
+    // after these tries ("better, but hard to finish") and the try that
+    // survives them, off the refutations just made. The decider says them in
+    // Danya's order with what they rest on: the verdict carries the tries it
+    // names (`tries`, each refutation its "but"), the plan the line it plays
+    // (`line`, what its "because" and its details are read against).
     const picture = { fen: i.fen, student: i.studentColor, rating: i.rating, reads: tempting, considered, refuted: { tempting: refuted, standing }, lines: i.before };
-    for (const f of [...readBoardAll('pictureVerdict', picture), ...readBoardAll('picturePlan', picture)]) {
-      facts.push({ from: 'position', kind: f.kind, text: f.text, computer: f.computer, squares: f.squares });
+    const conc = pictureConclusionsOf(picture);
+    // The verdict with its reason: a standing that already gave the band and
+    // the board's reason leads, and the verdict goes on from it ("You're
+    // slightly better — their king is in the middle. But it is hard to finish
+    // them off …") — the band said once.
+    const standing0 = facts.find((f) => f.kind === 'standing' && f.from === 'position' && !f.computer);
+    const sameBand = !!conc && povCp !== null && stepOfCp(povCp) === conc.verdict.step;
+    for (const f of readBoardAll('pictureVerdict', picture)) {
+      const merged = standing0 && sameBand && conc?.verdict.afterStanding ? `${standing0.text} ${conc.verdict.afterStanding}` : f.text;
+      facts.push({ from: 'position', kind: f.kind, text: merged, computer: f.computer, squares: f.squares, claims: f.claims, tries: conc?.but.map((t) => t.uci) ?? [] });
+    }
+    for (const f of readBoardAll('picturePlan', picture)) {
+      const line = tempting.find((r) => r.moves[0] === conc?.plan?.uci)?.moves ?? top.moves;
+      facts.push({ from: 'position', kind: f.kind, text: f.text, computer: f.computer, squares: f.squares, claims: f.claims, line: [...line] });
+    }
+    // A failed try no refuter words (the line that sends the piece straight
+    // back, his "…Qf6 is met by Rh5, and the queen has to go back") is said
+    // in the verdict's own words, so every try the verdict names has its "but".
+    for (const t of conc?.but ?? []) {
+      if (facts.some((f) => f.move === t.uci)) continue;
+      facts.push({ from: 'tempting', kind: 'refuted', text: t.text, computer: 'pictureVerdict', squares: [t.uci.slice(0, 2), t.uci.slice(2, 4)], move: t.uci });
     }
     // One rule-out a move: a try said by what it does to the result already
     // carries its board reason (`tryMechanism` reads `boardReason` too).
@@ -291,7 +313,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
         // A puzzle still being solved keeps only who stands better: what the
         // best move does is the answer.
         if (i.withhold && !VERDICT_KINDS.has(f.kind)) continue;
-        facts.push({ from: 'bestMove', kind: f.kind, text: f.text, computer: f.computer, squares: f.squares, stakes: stakeValue(f.stakes), restates: f.restates === true });
+        facts.push({ from: 'bestMove', kind: f.kind, text: f.text, computer: f.computer, squares: f.squares, stakes: stakeValue(f.stakes), restates: f.restates === true, claims: f.claims });
       }
       if (theirs.length > 0) {
         const theirRefuted = temptingOnBoard({ fen: fenB, student: i.studentColor, rating: i.rating, reads: theirs, priorMove: { fenBefore: i.fen, san } });
@@ -306,6 +328,10 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
   }
   return done();
 }
+
+const BAND_STEP: Record<ReturnType<typeof evalBand>, number> = { level: 0, slightly: 1, clearly: 2, decisive: 3 };
+/** The standing's band as a step from the student's seat (the picture's own scale). */
+function stepOfCp(cp: number): number { return Math.sign(cp) * BAND_STEP[evalBand(cp)]; }
 
 /** The named pattern the engine's line mates with, when it plays to mate. */
 function matePatternOf(fen: string, line: readonly string[]): string | null {

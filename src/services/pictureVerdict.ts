@@ -130,6 +130,10 @@ export interface PictureVerdictWord {
   /** The direct try that works now, when one does. */
   works: { uci: string; name: string } | null;
   text: string;
+  /** The same verdict said AFTER a standing that already gave the band and its
+   *  reason ("You're slightly better — their king is in the middle."): the
+   *  difficulty and the tries, without the band again. Empty on a plain band. */
+  afterStanding: string;
 }
 
 export interface PictureConclusions {
@@ -302,20 +306,23 @@ function verdictOf(i: PictureVerdictIn, mover: Color, step: number, but: FailedT
     : '';
   if (works && step > 0) {
     const text = rotateStem([`${lead}, and the direct way works now: ${works.name}.`, `${lead}, and ${works.name} goes straight for it.`], stem);
-    return { kind: 'works-now', step, word: `${STEP_WORD[step]}, and it works now`, works, text };
+    const after = rotateStem([`And the direct way works now: ${works.name}.`, `And ${works.name} goes straight for it.`], stem);
+    return { kind: 'works-now', step, word: `${STEP_WORD[step]}, and it works now`, works, text, afterStanding: after };
   }
   if (but.length > 0 && step > 0) {
     const first = rotateStem([`${lead}, but it is hard to finish ${them} off.`, `${lead}, but breaking through is another matter.`], stem);
-    return { kind: 'hard-to-finish', step, word: `${STEP_WORD[step]}, but hard to finish`, works: null, text: `${first} ${butLine}${noCounterplay}` };
+    const after = rotateStem([`But it is hard to finish ${them} off.`, 'But breaking through is another matter.'], stem);
+    return { kind: 'hard-to-finish', step, word: `${STEP_WORD[step]}, but hard to finish`, works: null, text: `${first} ${butLine}${noCounterplay}`, afterStanding: `${after} ${butLine}${noCounterplay}` };
   }
   if (but.length > 0 && step === 0) {
     const first = rotateStem([`${lead}, and there is no direct way in.`, `${lead}, and the direct tries get nowhere.`], stem);
-    return { kind: 'no-direct-way', step, word: 'level, with no direct way in', works: null, text: `${first} ${butLine}` };
+    const after = rotateStem(['There is no direct way in.', 'The direct tries get nowhere.'], stem);
+    return { kind: 'no-direct-way', step, word: 'level, with no direct way in', works: null, text: `${first} ${butLine}`, afterStanding: `${after} ${butLine}` };
   }
   if (but.length > 0) {
-    return { kind: 'tries-worsen', step, word: `${STEP_WORD[step]}, and the active tries make it worse`, works: null, text: `${lead}, and the active tries only make it worse. ${butLine}` };
+    return { kind: 'tries-worsen', step, word: `${STEP_WORD[step]}, and the active tries make it worse`, works: null, text: `${lead}, and the active tries only make it worse. ${butLine}`, afterStanding: `The active tries only make it worse. ${butLine}` };
   }
-  return { kind: 'plain', step, word: STEP_WORD[step], works: null, text: `${lead}.` };
+  return { kind: 'plain', step, word: STEP_WORD[step], works: null, text: `${lead}.`, afterStanding: '' };
 }
 
 /** The best line's moves as SAN from `fen`, as far as they play. */
