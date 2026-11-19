@@ -9,7 +9,7 @@ import { readBoardAll } from './boardComputers';
 import type { CoachFact } from './coachFact';
 import type { EngineLine } from './engineLineRead';
 import { buildPicture } from './positionPicture';
-import { counterplayOf, counterplayText, ledgerOf, pictureConclusions, pictureOfBoard, targetOf } from './pictureLedger';
+import { counterplayOf, counterplaysOf, counterplayText, ledgerOf, pictureConclusions, pictureOfBoard, planRacesOf, planTargetOf, planTargetText, targetOf } from './pictureLedger';
 
 interface Board { id: string; fen: string; lines: EngineLine[] }
 
@@ -102,8 +102,16 @@ describe('the counterplay', () => {
     expect(c?.counterplay.b).toMatchObject({ from: 'a4', to: 'a3', hits: ['b2'], state: 'alive', ply: 3 });
   });
 
-  it('the art of maneuvering #1: Black has no break at all', () => {
-    expect(pictureConclusions(factsOn(MANEUVER), MANEUVER.fen, MANEUVER.lines)?.counterplay.b).toBeNull();
+  it('the art of maneuvering #1: Black has no break, and its one piece resource, …Nh5 against f4, is dead after Rf2', () => {
+    const facts = factsOn(MANEUVER);
+    const c = pictureConclusions(facts, MANEUVER.fen, MANEUVER.lines);
+    // …Nh5 hits f4 twice (the knight, and the rook on f8 down the opened
+    // file) against the g5 bishop alone; the best line's Rf2 guards it again.
+    expect(c?.counterplay.b).toMatchObject({ kind: 'piece', piece: 'n', from: 'f6', to: 'h5', hits: ['f4'], state: 'dead', ply: 4, stoppedBy: 'e2f2' });
+    expect(counterplayText(c!.counterplay.b!, 'w', MANEUVER.fen, MANEUVER.lines))
+      .toMatch(/^Their (knight can come to h5 and hit|resource is the knight on f6: from h5 it hits) your pawn on f4\. But it is dead: after Rf2 it no longer works\.$/);
+    // It rests on a fact about the pawn it hits.
+    expect(restsOnFacts(facts, c!.counterplay.b!.factIds, 'wP@f4')).toBe(true);
   });
 
   it('the rook lift #2: White\'s b4, named by a fact, is left alone by the line — unsettled, never said', () => {
@@ -166,5 +174,95 @@ describe('the registry reads', () => {
 
   it('negative control: no facts, no ledger', () => {
     expect(readBoardAll('pictureLedger', { fen: ENDGAME.fen, student: 'w', lines: ENDGAME.lines, facts: [] })).toEqual([]);
+  });
+});
+
+const fact = (id: string, computer: string, fen: string, squares: string[]): CoachFact =>
+  ({ id, computer, fen, squares, claims: [], text: `${id}.` } as unknown as CoachFact);
+
+describe('the plan target (a race of up to four moves)', () => {
+  // White's knight needs four quiet moves to hit the isolated a6 pawn; Black
+  // has nothing that can guard it in time.
+  const FAR = '7k/8/p7/8/8/8/8/6NK w - - 0 1';
+
+  it('a weakness two moves cannot reach is won by a plan: the knight\'s route, and the count that wins it', () => {
+    const facts = [fact('test:a6', 'attackerDefenderCount', FAR, ['a6'])];
+    const led = ledgerOf(buildPicture(facts), FAR)!;
+    // Out of reach in two moves: never the target now.
+    expect(led.b.unreached.map((e) => e.object)).toEqual(['bP@a6']);
+    expect(targetOf(led, 'w')).toBeNull();
+    const p = planTargetOf(led, 'w');
+    expect(p?.best).toMatchObject({ won: true, horizon: 4, attackers: 1, defenders: 0 });
+    expect(p?.best.decisive).toMatchObject({ from: 'g1', piece: 'n', moves: 4 });
+    expect(planTargetText(p!, 'w')).toMatch(/^Your knight (can go by [a-h][1-8], [a-h][1-8] and [a-h][1-8] to [a-h][1-8] and hit|has a way to) their pawn on a6.* In four moves one of your pieces reaches it, and they have nothing that can guard it in time\.$/);
+    const [f] = readBoardAll('pictureTarget', { fen: FAR, student: 'w', lines: [], facts });
+    expect(f.text).toBe(planTargetText(p!, 'w'));
+    expect(f.squares).toContain('a6');
+  });
+
+  it('negative control: a guard that gets there in the same time wins the race — never the target', () => {
+    // Black's knight on h3 reaches c7 (guarding a6) in three moves, before
+    // White's knight is there: the race is counted move for move, never the
+    // attacker's four moves against the guards standing now.
+    const fen = '7k/8/p7/8/8/7n/8/6NK w - - 0 1';
+    const led = ledgerOf(buildPicture([fact('test:a6', 'attackerDefenderCount', fen, ['a6'])]), fen)!;
+    expect(planTargetOf(led, 'w')).toBeNull();
+    expect(planRacesOf(led, 'w')[0]).toMatchObject({ won: false, attackers: 1, defenders: 1 });
+    expect(readBoardAll('pictureTarget', { fen, student: 'w', lines: [], facts: [fact('test:a6', 'attackerDefenderCount', fen, ['a6'])] })).toEqual([]);
+  });
+
+  it('the rook lift #2: f2 is no plan target — the queen behind the knight is all Black brings, and four guard it', () => {
+    const c = pictureConclusions(factsOn(ROOK_LIFT), ROOK_LIFT.fen, ROOK_LIFT.lines)!;
+    const f2 = planRacesOf(c.ledger, 'b').find((r) => r.entry.object === 'wP@f2');
+    // Both rooks would stand behind the queen on the f-file, two pieces in
+    // front of f2: one line passes one piece, never two.
+    expect(f2).toMatchObject({ won: false, attackers: 1, defenders: 4 });
+    expect(c.planTarget.b).toBeNull();
+  });
+
+  it('the art of maneuvering #1: a6 is no plan target — four reach it, and four guard it in the same moves', () => {
+    const c = pictureConclusions(factsOn(MANEUVER), MANEUVER.fen, MANEUVER.lines)!;
+    expect(planRacesOf(c.ledger, 'w').find((r) => r.entry.object === 'bP@a6')).toMatchObject({ won: false, attackers: 4, defenders: 4 });
+    expect(c.planTarget.w).toBeNull();
+  });
+});
+
+describe('the piece counterplay', () => {
+  it('alive: the best line plays the threat, and it is said', () => {
+    const fen = '4k3/8/8/1p6/8/8/8/R3K3 b - - 0 1';
+    const lines: EngineLine[] = [{ moves: ['e8d7', 'a1b1', 'd7c6'], cp: 0, mate: null }];
+    const r = counterplayOf(buildPicture([]), fen, lines, 'w');
+    expect(r).toMatchObject({ kind: 'piece', piece: 'r', from: 'a1', to: 'b1', hits: ['b5'], state: 'alive', ply: 1 });
+    expect(counterplayText(r!, 'b', fen, lines)).toMatch(/b1.*your pawn on b5.*(It is coming: the best line plays it\.|Nothing stops it in the best line\.)$/);
+  });
+
+  it('the rook lift #2: Rh5 is no resource with the queen on g6 (it takes the rook); after …Qf6 it hits g5, until …g4', () => {
+    const now = counterplaysOf(pictureOfBoard(factsOn(ROOK_LIFT), ROOK_LIFT.fen), ROOK_LIFT.fen, ROOK_LIFT.lines, 'w');
+    expect(now.some((x) => x.from === 'h2' && x.to === 'h5')).toBe(false);
+    // Danya: "…Qf6 is always met by the annoying Rh5". On the board after
+    // …Qf6, Rh5 is a threat on g5. The engine's line there (the stored second
+    // line) plays d4 instead, and Black's …g4 takes the pawn out of its reach.
+    const afterQf6 = '2kr2r1/1b5p/p2pnq1B/1pp1p1p1/4P3/1PPPQNP1/1P3P1R/3RK3 w - - 1 26';
+    const lines: EngineLine[] = [{ moves: ['d3d4', 'e5d4', 'c3d4', 'g5g4'], cp: 120, mate: null }];
+    const g5 = fact('test:g5', 'attackerDefenderCount', afterQf6, ['g5']);
+    const r = counterplaysOf(buildPicture([g5]), afterQf6, lines, 'w').find((x) => x.from === 'h2' && x.to === 'h5');
+    expect(r).toMatchObject({ kind: 'piece', piece: 'r', hits: ['g5'], state: 'dead', ply: 3, stoppedBy: 'g5g4', factIds: ['test:g5'] });
+    expect(counterplayText(r!, 'b', afterQf6, lines)).toMatch(/But it is dead: after g4 it no longer works\.$/);
+    // Line without …g4: the line neither plays nor stops it — unsettled, unsaid.
+    const short: EngineLine[] = [{ ...lines[0], moves: lines[0].moves.slice(0, 3) }];
+    const u = counterplaysOf(buildPicture([g5]), afterQf6, short, 'w').find((x) => x.from === 'h2' && x.to === 'h5');
+    expect(u?.state).toBe('unsettled');
+    expect(counterplayText(u!, 'b', afterQf6, short)).toBeNull();
+    // With a line that plays it, it is alive and said.
+    const played: EngineLine[] = [{ moves: ['h2h5', 'f6g6'], cp: 120, mate: null }];
+    const a = counterplaysOf(buildPicture([g5]), afterQf6, played, 'w').find((x) => x.from === 'h2' && x.to === 'h5');
+    expect(a?.state).toBe('alive');
+    expect(counterplayText(a!, 'b', afterQf6, played)).toMatch(/rook.*h5.*your pawn on g5/);
+  });
+
+  it('negative control: a piece move with no threat, the line playing it, is not counterplay', () => {
+    const fen = '4k3/8/8/8/8/8/8/R3K3 b - - 0 1';
+    const lines: EngineLine[] = [{ moves: ['e8d7', 'a1b1', 'd7c6'], cp: 0, mate: null }];
+    expect(counterplayOf(buildPicture([]), fen, lines, 'w')).toBeNull();
   });
 });

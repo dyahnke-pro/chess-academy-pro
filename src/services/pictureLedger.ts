@@ -23,6 +23,8 @@ import { buildPicture, type PictureObject, type PictureRole, type PositionPictur
 import type { EngineLine } from './engineLineRead';
 import { andList, countWord } from '../utils/andList';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
+import { bfsRoute } from './forwardTeaching';
+import { computeMustDefend, mateThreatsAgainst, sideToMoveAs } from './threatOut';
 
 // ── the board, read once ─────────────────────────────────────────────────────
 
@@ -123,7 +125,11 @@ export interface Reach {
   piece: PieceSymbol;
   via: Square | null;
   at: Square;
-  moves: 0 | 1 | 2;
+  /** 0–2 for the two-move reach; up to `PLAN_MOVES` for the plan's route. */
+  moves: number;
+  /** The squares the piece lands on, in order, ending at `at` (empty: it hits
+   *  from where it stands). */
+  route: Square[];
   /** Through one of the owner's pieces (pressure behind it), never a clear hit. */
   behind: boolean;
 }
@@ -144,7 +150,7 @@ function reachersOf(g: Grid, target: Square, by: Color, through: readonly Color[
       return through.length > 0 && hits(gg, unit, s, target, through) ? { ok: true, behind: true } : { ok: false, behind: false };
     };
     const now = hitFrom(g, from);
-    if (now.ok) { out.push({ from, piece: unit.type, via: null, at: from, moves: 0, behind: now.behind }); continue; }
+    if (now.ok) { out.push({ from, piece: unit.type, via: null, at: from, moves: 0, route: [], behind: now.behind }); continue; }
     let best: Reach | null = null;
     for (const s1 of stepsOf(g, unit, from)) {
       if (s1 === target || !standsAt(g, s1)) continue;
@@ -152,7 +158,7 @@ function reachersOf(g: Grid, target: Square, by: Color, through: readonly Color[
       g1.delete(from);
       g1.set(s1, unit);
       const h1 = hitFrom(g1, s1);
-      if (h1.ok) { if (!best || best.moves > 1 || (best.behind && !h1.behind)) best = { from, piece: unit.type, via: null, at: s1, moves: 1, behind: h1.behind }; continue; }
+      if (h1.ok) { if (!best || best.moves > 1 || (best.behind && !h1.behind)) best = { from, piece: unit.type, via: null, at: s1, moves: 1, route: [s1], behind: h1.behind }; continue; }
       if (best && best.moves === 1) continue;
       for (const s2 of stepsOf(g1, unit, s1)) {
         if (s2 === target || s2 === from || !standsAt(g1, s2)) continue;
@@ -160,7 +166,7 @@ function reachersOf(g: Grid, target: Square, by: Color, through: readonly Color[
         g2.delete(s1);
         g2.set(s2, unit);
         const h2 = hitFrom(g2, s2);
-        if (h2.ok && (!best || (best.behind && !h2.behind))) best = { from, piece: unit.type, via: s1, at: s2, moves: 2, behind: h2.behind };
+        if (h2.ok && (!best || (best.behind && !h2.behind))) best = { from, piece: unit.type, via: s1, at: s2, moves: 2, route: [s1, s2], behind: h2.behind };
       }
     }
     if (best) out.push(best);
@@ -340,11 +346,11 @@ function accessOf(g: Grid, s: Square, owner: Color, hole: boolean): Access {
     for (const [from, unit] of unitsOf(g, them)) {
       if (unit.type === 'p' || unit.type === 'k') continue;
       const s1s = stepsOf(g, unit, from);
-      if (s1s.includes(s)) { arrivals.push({ from, piece: unit.type, via: null, at: s, moves: 1, behind: false }); continue; }
+      if (s1s.includes(s)) { arrivals.push({ from, piece: unit.type, via: null, at: s, moves: 1, route: [s], behind: false }); continue; }
       for (const s1 of s1s) {
         if (pawnHits(g, s1, owner).length > 0) continue;
         const g1 = new Map(g); g1.delete(from); g1.set(s1, unit);
-        if (stepsOf(g1, unit, s1).includes(s)) { arrivals.push({ from, piece: unit.type, via: s1, at: s, moves: 2, behind: false }); break; }
+        if (stepsOf(g1, unit, s1).includes(s)) { arrivals.push({ from, piece: unit.type, via: s1, at: s, moves: 2, route: [s1, s], behind: false }); break; }
       }
     }
     return { attackers: arrivals, levers: [], defenders: reachersOf(g, s, owner, [owner]), pawnGuards: [] };
@@ -457,14 +463,177 @@ export function targetOf(led: Ledger, attacker: Color): Target | null {
   return { attacker, best: live[0], runnerUp: cands.find((c) => c !== live[0]) ?? null, candidates: cands };
 }
 
+// ── the plan's target: a race of up to four moves ───────────────────────────
+
+/** How far the plan looks: the moves a piece may take to reach a weakness. */
+export const PLAN_MOVES = 4;
+
+/** Every piece of `by` (pawns apart; the king only where `reachersOf` already
+ *  counts it) that can stand hitting `target` within `PLAN_MOVES` moves: its
+ *  two-move reach where it has one, else its quiet route (`bfsRoute`, empty
+ *  squares only, every stop free of the other side's pawns). */
+function planReachersOf(fen: string, g: Grid, target: Square, by: Color, through: readonly Color[]): Reach[] {
+  // The pieces go in the order they arrive, each placed on its square before
+  // the next is routed: two pieces never share a square, and a line that runs
+  // through a piece placed earlier sees it there.
+  const near = new Map(reachersOf(g, target, by, through).map((r) => [r.from, r]));
+  const order = unitsOf(g, by)
+    .filter(([from, u]) => u.type !== 'p' && from !== target && (u.type !== 'k' || near.has(from)))
+    .map(([from, u]) => ({ from, unit: u, first: near.get(from)?.moves ?? PLAN_MOVES + 1 }))
+    .sort((x, y) => x.first - y.first || VALUE[y.unit.type] - VALUE[x.unit.type] || x.from.localeCompare(y.from));
+  const work: Grid = new Map(g);
+  const out: Reach[] = [];
+  const hitOn = (gg: Grid, unit: Unit, s: Square): { ok: boolean; behind: boolean } => {
+    if (hits(gg, unit, s, target, [])) return { ok: true, behind: false };
+    return through.length > 0 && hits(gg, unit, s, target, through) ? { ok: true, behind: true } : { ok: false, behind: false };
+  };
+  const place = (r: Reach, unit: Unit): void => { work.delete(r.from); work.set(r.at, unit); out.push(r); };
+  for (const { from, unit } of order) {
+    const now = hitOn(work, unit, from);
+    if (now.ok) { place({ from, piece: unit.type, via: null, at: from, moves: 0, route: [], behind: now.behind }, unit); continue; }
+    // The two-move reach (it may capture on the way) while its square is free.
+    const two = near.get(from);
+    if (two && two.moves > 0 && two.route.every((s) => work.get(s)?.color !== by)) {
+      const gg = new Map(work); gg.delete(from); gg.set(two.at, unit);
+      const h = hitOn(gg, unit, two.at);
+      if (h.ok) { place({ ...two, behind: h.behind }, unit); continue; }
+    }
+    if (unit.type === 'k') continue;
+    let behind = false;
+    const found = bfsRoute(fenOf(work, fen), from, (_c, s) => {
+      const gg = new Map(work);
+      gg.delete(from);
+      gg.set(s, unit);
+      const h = hitOn(gg, unit, s);
+      behind = h.behind;
+      return h.ok;
+    }, PLAN_MOVES, (_c, s) => s !== target && pawnHits(work, s, other(by)).length === 0);
+    if (!found) continue;
+    const route = found.route;
+    place({ from, piece: unit.type, via: route.length > 1 ? route[route.length - 2] : null, at: found.target, moves: route.length, route, behind }, unit);
+  }
+  // A piece placed early whose line a later arrival now blocks no longer hits.
+  return out.filter((r) => {
+    const unit = work.get(r.at) as Unit;
+    return hitOn(work, unit, r.at).ok;
+  });
+}
+
+/** A FEN for a grid: its pieces, the rest of `fen` kept. */
+function fenOf(g: Grid, fen: string): string {
+  const rows: string[] = [];
+  for (let r = 8; r >= 1; r--) {
+    let row = '';
+    let empty = 0;
+    for (let f = 0; f < 8; f++) {
+      const u = g.get(sq(f, r) as Square);
+      if (!u) { empty++; continue; }
+      if (empty) { row += String(empty); empty = 0; }
+      row += u.color === 'w' ? u.type.toUpperCase() : u.type;
+    }
+    if (empty) row += String(empty);
+    rows.push(row);
+  }
+  const parts = fen.split(' ');
+  return `${rows.join('/')} ${parts[1] ?? 'w'} - - ${parts[4] ?? '0'} ${parts[5] ?? '1'}`;
+}
+
+/** The pawns of `by` that hit `target` now or after one or two clear pushes,
+ *  with the pushes it takes — a lever for the attacker, a guard for the owner. */
+function pawnArrivals(g: Grid, target: Square, by: Color): Array<{ from: Square; at: Square; moves: number }> {
+  return leversOn(g, target, by).map((l) => ({ ...l, moves: Math.abs(rankOf(l.at) - rankOf(l.from)) }));
+}
+
+/** One weakness raced: how many units each side has on it, move by move. */
+export interface PlanRace {
+  entry: LedgerEntry;
+  /** The attackers outnumber the guards at `horizon`. */
+  won: boolean;
+  /** Won: the move count the attackers first outnumber the guards at. Lost:
+   *  `PLAN_MOVES`, the count the race was read to. */
+  horizon: number;
+  /** Units of the attacker on it by then (pieces and levers). */
+  attackers: number;
+  /** Units of the owner guarding it by then (pieces and pawns), in the same
+   *  number of moves. */
+  defenders: number;
+  /** Won: the piece whose arrival wins the race, and its way there. */
+  decisive: Reach | null;
+  attackerReach: Reach[];
+  defenderReach: Reach[];
+}
+
+export interface PlanTarget {
+  attacker: Color;
+  best: PlanRace;
+  /** Every race the attacker wins in three or four moves, best first. */
+  races: PlanRace[];
+}
+
+/** The race on one weakness: at each move count from 0 to `PLAN_MOVES`, the
+ *  attacker's pieces and levers that can be on it against the owner's pieces
+ *  and pawns that can guard it in the SAME number of moves. */
+function raceOf(fen: string, g: Grid, e: LedgerEntry, attacker: Color): PlanRace {
+  const owner = e.side;
+  const atk = planReachersOf(fen, g, e.square, attacker, [owner, attacker]);
+  const def = planReachersOf(fen, g, e.square, owner, [owner]);
+  const levers = pawnArrivals(g, e.square, attacker);
+  const guards = pawnArrivals(g, e.square, owner);
+  const count = (k: number): [number, number] => [
+    atk.filter((r) => r.moves <= k).length + levers.filter((l) => l.moves <= k).length,
+    def.filter((r) => r.moves <= k).length + guards.filter((l) => l.moves <= k).length,
+  ];
+  for (let k = 0; k <= PLAN_MOVES; k++) {
+    const [a, d] = count(k);
+    if (a <= d) continue;
+    // The piece whose arrival tips it: one arriving on this move, the most
+    // valuable first; a race a lever tips is named by the piece that came last.
+    const arriving = atk.filter((r) => r.moves === k).sort((x, y) => VALUE[y.piece] - VALUE[x.piece] || x.from.localeCompare(y.from));
+    const decisive = arriving[0] ?? [...atk].filter((r) => r.moves <= k).sort((x, y) => y.moves - x.moves || x.from.localeCompare(y.from))[0] ?? null;
+    return { entry: e, won: decisive !== null, horizon: k, attackers: a, defenders: d, decisive, attackerReach: atk, defenderReach: def };
+  }
+  const [a, d] = count(PLAN_MOVES);
+  return { entry: e, won: false, horizon: PLAN_MOVES, attackers: a, defenders: d, decisive: null, attackerReach: atk, defenderReach: def };
+}
+
+/** Every pawn or piece of the other side `attacker` could go after with a
+ *  plan (reached within two moves or not), raced. Holes and the king are not
+ *  things to win, so never raced. */
+export function planRacesOf(led: Ledger, attacker: Color): PlanRace[] {
+  const g = gridOf(led.fen);
+  if (!g) return [];
+  const side = led[other(attacker)];
+  return side.weaknesses.concat(side.unreached)
+    .filter((e) => e.piece !== null && e.piece !== 'k')
+    .map((e) => raceOf(led.fen, g, e, attacker))
+    .sort((x, y) => x.entry.square.localeCompare(y.entry.square));
+}
+
+/** The plan's target: the weakness of the other side `attacker` wins a race
+ *  on in three or four moves (a race won within two is the target now,
+ *  `targetOf`). The guards get the same moves as the attackers; a race the
+ *  counts do not show is never claimed. */
+export function planTargetOf(led: Ledger, attacker: Color): PlanTarget | null {
+  const races = planRacesOf(led, attacker).filter((r) => r.won && r.horizon > 2);
+  if (races.length === 0) return null;
+  races.sort((x, y) => (y.attackers - y.defenders) - (x.attackers - x.defenders) || x.horizon - y.horizon || x.entry.square.localeCompare(y.entry.square));
+  return { attacker, best: races[0], races };
+}
+
 // ── the counterplay ──────────────────────────────────────────────────────────
 
 export interface Counterplay {
   side: Color;
-  /** The break: the pawn, the square it goes to, and what it hits there. */
+  /** A pawn break, or a piece move that makes a threat. */
+  kind: 'break' | 'piece';
+  /** The unit that moves: 'p' for a break. */
+  piece: PieceSymbol;
+  /** The unit, the square it goes to, and what it hits there. */
   from: Square;
   to: Square;
   hits: Square[];
+  /** What stands on each of `hits` ('k': a mate threat), in order. */
+  hitPieces: PieceSymbol[];
   /** `alive`: the best line plays it; `dead`: a move in the best line stops
    *  it before it is played; `unsettled`: the line does neither (never said). */
   state: 'alive' | 'dead' | 'unsettled';
@@ -511,6 +680,99 @@ function breaksOf(g: Grid, side: Color): Array<{ from: Square; to: Square; hits:
   return out;
 }
 
+/** What a move of `side` newly threatens: the other side's units it wins on
+ *  its next move that it did not before (the one must-defend read), and its
+ *  king when a mate threat appears. `before` and `after` are the boards
+ *  around the move. */
+function newThreatsOf(before: string, after: string, side: Color): Array<{ square: Square; piece: PieceSymbol }> {
+  const foe = other(side);
+  const was = new Set(computeMustDefend(before, foe).pieces.map((p) => p.square));
+  const out = computeMustDefend(after, foe).pieces
+    .filter((p) => !was.has(p.square))
+    .map((p) => ({ square: p.square as Square, piece: p.piece as PieceSymbol }));
+  if (mateThreatsAgainst(after, foe).moves.length > 0 && mateThreatsAgainst(before, foe).moves.length === 0) {
+    const king = gridOf(after);
+    const k = king ? [...king].find(([, u]) => u.type === 'k' && u.color === foe)?.[0] : undefined;
+    if (k) out.push({ square: k, piece: 'k' });
+  }
+  return out;
+}
+
+/** The threat `side`'s piece on `from` makes by a quiet move to `to` on
+ *  `fen` (handed the move when it is not theirs): null when the move is not
+ *  there, captures, leaves the piece itself to be taken, or threatens
+ *  nothing new. */
+function pieceThreat(fen: string, from: Square, to: Square, side: Color): Array<{ square: Square; piece: PieceSymbol }> | null {
+  const board = sideToMoveAs(fen, side);
+  if (!board) return null;
+  let c: Chess;
+  try { c = new Chess(board); } catch { return null; }
+  let m: ReturnType<Chess['move']>;
+  try { m = c.move({ from, to }); } catch { return null; }
+  if (m.captured || m.piece === 'p' || m.piece === 'k' || c.inCheck()) return null;
+  const after = c.fen();
+  if (computeMustDefend(after, side).pieces.some((p) => p.square === to)) return null;
+  const t = newThreatsOf(board, after, side);
+  return t.length > 0 ? t : null;
+}
+
+/** `side`'s piece counterplay: every quiet move of a knight, bishop, rook or
+ *  queen that makes a new threat and does not just drop the piece. Alive when
+ *  the best line plays it; dead when a move of the
+ *  other side in the line takes the threat away first; otherwise unsettled.
+ *  Kept only alive or named by a fact (the piece, or the square it goes to). */
+function pieceCounterplay(pic: PositionPicture, fen: string, pv: readonly string[], side: Color): Counterplay[] {
+  const board = sideToMoveAs(fen, side);
+  if (!board) return [];
+  let c: Chess;
+  try { c = new Chess(board); } catch { return []; }
+  const here = placement(fen);
+  const out: Counterplay[] = [];
+  for (const m of c.moves({ verbose: true })) {
+    if (m.piece === 'p' || m.piece === 'k' || m.captured) continue;
+    const from = m.from;
+    const to = m.to;
+    const threat = pieceThreat(fen, from, to, side);
+    if (!threat) continue;
+    const hitSquares = threat.map((t) => t.square);
+    // The facts it rests on, each through a computed link: about the piece,
+    // about the square it goes to, or about a unit its threat hits.
+    const hitObjects = threat.filter((t) => t.piece !== 'k').map((t) => `${other(side)}${t.piece.toUpperCase()}@${t.square}`);
+    const factIds: string[] = [];
+    for (const e of pic.entries.values()) {
+      if (!LEDGER_ROLES.has(e.role) || placement(e.fact.fen) !== here) continue;
+      const aboutPiece = e.objects.includes(`${side}${m.piece.toUpperCase()}@${from}`);
+      const aboutSquare = (e.role === 'resource' || e.role === 'plan' || e.role === 'board') && e.objects.includes(`-@${to}`);
+      const aboutHit = hitObjects.some((o) => e.objects.includes(o));
+      if ((aboutPiece || aboutSquare || aboutHit) && !factIds.includes(e.fact.id)) factIds.push(e.fact.id);
+    }
+    const played = pv.some((u) => u.slice(0, 2) === from);
+    if (!played && factIds.length === 0) continue;
+    let state: Counterplay['state'] = 'unsettled';
+    let ply: number | null = null;
+    let stoppedBy: string | null = null;
+    let line: Chess;
+    try { line = new Chess(fen); } catch { continue; }
+    for (let i = 0; i < pv.length; i++) {
+      const u = pv[i];
+      const mover = line.turn();
+      // The piece moves in the line: this move (alive), or another, which is
+      // its own candidate and leaves this one unsettled.
+      if (mover === side && u.slice(0, 2) === from) {
+        if (u.slice(2, 4) === to) { state = 'alive'; ply = i; }
+        break;
+      }
+      const open = mover !== side && factIds.length > 0 && !!pieceThreat(line.fen(), from, to, side)?.some((t) => hitSquares.includes(t.square));
+      try { line.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { break; }
+      if (open && !pieceThreat(line.fen(), from, to, side)?.some((t) => hitSquares.includes(t.square))) { state = 'dead'; ply = i; stoppedBy = u; break; }
+    }
+    if (state === 'alive' || factIds.length > 0) {
+      out.push({ side, kind: 'piece', piece: m.piece, from, to, hits: hitSquares, hitPieces: threat.map((t) => t.piece), state, ply, stoppedBy, factIds });
+    }
+  }
+  return out;
+}
+
 /** Can `side` still play the break on `g` — the pawn there, the square free,
  *  a pawn still to hit — and does it not just drop the pawn? */
 function breakOpen(g: Grid, br: { from: Square; to: Square }, side: Color, captures: boolean): boolean {
@@ -540,11 +802,16 @@ function breakOpen(g: Grid, br: { from: Square; to: Square }, side: Color, captu
  *  leaves alone is `unsettled`. Null when `side` has no break that the line
  *  plays or a fact names. */
 export function counterplayOf(pic: PositionPicture, fen: string, lines: readonly EngineLine[], side: Color): Counterplay | null {
+  return counterplaysOf(pic, fen, lines, side)[0] ?? null;
+}
+
+/** Every resource of `side` worth weighing — pawn breaks and piece threats
+ *  the best line plays or a fact names — the one `counterplayOf` picks first. */
+export function counterplaysOf(pic: PositionPicture, fen: string, lines: readonly EngineLine[], side: Color): Counterplay[] {
   const g = gridOf(fen);
-  if (!g) return null;
+  if (!g) return [];
   const board = placement(fen);
   const breaks = breaksOf(g, side);
-  if (breaks.length === 0) return null;
   const pv = lines[0]?.moves ?? [];
   const found: Counterplay[] = [];
   for (const br of breaks) {
@@ -583,12 +850,12 @@ export function counterplayOf(pic: PositionPicture, fen: string, lines: readonly
       cur = next;
       mover = other(mover);
     }
-    if (state === 'alive' || factIds.length > 0) found.push({ side, from: br.from, to: br.to, hits: br.hits, state, ply, stoppedBy, factIds });
+    if (state === 'alive' || factIds.length > 0) found.push({ side, kind: 'break', piece: 'p', from: br.from, to: br.to, hits: br.hits, hitPieces: br.hits.map(() => 'p'), state, ply, stoppedBy, factIds });
   }
-  if (found.length === 0) return null;
+  found.push(...pieceCounterplay(pic, fen, pv, side));
   const rank = (c: Counterplay): number => (c.state === 'alive' ? 1000 - (c.ply ?? 0) : c.state === 'dead' ? 500 : 0) + c.factIds.length * 10;
   found.sort((x, y) => rank(y) - rank(x) || x.to.localeCompare(y.to));
-  return found[0];
+  return found;
 }
 
 // ── the conclusions together, for the verdict half ───────────────────────────
@@ -597,8 +864,10 @@ export interface PictureConclusions {
   ledger: Ledger;
   /** Each side's one resource. */
   counterplay: Record<Color, Counterplay | null>;
-  /** The target each side, attacking, would go for. */
+  /** The target each side, attacking, would go for now (within two moves). */
   target: Record<Color, Target | null>;
+  /** The target each side's plan goes for: a race won in three or four moves. */
+  planTarget: Record<Color, PlanTarget | null>;
 }
 
 /** The facts this file reads: on this board, and none of the conclusions'
@@ -630,6 +899,7 @@ function computeConclusions(facts: readonly CoachFact[], fen: string, lines: rea
     ledger,
     counterplay: { w: counterplayOf(pic, fen, lines, 'w'), b: counterplayOf(pic, fen, lines, 'b') },
     target: { w: targetOf(ledger, 'w'), b: targetOf(ledger, 'b') },
+    planTarget: { w: planTargetOf(ledger, 'w'), b: planTargetOf(ledger, 'b') },
   };
 }
 
@@ -699,14 +969,44 @@ export function targetText(t: Target, student: Color): string {
   return `${lead} ${thing(t.best)}: ${why}.`;
 }
 
+/** The plan's target in words: the piece that wins the race and its way
+ *  there, then the count that wins it. */
+export function planTargetText(p: PlanTarget, student: Color): string | null {
+  const r = p.best;
+  const d = r.decisive;
+  if (!r.won || !d || r.entry.piece === null) return null;
+  const mine = p.attacker === student;
+  const thing = `${mine ? 'their' : 'your'} ${NAME[r.entry.piece]} on ${r.entry.square}`;
+  const way = d.route.length <= 1 ? `to ${d.at}` : `by ${andList(d.route.slice(0, -1))} to ${d.at}`;
+  const key = stemKeyOf(`${r.entry.object}|${p.attacker}|plan`);
+  const owner = mine ? 'Your' : 'Their';
+  const head = rotateStem([`${owner} ${NAME[d.piece]} can go ${way} and hit ${thing}.`, `${owner} ${NAME[d.piece]} has a way to ${thing}: ${way.replace(/^to /, '')}.`], key);
+  const pieces = r.attackerReach.filter((x) => x.moves <= r.horizon).length;
+  const units = pieces < r.attackers ? 'pieces and pawns' : 'pieces';
+  const atk = `${countWord(r.attackers)} of ${mine ? 'your' : 'their'} ${units} ${r.attackers === 1 ? 'reaches' : 'reach'} it`;
+  const guard = r.defenders === 0
+    ? `${mine ? 'they have' : 'you have'} nothing that can guard it in time`
+    : `${mine ? 'they' : 'you'} can only bring ${countWord(r.defenders)} to guard it`;
+  return `${head} In ${countWord(r.horizon)} moves ${atk}, and ${guard}.`;
+}
+
+/** Does `uci` start the plan: a move of a piece on its way to the target? */
+export function moveWorksOnPlan(p: PlanTarget, uci: string | undefined): boolean {
+  if (!uci) return false;
+  return p.best.attackerReach.some((r) => r.moves > 0 && r.from === uci.slice(0, 2) && r.route[0] === uci.slice(2, 4));
+}
+
 /** The counterplay in words — said only alive or dead. */
 export function counterplayText(c: Counterplay, student: Color, fen: string, lines: readonly EngineLine[]): string | null {
   if (c.state === 'unsettled') return null;
   const mine = c.side === student;
-  const hit = andList(c.hits.map((h) => `${mine ? 'their' : 'your'} pawn on ${h}`));
+  const whose = mine ? 'their' : 'your';
+  const hit = andList(c.hits.map((h, i) => (c.hitPieces[i] === 'k' ? `${whose} king with mate` : `${whose} ${NAME[c.hitPieces[i]]} on ${h}`)));
   const owner = mine ? 'Your' : 'Their';
-  const key = stemKeyOf(`${placement(fen)}|${c.to}`);
-  const head = rotateStem([`${owner} one resource is the pawn break to ${c.to}, hitting ${hit}.`, `${owner} counterplay is the push to ${c.to}, against ${hit}.`], key);
+  const key = stemKeyOf(c.kind === 'break' ? `${placement(fen)}|${c.to}` : `${placement(fen)}|${c.from}${c.to}`);
+  const head = c.kind === 'break'
+    ? rotateStem([`${owner} one resource is the pawn break to ${c.to}, hitting ${hit}.`, `${owner} counterplay is the push to ${c.to}, against ${hit}.`], key)
+    : rotateStem([`${owner} ${NAME[c.piece]} can come to ${c.to} and hit ${hit}.`, `${owner} resource is the ${NAME[c.piece]} on ${c.from}: from ${c.to} it hits ${hit}.`], key);
   if (c.state === 'alive') return `${head} ${rotateStem(['It is coming: the best line plays it.', 'Nothing stops it in the best line.'], key)}`;
   const stopper = c.stoppedBy ? sanOf(fen, lines[0]?.moves ?? [], c.ply ?? 0) : null;
   return `${head} ${stopper ? `But it is dead: after ${stopper} it no longer works.` : 'But the best line stops it.'}`;

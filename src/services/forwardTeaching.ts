@@ -79,12 +79,12 @@ function outpostWhy(chess: Chess, square: Square, color: Color): string {
  * Travels through EMPTY squares only: a route that needs a capture is not a
  * quiet manoeuvre, and counting it would understate the tempo cost.
  *
- * Knight-only TODAY, and the `piece.type !== 'n'` guard says so at the top
- * rather than pretending otherwise. A slider's route needs blocker handling the
- * hop table cannot express; when that lands, it lands HERE and both callers get
- * it at once.
+ * Knights, bishops, rooks and queens: a slider hops along open rays and stops
+ * before the first piece, so a route never passes through or captures one. The
+ * picture's plan reach (`pictureLedger`) calls it too, for every piece
+ * but the king.
  */
-function bfsRoute(
+export function bfsRoute(
   fen: string,
   fromSquare: Square,
   stop: (chess: Chess, sq: Square, color: Color) => boolean,
@@ -100,7 +100,7 @@ function bfsRoute(
     return null;
   }
   const piece = chess.get(fromSquare);
-  if (!piece || !(piece.type === 'n' || piece.type === 'b' || piece.type === 'r')) return null;
+  if (!piece || !(piece.type === 'n' || piece.type === 'b' || piece.type === 'r' || piece.type === 'q')) return null;
   const color = piece.color;
   // One hop = one quiet move: a knight jump, or a slide along an open ray that
   // stops before the first piece (empty squares only — see the note above).
@@ -110,7 +110,7 @@ function bfsRoute(
       return KNIGHT_DELTAS.map(([df, dr]) => toSquare(f0 + df, r0 + dr)).filter((q): q is Square => !!q && !chess.get(q));
     }
     const out: Square[] = [];
-    for (const [df, dr] of piece.type === 'b' ? DIAG : ORTHO) {
+    for (const [df, dr] of piece.type === 'b' ? DIAG : piece.type === 'r' ? ORTHO : [...DIAG, ...ORTHO]) {
       for (let k = 1; k < 8; k++) {
         const q = toSquare(f0 + df * k, r0 + dr * k);
         if (!q || chess.get(q)) break;

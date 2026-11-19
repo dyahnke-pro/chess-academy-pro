@@ -124,7 +124,7 @@ import { pieceTempo } from './pieceTempo';
 import { kingBoxMove } from './kingBox';
 import { matingNet } from './matingNet';
 import { frozenTarget } from './frozenTarget';
-import { pictureConclusions, ledgerKey, ledgerText, ledgerSquares, counterplayText, targetText, moveWorksOnTarget } from './pictureLedger';
+import { pictureConclusions, ledgerKey, ledgerText, ledgerSquares, counterplayText, targetText, moveWorksOnTarget, planTargetText, moveWorksOnPlan } from './pictureLedger';
 import { centreDuo } from './centreDuo';
 import { noSafeChecks } from './noSafeChecks';
 import { promotionWithCheck } from './promotionWithCheck';
@@ -7855,11 +7855,18 @@ export const BOARD_COMPUTERS = {
     read: (ctx, fact) => safe(() => {
       const c = pictureConclusions(ctx.facts, ctx.fen, ctx.lines);
       const t = c?.target[ctx.student] ?? null;
-      if (!t) return null;
-      const text = targetText(t, ctx.student);
-      const squares = [t.best.entry.square, ...(t.runnerUp ? [t.runnerUp.entry.square] : [])];
-      const asks = sideToMove(ctx.fen) === ctx.student && moveWorksOnTarget(t, ctx.lines[0]?.moves[0]);
-      const key = `target:${t.best.entry.square}`;
+      // The plan's target: a race won in three or four moves, said beside the
+      // target now when it is another thing, alone when there is none.
+      const p0 = c?.planTarget[ctx.student] ?? null;
+      const p = p0 && p0.best.entry.object !== t?.best.entry.object ? p0 : null;
+      const planText = p ? planTargetText(p, ctx.student) : null;
+      if (!t && !planText) return null;
+      const text = [t ? targetText(t, ctx.student) : null, planText].filter((x): x is string => !!x).join(' ');
+      const planSquares = p && planText ? [p.best.entry.square, ...(p.best.decisive?.route ?? [])] : [];
+      const squares = [...new Set([...(t ? [t.best.entry.square, ...(t.runnerUp ? [t.runnerUp.entry.square] : [])] : []), ...planSquares])];
+      const first = ctx.lines[0]?.moves[0];
+      const asks = sideToMove(ctx.fen) === ctx.student && ((t !== null && moveWorksOnTarget(t, first)) || (p !== null && !!planText && moveWorksOnPlan(p, first)));
+      const key = t ? `target:${t.best.entry.square}` : `plan-target:${(p as NonNullable<typeof p>).best.entry.square}`;
       return fact({ key, claims: [key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
         seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: ctx.fen, ...(asks ? { skill: 'no-plan' } : {}) });
     }),
