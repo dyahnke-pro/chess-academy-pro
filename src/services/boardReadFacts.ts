@@ -161,7 +161,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     if (siege) facts.push({ from: 'position', kind: 'siege', text: siege.text, computer: 'siege', squares: siege.squares });
     const steps = stepsOf(i.fen, i.before, whose);
     if (steps) facts.push({ from: 'position', kind: 'plan-steps', text: steps.text, computer: 'planSteps', squares: steps.squares });
-    const second = mine ? switchWing(i.fen, side, 'your') : null;
+    const second = mine ? switchWing(i.fen, side, 'your', i.before[0]?.moves ?? []) : null;
     if (second) facts.push({ from: 'position', kind: 'switch-wing', text: second.text, computer: 'switchWing', squares: second.squares });
     // THEIR PLAN: their next quiet moves in the engine's line, after our best
     // move and their reply.

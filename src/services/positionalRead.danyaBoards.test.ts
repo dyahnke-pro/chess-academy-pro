@@ -122,3 +122,14 @@ describe('positionalRead — their knight heading for a hole is not kept bad', (
     expect(obs.map((o) => o.text).join(' ')).not.toMatch(/knight on h4 is their problem piece/);
   });
 });
+
+describe('a bishop behind an advanced wedge is no problem piece (the positional sacrifice #2: "the monstruous bishop on e4")', () => {
+  it('the e4 bishop behind d5 and f5 is not called a problem piece', () => {
+    const r = readPosition('1rb5/r2k1pp1/p2p3p/P2PpP2/1NP1BbPP/8/4K3/1R5R w - - 0 31', 'white');
+    expect(r.some((o) => /problem piece/.test(o.text) && /bishop/.test(o.text))).toBe(false);
+  });
+  it('negative control: a bishop hemmed in at home by its own pawns still is (the art of maneuvering #0)', () => {
+    const r = readPosition('4rr2/pb1qnpbk/1p1p2pp/2p1n3/4PNP1/P1NPB2P/1PP1QRB1/5R1K w - - 0 21', 'white');
+    expect(r.some((o) => /problem piece/.test(o.text) && /bishop/.test(o.text))).toBe(true);
+  });
+});

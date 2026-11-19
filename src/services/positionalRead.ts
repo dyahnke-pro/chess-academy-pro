@@ -64,6 +64,22 @@ const GOOD_PIECE_RANK: Record<PieceQualityKind, number> = {
 /** What makes a bad piece bad, said after its name in players' words ("Their
  *  bishop is their problem piece, hemmed in behind its own pawns") — never the
  *  note's label with its reason in brackets read aloud. */
+/** A BISHOP BEHIND AN ADVANCED WEDGE is no problem piece (Danya, the
+ *  positional sacrifice #2: "the monstruous bishop on e4" behind White's d5
+ *  and f5): it stands centrally and the pawns that block its forward rays are
+ *  already in their half, so it holds the wedge together and keeps the
+ *  squares behind it. A bishop hemmed in by its own pawns at home is the bad
+ *  bishop his articles mean ("incarcerated behind its own pawns"). */
+function wedgeBishop(fen: string, q: { piece: string; square: string; color: Color }): boolean {
+  if (q.piece !== 'b') return false;
+  const b = chessOf(fen);
+  if (!b) return false;
+  const r = Number(q.square[1]);
+  if (!'cdef'.includes(q.square[0]) || r < 3 || r > 6) return false;
+  const blockers = bishopBlockingPawns(b, q.square as Square, q.color);
+  return blockers.length > 0 && blockers.every((sq) => (q.color === 'w' ? Number(sq[1]) >= 5 : Number(sq[1]) <= 4));
+}
+
 function badPieceWords(note: { kind: PieceQualityKind; reason: string; square: string }): string {
   if (note.kind === 'bad-bishop') return 'hemmed in behind its own pawns';
   // The rim, said as the squares it reaches (Danya's article boards,
@@ -457,7 +473,7 @@ function observationsFor(
     const b = chessOf(fen);
     return !own && q.kind === 'rim-knight' && !!b && rimKnightHeading(b, q.square as Square, color);
   };
-  const bad = quality.find((q) => q.color === color && q.quality === 'bad' && q.square[1] !== startRank && !heading(q));
+  const bad = quality.find((q) => q.color === color && q.quality === 'bad' && q.square[1] !== startRank && !heading(q) && !wedgeBishop(fen, q));
   if (bad) {
     out.push({
       key: `${side}-bad-${bad.square}`, side, kind: 'piece', rank: rank('piece'),
@@ -712,7 +728,7 @@ function joinsFor(
 ): PositionalObservation[] {
   const turned = withTurn(fen, color);
   if (!turned) return [];
-  const badBefore = findPieceQuality(fen).filter((q) => q.color === color && q.quality === 'bad');
+  const badBefore = findPieceQuality(fen).filter((q) => q.color === color && q.quality === 'bad' && !wedgeBishop(fen, q));
   if (badBefore.length === 0) return [];
   const out: PositionalObservation[] = [];
   let probe: Chess;

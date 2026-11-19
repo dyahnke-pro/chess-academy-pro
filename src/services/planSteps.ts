@@ -26,7 +26,15 @@ export interface PlanStep { san: string; piece: string; from: string; to: string
 export interface PlanManeuver { piece: string; from: string; route: string[];
   /** The road goes on from the move just played: the piece keeps going, it was
    *  not misplaced ("has a better road" right after it arrived read as a fault). */
-  justMoved: boolean }
+  justMoved: boolean;
+  /** WHAT THE ROAD'S END GIVES THE PIECE TO DO, that it does not do now
+   *  (Danya judges a road by what it attacks there: "toward f2", "the knight
+   *  heads for d5", "the bishop adds pressure on the seventh"): a square next
+   *  to their king, a piece or pawn of theirs, or a hole in their camp. A
+   *  road with no job is the engine waiting, never a plan. */
+  job: RoadJob }
+/** The one job a road's end gives its piece. */
+export interface RoadJob { kind: 'king' | 'piece' | 'hole'; square: string; piece: string | null }
 export interface PlanSteps {
   /** The mover's next moves in the line, in order (2–3). */
   steps: PlanStep[];
@@ -167,7 +175,7 @@ export function planSteps(fenAfter: string, line: readonly string[], lastMove: s
     const pNow = nowBoard.get(sq as Square);
     if (p && (!pNow || pNow.color !== p.color || pNow.type !== p.type)) continue;
     if (!p && pNow) continue;
-    const target = (p && p.color === enemy && p.type !== 'k') || (!p && near(sq));
+    const target = (p && p.color === enemy && p.type !== 'k') || (!p && near(sq) && hasMatingForce(board, mover));
     if (!target) continue;
     aim = sq;
     aimPiece = p ? PIECE[p.type] : null;
@@ -192,6 +200,24 @@ export function planSteps(fenAfter: string, line: readonly string[], lastMove: s
   // developing" said on every quiet move was filler (decision baseline
   // 2026-11-12): finishing development is what every move of an opening does.
   if (!aim && !brk && !maneuver) return null;
+  // A list tied ONLY by a break is a plan when a step after it works with the
+  // break: a piece that lands bearing on the break's square or on the pawn
+  // it hits ("the c4 break and then Nc3", the knight on d5). "The f5 break,
+  // Kh8 and then Nc5" is a break and two other moves (Danya, mysterious GM
+  // moves #0: his plan is the centre and the king attack, never a list).
+  // Steps BEFORE a break are its preparation (the writers' "Bd3, Bc2 and then
+  // the d4 break"); steps after it must work with it.
+  if (!aim && !maneuver && brk) {
+    const b = steps.find((x) => x.brk);
+    if (b && b !== steps[steps.length - 1]) {
+      const f = b.to.charCodeAt(0); const r = Number(b.to[1]) + (mover === 'w' ? 1 : -1);
+      const contact = [-1, 1].map((d) => `${String.fromCharCode(f + d)}${r}`).filter((sq) => /^[a-h][1-8]$/.test(sq));
+      const goals = new Set([b.to, ...contact]);
+      const works = steps.slice(steps.indexOf(b) + 1).some((x) => !x.castle && x.piece !== 'pawn' && x.piece !== 'king'
+        && board.get(x.to as Square)?.color === mover && attacksFrom(board, x.to).some((sq) => goals.has(sq)));
+      if (!works) return null;
+    }
+  }
   // One step and no road is a move, not a plan.
   if (steps.length < 2 && !maneuver) return null;
   // A plan tied only by the break the move just played prepares is that
@@ -264,6 +290,60 @@ function reachesInOne(fen: string, start: string, at: string, to: string, mover:
  *  ends where the piece does more work than where it started. Kings and pawns
  *  walk for other reasons (an ending, a break) and are said by their own
  *  computers. */
+/** Does `c` have mating force against a king: a queen or a rook? A minor
+ *  hitting a square next to the king in an ending is no attack (Danya,
+ *  Carlsen's endgame wins #0: the play is the damaged queenside pawns, not
+ *  "b3, next to their king"). */
+export function hasMatingForce(b: Chess, c: Color): boolean {
+  return b.findPiece({ type: 'q', color: c }).length + b.findPiece({ type: 'r', color: c }).length > 0;
+}
+
+/** A hole of theirs for a piece of `mover`: a square no pawn of theirs can
+ *  ever attack. */
+function isHole(b: Chess, sq: string, mover: Color): boolean {
+  const r = Number(sq[1]); const f = sq.charCodeAt(0);
+  const them: Color = mover === 'w' ? 'b' : 'w';
+  for (const df of [-1, 1]) {
+    const file = String.fromCharCode(f + df);
+    if (file < 'a' || file > 'h') continue;
+    for (const p of b.findPiece({ type: 'p', color: them })) {
+      if (p[0] === file && (them === 'b' ? Number(p[1]) > r : Number(p[1]) < r)) return false;
+    }
+  }
+  return true;
+}
+
+/** THE ROAD'S JOB (see `RoadJob`): read at the road's end against where the
+ *  piece stands now — a square next to their king (with a queen or rook on
+ *  the board to make it an attack), a piece or pawn of theirs, a hole of
+ *  theirs for a knight. The king first, then a piece, then a hole. */
+function roadJob(start: Chess, end: Chess, from: string, to: string, mover: Color): RoadJob | null {
+  const them: Color = mover === 'w' ? 'b' : 'w';
+  const ALL: string[] = [];
+  for (const f of 'abcdefgh') for (let r = 1; r <= 8; r += 1) ALL.push(`${f}${r}`);
+  const hitNow = new Set(ALL.filter((sq) => start.attackers(sq as Square, mover).includes(from as Square)));
+  const hitEnd = ALL.filter((sq) => !hitNow.has(sq) && end.attackers(sq as Square, mover).includes(to as Square));
+  const k = end.findPiece({ type: 'k', color: them })[0];
+  if (k && hasMatingForce(end, mover)) {
+    const z = hitEnd.find((sq) => !end.get(sq as Square) && Math.abs(sq.charCodeAt(0) - k.charCodeAt(0)) <= 1 && Math.abs(Number(sq[1]) - Number(k[1])) <= 1);
+    if (z) return { kind: 'king', square: z, piece: null };
+  }
+  // The piece nearest their king first (the rook on h4 is after h3, not c4).
+  const dist = (sq: string): number => (k ? Math.max(Math.abs(sq.charCodeAt(0) - k.charCodeAt(0)), Math.abs(Number(sq[1]) - Number(k[1]))) : 0);
+  const piece = hitEnd.filter((sq) => { const p = end.get(sq as Square); return !!p && p.color === them && p.type !== 'k'; })
+    .sort((a, b) => dist(a) - dist(b))[0];
+  if (piece) return { kind: 'piece', square: piece, piece: PIECE[end.get(piece as Square)?.type ?? 'p'] };
+  const moved = end.get(to as Square);
+  // A hole is a knight's outpost (Danya: "the d5 square is irreparably weak"):
+  // a central square on their fifth or sixth rank, never a rim square.
+  if (moved?.type === 'n') {
+    const deep = mover === 'w' ? '56' : '43';
+    const hole = hitEnd.find((sq) => !end.get(sq as Square) && 'cdef'.includes(sq[0]) && deep.includes(sq[1]) && isHole(end, sq, mover));
+    if (hole) return { kind: 'hole', square: hole, piece: null };
+  }
+  return null;
+}
+
 function pieceManeuver(fenStart: string, end: Chess, steps: readonly PlanStep[], mover: Color): Omit<PlanManeuver, 'justMoved'> | null {
   let best: PlanStep[] = [];
   for (let i = 0; i < steps.length; i += 1) {
@@ -307,7 +387,9 @@ function pieceManeuver(fenStart: string, end: Chess, steps: readonly PlanStep[],
   try { before = pieceWork(startBoard, start as Square, type, mover); } catch { return null; }
   const after = pieceWork(end, last as Square, type, mover);
   if (after <= before) return null;
-  return { piece: best[0].piece, from: start, route: best.map((s) => s.to) };
+  const job = roadJob(startBoard, end, start, last, mover);
+  if (!job) return null;
+  return { piece: best[0].piece, from: start, route: best.map((s) => s.to), job };
 }
 
 /** The squares a piece on `sq` bears on: the knight's jumps, the king's
@@ -353,7 +435,7 @@ export function planStepsText(p: PlanSteps, whose: 'your' | 'their'): string {
     const m = p.maneuver;
     const owner = whose === 'your' ? 'their' : 'your';
     const road = m.route.length === 2 ? `${m.route[0]} and then ${m.route[1]}` : `${m.route.slice(0, -1).join(', ')} and then ${m.route.at(-1)}`;
-    const aim = p.aim ? ` There it lines up on ${p.aimPiece ? `${owner} ${p.aimPiece} on ${p.aim}` : `${p.aim}, next to ${owner} king`}.` : '';
+    const aim = p.aim ? ` There it lines up on ${p.aimPiece ? `${owner} ${p.aimPiece} on ${p.aim}` : `${p.aim}, next to ${owner} king`}.` : ` ${roadJobText(m.job, owner)}`;
     const who = whose === 'your' ? 'Your' : 'Their';
     return m.justMoved ? `${who} ${m.piece} keeps going: ${road}.${aim}` : `${who} ${m.piece} on ${m.from} has a better road: ${road}.${aim}`;
   }
@@ -364,6 +446,15 @@ export function planStepsText(p: PlanSteps, whose: 'your' | 'their'): string {
   const owner = whose === 'your' ? 'their' : 'your';
   const why = p.aim ? `, the pieces lining up on ${p.aimPiece ? `${owner} ${p.aimPiece} on ${p.aim}` : `${p.aim}, next to ${owner} king`}` : '';
   return `${whose === 'your' ? 'Your' : 'Their'} plan from here: ${list}${why}.`;
+}
+
+/** The road's job said after the road (one idea a sentence): "There it hits
+ *  g7, next to their king." / "There it hits their pawn on b3." / "There it
+ *  eyes d5, a hole in their camp." */
+export function roadJobText(j: RoadJob, owner: 'your' | 'their'): string {
+  if (j.kind === 'king') return `There it hits ${j.square}, next to ${owner} king.`;
+  if (j.kind === 'piece') return `There it hits ${owner} ${j.piece ?? 'pawn'} on ${j.square}.`;
+  return `There it eyes ${j.square}, a hole in ${owner} camp.`;
 }
 
 /** The plan's say-once key: one plan per aim or break and mover, so the same

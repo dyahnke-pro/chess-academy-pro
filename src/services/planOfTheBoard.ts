@@ -63,7 +63,7 @@
 // plan a read teaches is the plan a student's next moves can be checked
 // against (its squares and its piece).
 import { Chess, type Color, type Square } from 'chess.js';
-import { planSteps, type PlanSteps } from './planSteps';
+import { planSteps, roadJobText, hasMatingForce, type PlanSteps } from './planSteps';
 import { siegeOf } from './boardPlan';
 import { deriveNextPlanFacts, findWorstPlacedPiece, structurePlanFact, worstReason, type PlanKind } from './nextPlans';
 import { pawnBreak } from './pawnBreak';
@@ -319,7 +319,7 @@ export function stepsText(p: PlanSteps, whose: 'your' | 'their', fromTheMove: bo
     const rest = m.route.slice(1);
     const end = rest[rest.length - 1];
     const next = rest.length === 1 ? `Next, the ${m.piece} goes on to ${end}.` : `Next, the ${m.piece} goes on to ${rest[0]}. It ends on ${end}.`;
-    return aimed ? `${next} There it lines up on ${aimed}.` : next;
+    return aimed ? `${next} There it lines up on ${aimed}.` : `${next} ${roadJobText(m.job, owner)}`;
   }
   if (p.maneuver) {
     const m = p.maneuver;
@@ -327,7 +327,8 @@ export function stepsText(p: PlanSteps, whose: 'your' | 'their', fromTheMove: bo
     const lead = m.route.length === 1 ? `${Who} ${m.piece} on ${m.from} has a better square: ${end}.`
       : `${Who} ${m.piece} on ${m.from} has a better road, by way of ${m.route[0]}.`;
     const ends = m.route.length === 1 ? '' : aimed ? ` It ends on ${end}, lined up on ${aimed}.` : ` It ends on ${end}.`;
-    return `${lead}${m.route.length === 1 && aimed ? ` There it lines up on ${aimed}.` : ends}`;
+    const job = aimed ? '' : ` ${roadJobText(m.job, owner)}`;
+    return `${lead}${m.route.length === 1 && aimed ? ` There it lines up on ${aimed}.` : ends}${job}`;
   }
   const first = p.steps[0];
   const start = first.castle ? 'castling' : first.brk ? `the ${first.san} break` : first.san;
@@ -676,8 +677,10 @@ function attackRoadOf(fen: string, line: readonly string[], mover: Color, whose:
   const earlier = stops.slice(0, -1).map((bd, k) => ({ bd, sq: route[k] }));
   const via = route.length === 3 ? ` It goes on by ${route[1]}.` : '';
   // THE KING'S SQUARES: hit from the end, and not from where it stands now.
-  const zoneEnd = kingZone(end, them);
-  const zoneNow = kingZone(now, them);
+  // A king's squares are an attack only with a queen or rook on the board.
+  const force = hasMatingForce(end, mover);
+  const zoneEnd = force ? kingZone(end, them) : [];
+  const zoneNow = force ? kingZone(now, them) : [];
   const newHit = zoneEnd.find((sq) => hits(end, last, sq) && !(zoneNow.includes(sq) && hits(now, from, sq))
     && !earlier.some((e) => kingZone(e.bd, them).includes(sq) && hits(e.bd, e.sq, sq)));
   const key = stemKeyOf(`${fen}|attack-road|${from}`);

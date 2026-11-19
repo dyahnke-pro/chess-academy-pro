@@ -532,7 +532,17 @@ export function deriveNextPlanFacts(
   }
 
   // 5. You already hold an outpost → dominate from it, HOW spelled out.
-  const myOutpost = struct.outposts.find((o) => o.color === studentColorWB);
+  // Danya's "monster knight on e5", "the dream square c5", "the strong d5
+  // knight": the boss is a KNIGHT, off the rim, in their half or on a central
+  // square. A bishop on a guarded square, or a knight on h5 or on its own
+  // third rank, is a piece standing well, never the board's boss.
+  const isBoss = (o: { square: string; piece: string }): boolean => {
+    if (o.piece !== 'n' || 'ah'.includes(o.square[0])) return false;
+    const r = Number(o.square[1]);
+    const theirHalf = studentColorWB === 'w' ? r >= 5 : r <= 4;
+    return theirHalf || ('de'.includes(o.square[0]) && (r === 4 || r === 5));
+  };
+  const myOutpost = struct.outposts.find((o) => o.color === studentColorWB && isBoss(o));
   if (myOutpost) {
     const guard = guardPawnBit(chess, myOutpost.square as Square, studentColorWB);
     add('outpost', `make that ${myOutpost.piece === 'n' ? 'knight' : 'bishop'} on ${myOutpost.square} the boss of the board`, `building around your ${myOutpost.piece === 'n' ? 'knight' : 'bishop'} on ${myOutpost.square}`, `${guard.text} and refuse trades that give it up — from there it presses on everything around it`, [myOutpost.square, ...guard.squares]);
@@ -994,7 +1004,18 @@ export function structurePlanFact(fen: string, studentColor: Color): StructurePl
       : `You're playing with the isolated pawn on ${myIso} — keep pieces on and use the open lines for activity. Don't drift into the endgame where it's a target.` };
   }
   if (named) return named;
-  const theirIso = s.pawns.isolatedPawns[opp].filter(centralFile)[0];
+  // A pawn to PILE ONTO stands on a file we can use (Danya, the king march #1:
+  // White's e3 pawn behind Black's own e5 pawn is no target — no rook or
+  // queen of Black's can reach it down the file, and his read is the king's
+  // march): our own pawn in front of it on its file shuts the pile off.
+  const pileable = (sq: string): boolean => {
+    try {
+      const ours = new Chess(fen).findPiece({ type: 'p', color: studentColor });
+      const r = Number(sq[1]);
+      return !ours.some((p) => p[0] === sq[0] && (opp === 'w' ? Number(p[1]) > r : Number(p[1]) < r));
+    } catch { return false; }
+  };
+  const theirIso = s.pawns.isolatedPawns[opp].filter(centralFile).filter(pileable)[0];
   if (theirIso) {
     return { id: 'iqp-theirs', squares: [theirIso], text: ending
       ? `They have an isolated pawn on ${theirIso}, and in an ending like this it is a target: pile onto it.`

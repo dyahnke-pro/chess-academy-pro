@@ -17,12 +17,11 @@
 //
 // PURE: chess.js, the board readers and the lines handed in. Dual use: the
 // same plan a read teaches is the plan a student's game can be checked against.
-import { findPawnBreaks } from './positionReadingService';
 import { Chess, type Color } from 'chess.js';
 import { opponentTargets, pressureOf, pressureLine, type Target } from './targetSelector';
 import { planSteps, planStepsText } from './planSteps';
 import { isPawnBreak } from './pawnBreak';
-import { wingPawns, type Wing } from './boardStructure';
+import type { Wing } from './boardStructure';
 
 export interface BoardPlanLine { text: string; squares: string[] }
 
@@ -79,18 +78,38 @@ function heldTarget(fen: string, me: Color): Target | null {
 /** THE SECOND FRONT: the target holds and ties their pieces down, so the play
  *  goes to the other wing — said only with a pawn break the board has there
  *  for the mover. */
-export function switchWing(fen: string, me: Color, whose: 'your' | 'their'): BoardPlanLine | null {
+export function switchWing(fen: string, me: Color, whose: 'your' | 'their',
+  /** REQUIRED: the engine's best line here (UCI). The second front is a plan
+   *  only when the line plays its break (Danya, the hardest move to make #1:
+   *  "the queenside is permanently locked" — a b5 break the engine never
+   *  plays opens nothing). */
+  best: readonly string[]): BoardPlanLine | null {
   const t = heldTarget(fen, me);
   if (!t) return null;
   const board = new Chess(fen);
   if (board.turn() !== me) return null;
   const wing = OTHER[WING_OF(t.square)];
-  const mine = new Set(wingPawns(board)[me][wing]);
-  // A break that just drops the pawn opens no front (Danya, the hardest move
-  // to make #1: "the queenside is permanently locked" — b5 is met by axb5 and
-  // loses a pawn): only a break the one break computer accepts.
-  const safe = new Set<string>(findPawnBreaks(fen));
-  const brk = board.moves({ verbose: true }).find((m) => m.piece === 'p' && mine.has(m.from) && !m.captured && safe.has(m.to) && isPawnBreak(fen, m.san, null));
+  // A WING is the a-c or f-h files: a d- or e-pawn break is the centre's, and
+  // "a second front on the kingside: the e5 break" names the wrong place.
+  const wingFiles = wing === 'queenside' ? 'abc' : 'fgh';
+  // The target's own wing is the other side of the board: a d- or e-file
+  // target has no "other wing" (both are near it).
+  if ('de'.includes(t.square[0])) return null;
+  // THE BREAK THE LINE PLAYS: one of the mover's first four moves, a quiet
+  // pawn push on that wing the break computer accepts, before any capture.
+  const b = new Chess(fen);
+  let n = 0;
+  let brk: { san: string; to: string } | null = null;
+  for (const u of best) {
+    if (n >= 4) break;
+    const before = b.fen();
+    let mv;
+    try { mv = b.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { break; }
+    if (mv.captured) break;
+    if (mv.color !== me) continue;
+    n += 1;
+    if (mv.piece === 'p' && wingFiles.includes(mv.to[0]) && isPawnBreak(before, mv.san, null)) { brk = { san: mv.san, to: mv.to }; break; }
+  }
   if (!brk) return null;
   const other = whose === 'your' ? 'their' : 'your';
   const tied = t.guards.length === 1 ? 'a piece' : `${t.guards.length} pieces`;

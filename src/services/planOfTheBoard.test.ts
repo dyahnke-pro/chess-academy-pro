@@ -26,7 +26,7 @@ describe('planOfTheBoard — the plan Danya says', () => {
   it('the rook lift: a road whose first step is the best move itself', () => {
     const p = plan(ROOK_LIFT, ROOK_LIFT_LINE, 147);
     expect(p?.kind).toBe('road');
-    expect(p?.text).toBe('Next, the rook goes on to b3.');
+    expect(p?.text).toBe('Next, the rook goes on to b3. There it hits their rook on b8.');
     expect(p?.starts).toBe(0);
   });
   it('planSteps reads a one-step road after the best move (the old minimum of two steps after it lost the rook lift)', () => {
@@ -86,7 +86,7 @@ describe('planOfTheBoard — the step that led to the plan, in his order', () =>
     const p = planOfTheBoard({ fen, lines: linesOf([{ uci: 'g4h3', cp: -14, mate: null, pv: ['g4h3', 'g3h1', 'g8g7', 'e2a6', 'd8b8', 'f2g3', 'e5g3', 'h1g3', 'b8b2', 'a6f6', 'g7g8', 'g3e2'] }]), student: 'b', namesMoves: true });
     expect(p?.why?.step).toBe('worst-piece');
     // The piece named once in full, then "it" (the human-voice rule 3).
-    expect(p?.text).toBe('Your rook on d8 is still off the open b-file. It has a better road, by way of b8. It ends on b2.');
+    expect(p?.text).toBe('Your rook on d8 is still off the open b-file. It has a better road, by way of b8. It ends on b2. There it hits e2, next to their king.');
   });
   it('the structure sends the play to a wing: a locked centre and a queenside break (mysterious GM moves #4)', () => {
     const fen = '5rk1/pp1q1rpp/4b3/3pPp1Q/P1pP3P/2P3P1/1P3RB1/5RK1 w - - 0 26';
