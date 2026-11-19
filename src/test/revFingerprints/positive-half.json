@@ -1,8 +1,8 @@
 {
-  "rev": "2026-11-19-both-ways-3",
+  "rev": "2026-11-19-read-fixes",
   "parts": {
     "chesscom-1038626480": "d61986ccedee1931",
-    "chesscom-1042725180": "aba9a53b30261004",
+    "chesscom-1042725180": "6909210498cbd7c0",
     "chesscom-1044361526": "54261a84cf074f0b",
     "lichess-motifs": "00a4d5e683e564f4"
   }

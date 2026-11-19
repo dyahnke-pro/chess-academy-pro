@@ -1,7 +1,7 @@
 {
-  "rev": "2026-11-17-speedrun-producer-fixes",
+  "rev": "2026-11-19-read-fixes",
   "parts": {
     "puzzles": "00e30cfb971ab1f7",
-    "lichess": "3470abfde0ac778b"
+    "lichess": "aac09e9ab4ba3b92"
   }
 }
