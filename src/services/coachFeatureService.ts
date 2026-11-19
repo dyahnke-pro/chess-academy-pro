@@ -3869,6 +3869,7 @@ function* reviewSegmentSteps(
         ? readBoard('sacPayoff', {
             fenAfter: fenPair.fenAfter,
             mover: moverColor === 'white' ? 'w' : 'b',
+            student: playerColor === 'white' ? 'w' : 'b',
             moverPovEvalCp: m.evaluation != null ? (moverColor === 'white' ? m.evaluation : -m.evaluation) : null,
             moverPovBeforeCp: m.preMoveEval != null ? (moverColor === 'white' ? m.preMoveEval : -m.preMoveEval) : null,
             kingCentreTaught: flags.has('kingCenterTaught'),

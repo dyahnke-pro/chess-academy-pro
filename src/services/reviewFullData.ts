@@ -1024,7 +1024,7 @@ export function computeMoveFacets(
       say(readBoard('heldResource', { fenBefore, san, bestSan: ctx.bestMoveSan, cpLoss: cleanCost, student: studentWB }), 'timing');
       say(readBoard('captureChoice', { fenBefore, san, bestSan: ctx.bestMoveSan, cpLoss: ctx.costCp ?? cleanCost, student: studentWB }), 'capture-choice');
       if (cleanCost < 30) say(readBoard('kickAfterRecapture', { fenBefore, san, reply, bestUci: ctx.bestLineUci, student: studentWB }), 'kick');
-      say(readBoard('pawnSquareTaken', { fenBefore, san, cpLoss: cleanCost }), 'plan-race');
+      say(readBoard('pawnSquareTaken', { fenBefore, san, cpLoss: cleanCost, student: studentWB }), 'plan-race');
     }
   }
 

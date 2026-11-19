@@ -697,7 +697,7 @@ export function studentMoveAnswerLines(history: readonly string[], ply: number, 
   // answers "what was that for" and leads; a description of the board the
   // move made (a pawn duo, a square it covers) follows it, never replaces it.
   // Quiet moves only (the read says so) — nothing material is claimed.
-  const point = readBoard('quietMovePoint', { fenBefore, san: history[ply], prevCapture: captureRunOfMoves(null, history.slice(0, ply)) })?.text;
+  const point = readBoard('quietMovePoint', { fenBefore, san: history[ply], prevCapture: captureRunOfMoves(null, history.slice(0, ply)), student: fenBefore.split(' ')[1] === 'b' ? 'b' : 'w' })?.text;
   if (point && !out.includes(point)) out.unshift(point);
   return out;
 }

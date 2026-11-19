@@ -493,7 +493,8 @@ export interface BoardContexts {
   /** The kick after their recapture (`kickAfterRecapture`). */
   kickAfterRecapture: { fenBefore: string; san: string; reply: string | null; bestUci: readonly string[]; student: Color };
   /** The pawn square taken first (`pawnSquareTaken`). */
-  pawnSquareTaken: { fenBefore: string; san: string; cpLoss: number };
+  /** `student` REQUIRED: the race is said as the student's pawn ("Your pawn got there first") — the opponent's push is never read as theirs. */
+  pawnSquareTaken: { fenBefore: string; san: string; cpLoss: number; student: Color };
   /** The king reads the engine's best line poses (`kingReadsForBestLine`) —
    *  the ones that name a move, said as "Here, …". */
   kingReadsBestLine: { fenBefore: string; student: Color; bestUci: readonly string[] };
@@ -962,7 +963,8 @@ export interface BoardContexts {
   attackAsks: { fenAfter: string; target: string; mover: Color };
   theirOpeningChoice: { history: readonly string[]; student: Color; cpLoss: number; coachChose: boolean; fen: string };
   openingNamed: { det: { name: string } | null; history: readonly string[]; spokenName: string | null; student: Color; transposed: boolean; fen: string };
-  sacPayoff: { fenAfter: string; mover: Color; moverPovEvalCp: number | null; moverPovBeforeCp: number | null; kingCentreTaught: boolean };
+  /** `student` REQUIRED: "what you get for it" is the student's payoff only; the opponent's sac is "what they get". */
+  sacPayoff: { fenAfter: string; mover: Color; student: Color; moverPovEvalCp: number | null; moverPovBeforeCp: number | null; kingCentreTaught: boolean };
   sacShield: { fenBefore: string; san: string };
   takeStock: { fenBefore: string; san: string; fen: string; student: Color; studentPovCp: number | null };
   kingHuntCue: { fen: string; student: Color };
@@ -1046,7 +1048,8 @@ export interface BoardContexts {
   structureNaming: { fen: string; student: Color; openingName: string | null };
   /** WHAT A QUIET MOVE OF THE STUDENT'S IS FOR, asked after the move
    *  (`prevCapture`: the capture run before it). */
-  quietMovePoint: { fenBefore: string; san: string; prevCapture: PrevCaptureContext | null };
+  /** `student` REQUIRED: the point is said in the student's voice ("Now you have the two bishops") — only on the student's move. */
+  quietMovePoint: { fenBefore: string; san: string; prevCapture: PrevCaptureContext | null; student: Color };
   /** THE ANSWER TO THEIR SLIP, asked now (`lineUci`: the engine's line from
    *  `fen` starting with the answer). */
   /** `register`: the writer's tense — Review's retrospective words or Learn's live ones. */
@@ -1835,6 +1838,8 @@ export const BOARD_COMPUTERS = {
   },
   heldResource: {
     read: ({ fenBefore, san, bestSan, cpLoss, student }, fact) => safe(() => {
+      // The student's move only: its words are the student's ("their knight").
+      if (sideToMove(fenBefore) !== student) return null;
       const hold = heldResource(fenBefore, san, bestSan, cpLoss);
       const lp = hold ? legalLineProof(hold.fen, hold.sans, lineSeatAt(hold.fen, student)) : null;
       if (!hold || !lp) return null;
@@ -1848,6 +1853,8 @@ export const BOARD_COMPUTERS = {
   },
   captureChoice: {
     read: ({ fenBefore, san, bestSan, cpLoss, student }, fact) => safe(() => {
+      // The student's capture only: "their knight", "nothing of yours".
+      if (sideToMove(fenBefore) !== student) return null;
       const cc = captureChoice(fenBefore, san, bestSan, cpLoss);
       const lp = cc ? legalLineProof(fenBefore, cc.bad, lineSeatAt(fenBefore, student)) : null;
       if (!cc || !lp) return null;
@@ -1861,6 +1868,8 @@ export const BOARD_COMPUTERS = {
   },
   kickAfterRecapture: {
     read: ({ fenBefore, san, reply, bestUci, student }, fact) => safe(() => {
+      // The student's capture only: "Their knight took back".
+      if (sideToMove(fenBefore) !== student) return null;
       const kick = kickAfterRecapture(fenBefore, san, reply, bestUci);
       const lp = kick ? legalLineProof(fenBefore, kick.sans, lineSeatAt(fenBefore, student)) : null;
       if (!kick || !lp) return null;
@@ -1873,7 +1882,8 @@ export const BOARD_COMPUTERS = {
     surfaces: { ...reviewFacetSurfaces(), weaknesses: WEAK_PLAYED_JUDGED },
   },
   pawnSquareTaken: {
-    read: ({ fenBefore, san, cpLoss }, fact) => safe(() => {
+    read: ({ fenBefore, san, cpLoss, student }, fact) => safe(() => {
+      if (sideToMove(fenBefore) !== student) return null;
       const won = pawnSquareTaken(fenBefore, san, cpLoss);
       const proof = won ? pawnSquareRaceProof(fenBefore, won.race) : null;
       if (!won || !proof) return null;
@@ -1887,7 +1897,7 @@ export const BOARD_COMPUTERS = {
   },
   kingReadsBestLine: {
     // The king read the board posed and the move passed by, said "Here, …".
-    read: ({ fenBefore, student, bestUci }, fact) => safe(() => kingReadsForBestLine(fenBefore, student, bestUci)
+    read: ({ fenBefore, student, bestUci }, fact) => safe(() => (sideToMove(fenBefore) !== student ? [] : kingReadsForBestLine(fenBefore, student, bestUci))
       .filter((r) => r.namesMove && r.id !== 'storm-race')
       .map((r, i) => fact({ key: `${r.id}:${i}`, claims: [`king-read:${r.id}`], text: `Here, ${continueSentence(r.text)}`, proof: r.proof, squares: r.squares, stakes: r.stakes ?? null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore }))),
     computer: 'kingReadsForBestLine',
@@ -2049,7 +2059,7 @@ export const BOARD_COMPUTERS = {
       const squares = new Map<string, readonly string[]>();
       return computeBoardDelta(fenBefore, san, squares).map((clause, i) => {
         const seated = student ? seatPieceReferences(clause, fenAfter, student) : clause;
-        return fact({ key: `delta:${i}`, claims: [`delta:${i}`], text: `${openSentence(seated)}.`, proof: NO_PROOF.description, squares: [...(squares.get(clause) ?? [])], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
+        return fact({ key: `delta:${i}`, claims: [`delta:${i}`], text: `${openSentence(seated)}.`, proof: NO_PROOF.description, squares: [...(squares.get(clause) ?? [])], stakes: null, seat: !student || sideToMove(fenBefore) === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
       });
     }),
     computer: 'computeBoardDelta',
@@ -3286,9 +3296,9 @@ export const BOARD_COMPUTERS = {
   },
   kingFromCentre: {
     read: ({ fenBefore, san, student }, fact) => safe(() => {
-      const r = kingFromCentre(fenBefore, san);
-      if (!r) return null;
       const mine = new Chess(fenBefore).turn() === student;
+      const r = kingFromCentre(fenBefore, san, mine ? 'your' : 'their');
+      if (!r) return null;
       return fact({ key: r.key, claims: [r.key], text: r.text, proof: NO_PROOF.method, squares: r.squares, stakes: null,
         seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
     }),
@@ -4594,13 +4604,14 @@ export const BOARD_COMPUTERS = {
     // The student's sacrifice: what they get for it. A clause about a king
     // stuck in the centre is left out once that has been taught, and the key
     // says whether this one teaches it (`sacPayoffTeachesKing`).
-    read: ({ fenAfter, mover, moverPovEvalCp, moverPovBeforeCp, kingCentreTaught }, fact) => safe(() => {
+    read: ({ fenAfter, mover, student, moverPovEvalCp, moverPovBeforeCp, kingCentreTaught }, fact) => safe(() => {
       const stuck = (c: string): boolean => /stuck in the cent/i.test(c);
-      const comp = sacrificeCompensation(fenAfter, mover, moverPovEvalCp, true, moverPovBeforeCp).filter((c) => !(kingCentreTaught && stuck(c)));
+      const mine = mover === student;
+      const comp = sacrificeCompensation(fenAfter, mover, moverPovEvalCp, mine, moverPovBeforeCp).filter((c) => !(kingCentreTaught && stuck(c)));
       if (comp.length === 0) return null;
-      const text = `Look what you get for it: ${oxfordJoin(comp)}.`;
+      const text = `Look what ${mine ? 'you get' : 'they get'} for it: ${oxfordJoin(comp)}.`;
       return fact({ key: `${comp.some(stuck) ? 'k' : '-'}:${fenAfter.split(' ')[0]}`, claims: [`sac-payoff:${fenAfter.split(' ')[0]}`], text, proof: NO_PROOF.description, squares: [], stakes: null,
-        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
     }),
     computer: 'sacrificeCompensation',
     kind: 'sac-why',
@@ -5359,8 +5370,8 @@ export const BOARD_COMPUTERS = {
   quietMovePoint: {
     // WHAT A QUIET MOVE IS FOR (Play on demand, David 2026-10-02): quiet moves
     // only — a capture's point is the trade.
-    read: ({ fenBefore, san, prevCapture }, fact) => safe(() => {
-      if (/x/.test(san)) return null;
+    read: ({ fenBefore, san, prevCapture, student }, fact) => safe(() => {
+      if (/x/.test(san) || sideToMove(fenBefore) !== student) return null;
       const point = studentMovePoint(fenBefore, san, prevCapture, null);
       if (!point) return null;
       return fact({ key: `quiet-point:${san}:${posKey(fenBefore)}`, claims: [`quiet-point:${san}:${posKey(fenBefore)}`], text: point, proof: NO_PROOF.description, squares: [], stakes: null,
