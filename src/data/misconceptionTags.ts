@@ -544,7 +544,8 @@ export function isMisconceptionTagId(id: string): id is MisconceptionTagId {
  *  (effbb78), so a missed shot that only was one is named by what does. */
 // 2026-11-12-false-facts: task 172 — a discovery is named only when the move uncovers it (never the board's discovery "in waiting"), a guarded square holds no enemy piece, a take-back that comes out ahead is worded by what it nets.
 // 2026-11-12-buried-bishop: a move that gives check buries no bishop (its mobility read 0 on the flipped board), and the blocker must stand on the bishop's diagonal.
-export const MISCONCEPTION_RULES_REV = '2026-11-12-buried-bishop';
+// 2026-11-19-round3: the slips the round-3 computers file (the have-check reads, the null-move rule's check boards, the count's tempo).
+export const MISCONCEPTION_RULES_REV = '2026-11-19-round3';
 
 /** Bump when analysed games must be re-read for the POSITIVE half
  *  (2026-10-20: re-read from the one-price annotations, `RECORD_PRICE_REV`) (the heat
