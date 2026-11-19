@@ -44,8 +44,8 @@ function bfs(from: Square, steps: Array<[number, number]>, ok: (s: Square) => bo
         prev.set(t, s);
         if (goal(t)) {
           const path: Square[] = [t];
-          let cur = s;
-          while (cur !== from) { path.unshift(cur as Square); cur = prev.get(cur)!; }
+          let cur: Square = s;
+          while (cur !== from) { path.unshift(cur as Square); cur = prev.get(cur) as Square; }
           return path;
         }
         next.push(t);

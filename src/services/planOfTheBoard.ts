@@ -156,7 +156,9 @@ function structureStarts(kind: PlanKind, squares: readonly string[], moves: read
   // and win" ("plant your knight on f6 so f7 can never advance").
   const shield = kind === 'weak-pawn' && inKingShield(board, a);
   for (const m of moves) {
-    if (kind === 'weak-pawn' && !shield && (m.hits.has(a) || (b && m.to === b))) return m.idx;
+    // The pawn hit, or its blockade square taken by a minor piece (the
+    // blockader the plan names; a queen there is the attack's).
+    if (kind === 'weak-pawn' && !shield && (m.hits.has(a) || (b && m.to === b && (m.piece === 'n' || m.piece === 'b')))) return m.idx;
     if (kind === 'passer' && m.from === a) return m.idx;
     if (kind === 'outpost' && squares.includes(m.to) && (m.piece === 'n' || m.piece === 'b')) return m.idx;
     if (kind === 'worst-piece' && m.from === a) return m.idx;

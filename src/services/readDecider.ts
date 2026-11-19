@@ -112,9 +112,10 @@ export function readContextOf(i: {
  *  kind only when it names a square of the story's target; `sayOnce` steps
  *  describe the board and are said only when they name a square not yet named. */
 interface StepRow { step: ReadStep; kinds: readonly string[]; from?: readonly ReadFactFrom[]; positionKinds?: readonly string[]; onTarget?: readonly string[]; sayOnce?: true;
-  /** Kinds the step says before any weight: a plan with its goal and its way
-   *  over a description of a piece or a file (Danya's plans, 2026-11-19:
-   *  "their rook on f1 is well placed" beat "the rook lift Re1-e3-b3"). */
+  /** Computers the step says before any weight: the board's one plan, a
+   *  goal and a way the best line plays, over a description of a piece or a
+   *  file (Danya's plans, 2026-11-19: "their rook on f1 is well placed" beat
+   *  "the rook lift Re1-e3-b3"). */
   first?: readonly string[] }
 
 export const READ_STEPS: readonly StepRow[] = [
@@ -139,7 +140,7 @@ export const READ_STEPS: readonly StepRow[] = [
   { step: 'their-try', kinds: ['their-refuted'] },
   // THE PLAN: the board's one plan (`planOfTheBoard` — a goal and a way the
   // best line plays) when the board has one; else the plan computers' own.
-  { step: 'plan', kinds: ['board-plan', 'siege', 'plan-steps', 'plan-race', 'structure-plan'], sayOnce: true, first: ['board-plan'] },
+  { step: 'plan', kinds: ['siege', 'plan-steps', 'plan-race', 'structure-plan'], sayOnce: true, first: ['planOfTheBoard'] },
   // The concept the board shows. A played-out `line` is never a read's step:
   // it is said move by move, a score sheet (the voice rule).
   { step: 'concept', kinds: ['concept', 'speedrun-read'], sayOnce: true },
@@ -204,7 +205,7 @@ export function decideRead<F extends ReadFact>(facts: readonly F[], ctx: ReadCon
       && !out.some((o) => o.text === x.text)
       // ONE IDEA ONCE: a story line whose every square was named adds nothing.
       && (!row.sayOnce || x.squares.length === 0 || x.squares.some((sq) => !named.has(sq))));
-    let pick: F | null = candidates.find((x) => row.first?.includes(x.kind)) ?? null;
+    let pick: F | null = candidates.find((x) => !!x.computer && !!row.first?.includes(x.computer)) ?? null;
     let pickW = pick ? Infinity : -Infinity;
     for (const x of pick ? [] : candidates) {
       // The mate's pattern is the puzzle's lesson: said whenever it is found.

@@ -71,6 +71,7 @@ import { costStakes } from './factStakes';
 import { pawnBreak } from './pawnBreak';
 import { oppositeBishops } from './oppositeBishops';
 import { planSteps, planStepsText, planStepsKey } from './planSteps';
+import { planOfTheBoard } from './planOfTheBoard';
 import { compensation } from './compensation';
 import { openingTheoryFacts } from './openingTheory';
 import { moveStops } from './moveStops';
@@ -714,6 +715,13 @@ export interface BoardContexts {
    *  at, or a break. `played`: the move that made `fenAfter` (UCI), or null —
    *  a plan tied only by the break that move prepares is the move's own job. */
   planSteps: { fenAfter: string; line: readonly string[]; student: Color; played: string | null };
+  /** THE ONE PLAN OF THE BOARD (`planOfTheBoard`): on `fen` (the side to
+   *  move's, either seat), the plan the engine's best line plays — a road, a
+   *  siege, a kick, a weak pawn, an outpost, a passer, the worst piece, a break
+   *  — chosen by where the line starts it. `lines`: the engine's lines on
+   *  `fen`, best first. `namesMoves`: may it name a move the student is still
+   *  to find (Learn's live board holds it). */
+  planOfTheBoard: { fen: string; lines: readonly AnalysisLine[]; student: Color; namesMoves: boolean };
   /** COMPENSATION (`positionAssessment`): on `fenAfter`, a side down material
    *  and still level or better by the engine (`studentCp`, the student's
    *  seat), with the board reason that pays for it. `line`: the engine's line
@@ -3440,6 +3448,31 @@ export const BOARD_COMPUTERS = {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT,
       tactics: TACTICS_READ,
       weaknesses: { not: 'a reading of the board said once — no question of the student\'s posed' },
+      think: THINK,
+    },
+  },
+  planOfTheBoard: {
+    // Danya's plans are a goal and a way the best line plays ("the rook lift
+    // Re1-e3-b3", "b4 then b5 to dislodge the c6 knight", "build the gun on
+    // the d-file"), never a state ("their rook is well placed"): the one plan
+    // the board's best line starts, both seats.
+    read: ({ fen, lines, student, namesMoves }, fact) => safe(() => {
+      const p = planOfTheBoard({ fen, lines, student, namesMoves });
+      if (!p) return null;
+      const mover: Color = fen.split(' ')[1] === 'b' ? 'b' : 'w';
+      const mine = mover === student;
+      const key = `plan-of-board:${mover}:${p.kind}:${p.target ?? p.squares[0] ?? ''}`;
+      const proof = legalLineProof(fen, lines[0]?.moves ?? [], lineSeatAt(fen, student)) ?? NO_PROOF.description;
+      return fact({ key, claims: [key], text: p.text, proof, squares: p.squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: mine && namesMoves, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'planOfTheBoard',
+    kind: 'plan-steps',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { not: 'a plan read off the engine\'s line — no question of the student\'s posed' },
       think: THINK,
     },
   },

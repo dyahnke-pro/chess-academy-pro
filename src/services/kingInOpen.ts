@@ -53,7 +53,7 @@ export function kingInOpen(fen: string, lines: readonly EngineLine[], student: C
     const text = mine
       ? `Your king on ${cover.kingSquare} is out in the open, with ${coverWords}. Their ${andList(names)} can ${all} give check, so count that before you count pawns.`
       : `Their king on ${cover.kingSquare} is out in the open, with ${coverWords}. Your ${andList(names)} can ${all} give check, and a king like that matters more than a pawn.`;
-    return { side, king: cover.kingSquare, cover: cover.present, checkers, text, squares: [cover.kingSquare, ...checkers] };
+    return { side, king: cover.kingSquare as Square, cover: cover.present, checkers, text, squares: [cover.kingSquare as Square, ...checkers] };
   }
   return null;
 }
