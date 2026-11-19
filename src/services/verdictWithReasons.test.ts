@@ -128,3 +128,14 @@ describe('no initiative in a bare ending', () => {
   // The control: the greek gift #3 and the art of maneuvering #2 above still
   // read the initiative in a middlegame.
 });
+
+// Danya narration test 2026-11-19, Magnus Carlsen's best endgame wins #2: the
+// bishop's edge is said by what the matchup read (pawns on both wings, none
+// locked), never "an open board" with centre pawns on d5 and e5.
+describe('the bishop-over-knight reason says what was read', () => {
+  it('no "open board"', () => {
+    const fen = '2r5/3r4/p3k1bp/1p1pp1p1/8/1P2NPP1/PKPR2P1/4R3 b - - 0 25';
+    const minor = boardReasons(fen, 'b', null, null).find((r) => r.kind === 'minor');
+    expect(minor?.clause).toBe('your bishop on g6 is better than their knight, with pawns on both wings and none locked');
+  });
+});

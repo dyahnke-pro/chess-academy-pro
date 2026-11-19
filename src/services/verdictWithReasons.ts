@@ -252,7 +252,10 @@ export function boardReasons(fen: string, student: Color, lines: readonly Initia
     const own = OWN(x, student);
     const clause = mm.better === 'knight'
       ? `${own} knight on ${mm.knight.square} is better than ${OWN(mm.bishop.color, student)} ${mm.badBishop ? 'bad ' : ''}bishop on ${mm.bishop.square}`
-      : `${own} bishop on ${mm.bishop.square} is better than ${OWN(mm.knight.color, student)} knight on an open board`;
+      // What the matchup computer read, never "an open board" (Danya
+      // narration test 2026-11-19, Magnus Carlsen's best endgame wins #2:
+      // centre pawns on d5 and e5, said to be "an open board").
+      : `${own} bishop on ${mm.bishop.square} is better than ${OWN(mm.knight.color, student)} knight, with pawns on both wings and none locked`;
     out.push({ kind: 'minor', side: x, weight: 70, clause, sentence: `${cap(clause)}.`, squares: [mm.knight.square, mm.bishop.square] });
   }
 
