@@ -3218,7 +3218,7 @@ export const BOARD_COMPUTERS = {
       const text = `Your ${piece} on ${deep.follow.to} ${deep.hit.words} now — ${sayYourMove(san, fenBefore)} made that possible.`;
       const claim = `deep:${deep.follow.uci}`;
       return fact({ key: `${deep.follow.piece}|${deep.follow.to}|${deep.hit.square}|${deep.hit.type}|${claim}`, claims: [claim], text,
-        proof: squaresProof(text, [deep.follow.to, deep.hit.square]) ?? NO_PROOF.stated, squares: [deep.follow.to, deep.hit.square], stakes: null,
+        proof: squaresProof(text, [deep.follow.to, deep.hit.square]) ?? NO_PROOF.description, squares: [deep.follow.to, deep.hit.square], stakes: null,
         seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore });
     }),
     computer: 'deepFact',
@@ -3320,7 +3320,7 @@ export const BOARD_COMPUTERS = {
     computer: 'prizeTeaching',
     kind: 'loose',
     phase: ANY,
-    surfaces: { learn: LEARN_BUNDLE, play: PLAY_ASK, lesson: { not: 'a model line\'s won piece is said as the move that wins it' }, review: { not: 'Review names the loose piece through its loose facet, the square included (the moment is past)' }, chat: { not: 'chat answers "what can I win?" with the move named (asked)' }, tactics: { not: 'a puzzle poses the piece to win itself' }, weaknesses: { not: 'the miss is recorded by the focus as the chance\'s answer' }, think: { not: 'a step board asks the question as its own step (their-targets)' } },
+    surfaces: { learn: LEARN_BUNDLE, play: PLAY_ASK, lesson: { not: 'a model line\'s won piece is said as the move that wins it' }, review: { not: 'Review names the loose piece through its loose facet, the square included (the moment is past)' }, chat: { not: 'chat answers a question about what can be won, with the move named (asked)' }, tactics: { not: 'a puzzle poses the piece to win itself' }, weaknesses: { not: 'the miss is recorded by the focus as the chance\'s answer' }, think: { not: 'a step board asks the question as its own step (their-targets)' } },
   },
   gambitPoint: {
     // A GAMBIT THEY ACCEPTED (fresh-game walk 2026-09-27): their reply took the
@@ -3391,7 +3391,7 @@ export const BOARD_COMPUTERS = {
       if (/x/.test(san)) return null;
       const point = studentMovePoint(fenBefore, san, prevCapture, null);
       if (!point) return null;
-      return fact({ key: `quiet-point:${san}:${posKey(fenBefore)}`, claims: [`quiet-point:${san}:${posKey(fenBefore)}`], text: point, proof: NO_PROOF.stated, squares: [], stakes: null,
+      return fact({ key: `quiet-point:${san}:${posKey(fenBefore)}`, claims: [`quiet-point:${san}:${posKey(fenBefore)}`], text: point, proof: NO_PROOF.description, squares: [], stakes: null,
         seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
     }),
     computer: 'studentMovePoint',
@@ -3403,7 +3403,7 @@ export const BOARD_COMPUTERS = {
     read: ({ fen, prevCapture, answerSan, lineUci }, fact) => safe(() => {
       const text = slipAnswerText(fen, prevCapture, answerSan, 'now', lineUci);
       if (!text) return null;
-      return fact({ key: `slip-answer:${answerSan ?? '-'}:${posKey(fen)}`, claims: [`slip-answer:${posKey(fen)}`], text, proof: NO_PROOF.stated, squares: [], stakes: null,
+      return fact({ key: `slip-answer:${answerSan ?? '-'}:${posKey(fen)}`, claims: [`slip-answer:${posKey(fen)}`], text, proof: NO_PROOF.description, squares: [], stakes: null,
         seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
     }),
     computer: 'slipAnswerText',
@@ -3415,7 +3415,7 @@ export const BOARD_COMPUTERS = {
     read: ({ fen, student }, fact) => safe(() => {
       const c = countWarning(fen, student);
       if (!c) return null;
-      return fact({ key: countKey(c.square), claims: [countKey(c.square)], text: c.text, proof: squaresProof(c.text, [c.square]) ?? NO_PROOF.stated, squares: [c.square], stakes: null,
+      return fact({ key: countKey(c.square), claims: [countKey(c.square)], text: c.text, proof: squaresProof(c.text, [c.square]) ?? NO_PROOF.method, squares: [c.square], stakes: null,
         seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
     }),
     computer: 'countWarning',
