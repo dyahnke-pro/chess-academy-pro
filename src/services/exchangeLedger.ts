@@ -589,6 +589,15 @@ export function describeProofResult(
    *  stood at before it is the board's. */
   start: { fen: string; student: 'w' | 'b' } | null,
 ): string {
+  // A PAWN THAT QUEENS IS THE RESULT (Danya, pawn endgames a practical guide
+  // #2: "e4? Then they play g2, you answer exd5 and they play g1=Q — you win a
+  // pawn"). The captures said a pawn won; the line ends with their new queen.
+  // One side promoting and coming out ahead is that side queening, whatever
+  // pawns changed hands on the way.
+  const sp = ledger.studentPromoted; const op = ledger.opponentPromoted;
+  const promotes = (ps: readonly PieceLetter[]): string => (ps.includes('q') ? 'queen' : 'promote');
+  if (op.length > 0 && sp.length === 0 && ledger.netPawns < 0) return `they ${promotes(op)} first`;
+  if (sp.length > 0 && op.length === 0 && ledger.netPawns > 0) return `you ${promotes(sp)} first`;
   const two = describeExchange(ledger);
   // A like-for-like trade that leaves one side a clean gain is that gain.
   const g = [...ledger.studentWon]; const l = [...ledger.opponentWon];
