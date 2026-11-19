@@ -11,6 +11,7 @@
  * uncapped review speaks these verbatim (un-warmed) so no fact is compressed away
  * and the gaps are visible. Each facet is a labeled prose clause.
  */
+import { lastMoveFromSan } from './material';
 import { playedUci } from './planSteps';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { inFluxAfter } from './boardState';
@@ -1474,7 +1475,7 @@ export function computeMoveFacets(
   // ── 7e. WHO'S BETTER, AND WHY — at the turn of the game (S4).
   if (studentColorWB && ctx.teaching.phaseTurn) {
     const cp = ctx.evaluation === null ? null : (studentColorWB === 'w' ? ctx.evaluation : -ctx.evaluation);
-    sayFact(readBoard('phaseVerdict', { fenBefore, san, fen: fenAfter, student: studentColorWB, studentCp: cp, phase: ctx.teaching.phaseTurn }), 'stock');
+    sayFact(readBoard('phaseVerdict', { fen: fenAfter, student: studentColorWB, studentCp: cp, phase: ctx.teaching.phaseTurn, heard: new Set(), lastMove: lastMoveFromSan(fenBefore, san) }), 'stock');
   }
 
   // ── 8. FORCED MATING RUN — this ply begins a forced checking finish ──

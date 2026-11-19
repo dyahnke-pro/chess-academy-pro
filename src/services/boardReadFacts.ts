@@ -208,10 +208,15 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     try { san = board.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] ?? 'q' }).san; } catch { return done(); }
     const fenB = board.fen();
     const after = await i.read(fenB).catch(() => null);
+    // The game behind the board (one-coach unlock, 2026-11-19): the best move's
+    // facts read the moves played to reach it (the opening, a piece moved
+    // again, the queen chased, the habits) — never an empty game on a board
+    // that has one. A puzzle hands no moves.
+    const game = gameBehind(i.history, i.fen);
     if (after) {
       for (const f of moveThoughtFacts({
         fenBefore: i.fen, san, moverIsStudent: mine, namesPlayedMove: ASKED_WRITER.namesPlayedMove, plainThreatsSeen: plainThreatsSeenFor(ASKED_WRITER, false), tense: i.tense, theory: false, story: false,
-        prev: NO_PREV_CAPTURE, line: top.moves, history: [], theirLast: null, phrases: null, reads: { before: [...i.before], after: [...after], passBefore: [], passAfter: [] }, costCp: 0,
+        prev: NO_PREV_CAPTURE, line: top.moves, history: game.history, theirLast: game.theirLast, phrases: null, reads: { before: [...i.before], after: [...after], passBefore: [], passAfter: [] }, costCp: 0,
       })) {
         // A puzzle still being solved keeps only who stands better: what the
         // best move does is the answer.
@@ -240,4 +245,15 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
 function sanOf(fen: string, uci: string | undefined): string | null {
   if (!uci) return null;
   try { return new Chess(fen).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }).san; } catch { return null; }
+}
+
+/** The moves played to reach `fen` and the last of them, when the history
+ *  replays to that board; an empty game otherwise (a puzzle, a set-up board). */
+export function gameBehind(history: readonly string[], fen: string): { history: string[]; theirLast: { fenBefore: string; san: string } | null } {
+  if (history.length === 0) return { history: [], theirLast: null };
+  const b = new Chess();
+  let before = b.fen();
+  try { for (const san of history) { before = b.fen(); b.move(san); } } catch { return { history: [], theirLast: null }; }
+  if (b.fen().split(' ').slice(0, 4).join(' ') !== fen.split(' ').slice(0, 4).join(' ')) return { history: [], theirLast: null };
+  return { history: [...history], theirLast: { fenBefore: before, san: history[history.length - 1] } };
 }

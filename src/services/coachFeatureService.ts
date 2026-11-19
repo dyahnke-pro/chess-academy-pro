@@ -3870,7 +3870,7 @@ function* reviewSegmentSteps(
       // defender off the mating line, explain that line-clearance in a full
       // sentence. Board-true (chess.js replay). Only the student's own sac.
       const mechanismFact = isStudentSac
-        ? readBoard('sacMechanismWalk', { sans: sansForRun, sacIdx: m.ply - 1, fen: fenPair.fenBefore })
+        ? readBoard('sacMechanism', { sans: sansForRun, sacIdx: m.ply - 1 })
         : null;
       const mechanism = mechanismFact ? ` ${mechanismFact.text}` : '';
       // A positional / exchange sacrifice that isn't a DIRECT mating sac still has

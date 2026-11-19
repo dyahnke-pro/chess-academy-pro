@@ -139,8 +139,11 @@ export const FACT_SET_SURFACES = {
   chat: { wired: 'services/moveThoughtFacts.ts' },
   learn: { wired: 'services/moveThoughtFacts.ts' },
   think: { wired: 'services/moveThoughtFacts.ts' },
-  play: { not: 'Play volunteers nothing (PLAY_VOLUNTEERS_COACHING); the tapped read reaches the fact set through boardReadFacts' },
-  tactics: { not: 'a puzzle poses one tactic; this explains a game move' },
+  // Play's tapped read and a puzzle's read once solved (`boardReadFacts` reads
+  // the fact set on the engine's best move; the puzzle's is withheld until
+  // it is solved). Play still volunteers nothing.
+  play: { wired: 'services/moveThoughtFacts.ts' },
+  tactics: { wired: 'services/moveThoughtFacts.ts' },
   weaknesses: { not: 'a reason for a move said once; the record grades the move\'s own cost' },
 } as const;
 
