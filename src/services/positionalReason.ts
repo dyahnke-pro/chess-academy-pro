@@ -84,7 +84,7 @@ function pieceReach(fen: string, san: string, board: Chess, side: Color): Map<st
   const start = new Chess(fen);
   for (const row of start.board()) for (const p of row) {
     if (!p || p.color !== side || p.type === 'p' || p.type === 'k') continue;
-    const at = (moved && moved.from === p.square ? moved.to : p.square) as Square;
+    const at = moved && moved.from === p.square ? moved.to : p.square;
     const there = board.get(at);
     if (!there || there.color !== side || there.type !== p.type) continue;
     out.set(p.square, { at, type: p.type, n: turned.moves({ square: at, verbose: true }).length });

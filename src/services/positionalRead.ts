@@ -95,7 +95,7 @@ function goodPieceWork(fen: string, q: { square: string; piece: string; kind: Pi
   if (q.kind === 'seventh-rank') {
     const rank7 = q.color === 'w' ? '7' : '2';
     const back = q.color === 'w' ? '8' : '1';
-    const pawns = board.board().flat().filter((c) => c && c.color === enemy && c.type === 'p' && c.square[1] === rank7).map((c) => c!.square as string);
+    const pawns = board.board().flat().flatMap((c) => (c && c.color === enemy && c.type === 'p' && c.square[1] === rank7 ? [c.square as string] : []));
     if (pawns.length > 0) {
       return { text: `on the seventh it attacks ${foe} pawn${pawns.length > 1 ? 's' : ''} on ${pawns.length > 2 ? `the ${rank7 === '7' ? 'seventh' : 'second'} rank` : andList(pawns)}`, squares: pawns };
     }
@@ -275,7 +275,6 @@ function observationsFor(
   const rank = (k: ObservationKind): number => RANK[k] - (side === 'opponent' ? OPPONENT_PENALTY : 0);
   const own = side === 'student';
   const your = own ? 'Your' : 'Their';
-  const you = own ? 'you' : 'they';
 
   // QUEENS OFF, THE KING IS A FIGHTING PIECE. A centralised king in an
   // endgame is right, not a weakness, and "lines open toward your king" is the
@@ -534,7 +533,7 @@ function observationsFor(
     return tied ? { loose: null, tied } : null;
   })();
   if (doubledFiles.length > 0 && doubledRead && (doubledRead.loose || own)) {
-    const sq = (doubledRead.loose ?? doubledRead.tied?.sq) as Square;
+    const sq = doubledRead.loose ?? doubledRead.tied?.sq ?? weak.doubled[0];
     const guard = doubledRead.tied?.guard ?? null;
     const guardName = guard ? NAME[chessOf(fen)?.get(guard)?.type ?? ''] ?? 'piece' : '';
     out.push({
