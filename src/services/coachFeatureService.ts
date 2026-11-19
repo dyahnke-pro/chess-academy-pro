@@ -5,7 +5,6 @@ import { tacticGeometryKey } from './conceptKey';
 import { reasonFormula } from '../utils/reasonFormula';
 import { recordTermForThreat, seesPlainThreats, threatInputFor, threatVisibility, threatVoice } from './learnRecordTerms';
 import type { StudentRecord } from './studentRecord';
-import { lastMoveFromSan } from './material';
 import { Chess } from 'chess.js';
 import { gameArcSteps, type ArcEvent } from './lookaheadPlan';
 import { fundamentalOfLine, principleAlreadyTaught, type MoveFundamentalId } from './moveFundamentals';
@@ -17,14 +16,14 @@ import { selectTeaching, turnThesis, type SelectorPly } from './teachingSelector
 import { coldStudent, computeNeed, fenKey, type StudentNeedContext, type NeedVerdict } from './needScore';
 import { loadStudentNeedContext } from './studentNeedLoader';
 import { layerStandings } from './teachingLayers';
-import { readConversion, type ConversionStep } from './conversionMethod';
+import { type ConversionStep } from './conversionMethod';
 import { characterTurn } from './positionCharacter';
-import { readZugzwang, zugzwangProof, zugzwangSentence, type ZugzwangRead } from './zugzwang';
+import { readZugzwang, type ZugzwangRead } from './zugzwang';
 import { phaseTurnsOf } from './phaseTransitionDetector';
 import { detectImmediateTactics } from './liveTacticsContext';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching } from './reviewMoveTeaching';
 import { plyFactsClause, moveOnlyRestates, computePvLine, afterCapture, NO_PREV_CAPTURE, tacticWord, type PvLine, type PvEngine, type PrevCaptureContext, type MoveScorer } from './pvPlayback';
-import { countWord, lineSeatAt, lineShape, lineWinnerFor, withArticle } from '../utils/andList';
+import { countWord, lineShape, lineWinnerFor, withArticle } from '../utils/andList';
 import { BRIEFING_LINE_PLIES, buildReviewMoveBriefing } from './reviewMoveBriefing';
 import { moveThoughtFacts } from './moveThoughtFacts';
 import { criticalityFromCandidates } from './criticalityScan';
@@ -35,22 +34,19 @@ import { compareTwoMoves, type Evaluate } from './moveComparison';
 import { detectConcept } from './reviewConcepts';
 // (removed spokenTacticNote / generalizedTeaching — review no longer voices a
 // floating tactic-pattern note; that teaching lives on the tactics drill.)
-import { buildMiddlegameOrientation } from './reviewStrategicOrientation';
 import { getHisPlayDb } from './hisPlayLookup';
 import { ensureMastersDbLoaded, mastersMovesSync, masterMovesCachedSync } from './masterPlayLookup';
-import { moveJob, whatItAsks, MINE, THEIRS, JOB_RESTATED_BY_RULE, type BookJobKind, type PriorCapture } from './bookMoveWhy';
+import { moveJob, MINE, THEIRS, JOB_RESTATED_BY_RULE, type BookJobKind, type PriorCapture } from './bookMoveWhy';
 import { refutedAlternative, candidatesForPosition, SINGLETON_SCORER, type RefutedAlternative } from './refutedAlternative';
 import { loadKnownSlipIndex, type KnownSlipIndex } from './knownSlips';
 import { recordedMoveCost } from './moveCost';
 import { storedIntentReads } from './moveIntent';
 import { findWorstPlacedPiece, planAimKey } from './nextPlans';
 import { transferClause, transferMotifOf, recordMotif, withTransfer, motifSaidInstances, type MotifLedger } from './motifLedger';
-import { buildOpponentMoveTeaching, buildOpponentDevelopmentRead } from './reviewOpponentCommentary';
 import { detectOpening, detectOpeningByOrder } from './openingDetectionService';
 import { pickStoryGame } from './reviewStoryGame';
-import { sacrificeCompensation, enemyKingStuckInCenter, describeSacBreaksKingShield } from './reviewSacrifice';
-import { explainMatingSacMechanism } from './reviewForcedSequence';
-import { assessPositionalEdge, verdictBand } from './reviewPositionalAssessment';
+import { enemyKingStuckInCenter } from './reviewSacrifice';
+import { verdictBand } from './reviewPositionalAssessment';
 import { classifyPhase } from './gamePhaseService';
 import { inaccuracySpeaks, loadInaccuracyVoice } from './inaccuracyVoice';
 import { foldStandingRefrains, emptyRefrainLedger } from './standingRefrains';
@@ -63,13 +59,13 @@ import { boardStateAfter } from './boardState';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 import { FUNDAMENTAL_HABIT, habitIsOwed, type MethodHabit } from './methodBeat';
 import { noteSlip } from './learnBoardTeaching';
-import { readBoard, readBoardAll, readKey } from './boardComputers';
+import { readBoard, readBoardAll, readKey, fundamentalsSaid, sacPayoffTeachesKing, planBeatArrows, causalChainRead } from './boardComputers';
 import { replyReadsFromFan, repliesNotWeighed, type ReplyRead } from './ifTheyPlay';
 import { proofCut, describeProofResult, NO_FOLLOW, type LineProof } from './exchangeLedger';
 import { computeMoveFacets, prematureBreakWhy, INFLUENCE_LOOSE_TAIL_RE, positionalVerdictLine } from './reviewFullData';
 import { mainConceptLine } from './slipDepth';
 import { flipSideToMove, sideToMoveAs } from './threatOut';
-import { mateStakes, isSacrifice } from './factStakes';
+import { isSacrifice } from './factStakes';
 import { sacrificeLedger, type BestAmong, type SacrificeLedgerRead } from './sacrificeLedger';
 import { lineRestatesClaim, lineBuilds } from './threatPurpose';
 import type { BestOfEngine, DeepReadEngine } from './gameAnalysisService';
@@ -89,18 +85,15 @@ import { attachCalcLines } from './mistakePuzzleService';
 import { betterMoveReason, priorMoveLeadingTo } from './inaccuracyCall';
 import { toOtherSeat } from '../utils/seatPronouns';
 import { attributePrinciples, pvUciToSan, type PrincipleAttribution } from './principleAttribution';
-import { buildCausalChain, causalChainArrows, causalChainKey, findMissedChain, findAllowedChain } from './causalChain';
-import { renderCausalChain } from './causalChainVoice';
 import { matchFundamental, type WeaknessSignal } from './weaknessSignal';
 import { loadWeaknessSignals } from './weaknessSignalLoader';
-import { renderFundamentalVerdict, renderPvEvidence, renderFundamentalsRecap, isMethodSentence } from './principleVoice';
+import { renderPvEvidence, renderFundamentalsRecap, isMethodSentence } from './principleVoice';
 import { fundamentalReply, sameReplyAsGrade } from './mistakeTurnLine';
 import { resolveCoachNarration } from '../utils/coachNarration';
 import type { BadHabit, UserProfile, CoachNarration, OpeningKey, BoardArrow, HeardVerdict, StockfishAnalysis, TacticType, StoredLines, StoredWeighReads } from '../types';
 import { admitArrow, admitArrows, type ArrowClaim } from './arrowDoor';
-import { lineWins, lineArrows, mateLine } from './lineCalc';
-import { pawnEndingTrade, outsidePasserDecoy, spareTempoWasted } from './endgamePawnReads';
-import { theirOpeningVerdict, openingAnnouncementForGame, openingNameForBoard } from './openingAnnouncement';
+import { lineArrows } from './lineCalc';
+import { openingNameForBoard } from './openingAnnouncement';
 import { bookDeparture } from './bookDeparture';
 import { isWaypointOpening, identityFor, planFor } from './openingIdentity';
 import { departureRecordSentence, openingRecordClause } from './openingRecordBeat';
@@ -115,11 +108,11 @@ import { cutMarksWithWords, markItems } from './markAnchors';
 import type { PacedMark } from './markPacing';
 import { studentMoveTeaching, namedMoveArrows } from './learnBoardTeaching';
 import { FACET_ROLE, type FacetTag } from './reviewFacetRank';
-import { stepOf, type ComputerName } from './coachFact';
+import { stepOf, type ComputerName, type CoachFact } from './coachFact';
 import { reviewFacet, reworded, type ReviewFacet, type ReviewFacetParts } from './reviewFacet';
 import { type Proof } from './proof';
 import { newPhraseMemory } from '../utils/phraseMemory';
-import { whyItEnded, idlePiece, quietDecider, exploreInvite, murkyRead, type EndRead, type GamePly } from './gameEndReads';
+import type { GamePly } from './gameEndReads';
 import { positionOf } from '../utils/samePosition';
 import { yieldToScreen } from '../utils/yieldToScreen';
 import { emitEverything, everythingListening } from './everythingEvents';
@@ -1552,15 +1545,6 @@ function restatedByRule(
   });
 }
 
-/** Which computer reads each end-of-game fact (`gameEndReads`). */
-const END_READ_COMPUTER: Record<EndRead['kind'], ComputerName> = {
-  'why-it-ended': 'whyItEnded',
-  'idle-piece': 'idlePiece',
-  'quiet-decider': 'quietDecider',
-  explore: 'exploreInvite',
-  murky: 'murkyRead',
-};
-
 /** The loose piece a board-influence line names — a claim of its own (the
  *  loose count below reads it), so the line is never stripped as a
  *  restatement of the move's attack. Read off the claim its producer
@@ -2097,7 +2081,7 @@ function* reviewSegmentSteps(
   // a position to set up and explore, and the moments the engine's own read
   // would not hold still. Computed ONCE from the game's moves and the review's
   // own numbers, then handed to the ply they belong to.
-  const endReadsAt = new Map<number, EndRead[]>();
+  const endReadsAt = new Map<number, CoachFact[]>();
   if (studentColorWB) {
     try {
       const gamePlies: GamePly[] = fenChain.slice(0, usable).map((fp, k) => ({
@@ -2107,15 +2091,20 @@ function* reviewSegmentSteps(
         // the ply was searched for its cost, else the board's eval before it.
         bestMoveEval: moves[k].bestMoveEval ?? moves[k].preMoveEval ?? null,
       }));
-      const add = (r: EndRead | null): void => { if (r) endReadsAt.set(r.index, [...(endReadsAt.get(r.index) ?? []), r]); };
-      const ended = whyItEnded(gamePlies, studentColorWB);
+      // Each read belongs to the ply whose board it is on (`fact.fen`).
+      const plyOf = new Map(gamePlies.map((p, k) => [p.fenAfter, k] as const));
+      const add = (f: CoachFact | null): void => {
+        const at = f ? plyOf.get(f.fen) : undefined;
+        if (f && at !== undefined) endReadsAt.set(at, [...(endReadsAt.get(at) ?? []), f]);
+      };
+      const ended = readBoard('whyItEnded', { plies: gamePlies, student: studentColorWB });
       add(ended);
-      add(idlePiece(gamePlies, studentColorWB));
-      add(quietDecider(gamePlies, studentColorWB));
+      add(readBoard('idlePiece', { plies: gamePlies, student: studentColorWB }));
+      add(readBoard('quietDecider', { plies: gamePlies, student: studentColorWB }));
       for (let k = 0; k < gamePlies.length; k += 1) {
         // The final board's own read already says what every move allows.
-        if (!(ended && k === gamePlies.length - 1)) add(exploreInvite(gamePlies, k, studentColorWB));
-        add(murkyRead(gamePlies[k], k, studentColorWB));
+        if (!(ended && k === gamePlies.length - 1)) add(readBoard('exploreInvite', { plies: gamePlies, index: k, student: studentColorWB }));
+        add(readBoard('murkyRead', { plies: gamePlies, index: k, student: studentColorWB }));
         yield;
       }
     } catch { /* looking back is a bonus, never a blocker */ }
@@ -2253,28 +2242,23 @@ function* reviewSegmentSteps(
     let causalArrows: ReviewMoveSegment['planArrows'];
     if (studentColorWB !== null) {
       try {
-        const isStudentMove = (moverColor === 'white') === (studentColorWB === 'w');
-        const played = buildCausalChain({ historySans: sansForRun.slice(0, m.ply) });
-        const chain = played
-          ?? (isStudentMove ? findAllowedChain(sansForRun, m.ply, studentColorWB) : null)
-          ?? (isStudentMove ? findMissedChain(sansForRun, m.ply, studentColorWB) : null);
+        // The chain played on this move, else the one the student's move
+        // allowed, else the win it missed — the registry's one read.
+        const chainFact = readBoard('causalChain', { sans: sansForRun, ply: m.ply, student: studentColorWB, rating: rating ?? DEFAULT_STUDENT_RATING, fen: fenPair.fenAfter });
+        const chain = chainFact ? causalChainRead(chainFact) : null;
         // Per-game dedupe (D#6): the same cross-move chain can re-derive across
         // adjacent plies (the played/allowed/missed paths surface a recurring
         // tactic more than once). If it has already LED a beat this game, don't
         // lead with it again — the story's claim, under the one key Learn's
         // chain line claims too (`causalChainKey`, P1-8c). It leads the
         // narration whenever it is computed, so it is said here.
-        const chainKey = chain ? causalChainKey(chain) : '';
-        if (chain && !story.current().said.has(chainKey)) {
-          story.commit(m.ply, { claims: [chainKey] });
-          const lines = renderCausalChain(chain, { register: 'review', studentColor: studentColorWB, rating: rating ?? DEFAULT_STUDENT_RATING });
-          if (lines.length) causalLead = lines.join(' ');
-          if (chain.stance === 'played' || chain.stance === 'allowed') {
-            // Sight lines (the piece that attacks the loose target) through the
-            // arrow door, on the board after the move — each takes its owner's colour.
-            const arr = causalChainArrows(chain);
-            if (arr.length) causalArrows = admitArrows(arr.map((a): ArrowClaim => ({ from: a.from, to: a.to, role: 'vision', source: 'review.causalChain' })), { fen: fenPair.fenAfter, studentColor: playerColor ?? moverColor }).arrows;
-          }
+        if (chainFact && chain && !story.current().said.has(chain.chainKey)) {
+          story.commit(m.ply, { claims: [chain.chainKey] });
+          causalLead = chainFact.text;
+          // Sight lines (the piece that attacks the loose target) through the
+          // arrow door, on the board after the move — each takes its owner's
+          // colour. Played or allowed only: a missed chain's board is before it.
+          if (chain.arrows.length) causalArrows = admitArrows(chain.arrows.map((a): ArrowClaim => ({ from: a.from, to: a.to, role: 'vision', source: 'review.causalChain' })), { fen: fenPair.fenAfter, studentColor: playerColor ?? moverColor }).arrows;
         }
       } catch { causalLead = null; }
     }
@@ -2387,7 +2371,7 @@ function* reviewSegmentSteps(
       // The game looked back on (batch 2) — each read once a game, through the
       // `hint:` say-once ledger the Learn computers already ride.
       for (const r of endReadsAt.get(i) ?? []) {
-        facets.push(fact(END_READ_COMPUTER[r.kind], r.kind === 'murky' ? 'murky' : 'game-end', r.text, { identity: `hint:${r.claim}`, proof: r.proof, squares: r.squares, stakes: r.stakes }));
+        facets.push(fact(r.computer, r.kind as FacetTag, r.text, { identity: `hint:${readKey(r)}`, proof: r.proof, squares: r.squares, stakes: 'points' in r.stakes ? r.stakes : null }));
       }
       // MEMORY BY POSITION, the green half: the student left theory from this
       // board in another game at a cost, and this game went another way. The
@@ -2417,20 +2401,21 @@ function* reviewSegmentSteps(
         const studentToMove = moverColor !== playerColor;
         const zKey = `zugzwang:${fenPair.fenAfter.split(' ').slice(0, 2).join(' ')}`;
         if (!hintsSaid.has(`once:${zKey}`)) {
-          const raw = fact('readZugzwang', 'technique', zugzwangSentence(zz, studentToMove), { identity: `once:${zKey}`, proof: zugzwangProof(zz, studentToMove) });
-          facets.push(raw);
+          const zf = readBoard('zugzwangAt', { fen: fenPair.fenAfter, read: zz, studentToMove });
+          if (zf) facets.push(fact(zf.computer, zf.kind, zf.text, { identity: `once:${zKey}`, proof: zf.proof }));
         }
       }
       // THE CONVERSION METHOD (WO-LAYERS-01 step 5), on the student's move when
       // they are a piece or more up — the step the board is on, once per step
       // per game (the step only changes when the board does).
       if (moverColor === playerColor && studentColorWB) {
-        const conv = readConversion(fenPair.fenAfter, studentColorWB);
-        if (conv && !seenConversionSteps.has(conv.step) && !(conv.step === 'trade-pieces' && convertTaughtAt() !== null)) {
-          seenConversionSteps.add(conv.step);
-          const raw = fact('readConversion', 'technique', conv.text);
+        const conv = readBoard('conversion', { fen: fenPair.fenAfter, student: studentColorWB });
+        const step = conv ? readKey(conv) as ConversionStep : null;
+        if (conv && step && !seenConversionSteps.has(step) && !(step === 'trade-pieces' && convertTaughtAt() !== null)) {
+          seenConversionSteps.add(step);
+          const raw = fact(conv.computer, conv.kind, conv.text);
           facets.push(raw);
-          if (conv.step === 'trade-pieces') conversionFacets.add(raw);
+          if (step === 'trade-pieces') conversionFacets.add(raw);
         }
       }
       // THE PAWN ENDING (parity with Learn): the trade that takes the last
@@ -2438,19 +2423,20 @@ function* reviewSegmentSteps(
       if (moverColor === playerColor && studentColorWB && typeof m.preMoveEval === 'number' && typeof m.evaluation === 'number') {
         const sign = moverColor === 'white' ? 1 : -1;
         const moveCost = recordedMoveCost(m, moverColor) ?? 0;
-        const pe = pawnEndingTrade(fenPair.fenBefore, m.san, moves[i + 1]?.san ?? null, moveCost, m.evaluation * sign);
-        if (pe) facets.push(fact('pawnEndingTrade', 'technique', pe.text));
+        const pe = readBoard('pawnEndingCount', { fenBefore: fenPair.fenBefore, san: m.san, replySan: moves[i + 1]?.san ?? null, cpLoss: moveCost, evalAfterCp: m.evaluation * sign });
+        if (pe) facets.push(fact(pe.computer, pe.kind, pe.text));
         if (m.bestMove) {
           try {
             const bm = new Chess(fenPair.fenBefore).move({ from: m.bestMove.slice(0, 2), to: m.bestMove.slice(2, 4), promotion: m.bestMove[4] });
-            const st = spareTempoWasted(fenPair.fenBefore, m.san, bm?.san ?? null, moveCost);
-            if (st) facets.push(fact('spareTempoWasted', 'technique', st));
+            const st = readBoard('spareTempo', { fenBefore: fenPair.fenBefore, san: m.san, bestSan: bm?.san ?? null, cpLoss: moveCost });
+            if (st) facets.push(fact(st.computer, st.kind, st.text));
           } catch { /* no best move to compare */ }
         }
-        const decoy = outsidePasserDecoy(fenPair.fenAfter, studentColorWB);
-        if (decoy && !seenDecoys.has(decoy.passer[0])) {
-          seenDecoys.add(decoy.passer[0]);
-          facets.push(fact('outsidePasserDecoy', 'technique', decoy.text, { squares: decoy.squares }));
+        const decoy = readBoard('passerDecoy', { fen: fenPair.fenAfter, student: studentColorWB });
+        const decoyFile = decoy ? readKey(decoy)[0] : '';
+        if (decoy && !seenDecoys.has(decoyFile)) {
+          seenDecoys.add(decoyFile);
+          facets.push(fact(decoy.computer, decoy.kind, decoy.text, { squares: decoy.squares }));
         }
       }
       // THE LEARN COMPUTERS, CALLED — not copied (unify-the-coach A2, David
@@ -2506,14 +2492,14 @@ function* reviewSegmentSteps(
             : playedUci && m.pv?.earlierPlayed?.length ? [playedUci, ...m.pv.earlierPlayed] : null;
           // A line that MATES is said as the mate (and the quiet move that
           // started it) — a material count would undersell it.
-          const ml = line ? mateLine(fenPair.fenBefore, line, studentColorWB, m.san) : null;
+          const ml = line ? readBoard('mateLineAt', { fenBefore: fenPair.fenBefore, lineUci: line, student: studentColorWB, san: m.san }) : null;
           if (ml) {
-            facets.push(fact('mateLine', 'tactic', ml.text, { stakes: mateStakes('you', 0, true), squares: ml.taken, lines: [{ fen: fenPair.fenBefore, sans: ml.sans.map((x) => x.replace(/^…/, '')) }] }));
+            facets.push(fact(ml.computer, ml.kind, ml.text, { stakes: 'points' in ml.stakes ? ml.stakes : null, squares: ml.squares, lines: ml.lines }));
             if (!causalArrows || causalArrows.length === 0) {
               causalArrows = admitArrows(lineArrows(fenPair.fenBefore, line ?? [], 'review.mateLine'), { fen: fenPair.fenBefore, studentColor: playerColor ?? moverColor }).arrows;
             }
           }
-          const won = !ml && line ? lineWins(fenPair.fenBefore, line, studentColorWB, m.san, i > 0 ? { fenBefore: fenChain[i - 1].fenBefore, san: moves[i - 1].san } : null, [lineSecond]) : null;
+          const won = !ml && line ? readBoard('lineWinsAt', { fenBefore: fenPair.fenBefore, lineUci: line, student: studentColorWB, san: m.san, prior: i > 0 ? { fenBefore: fenChain[i - 1].fenBefore, san: moves[i - 1].san } : null, seconds: [lineSecond] }) : null;
           if (won) {
             // ONE COUNT OF WHAT THE CAPTURE WINS (Gotham–Jelena 13.Bxf7+: "You
             // take on f7, and they can take back — your bishop for their pawn"
@@ -2523,7 +2509,7 @@ function* reviewSegmentSteps(
             // (`readTrade`: "it takes off their bishop that was bearing down on
             // your king") is another claim and stays.
             for (let k = facets.length - 1; k >= 0; k -= 1) if (facets[k].tag === 'trade' && facets[k].computer === 'settledExchange') facets.splice(k, 1);
-            facets.push(fact('lineWins', 'tactic', `That wins ${won.what}: ${lineShape(won.sans, lineSeatAt(fenPair.fenBefore, studentColorWB), fenPair.fenBefore, 'first')}.`, { stakes: { points: won.net, plies: 0 }, lines: [{ fen: fenPair.fenBefore, sans: won.sans.map((x) => x.replace(/^…/, '')) }] }));
+            facets.push(fact(won.computer, won.kind, won.text, { stakes: 'points' in won.stakes ? won.stakes : null, lines: won.lines }));
             if (!causalArrows || causalArrows.length === 0) {
               causalArrows = admitArrows(lineArrows(fenPair.fenBefore, line ?? [], 'review.winningLine'), { fen: fenPair.fenBefore, studentColor: playerColor ?? moverColor }).arrows;
             }
@@ -2555,7 +2541,7 @@ function* reviewSegmentSteps(
           // from the first identity that carries an idea or a masters plan.
           const teaches = !!det && !isWaypointOpening(det.name) && (!!identityFor(det.name) || !!planFor(det.name));
           const namedOpening = openingAt(story.current(), 'named');
-          const announce = det && teaches ? openingAnnouncementForGame(det, history, namedOpening, studentColorWB, transposed) : null;
+          const announce = det && teaches ? readBoard('openingNamed', { det, history, spokenName: namedOpening, student: studentColorWB, transposed, fen: fenPair.fenAfter })?.text ?? null : null;
           // A story beat on this move that already names it ("They've gone for
           // the Italian Game", "You chose the Two Knights Defense") says the
           // name with its reason; the bare announcement would say it twice.
@@ -2683,9 +2669,9 @@ function* reviewSegmentSteps(
         // already claimed says what the move now ASKS instead, or nothing.
         const heard = !!job && [...storySaid].some((t) => t.includes(job.clause.replace(/^it /, '')));
         if (job && heard && !told && !hintsSaid.has(id) && moverColor !== playerColor && job.kind === 'attack' && job.squares[1]) {
-          const ask = whatItAsks(fenPair.fenAfter, job.squares[1], moverColor === 'white' ? 'w' : 'b', THEIRS);
+          const ask = readBoard('attackAsks', { fenAfter: fenPair.fenAfter, target: job.squares[1], mover: moverColor === 'white' ? 'w' : 'b' });
           if (ask && replyAnswersAttack(fenPair.fenAfter, job.squares[1], m.pv?.afterPlayed?.[0] ?? null)) {
-            facets.push(fact('whatItAsks', 'move-job', `${ask}.`, { identity: id, squares: job.squares }));
+            facets.push(fact(ask.computer, ask.kind, ask.text, { identity: id, squares: job.squares }));
           }
         }
         // THEIR ATTACK SAYS WHAT IT ASKS (lead 2026-10-20, Najdorf Zagreb:
@@ -2699,7 +2685,7 @@ function* reviewSegmentSteps(
         // — the engine leaves e4 and plays Nf3). An attack the best move
         // ignores asks nothing.
         const asks = theirAttack && job
-          ? whatItAsks(fenPair.fenAfter, job.squares[1], moverColor === 'white' ? 'w' : 'b', THEIRS) !== null
+          ? readBoard('attackAsks', { fenAfter: fenPair.fenAfter, target: job.squares[1], mover: moverColor === 'white' ? 'w' : 'b' }) !== null
             && replyAnswersAttack(fenPair.fenAfter, job.squares[1], m.pv?.afterPlayed?.[0] ?? null)
           : false;
         const plainAttackAsksNothing = theirAttack && !asks && !!job && /^it attacks /.test(job.clause);
@@ -2873,8 +2859,8 @@ function* reviewSegmentSteps(
       if (moverColor !== playerColor && studentColorWB && typeof m.preMoveEval === 'number' && typeof m.evaluation === 'number') {
         const sign = moverColor === 'white' ? 1 : -1;
         const oppLoss = typeof m.costCp === 'number' ? m.costCp : (m.preMoveEval - m.evaluation) * sign;
-        const verdict = theirOpeningVerdict(moves.slice(0, i + 1).map((x) => x.san), studentColorWB, oppLoss, false);
-        if (verdict) facets.push(fact('theirOpeningVerdict', 'opening', verdict));
+        const verdict = readBoard('theirOpeningChoice', { history: moves.slice(0, i + 1).map((x) => x.san), student: studentColorWB, cpLoss: oppLoss, coachChose: false, fen: fenPair.fenAfter });
+        if (verdict) facets.push(fact(verdict.computer, verdict.kind, verdict.text));
       }
       for (const e of arcByIndex.get(i) ?? []) {
         // Review has no think pause: the question and its answer run on as one
@@ -3620,7 +3606,13 @@ function* reviewSegmentSteps(
       // student's record (the attribution is filed, never dropped).
       const reasons = fundamentals.filter((f) => typeof f.facts.blow === 'string');
       const spokenFundamentals = reasons.length > 0 ? reasons : fundamentals;
-      const { diagnosis: verdict, how } = renderFundamentalVerdict(spokenFundamentals, { ply: m.ply, seen: seenFundamentals, replySan: moves[i + 1]?.san ?? null });
+      const verdictCtx = { attrs: spokenFundamentals, seen: seenFundamentals, replySan: moves[i + 1]?.san ?? null, ply: m.ply, fen: fenPair.fenBefore };
+      const verdictFact = readBoard('fundamentalVerdict', verdictCtx);
+      const howFact = readBoard('fundamentalHow', verdictCtx);
+      // The fundamentals said in full for the first time are this game's now.
+      for (const id of verdictFact ? fundamentalsSaid(verdictFact) : []) seenFundamentals.add(id);
+      const verdict = verdictFact?.text ?? '';
+      const how = howFact?.text ?? '';
       // The habit closes the turn, after everything the move says (WO-ONE-COACH-01).
       if (how) habitTail = how;
       // ONE REASON PER MOVE (WO-DECIDER-02, 2026-10-28). A fundamental that
@@ -3854,30 +3846,29 @@ function* reviewSegmentSteps(
       // from the position AFTER the sac + the eval. Only for the STUDENT's sac
       // (the "you get X for it" framing is the student's payoff); the opponent's
       // sac keeps the plain naming.
-      let comp = isStudentSac && !flags.has('sacCompShown')
-        ? sacrificeCompensation(
-            fenPair.fenAfter,
-            moverColor === 'white' ? 'w' : 'b',
-            m.evaluation != null ? (moverColor === 'white' ? m.evaluation : -m.evaluation) : null,
-            true,
-            m.preMoveEval != null ? (moverColor === 'white' ? m.preMoveEval : -m.preMoveEval) : null,
-          )
-        : [];
-      // If a standalone beat already taught "king stuck in the centre", drop that
-      // clause here so the keystone is never stated twice.
-      if (flags.has('kingCenterTaught')) comp = comp.filter((c) => !/stuck in the cent/i.test(c));
-      if (comp.length > 0) flags.add('sacCompShown');
-      if (comp.some((c) => /stuck in the cent/i.test(c))) flags.add('kingCenterTaught');
-      const payoff = comp.length > 0 ? ` Look what you get for it: ${joinClauses(comp)}.` : '';
+      // If a standalone beat already taught "king stuck in the centre", that
+      // clause is left out so the keystone is never stated twice.
+      const comp = isStudentSac && !flags.has('sacCompShown')
+        ? readBoard('sacPayoff', {
+            fenAfter: fenPair.fenAfter,
+            mover: moverColor === 'white' ? 'w' : 'b',
+            moverPovEvalCp: m.evaluation != null ? (moverColor === 'white' ? m.evaluation : -m.evaluation) : null,
+            moverPovBeforeCp: m.preMoveEval != null ? (moverColor === 'white' ? m.preMoveEval : -m.preMoveEval) : null,
+            kingCentreTaught: flags.has('kingCenterTaught'),
+          })
+        : null;
+      if (comp) flags.add('sacCompShown');
+      if (comp && sacPayoffTeachesKing(comp)) flags.add('kingCenterTaught');
+      const payoff = comp ? ` ${comp.text}` : '';
       // THE MECHANISM — the deepest "why" (David 2026-07-20: "where is the
       // teaching moment, the WHY? … one sentence per move doesn't cover it").
       // When this sac is a mating sac whose forced recapture DEFLECTS/CLEARS a
       // defender off the mating line, explain that line-clearance in a full
       // sentence. Board-true (chess.js replay). Only the student's own sac.
-      const mechanismClause = isStudentSac
-        ? explainMatingSacMechanism(sansForRun, m.ply - 1)
+      const mechanismFact = isStudentSac
+        ? readBoard('sacMechanism', { sans: sansForRun, sacIdx: m.ply - 1, fen: fenPair.fenBefore })
         : null;
-      const mechanism = mechanismClause ? ` Here's why it works: ${mechanismClause}.` : '';
+      const mechanism = mechanismFact ? ` ${mechanismFact.text}` : '';
       // A positional / exchange sacrifice that isn't a DIRECT mating sac still has
       // a concrete point: it rips a defender off the enemy king. When the mating
       // mechanism doesn't apply, teach THAT instead of the generic "for the
@@ -3885,8 +3876,8 @@ function* reviewSegmentSteps(
       // clause NAMES the material give + the point, so it's the base sentence.
       // Never the why of a sac the grade says failed (review walk 2026-10-01, ply 38).
       const sacFailed = m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'miss';
-      const kingShieldClause = isStudentSac && !mechanismClause && !sacFailed
-        ? describeSacBreaksKingShield(fenPair.fenBefore, m.san)
+      const kingShield = isStudentSac && !mechanismFact && !sacFailed
+        ? readBoard('sacShield', { fenBefore: fenPair.fenBefore, san: m.san })
         : null;
       if (piece === 'queen') {
         // The peak. A queen sacrifice the engine rates top is the point of the
@@ -3895,10 +3886,10 @@ function* reviewSegmentSteps(
         narration = top
           ? `There it is — the queen sacrifice on ${sq}${withCheck}. The boldest move on the board, and this is the point the whole attack was building toward.${mechanism}${payoff}`
           : `${subjCap} offer${s} the queen on ${sq}${withCheck} — a stunning sacrifice.${mechanism}${payoff}`;
-      } else if (kingShieldClause) {
+      } else if (kingShield) {
         // Exchange/positional sac that tears a shield off the king — the clause
         // names both the give and the point; append any fresh compensation.
-        narration = `${kingShieldClause}${withCheck}.${payoff}`;
+        narration = `${kingShield.text}${payoff}`;
       } else if (mechanism || payoff) {
         narration = `${subjCap} sacrifice${s} the ${piece} on ${sq}${withCheck}.${mechanism}${payoff}`;
       } else {
@@ -4090,8 +4081,8 @@ function* reviewSegmentSteps(
       // queenside-majority-endgame plan mid-mating-attack"). Board-true gate.
       && !enemyKingStuckInCenter(fenPair.fenBefore, studentColorWB)
     ) {
-      const orientation = buildMiddlegameOrientation(fenPair.fenBefore, studentColorWB, m.san);
-      if (orientation) { narration = orientation.text; planArrows = orientation.arrows; flags.add('orientationShown'); narrationSource = 'orientation'; }
+      const orientation = readBoard('middlegameOrientation', { fenBefore: fenPair.fenBefore, student: studentColorWB, san: m.san });
+      if (orientation) { narration = orientation.text; planArrows = planBeatArrows(orientation); flags.add('orientationShown'); narrationSource = 'orientation'; }
     }
     // (b2) ENUMERATED POSITIONAL VERDICT — the "you're better here, and here's
     // WHY: bishop pair, the open file, his weak pawn" message (David 2026-07-20:
@@ -4117,9 +4108,9 @@ function* reviewSegmentSteps(
       && !enemyKingStuckInCenter(fenPair.fenAfter, studentColorWB)
     ) {
       const studentPovCp = m.evaluation != null ? (studentColorWB === 'w' ? m.evaluation : -m.evaluation) : null;
-      const assess = assessPositionalEdge(fenPair.fenAfter, studentColorWB, studentPovCp, lastMoveFromSan(fenPair.fenBefore, m.san));
-      if (assess.reasons.length >= 2 && assess.verdict && assess.verdict !== 'balanced') {
-        narration = `Step back and take stock — you're ${assess.verdict} here, and it's worth knowing exactly why: ${joinClauses(assess.reasons)}.`;
+      const stock = readBoard('takeStock', { fenBefore: fenPair.fenBefore, san: m.san, fen: fenPair.fenAfter, student: studentColorWB, studentPovCp });
+      if (stock) {
+        narration = stock.text;
         flags.add('assessmentShown');
         narrationSource = 'assessment';
       }
@@ -4138,11 +4129,13 @@ function* reviewSegmentSteps(
       && moverColor === playerColor
       && m.ply >= 12
       && (m.classification === null || m.classification === 'book' || m.classification === 'good')
-      && enemyKingStuckInCenter(fenPair.fenAfter, studentColorWB)
     ) {
-      narration = 'Look at their king — still in the centre, no castling in sight, and the files are opening around it. That is your cue: this is the moment to throw your pieces at it, before they ever wriggle to safety.';
-      narrationSource = 'orientation';
-      flags.add('kingCenterTaught');
+      const cue = readBoard('kingHuntCue', { fen: fenPair.fenAfter, student: studentColorWB });
+      if (cue) {
+        narration = cue.text;
+        narrationSource = 'orientation';
+        flags.add('kingCenterTaught');
+      }
     }
     // VARIATION RE-NAMING (A2) — name the line as it takes shape (Danya: "now
     // we're in the Najdorf"). Announce each newly-reached named opening once, in
@@ -4326,7 +4319,7 @@ function* reviewSegmentSteps(
       // already handled by buildDeterministicNarration; this catches 'great'.
       && (m.classification === null || m.classification === 'book' || m.classification === 'good' || m.classification === 'great' || m.classification === 'brilliant')
     ) {
-      const devRead = buildOpponentDevelopmentRead(opponentSans, fenPair.fenAfter, studentColorWB);
+      const devRead = readBoard('opponentDevelopment', { opponentSans, fen: fenPair.fenAfter, student: studentColorWB });
       if (devRead) {
         narration = devRead.text;
         narrationSource = 'opponent';
@@ -4349,11 +4342,12 @@ function* reviewSegmentSteps(
       // per-target dedup already stops the same idea repeating; this richer
       // "what they're targeting" read fires whenever there's a NEW target, and
       // the PlyFacts fallback below covers every other eventful opponent move.
-      const opp = buildOpponentMoveTeaching(fenPair.fenBefore, m.san, studentColorWB);
-      const target = opp?.arrows[0]?.endSquare;
+      const opp = readBoard('opponentTarget', { fenBefore: fenPair.fenBefore, san: m.san, student: studentColorWB });
+      const oppArrows = opp ? planBeatArrows(opp) : [];
+      const target = oppArrows[0]?.endSquare;
       if (opp && !(target && oppTargetsSeen.has(target))) {
         narration = opp.text;
-        planArrows = opp.arrows;
+        planArrows = oppArrows;
         narrationSource = 'opponent';
         if (target) oppTargetsSeen.add(target);
       }
@@ -4620,13 +4614,6 @@ export function defaultIntroText(params: {
  * ship the deterministic templates, which are still fully grounded (G0). This
  * guarantees the walk becomes ready within a bounded window, every time.
  */
-/** Oxford-comma join for a short clause list ("a", "b", "c" → "a, b, and c"). */
-function joinClauses(parts: string[]): string {
-  if (parts.length <= 1) return parts[0] ?? '';
-  if (parts.length === 2) return `${parts[0]} and ${parts[1]}`;
-  return `${parts.slice(0, -1).join(', ')}, and ${parts[parts.length - 1]}`;
-}
-
 function raceTimeout<T>(p: Promise<T>, ms: number, fallback: T): Promise<T> {
   return Promise.race([
     p,
