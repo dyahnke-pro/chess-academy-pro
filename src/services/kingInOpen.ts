@@ -48,7 +48,7 @@ export function kingInOpen(fen: string, lines: readonly EngineLine[], student: C
     if (!ls.length || lineScore(ls[0], attacker) < 0) continue;
     const mine = side === student;
     const all = checkers.length === 2 ? 'both' : 'all';
-    const names = checkers.map((s) => `${PIECE_NAME[c.get(s)!.type]} on ${s}`);
+    const names = checkers.flatMap((s) => { const p = c.get(s); return p ? [`${PIECE_NAME[p.type]} on ${s}`] : []; });
     const coverWords = cover.present === 0 ? 'no pawn of its own in front of it' : 'only one pawn of its own near it';
     const text = mine
       ? `Your king on ${cover.kingSquare} is out in the open, with ${coverWords}. Their ${andList(names)} can ${all} give check, so count that before you count pawns.`
