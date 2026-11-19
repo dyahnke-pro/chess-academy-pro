@@ -152,7 +152,7 @@ export const PUZZLE_STEPS: readonly StepRow[] = [
   { step: 'concept', kinds: ['concept', 'king-read'], sayOnce: true },
 ];
 
-interface WeightTable { bar: number; prior: number; weights: Record<string, number> }
+interface WeightTable { bar: number; prior: number; weights: Partial<Record<string, number>> }
 const TABLE = weightTable as WeightTable;
 
 /** The keys of a fact, most specific first (`fit-read-weights.mjs` builds the
@@ -234,10 +234,11 @@ function habitOf(facts: readonly ReadFact[], ctx: ReadContext): string | null {
 /** Does the best move answer the threat on this fact's square — the piece
  *  steps away, takes an attacker, or gains a guard? */
 function bestAnswers(f: ReadFact, ctx: ReadContext): boolean {
-  if (!ctx.fen || ctx.best.length < 2) return false;
+  const fen = ctx.fen;
+  if (!fen || ctx.best.length < 2) return false;
   const [from, to] = ctx.best;
   try {
-    const b = new Chess(ctx.fen);
+    const b = new Chess(fen);
     const me = b.turn();
     const them = me === 'w' ? 'b' : 'w';
     return f.squares.some((sq) => {
@@ -246,7 +247,7 @@ function bestAnswers(f: ReadFact, ctx: ReadContext): boolean {
       if (from === sq) return true;
       if (b.attackers(sq as Square, them).includes(to as Square)) return true;
       const guardsBefore = b.attackers(sq as Square, me).length;
-      const after = new Chess(ctx.fen!);
+      const after = new Chess(fen);
       after.move({ from, to, promotion: 'q' });
       return after.attackers(sq as Square, me).length > guardsBefore;
     });
