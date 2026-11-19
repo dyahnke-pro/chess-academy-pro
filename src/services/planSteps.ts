@@ -10,10 +10,20 @@
 // are the steps a student's game can be checked against.
 import { Chess, type Color, type Square } from 'chess.js';
 import { isPawnBreak } from './pawnBreak';
+import { pieceWork } from './pieceWork';
+import { isUndevelopedInOpening } from '../utils/undeveloped';
 
 const PIECE: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king', p: 'pawn' };
 
-export interface PlanStep { san: string; piece: string; to: string; castle: boolean; brk: boolean }
+export interface PlanStep { san: string; piece: string; from: string; to: string; castle: boolean; brk: boolean }
+/** ONE PIECE'S ROAD in the plan (Danya: "the knight reroutes to a3", "the
+ *  queen must leave h5 for the queenside"): a piece the line moves two or more
+ *  times in a row of its own steps, that does more work at the end of the road
+ *  than where it stands (`pieceWork`). The piece to improve, and where it goes. */
+export interface PlanManeuver { piece: string; from: string; route: string[];
+  /** The road goes on from the move just played: the piece keeps going, it was
+   *  not misplaced ("has a better road" right after it arrived read as a fault). */
+  justMoved: boolean }
 export interface PlanSteps {
   /** The mover's next moves in the line, in order (2–3). */
   steps: PlanStep[];
@@ -26,6 +36,8 @@ export interface PlanSteps {
   aimPiece: string | null;
   /** The whole line played to the plan's last step (UCI), for the proof. */
   line: string[];
+  /** One piece walked two or more steps to a better square, or null. */
+  maneuver: PlanManeuver | null;
   squares: string[];
 }
 
@@ -37,7 +49,12 @@ export function planSteps(fenAfter: string, line: readonly string[], lastMove: s
   /** A plain trade in the stretch — a capture taken straight back on its
    *  square — is part of the plan, not a fight (the board read's plan: the
    *  engine's line often trades a pair on the way). Off for a move's own plan. */
-  allowTrades = false): PlanSteps | null {
+  allowTrades = false,
+  /** Is `lastMove` the plan's own first step (a board read: the engine's
+   *  suggestion, not a move played)? Then a piece's road starts where it
+   *  stands before it, so "the queen on h5" is named, not the square it was
+   *  sent to. A move already played is not a step of the plan from here. */
+  firstIsStep = false): PlanSteps | null {
   const board = new Chess(fenAfter);
   const mover: Color = board.turn() === 'w' ? 'b' : 'w';
   const steps: PlanStep[] = [];
@@ -61,7 +78,7 @@ export function planSteps(fenAfter: string, line: readonly string[], lastMove: s
       return null;
     }
     if (mv.color !== mover) continue;
-    steps.push({ san: mv.san, piece: PIECE[mv.piece], to: mv.to, castle: mv.san.startsWith('O-O'), brk: mv.piece === 'p' && isPawnBreak(before, mv.san, null) });
+    steps.push({ san: mv.san, piece: PIECE[mv.piece], from: mv.from, to: mv.to, castle: mv.san.startsWith('O-O'), brk: mv.piece === 'p' && isPawnBreak(before, mv.san, null) });
   }
   if (steps.length < 2) return null;
   // THE AIM: a square of theirs two or more of the moved pieces now hit.
@@ -86,15 +103,18 @@ export function planSteps(fenAfter: string, line: readonly string[], lastMove: s
     if (p && p.type === 'p' && near(sq)) break;
   }
   const brk = steps.some((s) => s.brk);
+  const first = firstIsStep && lastMove ? firstStep(fenAfter, lastMove) : null;
+  const road = pieceManeuver(first ? first.before : fenAfter, board, first ? [first.step, ...steps] : steps, mover);
+  const maneuver = road ? { ...road, justMoved: !first && !!lastMove && lastMove.slice(2, 4) === road.from } : null;
   // Steps with nothing that ties them — no square they aim at, no break they
   // build to — are moves, not a plan. "Be7, castling and then Nc6, to finish
   // developing" said on every quiet move was filler (decision baseline
   // 2026-11-12): finishing development is what every move of an opening does.
-  if (!aim && !brk) return null;
+  if (!aim && !brk && !maneuver) return null;
   // A plan tied only by the break the move just played prepares is that
   // move's own job said again ("Your c3 prepares d4 … and then the d4
   // break"): one idea, said once, by the move.
-  if (!aim && lastMove) {
+  if (!aim && !maneuver && lastMove) {
     const brkStep = steps.find((s) => s.brk);
     const by = board.get(lastMove.slice(2, 4) as Square);
     if (brkStep && by && by.type === 'p' && by.color === mover) {
@@ -103,7 +123,80 @@ export function planSteps(fenAfter: string, line: readonly string[], lastMove: s
       if (guards.includes(brkStep.to)) return null;
     }
   }
-  return { steps, aim, aimPiece, line: played, squares: [...steps.map((s) => s.to), ...(aim ? [aim] : [])] };
+  return { steps, aim, aimPiece, line: played, maneuver, squares: [...(maneuver ? [maneuver.from] : []), ...steps.map((s) => s.to), ...(aim ? [aim] : [])] };
+}
+
+/** The plan's first step when it is `lastMove` itself, with the board before
+ *  it (the piece put back where it stood), read off `fenAfter`. */
+function firstStep(fenAfter: string, lastMove: string): { step: PlanStep; before: string } | null {
+  try {
+    const b = new Chess(fenAfter);
+    const from = lastMove.slice(0, 2) as Square; const to = lastMove.slice(2, 4) as Square;
+    const p = b.get(to);
+    if (!p || p.type === 'p' || p.type === 'k' || b.get(from)) return null;
+    b.remove(to); b.put(p, from);
+    const letter = p.type.toUpperCase();
+    return { step: { san: `${letter}${to}`, piece: PIECE[p.type], from, to, castle: false, brk: false }, before: b.fen() };
+  } catch { return null; }
+}
+
+/** Can the piece on `start` of `fen`, standing on `at` instead, reach `to`
+ *  in one of its own moves (the rest of the board as it is)? */
+function reachesInOne(fen: string, start: string, at: string, to: string, mover: Color): boolean {
+  try {
+    const b = new Chess(fen);
+    const p = b.get(start as Square);
+    if (!p) return false;
+    if (at !== start) { if (b.get(at as Square)) return false; b.remove(start as Square); b.put(p, at as Square); }
+    const parts = b.fen().split(' '); parts[1] = mover; parts[3] = '-';
+    return new Chess(parts.join(' '), { skipValidation: true }).moves({ square: at as Square, verbose: true }).some((m) => m.to === to);
+  } catch { return false; }
+}
+
+/** The plan's one-piece road: the longest chain of steps moving the same
+ *  piece (each step starting where the last ended), two steps or more, that
+ *  ends where the piece does more work than where it started. Kings and pawns
+ *  walk for other reasons (an ending, a break) and are said by their own
+ *  computers. */
+function pieceManeuver(fenStart: string, end: Chess, steps: readonly PlanStep[], mover: Color): Omit<PlanManeuver, 'justMoved'> | null {
+  let best: PlanStep[] = [];
+  for (let i = 0; i < steps.length; i += 1) {
+    const chain = [steps[i]];
+    for (let j = i + 1; j < steps.length; j += 1) {
+      if (steps[j].from === chain[chain.length - 1].to && steps[j].piece === steps[i].piece) chain.push(steps[j]);
+    }
+    if (chain.length > best.length) best = chain;
+  }
+  if (best.length < 2) return null;
+  const type = best[0].san[0] === 'N' ? 'n' : best[0].san[0] === 'B' ? 'b' : best[0].san[0] === 'R' ? 'r' : best[0].san[0] === 'Q' ? 'q' : null;
+  if (!type) return null;
+  const start = best[0].from;
+  const last = best[best.length - 1].to;
+  // A ROAD GOES SOMEWHERE: no square twice, never back through where it
+  // started ("h2 and then h1" from h1 is a shuffle).
+  const walked = [start, ...best.map((s) => s.to)];
+  if (new Set(walked).size !== walked.length) return null;
+  // An undeveloped piece's lesson is development, not a reroute.
+  let startBoard: Chess;
+  try { startBoard = new Chess(fenStart); } catch { return null; }
+  if (isUndevelopedInOpening(fenStart, mover, type, start)) return null;
+  // A square the piece reaches in one move is not a road: the engine's detour
+  // is about timing, said by other computers.
+  // The same holds at every stop: a road that could skip a stop is the
+  // engine waiting, not a piece travelling ("c1, c2 and then c3").
+  for (let i = 0; i + 2 < walked.length; i += 1) {
+    for (let j = i + 2; j < walked.length; j += 1) {
+      if (reachesInOne(fenStart, start, walked[i], walked[j], mover)) return null;
+    }
+  }
+  // The road must end where the piece is still standing.
+  const at = end.get(last as Square);
+  if (!at || at.color !== mover || at.type !== type) return null;
+  let before: number;
+  try { before = pieceWork(startBoard, start as Square, type, mover); } catch { return null; }
+  const after = pieceWork(end, last as Square, type, mover);
+  if (after <= before) return null;
+  return { piece: best[0].piece, from: start, route: best.map((s) => s.to) };
 }
 
 /** The squares a piece on `sq` bears on: the knight's jumps, the king's
@@ -142,6 +235,17 @@ function attacksFrom(board: Chess, sq: string): string[] {
  *  its place among the steps ("Bd3, Bc2 and then the d4 break") — never the
  *  move and again as what it builds to. */
 export function planStepsText(p: PlanSteps, whose: 'your' | 'their'): string {
+  // A ROAD FOR ONE PIECE is the plan said as Danya says it: the piece, and
+  // where it goes (one idea a sentence). The line proves the road is better,
+  // not that the piece is idle where it stands, so "does little" is not said.
+  if (p.maneuver) {
+    const m = p.maneuver;
+    const owner = whose === 'your' ? 'their' : 'your';
+    const road = m.route.length === 2 ? `${m.route[0]} and then ${m.route[1]}` : `${m.route.slice(0, -1).join(', ')} and then ${m.route.at(-1)}`;
+    const aim = p.aim ? ` There it lines up on ${p.aimPiece ? `${owner} ${p.aimPiece} on ${p.aim}` : `${p.aim}, next to ${owner} king`}.` : '';
+    const who = whose === 'your' ? 'Your' : 'Their';
+    return m.justMoved ? `${who} ${m.piece} keeps going: ${road}.${aim}` : `${who} ${m.piece} on ${m.from} has a better road: ${road}.${aim}`;
+  }
   const named = p.steps.map((s) => (s.castle ? 'castling' : s.brk ? `the ${s.san} break` : s.san));
   const list = named.length === 2 ? `${named[0]} and then ${named[1]}` : `${named.slice(0, -1).join(', ')} and then ${named.at(-1)}`;
   // The target belongs to the OTHER side from the planner: your plan aims at
@@ -155,6 +259,9 @@ export function planStepsText(p: PlanSteps, whose: 'your' | 'their'): string {
  *  plan is not said again a move later with its steps shifted by one. */
 export function planStepsKey(p: PlanSteps, mover: 'w' | 'b'): string {
   const brk = p.steps.find((s) => s.brk);
+  // One plan per aim: a road that lines up on a target is that target's plan,
+  // so the same target is not said again a move later as a list of steps.
+  if (p.maneuver && !p.aim) return `plan-steps:${mover}:road:${p.maneuver.route.at(-1)}`;
   return `plan-steps:${mover}:${p.aim ? `aim:${p.aim}` : `break:${brk?.to ?? ''}`}`;
 }
 

@@ -155,7 +155,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
         const b = new Chess(i.fen);
         b.move({ from: top.moves[0].slice(0, 2), to: top.moves[0].slice(2, 4), promotion: top.moves[0][4] });
         b.move({ from: top.moves[1].slice(0, 2), to: top.moves[1].slice(2, 4), promotion: top.moves[1][4] });
-        const p = planSteps(b.fen(), top.moves.slice(2), top.moves[1], 3, true);
+        const p = planSteps(b.fen(), top.moves.slice(2), top.moves[1], 3, true, true);
         // planSteps reads the side NOT to move on the board it is given — the
         // other side here, so "their plan" is ours when the side to move is
         // theirs. Said from the student's seat.

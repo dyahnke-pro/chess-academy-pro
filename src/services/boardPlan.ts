@@ -17,7 +17,7 @@
 //
 // PURE: chess.js, the board readers and the lines handed in. Dual use: the
 // same plan a read teaches is the plan a student's game can be checked against.
-import { Chess, type Color, type Square } from 'chess.js';
+import { Chess, type Color } from 'chess.js';
 import { opponentTargets, pressureOf, pressureLine, type Target } from './targetSelector';
 import { planSteps, planStepsText } from './planSteps';
 import { isPawnBreak } from './pawnBreak';
@@ -56,7 +56,7 @@ export function stepsOf(fen: string, lines: readonly PlanLine[], whose: 'your' |
     if (!first) continue;
     let after: string;
     try { const c = new Chess(fen); c.move({ from: first.slice(0, 2), to: first.slice(2, 4), promotion: first[4] }); after = c.fen(); } catch { continue; }
-    const p = planSteps(after, l.moves.slice(1), first, 3, true);
+    const p = planSteps(after, l.moves.slice(1), first, 3, true, true);
     if (p) return { text: planStepsText(p, whose), squares: p.squares };
   }
   return null;
@@ -87,6 +87,6 @@ export function switchWing(fen: string, me: Color, whose: 'your' | 'their'): Boa
   const tied = t.guards.length === 1 ? 'a piece' : `${t.guards.length} pieces`;
   return {
     text: `${other === 'their' ? 'Their' : 'Your'} pawn on ${t.square} holds, but it ties down ${tied} to guard it. That is the time to open a second front on the ${wing}: the ${brk.san} break.`,
-    squares: [t.square, ...t.guards, brk.to as Square],
+    squares: [t.square, ...t.guards, brk.to],
   };
 }
