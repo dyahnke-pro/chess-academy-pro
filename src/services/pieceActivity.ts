@@ -121,7 +121,12 @@ export function pieceActivity(fen: string): PieceActivity | null {
       // doing a job (Danya's endgame-attacks board, move 29: "White's queen
       // and bishop are on ideal squares", read as "the bishop on f1 hasn't
       // moved" and the edge handed to the other side).
-      if (isMinorAtHome(cell.type, color, sq) && (isUndevelopedInOpening(fen, color, cell.type, sq) || safe <= 2)) state = 'home';
+      // …and past the opening it is not "hasn't moved" (Danya, modern chess
+      // technique #2, move 55: "their bishop on c8 hasn't moved" of a bishop
+      // that may have travelled the board): it is a piece with almost nowhere
+      // to go, said by its squares.
+      if (isMinorAtHome(cell.type, color, sq) && isUndevelopedInOpening(fen, color, cell.type, sq)) state = 'home';
+      else if (isMinorAtHome(cell.type, color, sq) && safe <= 2) state = 'stuck';
       else if (note?.quality === 'bad') state = 'poor';
       else if (note?.quality === 'good') state = 'strong';
       // Stuck (one safe square or none) is a minor's or a queen's away from
@@ -149,13 +154,17 @@ const NOUN: Record<Officer['piece'], string> = { n: 'knight', b: 'bishop', r: 'r
 
 /** The idle piece in players' words, after "their"/"your": "bishop on c8,
  *  still at home". */
+function safeWords(n: number): string {
+  return n === 0 ? 'no safe square' : n === 1 ? 'one safe square' : `only ${n === 2 ? 'two' : n} safe squares`;
+}
+
 function idleWords(o: Officer): string {
   const at = `${NOUN[o.piece]} on ${o.square}`;
   switch (o.state) {
     case 'home': return `${at} hasn't moved`;
-    case 'stranded': return `${at} is stranded with ${o.safe === 0 ? 'no safe square' : 'one safe square'}`;
+    case 'stranded': return `${at} is stranded with ${safeWords(o.safe)}`;
     case 'pinned': return `${at} is pinned to its king`;
-    case 'stuck': return `${at} has ${o.safe === 0 ? 'no safe square' : 'one safe square'}`;
+    case 'stuck': return `${at} has ${safeWords(o.safe)}`;
     case 'poor': return o.quality === 'rim-knight' ? `${at} is stuck on the rim` : `${at} is hemmed in by its own pawns`;
     default: return at;
   }
@@ -250,7 +259,7 @@ function idleUnits(e: ActivityEdge, passive: string): Unit[] {
     const mate = rest.find((p) => !done.has(p) && shared(p) === shared(o) && (o.state === 'stuck' || o.state === 'stranded'));
     if (!mate) { units.push({ text: `${passive} ${idleWords(o)}`, named: 1 }); continue; }
     done.add(mate);
-    const has = o.safe === 0 ? 'have no safe square' : 'each have one safe square';
+    const has = o.safe === 0 ? 'have no safe square' : `each have ${safeWords(o.safe)}`;
     const where = o.state === 'stranded' ? ` and are stranded` : '';
     units.push({ text: `${passive} ${NOUN[o.piece]} on ${o.square} and ${NOUN[mate.piece]} on ${mate.square} ${has}${where}`, named: 2 });
   }

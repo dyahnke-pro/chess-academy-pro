@@ -96,3 +96,23 @@ describe('verdictWithReasons — space on the one rule (ownsMoreSpace)', () => {
     expect(boardReasons(fen, 'b', lines('d6h2 g1h1 d7b6 c4f1 c8f5 e4f5 h2f4 c1f4 c7f4 g2g3'), null).some((r) => r.kind === 'space')).toBe(false);
   });
 });
+
+// Danya narration test 2026-11-19: a clear verdict is never pinned on a soft
+// plus that explains a fraction of it.
+describe('a clear edge needs a reason its size', () => {
+  const read = (fen: string, evalCp: number, student: 'w' | 'b') =>
+    verdictWithReasons({ fen, evalCp, mate: null, lines: null, student, lastMove: null, said: new Set() });
+  it('desperado defense #0: −2.4 is the bind (pieces with nowhere to go), never "your knight on b8 hasn\'t moved"', () => {
+    const v = read('rnq2rk1/1pn3bp/p2p2p1/2pPp1PP/P1P1Pp2/2N2N2/1P1B1P2/R2QK2R b KQ - 0 16', 237, 'b');
+    expect(v?.text ?? '').not.toMatch(/hasn't moved/);
+    expect(v?.text ?? '').toMatch(/one safe square/);
+  });
+  it('mastering the queen sacrifice #1: +2.15 a pawn down is not "you have the bishop pair"', () => {
+    const v = read('3b2k1/1q3rp1/1p1B3p/1Pp2b2/4n3/1Q2P3/P4PPP/R2R2K1 b - - 0 27', -215, 'b');
+    expect(v?.reasons.map((r) => r.kind) ?? []).not.toContain('bishop-pair');
+  });
+  it('the same soft reason still explains a slight edge (control)', () => {
+    const v = read('rnq2rk1/1pn3bp/p2p2p1/2pPp1PP/P1P1Pp2/2N2N2/1P1B1P2/R2QK2R b KQ - 0 16', 100, 'b');
+    expect(v?.reasons.length ?? 0).toBeGreaterThan(0);
+  });
+});

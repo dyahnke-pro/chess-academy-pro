@@ -42,6 +42,15 @@ export type ReasonKind =
   | 'material' | 'king-shelter' | 'king-centre' | 'king-attack' | 'activity' | 'initiative'
   | 'passer' | 'bishop-pair' | 'space' | 'minor' | 'weak-pawn' | 'guarded-pawn';
 
+/** A SOFT reason is a quiet plus the engine weighs in tenths of a pawn; a
+ *  concrete one (material, a passer, the kings, a pawn falling, the
+ *  initiative) can carry an edge of any size. */
+const SOFT_REASON: Record<ReasonKind, boolean> = {
+  material: false, 'king-shelter': false, 'king-centre': false, 'king-attack': false, initiative: false,
+  passer: false, 'weak-pawn': false,
+  activity: true, 'bishop-pair': true, space: true, minor: true, 'guarded-pawn': true,
+};
+
 export interface VerdictReason {
   kind: ReasonKind;
   /** The side this reason favours. */
@@ -318,6 +327,15 @@ export function verdictWithReasons(input: {
     picked = [main[0]];
     const second = fit.find((r) => r !== main[0] && (r.kind === 'guarded-pawn' || r.weight * 2 >= main[0].weight));
     if (second) picked.push(second);
+    // A CLEAR EDGE NEEDS A REASON ITS SIZE (Danya narration test 2026-11-19:
+    // "You're clearly worse — your knight on b8 hasn't moved" at −2.4, a
+    // kingside bind with the h-file coming; "clearly better — you have the
+    // bishop pair" a pawn down). A soft plus — a quiet edge the engine weighs
+    // in tenths — said alone for a clear verdict claims to explain what it
+    // cannot. Under half the edge, the verdict goes out without a reason.
+    const band = evalBand(input.evalCp);
+    if ((band === 'clearly' || band === 'decisive') && picked.every((r) => SOFT_REASON[r.kind])
+      && picked.reduce((t, r) => t + r.weight, 0) * 2 < Math.abs(input.evalCp)) return null;
   } else {
     const material = all.find((r) => r.kind === 'material');
     const ini = sayable.find((r) => r.kind === 'initiative');

@@ -21,7 +21,7 @@ import { Chess, type Square } from 'chess.js';
 import type { StockfishAnalysis, WalkableLine } from '../types';
 import { walkableLine, type Proof } from './proof';
 import { findHangingPieces } from './tacticClassifier';
-import { CAPTURE_VALUE } from './pieceValues';
+import { CAPTURE_VALUE, materialBalance } from './pieceValues';
 import { refutationProof, moverLineProof } from './exchangeLedger';
 import { strategicWhyLed } from './moveFundamentals';
 import { ownsMoreSpace, legalSeeGainFor, seeReadsStanding } from './positionReadingService';
@@ -971,13 +971,30 @@ function queensOffLine(fen: string, uci: readonly string[], plies: number): stri
     // white queen on the board: Bxd2 just wins the black one).
     if (!c.board().flat().some((x) => x && x.type === 'q' && x.color === 'w') || !c.board().flat().some((x) => x && x.type === 'q' && x.color === 'b')) return null;
     const sans: string[] = [];
+    let off: string[] | null = null;
     for (const u of uci.slice(0, plies)) {
       sans.push(c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san);
-      if (!c.board().flat().some((x) => x && x.type === 'q')) return sans;
+      if (!c.board().flat().some((x) => x && x.type === 'q')) { off = [...sans]; break; }
     }
-    return null;
+    if (!off) return null;
+    // THE TRADE IS THE REASON ONLY WHEN IT IS A TRADE (Danya, the importance
+    // of solving studies #0: "Qxb7+? Then they play Qxb7 and you answer axb7
+    // — the queens come off … every piece that comes off shrinks the edge",
+    // when Qxb7+ wins a knight and the line goes wrong on …gxf1=R+). Read to
+    // the line's end: a promotion, or material that does not come out even,
+    // is the line's real story, and the space-and-attack principle is not it.
+    const before = materialBalance(fen);
+    for (const u of uci.slice(off.length, LINE_END_PLIES)) {
+      const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
+      if (m.promotion) return null;
+    }
+    if (uci.slice(0, off.length).some((u) => u.length > 4)) return null;
+    return materialBalance(c.fen()) === before ? off : null;
   } catch { return null; }
 }
+
+/** How far a queen-trade line is read to see it come out even. */
+const LINE_END_PLIES = 8;
 
 /** The mover has more pieces bearing on the enemy king than defend it (`countKingAttack`). */
 function attacking(fen: string, mover: 'w' | 'b'): boolean {
