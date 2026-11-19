@@ -144,6 +144,14 @@ describe('the off-book method: which capture (captureChoice)', () => {
   });
   it('silent when the engine prefers the capture that hands the square over', () => {
     expect(captureChoice(fen, 'exd5', 'exd5', 0)).toBeNull();
+  });  it('a capture that hands them two squares names both (G4.5: every outpost, not the nearest)', () => {
+    // No g-pawn for Black, a pawn on g4 for White: …exd5 hands White d4 AND f5.
+    const two = 'rnbqkb1r/pp3p1p/3pp3/3PP3/6P1/2P2N2/PP3P1P/RNBQKB1R b KQkq - 0 1';
+    const r = captureChoice(two, 'dxe5', 'dxe5', 0);
+    expect(r?.handed).toEqual(['d4', 'f5']);
+    expect(r?.text).toMatch(/d4 and f5/);
+    expect(r?.squares).toEqual(expect.arrayContaining(['d4', 'f5']));
+    voice(r!.text);
   });
 });
 

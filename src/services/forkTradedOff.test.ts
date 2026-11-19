@@ -9,3 +9,15 @@ describe('a fork the forked piece simply trades off is no fork', () => {
     expect(t?.san === 'Qc6+' && /fork/.test(t.detail)).toBe(false);
   });
 });
+
+// G4.5: a fork of the king, queen AND rook names every piece it hits, never the
+// king and the first major alone.
+describe('a royal fork names every piece it hits', () => {
+  it('Nd5 threatens Nf6+ forking king, queen and rook — all three said', () => {
+    const t = detectNewThreat('4r1k1/3q4/8/8/1N6/8/8/K7 w - - 0 1', '4r1k1/3q4/8/3N4/8/8/8/K7 b - - 1 1', 'w');
+    expect(t?.kind).toBe('fork');
+    expect(t?.targets).toEqual(['king', 'rook on e8', 'queen on d7']);
+    expect(t?.targetSquares).toEqual(['g8', 'e8', 'd7']);
+    expect(t?.detail).toMatch(/king, rook on e8 and queen on d7/);
+  });
+});

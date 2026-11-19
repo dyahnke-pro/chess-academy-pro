@@ -221,3 +221,11 @@ describe('a king step out of check is the board, not a job', () => {
     expect(j && isBareJob(j)).toBe(false);
   });
 });
+
+describe('moveJob — every target a move hits is said (G4.5)', () => {
+  it('a queen move hitting a loose rook and a loose knight names both', () => {
+    const j = moveJob('7k/4n3/8/r7/8/8/8/2Q3K1 w - - 0 1', 'Qc5', 'w', MINE, null, []);
+    expect(j?.clause).toMatch(/rook on a5/);
+    expect(j?.clause).toMatch(/knight on e7/);
+  });
+});

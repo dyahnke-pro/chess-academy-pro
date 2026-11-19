@@ -29,6 +29,7 @@ import { masterMovesCachedSync } from './masterPlayLookup';
 import { afterCaptureSan, afterCaptureSanForms } from '../utils/captureWords';
 import type { MoveFundamentalId } from './moveFundamentals';
 import { openSentence } from '../utils/openSentence';
+import { andList } from '../utils/andList';
 import { checkAnswers } from './checkAnswers';
 
 const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -678,7 +679,9 @@ function captureJob(fen: string, san: string, mv: NonNullable<ReturnType<typeof 
   // queen"; `captureWords`).
   const forks = end && actsFromItsSquare(end) ? hitTargets(mv.board, mv.to, mover) : [];
   if (forks.length >= 2) {
-    const named = forks.slice(0, 2).map((f) => `${w.other} ${NAME[f.piece]} on ${f.square}`).join(' and ');
+    // EVERY piece it hits, never the first two (G4.5): a capture that hits
+    // three pieces is said as three.
+    const named = andList(forks.map((f) => `${w.other} ${NAME[f.piece]} on ${f.square}`));
     return { kind: 'fork', squares: [mv.to, ...forks.map((f) => f.square)], clause: `it hits ${named} at once` };
   }
   if (prior && prior.to === mv.to) {
@@ -731,8 +734,15 @@ const onlyOfKind = (board: Chess, type: string, color: Color): boolean =>
  *  that was already under fire, or hits one worth more than itself. */
 function attackJob(mv: NonNullable<ReturnType<typeof after>>, mover: Color, w: SeatWords): (Omit<BookMoveWhy, 'text' | 'job'> & { clause: string }) | null {
   // The dearest target first: a piece over a pawn.
-  const t = hitTargets(mv.board, mv.to, mover, true).sort((x, y) => CAPTURE_VALUE[y.piece] - CAPTURE_VALUE[x.piece])[0];
+  const ts = hitTargets(mv.board, mv.to, mover, true).sort((x, y) => CAPTURE_VALUE[y.piece] - CAPTURE_VALUE[x.piece]);
+  const t = ts[0];
   if (!t) return challengeJob(mv, mover, w);
+  // TWO OR MORE TARGETS: every one is said (G4.5) — the dearest alone dropped
+  // the second piece of a double attack.
+  if (ts.length >= 2) {
+    const named = andList(ts.map((x) => `${w.other} ${NAME[x.piece]} on ${x.square}`));
+    return { kind: 'attack', squares: [mv.to, ...ts.map((x) => x.square), ...ts.flatMap((x) => x.with)], clause: `it attacks ${named} at once` };
+  }
   const mate = t.with.length === 1 ? mv.board.get(t.with[0]) : null;
   const clause = t.attackers === 1
     ? `it attacks ${w.other} ${NAME[t.piece]} on ${t.square}`
