@@ -27,7 +27,14 @@ import type { FactStakes } from './factStakes';
 import { LOCAL_THREAD, placeFact, stakesOf, type CoachFact, type ComputerName, type FactSeat } from './coachFact';
 import { threadKey } from './gameStory';
 import { findPinBreaks, pinBreakLine, pinBreakProof } from './pinBreak';
-import { findProphylaxis, prophylaxisKey, prophylaxisLine, prophylaxisIdea, prophylaxisProof, theirWantedMoves } from './prophylaxis';
+import { findProphylaxis, prophylaxisKey, prophylaxisLine, prophylaxisIdea, prophylaxisProof, prophylaxisThreatProof, theirWantedMoves } from './prophylaxis';
+import { inBetweenMove } from './inBetweenMove';
+import { hookCreated } from './moveInsight';
+import { criticalityThresholds } from './criticalityScan';
+import { sayMoveClause } from './spokenMove';
+import { tempoCount } from './tempoCount';
+import { readPosition } from './positionalRead';
+import { detectKingExposure, kingExposureClause } from './kingSafety';
 import { findEnablingMove, enablingMoveLine, enablingMoveProof } from './enablingMove';
 import { findTiedDefenders, newTiedDefender, tiedDefenderLine, tiedDefenderProof } from './tiedDefender';
 import { obligationLifted, obligationLiftedLine } from './obligationLifted';
@@ -96,7 +103,7 @@ import { pieceWish } from './pieceWish';
 import { theirMoveCost } from './theirMoveCost';
 import { threatStoppedBy, playItAnyway } from './opponentMovePurpose';
 import { trickSidestepped } from './forkTrick';
-import { habitsOf } from './thinkAloud';
+import { habitsOf, opponentHabits } from './thinkAloud';
 import { knownAttack } from './attackLibrary';
 import { readTiming, timingClause } from './moveTiming';
 import { detectBluff, bluffClause } from './bluffDetector';
@@ -117,7 +124,7 @@ import { zugzwangMade, zugzwangSyncLine, zugzwangSyncProof } from './zugzwangRea
 import { theoreticalEndingMade, theoreticalEndingMadeLine } from './theoreticalEnding';
 import { raceCountMade, raceCountLine, raceCountSquares } from './raceCount';
 import { promotionPlayed, promotionChoiceLine, queenMissedLine } from './promotionChoice';
-import { defenderTradeMade, keyDefenderLine, defenderSquares } from './keyDefender';
+import { defenderTradeMade, keyDefenderLine, defenderSquares, keyDefenderPlan } from './keyDefender';
 import { practicalChance, practicalChanceLine, practicalChanceSquares, type PracticalReads } from './practicalChance';
 import { pawnCutsGuard, type PawnLineRead } from './pawnLines';
 import { chainBase } from './chainBase';
@@ -181,6 +188,19 @@ export function principleKey(f: CoachFact): { id: string; first: boolean; headsM
   const bar = k.indexOf('|');
   const head = k.slice(0, bar);
   return { id: k.slice(bar + 1), first: head[0] === '1', headsMove: head[1] === 'h' };
+}
+
+/** The observation's own kind a positional read was made under (`positionRead`). */
+export function positionReadKind(f: CoachFact): string {
+  const k = readKey(f);
+  return k.slice(0, k.indexOf('|'));
+}
+
+/** The lever a minority-attack read pushes (`minority`), off its key. */
+export function minorityLever(f: CoachFact): string | null {
+  const k = readKey(f);
+  const bar = k.indexOf('|');
+  return bar < 0 ? null : k.slice(bar + 1);
 }
 
 export function readKey(f: CoachFact): string {
@@ -501,6 +521,33 @@ export interface BoardContexts {
    *  attack and a weak colour complex either side (`minority`,
    *  `colourComplex`), and the race of two same-kind plans (`raceOfPlans`). */
   kingInCentre: { fen: string; student: Color };
+  /** NOT YET — FIRST THIS (`inBetweenMove`, his "Be5 first, hitting the
+   *  rook, and only then did I take"): on `fen` (the student to move) the
+   *  engine's best move `bestSan` — its line `pv` in UCI, the best move first —
+   *  is a forcing move before a capture that is still there after. Names the
+   *  student's move. */
+  notYet: { fen: string; bestSan: string; pv: readonly string[]; student: Color };
+  /** THE OBVIOUS STOP THAT DOESN'T WORK (`findProphylaxis`'s verdict, his
+   *  "the obvious move is h3 — but h3 creates a hook"): on `fen` (the student
+   *  to move) their wanted pin, kick or fork has a pawn stop that hands them a
+   *  hook, and the engine's `lines` (best first) rank it a notable step below
+   *  the best. */
+  obviousStop: { fen: string; student: Color; lines: ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate: number | null }> };
+  /** THE KEY DEFENDER, STANDING (`keyDefenderPlan`, WO-DANYA-READS-01 #6):
+   *  on `fen` as it stands, the engine's best line (`line`, White-POV score)
+   *  trades off the piece doing a job alone — either seat. */
+  keyDefenderNow: { fen: string; student: Color; line: AnalysisLine };
+  /** THE POSITIONAL READ (`readPosition`): every observation about the board
+   *  `fen`, both sides, most urgent first — the asked "how do I stand?". */
+  positionRead: { fen: string; student: Color };
+  /** THE KING'S SHELTER (`detectKingExposure`): the king of `side` on `fen` —
+   *  a broken castled shelter with real attackers on it, worded from the
+   *  student's seat. Null when the king is not exposed. */
+  kingExposure: { fen: string; side: Color; student: Color };
+  /** THEIR SHELTER CRACKED (`detectKingExposure`): two or more of the three
+   *  pawns in front of their king gone — the other half of "is my attack
+   *  worth it", from the student's seat. */
+  shelterCracked: { fen: string; student: Color };
   trappedPiece: { fen: string; student: Color; lineUci: readonly string[] };
   worstPiece: { fen: string; student: Color; movedTo: string | null };
   passerPush: { fen: string; student: Color; pushed: string | null };
@@ -745,6 +792,20 @@ const POISON_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop
 
 function safe<T>(f: () => T | null): T | null {
   try { return f(); } catch { return null; }
+}
+
+/** The engine's verdict on a stop (UCI): refuted only when the engine ranked
+ *  it and it sits a notable step below the best line. Absent from the lines,
+ *  its value is unknown — a MultiPV list can hold worse moves than the stop
+ *  (h3 −0.31 at d20 sat below Ng5 −0.41 on the OS-1 board), so absence is
+ *  never a refutation. */
+function stopRefuted(fen: string, uci: string, lines: ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate: number | null }>): boolean {
+  if (lines.length === 0) return false;
+  const sign = fen.split(' ')[1] === 'w' ? 1 : -1;
+  const cp = (l: { evaluation: number; mate: number | null }): number => (l.mate != null ? (l.mate > 0 ? 100000 : -100000) : l.evaluation) * sign;
+  const at = lines.findIndex((l) => l.moves[0]?.slice(0, 4) === uci);
+  if (at === 0) return false;
+  return at > 0 && cp(lines[0]) - cp(lines[at]) >= criticalityThresholds().notable;
 }
 
 /** The side to move on `fen`. */
@@ -2563,6 +2624,172 @@ export const BOARD_COMPUTERS = {
       weaknesses: { not: 'a reading of the board — no question of the student\'s posed' },
     },
   },
+  notYet: {
+    read: ({ fen, bestSan, pv, student }, fact) => safe(() => {
+      // ONE DETECTOR (A-plan P7): the in-between move the tactic record reads too.
+      const ib = inBetweenMove(fen, [...pv], 'best');
+      if (!ib) return null;
+      const text = `The capture on ${ib.captureSquare} is not going anywhere. Not yet — first ${sayMoveClause(bestSan, fen)}${ib.check ? ' with check' : ''}, and take after.`;
+      const line = { fen, sans: [...ib.line] };
+      // Its proof is the engine's line through the capture: the capture is
+      // still there after the forcing move (an engine line, never recited as fact).
+      const key = `notyet:${ib.captureSquare}`;
+      return fact({ key, claims: [key], text, proof: lineProof(line, lineSeatAt(fen, student)) ?? NO_PROOF.description, squares: [ib.captureSquare], stakes: null,
+        seat: 'student', namesStudentMove: true, thread: LOCAL_THREAD, fen, lines: [line] });
+    }),
+    computer: 'inBetweenMove',
+    kind: 'not-yet',
+    phase: ANY,
+    surfaces: {
+      learn: { wired: 'services/thinkAloud.ts' },
+      chat: { wired: 'services/thinkAloud.ts' },
+      review: { not: 'Review says the in-between move about the move played (notYetPlayed), never as advice on a board already past' },
+      lesson: { not: 'a lesson plays the model line, which plays the forcing move first' },
+      play: PLAY_ASK,
+      tactics: { not: 'owed — a zwischenzug puzzle could say why the capture waits' },
+      weaknesses: WEAK_OWED,
+      think: { not: 'owed — the step board reads the composer, not the live depth read (depthClauses)' },
+    },
+  },
+  obviousStop: {
+    // ONE COMPUTER OWNS THEIR WANTED PIN, KICK OR FORK (OS-1 root cause 1):
+    // `findProphylaxis` finds it and its stop; this reads only the VERDICT on
+    // that stop. A pawn stop that hands them a hook fails only when the ENGINE
+    // agrees — it ranked the stop a notable step below the best move.
+    // Otherwise the stop is the held answer (`prophylaxis`), never both.
+    read: ({ fen, student, lines }, fact) => safe(() => {
+      if (sideToMove(fen) !== student) return null;
+      const p = findProphylaxis(fen);
+      if (!p || p.prevention.piece !== 'p') return null;
+      const hook = hookCreated(fen, p.prevention.san);
+      if (!hook) return null;
+      if (!stopRefuted(fen, `${p.prevention.from}${p.prevention.to}`, lines)) return null;
+      const verb = p.kind === 'pin' ? 'pinning' : p.kind === 'fork' ? 'forking' : 'hitting';
+      const text = `They want ${sayMoveClause(p.intent.san, p.threat.line.fen)}, ${verb} your ${POISON_NAME[p.victim.piece] ?? 'piece'} on ${p.victim.square}. The obvious stop is ${sayMoveClause(p.prevention.san, fen)}, but that pawn becomes a hook for their pawn on ${hook.pawn} — find another way.`;
+      const key = prophylaxisKey(p.intent.to);
+      return fact({ key, claims: [key], text, proof: prophylaxisThreatProof(p), squares: [...p.threat.squares], stakes: null,
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen,
+        lines: [{ fen: p.threat.line.fen, sans: [...p.threat.line.sans] }],
+        marks: { play: { from: p.prevention.from, to: p.prevention.to }, theirs: { from: p.intent.from, to: p.intent.to } },
+        ...(p.threat.motif ? { motif: p.threat.motif } : {}) });
+    }),
+    computer: 'findProphylaxis',
+    kind: 'stop-flaw',
+    phase: ANY,
+    surfaces: {
+      learn: { wired: 'services/thinkAloud.ts' },
+      chat: { wired: 'services/thinkAloud.ts' },
+      review: { not: 'Review says the stop after it was missed (prophylaxisMissed), never as advice on a game already played' },
+      lesson: { not: 'a lesson plays the model line; there is no obvious stop of the student\'s to refute' },
+      play: PLAY_ASK,
+      tactics: TACTICS_NA,
+      weaknesses: WEAK_OWED,
+      think: { not: 'owed — the step board reads the composer, not the live depth read (depthClauses)' },
+    },
+  },
+  keyDefenderNow: {
+    // The piece of theirs doing a job alone, when the engine's best line
+    // trades it off — the same computer the move thought speaks when a move
+    // does it (`keyDefender`), read here for the board as it stands.
+    read: ({ fen, student, line }, fact) => safe(() => {
+      const plan = keyDefenderPlan(fen, line);
+      if (!plan) return null;
+      const mine = plan.defender.side !== student;
+      const text = keyDefenderLine(plan, mine, true, fen);
+      const squares = defenderSquares(plan);
+      return fact({ key: plan.key, claims: [plan.key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen, role: 'teach' });
+    }),
+    computer: 'keyDefenderPlan',
+    kind: 'trade',
+    phase: ANY,
+    surfaces: {
+      chat: { wired: 'services/groundedAnswer.ts' },
+      lesson: { not: 'a lesson says the trade as the move that makes it (keyDefender)' },
+      review: { not: 'Review says the trade as the move that makes it (keyDefender)' },
+      learn: { not: 'Learn says the trade as the move that makes it (keyDefender, through the one composer)' },
+      play: PLAY_ASK,
+      tactics: { not: 'a puzzle poses one tactic; trading off a key defender is a game move\'s plan' },
+      weaknesses: { not: 'a reading of the board — no question of the student\'s posed' },
+      think: { not: 'owed — the step board reads the composer, not the standing read' },
+    },
+  },
+  positionRead: {
+    // Every observation, both sides, most urgent first; the asker decides how
+    // far down the list to read. The key carries the observation's own kind
+    // (`positionReadKind`).
+    read: ({ fen, student }, fact) => safe(() => {
+      const obs = readPosition(fen, student === 'w' ? 'white' : 'black');
+      if (obs.length === 0) return null;
+      return obs.map((o) => {
+        const squares = [...(o.squares ?? [])];
+        return fact({ key: `${o.kind}|${o.key}`, claims: [o.key, ...(o.aliases ?? [])], text: o.text, proof: squaresProof(o.text, squares) ?? NO_PROOF.description, squares, stakes: null,
+          seat: o.side === 'student' ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+      });
+    }),
+    computer: 'readPosition',
+    kind: 'structure-plan',
+    phase: ANY,
+    surfaces: {
+      chat: { wired: 'services/groundedAnswer.ts' },
+      play: { not: 'owed — the tapped read reaches it through the composer (positionFacts), which reads the computer itself' },
+      lesson: { not: 'a lesson composes each move from the move\'s own facts' },
+      review: { not: 'Review walks moves; the standing read answers an asked question' },
+      learn: { not: 'owed — Learn\'s asked read reaches it through the composer (positionFacts)' },
+      tactics: TACTICS_NA,
+      weaknesses: { not: 'a reading of the board — no question of the student\'s posed' },
+      think: { not: 'owed — the step board reads the composer' },
+    },
+  },
+  kingExposure: {
+    read: ({ fen, side, student }, fact) => safe(() => {
+      const exposure = detectKingExposure(fen, side);
+      if (!exposure) return null;
+      const clause = kingExposureClause(exposure);
+      const lead = side === student ? 'Your king' : 'Their king';
+      // kingExposureClause is written third-person; fronted with the owner.
+      const text = clause ? `${lead}: ${clause}` : `${lead} is reasonably safe.`;
+      const key = `exposure:${side}`;
+      return fact({ key, claims: [key], text, proof: NO_PROOF.description, squares: [], stakes: null,
+        seat: side === student ? 'opponent' : 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'detectKingExposure',
+    kind: 'king',
+    phase: ANY,
+    surfaces: {
+      chat: { wired: 'services/groundedAnswer.ts' },
+      play: { not: 'owed — the tapped read reaches it through the composer (positionFacts)' },
+      lesson: { not: 'a lesson composes each move from the move\'s own facts' },
+      review: { not: 'owed — Review reads the king through its own walk' },
+      learn: { not: 'owed — Learn reaches it through the composer (positionFacts)' },
+      tactics: TACTICS_NA,
+      weaknesses: WEAK_OWED,
+      think: { not: 'owed — the step board reads the composer' },
+    },
+  },
+  shelterCracked: {
+    read: ({ fen, student }, fact) => safe(() => {
+      const exp = detectKingExposure(fen, student === 'w' ? 'b' : 'w');
+      if (!exp || exp.missingShield < 2) return null;
+      const text = `Their shelter is cracked — ${exp.missingShield === 3 ? 'all three' : `${countWord(exp.missingShield)} of the three`} pawns in front of the king are gone.`;
+      const key = `shelter:${student === 'w' ? 'b' : 'w'}`;
+      return fact({ key, claims: [key], text, proof: NO_PROOF.description, squares: [], stakes: null,
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'detectKingExposure',
+    kind: 'king',
+    phase: ANY,
+    surfaces: {
+      chat: { wired: 'services/groundedAnswer.ts' },
+      play: PLAY_ASK,
+      lesson: { not: 'a lesson composes each move from the move\'s own facts' },
+      review: { not: 'owed — Review reads the king through its own walk' },
+      learn: { not: 'owed — Learn reaches it through the composer (positionFacts)' },
+      tactics: TACTICS_NA,
+      weaknesses: WEAK_OWED,
+      think: { not: 'owed — the step board reads the composer' },
+    },
+  },
   trappedPiece: {
     // A rook or queen with no safe square, either side.
     read: ({ fen, student, lineUci }, fact) => safe(() => {
@@ -2640,13 +2867,13 @@ export const BOARD_COMPUTERS = {
       const mine = findMinorityAttack(fen, student);
       if (mine) {
         const text = `You have a minority attack on the ${mine.flank} — ${mine.leverSan} makes contact and leaves them a weak pawn on ${mine.target}.`;
-        out.push(fact({ key: `minority:${student}:${mine.target}`, claims: [`minority:${mine.target}`], text, proof: squaresProof(text, [mine.target]) ?? NO_PROOF.description, squares: [mine.target], stakes: null,
+        out.push(fact({ key: `minority:${student}:${mine.target}|${mine.leverSan}`, claims: [`minority:${mine.target}`], text, proof: squaresProof(text, [mine.target]) ?? NO_PROOF.description, squares: [mine.target], stakes: null,
           seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen }));
       }
       const theirs = findMinorityAttack(fen, enemy);
       if (theirs) {
         const text = `They have a minority attack on the ${theirs.flank} — ${theirs.leverSan} is the lever, leaving you a weak pawn on ${theirs.target} to watch.`;
-        out.push(fact({ key: `minority:${enemy}:${theirs.target}`, claims: [`minority:${theirs.target}`], text, proof: squaresProof(text, [theirs.target]) ?? NO_PROOF.description, squares: [theirs.target], stakes: null,
+        out.push(fact({ key: `minority:${enemy}:${theirs.target}|${theirs.leverSan}`, claims: [`minority:${theirs.target}`], text, proof: squaresProof(text, [theirs.target]) ?? NO_PROOF.description, squares: [theirs.target], stakes: null,
           seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen }));
       }
       return out.length ? out : null;
@@ -2799,7 +3026,15 @@ export const BOARD_COMPUTERS = {
   theirHabit: {
     read: ({ history, student, sound }, fact) => safe(() => {
       const side: Color = student === 'w' ? 'b' : 'w';
-      const hs = habitsOf(history, side, 'their', sound);
+      const hs: Array<{ kind: string; text: string }> = [...opponentHabits(history, side, sound)];
+      // THE TEMPO COMPUTER (`tempoCount`, census P2 #7): their piece moved
+      // again while the student develops — said with the habits, before the
+      // count of their pieces still at home.
+      const t = tempoCount(history, student);
+      if (t) {
+        const at = hs.findIndex((h) => h.kind === 'undeveloped');
+        hs.splice(at < 0 ? hs.length : at, 0, { kind: 'tempo', text: t.text });
+      }
       if (hs.length === 0) return null;
       return hs.map((h) => fact({ key: `theirHabit:${h.kind}`, claims: [`habit:their:${h.kind}`], text: h.text, proof: NO_PROOF.description, squares: [], stakes: null,
         seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenOfGame(history) }));

@@ -50,7 +50,8 @@ import { computeMoveFundamentals } from './moveFundamentals';
 import { buildReviewMoveTeaching } from './reviewMoveTeaching';
 import { deepFact, theirTarget } from './threeFacts';
 import { findProphylaxis, prophylaxisLine } from './prophylaxis';
-import { notYet, depthClauses } from './thinkAloud';
+import { depthClauses } from './thinkAloud';
+import { readBoard } from './boardComputers';
 import { notYetPlayed } from './notYetPlayed';
 import { moveIntent, type IntentReads } from './moveIntent';
 import { afterCapture, NO_PREV_CAPTURE, type PrevCaptureContext } from './captureRun';
@@ -516,7 +517,7 @@ const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Prom
     const best = p.best;
     const bestSan = best ? sansOf(p.fenBefore, [best.uci], 1).at(0) : undefined;
     if (!best || !bestSan) return null;
-    return notYet(p.fenBefore, { san: bestSan, pv: best.pv, cp: evalOf(best) * (p.mover === 'w' ? 1 : -1) })?.text ?? null;
+    return readBoard('notYet', { fen: p.fenBefore, bestSan, pv: best.pv, student: p.mover })?.text ?? null;
   },
   // Every alternative the weighing would rule out, with its reason, whether or
   // not the position is a real fork (the composer gates that; BUILT should not).
@@ -699,9 +700,9 @@ const FACT_COMPUTER: Record<FactKind, string> = {
   'structure-plan': 'services/boardPlanFacts.ts#boardPlanFacts',
   convert: 'services/conversionMethod.ts#readConversion',
   concept: 'services/conceptEngine.ts#conceptForBoard',
-  'not-yet': 'services/thinkAloud.ts#notYet',
+  'not-yet': 'services/inBetweenMove.ts#inBetweenMove',
   line: 'services/thinkAloud.ts#lineAchieves',
-  'stop-flaw': 'services/thinkAloud.ts#obviousStopFlaw',
+  'stop-flaw': 'services/prophylaxis.ts#findProphylaxis',
   // The teaching moves' own kinds (2026-11-05).
   'reply-tree': 'services/ifTheyPlay.ts#ifTheyPlay',
   'trap-set': 'services/ifTheyPlay.ts#baitBranch',
@@ -743,7 +744,7 @@ const SOURCE_COMPUTER: Record<ComputerSourceId, string> = {
   deepFact: 'services/threeFacts.ts#deepFact',
   theirTarget: 'services/threeFacts.ts#theirTarget',
   prophylaxis: 'services/prophylaxis.ts#findProphylaxis',
-  notYet: 'services/thinkAloud.ts#notYet',
+  notYet: 'services/inBetweenMove.ts#inBetweenMove',
   notYetPlayed: 'services/notYetPlayed.ts#notYetPlayed',
   speedRun: 'services/thinkAloud.ts#depthClauses',
   alternatives: 'services/deliberation.ts#buildDeliberation',

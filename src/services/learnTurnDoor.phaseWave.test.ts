@@ -16,7 +16,6 @@ import { phaseVerdictLine, phaseVerdictKeys, phaseStockKey } from './reviewPosit
 import { spokenSentenceKeys } from './voicePackage';
 import { NAMES_NO_MOVE } from './studentMoveNaming';
 import { findProphylaxis, prophylaxisIdea, prophylaxisKey } from './prophylaxis';
-import { obviousStopFlaw } from './thinkAloud';
 import { readBoard } from './boardComputers';
 import { laneFacts, decidePhaseWave, type PhaseFixture } from '../test/learnDoorFixtures';
 
@@ -86,12 +85,12 @@ describe('decidePhaseWave — one door call per report, inside its turn', () => 
     // the "obvious stop" clause are ONE claim (their bishop to g4).
     const ph = findProphylaxis(MOVE8);
     // An engine fan where the obvious stop h3 is a clear step down.
-    const flaw = obviousStopFlaw(MOVE8, 'w', [
+    const flaw = readBoard('obviousStop', { fen: MOVE8, student: 'w', lines: [
       { moves: ['e4e5', 'c6e5', 'f3e5', 'g7e5'], evaluation: 17, mate: null },
       { moves: ['h2h3', 'g8f6'], evaluation: -120, mate: null },
-    ]);
+    ] });
     expect(ph?.intent.to).toBe('g4');
-    expect(flaw?.threatTo).toBe('g4');
+    expect(flaw?.claims).toEqual([prophylaxisKey('g4')]);
     const read = readBoard('prophylaxis', { fen: MOVE8, engineFirstMoves: [`${ph!.prevention.from}${ph!.prevention.to}`] });
     expect(read?.claims).toEqual([prophylaxisKey('g4')]);
     const holds = new Set<string>();
@@ -104,12 +103,12 @@ describe('decidePhaseWave — one door call per report, inside its turn', () => 
     expect(late.spoke).not.toContain('prophylaxis');
     expect(holds.has(prophylaxisKey('g4'))).toBe(true);
     // The phase wave of the same turn offers the stop-flaw clause: held.
-    const d = decidePhaseWave([{ text: flaw!.text, claims: [prophylaxisKey(flaw!.threatTo)], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE, factKind: 'stop-flaw' }],
+    const d = decidePhaseWave([{ text: flaw!.text, claims: flaw!.claims, proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE, factKind: 'stop-flaw' }],
       MOVE8, { fen: MOVE8, ply: 13, slipCp: null, priceSettled: true, price: null, midExchange: null, decision: null, said: late.pkg.spoken, holds }, ctx);
     expect(d!.pkg.spoken).toBe('');
     expect(rows.at(-1)?.heldWhy.phase).toBe('held-this-turn');
     // A new turn starts a fresh set, so the claim is free again.
-    const next = decidePhaseWave([{ text: flaw!.text, claims: [prophylaxisKey(flaw!.threatTo)], proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE, factKind: 'stop-flaw' }],
+    const next = decidePhaseWave([{ text: flaw!.text, claims: flaw!.claims, proof: NO_PROOF.description, namesStudentMove: NAMES_NO_MOVE, factKind: 'stop-flaw' }],
       MOVE8, { fen: MOVE8, ply: 13, slipCp: null, priceSettled: true, price: null, midExchange: null, decision: null, said: '', holds: new Set<string>() }, ctx);
     expect(next!.pkg.spoken).not.toBe('');
   });
