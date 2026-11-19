@@ -38,7 +38,7 @@ import { PIECE_NAMES } from '../types/tacticTypes';
 import { sayMoveClause } from './spokenMove';
 import { legalLineProof, squaresProof, type Proof } from './proof';
 import { mateStakes, piecePoints, type FactStakes } from './factStakes';
-import { legalSeeGainFor } from './positionReadingService';
+import { legalSeeGain, legalSeeGainFor } from './positionReadingService';
 import { oppositeWingsRace, OPPOSITE_WINGS_CLAIM } from './planRace';
 import { conceptInstanceKey } from './conceptKey';
 import { lineSeatAt } from '../utils/andList';
@@ -570,10 +570,19 @@ export function sacrificeConditions(fen: string, me: Color, bestSan: string | nu
 
 // ── THE KING'S SQUARE, BY THE CHECKS THAT FOLLOW ─────────────────────────────
 
+/** The checks the side to move on `fen` has that WIN TIME: a check whose
+ *  piece is simply taken back for material is not one (Danya, the positional
+ *  rook lift #2: "there their knight checks and wins time" of Nxe5+, which
+ *  loses the knight to …dxe5; modern chess technique #2: …Rxc5+ and …Rxb4+,
+ *  each losing the rook). */
 function checksAfter(fen: string): Move[] {
   const b = load(fen);
   if (!b) return [];
-  return b.moves({ verbose: true }).filter((m) => m.san.includes('+'));
+  return b.moves({ verbose: true }).filter((m) => {
+    if (!m.san.includes('+')) return false;
+    const took = m.captured ? ({ p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 } as Record<string, number>)[m.captured] ?? 0 : 0;
+    try { const c = new Chess(fen); c.move(m.san); return legalSeeGain(c.fen(), m.to as Square) <= took; } catch { return false; }
+  });
 }
 
 /**
