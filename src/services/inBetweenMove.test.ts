@@ -3,7 +3,8 @@
 import { describe, it, expect } from 'vitest';
 import { inBetweenMove } from './inBetweenMove';
 import { detectTacticType } from './missedTacticService';
-import { notYet, depthClauses } from './thinkAloud';
+import { depthClauses } from './thinkAloud';
+import { readBoard } from './boardComputers';
 import { isProof } from './proof';
 
 // Bxd5 is on the board; Re8+ first, Kh7, and the knight is still there to take.
@@ -15,7 +16,7 @@ describe('the in-between move', () => {
     expect(inBetweenMove(FEN, PV, 'best')).toEqual({ capture: 'Bxd5', captureSquare: 'd5', first: 'Re8+', check: true, line: ['Re8+', 'Kh7', 'Bxd5'] });
   });
   it('Learn teaches it ("not yet — first …")', () => {
-    expect(notYet(FEN, { san: 'Re8+', pv: PV, cp: 300 })?.text).toMatch(/^The capture on d5 is not going anywhere\. Not yet — first .* with check, and take after\.$/);
+    expect(readBoard('notYet', { fen: FEN, bestSan: 'Re8+', pv: PV, student: 'w' })?.text).toMatch(/^The capture on d5 is not going anywhere\. Not yet — first .* with check, and take after\.$/);
   });
   it('the live read carries its proof: the line through the capture, drawn and marked', () => {
     const clause = depthClauses({ theory: true, fen: FEN, history: [], topLines: [{ moves: PV, evaluation: 300, mate: null }], studentColor: 'w', nameMove: true })

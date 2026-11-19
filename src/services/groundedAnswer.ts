@@ -13,7 +13,7 @@
  * live chat. Wiring it into `getCoachChatResponse` is the next step.
  */
 import { candidateCct, candidateCctSentence } from './candidateCct';
-import { temptingOnBoard, type WeighRead } from './weighedMoves';
+import { type WeighRead } from './weighedMoves';
 import { realMasterMoves } from './realMasterMoves';
 import { purposeFromLine } from './movePurpose';
 import { costWords } from './engineConstants';
@@ -51,11 +51,9 @@ import {
 } from './positionReadingService';
 import type { PressureCount } from './positionReadingService';
 import { gradeMove } from './accuracyService';
-import { readPosition } from './positionalRead';
 import { boardPlanFacts } from './boardPlanFacts';
 import { structurePlan } from './nextPlans';
 import { structureSignature } from './boardStructure';
-import { boardStructure } from './structureReads';
 import { minorMatchupOn, minorMatchupLine } from './minorMatchup';
 import { standingTarget, targetLine, targetSquares } from './targetSelector';
 import { breakDueNow } from './breakTiming';
@@ -69,7 +67,7 @@ import { strategicWhyLed, strategicWhyImperative } from './moveFundamentals';
 import { bestMoveReason, threatMadeWhy } from './deliberation';
 import { errorWhy, errorWhySentence, recordSecondReads } from './inaccuracyCall';
 import { liveMethodBeatFor } from './methodBeat';
-import { countKingAttack, detectKingExposure, kingExposureClause } from './kingSafety';
+import { countKingAttack } from './kingSafety';
 import { extractQuestionFocus, PURE_BOARD_ASPECTS } from './boardQuestionRouter';
 import type { QuestionAspect } from '../data/boardQuestionBuckets';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
@@ -79,7 +77,7 @@ import type { ConceptEntry } from './chessConceptService';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
 import type { FundamentalId } from './principleAttribution';
 import { FUNDAMENTAL_LESSON } from '../data/fundamentalLessons';
-import { andList, orList, fileList, countWord, withArticle } from '../utils/andList';
+import { andList, orList, fileList, withArticle } from '../utils/andList';
 import { afterCaptureSan, captureInWords } from '../utils/captureWords';
 import { captureLeadsTo } from './captureLeadsTo';
 import { findLoosePieces, type LoosePiece } from './loosePieces';
@@ -93,7 +91,6 @@ import { readOpposition, oppositionLine, oppositionSquares } from './oppositionR
 import { zugzwangOn, zugzwangSyncLine } from './zugzwangRead';
 import { raceCountOn, raceCountLine, raceCountSquares } from './raceCount';
 import { promotionChoicesOn, promotionChoiceLine } from './promotionChoice';
-import { keyDefenderPlan, keyDefenderLine, defenderSquares } from './keyDefender';
 import type { EndgameRuleMaterial } from '../coach/questionIntents';
 
 // Pure board-fact constants — universal chess values, leaf-local so this module
@@ -804,7 +801,7 @@ export function assembleKingSafetyAnswer(fen: string, studentColor: 'white' | 'b
       bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'],
     };
   }
-  const exposure = detectKingExposure(fen, target);
+  const exposure = readBoard('kingExposure', { fen, side: target, student: me, owner: true });
   if (!exposure) {
     // Say only what was checked (walk 2026-09-30, game 1: "no open lines" with
     // the g-file in front of the king wide open). Name any file beside the king
@@ -841,11 +838,7 @@ export function assembleKingSafetyAnswer(fen: string, studentColor: 'white' | 'b
           : `${Whose} king looks safe — its pawn cover is in place and nothing is attacking it right now.`;
     return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
   }
-  const clause = kingExposureClause(exposure);
-  const lead = whose === 'your' ? 'Your king' : 'Their king';
-  // kingExposureClause is written third-person; front it with the right owner.
-  const facts = clause ? `${lead}: ${clause}` : `${lead} is reasonably safe.`;
-  return { facts, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
+  return { facts: exposure.text, bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'] };
 }
 
 // ── MOVE PURPOSE — "what does d5 do?" ────────────────────────────────────────
@@ -1838,7 +1831,7 @@ export function assemblePositionAssessment(opts: {
   if (opts.fen && opts.tempting) {
     try {
       const mine = new Chess(opts.fen).turn() === sc;
-      const t = mine ? temptingOnBoard({ fen: opts.fen, student: sc, rating: opts.tempting.rating, reads: opts.tempting.reads, priorMove: null })[0] : undefined;
+      const t = mine ? readBoard('temptingNow', { fen: opts.fen, student: sc, rating: opts.tempting.rating, reads: opts.tempting.reads, priorMove: null }) : null;
       if (t && separate(t.text)) parts.push(t.text);
     } catch { /* the temptation is a bonus, never a blocker */ }
   }
@@ -1920,8 +1913,8 @@ export function assemblePositionAssessment(opts: {
     // computer the move thought speaks when a move does it.
     try {
       if (opts.line && opts.line.length > 0 && whiteCp !== null) {
-        const plan = keyDefenderPlan(fen, { rank: 1, evaluation: whiteCp, mate: typeof opts.mateIn === 'number' && opts.mateIn !== 0 ? opts.mateIn : null, moves: [...opts.line] });
-        if (plan) add(keyDefenderLine(plan, plan.defender.side !== sc, true, fen), defenderSquares(plan));
+        const plan = readBoard('keyDefenderNow', { fen, student: sc, line: { rank: 1, evaluation: whiteCp, mate: typeof opts.mateIn === 'number' && opts.mateIn !== 0 ? opts.mateIn : null, moves: [...opts.line] } });
+        if (plan) add(plan.text, plan.squares);
       }
     } catch { /* a bonus, never a blocker */ }
   }
@@ -1932,15 +1925,15 @@ export function assemblePositionAssessment(opts: {
     try {
       const already = parts.join(' ').toLowerCase();
       const reads: string[] = [];
-      for (const o of readPosition(opts.fen, studentColor)) {
+      for (const o of readBoardAll('positionRead', { fen: opts.fen, student: sc })) {
         // Skip an observation the eval/tactic line already covered (a shared
         // square token or subject) — a light guard, this is not the voice
         // package's cross-lane dedupe, just "don't say the same thing twice".
         const naming = o.text.toLowerCase().match(/[a-h][1-8]/)?.[0];
         if (naming && already.includes(naming)) continue;
         reads.push(o.text);
-        if (o.kind === 'passer') for (const sq of o.squares ?? []) passersRead.add(sq);
-        for (const sq of o.squares ?? []) {
+        if (positionReadKind(o) === 'passer') for (const sq of o.squares) passersRead.add(sq);
+        for (const sq of o.squares) {
           if (/^[a-h][1-8]$/.test(sq) && !keySquares.includes(sq)) keySquares.push(sq);
         }
         if (reads.length >= 2) break;
@@ -1953,7 +1946,7 @@ export function assemblePositionAssessment(opts: {
   // computers Learn and Review speak, read from the student's seat.
   if (opts.fen) {
     try {
-      for (const r of boardStructure(opts.fen, sc)) {
+      for (const r of readBoardAll('structureBoard', { fen: opts.fen, student: sc })) {
         parts.push(r.text);
         for (const sq of r.squares) if (/^[a-h][1-8]$/.test(sq) && !keySquares.includes(sq)) keySquares.push(sq);
       }
@@ -2033,12 +2026,12 @@ export function assembleAttackAssessment(fen: string, studentColor: 'white' | 'b
   const parts = [verdict];
   // The enemy king's own exposure — a broken castled shelter, or still uncastled
   // in the centre — is the other half of "is the attack worth it".
-  const exp = detectKingExposure(fen, them);
+  const cracked = readBoard('shelterCracked', { fen, student: me });
   const ekFile = ek.charCodeAt(0) - 97;
   const ekRank = Number(ek[1]);
   const uncastledCentre = ekFile >= 2 && ekFile <= 5 && (ekRank === (them === 'w' ? 1 : 8) || ekRank === (them === 'w' ? 2 : 7));
-  if (exp && exp.missingShield >= 2) {
-    parts.push(`Their shelter is cracked — ${exp.missingShield === 3 ? 'all three' : `${countWord(exp.missingShield)} of the three`} pawns in front of the king are gone.`);
+  if (cracked) {
+    parts.push(cracked.text);
   } else if (uncastledCentre) {
     parts.push(`Their king is still in the centre on ${ek} — a real target if you can open lines.`);
   }
@@ -6793,7 +6786,7 @@ export function assembleLastGameAnswer(g: LastGameLike | null): GroundedAnswer |
 // safety logic that nothing ever read — deleted; countMaterial/
 // centralPieceCount now live alongside the rest of this file's static reads.
 // ─────────────────────────────────────────────────────────────────────────────
-import { findBlockades, findPieceQuality, goodPieceReason, findWeakPawns, findWeakSquares, campHoles, holeTargets, developmentRead, kingSafetyRead, countMaterial, centralPieceCount, findColorComplexWeakness, findMinorityAttack } from './positionReadingService';
+import { findBlockades, findPieceQuality, goodPieceReason, findWeakPawns, findWeakSquares, campHoles, holeTargets, developmentRead, kingSafetyRead, countMaterial, centralPieceCount } from './positionReadingService';
 import { rotateStem } from '../utils/rotateStem';
 import { isOutpost } from './outpost';
 import { findQueenGrabTraps, queenGrabTrapLine } from './queenGrabTrap';
@@ -6806,6 +6799,7 @@ import { findTiedDefenders } from './tiedDefender';
 export type { PositionalTopic } from '../coach/questionIntents';
 import type { PositionalTopic } from '../coach/questionIntents';
 import { unmarked } from '../utils/sanMark';
+import { readBoard, readBoardAll, minorityLever, positionReadKind } from './boardComputers';
 
 const PIECE_WORD: Record<string, string> = { p: 'pawns', n: 'knights', b: 'bishops', r: 'rooks', q: 'queen', k: 'king' };
 
@@ -6988,22 +6982,22 @@ export function assemblePositionalAnswer(
     // ≥2 own-camp holes of that colour. Deterministic (G3) — the opponent's
     // pieces settle on those squares unchallenged. Honest decline when neither
     // side has one.
-    const cc = findColorComplexWeakness(fen);
-    const mine = cc.find((c) => c.side === myC);
-    const theirs = cc.find((c) => c.side === oppC);
-    const yours = mine ? `Your ${mine.complex} squares are weak: with no ${mine.complex}-squared bishop, no pawn or bishop of yours covers ${andList(mine.squares)}.` : '';
-    const opps = theirs ? `Their ${theirs.complex} squares are weak: they have no ${theirs.complex}-squared bishop, so a knight or bishop planted on ${orList(theirs.squares)} can't be challenged.` : '';
-    if (!yours && !opps) return { facts: `No colour-complex weakness right now — both sides still hold the bishop that covers those squares.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
-    return { facts: [opps, yours].filter(Boolean).join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    // The one colour-complex read and its one wording (the registry's), theirs first.
+    const cc = readBoardAll('colourComplex', { fen, student: myC });
+    if (cc.length === 0) return { facts: `No colour-complex weakness right now — both sides still hold the bishop that covers those squares.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    return { facts: cc.map((f) => f.text).join(' '), bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 
   if (topic === 'minority-attack') {
     // A pawn minority on a flank with a legal lever ready to make contact. Names
     // the concrete push + target (G3), never a vague "play on the wing".
-    const ma = findMinorityAttack(fen, myC);
-    if (ma) return { facts: `You have a minority attack on the ${ma.flank}: push ${ma.leverSan} to hit the pawn on ${ma.target}, forcing a trade that leaves them a backward pawn on a half-open file to target.`, bestMoveSan: ma.leverSan, bestMoveFromTo: null, sources: src };
-    const theirs = findMinorityAttack(fen, oppC);
-    if (theirs) return { facts: `They have a minority attack on the ${theirs.flank} — ${theirs.leverSan} is coming to hit your pawn on ${theirs.target}, and the trade would leave you a weak pawn there. Prepare to defend it or break the tension first.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    // The one minority-attack read and its one wording (the registry's): the
+    // student's own first, else theirs.
+    const ma = readBoardAll('minority', { fen, student: myC });
+    const mine = ma.find((f) => f.seat === 'student');
+    if (mine) return { facts: mine.text, bestMoveSan: minorityLever(mine), bestMoveFromTo: null, sources: src };
+    const theirs = ma.find((f) => f.seat === 'opponent');
+    if (theirs) return { facts: theirs.text, bestMoveSan: null, bestMoveFromTo: null, sources: src };
     return { facts: `No minority attack going — no flank where one side has fewer pawns with a lever ready to strike.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 

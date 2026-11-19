@@ -23,13 +23,11 @@ describe('boardComputers — the one registry', () => {
         const viaRegistry = new RegExp(`readBoard(All)?\\('${id}'`).test(code);
         const fnByComputer: Partial<Record<ComputerId, RegExp>> = {
           prophylaxis: /findProphylaxis\(/, tiedDefender: /newTiedDefender\(/, trapped: /trappedOnBoard\(/,
-          structureMove: /studentMoveStructure\(/, structureTheirMove: /theirMoveStructure\(/, structureBoard: /boardStructure\(/,
+          structureMove: /studentMoveStructure\(/, structureTheirMove: /theirMoveStructure\(/,
           // Learn packs the priority to the hint dial's register, so it calls the computer itself.
           priorityFirst: /buildPriorityFirst\(/,
           // The composer reads the opening-theory and move-gain computers directly (gaps A-B, 2026-11-12).
           openingTheory: /openingTheoryFacts\(/, moveGains: /moveStops\(/,
-          // The asked position read weighs the tempting move with the reads it took itself.
-          temptingNow: /temptingOnBoard\(/,
         };
         if (!viaRegistry && !(fnByComputer[id]?.test(code))) bad.push(`${id}/${surface}: ${ans.wired} never calls it`);
       }

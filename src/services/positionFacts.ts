@@ -1697,7 +1697,7 @@ function buildClauses(a: {
   // §9 king-safety — an exposed castled king under real fire. Ranks just below
   // the pin/skewer warnings: a drafty king is a standing danger, not a routine
   // plan. Uses the 'latent-danger' kind (same prophylactic family).
-  const exposureFact = kingExposure ? readBoard('kingExposure', { fen: a.fen, student }) : null;
+  const exposureFact = kingExposure ? readBoard('kingExposure', { fen: a.fen, side: student, student, owner: false }) : null;
   if (exposureFact) ranked.push(readClause(exposureFact, 'latent-danger', a.fen));
 
   // Incoming fire — the opponent's standing threat against the student (their

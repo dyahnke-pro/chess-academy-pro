@@ -16,13 +16,9 @@ import type { WalkableLine } from '../types';
 import { settledNetForLine } from './exchangeLedger';
 import { sayMoveClause } from './spokenMove';
 import { countWords } from '../utils/countWords';
-import { pvSans, hookCreated, holeAccess } from './moveInsight';
-import { walkableLine, lineProof, isProof, NO_PROOF, type FactProof, type Proof } from './proof';
-import { findProphylaxis, prophylaxisKey, prophylaxisThreatProof } from './prophylaxis';
-import { criticalityThresholds } from './criticalityScan';
-import { lineSeatAt } from '../utils/andList';
+import { pvSans, holeAccess } from './moveInsight';
+import { walkableLine, isProof, NO_PROOF, type FactProof } from './proof';
 import { kingAttackReads, type KingRead } from './kingAttackReads';
-import { tempoCount } from './tempoCount';
 import { homeMinorCount } from './development';
 import { legalSeeGainFor } from './positionReadingService';
 import type { Stakes } from './factStakes';
@@ -32,7 +28,6 @@ import { namesMoves, type NamesStudentMove } from './studentMoveNaming';
 import { readBoard, readBoardAll, readKey } from './boardComputers';
 import type { TacticType } from '../types';
 import { orderReads } from './orderReads';
-import { inBetweenMove } from './inBetweenMove';
 
 const cap = (s: string): string => openSentence(s);
 const NUM = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
@@ -186,36 +181,14 @@ export function sayLine(startFen: string, sans: readonly string[], me: 'w' | 'b'
   return { text: `${cap(body)}${tail}.`, line };
 }
 
-interface Candidate { san: string; pv: readonly string[]; /** Mover's-seat centipawns. */ cp: number }
-
-/**
- * NOT YET — FIRST THIS (his "I didn't take on h4 right away; Be5 first,
- * hitting the rook, and only then did I take"): a capture is on the board,
- * the engine's move is a different, forcing move, and the capture is still
- * there later in its line.
- */
-export function notYet(fen: string, best: Candidate): { text: string; capture: string; captureSquare: string; line: string[] } | null {
-  // ONE DETECTOR (A-plan P7): the in-between move, read by `inBetweenMove`,
-  // which the tactic record reads too.
-  // `best.pv` is the engine's line in UCI, its first move the best move.
-  const ib = inBetweenMove(fen, [...best.pv], 'best');
-  if (!ib) return null;
-  return {
-    capture: ib.capture,
-    captureSquare: ib.captureSquare,
-    line: ib.line,
-    text: `The capture on ${ib.captureSquare} is not going anywhere. Not yet — first ${sayMoveClause(best.san, fen)}${ib.check ? ' with check' : ''}, and take after.`,
-  };
-}
-
 interface Habit { kind: 'tempo' | 'undeveloped' | 'loose' | 'king-pawns'; text: string }
 
 /**
  * WHAT THEY KEEP DOING (his "he keeps moving the same piece in the opening —
  * you punish that by obeying the principles yourself"). The piece-moved-again
- * count is THE tempo computer (`tempoCount`, census P2 #7) — never a second
- * copy here; the queen out early is `ruleException`'s. This adds only the
- * development count: their minors still at home deep into the opening.
+ * count is THE tempo computer (`tempoCount`, census P2 #7), which the
+ * registry's `theirHabit` read says beside these — never a second copy here;
+ * the queen out early is `ruleException`'s.
  */
 export function opponentHabits(sans: readonly string[], opp: 'w' | 'b', sound: ReadonlySet<number>): Habit[] {
   return habitsOf(sans, opp, 'their', sound);
@@ -254,10 +227,6 @@ export function habitsOf(
     out.push({ kind: 'king-pawns', text: seat === 'their'
       ? `They keep pushing the pawns in front of their own king — ${num(reads.kingPawnPushes)} so far, and every push leaves a hole beside it. Aim your pieces at those squares.`
       : `You keep pushing the pawns in front of your own king — ${num(reads.kingPawnPushes)} so far, and every push leaves a hole beside it for their pieces. Leave those pawns at home unless the push wins something.` });
-  }
-  if (seat === 'their') {
-    const t = tempoCount(sans, side === 'w' ? 'b' : 'w');
-    if (t) out.push({ kind: 'tempo', text: t.text });
   }
   const c = new Chess();
   for (const s of sans.slice(0, 24)) { try { c.move(s); } catch { break; } }
@@ -389,8 +358,8 @@ export function depthClauses(args: {
     if (toMove === args.studentColor) {
       // Never argue with the engine: the verdict on the stop is its own
       // (game 2, 10.Ng5 — the engine prefers h3, so h3 is the answer, not a flaw).
-      const flaw = obviousStopFlaw(args.fen, args.studentColor, args.topLines);
-      if (flaw) out.push({ kind: 'stop-flaw', text: flaw.text, proof: flaw.proof, squares: flaw.squares, lines: flaw.lines, ...(flaw.motif ? { motif: flaw.motif } : {}), claim: prophylaxisKey(flaw.threatTo) });
+      const flaw = readBoard('obviousStop', { fen: args.fen, student: args.studentColor, lines: args.topLines });
+      if (flaw) out.push({ kind: 'stop-flaw', text: flaw.text, proof: flaw.proof, squares: [...flaw.squares], lines: (flaw.lines ?? []).map((l) => ({ fen: l.fen, sans: [...l.sans] })), ...(flaw.motif ? { motif: flaw.motif } : {}), claim: readKey(flaw) });
     }
     // READING THEIR MOVE (computers batch 2) — on the student's turn, what
     // their last move threatened quietly, needs, lifted, wrongly expected, or
@@ -466,12 +435,9 @@ export function depthClauses(args: {
     if (!top || !uci) return out;
     let bestSan: string;
     try { bestSan = new Chess(args.fen).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }).san; } catch { return out; }
-    const best: Candidate = { san: bestSan, pv: top.moves, cp: top.evaluation };
-    const ny = notYet(args.fen, best);
-    // Its proof is the engine's line through the capture: the capture is still
-    // there after the forcing move (an engine line, so never recited as fact).
-    if (ny) out.push({ kind: 'not-yet', text: ny.text, lines: [{ fen: args.fen, sans: ny.line }], squares: [ny.captureSquare], proof: lineProof({ fen: args.fen, sans: ny.line }, lineSeatAt(args.fen, args.studentColor)) ?? NO_PROOF.description });
-    const sans = pvSans(args.fen, [...best.pv], 6);
+    const ny = readBoard('notYet', { fen: args.fen, bestSan, pv: top.moves, student: args.studentColor });
+    if (ny) out.push({ kind: 'not-yet', text: ny.text, lines: (ny.lines ?? []).map((l) => ({ fen: l.fen, sans: [...l.sans] })), squares: [...ny.squares], proof: ny.proof });
+    const sans = pvSans(args.fen, [...top.moves], 6);
     // Walked where the moment calls for calculation (`walksBestLine`); there
     // the walk owns the best line, material and mate included, and the
     // weighing leaves its own copy of it out (`positionFacts`).
@@ -486,64 +452,4 @@ export function depthClauses(args: {
     }
   } catch { /* depth is a bonus, never a blocker */ }
   return out;
-}
-
-// ── THE REST OF HIS GAME-2 READ (full transcript, 2026-10-05) ────────────────
-
-/**
- * THE OBVIOUS STOP THAT DOESN'T WORK (his "what does Black want? …Bg4, a nasty
- * pin. The obvious move is h3 — why don't I want it? h3 creates a hook").
- *
- * ONE COMPUTER OWNS THEIR WANTED PIN, KICK OR FORK (OS-1 root cause 1):
- * `findProphylaxis` finds it and its stop; this reads only the VERDICT on that
- * stop. A pawn stop that hands them a hook is the obvious stop that fails only
- * when the ENGINE agrees — it ranked the stop a notable step below the best
- * move. Otherwise the
- * stop is the held answer (the prophylaxis lane), never both: the two used to
- * say "one move stops it" and "find another way" about the same h3.
- * The clause is ONE fact: the threat and the verdict in one text, carrying the
- * threat's line from the board where they would play it, its squares and an
- * exact proof — so it is graded on the board it is about.
- */
-export function obviousStopFlaw(
-  fen: string,
-  me: 'w' | 'b',
-  topLines: ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate: number | null }>,
-): { threatSan: string; threatTo: string; stopSan: string; text: string; proof: Proof; squares: string[]; lines: Array<{ fen: string; sans: string[] }>; motif?: TacticType } | null {
-  let board: Chess;
-  try { board = new Chess(fen); } catch { return null; }
-  if (board.turn() !== me) return null;
-  const p = findProphylaxis(fen);
-  if (!p || p.prevention.piece !== 'p') return null;
-  const hook = hookCreated(fen, p.prevention.san);
-  if (!hook) return null;
-  if (!stopRefuted(fen, `${p.prevention.from}${p.prevention.to}`, topLines)) return null;
-  const verb = p.kind === 'pin' ? 'pinning' : p.kind === 'fork' ? 'forking' : 'hitting';
-  const theirTurn = p.threat.line.fen;
-  return {
-    threatSan: p.intent.san,
-    threatTo: p.intent.to,
-    stopSan: p.prevention.san,
-    text: `They want ${sayMoveClause(p.intent.san, theirTurn)}, ${verb} your ${PIECE_WORD[p.victim.piece] ?? 'piece'} on ${p.victim.square}. The obvious stop is ${sayMoveClause(p.prevention.san, fen)}, but that pawn becomes a hook for their pawn on ${hook.pawn} — find another way.`,
-    proof: prophylaxisThreatProof(p),
-    squares: [...p.threat.squares],
-    lines: [{ fen: p.threat.line.fen, sans: [...p.threat.line.sans] }],
-    ...(p.threat.motif ? { motif: p.threat.motif } : {}),
-  };
-}
-
-const PIECE_WORD: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
-
-/** The engine's verdict on a stop (UCI): refuted only when the engine ranked
- *  it and it sits a notable step below the best line. */
-function stopRefuted(fen: string, uci: string, lines: ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate: number | null }>): boolean {
-  if (lines.length === 0) return false;
-  const sign = fen.split(' ')[1] === 'w' ? 1 : -1;
-  const cp = (l: { evaluation: number; mate: number | null }): number => (l.mate != null ? (l.mate > 0 ? 100000 : -100000) : l.evaluation) * sign;
-  const at = lines.findIndex((l) => l.moves[0]?.slice(0, 4) === uci);
-  if (at === 0) return false;
-  // Absent from the lines, its value is unknown — a MultiPV list can hold
-  // worse moves than the stop (h3 −0.31 at d20 sat below Ng5 −0.41 on the
-  // OS-1 board), so absence is never a refutation.
-  return at > 0 && cp(lines[0]) - cp(lines[at]) >= criticalityThresholds().notable;
 }

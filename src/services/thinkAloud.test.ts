@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { lineAchieves, sayLine, notYet, opponentHabits, depthClauses, obviousStopFlaw, NO_SOUND_PLIES, walksBestLine } from './thinkAloud';
+import { lineAchieves, sayLine, depthClauses, NO_SOUND_PLIES, walksBestLine } from './thinkAloud';
+import { readBoard, readBoardAll } from './boardComputers';
 import { moveWhy } from './deliberation';
 import { materialPlan, holeAccess } from './moveInsight';
 
@@ -30,14 +31,15 @@ describe('think aloud — the speed-run depth', () => {
     expect(lineAchieves('4k3/8/8/3q4/8/8/8/3QK3 w - - 0 1', ['Qxd5'], 'w').kind).toBe('material');
   });
   it('not yet — check first, the capture is still there after', () => {
-    const r = notYet('7k/p3R3/8/8/8/8/8/6K1 w - - 0 1', { san: 'Re8+', pv: ['e7e8', 'h8h7', 'e8e7', 'h7g6', 'e7a7'], cp: 500 });
-    expect(r?.capture).toBe('Rxa7');
+    const r = readBoard('notYet', { fen: '7k/p3R3/8/8/8/8/8/6K1 w - - 0 1', bestSan: 'Re8+', pv: ['e7e8', 'h8h7', 'e8e7', 'h7g6', 'e7a7'], student: 'w' });
+    expect(r?.lines?.[0]?.sans).toContain('Rxa7');
+    expect(r?.squares).toEqual(['a7']);
     expect(r?.text).toMatch(/Not yet — first .* with check/);
   });
   it('their habit: the same knight moved three times', () => {
     // the piece-moved-again count is THE tempo computer's (tempoCount)
-    const h = opponentHabits(['e4', 'Nf6', 'Nc3', 'Nd5', 'Nf3', 'Nb4'], 'b', NO_SOUND_PLIES);
-    expect(h[0]?.kind).toBe('tempo');
+    const h = readBoardAll('theirHabit', { history: ['e4', 'Nf6', 'Nc3', 'Nd5', 'Nf3', 'Nb4'], student: 'w', sound: NO_SOUND_PLIES });
+    expect(h[0]?.claims).toEqual(['habit:their:tempo']);
   });
 });
 
@@ -78,9 +80,9 @@ describe('his game-2 read, computed (full transcript)', () => {
   it('"what does Black want? …Bg4. The obvious move is h3 — but h3 creates a hook"', () => {
     const fen = fenAt('e4 e5 Nf3 Nc6 Bb5 Nd4 Nxd4 exd4 O-O Bc5 d3 Qh4 Nd2 c6 Bc4 d6 Nf3 Qh5');
     // The engine ranks h3 a full pawn below its best: the obvious stop fails.
-    const f = obviousStopFlaw(fen, 'w', [{ moves: ['c2c3'], evaluation: 40, mate: null }, { moves: ['h2h3'], evaluation: -60, mate: null }]);
-    expect(f?.threatSan).toBe('Bg4');
-    expect(f?.stopSan).toBe('h3');
+    const f = readBoard('obviousStop', { fen, student: 'w', lines: [{ moves: ['c2c3'], evaluation: 40, mate: null }, { moves: ['h2h3'], evaluation: -60, mate: null }] });
+    expect(f?.marks?.theirs?.to).toBe('g4');
+    expect(f?.marks?.play).toEqual({ from: 'h2', to: 'h3' });
     expect(f?.text).toMatch(/hook/);
   });
   it('inaccessibility: a weak square their knight cannot reach soon is no worry', () => {
