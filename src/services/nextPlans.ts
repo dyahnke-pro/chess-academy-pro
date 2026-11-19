@@ -477,7 +477,14 @@ export function deriveNextPlanFacts(
     // One step a sentence (David 2026-11-08, the human voice): "control h3 …;
     // then stack your rooks … — each one is a piece of theirs tied to it" was
     // two steps and an aside joined into one breath.
-    const pile = heavies.length > 0
+    // A FILE SHUT BY YOUR OWN PAWN IS NO ROAD (Danya, positional combinations
+    // #4: d5 "cannot be attacked directly" — White's own d4 pawn stands on
+    // the file): the heavy pieces cannot reach it down the file, so the
+    // attack comes from the side.
+    const fileShut = occupant?.color === studentColorWB && occupant.type === 'p';
+    const pile = fileShut
+      ? `it cannot be hit down the file, so bring your pieces at it from the side and trade off its defenders: each one is tied to it`
+      : heavies.length > 0
       ? `${heavyNoun} and trade off its defenders: each one is tied to it`
       : 'bring your king and pieces to it and trade off its defenders: each one is tied to it';
     add('weak-pawn', `win their weak pawn on ${weak}`, `winning their weak pawn on ${weak}`, `${blockBit ? `${blockBit}. Then ` : ''}${pile}${countBit(chess, weak as Square, studentColorWB)}`, [weak, block]);

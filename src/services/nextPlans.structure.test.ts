@@ -81,3 +81,19 @@ describe('structurePlanFact — the runner that cannot run', () => {
     expect(planRaceClause('8/5ppk/3P3p/8/8/2p4P/5PP1/K7 b - - 0 2', 'b', 'live')).toMatch(/both sides have a runner/);
   });
 });
+
+// Danya, positional combinations #4: d5 "cannot be attacked directly" — the
+// student's own d4 pawn shuts the file.
+describe('the weak-pawn plan never sends a rook down a file its own pawn shuts', () => {
+  it('positional combinations #4', async () => {
+    const { deriveNextPlanFacts } = await import('./nextPlans');
+    const p = deriveNextPlanFacts('1n3rk1/8/pp3p2/3p2pp/3P4/2R5/PP3PPP/4NK2 w - - 0 27', 'w', { namesStudentMoves: true }).find((x) => x.kind === 'weak-pawn');
+    expect(p?.text).toMatch(/cannot be hit down the file/);
+    expect(p?.text).not.toMatch(/put your rook on its file/);
+  });
+  it('negative control: with the file open the rook goes to it', async () => {
+    const { deriveNextPlanFacts } = await import('./nextPlans');
+    const p = deriveNextPlanFacts('r5k1/pp3ppp/2n5/4P3/8/8/PP4PP/6K1 b - - 0 20', 'b', { namesStudentMoves: true }).find((x) => x.kind === 'weak-pawn');
+    expect(p?.text).toMatch(/put your rook on its file/);
+  });
+});
