@@ -328,13 +328,13 @@ describe('a deep fact that takes the attacked piece is not said twice', () => {
 describe('onlyMove (gap B6)', () => {
   const start = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
   it('names the next best and what it gives up when only the played move holds', async () => {
-    const { onlyMove } = await import('./moveThoughtFacts');
+    const { onlyMove } = await import('./thoughtReads');
     expect(onlyMove(start, 'e2e4', [{ moves: ['e2e4'], evaluation: 40 }, { moves: ['g1f3'], evaluation: -260 }])).toEqual({ secondSan: 'Nf3', gives: "gives up about a piece's worth" });
     // Said as material, never a bare "far more" (Learn prod audit 2026-11-18).
     expect(onlyMove(start, 'e2e4', [{ moves: ['e2e4'], evaluation: 40 }, { moves: ['g1f3'], evaluation: -560 }])?.gives).toBe("gives up more than a rook's worth");
   });
   it('says nothing when the played move is not the best, or another move holds too', async () => {
-    const { onlyMove } = await import('./moveThoughtFacts');
+    const { onlyMove } = await import('./thoughtReads');
     expect(onlyMove(start, 'd2d4', [{ moves: ['e2e4'], evaluation: 40 }, { moves: ['d2d4'], evaluation: -170 }])).toBeNull();
     expect(onlyMove(start, 'e2e4', [{ moves: ['e2e4'], evaluation: 40 }, { moves: ['d2d4'], evaluation: 30 }])).toBeNull();
   });
