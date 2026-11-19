@@ -598,6 +598,15 @@ export function describeProofResult(
   const promotes = (ps: readonly PieceLetter[]): string => (ps.includes('q') ? 'queen' : 'promote');
   if (op.length > 0 && sp.length === 0 && ledger.netPawns < 0) return `they ${promotes(op)} first`;
   if (sp.length > 0 && op.length === 0 && ledger.netPawns > 0) return `you ${promotes(sp)} first`;
+  // A PROMOTED PIECE IS MATERIAL TOO (Danya narration test 2026-11-19, a
+  // guide to underpromotion #2: "Rd8? Then they answer Rxd3 and you play f8=B
+  // — they win a bishop", when the pawn came back a bishop and the line ends
+  // a pawn down). With a promotion in the line, the captures alone miscount:
+  // the net is said.
+  if ((sp.length > 0 || op.length > 0) && ledger.netPawns !== 0) {
+    const n = Math.abs(ledger.netPawns);
+    return `${ledger.netPawns > 0 ? 'you' : 'they'} come out ${n === 1 ? 'a pawn' : `${COUNT_WORD[n] ?? n} pawns`} up`;
+  }
   const two = describeExchange(ledger);
   // A like-for-like trade that leaves one side a clean gain is that gain.
   const g = [...ledger.studentWon]; const l = [...ledger.opponentWon];
