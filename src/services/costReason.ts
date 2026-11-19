@@ -36,6 +36,10 @@ export interface LineRead {
   source: 'deep' | 'record';
   /** REQUIRED: other reads of this board (`[]` = none), or `VERIFIED_LINE`. */
   seconds: LineSeconds;
+  /** The engine scored this read a forced mate for the line's winner. A line
+   *  that also ends in checkmate on the board is then named at any distance
+   *  (`lineTrust` `scoredMate`). Default false. */
+  scoredMate?: boolean;
 }
 
 export interface ReasonPly { san: string; uci: string; fenBefore: string; fenAfter: string; moverColor: 'white' | 'black' }
@@ -217,7 +221,7 @@ function walk(
       }
     } catch { return null; }
   }
-  const trust = lineTrust({ fen, uci: shown.map((p) => p.uci), plies: blowPlies, winner, seconds: read.seconds });
+  const trust = lineTrust({ fen, uci: shown.map((p) => p.uci), plies: blowPlies, winner, seconds: read.seconds, scoredMate: !!read.scoredMate && proof.mate });
   let motif: TacticType | null = null;
   try { motif = detectTacticType(fen, shown[0].uci, shown.map((p) => p.uci)); } catch { motif = null; }
   return {

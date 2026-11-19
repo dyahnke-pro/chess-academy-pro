@@ -706,7 +706,7 @@ export interface ReviewMoveSegment {
   /** The student's missed win three or more moves out, named on the naming
    *  rule — saved onto the move's mistake puzzle for Calculation
    *  (`attachCalcLines`). */
-  calcLine?: { uci: string[]; blowPlies: number; why: 'agreed' | 'forcing-agreed' | 'verified' };
+  calcLine?: { uci: string[]; blowPlies: number; why: 'agreed' | 'forcing-agreed' | 'board-proven' | 'forced-mate' | 'verified' };
   /** The ONE cost reason (`costReason`), both seats, as the decision row
    *  carries it — so an audit holds the two seats to the same depth. */
   reasonRow?: CostReasonRow;
@@ -5304,7 +5304,7 @@ async function augmentWithProjections(
       if (isStudentSlip) {
         const missedWin = r?.kind === 'missed' ? r : reasonFor(s, null, deep.before, 'before-only');
         const w = missedWin?.trust.why;
-        if (missedWin && missedWin.trust.name && missedWin.blowPlies > NAME_NEAR_PLIES && (w === 'agreed' || w === 'forcing-agreed' || w === 'verified')) {
+        if (missedWin && missedWin.trust.name && missedWin.blowPlies > NAME_NEAR_PLIES && (w === 'agreed' || w === 'forcing-agreed' || w === 'board-proven' || w === 'forced-mate' || w === 'verified')) {
           s.calcLine = { uci: missedWin.plies.map((p) => p.uci), blowPlies: missedWin.blowPlies, why: w };
         }
       }

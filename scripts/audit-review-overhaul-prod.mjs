@@ -1193,7 +1193,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
       // (their punishment withheld for your own next move counts as named).
       if (Array.isArray(cov.reasonRows)) {
         const rows = cov.reasonRows;
-        const bad = rows.filter((r) => r.spoken && !['near', 'agreed', 'forcing-agreed'].includes(r.why));
+        const bad = rows.filter((r) => r.spoken && !['near', 'agreed', 'forcing-agreed', 'board-proven', 'forced-mate'].includes(r.why));
         const share = (seat) => {
           const mat = rows.filter((r) => r.seat === seat && r.kind !== 'none');
           const told = mat.filter((r) => r.named);
