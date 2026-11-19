@@ -807,7 +807,8 @@ export function positionPosed(
 /** The registry computers whose read poses a question to the side to move. */
 type RegistryPosedComputer = 'detectLatentFork' | 'detectLatentDanger' | 'detectTradeCreatesPin' | 'detectCentralKingDanger' | 'detectKingExposure' | 'findQueenGrabTraps'
   | 'findTrappedPiece' | 'readConversion' | 'noSafeChecks' | 'kingRace' | 'kingActivityGap' | 'zugzwangIfPassed' | 'mateLine' | 'kingInOpen' | 'seventhRankMate'
-  | 'queenlessMate' | 'selfBlock' | 'mateThreatLever' | 'queenKnightNet' | 'lateralRookDefence' | 'kingSiege';
+  | 'queenlessMate' | 'selfBlock' | 'mateThreatLever' | 'queenKnightNet' | 'lateralRookDefence' | 'kingSiege'
+  | 'keySquaresOn' | 'shoulderOn' | 'connectedPassersOn';
 
 /** How sharply each posed question is asked, on the heat map's scale. */
 const REGISTRY_POSED_WEIGHT: Record<RegistryPosedComputer, number> = {
@@ -832,6 +833,9 @@ const REGISTRY_POSED_WEIGHT: Record<RegistryPosedComputer, number> = {
   queenKnightNet: 70,
   lateralRookDefence: 60,
   kingSiege: 70,
+  keySquaresOn: 65,
+  shoulderOn: 60,
+  connectedPassersOn: 70,
 };
 
 /** The registry's reads of the board the student moves on, each fact with
@@ -865,6 +869,12 @@ export function registryPosedFacts(fen: string, me: 'w' | 'b', bestLineUci: read
     // tempo — both ask the student's king to do the work.
     ...readBoardAll('kingActivityGap', { fen, lines: null, student: me }),
     ...readBoardAll('zugzwangIfPassed', { fen, student: me }),
+    // The endgame board reads: your king one step from a key square of your
+    // passer, your king or rook keeping theirs off a passer, your connected
+    // passers a lone piece cannot stop.
+    ...readBoardAll('keySquareRead', { fen, student: me }),
+    ...readBoardAll('shoulderRead', { fen, student: me }),
+    ...readBoardAll('connectedPassers', { fen, student: me }),
     // Your king walked or driven out from behind its pawns, their checks on it.
     ...readBoardAll('kingInOpen', { fen, lines: null, student: me }),
     // Their rooks on your second rank, held off only by your back rank.

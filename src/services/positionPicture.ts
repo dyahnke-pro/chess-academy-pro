@@ -350,6 +350,9 @@ export const PICTURE_ROLE: Record<ComputerName, PictureRole> = {
   mateThreatLever: 'threat',
   queenlessMate: 'threat',
   pieceTempo: 'plan',
+  keySquaresOn: 'asset',
+  shoulderOn: 'asset',
+  connectedPassersOn: 'threat',
 };
 
 /** One thing on the board a fact is about: a piece where it stands on the

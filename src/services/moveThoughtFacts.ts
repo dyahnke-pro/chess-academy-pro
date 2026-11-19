@@ -727,6 +727,11 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
           const lines = (i.reads?.after ?? []).map((l) => ({ moves: l.moves, cp: l.evaluation, mate: l.mate ?? null }));
           const batch: Array<{ f: CoachFact; idea: IdeaKind; weight: number }> = [
             ...readBoardAll('zugzwangIfPassed', { fen: after, student }).map((f) => ({ f, idea: 'king-activity' as IdeaKind, weight: 64 })),
+            // The endgame board reads: key squares, the shoulder or the rook's
+            // wall, two connected passers a lone piece cannot stop.
+            ...readBoardAll('keySquareRead', { fen: after, student }).map((f) => ({ f, idea: 'king-activity' as IdeaKind, weight: 64 })),
+            ...readBoardAll('shoulderRead', { fen: after, student }).map((f) => ({ f, idea: 'king-activity' as IdeaKind, weight: 60 })),
+            ...readBoardAll('connectedPassers', { fen: after, student }).map((f) => ({ f, idea: 'passed-pawn' as IdeaKind, weight: 66 })),
             ...readBoardAll('theirWorstPiece', { fen: after, student, bestLine: lines[0]?.moves ?? null }).map((f) => ({ f, idea: 'weakness' as IdeaKind, weight: 48 })),
             ...readBoardAll('seventhRankMate', { fen: after, lines: lines.length ? lines : null, student }).map((f) => ({ f, idea: 'attack-king' as IdeaKind, weight: 56 })),
             // Batch 3: no queens and still a mate (made or threatened).
