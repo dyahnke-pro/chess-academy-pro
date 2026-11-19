@@ -550,6 +550,22 @@ function stormPawns(chess: Chess, color: Color, wing: 'kingside' | 'queenside'):
   return chess.board().flat().filter((p) => p?.type === 'p' && p.color === color && files.includes(p.square[0])).length;
 }
 
+/** How many files `color` has pawns on, on `wing`. */
+function stormFiles(chess: Chess, color: Color, wing: 'kingside' | 'queenside'): number {
+  const files = wing === 'kingside' ? 'fgh' : 'abc';
+  const on = new Set<string>();
+  for (const p of chess.board().flat()) if (p?.type === 'p' && p.color === color && files.includes(p.square[0])) on.add(p.square[0]);
+  return on.size;
+}
+
+/** Has a pawn of `color` on `wing` already reached the other side's third
+ *  rank (the storm landed at the king)? */
+function stormLanded(chess: Chess, color: Color, wing: 'kingside' | 'queenside'): boolean {
+  const files = wing === 'kingside' ? 'fgh' : 'abc';
+  const rank = color === 'w' ? '6' : '3';
+  return chess.board().flat().some((p) => p?.type === 'p' && p.color === color && files.includes(p.square[0]) && p.square[1] === rank);
+}
+
 /** Kings castled on opposite wings with queens on: the race, and its count. */
 export function oppositeWingsRace(fen: string, studentColor: Color, register: RaceRegister): OppositeWingsRace | null {
   const s = describeStructure(fen);
@@ -565,6 +581,15 @@ export function oppositeWingsRace(fen: string, studentColor: Color, register: Ra
   // a piece attack, a mate). The claim says both sides' pawns go after the
   // other king, so each side owns two pawns on the other king's wing.
   if (stormPawns(chess, studentColor, theirWing) < 2 || stormPawns(chess, opp, myWing) < 2) return null;
+  // A STORM IS PAWNS ON TWO FILES, NOT YET LANDED (Danya: "push the h- and
+  // g-pawns"; the positional threat #0, where Black's only queenside pawns are
+  // the doubled c-pawns of a "crippled pawn structure"; queen the supporting
+  // actress #3, where the f6 pawn already sits at the king and "the queen and
+  // pawn tandem" is an attack with pieces, not a race): each side's pawns on
+  // the other king's wing stand on two files or more, and none of them is on
+  // the other side's third rank already.
+  if (stormFiles(chess, studentColor, theirWing) < 2 || stormFiles(chess, opp, myWing) < 2) return null;
+  if (stormLanded(chess, studentColor, theirWing) || stormLanded(chess, opp, myWing)) return null;
   const storm = detectStormRace(chess, studentColor);
   const past = register === 'review';
   const kings = [s.kings.kingSquare[studentColor], s.kings.kingSquare[opp]];

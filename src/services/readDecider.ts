@@ -187,6 +187,19 @@ export function decideRead<F extends ReadFact>(facts: readonly F[], ctx: ReadCon
   let target = new Set<string>();
   const named = new Set<string>();
   const onTarget = (f: F): boolean => f.squares.some((s) => target.has(s));
+  // THE VERDICT'S REASON IS THE CLAIM (readers' flags 2026-11-19: beginner
+  // chess strategy #6, how to survive a chess disaster #0): "you're losing —
+  // their passed pawn on d6 is two steps from queening, your isolated pawn on
+  // c3 …" and then "the target is your pawn on c3" or "both sides have a
+  // runner" says the same pawns again. A target or a race line about a pawn
+  // the verdict already named is that verdict said twice.
+  let verdictPawns = new Set<string>();
+  const restatesVerdict = (f: F): boolean => {
+    if (verdictPawns.size === 0) return false;
+    const race = f.kind === 'plan-race' || (f.kind === 'structure-plan' && /^Both sides ha(ve|d) a runner/.test(f.text));
+    if (!race && f.kind !== 'target' && f.kind !== 'their-target') return false;
+    return f.squares.some((sq) => verdictPawns.has(sq));
+  };
   const steps = ctx.puzzle ? PUZZLE_STEPS : READ_STEPS;
   for (const row of steps) {
     const candidates = facts.filter((x) =>
@@ -203,6 +216,7 @@ export function decideRead<F extends ReadFact>(facts: readonly F[], ctx: ReadCon
       // off the point of the shot.
       && !(ctx.puzzle && row.step === 'concept' && x.squares.length === 0)
       && !out.some((o) => o.text === x.text)
+      && !restatesVerdict(x)
       // ONE IDEA ONCE: a story line whose every square was named adds nothing.
       && (!row.sayOnce || x.squares.length === 0 || x.squares.some((sq) => !named.has(sq))));
     let pick: F | null = candidates.find((x) => !!x.computer && !!row.first?.includes(x.computer)) ?? null;
@@ -217,6 +231,10 @@ export function decideRead<F extends ReadFact>(facts: readonly F[], ctx: ReadCon
     out.push(pick);
     for (const sq of pick.squares) named.add(sq);
     if (row.step === 'priority') target = new Set(pick.squares);
+    // The pawns the verdict's reason is about (a passer, a weak pawn).
+    if (row.step === 'verdict' && ctx.fen) {
+      try { const b = new Chess(ctx.fen); verdictPawns = new Set(pick.squares.filter((sq) => b.get(sq as Square)?.type === 'p')); } catch { /* an unreadable board names no pawn */ }
+    }
   }
   return { facts: withDetails(out, facts, ctx), habit: habitOf(facts, ctx) };
 }

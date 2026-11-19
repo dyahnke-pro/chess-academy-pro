@@ -121,3 +121,18 @@ describe('the weak-pawn siege names the pieces on the board', () => {
     expect(t).not.toMatch(/defenders|pieces at it/);
   });
 });
+
+describe("Danya's reads of a plan's object (readers' flags 2026-11-19)", () => {
+  it('their isolated e3 pawn behind our own e5 pawn is no pile target (the king march #1)', () => {
+    expect(structurePlanFact('2kr3r/1p3ppp/p1n5/2N1p3/2b3Pb/1PN1P2P/P1P3B1/R5KR b - - 0 17', 'b')?.text ?? '').not.toMatch(/pile onto it/);
+  });
+  it('the boss of the board is a knight in their half (turn off the autopilot #0, the d6 knight)', () => {
+    const plans = deriveNextPlanFacts('1q3r1k/3nrp1p/3N4/p1pPP3/Pp3Q2/1P1b4/6BP/2R1R2K w - - 0 30', 'w', { namesStudentMoves: true });
+    expect(plans.some((p) => p.kind === 'outpost' && /knight on d6 the boss/.test(p.text))).toBe(true);
+  });
+  it('negative controls: a rim knight (h5) and a bishop (d5) are never the boss', () => {
+    for (const fen of ['b1r5/2r1kp2/3p1p1p/1pq1pP1N/4PbPP/pPPR4/P1B1Q3/1K1R4 w - - 0 31', '4rk2/1p1q1pp1/r2p1n1p/2pB4/PpP5/1P2R1PP/2QRPP1K/8 w - - 0 29']) {
+      expect(deriveNextPlanFacts(fen, 'w', { namesStudentMoves: true }).some((p) => /boss of the board/.test(p.text))).toBe(false);
+    }
+  });
+});

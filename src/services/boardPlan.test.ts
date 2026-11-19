@@ -44,9 +44,19 @@ describe('the board plan', () => {
   // Danya, the hardest move to make #1: "the queenside is permanently locked";
   // b5 is met by axb5 and drops a pawn — no second front there.
   it('the second front never names a break that drops the pawn', () => {
-    expect(switchWing('4r1k1/1p2qpb1/p1p4p/P2rN1p1/1PQPpP2/4P1P1/6KP/1R2R3 w - - 0 36', 'w', 'your')).toBeNull();
+    expect(switchWing('4r1k1/1p2qpb1/p1p4p/P2rN1p1/1PQPpP2/4P1P1/6KP/1R2R3 w - - 0 36', 'w', 'your', [])).toBeNull();
   });
-  it('negative control: a safe break on the other wing still opens the front', () => {
-    expect(switchWing('1r2k2r/4bp2/p2pbp2/1p2p2p/4P1P1/P3BP2/1PPR3P/1K3B1R w k - 0 18', 'w', 'your')?.text).toMatch(/the f4 break/);
+  it('negative control: the break the best line plays on the other wing opens the front (the positional sacrifice #2)', () => {
+    expect(switchWing('1rb5/r2k1pp1/p2p3p/P2PpP2/1NP1BbPP/8/4K3/1R5R w - - 0 31', 'w', 'your',
+      ['f5f6', 'g7f6', 'e4f5', 'd7e8', 'b4c6', 'b8b1', 'h1b1', 'a7a8', 'f5c8', 'a8c8'])?.text).toMatch(/the f6 break/);
+  });
+  it('a break the best line never plays is no second front (how to ruin your pawn structure #1: the engine plays gxh5)', () => {
+    expect(switchWing('1r2k2r/4bp2/p2pbp2/1p2p2p/4P1P1/P3BP2/1PPR3P/1K3B1R w k - 0 18', 'w', 'your',
+      ['g4h5', 'h8h5', 'h2h4', 'f6f5', 'e4f5', 'h5f5'])).toBeNull();
+  });
+  it('a d- or e-pawn break is the centre, never a second front on a wing', () => {
+    // the positional rook lift #0: "a second front on the kingside: the e5 break"
+    expect(switchWing('1r2kb1r/5ppp/pqbppn2/8/2P1P3/6P1/1P1N1PBP/R1BQR1K1 w k - 0 15', 'w', 'your',
+      ['e1e3', 'f6d7', 'e3b3', 'b6a7', 'b3b8', 'd7b8', 'b2b4', 'a7d7', 'b4b5', 'a6b5'])?.text ?? '').not.toMatch(/e5 break/);
   });
 });

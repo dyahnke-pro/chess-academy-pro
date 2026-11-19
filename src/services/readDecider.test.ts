@@ -137,3 +137,15 @@ describe('PUZZLE MODE: the answer withheld, the side to move winning', () => {
     expect(decideRead(p.facts, { ...ctxOfPuzzle(p, null), bucket: 'open' }).facts.some((f) => f.kind === 'structure-plan')).toBe(true);
   });
 });
+
+describe("the verdict's reason is said once (beginner chess strategy #6)", () => {
+  it('a target line about a pawn the verdict already named is not said again', () => {
+    const fen = '8/5ppk/3P3p/8/8/2pK3P/5PP1/8 b - - 0 2';
+    const facts: ReadFact[] = [
+      { from: 'position', kind: 'standing', text: "You're losing — their passed pawn on d6 is two steps from queening, your isolated pawn on c3 is attacked once and nothing guards it.", squares: ['d6', 'c3'] },
+      { from: 'position', kind: 'their-target', text: 'The target is your pawn on c3: it is isolated, so no pawn can ever guard it. Their king on d3 hits it, and nothing guards it.', squares: ['c3', 'd3'] },
+    ];
+    const ctx = readContextOf({ fen, top: { evaluation: 500, mate: null }, bestUci: 'g7g5', withheld: null, studentShot: false });
+    expect(decideRead(facts, ctx).facts.map((f) => f.kind)).toEqual(['standing']);
+  });
+});
