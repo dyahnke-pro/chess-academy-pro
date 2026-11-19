@@ -74,6 +74,29 @@ describe('the thought: one thread for the move to come', () => {
   });
 });
 
+describe('the shared set: one computer, one voice a turn', () => {
+  it('a shared fact whose computer a Learn lane offers is held by the door, and the row says why', () => {
+    let row: { heldWhy: Record<string, string> } | null = null;
+    const off = onLearnTurn((r) => { row = r as unknown as { heldWhy: Record<string, string> }; });
+    const d = decideTurn([
+      fact('tactic', 'There is a fork winning a rook.', ['c7', 'a8', 'e8'], { computer: 'desperadoAt', stakes: { points: 5, plies: 1 } }),
+      fact('thought', 'The knight can fork the king and rook on c7.', ['c7', 'a8', 'e8'], { computer: 'desperadoAt', stakes: { points: 5, plies: 1 } }),
+    ], undefined, undefined, null, null, false, LATE);
+    off();
+    expect(d.spoke).toEqual(['tactic']);
+    expect(row!.heldWhy.thought).toBe('lane-said');
+  });
+  it('a shared fact from a computer no lane offers is the door\'s to weigh as any other', () => {
+    let row: { heldWhy: Record<string, string> } | null = null;
+    const off = onLearnTurn((r) => { row = r as unknown as { heldWhy: Record<string, string> }; });
+    decideTurn([
+      fact('thought', 'The knight can fork the king and rook on c7.', ['c7', 'a8', 'e8'], { computer: 'desperadoAt', stakes: { points: 5, plies: 1 } }),
+    ], undefined, undefined, null, null, false, LATE);
+    off();
+    expect(row!.heldWhy.thought).not.toBe('lane-said');
+  });
+});
+
 describe('the thought: one reason for each move, whichever computer gave it', () => {
   it('three reasons for the student\'s move: the most valuable speaks', () => {
     const d = decideTurn([

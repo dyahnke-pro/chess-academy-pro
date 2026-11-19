@@ -115,9 +115,6 @@ const FILTER_DEBT: Record<string, ReadonlyArray<{ clause: string; why: string }>
     { clause: "f.source !== 'teachingMove'", why: 'OWED: Review\'s facets read the teaching-move computers' },
     { clause: "f.source !== 'pieceRoute'", why: 'GENUINE (tense): a trip is a plan forward; in a finished game the moves that followed were answers to the board — hindsight' },
   ],
-  'services/learnSharedFacts.ts': [
-    { clause: 'saidComputers.has(f.computer)', why: 'OWED: Learn\'s own lane already said this computer this turn; the say-once should be the door\'s claims' },
-  ],
   'services/moveThoughtFacts.ts': [
     { clause: "f.source === 'openingStory'", why: 'GENUINE (question scope): a story line about the board answers no question about a move' },
     { clause: 'thinkStepOf(f.computer)', why: 'GENUINE (David\'s steps): a thinking step says the computers that serve that step' },

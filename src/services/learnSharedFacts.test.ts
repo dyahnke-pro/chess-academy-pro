@@ -41,19 +41,18 @@ describe('sharedFactNamesStudentMove — LEARN NAMES NO MOVE UNASKED', () => {
 describe('sharedFactsForLearn — one coach, nothing said twice', () => {
   const fen = italian();
   it('rides the thought lane with the fact\'s own kind', () => {
-    const out = sharedFactsForLearn([fact({ text: 'Their bishop on c5 eyes f2.', kind: 'tactic' })], { fenNow: fen, student: 'w', saidComputers: new Set() });
+    const out = sharedFactsForLearn([fact({ text: 'Their bishop on c5 eyes f2.', kind: 'tactic' })], { fenNow: fen, student: 'w' });
     expect(out).toHaveLength(1);
     expect(out[0].lane).toBe('thought');
     expect(out[0].factKind).toBe('tactic');
     expect(out[0].namesStudentMove).toBe(false);
   });
-  it('drops a computer Learn already said this turn, and a repeated fact', () => {
+  it('drops a repeated fact (a computer Learn\'s own lane offers is the door\'s to hold)', () => {
     const f = fact({ text: 'Their bishop on c5 eyes f2.' });
-    expect(sharedFactsForLearn([f], { fenNow: fen, student: 'w', saidComputers: new Set(['desperadoAt']) })).toHaveLength(0);
-    expect(sharedFactsForLearn([f, f], { fenNow: fen, student: 'w', saidComputers: new Set() })).toHaveLength(1);
+    expect(sharedFactsForLearn([f, f], { fenNow: fen, student: 'w' })).toHaveLength(1);
   });
   it('marks a fact that names the student\'s next move', () => {
-    const out = sharedFactsForLearn([fact({ text: 'Ng5 hits f7.' })], { fenNow: fen, student: 'w', saidComputers: new Set() });
+    const out = sharedFactsForLearn([fact({ text: 'Ng5 hits f7.' })], { fenNow: fen, student: 'w' });
     expect(out[0].namesStudentMove).toBe(true);
   });
 });
