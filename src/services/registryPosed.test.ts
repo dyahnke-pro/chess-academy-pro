@@ -52,6 +52,8 @@ const CASES: Case[] = [
   { computer: 'kingActivityGap', tag: 'passive-king-endgame', fen: '8/5ppk/3P3p/8/8/2pK3P/5PP1/8 b - - 0 2', held: 'Kg6', missed: 'f5' },
   // In pursuit of zugzwang: with Black to move every move drops a pawn, so lose a tempo.
   { computer: 'zugzwangIfPassed', tag: 'passive-king-endgame', fen: '2k5/8/p1P5/P2K4/8/8/8/8 w - - 0 1', held: 'Kc4', missed: 'Kd6' },
+  // Ke5 and e4 against Ke8, Black to move: the solver proves …Ke7 holds the draw (…Kd8 loses to Kd6).
+  { computer: 'kpDrawReason', tag: 'passive-king-endgame', fen: '4k3/8/8/4K3/4P3/8/8/8 b - - 0 1', held: 'Ke7', missed: 'Kd8' },
   // Doubled rooks on the d-file against the back rank: Rd8+ Rxd8 Rxd8 is mate.
   { computer: 'mateLine', tag: 'missed-your-mate', fen: 'r5k1/5ppp/8/8/8/8/3R1PPP/3R2K1 w - - 0 1', held: 'Rd8+', missed: 'h3', line: ['d2d8', 'a8d8', 'd1d8'] },
   // A king on e1 that can no longer castle, one pawn in front of it, their queen's checks on it.

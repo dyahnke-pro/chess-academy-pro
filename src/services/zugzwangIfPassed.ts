@@ -23,15 +23,16 @@ const MAX_DEPTH = 13;
 const MAX_MEN = 6;
 const QUEEN = 9;
 
-/** A king-and-pawn board: squares 0..63 (a1 = 0), the side to move. */
-interface KP { k: [number, number]; p: [number[], number[]]; turn: 0 | 1 }
+/** A king-and-pawn board: squares 0..63 (a1 = 0), the side to move. The
+ *  board primitives below are shared with the exact solver (`kpSolver`). */
+export interface KP { k: [number, number]; p: [number[], number[]]; turn: 0 | 1 }
 
-const fileOf = (s: number): number => s & 7;
-const rankOf = (s: number): number => s >> 3;
-const near = (a: number, b: number): boolean => Math.max(Math.abs(fileOf(a) - fileOf(b)), Math.abs(rankOf(a) - rankOf(b))) <= 1;
+export const fileOf = (s: number): number => s & 7;
+export const rankOf = (s: number): number => s >> 3;
+export const near = (a: number, b: number): boolean => Math.max(Math.abs(fileOf(a) - fileOf(b)), Math.abs(rankOf(a) - rankOf(b))) <= 1;
 
 /** Squares a pawn of side `c` on `s` attacks. */
-function pawnHits(s: number, c: 0 | 1): number[] {
+export function pawnHits(s: number, c: 0 | 1): number[] {
   const r = rankOf(s) + (c === 0 ? 1 : -1);
   if (r < 0 || r > 7) return [];
   return [fileOf(s) - 1, fileOf(s) + 1].filter((f) => f >= 0 && f <= 7).map((f) => r * 8 + f);
@@ -96,7 +97,7 @@ function search(b: KP, depth: number, tt: Map<string, number>): number {
   return best;
 }
 
-function readKP(c: Chess): KP | null {
+export function readKP(c: Chess): KP | null {
   const k: [number, number] = [-1, -1]; const p: [number[], number[]] = [[], []];
   for (const cell of c.board().flat()) {
     if (!cell) continue;

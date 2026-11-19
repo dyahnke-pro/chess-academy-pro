@@ -113,6 +113,7 @@ import { kingInOpen } from './kingInOpen';
 import { kingActivityGap } from './kingActivityGap';
 import { zugzwangIfPassed } from './zugzwangIfPassed';
 import { keySquaresOn, keySquareLine, keySquareSquares } from './keySquareRead';
+import { kpDrawReason, KP_FAST_BUDGET } from './kpSolver';
 import { shoulderOn, shoulderLine, shoulderSquares } from './shoulderRead';
 import { connectedPassersOn, connectedPassersLine, connectedPassersSquares } from './connectedPassers';
 import { leverPasser } from './leverPasser';
@@ -1372,6 +1373,9 @@ export interface BoardContexts {
    *  reaches the key square"). Kings and pawns: a passed pawn's key squares
    *  and whose king holds, gets or can step onto one. */
   keySquareRead: { fen: string; student: Color };
+  /** Kings and pawns, solved exactly: a proven draw with a side more pawns
+   *  up, and why it holds (the defending king first, or every try met). */
+  kpDrawRead: { fen: string; student: Color };
   /** A king shouldered away from a passed pawn by the other king, or cut off
    *  by a rook along a file or rank, counted in king steps. */
   shoulderRead: { fen: string; student: Color };
@@ -7823,6 +7827,31 @@ export const BOARD_COMPUTERS = {
         seat: r.side === student ? 'student' : 'opponent', namesStudentMove: asks, thread: LOCAL_THREAD, fen, ...(asks ? { skill: 'passive-king-endgame' } : {}) });
     }),
     computer: 'keySquaresOn',
+    kind: 'technique',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { wired: 'services/moveInsight.ts' },
+    },
+  },
+  kpDrawRead: {
+    // His "White cannot make progress" and "the king gets there first": a
+    // kings-and-pawns board the exact solver proves drawn although one side has
+    // more pawns, and why — the defending king in front of the pawn or on its
+    // key square first, or every try met. Both seats; the record files the
+    // student's draw to hold when it is the student's move.
+    read: ({ fen, student }, fact) => safe(() => {
+      const r = kpDrawReason(fen, student, { budget: KP_FAST_BUDGET });
+      if (!r) return null;
+      const defender: Color = r.attacker === 'w' ? 'b' : 'w';
+      const asks = defender === student && sideToMove(fen) === student;
+      const key = `kp-draw:${fen.split(' ').slice(0, 2).join(' ')}`;
+      return fact({ key, claims: [key], text: r.text, proof: squaresProof(r.text, r.squares) ?? NO_PROOF.description, squares: r.squares, stakes: null,
+        seat: defender === student ? 'student' : 'opponent', namesStudentMove: asks && !!r.answer, thread: LOCAL_THREAD, fen, ...(asks ? { skill: 'passive-king-endgame' } : {}) });
+    }),
+    computer: 'kpDrawReason',
     kind: 'technique',
     phase: ANY,
     surfaces: {

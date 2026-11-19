@@ -26,6 +26,7 @@ import { stakeValue } from './factStakes';
 import { PICTURE_ROLE, type PictureRole } from './positionPicture';
 import { fortressOn, fortressLine, type Fortress } from './fortress';
 import { DRAW_LEVEL_CP, LOCKED_TEXT, lockedPawns, type LockedPawns } from './drawnEnding';
+import { KP_FAST_BUDGET, kpDrawReason, kpVerdict, type KpValue } from './kpSolver';
 
 export interface FutureBoard {
   fen: string;
@@ -502,6 +503,73 @@ export function lockGained(args: { fen: string; tryLine: LineRead; bestLine: Lin
   return { lock: lockedPawns(onTry.fen) as LockedPawns, ply: onTry.ply, fen: onTry.fen };
 }
 
+// ── THE PAWN ENDING, SOLVED (his "White cannot make progress", "the king
+// gets there first"): a kings-and-pawns board on the try's line and on the
+// best line, each solved exactly (`kpVerdict`) — a proof, not a score ──
+
+export interface KpChange {
+  /** `drawn`: the try lets the other side hold a draw the best line wins;
+   *  `lost`: the try loses a pawn ending the best line holds or wins. */
+  kind: 'drawn' | 'lost';
+  /** The try's board the proof stands on. */
+  fen: string;
+  ply: number;
+  text: string;
+}
+
+/** Boards from a line's end back, the solver tries this many per line. */
+const KP_BOARDS_PER_LINE = 3;
+
+/** The first proven value on a line's kings-and-pawns boards (from its end
+ *  back: the deepest board has the fewest pawns, so it is the cheapest proof),
+ *  or null when none is proven. */
+function provenOnLine(fen: string, moves: readonly string[]): { value: Exclude<KpValue, 'unknown'>; fen: string; ply: number } | null {
+  const boards = lineBoards(fen, moves).filter((x) => x.ply >= 1).reverse();
+  let tried = 0;
+  for (const x of boards) {
+    const v = kpVerdict(x.fen, KP_FAST_BUDGET);
+    if (!v) continue;
+    if (v.value !== 'unknown') return { value: v.value, fen: x.fen, ply: x.ply };
+    if (++tried >= KP_BOARDS_PER_LINE) break;
+  }
+  return null;
+}
+
+/**
+ * The try's line reaches a pawn ending the solver proves worse for the try's
+ * side than the best line's: a draw where the best line wins (and why it
+ * holds, `kpDrawReason`), or a loss where the best line holds or wins. Null
+ * when either line has no proven kings-and-pawns board. Pure: chess.js and the
+ * solver over the two lines.
+ */
+export function kpResultChange(args: { fen: string; student: Color; tryLine: LineRead; bestLine: LineRead; other: 'your' | 'their' }): KpChange | null {
+  let mover: Color;
+  try { mover = new Chess(args.fen).turn(); } catch { return null; }
+  const t = provenOnLine(args.fen, args.tryLine.moves);
+  if (!t) return null;
+  const b = provenOnLine(args.fen, args.bestLine.moves);
+  if (!b) return null;
+  const win = mover === 'w' ? 'white' : 'black';
+  const score = (v: Exclude<KpValue, 'unknown'>): number => (v === 'draw' ? 0 : v === win ? 1 : -1);
+  const st = score(t.value); const sb = score(b.value);
+  if (st >= sb) return null;
+  const yours = args.other === 'your';
+  if (st === 0) {
+    const why = kpDrawReason(t.fen, args.student, { attacker: mover, budget: KP_FAST_BUDGET });
+    const lead = yours ? 'That throws the win away.' : 'That lets you hold the draw.';
+    return { kind: 'drawn', fen: t.fen, ply: t.ply, text: why ? `${lead} ${why.text}` : `${lead} The pawn ending that follows is a draw by force.` };
+  }
+  let bestSan = '';
+  try {
+    const u = args.bestLine.moves[0];
+    bestSan = new Chess(args.fen).move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san;
+  } catch { return null; }
+  const said = mover === 'b' ? `…${bestSan}` : bestSan;
+  const kept = sb === 0 ? 'would have held the draw' : 'would have won it';
+  return { kind: 'lost', fen: t.fen, ply: t.ply,
+    text: yours ? `That loses the pawn ending by force. ${said} ${kept}.` : `That loses them the pawn ending by force. ${said} ${kept}.` };
+}
+
 /** The change a try lets happen, as the reason it falls short: the line's own
  *  story first; then a known draw the try lets the other side reach (the
  *  board's drawing resource, confirmed level by the line); then a fortress
@@ -532,6 +600,10 @@ export function changeReason(args: {
   if (drawn) return drawn.fact.text;
   // THE PAWNS LOCKED, NO WAY IN: the try's line freezes the chain level.
   if (lockGained(args)) return LOCKED_TEXT;
+  // THE PAWN ENDING, SOLVED: the try's line reaches a kings-and-pawns board
+  // proven worse for the try's side than the best line's.
+  const kp = kpResultChange(args);
+  if (kp) return kp.text;
   // A FORTRESS THE TRY LETS THEM BUILD: a piece down, and the board's reason
   // the extra material cannot win.
   const fort = fortressGained(args);

@@ -363,6 +363,7 @@ export const PICTURE_ROLE: Record<ComputerName, PictureRole> = {
   pictureTarget: 'weakness',
   pieceTempo: 'plan',
   keySquaresOn: 'asset',
+  kpDrawReason: 'resource',
   shoulderOn: 'asset',
   connectedPassersOn: 'threat',
 };
