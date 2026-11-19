@@ -193,8 +193,12 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
   // A move that loses nothing yet still costs a pawn or more is refuted by what
   // it gives up (`positionalReason`): his "b5 at once allows …e5, with strong
   // central counterplay and a dead bishop".
+  // The tries read here are the picture's input too (WO-PICTURE-01 P6): the
+  // best move's facts read the verdict and plan off them (`reads.tries`).
+  let triesRead: WeighRead[] | null = null;
   if (!i.withhold && i.readTempting && mine) {
     const tempting: WeighRead[] = [{ evaluation: top.evaluation, mate: top.mate, moves: top.moves }];
+    triesRead = tempting;
     // THE PLAN'S DIRECT TRY (WO-PICTURE-01 P2): the frontal hit on their weak
     // pawn, the storm at their king — weighed for the plan, not for the eye,
     // so it is read whatever a player at the rating would pick.
@@ -219,14 +223,6 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     const standing = standingRefutations({ fen: i.fen, student: i.studentColor, rating: i.rating, reads: tempting, considered });
     const empty = standing.filter((t) => !refuted.some((r) => r.uci === t.uci));
     for (const t of empty) facts.push({ from: 'tempting', kind: 'refuted', text: t.text, computer: 'temptingOnBoard', squares: t.squares });
-    // THE PICTURE'S CONCLUSIONS (WO-PICTURE-01 P3): the verdict read after
-    // these tries ("better, but hard to finish") and the try that survives
-    // them, off the refutations just made — kept in the read's facts for the
-    // decider (P5 speaks them).
-    const picture = { fen: i.fen, student: i.studentColor, rating: i.rating, reads: tempting, considered, refuted: { tempting: refuted, standing }, lines: i.before };
-    for (const f of [...readBoardAll('pictureVerdict', picture), ...readBoardAll('picturePlan', picture)]) {
-      facts.push({ from: 'position', kind: f.kind, text: f.text, computer: f.computer, squares: f.squares });
-    }
     // One rule-out a move: a try said by what it does to the result already
     // carries its board reason (`tryMechanism` reads `boardReason` too).
     const said = new Set([...refuted.map((t) => t.san), ...empty.map((t) => t.san)]);
@@ -286,12 +282,14 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     if (after) {
       for (const f of moveThoughtFacts({
         fenBefore: i.fen, san, moverIsStudent: mine, namesPlayedMove: ASKED_WRITER.namesPlayedMove, plainThreatsSeen: plainThreatsSeenFor(ASKED_WRITER, false), tense: i.tense, theory: false, story: false, moveReads: ASKED_WRITER.moveReads,
-        prev: NO_PREV_CAPTURE, line: top.moves.slice(1), history: game.history, theirLast: game.theirLast, phrases: null, reads: { before: [...i.before], after: [...after], passBefore: [], passAfter: [], everyAfter }, costCp: 0,
+        prev: NO_PREV_CAPTURE, line: top.moves.slice(1), history: game.history, theirLast: game.theirLast, phrases: null, reads: { before: [...i.before], after: [...after], passBefore: [], passAfter: [], everyAfter, tries: triesRead }, costCp: 0,
       })) {
         // A puzzle still being solved keeps only who stands better: what the
         // best move does is the answer.
         if (i.withhold && !VERDICT_KINDS.has(f.kind)) continue;
-        facts.push({ from: 'bestMove', kind: f.kind, text: f.text, computer: f.computer, squares: f.squares, stakes: stakeValue(f.stakes), restates: f.restates === true });
+        // The picture's conclusions are about the board, not the best move:
+        // the read hears them as the board's own (the verdict, the plan).
+        facts.push({ from: f.source === 'picture' ? 'position' : 'bestMove', kind: f.kind, text: f.text, computer: f.computer, squares: f.squares, stakes: stakeValue(f.stakes), restates: f.restates === true });
       }
       if (theirs.length > 0) {
         const theirRefuted = temptingOnBoard({ fen: fenB, student: i.studentColor, rating: i.rating, reads: theirs, priorMove: { fenBefore: i.fen, san } });

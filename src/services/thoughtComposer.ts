@@ -90,7 +90,10 @@ export type ThoughtSource =
   /** Two pieces hanging: the one lost anyway takes something first (`desperado.ts`). */
   | 'desperado'
   /** A check that goes nowhere: blocked or side-stepped, and it cost (`emptyCheck.ts`). */
-  | 'emptyCheck';
+  | 'emptyCheck'
+  /** The picture's conclusions (WO-PICTURE-01): the verdict after the tries,
+   *  the plan that survives them, the ledger, their counterplay, the target. */
+  | 'picture';
 
 /** ONE FACT, the composer's only input — the one fact shape (`coachFact.ts`),
  *  its step derived from its kind, with what this composer ranks by: the
@@ -219,6 +222,9 @@ export const SOURCE_DEPTH: Record<ThoughtSource, 'hidden' | 'why'> = {
   boardRead: 'why',
   desperado: 'hidden',
   emptyCheck: 'why',
+  // The picture's conclusions: what the board comes to, said as a reason; a
+  // fact on the same squares that says it plainer is the same idea.
+  picture: 'why',
   deepFact: 'hidden', binding: 'hidden', bestLine: 'hidden', notYet: 'hidden', prophylaxis: 'hidden', baitSet: 'hidden',
   // What their move aims at now is the attack itself, one claim with the
   // other lines on its square (decision baseline 2026-11-12: "Their Qd8 is

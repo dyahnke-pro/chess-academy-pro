@@ -351,7 +351,15 @@ export interface PictureCtx {
 
 /** The conclusions of one board from its context: the refuters run on the
  *  reads when the surface has not run them already. */
+const CONCLUSIONS = new WeakMap<PictureCtx, PictureConclusions | null>();
 function conclusionsOf(c: PictureCtx): PictureConclusions | null {
+  // The verdict and the plan read one context: read once.
+  if (CONCLUSIONS.has(c)) return CONCLUSIONS.get(c) ?? null;
+  const r = conclusionsRead(c);
+  CONCLUSIONS.set(c, r);
+  return r;
+}
+function conclusionsRead(c: PictureCtx): PictureConclusions | null {
   if (!c.reads || c.reads.length < 2) return null;
   const considered = c.considered ?? undefined;
   const tempting = c.refuted?.tempting ?? temptingOnBoard({ fen: c.fen, student: c.student, rating: c.rating, reads: c.reads, priorMove: null, considered });
@@ -1455,14 +1463,18 @@ const LIVE_READ: Record<CoachSurface, SurfaceAnswer> = {
   think: { not: 'a step board\'s teaching reads the move\'s own facts (moveThoughtFacts.stepThought), not the live board read' },
 };
 /** THE PICTURE'S CONCLUSIONS read the engine's read of every try on the
- *  board: the tapped read (`boardReadFacts`, every surface's Read button and
- *  a puzzle's read once solved) and chat's position answer
- *  (`groundedAnswer`, its tempting reads) are the two places those reads are
- *  made; the record files the posed question both ways (`moveInsight`). */
+ *  board the move was made on, through the one fact set (`moveThoughtFacts` →
+ *  `pictureReads`, WO-PICTURE-01 P6): Learn's turn (the fan before the
+ *  student's move and their reply), Review's walk (the record's candidate
+ *  reads, `storedIntentReads`), a lesson's and chat's move answers, and the
+ *  tapped read on every surface, a puzzle's once solved (`boardReadFacts`
+ *  hands it the tries it read, `reads.tries`). Chat's position answer reads
+ *  it too (`groundedAnswer`); the record files the posed question both ways
+ *  (`moveInsight.planPosed`). */
 const PICTURE_SURFACES: Record<CoachSurface, SurfaceAnswer> = {
-  learn: { wired: 'services/boardReadFacts.ts' }, review: { wired: 'services/boardReadFacts.ts' }, lesson: { wired: 'services/boardReadFacts.ts' },
-  play: { wired: 'services/boardReadFacts.ts' }, tactics: { wired: 'services/boardReadFacts.ts' },
-  chat: { wired: 'services/groundedAnswer.ts' },
+  learn: { wired: 'services/moveThoughtFacts.ts' }, review: { wired: 'services/moveThoughtFacts.ts' }, lesson: { wired: 'services/moveThoughtFacts.ts' },
+  play: { wired: 'services/moveThoughtFacts.ts' }, tactics: { wired: 'services/moveThoughtFacts.ts' },
+  chat: { wired: 'services/moveThoughtFacts.ts' },
   weaknesses: { wired: 'services/moveInsight.ts' },
   think: { not: 'a step board does not carry the engine reads of every try the conclusions are read from' },
 };

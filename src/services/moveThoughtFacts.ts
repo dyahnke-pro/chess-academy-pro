@@ -45,6 +45,7 @@ import { detectTactics } from './tacticsDetector';
 import { thinkStepOf } from './thinkingComputers';
 import type { ThinkingStep } from './thinkingSteps';
 import type { WeighRead } from './weighedMoves';
+import { consideredTries } from './tryCandidates';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { BLUNDER_CP, INACCURACY_CP, MATE_EVAL_VALUE, MISTAKE_CP } from './engineConstants';
 import type { AnalysisLine } from '../types';
@@ -943,14 +944,24 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     if (i.theirLast) push(readBoardAll('prophylaxisMissed', { prevFen: i.theirLast.fenBefore, studentSan: i.theirLast.san, fenBefore: i.fenBefore, san: i.san, student }), 'threat', 52);
     if (mine && i.costCp !== null) push(readBoardAll('structureMove', { fenBefore: i.fenBefore, san: i.san, student, cpLoss: Math.max(0, i.costCp), bestSan, bestUci: i.reads?.before[0]?.moves ?? [], reply: replySan, namesBetterMove: i.namesPlayedMove, namesStudentMoves: i.namesPlayedMove }), 'weakness', 50);
     push(readBoardAll('slipsOnLine', { history: historyAfter, student }), 'theory', 44);
-    // THE PICTURE'S CONCLUSIONS (WO-PICTURE-01 P3), last: the ledger, their
-    // one resource and the target, read off every fact above that is about
-    // the board after the move, with the engine's lines there.
+    // THE PICTURE'S CONCLUSIONS (WO-PICTURE-01 P3/P6), last, on every
+    // surface that reads this one fact set. On the board the move was made
+    // on: the verdict read after the tries and the try that survives them
+    // (`pictureReads`). On the board after it: the ledger, their one resource
+    // and the target, read off every fact above that is about that board,
+    // with the engine's lines there. Each keeps the student move it names (a
+    // plan is a move): the surface's door decides whether it may be said.
+    for (const { f, idea, weight } of pictureReads({ fenBefore: i.fenBefore, student, reads: pictureTriesOf(i.reads) })) {
+      facts.push({ ...f, source: 'picture', idea, weight });
+    }
     const lines = (i.reads?.after ?? []).map((l) => ({ moves: l.moves, cp: l.mate == null ? l.evaluation : null, mate: l.mate ?? null }));
     const picture: readonly CoachFact[] = [...facts];
-    push(readBoardAll('pictureLedger', { fen: fenAfter, student, lines, facts: picture }), 'weakness', 50);
-    push(readBoardAll('pictureCounterplay', { fen: fenAfter, student, lines, facts: picture }), 'threat', 54);
-    push(readBoardAll('pictureTarget', { fen: fenAfter, student, lines, facts: picture }), 'plan', 54);
+    const pushPicture = (fs: readonly CoachFact[], idea: IdeaKind, weight: number): void => {
+      for (const f of fs) facts.push({ ...f, source: 'picture', idea, weight });
+    };
+    pushPicture(readBoardAll('pictureLedger', { fen: fenAfter, student, lines, facts: picture }), 'weakness', 50);
+    pushPicture(readBoardAll('pictureCounterplay', { fen: fenAfter, student, lines, facts: picture }), 'threat', 54);
+    pushPicture(readBoardAll('pictureTarget', { fen: fenAfter, student, lines, facts: picture }), 'plan', 54);
   }
   return withDecisionGap(facts, i, from, to, seat);
 }
@@ -1357,6 +1368,33 @@ export function weighedReads(r: { fenBefore: string; san: string; student: Color
     ...readBoardAll('temptingRefuted', { ...at, priorMove: r.priorMove }).map((f) => ({ id: 'temptingRefuted' as const, f, weight: 55 })),
     ...readBoardAll('alsoGood', at).map((f) => ({ id: 'alsoGood' as const, f, weight: 45 })),
     ...readBoardAll('squareChoice', { ...at, priorMove: r.priorMove, beaten, namesStudentMoves: r.namesStudentMoves }).map((f) => ({ id: 'squareChoice' as const, f, weight: 50 })),
+  ];
+}
+
+/** THE TRIES THE PICTURE READS (WO-PICTURE-01 P6): the surface's read of
+ *  every try on the board (`reads.tries`, the tapped read), else the
+ *  candidates' reads (`reads.weigh`, Review's record), else the fan before
+ *  the move — each line a read of its first move. Null under two reads: one
+ *  read is no try against another. */
+export function pictureTriesOf(reads: IntentReads | null): readonly WeighRead[] | null {
+  if (!reads) return null;
+  const tries = reads.tries ?? reads.weigh
+    ?? reads.before.map((l) => ({ evaluation: l.evaluation, mate: l.mate, moves: l.moves, earlier: l.earlier?.moves ?? null }));
+  return tries.length >= 2 ? tries : null;
+}
+
+/** THE PICTURE'S VERDICT AND PLAN on the board a move was made on
+ *  (WO-PICTURE-01 P3/P6): "better, but hard to finish — …Qf6 and …c4 fail",
+ *  and the try that survives them, through the one registry, from the mover's
+ *  seat. Every surface reads it through the one fact set; the record files
+ *  the same question (`moveInsight.planPosed`). */
+export function pictureReads(r: { fenBefore: string; student: Color; reads: readonly WeighRead[] | null }): Array<{ f: BoardFact<'pictureVerdict' | 'picturePlan'>; idea: IdeaKind; weight: number }> {
+  if (!r.reads) return [];
+  const lines: AnalysisLine[] = r.reads.map((l, k) => ({ rank: k + 1, depth: 0, evaluation: l.evaluation, mate: l.mate, moves: [...l.moves] }));
+  const ctx = { fen: r.fenBefore, student: r.student, rating: DEFAULT_STUDENT_RATING, reads: r.reads, considered: consideredTries(r.fenBefore), refuted: null, lines };
+  return [
+    ...readBoardAll('pictureVerdict', ctx).map((f) => ({ f, idea: 'eval' as IdeaKind, weight: 58 })),
+    ...readBoardAll('picturePlan', ctx).map((f) => ({ f, idea: 'plan' as IdeaKind, weight: 60 })),
   ];
 }
 
