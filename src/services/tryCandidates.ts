@@ -25,6 +25,8 @@ import { withMover } from '../utils/sideToMove';
 import { findWeakPawns, findPassedPawns } from './positionReadingService';
 import { phaseOfFen } from './boardConcepts';
 import { weighedForWhatItDoes, type ConsideredWhy, type ConsideredTry } from './weighedMoves';
+import { computePieceRoute, computeSliderRoute } from './forwardTeaching';
+import { CAPTURE_VALUE } from './pieceValues';
 
 export type TryWhy = 'target' | 'storm';
 
@@ -106,7 +108,13 @@ export function planTries(fen: string): PlanTry[] {
  *  - `threat` / `defence`: a quiet move that now wins something next move, or
  *    saves what was under fire (`weighedForWhatItDoes`, read without the eye's
  *    floor), or that now threatens mate, strikes an enemy pawn (a lever) or
- *    doubles a rook on a file (`quietWhy`).
+ *    doubles a rook on a file (`quietWhy`);
+ *  - `reroute`: a quiet move that is the first step of a regroup
+ *    (`rerouteWhy`) — the route the board's route computers give the piece
+ *    (a knight to its outpost, a passive bishop to a long diagonal, a rook to
+ *    a file free of its own pawns), a knight's trip whose next step hits a
+ *    piece it cannot reach today ("Nd3, heading for b4"), or a rook lifted up
+ *    its file to swing across to the other king ("Re3-h3").
  * Every such move is a try (no cap, G4.5): the engine reads each, and the
  * refuters say only the ones whose line rules them out.
  *
@@ -133,7 +141,7 @@ export function reasonTries(fen: string): ReasonTry[] {
       : /[+#]/.test(m.san) ? 'check'
       : m.piece === 'p' && (passed.has(m.from) || !!m.promotion) ? 'passer'
       : m.piece === 'k' && ending && !m.flags.includes('k') && !m.flags.includes('q') ? 'king'
-      : weighedForWhatItDoes(fen, uci) ?? quietWhy(fen, m);
+      : weighedForWhatItDoes(fen, uci) ?? quietWhy(fen, m) ?? rerouteWhy(fen, m);
     if (why) out.push({ uci, san: m.san, why });
   }
   return out;
@@ -178,6 +186,68 @@ function quietWhy(fen: string, m: Move): ReasonWhy | null {
     }
   }
   return null;
+}
+
+/** THE REGROUP (`reroute`): a quiet move that starts a piece's trip to a
+ *  better square, read three ways, each a reason a strong player weighs it for
+ *  (his "Nd3-b4 to encircle d5", "Re3, lifting the rook toward the king"):
+ *  - the route the board's route computers give the piece starts here
+ *    (`computePieceRoute`, `computeSliderRoute`);
+ *  - a knight's trip: from where it lands, its next move hits an enemy piece
+ *    worth more than a knight or left unguarded, which the knight could not
+ *    hit in one move from where it stood — the two-move threat knights make;
+ *  - a rook lift: a rook moved up its own file, to its third or fourth rank,
+ *    from where its next move along that rank reaches the file of the enemy
+ *    king standing on a wing.
+ *  Nothing here says the regroup is good: the engine reads each. */
+function rerouteWhy(fen: string, m: Move): ReasonWhy | null {
+  if (m.captured || m.promotion || m.piece === 'p' || m.piece === 'k' || m.piece === 'q' || m.flags.includes('k') || m.flags.includes('q')) return null;
+  const route = m.piece === 'n' ? computePieceRoute(fen, m.from) : computeSliderRoute(fen, m.from);
+  if (route?.route[0] === m.to) return 'reroute';
+  const after = new Chess(fen);
+  try { after.move(m); } catch { return null; }
+  const free = withMover(after.fen(), m.color);
+  if (!free) return null;
+  const next = new Chess(free);
+  const them: Color = m.color === 'w' ? 'b' : 'w';
+  if (m.piece === 'n') {
+    const reachNow = new Set(knightHits(m.from));
+    for (const n of next.moves({ square: m.to, verbose: true })) {
+      if (n.captured) continue;
+      for (const sq of knightHits(n.to)) {
+        if (reachNow.has(sq) || knightHits(m.to).includes(sq)) continue;
+        const p = next.get(sq as Square);
+        if (!p || p.color !== them || p.type === 'p' || p.type === 'k') continue;
+        let guarded = true;
+        try { guarded = next.attackers(sq as Square, them).length > 0; } catch { guarded = true; }
+        if (CAPTURE_VALUE[p.type] > CAPTURE_VALUE.n || !guarded) return 'reroute';
+      }
+    }
+    return null;
+  }
+  if (m.piece === 'r' && m.from[0] === m.to[0]) {
+    const rel = m.color === 'w' ? Number(m.to[1]) : 9 - Number(m.to[1]);
+    const fromRel = m.color === 'w' ? Number(m.from[1]) : 9 - Number(m.from[1]);
+    if (rel <= fromRel || rel < 3 || rel > 4) return null;
+    const k = next.findPiece({ type: 'k', color: them })[0];
+    if (!k) return null;
+    const kf = k.charCodeAt(0) - 97;
+    if (kf > 1 && kf < 6) return null;
+    if (Math.abs(kf - (m.to.charCodeAt(0) - 97)) < 2) return null;
+    if (next.moves({ square: m.to, verbose: true }).some((r) => r.to[1] === m.to[1] && r.to.charCodeAt(0) - 97 === kf)) return 'reroute';
+  }
+  return null;
+}
+
+function knightHits(sq: string): string[] {
+  const f = sq.charCodeAt(0) - 97;
+  const r = Number(sq[1]) - 1;
+  const out: string[] = [];
+  for (const [df, dr] of [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]]) {
+    const nf = f + df; const nr = r + dr;
+    if (nf >= 0 && nf < 8 && nr >= 0 && nr < 8) out.push(`${String.fromCharCode(97 + nf)}${nr + 1}`);
+  }
+  return out;
 }
 
 /** EVERY MOVE WEIGHED PAST THE EYE, with its reason: the plan's direct tries
