@@ -235,19 +235,31 @@ export function latentDangerClause(
    *  what they are (`pieceRef`), the squares lit, not read out (David
    *  2026-11-05: three squares in a breath is the robot). */
   fen: string,
+  /** REQUIRED — whose seat the sentence is said from. The side that owns the
+   *  front piece hears it as a danger ("heads up"); the other side hears the
+   *  same line as its chance (both seats, David 2026-11-19). */
+  viewer: 'w' | 'b',
 ): string {
-  let me: 'w' | 'b' | null = null;
-  try { me = new Chess(fen).get(d.frontSquare as Square)?.color ?? null; } catch { me = null; }
-  const ref = (sq: string | undefined, fallback: string): string => (me && sq ? pieceRef(fen, sq, me)?.words ?? fallback : fallback);
-  const front = ref(d.frontSquare, `your ${PNAME[d.frontPiece]} on ${d.frontSquare}`);
+  let owner: 'w' | 'b' | null = null;
+  try { owner = new Chess(fen).get(d.frontSquare as Square)?.color ?? null; } catch { owner = null; }
+  const mine = owner === null || owner === viewer;
+  const yours = mine ? 'your' : 'their';
+  const theirs = mine ? 'their' : 'your';
+  const ref = (sq: string | undefined, fallback: string): string => (sq ? pieceRef(fen, sq, viewer)?.words ?? fallback : fallback);
+  const front = ref(d.frontSquare, `${yours} ${PNAME[d.frontPiece]} on ${d.frontSquare}`);
   const back = PNAME[d.backPiece];
-  const enemy = ref(d.enemySquare, `their ${PNAME[d.enemyPiece]} on ${d.enemySquare}`);
+  const enemy = ref(d.enemySquare, `${theirs} ${PNAME[d.enemyPiece]} on ${d.enemySquare}`);
   // WHICH line, WHOSE piece, and WHAT opens it (Alekhine re-walk ply 19: "your
   // bishop on e2 and your queen share that diagonal — mind it" named no enemy
   // and no move; the student cannot act on a line they cannot find).
   if (d.latent && d.shieldSquare && d.shieldPiece) {
     const shield = PNAME[d.shieldPiece];
-    return `heads up: ${enemy} looks through ${ref(d.shieldSquare, `your ${shield} on ${d.shieldSquare}`)} at ${front} and your ${back} behind it — move the ${shield} and the ${PNAME[d.frontPiece]} is pinned.`;
+    const through = ref(d.shieldSquare, `${yours} ${shield} on ${d.shieldSquare}`);
+    return mine
+      ? `heads up: ${enemy} looks through ${through} at ${front} and your ${back} behind it — move the ${shield} and the ${PNAME[d.frontPiece]} is pinned.`
+      : `${enemy} looks through ${through} at ${front} and their ${back} behind it — once the ${shield} moves, the ${PNAME[d.frontPiece]} is pinned.`;
   }
-  return `heads up: ${front} and your ${back} share that ${d.line} with ${enemy} — that ${d.line} is a pin.`;
+  return mine
+    ? `heads up: ${front} and your ${back} share that ${d.line} with ${enemy} — that ${d.line} is a pin.`
+    : `${front} and their ${back} share that ${d.line} with ${enemy} — that ${d.line} is a pin to aim at.`;
 }

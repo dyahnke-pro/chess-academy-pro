@@ -59,7 +59,7 @@ import { boardStateAfter } from './boardState';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 import { FUNDAMENTAL_HABIT, habitIsOwed, type MethodHabit } from './methodBeat';
 import { noteSlip } from './learnBoardTeaching';
-import { readBoard, readBoardAll, readKey, fundamentalsSaid, sacPayoffTeachesKing, planBeatArrows, causalChainRead } from './boardComputers';
+import { readBoard, readBoardAll, readKey, fundamentalsSaid, conversionKey, sacPayoffTeachesKing, planBeatArrows, causalChainRead } from './boardComputers';
 import { replyReadsFromFan, repliesNotWeighed, type ReplyRead } from './ifTheyPlay';
 import { proofCut, describeProofResult, NO_FOLLOW, type LineProof } from './exchangeLedger';
 import { computeMoveFacets, prematureBreakWhy, INFLUENCE_LOOSE_TAIL_RE, positionalVerdictLine } from './reviewFullData';
@@ -2413,11 +2413,12 @@ function* reviewSegmentSteps(
       // they are a piece or more up — the step the board is on, once per step
       // per game (the step only changes when the board does).
       if (moverColor === playerColor && studentColorWB) {
-        const conv = readBoard('conversionWalk', { fen: fenPair.fenAfter, student: studentColorWB });
-        const step = conv ? readKey(conv) as ConversionStep : null;
+        const conv = readBoard('conversion', { fen: fenPair.fenAfter, student: studentColorWB });
+        const step = conv ? conversionKey(conv).step as ConversionStep : null;
         if (conv && step && !seenConversionSteps.has(step) && !(step === 'trade-pieces' && convertTaughtAt() !== null)) {
           seenConversionSteps.add(step);
-          const raw = fact(conv.computer, conv.kind, conv.text);
+          // The walk says the step as technique (its facet tag), the composer as the method.
+          const raw = fact(conv.computer, 'technique', conv.text);
           facets.push(raw);
           if (step === 'trade-pieces') conversionFacets.add(raw);
         }
@@ -2726,7 +2727,7 @@ function* reviewSegmentSteps(
         const leadSquares = new Set(stepLeads.flatMap((f) => [...f.squares]));
         const phrasesHere = new Map(thoughtPhrases);
         const memoryHere = { keys: new Set(thoughtKeys) };
-        const thoughtFacts = moveThoughtFacts({ namesPlayedMove: REVIEW_WRITER.namesPlayedMove, theory: REVIEW_WALK_TEACHES_THEORY, story: REVIEW_WRITER.story, tense: REVIEW_WRITER.tense,
+        const thoughtFacts = moveThoughtFacts({ namesPlayedMove: REVIEW_WRITER.namesPlayedMove, theory: REVIEW_WALK_TEACHES_THEORY, story: REVIEW_WRITER.story, moveReads: REVIEW_WRITER.moveReads, tense: REVIEW_WRITER.tense,
           plainThreatsSeen: plainThreatsSeenFor(REVIEW_WRITER, seesPlainThreats(reviewRecord.plainThreats)),
           fenBefore: fenPair.fenBefore, san: m.san, moverIsStudent: mine, prev: prevCap,
           line: moves.slice(i + 1, i + 1 + BRIEFING_LINE_PLIES).map((x) => x.san),
@@ -2750,23 +2751,13 @@ function* reviewSegmentSteps(
           // What their move aims at is a threat Review says through its own
           // producer ([threat]); the lesson says it as the move's fact.
           && f.computer !== 'theirTarget'
-          // The king walked by hand: Review says it through its own facets
-          // (the registry's reads, both seats), so it is not said twice.
-          && f.source !== 'kingWalk'
           // A transposition or an analogy: Review says it through its opening
           // lines (the order reads), so it is not said twice.
           && !(f.source === 'openingTheory' && f.kind === 'equivalence')
-          // The opening's story: Review says it through its own story lines.
-          && f.computer !== 'openingStoryAt'
-          // Known slips: Review says them from its facet builder (reviewFullData).
-          && f.source !== 'knownSlip'
           // The book's statistics (main move or sideline, how it scores, the
           // usual reply) are the Theory button's (option B, David 2026-11-12);
           // the other main tries and their aims are theory the walk teaches.
           && !(f.kind === 'book-standing' || f.kind === 'book-score' || f.kind === 'book-reply')
-          // The moves a player weighs: Review says them through its own
-          // facets (the registry's reads, both seats).
-          && f.source !== 'weighed'
           // The teaching moves' new computers: Review says them through its
           // own facets (the registry's reads, both seats).
           && f.source !== 'teachingMove'
@@ -3611,8 +3602,9 @@ function* reviewSegmentSteps(
       const reasons = fundamentals.filter((f) => typeof f.facts.blow === 'string');
       const spokenFundamentals = reasons.length > 0 ? reasons : fundamentals;
       const verdictCtx = { attrs: spokenFundamentals, seen: seenFundamentals, replySan: moves[i + 1]?.san ?? null, ply: m.ply, fen: fenPair.fenBefore };
-      const verdictFact = readBoard('fundamentalVerdictWalk', verdictCtx);
-      const howFact = readBoard('fundamentalHow', verdictCtx);
+      const verdictFacts = readBoardAll('fundamentalVerdict', verdictCtx);
+      const verdictFact = verdictFacts.find((f) => readKey(f).startsWith('diagnosis|')) ?? null;
+      const howFact = verdictFacts.find((f) => readKey(f).startsWith('how|')) ?? null;
       // The fundamentals said in full for the first time are this game's now.
       for (const id of verdictFact ? fundamentalsSaid(verdictFact) : []) seenFundamentals.add(id);
       const verdict = verdictFact?.text ?? '';
@@ -4085,7 +4077,7 @@ function* reviewSegmentSteps(
       // queenside-majority-endgame plan mid-mating-attack"). Board-true gate.
       && !enemyKingStuckInCenter(fenPair.fenBefore, studentColorWB)
     ) {
-      const orientation = readBoard('middlegameOrientationWalk', { fenBefore: fenPair.fenBefore, student: studentColorWB, san: m.san });
+      const orientation = readBoard('middlegameOrientation', { fen: fenPair.fenBefore, student: studentColorWB, seat: 'both', san: m.san });
       if (orientation) { narration = orientation.text; planArrows = planBeatArrows(orientation); flags.add('orientationShown'); narrationSource = 'orientation'; }
     }
     // (b2) ENUMERATED POSITIONAL VERDICT — the "you're better here, and here's
@@ -4323,7 +4315,7 @@ function* reviewSegmentSteps(
       // already handled by buildDeterministicNarration; this catches 'great'.
       && (m.classification === null || m.classification === 'book' || m.classification === 'good' || m.classification === 'great' || m.classification === 'brilliant')
     ) {
-      const devRead = readBoard('opponentDevelopmentWalk', { opponentSans, fen: fenPair.fenAfter, student: studentColorWB });
+      const devRead = readBoard('opponentDevelopment', { oppSans: opponentSans, fen: fenPair.fenAfter, student: studentColorWB });
       if (devRead) {
         narration = devRead.text;
         narrationSource = 'opponent';

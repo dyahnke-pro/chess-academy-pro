@@ -215,7 +215,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     const game = gameBehind(i.history, i.fen);
     if (after) {
       for (const f of moveThoughtFacts({
-        fenBefore: i.fen, san, moverIsStudent: mine, namesPlayedMove: ASKED_WRITER.namesPlayedMove, plainThreatsSeen: plainThreatsSeenFor(ASKED_WRITER, false), tense: i.tense, theory: false, story: false,
+        fenBefore: i.fen, san, moverIsStudent: mine, namesPlayedMove: ASKED_WRITER.namesPlayedMove, plainThreatsSeen: plainThreatsSeenFor(ASKED_WRITER, false), tense: i.tense, theory: false, story: false, moveReads: ASKED_WRITER.moveReads,
         prev: NO_PREV_CAPTURE, line: top.moves, history: game.history, theirLast: game.theirLast, phrases: null, reads: { before: [...i.before], after: [...after], passBefore: [], passAfter: [] }, costCp: 0,
       })) {
         // A puzzle still being solved keeps only who stands better: what the

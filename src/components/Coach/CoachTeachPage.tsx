@@ -13478,9 +13478,9 @@ export function CoachTeachPage({ mode }: {
 
                 // ONE COACH (David 2026-11-17: "all computers feed the coach to all
                 // surfaces. It's only the narrations that differ"): the fact set the
-                // lesson, Review and chat read for the student's move, for every
-                // computer Learn's own lanes did not say this turn. The door decides
-                // what speaks; a fact naming the student's next move is held.
+                // lesson, Review and chat read for the student's move. The door decides
+                // what speaks: a computer Learn's own lane offers is said once, and a
+                // fact naming the student's next move is held.
                 try {
                   const queued = pendingVoiceRef.current;
                   if (fenBefore && preStudentRead?.topLines?.length && mid?.topLines?.length && queued && samePosition(queued.fen, fenAfterReply)) {
@@ -13491,7 +13491,6 @@ export function CoachTeachPage({ mode }: {
                     })();
                     const afterReply = samePosition(nextBoardFen ?? '', fenAfterReply) ? await nextBoardRead : null;
                     if (liveFenRef.current === fenAfterReply) {
-                      const said = new Set(queued.lines.map((l) => l.computer as string));
                       const parts = learnThoughtTurn({
                         studentMove: {
                           fenBefore, san: move.san, history: move.history.slice(0, -1), theirLast, costCp: studentCpLoss,
@@ -13504,7 +13503,7 @@ export function CoachTeachPage({ mode }: {
                           prev: captureRunOfPgn(move.pgn, move.history.length) ?? NO_PREV_CAPTURE,
                           reads: { before: mid.topLines, after: afterReply.topLines, passBefore: [], passAfter: [] },
                         } : null,
-                        fenNow: fenAfterReply, student: playerColor === 'white' ? 'w' : 'b', saidComputers: said,
+                        fenNow: fenAfterReply, student: playerColor === 'white' ? 'w' : 'b',
                       });
                       for (const p of parts) queueSpokenHint(fenAfterReply, p);
                     }

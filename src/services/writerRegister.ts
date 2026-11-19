@@ -74,6 +74,13 @@ export interface WriterSettings {
   /** Does the move's thought carry the opening story (`MoveThoughtInput.story`)?
    *  Review says its story through its own lines, so its thought answers false. */
   story: boolean;
+  /** Does the move's thought carry the move's BOARD READS — the king walked by
+   *  hand, the moves a player weighs, the known slips (`MoveThoughtInput.
+   *  moveReads`)? Each is one read every surface takes (`kingWalkReads`,
+   *  `weighedReads`, `knownSlipReads`). Review reads them once a ply off the
+   *  record in its facet builder and says them through its decider, so its
+   *  thought answers false: never read twice, never read and dropped. */
+  moveReads: boolean;
   /** Name the king's owner and say "reasonably safe" when nothing is wrong
    *  (`kingExposure.owner`): chat's answer to a question; elsewhere the bare clause. */
   owner: boolean;
@@ -95,7 +102,7 @@ export const WRITER: Record<CoachSurface, WriterSettings> = {
   // plain true) and learnSharedFacts (tense past, theory/story true).
   learn: {
     tense: 'past', register: 'live', namesPlayedMove: false, namesStudentMoves: false,
-    namesBetterMove: 'once-past', theory: true, storyTheory: true, story: true,
+    namesBetterMove: 'once-past', theory: true, storyTheory: true, story: true, moveReads: true,
     owner: false, plainBookMove: true, plainThreatsFromRecord: false,
   },
   // Review: the game is over — names both moves and the better move, in the
@@ -104,14 +111,14 @@ export const WRITER: Record<CoachSurface, WriterSettings> = {
   // reviewFullData / coachFeatureService.
   review: {
     tense: 'past', register: 'review', namesPlayedMove: true, namesStudentMoves: true,
-    namesBetterMove: 'always', theory: true, storyTheory: false, story: false,
+    namesBetterMove: 'always', theory: true, storyTheory: false, story: false, moveReads: false,
     owner: false, plainBookMove: false, plainThreatsFromRecord: true,
   },
   // A lesson (Teach me X, the opening pages, a generated Watch): the move is
   // shown, in the present (`lessonThought`), named, with its theory and story.
   lesson: {
     tense: 'now', register: 'live', namesPlayedMove: true, namesStudentMoves: true,
-    namesBetterMove: 'always', theory: true, storyTheory: true, story: true,
+    namesBetterMove: 'always', theory: true, storyTheory: true, story: true, moveReads: true,
     owner: false, plainBookMove: false, plainThreatsFromRecord: false,
   },
   // Play volunteers nothing (PLAY_VOLUNTEERS_COACHING = false); what the
@@ -119,35 +126,35 @@ export const WRITER: Record<CoachSurface, WriterSettings> = {
   // read). This row is the asked answer's words.
   play: {
     tense: 'now', register: 'live', namesPlayedMove: true, namesStudentMoves: true,
-    namesBetterMove: 'always', theory: true, storyTheory: true, story: false,
+    namesBetterMove: 'always', theory: true, storyTheory: true, story: false, moveReads: true,
     owner: false, plainBookMove: false, plainThreatsFromRecord: false,
   },
   // Chat: answers what was asked, in the present (`questionThought`), naming
   // what was asked, the king's owner included.
   chat: {
     tense: 'now', register: 'live', namesPlayedMove: true, namesStudentMoves: true,
-    namesBetterMove: 'always', theory: true, storyTheory: true, story: true,
+    namesBetterMove: 'always', theory: true, storyTheory: true, story: true, moveReads: true,
     owner: true, plainBookMove: false, plainThreatsFromRecord: false,
   },
   // Tactics / My Mistakes: a puzzle being solved never hands over the answer
   // (mistakeNarration, slipCause: namesBetterMove false).
   tactics: {
     tense: 'now', register: 'live', namesPlayedMove: true, namesStudentMoves: false,
-    namesBetterMove: 'never', theory: false, storyTheory: false, story: false,
+    namesBetterMove: 'never', theory: false, storyTheory: false, story: false, moveReads: true,
     owner: false, plainBookMove: false, plainThreatsFromRecord: false,
   },
   // Weaknesses: the student's finished games, read back (autoAnalyzeGame,
   // principleAttribution name the moves).
   weaknesses: {
     tense: 'past', register: 'review', namesPlayedMove: true, namesStudentMoves: true,
-    namesBetterMove: 'always', theory: false, storyTheory: false, story: false,
+    namesBetterMove: 'always', theory: false, storyTheory: false, story: false, moveReads: true,
     owner: false, plainBookMove: false, plainThreatsFromRecord: true,
   },
   // Learn how to think (held from release): a question before the move asks,
   // it never answers.
   think: {
     tense: 'now', register: 'live', namesPlayedMove: true, namesStudentMoves: false,
-    namesBetterMove: 'never', theory: false, storyTheory: false, story: false,
+    namesBetterMove: 'never', theory: false, storyTheory: false, story: false, moveReads: true,
     owner: false, plainBookMove: false, plainThreatsFromRecord: false,
   },
 };
@@ -199,9 +206,9 @@ export function plainThreatsSeenFor(w: WriterSettings, recordGreen: boolean): bo
   return w.plainThreatsFromRecord && recordGreen;
 }
 
-/** The three settings a move's thought takes from its surface. */
-export function thoughtSettings(w: WriterSettings): { namesPlayedMove: boolean; theory: boolean; story: boolean } {
-  return { namesPlayedMove: w.namesPlayedMove, theory: w.theory, story: w.story };
+/** The settings a move's thought takes from its surface. */
+export function thoughtSettings(w: WriterSettings): { namesPlayedMove: boolean; theory: boolean; story: boolean; moveReads: boolean } {
+  return { namesPlayedMove: w.namesPlayedMove, theory: w.theory, story: w.story, moveReads: w.moveReads };
 }
 
 // ─── THE DECIDER'S HALF ──────────────────────────────────────────────────────

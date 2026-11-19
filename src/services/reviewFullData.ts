@@ -11,6 +11,7 @@
  * uncapped review speaks these verbatim (un-warmed) so no fact is compressed away
  * and the gaps are visible. Each facet is a labeled prose clause.
  */
+import { kingWalkReads, weighedReads, knownSlipReads } from './moveThoughtFacts';
 import { lastMoveFromSan } from './material';
 import { playedUci } from './planSteps';
 import { openSentence, continueSentence } from '../utils/openSentence';
@@ -26,8 +27,8 @@ import type { RefutedAlternative } from './refutedAlternative';
 import type { ReviewIntent } from './reviewMoveIntent';
 import { recordedMoveCost } from './moveCost';
 import { lineProofFromUci, proofForStudent, squaresProof, isProof, NO_PROOF, type Proof } from './proof';
-import { readBoard, readBoardAll, readKey, principleKey, positionalVerdictOf, influenceShapeOf, oppTeachingKind, exchangeIdeaOf, tacticOf } from './boardComputers';
-import { knownSlipsAt, type KnownSlipIndex } from './knownSlips';
+import { readBoard, readBoardAll, readKey, principleKey, positionalVerdictOf, influenceShapeOf, oppTeachingKind, exchangeIdeaOf, tacticOf, fundamentalsSaid } from './boardComputers';
+import { type KnownSlipIndex } from './knownSlips';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import type { WeighRead } from './weighedMoves';
 import type { CoachFact, ComputerName } from './coachFact';
@@ -35,7 +36,7 @@ import { reviewFacet, asIncoming, inRuleFamily, type ReviewFacet } from './revie
 import type { FacetTag } from './reviewFacetRank';
 import { refutedAltProof } from './refutedAlternativeCore';
 import { advantageWasMissed } from './reviewWithholding';
-import { costWords, isMateEval, storedMate, mateDistanceOf, INACCURACY_CP, moverGaveUpMate, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
+import { costWords, isMateEval, storedMate, mateDistanceOf, moverGaveUpMate, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
 import { ONLY_MOVE_CP } from './criticalityScan';
 import { hangingLine, lostLastGuard } from './hangingLine';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
@@ -652,9 +653,11 @@ export function computeMoveFacets(
   // the flagged move crossed, proven on the board; stated as its own facet so
   // the uncapped inventory carries it and the capped cascade can lead with it.
   if (ctx.fundamentals && ctx.fundamentals.length > 0) {
-    const fv = readBoardAll('fundamentalVerdict', { fenBefore, fundamentals: ctx.fundamentals, ply, seen: ctx.seenFundamentals, replySan: ctx.allSans[ply] ?? null });
-    const diagnosis = fv.find((f) => readKey(f) === 'diagnosis') ?? null;
-    const how = fv.find((f) => readKey(f) === 'how') ?? null;
+    const fv = readBoardAll('fundamentalVerdict', { fen: fenBefore, attrs: ctx.fundamentals, ply, seen: ctx.seenFundamentals, replySan: ctx.allSans[ply] ?? null });
+    const diagnosis = fv.find((f) => readKey(f).startsWith('diagnosis|')) ?? null;
+    const how = fv.find((f) => readKey(f).startsWith('how|')) ?? null;
+    // The fundamentals said in full for the first time are this game's now.
+    for (const id of diagnosis ? fundamentalsSaid(diagnosis) : []) ctx.seenFundamentals.add(id);
     // ONE ANSWER, ONE CLAIM (Colle replay 2026-11-05, 20.Qxf4: "Another tempo
     // on offer: f6 would hit your bishop on g5" beside the verdict's "it let
     // them play …f6, which attacks your bishop"): a diagnosis naming the
@@ -1302,14 +1305,16 @@ export function computeMoveFacets(
     // used to be a habit on Review, a choice on Learn and a rule on the live
     // read (WO-STORY-MATRIX-01 P1-4) — said once through the `hint:` ledger.
     const add = (f: (CoachFact & { kind: FacetTag }) | undefined): void => { if (f) facetOf(f, `hint:${readKey(f)}`); };
+    // One fact a computer: the first each read found.
+    const addFirsts = (rs: ReadonlyArray<{ id: string; f: CoachFact & { kind: FacetTag } }>): void => {
+      const seen = new Set<string>();
+      for (const r of rs) if (!seen.has(r.id)) { seen.add(r.id); add(r.f); }
+    };
     // THE KING WALKED BY HAND, both seats (his Scotch Gambit game, 2026-11-04):
     // where the king goes when it must walk, the castling-by-hand plan and
     // each step of it, the bishop kept home to block a check, and the rule of
     // thumb when the king steps out of the centre.
-    add(readBoardAll('kingSquares', { fenBefore, san, student: studentColorWB, lines: ctx.bestLineUci.length ? [{ moves: ctx.bestLineUci }] : null, bestUci: ctx.bestLineUci[0] ?? null })[0]);
-    add(readBoardAll('castleByHand', { fenBefore, san, student: studentColorWB })[0]);
-    add(readBoardAll('keptHome', { fenBefore, san, student: studentColorWB })[0]);
-    add(readBoardAll('kingFromCentre', { fenBefore, san, student: studentColorWB })[0]);
+    addFirsts(kingWalkReads({ fenBefore, san, student: studentColorWB, lines: ctx.bestLineUci.length ? [{ moves: ctx.bestLineUci }] : null, bestUci: ctx.bestLineUci[0] ?? null }));
     // THE MOVES A PLAYER WEIGHS, both seats (weighedMoves, 2026-11-05): the
     // natural move that fails and its line, the move of the same worth and
     // what separates them, the piece's other squares and what goes wrong on
@@ -1317,13 +1322,11 @@ export function computeMoveFacets(
     {
       const w = ctx.teaching.weigh;
       const prior = ctx.teaching.prevFenBefore && ply >= 2 && ctx.allSans[ply - 2] ? { fenBefore: ctx.teaching.prevFenBefore, san: ctx.allSans[ply - 2] } : null;
-      add(readBoardAll('temptingRefuted', { fenBefore, san, student: studentColorWB, rating: w.rating, reads: w.reads, priorMove: prior })[0]);
-      add(readBoardAll('alsoGood', { fenBefore, san, student: studentColorWB, rating: w.rating, reads: w.reads })[0]);
       // The engine's better move when this move cost an inaccuracy or more:
       // the square choice is not asked of a piece it took elsewhere.
-      const beaten = Math.max(0, ctx.costCp ?? 0) >= INACCURACY_CP ? ctx.bestLineUci[0] ?? null : null;
-      const choice = readBoardAll('squareChoice', { fenBefore, san, student: studentColorWB, rating: w.rating, reads: w.reads, priorMove: prior, beaten, namesStudentMoves: REVIEW_WRITER.namesStudentMoves })[0];
-      add(choice);
+      const weighed = weighedReads({ fenBefore, san, student: studentColorWB, rating: w.rating, reads: w.reads, priorMove: prior, bestUci: ctx.bestLineUci[0] ?? null, costCp: ctx.costCp === null ? null : Math.max(0, ctx.costCp), namesStudentMoves: REVIEW_WRITER.namesStudentMoves });
+      addFirsts(weighed);
+      const choice = weighed.find((r) => r.id === 'squareChoice');
       // Why that square, the other way round: the piece put where nothing can
       // chase it (`outOfReach`). One answer a move — the same claim as the
       // square choice, so it speaks only where that one did not.
@@ -1372,6 +1375,12 @@ export function computeMoveFacets(
       // The early queen chased with tempo, both seats, off the game's own
       // moves before this one.
       add(readBoardAll('queenChased', { history: ctx.allSans.slice(0, ply - 1), fenBefore, san, student: studentColorWB })[0]);
+      // One piece moved again while the others wait at home, and the castling
+      // the move took away or which way the king castled, both seats — the
+      // same reads the lesson's thought takes (one coach, unlocked).
+      { const again = readBoardAll('pieceMovedAgain', { history: ctx.allSans.slice(0, ply - 1), fenBefore, san, student: studentColorWB, costCp: ctx.costCp })[0]; if (again) add({ ...again, kind: 'principle' }); }
+      add(readBoardAll('castlingTaken', { fenBefore, san, student: studentColorWB })[0]);
+      add(readBoardAll('castlingWing', { fenBefore, san, student: studentColorWB })[0]);
       add(readBoardAll('stalemateTrick', { fenBefore, san, student: studentColorWB })[0]);
       add(readBoardAll('bothSaved', { fenBefore, san, student: studentColorWB, replies: ctx.playedLineUci.length ? [{ cp: ctx.evaluation != null && storedMate(ctx.evaluation) == null ? ctx.evaluation : null, mate: null, moves: ctx.playedLineUci }] : [] })[0]);
       // A windmill and a perpetual check, both seats (repeatingChecks), one
@@ -1467,8 +1476,7 @@ export function computeMoveFacets(
     const slips = ctx.teaching.knownSlips;
     if (slips.index) {
       const gradedSound = ctx.classification === 'good' || ctx.classification === 'book' || ctx.classification === 'great' || ctx.classification === 'brilliant';
-      const played = gradedSound ? undefined : readBoardAll('knownSlip', { fen: fenBefore, gems: knownSlipsAt(slips.index, fenBefore), played: san, student: studentColorWB, verdictPunish, saidNext: null, told: slips.told })[0];
-      add(played ?? readBoardAll('trapAhead', { fen: fenAfter, gems: knownSlipsAt(slips.index, fenAfter), played: ctx.allSans[ply] ?? null, student: studentColorWB, verdictPunish: null, saidNext: slips.nextRefutedAlt, told: slips.told })[0]);
+      add(knownSlipReads({ fenBefore, fenAfter, san, next: ctx.allSans[ply] ?? null, student: studentColorWB, index: slips.index, graded: { sound: gradedSound, punish: verdictPunish, nextAlt: slips.nextRefutedAlt }, told: slips.told })[0]);
     }
   }
 
@@ -1490,7 +1498,7 @@ export function computeMoveFacets(
   if (studentColorWB) {
     // Never while their king is stuck in the centre — a king hunt, not a
     // majority grind (the registry's read decides).
-    sayFact(readBoard('middlegameOrientation', { fen: fenAfter, student: studentColorWB, seat: isStudent ? 'student' : 'opponent' }), 'plan-middlegame');
+    sayFact(readBoard('middlegameOrientation', { fen: fenAfter, student: studentColorWB, seat: isStudent ? 'student' : 'opponent', san: null }), 'plan-middlegame');
   }
 
   // ── 10. OPENING IDENTITY — the name and what the opening is are the

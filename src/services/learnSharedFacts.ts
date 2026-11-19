@@ -4,7 +4,8 @@
 // (`moveThoughtFacts`); Learn ran its own lanes and never read it, so every
 // computer that lives only in the shared set was silent in Learn. This turns
 // the shared facts for a move into Learn facts on the `thought` lane:
-//   - a computer Learn's own lanes already said this turn is not said twice;
+//   - a computer Learn's own lanes offer this turn is said once — the door
+//     holds the shared copy (`learnTurnDoor`, hold reason 'lane-said');
 //   - a fact that names a move the student has yet to find is marked so
 //     (LEARN NAMES NO MOVE UNASKED): every move its words or its lines name is
 //     checked on the board the student moves on next, and the door holds it.
@@ -46,16 +47,16 @@ export function sharedFactNamesStudentMove(f: Pick<ThoughtFact, 'text' | 'lines'
   return (f.lines ?? []).some((l) => namesPlayableStudentMove(studentMovesInLine(l.fen, l.sans, student, fenNow, 1)));
 }
 
-/** The shared facts for a move, as Learn facts on the `thought` lane — the
- *  ones whose computer Learn's own lanes did not already say this turn. */
+/** The shared facts for a move, as Learn facts on the `thought` lane. The
+ *  door decides which speak (a computer Learn's own lane offers is held). */
 export function sharedFactsForLearn(
   facts: readonly ThoughtFact[],
-  opts: { fenNow: string; student: 'w' | 'b'; saidComputers: ReadonlySet<string> },
+  opts: { fenNow: string; student: 'w' | 'b' },
 ): Array<LearnFactParts & { gradeFen: string }> {
   const out: Array<LearnFactParts & { gradeFen: string }> = [];
   const seen = new Set<string>();
   for (const f of facts) {
-    if (!f.text.trim() || opts.saidComputers.has(f.computer)) continue;
+    if (!f.text.trim()) continue;
     const key = `${f.computer}|${f.text}`;
     if (seen.has(key)) continue;
     seen.add(key);
@@ -97,12 +98,11 @@ export function learnThoughtTurn(args: {
   reply: LearnTurnMove | null;
   fenNow: string;
   student: 'w' | 'b';
-  saidComputers: ReadonlySet<string>;
 }): Array<LearnFactParts & { gradeFen: string }> {
   const read = (m: LearnTurnMove, moverIsStudent: boolean): ThoughtFact[] => moveThoughtFacts({
-    fenBefore: m.fenBefore, san: m.san, moverIsStudent, namesPlayedMove: namesPlayedMoveFor(LEARN_WRITER, moverIsStudent), plainThreatsSeen: plainThreatsSeenFor(LEARN_WRITER, false), tense: LEARN_WRITER.tense, theory: LEARN_WRITER.theory, story: LEARN_WRITER.story,
+    fenBefore: m.fenBefore, san: m.san, moverIsStudent, namesPlayedMove: namesPlayedMoveFor(LEARN_WRITER, moverIsStudent), plainThreatsSeen: plainThreatsSeenFor(LEARN_WRITER, false), tense: LEARN_WRITER.tense, theory: LEARN_WRITER.theory, story: LEARN_WRITER.story, moveReads: LEARN_WRITER.moveReads,
     prev: m.prev, line: null, history: [...m.history], theirLast: m.theirLast, phrases: null, reads: m.reads, costCp: m.costCp,
   });
   const facts = [...read(args.studentMove, true), ...(args.reply ? read(args.reply, false) : [])];
-  return sharedFactsForLearn(facts, { fenNow: args.fenNow, student: args.student, saidComputers: args.saidComputers });
+  return sharedFactsForLearn(facts, { fenNow: args.fenNow, student: args.student });
 }

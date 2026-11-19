@@ -46,19 +46,32 @@ export function isGenuine(reason: string): boolean {
  *  (the computer is read by a surface's own producer and not yet by the one
  *  fact set or the composer). Lower a ceiling when you open one; never raise it. */
 const LOCK_CEILING: Record<Exclude<CoachSurface, 'weaknesses'>, number> = {
-  learn: 61, review: 30, lesson: 47, play: 72, chat: 66, tactics: 96, think: 74,
+  learn: 53, review: 30, lesson: 45, play: 64, chat: 58, tactics: 88, think: 72,
 };
+
+/** BOTH WAYS (David 2026-11-19: "Make sure all computers work both ways"):
+ *  the computers whose record half is not wired yet — `owed` (the board poses
+ *  a skill and no record path files it) and `not` (each with its reason). Both
+ *  may only fall: a computer converted files held / missed for the student's
+ *  move through the one record path (`moveInsight.positionPosed` →
+ *  `capabilityOutcomes`) and its fact carries the skill. */
+const WEAKNESSES_OWED_CEILING = 69;
+const WEAKNESSES_UNWIRED_CEILING = 245;
 
 /** Which functions of `moveThoughtFacts.ts` each surface's consumer calls:
  *  Learn's shared facts, Play's and a puzzle's tapped read (`boardReadFacts`)
  *  and Review's walk read the core; a lesson and chat add the lesson's board
  *  reads, the student-move bundle and the purpose; a thinking step adds its
  *  step board reads. */
+const MOVE_READS = ['kingWalkReads', 'weighedReads', 'knownSlipReads'] as const;
 const REACH: Partial<Record<CoachSurface, readonly string[]>> = {
-  learn: ['moveThoughtFacts'], play: ['moveThoughtFacts'], tactics: ['moveThoughtFacts'], review: ['moveThoughtFacts'],
-  lesson: ['moveThoughtFacts', 'LESSON_MOVE_READS', 'studentMoveFacts', 'purposeFact'],
-  chat: ['moveThoughtFacts', 'LESSON_MOVE_READS', 'studentMoveFacts', 'purposeFact'],
-  think: ['moveThoughtFacts', 'studentMoveFacts', 'STEP_BOARD_READS'],
+  learn: ['moveThoughtFacts', ...MOVE_READS], play: ['moveThoughtFacts', ...MOVE_READS], tactics: ['moveThoughtFacts', ...MOVE_READS],
+  // Review reads the move's board reads in its facet builder (reviewFullData
+  // calls the same three functions), the rest through the core.
+  review: ['moveThoughtFacts', ...MOVE_READS],
+  lesson: ['moveThoughtFacts', 'LESSON_MOVE_READS', 'studentMoveFacts', 'purposeFact', ...MOVE_READS],
+  chat: ['moveThoughtFacts', 'LESSON_MOVE_READS', 'studentMoveFacts', 'purposeFact', ...MOVE_READS],
+  think: ['moveThoughtFacts', 'studentMoveFacts', 'STEP_BOARD_READS', ...MOVE_READS],
 };
 
 function bodyOf(src: string, name: string): string {
@@ -106,16 +119,9 @@ const FILTER_DEBT: Record<string, ReadonlyArray<{ clause: string; why: string }>
     { clause: 'REVIEW_OWNS_IDEA.has(f.idea)', why: 'OWED: as above' },
     { clause: 'ruleIdeas.has(f.idea)', why: 'OWED: an idea Review\'s facets already said on the ply (one idea said once)' },
     { clause: "f.computer !== 'theirTarget'", why: 'OWED: Review\'s [threat] facet says what their move aims at' },
-    { clause: "f.source !== 'kingWalk'", why: 'OWED: Review\'s facets read the king walk' },
     { clause: "f.source === 'openingTheory'", why: 'OWED: Review\'s opening lines say the equivalence' },
-    { clause: "f.computer !== 'openingStoryAt'", why: 'OWED: Review\'s own story lines' },
-    { clause: "f.source !== 'knownSlip'", why: 'OWED: reviewFullData\'s facet builder reads the known slips' },
-    { clause: "f.source !== 'weighed'", why: 'OWED: Review\'s facets read the weighed moves' },
     { clause: "f.source !== 'teachingMove'", why: 'OWED: Review\'s facets read the teaching-move computers' },
     { clause: "f.source !== 'pieceRoute'", why: 'GENUINE (tense): a trip is a plan forward; in a finished game the moves that followed were answers to the board — hindsight' },
-  ],
-  'services/learnSharedFacts.ts': [
-    { clause: 'saidComputers.has(f.computer)', why: 'OWED: Learn\'s own lane already said this computer this turn; the say-once should be the door\'s claims' },
   ],
   'services/moveThoughtFacts.ts': [
     { clause: "f.source === 'openingStory'", why: 'GENUINE (question scope): a story line about the board answers no question about a move' },
@@ -175,6 +181,14 @@ describe('one coach, unlocked', () => {
       .filter((s) => (locks[s]?.length ?? 0) > LOCK_CEILING[s])
       .map((s) => `${s}: ${locks[s].length} locks > ceiling ${LOCK_CEILING[s]}`);
     expect(over).toEqual([]);
+  });
+
+  it('both ways: the record half not yet wired may only fall', () => {
+    const weak = rows.map(([, spec]) => spec.surfaces.weaknesses);
+    const owed = weak.filter((a) => !a.wired && /owed/i.test(a.not ?? '')).length;
+    const unwired = weak.filter((a) => !a.wired).length;
+    expect(owed).toBeLessThanOrEqual(WEAKNESSES_OWED_CEILING);
+    expect(unwired).toBeLessThanOrEqual(WEAKNESSES_UNWIRED_CEILING);
   });
 
   it('(a) the genuine reasons are told apart from a lock', () => {

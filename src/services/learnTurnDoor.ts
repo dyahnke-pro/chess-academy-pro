@@ -61,7 +61,7 @@ export type { VoicePackage, VoiceFactKind } from './voicePackage';
 export type { FactStakes } from './factStakes';
 
 /** Why the door held a lane on a turn. */
-type HoldReason = 'mission' | 'quiet-turn' | 'names-chance' | 'names-move' | 'held-this-turn' | 'mate-turn' | 'verdict-turn' | 'mid-exchange' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'same-step' | 'second-thought' | 'marginal' | 'contradicts' | 'out-of-phase' | 'price-unsettled' | 'one-method';
+type HoldReason = 'mission' | 'quiet-turn' | 'names-chance' | 'names-move' | 'held-this-turn' | 'lane-said' | 'mate-turn' | 'verdict-turn' | 'mid-exchange' | 'danger-waits' | 'subsumed' | 'restates' | 'off-topic' | 'same-step' | 'second-thought' | 'marginal' | 'contradicts' | 'out-of-phase' | 'price-unsettled' | 'one-method';
 
 /** WHO OWNS THE VOICE OF THIS TURN (WO-MISSIONS-01, WO-LEARN-FOCUS-01).
  *  - `open`: no focus, no mission — the door decides.
@@ -970,6 +970,12 @@ export function decideTurn(
   const moveHeld: LearnLane[] = [];
   const chanceHeld: LearnLane[] = [];
   const heldEarlier: LearnLane[] = [];
+  // ONE COMPUTER, ONE VOICE A TURN (the say-once Learn's page used to filter
+  // by hand, `saidComputers`): a fact from the shared set (`thought`) whose
+  // computer one of Learn's own lanes offers in this wave is the same read
+  // twice — the lane's fact speaks, the shared one is held, and the row says so.
+  const laneSaid: LearnLane[] = [];
+  const laneComputers = new Set(facts.filter((f) => f.lane !== 'thought').map((f) => f.computer as string));
   // POINTERS (WO-LEARN-SWING-01): a fact that names the student's next move
   // speaks its held form in its place. A pointer at the decision speaks by the
   // record (`pointerSpeaks`) and once a game — its `pointer:<skill>` claim rides
@@ -996,6 +1002,7 @@ export function decideTurn(
     if (f !== named) voicedAs.set(named.id, f);
     if (!f.text.trim()) continue;
     offered.push(f.lane);
+    if (f.lane === 'thought' && laneComputers.has(f.computer as string)) { if (!laneSaid.includes(f.lane)) laneSaid.push(f.lane); continue; }
     if (factOutOfPhase(f)) { if (!phaseHeld.includes(f.lane)) phaseHeld.push(f.lane); for (const c of f.claims) heldThisTurn?.add(c); continue; }
     if (heldThisTurn && f.claims.some((c) => heldThisTurn.has(c))) { if (!heldEarlier.includes(f.lane)) heldEarlier.push(f.lane); continue; }
     // LEARN NAMES NO MOVE UNASKED (OS-10): a fact that names a move the
@@ -1276,6 +1283,7 @@ export function decideTurn(
   for (const l of moveHeld) hold(l, 'names-move');
   for (const l of chanceHeld) hold(l, 'names-chance');
   for (const l of heldEarlier) hold(l, 'held-this-turn');
+  for (const l of laneSaid) hold(l, 'lane-said');
   // "NOTHING HINGES ON YOUR NEXT MOVE" NEVER SITS BESIDE A STAKE (Alekhine
   // walk 2026-10-19: "Watch c2 — a knight forks there in 2…" then "Nothing
   // hinges on your next move"). Both were true — every top move met the fork —

@@ -28,7 +28,15 @@ describe('detectLatentDanger — the pin-in-waiting (David\'s heartbreak case)',
     const d = detectLatentDanger(fen, 'w');
     expect(d).toMatchObject({ frontSquare: 'e3', backSquare: 'e1', latent: true });
     // The pieces by what they are; the squares are the fact's to light (David 2026-11-05).
-    expect(latentDangerClause(d!, fen)).toMatch(/their rook looks through your knight at your bishop and your king behind it — move the knight and the bishop is pinned/);
+    expect(latentDangerClause(d!, fen, 'w')).toMatch(/their rook looks through your knight at your bishop and your king behind it — move the knight and the bishop is pinned/);
+  });
+
+  it('the same line from the other seat is the chance, not the alarm (both seats)', () => {
+    const fen = '4r1k1/8/8/4N3/8/4B3/8/4K3 w - - 0 1';
+    const d = detectLatentDanger(fen, 'w')!;
+    const said = latentDangerClause(d, fen, 'b');
+    expect(said).toMatch(/^your rook looks through their knight at their bishop and their king behind it — once the knight moves, the bishop is pinned\.$/);
+    expect(said).not.toMatch(/heads up/);
   });
 
   it('a pawn shield on a file is not a line the student opens (e4-Be2-Ke1)', () => {
@@ -66,7 +74,7 @@ describe('detectLatentDanger — the pin-in-waiting (David\'s heartbreak case)',
   it('renders a guide-don\'t-tell warning naming the alignment, never a move', () => {
     const fen = '4r1k1/8/8/4B3/8/8/8/4K3 w - - 0 1';
     const d = detectLatentDanger(fen, 'w')!;
-    const line = latentDangerClause(d, fen);
+    const line = latentDangerClause(d, fen, 'w');
     expect(line).toMatch(/your bishop/);
     expect(line).toMatch(/king/);
     expect(line).toMatch(/file/);

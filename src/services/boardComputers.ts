@@ -25,7 +25,7 @@ import { NO_PROOF, squaresProof, isProof, legalLineProof, lineProofFromUci, type
 import { lineSeatAt, withArticle } from '../utils/andList';
 import type { FactStakes } from './factStakes';
 import { LOCAL_THREAD, placeFact, stakesOf, type CoachFact, type CoachFactKind, type ComputerName, type FactSeat } from './coachFact';
-import { threadKey, type SaidSet } from './gameStory';
+import { threadKey } from './gameStory';
 import { findPinBreaks, pinBreakLine, pinBreakProof } from './pinBreak';
 import { findProphylaxis, prophylaxisKey, prophylaxisLine, prophylaxisIdea, prophylaxisProof, prophylaxisThreatProof, theirWantedMoves } from './prophylaxis';
 import { inBetweenMove } from './inBetweenMove';
@@ -446,8 +446,11 @@ export interface BoardContexts {
   /** Who's better and why at the turn of the game (`phaseVerdictLine`). */
   phaseVerdict: { fen: string; student: Color; studentCp: number | null; phase: 'middlegame' | 'endgame'; heard: ReadonlySet<string>; lastMove: LastMove | null };
   /** The middlegame plan (`buildMiddlegameOrientation`) — never while their
-   *  king is stuck in the centre (a king hunt, not a majority grind). */
-  middlegameOrientation: { fen: string; student: Color; seat: FactSeat };
+   *  king is stuck in the centre (a king hunt, not a majority grind). `seat`:
+   *  whose plan the beat may carry ('both' is the one-shot orientation the
+   *  walk says once); `san`: the move played, so a storm pushed at the
+   *  student's own king is said so (null on a board with no move). */
+  middlegameOrientation: { fen: string; student: Color; seat: 'student' | 'opponent' | 'both'; san: string | null };
   /** Their development so far (`buildOpponentDevelopmentRead`). */
   opponentDevelopment: { oppSans: readonly string[]; fen: string; student: Color };
   /** The point of the student's quiet move (`studentMovePoint`); none on a capture. */
@@ -463,9 +466,10 @@ export interface BoardContexts {
   /** The trade, defence and conversion ideas (`exchangeIdeas`). */
   exchangeIdeas: ExchangeIdeasInput;
   /** The fundamental the flagged move crossed (`renderFundamentalVerdict`):
-   *  its diagnosis (key `diagnosis`), then its how (key `how`). `seen` is the
-   *  game's ledger of fundamentals said in full — the read adds to it. */
-  fundamentalVerdict: { fenBefore: string; fundamentals: readonly PrincipleAttribution[]; ply: number; seen: SaidSet<FundamentalId>; replySan: string | null };
+   *  its diagnosis (key `diagnosis|…`), then its how (key `how|…`). `seen` is
+   *  the game's ledger of fundamentals said in full — the read never writes
+   *  it; the caller adds `fundamentalsSaid(diagnosis)` once it is said. */
+  fundamentalVerdict: { fen: string; attrs: readonly PrincipleAttribution[]; ply: number; seen: ReadonlySet<FundamentalId>; replySan: string | null };
   /** The rule of the tactic the better move would have landed (`tacticInvariant`). */
   tacticRule: { fen: string; type: string };
   /** The moved piece's new pressure (`describeMoveInfluence`), seated from
@@ -868,7 +872,6 @@ export interface BoardContexts {
   quietDecider: { plies: readonly GamePly[]; student: Color };
   exploreInvite: { plies: readonly GamePly[]; index: number; student: Color };
   murkyRead: { plies: readonly GamePly[]; index: number; student: Color };
-  conversionWalk: { fen: string; student: Color };
   pawnEndingCount: { fenBefore: string; san: string; replySan: string | null; cpLoss: number; evalAfterCp: number | null };
   spareTempo: { fenBefore: string; san: string; bestSan: string | null; cpLoss: number };
   passerDecoy: { fen: string; student: Color };
@@ -878,14 +881,10 @@ export interface BoardContexts {
   attackAsks: { fenAfter: string; target: string; mover: Color };
   theirOpeningChoice: { history: readonly string[]; student: Color; cpLoss: number; coachChose: boolean; fen: string };
   openingNamed: { det: { name: string } | null; history: readonly string[]; spokenName: string | null; student: Color; transposed: boolean; fen: string };
-  fundamentalVerdictWalk: { attrs: readonly PrincipleAttribution[]; seen: ReadonlySet<FundamentalId>; replySan: string | null; ply: number; fen: string };
-  fundamentalHow: { attrs: readonly PrincipleAttribution[]; seen: ReadonlySet<FundamentalId>; replySan: string | null; ply: number; fen: string };
   sacPayoff: { fenAfter: string; mover: Color; moverPovEvalCp: number | null; moverPovBeforeCp: number | null; kingCentreTaught: boolean };
   sacShield: { fenBefore: string; san: string };
-  middlegameOrientationWalk: { fenBefore: string; student: Color; san: string };
   takeStock: { fenBefore: string; san: string; fen: string; student: Color; studentPovCp: number | null };
   kingHuntCue: { fen: string; student: Color };
-  opponentDevelopmentWalk: { opponentSans: readonly string[]; fen: string; student: Color };
   opponentTarget: { fenBefore: string; san: string; student: Color };
   causalChain: { sans: readonly string[]; ply: number; student: Color; rating: number; fen: string };
   endgamePhase: { fen: string; student: Color };
@@ -1376,7 +1375,7 @@ const SLIP_NOT_WEAK: SurfaceAnswer = { not: 'the slip played is graded as the mo
 const KNOWN_SLIP_SURFACES: Record<CoachSurface, SurfaceAnswer> = {
   lesson: { wired: 'services/moveThoughtFacts.ts' },
   learn: LEARN_VIA_THOUGHT,
-  review: { wired: 'services/reviewFullData.ts' },
+  review: { wired: 'services/moveThoughtFacts.ts' },
   play: PLAY_READ,
   chat: { wired: 'services/moveThoughtFacts.ts' },
   tactics: TACTICS_READ,
@@ -1768,28 +1767,28 @@ export const BOARD_COMPUTERS = {
     // A slow "advance your majority" plan is a NON-APPLICABLE reason while the
     // enemy king is exposed in the centre — that's a king hunt, not a majority
     // grind (David 2026-07-20 diagnostic: it fired every move of a mating attack).
-    read: ({ fen, student, seat }, fact) => safe(() => {
+    // One read for Review's facets (the mover's seat) and the walk's one-shot
+    // orientation (both seats): the beat's arrows ride the key (`planBeatArrows`).
+    read: ({ fen, student, seat, san }, fact) => safe(() => {
       if (enemyKingStuckInCenter(fen, student)) return null;
-      const orient = buildMiddlegameOrientation(fen, student, undefined, seat);
-      if (!orient) return null;
-      return fact({ key: 'orientation', claims: ['plan-middlegame'], text: orient.text, proof: NO_PROOF.description, squares: [], stakes: null, seat, namesStudentMove: false, thread: LOCAL_THREAD, fen });
+      return planBeatFact(buildMiddlegameOrientation(fen, student, san ?? undefined, seat), fen, seat === 'opponent' ? 'opponent' : 'student', fact);
     }),
     computer: 'buildMiddlegameOrientation',
     kind: 'plan-middlegame',
     phase: ANY,
     surfaces: reviewFacetSurfaces(),
   },
+
   opponentDevelopment: {
-    read: ({ oppSans, fen, student }, fact) => safe(() => {
-      const dev = buildOpponentDevelopmentRead([...oppSans], fen, student);
-      if (!dev) return null;
-      return fact({ key: 'opp-dev', claims: ['opp-dev'], text: dev.text, proof: NO_PROOF.description, squares: [], stakes: null, seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen });
-    }),
+    // Their development so far — one read for Review's facets and the walk;
+    // the beat's arrows ride the key (`planBeatArrows`).
+    read: ({ oppSans, fen, student }, fact) => safe(() => planBeatFact(buildOpponentDevelopmentRead([...oppSans], fen, student), fen, 'opponent', fact)),
     computer: 'buildOpponentDevelopmentRead',
     kind: 'opp-dev',
     phase: ANY,
     surfaces: reviewFacetSurfaces(),
   },
+
   studentMovePoint: {
     // QUIET MOVES ONLY: a capture's point is the trade, said by the trade.
     read: ({ fenBefore, san, prevCap }, fact) => safe(() => {
@@ -1864,18 +1863,20 @@ export const BOARD_COMPUTERS = {
     surfaces: { ...LIVE_READ, review: REVIEW },
   },
   fundamentalVerdict: {
-    read: ({ fenBefore, fundamentals, ply, seen, replySan }, fact) => safe(() => {
-      if (!fundamentals.length) return null;
-      const verdict = renderFundamentalVerdict(fundamentals, { ply, seen, replySan });
-      const out = [fact({ key: 'diagnosis', claims: [`fundamental:${fundamentals[0].id}`], text: verdict.diagnosis, proof: NO_PROOF.description, squares: [], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore })];
-      if (verdict.how) out.push(fact({ key: 'how', claims: [`fundamental-how:${fundamentals[0].id}`], text: verdict.how, proof: NO_PROOF.description, squares: [], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore }));
-      return out;
+    // Its diagnosis, then its how (the habit step), from one render: the
+    // fundamentals it says in full for the first time ride the key
+    // (`fundamentalsSaid`), so the caller's ledger learns them once said.
+    read: (ctx, fact) => safe(() => {
+      if (!ctx.attrs.length) return null;
+      const out = (['diagnosis', 'how'] as const).map((half) => verdictFact(ctx, fact, half)).filter((f): f is CoachFact => f !== null);
+      return out.length ? out : null;
     }),
     computer: 'renderFundamentalVerdict',
     kind: 'principle',
     phase: ANY,
     surfaces: reviewFacetSurfaces(),
   },
+
   tacticRule: {
     read: ({ fen, type }, fact) => safe(() => {
       const inv = tacticInvariant(type);
@@ -2485,12 +2486,12 @@ export const BOARD_COMPUTERS = {
       if (!t) return null;
       const proof = queenGrabTrapProof(t);
       const key = `grab:${t.to}`;
-      return fact({ key, claims: [key], text: queenGrabTrapLine(t), proof, squares: [t.from, t.to, t.replyFrom, t.replyTo, ...(proof.squares ?? [])], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+      return fact({ key, claims: [key], text: queenGrabTrapLine(t), proof, squares: [t.from, t.to, t.replyFrom, t.replyTo, ...(proof.squares ?? [])], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, skill: 'poisoned-pawn', fen });
     }),
     computer: 'findQueenGrabTraps',
     kind: 'tactic',
     phase: ANY,
-    surfaces: { lesson: LESSON_BOARD, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_COMPOSER, weaknesses: WEAK_OWED, think: THINK },
+    surfaces: { lesson: LESSON_BOARD, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_COMPOSER, weaknesses: { wired: 'services/moveInsight.ts' }, think: THINK },
   },
   trapped: {
     read: ({ fen, student }, fact) => safe(() => {
@@ -2584,20 +2585,27 @@ export const BOARD_COMPUTERS = {
     surfaces: LIVE_READ,
   },
   latentDanger: {
+    // BOTH SEATS (David 2026-11-19): the pin in waiting on your king or queen
+    // (a danger, first), and the same line on theirs (your chance).
     read: ({ fen, student }, fact) => safe(() => {
-      const d = detectLatentDanger(fen, student, { latentOnly: true });
-      if (!d) return null;
-      const text = latentDangerClause(d, fen);
-      // A LATENT line needs their piece to arrive first.
-      return fact({ key: text, claims: [], text, proof: NO_PROOF.description,
-        squares: [d.enemySquare, d.frontSquare, d.backSquare, ...(d.shieldSquare ? [d.shieldSquare] : [])],
-        stakes: { points: lineTacticPoints(d.frontPiece, d.backPiece), plies: 3 },
-        seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+      const them: Color = student === 'w' ? 'b' : 'w';
+      const out: CoachFact[] = [];
+      for (const [side, seat, skill] of [[student, 'opponent', 'missed-their-pin'], [them, 'student', 'missed-your-pin']] as const) {
+        const d = detectLatentDanger(fen, side, { latentOnly: true });
+        if (!d) continue;
+        const text = latentDangerClause(d, fen, student);
+        // A LATENT line needs the pinning piece to arrive first.
+        out.push(fact({ key: text, claims: [], text, proof: NO_PROOF.description,
+          squares: [d.enemySquare, d.frontSquare, d.backSquare, ...(d.shieldSquare ? [d.shieldSquare] : [])],
+          stakes: { points: lineTacticPoints(d.frontPiece, d.backPiece), plies: 3 },
+          seat, namesStudentMove: false, thread: LOCAL_THREAD, fen, skill }));
+      }
+      return out.length ? out : null;
     }),
     computer: 'detectLatentDanger',
     kind: 'latent-danger',
     phase: ANY,
-    surfaces: LIVE_READ,
+    surfaces: { ...LIVE_READ, weaknesses: { wired: 'services/moveInsight.ts' } },
   },
   tradeDanger: {
     read: ({ fen, student }, fact) => safe(() => {
@@ -2612,12 +2620,12 @@ export const BOARD_COMPUTERS = {
       return fact({ key: text, claims: [], text, proof: NO_PROOF.description,
         squares: [d.enemySquare, d.frontSquare, d.backSquare, d.tradeFrom, d.tradeTo],
         stakes: { points: lineTacticPoints(d.frontPiece, d.backPiece), plies: 2 },
-        seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: after ?? fen });
+        seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: after ?? fen, skill: 'bad-trade' });
     }),
     computer: 'detectTradeCreatesPin',
     kind: 'latent-danger',
     phase: ANY,
-    surfaces: LIVE_READ,
+    surfaces: { ...LIVE_READ, weaknesses: { wired: 'services/moveInsight.ts' } },
   },
   latentFork: {
     // The student's own fork first (a plan you can execute beats a plan you
@@ -2632,12 +2640,14 @@ export const BOARD_COMPUTERS = {
       // The route is withheld from the words: the line names no move.
       return fact({ key, claims: [key], text, proof: NO_PROOF.description, squares: [f.square, ...targets],
         stakes: { points: forkPoints(f.targets.map((t) => t.piece)), plies: 2 * f.moves },
-        seat: f.forker === seat ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+        seat: f.forker === seat ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen,
+        // Both ways: your fork to set up, or theirs to stop (`moveInsight.positionPosed`).
+        skill: f.forker === seat ? 'missed-your-fork' : 'missed-their-fork' });
     }),
     computer: 'detectLatentFork',
     kind: 'latent-chance',
     phase: ANY,
-    surfaces: LIVE_READ,
+    surfaces: { ...LIVE_READ, weaknesses: { wired: 'services/moveInsight.ts' } },
   },
   centralKingDanger: {
     read: ({ fen, student, namesMoves: names }, fact) => safe(() => {
@@ -2645,12 +2655,12 @@ export const BOARD_COMPUTERS = {
       if (!d) return null;
       const text = centralKingDangerClause(d, names);
       return fact({ key: text, claims: [], text, proof: NO_PROOF.description, squares: [d.kingSquare, d.aimedFrom, d.tensionSquare], stakes: null,
-        seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+        seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen, skill: 'king-stuck-center' });
     }),
     computer: 'detectCentralKingDanger',
     kind: 'latent-danger',
     phase: ANY,
-    surfaces: LIVE_READ,
+    surfaces: { ...LIVE_READ, weaknesses: { wired: 'services/moveInsight.ts' } },
   },
   conversion: {
     // The key is the step and its passer (`conversionKey`): a step is said
@@ -2658,14 +2668,15 @@ export const BOARD_COMPUTERS = {
     read: ({ fen, student }, fact) => safe(() => {
       const c = readConversion(fen, student);
       if (!c) return null;
-      return fact({ key: `${c.step}|${c.passer ?? ''}`, claims: [], text: c.text, proof: NO_PROOF.description, squares: c.passer ? [c.passer] : [], stakes: null,
-        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+      return fact({ key: `${c.step}|${c.passer ?? ''}`, claims: [`convert:${c.step}`], text: c.text, proof: NO_PROOF.description, squares: c.passer ? [c.passer] : [], stakes: null,
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen, skill: 'botched-conversion' });
     }),
     computer: 'readConversion',
     kind: 'convert',
     phase: ANY,
-    surfaces: LIVE_READ,
+    surfaces: { ...LIVE_READ, weaknesses: { wired: 'services/moveInsight.ts' } },
   },
+
   opponentIntent: {
     read: ({ fen, topLines }, fact) => safe(() => {
       const oi = buildOpponentIntent({ analysis: { topLines }, fen });
@@ -3030,7 +3041,7 @@ export const BOARD_COMPUTERS = {
       play: PLAY_ASK,
       chat: { wired: 'services/thinkAloud.ts' },
       tactics: TACTICS_NA,
-      weaknesses: { not: 'the record half is the classifier: missedTacticService.detectTacticType asks geometryMotif' },
+      weaknesses: { wired: 'services/missedTacticService.ts' },
       think: THINK,
     },
   },
@@ -3049,12 +3060,14 @@ export const BOARD_COMPUTERS = {
         ? { text: s.kind === 'prep' ? 'That pawn move takes a square away from their knight, so your king can walk toward safety without a check.' : 'Your king has lost castling — walk it to safety by hand, a rook coming across behind it.', proof: NO_PROOF.method, squares: [] as string[] }
         : null;
       return fact({ key: s.key, claims: [s.key], text: s.text, proof: squaresProof(s.text, s.squares) ?? NO_PROOF.description, squares: s.squares, stakes: null,
-        seat: mine ? 'student' : 'opponent', namesStudentMove: !!held, thread: LOCAL_THREAD, fen, ...(held ? { heldForm: held } : {}) });
+        seat: mine ? 'student' : 'opponent', namesStudentMove: !!held, thread: LOCAL_THREAD, fen, ...(held ? { heldForm: held } : {}),
+        // Both ways: the king walk is the skill `positionPosed` files (king-stuck-center).
+        ...(mine ? { skill: 'king-stuck-center' } : {}) });
     }),
     computer: 'castleByHandMove',
     kind: 'castling',
     phase: NOT_ENDING,
-    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ, weaknesses: { not: 'the record half is positionPosed: castleByHand poses king-stuck-center' }, think: THINK },
+    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ, weaknesses: { wired: 'services/moveInsight.ts' }, think: THINK },
   },
   kingFromCentre: {
     read: ({ fenBefore, san, student }, fact) => safe(() => {
@@ -3067,7 +3080,7 @@ export const BOARD_COMPUTERS = {
     computer: 'kingFromCentre',
     kind: 'nugget',
     phase: NOT_ENDING,
-    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ, weaknesses: { not: 'a rule of thumb poses no question of its own; the king walk it closes is recorded through castleByHand' }, think: THINK },
+    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ, weaknesses: { not: 'a rule of thumb poses no question of its own; the king walk it closes is recorded through castleByHand' }, think: THINK },
   },
   keptHome: {
     read: ({ fenBefore, san, student }, fact) => safe(() => {
@@ -3084,7 +3097,7 @@ export const BOARD_COMPUTERS = {
     computer: 'keptHome',
     kind: 'held',
     phase: NOT_ENDING,
-    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ, weaknesses: { not: 'a piece kept home on purpose is a choice, not a skill the board poses' }, think: THINK },
+    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ, weaknesses: { not: 'a piece kept home on purpose is a choice, not a skill the board poses' }, think: THINK },
   },
   kingSquares: {
     // His 7…Kf8: "obviously not g6 or f6 — you'd get mated … the king to f8 is
@@ -3094,12 +3107,15 @@ export const BOARD_COMPUTERS = {
       const r = kingSquares(fenBefore, san, mine ? 'your' : 'their', lines, bestUci);
       if (!r) return null;
       return fact({ key: r.key, claims: [r.key], text: r.text, proof: squaresProof(r.text, r.squares) ?? NO_PROOF.description, squares: r.squares, stakes: null,
-        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore,
+        // Both ways: the mated square is the skill the record files
+        // (`capabilityEvidence.kingSquareOutcome`).
+        ...(mine ? { skill: 'missed-opponents-threat' } : {}) });
     }),
     computer: 'kingSquares',
     kind: 'contrast',
     phase: ANY,
-    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ, weaknesses: { not: 'the record half is capabilitiesPosed: a forced king walk with a mated square poses missed-opponents-threat' }, think: THINK },
+    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ, weaknesses: { wired: 'services/capabilityEvidence.ts' }, think: THINK },
   },
   knownSlip: {
     // THE KNOWN MISTAKES AND TRAPS (David 2026-11-04: "it needs to be in
@@ -3265,7 +3281,7 @@ export const BOARD_COMPUTERS = {
     computer: 'temptingRefuted',
     kind: 'refuted',
     phase: ANY,
-    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ, weaknesses: { not: 'a move not played poses nothing to record; the move played is graded by its own cost' }, think: THINK },
+    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ, weaknesses: { not: 'a move not played poses nothing to record; the move played is graded by its own cost' }, think: THINK },
   },
   temptingNow: {
     // His "Ng5+ is tempting, but after …Kg7 and …Rg3 Black parries the
@@ -3319,7 +3335,7 @@ export const BOARD_COMPUTERS = {
     computer: 'alsoGood',
     kind: 'contrast',
     phase: ANY,
-    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ, weaknesses: { not: 'two moves of one worth pose no question the student can miss' }, think: THINK },
+    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ, weaknesses: { not: 'two moves of one worth pose no question the student can miss' }, think: THINK },
   },
   squareChoice: {
     // His "Bf4 runs into Nxd4, Bg5 is kicked by h6, Bd2 hangs the knight —
@@ -3336,7 +3352,7 @@ export const BOARD_COMPUTERS = {
     computer: 'squareChoice',
     kind: 'contrast',
     phase: ANY,
-    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ, weaknesses: { not: 'a square ruled out is a choice explained, not a skill the board poses' }, think: THINK },
+    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ, weaknesses: { not: 'a square ruled out is a choice explained, not a skill the board poses' }, think: THINK },
   },
   pawnBreak: {
     // His "c5 attacking the base of the pawn chain", "open the d-file", "f4,
@@ -4106,7 +4122,7 @@ export const BOARD_COMPUTERS = {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
       learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_READ,
-      weaknesses: { not: 'a reading of the board, no question of the student\'s posed' },
+      weaknesses: { not: 'an opportunity a move may take or leave without a fault: a clean move is no answer to it, so held cannot be read off the cost — the record needs the played move to say whether it was taken' },
     },
   },
   badBishop: {
@@ -4162,19 +4178,6 @@ export const BOARD_COMPUTERS = {
     phase: ANY,
     surfaces: walkSurfaces(),
   },
-  conversionWalk: {
-    // The step the board is on, once a step: the step rides the key.
-    read: ({ fen, student }, fact) => safe(() => {
-      const c = readConversion(fen, student);
-      if (!c) return null;
-      return fact({ key: c.step, claims: [`convert:${c.step}`], text: c.text, proof: NO_PROOF.description, squares: c.passer ? [c.passer] : [], stakes: null,
-        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
-    }),
-    computer: 'readConversion',
-    kind: 'technique',
-    phase: ANY,
-    surfaces: walkSurfaces(),
-  },
   pawnEndingCount: {
     read: ({ fenBefore, san, replySan, cpLoss, evalAfterCp }, fact) => safe(() => {
       const t = pawnEndingTrade(fenBefore, san, replySan, cpLoss, evalAfterCp);
@@ -4198,7 +4201,7 @@ export const BOARD_COMPUTERS = {
     computer: 'outsidePasserDecoy',
     kind: 'technique',
     phase: ANY,
-    surfaces: walkSurfaces(),
+    surfaces: { ...walkSurfaces(), weaknesses: { not: 'an opportunity a move may take or leave without a fault: a clean move is no answer to it, so held cannot be read off the cost — the record needs the played move to say whether it was taken' } },
   },
   zugzwangAt: {
     // The tablebase read is fetched by the surface (it is a request); its
@@ -4275,20 +4278,6 @@ export const BOARD_COMPUTERS = {
     phase: ANY,
     surfaces: walkSurfaces(),
   },
-  fundamentalVerdictWalk: {
-    read: (ctx, fact) => safe(() => verdictFact(ctx, fact, 'diagnosis')),
-    computer: 'renderFundamentalVerdict',
-    kind: 'principle',
-    phase: ANY,
-    surfaces: walkSurfaces(),
-  },
-  fundamentalHow: {
-    read: (ctx, fact) => safe(() => verdictFact(ctx, fact, 'how')),
-    computer: 'renderFundamentalVerdict',
-    kind: 'how',
-    phase: ANY,
-    surfaces: walkSurfaces(),
-  },
   sacPayoff: {
     // The student's sacrifice: what they get for it. A clause about a king
     // stuck in the centre is left out once that has been taught, and the key
@@ -4319,13 +4308,6 @@ export const BOARD_COMPUTERS = {
     phase: ANY,
     surfaces: walkSurfaces(),
   },
-  middlegameOrientationWalk: {
-    read: ({ fenBefore, student, san }, fact) => safe(() => planBeatFact(buildMiddlegameOrientation(fenBefore, student, san), fenBefore, 'student', fact)),
-    computer: 'buildMiddlegameOrientation',
-    kind: 'plan-middlegame',
-    phase: ANY,
-    surfaces: walkSurfaces(),
-  },
   takeStock: {
     // A genuine edge with at least two board-true reasons — never a verdict
     // on a level board (empty > generic).
@@ -4351,13 +4333,6 @@ export const BOARD_COMPUTERS = {
     }),
     computer: 'enemyKingStuckInCenter',
     kind: 'king',
-    phase: ANY,
-    surfaces: walkSurfaces(),
-  },
-  opponentDevelopmentWalk: {
-    read: ({ opponentSans, fen, student }, fact) => safe(() => planBeatFact(buildOpponentDevelopmentRead([...opponentSans], fen, student), fen, 'opponent', fact)),
-    computer: 'buildOpponentDevelopmentRead',
-    kind: 'opp-dev',
     phase: ANY,
     surfaces: walkSurfaces(),
   },
@@ -5275,7 +5250,9 @@ export const BOARD_COMPUTERS = {
       if (!text) return null;
       const key = `exposure:${side}`;
       return fact({ key, claims: [key], text, proof: NO_PROOF.description, squares: [exposure.kingSquare, ...exposure.attackerSquares], stakes: null,
-        seat: side === student ? 'opponent' : 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+        seat: side === student ? 'opponent' : 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen,
+        // Your own king's shelter is the skill the board asks you to keep.
+        ...(side === student ? { skill: 'weakened-king-safety' } : {}) });
     }),
     computer: 'detectKingExposure',
     kind: 'king',
@@ -5287,7 +5264,7 @@ export const BOARD_COMPUTERS = {
       review: { not: 'owed — Review reads the king through its own walk' },
       learn: { wired: 'services/positionFacts.ts' },
       tactics: TACTICS_COMPOSER,
-      weaknesses: WEAK_OWED,
+      weaknesses: { wired: 'services/moveInsight.ts' },
       think: { not: 'owed — the step board reads the composer' },
     },
   },
@@ -5324,14 +5301,14 @@ export const BOARD_COMPUTERS = {
         const text = `Their ${theirs.piece} on ${theirs.square} is trapped — attacked by the ${theirs.attackerPiece} on ${theirs.attackerSquare}, and every escape square is covered. It's coming off the board.`;
         const squares = [theirs.square, theirs.attackerSquare];
         out.push(fact({ key: `trapped:${theirs.square}`, claims: [`trapped:${theirs.square}`], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: exchangeStakes(fen, [theirs.square]),
-          seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen }));
+          seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen, skill: 'missed-your-trapped-piece' }));
       }
       const mine = findTrappedPiece(fen, student, lineUci);
       if (mine) {
         const text = `Careful — your ${mine.piece} on ${mine.square} is trapped: attacked by the ${mine.attackerPiece} on ${mine.attackerSquare} with no safe square. Look for the cheapest way out.`;
         const squares = [mine.square, mine.attackerSquare];
         out.push(fact({ key: `trapped:${mine.square}`, claims: [`trapped:${mine.square}`], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: exchangeStakes(fen, [mine.square]),
-          seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen }));
+          seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen, skill: 'hung-material' }));
       }
       return out.length ? out : null;
     }),
@@ -5342,7 +5319,7 @@ export const BOARD_COMPUTERS = {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
       learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_READ,
-      weaknesses: { not: 'a reading of the board — no question of the student\'s posed' },
+      weaknesses: { wired: 'services/moveInsight.ts' },
     },
   },
   worstPiece: {
@@ -5360,7 +5337,7 @@ export const BOARD_COMPUTERS = {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
       learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_READ,
-      weaknesses: { not: 'a reading of the board — no question of the student\'s posed' },
+      weaknesses: { not: 'an opportunity a move may take or leave without a fault: a clean move is no answer to it, so held cannot be read off the cost — the record needs the played move to say whether it was taken' },
     },
   },
   passerPush: {
@@ -5380,7 +5357,7 @@ export const BOARD_COMPUTERS = {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
       learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_READ,
-      weaknesses: { not: 'a reading of the board — no question of the student\'s posed' },
+      weaknesses: { not: 'an opportunity a move may take or leave without a fault: a clean move is no answer to it, so held cannot be read off the cost — the record needs the played move to say whether it was taken' },
     },
   },
   minority: {
@@ -6476,7 +6453,7 @@ export const BOARD_COMPUTERS = {
     phase: NOT_ENDING,
     surfaces: {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN_VIA_THOUGHT,
-      review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ,
+      review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ,
       weaknesses: { not: 'a reading of the move just played — the castling it costs is recorded by the king-stuck-center watch' }, think: THINK,
     },
   },
@@ -6494,7 +6471,7 @@ export const BOARD_COMPUTERS = {
     phase: NOT_ENDING,
     surfaces: {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN_VIA_THOUGHT,
-      review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ,
+      review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ,
       weaknesses: { not: 'a reading of the castling move just played — no question of the student\'s posed' }, think: THINK,
     },
   },
@@ -6517,7 +6494,7 @@ export const BOARD_COMPUTERS = {
     phase: NOT_ENDING,
     surfaces: {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN_VIA_THOUGHT,
-      review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_NO_HISTORY,
+      review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_NO_HISTORY,
       weaknesses: { not: 'the record half is principleAttribution\'s same-piece-twice on the student\'s own costly move' },
       think: { not: 'it counts a piece\'s trips across the game\'s moves; a step board is one position' },
     },
@@ -6960,13 +6937,13 @@ function endReadFact(r: EndRead | null, plies: readonly GamePly[], fact: MakeFac
 /** The fundamental verdict's half (`diagnosis` leads the beat, `how` closes
  *  it). `seen` is read, never written: the ids this read says for the first
  *  time ride the key (`fundamentalsSaid`), and the surface commits them. */
-function verdictFact(ctx: BoardContexts['fundamentalVerdictWalk'], fact: MakeFact, half: 'diagnosis' | 'how'): CoachFact | null {
+function verdictFact(ctx: BoardContexts['fundamentalVerdict'], fact: MakeFact, half: 'diagnosis' | 'how'): CoachFact | null {
   const local = new Set<FundamentalId>(ctx.seen);
   const v = renderFundamentalVerdict(ctx.attrs, { ply: ctx.ply, seen: local, replySan: ctx.replySan });
   const text = v[half];
   if (!text) return null;
   const added = [...local].filter((id) => !ctx.seen.has(id));
-  return fact({ key: `${half}|${added.join(',')}|${ctx.ply}`, claims: [`${half}:${ctx.attrs.map((a) => a.id).join(',')}`], text, proof: NO_PROOF.description, squares: [], stakes: null,
+  return fact({ key: `${half}|${added.join(',')}|${ctx.ply}`, claims: [`${half === 'how' ? 'fundamental-how' : 'fundamental'}:${ctx.attrs[0].id}`], text, proof: NO_PROOF.description, squares: [], stakes: null,
     seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: ctx.fen });
 }
 
