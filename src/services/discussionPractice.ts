@@ -514,7 +514,7 @@ export async function recordMoveEvidence(args: {
     ownTakeback: ownTakenBack(rest.sourceGameId, rest.fenBefore, rest.playedSan),
     ...(bestSan ? { bestSan } : {}),
     ...(line ? { shotLine: line } : {}),
-    alsoPosed: [...positionPosed(args.fenBefore, { bestSan, ...(line ? { bestLine: line } : {}) }), ...plan],
+    alsoPosed: [...positionPosed(args.fenBefore, { bestSan, ...(line ? { bestLine: line } : {}), played: { san: args.playedSan, cpLoss: args.cpLoss } }), ...plan],
   });
 }
 

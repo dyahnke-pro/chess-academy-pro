@@ -1029,15 +1029,6 @@ export function ledgerSquares(led: Ledger): Square[] {
   return [...out];
 }
 
-/** Does `uci` (a move from the target's board) bring one more unit at the
- *  target: one of the pieces that can get at it, or a lever pawn? */
-export function moveWorksOnTarget(t: Target, uci: string | undefined): boolean {
-  if (!uci) return false;
-  const from = uci.slice(0, 2);
-  const a = t.best.entry.access as Access;
-  return a.attackers.some((r) => r.from === from && r.moves > 0) || a.levers.some((l) => l.from === from);
-}
-
 /** The ledger as one stable key: its counted entries, sorted. */
 export function ledgerKey(led: Ledger): string {
   const parts: string[] = [];
@@ -1046,4 +1037,106 @@ export function ledgerKey(led: Ledger): string {
     for (const e of led[c].weaknesses) parts.push(`-${e.object}`);
   }
   return parts.sort().join(',');
+}
+
+// ── the conclusions, recorded (both ways) ────────────────────────────────────
+
+/** The row each conclusion is filed under when the student's move answers it
+ *  or leaves it: the target, the plan's target, their counterplay. */
+export type PictureSkill = 'missed-weak-target' | 'missed-plan-route' | 'allowed-counterplay';
+
+/** A move that cost this much left the conclusion unanswered; under it, a
+ *  clean move off the conclusion answers a different question (the plan's own
+ *  bar, `moveInsight.planPosed`). */
+export const PICTURE_MISSED_CP = 50;
+
+/** How sharply each conclusion is asked, on the heat map's scale. */
+export const PICTURE_ANSWER_POSED: Record<PictureSkill, number> = {
+  'missed-weak-target': 60,
+  'missed-plan-route': 60,
+  'allowed-counterplay': 65,
+};
+
+const uciParts = (uci: string): { from: Square; to: Square; promotion?: string } =>
+  ({ from: uci.slice(0, 2) as Square, to: uci.slice(2, 4) as Square, ...(uci[4] ? { promotion: uci[4] } : {}) });
+
+/** The board after `uci` by the side to move on `fen`, or null (illegal). */
+function playedOn(fen: string, uci: string): { after: string; me: Color; to: Square } | null {
+  try {
+    const c = new Chess(fen);
+    const me = c.turn();
+    const m = c.move(uciParts(uci));
+    return { after: c.fen(), me, to: m.to };
+  } catch { return null; }
+}
+
+/** Does `uci` bring one more unit at the target: the first step of an
+ *  attacker's route there, a lever pawn's push toward its square, or a piece
+ *  that hits the target from where it lands (chess.js reads the hit). */
+export function moveAnswersTarget(t: Target, fen: string, uci: string | undefined): boolean {
+  if (!uci) return false;
+  const p = playedOn(fen, uci);
+  if (!p || p.me !== t.attacker) return false;
+  const { from, to } = uciParts(uci);
+  const a = t.best.entry.access as Access;
+  if (a.attackers.some((r) => r.moves > 0 && r.from === from && r.route[0] === to)) return true;
+  if (a.levers.some((l) => l.from === from && fileOf(to) === fileOf(l.at) && Math.abs(rankOf(to) - rankOf(from)) <= Math.abs(rankOf(l.at) - rankOf(from)))) return true;
+  try { return new Chess(p.after).attackers(t.best.entry.square, t.attacker).includes(to); } catch { return false; }
+}
+
+/** Is the resource still on after the board becomes `fen`: the break still a
+ *  lever that does not just drop the pawn, the piece's quiet move still
+ *  hitting what it hit (the walk's own checks, `counterplaysOf`). */
+export function counterplayStillOn(c: Counterplay, fenBefore: string, fen: string): boolean {
+  if (c.kind === 'break') {
+    const before = gridOf(fenBefore);
+    const g = gridOf(fen);
+    if (!before || !g) return false;
+    return breakOpen(g, { from: c.from, to: c.to }, c.side, !!before.get(c.to));
+  }
+  return !!pieceThreat(fen, c.from, c.to, c.side)?.some((t) => c.hits.includes(t.square));
+}
+
+/**
+ * WHAT THE PICTURE POSED, AND HOW THE MOVE ANSWERED IT — the record's half of
+ * the conclusions the picture computers speak (David 2026-11-19: "Make sure
+ * all computers work both ways"). With the student to move:
+ *  - the TARGET, where the best move brings one more unit at it: held when the
+ *    move played does too (`moveAnswersTarget`);
+ *  - the PLAN'S TARGET (a race won in three or four moves), where the best
+ *    move starts a winning piece's route: held when the move played does
+ *    (`moveWorksOnPlan`);
+ *  - THEIR COUNTERPLAY, where the best move kills it on the spot: held when
+ *    the move played leaves it unplayable (`counterplayStillOn`).
+ * A move that answers none of them is MISSED only when it cost
+ * (`PICTURE_MISSED_CP`); a clean move off the conclusion answered a different
+ * question and is no evidence either way. Pure.
+ */
+export function pictureAnswers(
+  c: PictureConclusions,
+  fen: string,
+  playedUci: string,
+  bestUci: string | undefined,
+  cpLoss: number | null,
+): Array<{ skill: PictureSkill; outcome: 'held' | 'broken' }> {
+  if (!bestUci || placement(c.ledger.fen) !== placement(fen)) return [];
+  const played = playedOn(fen, playedUci);
+  if (!played) return [];
+  const me = played.me;
+  const them = other(me);
+  const costly = cpLoss !== null && cpLoss >= PICTURE_MISSED_CP;
+  const out: Array<{ skill: PictureSkill; outcome: 'held' | 'broken' }> = [];
+  const answer = (skill: PictureSkill, held: boolean): void => {
+    if (held) out.push({ skill, outcome: 'held' });
+    else if (costly) out.push({ skill, outcome: 'broken' });
+  };
+  const t = c.target[me];
+  if (t && moveAnswersTarget(t, fen, bestUci)) answer('missed-weak-target', moveAnswersTarget(t, fen, playedUci));
+  const p = c.planTarget[me];
+  // The plan's target, when it is another thing than the target now (the
+  // registry read says it beside it on the same terms).
+  if (p && p.best.entry.object !== t?.best.entry.object && moveWorksOnPlan(p, bestUci)) answer('missed-plan-route', moveWorksOnPlan(p, playedUci));
+  const r = c.counterplay[them];
+  if (r && r.state === 'dead' && r.ply === 0) answer('allowed-counterplay', !counterplayStillOn(r, fen, played.after));
+  return out;
 }

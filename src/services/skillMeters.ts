@@ -93,6 +93,11 @@ export const METER_OF_TAG: Record<Exclude<MisconceptionTagId, 'other'>, SkillMet
   'created-pawn-weakness': 'planning',
   'overextended-pawn': 'planning',
   'mistimed-pawn-break': 'planning',
+  // The picture's conclusions (`pictureAnswers`): aiming at their weakness,
+  // starting the route to a target, killing their one resource.
+  'missed-weak-target': 'planning',
+  'missed-plan-route': 'planning',
+  'allowed-counterplay': 'planning',
   'passive-king-endgame': 'endgames',
   'botched-conversion': 'endgames',
   'passed-pawn-neglected': 'endgames',

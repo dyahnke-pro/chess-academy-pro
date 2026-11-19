@@ -33,6 +33,8 @@ const OLD_COACH_TAG_HABIT: Partial<Record<MisconceptionTagId, MethodHabit | null
   'space-conceded': null, 'weakened-king-safety': null, 'created-pawn-weakness': null, 'misplaced-piece': null,
   'overextended-pawn': null, 'capture-toward-centre': null, 'passive-king-endgame': null,
   'passed-pawn-neglected': null, 'passive-rook': null, other: null,
+  // Newer than the snapshot (2026-11-19): the picture's positional rows lead no step.
+  'missed-weak-target': null, 'missed-plan-route': null, 'allowed-counterplay': null,
   // Added 2026-10-19 (the per-motif incoming tags, after the re-key): each
   // refines missed-opponents-threat, so each takes its habit.
   'missed-their-fork': 'opponent-threat', 'missed-their-pin': 'opponent-threat', 'missed-their-skewer': 'opponent-threat',
