@@ -217,7 +217,9 @@ describe('moveMissed — handing them a tempo (catalogue §37)', () => {
 
 describe('positionPosed — the diagnosis half (both ways)', () => {
   it('the escape-square position poses missed-tactic', () => {
-    expect(positionPosed('7k/p5p1/7p/8/8/8/8/4RBK1 w - - 0 1', { bestSan: 'Bd3' }).map((p) => p.tag)).toEqual(['missed-tactic']);
+    // A rook and bishop up, the board also asks for the win to be converted
+    // (the registry's conversion read, both ways).
+    expect(positionPosed('7k/p5p1/7p/8/8/8/8/4RBK1 w - - 0 1', { bestSan: 'Bd3' }).map((p) => p.tag)).toEqual(['missed-tactic', 'botched-conversion']);
   });
   it('their threatening last move poses missed-opponents-threat', () => {
     const before = 'r5k1/5ppp/8/8/8/8/R4PPP/6K1 b - - 0 1';
