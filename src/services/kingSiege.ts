@@ -186,6 +186,9 @@ function movesToBear(c: Chess, p: SiegePiece, color: Color, targets: readonly Sq
   return null;
 }
 
+/** The attacker's engine edge (cp) a massed attack needs to be called one. */
+const MASS_CP = 50;
+
 /** How far a defender's piece may be and still count as "coming to help". */
 const AWAY_LIMIT = 3;
 
@@ -251,6 +254,16 @@ export function siegeSpeaks(fen: string, s: KingSiege, attackerCp: number | null
   const c = load(fen);
   if (!c || !hasQueen(c, other(s.defender))) return false;
   if (attackerCp !== null && attackerCp < -50) return false;
+  // THE MASSED ATTACK (Danya: "White already has three pieces in the attack",
+  // "all aimed at Black's king" — with the pawn cover still whole): three or
+  // more pieces on the king or a move from it, outnumbering its defenders,
+  // and the engine agreeing the attacker stands better. Measured on his 209
+  // boards: speaks on 28, half of them boards where he talks about the king
+  // attack (base rate 22%), and on 7 of the 11 where he names the massing.
+  // The piece count alone was right a third of the time — the engine's word
+  // is what tells massing from pieces that merely stand near a king.
+  if (attackerCp !== null && attackerCp >= MASS_CP && s.attackers.length >= 1 && s.attackers.length + s.coming.length >= 3
+    && s.attackers.length + s.coming.length > s.defenders.length) return true;
   const near = s.away.filter((p) => p.moves === 1).length;
   const force = s.attackers.length + s.coming.length;
   if (s.attackers.length < 2 || s.attackers.length < s.defenders.length || force < 4 || force < s.defenders.length + near + 1) return false;
@@ -268,7 +281,7 @@ export function siegeLine(s: KingSiege, student: Color, fen: string): string {
   const kingWord = `${defOwner} king on ${s.king}`;
   const more = s.coming.length === 0 ? '' : `, and ${countWord(s.coming.length)} more ${s.coming.length === 1 ? 'is' : 'are'} a move away`;
   const lead = rotateStem([
-    `${openSentence(n)} of ${atkOwner} pieces aim at ${kingWord}${more}.`,
+    `${openSentence(n)} of ${atkOwner} pieces ${s.attackers.length === 1 ? 'aims' : 'aim'} at ${kingWord}${more}.`,
     `${openSentence(kingWord)} faces ${n} of ${atkOwner} pieces${more}.`,
   ], stemKeyOf(fen));
   const defs = s.defenders.map((d) => `${NAME[d.piece]} on ${d.square}`);

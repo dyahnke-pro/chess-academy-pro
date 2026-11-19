@@ -156,3 +156,18 @@ describe('the reads reach the coach', () => {
     expect(readBoardAll('loadedDiscovery', { fenBefore: 'r4rk1/ppp2Rpp/2n5/4P3/2B5/2P2R1P/P1P3P1/6K1 b - - 0 18', san: 'Nxe5', student: 'b' })).toHaveLength(0);
   });
 });
+
+describe('siegeSpeaks — the massed attack (Danya)', () => {
+  // the-discovered-check-reloaded: "White has a fearsome kingside attack (Bh6, Ng5, Qh4)".
+  const fen = '3rr1k1/1bqnbp1p/ppp1p1pB/6N1/3P3Q/3B4/PPP2PPP/3RR1K1 w - - 0 18';
+  it('speaks when three or more pieces bear on the king, outnumber its defenders, and the engine agrees', () => {
+    const s = kingSiege(fen, 'b');
+    expect(s).not.toBeNull();
+    expect(siegeSpeaks(fen, s!, 124)).toBe(true);
+  });
+  it('stays quiet with the pawn cover whole when the engine does not back the attack', () => {
+    const s = kingSiege(fen, 'b');
+    expect(siegeSpeaks(fen, s!, null)).toBe(false);
+    expect(siegeSpeaks(fen, s!, 20)).toBe(false);
+  });
+});

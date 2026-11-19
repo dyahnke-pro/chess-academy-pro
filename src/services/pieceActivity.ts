@@ -25,6 +25,7 @@ import { asIfToMove, findPieceQuality, legalSeeGainFor, type PieceQualityKind } 
 import { andList } from '../utils/andList';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { isPinnedPiece } from './nextPlans';
+import { isUndevelopedInOpening } from '../utils/undeveloped';
 
 export type OfficerState =
   /** A knight or bishop still on its starting square. */
@@ -115,7 +116,12 @@ export function pieceActivity(fen: string): PieceActivity | null {
       const rank = Number(sq[1]);
       const theirHalf = color === 'w' ? rank >= 5 : rank <= 4;
       let state: OfficerState = 'normal';
-      if (isMinorAtHome(cell.type, color, sq)) state = 'home';
+      // AT HOME is idle in the opening, and later only when it still has
+      // almost nowhere to go: past move 12 a bishop on f1 with squares is
+      // doing a job (Danya's endgame-attacks board, move 29: "White's queen
+      // and bishop are on ideal squares", read as "the bishop on f1 hasn't
+      // moved" and the edge handed to the other side).
+      if (isMinorAtHome(cell.type, color, sq) && (isUndevelopedInOpening(fen, color, cell.type, sq) || safe <= 2)) state = 'home';
       else if (note?.quality === 'bad') state = 'poor';
       else if (note?.quality === 'good') state = 'strong';
       // Stuck (one safe square or none) is a minor's or a queen's away from

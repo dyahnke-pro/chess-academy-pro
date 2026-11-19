@@ -92,3 +92,19 @@ describe('pieceActivity: whose pieces are in play', () => {
     expect(activityEdge('8/8/8/4k3/4P3/4K3/8/8 w - - 0 1')).toBeNull();
   });
 });
+
+describe('pieceActivity — a home square past the opening', () => {
+  it('a bishop on f1 with squares at move 29 is not idle (Danya, endgame attacks: "queen and bishop on ideal squares")', () => {
+    const fen = '6k1/1q3pp1/5n1p/1p3P2/p2Qp3/2P1P1P1/1P5P/5BK1 w - - 0 29';
+    const a = pieceActivity(fen);
+    expect(a?.w.officers.find((o) => o.square === 'f1')?.state).not.toBe('home');
+    // The edge no longer goes to Black for a "bishop that hasn't moved".
+    expect(activityEdge(fen)?.side).not.toBe('b');
+  });
+
+  it('a bishop still boxed in on c8 at move 31 is still idle (Danya: "Black\'s pieces are extremely passive")', () => {
+    const fen = '1rb5/r2k1pp1/p2p3p/P2PpP2/1NP1BbPP/8/4K3/1R5R w - - 0 31';
+    expect(pieceActivity(fen)?.b.officers.find((o) => o.square === 'c8')?.state).toBe('home');
+    expect(activityEdge(fen)?.side).toBe('w');
+  });
+});
