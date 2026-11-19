@@ -15,4 +15,21 @@ describe('urgentStrike', () => {
   it('stays silent where the board does not have it', () => {
     expect(urgentStrike('8/5ppk/3P3p/8/8/2pK3P/5PP1/8 b - - 0 2', N, 'b')).toBeNull();
   });
+  // queen-the-supporting-actress#2 — Danya: "White must act immediately - Black
+  // needs only one more move (...Ke7 or ...Nd3+) to consolidate". Rh7 stays
+  // legal after Kb1 Ng6; the moment is gone all the same.
+  const T = [{ moves: ['h1h7', 'f7f6', 'f4h6', 'd8d7'], cp: -14, mate: null }, { moves: ['c1b1', 'e5g6', 'f4d6', 'c7d6'], cp: -131, mate: null }, { moves: ['f4g5', 'e5g6', 'g5d8', 'c7d8'], cp: -167, mate: null }];
+  const TAL = 'r1br1knQ/2q2pp1/p2bp3/1p1pn3/5B2/1NN2P2/PPP5/2KR1B1R w - - 0 23';
+  it('a quiet strike at the king whose moment the slow move gives away', () => {
+    const r = urgentStrike(TAL, T, 'w');
+    expect(r?.strike).toBe('Rh7');
+    expect(r?.text).toContain('Spend it on Kb1 and they get the move they need, Ng6');
+  });
+  it('the reply is the other side\'s when they strike', () => {
+    expect(urgentStrike(TAL, T, 'b')?.text).toContain('Spend it on Kb1 and you get the move you need');
+  });
+  it('a slow move under a pawn worse leaves the door open', () => {
+    const close = [T[0], { ...T[1], cp: -60 }, { ...T[2], cp: -70 }];
+    expect(urgentStrike(TAL, close, 'w')).toBeNull();
+  });
 });
