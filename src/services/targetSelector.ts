@@ -268,7 +268,10 @@ export function targetLine(t: Target, fen: string, whose: 'your' | 'their'): str
   const count = t.attackers.length > 0
     ? `${openSentence(piecesWords(board, t.attackers, whose))} ${t.attackers.length === 1 ? 'hits' : 'hit'} it, and ${guards}.`
     : t.reachers.length > 0
-      ? `Nothing of ${whose === 'your' ? 'yours' : 'theirs'} hits it yet, but ${piecesWords(board, t.reachers.map((r) => r.from), whose)} can get at it next move. ${openSentence(guards)}.`
+      // ONE SENTENCE (Danya narration test 2026-11-19: "Nothing of theirs
+      // hits it yet, but … next move. Nothing guards it." — three beats for
+      // one fact). The pieces that can come, and what guards it.
+      ? `${openSentence(piecesWords(board, t.reachers.map((r) => r.from), whose))} can get at it next move, and ${guards}.`
       : '';
   return `${lead} ${count}`.trim();
 }
