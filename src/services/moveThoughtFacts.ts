@@ -732,6 +732,8 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
             ...readBoardAll('keySquareRead', { fen: after, student }).map((f) => ({ f, idea: 'king-activity' as IdeaKind, weight: 64 })),
             // A pawn ending the exact solver proves drawn, and why it holds.
             ...readBoardAll('kpDrawRead', { fen: after, student }).map((f) => ({ f, idea: 'king-activity' as IdeaKind, weight: 64 })),
+            // A pawn ending the exact solver proves won, and the shape that wins it.
+            ...readBoardAll('wonEndingRead', { fen: after, student }).map((f) => ({ f, idea: 'passed-pawn' as IdeaKind, weight: 64 })),
             ...readBoardAll('shoulderRead', { fen: after, student }).map((f) => ({ f, idea: 'king-activity' as IdeaKind, weight: 60 })),
             ...readBoardAll('connectedPassers', { fen: after, student }).map((f) => ({ f, idea: 'passed-pawn' as IdeaKind, weight: 66 })),
             ...readBoardAll('theirWorstPiece', { fen: after, student, bestLine: lines[0]?.moves ?? null }).map((f) => ({ f, idea: 'weakness' as IdeaKind, weight: 48 })),

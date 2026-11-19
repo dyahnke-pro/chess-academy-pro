@@ -306,6 +306,7 @@ export const THINK_STEP: Record<ComputerName, ThinkAnswer> = {
   queenlessMate: 'forcing-moves',
   keySquaresOn: 'calculate',
   kpDrawReason: 'calculate',
+  wonEnding: 'calculate',
   shoulderOn: 'assess',
   connectedPassersOn: 'calculate',
   matingNet: 'forcing-moves',

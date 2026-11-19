@@ -1407,6 +1407,7 @@ export function computeMoveFacets(
       add(readBoardAll('zugzwangIfPassed', { fen: fenAfter, student: studentColorWB })[0]);
       add(readBoardAll('keySquareRead', { fen: fenAfter, student: studentColorWB })[0]);
       add(readBoardAll('kpDrawRead', { fen: fenAfter, student: studentColorWB })[0]);
+      add(readBoardAll('wonEndingRead', { fen: fenAfter, student: studentColorWB })[0]);
       add(readBoardAll('shoulderRead', { fen: fenAfter, student: studentColorWB })[0]);
       add(readBoardAll('connectedPassers', { fen: fenAfter, student: studentColorWB })[0]);
       add(readBoardAll('queenlessMate', { fen: fenAfter, student: studentColorWB })[0]);

@@ -538,6 +538,7 @@ export const BUNDLE_ADAPTERS: { [K in ComputerId]: Adapter<K> } = {
   kpDrawRead: (b) => ({ fen: b.fen, student: b.student }),
   shoulderRead: (b) => ({ fen: b.fen, student: b.student }),
   connectedPassers: (b) => ({ fen: b.fen, student: b.student }),
+  wonEndingRead: (b) => ({ fen: b.fen, student: b.student }),
   matingNet: (b) => ({ fen: b.fen, student: b.student }),
   frozenTarget: (b) => ({ fen: b.fen, student: b.student }),
   // The conclusions read every other computer's facts on the bundle (`baseFacts`).

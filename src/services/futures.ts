@@ -28,6 +28,7 @@ import { PICTURE_ROLE, type PictureRole } from './positionPicture';
 import { fortressOn, fortressLine, type Fortress } from './fortress';
 import { DRAW_LEVEL_CP, LOCKED_TEXT, lockedPawns, type LockedPawns } from './drawnEnding';
 import { KP_FAST_BUDGET, kpDrawReason, kpVerdict, type KpValue } from './kpSolver';
+import { wonEnding } from './wonEnding';
 
 export interface FutureBoard {
   fen: string;
@@ -597,8 +598,11 @@ export function kpResultChange(args: { fen: string; student: Color; tryLine: Lin
   } catch { return null; }
   const said = mover === 'b' ? `…${bestSan}` : bestSan;
   const kept = sb === 0 ? 'would have held the draw' : 'would have won it';
+  // WHY the other side wins it, from the solved board's shape (null: no shape).
+  const why = wonEnding(t.fen, args.student, KP_FAST_BUDGET);
+  const reason = why && why.side !== mover ? ` ${why.text}` : '';
   return { kind: 'lost', fen: t.fen, ply: t.ply,
-    text: yours ? `That loses the pawn ending by force. ${said} ${kept}.` : `That loses them the pawn ending by force. ${said} ${kept}.` };
+    text: yours ? `That loses the pawn ending by force.${reason} ${said} ${kept}.` : `That loses them the pawn ending by force.${reason} ${said} ${kept}.` };
 }
 
 /** The change a try lets happen, as the reason it falls short: the line's own

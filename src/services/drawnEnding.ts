@@ -22,8 +22,20 @@
 //                    the pawn's file ahead of it;
 //   oppositeBishops— a bishop each, on opposite colours, nothing else but
 //                    pawns, the side ahead one or two pawns up;
-//   oneWing        — a rook each, nothing else, one pawn up with every pawn on
-//                    one wing;
+//   oneWing        — a rook each, nothing else, every pawn on one wing, one
+//                    pawn up (3 v 4) or level (4 v 4, no one side's draw);
+//   ROOK AND PAWN AGAINST ROOK (the textbook holds, the geometry
+//   `endgameTechnique`'s where it has it):
+//   philidor       — the defending king in front of the pawn, the rook on the
+//                    third rank, the pawn not past its fifth (`detectPhilidor`);
+//   backRank       — the king on the queening square of a rook or knight pawn,
+//                    the rook far off on the back rank (`detectBackRankDefence`);
+//   rookPawnBehind — a rook pawn on its sixth or seventh, the attacker's rook
+//                    in front of it, the defender's rook behind it and the
+//                    defending king on the far wing's seventh (g7/h7);
+//   rookBehind     — the defending king in front of the pawn on its file, the
+//                    defending rook behind it on the file;
+//   rookKingInFront— the defending king in front of the pawn on its file;
 //   locked         — kings and pawns only, every pawn rammed head to head and
 //                    none able to take, and neither king able to reach a pawn
 //                    it could take: the pawn chain walls every way in
@@ -33,8 +45,10 @@
 import { Chess, type Color, type Square } from 'chess.js';
 import { type EngineLine, other, seatWords, sortedLines } from './engineLineRead';
 import { sideMaterial } from './pieceValues';
+import { detectBackRankDefence, detectPhilidor } from './endgameTechnique';
 
-export type DrawReason = 'cannotMate' | 'wrongBishop' | 'rookPawn' | 'kingInFront' | 'oppositeBishops' | 'oneWing' | 'locked';
+export type DrawReason = 'cannotMate' | 'wrongBishop' | 'rookPawn' | 'kingInFront' | 'oppositeBishops' | 'oneWing' | 'locked'
+  | 'philidor' | 'backRank' | 'rookPawnBehind' | 'rookBehind' | 'rookKingInFront';
 
 export interface DrawnEnding {
   reason: DrawReason;
@@ -66,7 +80,7 @@ export function drawnEnding(fen: string, lines: readonly EngineLine[], student: 
   if (lock) return { reason: 'locked', side: other(c.turn()), text: LOCKED_TEXT, squares: lock.rams };
   const mw = sideMaterial(fen, 'w');
   const mb = sideMaterial(fen, 'b');
-  if (Math.abs(mw - mb) < 1) return null;
+  if (Math.abs(mw - mb) < 1) return levelRookEnding(c);
   const up: Color = mw > mb ? 'w' : 'b';
   const down = other(up);
   const pcs: Pc[] = c.board().flat().filter((p): p is NonNullable<typeof p> => !!p).map((p) => ({ type: p.type, color: p.color, square: p.square }));
@@ -143,6 +157,55 @@ export function drawnEnding(fen: string, lines: readonly EngineLine[], student: 
     }
   }
 
+  // ── ROOK AND PAWN AGAINST ROOK: THE TEXTBOOK HOLDS ──
+  if (upPieces.length === 1 && downPieces.length === 1 && upPieces[0].type === 'r' && downPieces[0].type === 'r'
+    && upPawns.length === 1 && !downPawns.length) {
+    const p = upPawns[0].square;
+    const f = p[0];
+    const d = up === 'w' ? 1 : -1;
+    const ur = upPieces[0].square;
+    const dr = downPieces[0].square;
+    const rookPawnFile = f === 'a' || f === 'h';
+    const between = (a: Square, b: Square): boolean => {
+      const lo = Math.min(Number(a[1]), Number(b[1])); const hi = Math.max(Number(a[1]), Number(b[1]));
+      return !pcs.some((x) => x.square[0] === a[0] && Number(x.square[1]) > lo && Number(x.square[1]) < hi);
+    };
+    const inFront = kd[0] === f && (Number(kd[1]) - Number(p[1])) * d > 0;
+    const behind = (s: Square): boolean => s[0] === f && (Number(s[1]) - Number(p[1])) * d < 0 && between(s, p);
+    const ph = detectPhilidor(fen);
+    if (ph && ph.thirdRankSet) {
+      return { reason: 'philidor', side: down,
+        text: `${D.Whose} king stands in front of the ${f}-pawn and ${D.whose} rook holds the third rank on ${dr}: ${U.whose} king cannot come forward, and once the pawn steps up to that rank, the rook drops back and checks from behind. That is the Philidor draw.`,
+        squares: [kd, dr, p] };
+    }
+    if (detectBackRankDefence(fen)) {
+      return { reason: 'backRank', side: down,
+        text: `${D.Whose} king sits on ${kd}, the queening square of the ${f}-pawn, with ${D.whose} rook far off along the back rank on ${dr}: against a ${rookPawnFile ? 'rook' : 'knight'} pawn there is no room to drive the king out, and every check along the rank is met. A draw.`,
+        squares: [kd, dr, p] };
+    }
+    const home = up === 'w' ? Number(p[1]) : 9 - Number(p[1]);
+    const farWing = f === 'a' ? ['g', 'h'] : ['a', 'b'];
+    const seventh = up === 'w' ? '7' : '2';
+    if (rookPawnFile && home >= 6 && ur[0] === f && (Number(ur[1]) - Number(p[1])) * d > 0 && between(ur, p) && behind(dr)
+      && farWing.includes(kd[0]) && kd[1] === seventh) {
+      return { reason: 'rookPawnBehind', side: down,
+        text: `${U.Whose} rook is stuck in front of the ${f}-pawn on ${ur}, ${D.whose} rook sits behind it on ${dr}, and ${D.whose} king waits on ${kd}: the pawn cannot advance, and the moment the rook leaves the file the pawn falls. A known draw.`,
+        squares: [ur, dr, p, kd] };
+    }
+    if (inFront && behind(dr)) {
+      return { reason: 'rookBehind', side: down,
+        text: `${D.Whose} king blocks the ${f}-pawn from in front on ${kd}, and ${D.whose} rook watches it from behind on ${dr}: the pawn can never advance, so the extra pawn does not win. A draw.`,
+        squares: [kd, dr, p] };
+    }
+    if (inFront) {
+      return { reason: 'rookKingInFront', side: down,
+        text: rookPawnFile
+          ? `${D.Whose} king stands in front of the ${f}-pawn on ${kd}: against a rook pawn the king can never be driven out of the corner, so a rook each and one pawn is a draw.`
+          : `${D.Whose} king stands in front of the ${f}-pawn on ${kd}: with a rook each and the king blocking it, one pawn is not enough to win.`,
+        squares: [kd, p] };
+    }
+  }
+
   // ── TOO FEW PAWNS: A ROOK EACH, ALL ON ONE WING ──
   if (upPieces.length === 1 && downPieces.length === 1 && upPieces[0].type === 'r' && downPieces[0].type === 'r'
     && upPawns.length - downPawns.length === 1 && downPawns.length >= 1) {
@@ -156,6 +219,25 @@ export function drawnEnding(fen: string, lines: readonly EngineLine[], student: 
     }
   }
   return null;
+}
+
+/** A rook each, nothing else, the pawns level (four or more a side) and all
+ *  on one wing: no side's draw, so recorded as the side not to move (like a
+ *  locked board, so one board always keys the same). */
+function levelRookEnding(c: Chess): DrawnEnding | null {
+  const pcs = c.board().flat().filter((p): p is NonNullable<typeof p> => !!p);
+  const rooks = pcs.filter((p) => p.type === 'r');
+  if (pcs.some((p) => !['k', 'p', 'r'].includes(p.type)) || rooks.length !== 2 || rooks[0].color === rooks[1].color) return null;
+  const pawns = pcs.filter((p) => p.type === 'p');
+  const pw = pawns.filter((p) => p.color === 'w').length;
+  if (pw < 4 || pw * 2 !== pawns.length) return null;
+  const fs = pawns.map((p) => p.square.charCodeAt(0) - 97);
+  const king = fs.every((f) => f >= 4);
+  if (!king && !fs.every((f) => f <= 3)) return null;
+  const wing = king ? 'kingside' : 'queenside';
+  return { reason: 'oneWing', side: other(c.turn()),
+    text: `A rook each and the pawns level, every one of them on the ${wing}: no passed pawn can be forced and there is no second weakness to play against. Neither side can make progress, so it is a draw.`,
+    squares: pawns.map((p) => p.square) };
 }
 
 // ── THE LOCKED PAWN ENDING (his "White cannot make progress", "the position

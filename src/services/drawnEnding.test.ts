@@ -112,3 +112,59 @@ describe('the locked pawn ending', () => {
     expect(lockedPawns('8/8/8/1k4p1/6P1/4Pp2/3K4/8 w - - 0 63')).toBeNull();
   });
 });
+
+// ROOK ENDINGS THAT NOBODY CAN WIN: the textbook holds, each with the engine's
+// level line (the proof), and a board off the shape that says nothing.
+describe('drawnEnding: the rook-ending holds', () => {
+  it('Philidor: the king in front, the rook on the third rank', () => {
+    const r = drawnEnding('4k3/7R/r7/3KP3/8/8/8/8 b - - 0 1', level(['a6b6', 'h7h8']), 'w');
+    expect(r?.reason).toBe('philidor');
+    expect(r?.side).toBe('b');
+    expect(r?.text).toContain('third rank on a6');
+    // The rook off the third rank (and the king not in front): not this shape.
+    expect(drawnEnding('4k3/7R/8/3KP3/8/8/8/r7 b - - 0 1', level(['a1a6']), 'w')?.reason).not.toBe('philidor');
+  });
+
+  it('the back-rank defence against a knight pawn', () => {
+    const r = drawnEnding('r5k1/1R6/5KP1/8/8/8/8/8 b - - 0 1', level(['a8a6', 'f6f5']), 'b');
+    expect(r?.reason).toBe('backRank');
+    expect(r?.text).toMatch(/^Your king sits on g8, the queening square of the g-pawn/);
+  });
+
+  it('the a-pawn: their rook stuck in front, ours behind, the king on g7', () => {
+    const r = drawnEnding('R7/P5k1/8/8/8/8/5K2/r7 w - - 0 1', level(['f2e3', 'a1a3']), 'w');
+    expect(r?.reason).toBe('rookPawnBehind');
+    expect(r?.text).toContain('stuck in front of the a-pawn on a8');
+    // The king on f7, not the far wing's seventh: not this shape.
+    expect(drawnEnding('R7/P4k2/8/8/8/8/5K2/r7 w - - 0 1', level(['f2e3']), 'w')?.reason).not.toBe('rookPawnBehind');
+  });
+
+  it('the king in front of the pawn and the rook behind it', () => {
+    const r = drawnEnding('8/7R/8/3k4/3P4/5K2/8/3r4 w - - 0 1', level(['h7h5', 'd5d6']), 'w');
+    expect(r?.reason).toBe('rookBehind');
+    expect(r?.text).toContain('watches it from behind on d1');
+  });
+
+  it('the king in front of the pawn, a rook each', () => {
+    const r = drawnEnding('6r1/8/2k5/8/2P5/4K3/8/7R w - - 0 1', level(['h1h6', 'c6c5']), 'w');
+    expect(r?.reason).toBe('rookKingInFront');
+    expect(r?.text).toBe('Their king stands in front of the c-pawn on c6: with a rook each and the king blocking it, one pawn is not enough to win.');
+  });
+
+  it('a rook each, four pawns each, all on one wing: level and drawn', () => {
+    const r = drawnEnding('6k1/4ppp1/7p/8/8/6PP/4PPK1/r6R w - - 0 1', level(['h1h2', 'a1a2']), 'w');
+    expect(r?.reason).toBe('oneWing');
+    expect(r?.text).toContain('pawns level, every one of them on the kingside');
+    // Pawns on both wings: no shape.
+    expect(drawnEnding('6k1/p3pp2/7p/8/8/6PP/P3PPK1/r6R w - - 0 1', level(['h1h2']), 'w')).toBeNull();
+  });
+
+  it('negative controls: a lost rook ending (Lucena) and a non-level line say nothing', () => {
+    // Lucena, the engine winning: no draw.
+    expect(drawnEnding('1K1k4/1P6/8/8/8/8/r7/2R5 w - - 0 1', [{ moves: ['c1d1'], cp: 900, mate: null }], 'w')).toBeNull();
+    // The Philidor board with the engine line far from level: nothing.
+    expect(drawnEnding('4k3/7R/r7/3KP3/8/8/8/8 b - - 0 1', [{ moves: ['a6b6'], cp: 300, mate: null }], 'w')).toBeNull();
+    // The defending king to the side, the rook on the fourth rank: no shape.
+    expect(drawnEnding('8/5k2/8/3KP3/r7/8/8/7R w - - 0 1', level(['h1h7']), 'w')).toBeNull();
+  });
+});

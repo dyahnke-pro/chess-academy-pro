@@ -71,6 +71,8 @@ const CASES: Case[] = [
   { computer: 'queenKnightNet', tag: 'missed-tactic', fen: '3rk1r1/3q1p1R/6p1/1Np1b3/Q7/1P2P3/P3K3/5R2 w - - 0 32', held: 'Nc7+', missed: 'Nc3', line: ["b5c7", "e8f8", "h7f7", "d7f7", "c7e6", "f8e7", "a4a7", "e7e6", "a7f7", "e6d6"] },
   // Pantsulaia: the rook on d2 slides to g2 and guards g7 (…Rb2+ first).
   { computer: 'lateralRookDefence', tag: 'hung-material', fen: '6k1/pp3Rp1/2p1p2P/4P3/8/PP6/2rr2P1/1K3R2 b - - 0 33', held: 'Rb2+', missed: 'a5', line: ["c2b2", "b1a1", "b2a2", "a1b1", "d2b2", "b1c1", "b2g2", "c1b1", "a2b2", "b1c1"] },
+  // The won pawn ending to convert: the a-pawn runs, their king outside its square.
+  { computer: 'wonEnding', tag: 'botched-conversion', fen: '7k/8/8/P7/8/8/8/7K w - - 0 1', held: 'a6', missed: 'Kg2' },
   { computer: 'findQueenGrabTraps', tag: 'poisoned-pawn', fen: 'r2q1r1k/pppnn1p1/3p3p/1P1Qp3/8/P1N2N1P/5PP1/R1B1R1K1 w - - 1 17', held: 'Qb3', missed: 'Qxb7' },
 ];
 

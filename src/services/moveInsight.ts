@@ -814,7 +814,7 @@ export function positionPosed(
 type RegistryPosedComputer = 'detectLatentFork' | 'detectLatentDanger' | 'detectTradeCreatesPin' | 'detectCentralKingDanger' | 'detectKingExposure' | 'findQueenGrabTraps'
   | 'findTrappedPiece' | 'readConversion' | 'noSafeChecks' | 'kingRace' | 'kingActivityGap' | 'zugzwangIfPassed' | 'mateLine' | 'kingInOpen' | 'seventhRankMate'
   | 'queenlessMate' | 'selfBlock' | 'mateThreatLever' | 'queenKnightNet' | 'lateralRookDefence' | 'kingSiege'
-  | 'keySquaresOn' | 'kpDrawReason' | 'shoulderOn' | 'connectedPassersOn' | 'matingNet' | 'frozenTarget'
+  | 'keySquaresOn' | 'kpDrawReason' | 'wonEnding' | 'shoulderOn' | 'connectedPassersOn' | 'matingNet' | 'frozenTarget'
   | 'pictureLedger' | 'pictureCounterplay' | 'pictureTarget';
 
 /** How sharply each posed question is asked, on the heat map's scale. */
@@ -842,6 +842,7 @@ const REGISTRY_POSED_WEIGHT: Record<RegistryPosedComputer, number> = {
   kingSiege: 70,
   keySquaresOn: 65,
   kpDrawReason: 65,
+  wonEnding: 65,
   shoulderOn: 60,
   connectedPassersOn: 70,
   matingNet: 90,
@@ -904,6 +905,8 @@ function registryReads(fen: string, me: 'w' | 'b', bestLineUci: readonly string[
     ...readBoardAll('keySquareRead', { fen, student: me }),
     // A pawn ending the exact solver proves drawn: yours to hold.
     ...readBoardAll('kpDrawRead', { fen, student: me }),
+    // A pawn ending the exact solver proves won: yours to convert.
+    ...readBoardAll('wonEndingRead', { fen, student: me }),
     ...readBoardAll('shoulderRead', { fen, student: me }),
     ...readBoardAll('connectedPassers', { fen, student: me }),
     // Your king walked or driven out from behind its pawns, their checks on it.

@@ -116,6 +116,7 @@ import { keySquaresOn, keySquareLine, keySquareSquares } from './keySquareRead';
 import { kpDrawReason, KP_FAST_BUDGET } from './kpSolver';
 import { shoulderOn, shoulderLine, shoulderSquares } from './shoulderRead';
 import { connectedPassersOn, connectedPassersLine, connectedPassersSquares } from './connectedPassers';
+import { wonEnding } from './wonEnding';
 import { leverPasser } from './leverPasser';
 import { coordinationGap } from './coordinationGap';
 import { endgameVerdict } from './endgameVerdict';
@@ -1398,6 +1399,10 @@ export interface BoardContexts {
   /** Two connected passed pawns a lone rook or minor cannot stop, proven by
    *  an exact search. */
   connectedPassers: { fen: string; student: Color };
+  /** Kings and pawns, solved exactly: a proven win and the shape that wins it
+   *  (the pawn outside the king's square, connected or protected passers, the
+   *  king on a key square or the opposition, the outside passer). */
+  wonEndingRead: { fen: string; student: Color };
 }
 
 export type ComputerId = keyof BoardContexts;
@@ -7926,6 +7931,28 @@ export const BOARD_COMPUTERS = {
         seat: r.side === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen, ...(asks ? { skill: 'passed-pawn-neglected' } : {}) });
     }),
     computer: 'connectedPassersOn',
+    kind: 'technique',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { wired: 'services/moveInsight.ts' },
+    },
+  },
+  wonEndingRead: {
+    // The win's why, the twin of kpDrawRead: a kings-and-pawns board the
+    // exact solver proves won, and the shape that wins it. Both seats; the
+    // record files the student's won ending to convert when it is the
+    // student's move.
+    read: ({ fen, student }, fact) => safe(() => {
+      const r = wonEnding(fen, student, KP_FAST_BUDGET);
+      if (!r) return null;
+      const asks = r.side === student && sideToMove(fen) === student;
+      return fact({ key: r.key, claims: [`won-ending:${r.reason}:${fen.split(' ').slice(0, 2).join(' ')}`], text: r.text, proof: squaresProof(r.text, r.squares) ?? NO_PROOF.description, squares: r.squares, stakes: null,
+        seat: r.side === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen, ...(asks ? { skill: 'botched-conversion' } : {}) });
+    }),
+    computer: 'wonEnding',
     kind: 'technique',
     phase: ANY,
     surfaces: {
