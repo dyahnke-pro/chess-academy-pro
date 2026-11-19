@@ -241,7 +241,7 @@ function kickOf(fen: string, line: readonly string[], mover: Color, whose: 'your
       if (b.attackers(mv.to, them).length > b.attackers(mv.to, mover).length) continue;
       const owner = whose === 'your' ? 'their' : 'your';
       const steps = pushes.length >= 2 ? `${pushes.slice(0, -1).join(', ')} and then ${pushes.at(-1)}` : mv.san;
-      return { kind: 'kick', text: `The plan: ${steps}, to kick ${owner} ${NOUN[p.type]} off ${sq}.`, squares: [mv.to, sq], target: sq, starts: n - pushes.length };
+      return { kind: 'kick', text: `${whose === 'your' ? 'Your' : 'Their'} plan: ${steps}, to kick ${owner} ${NOUN[p.type]} off ${sq}.`, squares: [mv.to, sq], target: sq, starts: n - pushes.length };
     }
   }
   return null;

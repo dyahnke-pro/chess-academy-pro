@@ -36,7 +36,7 @@ describe('planOfTheBoard — the plan Danya says', () => {
   it('the knockout: the pawn that kicks the c6 knight', () => {
     const p = plan(KNOCKOUT, KNOCKOUT_LINE, 214);
     expect(p?.kind).toBe('kick');
-    expect(p?.text).toBe('The plan: b4 and then b5, to kick their knight off c6.');
+    expect(p?.text).toBe('Your plan: b4 and then b5, to kick their knight off c6.');
   });
   it("Alekhine's gun: the rooks stacked on the c-file at the knight on c6", () => {
     const p = plan(GUN, GUN_LINE, 266);
