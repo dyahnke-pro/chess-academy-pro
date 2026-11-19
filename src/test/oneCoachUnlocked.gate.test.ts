@@ -75,7 +75,9 @@ const WEAKNESSES_UNWIRED_CEILING = 257;
  *  and Review's walk read the core; a lesson and chat add the lesson's board
  *  reads, the student-move bundle and the purpose; a thinking step adds its
  *  step board reads. */
-const MOVE_READS = ['kingWalkReads', 'weighedReads', 'knownSlipReads'] as const;
+// `pictureReads`: the picture's verdict and plan, read by `moveThoughtFacts`
+// itself on the board the move was made on (WO-PICTURE-01 P6).
+const MOVE_READS = ['kingWalkReads', 'weighedReads', 'knownSlipReads', 'pictureReads'] as const;
 const REACH: Partial<Record<CoachSurface, readonly string[]>> = {
   learn: ['moveThoughtFacts', ...MOVE_READS], play: ['moveThoughtFacts', ...MOVE_READS], tactics: ['moveThoughtFacts', ...MOVE_READS],
   // Review reads the move's board reads in its facet builder (reviewFullData
@@ -126,6 +128,7 @@ const FACT_SET_READERS = [
 const FILTER_DEBT: Record<string, ReadonlyArray<{ clause: string; why: string }>> = {
   'services/coachFeatureService.ts': [
     { clause: "f.source === 'structureLines'", why: 'GENUINE (step selection): the board step keeps only the fighting line of the structure' },
+    { clause: "f.source === 'picture'", why: 'GENUINE (step selection): the picture\'s conclusions (verdict, plan, ledger, counterplay, target) are kept on every step — no Review producer says them' },
     { clause: "f.source !== 'teachingMove'", why: 'OWED: Review\'s facets read the teaching-move computers' },
     { clause: "f.source !== 'pieceRoute'", why: 'GENUINE (tense): a trip is a plan forward; in a finished game the moves that followed were answers to the board — hindsight' },
   ],

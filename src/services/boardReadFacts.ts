@@ -194,8 +194,12 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
   // A move that loses nothing yet still costs a pawn or more is refuted by what
   // it gives up (`positionalReason`): his "b5 at once allows …e5, with strong
   // central counterplay and a dead bishop".
+  // The tries read here are the picture's input too (WO-PICTURE-01 P6): the
+  // best move's facts read the verdict and plan off them (`reads.tries`).
+  let triesRead: WeighRead[] | null = null;
   if (!i.withhold && i.readTempting && mine) {
     const tempting: WeighRead[] = [{ evaluation: top.evaluation, mate: top.mate, moves: top.moves }];
+    triesRead = tempting;
     // THE PLAN'S DIRECT TRY (WO-PICTURE-01 P2): the frontal hit on their weak
     // pawn, the storm at their king — weighed for the plan, not for the eye,
     // so it is read whatever a player at the rating would pick.
@@ -308,11 +312,15 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     if (after) {
       for (const f of moveThoughtFacts({
         fenBefore: i.fen, san, moverIsStudent: mine, namesPlayedMove: ASKED_WRITER.namesPlayedMove, plainThreatsSeen: plainThreatsSeenFor(ASKED_WRITER, false), tense: i.tense, theory: false, story: false, moveReads: ASKED_WRITER.moveReads,
-        prev: NO_PREV_CAPTURE, line: top.moves.slice(1), history: game.history, theirLast: game.theirLast, phrases: null, reads: { before: [...i.before], after: [...after], passBefore: [], passAfter: [], everyAfter }, costCp: 0,
+        prev: NO_PREV_CAPTURE, line: top.moves.slice(1), history: game.history, theirLast: game.theirLast, phrases: null, reads: { before: [...i.before], after: [...after], passBefore: [], passAfter: [], everyAfter, tries: triesRead }, costCp: 0,
       })) {
         // A puzzle still being solved keeps only who stands better: what the
         // best move does is the answer.
         if (i.withhold && !VERDICT_KINDS.has(f.kind)) continue;
+        // The picture's conclusions are read above, off this read's own tries
+        // (said once, in Danya's order): the fact set's copy is for the other
+        // surfaces.
+        if (f.source === 'picture') continue;
         facts.push({ from: 'bestMove', kind: f.kind, text: f.text, computer: f.computer, squares: f.squares, stakes: stakeValue(f.stakes), restates: f.restates === true, claims: f.claims });
       }
       if (theirs.length > 0) {

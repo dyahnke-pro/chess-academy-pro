@@ -2774,7 +2774,11 @@ function* reviewSegmentSteps(
         // read off the stored candidates (`storedFanWithCandidates`). The rest
         // Review says through its own producers (the candidates it weighed,
         // the verdict, the punishment line) or the Theory button (the book).
-        }).filter((f) => (f.step === 'yours' || f.step === 'theirs' || f.step === 'notYet' || (f.step === 'board' && f.source === 'structureLines'))
+        // THE PICTURE'S CONCLUSIONS ride on every step (WO-PICTURE-01 P6): the
+        // verdict read after the tries, the plan that survives them, the
+        // ledger, their counterplay and the target — no Review producer says
+        // them, so the walk hears them from the one fact set.
+        }).filter((f) => (f.step === 'yours' || f.step === 'theirs' || f.step === 'notYet' || (f.step === 'board' && f.source === 'structureLines') || f.source === 'picture')
           // The book's statistics (main move or sideline, how it scores, the
           // usual reply) are the Theory button's (option B, David 2026-11-12);
           // the other main tries and their aims are theory the walk teaches.

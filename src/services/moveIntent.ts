@@ -59,6 +59,12 @@ export interface IntentReads {
    *  makes the search (Review's record). Absent: not read; the fan before the
    *  move stands in, each line a read of its first move. */
   weigh?: readonly WeighRead[] | null;
+  /** THE TRIES ON THE BOARD BEFORE THE MOVE, each read to its own line (the
+   *  plan's direct try, the forcing moves, the eye's moves — the tapped read
+   *  makes them, `boardReadFacts`): what the picture's verdict and plan are
+   *  read from (WO-PICTURE-01 P6). Absent: the candidates' reads or the fan
+   *  before the move stand in. */
+  tries?: readonly WeighRead[] | null;
 }
 
 export interface IntentMove { uci: string; san: string }
