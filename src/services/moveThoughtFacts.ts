@@ -1166,6 +1166,32 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       facts.push({ ...f, namesStudentMove: false, source: 'baitSet', idea: f.stakes && 'mate' in f.stakes && f.stakes.mate ? 'mate' : 'choice', weight: 60 });
     }
   }
+  // EVERY COMPUTER IN THE BASKET READS THE MOVE (David 2026-11-19: "We are
+  // unifying the computers so all surfaces can use them if needed"): the
+  // ones a single surface used to call for itself, now in the one fact set
+  // every surface reads. Each answers for itself whether it has anything on
+  // this move; what is said is the decider's and the writer's. (The rule a
+  // clean move kept is here already: the fundamentals above read the same
+  // computer as `principle`, so it is not read twice; so are the book read
+  // (`openingTheoryFacts`), what the move stops (`moveStops`) and its new
+  // threat (`moveThreat`) — the same computers under other entries.)
+  {
+    const mover = sideOf(i.fenBefore);
+    const student: 'w' | 'b' = mine ? mover : (mover === 'w' ? 'b' : 'w');
+    const bestUci = i.reads?.before[0]?.moves[0] ?? null;
+    const bestSan = bestUci ? uciSan(i.fenBefore, bestUci) : null;
+    const replyUci = i.reads?.reply ?? i.reads?.after[0]?.moves[0] ?? null;
+    const replySan = replyUci ? uciSan(fenAfter, replyUci) : (i.line?.[0] ?? null);
+    const fenAfterReply = replySan ? (afterSan(fenAfter, replySan) ?? fenAfter) : fenAfter;
+    const historyAfter = [...i.history, i.san];
+    const push = (fs: readonly CoachFact[], idea: IdeaKind, weight: number): void => {
+      for (const f of fs) facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea, weight });
+    };
+    push(readBoardAll('tiedDefender', { fenBefore: i.fenBefore, fenAfterMove: fenAfter, fenAfterReply, student }), 'pressure', 54);
+    if (i.theirLast) push(readBoardAll('prophylaxisMissed', { prevFen: i.theirLast.fenBefore, studentSan: i.theirLast.san, fenBefore: i.fenBefore, san: i.san, student }), 'threat', 52);
+    if (mine && i.costCp !== null) push(readBoardAll('structureMove', { fenBefore: i.fenBefore, san: i.san, student, cpLoss: Math.max(0, i.costCp), bestSan, bestUci: i.reads?.before[0]?.moves ?? [], reply: replySan, namesBetterMove: i.namesPlayedMove, namesStudentMoves: i.namesPlayedMove }), 'weakness', 50);
+    push(readBoardAll('slipsOnLine', { history: historyAfter, student }), 'theory', 44);
+  }
   return withDecisionGap(facts, i, from, to, seat);
 }
 
@@ -1593,6 +1619,20 @@ export function refutedFact(r: RefutedAlternative, fenBefore: string, seat: Fact
     thread: LOCAL_THREAD, stakes: stakesOf('common-wrong', costStakes(r.costCp)), proof: refutedAltProof(fenBefore, r) ?? squaresProof(said, squares) ?? NO_PROOF.description, seat, fen: fenBefore,
     claims: [`refuted:${r.alt.replace(/[+#!?]+$/, '')}`],
   };
+}
+
+/** A move in UCI or SAN on `fen`, as SAN (null when it does not play). */
+function uciSan(fen: string, mv: string): string | null {
+  try {
+    const c = new Chess(fen);
+    const m = /^[a-h][1-8][a-h][1-8][qrbn]?$/.test(mv) ? c.move({ from: mv.slice(0, 2), to: mv.slice(2, 4), promotion: mv[4] }) : c.move(mv);
+    return m.san;
+  } catch { return null; }
+}
+
+/** The board after a SAN move (null when it does not play). */
+function afterSan(fen: string, san: string): string | null {
+  try { const c = new Chess(fen); c.move(san); return c.fen(); } catch { return null; }
 }
 
 function sideOf(fen: string): 'w' | 'b' {

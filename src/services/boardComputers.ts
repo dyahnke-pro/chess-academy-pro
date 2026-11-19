@@ -938,6 +938,10 @@ export const BOARD_COMPUTERS = {
     // own move (its pressure bought it), so the student's seat: every door
     // seats it there today (Learn's move point, the live clause, Review).
     read: ({ fenBefore, fenAfterMove, fenAfterReply, student }, fact) => safe(() => {
+      // What the STUDENT's move tied down ("that is what pressure buys") —
+      // never said after their move (lesson 2026-11-19: "their bishop on f8
+      // is tied down now" on their own …c5).
+      if (new Chess(fenBefore).turn() !== student) return null;
       const tie = newTiedDefender(fenBefore, fenAfterMove, student);
       if (!tie) return null;
       const holds = findTiedDefenders(fenAfterReply, student).some((t) => t.defender.square === tie.defender.square && t.target.square === tie.target.square);
@@ -2992,6 +2996,9 @@ export const BOARD_COMPUTERS = {
     // leads the move (`h`), and the rule's id — `principleKey` reads it back.
     // Its full-again words behind a line that named the move ride `alsoText`.
     read: ({ fenBefore, san, student, taught, stemKey, namesPlayedMove }, fact) => safe(() => {
+      // The rule the STUDENT's clean move kept — never said about their move
+      // ("castle your king" over their castling).
+      if (new Chess(fenBefore).turn() !== student) return null;
       const r = principleLine(fenBefore, san, student === 'w' ? 'white' : 'black', taught, stemKey, namesPlayedMove);
       if (!r) return null;
       const fen = boardAfter(fenBefore, san) ?? fenBefore;
@@ -3012,6 +3019,7 @@ export const BOARD_COMPUTERS = {
   },
   principleContrast: {
     read: ({ fenBefore, san, bestSan, student, taught, stemKey }, fact) => safe(() => {
+      if (new Chess(fenBefore).turn() !== student) return null;
       const r = principleContrastLine(fenBefore, san, bestSan, student === 'w' ? 'white' : 'black', taught, stemKey);
       if (!r) return null;
       return fact({ key: `${r.first ? '1' : '0'}-|${r.id}`, claims: [`rule:${r.id}`], text: r.text, proof: NO_PROOF.stated, squares: r.squares, stakes: null,

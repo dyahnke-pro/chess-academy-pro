@@ -166,3 +166,25 @@ describe('boardComputers — threatAnswer (WO-STORY-MATRIX-01 P1-9c)', () => {
     expect(readBoard('threatAnswer', { ...ctx, bestUci: null, namesMove: false })).toBeNull();
   });
 });
+
+describe('principle — the rule the student\'s clean move kept, never theirs', () => {
+  // 1.e4 e5 2.Nf3 Nc6 3.Bc4 Bc5 4.O-O Nf6 — Black (the opponent) castles.
+  const before = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4';
+  it('says the rule on the student\'s own castling', () => {
+    expect(readBoard('principle', { fenBefore: before, san: 'O-O', student: 'b', taught: new Set(), stemKey: 0, namesPlayedMove: true })?.text ?? '').toMatch(/castle/i);
+  });
+  it('stays silent on the opponent\'s castling (it said "castle your king" over theirs)', () => {
+    expect(readBoard('principle', { fenBefore: before, san: 'O-O', student: 'w', taught: new Set(), stemKey: 0, namesPlayedMove: true })).toBeNull();
+    expect(readBoard('principleContrast', { fenBefore: before, san: 'O-O', bestSan: 'd6', student: 'w', taught: new Set(), stemKey: 0 })).toBeNull();
+  });
+});
+
+describe('tiedDefender — what the student\'s move tied down, never their move', () => {
+  // Colle: 1.d4 d5 2.Nf3 Nf6 3.e3 e6 4.Bd3 c5 — their …c5 (move 8 of the lesson).
+  const sans = ['d4', 'd5', 'Nf3', 'Nf6', 'e3', 'e6', 'Bd3'];
+  const c = new Chess(); for (const m of sans) c.move(m);
+  const fenBefore = c.fen(); c.move('c5'); const fenAfter = c.fen();
+  it('is silent after their move', () => {
+    expect(readBoard('tiedDefender', { fenBefore, fenAfterMove: fenAfter, fenAfterReply: fenAfter, student: 'w' })).toBeNull();
+  });
+});
