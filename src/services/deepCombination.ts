@@ -27,7 +27,7 @@
 import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'chess.js';
 import { sideMaterial } from './pieceValues';
 import { legalSeeGainFor } from './positionReadingService';
-import { mateThreatsAgainst } from './threatOut';
+import { hasMateThreat } from './threatOut';
 import { settledNetForLine, gainWords, promotedIn, type PieceLetter } from './exchangeLedger';
 import { kingSacrifice, kingSacrificeLine, kingSacrificeSquares } from './kingSiege';
 import { andList, lineShape } from '../utils/andList';
@@ -203,7 +203,7 @@ function shortestAt(fenBefore: string, sans: readonly string[], from: number, en
  *  move that threatens mate (`c` is the board after it). */
 function forcing(c: Chess, m: Move, foe: Color): boolean {
   if (m.captured || m.promotion || c.inCheck()) return true;
-  return mateThreatsAgainst(c.fen(), foe).moves.length > 0;
+  return hasMateThreat(c.fen(), foe);
 }
 
 /** What the line nets for the mover, by piece. */

@@ -15,6 +15,7 @@
 // criticality at the call site per the cost architecture.
 import { Chess, type Square } from 'chess.js';
 import { findHangingBySee } from './positionReadingService';
+import { liteMoves, makeLite, undoLite } from './liteMoves';
 import { CAPTURE_VALUE } from './pieceValues';
 import { withMover } from '../utils/sideToMove';
 
@@ -60,17 +61,41 @@ export function sideToMoveAs(fen: string, color: 'w' | 'b'): string | null {
  *  Learn's and Review's threat proof and the chat's "is my king safe?" and
  *  "what do they threaten?" read this, never a copy of it. */
 export function mateThreatsAgainst(fen: string, target: 'w' | 'b'): { fen: string; moves: Array<{ san: string; from: string; to: string }> } {
+  return mateScan(fen, target, false);
+}
+
+/** Is there a mate threat against `target`'s king — `mateThreatsAgainst`'s
+ *  moves non-empty, read without naming them (stops at the first). */
+export function hasMateThreat(fen: string, target: 'w' | 'b'): boolean {
+  return mateScan(fen, target, true).moves.length > 0;
+}
+
+function mateScan(fen: string, target: 'w' | 'b', first: boolean): { fen: string; moves: Array<{ san: string; from: string; to: string }> } {
   const attacker = target === 'w' ? 'b' : 'w';
   let probeFen = fen;
   try {
-    if (new Chess(fen).turn() === target) {
+    let c = new Chess(fen);
+    if (c.turn() === target) {
       const flipped = flipSideToMove(fen);
       if (!flipped) return { fen, moves: [] };
       probeFen = flipped;
+      c = new Chess(probeFen);
     }
-    const c = new Chess(probeFen);
     if (c.turn() !== attacker) return { fen: probeFen, moves: [] };
-    return { fen: probeFen, moves: c.moves({ verbose: true }).filter((m) => m.san.endsWith('#')).map((m) => ({ san: m.san, from: m.from, to: m.to })) };
+    // The mate test without the notation (phone cost 2026-11-19): the verbose
+    // list writes every move's SAN, which plays it and generates every reply.
+    // Only a mating move pays for its name.
+    const moves: Array<{ san: string; from: string; to: string }> = [];
+    for (const m of liteMoves(c)) {
+      makeLite(c, m);
+      const mate = c.inCheck() && liteMoves(c).length === 0;
+      undoLite(c);
+      if (!mate) continue;
+      if (first) return { fen: probeFen, moves: [{ san: '', from: m.from, to: m.to }] };
+      const named = c.moves({ square: m.from, verbose: true }).find((x) => x.to === m.to && x.promotion === m.promotion);
+      if (named) moves.push({ san: named.san, from: named.from, to: named.to });
+    }
+    return { fen: probeFen, moves };
   } catch { return { fen, moves: [] }; }
 }
 
@@ -88,15 +113,30 @@ export function mateThreatsAgainst(fen: string, target: 'w' | 'b'): { fen: strin
 function boardFact(probeFen: string, square: Square, subject: 'w' | 'b'): { attacker: string | null; attackerSquare: string | null; defenders: number } {
   try {
     const b = new Chess(probeFen);
-    const caps = b.moves({ verbose: true }).filter((m) => m.to === square && m.captured);
+    const caps = liteMoves(b).filter((m) => m.to === square && m.captured);
     caps.sort((x, y) => (VALUE[x.piece] ?? 0) - (VALUE[y.piece] ?? 0));
     return { attacker: caps[0]?.piece ?? null, attackerSquare: caps[0]?.from ?? null, defenders: b.attackers(square, subject).length };
   } catch { return { attacker: null, attackerSquare: null, defenders: 0 }; }
 }
 
 export function computeMustDefend(fen: string, subjectColor: 'w' | 'b'): MustDefend {
-  let toMove: 'w' | 'b';
-  try { toMove = new Chess(fen).turn(); } catch { return { net: 0, pieces: [] }; }
+  const read = mustDefendRead(fen, subjectColor);
+  if (!read) return { net: 0, pieces: [] };
+  const pieces = read.pieces.map((h) => ({ ...h, ...boardFact(read.probeFen, h.square, subjectColor) }));
+  return { net: pieces[0]?.value ?? 0, pieces };
+}
+
+/** The must-defend's pieces alone (square, piece, value; highest value
+ *  first) — `computeMustDefend` without the board fact behind each, for a
+ *  caller that reads only what hangs (one read, the same list). */
+export function mustDefendPieces(fen: string, subjectColor: 'w' | 'b'): Array<{ square: Square; piece: string; value: number }> {
+  return mustDefendRead(fen, subjectColor)?.pieces ?? [];
+}
+
+function mustDefendRead(fen: string, subjectColor: 'w' | 'b'): { probeFen: string; pieces: Array<{ square: Square; piece: string; value: number }> } | null {
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return null; }
+  const toMove = board.turn();
 
   // Ensure the OTHER side is the one to move on the probe board — that is the
   // board on which `findHangingPieces` reports what the subject must defend.
@@ -106,9 +146,9 @@ export function computeMustDefend(fen: string, subjectColor: 'w' | 'b'): MustDef
     // is in check there is no free tempo to give — the check dominates and is a
     // separate, more urgent signal; return nothing rather than probe an illegal
     // flipped board.
-    try { if (new Chess(fen).inCheck()) return { net: 0, pieces: [] }; } catch { return { net: 0, pieces: [] }; }
+    if (board.inCheck()) return null;
     const flipped = flipSideToMove(fen);
-    if (!flipped) return { net: 0, pieces: [] };
+    if (!flipped) return null;
     probeFen = flipped;
   }
   // else: the opponent is ALREADY to move — read the position directly.
@@ -129,13 +169,13 @@ export function computeMustDefend(fen: string, subjectColor: 'w' | 'b'): MustDef
   // moves. Every piece the exchange loses is a candidate now — the undefended
   // ones were always a subset (their swap gain is their full value).
   let hanging: ReturnType<typeof findHangingBySee>;
-  try { hanging = findHangingBySee(probeFen); } catch { return { net: 0, pieces: [] }; }
+  try { hanging = findHangingBySee(probeFen); } catch { return null; }
   const mine = hanging
     .filter((h) => h.color === subjectColor && h.piece !== 'k')
-    .map((h) => ({ square: h.square, piece: h.piece, value: Math.min(VALUE[h.piece] ?? 0, h.gain), ...boardFact(probeFen, h.square, subjectColor) }))
+    .map((h) => ({ square: h.square, piece: h.piece as string, value: Math.min(VALUE[h.piece] ?? 0, h.gain) }))
     .filter((h) => h.value > 0)
     .sort((a, b) => b.value - a.value);
-  return { net: mine[0]?.value ?? 0, pieces: mine };
+  return { probeFen, pieces: mine };
 }
 
 /** Pieces of `foe`'s (not pawns) the other side wins on its next move. */
@@ -148,5 +188,5 @@ const enPrise = (fen: string, foe: 'w' | 'b'): Set<string> =>
 export function newThreat(fenBefore: string, fenAfter: string, foe: 'w' | 'b'): boolean {
   const before = enPrise(fenBefore, foe);
   for (const sq of enPrise(fenAfter, foe)) if (!before.has(sq)) return true;
-  return mateThreatsAgainst(fenAfter, foe).moves.length > 0 && mateThreatsAgainst(fenBefore, foe).moves.length === 0;
+  return hasMateThreat(fenAfter, foe) && !hasMateThreat(fenBefore, foe);
 }

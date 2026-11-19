@@ -73,6 +73,10 @@ const KING_STEPS: number[][] = Array.from({ length: 64 }, (_, s) => {
   }
   return out;
 });
+/** The king steps flat (8 slots a square, `KN` used), for the hot loops. */
+const KS = new Uint8Array(64 * 8);
+const KN = new Uint8Array(64);
+for (let k = 0; k < 64; k++) { KN[k] = KING_STEPS[k].length; KING_STEPS[k].forEach((t, j) => { KS[k * 8 + j] = t; }); }
 /** Kings a step apart (or on one square), as a table. */
 const NEAR = new Uint8Array(64 * 64);
 for (let a = 0; a < 64; a++) for (let b = 0; b < 64; b++) NEAR[a * 64 + b] = near(a, b) ? 1 : 0;
@@ -93,12 +97,31 @@ const CACHE = new Map<string, Uint8Array>();
 export function kpClearCache(): void { CACHE.clear(); }
 const sliceKey = (wp: readonly number[], bp: readonly number[]): string => `${[...wp].sort((a, b) => a - b).join(',')}|${[...bp].sort((a, b) => a - b).join(',')}`;
 
+/** A slice already solved that is this one's mirror image: across the files
+ *  (a ↔ h), across the colours (White's pawns become Black's, ranks turned),
+ *  or both. Kings and pawns have no castling, so each image has the same
+ *  values, read through the same image of the kings. */
+type Image = { slice: Uint8Array; sq: number; colours: boolean };
+function imageOf(wp: readonly number[], bp: readonly number[]): Image | null {
+  const tries: Array<[number, boolean]> = [[7, false], [56, true], [63, true]];
+  for (const [x, colours] of tries) {
+    const w = (colours ? bp : wp).map((s) => s ^ x);
+    const b = (colours ? wp : bp).map((s) => s ^ x);
+    const hit = CACHE.get(sliceKey(w, b));
+    if (hit) return { slice: hit, sq: x, colours };
+  }
+  return null;
+}
+
 function getSlice(wp: number[], bp: number[], ctx: Ctx): Uint8Array {
   const key = sliceKey(wp, bp);
   const hit = CACHE.get(key);
   if (hit) return hit;
   if (++ctx.fresh > ctx.budget) throw new OutOfBudget();
-  const s = solveSlice(wp, bp, ctx);
+  // The budget, the cache and the order of every child slice stay exactly
+  // the search's own (an image is counted as a fresh slice and its children
+  // are still asked for): only the king tables are read off the image.
+  const s = solveSlice(wp, bp, ctx, imageOf(wp, bp));
   if (CACHE.size >= CACHE_MAX) CACHE.clear();
   CACHE.set(key, s);
   return s;
@@ -207,9 +230,10 @@ const SCRATCH = {
   fwdN: new Uint8Array(N), noMoves: new Uint8Array(N),
   status: new Int8Array(N), decided: new Uint8Array(N), remaining: new Uint8Array(N), queue: new Int32Array(N),
   outHi: new Int8Array(N), outLo: new Int8Array(N),
+  steps: new Uint8Array(2 * 64 * 8), stepN: new Uint8Array(2 * 64),
 };
 
-function solveSlice(wp: number[], bp: number[], ctx: Ctx): Uint8Array {
+function solveSlice(wp: number[], bp: number[], ctx: Ctx, image: Image | null = null): Uint8Array {
   const res = new Uint8Array(N);
   if (wp.length === 0 && bp.length === 0) { res.fill(enc(0, 0, 0)); return res; }
   const pawns: [number[], number[]] = [wp, bp];
@@ -264,9 +288,37 @@ function solveSlice(wp: number[], bp: number[], ctx: Ctx): Uint8Array {
     }
   }
 
-  // Every child slice is solved above, so nothing below recurses: the
-  // scratch tables are shared between slices.
+  // Every child slice is solved above. A mirror image already solved gives
+  // the king tables (each valid board read through the image; the colour
+  // image turns White's view round: a win for one is a win for the other).
+  if (image) {
+    const x = image.sq; const src = image.slice;
+    for (let kw = 0; kw < 64; kw++) for (let kb = 0; kb < 64; kb++) {
+      if (NEAR[kw * 64 + kb] || occ[kw] || occ[kb]) continue;
+      for (let t = 0; t < 2; t++) {
+        const ko = t === 0 ? kb : kw;
+        if (att[t][ko]) continue;
+        if (!image.colours) { res[idxOf(kw, kb, t)] = src[idxOf(kw ^ x, kb ^ x, t)]; continue; }
+        const v = src[idxOf(kb ^ x, kw ^ x, 1 - t)];
+        res[idxOf(kw, kb, t)] = enc(-decHi(v), -decLo(v), decNm(v));
+      }
+    }
+    return res;
+  }
+
+  // Nothing below recurses: the scratch tables are shared between slices.
   const { valid, inChk, exLo, exHi, hasEx, fwdN, noMoves } = SCRATCH;
+  // Each side's king steps off its own pawns and off the squares the other
+  // side's pawns hit, read once a slice (the kings' distance is read below).
+  const { steps, stepN } = SCRATCH;
+  for (let me = 0; me < 2; me++) {
+    const op = 1 - me;
+    for (let k = 0; k < 64; k++) {
+      let n = 0;
+      for (let j = 0; j < KN[k]; j++) { const t = KS[k * 8 + j]; if (occ[t] !== me + 1 && !att[op][t]) steps[(me * 64 + k) * 8 + n++] = t; }
+      stepN[me * 64 + k] = n;
+    }
+  }
   valid.fill(0); inChk.fill(0); hasEx.fill(0); fwdN.fill(0); noMoves.fill(0);
   for (let kw = 0; kw < 64; kw++) for (let kb = 0; kb < 64; kb++) {
     if (NEAR[kw * 64 + kb] || occ[kw] || occ[kb]) continue;
@@ -279,8 +331,10 @@ function solveSlice(wp: number[], bp: number[], ctx: Ctx): Uint8Array {
       const checks = att[op][km];
       if (checks) inChk[i] = 1;
       let moves = 0;
-      for (const s of KING_STEPS[km]) {
-        if (occ[s] === me + 1 || NEAR[s * 64 + ko] || att[op][s]) continue;
+      const sb = (me * 64 + km) * 8; const sn = stepN[me * 64 + km];
+      for (let j = 0; j < sn; j++) {
+        const s = steps[sb + j];
+        if (NEAR[s * 64 + ko]) continue;
         moves++;
         const ci = me === 0 ? idxOf(s, kb, op) : idxOf(kw, s, op);
         if (occ[s] === op + 1) { const v = (capSlice[me][s] as Uint8Array)[ci]; addExit(i, me, decLo(v), decHi(v)); }
@@ -351,7 +405,8 @@ function propagate(valid: Uint8Array, ex: Int8Array, hasEx: Uint8Array, fwdN: Ui
     const t = s & 1; const kw = s >> 7; const kb = (s >> 1) & 63;
     const moverWhite = t === 1;
     const from = moverWhite ? kw : kb;
-    for (const st of KING_STEPS[from]) {
+    for (let j = 0, n = KN[from]; j < n; j++) {
+      const st = KS[from * 8 + j];
       const p = moverWhite ? idxOf(st, kb, 0) : idxOf(kw, st, 1);
       if (!valid[p] || decided[p]) continue;
       if (status[s] === -1) set(p, 1);
