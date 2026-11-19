@@ -651,7 +651,6 @@ export function buildReviewMoveBriefing(input: ReviewMoveBriefingInput): string 
   const rankedMechanics = spokenAspects
     .map((a) => ({ ...a, score: a.weight + (a.keystone ? lift : Math.round(lift / 2)) }))
     .sort((a, b) => b.score - a.score)
-    .slice(0, 3)
     .map((a) => a.text);
   // The briefing is Review's: a move already played.
   const moveClause = rankedMechanics.length ? joinReview(rankedMechanics, moverIsStudent, mv.san, 'past') : '';

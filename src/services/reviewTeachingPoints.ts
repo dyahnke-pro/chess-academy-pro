@@ -59,11 +59,13 @@ function isLight(sq: string): boolean { return ((sq.charCodeAt(0) - 97) + (Numbe
 /** The count with the piece it is about: its square, and whether it is a
  *  TEMPO (a piece that can step away, so the count says it has to move — the
  *  same claim as the move that kicked it, which the registry couples). */
-export function attackerDefenderCount(fen: string, studentColorWB: Color): { text: string; square: Square; tempo: boolean } | null {
+export function attackerDefenderCount(fen: string, studentColorWB: Color): { text: string; square: Square; tempo: boolean }[] {
   let chess: Chess;
-  try { chess = new Chess(fen); } catch { return null; }
+  try { chess = new Chess(fen); } catch { return []; }
   const enemy: Color = studentColorWB === 'w' ? 'b' : 'w';
-  let best: { text: string; value: number; square: Square; tempo: boolean } | null = null;
+  // EVERY outnumbered piece, most valuable first — never the biggest alone
+  // (G4.5: two of their pieces falling is two facts).
+  const found: { text: string; value: number; square: Square; tempo: boolean }[] = [];
   // OFFENSIVE only — the M2 lesson is "more attackers than defenders → it falls".
   // We deliberately do NOT flag the student's own overloaded piece: it collides
   // with an intentional sacrifice (the sacked rook/queen is MEANT to be loose).
@@ -119,9 +121,9 @@ export function attackerDefenderCount(fen: string, studentColorWB: Color): { tex
       text: escapes
         ? `${count} — it's outnumbered, so it has to move, and that costs them the tempo`
         : `${count} — more attackers than defenders, so it falls` };
-    if (!best || cand.value > best.value) best = cand;
+    found.push(cand);
   }
-  return best ? { text: best.text, square: best.square, tempo: best.tempo } : null;
+  return found.sort((a, b) => b.value - a.value).map((f) => ({ text: f.text, square: f.square, tempo: f.tempo }));
 }
 
 function plural(n: number, noun: string): string { return `${n} ${noun}${n === 1 ? '' : 's'}`; }

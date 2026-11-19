@@ -27,7 +27,7 @@ import { namedSquares, namedSquareParts } from './squareRole';
 import { outpostKey } from './conceptKey';
 import { kickBreaksPin, pawnKickNext, pinsAgainst } from './pawnKickNext';
 import { computeMoveFundamentals } from './moveFundamentals';
-import { andList } from '../utils/andList';
+import { andList, countWord } from '../utils/andList';
 import { pieceRef } from './pieceRef';
 import { actsFromItsSquare, exchangeEnd } from './material';
 
@@ -410,18 +410,27 @@ function guardPoint(fenBefore: string, after: Chess, mv: Move, moverIsStudent: b
   if (mv.captured || mv.piece === 'k') return null;
   const before = new Chess(fenBefore);
   const enemy: 'w' | 'b' = mv.color === 'w' ? 'b' : 'w';
-  let best: { sq: string; type: string; by: string } | null = null;
+  // EVERY piece the move guards under fire, most valuable first — never the
+  // biggest alone (G4.5: a move that guards two loose pieces does both).
+  const guarded: { sq: string; type: string; by: string }[] = [];
   for (const c of after.board().flat()) {
     if (!c || c.color !== mv.color || c.type === 'k' || c.square === mv.to) continue;
     const hitBy = after.attackers(c.square, enemy);
     if (hitBy.length === 0) continue;
     if (!after.attackers(c.square, mv.color).includes(mv.to)) continue;
     if (before.attackers(c.square, mv.color).length >= before.attackers(c.square, enemy).length) continue;
-    if (!best || (PIECE_VAL[c.type] ?? 0) > (PIECE_VAL[best.type] ?? 0)) best = { sq: c.square, type: c.type, by: hitBy[0] };
+    guarded.push({ sq: c.square, type: c.type, by: hitBy[0] });
   }
-  if (!best) return null;
-  const hitter = after.get(best.by as Sq);
-  return { text: `Guards the ${PIECE_NOUN[best.type]} on ${best.sq}, which ${moverIsStudent ? 'their' : 'your'} ${PIECE_NOUN[hitter?.type ?? ''] ?? 'piece'} attacks.`, squares: [best.sq, best.by] };
+  if (guarded.length === 0) return null;
+  guarded.sort((a, b) => (PIECE_VAL[b.type] ?? 0) - (PIECE_VAL[a.type] ?? 0));
+  const theirs = moverIsStudent ? 'their' : 'your';
+  const named = andList(guarded.map((g) => `the ${PIECE_NOUN[g.type]} on ${g.sq}`));
+  const hitters = [...new Set(guarded.map((g) => g.by))];
+  const hitter = after.get(hitters[0] as Sq);
+  const tail = hitters.length === 1
+    ? `which ${theirs} ${PIECE_NOUN[hitter?.type ?? ''] ?? 'piece'} attacks`
+    : guarded.length === 2 ? 'both of them under attack' : `all ${countWord(guarded.length)} under attack`;
+  return { text: `Guards ${named}, ${tail}.`, squares: [...new Set(guarded.flatMap((g) => [g.sq, g.by]))] };
 }
 
 /** A KING STEPS OFF A SQUARE ITS OWN ROOK CAN NOW USE (9.Kh2: the rook on f1

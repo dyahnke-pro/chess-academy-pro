@@ -363,7 +363,7 @@ function observationsFor(
   const foeColor: Color = color === 'w' ? 'b' : 'w';
   const roads = (king?.openFilesNearKing ?? []).filter((f) => attackerCanUseFile(fen, f, foeColor));
   if (king?.exposed && roads.length > 0 && heavyAttackers > 0) {
-    const files = roads.slice(0, 2).join(' and ');
+    const files = andList(roads);
     const plural = roads.length > 1 ? 's are' : ' is';
     // AND WHAT TO DO ABOUT IT — never the road alone (David 2026-09-30:
     // "describing the board is what we do not want"). Your king: step it off
