@@ -111,8 +111,8 @@ T = {
 103:('D','verdict',None),
 104:('B','bluff refuted by calculation: engine line cxd5','depthClauses'),
 105:('A','bishop pair compensation (bishopPair / compensation)','bishopPair'),
-106:('E','overprotect the square that blocks their break (key-square overprotection)','overprotectKeySquare'),
-107:('E','overprotect key squares so the breaks never work','overprotectKeySquare'),
+106:('A','overprotect the entrenched piece (speedRunReads.overprotect, best piece on an outpost with a single guard)','speedRunReads.overprotect'),
+107:('A','breaks that never work = breakStopped (the break blocked) + speedRunReads.overprotect','breakStopped'),
 108:('D','verdict',None),
 109:('A','pawns need king support (endgamePawnReads)','endgamePawnReads'),
 110:('A','opposition (oppositionRead)','oppositionRead'),
@@ -246,8 +246,9 @@ cnt = Counter(r['group'] for r in rows)
 concepts = defaultdict(set)
 for r in rows:
     if r['group'] == 'E': concepts[r['concept']].add(r['board'])
+BUILT = {'centre': 'pawnCentre.ts', 'heldWeakPawns': 'harmlessWeakPawns.ts', 'inaccessibleHole': 'inaccessibleHole.ts', 'fileNeedsPiece': 'wingWithoutPieces.ts'}
 out = {'date': '2026-11-19', 'source': SRC, 'counts': dict(cnt),
-       'eConcepts': sorted([{'concept': k, 'boards': sorted(v), 'n': len(v)} for k, v in concepts.items()], key=lambda x: -x['n']),
+       'eConcepts': sorted([{'concept': k, 'boards': sorted(v), 'n': len(v), 'builtAs': BUILT.get(k)} for k, v in concepts.items()], key=lambda x: -x['n']),
        'rows': rows}
 json.dump(out, open(OUT, 'w'), indent=1)
 print(cnt); [print(c['n'], c['concept'], c['boards']) for c in out['eConcepts']]

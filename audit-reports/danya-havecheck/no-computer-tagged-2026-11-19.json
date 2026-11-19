@@ -3,10 +3,10 @@
  "source": "/home/user/urg-wt/audit-reports/danya-havecheck/ideas-labelled-2026-11-17.json",
  "counts": {
   "C": 51,
-  "A": 101,
+  "A": 103,
   "D": 28,
   "B": 26,
-  "E": 18
+  "E": 16
  },
  "eConcepts": [
   {
@@ -18,7 +18,8 @@
     "the-positional-sacrifice#3",
     "the-two-knight-advantage#1"
    ],
-   "n": 5
+   "n": 5,
+   "builtAs": "pawnCentre.ts"
   },
   {
    "concept": "heldWeakPawns",
@@ -26,15 +27,8 @@
     "how-to-ruin-your-pawn-structure#1",
     "how-to-ruin-your-pawn-structure#3"
    ],
-   "n": 2
-  },
-  {
-   "concept": "overprotectKeySquare",
-   "boards": [
-    "overprotection-decoded#1",
-    "overprotection-decoded#2"
-   ],
-   "n": 2
+   "n": 2,
+   "builtAs": "harmlessWeakPawns.ts"
   },
   {
    "concept": "inaccessibleHole",
@@ -42,42 +36,48 @@
     "weak-squares-who-cares#1",
     "weak-squares-who-cares#7"
    ],
-   "n": 2
+   "n": 2,
+   "builtAs": "inaccessibleHole.ts"
   },
   {
    "concept": "fileNeedsPiece",
    "boards": [
     "mysterious-gm-moves#4"
    ],
-   "n": 1
+   "n": 1,
+   "builtAs": "wingWithoutPieces.ts"
   },
   {
    "concept": "noChecks",
    "boards": [
     "tales-from-a-grandmaster#1"
    ],
-   "n": 1
+   "n": 1,
+   "builtAs": null
   },
   {
    "concept": "rookMate",
    "boards": [
     "the-art-of-time-management#3"
    ],
-   "n": 1
+   "n": 1,
+   "builtAs": null
   },
   {
    "concept": "promotionOrder",
    "boards": [
     "the-importance-of-solving-studies#1"
    ],
-   "n": 1
+   "n": 1,
+   "builtAs": null
   },
   {
    "concept": "kingRace",
    "boards": [
     "the-importance-of-solving-studies#2"
    ],
-   "n": 1
+   "n": 1,
+   "builtAs": null
   }
  ],
  "rows": [
@@ -1029,18 +1029,18 @@
    "idea": "White overprotects a key square, entrenches a bishop there and kills Black's queenside counterplay",
    "kind": "plan",
    "status": "missing",
-   "group": "E",
-   "reason": "overprotect the square that blocks their break (key-square overprotection)",
-   "concept": "overprotectKeySquare"
+   "group": "A",
+   "reason": "overprotect the entrenched piece (speedRunReads.overprotect, best piece on an outpost with a single guard)",
+   "existingComputer": "speedRunReads.overprotect"
   },
   {
    "board": "overprotection-decoded#2",
    "idea": "Overprotect the key squares so the breaks never work",
    "kind": "prevent",
    "status": "missing",
-   "group": "E",
-   "reason": "overprotect key squares so the breaks never work",
-   "concept": "overprotectKeySquare"
+   "group": "A",
+   "reason": "breaks that never work = breakStopped (the break blocked) + speedRunReads.overprotect",
+   "existingComputer": "breakStopped"
   },
   {
    "board": "pawn-endgames-a-practical-guide#1",
