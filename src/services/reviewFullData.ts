@@ -571,7 +571,7 @@ export function computeMoveFacets(
     // and its point — unless the student then MISSED it (U8).
     const answer = opponentMoved && bestSan && fellShort && costsPoints && !reason && !consequence
       && !advantageWasMissed(ctx.allSans[ply] ?? null, ctx.replyBestSan)
-      ? readBoard('slipAnswer', { fenAfter, prevCap: captureRunAfterMove(ctx.prevCap, fenBefore, san), answerSan: ctx.replyBestSan, lineUci: ctx.playedLineUci })?.text ?? null
+      ? readBoard('slipAnswer', { fen: fenAfter, prevCapture: captureRunAfterMove(ctx.prevCap, fenBefore, san), answerSan: ctx.replyBestSan, lineUci: ctx.playedLineUci, register: 'review' })?.text ?? null
       : null;
     // What it allowed first, then the better move with its reason — the
     // heart of the app's order. A better move with no reason is a bare
