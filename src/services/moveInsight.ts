@@ -1281,6 +1281,13 @@ export function diagonalContest(fen: string, me: 'w' | 'b'): { mine: string; the
  *  → held; their idea still landing after the move → broken. Null when the
  *  board posed no stop. `bestUci`: the engine's best move there. */
 export function prophylaxisAnswer(fenBefore: string, playedSan: string, bestUci: string): 'held' | 'broken' | null {
+  // A stop is a quiet one-step pawn push or king step (`findProphylaxis`); any
+  // other best move poses none, so the read is skipped (it costs ~25 ms a move).
+  try {
+    const b = new Chess(fenBefore).move({ from: bestUci.slice(0, 2), to: bestUci.slice(2, 4), promotion: bestUci[4] });
+    const step = (b.piece === 'p' && Math.abs(Number(b.to[1]) - Number(b.from[1])) === 1) || (b.piece === 'k' && !b.san.startsWith('O'));
+    if (b.captured || b.san.includes('+') || !step) return null;
+  } catch { return null; }
   const f = readBoard('prophylaxis', { fen: fenBefore, engineFirstMoves: [bestUci] });
   const play = f?.marks?.play;
   const theirs = f?.marks?.theirs;
