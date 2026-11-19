@@ -36,6 +36,7 @@
  * (`coachDecider`) can read.
  */
 import { Chess, type Square } from 'chess.js';
+import { PICTURE_ROLE, type PictureRole } from './positionPicture';
 import weightTable from '../data/read-decider-weights.json';
 import { readHabit, READ_HABIT } from './methodBeat';
 
@@ -247,6 +248,8 @@ export function decideRead<F extends ReadFact>(facts: readonly F[], ctx: ReadCon
  *  empty square is not the same thing; a restatement, a withheld square and a
  *  fact already said stay out. Each detail is heard once, after the first step
  *  it belongs to. */
+const DETAIL_ROLES: ReadonlySet<PictureRole> = new Set(['asset', 'weakness', 'board', 'threat']);
+
 function withDetails<F extends ReadFact>(picked: readonly F[], all: readonly F[], ctx: ReadContext): F[] {
   if (!ctx.fen) return [...picked];
   let board: Chess;
@@ -266,6 +269,13 @@ function withDetails<F extends ReadFact>(picked: readonly F[], all: readonly F[]
     if (pieces.size === 0) continue;
     for (const f of all) {
       if (used.has(f.text) || f.restates || !sayable.has(f.kind)) continue;
+      // A detail DESCRIBES the piece; it is never a second conclusion (another
+      // plan, another try, another verdict, another move's job) — the step
+      // already chose its one conclusion, and a rival plan heard as its
+      // "detail" contradicts it (rook lift #2: the lift, then "break with d5",
+      // the try the same read had just refuted).
+      const role = f.computer ? (PICTURE_ROLE as Record<string, PictureRole | undefined>)[f.computer] : undefined;
+      if (!role || !DETAIL_ROLES.has(role)) continue;
       if (f.kind === 'must-defend' && !bestAnswers(f, ctx)) continue;
       if (f.squares.some((s) => ctx.withheld.includes(s))) continue;
       if (!f.squares.some((sq) => pieces.has(sq))) continue;
