@@ -15,7 +15,7 @@
 // The proof is exact: the covering pawn and its capture, read off the board.
 // PURE: chess.js + the legal SEE.
 import { sideToMoveAs } from './threatOut';
-import { openSentence } from '../utils/openSentence';
+import { continueSentence } from '../utils/openSentence';
 import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'chess.js';
 import { legalSeeGainFor, bestCaptureGainFor } from './positionReadingService';
 import type { Proof } from './proof';
@@ -279,7 +279,10 @@ export function prophylaxisProof(p: Prophylaxis): Proof {
   return {
     kind: 'squares', exact: true,
     short: covers,
-    full: `${p.intent.san} would ${p.kind === 'pin' ? 'pin' : p.kind === 'fork' ? 'fork' : 'hit'} your ${NAME[p.victim.piece]} on ${p.victim.square}, and ${covers}`,
+    // THEIR MOVE IS NAMED AS THEIRS (Danya narration test 2026-11-19, weak
+    // squares who cares #7: "e4 first — e4 would hit your knight on f3, and
+    // your pawn gets there first" — one bare "e4" for your move and theirs).
+    full: `${p.intent.san === p.prevention.san ? `their ${NAME[p.intent.piece]} to ${p.intent.to}` : p.intent.san} would ${p.kind === 'pin' ? 'pin' : p.kind === 'fork' ? 'fork' : 'hit'} your ${NAME[p.victim.piece]} on ${p.victim.square}, and ${covers}`,
     squares: p.squares,
   };
 }
@@ -289,7 +292,7 @@ export function prophylaxisLine(p: Prophylaxis): string {
   // THE THREAT ONCE, THEN WHAT STOPS IT (OS-1 g2 ply 12: "h6 first — it
   // stops the pin with bishop to g5 before it lands. Bishop to g5 would pin
   // your knight on f6, and after h6 the pawn covers g5" said the pin twice).
-  return `${p.prevention.san} first — ${openSentence(prophylaxisProof(p).full)}.`;
+  return `${p.prevention.san} first — ${continueSentence(prophylaxisProof(p).full)}.`;
 }
 
 /** THE THREAT ALONE, proven: their move played out on the board where they

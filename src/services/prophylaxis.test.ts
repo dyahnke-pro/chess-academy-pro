@@ -59,7 +59,19 @@ describe('a pawn that stands on their square takes it first (Danya BGTB: "after 
   it('never says a pawn covers its own square', () => {
     const p = { kind: 'kick', intent: { san: 'c4', from: 'c5', to: 'c4', piece: 'p' }, victim: { square: 'd3', piece: 'q' },
       prevention: { san: 'c4', from: 'c3', to: 'c4', piece: 'p' }, squares: ['c4', 'd3'] } as unknown as Parameters<typeof prophylaxisProof>[0];
-    expect(prophylaxisProof(p).full).toBe('c4 would hit your queen on d3, and your pawn gets there first');
+    expect(prophylaxisProof(p).full).toBe('their pawn to c4 would hit your queen on d3, and your pawn gets there first');
+  });
+  // Danya narration test 2026-11-19, weak squares who cares #7: one bare
+  // "e4" for your move and theirs. Theirs is named as theirs.
+  it('names their move as theirs when it has the same SAN as yours', () => {
+    const p = { kind: 'kick', intent: { san: 'e4', from: 'e5', to: 'e4', piece: 'p' }, victim: { square: 'f3', piece: 'n' },
+      prevention: { san: 'e4', from: 'e3', to: 'e4', piece: 'p' }, squares: ['e4', 'f3'] } as unknown as Parameters<typeof prophylaxisProof>[0];
+    expect(prophylaxisLine(p)).toBe('e4 first — their pawn to e4 would hit your knight on f3, and your pawn gets there first.');
+  });
+  it('a different move keeps its SAN (control)', () => {
+    const p = { kind: 'pin', intent: { san: 'Bg4', from: 'c8', to: 'g4', piece: 'b' }, victim: { square: 'f3', piece: 'n' },
+      prevention: { san: 'h3', from: 'h2', to: 'h3', piece: 'p' }, squares: ['g4', 'f3'] } as unknown as Parameters<typeof prophylaxisProof>[0];
+    expect(prophylaxisProof(p).full).toBe('Bg4 would pin your knight on f3, and after h3 the pawn covers g4');
   });
 });
 
