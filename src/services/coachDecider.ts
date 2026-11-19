@@ -32,6 +32,7 @@
 import { boardVeto, isMateKind, type BoardState } from './boardState';
 import { computeImportance, type ImportanceSignals, type ImportanceTier, type ImportanceVerdict } from './narrationImportance';
 import { selectFacts, supportedFacts, barForTier, type QuietFact } from './factSelector';
+import { buildPicture, isDetailOf } from './positionPicture';
 import { fadeLevelOf, type FadeLevel, type FadeLevels } from './fadeText';
 import { factValue, FACT_ROLE, FACT_LAYER, FACT_PROOF, type FactKind, type FacetRole } from './reviewFacetRank';
 import type { CoachFact } from './coachFact';
@@ -537,7 +538,29 @@ export function decide(
   // both vocabularies. Only review has a move-reason line (`[does]`) to keep on
   // a ply with no teaching point.
   const support = supportedFacts(selection.spoken, roleOf);
-  const quietAll: QuietFact[] = [...provenQuiet, ...selection.quiet, ...support.quiet];
+  // 4c — THE PICTURE KEEPS THE DETAIL (WO-PICTURE-01 P4, David 2026-11-19: "We
+  // also need to not drop the lesser valued facts … Otherwise we just have an
+  // outline"). A description the floor swept still speaks when the picture
+  // links it to a teaching point that speaks — a different fact about the same
+  // piece on the same square of the same board. It is heard right after that
+  // point, as its detail. A
+  // duplicate (`subsumed`), a sentence already said, a proven layer and a board
+  // veto stay quiet: those are verdicts on the fact itself, not lost detail.
+  const picture = buildPicture(live);
+  const byText = new Map<string, DoorFact>();
+  for (const f of live) if (!byText.has(f.text)) byText.set(f.text, f);
+  const conclusions = support.spoken.filter((f) => roleOf(f) === 'teach');
+  const detailOf = new Map<string, DoorFact>();
+  const keptQuiet: QuietFact[] = [];
+  for (const q of [...selection.quiet, ...support.quiet]) {
+    const f = q.why === 'below-bar' || q.why === 'unsupported' ? byText.get(q.text) : undefined;
+    const by = f ? conclusions.find((c) => isDetailOf(picture, c.id, f.id)) : undefined;
+    if (f && by && !detailOf.has(f.id)) detailOf.set(f.id, by);
+    else keptQuiet.push(q);
+  }
+  const details = [...detailOf.keys()].map((id) => picture.entries.get(id)?.fact).filter((f): f is DoorFact => f !== undefined && live.includes(f as DoorFact));
+  support.spoken.push(...details);
+  const quietAll: QuietFact[] = [...provenQuiet, ...keptQuiet];
   // 5 — THE ORDER: the same values, highest first — and SUPPORT FOLLOWS WHAT
   // IT SUPPORTS. A description speaks only because a teaching point names its
   // squares, so it is heard after that point, never ahead of it (Learn +
@@ -553,8 +576,12 @@ export function decide(
   const order = new Map(value);
   const stepOrder = new Map<string, number>();
   for (const f of support.spoken) stepOrder.set(f.id, THOUGHT_ORDER[f.step]);
+  for (const [id, by] of detailOf) {
+    order.set(id, Math.min(value.get(id) ?? 0, (value.get(by.id) ?? 0) - 0.5));
+    stepOrder.set(id, stepOrder.get(by.id) ?? 0);
+  }
   for (const f of support.spoken) {
-    if (roleOf(f) !== 'describe') continue;
+    if (roleOf(f) !== 'describe' || detailOf.has(f.id)) continue;
     const supportedBy = support.spoken
       .filter((u) => roleOf(u) === 'teach' && u.squares.some((sq) => f.squares.includes(sq)));
     const supported = supportedBy.map(valueOf);

@@ -218,7 +218,44 @@ export function decideRead<F extends ReadFact>(facts: readonly F[], ctx: ReadCon
     for (const sq of pick.squares) named.add(sq);
     if (row.step === 'priority') target = new Set(pick.squares);
   }
-  return { facts: out, habit: habitOf(facts, ctx) };
+  return { facts: withDetails(out, facts, ctx), habit: habitOf(facts, ctx) };
+}
+
+/** THE DETAIL OF EACH STEP (WO-PICTURE-01 P4, David 2026-11-19: "Those are
+ *  important pieces of the puzzle that help form the details of the picture.
+ *  Otherwise we just have an outline"). A step says ONE fact; every other fact
+ *  about the SAME PIECE on the board read — the piece standing on a square the
+ *  step's fact names — is its detail and is heard right after it. A shared
+ *  empty square is not the same thing; a restatement, a withheld square and a
+ *  fact already said stay out. Each detail is heard once, after the first step
+ *  it belongs to. */
+function withDetails<F extends ReadFact>(picked: readonly F[], all: readonly F[], ctx: ReadContext): F[] {
+  if (!ctx.fen) return [...picked];
+  let board: Chess;
+  try { board = new Chess(ctx.fen); } catch { return [...picked]; }
+  const pieceAt = (sq: string): string | null => {
+    try { const p = board.get(sq as Square); return p ? `${p.color}${p.type}` : null; } catch { return null; }
+  };
+  const used = new Set<string>(picked.map((f) => f.text));
+  // Only what a read says at all: a kind no step takes (a played-out line, a
+  // score sheet) is never a read's detail either.
+  const steps = ctx.puzzle ? PUZZLE_STEPS : READ_STEPS;
+  const sayable = new Set(steps.flatMap((r) => r.kinds));
+  const out: F[] = [];
+  for (const lead of picked) {
+    out.push(lead);
+    const pieces = new Set(lead.squares.filter((sq) => pieceAt(sq) !== null));
+    if (pieces.size === 0) continue;
+    for (const f of all) {
+      if (used.has(f.text) || f.restates || !sayable.has(f.kind)) continue;
+      if (f.kind === 'must-defend' && !bestAnswers(f, ctx)) continue;
+      if (f.squares.some((s) => ctx.withheld.includes(s))) continue;
+      if (!f.squares.some((sq) => pieces.has(sq))) continue;
+      used.add(f.text);
+      out.push(f);
+    }
+  }
+  return out;
 }
 
 /** THE HABIT THAT CLOSES THE READ: on a puzzle, the attacking scan; else the

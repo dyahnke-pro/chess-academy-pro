@@ -45,9 +45,14 @@ just have an outline" → "Go".
 - **The "but":** the winning tries that fail.
 - **Plan:** the try that survives (planOfTheBoard). **Move:** its first step, with all its jobs.
 
-**P4 — the merge step becomes attach-as-support.**
-- `factSelector`'s subsumption no longer drops a same-claim fact. It attaches it as a support of the winner when a computed link exists, and keeps it in the picture when none does.
-- `QuietReason 'subsumed'` is replaced by `'support'`. The gate fails on any fact that leaves the picture.
+**P4 — the detail is kept, not dropped. ✅ built 2026-11-19.**
+- Found while building: a shared claim key means the SAME idea, so `subsumed` really is a duplicate and stays quiet. The detail that was being lost is a DIFFERENT fact about the same piece.
+  - `decide()` swept it below the floor.
+  - The static read (`decideRead`) dropped everything but one fact per step.
+- **The link is the same piece on the same square of the same board** (`isDetailOf`). A shared empty square or a shared claim never counts.
+- **The door:** a swept description linked to a spoken teaching point speaks right after it.
+- **The read:** every fact about a step's piece is heard right after that step. It must be a kind the read says at all; withheld squares, restatements and score sheets stay out.
+- Tests: `positionPicture.test.ts` and `readDecider.picture.test.ts` (Danya's rook-lift board). Both fail on the old code.
 
 **P5 — the read decider and the composer speak the picture:**
 - the conclusions in Danya's step order;
