@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { structurePlan, structurePlanFact, passerTrumpSentence } from './nextPlans';
+import { structurePlan, structurePlanFact, passerTrumpSentence, deriveNextPlanFacts } from './nextPlans';
 import { planRaceClause } from './planRace';
 
 describe('structurePlan — structure→plan (conservative, board-true)', () => {
@@ -61,7 +61,7 @@ describe('the student\'s own isolated pawn is read before theirs (census 9 cover
   it('their named isolani does not speak over your isolated e-pawn', () => {
     // Black: isolated e-pawn on e5 (no d/f pawns). White: d4 with no c/e pawn and no Black d-pawn.
     const fen = '4k3/pp4pp/8/4p3/3P4/8/PP3PPP/4K3 b - - 0 1';
-    expect(structurePlan(fen, 'b')).toMatch(/^You're playing with the isolated pawn on e5/);
+    expect(structurePlan(fen, 'b')).toMatch(/^Your isolated pawn on e5 is a target in this ending/);
   });
 });
 
@@ -101,5 +101,23 @@ describe('the weak-pawn plan never sends a rook down a file its own pawn shuts',
 describe('passerTrumpSentence — a stopped passer is no trump', () => {
   it('the double attack #2: d5 with d4 theirs', () => {
     expect(passerTrumpSentence('r1b2rk1/pp4pp/3b4/3p2q1/8/1P1Q1P2/PB1N2PP/R3R2K b - - 0 18', 'd5', true)).toBeNull();
+  });
+});
+
+// Danya narration test 2026-11-19 — the plan names only what is on the board.
+describe('the weak-pawn plan reads the board', () => {
+  it('in pursuit of zugzwang #1: in a one-rook ending the isolani is not "trade pieces" advice', () => {
+    expect(structurePlan('3R4/2p3p1/3p2kp/3P1p2/5P1K/6PP/2r5/8 b - - 0 42', 'b') ?? '').not.toMatch(/trade pieces/);
+  });
+  it('negative control: with pieces on, trading toward their isolani is still the plan', () => {
+    expect(structurePlan('r2q1rk1/pp3ppp/2n1pn2/8/8/2NPBN2/PP3PPP/R2Q1RK1 b - - 0 1', 'b') ?? '').toMatch(/trade pieces and pile onto it/);
+  });
+});
+
+describe('the weak-pawn siege names the pieces on the board', () => {
+  it('never resign prematurely #0: a pawn ending brings the king, and trades off no defenders', () => {
+    const t = deriveNextPlanFacts('8/2p1k2p/2P3p1/6P1/5P2/8/6KP/8 b - - 0 49', 'b', { namesStudentMoves: true }).find((p) => p.kind === 'weak-pawn')?.text ?? '';
+    expect(t).toMatch(/bring your king to it/);
+    expect(t).not.toMatch(/defenders|pieces at it/);
   });
 });

@@ -450,7 +450,16 @@ export function deriveNextPlanFacts(
     // stand on that square's colour.
     const occupant = chess.get(block as Square);
     const sqLight = isLightSquare(block);
-    const blockader = all.find((c) => c.type === 'n' && c.color === studentColorWB)
+    // A KNIGHT THAT CAN GET THERE (Danya, the double bishop sacrifice #4:
+    // "plant your knight on f6" with the only knight on b6, which cannot reach
+    // it): two knight jumps at most.
+    const knightNear = (from: string): boolean => {
+      const jumps = (sq: string): string[] => [[1, 2], [2, 1], [-1, 2], [-2, 1], [1, -2], [2, -1], [-1, -2], [-2, -1]]
+        .map(([df, dr]) => [sq.charCodeAt(0) - 97 + df, Number(sq[1]) + dr]).filter(([fi, r]) => fi >= 0 && fi < 8 && r >= 1 && r <= 8)
+        .map(([fi, r]) => `${String.fromCharCode(97 + fi)}${r}`);
+      return from === block || jumps(from).includes(block) || jumps(from).some((j) => jumps(j).includes(block));
+    };
+    const blockader = all.find((c) => c.type === 'n' && c.color === studentColorWB && knightNear(c.square))
       ?? all.find((c) => c.type === 'b' && c.color === studentColorWB && isLightSquare(c.square) === sqLight)
       ?? null;
     const blockBit = occupant && occupant.color === studentColorWB && occupant.type === 'p'
@@ -482,11 +491,20 @@ export function deriveNextPlanFacts(
     // the file): the heavy pieces cannot reach it down the file, so the
     // attack comes from the side.
     const fileShut = occupant?.color === studentColorWB && occupant.type === 'p';
-    const pile = fileShut
-      ? `it cannot be hit down the file, so bring your pieces at it from the side and trade off its defenders: each one is tied to it`
+    // THE DEFENDERS ARE THE ONES ON THE BOARD (Danya, never resign
+    // prematurely #0: "trade off its defenders" in a pawn ending, where
+    // nothing guards it and there are no pieces to bring). Its guards that
+    // are pieces, and the student's own pieces besides the king.
+    const guards = chess.attackers(weak as Square, enemy).filter((sq) => { const p = chess.get(sq); return !!p && p.type !== 'p' && p.type !== 'k'; }).length;
+    const tradeOff = guards === 0 ? '' : guards === 1 ? ' and trade off the piece that guards it' : ' and trade off its defenders: each one is tied to it';
+    const myPieces = all.some((c) => c.color === studentColorWB && c.type !== 'p' && c.type !== 'k');
+    const pile = !myPieces
+      ? 'bring your king to it'
+      : fileShut
+      ? `it cannot be hit down the file, so bring your pieces at it from the side${tradeOff}`
       : heavies.length > 0
-      ? `${heavyNoun} and trade off its defenders: each one is tied to it`
-      : 'bring your king and pieces to it and trade off its defenders: each one is tied to it';
+      ? `${heavyNoun}${tradeOff}`
+      : `bring your king and pieces to it${tradeOff}`;
     add('weak-pawn', `win their weak pawn on ${weak}`, `winning their weak pawn on ${weak}`, `${blockBit ? `${blockBit}. Then ` : ''}${pile}${countBit(chess, weak as Square, studentColorWB)}`, [weak, block]);
   }
 
@@ -964,14 +982,23 @@ export function structurePlanFact(fen: string, studentColor: Color): StructurePl
   // on the 3rd/6th rank, an e-pawn): not the named isolani with its outposts,
   // but still a pawn no pawn can guard — keep pieces on, or trade toward it.
   const centralFile = (sq: string): boolean => sq[0] === 'd' || sq[0] === 'e';
+  // ALREADY AN ENDGAME (Danya, in pursuit of zugzwang #1: "trade pieces and
+  // pile onto it" with one rook each): the trades are done, so the plan is
+  // the endgame's, never "trade toward it" or "don't drift into it".
+  let ending = false;
+  try { ending = new Chess(fen).board().flat().filter((p) => p && p.type !== 'p' && p.type !== 'k').length <= 2; } catch { ending = false; }
   const myIso = s.pawns.isolatedPawns[studentColor].filter(centralFile)[0];
   if (myIso) {
-    return { id: 'iqp-mine', squares: [myIso], text: `You're playing with the isolated pawn on ${myIso} — keep pieces on and use the open lines for activity. Don't drift into the endgame where it's a target.` };
+    return { id: 'iqp-mine', squares: [myIso], text: ending
+      ? `Your isolated pawn on ${myIso} is a target in this ending — keep your pieces active around it.`
+      : `You're playing with the isolated pawn on ${myIso} — keep pieces on and use the open lines for activity. Don't drift into the endgame where it's a target.` };
   }
   if (named) return named;
   const theirIso = s.pawns.isolatedPawns[opp].filter(centralFile)[0];
   if (theirIso) {
-    return { id: 'iqp-theirs', squares: [theirIso], text: `They have an isolated pawn on ${theirIso}, so trade pieces and pile onto it: in the endgame it falls.` };
+    return { id: 'iqp-theirs', squares: [theirIso], text: ending
+      ? `They have an isolated pawn on ${theirIso}, and in an ending like this it is a target: pile onto it.`
+      : `They have an isolated pawn on ${theirIso}, so trade pieces and pile onto it: in the endgame it falls.` };
   }
 
   return null;
