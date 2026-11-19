@@ -50,7 +50,11 @@ describe('"why is it best?" — what the move does, then the other moves', () =>
     // "played first, so that b4 comes next" — a take-back credited with a pawn
     // push (task 172). No single reason covers the gap, and the answer says so.
     expect(text).not.toMatch(/so that b4/);
-    expect(text).toMatch(/Anything else, like Ng5, gives up about half a point — for reasons further down the line\.$/);
+    // What anything else gives up closes the MOVE's part; the question also
+    // asks for the board's structure and tactics (`QUESTION_IDEAS`
+    // 'why-best-move'), which follow it when the board has them.
+    expect(text).toMatch(/Anything else, like Ng5, gives up about half a point — for reasons further down the line\./);
+    expect(text!.indexOf('Anything else')).toBeGreaterThan(text!.indexOf('Qxc5'));
   });
   it('a choice the board refuses never silences the true one behind it', () => {
     // "h4 or dxc5 — both hold here" leads the choices step and is refused as
@@ -68,7 +72,9 @@ describe('"why did they play that?"', () => {
     const board = new Chess();
     for (const s of g.sans.slice(0, 20)) board.move(s);
     const ctx = { fen: board.fen(), history: g.sans.slice(0, 20), studentColor: g.studentSide, bestUci: null, reads: null, reason: null };
-    expect(answerQuestionThought('opponent-move', ctx)?.text).toMatch(new RegExp(`^${introHead('opponent', 'b5', 'now')}`));
+    // Their move from their seat: its intro, or what it cost them, said as
+    // theirs in the house form ("Their …b5 costs them a5").
+    expect(answerQuestionThought('opponent-move', ctx)?.text).toMatch(new RegExp(`^(?:${introHead('opponent', 'b5', 'now')}|Their …b5 )`));
     // After the student's own move it is not their move to explain.
     const mine = new Chess(board.fen()); mine.move('Nf1');
     expect(answerQuestionThought('opponent-move', { ...ctx, fen: mine.fen(), history: [...ctx.history, 'Nf1'] })).toBeNull();
