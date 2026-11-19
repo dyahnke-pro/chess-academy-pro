@@ -102,7 +102,7 @@ describe('G8.5 — no lane without a live producer, no producer without a lane',
     for (const lane of Object.keys(LEARN_LANES) as LearnLane[]) {
       if (VIA_BACKWARD_LOOK.has(lane) || viaStory.has(lane) || viaPhaseWave.has(lane) || viaShared.has(lane)) continue;
       const fed = new RegExp(`queueSpokenHint\\([^;]*'${lane}'|deferIf\\([^;]*'${lane}'|lane: '${lane}'|'${lane}' as const`).test(TEACH_CODE)
-        || (pageCallsBoard && new RegExp(`lane: '${lane}'|teachingFact\\('${lane}'`).test(BOARD_CODE));
+        || (pageCallsBoard && new RegExp(`lane: '${lane}'|(?:teachingFact|fromBoard)\\('${lane}'`).test(BOARD_CODE));
       expect(fed, `lane '${lane}' is in the table and nothing feeds it`).toBe(true);
     }
     expect(TEACH_CODE).toMatch(/queueSpokenHint\(cm\.fenAfter, \{ computer: 'backwardLook', text: look\.line, lane: look\.kind[,} ]/);

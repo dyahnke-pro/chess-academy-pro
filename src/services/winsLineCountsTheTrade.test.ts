@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
-import { winningLine, priorFromHistory } from './learnBoardTeaching';
+import { priorFromHistory } from './learnBoardTeaching';
+import { lineWins } from './lineCalc';
 
 // Clean-pass walk 2026-10-04, G2 (lichess VRUh4Qgh) 31.Nxh4 Qxh4+: Learn said
 // "That wins two knights: …Qxh4+ Kg1 …Qxh5." Qxh4+ only takes back the knight
@@ -17,10 +18,10 @@ describe('a winning line that opens by taking back counts the trade it completes
     expect(priorFromHistory(history, FEN)?.san).toBe('Nxh4');
   });
   it('the defect is real without it: "two knights"', () => {
-    expect(winningLine(FEN, 'Qxh4+', LINE, 'b', null, [])?.what).toBe('two knights');
+    expect(lineWins(FEN, LINE, 'b', 'Qxh4+', null, [])?.what).toBe('two knights');
   });
   it('with it: the bishop given on h4 is in the count', () => {
-    const w = winningLine(FEN, 'Qxh4+', LINE, 'b', priorFromHistory(history, FEN), []);
+    const w = lineWins(FEN, LINE, 'b', 'Qxh4+', priorFromHistory(history, FEN), []);
     expect(w?.what).toBe('two knights for a bishop');
   });
 });

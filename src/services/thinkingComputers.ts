@@ -61,6 +61,8 @@ export const THINK_STEP: Record<ComputerName, ThinkAnswer> = {
   openingStoryAt: BOOK,
   openingSlip: BOOK,
   countMethod: 'is-my-move-safe',
+  countWarning: 'is-my-move-safe',
+  oppositeWingsRace: 'calculate',
   buildPriorityFirst: 'assess',
   lastTimeHere: RECORD,
   findQueenGrabTraps: 'is-my-move-safe',

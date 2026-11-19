@@ -9,19 +9,15 @@
 //
 // Pure: the engine reads are handed in by the page.
 import { flipSideToMove } from './threatOut';
-import { counterThreat, counterThreatLine } from './counterThreat';
-import { playedConcept, playedConceptLine, type PlayedConcept } from './playedConcept';
-import { CAPTURE_VALUE, MATERIAL_VALUE } from './pieceValues';
-import { lineProof, legalLineProof, squaresProof, NO_PROOF, type FactProof } from './proof';
-import { countWord, lineShape, lineSeatAt, withArticle } from '../utils/andList';
+import { type PlayedConcept } from './playedConcept';
+import { MATERIAL_VALUE } from './pieceValues';
+import { lineProof, squaresProof, NO_PROOF, type FactProof } from './proof';
+import { lineSeatAt } from '../utils/andList';
 import { Chess, type Color, type Square } from 'chess.js';
 import { hangingLine, lostLastGuard } from './hangingLine';
-import { legalSeeGainFor, signedCaptureRead, signedLegalSeeFor, structureTransfer, takingTheAttackerAnswers } from './positionReadingService';
-import { rookReachesFile } from './positionalRead';
-import { namedPawnStructure } from './nextPlans';
+import { signedLegalSeeFor, takingTheAttackerAnswers } from './positionReadingService';
 import { moverFault } from './accuracyService';
-import { lineWins, lineArrows, mateLine, type MateLine } from './lineCalc';
-import type { LineSeconds } from './lineTrust';
+import { lineArrows } from './lineCalc';
 /** A line as board arrows, ply by ply (one door for the page). */
 export { lineArrows as lineArrowClaims };
 import type { MisconceptionTagId } from '../data/misconceptionTags';
@@ -39,7 +35,7 @@ export type { ThreatProducer } from './learnRecordTerms';
 // direct import per computer — surfaceComposition's ceiling).
 export { mistakeTurnLine } from './mistakeTurnLine';
 export { NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, namesPlayableStudentMove, studentMovesInLine, type NamesStudentMove } from './studentMoveNaming';
-import { correctionHabit, habitSaidKey, liveHabitKey } from './methodBeat';
+import { correctionHabit, habitSaidKey } from './methodBeat';
 export { habitSaidKey } from './methodBeat';
 import { stepForMethodClaim, THINKING_STEPS } from './thinkingSteps';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
@@ -49,39 +45,23 @@ import { emitDecisiveReason } from './decisiveReasonEvents';
 import type { IntentReads } from './moveIntent';
 import type { LearnLane } from './learnTurnDoor';
 import type { ArrowClaim } from './arrowDoor';
-import { recaptureChoice } from './recaptureChoice';
 import { orderTeaching } from './orderTeaching';
-import { kingAttack } from './kingAttack';
-import { ruleException } from './ruleException';
-import { falseAlarm } from './falseAlarm';
-import { readBoard, readKey } from './boardComputers';
-import { pushOrHold } from './pushOrHold';
+import { readBoard, readBoardAll, readKey, learnReadKey, structureMoveRead } from './boardComputers';
+import type { CoachFact } from './coachFact';
 import { mastersPlanRead, planStillAhead, type MastersPlanRead } from './mastersPlanRead';
 import { masterMovesCachedSync } from './masterPlayLookup';
 import { prefetchOpeningStory } from './openingStory';
-import { tempoCount } from './tempoCount';
-import { checkMethod } from './checkMethod';
-import { tradeJudgement } from './tradeJudgement';
 import { lastMoveFromSan } from './material';
 import type { PieceValue } from './pieceValueRead';
-import { kneeJerk } from './kneeJerk';
-import { autopilotGuard, blunderCheck, keepPressing, BLUNDER_CHECK_QUESTION } from './safetyHabits';
+import { BLUNDER_CHECK_QUESTION } from './safetyHabits';
 export { BLUNDER_CHECK_QUESTION };
-import { pawnEndingTrade, outsidePasserDecoy, spareTempoWasted, kingCourse } from './endgamePawnReads';
-import { readZugzwang, zugzwangProof, zugzwangSentence } from './zugzwang';
-import { strongChoice, warmStrongChoice } from './strongChoice';
-import { stalemateWatch } from './stalemateWatch';
-import { criticalMomentFound, readCriticalMoment, type CriticalFanLine } from './criticalMoment';
+import { readZugzwang } from './zugzwang';
+import { warmStrongChoice } from './strongChoice';
+import { type CriticalFanLine } from './criticalMoment';
 import { SAID_BEFORE_MOVE } from './computerRoles';
-import { fileClaimed, oppositeWingsRace } from './planRace';
-import { conceptInstanceKey, tacticGeometryKey } from './conceptKey';
-import { sayYourMove, sayMoveNoun } from './spokenMove';
-import { deepFact, theirTarget, binding, moveHit } from './threeFacts';
-import { countWarning } from './countMethod';
-import { planChoice, type PlanChoiceLine } from './planChooser';
+import { sayMoveNoun } from './spokenMove';
+import { type PlanChoiceLine } from './planChooser';
 import { planFor } from './openingIdentity';
-import { buildReviewMoveTeachingFact } from './reviewMoveTeaching';
-import { withSubject, openSentence } from '../utils/openSentence';
 // The Learn page reaches the opening facts through this module, never directly
 // (surfaceComposition): the warm-up and the opening's length in plies.
 export { warmOpeningIdentity } from './openingIdentity';
@@ -93,25 +73,12 @@ export function warmOpeningStory(fen: string): void {
   void prefetchOpeningStory(fen, 'coach-teach').catch(() => undefined);
 }
 import { ruledOutSans, extractMentionedSanSpans } from './arrowEngine';
-import { slipAnswerText, studentMovePoint } from './playCommentary';
 import { gameArcs } from './lookaheadPlan';
-import { studentMoveStructure } from './structureReads';
-import { piecePoints, mateStakes, exchangeStakes, forkPoints, piecesOn, type FactStakes } from './factStakes';
-import { threatStakes } from './threatProof';
+import { isStaked, mateStakes, exchangeStakes, forkPoints, piecesOn, type FactStakes } from './factStakes';
 
 /** The board after `san` from `fen` — the board a fact about that move is
  *  computed on (`fen` itself when the move does not play). */
 const boardAfterMove = (fen: string, san: string): string => boardAfterSans(fen, [san]);
-
-/** The board after the student's move and their reply, or null. */
-function boardAfter(fenBefore: string, san: string, reply: string | null): Chess | null {
-  try {
-    const c = new Chess(fenBefore);
-    c.move(san);
-    if (reply) c.move(reply.replace(/^…/, ''));
-    return c;
-  } catch { return null; }
-}
 
 export interface StudentMoveInput {
   fenBefore: string;
@@ -179,6 +146,36 @@ export function namedStep(h: TeachingFact): TeachingFact {
   return { ...h, text: `${h.text.trim().replace(/[.!]?$/, '.')} ${tail}` };
 }
 
+/** A REGISTRY READ AS LEARN'S TEACHING FACT — the one fact the registry made
+ *  (its words, proof, squares, claims, kind and computer), with what the page
+ *  does with it beside it: the lane it rides, its event, its arrows and the
+ *  held answer it records. Its id is the board-teaching id (`teachingFact`). */
+function fromBoard(lane: LearnLane, f: CoachFact, ride: Parameters<typeof teachingFact>[2]): TeachingFact {
+  const t = teachingFact(lane, {
+    computer: f.computer, kind: f.kind, seat: f.seat, fen: f.fen, text: f.text, proof: f.proof, names: NAMES_NO_MOVE,
+    squares: f.squares, claims: f.claims, ...(isStaked(f.stakes) ? { stakes: f.stakes } : {}),
+    ...(f.role ? { role: f.role } : {}), ...(f.heldForm ? { heldForm: f.heldForm } : {}), ...(f.alsoText ? { alsoText: f.alsoText } : {}),
+  }, ride);
+  return { ...t, namesStudentMove: f.namesStudentMove };
+}
+
+/** The line a read says (`lines`), as arrows ply by ply, each on the board
+ *  before it, in the colour of the side that plays it. */
+function lineArrowsOf(f: CoachFact, student: 'w' | 'b', source: string): ArrowClaim[] {
+  const line = f.lines?.[0];
+  if (!line) return [];
+  const out: ArrowClaim[] = [];
+  try {
+    const b = new Chess(line.fen);
+    for (const s of line.sans) {
+      const before = b.fen();
+      const m = b.move(s.replace(/^…/, ''));
+      out.push({ from: m.from, to: m.to, role: m.color === student ? 'play' : 'theirs', fen: before, source });
+    }
+  } catch { /* the plies replayed so far still draw */ }
+  return out;
+}
+
 /** Everything the student's move teaches on the board, in no particular order —
  *  the Learn door ranks. */
 export function studentMoveTeaching(i: StudentMoveInput): TeachingFact[] {
@@ -192,9 +189,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingFact[] {
   // place (P1-6e), so where a rule's lane says otherwise (a habit, a trade, a
   // point) the two answers are named in the design (WO-STORY-MATRIX-01 §P1-6).
   let to = '';
-  let afterMove = '';
-  try { const c = new Chess(i.fenBefore); to = c.move(i.san).to; afterMove = c.fen(); } catch { return out; }
-  const mine = { seat: 'student' as const, fen: afterMove };
+  try { to = new Chess(i.fenBefore).move(i.san).to; } catch { return out; }
   // BATCH 1 — opening equivalence, order and timing (`orderTeaching`).
   // Every order lesson is graded by the move's cost: an unpriced move gets none.
   const pricedCost = i.cpLoss;
@@ -206,112 +201,72 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingFact[] {
   // reading the raw cost — "clean" is a narrower question.
   const faultCp = i.cpLoss !== null && moverFault(i.cpLoss, i.cpAfter) ? i.cpLoss : 0;
 
+  const me: 'w' | 'b' = i.fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
+  const theirLast = i.history.length >= 2 ? i.history[i.history.length - 2] : null;
+  const ply = i.history.length;
   // WHICH PIECE TAKES BACK, AND WHY — on a recapture the grader does not call
   // a fault. A faulty recapture is the one error computer's: it names the
   // better move with its reason, and a second reason here contradicted it
-  // (Colle replay 2026-11-05, 20.Qxf4: "…f6 attacks the bishop" from the
-  // grade, "…e5 hits the queen" from here).
-  try {
-    const theirLast = i.history.length >= 2 ? i.history[i.history.length - 2] : null;
-    const tookOn = theirLast ? /x([a-h][1-8])/.exec(theirLast)?.[1] ?? null : null;
-    if (faultCp === 0 && tookOn && to === tookOn && i.san.includes('x')) {
-      const rc = recaptureChoice(i.fenBefore, i.san, i.reply, i.namesStudentMoves);
-      // The right recapture chosen answers the capture-toward-centre
-      // question — held (P4 dual-use).
-      if (rc) out.push(teachingFact('recapture', { computer: 'recaptureChoice', kind: 'rule', ...mine, names: NAMES_NO_MOVE, proof: squaresProof(rc, [to]) ?? NO_PROOF.stated, text: rc, squares: [to], claims: [`recapture-${to}`] }, { event: null, arrows: [], evidence: { tag: 'capture-toward-centre' as const, posedImportance: 60 } }));
-    }
-  } catch { /* a bonus, never a blocker */ }
+  // (Colle replay 2026-11-05, 20.Qxf4). The right recapture chosen answers the
+  // capture-toward-centre question — held (P4 dual-use).
+  const rc = readBoard('recapture', { fenBefore: i.fenBefore, san: i.san, theirLast, reply: i.reply, faultCp, namesStudentMoves: i.namesStudentMoves });
+  if (rc) out.push(fromBoard('recapture', rc, { event: null, arrows: [], evidence: { tag: 'capture-toward-centre' as const, posedImportance: 60 } }));
 
   // THE LINE BEHIND A WINNING MOVE (David 2026-09-30: "teach more line
   // calculations"): the student played the engine's move and its line wins
-  // material — say it to where it lands, and draw it. One claim with the
+  // material — said to where it lands, and drawn. One claim with the
   // found-move line, so a critical moment says it once.
-  try {
-    const me = i.fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
-    const bare = (x: string): string => x.replace(/[+#]$/, '');
-    if (i.bestSan && bare(i.bestSan) === bare(i.san) && i.bestLine?.moves?.length) {
-      const ml = mateLine(i.fenBefore, i.bestLine.moves, me, i.san);
-      const w = ml ? null : winningLine(i.fenBefore, i.san, i.bestLine.moves, me, priorFromHistory(i.history, i.fenBefore), [i.bestLine.earlier?.moves ?? null]);
-      // The line goes on with the student's own moves — theirs to find (OS-10).
-      if (ml) out.push(teachingFact('movePoint', { computer: 'mateLine', kind: 'point', ...mine, names: studentMovesInLine(i.fenBefore, ml.sans, me, boardAfterSans(i.fenBefore, [i.san, i.reply]), 1), proof: lineProof({ fen: i.fenBefore, sans: ml.sans }, 'you') ?? squaresProof(ml.text, [to, ...ml.taken]) ?? NO_PROOF.stated, text: ml.text, squares: [to, ...ml.taken], claims: [`wins-line:${i.fenBefore.split(' ').slice(0, 2).join(' ')}`] }, { event: { name: 'coach_mate_line', props: { surface: 'coach-teach', quiet: ml.quiet } }, arrows: mateArrows(ml, me) }));
-      if (w) out.push(teachingFact('movePoint', { computer: 'lineWins', kind: 'point', ...mine, names: studentMovesInLine(i.fenBefore, w.sans, me, boardAfterSans(i.fenBefore, [i.san, i.reply]), 1), proof: lineProof({ fen: i.fenBefore, sans: w.sans }, 'you') ?? squaresProof(`That wins ${w.what}`, [to]) ?? NO_PROOF.stated, text: `That wins ${w.what}: ${lineShape(w.sans, 'you', i.fenBefore, 'first')}.`, squares: [to], claims: [`wins-line:${i.fenBefore.split(' ').slice(0, 2).join(' ')}`] }, { event: { name: 'coach_winning_line', props: { surface: 'coach-teach' } }, arrows: w.arrows }));
-    }
-  } catch { /* a bonus, never a blocker */ }
+  {
+    const lineUci = i.bestLine?.moves ?? [];
+    const ml = readBoard('mateLine', { fenBefore: i.fenBefore, san: i.san, bestSan: i.bestSan, lineUci, reply: i.reply });
+    const w = ml ? null : readBoard('winsLine', { fenBefore: i.fenBefore, san: i.san, bestSan: i.bestSan, lineUci, reply: i.reply, prior: priorFromHistory(i.history, i.fenBefore), seconds: [i.bestLine?.earlier?.moves ?? null] });
+    if (ml) out.push(fromBoard('movePoint', ml, { event: { name: 'coach_mate_line', props: { surface: 'coach-teach', quiet: learnReadKey(ml)[0] === 'quiet' } }, arrows: lineArrowsOf(ml, me, 'learn.foundMove.mate') }));
+    if (w) out.push(fromBoard('movePoint', w, { event: { name: 'coach_winning_line', props: { surface: 'coach-teach' } }, arrows: lineArrowsOf(w, me, 'learn.foundMove.line') }));
+  }
 
   // QUESTION THE KNEE-JERK (P3 method beat): the reflex recapture that cost.
-  {
-    const theirLast = i.history.length >= 2 ? i.history[i.history.length - 2] : null;
-    const kj = kneeJerk(theirLast, i.san, i.bestSan, faultCp);
-    if (kj) out.push(teachingFact('kneeJerk', { computer: 'kneeJerk', kind: 'rule', ...mine, names: NAMES_NO_MOVE, proof: NO_PROOF.method, text: kj, squares: [to], claims: ['method:knee-jerk'] }, { event: { name: 'coach_knee_jerk_taught', props: { surface: 'coach-teach' } }, arrows: [] }));
-  }
+  const kj = readBoard('kneeJerk', { fenBefore: i.fenBefore, san: i.san, theirLast, bestSan: i.bestSan, faultCp });
+  if (kj) out.push(fromBoard('kneeJerk', kj, { event: { name: 'coach_knee_jerk_taught', props: { surface: 'coach-teach' } }, arrows: [] }));
 
   // A STRONG PLAYER'S CHOICE HERE — from the games DB, depersonalized, said
   // after the move (P3 "his data on the live board").
   warmStrongChoice();
-  {
-    const sc = strongChoice(i.fenBefore, i.san);
-    if (sc) out.push(teachingFact('strongChoice', { computer: 'strongChoice', kind: 'quality', ...mine, names: NAMES_NO_MOVE, proof: NO_PROOF.description, text: sc.text, squares: [], // A bare affirmation ("that is a strong player's choice") teaches once a
-      // game; naming a DIFFERENT strong move teaches every time (David
-      // 2026-10-06: every narration must teach — not laborious to hear).
-      claims: [sc.same ? 'strong-choice:affirm' : `strong-choice:${i.history.length}`] }, { event: { name: 'coach_strong_choice_named', props: { surface: 'coach-teach', same: sc.same } }, arrows: [] }));
-  }
+  const sc = readBoard('strongChoice', { fenBefore: i.fenBefore, san: i.san, ply });
+  if (sc) out.push(fromBoard('strongChoice', sc, { event: { name: 'coach_strong_choice_named', props: { surface: 'coach-teach', same: learnReadKey(sc)[0] === 'same' } }, arrows: [] }));
 
-  // THE OPEN FILE, TAKEN (planRace file collision, live — P3): both sides
-  // wanted it and the student's rook got there on a clean move. Said after the
+  // THE OPEN FILE, TAKEN (planRace file collision, live — P3): said after the
   // move, and it records: the board asked who takes the file.
-  if (i.cpLoss !== null && i.cpLoss < 50) {
-    const fc = fileClaimed(i.fenBefore, i.san);
-    if (fc) out.push(teachingFact('fileRace', { computer: 'fileClaimed', kind: 'point', ...mine, names: NAMES_NO_MOVE, proof: squaresProof(fc.text, [to]) ?? NO_PROOF.stated, text: fc.text, squares: [to], claims: [`file-race:${fc.file}`] }, { event: { name: 'coach_file_claimed', props: { surface: 'coach-teach', contested: fc.contested } }, arrows: [], evidence: { tag: 'passive-rook', posedImportance: 60 } }));
-  }
+  const fc = readBoard('fileClaimed', { fenBefore: i.fenBefore, san: i.san, cpLoss: i.cpLoss });
+  if (fc) out.push(fromBoard('fileRace', fc, { event: { name: 'coach_file_claimed', props: { surface: 'coach-teach', contested: learnReadKey(fc)[0] === 'contested' } }, arrows: [], evidence: { tag: 'passive-rook', posedImportance: 60 } }));
 
   // THE SAFETY HABITS (P3 method beats) — earned only by what the board did.
-  {
-    const again = i.saidClaims?.has(habitSaidKey('blunder-check')) ?? false;
-    const bc = blunderCheck(i.fenBefore, i.san, i.reply, faultCp, again);
-    if (bc) {
-      // ITS STAKE AND ITS SQUARE (Learn audit 2026-10-14: held as an aside on a
-      // verdict turn, so "e6 was a blunder — it cost three or four points"
-      // spoke without the piece it named). What they took is what rides on it.
-      let lost: { square: string; piece: string } | null = null;
-      try {
-        const c = new Chess(i.fenBefore); c.move(i.san);
-        const r = i.reply ? c.move(i.reply.replace(/^…/, '')) : null;
-        if (r?.captured) lost = { square: r.to, piece: r.captured };
-      } catch { lost = null; }
-      out.push(teachingFact('blunderCheck', {
-        computer: 'blunderCheck', kind: 'rule', ...mine, names: NAMES_NO_MOVE, proof: NO_PROOF.method, text: bc, squares: lost ? [lost.square] : [],
-        // The callback carries its own move's claim: said once per blunder.
-        claims: [again ? `${liveHabitKey('blunder-check')}:${i.history.length}` : liveHabitKey('blunder-check')],
-        ...(lost ? { stakes: { points: piecePoints(lost.piece), plies: 1 } } : {}),
-      }, { event: { name: 'coach_blunder_check_taught', props: { surface: 'coach-teach' } }, arrows: [] }));
-    }
-    const ap = autopilotGuard(i.san, faultCp, i.popularTopSan ?? null);
-    if (ap) out.push(teachingFact('autopilot', { computer: 'autopilotGuard', kind: 'rule', ...mine, names: NAMES_NO_MOVE, proof: NO_PROOF.method, text: ap, squares: [to], claims: ['method:autopilot'] }, { event: { name: 'coach_autopilot_taught', props: { surface: 'coach-teach' } }, arrows: [] }));
-    // THE PAWN ENDING (Naroditsky's endgame series): the move that takes the
-    // last pieces off is counted first; and once only kings and pawns remain,
-    // an outside passer is a decoy. Each once per game (claims).
-    const st = spareTempoWasted(i.fenBefore, i.san, i.bestSan, faultCp);
-    if (st) out.push(teachingFact('pawnEnding', { computer: 'spareTempoWasted', kind: 'method', ...mine, names: NAMES_NO_MOVE, proof: NO_PROOF.method, text: st, squares: [to], claims: ['method:spare-tempo'] }, { event: { name: 'coach_spare_tempo_taught', props: { surface: 'coach-teach' } }, arrows: [] }));
-    const pe = pawnEndingTrade(i.fenBefore, i.san, i.reply, faultCp, i.cpAfter);
-    if (pe) out.push(teachingFact('pawnEnding', { computer: 'pawnEndingTrade', kind: 'method', ...mine, names: NAMES_NO_MOVE, proof: (i.reply ? legalLineProof(i.fenBefore, [i.san, i.reply], 'you') : null) ?? squaresProof(pe.text, [to]) ?? NO_PROOF.stated, text: pe.text, squares: [to], claims: ['method:pawn-ending-trade'] }, { event: { name: 'coach_pawn_ending_trade', props: { surface: 'coach-teach', verdict: pe.verdict } }, arrows: [] }));
-    try {
-      const me: 'w' | 'b' = i.fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
-      const c = new Chess(i.fenBefore); c.move(i.san);
-      const decoy = outsidePasserDecoy(c.fen(), me);
-      if (decoy) out.push(teachingFact('pawnEnding', { computer: 'outsidePasserDecoy', kind: 'method', ...mine, names: NAMES_NO_MOVE, proof: squaresProof(decoy.text, decoy.squares) ?? NO_PROOF.stated, text: decoy.text, squares: decoy.squares, claims: [`decoy:${decoy.passer[0]}`] }, { event: { name: 'coach_outside_passer_decoy', props: { surface: 'coach-teach' } }, arrows: [] }));
-    } catch { /* a bonus, never a blocker */ }
-    const kp = keepPressing(i.fenBefore, i.san, i.bestSan, faultCp, i.cpAfter);
-    if (kp) out.push(teachingFact('keepPressing', { computer: 'keepPressing', kind: 'rule', ...mine, names: NAMES_NO_MOVE, proof: NO_PROOF.method, text: kp, squares: [], claims: ['method:keep-pressing'] }, { event: { name: 'coach_keep_pressing_taught', props: { surface: 'coach-teach' } }, arrows: [] }));
-  }
+  const again = i.saidClaims?.has(habitSaidKey('blunder-check')) ?? false;
+  const bc = readBoard('blunderCheck', { fenBefore: i.fenBefore, san: i.san, reply: i.reply, faultCp, again, ply });
+  if (bc) out.push(fromBoard('blunderCheck', bc, { event: { name: 'coach_blunder_check_taught', props: { surface: 'coach-teach' } }, arrows: [] }));
+  const ap = readBoard('autopilot', { fenBefore: i.fenBefore, san: i.san, faultCp, popularTopSan: i.popularTopSan ?? null });
+  if (ap) out.push(fromBoard('autopilot', ap, { event: { name: 'coach_autopilot_taught', props: { surface: 'coach-teach' } }, arrows: [] }));
+  // THE PAWN ENDING (Naroditsky's endgame series): the move that takes the
+  // last pieces off is counted first; and once only kings and pawns remain,
+  // an outside passer is a decoy. Each once per game (claims).
+  const st = readBoard('spareTempo', { fenBefore: i.fenBefore, san: i.san, bestSan: i.bestSan, faultCp });
+  if (st) out.push(fromBoard('pawnEnding', st, { event: { name: 'coach_spare_tempo_taught', props: { surface: 'coach-teach' } }, arrows: [] }));
+  const pe = readBoard('pawnEndingCounted', { fenBefore: i.fenBefore, san: i.san, reply: i.reply, faultCp, cpAfter: i.cpAfter });
+  if (pe) out.push(fromBoard('pawnEnding', pe, { event: { name: 'coach_pawn_ending_trade', props: { surface: 'coach-teach', verdict: learnReadKey(pe)[0] } }, arrows: [] }));
+  const decoy = readBoard('outsidePasserDecoy', { fenBefore: i.fenBefore, san: i.san });
+  if (decoy) out.push(fromBoard('pawnEnding', decoy, { event: { name: 'coach_outside_passer_decoy', props: { surface: 'coach-teach' } }, arrows: [] }));
+  const kp = readBoard('keepPressing', { fenBefore: i.fenBefore, san: i.san, bestSan: i.bestSan, faultCp, cpAfter: i.cpAfter });
+  if (kp) out.push(fromBoard('keepPressing', kp, { event: { name: 'coach_keep_pressing_taught', props: { surface: 'coach-teach' } }, arrows: [] }));
 
   // WAS THE TRADE A GOOD DEAL (P3, T3 #45) — a like-for-like trade the reply
-  // completed, judged by the first reason the board supports.
-  try {
-    const tj = tradeJudgement(i.fenBefore, i.san, i.reply, new Chess(i.fenBefore).turn(), faultCp, i.evalBefore, ((pm) => (pm ? lastMoveFromSan(pm.fenBefore, pm.san) : null))(priorFromHistory(i.history, i.fenBefore)), i.namesStudentMoves);
-    if (tj) out.push(teachingFact('trade', { computer: 'tradeJudgement', kind: 'trade', ...mine, names: NAMES_NO_MOVE, proof: (i.reply ? legalLineProof(i.fenBefore, [i.san, i.reply], 'you') : null) ?? squaresProof(tj.text, tj.squares) ?? NO_PROOF.stated, text: tj.text, squares: tj.squares, claims: [`trade-${tj.reason}`, `capture:${to}:${i.history.length}`, ...(tj.reason === 'their-best' ? [`piece-quality:${to}`] : [])] }, { event: { name: 'coach_trade_judged', props: { surface: 'coach-teach', reason: tj.reason } }, arrows: [],
-      // A good trade the student chose is the 'bad-trade' question answered well.
-      ...(tj.reason !== 'behind' && tj.reason !== 'gave-best' && tj.reason !== 'bad' ? { evidence: { tag: 'bad-trade' as const, posedImportance: 60 } } : {}) }));
-  } catch { /* a bonus, never a blocker */ }
+  // completed, judged by the first reason the board supports. A good trade
+  // the student chose is the 'bad-trade' question answered well.
+  {
+    const pm = priorFromHistory(i.history, i.fenBefore);
+    const tj = readBoard('tradeDeal', { fenBefore: i.fenBefore, san: i.san, reply: i.reply, faultCp, values: i.evalBefore, prior: pm ? lastMoveFromSan(pm.fenBefore, pm.san) : null, namesStudentMoves: i.namesStudentMoves, ply });
+    const reason = tj ? learnReadKey(tj)[0] : '';
+    if (tj) out.push(fromBoard('trade', tj, { event: { name: 'coach_trade_judged', props: { surface: 'coach-teach', reason } }, arrows: [],
+      ...(reason !== 'behind' && reason !== 'gave-best' && reason !== 'bad' ? { evidence: { tag: 'bad-trade' as const, posedImportance: 60 } } : {}) }));
+  }
 
   // THE TIMING (capability parity with review, WO-TEACH-GAPS P3): "b4 is
   // finally right — a move earlier their queen would have taken on b3". Only on
@@ -320,104 +275,70 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingFact[] {
   // recapture, "The timing of Qh2+" on a check). The lesson is a quiet move
   // played at the right moment; a capture or a check is its own reason.
   if (i.cpLoss !== null && i.cpLoss < 50 && i.history.length >= 3 && !/[x+#]/.test(i.san)) {
-    try {
-      const t = readBoard('timing', { fenBefore: i.fenBefore, san: i.san, history: i.history.slice(0, -1), student: i.fenBefore.split(' ')[1] === 'b' ? 'b' : 'w' });
-      if (t) out.push(teachingFact('timing', { computer: 'readTiming', kind: 'point', ...mine, names: NAMES_NO_MOVE, proof: t.proof, text: t.text, squares: t.squares, claims: t.claims }, { event: { name: 'coach_move_timing_named', props: { surface: 'coach-teach' } }, arrows: [],
-        // A pawn push played at the right moment answers the mistimed-break question.
-        ...(/^[a-h]/.test(i.san) ? { evidence: { tag: 'mistimed-pawn-break' as const, posedImportance: 70 } } : {}) }));
-    } catch { /* a bonus, never a blocker */ }
+    const t = readBoard('timing', { fenBefore: i.fenBefore, san: i.san, history: i.history.slice(0, -1), student: me });
+    // A pawn push played at the right moment answers the mistimed-break question.
+    if (t) out.push(fromBoard('timing', t, { event: { name: 'coach_move_timing_named', props: { surface: 'coach-teach' } }, arrows: [],
+      ...(/^[a-h]/.test(i.san) ? { evidence: { tag: 'mistimed-pawn-break' as const, posedImportance: 70 } } : {}) }));
   }
 
-  // BRINGING PIECES TO THEIR KING — not on a move that cost a pawn; that
-  // move's lesson is the cost.
-  if (i.cpLoss !== null && i.cpLoss < 100) {
-    const ka = kingAttack(i.fenBefore, i.san, false, i.namesStudentMoves, i.linesAfter);
-    if (ka) {
-      out.push(teachingFact('kingAttack', {
-        // "…heads for their king — Qg3 next" names the student's next move.
-        computer: 'kingAttack', kind: 'rule', ...mine, names: ka.next ? namesMoves(new Chess(i.fenBefore).turn(), boardAfterSans(i.fenBefore, [i.san, i.reply]), { from: ka.next.uci.slice(0, 2), to: ka.next.uci.slice(2, 4) }) : NAMES_NO_MOVE, proof: squaresProof(ka.text, ka.squares) ?? NO_PROOF.stated, text: ka.text, squares: ka.squares,
-        // "Qe1 heads for their king — Qg3 next" and "Qe1 prepares Qg3" are one idea.
-        claims: [`king-attack-${ka.kind}`, ...(ka.next ? [`prepares:${ka.next.uci}`] : [])],
-      }, {
-        event: { name: 'coach_king_attack_named', props: { surface: 'coach-teach', kind: ka.kind } },
-        // "…heads for their king — Qg3 next": the next hop, as the move to play.
-        arrows: ka.next ? [{ from: ka.next.uci.slice(0, 2), to: ka.next.uci.slice(2, 4), role: 'play', source: 'learn.kingAttack' }] : [],
-      }));
-    }
+  // BRINGING PIECES TO THEIR KING — "…heads for their king — Qg3 next": the
+  // next hop, as the move to play.
+  const ka = readBoard('kingAttack', { fenBefore: i.fenBefore, san: i.san, reply: i.reply, cpLoss: i.cpLoss, namesStudentMoves: i.namesStudentMoves, linesAfter: i.linesAfter });
+  if (ka) {
+    const next = ka.marks?.play;
+    out.push(fromBoard('kingAttack', ka, {
+      event: { name: 'coach_king_attack_named', props: { surface: 'coach-teach', kind: learnReadKey(ka)[0] } },
+      arrows: next ? [{ from: next.from, to: next.to, role: 'play', source: 'learn.kingAttack' }] : [],
+    }));
   }
 
   // A RULE AND ITS EXCEPTION — only on a move the engine agrees with, so the
-  // exception is proven, not excused.
-  if (i.bothCp && i.cpLoss !== null && i.cpLoss <= 20) {
-    const rx = ruleException(i.fenBefore, i.san, i.history.slice(0, -1));
-    if (rx) {
-      // "…here it hits the pawn on g2": the sight line — only while the target
-      // is still standing there after their reply.
-      const hitSq = rx.squares[1];
-      const live = boardAfter(i.fenBefore, i.san, i.reply);
-      const stillThere = !!hitSq && !!live?.get(hitSq as never);
-      out.push(teachingFact('ruleException', { computer: 'ruleException', kind: 'rule-exception', ...mine, names: NAMES_NO_MOVE, proof: squaresProof(rx.text, rx.squares) ?? NO_PROOF.stated, text: rx.text, squares: rx.squares, claims: [`rule-${rx.rule}-${to}`] }, {
-        event: { name: 'coach_rule_exception_named', props: { surface: 'coach-teach', rule: rx.rule } },
-        arrows: stillThere ? [{ from: to, to: hitSq, role: 'vision', source: 'learn.ruleException' }] : [],
-      }));
-    }
+  // exception is proven, not excused. Its sight line is drawn only while the
+  // target still stands there (the read keeps that square).
+  const rx = readBoard('ruleException', { fenBefore: i.fenBefore, san: i.san, history: i.history.slice(0, -1), reply: i.reply, bothCp: i.bothCp, cpLoss: i.cpLoss });
+  if (rx) {
+    const [rule, hitSq] = learnReadKey(rx);
+    out.push(fromBoard('ruleException', rx, {
+      event: { name: 'coach_rule_exception_named', props: { surface: 'coach-teach', rule } },
+      arrows: hitSq && hitSq !== '-' ? [{ from: to, to: hitSq, role: 'vision', source: 'learn.ruleException' }] : [],
+    }));
   }
 
   // DON'T PANIC — their last move made a real threat, the engine's move
   // ignored it, and the student played exactly that move. The board before
   // their move is replayed from the game and must lead to this board.
   if (i.bothCp && i.cpLoss !== null && i.cpLoss <= 20 && i.bestSan === i.san && i.history.length >= 2) {
-    try {
-      const g = new Chess();
-      for (const s of i.history.slice(0, -2)) g.move(s);
-      const beforeTheirs = g.fen();
-      g.move(i.history[i.history.length - 2]);
-      if (g.fen().split(' ')[0] === i.fenBefore.split(' ')[0]) {
-        const fa = falseAlarm(beforeTheirs, i.fenBefore, i.bestLine, i.reply);
-        if (fa) {
-          // Their threat, red — only while it is still coming (not once played).
-          const played = i.reply && i.reply.replace(/^…/, '') === fa.threat.san;
-          out.push(teachingFact('falseAlarm', { computer: 'falseAlarm', kind: 'false-alarm', ...mine, names: NAMES_NO_MOVE, proof: squaresProof(fa.text, fa.squares) ?? NO_PROOF.stated, text: fa.text, squares: fa.squares, claims: [`false-alarm-${fa.threat.landing}`] }, {
-            event: { name: 'coach_false_alarm_named', props: { surface: 'coach-teach', kind: fa.threat.kind } },
-            arrows: played ? [] : [{ from: fa.threat.from, to: fa.threat.landing, role: 'threat', source: 'learn.falseAlarm' }],
-            // A threat rightly ignored (the engine's move, and not worse) is the
-            // opponent-threat question answered — held (P4 dual-use).
-            evidence: { tag: 'missed-opponents-threat', posedImportance: 70 },
-          }));
-        }
-      }
-    } catch { /* a bonus, never a blocker */ }
+    const beforeTheirs = priorFromHistory(i.history, i.fenBefore)?.fenBefore ?? null;
+    const fa = beforeTheirs ? readBoard('falseAlarm', { theirFenBefore: beforeTheirs, fenBefore: i.fenBefore, studentSan: i.san, bestLine: i.bestLine, reply: i.reply }) : null;
+    if (fa) {
+      // Their threat, red — only while it is still coming (not once played).
+      const threat = fa.marks?.theirs;
+      out.push(fromBoard('falseAlarm', fa, {
+        event: { name: 'coach_false_alarm_named', props: { surface: 'coach-teach', kind: learnReadKey(fa)[0] } },
+        arrows: threat ? [{ from: threat.from, to: threat.to, role: 'threat', source: 'learn.falseAlarm' }] : [],
+        // A threat rightly ignored (the engine's move, and not worse) is the
+        // opponent-threat question answered — held (P4 dual-use).
+        evidence: { tag: 'missed-opponents-threat', posedImportance: 70 },
+      }));
+    }
   }
   // PUSH OR HOLD — what a pawn up or down is worth in THIS ending, only while
   // the engine keeps it in the band where the choice matters.
-  if (i.cpAfter !== null) {
-    try {
-      const after = new Chess(i.fenBefore);
-      const mv = after.move(i.san);
-      const ph = pushOrHold(after.fen(), mv.color, i.cpAfter);
-      if (ph) {
-        out.push(teachingFact('pushOrHold', { computer: 'pushOrHold', kind: 'push-or-hold', ...mine, names: NAMES_NO_MOVE, proof: NO_PROOF.method, text: ph.text, squares: [], claims: [`ending-${ph.cls}-${ph.side}`] }, {
-          event: { name: 'coach_push_or_hold_named', props: { surface: 'coach-teach', cls: ph.cls, side: ph.side } },
-          arrows: [],
-        }));
-      }
-    } catch { /* a bonus, never a blocker */ }
+  const ph = readBoard('pushOrHold', { fenBefore: i.fenBefore, san: i.san, cpAfter: i.cpAfter });
+  if (ph) {
+    const [cls, side] = learnReadKey(ph);
+    out.push(fromBoard('pushOrHold', ph, { event: { name: 'coach_push_or_hold_named', props: { surface: 'coach-teach', cls, side } }, arrows: [] }));
   }
   // THE STRUCTURE JUDGEMENTS (batch 6, `structureReads`): what the move did
-  // to the structure, the squares and the plan — the right piece for the
-  // square, the route that fails while the plan stands, the file it plugged,
-  // the pawn it rightly left alone. Each carries its proof; a correct choice
-  // records HELD on its own tag (a miss is the live slip capture's).
-  try {
-    const me: 'w' | 'b' = i.fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
-    const priced = i.cpLoss;
-    if (priced !== null) for (const s of studentMoveStructure({ fenBefore: i.fenBefore, san: i.san, student: me, cpLoss: priced, bestSan: i.bestSan, bestUci: i.bestLine?.moves ?? [], reply: i.reply, namesBetterMove: false, namesStudentMoves: i.namesStudentMoves })) {
-      out.push(teachingFact('structureJudgement', {
-        computer: 'studentMoveStructure', kind: 'judgement', ...mine, names: NAMES_NO_MOVE, proof: s.proof, text: s.text, squares: s.squares, claims: [s.key], ...(s.alsoText ? { alsoText: s.alsoText } : {}),
-        ...(s.stakes ? { stakes: s.stakes } : {}),
-      }, { event: { name: 'coach_structure_judgement', props: { surface: 'coach-teach', act: s.act } }, arrows: [], ...(s.held ? { evidence: s.held } : {}) }));
+  // to the structure, the squares and the plan. Each carries its proof; a
+  // correct choice records HELD on its own tag (a miss is the live slip
+  // capture's).
+  if (i.cpLoss !== null) {
+    for (const s of readBoardAll('structureMove', { fenBefore: i.fenBefore, san: i.san, student: me, cpLoss: i.cpLoss, bestSan: i.bestSan, bestUci: i.bestLine?.moves ?? [], reply: i.reply, namesBetterMove: false, namesStudentMoves: i.namesStudentMoves })) {
+      const read = structureMoveRead(s);
+      out.push(fromBoard('structureJudgement', s, { event: { name: 'coach_structure_judgement', props: { surface: 'coach-teach', act: read?.act ?? '' } }, arrows: [], ...(read?.held ? { evidence: read.held } : {}) }));
     }
-  } catch { /* a bonus, never a blocker */ }
+  }
   return out.map(namedStep);
 }
 
@@ -448,9 +369,6 @@ export function theirMoveTeaching(fenBefore: string, san: string, student: 'w' |
   });
 }
 
-/** A student counter-threat that cost less than this (centipawns) held. */
-const COUNTER_THREAT_HELD_CP = 60;
-
 /** DANGER LEVELS (David 2026-10-18): a move that left an attacked piece and
  *  hit a bigger one instead. `fenBefore` is the board the move was played
  *  from. Their move: why the piece was left, and the line that punishes
@@ -465,38 +383,12 @@ export function counterThreatTeaching(
    *  comes first" (replay 2026-10-19). Ignored for their move. */
   studentMoveCostCp: number | null,
 ): TeachingFact | null {
-  const c = counterThreat(fenBefore, san);
+  const c = readBoard('counterThreat', { fenBefore, san, student, studentMoveCostCp });
   if (!c) return null;
-  let mover: 'w' | 'b';
-  try { mover = new Chess(fenBefore).turn(); } catch { return null; }
-  const byStudent = mover === student;
-  if (byStudent && (studentMoveCostCp === null || studentMoveCostCp >= COUNTER_THREAT_HELD_CP)) return null;
-  const text = counterThreatLine(c, byStudent);
-  // THEIR counter-threat is danger to the student: staked at what ignoring the
-  // hit piece costs, by the one threat computer (`threatStakes`), so the door
-  // ranks it as present danger and never as a warning that can wait.
-  let stakes: FactStakes | undefined;
-  if (!byStudent) {
-    try { const after = new Chess(fenBefore); after.move(san); stakes = threatStakes(after.fen(), student, [c.hit.square]) ?? undefined; } catch { stakes = undefined; }
-  }
-  const arrows: ArrowClaim[] = [];
-  if (c.line && !byStudent) {
-    try {
-      const b = new Chess(c.line.fen);
-      for (const s of c.line.sans) {
-        const before = b.fen();
-        const m = b.move(s);
-        arrows.push({ from: m.from, to: m.to, role: 'line', fen: before, source: 'learn.dangerLevels' });
-      }
-    } catch { /* the plies replayed so far still draw */ }
-  }
-  return teachingFact('dangerLevels', {
-    // The proof is the line that punishes taking the piece left.
-    computer: 'counterThreat', kind: 'must-defend', seat: byStudent ? 'student' : 'opponent', fen: boardAfterMove(fenBefore, san), names: NAMES_NO_MOVE, proof: (c.line ? lineProof(c.line, lineSeatAt(c.line.fen, student), true) : null) ?? squaresProof(text, c.squares) ?? NO_PROOF.description, text, squares: c.squares, claims: [`danger-levels:${c.left.square}>${c.hit.square}`],
-    role: 'teach', ...(stakes ? { stakes } : {}),
-  }, {
-    event: { name: 'coach_danger_levels_named', props: { surface: 'coach-teach', by: byStudent ? 'student' : 'opponent' } },
-    arrows,
+  return fromBoard('dangerLevels', c, {
+    event: { name: 'coach_danger_levels_named', props: { surface: 'coach-teach', by: c.seat === 'student' ? 'student' : 'opponent' } },
+    // The line that punishes taking the piece left, ply by ply.
+    arrows: lineArrowsOf(c, student, 'learn.dangerLevels').map((a) => ({ ...a, role: 'line' as const })),
   });
 }
 
@@ -507,19 +399,15 @@ export function counterThreatTeaching(
 export function playedConceptTeaching(
   fenBefore: string, san: string, student: 'w' | 'b',
   proven: ReadonlySet<string>, define: (type: string) => string,
-): { hint: TeachingFact | null; concept: PlayedConcept | null } {
-  const c = playedConcept(fenBefore, san);
-  if (!c) return { hint: null, concept: null };
-  if (proven.has(c.type)) return { hint: null, concept: c };
-  const text = `${playedConceptLine(c, student)}${define(c.type)}`;
-  const squares = c.squares.filter((s) => /^[a-h][1-8]$/.test(s));
+): { hint: TeachingFact | null; concept: Pick<PlayedConcept, 'type'> | null } {
+  const f = readBoard('playedConcept', { fenBefore, san, student, define });
+  if (!f) return { hint: null, concept: null };
+  const concept = { type: learnReadKey(f)[0] };
+  if (proven.has(concept.type)) return { hint: null, concept };
   return {
-    concept: c,
-    hint: teachingFact('playedConcept', {
-      computer: 'playedConcept', kind: 'concept', seat: c.mover === student ? 'student' : 'opponent', fen: boardAfterMove(fenBefore, san), names: NAMES_NO_MOVE, proof: squaresProof(text, squares) ?? NO_PROOF.description, text, squares, claims: [conceptInstanceKey(c.type, squares), ...[tacticGeometryKey(squares)].filter((k): k is string => !!k)],
-      role: 'teach',
-    }, {
-      event: { name: 'coach_played_concept_named', props: { surface: 'coach-teach', concept: c.type, by: c.mover === student ? 'student' : 'opponent' } },
+    concept,
+    hint: fromBoard('playedConcept', f, {
+      event: { name: 'coach_played_concept_named', props: { surface: 'coach-teach', concept: concept.type, by: f.seat === 'student' ? 'student' : 'opponent' } },
       arrows: [],
     }),
   };
@@ -530,43 +418,25 @@ export { loadProvenConcepts, recordConceptPlayed } from './conceptRecord';
 /** Tempo, counted (P2 #7): their reply is a piece's third move in the opening
  *  while the student has more pieces out. `history` ends with THEIR reply. */
 export function tempoTeaching(history: readonly string[], student: 'w' | 'b'): TeachingFact | null {
-  const t = tempoCount(history, student);
+  const t = readBoard('tempoCount', { history, student });
   if (!t) return null;
-  const fen = replayTo(history, history.length);
-  if (!fen) return null;
-  return teachingFact('tempo', {
-    // The count IS the proof — read off the game's own moves (exact).
-    computer: 'tempoCount', kind: 'opp-dev', seat: 'opponent', fen, names: NAMES_NO_MOVE, proof: { kind: 'count', exact: true, short: `${t.moves} moves with one piece`, full: `that piece has now moved ${t.moves} times`, squares: t.squares }, text: t.text, squares: t.squares, claims: [`tempo-count:${t.pieceId}`],
-  }, {
-    event: { name: 'coach_tempo_counted', props: { surface: 'coach-teach', moves: t.moves } },
-    arrows: [],
-  });
+  return fromBoard('tempo', t, { event: { name: 'coach_tempo_counted', props: { surface: 'coach-teach', moves: Number(learnReadKey(t)[0]) } }, arrows: [] });
 }
 
 /** Stalemate watch (P2 #9): student to move at `fen`, winning, and one of
  *  their moves stalemates the opponent. */
 export function stalemateTeaching(fen: string, student: 'w' | 'b'): TeachingFact | null {
-  const w = stalemateWatch(fen, student);
+  const w = readBoard('stalemateWatch', { fen, student });
   if (!w) return null;
-  return teachingFact('stalemate', {
-    computer: 'stalemateWatch', kind: 'deliberation', seat: 'student', fen, names: NAMES_NO_MOVE, proof: squaresProof(w.text, w.squares) ?? NO_PROOF.stated, text: w.text, squares: w.squares, claims: [`stalemate-watch:${fen.split(' ')[0]}`],
-  }, {
-    event: { name: 'coach_stalemate_warned', props: { surface: 'coach-teach', moves: w.moves.length } },
-    arrows: [],
-  });
+  return fromBoard('stalemate', w, { event: { name: 'coach_stalemate_warned', props: { surface: 'coach-teach', moves: Number(learnReadKey(w)[0]) } }, arrows: [] });
 }
 
 /** Three ways to meet check (P3 method beat): the student is in check and the
  *  best answer is not the king move. Names the kinds, never the move. */
 export function checkMethodTeaching(fen: string, student: 'w' | 'b', bestUci: string | null): TeachingFact | null {
-  const m = checkMethod(fen, student, bestUci);
+  const m = readBoard('checkMethod', { fen, student, bestUci });
   if (!m) return null;
-  return teachingFact('checkMethod', {
-    computer: 'checkMethod', kind: 'deliberation', seat: 'student', fen, names: NAMES_NO_MOVE, proof: NO_PROOF.method, text: m.text, squares: m.squares, claims: ['check-method'],
-  }, {
-    event: { name: 'coach_check_method_taught', props: { surface: 'coach-teach', kinds: m.kinds.join(',') } },
-    arrows: [],
-  });
+  return fromBoard('checkMethod', m, { event: { name: 'coach_check_method_taught', props: { surface: 'coach-teach', kinds: learnReadKey(m)[0] } }, arrows: [] });
 }
 
 /** The plan chooser (census #52): the engine's two best lines carry
@@ -575,14 +445,9 @@ export function planChoiceTeaching(
   fen: string, lines: readonly PlanChoiceLine[], studentColor: 'white' | 'black',
   lastMove: { fenBefore: string; san: string } | null,
 ): TeachingFact | null {
-  const pc = planChoice(fen, lines, studentColor, lastMove);
+  const pc = readBoard('planChoice', { fen, lines, student: studentColor === 'white' ? 'w' : 'b', lastMove });
   if (!pc) return null;
-  return teachingFact('planArc', {
-    computer: 'planChoice', kind: 'plan-arc', seat: 'student', fen, names: NAMES_NO_MOVE, proof: NO_PROOF.description, text: pc.text, squares: [], claims: ['plan-choice', pc.key],
-  }, {
-    event: { name: 'coach_plan_choice_named', props: { surface: 'coach-teach' } },
-    arrows: [],
-  });
+  return fromBoard('planArc', pc, { event: { name: 'coach_plan_choice_named', props: { surface: 'coach-teach' } }, arrows: [] });
 }
 
 /** EVERY MOVE A LINE NAMES GETS ITS ARROW (G6; the walk 2026-09-30 drew
@@ -710,12 +575,6 @@ function learnPlanRead(fen: string, openingName: string | null): MastersPlanRead
   return mastersPlanRead(fen, masterMovesCachedSync) ?? (openingName ? planStillAhead(planFor(openingName), fen) : null);
 }
 
-const PRIZE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
-const PRIZE_VALUE = CAPTURE_VALUE;
-// A COUNT OF PIECES, said as a number word ("three times"). `countWords` is the
-// material namer — it said "hit 3 points times" (prod Learn audit 2026-11-09).
-const times = (n: number): string => (n === 1 ? 'once' : n === 2 ? 'twice' : `${countWord(n)} times`);
-
 /**
  * WHAT CAN BE WON, AND WHY (Learn tape 2026-10-07: 21.Be8 and 22.Qe4 gave away
  * a bishop and a queen and the coach said nothing — the lane read only pieces
@@ -740,45 +599,8 @@ export function prizeTeaching(fen: string, square: string, student: 'w' | 'b',
    *  Learn 2026-10-16: said three times in one game, V7). */
   stem: number,
 ): { text: string; squares: string[] } | null {
-  let board: Chess;
-  try { board = new Chess(fen); } catch { return null; }
-  if (board.turn() !== student) return null;
-  const piece = board.get(square as Square);
-  if (!piece || piece.color === student || piece.type === 'k') return null;
-  if (legalSeeGainFor(fen, square as Square, student) <= 0) return null;
-  const them: 'w' | 'b' = student === 'w' ? 'b' : 'w';
-  // The prize is marked; the taker never is (lead 2026-10-20, option b).
-  const target = [square];
-  const name = PRIZE_NAME[piece.type] ?? 'piece';
-  const value = PRIZE_VALUE[piece.type] ?? 0;
-  const takers = board.moves({ verbose: true }).filter((m) => m.to === square && m.captured)
-    .sort((a, b) => (PRIZE_VALUE[a.piece] ?? 0) - (PRIZE_VALUE[b.piece] ?? 0));
-  if (takers.length === 0) return null;
-  const guards = board.attackers(square as Square, them).length;
-  // The undefended sentence is the one this lane always said (kept word for word).
-  const caution = 'Before you take, check what taking it allows.';
-  // The method is its OWN sentence, so the game's sentence ledger says it once
-  // and every later prize keeps only its fact.
-  if (guards === 0) {
-    // Each stem carries its own reason: the method sentence after it is said
-    // once a game, so a later prize keeps only this one (prod Learn
-    // 2026-10-16: "Their bishop on a5 is standing there unguarded." — bare).
-    const stems = [
-      `Their ${name} has nothing defending it — find it, and taking it costs you nothing back.`,
-      `Nothing guards one of their pieces — whatever takes it is not taken back.`,
-      `${openSentence(withArticle(name))} of theirs is unguarded: win it and nothing recaptures.`,
-    ];
-    return { text: `${stems[stem % stems.length]} ${caution}`, squares: target };
-  }
-  const cheap = takers[0];
-  if ((PRIZE_VALUE[cheap.piece] ?? 0) < value) {
-    return { text: `Their ${name} is guarded, but a cheaper piece of yours hits it — a guard does not save it. ${caution}`, squares: target };
-  }
-  const hitters = [...new Set(takers.map((m) => m.from))];
-  if (hitters.length > guards) {
-    return { text: `One of their pieces is hit ${times(hitters.length)} and guarded only ${times(guards)} — you win it in the trades. ${caution}`, squares: target };
-  }
-  return { text: `Their ${name} can be won — its guard is not enough. ${caution}`, squares: target };
+  const f = readBoard('prize', { fen, square, student, stem });
+  return f ? { text: f.text, squares: [...f.squares] } : null;
 }
 
 /** THE OPENING SUMMARY (census #52): the opening is over — did the student get
@@ -811,47 +633,19 @@ export function openingBreakFor(fen: string, student: 'w' | 'b', openingName: st
 
 /** THE VERDICT ON A FOUND MOVE (P2 #2): at a real decision moment on the board
  *  before the move, the student played one of the only moves that held. */
-export function foundMoveTeaching(fenBefore: string, san: string, preLines: readonly CriticalFanLine[] | undefined, student: 'w' | 'b', to: string, history: readonly string[]): TeachingFact | null {
-  if (!preLines || preLines.length < 2) return null;
+export function foundMoveTeaching(fenBefore: string, san: string, preLines: readonly CriticalFanLine[] | undefined, student: 'w' | 'b', _to: string, history: readonly string[]): TeachingFact | null {
+  if (!preLines) return null;
   // The capture run before the move, from the game's own history (checked to
   // reach this board): winning the piece they gave is a find, taking back
   // their trade is not (`takesBack`).
-  const prevCapture = priorFromHistory(history, fenBefore) ? captureRunOfMoves(null, history.slice(0, -1)) : null;
-  const found = criticalMomentFound(readCriticalMoment({ topLines: preLines, moverColor: student, fen: fenBefore }), san, prevCapture, fenBefore);
-  if (!found) return null;
-  // THE LINE THAT MAKES IT WORK (pass-2 walk 2026-09-30: "Nxd5 was the only
-  // move that kept you on top" — he says why: it wins a pawn, because …Bxc3+
-  // follows WITH CHECK). When the found move is the engine's and its own line
-  // wins material, the line is said to where the material lands, and drawn.
-  const ml = mateLine(fenBefore, preLines[0]?.moves ?? [], student, san);
-  const won = ml ? null : winningLine(fenBefore, san, preLines[0]?.moves ?? [], student, priorFromHistory(history, fenBefore), [preLines[0]?.earlier?.moves ?? null]);
-  const text = ml ? `${found} ${ml.text}` : won ? `${found} It wins ${won.what}: ${lineShape(won.sans, 'you', fenBefore, 'first')}.` : found;
-  const arrows: ArrowClaim[] = ml ? mateArrows(ml, student) : won ? won.arrows : [];
+  const prior = priorFromHistory(history, fenBefore);
+  const prevCapture = prior ? captureRunOfMoves(null, history.slice(0, -1)) : null;
+  const f = readBoard('foundMove', { fenBefore, san, preLines, student, prevCapture, prior });
+  if (!f) return null;
   // A real decision moment (only one or two moves held) answered is calculation
   // proven — importance 90, above the green bar, because the board posed it.
-  // The tempting moves that failed are said with their lines ("Qf7+ didn't
-  // work: Kxf7 — they win a queen"); with no winning line of its own, the
-  // first of those is the line the board plays.
-  const failed = readCriticalMoment({ topLines: preLines, moverColor: student, fen: fenBefore })?.discardedProofs?.[0]?.line ?? null;
-  // The decision moment is the board before the move: the verdict is computed there.
-  return teachingFact('foundMove', { computer: 'criticalMomentFound', kind: 'quality', seat: 'student', fen: fenBefore, names: NAMES_NO_MOVE, proof: (ml ? lineProof({ fen: fenBefore, sans: ml.sans }, lineSeatAt(fenBefore, student)) : won ? lineProof({ fen: fenBefore, sans: won.sans }, lineSeatAt(fenBefore, student)) : failed ? lineProof(failed, lineSeatAt(failed.fen, student)) : null) ?? NO_PROOF.description, text, squares: [to], claims: [`found-${san}`, ...(won || ml ? [`wins-line:${fenBefore.split(' ').slice(0, 2).join(' ')}`] : [])] }, { event: { name: 'coach_found_move_named', props: { surface: 'coach-teach' } }, arrows, evidence: { tag: 'calculation-depth', posedImportance: 90 } });
-}
-
-/** A mate line as board arrows, ply by ply, seated. */
-function mateArrows(ml: MateLine, student: 'w' | 'b'): ArrowClaim[] {
-  return ml.plies.map((p) => ({ from: p.from, to: p.to, role: p.color === student ? 'play' : 'theirs', fen: p.fen, source: 'learn.foundMove.mate' }));
-}
-
-/** The engine line starting with the played move, when the student ends it up
- *  material — said to the last capture, drawn ply by ply (`lineCalc`). */
-export function winningLine(
-  fen: string, san: string, lineUci: readonly string[], student: 'w' | 'b', prior: { fenBefore: string; san: string } | null,
-  /** REQUIRED — the other reads of this board (`lineTrust`). */
-  seconds: LineSeconds,
-): { what: string; sans: string[]; arrows: ArrowClaim[] } | null {
-  const w = lineWins(fen, lineUci, student, san, prior, seconds);
-  if (!w) return null;
-  return { what: w.what, sans: w.sans, arrows: w.plies.map((p) => ({ from: p.from, to: p.to, role: p.color === student ? 'play' : 'theirs', fen: p.fen, source: 'learn.foundMove.line' })) };
+  const how = learnReadKey(f)[0];
+  return fromBoard('foundMove', f, { event: { name: 'coach_found_move_named', props: { surface: 'coach-teach' } }, arrows: how === 'mate' ? lineArrowsOf(f, student, 'learn.foundMove.mate') : how === 'won' ? lineArrowsOf(f, student, 'learn.foundMove.line') : [], evidence: { tag: 'calculation-depth', posedImportance: 90 } });
 }
 
 // ── PLAY ASKS THE SAME COMPUTERS (David 2026-09-30: "Play still needs access to
@@ -897,11 +691,9 @@ export function studentMoveAnswerLines(history: readonly string[], ply: number, 
   // 2026-10-02). Quiet moves only: a capture's point is the trade. The point
   // answers "what was that for" and leads; a description of the board the
   // move made (a pawn duo, a square it covers) follows it, never replaces it.
-  if (!/x/.test(history[ply])) {
-    // Quiet moves only — nothing material is claimed, so no line is needed.
-    const point = studentMovePoint(fenBefore, history[ply], captureRunOfMoves(null, history.slice(0, ply)), null);
-    if (point && !out.includes(point)) out.unshift(point);
-  }
+  // Quiet moves only (the read says so) — nothing material is claimed.
+  const point = readBoard('quietMovePoint', { fenBefore, san: history[ply], prevCapture: captureRunOfMoves(null, history.slice(0, ply)) })?.text;
+  if (point && !out.includes(point)) out.unshift(point);
   return out;
 }
 
@@ -928,7 +720,7 @@ export function theirMoveAnswerLines(history: readonly string[], ply: number, st
   const out: string[] = [];
   if (best && ply === history.length - 1) {
     const after = replayTo(history, ply + 1);
-    const fa = after ? falseAlarm(fenBefore, after, best, null) : null;
+    const fa = after ? readBoard('falseAlarm', { theirFenBefore: fenBefore, fenBefore: after, studentSan: null, bestLine: best, reply: null }) : null;
     if (fa) out.push(fa.text);
   }
   // WHAT IT STOPPED — the threat of yours their move took away, or the fork
@@ -949,7 +741,7 @@ export function theirMoveAnswerLines(history: readonly string[], ply: number, st
       try {
         const u = best.moves[0];
         const answerSan = new Chess(after).move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] })?.san ?? null;
-        const text = slipAnswerText(after, captureRunOfMoves(null, history.slice(0, ply + 1)), answerSan, 'now', best.moves);
+        const text = readBoard('slipAnswer', { fen: after, prevCapture: captureRunOfMoves(null, history.slice(0, ply + 1)), answerSan, lineUci: best.moves })?.text;
         if (text) out.push(text);
       } catch { /* the answer is a bonus */ }
     }
@@ -982,9 +774,9 @@ export function dangerAnswerLines(fen: string, student: 'w' | 'b', bestUci: stri
   if (st) out.push(st.text);
   const cm = checkMethodTeaching(fen, student, bestUci);
   if (cm) out.push(cm.text);
-  const cnt = countWarning(fen, student);
+  const cnt = readBoard('countWarning', { fen, student });
   if (cnt) out.push(cnt.text);
-  const race = oppositeWingsRace(fen, student, 'live');
+  const race = readBoard('wingsRace', { fen, student });
   if (race) out.push(race.text);
   return out;
 }
@@ -1000,17 +792,20 @@ export function announcesTheMove(spoke: readonly LearnLane[]): boolean {
  *  decides pawn endings, said once per position. Null out of range. */
 export async function zugzwangTeaching(fen: string): Promise<TeachingFact | null> {
   if (fen.split(' ')[0].replace(/[^a-zA-Z]/g, '').length > 7) return null;
+  // The tablebase read is fetched here (the engine reads are handed in); the
+  // registry says it.
   const z = await readZugzwang(fen);
-  if (!z) return null;
-  return teachingFact('pawnEnding', { computer: 'readZugzwang', kind: 'method', seat: 'student', fen, names: NAMES_NO_MOVE, proof: zugzwangProof(z, true), text: zugzwangSentence(z, true), squares: [], claims: [`zugzwang:${fen.split(' ').slice(0, 2).join(' ')}`] }, { event: { name: 'coach_zugzwang_named', props: { surface: 'coach-teach', mutual: z.mutual } }, arrows: [] });
+  const f = z ? readBoard('zugzwang', { fen, read: z }) : null;
+  if (!f) return null;
+  return fromBoard('pawnEnding', f, { event: { name: 'coach_zugzwang_named', props: { surface: 'coach-teach', mutual: learnReadKey(f)[0] === 'mutual' } }, arrows: [] });
 }
 
 /** CHART A COURSE at the student's turn (kings and pawns only): the king's
  *  target is the weak pawn, not the centre. Once per game (claim). */
 export function kingCourseTeaching(fen: string, student: 'w' | 'b'): TeachingFact | null {
-  const kc = kingCourse(fen, student);
+  const kc = readBoard('kingCourse', { fen, student });
   if (!kc) return null;
-  return teachingFact('pawnEnding', { computer: 'kingCourse', kind: 'method', seat: 'student', fen, names: NAMES_NO_MOVE, proof: squaresProof(kc.text, [kc.target]) ?? NO_PROOF.stated, text: kc.text, squares: [kc.target], claims: ['king-course'] }, { event: { name: 'coach_king_course', props: { surface: 'coach-teach' } }, arrows: [] });
+  return fromBoard('pawnEnding', kc, { event: { name: 'coach_king_course', props: { surface: 'coach-teach' } }, arrows: [] });
 }
 
 // ─── THE THREAD ACROSS MOVES + THE STUDENT'S SLIPS (David 2026-10-06) ──────
@@ -1020,7 +815,7 @@ export function kingCourseTeaching(fen: string, student: 'w' | 'b'): TeachingFac
 import { promisesOpen, slipCount, type GamePromise, type StoryStore } from './gameStory';
 import { positionOf } from '../utils/samePosition';
 import { captureRunOfMoves, type PrevCaptureContext } from './captureRun';
-import { NAMES_NO_MOVE, namesMoves, studentMovesInLine, boardAfterSans } from './studentMoveNaming';
+import { NAMES_NO_MOVE, namesMoves, boardAfterSans } from './studentMoveNaming';
 
 export type { GamePromise } from './gameStory';
 
@@ -1072,28 +867,12 @@ export function notePromise(story: StoryStore, p: GamePromise, ply: number): voi
  *     unasked) and says it when you play it (`studentDeepFactPromise`).
  */
 export function theirDeepFactTeaching(fenBefore: string, theirSan: string, lineAfter: readonly string[] | null, student: 'w' | 'b'): TeachingFact | null {
-  const deep = deepFact(fenBefore, theirSan, lineAfter, false);
-  if (!deep || !lineAfter) return null;
-  let fenAfter: string;
-  try { const c = new Chess(fenBefore); c.move(theirSan); fenAfter = c.fen(); } catch { return null; }
-  const sans = [theirSan, ...lineAfter.slice(0, deep.lineIndex + 1)];
-  const text = `They play ${theirSan}, ${deep.text}.`;
-  return teachingFact('theirIntent', {
-    // Computed down their line from the board before their move.
-    computer: 'deepFact', kind: 'opponent-intent', seat: 'opponent', fen: fenBefore,
-    // "…once your b4 opens the diagonal" names a move of yours: held while it is yours to play.
-    names: deep.opener ? namesMoves(student, fenAfter, { from: deep.opener.from, to: deep.opener.to }) : NAMES_NO_MOVE,
-    proof: lineProof({ fen: fenBefore, sans }, 'they') ?? squaresProof(text, deep.squares) ?? NO_PROOF.description,
-    text,
-    squares: deep.squares,
-    // The same claim as their prepared move; the door keeps their move to one
-    // reason, and the board job (its fallback) gives way to this one.
-    claims: [`their-prepares:${deep.follow.uci}`],
-    stakes: { points: deep.hit.type === 'k' ? 1 : CAPTURE_VALUE[deep.hit.type] ?? 1, plies: sans.length - 1 },
-    role: 'teach',
-  }, {
-    event: { name: 'coach_their_deep_fact', props: { surface: 'coach-teach', plies: sans.length - 1 } },
-    arrows: [{ from: deep.follow.from, to: deep.follow.to, role: 'theirs', fen: fenAfter, source: 'learn.theirDeepFact' }],
+  const f = readBoard('theirDeepFact', { fenBefore, theirSan, lineAfter, student });
+  if (!f) return null;
+  const follow = f.marks?.theirs;
+  return fromBoard('theirIntent', f, {
+    event: { name: 'coach_their_deep_fact', props: { surface: 'coach-teach', plies: Number(learnReadKey(f)[0]) } },
+    arrows: follow ? [{ from: follow.from, to: follow.to, role: 'theirs', fen: boardAfterMove(fenBefore, theirSan), source: 'learn.theirDeepFact' }] : [],
   });
 }
 
@@ -1106,24 +885,9 @@ export function bindingTeaching(i: { fenBefore: string; san: string; history: re
   /** REQUIRED: the student's record of seeing plain threats
    *  (`StudentRecord.plainThreats`), read by the one rule (`seesPlainThreats`). */
   plainThreats: HeatState }): TeachingFact | null {
-  const tgt = theirTarget(priorFromHistory(i.history, i.fenBefore), true, seesPlainThreats(i.plainThreats));
-  if (!tgt) return null;
-  const bind = binding(i.fenBefore, i.san, tgt, moveHit(i.fenBefore, i.san), true);
-  if (!bind) return null;
-  // The binding's "this" is the student's move: the turn speaks after their
-  // reply, and "this" would attach to it. Said as "your move", never by name
-  // (David 2026-11-09: they just played it and saw it land).
-  const said = bind.replace(/\bthis\b/, 'your move');
-  const text = `${openSentence(tgt.text)}, ${said}.`;
-  return teachingFact('movePoint', {
-    computer: 'bindingFact', kind: 'point', seat: 'student', fen: boardAfterMove(i.fenBefore, i.san), names: NAMES_NO_MOVE,
-    proof: squaresProof(text, [tgt.by, tgt.square]) ?? NO_PROOF.stated,
-    text, squares: [tgt.by, tgt.square], claims: [`binding:${tgt.square}:${i.history.length}`],
-    role: 'teach',
-  }, {
-    event: { name: 'coach_move_binding', props: { surface: 'coach-teach' } },
-    arrows: [], ownMoveReason: true,
-  });
+  const f = readBoard('binding', { fenBefore: i.fenBefore, san: i.san, prior: priorFromHistory(i.history, i.fenBefore), plainSeen: seesPlainThreats(i.plainThreats), ply: i.history.length });
+  if (!f) return null;
+  return fromBoard('movePoint', f, { event: { name: 'coach_move_binding', props: { surface: 'coach-teach' } }, arrows: [], ownMoveReason: true });
 }
 
 /** YOUR DEEP FACT, KEPT FOR WHEN YOU PLAY IT: the move it sets up names your
@@ -1131,17 +895,10 @@ export function bindingTeaching(i: { fenBefore: string; san: string; history: re
  *  promise's window) and the hit still stands on the board, it is said then.
  *  `lineAfterReply` is the engine's line from the board after their reply. */
 export function studentDeepFactPromise(fenBefore: string, san: string, reply: string | null, lineAfterReply: readonly string[] | null): GamePromise | null {
-  if (!reply || !lineAfterReply || lineAfterReply.length === 0) return null;
-  const deep = deepFact(fenBefore, san, [reply.replace(/^…/, ''), ...lineAfterReply], true);
-  if (!deep) return null;
-  const piece = HIT_NAME[deep.follow.piece] ?? 'piece';
-  return {
-    key: `deep:${deep.follow.uci}`,
-    piece: deep.follow.piece,
-    square: deep.follow.to,
-    say: `Your ${piece} on ${deep.follow.to} ${deep.hit.words} now — ${sayYourMove(san, fenBefore)} made that possible.`,
-    hits: { square: deep.hit.square, type: deep.hit.type },
-  };
+  const f = readBoard('studentDeepFact', { fenBefore, san, reply, lineAfterReply });
+  if (!f) return null;
+  const [piece, square, hitSq, hitType] = learnReadKey(f);
+  return { key: f.claims[0], piece, square, say: f.text, hits: { square: hitSq, type: hitType } };
 }
 
 /** The student's move pays an open promise off → its closing line, and the
@@ -1248,50 +1005,15 @@ export function spokenIdeaCounts(...said: ReadonlyArray<ReadonlySet<string>>): M
   return out;
 }
 
-/** The board teacher's reading with the game's spoken ideas, and the claim for
- *  each idea it said (`idea:<key>:<n>`, n = the times it was said before). */
-function readWithIdeas(
-  fenBefore: string, san: string, moverIsStudent: boolean, spokenIdeas: ReadonlyMap<string, number>,
-): { fact: NonNullable<ReturnType<typeof buildReviewMoveTeachingFact>>; ideaClaims: string[] } | null {
-  const phrases = new Map(spokenIdeas);
-  const fact = buildReviewMoveTeachingFact(fenBefore, san, moverIsStudent, phrases);
-  if (!fact) return null;
-  const ideaClaims = [...phrases]
-    .filter(([k, n]) => n !== (spokenIdeas.get(k) ?? 0))
-    .map(([k]) => `idea:${k}:${spokenIdeas.get(k) ?? 0}`);
-  return { fact, ideaClaims };
-}
-
 /** WHAT THE STUDENT'S MOVE DID, from the board teacher (the per-move reason
  *  Review already speaks) — Learn's fallback own-move reason when no sharper
  *  computer (the move's point, its intent, a found move) had one (Learn audit
  *  2026-10-15: 36 of 56 turns offered no reason for the student's move at all).
  *  Null when the board teacher has nothing true to say. */
 export function boardTeacherPoint(fenBefore: string, san: string, fenNow: string, spokenIdeas: ReadonlyMap<string, number>): TeachingFact | null {
-  // The piece the point is about must still stand where it went (Alekhine walk
-  // 2026-10-19: "The queen trains on the bishop on b5" after …Bxa4 took it).
-  try {
-    const mv = new Chess(fenBefore).move(san);
-    const there = new Chess(fenNow).get(mv.to);
-    if (!there || there.color !== mv.color || there.type !== (mv.promotion ?? mv.piece)) return null;
-  } catch { return null; }
-  // The reading keeps the squares it named: a board fact about named squares
-  // is proven on the board (A-plan P5); a reading that names none stays a
-  // description, and says so.
-  const read = readWithIdeas(fenBefore, san, true, spokenIdeas);
-  if (!read) return null;
-  const { fact, ideaClaims } = read;
-  // Learn's own move is "your move", never its name (David 2026-11-09: "the
-  // user knows that, they see it play out" — prod focus audit: "c5 kicks
-  // their queen off b4", "King to h8 unpins your pawn on f7").
-  const text = withSubject(fact.text, 'Your move');
-  // The board teacher reads the move from the board before it.
-  return teachingFact('movePoint', {
-    computer: 'buildReviewMoveTeachingFact', kind: 'point', seat: 'student', fen: fenBefore, names: NAMES_NO_MOVE, proof: squaresProof(text, fact.squares) ?? NO_PROOF.description, text, squares: fact.squares, claims: [`board-teacher:${san}:${fenBefore.split(' ').slice(0, 2).join(' ')}`, ...(fact.claim ? [fact.claim] : []), ...ideaClaims],
-  }, {
-    event: { name: 'coach_move_point_named', props: { surface: 'coach-teach', source: 'board-teacher' } },
-    arrows: [],
-  });
+  const f = readBoard('boardTeacherOwn', { fenBefore, san, fenNow, spokenIdeas });
+  if (!f) return null;
+  return fromBoard('movePoint', f, { event: { name: 'coach_move_point_named', props: { surface: 'coach-teach', source: 'board-teacher' } }, arrows: [] });
 }
 
 /** THEIR MOVE'S BOARD JOB (golden speedrun 2026-10-20: from move 8 on the
@@ -1300,27 +1022,10 @@ export function boardTeacherPoint(fenBefore: string, san: string, fenNow: string
  *  teacher the student's moves get, from their seat. Null when it has nothing
  *  true to say, or their piece no longer stands where it went. */
 export function theirBoardPoint(fenBefore: string, san: string, fenNow: string, spokenIdeas: ReadonlyMap<string, number>): TeachingFact | null {
-  let to = '';
-  try {
-    const mv = new Chess(fenBefore).move(san);
-    const there = new Chess(fenNow).get(mv.to);
-    if (!there || there.color !== mv.color || there.type !== (mv.promotion ?? mv.piece)) return null;
-    to = mv.to;
-  } catch { return null; }
-  const read = readWithIdeas(fenBefore, san, false, spokenIdeas);
-  if (!read) return null;
-  const { fact, ideaClaims } = read;
-  const text = withSubject(fact.text.replace(/^The (?=(?:king|queen|rook|bishop|knight|pawn)\b)/, 'Their '), `Their ${san}`);
-  return teachingFact('theirPurpose', {
-    computer: 'buildReviewMoveTeachingFact', kind: 'opponent-intent', seat: 'opponent', fen: fenBefore, names: NAMES_NO_MOVE, proof: squaresProof(text, fact.squares) ?? NO_PROOF.description, text, squares: [to, ...fact.squares], claims: [`their-board:${san}:${fenBefore.split(' ').slice(0, 2).join(' ')}`, ...ideaClaims],
-    // Their move's job is the why of their move — a consequence, never an aside.
-    role: 'teach',
-  }, {
-    event: { name: 'coach_their_point_named', props: { surface: 'coach-teach', source: 'board-teacher' } },
-    arrows: [],
-  });
+  const f = readBoard('boardTeacherTheirs', { fenBefore, san, fenNow, spokenIdeas });
+  if (!f) return null;
+  return fromBoard('theirPurpose', f, { event: { name: 'coach_their_point_named', props: { surface: 'coach-teach', source: 'board-teacher' } }, arrows: [] });
 }
-
 
 /** THE RECORD DECIDES HOW LOUD A THREAT IS (OS-4, David 2026-10-19: "It's
  *  narrating a one move threat to me"). The ONE decider for Learn's threat
@@ -1499,10 +1204,8 @@ export function structureNamingLine(
   student: 'w' | 'b',
   openingName: string | null,
 ): { text: string; claim: string } | null {
-  const struct = namedPawnStructure(fen, student);
-  if (!struct) return null;
-  const transfer = structureTransfer(struct.name, openingName);
-  return { text: `${struct.name} — ${struct.plan}.${transfer ? ` ${transfer}` : ''}`, claim: `structure:${struct.name}` };
+  const f = readBoard('structureNaming', { fen, student, openingName });
+  return f ? { text: f.text, claim: f.claims[0] } : null;
 }
 
 // ── THREE READS LEARN USED TO COMPUTE INSIDE THE PAGE (WO-STORY-MATRIX-01
@@ -1562,8 +1265,6 @@ export function cheaperAttackerHit(fen: string, student: Color): CheaperHit | nu
   } catch { return null; }
 }
 
-const NAME_OF_PIECE: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
-
 /** A GAMBIT THEY ACCEPTED (fresh-game walk 2026-09-27, …g5 Nxg5: the pawn
  *  went and nothing said what it bought). Their reply took the piece the
  *  student's move put down, and the piece cannot be won straight back — so it
@@ -1573,47 +1274,7 @@ const NAME_OF_PIECE: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bish
  *  move captured, or the piece is won back) or when a file opened that no rook
  *  can use. */
 export function gambitPoint(p: { fenBefore: string; fenAfterMove: string; fenAfterReply: string; san: string; to: string; student: Color }): string | null {
-  const { fenBefore, fenAfterMove, fenAfterReply, san, to, student: me } = p;
-  try {
-    const reply = new Chess(fenAfterMove).moves({ verbose: true })
-      .find((r) => { const c = new Chess(fenAfterMove); c.move(r.san); return c.fen().split(' ')[0] === fenAfterReply.split(' ')[0]; });
-    if (!reply || reply.to !== to || !reply.captured) return null;
-    // A trade is not a gambit: the move itself captured, or the piece can be
-    // won straight back.
-    if (san.includes('x')) return null;
-    const wonBack = signedCaptureRead(fenAfterReply, to, me);
-    if (wonBack === null || wonBack > 0) return null;
-    const pawnFiles = (fen: string): Set<string> => new Set(new Chess(fen).board().flat()
-      .filter((c) => c && c.type === 'p' && c.color === me).map((c) => (c as { square: string }).square[0]));
-    const before = pawnFiles(fenBefore); const after = pawnFiles(fenAfterReply);
-    const opened = [...before].filter((f) => !after.has(f)).sort();
-    const what = NAME_OF_PIECE[reply.captured] ?? 'pawn';
-    // A BREAKTHROUGH, NOT A FILE (hand walk 2026-09-27, a pawn ending: "b6 was
-    // a gambit … the b-file is open for your rook" with no rook on the
-    // board). What the sacrifice bought is whichever of these is TRUE: a pawn
-    // of the student's that is passed now, or a file a rook of theirs can use.
-    const passed = (fen: string): Set<string> => {
-      const cells = new Chess(fen).board().flat().filter((c) => c && c.type === 'p') as Array<{ square: string; color: Color }>;
-      const dir = me === 'w' ? 1 : -1;
-      return new Set(cells.filter((pc) => pc.color === me && !cells.some((e) => e.color !== me
-        && Math.abs(e.square.charCodeAt(0) - pc.square.charCodeAt(0)) <= 1
-        && (Number(e.square[1]) - Number(pc.square[1])) * dir > 0)).map((pc) => pc.square));
-    };
-    const was = passed(fenBefore);
-    const fresh = [...passed(fenAfterReply)].filter((sq) => !was.has(sq) && ![...was].some((w) => w[0] === sq[0]));
-    if (fresh.length > 0) return `${san} was a breakthrough — they took the ${what}, and now your ${fresh[0][0]}-pawn is passed.`;
-    // OPEN ONLY IF IT IS OPEN, AND ONLY FOR A ROOK THAT GETS THERE (hand walk
-    // 1690, 2026-09-27: after 24.e5 dxe5 "the e-file is open for your rook" —
-    // Black's pawns still sat on e7 and e5).
-    const file = opened[0];
-    const theirPawnOnFile = file !== undefined && new Chess(fenAfterReply).board().flat()
-      .some((c) => c?.type === 'p' && c.color !== me && c.square[0] === file);
-    if (file !== undefined && rookReachesFile(fenAfterReply, me, file)) {
-      return `${san} was a gambit — they took the ${what}, and in return the ${file}-file is ${theirPawnOnFile ? 'half-open' : 'open'} for your rook.`;
-    }
-    if (opened.length > 0) return null;
-    return `${san} was a gambit — they took the ${what}, and the engine rates the trade of it for time as sound.`;
-  } catch { return null; }
+  return readBoard('gambitPoint', p)?.text ?? null;
 }
 
 /** LEARN'S HANGING-PIECE WARNING — the one wording (`hangingLine`, shared with

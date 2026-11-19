@@ -279,7 +279,7 @@ describe("Learn's student-move lanes reach the lesson (WO-STORY-MATRIX-01 P1-9c)
     const start = learn.indexOf('export function studentMoveTeaching');
     const body = learn.slice(start, learn.indexOf('\nexport function', start + 1));
     const order = readFileSync('src/services/orderTeaching.ts', 'utf8');
-    const lanes = new Set([...`${body}\n${order}`.matchAll(/teachingFact\('([A-Za-z]+)'/g)].map((m) => m[1]));
+    const lanes = new Set([...`${body}\n${order}`.matchAll(/(?:teachingFact|fromBoard)\('([A-Za-z]+)'/g)].map((m) => m[1]));
     expect(lanes.size).toBeGreaterThan(10);
     for (const lane of lanes) expect(Object.prototype.hasOwnProperty.call(LESSON_STUDENT_LANE, lane), lane).toBe(true);
   });
