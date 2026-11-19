@@ -112,13 +112,23 @@ export function boardPlanFacts(fen: string, side: 'white' | 'black', voice: 'you
     for (const r of ranks) {
       const sq = `${f}${r}`;
       const p = chess.get(sq as Square);
-      if (p && p.color === foeC && p.type === 'p') return sq;
+      // A pawn one of ours already hits is the tension's subject, not the file's.
+      if (p && p.color === foeC && p.type === 'p') return chess.attackers(sq as Square, myC).some((a) => chess.get(a)?.type === 'p') ? null : sq;
     }
     if (!files.open.includes(f)) return null;
     const entry = `${f}${myC === 'w' ? 7 : 2}` as Square;
     return chess.attackers(entry, foeC).length === 0 && !chess.get(entry) ? entry : null;
   };
-  const rookFiles = [...new Set([...files.open, ...theirSemi])].map((f) => ({ f, at: reach(f) })).filter((x) => !!x.at);
+  // A target the break already names is not said again by the file (one
+  // square, one mention — the human-voice rule).
+  // The plans above already name their targets and their files ("win their
+  // weak pawn on d3", "seize the open e-file"): the lever does not again.
+  const brokeAt = new Set([...levers.filter((l) => l.kind === 'break').flatMap((l) => l.squares), ...facts.flatMap((f) => f.squares)]);
+  const planFiles = new Set(facts.map((f) => f.file).filter((f): f is string => !!f));
+  // …and never a file a rook of the side already stands on: "put a rook on
+  // the f file" with the rook on f8 is the board read back.
+  const rookOn = new Set(chess.board().flat().flatMap((p) => (p && p.color === myC && p.type === 'r' ? [p.square[0]] : [])));
+  const rookFiles = [...new Set([...files.open, ...theirSemi])].filter((f) => !rookOn.has(f) && !planFiles.has(f)).map((f) => ({ f, at: reach(f) })).filter((x) => !!x.at && !brokeAt.has(x.at));
   // …only for a side that HAS a rook (Danya's opposite-coloured-bishop boards,
   // 2026-11-18: "put a rook on the e or a file" on a board of bishops,
   // knights and pawns).

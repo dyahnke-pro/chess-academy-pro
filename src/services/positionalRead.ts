@@ -71,7 +71,7 @@ function badPieceWords(note: { kind: PieceQualityKind; reason: string; square: s
  *  pressing the first enemy piece in front of it, or with a clear road into
  *  their camp; a rook on the seventh hitting pawns there or penning the king.
  *  Board geometry and chess.js. */
-function goodPieceWork(fen: string, q: { square: string; piece: string; kind: PieceQualityKind; color: Color }, own: boolean): { text: string; squares: string[] } | null {
+function goodPieceWork(fen: string, q: { square: string; piece: string; kind: PieceQualityKind; color: Color }, own: boolean): { text: string; squares: string[]; target?: string } | null {
   const board = chessOf(fen);
   if (!board) return null;
   const foe = own ? 'their' : 'your';
@@ -86,7 +86,7 @@ function goodPieceWork(fen: string, q: { square: string; piece: string; kind: Pi
       if (!occ) continue;
       if (occ.color === q.color) return null;
       const loose = board.attackers(sq, enemy).length === 0;
-      return { text: `it presses down the ${f}-file on ${foe} ${NAME[occ.type] ?? 'piece'} on ${sq}${loose ? ', and nothing guards it' : ''}`, squares: [sq] };
+      return { text: `it presses down the ${f}-file on ${foe} ${NAME[occ.type] ?? 'piece'} on ${sq}${loose ? ', and nothing guards it' : ''}`, squares: [sq], target: sq };
     }
     const entry = `${f}${q.color === 'w' ? 7 : 2}` as Square;
     if (board.attackers(entry, enemy).length > 0) return null;
@@ -97,7 +97,9 @@ function goodPieceWork(fen: string, q: { square: string; piece: string; kind: Pi
     const back = q.color === 'w' ? '8' : '1';
     const pawns = board.board().flat().flatMap((c) => (c && c.color === enemy && c.type === 'p' && c.square[1] === rank7 ? [c.square as string] : []));
     if (pawns.length > 0) {
-      return { text: `on the seventh it attacks ${foe} pawn${pawns.length > 1 ? 's' : ''} on ${pawns.length > 2 ? `the ${rank7 === '7' ? 'seventh' : 'second'} rank` : andList(pawns)}`, squares: pawns };
+      // One pawn is named; more are counted and lit (a list of squares read
+      // out is the robot, David 2026-11-05).
+      return { text: pawns.length === 1 ? `on the seventh it attacks ${foe} pawn on ${pawns[0]}` : `on the seventh it attacks ${countWord(pawns.length)} of ${foe} pawns`, squares: pawns };
     }
     const king = board.board().flat().find((c) => c && c.color === enemy && c.type === 'k')?.square;
     if (king && king[1] === back) return { text: `on the seventh it keeps ${foe} king shut in on the back rank`, squares: [king] };
@@ -174,6 +176,9 @@ interface PositionalObservation {
    *  what the voice named — computed here, never scraped from the prose (the
    *  coupling rule). Empty when the read names only files/counts, not squares. */
   squares?: readonly string[];
+  /** The pawn or piece of the other side this observation is about as a
+   *  TARGET (the pawn a rook presses, the pawn a break hits), when it names one. */
+  target?: string;
 }
 
 /** Urgency by kind. A plan outranks the facts it is built from — that is the
@@ -398,6 +403,7 @@ function observationsFor(
       key: goodPieceIdeaKey(side, q.piece, q.kind, q.square), side, kind: 'piece', rank: rank('piece'),
       aliases: q.kind === 'open-file' || q.kind === 'semi-open-file' ? [`file-${q.square[0]}`] : [],
       squares: [q.square, ...outpost.work.squares],
+      ...(outpost.work.target ? { target: outpost.work.target } : {}),
       text: own
         ? `Your ${NAME[q.piece] ?? 'piece'} on ${q.square} is your best-placed piece — ${outpost.work.text}.`
         // Not "their best-placed piece": the engine's piece read owns THEIR best
@@ -562,10 +568,15 @@ function observationsFor(
   // square and no consequence, on 54 boards). The pawn it challenges is the
   // point of the break; a break with no pawn to name is not said.
   const hit = breaks.length > 0 && turned ? breakContacts(turned, breaks[0], color)[0] ?? null : null;
-  if (breaks.length > 0 && hit) {
+  // ONE CLAIM, ONE PRODUCER: on the student's own move the plan's lever says
+  // this break with its target ("break with a4 to hit their pawn on b5",
+  // `boardPlanFacts`), so the read leaves it.
+  const planSaysIt = own && fen.split(' ')[1] === color;
+  if (breaks.length > 0 && hit && !planSaysIt) {
     out.push({
       key: `${side}-break-${breaks[0]}`, side, kind: 'lever', rank: rank('lever'),
       squares: [breaks[0], hit],
+      target: hit,
       text: own
         ? `The push to ${breaks[0]} is your pawn break: it challenges their pawn on ${hit}.`
         : `Their pawn break is the push to ${breaks[0]}: it challenges your pawn on ${hit}.`,
@@ -790,7 +801,13 @@ export function readPosition(
   // and danger to a king still speak.
   const racing = racingPasser(fen);
   const kept = racing ? deduped.filter((o) => o.kind === 'passer' || o.kind === 'king') : deduped;
-  return kept.sort((a, b) => b.rank - a.rank);
+  // ONE PAWN, ONE READ (the human-voice rule: "the full name once"): a rook
+  // pressing a pawn, or a break hitting it, says nothing the structure read of
+  // that same weak pawn does not already teach — the structure read keeps it.
+  const weakSquares = new Set(kept.filter((o) => o.kind === 'structure').flatMap((o) => o.squares ?? []));
+  const aboutWeak = (o: PositionalObservation): boolean => (o.kind === 'piece' || o.kind === 'lever')
+    && !!o.target && weakSquares.has(o.target);
+  return kept.filter((o) => !aboutWeak(o)).sort((a, b) => b.rank - a.rank);
 }
 
 /**

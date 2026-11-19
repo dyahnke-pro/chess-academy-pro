@@ -515,10 +515,10 @@ describe('a guarded grab is named in pieces, never points', () => {
 describe('rookOnSeventh — says what the rook does there', () => {
   it('pawnless: pins the king, no pawns to eat', () => {
     const t = rookOnSeventh('r4k2/6RR/8/8/8/8/8/6K1 w - - 0 1', 'w');
-    expect(t).toBe('your rook has reached the seventh on g7 — it pins their king to the back rank');
+    expect(t).toBe('your rook has reached the seventh on g7 — it keeps their king shut in on the back rank');
   });
   it('negative control: a pawn on the seventh is named', () => {
-    expect(rookOnSeventh('r4k2/p5R1/8/8/8/8/8/6K1 w - - 0 1', 'w')).toMatch(/it eats their pawn on a7/);
+    expect(rookOnSeventh('r4k2/p5R1/8/8/8/8/8/6K1 w - - 0 1', 'w')).toMatch(/where it eats their pawn on a7/);
   });
 });
 
@@ -532,6 +532,6 @@ describe('passedPawnPush — only a runner that can run', () => {
     expect(passedPawnPush('r1b2rk1/pp4pp/3b4/3p2q1/8/1P1Q1P2/PB1N2PP/R3R2K b - - 0 18', 'b', 'd5')).toBeNull();
   });
   it('negative control: a free runner says its count', () => {
-    expect(passedPawnPush('8/5ppk/3P3p/8/8/7P/5PP1/K7 w - - 0 2', 'w', 'd6')).toBe('your passed pawn on d6 wants to run — it is two pushes from queening, and passed pawns are meant to be pushed');
+    expect(passedPawnPush('8/5ppk/3P3p/8/8/7P/5PP1/K7 w - - 0 2', 'w', 'd6')).toBe('your passed pawn on d6 is two pushes from queening — push it');
   });
 });

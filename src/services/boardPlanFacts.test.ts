@@ -53,6 +53,6 @@ describe('the open-file lever needs a rook (Danya, opposite-coloured bishops #3)
     expect(file('8/4k3/1b3ppp/p2Bp3/4P3/2P3PP/1P2KP2/8 w - - 0 35')).toBeUndefined();
   });
   it('the same files with a rook on the board: the lever stands', () => {
-    expect(file('8/4k3/1b3ppp/p2Bp3/4P3/2P3PP/1P2KP2/7R w - - 0 35')).toMatch(/put a rook on the/);
+    expect(file('6k1/1p3ppp/p7/8/8/8/1P3PPP/2R3K1 w - - 0 30')).toMatch(/put a rook on the/);
   });
 });

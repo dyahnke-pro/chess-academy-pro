@@ -185,8 +185,8 @@ export function rookOnSeventh(fen: string, studentColorWB: Color): string | null
   const pawns = cells(chess).filter((c) => c.type === 'p' && c.color === enemy && c.square[1] === rank).map((c) => c.square);
   const king = cells(chess).find((c) => c.type === 'k' && c.color === enemy);
   const pinned = !!king && king.square[1] === (studentColorWB === 'w' ? '8' : '1');
-  if (pawns.length > 0) return `your rook has reached the seventh on ${rook.square} — a rook on the seventh is a pig: it eats ${pawns.length === 1 ? `their pawn on ${pawns[0]}` : `their pawns along the rank`}${pinned ? ' and pins their king to the back rank' : ''}`;
-  return pinned ? `your rook has reached the seventh on ${rook.square} — it pins their king to the back rank` : null;
+  if (pawns.length > 0) return `your rook has reached the seventh on ${rook.square}, where it eats ${pawns.length === 1 ? `their pawn on ${pawns[0]}` : 'their pawns along the rank'}${pinned ? ' and shuts their king in' : ''}`;
+  return pinned ? `your rook has reached the seventh on ${rook.square} — it keeps their king shut in on the back rank` : null;
 }
 
 /**
@@ -248,7 +248,7 @@ export function passedPawnPush(fen: string, studentColorWB: Color, passedSquare:
     return [[1, 2], [2, 1], [-1, 2], [-2, 1], [1, -2], [2, -1], [-1, -2], [-2, -1]].some(([df, dr]) =>
       path.includes(`${String.fromCharCode(f + df)}${rk + dr}`));
   });
-  const knightNote = knightOnPath ? ', and their knight is a poor blocker — knights are bad at stopping a runner' : '';
+  const knightNote = knightOnPath ? ', and their knight is a poor blocker' : '';
   // A RUNNER THAT CANNOT RUN IS NOT TOLD TO RUN (Danya have-check 2026-11-19:
   // "passed pawns are meant to be pushed" beside a race the other side wins,
   // and on pawns a king collects). Their king taking it, a next square they
@@ -268,7 +268,7 @@ export function passedPawnPush(fen: string, studentColorWB: Color, passedSquare:
   }
   // The push said with its count: how far it has to go is why it matters now.
   const pushes = pushesToPromote(chess, passedSquare, studentColorWB);
-  return `your passed pawn on ${passedSquare} wants to run — it is ${countWord(pushes)} push${pushes === 1 ? '' : 'es'} from queening, and passed pawns are meant to be pushed${knightNote}`;
+  return `your passed pawn on ${passedSquare} is ${countWord(pushes)} push${pushes === 1 ? '' : 'es'} from queening — push it${knightNote}`;
 }
 
 
