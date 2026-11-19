@@ -8,10 +8,9 @@ import { Chess } from 'chess.js';
 //
 // G0: every sentence returned is computed; the caller's model only phrases
 // them, most-important-first, in the order returned.
-import { readHabit } from './methodBeat';
 import { buildFedTacticsContext } from './liveTacticsContext';
 import { boardReadFacts } from './boardReadFacts';
-import { decideRead } from './readDecider';
+import { decideRead, readContextOf } from './readDecider';
 import { stockfishEngine } from './stockfishEngine';
 import type { EvalBoardFn } from './perturbation';
 import { teachingSourceForBoard, generalizedTeaching, spokenBeatText } from './danyaTeachingService';
@@ -124,8 +123,8 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
   // 2. THE READ — every fact the computers make about this board, and the
   //    ones his order asks for, one a step (`readDecider`: the story, the
   //    calm answer, the tempting move refuted). The habit closes it below.
-  let decidingMoment = false;
   let readLines: string[] = [];
+  let habitLine: string | null = null;
   const before = [...(i.analysis?.topLines ?? [])].sort((x, y) => x.rank - y.rank);
   if (before.length) try {
     const read = await boardReadFacts({
@@ -141,19 +140,21 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
         opponentLastMove: lastMoveIfOpponent(sans, i.playerColor, i.fen) ?? undefined,
       },
     });
-    decidingMoment = read.tier !== null && DECIDING_TIERS.has(read.tier);
-    readLines = decideRead(read.facts).map((f) => f.text);
+    // 3. THE DECIDER picks the facts and THE HABIT THAT CLOSES THE READ
+    //    (WO-DANYA-READS-01 group 9): the routine that finds this board's
+    //    point next time — on a puzzle being solved, the attacking scan.
+    const decided = decideRead(read.facts, readContextOf({
+      fen: i.fen,
+      top: before[0] ? { evaluation: before[0].evaluation, mate: before[0].mate ?? null } : null,
+      bestUci: before[0]?.moves[0] ?? null,
+      withheld: marks?.squares ?? null,
+      studentShot: (tactics?.immediate ?? []).some((t) => t.side === 'student'),
+      decidingMoment: read.tier !== null && DECIDING_TIERS.has(read.tier),
+    }));
+    readLines = decided.facts.map((f) => f.text);
+    habitLine = decided.habit;
   } catch { readLines = []; }
   if (i.isCancelled()) return '';
-
-  // 3. THE HABIT THAT CLOSES THE READ (WO-DANYA-READS-01 group 9): what
-  //    decides this board, as the routine that finds it next time. Never on a
-  //    puzzle still being solved: "run CCT" would say there is a shot.
-  const habitLine = marks ? null : readHabit({
-    studentShot: (tactics?.immediate ?? []).some((t) => t.side === 'student'),
-    theirThreat: (tactics?.threats ?? []).length > 0,
-    decidingMoment,
-  })?.text ?? null;
 
   return [noteLine, ...readLines, habitLine ?? '']
     .map((t) => t.trim())

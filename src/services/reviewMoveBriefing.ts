@@ -175,7 +175,9 @@ function evalWhy(fen: string, studentPovCp: number, studentWB: 'w' | 'b', lastMo
 const NOTHING_SAID: ReadonlySet<ReasonKind> = new Set<ReasonKind>();
 /** The eval VERDICT + WHY as a lead sentence. */
 function explainEval(fen: string, studentPovCp: number, studentWB: 'w' | 'b', lastMove: LastMove | null, lines: readonly InitiativeLine[] | null): string {
-  const read = evalWhy(fen, studentPovCp, studentWB, lastMove, lines);
+  return explainEvalOf(evalWhy(fen, studentPovCp, studentWB, lastMove, lines), studentPovCp);
+}
+function explainEvalOf(read: { clauses: string[]; level: boolean }, studentPovCp: number): string {
   const why = read.clauses;
   const verdict = evalVerdict(studentPovCp);
   const V = openSentence(verdict);
@@ -201,9 +203,12 @@ export function evalReading(fenAfter: string, povBeforeCp: number | null, povAft
 }
 /** THE STANDING OF A BOARD — who stands better and why, read off the board
  *  itself rather than off a move that changed it (the read's verdict, David
- *  2026-11-18: his read of a board opens on it). */
-export function standingReading(fen: string, studentPovCp: number, studentWB: 'w' | 'b', lines: readonly InitiativeLine[] | null): string {
-  return explainEval(fen, studentPovCp, studentWB, null, lines);
+ *  2026-11-18: his read of a board opens on it), and whether the board gave
+ *  it a reason — a bare "You're winning." says nothing a player can act on (the read decider says
+ *  a verdict only with its reason). */
+export function standingRead(fen: string, studentPovCp: number, studentWB: 'w' | 'b', lines: readonly InitiativeLine[] | null): { text: string; reasoned: boolean } {
+  const read = evalWhy(fen, studentPovCp, studentWB, null, lines);
+  return { text: explainEvalOf(read, studentPovCp), reasoned: read.clauses.length > 0 };
 }
 /** The DELTA — how this move moved the eval (student POV cp swing). Null when it
  *  barely moved (a quiet move keeps its silence rather than "held the balance"

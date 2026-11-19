@@ -26,7 +26,9 @@ import { siegeOf, stepsOf, switchWing } from './boardPlan';
 import { planSteps, planStepsText } from './planSteps';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { moveThoughtFacts } from './moveThoughtFacts';
-import { standingReading } from './reviewMoveBriefing';
+import { standingRead } from './reviewMoveBriefing';
+import { stakeValue } from './factStakes';
+import { classifyMatePattern } from './matePatterns';
 import { NO_PREV_CAPTURE } from './captureRun';
 import type { ReadFact } from './readDecider';
 import type { AnalysisLine, StockfishAnalysis } from '../types';
@@ -45,7 +47,7 @@ export type BoardFact = ReadFact;
 
 /** What a read never says beside a forced mate: plans, conversion advice and
  *  the kind of position. */
-const BESIDE_MATE: ReadonlySet<string> = new Set(['convert', 'compensation', 'eval', 'character', 'siege', 'plan-steps', 'plan-race', 'structure-plan', 'switch-wing', 'their-plan', 'refuted-positional']);
+const BESIDE_MATE: ReadonlySet<string> = new Set(['standing-bare', 'convert', 'compensation', 'eval', 'character', 'siege', 'plan-steps', 'plan-race', 'structure-plan', 'switch-wing', 'their-plan', 'refuted-positional']);
 
 /** The best move's facts that say who stands better, not what the move does. */
 const VERDICT_KINDS: ReadonlySet<string> = new Set(['eval', 'compensation', 'convert']);
@@ -116,12 +118,25 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
   // A forced mate is the concept read's, not a score's.
   // Whose mate it is, off the score's sign (White's seat); never on a puzzle
   // still being solved, where "there is a mate" is the hint.
+  const studentMates = mateOnBoard && (top.evaluation > 0) === (i.studentColor === 'w');
   if (mateOnBoard && !i.withhold) {
-    const studentMates = (top.evaluation > 0) === (i.studentColor === 'w');
     facts.push({ from: 'position', kind: 'standing', text: studentMates ? 'There is a forced mate here for you.' : 'They have a forced mate here.', squares: [] });
   }
+  // A PUZZLE'S MATE, BY ITS PATTERN: on a board still being solved the mate's
+  // name is the lesson and names no square of the answer (David's puzzle
+  // flags, 2026-11-19: the mate puzzles were silent).
+  if (mateOnBoard && i.withhold && studentMates) {
+    const pattern = matePatternOf(i.fen, top.moves);
+    if (pattern) {
+      const text = rotateStem([`There is a forced mate here: the pattern is ${pattern}.`, `This one ends in mate, and the pattern is ${pattern}. Find the forcing moves that get there.`], stemKeyOf(`${i.fen}|mate-pattern`));
+      facts.push({ from: 'position', kind: 'mate-pattern', text, computer: 'classifyMatePattern', squares: [] });
+    }
+  }
   if (povCp !== null) {
-    facts.push({ from: 'position', kind: 'standing', text: standingReading(i.fen, povCp, i.studentColor, i.before), squares: [] });
+    // A standing with no reason on the board is its own kind: the decider says
+    // a verdict only with its reason.
+    const st = standingRead(i.fen, povCp, i.studentColor, i.before);
+    facts.push({ from: 'position', kind: st.reasoned ? 'standing' : 'standing-bare', text: st.text, squares: [] });
     const k = boardKind(i.fen, i.studentColor, povCp);
     if (k) facts.push({ from: 'position', kind: 'character', text: k.text, squares: [] });
   }
@@ -134,7 +149,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
 
   for (const c of pf.candidates) {
     if (i.withhold && c.kind === 'deliberation') continue;
-    facts.push({ from: 'position', kind: c.kind, text: c.text, computer: c.computer, squares: c.squares });
+    facts.push({ from: 'position', kind: c.kind, text: c.text, computer: c.computer, squares: c.squares, stakes: stakeValue(c.stakes) });
   }
 
   // THE PLAN ON THE BOARD (his "attack down the c-file at the knight on c6"),
@@ -221,7 +236,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
         // A puzzle still being solved keeps only who stands better: what the
         // best move does is the answer.
         if (i.withhold && !VERDICT_KINDS.has(f.kind)) continue;
-        facts.push({ from: 'bestMove', kind: f.kind, text: f.text, computer: f.computer, squares: f.squares });
+        facts.push({ from: 'bestMove', kind: f.kind, text: f.text, computer: f.computer, squares: f.squares, stakes: stakeValue(f.stakes), restates: f.restates === true });
       }
       if (!i.withhold && i.readTempting && mine && after[0]) {
         const theirs: WeighRead[] = [{ evaluation: after[0].evaluation, mate: after[0].mate, moves: after[0].moves }];
@@ -240,6 +255,15 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     }
   }
   return done();
+}
+
+/** The named pattern the engine's line mates with, when it plays to mate. */
+function matePatternOf(fen: string, line: readonly string[]): string | null {
+  const b = new Chess(fen);
+  try { for (const m of line) b.move({ from: m.slice(0, 2), to: m.slice(2, 4), promotion: m[4] }); } catch { return null; }
+  if (!b.isCheckmate()) return null;
+  const p = classifyMatePattern(b.fen());
+  return p ? p.name.replace(/ Mate$/, ' mate') : null;
 }
 
 function sanOf(fen: string, uci: string | undefined): string | null {

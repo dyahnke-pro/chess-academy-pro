@@ -1,0 +1,1172 @@
+{
+ "boards": {
+  "mysterious-gm-moves#2": {
+   "fen": "4r1k1/pb3q1p/np1prpp1/2p4n/2P1P2B/1NPB1P2/P2Q2PP/3RR2K w - - 0 22",
+   "top": {
+    "cp": 54,
+    "mate": null,
+    "best": "b3a1"
+   },
+   "facts": [
+    {
+     "from": "position",
+     "kind": "standing",
+     "text": "You're slightly better \u2014 you have the bishop pair.",
+     "squares": []
+    },
+    {
+     "from": "position",
+     "kind": "speedrun-read",
+     "text": "Several moves are equally good for your next move \u2014 Na1, Kg1 or Bf2. Not every move is a big decision. Save your time for the ones that are.",
+     "squares": [],
+     "computer": "depthClauses"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "The plan from here is to make your bishop pair count. Here's how: trade pawns to open the board and keep both bishops \u2014 on an open board two bishops outgun their knight and bishop.",
+     "squares": [],
+     "computer": "boardPlanFacts"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "The plan: put a rook on the b or d file.",
+     "squares": [],
+     "computer": "boardPlanFacts"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "Your light-squared bishop is your problem piece, hemmed in behind its own pawns, and your e-pawn going to e5 frees it, so that pawn move is really about the piece.",
+     "squares": [
+      "e5"
+     ],
+     "computer": "readPosition"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "Your rook on d1 is your best-placed piece \u2014 it has the half-open d-file.",
+     "squares": [
+      "d1"
+     ],
+     "computer": "readPosition"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "Their rook on e8 is well placed \u2014 it has the half-open e-file.",
+     "squares": [
+      "e8"
+     ],
+     "computer": "readPosition"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "Their knight on a6 is their problem piece, out on the rim, where it reaches only 4 squares, and keeping it bad is worth as much as winning a pawn.",
+     "squares": [
+      "a6"
+     ],
+     "computer": "readPosition"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "Your pawns on the c-file are doubled \u2014 they can't defend each other, so each one needs a neighbour or a piece to guard it.",
+     "squares": [],
+     "computer": "readPosition"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "They have a pawn break available on f5 \u2014 that is where their play comes from.",
+     "squares": [
+      "f5"
+     ],
+     "computer": "readPosition"
+    },
+    {
+     "from": "position",
+     "kind": "plan-steps",
+     "text": "Your knight on b3 has a better road: a1, c2 and then e3.",
+     "squares": [
+      "a1",
+      "b3",
+      "c2",
+      "e3"
+     ],
+     "computer": "planSteps"
+    },
+    {
+     "from": "position",
+     "kind": "switch-wing",
+     "text": "Their pawn on d6 holds, but it ties down a piece to guard it. That is the time to open a second front on the kingside: the e5 break.",
+     "squares": [
+      "d6",
+      "e5"
+     ],
+     "computer": "switchWing"
+    },
+    {
+     "from": "position",
+     "kind": "their-plan",
+     "text": "Their knight on a6 has a better road: b8, d7 and then e5.",
+     "squares": [
+      "a6",
+      "b8",
+      "d7",
+      "e5"
+     ],
+     "computer": "planSteps"
+    },
+    {
+     "from": "tempting",
+     "kind": "refuted",
+     "text": "e5 looks natural, but it doesn't work: they play dxe5 \u2014 they win a pawn.",
+     "squares": [
+      "e5"
+     ],
+     "computer": "temptingOnBoard"
+    },
+    {
+     "from": "bestMove",
+     "kind": "plan-steps",
+     "text": "Your knight keeps going: c2 and then e3.",
+     "squares": [
+      "c2",
+      "e3"
+     ],
+     "computer": "planSteps"
+    },
+    {
+     "from": "bestMove",
+     "kind": "eval",
+     "text": "Roughly balanced.",
+     "squares": [],
+     "computer": "evalReading"
+    },
+    {
+     "from": "bestMove",
+     "kind": "judgement",
+     "text": "Your knight on a1 is safe there, since nothing of theirs can hit it, and it can swing to c2 next.",
+     "squares": [
+      "a1",
+      "c2"
+     ],
+     "computer": "studentMoveStructure"
+    },
+    {
+     "from": "tempting",
+     "kind": "their-refuted",
+     "text": "f5 was the obvious try for them, but it doesn't hold up: you play exf5 and, two moves later, you play Qxe1 \u2014 you win a pawn.",
+     "squares": [
+      "f5"
+     ],
+     "computer": "temptingOnBoard"
+    }
+   ]
+  },
+  "the-art-of-setting-traps#3": {
+   "fen": "1r4k1/2p1qpp1/p3p2p/2PnN3/P1Q1P3/6P1/1r3P1P/2RR2K1 b - - 0 23",
+   "top": {
+    "cp": -146,
+    "mate": null,
+    "best": "d5e3"
+   },
+   "facts": [
+    {
+     "from": "position",
+     "kind": "standing-bare",
+     "text": "You're slightly better.",
+     "squares": []
+    },
+    {
+     "from": "position",
+     "kind": "must-defend",
+     "text": "Their pawn attacks your knight on d5.",
+     "squares": [
+      "d5"
+     ],
+     "computer": "computeMustDefend"
+    },
+    {
+     "from": "position",
+     "kind": "key-moment",
+     "text": "Your move now: one move keeps you on top, and only one. Worth thinking it through.",
+     "squares": [],
+     "computer": "readCriticalMoment"
+    },
+    {
+     "from": "position",
+     "kind": "opp-think",
+     "text": "Their threat first, your idea second: right now they're after your knight.",
+     "squares": [],
+     "computer": "liveMethodBeat"
+    },
+    {
+     "from": "position",
+     "kind": "line",
+     "text": "The knight to e3, their f-pawn takes e3, your queen to g5, then their queen to d4, and you come out 3 points down.",
+     "squares": [
+      "d4",
+      "e3",
+      "g5"
+     ],
+     "computer": "depthClauses"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "The plan from here: break with f5 to open the position. Then put a rook on the b or d file. And plant a knight on b4.",
+     "squares": [
+      "b4",
+      "f5"
+     ],
+     "computer": "boardPlanFacts"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "Your rook on b8 is your best-placed piece \u2014 it owns the open b-file.",
+     "squares": [
+      "b8"
+     ],
+     "computer": "readPosition"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "Their rook on d1 is well placed \u2014 it owns the open d-file.",
+     "squares": [
+      "d1"
+     ],
+     "computer": "readPosition"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "Your pawn on a6 is isolated \u2014 no friendly pawn can ever defend it, so a piece has to.",
+     "squares": [
+      "a6"
+     ],
+     "computer": "readPosition"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "Their dark squares are holes, with no bishop of theirs to cover four of them. Put a knight on one.",
+     "squares": [],
+     "computer": "readPosition"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "Their pawns on c5 and a4 are isolated \u2014 those are long-term targets worth playing against.",
+     "squares": [
+      "a4",
+      "c5"
+     ],
+     "computer": "readPosition"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "You have a pawn break on f5 \u2014 the pawn levers are where the play comes from.",
+     "squares": [
+      "f5"
+     ],
+     "computer": "readPosition"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "Their weak c4, d3 and f3 hide behind the knight on e5. Chase it with f6, and those squares open up again.",
+     "squares": [
+      "c4",
+      "d3",
+      "e5",
+      "f3",
+      "f6"
+     ],
+     "computer": "boardStructure"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "Your e-pawn can still guard d5. They can never guard d4 the same way, so that square stays a hole for them.",
+     "squares": [
+      "d4",
+      "d5"
+     ],
+     "computer": "boardStructure"
+    },
+    {
+     "from": "tempting",
+     "kind": "refuted-positional",
+     "text": "f5 looks natural, but it isn't the move: the king is less sheltered after this than after the better move.",
+     "squares": [
+      "f5"
+     ],
+     "computer": "boardReason"
+    },
+    {
+     "from": "tempting",
+     "kind": "refuted-positional",
+     "text": "f6 is tempting here, but it doesn't hold up: your pieces reach fewer squares after this than after the better move.",
+     "squares": [
+      "f6"
+     ],
+     "computer": "boardReason"
+    },
+    {
+     "from": "tempting",
+     "kind": "refuted-positional",
+     "text": "Nb4 is tempting here, but it doesn't hold up: your pieces reach fewer squares after this than after the better move.",
+     "squares": [],
+     "computer": "boardReason"
+    },
+    {
+     "from": "tempting",
+     "kind": "refuted-positional",
+     "text": "Nf6 is tempting here, but it doesn't hold up: your pieces reach fewer squares after this than after the better move.",
+     "squares": [],
+     "computer": "boardReason"
+    },
+    {
+     "from": "bestMove",
+     "kind": "move-job",
+     "text": "You play Ne3 \u2014 it attacks their queen on c4.",
+     "squares": [
+      "c4"
+     ],
+     "computer": "moveJob"
+    },
+    {
+     "from": "bestMove",
+     "kind": "board-teacher",
+     "text": "You play Ne3 \u2014 it trains on their queen on c4, worth more than the knight, so it has to move or be guarded.",
+     "squares": [
+      "c4"
+     ],
+     "computer": "buildReviewMoveTeachingFact"
+    },
+    {
+     "from": "bestMove",
+     "kind": "rook7",
+     "text": "Your rook has reached the seventh on b2 \u2014 a rook on the seventh is a pig, chewing through the pawns and pinning the king back.",
+     "squares": [
+      "b2"
+     ],
+     "computer": "rookOnSeventh"
+    },
+    {
+     "from": "bestMove",
+     "kind": "stopped",
+     "text": "Ne3 also defuses their fork trick \u2014 Rxd5, exd5, Nc6 would have forked your rook and queen.",
+     "squares": [],
+     "computer": "trickSidestepped"
+    }
+   ]
+  },
+  "endgame-attacks-part-2#0": {
+   "fen": "6k1/p4pp1/2p5/1pp1P3/3q1PPp/P3NQ1P/b1P1K3/8 b - - 0 30",
+   "top": {
+    "cp": -200,
+    "mate": null,
+    "best": "a2e6"
+   },
+   "facts": [
+    {
+     "from": "position",
+     "kind": "standing",
+     "text": "You're clearly better \u2014 you're up a pawn.",
+     "squares": []
+    },
+    {
+     "from": "position",
+     "kind": "their-target",
+     "text": "Your pawn on c6 is the target: the pawns beside it have moved past it, so no pawn can ever guard it. Their queen on f3 hits it, and nothing guards it.",
+     "squares": [
+      "c6",
+      "f3"
+     ]
+    },
+    {
+     "from": "position",
+     "kind": "opp-think",
+     "text": "Before you pick a move: what is their last move doing? Here it hits your c-pawn on c6 \u2014 answer that first, every time.",
+     "squares": [
+      "c6"
+     ],
+     "computer": "liveMethodBeat"
+    },
+    {
+     "from": "position",
+     "kind": "tactic",
+     "text": "After the bishop to e6, kicking it with the f-pawn doesn't work here: the queen takes e5, winning a pawn.",
+     "squares": [
+      "e5",
+      "e6"
+     ],
+     "computer": "depthClauses"
+    },
+    {
+     "from": "position",
+     "kind": "speedrun-read",
+     "text": "Several moves are equally good for your next move \u2014 Be6, Bd5 or b4. Not every move is a big decision. Save your time for the ones that are.",
+     "squares": [
+      "b4"
+     ],
+     "computer": "depthClauses"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "The plan from here is to attack their king on e2 before it gets out. Here's how: tuck your own king away, bring pieces in with tempo, and look for a sacrifice on d2 or f2 to strip its cover.",
+     "squares": [
+      "d2",
+      "e2",
+      "f2"
+     ],
+     "computer": "boardPlanFacts"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "Alongside that, aim to win their weak pawn on c2. Here's how: control c3, the square in front of it, so it can never advance. Then put your queen on its file and trade off its defenders: each one is tied to it. Count it: you don't hit it yet and they guard it once \u2014 bring attackers until yours outnumber the guards.",
+     "squares": [
+      "c2",
+      "c3"
+     ],
+     "computer": "boardPlanFacts"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "The plan from here: break with f6 or b4 to open the position. Then post a bishop on e4.",
+     "squares": [
+      "b4",
+      "e4",
+      "f6"
+     ],
+     "computer": "boardPlanFacts"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "Their king on e2 is stuck in the centre \u2014 it can no longer castle, so every line that opens toward it is worth looking at.",
+     "squares": [
+      "e2"
+     ],
+     "computer": "readPosition"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "The d file is open toward their king \u2014 that is the road an attack would come down.",
+     "squares": [],
+     "computer": "readPosition"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "Your dark squares are weak: with no bishop of that colour, no pawn or bishop of yours can cover d6 and a5. Their knight can settle there.",
+     "squares": [
+      "a5",
+      "d6"
+     ],
+     "computer": "readPosition"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "Your pawns on the c-file are doubled \u2014 they can't defend each other, so each one needs a neighbour or a piece to guard it.",
+     "squares": [],
+     "computer": "readPosition"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "Their light squares are weak: no bishop of theirs covers four of them. Your bishop can work on them.",
+     "squares": [],
+     "computer": "readPosition"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "You have a pawn break on f6 \u2014 the pawn levers are where the play comes from.",
+     "squares": [
+      "f6"
+     ],
+     "computer": "readPosition"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "Their f4 pawn is the key pawn: it guards e5, and if f4 drops, e5 goes with it.",
+     "squares": [
+      "e5",
+      "f4"
+     ],
+     "computer": "boardStructure"
+    },
+    {
+     "from": "tempting",
+     "kind": "refuted-positional",
+     "text": "c4 is tempting here, but it doesn't hold up: your pieces reach fewer squares after this than after the better move.",
+     "squares": [
+      "c4"
+     ],
+     "computer": "boardReason"
+    },
+    {
+     "from": "tempting",
+     "kind": "refuted-positional",
+     "text": "Qc3 is tempting here, but it doesn't hold up: your pieces reach fewer squares after this than after the better move.",
+     "squares": [],
+     "computer": "boardReason"
+    },
+    {
+     "from": "bestMove",
+     "kind": "board-teacher",
+     "text": "You go Be6, which bears down on c4, holding back their c-pawn, and d5, keeping their knight off it.",
+     "squares": [
+      "c4",
+      "d5"
+     ],
+     "computer": "buildReviewMoveTeachingFact"
+    },
+    {
+     "from": "bestMove",
+     "kind": "contrast",
+     "text": "Be6 and Bd5 both hold here, and what separates them is that Bd5 keeps your pawn on c6 guarded, and Be6 leaves it loose.",
+     "squares": [
+      "c6"
+     ],
+     "computer": "alsoGood"
+    },
+    {
+     "from": "bestMove",
+     "kind": "tactic",
+     "text": "The knight on e3 is NOT free: the king on e2 guards it, and Qxe3+ just trades your queen for a knight \u2014 so the line passes it by.",
+     "squares": [
+      "e2",
+      "e3"
+     ],
+     "computer": "explainTemptingCapture"
+    },
+    {
+     "from": "bestMove",
+     "kind": "royal",
+     "text": "Their knight on e3 is guarded only by the king and queen \u2014 and the king and queen are the worst defenders, because the moment you hit the guard the piece drops.",
+     "squares": [
+      "e3"
+     ],
+     "computer": "royalDefenderTarget"
+    },
+    {
+     "from": "bestMove",
+     "kind": "king",
+     "text": "Their king is stuck in the centre with a central file open on it.",
+     "squares": [],
+     "computer": "enemyKingStuckInCenter"
+    },
+    {
+     "from": "bestMove",
+     "kind": "complex",
+     "text": "Their light squares are weak: four squares are holes no bishop of theirs covers. Your bishop can work on them.",
+     "squares": [],
+     "computer": "findColorComplexWeakness"
+    },
+    {
+     "from": "bestMove",
+     "kind": "complex",
+     "text": "Your dark squares are weak: with no bishop of that colour, no pawn or bishop of yours can cover d6 and a5.",
+     "squares": [
+      "a5",
+      "d6"
+     ],
+     "computer": "findColorComplexWeakness"
+    },
+    {
+     "from": "tempting",
+     "kind": "their-refuted",
+     "text": "c4 was tempting for them, but it fails: you play Bxc4+, they answer Nxc4 and you play Qxc4+ \u2014 you win a knight and a pawn for a bishop.",
+     "squares": [
+      "c4"
+     ],
+     "computer": "temptingOnBoard"
+    },
+    {
+     "from": "tempting",
+     "kind": "their-refuted",
+     "text": "Nf1 was the obvious try for them, but it doesn't hold up: you play Bc4+ and, two moves later, you play Qxf1 \u2014 you win a knight.",
+     "squares": [],
+     "computer": "temptingOnBoard"
+    },
+    {
+     "from": "tempting",
+     "kind": "their-refuted",
+     "text": "Ng2 was tempting for them, but it fails: you play Bc4+ and, three moves later, you play Qxg2 \u2014 you win a knight.",
+     "squares": [],
+     "computer": "temptingOnBoard"
+    }
+   ]
+  },
+  "endgame-attacks-part-2#3": {
+   "fen": "6k1/1q3pp1/5n1p/1p3P2/p2Qp3/2P1P1P1/1P5P/5BK1 w - - 0 29",
+   "top": {
+    "cp": -7,
+    "mate": null,
+    "best": "f1e2"
+   },
+   "facts": [
+    {
+     "from": "position",
+     "kind": "standing-bare",
+     "text": "Roughly balanced.",
+     "squares": []
+    },
+    {
+     "from": "position",
+     "kind": "speedrun-read",
+     "text": "Several moves are equally good for your next move \u2014 Be2, Kg2 or Qd8+. Not every move is a big decision. Save your time for the ones that are.",
+     "squares": [],
+     "computer": "depthClauses"
+    },
+    {
+     "from": "position",
+     "kind": "priority",
+     "text": "What's the priority here? \u2016\ue006 Their pawn on b5 is backward. The pawns beside it have gone past it, and your pawn covers the square in front of it. Aim at it: Be2 does. \u2016",
+     "squares": [
+      "b5"
+     ],
+     "computer": "buildPriorityFirst"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "The plan from here: break with c4 to open the position.",
+     "squares": [
+      "c4"
+     ],
+     "computer": "boardPlanFacts"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "You have a pawn break on c4 \u2014 the pawn levers are where the play comes from.",
+     "squares": [
+      "c4"
+     ],
+     "computer": "readPosition"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "They have a pawn break available on g6 \u2014 that is where their play comes from.",
+     "squares": [
+      "g6"
+     ],
+     "computer": "readPosition"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "Their b5 pawn is the key pawn: it guards a4, and if b5 drops, a4 goes with it.",
+     "squares": [
+      "a4",
+      "b5"
+     ],
+     "computer": "boardStructure"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "Your c-pawn can still guard d4. They can never guard d5 the same way, so that square stays a hole for them.",
+     "squares": [
+      "d4",
+      "d5"
+     ],
+     "computer": "boardStructure"
+    },
+    {
+     "from": "position",
+     "kind": "plan-steps",
+     "text": "Your plan from here: Qd4, Qc5 and then Be2, the pieces lining up on their pawn on b5.",
+     "squares": [
+      "b5"
+     ],
+     "computer": "planSteps"
+    },
+    {
+     "from": "tempting",
+     "kind": "refuted",
+     "text": "Bh3 is tempting here, but it fails: they play Qd5, you answer Bf1 and they play Qxf5 \u2014 they win a pawn.",
+     "squares": [],
+     "computer": "temptingOnBoard"
+    },
+    {
+     "from": "tempting",
+     "kind": "refuted-positional",
+     "text": "c4 is tempting here, but it doesn't hold up: your pieces reach fewer squares after this than after the better move.",
+     "squares": [
+      "c4"
+     ],
+     "computer": "boardReason"
+    },
+    {
+     "from": "bestMove",
+     "kind": "move-job",
+     "text": "You go Be2, which brings your bishop out.",
+     "squares": [],
+     "computer": "moveJob"
+    },
+    {
+     "from": "bestMove",
+     "kind": "fundamental",
+     "text": "You go Be2, which completes your development \u2014 every minor piece is out.",
+     "squares": [],
+     "computer": "computeMoveFundamentals"
+    },
+    {
+     "from": "bestMove",
+     "kind": "board-teacher",
+     "text": "You go Be2, which bears down on c4, backing your c-pawn's push there.",
+     "squares": [
+      "c4"
+     ],
+     "computer": "buildReviewMoveTeachingFact"
+    },
+    {
+     "from": "bestMove",
+     "kind": "tactic",
+     "text": "The knight on f6 is NOT free: the pawn on g7 guards it, and Qxf6 just trades your queen for a knight \u2014 so the line passes it by.",
+     "squares": [
+      "f6",
+      "g7"
+     ],
+     "computer": "explainTemptingCapture"
+    },
+    {
+     "from": "bestMove",
+     "kind": "judgement",
+     "text": "Your bishop on e2 is safe there, since nothing of theirs can hit it, and it can swing to b5 next.",
+     "squares": [
+      "b5",
+      "e2"
+     ],
+     "computer": "studentMoveStructure"
+    },
+    {
+     "from": "tempting",
+     "kind": "their-refuted",
+     "text": "Nd5 was the obvious try for them, but it doesn't hold up: you play Qxe4 \u2014 you win a pawn.",
+     "squares": [],
+     "computer": "temptingOnBoard"
+    }
+   ]
+  },
+  "mastering-the-queen-sacrifice#0": {
+   "fen": "b4rk1/5ppp/4pn2/1q1p4/1B2P3/1B3PQ1/NbP3PP/1R5K b - - 0 30",
+   "top": {
+    "cp": -39,
+    "mate": null,
+    "best": "f8c8"
+   },
+   "facts": [
+    {
+     "from": "position",
+     "kind": "standing",
+     "text": "Roughly balanced \u2014 they have the initiative.",
+     "squares": []
+    },
+    {
+     "from": "position",
+     "kind": "must-defend",
+     "text": "Their rook attacks your bishop on b2, and nothing defends it.",
+     "squares": [
+      "b2"
+     ],
+     "computer": "computeMustDefend"
+    },
+    {
+     "from": "position",
+     "kind": "key-moment",
+     "text": "Your move now: exactly two moves keep you level. The rest concede, so it's worth thinking it through.",
+     "squares": [],
+     "computer": "readCriticalMoment"
+    },
+    {
+     "from": "position",
+     "kind": "fundamental",
+     "text": "The plan here: take the half-open c-file, where the rook belongs \u2014 a rook needs an open file to reach their camp.",
+     "squares": [],
+     "computer": "strategicReason"
+    },
+    {
+     "from": "position",
+     "kind": "opp-think",
+     "text": "Before you pick a move: what is their last move doing? Here it hits your dark-squared bishop \u2014 answer that first, every time.",
+     "squares": [],
+     "computer": "liveMethodBeat"
+    },
+    {
+     "from": "position",
+     "kind": "priority",
+     "text": "What's the priority here? \u2016\ue001 Their pawn on c2 is isolated. No pawn beside it can defend it. Aim at it: Rc8 does. \u2016",
+     "squares": [
+      "c2"
+     ],
+     "computer": "buildPriorityFirst"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "The plan: put a rook on the a, b or c file. Then post a bishop on e3.",
+     "squares": [
+      "e3"
+     ],
+     "computer": "boardPlanFacts"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "Their knight on a2 is their problem piece, out on the rim, where it reaches only 3 squares, and keeping it bad is worth as much as winning a pawn.",
+     "squares": [
+      "a2"
+     ],
+     "computer": "readPosition"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "The b-file is open \u2014 that is where a rook wants to be.",
+     "squares": [],
+     "computer": "readPosition"
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "Their pawn on c2 is isolated \u2014 that is a long-term target worth playing against.",
+     "squares": [
+      "c2"
+     ],
+     "computer": "readPosition"
+    },
+    {
+     "from": "tempting",
+     "kind": "refuted",
+     "text": "Bb7 looks natural, but it doesn't work: they play Bxf8 and exd5 a move later, and you answer Nxf8 \u2014 they win a rook and a pawn for a bishop.",
+     "squares": [],
+     "computer": "temptingOnBoard"
+    },
+    {
+     "from": "tempting",
+     "kind": "refuted-positional",
+     "text": "Bc6 looks natural, but it isn't the move: your pieces reach fewer squares after this than after the better move.",
+     "squares": [],
+     "computer": "boardReason"
+    },
+    {
+     "from": "tempting",
+     "kind": "refuted-positional",
+     "text": "d4 is tempting here, but it doesn't hold up: the better move puts a rook on an open file.",
+     "squares": [
+      "d4"
+     ],
+     "computer": "boardReason"
+    },
+    {
+     "from": "bestMove",
+     "kind": "move-job",
+     "text": "You go Rc8, which takes your rook out of reach of their dark-squared bishop.",
+     "squares": [],
+     "computer": "moveJob"
+    },
+    {
+     "from": "bestMove",
+     "kind": "fundamental",
+     "text": "You go Rc8, which takes the half-open c-file, where the rook belongs.",
+     "squares": [],
+     "computer": "computeMoveFundamentals"
+    },
+    {
+     "from": "bestMove",
+     "kind": "fundamental",
+     "text": "You go Rc8, which saves the rook from their bishop on b4.",
+     "squares": [
+      "b4"
+     ],
+     "computer": "computeMoveFundamentals"
+    },
+    {
+     "from": "bestMove",
+     "kind": "board-teacher",
+     "text": "You go Rc8, which presses down the half-open c-file at their pawn on c2.",
+     "squares": [
+      "c2"
+     ],
+     "computer": "buildReviewMoveTeachingFact"
+    },
+    {
+     "from": "bestMove",
+     "kind": "aspect-their-weakness",
+     "text": "You play Rc8 \u2014 it takes c3 from their knight on a2, which has only c1 left.",
+     "squares": [
+      "a2",
+      "c1",
+      "c3"
+     ],
+     "computer": "pieceCage"
+    },
+    {
+     "from": "bestMove",
+     "kind": "tactic",
+     "text": "Notice the bishop on b4 is NOT free \u2014 it's guarded by the knight on a2, so Qxb4 just trades your queen for a bishop. That's why the line leaves it alone.",
+     "squares": [
+      "a2",
+      "b4"
+     ],
+     "computer": "explainTemptingCapture"
+    },
+    {
+     "from": "bestMove",
+     "kind": "plan-race",
+     "text": "You both wanted the open a-file, but only their rook could take it \u2014 it was theirs first.",
+     "squares": [],
+     "computer": "planRaceClause"
+    },
+    {
+     "from": "bestMove",
+     "kind": "contrast",
+     "text": "Your rook settles on c8, where no pawn of theirs can kick it, and no knight or bishop can hit it next move. On f8 the bishop on b4 was already hitting it.",
+     "squares": [
+      "b4",
+      "c8",
+      "f8"
+     ],
+     "computer": "outOfReach"
+    },
+    {
+     "from": "tempting",
+     "kind": "their-refuted",
+     "text": "Rxb2 looked natural for them, but it doesn't work: you play Qf1#.",
+     "squares": [],
+     "computer": "temptingOnBoard"
+    },
+    {
+     "from": "tempting",
+     "kind": "their-refuted",
+     "text": "Be1 was tempting for them, but it fails: you play Qf1#.",
+     "squares": [],
+     "computer": "temptingOnBoard"
+    },
+    {
+     "from": "tempting",
+     "kind": "their-refuted",
+     "text": "Nc1 looked natural for them, but it doesn't work: you play Qf1#.",
+     "squares": [],
+     "computer": "temptingOnBoard"
+    }
+   ]
+  }
+ },
+ "puzzles": {
+  "01qIp": {
+   "fen": "5rk1/p5pp/2ppp3/4p2R/4N1Q1/8/PPP3P1/1K6 b - - 0 22",
+   "answer": "Rf1+",
+   "themes": [
+    "backRankMate",
+    "endgame",
+    "mate",
+    "mateIn2",
+    "short"
+   ],
+   "facts": [
+    {
+     "from": "position",
+     "kind": "mate-pattern",
+     "text": "There is a forced mate here: the pattern is Back-Rank mate.",
+     "computer": "classifyMatePattern",
+     "squares": []
+    },
+    {
+     "from": "position",
+     "kind": "concept",
+     "text": "Their king has no square off the back rank, and the back rank can be invaded from f8 \u2014 a back-rank weakness leaves the king boxed in by its own pawns, so a rook or queen reaching the last rank is mate.",
+     "computer": "conceptForBoard",
+     "squares": [
+      "b1",
+      "f1",
+      "f8"
+     ],
+     "stakes": null
+    },
+    {
+     "from": "position",
+     "kind": "opp-think",
+     "text": "Run the question now \u2014 what are they threatening? They're after your d-pawn. Deal with that before your own plan.",
+     "computer": "liveMethodBeat",
+     "squares": [
+      "d6"
+     ],
+     "stakes": null
+    }
+   ]
+  },
+  "05XlR": {
+   "fen": "r1b1k1nr/pp1ppp1p/6pb/4P3/1qBP4/5Q2/PP1N1PPP/R1B1K2R b KQkq - 4 10",
+   "answer": "Bxd2+",
+   "themes": [
+    "advantage",
+    "opening",
+    "short"
+   ],
+   "facts": [
+    {
+     "from": "position",
+     "kind": "standing-bare",
+     "text": "You're winning.",
+     "squares": []
+    },
+    {
+     "from": "position",
+     "kind": "fundamental",
+     "text": "The plan here: remove the guard \u2014 the knight on d2 is all that holds the bishop on c4. A piece with one guard is only as safe as that guard.",
+     "computer": "strategicReason",
+     "squares": [
+      "d2",
+      "c4"
+     ],
+     "stakes": null
+    },
+    {
+     "from": "position",
+     "kind": "concept",
+     "text": "Their light-squared bishop has one guard, their knight. A piece with one guard is only as safe as that guard \u2014 take it or chase it, and what it guarded falls.",
+     "computer": "guardRemovalConcept",
+     "squares": [
+      "c4",
+      "d2"
+     ],
+     "stakes": null
+    },
+    {
+     "from": "position",
+     "kind": "king-read",
+     "text": "Look for a move that covers c1 \u2014 their king has to cross it to castle long.",
+     "computer": "depthClauses",
+     "squares": [
+      "d2",
+      "c1"
+     ],
+     "stakes": null
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "The plan from here is to seize the open c-file. Here's how: clear a path for a rook first: none of yours reaches the file in one move yet. Then double your rooks on it, so nothing can challenge them, and aim for the seventh rank, where a rook attacks their pawns from behind.",
+     "computer": "boardPlanFacts",
+     "squares": [],
+     "stakes": null
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "The plan: bring your knight and your light-squared bishop into the game, since development comes first. Then break with d6 to hit their pawn on e5.",
+     "computer": "boardPlanFacts",
+     "squares": [
+      "c8",
+      "g8",
+      "d6",
+      "e5"
+     ],
+     "stakes": null
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "You still have 2 minor pieces at home and they are ahead in development \u2014 the next move probably belongs to a piece, not a pawn.",
+     "computer": "readPosition",
+     "squares": [],
+     "stakes": null
+    }
+   ]
+  },
+  "08eyY": {
+   "fen": "rnb3k1/p3nRpp/2p5/2p5/2B1P3/2P5/PP4PP/R1Br2K1 w - - 1 17",
+   "answer": "Rf1+",
+   "themes": [
+    "crushing",
+    "discoveredAttack",
+    "discoveredCheck",
+    "master",
+    "middlegame",
+    "short"
+   ],
+   "facts": [
+    {
+     "from": "position",
+     "kind": "standing",
+     "text": "You're winning \u2014 you have the bishop pair.",
+     "squares": []
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "Your passed pawn on e4 is the trump here \u2014 push it and make them deal with the promotion.",
+     "computer": "structurePlanFact",
+     "squares": [
+      "e4"
+     ],
+     "stakes": null
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "The plan from here is to get your passed pawn on e4 promoting. It is four pushes from queening. Here's how: escort it with your king and pieces. Push it one safe square at a time, and every push brings it closer to promotion.",
+     "computer": "boardPlanFacts",
+     "squares": [
+      "e4"
+     ],
+     "stakes": null
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "Alongside that, aim to win their weak pawn on c6. Here's how: stack your rooks on its file and trade off its defenders: each one is tied to it. Count it: you don't hit it yet and they guard it twice \u2014 bring attackers until yours outnumber the guards.",
+     "computer": "boardPlanFacts",
+     "squares": [
+      "c6",
+      "c5"
+     ],
+     "stakes": null
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "On top of that, work to make your bishop pair count. Here's how: trade pawns to open the board and keep both bishops \u2014 on an open board two bishops outgun their knight and bishop.",
+     "computer": "boardPlanFacts",
+     "squares": [
+      "c4",
+      "c1"
+     ],
+     "stakes": null
+    },
+    {
+     "from": "position",
+     "kind": "structure-plan",
+     "text": "Your passed pawn on e4 is a long-term trump \u2014 every trade that clears its path makes it stronger.",
+     "computer": "readPosition",
+     "squares": [
+      "e4"
+     ],
+     "stakes": null
+    }
+   ]
+  }
+ }
+}

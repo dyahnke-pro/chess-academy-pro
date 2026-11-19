@@ -23,9 +23,9 @@ describe('readHabit', () => {
 });
 
 describe('the board read closes on it', () => {
-  it('composePositionRead ends on the habit, and never on a puzzle being solved', () => {
+  it('composePositionRead ends on the habit the read decider picks', () => {
     const src = readFileSync('src/services/positionReadComposer.ts', 'utf8');
-    expect(src).toMatch(/const habitLine = marks \? null : readHabit\(/);
+    expect(src).toMatch(/habitLine = decided\.habit;/);
     expect(src).toMatch(/\.\.\.readLines, habitLine \?\? ''\]/);
   });
 });
