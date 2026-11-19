@@ -1986,7 +1986,7 @@ export const BOARD_COMPUTERS = {
     computer: 'tacticInvariant',
     kind: 'rule',
     phase: ANY,
-    surfaces: { ...reviewFacetSurfaces(), weaknesses: { not: 'the rule of a motif, said beside a tactic: the tactic itself is the shot the record names (namedShotTags); a rule poses no question' } },
+    surfaces: { ...reviewFacetSurfaces(), learn: { wired: 'components/Coach/CoachTeachPage.tsx' }, weaknesses: { not: 'the rule of a motif, said beside a tactic: the tactic itself is the shot the record names (namedShotTags); a rule poses no question' } },
   },
   moveInfluence: {
     read: ({ fenBefore, fenAfter, san, student }, fact) => safe(() => {

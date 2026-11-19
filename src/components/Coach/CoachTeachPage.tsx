@@ -245,7 +245,7 @@ import { parseEvalTable, pieceQualityLines } from '../../services/pieceValueRead
 
 import { scaleGap, packageForRegister } from '../../services/hintRegister';
 import { stepBothArcs, withAnnouncement, planFromUci, tacticWord, seatedTacticLine, pinConsequence, forkConsequence, type ArcEvent } from '../../services/lookaheadPlan';
-import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
+import { definitionKey } from '../../services/conceptEngine';
 import { backwardLook, saidSlipCp, slipSpoken, lastCoachVerdictDecline, lookConcession, priorMoveLeadingTo, replyKeptWinOf, secondReadsOf } from '../../services/backwardLook';
 import { learnFundamentalVerdict } from '../../services/learnFundamentalNarration';
 import { FUNDAMENTAL_TAG, type FundamentalId } from '../../services/principleAttribution';
@@ -8723,9 +8723,9 @@ export function CoachTeachPage({ mode }: {
     const key = definitionKey(type);
     const story = learnMemRef.current.story;
     if (story.heard(fen).has(key)) return '';
-    const inv = tacticInvariant(type);
-    if (!inv) return '';
-    const text = `Remember — ${inv.full}`;
+    const rule = readBoard('tacticRule', { fen, type });
+    if (!rule) return '';
+    const text = rule.text;
     story.offer(fen, { text, claims: [key] });
     return ` ${text}`;
   };

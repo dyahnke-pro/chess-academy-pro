@@ -48,7 +48,7 @@ export function isGenuine(reason: string): boolean {
  *  (the computer is read by a surface's own producer and not yet by the one
  *  fact set or the composer). Lower a ceiling when you open one; never raise it. */
 const LOCK_CEILING: Record<Exclude<CoachSurface, 'weaknesses'>, number> = {
-  learn: 53, review: 30, lesson: 45, play: 64, chat: 58, tactics: 88, think: 72,
+  learn: 52, review: 30, lesson: 45, play: 64, chat: 58, tactics: 88, think: 72,
 };
 
 /** BOTH WAYS (David 2026-11-19: "Make sure all computers work both ways"):
@@ -165,7 +165,7 @@ const DIRECT_CALL_DEBT: Record<string, ReadonlyArray<string>> = {
   'coach/chatTurnAnswers.ts': ['computeMustDefend', 'readPosition'],
   'components/Coach/CoachGamePage.tsx': ['scanUpcomingTactics'],
   'components/Coach/CoachGameReview.tsx': ['intentWithFallback', 'renderThesis'],
-  'components/Coach/CoachTeachPage.tsx': ['buildPriorityFirst', 'buildOpponentIntent', 'tacticInvariant', 'studentMovePoint', 'intentWithFallback', 'openingAnnouncementForGame', 'theirOpeningVerdict', 'structureNamingLine', 'pieceQualityLines', 'opponentGapClause', 'buildRejectedTempting', 'characterTurn', 'buildCausalChain', 'payoffFor', 'openingBreak', 'backwardLook', 'learnFundamentalVerdict', 'studentMovePointFact', 'moveOrder', 'learnMoveReason', 'kingPawnUnderFire', 'cheaperAttackerHit', 'gambitPoint', 'prizeTeaching', 'temptingTurnClause', 'uncertaintyClause', 'candidateCompareRead', 'heldFoundText', 'slipAnswerText', 'buildPlayCommentary', 'detectBehaviors', 'buildPositionalRead'],
+  'components/Coach/CoachTeachPage.tsx': ['buildPriorityFirst', 'buildOpponentIntent', 'studentMovePoint', 'intentWithFallback', 'openingAnnouncementForGame', 'theirOpeningVerdict', 'structureNamingLine', 'pieceQualityLines', 'opponentGapClause', 'buildRejectedTempting', 'characterTurn', 'buildCausalChain', 'payoffFor', 'openingBreak', 'backwardLook', 'learnFundamentalVerdict', 'studentMovePointFact', 'moveOrder', 'learnMoveReason', 'kingPawnUnderFire', 'cheaperAttackerHit', 'gambitPoint', 'prizeTeaching', 'temptingTurnClause', 'uncertaintyClause', 'candidateCompareRead', 'heldFoundText', 'slipAnswerText', 'buildPlayCommentary', 'detectBehaviors', 'buildPositionalRead'],
   'components/Tactics/PatternSchoolPage.tsx': ['detectTactics'],
   'hooks/usePhaseNarration.ts': ['renderThesis', 'speakDeepestLookahead'],
 };
@@ -261,6 +261,14 @@ describe('one coach, unlocked', () => {
       }
     }
     expect(bad).toEqual([]);
+    // A debt entry is a call still made: one paid off leaves the list, so the
+    // debt can only fall and never sits there allowing a call back in.
+    const stale: string[] = [];
+    for (const [rel, names] of Object.entries(DIRECT_CALL_DEBT)) {
+      const made = directCalls(read(rel));
+      for (const n of names) if (!made.includes(n)) stale.push(`${rel}: ${n}`);
+    }
+    expect(stale).toEqual([]);
     // Named logic-only calls are inputs, never words.
     for (const name of LOGIC_ONLY) expect(name in COMPUTER_CATALOG, name).toBe(true);
   });
