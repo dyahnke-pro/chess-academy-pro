@@ -8,6 +8,10 @@ import { inaccessibleHole } from '../../src/services/inaccessibleHole';
 import { harmlessWeakPawns } from '../../src/services/harmlessWeakPawns';
 import { wingWithoutPieces } from '../../src/services/wingWithoutPieces';
 import { kingBoxMove } from '../../src/services/kingBox';
+import { noSafeChecks } from '../../src/services/noSafeChecks';
+import { promotionWithCheck } from '../../src/services/promotionWithCheck';
+import { centreDuo } from '../../src/services/centreDuo';
+import { kingRace } from '../../src/services/kingRace';
 
 const SRC = process.argv[2] ?? 'audit-reports/danya-havecheck/board-facts-2026-11-19.jsonl';
 interface Board { id: string; fen: string; best: string; lines: { moves: string[]; cp: number | null; mate: number | null }[] }
@@ -23,6 +27,13 @@ const COMPUTERS: Record<string, { concept: string; run: (b: Board) => { text: st
   inaccessibleHole: { concept: 'inaccessibleHole', run: (b) => inaccessibleHole(b.fen, b.best, turn(b.fen)) },
   wingWithoutPieces: { concept: 'fileNeedsPiece', run: (b) => wingWithoutPieces(b.fen, b.best) },
   kingBoxMove: { concept: 'rookMate', run: (b) => kingBoxMove(b.fen, b.best) },
+  noSafeChecks: { concept: 'noChecks', run: (b) => noSafeChecks(b.fen, turn(b.fen)) },
+  promotionWithCheck: { concept: 'promotionOrder', run: (b) => {
+    const reply = b.lines[0]?.moves[1] ?? null;
+    return promotionWithCheck(b.fen, b.best, reply);
+  } },
+  centreDuo: { concept: 'heldWeakPawns', run: (b) => centreDuo(b.fen, turn(b.fen)) },
+  kingRace: { concept: 'kingRace', run: (b) => kingRace(b.fen, turn(b.fen)) },
   harmlessWeakPawns: { concept: 'heldWeakPawns', run: (b) => harmlessWeakPawns(b.fen, turn(b.fen), b.lines[0] ?? null) },
 };
 for (const [name, c] of Object.entries(COMPUTERS)) {

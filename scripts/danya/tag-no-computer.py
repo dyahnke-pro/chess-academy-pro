@@ -246,7 +246,8 @@ cnt = Counter(r['group'] for r in rows)
 concepts = defaultdict(set)
 for r in rows:
     if r['group'] == 'E': concepts[r['concept']].add(r['board'])
-BUILT = {'centre': 'pawnCentre.ts', 'heldWeakPawns': 'harmlessWeakPawns.ts', 'inaccessibleHole': 'inaccessibleHole.ts', 'fileNeedsPiece': 'wingWithoutPieces.ts', 'rookMate': 'kingBox.ts'}
+BUILT = {'centre': 'pawnCentre.ts', 'heldWeakPawns': 'harmlessWeakPawns.ts', 'inaccessibleHole': 'inaccessibleHole.ts', 'fileNeedsPiece': 'wingWithoutPieces.ts', 'rookMate': 'kingBox.ts', 'noChecks': 'noSafeChecks.ts', 'promotionOrder': 'promotionWithCheck.ts', 'kingRace': 'kingRace.ts'}
+# how-to-ruin#3's deformed centre against a duo is read by centreDuo.ts (board tagged under heldWeakPawns).
 out = {'date': '2026-11-19', 'source': SRC, 'counts': dict(cnt),
        'eConcepts': sorted([{'concept': k, 'boards': sorted(v), 'n': len(v), 'builtAs': BUILT.get(k)} for k, v in concepts.items()], key=lambda x: -x['n']),
        'rows': rows}
