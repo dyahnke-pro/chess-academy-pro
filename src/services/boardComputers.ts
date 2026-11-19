@@ -4267,7 +4267,9 @@ export const BOARD_COMPUTERS = {
       // A count that says the piece has to move is the tempo the move that
       // attacked it gained: one claim (`ideaClaim('tempo')`), said once
       // (composerSaysOnce, g4 against the bishop on f5).
-      return fact({ key: `count:${text}`, claims: [`count:${fen.split(' ')[0]}`, ...reads.filter((r) => r.tempo).map((r) => ideaClaim('tempo', [r.square]))], text, proof: NO_PROOF.description, squares: [], stakes: null,
+      return fact({ key: `count:${text}`, claims: [`count:${fen.split(' ')[0]}`, ...reads.filter((r) => r.tempo).map((r) => ideaClaim('tempo', [r.square]))], text, proof: NO_PROOF.description,
+        // Every piece the count names is lit (a named square is a marked one).
+        squares: reads.map((r) => r.square), stakes: null,
         seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
     }),
     computer: 'attackerDefenderCount',

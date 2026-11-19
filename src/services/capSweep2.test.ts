@@ -34,6 +34,11 @@ describe('cap sweep 2 — every candidate is returned', () => {
     expect(out?.text).toMatch(/bishop on h5/);
   });
 
+  it('every piece the count names is lit', () => {
+    const out = readBoard('count', { fen: '4k3/8/8/n6b/8/8/8/R3K2R w - - 0 1', student: 'w' });
+    expect(out?.squares).toEqual(expect.arrayContaining(['a5', 'h5']));
+  });
+
   it('the count says the habit once, not once a piece (the human voice)', () => {
     const out = readBoard('count', { fen: '4k3/8/8/n6b/8/8/8/R3K2R w - - 0 1', student: 'w' });
     expect(out?.text.match(/count the attackers and defenders/gi)).toHaveLength(1);
