@@ -23,26 +23,24 @@ vi.mock('../services/voiceService', () => ({
   },
 }));
 
+// The read is ENGINE-BACKED (477061d, "one decider for Read this position"):
+// with no line from the engine the board read says nothing, and the old phase
+// sentence that used to fill it is gone by design. So the mocked engine
+// answers with a real line — the first legal move on the board it is asked
+// about — and every test reads a real, computed read.
+const firstLine = async (fen: string) => {
+  const { Chess } = await import('chess.js');
+  const m = new Chess(fen).moves({ verbose: true })[0];
+  return {
+    bestMove: m ? `${m.from}${m.to}` : '', evaluation: 20, isMate: false, mateIn: null, depth: 16,
+    topLines: m ? [{ rank: 1, evaluation: 20, mate: null, moves: [`${m.from}${m.to}`] }] : [],
+    nodesPerSecond: 0,
+  };
+};
 vi.mock('../services/stockfishEngine', () => ({
   stockfishEngine: {
-    analyzePosition: vi.fn().mockResolvedValue({
-      bestMove: 'e2e4',
-      evaluation: 0,
-      isMate: false,
-      mateIn: null,
-      depth: 16,
-      topLines: [],
-      nodesPerSecond: 0,
-    }),
-    analyzeWithBudget: vi.fn().mockResolvedValue({
-      bestMove: 'e2e4',
-      evaluation: 0,
-      isMate: false,
-      mateIn: null,
-      depth: 16,
-      topLines: [],
-      nodesPerSecond: 0,
-    }),
+    analyzePosition: vi.fn((fen: string) => firstLine(fen)),
+    analyzeWithBudget: vi.fn((fen: string) => firstLine(fen)),
     evalBoard: vi.fn().mockResolvedValue(null),
   },
   // The hook reads the active engine variant to size the Stockfish budget
@@ -95,6 +93,14 @@ import { stockfishEngine } from '../services/stockfishEngine';
 
 // ── Helpers ───────────────────────────────────────────────────────────────
 
+/** The hook's OWN engine reads of `fen` — the read's tempting moves are read
+ *  on the boards after them (`boardReadFacts`), which are other FENs. */
+const callsOn = (fen: string): number => vi.mocked(stockfishEngine.analyzeWithBudget).mock.calls.filter((c) => c[0] === fen).length;
+/** A full read is ~19 engine-backed reads and the read's data loaded on first
+ *  use (~5 s cold under vitest, ~1.7 s warm): the waits allow for it. */
+const READ_WAIT = { timeout: 20_000 };
+vi.setConfig({ testTimeout: 30_000 });
+
 function defaultArgs(): Parameters<typeof usePositionNarration>[0] {
   return {
     fen: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
@@ -134,19 +140,23 @@ describe('usePositionNarration', () => {
     // something true to say. (After 1.e4 alone it rightly says only the phase —
     // no lever talk with the minors at home, hand walk 2026-09-27.)
     const ITALIAN = 'r1bq1rk1/ppp1bppp/2np1n2/4p3/2B1P3/2PP1N2/PP3PPP/RNBQ1RK1 w - - 0 7';
+    // The engine's line here: h3 first (a2-a3, the first legal move, says
+    // nothing a read would speak of).
+    vi.mocked(stockfishEngine.analyzeWithBudget).mockResolvedValueOnce({
+      bestMove: 'h2h3', evaluation: 20, isMate: false, mateIn: null, depth: 16, nodesPerSecond: 1,
+      topLines: [{ rank: 1, evaluation: 20, moves: ['h2h3'], mate: null }],
+    } as unknown as Awaited<ReturnType<typeof stockfishEngine.analyzeWithBudget>>);
     const { result } = renderHook(() => usePositionNarration({ ...defaultArgs(), fen: ITALIAN }));
 
     act(() => {
       void result.current.narrate();
     });
 
-    await waitFor(() => expect(voiceCalls.length).toBe(1));
+    await waitFor(() => expect(voiceCalls.length).toBe(1), READ_WAIT);
     const call = voiceCalls[0];
-    // The phase is a computed sentence, present on every read — read off the
-    // BOARD (both sides castled here), never off the ply count (one-coach P2).
-    expect(call.facts).toMatch(/^(Still in the opening|This is the middlegame now)\./);
-    // The positional read (readPosition) is computed on the board, both sides.
-    expect(call.facts.length).toBeGreaterThan('This is the middlegame now.'.length);
+    // The read is computed on the board (the read decider's facts, Danya's
+    // order) before the phraser sees a word.
+    expect(call.facts.trim().length).toBeGreaterThan(0);
     // ONE seat end to end: the phraser is never asked to turn "they" into
     // "I" (on prod it turned it into "you" — a whose-piece inversion).
     expect(call.opts.perspective).toEqual({ mode: 'student', studentSide: 'white' });
@@ -166,7 +176,7 @@ describe('usePositionNarration', () => {
     act(() => {
       void result.current.narrate();
     });
-    await waitFor(() => expect(voiceCalls.length).toBe(1));
+    await waitFor(() => expect(voiceCalls.length).toBe(1), READ_WAIT);
 
     const phrased = 'Okay, still in the opening. Your bishop pair is your asset.';
     act(() => {
@@ -194,7 +204,7 @@ describe('usePositionNarration', () => {
     act(() => {
       void result.current.narrate();
     });
-    await waitFor(() => expect(voiceCalls.length).toBe(1));
+    await waitFor(() => expect(voiceCalls.length).toBe(1), READ_WAIT);
 
     // voiceFacts itself serves the raw facts on a provider failure; the hook
     // must ALSO survive the promise rejecting outright (a thrown error above
@@ -204,8 +214,11 @@ describe('usePositionNarration', () => {
     });
 
     await waitFor(() => expect(speakRecords.length).toBe(1));
-    expect(speakRecords[0].text).toMatch(/Still in the opening\./);
-    expect(result.current.currentText).toMatch(/Still in the opening\./);
+    // The computed read, in the raw register (`speakableFacts`).
+    const raw = voiceCalls[0].facts.replace(/\s{2,}/g, ' ').trim();
+    expect(raw.length).toBeGreaterThan(0);
+    expect(result.current.currentText).toBe(raw);
+    expect(raw.startsWith(speakRecords[0].text.trim())).toBe(true);
     expect(result.current.error).toContain('provider exploded');
   });
 
@@ -215,7 +228,7 @@ describe('usePositionNarration', () => {
     act(() => {
       void result.current.narrate();
     });
-    await waitFor(() => expect(voiceCalls.length).toBe(1));
+    await waitFor(() => expect(voiceCalls.length).toBe(1), READ_WAIT);
 
     act(() => {
       voiceResolver?.('First narration text.');
@@ -239,7 +252,7 @@ describe('usePositionNarration', () => {
     act(() => {
       void result.current.narrate();
     });
-    await waitFor(() => expect(voiceCalls.length).toBe(1));
+    await waitFor(() => expect(voiceCalls.length).toBe(1), READ_WAIT);
 
     act(() => {
       result.current.cancel();
@@ -256,7 +269,7 @@ describe('usePositionNarration', () => {
     act(() => {
       void result.current.narrate();
     });
-    await waitFor(() => expect(voiceCalls.length).toBe(1));
+    await waitFor(() => expect(voiceCalls.length).toBe(1), READ_WAIT);
 
     act(() => {
       result.current.cancel();
@@ -292,7 +305,7 @@ describe('usePositionNarration', () => {
 
       // Board-unfreeze invariant is unchanged — but the button is NOT dead: the
       // computed read is spoken in the raw register instead of "timed out".
-      expect(result.current.currentText).toMatch(/Still in the opening\./);
+      expect(result.current.currentText).toBe(voiceCalls[0].facts.replace(/\s{2,}/g, ' ').trim());
       expect(speakRecords.length).toBe(1);
       expect(auditCalls.some((c) => c.kind === 'llm-error' && /timed out/i.test(c.summary))).toBe(true);
       // The raw read is several sentences; each utterance waits on the last.
@@ -318,10 +331,10 @@ describe('usePositionNarration', () => {
     act(() => {
       void result.current.narrate();
     });
-    await waitFor(() => expect(voiceCalls.length).toBe(1));
+    await waitFor(() => expect(voiceCalls.length).toBe(1), READ_WAIT);
     voiceResolver?.('Opening look.');
     await waitFor(() => expect(speakRecords.length).toBe(1));
-    const firstCallCount = vi.mocked(stockfishEngine.analyzeWithBudget).mock.calls.length;
+    const firstCallCount = callsOn(defaultArgs().fen);
     expect(firstCallCount).toBe(1);
 
     // Finish first speak so the hook is idle again.
@@ -335,10 +348,10 @@ describe('usePositionNarration', () => {
     act(() => {
       void result.current.narrate();
     });
-    await waitFor(() => expect(voiceCalls.length).toBe(1));
+    await waitFor(() => expect(voiceCalls.length).toBe(1), READ_WAIT);
 
     // Stockfish NOT called again — cache hit.
-    expect(vi.mocked(stockfishEngine.analyzeWithBudget).mock.calls.length).toBe(firstCallCount);
+    expect(callsOn(defaultArgs().fen)).toBe(firstCallCount);
     expect(auditCalls.some((c) => c.kind === 'narration-stockfish-cache-hit')).toBe(true);
   });
 
@@ -352,24 +365,25 @@ describe('usePositionNarration', () => {
     act(() => {
       void result.current.narrate();
     });
-    await waitFor(() => expect(voiceCalls.length).toBe(1));
+    await waitFor(() => expect(voiceCalls.length).toBe(1), READ_WAIT);
     voiceResolver?.('one.');
     await waitFor(() => expect(speakRecords.length).toBe(1));
     speakRecords[0].resolve();
     await waitFor(() => expect(result.current.isNarrating).toBe(false));
 
-    const firstCallCount = vi.mocked(stockfishEngine.analyzeWithBudget).mock.calls.length;
+    const SICILIAN = 'rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2';
+    const firstCallCount = callsOn(SICILIAN);
     voiceResolver = null;
     voiceCalls.length = 0;
 
-    rerender({ ...firstArgs, fen: 'rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2' });
+    rerender({ ...firstArgs, fen: SICILIAN });
     act(() => {
       void result.current.narrate();
     });
-    await waitFor(() => expect(voiceCalls.length).toBe(1));
+    await waitFor(() => expect(voiceCalls.length).toBe(1), READ_WAIT);
 
     // New FEN → engine runs again, no cache-hit audit for THIS call.
-    expect(vi.mocked(stockfishEngine.analyzeWithBudget).mock.calls.length).toBe(firstCallCount + 1);
+    expect(callsOn(SICILIAN)).toBe(firstCallCount + 1);
   });
 });
 
@@ -387,7 +401,7 @@ describe('the COMPUTED CONCEPT reaches "Read this position" (P4c — a wire that
     } as unknown as Awaited<ReturnType<typeof stockfishEngine.analyzeWithBudget>>);
     const { result } = renderHook(() => usePositionNarration({ ...defaultArgs(), fen: FORK_FEN, pgn: '', moveNumber: 40, playerColor: 'white' }));
     act(() => { void result.current.narrate(); });
-    await waitFor(() => expect(voiceCalls.length).toBe(1), { timeout: 4000 });
+    await waitFor(() => expect(voiceCalls.length).toBe(1), READ_WAIT);
     expect(voiceCalls[0].facts, 'the concept clause never reached the phraser').toMatch(/a fork hits two targets at once/);
   });
 });
