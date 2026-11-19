@@ -3,10 +3,10 @@
  "source": "/home/user/urg-wt/audit-reports/danya-havecheck/ideas-labelled-2026-11-17.json",
  "counts": {
   "C": 51,
-  "A": 103,
+  "A": 104,
   "D": 28,
   "B": 26,
-  "E": 16
+  "E": 15
  },
  "eConcepts": [
   {
@@ -61,7 +61,7 @@
     "the-art-of-time-management#3"
    ],
    "n": 1,
-   "builtAs": null
+   "builtAs": "kingBox.ts"
   },
   {
    "concept": "promotionOrder",
@@ -1454,9 +1454,9 @@
    "idea": "Classic K+R mate: side checks push the king back a rank, then opposition and another check, to the back rank",
    "kind": "mate",
    "status": "missing",
-   "group": "E",
-   "reason": "K+R vs K mating method (box method) \u2014 technique computer",
-   "concept": "rookMate"
+   "group": "A",
+   "reason": "K+R vs K cut-off mating method (conceptEngine bareKingConcept, basic-mate)",
+   "existingComputer": "conceptEngine"
   },
   {
    "board": "the-art-of-time-management#3",

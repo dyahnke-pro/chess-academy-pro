@@ -159,7 +159,7 @@ T = {
 151:('B','plan to break the f-pawn so the queen hits f2 — engine line / planSteps','planSteps'),
 152:('A','three pieces in the attack = kingSiege','kingSiege'),
 153:('C','practical time management',None),
-154:('E','K+R vs K mating method (box method) — technique computer','rookMate'),
+154:('A','K+R vs K cut-off mating method (conceptEngine bareKingConcept, basic-mate)','conceptEngine'),
 155:('E','K+R box method','rookMate'),
 156:('C','habit: drill basic mates',None),
 157:('B','39.Rd8+ deflection — engine line','depthClauses'),
@@ -246,7 +246,7 @@ cnt = Counter(r['group'] for r in rows)
 concepts = defaultdict(set)
 for r in rows:
     if r['group'] == 'E': concepts[r['concept']].add(r['board'])
-BUILT = {'centre': 'pawnCentre.ts', 'heldWeakPawns': 'harmlessWeakPawns.ts', 'inaccessibleHole': 'inaccessibleHole.ts', 'fileNeedsPiece': 'wingWithoutPieces.ts'}
+BUILT = {'centre': 'pawnCentre.ts', 'heldWeakPawns': 'harmlessWeakPawns.ts', 'inaccessibleHole': 'inaccessibleHole.ts', 'fileNeedsPiece': 'wingWithoutPieces.ts', 'rookMate': 'kingBox.ts'}
 out = {'date': '2026-11-19', 'source': SRC, 'counts': dict(cnt),
        'eConcepts': sorted([{'concept': k, 'boards': sorted(v), 'n': len(v), 'builtAs': BUILT.get(k)} for k, v in concepts.items()], key=lambda x: -x['n']),
        'rows': rows}

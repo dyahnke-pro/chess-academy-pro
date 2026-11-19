@@ -7,6 +7,7 @@ import { tensionKept } from '../../src/services/tensionRelease';
 import { inaccessibleHole } from '../../src/services/inaccessibleHole';
 import { harmlessWeakPawns } from '../../src/services/harmlessWeakPawns';
 import { wingWithoutPieces } from '../../src/services/wingWithoutPieces';
+import { kingBoxMove } from '../../src/services/kingBox';
 
 const SRC = process.argv[2] ?? 'audit-reports/danya-havecheck/board-facts-2026-11-19.jsonl';
 interface Board { id: string; fen: string; best: string; lines: { moves: string[]; cp: number | null; mate: number | null }[] }
@@ -21,6 +22,7 @@ const COMPUTERS: Record<string, { concept: string; run: (b: Board) => { text: st
   // A move fact: read on the engine's best move of every board.
   inaccessibleHole: { concept: 'inaccessibleHole', run: (b) => inaccessibleHole(b.fen, b.best, turn(b.fen)) },
   wingWithoutPieces: { concept: 'fileNeedsPiece', run: (b) => wingWithoutPieces(b.fen, b.best) },
+  kingBoxMove: { concept: 'rookMate', run: (b) => kingBoxMove(b.fen, b.best) },
   harmlessWeakPawns: { concept: 'heldWeakPawns', run: (b) => harmlessWeakPawns(b.fen, turn(b.fen), b.lines[0] ?? null) },
 };
 for (const [name, c] of Object.entries(COMPUTERS)) {
