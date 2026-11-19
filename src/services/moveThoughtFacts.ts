@@ -785,7 +785,9 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'tactic', weight: 60 });
     }
     for (const f of readBoardAll('chainBase', { fenBefore: i.fenBefore, san: i.san, student })) {
-      facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: f.stakes ? 'pressure' : 'guard', weight: 50 });
+      // A hit on their base wins it (staked); a guard of your own carries a
+      // NoStakes marker, which is an object — truthiness cannot tell them apart.
+      facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: isStaked(f.stakes) ? 'pressure' : 'guard', weight: 50 });
     }
     // THE S4 KING GROUP's move reads (Danya's speedruns): the queen hunted or
     // saved, the second attacker that makes the count, the piece put out of
