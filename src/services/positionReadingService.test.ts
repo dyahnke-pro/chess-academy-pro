@@ -995,3 +995,16 @@ describe('findPawnBreaks — never a break that opens a discovered check', () =>
     expect(findPawnBreaks('r5k1/p2p1ppp/b7/1ppnr3/3pP3/PB1P1N2/1PPb1PPP/R4RK1 b - - 0 17')).toContain('f5');
   });
 });
+
+// Danya, weak squares who cares #0: "the f5 square is horribly weak; White's
+// knight is heading there" — a rim knight one jump from a hole is on its way.
+describe('findPieceQuality — a rim knight heading for a hole is not a problem piece', () => {
+  it('weak squares who cares #0: the h4 knight jumps to f5', () => {
+    const notes = findPieceQuality('r1bq1rk1/pp6/n2p1p1b/2pPp2p/2P1P1nN/P1N3B1/1P2BPP1/R2Q1RK1 b - - 0 18');
+    expect(notes.find((n) => n.square === 'h4')).toBeUndefined();
+  });
+  it('negative control: a rim knight with no hole to reach is still named', () => {
+    const notes = findPieceQuality('r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/N7/PPPP1PPP/R1BQKBNR w KQkq - 4 4');
+    expect(notes.find((n) => n.square === 'a3')?.kind).toBe('rim-knight');
+  });
+});

@@ -649,6 +649,33 @@ function rimKnightWorks(chess: Chess, square: Square, color: Color): boolean {
   return false;
 }
 
+/** A rim knight one jump from a hole in THEIR half — a square no pawn of
+ *  theirs can ever challenge, empty of its own side's pieces, that it reaches
+ *  without losing material (SEE). It is on its way, not stuck (Danya, weak
+ *  squares who cares #0: "the f5 square is horribly weak; White's knight is
+ *  heading there" — the read called the h4 knight a problem piece). */
+function rimKnightHeading(chess: Chess, square: Square, color: Color): boolean {
+  const enemy: Color = color === 'w' ? 'b' : 'w';
+  const f = square.charCodeAt(0) - 97;
+  const r = Number(square[1]);
+  for (const [df, dr] of KNIGHT_STEPS) {
+    const tf = f + df;
+    const tr = r + dr;
+    if (tf < 0 || tf > 7 || tr < 1 || tr > 8) continue;
+    if (color === 'w' ? tr < 5 : tr > 4) continue;
+    const to = `${String.fromCharCode(97 + tf)}${tr}` as Square;
+    const occ = chess.get(to);
+    if (occ && occ.color === color) continue;
+    if (!noPawnCanChallenge(chess, to, color)) continue;
+    const probe = new Chess(chess.fen());
+    probe.remove(square);
+    if (occ) probe.remove(to);
+    probe.put({ type: 'n', color }, to);
+    if (legalSeeGainFor(probe.fen(), to, enemy) <= 0) return true;
+  }
+  return false;
+}
+
 export function findPieceQuality(fen: string): PieceQualityNote[] {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return []; }
@@ -673,7 +700,7 @@ export function findPieceQuality(fen: string): PieceQualityNote[] {
         // and a knight bearing on the enemy king or winning a piece is doing
         // its job where it stands.
         if (file === 0 || file === 7) {
-          if (!rimKnightWorks(chess, square, color)) notes.push({ square, piece: 'n', color, quality: 'bad', kind: 'rim-knight', reason: 'knight on the rim' });
+          if (!rimKnightWorks(chess, square, color) && !rimKnightHeading(chess, square, color)) notes.push({ square, piece: 'n', color, quality: 'bad', kind: 'rim-knight', reason: 'knight on the rim' });
           continue;
         }
         // A PINNED PIECE IS NOT WORKING (Danya's article boards, 2026-11-18:
