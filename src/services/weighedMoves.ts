@@ -639,7 +639,10 @@ export function standingRefutations(args: {
     if ((real < TEMPTING_P_FLOOR && !plan) || read.mate !== null) continue;
     const tryCp = seatCp(read, mover);
     const cost = bestCp - tryCp;
-    if (cost < SHIFT_COST_CP) continue;
+    // The plan's direct try is weighed against the plan, not the eye: it
+    // "leads nowhere" well before it costs a pawn (his Qc5 at −0.85, "leads
+    // nowhere after …Qd7!") — the result still has to change.
+    if (cost < (plan ? PLAN_TRY_COST_CP : SHIFT_COST_CP)) continue;
     const shift = resultShift(bestCp, tryCp, mine);
     if (!shift) continue;
     const m = moveOn(args.fen, c.uci);
@@ -657,7 +660,8 @@ export function standingRefutations(args: {
     if (net !== null && net < 0) continue;
     const reply = `${mover === 'w' ? '…' : ''}${sans[1]}`;
     // NO REASON, NO REFUTATION: his every rule-out says why it falls short.
-    const mech = tryMechanism(args.fen, m, sans, best.san, w.own, w.other);
+    // The plan's try has its own reason: what became of the target.
+    const mech = tryMechanism(args.fen, m, sans, best.san, w.own, w.other) ?? (plan ? targetOutcome(args.fen, sans, plan.target, mover, w.other) : null);
     if (!mech) continue;
     const stem = stemKeyOf(`${args.fen}|result|${c.uci}`);
     const lead = plan
@@ -676,6 +680,29 @@ export function standingRefutations(args: {
 
 /** A pawn, the tempting move's own bar: a smaller drop is the band's edge, not a cost. */
 export const SHIFT_COST_CP = TEMPTING_COST_CP;
+/** The plan's direct try: under a pawn, as long as the result changes. */
+export const PLAN_TRY_COST_CP = 40;
+
+/** WHAT BECAME OF THE TARGET down the try's line: taken by the mover ("it wins
+ *  the pawn on b5, and that is all it does"), or still standing ("the pawn on
+ *  e6 still stands"). Read off the line's own moves. */
+function targetOutcome(fen: string, sans: readonly string[], target: string, mover: Color, other: 'your' | 'their'): string | null {
+  if (!/^[a-h][1-8]$/.test(target)) return null;
+  let b: Chess;
+  try { b = new Chess(fen); } catch { return null; }
+  const piece = b.get(target as Square);
+  if (!piece || piece.type !== 'p' || piece.color === mover) return null;
+  let taken = false;
+  try {
+    for (const s of sans) {
+      const m = b.move(s);
+      if (m.color === mover && m.to === target && m.captured) { taken = true; break; }
+    }
+  } catch { return null; }
+  return taken
+    ? `It wins ${other} pawn on ${target}, and that is all it does.`
+    : `${cap(other)} pawn on ${target} still stands.`;
+}
 
 // ── (L) TWO GOOD MOVES, AND WHAT SEPARATES THEM ─────────────────────────────
 

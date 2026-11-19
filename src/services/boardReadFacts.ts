@@ -16,7 +16,8 @@
  */
 import { Chess } from 'chess.js';
 import { computePositionFacts, type PositionFactsInput } from './positionFacts';
-import { temptingOnBoard, standingRefutations, candidateMoves, TEMPTING_COST_CP, type WeighRead } from './weighedMoves';
+import { planTries } from './tryCandidates';
+import { temptingOnBoard, standingRefutations, candidateMoves, TEMPTING_COST_CP, type WeighRead, type ConsideredTries } from './weighedMoves';
 import { seatCp } from './winChance';
 import { foldScore } from './humanReply';
 import { boardReason } from './positionalReason';
@@ -194,7 +195,14 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
   // central counterplay and a dead bishop".
   if (!i.withhold && i.readTempting && mine) {
     const tempting: WeighRead[] = [{ evaluation: top.evaluation, mate: top.mate, moves: top.moves }];
-    for (const c of candidateMoves(i.fen, i.rating, { played: null, scored: null })) {
+    // THE PLAN'S DIRECT TRY (WO-PICTURE-01 P2): the frontal hit on their weak
+    // pawn, the storm at their king — weighed for the plan, not for the eye,
+    // so it is read whatever a player at the rating would pick.
+    const plan = planTries(i.fen);
+    const considered: ConsideredTries = new Map(plan.map((t) => [t.uci, { why: 'plan' as const, target: t.target }]));
+    const weighed = candidateMoves(i.fen, i.rating, { played: null, scored: null });
+    const toRead = [...weighed.map((c) => ({ uci: c.uci, from: c.from, to: c.to })), ...plan.filter((t) => !weighed.some((c) => c.uci === t.uci)).map((t) => ({ uci: t.uci, from: t.uci.slice(0, 2), to: t.uci.slice(2, 4) }))];
+    for (const c of toRead) {
       if (c.uci === top.moves[0]) continue;
       const after = new Chess(i.fen);
       try { after.move({ from: c.from, to: c.to, promotion: c.uci[4] }); } catch { continue; }
@@ -202,11 +210,11 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
       const t = (await i.read(after.fen()).catch(() => null))?.[0];
       if (t) tempting.push({ evaluation: t.evaluation, mate: t.mate, moves: [c.uci, ...t.moves], earlier: t.earlier?.moves ? [c.uci, ...t.earlier.moves] : null });
     }
-    const refuted = temptingOnBoard({ fen: i.fen, student: i.studentColor, rating: i.rating, reads: tempting, priorMove: null });
+    const refuted = temptingOnBoard({ fen: i.fen, student: i.studentColor, rating: i.rating, reads: tempting, priorMove: null, considered });
     for (const t of refuted) facts.push({ from: 'tempting', kind: 'refuted', text: t.text, computer: 'temptingOnBoard', squares: [t.uci.slice(0, 2), t.uci.slice(2, 4)] });
     // A check or capture that wins nothing ("Nxe7+ Rxe7 gives no relief"):
     // the same computer's forcing-move shape, never beside its material refutation.
-    const empty = standingRefutations({ fen: i.fen, student: i.studentColor, rating: i.rating, reads: tempting }).filter((t) => !refuted.some((r) => r.uci === t.uci));
+    const empty = standingRefutations({ fen: i.fen, student: i.studentColor, rating: i.rating, reads: tempting, considered }).filter((t) => !refuted.some((r) => r.uci === t.uci));
     for (const t of empty) facts.push({ from: 'tempting', kind: 'refuted', text: t.text, computer: 'temptingOnBoard', squares: t.squares });
     // One rule-out a move: a try said by what it does to the result already
     // carries its board reason (`tryMechanism` reads `boardReason` too).
