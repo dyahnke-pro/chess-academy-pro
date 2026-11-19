@@ -26,6 +26,8 @@ describe('boardComputers — the one registry', () => {
           structureMove: /studentMoveStructure\(/, structureTheirMove: /theirMoveStructure\(/,
           // Learn packs the priority to the hint dial's register, so it calls the computer itself.
           priorityFirst: /buildPriorityFirst\(/,
+          // The record files these through the computer's own function.
+          castleByHand: /castleByHand\(/, kingSquares: /kingSquareOutcome\(/, tacticGeometry: /geometryMotif\(/,
         };
         if (!viaRegistry && !(fnByComputer[id]?.test(code))) bad.push(`${id}/${surface}: ${ans.wired} never calls it`);
       }
