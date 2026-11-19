@@ -26,6 +26,7 @@ import { seatBare } from '../utils/seatPieces';
 import type { StockfishAnalysis, TacticType } from '../types';
 import { computeCriticality, criticalitySignalsFromAnalysis, type CriticalityRead } from './criticality';
 import { Chess } from 'chess.js';
+import { sharpGap, SHARP_GAP_CP } from './positionCharacter';
 import type { GamePromise } from './learnBoardTeaching';
 import { isForcedReply, MOVE_FUNDAMENTAL_TAG } from './moveFundamentals';
 import { isTheoryLine } from './bookDeparture';
@@ -929,7 +930,13 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // student last heard (`structurePlanHeard`, the structure thread): the same
   // plan stays quiet, a different one — including a return to an earlier one —
   // speaks as a change.
-  const planRead = (!quietOpening && (asked || importance.speak))
+  // A SLOW PLAN IS NOT SAID WHILE A TACTIC DECIDES (Danya narration test
+  // 2026-11-19: "the plan from here is to make that knight on d5 the boss of
+  // the board" with Nf6+ winning at +4; "make your bishop pair count" beside
+  // the Greek gift Bxh7+). The engine's best move is a mate, or a check or a
+  // capture standing far above the second line: the tactic is the plan.
+  const tacticDecides = studentToMove && forcingBestDecides(fen, analysis.topLines ?? []);
+  const planRead = (!quietOpening && !tacticDecides && (asked || importance.speak))
     ? readBoard('structurePlan', { fen, student: studentColor, heard: asked ? null : input.structurePlanHeard ?? null, said: said ?? null })
     : null;
   const planKey = planRead ? structurePlanKey(planRead) : null;
@@ -1136,7 +1143,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   // the worst piece, and every plan the structure earns with its method. On a
   // question the read carries them; narration opts in after a live walk.
   const askedPlanClauses: ClauseFact[] = [];
-  if (asked) {
+  if (asked && !tacticDecides) {
     for (const f of readBoardAll('boardPlans', { fen, student: studentColor, withTrump: !structureText })) askedPlanClauses.push(readClause(f, 'structure-plan', fen));
     // THE POSITIONAL READ AND THE STRUCTURE JUDGEMENTS — the computers chat's
     // "how do I stand?" answered from, for both sides. Every one goes in; the
@@ -1952,3 +1959,29 @@ export function threatTheyMake(fen: string, student: 'w' | 'b', md: MustDefend, 
   if (left >= md.net) return null;
   return { words: pieceRef(fen, p.square, student)?.words ?? `your ${PNAME[p.piece.toLowerCase()]} on ${p.square}`, square: p.square };
 }
+
+/** The engine's best move is FORCING and DECIDES: a mate for the side to
+ *  move, or a check or capture whose line stands a sharp gap above the
+ *  second line (`sharpGap`, the one sharpness bar). */
+export function forcingBestDecides(fen: string, lines: ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate?: number | null }>): boolean {
+  const best = lines[0];
+  const u = best?.moves[0];
+  if (!best || !u) return false;
+  let san: string;
+  let mover: 'w' | 'b';
+  try { const c = new Chess(fen); mover = c.turn(); san = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san; } catch { return false; }
+  const sign = mover === 'w' ? 1 : -1;
+  if (typeof best.mate === 'number' && best.mate * sign > 0) return true;
+  if (!/x|\+|#/.test(san)) return false;
+  const second = lines[1];
+  if (!second) return false;
+  // The gap the forcing move wins by: the sharp bar, or — when it decides the
+  // game (three pawns or more) — half a pawn over everything else. Two
+  // winning lines read as no gap to `sharpGap`, yet the forcing one is still
+  // the point (the chess investigator #1: Nf6+ +4.03 against f4 +2.75).
+  const raw = Math.abs(best.evaluation - second.evaluation);
+  const gap = sharpGap(best.evaluation, second.evaluation);
+  return (gap !== null && gap >= SHARP_GAP_CP) || (best.evaluation * sign >= DECISIVE_CP && raw >= DECISIVE_LEAD_CP);
+}
+const DECISIVE_CP = 300;
+const DECISIVE_LEAD_CP = 50;

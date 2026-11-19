@@ -20,6 +20,10 @@ describe('statusBandChange — the general STATUS line', () => {
 
 const line = (rank: number, evaluation: number) => ({ rank, evaluation, moves: [], mate: null });
 const flat = { topLines: [line(1, 20), line(2, 15), line(3, 10)], evaluation: 20, isMate: false, mateIn: null, seldepth: 20, depth: 18, wdl: { win: 420, draw: 400, loss: 180 } };
+// The knight on e5 attacked by the d6 pawn, and the engine's best move saves
+// it (Nf3): "their threat first" is said only of a threat the best move
+// answers (Danya narration test 2026-11-19, `threatTheyMake`).
+const knightSaved = { ...flat, topLines: [{ ...line(1, 20), moves: ['e5f3'] }, line(2, 15), line(3, 10)] };
 
 describe('computePositionFacts — the composer', () => {
   it('stays SILENT in a quiet position (no clause earns voice)', async () => {
@@ -36,7 +40,7 @@ describe('computePositionFacts — the composer', () => {
   // nothing but a real hanging threat speaks"), on purpose — the habit rides a
   // middlegame briefing, it does not add a second sentence to move five.
   it('closes the briefing with the METHOD — the habit, last', async () => {
-    const r = await computePositionFacts({ theory: true, namesPlayedMove: true, boardComputers: 'surface', posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 14', moverColor: 'w', studentColor: 'w', analysis: flat });
+    const r = await computePositionFacts({ theory: true, namesPlayedMove: true, boardComputers: 'surface', posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 14', moverColor: 'w', studentColor: 'w', analysis: knightSaved });
     const method = r.clauses.filter((c) => c.computer === 'liveMethodBeat');
     expect(method).toHaveLength(1);
     expect(method[0].text).toMatch(/their|they/i);
@@ -55,7 +59,7 @@ describe('computePositionFacts — the composer', () => {
   // prove steps 3-6 of `coachDecider` actually ran over this composer's output,
   // not that the import exists.
   it('the door orders by computed stakes — the hanging piece leads the habit', async () => {
-    const r = await computePositionFacts({ theory: true, namesPlayedMove: true, boardComputers: 'surface', posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 14', moverColor: 'w', studentColor: 'w', analysis: flat });
+    const r = await computePositionFacts({ theory: true, namesPlayedMove: true, boardComputers: 'surface', posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 14', moverColor: 'w', studentColor: 'w', analysis: knightSaved });
     // The hanging knight carries stakes (3 points, two plies away) and the habit
     // carries none, so the computed order puts the knight first — and every
     // staked clause ahead of every unstaked one.
@@ -67,19 +71,19 @@ describe('computePositionFacts — the composer', () => {
   });
 
   it('returns the quiet trail — silence is a verdict you can read back', async () => {
-    const r = await computePositionFacts({ theory: true, namesPlayedMove: true, boardComputers: 'surface', posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 14', moverColor: 'w', studentColor: 'w', analysis: flat });
+    const r = await computePositionFacts({ theory: true, namesPlayedMove: true, boardComputers: 'surface', posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 14', moverColor: 'w', studentColor: 'w', analysis: knightSaved });
     expect(Array.isArray(r.quiet)).toBe(true);
     for (const q of r.quiet) expect(['subsumed', 'below-bar', 'importance', 'need']).toContain(q.why);
   });
 
   it('the METHOD beat is never subsumed — it carries no squares, and it is not a restatement of a fact', async () => {
-    const r = await computePositionFacts({ theory: true, namesPlayedMove: true, boardComputers: 'surface', posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 14', moverColor: 'w', studentColor: 'w', analysis: flat });
+    const r = await computePositionFacts({ theory: true, namesPlayedMove: true, boardComputers: 'surface', posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 14', moverColor: 'w', studentColor: 'w', analysis: knightSaved });
     expect(r.clauses.some((c) => c.computer === 'liveMethodBeat')).toBe(true);
     expect(r.quiet.some((q) => /habit|order of operations/i.test(q.text))).toBe(false);
   });
 
   it('couples the geometry at emission — a must-defend names the square it is about', async () => {
-    const r = await computePositionFacts({ theory: true, namesPlayedMove: true, boardComputers: 'surface', posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 14', moverColor: 'w', studentColor: 'w', analysis: flat });
+    const r = await computePositionFacts({ theory: true, namesPlayedMove: true, boardComputers: 'surface', posture: 'walk', fen: 'rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 14', moverColor: 'w', studentColor: 'w', analysis: knightSaved });
     const md = r.clauses.find((c) => c.kind === 'must-defend');
     expect(md?.squares).toEqual(['e5']);
   });
