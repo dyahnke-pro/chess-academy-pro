@@ -35,7 +35,7 @@ import { lineShape, lineShapePlies, orList, andList, type LineSeat } from '../ut
 import { contrastMoves } from './moveContrast';
 import { findHangingPieces } from './tacticClassifier';
 import { detectTactics } from './tacticsDetector';
-import { legalSeeGainFor } from './positionReadingService';
+import { legalSeeGainFor, bestCaptureGainFor } from './positionReadingService';
 import { exchangeEnd } from './material';
 import { describeStructure, newPawnWeaknesses } from './boardStructure';
 import { lineProof, type Proof } from './proof';
@@ -46,6 +46,8 @@ import { pieceRef } from './pieceRef';
 import { openSentence } from '../utils/openSentence';
 import { temptingKey } from './conceptKey';
 import { INACCURACY_CP } from './engineConstants';
+import { settledNetForLine, GAIN_HOLDS_PLIES } from './exchangeLedger';
+import { lineTrust } from './lineTrust';
 import { withMover } from '../utils/sideToMove';
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -168,6 +170,32 @@ export function eyeRead(fen: string, rating: number): Array<{ uci: string; p: nu
   return humanMoveProbabilities(fen, legal, rating).map((r) => ({ uci: r.uci, p: r.p }));
 }
 
+/** THE MOVES A PLAYER WEIGHS FOR WHAT THEY DO, NOT HOW THEY LOOK (CCT's
+ *  "threats", and the natural defence; Danya havecheck 2026-11-19). The eye
+ *  reads what KIND of move it is, so a quiet move that attacks a target or
+ *  guards a pawn under fire scores like every other quiet move: his "h3 fails:
+ *  …hxg4 fxg4 Bxg4" (h3 guards the g4-pawn that …h5 and the e6-bishop hit),
+ *  "…Qg5 counterattacks the knight", "Rh3 to hit them directly" sat at 2–3%
+ *  of the eye, under the bar, and were never read. A move the eye at least
+ *  glances at (`MATE_WALK_BAR`) that THREATENS — after it the mover could win
+ *  more with one capture than before (legal SEE, `bestCaptureGainFor`) — or
+ *  DEFENDS — the other side could win something before it and less after — is
+ *  weighed. Measured on the 209 boards of his articles: about three more
+ *  candidates a board, 7 of the 14 tries he weighs that the eye missed. */
+export function weighedForWhatItDoes(fen: string, uci: string): 'threat' | 'defence' | null {
+  const b = boardOf(fen);
+  if (!b) return null;
+  const me = b.turn();
+  const them: Color = me === 'w' ? 'b' : 'w';
+  let after: Chess;
+  try { after = new Chess(fen); after.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }); } catch { return null; }
+  if (after.isGameOver()) return null;
+  if (bestCaptureGainFor(after.fen(), me) > bestCaptureGainFor(fen, me)) return 'threat';
+  const theirs = bestCaptureGainFor(fen, them);
+  if (theirs > 0 && bestCaptureGainFor(after.fen(), them) < theirs) return 'defence';
+  return null;
+}
+
 /**
  * (1) THE CANDIDATE LIST — the moves a player at `rating` would most weigh
  * here, plus the move played. `scored`: every legal move's score (mover's
@@ -190,7 +218,7 @@ export function candidateMoves(fen: string, rating: number, opts: { played: stri
     const e = eye.get(uci) ?? 0;
     const p = full ? full.get(uci) ?? 0 : null;
     const isPlayed = uci === playedUci;
-    if (!isPlayed && e < CANDIDATE_BAR && (p === null || p < CANDIDATE_BAR) && !(e >= MATE_WALK_BAR && walksIntoMate(fen, uci))) continue;
+    if (!isPlayed && e < CANDIDATE_BAR && (p === null || p < CANDIDATE_BAR) && !(e >= MATE_WALK_BAR && (walksIntoMate(fen, uci) || weighedForWhatItDoes(fen, uci)))) continue;
     out.push({ uci, san: m.san, from: m.from, to: m.to, piece: m.piece, eye: e, p, played: isPlayed });
   }
   return out.sort((x, y) => y.eye - x.eye);
@@ -223,7 +251,7 @@ function readCandidates(fen: string, played: Move, reads: readonly WeighRead[], 
     const e = eye.get(uci) ?? 0;
     const p = real.get(uci) ?? 0;
     const mateWalk = e >= MATE_WALK_BAR && walksIntoMate(fen, uci);
-    if (e < CANDIDATE_BAR && p < CANDIDATE_BAR && !mateWalk) continue;
+    if (e < CANDIDATE_BAR && p < CANDIDATE_BAR && !mateWalk && !(e >= MATE_WALK_BAR && weighedForWhatItDoes(fen, uci))) continue;
     out.push({ c: { uci, san: m.san, from: m.from, to: m.to, piece: m.piece, eye: e, p, played: false }, read, real: p, mateWalk });
   }
   return out.sort((x, y) => y.c.eye - x.c.eye);
@@ -453,6 +481,96 @@ export function temptingOnBoard(args: {
   const best = bestOfReads(args.fen, args.reads);
   if (!best) return [];
   return temptingRefutations({ fenBefore: args.fen, san: best.san, student: args.student, rating: args.rating, reads: args.reads, priorMove: args.priorMove });
+}
+
+// ── (A″) THE FORCING TRY THAT WINS NOTHING ──────────────────────────────────
+
+/** A forcing try that wins nothing, ruled out (`emptyForcingTries`). */
+export interface EmptyForcingTry {
+  san: string;
+  uci: string;
+  /** What it costs against the engine's best (cp, the mover's side). */
+  costCp: number;
+  text: string;
+  squares: string[];
+  /** The tempting move's own claim: one rule-out a move, whichever shape said it. */
+  key: string;
+  claims: string[];
+}
+
+/** The standing the try leaves, from the mover's seat; null when the words
+ *  would claim nothing (a level board that stays level). */
+function emptyTryStanding(moverCp: number, bestCp: number, own: 'your' | 'their'): string | null {
+  const who = own === 'your' ? "you're" : "they're";
+  // "Still" only when the mover was worse before it too (the best move's score).
+  if (moverCp <= -TEMPTING_COST_CP) return bestCp <= -TEMPTING_COST_CP ? `${who} still worse after it` : `it leaves ${own === 'your' ? 'you' : 'them'} worse`;
+  if (bestCp >= TEMPTING_COST_CP && moverCp < 50) return `${own} edge is gone`;
+  if (bestCp >= TEMPTING_COST_CP) return `${own} edge shrinks`;
+  return null;
+}
+
+/**
+ * (A″) THE CHECK OR CAPTURE THAT ACHIEVES NOTHING — his "31.Nxe7+ Rxe7 32.Rd1
+ * a5 gives no relief", "38.Rxh7+ is tempting but lets Black's counterplay
+ * live", "Nd7+ or Ne6+ are tempting but achieve nothing". A forcing candidate
+ * the eye weighs, a pawn or more worse than the engine's best, whose own line
+ * wins the mover nothing: the material it settles on, its trades finished, is
+ * level at the line's last capture and stays level to `GAIN_HOLDS_PLIES`. The
+ * line up to that capture is said when it may be named (`lineTrust`), with
+ * the standing it leaves. A move the line proves LOSES material is the
+ * refuter's (`temptingOnBoard`), and a quiet one is refuted by what it gives
+ * up (`positionalReason`) — this is the forcing move's own lesson: forcing is
+ * not the same as good. Most tempting first; empty when none fails this way.
+ */
+export function emptyForcingTries(args: {
+  fen: string;
+  student: Color;
+  rating: number;
+  /** One read per candidate from `fen`, the engine's best among them. */
+  reads: readonly WeighRead[];
+}): EmptyForcingTry[] {
+  const best = bestOfReads(args.fen, args.reads);
+  if (!best) return [];
+  const played = moveOn(args.fen, best.san);
+  if (!played) return [];
+  const mover = played.color;
+  const w = seatWords(mover, args.student);
+  const bestCp = seatCp(best.read, mover);
+  const out: Array<EmptyForcingTry & { real: number }> = [];
+  for (const { c, read, real } of readCandidates(args.fen, played, args.reads, args.rating)) {
+    if (real < TEMPTING_P_FLOOR || !/x|\+/.test(c.san)) continue;
+    const moverCp = seatCp(read, mover);
+    const cost = bestCp - moverCp;
+    if (cost < TEMPTING_COST_CP || read.mate !== null) continue;
+    // The line as SAN, the candidate first, up to the horizon a gain must hold.
+    const sans: string[] = [];
+    try {
+      const b = new Chess(args.fen);
+      for (const u of read.moves.slice(0, GAIN_HOLDS_PLIES)) sans.push(b.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san);
+    } catch { continue; }
+    if (sans.length < 2) continue;
+    // Where the trades finish: the line's last capture inside the horizon.
+    let k = 0;
+    for (let j = 0; j < sans.length; j += 1) if (/x/.test(sans[j])) k = j + 1;
+    k = Math.max(k, 2);
+    if (settledNetForLine(args.fen, sans.slice(0, k), mover) !== 0 || settledNetForLine(args.fen, sans, mover) !== 0) continue;
+    const standing = emptyTryStanding(moverCp, bestCp, w.own);
+    if (!standing) continue;
+    let fenAfter: string;
+    try { const b = new Chess(args.fen); b.move(c.san); fenAfter = b.fen(); } catch { continue; }
+    const replies = read.moves.slice(1);
+    const seconds = read.earlier && read.earlier[0] === c.uci ? [read.earlier.slice(1)] : [];
+    if (!lineTrust({ fen: fenAfter, uci: replies, plies: k - 1, winner: mover === 'w' ? 'b' : 'w', seconds }).name) continue;
+    const said = sans.slice(1, k).map((x, j) => `${(j % 2 === 0) === (mover === 'w') ? '…' : ''}${x}`);
+    const stem = stemKeyOf(`${args.fen}|empty|${c.uci}`);
+    const lead = mover === args.student
+      ? rotateStem([`${c.san} is forcing, but it wins nothing`, `${c.san} looks active, but it wins nothing`, `${c.san} forces the play, but it gains nothing`], stem)
+      : rotateStem([`${c.san} was forcing for them, but it wins nothing`, `${c.san} looked active for them, but it wins nothing`, `${c.san} forces the play for them, but it gains nothing`], stem);
+    const text = `${lead}: ${lineShape(said, w.otherLine, fenAfter, null)}, and ${standing}.`;
+    const key = temptingKey(c.uci);
+    out.push({ san: c.san, uci: c.uci, costCp: Math.round(cost), text, squares: [c.from, c.to], key, claims: [key], real });
+  }
+  return out.sort((x, y) => y.real - x.real).map(({ real: _real, ...t }) => t);
 }
 
 // ── (L) TWO GOOD MOVES, AND WHAT SEPARATES THEM ─────────────────────────────

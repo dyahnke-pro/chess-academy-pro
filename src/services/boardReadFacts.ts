@@ -16,8 +16,9 @@
  */
 import { Chess } from 'chess.js';
 import { computePositionFacts, type PositionFactsInput } from './positionFacts';
-import { temptingOnBoard, candidateMoves, TEMPTING_COST_CP, type WeighRead } from './weighedMoves';
+import { temptingOnBoard, emptyForcingTries, candidateMoves, TEMPTING_COST_CP, type WeighRead } from './weighedMoves';
 import { seatCp } from './winChance';
+import { foldScore } from './humanReply';
 import { boardReason } from './positionalReason';
 import { phaseOfFen } from './boardConcepts';
 import { boardKind } from './positionCharacter';
@@ -196,6 +197,10 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     }
     const refuted = temptingOnBoard({ fen: i.fen, student: i.studentColor, rating: i.rating, reads: tempting, priorMove: null });
     for (const t of refuted) facts.push({ from: 'tempting', kind: 'refuted', text: t.text, computer: 'temptingOnBoard', squares: [t.uci.slice(0, 2), t.uci.slice(2, 4)] });
+    // A check or capture that wins nothing ("Nxe7+ Rxe7 gives no relief"):
+    // the same computer's forcing-move shape, never beside its material refutation.
+    const empty = emptyForcingTries({ fen: i.fen, student: i.studentColor, rating: i.rating, reads: tempting }).filter((t) => !refuted.some((r) => r.uci === t.uci));
+    for (const t of empty) facts.push({ from: 'tempting', kind: 'refuted', text: t.text, computer: 'temptingOnBoard', squares: t.squares });
     const bestSan = sanOf(i.fen, top.moves[0]);
     for (const r of tempting.slice(1)) {
       const san = sanOf(i.fen, r.moves[0]);
@@ -228,28 +233,44 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     // again, the queen chased, the habits) — never an empty game on a board
     // that has one. A puzzle hands no moves.
     const game = gameBehind(i.history, i.fen);
+    // THEIR LIKELY REPLIES, each read to its own line (the moves the eye weighs
+    // for them on the board after our best move, and the engine's best): the
+    // tempting try of theirs refuted below, and the reply tree the best move's
+    // facts read (`ifTheyPlay`: his "if Black plays …Nxe3, you take back and
+    // the d5-square is yours") — read ONCE for both.
+    const theirs: WeighRead[] = [];
+    if (after?.[0] && !i.withhold && i.readTempting && mine) {
+      theirs.push({ evaluation: after[0].evaluation, mate: after[0].mate, moves: after[0].moves });
+      for (const c of candidateMoves(fenB, i.rating, { played: null, scored: null })) {
+        if (c.uci === after[0].moves[0]) continue;
+        const b2 = new Chess(fenB);
+        try { b2.move({ from: c.from, to: c.to, promotion: c.uci[4] }); } catch { continue; }
+        if (b2.isGameOver()) continue;
+        const t = (await i.read(b2.fen()).catch(() => null))?.[0];
+        if (t) theirs.push({ evaluation: t.evaluation, mate: t.mate, moves: [c.uci, ...t.moves], earlier: t.earlier?.moves ? [c.uci, ...t.earlier.moves] : null });
+      }
+    }
+    const replier: 'w' | 'b' = side === 'w' ? 'b' : 'w';
+    const everyAfter = theirs.length >= 2
+      ? { replies: theirs.map((r) => ({ uci: r.moves[0], cp: foldScore(seatCp(r, replier), r.mate === null ? null : replier === 'w' ? r.mate : -r.mate), mate: r.mate === null ? null : replier === 'w' ? r.mate : -r.mate, pv: r.moves })), rating: i.rating }
+      : null;
     if (after) {
       for (const f of moveThoughtFacts({
         fenBefore: i.fen, san, moverIsStudent: mine, namesPlayedMove: ASKED_WRITER.namesPlayedMove, plainThreatsSeen: plainThreatsSeenFor(ASKED_WRITER, false), tense: i.tense, theory: false, story: false, moveReads: ASKED_WRITER.moveReads,
-        prev: NO_PREV_CAPTURE, line: top.moves, history: game.history, theirLast: game.theirLast, phrases: null, reads: { before: [...i.before], after: [...after], passBefore: [], passAfter: [] }, costCp: 0,
+        prev: NO_PREV_CAPTURE, line: top.moves.slice(1), history: game.history, theirLast: game.theirLast, phrases: null, reads: { before: [...i.before], after: [...after], passBefore: [], passAfter: [], everyAfter }, costCp: 0,
       })) {
         // A puzzle still being solved keeps only who stands better: what the
         // best move does is the answer.
         if (i.withhold && !VERDICT_KINDS.has(f.kind)) continue;
         facts.push({ from: 'bestMove', kind: f.kind, text: f.text, computer: f.computer, squares: f.squares, stakes: stakeValue(f.stakes), restates: f.restates === true });
       }
-      if (!i.withhold && i.readTempting && mine && after[0]) {
-        const theirs: WeighRead[] = [{ evaluation: after[0].evaluation, mate: after[0].mate, moves: after[0].moves }];
-        for (const c of candidateMoves(fenB, i.rating, { played: null, scored: null })) {
-          if (c.uci === after[0].moves[0]) continue;
-          const b2 = new Chess(fenB);
-          try { b2.move({ from: c.from, to: c.to, promotion: c.uci[4] }); } catch { continue; }
-          if (b2.isGameOver()) continue;
-          const t = (await i.read(b2.fen()).catch(() => null))?.[0];
-          if (t) theirs.push({ evaluation: t.evaluation, mate: t.mate, moves: [c.uci, ...t.moves], earlier: t.earlier?.moves ? [c.uci, ...t.earlier.moves] : null });
-        }
-        for (const t of temptingOnBoard({ fen: fenB, student: i.studentColor, rating: i.rating, reads: theirs, priorMove: { fenBefore: i.fen, san } })) {
+      if (theirs.length > 0) {
+        const theirRefuted = temptingOnBoard({ fen: fenB, student: i.studentColor, rating: i.rating, reads: theirs, priorMove: { fenBefore: i.fen, san } });
+        for (const t of theirRefuted) {
           facts.push({ from: 'tempting', kind: 'their-refuted', text: t.text, computer: 'temptingOnBoard', squares: [t.uci.slice(0, 2), t.uci.slice(2, 4)] });
+        }
+        for (const t of emptyForcingTries({ fen: fenB, student: i.studentColor, rating: i.rating, reads: theirs }).filter((x) => !theirRefuted.some((r) => r.uci === x.uci))) {
+          facts.push({ from: 'tempting', kind: 'their-refuted', text: t.text, computer: 'temptingOnBoard', squares: t.squares });
         }
       }
     }
