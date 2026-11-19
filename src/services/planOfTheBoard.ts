@@ -32,7 +32,7 @@
 import { Chess, type Color, type Square } from 'chess.js';
 import { planSteps, planStepsText, type PlanSteps } from './planSteps';
 import { siegeOf } from './boardPlan';
-import { deriveNextPlanFacts, type PlanKind } from './nextPlans';
+import { deriveNextPlanFacts, structurePlanFact, type PlanKind } from './nextPlans';
 import { pawnBreak } from './pawnBreak';
 import { openSentence } from '../utils/openSentence';
 
@@ -292,7 +292,14 @@ export function planOfTheBoard(i: PlanOfTheBoardIn): BoardPlan | null {
   // re-seated, so the student's own board only.
   if (mine) {
     const sign = i.student === 'w' ? 1 : -1;
+    // A passer that cannot run is no plan to push: their runner queens first,
+    // a piece stops it, or their king takes it (`structurePlanFact` reads the
+    // race). Danya, pawn endgames #2: "the instinctive push of the c-pawn is
+    // wrong — stop the g-pawn first".
+    const trump = structurePlanFact(i.fen, mover)?.id ?? '';
+    const passerRuns = !/^(passer-race:them|passer-stopped|passer-caught|passer-blockaded)/.test(trump);
     for (const p of deriveNextPlanFacts(i.fen, mover, { namesStudentMoves: i.namesMoves, studentPovCp: top.evaluation * sign })) {
+      if (p.kind === 'passer' && !passerRuns) continue;
       const s = structureStarts(p.kind, p.squares, moves, board);
       if (s < 0) continue;
       out.push({ kind: p.kind, text: goalAndWay(openSentence(p.text)), squares: p.squares, target: p.squares[0] ?? null, starts: s });

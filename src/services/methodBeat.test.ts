@@ -48,7 +48,9 @@ describe('methodBeat — how to think, earned by a computed signal', () => {
 
   it('varies the stem across plies so a long game never repeats verbatim', () => {
     const seen = new Set([0, 1, 2].map((p) => methodBeatFor({ ...base, tier: 'critical' }, p)));
-    expect(seen.size).toBe(3);
+    expect(seen.size).toBe(2);
+    // Clock advice is never one of them (David 2026-11-19).
+    for (const t of seen) expect(t).not.toMatch(/clock/i);
   });
 
   it('prefers the SPECIFIC habit over the general one', () => {

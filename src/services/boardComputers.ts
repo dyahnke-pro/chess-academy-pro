@@ -3470,7 +3470,10 @@ export const BOARD_COMPUTERS = {
     kind: 'plan-steps',
     phase: ANY,
     surfaces: {
-      lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT,
+      lesson: { wired: 'services/moveThoughtFacts.ts' },
+      learn: { not: 'the board\'s plan is read on a board whose move is shown, not played — never as advice on a game already played (Learn speaks the move just played)' },
+      review: { not: 'the board\'s plan is read on a board whose move is shown, not played — never as advice on a game already played (Review walks the moves played)' },
+      play: PLAY_READ, chat: CHAT_VIA_THOUGHT,
       tactics: TACTICS_READ,
       weaknesses: { not: 'a plan read off the engine\'s line — no question of the student\'s posed' },
       think: THINK,
