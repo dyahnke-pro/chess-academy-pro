@@ -716,7 +716,7 @@ export function computeMoveFundamentals(
     if (!flankNoCore) out.push(contact ? {
       id: 'center',
       weight: 66,
-      led: `opens up the center`,
+      led: `opens up the center, challenging their pawn on ${andList(contactBy)}`,
       selfContained: `opens up the center with the pawn to ${mv.to}`,
       // The rule names what the push CHALLENGES, never the push itself: "There's
       // a rule behind c5: open up the center with the pawn to c5" said the move
@@ -877,7 +877,7 @@ export function computeMoveFundamentals(
         weight: phase === 'endgame' ? 60 : 72,
         // A file is where a ROOK belongs; a queen merely uses it.
         led: mv.piece === 'r'
-          ? (doubleWords ? (doubled?.line === 'file' ? `doubles your rooks on the ${openness} ${fileName}` : `${take} the ${openness} ${fileName}, and doubles your rooks on ${doubleWords}`) : `${take} the ${openness} ${fileName}, where the rook belongs`)
+          ? (doubleWords ? (doubled?.line === 'file' ? `doubles your rooks on the ${openness} ${fileName}` : `${take} the ${openness} ${fileName}, and doubles your rooks on ${doubleWords}`) : `${take} the ${openness} ${fileName}${fileTarget(after, mv.to, mover) ?? ', where the rook belongs'}`)
           : `${take} the ${openness} ${fileName}`,
         selfContained: `brings the ${name} to the ${openness} ${fileName}`,
         imperative: mv.piece === 'r' ? `take the ${openness} ${fileName}, where the rook belongs` : `take the ${openness} ${fileName} with the queen`,
@@ -1033,7 +1033,7 @@ export function computeMoveFundamentals(
       out.push({
         id: 'space',
         weight: 48,
-        led: `grabs space on the ${side}`,
+        led: `grabs space on the ${side}${spaceTaken(after, mv.to, mover)}`,
         selfContained: `advances ${mv.to}, grabbing space on the ${side}`,
         imperative: `grab space on the ${side} with ${mv.to}`,
         pointer: `grab space on the ${side} with your ${file}-pawn`,
@@ -2017,4 +2017,31 @@ function doubledWith(board: Chess, sq: string, color: 'w' | 'b'): { line: 'file'
     }
   }
   return null;
+}
+
+/** What a rook on a file presses: the first piece of theirs ahead of it on
+ *  the file, said as a clause (", pressing their pawn on d6"), or null. The
+ *  file said with what it reaches (Danya have-check 2026-11-19: "takes the
+ *  open c-file, where the rook belongs" named the file and nothing on it). */
+function fileTarget(after: Chess, at: string, mover: 'w' | 'b'): string | null {
+  const step = mover === 'w' ? 1 : -1;
+  for (let r = Number(at[1]) + step; r >= 1 && r <= 8; r += step) {
+    const p = after.get(`${at[0]}${r}` as Square);
+    if (!p) continue;
+    if (p.color === mover) return null;
+    return `, pressing their ${PIECE_NAME[p.type]} on ${at[0]}${r}`;
+  }
+  return null;
+}
+
+/** The empty squares in their half the advanced pawn now covers — the space
+ *  it takes from their pieces (", taking g6 away from their pieces"). Empty
+ *  when it covers none. */
+function spaceTaken(after: Chess, at: string, mover: 'w' | 'b'): string {
+  const r = Number(at[1]) + (mover === 'w' ? 1 : -1);
+  if (r < 1 || r > 8) return '';
+  const theirHalf = (rank: number): boolean => (mover === 'w' ? rank >= 5 : rank <= 4);
+  const sqs = [-1, 1].map((d) => `${String.fromCharCode(at.charCodeAt(0) + d)}${r}`)
+    .filter((q) => /^[a-h][1-8]$/.test(q) && theirHalf(r) && !after.get(q as Square));
+  return sqs.length ? `, taking ${andList(sqs)} away from their pieces` : '';
 }
