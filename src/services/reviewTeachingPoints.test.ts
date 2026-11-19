@@ -18,7 +18,7 @@ function fenAfter(sans: string[]): string {
 describe('reviewTeachingPoints — the missing Naroditsky messages (David 2026-07-20)', () => {
   it('M2 counts attackers vs defenders on a winnable enemy piece (offense only)', () => {
     // After 4...Bxf3: the black bishop on f3 has 2 white attackers (Q d1, g2 pawn) and 0 defenders.
-    const t = attackerDefenderCount(fenAfter(['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3']), 'w')?.text ?? null;
+    const t = attackerDefenderCount(fenAfter(['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3']), 'w')[0]?.text ?? null;
     expect(t).not.toBeNull();
     expect(t).toMatch(/attackers? to .*defender/i);
     expect(t).toMatch(/it falls/i);
@@ -28,7 +28,7 @@ describe('reviewTeachingPoints — the missing Naroditsky messages (David 2026-0
 
   it('M2 never flags the student\'s OWN overloaded (sacrificed) piece', () => {
     // A student piece hanging is not reported — only enemy winnable targets.
-    const t = attackerDefenderCount(fenAfter(['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3']), 'w')?.text ?? null;
+    const t = attackerDefenderCount(fenAfter(['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3']), 'w')[0]?.text ?? null;
     expect(t).not.toMatch(/shore it up|your \w+ on/i);
   });
 
@@ -427,14 +427,14 @@ describe('buildMissedShotSignal — here was the signal', () => {
 describe('a piece that can step away does not "fall" — D-3 (WO-STANDARD-01, prod tape 2026-09-22)', () => {
   it('Scandinavian 3.Nc3: the queen on d5 is attacked, not falling', () => {
     // 1.e4 d5 2.exd5 Qxd5 3.Nc3 — Black to move; the queen has a dozen safe squares.
-    const t = attackerDefenderCount(fenAfter(['e4', 'd5', 'exd5', 'Qxd5', 'Nc3']), 'w')?.text ?? null;
+    const t = attackerDefenderCount(fenAfter(['e4', 'd5', 'exd5', 'Qxd5', 'Nc3']), 'w')[0]?.text ?? null;
     expect(t).not.toBeNull();
     expect(t).toMatch(/queen on d5/);
     expect(t).toMatch(/has to move/);
     expect(t).not.toMatch(/so it falls/);
   });
   it('negative control: with the student to move the capture is real and it falls (Bxf3 case)', () => {
-    const t = attackerDefenderCount(fenAfter(['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3']), 'w')?.text ?? null;
+    const t = attackerDefenderCount(fenAfter(['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3']), 'w')[0]?.text ?? null;
     expect(t).toMatch(/so it falls/);
   });
   it('pieceHasSafeEscape reads the board, not the count', () => {

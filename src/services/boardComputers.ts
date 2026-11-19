@@ -4258,13 +4258,13 @@ export const BOARD_COMPUTERS = {
   },
   count: {
     read: ({ fen, student }, fact) => safe(() => {
-      const read = attackerDefenderCount(fen, student);
-      if (!read) return null;
-      const text = `${openSentence(read.text)}.`;
+      const reads = attackerDefenderCount(fen, student);
+      if (reads.length === 0) return null;
+      const text = reads.map((r) => `${openSentence(r.text)}.`).join(' ');
       // A count that says the piece has to move is the tempo the move that
       // attacked it gained: one claim (`ideaClaim('tempo')`), said once
       // (composerSaysOnce, g4 against the bishop on f5).
-      return fact({ key: `count:${text}`, claims: [`count:${fen.split(' ')[0]}`, ...(read.tempo ? [ideaClaim('tempo', [read.square])] : [])], text, proof: NO_PROOF.description, squares: [], stakes: null,
+      return fact({ key: `count:${text}`, claims: [`count:${fen.split(' ')[0]}`, ...reads.filter((r) => r.tempo).map((r) => ideaClaim('tempo', [r.square]))], text, proof: NO_PROOF.description, squares: [], stakes: null,
         seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
     }),
     computer: 'attackerDefenderCount',
