@@ -93,4 +93,7 @@
 // lesson's move reads the same board computers Review does (a pin break, an
 // obligation lifted, a queen grab, the structure, the engine's order and its
 // priority, the tactic geometry) — each only when the move made it.
-export const WALKTHROUGH_GEN_REV = '2026-11-17-speedrun';
+// 2026-11-19-havecheck: the Danya have-check computers in the lesson's thought
+// (who owns the centre, a harmless or inaccessible weakness, the king race and
+// box, the promotion with check, the lever without pieces, the tension).
+export const WALKTHROUGH_GEN_REV = '2026-11-19-havecheck';
