@@ -81,7 +81,7 @@ describe('a move weighed for a reason is read past the human floor', () => {
   it('"Bh6? e7": the bishop move lets the e-pawn run', () => {
     const r = row('mastering-opposite-colored-bishops#1', 'Bh6');
     expect(saidOf(r, undefined)).toBeNull();
-    expect(saidOf(r, consideredTries(r.fen))).toMatch(/Bh6 .*e7.*queens on e8/);
+    expect(saidOf(r, consideredTries(r.fen))).toMatch(/Bh6 .*e7.*(queens|promotes) on e8/);
   });
 
   it('"b4?! cxb4": the target pawn takes on b4, so it is never said to "still stand" on c5', () => {

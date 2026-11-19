@@ -811,7 +811,7 @@ export function positionPosed(
 type RegistryPosedComputer = 'detectLatentFork' | 'detectLatentDanger' | 'detectTradeCreatesPin' | 'detectCentralKingDanger' | 'detectKingExposure' | 'findQueenGrabTraps'
   | 'findTrappedPiece' | 'readConversion' | 'noSafeChecks' | 'kingRace' | 'kingActivityGap' | 'zugzwangIfPassed' | 'mateLine' | 'kingInOpen' | 'seventhRankMate'
   | 'queenlessMate' | 'selfBlock' | 'mateThreatLever' | 'queenKnightNet' | 'lateralRookDefence' | 'kingSiege'
-  | 'keySquaresOn' | 'shoulderOn' | 'connectedPassersOn';
+  | 'keySquaresOn' | 'shoulderOn' | 'connectedPassersOn' | 'matingNet' | 'frozenTarget';
 
 /** How sharply each posed question is asked, on the heat map's scale. */
 const REGISTRY_POSED_WEIGHT: Record<RegistryPosedComputer, number> = {
@@ -839,6 +839,8 @@ const REGISTRY_POSED_WEIGHT: Record<RegistryPosedComputer, number> = {
   keySquaresOn: 65,
   shoulderOn: 60,
   connectedPassersOn: 70,
+  matingNet: 90,
+  frozenTarget: 60,
 };
 
 /** The registry's reads of the board the student moves on, each fact with
@@ -888,6 +890,10 @@ export function registryPosedFacts(fen: string, me: 'w' | 'b', bestLineUci: read
     // the engine's line, unscored (the line's own moves prove them); and your
     // raiding rook that slides along its rank to guard the attacked unit.
     ...readBoardAll('queenlessMate', { fen, student: me }),
+    // A king with no square and a mate there (yours to find, theirs to stop),
+    // and your own weak pawn frozen and out-counted (the student's to limit).
+    ...readBoardAll('matingNet', { fen, student: me }),
+    ...readBoardAll('frozenTarget', { fen, student: me }).filter((f) => f.skill),
     // Your king under siege as the board stands (the count of attackers and
     // defenders, unscored here: the engine's agreement is the teaching half's).
     ...readBoardAll('kingSiegeNow', { fen, student: me, studentCp: null }).filter((f) => f.skill),

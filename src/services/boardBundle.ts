@@ -514,6 +514,8 @@ export const BUNDLE_ADAPTERS: { [K in ComputerId]: Adapter<K> } = {
   keySquareRead: (b) => ({ fen: b.fen, student: b.student }),
   shoulderRead: (b) => ({ fen: b.fen, student: b.student }),
   connectedPassers: (b) => ({ fen: b.fen, student: b.student }),
+  matingNet: (b) => ({ fen: b.fen, student: b.student }),
+  frozenTarget: (b) => ({ fen: b.fen, student: b.student }),
 };
 
 /** Every computer the bundle can fill, read on it. A computer that throws is

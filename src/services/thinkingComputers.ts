@@ -305,6 +305,8 @@ export const THINK_STEP: Record<ComputerName, ThinkAnswer> = {
   keySquaresOn: 'calculate',
   shoulderOn: 'assess',
   connectedPassersOn: 'calculate',
+  matingNet: 'forcing-moves',
+  frozenTarget: 'assess',
   fortress: 'assess',
   oppositionTaken: 'assess',
   zugzwangMade: 'assess',
