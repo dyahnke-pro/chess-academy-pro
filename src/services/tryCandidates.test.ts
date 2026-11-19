@@ -23,3 +23,14 @@ describe("the plan's direct try (WO-PICTURE-01 P2)", () => {
     expect(planTries('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')).toEqual([]);
   });
 });
+
+describe('every quiet try, no cap (G4.5)', () => {
+  it('two pieces that can newly hit the same weak pawn are both tries', () => {
+    // Their isolated pawn on d5: the knight (Ne1-c3 is not quiet here, Nd4 hits
+    // nothing), the rook to d1 and the queen to d2 each newly hit it.
+    const fen = '6k1/5ppp/8/3p4/8/5N2/5PPP/2R1Q1K1 w - - 0 1';
+    const tries = planTries(fen).filter((t) => t.target === 'd5');
+    const pieces = new Set(tries.map((t) => t.san[0]));
+    expect(pieces.size).toBeGreaterThan(1);
+  });
+});

@@ -634,8 +634,9 @@ function cap(w: string): string { return w.charAt(0).toUpperCase() + w.slice(1);
  * checked on the engine's own scores, half a pawn at least); the reply that
  * meets it is named (the engine's first move after it — one move deep, the
  * named-line rule's near case); the mechanism is said when a computer reads
- * one (`tryMechanism`). A try the line proves loses material is the material
- * refuter's (`temptingOnBoard`), so the caller drops those. Most tempting first.
+ * one (`tryMechanism`). A try whose loss or mate the material refuter names
+ * (`temptingOnBoard`) is left to it; one it stays silent on is said here, with
+ * its material and its result. Most tempting first.
  */
 export function standingRefutations(args: {
   fen: string;
@@ -662,7 +663,9 @@ export function standingRefutations(args: {
     const plan = considered?.get(c.uci) ?? null;
     const drop = (g: StandingGate): void => { args.onDrop?.(c.uci, g); };
     if (real < TEMPTING_P_FLOOR && !plan) { drop('not-tempting'); continue; }
-    if (read.mate !== null) { drop('mate-line'); continue; }
+    // A try that walks into mate is the material refuter's when it says the
+    // mate; when it stays silent the line's own story says it here.
+    if (read.mate !== null && refuteCandidate(args.fen, c, read, best.read, args.student, null, plan?.target ?? null)) { drop('mate-line'); continue; }
     const tryCp = seatCp(read, mover);
     const cost = bestCp - tryCp;
     // The plan's direct try is weighed against the plan, not the eye: it
@@ -682,11 +685,14 @@ export function standingRefutations(args: {
       for (const u of read.moves.slice(0, GAIN_HOLDS_PLIES)) sans.push(b.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san);
     } catch { continue; }
     if (sans.length < 2) continue;
-    // A try whose line loses material is the material refuter's to say or to
-    // hold (`temptingOnBoard`, the one cost walker and its naming rule): this
-    // reads the tries that cost the result with the material kept.
     const net = settledNetForLine(args.fen, sans, mover);
-    if (net !== null && net < 0) { drop('loses-material'); continue; }
+    // HAND OFF ONLY TO A REFUTER THAT SPEAKS: a try whose line loses material
+    // is the material refuter's when it names the loss; when it stays silent
+    // (a pawn lost on a three-pawn cost, an unconfirmed line), the loss is
+    // said here, with the result.
+    if (net !== null && net < 0 && refuteCandidate(args.fen, c, read, best.read, args.student, null, plan?.target ?? null)) { drop('loses-material'); continue; }
+    const NUM = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+    const lost = net !== null && net < 0 ? `${cap(w.otherWho)} win ${-net === 1 ? 'a pawn' : `${NUM[-net] ?? -net} pawns' worth of material`} in the line.` : null;
     const reply = `${mover === 'w' ? '…' : ''}${sans[1]}`;
     // NO REASON, NO REFUTATION: his every rule-out says why it falls short.
     // The plan's try has its own reason: what became of the target.
@@ -694,13 +700,15 @@ export function standingRefutations(args: {
     // then the reply's mechanism, then what changed on the board after it.
     const story = lineStory(args.fen, read.moves, w.other, read.mate === null ? read.evaluation : null);
     const mech = story?.text
+      ?? lost
       ?? tryMechanism(args.fen, m, sans, best.san, w.own, w.other)
       ?? (plan ? targetOutcome(args.fen, sans, plan.target, mover, w.other) : null)
       ?? changeReason({ fen: args.fen, student: args.student, rating: args.rating, other: w.other,
         tryLine: { moves: read.moves, cp: read.mate === null ? read.evaluation : null, mate: read.mate },
         bestLine: { moves: best.read.moves, cp: best.read.mate === null ? best.read.evaluation : null, mate: best.read.mate } });
     if (!mech) { drop('no-reason'); continue; }
-    const shift = bandShift ?? smallerShift(bestCp, mine, /wins nothing/.test(mech), cost);
+    // A line that mates ends the game: no band words for that.
+    const shift = story?.kind === 'mates' ? (mine ? 'It loses the game.' : 'It loses them the game.') : bandShift ?? smallerShift(bestCp, mine, /wins nothing/.test(mech), cost);
     const stem = stemKeyOf(`${args.fen}|result|${c.uci}`);
     const lead = plan
       ? (mine
