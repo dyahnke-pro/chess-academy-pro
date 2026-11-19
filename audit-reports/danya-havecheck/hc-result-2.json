@@ -1,0 +1,2830 @@
+{
+ "ideas": [
+  {
+   "board": "positional-combinations#0",
+   "n": 0,
+   "idea": "White has strong central pressure, a large space advantage and coordinated pieces",
+   "verdict": "missing-silent",
+   "appComputer": "readPosition (positionReadingService space term)",
+   "appText": null,
+   "missingWhat": "White's space advantage and piece coordination",
+   "concept": null,
+   "note": "space term exists in positionReadingService but nothing spoken on this board"
+  },
+  {
+   "board": "positional-combinations#0",
+   "n": 1,
+   "idea": "The quiet 14...Be5 keeps Black solid",
+   "verdict": "missing-silent",
+   "appComputer": "alsoGood",
+   "appText": null,
+   "missingWhat": "14...Be5 as the solid alternative",
+   "concept": null,
+   "note": "engine line 3 is Be5; app refutes Bf4/Bc5 but never names Be5 as sound"
+  },
+  {
+   "board": "positional-combinations#0",
+   "n": 2,
+   "idea": "Eliminate the f5 knight",
+   "verdict": "partial",
+   "appComputer": "strategicReason",
+   "appText": "The plan here: move the bishop away from their knight on f5 before it is taken for nothing.",
+   "missingWhat": "that the f5 knight must be eliminated (the goal), not just escaped",
+   "concept": null,
+   "note": "Bxf5 only appears buried in conceptForBoard's 19-move line"
+  },
+  {
+   "board": "positional-combinations#0",
+   "n": 3,
+   "idea": "Trade pieces to lessen White's space advantage",
+   "verdict": "missing-new",
+   "appComputer": null,
+   "appText": null,
+   "missingWhat": "trading pieces to relieve the side with less space",
+   "concept": "trade-to-relieve-cramp",
+   "note": null
+  },
+  {
+   "board": "positional-combinations#0",
+   "n": 4,
+   "idea": "The d7 knight can move with tempo (...Nb6/...Ne5 hitting the c4 bishop)",
+   "verdict": "missing-new",
+   "appComputer": null,
+   "appText": null,
+   "missingWhat": "...Nb6/...Ne5 gain a tempo on the c4 bishop",
+   "concept": "piece move with tempo (developing/retreat that attacks)",
+   "note": "kickMap covers pawn kicks only"
+  },
+  {
+   "board": "positional-combinations#0",
+   "n": 5,
+   "idea": "The d6 bishop is attacked",
+   "verdict": "said",
+   "appComputer": "computeMustDefend",
+   "appText": "Their knight attacks your bishop on d6.",
+   "missingWhat": null,
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "positional-combinations#0",
+   "n": 6,
+   "idea": "14...Bh2+! moves the bishop with tempo, then ...Nb6, ...Bxf5 and ...Bf4 trades the dark bishops (positional combination)",
+   "verdict": "partial",
+   "appComputer": "moveJob",
+   "appText": "You go Bh2+, which gives check and takes your bishop out of reach of their knight on f5.",
+   "missingWhat": "the purpose of the sequence: ...Nb6, ...Bxf5, ...Bf4 to trade off the f5 knight and dark bishops",
+   "concept": "multi-move positional combination purpose",
+   "note": "conceptForBoard recites the line but frames it as a pin 19 plies deep"
+  },
+  {
+   "board": "how-to-ruin-your-pawn-structure#3",
+   "n": 0,
+   "idea": "Black has a space advantage and menacing e5/f5 pawns; White's centre is deformed",
+   "verdict": "partial",
+   "appComputer": "readPosition",
+   "appText": "Your pawns on the d-file are doubled — they can't defend each other...",
+   "missingWhat": "Black's space advantage and the menacing e5/f5 pawns",
+   "concept": null,
+   "note": "space term exists but silent"
+  },
+  {
+   "board": "how-to-ruin-your-pawn-structure#3",
+   "n": 1,
+   "idea": "c3-c4 would lock the bishop and create a hole on d4",
+   "verdict": "missing-silent",
+   "appComputer": "boardReason (refuted-positional)",
+   "appText": null,
+   "missingWhat": "c3-c4 would lock in the c2 bishop and leave a hole on d4",
+   "concept": null,
+   "note": "the refuted-positional computer only judges engine-tempting tries; c4 never considered; hole + bad-bishop consequence of a pawn move not computed"
+  },
+  {
+   "board": "how-to-ruin-your-pawn-structure#3",
+   "n": 2,
+   "idea": "Use Black's temporary lack of coordination and the e-file x-ray",
+   "verdict": "partial",
+   "appComputer": "readPosition",
+   "appText": "Your rook on e1 is your best-placed piece — it has the half-open e-file.",
+   "missingWhat": "the x-ray through e5 to the queen on e7 and Black's lack of coordination",
+   "concept": "x-ray along a file",
+   "note": null
+  },
+  {
+   "board": "how-to-ruin-your-pawn-structure#3",
+   "n": 3,
+   "idea": "1.h3 Nf6 2.Nh4 (Nxf5/Ng6) fails to 2...Nxd5!",
+   "verdict": "missing-silent",
+   "appComputer": "temptingOnBoard",
+   "appText": null,
+   "missingWhat": "the follow-up 2.Nh4 fails to 2...Nxd5",
+   "concept": null,
+   "note": "temptingOnBoard refutes only the first move, not a natural follow-up deeper in the line"
+  },
+  {
+   "board": "how-to-ruin-your-pawn-structure#3",
+   "n": 4,
+   "idea": "Plant a knight on e6",
+   "verdict": "said",
+   "appComputer": "planSteps",
+   "appText": "Your knight on f3 has a better road: d4 and then e6.",
+   "missingWhat": null,
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "how-to-ruin-your-pawn-structure#3",
+   "n": 5,
+   "idea": "Piece placement often trumps pawn structure",
+   "verdict": "not-teachable",
+   "appComputer": null,
+   "appText": null,
+   "missingWhat": null,
+   "concept": null,
+   "note": "general maxim (piece placement trumps structure), not a fact of this board"
+  },
+  {
+   "board": "how-to-avoid-blunders-part-1#3",
+   "n": 0,
+   "idea": "White is a pawn up; Black has active, centralized pieces as compensation",
+   "verdict": "missing-silent",
+   "appComputer": "compensation",
+   "appText": null,
+   "missingWhat": "White is a pawn up; Black's active centralized pieces are the compensation",
+   "concept": null,
+   "note": "standing line names only a knight's safe square"
+  },
+  {
+   "board": "how-to-avoid-blunders-part-1#3",
+   "n": 1,
+   "idea": "39.Nhf3 is the simple move, claiming a pleasant edge",
+   "verdict": "missing-silent",
+   "appComputer": "alsoGood",
+   "appText": null,
+   "missingWhat": "39.Nhf3 as the simple, safe edge-keeping move",
+   "concept": null,
+   "note": "engine line 2 is Nhf3; never named"
+  },
+  {
+   "board": "how-to-avoid-blunders-part-1#3",
+   "n": 2,
+   "idea": "If 39...Rxb3 then 40.Rxe7!! Nxe7 41.Rxe7 and Black's king is in danger",
+   "verdict": "wrong",
+   "appComputer": "(their-target)",
+   "appText": "The target is your pawn on b3 ... Their rook on d3 hits it, and nothing guards it.",
+   "missingWhat": "that ...Rxb3 is met by Rxe7!! with an attack on the king",
+   "concept": null,
+   "note": "app presents b3 as a free target; Danya (and engine line 3) shows taking it fails"
+  },
+  {
+   "board": "how-to-avoid-blunders-part-1#3",
+   "n": 3,
+   "idea": "39...Rc7 40.Nf7+ Kg7 41.Nd8 and the knight penetrates to e6",
+   "verdict": "partial",
+   "appComputer": "boardPlanFacts",
+   "appText": "... And plant a knight on e6.",
+   "missingWhat": "the route Nf7+, Nd8, Ne6 penetration",
+   "concept": "piece route via checks",
+   "note": null
+  },
+  {
+   "board": "how-to-avoid-blunders-part-1#3",
+   "n": 4,
+   "idea": "39.Kh3?? walks into ...Nxf4 mate — checkmate check",
+   "verdict": "said",
+   "appComputer": "temptingOnBoard",
+   "appText": "Kh3 is the obvious try, but it doesn't hold up: they play Nxf4#.",
+   "missingWhat": null,
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "how-to-win-equal-positions#0",
+   "n": 0,
+   "idea": "Balanced: White's c5 knight is well placed, Black is coordinated with no accessible weaknesses",
+   "verdict": "partial",
+   "appComputer": "null (standing) + readPosition",
+   "appText": "Roughly balanced. / Your knight on c5 is your best-placed piece — it sits on an outpost no pawn can kick.",
+   "missingWhat": "Black's coordination and lack of accessible weaknesses",
+   "concept": null,
+   "note": "app instead lists a5/e6 as weaknesses, contrary to Danya's read"
+  },
+  {
+   "board": "how-to-win-equal-positions#0",
+   "n": 1,
+   "idea": "Routine 21.Rfb1 is met by 21...Rfb8",
+   "verdict": "missing-silent",
+   "appComputer": "practicalChance",
+   "appText": null,
+   "missingWhat": "routine Rfb1 is met by ...Rfb8 and changes nothing",
+   "concept": null,
+   "note": "depthClauses even calls Rfb1 equally good"
+  },
+  {
+   "board": "how-to-win-equal-positions#0",
+   "n": 2,
+   "idea": "Physical method: change the material balance with 21.Nxa6, giving the good knight for the bishop",
+   "verdict": "partial",
+   "appComputer": "moveAspects",
+   "appText": "You go Nxa6, which trades the knight for the bishop.",
+   "missingWhat": "why: changing the material balance to unsettle a coordinated opponent",
+   "concept": "imbalance change as a plan",
+   "note": "boardPlanFacts simultaneously tells the student to keep the c5 knight and refuse trades"
+  },
+  {
+   "board": "how-to-win-equal-positions#0",
+   "n": 3,
+   "idea": "Then 22.Qc5 changes the pawn structure",
+   "verdict": "missing-new",
+   "appComputer": null,
+   "appText": null,
+   "missingWhat": "22.Qc5 follow-up that changes the pawn structure",
+   "concept": "follow-up plan after a transforming trade",
+   "note": null
+  },
+  {
+   "board": "how-to-win-equal-positions#0",
+   "n": 4,
+   "idea": "Habit: a sudden change of structure or material unsettles the opponent",
+   "verdict": "not-teachable",
+   "appComputer": null,
+   "appText": null,
+   "missingWhat": null,
+   "concept": null,
+   "note": "psychology of familiarity, not a board fact"
+  },
+  {
+   "board": "mastering-the-queen-sacrifice#1",
+   "n": 0,
+   "idea": "Black is down material but clearly in the driver's seat",
+   "verdict": "partial",
+   "appComputer": "null (standing)",
+   "appText": "You're clearly better — you have the bishop pair.",
+   "missingWhat": "that Black is down material yet in the driver's seat (activity over material)",
+   "concept": "material-vs-activity verdict",
+   "note": null
+  },
+  {
+   "board": "mastering-the-queen-sacrifice#1",
+   "n": 1,
+   "idea": "White's pieces are dreadfully uncoordinated",
+   "verdict": "missing-silent",
+   "appComputer": "pieceActivity",
+   "appText": null,
+   "missingWhat": "White's pieces are dreadfully uncoordinated",
+   "concept": null,
+   "note": "activity computers exist but nothing is said about White's coordination"
+  },
+  {
+   "board": "mastering-the-queen-sacrifice#1",
+   "n": 2,
+   "idea": "White's king is vulnerable",
+   "verdict": "missing-silent",
+   "appComputer": "kingSafety",
+   "appText": null,
+   "missingWhat": "White's king is vulnerable (f2 is the soft spot)",
+   "concept": null,
+   "note": "no king-safety line on this board"
+  },
+  {
+   "board": "mastering-the-queen-sacrifice#1",
+   "n": 3,
+   "idea": "The monstrous e4 knight dominates the position",
+   "verdict": "partial",
+   "appComputer": "readPosition",
+   "appText": "Their passed pawn on e3 is held: your knight on e4 stands in front of it...",
+   "missingWhat": "that the e4 knight dominates the whole position (its reach and the pressure on f2/d2)",
+   "concept": "piece dominance",
+   "note": null
+  },
+  {
+   "board": "mastering-the-queen-sacrifice#1",
+   "n": 4,
+   "idea": "27...Nxf2! is the knockout blow",
+   "verdict": "partial",
+   "appComputer": "depthClauses",
+   "appText": "Several moves are equally good for your next move — Nxd6, Nxf2 or Qc8.",
+   "missingWhat": "why Nxf2 is the knockout: the sac strips White's king",
+   "concept": null,
+   "note": "the engine prefers Nxd6 here; Nxf2 is named but given no reason"
+  },
+  {
+   "board": "queen-the-supporting-actress#5",
+   "n": 0,
+   "idea": "Lines toward Black's king are already open (broken f-pawns, isolated h7)",
+   "verdict": "partial",
+   "appComputer": "readPosition",
+   "appText": "Their pawns on the f-file are doubled — they can't defend each other, which makes them targets.",
+   "missingWhat": "that the broken f-pawns and isolated h7 are open avenues to the king",
+   "concept": "king-cover damage read",
+   "note": "boardPlanFacts aims at h7 as a pawn target, not as an attack on the king"
+  },
+  {
+   "board": "queen-the-supporting-actress#5",
+   "n": 1,
+   "idea": "No time to waste: Black threatens ...cxd4, ...Ne5 and ...Kh8 to seal the kingside",
+   "verdict": "partial",
+   "appComputer": "planSteps (their-plan)",
+   "appText": "Their plan from here: Kh8, Rg8 and then the b5 break.",
+   "missingWhat": "...cxd4 and ...Ne5 buttressing the kingside, so there is no time to waste",
+   "concept": null,
+   "note": "depthClauses tension line touches the cxd4 release"
+  },
+  {
+   "board": "queen-the-supporting-actress#5",
+   "n": 2,
+   "idea": "15.Qg3+ Kh8 16.Qh4 fails to 16...f5!, forcing a worse ending",
+   "verdict": "missing-silent",
+   "appComputer": "temptingOnBoard",
+   "appText": null,
+   "missingWhat": "15.Qg3+ Kh8 16.Qh4 fails to 16...f5! forcing a worse ending",
+   "concept": null,
+   "note": "temptingOnBoard does not judge Qg3+ (a check that is a natural try)"
+  },
+  {
+   "board": "queen-the-supporting-actress#5",
+   "n": 3,
+   "idea": "So the first shot must not be fired by the queen",
+   "verdict": "missing-new",
+   "appComputer": null,
+   "appText": null,
+   "missingWhat": "the first attacking shot must not be the queen's",
+   "concept": "which piece leads the attack (queen-first is premature)",
+   "note": null
+  },
+  {
+   "board": "queen-the-supporting-actress#5",
+   "n": 4,
+   "idea": "15.Bc1 (Bh6/Qg3+ idea) is too artificial: ...Kh8!, ...Ne5, ...Rg8 fizzles it",
+   "verdict": "wrong",
+   "appComputer": "boardPlanFacts",
+   "appText": "... And bring your bishop to c1, where it sweeps a long diagonal instead of 4 squares.",
+   "missingWhat": null,
+   "concept": null,
+   "note": "app recommends Bc1, the very regrouping Danya calls too artificial (...Kh8, ...Ne5, ...Rg8 fizzles it)"
+  },
+  {
+   "board": "the-chess-investigator#0",
+   "n": 0,
+   "idea": "Black must contain the strong d5 knight",
+   "verdict": "partial",
+   "appComputer": "readPosition",
+   "appText": "Their knight on d5 is well placed — it sits on an outpost no pawn can kick.",
+   "missingWhat": "that Black must now spend effort containing it",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "the-chess-investigator#0",
+   "n": 1,
+   "idea": "White threatens Nc7, forking the a8 rook and a6 bishop",
+   "verdict": "partial",
+   "appComputer": "temptingOnBoard",
+   "appText": "d6 is tempting here, but it fails: they play Nc7 and Nxa8 a move later...",
+   "missingWhat": "the standing threat Nc7 forking a8 and a6 right now",
+   "concept": null,
+   "note": "computeMustDefend silent though Nc7 is already a threat"
+  },
+  {
+   "board": "the-chess-investigator#0",
+   "n": 2,
+   "idea": "17...Rc8 (covering c7) keeps reasonable chances",
+   "verdict": "partial",
+   "appComputer": "computeMoveFundamentals",
+   "appText": "You go Rc8, which puts the rook behind your c5 pawn — it guards it now, and owns the c-file when it opens.",
+   "missingWhat": "that Rc8 covers c7, stopping the fork",
+   "concept": null,
+   "note": "the move's real job (prevention) is missed"
+  },
+  {
+   "board": "the-chess-investigator#0",
+   "n": 3,
+   "idea": "17...c4 at once also keeps chances (hits the b3 bishop)",
+   "verdict": "partial",
+   "appComputer": "depthClauses",
+   "appText": "Several moves are equally good for your next move — Rc8, Bb7 or c4.",
+   "missingWhat": "that ...c4 gains a tempo on the b3 bishop",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "the-chess-investigator#0",
+   "n": 4,
+   "idea": "17...f5? to undermine the knight opens the b3-g8 diagonal: Nc7+ with discovered check wins the a8 rook",
+   "verdict": "wrong",
+   "appComputer": "boardPlanFacts / readPosition",
+   "appText": "Here's the plan: break with f5, b4 or c4 to open the position. / You have a pawn break on f5 — the pawn levers are where the play comes from.",
+   "missingWhat": null,
+   "concept": null,
+   "note": "app recommends the f5 break; Danya shows f5? opens the b3-g8 diagonal for Nc7+ discovered check. boardReason does say f5 leaves the king less sheltered, so the app contradicts itself"
+  },
+  {
+   "board": "the-positional-sacrifice#2",
+   "n": 0,
+   "idea": "Black's position is on the verge of collapse",
+   "verdict": "partial",
+   "appComputer": "null (standing)",
+   "appText": "You're clearly better — their bishop on c8 hasn't moved and their bishop on f4 is stranded...",
+   "missingWhat": "that Black is on the verge of collapse",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "the-positional-sacrifice#2",
+   "n": 1,
+   "idea": "White's bishop on e4 is a monster",
+   "verdict": "wrong",
+   "appComputer": "readPosition",
+   "appText": "Your bishop is your problem piece, hemmed in behind its own pawns, and your f-pawn going to f6 frees it...",
+   "missingWhat": null,
+   "concept": null,
+   "note": "Danya: the e4 bishop is a monster. It is White's only bishop"
+  },
+  {
+   "board": "the-positional-sacrifice#2",
+   "n": 2,
+   "idea": "c6 is a gaping outpost for White's knight",
+   "verdict": "said",
+   "appComputer": "boardPlanFacts",
+   "appText": "Here's the plan: put a rook on the b or e file. Then plant a knight on c6.",
+   "missingWhat": null,
+   "concept": null,
+   "note": "said as a plan step, without calling c6 a gaping outpost"
+  },
+  {
+   "board": "the-positional-sacrifice#2",
+   "n": 3,
+   "idea": "Black's pieces are extremely passive",
+   "verdict": "partial",
+   "appComputer": "null (standing)",
+   "appText": "their bishop on c8 hasn't moved and their bishop on f4 is stranded with one safe square",
+   "missingWhat": "the overall passivity of all Black's pieces",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "the-positional-sacrifice#2",
+   "n": 4,
+   "idea": "A sacrifice that eliminates Black's most important defender is worth considering",
+   "verdict": "partial",
+   "appComputer": "gambitIdea",
+   "appText": "Your f6 offers a pawn: if they play gxf6 and you answer Bf5+, you're a piece ahead in development...",
+   "missingWhat": "which important defender the sacrifice eliminates",
+   "concept": "sacrifice to remove a key defender",
+   "note": null
+  },
+  {
+   "board": "a-guide-to-underpromotion#1",
+   "n": 0,
+   "idea": "White is a pawn up and the a7 passer is one step from promotion",
+   "verdict": "said",
+   "appComputer": "evalReading",
+   "appText": "You're winning — your passed pawn on a7 is one step from queening, you're up a pawn.",
+   "missingWhat": null,
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "a-guide-to-underpromotion#1",
+   "n": 1,
+   "idea": "White's king on h5 is terribly placed and limits White",
+   "verdict": "partial",
+   "appComputer": "temptingOnBoard",
+   "appText": "Qf8 is tempting here, but it fails: they play g6#. (and seven more like it)",
+   "missingWhat": "that White's king on h5 is the handicap that restricts everything",
+   "concept": "king-in-a-net read (own king's poor placement)",
+   "note": null
+  },
+  {
+   "board": "a-guide-to-underpromotion#1",
+   "n": 2,
+   "idea": "Black threatens mate on e8 or by ...g6, which restricts White's options",
+   "verdict": "partial",
+   "appComputer": "temptingOnBoard",
+   "appText": "Qe3 looks natural, but it doesn't work: they play g6#.",
+   "missingWhat": "the standing mate threats (...g6 and on e8) stated as THE constraint before any move",
+   "concept": null,
+   "note": "mate threat is only implied through nine refuted tries; computeMustDefend silent"
+  },
+  {
+   "board": "a-guide-to-underpromotion#1",
+   "n": 3,
+   "idea": "Habit: tactical awareness and precise calculation before promoting",
+   "verdict": "not-teachable",
+   "appComputer": null,
+   "appText": null,
+   "missingWhat": null,
+   "concept": null,
+   "note": "general habit (calculate before promoting), not a board fact"
+  },
+  {
+   "board": "alekhines-gun2#2",
+   "n": 0,
+   "idea": "Formidable central pressure; Black has no counterplay",
+   "verdict": "missing-silent",
+   "appComputer": "initiativeRead",
+   "appText": null,
+   "missingWhat": "formidable central pressure and Black's total lack of counterplay",
+   "concept": null,
+   "note": "standing only says slightly better"
+  },
+  {
+   "board": "alekhines-gun2#2",
+   "n": 1,
+   "idea": "The piece imbalance (bishop vs knight) favours White",
+   "verdict": "missing-silent",
+   "appComputer": "minorMatchup",
+   "appText": null,
+   "missingWhat": "the bishop-vs-knight imbalance favours White",
+   "concept": null,
+   "note": "boardPlanFacts says make the d5 bishop the boss but never weighs it against the knight"
+  },
+  {
+   "board": "alekhines-gun2#2",
+   "n": 2,
+   "idea": "Double rooks on the d-file against d6 (the gun)",
+   "verdict": "partial",
+   "appComputer": "boardPlanFacts",
+   "appText": "The plan: put a rook on the d file.",
+   "missingWhat": "doubling the rooks on the d-file (the gun) against d6",
+   "concept": "doubled-rook battery on a target",
+   "note": null
+  },
+  {
+   "board": "alekhines-gun2#2",
+   "n": 3,
+   "idea": "d6 is the target; once it falls the gun fires",
+   "verdict": "missing-silent",
+   "appComputer": "boardPlanFacts (weak-pawn target)",
+   "appText": null,
+   "missingWhat": "d6 is the backward target the gun fires at",
+   "concept": null,
+   "note": "weak-pawn plan never names the backward d6 pawn on the half-open file"
+  },
+  {
+   "board": "desperado-defense#0",
+   "n": 0,
+   "idea": "Black is in a nightmarish bind: light-squared bishop gone, kingside collapsing, no counterplay",
+   "verdict": "partial",
+   "appComputer": "null (standing)",
+   "appText": "You're clearly worse — your knight on b8 hasn't moved.",
+   "missingWhat": "the bind: light bishop gone, kingside about to collapse, no counterplay",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "desperado-defense#0",
+   "n": 1,
+   "idea": "White has all the time in the world to improve and then attack down the h-file",
+   "verdict": "missing-silent",
+   "appComputer": "kingAttack / planSteps (their-plan)",
+   "appText": null,
+   "missingWhat": "White can improve at leisure, then attack down the h-file",
+   "concept": null,
+   "note": "their-plan silent on this board"
+  },
+  {
+   "board": "desperado-defense#0",
+   "n": 2,
+   "idea": "16...Qg4 looks intimidating but threatens nothing; a5, Kf1 and Rh4 trap the queen",
+   "verdict": "missing-silent",
+   "appComputer": "queenNet / temptingOnBoard",
+   "appText": null,
+   "missingWhat": "16...Qg4 threatens nothing and gets trapped by a5, Kf1, Rh4",
+   "concept": null,
+   "note": "natural queen sortie not judged"
+  },
+  {
+   "board": "desperado-defense#0",
+   "n": 3,
+   "idea": "Passive defence (16...Nd7) holds under 10 moves; the only practical chance is a radical desperado",
+   "verdict": "missing-silent",
+   "appComputer": "desperado / practicalChance",
+   "appText": null,
+   "missingWhat": "passive defence fails; only a radical desperado gives practical chances",
+   "concept": null,
+   "note": "app instead frames Nd7 as plain development (\"completes your development\")"
+  },
+  {
+   "board": "how-to-avoid-blunders-part-1#0",
+   "n": 0,
+   "idea": "Black has long-term pressure; ...b5 gives a pawn to open another front",
+   "verdict": "partial",
+   "appComputer": "compensation",
+   "appText": "They're a pawn down, but they're slightly better: they have the bishop pair.",
+   "missingWhat": "that ...b5 gave the pawn to open a second front on the queenside",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "how-to-avoid-blunders-part-1#0",
+   "n": 1,
+   "idea": "The calm 21.a3 a5 22.Qd1 makes Black's initiative hard to fuel",
+   "verdict": "partial",
+   "appComputer": "findProphylaxis",
+   "appText": "a3 first — b4 would hit your knight on c3, and after a3 the pawn covers b4.",
+   "missingWhat": "the calm follow-up Qd1 that starves Black's initiative",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "how-to-avoid-blunders-part-1#0",
+   "n": 2,
+   "idea": "21.Nxb5?? is refuted by 21...Qe8!, hitting the knight on b5 and the bishop on e3",
+   "verdict": "said",
+   "appComputer": "temptingOnBoard",
+   "appText": "Nxb5 looks natural, but it doesn't work: they play Qe8, you answer Qf3 and they play Qxb5 — they win a knight for a pawn.",
+   "missingWhat": null,
+   "concept": null,
+   "note": "does not name the double attack on b5 and e3"
+  },
+  {
+   "board": "how-to-avoid-blunders-part-1#0",
+   "n": 3,
+   "idea": "White's pieces are too passive or out of play to help",
+   "verdict": "missing-silent",
+   "appComputer": "pieceActivity",
+   "appText": null,
+   "missingWhat": "White's pieces are too passive / out of play to help",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "how-to-ruin-your-pawn-structure#2",
+   "n": 0,
+   "idea": "19.Be2 hxg4 fxg4 Rh3 and Black's rook wreaks havoc",
+   "verdict": "wrong",
+   "appComputer": "alsoGood",
+   "appText": "gxh5 and Be2 both hold here, and what separates them is that Be2 keeps your pawns whole...",
+   "missingWhat": null,
+   "concept": null,
+   "note": "Danya: 19.Be2 hxg4 fxg4 Rh3 and Black's rook wreaks havoc; app calls Be2 equally good"
+  },
+  {
+   "board": "how-to-ruin-your-pawn-structure#2",
+   "n": 1,
+   "idea": "...Bc4! trades off the light bishops — a paradoxical modern move",
+   "verdict": "missing-silent",
+   "appComputer": "planSteps (their-plan)",
+   "appText": null,
+   "missingWhat": "...Bc4! trading off the light-squared bishops",
+   "concept": null,
+   "note": "their-plan names f5, Kd7, Bg5 instead; engine line 2 shows ...Bc4"
+  },
+  {
+   "board": "how-to-ruin-your-pawn-structure#2",
+   "n": 2,
+   "idea": "Exploiting a temporary deficiency often needs drastic measures",
+   "verdict": "not-teachable",
+   "appComputer": null,
+   "appText": null,
+   "missingWhat": null,
+   "concept": null,
+   "note": "general maxim about drastic measures"
+  },
+  {
+   "board": "how-to-ruin-your-pawn-structure#2",
+   "n": 3,
+   "idea": "...h5 hits g4",
+   "verdict": "said",
+   "appComputer": "liveMethodBeat",
+   "appText": "Run the question now — what are they threatening? They're after your g-pawn.",
+   "missingWhat": null,
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "magnus-carlsens-best-endgame-wins#2",
+   "n": 0,
+   "idea": "Black's advantage is clear but White has drawing chances",
+   "verdict": "partial",
+   "appComputer": "null (standing) / evalReading",
+   "appText": "You're slightly better ... / Roughly balanced.",
+   "missingWhat": "that Black's advantage is clear but White keeps drawing chances",
+   "concept": null,
+   "note": "the two eval lines on the same board disagree with each other"
+  },
+  {
+   "board": "magnus-carlsens-best-endgame-wins#2",
+   "n": 1,
+   "idea": "Black has built an impressive pawn center",
+   "verdict": "missing-silent",
+   "appComputer": "readPosition (space/centre)",
+   "appText": null,
+   "missingWhat": "Black's impressive d5/e5 pawn center",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "magnus-carlsens-best-endgame-wins#2",
+   "n": 2,
+   "idea": "Black's pieces are optimally placed",
+   "verdict": "missing-silent",
+   "appComputer": "pieceActivity",
+   "appText": null,
+   "missingWhat": "Black's pieces are optimally placed",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "magnus-carlsens-best-endgame-wins#2",
+   "n": 3,
+   "idea": "The central break ...d4 (prepared first) launches a calculated tactical sequence",
+   "verdict": "missing-silent",
+   "appComputer": "pawnBreak / boardPlanFacts",
+   "appText": null,
+   "missingWhat": "the prepared central break ...d4 launching the tactics",
+   "concept": null,
+   "note": "app names e4 as the break (twice) and never d4; two planSteps lines give two different plans for the same side"
+  },
+  {
+   "board": "morphys-sacrifices-explained#0",
+   "n": 0,
+   "idea": "White is on the verge of defeat",
+   "verdict": "partial",
+   "appComputer": "null (standing)",
+   "appText": "You're clearly better.",
+   "missingWhat": "that White is on the verge of defeat",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "morphys-sacrifices-explained#0",
+   "n": 1,
+   "idea": "Black's monster queen on d3 dominates and prepares the invasion",
+   "verdict": "missing-silent",
+   "appComputer": "pieceActivity / outpost",
+   "appText": null,
+   "missingWhat": "the monster queen on d3 dominating and preparing the invasion",
+   "concept": null,
+   "note": "only implied through the their-refuted Qxf1+ mates"
+  },
+  {
+   "board": "morphys-sacrifices-explained#0",
+   "n": 2,
+   "idea": "White threatens to repel the queen from d3",
+   "verdict": "missing-silent",
+   "appComputer": "opponentIntent",
+   "appText": null,
+   "missingWhat": "White threatens to repel the queen from d3",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "morphys-sacrifices-explained#0",
+   "n": 3,
+   "idea": "...Rae8 brings the last piece in (later ...Qxf3)",
+   "verdict": "partial",
+   "appComputer": "computeMoveFundamentals",
+   "appText": "You play Rae8 — it doubles your rooks on the open e-file.",
+   "missingWhat": "that it brings the last piece in, ready for ...Qxf3",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "never-resign-prematurely#0",
+   "n": 0,
+   "idea": "The pawn ending only looks hopeless",
+   "verdict": "said",
+   "appComputer": "readCriticalMoment",
+   "appText": "Your move now: one move keeps you level, and only one. Worth thinking it through.",
+   "missingWhat": null,
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "never-resign-prematurely#0",
+   "n": 1,
+   "idea": "49...Kd6! is the only move, going after c6",
+   "verdict": "said",
+   "appComputer": "onlyMove",
+   "appText": "You go Kd6, which is the only move that holds here — the next best, Kf7, gives up about a piece's worth.",
+   "missingWhat": null,
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "never-resign-prematurely#0",
+   "n": 2,
+   "idea": "49...Ke6 loses to 50.h4!",
+   "verdict": "partial",
+   "appComputer": "depthClauses (king-read)",
+   "appText": "King to d6, not e6 — there their pawn checks and wins time.",
+   "missingWhat": "the refutation 50.h4!",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "never-resign-prematurely#0",
+   "n": 3,
+   "idea": "Even a connected passer on the sixth may not decide a pawn ending",
+   "verdict": "not-teachable",
+   "appComputer": null,
+   "appText": null,
+   "missingWhat": null,
+   "concept": null,
+   "note": "general endgame maxim (connected passer on the sixth not always decisive); c6 here is not a connected passer"
+  },
+  {
+   "board": "positional-combinations#1",
+   "n": 0,
+   "idea": "White's pawn structure is wrecked: doubled f-pawns (f2, f5) and the e-pawn gone",
+   "verdict": "partial",
+   "appComputer": "readPosition",
+   "appText": "Your pawns on the f-file are doubled — they can't defend each other...",
+   "missingWhat": "that the whole structure is ruined (e-pawn gone too)",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "positional-combinations#1",
+   "n": 1,
+   "idea": "With e4 gone White no longer controls the centre",
+   "verdict": "missing-silent",
+   "appComputer": "readPosition (centre/space)",
+   "appText": null,
+   "missingWhat": "with e4 gone White no longer controls the centre",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "positional-combinations#1",
+   "n": 2,
+   "idea": "Black holds a slight edge and the initiative (driver's seat), not more",
+   "verdict": "partial",
+   "appComputer": "null (standing)",
+   "appText": "Roughly balanced — you have the bishop pair...",
+   "missingWhat": "that Black has the initiative and the driver's seat",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "positional-combinations#1",
+   "n": 3,
+   "idea": "...Bf4 offers the trade of dark-squared bishops to blunt White's space advantage",
+   "verdict": "missing-silent",
+   "appComputer": "opponentMovePurpose",
+   "appText": null,
+   "missingWhat": "...Bf4 is a trade offer of dark-squared bishops to blunt White's space",
+   "concept": null,
+   "note": "moveJob/attackerDefenderCount read Bf4 only as a target to kick"
+  },
+  {
+   "board": "rooks-on-the-seventh-revisited#2",
+   "n": 0,
+   "idea": "White's pieces are beautifully placed but breaking through is hard; close to a draw",
+   "verdict": "partial",
+   "appComputer": "rookOnSeventh",
+   "appText": "Your rook has reached the seventh on a7 — a rook on the seventh is a pig...",
+   "missingWhat": "that despite beautifully placed pieces the breakthrough is hard and it is close to a draw",
+   "concept": null,
+   "note": "standing calls it clearly better and conceptForBoard says \"won slowly\""
+  },
+  {
+   "board": "rooks-on-the-seventh-revisited#2",
+   "n": 1,
+   "idea": "Black's g5 rook reliably holds g7",
+   "verdict": "missing-silent",
+   "appComputer": "keyDefender",
+   "appText": null,
+   "missingWhat": "Black's g5 rook reliably holds g7",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "rooks-on-the-seventh-revisited#2",
+   "n": 2,
+   "idea": "Bring an auxiliary unit (the bishop via f7-g6) to add pressure on the seventh and make mate real",
+   "verdict": "partial",
+   "appComputer": "moveJob",
+   "appText": "You play Bf7 — it adds one guard to your pawn on h5, which their rook on g5 attacks.",
+   "missingWhat": "the bishop's real mission: via f7-g6 to add pressure on the seventh and make mate real",
+   "concept": "auxiliary piece joins the seventh-rank attack",
+   "note": "their-refuted Kh7 line hints at Bg6+"
+  },
+  {
+   "board": "rooks-on-the-seventh-revisited#2",
+   "n": 3,
+   "idea": "To stop that, the opponent may be forced into a fatal concession",
+   "verdict": "missing-new",
+   "appComputer": null,
+   "appText": null,
+   "missingWhat": "the pressure forces a fatal concession from the defender",
+   "concept": "squeeze / forced concession (zugzwang pressure)",
+   "note": "breakStopped notes ...g6 is taken away, a fragment of it"
+  },
+  {
+   "board": "tals-sacrifices-explained#1",
+   "n": 0,
+   "idea": "White is active, Black solid; no obvious way to continue the attack — a small edge",
+   "verdict": "partial",
+   "appComputer": "null (standing)",
+   "appText": "Roughly balanced.",
+   "missingWhat": "White active vs Black solid, no clear way to continue the attack",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "tals-sacrifices-explained#1",
+   "n": 1,
+   "idea": "The normal route: 19.Bxg6 hxg6 20.Qf3 for a small steady edge",
+   "verdict": "missing-silent",
+   "appComputer": "tradeJudgement / alsoGood",
+   "appText": null,
+   "missingWhat": "19.Bxg6 hxg6 20.Qf3 for a small steady edge",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "tals-sacrifices-explained#1",
+   "n": 2,
+   "idea": "19.a4 is the other normal option",
+   "verdict": "said",
+   "appComputer": "moveStops",
+   "appText": "Your a4 stops …Qb5, which would pin your knight against your queen.",
+   "missingWhat": null,
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "tals-sacrifices-explained#1",
+   "n": 3,
+   "idea": "Tal instead played an outwardly suicidal knight sacrifice despite an obvious refutation",
+   "verdict": "partial",
+   "appComputer": "depthClauses (king-read)",
+   "appText": "Your pieces converge on g6 — three of them against two of theirs, right by their king. That is where a sacrifice may land.",
+   "missingWhat": "which sacrifice and that it looks suicidal against an obvious refutation",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "the-art-of-maneuvering#1",
+   "n": 0,
+   "idea": "White is dominating",
+   "verdict": "partial",
+   "appComputer": "null (standing)",
+   "appText": "Roughly balanced.",
+   "missingWhat": "that White is dominating",
+   "concept": null,
+   "note": "app's eval band disagrees with Danya's verdict"
+  },
+  {
+   "board": "the-art-of-maneuvering#1",
+   "n": 1,
+   "idea": "But good positions don't win games — a concrete plan is needed",
+   "verdict": "not-teachable",
+   "appComputer": null,
+   "appText": null,
+   "missingWhat": null,
+   "concept": null,
+   "note": "general maxim (good positions need a plan)"
+  },
+  {
+   "board": "the-art-of-maneuvering#1",
+   "n": 2,
+   "idea": "A frontal assault on the e6 pawn can't be organised without compromising the position",
+   "verdict": "missing-new",
+   "appComputer": null,
+   "appText": null,
+   "missingWhat": "a frontal assault on e6 cannot be organised without compromising the position",
+   "concept": "direct-attack feasibility on a target (attackers vs defenders reachable)",
+   "note": null
+  },
+  {
+   "board": "the-art-of-maneuvering#1",
+   "n": 3,
+   "idea": "The target is Black's weak e6 pawn, to be pressured by a maneuver",
+   "verdict": "missing-silent",
+   "appComputer": "boardPlanFacts (weak-pawn target)",
+   "appText": null,
+   "missingWhat": "e6 is the weak pawn to pressure by maneuvering",
+   "concept": null,
+   "note": "weak-pawn plan picks a6 instead"
+  },
+  {
+   "board": "the-discovered-check-reloaded#1",
+   "n": 0,
+   "idea": "Black misplayed the opening and White has a fearsome kingside attack (Bh6, Ng5, Qh4)",
+   "verdict": "missing-silent",
+   "appComputer": "kingSiege / kingAttack",
+   "appText": null,
+   "missingWhat": "the fearsome kingside attack built by Bh6, Ng5, Qh4 after Black misplayed the opening",
+   "concept": null,
+   "note": "readPosition instead calls the h6 bishop \"stranded\"; standing (slightly better) and evalReading (clearly better) disagree"
+  },
+  {
+   "board": "the-discovered-check-reloaded#1",
+   "n": 1,
+   "idea": "Every White piece is optimal except the d1 rook — activate the dormant rook for the second wave",
+   "verdict": "missing-silent",
+   "appComputer": "pieceActivity / planSteps",
+   "appText": null,
+   "missingWhat": "all White pieces are optimal except the d1 rook: bring it in for the second wave",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "the-discovered-check-reloaded#1",
+   "n": 2,
+   "idea": "The g5 knight stands on the h4-e7 line: moving it unleashes a discovered attack; Black ends up giving his queen to stop it",
+   "verdict": "partial",
+   "appComputer": "buildReviewMoveTeachingFact",
+   "appText": "You play Qh3: it unpins your knight on g5 — and the queen aims at their pawn on e6.",
+   "missingWhat": "the discovered attack the g5 knight is loaded with on the h4-e7 line and that Black must give the queen to stop it",
+   "concept": "loaded discovery",
+   "note": "temptingOnBoard shows knight moves lose the queen to ...Bxh4, which is the pin side of it; loadedDiscovery (kingSiege.ts) exists"
+  },
+  {
+   "board": "the-discovered-check-reloaded#1",
+   "n": 3,
+   "idea": "With the king exposed, material equality doesn't matter",
+   "verdict": "missing-silent",
+   "appComputer": "kingSafety",
+   "appText": null,
+   "missingWhat": "with Black's king exposed, material equality does not matter",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "the-greek-gift-sacrifice-lives-on#3",
+   "n": 0,
+   "idea": "A complex position with equal material",
+   "verdict": "missing-silent",
+   "appComputer": "positionCharacter",
+   "appText": null,
+   "missingWhat": "a complex position with equal material",
+   "concept": null,
+   "note": "standing only says slightly better"
+  },
+  {
+   "board": "the-greek-gift-sacrifice-lives-on#3",
+   "n": 1,
+   "idea": "Black needs only ...Bb7 and ...Rfe8 to set his centre rolling with ...e5-e4",
+   "verdict": "missing-silent",
+   "appComputer": "planSteps (their-plan)",
+   "appText": null,
+   "missingWhat": "Black needs only ...Bb7 and ...Rfe8 to roll the centre with ...e5-e4",
+   "concept": null,
+   "note": "their-plan silent on this board"
+  },
+  {
+   "board": "the-greek-gift-sacrifice-lives-on#3",
+   "n": 2,
+   "idea": "So White must act before Black does",
+   "verdict": "missing-new",
+   "appComputer": null,
+   "appText": null,
+   "missingWhat": "White must act before Black's centre rolls",
+   "concept": "plan tempo race (their plan is N moves away, so act now)",
+   "note": "planRaceClause here only races passed pawns"
+  },
+  {
+   "board": "the-greek-gift-sacrifice-lives-on#3",
+   "n": 3,
+   "idea": "The Greek Gift exposes the king to the queen-and-knight tandem",
+   "verdict": "partial",
+   "appComputer": "moveAspects",
+   "appText": "You play Bxh7+ — it prises open their king's cover.",
+   "missingWhat": "that the Greek Gift exposes the king to the queen-and-knight tandem (Ng5+, Qg4/Qh5)",
+   "concept": "named attack pattern with its follow-up",
+   "note": "attackLibrary.knownAttack exists but is silent"
+  },
+  {
+   "board": "the-king-march#2",
+   "n": 0,
+   "idea": "Black is in huge trouble",
+   "verdict": "partial",
+   "appComputer": "null (standing)",
+   "appText": "Roughly balanced.",
+   "missingWhat": "that Black is in huge trouble (practically)",
+   "concept": null,
+   "note": "engine line 1 is a repetition after Kg8, so the app's level read may be engine-true; Danya's verdict is practical"
+  },
+  {
+   "board": "the-king-march#2",
+   "n": 1,
+   "idea": "White threatens Bxf6, removing the knight that guards h7, with Qxh7# to follow",
+   "verdict": "partial",
+   "appComputer": "temptingOnBoard",
+   "appText": "Nd7 is the obvious try, but it doesn't hold up: they play Qxh7#.",
+   "missingWhat": "the standing threat Bxf6, removing h7's guard, then Qxh7#",
+   "concept": null,
+   "note": "computeMustDefend silent"
+  },
+  {
+   "board": "the-king-march#2",
+   "n": 2,
+   "idea": "20...h6 does not help because of 21.Bxh6",
+   "verdict": "partial",
+   "appComputer": "boardReason",
+   "appText": "h6 looks natural, but it isn't the move: the king is less sheltered after this than after the better move.",
+   "missingWhat": "the concrete refutation 21.Bxh6",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "the-king-march#2",
+   "n": 3,
+   "idea": "With no safety on either wing, Black's king escapes toward the centre (Kg8-f8-e8)",
+   "verdict": "partial",
+   "appComputer": "onlyMove",
+   "appText": "You play Kg8: it is the only move that holds here...",
+   "missingWhat": "why: no safety on either wing, so the king runs for the centre (Kg8-f8-e8)",
+   "concept": "king escape route to the centre",
+   "note": null
+  },
+  {
+   "board": "the-positional-rook-lift#0",
+   "n": 0,
+   "idea": "White's advantage is clear: central control, coordinated pieces, no weaknesses",
+   "verdict": "partial",
+   "appComputer": "evalReading",
+   "appText": "You're clearly better — you have the initiative, their king is still in the middle.",
+   "missingWhat": "central control, coordinated pieces and no weaknesses",
+   "concept": null,
+   "note": "their-target says b2 is a weakness, against Danya's read"
+  },
+  {
+   "board": "the-positional-rook-lift#0",
+   "n": 1,
+   "idea": "The natural 15.b3 is good but less effective",
+   "verdict": "missing-silent",
+   "appComputer": "alsoGood",
+   "appText": null,
+   "missingWhat": "the natural 15.b3 is good but less effective",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "the-positional-rook-lift#0",
+   "n": 2,
+   "idea": "The rook lift Re1-e3-b3 swings the rook across the third rank to the queenside",
+   "verdict": "missing-silent",
+   "appComputer": "findRookLift (positionReadingService / intoTheirCamp)",
+   "appText": null,
+   "missingWhat": "the rook lift Re1-e3-b3 across the third rank",
+   "concept": null,
+   "note": "app reads Re3 as guarding e4 and unpinning f2, never as a lift (engine line Re3 ... Rb3)"
+  },
+  {
+   "board": "the-positional-rook-lift#0",
+   "n": 3,
+   "idea": "The lifted rook targets an ostensibly unimportant weakness (the a6 pawn)",
+   "verdict": "partial",
+   "appComputer": "boardPlanFacts",
+   "appText": "The plan from here is to win their weak pawn on a6. Here's how: plant your knight on a5...",
+   "missingWhat": "that the lifted rook is the piece that targets it",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "the-positional-sacrifice#0",
+   "n": 0,
+   "idea": "Black's ...Nd5 aims to trade knights and relieve the pressure",
+   "verdict": "missing-silent",
+   "appComputer": "opponentMovePurpose",
+   "appText": null,
+   "missingWhat": "...Nd5 aims to trade knights and relieve the pressure",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "the-positional-sacrifice#0",
+   "n": 1,
+   "idea": "White's rook on h4 is loose to the queen",
+   "verdict": "said",
+   "appComputer": "computeMustDefend",
+   "appText": "Their queen attacks your rook on h4, and nothing defends it.",
+   "missingWhat": null,
+   "concept": null,
+   "note": "null/character on the same board says \"no counterplay, so no hurry: improve every piece\", contradicting the must-defend"
+  },
+  {
+   "board": "the-positional-sacrifice#0",
+   "n": 2,
+   "idea": "So 16.Nxd5 fails to ...Qxh4",
+   "verdict": "missing-silent",
+   "appComputer": "temptingOnBoard",
+   "appText": null,
+   "missingWhat": "16.Nxd5 is impossible because of 16...Qxh4",
+   "concept": null,
+   "note": "the natural capture is not judged"
+  },
+  {
+   "board": "the-positional-sacrifice#0",
+   "n": 3,
+   "idea": "White should be willing to give up material to secure a crucial square for a piece",
+   "verdict": "partial",
+   "appComputer": "gambitIdea",
+   "appText": "You play Rxh6 — it gives a rook for a knight and a pawn ... It pays: you're slightly better even so.",
+   "missingWhat": "the crucial square the material buys",
+   "concept": "exchange sacrifice for a key square",
+   "note": "exchangeSacrifice computer exists"
+  },
+  {
+   "board": "the-tactical-detector#0",
+   "n": 0,
+   "idea": "Black is hanging on the precipice",
+   "verdict": "said",
+   "appComputer": "readCriticalMoment",
+   "appText": "For your next move, exactly one move keeps the win. Slow down.",
+   "missingWhat": null,
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "the-tactical-detector#0",
+   "n": 1,
+   "idea": "White is an exchange up",
+   "verdict": "said",
+   "appComputer": "null (standing)",
+   "appText": "You're winning — you have the initiative, you're up material: a rook for a piece and a pawn.",
+   "missingWhat": null,
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "the-tactical-detector#0",
+   "n": 2,
+   "idea": "More important than material: White's pieces are coordinated for a fatal blow on Black's exposed king",
+   "verdict": "said",
+   "appComputer": "kingSiege",
+   "appText": "Their king on g8 faces two of your pieces, and two more are a move away. Only their bishop on e6 defends it.",
+   "missingWhat": null,
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "the-tactical-detector#0",
+   "n": 3,
+   "idea": "Black's counterplay (...Rxa2+, ...Bxa2) is real but not deadly",
+   "verdict": "partial",
+   "appComputer": "temptingOnBoard",
+   "appText": "Rb1 is the obvious try, but it doesn't hold up: they play Rxa2#.",
+   "missingWhat": "the verdict that ...Rxa2+ Kb1 leads nowhere while ...Bxa2 is unpleasant but not deadly",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "the-two-knight-advantage#1",
+   "n": 0,
+   "idea": "At first sight Black's prospects look grim",
+   "verdict": "partial",
+   "appComputer": "null (standing)",
+   "appText": "Roughly balanced — their king has lost its pawn cover, they have the bishop pair.",
+   "missingWhat": "why Black's prospects look grim at first sight",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "the-two-knight-advantage#1",
+   "n": 1,
+   "idea": "White has the two bishops (vs Black's two knights)",
+   "verdict": "said",
+   "appComputer": "readPosition",
+   "appText": "They have the bishop pair against your two knights — two bishops grow stronger as the board opens...",
+   "missingWhat": null,
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "the-two-knight-advantage#1",
+   "n": 2,
+   "idea": "White has a menacing pawn centre",
+   "verdict": "missing-silent",
+   "appComputer": "readPosition (centre/space)",
+   "appText": null,
+   "missingWhat": "White's menacing pawn centre",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "the-two-knight-advantage#1",
+   "n": 3,
+   "idea": "White has an open g-file toward Black's king",
+   "verdict": "missing-silent",
+   "appComputer": "readPosition (open file) / kingSafety",
+   "appText": null,
+   "missingWhat": "the open g-file aimed at Black's king",
+   "concept": null,
+   "note": "depthClauses says their pawns come at your king on the kingside but never names the g-file"
+  },
+  {
+   "board": "understanding-the-back-rank#0",
+   "n": 0,
+   "idea": "White is a piece up",
+   "verdict": "said",
+   "appComputer": "null (standing)",
+   "appText": "You're winning — you're up a piece.",
+   "missingWhat": null,
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "understanding-the-back-rank#0",
+   "n": 1,
+   "idea": "The simple luft move 1.g3 (or h3) decides the game",
+   "verdict": "said",
+   "appComputer": "buildReviewMoveTeachingFact",
+   "appText": "You go g3, which makes luft, a breathing hole for the king, so a back-rank check can never turn into mate.",
+   "missingWhat": null,
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "understanding-the-back-rank#0",
+   "n": 2,
+   "idea": "Grabbing 1.Rxf7? loses to ...Rb1+ because of the back rank",
+   "verdict": "partial",
+   "appComputer": "depthClauses",
+   "appText": "The capture on f7 isn't going anywhere. Leave it hanging over them and make the useful move first...",
+   "missingWhat": "that 1.Rxf7? loses to ...Rb1+ on the back rank",
+   "concept": null,
+   "note": "temptingOnBoard refutes Qd7 (Rb1#) but not Rxf7"
+  },
+  {
+   "board": "understanding-the-back-rank#0",
+   "n": 3,
+   "idea": "Moral: back-rank safety cannot be overstated",
+   "verdict": "said",
+   "appComputer": "buildReviewMoveTeachingFact",
+   "appText": "...so a back-rank check can never turn into mate.",
+   "missingWhat": null,
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "weak-squares-who-cares#7",
+   "n": 0,
+   "idea": "19.e4 deliberately weakens a square (d4/f4) in return for a gain elsewhere (tit-for-tat)",
+   "verdict": "partial",
+   "appComputer": "computeMoveFundamentals",
+   "appText": "Your e4 stakes out the center and grabs space.",
+   "missingWhat": "the price: e4 weakens d4 and f4 (a deliberate concession for a gain)",
+   "concept": "cost of a pawn move (squares it gives up)",
+   "note": null
+  },
+  {
+   "board": "weak-squares-who-cares#7",
+   "n": 1,
+   "idea": "The concession is acceptable because Black cannot easily reach the weakened square (partial inaccessibility)",
+   "verdict": "missing-new",
+   "appComputer": null,
+   "appText": null,
+   "missingWhat": "the conceded square is acceptable because Black's pieces cannot easily reach it",
+   "concept": "inaccessible weak square (hole no enemy piece can reach soon)",
+   "note": null
+  },
+  {
+   "board": "weak-squares-who-cares#7",
+   "n": 2,
+   "idea": "The gain: e4 stops Black's ...e4 push that would hit the f3 knight",
+   "verdict": "said",
+   "appComputer": "breakStopped",
+   "appText": "This stops their …e4 break before it comes. Your pawn takes that square first, so the break can't be played.",
+   "missingWhat": null,
+   "concept": null,
+   "note": "said five times over by moveStops, findProphylaxis x2, depthClauses plan-race and breakStopped"
+  },
+  {
+   "board": "weak-squares-who-cares#7",
+   "n": 3,
+   "idea": "Positional concessions are fine when made for a concrete gain",
+   "verdict": "not-teachable",
+   "appComputer": null,
+   "appText": null,
+   "missingWhat": null,
+   "concept": null,
+   "note": "general principle (concessions are fine for a concrete gain); its board instance is idea 0"
+  },
+  {
+   "board": "beginner-chess-strategy#4",
+   "n": 0,
+   "idea": "White is far behind in material (15 vs 25) yet wins",
+   "verdict": "missing-silent",
+   "appComputer": "finishedBoard / gameEndReads",
+   "appText": null,
+   "missingWhat": "that White won while far behind in material (15 vs 25 points)",
+   "concept": null,
+   "note": "the app produced no facts at all on this mated board"
+  },
+  {
+   "board": "beginner-chess-strategy#4",
+   "n": 1,
+   "idea": "Black's king in the centre and undeveloped rook and bishop lost the game",
+   "verdict": "missing-silent",
+   "appComputer": "finishedBoard / gameEndReads",
+   "appText": null,
+   "missingWhat": "Black lost because the king stayed in the centre with rook and bishop undeveloped",
+   "concept": null,
+   "note": "no facts on the final board"
+  },
+  {
+   "board": "beginner-chess-strategy#4",
+   "n": 2,
+   "idea": "Rook and bishop deliver checkmate",
+   "verdict": "missing-silent",
+   "appComputer": "matePatterns",
+   "appText": null,
+   "missingWhat": "the rook and bishop deliver the mate (named mate pattern)",
+   "concept": null,
+   "note": "no facts on the final board"
+  },
+  {
+   "board": "desperado-defense#3",
+   "n": 0,
+   "idea": "Positionally White is fine: Black's structure is in shambles and e4 belongs to White",
+   "verdict": "partial",
+   "appComputer": "readPosition",
+   "appText": "Their pawns on c6 and c5 are isolated — those are long-term targets... / Their bishop on d6 is their problem piece...",
+   "missingWhat": "that e4 belongs to White alone (and so positionally White is fine)",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "desperado-defense#3",
+   "n": 1,
+   "idea": "Black has a mating attack (f3 pawn, Ng2) against White's king",
+   "verdict": "partial",
+   "appComputer": "liveMethodBeat",
+   "appText": "Before you pick a move: what is their last move doing? Here it hits your rook on e1...",
+   "missingWhat": "that Black has a mating attack with the f3 pawn and Ng2 against White's king",
+   "concept": null,
+   "note": "kingSiege silent"
+  },
+  {
+   "board": "desperado-defense#3",
+   "n": 2,
+   "idea": "Transform the game from tactical to quiet: give up the exchange so Black is up only an exchange with no attack",
+   "verdict": "partial",
+   "appComputer": "onlyMove",
+   "appText": "You play Re3: it is the only move that holds here — the next best, h4, gives up about a piece's worth.",
+   "missingWhat": "why: giving up the exchange transforms the game from a mating attack to a quiet position a mere exchange down",
+   "concept": "exchange sacrifice to kill an attack",
+   "note": "app frames Re3 as a battery on f3 (secondAttacker, conceptForBoard); exchangeSacrifice silent"
+  },
+  {
+   "board": "how-to-avoid-blunders-part-1#1",
+   "n": 0,
+   "idea": "White has pesky kingside counterplay (Ng5, h4, rook lift, queen)",
+   "verdict": "missing-silent",
+   "appComputer": "kingSiege / opponentIntent",
+   "appText": null,
+   "missingWhat": "White's pesky kingside counterplay (Ng5, h4, a rook lift, the queen)",
+   "concept": null,
+   "note": "Bxg5 is only read as \"trades the bishop for the knight\""
+  },
+  {
+   "board": "how-to-avoid-blunders-part-1#1",
+   "n": 1,
+   "idea": "If Black solves those problems he is clearly better",
+   "verdict": "partial",
+   "appComputer": "null (standing)",
+   "appText": "Roughly balanced.",
+   "missingWhat": "that once those problems are solved Black is clearly better",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "how-to-avoid-blunders-part-1#1",
+   "n": 2,
+   "idea": "Habit: DAP check — double attacks and pins before a tempting move",
+   "verdict": "missing-silent",
+   "appComputer": "methodBeat / checkMethod",
+   "appText": null,
+   "missingWhat": "the DAP check (double attacks and pins) before a tempting move",
+   "concept": null,
+   "note": "no method beat on this board"
+  },
+  {
+   "board": "how-to-beat-magnus-carlsen#2",
+   "n": 0,
+   "idea": "Qd1 prepares to bring the last reserve in with Raf2",
+   "verdict": "partial",
+   "appComputer": "depthClauses",
+   "appText": "Several moves are equally good for your next move — Qxd3, Qd1 or fxg6.",
+   "missingWhat": "what Qd1 is for: making room for Raf2, the last reserve",
+   "concept": "clearing a square for another piece",
+   "note": null
+  },
+  {
+   "board": "how-to-beat-magnus-carlsen#2",
+   "n": 1,
+   "idea": "Qd1 heads for g4 to maximize the queen against the king",
+   "verdict": "missing-silent",
+   "appComputer": "pieceRoute / planSteps",
+   "appText": null,
+   "missingWhat": "Qd1 heads for g4 to maximise the queen against the king",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "how-to-beat-magnus-carlsen#2",
+   "n": 2,
+   "idea": "29.Qxd3? Qb6+ 30.Be3 Ba6! 31.Qd2 Qb3 gives Black play",
+   "verdict": "wrong",
+   "appComputer": "moveAspects / moveJob / alsoGood",
+   "appText": "You play Qxd3 — it wins a pawn, and nothing can take back.",
+   "missingWhat": null,
+   "concept": null,
+   "note": "Danya: 29.Qxd3? Qb6+ 30.Be3 Ba6! 31.Qd2 Qb3 gives Black play; the engine's top line is Qxd3, so the app is engine-true but teaches the opposite of Danya's lesson"
+  },
+  {
+   "board": "how-to-play-a-brilliancy#2",
+   "n": 0,
+   "idea": "Rfd1 opens an escape square (f1) for the king",
+   "verdict": "said",
+   "appComputer": "moveStops",
+   "appText": "You play Rfd1 — it stops …Qh2, which would be mate, and now your king has f1.",
+   "missingWhat": null,
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "how-to-play-a-brilliancy#2",
+   "n": 1,
+   "idea": "Rfd1 reinforces the d4 pawn",
+   "verdict": "said",
+   "appComputer": "computeMoveFundamentals",
+   "appText": "You go Rfd1, which puts the rook behind your d4 pawn — it guards it now...",
+   "missingWhat": null,
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "how-to-play-a-brilliancy#2",
+   "n": 2,
+   "idea": "27.Rfe1 was a reasonable alternative",
+   "verdict": "missing-silent",
+   "appComputer": "alsoGood",
+   "appText": null,
+   "missingWhat": "27.Rfe1 was a reasonable alternative",
+   "concept": null,
+   "note": "readCriticalMoment says two moves keep the edge but does not name the second (engine line 2 is Rfe1)"
+  },
+  {
+   "board": "how-to-win-equal-positions#2",
+   "n": 0,
+   "idea": "White has a slight space edge and good pieces; Black is solid with no accessible weaknesses",
+   "verdict": "partial",
+   "appComputer": "null (standing)",
+   "appText": "Roughly balanced.",
+   "missingWhat": "White's slight space edge and good pieces against Black's solid, weakness-free camp",
+   "concept": null,
+   "note": "boardStructure/boardPlanFacts still name b6/a5 targets"
+  },
+  {
+   "board": "how-to-win-equal-positions#2",
+   "n": 1,
+   "idea": "Don't offer the draw: keep posing strategic dilemmas",
+   "verdict": "not-teachable",
+   "appComputer": null,
+   "appText": null,
+   "missingWhat": null,
+   "concept": null,
+   "note": "practical/competitive decision (decline the draw, keep testing)"
+  },
+  {
+   "board": "how-to-win-equal-positions#2",
+   "n": 2,
+   "idea": "Habit: risk is part of playing for a win in an equal position",
+   "verdict": "not-teachable",
+   "appComputer": null,
+   "appText": null,
+   "missingWhat": null,
+   "concept": null,
+   "note": "general attitude about risk"
+  },
+  {
+   "board": "in-pursuit-of-zugzwang#3",
+   "n": 0,
+   "idea": "White has built a fortress; on the surface Black cannot make progress and a draw looks likely",
+   "verdict": "missing-silent",
+   "appComputer": "fortress",
+   "appText": null,
+   "missingWhat": "White has built a fortress; on the surface Black cannot make progress",
+   "concept": null,
+   "note": "app just says \"You're winning\" (engine-true), never why it looks drawn"
+  },
+  {
+   "board": "in-pursuit-of-zugzwang#3",
+   "n": 1,
+   "idea": "The winning method is zugzwang: White must be put to move when every move worsens his position",
+   "verdict": "missing-silent",
+   "appComputer": "zugzwangRead / zugzwang",
+   "appText": null,
+   "missingWhat": "the winning method is zugzwang (six of them)",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "in-pursuit-of-zugzwang#3",
+   "n": 2,
+   "idea": "54...a6!! is the only move — a waiting move that hands White the move in a mutual-block position",
+   "verdict": "partial",
+   "appComputer": "readCriticalMoment / depthClauses (trigger)",
+   "appText": "Your move now: exactly two moves keep the win... / Nd2+ doesn't work yet — but it does after a6...",
+   "missingWhat": "that ...a6 is a pure waiting move that hands White the move in a mutual block",
+   "concept": "tempo/waiting move in a mutual-block position",
+   "note": null
+  },
+  {
+   "board": "magnus-carlsens-best-endgame-wins#3",
+   "n": 0,
+   "idea": "Black is on the edge of the precipice; a tactical sequence finishes",
+   "verdict": "said",
+   "appComputer": "readCriticalMoment",
+   "appText": "For your next move, two moves keep the win. Everything else concedes, so slow down.",
+   "missingWhat": null,
+   "concept": null,
+   "note": "with standing \"You're winning\""
+  },
+  {
+   "board": "magnus-carlsens-best-endgame-wins#3",
+   "n": 1,
+   "idea": "54.g6! hits the f7 bishop that guards Black's weak light squares",
+   "verdict": "said",
+   "appComputer": "boardStructure",
+   "appText": "Their weak e6, g6 and h5 hide behind the bishop on f7. Chase it with g6, and those squares open up again.",
+   "missingWhat": null,
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "magnus-carlsens-best-endgame-wins#3",
+   "n": 2,
+   "idea": "54.Rh6 also wins",
+   "verdict": "said",
+   "appComputer": "readCriticalMoment",
+   "appText": "...two moves keep the win...",
+   "missingWhat": null,
+   "concept": null,
+   "note": "the app teaches Rh6 as the move, so both winning moves are present"
+  },
+  {
+   "board": "mastering-opposite-colored-bishops#1",
+   "n": 0,
+   "idea": "White is two pawns up",
+   "verdict": "said",
+   "appComputer": "null (standing)",
+   "appText": "You're clearly better — you're up two pawns...",
+   "missingWhat": null,
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "mastering-opposite-colored-bishops#1",
+   "n": 1,
+   "idea": "Opposite-coloured bishops looked like a draw",
+   "verdict": "said",
+   "appComputer": "null (character)",
+   "appText": "You're better, but the bishops run on opposite colours: with only pawns besides, they have real drawing chances.",
+   "missingWhat": null,
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "mastering-opposite-colored-bishops#1",
+   "n": 2,
+   "idea": "Black's passed e-pawn ties down White's king",
+   "verdict": "partial",
+   "appComputer": "structurePlanFact",
+   "appText": "Both sides have a runner: yours on e6 is two pushes from queening, theirs on e4 is three...",
+   "missingWhat": "that Black's e-pawn permanently ties down White's king",
+   "concept": "passer ties down the king (defensive burden)",
+   "note": "boardPlanFacts instead calls e4 a weak pawn to win"
+  },
+  {
+   "board": "miracle-on-the-chess-board#0",
+   "n": 0,
+   "idea": "White threatens both Qxe4 and Ne7+",
+   "verdict": "partial",
+   "appComputer": "computeMustDefend",
+   "appText": "Their queen attacks your knight on e4, and nothing defends it.",
+   "missingWhat": "the second threat Ne7+ (the fork)",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "miracle-on-the-chess-board#0",
+   "n": 1,
+   "idea": "The natural 26...Nxf2 fails to Nxf6+ gxf6 Qc4+, losing the queen",
+   "verdict": "said",
+   "appComputer": "temptingOnBoard",
+   "appText": "Nxf2 looks like a fork, but it fails: they play Nxf6+ and Nxd7 a move later... they win a queen for a rook.",
+   "missingWhat": null,
+   "concept": null,
+   "note": "app's refutation line differs from Danya's (...gxf6 Qc4+) but the lesson is the same"
+  },
+  {
+   "board": "miracle-on-the-chess-board#0",
+   "n": 2,
+   "idea": "A hidden drawing resource exists (Black to play and draw)",
+   "verdict": "said",
+   "appComputer": "onlyMove",
+   "appText": "You play Qf5: it is the only move that holds here — the next best, Re8, gives up about a piece's worth.",
+   "missingWhat": null,
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "modern-chess-technique#0",
+   "n": 0,
+   "idea": "Black is close to a draw; he just needs to trade rooks at the right moment",
+   "verdict": "missing-silent",
+   "appComputer": "tradeJudgement / fileTrade",
+   "appText": null,
+   "missingWhat": "Black is close to a draw and only needs to trade rooks at the right moment",
+   "concept": null,
+   "note": "app reads it as clearly better and pushing the g-pawn"
+  },
+  {
+   "board": "modern-chess-technique#0",
+   "n": 1,
+   "idea": "So White keeps the rooks on",
+   "verdict": "missing-silent",
+   "appComputer": "tradeJudgement",
+   "appText": null,
+   "missingWhat": "so White keeps the rooks on",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "modern-chess-technique#0",
+   "n": 2,
+   "idea": "Time-sensitive position: go for it now rather than slowly improve",
+   "verdict": "missing-silent",
+   "appComputer": "moveTiming",
+   "appText": null,
+   "missingWhat": "the position is time-sensitive: go for it now instead of slow improvement",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "overprotection-decoded#2",
+   "n": 0,
+   "idea": "The opening has favoured White",
+   "verdict": "said",
+   "appComputer": "null (standing)",
+   "appText": "You're slightly better — their queen on f8 has no safe square.",
+   "missingWhat": null,
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "overprotection-decoded#2",
+   "n": 1,
+   "idea": "Black's Hedgehog health hinges on the two breaks ...b5 and ...d5",
+   "verdict": "partial",
+   "appComputer": "temptingOnBoard (their-refuted)",
+   "appText": "d5 was the obvious try for them, but it doesn't hold up: you play e5 ... you win a pawn.",
+   "missingWhat": "that the Hedgehog's health hinges on its two breaks, ...b5 and ...d5",
+   "concept": "named structure's key breaks",
+   "note": "readPosition names ...a5 as their break instead; namedStructure silent"
+  },
+  {
+   "board": "overprotection-decoded#2",
+   "n": 2,
+   "idea": "Overprotect the key squares so the breaks never work",
+   "verdict": "missing-silent",
+   "appComputer": "findProphylaxis / breakStopped",
+   "appText": null,
+   "missingWhat": "overprotect the key squares so the breaks never work (b5 takes the ...b5 break away)",
+   "concept": null,
+   "note": "app reads b5 only as space and as hitting a6"
+  },
+  {
+   "board": "queen-the-supporting-actress#2",
+   "n": 0,
+   "idea": "White is two pawns down",
+   "verdict": "said",
+   "appComputer": "evalReading",
+   "appText": "You're slightly worse — you're down two pawns.",
+   "missingWhat": null,
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "queen-the-supporting-actress#2",
+   "n": 1,
+   "idea": "In this tactical melee the material count doesn't matter — the attack does",
+   "verdict": "partial",
+   "appComputer": "tradeKeptAt",
+   "appText": "Down material, you keep the pieces on. Trading bishop for knight on e5 would only help the side that's ahead.",
+   "missingWhat": "that in this melee the attack outweighs the material count",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "queen-the-supporting-actress#2",
+   "n": 2,
+   "idea": "The queen on h8 plays a supporting role, tying Black down (pins Ng8)",
+   "verdict": "partial",
+   "appComputer": "secondAttacker / royalDefenderTarget",
+   "appText": "Your rook adds a second attacker on their pawn on g7, beside the queen on h8... / Their knight on g8 is guarded only by the king...",
+   "missingWhat": "the queen's supporting role: from h8 it ties Black down (pins/paralyses Ng8)",
+   "concept": "tied-down defender created by a piece",
+   "note": null
+  },
+  {
+   "board": "rooks-on-the-seventh-revisited#4",
+   "n": 0,
+   "idea": "38.g5! roots out the pernicious d4 bishop at once (g5 then Nf6 forces it off)",
+   "verdict": "partial",
+   "appComputer": "buildReviewMoveTeachingFact",
+   "appText": "You play g5 — it takes f6 away from their bishop on d4.",
+   "missingWhat": "the purpose: g5 then Nf6 forces the pernicious d4 bishop off at once",
+   "concept": "removing the key counterplay piece",
+   "note": "strategicReason says g5 grabs space; depthClauses says keep f6 empty for the knight's way to h5; boardReason calls Nf6 not the move"
+  },
+  {
+   "board": "rooks-on-the-seventh-revisited#4",
+   "n": 1,
+   "idea": "38.Rxh7+ and 38.Ng5 are tempting but let Black's counterplay live",
+   "verdict": "missing-silent",
+   "appComputer": "temptingOnBoard",
+   "appText": null,
+   "missingWhat": "38.Rxh7+ and 38.Ng5 are tempting but let Black's counterplay live",
+   "concept": null,
+   "note": "temptingOnBoard only refutes Kg2"
+  },
+  {
+   "board": "rooks-on-the-seventh-revisited#4",
+   "n": 2,
+   "idea": "Black has counterplay (doubled a-file rooks plus the bishop) that must be quashed first",
+   "verdict": "partial",
+   "appComputer": "liveMethodBeat",
+   "appText": "Their threat first, your idea second: right now they're after your a-pawn.",
+   "missingWhat": "the whole counterplay (doubled a-file rooks plus the bishop) that must be quashed before anything else",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "the-art-of-setting-traps#1",
+   "n": 0,
+   "idea": "31...Kb5?? — the natural king advance walks into a4+ and Bd2, winning",
+   "verdict": "partial",
+   "appComputer": "boardReason",
+   "appText": "Kb5 looks natural, but it isn't the move: your pieces reach fewer squares after this than after the better move.",
+   "missingWhat": "the real reason: Kb5?? walks into a4+ and Bd2, trapping the king",
+   "concept": null,
+   "note": "the reason given is a mobility count, not the trap"
+  },
+  {
+   "board": "the-art-of-setting-traps#1",
+   "n": 1,
+   "idea": "Nb4+ drove the king back and held White's flimsy position together",
+   "verdict": "partial",
+   "appComputer": "exchangeSacrifice",
+   "appText": "That gives up the exchange: your rook for their knight on b4...",
+   "missingWhat": "that the b4 knight is the piece holding White's flimsy position together (Nb4+ drives the king back)",
+   "concept": "key defender identification",
+   "note": null
+  },
+  {
+   "board": "the-art-of-setting-traps#1",
+   "n": 2,
+   "idea": "A trap is often hidden inside an entirely natural move — stay tactically alert",
+   "verdict": "missing-silent",
+   "appComputer": "methodBeat",
+   "appText": null,
+   "missingWhat": "a trap is often hidden inside an entirely natural move — check it",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "the-art-of-time-management#3",
+   "n": 0,
+   "idea": "Classic K+R mate: side checks push the king back a rank, then opposition and another check, to the back rank",
+   "verdict": "partial",
+   "appComputer": "readConversion",
+   "appText": "Their king is alone — cut it off: put your rook on a file or rank it can't cross, then drive it to the edge and mate.",
+   "missingWhat": "the actual method: side checks push it back a rank, force the opposition, check again",
+   "concept": "step-by-step basic mate technique",
+   "note": null
+  },
+  {
+   "board": "the-art-of-time-management#3",
+   "n": 1,
+   "idea": "That method is slow; a faster box method is safer with seconds left",
+   "verdict": "missing-silent",
+   "appComputer": "endgameTechnique",
+   "appText": null,
+   "missingWhat": "the faster \"box\" method, safer with seconds on the clock",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "the-art-of-time-management#3",
+   "n": 2,
+   "idea": "Habit: drill the fastest basic mates so you never lose a won game on time",
+   "verdict": "not-teachable",
+   "appComputer": null,
+   "appText": null,
+   "missingWhat": null,
+   "concept": null,
+   "note": "training/time-management advice"
+  },
+  {
+   "board": "the-discovered-check-reloaded#2",
+   "n": 0,
+   "idea": "White has overwhelming compensation for the piece (three pawns and more)",
+   "verdict": "partial",
+   "appComputer": "null (standing)",
+   "appText": "You're winning — their bishop on f5 is pinned to its king.",
+   "missingWhat": "that White has overwhelming compensation for the piece (three pawns and more)",
+   "concept": null,
+   "note": "compensation silent"
+  },
+  {
+   "board": "the-discovered-check-reloaded#2",
+   "n": 1,
+   "idea": "Black's king on g5 is very exposed and both White heavy pieces are optimally placed",
+   "verdict": "partial",
+   "appComputer": "readPosition",
+   "appText": "The f file is open toward their king — that is the road an attack would come down.",
+   "missingWhat": "Black's king on g5 is badly exposed and both White heavy pieces are optimally placed",
+   "concept": null,
+   "note": "kingSiege silent"
+  },
+  {
+   "board": "the-discovered-check-reloaded#2",
+   "n": 2,
+   "idea": "34.e4! hits the f5 bishop, pinned to the king along the fifth rank by Qc5 — exf5 comes with discovered check",
+   "verdict": "said",
+   "appComputer": "pinPressureConcept",
+   "appText": "Your queen pins their bishop to their king. Pile on the pinned piece... e4 adds a pawn on the bishop, and it can't step away.",
+   "missingWhat": null,
+   "concept": null,
+   "note": "the discovered-check follow-up is not named"
+  },
+  {
+   "board": "the-importance-of-solving-studies#2",
+   "n": 0,
+   "idea": "White plays for two results: everything hinges on whether White's king reaches g7 (to escort the h-pawn) before Black's king can",
+   "verdict": "missing-silent",
+   "appComputer": "kingWalk / raceCount",
+   "appText": null,
+   "missingWhat": "the game hinges on whether White's king reaches g7 before Black's king does",
+   "concept": null,
+   "note": "app plans an h-pawn push \"escorted by the king\" without the king race"
+  },
+  {
+   "board": "the-importance-of-solving-studies#2",
+   "n": 1,
+   "idea": "Moving the bishop along the a1-h8 diagonal blocks the White king's path and gives Black the tempo to draw",
+   "verdict": "missing-new",
+   "appComputer": null,
+   "appText": null,
+   "missingWhat": "a bishop on the a1-h8 diagonal blocks White's own king's path and hands Black the drawing tempo",
+   "concept": "self-block: own piece in own king's route",
+   "note": null
+  },
+  {
+   "board": "the-importance-of-solving-studies#2",
+   "n": 2,
+   "idea": "1.Ba3 keeps the king's pathway open (but has its own drawback)",
+   "verdict": "missing-silent",
+   "appComputer": "alsoGood",
+   "appText": null,
+   "missingWhat": "1.Ba3 keeps the king's path open (with its own drawback)",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "the-knockout-blow#2",
+   "n": 0,
+   "idea": "Black's king is stranded in the centre",
+   "verdict": "said",
+   "appComputer": "readPosition",
+   "appText": "Their king on d7 is stuck in the centre — it can no longer castle, so every line that opens toward it is worth looking at.",
+   "missingWhat": null,
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "the-knockout-blow#2",
+   "n": 1,
+   "idea": "The quiet pawn advance b4 (then b5) to dislodge the c6 knight is the knockout",
+   "verdict": "said",
+   "appComputer": "buildReviewMoveTeachingFact",
+   "appText": "You play b4 — it prepares b5, which would kick their knight.",
+   "missingWhat": null,
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "the-knockout-blow#2",
+   "n": 2,
+   "idea": "A knockout blow can be a simple developing move or pawn advance",
+   "verdict": "not-teachable",
+   "appComputer": null,
+   "appText": null,
+   "missingWhat": null,
+   "concept": null,
+   "note": "general maxim; its board instance is idea 1"
+  },
+  {
+   "board": "the-positional-queen-sacrifice#0",
+   "n": 0,
+   "idea": "White has repelled Black's queenside pressure",
+   "verdict": "missing-silent",
+   "appComputer": "planStopped",
+   "appText": null,
+   "missingWhat": "White has repelled Black's queenside pressure",
+   "concept": null,
+   "note": "readPosition still lists ...b4 as their play"
+  },
+  {
+   "board": "the-positional-queen-sacrifice#0",
+   "n": 1,
+   "idea": "White is about to break through on the kingside (g4-g5)",
+   "verdict": "said",
+   "appComputer": "pawnBreak",
+   "appText": "A pawn break: g5 attacks their pawn on f6, the base of the pawn chain. If they take, it half-opens the g-file for your rooks.",
+   "missingWhat": null,
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "the-positional-queen-sacrifice#0",
+   "n": 2,
+   "idea": "White has a clear advantage",
+   "verdict": "said",
+   "appComputer": "null (standing)",
+   "appText": "You're clearly better — their king is still in the middle.",
+   "missingWhat": null,
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "understanding-the-back-rank#3",
+   "n": 0,
+   "idea": "The position is outwardly complex and double-edged",
+   "verdict": "missing-silent",
+   "appComputer": "positionCharacter",
+   "appText": null,
+   "missingWhat": "the position is outwardly complex and double-edged",
+   "concept": null,
+   "note": "standing says slightly better, evalReading says clearly better"
+  },
+  {
+   "board": "understanding-the-back-rank#3",
+   "n": 1,
+   "idea": "29.Bxg6! starts a back-rank combination: removing the g6 knight; ...hxg6 falls into a king hunt",
+   "verdict": "partial",
+   "appComputer": "depthClauses (provoke)",
+   "appText": "The bishop takes g6 forces a concession — their best answer is fxg6, and it leaves their g-pawn weak for good.",
+   "missingWhat": "that Bxg6 removes the knight to launch the back-rank combination (Qe6+, Rc8) and that ...hxg6 runs into a king hunt",
+   "concept": null,
+   "note": "app reads the blow as a structural concession, not the combination"
+  },
+  {
+   "board": "understanding-the-back-rank#3",
+   "n": 2,
+   "idea": "Black's back rank (no luft, rooks tied to d-file) is the weakness to target",
+   "verdict": "said",
+   "appComputer": "backRankWeakness",
+   "appText": "Their king on g8 has no luft. Only their rook on d8 guards the back rank — pull it away and Re8 is mate.",
+   "missingWhat": null,
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "weak-squares-who-cares#5",
+   "n": 0,
+   "idea": "Positionally White looks busted: Black's knight is entrenched on the ideal e5 square",
+   "verdict": "missing-silent",
+   "appComputer": "outpost (their side)",
+   "appText": null,
+   "missingWhat": "Black's knight entrenched on the ideal e5 square, so positionally White looks busted",
+   "concept": null,
+   "note": "app never mentions the e5 knight; standing says clearly better"
+  },
+  {
+   "board": "weak-squares-who-cares#5",
+   "n": 1,
+   "idea": "But White has a formidable mass of pieces on the kingside while Black's rooks, c5 knight and b7 bishop are far from the king",
+   "verdict": "missing-silent",
+   "appComputer": "kingSiege",
+   "appText": null,
+   "missingWhat": "White's mass of pieces on the kingside while Black's rooks, Nc5 and Bb7 are far from the king",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "weak-squares-who-cares#5",
+   "n": 2,
+   "idea": "The position is time-sensitive: White must act before Black plugs the kingside holes",
+   "verdict": "missing-silent",
+   "appComputer": "moveTiming",
+   "appText": null,
+   "missingWhat": "time-sensitive: act before Black plugs the kingside holes",
+   "concept": null,
+   "note": "boardPlanFacts tells the student to reroute the h2 knight to d4 \"before you attack\", the opposite tempo"
+  },
+  {
+   "board": "bobbys-overlooked-gem#2",
+   "n": 0,
+   "idea": "26.f5! starts the model attack on the king — the time has come for the break",
+   "verdict": "partial",
+   "appComputer": "planSteps",
+   "appText": "Your plan from here: the f5 break, Rce1 and then the f6 break.",
+   "missingWhat": "that the time for f5 is now and it launches a model attack on the king",
+   "concept": null,
+   "note": "depthClauses calls a4, Rce1 and f5 equally good; strategicReason pushes a4 for space"
+  },
+  {
+   "board": "bobbys-overlooked-gem#2",
+   "n": 1,
+   "idea": "Black lost with surprising submissiveness; White is winning",
+   "verdict": "partial",
+   "appComputer": "null (standing)",
+   "appText": "You're clearly better.",
+   "missingWhat": "that White is (practically) winning",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "how-to-play-a-brilliancy#1",
+   "n": 0,
+   "idea": "Black has undermined White's centre and has respectable central counterplay",
+   "verdict": "partial",
+   "appComputer": "planSteps (their-plan)",
+   "appText": "Their plan from here: the e5 break, Bf4 and then Re8.",
+   "missingWhat": "that Black has already undermined White's centre and has respectable central counterplay",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "how-to-play-a-brilliancy#1",
+   "n": 1,
+   "idea": "17.Bg5 is dubious: White underestimates Black's dark-square play",
+   "verdict": "wrong",
+   "appComputer": "buildReviewMoveTeachingFact / depthClauses",
+   "appText": "You play Bg5 — it bears down on f4, keeping their bishop off it. / Several moves are equally good ... Bg5, Qc2 or Bxc7.",
+   "missingWhat": null,
+   "concept": null,
+   "note": "Danya: 17.Bg5 is dubious, it underestimates Black's dark-square play; the engine's top line is Bg5, so the app is engine-true but teaches the move as fine"
+  },
+  {
+   "board": "how-to-survive-a-chess-disaster#2",
+   "n": 0,
+   "idea": "Black's active knights and four connected passers are overwhelming compensation for the exchange",
+   "verdict": "partial",
+   "appComputer": "structurePlanFact",
+   "appText": "Both sides have a runner: yours on d4 is three pushes from queening...",
+   "missingWhat": "that active knights plus four connected passers are overwhelming compensation for the exchange",
+   "concept": "material-vs-compensation verdict for an exchange down",
+   "note": "standing says roughly balanced; planRaceClause on the same board says the race was lost, contradicting structurePlanFact"
+  },
+  {
+   "board": "how-to-survive-a-chess-disaster#2",
+   "n": 1,
+   "idea": "White's defence: the Carlsen approach — stay alive one move longer",
+   "verdict": "not-teachable",
+   "appComputer": null,
+   "appText": null,
+   "missingWhat": null,
+   "concept": null,
+   "note": "defensive attitude (stay alive one more move)"
+  },
+  {
+   "board": "in-pursuit-of-zugzwang#2",
+   "n": 0,
+   "idea": "47.Nf4! Qxg3 48.Nxh5: sacrifice the knight to remove the h-pawn and build a fortress",
+   "verdict": "missing-silent",
+   "appComputer": "fortress",
+   "appText": null,
+   "missingWhat": "47.Nf4! Qxg3 48.Nxh5: the knight is given to remove the h-pawn and build a fortress",
+   "concept": null,
+   "note": "app gives Nf4 a square-eyeing reason (e6/d5)"
+  },
+  {
+   "board": "in-pursuit-of-zugzwang#2",
+   "n": 1,
+   "idea": "The fortress (Bf7, g6) can only be broken by a series of zugzwangs",
+   "verdict": "missing-silent",
+   "appComputer": "zugzwangRead",
+   "appText": null,
+   "missingWhat": "the fortress (Bf7, g6) can only be broken by a series of zugzwangs",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "mastering-opposite-colored-bishops#0",
+   "n": 0,
+   "idea": "Trading the knight leads to opposite-coloured bishops three pawns up",
+   "verdict": "partial",
+   "appComputer": "defenderTradeMade",
+   "appText": "Their knight on f2 is the piece holding their position together... Once it's gone, your pawn on h4 can run.",
+   "missingWhat": "that trading the knight leaves opposite-coloured bishops",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "mastering-opposite-colored-bishops#0",
+   "n": 1,
+   "idea": "Opposite-coloured bishops let the defender build a fortress even three pawns down",
+   "verdict": "wrong",
+   "appComputer": "defenderTradeMade",
+   "appText": "Their knight on f2 is the piece holding their position together ... Once it's gone, your pawn on h4 can run.",
+   "missingWhat": null,
+   "concept": null,
+   "note": "Danya: the trade gave opposite-coloured bishops and an impregnable fortress even three pawns down; the app recommends the trade as winning"
+  },
+  {
+   "board": "modern-chess-technique#3",
+   "n": 0,
+   "idea": "White is a pawn up and winning",
+   "verdict": "said",
+   "appComputer": "null (standing)",
+   "appText": "You're clearly better — you have the initiative, you're up a pawn.",
+   "missingWhat": null,
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "modern-chess-technique#3",
+   "n": 1,
+   "idea": "White's pieces are perfectly coordinated",
+   "verdict": "missing-silent",
+   "appComputer": "pieceActivity",
+   "appText": null,
+   "missingWhat": "White's pieces are perfectly coordinated",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "pawn-endgames-a-practical-guide#2",
+   "n": 0,
+   "idea": "The instinctive push of the c-pawn is wrong",
+   "verdict": "said",
+   "appComputer": "structurePlanFact",
+   "appText": "Both sides have a runner: yours on c5 is three pushes from queening, theirs on g3 is two. They get there first, so you can't just race — stop theirs before yours can decide anything.",
+   "missingWhat": null,
+   "concept": null,
+   "note": "passedPawnPush (\"wants to run — passed pawns are meant to be pushed\") and boardPlanFacts (\"get your passed pawn on c5 promoting\") on the same board say the opposite"
+  },
+  {
+   "board": "pawn-endgames-a-practical-guide#2",
+   "n": 1,
+   "idea": "Pawn races are decided by exact calculation of who queens first (stop the g-pawn first)",
+   "verdict": "said",
+   "appComputer": "structurePlanFact",
+   "appText": "...They get there first, so you can't just race — stop theirs before yours can decide anything.",
+   "missingWhat": null,
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "plus-equals-mode#1",
+   "n": 0,
+   "idea": "White is slightly better",
+   "verdict": "said",
+   "appComputer": "null (standing)",
+   "appText": "You're slightly better.",
+   "missingWhat": null,
+   "concept": null,
+   "note": "evalReading on the same board says roughly balanced"
+  },
+  {
+   "board": "plus-equals-mode#1",
+   "n": 1,
+   "idea": "Transform the position: drastic change unsettles a defender playing for a draw",
+   "verdict": "missing-silent",
+   "appComputer": "practicalChance",
+   "appText": null,
+   "missingWhat": "drastically change the landscape to unsettle a defender playing for a draw",
+   "concept": null,
+   "note": "engine line 2 (Rxc7, the trade-down) is never framed as a transformation"
+  },
+  {
+   "board": "remembering-im-emory-tate#2",
+   "n": 0,
+   "idea": "Two pieces down, everything is about mate — the attack is the compensation",
+   "verdict": "partial",
+   "appComputer": "null (standing)",
+   "appText": "You're winning — their bishop on e7 has one safe square.",
+   "missingWhat": "that White is two pieces down and the mating attack is the whole compensation",
+   "concept": null,
+   "note": "compensation silent"
+  },
+  {
+   "board": "remembering-im-emory-tate#2",
+   "n": 1,
+   "idea": "27.g6!! pawn sac rips open the king's cover (prepared many moves earlier)",
+   "verdict": "said",
+   "appComputer": "pawnBreak",
+   "appText": "A pawn break: g6 attacks their pawn on f7. If they take, it half-opens the g-file for your rooks, toward their king.",
+   "missingWhat": null,
+   "concept": null,
+   "note": "with moveAspects \"threatens gxf7#\" and the their-refuted mates"
+  },
+  {
+   "board": "the-art-of-maneuvering#2",
+   "n": 0,
+   "idea": "Black has sacrificed a knight for an attack on the king stuck in the centre",
+   "verdict": "partial",
+   "appComputer": "boardPlanFacts",
+   "appText": "The plan from here is to attack their king on e1 before it gets out ... look for a sacrifice on d2 or f2 to strip its cover.",
+   "missingWhat": "that Black has already sacrificed a knight for this attack (the material is the stake)",
+   "concept": null,
+   "note": "standing says roughly balanced, evalReading clearly better"
+  },
+  {
+   "board": "the-art-of-maneuvering#2",
+   "n": 1,
+   "idea": "An attack with too little horsepower fails — mobilise every last reserve",
+   "verdict": "partial",
+   "appComputer": "boardPlanFacts",
+   "appText": "...double your rooks on the open d-file, bring pieces in with tempo...",
+   "missingWhat": "that h5 itself mobilises the last reserve (frees h6 for the g7 bishop, then ...Rhd8)",
+   "concept": "freeing a square for a reserve piece",
+   "note": "strategicReason and computeMoveFundamentals read h5 as grabbing kingside space"
+  },
+  {
+   "board": "the-double-bishop-sacrifice2#2",
+   "n": 0,
+   "idea": "Black's position is annoyingly passive after a poor opening",
+   "verdict": "missing-silent",
+   "appComputer": "pieceActivity",
+   "appText": null,
+   "missingWhat": "Black's position is annoyingly passive after a poor opening",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "the-double-bishop-sacrifice2#2",
+   "n": 1,
+   "idea": "16.Ne4 centralises the second knight, tightening the screws",
+   "verdict": "partial",
+   "appComputer": "computeMoveFundamentals",
+   "appText": "You play Ne4 — it eyes their bishop on d6, which no pawn of theirs can guard.",
+   "missingWhat": "that Ne4 centralises the second knight, tightening the screws on a passive position",
+   "concept": "centralisation / tightening a bind",
+   "note": "newTiedDefender notes the queen tied to c5, a piece of the squeeze"
+  },
+  {
+   "board": "the-importance-of-solving-studies#1",
+   "n": 0,
+   "idea": "Material is irrelevant; the only question is who promotes first (a pawn race)",
+   "verdict": "partial",
+   "appComputer": "planRaceClause",
+   "appText": "Both sides had a runner: yours on b6 was two pushes from queening, theirs on h2 was one. They would get there first, so racing lost it...",
+   "missingWhat": "that material is irrelevant and the whole question is who promotes first, which White wins by queening with check",
+   "concept": null,
+   "note": "the race verdict ignores that White's promotions come with check (onlyMove says b6+ holds)"
+  },
+  {
+   "board": "the-importance-of-solving-studies#1",
+   "n": 1,
+   "idea": "1.b6+ drives the king to the eighth rank so every White promotion later comes with check",
+   "verdict": "partial",
+   "appComputer": "onlyMove / depthClauses (king-read)",
+   "appText": "You go b6+, which is the only move that holds here... / The pawn to b6 first — it's check, and the king has to choose between a8 or b8.",
+   "missingWhat": "that driving the king to the eighth rank makes every later White promotion come with check",
+   "concept": "promotion with check (tempo-gaining promotion)",
+   "note": null
+  },
+  {
+   "board": "the-positional-queen-sacrifice#1",
+   "n": 0,
+   "idea": "The position is too complex to judge in general terms; it comes down to concrete calculation",
+   "verdict": "missing-silent",
+   "appComputer": "positionCharacter",
+   "appText": null,
+   "missingWhat": "the position is too complex for general terms; it comes down to concrete calculation",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "the-positional-queen-sacrifice#1",
+   "n": 1,
+   "idea": "White is objectively better yet under tremendous pressure from Black's active pieces (centralised knights, e4/d5 pawns)",
+   "verdict": "partial",
+   "appComputer": "readPosition",
+   "appText": "You still have 3 minor pieces at home and they are ahead in development... / Their passed pawn on d5 is the danger...",
+   "missingWhat": "that White is objectively better yet under tremendous pressure from the centralised knights and the e4/d5 pawns",
+   "concept": null,
+   "note": "standing says slightly better, evalReading roughly balanced"
+  },
+  {
+   "board": "the-tactical-detector#3",
+   "n": 0,
+   "idea": "Black (Adams) has reached a very comfortable endgame",
+   "verdict": "partial",
+   "appComputer": "null (standing)",
+   "appText": "You're slightly better.",
+   "missingWhat": "that Black has reached a very comfortable endgame",
+   "concept": null,
+   "note": "evalReading on the same board says roughly balanced"
+  },
+  {
+   "board": "the-tactical-detector#3",
+   "n": 1,
+   "idea": "Tactical features can hide behind an innocuous-looking position; keep the tactical detector on",
+   "verdict": "missing-silent",
+   "appComputer": "methodBeat",
+   "appText": null,
+   "missingWhat": "tactical features hide behind an innocuous position, so keep the tactical detector on",
+   "concept": null,
+   "note": null
+  },
+  {
+   "board": "understanding-the-back-rank#4",
+   "n": 0,
+   "idea": "Material is equal and the position symmetrical; a draw looks likeliest",
+   "verdict": "partial",
+   "appComputer": "null (standing)",
+   "appText": "You're slightly better.",
+   "missingWhat": "that material is equal and the position symmetrical, so a draw looks likeliest on the surface",
+   "concept": null,
+   "note": "evalReading says clearly better"
+  },
+  {
+   "board": "understanding-the-back-rank#4",
+   "n": 1,
+   "idea": "A stunning tactical sequence exploits a back-rank weakness that is hard to perceive",
+   "verdict": "partial",
+   "appComputer": "temptingOnBoard (their-refuted)",
+   "appText": "Qxg5 was the obvious try for them, but it doesn't hold up: you play Rxe8+, they answer Nxe8 and you play Bxg5 — you win a queen for a rook.",
+   "missingWhat": "that the whole sequence exploits Black's hard-to-see back-rank weakness",
+   "concept": null,
+   "note": "conceptForBoard describes WHITE's back rank as the weakness; backRankWeakness silent for Black"
+  },
+  {
+   "board": "the-chess-investigator#2",
+   "n": 0,
+   "idea": "Black appears to have built a solid, well-defended position (prose truncated)",
+   "verdict": "partial",
+   "appComputer": "readCriticalMoment",
+   "appText": "For your next move, exactly one move keeps you on top. Slow down.",
+   "missingWhat": "that Black only appears to have a solid, well-defended position (which Bxh6 breaks)",
+   "concept": null,
+   "note": "Danya's sentence is truncated"
+  }
+ ],
+ "restates": [
+  {
+   "board": "positional-combinations#0",
+   "computer": "moveAspects",
+   "text": "You go Bh2+, which checks the king, forcing a reply."
+  },
+  {
+   "board": "positional-combinations#0",
+   "computer": "buildReviewMoveTeachingFact",
+   "text": "You go Bh2+, which forces the king to react, seizing the initiative for a move."
+  },
+  {
+   "board": "positional-combinations#0",
+   "computer": "conceptForBoard",
+   "text": "After Bh2+, Kh1, Nb6, Bf1, Bxf5, exf5, Bf4, Bxf4, Qxf4, g3, Qb4, a3, Qe7, Kg1, h5, b4, Qe5, Re1, Qxe1, your queen pins their bishop against their king — ... (score-sheet recital of a 19-ply engine line)"
+  },
+  {
+   "board": "how-to-avoid-blunders-part-1#3",
+   "computer": "moveAspects",
+   "text": "You play Nf7+ — it checks the king, forcing a reply."
+  },
+  {
+   "board": "how-to-avoid-blunders-part-1#3",
+   "computer": "moveJob",
+   "text": "You play Nf7+ — it gives check."
+  },
+  {
+   "board": "how-to-avoid-blunders-part-1#3",
+   "computer": "buildReviewMoveTeachingFact",
+   "text": "You play Nf7+ — it forces the king to react, seizing the initiative for a move."
+  },
+  {
+   "board": "how-to-win-equal-positions#0",
+   "computer": "moveAspects",
+   "text": "You go Nxa6, which trades the knight for the bishop."
+  },
+  {
+   "board": "mastering-the-queen-sacrifice#1",
+   "computer": "moveAspects",
+   "text": "You play Nxd6 — it trades the knight for the bishop."
+  },
+  {
+   "board": "the-positional-sacrifice#2",
+   "computer": "moveJob",
+   "text": "Your f6 attacks their pawn on g7."
+  },
+  {
+   "board": "a-guide-to-underpromotion#1",
+   "computer": "nameEndgamePhase",
+   "text": "You've reached a queen endgame — king safety and precision decide it."
+  },
+  {
+   "board": "a-guide-to-underpromotion#1",
+   "computer": "depthClauses (line)",
+   "text": "The queen to e8, their queen to a2, your pawn to a8, promoting to a bishop, then their queen to a5, and your pawn queens."
+  },
+  {
+   "board": "a-guide-to-underpromotion#1",
+   "computer": "boardReason",
+   "text": "a8=Q looks natural, but it isn't the move: the better move makes a passed pawn. (false reason: the a7 pawn is already passed)"
+  },
+  {
+   "board": "a-guide-to-underpromotion#1",
+   "computer": "buildReviewMoveTeachingFact",
+   "text": "You play Qe8: it takes the open e-file — a highway straight into their position. (misses the real job: covering a8 and the back rank)"
+  },
+  {
+   "board": "alekhines-gun2#2",
+   "computer": "conceptForBoard",
+   "text": "After Rf3, Qe7, Rf4, Ra7, Kg2, b6, Bc6, Rd8, Qd3, Rc7, Qf3, your queen and your rook on f4 form a battery ... (11-ply recital)"
+  },
+  {
+   "board": "desperado-defense#0",
+   "computer": "moveJob",
+   "text": "You go Nd7, which brings your knight out."
+  },
+  {
+   "board": "desperado-defense#0",
+   "computer": "buildReviewMoveTeachingFact",
+   "text": "You go Nd7, which develops to d7, joining the game."
+  },
+  {
+   "board": "how-to-ruin-your-pawn-structure#2",
+   "computer": "moveAspects",
+   "text": "You play gxh5 — it trades pawns."
+  },
+  {
+   "board": "never-resign-prematurely#0",
+   "computer": "nameEndgamePhase",
+   "text": "You've reached a king-and-pawn endgame — every tempo counts."
+  },
+  {
+   "board": "never-resign-prematurely#0",
+   "computer": "conceptForBoard",
+   "text": "In a pawn ending king activity, the opposition, and the outside passed pawn decide it — every tempo counts. (generic, not this board)"
+  },
+  {
+   "board": "positional-combinations#1",
+   "computer": "conceptForBoard",
+   "text": "After g3, Bxc1, Raxc1, h6, Kg2, a5, Rd2, Rad8, Rcd1, your rook on d1 and your rook on d2 form a battery ... (9-ply recital)"
+  },
+  {
+   "board": "positional-combinations#1",
+   "computer": "buildReviewMoveTeachingFact",
+   "text": "You go g3, which kicks their bishop off f4, gaining time. (verbatim duplicate of computeMoveFundamentals)"
+  },
+  {
+   "board": "rooks-on-the-seventh-revisited#2",
+   "computer": "conceptForBoard",
+   "text": "A rook-and-minor ending is won slowly: keep the pieces active and pile on the weakest pawn. (generic)"
+  },
+  {
+   "board": "the-greek-gift-sacrifice-lives-on#3",
+   "computer": "moveAspects",
+   "text": "You play Bxh7+ — it checks the king, forcing a reply."
+  },
+  {
+   "board": "the-greek-gift-sacrifice-lives-on#3",
+   "computer": "moveJob",
+   "text": "You play Bxh7+ — it gives check."
+  },
+  {
+   "board": "the-greek-gift-sacrifice-lives-on#3",
+   "computer": "moveAspects (aspect-passer)",
+   "text": "You play Bxh7+ — it creates a passed pawn on h2. (FALSE: Black's g7 pawn still covers the h-file path, h2 is not passed)"
+  },
+  {
+   "board": "the-greek-gift-sacrifice-lives-on#3",
+   "computer": "passedPawnPush",
+   "text": "Your passed pawn on h2 wants to run — passed pawns are meant to be pushed. (FALSE, same reason; planRaceClause then races it)"
+  },
+  {
+   "board": "the-king-march#2",
+   "computer": "structurePlanFact",
+   "text": "You hold the isolated queen's pawn — play actively while pieces are on ... (irrelevant with the king under mating attack)"
+  },
+  {
+   "board": "the-positional-sacrifice#0",
+   "computer": "null (character)",
+   "text": "They have no counterplay, so there is no hurry: improve every piece before doing anything concrete. (said while their queen hits the loose h4 rook)"
+  },
+  {
+   "board": "the-tactical-detector#0",
+   "computer": "depthClauses (king-read)",
+   "text": "The kings are on opposite wings, so it is a race: your pawns go after their king on the kingside... (no pawn storm exists here)"
+  },
+  {
+   "board": "the-tactical-detector#0",
+   "computer": "depthClauses (line)",
+   "text": "The knight to f6, check, their king to f7, your queen to e8, check, then their king takes f6, and you come out 3 points down. (stops before Qxf8+; deepCombination says the material comes back)"
+  },
+  {
+   "board": "the-tactical-detector#0",
+   "computer": "moveAspects",
+   "text": "You go Nf6+, which checks the king, forcing a reply."
+  },
+  {
+   "board": "the-tactical-detector#0",
+   "computer": "moveJob",
+   "text": "You go Nf6+, which gives check."
+  },
+  {
+   "board": "understanding-the-back-rank#0",
+   "computer": "studentMoveStructure",
+   "text": "Your pawns make a triangle with the one on g3 at its point: backed from both sides, it can lead the expansion. (meaningless for a luft move)"
+  },
+  {
+   "board": "weak-squares-who-cares#7",
+   "computer": "moveJob",
+   "text": "Your e4 covers e4, where the pawn to e4 would hit your knight on f3."
+  },
+  {
+   "board": "weak-squares-who-cares#7",
+   "computer": "buildReviewMoveTeachingFact",
+   "text": "Your e4 stakes a claim in the center and opens lines for the pieces."
+  },
+  {
+   "board": "desperado-defense#3",
+   "computer": "moveAspects",
+   "text": "You play Re3 — it lands a battery. / You play Re3 — it sets up a battery. (both said on the same move)"
+  },
+  {
+   "board": "how-to-avoid-blunders-part-1#1",
+   "computer": "moveAspects",
+   "text": "You play Bxg5 — it trades the bishop for the knight."
+  },
+  {
+   "board": "how-to-beat-magnus-carlsen#2",
+   "computer": "moveJob",
+   "text": "You play Qxd3 — it wins a pawn, and nothing can take back. (verbatim duplicate of moveAspects)"
+  },
+  {
+   "board": "how-to-win-equal-positions#2",
+   "computer": "buildReviewMoveTeachingFact",
+   "text": "You play Kg2: it marches up — in the endgame it stops hiding and becomes a fighting piece. (queens and knights are on; Kg2 is a tuck-in that avoids a queen check, as depthClauses says)"
+  },
+  {
+   "board": "in-pursuit-of-zugzwang#3",
+   "computer": "conceptForBoard",
+   "text": "Bishop versus knight: the bishop wants open lines and both wings, the knight wants an outpost and a fixed structure. (generic)"
+  },
+  {
+   "board": "in-pursuit-of-zugzwang#3",
+   "computer": "nameEndgamePhase",
+   "text": "You've reached a minor-piece endgame — the better piece and the outside pawn win it."
+  },
+  {
+   "board": "magnus-carlsens-best-endgame-wins#3",
+   "computer": "planRaceClause",
+   "text": "Both sides had a runner: yours on g5 was three pushes... (past-tense duplicate of structurePlanFact on the same board)"
+  },
+  {
+   "board": "mastering-opposite-colored-bishops#1",
+   "computer": "nameEndgamePhase",
+   "text": "You've reached a minor-piece endgame — the better piece and the outside pawn win it. (said beside the opposite-bishops drawishness line)"
+  },
+  {
+   "board": "modern-chess-technique#0",
+   "computer": "evalReading",
+   "text": "You're slightly better — their rook on d4 is stranded with no safe square... (FALSE: the rook has d6, d7, d8)"
+  },
+  {
+   "board": "modern-chess-technique#0",
+   "computer": "temptingRefuted",
+   "text": "Kg4 is tempting here, but it fails: they play Rxe4+ — they win a bishop. (said three times: temptingOnBoard, temptingRefuted, buildDeliberation x2)"
+  },
+  {
+   "board": "overprotection-decoded#2",
+   "computer": "planSteps",
+   "text": "Your queen on e1 has a better road: f2 and then g2. (said twice)"
+  },
+  {
+   "board": "queen-the-supporting-actress#2",
+   "computer": "depthClauses (king-read)",
+   "text": "The kings are on opposite wings, so it is a race: your pawns go after their king on the kingside... (no pawn storm here; the pieces are attacking)"
+  },
+  {
+   "board": "queen-the-supporting-actress#2",
+   "computer": "conceptForBoard",
+   "text": "After Rh7, f6, Bh6, Rd7, Nd4, Rf7, Ncxb5, axb5, Nxb5, Ng6, Nxc7, Nxh8, Nxa8, gxh6, Rxh8, your rook on h8 pins... (15-ply recital)"
+  },
+  {
+   "board": "the-art-of-time-management#3",
+   "computer": "boardPlanFacts",
+   "text": "The plan from here is to seize the open a-file ... aim for the seventh rank, where a rook attacks pawns from behind. (K+R vs K, no pawns)"
+  },
+  {
+   "board": "the-art-of-time-management#3",
+   "computer": "boardPlanFacts",
+   "text": "Alongside that, aim to convert your extra material. Here's how: trade pieces, keep the pawns... (no pieces or pawns to trade)"
+  },
+  {
+   "board": "the-art-of-time-management#3",
+   "computer": "computeMoveFundamentals / buildReviewMoveTeachingFact",
+   "text": "You play Rd2 — it takes the open d-file, where the rook belongs. / ...a highway straight into their position. (Rd2 cuts the king off; \"open file\" is meaningless here)"
+  },
+  {
+   "board": "the-art-of-time-management#3",
+   "computer": "null (character)",
+   "text": "They have no counterplay, so there is no hurry: improve every piece before doing anything concrete."
+  },
+  {
+   "board": "the-discovered-check-reloaded#2",
+   "computer": "computeMoveFundamentals / buildReviewMoveTeachingFact",
+   "text": "Your e4 stakes out the center and grabs space. / Your e4 stakes a claim in the center and opens lines for the pieces. (generic opening-move reading of a tactical blow)"
+  },
+  {
+   "board": "the-importance-of-solving-studies#2",
+   "computer": "nameEndgamePhase",
+   "text": "You've reached a minor-piece endgame — the better piece and the outside pawn win it. (beside the opposite-bishops drawishness line on the same board; standing says slightly better, evalReading says winning)"
+  },
+  {
+   "board": "understanding-the-back-rank#3",
+   "computer": "moveAspects",
+   "text": "You go Bxg6, which trades the bishop for the knight."
+  },
+  {
+   "board": "how-to-survive-a-chess-disaster#2",
+   "computer": "planRaceClause",
+   "text": "Both sides had a runner ... They would get there first, so racing lost it... (contradicts structurePlanFact on the same board: \"the race is yours\")"
+  },
+  {
+   "board": "in-pursuit-of-zugzwang#2",
+   "computer": "depthClauses (king-read)",
+   "text": "The kings are on opposite wings, so it is a race: your pawns go after their king on the kingside... (down a queen for two pieces; no pawn storm)"
+  },
+  {
+   "board": "in-pursuit-of-zugzwang#2",
+   "computer": "buildReviewMoveTeachingFact",
+   "text": "You play Nf4 — it bears down on d5, a square no pawn of theirs can cover, and aiming at a square no pawn of theirs can cover. (repeats itself)"
+  },
+  {
+   "board": "mastering-opposite-colored-bishops#0",
+   "computer": "conceptForBoard",
+   "text": "A minor-piece ending goes to activity, the better piece, and a centralized king. (generic)"
+  },
+  {
+   "board": "modern-chess-technique#3",
+   "computer": "moveAspects",
+   "text": "You go Nd6+, which checks the king, forcing a reply."
+  },
+  {
+   "board": "modern-chess-technique#3",
+   "computer": "buildReviewMoveTeachingFact",
+   "text": "You go Nd6+, which forces the king to react, seizing the initiative for a move."
+  },
+  {
+   "board": "pawn-endgames-a-practical-guide#2",
+   "computer": "buildDeliberation",
+   "text": "e4? Then they play g2, you answer exd5 and they play g1=Q — you win a pawn. (FALSE: they queen; temptingOnBoard on the same board refutes e4)"
+  },
+  {
+   "board": "pawn-endgames-a-practical-guide#2",
+   "computer": "passedPawnPush",
+   "text": "Your passed pawn on c5 wants to run — passed pawns are meant to be pushed. (contradicts the race verdict)"
+  },
+  {
+   "board": "pawn-endgames-a-practical-guide#2",
+   "computer": "conceptForBoard",
+   "text": "After Ke2, Kh3, c6, g2, c7, g1=Q, c8=Q+, Qg4+, Qxg4+, Kxg4, e4, Kxf4, exd5, it comes down to a pawn race... (13-ply recital)"
+  },
+  {
+   "board": "plus-equals-mode#1",
+   "computer": "moveJob",
+   "text": "You go Be2, which brings your bishop out."
+  },
+  {
+   "board": "plus-equals-mode#1",
+   "computer": "buildReviewMoveTeachingFact",
+   "text": "You go Be2, which develops to e2, joining the game."
+  },
+  {
+   "board": "remembering-im-emory-tate#2",
+   "computer": "structurePlanFact",
+   "text": "They have an isolated pawn on d6, so trade pieces and pile onto it: in the endgame it falls. (advice to trade while two pieces down in a mating attack)"
+  },
+  {
+   "board": "remembering-im-emory-tate#2",
+   "computer": "buildPriorityFirst",
+   "text": "What's the priority here? ‖ Their pawn on f7 is isolated... Aim at it: g6 does. (g6 is a king attack, not a weak-pawn hunt)"
+  },
+  {
+   "board": "the-importance-of-solving-studies#1",
+   "computer": "depthClauses (line)",
+   "text": "The pawn to b6, check, their king to a8, your pawn to g7, then their pawn to h1, promoting to a queen, and you come out 8 points down. (stops before g8=Q+, the point of the line)"
+  },
+  {
+   "board": "the-importance-of-solving-studies#1",
+   "computer": "moveAspects / moveJob",
+   "text": "You go b6+, which checks the king, forcing a reply. / You go b6+, which gives check."
+  },
+  {
+   "board": "the-importance-of-solving-studies#1",
+   "computer": "computeMoveFundamentals",
+   "text": "You go b6+, which pushes your passed pawn — passed pawns must be pushed."
+  },
+  {
+   "board": "the-tactical-detector#3",
+   "computer": "buildReviewMoveTeachingFact",
+   "text": "You play Rb4: it takes the open b-file — a highway straight into their position."
+  }
+ ]
+}
