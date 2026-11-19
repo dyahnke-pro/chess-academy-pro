@@ -16,11 +16,14 @@
 //                  its best move is no capture, no check and no pawn into
 //                  their half, and the best line has the other side take
 //                  nothing for six moves: no counterplay, and nothing falls.
+//   drawn        — a known drawing shape the engine's line confirms level
+//                  (`drawnEnding`): the side behind holds it.
 import { Chess, type Color, type Square } from 'chess.js';
 import { type EngineLine, isQuiet, lineScore, playLine, sortedLines } from './engineLineRead';
+import { drawnEnding, type DrawReason } from './drawnEnding';
 
-export type VerdictKind = 'checksRepeat' | 'noProgress' | 'sitTight';
-export interface EndgameVerdict { kind: VerdictKind; side: Color; text: string; squares: Square[] }
+export type VerdictKind = 'checksRepeat' | 'noProgress' | 'sitTight' | 'drawn';
+export interface EndgameVerdict { kind: VerdictKind; side: Color; text: string; squares: Square[]; /** For `drawn`: which drawing shape. */ draw?: DrawReason }
 
 const posKey = (fen: string): string => fen.split(' ').slice(0, 2).join(' ');
 
@@ -44,6 +47,9 @@ function pawnContact(fen: string, sq: Square, color: Color): boolean {
 export function endgameVerdict(fen: string, lines: readonly EngineLine[], student: Color): EndgameVerdict | null {
   let c: Chess;
   try { c = new Chess(fen); } catch { return null; }
+  // A KNOWN DRAW the engine confirms: the side behind holds it.
+  const drawn = drawnEnding(fen, lines, student);
+  if (drawn) return { kind: 'drawn', side: drawn.side, text: drawn.text, squares: drawn.squares, draw: drawn.reason };
   if (c.inCheck()) return null;
   const side = c.turn();
   const ls = sortedLines(lines, side);
@@ -78,7 +84,11 @@ export function endgameVerdict(fen: string, lines: readonly EngineLine[], studen
   // An ENDGAME verdict: with queens on, six quiet moves are often an attack
   // being built (Tal's Rh7 board, queen-the-supporting-actress#2, reads level).
   const queensOff = !c.board().flat().some((p) => p?.type === 'q');
-  if (queensOff && firstSix.length === 6 && Math.abs(score) <= 50 && firstSix.every((m, i) => !m.captured && (m.piece !== 'p' || !pawnContact(best.boards[i + 1], m.to, m.color)))) {
+  // Checks are no maneuvering ("the best moves just improve pieces" was said
+  // over a rook checking a king away from a pawn on c7), and a pawn on its
+  // sixth or seventh rank is a target to hit, not a dead board.
+  const farPawn = c.board().flat().some((p) => p?.type === 'p' && (p.color === 'w' ? Number(p.square[1]) >= 6 : Number(p.square[1]) <= 3));
+  if (queensOff && !farPawn && firstSix.length === 6 && Math.abs(score) <= 50 && firstSix.every((m, i) => !m.captured && !/[+#]/.test(m.san) && (m.piece !== 'p' || !pawnContact(best.boards[i + 1], m.to, m.color)))) {
     const text = mine
       ? 'Nothing here can be forced: there is no pawn break and no target to hit, and the best moves just improve pieces. Maneuver, keep it solid, and wait for them to go wrong.'
       : 'Nothing here can be forced for them: no pawn break, no target. Keep everything solid and they have nothing to hit.';

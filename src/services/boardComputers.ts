@@ -7360,7 +7360,7 @@ export const BOARD_COMPUTERS = {
     read: (ctx, fact) => safe(() => {
       const r = endgameVerdict(ctx.fen, ctx.lines, ctx.student);
       if (!r) return null;
-      const key = `verdict:${r.kind}:${r.side}`;
+      const key = r.draw ? `verdict:drawn:${r.draw}:${r.side}` : `verdict:${r.kind}:${r.side}`;
       return fact({ key, claims: [key], text: r.text, proof: squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
         seat: (r.side === ctx.student ? 'student' : 'opponent'), namesStudentMove: r.kind === 'checksRepeat' && r.side === ctx.student, thread: LOCAL_THREAD, fen: ctx.fen });
     }),
