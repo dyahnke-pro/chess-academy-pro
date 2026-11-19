@@ -35,7 +35,7 @@ import { lineShape, lineShapePlies, orList, andList, type LineSeat } from '../ut
 import { contrastMoves } from './moveContrast';
 import { findHangingPieces } from './tacticClassifier';
 import { detectTactics } from './tacticsDetector';
-import { legalSeeGainFor } from './positionReadingService';
+import { legalSeeGainFor, bestCaptureGainFor } from './positionReadingService';
 import { exchangeEnd } from './material';
 import { describeStructure, newPawnWeaknesses } from './boardStructure';
 import { lineProof, type Proof } from './proof';
@@ -46,6 +46,10 @@ import { pieceRef } from './pieceRef';
 import { openSentence } from '../utils/openSentence';
 import { temptingKey } from './conceptKey';
 import { INACCURACY_CP } from './engineConstants';
+import { settledNetForLine, GAIN_HOLDS_PLIES } from './exchangeLedger';
+import { evalBand } from './evalBand';
+import { boardReason } from './positionalReason';
+import { phaseOfFen } from './boardConcepts';
 import { withMover } from '../utils/sideToMove';
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -114,6 +118,12 @@ export const SIBLING_SHARE = 0.5;
 /** The moves of the opening, where a centre pawn at home is still the plan. */
 const OPENING_MOVES = 12;
 
+/** MOVES WEIGHED FOR THE PLAN, not for the eye (his "Rh3 to hit them
+ *  directly fails to …h4"): UCI → what the try goes after, in words ("their
+ *  pawn on e6"). A considered move is a candidate whatever the eye or the
+ *  human model says, and its refutation is worded as the direct try failing. */
+export type ConsideredTries = ReadonlyMap<string, { why: 'plan'; target: string }>;
+
 /** ONE ENGINE READ OF ONE CANDIDATE from the board before the move: the
  *  candidate first (UCI), then the line the engine expects; the score is
  *  White's view, the same convention as every analysis line. `earlier` is the
@@ -168,6 +178,32 @@ export function eyeRead(fen: string, rating: number): Array<{ uci: string; p: nu
   return humanMoveProbabilities(fen, legal, rating).map((r) => ({ uci: r.uci, p: r.p }));
 }
 
+/** THE MOVES A PLAYER WEIGHS FOR WHAT THEY DO, NOT HOW THEY LOOK (CCT's
+ *  "threats", and the natural defence; Danya havecheck 2026-11-19). The eye
+ *  reads what KIND of move it is, so a quiet move that attacks a target or
+ *  guards a pawn under fire scores like every other quiet move: his "h3 fails:
+ *  …hxg4 fxg4 Bxg4" (h3 guards the g4-pawn that …h5 and the e6-bishop hit),
+ *  "…Qg5 counterattacks the knight", "Rh3 to hit them directly" sat at 2–3%
+ *  of the eye, under the bar, and were never read. A move the eye at least
+ *  glances at (`MATE_WALK_BAR`) that THREATENS — after it the mover could win
+ *  more with one capture than before (legal SEE, `bestCaptureGainFor`) — or
+ *  DEFENDS — the other side could win something before it and less after — is
+ *  weighed. Measured on the 209 boards of his articles: about three more
+ *  candidates a board, 7 of the 14 tries he weighs that the eye missed. */
+export function weighedForWhatItDoes(fen: string, uci: string): 'threat' | 'defence' | null {
+  const b = boardOf(fen);
+  if (!b) return null;
+  const me = b.turn();
+  const them: Color = me === 'w' ? 'b' : 'w';
+  let after: Chess;
+  try { after = new Chess(fen); after.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }); } catch { return null; }
+  if (after.isGameOver()) return null;
+  if (bestCaptureGainFor(after.fen(), me) > bestCaptureGainFor(fen, me)) return 'threat';
+  const theirs = bestCaptureGainFor(fen, them);
+  if (theirs > 0 && bestCaptureGainFor(after.fen(), them) < theirs) return 'defence';
+  return null;
+}
+
 /**
  * (1) THE CANDIDATE LIST — the moves a player at `rating` would most weigh
  * here, plus the move played. `scored`: every legal move's score (mover's
@@ -190,7 +226,7 @@ export function candidateMoves(fen: string, rating: number, opts: { played: stri
     const e = eye.get(uci) ?? 0;
     const p = full ? full.get(uci) ?? 0 : null;
     const isPlayed = uci === playedUci;
-    if (!isPlayed && e < CANDIDATE_BAR && (p === null || p < CANDIDATE_BAR) && !(e >= MATE_WALK_BAR && walksIntoMate(fen, uci))) continue;
+    if (!isPlayed && e < CANDIDATE_BAR && (p === null || p < CANDIDATE_BAR) && !(e >= MATE_WALK_BAR && (walksIntoMate(fen, uci) || weighedForWhatItDoes(fen, uci)))) continue;
     out.push({ uci, san: m.san, from: m.from, to: m.to, piece: m.piece, eye: e, p, played: isPlayed });
   }
   return out.sort((x, y) => y.eye - x.eye);
@@ -205,7 +241,7 @@ function readOf(reads: readonly WeighRead[], uci: string): WeighRead | null {
  *  model's share among the moves read (`real` — what a player at the rating
  *  would PLAY of them, the cost included), kept when either clears the bar,
  *  most natural-looking first. */
-function readCandidates(fen: string, played: Move, reads: readonly WeighRead[], rating: number): Array<{ c: CandidateMove; read: WeighRead; real: number; mateWalk: boolean }> {
+function readCandidates(fen: string, played: Move, reads: readonly WeighRead[], rating: number, considered: ConsideredTries | null = null): Array<{ c: CandidateMove; read: WeighRead; real: number; mateWalk: boolean }> {
   const mover = played.color;
   const playedUci = uciOf(played);
   const eye = new Map(eyeRead(fen, rating).map((r) => [r.uci, r.p]));
@@ -223,7 +259,7 @@ function readCandidates(fen: string, played: Move, reads: readonly WeighRead[], 
     const e = eye.get(uci) ?? 0;
     const p = real.get(uci) ?? 0;
     const mateWalk = e >= MATE_WALK_BAR && walksIntoMate(fen, uci);
-    if (e < CANDIDATE_BAR && p < CANDIDATE_BAR && !mateWalk) continue;
+    if (e < CANDIDATE_BAR && p < CANDIDATE_BAR && !mateWalk && !considered?.has(uci) && !(e >= MATE_WALK_BAR && weighedForWhatItDoes(fen, uci))) continue;
     out.push({ c: { uci, san: m.san, from: m.from, to: m.to, piece: m.piece, eye: e, p, played: false }, read, real: p, mateWalk });
   }
   return out.sort((x, y) => y.c.eye - x.c.eye);
@@ -304,6 +340,8 @@ export function temptingRefuted(args: {
   reads: readonly WeighRead[];
   /** The move that led to `fenBefore`, so a recapture is half a trade. */
   priorMove: { fenBefore: string; san: string } | null;
+  /** Tries weighed for the plan (`ConsideredTries`), past the human floor. */
+  considered?: ConsideredTries;
 }): TemptingRefuted | null {
   return temptingRefutations(args)[0] ?? null;
 }
@@ -317,13 +355,15 @@ export function temptingRefutations(args: Parameters<typeof temptingRefuted>[0])
   if (!playedRead) return [];
   const out: Array<TemptingRefuted & { real: number }> = [];
   // A temptation is a move someone at the rating would really play (`real`).
-  for (const { c, read, real, mateWalk } of readCandidates(args.fenBefore, played, args.reads, args.rating)) {
+  const considered = args.considered ?? null;
+  for (const { c, read, real, mateWalk } of readCandidates(args.fenBefore, played, args.reads, args.rating, considered)) {
+    const plan = considered?.get(c.uci) ?? null;
     // A move that walks into mate is weighed by the eye alone: the full model
     // prices the mate in, so its share collapses whatever the eye's pull (Kh3
     // at 2% of the eye, 0.04% once the mate is counted) — the blunder a
     // checkmate check exists to catch.
-    if (real < TEMPTING_P_FLOOR && !mateWalk) continue;
-    const t = refuteCandidate(args.fenBefore, c, read, playedRead, args.student, args.priorMove);
+    if (real < TEMPTING_P_FLOOR && !mateWalk && !plan) continue;
+    const t = refuteCandidate(args.fenBefore, c, read, playedRead, args.student, args.priorMove, plan?.target ?? null);
     if (!t) continue;
     // A PIECE SIMPLY GIVEN AWAY IS NOT A TEMPTATION: their first reply takes
     // the piece that moved, a rook's worth or more for nothing much (…Qxf2+
@@ -354,7 +394,7 @@ export function temptingRefutations(args: Parameters<typeof temptingRefuted>[0])
  *  wording every tempting-move surface says. Null when it costs under a pawn
  *  against it, when its line proves no material or mate (`costReason`), or
  *  when the line may not be named (`lineTrust`). */
-function refuteCandidate(fenBefore: string, c: Pick<CandidateMove, 'uci' | 'san' | 'from' | 'to' | 'eye'>, read: WeighRead, against: WeighRead, student: Color, priorMove: { fenBefore: string; san: string } | null): TemptingRefuted | null {
+function refuteCandidate(fenBefore: string, c: Pick<CandidateMove, 'uci' | 'san' | 'from' | 'to' | 'eye'>, read: WeighRead, against: WeighRead, student: Color, priorMove: { fenBefore: string; san: string } | null, planTarget: string | null = null): TemptingRefuted | null {
   const mover: Color = fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
   const w = seatWords(mover, student);
   const cost = seatCp(against, mover) - seatCp(read, mover);
@@ -377,7 +417,11 @@ function refuteCandidate(fenBefore: string, c: Pick<CandidateMove, 'uci' | 'san'
   // said in the lead — the reason someone would play it.
   const look = tryLooksLike(fenBefore, c.san, mover);
   const stem = stemKeyOf(`${fenBefore}|${c.uci}`);
-  const lead = look
+  const lead = planTarget
+    ? (mover === student
+      ? rotateStem([`${c.san}, going straight at ${planTarget}, fails`, `${c.san} to hit ${planTarget} directly doesn't work`], stem)
+      : rotateStem([`${c.san}, going straight at ${planTarget}, failed for them`, `${c.san} to hit ${planTarget} directly didn't work for them`], stem))
+    : look
     ? (mover === student
       ? rotateStem([`${c.san} looks like ${look}, but it fails`, `${c.san} sets up ${look}, but it doesn't work`], stem)
       : rotateStem([`${c.san} looked like ${look} for them, but it fails`, `${c.san} would have set up ${look} for them, but it doesn't work`], stem))
@@ -449,11 +493,189 @@ export function temptingOnBoard(args: {
   reads: readonly WeighRead[];
   /** The move that led to `fen`, so a recapture is half a trade. */
   priorMove: { fenBefore: string; san: string } | null;
+  /** Tries weighed for the plan (`ConsideredTries`), past the human floor. */
+  considered?: ConsideredTries;
 }): TemptingRefuted[] {
   const best = bestOfReads(args.fen, args.reads);
   if (!best) return [];
-  return temptingRefutations({ fenBefore: args.fen, san: best.san, student: args.student, rating: args.rating, reads: args.reads, priorMove: args.priorMove });
+  return temptingRefutations({ fenBefore: args.fen, san: best.san, student: args.student, rating: args.rating, reads: args.reads, priorMove: args.priorMove, considered: args.considered });
 }
+
+// ── (A″) THE TRY THAT COSTS THE RESULT ──────────────────────────────────────
+
+/** A try ruled out by what it does to the result (`standingRefutations`). */
+export interface StandingRefuted {
+  san: string;
+  uci: string;
+  /** What it costs against the engine's best (cp, the mover's side). */
+  costCp: number;
+  /** The reply that meets it (SAN, "…" on a Black move). */
+  reply: string;
+  text: string;
+  squares: string[];
+  /** The tempting move's own claim: one rule-out a move, whichever shape said it. */
+  key: string;
+  claims: string[];
+}
+
+/** The standing as a signed step from the mover's seat: 0 level, ±1 slightly,
+ *  ±2 clearly, ±3 winning/losing (`evalBand`, the one scale). */
+function bandStep(cp: number): number {
+  const steps: Record<ReturnType<typeof evalBand>, number> = { level: 0, slightly: 1, clearly: 2, decisive: 3 };
+  return Math.sign(cp) * steps[evalBand(cp)];
+}
+
+const BAND_WORDS: Readonly<Record<number, string>> = {
+  [-3]: 'losing', [-2]: 'clearly worse', [-1]: 'slightly worse', 0: 'level', 1: 'slightly better', 2: 'clearly better', 3: 'winning',
+};
+
+/** What the try does to the result, from the mover's seat (his "throws the
+ *  win", "keeps only a slight edge", "the edge is gone"): one sentence, or
+ *  null when the band does not drop. */
+export function resultShift(bestCp: number, tryCp: number, mine: boolean): string | null {
+  const from = bandStep(bestCp);
+  const to = bandStep(tryCp);
+  // THE RESULT CHANGES, not the size of an edge: a win, an edge, level, or
+  // worse (his "throws the win", "the edge is gone", "it leaves you worse").
+  // A clear edge that stays an edge is the same result.
+  const result = (b: number): number => (b >= 3 ? 2 : b > 0 ? 1 : b === 0 ? 0 : -1);
+  if (result(to) >= result(from)) return null;
+  const you = mine ? "you're" : "they're";
+  const own = mine ? 'your' : 'their';
+  if (from === 3) return to === 0 ? 'It throws the win: the game is level after it.' : to > 0 ? `It lets the win slip: ${you} only ${BAND_WORDS[to]} after it.` : `It throws the win: ${you} ${BAND_WORDS[to]} after it.`;
+  if (from > 0 && to === 0) return `After it ${own} edge is gone.`;
+  return `It leaves ${mine ? 'you' : 'them'} ${BAND_WORDS[to]}.`;
+}
+
+/** WHY THE TRY FALLS SHORT on the board, from the computers that already read
+ *  it (his "…d5 blocks Black's own bishop", "achieves nothing"): the bishop
+ *  the move shuts in (`blocksOwn`), the pawn that kicks the piece where it
+ *  went (`pawnKick`), the check or capture whose line wins nothing (the
+ *  ledger), or what the board after it gives up against the best move
+ *  (`positionalReason.boardReason`). Null when none reads it. */
+function tryMechanism(fen: string, m: Move, sans: readonly string[], bestSan: string, own: 'your' | 'their', other: 'your' | 'their'): string | null {
+  const blk = blocksOwn(fen, m);
+  if (blk) {
+    let after: Chess;
+    try { after = new Chess(fen); after.move(m.san); } catch { return null; }
+    const ref = pieceRef(after.fen(), blk.by, m.color);
+    return `It shuts in ${ref ? ref.words : `${own} ${NAME[blk.piece]} on ${blk.by}`}.`;
+  }
+  if (m.piece !== 'p' && m.piece !== 'k') {
+    try {
+      const after = new Chess(fen); after.move(m.san);
+      const kick = pawnKick(after.fen(), m.to, m.color);
+      if (kick && sans[1] === kick) return `${cap(other)} ${kick[0]}-pawn kicks ${own} ${NAME[m.piece]} straight back.`;
+    } catch { /* no kick read */ }
+  }
+  if (/x|\+/.test(m.san) && sans.length >= 2) {
+    let k = 0;
+    for (let j = 0; j < sans.length; j += 1) if (/x/.test(sans[j])) k = j + 1;
+    k = Math.max(k, 2);
+    if (settledNetForLine(fen, sans.slice(0, k), m.color) === 0 && settledNetForLine(fen, sans, m.color) === 0) return 'It wins nothing: the trades leave the material level.';
+  }
+  // WHAT THE REPLY DOES (his "…Qf6! hits e6 and a1", "Nd5+ comes with
+  // check"): a motif it sets up with the piece it moved, or the tempo of a
+  // check — read on the board after it. A piece it takes is no reason here:
+  // the line keeps the material level, so a capture is half a trade.
+  let tryBoard: Chess;
+  try { tryBoard = new Chess(fen); tryBoard.move(m.san); } catch { return null; }
+  const replier: Color = m.color === 'w' ? 'b' : 'w';
+  let rm: Move;
+  try { rm = tryBoard.move(sans[1]); } catch { return null; }
+  const replyWords = `${replier === 'b' ? '…' : ''}${rm.san}`;
+  const named = (sq: string, viewer: Color): string => pieceRef(tryBoard.fen(), sq, viewer)?.words ?? sq;
+  try {
+    for (const t of detectTactics(tryBoard.fen()).tactics) {
+      const word = LOOKS[t.type];
+      if (!word || t.beneficiary !== replier || t.involvedSquares[0] !== rm.to) continue;
+      const targets = t.involvedSquares.slice(1).map((sq) => named(sq, m.color));
+      if (targets.length === 0) continue;
+      return `${replyWords} is ${word}: it hits ${andList(targets)}.`;
+    }
+  } catch { /* no motif read */ }
+  if (/\+$/.test(rm.san)) return `${replyWords} comes with check, so ${other === 'your' ? 'you gain' : 'they gain'} a tempo.`;
+  const why = boardReason(fen, m.san, bestSan, phaseOfFen(fen) ?? 'middlegame');
+  return why ? why.note : null;
+}
+
+function cap(w: string): string { return w.charAt(0).toUpperCase() + w.slice(1); }
+
+/**
+ * (A″) THE TRY THAT COSTS THE RESULT — Danya's choices, as he reads them: of
+ * his 76 weighed moves, 3 are refuted by material or mate; the rest by what
+ * they do to the RESULT ("27.Rc7 achieves nothing because …Rf7 meets it",
+ * "48…Ke7?? throws the win", "Rb3 keeps only a slight edge", "31.Nxe7+ Rxe7
+ * gives no relief") and the mechanism behind it ("…d5 blocks Black's own
+ * bishop"). A candidate the eye weighs for what it is or what it does,
+ * measured against the engine's best: its standing band drops (`resultShift`,
+ * checked on the engine's own scores, half a pawn at least); the reply that
+ * meets it is named (the engine's first move after it — one move deep, the
+ * named-line rule's near case); the mechanism is said when a computer reads
+ * one (`tryMechanism`). A try the line proves loses material is the material
+ * refuter's (`temptingOnBoard`), so the caller drops those. Most tempting first.
+ */
+export function standingRefutations(args: {
+  fen: string;
+  student: Color;
+  rating: number;
+  /** One read per candidate from `fen`, the engine's best among them. */
+  reads: readonly WeighRead[];
+  /** Tries weighed for the plan (`ConsideredTries`), past the human floor. */
+  considered?: ConsideredTries;
+}): StandingRefuted[] {
+  const best = bestOfReads(args.fen, args.reads);
+  if (!best || best.read.mate !== null) return [];
+  const played = moveOn(args.fen, best.san);
+  if (!played) return [];
+  const mover = played.color;
+  const mine = mover === args.student;
+  const w = seatWords(mover, args.student);
+  const bestCp = seatCp(best.read, mover);
+  const out: Array<StandingRefuted & { real: number }> = [];
+  const considered = args.considered ?? null;
+  for (const { c, read, real } of readCandidates(args.fen, played, args.reads, args.rating, considered)) {
+    const plan = considered?.get(c.uci) ?? null;
+    if ((real < TEMPTING_P_FLOOR && !plan) || read.mate !== null) continue;
+    const tryCp = seatCp(read, mover);
+    const cost = bestCp - tryCp;
+    if (cost < SHIFT_COST_CP) continue;
+    const shift = resultShift(bestCp, tryCp, mine);
+    if (!shift) continue;
+    const m = moveOn(args.fen, c.uci);
+    if (!m || read.moves.length < 2) continue;
+    const sans: string[] = [];
+    try {
+      const b = new Chess(args.fen);
+      for (const u of read.moves.slice(0, GAIN_HOLDS_PLIES)) sans.push(b.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san);
+    } catch { continue; }
+    if (sans.length < 2) continue;
+    // A try whose line loses material is the material refuter's to say or to
+    // hold (`temptingOnBoard`, the one cost walker and its naming rule): this
+    // reads the tries that cost the result with the material kept.
+    const net = settledNetForLine(args.fen, sans, mover);
+    if (net !== null && net < 0) continue;
+    const reply = `${mover === 'w' ? '…' : ''}${sans[1]}`;
+    // NO REASON, NO REFUTATION: his every rule-out says why it falls short.
+    const mech = tryMechanism(args.fen, m, sans, best.san, w.own, w.other);
+    if (!mech) continue;
+    const stem = stemKeyOf(`${args.fen}|result|${c.uci}`);
+    const lead = plan
+      ? (mine
+        ? rotateStem([`${c.san} goes straight at ${plan.target}, but ${reply} meets it.`, `${c.san} to hit ${plan.target} directly runs into ${reply}.`], stem)
+        : rotateStem([`${c.san} went straight at ${plan.target} for them, but ${reply} meets it.`, `${c.san} to hit ${plan.target} directly ran into ${reply} for them.`], stem))
+      : mine
+      ? rotateStem([`${c.san} looks natural, but ${reply} meets it.`, `${c.san} is the obvious try, but ${reply} is the answer.`, `${c.san} is tempting, but ${reply} takes the sting out of it.`], stem)
+      : rotateStem([`${c.san} looked natural for them, but ${reply} meets it.`, `${c.san} was the obvious try for them, but ${reply} is the answer.`, `${c.san} was tempting for them, but ${reply} takes the sting out of it.`], stem);
+    const text = `${lead} ${mech} ${shift}`;
+    const key = temptingKey(c.uci);
+    out.push({ san: c.san, uci: c.uci, costCp: Math.round(cost), reply, text, squares: [...new Set([c.from, c.to, read.moves[1].slice(2, 4)])], key, claims: [key], real });
+  }
+  return out.sort((x, y) => y.real - x.real).map(({ real: _real, ...t }) => t);
+}
+
+/** A pawn, the tempting move's own bar: a smaller drop is the band's edge, not a cost. */
+export const SHIFT_COST_CP = TEMPTING_COST_CP;
 
 // ── (L) TWO GOOD MOVES, AND WHAT SEPARATES THEM ─────────────────────────────
 

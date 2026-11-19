@@ -66,7 +66,7 @@ import { knownSlip, knownSlipIndexNow, knownSlipsAt, type KnownSlipContext } fro
 import { ifTheyPlay, treeSentence, sayable, baitBranch, baitSentence, everyTakeLoses, everyTakeSentence, type ReplyRead, type ReplyBranch, type TreeTense, landedSquare } from './ifTheyPlay';
 import { mateStakes } from './factStakes';
 import { MOTIF_OF_TACTIC, MOTIFS } from '../data/tacticMotifs';
-import { temptingRefuted, temptingOnBoard, alsoGood, squareChoice, type WeighRead } from './weighedMoves';
+import { temptingRefuted, temptingOnBoard, standingRefutations, alsoGood, squareChoice, type WeighRead } from './weighedMoves';
 import { costStakes } from './factStakes';
 import { pawnBreak } from './pawnBreak';
 import { oppositeBishops } from './oppositeBishops';
@@ -3433,8 +3433,15 @@ export const BOARD_COMPUTERS = {
     read: ({ fen, student, rating, reads, priorMove }, fact) => safe(() => {
       if (!reads || reads.length < 2) return null;
       const r = temptingOnBoard({ fen, student, rating, reads, priorMove })[0];
-      if (!r) return null;
       const mine = new Chess(fen).turn() === student;
+      if (!r) {
+        // The forcing try that wins nothing ("Nxe7+ Rxe7 gives no relief"):
+        // the same rule-out claim, proven by the trades its line finishes.
+        const e = standingRefutations({ fen, student, rating, reads })[0];
+        if (!e) return null;
+        return fact({ key: e.key, claims: e.claims, text: e.text, proof: squaresProof(e.text, e.squares) ?? NO_PROOF.description, squares: e.squares,
+          stakes: costStakes(e.costCp), seat: mine ? 'student' : 'opponent', namesStudentMove: mine, thread: LOCAL_THREAD, fen });
+      }
       return fact({ key: r.key, claims: r.claims, text: r.text, proof: r.proof ?? squaresProof(r.text, r.squares) ?? NO_PROOF.description, squares: r.squares,
         stakes: costStakes(r.costCp), seat: mine ? 'student' : 'opponent', namesStudentMove: mine, thread: LOCAL_THREAD, fen,
         ...(r.proof?.line ? { lines: [r.proof.line] } : {}) });
