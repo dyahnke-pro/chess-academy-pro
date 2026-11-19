@@ -117,7 +117,14 @@ interface StepRow { step: ReadStep; kinds: readonly string[]; from?: readonly Re
    *  goal and a way the best line plays, over a description of a piece or a
    *  file (Danya's plans, 2026-11-19: "their rook on f1 is well placed" beat
    *  "the rook lift Re1-e3-b3"). */
-  first?: readonly string[] }
+  first?: readonly string[];
+  /** Sources the step says before any other, among its facts that clear the
+   *  bar: the tempting step is the tempting move refuted (his step 3, "Nxb5
+   *  looks natural, but…") — a deliberation over another candidate speaks
+   *  there only when no tempting move was refuted (Korchnoi's board: the
+   *  learned weight of a "why not Ne2?" otherwise outranks the natural
+   *  capture that loses a knight). */
+  firstFrom?: readonly ReadFactFrom[] }
 
 export const READ_STEPS: readonly StepRow[] = [
   // The standing with its reason; compensation and "convert" say the same
@@ -137,7 +144,7 @@ export const READ_STEPS: readonly StepRow[] = [
     // What the best move does — and the board's own pointers at it.
     from: ['bestMove'], positionKinds: ['timing', 'move-order', 'not-yet', 'king-read'],
   },
-  { step: 'tempting', kinds: ['refuted', 'refuted-positional', 'deliberation'] },
+  { step: 'tempting', kinds: ['refuted', 'refuted-positional', 'deliberation'], firstFrom: ['tempting'] },
   { step: 'their-try', kinds: ['their-refuted'] },
   // THE PLAN: the board's one plan (`planOfTheBoard` — a goal and a way the
   // best line plays) when the board has one; else the plan computers' own.
@@ -222,9 +229,12 @@ export function decideRead<F extends ReadFact>(facts: readonly F[], ctx: ReadCon
       && (!row.sayOnce || x.squares.length === 0 || x.squares.some((sq) => !named.has(sq))));
     let pick: F | null = candidates.find((x) => !!x.computer && !!row.first?.includes(x.computer)) ?? null;
     let pickW = pick ? Infinity : -Infinity;
-    for (const x of pick ? [] : candidates) {
-      // The mate's pattern is the puzzle's lesson: said whenever it is found.
-      const w = x.kind === 'mate-pattern' ? 1 : readWeight(x, ctx) + (onTarget(x) ? ON_TARGET : 0);
+    // The mate's pattern is the puzzle's lesson: said whenever it is found.
+    const weightOf = (x: F): number => (x.kind === 'mate-pattern' ? 1 : readWeight(x, ctx) + (onTarget(x) ? ON_TARGET : 0));
+    const firstFrom = row.firstFrom;
+    const preferred = firstFrom ? candidates.filter((x) => firstFrom.includes(x.from) && weightOf(x) >= TABLE.bar) : [];
+    for (const x of pick ? [] : preferred.length ? preferred : candidates) {
+      const w = weightOf(x);
       if (w < TABLE.bar) continue;
       if (w > pickW || (w === pickW && (x.stakes ?? -1) > (pick?.stakes ?? -1))) { pick = x; pickW = w; }
     }

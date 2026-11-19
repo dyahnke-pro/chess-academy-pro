@@ -97,7 +97,9 @@ describe('the read decider: his order, the fact he would say at each step', () =
 
   it('one idea once: a line whose squares the read has already named is not said again', () => {
     const facts: ReadFact[] = [
-      { from: 'position', kind: 'structure-plan', computer: 'readPosition', text: 'Their pawn on d5 is isolated — your rooks on d3 and d1 press it.', squares: ['d3', 'd1', 'd5'] },
+      // A plan computer Danya's reads say (`boardStructure`, over the bar);
+      // the read's own `readPosition` plans sit under it since the all-video fit.
+      { from: 'position', kind: 'structure-plan', computer: 'boardStructure', text: 'Their pawn on d5 is isolated — your rooks on d3 and d1 press it.', squares: ['d3', 'd1', 'd5'] },
       { from: 'position', kind: 'concept', computer: 'conceptForBoard', text: 'Your rooks on d3 and d1 would form a battery on the d-file against d5.', squares: ['d3', 'd1', 'd5'] },
     ];
     expect(said(facts, OPEN)).toEqual([facts[0].text]);
@@ -133,8 +135,13 @@ describe('PUZZLE MODE: the answer withheld, the side to move winning', () => {
     const s = decideRead(p.facts, ctxOfPuzzle(p, ['h6', 'd2'])).facts;
     expect(s.some((f) => f.kind === 'standing-bare' || f.kind === 'structure-plan')).toBe(false);
     expect(s.some((f) => f.squares.some((q) => q === 'h6' || q === 'd2'))).toBe(false);
-    // NEGATIVE CONTROL: read as a live board, the plans may speak.
-    expect(decideRead(p.facts, { ...ctxOfPuzzle(p, null), bucket: 'open' }).facts.some((f) => f.kind === 'structure-plan')).toBe(true);
+    // NEGATIVE CONTROL: read as a live board, the board's one plan speaks;
+    // the same plan on the puzzle stays silent. (The fixture's own plan
+    // computers sit under the bar since the all-video fit, so the control
+    // carries the plan the plan step says first.)
+    const plan: ReadFact = { from: 'position', kind: 'structure-plan', computer: 'planOfTheBoard', text: 'The plan: bring the knight on g8 into the game.', squares: ['g8'] };
+    expect(decideRead([...p.facts, plan], { ...ctxOfPuzzle(p, null), bucket: 'open' }).facts.some((f) => f.kind === 'structure-plan')).toBe(true);
+    expect(decideRead([...p.facts, plan], ctxOfPuzzle(p, ['h6', 'd2'])).facts.some((f) => f.kind === 'structure-plan')).toBe(false);
   });
 });
 
