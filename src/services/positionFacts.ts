@@ -39,7 +39,7 @@ import { isMateEval } from './engineConstants';
 import { boardStateAfter, inFluxAfter, mateInOneOnBoard, type BoardState } from './boardState';
 import type { QuietFact } from './factSelector';
 import { criticalityThresholds, type Severity } from './criticalityScan';
-import { computeMustDefend, type MustDefend } from './threatOut';
+import { computeMustDefend, mateThreatsAgainst, type MustDefend } from './threatOut';
 import { computeLeansOn, type LeansOn, type EvalBoardFn } from './perturbation';
 import { buildDeliberation, deliberationWeighing, deliberationVerdict, ruleOutClaims, NOTHING_SAID, type Deliberation, type HeldVerdict } from './deliberation';
 import { detectLatentFork, type LatentFork } from './latentFork';
@@ -1032,13 +1032,12 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     const halfmove = Number.parseInt(fen.split(' ')[5] ?? '0', 10) || 0;
     methodFact = readBoard('liveMethod', { fen, ply: halfmove, said, signals: {
       bestSan: bestSanHere,
-      threatStanding: mustDefend.net > 0,
-      // Always the piece it hits, whatever its worth: the habit's question is
-      // never asked without its answer (OS-1 g3 15.c5).
-      threatTarget: mustDefend.pieces[0] ? {
-        words: pieceRef(fen, mustDefend.pieces[0].square, studentColor)?.words ?? `your ${PNAME[mustDefend.pieces[0].piece.toLowerCase()]} on ${mustDefend.pieces[0].square}`,
-        square: mustDefend.pieces[0].square,
-      } : null,
+      // THEIR THREAT, AND ONLY ONE THE ENGINE'S BEST MOVE ANSWERS (Danya
+      // narration test 2026-11-19): "answer that first" said of a piece the
+      // best move leaves where it is (mastering the queen sacrifice #0: Rb1
+      // hits Bb2, the answer is …Rc8) steers the student off the move. Mate
+      // first, then the piece the probe says they win.
+      ...(() => { const t = studentToMove ? threatTheyMake(fen, studentColor, mustDefend, analysis.topLines?.[0]?.moves[0] ?? bestUci ?? null) : null; return { threatStanding: !!t, threatTarget: t }; })(),
       isStudentMove: studentToMove,
       realChoice: !!deliberation?.isRealChoice,
       tier: importance.tier,
@@ -1928,4 +1927,21 @@ export function afterLine(line: readonly string[] | undefined, boardFen: string 
 
 function samePlacementFen(a: string, b: string): boolean {
   return a.split(' ')[0] === b.split(' ')[0];
+}
+
+/** THE THREAT THE STUDENT MUST MEET FIRST, in words, or null: their mate in
+ *  one when they have it, else the piece the must-defend probe says they win
+ *  — and only when the engine's best move answers it (the mate is gone, or
+ *  the piece is no longer lost). A threat the best move ignores is not first. */
+export function threatTheyMake(fen: string, student: 'w' | 'b', md: MustDefend, bestUci: string | null): { words: string; square: string } | null {
+  if (!bestUci || bestUci.length < 4) return null;
+  let after: string;
+  try { const c = new Chess(fen); if (c.inCheck()) return null; c.move({ from: bestUci.slice(0, 2), to: bestUci.slice(2, 4), promotion: bestUci[4] }); after = c.fen(); } catch { return null; }
+  const mate = mateThreatsAgainst(fen, student).moves[0];
+  if (mate) return mateThreatsAgainst(after, student).moves.length === 0 ? { words: `mate on ${mate.to}`, square: mate.to } : null;
+  const p = md.pieces[0];
+  if (!p || md.net <= 0) return null;
+  const left = computeMustDefend(after, student).net;
+  if (left >= md.net) return null;
+  return { words: pieceRef(fen, p.square, student)?.words ?? `your ${PNAME[p.piece.toLowerCase()]} on ${p.square}`, square: p.square };
 }

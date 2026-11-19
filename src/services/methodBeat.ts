@@ -383,7 +383,7 @@ export function liveMethodBeat(s: LiveMethodSignals, plyForVariety = 0, said?: R
   if (s.threatStanding && s.threatTarget && !mateOnBoard && owed('opponent-threat')) {
     const t = s.threatTarget.words;
     return { ...beat('opponent-threat', [
-      `Before you pick a move: what is their last move doing? Here it hits ${t} — answer that first, every time.`,
+      `Before you pick a move: what are they threatening? Here they're after ${t} — answer that first.`,
       `Run the question now — what are they threatening? They're after ${t}. Deal with that before your own plan.`,
       `Their threat first, your idea second: right now they're after ${t}.`,
     ], plyForVariety), squares: [s.threatTarget.square] };
@@ -505,8 +505,15 @@ export function readHabit(s: {
   /** The one door ranks this a deciding moment (only move / critical). */
   decidingMoment: boolean;
 }): { habit: 'forcing-scan' | 'opponent-threat' | 'slow-down'; text: string } | null {
+  // THEIR THREAT'S HABIT IS SAID BY THE LIVE BEAT, WITH THE THREAT NAMED
+  // (`liveMethodBeat` 'opponent-threat': "Their threat first, your idea
+  // second: right now they're after your c-pawn on c4"). Said here too, it
+  // was the same habit a second time — or the habit with no threat named
+  // anywhere in the read (Danya narration test 2026-11-19: "Make this the
+  // routine — their threat before your plan" on 61 of 209 boards). A board
+  // whose point is their threat closes on the threat's own line, not on this.
   const habit = s.studentShot ? 'forcing-scan' as const
-    : s.theirThreat ? 'opponent-threat' as const
+    : s.theirThreat ? null
       : s.decidingMoment ? 'slow-down' as const : null;
   return habit ? { habit, text: READ_HABIT[habit] } : null;
 }

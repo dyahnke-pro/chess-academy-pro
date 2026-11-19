@@ -8,8 +8,8 @@ describe('readHabit', () => {
   it('a shot for the student is the forcing scan', () => {
     expect(readHabit({ studentShot: true, theirThreat: true, decidingMoment: true })?.habit).toBe('forcing-scan');
   });
-  it('their threat, with no shot of yours, is "their move first"', () => {
-    expect(readHabit({ studentShot: false, theirThreat: true, decidingMoment: true })?.habit).toBe('opponent-threat');
+  it('their threat closes on the live beat that names it, never a second, nameless habit line (Danya narration test 2026-11-19)', () => {
+    expect(readHabit({ studentShot: false, theirThreat: true, decidingMoment: true })).toBeNull();
   });
   it('an only-move moment is "slow down"', () => {
     expect(readHabit({ studentShot: false, theirThreat: false, decidingMoment: true })?.habit).toBe('slow-down');
