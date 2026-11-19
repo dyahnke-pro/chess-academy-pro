@@ -40,4 +40,13 @@ describe('the board plan', () => {
     expect(switchWing(held, 'w', 'your')).toBeNull(); // no piece guards it but the rook: one attacker, one guard, and no break
     expect(switchWing(KARPOV, 'b', 'your')).toBeNull(); // not the mover
   });
+
+  // Danya, the hardest move to make #1: "the queenside is permanently locked";
+  // b5 is met by axb5 and drops a pawn — no second front there.
+  it('the second front never names a break that drops the pawn', () => {
+    expect(switchWing('4r1k1/1p2qpb1/p1p4p/P2rN1p1/1PQPpP2/4P1P1/6KP/1R2R3 w - - 0 36', 'w', 'your')).toBeNull();
+  });
+  it('negative control: a safe break on the other wing still opens the front', () => {
+    expect(switchWing('1r2k2r/4bp2/p2pbp2/1p2p2p/4P1P1/P3BP2/1PPR3P/1K3B1R w k - 0 18', 'w', 'your')?.text).toMatch(/the f4 break/);
+  });
 });
