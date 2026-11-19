@@ -52,6 +52,7 @@ import { evalBand } from './evalBand';
 import { boardReason } from './positionalReason';
 import { phaseOfFen } from './boardConcepts';
 import { withMover } from '../utils/sideToMove';
+import { replyJob } from './replyJob';
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const VALUE = MATERIAL_VALUE;
@@ -750,8 +751,17 @@ export function standingRefutations(args: {
         tryLine: { moves: read.moves, cp: read.mate === null ? read.evaluation : null, mate: read.mate },
         bestLine: { moves: best.read.moves, cp: best.read.mate === null ? best.read.evaluation : null, mate: best.read.mate } });
     if (!mech) { drop('no-reason'); continue; }
+    // WHAT THE REPLY DOES (his "…Qd7 guards b5", "…h4 kicks the knight"):
+    // the reply's job, said right after the lead names it — unless the reason
+    // already says what the reply does (one idea said once). It explains a
+    // refutation the board already gives a reason for; it never makes one.
+    const job = replyJob(args.fen, read.moves, plan?.target ?? null, args.student);
+    // A recapture is the trade, not a reason: the ledger already says what it nets.
+    const jobSaid = !!job && job.kind !== 'recaptures' && !mech.includes(sans[1]) && !(job.kind === 'kicks' && /kicks/.test(mech));
+    // "…Kd5 holds the pawn on c6" and "the pawn on c6 still stands" are one idea.
+    const reason = jobSaid && job?.kind === 'guards' && /still stands/.test(mech) ? null : mech;
     // A line that mates ends the game: no band words for that.
-    const shift = story?.kind === 'mates' ? (mine ? 'It loses the game.' : 'It loses them the game.') : bandShift ?? smallerShift(bestCp, mine, /wins nothing/.test(mech), cost);
+    const shift = story?.kind === 'mates' ? (mine ? 'It loses the game.' : 'It loses them the game.') : bandShift ?? smallerShift(bestCp, mine, !!reason && /wins nothing/.test(reason), cost);
     const stem = stemKeyOf(`${args.fen}|result|${c.uci}`);
     const lead = plan
       ? (plan.storm
@@ -764,9 +774,9 @@ export function standingRefutations(args: {
       : mine
       ? rotateStem([`${c.san} looks natural, but ${reply} meets it.`, `${c.san} is the obvious try, but ${reply} is the answer.`, `${c.san} is tempting, but ${reply} takes the sting out of it.`], stem)
       : rotateStem([`${c.san} looked natural for them, but ${reply} meets it.`, `${c.san} was the obvious try for them, but ${reply} is the answer.`, `${c.san} was tempting for them, but ${reply} takes the sting out of it.`], stem);
-    const text = `${lead} ${mech} ${shift}`;
+    const text = [lead, jobSaid ? job?.follow : null, reason, shift].filter(Boolean).join(' ');
     const key = temptingKey(c.uci);
-    out.push({ san: c.san, uci: c.uci, costCp: Math.round(cost), reply, text, squares: [...new Set([c.from, c.to, read.moves[1].slice(2, 4)])], key, claims: [key], real });
+    out.push({ san: c.san, uci: c.uci, costCp: Math.round(cost), reply, text, squares: [...new Set([c.from, c.to, read.moves[1].slice(2, 4), ...(jobSaid && job ? job.squares : [])])], key, claims: [key], real });
   }
   return out.sort((x, y) => y.real - x.real).map(({ real: _real, ...t }) => t);
 }
