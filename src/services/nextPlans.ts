@@ -21,7 +21,7 @@ import { findPieceQuality, legalSeeGainFor, pieceScope } from './positionReading
 import { enemyKingStuckInCenter } from './reviewSacrifice';
 import { openSentence } from '../utils/openSentence';
 import { withMover } from '../utils/sideToMove';
-import { detectPlanRace, planRaceClause, pushesToPromote, stepsToPromote } from './planRace';
+import { detectPlanRace, kingCatchesPasser, planRaceClause, pushesToPromote, stepsToPromote } from './planRace';
 import { countWord } from '../utils/andList';
 import { absolutePinRay } from './pinGeometry';
 
@@ -397,7 +397,10 @@ export function deriveNextPlanFacts(
     .filter((sq) => {
       const front = `${sq[0]}${Number(sq[1]) + (studentColorWB === 'w' ? 1 : -1)}` as Square;
       const blocker = chess.get(front);
-      return !(blocker && blocker.color === enemy);
+      // A pawn ending's passer their king takes is no plan to promote (Danya,
+      // beginner chess strategy #6: c3 "two pushes from queening" with their
+      // king beside c2).
+      return !(blocker && blocker.color === enemy) && kingCatchesPasser(chess, sq, studentColorWB, 'now') !== true;
     })
     .map((sq, i) => ({ sq, i }))
     .sort((a, b) => pushesLeft(a.sq) - pushesLeft(b.sq) || Number(kingInFront(a.sq)) - Number(kingInFront(b.sq)) || kingReach(b.sq) - kingReach(a.sq) || a.i - b.i)[0]?.sq;
@@ -426,7 +429,12 @@ export function deriveNextPlanFacts(
   // 3. An enemy weak (isolated) pawn on the c–f files → besiege it, HOW spelled
   // out. Only prescribe pieces the student actually HAS — "plant a knight"
   // with no knight on the board is nonsense advice (template-logic sweep).
-  const weak = struct.pawns.isolatedPawns[enemy].find((sq) => 'cdef'.includes(sq[0])) ?? struct.pawns.isolatedPawns[enemy][0];
+  // An ADVANCED passer is a runner, not a pawn to besiege (Danya, beginner
+  // chess strategy #6: "win their weak pawn on d6" two pushes from queening) —
+  // the passer read owns it, as in positionalRead.
+  const enemyToGo = (sq: string): number => (enemy === 'w' ? 8 - Number(sq[1]) : Number(sq[1]) - 1);
+  const besiegeable = struct.pawns.isolatedPawns[enemy].filter((sq) => !(struct.pawns.passedPawns[enemy].includes(sq) && enemyToGo(sq) <= 2));
+  const weak = besiegeable.find((sq) => 'cdef'.includes(sq[0])) ?? besiegeable[0];
   if (weak) {
     const block = `${weak[0]}${enemy === 'w' ? Number(weak[1]) + 1 : Number(weak[1]) - 1}`;
     // The blockader is an ACTUAL board object — its noun is interpolated from
@@ -469,7 +477,14 @@ export function deriveNextPlanFacts(
     // One step a sentence (David 2026-11-08, the human voice): "control h3 …;
     // then stack your rooks … — each one is a piece of theirs tied to it" was
     // two steps and an aside joined into one breath.
-    const pile = heavies.length > 0
+    // A FILE SHUT BY YOUR OWN PAWN IS NO ROAD (Danya, positional combinations
+    // #4: d5 "cannot be attacked directly" — White's own d4 pawn stands on
+    // the file): the heavy pieces cannot reach it down the file, so the
+    // attack comes from the side.
+    const fileShut = occupant?.color === studentColorWB && occupant.type === 'p';
+    const pile = fileShut
+      ? `it cannot be hit down the file, so bring your pieces at it from the side and trade off its defenders: each one is tied to it`
+      : heavies.length > 0
       ? `${heavyNoun} and trade off its defenders: each one is tied to it`
       : 'bring your king and pieces to it and trade off its defenders: each one is tied to it';
     add('weak-pawn', `win their weak pawn on ${weak}`, `winning their weak pawn on ${weak}`, `${blockBit ? `${blockBit}. Then ` : ''}${pile}${countBit(chess, weak as Square, studentColorWB)}`, [weak, block]);
@@ -484,9 +499,17 @@ export function deriveNextPlanFacts(
   const theirHeavyFiles = new Set(all.filter((c) => (c.type === 'r' || c.type === 'q') && c.color === enemy).map((c) => c.square[0]));
   const freeOpenFile = struct.pawns.openFiles.find((f) => !myHeavyFiles.has(f) && !theirHeavyFiles.has(f));
   if (freeOpenFile && myRooks.length > 0) {
+    // The seventh rank is said for what it holds (Danya, rooks on the seventh
+    // revisited #0: "where a rook attacks pawns from behind" on a board with
+    // no pawns): their pawns there, or their king penned on its back rank.
+    const seventh = studentColorWB === 'w' ? '7' : '2';
+    const back = studentColorWB === 'w' ? '8' : '1';
+    const pawnsOn7 = all.some((c) => c.type === 'p' && c.color === enemy && c.square[1] === seventh);
+    const kingOnBack = all.some((c) => c.type === 'k' && c.color === enemy && c.square[1] === back);
+    const why = pawnsOn7 ? ', where a rook attacks their pawns from behind' : kingOnBack ? ', where a rook pens their king on its back rank' : '';
     const then = myRooks.length >= 2
-      ? 'Then double your rooks on it, so nothing can challenge them, and aim for the seventh rank, where a rook attacks pawns from behind'
-      : 'Then aim for the seventh rank, where a rook attacks pawns from behind';
+      ? `Then double your rooks on it, so nothing can challenge them${why ? `, and aim for the seventh rank${why}` : ''}`
+      : why ? `Then aim for the seventh rank${why}` : 'Then use it to reach their camp';
     add('open-file', `seize the open ${freeOpenFile}-file`, `seizing the open ${freeOpenFile}-file`, `${rookReachBit(chess, myRooks, freeOpenFile)}. ${then}`, [], freeOpenFile);
   }
 
@@ -540,7 +563,8 @@ export function deriveNextPlanFacts(
       : nonPawnDiff > 0 ? 'your extra material'
       : pawnDiff >= 1 ? `your extra pawn${pawnDiff > 1 ? 's' : ''}`
       : 'your material edge';
-    add('convert', `convert your extra material`, `converting your extra material`, `trade pieces, keep the pawns, and keep it simple — every trade makes ${surplus} count for more`, []);
+    const anyPawns = all.some((c) => c.type === 'p' && c.color === studentColorWB);
+    add('convert', `convert your extra material`, `converting your extra material`, `trade pieces${anyPawns ? ', keep the pawns,' : ''} and keep it simple — every trade makes ${surplus} count for more`, []);
   }
 
   // 8. Bishop pair → open the position for the two bishops, HOW spelled out.
@@ -720,6 +744,15 @@ export function passerTrumpSentence(fen: string, square: string, own: boolean): 
     const left = pushesToPromote(chess, square, pawn.color);
     if (left <= 2 && !inRace) {
       const n = `${countWord(left)} push${left === 1 ? '' : 'es'}`;
+      if (own && kingCatchesPasser(chess, square, pawn.color, 'now') === true) {
+        return `Your passed pawn on ${square} is ${n} from queening, but their king is close enough to take it.`;
+      }
+      // THE RULE OF THE SQUARE (Danya, beginner chess strategy #6: "Black's
+      // king is too far away to stop the d-pawn"): in a pawn ending, a king
+      // that cannot catch it is not told to stand in front of it.
+      if (!own && kingCatchesPasser(chess, square, pawn.color) === false) {
+        return `Their passed pawn on ${square} is ${n} from queening, and your king is outside its square — it cannot catch it.`;
+      }
       const aside = block.kind === 'friendly' && front
         ? ` once ${own ? 'your' : 'their'} ${STRUCT_PIECE_NOUN[block.piece ?? 'p']} on ${front} steps aside`
         : '';
@@ -727,6 +760,10 @@ export function passerTrumpSentence(fen: string, square: string, own: boolean): 
         ? `Your passed pawn on ${square} is ${n} from queening${aside} — every move counts now.`
         : `Their passed pawn on ${square} is ${n} from queening${aside}. Put ${chess.board().flat().some((c) => !!c && c.type !== 'p' && c.type !== 'k' && c.color !== pawn.color) ? 'a piece' : 'your king'} in front of it before it runs.`;
     }
+    // A passer whose next square they win is said by the structure plan
+    // ("it needs guarding, not pushing"), never as a trump (Danya, the double
+    // attack #2: d5 "is very weak … a target even when defended").
+    if (own && passerStopper(fen, square, pawn.color)) return null;
     if (race?.kind === 'passer-race') {
       if (!own) return null;
       const raceText = planRaceClause(fen, student, 'live');
@@ -835,6 +872,22 @@ export function structurePlan(fen: string, studentColor: Color): string | null {
   return structurePlanFact(fen, studentColor)?.text ?? null;
 }
 
+/** The enemy piece that stops a passer's next push: the push lands where
+ *  they win it (SEE), and the first of their pieces covering that square. */
+function passerStopper(fen: string, square: string, color: Color): { front: Square; by: Square; piece: PieceSymbol } | null {
+  const turned = withMover(fen, color);
+  if (!turned) return null;
+  let c: Chess;
+  try { c = new Chess(turned); } catch { return null; }
+  const front = `${square[0]}${Number(square[1]) + (color === 'w' ? 1 : -1)}` as Square;
+  const enemy: Color = color === 'w' ? 'b' : 'w';
+  try { c.move({ from: square as Square, to: front, promotion: 'q' }); } catch { return null; }
+  if (legalSeeGainFor(c.fen(), front, enemy) <= 0) return null;
+  const by = c.attackers(front, enemy)[0];
+  const piece = by ? c.get(by)?.type : undefined;
+  return by && piece ? { front, by, piece } : null;
+}
+
 export function structurePlanFact(fen: string, studentColor: Color): StructurePlanFact | null {
   const s = describeStructure(fen);
   if (!s) return null;
@@ -851,6 +904,18 @@ export function structurePlanFact(fen: string, studentColor: Color): StructurePl
     }
     if (block.kind === 'friendly') {
       return { id: 'passer-blockaded-friendly', aim: `plan-aim:passer:${mine[0]}`, ideaKey: `student-passer-${mine[0]}`, squares: [mine], text: `Your passed pawn on ${mine} is a trump, but your own ${STRUCT_PIECE_NOUN[block.piece ?? 'p']} sits in its path — clear the way before it can advance.` };
+    }
+    // A RUNNER THAT CANNOT RUN IS NOT A TRUMP (Danya have-check 2026-11-19).
+    // Beginner chess strategy #6: their king takes c3 on c2 — "push it" walks
+    // it into the king. The double attack #2: d5 "is very weak … a target
+    // even when defended", with their queen covering d4 — "push it" drops it.
+    const caught = (() => { try { return kingCatchesPasser(new Chess(fen), mine, studentColor, 'now') === true; } catch { return false; } })();
+    if (caught) {
+      return { id: 'passer-caught', aim: `plan-aim:passer:${mine[0]}`, ideaKey: `student-passer-${mine[0]}`, squares: [mine], text: `Your passed pawn on ${mine} is no runner: their king is close enough to take it.` };
+    }
+    const stopper = passerStopper(fen, mine, studentColor);
+    if (stopper) {
+      return { id: 'passer-stopped', aim: `plan-aim:passer:${mine[0]}`, ideaKey: `student-passer-${mine[0]}`, squares: [mine, stopper.front, stopper.by], text: `Your passed pawn on ${mine} can't advance yet: their ${STRUCT_PIECE_NOUN[stopper.piece]} on ${stopper.by} covers ${stopper.front}. For now it needs guarding, not pushing.` };
     }
     // 🚨 THE ELSE-CHAIN DEFECT (found reading the code, 2026-09-17). Everything
     // below used to be unreachable whenever the student had a passer of their

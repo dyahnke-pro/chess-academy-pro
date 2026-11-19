@@ -486,9 +486,63 @@ export function findPawnBreaks(fen: string): Square[] {
     // read) presents a break as ADVICE, so the one test belongs here: the
     // pushed pawn must survive the exchange on its landing square. A break
     // that trades evenly still counts — that IS opening the position.
-    if (contact && landingIsSafe(probe.fen(), to)) breaks.add(to);
+    // A BREAK THAT OPENS A DISCOVERED CHECK ON ITS OWN KING IS NOT A PLAN
+    // (Danya, the chess investigator #0: "17...f5? to undermine the knight
+    // opens the b3-g8 diagonal: Nc7+ with discovered check wins the a8 rook").
+    // The pawn leaves its square; if that square was the last of the mover's
+    // pieces between an enemy slider and the mover's king, and one enemy piece
+    // is left on the line, the next move is a discovered check.
+    if (contact && landingIsSafe(probe.fen(), to) && !opensDiscoveryOnKing(probe, mover, mv.from)) breaks.add(to);
   }
   return [...breaks];
+}
+
+/** After a move from `vacated`, does an enemy slider see `mover`'s king through
+ *  that square with exactly one ENEMY piece left between — a discovered check
+ *  on their next move? Board geometry only. */
+export function opensDiscoveryOnKing(after: Chess, mover: Color, vacated: Square): boolean {
+  const king = after.board().flat().find((c) => c && c.type === 'k' && c.color === mover)?.square;
+  if (!king) return false;
+  const kf = king.charCodeAt(0) - 97; const kr = Number(king[1]);
+  const vf = vacated.charCodeAt(0) - 97; const vr = Number(vacated[1]);
+  const df = Math.sign(vf - kf); const dr = Math.sign(vr - kr);
+  const straight = df === 0 || dr === 0;
+  if (!(straight || Math.abs(vf - kf) === Math.abs(vr - kr))) return false;
+  const vDist = Math.max(Math.abs(vf - kf), Math.abs(vr - kr));
+  const before: Array<{ color: Color }> = [];
+  for (let f = kf + df, r = kr + dr, d = 1; f >= 0 && f < 8 && r >= 1 && r <= 8; f += df, r += dr, d += 1) {
+    const occ = after.get(`${String.fromCharCode(97 + f)}${r}` as Square);
+    if (!occ) continue;
+    const slider = straight ? occ.type === 'r' || occ.type === 'q' : occ.type === 'b' || occ.type === 'q';
+    if (occ.color !== mover && slider) {
+      return d > vDist && before.length === 1 && before[0].color !== mover;
+    }
+    before.push({ color: occ.color });
+    if (before.length > 1) return false;
+  }
+  return false;
+}
+
+/** The enemy pawns a pawn on `to` touches after a push — the pawn it hits, or
+ *  the pawn that hits it. The break's target, said with the break. */
+export function breakContacts(fen: string, to: Square, mover: Color): Square[] {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return []; }
+  const file = to.charCodeAt(0) - 97; const rank = Number(to[1]);
+  const fwd = mover === 'w' ? 1 : -1;
+  const out: Square[] = [];
+  const r = rank + fwd;
+  if (r < 1 || r > 8) return out;
+  // The pawn it hits and the pawn that hits it stand on the same squares:
+  // diagonally in front of it.
+  for (const df of [-1, 1]) {
+    const f = file + df;
+    if (f < 0 || f > 7) continue;
+    const sq = `${String.fromCharCode(97 + f)}${r}` as Square;
+    const occ = chess.get(sq);
+    if (occ && occ.type === 'p' && occ.color !== mover) out.push(sq);
+  }
+  return out;
 }
 
 export interface PieceQualityNote {
@@ -591,6 +645,33 @@ function rimKnightWorks(chess: Chess, square: Square, color: Color): boolean {
     if (!occ || occ.color !== enemy || occ.type === 'p' || occ.type === 'k') continue;
     if ((MATERIAL_VALUE[occ.type] ?? 0) > (MATERIAL_VALUE.n ?? 3)) return true;
     if (chess.attackers(to, enemy).length === 0) return true;
+  }
+  return false;
+}
+
+/** A rim knight one jump from a hole in THEIR half — a square no pawn of
+ *  theirs can ever challenge, empty of its own side's pieces, that it reaches
+ *  without losing material (SEE). It is on its way, not stuck (Danya, weak
+ *  squares who cares #0: "the f5 square is horribly weak; White's knight is
+ *  heading there" — the read called the h4 knight a problem piece). */
+export function rimKnightHeading(chess: Chess, square: Square, color: Color): boolean {
+  const enemy: Color = color === 'w' ? 'b' : 'w';
+  const f = square.charCodeAt(0) - 97;
+  const r = Number(square[1]);
+  for (const [df, dr] of KNIGHT_STEPS) {
+    const tf = f + df;
+    const tr = r + dr;
+    if (tf < 0 || tf > 7 || tr < 1 || tr > 8) continue;
+    if (color === 'w' ? tr < 5 : tr > 4) continue;
+    const to = `${String.fromCharCode(97 + tf)}${tr}` as Square;
+    const occ = chess.get(to);
+    if (occ && occ.color === color) continue;
+    if (!noPawnCanChallenge(chess, to, color)) continue;
+    const probe = new Chess(chess.fen());
+    probe.remove(square);
+    if (occ) probe.remove(to);
+    probe.put({ type: 'n', color }, to);
+    if (legalSeeGainFor(probe.fen(), to, enemy) <= 0) return true;
   }
   return false;
 }

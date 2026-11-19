@@ -62,3 +62,18 @@ describe('the choice when ahead — attack, not trade, when their king is open (
     expect(r?.text).toMatch(/Don't cash in with trades yet/);
   });
 });
+
+// Danya, rooks on the seventh revisited #0: two rooks against one and no pawns
+// — "progress needs the white king to come and support the rooks". There is no
+// passed pawn to make; the extra rook wins by mate.
+describe('readConversion — no pawns, the win is mate', () => {
+  it('rooks on the seventh revisited #0: never "make a passed pawn"', () => {
+    const r = readConversion('r4k2/6RR/8/8/8/8/8/6K1 w - - 0 1', 'w');
+    expect(r?.text).not.toMatch(/passed pawn/);
+    expect(r?.text).toMatch(/the win is mate\. Bring your king up/);
+  });
+  it('negative control: with pawns on the board it still says make a passed pawn', () => {
+    const r = readConversion('r4k2/6RR/8/8/8/8/6P1/6K1 w - - 0 1', 'w');
+    expect(r?.step).not.toBe('cut-off-king');
+  });
+});

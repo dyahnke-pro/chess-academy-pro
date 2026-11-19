@@ -17,6 +17,7 @@
 //
 // PURE: chess.js, the board readers and the lines handed in. Dual use: the
 // same plan a read teaches is the plan a student's game can be checked against.
+import { findPawnBreaks } from './positionReadingService';
 import { Chess, type Color } from 'chess.js';
 import { opponentTargets, pressureOf, pressureLine, type Target } from './targetSelector';
 import { planSteps, planStepsText } from './planSteps';
@@ -81,7 +82,11 @@ export function switchWing(fen: string, me: Color, whose: 'your' | 'their'): Boa
   if (board.turn() !== me) return null;
   const wing = OTHER[WING_OF(t.square)];
   const mine = new Set(wingPawns(board)[me][wing]);
-  const brk = board.moves({ verbose: true }).find((m) => m.piece === 'p' && mine.has(m.from) && !m.captured && isPawnBreak(fen, m.san, null));
+  // A break that just drops the pawn opens no front (Danya, the hardest move
+  // to make #1: "the queenside is permanently locked" — b5 is met by axb5 and
+  // loses a pawn): only a break the one break computer accepts.
+  const safe = new Set<string>(findPawnBreaks(fen));
+  const brk = board.moves({ verbose: true }).find((m) => m.piece === 'p' && mine.has(m.from) && !m.captured && safe.has(m.to) && isPawnBreak(fen, m.san, null));
   if (!brk) return null;
   const other = whose === 'your' ? 'their' : 'your';
   const tied = t.guards.length === 1 ? 'a piece' : `${t.guards.length} pieces`;

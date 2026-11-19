@@ -204,12 +204,51 @@ export function pushesToPromote(chess: Chess, square: string, color: Color): num
  * all. A side whose only passer is blockaded has no runner here, and the
  * teaching for it already exists — `structurePlan` says dislodge the blockader.
  */
+/**
+ * THE RULE OF THE SQUARE, said as captures: does the enemy king take this
+ * passer (or its new queen) before it is safe? After the pawn's j-th push it
+ * stands on s_j; the king has had j moves (j+1 when it moves first), so it
+ * catches the pawn when it is within that many king steps of some s_j that
+ * the pawn's own king does not guard. A pawn ending's arithmetic — with other
+ * pieces on, they can interfere either way, so it answers only with none.
+ * (Danya, beginner chess strategy #6: "Black's king is too far away to stop
+ * the d-pawn"; the race said Black's own c3 runner won, with White's king
+ * taking it on c2.)
+ */
+export function kingCatchesPasser(chess: Chess, square: string, color: Color, reach: 'square' | 'now' = 'square'): boolean | null {
+  if (chess.board().flat().some((c) => !!c && c.type !== 'k' && c.type !== 'p')) return null;
+  const enemy: Color = color === 'w' ? 'b' : 'w';
+  const kingSq = (c: Color): string | null => chess.board().flat().find((x) => !!x && x.type === 'k' && x.color === c)?.square ?? null;
+  const theirKing = kingSq(enemy);
+  const ownKing = kingSq(color);
+  if (!theirKing) return false;
+  const dist = (a: string, b: string): number => Math.max(Math.abs(a.charCodeAt(0) - b.charCodeAt(0)), Math.abs(Number(a[1]) - Number(b[1])));
+  const pushes = pushesToPromote(chess, square, color);
+  const kingFirst = chess.turn() === enemy;
+  const step = color === 'w' ? 1 : -1;
+  const promoRank = color === 'w' ? 8 : 1;
+  // 'now': the king takes it on its very next move — the pawn is lost, and
+  // no tempo spent elsewhere changes that. 'square': the whole rule.
+  const last = reach === 'now' ? (kingFirst ? 0 : 1) : pushes;
+  for (let j = 0; j <= Math.min(last, pushes); j += 1) {
+    if (j === 0 && !kingFirst) continue;
+    // A double step skips its first square; the count is in pushes, so read
+    // the rank from the promotion square back.
+    const rank = j === pushes ? promoRank : promoRank - step * (pushes - j);
+    const sj = `${square[0]}${rank}`;
+    if (ownKing && dist(ownKing, sj) <= 1) continue;
+    if (dist(theirKing, sj) <= (reach === 'now' ? 1 : j + (kingFirst ? 1 : 0))) return true;
+  }
+  return false;
+}
+
 function fastestRunner(chess: Chess, squares: readonly string[], color: Color): { sq: string; pushes: number } | null {
   let best: { sq: string; pushes: number } | null = null;
   const d = color === 'w' ? 1 : -1;
   for (const sq of squares) {
     const front = `${sq[0]}${Number.parseInt(sq[1] ?? '2', 10) + d}`;
     if (chess.get(front as Square)) continue; // blockaded — not running
+    if (kingCatchesPasser(chess, sq, color, 'now') === true) continue; // the king takes it — not running
     const pushes = pushesToPromote(chess, sq, color);
     if (!best || pushes < best.pushes) best = { sq, pushes };
   }

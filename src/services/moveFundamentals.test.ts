@@ -323,9 +323,9 @@ describe('the space rule rides with a flank space-grab, once (B1)', () => {
     const c = new Chess();
     for (const s of 'e4 e5 Nf3 d6 d4 exd4 Nxd4 Be7 Nc3 Nf6 Bc4 O-O Bb3 Nbd7 O-O Ne5 f4 Ned7 Nf3 Nc5 Qe1 Bg4 e5 dxe5 fxe5 Nh5 Be3 Ne6'.split(' ')) c.move(s);
     const first = principleLine(c.fen(), 'a4', 'white', new Set(), 0, true);
-    expect(first?.text).toBe('Your a4 grabs space on the queenside — space is a slow, real edge: keep it and your pieces breathe while theirs stumble over each other.');
+    expect(first?.text).toBe('Your a4 grabs space on the queenside, taking b5 away from their pieces — space is a slow, real edge: keep it and your pieces breathe while theirs stumble over each other.');
     const again = principleLine(c.fen(), 'a4', 'white', new Set(['mg-rule:space']), 0, true);
-    expect(again?.text).toBe('Your a4 grabs space on the queenside.');
+    expect(again?.text).toBe('Your a4 grabs space on the queenside, taking b5 away from their pieces.');
   });
 });
 
@@ -471,5 +471,15 @@ describe('the plan pointer says what to do (prod audit 2026-11-07: "The plan her
       expect(p, `${san}: ${p}`).not.toMatch(new RegExp(`\\b${to}\\b`));
       expect(p, `${san}: ${p}`).toMatch(/\b[a-h][1-8]\b|[a-h]-(?:file|pawn)/);
     }
+  });
+});
+
+// Danya have-check 2026-11-19: "takes the open c-file, where the rook belongs"
+// and "opens up the center" named the file or the break and nothing it does.
+describe('move fundamentals say what the file and the break reach', () => {
+  it('a rook on the half-open file presses the pawn on it', async () => {
+    const { computeMoveFundamentals } = await import('./moveFundamentals');
+    const fs = computeMoveFundamentals('r3k2r/pp3ppp/3p4/8/8/8/PP3PPP/R3K2R w KQkq - 0 20', 'Rd1', 'white');
+    expect(JSON.stringify(fs)).toMatch(/pressing their pawn on d6/);
   });
 });

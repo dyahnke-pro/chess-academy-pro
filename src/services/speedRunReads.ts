@@ -372,6 +372,18 @@ export function usefulWaiting(fen: string, lines: Lines): Read | null {
   if (!anyMoveFine(fen, lines)) return null;
   const bestSan = sanOf(fen, lines[0]?.moves?.[0]);
   if (!bestSan || !/^[abgh][36]$/.test(bestSan)) return null;
+  // A PAWN STEP THAT HITS A PIECE IS NOT A WAIT (Danya, the double attack #1:
+  // "Black must act immediately or White's attack becomes unbearable" — g6
+  // kicks the queen on f5 with tempo, and the read called it a move that
+  // costs nothing and makes them commit first).
+  const r = play(fen, bestSan);
+  if (!r) return null;
+  const hitsPiece = [-1, 1].some((d) => {
+    const q = `${String.fromCharCode(r.move.to.charCodeAt(0) + d)}${Number(r.move.to[1]) + (r.move.color === 'w' ? 1 : -1)}`;
+    const p = /^[a-h][1-8]$/.test(q) ? r.board.get(q as Square) : null;
+    return !!p && p.color !== r.move.color && p.type !== 'p';
+  });
+  if (hitsPiece) return null;
   return { idea: 'Nothing has to happen yet — a useful waiting move is enough, and it makes them commit first.', claim: 'srr:waiting', namesMove: true, text: `Nothing has to happen yet — ${bestSan} is a useful waiting move: it costs nothing, gives your king air, and makes them commit first.`, squares: [bestSan] };
 }
 

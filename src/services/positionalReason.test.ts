@@ -43,3 +43,27 @@ describe('the error computer says the positional reason, never the cost alone', 
     expect(errorWhy({ ...base, quality: 'inaccuracy', costCp: 60, namesBetterMove: false }).positional).toBeNull();
   });
 });
+
+// Danya have-check 2026-11-19: "your pieces reach fewer squares after this",
+// "the better move puts a rook on an open file" — which piece, which file.
+describe('boardReason names its piece', () => {
+  const fen = '6k1/p4pp1/2p5/1pp1P3/3q1PPp/P3NQ1P/b1P1K3/8 b - - 0 30';
+  it('the piece that loses squares', () => {
+    expect(boardReason(fen, 'c4', 'g6', 'endgame')?.note ?? boardReason(fen, 'c4', 'g6', 'middlegame')?.note)
+      .toBe('Your bishop on a2 reaches 3 fewer squares after this than after the better move.');
+  });
+  it('their piece it frees', () => {
+    expect(boardReason(fen, 'c4', 'Qe5', 'middlegame')?.note).toBe('That frees their knight on e3: it reaches 6 more squares than after the better move.');
+  });
+  it('the rook and its file', () => {
+    expect(boardReason('r2r2k1/qp3ppp/1np1p1b1/p7/P2P2N1/2P5/1P1QBPPP/R4RK1 w - - 0 22', 'd5', 'Rfe1', 'middlegame')?.note)
+      .toBe('The better move puts your rook on the half-open e-file.');
+  });
+});
+
+describe('boardReason never reads a check as a freed piece', () => {
+  it('the tactical detector #0: the better move checks — no "frees their queen"', () => {
+    const n = boardReason('3Q1bk1/pp5p/r3b1p1/8/4Nq2/5P2/PP6/K2RR3 w - - 0 30', 'Nd6', 'Qxf8+', 'middlegame')?.note ?? '';
+    expect(n).not.toMatch(/frees their queen/);
+  });
+});

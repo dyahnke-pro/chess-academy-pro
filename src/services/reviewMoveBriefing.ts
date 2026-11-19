@@ -32,6 +32,7 @@ import { verdictWithReasons, reasonClauses, type ReasonKind } from './verdictWit
 import type { InitiativeLine } from './initiativeRead';
 import { hasRook } from '../utils/hasRook';
 import { Chess } from 'chess.js';
+import { checkAnswers } from './checkAnswers';
 import { MATERIAL_VALUE } from './pieceValues';
 import { actsFromItsSquare, exchangeEnd } from './material';
 import { gainHoldsInLine, materialDeficit, netPieceWords, GAIN_HOLDS_PLIES, NO_FOLLOW, type FollowLines } from './exchangeLedger';
@@ -475,7 +476,16 @@ export function moveAspects(input: {
   if (namedTactic) aspects.push({ kind: 'aspect-tactic-set-up', text: `setting up ${withArticle(namedTactic)}`, verb: `sets up ${withArticle(namedTactic)}`, idea: 'tactic', squares: [], weight: 66 });
 
   // 4. Check (a beat of its own when not mate/threat-carried).
-  if (facts.isCheck) aspects.push({ kind: 'aspect-check', text: 'checking the king, forcing a reply', verb: 'checks the king, forcing a reply', idea: 'check', squares: [], weight: 72, keystone: true, restates: true });
+  // THE CHECK SAYS WHAT IT LEAVES THEM (Danya have-check 2026-11-19: "which
+  // checks the king, forcing a reply" on 14 boards, true of every check): one
+  // or two answers are named, and a king with no block or capture "has to
+  // move". A check with many answers only restates the move.
+  if (facts.isCheck) {
+    const answers = moverIsStudent === undefined ? null : checkAnswers(fenAfter, enemyPoss);
+    aspects.push(answers
+      ? { kind: 'aspect-check', text: `checking the king, and ${answers}`, verb: `checks the king, and ${answers}`, idea: 'check', squares: [], weight: 72, keystone: true }
+      : { kind: 'aspect-check', text: 'checking the king, forcing a reply', verb: 'checks the king, forcing a reply', idea: 'check', squares: [], weight: 72, keystone: true, restates: true });
+  }
 
   // 5. Promotion.
   if (facts.promotion) aspects.push({ kind: 'aspect-promotes', text: `promoting to ${withArticle(facts.promotion)}`, verb: `promotes to ${withArticle(facts.promotion)}`, idea: 'promote', squares: [mv.to], weight: 86, keystone: true });

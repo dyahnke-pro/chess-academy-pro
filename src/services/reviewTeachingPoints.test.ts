@@ -509,3 +509,29 @@ describe('a guarded grab is named in pieces, never points', () => {
     expect(why).not.toMatch(/\d\s*points?|\bpoints? for\b/);
   });
 });
+
+// Danya, rooks on the seventh revisited #0: no pawns on the board, so the
+// seventh is about the king it pens, never "chewing through the pawns".
+describe('rookOnSeventh — says what the rook does there', () => {
+  it('pawnless: pins the king, no pawns to eat', () => {
+    const t = rookOnSeventh('r4k2/6RR/8/8/8/8/8/6K1 w - - 0 1', 'w');
+    expect(t).toBe('your rook has reached the seventh on g7 — it keeps their king shut in on the back rank');
+  });
+  it('negative control: a pawn on the seventh is named', () => {
+    expect(rookOnSeventh('r4k2/p5R1/8/8/8/8/8/6K1 w - - 0 1', 'w')).toMatch(/where it eats their pawn on a7/);
+  });
+});
+
+// Danya have-check 2026-11-19: "passed pawns are meant to be pushed" beside a
+// lost race and on a pawn their king collects.
+describe('passedPawnPush — only a runner that can run', () => {
+  it('beginner chess strategy #6: c3 is taken by their king — no push cue', () => {
+    expect(passedPawnPush('8/5ppk/3P3p/8/8/2pK3P/5PP1/8 b - - 0 2', 'b', 'c3')).toBeNull();
+  });
+  it('the double attack #2: d4 is theirs — no push cue', () => {
+    expect(passedPawnPush('r1b2rk1/pp4pp/3b4/3p2q1/8/1P1Q1P2/PB1N2PP/R3R2K b - - 0 18', 'b', 'd5')).toBeNull();
+  });
+  it('negative control: a free runner says its count', () => {
+    expect(passedPawnPush('8/5ppk/3P3p/8/8/7P/5PP1/K7 w - - 0 2', 'w', 'd6')).toBe('your passed pawn on d6 is two pushes from queening — push it');
+  });
+});

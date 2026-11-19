@@ -39,7 +39,8 @@ import { legalSeeGainOn, bishopHemmedByOwnPawns, standsSafe } from './positionRe
 import { captureHasCounterTactic, detectNewThreat, forkAlignmentClause, type DetectedThreat } from './groundedAnswer';
 import { cells, PIECE_NOUN, findWorstPlacedPiece, deriveNextPlans } from './nextPlans';
 import { trappedAt, lineTakesPiece } from './trappedPiece';
-import { andList, withArticle } from '../utils/andList';
+import { detectPlanRace, kingCatchesPasser, pushesToPromote } from './planRace';
+import { andList, withArticle, countWord } from '../utils/andList';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 // Re-exported: eight callers and tests import these from here (2026-09-19 leaf move).
 export { findWorstPlacedPiece, deriveNextPlans };
@@ -177,7 +178,15 @@ export function rookOnSeventh(fen: string, studentColorWB: Color): string | null
   try { chess = new Chess(fen); } catch { return null; }
   const rank = studentColorWB === 'w' ? '7' : '2';
   const rook = cells(chess).find((c) => c.type === 'r' && c.color === studentColorWB && c.square[1] === rank);
-  return rook ? `your rook has reached the seventh on ${rook.square} — a rook on the seventh is a pig, chewing through the pawns and pinning the king back` : null;
+  if (!rook) return null;
+  // What the rook does there, read off the board (Danya, rooks on the seventh
+  // revisited #0: "chewing through the pawns" with no pawns on the board).
+  const enemy: Color = studentColorWB === 'w' ? 'b' : 'w';
+  const pawns = cells(chess).filter((c) => c.type === 'p' && c.color === enemy && c.square[1] === rank).map((c) => c.square);
+  const king = cells(chess).find((c) => c.type === 'k' && c.color === enemy);
+  const pinned = !!king && king.square[1] === (studentColorWB === 'w' ? '8' : '1');
+  if (pawns.length > 0) return `your rook has reached the seventh on ${rook.square}, where it eats ${pawns.length === 1 ? `their pawn on ${pawns[0]}` : 'their pawns along the rank'}${pinned ? ' and shuts their king in' : ''}`;
+  return pinned ? `your rook has reached the seventh on ${rook.square} — it keeps their king shut in on the back rank` : null;
 }
 
 /**
@@ -239,8 +248,27 @@ export function passedPawnPush(fen: string, studentColorWB: Color, passedSquare:
     return [[1, 2], [2, 1], [-1, 2], [-2, 1], [1, -2], [2, -1], [-1, -2], [-2, -1]].some(([df, dr]) =>
       path.includes(`${String.fromCharCode(f + df)}${rk + dr}`));
   });
-  const knightNote = knightOnPath ? ', and their knight is a poor blocker — knights are bad at stopping a runner' : '';
-  return `your passed pawn on ${passedSquare} wants to run — passed pawns are meant to be pushed${knightNote}`;
+  const knightNote = knightOnPath ? ', and their knight is a poor blocker' : '';
+  // A RUNNER THAT CANNOT RUN IS NOT TOLD TO RUN (Danya have-check 2026-11-19:
+  // "passed pawns are meant to be pushed" beside a race the other side wins,
+  // and on pawns a king collects). Their king taking it, a next square they
+  // win, or their passer queening first: no push cue.
+  if (kingCatchesPasser(chess, passedSquare, studentColorWB, 'now') === true) return null;
+  const race = detectPlanRace(fen, studentColorWB);
+  if (race?.kind === 'passer-race' && race.yourPawn === passedSquare && !race.youQueenFirst) return null;
+  const front = path[0];
+  if (front) {
+    const pushed = new Chess(fen);
+    const parts = pushed.fen().split(' '); parts[1] = studentColorWB; parts[3] = '-';
+    try {
+      const b = new Chess(parts.join(' '));
+      b.move({ from: passedSquare as Square, to: front as Square, promotion: 'q' });
+      if (legalSeeGainOn(b, front as Square) > 0) return null;
+    } catch { return null; }
+  }
+  // The push said with its count: how far it has to go is why it matters now.
+  const pushes = pushesToPromote(chess, passedSquare, studentColorWB);
+  return `your passed pawn on ${passedSquare} is ${countWord(pushes)} push${pushes === 1 ? '' : 'es'} from queening — push it${knightNote}`;
 }
 
 

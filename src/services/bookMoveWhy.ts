@@ -29,6 +29,7 @@ import { masterMovesCachedSync } from './masterPlayLookup';
 import { afterCaptureSan, afterCaptureSanForms } from '../utils/captureWords';
 import type { MoveFundamentalId } from './moveFundamentals';
 import { openSentence } from '../utils/openSentence';
+import { checkAnswers } from './checkAnswers';
 
 const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const CENTER: readonly Square[] = ['d4', 'd5', 'e4', 'e5'];
@@ -813,7 +814,13 @@ export function moveJob(
   // A CHECK IS ALWAYS SAID — it is what the move forces first.
   if (/\+$/.test(san)) {
     const check = (c: string): string => `it gives check and ${c.replace(/^it /, '')}`;
-    return job ? { ...job, clause: check(job.clause), ...(job.compact ? { compact: check(job.compact) } : {}), ...(job.forms ? { forms: job.forms.map(check) } : {}) } : { kind: 'attack', squares: [mv.to], clause: 'it gives check' };
+    if (job) return { ...job, clause: check(job.clause), ...(job.compact ? { compact: check(job.compact) } : {}), ...(job.forms ? { forms: job.forms.map(check) } : {}) };
+    // A check with no other job says what it leaves them, or it is the bare
+    // check (isBareJob) — the move read back, which its consumers drop.
+    let afterFen: string | null = null;
+    try { const c = new Chess(fen); c.move(san); afterFen = c.fen(); } catch { afterFen = null; }
+    const answers = afterFen && (w.other === 'their' || w.other === 'your') ? checkAnswers(afterFen, w.other) : null;
+    return { kind: 'attack', squares: [mv.to], clause: answers ? `it gives check, and ${answers}` : 'it gives check' };
   }
   return job;
 }

@@ -560,7 +560,7 @@ export function assembleBoardPlanAnswer(
   // method's can be two different pieces).
   const covered = (l: { kind: string; squares: string[] }): boolean => l.kind !== 'file' && l.squares.length > 0 && l.squares.every((q) => pf.methodSquares.includes(q));
   // A file lever is covered only when it names one file and the method takes that same file.
-  const fileCovered = (l: { phrase: string }): boolean => { const f = /^put a rook on the ([a-h]) file$/.exec(l.phrase)?.[1]; return !!f && !!pf.method?.includes(`open ${f}-file`); };
+  const fileCovered = (l: { phrase: string }): boolean => { const f = /^put a rook on the ([a-h]) file\b/.exec(l.phrase)?.[1]; return !!f && !!pf.method?.includes(`open ${f}-file`); };
   const topK = pf.levers.filter((l) => !(pf.method && (covered(l) || (l.kind === 'file' && fileCovered(l))))).map((l) => l.phrase).filter(keep);
   // THEIR TARGET (WO-DANYA-READS-01 #3): the pawn no pawn of theirs can guard
   // that the engine's best move goes after — what the plan works against,

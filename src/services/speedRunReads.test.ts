@@ -138,6 +138,12 @@ describe('his habits of thought, computed (each checked against the existing com
     expect(usefulWaiting(fen, [line(['h2h3'], 30), line(['b1c3'], 25), line(['c2c3'], 20)])?.text).toMatch(/useful waiting move/);
     expect(usefulWaiting(fen, [line(['b1c3'], 30), line(['h2h3'], 25), line(['c2c3'], 20)])).toBeNull();
   });
+  // Danya, the double attack #1: g6 kicks the queen on f5 — "Black must act
+  // immediately", never "nothing has to happen yet".
+  it('a pawn step that hits a piece is never the useful waiting move', () => {
+    const fen = '3r2k1/pppq1ppp/4r3/n2p1Q2/3PPB2/P1P2P2/5P1P/R5RK b - - 0 18';
+    expect(usefulWaiting(fen, [line(['g7g6'], 12), line(['a5c6'], 18), line(['e6a6'], 21)])).toBeNull();
+  });
   it('keep a square vacant: the knight on b1 goes through d2, never through c3 where the d4-pawn takes it', () => {
     // The route walks only through safe squares (WO-DEPTH-01): c3 is hit by
     // the pawn on d4, so the knight's road to an outpost runs b1–d2–c4.

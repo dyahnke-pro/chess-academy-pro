@@ -70,6 +70,47 @@ function rooksOnOpenFiles(c: Chess, color: Color): number {
   return n;
 }
 
+/** Each piece of `side` (not pawns, not the king), keyed by the square it
+ *  stood on in `fen`, with where it stands on `board` after `san` and how many
+ *  squares it reaches there. */
+function pieceReach(fen: string, san: string, board: Chess, side: Color): Map<string, { at: Square; type: string; n: number }> {
+  const out = new Map<string, { at: Square; type: string; n: number }>();
+  let moved: { from: string; to: Square } | null = null;
+  try { const m = new Chess(fen).move(san); moved = m ? { from: m.from, to: m.to } : null; } catch { moved = null; }
+  const parts = board.fen().split(' ');
+  parts[1] = side; parts[3] = '-';
+  let turned: Chess;
+  try { turned = new Chess(parts.join(' ')); } catch { return out; }
+  // A side in check moves only to answer it: its reach then measures the
+  // check, not the piece (the better move checks, and their queen "reaches
+  // 19 more squares" after the played one).
+  if (turned.inCheck()) return out;
+  const start = new Chess(fen);
+  for (const row of start.board()) for (const p of row) {
+    if (!p || p.color !== side || p.type === 'p' || p.type === 'k') continue;
+    const at = moved && moved.from === p.square ? moved.to : p.square;
+    const there = board.get(at);
+    if (!there || there.color !== side || there.type !== p.type) continue;
+    out.set(p.square, { at, type: p.type, n: turned.moves({ square: at, verbose: true }).length });
+  }
+  return out;
+}
+
+/** The piece whose reach changes most between two boards: `sign` +1 for the
+ *  piece that reaches fewer squares on `worse` than on `better`. */
+function biggestShift(fen: string, worseSan: string, worse: Chess, betterSan: string, better: Chess, side: Color): { at: Square; type: string; gap: number } | null {
+  const a = pieceReach(fen, worseSan, worse, side);
+  const b = pieceReach(fen, betterSan, better, side);
+  let best: { at: Square; type: string; gap: number } | null = null;
+  for (const [origin, w] of a) {
+    const g = b.get(origin);
+    if (!g) continue;
+    const gap = g.n - w.n;
+    if (!best || gap > best.gap) best = { at: w.at, type: w.type, gap };
+  }
+  return best;
+}
+
 /** The squares a pawn of `color` on `sq` attacks. */
 function pawnHits(sq: Square, color: Color): Square[] {
   const f = sq.charCodeAt(0); const r = Number(sq[1]) + (color === 'w' ? 1 : -1);
@@ -119,15 +160,28 @@ export function boardReason(fen: string, playedSan: string, bestSan: string | nu
     push(findPassedPawns(bestBoard.fen(), mover).length - findPassedPawns(played.fen(), mover).length, 1,
       { tag: 'passed-pawn-neglected', note: 'The better move makes a passed pawn.' });
   }
-  push(rooksOnOpenFiles(bestBoard, mover) - rooksOnOpenFiles(played, mover), 1,
-    { tag: 'passive-rook', note: 'The better move puts a rook on an open file.' });
+  // THE READING NAMES ITS PIECE (Danya have-check 2026-11-19: "the better
+  // move puts a rook on an open file", "your pieces reach fewer squares" —
+  // which rook, which file, which piece). A gap with no piece to name is
+  // not said.
+  const rookGain = (() => {
+    const files = findOpenFiles(bestBoard.fen());
+    const semi = mover === 'w' ? files.whiteSemiOpen : files.blackSemiOpen;
+    const onFile = (sq: string): boolean => files.open.includes(sq[0]) || semi.includes(sq[0]);
+    const bm = new Chess(fen).move(bestSan);
+    return bm && bm.piece === 'r' && onFile(bm.to) && !onFile(bm.from) ? `${files.open.includes(bm.to[0]) ? 'open' : 'half-open'} ${bm.to[0]}-file` : null;
+  })();
+  if (rookGain) push(rooksOnOpenFiles(bestBoard, mover) - rooksOnOpenFiles(played, mover), 1,
+    { tag: 'passive-rook', note: `The better move puts your rook on the ${rookGain}.` });
   const space = (c: Chess): number => { const t = computeTerritory(c.fen()); return mover === 'w' ? t.white - t.black : t.black - t.white; };
   push(space(bestBoard) - space(played), 2,
     { tag: 'space-conceded', note: 'That gives up space in the centre the better move kept.' });
-  push(activity(bestBoard, mover) - activity(played, mover), 4,
-    { tag: 'misplaced-piece', note: 'Your pieces reach fewer squares after this than after the better move.' });
-  push(activity(played, enemy) - activity(bestBoard, enemy), 4,
-    { tag: 'tempo-handed', note: 'That frees their pieces; the better move kept them tied up.' });
+  const mine = biggestShift(fen, playedSan, played, bestSan, bestBoard, mover);
+  if (mine && mine.gap >= 3) push(activity(bestBoard, mover) - activity(played, mover), 4,
+    { tag: 'misplaced-piece', note: `Your ${PIECE[mine.type] ?? 'piece'} on ${mine.at} reaches ${mine.gap} fewer squares after this than after the better move.` });
+  const theirs = biggestShift(fen, bestSan, bestBoard, playedSan, played, enemy);
+  if (theirs && theirs.gap >= 3) push(activity(played, enemy) - activity(bestBoard, enemy), 4,
+    { tag: 'tempo-handed', note: `That frees their ${PIECE[theirs.type] ?? 'piece'} on ${theirs.at}: it reaches ${theirs.gap} more squares than after the better move.` });
   return gaps.length > 0 ? gaps.sort((a, b) => b.gap - a.gap)[0].reason : null;
 }
 

@@ -180,6 +180,11 @@ function pieceManeuver(fenStart: string, end: Chess, steps: readonly PlanStep[],
   let startBoard: Chess;
   try { startBoard = new Chess(fenStart); } catch { return null; }
   if (isUndevelopedInOpening(fenStart, mover, type, start)) return null;
+  // The road's piece must stand on its first square NOW: a queen the line
+  // makes by promoting is not "your queen on c8" on a board with no queen
+  // (Danya, a guide to underpromotion #0: the Saavedra board).
+  const own = startBoard.get(start as Square);
+  if (!own || own.color !== mover || own.type !== type) return null;
   // A square the piece reaches in one move is not a road: the engine's detour
   // is about timing, said by other computers.
   // The same holds at every stop: a road that could skip a stop is the

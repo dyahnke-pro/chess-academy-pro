@@ -122,6 +122,13 @@ export function readConversion(fen: string, student: 'w' | 'b'): ConversionRead 
   } else if (theirPieces >= 2) {
     step = 'trade-pieces';
     text = `You're up ${boardEdgeWords(c.fen(), student, edge)} — trade pieces, not pawns. Every piece that comes off makes your extra material count for more.`;
+  } else if (theirPawns === 0 && !c.board().some((row) => row.some((x) => x && x.color === student && x.type === 'p'))) {
+    // NO PAWNS LEFT, NO PASSER TO MAKE (Danya, rooks on the seventh revisited
+    // #0: two rooks against one, "progress needs the white king to come and
+    // support the rooks"; the read said "make a passed pawn" on a board with
+    // no pawns). The extra material wins only by mate, and the king joins in.
+    step = 'cut-off-king';
+    text = `You're up ${boardEdgeWords(c.fen(), student, edge)} with no pawns left, so the win is mate. Bring your king up to support your pieces, and keep their king on the edge.`;
   } else if (!passer) {
     step = 'make-passer';
     text = `You're up ${boardEdgeWords(c.fen(), student, edge)} with few pieces left — now make a passed pawn. The extra material wins by making a new queen, not by hunting the king.`;

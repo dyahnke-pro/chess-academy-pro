@@ -7,6 +7,7 @@ import { findMinorityAttack,
   findHangingBySee,
   findPawnBreaks,
   findPieceQuality,
+  rimKnightHeading,
   bishopBlockingPawns,
   bishopHemmedByOwnPawns,
   samplePositionsFromGame,
@@ -980,5 +981,29 @@ describe('P0c (2026-10-04) — every hanging piece, no caps', () => {
 
   it('findForcingCandidates is uncapped (G4.5) — every check and capture', () => {
     expect(findForcingCandidates(BUSY).length).toBeGreaterThan(8);
+  });
+});
+
+// Danya, the chess investigator #0: "17...f5? to undermine the knight opens the
+// b3-g8 diagonal: Nc7+ with discovered check wins the a8 rook". A break that
+// leaves one enemy piece between an enemy slider and the mover's king is not a
+// break to recommend.
+describe('findPawnBreaks — never a break that opens a discovered check', () => {
+  it('the chess investigator #0: f5 is not offered', () => {
+    expect(findPawnBreaks('r5k1/p2p1ppp/b7/1ppNr3/3pP3/PB1P4/1PPb1PPP/R4RK1 b - - 0 17')).not.toContain('f5');
+  });
+  it('negative control: with their own knight on d5 instead, f5 is a break again', () => {
+    expect(findPawnBreaks('r5k1/p2p1ppp/b7/1ppnr3/3pP3/PB1P1N2/1PPb1PPP/R4RK1 b - - 0 17')).toContain('f5');
+  });
+});
+
+// Danya, weak squares who cares #0: "the f5 square is horribly weak; White's
+// knight is heading there" — a rim knight one jump from a hole is on its way.
+describe('rimKnightHeading', () => {
+  it('weak squares who cares #0: the h4 knight jumps to f5', () => {
+    expect(rimKnightHeading(new Chess('r1bq1rk1/pp6/n2p1p1b/2pPp2p/2P1P1nN/P1N3B1/1P2BPP1/R2Q1RK1 b - - 0 18'), 'h4', 'w')).toBe(true);
+  });
+  it('negative control: a rim knight with no hole to reach', () => {
+    expect(rimKnightHeading(new Chess('r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/N7/PPPP1PPP/R1BQKBNR w KQkq - 4 4'), 'a3', 'w')).toBe(false);
   });
 });
