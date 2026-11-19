@@ -1375,6 +1375,12 @@ export function computeMoveFacets(
       // The early queen chased with tempo, both seats, off the game's own
       // moves before this one.
       add(readBoardAll('queenChased', { history: ctx.allSans.slice(0, ply - 1), fenBefore, san, student: studentColorWB })[0]);
+      // One piece moved again while the others wait at home, and the castling
+      // the move took away or which way the king castled, both seats — the
+      // same reads the lesson's thought takes (one coach, unlocked).
+      { const again = readBoardAll('pieceMovedAgain', { history: ctx.allSans.slice(0, ply - 1), fenBefore, san, student: studentColorWB, costCp: ctx.costCp })[0]; if (again) add({ ...again, kind: 'principle' }); }
+      add(readBoardAll('castlingTaken', { fenBefore, san, student: studentColorWB })[0]);
+      add(readBoardAll('castlingWing', { fenBefore, san, student: studentColorWB })[0]);
       add(readBoardAll('stalemateTrick', { fenBefore, san, student: studentColorWB })[0]);
       add(readBoardAll('bothSaved', { fenBefore, san, student: studentColorWB, replies: ctx.playedLineUci.length ? [{ cp: ctx.evaluation != null && storedMate(ctx.evaluation) == null ? ctx.evaluation : null, mate: null, moves: ctx.playedLineUci }] : [] })[0]);
       // A windmill and a perpetual check, both seats (repeatingChecks), one

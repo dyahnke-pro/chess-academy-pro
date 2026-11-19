@@ -6453,7 +6453,7 @@ export const BOARD_COMPUTERS = {
     phase: NOT_ENDING,
     surfaces: {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN_VIA_THOUGHT,
-      review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ,
+      review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ,
       weaknesses: { not: 'a reading of the move just played — the castling it costs is recorded by the king-stuck-center watch' }, think: THINK,
     },
   },
@@ -6471,7 +6471,7 @@ export const BOARD_COMPUTERS = {
     phase: NOT_ENDING,
     surfaces: {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN_VIA_THOUGHT,
-      review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ,
+      review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ,
       weaknesses: { not: 'a reading of the castling move just played — no question of the student\'s posed' }, think: THINK,
     },
   },
@@ -6494,7 +6494,7 @@ export const BOARD_COMPUTERS = {
     phase: NOT_ENDING,
     surfaces: {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN_VIA_THOUGHT,
-      review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_NO_HISTORY,
+      review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_NO_HISTORY,
       weaknesses: { not: 'the record half is principleAttribution\'s same-piece-twice on the student\'s own costly move' },
       think: { not: 'it counts a piece\'s trips across the game\'s moves; a step board is one position' },
     },
