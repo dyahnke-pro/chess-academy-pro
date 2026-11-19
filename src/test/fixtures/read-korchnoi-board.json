@@ -1,198 +1,270 @@
 {
- "id": "how-to-avoid-blunders-part-1#0",
- "fen": "r2q2k1/p4pbp/6r1/1p1P1bPQ/2p2P2/2N1B3/PP5P/R4RK1 w - - 0 21",
- "facts": [
-  {
-   "from": "position",
-   "kind": "deliberation",
-   "text": "Ne2? Then they play Qd7, you answer Rae1 and they play Bxb2 \u2014 they win a pawn back.",
-   "depth": null,
-   "stake": 1586.4215258461968,
-   "keptToday": true
-  },
-  {
-   "from": "position",
-   "kind": "concept",
-   "text": "After a3, a5, Qf3, b4, axb4, axb4, Rxa8, your rook on a8 pins their queen against their king \u2014 a pin freezes the piece in front: it can't move without exposing the more valuable piece behind it, so it can be piled on.",
-   "depth": null,
-   "stake": null,
-   "keptToday": true
-  },
-  {
-   "from": "position",
-   "kind": "structure-plan",
-   "text": "Your passed pawn on d5 is the trump here \u2014 push it and make them deal with the promotion.",
-   "depth": null,
-   "stake": null,
-   "keptToday": true
-  },
-  {
-   "from": "position",
-   "kind": "speedrun-read",
-   "text": "You could take on b5 right now, but the threat is stronger than carrying it out \u2014 the material will keep, so keep it hanging over them and improve first.",
-   "depth": null,
-   "stake": 1728.2071775329032,
-   "keptToday": true
-  },
-  {
-   "from": "position",
-   "kind": "timing",
-   "text": "a3 first \u2014 b4 would hit your knight on c3, and after a3 the pawn covers b4.",
-   "depth": null,
-   "stake": null,
-   "keptToday": true
-  },
-  {
-   "from": "position",
-   "kind": "structure-plan",
-   "text": "The plan from here is to get your passed pawn on d5 promoting. It is three pushes from queening. Here's how: their queen on d8 covers d6, so drive it off or cover d6 yourself first. Escort it with your pieces, and bring the king in once the queens come off. Push it one safe square at a time, and every push brings it closer to promotion.",
-   "depth": null,
-   "stake": null,
-   "keptToday": true
-  },
-  {
-   "from": "position",
-   "kind": "structure-plan",
-   "text": "Alongside that, aim to win their weak pawn on f7. Here's how: plant your knight on f6, in front of it, so it can never advance. Then stack your rooks and queen on its file and trade off its defenders: each one is tied to it. Count it: you don't hit it yet and they guard it once \u2014 bring attackers until yours outnumber the guards.",
-   "depth": null,
-   "stake": null,
-   "keptToday": true
-  },
-  {
-   "from": "position",
-   "kind": "structure-plan",
-   "text": "On top of that, work to seize the open e-file. Here's how: one of your rooks gets there in a single move, so take the file before they contest it. Then double your rooks on it, so nothing can challenge them, and aim for the seventh rank, where a rook attacks pawns from behind.",
-   "depth": null,
-   "stake": null,
-   "keptToday": true
-  },
-  {
-   "from": "position",
-   "kind": "structure-plan",
-   "text": "The plan from here: break with a4 or b3 to open the position. Then put a rook on the e or c file. And post a bishop on c5.",
-   "depth": null,
-   "stake": null,
-   "keptToday": true
-  },
-  {
-   "from": "position",
-   "kind": "structure-plan",
-   "text": "You have a minority attack on the queenside \u2014 b3 makes contact and leaves them a weak pawn on c4.",
-   "depth": null,
-   "stake": null,
-   "keptToday": true
-  },
-  {
-   "from": "position",
-   "kind": "structure-plan",
-   "text": "Your passed pawn on d5 is a long-term trump \u2014 every trade that clears its path makes it stronger.",
-   "depth": null,
-   "stake": null,
-   "keptToday": false
-  },
-  {
-   "from": "position",
-   "kind": "structure-plan",
-   "text": "Your light squares are weak: with no bishop of that colour, no pawn or bishop of yours can cover four of them. Their bishop can settle there.",
-   "depth": null,
-   "stake": null,
-   "keptToday": true
-  },
-  {
-   "from": "position",
-   "kind": "structure-plan",
-   "text": "Their rook on g6 is well placed \u2014 it has the half-open g-file.",
-   "depth": null,
-   "stake": null,
-   "keptToday": true
-  },
-  {
-   "from": "position",
-   "kind": "structure-plan",
-   "text": "The e-file is open \u2014 that is where a rook wants to be.",
-   "depth": null,
-   "stake": null,
-   "keptToday": true
-  },
-  {
-   "from": "position",
-   "kind": "structure-plan",
-   "text": "Their pawn on h7 is isolated \u2014 that is a long-term target worth playing against.",
-   "depth": null,
-   "stake": null,
-   "keptToday": true
-  },
-  {
-   "from": "position",
-   "kind": "structure-plan",
-   "text": "You have a pawn break on a4 \u2014 the pawn levers are where the play comes from.",
-   "depth": null,
-   "stake": null,
-   "keptToday": true
-  },
-  {
-   "from": "position",
-   "kind": "structure-plan",
-   "text": "They have a pawn break available on f6 \u2014 that is where their play comes from.",
-   "depth": null,
-   "stake": null,
-   "keptToday": true
-  },
-  {
-   "from": "tempting",
-   "kind": "refuted",
-   "text": "Nxb5 looks natural, but it doesn't work: they play Qe8, you answer Qf3 and they play Qxb5 \u2014 they win a knight for a pawn.",
-   "depth": null,
-   "stake": null,
-   "keptToday": false
-  },
-  {
-   "from": "bestMove",
-   "kind": "move-job",
-   "text": "You played a3 \u2014 it covers b4, where the pawn to b4 would hit your knight on c3.",
-   "depth": "hidden",
-   "stake": 1008.693646008916,
-   "keptToday": false
-  },
-  {
-   "from": "bestMove",
-   "kind": "move-job",
-   "text": "Behind like this, the job is to make it hard for them. Even their best line needs five moves before it wins material that stays won.",
-   "depth": "hidden",
-   "stake": 1008.693646008916,
-   "keptToday": false
-  },
-  {
-   "from": "bestMove",
-   "kind": "stop",
-   "text": "You played a3 \u2014 it stops \u2026b4, which would hit your knight.",
-   "depth": "why",
-   "stake": 1008.693646008916,
-   "keptToday": false
-  },
-  {
-   "from": "bestMove",
-   "kind": "stop",
-   "text": "You played a3 \u2014 it takes away b4: b4 would hit your knight on c3.",
-   "depth": "hidden",
-   "stake": 1008.693646008916,
-   "keptToday": false
-  },
-  {
-   "from": "bestMove",
-   "kind": "deliberation",
-   "text": "Ne2? Then they play Qd7, you answer Rae1 and they play Bxb2 \u2014 they win a pawn back.",
-   "depth": "hidden",
-   "stake": 1539.2193490762415,
-   "keptToday": false
-  },
-  {
-   "from": "bestMove",
-   "kind": "compensation",
-   "text": "They're a pawn down, but they're slightly better: they have the bishop pair.",
-   "depth": "why",
-   "stake": null,
-   "keptToday": false
-  }
- ]
+  "id": "how-to-avoid-blunders-part-1#0",
+  "fen": "r2q2k1/p4pbp/6r1/1p1P1bPQ/2p2P2/2N1B3/PP5P/R4RK1 w - - 0 21",
+  "facts": [
+    {
+      "from": "position",
+      "kind": "deliberation",
+      "text": "Ne2? Then they play Qd7, you answer Rae1 and they play Bxb2 — they win a pawn back.",
+      "depth": null,
+      "stake": 1586.4215258461968,
+      "keptToday": true,
+      "squares": []
+    },
+    {
+      "from": "position",
+      "kind": "concept",
+      "text": "After a3, a5, Qf3, b4, axb4, axb4, Rxa8, your rook on a8 pins their queen against their king — a pin freezes the piece in front: it can't move without exposing the more valuable piece behind it, so it can be piled on.",
+      "depth": null,
+      "stake": null,
+      "keptToday": true,
+      "squares": [
+        "a3",
+        "a5",
+        "b4",
+        "a8"
+      ]
+    },
+    {
+      "from": "position",
+      "kind": "structure-plan",
+      "text": "Your passed pawn on d5 is the trump here — push it and make them deal with the promotion.",
+      "depth": null,
+      "stake": null,
+      "keptToday": true,
+      "squares": [
+        "d5"
+      ]
+    },
+    {
+      "from": "position",
+      "kind": "speedrun-read",
+      "text": "You could take on b5 right now, but the threat is stronger than carrying it out — the material will keep, so keep it hanging over them and improve first.",
+      "depth": null,
+      "stake": 1728.2071775329032,
+      "keptToday": true,
+      "squares": [
+        "b5"
+      ]
+    },
+    {
+      "from": "position",
+      "kind": "timing",
+      "text": "a3 first — b4 would hit your knight on c3, and after a3 the pawn covers b4.",
+      "depth": null,
+      "stake": null,
+      "keptToday": true,
+      "squares": [
+        "a3",
+        "b4",
+        "c3"
+      ]
+    },
+    {
+      "from": "position",
+      "kind": "structure-plan",
+      "text": "The plan from here is to get your passed pawn on d5 promoting. It is three pushes from queening. Here's how: their queen on d8 covers d6, so drive it off or cover d6 yourself first. Escort it with your pieces, and bring the king in once the queens come off. Push it one safe square at a time, and every push brings it closer to promotion.",
+      "depth": null,
+      "stake": null,
+      "keptToday": true,
+      "squares": [
+        "d5",
+        "d8",
+        "d6"
+      ]
+    },
+    {
+      "from": "position",
+      "kind": "structure-plan",
+      "text": "Alongside that, aim to win their weak pawn on f7. Here's how: plant your knight on f6, in front of it, so it can never advance. Then stack your rooks and queen on its file and trade off its defenders: each one is tied to it. Count it: you don't hit it yet and they guard it once — bring attackers until yours outnumber the guards.",
+      "depth": null,
+      "stake": null,
+      "keptToday": true,
+      "squares": [
+        "f7",
+        "f6"
+      ]
+    },
+    {
+      "from": "position",
+      "kind": "structure-plan",
+      "text": "On top of that, work to seize the open e-file. Here's how: one of your rooks gets there in a single move, so take the file before they contest it. Then double your rooks on it, so nothing can challenge them, and aim for the seventh rank, where a rook attacks pawns from behind.",
+      "depth": null,
+      "stake": null,
+      "keptToday": true,
+      "squares": []
+    },
+    {
+      "from": "position",
+      "kind": "structure-plan",
+      "text": "The plan from here: break with a4 or b3 to open the position. Then put a rook on the e or c file. And post a bishop on c5.",
+      "depth": null,
+      "stake": null,
+      "keptToday": true,
+      "squares": [
+        "a4",
+        "b3",
+        "c5"
+      ]
+    },
+    {
+      "from": "position",
+      "kind": "structure-plan",
+      "text": "You have a minority attack on the queenside — b3 makes contact and leaves them a weak pawn on c4.",
+      "depth": null,
+      "stake": null,
+      "keptToday": true,
+      "squares": [
+        "b3",
+        "c4"
+      ]
+    },
+    {
+      "from": "position",
+      "kind": "structure-plan",
+      "text": "Your passed pawn on d5 is a long-term trump — every trade that clears its path makes it stronger.",
+      "depth": null,
+      "stake": null,
+      "keptToday": false,
+      "squares": [
+        "d5"
+      ]
+    },
+    {
+      "from": "position",
+      "kind": "structure-plan",
+      "text": "Your light squares are weak: with no bishop of that colour, no pawn or bishop of yours can cover four of them. Their bishop can settle there.",
+      "depth": null,
+      "stake": null,
+      "keptToday": true,
+      "squares": []
+    },
+    {
+      "from": "position",
+      "kind": "structure-plan",
+      "text": "Their rook on g6 is well placed — it has the half-open g-file.",
+      "depth": null,
+      "stake": null,
+      "keptToday": true,
+      "squares": [
+        "g6"
+      ]
+    },
+    {
+      "from": "position",
+      "kind": "structure-plan",
+      "text": "The e-file is open — that is where a rook wants to be.",
+      "depth": null,
+      "stake": null,
+      "keptToday": true,
+      "squares": []
+    },
+    {
+      "from": "position",
+      "kind": "structure-plan",
+      "text": "Their pawn on h7 is isolated — that is a long-term target worth playing against.",
+      "depth": null,
+      "stake": null,
+      "keptToday": true,
+      "squares": [
+        "h7"
+      ]
+    },
+    {
+      "from": "position",
+      "kind": "structure-plan",
+      "text": "You have a pawn break on a4 — the pawn levers are where the play comes from.",
+      "depth": null,
+      "stake": null,
+      "keptToday": true,
+      "squares": [
+        "a4"
+      ]
+    },
+    {
+      "from": "position",
+      "kind": "structure-plan",
+      "text": "They have a pawn break available on f6 — that is where their play comes from.",
+      "depth": null,
+      "stake": null,
+      "keptToday": true,
+      "squares": [
+        "f6"
+      ]
+    },
+    {
+      "from": "tempting",
+      "kind": "refuted",
+      "text": "Nxb5 looks natural, but it doesn't work: they play Qe8, you answer Qf3 and they play Qxb5 — they win a knight for a pawn.",
+      "depth": null,
+      "stake": null,
+      "keptToday": false,
+      "squares": []
+    },
+    {
+      "from": "bestMove",
+      "kind": "move-job",
+      "text": "You played a3 — it covers b4, where the pawn to b4 would hit your knight on c3.",
+      "depth": "hidden",
+      "stake": 1008.693646008916,
+      "keptToday": false,
+      "squares": [
+        "a3",
+        "b4",
+        "c3"
+      ]
+    },
+    {
+      "from": "bestMove",
+      "kind": "move-job",
+      "text": "Behind like this, the job is to make it hard for them. Even their best line needs five moves before it wins material that stays won.",
+      "depth": "hidden",
+      "stake": 1008.693646008916,
+      "keptToday": false,
+      "squares": []
+    },
+    {
+      "from": "bestMove",
+      "kind": "stop",
+      "text": "You played a3 — it stops …b4, which would hit your knight.",
+      "depth": "why",
+      "stake": 1008.693646008916,
+      "keptToday": false,
+      "squares": [
+        "a3",
+        "b4"
+      ]
+    },
+    {
+      "from": "bestMove",
+      "kind": "stop",
+      "text": "You played a3 — it takes away b4: b4 would hit your knight on c3.",
+      "depth": "hidden",
+      "stake": 1008.693646008916,
+      "keptToday": false,
+      "squares": [
+        "a3",
+        "b4",
+        "c3"
+      ]
+    },
+    {
+      "from": "bestMove",
+      "kind": "deliberation",
+      "text": "Ne2? Then they play Qd7, you answer Rae1 and they play Bxb2 — they win a pawn back.",
+      "depth": "hidden",
+      "stake": 1539.2193490762415,
+      "keptToday": false,
+      "squares": []
+    },
+    {
+      "from": "bestMove",
+      "kind": "compensation",
+      "text": "They're a pawn down, but they're slightly better: they have the bishop pair.",
+      "depth": "why",
+      "stake": null,
+      "keptToday": false,
+      "squares": []
+    }
+  ]
 }

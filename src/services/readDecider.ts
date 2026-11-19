@@ -31,6 +31,9 @@ export interface ReadFact {
   text: string;
   /** The computer that made it (catalog name), where the read knows it. */
   computer?: string;
+  /** REQUIRED: the squares the fact is about, coupled by its producer (G4.5.1:
+   *  never scraped back out of the words). Empty for a fact about no square. */
+  squares: readonly string[];
 }
 
 export type ReadStep = 'verdict' | 'character' | 'priority' | 'their-move' | 'their-plan' | 'best-move' | 'tempting' | 'their-try' | 'plan' | 'second-front';
@@ -83,7 +86,8 @@ export const READ_STEPS: ReadonlyArray<{ step: ReadStep; kinds: readonly StepKin
   { step: 'second-front', kinds: [{ kind: 'switch-wing', onTarget: true }] },
 ];
 
-const squaresOf = (text: string): Set<string> => new Set(text.match(/\b[a-h][1-8]\b/g) ?? []);
+/** The squares a fact is about — its producer's own, never read off its words. */
+const squaresOf = (f: ReadFact): Set<string> => new Set(f.squares);
 
 /** The steps that describe the board rather than a move: said only when they
  *  name a square the read has not named yet. */
@@ -95,18 +99,18 @@ export function decideRead<F extends ReadFact>(facts: readonly F[]): F[] {
   // The story's target: the squares the reason under the standing names.
   let target = new Set<string>();
   const named = new Set<string>();
-  const onTarget = (f: F): boolean => [...squaresOf(f.text)].some((s) => target.has(s));
+  const onTarget = (f: F): boolean => [...squaresOf(f)].some((s) => target.has(s));
   for (const { step, kinds, preferTarget } of READ_STEPS) {
     const candidates = kinds.flatMap((k) => facts.filter((x) =>
       x.kind === k.kind && (!k.from || x.from === k.from) && (!k.onTarget || onTarget(x)) && !out.some((o) => o.text === x.text)));
     // ONE IDEA ONCE (Danya never says the same square twice in a read): a
     // story line whose every square was already named adds nothing.
-    const fresh = SAY_ONCE.has(step) ? candidates.filter((x) => { const q = [...squaresOf(x.text)]; return q.length === 0 || q.some((sq) => !named.has(sq)); }) : candidates;
+    const fresh = SAY_ONCE.has(step) ? candidates.filter((x) => { const q = [...squaresOf(x)]; return q.length === 0 || q.some((sq) => !named.has(sq)); }) : candidates;
     const f = (preferTarget ? fresh.find(onTarget) : undefined) ?? fresh[0];
     if (!f) continue;
     out.push(f);
-    for (const sq of squaresOf(f.text)) named.add(sq);
-    if (step === 'priority') target = squaresOf(f.text);
+    for (const sq of squaresOf(f)) named.add(sq);
+    if (step === 'priority') target = squaresOf(f);
   }
   return out;
 }

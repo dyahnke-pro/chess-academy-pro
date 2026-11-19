@@ -118,23 +118,23 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
   // still being solved, where "there is a mate" is the hint.
   if (mateOnBoard && !i.withhold) {
     const studentMates = (top.evaluation > 0) === (i.studentColor === 'w');
-    facts.push({ from: 'position', kind: 'standing', text: studentMates ? 'There is a forced mate here for you.' : 'They have a forced mate here.' });
+    facts.push({ from: 'position', kind: 'standing', text: studentMates ? 'There is a forced mate here for you.' : 'They have a forced mate here.', squares: [] });
   }
   if (povCp !== null) {
-    facts.push({ from: 'position', kind: 'standing', text: standingReading(i.fen, povCp, i.studentColor, i.before) });
+    facts.push({ from: 'position', kind: 'standing', text: standingReading(i.fen, povCp, i.studentColor, i.before), squares: [] });
     const k = boardKind(i.fen, i.studentColor, povCp);
-    if (k) facts.push({ from: 'position', kind: 'character', text: k.text });
+    if (k) facts.push({ from: 'position', kind: 'character', text: k.text, squares: [] });
   }
   // THE TARGET the board turns on, for the side to move when it is the
   // student, and the student's own pawn the other side can win.
   const target = mine ? standingTarget(i.fen, side, povCp, top.moves[0] ?? null) : null;
-  if (target) facts.push({ from: 'position', kind: 'target', text: targetLine(target, i.fen, 'your') });
+  if (target) facts.push({ from: 'position', kind: 'target', text: targetLine(target, i.fen, 'your'), squares: [target.square] });
   const theirTarget = opponentTargets(i.fen, them).find((t) => t.attackers.length + t.reachers.length > t.guards.length);
-  if (theirTarget) facts.push({ from: 'position', kind: 'their-target', text: targetLine(theirTarget, i.fen, 'their') });
+  if (theirTarget) facts.push({ from: 'position', kind: 'their-target', text: targetLine(theirTarget, i.fen, 'their'), squares: [theirTarget.square] });
 
   for (const c of pf.candidates) {
     if (i.withhold && c.kind === 'deliberation') continue;
-    facts.push({ from: 'position', kind: c.kind, text: c.text, computer: c.computer });
+    facts.push({ from: 'position', kind: c.kind, text: c.text, computer: c.computer, squares: c.squares });
   }
 
   // THE PLAN ON THE BOARD (his "attack down the c-file at the knight on c6"),
@@ -143,11 +143,11 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
   // still being solved: a plan names its moves.
   if (!i.withhold) {
     const siege = siegeOf(i.fen, i.before, whose);
-    if (siege) facts.push({ from: 'position', kind: 'siege', text: siege.text, computer: 'siege' });
+    if (siege) facts.push({ from: 'position', kind: 'siege', text: siege.text, computer: 'siege', squares: siege.squares });
     const steps = stepsOf(i.fen, i.before, whose);
-    if (steps) facts.push({ from: 'position', kind: 'plan-steps', text: steps.text, computer: 'planSteps' });
+    if (steps) facts.push({ from: 'position', kind: 'plan-steps', text: steps.text, computer: 'planSteps', squares: steps.squares });
     const second = mine ? switchWing(i.fen, side, 'your') : null;
-    if (second) facts.push({ from: 'position', kind: 'switch-wing', text: second.text, computer: 'switchWing' });
+    if (second) facts.push({ from: 'position', kind: 'switch-wing', text: second.text, computer: 'switchWing', squares: second.squares });
     // THEIR PLAN: their next quiet moves in the engine's line, after our best
     // move and their reply.
     if (top.moves.length > 2) {
@@ -159,7 +159,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
         // planSteps reads the side NOT to move on the board it is given — the
         // other side here, so "their plan" is ours when the side to move is
         // theirs. Said from the student's seat.
-        if (p) facts.push({ from: 'position', kind: 'their-plan', text: planStepsText(p, mine ? 'their' : 'your'), computer: 'planSteps' });
+        if (p) facts.push({ from: 'position', kind: 'their-plan', text: planStepsText(p, mine ? 'their' : 'your'), computer: 'planSteps', squares: [...p.steps.flatMap((x) => [x.from, x.to]), ...(p.aim ? [p.aim] : [])] });
       } catch { /* an unplayable line shows no plan */ }
     }
   }
@@ -180,7 +180,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
       if (t) tempting.push({ evaluation: t.evaluation, mate: t.mate, moves: [c.uci, ...t.moves], earlier: t.earlier?.moves ? [c.uci, ...t.earlier.moves] : null });
     }
     const refuted = temptingOnBoard({ fen: i.fen, student: i.studentColor, rating: i.rating, reads: tempting, priorMove: null });
-    for (const t of refuted) facts.push({ from: 'tempting', kind: 'refuted', text: t.text, computer: 'temptingOnBoard' });
+    for (const t of refuted) facts.push({ from: 'tempting', kind: 'refuted', text: t.text, computer: 'temptingOnBoard', squares: [t.uci.slice(0, 2), t.uci.slice(2, 4)] });
     const bestSan = sanOf(i.fen, top.moves[0]);
     for (const r of tempting.slice(1)) {
       const san = sanOf(i.fen, r.moves[0]);
@@ -194,7 +194,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
       const why = boardReason(i.fen, san, bestSan, phaseOfFen(i.fen) ?? 'middlegame');
       if (!why) continue;
       const lead = rotateStem([`${san} looks natural, but it isn't the move`, `${san} is tempting here, but it doesn't hold up`], stemKeyOf(`${i.fen}|positional|${san}`));
-      facts.push({ from: 'tempting', kind: 'refuted-positional', computer: 'boardReason', text: `${lead}: ${why.note.replace(/^./, (x) => x.toLowerCase())}` });
+      facts.push({ from: 'tempting', kind: 'refuted-positional', computer: 'boardReason', text: `${lead}: ${why.note.replace(/^./, (x) => x.toLowerCase())}`, squares: r.moves[0] ? [r.moves[0].slice(0, 2), r.moves[0].slice(2, 4)] : [] });
     }
   }
 
@@ -221,7 +221,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
         // A puzzle still being solved keeps only who stands better: what the
         // best move does is the answer.
         if (i.withhold && !VERDICT_KINDS.has(f.kind)) continue;
-        facts.push({ from: 'bestMove', kind: f.kind, text: f.text, computer: f.computer });
+        facts.push({ from: 'bestMove', kind: f.kind, text: f.text, computer: f.computer, squares: f.squares });
       }
       if (!i.withhold && i.readTempting && mine && after[0]) {
         const theirs: WeighRead[] = [{ evaluation: after[0].evaluation, mate: after[0].mate, moves: after[0].moves }];
@@ -234,7 +234,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
           if (t) theirs.push({ evaluation: t.evaluation, mate: t.mate, moves: [c.uci, ...t.moves], earlier: t.earlier?.moves ? [c.uci, ...t.earlier.moves] : null });
         }
         for (const t of temptingOnBoard({ fen: fenB, student: i.studentColor, rating: i.rating, reads: theirs, priorMove: { fenBefore: i.fen, san } })) {
-          facts.push({ from: 'tempting', kind: 'their-refuted', text: t.text, computer: 'temptingOnBoard' });
+          facts.push({ from: 'tempting', kind: 'their-refuted', text: t.text, computer: 'temptingOnBoard', squares: [t.uci.slice(0, 2), t.uci.slice(2, 4)] });
         }
       }
     }
