@@ -25,7 +25,7 @@ import { NO_PROOF, squaresProof, isProof, legalLineProof, lineProofFromUci, type
 import { lineSeatAt, withArticle } from '../utils/andList';
 import type { FactStakes } from './factStakes';
 import { LOCAL_THREAD, placeFact, stakesOf, type CoachFact, type CoachFactKind, type ComputerName, type FactSeat } from './coachFact';
-import { threadKey, type SaidSet } from './gameStory';
+import { threadKey } from './gameStory';
 import { findPinBreaks, pinBreakLine, pinBreakProof } from './pinBreak';
 import { findProphylaxis, prophylaxisKey, prophylaxisLine, prophylaxisIdea, prophylaxisProof, prophylaxisThreatProof, theirWantedMoves } from './prophylaxis';
 import { inBetweenMove } from './inBetweenMove';
@@ -446,8 +446,11 @@ export interface BoardContexts {
   /** Who's better and why at the turn of the game (`phaseVerdictLine`). */
   phaseVerdict: { fen: string; student: Color; studentCp: number | null; phase: 'middlegame' | 'endgame'; heard: ReadonlySet<string>; lastMove: LastMove | null };
   /** The middlegame plan (`buildMiddlegameOrientation`) — never while their
-   *  king is stuck in the centre (a king hunt, not a majority grind). */
-  middlegameOrientation: { fen: string; student: Color; seat: FactSeat };
+   *  king is stuck in the centre (a king hunt, not a majority grind). `seat`:
+   *  whose plan the beat may carry ('both' is the one-shot orientation the
+   *  walk says once); `san`: the move played, so a storm pushed at the
+   *  student's own king is said so (null on a board with no move). */
+  middlegameOrientation: { fen: string; student: Color; seat: 'student' | 'opponent' | 'both'; san: string | null };
   /** Their development so far (`buildOpponentDevelopmentRead`). */
   opponentDevelopment: { oppSans: readonly string[]; fen: string; student: Color };
   /** The point of the student's quiet move (`studentMovePoint`); none on a capture. */
@@ -463,9 +466,10 @@ export interface BoardContexts {
   /** The trade, defence and conversion ideas (`exchangeIdeas`). */
   exchangeIdeas: ExchangeIdeasInput;
   /** The fundamental the flagged move crossed (`renderFundamentalVerdict`):
-   *  its diagnosis (key `diagnosis`), then its how (key `how`). `seen` is the
-   *  game's ledger of fundamentals said in full — the read adds to it. */
-  fundamentalVerdict: { fenBefore: string; fundamentals: readonly PrincipleAttribution[]; ply: number; seen: SaidSet<FundamentalId>; replySan: string | null };
+   *  its diagnosis (key `diagnosis|…`), then its how (key `how|…`). `seen` is
+   *  the game's ledger of fundamentals said in full — the read never writes
+   *  it; the caller adds `fundamentalsSaid(diagnosis)` once it is said. */
+  fundamentalVerdict: { fen: string; attrs: readonly PrincipleAttribution[]; ply: number; seen: ReadonlySet<FundamentalId>; replySan: string | null };
   /** The rule of the tactic the better move would have landed (`tacticInvariant`). */
   tacticRule: { fen: string; type: string };
   /** The moved piece's new pressure (`describeMoveInfluence`), seated from
@@ -868,7 +872,6 @@ export interface BoardContexts {
   quietDecider: { plies: readonly GamePly[]; student: Color };
   exploreInvite: { plies: readonly GamePly[]; index: number; student: Color };
   murkyRead: { plies: readonly GamePly[]; index: number; student: Color };
-  conversionWalk: { fen: string; student: Color };
   pawnEndingCount: { fenBefore: string; san: string; replySan: string | null; cpLoss: number; evalAfterCp: number | null };
   spareTempo: { fenBefore: string; san: string; bestSan: string | null; cpLoss: number };
   passerDecoy: { fen: string; student: Color };
@@ -878,14 +881,10 @@ export interface BoardContexts {
   attackAsks: { fenAfter: string; target: string; mover: Color };
   theirOpeningChoice: { history: readonly string[]; student: Color; cpLoss: number; coachChose: boolean; fen: string };
   openingNamed: { det: { name: string } | null; history: readonly string[]; spokenName: string | null; student: Color; transposed: boolean; fen: string };
-  fundamentalVerdictWalk: { attrs: readonly PrincipleAttribution[]; seen: ReadonlySet<FundamentalId>; replySan: string | null; ply: number; fen: string };
-  fundamentalHow: { attrs: readonly PrincipleAttribution[]; seen: ReadonlySet<FundamentalId>; replySan: string | null; ply: number; fen: string };
   sacPayoff: { fenAfter: string; mover: Color; moverPovEvalCp: number | null; moverPovBeforeCp: number | null; kingCentreTaught: boolean };
   sacShield: { fenBefore: string; san: string };
-  middlegameOrientationWalk: { fenBefore: string; student: Color; san: string };
   takeStock: { fenBefore: string; san: string; fen: string; student: Color; studentPovCp: number | null };
   kingHuntCue: { fen: string; student: Color };
-  opponentDevelopmentWalk: { opponentSans: readonly string[]; fen: string; student: Color };
   opponentTarget: { fenBefore: string; san: string; student: Color };
   causalChain: { sans: readonly string[]; ply: number; student: Color; rating: number; fen: string };
   endgamePhase: { fen: string; student: Color };
@@ -1768,28 +1767,28 @@ export const BOARD_COMPUTERS = {
     // A slow "advance your majority" plan is a NON-APPLICABLE reason while the
     // enemy king is exposed in the centre — that's a king hunt, not a majority
     // grind (David 2026-07-20 diagnostic: it fired every move of a mating attack).
-    read: ({ fen, student, seat }, fact) => safe(() => {
+    // One read for Review's facets (the mover's seat) and the walk's one-shot
+    // orientation (both seats): the beat's arrows ride the key (`planBeatArrows`).
+    read: ({ fen, student, seat, san }, fact) => safe(() => {
       if (enemyKingStuckInCenter(fen, student)) return null;
-      const orient = buildMiddlegameOrientation(fen, student, undefined, seat);
-      if (!orient) return null;
-      return fact({ key: 'orientation', claims: ['plan-middlegame'], text: orient.text, proof: NO_PROOF.description, squares: [], stakes: null, seat, namesStudentMove: false, thread: LOCAL_THREAD, fen });
+      return planBeatFact(buildMiddlegameOrientation(fen, student, san ?? undefined, seat), fen, seat === 'opponent' ? 'opponent' : 'student', fact);
     }),
     computer: 'buildMiddlegameOrientation',
     kind: 'plan-middlegame',
     phase: ANY,
     surfaces: reviewFacetSurfaces(),
   },
+
   opponentDevelopment: {
-    read: ({ oppSans, fen, student }, fact) => safe(() => {
-      const dev = buildOpponentDevelopmentRead([...oppSans], fen, student);
-      if (!dev) return null;
-      return fact({ key: 'opp-dev', claims: ['opp-dev'], text: dev.text, proof: NO_PROOF.description, squares: [], stakes: null, seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen });
-    }),
+    // Their development so far — one read for Review's facets and the walk;
+    // the beat's arrows ride the key (`planBeatArrows`).
+    read: ({ oppSans, fen, student }, fact) => safe(() => planBeatFact(buildOpponentDevelopmentRead([...oppSans], fen, student), fen, 'opponent', fact)),
     computer: 'buildOpponentDevelopmentRead',
     kind: 'opp-dev',
     phase: ANY,
     surfaces: reviewFacetSurfaces(),
   },
+
   studentMovePoint: {
     // QUIET MOVES ONLY: a capture's point is the trade, said by the trade.
     read: ({ fenBefore, san, prevCap }, fact) => safe(() => {
@@ -1864,18 +1863,20 @@ export const BOARD_COMPUTERS = {
     surfaces: { ...LIVE_READ, review: REVIEW },
   },
   fundamentalVerdict: {
-    read: ({ fenBefore, fundamentals, ply, seen, replySan }, fact) => safe(() => {
-      if (!fundamentals.length) return null;
-      const verdict = renderFundamentalVerdict(fundamentals, { ply, seen, replySan });
-      const out = [fact({ key: 'diagnosis', claims: [`fundamental:${fundamentals[0].id}`], text: verdict.diagnosis, proof: NO_PROOF.description, squares: [], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore })];
-      if (verdict.how) out.push(fact({ key: 'how', claims: [`fundamental-how:${fundamentals[0].id}`], text: verdict.how, proof: NO_PROOF.description, squares: [], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore }));
-      return out;
+    // Its diagnosis, then its how (the habit step), from one render: the
+    // fundamentals it says in full for the first time ride the key
+    // (`fundamentalsSaid`), so the caller's ledger learns them once said.
+    read: (ctx, fact) => safe(() => {
+      if (!ctx.attrs.length) return null;
+      const out = (['diagnosis', 'how'] as const).map((half) => verdictFact(ctx, fact, half)).filter((f): f is CoachFact => f !== null);
+      return out.length ? out : null;
     }),
     computer: 'renderFundamentalVerdict',
     kind: 'principle',
     phase: ANY,
     surfaces: reviewFacetSurfaces(),
   },
+
   tacticRule: {
     read: ({ fen, type }, fact) => safe(() => {
       const inv = tacticInvariant(type);
@@ -2658,7 +2659,7 @@ export const BOARD_COMPUTERS = {
     read: ({ fen, student }, fact) => safe(() => {
       const c = readConversion(fen, student);
       if (!c) return null;
-      return fact({ key: `${c.step}|${c.passer ?? ''}`, claims: [], text: c.text, proof: NO_PROOF.description, squares: c.passer ? [c.passer] : [], stakes: null,
+      return fact({ key: `${c.step}|${c.passer ?? ''}`, claims: [`convert:${c.step}`], text: c.text, proof: NO_PROOF.description, squares: c.passer ? [c.passer] : [], stakes: null,
         seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
     }),
     computer: 'readConversion',
@@ -2666,6 +2667,7 @@ export const BOARD_COMPUTERS = {
     phase: ANY,
     surfaces: LIVE_READ,
   },
+
   opponentIntent: {
     read: ({ fen, topLines }, fact) => safe(() => {
       const oi = buildOpponentIntent({ analysis: { topLines }, fen });
@@ -4162,19 +4164,6 @@ export const BOARD_COMPUTERS = {
     phase: ANY,
     surfaces: walkSurfaces(),
   },
-  conversionWalk: {
-    // The step the board is on, once a step: the step rides the key.
-    read: ({ fen, student }, fact) => safe(() => {
-      const c = readConversion(fen, student);
-      if (!c) return null;
-      return fact({ key: c.step, claims: [`convert:${c.step}`], text: c.text, proof: NO_PROOF.description, squares: c.passer ? [c.passer] : [], stakes: null,
-        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
-    }),
-    computer: 'readConversion',
-    kind: 'technique',
-    phase: ANY,
-    surfaces: walkSurfaces(),
-  },
   pawnEndingCount: {
     read: ({ fenBefore, san, replySan, cpLoss, evalAfterCp }, fact) => safe(() => {
       const t = pawnEndingTrade(fenBefore, san, replySan, cpLoss, evalAfterCp);
@@ -4275,20 +4264,6 @@ export const BOARD_COMPUTERS = {
     phase: ANY,
     surfaces: walkSurfaces(),
   },
-  fundamentalVerdictWalk: {
-    read: (ctx, fact) => safe(() => verdictFact(ctx, fact, 'diagnosis')),
-    computer: 'renderFundamentalVerdict',
-    kind: 'principle',
-    phase: ANY,
-    surfaces: walkSurfaces(),
-  },
-  fundamentalHow: {
-    read: (ctx, fact) => safe(() => verdictFact(ctx, fact, 'how')),
-    computer: 'renderFundamentalVerdict',
-    kind: 'how',
-    phase: ANY,
-    surfaces: walkSurfaces(),
-  },
   sacPayoff: {
     // The student's sacrifice: what they get for it. A clause about a king
     // stuck in the centre is left out once that has been taught, and the key
@@ -4319,13 +4294,6 @@ export const BOARD_COMPUTERS = {
     phase: ANY,
     surfaces: walkSurfaces(),
   },
-  middlegameOrientationWalk: {
-    read: ({ fenBefore, student, san }, fact) => safe(() => planBeatFact(buildMiddlegameOrientation(fenBefore, student, san), fenBefore, 'student', fact)),
-    computer: 'buildMiddlegameOrientation',
-    kind: 'plan-middlegame',
-    phase: ANY,
-    surfaces: walkSurfaces(),
-  },
   takeStock: {
     // A genuine edge with at least two board-true reasons — never a verdict
     // on a level board (empty > generic).
@@ -4351,13 +4319,6 @@ export const BOARD_COMPUTERS = {
     }),
     computer: 'enemyKingStuckInCenter',
     kind: 'king',
-    phase: ANY,
-    surfaces: walkSurfaces(),
-  },
-  opponentDevelopmentWalk: {
-    read: ({ opponentSans, fen, student }, fact) => safe(() => planBeatFact(buildOpponentDevelopmentRead([...opponentSans], fen, student), fen, 'opponent', fact)),
-    computer: 'buildOpponentDevelopmentRead',
-    kind: 'opp-dev',
     phase: ANY,
     surfaces: walkSurfaces(),
   },
@@ -6960,13 +6921,13 @@ function endReadFact(r: EndRead | null, plies: readonly GamePly[], fact: MakeFac
 /** The fundamental verdict's half (`diagnosis` leads the beat, `how` closes
  *  it). `seen` is read, never written: the ids this read says for the first
  *  time ride the key (`fundamentalsSaid`), and the surface commits them. */
-function verdictFact(ctx: BoardContexts['fundamentalVerdictWalk'], fact: MakeFact, half: 'diagnosis' | 'how'): CoachFact | null {
+function verdictFact(ctx: BoardContexts['fundamentalVerdict'], fact: MakeFact, half: 'diagnosis' | 'how'): CoachFact | null {
   const local = new Set<FundamentalId>(ctx.seen);
   const v = renderFundamentalVerdict(ctx.attrs, { ply: ctx.ply, seen: local, replySan: ctx.replySan });
   const text = v[half];
   if (!text) return null;
   const added = [...local].filter((id) => !ctx.seen.has(id));
-  return fact({ key: `${half}|${added.join(',')}|${ctx.ply}`, claims: [`${half}:${ctx.attrs.map((a) => a.id).join(',')}`], text, proof: NO_PROOF.description, squares: [], stakes: null,
+  return fact({ key: `${half}|${added.join(',')}|${ctx.ply}`, claims: [`${half === 'how' ? 'fundamental-how' : 'fundamental'}:${ctx.attrs[0].id}`], text, proof: NO_PROOF.description, squares: [], stakes: null,
     seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: ctx.fen });
 }
 

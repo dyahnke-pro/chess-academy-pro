@@ -27,7 +27,7 @@ import type { RefutedAlternative } from './refutedAlternative';
 import type { ReviewIntent } from './reviewMoveIntent';
 import { recordedMoveCost } from './moveCost';
 import { lineProofFromUci, proofForStudent, squaresProof, isProof, NO_PROOF, type Proof } from './proof';
-import { readBoard, readBoardAll, readKey, principleKey, positionalVerdictOf, influenceShapeOf, oppTeachingKind, exchangeIdeaOf, tacticOf } from './boardComputers';
+import { readBoard, readBoardAll, readKey, principleKey, positionalVerdictOf, influenceShapeOf, oppTeachingKind, exchangeIdeaOf, tacticOf, fundamentalsSaid } from './boardComputers';
 import { knownSlipsAt, type KnownSlipIndex } from './knownSlips';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import type { WeighRead } from './weighedMoves';
@@ -653,9 +653,11 @@ export function computeMoveFacets(
   // the flagged move crossed, proven on the board; stated as its own facet so
   // the uncapped inventory carries it and the capped cascade can lead with it.
   if (ctx.fundamentals && ctx.fundamentals.length > 0) {
-    const fv = readBoardAll('fundamentalVerdict', { fenBefore, fundamentals: ctx.fundamentals, ply, seen: ctx.seenFundamentals, replySan: ctx.allSans[ply] ?? null });
-    const diagnosis = fv.find((f) => readKey(f) === 'diagnosis') ?? null;
-    const how = fv.find((f) => readKey(f) === 'how') ?? null;
+    const fv = readBoardAll('fundamentalVerdict', { fen: fenBefore, attrs: ctx.fundamentals, ply, seen: ctx.seenFundamentals, replySan: ctx.allSans[ply] ?? null });
+    const diagnosis = fv.find((f) => readKey(f).startsWith('diagnosis|')) ?? null;
+    const how = fv.find((f) => readKey(f).startsWith('how|')) ?? null;
+    // The fundamentals said in full for the first time are this game's now.
+    for (const id of diagnosis ? fundamentalsSaid(diagnosis) : []) ctx.seenFundamentals.add(id);
     // ONE ANSWER, ONE CLAIM (Colle replay 2026-11-05, 20.Qxf4: "Another tempo
     // on offer: f6 would hit your bishop on g5" beside the verdict's "it let
     // them play …f6, which attacks your bishop"): a diagnosis naming the
@@ -1490,7 +1492,7 @@ export function computeMoveFacets(
   if (studentColorWB) {
     // Never while their king is stuck in the centre — a king hunt, not a
     // majority grind (the registry's read decides).
-    sayFact(readBoard('middlegameOrientation', { fen: fenAfter, student: studentColorWB, seat: isStudent ? 'student' : 'opponent' }), 'plan-middlegame');
+    sayFact(readBoard('middlegameOrientation', { fen: fenAfter, student: studentColorWB, seat: isStudent ? 'student' : 'opponent', san: null }), 'plan-middlegame');
   }
 
   // ── 10. OPENING IDENTITY — the name and what the opening is are the

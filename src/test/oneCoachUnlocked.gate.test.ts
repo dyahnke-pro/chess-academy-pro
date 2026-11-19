@@ -46,7 +46,7 @@ export function isGenuine(reason: string): boolean {
  *  (the computer is read by a surface's own producer and not yet by the one
  *  fact set or the composer). Lower a ceiling when you open one; never raise it. */
 const LOCK_CEILING: Record<Exclude<CoachSurface, 'weaknesses'>, number> = {
-  learn: 61, review: 30, lesson: 47, play: 72, chat: 66, tactics: 96, think: 74,
+  learn: 53, review: 30, lesson: 45, play: 64, chat: 58, tactics: 88, think: 72,
 };
 
 /** Which functions of `moveThoughtFacts.ts` each surface's consumer calls:
