@@ -521,3 +521,17 @@ describe('rookOnSeventh — says what the rook does there', () => {
     expect(rookOnSeventh('r4k2/p5R1/8/8/8/8/8/6K1 w - - 0 1', 'w')).toMatch(/it eats their pawn on a7/);
   });
 });
+
+// Danya have-check 2026-11-19: "passed pawns are meant to be pushed" beside a
+// lost race and on a pawn their king collects.
+describe('passedPawnPush — only a runner that can run', () => {
+  it('beginner chess strategy #6: c3 is taken by their king — no push cue', () => {
+    expect(passedPawnPush('8/5ppk/3P3p/8/8/2pK3P/5PP1/8 b - - 0 2', 'b', 'c3')).toBeNull();
+  });
+  it('the double attack #2: d4 is theirs — no push cue', () => {
+    expect(passedPawnPush('r1b2rk1/pp4pp/3b4/3p2q1/8/1P1Q1P2/PB1N2PP/R3R2K b - - 0 18', 'b', 'd5')).toBeNull();
+  });
+  it('negative control: a free runner says its count', () => {
+    expect(passedPawnPush('8/5ppk/3P3p/8/8/7P/5PP1/K7 w - - 0 2', 'w', 'd6')).toBe('your passed pawn on d6 wants to run — it is two pushes from queening, and passed pawns are meant to be pushed');
+  });
+});

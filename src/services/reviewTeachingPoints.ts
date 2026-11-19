@@ -39,7 +39,8 @@ import { legalSeeGainOn, bishopHemmedByOwnPawns, standsSafe } from './positionRe
 import { captureHasCounterTactic, detectNewThreat, forkAlignmentClause, type DetectedThreat } from './groundedAnswer';
 import { cells, PIECE_NOUN, findWorstPlacedPiece, deriveNextPlans } from './nextPlans';
 import { trappedAt, lineTakesPiece } from './trappedPiece';
-import { andList, withArticle } from '../utils/andList';
+import { detectPlanRace, kingCatchesPasser, pushesToPromote } from './planRace';
+import { andList, withArticle, countWord } from '../utils/andList';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 // Re-exported: eight callers and tests import these from here (2026-09-19 leaf move).
 export { findWorstPlacedPiece, deriveNextPlans };
@@ -248,7 +249,26 @@ export function passedPawnPush(fen: string, studentColorWB: Color, passedSquare:
       path.includes(`${String.fromCharCode(f + df)}${rk + dr}`));
   });
   const knightNote = knightOnPath ? ', and their knight is a poor blocker — knights are bad at stopping a runner' : '';
-  return `your passed pawn on ${passedSquare} wants to run — passed pawns are meant to be pushed${knightNote}`;
+  // A RUNNER THAT CANNOT RUN IS NOT TOLD TO RUN (Danya have-check 2026-11-19:
+  // "passed pawns are meant to be pushed" beside a race the other side wins,
+  // and on pawns a king collects). Their king taking it, a next square they
+  // win, or their passer queening first: no push cue.
+  if (kingCatchesPasser(chess, passedSquare, studentColorWB, 'now') === true) return null;
+  const race = detectPlanRace(fen, studentColorWB);
+  if (race?.kind === 'passer-race' && race.yourPawn === passedSquare && !race.youQueenFirst) return null;
+  const front = path[0];
+  if (front) {
+    const pushed = new Chess(fen);
+    const parts = pushed.fen().split(' '); parts[1] = studentColorWB; parts[3] = '-';
+    try {
+      const b = new Chess(parts.join(' '));
+      b.move({ from: passedSquare as Square, to: front as Square, promotion: 'q' });
+      if (legalSeeGainOn(b, front as Square) > 0) return null;
+    } catch { return null; }
+  }
+  // The push said with its count: how far it has to go is why it matters now.
+  const pushes = pushesToPromote(chess, passedSquare, studentColorWB);
+  return `your passed pawn on ${passedSquare} wants to run — it is ${countWord(pushes)} push${pushes === 1 ? '' : 'es'} from queening, and passed pawns are meant to be pushed${knightNote}`;
 }
 
 
