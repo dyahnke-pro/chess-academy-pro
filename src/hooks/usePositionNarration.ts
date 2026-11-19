@@ -16,6 +16,7 @@ import type { StockfishAnalysis } from '../types';
 import { DEFAULT_STUDENT_RATING } from '../services/ratingBands';
 import { useStudentNeed } from './useStudentNeed';
 import { composePositionRead, READ_SEAT } from '../services/positionReadComposer';
+import type { ReadSurface } from '../services/tryReadBudget';
 
 interface UsePositionNarrationArgs {
   fen: string;
@@ -35,6 +36,9 @@ interface UsePositionNarrationArgs {
   /** A move the read must not give away (a puzzle's solution before it is
    *  answered). REQUIRED — `null` on a live board. See `PositionReadInput`. */
   withhold: string | null;
+  /** The surface the read is on — REQUIRED: it sets the engine budget for the
+   *  read's tries (`tryReadBudget`: live boards shallow and parallel, Review deep). */
+  surface: ReadSurface;
 }
 
 interface UsePositionNarrationResult {
@@ -240,6 +244,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
         corpusNotes: args.corpusNotes,
         withhold: args.withhold,
         readTempting: true,
+        surface: args.surface,
       });
       if (token !== activeTokenRef.current) return;
       if (!facts) {
@@ -362,7 +367,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
         setIsNarrating(false);
       }
     }
-  }, [args.fen, args.pgn, args.moveNumber, args.playerColor, args.openingName, args.onReport, args.corpusNotes]);
+  }, [args.fen, args.pgn, args.moveNumber, args.playerColor, args.openingName, args.onReport, args.corpusNotes, args.surface]);
 
   return { narrate, cancel, isNarrating, currentText, error };
 }

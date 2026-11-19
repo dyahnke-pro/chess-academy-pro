@@ -555,11 +555,36 @@ function baseFacts(b: BoardBundle): CoachFact[] {
   return out;
 }
 
+/** Every field the bundle carries, so the read's key is the WHOLE bundle: a
+ *  new field fails to compile here until it is part of the key. */
+const BUNDLE_KEY_FIELDS: Record<keyof BoardBundle, true> = {
+  fen: true, student: true, lines: true, rating: true, history: true, priorMove: true, priorMoveSeat: true, priorLines: true, seconds: true,
+};
+const KEY_ORDER = Object.keys(BUNDLE_KEY_FIELDS) as Array<keyof BoardBundle>;
+/** The same bundle, by value: two bundles built apart for one board (the best
+ *  line's futures, read again for every try a board read weighs) are one read. */
+export function bundleKey(b: BoardBundle): string {
+  return JSON.stringify(KEY_ORDER.map((k) => b[k] ?? null));
+}
+/** The reads already made, by bundle. Every computer is pure over the bundle,
+ *  so a bundle read once is read. Oldest out first, past the keep. */
+const EVERY = new Map<string, CoachFact[]>();
+const EVERY_KEEP = 512;
+
 /** Every computer the bundle can fill, read on it — the conclusions last, on
  *  the facts of the rest. A computer that throws is skipped (its own `safe`
- *  already guards it). */
+ *  already guards it). A bundle read before is not read again. */
 export function readEveryComputer(b: BoardBundle): CoachFact[] {
-  return [...baseFacts(b), ...readSome(b, (id) => CONCLUSIONS.has(id))];
+  const key = bundleKey(b);
+  const hit = EVERY.get(key);
+  if (hit) return [...hit];
+  const out = [...baseFacts(b), ...readSome(b, (id) => CONCLUSIONS.has(id))];
+  if (EVERY.size >= EVERY_KEEP) {
+    const oldest = EVERY.keys().next().value;
+    if (oldest !== undefined) EVERY.delete(oldest);
+  }
+  EVERY.set(key, out);
+  return [...out];
 }
 
 function readSome(b: BoardBundle, which: (id: ComputerId) => boolean): CoachFact[] {

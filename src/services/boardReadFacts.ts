@@ -38,13 +38,17 @@ import type { IntroTense } from '../utils/moveIntro';
 import type { ImportanceTier } from './narrationImportance';
 import { writerFor, momentPosture, plainThreatsSeenFor } from './writerRegister';
 import { readBoardAll } from './boardComputers';
+import type { TrySource } from './tryReadBudget';
 
 /** A read the student asked for ("read this position"): the asked answer's
  *  writer settings (`writerRegister`). */
 const ASKED_WRITER = writerFor('chat');
 
-/** One engine read of a board: its lines, best first. Null when unread. */
-export type BoardReader = (fen: string) => Promise<readonly AnalysisLine[] | null>;
+/** One engine read of a board: its lines, best first. Null when unread.
+ *  `source` says which try the board comes from, so the surface's budget
+ *  (`tryReadBudget`) sets the read's depth and time. The reads of one step
+ *  are asked together: a reader with a pool runs them in parallel. */
+export type BoardReader = (fen: string, source: TrySource) => Promise<readonly AnalysisLine[] | null>;
 
 export type BoardFact = ReadFact;
 
@@ -203,15 +207,22 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     // that threatens or defends — each read, whatever the eye says.
     const considered: ConsideredTries = consideredTries(i.fen);
     const weighed = candidateMoves(i.fen, i.rating, { played: null, scored: null });
-    const toRead = [...weighed.map((c) => ({ uci: c.uci, from: c.from, to: c.to })), ...[...considered.keys()].filter((u) => !weighed.some((c) => c.uci === u)).map((u) => ({ uci: u, from: u.slice(0, 2), to: u.slice(2, 4) }))];
-    for (const c of toRead) {
-      if (c.uci === top.moves[0]) continue;
+    const toRead: Array<{ uci: string; from: string; to: string; source: TrySource }> = [
+      ...weighed.map((c) => ({ uci: c.uci, from: c.from, to: c.to, source: 'eye' as const })),
+      ...[...considered].filter(([u]) => !weighed.some((c) => c.uci === u)).map(([u, t]) => ({ uci: u, from: u.slice(0, 2), to: u.slice(2, 4), source: t.why })),
+    ];
+    // Every try's board, read together (the pool runs them side by side), kept in order.
+    const boards = toRead.flatMap((c) => {
+      if (c.uci === top.moves[0]) return [];
       const after = new Chess(i.fen);
-      try { after.move({ from: c.from, to: c.to, promotion: c.uci[4] }); } catch { continue; }
-      if (after.isGameOver()) continue;
-      const t = (await i.read(after.fen()).catch(() => null))?.[0];
-      if (t) tempting.push({ evaluation: t.evaluation, mate: t.mate, moves: [c.uci, ...t.moves], earlier: t.earlier?.moves ? [c.uci, ...t.earlier.moves] : null });
-    }
+      try { after.move({ from: c.from, to: c.to, promotion: c.uci[4] }); } catch { return []; }
+      return after.isGameOver() ? [] : [{ uci: c.uci, fen: after.fen(), source: c.source }];
+    });
+    const reads = await Promise.all(boards.map((b) => i.read(b.fen, b.source).catch(() => null)));
+    boards.forEach((b, k) => {
+      const t = reads[k]?.[0];
+      if (t) tempting.push({ evaluation: t.evaluation, mate: t.mate, moves: [b.uci, ...t.moves], earlier: t.earlier?.moves ? [b.uci, ...t.earlier.moves] : null });
+    });
     const refuted = temptingOnBoard({ fen: i.fen, student: i.studentColor, rating: i.rating, reads: tempting, priorMove: null, considered });
     for (const t of refuted) facts.push({ from: 'tempting', kind: 'refuted', text: t.text, computer: 'temptingOnBoard', squares: [t.uci.slice(0, 2), t.uci.slice(2, 4)] });
     // A check or capture that wins nothing ("Nxe7+ Rxe7 gives no relief"):
@@ -256,7 +267,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     let san: string;
     try { san = board.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] ?? 'q' }).san; } catch { return done(); }
     const fenB = board.fen();
-    const after = await i.read(fenB).catch(() => null);
+    const after = await i.read(fenB, 'best-after').catch(() => null);
     // The game behind the board (one-coach unlock, 2026-11-19): the best move's
     // facts read the moves played to reach it (the opening, a piece moved
     // again, the queen chased, the habits) — never an empty game on a board
@@ -270,14 +281,17 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     const theirs: WeighRead[] = [];
     if (after?.[0] && !i.withhold && i.readTempting && mine) {
       theirs.push({ evaluation: after[0].evaluation, mate: after[0].mate, moves: after[0].moves });
-      for (const c of candidateMoves(fenB, i.rating, { played: null, scored: null })) {
-        if (c.uci === after[0].moves[0]) continue;
+      const replies = candidateMoves(fenB, i.rating, { played: null, scored: null }).flatMap((c) => {
+        if (c.uci === after[0].moves[0]) return [];
         const b2 = new Chess(fenB);
-        try { b2.move({ from: c.from, to: c.to, promotion: c.uci[4] }); } catch { continue; }
-        if (b2.isGameOver()) continue;
-        const t = (await i.read(b2.fen()).catch(() => null))?.[0];
-        if (t) theirs.push({ evaluation: t.evaluation, mate: t.mate, moves: [c.uci, ...t.moves], earlier: t.earlier?.moves ? [c.uci, ...t.earlier.moves] : null });
-      }
+        try { b2.move({ from: c.from, to: c.to, promotion: c.uci[4] }); } catch { return []; }
+        return b2.isGameOver() ? [] : [{ uci: c.uci, fen: b2.fen() }];
+      });
+      const replyReads = await Promise.all(replies.map((r) => i.read(r.fen, 'their-eye').catch(() => null)));
+      replies.forEach((r, k) => {
+        const t = replyReads[k]?.[0];
+        if (t) theirs.push({ evaluation: t.evaluation, mate: t.mate, moves: [r.uci, ...t.moves], earlier: t.earlier?.moves ? [r.uci, ...t.earlier.moves] : null });
+      });
     }
     const replier: 'w' | 'b' = side === 'w' ? 'b' : 'w';
     const everyAfter = theirs.length >= 2

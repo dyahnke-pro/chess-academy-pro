@@ -1036,7 +1036,8 @@ export interface BestOfEngine {
 /** A pooled engine's deep read: the whole principal line and the same search
  *  two depths shallower (`AnalysisLine.earlier`). */
 export interface DeepReadEngine {
-  analyzeDeep(fen: string, depth: number): Promise<StockfishAnalysis>;
+  /** `budgetMs`: this read's own time budget (the pool's otherwise). */
+  analyzeDeep(fen: string, depth: number, budgetMs?: number): Promise<StockfishAnalysis>;
 }
 
 /** Plies of line a deep read keeps — a cost that lands ten moves on fits. */
@@ -1067,8 +1068,8 @@ export async function acquirePvEngines(
     /** A COST REASON'S DEEP READ (WO-DECIDER-02): the whole line, not the
      *  record's eight plies — a blow that lands six moves on is past them —
      *  with the line two depths shallower beside it (`AnalysisLine.earlier`). */
-    async analyzeDeep(fen: string, depth: number): Promise<StockfishAnalysis> {
-      const r = await w.analyzePosition(fen, depth, budgetMs, DEEP_READ_PV_PLIES);
+    async analyzeDeep(fen: string, depth: number, readBudgetMs?: number): Promise<StockfishAnalysis> {
+      const r = await w.analyzePosition(fen, depth, readBudgetMs ?? budgetMs, DEEP_READ_PV_PLIES);
       const mate = Math.abs(r.evaluation) >= MATE_EVAL_THRESHOLD;
       return {
         bestMove: r.bestMove,

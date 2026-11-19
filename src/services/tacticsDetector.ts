@@ -5,6 +5,7 @@ import { andList } from '../utils/andList';
 import { pieceRef } from './pieceRef';
 import { Chess, type Square, type Color, type PieceSymbol } from 'chess.js';
 import { MATERIAL_VALUE } from './pieceValues';
+import { liteMoves, makeLite, undoLite, type LiteMove } from './liteMoves';
 import type { BoardHighlight } from '../types';
 import type { TacticPattern, HangingPiece } from '../types/tacticTypes';
 import { findHangingPieces } from './tacticClassifier';
@@ -64,7 +65,8 @@ function getAttackedSquares(chess: Chess, square: Square): Square[] {
 
   try {
     const testChess = new Chess(fenParts.join(' '));
-    const moves = testChess.moves({ square, verbose: true });
+    // Only the squares are read: the moves without their notation (`liteMoves`).
+    const moves = liteMoves(testChess, { square });
     const attacked = new Set<string>();
     for (const m of moves) {
       attacked.add(m.to);
@@ -225,11 +227,11 @@ function findMateThreats(chess: Chess): TacticPattern[] {
   const out: TacticPattern[] = [];
   const turn = chess.turn();
   for (const color of ['w', 'b'] as Color[]) {
-    let mate: ReturnType<Chess['moves']>[number] | undefined;
+    let mate: LiteMove | null = null;
     if (color === turn) {
       // The side to move's own mate-in-1 is genuinely available now.
       if (chess.isCheck()) continue; // in check: not a quiet threat
-      mate = chess.moves({ verbose: true }).find((m) => m.san.includes('#'));
+      mate = firstMatingMove(chess);
     } else {
       // For the side NOT to move, a mate-in-1 is a real threat only if the
       // side to move cannot prevent it — every reply still allows a mate
@@ -238,10 +240,11 @@ function findMateThreats(chess: Chess): TacticPattern[] {
       // impossible board exactly when the threat came WITH check (census
       // 2026-10-10: Qa8+ Rc8 Qxc8#).
       if (!mateThreatIsUnstoppable(chess)) continue;
-      const reply = chess.moves({ verbose: true })[0];
-      const after = new Chess(chess.fen());
-      try { after.move(reply); } catch { continue; }
-      mate = after.moves({ verbose: true }).find((m) => m.san.includes('#'));
+      const reply = liteMoves(chess).at(0);
+      if (!reply) continue;
+      makeLite(chess, reply);
+      mate = firstMatingMove(chess);
+      undoLite(chess);
     }
     if (!mate) continue;
     out.push({
@@ -262,16 +265,30 @@ function findMateThreats(chess: Chess): TacticPattern[] {
  *  (After each defense it is naturally the threatening side's move, so its
  *  mate is read straight off `after.moves()`.) */
 function mateThreatIsUnstoppable(chess: Chess): boolean {
-  const defenses = chess.moves({ verbose: true });
+  const defenses = liteMoves(chess);
   if (defenses.length === 0) return false;
   for (const dm of defenses) {
-    const after = new Chess(chess.fen());
-    try { after.move(dm); } catch { return false; }
+    // Each defense played and taken back on the same board (no copy, no
+    // notation): the board after is the board `move()` leaves.
+    makeLite(chess, dm);
     // If the defense ended the game or removed every mating move, it was preventable.
-    if (after.isGameOver()) return false;
-    if (!after.moves({ verbose: true }).some((m) => m.san.includes('#'))) return false;
+    const holds = chess.isGameOver() || firstMatingMove(chess) === null;
+    undoLite(chess);
+    if (holds) return false;
   }
   return true;
+}
+
+/** The first move on `chess` (the side to move, chess.js's own move order)
+ *  that mates: the move whose SAN ends '#', found without writing any SAN. */
+function firstMatingMove(chess: Chess): LiteMove | null {
+  for (const m of liteMoves(chess)) {
+    makeLite(chess, m);
+    const mates = chess.isCheckmate();
+    undoLite(chess);
+    if (mates) return m;
+  }
+  return null;
 }
 
 /** BACK-RANK WEAKNESS: a king sitting on its home rank with no luft while an
@@ -311,11 +328,9 @@ function findBackRankWeakness(chess: Chess): TacticPattern[] {
     // …Bxf8). An even trade still counts — the defender's rook is tied to the
     // rank, which is the weakness. The king may take only an unprotected
     // invader.
-    const survives = (m: { from: Square; to: Square; san: string; piece: string; captured?: string }): boolean => {
+    // Read on the board after the check (`after`, the invader just landed).
+    const survives = (after: Chess, m: { from: Square; to: Square; piece: string; captured?: string }): boolean => {
       try {
-        const after = withTurn(chess, enemy);
-        if (!after) return false;
-        after.move(m.san);
         const cheaper = after.attackers(m.to, color).filter((sq) => {
           const t = after.get(sq)?.type;
           return t !== undefined && t !== 'k' && MATERIAL_VALUE[t] < MATERIAL_VALUE[m.piece as PieceSymbol];
@@ -327,8 +342,15 @@ function findBackRankWeakness(chess: Chess): TacticPattern[] {
         return !kingTakes || after.attackers(m.to, enemy).length > 0;
       } catch { return false; }
     };
-    const invader = probe.moves({ verbose: true }).find((m) =>
-      (m.piece === 'r' || m.piece === 'q') && rankOfSquare(m.to) === rank && m.san.includes('+') && survives(m));
+    // Each heavy move onto the rank played and taken back on the probe, without
+    // its notation (`liteMoves`): a check that is not mate (SAN '+') and survives.
+    const invader = liteMoves(probe).find((m) => {
+      if ((m.piece !== 'r' && m.piece !== 'q') || rankOfSquare(m.to) !== rank) return false;
+      makeLite(probe, m);
+      const lands = probe.isCheck() && !probe.isCheckmate() && survives(probe, m);
+      undoLite(probe);
+      return lands;
+    });
     if (invader) {
       out.push({
         type: 'back_rank',
@@ -387,7 +409,7 @@ function moveIndexFor(chess: Chess, by: Color): Map<Square, PieceSymbol[]> {
   const index = new Map<Square, PieceSymbol[]>();
   const probe = withTurn(chess, by);
   if (probe) {
-    for (const m of probe.moves({ verbose: true })) {
+    for (const m of liteMoves(probe)) {
       const list = index.get(m.to);
       if (list) list.push(m.piece);
       else index.set(m.to, [m.piece]);

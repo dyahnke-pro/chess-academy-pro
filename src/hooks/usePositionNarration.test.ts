@@ -104,6 +104,7 @@ function defaultArgs(): Parameters<typeof usePositionNarration>[0] {
     openingName: null,
     corpusNotes: true,
     withhold: null,
+    surface: 'learn' as const,
   };
 }
 

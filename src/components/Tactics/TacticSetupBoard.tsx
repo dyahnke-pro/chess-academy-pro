@@ -326,6 +326,7 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
     openingName: null,
     corpusNotes: true, // the tactics drill is a kept corpus surface
     withhold: ended ? null : knownMove?.san ?? null,
+    surface: 'puzzle',
   });
   const handleRead = useCallback((): void => {
     if (!answeredRef.current) promptedRef.current = true;
