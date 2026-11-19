@@ -145,6 +145,39 @@ import { captureOrder, type OrderRead } from './captureOrder';
 import { knightSquareTaken } from './knightSquareTaken';
 import { seatCp } from './winChance';
 import { principleLine, principleContrastLine } from './moveFundamentals';
+import { statusBandChange } from './statusBand';
+import { refutedFromFan, candidatesFromAmateur, refutedAltProof, type FanLine } from './refutedAlternativeCore';
+import { pawnHit, lineTakesPiece } from './trappedPiece';
+import { moverLineProof } from './exchangeLedger';
+import { MATERIAL_VALUE } from './pieceValues';
+import { setUpClause, setUpHeldClause, setUpSkill, type SetUpChance } from './setUpChance';
+import type { MustDefend } from './threatOut';
+import { looseClaim, plyOfFen, type LooseSpells } from './conceptKey';
+import { takingTheAttackerAnswers } from './positionReadingService';
+import { threatProof } from './threatProof';
+import { liveMethodBeat, type LiveMethodSignals } from './methodBeat';
+import { boardPlanFacts, leverSentence } from './boardPlanFacts';
+import { readPosition } from './positionalRead';
+import { exchangeIdeas, type ExchangeIdeasInput } from './exchangeIdeas';
+import { conceptForBoard } from './conceptEngine';
+import { pinPressureConcept, guardRemovalConcept, type BoardConcept } from './boardTeachConcepts';
+import { deliberationFacts, deliberationMarks, fullWeighingSays, deliberationWeighing, HELD_WEIGHING_SAYS, type Deliberation } from './deliberation';
+import { detectLatentDanger, latentDangerClause, detectTradeCreatesPin, tradeDangerClause } from './latentDanger';
+import { detectLatentFork, latentForkClause } from './latentFork';
+import { detectKingExposure, kingExposureClause, detectCentralKingDanger, centralKingDangerClause } from './kingSafety';
+import { readConversion } from './conversionMethod';
+import { phaseVerdictLine } from './reviewPositionalAssessment';
+import { buildOpponentIntent, opponentIntentFacts } from './opponentIntent';
+import { readCriticalMoment, criticalMomentStatement, criticalMomentSquares, opponentOnlyMoveStatement } from './criticalMoment';
+import type { LeansOn } from './perturbation';
+import { planHere, strategicWhyImperative, strategicReason, strategicPlanPointer, strategicClaims, strategicSquares } from './moveFundamentals';
+import { structurePlanFact } from './nextPlans';
+import { structurePlanEvent, planChangeSentence } from './planThread';
+import { readTrade, findTradeTarget } from './tradeQuality';
+import type { LastMove } from './material';
+import type { StockfishAnalysis } from '../types';
+import { forkThreatKey } from './conceptKey';
+import { lineTacticPoints } from './factStakes';
 
 type CoachSurface = 'learn' | 'review' | 'lesson' | 'play' | 'chat' | 'tactics' | 'weaknesses' | 'think';
 
@@ -181,6 +214,54 @@ export function principleKey(f: CoachFact): { id: string; first: boolean; headsM
   const bar = k.indexOf('|');
   const head = k.slice(0, bar);
   return { id: k.slice(bar + 1), first: head[0] === '1', headsMove: head[1] === 'h' };
+}
+
+/** What a conversion read's key says: the step, and its passer when it has one. */
+export function conversionKey(f: CoachFact): { step: string; passer: string | null } {
+  const [step, passer] = readKey(f).split('|');
+  return { step, passer: passer || null };
+}
+
+/** What a structure plan read's key says: the plan's id, its idea key and its
+ *  aim (`structurePlanFact`), each null where the plan has none. */
+export function structurePlanKey(f: CoachFact): { id: string; ideaKey: string | null; aim: string | null } {
+  const [id, ideaKey, aim] = readKey(f).split('|');
+  return { id, ideaKey: ideaKey || null, aim: aim || null };
+}
+
+/** What a live method read's key says: the habit, and its say-once key. */
+export function liveMethodKey(f: CoachFact): { habit: string; key: string } {
+  const k = readKey(f);
+  const bar = k.indexOf('|');
+  return { habit: k.slice(0, bar), key: k.slice(bar + 1) };
+}
+
+/** What a positional read's key says: the observation's kind and its key. */
+export function positionReadKey(f: CoachFact): { kind: string; key: string } {
+  const k = readKey(f);
+  const bar = k.indexOf('|');
+  return { kind: k.slice(0, bar), key: k.slice(bar + 1) };
+}
+
+/** What an exchange idea's key says: its kind and its say-once claim. */
+export function exchangeIdeaKey(f: CoachFact): { kind: 'trade-idea' | 'defence-idea' | 'nugget'; claim: string } {
+  const k = readKey(f);
+  const bar = k.indexOf('|');
+  return { kind: k.slice(0, bar) as 'trade-idea' | 'defence-idea' | 'nugget', claim: k.slice(bar + 1) };
+}
+
+/** A concept read (`boardConcept`, `pinPressure`, `guardRemoval`) back as the
+ *  concept the live read teaches: its source and id from the key, its full
+ *  words, its short form (`alsoText`), its squares and board, and either the
+ *  line that reaches that board or — a pile-on — the move that piles on. */
+export function boardConceptOf(f: CoachFact): BoardConcept {
+  const [source, id, pin] = readKey(f).split('|');
+  const line = f.lines?.[0];
+  return {
+    computer: f.computer, id, source, full: f.text, squares: f.squares, boardFen: f.fen,
+    ...(f.alsoText ? { short: f.alsoText } : {}),
+    ...(line && pin ? { pinMove: { fen: line.fen, san: line.sans[0] } } : line ? { line: [...line.sans] } : {}),
+  };
 }
 
 export function readKey(f: CoachFact): string {
@@ -266,6 +347,80 @@ export interface BoardContexts {
   /** What their move did to the student's structure and squares. */
   structureTheirMove: { fenBefore: string; san: string; student: Color };
   /** The standing structural facts, student to move. */
+  /** THE LIVE READ'S BOARD FACTS (the basket, positionFacts): each the one
+   *  writer of its sentence. The standing crossed a band since the last read
+   *  (`studentCp`/`prevStudentCp`, the student's side). */
+  statusBand: { fen: string; studentCp: number; prevStudentCp: number };
+  /** A pin or skewer in waiting on the student's own king or queen. */
+  latentDanger: { fen: string; student: Color };
+  /** A trade of the student's that would line their own pieces up for a pin. */
+  tradeDanger: { fen: string; student: Color };
+  /** A knight fork two quiet moves away — the student's own first, else theirs. */
+  latentFork: { fen: string; student: Color };
+  /** A castled king with a broken shelter under real fire. */
+  kingExposure: { fen: string; student: Color };
+  /** An uncastled central king with the file about to open. REQUIRED
+   *  `namesMoves`: may the line say how to get castled? */
+  centralKingDanger: { fen: string; student: Color; namesMoves: boolean };
+  /** The conversion step this won board is on (the student a piece up). */
+  conversion: { fen: string; student: Color };
+  /** Who's better and why, at the turn of the game. `heard`: the say-once
+   *  keys already spoken; `lastMove`: the move that produced `fen`. */
+  phaseVerdict: { fen: string; student: Color; studentCp: number; phase: 'middlegame' | 'endgame'; heard: ReadonlySet<string>; lastMove: LastMove | null };
+  /** What the opponent wants, named off their fan (`fen`: they are to move). */
+  opponentIntent: { fen: string; topLines: StockfishAnalysis['topLines'] };
+  /** The critical moment counted off the fan: on the student's move, how many
+   *  moves hold and what they hold (`anchor`: the reply that made the board);
+   *  on the opponent's, that they have one move — or, on a critical tier with
+   *  no count, that the position is sharp for them. */
+  criticalMoment: { fen: string; topLines: StockfishAnalysis['topLines']; mover: Color; studentToMove: boolean; ply: number; anchor: { san: string; fenBefore: string } | null; critical: boolean };
+  /** The piece a side leans on, as the perturbation probe found it — the
+   *  probe is async and runs with the surface's eval, so the read is handed in. */
+  leansOn: { fen: string; read: LeansOn; seat: FactSeat };
+  /** The plan the student's best move (`bestSan`) serves. */
+  strategicPlan: { fen: string; bestSan: string; student: Color };
+  /** The plan the pawn structure earns — said when the student has not heard
+   *  it (`heard`: the structure thread's last plan) or it changed; quiet when
+   *  its idea was already said (`said`). */
+  structurePlan: { fen: string; student: Color; heard: string | null; said: ReadonlySet<string> | null };
+  /** Their best piece and the student's worst, the trade the engine's line makes. */
+  tradeTarget: { fen: string; student: Color; bestLine: readonly string[] | null };
+  /** How good a trade just played was (`costCp`: its graded cost; `priorMove`:
+   *  the move that led to `fenBefore`). */
+  tradeRead: { fenBefore: string; san: string; student: Color; costCp: number | null; priorMove: LastMove | null; namesPlayedMove: boolean };
+  /** The move players at this level reach for at `fenBefore` (their popular
+   *  moves) and what it costs off the fan already read there. */
+  refutedAlt: { fenBefore: string; playedSan: string; popular: ReadonlyArray<{ san: string; games: number; pct: number }>; fan: readonly FanLine[]; student: Color };
+  /** The engine's best move traps a piece of theirs, its own line taking it
+   *  (`line`: the best line, UCI; `priorMove`: the move that made the board). */
+  trapChance: { fen: string; student: Color; line: readonly string[] | null; priorMove: { fenBefore: string; san: string } | null };
+  /** A tactic the student can set up with one quiet move — the read the
+   *  surface took off its fan (`detectSetUpChance`), said here. */
+  setUpChance: { fen: string; read: SetUpChance };
+  /** What the student must defend now — the null-move probe's read, said
+   *  here (`looseSpells`: the spells of their loose pieces this game). */
+  mustDefend: { fen: string; student: Color; read: MustDefend; studentToMove: boolean; studentCp: number; looseSpells: LooseSpells | null };
+  /** The habit to run on this board, present tense (`ply` rotates its stems,
+   *  `said` its say-once ledger). */
+  liveMethod: { fen: string; signals: LiveMethodSignals; ply: number; said: ReadonlySet<string> | undefined };
+  /** The plans the board earns (development, breaks, files, outposts) —
+   *  `withTrump`: the structural trump too, where no plan line said it. */
+  boardPlans: { fen: string; student: Color; withTrump: boolean };
+  /** The positional read of the board for both sides. */
+  positionRead: { fen: string; student: Color };
+  /** Trades, defence and conversion, and the principles behind them. */
+  exchangeIdeas: ExchangeIdeasInput;
+  /** The lead computed concept of the board (a tactic, a technique), off the
+   *  engine's line when the surface may walk it (`analysis`). */
+  boardConcept: { fen: string; student: Color; rating: number; analysis: Pick<StockfishAnalysis, 'topLines' | 'evaluation'> | undefined };
+  /** A pin with a pile-on, for either seat. */
+  pinPressure: { fen: string; student: Color };
+  /** A piece held by one guard, for either seat. */
+  guardRemoval: { fen: string; student: Color };
+  /** The weighing — the read the surface built (`buildDeliberation`), said
+   *  here: the alternatives ruled out and the move, and its held form (the
+   *  rule-outs alone). `saysBestLine`: the weighing plays the best line out. */
+  deliberation: { fen: string; read: Deliberation; said: ReadonlySet<string>; saysBestLine: boolean };
   structureBoard: { fen: string; student: Color };
   /** Plan choices off the student's MultiPV at `fen` (student to move).
    *  REQUIRED `namesMoves`: a live board holds the moves (the choice is said
@@ -696,6 +851,19 @@ const CHAT_VIA_THOUGHT = { wired: 'services/moveThoughtFacts.ts' } as const;
 /** The live composer reads it for every surface that does not read it itself
  *  — chat's board answers and the tapped read on Play (2026-10-15). */
 const COMPOSER = { wired: 'services/positionFacts.ts' } as const;
+/** THE LIVE READ'S OWN BOARD FACTS (the basket): read by the one composer
+ *  for every surface it answers — Learn's position-facts lane, chat's board
+ *  answers and the read the student taps on Play. Review and a lesson speak a
+ *  move's own facts (moveThoughtFacts), never this read of the board between
+ *  moves. */
+const LIVE_READ: Record<CoachSurface, SurfaceAnswer> = {
+  learn: COMPOSER, chat: COMPOSER, play: COMPOSER,
+  review: { not: 'a read of the live board between moves; Review speaks each move\'s own facts (moveThoughtFacts, reviewFullData)' },
+  lesson: { not: 'a lesson composes each move from its own facts (moveThoughtFacts); this is the live board read' },
+  tactics: { not: 'a puzzle poses one tactic; this reads a game board between moves' },
+  weaknesses: { not: 'a read of the board said in the moment — the record grades the move\'s own cost' },
+  think: { not: 'a step board\'s teaching reads the move\'s own facts (moveThoughtFacts.stepThought), not the live board read' },
+};
 /** LEARN HOW TO THINK (one coach, David 2026-11-17): the step's teaching reads
  *  the composer and the step board's registry reads (`moveThoughtFacts.stepThought`). */
 const THINK = { wired: 'services/moveThoughtFacts.ts' } as const;
@@ -742,6 +910,15 @@ const STRUCT_WEAK = { not: 'owed — the weakness record keeps tags, not the str
 
 /** The piece a poisoned-by-the-line sentence names. */
 const POISON_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+
+/** A pile-on or guard-removal concept as its fact: `pin` in the key marks the
+ *  move that piles on, carried as the line on the board it is played. */
+function conceptFact(c: BoardConcept | null, fact: MakeFact, fen: string): CoachFact | null {
+  if (!c) return null;
+  return fact({ key: `${c.source}|${c.id}|${c.pinMove ? 'pin' : ''}`, claims: [], text: c.full, proof: NO_PROOF.description, squares: c.squares, stakes: null,
+    seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: c.boardFen ?? fen, ...(c.short ? { alsoText: c.short } : {}),
+    ...(c.pinMove ? { lines: [{ fen: c.pinMove.fen, sans: [c.pinMove.san] }] } : c.line ? { lines: [{ fen, sans: c.line }] } : {}) });
+}
 
 function safe<T>(f: () => T | null): T | null {
   try { return f(); } catch { return null; }
@@ -1379,6 +1556,431 @@ export const BOARD_COMPUTERS = {
     kind: 'judgement',
     phase: ANY,
     surfaces: { lesson: LESSON_BOARD, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, tactics: STRUCT_TACTICS, weaknesses: STRUCT_WEAK, think: THINK },
+  },
+  statusBand: {
+    read: ({ fen, studentCp, prevStudentCp }, fact) => safe(() => {
+      const text = statusBandChange(studentCp, prevStudentCp);
+      if (!text) return null;
+      return fact({ key: text, claims: [], text, proof: NO_PROOF.description, squares: [], stakes: null,
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'statusBandChange',
+    kind: 'status',
+    phase: ANY,
+    surfaces: LIVE_READ,
+  },
+  latentDanger: {
+    read: ({ fen, student }, fact) => safe(() => {
+      const d = detectLatentDanger(fen, student, { latentOnly: true });
+      if (!d) return null;
+      const text = latentDangerClause(d, fen);
+      // A LATENT line needs their piece to arrive first.
+      return fact({ key: text, claims: [], text, proof: NO_PROOF.description,
+        squares: [d.enemySquare, d.frontSquare, d.backSquare, ...(d.shieldSquare ? [d.shieldSquare] : [])],
+        stakes: { points: lineTacticPoints(d.frontPiece, d.backPiece), plies: 3 },
+        seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'detectLatentDanger',
+    kind: 'latent-danger',
+    phase: ANY,
+    surfaces: LIVE_READ,
+  },
+  tradeDanger: {
+    read: ({ fen, student }, fact) => safe(() => {
+      const d = detectTradeCreatesPin(fen, student);
+      if (!d) return null;
+      const text = tradeDangerClause(d, fen);
+      // Said about the board AFTER the capture ("before you trade on e4: that
+      // lines your bishop on e4 up…") — graded there, or it reads false now.
+      const after = ((): string | null => { try { const c = new Chess(fen); return c.move({ from: d.tradeFrom, to: d.tradeTo, promotion: 'q' }) ? c.fen() : null; } catch { return null; } })();
+      // The alignment AND the capture that creates it — that whole geometry is
+      // the claim; the trade walks into the line now, landing one move later.
+      return fact({ key: text, claims: [], text, proof: NO_PROOF.description,
+        squares: [d.enemySquare, d.frontSquare, d.backSquare, d.tradeFrom, d.tradeTo],
+        stakes: { points: lineTacticPoints(d.frontPiece, d.backPiece), plies: 2 },
+        seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: after ?? fen });
+    }),
+    computer: 'detectTradeCreatesPin',
+    kind: 'latent-danger',
+    phase: ANY,
+    surfaces: LIVE_READ,
+  },
+  latentFork: {
+    // The student's own fork first (a plan you can execute beats a plan you
+    // must prevent); the seat is the forker's, and decides opportunity or danger.
+    read: ({ fen, student }, fact) => safe(() => {
+      const seat = student === 'w' ? 'white' as const : 'black' as const;
+      const f = detectLatentFork(fen, seat) ?? detectLatentFork(fen, seat === 'white' ? 'black' : 'white');
+      if (!f) return null;
+      const targets = f.targets.map((t) => t.square);
+      const key = forkThreatKey(f.square, targets);
+      const text = latentForkClause(f, seat);
+      // The route is withheld from the words: the line names no move.
+      return fact({ key, claims: [key], text, proof: NO_PROOF.description, squares: [f.square, ...targets],
+        stakes: { points: forkPoints(f.targets.map((t) => t.piece)), plies: 2 * f.moves },
+        seat: f.forker === seat ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'detectLatentFork',
+    kind: 'latent-chance',
+    phase: ANY,
+    surfaces: LIVE_READ,
+  },
+  kingExposure: {
+    read: ({ fen, student }, fact) => safe(() => {
+      const k = detectKingExposure(fen, student);
+      if (!k) return null;
+      const text = kingExposureClause(k);
+      return fact({ key: text, claims: [], text, proof: NO_PROOF.description, squares: [k.kingSquare, ...k.attackerSquares], stakes: null,
+        seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'detectKingExposure',
+    kind: 'latent-danger',
+    phase: ANY,
+    surfaces: LIVE_READ,
+  },
+  centralKingDanger: {
+    read: ({ fen, student, namesMoves: names }, fact) => safe(() => {
+      const d = detectCentralKingDanger(fen, student);
+      if (!d) return null;
+      const text = centralKingDangerClause(d, names);
+      return fact({ key: text, claims: [], text, proof: NO_PROOF.description, squares: [d.kingSquare, d.aimedFrom, d.tensionSquare], stakes: null,
+        seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'detectCentralKingDanger',
+    kind: 'latent-danger',
+    phase: ANY,
+    surfaces: LIVE_READ,
+  },
+  conversion: {
+    // The key is the step and its passer (`conversionKey`): a step is said
+    // once, whatever the edge it is said with.
+    read: ({ fen, student }, fact) => safe(() => {
+      const c = readConversion(fen, student);
+      if (!c) return null;
+      return fact({ key: `${c.step}|${c.passer ?? ''}`, claims: [], text: c.text, proof: NO_PROOF.description, squares: c.passer ? [c.passer] : [], stakes: null,
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'readConversion',
+    kind: 'convert',
+    phase: ANY,
+    surfaces: LIVE_READ,
+  },
+  phaseVerdict: {
+    read: ({ fen, student, studentCp, phase, heard, lastMove }, fact) => safe(() => {
+      const text = phaseVerdictLine(fen, student, studentCp, phase, heard, lastMove);
+      if (!text) return null;
+      return fact({ key: text, claims: [], text, proof: NO_PROOF.description, squares: [], stakes: null,
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'phaseVerdictLine',
+    kind: 'stock',
+    phase: ANY,
+    surfaces: LIVE_READ,
+  },
+  opponentIntent: {
+    read: ({ fen, topLines }, fact) => safe(() => {
+      const oi = buildOpponentIntent({ analysis: { topLines }, fen });
+      if (!oi) return null;
+      const text = opponentIntentFacts(oi);
+      if (!text) return null;
+      // The idea the sentence actually names is plan[0] — ITS squares.
+      return fact({ key: text, claims: [], text, proof: NO_PROOF.description, squares: [...(oi.plans[0]?.squares ?? [])], stakes: null,
+        seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'buildOpponentIntent',
+    kind: 'opponent-intent',
+    phase: ANY,
+    surfaces: LIVE_READ,
+  },
+  criticalMoment: {
+    read: ({ fen, topLines, mover, studentToMove, ply, anchor, critical }, fact) => safe(() => {
+      const read = readCriticalMoment({ topLines, moverColor: mover });
+      if (studentToMove) {
+        const text = read ? criticalMomentStatement(read, ply, anchor) : null;
+        if (!text || !read) return null;
+        // The decision is now; missing it costs the gap the fan measured.
+        return fact({ key: text, claims: [], text, proof: NO_PROOF.description, squares: criticalMomentSquares(anchor), stakes: costStakes(read.gapCp),
+          seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+      }
+      // The count is the one computer's, never the tier's.
+      const text = opponentOnlyMoveStatement(read) ?? (critical ? 'This is where the opponent has to find something — the position is sharp for them.' : null);
+      if (!text) return null;
+      return fact({ key: text, claims: [], text, proof: NO_PROOF.description, squares: [], stakes: null,
+        seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'readCriticalMoment',
+    kind: 'key-moment',
+    phase: ANY,
+    surfaces: LIVE_READ,
+  },
+  leansOn: {
+    read: ({ fen, read: l, seat }, fact) => safe(() => {
+      const text = seat === 'student'
+        ? `Your ${l.piece} on ${l.square} does its work because your ${l.leansOn.piece} on ${l.leansOn.square} holds it there — keep that ${l.leansOn.piece} in place.`
+        : `Their ${l.piece} on ${l.square} is their best piece — but it leans on the ${l.leansOn.piece} on ${l.leansOn.square}. Take that away and it's ordinary.`;
+      return fact({ key: text, claims: [], text, proof: NO_PROOF.description, squares: [l.square, l.leansOn.square], stakes: null,
+        seat, namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'computeLeansOn',
+    kind: 'student-leans',
+    phase: ANY,
+    surfaces: LIVE_READ,
+  },
+  strategicPlan: {
+    // Built FROM the engine's move for the student: "The plan here: kick their
+    // knight off a5 with a pawn" is that move, so it names it and carries its
+    // held form — the plan, never the move, a pointer at the next decision.
+    read: ({ fen, bestSan, student }, fact) => safe(() => {
+      const side = student === 'w' ? 'white' as const : 'black' as const;
+      const idea = strategicWhyImperative(fen, bestSan, side);
+      // A plan names where it happens ("the plan here: develop into the game"
+      // in a queenless ending points at nothing on the board).
+      if (!idea || !/\b[a-h][1-8]\b|-file\b|castle/.test(idea)) return null;
+      const text = planHere(idea, strategicReason(fen, bestSan, side));
+      const held = strategicPlanPointer(fen, bestSan, side);
+      const claim = strategicClaims(fen, bestSan, side)[0] ?? null;
+      return fact({ key: claim ?? text, claims: claim ? [claim] : [], text, proof: NO_PROOF.description, squares: strategicSquares(fen, bestSan, side), stakes: null,
+        seat: 'student', namesStudentMove: true, thread: LOCAL_THREAD, fen,
+        ...(held ? { heldForm: { text: held, proof: NO_PROOF.method, squares: [], points: 'no-plan' as const } } : {}) });
+    }),
+    computer: 'strategicReason',
+    kind: 'fundamental',
+    phase: ANY,
+    surfaces: LIVE_READ,
+  },
+  structurePlan: {
+    // SAID ONCE BY ITS PLAN, NOT ITS WORDS, and when the plan changes, said as
+    // a change (`structurePlanEvent`). The key carries the plan's id, its idea
+    // key and its aim (`structurePlanKey`).
+    read: ({ fen, student, heard, said }, fact) => safe(() => {
+      const p = structurePlanFact(fen, student);
+      if (!p) return null;
+      if ((p.ideaKey && said?.has(p.ideaKey)) || (p.aim && said?.has(p.aim))) return null;
+      const event = structurePlanEvent(heard, p);
+      const text = event === 'announce' ? p.text : event === 'changed' ? planChangeSentence(p.text, 'statement') : '';
+      if (!text) return null;
+      return fact({ key: `${p.id}|${p.ideaKey ?? ''}|${p.aim ?? ''}`, claims: [], text, proof: NO_PROOF.description, squares: [...(p.squares ?? [])], stakes: null,
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'structurePlanFact',
+    kind: 'structure-plan',
+    phase: ANY,
+    surfaces: LIVE_READ,
+  },
+  tradeTarget: {
+    read: ({ fen, student, bestLine }, fact) => safe(() => {
+      const t = findTradeTarget(fen, student, bestLine);
+      if (!t) return null;
+      return fact({ key: t.key, claims: [t.key], text: t.text, proof: NO_PROOF.description, squares: t.squares, stakes: null,
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'findTradeTarget',
+    kind: 'trade',
+    phase: ANY,
+    surfaces: LIVE_READ,
+  },
+  tradeRead: {
+    // The trade's move is named, so it is drawn.
+    read: ({ fenBefore, san, student, costCp, priorMove, namesPlayedMove }, fact) => safe(() => {
+      const t = readTrade(fenBefore, san, student, costCp, priorMove, namesPlayedMove);
+      if (!t) return null;
+      return fact({ key: t.key, claims: [], text: t.text, proof: NO_PROOF.description, squares: t.squares, stakes: null,
+        seat: t.moverIsStudent ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore,
+        lines: [{ fen: fenBefore, sans: [san] }] });
+    }),
+    computer: 'readTrade',
+    kind: 'trade',
+    phase: ANY,
+    surfaces: LIVE_READ,
+  },
+  refutedAlt: {
+    read: ({ fenBefore, playedSan, popular, fan, student }, fact) => safe(() => {
+      const r = refutedFromFan({ fenBefore, playedSan, candidates: candidatesFromAmateur(popular), fan, moverWB: student });
+      if (!r) return null;
+      // Its squares on the board it was an alternative ON (the student's pre-move board).
+      const squares = ((): string[] => { try { const m = new Chess(fenBefore).move(r.alt); return [m.from, m.to]; } catch { return []; } })();
+      return fact({ key: r.alt, claims: [], text: r.text, proof: refutedAltProof(fenBefore, r) ?? NO_PROOF.description, squares, stakes: costStakes(r.costCp),
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore });
+    }),
+    computer: 'refutedFromFan',
+    kind: 'common-wrong',
+    phase: ANY,
+    surfaces: LIVE_READ,
+  },
+  trapChance: {
+    // The engine's best move is a pawn move that leaves a piece no safe square,
+    // and its own line takes that piece — the outcome proved, not a mobility
+    // count. The key is the trapping move.
+    read: ({ fen, student, line, priorMove }, fact) => safe(() => {
+      if (!line?.length) return null;
+      const c = new Chess(fen);
+      const mv = c.move({ from: line[0].slice(0, 2), to: line[0].slice(2, 4), promotion: line[0][4] });
+      const hit = mv ? pawnHit(c.fen(), mv) : null;
+      if (!mv || !hit?.trapped || !lineTakesPiece(fen, hit.square, line)) return null;
+      const proof = moverLineProof(fen, line, student, priorMove)?.short ?? null;
+      const NAME: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
+      const text = `${mv.san} traps their ${NAME[hit.type] ?? 'piece'} on ${hit.square} — it has no safe square to run to${proof ? `: ${proof}` : ''}.`;
+      return fact({ key: mv.san, claims: [], text, proof: NO_PROOF.description, squares: [mv.to, hit.square], stakes: { points: MATERIAL_VALUE[hit.type] ?? 3, plies: 3 },
+        seat: 'student', namesStudentMove: true, thread: LOCAL_THREAD, fen, marks: { play: { from: mv.from, to: mv.to } } });
+    }),
+    computer: 'pawnHit',
+    kind: 'latent-chance',
+    phase: ANY,
+    surfaces: LIVE_READ,
+  },
+  setUpChance: {
+    // The full fact names the quiet move; the held form names the tactic and
+    // its targets only — a pointer at the student's next decision, said by the
+    // record (`HeldForm.points`, the motif's own skill).
+    read: ({ fen, read: su }, fact) => safe(() => {
+      const claim = `set-up:${su.motif}:${su.squares.join(',')}`;
+      return fact({ key: claim, claims: [claim], text: setUpClause(su),
+        proof: lineProofFromUci(fen, su.line.slice(0, 2 * Math.max(1, su.depth)), 'you') ?? NO_PROOF.description,
+        // The line names the move, so its square is lit with the targets.
+        squares: [...new Set([su.uci.slice(2, 4), ...su.squares])],
+        stakes: su.kind === 'pin' ? { points: lineTacticPoints(su.targets[0], su.targets[1]), plies: 3 } : { points: Math.min(su.gain, 10), plies: 2 * su.depth },
+        seat: 'student', namesStudentMove: true, thread: LOCAL_THREAD, fen, marks: { play: { from: su.uci.slice(0, 2), to: su.uci.slice(2, 4) } },
+        heldForm: { text: setUpHeldClause(su), proof: NO_PROOF.withheld, squares: su.squares, points: setUpSkill(su) } });
+    }),
+    computer: 'detectSetUpChance',
+    kind: 'latent-chance',
+    phase: ANY,
+    surfaces: LIVE_READ,
+  },
+  mustDefend: {
+    // THE BOARD FACT, NOT THE OUTCOME OR THE ORDER (WO-OUTCOME-01 C): the probe
+    // is a static swap count with no engine line, so it may name the attacker
+    // and the missing guard — never "they win it", never "take it first".
+    // ONE CLAIM, ONE KEY: said once, then once "still" (`looseClaim`).
+    read: ({ fen, student, read: md, studentToMove, studentCp, looseSpells }, fact) => safe(() => {
+      const p = md.pieces[0];
+      if (md.net < 3 || !p) return null;
+      const loose = looseClaim(p.square, plyOfFen(fen), looseSpells);
+      // PROPHYLAXIS FRAMING: winning, the teaching is "don't let them punch back in".
+      const winning = studentToMove && studentCp >= 200;
+      // The answer the board allows, as a fact: their attacker taken for free.
+      const takeable = !!(studentToMove && p.attackerSquare && takingTheAttackerAnswers(fen, p.attackerSquare as Square, student));
+      const hit = `${p.attacker ? `their ${POISON_NAME[p.attacker]}${takeable ? ` on ${p.attackerSquare}` : ''}` : 'they'} ${p.attacker ? 'attacks' : 'attack'} your ${POISON_NAME[p.piece.toLowerCase()]} on ${p.square}${p.defenders === 0 ? ', and nothing defends it' : ''}${takeable ? ' — and you can take the attacker without losing material' : ''}`;
+      const text = loose.still ? `Still — ${hit}.` : winning ? `You're on top, but watch the counterpunch: ${hit}.` : `${openSentence(hit)}.`;
+      return fact({ key: loose.key, claims: [loose.key], text,
+        // Its proof — the count and the capture, the same read Learn's warning speaks.
+        proof: threatProof(fen, student, [p.square]) ?? NO_PROOF.description,
+        squares: takeable && p.attackerSquare ? [p.square, p.attackerSquare] : [p.square],
+        // The null-move probe's own net: taken on their next move.
+        stakes: { points: md.net, plies: studentToMove ? 2 : 1 },
+        seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'computeMustDefend',
+    kind: 'must-defend',
+    phase: ANY,
+    surfaces: LIVE_READ,
+  },
+  liveMethod: {
+    // The key carries the habit (`liveMethodKey`): a habit is said once a game,
+    // under its kind (`HABIT_KIND`), and its stems rotate.
+    read: ({ fen, signals, ply, said }, fact) => safe(() => {
+      const mb = liveMethodBeat(signals, ply, said);
+      if (!mb) return null;
+      return fact({ key: `${mb.habit}|${mb.key}`, claims: [mb.key], text: mb.text, proof: mb.proof ?? NO_PROOF.description, squares: mb.squares, stakes: null,
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'liveMethodBeat',
+    kind: 'method',
+    phase: ANY,
+    surfaces: LIVE_READ,
+  },
+  boardPlans: {
+    read: ({ fen, student, withTrump }, fact) => safe(() => {
+      const pf = boardPlanFacts(fen, student === 'w' ? 'white' : 'black');
+      if (!pf) return null;
+      const out: CoachFact[] = [];
+      const say = (text: string, squares: readonly string[]): void => {
+        out.push(fact({ key: text, claims: [], text, proof: NO_PROOF.description, squares: [...squares], stakes: null,
+          seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen }));
+      };
+      if (withTrump && pf.trump) say(pf.trump, pf.trumpSquares);
+      for (const p of pf.plans) say(p.text, p.squares);
+      const levers = leverSentence(pf.levers);
+      if (levers) say(levers, pf.levers.flatMap((l) => l.squares));
+      return out;
+    }),
+    computer: 'boardPlanFacts',
+    kind: 'structure-plan',
+    phase: ANY,
+    surfaces: LIVE_READ,
+  },
+  positionRead: {
+    // The key carries the observation's kind and its own key (`positionReadKey`).
+    read: ({ fen, student }, fact) => safe(() => readPosition(fen, student === 'w' ? 'white' : 'black').map((o) => fact({
+      key: `${o.kind}|${o.key}`, claims: [], text: o.text, proof: NO_PROOF.description, squares: [...(o.squares ?? [])], stakes: null,
+      seat: o.side, namesStudentMove: false, thread: LOCAL_THREAD, fen }))),
+    computer: 'readPosition',
+    kind: 'structure-plan',
+    phase: ANY,
+    surfaces: LIVE_READ,
+  },
+  exchangeIdeas: {
+    // Each read carries its proof and its say-once claim; the key carries its
+    // kind (`exchangeIdeaKey`: a trade, a defence or a nugget).
+    read: (input, fact) => safe(() => exchangeIdeas(input).map((x) => fact({
+      key: `${x.kind}|${x.claim}`, claims: [x.claim], text: x.text, proof: x.proof, squares: x.squares, stakes: x.stakes ?? null,
+      seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: input.fen }))),
+    computer: 'exchangeIdeas',
+    kind: 'trade-idea',
+    phase: ANY,
+    surfaces: LIVE_READ,
+  },
+  boardConcept: {
+    // A positional lead is the fundamental's and the plan's to say; a rule
+    // with no pieces named is not spoken live. The concept rides as
+    // `boardConceptOf`: its source and id in the key, its short form in
+    // `alsoText`, the line that reaches its board in `lines`.
+    read: ({ fen, student, rating, analysis }, fact) => safe(() => {
+      const lead = conceptForBoard(fen, { analysis, studentSide: student === 'w' ? 'white' : 'black', rating, max: 1 })[0];
+      if (!lead || lead.source === 'positional' || lead.bare) return null;
+      return fact({ key: `${lead.source}|${lead.id}|`, claims: [], text: lead.full, proof: NO_PROOF.description, squares: lead.squares, stakes: null,
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: lead.boardFen ?? fen, alsoText: lead.short,
+        ...(lead.line ? { lines: [{ fen, sans: lead.line }] } : {}) });
+    }),
+    computer: 'conceptForBoard',
+    kind: 'concept',
+    phase: ANY,
+    surfaces: LIVE_READ,
+  },
+  pinPressure: {
+    read: ({ fen, student }, fact) => safe(() => conceptFact(pinPressureConcept(fen, student), fact, fen)),
+    computer: 'pinPressureConcept',
+    kind: 'concept',
+    phase: ANY,
+    surfaces: LIVE_READ,
+  },
+  guardRemoval: {
+    read: ({ fen, student }, fact) => safe(() => conceptFact(guardRemovalConcept(fen, student), fact, fen)),
+    computer: 'guardRemovalConcept',
+    kind: 'concept',
+    phase: ANY,
+    surfaces: LIVE_READ,
+  },
+  deliberation: {
+    // Only a REAL fork is weighed out loud. The held form is the weighing with
+    // the move held back — the rule-outs and their marks, never the held move.
+    read: ({ fen, read: d, said, saysBestLine }, fact) => safe(() => {
+      if (!d.isRealChoice) return null;
+      const text = deliberationFacts(d, said, saysBestLine);
+      if (!text) return null;
+      const marks = deliberationMarks(d, fen, said, fullWeighingSays(d, saysBestLine));
+      const held = deliberationWeighing(d, said);
+      const heldMarks = deliberationMarks(d, fen, said, HELD_WEIGHING_SAYS);
+      // The choice is worth what the tempting alternative would cost.
+      const worst = Math.max(0, ...d.alternatives.map((c) => c.deltaCp));
+      return fact({ key: text, claims: [], text, proof: NO_PROOF.description, squares: marks.squares, stakes: costStakes(worst),
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen, lines: marks.lines,
+        ...(held ? { heldForm: { text: held, proof: NO_PROOF.withheld, squares: heldMarks.squares, lines: heldMarks.lines } } : {}) });
+    }),
+    computer: 'buildDeliberation',
+    kind: 'deliberation',
+    phase: ANY,
+    surfaces: LIVE_READ,
   },
   structureBoard: {
     read: ({ fen, student }, fact) => safe(() => boardStructure(fen, student).map((r) => structureFact(r, fact, fen, 'student'))),
