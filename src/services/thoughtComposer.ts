@@ -136,7 +136,27 @@ export const THOUGHT_REGISTER: Record<ThoughtSurface, ThoughtRegister> = {
 /** The say-once memory a lesson, a review or a game keeps across its moves:
  *  sentence and claim keys already spoken — the story's ledger (`SaidSet`,
  *  a lesson line's or Review's), or a plain set a caller keeps on trial. */
-export interface ThoughtMemory { keys: SaidSet }
+export interface ThoughtMemory {
+  keys: SaidSet;
+  /** WHAT THE SURFACE'S OTHER LINES ALREADY SAY ON THIS MOVE (one idea said
+   *  once): Review's facets teach a principle, a threat, a trade or the move's
+   *  job through their own lines; the composer holds the same idea here as
+   *  already said, and the hold is recorded (never a surface filter). */
+  alsoSaid?: AlsoSaid;
+}
+
+/** The ideas, sources and source-ideas another line on this move already says. */
+export interface AlsoSaid {
+  ideas: ReadonlySet<string>;
+  sources: ReadonlySet<string>;
+  sourceIdeas: ReadonlyArray<{ source: string; ideas: ReadonlySet<string> }>;
+}
+
+/** Does another line on this move already say this fact's idea? */
+export function saidElsewhere(f: Pick<ThoughtFact, 'idea' | 'source'>, a: AlsoSaid | undefined): boolean {
+  if (!a) return false;
+  return a.ideas.has(f.idea) || a.sources.has(f.source) || a.sourceIdeas.some((x) => x.source === f.source && x.ideas.has(f.idea));
+}
 
 export interface ComposedThought {
   /** The thought, ready to speak. '' when nothing earned a word. */
@@ -469,7 +489,7 @@ export function composeThought(
     if (!reg.steps.has(f.step)) { held.push({ fact: f, why: 'step-not-asked' }); continue; }
     // ALREADY SAID in this lesson, review or game: it never takes a step's
     // lead, so the next fact of the step can say something new.
-    if (memory && f.claims.some((c) => memory.keys.has(claimKey(c)))) { held.push({ fact: f, why: 'already-said' }); continue; }
+    if (memory && (f.claims.some((c) => memory.keys.has(claimKey(c))) || saidElsewhere(f, memory.alsoSaid))) { held.push({ fact: f, why: 'already-said' }); continue; }
     // ONE IDEA IS SAID ONCE, by the computer that leads it: "keeps their bishop
     // off g4" and "takes the g4 square away from their bishop" are one idea.
     if (picked.some((p) => p.step === f.step && sameIdea(p, f))) { held.push({ fact: f, why: 'same-idea' }); continue; }

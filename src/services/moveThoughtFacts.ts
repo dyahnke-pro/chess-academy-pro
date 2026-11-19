@@ -707,7 +707,10 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
           const playedCp = i.reads?.after[0] ? i.reads.after[0].evaluation * (mover === 'w' ? 1 : -1) : null;
           if (lines.length) board.push(...readBoardAll('tensionReleased', { fenBefore: i.fenBefore, san: i.san, lines, playedCp: i.reads?.after[0]?.mate == null ? playedCp : null, reply: i.line?.[0] ?? null, student }).map((f) => ({ f, idea: 'trade' as IdeaKind, weight: 60 })));
         }
-        if (i.reads?.after.length) {
+        // The tension to keep is read on the board the STUDENT moves on next
+        // (after their move): on the opponent's turn the release read says it
+        // when they take, so the prediction would only say it twice.
+        if (!mine && i.reads?.after.length) {
           const lines = i.reads.after.map((l) => ({ moves: l.moves, cp: l.evaluation, mate: l.mate ?? null }));
           board.push(...readBoardAll('tensionKept', { fen: after, lines, student }).map((f) => ({ f, idea: 'trade' as IdeaKind, weight: 54 })));
         }

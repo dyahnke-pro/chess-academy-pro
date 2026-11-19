@@ -90,6 +90,7 @@ import { flexibleMove, flexibleMoveLine, flexibleMoveSquares } from './flexibleM
 import { exchangeSacrifice, exchangeSacrificeLine, exchangeSacrificeSquares } from './exchangeSacrifice';
 import { pawnMajority, pawnMajorityLine, pawnMajoritySquares } from './pawnMajority';
 import { pawnCentre } from './pawnCentre';
+import { phaseOfFen } from './boardConcepts';
 import { tensionKept, tensionReleased, type TensionLine } from './tensionRelease';
 import { inaccessibleHole } from './inaccessibleHole';
 import { harmlessWeakPawns } from './harmlessWeakPawns';
@@ -1260,6 +1261,9 @@ const ANY: ReadonlySet<GamePhase | 'any'> = new Set<GamePhase | 'any'>(['any']);
 /** The opening and the middlegame: about the opening, the book or castling,
  *  with nothing to say in an ending (Learn's door held these lanes there). */
 const NOT_ENDING: ReadonlySet<GamePhase | 'any'> = new Set<GamePhase>(['opening', 'middlegame']);
+/** The middlegame only: a judgement the opening's book can contradict (a
+ *  capture the book plays is no tension released too early). */
+const MIDDLEGAME: ReadonlySet<GamePhase | 'any'> = new Set<GamePhase>(['middlegame']);
 
 const LEARN = { wired: 'components/Coach/CoachTeachPage.tsx' } as const;
 const REVIEW = { wired: 'services/reviewFullData.ts' } as const;
@@ -7015,7 +7019,7 @@ export const BOARD_COMPUTERS = {
     }),
     computer: 'tensionKept',
     kind: 'trade-idea',
-    phase: NOT_ENDING,
+    phase: MIDDLEGAME,
     surfaces: {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, review: { not: 'Review keeps one line after the move: the per-capture lines this reads on the board before it are never stored' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
       learn: LEARN_VIA_THOUGHT,
@@ -7034,7 +7038,7 @@ export const BOARD_COMPUTERS = {
     }),
     computer: 'tensionReleased',
     kind: 'trade-idea',
-    phase: NOT_ENDING,
+    phase: MIDDLEGAME,
     surfaces: {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
       learn: LEARN_VIA_THOUGHT,
@@ -7059,10 +7063,14 @@ function boardOf(ctx: object): string | null {
 /** Is the board outside the computer's phases? An ending is the one phase a
  *  computer can be out of today (`isEndgameByMaterial`, the one definition). */
 function outOfPhase(phase: ReadonlySet<GamePhase | 'any'>, ctx: object): boolean {
-  if (phase.has('any') || phase.has('endgame')) return false;
+  if (phase.has('any')) return false;
   const fen = boardOf(ctx);
   if (!fen) return false;
-  try { return isEndgameByMaterial(fen); } catch { return false; }
+  try {
+    // The opening, read off the board (`phaseOfFen`), for a computer the book can contradict.
+    if (!phase.has('opening') && phaseOfFen(fen) === 'opening') return true;
+    return !phase.has('endgame') && isEndgameByMaterial(fen);
+  } catch { return false; }
 }
 
 /** The plan thread's adopt step (its state is the game's story's). */
