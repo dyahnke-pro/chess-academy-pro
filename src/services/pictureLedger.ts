@@ -198,7 +198,8 @@ export type WeakTrait =
   | 'isolated' | 'doubled' | 'backward' | 'open-file' | 'outnumbered'
   | 'no-safe-square' | 'loose'
   | 'king-centre' | 'king-file'
-  | 'hole';
+  | 'hole'
+  | 'piece-guarded';
 export type AssetTrait = 'passed' | 'outpost' | 'open-file';
 
 function pawnGuarded(g: Grid, s: Square, c: Color): boolean { return pawnHits(g, s, c).length > 0; }
@@ -259,6 +260,53 @@ function weakKingTraits(g: Grid, s: Square, c: Color): WeakTrait[] {
   return t;
 }
 
+/** A pawn guarded only by PIECES: no pawn of its own guards it now or can by
+ *  one push, and an enemy pawn levers it now or after one push of its own —
+ *  the piece holding it is tied down ("c5 is held only by the knight, and
+ *  b4 hits it"). The pawn, the pieces tied to it, and the lever moves. */
+export interface TiedGuard {
+  guards: Array<{ square: Square; piece: PieceSymbol }>;
+  levers: Array<{ from: Square; to: Square; san: string }>;
+}
+
+/** Can a pawn of `c` guard `s` by one push (single, or double from home)? */
+function pawnGuardsSoon(g: Grid, s: Square, c: Color): boolean {
+  for (const x of [fileOf(s) - 1, fileOf(s) + 1]) {
+    const gs = sq(x, rankOf(s) - fwd(c));
+    if (!gs || g.has(gs)) continue;
+    const one = sq(x, rankOf(gs) - fwd(c));
+    const u1 = one ? g.get(one) : undefined;
+    if (u1 && u1.type === 'p' && u1.color === c) return true;
+    if (one && !u1) {
+      const two = sq(x, rankOf(gs) - 2 * fwd(c));
+      const u2 = two ? g.get(two) : undefined;
+      if (two && u2 && u2.type === 'p' && u2.color === c && rankOf(two) === (c === 'w' ? 2 : 7)) return true;
+    }
+  }
+  return false;
+}
+
+function tiedGuardOf(fen: string, g: Grid, s: Square, c: Color): TiedGuard | null {
+  if (pawnGuarded(g, s, c) || pawnGuardsSoon(g, s, c)) return null;
+  const guards = unitsOf(g, c)
+    .filter(([from, u]) => u.type !== 'p' && hits(g, u, from, s, []))
+    .map(([square, u]) => ({ square, piece: u.type }));
+  if (guards.length === 0) return null;
+  const them = other(c);
+  const board = sideToMoveAs(fen, them);
+  let legal: Array<{ from: string; to: string; san: string }> | null = null;
+  if (board) { try { legal = new Chess(board).moves({ verbose: true }).filter((m) => m.piece === 'p'); } catch { legal = null; } }
+  const levers: TiedGuard['levers'] = [];
+  for (const l of leversOn(g, s, them)) {
+    const to = l.at === l.from ? s : l.at;
+    const m = legal?.find((x) => x.from === l.from && x.to === to);
+    if (legal && !m) continue;
+    levers.push({ from: l.from, to, san: m?.san ?? `${l.from}-${to}` });
+  }
+  if (levers.length === 0) return null;
+  return { guards, levers };
+}
+
 /** An empty square in `c`'s half that no pawn of `c` can ever guard. */
 function isHoleOf(g: Grid, s: Square, c: Color): boolean {
   const r = rankOf(s);
@@ -316,6 +364,9 @@ export interface LedgerEntry {
   factIds: string[];
   /** A weakness only: who can get at it. */
   access?: Access;
+  /** A pawn held only by pieces, with a lever on it: the pieces tied down and
+   *  the lever moves (`TiedGuard`). */
+  tied?: TiedGuard;
   /** An asset only: a passer whose next square is free, a piece on its
    *  outpost, a rook on its file — doing its job now. */
   working?: boolean;
@@ -393,9 +444,11 @@ export function ledgerOf(pic: PositionPicture, fen: string): Ledger | null {
       continue;
     }
     const weak = unit.type === 'p' ? weakPawnTraits(g, s, unit.color) : unit.type === 'k' ? weakKingTraits(g, s, unit.color) : weakPieceTraits(g, s, unit);
+    const tied = unit.type === 'p' ? tiedGuardOf(fen, g, s, unit.color) : null;
+    if (tied) weak.push('piece-guarded');
     if (weak.length > 0) {
       const access = accessOf(g, s, unit.color, false);
-      const e: LedgerEntry = { side: unit.color, kind: 'weakness', object, square: s, piece: unit.type, traits: weak, factIds, access };
+      const e: LedgerEntry = { side: unit.color, kind: 'weakness', object, square: s, piece: unit.type, traits: weak, factIds, access, ...(tied ? { tied } : {}) };
       (reachable(access) ? out[unit.color].weaknesses : out[unit.color].unreached).push(e);
       continue;
     }
@@ -923,6 +976,7 @@ function weakPhrase(e: LedgerEntry): string {
   if (e.traits.includes('isolated')) return `the isolated pawn on ${e.square}`;
   if (e.traits.includes('backward')) return `the backward pawn on ${e.square}`;
   if (e.traits.includes('doubled')) return `the doubled pawn on ${e.square}`;
+  if (e.tied) return `${name}, held only by ${andList(e.tied.guards.map((x) => `the ${NAME[x.piece]} on ${x.square}`))}`;
   return name;
 }
 

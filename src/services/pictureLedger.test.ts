@@ -266,3 +266,55 @@ describe('the piece counterplay', () => {
     expect(counterplayOf(buildPicture([]), fen, lines, 'w')).toBeNull();
   });
 });
+
+// Fischer–Spassky, Reykjavik 1972 (game 6), before 18.Nd4: Black's hanging
+// pawns. "Black already has to concentrate most of his forces to keep his
+// center intact" — c5 is held by the rook, the knight and the queen, no pawn of
+// Black's can guard it (b7 and d6 are empty, nothing to push there), and White's
+// b-pawn levers it with b4.
+const HANGING: Board = {
+  id: 'bobbys-overlooked-gem#1',
+  fen: '2r3k1/r2nqpp1/p3b2p/2pp4/8/Q3PN2/PP2BPPP/2R2RK1 w - - 0 18',
+  lines: [
+    { moves: ['f3d4', 'a6a5', 'd4e6', 'f7e6', 'e3e4', 'd7f6', 'e4d5', 'e6d5', 'e2d3', 'c5c4'], cp: 37, mate: null },
+    { moves: ['f1d1', 'e7f8', 'b2b3', 'a6a5', 'e2b5', 'f8d6', 'f3d4', 'd6b6', 'c1c2'], cp: 15, mate: null },
+    { moves: ['h2h3', 'd7f6', 'f1d1', 'a6a5', 'c1c2', 'a5a4', 'd1c1', 'c5c4', 'a3e7', 'a7e7'], cp: 12, mate: null },
+  ],
+};
+
+describe('a pawn held only by pieces, with a lever on it', () => {
+  it('Fischer–Spassky 1972: c5 is held only by the rook, knight and queen, and b4 levers it — the target', () => {
+    const facts = factsOn(HANGING);
+    const c = pictureConclusions(facts, HANGING.fen, HANGING.lines);
+    const c5 = c?.ledger.b.weaknesses.find((e) => e.object === 'bP@c5');
+    expect(c5?.traits).toContain('piece-guarded');
+    expect(c5?.tied?.guards.map((x) => `${x.piece}${x.square}`).sort()).toEqual(['nd7', 'qe7', 'rc8']);
+    expect(c5?.tied?.levers).toEqual([{ from: 'b2', to: 'b4', san: 'b4' }]);
+    expect(restsOnFacts(facts, c5?.factIds ?? [], 'bP@c5')).toBe(true);
+    // It feeds the target like any weakness: the lever is one of its attackers.
+    const t = c ? targetOf(c.ledger, 'w') : null;
+    const cand = t?.candidates.find((x) => x.entry.object === 'bP@c5');
+    expect(cand?.levers).toBe(1);
+    expect(cand?.entry.tied).toBeDefined();
+  }, 30_000);
+
+  it('negative control: a pawn that can guard it by one push (…b6) — not tied down', () => {
+    const fen = '2r3k1/rp1nqpp1/p3b2p/2pp4/8/Q3PN2/PP2BPPP/2R2RK1 w - - 0 18';
+    const c = pictureConclusions(factsOn({ ...HANGING, fen }), fen, HANGING.lines);
+    const all = c ? [...c.ledger.b.weaknesses, ...c.ledger.b.unreached] : [];
+    const c5 = all.find((e) => e.object === 'bP@c5');
+    expect(c5).toBeDefined();
+    expect(c5?.traits).not.toContain('piece-guarded');
+    expect(c5?.tied).toBeUndefined();
+  }, 30_000);
+
+  it('negative control: no lever can reach it — not an accessible weakness of this kind', () => {
+    const fen = '2r3k1/r2nqpp1/p3b2p/2pp4/8/Q3PN2/P3BPPP/2R2RK1 w - - 0 18';
+    const c = pictureConclusions(factsOn({ ...HANGING, fen }), fen, HANGING.lines);
+    const all = c ? [...c.ledger.b.weaknesses, ...c.ledger.b.unreached] : [];
+    const c5 = all.find((e) => e.object === 'bP@c5');
+    expect(c5).toBeDefined();
+    expect(c5?.traits).not.toContain('piece-guarded');
+    expect(c5?.tied).toBeUndefined();
+  }, 30_000);
+});
