@@ -81,6 +81,10 @@ function pieceReach(fen: string, san: string, board: Chess, side: Color): Map<st
   parts[1] = side; parts[3] = '-';
   let turned: Chess;
   try { turned = new Chess(parts.join(' ')); } catch { return out; }
+  // A side in check moves only to answer it: its reach then measures the
+  // check, not the piece (the better move checks, and their queen "reaches
+  // 19 more squares" after the played one).
+  if (turned.inCheck()) return out;
   const start = new Chess(fen);
   for (const row of start.board()) for (const p of row) {
     if (!p || p.color !== side || p.type === 'p' || p.type === 'k') continue;

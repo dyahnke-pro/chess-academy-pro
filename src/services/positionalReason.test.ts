@@ -60,3 +60,10 @@ describe('boardReason names its piece', () => {
       .toBe('The better move puts your rook on the half-open e-file.');
   });
 });
+
+describe('boardReason never reads a check as a freed piece', () => {
+  it('the tactical detector #0: the better move checks — no "frees their queen"', () => {
+    const n = boardReason('3Q1bk1/pp5p/r3b1p1/8/4Nq2/5P2/PP6/K2RR3 w - - 0 30', 'Nd6', 'Qxf8+', 'middlegame')?.note ?? '';
+    expect(n).not.toMatch(/frees their queen/);
+  });
+});

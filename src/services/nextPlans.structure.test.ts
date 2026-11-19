@@ -97,3 +97,9 @@ describe('the weak-pawn plan never sends a rook down a file its own pawn shuts',
     expect(p?.text).toMatch(/put your rook on its file/);
   });
 });
+
+describe('passerTrumpSentence — a stopped passer is no trump', () => {
+  it('the double attack #2: d5 with d4 theirs', () => {
+    expect(passerTrumpSentence('r1b2rk1/pp4pp/3b4/3p2q1/8/1P1Q1P2/PB1N2PP/R3R2K b - - 0 18', 'd5', true)).toBeNull();
+  });
+});

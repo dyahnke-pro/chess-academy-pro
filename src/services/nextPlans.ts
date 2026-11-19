@@ -760,6 +760,10 @@ export function passerTrumpSentence(fen: string, square: string, own: boolean): 
         ? `Your passed pawn on ${square} is ${n} from queening${aside} — every move counts now.`
         : `Their passed pawn on ${square} is ${n} from queening${aside}. Put ${chess.board().flat().some((c) => !!c && c.type !== 'p' && c.type !== 'k' && c.color !== pawn.color) ? 'a piece' : 'your king'} in front of it before it runs.`;
     }
+    // A passer whose next square they win is said by the structure plan
+    // ("it needs guarding, not pushing"), never as a trump (Danya, the double
+    // attack #2: d5 "is very weak … a target even when defended").
+    if (own && passerStopper(fen, square, pawn.color)) return null;
     if (race?.kind === 'passer-race') {
       if (!own) return null;
       const raceText = planRaceClause(fen, student, 'live');
