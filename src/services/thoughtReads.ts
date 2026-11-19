@@ -238,6 +238,8 @@ export function replyAnswers(fen: string, line: readonly string[] | null, aim: T
  *  speaker's seat (`buildReviewMoveTeachingFact`). Its develop reading is its
  *  last resort ("the knight develops to d2, joining the game"): the move read
  *  back, said only when nothing else is. */
+/** A check's board-teacher line ("forces the king to react") is true of every
+ *  check: it restates the move (checkAnswers, the briefing's bare check). */
 export function boardTeacherThought(make: (p: ThoughtParts) => CoachFact, w: MoveWords, phrases: PhraseMemory | null): CoachFact | null {
   const t = buildReviewMoveTeachingFact(w.fenBefore, w.san, w.moverIsStudent !== false, phrases);
   if (!t) return null;
@@ -245,7 +247,7 @@ export function boardTeacherThought(make: (p: ThoughtParts) => CoachFact, w: Mov
   return moveIdeaFact(make, w, {
     kind: 'board-teacher', idea: t.idea, weight: 50,
     text: unnamed(w) ? moveGerund(w, toClause(t.text)) : joinReview([toClause(t.text)], w.moverIsStudent, w.san, w.tense),
-    alsoText: subjectLed ? t.text : `It also ${continueSentence(t.text)}`, squares: t.squares, restates: t.idea === 'develop' || t.restates === true,
+    alsoText: subjectLed ? t.text : `It also ${continueSentence(t.text)}`, squares: t.squares, restates: t.idea === 'develop' || t.idea === 'check' || t.restates === true,
   });
 }
 

@@ -27,7 +27,7 @@
 // fire-rate script `scripts/danya/fire-rates.ts`.
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { noPawnCanChallenge } from './outpost';
-import { andList } from '../utils/andList';
+import { andList, countWord } from '../utils/andList';
 
 /** A hole their minor pieces need at least this many moves to reach is not a weakness yet. */
 export const INACCESSIBLE_MOVES = 4;
@@ -143,12 +143,14 @@ export function inaccessibleHole(fenBefore: string, san: string, student: Color)
       const whose = mine ? 'your' : 'their';
       const foe = mine ? 'their' : 'your';
       const reachText = best === null
-        ? `none of ${foe} knights or bishops has a road there through the squares open now`
-        : `${foe} nearest knight or bishop needs ${best} moves to get there`;
+        ? `no knight or bishop of ${foe === 'their' ? 'theirs' : 'yours'} can reach it yet`
+        : `${foe} nearest knight or bishop is ${countWord(best)} moves away`;
       const stopText = stops.length
         ? `. In return it stops ${andList(stops.map((s) => `${foe} ${s.pawn[0]}-pawn reaching ${s.to}`))}`
         : '';
-      const text = `${mine ? 'Your' : 'Their'} pawn move leaves a weak square on ${hole} in ${whose} camp, but ${reachText}, so the weakness does not matter yet${stopText}.`;
+      // One sentence (a say-once that kept half would leave a bare weakness):
+      // the square, and why it does not matter yet.
+      const text = `${mine ? 'Your' : 'Their'} pawn move leaves a weak square on ${hole} in ${whose} camp, but ${reachText}, so it does not matter${stopText}.`;
       return { hole, moves: best, stops, text, squares: [hole, m.to, ...stops.map((s) => s.to)] };
     }
   }

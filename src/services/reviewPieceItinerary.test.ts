@@ -25,7 +25,8 @@ describe('detectPieceItineraries — the REAL reroute from the game (G3)', () =>
     expect(vals.length).toBe(1);
     expect(vals[0].pieceType).toBe('n');
     expect(vals[0].route).toEqual(['g1', 'f3', 'd2', 'c4']);
-    expect(vals[0].text).toMatch(/f3–d2–c4/);
+    expect(vals[0].route.slice(-3)).toEqual(['f3', 'd2', 'c4']);
+    expect(vals[0].text).toMatch(/by way of d2, it reaches c4/);
     expect(vals[0].text).toMatch(/journey|reroute/i);
   });
 
@@ -72,7 +73,7 @@ describe('the itinerary in the one basket (unification)', () => {
       if (f && f.seat === 'opponent') theirs ??= f;
     }
     expect(mine?.text).toMatch(/knight/);
-    expect(theirs?.text).toMatch(/^Their knight has gone/);
+    expect(theirs?.text).toMatch(/^Their knight came to /);
   }, 60_000);
   it('a board with no game behind it has no itinerary', async () => {
     const { readBoard } = await import('./boardComputers');

@@ -96,14 +96,16 @@ export function detectPieceItineraries(
       && !emittedRoutes.has(key)
     ) {
       emittedRoutes.add(key);
-      // Narrate the meaningful tail (last 3 squares) so a long journey reads tight.
-      const shown = route.squares.slice(-3);
+      // The journey said the way a person says it — where it went and the
+      // stop on the way ("by way of g3"), never the squares in a row; the
+      // board draws the whole route.
+      const via = route.squares[route.squares.length - 2];
       const label = PIECE_LABEL[route.pieceType];
       found.push({
         ply,
         pieceType: route.pieceType,
         route: route.squares.slice(),
-        text: `Follow the ${label}'s journey — ${shown.join('–')}. It reroutes to ${mv.to} instead of settling for its first square, and that patience is the whole idea.`,
+        text: `Follow the ${label}'s journey: by way of ${via}, it reaches ${mv.to}. It reroutes instead of settling for its first square, and that patience is the whole idea.`,
       });
     }
   }
@@ -130,10 +132,10 @@ export function itineraryAt(fenBefore: string, history: readonly string[], san: 
 
 /** The itinerary said from the speaker's seat. */
 export function itineraryLine(it: PieceItinerary, mine: boolean): string {
-  const shown = it.route.slice(-3);
   const label = PIECE_LABEL[it.pieceType];
   const to = it.route[it.route.length - 1];
+  const via = it.route[it.route.length - 2];
   return mine
     ? it.text
-    : `Their ${label} has gone ${shown.join('–')}. It took the long road to ${to} instead of settling for its first square.`;
+    : `Their ${label} came to ${to} by way of ${via}. It took the long road instead of settling for its first square.`;
 }

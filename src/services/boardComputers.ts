@@ -4133,7 +4133,7 @@ export const BOARD_COMPUTERS = {
       // A count that says the piece has to move is the tempo the move that
       // attacked it gained: one claim (`ideaClaim('tempo')`), said once
       // (composerSaysOnce, g4 against the bishop on f5).
-      return fact({ key: `count:${text}`, claims: [`count:${fen.split(' ')[0]}`, ...(read.tempo ? [ideaClaim('tempo', [read.square])] : [])], text, proof: NO_PROOF.description, squares: [read.square], stakes: null,
+      return fact({ key: `count:${text}`, claims: [`count:${fen.split(' ')[0]}`, ...(read.tempo ? [ideaClaim('tempo', [read.square])] : [])], text, proof: NO_PROOF.description, squares: [], stakes: null,
         seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
     }),
     computer: 'attackerDefenderCount',
@@ -6910,7 +6910,9 @@ export const BOARD_COMPUTERS = {
       const n = noSafeChecks(fen, student);
       if (!n) return null;
       const side = n.side;
-      const key = `no-safe-checks:${fen.split(' ')[0]}`;
+      // Said once a game for each side: the next board where it still holds
+      // is the same lesson again (colle800 Bh6, then Bf6).
+      const key = `no-safe-checks:${side}`;
       return fact({ key, claims: [key], text: n.text, proof: NO_PROOF.description, squares: [...n.squares], stakes: null,
         seat: side === student ? 'opponent' : 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen,
         // Both ways: their safe checks are a threat the student's move answers or ignores.
