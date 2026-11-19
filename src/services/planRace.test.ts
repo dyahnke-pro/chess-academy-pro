@@ -214,3 +214,13 @@ describe('a storm reaches the king only at its own pawns (OS-11 g2, Najdorf Engl
     expect(r?.kind === 'storm-race' ? { theirPawn: r.theirPawn, theirPushes: r.theirPushes } : null).toEqual({ theirPawn: 'f3', theirPushes: 3 });
   });
 });
+
+describe('a race needs pawns to race with (readers\' flags 2026-11-19)', () => {
+  it('no race with one pawn on the other king\'s wing — a piece attack is not a pawn race', () => {
+    // queen-the-supporting-actress#2 shape: White Kc1 with only f3 on the kingside.
+    expect(oppositeWingsRace('r4rk1/pp3pp1/2p4p/8/8/5P2/PPPQ4/2KR3R w - - 0 1', 'w', 'live')).toBeNull();
+  });
+  it('NEGATIVE CONTROL: two pawns each side still race', () => {
+    expect(oppositeWingsRace('r4rk1/pp3pp1/2p4p/8/8/5PP1/PPPQ4/2KR3R w - - 0 1', 'w', 'live')?.text).toMatch(/race/);
+  });
+});

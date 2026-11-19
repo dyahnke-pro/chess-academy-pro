@@ -14,7 +14,8 @@ describe('buildMiddlegameOrientation (§1 anchor + §2 both-sides plans)', () =>
   it('one plan per side: the race is the plan, a majority on the other wing is not said (unity U5, walk #24)', () => {
     // White Kc1, Black Kg8: White storms the kingside; White's queenside
     // majority sits on White's OWN king's wing and is not a second plan.
-    const fen = 'r2qr1k1/p1n2ppp/1b6/8/8/1B6/PPPN1PPP/2KRQ2R w - - 0 1';
+    // (Black owns two queenside pawns: a race needs pawns on both sides.)
+    const fen = 'r2qr1k1/ppn2ppp/1b6/8/8/1B6/PPPN1PPP/2KRQ2R w - - 0 1';
     const beat = buildMiddlegameOrientation(fen, 'w');
     expect(beat).not.toBeNull();
     expect(beat!.text).toMatch(/race/i);

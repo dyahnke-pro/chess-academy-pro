@@ -222,13 +222,12 @@ export function buildMiddlegameOrientation(
   // A PAWN RACE NEEDS PAWNS TO RACE WITH, AND A MIDDLEGAME TO RACE IN (review
   // walk 900, 2026-09-26: "The kings castled on opposite wings — this is a
   // race" with neither king castled, queens and rooks hunting a bare king, and
-  // one a-pawn to "throw" at it). Kings on opposite wings is a storm only when
-  // the storming side still owns two pawns on the enemy king's wing.
+  // one a-pawn to "throw" at it). The pawns to race with are the race's own
+  // owner's to count (`oppositeWingsRace`).
   const enemyKingWingNow = struct.kings.kingWing[enemyWB] === 'queenside' ? 'queenside' : 'kingside';
   const oppositeCastling =
     oppositeWingsRace(fen, studentColorWB, 'review') !== null &&
-    phaseOfFen(fen) === 'middlegame' &&
-    counts[studentColorWB][enemyKingWingNow] >= 2;
+    phaseOfFen(fen) === 'middlegame';
   if (oppositeCastling && seat !== 'opponent') {
     const enemyKingWing = enemyKingWingNow;
     const myKingWing = struct.kings.kingWing[studentColorWB] === 'queenside' ? 'queenside' : 'kingside';

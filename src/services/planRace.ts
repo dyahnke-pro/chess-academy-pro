@@ -544,6 +544,12 @@ export interface OppositeWingsRace {
   proof: Proof;
 }
 
+/** How many pawns `color` owns on `wing` (the a–c files, or f–h). */
+function stormPawns(chess: Chess, color: Color, wing: 'kingside' | 'queenside'): number {
+  const files = wing === 'kingside' ? 'fgh' : 'abc';
+  return chess.board().flat().filter((p) => p?.type === 'p' && p.color === color && files.includes(p.square[0])).length;
+}
+
 /** Kings castled on opposite wings with queens on: the race, and its count. */
 export function oppositeWingsRace(fen: string, studentColor: Color, register: RaceRegister): OppositeWingsRace | null {
   const s = describeStructure(fen);
@@ -554,6 +560,11 @@ export function oppositeWingsRace(fen: string, studentColor: Color, register: Ra
   if (!myWing || !theirWing || myWing === theirWing) return null;
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
+  // A RACE NEEDS PAWNS TO RACE WITH (readers' flags 2026-11-19, 14 boards:
+  // "your pawns go after their king" with one pawn, or none, on that wing —
+  // a piece attack, a mate). The claim says both sides' pawns go after the
+  // other king, so each side owns two pawns on the other king's wing.
+  if (stormPawns(chess, studentColor, theirWing) < 2 || stormPawns(chess, opp, myWing) < 2) return null;
   const storm = detectStormRace(chess, studentColor);
   const past = register === 'review';
   const kings = [s.kings.kingSquare[studentColor], s.kings.kingSquare[opp]];
