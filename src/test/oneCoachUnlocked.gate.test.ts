@@ -54,11 +54,15 @@ const LOCK_CEILING: Record<Exclude<CoachSurface, 'weaknesses'>, number> = {
  *  and Review's walk read the core; a lesson and chat add the lesson's board
  *  reads, the student-move bundle and the purpose; a thinking step adds its
  *  step board reads. */
+const MOVE_READS = ['kingWalkReads', 'weighedReads', 'knownSlipReads'] as const;
 const REACH: Partial<Record<CoachSurface, readonly string[]>> = {
-  learn: ['moveThoughtFacts'], play: ['moveThoughtFacts'], tactics: ['moveThoughtFacts'], review: ['moveThoughtFacts'],
-  lesson: ['moveThoughtFacts', 'LESSON_MOVE_READS', 'studentMoveFacts', 'purposeFact'],
-  chat: ['moveThoughtFacts', 'LESSON_MOVE_READS', 'studentMoveFacts', 'purposeFact'],
-  think: ['moveThoughtFacts', 'studentMoveFacts', 'STEP_BOARD_READS'],
+  learn: ['moveThoughtFacts', ...MOVE_READS], play: ['moveThoughtFacts', ...MOVE_READS], tactics: ['moveThoughtFacts', ...MOVE_READS],
+  // Review reads the move's board reads in its facet builder (reviewFullData
+  // calls the same three functions), the rest through the core.
+  review: ['moveThoughtFacts', ...MOVE_READS],
+  lesson: ['moveThoughtFacts', 'LESSON_MOVE_READS', 'studentMoveFacts', 'purposeFact', ...MOVE_READS],
+  chat: ['moveThoughtFacts', 'LESSON_MOVE_READS', 'studentMoveFacts', 'purposeFact', ...MOVE_READS],
+  think: ['moveThoughtFacts', 'studentMoveFacts', 'STEP_BOARD_READS', ...MOVE_READS],
 };
 
 function bodyOf(src: string, name: string): string {
@@ -106,11 +110,8 @@ const FILTER_DEBT: Record<string, ReadonlyArray<{ clause: string; why: string }>
     { clause: 'REVIEW_OWNS_IDEA.has(f.idea)', why: 'OWED: as above' },
     { clause: 'ruleIdeas.has(f.idea)', why: 'OWED: an idea Review\'s facets already said on the ply (one idea said once)' },
     { clause: "f.computer !== 'theirTarget'", why: 'OWED: Review\'s [threat] facet says what their move aims at' },
-    { clause: "f.source !== 'kingWalk'", why: 'OWED: Review\'s facets read the king walk' },
     { clause: "f.source === 'openingTheory'", why: 'OWED: Review\'s opening lines say the equivalence' },
     { clause: "f.computer !== 'openingStoryAt'", why: 'OWED: Review\'s own story lines' },
-    { clause: "f.source !== 'knownSlip'", why: 'OWED: reviewFullData\'s facet builder reads the known slips' },
-    { clause: "f.source !== 'weighed'", why: 'OWED: Review\'s facets read the weighed moves' },
     { clause: "f.source !== 'teachingMove'", why: 'OWED: Review\'s facets read the teaching-move computers' },
     { clause: "f.source !== 'pieceRoute'", why: 'GENUINE (tense): a trip is a plan forward; in a finished game the moves that followed were answers to the board — hindsight' },
   ],

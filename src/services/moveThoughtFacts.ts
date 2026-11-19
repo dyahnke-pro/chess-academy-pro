@@ -14,7 +14,7 @@ import { type PrevCaptureContext } from './captureRun';
 import { type PhraseMemory } from '../utils/phraseMemory';
 import { NO_PROOF, squaresProof, lineProof } from './proof';
 import type { DecisiveReason } from './decisiveReason';
-import { knownSlipIndexNow, knownSlipsAt } from './knownSlips';
+import { knownSlipIndexNow, knownSlipsAt, type KnownSlipIndex } from './knownSlips';
 import { lineSeatAt } from '../utils/andList';
 import { newLessonVoice } from './reviewMoveBriefing';
 import { type IdeaKind } from './ideaKind';
@@ -29,7 +29,8 @@ import { moverCp, seatCp, wcGap } from './winChance';
 import { playedUci } from './planSteps';
 import { counterThreatTeaching, planChoiceTeaching, studentMoveTeaching } from './learnBoardTeaching';
 import type { LearnLane } from './learnTurnDoor';
-import { readBoard, readBoardAll, readKey } from './boardComputers';
+import { readBoard, readBoardAll, readKey, type BoardFact } from './boardComputers';
+import { writerFor } from './writerRegister';
 import { closeSentence as close, deepTag, thoughtKey, type MoveWords } from './thoughtReads';
 import { pvLineFromUci } from './pvPlayback';
 /** A SAN line from a board, as UCI (moves it cannot play end it). */
@@ -86,6 +87,10 @@ export interface MoveThoughtInput {
    *  answer). Review says its story through its own lines and answers false,
    *  so it does not pay ~45 ms a move for facts it drops. */
   story: boolean;
+  /** REQUIRED: does the thought carry the move's board reads (the king walk,
+   *  the moves weighed, the known slips — `WriterSettings.moveReads`)? Review
+   *  reads them in its facet builder and says them through its decider. */
+  moveReads: boolean;
   history: readonly string[];
   /** The lesson's phrase memory (an idea said in full once, then referred to). */
   phrases: PhraseMemory | null;
@@ -318,12 +323,11 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     // The club index once loaded; the curated gems answer before it and where
     // it holds nothing for a board (`knownSlipsAt`).
     const index = knownSlipIndexNow();
-    {
+    if (i.moveReads) {
       const studentColor: 'w' | 'b' = mine === (sideOf(i.fenBefore) === 'w') ? 'w' : 'b';
-      const told = i.history.length;
-      const played = readBoardAll('knownSlip', { fen: i.fenBefore, gems: knownSlipsAt(index, i.fenBefore), played: i.san, student: studentColor, verdictPunish: null, saidNext: null, told });
-      const ahead = played.length > 0 ? [] : readBoardAll('trapAhead', { fen: fenAfter, gems: knownSlipsAt(index, fenAfter), played: i.line?.[0] ?? null, student: studentColor, verdictPunish: null, saidNext: null, told });
-      for (const f of [...played, ...ahead]) facts.push({ ...f, source: 'knownSlip', idea: 'tactic', weight: 64 });
+      for (const f of knownSlipReads({ fenBefore: i.fenBefore, fenAfter, san: i.san, next: i.line?.[0] ?? null, student: studentColor, index, graded: null, told: i.history.length })) {
+        facts.push({ ...f, source: 'knownSlip', idea: 'tactic', weight: 64 });
+      }
     }
   }
 
@@ -419,15 +423,9 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
   // thumb. A lesson shows its line, so every move is named (the full text).
   if (i.moverIsStudent !== undefined) {
     const student = mine ? sideOf(i.fenBefore) : sideOf(fenAfter);
-    const kingReads: Array<{ f: CoachFact; idea: IdeaKind }> = [
-      ...readBoardAll('kingSquares', { fenBefore: i.fenBefore, san: i.san, student, lines: i.reads?.before ?? null, bestUci: i.reads?.before[0]?.moves[0] ?? null }).map((f) => ({ f, idea: 'choice' as IdeaKind })),
-      ...readBoardAll('castleByHand', { fenBefore: i.fenBefore, san: i.san, student }).map((f) => ({ f, idea: 'king-safety' as IdeaKind })),
-      ...readBoardAll('keptHome', { fenBefore: i.fenBefore, san: i.san, student }).map((f) => ({ f, idea: 'king-safety' as IdeaKind })),
-      ...readBoardAll('kingFromCentre', { fenBefore: i.fenBefore, san: i.san, student }).map((f) => ({ f, idea: 'king-safety' as IdeaKind })),
-    ];
-    for (const { f, idea } of kingReads) {
+    for (const { f, idea, weight } of !i.moveReads ? [] : kingWalkReads({ fenBefore: i.fenBefore, san: i.san, student, lines: i.reads?.before ?? null, bestUci: i.reads?.before[0]?.moves[0] ?? null })) {
       const { heldForm: _held, ...fact } = f;
-      facts.push({ ...fact, namesStudentMove: false, source: 'kingWalk', idea, weight: 60 });
+      facts.push({ ...fact, namesStudentMove: false, source: 'kingWalk', idea, weight });
     }
     // THE MOVES A PLAYER WEIGHS (weighedMoves, 2026-11-05), through the one
     // registry: the natural move that fails and its line, the move of the
@@ -438,14 +436,8 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     // hand, so the eye is the cold-start one (`DEFAULT_STUDENT_RATING`).
     const weighReads: readonly WeighRead[] | null = i.reads?.weigh
       ?? (i.reads && i.reads.before.length >= 2 ? i.reads.before.map((l) => ({ evaluation: l.evaluation, mate: l.mate, moves: l.moves, earlier: l.earlier?.moves ?? null })) : null);
-    const prior = i.theirLast;
-    const weighed: Array<{ f: CoachFact; weight: number }> = [
-      ...readBoardAll('temptingRefuted', { fenBefore: i.fenBefore, san: i.san, student, rating: DEFAULT_STUDENT_RATING, reads: weighReads, priorMove: prior }).map((f) => ({ f, weight: 55 })),
-      ...readBoardAll('alsoGood', { fenBefore: i.fenBefore, san: i.san, student, rating: DEFAULT_STUDENT_RATING, reads: weighReads }).map((f) => ({ f, weight: 45 })),
-      ...readBoardAll('squareChoice', { fenBefore: i.fenBefore, san: i.san, student, rating: DEFAULT_STUDENT_RATING, reads: weighReads, priorMove: prior,
-        beaten: i.costCp !== null && i.costCp >= INACCURACY_CP ? i.reads?.before[0]?.moves[0] ?? null : null, namesStudentMoves: true }).map((f) => ({ f, weight: 50 })),
-    ];
-    for (const { f, weight } of weighed) {
+    for (const { f, weight } of !i.moveReads ? [] : weighedReads({ fenBefore: i.fenBefore, san: i.san, student, rating: DEFAULT_STUDENT_RATING, reads: weighReads, priorMove: i.theirLast,
+      bestUci: i.reads?.before[0]?.moves[0] ?? null, costCp: i.costCp, namesStudentMoves: true })) {
       // A lesson shows its line, so the move is named (the full text).
       const { heldForm: _held, ...fact } = f;
       facts.push({ ...fact, namesStudentMove: false, source: 'weighed', idea: 'choice', weight });
@@ -902,10 +894,10 @@ function withDecisionGap(facts: ThoughtFact[], i: MoveThoughtInput, from: string
  *  top-three clause list (`lessonBeat`), which picked by aspect weight alone,
  *  cut at three and never heard the move's job or its fundamentals. '' when
  *  nothing earned a word: silence beats a repeat. */
-export function lessonThought(shown: Omit<MoveThoughtInput, 'phrases' | 'tense' | 'plainThreatsSeen'>, voice: LessonVoice, refuted: RefutedAlternative | null): string {
+export function lessonThought(shown: Omit<MoveThoughtInput, 'phrases' | 'tense' | 'plainThreatsSeen' | 'moveReads'>, voice: LessonVoice, refuted: RefutedAlternative | null): string {
   // A lesson shows the move as it is played: its words are the present's. It
   // reads no student record, so a plain threat is taught.
-  const input: Omit<MoveThoughtInput, 'phrases'> = { ...shown, tense: 'now', plainThreatsSeen: false };
+  const input: Omit<MoveThoughtInput, 'phrases'> = { ...shown, tense: 'now', plainThreatsSeen: false, moveReads: writerFor('lesson').moveReads };
   // The line's story is at this move's ply: what it says is said here.
   voice.story.reach(plyOfFen(input.fenBefore));
   const facts = moveThoughtFacts({ ...input, phrases: voice.phrases });
@@ -924,9 +916,9 @@ const MOVE_STEPS_OF_STORY: ReadonlySet<string> = new Set(['yours', 'theirs']);
  *  the groups the question asks about ("why did they play that?" — their
  *  move, their side, the danger, the line; `questionThought.QUESTION_IDEAS`):
  *  one ordering for every surface, never a lane's own stack of sentences. */
-export function questionThought(asked: Omit<MoveThoughtInput, 'phrases' | 'tense'>, groups: ReadonlySet<FactGroup>, refuted: RefutedAlternative | null, reason: DecisiveReason | null): ComposedThought {
+export function questionThought(asked: Omit<MoveThoughtInput, 'phrases' | 'tense' | 'moveReads'>, groups: ReadonlySet<FactGroup>, refuted: RefutedAlternative | null, reason: DecisiveReason | null): ComposedThought {
   // A question is answered on the board in front of the student, in the present.
-  const input: Omit<MoveThoughtInput, 'phrases'> = { ...asked, tense: 'now' };
+  const input: Omit<MoveThoughtInput, 'phrases'> = { ...asked, tense: 'now', moveReads: writerFor('chat').moveReads };
   const voice = newLessonVoice();
   voice.story.reach(plyOfFen(input.fenBefore));
   const facts = moveThoughtFacts({ ...input, phrases: voice.phrases });
@@ -1038,11 +1030,11 @@ export function lessonBoardFacts(i: Omit<MoveThoughtInput, 'phrases'>): ThoughtF
  *  the one composer's facts on the step's move (`asked`, null on a board with
  *  no move to explain) and the registry's reads of the step board, kept to
  *  the computers that serve THIS step (`THINK_STEP`), in the thought's order. */
-export function stepThought(step: ThinkingStep, board: StepBoard, asked: Omit<MoveThoughtInput, 'phrases' | 'tense'> | null): ComposedThought {
+export function stepThought(step: ThinkingStep, board: StepBoard, asked: Omit<MoveThoughtInput, 'phrases' | 'tense' | 'moveReads'> | null): ComposedThought {
   const voice = newLessonVoice();
   const all: ThoughtFact[] = [];
   if (asked) {
-    const input: Omit<MoveThoughtInput, 'phrases'> = { ...asked, tense: 'now' };
+    const input: Omit<MoveThoughtInput, 'phrases'> = { ...asked, tense: 'now', moveReads: writerFor('think').moveReads };
     voice.story.reach(plyOfFen(input.fenBefore));
     all.push(...moveThoughtFacts({ ...input, phrases: voice.phrases }), ...studentMoveFacts(input));
   }
@@ -1220,6 +1212,62 @@ function uciSan(fen: string, mv: string): string | null {
 /** The board after a SAN move (null when it does not play). */
 function afterSan(fen: string, san: string): string | null {
   try { const c = new Chess(fen); c.move(san); return c.fen(); } catch { return null; }
+}
+
+/** THE KING WALKED BY HAND, both seats (his Scotch Gambit game,
+ *  2026-11-04) — the one read every surface takes: where the king goes when it
+ *  must walk, the castling-by-hand plan and each step of it, the bishop kept
+ *  home to block a check, the rule of thumb when the king steps out of the
+ *  centre. `lines`: the engine's lines before the move (the fan, or the
+ *  record's best line); `bestUci`: the engine's best move there. */
+export function kingWalkReads(r: { fenBefore: string; san: string; student: Color; lines: ReadonlyArray<{ moves: readonly string[] }> | null; bestUci: string | null }): Array<{ id: 'kingSquares' | 'castleByHand' | 'keptHome' | 'kingFromCentre'; f: BoardFact<'kingSquares' | 'castleByHand' | 'keptHome' | 'kingFromCentre'>; idea: IdeaKind; weight: number }> {
+  const at = { fenBefore: r.fenBefore, san: r.san, student: r.student };
+  return [
+    ...readBoardAll('kingSquares', { ...at, lines: r.lines, bestUci: r.bestUci }).map((f) => ({ id: 'kingSquares' as const, f, idea: 'choice' as IdeaKind, weight: 60 })),
+    ...readBoardAll('castleByHand', at).map((f) => ({ id: 'castleByHand' as const, f, idea: 'king-safety' as IdeaKind, weight: 60 })),
+    ...readBoardAll('keptHome', at).map((f) => ({ id: 'keptHome' as const, f, idea: 'king-safety' as IdeaKind, weight: 60 })),
+    ...readBoardAll('kingFromCentre', at).map((f) => ({ id: 'kingFromCentre' as const, f, idea: 'king-safety' as IdeaKind, weight: 60 })),
+  ];
+}
+
+/** THE MOVES A PLAYER WEIGHS, both seats (weighedMoves, 2026-11-05) — the one
+ *  read every surface takes: the natural move that fails and its line, the
+ *  move of the same worth and what separates them, the piece's other squares
+ *  and what goes wrong on each. The square choice is not asked of a piece the
+ *  engine's better move took elsewhere when the move cost an inaccuracy or
+ *  more (`beaten`). `rating`: the student's eye (a lesson's is the cold-start
+ *  one); `namesStudentMoves`: the writer's setting. */
+export function weighedReads(r: { fenBefore: string; san: string; student: Color; rating: number; reads: readonly WeighRead[] | null; priorMove: { fenBefore: string; san: string } | null; bestUci: string | null; costCp: number | null; namesStudentMoves: boolean }): Array<{ id: 'temptingRefuted' | 'alsoGood' | 'squareChoice'; f: BoardFact<'temptingRefuted' | 'alsoGood' | 'squareChoice'>; weight: number }> {
+  const at = { fenBefore: r.fenBefore, san: r.san, student: r.student, rating: r.rating, reads: r.reads };
+  const beaten = r.costCp !== null && r.costCp >= INACCURACY_CP ? r.bestUci : null;
+  return [
+    ...readBoardAll('temptingRefuted', { ...at, priorMove: r.priorMove }).map((f) => ({ id: 'temptingRefuted' as const, f, weight: 55 })),
+    ...readBoardAll('alsoGood', at).map((f) => ({ id: 'alsoGood' as const, f, weight: 45 })),
+    ...readBoardAll('squareChoice', { ...at, priorMove: r.priorMove, beaten, namesStudentMoves: r.namesStudentMoves }).map((f) => ({ id: 'squareChoice' as const, f, weight: 50 })),
+  ];
+}
+
+/** What a surface knows of the move's GRADE, for the known slips: a move the
+ *  grade called sound is never called a slip; the punishment its verdict
+ *  names is the slip's; the alternative the next move refutes is said with
+ *  the trap ahead. Null: no grade (a lesson's model
+ *  line, an asked read). */
+export interface MoveGrade {
+  sound: boolean;
+  punish: string | null;
+  nextAlt: string | null;
+}
+
+/** THE KNOWN MISTAKES AND TRAPS, both seats (David 2026-11-04: "it needs to be
+ *  in review for sure"), from the club gem index — the one read every surface
+ *  takes: the slip this move played, said as why it was a mistake (never
+ *  against a grade that called it sound), or else the slip waiting at the
+ *  board the move reached, when the game went another way. */
+export function knownSlipReads(r: { fenBefore: string; fenAfter: string; san: string; next: string | null; student: Color; index: KnownSlipIndex | null; graded: MoveGrade | null; told: number }): Array<BoardFact<'knownSlip' | 'trapAhead'>> {
+  const told = r.told;
+  const played = r.graded?.sound ? [] : readBoardAll('knownSlip', { fen: r.fenBefore, gems: knownSlipsAt(r.index, r.fenBefore), played: r.san, student: r.student, verdictPunish: r.graded?.punish ?? null, saidNext: null, told });
+  if (played.length > 0) return played;
+  return readBoardAll('trapAhead', { fen: r.fenAfter, gems: knownSlipsAt(r.index, r.fenAfter), played: r.next, student: r.student, verdictPunish: null, saidNext: r.graded?.nextAlt ?? null, told });
 }
 
 function sideOf(fen: string): 'w' | 'b' {

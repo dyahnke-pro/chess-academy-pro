@@ -2726,7 +2726,7 @@ function* reviewSegmentSteps(
         const leadSquares = new Set(stepLeads.flatMap((f) => [...f.squares]));
         const phrasesHere = new Map(thoughtPhrases);
         const memoryHere = { keys: new Set(thoughtKeys) };
-        const thoughtFacts = moveThoughtFacts({ namesPlayedMove: REVIEW_WRITER.namesPlayedMove, theory: REVIEW_WALK_TEACHES_THEORY, story: REVIEW_WRITER.story, tense: REVIEW_WRITER.tense,
+        const thoughtFacts = moveThoughtFacts({ namesPlayedMove: REVIEW_WRITER.namesPlayedMove, theory: REVIEW_WALK_TEACHES_THEORY, story: REVIEW_WRITER.story, moveReads: REVIEW_WRITER.moveReads, tense: REVIEW_WRITER.tense,
           plainThreatsSeen: plainThreatsSeenFor(REVIEW_WRITER, seesPlainThreats(reviewRecord.plainThreats)),
           fenBefore: fenPair.fenBefore, san: m.san, moverIsStudent: mine, prev: prevCap,
           line: moves.slice(i + 1, i + 1 + BRIEFING_LINE_PLIES).map((x) => x.san),
@@ -2750,23 +2750,15 @@ function* reviewSegmentSteps(
           // What their move aims at is a threat Review says through its own
           // producer ([threat]); the lesson says it as the move's fact.
           && f.computer !== 'theirTarget'
-          // The king walked by hand: Review says it through its own facets
-          // (the registry's reads, both seats), so it is not said twice.
-          && f.source !== 'kingWalk'
           // A transposition or an analogy: Review says it through its opening
           // lines (the order reads), so it is not said twice.
           && !(f.source === 'openingTheory' && f.kind === 'equivalence')
           // The opening's story: Review says it through its own story lines.
           && f.computer !== 'openingStoryAt'
-          // Known slips: Review says them from its facet builder (reviewFullData).
-          && f.source !== 'knownSlip'
           // The book's statistics (main move or sideline, how it scores, the
           // usual reply) are the Theory button's (option B, David 2026-11-12);
           // the other main tries and their aims are theory the walk teaches.
           && !(f.kind === 'book-standing' || f.kind === 'book-score' || f.kind === 'book-reply')
-          // The moves a player weighs: Review says them through its own
-          // facets (the registry's reads, both seats).
-          && f.source !== 'weighed'
           // The teaching moves' new computers: Review says them through its
           // own facets (the registry's reads, both seats).
           && f.source !== 'teachingMove'

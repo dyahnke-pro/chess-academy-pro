@@ -1376,7 +1376,7 @@ const SLIP_NOT_WEAK: SurfaceAnswer = { not: 'the slip played is graded as the mo
 const KNOWN_SLIP_SURFACES: Record<CoachSurface, SurfaceAnswer> = {
   lesson: { wired: 'services/moveThoughtFacts.ts' },
   learn: LEARN_VIA_THOUGHT,
-  review: { wired: 'services/reviewFullData.ts' },
+  review: { wired: 'services/moveThoughtFacts.ts' },
   play: PLAY_READ,
   chat: { wired: 'services/moveThoughtFacts.ts' },
   tactics: TACTICS_READ,
@@ -3054,7 +3054,7 @@ export const BOARD_COMPUTERS = {
     computer: 'castleByHandMove',
     kind: 'castling',
     phase: NOT_ENDING,
-    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ, weaknesses: { not: 'the record half is positionPosed: castleByHand poses king-stuck-center' }, think: THINK },
+    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ, weaknesses: { not: 'the record half is positionPosed: castleByHand poses king-stuck-center' }, think: THINK },
   },
   kingFromCentre: {
     read: ({ fenBefore, san, student }, fact) => safe(() => {
@@ -3067,7 +3067,7 @@ export const BOARD_COMPUTERS = {
     computer: 'kingFromCentre',
     kind: 'nugget',
     phase: NOT_ENDING,
-    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ, weaknesses: { not: 'a rule of thumb poses no question of its own; the king walk it closes is recorded through castleByHand' }, think: THINK },
+    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ, weaknesses: { not: 'a rule of thumb poses no question of its own; the king walk it closes is recorded through castleByHand' }, think: THINK },
   },
   keptHome: {
     read: ({ fenBefore, san, student }, fact) => safe(() => {
@@ -3084,7 +3084,7 @@ export const BOARD_COMPUTERS = {
     computer: 'keptHome',
     kind: 'held',
     phase: NOT_ENDING,
-    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ, weaknesses: { not: 'a piece kept home on purpose is a choice, not a skill the board poses' }, think: THINK },
+    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ, weaknesses: { not: 'a piece kept home on purpose is a choice, not a skill the board poses' }, think: THINK },
   },
   kingSquares: {
     // His 7…Kf8: "obviously not g6 or f6 — you'd get mated … the king to f8 is
@@ -3099,7 +3099,7 @@ export const BOARD_COMPUTERS = {
     computer: 'kingSquares',
     kind: 'contrast',
     phase: ANY,
-    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ, weaknesses: { not: 'the record half is capabilitiesPosed: a forced king walk with a mated square poses missed-opponents-threat' }, think: THINK },
+    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ, weaknesses: { not: 'the record half is capabilitiesPosed: a forced king walk with a mated square poses missed-opponents-threat' }, think: THINK },
   },
   knownSlip: {
     // THE KNOWN MISTAKES AND TRAPS (David 2026-11-04: "it needs to be in
@@ -3265,7 +3265,7 @@ export const BOARD_COMPUTERS = {
     computer: 'temptingRefuted',
     kind: 'refuted',
     phase: ANY,
-    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ, weaknesses: { not: 'a move not played poses nothing to record; the move played is graded by its own cost' }, think: THINK },
+    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ, weaknesses: { not: 'a move not played poses nothing to record; the move played is graded by its own cost' }, think: THINK },
   },
   temptingNow: {
     // His "Ng5+ is tempting, but after …Kg7 and …Rg3 Black parries the
@@ -3319,7 +3319,7 @@ export const BOARD_COMPUTERS = {
     computer: 'alsoGood',
     kind: 'contrast',
     phase: ANY,
-    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ, weaknesses: { not: 'two moves of one worth pose no question the student can miss' }, think: THINK },
+    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ, weaknesses: { not: 'two moves of one worth pose no question the student can miss' }, think: THINK },
   },
   squareChoice: {
     // His "Bf4 runs into Nxd4, Bg5 is kicked by h6, Bd2 hangs the knight —
@@ -3336,7 +3336,7 @@ export const BOARD_COMPUTERS = {
     computer: 'squareChoice',
     kind: 'contrast',
     phase: ANY,
-    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ, weaknesses: { not: 'a square ruled out is a choice explained, not a skill the board poses' }, think: THINK },
+    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ, weaknesses: { not: 'a square ruled out is a choice explained, not a skill the board poses' }, think: THINK },
   },
   pawnBreak: {
     // His "c5 attacking the base of the pawn chain", "open the d-file", "f4,

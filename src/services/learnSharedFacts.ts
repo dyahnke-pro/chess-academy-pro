@@ -100,7 +100,7 @@ export function learnThoughtTurn(args: {
   saidComputers: ReadonlySet<string>;
 }): Array<LearnFactParts & { gradeFen: string }> {
   const read = (m: LearnTurnMove, moverIsStudent: boolean): ThoughtFact[] => moveThoughtFacts({
-    fenBefore: m.fenBefore, san: m.san, moverIsStudent, namesPlayedMove: namesPlayedMoveFor(LEARN_WRITER, moverIsStudent), plainThreatsSeen: plainThreatsSeenFor(LEARN_WRITER, false), tense: LEARN_WRITER.tense, theory: LEARN_WRITER.theory, story: LEARN_WRITER.story,
+    fenBefore: m.fenBefore, san: m.san, moverIsStudent, namesPlayedMove: namesPlayedMoveFor(LEARN_WRITER, moverIsStudent), plainThreatsSeen: plainThreatsSeenFor(LEARN_WRITER, false), tense: LEARN_WRITER.tense, theory: LEARN_WRITER.theory, story: LEARN_WRITER.story, moveReads: LEARN_WRITER.moveReads,
     prev: m.prev, line: null, history: [...m.history], theirLast: m.theirLast, phrases: null, reads: m.reads, costCp: m.costCp,
   });
   const facts = [...read(args.studentMove, true), ...(args.reply ? read(args.reply, false) : [])];

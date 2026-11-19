@@ -11,6 +11,7 @@
  * uncapped review speaks these verbatim (un-warmed) so no fact is compressed away
  * and the gaps are visible. Each facet is a labeled prose clause.
  */
+import { kingWalkReads, weighedReads, knownSlipReads } from './moveThoughtFacts';
 import { lastMoveFromSan } from './material';
 import { playedUci } from './planSteps';
 import { openSentence, continueSentence } from '../utils/openSentence';
@@ -1302,14 +1303,16 @@ export function computeMoveFacets(
     // used to be a habit on Review, a choice on Learn and a rule on the live
     // read (WO-STORY-MATRIX-01 P1-4) — said once through the `hint:` ledger.
     const add = (f: (CoachFact & { kind: FacetTag }) | undefined): void => { if (f) facetOf(f, `hint:${readKey(f)}`); };
+    // One fact a computer: the first each read found.
+    const addFirsts = (rs: ReadonlyArray<{ id: string; f: CoachFact & { kind: FacetTag } }>): void => {
+      const seen = new Set<string>();
+      for (const r of rs) if (!seen.has(r.id)) { seen.add(r.id); add(r.f); }
+    };
     // THE KING WALKED BY HAND, both seats (his Scotch Gambit game, 2026-11-04):
     // where the king goes when it must walk, the castling-by-hand plan and
     // each step of it, the bishop kept home to block a check, and the rule of
     // thumb when the king steps out of the centre.
-    add(readBoardAll('kingSquares', { fenBefore, san, student: studentColorWB, lines: ctx.bestLineUci.length ? [{ moves: ctx.bestLineUci }] : null, bestUci: ctx.bestLineUci[0] ?? null })[0]);
-    add(readBoardAll('castleByHand', { fenBefore, san, student: studentColorWB })[0]);
-    add(readBoardAll('keptHome', { fenBefore, san, student: studentColorWB })[0]);
-    add(readBoardAll('kingFromCentre', { fenBefore, san, student: studentColorWB })[0]);
+    addFirsts(kingWalkReads({ fenBefore, san, student: studentColorWB, lines: ctx.bestLineUci.length ? [{ moves: ctx.bestLineUci }] : null, bestUci: ctx.bestLineUci[0] ?? null }));
     // THE MOVES A PLAYER WEIGHS, both seats (weighedMoves, 2026-11-05): the
     // natural move that fails and its line, the move of the same worth and
     // what separates them, the piece's other squares and what goes wrong on
@@ -1317,13 +1320,11 @@ export function computeMoveFacets(
     {
       const w = ctx.teaching.weigh;
       const prior = ctx.teaching.prevFenBefore && ply >= 2 && ctx.allSans[ply - 2] ? { fenBefore: ctx.teaching.prevFenBefore, san: ctx.allSans[ply - 2] } : null;
-      add(readBoardAll('temptingRefuted', { fenBefore, san, student: studentColorWB, rating: w.rating, reads: w.reads, priorMove: prior })[0]);
-      add(readBoardAll('alsoGood', { fenBefore, san, student: studentColorWB, rating: w.rating, reads: w.reads })[0]);
       // The engine's better move when this move cost an inaccuracy or more:
       // the square choice is not asked of a piece it took elsewhere.
-      const beaten = Math.max(0, ctx.costCp ?? 0) >= INACCURACY_CP ? ctx.bestLineUci[0] ?? null : null;
-      const choice = readBoardAll('squareChoice', { fenBefore, san, student: studentColorWB, rating: w.rating, reads: w.reads, priorMove: prior, beaten, namesStudentMoves: REVIEW_WRITER.namesStudentMoves })[0];
-      add(choice);
+      const weighed = weighedReads({ fenBefore, san, student: studentColorWB, rating: w.rating, reads: w.reads, priorMove: prior, bestUci: ctx.bestLineUci[0] ?? null, costCp: ctx.costCp === null ? null : Math.max(0, ctx.costCp), namesStudentMoves: REVIEW_WRITER.namesStudentMoves });
+      addFirsts(weighed);
+      const choice = weighed.find((r) => r.id === 'squareChoice');
       // Why that square, the other way round: the piece put where nothing can
       // chase it (`outOfReach`). One answer a move — the same claim as the
       // square choice, so it speaks only where that one did not.
@@ -1467,8 +1468,7 @@ export function computeMoveFacets(
     const slips = ctx.teaching.knownSlips;
     if (slips.index) {
       const gradedSound = ctx.classification === 'good' || ctx.classification === 'book' || ctx.classification === 'great' || ctx.classification === 'brilliant';
-      const played = gradedSound ? undefined : readBoardAll('knownSlip', { fen: fenBefore, gems: knownSlipsAt(slips.index, fenBefore), played: san, student: studentColorWB, verdictPunish, saidNext: null, told: slips.told })[0];
-      add(played ?? readBoardAll('trapAhead', { fen: fenAfter, gems: knownSlipsAt(slips.index, fenAfter), played: ctx.allSans[ply] ?? null, student: studentColorWB, verdictPunish: null, saidNext: slips.nextRefutedAlt, told: slips.told })[0]);
+      add(knownSlipReads({ fenBefore, fenAfter, san, next: ctx.allSans[ply] ?? null, student: studentColorWB, index: slips.index, graded: { sound: gradedSound, punish: verdictPunish, nextAlt: slips.nextRefutedAlt }, told: slips.told })[0]);
     }
   }
 
