@@ -47,7 +47,7 @@ import { pieceRef } from './pieceRef';
 import { openSentence } from '../utils/openSentence';
 import { temptingKey } from './conceptKey';
 import { INACCURACY_CP } from './engineConstants';
-import { settledNetForLine, GAIN_HOLDS_PLIES } from './exchangeLedger';
+import { settledNetForLine, GAIN_HOLDS_PLIES, computeExchangeLedger, materialGainWords } from './exchangeLedger';
 import { evalBand } from './evalBand';
 import { boardReason } from './positionalReason';
 import { phaseOfFen } from './boardConcepts';
@@ -726,8 +726,16 @@ export function standingRefutations(args: {
     const sans: string[] = [];
     try {
       const b = new Chess(args.fen);
-      for (const u of read.moves.slice(0, GAIN_HOLDS_PLIES)) sans.push(b.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san);
-    } catch { continue; }
+      // THE COUNT ENDS WHERE THE TRADES END, not mid-trade: a line cut on a
+      // capture with the line going on counts the next move too (Nd3 …Ba4 …
+      // Bxc6 Rxc3 is a knight for a pawn, not three pawns — the recapture
+      // was the seventh move).
+      for (let i = 0; i < read.moves.length; i += 1) {
+        if (i >= GAIN_HOLDS_PLIES && !/x/.test(sans[sans.length - 1] ?? '')) break;
+        const u = read.moves[i];
+        sans.push(b.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san);
+      }
+    } catch { /* count the moves that played */ }
     if (sans.length < 2) continue;
     const net = settledNetForLine(args.fen, sans, mover);
     // HAND OFF ONLY TO A REFUTER THAT SPEAKS: a try whose line loses material
@@ -735,8 +743,12 @@ export function standingRefutations(args: {
     // (a pawn lost on a three-pawn cost, an unconfirmed line), the loss is
     // said here, with the result.
     if (net !== null && net < 0 && refuteCandidate(args.fen, c, read, best.read, args.student, null, plan ? planAim(plan, mine) : null)) { drop('loses-material'); continue; }
-    const NUM = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
-    const lost = net !== null && net < 0 ? `${cap(w.otherWho)} win ${-net === 1 ? 'a pawn' : `${NUM[-net] ?? -net} pawns' worth of material`} in the line.` : null;
+    // WHAT THEY WIN, in pieces ("a knight for a pawn"), by the one ledger
+    // namer — never a point total.
+    const lostWords = net !== null && net < 0
+      ? ((): string | null => { const l = computeExchangeLedger(args.fen, sans, mover === 'w' ? 'b' : 'w'); return l ? materialGainWords(l) : null; })()
+      : null;
+    const lost = lostWords ? `${cap(w.otherWho)} win ${lostWords} in the line.` : null;
     const reply = `${mover === 'w' ? '…' : ''}${sans[1]}`;
     // NO REASON, NO REFUTATION: his every rule-out says why it falls short.
     // The plan's try has its own reason: what became of the target.
