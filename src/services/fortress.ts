@@ -91,21 +91,35 @@ function fortressReason(fen: string, defender: Color): FortressReason | null {
  * (White-POV); [] where the surface has none.
  */
 export function fortress(fenBefore: string, san: string, replies: readonly ReplyLine[]): Fortress | null {
+  let c: Chess;
+  try { c = new Chess(fenBefore); c.move(san.replace(/[!?]+$/, '')); } catch { return null; }
+  const f = fortressOn(c.fen(), replies);
+  if (!f) return null;
+  // Made by this move: the board before held no such reason.
+  if (fortressReason(fenBefore, f.defender)?.kind === f.reason.kind) return null;
+  return f;
+}
+
+/**
+ * The fortress standing on `fen`, whatever move made it: the same ending,
+ * material gap, draw read and board reason as `fortress`, without the "made
+ * by this move" test. For a board read on its own — the board a line reaches,
+ * compared with the board another line reaches (`futures.whatChanged`).
+ * `replies`: the engine's lines from `fen`, best first (White-POV).
+ */
+export function fortressOn(fen: string, replies: readonly ReplyLine[]): Fortress | null {
   const best = replies[0] as ReplyLine | undefined;
   if (!best || best.mate != null || best.cp == null || Math.abs(best.cp) > FORTRESS_DRAW_CP) return null;
   let c: Chess;
-  try { c = new Chess(fenBefore); c.move(san.replace(/[!?]+$/, '')); } catch { return null; }
+  try { c = new Chess(fen); } catch { return null; }
   if (c.isGameOver()) return null;
-  const fenAfter = c.fen();
-  if (!isEndgameByMaterial(fenAfter)) return null;
-  const w = sideMaterial(fenAfter, 'w');
-  const b = sideMaterial(fenAfter, 'b');
+  if (!isEndgameByMaterial(fen)) return null;
+  const w = sideMaterial(fen, 'w');
+  const b = sideMaterial(fen, 'b');
   if (Math.abs(w - b) < CONVERSION_EDGE) return null;
   const defender: Color = w < b ? 'w' : 'b';
-  const reason = fortressReason(fenAfter, defender);
+  const reason = fortressReason(fen, defender);
   if (!reason) return null;
-  // Made by this move: the board before held no such reason.
-  if (fortressReason(fenBefore, defender)?.kind === reason.kind) return null;
   return { defender, reason, key: `fortress:${reason.kind}:${defender}` };
 }
 
