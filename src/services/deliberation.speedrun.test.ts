@@ -43,3 +43,19 @@ describe('no queen trade where no queens are left (Alekhine walk 2026-10-19)', (
     expect(deliberationFacts(d as never, NOTHING_SAID, true)).not.toMatch(/queen/);
   });
 });
+
+// Danya narration test 2026-11-19, how to ruin your pawn structure #0: White
+// has no queen, so Bxd2 after …Kf8 wins Black's queen; no queens "come off".
+describe('a queen trade needs a queen on each side', () => {
+  it('…Kf8 Bxd2 is not "the queens come off"', () => {
+    const fen = '1r2k2r/4bpp1/p2pbN1p/1p2p3/4P1P1/P3BP2/1PPq3P/1K1R1B1R b k - 0 17';
+    const d = buildDeliberation({ priorMove: null, fenBefore: fen, moverColor: 'b', prevCapture: null, analysis: {
+      bestMove: 'g7f6', evaluation: -7, isMate: false, mateIn: null, depth: 16, nodesPerSecond: 0,
+      topLines: [
+        { rank: 1, evaluation: -7, mate: null, moves: 'g7f6 d1d2 h6h5 g4h5 h8h5 h1g1'.split(' ') },
+        { rank: 2, evaluation: -1, mate: null, moves: 'e7f6 d1d2 b8d8 h2h4 d6d5 e4d5'.split(' ') },
+        { rank: 3, evaluation: 53, mate: null, moves: 'e8f8 e3d2 g7f6 f1e2 b8d8 f3f4'.split(' ') },
+      ] } } as never);
+    expect(d?.alternatives.find((a) => a.san === 'Kf8')?.shortfall).not.toBe('trades-queens');
+  });
+});

@@ -965,6 +965,10 @@ function queensOffLine(fen: string, uci: readonly string[], plies: number): stri
     // No queen to trade: the line takes nothing off (Alekhine walk 2026-10-19:
     // "h4 takes the last queen off" twenty moves after the queens went).
     if (!c.board().flat().some((x) => x && x.type === 'q')) return null;
+    // A TRADE NEEDS A QUEEN ON EACH SIDE (Danya, how to ruin your pawn
+    // structure #0: "Kf8? Then they play Bxd2 — the queens come off" with no
+    // white queen on the board: Bxd2 just wins the black one).
+    if (!c.board().flat().some((x) => x && x.type === 'q' && x.color === 'w') || !c.board().flat().some((x) => x && x.type === 'q' && x.color === 'b')) return null;
     const sans: string[] = [];
     for (const u of uci.slice(0, plies)) {
       sans.push(c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san);
