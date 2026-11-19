@@ -206,7 +206,14 @@ export type BoardKind = 'drawing-chances' | 'locked' | 'no-counterplay';
 /** The student's edge, centipawns, that counts as better; past the upper bar
  *  the game is decided and no "drawing chances" are said. */
 const BETTER_CP = 80;
-const DRAWISH_BELOW_CP = 400;
+/** Past two pawns the engine sees the win: an edge that size in an opposite-
+ *  bishop ending is the second front working, not drawing chances (Danya,
+ *  mastering opposite-coloured bishops #1, +2.42: "White wins despite the
+ *  opposite bishops"). */
+const DRAWISH_BELOW_CP = 200;
+/** The best move must stand this little above the second for "no hurry": a
+ *  wider gap is one move to find now. */
+const NO_HURRY_GAP_CP = 40;
 /** Locked, and close enough that nobody is in danger yet. */
 const LOCKED_CLOSE_CP = 150;
 
@@ -221,7 +228,12 @@ const squareShade = (sq: string): number => (sq.charCodeAt(0) - 97 + Number(sq[1
 
 /** THE KIND OF POSITION for `student` ('w'/'b'), whose edge is `studentCp`
  *  (centipawns, the student's seat; null when unread). Null when none holds. */
-export function boardKind(fen: string, student: 'w' | 'b', studentCp: number | null): { kind: BoardKind; text: string } | null {
+export function boardKind(fen: string, student: 'w' | 'b', studentCp: number | null,
+  /** The engine's lines on `fen`, best first (UCI, the side to move's move
+   *  first; `evaluation` White's view). "No hurry" is a claim about the
+   *  engine's best move — that it is quiet and nothing stands far above the
+   *  rest — so without the lines it is not said. */
+  lines: ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate?: number | null }> = []): { kind: BoardKind; text: string } | null {
   let c: Chess;
   try { c = new Chess(fen); } catch { return null; }
   const all = c.board().flat().filter((p): p is NonNullable<typeof p> => !!p);
@@ -232,20 +244,31 @@ export function boardKind(fen: string, student: 'w' | 'b', studentCp: number | n
     const bishops = minors.filter((p) => p.type === 'b');
     const opposite = heavy.length === 0 && minors.length === 2 && bishops.length === 2
       && bishops[0].color !== bishops[1].color && squareShade(bishops[0].square) !== squareShade(bishops[1].square);
-    if (opposite) return { kind: 'drawing-chances', text: 'You\'re better, but the bishops run on opposite colours: with only pawns besides, they have real drawing chances.' };
+    // The standing line already said the edge; this says what holds it back,
+    // never "you're better" a second time.
+    if (opposite) return { kind: 'drawing-chances', text: 'But the bishops run on opposite colours: with only pawns besides, they have real drawing chances.' };
     const wings = wingPawns(c);
     const on = (w: 'queenside' | 'kingside'): number => wings.w[w].length + wings.b[w].length;
-    if (heavy.length + minors.length <= 2 && (on('queenside') === 0) !== (on('kingside') === 0)) {
-      return { kind: 'drawing-chances', text: 'You\'re better, but with so little left and every pawn on one wing, they have real drawing chances.' };
+    // Drawing chances on one wing are the extra pawn's: the student a pawn up
+    // at most, with pawns on both sides of it. A lone pawn against a rook is
+    // a race (a guide to underpromotion #0, the Saavedra), not a hold.
+    const pawns = all.filter((p) => p.type === 'p');
+    const edge = quietBalance(fen) * (student === 'w' ? 1 : -1);
+    if (heavy.length + minors.length <= 2 && (on('queenside') === 0) !== (on('kingside') === 0)
+      && pawns.some((p) => p.color === student) && pawns.some((p) => p.color !== student) && edge >= 0 && edge <= 1) {
+      return { kind: 'drawing-chances', text: 'But with so little left and every pawn on one wing, they have real drawing chances.' };
     }
   }
   // Locked and close: "nobody is in danger" is false on a board one side is
   // winning (Desperado, Black clearly worse in a bind with an h-file attack
   // coming).
   if ((studentCp === null || Math.abs(studentCp) < LOCKED_CLOSE_CP) && lockedPawnPairs(c).length >= 3 && findOpenFiles(fen).open.length === 0) {
-    return { kind: 'locked', text: 'The position is locked: the pawns hold each other and no file is open, so nobody is in danger yet. The play is slow, behind the pawns.' };
+    // What locked pawns PROVE is where the play goes, never that nobody is in
+    // danger (Danya, how to beat Magnus Carlsen #1: locked, and White's
+    // kingside attack comes quickly — Black must play …Nc5 now).
+    return { kind: 'locked', text: 'The position is locked: the pawns hold each other and no file is open, so the play goes through the pawn breaks.' };
   }
-  if (better) {
+  if (better && quietBest(fen, lines)) {
     const mine = pieceReach(c, student);
     const theirs = pieceReach(c, student === 'w' ? 'b' : 'w');
     if (mine >= 10 && theirs * 2 < mine) {
@@ -253,4 +276,26 @@ export function boardKind(fen: string, student: 'w' | 'b', studentCp: number | n
     }
   }
   return null;
+}
+
+/** The engine's best move is QUIET and nothing stands far above the rest:
+ *  not a capture, a check or a pawn move, no capture in its line's first two
+ *  replies, and within `NO_HURRY_GAP_CP` of the second line. "No hurry"
+ *  against a concrete best move tells the student to wait while the move that
+ *  wins is there (Danya, mastering intuition #1: 37.c5!! at +1.24 against
+ *  +0.50; the modern immortal #3: a4, then the f-file opens). */
+function quietBest(fen: string, lines: ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate?: number | null }>): boolean {
+  const best = lines[0];
+  if (!best || best.moves.length === 0 || lines.length < 2) return false;
+  if (typeof best.mate === 'number') return false;
+  if (Math.abs(best.evaluation - lines[1].evaluation) >= NO_HURRY_GAP_CP) return false;
+  try {
+    const c = new Chess(fen);
+    for (let i = 0; i < Math.min(3, best.moves.length); i += 1) {
+      const u = best.moves[i];
+      const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
+      if (m.captured || /[+#]/.test(m.san) || (i === 0 && m.piece === 'p')) return false;
+    }
+  } catch { return false; }
+  return true;
 }
