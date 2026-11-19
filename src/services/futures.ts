@@ -19,7 +19,7 @@
  * read (no engine call). A fact is matched across the two boards by its
  * computer and its claims, so "their rook is active" on both is no change.
  */
-import { Chess, type Color } from 'chess.js';
+import { Chess, type Color, type Square } from 'chess.js';
 import { readEveryComputer, type BoardBundle } from './boardBundle';
 import type { CoachFact } from './coachFact';
 import { stakeValue } from './factStakes';
@@ -169,7 +169,7 @@ export function whatChanged(args: {
 // ── WHAT THE TRY'S LINE DOES (his "with a perpetual check", "and White
 // promotes", "the back-rank checkmate") — read off the line's own moves ──
 
-export type LineStoryKind = 'perpetual' | 'promotes' | 'mates';
+export type LineStoryKind = 'perpetual' | 'promotes' | 'mates' | 'stalemate' | 'bareDraw';
 
 export interface LineStory {
   kind: LineStoryKind;
@@ -177,6 +177,66 @@ export interface LineStory {
   text: string;
   /** The squares it is about. */
   squares: string[];
+}
+
+/** The try side's possessive, from `other` (the side that answers it). */
+function ownWord(other: 'your' | 'their'): string { return other === 'your' ? 'their' : 'your'; }
+
+/**
+ * THE SQUARE OF THE PAWN, COUNTED (his "loses by a single tempo"). On the
+ * first board after the reply where only kings and pawns are left and the
+ * promoting pawn's file ahead is empty, with the try side to move: its king's
+ * distance to the queening square (the rule of the square) against the
+ * pawn's pushes plus one (the double step counted; the king moves first).
+ * How many moves late the king is; null when no such board comes or the king
+ * was in time there.
+ * `line` is the try's line up to and including the promotion; `mover` the
+ * side that played the try.
+ */
+export function lateToCatch(fen: string, line: readonly string[], mover: Color): number | null {
+  let b: Chess;
+  try { b = new Chess(fen); } catch { return null; }
+  const boards: string[] = [];
+  const moves: Array<{ from: string; to: string; piece: string; color: Color }> = [];
+  for (const u of line) {
+    try { moves.push(b.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] })); boards.push(b.fen()); } catch { return null; }
+  }
+  const last = moves[moves.length - 1];
+  if (!last || last.piece !== 'p' || last.color === mover) return null;
+  // The promoting pawn's square on each board, traced back from its last push.
+  const at: Array<string | null> = new Array<string | null>(moves.length).fill(null);
+  let cur = last.from;
+  for (let j = moves.length - 2; j >= 0; j -= 1) {
+    at[j] = cur;
+    const m = moves[j];
+    if (m.color === last.color && m.piece === 'p' && m.to === cur) cur = m.from;
+  }
+  for (let j = 1; j < moves.length - 1; j += 1) {
+    const sq = at[j];
+    if (!sq) continue;
+    let c: Chess;
+    try { c = new Chess(boards[j]); } catch { continue; }
+    // Counted with the try side's king to move: the moment it could start running.
+    if (c.turn() !== mover) continue;
+    if (c.board().flat().some((p) => p && p.type !== 'k' && p.type !== 'p')) continue;
+    const r = Number(sq[1]);
+    const dir = last.color === 'w' ? 1 : -1;
+    let clear = true;
+    for (let rr = r + dir; rr >= 1 && rr <= 8; rr += dir) if (c.get(`${sq[0]}${rr}` as Square)) { clear = false; break; }
+    if (!clear) continue;
+    const promo = `${sq[0]}${last.color === 'w' ? 8 : 1}` as Square;
+    const king = c.board().flat().find((p) => p && p.type === 'k' && p.color === mover)?.square;
+    if (!king) return null;
+    const startRank = last.color === 'w' ? 2 : 7;
+    const pushes = Math.abs((last.color === 'w' ? 8 : 1) - r) - (r === startRank ? 1 : 0);
+    // THE RULE OF THE SQUARE: the king's straight-line distance, as a player
+    // counts it (a fenced walk overcounts: the line's king takes its way through).
+    const steps = Math.max(Math.abs(king.charCodeAt(0) - promo.charCodeAt(0)), Math.abs(Number(king[1]) - Number(promo[1])));
+    // The king's side to move: it catches the pawn with one move more than the pushes.
+    const allowed = pushes + 1;
+    return steps > allowed ? steps - allowed : null;
+  }
+  return null;
 }
 
 const PERPETUAL_CHECKS = 3;
@@ -189,8 +249,15 @@ const PERPETUAL_LEVEL_CP = 50;
  *    least three times or until a position repeats — "…Rg1+, and the checks
  *    never stop";
  *  - `promotes`: a pawn of the other side reaches the last rank in the line;
- *  - `mates`: the other side mates in the line.
- * Null when the line does none of these. Pure: chess.js over the line.
+ *  - `mates`: the other side mates in the line;
+ *  - `stalemate`: a move in the line leaves the side to move no legal move and
+ *    no check (his "results in stalemate");
+ *  - `bareDraw`: a capture in the line leaves nothing on the board that can
+ *    mate (chess.js's insufficient material; his "is a draw!").
+ * A promotion says what it promotes to and, when only kings and pawns are
+ * left, whether the try side's king was outside the pawn's square — his
+ * "loses by a single tempo" (`lateToCatch`). Null when the line does none of
+ * these. Pure: chess.js over the line.
  */
 export function lineStory(fen: string, tryLine: readonly string[], other: 'your' | 'their', tryCp: number | null = null): LineStory | null {
   let b: Chess;
@@ -211,7 +278,24 @@ export function lineStory(fen: string, tryLine: readonly string[], other: 'your'
     const byOther = m.color !== mover;
     const sanWords = `${m.color === 'b' ? '…' : ''}${m.san}`;
     if (byOther && b.isCheckmate()) return { kind: 'mates', text: `${sanWords} is mate.`, squares: [m.to] };
-    if (byOther && m.promotion) return { kind: 'promotes', text: `${other === 'your' ? 'Your' : 'Their'} ${m.from[0]}-pawn runs through and queens on ${m.to}.`, squares: [m.from, m.to] };
+    if (byOther && m.promotion) {
+      // A rook or bishop in an engine line is a queen's stand-in (the same
+      // score); a knight is the point of the move.
+      const promo = m.promotion === 'q' ? 'queens' : m.promotion === 'n' ? 'promotes to a knight' : 'promotes';
+      const late = lateToCatch(fen, tryLine.slice(0, i + 1), mover);
+      const tail = late === 1 ? `: ${ownWord(other)} king is one move too late to catch it` : late !== null ? `: ${ownWord(other)} king is too far away to catch it` : '';
+      return { kind: 'promotes', text: `${other === 'your' ? 'Your' : 'Their'} ${m.from[0]}-pawn runs through and ${promo} on ${m.to}${tail}.`, squares: [m.from, m.to] };
+    }
+    // A STALEMATE ON THE BOARD is a draw whatever the engine says next.
+    if (b.isStalemate()) {
+      const stuck = (m.color === mover) === (other === 'your') ? 'you' : 'them';
+      return { kind: 'stalemate', text: `${sanWords} leaves ${stuck} no legal move: it is stalemate, a draw.`, squares: [m.to] };
+    }
+    // Nothing left that can mate: the capture that took the last of it.
+    if (m.captured && b.isInsufficientMaterial()) {
+      const bare = b.board().flat().every((p) => !p || p.type === 'k');
+      return { kind: 'bareDraw', text: bare ? `After ${sanWords} only the kings are left: a draw.` : `After ${sanWords} nothing is left that can mate: a draw.`, squares: [m.to] };
+    }
     if (byOther && !checksBroken) {
       if (/\+$/.test(m.san)) {
         checks += 1;
@@ -231,9 +315,104 @@ export function lineStory(fen: string, tryLine: readonly string[], other: 'your'
   return null;
 }
 
+// ── THE DEFENDER COMES ALIVE (his "…Rxh5 and the rook is alive") — a
+// difference, so it is read here, across the two futures ──
+
+export interface ComesAlive {
+  /** The side whose piece comes alive (the side answering the try). */
+  side: Color;
+  piece: 'r' | 'q' | 'b' | 'n' | 'k';
+  /** Where it stands on the try's board. */
+  square: Square;
+  /** Its moves there, and the most any piece of its kind has on the best line's board. */
+  moves: number;
+  movesOnBest: number;
+  at: 'reply' | 'quiet';
+}
+
+/** How many squares each piece of `side` could go to, its side to move. */
+function mobility(fen: string, side: Color): Map<Square, { type: string; n: number }> {
+  const out = new Map<Square, { type: string; n: number }>();
+  const parts = fen.split(' ');
+  parts[1] = side;
+  parts[3] = '-';
+  let c: Chess;
+  try { c = new Chess(parts.join(' ')); } catch { return out; }
+  for (const p of c.board().flat()) {
+    if (!p || p.color !== side || p.type === 'p') continue;
+    out.set(p.square, { type: p.type, n: c.moves({ square: p.square }).length });
+  }
+  return out;
+}
+
+/** The gain that makes a passive piece "alive", by kind: how many more
+ *  squares, at most how many it had, at least how many it has. */
+const ALIVE_BAR: Record<ComesAlive['piece'], { gain: number; wasAtMost: number; nowAtLeast: number }> = {
+  r: { gain: 5, wasAtMost: 5, nowAtLeast: 9 },
+  q: { gain: 8, wasAtMost: 6, nowAtLeast: 16 },
+  b: { gain: 4, wasAtMost: 3, nowAtLeast: 7 },
+  n: { gain: 3, wasAtMost: 2, nowAtLeast: 5 },
+  k: { gain: 3, wasAtMost: 2, nowAtLeast: 5 },
+};
+
+/**
+ * A piece of the answering side that is passive on the best line's board and
+ * active on the try's, at the same point: the most mobile piece of each kind
+ * on each board, compared (a rook shut in on a8 with 3 squares against a rook
+ * on h5 with 11). The piece must stand on a square the try's line acted on,
+ * so the life is what the line gave it. A king counts only with the queens
+ * off. Pure: chess.js over the two lines.
+ */
+export function comesAlive(args: { fen: string; tryLine: LineRead; bestLine: LineRead }): ComesAlive | null {
+  let mover: Color;
+  try { mover = new Chess(args.fen).turn(); } catch { return null; }
+  const side: Color = mover === 'w' ? 'b' : 'w';
+  const t = futureBoards(args.fen, args.tryLine.moves);
+  const b = futureBoards(args.fen, args.bestLine.moves);
+  let best: (ComesAlive & { gain: number }) | null = null;
+  for (const at of ['reply', 'quiet'] as const) {
+    const tf = t[at];
+    const bf = b[at];
+    if (!tf || !bf) continue;
+    const queensOff = !/q/i.test(tf.fen.split(' ')[0]);
+    const lineSquares = touched(args.fen, args.tryLine.moves, tf.fen);
+    const onTry = mobility(tf.fen, side);
+    const onBest = mobility(bf.fen, side);
+    for (const kind of ['r', 'q', 'b', 'n', 'k'] as const) {
+      if (kind === 'k' && !queensOff) continue;
+      const bar = ALIVE_BAR[kind];
+      const most = (m: Map<Square, { type: string; n: number }>): { sq: Square | null; n: number } => {
+        let sq: Square | null = null; let n = -1;
+        for (const [s, v] of m) if (v.type === kind && v.n > n) { sq = s; n = v.n; }
+        return { sq, n };
+      };
+      const tr = most(onTry);
+      const br = most(onBest);
+      if (!tr.sq || !br.sq || !lineSquares.has(tr.sq)) continue;
+      const gain = tr.n - br.n;
+      if (gain < bar.gain || br.n > bar.wasAtMost || tr.n < bar.nowAtLeast) continue;
+      if (!best || gain / bar.gain > best.gain) best = { side, piece: kind, square: tr.sq, moves: tr.n, movesOnBest: br.n, at, gain: gain / bar.gain };
+    }
+  }
+  if (!best) return null;
+  const { gain: _g, ...out } = best;
+  return out;
+}
+
+const ALIVE_NAME: Record<ComesAlive['piece'], string> = { r: 'rook', q: 'queen', b: 'bishop', n: 'knight', k: 'king' };
+
+/** The words for a piece that comes alive, from the try side's seat. */
+export function comesAliveText(a: ComesAlive, other: 'your' | 'their'): string {
+  const whose = other === 'your' ? 'Your' : 'Their';
+  return `${whose} ${ALIVE_NAME[a.piece]} comes alive on ${a.square}: it has ${a.moves} squares to work with there, where the better line keeps it to ${a.movesOnBest}.`;
+}
+
 /** The change a try lets happen, as the reason it falls short: the line's own
- *  story first, then a threat or a resource that appears on the board after
- *  it, about a square the line acted on or a king. Null when none. */
+ *  story first; then a known draw the try lets the other side reach (the
+ *  board's drawing resource, confirmed level by the line); then a threat or
+ *  a resource that appears on the board after it, about a square the line
+ *  acted on or a king; then a piece of theirs that comes alive. Null when
+ *  none. */
 export function changeReason(args: {
   fen: string;
   student: Color;
@@ -250,6 +429,13 @@ export function changeReason(args: {
   const theirSeat = args.other === 'their' ? 'opponent' : 'student';
   // A danger the try's side would walk into NEXT (`latent-danger`, "before you
   // take on e5…") is advice for a later move, not what the reply did.
+  // A KNOWN DRAW THE TRY LETS THEM REACH (his "is obviously a draw", "a
+  // corner pawn of the wrong colour"): the drawing shape is held by the side
+  // answering the try, and the best line's board does not have it.
+  const drawn = wc.appeared.find((c) => c.fact.seat === theirSeat && c.fact.claims.some((k) => k.startsWith('verdict:drawn:')));
+  if (drawn) return drawn.fact.text;
   const hit = wc.appeared.find((c) => c.inLine && c.fact.seat === theirSeat && c.fact.kind !== 'latent-danger' && ['threat', 'resource'].includes(PICTURE_ROLE[c.fact.computer] ?? 'board'));
-  return hit ? hit.fact.text : null;
+  if (hit) return hit.fact.text;
+  const alive = comesAlive(args);
+  return alive ? comesAliveText(alive, args.other) : null;
 }

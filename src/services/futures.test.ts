@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { lineStory, futureBoards, whatChanged } from './futures';
+import { lineStory, futureBoards, whatChanged, changeReason, comesAlive, comesAliveText } from './futures';
 
 describe('what the try line does (fixes 2–3)', () => {
   it('reads a perpetual check his way: the checks never stop', () => {
@@ -38,5 +38,55 @@ describe('what the try line does (fixes 2–3)', () => {
     const wc = whatChanged({ fen, student: 'w', rating: 1500, tryLine: line, bestLine: line });
     expect(wc.appeared).toEqual([]);
     expect(wc.lost).toEqual([]);
+  });
+});
+
+// His refuted tries, with the engine's lines on them (depth 18, White's view).
+describe('the drawing resource, the race and the defender alive (WO-PICTURE-01)', () => {
+  // magnus-carlsens-best-endgame-wins#1: "Kb4 loses by a single tempo".
+  it('a race lost by one move says so', () => {
+    const fen = '8/8/6pp/1K1k1p2/2p5/2P4P/1P4P1/8 w - - 1 49';
+    const line = ['b5b4', 'g6g5', 'b4a4', 'g5g4', 'h3g4', 'f5g4', 'b2b4', 'c4b3', 'a4b3', 'h6h5', 'c3c4', 'd5e6', 'b3c3', 'h5h4', 'c3d2', 'h4h3', 'd2e1', 'h3h2', 'e1f2', 'h2h1r', 'f2g3', 'h1c1', 'g3g4'];
+    const s = lineStory(fen, line, 'their', -541);
+    expect(s?.kind).toBe('promotes');
+    expect(s?.text).toBe('Their h-pawn runs through and promotes on h1: your king is one move too late to catch it.');
+  });
+
+  // modern-chess-technique#2: "Ng7 is a draw!" — the knight and the f-pawn go.
+  it('a line that leaves nothing to mate with is a draw', () => {
+    const fen = '8/8/4N3/4kP2/p7/8/2K5/8 w - - 1 76';
+    const line = ['e6g7', 'e5f6', 'c2b2', 'f6g7', 'b2a3', 'g7f6', 'a3a4', 'f6f5', 'a4b5', 'f5g4'];
+    const s = lineStory(fen, line, 'their', 0);
+    expect(s?.kind).toBe('bareDraw');
+    expect(s?.text).toBe('After …Kxf5 only the kings are left: a draw.');
+  });
+
+  it('a stalemate in the line is a draw', () => {
+    const s = lineStory('k7/P7/2K5/8/8/8/8/8 w - - 0 1', ['c6b6'], 'their');
+    expect(s?.kind).toBe('stalemate');
+    expect(s?.text).toBe('Kb6 leaves them no legal move: it is stalemate, a draw.');
+  });
+
+  // the-importance-of-solving-studies#0: "Kf1 is obviously a draw" — the line
+  // reaches opposite-coloured bishops two pawns up.
+  it('the reason is the drawn ending the try lets them reach', () => {
+    const fen = 'k7/Pn6/8/2B5/3b4/6pP/6BP/6K1 w - - 1 6';
+    const tryLine = { moves: ['g1f1', 'd4c5', 'g2b7', 'a8a7', 'h2g3', 'a7b6', 'f1g2', 'b6c7', 'g2f3', 'c7d7'], cp: 6, mate: null };
+    const bestLine = { moves: ['c5d4', 'g3h2', 'g1f1', 'h2h1q', 'd4g1', 'h1h3', 'g2h3', 'b7a5', 'f1e2', 'a5b7'], cp: 413, mate: null };
+    const why = changeReason({ fen, student: 'w', rating: 1800, other: 'their', tryLine, bestLine });
+    expect(why).toBe('The bishops are of opposite colours, so your two extra pawns are not enough: their bishop and king hold the dark squares in front of them, and your bishop can never touch those.');
+  });
+
+  // modern-chess-technique#3: "b4, and suddenly Black's position is beginning
+  // to show signs of life" — the king shut in on c8 walks out to b7.
+  it('the defender comes alive', () => {
+    const fen = '2kb4/p4p2/2b3r1/2p1PN1p/5P2/1PB4P/P2R3K/8 w - - 0 37';
+    const tryLine = { moves: ['b3b4', 'c5b4', 'c3b4', 'c8b7', 'b4e7', 'd8a5', 'd2b2', 'b7a8'], cp: 102, mate: null };
+    const bestLine = { moves: ['f5d6', 'c8b8', 'f4f5', 'g6g8', 'f5f6', 'd8b6', 'd6f7', 'c5c4'], cp: 322, mate: null };
+    const a = comesAlive({ fen, tryLine, bestLine });
+    expect(a).toMatchObject({ side: 'b', piece: 'k', square: 'b7', moves: 6, movesOnBest: 2 });
+    expect(comesAliveText(a!, 'their')).toBe('Their king comes alive on b7: it has 6 squares to work with there, where the better line keeps it to 2.');
+    // The same line on both sides: nothing comes alive.
+    expect(comesAlive({ fen, tryLine, bestLine: tryLine })).toBeNull();
   });
 });
