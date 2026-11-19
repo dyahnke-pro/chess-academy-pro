@@ -2585,15 +2585,22 @@ export const BOARD_COMPUTERS = {
     surfaces: LIVE_READ,
   },
   latentDanger: {
+    // BOTH SEATS (David 2026-11-19): the pin in waiting on your king or queen
+    // (a danger, first), and the same line on theirs (your chance).
     read: ({ fen, student }, fact) => safe(() => {
-      const d = detectLatentDanger(fen, student, { latentOnly: true });
-      if (!d) return null;
-      const text = latentDangerClause(d, fen);
-      // A LATENT line needs their piece to arrive first.
-      return fact({ key: text, claims: [], text, proof: NO_PROOF.description,
-        squares: [d.enemySquare, d.frontSquare, d.backSquare, ...(d.shieldSquare ? [d.shieldSquare] : [])],
-        stakes: { points: lineTacticPoints(d.frontPiece, d.backPiece), plies: 3 },
-        seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen, skill: 'missed-their-pin' });
+      const them: Color = student === 'w' ? 'b' : 'w';
+      const out: CoachFact[] = [];
+      for (const [side, seat, skill] of [[student, 'opponent', 'missed-their-pin'], [them, 'student', 'missed-your-pin']] as const) {
+        const d = detectLatentDanger(fen, side, { latentOnly: true });
+        if (!d) continue;
+        const text = latentDangerClause(d, fen, student);
+        // A LATENT line needs the pinning piece to arrive first.
+        out.push(fact({ key: text, claims: [], text, proof: NO_PROOF.description,
+          squares: [d.enemySquare, d.frontSquare, d.backSquare, ...(d.shieldSquare ? [d.shieldSquare] : [])],
+          stakes: { points: lineTacticPoints(d.frontPiece, d.backPiece), plies: 3 },
+          seat, namesStudentMove: false, thread: LOCAL_THREAD, fen, skill }));
+      }
+      return out.length ? out : null;
     }),
     computer: 'detectLatentDanger',
     kind: 'latent-danger',

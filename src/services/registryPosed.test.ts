@@ -28,6 +28,8 @@ const CASES: Case[] = [
   { computer: 'detectLatentFork', tag: 'missed-your-fork', fen: 'r1b1kb1r/pp2pppp/2np1n2/8/3NP2q/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 7', held: 'Ndb5', missed: 'h3' },
   // Rook e8 behind the knight e5: move the knight and the bishop on e3 is pinned.
   { computer: 'detectLatentDanger', tag: 'missed-their-pin', fen: '4r1k1/8/8/4N3/8/4B3/8/4K3 w - - 0 1', held: 'Kd2', missed: 'Nc6' },
+  // The same line from Black's seat: their bishop on e3 is the one to pin.
+  { computer: 'detectLatentDanger', tag: 'missed-your-pin', fen: '4r1k1/8/8/4N3/8/4B3/8/4K3 b - - 0 1', held: 'Kh7', missed: 'Rd8' },
   // Bxe5 lines the bishop up in front of the king on the e-file.
   { computer: 'detectTradeCreatesPin', tag: 'bad-trade', fen: '4r1k1/8/8/4n3/3B4/8/8/4K3 w - - 0 1', held: 'Kd2', missed: 'Bxe5' },
   // King in the centre, a rook on e8 and the e-file about to open.
