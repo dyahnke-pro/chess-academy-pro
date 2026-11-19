@@ -24,7 +24,7 @@ import { legalSeeGainFor, signedLegalSeeFor, seeSequence } from './positionReadi
 import { NO_PROOF, squaresProof, isProof, legalLineProof, lineProofFromUci, type FactProof } from './proof';
 import { lineSeatAt, withArticle } from '../utils/andList';
 import type { FactStakes } from './factStakes';
-import { LOCAL_THREAD, placeFact, stakesOf, type CoachFact, type ComputerName, type FactSeat } from './coachFact';
+import { LOCAL_THREAD, placeFact, stakesOf, type CoachFact, type CoachFactKind, type ComputerName, type FactSeat } from './coachFact';
 import { threadKey, type SaidSet } from './gameStory';
 import { findPinBreaks, pinBreakLine, pinBreakProof } from './pinBreak';
 import { findProphylaxis, prophylaxisKey, prophylaxisLine, prophylaxisIdea, prophylaxisProof, prophylaxisThreatProof, theirWantedMoves } from './prophylaxis';
@@ -259,6 +259,40 @@ import { namedPawnStructure } from './nextPlans';
 import { slipAnswerText } from './playCommentary';
 import { countWarning } from './countMethod';
 import { oppositeWingsRace } from './planRace';
+// THE ONE FACT SET'S READS (the basket, 2026-11-19).
+import { moveIdeaFact, moveLead, moveGerund, moveSeat, closeSentence, placedAs, castlePrepClaim, linePlays, followPvOf, orderMatters, horizonSaid, replyAnswers, boardTeacherThought, deepThought, FACT_SET_SURFACES, JOB_WEIGHT, STOCK_PHRASE, onlyMove, type MoveWords, type FactSetMultiKind } from './thoughtReads';
+import type { PhraseMemory } from '../utils/phraseMemory';
+import { sayIdea } from '../utils/phraseMemory';
+import type { FollowLines } from './exchangeLedger';
+import type { IntentReads } from './moveIntent';
+import { moveIntent, intentRule } from './moveIntent';
+import { moveAspects, evalReading, signedBand } from './reviewMoveBriefing';
+import { moveJob, isBareJob, MINE } from './bookMoveWhy';
+import { BOOK_JOB_IDEA, FUNDAMENTAL_IDEA } from './ideaKind';
+import { computeMoveFundamentals } from './moveFundamentals';
+import { toOtherSeat } from '../utils/seatPronouns';
+import { moveThreat } from './moveThreat';
+import { costReason, allowedClause } from './costReason';
+import { computeMustDefend } from './threatOut';
+import { rotateStem } from '../utils/rotateStem';
+import { orderByThreat } from './orderByThreat';
+import { desperadoAt, desperadoLine } from './desperado';
+import { emptyCheckAt, emptyCheckLine } from './emptyCheck';
+import { detectOpeningByOrder } from './openingDetectionService';
+import { transposedOpening } from './openingPositions';
+import { openingEquivalence } from './openingEquivalence';
+import { preparesBreakClause } from './mastersPlanRead';
+import { storyPlanAfter } from './openingStory';
+import { namedStructureFormed, namedStructureLine } from './namedStructure';
+import { stopsBreak } from './moveStops';
+import { pieceRoute } from './pieceRoute';
+import { moveOrder } from './moveOrder';
+import { gambitIdea } from './gambitIdea';
+import { BLUNDER_CP } from './engineConstants';
+import { STORY_KEY } from './gameStory';
+import { buildDeliberation, ruleOuts, NOTHING_SAID } from './deliberation';
+import { bindingFact } from './threeFacts';
+import { pvSanToUci } from './principleAttribution';
 
 type CoachSurface = 'learn' | 'review' | 'lesson' | 'play' | 'chat' | 'tactics' | 'weaknesses' | 'think';
 
@@ -472,10 +506,10 @@ export interface BoardContexts {
     plain: boolean };
   /** Opening theory, calculated, on the last two moves of `history` (the
    *  student's move and the reply): main move, other tries, reply, score. */
-  openingTheory: { history: readonly string[]; student: Color };
+  openingTheory: { history: readonly string[]; student: Color } | { words: MoveWords };
   /** What each of the last two moves of `history` stops, the order it kept,
    *  the line it cut (gaps B1-B3). `follow`: the line after, when known. */
-  moveGains: { history: readonly string[]; student: Color };
+  moveGains: { history: readonly string[]; student: Color } | { words: MoveWords };
   /** The moved piece stepped off a line and opened a check its side gives in
    *  `line` (the moves after `san`, the reply first) on its second move after. */
   opensCheck: { fenBefore: string; san: string; line: readonly string[] | null; student: Color; tense: 'past' | 'now' };
@@ -589,7 +623,8 @@ export interface BoardContexts {
   /** The weighing — the read the surface built (`buildDeliberation`), said
    *  here: the alternatives ruled out and the move, and its held form (the
    *  rule-outs alone). `saysBestLine`: the weighing plays the best line out. */
-  deliberation: { fen: string; read: Deliberation; said: ReadonlySet<string>; saysBestLine: boolean };
+  deliberation: { fen: string; read: Deliberation; said: ReadonlySet<string>; saysBestLine: boolean }
+    | { words: MoveWords; fan: readonly AnalysisLine[]; prev: PrevCaptureContext; theirLast: { fenBefore: string; san: string } | null; deep: boolean };
   structureBoard: { fen: string; student: Color };
   /** Plan choices off the student's MultiPV at `fen` (student to move).
    *  REQUIRED `namesMoves`: a live board holds the moves (the choice is said
@@ -914,16 +949,17 @@ export interface BoardContexts {
    *  capture run before the move; `prior`: their move that led there). */
   foundMove: { fenBefore: string; san: string; preLines: readonly CriticalFanLine[]; student: Color; prevCapture: PrevCaptureContext | null; prior: { fenBefore: string; san: string } | null };
   /** THEIR MOVE'S DEEP FACT: what it sets up down their line (`lineAfter`). */
-  theirDeepFact: { fenBefore: string; theirSan: string; lineAfter: readonly string[] | null; student: Color };
+  theirDeepFact: { fenBefore: string; theirSan: string; lineAfter: readonly string[] | null; student: Color } | { words: MoveWords; line: readonly string[] | null };
   /** YOUR DEEP FACT, said when you play it (`lineAfterReply`: the line after their reply). */
-  studentDeepFact: { fenBefore: string; san: string; reply: string | null; lineAfterReply: readonly string[] | null };
+  studentDeepFact: { fenBefore: string; san: string; reply: string | null; lineAfterReply: readonly string[] | null } | { words: MoveWords; line: readonly string[] | null };
   /** YOUR MOVE AGAINST THEIR LAST ONE: their target, and how the move answers
    *  it (`prior`: their last move; `plainSeen`: the record sees plain threats). */
-  binding: { fenBefore: string; san: string; prior: { fenBefore: string; san: string } | null; plainSeen: boolean; ply: number };
+  binding: { fenBefore: string; san: string; prior: { fenBefore: string; san: string } | null; plainSeen: boolean; ply: number }
+    | { words: MoveWords; theirLast: { fenBefore: string; san: string } | null; plainSeen: boolean; point: string | null };
   /** THE BOARD TEACHER on a move of either seat, with the ideas the game has
    *  said (`spokenIdeas`: an idea said in full once is referred to after). */
-  boardTeacherOwn: { fenBefore: string; san: string; fenNow: string; spokenIdeas: ReadonlyMap<string, number> };
-  boardTeacherTheirs: { fenBefore: string; san: string; fenNow: string; spokenIdeas: ReadonlyMap<string, number> };
+  boardTeacherOwn: { fenBefore: string; san: string; fenNow: string; spokenIdeas: ReadonlyMap<string, number> } | { words: MoveWords; phrases: PhraseMemory | null };
+  boardTeacherTheirs: { fenBefore: string; san: string; fenNow: string; spokenIdeas: ReadonlyMap<string, number> } | { words: MoveWords; phrases: PhraseMemory | null };
   /** WHAT CAN BE WON, AND WHY (`prizeTeaching`, student to move): a piece of
    *  theirs on `square` the legal exchange wins, said without its square
    *  (OS-10). `stem`: the game's occurrence, so the words rotate. */
@@ -958,7 +994,7 @@ export interface BoardContexts {
    *  engine's best move `bestSan` — its line `pv` in UCI, the best move first —
    *  is a forcing move before a capture that is still there after. Names the
    *  student's move. */
-  notYet: { fen: string; bestSan: string; pv: readonly string[]; student: Color };
+  notYet: { fen: string; bestSan: string; pv: readonly string[]; student: Color } | { words: MoveWords; line: readonly string[]; fan: readonly AnalysisLine[] };
   /** THE OBVIOUS STOP THAT DOESN'T WORK (`findProphylaxis`'s verdict, his
    *  "the obvious move is h3 — but h3 creates a hook"): on `fen` (the student
    *  to move) their wanted pin, kick or fork has a pawn stop that hands them a
@@ -1034,6 +1070,32 @@ export interface BoardContexts {
    *  `answerSan`, when given, is the engine's reply that meets it — said as
    *  the answer on the opponent's threat. */
   newThreat: { fenBefore: string; fenAfter: string; mover: Color; student: Color; answerSan: string | null };
+  /** THE ONE FACT SET'S READS (the basket, 2026-11-19): every computer the
+   *  move's fact set (`moveThoughtFacts`) reads, each handed the move and HOW
+   *  it is said (`MoveWords` — its seat, tense, whether it may name the move). */
+  moveAspect: { words: MoveWords; prev: PrevCaptureContext; follow: FollowLines; phrases: PhraseMemory | null };
+  moveThreatDeep: { words: MoveWords; reads: { before: readonly AnalysisLine[]; after: readonly AnalysisLine[]; passAfter: readonly AnalysisLine[] }; student: Color };
+  moveAllows: { words: MoveWords; student: Color; costCp: number; after: AnalysisLine; against: readonly string[] | null };
+  moveJobRead: { words: MoveWords; theirLast: { fenBefore: string; san: string } | null; follow: FollowLines; phrases: PhraseMemory | null };
+  moveFundamentals: { words: MoveWords; follow: FollowLines };
+  theirAim: { words: MoveWords; line: readonly string[] | null; plainSeen: boolean };
+  outFirst: { words: MoveWords; line: readonly string[] };
+  orderFirst: { words: MoveWords; line: readonly string[]; fan: readonly AnalysisLine[] };
+  desperadoMove: { words: MoveWords; bestUci: string | null };
+  emptyCheckMove: { words: MoveWords; costCp: number | null; replyUci: string | null };
+  transposition: { words: MoveWords; history: readonly string[] };
+  mastersBreak: { words: MoveWords; history: readonly string[] };
+  structureFormed: { words: MoveWords };
+  moveCut: { words: MoveWords };
+  moveCage: { words: MoveWords };
+  moveStopsBreak: { words: MoveWords; history: readonly string[] };
+  moveRoute: { words: MoveWords; line: readonly string[] | null; skipFrom: string | null };
+  followUpFirst: { words: MoveWords; followFirst: { uci: string; line: AnalysisLine }; line: AnalysisLine };
+  takesAway: { words: MoveWords };
+  gambitOffer: { words: MoveWords; after: readonly AnalysisLine[]; student: Color; costCp: number | null };
+  standingRead: { words: MoveWords; student: Color; before: AnalysisLine; after: AnalysisLine; lines: readonly AnalysisLine[] | null };
+  movePurpose: { words: MoveWords; reads: IntentReads; line: readonly string[] | null; costCp: number | null; ruleBoard: { fen: string; taught: ReadonlySet<string> } | null };
+  onlyMoveRead: { words: MoveWords; fan: readonly AnalysisLine[] };
   principle: { fenBefore: string; san: string; student: Color; taught: ReadonlySet<string>; stemKey: number; namesPlayedMove: boolean };
   /** The rule the engine's move kept, where the clean move kept none. */
   principleContrast: { fenBefore: string; san: string; bestSan: string | null; student: Color; taught: ReadonlySet<string>; stemKey: number };
@@ -2108,7 +2170,16 @@ export const BOARD_COMPUTERS = {
     // sideline, the other main tries and their aims, how it scores. Learn says
     // "your move", never its name; the reply the masters give to THEIR move is
     // the student's next move, so it is not said here.
-    read: ({ history, student }, fact) => safe(() => {
+    // THE MOVE'S OWN BOOK READ in the one fact set: the standing said about the move, the rest as sentences of their own steps; their move's expected reply is the student's next move (held where the surface holds it).
+    read: (ctx, fact) => ('words' in ctx ? safe(() => {
+      const w = ctx.words;
+      const mine = w.moverIsStudent !== false;
+      return openingTheoryFacts(w.fenBefore, w.san, mine).flatMap((t) => {
+        const f = moveIdeaFact(fact, w, { kind: t.kind, idea: 'theory', weight: 40, text: t.kind === 'book-standing' ? moveLead(w, t.clause) : t.sentence, alsoText: t.sentence, squares: t.squares, extraClaims: [`theory:${t.kind}:${t.names.join(',')}`] });
+        return f ? [t.kind === 'book-reply' && !mine ? { ...f, namesStudentMove: true } : f] : [];
+      });
+    }) : safe(() => {
+      const { history, student } = ctx;
       const out: ReturnType<MakeFact>[] = [];
       const board = new Chess();
       const fens: string[] = [];
@@ -2129,7 +2200,7 @@ export const BOARD_COMPUTERS = {
         }
       }
       return out.length > 0 ? out : null;
-    }),
+    })),
     computer: 'openingTheoryFacts',
     // The door's word for a fact about the opening itself (the name group).
     kind: 'opening',
@@ -2177,7 +2248,15 @@ export const BOARD_COMPUTERS = {
     // David 2026-11-12: "I want the gap filled" — on every surface). Learn
     // reads the student's move and the reply: "Your move stops …Bg4, which
     // would pin your knight on f3 against your queen on d1".
-    read: ({ history, student }, fact) => safe(() => {
+    // The move's own stops in the one fact set (both seats): "it stops …Bg4, which would pin your knight on f3 against your queen".
+    read: (ctx, fact) => ('words' in ctx ? safe(() => {
+      const w = ctx.words;
+      return moveStops(w.fenBefore, w.san, w.moverIsStudent !== false).flatMap((st) => {
+        const f = moveIdeaFact(fact, w, { kind: 'stop', idea: 'prevent', weight: 70, text: moveLead(w, st.clause), alsoText: `It also ${st.clause}`, squares: st.squares, extraClaims: [`stops:${st.san}`] });
+        return f ? [f] : [];
+      });
+    }) : safe(() => {
+      const { history, student } = ctx;
       const out: ReturnType<MakeFact>[] = [];
       const board = new Chess();
       const fens: string[] = [];
@@ -2206,7 +2285,7 @@ export const BOARD_COMPUTERS = {
         if (cage) say(`cage:${cage.knight}`, cage.clause, cage.squares);
       }
       return out.length > 0 ? out : null;
-    }),
+    })),
     computer: 'moveStops',
     kind: 'stopped',
     phase: ANY,
@@ -2846,7 +2925,34 @@ export const BOARD_COMPUTERS = {
   deliberation: {
     // Only a REAL fork is weighed out loud. The held form is the weighing with
     // the move held back — the rule-outs and their marks, never the held move.
-    read: ({ fen, read: d, said, saysBestLine }, fact) => safe(() => {
+    // THE CHOICES on the move in the one fact set: the moves you'd weigh here
+    // and why each falls short, each its own fact with its proof, read off the
+    // fan before the move; and the line played out when the move is the
+    // engine's own and wins material or mates (not when the deep fact already
+    // says what the move sets up). Its idea rides the key (`mate|`, `win-material|`).
+    read: (ctx, fact) => ('words' in ctx ? safe(() => {
+      const w = ctx.words;
+      const san = w.san.replace(/[!?]+$/, '');
+      const db = buildDeliberation({ analysis: { topLines: [...ctx.fan] }, fenBefore: w.fenBefore, moverColor: sideToMove(w.fenBefore), excludeSan: san, prevCapture: ctx.prev, priorMove: ctx.theirLast });
+      if (!db) return null;
+      const m = new Chess(w.fenBefore).move(w.san);
+      const fenAfter = boardAfter(w.fenBefore, w.san) ?? w.fenBefore;
+      const seat = moveSeat(w);
+      const out: CoachFact[] = ruleOuts(db, NOTHING_SAID).map((r) => {
+        const said = closeSentence(r.text);
+        const claim = r.claim ?? `choice:${m.from}${m.to}:${r.san}`;
+        return fact({ key: `choice|${claim}`, claims: [claim], text: said, squares: r.squares, stakes: costStakes(r.deltaCp),
+          proof: r.proof ?? squaresProof(said, r.squares) ?? NO_PROOF.description, seat, namesStudentMove: false, thread: LOCAL_THREAD, fen: w.fenBefore, altFen: fenAfter });
+      });
+      if (db.best.san === san && db.bestLineAfter && db.bestLineProof && !ctx.deep) {
+        const idea = /and it's mate$/.test(db.bestLineAfter) ? 'mate' : 'win-material';
+        const claim = `line:${m.from}${m.to}:${(db.bestLineSans ?? []).join(',')}`;
+        out.push(placedAs(fact({ key: `${idea}|${claim}`, claims: [claim], text: closeSentence(db.bestLineAfter), squares: [], stakes: null, proof: db.bestLineProof,
+          seat, namesStudentMove: false, thread: LOCAL_THREAD, fen: w.fenBefore, altFen: fenAfter }), 'line', null));
+      }
+      return out;
+    }) : safe(() => {
+      const { fen, read: d, said, saysBestLine } = ctx;
       if (!d.isRealChoice) return null;
       const text = deliberationFacts(d, said, saysBestLine);
       if (!text) return null;
@@ -2858,11 +2964,11 @@ export const BOARD_COMPUTERS = {
       return fact({ key: text, claims: [], text, proof: NO_PROOF.description, squares: marks.squares, stakes: costStakes(worst),
         seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen, lines: marks.lines,
         ...(held ? { heldForm: { text: held, proof: NO_PROOF.withheld, squares: heldMarks.squares, lines: heldMarks.lines } } : {}) });
-    }),
+    })),
     computer: 'buildDeliberation',
     kind: 'deliberation',
     phase: ANY,
-    surfaces: LIVE_READ,
+    surfaces: { ...LIVE_READ, lesson: { wired: 'services/moveThoughtFacts.ts' }, review: { wired: 'services/moveThoughtFacts.ts' }, think: { wired: 'services/moveThoughtFacts.ts' } },
   },
   structureBoard: {
     read: ({ fen, student }, fact) => safe(() => boardStructure(fen, student).map((r) => structureFact(r, fact, fen, 'student'))),
@@ -4742,7 +4848,9 @@ export const BOARD_COMPUTERS = {
     // claim as their prepared move. "…once your b4 opens the diagonal" names a
     // move of the student's: held while it is theirs to play. Their prepared
     // move is drawn (`marks.theirs`).
-    read: ({ fenBefore, theirSan, lineAfter, student }, fact) => safe(() => {
+    // Their move's deep fact in the one fact set (`deepThought`).
+    read: (ctx, fact) => ('words' in ctx ? safe(() => deepThought(fact, ctx.words, ctx.line)) : safe(() => {
+      const { fenBefore, theirSan, lineAfter, student } = ctx;
       const deep = deepFact(fenBefore, theirSan, lineAfter, false);
       if (!deep || !lineAfter) return null;
       const fenAfter = boardAfter(fenBefore, theirSan);
@@ -4755,17 +4863,19 @@ export const BOARD_COMPUTERS = {
         stakes: { points: deep.hit.type === 'k' ? 1 : CAPTURE_VALUE[deep.hit.type] ?? 1, plies: sans.length - 1 },
         seat: 'opponent', namesStudentMove: deep.opener ? namesPlayableStudentMove(namesMoves(student, fenAfter, { from: deep.opener.from, to: deep.opener.to })) : false,
         thread: LOCAL_THREAD, fen: fenBefore, role: 'teach', marks: { theirs: { from: deep.follow.from, to: deep.follow.to } } });
-    }),
+    })),
     computer: 'deepFact',
     kind: 'opponent-intent',
     phase: ANY,
-    surfaces: { learn: LEARN_BUNDLE, play: PLAY_ASK, lesson: { not: 'a lesson reads the deep fact inside its briefing (threeFacts)' }, review: { not: 'Review reads the deep fact inside its briefing (threeFacts)' }, chat: { not: 'chat reads the move\'s three facts through its own briefing (threeFacts, moveThoughtFacts)' }, tactics: TACTICS_NA, weaknesses: { not: 'what their move set up; the miss is the move\'s cost' }, think: { not: 'a step board reads the three facts through the lesson composer (moveThoughtFacts)' } },
+    surfaces: { learn: LEARN_BUNDLE, play: PLAY_ASK, lesson: { wired: 'services/moveThoughtFacts.ts' }, review: { wired: 'services/moveThoughtFacts.ts' }, chat: { wired: 'services/moveThoughtFacts.ts' }, tactics: TACTICS_NA, weaknesses: { not: 'what their move set up; the miss is the move\'s cost' }, think: { wired: 'services/moveThoughtFacts.ts' } },
   },
   studentDeepFact: {
     // YOUR DEEP FACT names your next move, so Learn holds it and says it when
     // you play it: the fact is the promise's words, its piece, square and the
     // hit it must still make ride the key (`<piece>|<square>|<hit>|<type>|…`).
-    read: ({ fenBefore, san, reply, lineAfterReply }, fact) => safe(() => {
+    // The student's move's deep fact in the one fact set (`deepThought`).
+    read: (ctx, fact) => ('words' in ctx ? safe(() => deepThought(fact, ctx.words, ctx.line)) : safe(() => {
+      const { fenBefore, san, reply, lineAfterReply } = ctx;
       if (!reply || !lineAfterReply || lineAfterReply.length === 0) return null;
       const deep = deepFact(fenBefore, san, [reply.replace(/^…/, ''), ...lineAfterReply], true);
       if (!deep) return null;
@@ -4775,17 +4885,30 @@ export const BOARD_COMPUTERS = {
       return fact({ key: `${deep.follow.piece}|${deep.follow.to}|${deep.hit.square}|${deep.hit.type}|${claim}`, claims: [claim], text,
         proof: squaresProof(text, [deep.follow.to, deep.hit.square]) ?? NO_PROOF.description, squares: [deep.follow.to, deep.hit.square], stakes: null,
         seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore });
-    }),
+    })),
     computer: 'deepFact',
     kind: 'point',
     phase: ANY,
-    surfaces: { learn: LEARN_BUNDLE, play: PLAY_ASK, lesson: { not: 'a lesson reads the deep fact inside its briefing (threeFacts)' }, review: { not: 'Review reads the deep fact inside its briefing (threeFacts)' }, chat: { not: 'chat reads the move\'s three facts through its own briefing (threeFacts, moveThoughtFacts)' }, tactics: TACTICS_NA, weaknesses: { not: 'a promise kept, no question of the student\'s missed' }, think: { not: 'a step board reads the three facts through the lesson composer (moveThoughtFacts)' } },
+    surfaces: { learn: LEARN_BUNDLE, play: PLAY_ASK, lesson: { wired: 'services/moveThoughtFacts.ts' }, review: { wired: 'services/moveThoughtFacts.ts' }, chat: { wired: 'services/moveThoughtFacts.ts' }, tactics: TACTICS_NA, weaknesses: { not: 'a promise kept, no question of the student\'s missed' }, think: { wired: 'services/moveThoughtFacts.ts' } },
   },
   binding: {
     // YOUR MOVE AGAINST THEIR LAST ONE — their target and how the move answers
     // it. The binding's "this" is the student's move: said as "your move",
     // never by name (David 2026-11-09).
-    read: ({ fenBefore, san, prior, plainSeen, ply }, fact) => safe(() => {
+    // THE ANSWER TO THEIR LAST MOVE in the one fact set, either seat: what it
+    // aimed at, and how this move meets it, from the move's own point (what it
+    // sets up or threatens — `point` — else what the moved piece hits).
+    read: (ctx, fact) => ('words' in ctx ? safe(() => {
+      const w = ctx.words;
+      const mine = w.moverIsStudent !== false;
+      const tgt = theirTarget(ctx.theirLast, mine, ctx.plainSeen);
+      if (!tgt) return null;
+      const bind = bindingFact(w.fenBefore, w.san, tgt, ctx.point ?? moveHit(w.fenBefore, w.san), mine);
+      if (!bind) return null;
+      const text = `${openSentence(tgt.text)}, ${bind.text}`;
+      return moveIdeaFact(fact, w, { kind: 'binding', idea: bind.idea, weight: 62, text, alsoText: text, squares: [tgt.square] });
+    }) : safe(() => {
+      const { fenBefore, san, prior, plainSeen, ply } = ctx;
       const tgt = theirTarget(prior, true, plainSeen);
       if (!tgt) return null;
       const bind = binding(fenBefore, san, tgt, moveHit(fenBefore, san), true);
@@ -4794,18 +4917,20 @@ export const BOARD_COMPUTERS = {
       const claim = `binding:${tgt.square}:${ply}`;
       return fact({ key: claim, claims: [claim], text, proof: squaresProof(text, [tgt.by, tgt.square]) ?? NO_PROOF.stated, squares: [tgt.by, tgt.square], stakes: null,
         seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore, role: 'teach' });
-    }),
+    })),
     computer: 'bindingFact',
     kind: 'point',
     phase: ANY,
-    surfaces: { learn: LEARN_BUNDLE, play: PLAY_ASK, lesson: { not: 'a lesson reads the binding inside its briefing (threeFacts)' }, review: { not: 'Review reads the binding inside its briefing (threeFacts)' }, chat: { not: 'chat reads the move\'s three facts through its own briefing (threeFacts, moveThoughtFacts)' }, tactics: TACTICS_NA, weaknesses: { not: 'a reason for a move, no question of the student\'s missed' }, think: { not: 'a step board reads the three facts through the lesson composer (moveThoughtFacts)' } },
+    surfaces: { learn: LEARN_BUNDLE, play: PLAY_ASK, lesson: { wired: 'services/moveThoughtFacts.ts' }, review: { wired: 'services/moveThoughtFacts.ts' }, chat: { wired: 'services/moveThoughtFacts.ts' }, tactics: TACTICS_NA, weaknesses: { not: 'a reason for a move, no question of the student\'s missed' }, think: { wired: 'services/moveThoughtFacts.ts' } },
   },
   boardTeacherOwn: {
     // WHAT THE STUDENT'S MOVE DID, from the board teacher — Learn's fallback
     // own-move reason. The piece must still stand where it went; the move is
     // "your move", never its name (David 2026-11-09). An idea said in full
     // once is referred to after (`idea:<key>:<n>` claims).
-    read: ({ fenBefore, san, fenNow, spokenIdeas }, fact) => safe(() => {
+    // The student's move in the one fact set (`boardTeacherThought`).
+    read: (ctx, fact) => ('words' in ctx ? safe(() => boardTeacherThought(fact, ctx.words, ctx.phrases)) : safe(() => {
+      const { fenBefore, san, fenNow, spokenIdeas } = ctx;
       if (!stillStands(fenBefore, san, fenNow)) return null;
       const read = teacherWithIdeas(fenBefore, san, true, spokenIdeas);
       if (!read) return null;
@@ -4813,16 +4938,18 @@ export const BOARD_COMPUTERS = {
       return fact({ key: `board-teacher:${san}:${posKey(fenBefore)}`, claims: [`board-teacher:${san}:${posKey(fenBefore)}`, ...(read.fact.claim ? [read.fact.claim] : []), ...read.ideaClaims], text,
         proof: squaresProof(text, read.fact.squares) ?? NO_PROOF.description, squares: read.fact.squares, stakes: null,
         seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore });
-    }),
+    })),
     computer: 'buildReviewMoveTeachingFact',
     kind: 'point',
     phase: ANY,
-    surfaces: { learn: LEARN_BUNDLE, play: PLAY_ASK, lesson: { not: 'a lesson reads the board teacher through its own move facts (moveThoughtFacts)' }, review: { not: 'Review speaks the board teacher through its own move teaching (reviewMoveTeaching)' }, chat: { not: 'chat reads the move\'s three facts through its own briefing (threeFacts, moveThoughtFacts)' }, tactics: TACTICS_NA, weaknesses: { not: 'a reason for a move, no question of the student\'s missed' }, think: { not: 'a step board reads the three facts through the lesson composer (moveThoughtFacts)' } },
+    surfaces: { learn: LEARN_BUNDLE, play: PLAY_ASK, lesson: { wired: 'services/moveThoughtFacts.ts' }, review: { wired: 'services/moveThoughtFacts.ts' }, chat: { wired: 'services/moveThoughtFacts.ts' }, tactics: TACTICS_NA, weaknesses: { not: 'a reason for a move, no question of the student\'s missed' }, think: { wired: 'services/moveThoughtFacts.ts' } },
   },
   boardTeacherTheirs: {
     // THEIR MOVE'S BOARD JOB (golden speedrun 2026-10-20): the same board
     // teacher, from their seat — the why of their move, never an aside.
-    read: ({ fenBefore, san, fenNow, spokenIdeas }, fact) => safe(() => {
+    // Their move in the one fact set (`boardTeacherThought`).
+    read: (ctx, fact) => ('words' in ctx ? safe(() => boardTeacherThought(fact, ctx.words, ctx.phrases)) : safe(() => {
+      const { fenBefore, san, fenNow, spokenIdeas } = ctx;
       if (!stillStands(fenBefore, san, fenNow)) return null;
       const read = teacherWithIdeas(fenBefore, san, false, spokenIdeas);
       if (!read) return null;
@@ -4830,11 +4957,11 @@ export const BOARD_COMPUTERS = {
       return fact({ key: `their-board:${san}:${posKey(fenBefore)}`, claims: [`their-board:${san}:${posKey(fenBefore)}`, ...read.ideaClaims], text,
         proof: squaresProof(text, read.fact.squares) ?? NO_PROOF.description, squares: [moveTo(fenBefore, san), ...read.fact.squares], stakes: null,
         seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore, role: 'teach' });
-    }),
+    })),
     computer: 'buildReviewMoveTeachingFact',
     kind: 'opponent-intent',
     phase: ANY,
-    surfaces: { learn: LEARN_BUNDLE, play: PLAY_ASK, lesson: { not: 'a lesson reads the board teacher through its own move facts (moveThoughtFacts)' }, review: { not: 'Review speaks the board teacher through its own move teaching (reviewMoveTeaching)' }, chat: { not: 'chat reads the move\'s three facts through its own briefing (threeFacts, moveThoughtFacts)' }, tactics: TACTICS_NA, weaknesses: { not: 'their move\'s job, no question of the student\'s missed' }, think: { not: 'a step board reads the three facts through the lesson composer (moveThoughtFacts)' } },
+    surfaces: { learn: LEARN_BUNDLE, play: PLAY_ASK, lesson: { wired: 'services/moveThoughtFacts.ts' }, review: { wired: 'services/moveThoughtFacts.ts' }, chat: { wired: 'services/moveThoughtFacts.ts' }, tactics: TACTICS_NA, weaknesses: { not: 'their move\'s job, no question of the student\'s missed' }, think: { wired: 'services/moveThoughtFacts.ts' } },
   },
   prize: {
     // The sentence is the reason it can be won, from the board: nothing guards
@@ -5008,7 +5135,25 @@ export const BOARD_COMPUTERS = {
     },
   },
   notYet: {
-    read: ({ fen, bestSan, pv, student }, fact) => safe(() => {
+    // NOT YET — FIRST THIS, about the move just played (the one fact set):
+    // a capture is on the board, this move is a different forcing move, and
+    // the capture is still there later in the line that follows. Both seats.
+    read: (ctx, fact) => ('words' in ctx ? safe(() => {
+      const w = ctx.words;
+      const mine = w.moverIsStudent !== false;
+      const ib = inBetweenMove(w.fenBefore, pvSanToUci(w.fenBefore, [w.san, ...ctx.line]), { reads: ctx.fan });
+      if (!ib) return null;
+      const first = ib.check ? 'The check' : 'The threat';
+      const said = closeSentence(mine
+        ? `Taking on ${ib.captureSquare} can wait — it isn't going anywhere. ${first} comes first, and you take after`
+        : `They don't take on ${ib.captureSquare} yet — it isn't going anywhere. ${first} comes first, and they take after`);
+      const m = new Chess(w.fenBefore).move(w.san);
+      const claim = `not-yet:${m.from}${m.to}:${ib.captureSquare}`;
+      return fact({ key: claim, claims: [claim], text: said, squares: [ib.captureSquare], stakes: null,
+        proof: lineProof({ fen: w.fenBefore, sans: ib.line }, mine ? 'you' : 'they') ?? NO_PROOF.description, seat: moveSeat(w), namesStudentMove: false, thread: LOCAL_THREAD,
+        fen: boardAfter(w.fenBefore, w.san) ?? w.fenBefore, altFen: w.fenBefore });
+    }) : safe(() => {
+      const { fen, bestSan, pv, student } = ctx;
       // ONE DETECTOR (A-plan P7): the in-between move the tactic record reads too.
       const ib = inBetweenMove(fen, [...pv], 'best');
       if (!ib) return null;
@@ -5019,19 +5164,19 @@ export const BOARD_COMPUTERS = {
       const key = `notyet:${ib.captureSquare}`;
       return fact({ key, claims: [key], text, proof: lineProof(line, lineSeatAt(fen, student)) ?? NO_PROOF.description, squares: [ib.captureSquare], stakes: null,
         seat: 'student', namesStudentMove: true, thread: LOCAL_THREAD, fen, lines: [line] });
-    }),
+    })),
     computer: 'inBetweenMove',
     kind: 'not-yet',
     phase: ANY,
     surfaces: {
       learn: { wired: 'services/thinkAloud.ts' },
       chat: { wired: 'services/thinkAloud.ts' },
-      review: { not: 'Review says the in-between move about the move played (notYetPlayed), never as advice on a board already past' },
-      lesson: { not: 'a lesson plays the model line, which plays the forcing move first' },
+      review: { wired: 'services/moveThoughtFacts.ts' },
+      lesson: { wired: 'services/moveThoughtFacts.ts' },
       play: PLAY_ASK,
       tactics: { not: 'owed — a zwischenzug puzzle could say why the capture waits' },
       weaknesses: WEAK_OWED,
-      think: { not: 'owed — the step board reads the composer, not the live depth read (depthClauses)' },
+      think: { wired: 'services/moveThoughtFacts.ts' },
     },
   },
   obviousStop: {
@@ -5604,6 +5749,436 @@ export const BOARD_COMPUTERS = {
       tactics: TACTICS_NA,
       weaknesses: { not: 'what a move threatens — the miss is filed by the threat lane' },
     },
+  },
+  // THE ONE FACT SET'S READS (the basket, 2026-11-19: "We are unifying the
+  // computers so all surfaces can use them"). Each reads one computer on one
+  // move and says it with the surface's writer settings (`MoveWords`): its
+  // seat, its tense and whether it may name the move — never a second copy of
+  // the sentence. Each fact carries its idea, weight and extra on its key
+  // (`thoughtKey`); its place is the kind its computer stated (`moveIdeaFact`).
+  moveAspect: {
+    // THE BRIEFING'S ASPECTS — the threat, the material, the trade, the tactic,
+    // the check, the promotion, the king cover, the structure made or conceded
+    // — or the mate. A capture's gain is said only when it stands in every
+    // line that follows (task 172). The long horizon is a fixed phrase: said
+    // with its first two changes of its kind (the WHY rule). The threat's
+    // square rides the tag (the binding reads it as the move's own point).
+    read: ({ words: w, prev, follow, phrases }, fact) => safe(() => {
+      const r = moveAspects({ fenBefore: w.fenBefore, san: w.san, prev, moverIsStudent: w.moverIsStudent, follow });
+      if (!r) return null;
+      if (r.mate) {
+        const who = w.moverIsStudent === undefined ? 'This delivers' : w.moverIsStudent ? 'You deliver' : 'They deliver';
+        return moveIdeaFact(fact, w, { kind: 'checkmate', idea: 'mate', weight: 100, text: `${who} checkmate — the king has no reply`, squares: [] });
+      }
+      return r.aspects.flatMap((a) => {
+        const verb = a.horizon && horizonSaid(phrases, a.kind) ? `${a.verb}${a.horizon}` : a.verb;
+        const f = moveIdeaFact(fact, w, { kind: a.kind, idea: a.idea, weight: a.weight, text: moveLead(w, verb), alsoText: `It also ${verb}`, squares: a.squares, restates: a.restates === true, tag: a.kind === 'aspect-threat' ? a.squares[0] ?? '' : '' });
+        return f ? [f] : [];
+      });
+    }),
+    computer: 'moveAspects',
+    kind: 'point',
+    phase: ANY,
+    surfaces: FACT_SET_SURFACES,
+  },
+  moveThreatDeep: {
+    // WHAT THE MOVE THREATENS, DEEPER (fix 3, 2026-11-13): a threat two or
+    // three moves long (Bg5 → Bxf6 and cxd5), read off the null-move line.
+    read: ({ words: w, reads, student }, fact) => safe(() => {
+      const t = moveThreat(w.fenBefore, w.san, reads, student);
+      if (!t) return null;
+      const mate = /^threatens mate/.test(t.clause);
+      return moveIdeaFact(fact, w, { kind: 'aspect-threat', idea: mate ? 'mate' : 'threat', weight: mate ? 94 : 86, text: moveLead(w, t.clause), alsoText: `It also ${t.clause}`, squares: t.squares });
+    }),
+    computer: 'moveThreat',
+    kind: 'point',
+    phase: ANY,
+    surfaces: FACT_SET_SURFACES,
+  },
+  moveAllows: {
+    // WHAT A COSTLY MOVE ALLOWS (fix 1, 2026-11-13): the line that punishes
+    // it — the one cost computer every surface grades with (`costReason`),
+    // worded by its one renderer, both seats from the student's.
+    read: ({ words: w, student, costCp, after, against }, fact) => safe(() => {
+      const earlier = after.earlier?.moves;
+      const r = costReason({
+        fenBefore: w.fenBefore, playedSan: w.san, mover: sideToMove(w.fenBefore), student, costCp,
+        after: { uci: after.moves, source: 'deep', seconds: earlier && earlier.length > 0 ? [earlier] : [] },
+        before: null, priorMove: null, against,
+      });
+      const clause = r ? allowedClause(r, student) : null;
+      if (!r || !clause) return null;
+      const sq = r.plies.slice(0, r.blowPlies).map((p) => p.uci.slice(2, 4));
+      return moveIdeaFact(fact, w, { kind: 'consequence', idea: r.mate ? 'mate' : 'win-material', weight: 92, text: moveLead(w, clause), alsoText: `It ${clause}`, squares: sq, extraClaims: [`allows:${r.plies[0]?.uci ?? ''}`] });
+    }),
+    computer: 'allowedClause',
+    kind: 'consequence',
+    phase: ANY,
+    surfaces: FACT_SET_SURFACES,
+  },
+  moveJobRead: {
+    // THE MOVE'S JOB, from the speaker's seat; a take-back reads the capture
+    // before it. A JOB SAID MANY TIMES A LESSON OR A GAME ROTATES ITS WORDS
+    // (v5 re-run 2026-10-29), and the context that makes a guard matter is
+    // said with its first guard only. A job that says the check carries the
+    // check's claim; a castling made ready carries that claim.
+    read: ({ words: w, theirLast, follow, phrases }, fact) => safe(() => {
+      const prior = (() => {
+        if (!theirLast || !/x/.test(theirLast.san)) return null;
+        try { const pm = new Chess(theirLast.fenBefore).move(theirLast.san); return pm.captured ? { to: pm.to, captured: pm.captured, promoted: !!pm.promotion } : null; } catch { return null; }
+      })();
+      const job = moveJob(w.fenBefore, w.san, sideToMove(w.fenBefore), w.moverIsStudent !== false ? MINE : THEIRS, prior, follow);
+      if (!job) return null;
+      const m = new Chess(w.fenBefore).move(w.san);
+      const worded = job.contextKey && job.compact
+        ? sayIdea(phrases, `job-context:${job.contextKey}`, [job.clause, job.compact])
+        : job.forms?.length ? sayIdea(phrases, `job-kind:${job.kind}`, job.forms) : job.clause;
+      const clause = worded.replace(/^it\s+/i, '');
+      const saysCheck = /^gives check\b/.test(clause);
+      const idea: IdeaKind = job.clause === 'it gives check' ? 'check' : BOOK_JOB_IDEA[job.kind];
+      return moveIdeaFact(fact, w, { kind: 'move-job', idea, weight: JOB_WEIGHT[job.kind], text: moveLead(w, clause), alsoText: `It also ${clause}`, squares: job.squares, restates: isBareJob(job), extraClaims: [
+        ...(saysCheck ? [`move:${m.from}${m.to}:${ideaClaim('check', [])}`] : []),
+        ...(job.prepsCastle ? [castlePrepClaim(m.from, m.to)] : []),
+      ] });
+    }),
+    computer: 'moveJob',
+    kind: 'move-job',
+    phase: ANY,
+    surfaces: FACT_SET_SURFACES,
+  },
+  moveFundamentals: {
+    // THE FUNDAMENTALS — worded from the mover's own seat ("saves the queen
+    // from their bishop"), their move's turned to the student's. A push the
+    // rule calls prepared is one a line goes on to play (task 172); developing
+    // with tempo is a tempo; a stock phrase is taught in full once a lesson.
+    read: ({ words: w, follow }, fact) => safe(() => {
+      const fenAfter = boardAfter(w.fenBefore, w.san);
+      if (!fenAfter) return null;
+      const seated = (clause: string): string => (w.moverIsStudent !== false ? clause : toOtherSeat(clause));
+      const out: CoachFact[] = [];
+      for (const f of computeMoveFundamentals(w.fenBefore, w.san, sideToMove(w.fenBefore) === 'w' ? 'white' : 'black')) {
+        if (f.id === 'prepare-break' && f.names && follow.length > 0 && !follow.some((line) => linePlays(fenAfter, line, f.names as { from: string; to: string }))) continue;
+        const idea: IdeaKind = f.id === 'development' && f.forcing ? 'tempo' : FUNDAMENTAL_IDEA[f.id];
+        const made = moveIdeaFact(fact, w, { kind: 'fundamental', idea, weight: f.weight, text: moveLead(w, seated(f.led)), alsoText: `It also ${seated(f.led)}`, squares: f.squares, extraClaims: STOCK_PHRASE.has(idea) ? [`phrase:${idea}`] : [] });
+        if (made) out.push(made);
+      }
+      return out;
+    }),
+    computer: 'computeMoveFundamentals',
+    kind: 'fundamental',
+    phase: ANY,
+    surfaces: FACT_SET_SURFACES,
+  },
+  theirAim: {
+    // WHAT THEIR MOVE AIMS AT, on their move (WO-STORY-MATRIX-01 P1-9) — only
+    // an aim the student has to answer: a piece that really falls
+    // (`computeMustDefend`, SEE-checked). When the reply in the line answers
+    // it, the reply's binding says the aim and the answer in one breath.
+    read: ({ words: w, line, plainSeen }, fact) => safe(() => {
+      const fenAfter = boardAfter(w.fenBefore, w.san);
+      const aim = theirTarget({ fenBefore: w.fenBefore, san: w.san }, true, plainSeen);
+      if (!aim || !fenAfter) return null;
+      if (!computeMustDefend(fenAfter, sideToMove(fenAfter)).pieces.some((p) => p.square === aim.square)) return null;
+      if (replyAnswers(fenAfter, line, aim)) return null;
+      return moveIdeaFact(fact, w, { kind: 'opp-target', idea: 'threat', weight: 45, text: openSentence(aim.text), alsoText: openSentence(aim.text), squares: [aim.square, aim.by], extraClaims: [`aim:${aim.by}:${aim.square}`] });
+    }),
+    computer: 'theirTarget',
+    kind: 'opp-target',
+    phase: ANY,
+    surfaces: FACT_SET_SURFACES,
+  },
+  outFirst: {
+    // A PIECE OUT BEFORE ITS PAWN SHUTS IT IN (gap B1): "…Bf5 comes out before
+    // …e6, which would shut the bishop in", read off the line that follows.
+    // Said as theory teaches it, the question first (gap E1), rotated on the
+    // board — a sentence of its own step, never a second intro of the move.
+    read: ({ words: w, line }, fact) => safe(() => {
+      const o = pieceOutFirst(w.fenBefore, w.san, line);
+      if (!o) return null;
+      const also = rotateStem([
+        `The ${o.piece} comes out before ${o.pawn}, which would have shut it in`,
+        `Why not ${o.pawn} first? It would have shut the ${o.piece} in`,
+      ], stemKeyOf(`${w.fenBefore}|${w.san}`));
+      return moveIdeaFact(fact, w, { kind: 'move-order', idea: 'order', weight: 72, text: also, alsoText: also, squares: o.squares, extraClaims: [`out-first:${o.squares.join('')}`] });
+    }),
+    computer: 'pieceOutFirst',
+    kind: 'move-order',
+    phase: ANY,
+    surfaces: FACT_SET_SURFACES,
+  },
+  orderFirst: {
+    // THE ORDER, READ OFF THE BOARD (gap B1): the mover's next move in the
+    // line, played first, would let them pin, fork or kick — said only when
+    // the engine agrees it is worse (`orderMatters`). One claim with the stop
+    // on the same reply: the stop says it.
+    read: ({ words: w, line, fan }, fact) => safe(() => {
+      const order = orderByThreat(w.fenBefore, w.san, line, w.moverIsStudent !== false, followPvOf(w.fenBefore, line[1], fan));
+      if (!order || !orderMatters(w.fenBefore, w.san, order.follow, fan)) return null;
+      const does = order.would.replace(/^would (\w+)/, (_m, v: string) => `${v}s`);
+      const said = rotateStem([
+        `Why not ${order.follow} first? It would allow ${order.answer}, which ${does}`,
+        `The order matters: ${order.follow} straight away would allow ${order.answer}, which ${does}`,
+      ], stemKeyOf(`${w.fenBefore}|${w.san}|order`));
+      return moveIdeaFact(fact, w, { kind: 'move-order', idea: 'order', weight: 72, text: said, alsoText: said, squares: order.squares, extraClaims: [`order-board:${order.follow}>${order.answer}`, `stops:${order.answer}`] });
+    }),
+    computer: 'orderByThreat',
+    kind: 'move-order',
+    phase: ANY,
+    surfaces: FACT_SET_SURFACES,
+  },
+  desperadoMove: {
+    // TWO PIECES HANGING: SELL THE ONE YOU CANNOT SAVE (desperado, Danya
+    // 1Rejj): the engine's best move is a capture by one of two hanging pieces.
+    read: ({ words: w, bestUci }, fact) => safe(() => {
+      const d = desperadoAt(w.fenBefore, w.san, bestUci);
+      if (!d) return null;
+      return moveIdeaFact(fact, w, { kind: 'defence-idea', idea: 'rescue', weight: 66, text: desperadoLine(d, w.moverIsStudent !== false ? 'your' : 'their', w.fenBefore), squares: [d.from, d.to, ...(d.other ? [d.other.square] : [])], extraClaims: [`desperado:${d.from}${d.to}`] });
+    }),
+    computer: 'desperadoAt',
+    kind: 'defence-idea',
+    phase: ANY,
+    surfaces: FACT_SET_SURFACES,
+  },
+  emptyCheckMove: {
+    // A CHECK THAT GOES NOWHERE (Danya Ytkf3): it cost half a pawn and the
+    // engine's answer is a block or a king step.
+    read: ({ words: w, costCp, replyUci }, fact) => safe(() => {
+      const e = emptyCheckAt(w.fenBefore, w.san, costCp, replyUci);
+      if (!e) return null;
+      return moveIdeaFact(fact, w, { kind: 'method', idea: 'check', weight: 58, text: emptyCheckLine(e, w.moverIsStudent !== false ? 'your' : 'their', w.fenBefore), squares: e.squares, extraClaims: [`empty-check:${e.squares.join('')}`] });
+    }),
+    computer: 'emptyCheckAt',
+    kind: 'method',
+    phase: ANY,
+    surfaces: FACT_SET_SURFACES,
+  },
+  transposition: {
+    // TRANSPOSITION AND ANALOGY (gaps A7, A11): "this transposes into the
+    // Exchange French"; "a reversed Sicilian". Every name is a real DB
+    // position (the offline index).
+    read: ({ words: w, history }, fact) => safe(() => {
+      const fenAfter = boardAfter(w.fenBefore, w.san);
+      if (!fenAfter) return null;
+      const after = [...history, w.san];
+      const to = new Chess(w.fenBefore).move(w.san).to;
+      const into = transposedOpening(fenAfter, after.length, detectOpeningByOrder(after));
+      const out: CoachFact[] = [];
+      const t = into ? moveIdeaFact(fact, w, { kind: 'equivalence', idea: 'theory', weight: 44, text: moveLead(w, `transposes into the ${into}`), alsoText: `It transposes into the ${into}`, squares: [to], extraClaims: [`transposed:${into}`] }) : null;
+      if (t) out.push(t);
+      const mine = w.moverIsStudent !== false;
+      const eq = openingEquivalence(after, mine === (sideToMove(w.fenBefore) === 'w') ? 'w' : 'b');
+      const e = eq ? moveIdeaFact(fact, w, { kind: 'equivalence', idea: 'theory', weight: 42, text: eq.text, alsoText: eq.text, squares: eq.squares, extraClaims: [eq.claim] }) : null;
+      if (e) out.push(e);
+      return out;
+    }),
+    computer: 'openingEquivalence',
+    kind: 'equivalence',
+    phase: ANY,
+    surfaces: { ...FACT_SET_SURFACES, think: THINK_BOOK },
+  },
+  mastersBreak: {
+    // THE MASTERS' BREAK THE MOVE PREPARES (David 2026-10-27, "the a3
+    // Sicilian": 2.a3 covers b4, and masters push b4 in 56% of their games):
+    // the move's own job, read in the composer like every other.
+    read: ({ words: w, history }, fact) => safe(() => {
+      const prep = preparesBreakClause(w.fenBefore, w.san, storyPlanAfter([...history, w.san]), w.moverIsStudent !== false);
+      if (!prep) return null;
+      return moveIdeaFact(fact, w, { kind: 'move-job', idea: 'prepare', weight: 62, text: moveLead(w, prep.clause), alsoText: `It also ${prep.clause}`, squares: prep.squares, extraClaims: [`prepares-break:${prep.squares[1]}`] });
+    }),
+    computer: 'preparesBreakClause',
+    kind: 'move-job',
+    phase: ANY,
+    surfaces: FACT_SET_SURFACES,
+  },
+  structureFormed: {
+    // THE STRUCTURE BY NAME, WITH ITS PLANS (gap D1): said when the move
+    // creates it, from the student's seat.
+    read: ({ words: w }, fact) => safe(() => {
+      const formed = namedStructureFormed(w.fenBefore, w.san);
+      if (!formed) return null;
+      const line = namedStructureLine(formed, (w.moverIsStudent !== false) === (sideToMove(w.fenBefore) === 'w') ? 'w' : 'b');
+      return moveIdeaFact(fact, w, { kind: 'structure-plan', idea: 'structure', weight: 58, text: line, alsoText: line, squares: formed.squares, extraClaims: [`structure:${formed.name}`] });
+    }),
+    computer: 'namedStructureFormed',
+    kind: 'structure-plan',
+    phase: ANY,
+    surfaces: FACT_SET_SURFACES,
+  },
+  moveCut: {
+    // WHAT THE MOVE CUTS (gap B3): "Bd3 cuts the queen off from d4".
+    read: ({ words: w }, fact) => safe(() => {
+      const cut = lineCut(w.fenBefore, w.san, w.moverIsStudent !== false);
+      if (!cut) return null;
+      return moveIdeaFact(fact, w, { kind: 'aspect-own-weakness', idea: 'weakness', weight: 46, text: moveLead(w, `cuts ${cut.piece} off from ${cut.lost}`), alsoText: `It also cuts ${cut.piece} off from ${cut.lost}`, squares: cut.squares, extraClaims: [`cut:${cut.squares.join('')}`] });
+    }),
+    computer: 'lineCut',
+    kind: 'point',
+    phase: ANY,
+    surfaces: FACT_SET_SURFACES,
+  },
+  moveCage: {
+    // THE CAGE (Danya, 32.e4: "e4 takes d5; the knight can only shuttle
+    // between b6 and a8"): the move takes the squares their knight needs.
+    read: ({ words: w }, fact) => safe(() => {
+      const cage = pieceCage(w.fenBefore, w.san, w.moverIsStudent !== false);
+      if (!cage) return null;
+      return moveIdeaFact(fact, w, { kind: 'aspect-their-weakness', idea: 'prevent', weight: 62, text: moveLead(w, cage.clause), alsoText: `It also ${cage.clause}`, squares: cage.squares, extraClaims: [`cage:${cage.knight}`] });
+    }),
+    computer: 'pieceCage',
+    kind: 'point',
+    phase: ANY,
+    surfaces: FACT_SET_SURFACES,
+  },
+  moveStopsBreak: {
+    // THEIR BREAK, STOPPED ("a5, stopping b4"): the pawn break their side
+    // plays in master games from here, which the move makes lose material.
+    read: ({ words: w, history }, fact) => safe(() => {
+      const plan = storyPlanAfter(history);
+      const theirBreak = plan ? (sideToMove(w.fenBefore) === 'w' ? plan.black : plan.white) : null;
+      const brk = theirBreak ? stopsBreak(w.fenBefore, w.san, theirBreak.san, w.moverIsStudent !== false) : null;
+      if (!brk) return null;
+      return moveIdeaFact(fact, w, { kind: 'stop', idea: 'prevent', weight: 72, text: moveLead(w, brk.clause), alsoText: `It also ${brk.clause}`, squares: brk.squares, extraClaims: [`stops-break:${brk.san}`] });
+    }),
+    computer: 'stopsBreak',
+    kind: 'point',
+    phase: ANY,
+    surfaces: FACT_SET_SURFACES,
+  },
+  moveRoute: {
+    // THE PIECE'S TRIP down the line that follows — not when the deep fact's
+    // follow-up already walks it (`skipFrom`).
+    read: ({ words: w, line, skipFrom }, fact) => safe(() => {
+      const route = pieceRoute(w.fenBefore, w.san, line);
+      if (!route || (skipFrom !== null && route.path.includes(skipFrom))) return null;
+      return moveIdeaFact(fact, w, { kind: 'route', idea: 'route', weight: 52, text: moveGerund(w, route.text), alsoText: `It also ${route.verb}`, squares: route.path });
+    }),
+    computer: 'pieceRoute',
+    kind: 'point',
+    phase: ANY,
+    surfaces: FACT_SET_SURFACES,
+  },
+  followUpFirst: {
+    // THE ORDER MATTERS (`moveOrder`, census #1): the mover's follow-up played
+    // first would have run into an answer that costs material or mates — read
+    // off the engine's line after this move and its line where the follow-up
+    // came first. Both seats; the lesson shows its line, so the moves are named.
+    read: ({ words: w, followFirst, line }, fact) => safe(() => {
+      const seat = moveSeat(w);
+      const mo = moveOrder(w.fenBefore, w.san, followFirst.uci, line, followFirst.line, seat, true);
+      if (!mo) return null;
+      const m = new Chess(w.fenBefore).move(w.san);
+      const fenAfter = boardAfter(w.fenBefore, w.san) ?? w.fenBefore;
+      const said = closeSentence(mo.text);
+      const key = `order:${m.from}${m.to}>${mo.followUp.uci}`;
+      return fact({ key, claims: [key], text: said, squares: mo.squares.filter((s) => s !== m.from && s !== m.to).filter((s, k, a) => a.indexOf(s) === k),
+        stakes: costStakes(mo.costCp), proof: squaresProof(said, mo.squares) ?? NO_PROOF.description, seat, namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter, altFen: w.fenBefore });
+    }),
+    computer: 'moveOrder',
+    kind: 'move-order',
+    phase: ANY,
+    surfaces: FACT_SET_SURFACES,
+  },
+  takesAway: {
+    // THE STOP: the other side's wanted pin, kick or fork, and this is the
+    // move that stops it ("h3 takes away g4: Bg4 would pin your knight on f3").
+    // BOTH SEATS: worded from the mover's seat, turned to the student's.
+    read: ({ words: w }, fact) => safe(() => {
+      const stop = findProphylaxis(w.fenBefore);
+      if (!stop || stop.prevention.san.replace(/[+#]$/, '') !== w.san.replace(/[+#!?]+$/, '')) return null;
+      const verb = stop.kind === 'pin' ? 'pin' : stop.kind === 'fork' ? 'fork' : 'hit';
+      const raw = `${stop.intent.san} would ${verb} your ${POISON_NAME[stop.victim.piece] ?? 'piece'} on ${stop.victim.square}`;
+      const why = w.moverIsStudent !== false ? raw : toOtherSeat(raw);
+      return moveIdeaFact(fact, w, { kind: 'stop', idea: 'prevent', weight: 72, text: moveLead(w, `takes away ${stop.intent.to}: ${why}`), alsoText: `It also takes away ${stop.intent.to}: ${why}`, squares: stop.squares });
+    }),
+    computer: 'findProphylaxis',
+    kind: 'point',
+    phase: ANY,
+    surfaces: FACT_SET_SURFACES,
+  },
+  gambitOffer: {
+    // A GAMBIT (fix 4, 2026-11-13): what the move gives, what comes back along
+    // the line that takes it, and the engine's verdict, said apart. The
+    // square of the gift rides the tag (the opening's own line about it is
+    // the same claim).
+    read: ({ words: w, after, student, costCp }, fact) => safe(() => {
+      const g = gambitIdea(w.fenBefore, w.san, after, student, costCp);
+      if (!g) return null;
+      return moveIdeaFact(fact, w, { kind: 'compensation', idea: 'eval', weight: 80, text: `${moveLead(w, g.clause)}. ${g.verdict}`, alsoText: `It ${g.clause}. ${g.verdict}`, squares: g.squares, extraClaims: [`gambit:${g.sans[0]}`], tag: g.captureSquare });
+    }),
+    computer: 'gambitIdea',
+    kind: 'compensation',
+    phase: ANY,
+    surfaces: FACT_SET_SURFACES,
+  },
+  standingRead: {
+    // THE STANDING WHEN THE MOVE CHANGED IT — Review's verdict and its board
+    // reason, the one producer (`evalReading`). ONE STANDING IS ONE CLAIM.
+    read: ({ words: w, student, before, after, lines }, fact) => safe(() => {
+      const fenAfter = boardAfter(w.fenBefore, w.san);
+      if (!fenAfter) return null;
+      const pov = (cp: number): number => cp * (student === 'w' ? 1 : -1);
+      const m = (() => { try { return new Chess(w.fenBefore).move(w.san); } catch { return null; } })();
+      const text = evalReading(fenAfter, pov(before.evaluation), pov(after.evaluation), null, student, m ? { to: m.to, captured: m.captured ?? null } : null, lines);
+      if (!text) return null;
+      return moveIdeaFact(fact, w, { kind: 'eval', idea: 'eval', weight: 45, text, squares: [], extraClaims: [`standing:${signedBand(pov(after.evaluation))}`] });
+    }),
+    computer: 'evalReading',
+    kind: 'eval',
+    phase: ANY,
+    surfaces: FACT_SET_SURFACES,
+  },
+  movePurpose: {
+    // WHAT THE MOVE PREPARES, PROVEN, WITH THE RULE BEHIND IT
+    // (WO-STORY-MATRIX-01 P1-9c): the follow-up the move made possible, read
+    // against the null-move reads (`moveIntent`), and once a lesson the
+    // principle that makes it worth it (`intentRule`), said on the board after
+    // the reply (`ruleBoard`, with the rules the lesson has taught). A move
+    // that loses big prepares nothing worth saying (3.Ke2?? "prepares Qe1").
+    read: ({ words: w, reads, line, costCp, ruleBoard }, fact) => safe(() => {
+      if (w.moverIsStudent === undefined) return null;
+      if (reads.passBefore.length === 0 && reads.passAfter.length === 0) return null;
+      const mover = sideToMove(w.fenBefore);
+      const a0 = reads.after[0];
+      const mated = !!a0 && a0.mate !== null && a0.mate !== undefined && (mover === 'w' ? a0.mate < 0 : a0.mate > 0);
+      if (mated || (costCp !== null && costCp >= BLUNDER_CP)) return null;
+      const seat = moveSeat(w);
+      const lineAfter: string[] = [];
+      if (w.tense === 'now' && line) {
+        try { const c = new Chess(w.fenBefore); c.move(w.san); for (const s of line) { const m = c.move(s); lineAfter.push(`${m.from}${m.to}${m.promotion ?? ''}`); } } catch { /* the playable prefix */ }
+      }
+      const intent = moveIntent(w.fenBefore, w.san, lineAfter.length ? { ...reads, lineAfter } : reads, seat);
+      if (!intent?.prepares) return null;
+      const studentColor: 'white' | 'black' = (mover === 'w') === w.moverIsStudent ? 'white' : 'black';
+      const rule = ruleBoard ? safe(() => intentRule(intent, ruleBoard.fen, studentColor, ruleBoard.taught)) : null;
+      const text = rule ? `${intent.text.replace(/\.$/, '')} — ${rule.text}.` : intent.text;
+      const kind = w.moverIsStudent ? 'point' : 'opponent-intent';
+      const m = new Chess(w.fenBefore).move(w.san);
+      const f = fact({ key: intent.prepares.uci, claims: [
+        `purpose:prepares:${intent.prepares.uci}`,
+        ...(/^O-O/.test(intent.prepares.san) ? [castlePrepClaim(m.from, m.to)] : []),
+        ...(rule?.keys.map((k) => STORY_KEY.principle(k)) ?? []),
+      ], text: closeSentence(text), squares: intent.squares, stakes: costStakes(intent.prepares.gainCp),
+        proof: squaresProof(text, intent.squares) ?? NO_PROOF.description, seat, namesStudentMove: false, thread: LOCAL_THREAD, fen: w.fenBefore });
+      return placedAs(f, kind, costStakes(intent.prepares.gainCp));
+    }),
+    computer: 'moveIntent',
+    kind: 'point',
+    phase: ANY,
+    surfaces: { ...FACT_SET_SURFACES, review: { not: 'Review says the move\'s purpose through its own intent read' }, learn: { not: 'Learn says the move\'s purpose through its own intent lane' }, think: { not: 'a step board reads the move\'s own facts; the purpose is the lesson\'s and chat\'s' } },
+  },
+  onlyMoveRead: {
+    // THE ONLY MOVE (gap B6): said with the next best and what it gives up —
+    // never a bare "only move".
+    read: ({ words: w, fan }, fact) => safe(() => {
+      const m = new Chess(w.fenBefore).move(w.san);
+      const only = onlyMove(w.fenBefore, `${m.from}${m.to}`, fan);
+      if (!only) return null;
+      return moveIdeaFact(fact, w, { kind: 'key-moment', idea: 'choice', weight: 66, text: moveLead(w, `is the only move that holds here — the next best, ${only.secondSan}, ${only.gives}`), alsoText: `It's the only move that holds here: the next best, ${only.secondSan}, ${only.gives}`, squares: [m.to], extraClaims: [`only:${m.from}${m.to}`] });
+    }),
+    computer: 'onlyMove',
+    kind: 'key-moment',
+    phase: ANY,
+    surfaces: FACT_SET_SURFACES,
   },
   principle: {
     // The key carries what a surface keeps of the read: whether this is the
@@ -6256,7 +6831,7 @@ export { adoptPlanTrial, type PlanThread } from './planThread';
  *  computer, so a surface that speaks a computer under its own vocabulary
  *  (Review's facets, the live clauses) fails to compile on a kind it has no
  *  name for, as the per-surface relabel used to guarantee. */
-type KindOf<K extends ComputerId> = K extends 'openingStory' ? (typeof STORY_KIND)[keyof typeof STORY_KIND] : K extends 'planThread' ? PlanLineKind : (typeof BOARD_COMPUTERS)[K]['kind'];
+type KindOf<K extends ComputerId> = K extends 'openingStory' ? (typeof STORY_KIND)[keyof typeof STORY_KIND] : K extends 'planThread' ? PlanLineKind : K extends FactSetMultiKind ? CoachFactKind : (typeof BOARD_COMPUTERS)[K]['kind'];
 export type BoardFact<K extends ComputerId> = CoachFact & { kind: KindOf<K> };
 
 /** Every fact, in speaking order. */

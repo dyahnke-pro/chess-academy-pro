@@ -261,7 +261,7 @@ export const COMPUTER_CATALOG = {
   orderByThreat: { file: 'services/orderByThreat.ts', says: "the mover's next move in the line, played first, would let the other side pin, fork or kick a piece this order keeps safe" },
   stopsBreak: { file: 'services/moveStops.ts', says: "the move makes the pawn break the other side plays in master games from here lose material, or takes it away" },
   preparesBreakClause: { file: 'services/mastersPlanRead.ts', says: "the move covers the square of its side's masters' break: it prepares the break, with how often masters push it from here" },
-  onlyMove: { file: 'services/moveThoughtFacts.ts', says: "the move played is the only one that holds: the engine's next best gives up at least the only-move gap" },
+  onlyMove: { file: 'services/thoughtReads.ts', says: "the move played is the only one that holds: the engine's next best gives up at least the only-move gap" },
   moveStops: { file: 'services/moveStops.ts', says: "the opponent's useful moves (a pin, a kick, a fork, a safe check) a move takes away" },
   openingTheoryFacts: { file: 'services/openingTheory.ts', says: "opening theory, calculated from the masters' games: the main move, the other tries and their aims, the reply, the score" },
   inBetweenMove: { file: 'services/inBetweenMove.ts', says: 'not yet, first this: a forcing move before the capture that is still there after' },
