@@ -59,6 +59,15 @@ function moveOf(b: BoardBundle): { fenBefore: string; san: string; mover: Color 
   return { ...b.priorMove, mover };
 }
 
+/** The move, only when the student played it: a computer whose context has
+ *  no seat reads "the student's move" by contract ("you play …", "your
+ *  outside passer"), so the opponent's move is never handed to it (a future
+ *  board reached by their reply, `futures.bundleAt`). */
+function studentMoveOf(b: BoardBundle): { fenBefore: string; san: string; mover: Color } | null {
+  const MOVE = moveOf(b);
+  return MOVE && MOVE.mover === b.student ? MOVE : null;
+}
+
 function lineCp(l: EngineLine | undefined): number | null {
   if (!l) return null;
   if (l.mate !== null) return l.mate > 0 ? 100000 : -100000;
@@ -88,7 +97,7 @@ export const BUNDLE_ADAPTERS: { [K in ComputerId]: Adapter<K> } = {
   prophylaxisMissed: { needs: ["prevFen", "studentSan"] },
   enablingMove: (b) => ({ fen: b.fen, pv: b.lines[0]?.moves ?? [] }),
   tradeLedger: (b) => ({ history: b.history, student: b.student }),
-  notYetPlayed: (b) => { const MOVE = moveOf(b); const loss = cpLossOf(b); return MOVE && loss !== null ? { fenBefore: MOVE.fenBefore, san: MOVE.san, bestSan: priorBest(b), cpLoss: loss } : null; },
+  notYetPlayed: (b) => { const MOVE = studentMoveOf(b); const loss = cpLossOf(b); return MOVE && loss !== null ? { fenBefore: MOVE.fenBefore, san: MOVE.san, bestSan: priorBest(b), cpLoss: loss } : null; },
   heldResource: (b) => { const MOVE = moveOf(b); const loss = cpLossOf(b); return MOVE && loss !== null ? { fenBefore: MOVE.fenBefore, san: MOVE.san, bestSan: priorBest(b), cpLoss: loss, student: b.student } : null; },
   captureChoice: (b) => { const MOVE = moveOf(b); const loss = cpLossOf(b); return MOVE && loss !== null ? { fenBefore: MOVE.fenBefore, san: MOVE.san, bestSan: priorBest(b), cpLoss: loss, student: b.student } : null; },
   kickAfterRecapture: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, reply: replySan(b), bestUci: b.lines[0]?.moves ?? [], student: b.student } : null; },
@@ -96,7 +105,7 @@ export const BUNDLE_ADAPTERS: { [K in ComputerId]: Adapter<K> } = {
   kingReadsBestLine: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, student: b.student, bestUci: b.lines[0]?.moves ?? [] } : null; },
   sacCompensation: { needs: ["moverCp", "moverCpBefore"] },
   sacMechanism: { needs: ["sans", "sacIdx"] },
-  sacKingShield: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san } : null; },
+  sacKingShield: (b) => { const MOVE = studentMoveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san } : null; },
   structureState: (b) => ({ fen: b.fen }),
   phaseVerdict: { needs: ["phase", "heard", "lastMove"] },
   middlegameOrientation: { needs: ["seat", "san"] },
@@ -189,7 +198,8 @@ export const BUNDLE_ADAPTERS: { [K in ComputerId]: Adapter<K> } = {
   flexibleMove: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, student: b.student, reads: null } : null; },
   exchangeSacrifice: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, student: b.student, reads: null } : null; },
   pawnMajority: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, student: b.student, prior: b.priorMove } : null; },
-  fortress: { needs: ["replies"] },
+  // The replies ARE the bundle's lines: the engine's lines from the board the move reached.
+  fortress: (b) => { const MOVE = moveOf(b); return MOVE && b.lines.length ? { fenBefore: MOVE.fenBefore, san: MOVE.san, student: b.student, replies: b.lines } : null; },
   pieceItinerary: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, student: b.student, history: b.history } : null; },
   forcedRun: { needs: ["evalsAfter"] },
   threatPurpose: { needs: ["line"] },
@@ -204,7 +214,7 @@ export const BUNDLE_ADAPTERS: { [K in ComputerId]: Adapter<K> } = {
   exploreInvite: { needs: ["plies", "index"] },
   murkyRead: { needs: ["plies", "index"] },
   pawnEndingCount: { needs: ["cpLoss", "evalAfterCp"] },
-  spareTempo: (b) => { const MOVE = moveOf(b); const loss = cpLossOf(b); return MOVE && loss !== null ? { fenBefore: MOVE.fenBefore, san: MOVE.san, bestSan: priorBest(b), cpLoss: loss } : null; },
+  spareTempo: (b) => { const MOVE = studentMoveOf(b); const loss = cpLossOf(b); return MOVE && loss !== null ? { fenBefore: MOVE.fenBefore, san: MOVE.san, bestSan: priorBest(b), cpLoss: loss } : null; },
   passerDecoy: (b) => ({ fen: b.fen, student: b.student }),
   zugzwangAt: { needs: ["read"] },
   mateLineAt: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, lineUci: b.lines[0]?.moves ?? [], student: b.student, san: MOVE.san } : null; },
@@ -213,28 +223,28 @@ export const BUNDLE_ADAPTERS: { [K in ComputerId]: Adapter<K> } = {
   theirOpeningChoice: { needs: ["cpLoss", "coachChose"] },
   openingNamed: { needs: ["det", "spokenName", "transposed"] },
   sacPayoff: { needs: ["moverPovEvalCp", "moverPovBeforeCp", "kingCentreTaught"] },
-  sacShield: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san } : null; },
+  sacShield: (b) => { const MOVE = studentMoveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san } : null; },
   takeStock: { needs: ["studentPovCp"] },
   kingHuntCue: (b) => ({ fen: b.fen, student: b.student }),
   opponentTarget: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, student: b.student } : null; },
   causalChain: { needs: ["sans", "ply"] },
   endgamePhase: (b) => ({ fen: b.fen, student: b.student }),
   recapture: { needs: ["theirLast", "faultCp"] },
-  mateLine: (b) => { const MOVE = moveOf(b); return MOVE && b.priorLines ? { fenBefore: MOVE.fenBefore, san: MOVE.san, bestSan: priorBest(b), lineUci: b.priorLines[0]?.moves ?? [], reply: replySan(b) } : null; },
+  mateLine: (b) => { const MOVE = studentMoveOf(b); return MOVE && b.priorLines ? { fenBefore: MOVE.fenBefore, san: MOVE.san, bestSan: priorBest(b), lineUci: b.priorLines[0]?.moves ?? [], reply: replySan(b) } : null; },
   winsLine: { needs: ["bestSan", "seconds"] },
   kneeJerk: { needs: ["theirLast", "bestSan", "faultCp"] },
   strongChoice: { needs: ["ply"] },
-  fileClaimed: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, cpLoss: null } : null; },
+  fileClaimed: (b) => { const MOVE = studentMoveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, cpLoss: null } : null; },
   blunderCheck: { needs: ["faultCp", "again", "ply"] },
   autopilot: { needs: ["faultCp", "popularTopSan"] },
   pawnEndingCounted: { needs: ["faultCp"] },
-  outsidePasserDecoy: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san } : null; },
+  outsidePasserDecoy: (b) => { const MOVE = studentMoveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san } : null; },
   keepPressing: { needs: ["bestSan", "faultCp"] },
   tradeDeal: { needs: ["faultCp", "values", "prior", "ply"] },
   kingAttack: { needs: ["linesAfter"] },
   ruleException: { needs: ["bothCp"] },
   falseAlarm: { needs: ["theirFenBefore", "studentSan", "bestLine"] },
-  pushOrHold: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, cpAfter: studentCp(b) } : null; },
+  pushOrHold: (b) => { const MOVE = studentMoveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, cpAfter: studentCp(b) } : null; },
   counterThreat: { needs: ["studentMoveCostCp"] },
   playedConcept: { needs: ["define"] },
   tempoCount: (b) => ({ history: b.history, student: b.student }),

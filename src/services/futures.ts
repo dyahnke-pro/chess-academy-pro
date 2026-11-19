@@ -24,6 +24,7 @@ import { readEveryComputer, type BoardBundle } from './boardBundle';
 import type { CoachFact } from './coachFact';
 import { stakeValue } from './factStakes';
 import { PICTURE_ROLE, type PictureRole } from './positionPicture';
+import { fortressOn, fortressLine, type Fortress } from './fortress';
 
 export interface FutureBoard {
   fen: string;
@@ -31,6 +32,9 @@ export interface FutureBoard {
   ply: number;
   /** The rest of the line from here, UCI. */
   rest: readonly string[];
+  /** The move that reached this board: the board before it, its SAN, who
+   *  played it, and the line from that board (this move first). */
+  reached: { fenBefore: string; san: string; seat: Color; line: readonly string[] };
 }
 
 export interface LineRead {
@@ -51,9 +55,11 @@ export function futureBoards(fen: string, moves: readonly string[]): { reply: Fu
   const n = Math.min(moves.length, MAX_PLIES);
   for (let i = 0; i < n; i += 1) {
     const u = moves[i];
+    const fenBefore = b.fen();
     let m;
     try { m = b.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { break; }
-    const here: FutureBoard = { fen: b.fen(), ply: i + 1, rest: moves.slice(i + 1) };
+    const here: FutureBoard = { fen: b.fen(), ply: i + 1, rest: moves.slice(i + 1),
+      reached: { fenBefore, san: m.san, seat: m.color, line: moves.slice(i) } };
     if (i === 1) reply = here;
     if (i >= 1 && !m.captured && !/[+#]$/.test(m.san)) { quiet = here; break; }
     quiet = here;
@@ -61,16 +67,28 @@ export function futureBoards(fen: string, moves: readonly string[]): { reply: Fu
   return { reply, quiet };
 }
 
-function bundleAt(f: FutureBoard, line: LineRead, student: Color, rating: number): BoardBundle {
+/**
+ * The bundle on a future board. The move that reached it is the line's own
+ * move, so every computer that reads the move played (`priorMove`) reads it.
+ * `priorLines` — the engine's line from the board before that move — is the
+ * line itself from there, only when that move is the engine's choice: every
+ * move past the try is (the line is the engine's best play after it), so the
+ * line from before it IS the engine's best line, scored as the whole line. The
+ * try itself is never a future board's move (the first future is after the
+ * reply), so no cost is ever made up for a move the engine did not choose.
+ */
+export function bundleAt(f: FutureBoard, line: LineRead, student: Color, rating: number): BoardBundle {
+  const r = f.reached;
+  const engineChose = f.ply >= 2;
   return {
     fen: f.fen,
     student,
     lines: [{ moves: [...f.rest], cp: line.cp, mate: line.mate }],
     rating,
     history: [],
-    priorMove: null,
-    priorMoveSeat: null,
-    priorLines: null,
+    priorMove: { fenBefore: r.fenBefore, san: r.san },
+    priorMoveSeat: r.seat,
+    priorLines: engineChose ? [{ moves: [...r.line], cp: line.cp, mate: line.mate }] : null,
   };
 }
 
@@ -407,9 +425,47 @@ export function comesAliveText(a: ComesAlive, other: 'your' | 'their'): string {
   return `${whose} ${ALIVE_NAME[a.piece]} comes alive on ${a.square}: it has ${a.moves} squares to work with there, where the better line keeps it to ${a.movesOnBest}.`;
 }
 
+// ── THE FORTRESS THE TRY LETS THEM BUILD (his "and once again, White cannot
+// make progress") — a state on the board the line reaches, so it is read on
+// that board, not off the move that reached it ──
+
+export interface FortressGained {
+  fortress: Fortress;
+  at: 'reply' | 'quiet';
+  /** The try's board it stands on. */
+  fen: string;
+}
+
+/**
+ * A fortress the side answering the try holds on the try's board (after the
+ * reply, or at the quiet end) and does not hold on the best line's board at
+ * the same point. The draw read is the line's own score (the engine's read of
+ * the line the board lies on), so no read, no claim. Pure: chess.js over the
+ * two lines.
+ */
+export function fortressGained(args: { fen: string; tryLine: LineRead; bestLine: LineRead }): FortressGained | null {
+  let mover: Color;
+  try { mover = new Chess(args.fen).turn(); } catch { return null; }
+  const side: Color = mover === 'w' ? 'b' : 'w';
+  const t = futureBoards(args.fen, args.tryLine.moves);
+  const b = futureBoards(args.fen, args.bestLine.moves);
+  for (const at of ['reply', 'quiet'] as const) {
+    const tf = t[at];
+    if (!tf) continue;
+    const f = fortressOn(tf.fen, [{ moves: tf.rest, cp: args.tryLine.cp, mate: args.tryLine.mate }]);
+    if (!f || f.defender !== side) continue;
+    const bf = b[at];
+    const onBest = bf ? fortressOn(bf.fen, [{ moves: bf.rest, cp: args.bestLine.cp, mate: args.bestLine.mate }]) : null;
+    if (onBest && onBest.defender === side) continue;
+    return { fortress: f, at, fen: tf.fen };
+  }
+  return null;
+}
+
 /** The change a try lets happen, as the reason it falls short: the line's own
  *  story first; then a known draw the try lets the other side reach (the
- *  board's drawing resource, confirmed level by the line); then a threat or
+ *  board's drawing resource, confirmed level by the line); then a fortress
+ *  the try lets them build (`fortressGained`); then a threat or
  *  a resource that appears on the board after it, about a square the line
  *  acted on or a king; then a piece of theirs that comes alive. Null when
  *  none. */
@@ -434,6 +490,10 @@ export function changeReason(args: {
   // answering the try, and the best line's board does not have it.
   const drawn = wc.appeared.find((c) => c.fact.seat === theirSeat && c.fact.claims.some((k) => k.startsWith('verdict:drawn:')));
   if (drawn) return drawn.fact.text;
+  // A FORTRESS THE TRY LETS THEM BUILD: a piece down, and the board's reason
+  // the extra material cannot win.
+  const fort = fortressGained(args);
+  if (fort) return fortressLine(fort.fortress, fort.fortress.defender === args.student, fort.fen);
   const hit = wc.appeared.find((c) => c.inLine && c.fact.seat === theirSeat && c.fact.kind !== 'latent-danger' && ['threat', 'resource'].includes(PICTURE_ROLE[c.fact.computer] ?? 'board'));
   if (hit) return hit.fact.text;
   const alive = comesAlive(args);

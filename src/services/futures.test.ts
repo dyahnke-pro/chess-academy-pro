@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { lineStory, futureBoards, whatChanged, changeReason, comesAlive, comesAliveText } from './futures';
+import { lineStory, futureBoards, whatChanged, changeReason, comesAlive, comesAliveText, bundleAt, fortressGained } from './futures';
 
 describe('what the try line does (fixes 2–3)', () => {
   it('reads a perpetual check his way: the checks never stop', () => {
@@ -88,5 +88,44 @@ describe('the drawing resource, the race and the defender alive (WO-PICTURE-01)'
     expect(comesAliveText(a!, 'their')).toBe('Their king comes alive on b7: it has 6 squares to work with there, where the better line keeps it to 2.');
     // The same line on both sides: nothing comes alive.
     expect(comesAlive({ fen, tryLine, bestLine: tryLine })).toBeNull();
+  });
+});
+
+describe('a future board carries the move that reached it (WO-PICTURE-01 gap 1)', () => {
+  const fen = '7k/6pp/8/8/5q2/8/7P/R6K w - - 0 1';
+  const line = { moves: ['a1b1', 'f4f3', 'h1g1', 'f3g4'], cp: -900, mate: null };
+  it('the reply board is reached by the reply, its line the engine\'s from before it', () => {
+    const f = futureBoards(fen, line.moves).reply!;
+    const b = bundleAt(f, line, 'w', 1800);
+    expect(b.priorMove).toEqual({ fenBefore: '7k/6pp/8/8/5q2/8/7P/1R5K b - - 1 1', san: 'Qf3+' });
+    expect(b.priorMoveSeat).toBe('b');
+    expect(b.priorLines?.[0].moves).toEqual(['f4f3', 'h1g1', 'f3g4']);
+    expect(b.lines[0].moves).toEqual(['h1g1', 'f3g4']);
+  });
+  it('the try is never given a made-up line: a board the try reached has none', () => {
+    const g = { fen: '7k/6pp/8/8/5q2/8/7P/1R5K b - - 1 1', ply: 1, rest: ['f4f3'], reached: { fenBefore: fen, san: 'Rb1', seat: 'w' as const, line: ['a1b1', 'f4f3'] } };
+    const b = bundleAt(g, line, 'w', 1800);
+    expect(b.priorMove?.san).toBe('Rb1');
+    expect(b.priorLines).toBeNull();
+  });
+});
+
+describe('the fortress the try lets them build (WO-PICTURE-01 gap 2)', () => {
+  // Puzzle 05jP1: Bxg6 (the try) leaves the light bishop against a pawn on h6,
+  // a draw; hxg6 (the best) wins. Engine lines Stockfish 16 depth 20.
+  const fen = '7k/8/3K2pp/7P/4B3/8/8/8 w - - 0 71';
+  const tryLine = { moves: ['e4g6', 'h8g8', 'd6e6', 'g8g7', 'g6b1', 'g7g8', 'e6f6'], cp: 6, mate: null };
+  const bestLine = { moves: ['h5g6', 'h6h5', 'd6e6', 'h8g7', 'e6f5', 'g7f8', 'f5f6'], cp: 3507, mate: null };
+  it('reads the fortress on the try\'s board, absent on the best\'s', () => {
+    const g = fortressGained({ fen, tryLine, bestLine });
+    expect(g?.at).toBe('reply');
+    expect(g?.fortress).toMatchObject({ defender: 'b', reason: { kind: 'bishop-colour', pawns: ['h6'] } });
+  });
+  it('says it as the reason the try falls short', () => {
+    const why = changeReason({ fen, student: 'w', rating: 1800, other: 'their', tryLine, bestLine });
+    expect(why).toMatch(/their pawn on h6 stands on a dark square, where your light-squared bishop can never attack it\.$/);
+  });
+  it('the same line both ways: no fortress gained', () => {
+    expect(fortressGained({ fen, tryLine, bestLine: tryLine })).toBeNull();
   });
 });
