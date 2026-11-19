@@ -1096,7 +1096,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   const producedBy = studentToMove ? input.opponentLastMove : input.lastMove;
   const fenMove = producedBy ? lastMoveFromSan(producedBy.fenBefore, producedBy.san) : null;
   const stockHere = input.phaseTurn && !analysis.isMate
-    ? readBoard('phaseVerdict', { fen, student: studentColor, studentCp: evalCpWhitePov * sSign, phase: input.phaseTurn, heard: said ?? new Set(), lastMove: fenMove })
+    ? readBoard('phaseVerdictLive', { fen, student: studentColor, studentCp: evalCpWhitePov * sSign, phase: input.phaseTurn, heard: said ?? new Set(), lastMove: fenMove })
     : null;
   const stockKeys = stockHere
     ? [...phaseVerdictKeys(fen, studentColor, evalCpWhitePov * sSign, said ?? new Set(), fenMove), ...(input.phaseTurn ? [phaseStockKey(input.phaseTurn)] : [])]
@@ -1267,7 +1267,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   try {
     const lmCost = lm ? gradedLoss(lm) : null;
     const lmBest = lm?.reads?.bestMoveUci ? uciToSanAt(lm.fenBefore, lm.reads.bestMoveUci) : null;
-    for (const x of readBoardAll('exchangeIdeas', {
+    for (const x of readBoardAll('exchangeIdeasLive', {
       fen,
       student: studentColor,
       lines: input.analysis.topLines,
