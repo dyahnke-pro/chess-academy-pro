@@ -8738,6 +8738,7 @@ export function CoachTeachPage({ mode }: {
     // Learn free play carries no corpus notes (David 2026-09-23).
     corpusNotes: false,
     withhold: null, // a live game: nothing to withhold
+    surface: 'learn',
   });
 
   // PHASE TRANSITIONS — Learn never had them (2026-08-05). `usePhaseNarration`

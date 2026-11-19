@@ -19,6 +19,7 @@
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { findWeakPawns, legalSeeGainOn } from './positionReadingService';
 import { sideToMoveAs } from './threatOut';
+import { liteMoves, makeLite, undoLite } from './liteMoves';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { andList, countWord } from '../utils/andList';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
@@ -55,23 +56,28 @@ function reach(fen: string, from: Square, target: Square, color: Color): 0 | 1 |
   const base = new Chess(own);
   if (hits(base, from, target, color)) return 0;
   let best: 1 | 2 | null = null;
-  for (const m1 of base.moves({ square: from, verbose: true })) {
+  // Each move played and taken back on one board, without its notation
+  // (`liteMoves`): the board after is the board `move()` leaves.
+  for (const m1 of liteMoves(base, { square: from })) {
     if (m1.to === target) continue; // taking it is the fall, not a count
-    const a = new Chess(own);
-    a.move(m1.san);
-    if (hits(a, m1.to, target, color)) {
-      if (safeOn(a, m1.to)) return 1;
+    makeLite(base, m1);
+    if (hits(base, m1.to, target, color)) {
+      const safe = safeOn(base, m1.to);
+      undoLite(base);
+      if (safe) return 1;
       continue;
     }
-    if (best !== null) continue;
-    const back = sideToMoveAs(a.fen(), color);
+    if (best !== null) { undoLite(base); continue; }
+    const back = sideToMoveAs(base.fen(), color);
+    undoLite(base);
     if (!back) continue;
     const b = new Chess(back);
-    for (const m2 of b.moves({ square: m1.to, verbose: true })) {
+    for (const m2 of liteMoves(b, { square: m1.to })) {
       if (m2.to === target) continue;
-      const d = new Chess(back);
-      d.move(m2.san);
-      if (hits(d, m2.to, target, color) && safeOn(d, m2.to)) { best = 2; break; }
+      makeLite(b, m2);
+      const found = hits(b, m2.to, target, color) && safeOn(b, m2.to);
+      undoLite(b);
+      if (found) { best = 2; break; }
     }
   }
   return best;

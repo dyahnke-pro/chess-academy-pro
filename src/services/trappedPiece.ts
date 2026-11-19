@@ -7,6 +7,7 @@ import { Chess, type Color, type Square } from 'chess.js';
 import { legalSeeGainOn, signedLegalSeeFor } from './positionReadingService';
 import { MATERIAL_VALUE } from './pieceValues';
 import { sideToMoveAs } from './threatOut';
+import { liteMoves, makeLite, undoLite } from './liteMoves';
 
 const VAL = MATERIAL_VALUE;
 
@@ -14,7 +15,7 @@ const VAL = MATERIAL_VALUE;
 function stillWinnable(afterOppToMove: Chess, sq: string, side: Color, val: number): boolean {
   const cell = afterOppToMove.get(sq as Square);
   if (!cell || cell.color !== side) return false;
-  const caps = afterOppToMove.moves({ verbose: true }).filter((m) => m.to === sq && m.captured);
+  const caps = liteMoves(afterOppToMove).filter((m) => m.to === sq && m.captured);
   if (caps.length === 0) return false;
   if (caps.some((m) => (VAL[afterOppToMove.get(m.from)?.type ?? 'k'] ?? 99) < val)) return true;
   return afterOppToMove.attackers(sq as Square, side).length === 0;
@@ -45,27 +46,33 @@ export function trappedAt(fen: string, sq: string): { attackerSquare: string } |
   if (!ownerFen) return null;
   const probe = new Chess(ownerFen);
   if (probe.inCheck()) return null;
-  for (const m of probe.moves({ verbose: true }).filter((x) => x.from === sq)) {
-    const after = new Chess(ownerFen);
-    after.move(m.san);
+  // Every move played and taken back on the one board, without its notation
+  // (`liteMoves`): the board after is the board `move()` leaves.
+  const all = liteMoves(probe);
+  for (const m of all) {
+    if (m.from !== sq) continue;
+    makeLite(probe, m);
+    let escapes: boolean;
     if (m.captured) {
-      if (legalSeeGainOn(after, m.to) - (VAL[m.captured] ?? 0) < 1) return null;
+      escapes = legalSeeGainOn(probe, m.to) - (VAL[m.captured] ?? 0) < 1;
     } else {
-      const atk = after.attackers(m.to, enemy);
-      if (atk.length === 0) return null;
-      const cheaper = atk.some((a) => (VAL[after.get(a)?.type ?? 'k'] ?? 99) < val);
-      if (!cheaper && after.attackers(m.to, side).length > 0) return null;
+      const atk = probe.attackers(m.to, enemy);
+      const cheaper = atk.some((a) => (VAL[probe.get(a)?.type ?? 'k'] ?? 99) < val);
+      escapes = atk.length === 0 || (!cheaper && probe.attackers(m.to, side).length > 0);
     }
+    undoLite(probe);
+    if (escapes) return null;
   }
-  for (const m of probe.moves({ verbose: true })) {
+  for (const m of all) {
     if (m.from === sq) continue;
-    const after = new Chess(ownerFen);
-    try { after.move(m.san); } catch { continue; }
+    makeLite(probe, m);
     // A RESCUE THAT COSTS MORE THAN THE PIECE IS NO RESCUE (speedrun
     // _4xbS0Crtic, …g4 against Bf3: "kicks their bishop off f3, gaining time" —
     // Qxf7+ stops the capture for one move and throws the queen away).
-    if (legalSeeGainOn(after, m.to) - (m.captured ? VAL[m.captured] ?? 0 : 0) >= val) continue;
-    if (!stillWinnable(after, sq, side, val)) return null;
+    const tooDear = legalSeeGainOn(probe, m.to) - (m.captured ? VAL[m.captured] ?? 0 : 0) >= val;
+    const rescues = !tooDear && !stillWinnable(probe, sq, side, val);
+    undoLite(probe);
+    if (rescues) return null;
   }
   return { attackerSquare: cheapAtk ?? attackers[0] };
 }
@@ -156,19 +163,20 @@ export function strandedAt(fen: string, sq: string): { squares: string[] } | nul
   if (!ownerFen) return null;
   const probe = new Chess(ownerFen);
   if (probe.inCheck()) return null;
-  const moves = probe.moves({ verbose: true }).filter((x) => x.from === sq);
+  const moves = liteMoves(probe, { square: sq as Square });
   if (moves.length === 0) return null;
   for (const m of moves) {
-    const after = new Chess(ownerFen);
-    after.move(m.san);
+    makeLite(probe, m);
+    let safe: boolean;
     if (m.captured) {
-      if (legalSeeGainOn(after, m.to) - (VAL[m.captured] ?? 0) < 1) return null;
-      continue;
+      safe = legalSeeGainOn(probe, m.to) - (VAL[m.captured] ?? 0) < 1;
+    } else {
+      const hit = probe.attackers(m.to, enemy);
+      const cheaper = hit.some((a) => (VAL[probe.get(a)?.type ?? 'k'] ?? 99) < val);
+      safe = hit.length === 0 || (!cheaper && probe.attackers(m.to, side).length > 0);
     }
-    const hit = after.attackers(m.to, enemy);
-    if (hit.length === 0) return null;
-    const cheaper = hit.some((a) => (VAL[after.get(a)?.type ?? 'k'] ?? 99) < val);
-    if (!cheaper && after.attackers(m.to, side).length > 0) return null;
+    undoLite(probe);
+    if (safe) return null;
   }
   return { squares: [...new Set(moves.map((m) => m.to))].sort() };
 }

@@ -78,7 +78,14 @@ async function main(): Promise<void> {
   const done = new Set(existsSync(outPath) ? readFileSync(outPath, 'utf8').split('\n').filter(Boolean).map((l) => (JSON.parse(l) as { id: string }).id) : []);
   if (!existsSync(outPath)) writeFileSync(outPath, '');
   const engine = new Engine();
-  const read = async (fen: string): Promise<AnalysisLine[]> => { const c = cache.get(fen); if (c) return c; const r = await engine.analyse(fen); cache.set(fen, r); return r; };
+  // One process runs one search: the board read asks its tries together, so
+  // they queue here, one at a time.
+  let queue: Promise<unknown> = Promise.resolve();
+  const read = (fen: string): Promise<AnalysisLine[]> => {
+    const run = queue.then(async () => { const c = cache.get(fen); if (c) return c; const r = await engine.analyse(fen); cache.set(fen, r); return r; });
+    queue = run.catch(() => undefined);
+    return run;
+  };
   let n = 0;
   for (const r of rows) {
     n += 1;

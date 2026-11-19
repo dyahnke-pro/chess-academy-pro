@@ -630,6 +630,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
     openingName: displayName,
     corpusNotes: true,   // a Play mount (2026-09-23)
     withhold: null,      // greyed while a punish callout is unrevealed, below
+    surface: 'openings',
   });
   const punishPending = !!punishCue && !punishRevealed;
   // THE LINE JUST STATED (the one Play-line button plays it): the punish line

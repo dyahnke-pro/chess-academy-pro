@@ -308,6 +308,7 @@ export function PuzzleBoard({
     openingName: null,
     corpusNotes: true, // the tactics drill is a kept corpus surface
     withhold: terminal ? null : solverFirstSan,
+    surface: 'puzzle',
   });
   const handleTeach = useCallback((): void => {
     // Taught before answering → the answer is recorded as prompted.

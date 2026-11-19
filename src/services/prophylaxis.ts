@@ -18,6 +18,7 @@ import { sideToMoveAs } from './threatOut';
 import { continueSentence } from '../utils/openSentence';
 import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'chess.js';
 import { legalSeeGainFor, bestCaptureGainFor } from './positionReadingService';
+import { liteMoves, makeLite, undoLite, type LiteMove } from './liteMoves';
 import type { Proof } from './proof';
 import type { SpokenLine } from './voicePackage';
 import type { TacticType } from '../types';
@@ -58,7 +59,7 @@ function withTurn(fen: string, turn: Color): Chess | null {
 
 /** The student piece their move `m` pins against the queen or king (a minor
  *  with the big piece straight behind it on the line from m.to), or null. */
-function pinVictim(after: Chess, m: Move, me: Color): { square: Square; piece: PieceSymbol; behind: Square } | null {
+function pinVictim(after: Chess, m: Pick<Move, 'piece' | 'to'>, me: Color): { square: Square; piece: PieceSymbol; behind: Square } | null {
   if (m.piece !== 'b' && m.piece !== 'r' && m.piece !== 'q') return null;
   const dirs = m.piece === 'b' ? [[1, 1], [1, -1], [-1, 1], [-1, -1]] : m.piece === 'r' ? [[1, 0], [-1, 0], [0, 1], [0, -1]]
     : [[1, 1], [1, -1], [-1, 1], [-1, -1], [1, 0], [-1, 0], [0, 1], [0, -1]];
@@ -84,19 +85,24 @@ function pinVictim(after: Chess, m: Move, me: Color): { square: Square; piece: P
 }
 
 /** Their moves that would pin or kick one of the student's minors right now. */
-type Intent = { m: Move; kind: ProphylaxisKind; victim: { square: Square; piece: PieceSymbol }; hits: Square[] };
+type IntentMove = Pick<Move, 'from' | 'to' | 'piece' | 'san'>;
+type Intent = { m: IntentMove; kind: ProphylaxisKind; victim: { square: Square; piece: PieceSymbol }; hits: Square[] };
 function intents(fen: string, me: Color): Intent[] {
   const them: Color = me === 'w' ? 'b' : 'w';
   const board = withTurn(fen, them);
   if (!board || board.inCheck()) return [];
-  const out: Intent[] = [];
-  for (const m of board.moves({ verbose: true })) {
-    if (m.captured || m.san.includes('+')) continue;
-    board.move(m);
+  const found: Array<{ lite: LiteMove } & Omit<Intent, 'm'>> = [];
+  // Each move played and taken back on the one board, without its notation
+  // (`liteMoves`); the SAN is written only for the moves that are intents.
+  for (const m of liteMoves(board)) {
+    if (m.captured) continue;
+    makeLite(board, m);
     const after = board;
+    // A check is not a quiet intent (a mate is: the SAN ends '#', not '+').
+    if (after.isCheck() && !after.isCheckmate()) { undoLite(board); continue; }
     // The move must be safe for them where it lands — a pin or kick that just
     // loses the piece is no plan of theirs.
-    if (legalSeeGainFor(after.fen(), m.to, me) > 0) { board.undo(); continue; }
+    if (legalSeeGainFor(after.fen(), m.to, me) > 0) { undoLite(board); continue; }
     // …nor drop material elsewhere: a pin or a kick wins nothing yet, so one
     // that leaves the student a winning capture (a pawn or more, counted to the
     // end of the trades) is no plan; a fork wins its victim, so it is no plan
@@ -112,13 +118,13 @@ function intents(fen: string, me: Color): Intent[] {
         const sq = `${String.fromCharCode(97 + f + df)}${r + 1}` as Square;
         const pc = after.get(sq);
         if (pc && pc.color === me && VAL[pc.type] >= 3 && pc.type !== 'k') {
-          if (drops < 1) out.push({ m, kind: 'kick', victim: { square: sq, piece: pc.type }, hits: [sq] });
+          if (drops < 1) found.push({ lite: m, kind: 'kick', victim: { square: sq, piece: pc.type }, hits: [sq] });
           break;
         }
       }
     } else {
       const v = pinVictim(after, m, me);
-      if (v) { if (drops < 1) out.push({ m, kind: 'pin', victim: { square: v.square, piece: v.piece }, hits: [v.square, v.behind] }); }
+      if (v) { if (drops < 1) found.push({ lite: m, kind: 'pin', victim: { square: v.square, piece: v.piece }, hits: [v.square, v.behind] }); }
       else {
         // A FORK: the piece lands hitting two of the student's pieces each
         // worth more than it (or the king and one more).
@@ -130,25 +136,30 @@ function intents(fen: string, me: Color): Intent[] {
         }
         if (hit.length >= 2) {
           const victim = hit.filter((h) => h.piece !== 'k').sort((a, b) => VAL[b.piece] - VAL[a.piece])[0];
-          if (victim && drops < VAL[victim.piece]) out.push({ m, kind: 'fork', victim, hits: hit.map((h) => h.square) });
+          if (victim && drops < VAL[victim.piece]) found.push({ lite: m, kind: 'fork', victim, hits: hit.map((h) => h.square) });
         }
       }
     }
-    board.undo();
+    undoLite(board);
   }
-  return out;
+  if (found.length === 0) return [];
+  const verbose = board.moves({ verbose: true });
+  return found.flatMap(({ lite, ...rest }) => {
+    const v = verbose.find((x) => x.from === lite.from && x.to === lite.to && x.promotion === lite.promotion);
+    return v ? [{ m: { from: v.from, to: v.to, piece: v.piece, san: v.san }, ...rest }] : [];
+  });
 }
 
 /** Does `intent` still work after the student's quiet move? It fails when the
  *  move is no longer legal for them, or its landing square can be taken with
  *  profit, or (a pin) it no longer pins anything. */
-function stillWorks(fenAfterPrevention: string, me: Color, i: { m: Move; kind: ProphylaxisKind }): boolean {
+function stillWorks(fenAfterPrevention: string, me: Color, i: { m: IntentMove; kind: ProphylaxisKind }): boolean {
   const them: Color = me === 'w' ? 'b' : 'w';
   const board = withTurn(fenAfterPrevention, them);
   if (!board) return false;
-  const again = board.moves({ verbose: true }).find((x) => x.from === i.m.from && x.to === i.m.to);
+  const again = liteMoves(board, { square: i.m.from }).find((x) => x.to === i.m.to);
   if (!again) return false;
-  board.move(again);
+  makeLite(board, again);
   if (legalSeeGainFor(board.fen(), again.to, me) > 0) return false;
   if (i.kind === 'pin') return !!pinVictim(board, again, me);
   return true;   // a fork or kick that still lands safely still works

@@ -32,7 +32,7 @@ import { describeStructure } from './boardStructure';
 import { kingCover } from './kingSafety';
 import { worstPieceNote } from './nextPlans';
 import { unmarked } from '../utils/sanMark';
-import { liteMoves, makeLite, undoLite } from './liteMoves';
+import { liteMoves, makeLite, undoLite, type LiteMove } from './liteMoves';
 import { oppositionOn } from './oppositionRead';
 import { absolutePinRay } from './pinGeometry';
 
@@ -364,11 +364,14 @@ export function minorRouteToSquare(
   if (chess.get(target)) return null; // occupied — not an empty hole to plant on
   const isMinorMove = (m: { piece: PieceSymbol }): boolean => (only ? m.piece === only : m.piece === 'n' || m.piece === 'b');
   // reach-1: a minor of `color` can move straight onto the hole.
-  const gen = (f: string): { from: Square; to: Square; piece: PieceSymbol; captured?: PieceSymbol }[] => {
-    try { return new Chess(f).moves({ verbose: true }).filter(isMinorMove); } catch { return []; }
+  // The moves without their notation (`liteMoves`): only the squares are read.
+  const gen = (f: string): LiteMove[] => {
+    try { return liteMoves(new Chess(f)).filter(isMinorMove); } catch { return []; }
   };
   const start = forceTurn(fen, color);
-  const moves1 = gen(start);
+  let startBoard: Chess;
+  try { startBoard = new Chess(start); } catch { return null; }
+  const moves1 = liteMoves(startBoard).filter(isMinorMove);
   const direct = moves1.find((m) => m.to === target);
   if (direct) return { piece: direct.piece as 'n' | 'b', from: direct.from, via: null };
   if (maxMoves < 2) return null;
@@ -380,10 +383,12 @@ export function minorRouteToSquare(
     // by a6; the "route" lost the bishop). No capture on the way, and no
     // stop they can simply win.
     if (m.captured) continue;
-    let mid: Chess;
-    try { mid = new Chess(start); mid.move({ from: m.from, to: m.to }); } catch { continue; }
-    if (legalSeeGainFor(mid.fen(), m.to, color === 'w' ? 'b' : 'w') > 0 || !seeReadsStanding(mid.fen(), m.to, color === 'w' ? 'b' : 'w')) continue;
-    if (gen(forceTurn(mid.fen(), color)).some((m2) => m2.from === m.to && m2.to === target)) {
+    // The board after the hop: played and taken back on the start board.
+    makeLite(startBoard, m);
+    const midFen = startBoard.fen();
+    undoLite(startBoard);
+    if (legalSeeGainFor(midFen, m.to, color === 'w' ? 'b' : 'w') > 0 || !seeReadsStanding(midFen, m.to, color === 'w' ? 'b' : 'w')) continue;
+    if (gen(forceTurn(midFen, color)).some((m2) => m2.from === m.to && m2.to === target)) {
       return { piece: m.piece as 'n' | 'b', from: m.from, via: m.to };
     }
   }

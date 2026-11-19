@@ -10,7 +10,8 @@ import { Chess } from 'chess.js';
 // them, most-important-first, in the order returned.
 import { buildFedTacticsContext } from './liveTacticsContext';
 import { sharpGap, SHARP_GAP_CP } from './positionCharacter';
-import { boardReadFacts } from './boardReadFacts';
+import { boardReadFacts, type BoardReader } from './boardReadFacts';
+import { tryReadBudget, poolBudgetMs, poolDispatcher, type ReadSurface, type ReadBudget } from './tryReadBudget';
 import { decideRead, readContextOf } from './readDecider';
 import { stockfishEngine } from './stockfishEngine';
 import type { EvalBoardFn } from './perturbation';
@@ -26,10 +27,33 @@ import type { WeaknessSignal } from './weaknessSignal';
  *  piece — not a phrasing choice). `usePositionNarration` phrases in it too. */
 export const READ_SEAT = 'student' as const;
 
-/** The engine read for each other board the read needs (a tempting move, the
- *  board after the best move) — the tempting reads' own depth and budget. */
-const READ_DEPTH = 12;
-const READ_BUDGET_MS = 300;
+/** How many pool workers a read asks for: one per try it reads, the pool
+ *  gives what it has (`acquirePool` never waits). */
+const POOL_WANT = 8;
+
+/** The reader for the board's tries, on the surface's budget
+ *  (`tryReadBudget`): the board after the best move on the singleton (its
+ *  MultiPV fan), every try on the worker pool in parallel when one can be had
+ *  — the singleton otherwise, exactly as before. `release` frees the pool. */
+export async function surfaceBoardReader(
+  surface: ReadSurface,
+  /** The read will read tries (the student's turn, not a puzzle being solved). */
+  readsTries: boolean,
+  acquire: (size: number, budgetMs: number) => Promise<{ engines: Array<{ analyzeDeep(fen: string, depth: number, budgetMs?: number): Promise<StockfishAnalysis> }>; release: () => void } | null>,
+  single: (fen: string, depth: number, budgetMs: number) => Promise<StockfishAnalysis>,
+): Promise<{ read: BoardReader; release: () => void }> {
+  const budget = tryReadBudget(surface);
+  const pool = budget.pool && readsTries ? await acquire(POOL_WANT, poolBudgetMs(surface)).catch(() => null) : null;
+  const pooled = pool && pool.engines.length > 0
+    ? poolDispatcher(pool.engines.map((e) => ({ read: async (fen: string, b: ReadBudget) => (await e.analyzeDeep(fen, b.depth, b.budgetMs)).topLines ?? null })))
+    : null;
+  const read: BoardReader = async (fen, source) => {
+    const b = budget.reads[source];
+    if (pooled && source !== 'best-after') return pooled(fen, b);
+    return (await single(fen, b.depth, b.budgetMs)).topLines ?? null;
+  };
+  return { read, release: () => pool?.release() };
+}
 
 interface PositionReadInput {
   fen: string;
@@ -62,6 +86,9 @@ interface PositionReadInput {
    *  (WO-DANYA-READS-01 group 4). The composer reads them itself, so a
    *  surface never imports the computer. Never on a withheld board. */
   readTempting: boolean;
+  /** REQUIRED: the surface the read is on — its engine budget for the tries
+   *  (`tryReadBudget`: Learn shallow and parallel, Review deep). */
+  surface: ReadSurface;
 }
 
 /** Below this the forcing best move is one of several (a capture or a
@@ -157,10 +184,18 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
   let habitLine: string | null = null;
   const before = [...(i.analysis?.topLines ?? [])].sort((x, y) => x.rank - y.rank);
   if (before.length) try {
+    // The tries are read only on the student's own turn, never on a puzzle
+    // still being solved: no tries, no pool.
+    const readsTries = i.readTempting && !marks && i.fen.split(' ')[1] === studentCC;
+    const reader = await surfaceBoardReader(
+      i.surface, readsTries,
+      async (size, budgetMs) => (await import('./gameAnalysisService')).acquirePvEngines(size, budgetMs),
+      (fen, depth, budgetMs) => stockfishEngine.analyzeWithBudget(fen, depth, budgetMs),
+    );
     const read = await boardReadFacts({
       fen: i.fen, studentColor: studentCC, rating: i.rating, before, history: sans, theory: true, tense: 'now',
       withhold: !!marks, readTempting: i.readTempting && !marks,
-      read: async (fen) => (await stockfishEngine.analyzeWithBudget(fen, READ_DEPTH, READ_BUDGET_MS)).topLines ?? null,
+      read: reader.read,
       // THE HEAT MAP + THE NEED TERM (B3): the student's record and the
       // last move on each side when the PGN produces this board.
       studentNeedContext: i.studentNeedContext,
@@ -169,7 +204,7 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
         lastMove: lastMoveIfStudent(sans, i.playerColor, i.fen) ?? undefined,
         opponentLastMove: lastMoveIfOpponent(sans, i.playerColor, i.fen) ?? undefined,
       },
-    });
+    }).finally(reader.release);
     // 3. THE DECIDER picks the facts and THE HABIT THAT CLOSES THE READ
     //    (WO-DANYA-READS-01 group 9): the routine that finds this board's
     //    point next time — on a puzzle being solved, the attacking scan.
