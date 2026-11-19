@@ -21,6 +21,12 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 
 ---
 
+## 000zm. WO-PICTURE-01 — the facts form one picture, nothing dropped (David 2026-11-19, `docs/plans/2026-11-19-position-picture.md`)
+- 🔴 P1 index every fact by object/side/role · P4 the merge step attaches as a support instead of dropping
+- 🔴 P2 try-and-refute (plan's direct try, forcing, autopilot, safe; reply + its job; cost in standing)
+- 🔴 P3 conclusions: ledger, counterplay, target, verdict word, the "but", plan, move · P5 speak the picture · P6 every surface + record
+- 🟠 P7 measure on held-out videos (waits on David's go for testing)
+
 ## 000zl. THE ORDER (David 2026-11-18: "making sure we have the working computers is always step one, then working narrations. Then a working platform. These are the next three things to do")
 - 🟠 1 · working computers — WO-DANYA-READS-01 (000zk): all ten groups on main (b0c70f2); the yardstick re-run and the second pass owed
 - 🔴 2 · working narrations — every surface's lines read against the board after the computers land
