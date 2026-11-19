@@ -355,6 +355,12 @@ export function countKingAttack(c: Chess, me: 'w' | 'b'): { attackers: Set<strin
     try {
       for (const a of c.attackers(sq, me)) { const p = c.get(a); if (p && p.type !== 'k' && bearsOnSquare(c, a, sq)) attackers.add(a); }
       for (const d of c.attackers(sq, them)) { const p = c.get(d); if (p && p.type !== 'k' && bearsOnSquare(c, d, sq)) defenders.add(d); }
+      // A piece of theirs STANDING beside the king defends it too: it shields
+      // the square and covers it by being there (Danya, the importance of
+      // solving studies #0: "three of your pieces bear on their king against
+      // no defenders" with their knight on b7 beside the king on a7).
+      const on = c.get(sq as Square);
+      if (on && on.color === them && on.type !== 'k' && on.type !== 'p') defenders.add(sq);
     } catch { /* skip a bad square */ }
   }
   return { attackers, defenders, king: ek };

@@ -694,8 +694,11 @@ export function kingDiagonalWalk(fen: string, me: Color, bestSan: string | null)
   const b = load(fen);
   if (!b || b.turn() !== me) return null;
   const cells = b.board().flat().filter((x): x is NonNullable<typeof x> => !!x);
-  if (cells.some((x) => x.type === 'q')) return null;
-  if (cells.filter((x) => x.type !== 'k' && x.type !== 'p').length > 2) return null;
+  // A PAWN ENDING ONLY: with a piece on the board the king's step answers the
+  // piece (Danya, a guide to underpromotion #3: Kd4 runs from the rook's
+  // checks; "heads for their pawn on b7 and yours on d7" was a reason the
+  // geometry found and the position did not have).
+  if (cells.some((x) => x.type !== 'k' && x.type !== 'p')) return null;
   const best = playLine(fen, [bestSan]);
   if (!best || best.played.length !== 1 || best.played[0].piece !== 'k') return null;
   const mv = best.played[0];
