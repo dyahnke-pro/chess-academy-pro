@@ -76,8 +76,6 @@ export interface ReadContext {
   puzzle: boolean;
   /** A tactic on the board for the student, to play now. */
   studentShot: boolean;
-  /** The one door ranks this a deciding moment (only move / critical). */
-  decidingMoment: boolean;
 }
 
 /** Three pawns: the band where his reads stop planning and start converting. */
@@ -93,7 +91,6 @@ export function readContextOf(i: {
   bestUci: string | null;
   withheld: readonly string[] | null;
   studentShot: boolean;
-  decidingMoment: boolean;
 }): ReadContext {
   const sign = i.fen.split(' ')[1] === 'b' ? -1 : 1;
   const mate = i.top?.mate ?? null;
@@ -107,7 +104,6 @@ export function readContextOf(i: {
     withheld: i.withheld ?? [],
     puzzle: !!i.withheld && moverWins,
     studentShot: i.studentShot,
-    decidingMoment: i.decidingMoment,
   };
 }
 
@@ -115,7 +111,12 @@ export function readContextOf(i: {
  *  `positionKinds` the board's own pointers it also takes); `onTarget` takes a
  *  kind only when it names a square of the story's target; `sayOnce` steps
  *  describe the board and are said only when they name a square not yet named. */
-interface StepRow { step: ReadStep; kinds: readonly string[]; from?: readonly ReadFactFrom[]; positionKinds?: readonly string[]; onTarget?: readonly string[]; sayOnce?: true }
+interface StepRow { step: ReadStep; kinds: readonly string[]; from?: readonly ReadFactFrom[]; positionKinds?: readonly string[]; onTarget?: readonly string[]; sayOnce?: true;
+  /** Computers the step says before any weight: the board's one plan, a
+   *  goal and a way the best line plays, over a description of a piece or a
+   *  file (Danya's plans, 2026-11-19: "their rook on f1 is well placed" beat
+   *  "the rook lift Re1-e3-b3"). */
+  first?: readonly string[] }
 
 export const READ_STEPS: readonly StepRow[] = [
   // The standing with its reason; compensation and "convert" say the same
@@ -137,7 +138,9 @@ export const READ_STEPS: readonly StepRow[] = [
   },
   { step: 'tempting', kinds: ['refuted', 'refuted-positional', 'deliberation'] },
   { step: 'their-try', kinds: ['their-refuted'] },
-  { step: 'plan', kinds: ['siege', 'plan-steps', 'plan-race', 'structure-plan'], sayOnce: true },
+  // THE PLAN: the board's one plan (`planOfTheBoard` — a goal and a way the
+  // best line plays) when the board has one; else the plan computers' own.
+  { step: 'plan', kinds: ['siege', 'plan-steps', 'plan-race', 'structure-plan'], sayOnce: true, first: ['planOfTheBoard'] },
   // The concept the board shows. A played-out `line` is never a read's step:
   // it is said move by move, a score sheet (the voice rule).
   { step: 'concept', kinds: ['concept', 'speedrun-read'], sayOnce: true },
@@ -202,9 +205,9 @@ export function decideRead<F extends ReadFact>(facts: readonly F[], ctx: ReadCon
       && !out.some((o) => o.text === x.text)
       // ONE IDEA ONCE: a story line whose every square was named adds nothing.
       && (!row.sayOnce || x.squares.length === 0 || x.squares.some((sq) => !named.has(sq))));
-    let pick: F | null = null;
-    let pickW = -Infinity;
-    for (const x of candidates) {
+    let pick: F | null = candidates.find((x) => !!x.computer && !!row.first?.includes(x.computer)) ?? null;
+    let pickW = pick ? Infinity : -Infinity;
+    for (const x of pick ? [] : candidates) {
       // The mate's pattern is the puzzle's lesson: said whenever it is found.
       const w = x.kind === 'mate-pattern' ? 1 : readWeight(x, ctx) + (onTarget(x) ? ON_TARGET : 0);
       if (w < TABLE.bar) continue;
@@ -221,14 +224,15 @@ export function decideRead<F extends ReadFact>(facts: readonly F[], ctx: ReadCon
 /** THE HABIT THAT CLOSES THE READ: on a puzzle, the attacking scan; else the
  *  routine that finds this board's point next time — "their threat first"
  *  only when the board proves their threat (a must-defend) and you have no
- *  shot of your own. Nothing on a withheld board that is not a winning shot. */
+ *  shot of your own, the forcing scan when you have one. Nothing on a withheld
+ *  board that is not a winning shot. */
 function habitOf(facts: readonly ReadFact[], ctx: ReadContext): string | null {
   if (ctx.puzzle) return READ_HABIT['forcing-scan'];
   if (ctx.withheld.length) return null;
   const real = facts.some((f) => f.kind === 'must-defend' && bestAnswers(f, ctx));
   // Their threat's habit is the live beat's, with the threat named.
   if (real && !ctx.studentShot) return facts.find((f) => f.kind === 'opp-think')?.text ?? null;
-  return readHabit({ studentShot: ctx.studentShot, theirThreat: false, decidingMoment: ctx.decidingMoment })?.text ?? null;
+  return readHabit({ studentShot: ctx.studentShot })?.text ?? null;
 }
 
 /** Does the best move answer the threat on this fact's square — the piece

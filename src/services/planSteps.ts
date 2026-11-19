@@ -131,7 +131,11 @@ export function planSteps(fenAfter: string, line: readonly string[], lastMove: s
     }
     steps.push({ san: mv.san, piece: PIECE[mv.piece], from: mv.from, to: mv.to, castle: mv.san.startsWith('O-O'), brk: mv.piece === 'p' && isPawnBreak(before, mv.san, null) });
   }
-  if (steps.length < 2) return null;
+  // A board read's first step is a step of the road too ("Re3 and then b3":
+  // the rook lift, the-positional-rook-lift #0): one step after it is a road
+  // when the same piece walks it, never a list.
+  const firstPiece = firstIsStep && lastMove ? firstStep(fenAfter, lastMove) : null;
+  if (steps.length < (firstPiece ? 1 : 2)) return null;
   // THE AIM: a square of theirs two or more of the moved pieces now hit.
   const enemy: Color = mover === 'w' ? 'b' : 'w';
   const theirKing = board.board().flat().find((p) => p && p.type === 'k' && p.color === enemy)?.square ?? null;
@@ -160,7 +164,7 @@ export function planSteps(fenAfter: string, line: readonly string[], lastMove: s
     if (p && p.type === 'p' && near(sq)) break;
   }
   const brk = steps.some((s) => s.brk);
-  const first = firstIsStep && lastMove ? firstStep(fenAfter, lastMove) : null;
+  const first = firstPiece;
   const road = pieceManeuver(first ? first.before : fenAfter, board, first ? [first.step, ...steps] : steps, mover);
   const maneuver = road ? { ...road, justMoved: !first && !!lastMove && lastMove.slice(2, 4) === road.from } : null;
   // A road names only its own piece's moves: a road square some OTHER step
@@ -178,6 +182,8 @@ export function planSteps(fenAfter: string, line: readonly string[], lastMove: s
   // developing" said on every quiet move was filler (decision baseline
   // 2026-11-12): finishing development is what every move of an opening does.
   if (!aim && !brk && !maneuver) return null;
+  // One step and no road is a move, not a plan.
+  if (steps.length < 2 && !maneuver) return null;
   // A plan tied only by the break the move just played prepares is that
   // move's own job said again ("Your c3 prepares d4 … and then the d4
   // break"): one idea, said once, by the move.

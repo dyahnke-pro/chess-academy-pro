@@ -18,7 +18,6 @@ import { lastMoveIfStudent, lastMoveIfOpponent, sansOfPgn } from './lastMoveOfLi
 import type { StudentNeedContext } from './needScore';
 import type { StockfishAnalysis } from '../types';
 import type { WeaknessSignal } from './weaknessSignal';
-import type { ImportanceTier } from './narrationImportance';
 
 /** The seat every sentence of the read is computed in. The facts computers
  *  write "you / they", so the read speaks that seat end to end and the phraser
@@ -30,11 +29,6 @@ export const READ_SEAT = 'student' as const;
  *  board after the best move) — the tempting reads' own depth and budget. */
 const READ_DEPTH = 12;
 const READ_BUDGET_MS = 300;
-
-/** Moments where the position has one thing to say — positional observations
- *  stay quiet so they cannot point away from it. The one deciding door's own
- *  tiers, never a second criticality. */
-const DECIDING_TIERS: ReadonlySet<ImportanceTier> = new Set<ImportanceTier>(['mate', 'only-move', 'blunder', 'must-defend']);
 
 interface PositionReadInput {
   fen: string;
@@ -149,7 +143,6 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
       bestUci: before[0]?.moves[0] ?? null,
       withheld: marks?.squares ?? null,
       studentShot: (tactics?.immediate ?? []).some((t) => t.side === 'student'),
-      decidingMoment: read.tier !== null && DECIDING_TIERS.has(read.tier),
     }));
     readLines = decided.facts.map((f) => f.text);
     habitLine = decided.habit;

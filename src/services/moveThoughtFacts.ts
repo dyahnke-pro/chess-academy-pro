@@ -825,6 +825,17 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
         facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'plan', weight: 52 });
       }
     }
+    // THE ONE PLAN OF THE BOARD the move starts (`planOfTheBoard`): read on
+    // the board before it, off the engine's best line there, only when the
+    // move is shown, not played, and is that line's first move — the plan is
+    // said as the board's, so a move already played (or another move) is
+    // not its first step.
+    const bestHere = i.reads?.before[0];
+    if (i.tense === 'now' && bestHere?.moves[0] && bestHere.moves[0].slice(0, 4) === `${from}${to}`) {
+      for (const f of readBoardAll('planOfTheBoard', { fen: i.fenBefore, lines: i.reads?.before ?? [], student, namesMoves: true })) {
+        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'plan', weight: 53 });
+      }
+    }
     let standingSaid = false;
     // A GAMBIT (fix 4, 2026-11-13): what the move gives, what comes back along
     // the line that takes it, and the engine's verdict, said apart ("offers a
