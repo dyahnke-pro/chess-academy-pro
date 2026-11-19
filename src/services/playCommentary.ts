@@ -31,7 +31,7 @@ import { pawnHit } from './trappedPiece';
 import { kickKey } from './conceptKey';
 import { temptingOnBoard } from './weighedMoves';
 import { settledExchange } from './exchangeLedger';
-import { captureRead, findWeakPawns } from './positionReadingService';
+import { captureRead, findWeakPawns, legalSeeGainFor } from './positionReadingService';
 import { seatBare } from '../utils/seatPieces';
 import { mateDescription } from './matePatterns';
 import { withArticle } from '../utils/andList';
@@ -489,12 +489,25 @@ export function buildPriorityFirst(args: {
     const probe = new Chess(args.fen);
     const moved = probe.move({ from: args.bestUci.slice(0, 2) as Square, to: args.bestUci.slice(2, 4) as Square, promotion: (args.bestUci[4] as 'q' | undefined) ?? undefined });
     if (!moved || moved.captured !== undefined || probe.isCheck()) return null; // forcing moves are the tactic lane's job
+    // THE PAWN MUST BE THE MOVE'S POINT (Danya narration test 2026-11-19): a
+    // promotion is about the new queen (tales from a grandmaster #1, b1=Q
+    // "aims at h7"), and a piece left en prise on its square is a sacrifice
+    // whose point is elsewhere (how to play a brilliancy #3, Re4!! offered to
+    // two captures to keep the f-file shut) — neither is "aim at the weak
+    // pawn". Nor is a queen that now checks their king over and over (never
+    // resign prematurely #1, the Qe3 desperado: a perpetual, not c3).
+    if (moved.promotion) return null;
+    if (legalSeeGainFor(probe.fen(), moved.to as Square, them) > 0) return null;
     // After the best move lands, does the MOVED piece attack a weak pawn?
     const parts = probe.fen().split(' ');
     parts[1] = me;
     parts[3] = '-';
     const myTurn = new Chess(parts.join(' '));
-    const attacked = new Set(myTurn.moves({ square: moved.to, verbose: true }).map((m) => m.to));
+    const nextMoves = myTurn.moves({ square: moved.to, verbose: true });
+    // A piece that now has checks on their king (two or more: a perpetual's
+    // shape) is aimed at the king, not at a pawn (the Qe3 desperado above).
+    if (nextMoves.filter((m) => /[+#]/.test(m.san)).length >= 2) return null;
+    const attacked = new Set(nextMoves.map((m) => m.to));
     const target = weakPawns.find((p) => attacked.has(p.square as Square));
     if (!target) return null;
     // One idea a sentence: what the pawn is, then why it cannot be helped.
