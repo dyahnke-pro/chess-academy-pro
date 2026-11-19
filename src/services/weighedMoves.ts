@@ -130,7 +130,7 @@ export type ConsideredTries = ReadonlyMap<string, ConsideredTry>;
  *  (`tryCandidates.reasonTries`) — a capture, a check, a passed pawn's push, a
  *  king step in an ending, a quiet move that threatens or defends. Only the
  *  plan's try is worded as going straight at its target. */
-export type ConsideredWhy = 'capture' | 'check' | 'passer' | 'king' | 'threat' | 'defence' | 'mate-threat' | 'lever' | 'double';
+export type ConsideredWhy = 'capture' | 'check' | 'passer' | 'king' | 'threat' | 'defence' | 'mate-threat' | 'lever' | 'double' | 'reroute';
 export type ConsideredTry = { why: 'plan'; target: string; storm: boolean } | { why: ConsideredWhy; target: null };
 
 /** What a plan's try goes after, in words: the weak pawn ("the pawn on b5"),

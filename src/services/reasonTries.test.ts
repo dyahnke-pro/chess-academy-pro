@@ -98,3 +98,18 @@ describe('a move weighed for a reason is read past the human floor', () => {
     expect(t).toMatch(/bxc4/);
   });
 });
+
+describe('the regroup is weighed (reroute)', () => {
+  it('a rook lifted up its file toward the king — his "Re3?? fxe5"', () => {
+    expect(whyOf('1n1r1rk1/pbq2p1p/1p1bpp2/2p1Nn1Q/3P1P2/P1PB4/1P4PP/R3R1K1 w - - 2 19', 'Re3')).toBe('reroute');
+  });
+  it('a knight trip whose next step hits the queen — his "Ne7? Bxc4"', () => {
+    expect(whyOf('2bq1r1k/2p4p/p1np3Q/7P/2pPPNp1/5P2/r7/2KR1BR1 b - - 0 21', 'Ne7')).toBe('reroute');
+  });
+  it('a knight trip whose next step hits a loose bishop — his "Nd3? Be4"', () => {
+    const fen = 'r5k1/5p1p/1pb1p3/2N5/2pr4/8/2R2PPP/4RBK1 w - - 0 26';
+    expect(whyOf(fen, 'Nd3')).toBe('reroute');
+    // A knight step that leads to no hit is not a regroup.
+    expect(whyOf(fen, 'Na4')).toBeUndefined();
+  });
+});
