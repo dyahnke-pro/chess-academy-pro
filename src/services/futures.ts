@@ -22,6 +22,7 @@
 import { Chess, type Color, type Square } from 'chess.js';
 import { readEveryComputer, type BoardBundle } from './boardBundle';
 import type { CoachFact } from './coachFact';
+import { readEngineComputers, type BundleEngine } from './engineComputers';
 import { stakeValue } from './factStakes';
 import { PICTURE_ROLE, type PictureRole } from './positionPicture';
 import { fortressOn, fortressLine, type Fortress } from './fortress';
@@ -94,6 +95,36 @@ export function bundleAt(f: FutureBoard, line: LineRead, student: Color, rating:
   };
 }
 
+/** The engine-backed computers' facts on each future board
+ *  (`engineFutureFacts`): read where an engine is at hand, added to the pure
+ *  read of the same board. */
+export interface EngineFutureFacts {
+  onTry: Partial<Record<'reply' | 'quiet', CoachFact[]>>;
+  onBest: Partial<Record<'reply' | 'quiet', CoachFact[]>>;
+}
+
+/** The engine-backed computers (`readEngineComputers`) read on the four
+ *  future boards — the try's and the best's, after the reply and at the quiet
+ *  end — each with the extra reads it needs, through `engine`. */
+export async function engineFutureFacts(args: { fen: string; student: Color; rating: number; tryLine: LineRead; bestLine: LineRead }, engine: BundleEngine): Promise<EngineFutureFacts> {
+  const t = futureBoards(args.fen, args.tryLine.moves);
+  const b = futureBoards(args.fen, args.bestLine.moves);
+  const out: EngineFutureFacts = { onTry: {}, onBest: {} };
+  for (const at of ['reply', 'quiet'] as const) {
+    const tf = t[at];
+    const bf = b[at];
+    if (!tf || !bf) continue;
+    out.onTry[at] = await readEngineComputers(bundleAt(tf, args.tryLine, args.student, args.rating), engine).catch(() => []);
+    out.onBest[at] = await readEngineComputers(bundleAt(bf, args.bestLine, args.student, args.rating), engine).catch(() => []);
+  }
+  return out;
+}
+
+/** `changeReason` with the engine-backed computers read on the futures too. */
+export async function changeReasonWithEngine(args: Parameters<typeof changeReason>[0], engine: BundleEngine): Promise<string | null> {
+  return changeReason(args, await engineFutureFacts(args, engine));
+}
+
 function factKey(f: CoachFact): string {
   return `${f.computer}|${[...f.claims].sort().join(',') || f.text}`;
 }
@@ -155,7 +186,7 @@ export function whatChanged(args: {
   tryLine: LineRead;
   /** The best line from `fen`. */
   bestLine: LineRead;
-}): WhatChanged {
+}, more: EngineFutureFacts | null = null): WhatChanged {
   const t = futureBoards(args.fen, args.tryLine.moves);
   const b = futureBoards(args.fen, args.bestLine.moves);
   const appeared: Change[] = [];
@@ -164,9 +195,9 @@ export function whatChanged(args: {
     const tf = t[at];
     const bf = b[at];
     if (!tf || !bf) continue;
-    const onTry = readEveryComputer(bundleAt(tf, args.tryLine, args.student, args.rating))
+    const onTry = [...readEveryComputer(bundleAt(tf, args.tryLine, args.student, args.rating)), ...(more?.onTry[at] ?? [])]
       .filter((f) => CHANGE_ROLES.has(PICTURE_ROLE[f.computer] ?? 'board'));
-    const onBest = readEveryComputer(bundleAt(bf, args.bestLine, args.student, args.rating))
+    const onBest = [...readEveryComputer(bundleAt(bf, args.bestLine, args.student, args.rating)), ...(more?.onBest[at] ?? [])]
       .filter((f) => CHANGE_ROLES.has(PICTURE_ROLE[f.computer] ?? 'board'));
     const index = (xs: CoachFact[]) => ({ keys: new Set(xs.map(factKey)), texts: new Set(xs.map((f) => `${f.computer}|${f.text}`)) });
     const ti = index(onTry);
@@ -584,10 +615,10 @@ export function changeReason(args: {
   tryLine: LineRead;
   bestLine: LineRead;
   other: 'your' | 'their';
-}): string | null {
+}, more: EngineFutureFacts | null = null): string | null {
   const story = lineStory(args.fen, args.tryLine.moves, args.other, args.tryLine.mate === null ? args.tryLine.cp : null);
   if (story) return story.text;
-  const wc = whatChanged(args);
+  const wc = whatChanged(args, more);
   // A reason is what the OTHER side gains: a fact about the try's own side
   // (advice to it, "before you take…") is no reason the try fails.
   const theirSeat = args.other === 'their' ? 'opponent' : 'student';

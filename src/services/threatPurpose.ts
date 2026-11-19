@@ -36,6 +36,10 @@ function apparentTarget(line: PvLine, victim: Color): { piece: PieceSymbol; squa
   return best;
 }
 
+/** A line is decisive for its mover from this many centipawns (the mover's
+ *  seat): the bar `threatPurpose` is read under, on every surface. */
+export const DECISIVE_LINE_CP = 250;
+
 export function threatPurpose(line: PvLine, student: Color): string | null {
   if (line.plies.length < 3) return null;
   // Either seat: the side that moves first is the one whose threat it is; the
@@ -121,10 +125,21 @@ function piecesWonByMover(line: PvLine): { piece: PieceSymbol; square: Square } 
   // back), is its real point.
   let mover: string | null = line.plies[0]?.uci.slice(2, 4) ?? null;
   let won: { piece: PieceSymbol; square: Square } | null = null;
+  // A PIECE THE OTHER SIDE WALKED INTO IT IS NOT ITS POINT (Danya the chess
+  // investigator #2, after 21.gxh3 Re8: "Your Qh5 looks aimed at their pawn on
+  // f7, but its real point is their pawn on a7" — Black pushed …a5-a4 of its
+  // own accord and the queen took it on a4). A piece its owner moved freely in
+  // the line (not in check, with another move to play) was not standing where
+  // the threat aimed; a forced move (a check, the only move) still counts.
+  const walked = new Set<string>();
   line.plies.forEach((p, i) => {
     const from = p.uci.slice(0, 2) as Square;
     const to = p.uci.slice(2, 4) as Square;
     if (p.moverColor !== owner) {
+      let free = false;
+      try { const b = new Chess(p.fenBefore); free = !b.inCheck() && b.moves().length > 1; } catch { free = false; }
+      walked.delete(from);
+      if (free) walked.add(to); else walked.delete(to);
       origin.set(to, origin.get(from) ?? from);
       origin.delete(from);
       if (to === mover) mover = null; // the piece was taken
@@ -137,6 +152,7 @@ function piecesWonByMover(line: PvLine): { piece: PieceSymbol; square: Square } 
     if (!taken || !byMover) return;
     const next = line.plies[i + 1];
     if (next && next.uci.slice(2, 4) === to) return; // taken straight back: a trade
+    if (walked.has(to)) { walked.delete(to); origin.delete(to); return; }
     const startedOn = origin.get(to) ?? to;
     origin.delete(to);
     if (!won || VALUE[taken] > VALUE[won.piece]) won = { piece: taken, square: startedOn };
