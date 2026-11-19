@@ -10,10 +10,10 @@
 // Read off the engine's top lines, chess.js only: a position within a pawn
 // and a half of level, no capture or check in the best move; among the moves
 // within 40 centipawns of the best, the one that poses the most problems — a
-// piece of theirs it newly hits that is loose or worth more than the hitter,
-// a pawn of theirs it newly attacks, or a pawn thrust past the middle on the
-// wing of their king — when it poses more than the best move. Said to the
-// mover.
+// loose piece or pawn of theirs it newly hits, a piece worth more than the
+// hitter, or (queens on) a pawn thrust past the middle at their king on a
+// wing — when it poses more than the best move. Out of the opening (move 12
+// on). Said to the mover.
 import { Chess, type Color, type Move, type Square } from 'chess.js';
 import { type EngineLine, PIECE_NAME, isQuiet, lineScore, playLine, sortedLines } from './engineLineRead';
 import { MATERIAL_VALUE } from './pieceValues';
@@ -38,7 +38,9 @@ function problemsOf(fen: string, m: Move, their: string): string[] {
     const rank = Number(m.to[1]);
     const past = side === 'w' ? rank >= 4 : rank <= 5;
     const queensOn = after.findPiece({ type: 'q', color: them }).length > 0;
-    if (king && past && queensOn && Math.abs(m.to.charCodeAt(0) - king.charCodeAt(0)) <= 2) out.push(`brings a pawn at ${their} king on ${king}`);
+    // A king on a wing: a king still in the centre is the opening's lesson.
+    const onWing = !!king && !'de'.includes(king[0]);
+    if (king && onWing && past && queensOn && Math.abs(m.to.charCodeAt(0) - king.charCodeAt(0)) <= 2) out.push(`brings a pawn at ${their} king on ${king}`);
   }
   return out;
 }
@@ -46,7 +48,7 @@ function problemsOf(fen: string, m: Move, their: string): string[] {
 export function tactify(fen: string, lines: readonly EngineLine[], student: Color): Tactify | null {
   let c: Chess;
   try { c = new Chess(fen); } catch { return null; }
-  if (c.inCheck()) return null;
+  if (c.inCheck() || Number(fen.split(' ')[5] ?? '0') < 12) return null;
   const side = c.turn();
   const ls = sortedLines(lines, side);
   if (ls.length < 2 || ls[0].mate != null) return null;

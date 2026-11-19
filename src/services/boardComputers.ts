@@ -95,6 +95,18 @@ import { tensionKept, tensionReleased, type TensionLine } from './tensionRelease
 import { inaccessibleHole } from './inaccessibleHole';
 import { harmlessWeakPawns } from './harmlessWeakPawns';
 import { wingWithoutPieces } from './wingWithoutPieces';
+import type { EngineLine } from './engineLineRead';
+import { urgentStrike } from './urgentStrike';
+import { misplacedQueen } from './misplacedQueen';
+import { theirWorstPiece } from './theirWorstPiece';
+import { kingInOpen } from './kingInOpen';
+import { kingActivityGap } from './kingActivityGap';
+import { zugzwangIfPassed } from './zugzwangIfPassed';
+import { leverPasser } from './leverPasser';
+import { coordinationGap } from './coordinationGap';
+import { endgameVerdict } from './endgameVerdict';
+import { defenderInTime } from './defenderInTime';
+import { tactify } from './tactify';
 import { kingBoxMove } from './kingBox';
 import { centreDuo } from './centreDuo';
 import { noSafeChecks } from './noSafeChecks';
@@ -1227,6 +1239,32 @@ export interface BoardContexts {
   inaccessibleHole: { fenBefore: string; san: string; student: Color };
   /** A wing pawn lever with none of the pusher's pieces near it. */
   wingWithoutPieces: { fenBefore: string; san: string; student: Color };
+  /** THE DANYA HAVE-CHECK COMPUTERS, BATCH 2 (2026-11-19). `lines`: the
+   *  engine's top lines on `fen` (White's view, UCI), best first or not. The
+   *  strike that has to come now, before their reply closes it. */
+  urgentStrike: { fen: string; lines: readonly EngineLine[]; student: Color };
+  /** A queen doing little, and the square the engine's line gives it. */
+  misplacedQueen: { fen: string; lines: readonly EngineLine[]; student: Color };
+  /** The other side's worst piece, staying out of the game in the engine's
+   *  line (`bestLine`, UCI, null when none). */
+  theirWorstPiece: { fen: string; student: Color; bestLine: readonly string[] | null };
+  /** A king off its shelter with checks against it. */
+  kingInOpen: { fen: string; lines: readonly EngineLine[]; student: Color };
+  /** Whose king is the fighting piece in an ending. `lines` null: posed by
+   *  the count alone (the record's read, which keeps no score). */
+  kingActivityGap: { fen: string; lines: readonly EngineLine[] | null; student: Color };
+  /** Kings and pawns: the other side would be in zugzwang if it had the move. */
+  zugzwangIfPassed: { fen: string; student: Color };
+  /** The pawn lever in the engine's line that makes a passed pawn. */
+  leverPasser: { fen: string; lines: readonly EngineLine[]; student: Color };
+  /** One army guarded and working, the other loose or idle. */
+  coordinationGap: { fen: string; lines: readonly EngineLine[]; student: Color };
+  /** Checks that go round in circles, nothing to force, or sit tight. */
+  endgameVerdict: { fen: string; lines: readonly EngineLine[]; student: Color };
+  /** A knight's route to a loose pawn against the king that gets there first. */
+  defenderInTime: { fen: string; lines: readonly EngineLine[]; student: Color };
+  /** In a level, quiet position, the equal move that asks them questions. */
+  tactify: { fen: string; lines: readonly EngineLine[]; student: Color };
   /** BEFORE the move: a tension capture the engine wants left alone
    *  (`lines`: the engine's lines on `fen`, White's view, UCI). */
   tensionKept: { fen: string; lines: readonly TensionLine[]; student: Color };
@@ -7033,6 +7071,215 @@ export const BOARD_COMPUTERS = {
       learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_READ,
       weaknesses: { wired: 'services/capabilityEvidence.ts' },
+    },
+  },
+  urgentStrike: {
+    // "White does not have unlimited time": the strike that works now, and the slow move whose reply closes it. Both seats.
+    read: (ctx, fact) => safe(() => {
+      const r = urgentStrike(ctx.fen, ctx.lines, ctx.student);
+      if (!r) return null;
+      const key = `urgent:${r.strike}:${r.reply}`;
+      return fact({ key, claims: [key], text: r.text, proof: squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
+        seat: (r.side === ctx.student ? 'student' : 'opponent'), namesStudentMove: r.side === ctx.student, thread: LOCAL_THREAD, fen: ctx.fen });
+    }),
+    computer: 'urgentStrike',
+    kind: 'timing',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: { not: 'Review keeps one line after the move: the comparison needs the engine\'s other top lines on the board' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { not: 'its question needs the engine\'s other top lines on the board, and the record keeps one line a move' },
+    },
+  },
+  misplacedQueen: {
+    // "The passive queen on e2": a queen doing little, and the square the engine's line gives it. Both seats.
+    read: (ctx, fact) => safe(() => {
+      const r = misplacedQueen(ctx.fen, ctx.lines, ctx.student);
+      if (!r) return null;
+      const key = `misplaced-queen:${r.from}`;
+      return fact({ key, claims: [key], text: r.text, proof: squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
+        seat: (r.side === ctx.student ? 'student' : 'opponent'), namesStudentMove: r.side === ctx.student, thread: LOCAL_THREAD, fen: ctx.fen });
+    }),
+    computer: 'misplacedQueen',
+    kind: 'quality',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { not: 'an opportunity a move may take or leave without a fault: a clean move is no answer to it' },
+    },
+  },
+  theirWorstPiece: {
+    // "Black's a8 bishop is dreadful": the other side's worst piece, out of the game in the engine's line.
+    read: (ctx, fact) => safe(() => {
+      const r = theirWorstPiece(ctx.fen, ctx.student, ctx.bestLine);
+      if (!r) return null;
+      const key = `their-worst:${r.square}`;
+      return fact({ key, claims: [key], text: r.text, proof: squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
+        seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: ctx.fen });
+    }),
+    computer: 'theirWorstPiece',
+    kind: 'quality',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { not: 'a standing description of their piece: no move of the student\'s answers it' },
+    },
+  },
+  kingInOpen: {
+    // "With the king exposed, material equality doesn't matter": a king off its shelter with checks against it. Both seats.
+    read: (ctx, fact) => safe(() => {
+      const r = kingInOpen(ctx.fen, ctx.lines, ctx.student);
+      if (!r) return null;
+      const key = `king-open:${r.king}`;
+      return fact({ key, claims: [key], text: r.text, proof: squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
+        seat: (r.side === ctx.student ? 'student' : 'opponent'), namesStudentMove: false, thread: LOCAL_THREAD, fen: ctx.fen });
+    }),
+    computer: 'kingInOpen',
+    kind: 'king-read',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { not: 'its read needs the engine\'s score on the board, and the record\'s board read keeps none' },
+    },
+  },
+  kingActivityGap: {
+    // "In the endgame the king should be active rather than safe": the two kings compared. Both seats; the record files the student's passive king.
+    read: (ctx, fact) => safe(() => {
+      const r = kingActivityGap(ctx.fen, ctx.lines, ctx.student);
+      if (!r) return null;
+      const key = `king-activity:${r.activeKing}:${r.passiveKing}`;
+      return fact({ key, claims: [key], text: r.text, proof: squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
+        seat: (r.active === ctx.student ? 'student' : 'opponent'), namesStudentMove: false, thread: LOCAL_THREAD, fen: ctx.fen, ...(r.active !== ctx.student ? { skill: 'passive-king-endgame' } : {}) });
+    }),
+    computer: 'kingActivityGap',
+    kind: 'technique',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { wired: 'services/moveInsight.ts' },
+    },
+  },
+  zugzwangIfPassed: {
+    // "With Black to move it would be zugzwang: triangulate": the zugzwang that is theirs only if they have to move. Both seats; the record files the tempo to lose.
+    read: (ctx, fact) => safe(() => {
+      const r = zugzwangIfPassed(ctx.fen, ctx.student);
+      if (!r) return null;
+      const key = `zz-if-passed:${ctx.fen.split(' ').slice(0, 2).join(' ')}`;
+      return fact({ key, claims: [key], text: r.text, proof: squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
+        seat: (r.side === ctx.student ? 'student' : 'opponent'), namesStudentMove: false, thread: LOCAL_THREAD, fen: ctx.fen, ...(r.side === ctx.student ? { skill: 'passive-king-endgame' } : {}) });
+    }),
+    computer: 'zugzwangIfPassed',
+    kind: 'technique',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { wired: 'services/moveInsight.ts' },
+    },
+  },
+  leverPasser: {
+    // "Create an outside passer": the lever in the engine's line that makes a passed pawn. Both seats.
+    read: (ctx, fact) => safe(() => {
+      const r = leverPasser(ctx.fen, ctx.lines, ctx.student);
+      if (!r) return null;
+      const key = `lever-passer:${r.lever}:${r.passer[0]}`;
+      return fact({ key, claims: [key], text: r.text, proof: squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
+        seat: (r.side === ctx.student ? 'student' : 'opponent'), namesStudentMove: r.side === ctx.student, thread: LOCAL_THREAD, fen: ctx.fen });
+    }),
+    computer: 'leverPasser',
+    kind: 'structure',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { not: 'an opportunity a move may take or leave without a fault: a clean move is no answer to it' },
+    },
+  },
+  coordinationGap: {
+    // "White's army is excellently coordinated": one side guarded and working, the other loose or idle. Both seats.
+    read: (ctx, fact) => safe(() => {
+      const r = coordinationGap(ctx.fen, ctx.lines, ctx.student);
+      if (!r) return null;
+      const key = `coordination:${r.side}`;
+      return fact({ key, claims: [key], text: r.text, proof: squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
+        seat: (r.side === ctx.student ? 'student' : 'opponent'), namesStudentMove: false, thread: LOCAL_THREAD, fen: ctx.fen });
+    }),
+    computer: 'coordinationGap',
+    kind: 'judgement',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { not: 'a judgement of both armies: no single move answers it' },
+    },
+  },
+  endgameVerdict: {
+    // "Nothing better than to repeat checks" / "no way to make progress" / "hunker down": the verdict on a board with nothing to force.
+    read: (ctx, fact) => safe(() => {
+      const r = endgameVerdict(ctx.fen, ctx.lines, ctx.student);
+      if (!r) return null;
+      const key = `verdict:${r.kind}:${r.side}`;
+      return fact({ key, claims: [key], text: r.text, proof: squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
+        seat: (r.side === ctx.student ? 'student' : 'opponent'), namesStudentMove: r.kind === 'checksRepeat' && r.side === ctx.student, thread: LOCAL_THREAD, fen: ctx.fen });
+    }),
+    computer: 'endgameVerdict',
+    kind: 'verdict',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { not: 'a verdict on how to play the board: a clean move is no answer to it' },
+    },
+  },
+  defenderInTime: {
+    // "Nd3-b4 fails to ...Kf7-e6": the knight's route to a loose pawn against the king that gets there first. Both seats.
+    read: (ctx, fact) => safe(() => {
+      const r = defenderInTime(ctx.fen, ctx.lines, ctx.student);
+      if (!r) return null;
+      const key = `defender-in-time:${r.pawn}`;
+      return fact({ key, claims: [key], text: r.text, proof: squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
+        seat: (r.side === ctx.student ? 'student' : 'opponent'), namesStudentMove: false, thread: LOCAL_THREAD, fen: ctx.fen });
+    }),
+    computer: 'defenderInTime',
+    kind: 'technique',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { not: 'a plan that does not work yet: no move is a fault against it' },
+    },
+  },
+  tactify: {
+    // "Tactify the position so the opponent must calculate": among equal moves, the one that asks questions. Both seats.
+    read: (ctx, fact) => safe(() => {
+      const r = tactify(ctx.fen, ctx.lines, ctx.student);
+      if (!r) return null;
+      const key = `tactify:${r.move}`;
+      return fact({ key, claims: [key], text: r.text, proof: squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
+        seat: (r.side === ctx.student ? 'student' : 'opponent'), namesStudentMove: r.side === ctx.student, thread: LOCAL_THREAD, fen: ctx.fen });
+    }),
+    computer: 'tactify',
+    kind: 'method',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: { not: 'Review keeps one line after the move: the comparison needs the engine\'s other top lines on the board' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { not: 'a practical choice between equal moves: no move is a fault against it' },
     },
   },
   tensionKept: {

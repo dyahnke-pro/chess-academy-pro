@@ -35,6 +35,7 @@ export const GENUINE: ReadonlyArray<{ re: RegExp; why: string }> = [
   { re: /^opening book knowledge — taught by the opening lessons, not a step of thinking/, why: 'David\'s eight thinking steps (FACT_GROUP → stepOf / THINK_STEP) own no opening step' },
   { re: /a step board asks the plan as its own step|the step's own question asks for the threat|the answer-danger step names its own key/, why: 'the thinking step is the question itself: the read would hand over its answer' },
   { re: /^Review keeps one line after the move: the per-capture lines/, why: 'the record stores one engine line per move; a read of every capture\'s line has no input on Review' },
+  { re: /^Review keeps one line after the move: the comparison needs the engine's other top lines/, why: 'the record stores one engine line per move; a read comparing the top lines has no input on Review' },
   { re: /^the walk speaks none: the Theory button/, why: 'OPENING THEORY: the Review walk keeps it behind the Theory button (CLAUDE.md)' },
   { re: /^a habit is read across a game; a step board is one position|counts (a piece|the queen)'s trips across the game's moves/, why: 'it reads a whole game; a step board has none' },
 ];
@@ -60,7 +61,9 @@ const WEAKNESSES_OWED_CEILING = 57;
 // 252 = 245 for the computers before 2026-11-19 round 2, plus the Danya
 // have-check computers that arrived with a reasoned `not` (a description or an
 // opportunity a clean move cannot answer); the four wired with them do not count.
-const WEAKNESSES_UNWIRED_CEILING = 252;
+// 259 = 252 plus the seven batch-2 computers (2026-11-19) with a reasoned
+// `not`; kingActivityGap and zugzwangIfPassed are filed both ways.
+const WEAKNESSES_UNWIRED_CEILING = 259;
 
 /** Which functions of `moveThoughtFacts.ts` each surface's consumer calls:
  *  Learn's shared facts, Play's and a puzzle's tapped read (`boardReadFacts`)

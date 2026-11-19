@@ -5,15 +5,14 @@
 // moves on the board it starts from, and gives its score from either side.
 // PURE: chess.js and the lines handed in (G0).
 import { Chess, type Color, type Move } from 'chess.js';
+import { seatCp } from './winChance';
 
 /** An engine line: UCI moves from the board, the score White's view. */
 export interface EngineLine { moves: readonly string[]; cp: number | null; mate: number | null }
 
-/** A mate read as a large score, so lines compare on one scale. */
+/** The line's value for `side`, a mate on the one scale (`seatCp`). */
 export function lineScore(l: EngineLine, side: Color): number {
-  const sign = side === 'w' ? 1 : -1;
-  if (l.mate != null) return sign * (l.mate > 0 ? 10000 - l.mate : -10000 - l.mate);
-  return sign * (l.cp ?? 0);
+  return seatCp({ evaluation: l.cp ?? 0, mate: l.mate }, side);
 }
 
 /** The line's moves played out on `fen` (stops at the first illegal move). */

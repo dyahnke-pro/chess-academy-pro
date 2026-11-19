@@ -806,7 +806,7 @@ export function positionPosed(
 
 /** The registry computers whose read poses a question to the side to move. */
 type RegistryPosedComputer = 'detectLatentFork' | 'detectLatentDanger' | 'detectTradeCreatesPin' | 'detectCentralKingDanger' | 'detectKingExposure' | 'findQueenGrabTraps'
-  | 'findTrappedPiece' | 'readConversion' | 'noSafeChecks' | 'kingRace';
+  | 'findTrappedPiece' | 'readConversion' | 'noSafeChecks' | 'kingRace' | 'kingActivityGap' | 'zugzwangIfPassed';
 
 /** How sharply each posed question is asked, on the heat map's scale. */
 const REGISTRY_POSED_WEIGHT: Record<RegistryPosedComputer, number> = {
@@ -820,6 +820,8 @@ const REGISTRY_POSED_WEIGHT: Record<RegistryPosedComputer, number> = {
   readConversion: 65,
   noSafeChecks: 75,
   kingRace: 70,
+  kingActivityGap: 60,
+  zugzwangIfPassed: 70,
 };
 
 /** The registry's reads of the board the student moves on, each fact with
@@ -848,6 +850,11 @@ export function registryPosedFacts(fen: string, me: 'w' | 'b', bestLineUci: read
     // answer quietly), and a king race to the passer's escort square.
     ...readBoardAll('noSafeChecks', { fen, student: me }),
     ...readBoardAll('kingRace', { fen, student: me }),
+    // Your king the passive one in an ending (posed by the count: the record's
+    // board read keeps no score), and their zugzwang that needs you to lose a
+    // tempo — both ask the student's king to do the work.
+    ...readBoardAll('kingActivityGap', { fen, lines: null, student: me }),
+    ...readBoardAll('zugzwangIfPassed', { fen, student: me }),
   ];
 }
 

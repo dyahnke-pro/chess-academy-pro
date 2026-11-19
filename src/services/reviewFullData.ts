@@ -1391,6 +1391,25 @@ export function computeMoveFacets(
       if (ctx.evaluation != null) add(readBoardAll('harmlessWeakPawns', { fen: fenAfter, student: studentColorWB, best: { cp: storedMate(ctx.evaluation) == null ? ctx.evaluation : null, mate: storedMate(ctx.evaluation) } })[0]);
       add(readBoardAll('noSafeChecks', { fen: fenAfter, student: studentColorWB })[0]);
       add(readBoardAll('kingRace', { fen: fenAfter, student: studentColorWB })[0]);
+      // BATCH 2 (2026-11-19), on the board after the move with the record's
+      // one line there (the played line, its score White's view, unpriced on a
+      // mate): a misplaced queen, their worst piece, a king in the open, the two
+      // kings, the zugzwang theirs only if they move, the lever to a passer, the
+      // two armies, the verdict, the defender in time. (The strike that has to
+      // come now and the equal move that asks questions compare top lines the
+      // record does not keep.)
+      add(readBoardAll('zugzwangIfPassed', { fen: fenAfter, student: studentColorWB })[0]);
+      add(readBoardAll('theirWorstPiece', { fen: fenAfter, student: studentColorWB, bestLine: ctx.playedLineUci.length ? ctx.playedLineUci : null })[0]);
+      if (ctx.evaluation != null && !isMateEval(ctx.evaluation) && ctx.playedLineUci.length) {
+        const lines = [{ moves: ctx.playedLineUci, cp: ctx.evaluation, mate: null }];
+        add(readBoardAll('misplacedQueen', { fen: fenAfter, lines, student: studentColorWB })[0]);
+        add(readBoardAll('kingInOpen', { fen: fenAfter, lines, student: studentColorWB })[0]);
+        add(readBoardAll('kingActivityGap', { fen: fenAfter, lines, student: studentColorWB })[0]);
+        add(readBoardAll('leverPasser', { fen: fenAfter, lines, student: studentColorWB })[0]);
+        add(readBoardAll('coordinationGap', { fen: fenAfter, lines, student: studentColorWB })[0]);
+        add(readBoardAll('endgameVerdict', { fen: fenAfter, lines, student: studentColorWB })[0]);
+        add(readBoardAll('defenderInTime', { fen: fenAfter, lines, student: studentColorWB })[0]);
+      }
       add(readBoardAll('inaccessibleHole', { fenBefore, san, student: studentColorWB })[0]);
       // Both seats, worded from the student's: the box shrunk, the promotion
       // that comes with check, the lever with no pieces near it, and the

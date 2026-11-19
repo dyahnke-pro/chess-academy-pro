@@ -14,10 +14,10 @@
 // within N plies, while the side to move, moving now, wins nothing in N + 1:
 // it is a tempo short, and has to lose one. Said to either seat. chess.js only
 // reads the board (G0).
-import { Chess, type Color } from 'chess.js';
+import { Chess, type Color, type Square } from 'chess.js';
 import { other } from './engineLineRead';
 
-export interface ZugzwangIfPassed { side: Color; victim: Color; drops: number; plies: number; text: string }
+export interface ZugzwangIfPassed { side: Color; victim: Color; drops: number; plies: number; text: string; squares: Square[] }
 
 const MAX_DEPTH = 13;
 const MAX_MEN = 6;
@@ -132,5 +132,6 @@ export function zugzwangIfPassed(fen: string, student: Color): ZugzwangIfPassed 
   const text = side === student
     ? `If it were their move here, every move they have would drop ${what}: they would be in zugzwang. So give them the move — lose a tempo with your king and come back to this position with them to move.`
     : `If it were your move here, every move you have would drop ${what}. Don't let them hand you the move: keep your king where this position never comes back with you to move.`;
-  return { side, victim, drops, plies, text };
+  const squares: Square[] = [...c.findPiece({ type: 'k', color: side }), ...c.findPiece({ type: 'k', color: victim })];
+  return { side, victim, drops, plies, text, squares };
 }

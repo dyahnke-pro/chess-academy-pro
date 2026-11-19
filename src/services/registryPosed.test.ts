@@ -48,6 +48,10 @@ const CASES: Case[] = [
   { computer: 'noSafeChecks', tag: 'missed-opponents-threat', fen: '3k4/2p2b2/2PpR3/3P1pP1/3P4/p4KNr/P7/8 w - - 0 54', held: 'Kf2', missed: 'Re8+' },
   // The study: both kings race to g7, the h-pawn's escort square.
   { computer: 'kingRace', tag: 'passive-king-endgame', fen: 'k7/8/4p3/7P/8/3P4/1Bb4P/K7 w - - 0 1', held: 'h6', missed: 'd4' },
+  // Danya, beginner chess strategy: your king on h7 three steps from the centre, theirs on d3.
+  { computer: 'kingActivityGap', tag: 'passive-king-endgame', fen: '8/5ppk/3P3p/8/8/2pK3P/5PP1/8 b - - 0 2', held: 'Kg6', missed: 'f5' },
+  // In pursuit of zugzwang: with Black to move every move drops a pawn, so lose a tempo.
+  { computer: 'zugzwangIfPassed', tag: 'passive-king-endgame', fen: '2k5/8/p1P5/P2K4/8/8/8/8 w - - 0 1', held: 'Kc4', missed: 'Kd6' },
   { computer: 'findQueenGrabTraps', tag: 'poisoned-pawn', fen: 'r2q1r1k/pppnn1p1/3p3p/1P1Qp3/8/P1N2N1P/5PP1/R1B1R1K1 w - - 1 17', held: 'Qb3', missed: 'Qxb7' },
 ];
 

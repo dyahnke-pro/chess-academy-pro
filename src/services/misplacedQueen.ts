@@ -53,6 +53,8 @@ export function misplacedQueen(fen: string, lines: readonly EngineLine[], studen
       seen[side]++;
       if (seen[side] > 3 || m.piece !== 'q') continue;
       if (!isQuiet(m)) break;
+      // A queen still on its home square is development, not a misplaced piece.
+      if (m.from === (side === 'w' ? 'd1' : 'd8')) break;
       const before = new Chess(boards[i]);
       if (before.attackers(m.from, other(side)).length > 0) break;
       const after = new Chess(boards[i + 1]);

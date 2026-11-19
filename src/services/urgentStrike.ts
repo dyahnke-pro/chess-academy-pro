@@ -9,13 +9,16 @@
 // Read off the engine's top lines, chess.js only: the best line's first move is
 // ACTIVE (a check, a capture, a pawn into their half, or a move that hits a
 // piece of theirs worth a minor or more), it leads the best QUIET alternative
-// by a pawn or more, and the side to move is not already winning big (then the
+// by half a pawn or more, and the side to move is not already winning big (then the
 // lesson is converting, not hurrying). The quiet line's reply is the move they
-// get to make — named, because that is the door closing.
+// get to make — named, because that is the door closing: it takes the striking
+// piece, blocks its road, or comes with check. A target that only steps away
+// is a piece saved, never this read.
 import { Chess, type Color, type Square } from 'chess.js';
 import { type EngineLine, PIECE_NAME, isQuiet, lineScore, playLine, sortedLines, seatWords } from './engineLineRead';
 import { MATERIAL_VALUE } from './pieceValues';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
+import { sideToMoveAs } from './threatOut';
 
 export interface UrgentStrike { side: Color; strike: string; slow: string; reply: string | null; gainCp: number; text: string; squares: Square[] }
 
@@ -28,7 +31,7 @@ function hitsNewPiece(fen: string, uci: string): boolean {
   try {
     const c = new Chess(fen);
     const side = c.turn();
-    const before = new Set(c.board().flat().filter((p) => p && p.color !== side && p.type !== 'p' && p.type !== 'k' && c.attackers(p.square, side).length > 0).map((p) => p!.square));
+    const before = new Set(c.board().flat().filter((p) => p && p.color !== side && p.type !== 'p' && p.type !== 'k' && c.attackers(p.square, side).length > 0).map((p) => p?.square));
     const m = c.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] });
     for (const p of c.board().flat()) {
       if (!p || p.color === side || p.type === 'p' || p.type === 'k' || before.has(p.square)) continue;
@@ -39,16 +42,18 @@ function hitsNewPiece(fen: string, uci: string): boolean {
 }
 
 /** Why the strike is off the board after the slow move and their reply, or null. */
-function windowClosed(after: string | undefined, strike: { from: string; to: string; piece: string; captured?: string; san: string }, replySan: string): string | null {
+function windowClosed(after: string | undefined, strike: { from: string; to: string; piece: string; color: Color; captured?: string; san: string }, replySan: string): string | null {
   if (!after) return null;
   let c: Chess;
   try { c = new Chess(after); } catch { return null; }
   const p = c.get(strike.from as Square);
   const name = PIECE_NAME[strike.piece] ?? 'piece';
-  if (!p || p.type !== strike.piece) return `{whose} ${name} on ${strike.from} is gone, and ${strike.san} with it`;
+  if (!p || p.type !== strike.piece || p.color !== strike.color) return `{whose} ${name} on ${strike.from} is gone, and ${strike.san} with it`;
   if (strike.captured) {
     const t = c.get(strike.to as Square);
-    if (!t || t.color === p.color) return `the ${PIECE_NAME[strike.captured] ?? 'piece'} has left ${strike.to}, and there is nothing to take`;
+    // The target simply stepping away is a piece saved, not a door closing
+    // ("take it before it runs" is the loose-piece read's lesson).
+    if (!t || t.color === p.color) return null;
   }
   const legal = c.moves({ verbose: true }).some((m) => m.from === strike.from && m.to === strike.to);
   if (legal) return null;
@@ -86,8 +91,11 @@ export function urgentStrike(fen: string, lines: readonly EngineLine[], student:
   // Their reply closes it, not the slow move: the strike still stands after
   // the slow move alone.
   if (slow.from === strike.from || slow.to === strike.to) return null;
+  // Their reply taking with the very piece the strike takes is the same trade
+  // the other way round — a recapture to make, not a window closing.
+  if (reply.from === strike.to) return null;
   const boards = playLine(fen, slowLine.moves, 2).boards;
-  const midOpen = (() => { try { const c = new Chess(boards[1]); const f = c.fen().split(' '); f[1] = side; return new Chess(f.join(' ')).moves({ verbose: true }).some((m) => m.from === strike.from && m.to === strike.to); } catch { return false; } })();
+  const midOpen = (() => { const asMe = sideToMoveAs(boards[1], side); if (!asMe) return false; try { return new Chess(asMe).moves({ verbose: true }).some((m) => m.from === strike.from && m.to === strike.to); } catch { return false; } })();
   if (!midOpen) return null;
   const closed = windowClosed(boards[2], strike, reply.san);
   if (!closed) return null;

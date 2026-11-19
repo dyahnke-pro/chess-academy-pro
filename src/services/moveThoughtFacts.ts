@@ -715,6 +715,33 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
           board.push(...readBoardAll('tensionKept', { fen: after, lines, student }).map((f) => ({ f, idea: 'trade' as IdeaKind, weight: 54 })));
         }
         for (const { f, idea, weight } of board) facts.push({ ...f, namesStudentMove: f.computer === 'tensionKept' && f.seat === 'student', source: 'teachingMove', idea, weight });
+        // THE DANYA HAVE-CHECK COMPUTERS, BATCH 2 (2026-11-19), on the board
+        // after the move with the engine's lines there, both seats: the strike
+        // that has to come now, a misplaced queen, their worst piece, a king in
+        // the open, the two kings compared, the zugzwang that is theirs only if
+        // they move, the lever to a passer, the two armies, the verdict on a
+        // board with nothing to force, the defender in time, the equal move that
+        // asks questions. A read that names the side to move's next move keeps
+        // its own `namesStudentMove`, so Learn holds the student's.
+        {
+          const lines = (i.reads?.after ?? []).map((l) => ({ moves: l.moves, cp: l.evaluation, mate: l.mate ?? null }));
+          const batch: Array<{ f: CoachFact; idea: IdeaKind; weight: number }> = [
+            ...readBoardAll('zugzwangIfPassed', { fen: after, student }).map((f) => ({ f, idea: 'king-activity' as IdeaKind, weight: 64 })),
+            ...readBoardAll('theirWorstPiece', { fen: after, student, bestLine: lines[0]?.moves ?? null }).map((f) => ({ f, idea: 'weakness' as IdeaKind, weight: 48 })),
+          ];
+          if (lines.length) batch.push(
+            ...readBoardAll('urgentStrike', { fen: after, lines, student }).map((f) => ({ f, idea: 'tempo' as IdeaKind, weight: 64 })),
+            ...readBoardAll('misplacedQueen', { fen: after, lines, student }).map((f) => ({ f, idea: 'route' as IdeaKind, weight: 52 })),
+            ...readBoardAll('kingInOpen', { fen: after, lines, student }).map((f) => ({ f, idea: 'attack-king' as IdeaKind, weight: 58 })),
+            ...readBoardAll('kingActivityGap', { fen: after, lines, student }).map((f) => ({ f, idea: 'king-activity' as IdeaKind, weight: 56 })),
+            ...readBoardAll('leverPasser', { fen: after, lines, student }).map((f) => ({ f, idea: 'passed-pawn' as IdeaKind, weight: 58 })),
+            ...readBoardAll('coordinationGap', { fen: after, lines, student }).map((f) => ({ f, idea: 'plan' as IdeaKind, weight: 46 })),
+            ...readBoardAll('endgameVerdict', { fen: after, lines, student }).map((f) => ({ f, idea: 'plan' as IdeaKind, weight: 50 })),
+            ...readBoardAll('defenderInTime', { fen: after, lines, student }).map((f) => ({ f, idea: 'route' as IdeaKind, weight: 50 })),
+            ...readBoardAll('tactify', { fen: after, lines, student }).map((f) => ({ f, idea: 'choice' as IdeaKind, weight: 48 })),
+          );
+          for (const { f, idea, weight } of batch) facts.push({ ...f, source: 'teachingMove', idea, weight });
+        }
       }
     }
     // Getting into their camp, both seats (Danya's speedruns): a piece gets in

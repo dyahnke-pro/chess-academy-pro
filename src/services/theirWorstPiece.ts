@@ -12,6 +12,8 @@ import { Chess, type Color, type Square } from 'chess.js';
 import { findWorstPlacedPiece, worstReason } from './nextPlans';
 import { PIECE_NAME, other, playLine } from './engineLineRead';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
+import { badEnemyBishop } from './reviewTeachingPoints';
+import { isMinorAtHome } from './development';
 
 export interface TheirWorstPiece { square: Square; piece: string; kind: string; text: string; squares: Square[] }
 
@@ -21,10 +23,16 @@ export function theirWorstPiece(fen: string, student: Color, bestLine: readonly 
   let w: ReturnType<typeof findWorstPlacedPiece>;
   try { w = findWorstPlacedPiece(new Chess(fen), other(student)); } catch { return null; }
   if (!w || w.kind === 'no-file-rook') return null;
+  // A minor still on its home square is the opening's lesson (develop it),
+  // never "their worst piece".
+  if (isMinorAtHome(w.type, other(student), w.sq)) return null;
+  const at = w.sq;
+  // Their bad bishop has its own read (`badEnemyBishop`): one claim, one voice.
+  if (w.kind === 'bad-bishop' && badEnemyBishop(fen, student) !== null) return null;
   // Backed by the engine: in its best line the piece neither moves nor is
   // traded off for four moves — it stays out of the game.
   if (!bestLine || bestLine.length < 4) return null;
-  if (playLine(fen, bestLine, 8).moves.some((m) => m.from === w!.sq || m.to === w!.sq)) return null;
+  if (playLine(fen, bestLine, 8).moves.some((m) => m.from === at || m.to === at)) return null;
   const name = PIECE_NAME[w.type] ?? 'piece';
   const close = rotateStem([
     "Leave it there: don't offer to trade it off.",

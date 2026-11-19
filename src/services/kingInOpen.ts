@@ -15,15 +15,17 @@
 // level. Both seats.
 import { Chess, type Color, type Square } from 'chess.js';
 import { kingCover } from './kingSafety';
+import { sideToMoveAs } from './threatOut';
 import { type EngineLine, PIECE_NAME, lineScore, other, sortedLines } from './engineLineRead';
 import { andList } from '../utils/andList';
 
 export interface KingInOpen { side: Color; king: Square; cover: number; checkers: Square[]; text: string; squares: Square[] }
 
 function checkingPieces(fen: string, attacker: Color): Square[] {
-  const p = fen.split(' '); p[1] = attacker; p[3] = '-';
+  const asAttacker = sideToMoveAs(fen, attacker);
+  if (!asAttacker) return [];
   let c: Chess;
-  try { c = new Chess(p.join(' ')); } catch { return []; }
+  try { c = new Chess(asAttacker); } catch { return []; }
   if (c.inCheck()) return [];
   const out = new Set<Square>();
   for (const m of c.moves({ verbose: true })) if (m.piece !== 'p' && m.piece !== 'k' && (m.san.includes('+') || m.san.includes('#'))) out.add(m.from);
@@ -48,12 +50,12 @@ export function kingInOpen(fen: string, lines: readonly EngineLine[], student: C
     if (!ls.length || lineScore(ls[0], attacker) < 0) continue;
     const mine = side === student;
     const all = checkers.length === 2 ? 'both' : 'all';
-    const names = checkers.map((s) => `${PIECE_NAME[c.get(s)!.type]} on ${s}`);
+    const names = checkers.map((s) => `${PIECE_NAME[c.get(s)?.type ?? 'p']} on ${s}`);
     const coverWords = cover.present === 0 ? 'no pawn of its own in front of it' : 'only one pawn of its own near it';
     const text = mine
       ? `Your king on ${cover.kingSquare} is out in the open, with ${coverWords}. Their ${andList(names)} can ${all} give check, so count that before you count pawns.`
       : `Their king on ${cover.kingSquare} is out in the open, with ${coverWords}. Your ${andList(names)} can ${all} give check, and a king like that matters more than a pawn.`;
-    return { side, king: cover.kingSquare, cover: cover.present, checkers, text, squares: [cover.kingSquare, ...checkers] };
+    return { side, king: cover.kingSquare as Square, cover: cover.present, checkers, text, squares: [cover.kingSquare as Square, ...checkers] };
   }
   return null;
 }
