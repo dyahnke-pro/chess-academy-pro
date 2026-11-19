@@ -25,6 +25,7 @@ import type { CoachFact } from './coachFact';
 import { stakeValue } from './factStakes';
 import { PICTURE_ROLE, type PictureRole } from './positionPicture';
 import { fortressOn, fortressLine, type Fortress } from './fortress';
+import { DRAW_LEVEL_CP, LOCKED_TEXT, lockedPawns, type LockedPawns } from './drawnEnding';
 
 export interface FutureBoard {
   fen: string;
@@ -462,6 +463,45 @@ export function fortressGained(args: { fen: string; tryLine: LineRead; bestLine:
   return null;
 }
 
+// ── THE PAWNS LOCKED, NO WAY IN (his "and once again, White cannot make
+// progress", "the position is totally locked up") — read on every board the
+// try's line reaches, since a lock is permanent: once the chain is frozen and
+// walls the kings out, nothing on the board can change ──
+
+export interface LockGained {
+  lock: LockedPawns;
+  /** The ply of the try's line the lock stands from, and its board. */
+  ply: number;
+  fen: string;
+}
+
+/** The boards a line reaches, from its first move (ply 1). */
+function lineBoards(fen: string, moves: readonly string[]): { ply: number; fen: string }[] {
+  const out: { ply: number; fen: string }[] = [];
+  let b: Chess;
+  try { b = new Chess(fen); } catch { return out; }
+  for (let i = 0; i < moves.length; i += 1) {
+    const u = moves[i];
+    try { b.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { break; }
+    out.push({ ply: i + 1, fen: b.fen() });
+  }
+  return out;
+}
+
+/**
+ * A locked pawn ending (`lockedPawns`) the try's line reaches after the reply,
+ * the line's own score level (within `DRAW_LEVEL_CP`, no mate: the engine's
+ * proof), and that the best line never reaches. Pure: chess.js over the two
+ * lines.
+ */
+export function lockGained(args: { fen: string; tryLine: LineRead; bestLine: LineRead }): LockGained | null {
+  if (args.tryLine.mate !== null || args.tryLine.cp === null || Math.abs(args.tryLine.cp) > DRAW_LEVEL_CP) return null;
+  const onTry = lineBoards(args.fen, args.tryLine.moves).filter((x) => x.ply >= 2).find((x) => lockedPawns(x.fen));
+  if (!onTry) return null;
+  if (lineBoards(args.fen, args.bestLine.moves).some((x) => lockedPawns(x.fen))) return null;
+  return { lock: lockedPawns(onTry.fen) as LockedPawns, ply: onTry.ply, fen: onTry.fen };
+}
+
 /** The change a try lets happen, as the reason it falls short: the line's own
  *  story first; then a known draw the try lets the other side reach (the
  *  board's drawing resource, confirmed level by the line); then a fortress
@@ -490,6 +530,8 @@ export function changeReason(args: {
   // answering the try, and the best line's board does not have it.
   const drawn = wc.appeared.find((c) => c.fact.seat === theirSeat && c.fact.claims.some((k) => k.startsWith('verdict:drawn:')));
   if (drawn) return drawn.fact.text;
+  // THE PAWNS LOCKED, NO WAY IN: the try's line freezes the chain level.
+  if (lockGained(args)) return LOCKED_TEXT;
   // A FORTRESS THE TRY LETS THEM BUILD: a piece down, and the board's reason
   // the extra material cannot win.
   const fort = fortressGained(args);

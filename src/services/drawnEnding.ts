@@ -23,13 +23,18 @@
 //   oppositeBishops— a bishop each, on opposite colours, nothing else but
 //                    pawns, the side ahead one or two pawns up;
 //   oneWing        — a rook each, nothing else, one pawn up with every pawn on
-//                    one wing.
+//                    one wing;
+//   locked         — kings and pawns only, every pawn rammed head to head and
+//                    none able to take, and neither king able to reach a pawn
+//                    it could take: the pawn chain walls every way in
+//                    (`lockedPawns`). Material is level, so it is no one
+//                    side's draw: both hold it.
 // PURE: chess.js and the lines handed in (G0).
 import { Chess, type Color, type Square } from 'chess.js';
 import { type EngineLine, other, seatWords, sortedLines } from './engineLineRead';
 import { sideMaterial } from './pieceValues';
 
-export type DrawReason = 'cannotMate' | 'wrongBishop' | 'rookPawn' | 'kingInFront' | 'oppositeBishops' | 'oneWing';
+export type DrawReason = 'cannotMate' | 'wrongBishop' | 'rookPawn' | 'kingInFront' | 'oppositeBishops' | 'oneWing' | 'locked';
 
 export interface DrawnEnding {
   reason: DrawReason;
@@ -55,6 +60,10 @@ export function drawnEnding(fen: string, lines: readonly EngineLine[], student: 
   const ls = sortedLines(lines, c.turn());
   const top = ls[0];
   if (!top || top.mate !== null || top.cp === null || Math.abs(top.cp) > DRAW_LEVEL_CP) return null;
+  // ── THE PAWNS LOCKED, NO WAY IN ── (level material: both sides hold it;
+  // recorded as the side not to move, so one board always keys the same).
+  const lock = lockedPawns(fen);
+  if (lock) return { reason: 'locked', side: other(c.turn()), text: LOCKED_TEXT, squares: lock.rams };
   const mw = sideMaterial(fen, 'w');
   const mb = sideMaterial(fen, 'b');
   if (Math.abs(mw - mb) < 1) return null;
@@ -147,4 +156,84 @@ export function drawnEnding(fen: string, lines: readonly EngineLine[], student: 
     }
   }
   return null;
+}
+
+// ── THE LOCKED PAWN ENDING (his "White cannot make progress", "the position
+// is totally locked up") ──
+
+export const LOCKED_TEXT = 'The pawns are locked, and the pawn chain walls off every way in: neither king can ever reach a pawn it could take. Neither side can make progress, so it is a draw.';
+
+export interface LockedPawns {
+  /** Every pawn, each rammed head to head with an enemy pawn. */
+  rams: Square[];
+  /** The squares each king can ever walk to (the frozen chain decides them). */
+  reach: Record<Color, Square[]>;
+}
+
+const sq = (f: number, r: number): Square | null => (f >= 0 && f < 8 && r >= 1 && r <= 8 ? `${String.fromCharCode(97 + f)}${r}` as Square : null);
+
+/**
+ * A locked pawn ending, proved by the rules alone: only kings and pawns; every
+ * pawn has an enemy pawn on the square in front of it and no enemy pawn to
+ * take, so no pawn can ever move again and the chain is frozen for good; and
+ * for each king, the squares it can ever walk to (empty, not covered by an
+ * enemy pawn — the chain never changes, so neither does that set) touch no
+ * enemy pawn that is not guarded by a pawn of its own. Then no pawn can ever
+ * fall and nothing on the board can change: a draw. Null otherwise.
+ */
+export function lockedPawns(fen: string): LockedPawns | null {
+  let c: Chess;
+  try { c = new Chess(fen); } catch { return null; }
+  const board = c.board();
+  const at = (s: Square) => c.get(s);
+  const pawns: { square: Square; color: Color }[] = [];
+  const kings: Partial<Record<Color, Square>> = {};
+  for (const p of board.flat()) {
+    if (!p) continue;
+    if (p.type === 'k') kings[p.color] = p.square;
+    else if (p.type === 'p') pawns.push({ square: p.square, color: p.color });
+    else return null;
+  }
+  if (!kings.w || !kings.b || !pawns.length) return null;
+  const covers = (s: Square, color: Color): Square[] => {
+    const f = s.charCodeAt(0) - 97; const r = Number(s[1]) + (color === 'w' ? 1 : -1);
+    return [sq(f - 1, r), sq(f + 1, r)].filter((x): x is Square => !!x);
+  };
+  // Every pawn rammed, none able to take.
+  for (const p of pawns) {
+    const f = p.square.charCodeAt(0) - 97;
+    const ahead = sq(f, Number(p.square[1]) + (p.color === 'w' ? 1 : -1));
+    const front = ahead ? at(ahead) : null;
+    if (!front || front.type !== 'p' || front.color === p.color) return null;
+    if (covers(p.square, p.color).some((x) => { const t = at(x); return !!t && t.type === 'p' && t.color !== p.color; })) return null;
+  }
+  const coveredBy = (color: Color): Set<Square> => new Set(pawns.filter((p) => p.color === color).flatMap((p) => covers(p.square, color)));
+  const pawnSquares = new Set(pawns.map((p) => p.square));
+  const reach = {} as Record<Color, Square[]>;
+  for (const side of ['w', 'b'] as const) {
+    const foe = other(side);
+    // A square an enemy pawn covers: the king may not step there, and an enemy
+    // pawn standing there is guarded.
+    const barred = coveredBy(foe);
+    const seen = new Set<Square>([kings[side] as Square]);
+    const queue: Square[] = [kings[side] as Square];
+    while (queue.length) {
+      const s = queue.shift() as Square;
+      const f = s.charCodeAt(0) - 97; const r = Number(s[1]);
+      for (let df = -1; df <= 1; df += 1) for (let dr = -1; dr <= 1; dr += 1) {
+        const n = sq(f + df, r + dr);
+        if (!n || seen.has(n)) continue;
+        if (pawnSquares.has(n)) {
+          // An enemy pawn no pawn guards, next to a square the king reaches: it falls.
+          if (pawns.some((p) => p.square === n && p.color === foe) && !barred.has(n)) return null;
+          continue;
+        }
+        if (barred.has(n)) continue;
+        seen.add(n);
+        queue.push(n);
+      }
+    }
+    reach[side] = [...seen];
+  }
+  return { rams: pawns.map((p) => p.square), reach };
 }

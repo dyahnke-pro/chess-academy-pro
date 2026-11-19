@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { lineStory, futureBoards, whatChanged, changeReason, comesAlive, comesAliveText, bundleAt, fortressGained } from './futures';
+import { lineStory, futureBoards, whatChanged, changeReason, comesAlive, comesAliveText, bundleAt, fortressGained, lockGained } from './futures';
+import { LOCKED_TEXT } from './drawnEnding';
 
 describe('what the try line does (fixes 2–3)', () => {
   it('reads a perpetual check his way: the checks never stop', () => {
@@ -127,5 +128,29 @@ describe('the fortress the try lets them build (WO-PICTURE-01 gap 2)', () => {
   });
   it('the same line both ways: no fortress gained', () => {
     expect(fortressGained({ fen, tryLine, bestLine: tryLine })).toBeNull();
+  });
+});
+
+describe('the try that lets the pawns lock (his "White cannot make progress")', () => {
+  // White's king walks in by f3, g4, f5 and takes e5 (depth 24, +6.74); g4??
+  // lets …g6 lock the chain across the board (0.00).
+  const fen = '8/6p1/2k5/p1p1p3/P1P1P3/8/6P1/6K1 w - - 0 1';
+  const tryLine = { moves: ['g2g4', 'c6d7', 'g1g2', 'd7e7', 'g4g5', 'g7g6', 'g2h3', 'e7f8', 'h3g4', 'f8e8'], cp: 0, mate: null };
+  const bestLine = { moves: ['g1f1', 'c6d7', 'f1f2', 'd7e6', 'f2g3', 'e6f6', 'g3h4', 'f6g6', 'h4g4', 'g6h6', 'g4f5', 'h6h5', 'f5e5'], cp: 674, mate: null };
+  it('the reason is the lock the try lets them reach', () => {
+    expect(lockGained({ fen, tryLine, bestLine })?.ply).toBe(6);
+    expect(changeReason({ fen, student: 'w', rating: 1800, other: 'their', tryLine, bestLine })).toBe(LOCKED_TEXT);
+  });
+  it('no level read, no lock claimed', () => {
+    expect(lockGained({ fen, tryLine: { ...tryLine, cp: 300 }, bestLine })).toBeNull();
+  });
+  // never-resign-prematurely#0: h6?? loses, the best line Kg8 draws by the
+  // kings; neither line freezes the chain, so this read says nothing there.
+  it('his Timman board: no lock on either line', () => {
+    const f = '8/4K1kp/6p1/6P1/7P/8/8/8 b - - 3 65';
+    const t = { moves: ['h7h6', 'e7e6', 'g7f8', 'e6f6', 'h6g5', 'h4g5', 'f8e8', 'f6g6'], cp: 3438, mate: null };
+    const b = { moves: ['g7g8', 'e7e8', 'g8g7', 'e8d8', 'g7f8', 'd8d7'], cp: 0, mate: null };
+    expect(lockGained({ fen: f, tryLine: t, bestLine: b })).toBeNull();
+    expect(lockGained({ fen: f, tryLine: b, bestLine: t })).toBeNull();
   });
 });

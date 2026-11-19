@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { drawnEnding } from './drawnEnding';
+import { drawnEnding, lockedPawns, LOCKED_TEXT } from './drawnEnding';
 import { endgameVerdict } from './endgameVerdict';
 
 const level = (moves: string[]) => [{ moves, cp: 0, mate: null }];
@@ -67,5 +67,48 @@ describe('drawnEnding', () => {
   it('no "nothing can be forced" over checks and a pawn on the seventh', () => {
     const L = [{ moves: ['c5c6', 'd2c2', 'c6b7', 'a1b1', 'b7b8', 'c2c3', 'c7c8q', 'c3c8'], cp: 0, mate: null }];
     expect(endgameVerdict('8/2P5/8/2K5/8/8/3r4/k7 w - - 3 3', L, 'w')).toBeNull();
+  });
+});
+
+// His "White cannot make progress" / "totally locked up": the pawn chain
+// frozen, and no king can ever reach a pawn it could take.
+describe('the locked pawn ending', () => {
+  // A textbook wall: four rams, every square between the chains covered.
+  const wall = '8/8/2k5/p1p1p1p1/P1P1P1P1/8/8/4K3 w - - 0 1';
+  it('a chain across the board walls both kings out: a draw', () => {
+    const lock = lockedPawns(wall);
+    expect(lock?.rams.length).toBe(8);
+    expect(lock?.reach.w.every((s) => Number(s[1]) <= 3)).toBe(true);
+    expect(lock?.reach.b.every((s) => Number(s[1]) >= 6)).toBe(true);
+    // The engine reads it level (depth 24: Kf1 Kd7 Kf2 …, 0.00).
+    const r = drawnEnding(wall, level(['e1f1', 'c6d7', 'f1f2', 'd7c7']), 'w');
+    expect(r?.reason).toBe('locked');
+    expect(r?.text).toBe(LOCKED_TEXT);
+    expect(endgameVerdict(wall, level(['e1f1', 'c6d7']), 'w')?.draw).toBe('locked');
+  });
+
+  it('a gap in the wall lets a king in: no lock', () => {
+    // No g-pawns: the white king walks g4, f5 and takes the unguarded e5.
+    expect(lockedPawns('8/8/2k5/p1p1p3/P1P1P3/8/8/4K3 w - - 0 1')).toBeNull();
+  });
+
+  it('a pawn that can still move or take is no lock', () => {
+    expect(lockedPawns('8/6p1/2k5/p1p1p3/P1P1P1P1/8/8/4K3 w - - 0 1')).toBeNull(); // g4 free
+    expect(lockedPawns('4k3/8/8/3p4/4P3/8/8/4K3 w - - 0 1')).toBeNull(); // exd5 is on
+    expect(lockedPawns('4k3/8/8/3p4/3PR3/8/8/4K3 w - - 0 1')).toBeNull(); // a rook on the board
+  });
+
+  // never-resign-prematurely#0 (h6??; "and once again, White cannot make
+  // progress"): the draw there is the kings, not a frozen chain: h4-h5 and
+  // …h6 are still on. No board of the best line (Kg8 Ke8 Kg7 …) is locked.
+  it('his Timman board is a king draw, not a lock', () => {
+    expect(lockedPawns('8/4K1kp/6p1/6P1/7P/8/8/8 b - - 3 65')).toBeNull();
+    expect(lockedPawns('6k1/4K2p/6p1/6P1/7P/8/8/8 w - - 4 66')).toBeNull();
+  });
+
+  // pawn-endgames-a-practical-guide#1 (e4?): the e-pawn and the f3 pawn are
+  // still free.
+  it('his Kashlinskaya board is no lock', () => {
+    expect(lockedPawns('8/8/8/1k4p1/6P1/4Pp2/3K4/8 w - - 0 63')).toBeNull();
   });
 });
