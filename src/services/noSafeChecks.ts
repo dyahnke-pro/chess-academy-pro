@@ -14,7 +14,7 @@
 // The text names their safe checks and how many checks you have.
 import { Chess, type Color, type Move } from 'chess.js';
 import { legalSeeGain } from './positionReadingService';
-import { flipSideToMove } from './threatOut';
+import { computeMustDefend, flipSideToMove } from './threatOut';
 import { andList, countWord } from '../utils/andList';
 
 export interface NoSafeChecks { side: Color; yourChecks: string[]; theirSafeChecks: string[]; text: string; squares: string[] }
@@ -38,6 +38,16 @@ export function noSafeChecks(fen: string, student: Color): NoSafeChecks | null {
   if (c.inCheck()) return null;
   const mine = checks(fen);
   if (!mine.all.length || mine.safe.length) return null;
+  // Only when checks would be the tempting way out (his "White is threatening
+  // Ng6, and I am all out of meaningful checks"): the side to move faces a
+  // threat — a piece it must defend, or a mate in one against it. A board with
+  // nothing threatened asks no question of the checks (decision baseline
+  // 2026-11-19: "they are out of useful checks … while you have Qd4+" on a
+  // quiet board).
+  const side0 = c.turn();
+  const flippedProbe = flipSideToMove(fen);
+  const mateThreat = !!flippedProbe && new Chess(flippedProbe).moves().some((m) => m.endsWith('#'));
+  if (computeMustDefend(fen, side0).pieces.length === 0 && !mateThreat) return null;
   const flipped = flipSideToMove(fen);
   if (!flipped) return null;
   const theirs = checks(flipped);

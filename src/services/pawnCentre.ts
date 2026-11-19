@@ -37,7 +37,6 @@ export interface PawnCentre {
 }
 
 const other = (c: Color): Color => (c === 'w' ? 'b' : 'w');
-const SIDE_NAME: Record<Color, string> = { w: 'White', b: 'Black' };
 
 function pawnOf(c: Chess, sq: string, col: Color): boolean {
   const p = c.get(sq as Square);
@@ -79,7 +78,8 @@ export function pawnCentre(fen: string, student: Color): PawnCentre | null {
     if ((['d4', 'e4', 'd5', 'e5'] as Square[]).some((s) => pawnOf(c, s, other(side)))) continue;
     const takes = [...new Set(pawns.flatMap((p) => pawnCaptureSquares(p, side)))].sort();
     const mine = side === student;
-    const owner = mine ? 'Your' : `${SIDE_NAME[side]}'s`;
+    // One perspective (CLAUDE.md): the opponent is "their", never a colour.
+    const owner = mine ? 'Your' : 'Their';
     const foe = mine ? 'They have' : 'You have';
     const pawnWord = pawns.length === 1 ? `pawn on ${pawns[0]}` : `pawns on ${andList(pawns)}`;
     const joinClause = joins.length
