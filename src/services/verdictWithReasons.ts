@@ -264,7 +264,12 @@ export function boardReasons(fen: string, student: Color, lines: readonly Initia
   }
 
   // ── WHO IS MAKING THE THREATS ──
-  const ini: Initiative | null = lines ? initiativeRead(fen, lines) : null;
+  // Not in a bare ending (Danya narration test 2026-11-19, the two rook
+  // endings you must know #0: "Roughly balanced — they have the initiative",
+  // a rook checking a king in a drawn rook-and-pawn ending): with two pieces
+  // or fewer besides the kings and pawns, a check is the defender's
+  // technique, never a lead in the play.
+  const ini: Initiative | null = lines && officers >= 3 ? initiativeRead(fen, lines) : null;
   if (ini) {
     out.push({ kind: 'initiative', side: ini.side, weight: 130, clause: `${WHO(ini.side, student)} have the initiative`,
       sentence: initiativeLine(ini, student, stemKeyOf(fen)), squares: ini.squares });

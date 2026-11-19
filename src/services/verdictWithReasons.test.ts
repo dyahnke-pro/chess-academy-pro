@@ -116,3 +116,15 @@ describe('a clear edge needs a reason its size', () => {
     expect(v?.reasons.length ?? 0).toBeGreaterThan(0);
   });
 });
+
+// Danya narration test 2026-11-19, the two rook endings you must know #0: the
+// rook checking a king in a drawn rook ending is not the initiative.
+describe('no initiative in a bare ending', () => {
+  it('rook and pawn against rook: a level verdict names no initiative', () => {
+    const fen = '8/8/8/8/5pk1/2R5/r7/5K2 b - - 0 60';
+    const ls = [{ moves: ['f4f3', 'c3c8', 'f3f2', 'c8c4', 'g4f5', 'c4c5', 'f5e6', 'c5c6', 'e6e5', 'c6c5'] }];
+    expect(boardReasons(fen, 'b', ls, null).map((r) => r.kind)).not.toContain('initiative');
+  });
+  // The control: the greek gift #3 and the art of maneuvering #2 above still
+  // read the initiative in a middlegame.
+});
