@@ -33,14 +33,13 @@ import { readBoard, readBoardAll, readKey, type BoardFact } from './boardCompute
 import { writerFor } from './writerRegister';
 import { closeSentence as close, deepTag, thoughtKey, type MoveWords } from './thoughtReads';
 import { pvLineFromUci } from './pvPlayback';
+import { DECISIVE_LINE_CP } from './threatPurpose';
 /** A SAN line from a board, as UCI (moves it cannot play end it). */
 function sansToUci(fen: string, sans: readonly string[]): string[] {
   const out: string[] = [];
   try { const c = new Chess(fen); for (const s of sans) { const m = c.move(s); out.push(`${m.from}${m.to}${m.promotion ?? ''}`); } } catch { /* stop at the first move that does not play */ }
   return out;
 }
-/** A line decisive for its mover: two and a half pawns or mate (Review's deep-threat floor). */
-const DECISIVE_LINE_CP = 250;
 import { detectTactics } from './tacticsDetector';
 import { thinkStepOf } from './thinkingComputers';
 import type { ThinkingStep } from './thinkingSteps';
