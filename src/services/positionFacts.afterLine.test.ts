@@ -24,4 +24,10 @@ describe('afterLine — a future board is said as the moves that reach it', () =
   it('the board on screen needs no line', () => {
     expect(afterLine(['Qd2'], NOW, NOW, 'w', TEXT)).toBe(TEXT);
   });
+  it('a long line is said by its key move, never a score sheet (rule 4)', () => {
+    const line = ['Qc2', 'Bc6', 'Qb1', 'Nd7', 'Bc3', 'c4', 'Rd4', 'Qc5', 'Red1'];
+    expect(afterLine(line, FUTURE, NOW, 'w', TEXT)).toBe('After Qc2 and eight more moves, your queen on d2 and your bishop on e3 form a battery.');
+    // Four plies are still said move by move.
+    expect(afterLine(line.slice(0, 4), FUTURE, NOW, 'w', TEXT)).toMatch(/^After Qc2, Bc6, Qb1, Nd7, /);
+  });
 });

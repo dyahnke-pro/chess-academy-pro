@@ -110,7 +110,7 @@ export interface LastMoveInput {
 import type { TacticPatternType } from '../types/tacticTypes';
 import { definitionKey } from './conceptEngine';
 import { lineProof, NO_PROOF, type FactProof } from './proof';
-import { lineSeatAt } from '../utils/andList';
+import { lineSeatAt, countWord } from '../utils/andList';
 import { habitIsOwed, HABIT_KIND } from './methodBeat';
 import { naturalDefenceFails, forcingLine, markSacrificeLine } from './methodSignals';
 import { habitNeedFrom } from './coachDecider';
@@ -1909,6 +1909,9 @@ function buildClauses(a: {
   });
 }
 
+/** The longest line said move by move: a combination's three or four plies. */
+const LINE_SAID_IN_FULL = 4;
+
 /** A concept that lives on a FUTURE board is said with the moves that reach
  *  it — "After cxb3+, moving your pawn on b3…" — never as a fact about the
  *  board on screen (walk 900, 27…Ba4+). When the line is ONE move of the
@@ -1922,6 +1925,10 @@ export function afterLine(line: readonly string[] | undefined, boardFen: string 
   // so it reads for every detector sentence ("If you play Nd4, moving the
   // knight on e5 would unveil…"); "Play X and moving…" did not.
   if (line.length === 1 && fenNow.split(' ')[1] === student) return `If you play ${line[0]}, ${rest}`;
+  // A long line is said as its key move, never as a score sheet (THE COACH
+  // TALKS LIKE A PERSON, rule 4: "After Qc2, Bc6, Qb1, Nd7, Bc3, c4, Rd4,
+  // Qc5, Red1, your rook…" was a read of a board, 2026-11-19).
+  if (line.length > LINE_SAID_IN_FULL) return `After ${line[0]} and ${countWord(line.length - 1)} more moves, ${rest}`;
   return `After ${line.join(', ')}, ${rest}`;
 }
 
