@@ -793,8 +793,43 @@ export function positionPosed(
       const posed = KING_READ_POSED[r.id];
       if (posed) add(posed.tag, posed.weight);
     }
+    // THE REGISTRY'S STANDING READS, BOTH WAYS (David 2026-11-19: "Make sure
+    // all computers work both ways"): each read that TEACHES a danger or a
+    // chance on the board the student moves on is the same read that names
+    // the skill the board asked for. The fact carries its skill
+    // (`CoachFact.skill`), so teaching and the record speak one vocabulary.
+    for (const f of registryPosedFacts(fen, me)) if (f.skill) add(f.skill as MisconceptionTagId, REGISTRY_POSED_WEIGHT[f.computer as RegistryPosedComputer] ?? 60);
   } catch { /* an unreadable board posed nothing */ }
   return out;
+}
+
+/** The registry computers whose read poses a question to the side to move. */
+type RegistryPosedComputer = 'detectLatentFork' | 'detectLatentDanger' | 'detectTradeCreatesPin' | 'detectCentralKingDanger' | 'detectKingExposure' | 'findQueenGrabTraps';
+
+/** How sharply each posed question is asked, on the heat map's scale. */
+const REGISTRY_POSED_WEIGHT: Record<RegistryPosedComputer, number> = {
+  detectLatentFork: 75,
+  detectLatentDanger: 70,
+  detectTradeCreatesPin: 65,
+  detectCentralKingDanger: 70,
+  detectKingExposure: 65,
+  findQueenGrabTraps: 80,
+};
+
+/** The registry's reads of the board the student moves on, each fact with
+ *  the skill it poses (`skill`) — the knight fork two moves away (theirs or
+ *  yours), the pin in waiting on your king or queen, the trade that walks into
+ *  a pin, your king in the centre with the file opening, your king's broken
+ *  shelter, the pawn that traps the queen that takes it. */
+export function registryPosedFacts(fen: string, me: 'w' | 'b'): Array<{ computer: string; skill?: string }> {
+  return [
+    readBoard('latentFork', { fen, student: me }),
+    readBoard('latentDanger', { fen, student: me }),
+    readBoard('tradeDanger', { fen, student: me }),
+    readBoard('centralKingDanger', { fen, student: me, namesMoves: false }),
+    readBoard('kingExposure', { fen, side: me, student: me, owner: false }),
+    readBoard('queenGrabTrap', { fen }),
+  ].filter((f): f is NonNullable<typeof f> => f !== null);
 }
 
 // ── THE FULL SPEED-RUN READ (catalogue A/B/C) ────────────────────────────────

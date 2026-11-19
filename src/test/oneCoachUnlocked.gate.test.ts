@@ -49,6 +49,15 @@ const LOCK_CEILING: Record<Exclude<CoachSurface, 'weaknesses'>, number> = {
   learn: 53, review: 30, lesson: 45, play: 64, chat: 58, tactics: 88, think: 72,
 };
 
+/** BOTH WAYS (David 2026-11-19: "Make sure all computers work both ways"):
+ *  the computers whose record half is not wired yet — `owed` (the board poses
+ *  a skill and no record path files it) and `not` (each with its reason). Both
+ *  may only fall: a computer converted files held / missed for the student's
+ *  move through the one record path (`moveInsight.positionPosed` →
+ *  `capabilityOutcomes`) and its fact carries the skill. */
+const WEAKNESSES_OWED_CEILING = 69;
+const WEAKNESSES_UNWIRED_CEILING = 250;
+
 /** Which functions of `moveThoughtFacts.ts` each surface's consumer calls:
  *  Learn's shared facts, Play's and a puzzle's tapped read (`boardReadFacts`)
  *  and Review's walk read the core; a lesson and chat add the lesson's board
@@ -172,6 +181,14 @@ describe('one coach, unlocked', () => {
       .filter((s) => (locks[s]?.length ?? 0) > LOCK_CEILING[s])
       .map((s) => `${s}: ${locks[s].length} locks > ceiling ${LOCK_CEILING[s]}`);
     expect(over).toEqual([]);
+  });
+
+  it('both ways: the record half not yet wired may only fall', () => {
+    const weak = rows.map(([, spec]) => spec.surfaces.weaknesses);
+    const owed = weak.filter((a) => !a.wired && /owed/i.test(a.not ?? '')).length;
+    const unwired = weak.filter((a) => !a.wired).length;
+    expect(owed).toBeLessThanOrEqual(WEAKNESSES_OWED_CEILING);
+    expect(unwired).toBeLessThanOrEqual(WEAKNESSES_UNWIRED_CEILING);
   });
 
   it('(a) the genuine reasons are told apart from a lock', () => {

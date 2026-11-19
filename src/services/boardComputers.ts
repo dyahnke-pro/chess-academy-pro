@@ -2486,12 +2486,12 @@ export const BOARD_COMPUTERS = {
       if (!t) return null;
       const proof = queenGrabTrapProof(t);
       const key = `grab:${t.to}`;
-      return fact({ key, claims: [key], text: queenGrabTrapLine(t), proof, squares: [t.from, t.to, t.replyFrom, t.replyTo, ...(proof.squares ?? [])], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+      return fact({ key, claims: [key], text: queenGrabTrapLine(t), proof, squares: [t.from, t.to, t.replyFrom, t.replyTo, ...(proof.squares ?? [])], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, skill: 'poisoned-pawn', fen });
     }),
     computer: 'findQueenGrabTraps',
     kind: 'tactic',
     phase: ANY,
-    surfaces: { lesson: LESSON_BOARD, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_COMPOSER, weaknesses: WEAK_OWED, think: THINK },
+    surfaces: { lesson: LESSON_BOARD, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_COMPOSER, weaknesses: { wired: 'services/moveInsight.ts' }, think: THINK },
   },
   trapped: {
     read: ({ fen, student }, fact) => safe(() => {
@@ -2593,12 +2593,12 @@ export const BOARD_COMPUTERS = {
       return fact({ key: text, claims: [], text, proof: NO_PROOF.description,
         squares: [d.enemySquare, d.frontSquare, d.backSquare, ...(d.shieldSquare ? [d.shieldSquare] : [])],
         stakes: { points: lineTacticPoints(d.frontPiece, d.backPiece), plies: 3 },
-        seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+        seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen, skill: 'missed-their-pin' });
     }),
     computer: 'detectLatentDanger',
     kind: 'latent-danger',
     phase: ANY,
-    surfaces: LIVE_READ,
+    surfaces: { ...LIVE_READ, weaknesses: { wired: 'services/moveInsight.ts' } },
   },
   tradeDanger: {
     read: ({ fen, student }, fact) => safe(() => {
@@ -2613,12 +2613,12 @@ export const BOARD_COMPUTERS = {
       return fact({ key: text, claims: [], text, proof: NO_PROOF.description,
         squares: [d.enemySquare, d.frontSquare, d.backSquare, d.tradeFrom, d.tradeTo],
         stakes: { points: lineTacticPoints(d.frontPiece, d.backPiece), plies: 2 },
-        seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: after ?? fen });
+        seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: after ?? fen, skill: 'bad-trade' });
     }),
     computer: 'detectTradeCreatesPin',
     kind: 'latent-danger',
     phase: ANY,
-    surfaces: LIVE_READ,
+    surfaces: { ...LIVE_READ, weaknesses: { wired: 'services/moveInsight.ts' } },
   },
   latentFork: {
     // The student's own fork first (a plan you can execute beats a plan you
@@ -2633,12 +2633,14 @@ export const BOARD_COMPUTERS = {
       // The route is withheld from the words: the line names no move.
       return fact({ key, claims: [key], text, proof: NO_PROOF.description, squares: [f.square, ...targets],
         stakes: { points: forkPoints(f.targets.map((t) => t.piece)), plies: 2 * f.moves },
-        seat: f.forker === seat ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+        seat: f.forker === seat ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen,
+        // Both ways: your fork to set up, or theirs to stop (`moveInsight.positionPosed`).
+        skill: f.forker === seat ? 'missed-your-fork' : 'missed-their-fork' });
     }),
     computer: 'detectLatentFork',
     kind: 'latent-chance',
     phase: ANY,
-    surfaces: LIVE_READ,
+    surfaces: { ...LIVE_READ, weaknesses: { wired: 'services/moveInsight.ts' } },
   },
   centralKingDanger: {
     read: ({ fen, student, namesMoves: names }, fact) => safe(() => {
@@ -2646,12 +2648,12 @@ export const BOARD_COMPUTERS = {
       if (!d) return null;
       const text = centralKingDangerClause(d, names);
       return fact({ key: text, claims: [], text, proof: NO_PROOF.description, squares: [d.kingSquare, d.aimedFrom, d.tensionSquare], stakes: null,
-        seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+        seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen, skill: 'king-stuck-center' });
     }),
     computer: 'detectCentralKingDanger',
     kind: 'latent-danger',
     phase: ANY,
-    surfaces: LIVE_READ,
+    surfaces: { ...LIVE_READ, weaknesses: { wired: 'services/moveInsight.ts' } },
   },
   conversion: {
     // The key is the step and its passer (`conversionKey`): a step is said
@@ -5236,7 +5238,9 @@ export const BOARD_COMPUTERS = {
       if (!text) return null;
       const key = `exposure:${side}`;
       return fact({ key, claims: [key], text, proof: NO_PROOF.description, squares: [exposure.kingSquare, ...exposure.attackerSquares], stakes: null,
-        seat: side === student ? 'opponent' : 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+        seat: side === student ? 'opponent' : 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen,
+        // Your own king's shelter is the skill the board asks you to keep.
+        ...(side === student ? { skill: 'weakened-king-safety' } : {}) });
     }),
     computer: 'detectKingExposure',
     kind: 'king',
@@ -5248,7 +5252,7 @@ export const BOARD_COMPUTERS = {
       review: { not: 'owed — Review reads the king through its own walk' },
       learn: { wired: 'services/positionFacts.ts' },
       tactics: TACTICS_COMPOSER,
-      weaknesses: WEAK_OWED,
+      weaknesses: { wired: 'services/moveInsight.ts' },
       think: { not: 'owed — the step board reads the composer' },
     },
   },
