@@ -224,3 +224,12 @@ describe('a race needs pawns to race with (readers\' flags 2026-11-19)', () => {
     expect(oppositeWingsRace('r4rk1/pp3pp1/2p4p/8/8/5PP1/PPPQ4/2KR3R w - - 0 1', 'w', 'live')?.text).toMatch(/race/);
   });
 });
+
+describe('a race needs two storms: pawns on two files, not landed yet (Danya: the positional threat #0, queen the supporting actress #3)', () => {
+  it("Black's only queenside pawns are the doubled c-pawns: no race, the fight is the pieces'", () => {
+    expect(oppositeWingsRace('3r2k1/2p1nqbp/2p2pp1/2B1p3/1P2P3/4QP2/P3N1PP/1KR5 w - - 0 32', 'w', 'live')).toBeNull();
+  });
+  it('the f6 pawn already sits at the king: an attack, not a race', () => {
+    expect(oppositeWingsRace('2r3k1/1b3q1p/p3pPpQ/1p2p3/8/PN6/1PP4P/1K3R2 w - - 0 33', 'w', 'live')).toBeNull();
+  });
+});

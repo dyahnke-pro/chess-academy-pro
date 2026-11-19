@@ -123,3 +123,29 @@ describe('planOfTheBoard — the step that led to the plan, in his order', () =>
     expect(plan('5rk1/pp1q1rpp/4b3/3pPp1Q/P1pP3P/2P3P1/1P3RB1/5RK1 w - - 0 26', ['a4a5', 'd7d8', 'a5a6', 'b7a6'], 420)).toBeNull();
   });
 });
+
+// A ROAD JUDGED BY WHAT IT HITS AT ITS END, its steps spread through the line.
+describe('planOfTheBoard — a road judged by its end, steps spread through the line', () => {
+  it('the bishop via f7 to g6 joins the rooks on the seventh (rooks on the seventh revisited #2)', () => {
+    const fen = '5r1k/R2R2p1/7p/p4prP/2B5/5K2/8/8 w - - 0 36';
+    const p = plan(fen, ['c4f7', 'f5f4', 'f7g6', 'g5g3', 'f3f2', 'f8g8', 'a7a5', 'g3c3', 'a5a2', 'c3c8'], 279);
+    expect(p?.kind).toBe('road');
+    expect(p?.planText).toBe('Your bishop on c4 has a better road, by way of f7. On g6 it joins your rooks on the seventh rank. It hits h7, next to their king.');
+  });
+  it('the rook d7 then f7, king moves between its steps, aims down the f-file at f2 (the positional rook lift #2)', () => {
+    const fen = '2kr2r1/1b5p/p2pn1qB/1pp1p1p1/4P3/1PPPQNP1/1P3P1R/3RK3 b - - 0 25';
+    const p = plan(fen, ['c8b8', 'e1e2', 'd8d7', 'd1a1', 'b8c8', 'e2e1', 'c8c7', 'e1f1', 'd7f7', 'f3d2'], -126);
+    expect(p?.text).toBe('Your rook on d8 has a better road, by way of d7. On f7 it aims down the f-file at f2, next to their king.');
+    expect(p?.starts).toBe(1);
+  });
+  it('negative control: a capture before the last step ends the road', () => {
+    const fen = '2kr2r1/1b5p/p2pn1qB/1pp1p1p1/4P3/1PPPQNP1/1P3P1R/3RK3 b - - 0 25';
+    const p = plan(fen, ['c8b8', 'e1e2', 'd8d7', 'h6g5', 'b8c8', 'e2e1', 'd7f7'], -126);
+    expect(p?.text ?? '').not.toContain('rook on d8 has a better road');
+  });
+  it('negative control: a stop that already has the job makes it no road (the rook on b4 already hits c4 before a4, the tactical detector #3)', () => {
+    const fen = '6k1/p1r2pp1/b3pn2/2p1N2p/2P5/5BPP/Pr2PP2/R3K2R b KQ - 0 24';
+    const p = plan(fen, ['b2b4', 'a2a3', 'b4a4', 'a1c1', 'a4a3', 'e1g1', 'f6d7', 'e5d7', 'c7d7', 'f3h5'], -54);
+    expect(p?.kind).not.toBe('road');
+  });
+});

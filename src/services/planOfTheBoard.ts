@@ -73,6 +73,7 @@ import { structureSignature } from './boardStructure';
 import { opponentTargets } from './targetSelector';
 import { breakStopped } from './breakTiming';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
+import { isUndevelopedInOpening } from '../utils/undeveloped';
 
 export type BoardPlanKind = 'siege' | 'road' | 'kick' | PlanKind | 'break' | 'steps';
 
@@ -376,6 +377,14 @@ export function planOfTheBoard(i: PlanOfTheBoardIn): BoardPlan | null {
     }
   }
 
+  // A ROAD JUDGED BY WHAT IT HITS AT ITS END, its steps spread through the
+  // line (Danya: "the bishop via f7-g6 adds pressure on the seventh", "Rd7-f7
+  // toward f2" with king moves between the rook's steps).
+  if (names) {
+    const far = attackRoadOf(i.fen, top.moves, mover, whose);
+    if (far) out.push(far);
+  }
+
   // The plans the structure earns, written to the student: theirs is not
   // re-seated, so the student's own board only.
   if (mine) {
@@ -550,4 +559,152 @@ function referBack(text: string, r: PlanReason): string {
       .replace(/^Next, the (knight|bishop|rook|queen) goes on/, 'Next, it goes on');
   }
   return text;
+}
+
+/** How many of the mover's moves in the best line a spread-out road may use. */
+const ROAD_MOVES = 5;
+
+const ALL_SQUARES: Square[] = [];
+for (const f of 'abcdefgh') for (let r = 1; r <= 8; r += 1) ALL_SQUARES.push(`${f}${r}` as Square);
+
+/** The squares next to the king of `c` on `b`. */
+function kingZone(b: Chess, c: Color): Square[] {
+  const k = b.findPiece({ type: 'k', color: c })[0];
+  if (!k) return [];
+  return ALL_SQUARES.filter((s) => s !== k && Math.abs(s.charCodeAt(0) - k.charCodeAt(0)) <= 1 && Math.abs(Number(s[1]) - Number(k[1])) <= 1);
+}
+
+/** The square a slider on `from` reaches along one line THROUGH exactly one
+ *  piece of `them` (the x-ray: the rook on f7 "toward f2" past the knight on
+ *  f3), when that square is one of `goal`; with the piece it looks through. */
+function xrayAt(b: Chess, from: Square, type: string, them: Color, goal: readonly Square[]): { sq: Square; through: Square } | null {
+  const dirs = type === 'b' ? [[1, 1], [1, -1], [-1, 1], [-1, -1]] : type === 'r' ? [[1, 0], [-1, 0], [0, 1], [0, -1]]
+    : type === 'q' ? [[1, 1], [1, -1], [-1, 1], [-1, -1], [1, 0], [-1, 0], [0, 1], [0, -1]] : [];
+  const f0 = from.charCodeAt(0) - 97; const r0 = Number(from[1]) - 1;
+  for (const [df, dr] of dirs) {
+    let through: Square | null = null;
+    for (let k = 1; k < 8; k += 1) {
+      const f = f0 + df * k; const r = r0 + dr * k;
+      if (f < 0 || f > 7 || r < 0 || r > 7) break;
+      const sq = `${String.fromCharCode(97 + f)}${r + 1}` as Square;
+      if (through && goal.includes(sq)) return { sq, through };
+      const p = b.get(sq);
+      if (!p) continue;
+      if (through || p.color !== them || p.type === 'k') break;
+      through = sq;
+    }
+  }
+  return null;
+}
+
+/** Can a piece of `type` and `c` on `at` reach `to` in one move on `b` (the
+ *  piece itself taken off `start`)? */
+function reachesInOne(b: Chess, start: Square, at: Square, to: Square, type: string, c: Color): boolean {
+  try {
+    const x = new Chess(b.fen());
+    x.remove(start);
+    if (x.get(at)) return false;
+    x.put({ type: type as 'n', color: c }, at);
+    const parts = x.fen().split(' '); parts[1] = c; parts[3] = '-';
+    return new Chess(parts.join(' '), { skipValidation: true }).moves({ square: at, verbose: true }).some((m) => m.to === to);
+  } catch { return false; }
+}
+
+/** A ROAD JUDGED BY WHAT IT ATTACKS AT ITS END. One piece's steps in the best
+ *  line, the mover's first five moves, spread out (other moves between them),
+ *  nothing captured and no check before its last step; a road that goes
+ *  somewhere (no square twice, no stop it could skip, every stop empty now);
+ *  safe where it ends. It is a plan when the end gives the piece a job it does
+ *  not have now: a square next to their king (hit, or looked at through one
+ *  piece of theirs down a line), or the board's target pawn. Beside our rooks
+ *  on their second rank the job is joining them (Danya, rooks on the seventh
+ *  revisited #2: "the bishop via f7-g6, to add pressure on the seventh and
+ *  make mate real"). */
+function attackRoadOf(fen: string, line: readonly string[], mover: Color, whose: 'your' | 'their'): Cand | null {
+  const now = new Chess(fen);
+  const them: Color = mover === 'w' ? 'b' : 'w';
+  const b = new Chess(fen);
+  /** Each moved piece's road, by the square it stands on in the line. */
+  const roads = new Map<string, { from: Square; type: string; route: Square[]; first: number; stops: Chess[] }>();
+  let n = 0;
+  let best: { from: Square; type: string; route: Square[]; first: number; stops: Chess[] } | null = null;
+  for (const u of line) {
+    if (n >= ROAD_MOVES) break;
+    let mv;
+    try { mv = b.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { break; }
+    if (mv.captured || mv.san.includes('+') || mv.san.includes('#')) break;
+    if (mv.color !== mover) continue;
+    n += 1;
+    if (mv.piece === 'p' || mv.piece === 'k' || mv.san.startsWith('O-O')) continue;
+    const r = roads.get(mv.from) ?? { from: mv.from, type: mv.piece, route: [], first: n - 1, stops: [] };
+    roads.delete(mv.from);
+    r.route.push(mv.to);
+    r.stops.push(new Chess(b.fen()));
+    roads.set(mv.to, r);
+    // The longest road so far ends here; a later step of the same piece
+    // extends it.
+    if (r.route.length >= 2 && (!best || r.route.length >= best.route.length)) best = { ...r, route: [...r.route], stops: [...r.stops] };
+  }
+  if (!best) return null;
+  const { from, type, route, first, stops } = best;
+  const end = stops[stops.length - 1];
+  const last = route[route.length - 1];
+  // Three stops at most: a longer road names more squares than a person says.
+  if (route.length > 3) return null;
+  const walked = [from, ...route];
+  if (new Set(walked).size !== walked.length) return null;
+  const own = now.get(from);
+  if (!own || own.color !== mover || own.type !== type) return null;
+  if (isUndevelopedInOpening(fen, mover, type, from)) return null;
+  // Every stop is empty on the board now (a road onto a square its own piece
+  // holds is said against a board the student is not looking at).
+  if (route.some((sq) => now.get(sq))) return null;
+  // A stop it could skip is the engine waiting, not a piece travelling.
+  for (let a = 0; a + 2 < walked.length; a += 1) {
+    for (let z = a + 2; z < walked.length; z += 1) if (reachesInOne(now, from, walked[a], walked[z], type, mover)) return null;
+  }
+  // Safe where it ends: no pawn hits it, and it is hit no more often than guarded.
+  const hitBy = end.attackers(last, them);
+  if (hitBy.some((s) => end.get(s)?.type === 'p')) return null;
+  if (hitBy.length > end.attackers(last, mover).length) return null;
+  const hits = (bd: Chess, at: Square, sq: Square): boolean => bd.attackers(sq, mover).includes(at);
+  const Who = whose === 'your' ? 'Your' : 'Their';
+  const owner = whose === 'your' ? 'their' : 'your';
+  const lead = `${Who} ${NOUN[type]} on ${from} has a better road, by way of ${route[0]}.`;
+  // The job is the END's: a stop before it that already has it makes the
+  // road the shorter one (the rook on b4 already hits c4 before a4).
+  const earlier = stops.slice(0, -1).map((bd, k) => ({ bd, sq: route[k] }));
+  const via = route.length === 3 ? ` It goes on by ${route[1]}.` : '';
+  // THE KING'S SQUARES: hit from the end, and not from where it stands now.
+  const zoneEnd = kingZone(end, them);
+  const zoneNow = kingZone(now, them);
+  const newHit = zoneEnd.find((sq) => hits(end, last, sq) && !(zoneNow.includes(sq) && hits(now, from, sq))
+    && !earlier.some((e) => kingZone(e.bd, them).includes(sq) && hits(e.bd, e.sq, sq)));
+  const key = stemKeyOf(`${fen}|attack-road|${from}`);
+  if (newHit) {
+    // Their second rank, where our rooks already stand.
+    const second = them === 'b' ? '7' : '2';
+    const rooks = end.findPiece({ type: 'r', color: mover }).filter((s) => s[1] === second && s !== last);
+    const join = newHit[1] === second && rooks.length > 0
+      ? ` On ${last} it joins ${whose} rook${rooks.length > 1 ? 's' : ''} on the ${second === '7' ? 'seventh' : 'second'} rank. It hits ${newHit}, next to ${owner} king.`
+      : rotateStem([` On ${last} it hits ${newHit}, next to ${owner} king.`, ` From ${last} it hits ${newHit}, right next to ${owner} king.`], key);
+    return { kind: 'road', text: `${lead}${via}${join}`, squares: [from, ...route, newHit], target: newHit, starts: first,
+      road: { from, piece: NOUN[type], end: last, fromTheMove: false } };
+  }
+  // Looked at down a line through one piece of theirs.
+  const xNow = xrayAt(now, from, type, them, zoneNow);
+  const x = xNow || earlier.some((e) => xrayAt(e.bd, e.sq, type, them, kingZone(e.bd, them))) ? null : xrayAt(end, last, type, them, zoneEnd);
+  if (x) {
+    const fileOrDiag = x.sq[0] === last[0] ? `down the ${last[0]}-file ` : '';
+    const text = `${lead}${via} On ${last} it aims ${fileOrDiag}at ${x.sq}, next to ${owner} king.`;
+    return { kind: 'road', text, squares: [from, ...route, x.sq], target: x.sq, starts: first,
+      road: { from, piece: NOUN[type], end: last, fromTheMove: false } };
+  }
+  // The board's target pawn.
+  const t = opponentTargets(fen, mover)[0]?.square as Square | undefined;
+  if (t && hits(end, last, t) && !hits(now, from, t) && !earlier.some((e) => hits(e.bd, e.sq, t))) {
+    return { kind: 'road', text: `${lead}${via} On ${last} it hits ${owner} pawn on ${t}.`, squares: [from, ...route, t], target: t, starts: first,
+      road: { from, piece: NOUN[type], end: last, fromTheMove: false } };
+  }
+  return null;
 }
