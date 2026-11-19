@@ -1249,7 +1249,7 @@ export interface BoardContexts {
    *  line (`bestLine`, UCI, null when none). */
   theirWorstPiece: { fen: string; student: Color; bestLine: readonly string[] | null };
   /** A king off its shelter with checks against it. */
-  kingInOpen: { fen: string; lines: readonly EngineLine[]; student: Color };
+  kingInOpen: { fen: string; lines: readonly EngineLine[] | null; student: Color };
   /** Whose king is the fighting piece in an ending. `lines` null: posed by
    *  the count alone (the record's read, which keeps no score). */
   kingActivityGap: { fen: string; lines: readonly EngineLine[] | null; student: Color };
@@ -1368,6 +1368,17 @@ const ENDING_SURFACES: Record<CoachSurface, SurfaceAnswer> = {
   weaknesses: { not: 'a reading of the ending said once — no question of the student\'s posed' },
 };
 const WEAK_OWED = { not: 'owed — one-coach P3: the record keeps the proof' } as const;
+/** BOTH WAYS, ANSWERED (2026-11-19): the reads whose record half is not a
+ *  question to the student's next move, each with why. A computer that poses
+ *  a danger or a chance a clean move answers is filed through
+ *  `moveInsight.registryPosedFacts`; these are the rest. */
+const WEAK_MOVE_DESCRIBED = { not: 'a description of a move already on the board (what it did, what it gave up): it poses no question to the student\'s next move, so a clean move answers nothing' } as const;
+const WEAK_PLAYED_JUDGED = { not: 'a judgement of the student\'s move once played: the move is graded by the one price and its miss is the slip the classifier files under its own tag; the read poses no question before the move' } as const;
+const WEAK_WHOLE_GAME = { not: 'a read of a whole game (how it went, how it ended): no move is left to answer it' } as const;
+const WEAK_OPENING_TOLD = { not: 'the opening named or told: the record files the book departure itself (autoAnalyzeGame\'s bookAsked, bookDepartureWeakness), not this description' } as const;
+const WEAK_BOARD_VERDICT = { not: 'a verdict on the board (its structure, its edge): a judgement no single move can hold or miss' } as const;
+const WEAK_PLAN_CHANCE = { not: 'an opportunity (a plan to follow): many clean moves serve it and none answers it, so the record cannot tell it held from passed by' } as const;
+const WEAK_SAC_TOLD = { not: 'why a sacrifice already played works: a description of the move; the sacrifice the board offered is the shot the record names from the best move (capabilityOutcomes, namedShotTags)' } as const;
 /** A lesson composes each move from the move's own facts (`moveThoughtFacts`)
  *  and reads no registry yet. */
 const LESSON_BOARD = { wired: 'services/moveThoughtFacts.ts' } as const;
@@ -1688,7 +1699,7 @@ export const BOARD_COMPUTERS = {
     computer: 'tradeLedger',
     kind: 'timing',
     phase: ANY,
-    surfaces: reviewFacetSurfaces(),
+    surfaces: { ...reviewFacetSurfaces(), weaknesses: WEAK_WHOLE_GAME },
   },
   notYetPlayed: {
     read: ({ fenBefore, san, bestSan, cpLoss }, fact) => safe(() => {
@@ -1701,7 +1712,7 @@ export const BOARD_COMPUTERS = {
     computer: 'notYetPlayed',
     kind: 'timing',
     phase: ANY,
-    surfaces: reviewFacetSurfaces(),
+    surfaces: { ...reviewFacetSurfaces(), weaknesses: WEAK_PLAYED_JUDGED },
   },
   heldResource: {
     read: ({ fenBefore, san, bestSan, cpLoss, student }, fact) => safe(() => {
@@ -1714,7 +1725,7 @@ export const BOARD_COMPUTERS = {
     computer: 'heldResource',
     kind: 'timing',
     phase: ANY,
-    surfaces: reviewFacetSurfaces(),
+    surfaces: { ...reviewFacetSurfaces(), weaknesses: WEAK_PLAYED_JUDGED },
   },
   captureChoice: {
     read: ({ fenBefore, san, bestSan, cpLoss, student }, fact) => safe(() => {
@@ -1727,7 +1738,7 @@ export const BOARD_COMPUTERS = {
     computer: 'captureChoice',
     kind: 'capture-choice',
     phase: ANY,
-    surfaces: reviewFacetSurfaces(),
+    surfaces: { ...reviewFacetSurfaces(), weaknesses: WEAK_PLAYED_JUDGED },
   },
   kickAfterRecapture: {
     read: ({ fenBefore, san, reply, bestUci, student }, fact) => safe(() => {
@@ -1740,7 +1751,7 @@ export const BOARD_COMPUTERS = {
     computer: 'kickAfterRecapture',
     kind: 'kick',
     phase: ANY,
-    surfaces: reviewFacetSurfaces(),
+    surfaces: { ...reviewFacetSurfaces(), weaknesses: WEAK_PLAYED_JUDGED },
   },
   pawnSquareTaken: {
     read: ({ fenBefore, san, cpLoss }, fact) => safe(() => {
@@ -1753,7 +1764,7 @@ export const BOARD_COMPUTERS = {
     computer: 'pawnSquareTaken',
     kind: 'plan-race',
     phase: ANY,
-    surfaces: reviewFacetSurfaces(),
+    surfaces: { ...reviewFacetSurfaces(), weaknesses: WEAK_PLAYED_JUDGED },
   },
   kingReadsBestLine: {
     // The king read the board posed and the move passed by, said "Here, …".
@@ -1763,7 +1774,7 @@ export const BOARD_COMPUTERS = {
     computer: 'kingReadsForBestLine',
     kind: 'king-read',
     phase: ANY,
-    surfaces: reviewFacetSurfaces(),
+    surfaces: { ...reviewFacetSurfaces(), weaknesses: { wired: 'services/moveInsight.ts' } },
   },
   sacCompensation: {
     read: ({ fenBefore, san, fenAfter, mover, moverCp, moverCpBefore, student, line }, fact) => safe(() => {
@@ -1777,7 +1788,7 @@ export const BOARD_COMPUTERS = {
     computer: 'sacrificeCompensation',
     kind: 'sac',
     phase: ANY,
-    surfaces: reviewFacetSurfaces(),
+    surfaces: { ...reviewFacetSurfaces(), weaknesses: WEAK_SAC_TOLD },
   },
   // ONE ENTRY FOR THE MATING SAC'S MECHANISM (the one-coach unlock,
   // 2026-11-19: the walk's `sacMechanismWalk` was this computer with a
@@ -1792,7 +1803,7 @@ export const BOARD_COMPUTERS = {
     kind: 'sac-why',
     phase: ANY,
     // Review's facets (reviewFullData) and Review's walk (coachFeatureService).
-    surfaces: reviewFacetSurfaces(),
+    surfaces: { ...reviewFacetSurfaces(), weaknesses: WEAK_SAC_TOLD },
   },
   sacKingShield: {
     read: ({ fenBefore, san }, fact) => safe(() => {
@@ -1803,7 +1814,7 @@ export const BOARD_COMPUTERS = {
     computer: 'describeSacBreaksKingShield',
     kind: 'sac-why',
     phase: ANY,
-    surfaces: reviewFacetSurfaces(),
+    surfaces: { ...reviewFacetSurfaces(), weaknesses: WEAK_SAC_TOLD },
   },
   structureState: {
     read: ({ fen }, fact) => safe(() => {
@@ -1824,7 +1835,7 @@ export const BOARD_COMPUTERS = {
     computer: 'describeStructure',
     kind: 'structure',
     phase: ANY,
-    surfaces: reviewFacetSurfaces(),
+    surfaces: { ...reviewFacetSurfaces(), weaknesses: WEAK_BOARD_VERDICT },
   },
   // ONE ENTRY FOR WHO IS BETTER AT THE TURN OF THE GAME (the one-coach
   // unlock, 2026-11-19: the live composer's `phaseVerdictLive` was this
@@ -1857,7 +1868,7 @@ export const BOARD_COMPUTERS = {
     computer: 'buildMiddlegameOrientation',
     kind: 'plan-middlegame',
     phase: ANY,
-    surfaces: reviewFacetSurfaces(),
+    surfaces: { ...reviewFacetSurfaces(), weaknesses: WEAK_PLAN_CHANCE },
   },
 
   opponentDevelopment: {
@@ -1867,7 +1878,7 @@ export const BOARD_COMPUTERS = {
     computer: 'buildOpponentDevelopmentRead',
     kind: 'opp-dev',
     phase: ANY,
-    surfaces: reviewFacetSurfaces(),
+    surfaces: { ...reviewFacetSurfaces(), weaknesses: WEAK_MOVE_DESCRIBED },
   },
 
   studentMovePoint: {
@@ -1882,7 +1893,7 @@ export const BOARD_COMPUTERS = {
     computer: 'studentMovePoint',
     kind: 'point',
     phase: ANY,
-    surfaces: reviewFacetSurfaces(),
+    surfaces: { ...reviewFacetSurfaces(), weaknesses: WEAK_MOVE_DESCRIBED },
   },
   positionalVerdict: {
     read: ({ fenBefore, san, fen, student, studentCp, quietBareBalanced }, fact) => safe(() => {
@@ -1899,7 +1910,7 @@ export const BOARD_COMPUTERS = {
     computer: 'assessPositionalEdge',
     kind: 'verdict',
     phase: ANY,
-    surfaces: reviewFacetSurfaces(),
+    surfaces: { ...reviewFacetSurfaces(), weaknesses: WEAK_BOARD_VERDICT },
   },
   plyFacts: {
     read: ({ fenBefore, san, prevCap, moverIsStudent }, fact) => safe(() => {
@@ -1910,7 +1921,7 @@ export const BOARD_COMPUTERS = {
     computer: 'plyFactsForMove',
     kind: 'move',
     phase: ANY,
-    surfaces: reviewFacetSurfaces(),
+    surfaces: { ...reviewFacetSurfaces(), weaknesses: WEAK_MOVE_DESCRIBED },
   },
   boardDelta: {
     // The squares come back keyed by the RAW clause, re-keyed onto the said
@@ -1925,7 +1936,7 @@ export const BOARD_COMPUTERS = {
     computer: 'computeBoardDelta',
     kind: 'delta',
     phase: ANY,
-    surfaces: reviewFacetSurfaces(),
+    surfaces: { ...reviewFacetSurfaces(), weaknesses: WEAK_MOVE_DESCRIBED },
   },
   // ONE ENTRY FOR THE TRADES, DEFENCE AND CONVERSION (the one-coach unlock,
   // 2026-11-19: the live composer's `exchangeIdeasLive` was this read word
@@ -1955,7 +1966,7 @@ export const BOARD_COMPUTERS = {
     computer: 'renderFundamentalVerdict',
     kind: 'principle',
     phase: ANY,
-    surfaces: reviewFacetSurfaces(),
+    surfaces: { ...reviewFacetSurfaces(), weaknesses: { not: 'the diagnosis of a fundamental, rendered: its miss is filed by the attribution pipeline (autoAnalyzeGame, misconceptionTags) and its hold by the leading fundamentals (capabilitiesPosed); this read writes the words' } },
   },
 
   tacticRule: {
@@ -1968,7 +1979,7 @@ export const BOARD_COMPUTERS = {
     computer: 'tacticInvariant',
     kind: 'rule',
     phase: ANY,
-    surfaces: reviewFacetSurfaces(),
+    surfaces: { ...reviewFacetSurfaces(), weaknesses: { not: 'the rule of a motif, said beside a tactic: the tactic itself is the shot the record names (namedShotTags); a rule poses no question' } },
   },
   moveInfluence: {
     read: ({ fenBefore, fenAfter, san, student }, fact) => safe(() => {
@@ -1986,7 +1997,7 @@ export const BOARD_COMPUTERS = {
     computer: 'describeMoveInfluence',
     kind: 'does',
     phase: ANY,
-    surfaces: reviewFacetSurfaces(),
+    surfaces: { ...reviewFacetSurfaces(), weaknesses: WEAK_MOVE_DESCRIBED },
   },
   heardCorrection: {
     read: ({ fen, heard, classification, san }, fact) => safe(() => {
@@ -1997,7 +2008,7 @@ export const BOARD_COMPUTERS = {
     computer: 'correctionAgainstHeard',
     kind: 'quality',
     phase: ANY,
-    surfaces: reviewFacetSurfaces(),
+    surfaces: { ...reviewFacetSurfaces(), weaknesses: WEAK_PLAYED_JUDGED },
   },
   opponentMoveTeaching: {
     read: ({ fenBefore, san, student }, fact) => safe(() => {
@@ -2008,7 +2019,7 @@ export const BOARD_COMPUTERS = {
     computer: 'buildOpponentMoveTeaching',
     kind: 'opp-target',
     phase: ANY,
-    surfaces: reviewFacetSurfaces(),
+    surfaces: { ...reviewFacetSurfaces(), weaknesses: WEAK_MOVE_DESCRIBED },
   },
   tradeJudged: {
     // HOW GOOD THE TRADE IS (David 2026-09-27: "how well the trade benefits
@@ -2025,7 +2036,7 @@ export const BOARD_COMPUTERS = {
     computer: 'readTrade',
     kind: 'trade',
     phase: ANY,
-    surfaces: reviewFacetSurfaces(),
+    surfaces: { ...reviewFacetSurfaces(), weaknesses: WEAK_PLAYED_JUDGED },
   },
   tradeSettled: {
     // THE WHOLE EXCHANGE, read off the ENGINE'S line through the one ledger
@@ -2105,7 +2116,7 @@ export const BOARD_COMPUTERS = {
     computer: 'settledExchange',
     kind: 'trade',
     phase: ANY,
-    surfaces: reviewFacetSurfaces(),
+    surfaces: { ...reviewFacetSurfaces(), weaknesses: WEAK_PLAYED_JUDGED },
   },
   boardTactics: {
     read: ({ fenBefore, san, fenAfter, student, lineUci, motifSaid, skipMateAgainst }, fact) => safe(() => {
@@ -2176,7 +2187,7 @@ export const BOARD_COMPUTERS = {
     computer: 'detectTactics',
     kind: 'tactic',
     phase: ANY,
-    surfaces: reviewFacetSurfaces(),
+    surfaces: { ...reviewFacetSurfaces(), weaknesses: { not: 'the tactics on the board after a move, for words: the chance the student had is the shot the record names from the best move (capabilityOutcomes, namedShotTags), their tactic the threat reads pose' } },
   },
   tiedDefender: {
     // Their guard the student's move tied down — a fact about the student's
@@ -2210,7 +2221,7 @@ export const BOARD_COMPUTERS = {
     computer: 'obligationLifted',
     kind: 'their-read',
     phase: ANY,
-    surfaces: { lesson: LESSON_BOARD, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_COMPOSER, weaknesses: WEAK_OWED, think: THINK },
+    surfaces: { lesson: LESSON_BOARD, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_COMPOSER, weaknesses: WEAK_MOVE_DESCRIBED, think: THINK },
   },
   openingStory: {
     // HOW A STRONG COACH EXPLAINS AN OPENING (OS-3): the fork, what it is, the
@@ -2236,7 +2247,7 @@ export const BOARD_COMPUTERS = {
       play: { not: 'Play\'s writer row carries no opening story (writerRegister WRITER.play.story false): its tapped read is about the board, not the opening' },
       chat: CHAT_VIA_THOUGHT,
       tactics: TACTICS_NO_HISTORY,
-      weaknesses: { not: 'owed — a named structure cost left unanswered is a broken answer the record could keep' },
+      weaknesses: WEAK_OPENING_TOLD,
       think: THINK_BOOK,
     },
   },
@@ -2271,7 +2282,7 @@ export const BOARD_COMPUTERS = {
       play: COMPOSER,
       chat: COMPOSER,
       tactics: TACTICS_NO_HISTORY,
-      weaknesses: { not: 'owed — the departure row (bookDepartureWeakness) could carry the job' },
+      weaknesses: WEAK_OPENING_TOLD,
       think: THINK_BOOK,
     },
   },
@@ -2465,7 +2476,7 @@ export const BOARD_COMPUTERS = {
       play: PLAY_READ,
       chat: { wired: 'services/moveThoughtFacts.ts' },
       tactics: TACTICS_READ,
-      weaknesses: WEAK_OWED,
+      weaknesses: WEAK_PLAYED_JUDGED,
       think: THINK,
     },
   },
@@ -2494,7 +2505,7 @@ export const BOARD_COMPUTERS = {
       play: PLAY_READ,
       chat: { wired: 'services/moveThoughtFacts.ts' },
       tactics: TACTICS_READ,
-      weaknesses: WEAK_OWED,
+      weaknesses: WEAK_PLAYED_JUDGED,
       think: THINK,
     },
   },
@@ -2511,7 +2522,7 @@ export const BOARD_COMPUTERS = {
     computer: 'countMethod',
     kind: 'method',
     phase: ANY,
-    surfaces: { lesson: LESSON_READ, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_COMPOSER, weaknesses: WEAK_OWED, think: THINK },
+    surfaces: { lesson: LESSON_READ, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_COMPOSER, weaknesses: WEAK_PLAYED_JUDGED, think: THINK },
   },
   priorityFirst: {
     read: ({ fen, student, bestUci }, fact) => safe(() => {
@@ -2556,7 +2567,7 @@ export const BOARD_COMPUTERS = {
       play: COMPOSER,
       chat: COMPOSER,
       tactics: TACTICS_NO_HISTORY,
-      weaknesses: { not: 'owed — the departure row is the weakness itself' },
+      weaknesses: WEAK_OPENING_TOLD,
       think: { not: 'reads the student\'s own record at this board, which a step board does not carry' },
     },
   },
@@ -2587,7 +2598,7 @@ export const BOARD_COMPUTERS = {
     computer: 'trappedOnBoard',
     kind: 'tactic',
     phase: ANY,
-    surfaces: { lesson: LESSON_READ, learn: LEARN, review: { wired: 'services/reviewTeachingPoints.ts' }, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_COMPOSER, weaknesses: WEAK_OWED, think: THINK },
+    surfaces: { lesson: LESSON_READ, learn: LEARN, review: { wired: 'services/reviewTeachingPoints.ts' }, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_COMPOSER, weaknesses: { not: 'a trapped piece is often lost whatever is played, so a clean move proves nothing held; the record files a trapped piece where the engine\'s line shows the way out (findTrappedPiece, hung-material)' }, think: THINK },
   },
   threatCost: {
     // A warning the surface wrote, with the cost it claims proven on the
@@ -2600,7 +2611,7 @@ export const BOARD_COMPUTERS = {
     computer: 'provenThreatLine',
     kind: 'threat',
     phase: ANY,
-    surfaces: { lesson: LESSON_NO_STUDENT_MOVE, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: { not: 'chat\'s threat question reads the same must-defend computer (groundedAnswer.assembleThreatAnswer → computeMustDefend) and proves each target there; this read proves a warning another surface wrote' }, tactics: TACTICS_NA, weaknesses: WEAK_OWED, think: { not: 'said with a threat warning a surface named; the step\'s own question asks for the threat' } },
+    surfaces: { lesson: LESSON_NO_STUDENT_MOVE, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: { not: 'chat\'s threat question reads the same must-defend computer (groundedAnswer.assembleThreatAnswer → computeMustDefend) and proves each target there; this read proves a warning another surface wrote' }, tactics: TACTICS_NA, weaknesses: { not: 'proves the cost a surface\'s own warning claims: the threat is posed by the reads that find it (the mate probe in capabilitiesPosed, noSafeChecks), this read proves the words' }, think: { not: 'said with a threat warning a surface named; the step\'s own question asks for the threat' } },
   },
   threatAnswer: {
     // The threat and its answer are one claim: the answer is proven by the
@@ -2626,7 +2637,7 @@ export const BOARD_COMPUTERS = {
       lesson: { not: 'the line\'s next move is the answer, said on it as the answer to their last move (moveThoughtFacts: bindingFact) or its job' },
       learn: LEARN,
       review: { not: 'the student\'s next ply says the answer: its job when it met the threat, the error and the better move when it did not' },
-      play: PLAY_ASK, chat: { not: 'chat\'s threat question reads the same must-defend computer (assembleThreatAnswer → computeMustDefend: each target, what hits and guards it, the moves that keep it); "why that move?" says how a move meets a threat through the thought\'s rescue and guard facts' }, tactics: TACTICS_NA, weaknesses: WEAK_OWED,
+      play: PLAY_ASK, chat: { not: 'chat\'s threat question reads the same must-defend computer (assembleThreatAnswer → computeMustDefend: each target, what hits and guards it, the moves that keep it); "why that move?" says how a move meets a threat through the thought\'s rescue and guard facts' }, tactics: TACTICS_NA, weaknesses: { not: 'the answer to a threat a surface just named, from that surface\'s squares: the record\'s board read has no squares to hand it, and the threat itself is posed by the reads that find it' },
       think: { not: 'answers a threat a surface just named; the answer-danger step names its own key' },
     },
   },
@@ -3101,7 +3112,7 @@ export const BOARD_COMPUTERS = {
     computer: 'planThreadTurn',
     kind: 'plan-now',
     phase: ANY,
-    surfaces: { lesson: { not: 'a lesson says ONE plan, the one the strongest games show where its line ends (openingGenerator.lessonPlanOutro → computedPlanAt); the per-move plan thread follows a game the student plays' }, learn: LEARN, review: { wired: 'services/coachFeatureService.ts' }, play: PLAY_ASK, chat: { not: 'chat\'s plan question is answered by the same plan computer the thread speaks (groundedAnswer.assemblePlanMethodAnswer → planChoice.methodRead); the thread itself is one game\'s memory' }, tactics: TACTICS_NA, weaknesses: WEAK_OWED, think: { not: 'a plan carried across a game\'s moves; a step board is one position' } },
+    surfaces: { lesson: { not: 'a lesson says ONE plan, the one the strongest games show where its line ends (openingGenerator.lessonPlanOutro → computedPlanAt); the per-move plan thread follows a game the student plays' }, learn: LEARN, review: { wired: 'services/coachFeatureService.ts' }, play: PLAY_ASK, chat: { not: 'chat\'s plan question is answered by the same plan computer the thread speaks (groundedAnswer.assemblePlanMethodAnswer → planChoice.methodRead); the thread itself is one game\'s memory' }, tactics: TACTICS_NA, weaknesses: WEAK_PLAN_CHANCE, think: { not: 'a plan carried across a game\'s moves; a step board is one position' } },
   },
   tacticGeometry: {
     read: (ctx, fact) => safe(() => geometryReads(ctx).map((r) => fact({
@@ -4241,35 +4252,35 @@ export const BOARD_COMPUTERS = {
     computer: 'whyItEnded',
     kind: 'game-end',
     phase: ANY,
-    surfaces: walkSurfaces(),
+    surfaces: { ...walkSurfaces(), weaknesses: WEAK_WHOLE_GAME },
   },
   idlePiece: {
     read: ({ plies, student }, fact) => safe(() => endReadFact(idlePiece(plies, student), plies, fact)),
     computer: 'idlePiece',
     kind: 'game-end',
     phase: ANY,
-    surfaces: walkSurfaces(),
+    surfaces: { ...walkSurfaces(), weaknesses: WEAK_WHOLE_GAME },
   },
   quietDecider: {
     read: ({ plies, student }, fact) => safe(() => endReadFact(quietDecider(plies, student), plies, fact)),
     computer: 'quietDecider',
     kind: 'game-end',
     phase: ANY,
-    surfaces: walkSurfaces(),
+    surfaces: { ...walkSurfaces(), weaknesses: WEAK_WHOLE_GAME },
   },
   exploreInvite: {
     read: ({ plies, index, student }, fact) => safe(() => endReadFact(exploreInvite(plies, index, student), plies, fact)),
     computer: 'exploreInvite',
     kind: 'game-end',
     phase: ANY,
-    surfaces: walkSurfaces(),
+    surfaces: { ...walkSurfaces(), weaknesses: WEAK_WHOLE_GAME },
   },
   murkyRead: {
     read: ({ plies, index, student }, fact) => safe(() => endReadFact(plies[index] ? murkyRead(plies[index], index, student) : null, plies, fact)),
     computer: 'murkyRead',
     kind: 'murky',
     phase: ANY,
-    surfaces: walkSurfaces(),
+    surfaces: { ...walkSurfaces(), weaknesses: WEAK_WHOLE_GAME },
   },
   pawnEndingCount: {
     read: ({ fenBefore, san, replySan, cpLoss, evalAfterCp }, fact) => safe(() => {
@@ -4281,7 +4292,7 @@ export const BOARD_COMPUTERS = {
     computer: 'pawnEndingTrade',
     kind: 'technique',
     phase: ANY,
-    surfaces: walkSurfaces(),
+    surfaces: { ...walkSurfaces(), weaknesses: WEAK_PLAYED_JUDGED },
   },
   passerDecoy: {
     // The passer's file leads the key (once a game per file).
@@ -4307,7 +4318,7 @@ export const BOARD_COMPUTERS = {
     computer: 'readZugzwang',
     kind: 'technique',
     phase: ANY,
-    surfaces: walkSurfaces(),
+    surfaces: { ...walkSurfaces(), weaknesses: { not: 'the tablebase read is a request a surface makes; the record\'s board read makes none' } },
   },
   mateLineAt: {
     read: ({ fenBefore, lineUci, student, san }, fact) => safe(() => {
@@ -4316,13 +4327,15 @@ export const BOARD_COMPUTERS = {
       const sans = ml.sans.map((x) => x.replace(/^…/, ''));
       const proof = lineProof({ fen: fenBefore, sans }, lineSeatAt(fenBefore, student));
       if (!proof) return null;
+      // The mate the board offered the student: the record files it held or
+      // missed under the mate row (both ways).
       return fact({ key: `mate-line:${fenBefore.split(' ')[0]}:${sans.join(',')}`, claims: [`mate-line:${sans.join(',')}`], text: ml.text, proof, squares: ml.taken, stakes: mateStakes('you', 0, true),
-        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore, lines: [{ fen: fenBefore, sans }] });
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore, lines: [{ fen: fenBefore, sans }], skill: 'missed-your-mate' });
     }),
     computer: 'mateLine',
     kind: 'tactic',
     phase: ANY,
-    surfaces: walkSurfaces(),
+    surfaces: { ...walkSurfaces(), weaknesses: { wired: 'services/moveInsight.ts' } },
   },
   lineWinsAt: {
     read: ({ fenBefore, lineUci, student, san, prior, seconds }, fact) => safe(() => {
@@ -4338,7 +4351,7 @@ export const BOARD_COMPUTERS = {
     computer: 'lineWins',
     kind: 'tactic',
     phase: ANY,
-    surfaces: walkSurfaces(),
+    surfaces: { ...walkSurfaces(), weaknesses: { not: 'the line a move played starts, said after it: the board\'s winning shot is posed under the shot\'s own name (capabilityOutcomes, namedShotTags)' } },
   },
   attackAsks: {
     // Their attack on `target`: what it asks of the student this move.
@@ -4351,7 +4364,7 @@ export const BOARD_COMPUTERS = {
     computer: 'whatItAsks',
     kind: 'move-job',
     phase: ANY,
-    surfaces: walkSurfaces(),
+    surfaces: { ...walkSurfaces(), weaknesses: WEAK_MOVE_DESCRIBED },
   },
   theirOpeningChoice: {
     read: ({ history, student, cpLoss, coachChose, fen }, fact) => safe(() => {
@@ -4363,7 +4376,7 @@ export const BOARD_COMPUTERS = {
     computer: 'theirOpeningVerdict',
     kind: 'opening',
     phase: ANY,
-    surfaces: walkSurfaces(),
+    surfaces: { ...walkSurfaces(), weaknesses: WEAK_OPENING_TOLD },
   },
   openingNamed: {
     read: ({ det, history, spokenName, student, transposed, fen }, fact) => safe(() => {
@@ -4375,7 +4388,7 @@ export const BOARD_COMPUTERS = {
     computer: 'openingAnnouncementForGame',
     kind: 'opening',
     phase: ANY,
-    surfaces: walkSurfaces(),
+    surfaces: { ...walkSurfaces(), weaknesses: WEAK_OPENING_TOLD },
   },
   sacPayoff: {
     // The student's sacrifice: what they get for it. A clause about a king
@@ -4392,7 +4405,7 @@ export const BOARD_COMPUTERS = {
     computer: 'sacrificeCompensation',
     kind: 'sac-why',
     phase: ANY,
-    surfaces: walkSurfaces(),
+    surfaces: { ...walkSurfaces(), weaknesses: WEAK_SAC_TOLD },
   },
   sacShield: {
     read: ({ fenBefore, san }, fact) => safe(() => {
@@ -4405,7 +4418,7 @@ export const BOARD_COMPUTERS = {
     computer: 'describeSacBreaksKingShield',
     kind: 'sac',
     phase: ANY,
-    surfaces: walkSurfaces(),
+    surfaces: { ...walkSurfaces(), weaknesses: WEAK_SAC_TOLD },
   },
   takeStock: {
     // A genuine edge with at least two board-true reasons — never a verdict
@@ -4420,7 +4433,7 @@ export const BOARD_COMPUTERS = {
     computer: 'assessPositionalEdge',
     kind: 'verdict',
     phase: ANY,
-    surfaces: walkSurfaces(),
+    surfaces: { ...walkSurfaces(), weaknesses: WEAK_BOARD_VERDICT },
   },
   kingHuntCue: {
     // Their king in the centre, read as the cue to attack it now.
@@ -4440,7 +4453,7 @@ export const BOARD_COMPUTERS = {
     computer: 'buildOpponentMoveTeaching',
     kind: 'opp-target',
     phase: ANY,
-    surfaces: walkSurfaces(),
+    surfaces: { ...walkSurfaces(), weaknesses: WEAK_MOVE_DESCRIBED },
   },
   causalChain: {
     // The chain PLAYED on this move, else (on the student's move) the one
@@ -4462,7 +4475,7 @@ export const BOARD_COMPUTERS = {
     computer: 'buildCausalChain',
     kind: 'consequence',
     phase: ANY,
-    surfaces: walkSurfaces(),
+    surfaces: { ...walkSurfaces(), weaknesses: WEAK_MOVE_DESCRIBED },
   },
   endgamePhase: {
     read: ({ fen }, fact) => safe(() => {
@@ -5252,7 +5265,7 @@ export const BOARD_COMPUTERS = {
       lesson: { wired: 'services/moveThoughtFacts.ts' },
       play: PLAY_READ,
       tactics: TACTICS_READ,
-      weaknesses: WEAK_OWED,
+      weaknesses: WEAK_PLAYED_JUDGED,
       think: { wired: 'services/moveThoughtFacts.ts' },
     },
   },
@@ -7137,7 +7150,10 @@ export const BOARD_COMPUTERS = {
       if (!r) return null;
       const key = `king-open:${r.king}`;
       return fact({ key, claims: [key], text: r.text, proof: squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
-        seat: (r.side === ctx.student ? 'student' : 'opponent'), namesStudentMove: false, thread: LOCAL_THREAD, fen: ctx.fen });
+        seat: (r.side === ctx.student ? 'student' : 'opponent'), namesStudentMove: false, thread: LOCAL_THREAD, fen: ctx.fen,
+        // The student's own king in the open: the record files the king's
+        // safety held or broken on the move (both ways).
+        ...(r.side === ctx.student ? { skill: 'weakened-king-safety' } : {}) });
     }),
     computer: 'kingInOpen',
     kind: 'king-read',
@@ -7146,7 +7162,7 @@ export const BOARD_COMPUTERS = {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
       learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_READ,
-      weaknesses: { not: 'its read needs the engine\'s score on the board, and the record\'s board read keeps none' },
+      weaknesses: { wired: 'services/moveInsight.ts' },
     },
   },
   kingActivityGap: {

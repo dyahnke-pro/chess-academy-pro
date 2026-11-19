@@ -39,7 +39,10 @@ function checkingPieces(fen: string, attacker: Color): { from: Square[]; checks:
   return { from: [...out], checks };
 }
 
-export function kingInOpen(fen: string, lines: readonly EngineLine[], student: Color): KingInOpen | null {
+/** `lines` null: the record's read of the board the student moves on, which
+ *  keeps no engine score — the question (your king in the open, their checks
+ *  on it) is posed by the board alone. */
+export function kingInOpen(fen: string, lines: readonly EngineLine[] | null, student: Color): KingInOpen | null {
   let c: Chess;
   try { c = new Chess(fen); } catch { return null; }
   for (const side of ['w', 'b'] as Color[]) {
@@ -59,8 +62,10 @@ export function kingInOpen(fen: string, lines: readonly EngineLine[], student: C
     const { from: checkers, checks } = checkingPieces(fen, attacker);
     // Two pieces that can check, or one (the queen) with three checks of its own.
     if (checkers.length < 2 && checks < 3) continue;
-    const ls = sortedLines(lines, attacker);
-    if (!ls.length || lineScore(ls[0], attacker) < 0) continue;
+    if (lines) {
+      const ls = sortedLines(lines, attacker);
+      if (!ls.length || lineScore(ls[0], attacker) < 0) continue;
+    }
     const mine = side === student;
     const all = checkers.length === 1 ? null : checkers.length === 2 ? 'both' : 'all';
     const names = checkers.map((s) => `${PIECE_NAME[c.get(s)?.type ?? 'p']} on ${s}`);
