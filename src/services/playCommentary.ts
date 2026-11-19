@@ -497,7 +497,7 @@ export function buildPriorityFirst(args: {
     // pawn". Nor is a queen that now checks their king over and over (never
     // resign prematurely #1, the Qe3 desperado: a perpetual, not c3).
     if (moved.promotion) return null;
-    if (legalSeeGainFor(probe.fen(), moved.to as Square, them) > 0) return null;
+    if (legalSeeGainFor(probe.fen(), moved.to, them) > 0) return null;
     // After the best move lands, does the MOVED piece attack a weak pawn?
     const parts = probe.fen().split(' ');
     parts[1] = me;

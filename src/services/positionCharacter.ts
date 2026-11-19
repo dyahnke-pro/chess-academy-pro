@@ -238,7 +238,7 @@ export function boardKind(fen: string, student: 'w' | 'b', studentCp: number | n
   try { c = new Chess(fen); } catch { return null; }
   const all = c.board().flat().filter((p): p is NonNullable<typeof p> => !!p);
   const better = studentCp !== null && studentCp >= BETTER_CP;
-  if (better && studentCp! < DRAWISH_BELOW_CP) {
+  if (better && studentCp < DRAWISH_BELOW_CP) {
     const heavy = all.filter((p) => p.type === 'q' || p.type === 'r');
     const minors = all.filter((p) => p.type === 'b' || p.type === 'n');
     const bishops = minors.filter((p) => p.type === 'b');

@@ -581,7 +581,7 @@ function checksAfter(fen: string): Move[] {
   return b.moves({ verbose: true }).filter((m) => {
     if (!m.san.includes('+')) return false;
     const took = m.captured ? ({ p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 } as Record<string, number>)[m.captured] ?? 0 : 0;
-    try { const c = new Chess(fen); c.move(m.san); return legalSeeGain(c.fen(), m.to as Square) <= took; } catch { return false; }
+    try { const c = new Chess(fen); c.move(m.san); return legalSeeGain(c.fen(), m.to) <= took; } catch { return false; }
   });
 }
 

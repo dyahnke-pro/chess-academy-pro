@@ -119,7 +119,7 @@ export function planSteps(fenAfter: string, line: readonly string[], lastMove: s
       // A step onto a square one of the mover's own pieces holds NOW is said
       // against a board the student is not looking at ("Qd4" with the queen
       // on d4, "e2 and then f4" with a knight on f4).
-      const there = nowBoard.get(mv.to as Square);
+      const there = nowBoard.get(mv.to);
       // Free only when a step of the plan itself left it — and then only if
       // that step is said with it (checked once the plan's shape is known).
       if (there && there.color === mover) {

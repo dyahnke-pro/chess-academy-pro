@@ -3,7 +3,7 @@ import { boardKind } from './positionCharacter';
 
 // THE KIND OF POSITION IS NEVER SAID AGAINST THE ENGINE (Danya narration test
 // 2026-11-19). Real boards, their saved engine lines (White's view).
-const L = (cp: number, moves: string) => ({ evaluation: cp, moves: moves.split(' ') });
+const L = (cp: number, moves: string): { evaluation: number; moves: string[] } => ({ evaluation: cp, moves: moves.split(' ') });
 
 describe('boardKind — against the engine', () => {
   it('mastering intuition #1: "no hurry" is not said when the best move is the c5 break, +1.24 against +0.50', () => {
