@@ -34,6 +34,7 @@ import { andList } from '../utils/andList';
 import { countWords } from '../utils/countWords';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { readBoard, readBoardAll } from './boardComputers';
+import { theirWantedMoves } from './prophylaxis';
 import { openingWindowOpen } from './moveFundamentals';
 import { readConversion } from './conversionMethod';
 import { minorsAtHome } from './development';
@@ -805,7 +806,7 @@ export function positionPosed(
 
 /** The registry computers whose read poses a question to the side to move. */
 type RegistryPosedComputer = 'detectLatentFork' | 'detectLatentDanger' | 'detectTradeCreatesPin' | 'detectCentralKingDanger' | 'detectKingExposure' | 'findQueenGrabTraps'
-  | 'findTrappedPiece' | 'readConversion';
+  | 'findTrappedPiece' | 'readConversion' | 'noSafeChecks' | 'kingRace';
 
 /** How sharply each posed question is asked, on the heat map's scale. */
 const REGISTRY_POSED_WEIGHT: Record<RegistryPosedComputer, number> = {
@@ -817,6 +818,8 @@ const REGISTRY_POSED_WEIGHT: Record<RegistryPosedComputer, number> = {
   findQueenGrabTraps: 80,
   findTrappedPiece: 80,
   readConversion: 65,
+  noSafeChecks: 75,
+  kingRace: 70,
 };
 
 /** The registry's reads of the board the student moves on, each fact with
@@ -841,6 +844,10 @@ export function registryPosedFacts(fen: string, me: 'w' | 'b', bestLineUci: read
     // move may take or leave — the passer to push, the worst piece, the rook
     // for the seventh — is not read here: a clean move is no answer to it.)
     ...readBoardAll('conversion', { fen, student: me }),
+    // Their safe checks while yours all give the piece away (a threat to
+    // answer quietly), and a king race to the passer's escort square.
+    ...readBoardAll('noSafeChecks', { fen, student: me }),
+    ...readBoardAll('kingRace', { fen, student: me }),
   ];
 }
 
@@ -1265,4 +1272,25 @@ export function diagonalContest(fen: string, me: 'w' | 'b'): { mine: string; the
     }
   }
   return null;
+}
+
+/** THE QUIET STOP, BOTH WAYS (David 2026-11-19: "Make sure all computers work
+ *  both ways"). The prophylaxis read teaches "first stop their pin / kick"
+ *  where the engine's best move is that stop; this files the student's
+ *  answer: the stop played, or a move after which their idea no longer lands
+ *  → held; their idea still landing after the move → broken. Null when the
+ *  board posed no stop. `bestUci`: the engine's best move there. */
+export function prophylaxisAnswer(fenBefore: string, playedSan: string, bestUci: string): 'held' | 'broken' | null {
+  const f = readBoard('prophylaxis', { fen: fenBefore, engineFirstMoves: [bestUci] });
+  const play = f?.marks?.play;
+  const theirs = f?.marks?.theirs;
+  if (!f || !play || !theirs) return null;
+  try {
+    const c = new Chess(fenBefore);
+    const me = c.turn();
+    const m = c.move(playedSan);
+    if (m.from === play.from && m.to === play.to) return 'held';
+    const lands = theirWantedMoves(c.fen(), me).some((w) => w.from === theirs.from && w.to === theirs.to);
+    return lands ? 'broken' : 'held';
+  } catch { return null; }
 }

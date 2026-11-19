@@ -44,6 +44,10 @@ const CASES: Case[] = [
   { computer: 'findTrappedPiece', tag: 'missed-your-trapped-piece', fen: 'r1b1r1k1/1ppn1ppp/p2npq2/3p2B1/3P2PP/2PBPP2/P1P1N1Q1/2KR3R w - - 0 13', held: 'Bxf6', missed: 'a3', line: ['g5f6'] },
   // A rook up, nothing left but the win to convert.
   { computer: 'readConversion', tag: 'botched-conversion', fen: '6k1/8/8/8/8/8/5PPP/R5K1 w - - 0 40', held: 'Kf1', missed: 'Ra8+' },
+  // Carlsen's game: every check of White's gives the piece away, Black has …Bh5+.
+  { computer: 'noSafeChecks', tag: 'missed-opponents-threat', fen: '3k4/2p2b2/2PpR3/3P1pP1/3P4/p4KNr/P7/8 w - - 0 54', held: 'Kf2', missed: 'Re8+' },
+  // The study: both kings race to g7, the h-pawn's escort square.
+  { computer: 'kingRace', tag: 'passive-king-endgame', fen: 'k7/8/4p3/7P/8/3P4/1Bb4P/K7 w - - 0 1', held: 'h6', missed: 'd4' },
   { computer: 'findQueenGrabTraps', tag: 'poisoned-pawn', fen: 'r2q1r1k/pppnn1p1/3p3p/1P1Qp3/8/P1N2N1P/5PP1/R1B1R1K1 w - - 1 17', held: 'Qb3', missed: 'Qxb7' },
 ];
 
@@ -82,5 +86,25 @@ describe('the registry reads pose their skill to the record (both ways)', () => 
 
   it('a quiet opening board poses none of them', () => {
     expect(registryPosedFacts(new Chess().fen(), 'w', [])).toEqual([]);
+  });
+});
+
+describe('the quiet stop, both ways (prophylaxis)', () => {
+  // 1.e4 e5 2.Nf3 d6 3.d4 Nf6 4.Nc3 Nc6: the engine wants h3 first, stopping …Bg4.
+  const c = new Chess();
+  for (const san of ['e4', 'e5', 'Nf3', 'd6', 'd4', 'Nf6', 'Nc3', 'Nc6']) c.move(san);
+  const fen = c.fen();
+  it('the stop played is held; a move that lets the pin land is broken', async () => {
+    const { prophylaxisAnswer } = await import('./moveInsight');
+    expect(prophylaxisAnswer(fen, 'h3', 'h2h3')).toBe('held');
+    expect(prophylaxisAnswer(fen, 'Bc4', 'h2h3')).toBe('broken');
+    // The engine wanted something else: the board posed no stop.
+    expect(prophylaxisAnswer(fen, 'Bc4', 'f1e2')).toBeNull();
+  });
+  it('the record files it under missed-opponents-threat, held and broken', () => {
+    const held = capabilityOutcomes({ fenBefore: fen, playedSan: 'h3', moverColor: 'white', cpLoss: 0, bestSan: 'h3' });
+    expect(held.find((r) => r.tag === 'missed-opponents-threat')?.outcome).toBe('held');
+    const missed = capabilityOutcomes({ fenBefore: fen, playedSan: 'Bc4', moverColor: 'white', cpLoss: 20, bestSan: 'h3' });
+    expect(missed.find((r) => r.tag === 'missed-opponents-threat')?.outcome).toBe('broken');
   });
 });

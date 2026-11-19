@@ -523,6 +523,17 @@ export const COMPUTER_CATALOG = {
   outOfReach: { file: 'services/outOfReach.ts', says: 'a piece put where no pawn and no smaller piece can chase it, against the square where it could be chased' },
   poisonedPiece: { file: 'services/poisonedPiece.ts', says: 'a piece that looks loose but cannot be taken: every capture of it walks into a forced mate in one or two' },
   everyMate: { file: 'services/everyMate.ts', says: 'the mate played, and the other moves that mate on the same board' },
+  pawnCentre: { file: 'services/pawnCentre.ts', says: 'a side\'s pawns on its own d/e fourth-rank squares (with a third-rank pawn that can safely join them) that the other side has no centre pawn to contest, and the squares in the enemy half they take away' },
+  centreDuo: { file: 'services/centreDuo.ts', says: 'two of a side\'s pawns side by side on neighbouring central files on its fourth or fifth rank, against the other side\'s central pawns doubled or isolated' },
+  harmlessWeakPawns: { file: 'services/harmlessWeakPawns.ts', says: 'a doubled pair a side\'s piece guards and no enemy piece can aim at in one quiet move, the side no worse than half a pawn: the weakness does not matter on this board' },
+  noSafeChecks: { file: 'services/noSafeChecks.ts', says: 'the side to move has checks but every one gives the checking piece away, while the other side, given the move, has a safe check of its own' },
+  kingRace: { file: 'services/kingRace.ts', says: 'in an ending with a passed pawn on its fifth rank or further, each king\'s walk to the square that escorts it home, counted step by step, and whose king gets there first' },
+  kingBoxMove: { file: 'services/kingBox.ts', says: 'against a bare king, the rook or queen move that shrinks the box its file and rank shut the king into, with the box\'s size before and after' },
+  promotionWithCheck: { file: 'services/promotionWithCheck.ts', says: 'a check that drives the defending king onto the rank the checker\'s passed pawn queens on, so the promotion later comes with check' },
+  inaccessibleHole: { file: 'services/inaccessibleHole.ts', says: 'the hole a pawn move leaves next to its file that no enemy knight or bishop can reach in four moves, and the enemy pawn pushes the move stops' },
+  wingWithoutPieces: { file: 'services/wingWithoutPieces.ts', says: 'a wing pawn lever pushed past the third rank with none of the pusher\'s pieces near that wing, so the file it opens is opened for the other side' },
+  tensionKept: { file: 'services/tensionRelease.ts', says: 'before the move: a tension capture the engine reads at least 0.3 worse than its quiet best, and what the recapture hands the other side (a piece developed, a file opened, a bishop freed, a pawn into the centre, a pawn left isolated)' },
+  tensionReleased: { file: 'services/tensionRelease.ts', says: 'after the move: a tension capture played at least half a pawn worse than the quiet best, and what the recapture hands the other side' },
 } satisfies Record<string, CatalogRow>;
 
 export type ComputerName = keyof typeof COMPUTER_CATALOG;

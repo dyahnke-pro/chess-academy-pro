@@ -59,6 +59,7 @@ import { positionOf } from '../utils/samePosition';
 import { memoOverTable, type TableMemo } from './tableMemo';
 import { evidenceMirror, slipMirror } from './recordMirror';
 import { kingSquareOutcome } from './kingWalk';
+import { prophylaxisAnswer } from './moveInsight';
 import {
   holdRecords, holdState, NEVER_POSED, HOLD_WINDOW, HOLD_MIN_POSED, HOLD_GREEN, HOLD_SHORT,
   type HoldRecord,
@@ -543,6 +544,9 @@ function classifiedSlipTag(args: { fenBefore: string; playedSan: string; bestSan
 /** A modest question: enough to count for NEED, below the green bar alone. */
 const C_PAWN_POSED = 60;
 
+/** Their pin or kick the engine's best move stops: a real question. */
+const PROPHYLAXIS_POSED = 70;
+
 /** Held / broken for the queen's-knight choice, or null when the board did
  *  not ask it (the knight did not move, or c3/c6 would not block anything). */
 function queensKnightChoice(fenBefore: string, playedSan: string, side: 'w' | 'b'): CapabilityOutcome | null {
@@ -652,6 +656,19 @@ export function capabilityOutcomes(args: CapabilityMoveArgs): Array<{ tag: Misco
     // not evidence either way (it had been skipped for these extras only).
     if (extra.posedImportance < POSED_IMPORTANCE_MIN) continue;
     if (!posed.some((p) => p.tag === extra.tag)) posed.push({ tag: extra.tag, posedImportance: extra.posedImportance });
+  }
+  // THE QUIET STOP (prophylaxis, both ways): where the engine's best move is
+  // the stop of their pin or kick, the move answers it or lets it land.
+  if (args.bestSan) {
+    try {
+      const b = new Chess(args.fenBefore).move(args.bestSan);
+      const answer = prophylaxisAnswer(args.fenBefore, args.playedSan, `${b.from}${b.to}${b.promotion ?? ''}`);
+      if (answer) {
+        const had = posed.find((p) => p.tag === 'missed-opponents-threat');
+        if (had) { if (answer === 'broken') had.outcome = 'broken'; }
+        else posed.push({ tag: 'missed-opponents-threat', posedImportance: PROPHYLAXIS_POSED, ...(answer === 'broken' ? { outcome: 'broken' as const } : {}) });
+      }
+    } catch { /* an unreadable board posed nothing */ }
   }
   if (posed.length === 0) return [];
   const clean = movePlayedCleanly(args.cpLoss);

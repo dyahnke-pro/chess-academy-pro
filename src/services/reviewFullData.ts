@@ -1381,6 +1381,30 @@ export function computeMoveFacets(
       { const again = readBoardAll('pieceMovedAgain', { history: ctx.allSans.slice(0, ply - 1), fenBefore, san, student: studentColorWB, costCp: ctx.costCp })[0]; if (again) add({ ...again, kind: 'principle' }); }
       add(readBoardAll('castlingTaken', { fenBefore, san, student: studentColorWB })[0]);
       add(readBoardAll('castlingWing', { fenBefore, san, student: studentColorWB })[0]);
+      // THE DANYA HAVE-CHECK COMPUTERS (2026-11-19), both seats on the board
+      // after the move: who owns the centre with pawns, a central duo against
+      // a deformed centre, a bent structure that does not matter (off the
+      // stored score), checks that all give the piece away, the kings' race,
+      // and the hole the pawn move leaves that nothing reaches.
+      add(readBoardAll('pawnCentre', { fen: fenAfter, student: studentColorWB })[0]);
+      add(readBoardAll('centreDuo', { fen: fenAfter, student: studentColorWB })[0]);
+      if (ctx.evaluation != null) add(readBoardAll('harmlessWeakPawns', { fen: fenAfter, student: studentColorWB, best: { cp: storedMate(ctx.evaluation) == null ? ctx.evaluation : null, mate: storedMate(ctx.evaluation) } })[0]);
+      add(readBoardAll('noSafeChecks', { fen: fenAfter, student: studentColorWB })[0]);
+      add(readBoardAll('kingRace', { fen: fenAfter, student: studentColorWB })[0]);
+      add(readBoardAll('inaccessibleHole', { fenBefore, san, student: studentColorWB })[0]);
+      // Worded to the mover: said of the student's own move.
+      if (isStudent) {
+        add(readBoardAll('kingBox', { fenBefore, san, namesPlayedMove: REVIEW_WRITER.namesPlayedMove })[0]);
+        add(readBoardAll('promotionWithCheck', { fenBefore, san, reply: ctx.allSans[ply] ?? null, namesPlayedMove: REVIEW_WRITER.namesPlayedMove })[0]);
+        add(readBoardAll('wingWithoutPieces', { fenBefore, san })[0]);
+        // The tension released too early, off the record's best line and the
+        // score before and after the move (both White's view, unpriced on a mate).
+        if (ctx.preMoveEval != null && ctx.evaluation != null && !isMateEval(ctx.preMoveEval) && !isMateEval(ctx.evaluation) && ctx.bestLineUci.length) {
+          const sign = moverWB === 'w' ? 1 : -1;
+          const released = readBoardAll('tensionReleased', { fenBefore, san, lines: [{ moves: ctx.bestLineUci, cp: ctx.preMoveEval, mate: null }], playedCp: ctx.evaluation * sign, reply: ctx.allSans[ply] ?? null })[0];
+          if (released) add(released);
+        }
+      }
       add(readBoardAll('stalemateTrick', { fenBefore, san, student: studentColorWB })[0]);
       add(readBoardAll('bothSaved', { fenBefore, san, student: studentColorWB, replies: ctx.playedLineUci.length ? [{ cp: ctx.evaluation != null && storedMate(ctx.evaluation) == null ? ctx.evaluation : null, mate: null, moves: ctx.playedLineUci }] : [] })[0]);
       // A windmill and a perpetual check, both seats (repeatingChecks), one

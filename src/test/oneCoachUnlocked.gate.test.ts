@@ -34,6 +34,7 @@ export const GENUINE: ReadonlyArray<{ re: RegExp; why: string }> = [
   { re: /^Play's writer row carries no opening story/, why: 'the writer row (WRITER.play.story false)' },
   { re: /^opening book knowledge — taught by the opening lessons, not a step of thinking/, why: 'David\'s eight thinking steps (FACT_GROUP → stepOf / THINK_STEP) own no opening step' },
   { re: /a step board asks the plan as its own step|the step's own question asks for the threat|the answer-danger step names its own key/, why: 'the thinking step is the question itself: the read would hand over its answer' },
+  { re: /^Review keeps one line after the move: the per-capture lines/, why: 'the record stores one engine line per move; a read of every capture\'s line has no input on Review' },
   { re: /^the walk speaks none: the Theory button/, why: 'OPENING THEORY: the Review walk keeps it behind the Theory button (CLAUDE.md)' },
   { re: /^a habit is read across a game; a step board is one position|counts (a piece|the queen)'s trips across the game's moves/, why: 'it reads a whole game; a step board has none' },
 ];

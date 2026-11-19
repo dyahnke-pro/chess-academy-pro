@@ -676,6 +676,47 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     for (const f of readBoardAll('pawnMajority', { fenBefore: i.fenBefore, san: i.san, student, prior: i.theirLast })) {
       facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: majorityIdea(f.claims[0] ?? ''), weight: 50 });
     }
+    // THE DANYA HAVE-CHECK COMPUTERS (2026-11-19), through the one registry.
+    // The board after the move, both seats: who owns the centre with pawns,
+    // a central duo against a deformed centre, a bent structure that does not
+    // matter, checks that all give the piece away, the kings' race.
+    {
+      const after = afterSan(i.fenBefore, i.san);
+      const top = i.reads?.after[0] ?? null;
+      if (after) {
+        const board: Array<{ f: CoachFact; idea: IdeaKind; weight: number }> = [
+          ...readBoardAll('pawnCentre', { fen: after, student }).map((f) => ({ f, idea: 'center' as IdeaKind, weight: 46 })),
+          ...readBoardAll('centreDuo', { fen: after, student }).map((f) => ({ f, idea: 'center' as IdeaKind, weight: 48 })),
+          ...readBoardAll('harmlessWeakPawns', { fen: after, student, best: top ? { cp: top.evaluation, mate: top.mate ?? null } : null }).map((f) => ({ f, idea: 'weakness' as IdeaKind, weight: 46 })),
+          ...readBoardAll('noSafeChecks', { fen: after, student }).map((f) => ({ f, idea: 'check' as IdeaKind, weight: 58 })),
+          ...readBoardAll('kingRace', { fen: after, student }).map((f) => ({ f, idea: 'king-activity' as IdeaKind, weight: 62 })),
+          ...readBoardAll('inaccessibleHole', { fenBefore: i.fenBefore, san: i.san, student }).map((f) => ({ f, idea: 'weakness' as IdeaKind, weight: 50 })),
+        ];
+        // Worded to the mover, so said of the student's own move: the box
+        // shrunk, the check that makes the promotion come with check, the
+        // lever with no pieces near it, the tension released too early.
+        if (mine) {
+          board.push(
+            ...readBoardAll('kingBox', { fenBefore: i.fenBefore, san: i.san, namesPlayedMove: i.namesPlayedMove }).map((f) => ({ f, idea: 'king-activity' as IdeaKind, weight: 56 })),
+            ...readBoardAll('promotionWithCheck', { fenBefore: i.fenBefore, san: i.san, reply: i.line?.[0] ?? null, namesPlayedMove: i.namesPlayedMove }).map((f) => ({ f, idea: 'promote' as IdeaKind, weight: 66 })),
+            ...readBoardAll('wingWithoutPieces', { fenBefore: i.fenBefore, san: i.san }).map((f) => ({ f, idea: 'plan' as IdeaKind, weight: 52 })),
+          );
+          const lines = (i.reads?.before ?? []).map((l) => ({ moves: l.moves, cp: l.evaluation, mate: l.mate ?? null }));
+          const mover = sideOf(i.fenBefore);
+          const playedCp = i.reads?.after[0] ? i.reads.after[0].evaluation * (mover === 'w' ? 1 : -1) : null;
+          if (lines.length) board.push(...readBoardAll('tensionReleased', { fenBefore: i.fenBefore, san: i.san, lines, playedCp: i.reads?.after[0]?.mate == null ? playedCp : null, reply: i.line?.[0] ?? null }).map((f) => ({ f, idea: 'trade' as IdeaKind, weight: 60 })));
+        }
+        // On their move, the board the student moves on next: a tension
+        // capture the engine wants left alone (worded to the side to move).
+        if (!mine && i.reads?.after.length) {
+          const lines = i.reads.after.map((l) => ({ moves: l.moves, cp: l.evaluation, mate: l.mate ?? null }));
+          board.push(...readBoardAll('tensionKept', { fen: after, lines }).map((f) => ({ f, idea: 'trade' as IdeaKind, weight: 54 })));
+        }
+        // The tension capture names a move the student could play next (as
+        // the one to leave alone), so a surface that holds such a move holds it.
+        for (const { f, idea, weight } of board) facts.push({ ...f, namesStudentMove: f.computer === 'tensionKept', source: 'teachingMove', idea, weight });
+      }
+    }
     // Getting into their camp, both seats (Danya's speedruns): a piece gets in
     // and hits what they cannot keep, the rooks on the seventh, a rook lift or
     // swing, the rooks connected — or still cut off on move 12.

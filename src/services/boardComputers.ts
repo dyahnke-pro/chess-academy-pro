@@ -89,6 +89,16 @@ import { breakPrep, breakPrepLine, breakStopped, breakStoppedLine } from './brea
 import { flexibleMove, flexibleMoveLine, flexibleMoveSquares } from './flexibleMove';
 import { exchangeSacrifice, exchangeSacrificeLine, exchangeSacrificeSquares } from './exchangeSacrifice';
 import { pawnMajority, pawnMajorityLine, pawnMajoritySquares } from './pawnMajority';
+import { pawnCentre } from './pawnCentre';
+import { tensionKept, tensionReleased, type TensionLine } from './tensionRelease';
+import { inaccessibleHole } from './inaccessibleHole';
+import { harmlessWeakPawns } from './harmlessWeakPawns';
+import { wingWithoutPieces } from './wingWithoutPieces';
+import { kingBoxMove } from './kingBox';
+import { centreDuo } from './centreDuo';
+import { noSafeChecks } from './noSafeChecks';
+import { promotionWithCheck } from './promotionWithCheck';
+import { kingRace } from './kingRace';
 import { fortress, fortressLine, fortressSquares } from './fortress';
 import { itineraryAt, itineraryLine } from './reviewPieceItinerary';
 import { forcedRunAt, FORCED_RUN_LINE } from './reviewForcedSequence';
@@ -1194,6 +1204,34 @@ export interface BoardContexts {
   poisonedPiece: { fenBefore: string; san: string; student: Color; /** The read of every reply after the move (the lesson's `everyAfter`), or null: a capture that loses by the line, not only by mate. */ fan: { replies: readonly ReplyRead[]; rating: number } | null };
   /** EVERY MATE (`everyMate`): the move mates, and another move mated too. */
   everyMate: { fenBefore: string; san: string; student: Color };
+  /** THE DANYA HAVE-CHECK COMPUTERS (2026-11-19), both seats where the board
+   *  allows. Who owns the centre with pawns (`pawnCentre`). */
+  pawnCentre: { fen: string; student: Color };
+  /** Two central pawns side by side against a doubled or isolated centre. */
+  centreDuo: { fen: string; student: Color };
+  /** A bent structure that does not matter on this board (`best`: the
+   *  engine's score, White's view). */
+  harmlessWeakPawns: { fen: string; student: Color; best: { cp: number | null; mate: number | null } | null };
+  /** The side to move has only checks that give the piece away while the
+   *  other side has safe ones. */
+  noSafeChecks: { fen: string; student: Color };
+  /** Whose king reaches the passer's escort square first. */
+  kingRace: { fen: string; student: Color };
+  /** The lone king's box shrunk by the move. REQUIRED `namesPlayedMove`: the
+   *  writer's setting (Learn says "your move", never the move just played). */
+  kingBox: { fenBefore: string; san: string; namesPlayedMove: boolean };
+  /** A check that drives their king onto the promotion rank first. */
+  promotionWithCheck: { fenBefore: string; san: string; reply: string | null; namesPlayedMove: boolean };
+  /** A hole the pawn move leaves that no enemy piece can reach soon. */
+  inaccessibleHole: { fenBefore: string; san: string; student: Color };
+  /** A wing pawn lever with none of the pusher's pieces near it. */
+  wingWithoutPieces: { fenBefore: string; san: string };
+  /** BEFORE the move: a tension capture the engine wants left alone
+   *  (`lines`: the engine's lines on `fen`, White's view, UCI). */
+  tensionKept: { fen: string; lines: readonly TensionLine[] };
+  /** AFTER the move: the capture released tension the engine wanted kept
+   *  (`playedCp`: the mover's score after it, where the surface has it). */
+  tensionReleased: { fenBefore: string; san: string; lines: readonly TensionLine[]; playedCp: number | null; reply: string | null };
 }
 
 export type ComputerId = keyof BoardContexts;
@@ -1555,12 +1593,14 @@ export const BOARD_COMPUTERS = {
       // (easy walk 2026-10-11: "h3 first — it stops the pin" unasked).
       return fact({ key, claims: [key], text: prophylaxisLine(ph), proof: prophylaxisProof(ph), squares: ph.squares, stakes: null, seat: 'student', namesStudentMove: true, thread: LOCAL_THREAD, fen,
         marks: { play: { from: ph.prevention.from, to: ph.prevention.to }, theirs: { from: ph.intent.from, to: ph.intent.to } },
-        heldForm: prophylaxisIdea(ph) });
+        heldForm: prophylaxisIdea(ph),
+        // Both ways: the stop played, or their idea let land (`moveInsight.prophylaxisAnswer`).
+        skill: 'missed-opponents-threat' });
     }),
     computer: 'findProphylaxis',
     kind: 'timing',
     phase: ANY,
-    surfaces: { lesson: LESSON_READ, learn: LEARN, review: { not: 'Review says the stop after it was missed (prophylaxisMissed), never as advice on a game already played' }, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_COMPOSER, weaknesses: WEAK_OWED, think: THINK },
+    surfaces: { lesson: LESSON_READ, learn: LEARN, review: { not: 'Review says the stop after it was missed (prophylaxisMissed), never as advice on a game already played' }, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_COMPOSER, weaknesses: { wired: 'services/moveInsight.ts' }, think: THINK },
   },
   prophylaxisMissed: {
     read: ({ prevFen, studentSan, fenBefore, san, student }, fact) => safe(() => {
@@ -1579,7 +1619,7 @@ export const BOARD_COMPUTERS = {
     computer: 'findProphylaxis',
     kind: 'timing',
     phase: ANY,
-    surfaces: { lesson: { not: 'a lesson plays the stop; there is no missed stop in a taught line' }, learn: { not: 'Learn says the stop before the move (prophylaxis), never the miss after it' }, review: REVIEW, play: PLAY_READ, chat: { not: 'chat answers about the board in front of it, not a past stop' }, tactics: TACTICS_READ, weaknesses: WEAK_OWED, think: { not: 'a step board has no earlier move to have stopped it' } },
+    surfaces: { lesson: { not: 'a lesson plays the stop; there is no missed stop in a taught line' }, learn: { not: 'Learn says the stop before the move (prophylaxis), never the miss after it' }, review: REVIEW, play: PLAY_READ, chat: { not: 'chat answers about the board in front of it, not a past stop' }, tactics: TACTICS_READ, weaknesses: { not: 'the record half is the stop itself (moveInsight.prophylaxisAnswer): the same read files the move held or broken, once' }, think: { not: 'a step board has no earlier move to have stopped it' } },
   },
   enablingMove: {
     // "A first": names the student's first move (the live read speaks it only
@@ -6770,6 +6810,235 @@ export const BOARD_COMPUTERS = {
       tactics: TACTICS_READ,
       weaknesses: { not: 'the game is over on a mate — no question of the student\'s left to grade' },
       think: THINK,
+    },
+  },
+  // ── THE DANYA HAVE-CHECK COMPUTERS (2026-11-19, basket-new) ──
+  pawnCentre: {
+    // "Black has built an impressive pawn center": a side's d/e pawns the
+    // other side has nothing to contest, both seats.
+    read: ({ fen, student }, fact) => safe(() => {
+      const c = pawnCentre(fen, student);
+      if (!c) return null;
+      const side = c.side;
+      const key = `pawn-centre:${side}:${[...c.pawns].sort().join(',')}`;
+      return fact({ key, claims: [key], text: c.text, proof: squaresProof(c.text, c.squares) ?? NO_PROOF.description, squares: [...c.squares], stakes: null,
+        seat: side === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'pawnCentre',
+    kind: 'structure',
+    phase: NOT_ENDING,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { not: 'a standing description of the centre: no move answers it, so a clean move would be a false green' },
+    },
+  },
+  centreDuo: {
+    read: ({ fen, student }, fact) => safe(() => {
+      const d = centreDuo(fen, student);
+      if (!d) return null;
+      const side = d.side;
+      const key = `centre-duo:${side}:${d.duo.join(',')}`;
+      return fact({ key, claims: [key], text: d.text, proof: squaresProof(d.text, d.squares) ?? NO_PROOF.description, squares: [...d.squares], stakes: null,
+        seat: side === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'centreDuo',
+    kind: 'structure',
+    phase: NOT_ENDING,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { not: 'a standing description of the centre: no move answers it, so a clean move would be a false green' },
+    },
+  },
+  harmlessWeakPawns: {
+    // "Piece placement trumps pawn structure": doubled pawns guarded by a
+    // piece and out of reach, both seats.
+    read: ({ fen, student, best }, fact) => safe(() => {
+      const h = harmlessWeakPawns(fen, student, best);
+      if (!h) return null;
+      const side = h.side;
+      const key = `harmless-weak:${side}:${h.pawns.map((x) => x.square).sort().join(',')}`;
+      return fact({ key, claims: [key], text: h.text, proof: squaresProof(h.text, h.squares) ?? NO_PROOF.description, squares: [...h.squares], stakes: null,
+        seat: side === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'harmlessWeakPawns',
+    kind: 'structure',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { not: 'a judgement that a weakness does not matter: no move answers it' },
+    },
+  },
+  noSafeChecks: {
+    // "I am all out of meaningful checks": the side to move — either seat —
+    // has only checks that hand the piece over, the other side safe ones.
+    read: ({ fen, student }, fact) => safe(() => {
+      const n = noSafeChecks(fen, student);
+      if (!n) return null;
+      const side = n.side;
+      const key = `no-safe-checks:${fen.split(' ')[0]}`;
+      return fact({ key, claims: [key], text: n.text, proof: NO_PROOF.description, squares: [...n.squares], stakes: null,
+        seat: side === student ? 'opponent' : 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen,
+        // Both ways: their safe checks are a threat the student's move answers or ignores.
+        ...(side === student ? { skill: 'missed-opponents-threat' } : {}) });
+    }),
+    computer: 'noSafeChecks',
+    kind: 'tactic',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { wired: 'services/moveInsight.ts' },
+    },
+  },
+  kingRace: {
+    // "Everything hinges on whether White's king reaches g7": the kings'
+    // count to the passer's escort square, both seats.
+    read: ({ fen, student }, fact) => safe(() => {
+      const r = kingRace(fen, student);
+      if (!r) return null;
+      const side = r.side;
+      const key = `king-race:${r.pawn}:${r.escort}`;
+      return fact({ key, claims: [key], text: r.text, proof: squaresProof(r.text, r.squares) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
+        seat: side === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen,
+        // Both ways: a king race on the board asks the student's king to run.
+        skill: 'passive-king-endgame' });
+    }),
+    computer: 'kingRace',
+    kind: 'technique',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { wired: 'services/moveInsight.ts' },
+    },
+  },
+  kingBox: {
+    // The box method: the rook move that shrinks the lone king's box. The
+    // mover is the one mating (the student's seat on their move).
+    read: ({ fenBefore, san, namesPlayedMove }, fact) => safe(() => {
+      const b = kingBoxMove(fenBefore, san);
+      if (!b) return null;
+      const text = namesPlayedMove ? b.text : b.text.replace(new RegExp(`^${san.replace(/[+#]/g, '\\$&')}`), 'Your move');
+      const key = `king-box:${fenBefore.split(' ')[0]}:${san}`;
+      return fact({ key, claims: [`king-box:${b.after.area}`], text, proof: squaresProof(text, b.squares) ?? NO_PROOF.description, squares: [...b.squares], stakes: null,
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
+    }),
+    computer: 'kingBoxMove',
+    kind: 'technique',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { not: 'a technique a move may use or not: a clean move is no answer to it, so held cannot be read off the cost' },
+    },
+  },
+  promotionWithCheck: {
+    // "1.b6+ drives the king to the eighth rank so every promotion later comes
+    // with check" — said of the student's own check.
+    read: ({ fenBefore, san, reply, namesPlayedMove }, fact) => safe(() => {
+      const p = promotionWithCheck(fenBefore, san, reply);
+      if (!p) return null;
+      const text = namesPlayedMove ? p.text : p.text.replace(new RegExp(`^${san.replace(/[+#]/g, '\\$&')}`), 'Your check');
+      const key = `promotion-check:${p.pawn}:${p.kingTo}`;
+      return fact({ key, claims: [key], text, proof: squaresProof(text, p.squares) ?? NO_PROOF.description, squares: [...p.squares], stakes: null,
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
+    }),
+    computer: 'promotionWithCheck',
+    kind: 'technique',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { not: 'an order a move may find or not: a clean move is no answer to it, so held cannot be read off the cost' },
+    },
+  },
+  inaccessibleHole: {
+    // "Weak squares, who cares?": the hole a pawn move leaves that no enemy
+    // piece reaches soon, both seats.
+    read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const h = inaccessibleHole(fenBefore, san, student);
+      if (!h) return null;
+      const key = `inaccessible:${h.hole}`;
+      return fact({ key, claims: [key], text: h.text, proof: squaresProof(h.text, h.squares) ?? NO_PROOF.description, squares: [...h.squares], stakes: null,
+        seat: sideToMove(fenBefore) === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
+    }),
+    computer: 'inaccessibleHole',
+    kind: 'structure',
+    phase: NOT_ENDING,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { not: 'a judgement that a weakness does not matter: the move made it on purpose, no question posed' },
+    },
+  },
+  wingWithoutPieces: {
+    // "To open the b-file White must bring a piece to the queenside": a wing
+    // lever with none of the pusher's pieces near it. Worded to the mover.
+    read: ({ fenBefore, san }, fact) => safe(() => {
+      const w = wingWithoutPieces(fenBefore, san);
+      if (!w) return null;
+      const key = `wing-without-pieces:${w.push.from}${w.push.to}`;
+      return fact({ key, claims: [key], text: w.text, proof: squaresProof(w.text, w.squares) ?? NO_PROOF.description, squares: [...w.squares], stakes: null,
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
+    }),
+    computer: 'wingWithoutPieces',
+    kind: 'structure',
+    phase: NOT_ENDING,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { not: 'owed — a lever pushed without pieces is a mistimed break only when the engine says it cost; the record needs that cost on the lever itself' },
+    },
+  },
+  tensionKept: {
+    // "To take is a mistake": the tension capture the engine wants left
+    // alone, and what taking first hands them. Worded to the side to move.
+    read: ({ fen, lines }, fact) => safe(() => {
+      const r = tensionKept(fen, lines);
+      if (!r) return null;
+      const key = `tension-kept:${r.capture}`;
+      return fact({ key, claims: [key], text: r.text, proof: squaresProof(r.text, r.squares) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'tensionKept',
+    kind: 'trade-idea',
+    phase: NOT_ENDING,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: { not: 'Review keeps one line after the move: the per-capture lines this reads on the board before it are never stored' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { not: 'owed — the record has the best line, not the per-capture lines this reads; the release half is filed by its own cost' },
+    },
+  },
+  tensionReleased: {
+    // The capture that released tension too early, and what it handed them.
+    read: ({ fenBefore, san, lines, playedCp, reply }, fact) => safe(() => {
+      const r = tensionReleased(fenBefore, san, lines, playedCp, reply);
+      if (!r) return null;
+      const key = `tension-released:${fenBefore.split(' ')[0]}:${san}`;
+      return fact({ key, claims: [`tension-released:${r.capture}`], text: r.text, proof: squaresProof(r.text, r.squares) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
+    }),
+    computer: 'tensionReleased',
+    kind: 'trade-idea',
+    phase: NOT_ENDING,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { not: 'owed — the slip is filed by its cost; its own tag (mistimed-pawn-break) needs the classifier to name a released tension' },
     },
   },
 } satisfies { [K in ComputerId]: ComputerSpec<BoardContexts[K]> };
