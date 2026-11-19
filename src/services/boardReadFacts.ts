@@ -137,7 +137,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     // a verdict only with its reason.
     const st = standingRead(i.fen, povCp, i.studentColor, i.before);
     facts.push({ from: 'position', kind: st.reasoned ? 'standing' : 'standing-bare', text: st.text, squares: [] });
-    const k = boardKind(i.fen, i.studentColor, povCp);
+    const k = boardKind(i.fen, i.studentColor, povCp, i.before);
     if (k) facts.push({ from: 'position', kind: 'character', text: k.text, squares: [] });
   }
   // THE TARGET the board turns on, for the side to move when it is the
