@@ -216,8 +216,17 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     for (const t of refuted) facts.push({ from: 'tempting', kind: 'refuted', text: t.text, computer: 'temptingOnBoard', squares: [t.uci.slice(0, 2), t.uci.slice(2, 4)] });
     // A check or capture that wins nothing ("Nxe7+ Rxe7 gives no relief"):
     // the same computer's forcing-move shape, never beside its material refutation.
-    const empty = standingRefutations({ fen: i.fen, student: i.studentColor, rating: i.rating, reads: tempting, considered }).filter((t) => !refuted.some((r) => r.uci === t.uci));
+    const standing = standingRefutations({ fen: i.fen, student: i.studentColor, rating: i.rating, reads: tempting, considered });
+    const empty = standing.filter((t) => !refuted.some((r) => r.uci === t.uci));
     for (const t of empty) facts.push({ from: 'tempting', kind: 'refuted', text: t.text, computer: 'temptingOnBoard', squares: t.squares });
+    // THE PICTURE'S CONCLUSIONS (WO-PICTURE-01 P3): the verdict read after
+    // these tries ("better, but hard to finish") and the try that survives
+    // them, off the refutations just made — kept in the read's facts for the
+    // decider (P5 speaks them).
+    const picture = { fen: i.fen, student: i.studentColor, rating: i.rating, reads: tempting, considered, refuted: { tempting: refuted, standing }, lines: i.before };
+    for (const f of [...readBoardAll('pictureVerdict', picture), ...readBoardAll('picturePlan', picture)]) {
+      facts.push({ from: 'position', kind: f.kind, text: f.text, computer: f.computer, squares: f.squares });
+    }
     // One rule-out a move: a try said by what it does to the result already
     // carries its board reason (`tryMechanism` reads `boardReason` too).
     const said = new Set([...refuted.map((t) => t.san), ...empty.map((t) => t.san)]);
