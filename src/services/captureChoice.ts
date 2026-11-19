@@ -14,7 +14,7 @@ import { isOutpost } from './outpost';
 import { knightReach } from './moveInsight';
 import { CAPTURE_VALUE } from './pieceValues';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
-import { withArticle } from '../utils/andList';
+import { andList, withArticle } from '../utils/andList';
 
 interface CaptureChoice {
   text: string;
@@ -22,8 +22,10 @@ interface CaptureChoice {
   good: string;
   /** The capture that hands them a square, SAN, and their recapture. */
   bad: [string, string];
-  /** The square it hands them. */
+  /** The square it hands them (the nearest for their knight). */
   square: string;
+  /** EVERY square it hands them, nearest first, said as a list (G4.5). */
+  handed: string[];
   /** Where their knight comes from to use it. */
   knightFrom: string;
   squares: string[];
@@ -39,16 +41,18 @@ function recaptureOf(board: Chess, square: string): Move | null {
   return takers[0] ?? null;
 }
 
-/** Squares that become outposts for `side` after the exchange, which a knight
- *  of theirs reaches in two moves or fewer. */
-function newOutposts(fenBefore: string, capture: string, side: 'w' | 'b'): { square: string; from: string; recapture: string } | null {
+/** EVERY square that becomes an outpost for `side` after the exchange, which a
+ *  knight of theirs reaches in two moves or fewer — nearest first. Every one,
+ *  never the nearest alone (G4.5): a capture that hands them d4 AND e5 hands
+ *  them both. */
+export function newOutposts(fenBefore: string, capture: string, side: 'w' | 'b'): Array<{ square: string; from: string; recapture: string }> {
   const before = new Chess(fenBefore);
   const after = new Chess(fenBefore);
-  try { after.move(capture); } catch { return null; }
+  try { after.move(capture); } catch { return []; }
   const r = recaptureOf(after, after.history({ verbose: true })[0].to);
-  if (!r) return null;
+  if (!r) return [];
   after.move(r.san);
-  let best: { square: string; from: string; recapture: string; moves: number } | null = null;
+  const all: Array<{ square: string; from: string; recapture: string; moves: number }> = [];
   for (const f of 'abcdefgh') {
     for (let rk = 1; rk <= 8; rk += 1) {
       const sq = `${f}${rk}`;
@@ -59,10 +63,10 @@ function newOutposts(fenBefore: string, capture: string, side: 'w' | 'b'): { squ
       if (!'cdef'.includes(f)) continue;
       const reach = knightReach(after.fen(), sq, side);
       if (!reach || reach.moves > 2) continue;
-      if (!best || reach.moves < best.moves) best = { square: sq, from: reach.from, recapture: r.san, moves: reach.moves };
+      all.push({ square: sq, from: reach.from, recapture: r.san, moves: reach.moves });
     }
   }
-  return best ? { square: best.square, from: best.from, recapture: best.recapture } : null;
+  return all.sort((a, b) => a.moves - b.moves).map(({ square, from, recapture }) => ({ square, from, recapture }));
 }
 
 /**
@@ -88,7 +92,7 @@ export function captureChoice(fenBefore: string, san: string, bestSan: string | 
   const best = captures.find((m) => strip(m.san) === strip(bestSan));
   if (!best || captures.length < 2) return null;
   // The engine's capture must hand them nothing.
-  if (newOutposts(fenBefore, best.san, them)) return null;
+  if (newOutposts(fenBefore, best.san, them).length) return null;
   const playedBest = strip(san) === strip(bestSan);
   if (playedBest && cpLoss >= 30) return null;
   const others = playedBest
@@ -96,20 +100,24 @@ export function captureChoice(fenBefore: string, san: string, bestSan: string | 
     : captures.filter((m) => strip(m.san) === strip(san));
   if (!playedBest && cpLoss < 50) return null;
   for (const o of others) {
-    const h = newOutposts(fenBefore, o.san, them);
+    const hs = newOutposts(fenBefore, o.san, them);
+    const h = hs[0];
     if (!h) continue;
+    const where = andList(hs.map((x) => x.square));
+    const thatSquare = hs.length > 1 ? 'those squares' : 'that square';
+    const it = hs.length > 1 ? 'a piece' : 'it';
     const knight = 'knight';
     const dot = me === 'b' ? '…' : '';
     const text = playedBest
       ? rotateStem([
-        `Right capture: taking on ${o.to} instead hands them ${h.square} for ${withArticle(knight)} — after ${dot}${o.san} ${them === 'b' ? '…' : ''}${h.recapture}, no pawn of yours can ever chase a piece off ${h.square}.`,
-        `The other capture, ${dot}${o.san}, would give their ${knight} ${h.square} for good — nothing of yours could ever kick it from there. Taking on ${best.to} keeps that square covered.`,
+        `Right capture: taking on ${o.to} instead hands them ${where} for ${withArticle(knight)} — after ${dot}${o.san} ${them === 'b' ? '…' : ''}${h.recapture}, no pawn of yours can ever chase a piece off ${where}.`,
+        `The other capture, ${dot}${o.san}, would give their ${knight} ${where} for good — nothing of yours could ever kick it from there. Taking on ${best.to} keeps ${thatSquare} covered.`,
       ], stemKeyOf(fenBefore))
       : rotateStem([
-        `Taking on ${o.to} hands them ${h.square} for ${withArticle(knight)} — no pawn of yours can ever chase it off. ${dot}${best.san} was the capture.`,
-        `${dot}${o.san} gives their ${knight} ${h.square} for good. Taking on ${best.to} with ${dot}${best.san} keeps that square covered.`,
+        `Taking on ${o.to} hands them ${where} for ${withArticle(knight)} — no pawn of yours can ever chase ${it} off. ${dot}${best.san} was the capture.`,
+        `${dot}${o.san} gives their ${knight} ${where} for good. Taking on ${best.to} with ${dot}${best.san} keeps ${thatSquare} covered.`,
       ], stemKeyOf(fenBefore));
-    return { text, good: best.san, bad: [o.san, h.recapture], square: h.square, knightFrom: h.from, squares: [o.from, o.to, h.square, h.from], playedBad: !playedBest };
+    return { text, good: best.san, bad: [o.san, h.recapture], square: h.square, handed: hs.map((x) => x.square), knightFrom: h.from, squares: [o.from, o.to, ...hs.flatMap((x) => [x.square, x.from])], playedBad: !playedBest };
   }
   return null;
 }
@@ -120,5 +128,5 @@ export function captureChoiceIdea(fen: string, bestSan: string | null): CaptureC
   const c = captureChoice(fen, bestSan ?? '', bestSan, 0);
   if (!c) return null;
   const dot = new Chess(fen).turn() === 'b' ? '…' : '';
-  return { ...c, text: `Two captures here. ${dot}${c.bad[0]} hands their knight ${c.square} for good — no pawn of yours could ever chase it — so take on ${new Chess(fen).move(c.good).to} with ${dot}${c.good}.` };
+  return { ...c, text: `Two captures here. ${dot}${c.bad[0]} hands their knight ${andList(c.handed)} for good — no pawn of yours could ever chase ${c.handed.length > 1 ? 'a piece' : 'it'} — so take on ${new Chess(fen).move(c.good).to} with ${dot}${c.good}.` };
 }

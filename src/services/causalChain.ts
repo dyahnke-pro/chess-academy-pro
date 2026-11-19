@@ -303,14 +303,16 @@ function guardCount(s: RelationSnapshot, sq: Square, mover: Color): { attackers:
 
 // ─── relation detectors (each board-proven) ─────────────────────────────────
 
-/** The focus move newly attacks an enemy piece (≥3 pts) that is now LOOSE
+/** Every enemy piece (≥3 pts) the focus move newly attacks that is now LOOSE
  *  (no defender). "Newly" = it was not attacked by the mover before the move, so
- *  THIS move created the attack. Returns the target + whether the moved piece is
- *  one of the attackers. Null when no such loose target. */
-function exploitedLoosePiece(before: RelationSnapshot, after: RelationSnapshot, afterBoard: Chess, focus: Move): { target: Square; type: PieceSymbol; movedPieceAttacks: boolean } | null {
+ *  THIS move created the attack. Most valuable first. EVERY target, never the
+ *  most valuable alone (G4.5): the chain needs an unveiled attacker AND a missing
+ *  defender on the SAME target, and a pick of one target dropped the chain
+ *  whenever the dearest piece lacked them while a cheaper one had both. */
+function exploitedLoosePieces(before: RelationSnapshot, after: RelationSnapshot, afterBoard: Chess, focus: Move): Array<{ target: Square; type: PieceSymbol; movedPieceAttacks: boolean }> {
   const mover = focus.color;
   const enemy = other(mover);
-  let best: { target: Square; type: PieceSymbol; movedPieceAttacks: boolean } | null = null;
+  const out: Array<{ target: Square; type: PieceSymbol; movedPieceAttacks: boolean }> = [];
   for (const p of pieces(afterBoard, enemy)) {
     if (p.type === 'k' || VAL[p.type] < 3) continue;
     const attackersNow = attackersOn(after, p.square, mover);
@@ -324,10 +326,19 @@ function exploitedLoosePiece(before: RelationSnapshot, after: RelationSnapshot, 
     if (winnableGain(afterBoard, p.square) < VAL[p.type]) continue;
     // The move didn't create the attack when the mover already attacked it.
     if (attackersOn(before, p.square, mover).length > 0) continue;
-    const cand = { target: p.square, type: p.type, movedPieceAttacks: attackersNow.includes(focus.to) };
-    if (!best || VAL[p.type] > VAL[best.type]) best = cand;
+    out.push({ target: p.square, type: p.type, movedPieceAttacks: attackersNow.includes(focus.to) });
   }
-  return best;
+  return out.sort((a, b) => VAL[b.type] - VAL[a.type]);
+}
+
+/** Test seam: the loose targets `san` newly attacks on `fenBefore`. */
+export function exploitedLooseTargets(fenBefore: string, san: string): Array<{ target: Square; type: PieceSymbol }> {
+  const before = snapshot(fenBefore);
+  const c = new Chess(fenBefore);
+  const focus = c.move(san);
+  const after = snapshot(c.fen());
+  if (!before || !after) return [];
+  return exploitedLoosePieces(before, after, c, focus).map(({ target, type }) => ({ target, type }));
 }
 
 /** The focus move VACATED its from-square, unveiling a friendly line-piece's
@@ -442,13 +453,23 @@ function buildPrematureQueenDiscoveryChain(g: GameBoards, focusPly: number): Cau
   if (!beforeSnap || !afterSnap) return null;
   const after = new Chess(g.fens[focusPly]);
   const focus = g.moves[focusPly - 1];
-  const mover = focus.color;
-  const enemy = other(mover);
 
   // 1. The tactic: did this move win/attack a LOOSE enemy piece it wasn't
-  //    attacking before?
-  const loose = exploitedLoosePiece(beforeSnap, afterSnap, after, focus);
-  if (!loose) return null;
+  //    attacking before? Every loose target, dearest first: the chain is built on the first one
+  // whose every link (an unveiled attacker, a missing defender) is proven.
+  for (const loose of exploitedLoosePieces(beforeSnap, afterSnap, after, focus)) {
+    const chain = prematureQueenChainOn(g, focusPly, beforeSnap, afterSnap, after, focus, loose);
+    if (chain) return chain;
+  }
+  return null;
+}
+
+function prematureQueenChainOn(
+  g: GameBoards, focusPly: number, beforeSnap: RelationSnapshot, afterSnap: RelationSnapshot, after: Chess, focus: Move,
+  loose: { target: Square; type: PieceSymbol; movedPieceAttacks: boolean },
+): CausalChain | null {
+  const mover = focus.color;
+  const enemy = other(mover);
 
   // 🔒 REQUIRE A GENUINE DISCOVERED ATTACK. A single attacker on an undefended
   // piece is often just a KICK the piece escapes (…h6 hits Bg5, the bishop simply

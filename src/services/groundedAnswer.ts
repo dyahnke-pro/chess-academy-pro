@@ -7555,10 +7555,12 @@ export function detectNewThreat(
             // when it is in fact the STUDENT's (board-awareness sweep,
             // 2026-07-22). The consumer's framing ("you're threatening" /
             // "their move threatens") already carries whose move it is.
-            const forkTargets = hitsKing ? `the king and ${majors[0]}` : `the ${majors.join(' and ')}`;
+            // EVERY piece it forks (G4.5): the king and the first major alone
+            // dropped the rook of a king-queen-rook fork.
+            const forkTargets = `the ${andList(hitsKing ? ['king', ...majors] : majors)}`;
             const rank = 500 + (played.captured ? PIECE_VALUE_LOCAL[played.captured] ?? 0 : 0);
             if (!best || rank > best.rank) {
-              best = { san: mv.san, detail: `${capBit}forks ${forkTargets}`, kind: 'fork', from: played.from, landing: played.to, targets: hitsKing ? ['king', majors[0]] : majors, targetSquares: hitsKing ? [kingSquare as string, ...(majorSquares[0] ? [majorSquares[0]] : [])] : majorSquares, guards: guardsOf(sim, played.to), rank };
+              best = { san: mv.san, detail: `${capBit}forks ${forkTargets}`, kind: 'fork', from: played.from, landing: played.to, targets: hitsKing ? ['king', ...majors] : majors, targetSquares: hitsKing ? [kingSquare as string, ...majorSquares] : majorSquares, guards: guardsOf(sim, played.to), rank };
             }
             continue;
           }
@@ -7678,12 +7680,13 @@ export function forkAlignmentClause(
 ): string {
   const sanPieceLetter = /^([NBRQK])/.exec(threat.san);
   const forkerType = sanPieceLetter ? sanPieceLetter[1].toLowerCase() : 'p';
+  const each = threat.targets.length > 2 ? 'all' : 'both';
   const geom = forkerType === 'n'
     ? `sitting one knight's-hop from ${threat.landing}`
     : forkerType === 'p'
-      ? `both caught by a pawn on ${threat.landing}`
-      : `both in the ${REVIEW_PIECE_NAME[forkerType]}'s line from ${threat.landing}`;
-  return `${owner} ${threat.targets.join(' and ')} ${geom}`;
+      ? `${each} caught by a pawn on ${threat.landing}`
+      : `${each} in the ${REVIEW_PIECE_NAME[forkerType]}'s line from ${threat.landing}`;
+  return `${owner} ${andList(threat.targets)} ${geom}`;
 }
 
 /**

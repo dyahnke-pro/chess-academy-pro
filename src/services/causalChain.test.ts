@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildCausalChain, causalChainArrows, causalChainHighlights, findMissedChain, findAllowedChain } from './causalChain';
+import { buildCausalChain, causalChainArrows, causalChainHighlights, findMissedChain, findAllowedChain, exploitedLooseTargets } from './causalChain';
 import { renderCausalChain } from './causalChainVoice';
 
 // David's real chess.com game (2026-09-07). The acceptance fixture: the whole
@@ -259,3 +259,10 @@ describe('the removed defender, an earlier move', () => {
   });
 });
 
+
+describe('exploitedLooseTargets — every loose target, not the dearest alone (G4.5)', () => {
+  it('a queen move hitting a loose rook and a loose knight returns both, rook first', () => {
+    const r = exploitedLooseTargets('7k/4n3/8/r7/8/8/8/2Q3K1 w - - 0 1', 'Qc5');
+    expect(r.map((x) => x.target)).toEqual(['a5', 'e7']);
+  });
+});
