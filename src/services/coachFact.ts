@@ -371,9 +371,9 @@ export const COMPUTER_CATALOG = {
   // one of these, named where it is made.
   plyFactsForMove: { file: 'services/pvPlayback.ts', says: 'what a move did on the board: the piece, the capture, the check' },
   settledExchange: { file: 'services/exchangeLedger.ts', says: 'a capture counted to the end of its trades: what each side won' },
-  describeMoveInfluence: { file: 'services/reviewFullData.ts', says: 'the new pressure a move creates: the pieces it now hits' },
+  describeMoveInfluence: { file: 'services/moveInfluence.ts', says: 'the new pressure a move creates: the pieces it now hits' },
   computeBoardDelta: { file: 'services/boardDelta.ts', says: 'the lines a move opened and what it gave up' },
-  correctionAgainstHeard: { file: 'services/reviewFullData.ts', says: 'the deeper read correcting the grade heard live' },
+  correctionAgainstHeard: { file: 'services/heardCorrection.ts', says: 'the deeper read correcting the grade heard live' },
   errorWhy: { file: 'services/inaccuracyCall.ts', says: 'what a costly move allowed or missed, with the line that shows it' },
   gambitIdea: { file: 'services/gambitIdea.ts', says: 'a gambit: what the move gives, what comes back along the line that takes it, and whether the engine says it pays' },
   moveThreat: { file: 'services/moveThreat.ts', says: 'what a move threatens two or three moves deep: the null-move line that wins material the board did not offer before' },

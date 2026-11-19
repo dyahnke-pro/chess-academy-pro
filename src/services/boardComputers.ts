@@ -20,12 +20,12 @@
 // PURE: every computer here is pure; this module adds no chess of its own.
 import { ideaClaim, type IdeaKind } from './ideaKind';
 import { Chess, type Color, type Move, type Square } from 'chess.js';
-import { legalSeeGainFor } from './positionReadingService';
+import { legalSeeGainFor, signedLegalSeeFor, seeSequence } from './positionReadingService';
 import { NO_PROOF, squaresProof, isProof, legalLineProof, lineProofFromUci, type FactProof } from './proof';
-import { lineSeatAt } from '../utils/andList';
+import { lineSeatAt, withArticle } from '../utils/andList';
 import type { FactStakes } from './factStakes';
 import { LOCAL_THREAD, placeFact, stakesOf, type CoachFact, type ComputerName, type FactSeat } from './coachFact';
-import { threadKey } from './gameStory';
+import { threadKey, type SaidSet } from './gameStory';
 import { findPinBreaks, pinBreakLine, pinBreakProof } from './pinBreak';
 import { findProphylaxis, prophylaxisKey, prophylaxisLine, prophylaxisIdea, prophylaxisProof, theirWantedMoves } from './prophylaxis';
 import { findEnablingMove, enablingMoveLine, enablingMoveProof } from './enablingMove';
@@ -47,13 +47,13 @@ import { studentMoveStructure, theirMoveStructure, boardStructure, linesStructur
 import { STRUCTURE_ROLE } from './structureJudgementKit';
 import { countMethod } from './countMethod';
 import { countKey, temptingKey } from './conceptKey';
-import { buildPriorityFirst } from './playCommentary';
+import { buildPriorityFirst, studentMovePoint, studentAnswer } from './playCommentary';
 import { openingStoryAt, STORY_KIND } from './openingStory';
 import { isEndgameByMaterial } from './gamePhaseService';
 import type { FactKind } from './reviewFacetRank';
-import type { GamePhase } from '../types';
+import type { GamePhase, HeardVerdict } from '../types';
 import { packageForRegister } from './hintRegister';
-import { FUNDAMENTAL_TAG } from './principleAttribution';
+import { FUNDAMENTAL_TAG, type PrincipleAttribution, type FundamentalId } from './principleAttribution';
 import { castleByHandMove, kingFromCentre, keptHome, kingSquares } from './kingWalk';
 import { knownSlip, knownSlipIndexNow, knownSlipsAt, type KnownSlipContext } from './knownSlips';
 import { ifTheyPlay, treeSentence, sayable, baitBranch, baitSentence, everyTakeLoses, everyTakeSentence, type ReplyRead, type ReplyBranch, type TreeTense, landedSquare } from './ifTheyPlay';
@@ -89,9 +89,9 @@ import { threatPurpose } from './threatPurpose';
 import { temptingCaptureRead, attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop } from './reviewTeachingPoints';
 import { nameEndgamePhase } from './reviewMoveTeaching';
 import { passedPawnPush, findTrappedPiece } from './reviewTeachingPoints';
-import { enemyKingStuckInCenter } from './reviewSacrifice';
+import { enemyKingStuckInCenter, sacrificeCompensation, describeSacBreaksKingShield } from './reviewSacrifice';
 import { findMinorityAttack, findColorComplexWeakness } from './positionReadingService';
-import { planRaceClause, planRaceProof } from './planRace';
+import { planRaceClause, planRaceProof, pawnSquareTaken, pawnSquareRaceProof } from './planRace';
 import { pieceWish } from './pieceWish';
 import { theirMoveCost } from './theirMoveCost';
 import { threatStoppedBy, playItAnyway } from './opponentMovePurpose';
@@ -106,11 +106,11 @@ import { lineProof } from './proof';
 import { holeKey } from './conceptKey';
 import { describeStructure } from './boardStructure';
 import { exchangeStakes, forkPoints, piecesOn } from './factStakes';
-import { detectNewThreat, describeThreatPrevention } from './groundedAnswer';
+import { detectNewThreat, describeThreatPrevention, seatPieceReferences } from './groundedAnswer';
 import { andList as listAnd, countWord } from '../utils/andList';
 import { imageryFor } from './factImagery';
 import { stemKeyOf } from '../utils/rotateStem';
-import { openSentence } from '../utils/openSentence';
+import { openSentence, continueSentence } from '../utils/openSentence';
 import type { PvLine } from './pvPlayback';
 import { oppositionTaken, oppositionLine, oppositionSquares } from './oppositionRead';
 import { zugzwangMade, zugzwangSyncLine, zugzwangSyncProof } from './zugzwangRead';
@@ -178,6 +178,40 @@ import type { LastMove } from './material';
 import type { StockfishAnalysis } from '../types';
 import { forkThreatKey } from './conceptKey';
 import { lineTacticPoints } from './factStakes';
+
+import { tradeLedger } from './tempoCount';
+import { notYetPlayed } from './notYetPlayed';
+import { heldResource } from './holdResource';
+import { captureChoice } from './captureChoice';
+import { kickAfterRecapture } from './kickMap';
+import { kingReadsForBestLine } from './kingAttackReads';
+import { explainMatingSacMechanism } from './reviewForcedSequence';
+import { assessPositionalEdge, phaseVerdictLine, positionalVerdictLine } from './reviewPositionalAssessment';
+import { buildMiddlegameOrientation } from './reviewStrategicOrientation';
+import { buildOpponentDevelopmentRead, buildOpponentMoveTeaching } from './reviewOpponentCommentary';
+import { lastMoveFromSan } from './material';
+import type { PrevCaptureContext } from './captureRun';
+
+import { plyFactsForMove, seatMoveSubject } from './pvPlayback';
+import { computeBoardDelta } from './boardDelta';
+import { exchangeIdeas, type ExchangeIdeasInput, type ExchangeIdeaKind } from './exchangeIdeas';
+import { renderFundamentalVerdict } from './principleVoice';
+import { definitionKey, tacticInvariant } from './conceptEngine';
+import { describeMoveInfluence } from './moveInfluence';
+import { correctionAgainstHeard } from './heardCorrection';
+
+import { readTrade } from './tradeQuality';
+import { settledExchange } from './exchangeLedger';
+import { inFluxAfter } from './boardState';
+import { MISTAKE_CP } from './engineConstants';
+
+import { detectTactics, tacticDescription } from './tacticsDetector';
+import { verifyForkOnBoard } from './tacticVerification';
+import { forkConsequence } from './tacticVocabulary';
+import { pinConsequence } from './lookaheadPlan';
+import { moverLineProof } from './exchangeLedger';
+import { threatProof } from './threatProof';
+import { isScenicPawnPin } from './factStakes';
 
 type CoachSurface = 'learn' | 'review' | 'lesson' | 'play' | 'chat' | 'tactics' | 'weaknesses' | 'think';
 
@@ -288,6 +322,84 @@ export interface BoardContexts {
    *  Named for its computer (`findEnablingMove`): the move-order point —
    *  "X first, because Y right now runs into R" — is `moveOrder`'s own. */
   enablingMove: { fen: string; pv: readonly string[] };
+  // ── REVIEW'S PER-MOVE FACETS (one-coach basket): the reads Review's
+  // `computeMoveFacets` says, each worded here, never at its call site. ──
+  /** THE TRADE COUNT (`tradeLedger`): the game's moves through the reply. */
+  tradeLedger: { history: readonly string[]; student: Color };
+  /** A move's point not yet played (`notYetPlayed`): the student's engine move. */
+  notYetPlayed: { fenBefore: string; san: string; bestSan: string | null; cpLoss: number };
+  /** A resource held back (`heldResource`), proved by its line. */
+  heldResource: { fenBefore: string; san: string; bestSan: string | null; cpLoss: number; student: Color };
+  /** Which capture to make (`captureChoice`), proved by the bad one's line. */
+  captureChoice: { fenBefore: string; san: string; bestSan: string | null; cpLoss: number; student: Color };
+  /** The kick after their recapture (`kickAfterRecapture`). */
+  kickAfterRecapture: { fenBefore: string; san: string; reply: string | null; bestUci: readonly string[]; student: Color };
+  /** The pawn square taken first (`pawnSquareTaken`). */
+  pawnSquareTaken: { fenBefore: string; san: string; cpLoss: number };
+  /** The king reads the engine's best line poses (`kingReadsForBestLine`) —
+   *  the ones that name a move, said as "Here, …". */
+  kingReadsBestLine: { fenBefore: string; student: Color; bestUci: readonly string[] };
+  /** A sacrifice's compensation (`sacrificeCompensation`), from the mover's
+   *  seat (`moverCp`/`moverCpBefore`: the mover's scores after and before);
+   *  proved by the engine's `line` after it. */
+  sacCompensation: { fenBefore: string; san: string; fenAfter: string; mover: Color; moverCp: number | null; moverCpBefore: number | null; student: Color; line: readonly string[] };
+  /** How a mating sacrifice works (`explainMatingSacMechanism`). */
+  sacMechanism: { sans: readonly string[]; sacIdx: number };
+  /** The sacrifice that breaks the king's shield (`describeSacBreaksKingShield`). */
+  sacKingShield: { fenBefore: string; san: string };
+  /** The board's structure state (`describeStructure`): files, outposts, pawns. */
+  structureState: { fen: string };
+  /** Who's better and why at the turn of the game (`phaseVerdictLine`). */
+  phaseVerdict: { fenBefore: string; san: string; fen: string; student: Color; studentCp: number | null; phase: 'middlegame' | 'endgame' };
+  /** The middlegame plan (`buildMiddlegameOrientation`) — never while their
+   *  king is stuck in the centre (a king hunt, not a majority grind). */
+  middlegameOrientation: { fen: string; student: Color; seat: FactSeat };
+  /** Their development so far (`buildOpponentDevelopmentRead`). */
+  opponentDevelopment: { oppSans: readonly string[]; fen: string; student: Color };
+  /** The point of the student's quiet move (`studentMovePoint`); none on a capture. */
+  studentMovePoint: { fenBefore: string; san: string; prevCap: PrevCaptureContext | null };
+  /** The positional verdict (`assessPositionalEdge`). `quietBareBalanced`:
+   *  the surface's setting — a bare "balanced" with no reason is not said. */
+  positionalVerdict: { fenBefore: string; san: string; fen: string; student: Color; studentCp: number | null; quietBareBalanced: boolean };
+  /** What the move did on the board (`plyFactsForMove`), owned by its mover. */
+  plyFacts: { fenBefore: string; san: string; prevCap: PrevCaptureContext; moverIsStudent: boolean };
+  /** Every other change the move caused (`computeBoardDelta`), a fact a
+   *  clause, seated from the student's side when known. */
+  boardDelta: { fenBefore: string; san: string; fenAfter: string; student: Color | null };
+  /** The trade, defence and conversion ideas (`exchangeIdeas`). */
+  exchangeIdeas: ExchangeIdeasInput;
+  /** The fundamental the flagged move crossed (`renderFundamentalVerdict`):
+   *  its diagnosis (key `diagnosis`), then its how (key `how`). `seen` is the
+   *  game's ledger of fundamentals said in full — the read adds to it. */
+  fundamentalVerdict: { fenBefore: string; fundamentals: readonly PrincipleAttribution[]; ply: number; seen: SaidSet<FundamentalId>; replySan: string | null };
+  /** The rule of the tactic the better move would have landed (`tacticInvariant`). */
+  tacticRule: { fen: string; type: string };
+  /** The moved piece's new pressure (`describeMoveInfluence`), seated from
+   *  the student's side when known; its shape rides its key (`influenceShapeOf`). */
+  moveInfluence: { fenBefore: string; fenAfter: string; san: string; student: Color | null };
+  /** The deeper read against the grade heard live (`correctionAgainstHeard`):
+   *  key `rides` when it joins the verdict, `alone` when it stands alone. */
+  heardCorrection: { fen: string; heard: HeardVerdict; classification: string | null; san: string };
+  /** What their move targets (`buildOpponentMoveTeaching`); its kind rides
+   *  its key (`oppTeachingKind`). */
+  opponentMoveTeaching: { fenBefore: string; san: string; student: Color };
+  /** The student's answer to their slip (`slipAnswerText`, Review's voice). */
+  slipAnswer: { fenAfter: string; prevCap: PrevCaptureContext | null; answerSan: string | null; lineUci: readonly string[] | null };
+  /** A capture they can take back, played (Review's trade line): how good
+   *  the trade is (`tradeJudged`, `readTrade`), else what the exchange settles
+   *  (`tradeSettled`, `settledExchange`). `lineUci`: the engine's line after
+   *  the move; `prior`: the move before it; `costCp`: the mover's cost (raw);
+   *  `moverCostCp`: that cost, null across a mate score. */
+  tradeJudged: TradePlayedCtx;
+  tradeSettled: TradePlayedCtx;
+  /** THE TACTICS ON THE BOARD AFTER A MOVE (`detectTactics`), seated from the
+   *  student's side: a fork said only when verified, a scenic pawn pin never,
+   *  a pin with what it holds. `motifSaid`: the instances of each motif the
+   *  walk has said, so a sentence rotates by its place among them;
+   *  `skipMateAgainst`: the side whose mate the verdict already said (its
+   *  mate-in-one is not said twice), or null. Each fact's key is its motif
+   *  instance (`tacticOf`). */
+  boardTactics: { fenBefore: string; san: string; fenAfter: string; student: Color | null; lineUci: readonly string[]; motifSaid: ReadonlyMap<string, readonly string[]>; skipMateAgainst: Color | null };
   /** The guard the student's move tied down, still tied after their reply. */
   tiedDefender: { fenBefore: string; fenAfterMove: string; fenAfterReply: string; student: Color };
   /** Their move took an attacker off a piece the student had to look after. */
@@ -1109,6 +1221,501 @@ export const BOARD_COMPUTERS = {
     kind: 'move-order',
     phase: ANY,
     surfaces: { lesson: LESSON_BOARD, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED, think: THINK },
+  },
+  // ── REVIEW'S PER-MOVE FACETS (one-coach basket) ──
+  tradeLedger: {
+    read: ({ history, student }, fact) => safe(() => {
+      const led = tradeLedger(history, student);
+      const proof = led ? squaresProof(led.text, led.squares) : null;
+      if (!led || !proof) return null;
+      const key = `ledger:${led.kind}:${led.square}`;
+      return fact({ key, claims: [key], text: led.text, proof, squares: [led.square], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenOfGame(history) });
+    }),
+    computer: 'tradeLedger',
+    kind: 'timing',
+    phase: ANY,
+    surfaces: reviewFacetSurfaces(),
+  },
+  notYetPlayed: {
+    read: ({ fenBefore, san, bestSan, cpLoss }, fact) => safe(() => {
+      const ny = notYetPlayed(fenBefore, san, bestSan, cpLoss);
+      const proof = ny ? squaresProof(ny.text, ny.squares) : null;
+      if (!ny || !proof) return null;
+      const key = `once:not-yet-played:${ny.target}`;
+      return fact({ key, claims: [key], text: ny.text, proof, squares: ny.squares, stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore });
+    }),
+    computer: 'notYetPlayed',
+    kind: 'timing',
+    phase: ANY,
+    surfaces: reviewFacetSurfaces(),
+  },
+  heldResource: {
+    read: ({ fenBefore, san, bestSan, cpLoss, student }, fact) => safe(() => {
+      const hold = heldResource(fenBefore, san, bestSan, cpLoss);
+      const lp = hold ? legalLineProof(hold.fen, hold.sans, lineSeatAt(hold.fen, student)) : null;
+      if (!hold || !lp) return null;
+      const key = `once:hold:${hold.resource}`;
+      return fact({ key, claims: [key], text: hold.text, proof: { ...lp, squares: hold.squares }, squares: hold.squares, stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore });
+    }),
+    computer: 'heldResource',
+    kind: 'timing',
+    phase: ANY,
+    surfaces: reviewFacetSurfaces(),
+  },
+  captureChoice: {
+    read: ({ fenBefore, san, bestSan, cpLoss, student }, fact) => safe(() => {
+      const cc = captureChoice(fenBefore, san, bestSan, cpLoss);
+      const lp = cc ? legalLineProof(fenBefore, cc.bad, lineSeatAt(fenBefore, student)) : null;
+      if (!cc || !lp) return null;
+      const key = `capture-choice:${cc.square}`;
+      return fact({ key, claims: [key], text: cc.text, proof: { ...lp, squares: [cc.square] }, squares: cc.squares, stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore });
+    }),
+    computer: 'captureChoice',
+    kind: 'capture-choice',
+    phase: ANY,
+    surfaces: reviewFacetSurfaces(),
+  },
+  kickAfterRecapture: {
+    read: ({ fenBefore, san, reply, bestUci, student }, fact) => safe(() => {
+      const kick = kickAfterRecapture(fenBefore, san, reply, bestUci);
+      const lp = kick ? legalLineProof(fenBefore, kick.sans, lineSeatAt(fenBefore, student)) : null;
+      if (!kick || !lp) return null;
+      const key = `kick:${kick.kick.square}`;
+      return fact({ key, claims: [key], text: kick.text, proof: { ...lp, squares: kick.squares }, squares: kick.squares, stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore });
+    }),
+    computer: 'kickAfterRecapture',
+    kind: 'kick',
+    phase: ANY,
+    surfaces: reviewFacetSurfaces(),
+  },
+  pawnSquareTaken: {
+    read: ({ fenBefore, san, cpLoss }, fact) => safe(() => {
+      const won = pawnSquareTaken(fenBefore, san, cpLoss);
+      const proof = won ? pawnSquareRaceProof(fenBefore, won.race) : null;
+      if (!won || !proof) return null;
+      const key = `pawn-race:${won.race.square}`;
+      return fact({ key, claims: [key], text: won.text, proof, squares: won.squares, stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore });
+    }),
+    computer: 'pawnSquareTaken',
+    kind: 'plan-race',
+    phase: ANY,
+    surfaces: reviewFacetSurfaces(),
+  },
+  kingReadsBestLine: {
+    // The king read the board posed and the move passed by, said "Here, …".
+    read: ({ fenBefore, student, bestUci }, fact) => safe(() => kingReadsForBestLine(fenBefore, student, bestUci)
+      .filter((r) => r.namesMove && r.id !== 'storm-race')
+      .map((r, i) => fact({ key: `${r.id}:${i}`, claims: [`king-read:${r.id}`], text: `Here, ${continueSentence(r.text)}`, proof: r.proof, squares: r.squares, stakes: r.stakes ?? null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore }))),
+    computer: 'kingReadsForBestLine',
+    kind: 'king-read',
+    phase: ANY,
+    surfaces: reviewFacetSurfaces(),
+  },
+  sacCompensation: {
+    read: ({ fenBefore, san, fenAfter, mover, moverCp, moverCpBefore, student, line }, fact) => safe(() => {
+      const comp = sacrificeCompensation(fenAfter, mover, moverCp, mover === student, moverCpBefore);
+      if (!comp.length) return null;
+      // The compensation is shown by the play that follows: the engine's line
+      // after the sacrifice (or, with no line, the sacrificing move itself).
+      const proof = lineProofFromUci(fenAfter, line, lineSeatAt(fenAfter, student)) ?? legalLineProof(fenBefore, [san], lineSeatAt(fenBefore, student));
+      return fact({ key: `sac:${san}`, claims: [`sac:${san}`], text: `${mover === student ? 'Your' : 'Their'} move is a sacrifice — compensation: ${listAnd(comp)}.`, proof: proof ?? NO_PROOF.description, squares: [], stakes: null, seat: mover === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
+    }),
+    computer: 'sacrificeCompensation',
+    kind: 'sac',
+    phase: ANY,
+    surfaces: reviewFacetSurfaces(),
+  },
+  sacMechanism: {
+    read: ({ sans, sacIdx }, fact) => safe(() => {
+      const mech = explainMatingSacMechanism([...sans], sacIdx);
+      if (!mech) return null;
+      return fact({ key: `sac-why:${sacIdx}`, claims: [`sac-why:${sacIdx}`], text: `${openSentence(mech)}.`, proof: NO_PROOF.description, squares: [], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenOfGame(sans.slice(0, sacIdx + 1)) });
+    }),
+    computer: 'explainMatingSacMechanism',
+    kind: 'sac-why',
+    phase: ANY,
+    surfaces: reviewFacetSurfaces(),
+  },
+  sacKingShield: {
+    read: ({ fenBefore, san }, fact) => safe(() => {
+      const shield = describeSacBreaksKingShield(fenBefore, san);
+      if (!shield) return null;
+      return fact({ key: `shield:${san}`, claims: [`shield:${san}`], text: `${shield}.`, proof: NO_PROOF.description, squares: [], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore });
+    }),
+    computer: 'describeSacBreaksKingShield',
+    kind: 'sac-why',
+    phase: ANY,
+    surfaces: reviewFacetSurfaces(),
+  },
+  structureState: {
+    read: ({ fen }, fact) => safe(() => {
+      const struct = describeStructure(fen);
+      if (!struct) return null;
+      const s: string[] = [];
+      if (struct.pawns.openFiles.length) s.push(`open files ${struct.pawns.openFiles.join(',')}`);
+      if (struct.outposts.length) s.push(struct.outposts.map((o) => `${o.color === 'w' ? 'White' : 'Black'} ${o.piece === 'n' ? 'knight' : 'bishop'} outpost ${o.square}`).join(', '));
+      const passed = [...struct.pawns.passedPawns.w.map((p) => `white ${p}`), ...struct.pawns.passedPawns.b.map((p) => `black ${p}`)];
+      if (passed.length) s.push(`passed pawns ${passed.join(', ')}`);
+      const iso = [...struct.pawns.isolatedPawns.w.map((p) => `white ${p}`), ...struct.pawns.isolatedPawns.b.map((p) => `black ${p}`)];
+      if (iso.length) s.push(`isolated pawns ${iso.join(', ')}`);
+      const dbl = [...struct.pawns.doubledFiles.w.map((f) => `white ${f}-file`), ...struct.pawns.doubledFiles.b.map((f) => `black ${f}-file`)];
+      if (dbl.length) s.push(`doubled pawns ${dbl.join(', ')}`);
+      if (!s.length) return null;
+      return fact({ key: 'structure-state', claims: ['structure-state'], text: `${s.join(' · ')}.`, proof: NO_PROOF.description, squares: [], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'describeStructure',
+    kind: 'structure',
+    phase: ANY,
+    surfaces: reviewFacetSurfaces(),
+  },
+  phaseVerdict: {
+    // Review's own say-once ledger decides repeats downstream; nothing heard here.
+    read: ({ fenBefore, san, fen, student, studentCp, phase }, fact) => safe(() => {
+      const line = phaseVerdictLine(fen, student, studentCp, phase, new Set(), lastMoveFromSan(fenBefore, san));
+      if (!line) return null;
+      return fact({ key: `phase:${phase}`, claims: [`phase:${phase}`], text: line, proof: NO_PROOF.description, squares: [], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'phaseVerdictLine',
+    kind: 'stock',
+    phase: ANY,
+    surfaces: reviewFacetSurfaces(),
+  },
+  middlegameOrientation: {
+    // A slow "advance your majority" plan is a NON-APPLICABLE reason while the
+    // enemy king is exposed in the centre — that's a king hunt, not a majority
+    // grind (David 2026-07-20 diagnostic: it fired every move of a mating attack).
+    read: ({ fen, student, seat }, fact) => safe(() => {
+      if (enemyKingStuckInCenter(fen, student)) return null;
+      const orient = buildMiddlegameOrientation(fen, student, undefined, seat);
+      if (!orient) return null;
+      return fact({ key: 'orientation', claims: ['plan-middlegame'], text: orient.text, proof: NO_PROOF.description, squares: [], stakes: null, seat, namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'buildMiddlegameOrientation',
+    kind: 'plan-middlegame',
+    phase: ANY,
+    surfaces: reviewFacetSurfaces(),
+  },
+  opponentDevelopment: {
+    read: ({ oppSans, fen, student }, fact) => safe(() => {
+      const dev = buildOpponentDevelopmentRead([...oppSans], fen, student);
+      if (!dev) return null;
+      return fact({ key: 'opp-dev', claims: ['opp-dev'], text: dev.text, proof: NO_PROOF.description, squares: [], stakes: null, seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'buildOpponentDevelopmentRead',
+    kind: 'opp-dev',
+    phase: ANY,
+    surfaces: reviewFacetSurfaces(),
+  },
+  studentMovePoint: {
+    // QUIET MOVES ONLY: a capture's point is the trade, said by the trade.
+    read: ({ fenBefore, san, prevCap }, fact) => safe(() => {
+      const mv = new Chess(fenBefore).move(san);
+      if (!mv || mv.captured) return null;
+      const point = studentMovePoint(fenBefore, san, prevCap, null);
+      if (!point) return null;
+      return fact({ key: `point:${mv.to}`, claims: [`point:${mv.to}`], text: point, proof: NO_PROOF.description, squares: [mv.to], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore });
+    }),
+    computer: 'studentMovePoint',
+    kind: 'point',
+    phase: ANY,
+    surfaces: reviewFacetSurfaces(),
+  },
+  positionalVerdict: {
+    read: ({ fenBefore, san, fen, student, studentCp, quietBareBalanced }, fact) => safe(() => {
+      const assess = assessPositionalEdge(fen, student, studentCp, lastMoveFromSan(fenBefore, san));
+      if (!assess.verdict) return null;
+      // A BARE "you're balanced" IN THE OPENING SAYS NOTHING (David 2026-09-16).
+      if (quietBareBalanced && assess.reasons.length === 0 && /^balanced$/i.test(assess.verdict)) return null;
+      return fact({
+        key: `${assess.verdict}|${JSON.stringify(assess.reasons)}`, claims: [`verdict:${assess.verdict}`],
+        text: positionalVerdictLine(assess.verdict, assess.reasons), proof: NO_PROOF.description,
+        squares: [...new Set(assess.reasonSquares.flat())], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen,
+      });
+    }),
+    computer: 'assessPositionalEdge',
+    kind: 'verdict',
+    phase: ANY,
+    surfaces: reviewFacetSurfaces(),
+  },
+  plyFacts: {
+    read: ({ fenBefore, san, prevCap, moverIsStudent }, fact) => safe(() => {
+      const mech = plyFactsForMove(fenBefore, san, prevCap);
+      if (!mech) return null;
+      return fact({ key: `move:${san}`, claims: [`move:${san}`], text: seatMoveSubject(mech, moverIsStudent), proof: NO_PROOF.description, squares: [], stakes: null, seat: moverIsStudent ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore });
+    }),
+    computer: 'plyFactsForMove',
+    kind: 'move',
+    phase: ANY,
+    surfaces: reviewFacetSurfaces(),
+  },
+  boardDelta: {
+    // The squares come back keyed by the RAW clause, re-keyed onto the said
+    // words (never scraped from prose).
+    read: ({ fenBefore, san, fenAfter, student }, fact) => safe(() => {
+      const squares = new Map<string, readonly string[]>();
+      return computeBoardDelta(fenBefore, san, squares).map((clause, i) => {
+        const seated = student ? seatPieceReferences(clause, fenAfter, student) : clause;
+        return fact({ key: `delta:${i}`, claims: [`delta:${i}`], text: `${openSentence(seated)}.`, proof: NO_PROOF.description, squares: [...(squares.get(clause) ?? [])], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
+      });
+    }),
+    computer: 'computeBoardDelta',
+    kind: 'delta',
+    phase: ANY,
+    surfaces: reviewFacetSurfaces(),
+  },
+  exchangeIdeas: {
+    read: (input, fact) => safe(() => exchangeIdeas(input).map((x) => fact({
+      key: `${x.kind}|${x.claim}`, claims: [x.claim], text: x.text, proof: x.proof, squares: x.squares, stakes: x.stakes ?? null,
+      seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: input.fen,
+    }))),
+    computer: 'exchangeIdeas',
+    kind: 'trade-idea',
+    phase: ANY,
+    surfaces: reviewFacetSurfaces(),
+  },
+  fundamentalVerdict: {
+    read: ({ fenBefore, fundamentals, ply, seen, replySan }, fact) => safe(() => {
+      if (!fundamentals.length) return null;
+      const verdict = renderFundamentalVerdict(fundamentals, { ply, seen, replySan });
+      const out = [fact({ key: 'diagnosis', claims: [`fundamental:${fundamentals[0].id}`], text: verdict.diagnosis, proof: NO_PROOF.description, squares: [], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore })];
+      if (verdict.how) out.push(fact({ key: 'how', claims: [`fundamental-how:${fundamentals[0].id}`], text: verdict.how, proof: NO_PROOF.description, squares: [], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore }));
+      return out;
+    }),
+    computer: 'renderFundamentalVerdict',
+    kind: 'principle',
+    phase: ANY,
+    surfaces: reviewFacetSurfaces(),
+  },
+  tacticRule: {
+    read: ({ fen, type }, fact) => safe(() => {
+      const inv = tacticInvariant(type);
+      if (!inv) return null;
+      const key = definitionKey(type);
+      return fact({ key, claims: [key], text: `Remember — ${inv.full}`, proof: NO_PROOF.description, squares: [], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'tacticInvariant',
+    kind: 'rule',
+    phase: ANY,
+    surfaces: reviewFacetSurfaces(),
+  },
+  moveInfluence: {
+    read: ({ fenBefore, fenAfter, san, student }, fact) => safe(() => {
+      const squares: string[] = [];
+      const shape: { hitsPiece: boolean; loose?: string } = { hitsPiece: false };
+      const raw = describeMoveInfluence(fenBefore, fenAfter, san, squares, shape);
+      if (!raw) return null;
+      const mover = sideToMove(fenBefore);
+      return fact({
+        key: `${shape.hitsPiece ? 'h' : '-'}|${shape.loose ?? ''}`, claims: [`influence:${san}`],
+        text: student ? seatPieceReferences(raw, fenAfter, student) : raw, proof: NO_PROOF.description, squares,
+        stakes: null, seat: !student || mover === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter,
+      });
+    }),
+    computer: 'describeMoveInfluence',
+    kind: 'does',
+    phase: ANY,
+    surfaces: reviewFacetSurfaces(),
+  },
+  heardCorrection: {
+    read: ({ fen, heard, classification, san }, fact) => safe(() => {
+      const c = correctionAgainstHeard(heard, classification, san);
+      if (!c) return null;
+      return fact({ key: c.ridesVerdict ? 'rides' : 'alone', claims: [`heard:${san}`], text: c.text, proof: NO_PROOF.description, squares: [], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+    }),
+    computer: 'correctionAgainstHeard',
+    kind: 'quality',
+    phase: ANY,
+    surfaces: reviewFacetSurfaces(),
+  },
+  opponentMoveTeaching: {
+    read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const opp = buildOpponentMoveTeaching(fenBefore, san, student);
+      if (!opp) return null;
+      return fact({ key: `${opp.kind ?? '-'}|${san}`, claims: [`opp-target:${san}`], text: opp.text, proof: NO_PROOF.description, squares: [...(opp.squares ?? [])], stakes: null, seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
+    }),
+    computer: 'buildOpponentMoveTeaching',
+    kind: 'opp-target',
+    phase: ANY,
+    surfaces: reviewFacetSurfaces(),
+  },
+  slipAnswer: {
+    read: ({ fenAfter, prevCap, answerSan, lineUci }, fact) => safe(() => {
+      const text = studentAnswer(fenAfter, prevCap, answerSan, lineUci);
+      if (!text) return null;
+      return fact({ key: `answer:${answerSan ?? ''}`, claims: [`answer:${answerSan ?? ''}`], text, proof: NO_PROOF.description, squares: [], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
+    }),
+    computer: 'slipAnswerText',
+    kind: 'quality',
+    phase: ANY,
+    surfaces: reviewFacetSurfaces(),
+  },
+  tradeJudged: {
+    // HOW GOOD THE TRADE IS (David 2026-09-27: "how well the trade benefits
+    // the user"). The same computer Learn speaks from; the engine has the
+    // last word through the mover's own cost on this ply. Key `h|…` when its
+    // words open with the move.
+    read: ({ fenBefore, fenAfter, san, student, prior, costCp }, fact) => safe(() => {
+      const sq = inFluxAfter(fenBefore, san);
+      if (!student || !sq) return null;
+      const judged = readTrade(fenBefore, san, student, costCp, prior ? lastMoveFromSan(prior.fenBefore, prior.san) : null, true);
+      if (!judged) return null;
+      return fact({ key: `${judged.headsMove ? 'h' : '-'}|${sq}`, claims: [`trade:${sq}`], text: judged.text, proof: tradeProofOf(fenBefore, fenAfter, san, sq, student) ?? NO_PROOF.description, squares: judged.squares, stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
+    }),
+    computer: 'readTrade',
+    kind: 'trade',
+    phase: ANY,
+    surfaces: reviewFacetSurfaces(),
+  },
+  tradeSettled: {
+    // THE WHOLE EXCHANGE, read off the ENGINE'S line through the one ledger
+    // (WO-OUTCOME-01). Key `delta` for a capture with nothing computed about
+    // it (a description, said only beside a teaching point on its square),
+    // `trade` for material that changes hands or a take-back that costs more.
+    // A plain even trade restates the move and is not said.
+    read: ({ fenBefore, fenAfter, san, moverIsStudent, student, lineUci, prior, moverCostCp }, fact) => safe(() => {
+      const tradeSq = inFluxAfter(fenBefore, san);
+      if (!tradeSq) return null;
+      const mv = new Chess(fenBefore).move(san);
+      const NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
+      const theirs = NOUN[mv.captured ?? ''] ?? 'piece';
+      const line: string[] = [san];
+      try {
+        const c = new Chess(fenAfter);
+        for (const u of lineUci) {
+          const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
+          if (!m) break;
+          line.push(m.san);
+        }
+      } catch { /* the line stops where it stops being legal */ }
+      const studentWB: Color = moverIsStudent ? mv.color : mv.color === 'w' ? 'b' : 'w';
+      const ledger = line.length > 1 ? settledExchange(fenBefore, line, studentWB, prior) : null;
+      const studentLost: string[] = ledger ? [...ledger.opponentWon] : [];
+      const theirLost: string[] = ledger ? [...ledger.studentWon] : [];
+      const traded: string[] = [];
+      for (let i = studentLost.length - 1; i >= 0; i -= 1) {
+        const j = theirLost.indexOf(studentLost[i]);
+        if (j >= 0) { traded.unshift(studentLost[i]); theirLost.splice(j, 1); studentLost.splice(i, 1); }
+      }
+      const nouns = (xs: string[]): string => listAnd(xs.map((x) => NOUN[x] ?? 'piece'));
+      const tradePart = traded.length ? `${withArticle(nouns([...new Set(traded)]))} trade` : null;
+      // The piece won beside a trade of its kind is ANOTHER one (Review
+      // baseline 2026-11-08, 19.gxf5: "a pawn trade, and they win the pawn").
+      const won = (xs: string[]): string => (xs.length === 1 && traded.includes(xs[0]) ? `another ${NOUN[xs[0]] ?? 'piece'}` : `the ${nouns(xs)}`);
+      const restPart = studentLost.length && theirLost.length
+        ? `your ${nouns(studentLost)} for their ${nouns(theirLost)}`
+        : theirLost.length ? `you win ${won(theirLost)}`
+          : studentLost.length ? `they win ${won(studentLost)}` : null;
+      const what = tradePart && restPart ? `${tradePart}, and ${restPart}` : tradePart ?? restPart;
+      // "Can take back" only when taking back does not lose material; the
+      // static count yields to the engine — a capture that cost its mover a
+      // mistake's worth is never "safe from recapture".
+      const recapturer: Color = mv.color === 'w' ? 'b' : 'w';
+      const engineSaysCostly = moverCostCp !== null && moverCostCp >= MISTAKE_CP;
+      // Whether they take back is what the engine's line does, when there is one.
+      const lineRetakes = line.length > 1
+        ? /x/.test(line[1]) && /([a-h][1-8])(?:=[QRBN])?[+#]?$/.exec(line[1])?.[1] === tradeSq
+        : null;
+      // THE LINE'S OWN ANSWER DECIDES (review walk oct3b, g2 ply 49): when the
+      // line declines the take-back of a capture that still cost its mover,
+      // say the capture and stop.
+      const safeBack = lineRetakes ?? (engineSaysCostly || signedLegalSeeFor(fenAfter, tradeSq as Square, recapturer) >= 0);
+      const costlyGrab = lineRetakes === false && engineSaysCostly;
+      const lost = NOUN[mv.captured ?? ''] ?? 'piece';
+      const said = !what || costlyGrab
+        ? moverIsStudent
+          ? `You take on ${tradeSq} — that was their ${theirs}.`
+          : `They take on ${tradeSq} — that was your ${theirs}.`
+        : safeBack
+          ? moverIsStudent
+            ? `You take on ${tradeSq}, and they can take back — ${what}.`
+            : `They take on ${tradeSq}, and you can take back — ${what}.`
+          : moverIsStudent
+            ? `You take on ${tradeSq} — taking back would cost them more than the ${lost}.`
+            : `They take on ${tradeSq} — taking back would cost you more than the ${lost}.`;
+      const seat: FactSeat = moverIsStudent ? 'student' : 'opponent';
+      // A CAPTURE WITH NOTHING COMPUTED ABOUT IT IS A DESCRIPTION (review
+      // audit 2026-10-14): filed as one, with its square.
+      if (!what || costlyGrab) return fact({ key: `delta|${tradeSq}`, claims: [`capture:${tradeSq}`], text: said, proof: NO_PROOF.description, squares: [tradeSq], stakes: null, seat, namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
+      // A PLAIN EVEN TRADE restates the move (lead 2026-10-20): said only when
+      // material changes hands or the take-back costs more.
+      if (!restPart && safeBack) return null;
+      return fact({ key: `trade|${tradeSq}`, claims: [`trade:${tradeSq}`], text: said, proof: tradeProofOf(fenBefore, fenAfter, san, tradeSq, student) ?? NO_PROOF.description, squares: [], stakes: null, seat, namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
+    }),
+    computer: 'settledExchange',
+    kind: 'trade',
+    phase: ANY,
+    surfaces: reviewFacetSurfaces(),
+  },
+  boardTactics: {
+    read: ({ fenBefore, san, fenAfter, student, lineUci, motifSaid, skipMateAgainst }, fact) => safe(() => {
+      const t = detectTactics(fenAfter);
+      // The ONE colour-named description the detector writes ("Black has a
+      // checkmate available from c8") is seated here too — walk 6, R13.
+      const seatText = (s: string): string => {
+        if (!student) return s;
+        const me = student === 'w' ? 'White' : 'Black';
+        const seated = s.replace(/^(White|Black) has mate in one\b/, (_m, side: string) => (side === me ? 'You have mate in one' : 'They have mate in one'));
+        return seatPieceReferences(seated, fenAfter, student);
+      };
+      // A TACTIC'S PROOF is the engine line from this board, cut where it
+      // proves the material for the side the tactic favours — only when that
+      // side is to move; for the side NOT to move, the null-move read of what
+      // it wins (`threatProof`, the same proof Learn's warning speaks).
+      const toMove = sideToMove(fenAfter);
+      const tacProof = (b: Color | undefined, squares: readonly string[]): FactProof => {
+        if (!b) return NO_PROOF.description;
+        return (b === toMove ? moverLineProof(fenAfter, lineUci, b, { fenBefore, san }) : threatProof(fenAfter, toMove, squares)) ?? NO_PROOF.description;
+      };
+      // THIS INSTANCE'S PLACE AMONG THE GAME'S — said before, then new here —
+      // so a sentence rotates by how many patterns of its kind were said.
+      const newHere = new Map<string, string[]>();
+      const occurrence = (motif: string, instance: string): number => {
+        const said = motifSaid.get(motif) ?? [];
+        const at = said.indexOf(instance);
+        if (at >= 0) return at;
+        const here = newHere.get(motif) ?? [];
+        if (!here.includes(instance)) here.push(instance);
+        newHere.set(motif, here);
+        return said.length + here.indexOf(instance);
+      };
+      const out: CoachFact[] = [];
+      const say = (tac: (typeof t.tactics)[number], text: string, stakes: FactStakes | null): void => {
+        const key = `${tac.type}@${tac.beneficiary ?? '-'}:${tac.involvedSquares.join('')}`;
+        out.push(fact({ key, claims: [`motif:${key}`], text, proof: tacProof(tac.beneficiary, tac.involvedSquares), squares: tac.involvedSquares, stakes, seat: student && tac.beneficiary && tac.beneficiary !== student ? 'opponent' : 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter }));
+      };
+      for (const tac of t.tactics) {
+        if (tac.type === 'none' || !tac.description) continue;
+        // THE MATE IS SAID ONCE: the verdict already said the mate this move allowed.
+        if (tac.type === 'mate_threat' && skipMateAgainst !== null && tac.beneficiary !== skipMateAgainst) continue;
+        // A fork SHAPE is tempo-blind: verified (tempo + SEE) before it is said.
+        if (tac.type === 'fork') {
+          const v = verifyForkOnBoard(fenAfter, tac.involvedSquares[0], tac.involvedSquares.slice(1));
+          if (v.status === 'live') {
+            say(tac, `${seatText(tac.description)} — it's the move, so the material comes off.`, { points: v.winsPoints, plies: 1 });
+          } else if (v.status === 'threat') {
+            // The fork is coming, and the side it hits can rescue only one piece.
+            const saver = !student || !tac.beneficiary ? null : tac.beneficiary === student ? 'they' : 'you';
+            say(tac, `${seatText(tac.description)}${saver ? ` — ${forkConsequence(saver)}` : ''}.`, { points: v.winsPoints || forkPoints(piecesOn(fenAfter, tac.involvedSquares.slice(1))), plies: 2 });
+          }
+          continue;
+        }
+        // What it wins by exchange on its own squares, from the side it hurts.
+        const stakes = exchangeStakes(fenAfter, tac.involvedSquares, tac.beneficiary ? (tac.beneficiary === 'w' ? 'b' : 'w') : null);
+        // A PIN ON A PAWN THAT WINS NOTHING IS SCENERY (walk 6, R5).
+        if (isScenicPawnPin(fenAfter, tac.type, tac.involvedSquares, tac.beneficiary)) continue;
+        // A PIN SAYS WHAT IT HOLDS — the same rotated sentence Learn's pin line speaks.
+        const said = occurrence(tac.type, tac.involvedSquares.join(''));
+        const holds = tac.type === 'pin' && student && tac.beneficiary
+          ? pinConsequence(fenAfter, tac.involvedSquares, student, tac.beneficiary === student ? 'student' : 'opponent', said)
+          : null;
+        say(tac, `${seatText(tacticDescription(tac, fenAfter, said, student ?? null))}.${holds ? ` ${holds}` : ''}`, stakes);
+      }
+      return out;
+    }),
+    computer: 'detectTactics',
+    kind: 'tactic',
+    phase: ANY,
+    surfaces: reviewFacetSurfaces(),
   },
   tiedDefender: {
     // Their guard the student's move tied down — a fact about the student's
@@ -4278,4 +4885,63 @@ export function sayOnce(f: CoachFact | null, told: Set<string> | null): string |
   if (told?.has(k)) return null;
   told?.add(k);
   return f.text;
+}
+
+/** What a positional verdict read says (`positionalVerdict`): its word and reasons. */
+export function positionalVerdictOf(f: CoachFact): { word: string; reasons: string[] } {
+  const k = readKey(f);
+  const bar = k.indexOf('|');
+  return { word: k.slice(0, bar), reasons: JSON.parse(k.slice(bar + 1)) as string[] };
+}
+
+/** WHERE A REVIEW FACET IS SAID (one-coach basket): Review's per-move facets
+ *  read the registry; the other surfaces say these reads their own way today. */
+function reviewFacetSurfaces(): Record<CoachSurface, SurfaceAnswer> {
+  return {
+    review: REVIEW,
+    lesson: { not: 'a lesson composes each move from the move\'s own facts (moveThoughtFacts); this is Review\'s read of a played move' },
+    learn: { not: 'owed — Learn\'s door (learnTurnDoor) reads its own lanes; this is Review\'s read of a played move' },
+    play: PLAY_ASK,
+    chat: { not: 'owed — chat answers through the one composer, which does not read this Review facet yet' },
+    tactics: TACTICS_NA,
+    weaknesses: WEAK_OWED,
+    think: { not: 'owed — a step board reads the composer; this is Review\'s read of a played move' },
+  };
+}
+
+/** What a move-influence read's key says (`moveInfluence`). */
+export function influenceShapeOf(f: CoachFact): { hitsPiece: boolean; loose?: string } {
+  const [h, loose] = readKey(f).split('|');
+  return { hitsPiece: h === 'h', ...(loose ? { loose } : {}) };
+}
+
+/** The kind of their move's target read (`opponentMoveTeaching`), if any. */
+export function oppTeachingKind(f: CoachFact): string | undefined {
+  const k = readKey(f).split('|')[0];
+  return k === '-' ? undefined : k;
+}
+
+/** An exchange idea's kind and say-once claim (`exchangeIdeas`). */
+export function exchangeIdeaOf(f: CoachFact): { kind: ExchangeIdeaKind; claim: string } {
+  const k = readKey(f);
+  const bar = k.indexOf('|');
+  return { kind: k.slice(0, bar) as ExchangeIdeaKind, claim: k.slice(bar + 1) };
+}
+
+/** What a played trade's reads need (`tradeJudged`, `tradeSettled`). */
+interface TradePlayedCtx { fenBefore: string; fenAfter: string; san: string; moverIsStudent: boolean; student: Color | null; lineUci: readonly string[]; prior: { fenBefore: string; san: string } | null; costCp: number | null; moverCostCp: number | null }
+
+/** THE TRADE'S PROOF: the capture, then every recapture on the square in
+ *  least-valuable order — the exchange itself, exact (`seeSequence`). */
+function tradeProofOf(fenBefore: string, fenAfter: string, san: string, sq: string, student: Color | null): FactProof | null {
+  return lineProof({ fen: fenBefore, sans: [san, ...seeSequence(fenAfter, sq as Square)] }, lineSeatAt(fenBefore, student), true);
+}
+
+/** What a board-tactics read's key says (`boardTactics`): its motif, who it
+ *  favours, its instance. */
+export function tacticOf(f: CoachFact): { motif: string; beneficiary: Color | undefined; instance: string } {
+  const k = readKey(f);
+  const at = k.indexOf('@');
+  const side = k[at + 1];
+  return { motif: k.slice(0, at), beneficiary: side === 'w' || side === 'b' ? side : undefined, instance: k.slice(k.indexOf(':') + 1) };
 }

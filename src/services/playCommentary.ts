@@ -957,3 +957,16 @@ export function slipAnswerText(
 
 /** A board, by its pieces and side to move — move counters ignored. */
 function posKey(fen: string): string { return fen.split(' ').slice(0, 2).join(' '); }
+
+/** The student's answer to the opponent's slip, in Review's retrospective
+ *  voice — the one wording Learn speaks too (`slipAnswerText`). */
+export function studentAnswer(
+  fenAfter: string,
+  /** The capture run their move ended (`captureRun`), or null when unknown. */
+  prevCapture: PrevCaptureContext | null,
+  answerSan: string | null,
+  /** The engine's line after their move, UCI (the answer first), or null. */
+  answerLineUci: readonly string[] | null,
+): string | null {
+  return slipAnswerText(fenAfter, prevCapture, answerSan, 'review', answerLineUci);
+}
