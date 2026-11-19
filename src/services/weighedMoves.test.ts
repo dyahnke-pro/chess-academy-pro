@@ -9,7 +9,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
-import { candidateMoves, temptingRefuted, alsoGood, squareChoice, moveDifference, type WeighRead } from './weighedMoves';
+import { candidateMoves, CANDIDATE_BAR, temptingRefuted, alsoGood, squareChoice, moveDifference, type WeighRead } from './weighedMoves';
 import { readBoard } from './boardComputers';
 import { isProof } from './proof';
 import { moveThoughtFacts } from './moveThoughtFacts';
@@ -38,8 +38,9 @@ describe('the candidate list is the human model\'s, quiet moves included', () =>
     const c = candidateMoves(fen, 1500, { played: 'Nd7', scored: null });
     expect(c[0].san).toBe('Nc6');
     expect(c.some((x) => x.san === 'Nd7' && x.played)).toBe(true);
-    // None of the eye's top candidates here is a check or a capture.
-    expect(c.every((x) => !/[x+#]/.test(x.san))).toBe(true);
+    // None of the eye's own candidates here is a check or a capture (the
+    // moves weighed for what they do — Bxa3 hits b2 — join below its bar).
+    expect(c.filter((x) => x.eye >= CANDIDATE_BAR).every((x) => !/[x+#]/.test(x.san))).toBe(true);
   });
 
   it('a move the engine scores as losing a piece drops out once every move is scored', () => {

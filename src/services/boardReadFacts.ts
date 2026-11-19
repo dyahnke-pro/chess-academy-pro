@@ -16,7 +16,7 @@
  */
 import { Chess } from 'chess.js';
 import { computePositionFacts, type PositionFactsInput } from './positionFacts';
-import { temptingOnBoard, emptyForcingTries, candidateMoves, TEMPTING_COST_CP, type WeighRead } from './weighedMoves';
+import { temptingOnBoard, standingRefutations, candidateMoves, TEMPTING_COST_CP, type WeighRead } from './weighedMoves';
 import { seatCp } from './winChance';
 import { foldScore } from './humanReply';
 import { boardReason } from './positionalReason';
@@ -199,12 +199,15 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     for (const t of refuted) facts.push({ from: 'tempting', kind: 'refuted', text: t.text, computer: 'temptingOnBoard', squares: [t.uci.slice(0, 2), t.uci.slice(2, 4)] });
     // A check or capture that wins nothing ("Nxe7+ Rxe7 gives no relief"):
     // the same computer's forcing-move shape, never beside its material refutation.
-    const empty = emptyForcingTries({ fen: i.fen, student: i.studentColor, rating: i.rating, reads: tempting }).filter((t) => !refuted.some((r) => r.uci === t.uci));
+    const empty = standingRefutations({ fen: i.fen, student: i.studentColor, rating: i.rating, reads: tempting }).filter((t) => !refuted.some((r) => r.uci === t.uci));
     for (const t of empty) facts.push({ from: 'tempting', kind: 'refuted', text: t.text, computer: 'temptingOnBoard', squares: t.squares });
+    // One rule-out a move: a try said by what it does to the result already
+    // carries its board reason (`tryMechanism` reads `boardReason` too).
+    const said = new Set([...refuted.map((t) => t.san), ...empty.map((t) => t.san)]);
     const bestSan = sanOf(i.fen, top.moves[0]);
     for (const r of tempting.slice(1)) {
       const san = sanOf(i.fen, r.moves[0]);
-      if (!san || refuted.some((t) => t.san === san)) continue;
+      if (!san || said.has(san)) continue;
       // What a move gives up explains a QUIET move; a capture or a check that
       // fails is refuted by its line or not at all.
       if (/x|\+|#/.test(san)) continue;
@@ -269,7 +272,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
         for (const t of theirRefuted) {
           facts.push({ from: 'tempting', kind: 'their-refuted', text: t.text, computer: 'temptingOnBoard', squares: [t.uci.slice(0, 2), t.uci.slice(2, 4)] });
         }
-        for (const t of emptyForcingTries({ fen: fenB, student: i.studentColor, rating: i.rating, reads: theirs }).filter((x) => !theirRefuted.some((r) => r.uci === x.uci))) {
+        for (const t of standingRefutations({ fen: fenB, student: i.studentColor, rating: i.rating, reads: theirs }).filter((x) => !theirRefuted.some((r) => r.uci === x.uci))) {
           facts.push({ from: 'tempting', kind: 'their-refuted', text: t.text, computer: 'temptingOnBoard', squares: t.squares });
         }
       }
