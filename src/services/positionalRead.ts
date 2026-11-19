@@ -33,7 +33,7 @@ import { homeMinorCount } from './development';
 import { isolaniStructure, passerTrumpSentence } from './nextPlans';
 import { Chess, type Color, type Square } from 'chess.js';
 import { strandedAt } from './trappedPiece';
-import { countWord, andList, fileList } from '../utils/andList';
+import { countWord, andList } from '../utils/andList';
 import {
   kingSafetyRead,
   developmentRead,
@@ -41,6 +41,7 @@ import {
   findPieceQuality,
   goodPieceClause,
   findPawnBreaks,
+  breakContacts,
   findColorComplexWeakness,
   findMinorityAttack,
   findPassedPawns,
@@ -62,6 +63,46 @@ function badPieceWords(note: { kind: PieceQualityKind; reason: string; square: s
   // trapped, and the count is true on every board.
   if (note.kind === 'rim-knight') return `out on the rim, where it reaches only ${knightReach(note.square)} squares`;
   return note.reason;
+}
+
+/** What a good piece DOES from its square, said from the owner's seat, or null
+ *  when the board names no job: an outpost no pawn can kick; a rook on a file
+ *  pressing the first enemy piece in front of it, or with a clear road into
+ *  their camp; a rook on the seventh hitting pawns there or penning the king.
+ *  Board geometry and chess.js. */
+function goodPieceWork(fen: string, q: { square: string; piece: string; kind: PieceQualityKind; color: Color }, own: boolean): { text: string; squares: string[] } | null {
+  const board = chessOf(fen);
+  if (!board) return null;
+  const foe = own ? 'their' : 'your';
+  const enemy: Color = q.color === 'w' ? 'b' : 'w';
+  if (q.kind === 'outpost') return { text: goodPieceClause(q.kind, q.square), squares: [] };
+  if (q.kind === 'open-file' || q.kind === 'semi-open-file') {
+    const step = q.color === 'w' ? 1 : -1;
+    const f = q.square[0];
+    for (let r = Number(q.square[1]) + step; r >= 1 && r <= 8; r += step) {
+      const sq = `${f}${r}` as Square;
+      const occ = board.get(sq);
+      if (!occ) continue;
+      if (occ.color === q.color) return null;
+      const loose = board.attackers(sq, enemy).length === 0;
+      return { text: `it presses down the ${f}-file on ${foe} ${NAME[occ.type] ?? 'piece'} on ${sq}${loose ? ', and nothing guards it' : ''}`, squares: [sq] };
+    }
+    const entry = `${f}${q.color === 'w' ? 7 : 2}` as Square;
+    if (board.attackers(entry, enemy).length > 0) return null;
+    return { text: `the ${f}-file is clear all the way to ${entry}, its road into ${foe} camp`, squares: [entry] };
+  }
+  if (q.kind === 'seventh-rank') {
+    const rank7 = q.color === 'w' ? '7' : '2';
+    const back = q.color === 'w' ? '8' : '1';
+    const pawns = board.board().flat().filter((c) => c && c.color === enemy && c.type === 'p' && c.square[1] === rank7).map((c) => c!.square as string);
+    if (pawns.length > 0) {
+      return { text: `on the seventh it attacks ${foe} pawn${pawns.length > 1 ? 's' : ''} on ${pawns.length > 2 ? `the ${rank7 === '7' ? 'seventh' : 'second'} rank` : andList(pawns)}`, squares: pawns };
+    }
+    const king = board.board().flat().find((c) => c && c.color === enemy && c.type === 'k')?.square;
+    if (king && king[1] === back) return { text: `on the seventh it keeps ${foe} king shut in on the back rank`, squares: [king] };
+    return null;
+  }
+  return null;
 }
 
 /** Squares a knight on `square` reaches on an empty board — the rim's cost. */
@@ -345,20 +386,26 @@ function observationsFor(
   }
 
   const quality = findPieceQuality(fen);
-  const outpost = quality.find((q) => q.color === color && q.quality === 'good');
-  if (outpost) {
+  // A GOOD PIECE IS SAID WITH ITS WORK (Danya have-check 2026-11-19: "your rook
+  // on d2 is your best-placed piece — it has the half-open d-file" on 70
+  // boards, the file named and nothing it does there). The first good piece
+  // whose job the board can name speaks; one with no job is not praised.
+  const goods = quality.filter((q) => q.color === color && q.quality === 'good');
+  const outpost = goods.map((q) => ({ q, work: goodPieceWork(fen, q, own) })).find((g) => g.work !== null) ?? null;
+  if (outpost && outpost.work) {
+    const q = outpost.q;
     out.push({
-      key: goodPieceIdeaKey(side, outpost.piece, outpost.kind, outpost.square), side, kind: 'piece', rank: rank('piece'),
-      aliases: outpost.kind === 'open-file' || outpost.kind === 'semi-open-file' ? [`file-${outpost.square[0]}`] : [],
-      squares: [outpost.square],
+      key: goodPieceIdeaKey(side, q.piece, q.kind, q.square), side, kind: 'piece', rank: rank('piece'),
+      aliases: q.kind === 'open-file' || q.kind === 'semi-open-file' ? [`file-${q.square[0]}`] : [],
+      squares: [q.square, ...outpost.work.squares],
       text: own
-        ? `Your ${NAME[outpost.piece] ?? 'piece'} on ${outpost.square} is your best-placed piece — ${goodPieceClause(outpost.kind, outpost.square)}.`
+        ? `Your ${NAME[q.piece] ?? 'piece'} on ${q.square} is your best-placed piece — ${outpost.work.text}.`
         // Not "their best-placed piece": the engine's piece read owns THEIR best
         // ("the piece doing the most work for them"), and two computers crowning
         // two different pieces on one move contradicted each other (hand walk
         // 2340: rook d8 "best-placed", then knight c6 "most work"). This names
         // the fact about the piece, which is true whichever wins that ranking.
-        : `Their ${NAME[outpost.piece] ?? 'piece'} on ${outpost.square} is well placed — ${goodPieceClause(outpost.kind, outpost.square)}.`,
+        : `Their ${NAME[q.piece] ?? 'piece'} on ${q.square} is well placed — ${outpost.work.text}.`,
     });
   }
   // STRANDED (Danya, the positional rook lift #2: "White's bishop on h6 is
@@ -455,14 +502,42 @@ function observationsFor(
         : (n > 2 ? `They have ${who} — long-term targets worth playing against.` : `Their ${who} ${n > 1 ? 'are' : 'is'} isolated — ${n > 1 ? 'those are long-term targets' : 'that is a long-term target'} worth playing against.`),
     });
   }
+  // DOUBLED PAWNS ARE A TARGET ONLY WHEN ONE IS LOOSE AND CAN BE REACHED
+  // (Danya, how to ruin your pawn structure #1: Black's doubled f-pawns "are
+  // defended by the e7 bishop and do not matter" — the read called them
+  // targets on the bare fact that they were doubled). The doubling is the
+  // cause; the consequence is a pawn nothing guards that the other side can
+  // aim at. A guarded or unreachable pair says nothing.
   const doubledFiles = [...new Set(weak.doubled.map((sq) => sq[0]))].sort();
-  if (doubledFiles.length > 0) {
+  // The weakest of the doubled pawns: one no pawn guards that the other side
+  // can aim at — nothing guarding it at all, or (own side) only a piece, which
+  // that piece is then tied to.
+  const doubledRead = (() => {
+    const board = chessOf(fen);
+    if (!board) return null;
+    let tied: { sq: Square; guard: Square } | null = null;
+    for (const sq of weak.doubled) {
+      const guards = board.attackers(sq, color);
+      if (guards.some((g) => board.get(g)?.type === 'p')) continue;
+      if (!canBeAimedAt(fen, sq, enemyOf)) continue;
+      if (guards.length === 0) return { loose: sq, tied: null };
+      if (!tied && guards.length === 1) tied = { sq, guard: guards[0] };
+    }
+    return tied ? { loose: null, tied } : null;
+  })();
+  if (doubledFiles.length > 0 && doubledRead && (doubledRead.loose || own)) {
+    const sq = (doubledRead.loose ?? doubledRead.tied?.sq) as Square;
+    const guard = doubledRead.tied?.guard ?? null;
+    const guardName = guard ? NAME[chessOf(fen)?.get(guard)?.type ?? ''] ?? 'piece' : '';
     out.push({
       key: `${side}-doubled-${doubledFiles[0]}`, side, kind: 'structure', rank: rank('structure'),
       aliases: doubledFiles.slice(1).map((f) => `${side}-doubled-${f}`),
-      text: own
-        ? `Your pawns on ${fileList(doubledFiles)} are doubled — they can't defend each other, so each one needs a neighbour or a piece to guard it.`
-        : `Their pawns on ${fileList(doubledFiles)} are doubled — they can't defend each other, which makes them targets.`,
+      squares: guard ? [sq, guard] : [sq],
+      text: doubledRead.loose
+        ? (own
+          ? `Your pawns on the ${sq[0]}-file are doubled, and nothing guards the one on ${sq} — they can aim a piece at it, so give it a guard.`
+          : `Their pawns on the ${sq[0]}-file are doubled, and nothing guards the one on ${sq} — aim a piece at it.`)
+        : `Your pawns on the ${sq[0]}-file are doubled, so no pawn can guard the one on ${sq}. Only your ${guardName} on ${guard} does, and it is tied to it.`,
     });
   }
 
@@ -475,13 +550,18 @@ function observationsFor(
   let undeveloped = 0;
   try { undeveloped = homeMinorCount(new Chess(fen), color); } catch { undeveloped = 0; }
   const breaks = turned && undeveloped < 3 ? findPawnBreaks(turned) : [];
-  if (breaks.length > 0) {
+  // THE BREAK SAYS WHAT IT HITS (Danya have-check 2026-11-19: "you have a
+  // pawn break on f4 — the pawn levers are where the play comes from" named a
+  // square and no consequence, on 54 boards). The pawn it challenges is the
+  // point of the break; a break with no pawn to name is not said.
+  const hit = breaks.length > 0 && turned ? breakContacts(turned, breaks[0], color)[0] ?? null : null;
+  if (breaks.length > 0 && hit) {
     out.push({
       key: `${side}-break-${breaks[0]}`, side, kind: 'lever', rank: rank('lever'),
-      squares: [breaks[0]],
+      squares: [breaks[0], hit],
       text: own
-        ? `You have a pawn break on ${breaks[0]} — the pawn levers are where the play comes from.`
-        : `${openSentence(you)} have a pawn break available on ${breaks[0]} — that is where their play comes from.`,
+        ? `The push to ${breaks[0]} is your pawn break: it challenges their pawn on ${hit}.`
+        : `Their pawn break is the push to ${breaks[0]}: it challenges your pawn on ${hit}.`,
     });
   }
 
@@ -555,11 +635,21 @@ function observationsFor(
       catch { return false; }
     };
     const file = openFiles.some(rookOn) ? undefined : openFiles.find((f) => rookReachesFile(fen, color, f));
-    if (file) {
+    // An open file is worth a rook only for where it leads (Danya have-check
+    // 2026-11-19: "the d-file is open — that is where a rook wants to be" on
+    // 21 boards, the file named and not its road): the entry square in their
+    // camp, when nothing of theirs covers it.
+    const entry = file ? `${file}${color === 'w' ? 7 : 2}` as Square : null;
+    const entryFree = (() => {
+      const b = chessOf(fen);
+      return !!b && !!entry && b.attackers(entry, enemyOf).length === 0 && !b.get(entry);
+    })();
+    if (file && entry && entryFree) {
       out.push({
         key: `${side}-file-${file}`, side, kind: 'file', rank: rank('file'),
         aliases: [`file-${file}`],
-        text: `The ${file}-file is open — that is where a rook wants to be.`,
+        squares: [entry],
+        text: `The ${file}-file is open, and nothing of theirs covers ${entry} — a rook there gets into their camp.`,
       });
     }
   }

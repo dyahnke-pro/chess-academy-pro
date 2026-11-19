@@ -31,16 +31,28 @@ describe('positionalRead — their bishop pair', () => {
 });
 
 describe('positionalRead — every weak pawn, never the first', () => {
-  it('the positional rook lift #1: both doubled files, b and g', () => {
+  it('the positional rook lift #1: the doubled pawn a piece is tied to, both files keyed', () => {
     const o = readPosition('r3k2r/1p3pbp/p2pq1p1/4p1P1/4P1P1/1PP5/1P3P2/R1BQK2R w KQkq - 0 18', 'white')
       .find((x) => x.key.startsWith('student-doubled-'));
-    expect(o?.text).toMatch(/the b- and g-files are doubled/);
+    expect(o?.text).toBe('Your pawns on the b-file are doubled, so no pawn can guard the one on b3. Only your queen on d1 does, and it is tied to it.');
     expect(o?.aliases).toContain('student-doubled-g');
   });
   it('one doubled file is still said as one', () => {
     const o = readPosition('r3r1k1/1pq2ppp/pnp2n2/5P2/5b2/1BN4P/PPQ2PP1/R1BR3K w - - 0 18', 'white')
       .find((x) => x.key.startsWith('student-doubled-'));
     expect(o?.text).toMatch(/on the f-file are doubled/);
+  });
+  // Danya, how to ruin your pawn structure #1: Black's doubled f-pawns "are
+  // defended by the e7 bishop and do not matter" — never called targets.
+  it('their guarded doubled pawns are not called targets', () => {
+    const obs = readPosition('1r2k2r/4bp2/p2pbp2/1p2p2p/4P1P1/P3BP2/1PPR3P/1K3B1R w k - 0 18', 'white');
+    expect(obs.find((x) => x.key.startsWith('opponent-doubled-'))).toBeUndefined();
+    expect(obs.map((o) => o.text).join(' ')).not.toMatch(/makes them targets/);
+  });
+  it('their loose doubled pawn the student can reach is named (negative control)', () => {
+    // f6 has no guard; the rook on f1 hits it down the file.
+    const o = readPosition('6k1/5p2/5p2/8/8/8/6PP/5RK1 w - - 0 30', 'white').find((x) => x.key.startsWith('opponent-doubled-'));
+    expect(o?.text).toBe('Their pawns on the f-file are doubled, and nothing guards the one on f6 — aim a piece at it.');
   });
 });
 

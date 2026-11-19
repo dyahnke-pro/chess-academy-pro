@@ -982,3 +982,16 @@ describe('P0c (2026-10-04) — every hanging piece, no caps', () => {
     expect(findForcingCandidates(BUSY).length).toBeGreaterThan(8);
   });
 });
+
+// Danya, the chess investigator #0: "17...f5? to undermine the knight opens the
+// b3-g8 diagonal: Nc7+ with discovered check wins the a8 rook". A break that
+// leaves one enemy piece between an enemy slider and the mover's king is not a
+// break to recommend.
+describe('findPawnBreaks — never a break that opens a discovered check', () => {
+  it('the chess investigator #0: f5 is not offered', () => {
+    expect(findPawnBreaks('r5k1/p2p1ppp/b7/1ppNr3/3pP3/PB1P4/1PPb1PPP/R4RK1 b - - 0 17')).not.toContain('f5');
+  });
+  it('negative control: with their own knight on d5 instead, f5 is a break again', () => {
+    expect(findPawnBreaks('r5k1/p2p1ppp/b7/1ppnr3/3pP3/PB1P1N2/1PPb1PPP/R4RK1 b - - 0 17')).toContain('f5');
+  });
+});
