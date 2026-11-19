@@ -141,6 +141,9 @@ export function squaresTheReplyChanged(fenBefore: string, san: string, reply: st
 
 /** What THEIR move did to the student's structure and squares. */
 export function theirMoveStructure(fenBefore: string, san: string, student: Color): StructureRead[] {
+  // Their move only: every read here words the mover as "their" (the king
+  // committed read checked nothing, and said "Their king went …" after yours).
+  if (fenBefore.split(' ')[1] === student) return [];
   return [
     safe(() => recaptureSealed(fenBefore, san, student)),
     safe(() => unmovedUnits(fenBefore, san, student)),

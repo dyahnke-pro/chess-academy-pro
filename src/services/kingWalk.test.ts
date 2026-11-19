@@ -58,12 +58,12 @@ describe('castling by hand, step by step (his …Nf6, …h6, …Kf7, …Re8, …
 
 describe('the king far from the centre (his …Kg8)', () => {
   it('says the rule on a king walked out of the centre, queens on', () => {
-    expect(kingFromCentre(before(26).fen, 'Kg8')?.text).toMatch(/^Rule of thumb: the further the king is from the centre, the safer it is/);
+    expect(kingFromCentre(before(26).fen, 'Kg8', 'your')?.text).toMatch(/^Rule of thumb: the further the king is from the centre, the safer it is/);
   });
   it('not on castling, not on a king staying central, not with the queens off', () => {
-    expect(kingFromCentre(before(21).fen, 'O-O')).toBeNull();
-    expect(kingFromCentre(before(22).fen, 'Kf7')).toBeNull();
-    expect(kingFromCentre('6k1/5ppp/8/8/8/8/5PPP/5K2 w - - 0 1', 'Kg2')).toBeNull();
+    expect(kingFromCentre(before(21).fen, 'O-O', 'your')).toBeNull();
+    expect(kingFromCentre(before(22).fen, 'Kf7', 'your')).toBeNull();
+    expect(kingFromCentre('6k1/5ppp/8/8/8/8/5PPP/5K2 w - - 0 1', 'Kg2', 'your')).toBeNull();
   });
 });
 

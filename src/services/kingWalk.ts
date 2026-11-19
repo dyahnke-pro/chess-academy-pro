@@ -250,7 +250,10 @@ export function castleByHandMove(fenBefore: string, san: string, who: 'your' | '
  * enemy queen on: "the further the king is from the centre, the safer it is"
  * (Danya, on …Kg8). Null otherwise.
  */
-export function kingFromCentre(fenBefore: string, san: string): { key: string; text: string; squares: string[] } | null {
+/** `who`: whose king walked, from the student's seat — REQUIRED, the corner is
+ *  hard for the OTHER side's pieces to reach ("their pieces" for your king,
+ *  "your pieces" for theirs). */
+export function kingFromCentre(fenBefore: string, san: string, who: 'your' | 'their'): { key: string; text: string; squares: string[] } | null {
   if (/^O-O/.test(san)) return null;
   const b = boardOf(fenBefore);
   if (!b) return null;
@@ -263,7 +266,7 @@ export function kingFromCentre(fenBefore: string, san: string): { key: string; t
   if (!'def'.includes(m.from[0]) || !'abcgh'.includes(m.to[0])) return null;
   return {
     key: 'rule:king-from-centre',
-    text: 'Rule of thumb: the further the king is from the centre, the safer it is — the centre is where the lines open first, and the corner is harder for their pieces to reach.',
+    text: `Rule of thumb: the further the king is from the centre, the safer it is — the centre is where the lines open first, and the corner is harder for ${who === 'your' ? 'their' : 'your'} pieces to reach.`,
     squares: [m.to],
   };
 }
