@@ -47,7 +47,14 @@ const DECIDED_CP = 300;
 export function sharpGap(bestCp: number | null | undefined, secondCp: number | null | undefined): number | null {
   if (typeof bestCp !== 'number' || typeof secondCp !== 'number') return null;
   const sameSideDecided = (bestCp >= DECIDED_CP && secondCp >= DECIDED_CP) || (bestCp <= -DECIDED_CP && secondCp <= -DECIDED_CP);
-  return sameSideDecided ? 0 : Math.abs(bestCp - secondCp);
+  return sameSideDecided ? 0 : bestMoveGap(bestCp, secondCp);
+}
+
+/** THE ONE best-move gap: how far the engine's best line stands over its
+ *  second, in centipawns, whatever the game's state. A gap between two
+ *  candidate lines, never a move's price (that is `liveMovePrice`). */
+export function bestMoveGap(bestCp: number, secondCp: number): number {
+  return Math.abs(bestCp - secondCp);
 }
 
 /** A tactic counts as LIVE only when a verifier PROVED it wins something.

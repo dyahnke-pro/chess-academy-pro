@@ -8,6 +8,7 @@ import { findPinPressure, PIN_PRESSURE_PRINCIPLE, PIN_PRESSURE_WARNING, pieceNam
 import { findGuardRemovals, GUARD_REMOVAL_PRINCIPLE, GUARD_REMOVAL_WARNING, type GuardRemoval } from './guardRemoval';
 import { stemKeyOf, rotateStem } from '../utils/rotateStem';
 import { openSentence } from '../utils/openSentence';
+import { sideToMoveAs } from './threatOut';
 import { pieceRef } from './pieceRef';
 
 /** A computed concept the live read teaches: its id and source, its words
@@ -53,7 +54,7 @@ export function pinPressureConcept(fen: string, student: 'w' | 'b'): BoardConcep
     id: 'pin', source: 'tactic', full, short: full,
     squares: [pp.pinner, pp.pinned, pp.behind],
     boardFen: fen,
-    pinMove: { fen: pp.side === board.turn() ? fen : sideToMoveFlipped(fen), san: move.san },
+    ...((): { pinMove?: { fen: string; san: string } } => { const f = sideToMoveAs(fen, pp.side); return f ? { pinMove: { fen: f, san: move.san } } : {}; })(),
   };
 }
 
@@ -86,18 +87,8 @@ export function guardRemovalConcept(fen: string, student: 'w' | 'b'): BoardConce
     id: 'removal_of_guard', source: 'tactic', full, short: full,
     squares: [gr.target, gr.guard],
     boardFen: fen,
-    ...(mine ? {} : { pinMove: { fen: gr.side === board.turn() ? fen : sideToMoveFlipped(fen), san: move.san } }),
+    ...((): { pinMove?: { fen: string; san: string } } => { const f = mine ? null : sideToMoveAs(fen, gr.side); return f ? { pinMove: { fen: f, san: move.san } } : {}; })(),
   };
 }
 
-/** The same board with the other side to move (en passant cleared) — the
- *  position a THREAT is played on: what the mover had set up, as if it were
- *  their turn again. */
-function sideToMoveFlipped(fen: string): string {
-  const p = fen.split(' ');
-  if (p.length < 4) return fen;
-  p[1] = p[1] === 'w' ? 'b' : 'w';
-  p[3] = '-';
-  return p.join(' ');
-}
 

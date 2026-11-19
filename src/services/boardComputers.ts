@@ -296,7 +296,7 @@ import { computeMoveFundamentals } from './moveFundamentals';
 import { toOtherSeat } from '../utils/seatPronouns';
 import { moveThreat } from './moveThreat';
 import { costReason, allowedClause } from './costReason';
-import { computeMustDefend } from './threatOut';
+import { computeMustDefend, flipSideToMove } from './threatOut';
 import { rotateStem } from '../utils/rotateStem';
 import { orderByThreat } from './orderByThreat';
 import { desperadoAt, desperadoLine } from './desperado';
@@ -5577,10 +5577,10 @@ export const BOARD_COMPUTERS = {
       if (!stop) return null;
       const replySquares = ((): string[] => { try { const m = new Chess(studentFenAfter).move(reply); return [m.from, m.to]; } catch { return []; } })();
       const squares = [stop.threat.from, stop.threat.landing, ...replySquares.slice(1)];
-      const flipped = ((): string => { const p = studentFenAfter.split(' '); p[1] = p[1] === 'w' ? 'b' : 'w'; p[3] = '-'; return p.join(' '); })();
+      const flipped = flipSideToMove(studentFenAfter);
       return fact({ key: `stopped:${stop.threat.san}:${reply}`, claims: [`stopped:${stop.threat.landing}`], text: stop.text, proof: squaresProof(stop.text, squares) ?? NO_PROOF.description, squares, stakes: null,
         seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: studentFenAfter,
-        lines: [{ fen: studentFenAfter, sans: [reply] }, { fen: flipped, sans: [stop.threat.san] }] });
+        lines: [{ fen: studentFenAfter, sans: [reply] }, ...(flipped ? [{ fen: flipped, sans: [stop.threat.san] }] : [])] });
     }),
     computer: 'threatStoppedBy',
     kind: 'stopped',

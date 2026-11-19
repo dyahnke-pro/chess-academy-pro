@@ -26,7 +26,7 @@ import { seatBare } from '../utils/seatPieces';
 import type { StockfishAnalysis, TacticType } from '../types';
 import { computeCriticality, criticalitySignalsFromAnalysis, type CriticalityRead } from './criticality';
 import { Chess } from 'chess.js';
-import { sharpGap, SHARP_GAP_CP } from './positionCharacter';
+import { bestMoveGap, sharpGap, SHARP_GAP_CP } from './positionCharacter';
 import type { GamePromise } from './learnBoardTeaching';
 import { isForcedReply, MOVE_FUNDAMENTAL_TAG } from './moveFundamentals';
 import { isTheoryLine } from './bookDeparture';
@@ -1979,7 +1979,7 @@ export function forcingBestDecides(fen: string, lines: ReadonlyArray<{ moves: re
   // game (three pawns or more) — half a pawn over everything else. Two
   // winning lines read as no gap to `sharpGap`, yet the forcing one is still
   // the point (the chess investigator #1: Nf6+ +4.03 against f4 +2.75).
-  const raw = Math.abs(best.evaluation - second.evaluation);
+  const raw = bestMoveGap(best.evaluation, second.evaluation);
   const gap = sharpGap(best.evaluation, second.evaluation);
   return (gap !== null && gap >= SHARP_GAP_CP) || (best.evaluation * sign >= DECISIVE_CP && raw >= DECISIVE_LEAD_CP);
 }

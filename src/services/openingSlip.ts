@@ -38,6 +38,7 @@ import { masterMovesCachedSync } from './masterPlayLookup';
 import { MIN_BOOK_GAMES } from './bookDeparture';
 import { bookLinesThrough } from './openingDetectionService';
 import { leftBookSentence } from './openingAnnouncement';
+import { flipSideToMove } from './threatOut';
 
 const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -219,11 +220,9 @@ function pinClause(board: Chess, pin: { target: Square; behind: Square }): strin
 /** The board with the student to move again — "if they passed" — or null when
  *  that board cannot exist (the student gave check). */
 function studentAgain(board: Chess): Chess | null {
-  if (board.inCheck()) return null;
-  const parts = board.fen().split(' ');
-  parts[1] = parts[1] === 'w' ? 'b' : 'w';
-  parts[3] = '-';
-  try { return new Chess(parts.join(' ')); } catch { return null; }
+  const f = flipSideToMove(board.fen());
+  if (!f) return null;
+  try { return new Chess(f); } catch { return null; }
 }
 
 /**
