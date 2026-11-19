@@ -654,7 +654,7 @@ function rimKnightWorks(chess: Chess, square: Square, color: Color): boolean {
  *  without losing material (SEE). It is on its way, not stuck (Danya, weak
  *  squares who cares #0: "the f5 square is horribly weak; White's knight is
  *  heading there" — the read called the h4 knight a problem piece). */
-function rimKnightHeading(chess: Chess, square: Square, color: Color): boolean {
+export function rimKnightHeading(chess: Chess, square: Square, color: Color): boolean {
   const enemy: Color = color === 'w' ? 'b' : 'w';
   const f = square.charCodeAt(0) - 97;
   const r = Number(square[1]);
@@ -700,7 +700,7 @@ export function findPieceQuality(fen: string): PieceQualityNote[] {
         // and a knight bearing on the enemy king or winning a piece is doing
         // its job where it stands.
         if (file === 0 || file === 7) {
-          if (!rimKnightWorks(chess, square, color) && !rimKnightHeading(chess, square, color)) notes.push({ square, piece: 'n', color, quality: 'bad', kind: 'rim-knight', reason: 'knight on the rim' });
+          if (!rimKnightWorks(chess, square, color)) notes.push({ square, piece: 'n', color, quality: 'bad', kind: 'rim-knight', reason: 'knight on the rim' });
           continue;
         }
         // A PINNED PIECE IS NOT WORKING (Danya's article boards, 2026-11-18:

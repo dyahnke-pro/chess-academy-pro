@@ -41,3 +41,13 @@ describe('planSteps — one piece\'s road', () => {
     expect(planStepsText(p!, 'your')).toBe('Your knight keeps going: c2 and then e3.');
   });
 });
+
+// Danya, a guide to underpromotion #0: the line promotes on c8 and the queen
+// travels — "your queen on c8 has a better road" on a board with no queen.
+describe('a road belongs to a piece on the board', () => {
+  it('the Saavedra board: no road for a queen the line has not made yet', async () => {
+    const { stepsOf } = await import('./boardPlan');
+    const r = stepsOf('8/8/1KP5/3r4/8/8/8/k7 w - - 0 1', [{ moves: ['c6c7', 'a1b2', 'c7c8q', 'd5d3', 'c8f5', 'b2c3', 'f5f2', 'd3d2', 'f2f6', 'c3d3'] }], 'your');
+    expect(r?.text ?? '').not.toMatch(/queen on c8/);
+  });
+});

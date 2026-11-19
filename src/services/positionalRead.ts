@@ -42,6 +42,7 @@ import {
   goodPieceClause,
   findPawnBreaks,
   breakContacts,
+  rimKnightHeading,
   findColorComplexWeakness,
   findMinorityAttack,
   findPassedPawns,
@@ -432,7 +433,14 @@ function observationsFor(
   // Same rule as the join: a piece still on its starting square is not a
   // problem piece, it is a piece that has not been developed yet.
   const startRank = color === 'w' ? '1' : '8';
-  const bad = quality.find((q) => q.color === color && q.quality === 'bad' && q.square[1] !== startRank);
+  // Their rim knight one jump from a hole is on its way there, not a piece to
+  // keep bad (Danya, weak squares who cares #0: the h4 knight heading for
+  // f5). The student's own such knight stays: the road is its plan.
+  const heading = (q: { kind: PieceQualityKind; square: string }): boolean => {
+    const b = chessOf(fen);
+    return !own && q.kind === 'rim-knight' && !!b && rimKnightHeading(b, q.square as Square, color);
+  };
+  const bad = quality.find((q) => q.color === color && q.quality === 'bad' && q.square[1] !== startRank && !heading(q));
   if (bad) {
     out.push({
       key: `${side}-bad-${bad.square}`, side, kind: 'piece', rank: rank('piece'),

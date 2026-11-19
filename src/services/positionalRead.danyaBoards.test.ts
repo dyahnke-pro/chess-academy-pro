@@ -99,3 +99,10 @@ describe('positionalRead — three isolated pawns are counted, not listed', () =
     expect(o?.squares?.length).toBe(3);
   });
 });
+
+describe('positionalRead — their knight heading for a hole is not kept bad', () => {
+  it('weak squares who cares #0: no "keeping it bad" for the h4 knight', () => {
+    const obs = readPosition('r1bq1rk1/pp6/n2p1p1b/2pPp2p/2P1P1nN/P1N3B1/1P2BPP1/R2Q1RK1 b - - 0 18', 'black');
+    expect(obs.map((o) => o.text).join(' ')).not.toMatch(/knight on h4 is their problem piece/);
+  });
+});
