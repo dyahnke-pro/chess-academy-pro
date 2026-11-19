@@ -806,7 +806,8 @@ export function positionPosed(
 
 /** The registry computers whose read poses a question to the side to move. */
 type RegistryPosedComputer = 'detectLatentFork' | 'detectLatentDanger' | 'detectTradeCreatesPin' | 'detectCentralKingDanger' | 'detectKingExposure' | 'findQueenGrabTraps'
-  | 'findTrappedPiece' | 'readConversion' | 'noSafeChecks' | 'kingRace' | 'kingActivityGap' | 'zugzwangIfPassed' | 'mateLine' | 'kingInOpen' | 'seventhRankMate';
+  | 'findTrappedPiece' | 'readConversion' | 'noSafeChecks' | 'kingRace' | 'kingActivityGap' | 'zugzwangIfPassed' | 'mateLine' | 'kingInOpen' | 'seventhRankMate'
+  | 'queenlessMate' | 'selfBlock' | 'mateThreatLever' | 'queenKnightNet' | 'lateralRookDefence';
 
 /** How sharply each posed question is asked, on the heat map's scale. */
 const REGISTRY_POSED_WEIGHT: Record<RegistryPosedComputer, number> = {
@@ -825,6 +826,11 @@ const REGISTRY_POSED_WEIGHT: Record<RegistryPosedComputer, number> = {
   mateLine: 90,
   kingInOpen: 65,
   seventhRankMate: 70,
+  queenlessMate: 90,
+  selfBlock: 70,
+  mateThreatLever: 75,
+  queenKnightNet: 70,
+  lateralRookDefence: 60,
 };
 
 /** The registry's reads of the board the student moves on, each fact with
@@ -862,6 +868,18 @@ export function registryPosedFacts(fen: string, me: 'w' | 'b', bestLineUci: read
     ...readBoardAll('kingInOpen', { fen, lines: null, student: me }),
     // Their rooks on your second rank, held off only by your back rank.
     ...readBoardAll('seventhRankMate', { fen, lines: null, student: me }),
+    // No queens and still a mate (yours to play, or theirs to stop); in a king
+    // race, the piece move that keeps out of your king's way; the quiet mate
+    // threat that wins material; the queen-and-knight net — the last three off
+    // the engine's line, unscored (the line's own moves prove them); and your
+    // raiding rook that slides along its rank to guard the attacked unit.
+    ...readBoardAll('queenlessMate', { fen, student: me }),
+    ...((): ReturnType<typeof readBoardAll> => {
+      if (!bestLineUci.length) return [];
+      const lines = [{ moves: bestLineUci, cp: null, mate: null }];
+      return [...readBoardAll('selfBlock', { fen, lines, student: me }), ...readBoardAll('mateThreatLever', { fen, lines, student: me }), ...readBoardAll('queenKnightNet', { fen, lines, student: me }),
+        ...readBoardAll('lateralRookDefence', { fen, lines, student: me })];
+    })(),
     // The forced mate the engine's line plays for the student (two moves or
     // more; the line has to end in mate).
     ...((): ReturnType<typeof readBoardAll> => {

@@ -729,6 +729,8 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
             ...readBoardAll('zugzwangIfPassed', { fen: after, student }).map((f) => ({ f, idea: 'king-activity' as IdeaKind, weight: 64 })),
             ...readBoardAll('theirWorstPiece', { fen: after, student, bestLine: lines[0]?.moves ?? null }).map((f) => ({ f, idea: 'weakness' as IdeaKind, weight: 48 })),
             ...readBoardAll('seventhRankMate', { fen: after, lines: lines.length ? lines : null, student }).map((f) => ({ f, idea: 'attack-king' as IdeaKind, weight: 56 })),
+            // Batch 3: no queens and still a mate (made or threatened).
+            ...readBoardAll('queenlessMate', { fen: after, student }).map((f) => ({ f, idea: 'mate' as IdeaKind, weight: 66 })),
           ];
           if (lines.length) batch.push(
             ...readBoardAll('urgentStrike', { fen: after, lines, student }).map((f) => ({ f, idea: 'tempo' as IdeaKind, weight: 64 })),
@@ -741,6 +743,17 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
             ...readBoardAll('defenderInTime', { fen: after, lines, student }).map((f) => ({ f, idea: 'route' as IdeaKind, weight: 50 })),
             ...readBoardAll('tactify', { fen: after, lines, student }).map((f) => ({ f, idea: 'choice' as IdeaKind, weight: 48 })),
             ...readBoardAll('pieceTempo', { fen: after, lines, student }).map((f) => ({ f, idea: 'tempo' as IdeaKind, weight: 46 })),
+            // Batch 3 (2026-11-19): the second front, the rook that guards
+            // sideways, a square for a piece, the cramped side's trade, the
+            // queen-and-knight net, the piece out of its own king's way, the
+            // mate threat that wins material.
+            ...readBoardAll('secondFront', { fen: after, lines, student }).map((f) => ({ f, idea: 'plan' as IdeaKind, weight: 52 })),
+            ...readBoardAll('lateralRookDefence', { fen: after, lines, student }).map((f) => ({ f, idea: 'guard' as IdeaKind, weight: 48 })),
+            ...readBoardAll('squareForPiece', { fen: after, lines, student }).map((f) => ({ f, idea: 'weakness' as IdeaKind, weight: 50 })),
+            ...readBoardAll('tradeRelievesCramp', { fen: after, lines, student }).map((f) => ({ f, idea: 'trade' as IdeaKind, weight: 48 })),
+            ...readBoardAll('queenKnightNet', { fen: after, lines, student }).map((f) => ({ f, idea: 'attack-king' as IdeaKind, weight: 60 })),
+            ...readBoardAll('selfBlock', { fen: after, lines, student }).map((f) => ({ f, idea: 'king-activity' as IdeaKind, weight: 60 })),
+            ...readBoardAll('mateThreatLever', { fen: after, lines, student }).map((f) => ({ f, idea: 'mate' as IdeaKind, weight: 62 })),
           );
           for (const { f, idea, weight } of batch) facts.push({ ...f, source: 'teachingMove', idea, weight });
         }

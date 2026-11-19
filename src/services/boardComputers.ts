@@ -93,6 +93,14 @@ import { pawnMajority, pawnMajorityLine, pawnMajoritySquares } from './pawnMajor
 import { pawnCentre } from './pawnCentre';
 import { phaseOfFen } from './boardConcepts';
 import { tensionKept, tensionReleased, type TensionLine } from './tensionRelease';
+import { secondFront } from './secondFront';
+import { lateralRookDefence } from './lateralRookDefence';
+import { squareForPiece } from './squareForPiece';
+import { tradeRelievesCramp } from './tradeRelievesCramp';
+import { queenKnightNet } from './queenKnightNet';
+import { selfBlock } from './selfBlock';
+import { mateThreatLever } from './mateThreatLever';
+import { queenlessMate } from './queenlessMate';
 import { inaccessibleHole } from './inaccessibleHole';
 import { harmlessWeakPawns } from './harmlessWeakPawns';
 import { wingWithoutPieces } from './wingWithoutPieces';
@@ -1287,6 +1295,24 @@ export interface BoardContexts {
   /** BEFORE the move: a tension capture the engine wants left alone
    *  (`lines`: the engine's lines on `fen`, White's view, UCI). */
   tensionKept: { fen: string; lines: readonly TensionLine[]; student: Color };
+  /** THE DANYA HAVE-CHECK COMPUTERS, BATCH 3 (2026-11-19). `lines`: the
+   *  engine's lines on `fen` (White's view, UCI; a line's cp null when the
+   *  surface keeps no score). One wing held with no way in, so the second front. */
+  secondFront: { fen: string; lines: readonly EngineLine[]; student: Color };
+  /** The raiding rook that slides along its rank to guard. */
+  lateralRookDefence: { fen: string; lines: readonly EngineLine[]; student: Color };
+  /** A pawn push that gives up a square for good and buries a minor. */
+  squareForPiece: { fen: string; lines: readonly EngineLine[]; student: Color };
+  /** The side short of room trades. */
+  tradeRelievesCramp: { fen: string; lines: readonly EngineLine[]; student: Color };
+  /** Queen and knight leave the king one square or none. */
+  queenKnightNet: { fen: string; lines: readonly EngineLine[]; student: Color };
+  /** A piece move in a king race that keeps out of its own king's way. */
+  selfBlock: { fen: string; lines: readonly EngineLine[]; student: Color };
+  /** A quiet mate threat that wins material while it is parried. */
+  mateThreatLever: { fen: string; lines: readonly EngineLine[]; student: Color };
+  /** No queens on the board, and a mate in one (made or threatened). */
+  queenlessMate: { fen: string; student: Color };
   /** AFTER the move: the capture released tension the engine wanted kept
    *  (`playedCp`: the mover's score after it, where the surface has it). */
   tensionReleased: { fenBefore: string; san: string; lines: readonly TensionLine[]; playedCp: number | null; reply: string | null; student: Color };
@@ -7417,6 +7443,158 @@ export const BOARD_COMPUTERS = {
       learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_READ,
       weaknesses: { not: 'an opportunity a move may take or leave without a fault: a clean move is no answer to it' },
+    },
+  },
+  // "No such invasion exists … open a second front": one wing held with no way in. Both seats.
+  secondFront: {
+    read: (ctx, fact) => safe(() => {
+      const r = secondFront(ctx.fen, ctx.lines, ctx.student);
+      if (!r) return null;
+      const key = `second-front:${r.side}:${r.lever}`;
+      return fact({ key, claims: [key], text: r.text, proof: squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
+        seat: (r.side === ctx.student ? 'student' : 'opponent'), namesStudentMove: r.side === ctx.student, thread: LOCAL_THREAD, fen: ctx.fen });
+    }),
+    computer: 'secondFront',
+    kind: 'judgement',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { not: 'a plan a move may take up or not without a fault: a clean move is no answer to it' },
+    },
+  },
+  // "The rooks fulfil a defensive duty on the g-file": the raiding rook guards sideways. Both seats.
+  lateralRookDefence: {
+    read: (ctx, fact) => safe(() => {
+      const r = lateralRookDefence(ctx.fen, ctx.lines, ctx.student);
+      if (!r) return null;
+      const key = `lateral-rook:${r.from}:${r.guards}`;
+      return fact({ key, claims: [key], text: r.text, proof: squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
+        seat: (r.side === ctx.student ? 'student' : 'opponent'), namesStudentMove: r.side === ctx.student, thread: LOCAL_THREAD, fen: ctx.fen, ...(r.side === ctx.student ? { skill: 'hung-material' } : {}) });
+    }),
+    computer: 'lateralRookDefence',
+    kind: 'defence-idea',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { wired: 'services/moveInsight.ts' },
+    },
+  },
+  // "Weakened e5 but totally restricted the c8 bishop": a square for a piece. Both seats.
+  squareForPiece: {
+    read: (ctx, fact) => safe(() => {
+      const r = squareForPiece(ctx.fen, ctx.lines, ctx.student);
+      if (!r) return null;
+      const key = `square-for-piece:${r.hole}:${r.buried}`;
+      return fact({ key, claims: [key], text: r.text, proof: squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
+        seat: (r.side === ctx.student ? 'student' : 'opponent'), namesStudentMove: r.side === ctx.student, thread: LOCAL_THREAD, fen: ctx.fen });
+    }),
+    computer: 'squareForPiece',
+    kind: 'structure',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { not: 'an opportunity a move may take or leave without a fault: a clean move is no answer to it' },
+    },
+  },
+  // "Trade pieces to lessen White's space advantage": the side short of room trades. Both seats.
+  tradeRelievesCramp: {
+    read: (ctx, fact) => safe(() => {
+      const r = tradeRelievesCramp(ctx.fen, ctx.lines, ctx.student);
+      if (!r) return null;
+      const key = `cramp-trade:${r.target}`;
+      return fact({ key, claims: [key], text: r.text, proof: squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
+        seat: (r.cramped === ctx.student ? 'student' : 'opponent'), namesStudentMove: r.cramped === ctx.student, thread: LOCAL_THREAD, fen: ctx.fen });
+    }),
+    computer: 'tradeRelievesCramp',
+    kind: 'trade',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { not: 'a strategy for a cramped side: keeping the pieces on is no fault a move commits' },
+    },
+  },
+  // "Queen and knight coordinate in an instant": the pair leaves the king one square or none. Both seats; the record files the student's net held or missed.
+  queenKnightNet: {
+    read: (ctx, fact) => safe(() => {
+      const r = queenKnightNet(ctx.fen, ctx.lines, ctx.student);
+      if (!r) return null;
+      const key = `qn-net:${r.king}`;
+      return fact({ key, claims: [key], text: r.text, proof: squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
+        seat: (r.side === ctx.student ? 'student' : 'opponent'), namesStudentMove: false, thread: LOCAL_THREAD, fen: ctx.fen, ...(r.side === ctx.student ? { skill: 'missed-tactic' } : {}) });
+    }),
+    computer: 'queenKnightNet',
+    kind: 'king-read',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { wired: 'services/moveInsight.ts' },
+    },
+  },
+  // "Bh8!!: the only square on the long diagonal not in the king's way". Both seats; the record files the student's race.
+  selfBlock: {
+    read: (ctx, fact) => safe(() => {
+      const r = selfBlock(ctx.fen, ctx.lines, ctx.student);
+      if (!r) return null;
+      const key = `self-block:${r.piece}:${r.escort}`;
+      return fact({ key, claims: [key], text: r.text, proof: squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
+        seat: (r.side === ctx.student ? 'student' : 'opponent'), namesStudentMove: r.side === ctx.student, thread: LOCAL_THREAD, fen: ctx.fen, ...(r.side === ctx.student ? { skill: 'passive-king-endgame' } : {}) });
+    }),
+    computer: 'selfBlock',
+    kind: 'technique',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { wired: 'services/moveInsight.ts' },
+    },
+  },
+  // "The threat of mate should be used to transform the advantage". Both seats; the record files the student's lever.
+  mateThreatLever: {
+    read: (ctx, fact) => safe(() => {
+      const r = mateThreatLever(ctx.fen, ctx.lines, ctx.student);
+      if (!r) return null;
+      const key = `mate-lever:${r.move}:${r.mate}`;
+      return fact({ key, claims: [key], text: r.text, proof: squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
+        seat: (r.side === ctx.student ? 'student' : 'opponent'), namesStudentMove: r.side === ctx.student, thread: LOCAL_THREAD, fen: ctx.fen, ...(r.side === ctx.student ? { skill: 'missed-tactic' } : {}) });
+    }),
+    computer: 'mateThreatLever',
+    kind: 'tactic',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { wired: 'services/moveInsight.ts' },
+    },
+  },
+  // "A feeling of immunity (the queens are off!) leads to carelessness": the checkmate check. Both seats, filed both ways.
+  queenlessMate: {
+    read: (ctx, fact) => safe(() => {
+      const r = queenlessMate(ctx.fen, ctx.student);
+      if (!r) return null;
+      const key = `queenless-mate:${r.mate}`;
+      return fact({ key, claims: [key], text: r.text, proof: squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
+        seat: (r.side === ctx.student ? 'student' : 'opponent'), namesStudentMove: r.side === ctx.student, thread: LOCAL_THREAD, fen: ctx.fen, skill: r.side === ctx.student ? 'missed-your-mate' : 'missed-their-mate' });
+    }),
+    computer: 'queenlessMate',
+    kind: 'method',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { wired: 'services/moveInsight.ts' },
     },
   },
   tensionKept: {
