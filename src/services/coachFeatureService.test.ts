@@ -653,7 +653,10 @@ describe('coachFeatureService', () => {
       // TEACHES the mechanism — the WHY (David 2026-07-20): the recapture drags
       // the knight off d7, clearing the d-file for Rd8# (multi-sentence).
       expect(at(31)).toMatch(/queen sacrifice/i);
-      expect(at(31)).toMatch(/why it works/i);
+      // The mechanism is said as the sac's consequence, with no "Here's why it
+      // works:" lead-in (one entry, sacMechanism, 2026-11-19).
+      expect(at(31)).toMatch(/It drags the knight off d7/);
+      expect(at(31)).not.toMatch(/why it works/i);
       expect(at(31)).toMatch(/knight off d7/i);
       expect(at(31)).toMatch(/d-file/i);
       expect(at(31)).toMatch(/crashes down to d8/i);

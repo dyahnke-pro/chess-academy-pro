@@ -881,7 +881,6 @@ export interface BoardContexts {
   fundamentalVerdictWalk: { attrs: readonly PrincipleAttribution[]; seen: ReadonlySet<FundamentalId>; replySan: string | null; ply: number; fen: string };
   fundamentalHow: { attrs: readonly PrincipleAttribution[]; seen: ReadonlySet<FundamentalId>; replySan: string | null; ply: number; fen: string };
   sacPayoff: { fenAfter: string; mover: Color; moverPovEvalCp: number | null; moverPovBeforeCp: number | null; kingCentreTaught: boolean };
-  sacMechanismWalk: { sans: readonly string[]; sacIdx: number; fen: string };
   sacShield: { fenBefore: string; san: string };
   middlegameOrientationWalk: { fenBefore: string; student: Color; san: string };
   takeStock: { fenBefore: string; san: string; fen: string; student: Color; studentPovCp: number | null };
@@ -1700,6 +1699,9 @@ export const BOARD_COMPUTERS = {
     phase: ANY,
     surfaces: reviewFacetSurfaces(),
   },
+  // ONE ENTRY FOR THE MATING SAC'S MECHANISM (the one-coach unlock,
+  // 2026-11-19: the walk's `sacMechanismWalk` was this computer with a
+  // "Here's why it works:" lead-in; the walk now says the mechanism itself).
   sacMechanism: {
     read: ({ sans, sacIdx }, fact) => safe(() => {
       const mech = explainMatingSacMechanism([...sans], sacIdx);
@@ -1709,6 +1711,7 @@ export const BOARD_COMPUTERS = {
     computer: 'explainMatingSacMechanism',
     kind: 'sac-why',
     phase: ANY,
+    // Review's facets (reviewFullData) and Review's walk (coachFeatureService).
     surfaces: reviewFacetSurfaces(),
   },
   sacKingShield: {
@@ -4299,18 +4302,6 @@ export const BOARD_COMPUTERS = {
         seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
     }),
     computer: 'sacrificeCompensation',
-    kind: 'sac-why',
-    phase: ANY,
-    surfaces: walkSurfaces(),
-  },
-  sacMechanismWalk: {
-    read: ({ sans, sacIdx, fen }, fact) => safe(() => {
-      const clause = explainMatingSacMechanism([...sans], sacIdx);
-      if (!clause) return null;
-      return fact({ key: `sac-mechanism:${sacIdx}`, claims: [`sac-mechanism:${sacIdx}`], text: `Here's why it works: ${clause}.`, proof: NO_PROOF.description, squares: [], stakes: null,
-        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
-    }),
-    computer: 'explainMatingSacMechanism',
     kind: 'sac-why',
     phase: ANY,
     surfaces: walkSurfaces(),
