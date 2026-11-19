@@ -42,6 +42,15 @@ export type ReasonKind =
   | 'material' | 'king-shelter' | 'king-centre' | 'king-attack' | 'activity' | 'initiative'
   | 'passer' | 'bishop-pair' | 'space' | 'minor' | 'weak-pawn' | 'guarded-pawn';
 
+/** A SOFT reason is a quiet plus the engine weighs in tenths of a pawn; a
+ *  concrete one (material, a passer, the kings, a pawn falling, the
+ *  initiative) can carry an edge of any size. */
+const SOFT_REASON: Record<ReasonKind, boolean> = {
+  material: false, 'king-shelter': false, 'king-centre': false, 'king-attack': false, initiative: false,
+  passer: false, 'weak-pawn': false,
+  activity: true, 'bishop-pair': true, space: true, minor: true, 'guarded-pawn': true,
+};
+
 export interface VerdictReason {
   kind: ReasonKind;
   /** The side this reason favours. */
@@ -243,7 +252,10 @@ export function boardReasons(fen: string, student: Color, lines: readonly Initia
     const own = OWN(x, student);
     const clause = mm.better === 'knight'
       ? `${own} knight on ${mm.knight.square} is better than ${OWN(mm.bishop.color, student)} ${mm.badBishop ? 'bad ' : ''}bishop on ${mm.bishop.square}`
-      : `${own} bishop on ${mm.bishop.square} is better than ${OWN(mm.knight.color, student)} knight on an open board`;
+      // What the matchup computer read, never "an open board" (Danya
+      // narration test 2026-11-19, Magnus Carlsen's best endgame wins #2:
+      // centre pawns on d5 and e5, said to be "an open board").
+      : `${own} bishop on ${mm.bishop.square} is better than ${OWN(mm.knight.color, student)} knight, with pawns on both wings and none locked`;
     out.push({ kind: 'minor', side: x, weight: 70, clause, sentence: `${cap(clause)}.`, squares: [mm.knight.square, mm.bishop.square] });
   }
 
@@ -255,7 +267,12 @@ export function boardReasons(fen: string, student: Color, lines: readonly Initia
   }
 
   // ── WHO IS MAKING THE THREATS ──
-  const ini: Initiative | null = lines ? initiativeRead(fen, lines) : null;
+  // Not in a bare ending (Danya narration test 2026-11-19, the two rook
+  // endings you must know #0: "Roughly balanced — they have the initiative",
+  // a rook checking a king in a drawn rook-and-pawn ending): with two pieces
+  // or fewer besides the kings and pawns, a check is the defender's
+  // technique, never a lead in the play.
+  const ini: Initiative | null = lines && officers >= 3 ? initiativeRead(fen, lines) : null;
   if (ini) {
     out.push({ kind: 'initiative', side: ini.side, weight: 130, clause: `${WHO(ini.side, student)} have the initiative`,
       sentence: initiativeLine(ini, student, stemKeyOf(fen)), squares: ini.squares });
@@ -318,6 +335,15 @@ export function verdictWithReasons(input: {
     picked = [main[0]];
     const second = fit.find((r) => r !== main[0] && (r.kind === 'guarded-pawn' || r.weight * 2 >= main[0].weight));
     if (second) picked.push(second);
+    // A CLEAR EDGE NEEDS A REASON ITS SIZE (Danya narration test 2026-11-19:
+    // "You're clearly worse — your knight on b8 hasn't moved" at −2.4, a
+    // kingside bind with the h-file coming; "clearly better — you have the
+    // bishop pair" a pawn down). A soft plus — a quiet edge the engine weighs
+    // in tenths — said alone for a clear verdict claims to explain what it
+    // cannot. Under half the edge, the verdict goes out without a reason.
+    const band = evalBand(input.evalCp);
+    if ((band === 'clearly' || band === 'decisive') && picked.every((r) => SOFT_REASON[r.kind])
+      && picked.reduce((t, r) => t + r.weight, 0) * 2 < Math.abs(input.evalCp)) return null;
   } else {
     const material = all.find((r) => r.kind === 'material');
     const ini = sayable.find((r) => r.kind === 'initiative');

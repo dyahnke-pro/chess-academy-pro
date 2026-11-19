@@ -59,3 +59,23 @@ describe('a queen trade needs a queen on each side', () => {
     expect(d?.alternatives.find((a) => a.san === 'Kf8')?.shortfall).not.toBe('trades-queens');
   });
 });
+
+// Danya narration test 2026-11-19, the importance of solving studies #0:
+// Qxb7+ Qxb7 axb7 wins a knight on the way and the line turns on …gxf1=R+.
+// The queens come off, but the trade is not why it falls short.
+describe('a queen trade is the reason only when the line comes out even', () => {
+  const fen = '8/kn4b1/P2B4/8/1Q6/6pP/1q4pP/5BK1 w - - 0 1';
+  const analysis = {
+    bestMove: 'd6c5', evaluation: 272, isMate: false, mateIn: null, depth: 16, nodesPerSecond: 0,
+    topLines: [
+      { rank: 1, evaluation: 272, mate: null, moves: ['d6c5', 'b7c5', 'b4c5', 'b2b6'] },
+      { rank: 2, evaluation: 14, mate: null, moves: ['b4b7', 'b2b7', 'a6b7', 'g2f1r', 'g1f1', 'g3g2', 'f1g2', 'a7b7'] },
+      { rank: 3, evaluation: 12, mate: null, moves: ['b4b2', 'g2f1r', 'g1f1', 'g7b2'] },
+    ],
+  };
+  it('Qxb7+ and Qxb2 are not "the queens come off"', () => {
+    const d = buildDeliberation({ priorMove: null, fenBefore: fen, analysis, moverColor: 'w', prevCapture: null } as never);
+    for (const san of ['Qxb7+', 'Qxb2']) expect(d?.alternatives.find((a) => a.san === san)?.shortfall).not.toBe('trades-queens');
+    expect(deliberationFacts(d as never, NOTHING_SAID, true)).not.toMatch(/queens come off/);
+  });
+});

@@ -2,7 +2,7 @@
 // capture as a subjectless "winning the X". Boards are the real ones the
 // defect came from (David's Alapin, 2026-09-16).
 import { describe, it, expect } from 'vitest';
-import { computeExchangeLedger, describeExchange } from './exchangeLedger';
+import { computeExchangeLedger, describeExchange, refutationProof } from './exchangeLedger';
 import { betterMoveReason } from './inaccuracyCall';
 
 // After 15.Nc7+ — Black (the student) to move, forked king and rook.
@@ -276,5 +276,20 @@ describe('a promotion is named by the piece it makes', () => {
   it('captures and a promotion together', async () => {
     const { gainWords } = await import('./exchangeLedger');
     expect(gainWords(['r'], [], ['q'])).toBe('a rook, and a new queen');
+  });
+});
+
+// Danya narration test 2026-11-19, a guide to underpromotion #2: the pawn
+// that promotes is counted, so Rd8 Rxd3 f8=B is a pawn lost, not a bishop.
+describe('a promotion in the line is counted in what is said', () => {
+  const fen = '5R2/5P1k/4N1p1/3pn3/1b6/3Br3/1PK5/8 w - - 0 48';
+  const best = ['f8e8', 'd5d4', 'f7f8q', 'b4f8', 'e6f8', 'h7g7', 'f8e6', 'g7f6', 'd3b5', 'd4d3'];
+  it('Rd8 … f8=B comes out a pawn down, never "they win a bishop"', () => {
+    const p = refutationProof(fen, ['f8d8', 'e3d3', 'f7f8b', 'd3d2', 'c2b3', 'b4f8', 'd8f8', 'd2e2', 'b3c3', 'd5d4'], best, 'w');
+    expect(p?.short).toMatch(/they come out a pawn up$/);
+  });
+  it('a line with no promotion still names the piece (control)', () => {
+    const p = refutationProof(fen, ['f8b8', 'e5d3', 'b8b4', 'd3b4', 'c2d2', 'e3f3', 'e6g5', 'h7g7', 'g5f3', 'g7f7'], best, 'w');
+    expect(p?.short).toMatch(/they win a bishop$/);
   });
 });

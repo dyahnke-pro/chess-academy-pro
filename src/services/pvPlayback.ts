@@ -20,6 +20,7 @@ import { isPawnBreak } from './pawnBreak';
 import { gainedBishopPair } from './bishopPair';
 import { andList, fileList, withArticle } from '../utils/andList';
 import { afterCaptureSan } from '../utils/captureWords';
+import { checkAnswers } from './checkAnswers';
 import { Chess } from 'chess.js';
 import { shieldLoss } from './kingSafety';
 import type { Square } from 'chess.js';
@@ -934,7 +935,7 @@ export function plyFactsForMove(fenBefore: string, san: string, prev?: PrevCaptu
       captured: mv.captured, san: mv.san, color: mv.color, promotion: mv.promotion,
     }, prev);
 
-    return plyFactsSentence(f, mv.san, moverIsStudent);
+    return plyFactsSentence(f, mv.san, moverIsStudent, c.fen());
   } catch {
     return null;
   }
@@ -946,7 +947,10 @@ export function plyFactsForMove(fenBefore: string, san: string, prev?: PrevCaptu
  *  line used a subject-less copy ("The move e6 outpost established on d5",
  *  review audit 2026-10-14). A bare capture with nothing gained says nothing
  *  — the board shows it. Null when there is nothing to say. */
-export function plyFactsSentence(f: PlyFacts, san: string, moverIsStudent?: boolean): string | null {
+export function plyFactsSentence(f: PlyFacts, san: string, moverIsStudent: boolean | undefined,
+  /** REQUIRED: the board after the move, or null where the caller has none —
+   *  a lone check is said by what it leaves them (`checkAnswers`). */
+  fenAfter: string | null): string | null {
     // Don't RESTATE a bare capture the student watched happen (Narration rule
     // #3 — the board already told that story): if the only fact is the capture
     // itself, no material won and no tactical/structural consequence, stay
@@ -995,8 +999,13 @@ export function plyFactsSentence(f: PlyFacts, san: string, moverIsStudent?: bool
     // forces a reply and hands the checker a free move (David 2026-07-25: TEACH
     // every move, no thin lines). Only when the check is the SOLE fact; joined
     // with a capture/tactic the plain "gives check" clause still reads fine.
+    // …and what it DOES is read off the board (Danya have-check 2026-11-19:
+    // "checks the king, forcing a reply" is true of every check): one or two
+    // answers named, or a king that has to move. A check with many answers is
+    // the move read back, and says nothing.
     if (parts.length === 1 && f.isCheck && !f.isMate) {
-      return `${subject} ${vb('check the king, forcing a reply and taking the initiative for a move', 'checks the king, forcing a reply and taking the initiative for a move')}.`;
+      const answers = fenAfter && (isYou || isThem) ? checkAnswers(fenAfter, isYou ? 'their' : 'your') : null;
+      return answers ? `${subject} ${vb('check the king', 'checks the king')}, and ${answers}.` : null;
     }
     return `${subject} ${andList(parts)}.`;
 }

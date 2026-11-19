@@ -96,3 +96,46 @@ describe('verdictWithReasons — space on the one rule (ownsMoreSpace)', () => {
     expect(boardReasons(fen, 'b', lines('d6h2 g1h1 d7b6 c4f1 c8f5 e4f5 h2f4 c1f4 c7f4 g2g3'), null).some((r) => r.kind === 'space')).toBe(false);
   });
 });
+
+// Danya narration test 2026-11-19: a clear verdict is never pinned on a soft
+// plus that explains a fraction of it.
+describe('a clear edge needs a reason its size', () => {
+  const read = (fen: string, evalCp: number, student: 'w' | 'b') =>
+    verdictWithReasons({ fen, evalCp, mate: null, lines: null, student, lastMove: null, said: new Set() });
+  it('desperado defense #0: −2.4 is the bind (pieces with nowhere to go), never "your knight on b8 hasn\'t moved"', () => {
+    const v = read('rnq2rk1/1pn3bp/p2p2p1/2pPp1PP/P1P1Pp2/2N2N2/1P1B1P2/R2QK2R b KQ - 0 16', 237, 'b');
+    expect(v?.text ?? '').not.toMatch(/hasn't moved/);
+    expect(v?.text ?? '').toMatch(/one safe square/);
+  });
+  it('mastering the queen sacrifice #1: +2.15 a pawn down is not "you have the bishop pair"', () => {
+    const v = read('3b2k1/1q3rp1/1p1B3p/1Pp2b2/4n3/1Q2P3/P4PPP/R2R2K1 b - - 0 27', -215, 'b');
+    expect(v?.reasons.map((r) => r.kind) ?? []).not.toContain('bishop-pair');
+  });
+  it('the same soft reason still explains a slight edge (control)', () => {
+    const v = read('rnq2rk1/1pn3bp/p2p2p1/2pPp1PP/P1P1Pp2/2N2N2/1P1B1P2/R2QK2R b KQ - 0 16', 100, 'b');
+    expect(v?.reasons.length ?? 0).toBeGreaterThan(0);
+  });
+});
+
+// Danya narration test 2026-11-19, the two rook endings you must know #0: the
+// rook checking a king in a drawn rook ending is not the initiative.
+describe('no initiative in a bare ending', () => {
+  it('rook and pawn against rook: a level verdict names no initiative', () => {
+    const fen = '8/8/8/8/5pk1/2R5/r7/5K2 b - - 0 60';
+    const ls = [{ moves: ['f4f3', 'c3c8', 'f3f2', 'c8c4', 'g4f5', 'c4c5', 'f5e6', 'c5c6', 'e6e5', 'c6c5'] }];
+    expect(boardReasons(fen, 'b', ls, null).map((r) => r.kind)).not.toContain('initiative');
+  });
+  // The control: the greek gift #3 and the art of maneuvering #2 above still
+  // read the initiative in a middlegame.
+});
+
+// Danya narration test 2026-11-19, Magnus Carlsen's best endgame wins #2: the
+// bishop's edge is said by what the matchup read (pawns on both wings, none
+// locked), never "an open board" with centre pawns on d5 and e5.
+describe('the bishop-over-knight reason says what was read', () => {
+  it('no "open board"', () => {
+    const fen = '2r5/3r4/p3k1bp/1p1pp1p1/8/1P2NPP1/PKPR2P1/4R3 b - - 0 25';
+    const minor = boardReasons(fen, 'b', null, null).find((r) => r.kind === 'minor');
+    expect(minor?.clause).toBe('your bishop on g6 is better than their knight, with pawns on both wings and none locked');
+  });
+});

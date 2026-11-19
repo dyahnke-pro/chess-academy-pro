@@ -104,7 +104,21 @@ describe('pieceActivity — a home square past the opening', () => {
 
   it('a bishop still boxed in on c8 at move 31 is still idle (Danya: "Black\'s pieces are extremely passive")', () => {
     const fen = '1rb5/r2k1pp1/p2p3p/P2PpP2/1NP1BbPP/8/4K3/1R5R w - - 0 31';
-    expect(pieceActivity(fen)?.b.officers.find((o) => o.square === 'c8')?.state).toBe('home');
+    expect(pieceActivity(fen)?.b.officers.find((o) => o.square === 'c8')?.state).toBe('stuck');
     expect(activityEdge(fen)?.side).toBe('w');
+  });
+  // Danya narration test 2026-11-19, modern chess technique #2 (move 55):
+  // "their bishop on c8 hasn't moved" is not a claim the board can make.
+  it('past the opening a minor on its home square is said by its squares, never "hasn\'t moved"', () => {
+    const fen = '1rb5/r2k1pp1/p2p3p/P2PpP2/1NP1BbPP/8/4K3/1R5R w - - 0 31';
+    const e = activityEdge(fen);
+    expect(e).not.toBeNull();
+    const line = activityEdgeLine(e as NonNullable<typeof e>, 'w');
+    expect(line).not.toMatch(/hasn't moved|haven't moved/);
+    expect(line).toMatch(/bishop on c8 has (no|one|only \w+) safe square/);
+  });
+  it('an undeveloped minor in the opening still "hasn\'t moved" (control)', () => {
+    const fen = 'rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
+    expect(pieceActivity(fen)?.w.officers.find((o) => o.square === 'b1')?.state).toBe('home');
   });
 });
