@@ -124,6 +124,7 @@ import { pieceTempo } from './pieceTempo';
 import { kingBoxMove } from './kingBox';
 import { matingNet } from './matingNet';
 import { frozenTarget } from './frozenTarget';
+import { pictureConclusions, ledgerKey, ledgerText, ledgerSquares, counterplayText, targetText, moveWorksOnTarget } from './pictureLedger';
 import { centreDuo } from './centreDuo';
 import { noSafeChecks } from './noSafeChecks';
 import { promotionWithCheck } from './promotionWithCheck';
@@ -1324,6 +1325,12 @@ export interface BoardContexts {
   /** A weak pawn that cannot move, no pawn able to come to its aid, and more
    *  pieces able to reach it than to guard it within two moves. */
   frozenTarget: { fen: string; student: Color };
+  /** THE PICTURE'S CONCLUSIONS (WO-PICTURE-01 P3): read off the facts every
+   *  computer produced on `fen` (the picture) and the engine's lines there,
+   *  best first, White's seat. */
+  pictureLedger: { fen: string; student: Color; lines: readonly EngineLine[]; facts: readonly CoachFact[] };
+  pictureCounterplay: { fen: string; student: Color; lines: readonly EngineLine[]; facts: readonly CoachFact[] };
+  pictureTarget: { fen: string; student: Color; lines: readonly EngineLine[]; facts: readonly CoachFact[] };
   /** AFTER the move: the capture released tension the engine wanted kept
    *  (`playedCp`: the mover's score after it, where the surface has it). */
   tensionReleased: { fenBefore: string; san: string; lines: readonly TensionLine[]; playedCp: number | null; reply: string | null; student: Color };
@@ -7781,6 +7788,86 @@ export const BOARD_COMPUTERS = {
     phase: ANY,
     surfaces: {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { wired: 'services/moveInsight.ts' },
+    },
+  },
+  // THE PICTURE'S CONCLUSIONS (WO-PICTURE-01 P3): what Danya works out before
+  // he weighs a try — the ledger of what works and what can be got at, the
+  // other side's one resource, the target picked by comparison. Each rests on
+  // the facts the other computers produced on the board (`pictureLedger.ts`).
+  // The record: your weakness they outnumber with you to move (guard it), and
+  // their break your next move kills (stop it), are threats to answer; your
+  // target with the best move going after it is the plan to start.
+  pictureLedger: {
+    read: (ctx, fact) => safe(() => {
+      const c = pictureConclusions(ctx.facts, ctx.fen, ctx.lines);
+      if (!c) return null;
+      const text = ledgerText(c.ledger, ctx.student);
+      if (!text) return null;
+      const squares = ledgerSquares(c.ledger);
+      const them: Color = ctx.student === 'w' ? 'b' : 'w';
+      const asks = sideToMove(ctx.fen) === ctx.student && c.target[them] !== null;
+      // One claim per ledger: the same entries on two boards are the same idea.
+      const key = `ledger:${ledgerKey(c.ledger)}`;
+      return fact({ key, claims: [key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: ctx.fen, ...(asks ? { skill: 'missed-opponents-threat' } : {}) });
+    }),
+    computer: 'pictureLedger',
+    kind: 'stock',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { wired: 'services/moveInsight.ts' },
+    },
+  },
+  pictureCounterplay: {
+    read: (ctx, fact) => safe(() => {
+      const c = pictureConclusions(ctx.facts, ctx.fen, ctx.lines);
+      const them: Color = ctx.student === 'w' ? 'b' : 'w';
+      const r = c?.counterplay[them] ?? null;
+      if (!r) return null;
+      const text = counterplayText(r, ctx.student, ctx.fen, ctx.lines);
+      if (!text) return null;
+      const squares = [r.from, r.to, ...r.hits];
+      const studentFirst = sideToMove(ctx.fen) === ctx.student;
+      const asks = r.state === 'dead' && r.ply === 0 && studentFirst;
+      // The stopper named is the student's move when it falls on their ply.
+      const namesStudentMove = r.state === 'dead' && r.ply !== null && (r.ply % 2 === 0) === studentFirst;
+      const key = `counterplay:${r.from}${r.to}:${r.state}`;
+      return fact({ key, claims: [key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+        seat: 'opponent', namesStudentMove, thread: LOCAL_THREAD, fen: ctx.fen, ...(asks ? { skill: 'missed-opponents-threat' } : {}) });
+    }),
+    computer: 'pictureCounterplay',
+    kind: 'opponent-intent',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { wired: 'services/moveInsight.ts' },
+    },
+  },
+  pictureTarget: {
+    read: (ctx, fact) => safe(() => {
+      const c = pictureConclusions(ctx.facts, ctx.fen, ctx.lines);
+      const t = c?.target[ctx.student] ?? null;
+      if (!t) return null;
+      const text = targetText(t, ctx.student);
+      const squares = [t.best.entry.square, ...(t.runnerUp ? [t.runnerUp.entry.square] : [])];
+      const asks = sideToMove(ctx.fen) === ctx.student && moveWorksOnTarget(t, ctx.lines[0]?.moves[0]);
+      const key = `target:${t.best.entry.square}`;
+      return fact({ key, claims: [key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: ctx.fen, ...(asks ? { skill: 'no-plan' } : {}) });
+    }),
+    computer: 'pictureTarget',
+    kind: 'priority',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
       learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_READ,
       weaknesses: { wired: 'services/moveInsight.ts' },
