@@ -35,10 +35,10 @@ function relRank(sq: string, c: Color): number {
   return c === 'w' ? Number(sq[1]) : 9 - Number(sq[1]);
 }
 
-function officerPhrase(officers: WingWithoutPieces['officers']): string {
+function officerPhrase(officers: WingWithoutPieces['officers'], owner: 'your' | 'their'): string {
   const byType = new Map<PieceSymbol, Square[]>();
   for (const o of officers) byType.set(o.piece, [...(byType.get(o.piece) ?? []), o.square]);
-  return andList([...byType].map(([t, sqs]) => (sqs.length === 1 ? `your ${NAME[t]} on ${sqs[0]}` : `your ${PLURAL[t]} on ${andList(sqs)}`)));
+  return andList([...byType].map(([t, sqs]) => (sqs.length === 1 ? `${owner} ${NAME[t]} on ${sqs[0]}` : `${owner} ${PLURAL[t]} on ${andList(sqs)}`)));
 }
 
 /** The pushed pawn is in contact with an enemy pawn now or after its next step — the push is a lever, not a clamp. */
@@ -60,7 +60,9 @@ function opensLines(c: Chess, at: Square, me: Color): boolean {
 }
 
 /** A wing pawn push made with every officer on the other side of the board, or null. Phrased for the mover. */
-export function wingWithoutPieces(fen: string, san: string): WingWithoutPieces | null {
+export function wingWithoutPieces(fen: string, san: string,
+  /** REQUIRED: the student's seat — the pusher is "you" or "they". */
+  student: Color): WingWithoutPieces | null {
   let c: Chess;
   try { c = new Chess(fen); } catch { return null; }
   const me = c.turn();
@@ -84,6 +86,8 @@ export function wingWithoutPieces(fen: string, san: string): WingWithoutPieces |
   if (officers.length < 2 || onWing > 0) return null;
   const otherWing = officers.every((o) => (wing === 'queenside' ? KINGSIDE : QUEENSIDE).includes(o.square[0]));
   const where = otherWing ? `all on the ${wing === 'queenside' ? 'kingside' : 'queenside'}` : `all away from the ${wing}`;
-  const text = `The ${file}-pawn push starts play on the ${wing}, but ${officerPhrase(officers)} are ${where}. A file opened there with none of your pieces near it is opened for them — bring a piece over before the lines open.`;
+  const text = me === student
+    ? `The ${file}-pawn push starts play on the ${wing}, but ${officerPhrase(officers, 'your')} are ${where}. A file opened there with none of your pieces near it is opened for them — bring a piece over before the lines open.`
+    : `Their ${file}-pawn push starts play on the ${wing}, but ${officerPhrase(officers, 'their')} are ${where}. A file opened there with none of their pieces near it is opened for you.`;
   return { wing, push: { from: m.from, to: m.to }, officers, text, squares: [m.from, m.to, ...officers.map((o) => o.square)] };
 }

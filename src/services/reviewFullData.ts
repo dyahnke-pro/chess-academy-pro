@@ -1392,16 +1392,17 @@ export function computeMoveFacets(
       add(readBoardAll('noSafeChecks', { fen: fenAfter, student: studentColorWB })[0]);
       add(readBoardAll('kingRace', { fen: fenAfter, student: studentColorWB })[0]);
       add(readBoardAll('inaccessibleHole', { fenBefore, san, student: studentColorWB })[0]);
-      // Worded to the mover: said of the student's own move.
-      if (isStudent) {
-        add(readBoardAll('kingBox', { fenBefore, san, namesPlayedMove: REVIEW_WRITER.namesPlayedMove })[0]);
-        add(readBoardAll('promotionWithCheck', { fenBefore, san, reply: ctx.allSans[ply] ?? null, namesPlayedMove: REVIEW_WRITER.namesPlayedMove })[0]);
-        add(readBoardAll('wingWithoutPieces', { fenBefore, san })[0]);
-        // The tension released too early, off the record's best line and the
-        // score before and after the move (both White's view, unpriced on a mate).
+      // Both seats, worded from the student's: the box shrunk, the promotion
+      // that comes with check, the lever with no pieces near it, and the
+      // tension released too early (off the record's best line and the score
+      // before and after the move, White's view, unpriced on a mate).
+      {
+        add(readBoardAll('kingBox', { fenBefore, san, student: studentColorWB, namesPlayedMove: REVIEW_WRITER.namesPlayedMove })[0]);
+        add(readBoardAll('promotionWithCheck', { fenBefore, san, reply: ctx.allSans[ply] ?? null, student: studentColorWB, namesPlayedMove: REVIEW_WRITER.namesPlayedMove })[0]);
+        add(readBoardAll('wingWithoutPieces', { fenBefore, san, student: studentColorWB })[0]);
         if (ctx.preMoveEval != null && ctx.evaluation != null && !isMateEval(ctx.preMoveEval) && !isMateEval(ctx.evaluation) && ctx.bestLineUci.length) {
           const sign = moverWB === 'w' ? 1 : -1;
-          const released = readBoardAll('tensionReleased', { fenBefore, san, lines: [{ moves: ctx.bestLineUci, cp: ctx.preMoveEval, mate: null }], playedCp: ctx.evaluation * sign, reply: ctx.allSans[ply] ?? null })[0];
+          const released = readBoardAll('tensionReleased', { fenBefore, san, lines: [{ moves: ctx.bestLineUci, cp: ctx.preMoveEval, mate: null }], playedCp: ctx.evaluation * sign, reply: ctx.allSans[ply] ?? null, student: studentColorWB })[0];
           if (released) add(released);
         }
       }

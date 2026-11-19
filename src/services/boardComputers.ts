@@ -1219,19 +1219,19 @@ export interface BoardContexts {
   kingRace: { fen: string; student: Color };
   /** The lone king's box shrunk by the move. REQUIRED `namesPlayedMove`: the
    *  writer's setting (Learn says "your move", never the move just played). */
-  kingBox: { fenBefore: string; san: string; namesPlayedMove: boolean };
+  kingBox: { fenBefore: string; san: string; student: Color; namesPlayedMove: boolean };
   /** A check that drives their king onto the promotion rank first. */
-  promotionWithCheck: { fenBefore: string; san: string; reply: string | null; namesPlayedMove: boolean };
+  promotionWithCheck: { fenBefore: string; san: string; reply: string | null; student: Color; namesPlayedMove: boolean };
   /** A hole the pawn move leaves that no enemy piece can reach soon. */
   inaccessibleHole: { fenBefore: string; san: string; student: Color };
   /** A wing pawn lever with none of the pusher's pieces near it. */
-  wingWithoutPieces: { fenBefore: string; san: string };
+  wingWithoutPieces: { fenBefore: string; san: string; student: Color };
   /** BEFORE the move: a tension capture the engine wants left alone
    *  (`lines`: the engine's lines on `fen`, White's view, UCI). */
-  tensionKept: { fen: string; lines: readonly TensionLine[] };
+  tensionKept: { fen: string; lines: readonly TensionLine[]; student: Color };
   /** AFTER the move: the capture released tension the engine wanted kept
    *  (`playedCp`: the mover's score after it, where the surface has it). */
-  tensionReleased: { fenBefore: string; san: string; lines: readonly TensionLine[]; playedCp: number | null; reply: string | null };
+  tensionReleased: { fenBefore: string; san: string; lines: readonly TensionLine[]; playedCp: number | null; reply: string | null; student: Color };
 }
 
 export type ComputerId = keyof BoardContexts;
@@ -6920,15 +6920,16 @@ export const BOARD_COMPUTERS = {
     },
   },
   kingBox: {
-    // The box method: the rook move that shrinks the lone king's box. The
-    // mover is the one mating (the student's seat on their move).
-    read: ({ fenBefore, san, namesPlayedMove }, fact) => safe(() => {
-      const b = kingBoxMove(fenBefore, san);
+    // The box method: the rook move that shrinks the lone king's box, both
+    // seats (the student boxing, or their king boxed).
+    read: ({ fenBefore, san, student, namesPlayedMove }, fact) => safe(() => {
+      const b = kingBoxMove(fenBefore, san, student);
       if (!b) return null;
-      const text = namesPlayedMove ? b.text : b.text.replace(new RegExp(`^${san.replace(/[+#]/g, '\\$&')}`), 'Your move');
+      const mine = sideToMove(fenBefore) === student;
+      const text = namesPlayedMove || !mine ? b.text : b.text.replace(new RegExp(`^${san.replace(/[+#]/g, '\\$&')}`), 'Your move');
       const key = `king-box:${fenBefore.split(' ')[0]}:${san}`;
       return fact({ key, claims: [`king-box:${b.after.area}`], text, proof: squaresProof(text, b.squares) ?? NO_PROOF.description, squares: [...b.squares], stakes: null,
-        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
     }),
     computer: 'kingBoxMove',
     kind: 'technique',
@@ -6943,13 +6944,14 @@ export const BOARD_COMPUTERS = {
   promotionWithCheck: {
     // "1.b6+ drives the king to the eighth rank so every promotion later comes
     // with check" — said of the student's own check.
-    read: ({ fenBefore, san, reply, namesPlayedMove }, fact) => safe(() => {
-      const p = promotionWithCheck(fenBefore, san, reply);
+    read: ({ fenBefore, san, reply, student, namesPlayedMove }, fact) => safe(() => {
+      const p = promotionWithCheck(fenBefore, san, reply, student);
       if (!p) return null;
-      const text = namesPlayedMove ? p.text : p.text.replace(new RegExp(`^${san.replace(/[+#]/g, '\\$&')}`), 'Your check');
+      const mine = sideToMove(fenBefore) === student;
+      const text = namesPlayedMove || !mine ? p.text : p.text.replace(new RegExp(`^${san.replace(/[+#]/g, '\\$&')}`), 'Your check');
       const key = `promotion-check:${p.pawn}:${p.kingTo}`;
       return fact({ key, claims: [key], text, proof: squaresProof(text, p.squares) ?? NO_PROOF.description, squares: [...p.squares], stakes: null,
-        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
     }),
     computer: 'promotionWithCheck',
     kind: 'technique',
@@ -6984,12 +6986,12 @@ export const BOARD_COMPUTERS = {
   wingWithoutPieces: {
     // "To open the b-file White must bring a piece to the queenside": a wing
     // lever with none of the pusher's pieces near it. Worded to the mover.
-    read: ({ fenBefore, san }, fact) => safe(() => {
-      const w = wingWithoutPieces(fenBefore, san);
+    read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const w = wingWithoutPieces(fenBefore, san, student);
       if (!w) return null;
       const key = `wing-without-pieces:${w.push.from}${w.push.to}`;
       return fact({ key, claims: [key], text: w.text, proof: squaresProof(w.text, w.squares) ?? NO_PROOF.description, squares: [...w.squares], stakes: null,
-        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
+        seat: sideToMove(fenBefore) === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
     }),
     computer: 'wingWithoutPieces',
     kind: 'structure',
@@ -6998,18 +7000,18 @@ export const BOARD_COMPUTERS = {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
       learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_READ,
-      weaknesses: { not: 'owed — a lever pushed without pieces is a mistimed break only when the engine says it cost; the record needs that cost on the lever itself' },
+      weaknesses: { wired: 'services/capabilityEvidence.ts' },
     },
   },
   tensionKept: {
     // "To take is a mistake": the tension capture the engine wants left
     // alone, and what taking first hands them. Worded to the side to move.
-    read: ({ fen, lines }, fact) => safe(() => {
-      const r = tensionKept(fen, lines);
+    read: ({ fen, lines, student }, fact) => safe(() => {
+      const r = tensionKept(fen, lines, student);
       if (!r) return null;
       const key = `tension-kept:${r.capture}`;
       return fact({ key, claims: [key], text: r.text, proof: squaresProof(r.text, r.squares) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
-        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+        seat: sideToMove(fen) === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen });
     }),
     computer: 'tensionKept',
     kind: 'trade-idea',
@@ -7018,17 +7020,17 @@ export const BOARD_COMPUTERS = {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, review: { not: 'Review keeps one line after the move: the per-capture lines this reads on the board before it are never stored' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
       learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_READ,
-      weaknesses: { not: 'owed — the record has the best line, not the per-capture lines this reads; the release half is filed by its own cost' },
+      weaknesses: { not: 'its held half needs every capture\'s own engine line before the move, and the record keeps one line a move; the release half is filed (tensionReleased, capabilityEvidence)' },
     },
   },
   tensionReleased: {
     // The capture that released tension too early, and what it handed them.
-    read: ({ fenBefore, san, lines, playedCp, reply }, fact) => safe(() => {
-      const r = tensionReleased(fenBefore, san, lines, playedCp, reply);
+    read: ({ fenBefore, san, lines, playedCp, reply, student }, fact) => safe(() => {
+      const r = tensionReleased(fenBefore, san, lines, playedCp, reply, student);
       if (!r) return null;
       const key = `tension-released:${fenBefore.split(' ')[0]}:${san}`;
       return fact({ key, claims: [`tension-released:${r.capture}`], text: r.text, proof: squaresProof(r.text, r.squares) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
-        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
+        seat: sideToMove(fenBefore) === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
     }),
     computer: 'tensionReleased',
     kind: 'trade-idea',
@@ -7037,7 +7039,7 @@ export const BOARD_COMPUTERS = {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
       learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_READ,
-      weaknesses: { not: 'owed — the slip is filed by its cost; its own tag (mistimed-pawn-break) needs the classifier to name a released tension' },
+      weaknesses: { wired: 'services/capabilityEvidence.ts' },
     },
   },
 } satisfies { [K in ComputerId]: ComputerSpec<BoardContexts[K]> };
