@@ -250,10 +250,20 @@ function kickOf(fen: string, line: readonly string[], mover: Color, whose: 'your
  *  sentence, never three squares in one (the human-squares rule) — the piece
  *  and its first stop, then where it ends and what it hits there; a list of
  *  steps is what they line up on, then the step that starts it. */
-export function stepsText(p: PlanSteps, whose: 'your' | 'their'): string {
+export function stepsText(p: PlanSteps, whose: 'your' | 'their', fromTheMove: boolean): string {
   const Who = whose === 'your' ? 'Your' : 'Their';
   const owner = whose === 'your' ? 'their' : 'your';
   const aimed = p.aim ? (p.aimPiece ? `${owner} ${p.aimPiece} on ${p.aim}` : `${p.aim}, next to ${owner} king`) : null;
+  // A ROAD THE SHOWN MOVE STARTS goes on from where the move lands: the move
+  // is said by its own facts, so the road is said from there, never as "the
+  // knight on f1 has a better road" beside "Ng3 heads for their king".
+  if (p.maneuver && fromTheMove && p.maneuver.route.length >= 2) {
+    const m = p.maneuver;
+    const rest = m.route.slice(1);
+    const end = rest[rest.length - 1];
+    const next = rest.length === 1 ? `Next, the ${m.piece} goes on to ${end}.` : `Next, the ${m.piece} goes on to ${rest[0]}. It ends on ${end}.`;
+    return aimed ? `${next} There it lines up on ${aimed}.` : next;
+  }
   if (p.maneuver) {
     const m = p.maneuver;
     const end = m.route[m.route.length - 1];
@@ -304,7 +314,7 @@ export function planOfTheBoard(i: PlanOfTheBoardIn): BoardPlan | null {
     if (st.maneuver || st.aim) {
       const piece = st.maneuver?.from ?? null;
       const s = startsAt(moves, st.squares, st.aim, piece);
-      if (s >= 0) out.push({ kind, text: stepsText(st, whose), squares: st.squares, target: st.aim, starts: s });
+      if (s >= 0) out.push({ kind, text: stepsText(st, whose, s === 0 && !!st.maneuver && st.maneuver.from === top.moves[0].slice(0, 2)), squares: st.squares, target: st.aim, starts: s });
     }
   }
 
