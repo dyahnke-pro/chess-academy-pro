@@ -66,8 +66,9 @@ const WEAKNESSES_OWED_CEILING = 0;
 // opportunity a clean move cannot answer); the four wired with them do not count.
 // 259 = 252 plus the seven batch-2 computers (2026-11-19) with a reasoned
 // `not`; kingActivityGap and zugzwangIfPassed are filed both ways.
-// 256 = 259 less mateLine, kingInOpen and kingReadsBestLine, filed both ways.
-const WEAKNESSES_UNWIRED_CEILING = 256;
+// 257 = 259 less mateLine, kingInOpen and kingReadsBestLine, filed both ways,
+// plus pieceTempo (an opportunity, reasoned); seventhRankMate came wired.
+const WEAKNESSES_UNWIRED_CEILING = 257;
 
 /** Which functions of `moveThoughtFacts.ts` each surface's consumer calls:
  *  Learn's shared facts, Play's and a puzzle's tapped read (`boardReadFacts`)

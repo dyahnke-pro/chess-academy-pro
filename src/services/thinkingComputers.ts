@@ -291,6 +291,8 @@ export const THINK_STEP: Record<ComputerName, ThinkAnswer> = {
   endgameVerdict: 'assess',
   defenderInTime: 'calculate',
   tactify: 'candidates',
+  seventhRankMate: 'assess',
+  pieceTempo: 'candidates',
   fortress: 'assess',
   oppositionTaken: 'assess',
   zugzwangMade: 'assess',

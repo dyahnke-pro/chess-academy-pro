@@ -806,7 +806,7 @@ export function positionPosed(
 
 /** The registry computers whose read poses a question to the side to move. */
 type RegistryPosedComputer = 'detectLatentFork' | 'detectLatentDanger' | 'detectTradeCreatesPin' | 'detectCentralKingDanger' | 'detectKingExposure' | 'findQueenGrabTraps'
-  | 'findTrappedPiece' | 'readConversion' | 'noSafeChecks' | 'kingRace' | 'kingActivityGap' | 'zugzwangIfPassed' | 'mateLine' | 'kingInOpen';
+  | 'findTrappedPiece' | 'readConversion' | 'noSafeChecks' | 'kingRace' | 'kingActivityGap' | 'zugzwangIfPassed' | 'mateLine' | 'kingInOpen' | 'seventhRankMate';
 
 /** How sharply each posed question is asked, on the heat map's scale. */
 const REGISTRY_POSED_WEIGHT: Record<RegistryPosedComputer, number> = {
@@ -824,6 +824,7 @@ const REGISTRY_POSED_WEIGHT: Record<RegistryPosedComputer, number> = {
   zugzwangIfPassed: 70,
   mateLine: 90,
   kingInOpen: 65,
+  seventhRankMate: 70,
 };
 
 /** The registry's reads of the board the student moves on, each fact with
@@ -859,6 +860,8 @@ export function registryPosedFacts(fen: string, me: 'w' | 'b', bestLineUci: read
     ...readBoardAll('zugzwangIfPassed', { fen, student: me }),
     // Your king walked or driven out from behind its pawns, their checks on it.
     ...readBoardAll('kingInOpen', { fen, lines: null, student: me }),
+    // Their rooks on your second rank, held off only by your back rank.
+    ...readBoardAll('seventhRankMate', { fen, lines: null, student: me }),
     // The forced mate the engine's line plays for the student (two moves or
     // more; the line has to end in mate).
     ...((): ReturnType<typeof readBoardAll> => {

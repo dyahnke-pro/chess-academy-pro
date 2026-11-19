@@ -107,6 +107,8 @@ import { coordinationGap } from './coordinationGap';
 import { endgameVerdict } from './endgameVerdict';
 import { defenderInTime } from './defenderInTime';
 import { tactify } from './tactify';
+import { seventhRankMate } from './seventhRankMate';
+import { pieceTempo } from './pieceTempo';
 import { kingBoxMove } from './kingBox';
 import { centreDuo } from './centreDuo';
 import { noSafeChecks } from './noSafeChecks';
@@ -1265,6 +1267,11 @@ export interface BoardContexts {
   defenderInTime: { fen: string; lines: readonly EngineLine[]; student: Color };
   /** In a level, quiet position, the equal move that asks them questions. */
   tactify: { fen: string; lines: readonly EngineLine[]; student: Color };
+  /** Rooks on the seventh that cannot mate: the back rank guarded, or the
+   *  king touching one. `lines` null: the record's read, by the board alone. */
+  seventhRankMate: { fen: string; lines: readonly EngineLine[] | null; student: Color };
+  /** A knight, bishop or rook that moves with tempo onto a safe square. */
+  pieceTempo: { fen: string; lines: readonly EngineLine[] | null; student: Color };
   /** BEFORE the move: a tension capture the engine wants left alone
    *  (`lines`: the engine's lines on `fen`, White's view, UCI). */
   tensionKept: { fen: string; lines: readonly TensionLine[]; student: Color };
@@ -7296,6 +7303,48 @@ export const BOARD_COMPUTERS = {
       learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_READ,
       weaknesses: { not: 'a practical choice between equal moves: no move is a fault against it' },
+    },
+  },
+  seventhRankMate: {
+    // "Two rooks on the seventh can almost never mate by themselves": the
+    // mating-square census — what keeps every check from mating. Both seats;
+    // the record files the student's back rank held or let go.
+    read: (ctx, fact) => safe(() => {
+      const r = seventhRankMate(ctx.fen, ctx.lines, ctx.student);
+      if (!r) return null;
+      const key = `seventh-no-mate:${r.heavies.join('')}`;
+      return fact({ key, claims: [key], text: r.text, proof: squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
+        seat: (r.attacker === ctx.student ? 'student' : 'opponent'), namesStudentMove: false, thread: LOCAL_THREAD, fen: ctx.fen,
+        ...(r.attacker !== ctx.student ? { skill: 'missed-opponents-threat' } : {}) });
+    }),
+    computer: 'seventhRankMate',
+    kind: 'technique',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { wired: 'services/moveInsight.ts' },
+    },
+  },
+  pieceTempo: {
+    // "The knight on d7 can move away with gain of tempo": a piece move that
+    // lands safe and hits a piece they must answer. Both seats.
+    read: (ctx, fact) => safe(() => {
+      const r = pieceTempo(ctx.fen, ctx.lines, ctx.student);
+      if (!r) return null;
+      const key = `piece-tempo:${r.from}:${r.target}`;
+      return fact({ key, claims: [key], text: r.text, proof: squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
+        seat: (r.side === ctx.student ? 'student' : 'opponent'), namesStudentMove: r.side === ctx.student, thread: LOCAL_THREAD, fen: ctx.fen });
+    }),
+    computer: 'pieceTempo',
+    kind: 'timing',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { not: 'an opportunity a move may take or leave without a fault: a clean move is no answer to it' },
     },
   },
   tensionKept: {
