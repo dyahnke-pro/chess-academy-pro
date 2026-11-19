@@ -807,7 +807,7 @@ export function positionPosed(
 /** The registry computers whose read poses a question to the side to move. */
 type RegistryPosedComputer = 'detectLatentFork' | 'detectLatentDanger' | 'detectTradeCreatesPin' | 'detectCentralKingDanger' | 'detectKingExposure' | 'findQueenGrabTraps'
   | 'findTrappedPiece' | 'readConversion' | 'noSafeChecks' | 'kingRace' | 'kingActivityGap' | 'zugzwangIfPassed' | 'mateLine' | 'kingInOpen' | 'seventhRankMate'
-  | 'queenlessMate' | 'selfBlock' | 'mateThreatLever' | 'queenKnightNet' | 'lateralRookDefence';
+  | 'queenlessMate' | 'selfBlock' | 'mateThreatLever' | 'queenKnightNet' | 'lateralRookDefence' | 'kingSiege';
 
 /** How sharply each posed question is asked, on the heat map's scale. */
 const REGISTRY_POSED_WEIGHT: Record<RegistryPosedComputer, number> = {
@@ -831,6 +831,7 @@ const REGISTRY_POSED_WEIGHT: Record<RegistryPosedComputer, number> = {
   mateThreatLever: 75,
   queenKnightNet: 70,
   lateralRookDefence: 60,
+  kingSiege: 70,
 };
 
 /** The registry's reads of the board the student moves on, each fact with
@@ -874,6 +875,9 @@ export function registryPosedFacts(fen: string, me: 'w' | 'b', bestLineUci: read
     // the engine's line, unscored (the line's own moves prove them); and your
     // raiding rook that slides along its rank to guard the attacked unit.
     ...readBoardAll('queenlessMate', { fen, student: me }),
+    // Your king under siege as the board stands (the count of attackers and
+    // defenders, unscored here: the engine's agreement is the teaching half's).
+    ...readBoardAll('kingSiegeNow', { fen, student: me, studentCp: null }).filter((f) => f.skill),
     ...((): ReturnType<typeof readBoardAll> => {
       if (!bestLineUci.length) return [];
       const lines = [{ moves: bestLineUci, cp: null, mate: null }];
@@ -888,6 +892,35 @@ export function registryPosedFacts(fen: string, me: 'w' | 'b', bestLineUci: read
     })(),
   ];
 }
+
+/** THE PLAN, BOTH WAYS (WO-PICTURE-01, David 2026-11-19: "Make sure all
+ *  computers work both ways"). The board's plan computers — the plan of the
+ *  board, the second front, the square given for a piece, the cramped side's
+ *  trade — pose `no-plan` to the student only where a clean move cannot pass
+ *  for an answer: the move played IS the line that starts the plan (held), or
+ *  it cost the student (broken). A clean move off the plan is no evidence
+ *  either way. It needs the engine's lines on THIS board, so only a surface
+ *  that reads every move passes them (live Learn): an imported game keeps
+ *  lines on its mistakes alone, and posing from those would only ever miss. */
+export function planPosed(fen: string, playedUci: string, cpLoss: number | null, lines: ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate: number | null }>): Array<{ tag: MisconceptionTagId; posedImportance: number }> {
+  if (lines.length === 0 || cpLoss === null) return [];
+  let me: 'w' | 'b';
+  try { me = new Chess(fen).turn(); } catch { return []; }
+  const analysis = lines.map((l, i) => ({ rank: i + 1, evaluation: l.evaluation, mate: l.mate, moves: [...l.moves], depth: 0 }));
+  const engine = lines.map((l) => ({ moves: l.moves, cp: l.mate === null ? l.evaluation : null, mate: l.mate }));
+  const plans = [
+    ...readBoardAll('planOfTheBoard', { fen, lines: analysis, student: me, namesMoves: true }),
+    ...readBoardAll('secondFront', { fen, lines: engine, student: me }),
+    ...readBoardAll('squareForPiece', { fen, lines: engine, student: me }),
+    ...readBoardAll('tradeRelievesCramp', { fen, lines: engine, student: me }),
+  ].filter((f) => f.seat === 'student');
+  if (plans.length === 0) return [];
+  const starts = playedUci === lines[0].moves[0];
+  return starts || cpLoss >= PLAN_MISSED_CP ? [{ tag: 'no-plan', posedImportance: PLAN_POSED }] : [];
+}
+/** A move that cost this much skipped the plan; under it, a clean move off the plan says nothing. */
+const PLAN_MISSED_CP = 50;
+const PLAN_POSED = 65;
 
 /** The SAN of a UCI move on `fen`, or null. */
 function sanOfUci(fen: string, uci: string | undefined): string | null {

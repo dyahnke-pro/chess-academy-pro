@@ -27,7 +27,7 @@ import { fileTakenBack } from './takenBackPuzzles';
 import { pvUciToSan } from './principleAttribution';
 import type { MisconceptionSource, MisconceptionTagRecord } from '../types';
 import { markEvidenceHinted, markEvidenceTakenBack, recordCapabilityEvidence, type CapabilityEvidenceRecord } from './capabilityEvidence';
-import { positionPosed } from './moveInsight';
+import { positionPosed, planPosed } from './moveInsight';
 import { withArticle } from '../utils/andList';
 
 /** Decide whether a played move warrants the "why?" prompt. Thin
@@ -498,16 +498,23 @@ export async function recordMoveEvidence(args: {
   /** The engine's line from `fenBefore` (UCI, its best move first), when the
    *  surface read one — the shot and its set-up are named off it. */
   bestLine?: readonly string[];
+  /** The engine's lines on `fenBefore` (MultiPV, White's seat), passed ONLY by
+   *  a surface that reads every move — the plan is judged off them both ways
+   *  (`planPosed`); an imported game's lines on its mistakes alone never are. */
+  everyMoveLines?: ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate: number | null }>;
 }): Promise<number> {
-  const { bestSan, bestLine, ...rest } = args;
+  const { bestSan, bestLine, everyMoveLines, ...rest } = args;
   const line = bestLine && bestLine.length > 1 ? bestLine : undefined;
+  let playedUci = '';
+  try { const m = new Chess(args.fenBefore).move(args.playedSan); playedUci = `${m.from}${m.to}${m.promotion ?? ''}`; } catch { playedUci = ''; }
+  const plan = everyMoveLines && playedUci ? planPosed(args.fenBefore, playedUci, args.cpLoss, everyMoveLines) : [];
   return recordCapabilityEvidence({
     ...rest,
     takenBack: rest.takenBack || ownTakenBack(rest.sourceGameId, rest.fenBefore, rest.playedSan),
     ownTakeback: ownTakenBack(rest.sourceGameId, rest.fenBefore, rest.playedSan),
     ...(bestSan ? { bestSan } : {}),
     ...(line ? { shotLine: line } : {}),
-    alsoPosed: positionPosed(args.fenBefore, { bestSan, ...(line ? { bestLine: line } : {}) }),
+    alsoPosed: [...positionPosed(args.fenBefore, { bestSan, ...(line ? { bestLine: line } : {}) }), ...plan],
   });
 }
 

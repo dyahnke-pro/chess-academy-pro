@@ -3570,7 +3570,7 @@ export const BOARD_COMPUTERS = {
       review: { not: 'the board\'s plan is read on a board whose move is shown, not played — never as advice on a game already played (Review walks the moves played)' },
       play: PLAY_READ, chat: CHAT_VIA_THOUGHT,
       tactics: TACTICS_READ,
-      weaknesses: { not: 'a plan read off the engine\'s line — no question of the student\'s posed' },
+      weaknesses: { wired: 'services/moveInsight.ts' }, // `planPosed`: live Learn, both ways (no-plan)
       think: THINK,
     },
   },
@@ -7281,7 +7281,9 @@ export const BOARD_COMPUTERS = {
         const text = siegeLine(s, student, fen);
         const squares = siegeSquares(s);
         out.push(fact({ key: s.key, claims: [s.key, `king-attack:${s.king}`], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
-          seat: attacker === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen }));
+          seat: attacker === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen,
+          // Both ways: the student's own king under siege asks for its defence.
+          ...(defender === student ? { skill: 'weakened-king-safety' } : {}) }));
       }
       return out.length ? out : null;
     }),
@@ -7291,9 +7293,8 @@ export const BOARD_COMPUTERS = {
     surfaces: {
       learn: { wired: 'services/boardReadFacts.ts' }, play: { wired: 'services/boardReadFacts.ts' }, review: { wired: 'services/boardReadFacts.ts' },
       lesson: { wired: 'services/boardReadFacts.ts' }, tactics: { wired: 'services/boardReadFacts.ts' },
-      chat: { not: 'chat\'s board answer reads the same siege on the board as it stands (`groundedAnswer` → `kingReadsOn`)' },
-      think: { not: 'the thinking steps judge a move; a siege that stood before it is no step of that move' },
-      weaknesses: { not: 'a reading of a standing board — no move of the student\'s it judges' },
+      chat: CHAT_VIA_THOUGHT, think: THINK,
+      weaknesses: { wired: 'services/moveInsight.ts' },
     },
   },
   zugzwangIfPassed: {
@@ -7468,7 +7469,7 @@ export const BOARD_COMPUTERS = {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
       learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_READ,
-      weaknesses: { not: 'a plan a move may take up or not without a fault: a clean move is no answer to it' },
+      weaknesses: { wired: 'services/moveInsight.ts' }, // `planPosed`: live Learn, both ways (no-plan)
     },
   },
   // "The rooks fulfil a defensive duty on the g-file": the raiding rook guards sideways. Both seats.
@@ -7506,7 +7507,7 @@ export const BOARD_COMPUTERS = {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
       learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_READ,
-      weaknesses: { not: 'an opportunity a move may take or leave without a fault: a clean move is no answer to it' },
+      weaknesses: { wired: 'services/moveInsight.ts' }, // `planPosed`: live Learn, both ways (no-plan)
     },
   },
   // "Trade pieces to lessen White's space advantage": the side short of room trades. Both seats.
@@ -7525,7 +7526,7 @@ export const BOARD_COMPUTERS = {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
       learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_READ,
-      weaknesses: { not: 'a strategy for a cramped side: keeping the pieces on is no fault a move commits' },
+      weaknesses: { wired: 'services/moveInsight.ts' }, // `planPosed`: live Learn, both ways (no-plan)
     },
   },
   // "Queen and knight coordinate in an instant": the pair leaves the king one square or none. Both seats; the record files the student's net held or missed.

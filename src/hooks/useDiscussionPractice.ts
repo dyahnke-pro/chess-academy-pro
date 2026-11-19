@@ -425,6 +425,7 @@ export function useDiscussionPractice(
       let replyPvUci: string[] = [];
       /** The before-read's fan — the price's first reader may be this hook. */
       let beforeRead: Awaited<ReturnType<typeof stockfishEngine.analyzePosition>> | null = null;
+      let beforeLines: Array<{ moves: readonly string[]; evaluation: number; mate: number | null }> = [];
       try {
         const [before, after] = await Promise.all([
           stockfishEngine.analyzePosition(args.fenBefore, ANALYSIS_DEPTH),
@@ -443,6 +444,7 @@ export function useDiscussionPractice(
         afterIsMate = after.isMate;
         replyPvUci = after.topLines?.[0]?.moves ?? (after.bestMove ? [after.bestMove] : []);
         beforeRead = before;
+        beforeLines = (before.topLines ?? []).map((l) => ({ moves: l.moves, evaluation: l.evaluation, mate: l.mate ?? null }));
       } catch {
         return; // engine down → never guess (G0/G3)
       }
@@ -545,6 +547,8 @@ export function useDiscussionPractice(
         takenBack: args.takenBack,
         bestSan,
         ...(bestPvUci && bestPvUci.length > 1 ? { bestLine: bestPvUci } : {}),
+        // Learn reads every move, so the plan is judged both ways here.
+        ...(beforeLines.length ? { everyMoveLines: beforeLines } : {}),
       });
 
       // The same graded move moves the opponent's live strength (above). Book
