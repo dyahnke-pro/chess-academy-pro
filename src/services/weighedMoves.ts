@@ -233,6 +233,12 @@ export function candidateMoves(fen: string, rating: number, opts: { played: stri
   return out.sort((x, y) => y.eye - x.eye);
 }
 
+/** The read scores a forced mate AGAINST `mover` (the side whose candidate
+ *  it is). */
+function matesMover(read: WeighRead, mover: Color): boolean {
+  return read.mate !== null && seatCp(read, mover) < 0;
+}
+
 function readOf(reads: readonly WeighRead[], uci: string): WeighRead | null {
   return reads.find((r) => r.moves[0] === uci) ?? null;
 }
@@ -363,7 +369,11 @@ export function temptingRefutations(args: Parameters<typeof temptingRefuted>[0])
     // prices the mate in, so its share collapses whatever the eye's pull (Kh3
     // at 2% of the eye, 0.04% once the mate is counted) — the blunder a
     // checkmate check exists to catch.
-    if (real < TEMPTING_P_FLOOR && !mateWalk && !plan) continue;
+    // A FORCED MATE IS ALWAYS SAID (Danya's tries, 2026-11-19): a candidate
+    // the eye weighs at all whose line mates the mover is ruled out however
+    // rarely it would be played — the full model prices the mate in, which is
+    // the very reason a player must hear it.
+    if (real < TEMPTING_P_FLOOR && !mateWalk && !plan && !matesMover(read, played.color)) continue;
     const t = refuteCandidate(args.fenBefore, c, read, playedRead, args.student, args.priorMove, plan?.target ?? null);
     if (!t) continue;
     // A PIECE SIMPLY GIVEN AWAY IS NOT A TEMPTATION: their first reply takes
@@ -376,7 +386,8 @@ export function temptingRefutations(args: Parameters<typeof temptingRefuted>[0])
     // A rook's worth (net four or more: a rook for a pawn) is the bar — the
     // article board, Korchnoi–Salov: "Rxg5+ was tempting for them … you play
     // fxg5" was a rook handed over with check.
-    if (t.reason.plies[0]?.uci.slice(2, 4) === c.to && t.reason.netForWinner >= 4) continue;
+    // A mate is never a giveaway: the piece taken is a step of the mate.
+    if (!t.reason.mate && t.reason.plies[0]?.uci.slice(2, 4) === c.to && t.reason.netForWinner >= 4) continue;
     out.push({ ...t, real });
   }
   // THE MOST TEMPTING IS THE ONE A PLAYER WOULD MOST OFTEN PLAY — the eye's
@@ -403,7 +414,9 @@ function refuteCandidate(fenBefore: string, c: Pick<CandidateMove, 'uci' | 'san'
   const seconds = read.earlier && read.earlier[0] === c.uci ? [read.earlier.slice(1)] : [];
   const r = costReason({
     fenBefore, playedSan: c.san, mover, student, costCp: cost,
-    after: { uci: read.moves.slice(1), source: 'deep', seconds }, before: null, priorMove,
+    // A mate the engine found against the mover is exact once the board plays
+    // it out to checkmate (`lineTrust` `scoredMate`).
+    after: { uci: read.moves.slice(1), source: 'deep', seconds, scoredMate: matesMover(read, mover) }, before: null, priorMove,
     // Measured against the other move's line: a loss its own line shares is no reason.
     against: against.moves,
   });
@@ -662,10 +675,11 @@ export function standingRefutations(args: {
   for (const { c, read, real } of readCandidates(args.fen, played, args.reads, args.rating, considered)) {
     const plan = considered?.get(c.uci) ?? null;
     const drop = (g: StandingGate): void => { args.onDrop?.(c.uci, g); };
-    if (real < TEMPTING_P_FLOOR && !plan) { drop('not-tempting'); continue; }
     // A try that walks into mate is the material refuter's when it says the
-    // mate; when it stays silent the line's own story says it here.
+    // mate (past the tempting floor too: a forced mate is always said); when
+    // it stays silent the line's own story says it here.
     if (read.mate !== null && refuteCandidate(args.fen, c, read, best.read, args.student, null, plan?.target ?? null)) { drop('mate-line'); continue; }
+    if (real < TEMPTING_P_FLOOR && !plan) { drop('not-tempting'); continue; }
     const tryCp = seatCp(read, mover);
     const cost = bestCp - tryCp;
     // The plan's direct try is weighed against the plan, not the eye: it

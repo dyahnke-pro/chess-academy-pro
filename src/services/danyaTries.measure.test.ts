@@ -20,7 +20,7 @@ import tries from './__fixtures__/danyaTries.reads.json';
 interface TryRow { id: string; fen: string; try: string; nag: string; his: string | null; reads: WeighRead[] }
 
 /** Said today; it only rises. */
-const SAID_FLOOR = 63;
+const SAID_FLOOR = 103;
 
 describe.skipIf(process.env.DANYA_TRIES !== '1')('the tries bench: his refuted tries, said', () => {
   it('says at least the floor, and names the gate on every one it drops', () => {
