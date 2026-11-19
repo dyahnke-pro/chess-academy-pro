@@ -9,6 +9,7 @@ import { Chess } from 'chess.js';
 // G0: every sentence returned is computed; the caller's model only phrases
 // them, most-important-first, in the order returned.
 import { buildFedTacticsContext } from './liveTacticsContext';
+import { sharpGap, SHARP_GAP_CP } from './positionCharacter';
 import { boardReadFacts } from './boardReadFacts';
 import { decideRead, readContextOf } from './readDecider';
 import { stockfishEngine } from './stockfishEngine';
@@ -61,6 +62,41 @@ interface PositionReadInput {
    *  (WO-DANYA-READS-01 group 4). The composer reads them itself, so a
    *  surface never imports the computer. Never on a withheld board. */
   readTempting: boolean;
+}
+
+/** Below this the forcing best move is one of several (a capture or a
+ *  check that merely keeps pace with the quiet moves). */
+const FORCING_SHOT_GAP_CP = 50;
+
+/**
+ * IS THERE A SHOT FOR THE STUDENT TO PLAY NOW — the forcing-scan habit's
+ * earning fact (Danya narration test 2026-11-19: "Habit for positions like
+ * this: CCT" on a quiet squeeze where the top three moves sit within a tenth,
+ * because a standing pin, which carries no verdict, counted as a shot). With
+ * two lines or more the ENGINE says it: the student mates, one move stands a
+ * sharp gap above the rest, or a check or capture stands clearly above it.
+ * With one line (a puzzle) the detectors' own tactic for the student does.
+ */
+export function readHasShot(
+  fen: string,
+  student: 'w' | 'b',
+  lines: ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate?: number | null }>,
+  detectorTactic: boolean,
+): boolean {
+  if (fen.split(' ')[1] !== student) return false;
+  const best = lines[0];
+  if (!best || lines.length < 2) return detectorTactic;
+  const seat = student === 'w' ? 1 : -1;
+  if (typeof best.mate === 'number') return best.mate * seat > 0;
+  const gap = sharpGap(best.evaluation, lines[1].evaluation) ?? 0;
+  if (gap >= SHARP_GAP_CP) return true;
+  let forcing = false;
+  try {
+    const u = best.moves[0];
+    const m = new Chess(fen).move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
+    forcing = !!m.captured || /[+#]$/.test(m.san);
+  } catch { return false; }
+  return forcing && gap >= FORCING_SHOT_GAP_CP;
 }
 
 /** The SAN and the two squares a withheld move would reveal. */
@@ -142,7 +178,7 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
       top: before[0] ? { evaluation: before[0].evaluation, mate: before[0].mate ?? null } : null,
       bestUci: before[0]?.moves[0] ?? null,
       withheld: marks?.squares ?? null,
-      studentShot: (tactics?.immediate ?? []).some((t) => t.side === 'student'),
+      studentShot: readHasShot(i.fen, studentCC, before, (tactics?.immediate ?? []).some((t) => t.side === 'student')),
     }));
     readLines = decided.facts.map((f) => f.text);
     habitLine = decided.habit;
