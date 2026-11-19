@@ -14,13 +14,14 @@
 import { describe, it, expect } from 'vitest';
 import fs from 'node:fs';
 import { Chess, type Color } from 'chess.js';
-import { temptingOnBoard, standingRefutations, type WeighRead, type StandingGate } from './weighedMoves';
+import { temptingOnBoard, standingRefutations, bestOfReads, type WeighRead, type StandingGate } from './weighedMoves';
+import { consideredTries } from './tryCandidates';
 import tries from './__fixtures__/danyaTries.reads.json';
 
 interface TryRow { id: string; fen: string; try: string; nag: string; his: string | null; reads: WeighRead[] }
 
 /** Said today; it only rises. */
-const SAID_FLOOR = 103;
+const SAID_FLOOR = 121;
 
 describe.skipIf(process.env.DANYA_TRIES !== '1')('the tries bench: his refuted tries, said', () => {
   it('says at least the floor, and names the gate on every one it drops', () => {
@@ -30,9 +31,13 @@ describe.skipIf(process.env.DANYA_TRIES !== '1')('the tries bench: his refuted t
       const m = new Chess(t.fen).move(t.try);
       const uci = m.from + m.to + (m.promotion ?? '');
       const student = t.fen.split(' ')[1] as Color;
-      let gate: StandingGate | 'not-weighed' = 'not-weighed';
-      const tempt = temptingOnBoard({ fen: t.fen, student, rating: 1800, reads: t.reads, priorMove: null }).find((x) => x.uci === uci);
-      const stand = standingRefutations({ fen: t.fen, student, rating: 1800, reads: t.reads, onDrop: (u, g) => { if (u === uci) gate = g; } }).find((x) => x.uci === uci);
+      // A try the stored reads score best is not refuted by them at all: the
+      // engine (depth 14) agrees with the try, so no refuter can rule it out.
+      let gate: StandingGate | 'not-weighed' | 'engine-best' = bestOfReads(t.fen, t.reads)?.san === m.san ? 'engine-best' : 'not-weighed';
+      // The moves weighed past the eye, the same builder the board read uses.
+      const considered = consideredTries(t.fen);
+      const tempt = temptingOnBoard({ fen: t.fen, student, rating: 1800, reads: t.reads, priorMove: null, considered }).find((x) => x.uci === uci);
+      const stand = standingRefutations({ fen: t.fen, student, rating: 1800, reads: t.reads, considered, onDrop: (u, g) => { if (u === uci) gate = g; } }).find((x) => x.uci === uci);
       const said = tempt?.text ?? stand?.text ?? null;
       const g = said ? 'said' : gate;
       gates[g] = (gates[g] ?? 0) + 1;

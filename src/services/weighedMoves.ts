@@ -123,7 +123,21 @@ const OPENING_MOVES = 12;
  *  directly fails to …h4"): UCI → what the try goes after, in words ("their
  *  pawn on e6"). A considered move is a candidate whatever the eye or the
  *  human model says, and its refutation is worded as the direct try failing. */
-export type ConsideredTries = ReadonlyMap<string, { why: 'plan'; target: string }>;
+export type ConsideredTries = ReadonlyMap<string, ConsideredTry>;
+/** Why a move is weighed past the eye: the plan's direct try (with what it
+ *  goes after), or a reason a strong player weighs every such move for
+ *  (`tryCandidates.reasonTries`) — a capture, a check, a passed pawn's push, a
+ *  king step in an ending, a quiet move that threatens or defends. Only the
+ *  plan's try is worded as going straight at its target. */
+export type ConsideredWhy = 'capture' | 'check' | 'passer' | 'king' | 'threat' | 'defence' | 'mate-threat' | 'lever' | 'double';
+export type ConsideredTry = { why: 'plan'; target: string; storm: boolean } | { why: ConsideredWhy; target: null };
+
+/** What a plan's try goes after, in words: the weak pawn ("the pawn on b5"),
+ *  or for a storm the king itself — never the king's square. */
+function planAim(plan: { target: string; storm: boolean }, moverIsStudent: boolean): string {
+  if (plan.storm) return moverIsStudent ? 'their king' : 'your king';
+  return /^[a-h][1-8]$/.test(plan.target) ? `the pawn on ${plan.target}` : plan.target;
+}
 
 /** ONE ENGINE READ OF ONE CANDIDATE from the board before the move: the
  *  candidate first (UCI), then the line the engine expects; the score is
@@ -364,7 +378,8 @@ export function temptingRefutations(args: Parameters<typeof temptingRefuted>[0])
   // A temptation is a move someone at the rating would really play (`real`).
   const considered = args.considered ?? null;
   for (const { c, read, real, mateWalk } of readCandidates(args.fenBefore, played, args.reads, args.rating, considered)) {
-    const plan = considered?.get(c.uci) ?? null;
+    const weighed = considered?.get(c.uci) ?? null;
+    const plan = weighed?.why === 'plan' ? weighed : null;
     // A move that walks into mate is weighed by the eye alone: the full model
     // prices the mate in, so its share collapses whatever the eye's pull (Kh3
     // at 2% of the eye, 0.04% once the mate is counted) — the blunder a
@@ -373,8 +388,8 @@ export function temptingRefutations(args: Parameters<typeof temptingRefuted>[0])
     // the eye weighs at all whose line mates the mover is ruled out however
     // rarely it would be played — the full model prices the mate in, which is
     // the very reason a player must hear it.
-    if (real < TEMPTING_P_FLOOR && !mateWalk && !plan && !matesMover(read, played.color)) continue;
-    const t = refuteCandidate(args.fenBefore, c, read, playedRead, args.student, args.priorMove, plan?.target ?? null);
+    if (real < TEMPTING_P_FLOOR && !mateWalk && !weighed && !matesMover(read, played.color)) continue;
+    const t = refuteCandidate(args.fenBefore, c, read, playedRead, args.student, args.priorMove, plan ? planAim(plan, played.color === args.student) : null);
     if (!t) continue;
     // A PIECE SIMPLY GIVEN AWAY IS NOT A TEMPTATION: their first reply takes
     // the piece that moved, a rook's worth or more for nothing much (…Qxf2+
@@ -631,7 +646,17 @@ function tryMechanism(fen: string, m: Move, sans: readonly string[], bestSan: st
   } catch { /* no motif read */ }
   if (/\+$/.test(rm.san)) return `${replyWords} comes with check, so ${other === 'your' ? 'you gain' : 'they gain'} a tempo.`;
   const why = boardReason(fen, m.san, bestSan, phaseOfFen(fen) ?? 'middlegame');
-  return why ? why.note : null;
+  if (!why) return null;
+  // A board reason about a piece the line takes is false (Kf1?? …Bxc5: "your
+  // bishop on c5 reaches fewer squares" — it is gone): the squares the line
+  // captures on are not described.
+  const taken = new Set<string>();
+  try {
+    const walk = new Chess(fen);
+    for (const san of sans) { const mv = walk.move(san); if (mv.captured) taken.add(mv.to); }
+  } catch { /* read the squares taken so far */ }
+  if ((why.note.match(/\b[a-h][1-8]\b/g) ?? []).some((q) => taken.has(q))) return null;
+  return why.note;
 }
 
 function cap(w: string): string { return w.charAt(0).toUpperCase() + w.slice(1); }
@@ -673,13 +698,14 @@ export function standingRefutations(args: {
   const out: Array<StandingRefuted & { real: number }> = [];
   const considered = args.considered ?? null;
   for (const { c, read, real } of readCandidates(args.fen, played, args.reads, args.rating, considered)) {
-    const plan = considered?.get(c.uci) ?? null;
+    const weighed = considered?.get(c.uci) ?? null;
+    const plan = weighed?.why === 'plan' ? weighed : null;
     const drop = (g: StandingGate): void => { args.onDrop?.(c.uci, g); };
     // A try that walks into mate is the material refuter's when it says the
     // mate (past the tempting floor too: a forced mate is always said); when
     // it stays silent the line's own story says it here.
-    if (read.mate !== null && refuteCandidate(args.fen, c, read, best.read, args.student, null, plan?.target ?? null)) { drop('mate-line'); continue; }
-    if (real < TEMPTING_P_FLOOR && !plan) { drop('not-tempting'); continue; }
+    if (read.mate !== null && refuteCandidate(args.fen, c, read, best.read, args.student, null, plan ? planAim(plan, mine) : null)) { drop('mate-line'); continue; }
+    if (real < TEMPTING_P_FLOOR && !weighed) { drop('not-tempting'); continue; }
     const tryCp = seatCp(read, mover);
     const cost = bestCp - tryCp;
     // The plan's direct try is weighed against the plan, not the eye: it
@@ -688,9 +714,12 @@ export function standingRefutations(args: {
     if (cost < (plan ? PLAN_TRY_COST_CP : ACHIEVES_NOTHING_CP)) { drop('small-cost'); continue; }
     // THE RESULT HOLDS, BUT THE TRY ACHIEVES NOTHING (his ?! moves: of 240
     // refuted tries, ~37 cost half a pawn to a pawn and keep the band): said
-    // as giving back part of the edge, with its reason like any other.
+    // as giving back part of the edge, with its reason like any other. The
+    // plan's lower bar needs the result to change; at half a pawn the plan's
+    // try is weighed like any other (his "c4? bxc4", a plan try at −0.6 that
+    // kept the band was dropped while the same move from the eye was said).
     const bandShift = plan || cost >= SHIFT_COST_CP ? resultShift(bestCp, tryCp, mine) : null;
-    if (!bandShift && (plan || cost < ACHIEVES_NOTHING_CP)) { drop('same-result'); continue; }
+    if (!bandShift && cost < ACHIEVES_NOTHING_CP) { drop('same-result'); continue; }
     const m = moveOn(args.fen, c.uci);
     if (!m || read.moves.length < 2) continue;
     const sans: string[] = [];
@@ -704,7 +733,7 @@ export function standingRefutations(args: {
     // is the material refuter's when it names the loss; when it stays silent
     // (a pawn lost on a three-pawn cost, an unconfirmed line), the loss is
     // said here, with the result.
-    if (net !== null && net < 0 && refuteCandidate(args.fen, c, read, best.read, args.student, null, plan?.target ?? null)) { drop('loses-material'); continue; }
+    if (net !== null && net < 0 && refuteCandidate(args.fen, c, read, best.read, args.student, null, plan ? planAim(plan, mine) : null)) { drop('loses-material'); continue; }
     const NUM = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
     const lost = net !== null && net < 0 ? `${cap(w.otherWho)} win ${-net === 1 ? 'a pawn' : `${NUM[-net] ?? -net} pawns' worth of material`} in the line.` : null;
     const reply = `${mover === 'w' ? '…' : ''}${sans[1]}`;
@@ -725,9 +754,13 @@ export function standingRefutations(args: {
     const shift = story?.kind === 'mates' ? (mine ? 'It loses the game.' : 'It loses them the game.') : bandShift ?? smallerShift(bestCp, mine, /wins nothing/.test(mech), cost);
     const stem = stemKeyOf(`${args.fen}|result|${c.uci}`);
     const lead = plan
-      ? (mine
-        ? rotateStem([`${c.san} goes straight at ${plan.target}, but ${reply} meets it.`, `${c.san} to hit ${plan.target} directly runs into ${reply}.`], stem)
-        : rotateStem([`${c.san} went straight at ${plan.target} for them, but ${reply} meets it.`, `${c.san} to hit ${plan.target} directly ran into ${reply} for them.`], stem))
+      ? (plan.storm
+        ? (mine
+          ? rotateStem([`${c.san} storms their king, but ${reply} meets it.`, `${c.san}, throwing a pawn at their king, runs into ${reply}.`], stem)
+          : rotateStem([`${c.san} stormed your king for them, but ${reply} meets it.`, `${c.san}, throwing a pawn at your king, ran into ${reply} for them.`], stem))
+        : mine
+        ? rotateStem([`${c.san} goes straight at ${planAim(plan, true)}, but ${reply} meets it.`, `${c.san} to hit ${planAim(plan, true)} directly runs into ${reply}.`], stem)
+        : rotateStem([`${c.san} went straight at ${planAim(plan, false)} for them, but ${reply} meets it.`, `${c.san} to hit ${planAim(plan, false)} directly ran into ${reply} for them.`], stem))
       : mine
       ? rotateStem([`${c.san} looks natural, but ${reply} meets it.`, `${c.san} is the obvious try, but ${reply} is the answer.`, `${c.san} is tempting, but ${reply} takes the sting out of it.`], stem)
       : rotateStem([`${c.san} looked natural for them, but ${reply} meets it.`, `${c.san} was the obvious try for them, but ${reply} is the answer.`, `${c.san} was tempting for them, but ${reply} takes the sting out of it.`], stem);
@@ -761,6 +794,10 @@ function targetOutcome(fen: string, sans: readonly string[], target: string, mov
   try {
     for (const s of sans) {
       const m = b.move(s);
+      // The target walks away (his "b4? cxb4": the c5 pawn takes on b4) —
+      // it does not "still stand", and whatever lands on its square later is
+      // another piece.
+      if (m.color !== mover && m.from === target) return `${cap(other)} pawn on ${target} ${m.captured ? 'takes on' : 'steps to'} ${m.to} instead.`;
       if (m.color === mover && m.to === target && m.captured) { taken = true; break; }
     }
   } catch { return null; }

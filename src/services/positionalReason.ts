@@ -150,9 +150,11 @@ export function boardReason(fen: string, playedSan: string, bestSan: string | nu
       const k = kingSafetyRead(c.fen(), mover);
       return k ? (3 - k.shieldPawns) + k.openFilesNearKing.length + (k.inCenter ? 1 : 0) : 0;
     };
+    // WHOSE KING (the human voice: name it once): the mover's, by its square.
+    const ksq = kingOf(played, mover);
     push(ks(played) - ks(bestBoard), 1,
       { tag: bestMove && /^O-O/.test(bestMove.san) ? 'king-stuck-center' : 'weakened-king-safety',
-        note: 'The king is less sheltered after this than after the better move.' });
+        note: ksq ? `The king on ${ksq} is less sheltered after this than after the better move.` : 'The king is less sheltered after this than after the better move.' });
   }
   if (phase === 'endgame') {
     const kp = kingOf(played, mover); const kb = kingOf(bestBoard, mover);
