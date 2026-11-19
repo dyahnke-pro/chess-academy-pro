@@ -4,9 +4,11 @@ import { readFileSync } from 'fs';
 import { Chess } from 'chess.js';
 import { pawnCentre } from '../../src/services/pawnCentre';
 import { tensionKept } from '../../src/services/tensionRelease';
+import { inaccessibleHole } from '../../src/services/inaccessibleHole';
+import { harmlessWeakPawns } from '../../src/services/harmlessWeakPawns';
 
 const SRC = process.argv[2] ?? 'audit-reports/danya-havecheck/board-facts-2026-11-19.jsonl';
-interface Board { id: string; fen: string; lines: { moves: string[]; cp: number | null; mate: number | null }[] }
+interface Board { id: string; fen: string; best: string; lines: { moves: string[]; cp: number | null; mate: number | null }[] }
 const boards: Board[] = readFileSync(SRC, 'utf8').trim().split('\n').map((l) => JSON.parse(l) as Board);
 const tagged = JSON.parse(readFileSync('audit-reports/danya-havecheck/no-computer-tagged-2026-11-19.json', 'utf8')) as { eConcepts: { concept: string; boards: string[] }[] };
 const need = (concept: string): Set<string> => new Set(tagged.eConcepts.find((e) => e.concept === concept)?.boards ?? []);
@@ -15,6 +17,9 @@ const turn = (fen: string) => new Chess(fen).turn();
 const COMPUTERS: Record<string, { concept: string; run: (b: Board) => { text: string } | null }> = {
   pawnCentre: { concept: 'centre', run: (b) => pawnCentre(b.fen, turn(b.fen)) },
   tensionKept: { concept: 'tensionGain', run: (b) => tensionKept(b.fen, b.lines) },
+  // A move fact: read on the engine's best move of every board.
+  inaccessibleHole: { concept: 'inaccessibleHole', run: (b) => inaccessibleHole(b.fen, b.best, turn(b.fen)) },
+  harmlessWeakPawns: { concept: 'heldWeakPawns', run: (b) => harmlessWeakPawns(b.fen, turn(b.fen), b.lines[0] ?? null) },
 };
 for (const [name, c] of Object.entries(COMPUTERS)) {
   const needed = need(c.concept);
