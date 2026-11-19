@@ -169,16 +169,24 @@ export interface TradeDanger extends LatentDanger {
  * recapture-creates-it case (2 ply) is a later refinement.
  */
 export function detectTradeCreatesPin(fen: string, studentColor: 'w' | 'b'): TradeDanger | null {
+  return detectTradesCreatingPin(fen, studentColor)[0] ?? null;
+}
+
+/** EVERY trade on the board that opens a pin on the student's own pieces,
+ *  worth first (the front piece's value). Not a cap (G4.5): two captures that
+ *  each walk into their own line are two warnings, and the deciding door —
+ *  not this computer — chooses what is said. */
+export function detectTradesCreatingPin(fen: string, studentColor: 'w' | 'b'): TradeDanger[] {
   let chess: Chess;
-  try { chess = new Chess(fen); } catch { return null; }
-  if (chess.turn() !== studentColor) return null; // only on the student's move
+  try { chess = new Chess(fen); } catch { return []; }
+  if (chess.turn() !== studentColor) return []; // only on the student's move
   const before = detectLatentDanger(fen, studentColor);
   const beforeKey = before ? `${before.frontSquare}-${before.backSquare}-${before.enemySquare}` : '';
 
-  let best: TradeDanger | null = null;
+  const found: TradeDanger[] = [];
   let captures: ReturnType<Chess['moves']>;
   try { captures = chess.moves({ verbose: true }).filter((m) => (m as { captured?: string }).captured); }
-  catch { return null; }
+  catch { return []; }
 
   for (const m of captures as Array<{ from: string; to: string }>) {
     // A TRADE, NOT A LOSS (OS-11 g4, 16…Qxe4: "before you take on g2, look past
@@ -196,11 +204,10 @@ export function detectTradeCreatesPin(fen: string, studentColor: 'w' | 'b'): Tra
     if (!after) continue;
     const afterKey = `${after.frontSquare}-${after.backSquare}-${after.enemySquare}`;
     if (afterKey === beforeKey) continue;                 // not newly created by this trade
-    const score = VAL[after.frontPiece] ?? 0;
-    const bestScore = best ? (VAL[best.frontPiece] ?? 0) : -1;
-    if (score > bestScore) best = { ...after, tradeFrom: m.from, tradeTo: m.to };
+    found.push({ ...after, tradeFrom: m.from, tradeTo: m.to });
   }
-  return best;
+  // Worth first; a tie keeps the board's move order (stable sort).
+  return found.sort((a, b) => (VAL[b.frontPiece] ?? 0) - (VAL[a.frontPiece] ?? 0));
 }
 
 /** The v2 warning — a trade that opens a pin. Guide-don't-tell: names the

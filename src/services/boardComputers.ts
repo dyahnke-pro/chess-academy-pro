@@ -202,7 +202,7 @@ import { exchangeIdeas, type ExchangeIdeasInput } from './exchangeIdeas';
 import { conceptForBoard } from './conceptEngine';
 import { pinPressureConcept, guardRemovalConcept, type BoardConcept } from './boardTeachConcepts';
 import { deliberationFacts, deliberationMarks, fullWeighingSays, deliberationWeighing, HELD_WEIGHING_SAYS, type Deliberation } from './deliberation';
-import { detectLatentDanger, latentDangerClause, detectTradeCreatesPin, tradeDangerClause } from './latentDanger';
+import { detectLatentDanger, latentDangerClause, detectTradesCreatingPin, tradeDangerClause } from './latentDanger';
 import { detectLatentFork, latentForkClause } from './latentFork';
 import { detectCentralKingDanger, centralKingDangerClause } from './kingSafety';
 import { readConversion } from './conversionMethod';
@@ -2748,8 +2748,7 @@ export const BOARD_COMPUTERS = {
   },
   tradeDanger: {
     read: ({ fen, student }, fact) => safe(() => {
-      const d = detectTradeCreatesPin(fen, student);
-      if (!d) return null;
+      const out = detectTradesCreatingPin(fen, student).map((d) => {
       const text = openSentence(tradeDangerClause(d, fen));
       // Said about the board AFTER the capture ("before you trade on e4: that
       // lines your bishop on e4 up…") — graded there, or it reads false now.
@@ -2760,6 +2759,8 @@ export const BOARD_COMPUTERS = {
         squares: [d.enemySquare, d.frontSquare, d.backSquare, d.tradeFrom, d.tradeTo],
         stakes: { points: lineTacticPoints(d.frontPiece, d.backPiece), plies: 2 },
         seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: after ?? fen, skill: 'bad-trade' });
+      });
+      return out.length ? out : null;
     }),
     computer: 'detectTradeCreatesPin',
     kind: 'latent-danger',

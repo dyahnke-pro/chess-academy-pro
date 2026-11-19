@@ -1675,12 +1675,15 @@ function buildClauses(a: {
   // The prevention layer — a pin/skewer on your own king/queen, guide-don't-tell.
   // Prefer the actionable TRADE warning ("before you trade on X…") when present;
   // otherwise the standing-alignment warning. Only one, never both.
-  const tradeDangerFact = tradeDanger ? readBoard('tradeDanger', { fen: a.fen, student }) : null;
+  // EVERY trade that opens a pin (G4.5): two captures walking into two lines
+  // are two warnings; the door decides which is said.
+  const tradeDangerFacts = tradeDanger ? readBoardAll('tradeDanger', { fen: a.fen, student }) : [];
+  const tradeDangerFact = tradeDangerFacts[0] ?? null;
   const latentReads = !tradeDangerFact && (latentDanger || latentChance) ? readBoardAll('latentDanger', { fen: a.fen, student }) : [];
   const latentDangerFact = latentDanger ? latentReads.find((f) => f.seat === 'opponent') ?? null : null;
   const latentChanceFact = !latentDanger && latentChance ? latentReads.find((f) => f.seat === 'student') ?? null : null;
   // Said about the board AFTER the capture — graded there, or it reads false now.
-  if (tradeDangerFact) ranked.push(readClause(tradeDangerFact, 'latent-danger', a.fen, { gradeFen: tradeDangerFact.fen }));
+  if (tradeDangerFact) for (const f of tradeDangerFacts) ranked.push(readClause(f, 'latent-danger', a.fen, { gradeFen: f.fen }));
   // Only the pin IN WAITING. A standing one (the line already open) is a live
   // pin the tactic lanes name — hand walk 2340: "their bishop on g4 pins your
   // knight" followed by "your knight on f3 and your queen share that diagonal

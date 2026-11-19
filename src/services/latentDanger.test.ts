@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { detectLatentDanger, latentDangerClause, detectTradeCreatesPin, tradeDangerClause } from './latentDanger';
+import { detectLatentDanger, latentDangerClause, detectTradeCreatesPin, detectTradesCreatingPin, tradeDangerClause } from './latentDanger';
 
 describe('detectLatentDanger — the pin-in-waiting (David\'s heartbreak case)', () => {
   it('flags a bishop lined up in front of its own king on a rook file', () => {
@@ -112,6 +112,21 @@ describe('detectTradeCreatesPin — v2, the trade that CREATES the pin (David\'s
 
   it('returns null when it is not the student\'s move', () => {
     expect(detectTradeCreatesPin(FEN, 'b')).toBeNull();
+  });
+});
+
+describe('detectTradesCreatingPin — every trade, not the first (G4.5)', () => {
+  // Bxe5 AND Nxe5 each put a piece in front of the king on the open e-file.
+  // Two captures, two warnings: the computer returns both, worth first.
+  const FEN = '4r1k1/8/8/4n3/3B4/5N2/8/4K3 w - - 0 1';
+
+  it('returns both trades that open the pin', () => {
+    const all = detectTradesCreatingPin(FEN, 'w');
+    expect(all.map((t) => `${t.tradeFrom}${t.tradeTo}`).sort()).toEqual(['d4e5', 'f3e5']);
+  });
+
+  it('the single read is the first of the list', () => {
+    expect(detectTradeCreatesPin(FEN, 'w')).toEqual(detectTradesCreatingPin(FEN, 'w')[0]);
   });
 });
 

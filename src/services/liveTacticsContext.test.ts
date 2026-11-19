@@ -122,29 +122,6 @@ describe('buildTacticsLiveContext', () => {
     expect(typeof ctx.lookaheadDepth).toBe('number');
   });
 
-  it('caps threats and opportunities at 5 each (token budget guard)', () => {
-    // Synthesise a fake analysis with 10 long PV lines that include
-    // captures — the helper must not return more than 5 of each
-    // beneficiary even if the PV scan produced more.
-    const analysis: StockfishAnalysis = {
-      bestMove: 'e2e4',
-      evaluation: 0,
-      isMate: false,
-      mateIn: null,
-      depth: 12,
-      topLines: Array.from({ length: 10 }, (_, i) => ({
-        rank: i,
-        evaluation: 0,
-        moves: ['e2e4', 'e7e5', 'g1f3', 'b8c6'],
-        mate: null,
-      })),
-      nodesPerSecond: 0,
-    };
-    const ctx = buildTacticsLiveContext(STARTING_FEN, analysis, 'w', 2000);
-    expect(ctx.threats.length).toBeLessThanOrEqual(5);
-    expect(ctx.opportunities.length).toBeLessThanOrEqual(5);
-  });
-
   it('survives malformed FEN without throwing (returns empty context)', () => {
     expect(() => buildTacticsLiveContext('not-a-fen', null, 'w', 1500)).not.toThrow();
     const ctx = buildTacticsLiveContext('not-a-fen', null, 'w', 1500);

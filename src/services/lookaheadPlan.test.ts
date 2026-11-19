@@ -854,6 +854,19 @@ describe('what the plan leaves out gets its OWN sentence', () => {
     expect(plan.aside).toMatch(/Worth noticing: your pieces on a1, d1 and f1 sit this one out/);
   });
 
+  it('names EVERY sleeping piece, not the first three (G4.5)', () => {
+    const plan = planWithIdle(['a1', 'c1', 'd1', 'h1']);
+    describePlan(plan, 'mine');
+    expect(plan.aside).toMatch(/your pieces on a1, c1, d1 and h1 sit this one out/);
+  });
+
+  it('the drift line names EVERY destination, not the first two (G4.5)', () => {
+    const plan: SidePlan = { ...planWithIdle([]), headingFor: ['d4', 'c3', 'e5'], outposts: [] };
+    const line = describePlan(plan, 'mine');
+    expect(line).toBe("You're bringing pieces to d4, c3 and e5 over the next few moves.");
+    expect(plan.spokenClauses[0]?.squares).toEqual(['d4', 'c3', 'e5']);
+  });
+
   it('stays quiet when only one or two pieces sit out — that is every plan', () => {
     const plan = planWithIdle(['a1', 'd1']);
     describePlan(plan, 'mine');

@@ -33,7 +33,7 @@ import { aimsOf, aimWalkableNow, stepArc, EMPTY_ARC, type ArcEvent, type ArcMove
 import { proofCut } from './exchangeLedger';
 import { routeVerb, routeWaypoints, type RouteSpec } from '../utils/routeWords';
 import { positionOf } from '../utils/samePosition';
-import { withArticle } from '../utils/andList';
+import { andList, withArticle } from '../utils/andList';
 import { MATERIAL_VALUE } from './pieceValues';
 // The PLAN ACROSS MOVES (planArc) — the memory this reader never had. Exposed
 // from here so a surface composes one plan module, not two.
@@ -1136,8 +1136,10 @@ export function describePlan(
     // Nothing concrete happens in the line, but the pieces still go SOMEWHERE,
     // and where they go is the plan when nothing is captured.
     if (plan.headingFor.length === 0) return '';
-    const heading = plan.headingFor.slice(0, 2);
-    const squares = heading.join(' and ');
+    // EVERY destination, most-visited first (G4.5): `slice(0, 2)` dropped the
+    // third square a piece was heading to, whatever it was worth.
+    const heading = [...plan.headingFor];
+    const squares = andList(heading);
     // THE DRIFT LINE OBEYS THE SAID-SET TOO. Every scored clause above is
     // filtered against it; this early return skipped the check entirely, so on
     // a quiet stretch the coach repeated itself word for word — from the prod
@@ -1203,7 +1205,8 @@ export function describePlan(
   // as a complaint about their play and is not the student's problem.
   const idle = plan.idlePieces ?? [];
   if (voice === 'mine' && idle.length >= 3) {
-    const three = idle.slice(0, 3);
+    // EVERY sleeping piece (G4.5): `slice(0, 3)` named three and dropped the
+    // rest, so a fourth rook or bishop left at home went unsaid.
     // ── ONCE PER GAME MEANS ONCE, NOT ONCE PER LINE-UP ────────────────────
     // The key used to be the three squares, so the moment one of them woke up
     // the sample changed and the caveat introduced itself all over again. In
@@ -1217,7 +1220,7 @@ export function describePlan(
     const key = 'idle-pieces';
     if (!said?.has(key)) {
       said?.add(key);
-      plan.aside = `Worth noticing: your pieces on ${three.slice(0, -1).join(', ')} and ${three[three.length - 1]} sit this one out entirely.`;
+      plan.aside = `Worth noticing: your pieces on ${andList(idle)} sit this one out entirely.`;
     }
   }
   return `${subject} want to ${list}.`;

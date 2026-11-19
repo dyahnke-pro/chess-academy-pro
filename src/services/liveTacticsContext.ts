@@ -87,8 +87,8 @@ export function buildTacticsLiveContext(
   const hanging = detectHangingPieces(fen);
 
   // 2. Forward scan of the PV (threats + opportunities).
-  let threats: TacticsLiveContext['threats'] = [];
-  let opportunities: TacticsLiveContext['opportunities'] = [];
+  const threats: TacticsLiveContext['threats'] = [];
+  const opportunities: TacticsLiveContext['opportunities'] = [];
   if (analysis && analysis.topLines.length > 0) {
     // Only lines worth playing: a line a pawn or more worse than the engine's
     // best is not a plan for either side (walk 2026-09-27: "you've got a pin
@@ -107,11 +107,10 @@ export function buildTacticsLiveContext(
       if (u.beneficiary === 'opponent') threats.push(entry);
       else opportunities.push(entry);
     }
-    // Cap each list at 5 — token budget; the brain doesn't need 20
-    // upcoming entries to narrate well, and 5 covers the top PV
-    // contributors.
-    threats = threats.slice(0, 5);
-    opportunities = opportunities.slice(0, 5);
+    // NO CAP (G4.5). These lists were `.slice(0, 5)` for "token budget" —
+    // but the grounded answer speaks EVERY opportunity and immediate tactic,
+    // so a sixth shot was silently dropped before anyone ranked it. Every
+    // computed tactic reaches the package; the door decides what is said.
   }
 
   // 3. COMPUTED CONCEPTS — from the SAME analysis this package already holds
@@ -357,8 +356,8 @@ export function detectImmediateTactics(
     // geometry detector — the one ground-truth-tested against the 15,000
     // -puzzle corpus, and the one that carries `beneficiary`.
     //
-    // Capped like threats/opportunities: a busy middlegame can show
-    // several patterns and the envelope is token-bounded.
+    // Every pattern, uncapped (G4.5): the Learn alert and the grounded answer
+    // read this list, so a cut here deleted tactics before the ranker saw them.
     const result = detectTactics(fen);
     return result.tactics
       .filter((t) => t.type !== 'none')
@@ -366,8 +365,7 @@ export function detectImmediateTactics(
       // (`isScenicPawnPin`), applied where the live package is built so no
       // Learn lane has to remember it.
       .filter((t) => !isScenicPawnPin(fen, t.type, t.involvedSquares, t.beneficiary))
-      .map((t) => tacticPatternToEntry(t, playerColor, fen))
-      .slice(0, 5);
+      .map((t) => tacticPatternToEntry(t, playerColor, fen));
   } catch {
     return [];
   }
