@@ -1417,7 +1417,7 @@ export function computeMoveFacets(
         add(readBoardAll('leverPasser', { fen: fenAfter, lines, student: studentColorWB })[0]);
         add(readBoardAll('coordinationGap', { fen: fenAfter, lines, student: studentColorWB })[0]);
         add(readBoardAll('endgameVerdict', { fen: fenAfter, lines, student: studentColorWB })[0]);
-        add(readBoardAll('defenderInTime', { fen: fenAfter, lines, student: studentColorWB })[0]);
+        for (const f of readBoardAll('defenderInTime', { fen: fenAfter, lines, student: studentColorWB })) add(f);
         // Batch 3 (2026-11-19), on the record's one line.
         add(readBoardAll('secondFront', { fen: fenAfter, lines, student: studentColorWB })[0]);
         add(readBoardAll('lateralRookDefence', { fen: fenAfter, lines, student: studentColorWB })[0]);

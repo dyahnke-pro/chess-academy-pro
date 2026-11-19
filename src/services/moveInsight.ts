@@ -45,7 +45,7 @@ import { findLoosePieces } from './loosePieces';
 import { noPawnCanChallenge } from './outpost';
 import { findHangingBySee, findKnightReroute, findWeakPawns } from './positionReadingService';
 import { findWorstPlacedPiece, worstReason } from './nextPlans';
-import { detectLatentDanger, latentDangerClause } from './latentDanger';
+import { detectLatentDangers, latentDangerClause } from './latentDanger';
 import { findTrappedPiece } from './reviewTeachingPoints';
 import { detectNewThreat } from './groundedAnswer';
 import { kingReadsForBestLine, type KingReadId } from './kingAttackReads';
@@ -162,9 +162,12 @@ export function positionAsk(fen: string, opts: { bestSan?: string; lastMove?: { 
   const base = (() => {
     try {
       const me = new Chess(fen).turn();
-      const d = detectLatentDanger(fen, me, { latentOnly: true });
-      if (!d || core.mode === 'press') return core;
-      return { ...core, text: [core.text, cap(latentDangerClause(d, fen, me).replace(/\.?$/, '.'))].filter(Boolean).join(' '), squares: [...core.squares, d.frontSquare, d.backSquare] };
+      // Every alignment, worth first (G4.5) — not only the lead one.
+      const ds = detectLatentDangers(fen, me, { latentOnly: true });
+      if (!ds.length || core.mode === 'press') return core;
+      return { ...core,
+        text: [core.text, ...ds.map((d) => cap(latentDangerClause(d, fen, me).replace(/\.?$/, '.')))].filter(Boolean).join(' '),
+        squares: [...core.squares, ...ds.flatMap((d) => [d.frontSquare, d.backSquare])] };
     } catch { return core; }
   })();
   // WHAT THEIR LAST MOVE CHANGED leads (catalogue §1 — "when a move is made, I

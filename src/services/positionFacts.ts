@@ -1680,17 +1680,18 @@ function buildClauses(a: {
   const tradeDangerFacts = tradeDanger ? readBoardAll('tradeDanger', { fen: a.fen, student }) : [];
   const tradeDangerFact = tradeDangerFacts[0] ?? null;
   const latentReads = !tradeDangerFact && (latentDanger || latentChance) ? readBoardAll('latentDanger', { fen: a.fen, student }) : [];
-  const latentDangerFact = latentDanger ? latentReads.find((f) => f.seat === 'opponent') ?? null : null;
-  const latentChanceFact = !latentDanger && latentChance ? latentReads.find((f) => f.seat === 'student') ?? null : null;
+  // EVERY pin in waiting on the leading seat (G4.5), worth first — the door decides.
+  const latentDangerFacts = latentDanger ? latentReads.filter((f) => f.seat === 'opponent') : [];
+  const latentChanceFacts = !latentDanger && latentChance ? latentReads.filter((f) => f.seat === 'student') : [];
   // Said about the board AFTER the capture — graded there, or it reads false now.
   if (tradeDangerFact) for (const f of tradeDangerFacts) ranked.push(readClause(f, 'latent-danger', a.fen, { gradeFen: f.fen }));
   // Only the pin IN WAITING. A standing one (the line already open) is a live
   // pin the tactic lanes name — hand walk 2340: "their bishop on g4 pins your
   // knight" followed by "your knight on f3 and your queen share that diagonal
   // — that diagonal is a pin". One fact once.
-  else if (latentDangerFact) ranked.push(readClause(latentDangerFact, 'latent-danger', a.fen));
+  else if (latentDangerFacts.length) for (const f of latentDangerFacts) ranked.push(readClause(f, 'latent-danger', a.fen));
   // The same line on their pieces: the student's chance (the seat decides the kind).
-  else if (latentChanceFact) ranked.push(readClause(latentChanceFact, 'latent-chance', a.fen));
+  else if (latentChanceFacts.length) for (const f of latentChanceFacts) ranked.push(readClause(f, 'latent-chance', a.fen));
 
   // Foresight is valuable and it is not urgent: what a fork TWO MOVES AWAY is
   // worth is its stakes discounted by the plies until it lands, so live

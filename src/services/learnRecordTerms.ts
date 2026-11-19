@@ -37,7 +37,7 @@ import type { StudentRecord } from './studentRecord';
 import { studentMomentBoost } from './studentMomentBoost';
 import { boostFor, matchTag } from './weaknessSignal';
 import { detectTactics } from './tacticsDetector';
-import { detectLatentDanger } from './latentDanger';
+import { detectLatentDangers } from './latentDanger';
 import { mateThreatsAgainst } from './threatOut';
 import { CAPTURE_VALUE } from './pieceValues';
 
@@ -186,8 +186,8 @@ export function threatVisibility(t: ThreatSighting): VisibilityTerm {
 
   const touches = (p: { involvedSquares: string[] }): boolean => p.involvedSquares.some((sq) => targets.includes(sq));
   if (tactics.some((p) => GEOMETRY_PATTERNS.has(p.type) && touches(p))) return hidden('line-geometry');
-  const xray = detectLatentDanger(fenAfter, student);
-  if (xray && targets.includes(xray.frontSquare)) return hidden('line-geometry');
+  // ANY line through a target hides it, not only the lead one.
+  if (detectLatentDangers(fenAfter, student).some((x) => targets.includes(x.frontSquare))) return hidden('line-geometry');
 
   const piece = after.get(t.attacker as Square);
   if (piece && (piece.type === 'b' || piece.type === 'r' || piece.type === 'q')

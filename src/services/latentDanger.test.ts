@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { detectLatentDanger, latentDangerClause, detectTradeCreatesPin, detectTradesCreatingPin, tradeDangerClause } from './latentDanger';
+import { detectLatentDanger, detectLatentDangers, latentDangerClause, detectTradeCreatesPin, detectTradesCreatingPin, tradeDangerClause } from './latentDanger';
+import { readBoardAll } from './boardComputers';
 
 describe('detectLatentDanger — the pin-in-waiting (David\'s heartbreak case)', () => {
   it('flags a bishop lined up in front of its own king on a rook file', () => {
@@ -134,5 +135,22 @@ describe('a pawn pinned down its own file is not frozen (hand walk 2026-09-24)',
   it('e5 in front of the e1-queen, the e7-queen behind: no pin warning', () => {
     const d = detectLatentDanger('5r1k/p3q1pp/2p5/1pb1P2P/2B2B2/2N2R1P/PPP3K1/4Q3 w - - 0 28', 'w');
     expect(d?.frontSquare).not.toBe('e5');
+  });
+});
+
+describe('detectLatentDangers — every pin in waiting, not the biggest alone (G4.5)', () => {
+  // Two lines on one board: their bishop through your knight on b5 at the rook
+  // and queen, and their rook through your knight on e5 at the bishop and king.
+  const FEN = '4r1k1/8/b7/1N2N3/2R5/3QB3/8/4K3 w - - 0 1';
+  it('returns both, worth first', () => {
+    const ds = detectLatentDangers(FEN, 'w', { latentOnly: true });
+    expect(ds.map((d) => d.frontSquare)).toEqual(['c4', 'e3']);
+    expect(detectLatentDanger(FEN, 'w', { latentOnly: true })?.frontSquare).toBe('c4');
+  });
+  it('the registry read speaks each one', () => {
+    const facts = readBoardAll('latentDanger', { fen: FEN, student: 'w' }).filter((f) => f.seat === 'opponent');
+    expect(facts.length).toBe(2);
+    expect(facts.some((f) => /knight on e5/.test(f.text))).toBe(true);
+    expect(facts.some((f) => /knight on b5/.test(f.text))).toBe(true);
   });
 });

@@ -85,19 +85,32 @@ function lineKind(dr: number, dc: number): LatentDanger['line'] {
  * a KING or QUEEN is a pin geometry. At most ONE shield may sit between the enemy
  * and P1, and it must be the STUDENT's own piece — 0 = the line is already open,
  * 1 = LATENT (opens if the student moves or trades that piece). Returns the
- * highest-value exposure, or null.
+ * highest-value exposure, or null — the lead of `detectLatentDangers`, for the
+ * callers whose claim is ONE line (a membership check, the lead alarm).
  */
 export function detectLatentDanger(
+  fen: string,
+  studentColor: 'w' | 'b',
+  opts: { latentOnly?: boolean } = {},
+): LatentDanger | null {
+  return detectLatentDangers(fen, studentColor, opts)[0] ?? null;
+}
+
+/** EVERY line on the board that puts the student's king or queen behind one of
+ *  their pieces, worth first (the piece at risk, then a king behind). Not a cap
+ *  (G4.5): two pins in waiting are two warnings, and the deciding door — not
+ *  this computer — chooses what is said. */
+export function detectLatentDangers(
   fen: string,
   studentColor: 'w' | 'b',
   /** Skip lines already open — a standing pin is a live tactic the tactic lanes
    *  name; the prevention clause only warns about the one in waiting. */
   opts: { latentOnly?: boolean } = {},
-): LatentDanger | null {
+): LatentDanger[] {
   const g = grid(fen);
   const at = (r: number, c: number): Cell | null => (r >= 0 && r < 8 && c >= 0 && c < 8 ? g[r][c] : null);
   const enemy: 'w' | 'b' = studentColor === 'w' ? 'b' : 'w';
-  let best: LatentDanger | null = null;
+  const found: LatentDanger[] = [];
 
   for (let r = 0; r < 8; r++) {
     for (let c = 0; c < 8; c++) {
@@ -141,14 +154,14 @@ export function detectLatentDanger(
           line: lineKind(dr, dc), latent: shields === 1,
           ...(shields === 1 ? { shieldSquare: onRay[0].sq, shieldPiece: onRay[0].piece } : {}),
         };
-        // Rank by the piece at risk (front), then prefer a king behind.
-        const score = (VAL[front.piece] ?? 0) + (back.piece === 'k' ? 0.5 : 0);
-        const bestScore = best ? (VAL[best.frontPiece] ?? 0) + (best.backPiece === 'k' ? 0.5 : 0) : -1;
-        if (score > bestScore) best = danger;
+        found.push(danger);
       }
     }
   }
-  return best;
+  // Rank by the piece at risk (front), then prefer a king behind; a tie keeps
+  // the board's scan order (stable sort).
+  const worth = (d: LatentDanger): number => (VAL[d.frontPiece] ?? 0) + (d.backPiece === 'k' ? 0.5 : 0);
+  return found.sort((a, b) => worth(b) - worth(a));
 }
 
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -180,8 +193,8 @@ export function detectTradesCreatingPin(fen: string, studentColor: 'w' | 'b'): T
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return []; }
   if (chess.turn() !== studentColor) return []; // only on the student's move
-  const before = detectLatentDanger(fen, studentColor);
-  const beforeKey = before ? `${before.frontSquare}-${before.backSquare}-${before.enemySquare}` : '';
+  const keyOf = (d: LatentDanger): string => `${d.frontSquare}-${d.backSquare}-${d.enemySquare}`;
+  const before = new Set(detectLatentDangers(fen, studentColor).map(keyOf));
 
   const found: TradeDanger[] = [];
   let captures: ReturnType<Chess['moves']>;
@@ -193,18 +206,16 @@ export function detectTradesCreatingPin(fen: string, studentColor: 'w' | 'b'): T
     // the trade … a pin" — …Qxg2+ is met by Kxg2 and the queen is simply gone).
     // A capture that loses material on its own square is not a trade to look
     // past: the loss is the story, and it is told elsewhere.
-    let after: LatentDanger | null;
+    let after: LatentDanger[];
     try {
       const c = new Chess(fen);
       const played = c.move({ from: m.from, to: m.to });
       // This capture's own net: what it takes, less their best answer on the square.
       if ((VAL[played.captured ?? ''] ?? 0) - legalSeeGain(c.fen(), m.to as Square) < 0) continue;
-      after = detectLatentDanger(c.fen(), studentColor);
+      after = detectLatentDangers(c.fen(), studentColor);
     } catch { continue; }
-    if (!after) continue;
-    const afterKey = `${after.frontSquare}-${after.backSquare}-${after.enemySquare}`;
-    if (afterKey === beforeKey) continue;                 // not newly created by this trade
-    found.push({ ...after, tradeFrom: m.from, tradeTo: m.to });
+    // Every line this capture newly opens (a line already standing is not the trade's).
+    for (const d of after) if (!before.has(keyOf(d))) found.push({ ...d, tradeFrom: m.from, tradeTo: m.to });
   }
   // Worth first; a tie keeps the board's move order (stable sort).
   return found.sort((a, b) => (VAL[b.frontPiece] ?? 0) - (VAL[a.frontPiece] ?? 0));

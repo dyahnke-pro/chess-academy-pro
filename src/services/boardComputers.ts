@@ -127,7 +127,7 @@ import { fortress, fortressLine, fortressSquares } from './fortress';
 import { itineraryAt, itineraryLine } from './reviewPieceItinerary';
 import { forcedRunAt, FORCED_RUN_LINE } from './reviewForcedSequence';
 import { threatPurpose } from './threatPurpose';
-import { temptingCaptureRead, attackerDefenderCount, royalDefenderTarget, rookOnSeventh, badEnemyBishop } from './reviewTeachingPoints';
+import { temptingCaptureRead, attackerDefenderCount, countSaid, royalDefenderTarget, rookOnSeventh, badEnemyBishop } from './reviewTeachingPoints';
 import { nameEndgamePhase } from './reviewMoveTeaching';
 import { passedPawnPush, findTrappedPiece } from './reviewTeachingPoints';
 import { enemyKingStuckInCenter, sacrificeCompensation, describeSacBreaksKingShield } from './reviewSacrifice';
@@ -202,7 +202,7 @@ import { exchangeIdeas, type ExchangeIdeasInput } from './exchangeIdeas';
 import { conceptForBoard } from './conceptEngine';
 import { pinPressureConcept, guardRemovalConcept, type BoardConcept } from './boardTeachConcepts';
 import { deliberationFacts, deliberationMarks, fullWeighingSays, deliberationWeighing, HELD_WEIGHING_SAYS, type Deliberation } from './deliberation';
-import { detectLatentDanger, latentDangerClause, detectTradesCreatingPin, tradeDangerClause } from './latentDanger';
+import { detectLatentDangers, latentDangerClause, detectTradesCreatingPin, tradeDangerClause } from './latentDanger';
 import { detectLatentFork, latentForkClause } from './latentFork';
 import { detectCentralKingDanger, centralKingDangerClause } from './kingSafety';
 import { readConversion } from './conversionMethod';
@@ -2728,8 +2728,8 @@ export const BOARD_COMPUTERS = {
       const them: Color = student === 'w' ? 'b' : 'w';
       const out: CoachFact[] = [];
       for (const [side, seat, skill] of [[student, 'opponent', 'missed-their-pin'], [them, 'student', 'missed-your-pin']] as const) {
-        const d = detectLatentDanger(fen, side, { latentOnly: true });
-        if (!d) continue;
+        // EVERY pin in waiting, worth first (G4.5): the door chooses what is said.
+        for (const d of detectLatentDangers(fen, side, { latentOnly: true })) {
         // A spoken sentence opens with its capital: the clause is built to
         // follow other words in `moveInsight`, so the fact opens it here.
         const text = openSentence(latentDangerClause(d, fen, student));
@@ -2738,6 +2738,7 @@ export const BOARD_COMPUTERS = {
           squares: [d.enemySquare, d.frontSquare, d.backSquare, ...(d.shieldSquare ? [d.shieldSquare] : [])],
           stakes: { points: lineTacticPoints(d.frontPiece, d.backPiece), plies: 3 },
           seat, namesStudentMove: false, thread: LOCAL_THREAD, fen, skill }));
+        }
       }
       return out.length ? out : null;
     }),
@@ -4261,7 +4262,8 @@ export const BOARD_COMPUTERS = {
     read: ({ fen, student }, fact) => safe(() => {
       const reads = attackerDefenderCount(fen, student);
       if (reads.length === 0) return null;
-      const text = reads.map((r) => `${openSentence(r.text)}.`).join(' ');
+      // The habit said once, each piece its own sentence on a rotated stem.
+      const text = countSaid(reads, fen);
       // A count that says the piece has to move is the tempo the move that
       // attacked it gained: one claim (`ideaClaim('tempo')`), said once
       // (composerSaysOnce, g4 against the bishop on f5).
@@ -7377,11 +7379,14 @@ export const BOARD_COMPUTERS = {
   defenderInTime: {
     // "Nd3-b4 fails to ...Kf7-e6": the knight's route to a loose pawn against the king that gets there first. Both seats.
     read: (ctx, fact) => safe(() => {
-      const r = defenderInTime(ctx.fen, ctx.lines, ctx.student);
-      if (!r) return null;
-      const key = `defender-in-time:${r.pawn}`;
-      return fact({ key, claims: [key], text: r.text, proof: squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
-        seat: (r.side === ctx.student ? 'student' : 'opponent'), namesStudentMove: false, thread: LOCAL_THREAD, fen: ctx.fen });
+      // EVERY race, one fact a knight-and-pawn pair (G4.5); the claim is the
+      // pawn, so two knights after one pawn are one claim to the door.
+      const out = defenderInTime(ctx.fen, ctx.lines, ctx.student).map((r) => {
+        const claim = `defender-in-time:${r.pawn}`;
+        return fact({ key: `${claim}:${r.knight}`, claims: [claim], text: r.text, proof: squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
+          seat: (r.side === ctx.student ? 'student' : 'opponent'), namesStudentMove: false, thread: LOCAL_THREAD, fen: ctx.fen });
+      });
+      return out.length ? out : null;
     }),
     computer: 'defenderInTime',
     kind: 'technique',

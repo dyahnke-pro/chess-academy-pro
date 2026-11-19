@@ -59,13 +59,15 @@ function isLight(sq: string): boolean { return ((sq.charCodeAt(0) - 97) + (Numbe
 /** The count with the piece it is about: its square, and whether it is a
  *  TEMPO (a piece that can step away, so the count says it has to move — the
  *  same claim as the move that kicked it, which the registry couples). */
-export function attackerDefenderCount(fen: string, studentColorWB: Color): { text: string; square: Square; tempo: boolean }[] {
+export interface CountRead { text: string; square: Square; tempo: boolean; piece: string; attackers: number; defenders: number }
+
+export function attackerDefenderCount(fen: string, studentColorWB: Color): CountRead[] {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return []; }
   const enemy: Color = studentColorWB === 'w' ? 'b' : 'w';
   // EVERY outnumbered piece, most valuable first — never the biggest alone
   // (G4.5: two of their pieces falling is two facts).
-  const found: { text: string; value: number; square: Square; tempo: boolean }[] = [];
+  const found: (CountRead & { value: number })[] = [];
   // OFFENSIVE only — the M2 lesson is "more attackers than defenders → it falls".
   // We deliberately do NOT flag the student's own overloaded piece: it collides
   // with an intentional sacrifice (the sacked rook/queen is MEANT to be loose).
@@ -117,13 +119,38 @@ export function attackerDefenderCount(fen: string, studentColorWB: Color): { tex
     const theirMove = (fen.split(' ')[1] ?? '') !== studentColorWB;
     const escapes = theirMove && pieceHasSafeEscape(chess, sq, studentColorWB);
     const count = `count the attackers and defenders on their ${PIECE_NOUN[c.type]} on ${sq}: ${plural(atk, 'attacker')} to ${plural(def, 'defender')}`;
-    const cand = { value: PIECE_VAL[c.type] ?? 0, square: sq, tempo: escapes,
+    const cand = { value: PIECE_VAL[c.type] ?? 0, square: sq, tempo: escapes, piece: PIECE_NOUN[c.type], attackers: atk, defenders: def,
       text: escapes
         ? `${count} — it's outnumbered, so it has to move, and that costs them the tempo`
         : `${count} — more attackers than defenders, so it falls` };
     found.push(cand);
   }
-  return found.sort((a, b) => b.value - a.value).map((f) => ({ text: f.text, square: f.square, tempo: f.tempo }));
+  return found.sort((a, b) => b.value - a.value).map(({ value: _v, ...f }) => f);
+}
+
+/**
+ * The count SAID, every outnumbered piece in it. One piece: its own sentence.
+ * Two or more: the habit once ("Count the attackers and defenders."), then one
+ * sentence a piece, its stem rotated on the board so no stem repeats — never
+ * "Count the attackers and defenders on their …" said again for each piece.
+ */
+export function countSaid(reads: readonly CountRead[], fen: string): string {
+  if (reads.length === 0) return '';
+  if (reads.length === 1) return `${openSentence(reads[0].text)}.`;
+  // The verdict in full once; a piece after another with the same verdict says it short.
+  const tail = (r: CountRead, i: number): string => {
+    const again = i > 0 && reads[i - 1].tempo === r.tempo;
+    if (r.tempo) return again ? 'it has to move too' : "it's outnumbered, so it has to move, and that costs them the tempo";
+    return again ? 'it falls too' : 'more attackers than defenders, so it falls';
+  };
+  const tally = (r: CountRead): string => `${plural(r.attackers, 'attacker')} to ${plural(r.defenders, 'defender')}`;
+  const stems = (r: CountRead, i: number): string[] => [
+    `Their ${r.piece} on ${r.square} has ${tally(r)} — ${tail(r, i)}.`,
+    `On ${r.square}, their ${r.piece} faces ${tally(r)} — ${tail(r, i)}.`,
+    `Look at their ${r.piece} on ${r.square}: ${tally(r)} — ${tail(r, i)}.`,
+  ];
+  const base = stemKeyOf(fen);
+  return ['Count the attackers and defenders.', ...reads.map((r, i) => rotateStem(stems(r, i), base + i))].join(' ');
 }
 
 function plural(n: number, noun: string): string { return `${n} ${noun}${n === 1 ? '' : 's'}`; }
