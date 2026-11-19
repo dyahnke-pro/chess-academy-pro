@@ -1,0 +1,2073 @@
+{
+ "date": "2026-11-19",
+ "source": "/home/user/urg-wt/audit-reports/danya-havecheck/ideas-labelled-2026-11-17.json",
+ "counts": {
+  "C": 51,
+  "A": 104,
+  "D": 28,
+  "B": 26,
+  "E": 15
+ },
+ "eConcepts": [
+  {
+   "concept": "centre",
+   "boards": [
+    "how-to-play-a-brilliancy#1",
+    "magnus-carlsens-best-endgame-wins#2",
+    "positional-combinations#1",
+    "the-positional-sacrifice#3",
+    "the-two-knight-advantage#1"
+   ],
+   "n": 5,
+   "builtAs": "pawnCentre.ts"
+  },
+  {
+   "concept": "heldWeakPawns",
+   "boards": [
+    "how-to-ruin-your-pawn-structure#1",
+    "how-to-ruin-your-pawn-structure#3"
+   ],
+   "n": 2,
+   "builtAs": "harmlessWeakPawns.ts"
+  },
+  {
+   "concept": "inaccessibleHole",
+   "boards": [
+    "weak-squares-who-cares#1",
+    "weak-squares-who-cares#7"
+   ],
+   "n": 2,
+   "builtAs": "inaccessibleHole.ts"
+  },
+  {
+   "concept": "fileNeedsPiece",
+   "boards": [
+    "mysterious-gm-moves#4"
+   ],
+   "n": 1,
+   "builtAs": "wingWithoutPieces.ts"
+  },
+  {
+   "concept": "noChecks",
+   "boards": [
+    "tales-from-a-grandmaster#1"
+   ],
+   "n": 1,
+   "builtAs": null
+  },
+  {
+   "concept": "rookMate",
+   "boards": [
+    "the-art-of-time-management#3"
+   ],
+   "n": 1,
+   "builtAs": "kingBox.ts"
+  },
+  {
+   "concept": "promotionOrder",
+   "boards": [
+    "the-importance-of-solving-studies#1"
+   ],
+   "n": 1,
+   "builtAs": null
+  },
+  {
+   "concept": "kingRace",
+   "boards": [
+    "the-importance-of-solving-studies#2"
+   ],
+   "n": 1,
+   "builtAs": null
+  }
+ ],
+ "rows": [
+  {
+   "board": "a-guide-to-underpromotion#1",
+   "idea": "Habit: tactical awareness and precise calculation before promoting",
+   "kind": "choice",
+   "status": "missing",
+   "group": "C",
+   "reason": "habit before promoting; trigger exists (a promotion on the board)",
+   "boardTrigger": "promotionChoice"
+  },
+  {
+   "board": "a-guide-to-underpromotion#2",
+   "idea": "Promote to a knight (it can give check / hit key squares) rather than a queen",
+   "kind": "promote",
+   "status": "missing",
+   "group": "A",
+   "reason": "underpromotion choice is read by promotionChoice",
+   "existingComputer": "promotionChoice"
+  },
+  {
+   "board": "a-guide-to-underpromotion#4",
+   "idea": "Habit: before promoting, scan for hidden resources; you may be reaching for the wrong piece",
+   "kind": "promote",
+   "status": "missing",
+   "group": "C",
+   "reason": "habit: scan before promoting; trigger = promotion available",
+   "boardTrigger": null
+  },
+  {
+   "board": "alekhines-gun2#2",
+   "idea": "Formidable central pressure; Black has no counterplay",
+   "kind": "pressure",
+   "status": "missing",
+   "group": "A",
+   "reason": "pressure on a fixed target = pieces bearing on d6 (attackerDefenderCount / pressureOf)",
+   "existingComputer": "attackerDefenderCount"
+  },
+  {
+   "board": "alekhines-gun2#2",
+   "idea": "d6 is the target; once it falls the gun fires",
+   "kind": "weakness",
+   "status": "missing",
+   "group": "A",
+   "reason": "fixed backward pawn as target (structureReads / boardPlanFacts target)",
+   "existingComputer": "boardPlanFacts"
+  },
+  {
+   "board": "alekhines-gun2#3",
+   "idea": "The pressure prepares a sudden transformation White is not ready for",
+   "kind": "plan",
+   "status": "missing",
+   "group": "C",
+   "reason": "narrative (\"prepares a sudden transformation\"); no board trigger",
+   "boardTrigger": null
+  },
+  {
+   "board": "beginner-chess-strategy#4",
+   "idea": "White is far behind in material (15 vs 25) yet wins",
+   "kind": "eval",
+   "status": "missing",
+   "group": "D",
+   "reason": "material count vs result verdict"
+  },
+  {
+   "board": "beginner-chess-strategy#6",
+   "idea": "White's king is far more active than Black's and nothing can harass it",
+   "kind": "king-activity",
+   "status": "missing",
+   "group": "A",
+   "reason": "king activity in an ending (kingActivity reads in endgamePawnReads / nameEndgamePhase)",
+   "existingComputer": "endgamePawnReads"
+  },
+  {
+   "board": "blunders-a-grandmasters-perspective#2",
+   "idea": "Habit: run a DAP check (double attacks, pins) and look for in-between moves",
+   "kind": "tactic",
+   "status": "missing",
+   "group": "C",
+   "reason": "habit: DAP check; trigger = liveMethodBeat forcing scan",
+   "boardTrigger": "liveMethodBeat"
+  },
+  {
+   "board": "bobbys-overlooked-gem#1",
+   "idea": "A concealed tactical resource 18.Nd4! drives through Black's solid-looking position",
+   "kind": "tactic",
+   "status": "missing",
+   "group": "B",
+   "reason": "concrete engine move 18.Nd4 \u2014 the line computers (depthClauses line) cover it",
+   "existingComputer": "depthClauses"
+  },
+  {
+   "board": "desperado-defense#0",
+   "idea": "Passive defence (16...Nd7) holds under 10 moves; the only practical chance is a radical desperado",
+   "kind": "plan",
+   "status": "missing",
+   "group": "C",
+   "reason": "practical decision (desperado vs passive defence)",
+   "boardTrigger": null
+  },
+  {
+   "board": "desperado-defense#2",
+   "idea": "Desperado idea: add a tactical element so the opponent must keep calculating",
+   "kind": "plan",
+   "status": "missing",
+   "group": "C",
+   "reason": "practical decision: add tactical elements",
+   "boardTrigger": null
+  },
+  {
+   "board": "endgame-attacks-part-2#1",
+   "idea": "Black is very comfortable: no weaknesses and a space advantage",
+   "kind": "space",
+   "status": "missing",
+   "group": "A",
+   "reason": "space advantage (computeTerritory / detectSpaceAdvantage)",
+   "existingComputer": "computeTerritory"
+  },
+  {
+   "board": "endgame-attacks-part-2#1",
+   "idea": "Do not be afraid to trade the knight for the greater good",
+   "kind": "trade",
+   "status": "missing",
+   "group": "C",
+   "reason": "trade attitude; no board trigger",
+   "boardTrigger": null
+  },
+  {
+   "board": "endgame-attacks-part-2#3",
+   "idea": "Black has an unpleasant endgame after botching the opening",
+   "kind": "eval",
+   "status": "said-wrong",
+   "group": "D",
+   "reason": "verdict sentence"
+  },
+  {
+   "board": "endgame-attacks-part-2#3",
+   "idea": "White's queen and bishop are on ideal squares",
+   "kind": "pressure",
+   "status": "missing",
+   "group": "A",
+   "reason": "pieces on ideal squares = pieceActivity activityEdge",
+   "existingComputer": "pieceActivity"
+  },
+  {
+   "board": "how-to-avoid-blunders-part-1#0",
+   "idea": "White's pieces are too passive or out of play to help",
+   "kind": "weakness",
+   "status": "missing",
+   "group": "A",
+   "reason": "passive / out-of-play pieces = pieceActivity",
+   "existingComputer": "pieceActivity"
+  },
+  {
+   "board": "how-to-avoid-blunders-part-1#1",
+   "idea": "Habit: DAP check \u2014 double attacks and pins before a tempting move",
+   "kind": "tactic",
+   "status": "missing",
+   "group": "C",
+   "reason": "habit: DAP check; liveMethodBeat forcing scan",
+   "boardTrigger": "liveMethodBeat"
+  },
+  {
+   "board": "how-to-avoid-blunders-part-1#2",
+   "idea": "Habit: main-line check \u2014 calculate the short line that justifies the move",
+   "kind": "choice",
+   "status": "missing",
+   "group": "C",
+   "reason": "habit: calculate the justifying line",
+   "boardTrigger": null
+  },
+  {
+   "board": "how-to-avoid-blunders-part-1#3",
+   "idea": "39...Rc7 40.Nf7+ Kg7 41.Nd8 and the knight penetrates to e6",
+   "kind": "route",
+   "status": "missing",
+   "group": "B",
+   "reason": "knight penetration line Nf7+-d8-e6 is an engine line (depthClauses / pieceRoute)",
+   "existingComputer": "pieceRoute"
+  },
+  {
+   "board": "how-to-avoid-blunders-part-1#4",
+   "idea": "Habit: a feeling of immunity (queens off) leads to carelessness \u2014 run the checkmate check",
+   "kind": "king-safety",
+   "status": "missing",
+   "group": "C",
+   "reason": "habit: checkmate check with queens off",
+   "boardTrigger": null
+  },
+  {
+   "board": "how-to-ignore-a-threat-and-win#0",
+   "idea": "Anti-prophylaxis: 26.Nhf5! ignores Black's idea and counter-attacks",
+   "kind": "choice",
+   "status": "said-wrong",
+   "group": "B",
+   "reason": "counterattack ignoring the threat = engine best ignoring a threat (depthClauses / temptingRefuted)",
+   "existingComputer": "depthClauses"
+  },
+  {
+   "board": "how-to-ignore-a-threat-and-win#2",
+   "idea": "Habit: do not overestimate a threat, especially against a stronger player",
+   "kind": "threat",
+   "status": "missing",
+   "group": "C",
+   "reason": "habit: do not overestimate a threat",
+   "boardTrigger": null
+  },
+  {
+   "board": "how-to-ignore-a-threat-and-win#3",
+   "idea": "Black is a pawn up but the material count is irrelevant",
+   "kind": "eval",
+   "status": "missing",
+   "group": "D",
+   "reason": "material irrelevant verdict"
+  },
+  {
+   "board": "how-to-play-a-brilliancy#1",
+   "idea": "Black has undermined White's centre and has respectable central counterplay",
+   "kind": "center",
+   "status": "missing",
+   "group": "E",
+   "reason": "centre: counterplay against the centre \u2014 central control comparison",
+   "concept": "centre"
+  },
+  {
+   "board": "how-to-play-a-brilliancy#1",
+   "idea": "17.Bg5 is dubious: White underestimates Black's dark-square play",
+   "kind": "weakness",
+   "status": "missing",
+   "group": "A",
+   "reason": "dark-square play underestimated (colour complex)",
+   "existingComputer": "findColorComplexWeakness"
+  },
+  {
+   "board": "how-to-play-a-brilliancy#3",
+   "idea": "31...Re4!!: the rook goes where two white pieces can take it",
+   "kind": "tactic",
+   "status": "missing",
+   "group": "B",
+   "reason": "31...Re4!! sacrificial interference \u2014 engine line (depthClauses line)",
+   "existingComputer": "depthClauses"
+  },
+  {
+   "board": "how-to-ruin-your-pawn-structure#0",
+   "idea": "Damage your own structure (gxf6) to make inroads",
+   "kind": "structure",
+   "status": "said-wrong",
+   "group": "A",
+   "reason": "which way to recapture (gxf6 over Bxf6) = capture-choice (tradeKeptAt) \u2014 the recapture choice computer",
+   "existingComputer": "tradeKeptAt"
+  },
+  {
+   "board": "how-to-ruin-your-pawn-structure#1",
+   "idea": "Keeping g4 (Be2/Rg1) lets Black take over: rook on h8 dominant, e4/g4 weak, White undeveloped",
+   "kind": "weakness",
+   "status": "missing",
+   "group": "B",
+   "reason": "consequence line after Be2/Rg1 hxg4 \u2014 engine line",
+   "existingComputer": "depthClauses"
+  },
+  {
+   "board": "how-to-ruin-your-pawn-structure#1",
+   "idea": "Black's 'weak' pawns are defended by the e7 bishop and do not matter",
+   "kind": "structure",
+   "status": "missing",
+   "group": "E",
+   "reason": "weak pawns held by a piece do not count (piece placement over structure)",
+   "concept": "heldWeakPawns"
+  },
+  {
+   "board": "how-to-ruin-your-pawn-structure#1",
+   "idea": "Habit: never capture automatically",
+   "kind": "choice",
+   "status": "missing",
+   "group": "C",
+   "reason": "habit: never capture automatically (tension trigger: a capture exists)",
+   "boardTrigger": "tensionGain"
+  },
+  {
+   "board": "how-to-ruin-your-pawn-structure#2",
+   "idea": "Exploiting a temporary deficiency often needs drastic measures",
+   "kind": "plan",
+   "status": "missing",
+   "group": "C",
+   "reason": "maxim: drastic measures",
+   "boardTrigger": null
+  },
+  {
+   "board": "how-to-ruin-your-pawn-structure#3",
+   "idea": "Black has a space advantage and menacing e5/f5 pawns; White's centre is deformed",
+   "kind": "space",
+   "status": "missing",
+   "group": "A",
+   "reason": "space advantage computeTerritory",
+   "existingComputer": "computeTerritory"
+  },
+  {
+   "board": "how-to-ruin-your-pawn-structure#3",
+   "idea": "Plant a knight on e6",
+   "kind": "outpost",
+   "status": "missing",
+   "group": "A",
+   "reason": "outpost e6 (outpost.ts / holeTargets)",
+   "existingComputer": "outpost"
+  },
+  {
+   "board": "how-to-ruin-your-pawn-structure#3",
+   "idea": "Piece placement often trumps pawn structure",
+   "kind": "plan",
+   "status": "missing",
+   "group": "E",
+   "reason": "piece placement over structure",
+   "concept": "heldWeakPawns"
+  },
+  {
+   "board": "how-to-ruin-your-pawn-structure#5",
+   "idea": "A passive position will not hold; mobilize the pieces",
+   "kind": "plan",
+   "status": "missing",
+   "group": "A",
+   "reason": "passive position, mobilize = pieceActivity",
+   "existingComputer": "pieceActivity"
+  },
+  {
+   "board": "how-to-survive-a-chess-disaster#0",
+   "idea": "After a blunder: reality check \u2014 stay composed and look hard for saving resources",
+   "kind": "plan",
+   "status": "missing",
+   "group": "C",
+   "reason": "mindset after a blunder",
+   "boardTrigger": null
+  },
+  {
+   "board": "how-to-survive-a-chess-disaster#1",
+   "idea": "The game has turned into wild tactics with both players under a minute",
+   "kind": "choice",
+   "status": "missing",
+   "group": "C",
+   "reason": "clock/meta",
+   "boardTrigger": null
+  },
+  {
+   "board": "how-to-survive-a-chess-disaster#1",
+   "idea": "Positive mindset: never resign, keep looking (the later 38...a6 luck)",
+   "kind": "plan",
+   "status": "missing",
+   "group": "C",
+   "reason": "mindset: never resign",
+   "boardTrigger": null
+  },
+  {
+   "board": "how-to-survive-a-chess-disaster#2",
+   "idea": "White's defence: the Carlsen approach \u2014 stay alive one move longer",
+   "kind": "plan",
+   "status": "missing",
+   "group": "C",
+   "reason": "defence mindset",
+   "boardTrigger": null
+  },
+  {
+   "board": "how-to-survive-a-chess-disaster#3",
+   "idea": "The levelheaded 34.Qc1! secures long-term compensation",
+   "kind": "choice",
+   "status": "missing",
+   "group": "B",
+   "reason": "34.Qc1! engine move with long-term compensation (compensation.ts)",
+   "existingComputer": "compensation"
+  },
+  {
+   "board": "how-to-survive-a-chess-disaster#4",
+   "idea": "36.Rc3!: a bluff \u2014 ...Qxe6 wins but 37.Qxf4+ complications are hard to calculate",
+   "kind": "choice",
+   "status": "said-wrong",
+   "group": "B",
+   "reason": "bluff Rc3 \u2014 engine line that refutes it",
+   "existingComputer": null
+  },
+  {
+   "board": "how-to-survive-a-chess-disaster#4",
+   "idea": "Habit: bluff as a last resort \u2014 make the opponent show mental toughness",
+   "kind": "plan",
+   "status": "missing",
+   "group": "C",
+   "reason": "habit: bluff as last resort",
+   "boardTrigger": null
+  },
+  {
+   "board": "how-to-win-equal-positions#0",
+   "idea": "Physical method: change the material balance with 21.Nxa6, giving the good knight for the bishop",
+   "kind": "trade",
+   "status": "said-wrong",
+   "group": "A",
+   "reason": "trade good knight for bishop to change balance = trade computers (tradeJudgement)",
+   "existingComputer": "tradeJudgement"
+  },
+  {
+   "board": "how-to-win-equal-positions#0",
+   "idea": "Then 22.Qc5 changes the pawn structure",
+   "kind": "structure",
+   "status": "missing",
+   "group": "A",
+   "reason": "structure change after Qc5 = studentMoveStructure",
+   "existingComputer": "studentMoveStructure"
+  },
+  {
+   "board": "how-to-win-equal-positions#0",
+   "idea": "Habit: a sudden change of structure or material unsettles the opponent",
+   "kind": "plan",
+   "status": "missing",
+   "group": "C",
+   "reason": "maxim: sudden change unsettles",
+   "boardTrigger": null
+  },
+  {
+   "board": "how-to-win-equal-positions#1",
+   "idea": "Black's queen on a7 is somewhat misplaced",
+   "kind": "weakness",
+   "status": "missing",
+   "group": "A",
+   "reason": "misplaced queen = pieceWish worst / pieceActivity",
+   "existingComputer": "pieceWish"
+  },
+  {
+   "board": "how-to-win-equal-positions#1",
+   "idea": "Tactical method: 'tactify' the position so the opponent must calculate",
+   "kind": "plan",
+   "status": "said-wrong",
+   "group": "C",
+   "reason": "method: tactify",
+   "boardTrigger": null
+  },
+  {
+   "board": "how-to-win-equal-positions#2",
+   "idea": "Don't offer the draw: keep posing strategic dilemmas",
+   "kind": "plan",
+   "status": "missing",
+   "group": "C",
+   "reason": "practical: do not offer draw",
+   "boardTrigger": null
+  },
+  {
+   "board": "how-to-win-equal-positions#2",
+   "idea": "Habit: risk is part of playing for a win in an equal position",
+   "kind": "plan",
+   "status": "missing",
+   "group": "C",
+   "reason": "risk mindset",
+   "boardTrigger": null
+  },
+  {
+   "board": "in-pursuit-of-zugzwang#0",
+   "idea": "With Black to move it would be zugzwang: triangulate to lose a tempo",
+   "kind": "order",
+   "status": "missing",
+   "group": "A",
+   "reason": "triangulation to lose a tempo (endgamePawnReads triangulation, zugzwang.ts)",
+   "existingComputer": "endgamePawnReads"
+  },
+  {
+   "board": "in-pursuit-of-zugzwang#1",
+   "idea": "White is down a pawn but has high drawing chances",
+   "kind": "eval",
+   "status": "said-wrong",
+   "group": "D",
+   "reason": "drawing chances verdict (fortress/character)"
+  },
+  {
+   "board": "in-pursuit-of-zugzwang#3",
+   "idea": "White has built a fortress; on the surface Black cannot make progress and a draw looks likely",
+   "kind": "eval",
+   "status": "said-wrong",
+   "group": "A",
+   "reason": "fortress (fortress.ts)",
+   "existingComputer": "fortress"
+  },
+  {
+   "board": "in-pursuit-of-zugzwang#3",
+   "idea": "The winning method is zugzwang: White must be put to move when every move worsens his position",
+   "kind": "plan",
+   "status": "missing",
+   "group": "A",
+   "reason": "zugzwang method (zugzwang.ts / zugzwangRead)",
+   "existingComputer": "zugzwangRead"
+  },
+  {
+   "board": "in-pursuit-of-zugzwang#3",
+   "idea": "54...a6!! is the only move \u2014 a waiting move that hands White the move in a mutual-block position",
+   "kind": "tempo",
+   "status": "missing",
+   "group": "A",
+   "reason": "waiting move into mutual zugzwang (zugzwangRead)",
+   "existingComputer": "zugzwangRead"
+  },
+  {
+   "board": "introduction-to-my-friday-columns#2",
+   "idea": "White's first rank is fatally weak (back-rank mate ideas)",
+   "kind": "weakness",
+   "status": "missing",
+   "group": "A",
+   "reason": "back-rank weakness (kingSiege.backRankWeakness)",
+   "existingComputer": "backRankWeakness"
+  },
+  {
+   "board": "introduction-to-my-friday-columns#2",
+   "idea": "After 25.Bxd6 Bd4+! the bishop cannot be taken (back rank) and the king walks into a knight fork",
+   "kind": "tactic",
+   "status": "missing",
+   "group": "B",
+   "reason": "Bd4+ back-rank + fork line \u2014 engine line",
+   "existingComputer": "depthClauses"
+  },
+  {
+   "board": "joseacute-rauacutel-capablancas-greatest-positional-wins-part-2#1",
+   "idea": "White has nursed a positional edge into a full assault; Black's position is in tatters",
+   "kind": "eval",
+   "status": "said-wrong",
+   "group": "D",
+   "reason": "verdict"
+  },
+  {
+   "board": "knights-on-the-rim-areamazing#2",
+   "idea": "White has a massive space advantage",
+   "kind": "space",
+   "status": "missing",
+   "group": "A",
+   "reason": "space (computeTerritory)",
+   "existingComputer": "computeTerritory"
+  },
+  {
+   "board": "knights-on-the-rim-areamazing#2",
+   "idea": "The knight reroutes to a3, where its potential energy decides the game",
+   "kind": "route",
+   "status": "missing",
+   "group": "A",
+   "reason": "knight reroute (findKnightReroute / pieceRoute)",
+   "existingComputer": "pieceRoute"
+  },
+  {
+   "board": "magnus-carlsens-best-endgame-wins#2",
+   "idea": "Black has built an impressive pawn center",
+   "kind": "center",
+   "status": "missing",
+   "group": "E",
+   "reason": "pawn centre (central duo, unchallenged)",
+   "concept": "centre"
+  },
+  {
+   "board": "magnus-carlsens-best-endgame-wins#2",
+   "idea": "Black's pieces are optimally placed",
+   "kind": "eval",
+   "status": "missing",
+   "group": "A",
+   "reason": "pieces optimally placed = pieceActivity",
+   "existingComputer": "pieceActivity"
+  },
+  {
+   "board": "mastering-intuition-part-1#0",
+   "idea": "Black's outwardly passive d7 bishop actually holds his position together, so trade the knight for it",
+   "kind": "trade",
+   "status": "missing",
+   "group": "A",
+   "reason": "trade off the key defender: tiedDefender / royalDefenderTarget",
+   "existingComputer": "tiedDefender"
+  },
+  {
+   "board": "mastering-intuition-part-1#0",
+   "idea": "Removing the c5 knight lets White's rooks infiltrate the seventh rank",
+   "kind": "file",
+   "status": "missing",
+   "group": "B",
+   "reason": "rooks to the seventh after Nxd7 \u2014 line + rookOnSeventh",
+   "existingComputer": "rookOnSeventh"
+  },
+  {
+   "board": "mastering-intuition-part-1#0",
+   "idea": "General rule: with a cramped opponent avoid simplifications \u2014 broken here on purpose",
+   "kind": "trade",
+   "status": "missing",
+   "group": "C",
+   "reason": "maxim on simplification",
+   "boardTrigger": null
+  },
+  {
+   "board": "mastering-intuition-part-1#1",
+   "idea": "Black's a8 bishop is dreadful \u2014 incarcerated behind its own pawns",
+   "kind": "weakness",
+   "status": "missing",
+   "group": "A",
+   "reason": "bad bishop behind own pawns (findPieceQuality bad-bishop / badEnemyBishop)",
+   "existingComputer": "badEnemyBishop"
+  },
+  {
+   "board": "mastering-intuition-part-1#1",
+   "idea": "37.c5! fixes the bishop's prison so it dooms Black long-term",
+   "kind": "plan",
+   "status": "missing",
+   "group": "A",
+   "reason": "fixing the prison pawn = badEnemyBishop + studentMoveStructure",
+   "existingComputer": "badEnemyBishop"
+  },
+  {
+   "board": "mastering-intuition-part-2#0",
+   "idea": "Black is still in the driver's seat",
+   "kind": "eval",
+   "status": "said-wrong",
+   "group": "D",
+   "reason": "verdict"
+  },
+  {
+   "board": "mastering-intuition-part-2#0",
+   "idea": "A back-rank tactic (later 40.e6) is in the air",
+   "kind": "tactic",
+   "status": "missing",
+   "group": "A",
+   "reason": "back-rank (backRankWeakness)",
+   "existingComputer": "backRankWeakness"
+  },
+  {
+   "board": "mastering-intuition-part-2#2",
+   "idea": "Black is on the verge of a crushing blow",
+   "kind": "eval",
+   "status": "said-wrong",
+   "group": "D",
+   "reason": "verdict"
+  },
+  {
+   "board": "mastering-opposite-colored-bishops#3",
+   "idea": "Even in drawn positions keep searching for practical winning chances (create a passer/second weakness)",
+   "kind": "plan",
+   "status": "missing",
+   "group": "C",
+   "reason": "practical: keep searching for chances",
+   "boardTrigger": null
+  },
+  {
+   "board": "mastering-the-queen-sacrifice#1",
+   "idea": "White's pieces are dreadfully uncoordinated",
+   "kind": "weakness",
+   "status": "missing",
+   "group": "A",
+   "reason": "uncoordinated pieces = pieceActivity",
+   "existingComputer": "pieceActivity"
+  },
+  {
+   "board": "mastering-the-queen-sacrifice#1",
+   "idea": "White's king is vulnerable",
+   "kind": "king-safety",
+   "status": "missing",
+   "group": "A",
+   "reason": "king vulnerable = detectKingExposure",
+   "existingComputer": "detectKingExposure"
+  },
+  {
+   "board": "mastering-the-queen-sacrifice#1",
+   "idea": "The monstrous e4 knight dominates the position",
+   "kind": "outpost",
+   "status": "missing",
+   "group": "A",
+   "reason": "dominant knight outpost (outpost.ts)",
+   "existingComputer": "outpost"
+  },
+  {
+   "board": "mastering-the-queen-sacrifice#1",
+   "idea": "27...Nxf2! is the knockout blow",
+   "kind": "attack-king",
+   "status": "missing",
+   "group": "B",
+   "reason": "27...Nxf2 knockout \u2014 engine line",
+   "existingComputer": "depthClauses"
+  },
+  {
+   "board": "mastering-the-queen-sacrifice#2",
+   "idea": "Black's 16th move (a queen sacrifice) is backed by well-placed minor pieces and long-term g-file pressure",
+   "kind": "plan",
+   "status": "missing",
+   "group": "A",
+   "reason": "queen sac compensation (compensation.ts) + g-file pressure",
+   "existingComputer": "compensation"
+  },
+  {
+   "board": "mastering-your-psychological-intuition#0",
+   "idea": "Good positions do not win by themselves; pose a profound problem with many options rather than forcing moves in the opponent's time trouble",
+   "kind": "plan",
+   "status": "missing",
+   "group": "C",
+   "reason": "practical psychology",
+   "boardTrigger": null
+  },
+  {
+   "board": "miracle-on-the-chess-board#0",
+   "idea": "A hidden drawing resource exists (Black to play and draw)",
+   "kind": "eval",
+   "status": "said-wrong",
+   "group": "D",
+   "reason": "study verdict (drawing resource)"
+  },
+  {
+   "board": "miracle-on-the-chess-board#2",
+   "idea": "Black aims ...Qa8 at a2 for infiltration",
+   "kind": "threat",
+   "status": "missing",
+   "group": "A",
+   "reason": "queen infiltration a2 = moveAspects / their plan (planSteps their-plan)",
+   "existingComputer": "planSteps"
+  },
+  {
+   "board": "miracle-on-the-chess-board#3",
+   "idea": "Both kings are badly placed",
+   "kind": "king-safety",
+   "status": "missing",
+   "group": "A",
+   "reason": "both kings badly placed = detectKingExposure both sides",
+   "existingComputer": "detectKingExposure"
+  },
+  {
+   "board": "miracle-on-the-chess-board#4",
+   "idea": "In truth Black's situation is dire",
+   "kind": "eval",
+   "status": "missing",
+   "group": "D",
+   "reason": "verdict"
+  },
+  {
+   "board": "miracle-on-the-chess-board#4",
+   "idea": "Black's rook is tied down (to blockading b5)",
+   "kind": "weakness",
+   "status": "missing",
+   "group": "A",
+   "reason": "rook tied to a blockade (tiedDefender / findBlockades)",
+   "existingComputer": "tiedDefender"
+  },
+  {
+   "board": "modern-chess-technique#0",
+   "idea": "Time-sensitive position: go for it now rather than slowly improve",
+   "kind": "plan",
+   "status": "missing",
+   "group": "C",
+   "reason": "time-sensitive (no clean trigger)",
+   "boardTrigger": null
+  },
+  {
+   "board": "modern-chess-technique#1",
+   "idea": "Black's pieces are passive and uncoordinated",
+   "kind": "weakness",
+   "status": "missing",
+   "group": "A",
+   "reason": "passive uncoordinated pieces = pieceActivity",
+   "existingComputer": "pieceActivity"
+  },
+  {
+   "board": "modern-chess-technique#1",
+   "idea": "Endgames are trickier than they look; needs courage and concrete play",
+   "kind": "plan",
+   "status": "missing",
+   "group": "C",
+   "reason": "maxim on endgames",
+   "boardTrigger": null
+  },
+  {
+   "board": "modern-chess-technique#2",
+   "idea": "Something worrying arises (Black's fortress), prompting a concrete solution (later the Rd8 sacrifice)",
+   "kind": "plan",
+   "status": "missing",
+   "group": "A",
+   "reason": "fortress worry (fortress.ts)",
+   "existingComputer": "fortress"
+  },
+  {
+   "board": "modern-chess-technique#3",
+   "idea": "White's pieces are perfectly coordinated",
+   "kind": "eval",
+   "status": "missing",
+   "group": "A",
+   "reason": "coordinated pieces = pieceActivity",
+   "existingComputer": "pieceActivity"
+  },
+  {
+   "board": "morphys-sacrifices-explained#0",
+   "idea": "Black's monster queen on d3 dominates and prepares the invasion",
+   "kind": "outpost",
+   "status": "missing",
+   "group": "A",
+   "reason": "dominant queen outpost d3 (outpost / findPieceQuality)",
+   "existingComputer": "outpost"
+  },
+  {
+   "board": "mysterious-gm-moves#0",
+   "idea": "White's plan: central pressure (Bd4, Rd1) plus a king attack with Qh4 and/or f5",
+   "kind": "plan",
+   "status": "missing",
+   "group": "A",
+   "reason": "central pressure + king attack plan (boardPlan / kingAttack)",
+   "existingComputer": "kingAttack"
+  },
+  {
+   "board": "mysterious-gm-moves#2",
+   "idea": "White's advantage is evident",
+   "kind": "eval",
+   "status": "said-wrong",
+   "group": "D",
+   "reason": "verdict"
+  },
+  {
+   "board": "mysterious-gm-moves#2",
+   "idea": "White has the bishop pair",
+   "kind": "eval",
+   "status": "missing",
+   "group": "A",
+   "reason": "bishop pair (bishopPair.ts)",
+   "existingComputer": "bishopPair"
+  },
+  {
+   "board": "mysterious-gm-moves#2",
+   "idea": "Black's pieces lack coordination \u2014 the knight on a6 is stranded",
+   "kind": "weakness",
+   "status": "missing",
+   "group": "A",
+   "reason": "stranded knight a6 = pieceActivity stranded",
+   "existingComputer": "pieceActivity"
+  },
+  {
+   "board": "mysterious-gm-moves#2",
+   "idea": "The d5 square is irreparably weak",
+   "kind": "outpost",
+   "status": "missing",
+   "group": "A",
+   "reason": "irreparable hole d5 (findWeakSquares / campHoles)",
+   "existingComputer": "campHoles"
+  },
+  {
+   "board": "mysterious-gm-moves#3",
+   "idea": "Open a second front on the queenside",
+   "kind": "plan",
+   "status": "missing",
+   "group": "A",
+   "reason": "second front = switchWing",
+   "existingComputer": "switchWing"
+  },
+  {
+   "board": "mysterious-gm-moves#4",
+   "idea": "...b5 has been prevented",
+   "kind": "prevent",
+   "status": "missing",
+   "group": "A",
+   "reason": "break prevented = breakStopped",
+   "existingComputer": "breakStopped"
+  },
+  {
+   "board": "mysterious-gm-moves#4",
+   "idea": "To open the b-file White must bring a piece to the queenside",
+   "kind": "plan",
+   "status": "missing",
+   "group": "E",
+   "reason": "to open a file the side must first bring a heavy piece there (file needs a user)",
+   "concept": "fileNeedsPiece"
+  },
+  {
+   "board": "mysterious-gm-moves#4",
+   "idea": "So the queen must leave h5 for the queenside",
+   "kind": "route",
+   "status": "missing",
+   "group": "E",
+   "reason": "same: the queen must leave for the queenside to use the file",
+   "concept": "fileNeedsPiece"
+  },
+  {
+   "board": "never-resign-prematurely#0",
+   "idea": "Even a connected passer on the sixth may not decide a pawn ending",
+   "kind": "passed-pawn",
+   "status": "missing",
+   "group": "A",
+   "reason": "pawn-ending race reads (raceCount / endgamePawnReads)",
+   "existingComputer": "raceCount"
+  },
+  {
+   "board": "never-resign-prematurely#3",
+   "idea": "30.Rd6!! interposition: ...Rxd6 allows g8=Q, ...cxd6 allows f7",
+   "kind": "tactic",
+   "status": "missing",
+   "group": "B",
+   "reason": "30.Rd6!! interference \u2014 engine line",
+   "existingComputer": "depthClauses"
+  },
+  {
+   "board": "never-trust-your-opponent#1",
+   "idea": "White has the bishop pair",
+   "kind": "eval",
+   "status": "missing",
+   "group": "A",
+   "reason": "bishop pair (bishopPair.ts)",
+   "existingComputer": "bishopPair"
+  },
+  {
+   "board": "never-trust-your-opponent#1",
+   "idea": "White's army is excellently coordinated",
+   "kind": "eval",
+   "status": "missing",
+   "group": "A",
+   "reason": "coordinated army = pieceActivity",
+   "existingComputer": "pieceActivity"
+  },
+  {
+   "board": "never-trust-your-opponent#1",
+   "idea": "A natural king move (26.Kd2) walks into ...Nxe5 (knight to c4 with check)",
+   "kind": "tactic",
+   "status": "missing",
+   "group": "B",
+   "reason": "Kd2? Nxe5 Nc4+ \u2014 temptingRefuted / engine line",
+   "existingComputer": "temptingOnBoard"
+  },
+  {
+   "board": "never-trust-your-opponent#1",
+   "idea": "With no counterplay it is easy to relax \u2014 never assume safety",
+   "kind": "plan",
+   "status": "missing",
+   "group": "C",
+   "reason": "mindset: never assume safety",
+   "boardTrigger": null
+  },
+  {
+   "board": "never-trust-your-opponent#2",
+   "idea": "The tables have turned (Black better after White lost the thread)",
+   "kind": "eval",
+   "status": "said-wrong",
+   "group": "D",
+   "reason": "verdict"
+  },
+  {
+   "board": "never-trust-your-opponent#2",
+   "idea": "White's piece offer is a bluff; calculate and take (\u2026cxd5)",
+   "kind": "tactic",
+   "status": "missing",
+   "group": "B",
+   "reason": "bluff refuted by calculation: engine line cxd5",
+   "existingComputer": "depthClauses"
+  },
+  {
+   "board": "overprotection-decoded#1",
+   "idea": "Black's compensation is the two bishops",
+   "kind": "eval",
+   "status": "missing",
+   "group": "A",
+   "reason": "bishop pair compensation (bishopPair / compensation)",
+   "existingComputer": "bishopPair"
+  },
+  {
+   "board": "overprotection-decoded#1",
+   "idea": "White overprotects a key square, entrenches a bishop there and kills Black's queenside counterplay",
+   "kind": "plan",
+   "status": "missing",
+   "group": "A",
+   "reason": "overprotect the entrenched piece (speedRunReads.overprotect, best piece on an outpost with a single guard)",
+   "existingComputer": "speedRunReads.overprotect"
+  },
+  {
+   "board": "overprotection-decoded#2",
+   "idea": "Overprotect the key squares so the breaks never work",
+   "kind": "prevent",
+   "status": "missing",
+   "group": "A",
+   "reason": "breaks that never work = breakStopped (the break blocked) + speedRunReads.overprotect",
+   "existingComputer": "breakStopped"
+  },
+  {
+   "board": "pawn-endgames-a-practical-guide#1",
+   "idea": "White is in the driver's seat",
+   "kind": "eval",
+   "status": "said-wrong",
+   "group": "D",
+   "reason": "verdict"
+  },
+  {
+   "board": "pawn-endgames-a-practical-guide#1",
+   "idea": "Black's pawns cannot hold without king support",
+   "kind": "weakness",
+   "status": "missing",
+   "group": "A",
+   "reason": "pawns need king support (endgamePawnReads)",
+   "existingComputer": "endgamePawnReads"
+  },
+  {
+   "board": "pawn-endgames-a-practical-guide#1",
+   "idea": "The opposition decides; the defending king takes a long route to win it at the right moment",
+   "kind": "king-activity",
+   "status": "missing",
+   "group": "A",
+   "reason": "opposition (oppositionRead)",
+   "existingComputer": "oppositionRead"
+  },
+  {
+   "board": "pawn-endgames-a-practical-guide#3",
+   "idea": "White threatens the thematic a5: create an outside passer, deflect Black's king, then eat the kingside",
+   "kind": "threat",
+   "status": "missing",
+   "group": "A",
+   "reason": "outside passer deflection (endgamePawnReads outsidePasser)",
+   "existingComputer": "endgamePawnReads"
+  },
+  {
+   "board": "petrosians-exchange-sacrifices-explained#0",
+   "idea": "Black is in dire straits",
+   "kind": "eval",
+   "status": "said-wrong",
+   "group": "D",
+   "reason": "verdict"
+  },
+  {
+   "board": "petrosians-exchange-sacrifices-explained#2",
+   "idea": "Superficially White looks better: d4 is his square and Black's h-pawns may become weak",
+   "kind": "structure",
+   "status": "missing",
+   "group": "C",
+   "reason": "superficial impression vs reality (a meta statement)",
+   "boardTrigger": null
+  },
+  {
+   "board": "plus-equals-mode#0",
+   "idea": "Keep posing problems and keep the pressure; do not offer a draw",
+   "kind": "plan",
+   "status": "missing",
+   "group": "C",
+   "reason": "practical: keep pressing",
+   "boardTrigger": null
+  },
+  {
+   "board": "plus-equals-mode#1",
+   "idea": "Transform the position: drastic change unsettles a defender playing for a draw",
+   "kind": "plan",
+   "status": "missing",
+   "group": "C",
+   "reason": "maxim: transform",
+   "boardTrigger": null
+  },
+  {
+   "board": "positional-combinations#0",
+   "idea": "White has strong central pressure, a large space advantage and coordinated pieces",
+   "kind": "space",
+   "status": "missing",
+   "group": "A",
+   "reason": "space + central pressure (computeTerritory, pieceActivity)",
+   "existingComputer": "computeTerritory"
+  },
+  {
+   "board": "positional-combinations#0",
+   "idea": "Eliminate the f5 knight",
+   "kind": "trade",
+   "status": "missing",
+   "group": "A",
+   "reason": "eliminate the f5 knight = tradeJudgement / best-piece trade",
+   "existingComputer": "tradeJudgement"
+  },
+  {
+   "board": "positional-combinations#0",
+   "idea": "Trade pieces to lessen White's space advantage",
+   "kind": "trade",
+   "status": "missing",
+   "group": "A",
+   "reason": "trade to relieve space = trade-idea (exchangeIdeas)",
+   "existingComputer": "exchangeIdeas"
+  },
+  {
+   "board": "positional-combinations#0",
+   "idea": "The d7 knight can move with tempo (...Nb6/...Ne5 hitting the c4 bishop)",
+   "kind": "tempo",
+   "status": "missing",
+   "group": "A",
+   "reason": "tempo moves on a piece = pawnKickNext / moveAspects threat",
+   "existingComputer": "moveAspects"
+  },
+  {
+   "board": "positional-combinations#0",
+   "idea": "14...Bh2+! moves the bishop with tempo, then ...Nb6, ...Bxf5 and ...Bf4 trades the dark bishops (positional combination)",
+   "kind": "order",
+   "status": "missing",
+   "group": "B",
+   "reason": "positional combination Bh2+ etc = engine line",
+   "existingComputer": "depthClauses"
+  },
+  {
+   "board": "positional-combinations#1",
+   "idea": "With e4 gone White no longer controls the centre",
+   "kind": "center",
+   "status": "missing",
+   "group": "E",
+   "reason": "centre control lost (centre count)",
+   "concept": "centre"
+  },
+  {
+   "board": "positional-combinations#4",
+   "idea": "Switch to the other flank: Black's g5/h5 pawns are far advanced and unsupported",
+   "kind": "weakness",
+   "status": "missing",
+   "group": "A",
+   "reason": "switch flank to advanced unsupported pawns = switchWing",
+   "existingComputer": "switchWing"
+  },
+  {
+   "board": "queen-the-supporting-actress#0",
+   "idea": "Black's knight on d5 is a strong, irksome outpost",
+   "kind": "outpost",
+   "status": "missing",
+   "group": "A",
+   "reason": "knight outpost d5 (outpost.ts)",
+   "existingComputer": "outpost"
+  },
+  {
+   "board": "queen-the-supporting-actress#0",
+   "idea": "White's rook h1 and knight g5 are massed against the black king",
+   "kind": "attack-king",
+   "status": "missing",
+   "group": "A",
+   "reason": "pieces massed against the king = kingSiege",
+   "existingComputer": "kingSiege"
+  },
+  {
+   "board": "queen-the-supporting-actress#0",
+   "idea": "The queen on a3 looks badly misplaced and uncoordinated",
+   "kind": "choice",
+   "status": "missing",
+   "group": "A",
+   "reason": "misplaced queen a3 = pieceWish/pieceActivity",
+   "existingComputer": "pieceWish"
+  },
+  {
+   "board": "queen-the-supporting-actress#1",
+   "idea": "The queen can join the kingside after Nce4 and Bd2 clear its path",
+   "kind": "route",
+   "status": "missing",
+   "group": "A",
+   "reason": "queen route via cleared path = pieceRoute",
+   "existingComputer": "pieceRoute"
+  },
+  {
+   "board": "queen-the-supporting-actress#3",
+   "idea": "Queen h6 + pawn f6 form a menacing mating tandem against g7",
+   "kind": "attack-king",
+   "status": "missing",
+   "group": "A",
+   "reason": "queen + pawn mating tandem = kingSiege / matePatterns",
+   "existingComputer": "kingSiege"
+  },
+  {
+   "board": "queen-the-supporting-actress#3",
+   "idea": "The queen is ineffective as the lead attacker on h6; relocate it to a central square (e3) from which it still supports the attack",
+   "kind": "route",
+   "status": "missing",
+   "group": "A",
+   "reason": "relocate the queen = pieceWish / pieceRoute",
+   "existingComputer": "pieceRoute"
+  },
+  {
+   "board": "queen-the-supporting-actress#5",
+   "idea": "Lines toward Black's king are already open (broken f-pawns, isolated h7)",
+   "kind": "attack-king",
+   "status": "missing",
+   "group": "A",
+   "reason": "open lines to the king = detectKingExposure",
+   "existingComputer": "detectKingExposure"
+  },
+  {
+   "board": "remembering-im-emory-tate#1",
+   "idea": "18.b4! hits the c5 knight and launches the attack",
+   "kind": "tempo",
+   "status": "missing",
+   "group": "A",
+   "reason": "pawn kick with tempo (pawnKickNext)",
+   "existingComputer": "pawnKickNext"
+  },
+  {
+   "board": "remembering-im-emory-tate#2",
+   "idea": "27.g6!! pawn sac rips open the king's cover (prepared many moves earlier)",
+   "kind": "attack-king",
+   "status": "missing",
+   "group": "A",
+   "reason": "pawn sac opening king = kingSacrifice / moveAspects opens-king",
+   "existingComputer": "kingSacrifice"
+  },
+  {
+   "board": "rooks-on-the-seventh-revisited#0",
+   "idea": "The black king attacks a rook (after Rb7 Kg8 it hits g7); while it touches a rook there is no mate",
+   "kind": "threat",
+   "status": "missing",
+   "group": "B",
+   "reason": "king attacks a rook so no mate: engine line detail",
+   "existingComputer": "depthClauses"
+  },
+  {
+   "board": "rooks-on-the-seventh-revisited#0",
+   "idea": "Progress needs the white king to come and support the rooks",
+   "kind": "king-activity",
+   "status": "missing",
+   "group": "A",
+   "reason": "king must come up (endgame king activity)",
+   "existingComputer": "endgamePawnReads"
+  },
+  {
+   "board": "rooks-on-the-seventh-revisited#1",
+   "idea": "When needed the rooks switch to defence along the g-file",
+   "kind": "guard",
+   "status": "missing",
+   "group": "B",
+   "reason": "rooks defend on the g-file \u2014 engine line",
+   "existingComputer": null
+  },
+  {
+   "board": "rooks-on-the-seventh-revisited#2",
+   "idea": "White's pieces are beautifully placed but breaking through is hard; close to a draw",
+   "kind": "eval",
+   "status": "said-wrong",
+   "group": "D",
+   "reason": "verdict"
+  },
+  {
+   "board": "rooks-on-the-seventh-revisited#2",
+   "idea": "To stop that, the opponent may be forced into a fatal concession",
+   "kind": "prevent",
+   "status": "missing",
+   "group": "C",
+   "reason": "narrative about concessions",
+   "boardTrigger": null
+  },
+  {
+   "board": "rooks-on-the-seventh-revisited#3",
+   "idea": "Use the threat of mate to transform the advantage, not to mate",
+   "kind": "plan",
+   "status": "missing",
+   "group": "C",
+   "reason": "method: use the mate threat to transform",
+   "boardTrigger": null
+  },
+  {
+   "board": "tales-from-a-grandmaster#1",
+   "idea": "Black has no useful checks left",
+   "kind": "check",
+   "status": "missing",
+   "group": "E",
+   "reason": "no useful checks left (check census) \u2014 one board",
+   "concept": "noChecks"
+  },
+  {
+   "board": "tales-from-a-grandmaster#4",
+   "idea": "Habit: check what the opponent's last move threatens before replying",
+   "kind": "prevent",
+   "status": "missing",
+   "group": "C",
+   "reason": "habit: what does their last move threaten (liveMethodBeat opp-think)",
+   "boardTrigger": "liveMethodBeat"
+  },
+  {
+   "board": "tals-sacrifices-explained#1",
+   "idea": "White is active, Black solid; no obvious way to continue the attack \u2014 a small edge",
+   "kind": "eval",
+   "status": "said-wrong",
+   "group": "D",
+   "reason": "verdict"
+  },
+  {
+   "board": "tals-sacrifices-explained#1",
+   "idea": "Tal instead played an outwardly suicidal knight sacrifice despite an obvious refutation",
+   "kind": "tactic",
+   "status": "missing",
+   "group": "B",
+   "reason": "Tal knight sac \u2014 engine line / sacrifice computers",
+   "existingComputer": null
+  },
+  {
+   "board": "the-anatomy-of-a-brilliancy#3",
+   "idea": "Black is still in the game but all the momentum is White's",
+   "kind": "eval",
+   "status": "said-wrong",
+   "group": "D",
+   "reason": "verdict"
+  },
+  {
+   "board": "the-art-of-maneuvering#0",
+   "idea": "Black's pieces are well coordinated with a monster knight on e5",
+   "kind": "outpost",
+   "status": "missing",
+   "group": "A",
+   "reason": "monster knight e5 outpost (outpost.ts)",
+   "existingComputer": "outpost"
+  },
+  {
+   "board": "the-art-of-maneuvering#0",
+   "idea": "White's weakest link is the passive queen on e2 \u2014 improve/reroute it",
+   "kind": "route",
+   "status": "missing",
+   "group": "A",
+   "reason": "reroute the worst piece = pieceWish worst",
+   "existingComputer": "pieceWish"
+  },
+  {
+   "board": "the-art-of-maneuvering#0",
+   "idea": "Principle: if one piece stands badly the whole game stands badly \u2014 improve it",
+   "kind": "plan",
+   "status": "missing",
+   "group": "A",
+   "reason": "Tarrasch worst-piece rule = pieceWish",
+   "existingComputer": "pieceWish"
+  },
+  {
+   "board": "the-art-of-maneuvering#1",
+   "idea": "White is dominating",
+   "kind": "eval",
+   "status": "said-wrong",
+   "group": "D",
+   "reason": "verdict"
+  },
+  {
+   "board": "the-art-of-maneuvering#1",
+   "idea": "The target is Black's weak e6 pawn, to be pressured by a maneuver",
+   "kind": "weakness",
+   "status": "missing",
+   "group": "A",
+   "reason": "target weak e6 pawn (structure / boardPlanFacts target)",
+   "existingComputer": "boardPlanFacts"
+  },
+  {
+   "board": "the-art-of-maneuvering#2",
+   "idea": "An attack with too little horsepower fails \u2014 mobilise every last reserve",
+   "kind": "plan",
+   "status": "missing",
+   "group": "C",
+   "reason": "maxim: mobilise all reserves (kingSiege counts attackers)",
+   "boardTrigger": "kingSiege"
+  },
+  {
+   "board": "the-art-of-setting-traps#1",
+   "idea": "Nb4+ drove the king back and held White's flimsy position together",
+   "kind": "guard",
+   "status": "missing",
+   "group": "B",
+   "reason": "Nb4+ check holds \u2014 engine line",
+   "existingComputer": null
+  },
+  {
+   "board": "the-art-of-setting-traps#2",
+   "idea": "White has dominated and his initiative is at its peak",
+   "kind": "eval",
+   "status": "said-wrong",
+   "group": "D",
+   "reason": "verdict"
+  },
+  {
+   "board": "the-art-of-setting-traps#3",
+   "idea": "The b2 rook would grow if White's kingside pawns were broken; kill the f-pawn so ...Qf6/...Qg5 hit f2",
+   "kind": "plan",
+   "status": "missing",
+   "group": "B",
+   "reason": "plan to break the f-pawn so the queen hits f2 \u2014 engine line / planSteps",
+   "existingComputer": "planSteps"
+  },
+  {
+   "board": "the-art-of-setting-traps#5",
+   "idea": "White already has three pieces in the attack (Qh4, Nh6, Rf1)",
+   "kind": "attack-king",
+   "status": "missing",
+   "group": "A",
+   "reason": "three pieces in the attack = kingSiege",
+   "existingComputer": "kingSiege"
+  },
+  {
+   "board": "the-art-of-time-management#2",
+   "idea": "When lost, slow down and hunt conscientiously for defensive resources",
+   "kind": "choice",
+   "status": "missing",
+   "group": "C",
+   "reason": "practical time management",
+   "boardTrigger": null
+  },
+  {
+   "board": "the-art-of-time-management#3",
+   "idea": "Classic K+R mate: side checks push the king back a rank, then opposition and another check, to the back rank",
+   "kind": "mate",
+   "status": "missing",
+   "group": "A",
+   "reason": "K+R vs K cut-off mating method (conceptEngine bareKingConcept, basic-mate)",
+   "existingComputer": "conceptEngine"
+  },
+  {
+   "board": "the-art-of-time-management#3",
+   "idea": "That method is slow; a faster box method is safer with seconds left",
+   "kind": "mate",
+   "status": "missing",
+   "group": "E",
+   "reason": "K+R box method",
+   "concept": "rookMate"
+  },
+  {
+   "board": "the-art-of-time-management#3",
+   "idea": "Habit: drill the fastest basic mates so you never lose a won game on time",
+   "kind": "plan",
+   "status": "missing",
+   "group": "C",
+   "reason": "habit: drill basic mates",
+   "boardTrigger": null
+  },
+  {
+   "board": "the-art-of-time-management#5",
+   "idea": "39.Rd8+! is the obvious start (deflect the h8 rook)",
+   "kind": "check",
+   "status": "missing",
+   "group": "B",
+   "reason": "39.Rd8+ deflection \u2014 engine line",
+   "existingComputer": "depthClauses"
+  },
+  {
+   "board": "the-chess-investigator#1",
+   "idea": "Lesson: converting a big material edge needs care; he later blundered the knight in time trouble",
+   "kind": "plan",
+   "status": "missing",
+   "group": "C",
+   "reason": "lesson about conversion",
+   "boardTrigger": null
+  },
+  {
+   "board": "the-chess-investigator#2",
+   "idea": "Black appears to have built a solid, well-defended position (prose truncated)",
+   "kind": "eval",
+   "status": "missing",
+   "group": "D",
+   "reason": "verdict (truncated prose)"
+  },
+  {
+   "board": "the-discovered-check-reloaded#0",
+   "idea": "White's attack is about to fizzle out",
+   "kind": "eval",
+   "status": "said-wrong",
+   "group": "D",
+   "reason": "verdict"
+  },
+  {
+   "board": "the-discovered-check-reloaded#1",
+   "idea": "Black misplayed the opening and White has a fearsome kingside attack (Bh6, Ng5, Qh4)",
+   "kind": "attack-king",
+   "status": "missing",
+   "group": "A",
+   "reason": "kingside attack pieces = kingSiege",
+   "existingComputer": "kingSiege"
+  },
+  {
+   "board": "the-discovered-check-reloaded#1",
+   "idea": "Every White piece is optimal except the d1 rook \u2014 activate the dormant rook for the second wave",
+   "kind": "route",
+   "status": "missing",
+   "group": "A",
+   "reason": "activate the dormant rook = pieceWish worst",
+   "existingComputer": "pieceWish"
+  },
+  {
+   "board": "the-discovered-check-reloaded#1",
+   "idea": "With the king exposed, material equality doesn't matter",
+   "kind": "king-safety",
+   "status": "missing",
+   "group": "D",
+   "reason": "king exposure outweighs material \u2014 verdict"
+  },
+  {
+   "board": "the-discovered-check-reloaded#2",
+   "idea": "Black's king on g5 is very exposed and both White heavy pieces are optimally placed",
+   "kind": "king-safety",
+   "status": "missing",
+   "group": "A",
+   "reason": "exposed king + optimal heavy pieces = detectKingExposure / kingSiege",
+   "existingComputer": "kingSiege"
+  },
+  {
+   "board": "the-double-attack#1",
+   "idea": "g7 is very weak (Rg1 on the g-file, Bh6 coming)",
+   "kind": "weakness",
+   "status": "missing",
+   "group": "A",
+   "reason": "weak g7 on the g-file = kingSiege / detectKingExposure",
+   "existingComputer": "kingSiege"
+  },
+  {
+   "board": "the-double-attack#2",
+   "idea": "But the d5 pawn is very weak (isolated, a target even when defended \u2014 WPDO)",
+   "kind": "weakness",
+   "status": "said-wrong",
+   "group": "A",
+   "reason": "isolated d5 pawn target (structureReads)",
+   "existingComputer": "structureReads"
+  },
+  {
+   "board": "the-double-bishop-sacrifice2#2",
+   "idea": "Black's position is annoyingly passive after a poor opening",
+   "kind": "space",
+   "status": "said-wrong",
+   "group": "A",
+   "reason": "passive position = pieceActivity",
+   "existingComputer": "pieceActivity"
+  },
+  {
+   "board": "the-double-bishop-sacrifice2#3",
+   "idea": "Black struggled from the opening",
+   "kind": "eval",
+   "status": "missing",
+   "group": "D",
+   "reason": "verdict"
+  },
+  {
+   "board": "the-double-bishop-sacrifice2#3",
+   "idea": "The double-bishop sacrifice in its purest form: Bxh7+ and Bxg7 strip the king for queen and rook",
+   "kind": "attack-king",
+   "status": "missing",
+   "group": "A",
+   "reason": "double bishop sac = knownAttack / attackLibrary",
+   "existingComputer": "attackLibrary"
+  },
+  {
+   "board": "the-greatest-chess-upsets-part-1#3",
+   "idea": "19.Nh5! \u2014 the second knight joins Nf5 against g7: a crushing blow",
+   "kind": "attack-king",
+   "status": "missing",
+   "group": "B",
+   "reason": "19.Nh5 second knight on g7 \u2014 engine line + secondAttacker",
+   "existingComputer": "secondAttacker"
+  },
+  {
+   "board": "the-hardest-move-to-make#1",
+   "idea": "Black's rook occupies a superb post on d5",
+   "kind": "outpost",
+   "status": "missing",
+   "group": "A",
+   "reason": "rook on a strong central post (findPieceQuality / outpost)",
+   "existingComputer": "outpost"
+  },
+  {
+   "board": "the-hardest-move-to-make#1",
+   "idea": "Never judge a move by its appearance: tactics transcend general reasoning",
+   "kind": "choice",
+   "status": "missing",
+   "group": "C",
+   "reason": "maxim: tactics transcend general reasoning",
+   "boardTrigger": null
+  },
+  {
+   "board": "the-importance-of-solving-studies#0",
+   "idea": "White has many ways to attack Black's king, but must calculate",
+   "kind": "attack-king",
+   "status": "missing",
+   "group": "A",
+   "reason": "many attacking options = kingSiege",
+   "existingComputer": "kingSiege"
+  },
+  {
+   "board": "the-importance-of-solving-studies#1",
+   "idea": "Material is irrelevant; the only question is who promotes first (a pawn race)",
+   "kind": "promote",
+   "status": "missing",
+   "group": "A",
+   "reason": "pawn race, who promotes first (raceCount)",
+   "existingComputer": "raceCount"
+  },
+  {
+   "board": "the-importance-of-solving-studies#1",
+   "idea": "1.b6+ drives the king to the eighth rank so every White promotion later comes with check",
+   "kind": "order",
+   "status": "missing",
+   "group": "E",
+   "reason": "promote with check: drive the king to the promotion rank first (order)",
+   "concept": "promotionOrder"
+  },
+  {
+   "board": "the-importance-of-solving-studies#2",
+   "idea": "White plays for two results: everything hinges on whether White's king reaches g7 (to escort the h-pawn) before Black's king can",
+   "kind": "route",
+   "status": "missing",
+   "group": "E",
+   "reason": "king race to a key square (whose king reaches the escort square first)",
+   "concept": "kingRace"
+  },
+  {
+   "board": "the-importance-of-solving-studies#2",
+   "idea": "Moving the bishop along the a1-h8 diagonal blocks the White king's path and gives Black the tempo to draw",
+   "kind": "tempo",
+   "status": "missing",
+   "group": "B",
+   "reason": "bishop interferes with the king path \u2014 engine line",
+   "existingComputer": null
+  },
+  {
+   "board": "the-king-march#2",
+   "idea": "Black is in huge trouble",
+   "kind": "eval",
+   "status": "missing",
+   "group": "D",
+   "reason": "verdict"
+  },
+  {
+   "board": "the-knockout-blow#0",
+   "idea": "White has a positional advantage to convert into something tangible",
+   "kind": "eval",
+   "status": "said-wrong",
+   "group": "D",
+   "reason": "verdict"
+  },
+  {
+   "board": "the-knockout-blow#1",
+   "idea": "Being a pawn down is the least of Black's worries: White's pieces are all aimed at Black's king",
+   "kind": "attack-king",
+   "status": "missing",
+   "group": "A",
+   "reason": "all pieces aimed at the king = kingSiege",
+   "existingComputer": "kingSiege"
+  },
+  {
+   "board": "the-knockout-blow#1",
+   "idea": "Habit: do not let a safer alternative override a sound tactic",
+   "kind": "choice",
+   "status": "missing",
+   "group": "C",
+   "reason": "habit: do not let a safer move override a sound tactic",
+   "boardTrigger": null
+  },
+  {
+   "board": "the-knockout-blow#2",
+   "idea": "A knockout blow can be a simple developing move or pawn advance",
+   "kind": "choice",
+   "status": "missing",
+   "group": "C",
+   "reason": "maxim about knockout blows",
+   "boardTrigger": null
+  },
+  {
+   "board": "the-knockout-blow#3",
+   "idea": "Black's pieces are scattered across the board (uncoordinated)",
+   "kind": "weakness",
+   "status": "missing",
+   "group": "A",
+   "reason": "scattered pieces = pieceActivity",
+   "existingComputer": "pieceActivity"
+  },
+  {
+   "board": "the-knockout-blow#3",
+   "idea": "A beautiful combination finishes Black off",
+   "kind": "tactic",
+   "status": "missing",
+   "group": "B",
+   "reason": "finishing combination \u2014 engine line",
+   "existingComputer": "depthClauses"
+  },
+  {
+   "board": "the-modern-immortal#2",
+   "idea": "Black's ...Rad8/...Rd7 setup does not meet the needs of the position",
+   "kind": "plan",
+   "status": "missing",
+   "group": "C",
+   "reason": "setup does not meet needs (narrative)",
+   "boardTrigger": null
+  },
+  {
+   "board": "the-modern-immortal#3",
+   "idea": "The calm before the storm: a sacrificial attack on Black's king is imminent",
+   "kind": "attack-king",
+   "status": "missing",
+   "group": "A",
+   "reason": "imminent sacrificial attack = kingSiege / kingSacrifice",
+   "existingComputer": "kingSiege"
+  },
+  {
+   "board": "the-positional-queen-sacrifice#0",
+   "idea": "White has repelled Black's queenside pressure",
+   "kind": "prevent",
+   "status": "missing",
+   "group": "A",
+   "reason": "queenside pressure repelled = breakStopped / planStopped",
+   "existingComputer": "planStopped"
+  },
+  {
+   "board": "the-positional-queen-sacrifice#1",
+   "idea": "The position is too complex to judge in general terms; it comes down to concrete calculation",
+   "kind": "choice",
+   "status": "missing",
+   "group": "C",
+   "reason": "meta: needs concrete calculation",
+   "boardTrigger": null
+  },
+  {
+   "board": "the-positional-rook-lift#0",
+   "idea": "The rook lift Re1-e3-b3 swings the rook across the third rank to the queenside",
+   "kind": "route",
+   "status": "said-wrong",
+   "group": "A",
+   "reason": "rook lift (findRookLift / pieceRoute)",
+   "existingComputer": "findRookLift"
+  },
+  {
+   "board": "the-positional-rook-lift#1",
+   "idea": "White's positional advantage is obvious",
+   "kind": "eval",
+   "status": "said-wrong",
+   "group": "D",
+   "reason": "verdict"
+  },
+  {
+   "board": "the-positional-sacrifice#1",
+   "idea": "At first sight Black seems to have come out of the opening well (strong piece/ pressure)",
+   "kind": "eval",
+   "status": "missing",
+   "group": "D",
+   "reason": "verdict"
+  },
+  {
+   "board": "the-positional-sacrifice#2",
+   "idea": "White's bishop on e4 is a monster",
+   "kind": "outpost",
+   "status": "said-wrong",
+   "group": "A",
+   "reason": "monster bishop e4 (findPieceQuality / outpost)",
+   "existingComputer": "outpost"
+  },
+  {
+   "board": "the-positional-sacrifice#2",
+   "idea": "c6 is a gaping outpost for White's knight",
+   "kind": "outpost",
+   "status": "missing",
+   "group": "A",
+   "reason": "outpost c6 for a knight (holeTargets / outpost)",
+   "existingComputer": "outpost"
+  },
+  {
+   "board": "the-positional-sacrifice#2",
+   "idea": "Black's pieces are extremely passive",
+   "kind": "weakness",
+   "status": "missing",
+   "group": "A",
+   "reason": "passive pieces = pieceActivity",
+   "existingComputer": "pieceActivity"
+  },
+  {
+   "board": "the-positional-sacrifice#3",
+   "idea": "White's position looks flimsy: Black has put his pieces on imposing central squares",
+   "kind": "center",
+   "status": "missing",
+   "group": "E",
+   "reason": "pieces on imposing central squares (centre control)",
+   "concept": "centre"
+  },
+  {
+   "board": "the-positional-threat#0",
+   "idea": "Material is equal, but Black has a jumble of weaknesses and passive pieces",
+   "kind": "weakness",
+   "status": "missing",
+   "group": "A",
+   "reason": "weaknesses + passive pieces = pieceActivity + structure",
+   "existingComputer": "pieceActivity"
+  },
+  {
+   "board": "the-positional-threat#1",
+   "idea": "White's advantage cannot be disputed",
+   "kind": "eval",
+   "status": "said-wrong",
+   "group": "D",
+   "reason": "verdict"
+  },
+  {
+   "board": "the-positional-threat#1",
+   "idea": "Habit: strategic reasoning is often what unlocks the attack",
+   "kind": "plan",
+   "status": "missing",
+   "group": "C",
+   "reason": "maxim: strategy unlocks the attack",
+   "boardTrigger": null
+  },
+  {
+   "board": "the-tactical-detector#0",
+   "idea": "More important than material: White's pieces are coordinated for a fatal blow on Black's exposed king",
+   "kind": "attack-king",
+   "status": "missing",
+   "group": "A",
+   "reason": "pieces coordinated against the exposed king = kingSiege",
+   "existingComputer": "kingSiege"
+  },
+  {
+   "board": "the-tactical-detector#2",
+   "idea": "A brilliant hidden combination (...Bxd4) is masked by the position's innocuous look",
+   "kind": "tactic",
+   "status": "missing",
+   "group": "B",
+   "reason": "hidden ...Bxd4 combination \u2014 engine line",
+   "existingComputer": "depthClauses"
+  },
+  {
+   "board": "the-tactical-detector#3",
+   "idea": "Tactical features can hide behind an innocuous-looking position; keep the tactical detector on",
+   "kind": "tactic",
+   "status": "missing",
+   "group": "C",
+   "reason": "habit: tactical detector (liveMethodBeat)",
+   "boardTrigger": "liveMethodBeat"
+  },
+  {
+   "board": "the-tactical-detector#4",
+   "idea": "Black has a queenside space advantage",
+   "kind": "space",
+   "status": "missing",
+   "group": "A",
+   "reason": "queenside space (computeTerritory)",
+   "existingComputer": "computeTerritory"
+  },
+  {
+   "board": "the-tactical-detector#4",
+   "idea": "Black's rim knight has the potential to reach a strong outpost",
+   "kind": "outpost",
+   "status": "said-wrong",
+   "group": "A",
+   "reason": "rim knight route to an outpost (findKnightReroute)",
+   "existingComputer": "pieceRoute"
+  },
+  {
+   "board": "the-tactical-detector#4",
+   "idea": "Before calculating, scan the board for tactical motifs: loose pieces (LPDO), exposed king, fork squares",
+   "kind": "tactic",
+   "status": "missing",
+   "group": "C",
+   "reason": "habit: scan motifs (loose pieces, exposed king, fork squares)",
+   "boardTrigger": "liveMethodBeat"
+  },
+  {
+   "board": "the-terrifying-grinder-of-chess#1",
+   "idea": "Even in a dead-equal ending the defender must keep solving problems; the grinder narrows the margin move by move",
+   "kind": "choice",
+   "status": "missing",
+   "group": "C",
+   "reason": "grinder mindset",
+   "boardTrigger": null
+  },
+  {
+   "board": "the-two-knight-advantage#1",
+   "idea": "White has a menacing pawn centre",
+   "kind": "center",
+   "status": "missing",
+   "group": "E",
+   "reason": "menacing pawn centre",
+   "concept": "centre"
+  },
+  {
+   "board": "the-two-rook-endings-you-must-know#2",
+   "idea": "It might look drawn: Black's passer is far advanced but his king is entombed in front of it",
+   "kind": "king-activity",
+   "status": "missing",
+   "group": "A",
+   "reason": "king entombed in front of its passer (endgameTechnique)",
+   "existingComputer": "endgameTechnique"
+  },
+  {
+   "board": "the-two-rook-endings-you-must-know#2",
+   "idea": "This is the Lucena position, won by a two-step technique",
+   "kind": "theory",
+   "status": "missing",
+   "group": "A",
+   "reason": "Lucena (endgameTechnique)",
+   "existingComputer": "endgameTechnique"
+  },
+  {
+   "board": "turn-off-the-autopilot#1",
+   "idea": "A lethal tactic is stronger than Qe4+",
+   "kind": "tactic",
+   "status": "missing",
+   "group": "B",
+   "reason": "lethal tactic stronger than Qe4+ \u2014 engine line",
+   "existingComputer": "depthClauses"
+  },
+  {
+   "board": "turn-off-the-autopilot#1",
+   "idea": "Habit: even when a move seems forced or natural, take a few seconds to look for a tactic",
+   "kind": "choice",
+   "status": "missing",
+   "group": "C",
+   "reason": "habit: look for a tactic when the move seems forced",
+   "boardTrigger": null
+  },
+  {
+   "board": "turn-off-the-autopilot#2",
+   "idea": "The in-between move is hard to find in advance; never assume the reply is forced",
+   "kind": "choice",
+   "status": "missing",
+   "group": "C",
+   "reason": "habit: never assume the reply is forced",
+   "boardTrigger": null
+  },
+  {
+   "board": "understanding-the-back-rank#2",
+   "idea": "The open board and limited material still give Black real saving chances; conversion will be long",
+   "kind": "eval",
+   "status": "missing",
+   "group": "D",
+   "reason": "verdict"
+  },
+  {
+   "board": "understanding-the-back-rank#3",
+   "idea": "29.Bxg6! starts a back-rank combination: removing the g6 knight; ...hxg6 falls into a king hunt",
+   "kind": "tactic",
+   "status": "missing",
+   "group": "B",
+   "reason": "29.Bxg6 back-rank combination \u2014 engine line + backRankWeakness",
+   "existingComputer": "backRankWeakness"
+  },
+  {
+   "board": "weak-squares-who-cares#1",
+   "idea": "After f4 the bishop is shut in but can reroute via e1 to the a5-d8 diagonal",
+   "kind": "route",
+   "status": "missing",
+   "group": "A",
+   "reason": "bishop reroute via e1 (pieceRoute)",
+   "existingComputer": "pieceRoute"
+  },
+  {
+   "board": "weak-squares-who-cares#1",
+   "idea": "A weakened square does not matter if the opponent cannot reach it (inaccessibility)",
+   "kind": "weakness",
+   "status": "missing",
+   "group": "E",
+   "reason": "inaccessibility: a hole the enemy cannot reach soon does not matter",
+   "concept": "inaccessibleHole"
+  },
+  {
+   "board": "weak-squares-who-cares#3",
+   "idea": "e4-e5 is not achievable for now",
+   "kind": "prepare",
+   "status": "missing",
+   "group": "A",
+   "reason": "break not achievable = pawnBreak / breakStopped",
+   "existingComputer": "breakStopped"
+  },
+  {
+   "board": "weak-squares-who-cares#4",
+   "idea": "White's knight on h2 is terribly inactive",
+   "kind": "weakness",
+   "status": "missing",
+   "group": "A",
+   "reason": "inactive knight h2 = pieceActivity",
+   "existingComputer": "pieceActivity"
+  },
+  {
+   "board": "weak-squares-who-cares#4",
+   "idea": "Black's knight sits on the dream square c5",
+   "kind": "outpost",
+   "status": "missing",
+   "group": "A",
+   "reason": "knight on dream square c5 (outpost)",
+   "existingComputer": "outpost"
+  },
+  {
+   "board": "weak-squares-who-cares#5",
+   "idea": "Positionally White looks busted: Black's knight is entrenched on the ideal e5 square",
+   "kind": "outpost",
+   "status": "missing",
+   "group": "A",
+   "reason": "entrenched knight e5 (outpost)",
+   "existingComputer": "outpost"
+  },
+  {
+   "board": "weak-squares-who-cares#5",
+   "idea": "But White has a formidable mass of pieces on the kingside while Black's rooks, c5 knight and b7 bishop are far from the king",
+   "kind": "attack-king",
+   "status": "missing",
+   "group": "A",
+   "reason": "attackers far from defenders = kingSiege farFromHome",
+   "existingComputer": "kingSiege"
+  },
+  {
+   "board": "weak-squares-who-cares#5",
+   "idea": "The position is time-sensitive: White must act before Black plugs the kingside holes",
+   "kind": "tempo",
+   "status": "missing",
+   "group": "C",
+   "reason": "time-sensitive: act before holes are plugged",
+   "boardTrigger": null
+  },
+  {
+   "board": "weak-squares-who-cares#7",
+   "idea": "The concession is acceptable because Black cannot easily reach the weakened square (partial inaccessibility)",
+   "kind": "weakness",
+   "status": "missing",
+   "group": "E",
+   "reason": "partial inaccessibility (hole reachable only into a guard)",
+   "concept": "inaccessibleHole"
+  },
+  {
+   "board": "weak-squares-who-cares#7",
+   "idea": "Positional concessions are fine when made for a concrete gain",
+   "kind": "choice",
+   "status": "missing",
+   "group": "C",
+   "reason": "maxim: concessions for concrete gain",
+   "boardTrigger": null
+  }
+ ]
+}
