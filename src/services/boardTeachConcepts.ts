@@ -66,8 +66,7 @@ export function pinPressureConcept(fen: string, student: 'w' | 'b'): BoardConcep
  */
 export function guardRemovalConcept(fen: string, student: 'w' | 'b'): BoardConcept | null {
   const them: 'w' | 'b' = student === 'w' ? 'b' : 'w';
-  let board: Chess;
-  try { board = new Chess(fen); } catch { return null; }
+  try { new Chess(fen); } catch { return null; }
   const pick = (holder: 'w' | 'b'): GuardRemoval | null => findGuardRemovals(fen, holder)[0] ?? null;
   const key = stemKeyOf(fen.split(' ')[0]);
   const mine = pick(student);

@@ -69,7 +69,7 @@ export function pieceTempo(fen: string, lines: readonly EngineLine[] | null, stu
     if (had && had.target === hits[0]) had.moves.push(m.san);
     else if (!had) byPiece.set(m.from, { moves: [m.san], target: hits[0] });
   }
-  const pick = [...byPiece.entries()].sort((a, b) => b[1].moves.length - a[1].moves.length)[0];
+  const pick = [...byPiece.entries()].sort((a, b) => b[1].moves.length - a[1].moves.length)[0] as [Square, { moves: string[]; target: Square }] | undefined;
   if (!pick) return null;
   const [from, { moves, target }] = pick;
   const piece = PIECE_NAME[c.get(from)?.type ?? 'p'];

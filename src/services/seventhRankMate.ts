@@ -47,11 +47,10 @@ export function seventhRankMate(fen: string, lines: readonly EngineLine[] | null
     const defender = other(attacker);
     const seventh = attacker === 'w' ? '7' : '2';
     const back = attacker === 'w' ? '8' : '1';
-    const king = c.findPiece({ type: 'k', color: defender })[0];
+    const king = c.findPiece({ type: 'k', color: defender })[0] as Square | undefined;
     if (!king || king[1] !== back) continue;
     const heavies = c.board().flat()
-      .filter((p) => p && p.color === attacker && (p.type === 'r' || p.type === 'q') && p.square[1] === seventh)
-      .map((p) => p!.square);
+      .flatMap((p) => (p && p.color === attacker && (p.type === 'r' || p.type === 'q') && p.square[1] === seventh ? [p.square] : []));
     if (heavies.length < 2) continue;
     if (!noMatingCheck(fen, attacker)) continue;
     const guard = c.board().flat().find((p) => p && p.color === defender && (p.type === 'r' || p.type === 'q') && p.square[1] === back)?.square ?? null;
@@ -71,7 +70,7 @@ export function seventhRankMate(fen: string, lines: readonly EngineLine[] | null
     const text = mine
       ? `${two} on the seventh don't mate by themselves here: no check mates while ${why}. Use them to win material or bring another piece in.`
       : `${two} on your second rank can't mate on their own: no check of theirs mates while ${why}. Keep it that way: the ${rank} rank guarded and your king next to a rook.`;
-    return { attacker, heavies, guard, touched, text, squares: [king as Square, ...heavies, ...(guard ? [guard] : [])] };
+    return { attacker, heavies, guard, touched, text, squares: [king, ...heavies, ...(guard ? [guard] : [])] };
   }
   return null;
 }
