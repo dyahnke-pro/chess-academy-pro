@@ -28,6 +28,7 @@ import { isGenericAnnotationText } from './walkthroughNarration';
 import { BRIEFING_LINE_PLIES, newLessonVoice, type LessonVoice } from './reviewMoveBriefing';
 import { lessonThought } from './moveThoughtFacts';
 import { afterCapture, NO_PREV_CAPTURE, type PrevCaptureContext } from './pvPlayback';
+import { writerFor, thoughtSettings } from './writerRegister';
 
 interface WalkthroughNarrationInput {
   openingName: string;
@@ -149,7 +150,7 @@ function buildPerMoveContext(startFen: string, sanMoves: string[]): PerMoveConte
  *  nothing nameable: silence is allowed, filler is not. */
 function computeFill(ctx: PerMoveContext, studentSide: 'white' | 'black' | undefined, voice: LessonVoice): string {
   try {
-    return lessonThought({ namesPlayedMove: true, theory: true, story: true,
+    return lessonThought({ ...thoughtSettings(writerFor('lesson')),
       fenBefore: ctx.fenBefore,
       san: ctx.san,
       prev: ctx.prev,

@@ -64,6 +64,7 @@ import type {
   NarrationArrow,
   NarrationHighlight,
 } from '../types/walkthroughTree';
+import { writerFor, thoughtSettings } from '../services/writerRegister';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -1440,7 +1441,7 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
         const theirLast = pathSans.length >= 2
           ? { fenBefore: fenForPath(pathSans.slice(0, -2), treeRef.current?.startFen), san: pathSans[pathSans.length - 2] }
           : null;
-        idea = lessonThought({ namesPlayedMove: true, theory: true, story: true,
+        idea = lessonThought({ ...thoughtSettings(writerFor('lesson')),
           fenBefore, san: node.san, prev,
           moverIsStudent: mover === (treeRef.current?.studentSide ?? 'white'),
           line,

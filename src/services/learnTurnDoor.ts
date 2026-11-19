@@ -54,6 +54,7 @@ import { STORY_KIND, type StoryBeat } from './openingStory';
 import type { ThreadLine } from './gameStory';
 import { samePosition } from '../utils/samePosition';
 import type { FocusId } from '../coach/focus/focusCard';
+import { averageWordsOf } from './writerRegister';
 export { buildVoicePackage, describeVoicePackage, keptLines, markableSquares, spokenSentenceKeys } from './voicePackage';
 export type { SpokenLine } from './voicePackage';
 export type { VoicePackage, VoiceFactKind } from './voicePackage';
@@ -101,7 +102,7 @@ export interface ChanceHold {
 
 /** The AVERAGE a Learn turn is held to (CLAUDE.md WHY standard measure 4) —
  *  the scale of the marginal bar, never a limit. */
-const TURN_WORD_TARGET = 80;
+const TURN_WORD_TARGET = averageWordsOf('learn');
 
 /** What stands on `square` in `fen`: its FEN letter ('N', 'p' …), '' when
  *  empty, null when the board or square cannot be read. */

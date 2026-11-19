@@ -92,6 +92,7 @@ import { zugzwangOn, zugzwangSyncLine } from './zugzwangRead';
 import { raceCountOn, raceCountLine, raceCountSquares } from './raceCount';
 import { promotionChoicesOn, promotionChoiceLine } from './promotionChoice';
 import type { EndgameRuleMaterial } from '../coach/questionIntents';
+import { writerFor } from './writerRegister';
 
 // Pure board-fact constants — universal chess values, leaf-local so this module
 // imports nothing that could loop back. coachFeatureService imports these FROM
@@ -801,7 +802,7 @@ export function assembleKingSafetyAnswer(fen: string, studentColor: 'white' | 'b
       bestMoveSan: null, bestMoveFromTo: null, sources: ['chess.js'],
     };
   }
-  const exposure = readBoard('kingExposure', { fen, side: target, student: me, owner: true });
+  const exposure = readBoard('kingExposure', { fen, side: target, student: me, owner: writerFor('chat').owner });
   if (!exposure) {
     // Say only what was checked (walk 2026-09-30, game 1: "no open lines" with
     // the g-file in front of the king wide open). Name any file beside the king

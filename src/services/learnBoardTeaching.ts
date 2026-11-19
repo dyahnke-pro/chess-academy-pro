@@ -75,6 +75,11 @@ export function warmOpeningStory(fen: string): void {
 import { ruledOutSans, extractMentionedSanSpans } from './arrowEngine';
 import { gameArcs } from './lookaheadPlan';
 import { isStaked, mateStakes, exchangeStakes, forkPoints, piecesOn, type FactStakes } from './factStakes';
+import { writerFor, slipRegister, namesStudentMovesFor } from './writerRegister';
+
+/** Learn's writer settings, and the asked answer's ("was that a good move?"). */
+const LEARN_WRITER = writerFor('learn');
+const CHAT_WRITER = writerFor('chat');
 
 /** The board after `san` from `fen` — the board a fact about that move is
  *  computed on (`fen` itself when the move does not play). */
@@ -680,7 +685,7 @@ export function studentMoveAnswerLines(history: readonly string[], ply: number, 
   if (!fenBefore || ply < 0 || ply >= history.length) return [];
   // The student asked ("was that a good move?"): theory may answer.
   const hints = studentMoveTeaching({
-    theory: true, namesStudentMoves: true,
+    theory: CHAT_WRITER.theory, namesStudentMoves: CHAT_WRITER.namesStudentMoves,
     fenBefore, san: history[ply], history: history.slice(0, ply + 1), cpLoss, bothCp: true,
     bestSan, bestLine: undefined, reply: history[ply + 1] ?? null, cpAfter: null,
     // No engine line after the move is read here: no follow-up is named.
@@ -741,7 +746,7 @@ export function theirMoveAnswerLines(history: readonly string[], ply: number, st
       try {
         const u = best.moves[0];
         const answerSan = new Chess(after).move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] })?.san ?? null;
-        const text = readBoard('slipAnswer', { fen: after, prevCapture: captureRunOfMoves(null, history.slice(0, ply + 1)), answerSan, lineUci: best.moves, register: 'now' })?.text;
+        const text = readBoard('slipAnswer', { fen: after, prevCapture: captureRunOfMoves(null, history.slice(0, ply + 1)), answerSan, lineUci: best.moves, register: slipRegister(CHAT_WRITER) })?.text;
         if (text) out.push(text);
       } catch { /* the answer is a bonus */ }
     }
@@ -1161,7 +1166,7 @@ interface LearnReason {
 
 export function learnMoveReason(input: { fenBefore: string; san: string; reads: IntentReads; seat: 'student' | 'opponent'; prevCapture: PrevCaptureContext | null; asksToSee?: boolean }): LearnReason | null {
   // Learn: the student's next move is held — the prepared move is said by its piece (OS-10).
-  const reason = decisiveReason({ ...input, namesStudentMoves: input.seat !== 'student' });
+  const reason = decisiveReason({ ...input, namesStudentMoves: namesStudentMovesFor(LEARN_WRITER, input.seat === 'student') });
   if (!reason) return null;
   const posed = input.seat === 'student' ? reasonPosed(reason) : null;
   emitDecisiveReason({ surface: 'learn', kind: reason.kind, source: reason.source, about: reason.about, gapCp: reason.gapCp, stakeCp: reason.stakeCp, posedTag: posed?.tag ?? null, outcome: posed ? 'held' : 'explained' });

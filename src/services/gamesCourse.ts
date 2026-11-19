@@ -36,6 +36,7 @@ import { NO_PREV_CAPTURE } from './captureRun';
 import type { GamesAnswer, GamesSource } from './deepTree';
 import { CLUB_BAND } from './clubTree';
 import { numberedMove } from '../utils/numberedMove';
+import { writerFor, thoughtSettings } from './writerRegister';
 
 /** Why a walk stopped. */
 export type CourseStop = 'middlegame' | 'thin' | 'game-over' | 'max' | 'unreachable';
@@ -354,7 +355,7 @@ function splitThought(v: CourseLine, side: 'white' | 'black'): string {
     for (const san of v.sans.slice(0, v.from)) c.move(san);
     const prev = captureContextsAlong(new Chess().fen(), v.sans.slice(0, v.from)).at(-1) ?? NO_PREV_CAPTURE;
     const before = v.from > 0 ? (() => { const b = new Chess(); for (const san of v.sans.slice(0, v.from - 1)) b.move(san); return b.fen(); })() : null;
-    return lessonThought({ namesPlayedMove: true, theory: true, story: true,
+    return lessonThought({ ...thoughtSettings(writerFor('lesson')),
       fenBefore: c.fen(),
       san: v.sans[v.from],
       prev,

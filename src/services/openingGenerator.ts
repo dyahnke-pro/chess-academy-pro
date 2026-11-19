@@ -90,6 +90,7 @@ import type {
 import { proofCut } from './exchangeLedger';
 import { sideToMoveAs } from './threatOut';
 import { captureContextsAlong, type PrevCaptureContext } from './pvPlayback';
+import { writerFor, thoughtSettings } from './writerRegister';
 
 /** Render a Lichess-DB entry list as a numbered, prompt-friendly
  *  block. Each line: "  {N}. [ECO] Name :: PGN". */
@@ -1749,7 +1750,7 @@ function computedPlyBeat(
     // Through the DNA door, with the lesson's own memory: an idea is taught
     // in full once and referred to after (David 2026-10-07: "teach me x has a
     // lot of repeated phrases" — 2,167 repeats over 25 lessons).
-    return lessonThought({ namesPlayedMove: true, theory: true, story: true,
+    return lessonThought({ ...thoughtSettings(writerFor('lesson')),
       fenBefore,
       san: stripSanAnnotations(san),
       prev,
@@ -2627,7 +2628,7 @@ function buildFallbackTreeFromDb(
   // and say-once must run forward or the last ply is the one taught in full).
   const dbVoice = newLessonVoice();
   const dbRuns = captureContextsAlong(fensBefore[0], entry.moves.map(stripSanAnnotations));
-  const dbIdeas = entry.moves.map((san, i) => lessonThought({ namesPlayedMove: true, theory: true, story: true,
+  const dbIdeas = entry.moves.map((san, i) => lessonThought({ ...thoughtSettings(writerFor('lesson')),
     fenBefore: fensBefore[i],
     san: stripSanAnnotations(san),
     prev: dbRuns[i],
