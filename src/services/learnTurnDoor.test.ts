@@ -931,7 +931,7 @@ describe('one reason for one move (Learn audit 2026-10-18)', () => {
 });
 
 describe('"nothing hinges" never sits beside a stake (Alekhine walk 2026-10-19)', () => {
-  const calm = { lane: 'positionFacts' as const, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'Nothing hinges on your next move — pick a sensible one and keep your clock for the hard decisions.', fen: FEN, claims: ['srr:any-move-fine'] };
+  const calm = { lane: 'positionFacts' as const, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'Nothing hinges on your next move — several do the same job.', fen: FEN, claims: ['srr:any-move-fine'] };
   const fork = { lane: 'positionFacts' as const, namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'Watch c2 — a knight lands there in 2 and forks your king on e1 and rook on a1, so take the square away before it arrives.', fen: FEN, squares: ['c2'], stakes: { points: 5, plies: 3 } };
   it('the calm read stands down when something else is at stake', () => {
     const d = decideTurn([fork, calm]);

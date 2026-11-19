@@ -173,7 +173,7 @@ describe('only-move teaches whether or not they found it', () => {
 
   it('still uses the corrective register when they missed it', () => {
     const beat = methodBeatFor(base({ tier: 'only-move', cpLossCp: 220, bestSan: 'Nf3' })) ?? '';
-    expect(beat).toMatch(/moment to slow down|Spend your clock|fork in the road/i);
+    expect(beat).toMatch(/moment to slow down|fork in the road/i);
     expect(beat).not.toMatch(/you found it|you solved it/i);
   });
 

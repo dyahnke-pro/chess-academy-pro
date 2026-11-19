@@ -6,16 +6,11 @@ import { readHabit, READ_HABIT } from './methodBeat';
 
 describe('readHabit', () => {
   it('a shot for the student is the forcing scan', () => {
-    expect(readHabit({ studentShot: true, theirThreat: true, decidingMoment: true })?.habit).toBe('forcing-scan');
+    expect(readHabit({ studentShot: true })?.habit).toBe('forcing-scan');
   });
-  it('their threat closes on the live beat that names it, never a second, nameless habit line (Danya narration test 2026-11-19)', () => {
-    expect(readHabit({ studentShot: false, theirThreat: true, decidingMoment: true })).toBeNull();
-  });
-  it('an only-move moment is "slow down"', () => {
-    expect(readHabit({ studentShot: false, theirThreat: false, decidingMoment: true })?.habit).toBe('slow-down');
-  });
-  it('a quiet board gets no habit', () => {
-    expect(readHabit({ studentShot: false, theirThreat: false, decidingMoment: false })).toBeNull();
+  it('a board with no shot gets no habit line — never clock advice (David 2026-11-19: "spend your clock" removed)', () => {
+    expect(readHabit({ studentShot: false })).toBeNull();
+    for (const t of Object.values(READ_HABIT)) expect(t).not.toMatch(/clock|spend (your )?time|save your time/i);
   });
   it('each habit has one fixed wording (repetition builds the habit)', () => {
     for (const t of Object.values(READ_HABIT)) expect(t).toMatch(/^[A-Z].*[.]$/);

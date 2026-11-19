@@ -239,11 +239,9 @@ export function methodBeatRead(s: MethodSignals, plyForVariety = 0): { habit: Me
       ? pick([
         'Worth marking this one: only one move held here, and you found it. That shape — one move holds, everything else slides — is what to slow down for next time.',
         'That was an only-move position and you solved it. Learn the feel of them: when just one move keeps the balance, it is worth every second you can give it.',
-        'Exactly one move held the position and it was the one you played. Positions like this are the ones to spend your clock on — notice them early.',
       ], plyForVariety)
       : pick([
         'This was the moment to slow down — positions where one move decides it are worth more time than the ten quiet moves around them.',
-        'Spend your clock here, not on the easy moves — this is the kind of position that decides games.',
         'Worth noticing for next time: this position was a fork in the road, and those deserve real thinking time.',
       ], plyForVariety));
   }
@@ -252,7 +250,6 @@ export function methodBeatRead(s: MethodSignals, plyForVariety = 0): { habit: Me
   if (slowTier) {
     return claim('slow-down', pick([
       'This was the moment to slow down — positions where one move decides it are worth more time than the ten quiet moves around them.',
-      'Spend your clock here, not on the easy moves — this is the kind of position that decides games.',
       'Worth noticing for next time: this position was a fork in the road, and those deserve real thinking time.',
     ], plyForVariety));
   }
@@ -488,34 +485,20 @@ export const CANDIDATES_HABIT = 'The habit that catches this: name two or three 
  */
 /** THE HABIT THAT CLOSES A BOARD READ (WO-DANYA-READS-01 group 9, David
  *  2026-11-18). A correction ends on its habit (`correctionHabit`); a read of
- *  the board did not. One fixed line per habit (repetition builds the habit),
- *  chosen by what decides THIS board: a forcing shot for the student is the
- *  forcing scan, their threat is "their move first", an only-move moment is
- *  "slow down". A quiet board gets none — empty beats generic. */
-export const READ_HABIT: Readonly<Record<'forcing-scan' | 'opponent-threat' | 'slow-down', string>> = {
+ *  the board closes on the forcing scan when a shot is there for the student.
+ *  One fixed line (repetition builds the habit). A quiet board gets none —
+ *  empty beats generic. Their threat closes on the live beat that names it
+ *  (`liveMethodBeat` 'opponent-threat'), never a nameless habit line here; and
+ *  "spend your clock on positions like this" is never said (David 2026-11-19:
+ *  removed — clock advice is filler, it teaches nothing about the board). */
+export const READ_HABIT: Readonly<Record<'forcing-scan', string>> = {
   'forcing-scan': 'Habit for positions like this: CCT — every check, every capture, every threat, in that order, before you consider a quiet move.',
-  'opponent-threat': 'Make this the routine — their threat before your plan. Ask what they are trying to do before you ask what you want.',
-  'slow-down': 'Positions like this are the ones to spend your clock on: when one move decides it, notice it early and slow down.',
 };
 export function readHabit(s: {
   /** A tactic on the board for the student, to play now. */
   studentShot: boolean;
-  /** A threat of theirs the student must meet. */
-  theirThreat: boolean;
-  /** The one door ranks this a deciding moment (only move / critical). */
-  decidingMoment: boolean;
-}): { habit: 'forcing-scan' | 'opponent-threat' | 'slow-down'; text: string } | null {
-  // THEIR THREAT'S HABIT IS SAID BY THE LIVE BEAT, WITH THE THREAT NAMED
-  // (`liveMethodBeat` 'opponent-threat': "Their threat first, your idea
-  // second: right now they're after your c-pawn on c4"). Said here too, it
-  // was the same habit a second time — or the habit with no threat named
-  // anywhere in the read (Danya narration test 2026-11-19: "Make this the
-  // routine — their threat before your plan" on 61 of 209 boards). A board
-  // whose point is their threat closes on the threat's own line, not on this.
-  const habit = s.studentShot ? 'forcing-scan' as const
-    : s.theirThreat ? null
-      : s.decidingMoment ? 'slow-down' as const : null;
-  return habit ? { habit, text: READ_HABIT[habit] } : null;
+}): { habit: 'forcing-scan'; text: string } | null {
+  return s.studentShot ? { habit: 'forcing-scan', text: READ_HABIT['forcing-scan'] } : null;
 }
 
 export function correctionHabit(s: {

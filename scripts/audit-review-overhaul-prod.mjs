@@ -1907,7 +1907,7 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
   // (habitNeedFrom) and say-once per game, so the honest measure is how many
   // actually reached the voice on a real game — printed here rather than left
   // for a grep. Stems come from methodBeat.ts; keep the two in sync.
-  const METHOD_STEMS = /habit that catches this|their threat before your plan|what is their move doing|list the checks and the captures|checks and captures first|every check, every capture|moment to slow down|Spend your clock here|fork in the road, and those deserve|Name your candidates|candidate moves, written down|discipline here is listing/i;
+  const METHOD_STEMS = /habit that catches this|their threat before your plan|what is their move doing|list the checks and the captures|checks and captures first|every check, every capture|moment to slow down|fork in the road, and those deserve|Name your candidates|candidate moves, written down|discipline here is listing/i;
   const methodBeats = spoken().map((x) => x.text).filter((t) => METHOD_STEMS.test(t));
   log(`\n===== METHOD BEATS (${methodBeats.length}) — seedWeakness=${process.env.AUDIT_SEED_WEAKNESS === '1' ? 'ON' : 'off (cold device)'} =====`);
   if (methodBeats.length === 0) log('  (none — the habit gates did not clear on this game)');

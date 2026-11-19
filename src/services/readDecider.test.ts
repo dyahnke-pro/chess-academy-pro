@@ -19,11 +19,11 @@ const ctxOf = (b: Board, over: Partial<ReadContext> = {}): ReadContext => ({
   ...readContextOf({
     fen: b.fen,
     top: { evaluation: b.top.mate != null ? (b.top.mate > 0 ? 100000 : -100000) : (b.top.cp ?? 0), mate: b.top.mate },
-    bestUci: b.top.best, withheld: null, studentShot: false, decidingMoment: false,
+    bestUci: b.top.best, withheld: null, studentShot: false,
   }),
   ...over,
 });
-const OPEN: ReadContext = { fen: null, bucket: 'open', best: [], withheld: [], puzzle: false, studentShot: false, decidingMoment: false };
+const OPEN: ReadContext = { fen: null, bucket: 'open', best: [], withheld: [], puzzle: false, studentShot: false };
 const said = (facts: readonly ReadFact[], ctx: ReadContext): string[] => decideRead(facts, ctx).facts.map((f) => f.text);
 
 describe('the read decider: his order, the fact he would say at each step', () => {
@@ -115,7 +115,7 @@ describe('PUZZLE MODE: the answer withheld, the side to move winning', () => {
   const ctxOfPuzzle = (p: Puzzle, withheld: string[] | null): ReadContext => readContextOf({
     fen: p.fen,
     top: { evaluation: p.fen.split(' ')[1] === 'w' ? 400 : -400, mate: null },
-    bestUci: null, withheld, studentShot: false, decidingMoment: false,
+    bestUci: null, withheld, studentShot: false,
   });
 
   it('a back-rank mate puzzle: the pattern and the attacking habit, never "what are they threatening?" (01qIp)', () => {

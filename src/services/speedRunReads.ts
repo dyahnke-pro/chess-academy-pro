@@ -84,7 +84,9 @@ export function anyMoveFine(fen: string, lines: Lines): Read | null {
   // verdict on the one they just played (Learn tape 2026-10-15: "This is not a
   // critical moment…" then "Rook takes d3 was the only move…") — so every stem
   // says which move it means.
-  return { idea: rot(fen, 'Your next move is not a big decision — several are about equally good, so save your time for the moves that are.', 'A few moves do the same job here. It is not a critical moment, so save your time for one that is.', 'Nothing hinges on your next move — pick a sensible one and keep your clock for the hard decisions.'), claim: 'srr:any-move-fine', namesMove: true, text: `Several moves are equally good for your next move — ${sans[0]}, ${sans[1]} or ${sans[2]}. Not every move is a big decision. Save your time for the ones that are.` };
+  // The board fact alone: clock advice ("save your time", "keep your clock
+  // for the hard decisions") is never said (David 2026-11-19).
+  return { idea: rot(fen, 'Your next move is not a big decision — several are about equally good.', 'A few moves do the same job here. It is not a critical moment.', 'Nothing hinges on your next move — several do the same job.'), claim: 'srr:any-move-fine', namesMove: true, text: `Several moves are equally good for your next move — ${sans[0]}, ${sans[1]} or ${sans[2]}. Not every move is a big decision.` };
 }
 
 /** D2 THE UGLY MOVE THAT IS CORRECT ("the hardest move to make"): the engine's
