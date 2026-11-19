@@ -1,10 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { structurePlan } from './nextPlans';
+import { structurePlan, structurePlanFact, passerTrumpSentence } from './nextPlans';
+import { planRaceClause } from './planRace';
 
 describe('structurePlan — structure→plan (conservative, board-true)', () => {
   it('names the push plan for the student’s own passed pawn', () => {
     // White pawn on e6, no black pawns on d/e/f ahead of it → passed.
-    const fen = '4k3/8/4P3/8/8/8/8/4K3 w - - 0 1';
+    const fen = 'k7/8/4P3/8/8/8/8/4K3 w - - 0 1';
     const plan = structurePlan(fen, 'w');
     expect(plan).toMatch(/passed pawn on e6/i);
     expect(plan).toMatch(/push it/i);
@@ -61,5 +62,22 @@ describe('the student\'s own isolated pawn is read before theirs (census 9 cover
     // Black: isolated e-pawn on e5 (no d/f pawns). White: d4 with no c/e pawn and no Black d-pawn.
     const fen = '4k3/pp4pp/8/4p3/3P4/8/PP3PPP/4K3 b - - 0 1';
     expect(structurePlan(fen, 'b')).toMatch(/^You're playing with the isolated pawn on e5/);
+  });
+});
+
+// Danya have-check 2026-11-19 — a passer that cannot run is no trump.
+describe('structurePlanFact — the runner that cannot run', () => {
+  it('beginner chess strategy #6: their king takes c3 — no race, no push', () => {
+    const f = structurePlanFact('8/5ppk/3P3p/8/8/2pK3P/5PP1/8 b - - 0 2', 'b');
+    expect(f?.text).toBe('Your passed pawn on c3 is no runner: their king is close enough to take it.');
+    expect(planRaceClause('8/5ppk/3P3p/8/8/2pK3P/5PP1/8 b - - 0 2', 'b', 'live')).toBeNull();
+    expect(passerTrumpSentence('8/5ppk/3P3p/8/8/2pK3P/5PP1/8 b - - 0 2', 'd6', false)).toMatch(/your king is outside its square — it cannot catch it/);
+  });
+  it('the double attack #2: d5 cannot advance into their queen', () => {
+    const f = structurePlanFact('r1b2rk1/pp4pp/3b4/3p2q1/8/1P1Q1P2/PB1N2PP/R3R2K b - - 0 18', 'b');
+    expect(f?.text).toBe("Your passed pawn on d5 can't advance yet: their queen on d3 covers d4. For now it needs guarding, not pushing.");
+  });
+  it('negative control: with their king far away the race is still a race', () => {
+    expect(planRaceClause('8/5ppk/3P3p/8/8/2p4P/5PP1/K7 b - - 0 2', 'b', 'live')).toMatch(/both sides have a runner/);
   });
 });
