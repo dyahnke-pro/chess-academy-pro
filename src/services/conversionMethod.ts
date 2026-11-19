@@ -21,6 +21,7 @@ import { Chess, type Square } from 'chess.js';
 import { outsidePasserDecoy } from './endgamePawnReads';
 import { describeStructure } from './boardStructure';
 import { findHangingBySee, captureRead } from './positionReadingService';
+import { flipSideToMove } from './threatOut';
 import { homeMinorCount } from './development';
 import { MATERIAL_VALUE } from './pieceValues';
 import { countKingAttack } from './kingSafety';
@@ -62,7 +63,14 @@ export function readConversion(fen: string, student: 'w' | 'b'): ConversionRead 
   // saving move WITH CHECK buys a second save, since the opponent must answer
   // the check first (claim check: Rxe1+ then the queen steps away — "a piece
   // up" said a queen up, engine +7).
-  const hangs = findHangingBySee(fen).filter((h) => h.color === student).sort((x, y) => y.gain - x.gain);
+  // IN CHECK, THE CHECK IS THE MOVE (Danya, how to ruin your pawn structure
+  // #0: "You're up material — finish developing" with Nf6+ on the board and
+  // the queen on d2 hanging): no conversion plan before it is answered.
+  if (c.turn() === student && c.inCheck()) return null;
+  // The hanging read is the side-to-move's captures: on the student's move it
+  // is read with the tempo handed over, or the student's own loose pieces are
+  // never seen at all (the queen on d2 above counted as a whole queen up).
+  const hangs = findHangingBySee(c.turn() === student ? (flipSideToMove(fen) ?? fen) : fen).filter((h) => h.color === student).sort((x, y) => y.gain - x.gain);
   const rescue = (sq: string): { ok: boolean; check: boolean } => {
     let ok = false; let check = false;
     for (const m of c.moves({ square: sq as Square, verbose: true })) {
