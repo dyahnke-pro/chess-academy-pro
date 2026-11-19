@@ -111,7 +111,6 @@ const FILTER_DEBT: Record<string, ReadonlyArray<{ clause: string; why: string }>
     { clause: 'ruleIdeas.has(f.idea)', why: 'OWED: an idea Review\'s facets already said on the ply (one idea said once)' },
     { clause: "f.computer !== 'theirTarget'", why: 'OWED: Review\'s [threat] facet says what their move aims at' },
     { clause: "f.source === 'openingTheory'", why: 'OWED: Review\'s opening lines say the equivalence' },
-    { clause: "f.computer !== 'openingStoryAt'", why: 'OWED: Review\'s own story lines' },
     { clause: "f.source !== 'teachingMove'", why: 'OWED: Review\'s facets read the teaching-move computers' },
     { clause: "f.source !== 'pieceRoute'", why: 'GENUINE (tense): a trip is a plan forward; in a finished game the moves that followed were answers to the board — hindsight' },
   ],

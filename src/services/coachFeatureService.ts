@@ -2754,8 +2754,6 @@ function* reviewSegmentSteps(
           // A transposition or an analogy: Review says it through its opening
           // lines (the order reads), so it is not said twice.
           && !(f.source === 'openingTheory' && f.kind === 'equivalence')
-          // The opening's story: Review says it through its own story lines.
-          && f.computer !== 'openingStoryAt'
           // The book's statistics (main move or sideline, how it scores, the
           // usual reply) are the Theory button's (option B, David 2026-11-12);
           // the other main tries and their aims are theory the walk teaches.
