@@ -13,7 +13,12 @@
 //               capture stalemates (`stalemateTraps`, the Saavedra trick);
 //   mate      — the promotion is checkmate;
 //   fork      — a knight promotion that checks and attacks the queen, and every
-//               reply leaves the queen to take (no recapture).
+//               reply leaves the queen to take (no recapture);
+//   check     — a knight promotion that gives check where the queen gives
+//               none, and the engine's lines on the board (both promotions
+//               read) have the knight at least `KNIGHT_CHECK_GAIN_CP` better
+//               (Danya's d8=N+ in "A Guide to Underpromotion": the queen only
+//               holds level, the knight's check wins). No lines, no claim.
 // The choice is an underpromotion only when the queen fails one of these and
 // the piece chosen does not: a knight that mates or wins the queen where the
 // queen does neither; the strongest piece that dodges the stalemate. When the
@@ -25,6 +30,12 @@ import { Chess, type Color, type Move, type PieceSymbol } from 'chess.js';
 import { stalemateTraps, type StalemateTrap } from './stalemateWatch';
 import { withArticle } from '../utils/andList';
 import { openSentence } from '../utils/openSentence';
+import { seatCp } from './winChance';
+import type { AnalysisLine } from '../types';
+
+/** The knight's check line beats the queen's by at least this (the mover's
+ *  score), or the check is no reason to underpromote. */
+export const KNIGHT_CHECK_GAIN_CP = 200;
 
 type Promo = 'q' | 'r' | 'b' | 'n';
 
@@ -32,7 +43,8 @@ export type PromotionReason =
   | { kind: 'queen-stalemates' }
   | { kind: 'queen-trap'; trap: StalemateTrap }
   | { kind: 'knight-mates' }
-  | { kind: 'knight-forks'; target: string };
+  | { kind: 'knight-forks'; target: string }
+  | { kind: 'knight-checks'; gainCp: number };
 
 export interface PromotionChoice {
   side: Color;
@@ -50,7 +62,7 @@ export interface PromotionChoice {
   key: string;
 }
 
-interface PieceRead { san: string; stalemate: boolean; trap: StalemateTrap | null; mate: boolean; fork: string | null }
+interface PieceRead { san: string; stalemate: boolean; trap: StalemateTrap | null; mate: boolean; fork: string | null; check: boolean }
 
 function readPiece(fen: string, m: Move): PieceRead {
   const b = new Chess(fen); b.move(m);
@@ -79,15 +91,23 @@ function readPiece(fen: string, m: Move): PieceRead {
       }
     }
   }
-  return { san: m.san, stalemate, trap, mate, fork };
+  return { san: m.san, stalemate, trap, mate, fork, check: b.inCheck() };
 }
 
 const ORDER: Promo[] = ['q', 'r', 'b', 'n'];
 
+/** The mover's score on the line among `lines` that starts with `uci`, or null. */
+function lineScore(lines: readonly AnalysisLine[] | null, uci: string, mover: Color): number | null {
+  const l = lines?.find((x) => x.moves[0] === uci);
+  return l ? seatCp(l, mover) : null;
+}
+
 /** THE CHOICE for the pawn move `from`→`to` on `fen` (the side to move's), or
  *  null when the queen is right or nothing proves otherwise. `engineBest`:
- *  the engine's best move (UCI) or null. */
-export function promotionChoiceFor(fen: string, from: string, to: string, engineBest: string | null): PromotionChoice | null {
+ *  the engine's best move (UCI) or null. `lines`: the engine's lines on `fen`
+ *  (MultiPV), REQUIRED — null where the surface has none (the knight's check
+ *  is then no reason). */
+export function promotionChoiceFor(fen: string, from: string, to: string, engineBest: string | null, lines: readonly AnalysisLine[] | null): PromotionChoice | null {
   let c: Chess;
   try { c = new Chess(fen); } catch { return null; }
   const moves = c.moves({ verbose: true }).filter((m) => m.from === from && m.to === to && m.promotion);
@@ -101,7 +121,12 @@ export function promotionChoiceFor(fen: string, from: string, to: string, engine
   const n = by.get('n');
   if (n && n.mate && !q.mate) choice = { piece: 'n', reason: { kind: 'knight-mates' } };
   else if (n && n.fork && !q.mate) choice = { piece: 'n', reason: { kind: 'knight-forks', target: n.fork } };
-  else if (fails(q)) {
+  else if (n && n.check && !q.check && !q.mate && !n.stalemate) {
+    const kn = lineScore(lines, `${from}${to}n`, c.turn());
+    const qn = lineScore(lines, `${from}${to}q`, c.turn());
+    if (kn !== null && qn !== null && kn - qn >= KNIGHT_CHECK_GAIN_CP) choice = { piece: 'n', reason: { kind: 'knight-checks', gainCp: kn - qn } };
+  }
+  if (!choice && fails(q)) {
     const ok = ORDER.slice(1).find((p) => { const r = by.get(p); return !!r && !fails(r); });
     if (ok) choice = { piece: ok, reason: q.stalemate ? { kind: 'queen-stalemates' } : { kind: 'queen-trap', trap: q.trap as StalemateTrap } };
   }
@@ -115,7 +140,7 @@ export function promotionChoiceFor(fen: string, from: string, to: string, engine
 }
 
 /** Every promotion choice the side to move has on `fen` (one per pawn move). */
-export function promotionChoicesOn(fen: string, engineBest: string | null): PromotionChoice[] {
+export function promotionChoicesOn(fen: string, engineBest: string | null, lines: readonly AnalysisLine[] | null): PromotionChoice[] {
   let c: Chess;
   try { c = new Chess(fen); } catch { return []; }
   const seen = new Set<string>();
@@ -125,7 +150,7 @@ export function promotionChoicesOn(fen: string, engineBest: string | null): Prom
     const k = `${m.from}${m.to}`;
     if (seen.has(k)) continue;
     seen.add(k);
-    const pc = promotionChoiceFor(fen, m.from, m.to, engineBest);
+    const pc = promotionChoiceFor(fen, m.from, m.to, engineBest, lines);
     if (pc) out.push(pc);
   }
   return out;
@@ -147,6 +172,8 @@ export function promotionChoiceLine(pc: PromotionChoice, student: Color, played:
       return `${lead} The knight on ${pc.to} gives checkmate, and a queen there does not.`;
     case 'knight-forks':
       return `${lead} The knight on ${pc.to} gives check and hits the queen on ${pc.reason.target}, so the queen falls next move.`;
+    case 'knight-checks':
+      return `${lead} The knight on ${pc.to} comes with check, and a queen there gives none. That check is the tempo that wins: with a queen, ${mine ? 'they hold' : 'you hold'} the balance.`;
     case 'queen-stalemates':
       return `${lead} A queen on ${pc.to} would leave ${mine ? 'their' : 'your'} king no move and nothing else to move: stalemate.${also} The ${piece} does the job and leaves ${mine ? 'them' : 'you'} a move.`;
     case 'queen-trap': {
@@ -160,13 +187,13 @@ export function promotionChoiceLine(pc: PromotionChoice, student: Color, played:
 
 /** THE MOVE THAT PROMOTED (either seat): the underpromotion played and its
  *  reason, or the queen played where the board needed a lesser piece. */
-export function promotionPlayed(fenBefore: string, san: string): { choice: PromotionChoice; queenMissed: boolean } | null {
+export function promotionPlayed(fenBefore: string, san: string, lines: readonly AnalysisLine[] | null): { choice: PromotionChoice; queenMissed: boolean } | null {
   let c: Chess;
   try { c = new Chess(fenBefore); } catch { return null; }
   let m: Move;
   try { m = c.move(san); } catch { return null; }
   if (!m.promotion) return null;
-  const pc = promotionChoiceFor(fenBefore, m.from, m.to, null);
+  const pc = promotionChoiceFor(fenBefore, m.from, m.to, null, lines);
   if (!pc) return null;
   if (m.promotion === pc.piece) return { choice: pc, queenMissed: false };
   if (m.promotion === 'q') return { choice: pc, queenMissed: true };
@@ -180,6 +207,7 @@ export function queenMissedLine(pc: PromotionChoice, student: Color): string {
   switch (pc.reason.kind) {
     case 'knight-mates': return mine ? `A knight on ${pc.to} would have given checkmate. The queen does not.` : `A knight on ${pc.to} would have given them checkmate. The queen does not.`;
     case 'knight-forks': return mine ? `A knight on ${pc.to} would have checked and won the queen on ${pc.reason.target}.` : `A knight on ${pc.to} would have checked and won your queen on ${pc.reason.target}.`;
+    case 'knight-checks': return mine ? `A knight on ${pc.to} would have come with check. The queen gives none, and lets them hold.` : `A knight on ${pc.to} would have come with check. Their queen gives none, and lets you hold.`;
     case 'queen-stalemates': return mine ? `The queen is stalemate. ${openSentence(withArticle(piece))} would have kept the win.` : `The queen stalemates you. ${openSentence(withArticle(piece))} would have kept their win.`;
     case 'queen-trap': {
       const t = pc.reason.trap;
