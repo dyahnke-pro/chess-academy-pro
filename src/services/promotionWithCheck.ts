@@ -38,7 +38,9 @@ function passed(c: Chess, sq: Square, col: Color): boolean {
 }
 
 /** A check that puts their king on the rank your pawn queens on, so the promotion comes with check; or null. */
-export function promotionWithCheck(fen: string, san: string, reply: string | null): PromotionWithCheck | null {
+export function promotionWithCheck(fen: string, san: string, reply: string | null,
+  /** REQUIRED: the student's seat — the checking side is "you" or "they". */
+  student: Color): PromotionWithCheck | null {
   let c: Chess;
   try { c = new Chess(fen); } catch { return null; }
   let m;
@@ -64,7 +66,9 @@ export function promotionWithCheck(fen: string, san: string, reply: string | nul
       // A new queen beside the king is taken at once unless something guards it.
       const touching = Math.abs(FILES.indexOf(queens[0]) - FILES.indexOf(r0.to[0])) <= 1;
       if (touching && !c.attackers(queens, me).length) continue;
-      const text = `${san} drives their king to ${r0.to}, onto the rank your ${p.square[0]}-pawn queens on — so when it promotes on ${queens}, it promotes with check, and you win the tempo the race needs.`;
+      const text = me === student
+        ? `${san} drives their king to ${r0.to}, onto the rank your ${p.square[0]}-pawn queens on — so when it promotes on ${queens}, it promotes with check, and you win the tempo the race needs.`
+        : `Their ${san} drives your king to ${r0.to}, onto the rank their ${p.square[0]}-pawn queens on — so when it promotes on ${queens}, it promotes with check, and they win the tempo the race needs.`;
       return { check: san, kingTo: r0.to, pawn: p.square, queens, text, squares: [m.to, r0.to, p.square, queens] };
     }
   }

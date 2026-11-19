@@ -41,7 +41,7 @@
  * that drift.
  */
 import { db } from '../db/schema';
-import { MISTAKE_CP } from './engineConstants';
+import { MISTAKE_CP, INACCURACY_CP } from './engineConstants';
 import { logAppAudit } from './appAuditor';
 import { emitWeaknessModelChanged } from './weaknessModelEvents';
 import { leadingFundamentals, MOVE_FUNDAMENTAL_TAG } from './moveFundamentals';
@@ -61,6 +61,8 @@ import { evidenceMirror, slipMirror } from './recordMirror';
 import { kingSquareOutcome } from './kingWalk';
 import { prophylaxisAnswer } from './moveInsight';
 import { studentMoveStructure } from './structureReads';
+import { tensionReleased } from './tensionRelease';
+import { wingWithoutPieces } from './wingWithoutPieces';
 import {
   holdRecords, holdState, NEVER_POSED, HOLD_WINDOW, HOLD_MIN_POSED, HOLD_GREEN, HOLD_SHORT,
   type HoldRecord,
@@ -545,6 +547,9 @@ function classifiedSlipTag(args: { fenBefore: string; playedSan: string; bestSan
 /** A modest question: enough to count for NEED, below the green bar alone. */
 const C_PAWN_POSED = 60;
 
+/** An idea the move ignored at a cost (released tension, a lever with no pieces). */
+const IGNORED_IDEA_POSED = 65;
+
 /** Their pin or kick the engine's best move stops: a real question. */
 const PROPHYLAXIS_POSED = 70;
 
@@ -686,6 +691,28 @@ export function capabilityOutcomes(args: CapabilityMoveArgs): Array<{ tag: Misco
         if (!r.held || r.held.posedImportance < POSED_IMPORTANCE_MIN || posed.some((p) => p.tag === r.held?.tag)) continue;
         posed.push({ tag: r.held.tag, posedImportance: r.held.posedImportance });
       }
+    } catch { /* an unreadable board posed nothing */ }
+  }
+  // THE MOVE THAT IGNORED THE IDEA, both ways (the tension released too early,
+  // the lever pushed with no pieces near it): filed BROKEN where the move did
+  // it and the engine says it cost — the move genuinely ignored the idea.
+  // Their held half needs the question asked before the move (every capture's
+  // own line), which the record does not keep.
+  if (args.cpLoss != null && args.cpLoss >= INACCURACY_CP) {
+    const side: 'w' | 'b' = args.moverColor === 'white' ? 'w' : 'b';
+    const breakTag = (tag: MisconceptionTagId): void => {
+      const had = posed.find((p) => p.tag === tag);
+      if (had) had.outcome = 'broken';
+      else posed.push({ tag, posedImportance: IGNORED_IDEA_POSED, outcome: 'broken' });
+    };
+    try {
+      if (args.bestSan) {
+        const b = new Chess(args.fenBefore).move(args.bestSan);
+        // The best line's score is the zero point: the move's cost is its gap.
+        const r = tensionReleased(args.fenBefore, args.playedSan, [{ moves: [`${b.from}${b.to}${b.promotion ?? ''}`], cp: 0, mate: null }], -args.cpLoss, null, side);
+        if (r) breakTag(/^[a-h]x/.test(r.capture) ? 'mistimed-pawn-break' : 'bad-trade');
+      }
+      if (wingWithoutPieces(args.fenBefore, args.playedSan, side)) breakTag('mistimed-pawn-break');
     } catch { /* an unreadable board posed nothing */ }
   }
   if (posed.length === 0) return [];

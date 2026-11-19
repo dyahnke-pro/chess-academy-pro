@@ -692,29 +692,29 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
           ...readBoardAll('kingRace', { fen: after, student }).map((f) => ({ f, idea: 'king-activity' as IdeaKind, weight: 62 })),
           ...readBoardAll('inaccessibleHole', { fenBefore: i.fenBefore, san: i.san, student }).map((f) => ({ f, idea: 'weakness' as IdeaKind, weight: 50 })),
         ];
-        // Worded to the mover, so said of the student's own move: the box
-        // shrunk, the check that makes the promotion come with check, the
-        // lever with no pieces near it, the tension released too early.
-        if (mine) {
-          board.push(
-            ...readBoardAll('kingBox', { fenBefore: i.fenBefore, san: i.san, namesPlayedMove: i.namesPlayedMove }).map((f) => ({ f, idea: 'king-activity' as IdeaKind, weight: 56 })),
-            ...readBoardAll('promotionWithCheck', { fenBefore: i.fenBefore, san: i.san, reply: i.line?.[0] ?? null, namesPlayedMove: i.namesPlayedMove }).map((f) => ({ f, idea: 'promote' as IdeaKind, weight: 66 })),
-            ...readBoardAll('wingWithoutPieces', { fenBefore: i.fenBefore, san: i.san }).map((f) => ({ f, idea: 'plan' as IdeaKind, weight: 52 })),
-          );
+        // Both seats (each worded from the student's seat): the box shrunk,
+        // the check that makes the promotion come with check, the lever with
+        // no pieces near it, the tension released too early — and, on the
+        // board after the move, a tension capture the engine wants left alone.
+        board.push(
+          ...readBoardAll('kingBox', { fenBefore: i.fenBefore, san: i.san, student, namesPlayedMove: i.namesPlayedMove }).map((f) => ({ f, idea: 'king-activity' as IdeaKind, weight: 56 })),
+          ...readBoardAll('promotionWithCheck', { fenBefore: i.fenBefore, san: i.san, reply: i.line?.[0] ?? null, student, namesPlayedMove: i.namesPlayedMove }).map((f) => ({ f, idea: 'promote' as IdeaKind, weight: 66 })),
+          ...readBoardAll('wingWithoutPieces', { fenBefore: i.fenBefore, san: i.san, student }).map((f) => ({ f, idea: 'plan' as IdeaKind, weight: 52 })),
+        );
+        {
           const lines = (i.reads?.before ?? []).map((l) => ({ moves: l.moves, cp: l.evaluation, mate: l.mate ?? null }));
           const mover = sideOf(i.fenBefore);
           const playedCp = i.reads?.after[0] ? i.reads.after[0].evaluation * (mover === 'w' ? 1 : -1) : null;
-          if (lines.length) board.push(...readBoardAll('tensionReleased', { fenBefore: i.fenBefore, san: i.san, lines, playedCp: i.reads?.after[0]?.mate == null ? playedCp : null, reply: i.line?.[0] ?? null }).map((f) => ({ f, idea: 'trade' as IdeaKind, weight: 60 })));
+          if (lines.length) board.push(...readBoardAll('tensionReleased', { fenBefore: i.fenBefore, san: i.san, lines, playedCp: i.reads?.after[0]?.mate == null ? playedCp : null, reply: i.line?.[0] ?? null, student }).map((f) => ({ f, idea: 'trade' as IdeaKind, weight: 60 })));
         }
-        // On their move, the board the student moves on next: a tension
-        // capture the engine wants left alone (worded to the side to move).
+        // The tension to keep is read on the board the STUDENT moves on next
+        // (after their move): on the opponent's turn the release read says it
+        // when they take, so the prediction would only say it twice.
         if (!mine && i.reads?.after.length) {
           const lines = i.reads.after.map((l) => ({ moves: l.moves, cp: l.evaluation, mate: l.mate ?? null }));
-          board.push(...readBoardAll('tensionKept', { fen: after, lines }).map((f) => ({ f, idea: 'trade' as IdeaKind, weight: 54 })));
+          board.push(...readBoardAll('tensionKept', { fen: after, lines, student }).map((f) => ({ f, idea: 'trade' as IdeaKind, weight: 54 })));
         }
-        // The tension capture names a move the student could play next (as
-        // the one to leave alone), so a surface that holds such a move holds it.
-        for (const { f, idea, weight } of board) facts.push({ ...f, namesStudentMove: f.computer === 'tensionKept', source: 'teachingMove', idea, weight });
+        for (const { f, idea, weight } of board) facts.push({ ...f, namesStudentMove: f.computer === 'tensionKept' && f.seat === 'student', source: 'teachingMove', idea, weight });
       }
     }
     // Getting into their camp, both seats (Danya's speedruns): a piece gets in

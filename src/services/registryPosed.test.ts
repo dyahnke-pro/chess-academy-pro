@@ -121,3 +121,22 @@ describe('the structure judgements of the move, both ways (studentMoveStructure)
     expect(costly.find((r) => r.tag === 'mistimed-pawn-break' && r.outcome === 'held')).toBeUndefined();
   });
 });
+
+describe('the move that ignored the idea, both ways (tension, the lever without pieces)', () => {
+  it('the tension released at a cost is broken under its tag; a cheap one files nothing', () => {
+    // Spassky's board: axb5 releases the tension the engine wanted kept.
+    const fen = 'r3rq2/1b3pbk/p2p1np1/1pnPp1Bp/P1p1P3/2P2PNP/1PBQ2PN/R4RK1 w - - 0 24';
+    const costly = capabilityOutcomes({ fenBefore: fen, playedSan: 'axb5', moverColor: 'white', cpLoss: 120, bestSan: 'Bxf6', slipTag: 'other' });
+    // The engine's best here is a capture, so no tension was posed against it.
+    expect(costly.find((r) => r.tag === 'mistimed-pawn-break' && r.outcome === 'broken')).toBeUndefined();
+    const quietBest = capabilityOutcomes({ fenBefore: fen, playedSan: 'axb5', moverColor: 'white', cpLoss: 120, bestSan: 'Kh1', slipTag: 'other' });
+    expect(quietBest.find((r) => r.tag === 'mistimed-pawn-break')?.outcome).toBe('broken');
+    const cheap = capabilityOutcomes({ fenBefore: fen, playedSan: 'axb5', moverColor: 'white', cpLoss: 10, bestSan: 'Kh1' });
+    expect(cheap.find((r) => r.tag === 'mistimed-pawn-break' && r.outcome === 'broken')).toBeUndefined();
+  });
+  it('the lever pushed with no pieces near it, at a cost, is broken', () => {
+    const fen = '5rk1/pp1q1rpp/4b3/3pPp1Q/P1pP3P/2P3P1/1P3RB1/5RK1 w - - 0 26';
+    const r = capabilityOutcomes({ fenBefore: fen, playedSan: 'a5', moverColor: 'white', cpLoss: 80, bestSan: 'Qd1', slipTag: 'other' });
+    expect(r.find((x) => x.tag === 'mistimed-pawn-break')?.outcome).toBe('broken');
+  });
+});

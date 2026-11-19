@@ -662,6 +662,11 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   const latentDanger = (!quietOpening && studentToMove)
     ? detectLatentDanger(fen, studentColor, { latentOnly: true })
     : null;
+  // …and the same line on THEIR king or queen: the student's pin in waiting
+  // (both seats, 2026-11-19), said only where no danger of theirs leads.
+  const latentChance = (!quietOpening && studentToMove && !latentDanger)
+    ? detectLatentDanger(fen, studentColor === 'w' ? 'b' : 'w', { latentOnly: true })
+    : null;
   // v2 — a TRADE that would CREATE a pin on your own king/queen (the more
   // actionable warning: "before you trade on X…").
   const tradeDanger = (!quietOpening && studentToMove)
@@ -1158,7 +1163,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     } catch { /* same */ }
   }
   const composedAll = orderByValue(
-    [...buildClauses({ walkOwnsBestLine: !!input.namesBestMove && studentToMove && walksBestLine(fen, analysis.topLines ?? [], studentColor), refuted: refutedHere, rule: ruleHere && lm ? { computer: ruleHere.computer, id: ruleHere.id, text: ruleHere.text, squares: ruleHere.squares, names: ruleHere.names && !input.namesBestMove ? namesMoves(studentColor, input.fen, ruleHere.names) : NAMES_NO_MOVE, gradeFen: ((): string | undefined => { try { const c = new Chess(lm.fenBefore); return c.move(lm.san) ? c.fen() : undefined; } catch { return undefined; } })() } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down') && !(bestSanHere && isForcedReply(input.fen, bestSanHere)), criticalRead, criticalAnchor: studentToMove && input.opponentLastMove ? input.opponentLastMove : null, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, setUp, trapChance, studentSeat, tradeDanger, opponentIntent, topLines: analysis.topLines, status: statusFact, structure: planRead, structureClaim: planKey?.ideaKey ?? undefined, fundamental, fundamentalNames: fundamental && bestSanHere && !input.namesBestMove ? namesMoves(studentColor, fen, namedSan(fen, bestSanHere)) : NAMES_NO_MOVE, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, namesMoves: !!input.namesBestMove, concept, method: methodFact, methodKind, bluff: studentToMove && input.opponentLastMove ? readBoard('bluff', { fenBefore: input.opponentLastMove.fenBefore, san: input.opponentLastMove.san, reply: bestSanHere, student: studentColor }) : null, alreadySaid: said, looseSpells: input.looseSpells ?? null }), ...tradeClauses],
+    [...buildClauses({ walkOwnsBestLine: !!input.namesBestMove && studentToMove && walksBestLine(fen, analysis.topLines ?? [], studentColor), refuted: refutedHere, rule: ruleHere && lm ? { computer: ruleHere.computer, id: ruleHere.id, text: ruleHere.text, squares: ruleHere.squares, names: ruleHere.names && !input.namesBestMove ? namesMoves(studentColor, input.fen, ruleHere.names) : NAMES_NO_MOVE, gradeFen: ((): string | undefined => { try { const c = new Chess(lm.fenBefore); return c.move(lm.san) ? c.fen() : undefined; } catch { return undefined; } })() } : null, stopped: stoppedHere, stock: stockHere, fen: input.fen, slowDownOwed: habitIsOwed(habitNeedFrom(input.studentWeaknesses ?? []), 'slow-down') && !(bestSanHere && isForcedReply(input.fen, bestSanHere)), criticalRead, criticalAnchor: studentToMove && input.opponentLastMove ? input.opponentLastMove : null, plyNumber, importance, speaks, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentChance, latentFork, setUp, trapChance, studentSeat, tradeDanger, opponentIntent, topLines: analysis.topLines, status: statusFact, structure: planRead, structureClaim: planKey?.ideaKey ?? undefined, fundamental, fundamentalNames: fundamental && bestSanHere && !input.namesBestMove ? namesMoves(studentColor, fen, namedSan(fen, bestSanHere)) : NAMES_NO_MOVE, studentEvalCp: evalCpWhitePov * sSign, kingExposure, centralKingDanger, namesMoves: !!input.namesBestMove, concept, method: methodFact, methodKind, bluff: studentToMove && input.opponentLastMove ? readBoard('bluff', { fenBefore: input.opponentLastMove.fenBefore, san: input.opponentLastMove.san, reply: bestSanHere, student: studentColor }) : null, alreadySaid: said, looseSpells: input.looseSpells ?? null }), ...tradeClauses],
     input.studentWeaknesses ?? [],
   );
 
@@ -1601,6 +1606,8 @@ function buildClauses(a: {
   openingPhase: boolean;
   deliberation: Deliberation | null;
   latentDanger: LatentDanger | null;
+  /** The pin in waiting on THEIR king or queen (the student's chance). */
+  latentChance: LatentDanger | null;
   trapChance: CoachFact | null;
   latentFork: LatentFork | null;
   setUp: SetUpChance | null;
@@ -1637,7 +1644,7 @@ function buildClauses(a: {
   /** The method beat's kind — the habit's (`methodBeat.HABIT_KIND`). */
   methodKind: ClauseKind;
 }): ClauseFact[] {
-  const { importance, speaks, criticalRead, plyNumber, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentFork, trapChance, studentSeat, tradeDanger, opponentIntent, studentEvalCp, kingExposure, centralKingDanger, concept } = a;
+  const { importance, speaks, criticalRead, plyNumber, mustDefend, leansOn, opponentLeansOn, studentToMove, openingPhase, deliberation, latentDanger, latentChance, latentFork, trapChance, studentSeat, tradeDanger, opponentIntent, studentEvalCp, kingExposure, centralKingDanger, concept } = a;
   const student: 'w' | 'b' = studentSeat === 'white' ? 'w' : 'b';
   // THE WHETHER-QUESTION IS THE DOOR'S. This used to be a private escape hatch
   // here — "speak anyway if a pin / king-danger / band-change was found",
@@ -1663,7 +1670,9 @@ function buildClauses(a: {
   // Prefer the actionable TRADE warning ("before you trade on X…") when present;
   // otherwise the standing-alignment warning. Only one, never both.
   const tradeDangerFact = tradeDanger ? readBoard('tradeDanger', { fen: a.fen, student }) : null;
-  const latentDangerFact = !tradeDangerFact && latentDanger ? readBoard('latentDanger', { fen: a.fen, student }) : null;
+  const latentReads = !tradeDangerFact && (latentDanger || latentChance) ? readBoardAll('latentDanger', { fen: a.fen, student }) : [];
+  const latentDangerFact = latentDanger ? latentReads.find((f) => f.seat === 'opponent') ?? null : null;
+  const latentChanceFact = !latentDanger && latentChance ? latentReads.find((f) => f.seat === 'student') ?? null : null;
   // Said about the board AFTER the capture — graded there, or it reads false now.
   if (tradeDangerFact) ranked.push(readClause(tradeDangerFact, 'latent-danger', a.fen, { gradeFen: tradeDangerFact.fen }));
   // Only the pin IN WAITING. A standing one (the line already open) is a live
@@ -1671,6 +1680,8 @@ function buildClauses(a: {
   // knight" followed by "your knight on f3 and your queen share that diagonal
   // — that diagonal is a pin". One fact once.
   else if (latentDangerFact) ranked.push(readClause(latentDangerFact, 'latent-danger', a.fen));
+  // The same line on their pieces: the student's chance (the seat decides the kind).
+  else if (latentChanceFact) ranked.push(readClause(latentChanceFact, 'latent-chance', a.fen));
 
   // Foresight is valuable and it is not urgent: what a fork TWO MOVES AWAY is
   // worth is its stakes discounted by the plies until it lands, so live

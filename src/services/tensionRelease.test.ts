@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { tensionKept, tensionReleased, type TensionLine } from './tensionRelease';
 
+const moverOf = (fen: string): 'w' | 'b' => (fen.split(' ')[1] === 'b' ? 'b' : 'w');
+
 // Real Danya boards with the engine lines from audit-reports/danya-havecheck/board-facts-2026-11-19.jsonl.
 const L = (moves: string[], cp: number): TensionLine => ({ moves, cp, mate: null });
 
@@ -19,7 +21,7 @@ const NXA6_LINES = [L(['c5a6', 'b6a6'], 11), L(['a3c1', 'a6c4'], 2), L(['f1b1', 
 
 describe('tensionKept', () => {
   it('pawn tension: axb5 axb5 opens the a-file for the a8 rook', () => {
-    const r = tensionKept(SPASSKY, SPASSKY_LINES);
+    const r = tensionKept(SPASSKY, SPASSKY_LINES, moverOf(SPASSKY));
     expect(r?.capture).toBe('axb5');
     expect(r?.recapture).toBe('axb5');
     expect(r?.gapCp).toBe(124);
@@ -27,32 +29,37 @@ describe('tensionKept', () => {
     expect(r?.text).toContain('opens the a-file for their rook on a8');
   });
   it('piece tension: the knight trade on e7 the engine rates 122cp worse', () => {
-    const r = tensionKept(TRAPS, TRAPS_LINES);
+    const r = tensionKept(TRAPS, TRAPS_LINES, moverOf(TRAPS));
     expect(r?.capture).toBe('Nxe7+');
     expect(r?.recapture).toBe('Rxe7');
     expect(r?.gapCp).toBe(122);
   });
   it('stays silent where the engine\'s best is the capture', () => {
-    expect(tensionKept(ANAND, ANAND_LINES)).toBeNull();
-    expect(tensionKept(NXA6, NXA6_LINES)).toBeNull();
+    expect(tensionKept(ANAND, ANAND_LINES, moverOf(ANAND))).toBeNull();
+    expect(tensionKept(NXA6, NXA6_LINES, moverOf(NXA6))).toBeNull();
   });
   it('never claims a capture the engine lines do not hold', () => {
-    expect(tensionKept(SPASSKY, [SPASSKY_LINES[0], SPASSKY_LINES[2]])).toBeNull();
+    expect(tensionKept(SPASSKY, [SPASSKY_LINES[0], SPASSKY_LINES[2]], moverOf(SPASSKY))).toBeNull();
   });
 });
 
 describe('tensionReleased', () => {
   it('says what releasing gave them after the student took', () => {
-    const r = tensionReleased(SPASSKY, 'axb5', SPASSKY_LINES, null, 'axb5');
+    const r = tensionReleased(SPASSKY, 'axb5', SPASSKY_LINES, null, 'axb5', moverOf(SPASSKY));
     expect(r?.gapCp).toBe(124);
     expect(r?.text).toContain('Taking on b5 released the tension too early');
     expect(r?.text).toContain('f4 kept it');
   });
   it('uses the caller\'s own value for the played move', () => {
-    expect(tensionReleased(SPASSKY, 'axb5', SPASSKY_LINES, 190, 'axb5')).toBeNull();
+    expect(tensionReleased(SPASSKY, 'axb5', SPASSKY_LINES, 190, 'axb5', moverOf(SPASSKY))).toBeNull();
   });
   it('stays silent on a quiet move and where the capture was best', () => {
-    expect(tensionReleased(SPASSKY, 'Rf2', SPASSKY_LINES, null, null)).toBeNull();
-    expect(tensionReleased(ANAND, 'gxh5', ANAND_LINES, null, 'Rxh5')).toBeNull();
+    expect(tensionReleased(SPASSKY, 'Rf2', SPASSKY_LINES, null, null, moverOf(SPASSKY))).toBeNull();
+    expect(tensionReleased(ANAND, 'gxh5', ANAND_LINES, null, 'Rxh5', moverOf(ANAND))).toBeNull();
+  });
+  it('the other seat: their capture released the tension, your recapture gains', () => {
+    const r = tensionReleased(SPASSKY, 'axb5', SPASSKY_LINES, null, 'axb5', 'b');
+    expect(r?.text).toMatch(/^Their taking on b5 released the tension too early\. You take back/);
+    expect(r?.text).not.toMatch(/develops their|for their|frees their/);
   });
 });

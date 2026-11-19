@@ -2726,7 +2726,15 @@ function* reviewSegmentSteps(
         const stepLeads = facets.filter((f) => FACET_ROLE[f.tag] === 'teach' && !(f.identity ?? '').startsWith('hint:story:') && (stepOf(f.tag, 'student') === 'yours' || stepOf(f.tag, 'student') === 'theirs'));
         const leadSquares = new Set(stepLeads.flatMap((f) => [...f.squares]));
         const phrasesHere = new Map(thoughtPhrases);
-        const memoryHere = { keys: new Set(thoughtKeys) };
+        // What Review's own lines on this move already say, held by the
+        // composer as said (one idea once): the move's job when a line already
+        // says it (skipJob), the briefing's ideas Review's facets own
+        // (REVIEW_OWNS_IDEA), a principle a [rule] line teaches (ruleIdeas).
+        const memoryHere = { keys: new Set(thoughtKeys), alsoSaid: {
+          ideas: ruleIdeas,
+          sources: new Set<string>(skipJob ? ['moveJob'] : []),
+          sourceIdeas: [{ source: 'briefing', ideas: REVIEW_OWNS_IDEA }],
+        } };
         const thoughtFacts = moveThoughtFacts({ namesPlayedMove: REVIEW_WRITER.namesPlayedMove, theory: REVIEW_WALK_TEACHES_THEORY, story: REVIEW_WRITER.story, moveReads: REVIEW_WRITER.moveReads, tense: REVIEW_WRITER.tense,
           plainThreatsSeen: plainThreatsSeenFor(REVIEW_WRITER, seesPlainThreats(reviewRecord.plainThreats)),
           fenBefore: fenPair.fenBefore, san: m.san, moverIsStudent: mine, prev: prevCap,
@@ -2746,14 +2754,6 @@ function* reviewSegmentSteps(
         // Review says through its own producers (the candidates it weighed,
         // the verdict, the punishment line) or the Theory button (the book).
         }).filter((f) => (f.step === 'yours' || f.step === 'theirs' || f.step === 'notYet' || (f.step === 'board' && f.source === 'structureLines'))
-          && !(skipJob && f.source === 'moveJob')
-          && !(f.source === 'briefing' && REVIEW_OWNS_IDEA.has(f.idea)) && !ruleIdeas.has(f.idea)
-          // What their move aims at is a threat Review says through its own
-          // producer ([threat]); the lesson says it as the move's fact.
-          && f.computer !== 'theirTarget'
-          // A transposition or an analogy: Review says it through its opening
-          // lines (the order reads), so it is not said twice.
-          && !(f.source === 'openingTheory' && f.kind === 'equivalence')
           // The book's statistics (main move or sideline, how it scores, the
           // usual reply) are the Theory button's (option B, David 2026-11-12);
           // the other main tries and their aims are theory the walk teaches.

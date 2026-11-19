@@ -53,7 +53,9 @@ export function kingBox(fen: string): KingBox | null {
 }
 
 /** A move that makes the lone king's box smaller with the boxing piece safe, or null. */
-export function kingBoxMove(fen: string, san: string): KingBoxMove | null {
+export function kingBoxMove(fen: string, san: string,
+  /** REQUIRED: the student's seat — the boxing side is "you" or "they". */
+  student: Color): KingBoxMove | null {
   const before = kingBox(fen);
   if (!before) return null;
   const c = new Chess(fen);
@@ -65,6 +67,8 @@ export function kingBoxMove(fen: string, san: string): KingBoxMove | null {
   const them: Color = m.color === 'w' ? 'b' : 'w';
   const hits = c.attackers(after.piece, them).length > 0;
   if (hits && c.attackers(after.piece, m.color).length === 0) return null;
-  const text = `${san} shrinks their king's box from ${before.area} squares to ${after.area} — your ${NAME[after.pieceType]} on ${after.piece} shuts it into ${after.files} files and ${after.ranks} ranks. Make the box smaller every move, and bring your king up when the ${NAME[after.pieceType]} needs a guard.`;
+  const text = m.color === student
+    ? `${san} shrinks their king's box from ${before.area} squares to ${after.area} — your ${NAME[after.pieceType]} on ${after.piece} shuts it into ${after.files} files and ${after.ranks} ranks. Make the box smaller every move, and bring your king up when the ${NAME[after.pieceType]} needs a guard.`
+    : `Their ${san} shrinks your king's box from ${before.area} squares to ${after.area} — their ${NAME[after.pieceType]} on ${after.piece} shuts it into ${after.files} files and ${after.ranks} ranks. Keep your king in the middle of the box, as far from the edge as it can get.`;
   return { before, after, text, squares: [after.piece] };
 }
