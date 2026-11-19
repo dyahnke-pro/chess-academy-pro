@@ -38,7 +38,7 @@ import { studentMomentBoost } from './studentMomentBoost';
 import { boostFor, matchTag } from './weaknessSignal';
 import { detectTactics } from './tacticsDetector';
 import { detectLatentDangers } from './latentDanger';
-import { mateThreatsAgainst } from './threatOut';
+import { hasMateThreat } from './threatOut';
 import { CAPTURE_VALUE } from './pieceValues';
 
 const VALUE = (t: string): number => CAPTURE_VALUE[t] ?? 0;
@@ -174,7 +174,7 @@ export function threatVisibility(t: ThreatSighting): VisibilityTerm {
   const fenAfter = after.fen();
   if (after.inCheck()) return hidden('check');
   // Any mate in one for them — exact (the null-move probe), not a pattern list.
-  if (mateThreatsAgainst(fenAfter, student).moves.length > 0) return hidden('mate-pattern');
+  if (hasMateThreat(fenAfter, student)) return hidden('mate-pattern');
   const tactics = detectTactics(fenAfter).tactics.filter((p) => p.beneficiary === foe);
   if (tactics.some((p) => p.type === 'mate_threat' || p.type === 'back_rank')) return hidden('mate-pattern');
 

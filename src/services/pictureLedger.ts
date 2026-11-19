@@ -24,7 +24,9 @@ import type { EngineLine } from './engineLineRead';
 import { andList, countWord } from '../utils/andList';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { bfsRoute } from './forwardTeaching';
-import { computeMustDefend, mateThreatsAgainst, sideToMoveAs } from './threatOut';
+import { liteMoves, makeLite, undoLite } from './liteMoves';
+import { legalSeeGainOn } from './positionReadingService';
+import { hasMateThreat, mustDefendPieces, sideToMoveAs } from './threatOut';
 
 // ── the board, read once ─────────────────────────────────────────────────────
 
@@ -737,13 +739,40 @@ function breaksOf(g: Grid, side: Color): Array<{ from: Square; to: Square; hits:
  *  its next move that it did not before (the one must-defend read), and its
  *  king when a mate threat appears. `before` and `after` are the boards
  *  around the move. */
+// THE THREAT READS, ONCE PER BOARD (phone cost 2026-11-19): every quiet move
+// of every piece reads the same board BEFORE it, and the line walk reads the
+// same line boards for every candidate, so the two pure reads are kept by
+// board and side. Same answers: both are pure functions of (fen, side).
+const MUST = new Map<string, Set<string>>();
+const MUST_LIST = new Map<string, Array<{ square: Square; piece: PieceSymbol }>>();
+const MATES = new Map<string, boolean>();
+const READ_KEEP = 4000;
+function keep<V>(m: Map<string, V>, k: string, v: V): V {
+  if (m.size >= READ_KEEP) m.clear();
+  m.set(k, v);
+  return v;
+}
+function mustDefendOf(fen: string, side: Color): Array<{ square: Square; piece: PieceSymbol }> {
+  const k = `${fen}|${side}`;
+  return MUST_LIST.get(k) ?? keep(MUST_LIST, k, mustDefendPieces(fen, side).map((p) => ({ square: p.square as Square, piece: p.piece as PieceSymbol })));
+}
+function mustSquaresOf(fen: string, side: Color): Set<string> {
+  const k = `${fen}|${side}`;
+  return MUST.get(k) ?? keep(MUST, k, new Set(mustDefendOf(fen, side).map((p) => p.square)));
+}
+function mateThreatOn(fen: string, side: Color): boolean {
+  const k = `${fen}|${side}`;
+  const hit = MATES.get(k);
+  return hit ?? keep(MATES, k, hasMateThreat(fen, side));
+}
+
 function newThreatsOf(before: string, after: string, side: Color): Array<{ square: Square; piece: PieceSymbol }> {
   const foe = other(side);
-  const was = new Set(computeMustDefend(before, foe).pieces.map((p) => p.square));
-  const out = computeMustDefend(after, foe).pieces
+  const was = mustSquaresOf(before, foe);
+  const out = mustDefendOf(after, foe)
     .filter((p) => !was.has(p.square))
-    .map((p) => ({ square: p.square as Square, piece: p.piece as PieceSymbol }));
-  if (mateThreatsAgainst(after, foe).moves.length > 0 && mateThreatsAgainst(before, foe).moves.length === 0) {
+    .map((p) => ({ square: p.square, piece: p.piece }));
+  if (mateThreatOn(after, foe) && !mateThreatOn(before, foe)) {
     const king = gridOf(after);
     const k = king ? [...king].find(([, u]) => u.type === 'k' && u.color === foe)?.[0] : undefined;
     if (k) out.push({ square: k, piece: 'k' });
@@ -755,18 +784,45 @@ function newThreatsOf(before: string, after: string, side: Color): Array<{ squar
  *  `fen` (handed the move when it is not theirs): null when the move is not
  *  there, captures, leaves the piece itself to be taken, or threatens
  *  nothing new. */
+const THREATS = new Map<string, Array<{ square: Square; piece: PieceSymbol }> | null>();
 function pieceThreat(fen: string, from: Square, to: Square, side: Color): Array<{ square: Square; piece: PieceSymbol }> | null {
+  const k = `${fen}|${from}${to}|${side}`;
+  if (THREATS.has(k)) return THREATS.get(k) ?? null;
+  return keep(THREATS, k, pieceThreatRead(fen, from, to, side));
+}
+// One parsed board per (board, side): each candidate move is played on it
+// and taken back, never re-parsed.
+const SIDE_BOARDS = new Map<string, { fen: string; c: Chess } | null>();
+function sideBoard(fen: string, side: Color): { fen: string; c: Chess } | null {
+  const k = `${fen}|${side}`;
+  if (SIDE_BOARDS.has(k)) return SIDE_BOARDS.get(k) ?? null;
   const board = sideToMoveAs(fen, side);
-  if (!board) return null;
-  let c: Chess;
-  try { c = new Chess(board); } catch { return null; }
-  let m: ReturnType<Chess['move']>;
-  try { m = c.move({ from, to }); } catch { return null; }
-  if (m.captured || m.piece === 'p' || m.piece === 'k' || c.inCheck()) return null;
-  const after = c.fen();
-  if (computeMustDefend(after, side).pieces.some((p) => p.square === to)) return null;
-  const t = newThreatsOf(board, after, side);
-  return t.length > 0 ? t : null;
+  let v: { fen: string; c: Chess } | null = null;
+  if (board) { try { v = { fen: board, c: new Chess(board) }; } catch { v = null; } }
+  return keep(SIDE_BOARDS, k, v);
+}
+function pieceThreatRead(fen: string, from: Square, to: Square, side: Color): Array<{ square: Square; piece: PieceSymbol }> | null {
+  const sb = sideBoard(fen, side);
+  if (!sb) return null;
+  const { c, fen: board } = sb;
+  // The move without its notation (a SAN read plays every reply): the same
+  // board after, the same fields read.
+  const m = liteMoves(c, { square: from }).find((x) => x.to === to);
+  if (!m) return null;
+  if (m.captured || m.piece === 'p' || m.piece === 'k') return null;
+  makeLite(c, m);
+  try {
+    if (c.inCheck()) return null;
+    const after = c.fen();
+    // Does the piece just drop there? The must-defend read of `side` on this
+    // board (the other side to move) holds `to` exactly when the exchange
+    // there wins it — read for that one square, not every piece on the board.
+    if (legalSeeGainOn(c, to) > 0) return null;
+    const t = newThreatsOf(board, after, side);
+    return t.length > 0 ? t : null;
+  } finally {
+    undoLite(c);
+  }
 }
 
 /** `side`'s piece counterplay: every quiet move of a knight, bishop, rook or
@@ -781,7 +837,7 @@ function pieceCounterplay(pic: PositionPicture, fen: string, pv: readonly string
   try { c = new Chess(board); } catch { return []; }
   const here = placement(fen);
   const out: Counterplay[] = [];
-  for (const m of c.moves({ verbose: true })) {
+  for (const m of liteMoves(c)) {
     if (m.piece === 'p' || m.piece === 'k' || m.captured) continue;
     const from = m.from;
     const to = m.to;
@@ -816,7 +872,11 @@ function pieceCounterplay(pic: PositionPicture, fen: string, pv: readonly string
         break;
       }
       const open = mover !== side && factIds.length > 0 && !!pieceThreat(line.fen(), from, to, side)?.some((t) => hitSquares.includes(t.square));
-      try { line.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { break; }
+      // chess.js's own match, without the notation: the first legal move from
+      // and to these squares, a promotion only to the piece named.
+      const step = liteMoves(line, { square: u.slice(0, 2) as Square }).find((x) => x.to === u.slice(2, 4) && (!x.promotion || x.promotion === u[4]));
+      if (!step) break;
+      makeLite(line, step);
       if (open && !pieceThreat(line.fen(), from, to, side)?.some((t) => hitSquares.includes(t.square))) { state = 'dead'; ply = i; stoppedBy = u; break; }
     }
     if (state === 'alive' || factIds.length > 0) {

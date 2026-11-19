@@ -40,7 +40,7 @@ import { isMateEval } from './engineConstants';
 import { boardStateAfter, inFluxAfter, mateInOneOnBoard, type BoardState } from './boardState';
 import type { QuietFact } from './factSelector';
 import { criticalityThresholds, type Severity } from './criticalityScan';
-import { computeMustDefend, mateThreatsAgainst, type MustDefend } from './threatOut';
+import { computeMustDefend, hasMateThreat, mateThreatsAgainst, type MustDefend } from './threatOut';
 import { computeLeansOn, type LeansOn, type EvalBoardFn } from './perturbation';
 import { buildDeliberation, deliberationWeighing, deliberationVerdict, ruleOutClaims, NOTHING_SAID, type Deliberation, type HeldVerdict } from './deliberation';
 import { detectLatentFork, type LatentFork } from './latentFork';
@@ -1956,7 +1956,7 @@ export function threatTheyMake(fen: string, student: 'w' | 'b', md: MustDefend, 
   let after: string;
   try { const c = new Chess(fen); if (c.inCheck()) return null; c.move({ from: bestUci.slice(0, 2), to: bestUci.slice(2, 4), promotion: bestUci[4] }); after = c.fen(); } catch { return null; }
   const mate = mateThreatsAgainst(fen, student).moves[0];
-  if (mate) return mateThreatsAgainst(after, student).moves.length === 0 ? { words: `mate on ${mate.to}`, square: mate.to } : null;
+  if (mate) return !hasMateThreat(after, student) ? { words: `mate on ${mate.to}`, square: mate.to } : null;
   const p = md.pieces[0];
   if (!p || md.net <= 0) return null;
   const left = computeMustDefend(after, student).net;

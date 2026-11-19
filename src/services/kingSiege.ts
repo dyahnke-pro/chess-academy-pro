@@ -24,7 +24,7 @@
 // Phrasing rotates on the board (`stemKeyOf` of the FEN), never at random.
 import { Chess, type Color, type PieceSymbol, type Square, type Move } from 'chess.js';
 import { kingRing, kingNeighbourhood, bearsOnSquare, kingCover } from './kingSafety';
-import { sideToMoveAs, mateThreatsAgainst } from './threatOut';
+import { sideToMoveAs, hasMateThreat, mateThreatsAgainst } from './threatOut';
 import { MATERIAL_VALUE, sideMaterial } from './pieceValues';
 import { andList, countWord } from '../utils/andList';
 import { openSentence } from '../utils/openSentence';
@@ -562,7 +562,7 @@ export function kingSacrifice(fenBefore: string, san: string, line: readonly str
       const forcing = !!m.captured || c.inCheck();
       // A quiet move that threatens mate is forcing too (the Greek gift's
       // Qh5, threatening Qh7 mate) — and the stretch ends on it.
-      const mateThreat = !forcing && mateThreatsAgainst(c.fen(), foe).moves.length > 0;
+      const mateThreat = !forcing && hasMateThreat(c.fen(), foe);
       if (!forcing && !mateThreat) break;
       follow.push(m.san);
       lastForcing = sans.length - 1;

@@ -417,6 +417,21 @@ export function findHangingBySee(fen: string): HangingPiece[] {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return []; }
   const out: HangingPiece[] = [];
+  // ONE BOARD PER CAPTURING SIDE (phone cost 2026-11-19): `legalSeeGainFor`
+  // re-parsed the FEN (and its as-if flip) for every attacked piece; the
+  // exchange read restores the board, so one parsed board per side serves all.
+  const asIf: Partial<Record<Color, Chess | null>> = {};
+  const boardFor = (side: Color): Chess | null => {
+    if (side in asIf) return asIf[side] ?? null;
+    const f = asIfToMove(fen, side);
+    let b: Chess | null = null;
+    // The board itself when it is already that side's move (the exchange read
+    // restores it, so the scan over it is unchanged).
+    if (f === fen) b = chess;
+    else if (f) { try { b = new Chess(f); } catch { b = null; } }
+    asIf[side] = b;
+    return b;
+  };
   for (const row of chess.board()) {
     for (const cell of row) {
       if (!cell) continue;
@@ -442,7 +457,8 @@ export function findHangingBySee(fen: string): HangingPiece[] {
       // probe (measured 2026-10-07: ~30ms a board scanning every piece, ~1ms
       // scanning only the attacked ones).
       if (!chess.isAttacked(cell.square, enemy)) continue;
-      const gain = legalSeeGainFor(fen, cell.square, enemy);
+      const seeBoard = boardFor(enemy);
+      const gain = seeBoard ? seeCaptureValue(seeBoard, cell.square) : 0;
       if (gain > 0) out.push({ square: cell.square, piece: cell.type, color: cell.color, gain, defended: chess.isAttacked(cell.square, cell.color) });
     }
   }

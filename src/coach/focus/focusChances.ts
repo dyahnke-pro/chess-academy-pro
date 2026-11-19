@@ -22,7 +22,7 @@ import type { MisconceptionTagId } from '../../data/misconceptionTags';
 import { asIfToMove, legalSeeGainFor } from '../../services/positionReadingService';
 import { newThreatsAtTurn, threatAnswerOutcome } from '../../services/threatAnswerEvidence';
 import { THREAT_SKILL, type ThreatPattern } from '../../services/learnRecordTerms';
-import { mateThreatsAgainst } from '../../services/threatOut';
+import { hasMateThreat, mateThreatsAgainst } from '../../services/threatOut';
 import { pvGain, pvGainDepth } from '../../services/tacticGeometry';
 import { MATERIAL_VALUE } from '../../services/pieceValues';
 import { levelOfTag, MOTIFS, motifOfTag, tagOpenAt, type MotifLevel } from '../../data/tacticMotifs';
@@ -622,7 +622,7 @@ export function walkedInto(m: FocusMove): FocusChance | null {
   if (!reply) return null;
   const foe = other(m.student);
   const attacker = { type: reply.piece, square: reply.to };
-  if (!after.inCheck() && mateThreatsAgainst(m.fenBefore, m.student).moves.length === 0) {
+  if (!after.inCheck() && !hasMateThreat(m.fenBefore, m.student)) {
     const mates = mateThreatsAgainst(after.fen(), m.student).moves;
     if (mates.length > 0) {
       return {
@@ -655,7 +655,7 @@ function forcingFirst(fen: string, uci: string, side: Color): boolean {
   for (const p of piecesOf(c, other(side))) {
     if (legalSeeGainFor(after, p.square, side) >= LOOSE_GAIN) return true;
   }
-  return mateThreatsAgainst(after, other(side)).moves.length > 0;
+  return hasMateThreat(after, other(side));
 }
 
 /** A shot's rung by its depth (your moves until the material lands): a fork

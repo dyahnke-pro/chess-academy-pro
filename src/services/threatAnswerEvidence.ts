@@ -20,7 +20,7 @@ import { recordLaneEvidence, type CapabilityEvidenceRecord, type CapabilityOutco
 import { THREAT_SKILL, type ThreatPattern } from './learnRecordTerms';
 import { signedLegalSeeFor } from './positionReadingService';
 import { CAPTURE_VALUE, MATERIAL_VALUE } from './pieceValues';
-import { flipSideToMove, mateThreatsAgainst } from './threatOut';
+import { flipSideToMove, hasMateThreat } from './threatOut';
 import { detectTactics } from './tacticsDetector';
 
 /** A threat worth a piece or more is a sharp question (clears the green bar,
@@ -88,13 +88,13 @@ export function threatAnswerOutcome(a: ThreatAnswerArgs): ThreatAnswer | null {
   const after = board.fen();
 
   if (MATE_PATTERNS.has(a.pattern)) {
-    if (mateThreatsAgainst(a.fen, student).moves.length === 0) return null;
-    const lands = !board.isGameOver() && mateThreatsAgainst(after, student).moves.length > 0;
+    if (!hasMateThreat(a.fen, student)) return null;
+    const lands = !board.isGameOver() && hasMateThreat(after, student);
     // A mate nothing stops was not a question at this turn (see below).
     const stoppable = !lands || new Chess(a.fen).moves().some((san) => {
       const b = new Chess(a.fen);
       b.move(san);
-      return b.isGameOver() || mateThreatsAgainst(b.fen(), student).moves.length === 0;
+      return b.isGameOver() || !hasMateThreat(b.fen(), student);
     });
     if (!stoppable) return null;
     return { tag, outcome: lands ? 'broken' : 'held', posedImportance: THREAT_MATE_IMPORTANCE, gainBefore: 100, gainAfter: lands ? 100 : 0 };
