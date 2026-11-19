@@ -28,7 +28,7 @@ import type { ReviewIntent } from './reviewMoveIntent';
 import { recordedMoveCost } from './moveCost';
 import { lineProofFromUci, proofForStudent, squaresProof, isProof, NO_PROOF, type Proof } from './proof';
 import { readBoard, readBoardAll, readKey, principleKey, positionalVerdictOf, influenceShapeOf, oppTeachingKind, exchangeIdeaOf, tacticOf, fundamentalsSaid } from './boardComputers';
-import { knownSlipsAt, type KnownSlipIndex } from './knownSlips';
+import { type KnownSlipIndex } from './knownSlips';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import type { WeighRead } from './weighedMoves';
 import type { CoachFact, ComputerName } from './coachFact';
@@ -36,7 +36,7 @@ import { reviewFacet, asIncoming, inRuleFamily, type ReviewFacet } from './revie
 import type { FacetTag } from './reviewFacetRank';
 import { refutedAltProof } from './refutedAlternativeCore';
 import { advantageWasMissed } from './reviewWithholding';
-import { costWords, isMateEval, storedMate, mateDistanceOf, INACCURACY_CP, moverGaveUpMate, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
+import { costWords, isMateEval, storedMate, mateDistanceOf, moverGaveUpMate, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
 import { ONLY_MOVE_CP } from './criticalityScan';
 import { hangingLine, lostLastGuard } from './hangingLine';
 import type { PrincipleAttribution, FundamentalId } from './principleAttribution';
