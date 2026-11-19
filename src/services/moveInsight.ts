@@ -50,6 +50,7 @@ import { findTrappedPiece } from './reviewTeachingPoints';
 import { detectNewThreat } from './groundedAnswer';
 import { kingReadsForBestLine, type KingReadId } from './kingAttackReads';
 import { castleByHand } from './kingWalk';
+import type { CoachFact } from './coachFact';
 
 /** Which capability each king read POSES — exhaustive over the reads, so a new
  *  read fails to compile until someone decides. Null: a standing fact the
@@ -811,7 +812,8 @@ export function positionPosed(
 type RegistryPosedComputer = 'detectLatentFork' | 'detectLatentDanger' | 'detectTradeCreatesPin' | 'detectCentralKingDanger' | 'detectKingExposure' | 'findQueenGrabTraps'
   | 'findTrappedPiece' | 'readConversion' | 'noSafeChecks' | 'kingRace' | 'kingActivityGap' | 'zugzwangIfPassed' | 'mateLine' | 'kingInOpen' | 'seventhRankMate'
   | 'queenlessMate' | 'selfBlock' | 'mateThreatLever' | 'queenKnightNet' | 'lateralRookDefence' | 'kingSiege'
-  | 'keySquaresOn' | 'shoulderOn' | 'connectedPassersOn' | 'matingNet' | 'frozenTarget';
+  | 'keySquaresOn' | 'shoulderOn' | 'connectedPassersOn' | 'matingNet' | 'frozenTarget'
+  | 'pictureLedger' | 'pictureCounterplay' | 'pictureTarget';
 
 /** How sharply each posed question is asked, on the heat map's scale. */
 const REGISTRY_POSED_WEIGHT: Record<RegistryPosedComputer, number> = {
@@ -841,6 +843,9 @@ const REGISTRY_POSED_WEIGHT: Record<RegistryPosedComputer, number> = {
   connectedPassersOn: 70,
   matingNet: 90,
   frozenTarget: 60,
+  pictureLedger: 65,
+  pictureCounterplay: 65,
+  pictureTarget: 60,
 };
 
 /** The registry's reads of the board the student moves on, each fact with
@@ -851,6 +856,22 @@ const REGISTRY_POSED_WEIGHT: Record<RegistryPosedComputer, number> = {
  *  (theirs to win, yours to save), the won game to convert. `bestLineUci`:
  *  the engine's line from the board (UCI), [] when none is known. */
 export function registryPosedFacts(fen: string, me: 'w' | 'b', bestLineUci: readonly string[]): Array<{ computer: string; skill?: string }> {
+  const read = registryReads(fen, me, bestLineUci);
+  // THE PICTURE'S CONCLUSIONS, both ways (WO-PICTURE-01 P3), on the reads
+  // above and the board's own read: your weakness they outnumber (guard it),
+  // their break your next move kills (stop it), your target the best move
+  // goes after (start on it). A clean move answers each.
+  const facts = [...read, ...readBoardAll('positionRead', { fen, student: me })];
+  const lines = bestLineUci.length ? [{ moves: bestLineUci, cp: null, mate: null }] : [];
+  return [
+    ...read,
+    ...readBoardAll('pictureLedger', { fen, student: me, lines, facts }).filter((f) => f.skill),
+    ...readBoardAll('pictureCounterplay', { fen, student: me, lines, facts }).filter((f) => f.skill),
+    ...readBoardAll('pictureTarget', { fen, student: me, lines, facts }).filter((f) => f.skill),
+  ];
+}
+
+function registryReads(fen: string, me: 'w' | 'b', bestLineUci: readonly string[]): CoachFact[] {
   return [
     ...readBoardAll('latentFork', { fen, student: me }),
     ...readBoardAll('latentDanger', { fen, student: me }),

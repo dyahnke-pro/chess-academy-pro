@@ -351,6 +351,12 @@ export const PICTURE_ROLE: Record<ComputerName, PictureRole> = {
   queenlessMate: 'threat',
   matingNet: 'threat',
   frozenTarget: 'weakness',
+  // The P3 conclusions (pictureLedger.ts) take the role of what they conclude;
+  // they are computed from the picture and never read back into it
+  // (`pictureOfBoard` leaves them out).
+  pictureLedger: 'standing',
+  pictureCounterplay: 'resource',
+  pictureTarget: 'weakness',
   pieceTempo: 'plan',
   keySquaresOn: 'asset',
   shoulderOn: 'asset',

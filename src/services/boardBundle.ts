@@ -516,13 +516,36 @@ export const BUNDLE_ADAPTERS: { [K in ComputerId]: Adapter<K> } = {
   connectedPassers: (b) => ({ fen: b.fen, student: b.student }),
   matingNet: (b) => ({ fen: b.fen, student: b.student }),
   frozenTarget: (b) => ({ fen: b.fen, student: b.student }),
+  // The conclusions read every other computer's facts on the bundle (`baseFacts`).
+  pictureLedger: (b) => ({ fen: b.fen, student: b.student, lines: b.lines, facts: baseFacts(b) }),
+  pictureCounterplay: (b) => ({ fen: b.fen, student: b.student, lines: b.lines, facts: baseFacts(b) }),
+  pictureTarget: (b) => ({ fen: b.fen, student: b.student, lines: b.lines, facts: baseFacts(b) }),
 };
 
-/** Every computer the bundle can fill, read on it. A computer that throws is
- *  skipped (its own `safe` already guards it). */
+/** The computers that conclude from the others' facts (WO-PICTURE-01 P3):
+ *  read last, on the facts of every other computer. */
+const CONCLUSIONS: ReadonlySet<ComputerId> = new Set<ComputerId>(['pictureLedger', 'pictureCounterplay', 'pictureTarget']);
+const BASE = new WeakMap<BoardBundle, CoachFact[]>();
+/** Every computer but the conclusions, read on the bundle once. */
+function baseFacts(b: BoardBundle): CoachFact[] {
+  const hit = BASE.get(b);
+  if (hit) return hit;
+  const out = readSome(b, (id) => !CONCLUSIONS.has(id));
+  BASE.set(b, out);
+  return out;
+}
+
+/** Every computer the bundle can fill, read on it — the conclusions last, on
+ *  the facts of the rest. A computer that throws is skipped (its own `safe`
+ *  already guards it). */
 export function readEveryComputer(b: BoardBundle): CoachFact[] {
+  return [...baseFacts(b), ...readSome(b, (id) => CONCLUSIONS.has(id))];
+}
+
+function readSome(b: BoardBundle, which: (id: ComputerId) => boolean): CoachFact[] {
   const out: CoachFact[] = [];
   for (const id of Object.keys(BUNDLE_ADAPTERS) as ComputerId[]) {
+    if (!which(id)) continue;
     const a = BUNDLE_ADAPTERS[id] as Adapter<typeof id>;
     if (typeof a !== 'function') continue;
     let ctx: BoardContexts[typeof id] | null = null;

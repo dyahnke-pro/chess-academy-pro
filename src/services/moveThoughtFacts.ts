@@ -943,6 +943,14 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     if (i.theirLast) push(readBoardAll('prophylaxisMissed', { prevFen: i.theirLast.fenBefore, studentSan: i.theirLast.san, fenBefore: i.fenBefore, san: i.san, student }), 'threat', 52);
     if (mine && i.costCp !== null) push(readBoardAll('structureMove', { fenBefore: i.fenBefore, san: i.san, student, cpLoss: Math.max(0, i.costCp), bestSan, bestUci: i.reads?.before[0]?.moves ?? [], reply: replySan, namesBetterMove: i.namesPlayedMove, namesStudentMoves: i.namesPlayedMove }), 'weakness', 50);
     push(readBoardAll('slipsOnLine', { history: historyAfter, student }), 'theory', 44);
+    // THE PICTURE'S CONCLUSIONS (WO-PICTURE-01 P3), last: the ledger, their
+    // one resource and the target, read off every fact above that is about
+    // the board after the move, with the engine's lines there.
+    const lines = (i.reads?.after ?? []).map((l) => ({ moves: l.moves, cp: l.mate == null ? l.evaluation : null, mate: l.mate ?? null }));
+    const picture: readonly CoachFact[] = [...facts];
+    push(readBoardAll('pictureLedger', { fen: fenAfter, student, lines, facts: picture }), 'weakness', 50);
+    push(readBoardAll('pictureCounterplay', { fen: fenAfter, student, lines, facts: picture }), 'threat', 54);
+    push(readBoardAll('pictureTarget', { fen: fenAfter, student, lines, facts: picture }), 'plan', 54);
   }
   return withDecisionGap(facts, i, from, to, seat);
 }
