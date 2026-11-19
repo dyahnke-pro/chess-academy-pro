@@ -72,8 +72,8 @@ import { type LearnDecision, learnErrorBarCp, FACT_ROLE, looseClaim, nextLooseSp
 import { buildPositionalRead } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
-import { cheaperAttackerHit, gambitPoint, kingPawnUnderFire, type CheaperHit, mistakeTurnLine, NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, namesPlayableStudentMove, studentMovesInLine, type NamesStudentMove } from '../../services/learnBoardTeaching';
-import { habitSaidKey, learnMoveReason, learnReasonDue, learnReplyWait, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, promiseEvent, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, structureNamingLine, foundMoveTeaching, namedMoveArrows, openingBreakFor, prizeTeaching, cheaperAttackerLine, learnHangingWarning, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, tacticStakesFor, refutedAlternativeClaims, type TeachingFact, type ThreatProducer } from '../../services/learnBoardTeaching';
+import { cheaperAttackerHit, kingPawnUnderFire, type CheaperHit, mistakeTurnLine, NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, namesPlayableStudentMove, studentMovesInLine, type NamesStudentMove } from '../../services/learnBoardTeaching';
+import { habitSaidKey, learnMoveReason, learnReasonDue, learnReplyWait, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, promiseEvent, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, foundMoveTeaching, namedMoveArrows, openingBreakFor, cheaperAttackerLine, learnHangingWarning, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, tacticStakesFor, refutedAlternativeClaims, type TeachingFact, type ThreatProducer } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, slipAnswerText, gainedBishopPair, BISHOP_PAIR_POINT, BISHOP_PAIR_CLAIMS } from '../../services/playCommentary';
 import { captureRunAfterMove, captureRunOfPgn, NO_PREV_CAPTURE } from '../../services/captureRun';
 
@@ -245,7 +245,7 @@ import { parseEvalTable, pieceQualityLines } from '../../services/pieceValueRead
 
 import { scaleGap, packageForRegister } from '../../services/hintRegister';
 import { stepBothArcs, withAnnouncement, planFromUci, tacticWord, seatedTacticLine, pinConsequence, forkConsequence, type ArcEvent } from '../../services/lookaheadPlan';
-import { tacticInvariant, definitionKey } from '../../services/conceptEngine';
+import { definitionKey } from '../../services/conceptEngine';
 import { backwardLook, saidSlipCp, slipSpoken, lastCoachVerdictDecline, lookConcession, priorMoveLeadingTo, replyKeptWinOf, secondReadsOf } from '../../services/backwardLook';
 import { learnFundamentalVerdict } from '../../services/learnFundamentalNarration';
 import { FUNDAMENTAL_TAG, type FundamentalId } from '../../services/principleAttribution';
@@ -8723,9 +8723,9 @@ export function CoachTeachPage({ mode }: {
     const key = definitionKey(type);
     const story = learnMemRef.current.story;
     if (story.heard(fen).has(key)) return '';
-    const inv = tacticInvariant(type);
-    if (!inv) return '';
-    const text = `Remember — ${inv.full}`;
+    const rule = readBoard('tacticRule', { fen, type });
+    if (!rule) return '';
+    const text = rule.text;
     story.offer(fen, { text, claims: [key] });
     return ` ${text}`;
   };
@@ -9243,7 +9243,8 @@ export function CoachTeachPage({ mode }: {
           // opening onto the rook). This lane runs before the engine read, so it
           // states the fact and the question; the engine lane names the move.
           : (() => {
-            const pz = prizeTeaching(args.fenAfterReply, prize.square, studentCC, nextStem(learnMemRef.current, 'prize'));
+            const pzFact = readBoard('prize', { fen: args.fenAfterReply, square: prize.square, student: studentCC, stem: nextStem(learnMemRef.current, 'prize') });
+            const pz = pzFact ? { text: pzFact.text, squares: [...pzFact.squares] } : null;
             // The square is the find: withheld from the words (OS-10); the board
             // marks the prize only, never the taker (the producer's squares).
             if (pz) { tacticFactProof = NO_PROOF.withheld; tacticSquares = pz.squares; }
@@ -11253,7 +11254,8 @@ export function CoachTeachPage({ mode }: {
                       // busy turn is offered again, never marked said unheard.
                       let openingNow: string | null = null;
                       try { openingNow = detectOpening([...move.history, m.san])?.name ?? null; } catch { openingNow = null; }
-                      const struct = structureNamingLine(probe.fen(), playerColor === 'white' ? 'w' : 'b', openingNow);
+                      const structFact = readBoard('structureNaming', { fen: probe.fen(), student: playerColor === 'white' ? 'w' : 'b', openingName: openingNow });
+                      const struct = structFact ? { text: structFact.text, claim: structFact.claims[0] } : null;
                       if (struct) {
                         const line = gradeNarrationText(struct.text, probe.fen(), 'CoachTeachPage.structure')?.trim();
                         if (line) queueSpokenHint(probe.fen(), { computer: 'structureNamingLine', text: line, lane: 'structure', proof: NO_PROOF.name, namesStudentMove: false, claims: [struct.claim] });
@@ -12956,7 +12958,7 @@ export function CoachTeachPage({ mode }: {
                       // move still cost under the clean bar — so it was an
                       // offer, and the teaching is what it opened: files your
                       // pawns no longer stand on.
-                      const gambitLine = gambitPoint({ fenBefore, fenAfterMove: move.fen, fenAfterReply, san: move.san, to: move.to, student: playerColor === 'white' ? 'w' : 'b' });
+                      const gambitLine = readBoard('gambitPoint', { fenBefore, fenAfterMove: move.fen, fenAfterReply, san: move.san, to: move.to, student: playerColor === 'white' ? 'w' : 'b' })?.text ?? null;
                       // THE VERDICT ON A FOUND MOVE (WO-TEACH-GAPS P2 #2): at a real
                       // decision moment on the board BEFORE the move, the student
                       // played one of the only moves that held — say so, with why

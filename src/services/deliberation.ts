@@ -21,6 +21,7 @@ import { Chess, type Square } from 'chess.js';
 import type { StockfishAnalysis, WalkableLine } from '../types';
 import { walkableLine, type Proof } from './proof';
 import { findHangingPieces } from './tacticClassifier';
+import { CAPTURE_VALUE } from './pieceValues';
 import { refutationProof, moverLineProof } from './exchangeLedger';
 import { strategicWhyLed } from './moveFundamentals';
 import { ownsMoreSpace, legalSeeGainFor, seeReadsStanding } from './positionReadingService';
@@ -76,7 +77,7 @@ function materialWhy(fenBefore: string, san: string, mover: 'w' | 'b', prevCaptu
   }
 }
 
-const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+const VAL = CAPTURE_VALUE;
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 /** Default candidates to weigh — David's call: "the first 3, maybe 4." */
 const DEFAULT_MAX = 3;

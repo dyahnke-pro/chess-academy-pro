@@ -11,7 +11,7 @@
 //                  within six moves, while the best line does something else
 //                  (the side a pawn or more up).
 //   noProgress   — level (within half a pawn) and the best line has no pawn
-//                  move and no capture for six moves: nothing to force.
+//                  lever and no capture for six moves: nothing to force.
 //   sitTight     — the side to move is worse (one to three and a half pawns),
 //                  its best move is no capture, no check and no pawn into
 //                  their half, and the best line has the other side take
@@ -23,6 +23,23 @@ export type VerdictKind = 'checksRepeat' | 'noProgress' | 'sitTight';
 export interface EndgameVerdict { kind: VerdictKind; side: Color; text: string; squares: Square[] }
 
 const posKey = (fen: string): string => fen.split(' ').slice(0, 2).join(' ');
+
+/** A pawn on `sq` (of `color`) that attacks an enemy pawn or is attacked by one: a lever. */
+function pawnContact(fen: string, sq: Square, color: Color): boolean {
+  let c: Chess;
+  try { c = new Chess(fen); } catch { return true; }
+  const f = sq.charCodeAt(0); const r = Number(sq[1]);
+  const fwd = color === 'w' ? 1 : -1;
+  for (const df of [-1, 1]) {
+    for (const dr of [fwd, -fwd]) {
+      const t = `${String.fromCharCode(f + df)}${r + dr}`;
+      if (!/^[a-h][1-8]$/.test(t)) continue;
+      const p = c.get(t as Square);
+      if (p && p.type === 'p' && p.color !== color) return true;
+    }
+  }
+  return false;
+}
 
 export function endgameVerdict(fen: string, lines: readonly EngineLine[], student: Color): EndgameVerdict | null {
   let c: Chess;
@@ -55,7 +72,13 @@ export function endgameVerdict(fen: string, lines: readonly EngineLine[], studen
   const score = lineScore(ls[0], side);
   if (ls[0].mate != null) return null;
   const firstSix = best.moves.slice(0, 6);
-  if (firstSix.length === 6 && Math.abs(score) <= 50 && firstSix.every((m) => m.piece !== 'p' && !m.captured)) {
+  // A pawn move that touches no enemy pawn is a piece of the maneuvering, not
+  // a break: Magnus's ...a5 "does not threaten anything" on a board with "no
+  // conceivable way to make progress" (magnus-carlsens-best-endgame-wins#0).
+  // An ENDGAME verdict: with queens on, six quiet moves are often an attack
+  // being built (Tal's Rh7 board, queen-the-supporting-actress#2, reads level).
+  const queensOff = !c.board().flat().some((p) => p?.type === 'q');
+  if (queensOff && firstSix.length === 6 && Math.abs(score) <= 50 && firstSix.every((m, i) => !m.captured && (m.piece !== 'p' || !pawnContact(best.boards[i + 1], m.to, m.color)))) {
     const text = mine
       ? 'Nothing here can be forced: there is no pawn break and no target to hit, and the best moves just improve pieces. Maneuver, keep it solid, and wait for them to go wrong.'
       : 'Nothing here can be forced for them: no pawn break, no target. Keep everything solid and they have nothing to hit.';

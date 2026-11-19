@@ -52,6 +52,12 @@ const CASES: Case[] = [
   { computer: 'kingActivityGap', tag: 'passive-king-endgame', fen: '8/5ppk/3P3p/8/8/2pK3P/5PP1/8 b - - 0 2', held: 'Kg6', missed: 'f5' },
   // In pursuit of zugzwang: with Black to move every move drops a pawn, so lose a tempo.
   { computer: 'zugzwangIfPassed', tag: 'passive-king-endgame', fen: '2k5/8/p1P5/P2K4/8/8/8/8 w - - 0 1', held: 'Kc4', missed: 'Kd6' },
+  // Doubled rooks on the d-file against the back rank: Rd8+ Rxd8 Rxd8 is mate.
+  { computer: 'mateLine', tag: 'missed-your-mate', fen: 'r5k1/5ppp/8/8/8/8/3R1PPP/3R2K1 w - - 0 1', held: 'Rd8+', missed: 'h3', line: ['d2d8', 'a8d8', 'd1d8'] },
+  // A king on e1 that can no longer castle, one pawn in front of it, their queen's checks on it.
+  { computer: 'kingInOpen', tag: 'weakened-king-safety', fen: '3qk3/8/8/8/8/8/3P4/R3K2R w - - 0 30', held: 'Kf2', missed: 'Ra2' },
+  // Their two rooks on your second rank; your rook on a8 holds the back rank, and Ra1+ lets it go.
+  { computer: 'seventhRankMate', tag: 'missed-opponents-threat', fen: 'r4k2/6RR/8/8/8/8/8/6K1 b - - 0 1', held: 'Ke8', missed: 'Ra1+' },
   { computer: 'findQueenGrabTraps', tag: 'poisoned-pawn', fen: 'r2q1r1k/pppnn1p1/3p3p/1P1Qp3/8/P1N2N1P/5PP1/R1B1R1K1 w - - 1 17', held: 'Qb3', missed: 'Qxb7' },
 ];
 

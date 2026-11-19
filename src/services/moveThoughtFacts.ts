@@ -728,6 +728,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
           const batch: Array<{ f: CoachFact; idea: IdeaKind; weight: number }> = [
             ...readBoardAll('zugzwangIfPassed', { fen: after, student }).map((f) => ({ f, idea: 'king-activity' as IdeaKind, weight: 64 })),
             ...readBoardAll('theirWorstPiece', { fen: after, student, bestLine: lines[0]?.moves ?? null }).map((f) => ({ f, idea: 'weakness' as IdeaKind, weight: 48 })),
+            ...readBoardAll('seventhRankMate', { fen: after, lines: lines.length ? lines : null, student }).map((f) => ({ f, idea: 'attack-king' as IdeaKind, weight: 56 })),
           ];
           if (lines.length) batch.push(
             ...readBoardAll('urgentStrike', { fen: after, lines, student }).map((f) => ({ f, idea: 'tempo' as IdeaKind, weight: 64 })),
@@ -739,6 +740,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
             ...readBoardAll('endgameVerdict', { fen: after, lines, student }).map((f) => ({ f, idea: 'plan' as IdeaKind, weight: 50 })),
             ...readBoardAll('defenderInTime', { fen: after, lines, student }).map((f) => ({ f, idea: 'route' as IdeaKind, weight: 50 })),
             ...readBoardAll('tactify', { fen: after, lines, student }).map((f) => ({ f, idea: 'choice' as IdeaKind, weight: 48 })),
+            ...readBoardAll('pieceTempo', { fen: after, lines, student }).map((f) => ({ f, idea: 'tempo' as IdeaKind, weight: 46 })),
           );
           for (const { f, idea, weight } of batch) facts.push({ ...f, source: 'teachingMove', idea, weight });
         }

@@ -15,4 +15,19 @@ describe('kingInOpen', () => {
   it('stays silent where the board does not have it', () => {
     expect(kingInOpen('3rr1k1/1bqnbp1p/ppp1p1pB/6N1/3P3Q/3B4/PPP2PPP/3RR1K1 w - - 0 18', N, 'w')).toBeNull();
   });
+  // miracle-on-the-chess-board#3 — Danya: "both sides are experiencing major
+  // problems with king placement". One queen with three checks counts.
+  it('one queen with three checks against a king with no pawns is an open king', () => {
+    const M = [{ moves: ['f1g1', 'd6d5'], cp: 38, mate: null }];
+    const r = kingInOpen('5Q2/5p1p/1pPr2p1/6k1/8/3pP2P/2q2PP1/3R1K2 w - - 0 44', M, 'w');
+    expect(r?.king).toBe('g5');
+    expect(r?.text).toContain('queen on f8 has');
+  });
+  // A centre king that can still castle belongs to the centre-king read; one
+  // that lost the right has no shelter coming.
+  it('a centre king with no castling rights left is read; one that can still castle is not', () => {
+    const E = [{ moves: ['a1a2'], cp: 0, mate: null }];
+    expect(kingInOpen('3qk3/8/8/8/8/8/3P4/R3K2R w - - 0 30', E, 'w')?.king).toBe('e1');
+    expect(kingInOpen('3qk3/8/8/8/8/8/3P4/R3K2R w KQ - 0 30', E, 'w')).toBeNull();
+  });
 });

@@ -15,4 +15,16 @@ describe('endgameVerdict', () => {
   it('stays silent where the board does not have it', () => {
     expect(endgameVerdict('r1b2rk1/5pbp/1q2p3/1pn5/3p4/3B1N2/PP2QPPP/R1B2RK1 w - - 0 16', N, 'w')).toBeNull();
   });
+  // magnus-carlsens-best-endgame-wins#0 — Danya: "there seems to be no
+  // conceivable way to make progress"; Magnus's ...a5 "does not threaten anything".
+  const M = [{ moves: ['e6d7', 'd4b3', 'a6a5', 'e2f1', 'd7a4', 'b3d4', 'b7c5', 'f1e2'], cp: -3, mate: null }];
+  it('a pawn move that touches no pawn is maneuvering, not a break', () => {
+    expect(endgameVerdict('8/1n6/pp1kb1p1/5p1p/2PNp2P/P1K1P1P1/4BP2/8 b - - 0 50', M, 'b')?.kind).toBe('noProgress');
+  });
+  // queen-the-supporting-actress#2: Tal's attack reads level, and with queens on
+  // six quiet moves are an attack, not a dead board.
+  it('with queens on, a level board is no endgame verdict', () => {
+    const T = [{ moves: ['h1h7', 'f7f6', 'f4h6', 'd8d7', 'b3d4', 'd7f7'], cp: -14, mate: null }];
+    expect(endgameVerdict('r1br1knQ/2q2pp1/p2bp3/1p1pn3/5B2/1NN2P2/PPP5/2KR1B1R w - - 0 23', T, 'w')).toBeNull();
+  });
 });

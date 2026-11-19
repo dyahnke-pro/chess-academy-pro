@@ -1400,6 +1400,8 @@ export function computeMoveFacets(
       // record does not keep.)
       add(readBoardAll('zugzwangIfPassed', { fen: fenAfter, student: studentColorWB })[0]);
       add(readBoardAll('theirWorstPiece', { fen: fenAfter, student: studentColorWB, bestLine: ctx.playedLineUci.length ? ctx.playedLineUci : null })[0]);
+      add(readBoardAll('seventhRankMate', { fen: fenAfter, lines: null, student: studentColorWB })[0]);
+      add(readBoardAll('pieceTempo', { fen: fenAfter, lines: null, student: studentColorWB })[0]);
       if (ctx.evaluation != null && !isMateEval(ctx.evaluation) && ctx.playedLineUci.length) {
         const lines = [{ moves: ctx.playedLineUci, cp: ctx.evaluation, mate: null }];
         add(readBoardAll('misplacedQueen', { fen: fenAfter, lines, student: studentColorWB })[0]);
