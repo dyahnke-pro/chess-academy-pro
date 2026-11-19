@@ -25,7 +25,7 @@ describe('planOfTheBoard — the plan Danya says', () => {
   it('the rook lift: a road whose first step is the best move itself', () => {
     const p = plan(ROOK_LIFT, ROOK_LIFT_LINE, 147);
     expect(p?.kind).toBe('road');
-    expect(p?.text).toBe('Your rook on e1 has a better road: e3 and then b3.');
+    expect(p?.text).toBe('Your rook on e1 has a better road, by way of e3. It ends on b3.');
     expect(p?.starts).toBe(0);
   });
   it('planSteps reads a one-step road after the best move (the old minimum of two steps after it lost the rook lift)', () => {
@@ -36,11 +36,11 @@ describe('planOfTheBoard — the plan Danya says', () => {
   it('the knockout: the pawn that kicks the c6 knight', () => {
     const p = plan(KNOCKOUT, KNOCKOUT_LINE, 214);
     expect(p?.kind).toBe('kick');
-    expect(p?.text).toBe('Your plan: b4 and then b5, to kick their knight off c6.');
+    expect(p?.text).toBe('Your plan is to kick their knight off c6. The b-pawn does it: b4, then b5.');
   });
   it("Alekhine's gun: the rooks stacked on the c-file at the knight on c6", () => {
     const p = plan(GUN, GUN_LINE, 266);
-    expect(p?.text).toMatch(/Rc2, Rfc1 and then Rc3/);
+    expect(p?.text).toBe('Your pieces line up on their knight on c6. It starts with Rc2.');
     expect(p?.target).toBe('c6');
   });
   it('silent when the best line is a tactic: a check first', () => {
@@ -67,7 +67,7 @@ describe('the read decider says the board\'s plan before a description', () => {
     const facts: ReadFact[] = [
       { from: 'bestMove', kind: 'plan-steps', computer: 'planSteps', text: 'Your plan from here: Nf1, Ne3 and then Nd5.', squares: ['f1', 'd5'] },
       { from: 'position', kind: 'structure-plan', computer: 'readPosition', text: 'Your rook on a1 is your best-placed piece — it has the half-open a-file.', squares: ['a1'] },
-      { from: 'bestMove', kind: 'plan-steps', computer: 'planOfTheBoard', text: 'Your rook on e1 has a better road: e3 and then b3.', squares: ['e1', 'e3', 'b3'] },
+      { from: 'bestMove', kind: 'plan-steps', computer: 'planOfTheBoard', text: 'Your rook on e1 has a better road, by way of e3. It ends on b3.', squares: ['e1', 'e3', 'b3'] },
     ];
     const ctx = readContextOf({ fen: ROOK_LIFT, top: { evaluation: 147, mate: null }, bestUci: 'e1e3', withheld: null, studentShot: false });
     const said = decideRead(facts, ctx).facts.map((f) => f.computer);

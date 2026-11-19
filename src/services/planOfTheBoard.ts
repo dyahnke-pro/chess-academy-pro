@@ -30,11 +30,12 @@
 // plan a read teaches is the plan a student's next moves can be checked
 // against (its squares and its piece).
 import { Chess, type Color, type Square } from 'chess.js';
-import { planSteps, planStepsText, type PlanSteps } from './planSteps';
+import { planSteps, type PlanSteps } from './planSteps';
 import { siegeOf } from './boardPlan';
 import { deriveNextPlanFacts, structurePlanFact, type PlanKind } from './nextPlans';
 import { pawnBreak } from './pawnBreak';
 import { openSentence } from '../utils/openSentence';
+import { sideMaterial } from './pieceValues';
 
 export type BoardPlanKind = 'siege' | 'road' | 'kick' | PlanKind | 'break' | 'steps';
 
@@ -63,12 +64,10 @@ const SUPPORT_MOVES = 4;
 /** The tie order: the more specific plan first. */
 const ORDER: readonly BoardPlanKind[] = ['siege', 'road', 'kick', 'weak-pawn', 'outpost', 'passer', 'king-attack', 'worst-piece', 'open-file', 'bishop-pair', 'convert', 'break', 'steps'];
 
-const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
-
+/** The mover's material lead on the board (the one side-material sum). */
 function material(b: Chess, c: Color): number {
-  let n = 0;
-  for (const row of b.board()) for (const x of row) if (x) n += (x.color === c ? 1 : -1) * VALUE[x.type];
-  return n;
+  const fen = b.fen();
+  return sideMaterial(fen, c) - sideMaterial(fen, c === 'w' ? 'b' : 'w');
 }
 
 interface MoverMove { idx: number; from: string; to: string; piece: string; san: string; hits: Set<string> }
@@ -240,11 +239,32 @@ function kickOf(fen: string, line: readonly string[], mover: Color, whose: 'your
       if (!was || was.color !== them || was.type !== p.type) continue;
       if (b.attackers(mv.to, them).length > b.attackers(mv.to, mover).length) continue;
       const owner = whose === 'your' ? 'their' : 'your';
-      const steps = pushes.length >= 2 ? `${pushes.slice(0, -1).join(', ')} and then ${pushes.at(-1)}` : mv.san;
-      return { kind: 'kick', text: `${whose === 'your' ? 'Your' : 'Their'} plan: ${steps}, to kick ${owner} ${NOUN[p.type]} off ${sq}.`, squares: [mv.to, sq], target: sq, starts: n - pushes.length };
+      const steps = pushes.length >= 2 ? `${pushes[0]}, then ${pushes.at(-1)}` : mv.san;
+      return { kind: 'kick', text: `${whose === 'your' ? 'Your' : 'Their'} plan is to kick ${owner} ${NOUN[p.type]} off ${sq}. The ${mv.to[0]}-pawn does it: ${steps}.`, squares: [mv.to, sq], target: sq, starts: n - pushes.length };
     }
   }
   return null;
+}
+
+/** A road or a list of steps said the way a person says it: one idea a
+ *  sentence, never three squares in one (the human-squares rule) — the piece
+ *  and its first stop, then where it ends and what it hits there; a list of
+ *  steps is what they line up on, then the step that starts it. */
+export function stepsText(p: PlanSteps, whose: 'your' | 'their'): string {
+  const Who = whose === 'your' ? 'Your' : 'Their';
+  const owner = whose === 'your' ? 'their' : 'your';
+  const aimed = p.aim ? (p.aimPiece ? `${owner} ${p.aimPiece} on ${p.aim}` : `${p.aim}, next to ${owner} king`) : null;
+  if (p.maneuver) {
+    const m = p.maneuver;
+    const end = m.route[m.route.length - 1];
+    const lead = m.route.length === 1 ? `${Who} ${m.piece} on ${m.from} has a better square: ${end}.`
+      : `${Who} ${m.piece} on ${m.from} has a better road, by way of ${m.route[0]}.`;
+    const ends = m.route.length === 1 ? '' : aimed ? ` It ends on ${end}, lined up on ${aimed}.` : ` It ends on ${end}.`;
+    return `${lead}${m.route.length === 1 && aimed ? ` There it lines up on ${aimed}.` : ends}`;
+  }
+  const first = p.steps[0];
+  const start = first.castle ? 'castling' : first.brk ? `the ${first.san} break` : first.san;
+  return `${Who} pieces line up on ${aimed ?? 'one target'}. It starts with ${start}.`;
 }
 
 export interface PlanOfTheBoardIn {
@@ -284,7 +304,7 @@ export function planOfTheBoard(i: PlanOfTheBoardIn): BoardPlan | null {
     if (st.maneuver || st.aim) {
       const piece = st.maneuver?.from ?? null;
       const s = startsAt(moves, st.squares, st.aim, piece);
-      if (s >= 0) out.push({ kind, text: planStepsText(st, whose), squares: st.squares, target: st.aim, starts: s });
+      if (s >= 0) out.push({ kind, text: stepsText(st, whose), squares: st.squares, target: st.aim, starts: s });
     }
   }
 
