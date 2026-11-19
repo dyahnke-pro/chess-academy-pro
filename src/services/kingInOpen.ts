@@ -68,7 +68,9 @@ export function kingInOpen(fen: string, lines: readonly EngineLine[] | null, stu
     }
     const mine = side === student;
     const all = checkers.length === 1 ? null : checkers.length === 2 ? 'both' : 'all';
-    const names = checkers.map((s) => `${PIECE_NAME[c.get(s)?.type ?? 'p']} on ${s}`);
+    // Three squares in a sentence is a list nobody can hold: past two
+    // checkers the pieces are named, and the board lights their squares.
+    const names = checkers.map((s) => (checkers.length > 2 ? PIECE_NAME[c.get(s)?.type ?? 'p'] : `${PIECE_NAME[c.get(s)?.type ?? 'p']} on ${s}`));
     const can = all ? `can ${all} give check` : `has ${checks} checks`;
     const coverWords = cover.present === 0 ? 'no pawn of its own in front of it' : 'only one pawn of its own near it';
     const text = mine

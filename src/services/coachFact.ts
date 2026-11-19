@@ -546,7 +546,7 @@ export const COMPUTER_CATALOG = {
   defenderInTime: { file: 'services/defenderInTime.ts', says: 'in an ending without queens, a knight\'s shortest route to a square hitting a loose enemy pawn, against the defending king\'s walk to a square beside it, when the king needs no more moves and the engine\'s line does not win the pawn' },
   tactify: { file: 'services/tactify.ts', says: 'within a pawn and a half of level with a quiet best move: an equally good quiet move (within 40 centipawns) that hits a loose piece or pawn, a bigger piece, or brings a pawn at their king, more than the best move does' },
   seventhRankMate: { file: 'services/seventhRankMate.ts', says: 'two rooks or queens on the other side\'s second rank, that king on its back rank, no check of theirs that mates, and what keeps it so: a rook or queen of the defender\'s on its back rank, the king touching one of the attackers; with the engine\'s lines, no mate within three moves' },
-  pieceTempo: { file: 'services/pieceTempo.ts', says: 'a quiet move by an idle (pieceWork under four) or pawn-hit knight, bishop or rook onto a square nothing wins, newly hitting a piece (not a pawn) it would win to the end of the trades and that cannot take it back; never one the engine lists more than a pawn worse than its best' },
+  pieceTempo: { file: 'services/pieceTempo.ts', says: 'a quiet move by an idle (pieceWork under four) knight, bishop or rook onto a square nothing wins, newly hitting a piece (not a pawn) whose capture gains material to the end of the trades and that cannot take it back; never one the engine lists more than a pawn worse than its best' },
 } satisfies Record<string, CatalogRow>;
 
 export type ComputerName = keyof typeof COMPUTER_CATALOG;

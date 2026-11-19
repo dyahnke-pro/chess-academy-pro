@@ -11,9 +11,9 @@
 // wins (`standsSafe`), and from there newly hits a piece of theirs (not a pawn,
 // not the king) that the side would win if it were left (`legalSeeGainFor`,
 // to the end of the trades) and that cannot simply take the piece back. Said
-// only for a piece that has to move anyway — one with no work where it stands
-// (`pieceWork` under four) or one their pawn already hits — so the tempo is a
-// free move, not a sideways one. With the engine's lines, a move that the
+// only for a piece with no work where it stands (`pieceWork` under four), so
+// the tempo is a free move, not a sideways one; a piece a pawn kicks is the
+// kick's read. With the engine's lines, a move that the
 // engine reads more than a pawn worse than its best is never offered.
 import { Chess, type Color, type Move, type Square } from 'chess.js';
 import { legalSeeGainFor, standsSafe } from './positionReadingService';
@@ -56,8 +56,8 @@ export function pieceTempo(fen: string, lines: readonly EngineLine[] | null, stu
     if (!['n', 'b', 'r'].includes(m.piece) || m.captured || m.san.includes('+') || m.san.includes('#')) continue;
     const here = c.get(m.from);
     if (!here) continue;
-    const hitByPawn = c.attackers(m.from, other(side)).some((a) => c.get(a)?.type === 'p');
-    if (!hitByPawn && pieceWork(c, m.from, m.piece as 'n' | 'b' | 'r', side) >= IDLE_WORK) continue;
+    // A piece a pawn just kicked is the kick's lesson (said with the kick).
+    if (pieceWork(c, m.from, m.piece as 'n' | 'b' | 'r', side) >= IDLE_WORK) continue;
     const after = new Chess(fen); after.move(m.san);
     if (!standsSafe(after.fen(), m.to, other(side))) continue;
     // The engine: a move it lists far below its best is not offered.
