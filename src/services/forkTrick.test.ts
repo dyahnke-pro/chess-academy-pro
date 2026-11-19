@@ -65,6 +65,19 @@ describe('forkTrick reaches both surfaces', () => {
       allSans: sans, forcedRunStartPly: null, forcedRunFact: null, playedLineEarlierUci: null, playedLineUci: [], bestLineUci: [], replyBestSan: null, replyEvaluation: null }));
     expect(facets.join(' ')).toMatch(/\[stopped\] .*their fork trick/);
   }, 30_000);
+
+  // Marks sweep 2026-11-19: "e5 sidesteps your fork trick: Nxe4, Nxe4, d5"
+  // drew nothing — the trick is a continuation no board the walk shows plays.
+  it('the sidestep carries the trick as a line, played from the board it stood on', async () => {
+    const fen = fenAfter(PHILIDOR);
+    const s = trickSidestepped(fen, 'Bb3', 'w', 'their');
+    expect(s?.line.sans).toEqual(['Nxe4', 'Nxe4', 'd5']);
+    const c = new Chess(s?.line.fen ?? '');
+    expect(c.board().map((r) => r.map((p) => p?.type ?? '.').join('')).join('/')).toBe(new Chess(fen).board().map((r) => r.map((p) => p?.type ?? '.').join('')).join('/'));
+    for (const san of s?.line.sans ?? []) expect(c.move(san)).toBeTruthy();
+    const { readBoard } = await import('./boardComputers');
+    expect(readBoard('trickSidestepped', { fenBefore: fen, san: 'Bb3', student: 'w' })?.lines?.[0]?.sans).toEqual(['Nxe4', 'Nxe4', 'd5']);
+  }, 30_000);
 });
 
 // Clean-pass review walk 2026-10-04, G3 (lichess mZ1GOTOw) 23.Re1. Before it,

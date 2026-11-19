@@ -116,6 +116,12 @@ interface TrickSidestep {
   trick: ForkTrick;
   text: string;
   squares: string[];
+  /** THE LINE THE WORDS NAME (marks sweep 2026-11-19: "e5 sidesteps your
+   *  fork trick: Nxe4, Nxe4, d5" drew nothing — the capture, the recapture
+   *  and the fork are a continuation, legal on no board the walk shows). The
+   *  board the trick stood on — before the move, its owner to move — and its
+   *  three moves, so a surface draws it move by move. */
+  line: { fen: string; sans: string[] };
 }
 
 /**
@@ -161,5 +167,5 @@ export function trickSidestepped(
     `${bare} also defuses ${trickOwner} fork trick — ${line} would have forked ${victims}.`,
   ], stemKeyOf(fenBefore));
   // The move the sentence opens on, lit with the fork's square.
-  return { trick, text, squares: [trick.forkSquare, moved] };
+  return { trick, text, squares: [trick.forkSquare, moved], line: { fen: flipped, sans: [trick.capture, trick.recapture, trick.fork] } };
 }

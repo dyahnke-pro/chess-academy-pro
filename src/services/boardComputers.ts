@@ -5715,7 +5715,7 @@ export const BOARD_COMPUTERS = {
       const trick = trickSidestepped(fenBefore, san, mover, mover === student ? 'their' : 'your');
       if (!trick) return null;
       return fact({ key: `trick:${san}:${trick.squares.join('-')}`, claims: [`trick:${trick.squares[0] ?? san}`], text: trick.text, proof: squaresProof(trick.text, trick.squares) ?? NO_PROOF.description, squares: [...trick.squares], stakes: null,
-        seat: mover === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore });
+        seat: mover === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore, lines: [trick.line] });
     }),
     computer: 'trickSidestepped',
     kind: 'stopped',
@@ -7518,7 +7518,7 @@ export const BOARD_COMPUTERS = {
       if (!r) return null;
       const key = `cramp-trade:${r.target}`;
       return fact({ key, claims: [key], text: r.text, proof: squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
-        seat: (r.cramped === ctx.student ? 'student' : 'opponent'), namesStudentMove: r.cramped === ctx.student, thread: LOCAL_THREAD, fen: ctx.fen });
+        seat: (r.cramped === ctx.student ? 'student' : 'opponent'), namesStudentMove: r.cramped === ctx.student, thread: LOCAL_THREAD, fen: ctx.fen, lines: [r.line] });
     }),
     computer: 'tradeRelievesCramp',
     kind: 'trade',

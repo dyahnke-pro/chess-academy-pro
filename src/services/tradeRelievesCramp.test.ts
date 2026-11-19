@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { Chess } from 'chess.js';
 import { tradeRelievesCramp } from './tradeRelievesCramp';
 
 // Danya have-check board positional-combinations#0; the engine's top lines as dumped (White's view).
@@ -14,5 +15,19 @@ describe('tradeRelievesCramp', () => {
   });
   it('stays silent where the board does not have it', () => {
     expect(tradeRelievesCramp('5rk1/pp2qrpp/4b3/3pPp1Q/2pP3P/P1P3P1/1P3RB1/5RK1 w - - 0 25', N, 'w')).toBeNull();
+  });
+  // Marks sweep 2026-11-19: "Bxc3 would take off your knight on c3" drew
+  // nothing — the trade sits moves into the engine's line, legal on no board
+  // the walk shows.
+  it('carries the line to its trade: from the board, through the trade and its take-back', () => {
+    const fen = 'r1b1r1k1/1pqn1ppp/p1pb1n2/5N2/2B1P3/2N4P/PPQ2PP1/R1BR2K1 b - - 0 14';
+    const r = tradeRelievesCramp(fen, L, 'b');
+    expect(r?.line.fen).toBe(fen);
+    const sans = r?.line.sans ?? [];
+    expect(sans.at(-2)).toBe(r?.trade);
+    const c = new Chess(fen);
+    const moves = sans.map((s) => c.move(s));
+    expect(moves.at(-1)?.to).toBe(r?.target);
+    expect(moves.at(-1)?.captured).toBeTruthy();
   });
 });

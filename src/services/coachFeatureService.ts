@@ -527,28 +527,49 @@ export function segmentMarks(
  *  ply from the board it starts on, or nothing when it does not play. A line
  *  whose words name its moves ("you play Bxe4, they answer Nxe4 and you play
  *  Bxb2") comes before a proof the words only conclude from. */
+type LinePly = { uci: string; san: string; fenBefore: string; fenAfter: string };
+
+/** A kept fact's line, ply by ply: its first line of two moves or more, else
+ *  its lines CHAINED — each played on from the board the one before ended on,
+ *  the side to move aside ("Bf6, which threatens Qxg7#": the reply, then the
+ *  threat it makes, the same side moving again). Null when nothing plays. */
+function factLinePlies(lines: readonly SpokenLine[] | undefined): LinePly[] | null {
+  if (!lines?.length) return null;
+  const placement = (fen: string): string => fen.split(' ')[0];
+  const play = (from: readonly SpokenLine[]): LinePly[] | null => {
+    const out: LinePly[] = [];
+    let reached: string | null = null;
+    for (const l of from) {
+      if (reached !== null && placement(l.fen) !== placement(reached)) return null;
+      try {
+        const c = new Chess(l.fen);
+        for (const san of l.sans) {
+          const fenBefore = c.fen();
+          const m = c.move(san);
+          out.push({ uci: `${m.from}${m.to}${m.promotion ?? ''}`, san: m.san, fenBefore, fenAfter: c.fen() });
+        }
+        reached = c.fen();
+      } catch { return null; }
+    }
+    return out.length >= 2 ? out : null;
+  };
+  const long = lines.find((l) => l.sans.length >= 2);
+  return (long ? play([long]) : null) ?? (lines.length >= 2 ? play(lines) : null);
+}
+
 function spokenLineOf(kept: readonly { text?: string; lines?: readonly SpokenLine[] }[]): { spokenLineArrows?: Array<{ uci: string; fenBefore: string; fenAfter: string }>; spokenLineSaid?: string } {
   const unmark = (san: string): string => san.replace(/^…/, '').replace(/[+#?!]/g, '');
   const named = (f: { text?: string; lines?: readonly SpokenLine[] }): number => {
-    const line = f.lines?.find((l) => l.sans.length >= 2);
-    if (!line || !f.text) return 0;
+    const plies = factLinePlies(f.lines);
+    if (!plies || !f.text) return 0;
     const said = new Set(extractMentionedSans(f.text).map(unmark));
-    return line.sans.filter((san) => said.has(unmark(san))).length;
+    return plies.filter((p) => said.has(unmark(p.san))).length;
   };
   const ordered = [...kept].sort((a, b) => named(b) - named(a));
   for (const f of ordered) {
-    const line = f.lines?.find((l) => l.sans.length >= 2);
-    if (!line) continue;
-    try {
-      const c = new Chess(line.fen);
-      const arrows: Array<{ uci: string; fenBefore: string; fenAfter: string }> = [];
-      for (const san of line.sans) {
-        const fenBefore = c.fen();
-        const m = c.move(san);
-        arrows.push({ uci: `${m.from}${m.to}${m.promotion ?? ''}`, fenBefore, fenAfter: c.fen() });
-      }
-      if (arrows.length >= 2) return { spokenLineArrows: arrows, ...(f.text ? { spokenLineSaid: f.text } : {}) };
-    } catch { /* a line that does not play draws nothing */ }
+    const plies = factLinePlies(f.lines);
+    if (!plies) continue;
+    return { spokenLineArrows: plies.map(({ uci, fenBefore, fenAfter }) => ({ uci, fenBefore, fenAfter })), ...(f.text ? { spokenLineSaid: f.text } : {}) };
   }
   return {};
 }

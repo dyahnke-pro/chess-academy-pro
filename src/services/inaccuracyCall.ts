@@ -49,7 +49,9 @@ import { openSentence } from '../utils/openSentence';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { replyPunishment } from './moveAllowed';
 import { whyItFailed } from './whyItFailed';
-import { mateThreatsAgainst, sideToMoveAs } from './threatOut';
+import { flipSideToMove, mateThreatsAgainst, sideToMoveAs } from './threatOut';
+import { extractMentionedSans } from './arrowEngine';
+import type { SpokenLine } from './voicePackage';
 import { lineProofFromUci, walkableLine, type Proof } from './proof';
 import type { WalkableLine } from '../types';
 import { signedLegalSeeFor, legalSeeGain } from './positionReadingService';
@@ -1001,9 +1003,30 @@ function kingHunt(
   } catch { return null; }
 }
 
+/** THE MOVE A REPLY'S WHY NAMES NEXT (marks sweep 2026-11-19: "It let you
+ *  play Bf6, which threatens Qxg7#" drew Bf6 and nothing for the mate it
+ *  threatens). The why's own move after the reply — the threat it makes —
+ *  plays on the board after the reply with the same side to move again, so the
+ *  words' line is the reply, then that move: two boards, one line said. */
+function followUpLines(fenAfter: string, replySan: string, why: string): SpokenLine[] | null {
+  try {
+    const c = new Chess(fenAfter);
+    if (!c.move(replySan)) return null;
+    const again = flipSideToMove(c.fen());
+    if (!again) return null;
+    for (const san of extractMentionedSans(why)) {
+      try {
+        const m = new Chess(again).move(san.replace(/^…/, ''));
+        if (m) return [{ fen: fenAfter, sans: [replySan] }, { fen: again, sans: [m.san] }];
+      } catch { /* not this side's move there */ }
+    }
+  } catch { /* no board */ }
+  return null;
+}
+
 export function allowedReply(
   fenBefore: string, playedSan: string, replyLineUci: readonly string[], moverColor: 'white' | 'black',
-): { said: string; line: { fen: string; uci: string[] } } | null {
+): { said: string; line: { fen: string; uci: string[] }; lines?: SpokenLine[] } | null {
   if (!replyLineUci || replyLineUci.length === 0) return null;
   try {
     const c = new Chess(fenBefore);
@@ -1048,6 +1071,7 @@ export function allowedReply(
       // forces (hard-question walk 2026-10-11: four plies were drawn, two
       // more of the mover's own moves under words naming only …e5).
       line: { fen: fenAfter, uci: replyLineUci.slice(0, 2) },
+      ...((): { lines?: SpokenLine[] } => { const l = followUpLines(fenAfter, reply.san, why); return l ? { lines: l } : {}; })(),
     };
   } catch { return null; }
 }
@@ -1094,6 +1118,10 @@ interface ErrorWhy {
   /** The line the words name, as a proof — absent when nothing is shown. */
   proof?: Proof;
   line?: { fen: string; uci: string[] };
+  /** THE LINE THE CONSEQUENCE'S WORDS NAME when it runs past one board — the
+   *  reply they were let into, then the move its why names ("Bf6, which
+   *  threatens Qxg7#"), each on the board it is played on. */
+  allowedLines?: SpokenLine[];
   /** A cost with nothing else to say, proven by the engine's answer — said
    *  after the cost on the STUDENT's own grade only (" The line: …"). */
   costTail?: string;
@@ -1542,6 +1570,7 @@ export function errorWhy(args: {
     reason: should ? reason : null,
     ...(proof ? { proof } : {}),
     ...(line ? { line } : {}),
+    ...(consequence && allowed?.lines && line === allowed.line ? { allowedLines: allowed.lines } : {}),
     ...(costLine ? { costLine, costTail } : {}),
     ...(punishment?.lostSquare ?? failedLost ?? replyTaken ? { lostSquare: punishment?.lostSquare ?? failedLost ?? replyTaken } : {}),
     ...((should || mateSaid) && bestSan ? { namesBetter: bestSan } : {}),

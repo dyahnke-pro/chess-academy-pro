@@ -621,6 +621,10 @@ export function computeMoveFacets(
     // errorWhy reads from the MOVER's seat; the review speaks from the
     // student's, so its proof is re-said from there (as its text is).
     if (costsPoints || fellShort) recProof(qf, ew?.proof ? proofForStudent(ew.proof, ctx.studentColorWB) : lineProofFromUci(fenBefore, ctx.bestLineUci, lineSeatAt(fenBefore, ctx.studentColorWB)));
+    // …and when what it allowed runs past one board ("It let you play Bf6,
+    // which threatens Qxg7#"), the board walks the reply and the move its why
+    // names, each on its own board (marks sweep 2026-11-19).
+    if (consequence && ew?.allowedLines?.length) qf.lines = [...ew.allowedLines];
     // The squares the why names — the piece left hanging and what takes it —
     // lead the eye (David 2026-10-11: "arrows and highlights … when narrating
     // moves and important squares").
@@ -1238,6 +1242,8 @@ export function computeMoveFacets(
       const f = made('trickSidestepped', 'stopped', trick.text);
       facets.push(f);
       recSquares(f, [...trick.squares]);
+      // The capture, recapture and fork the words name, drawn move by move.
+      if (trick.lines?.length) f.lines = [...trick.lines];
     }
   }
 
