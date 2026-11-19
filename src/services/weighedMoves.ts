@@ -548,6 +548,27 @@ export function resultShift(bestCp: number, tryCp: number, mine: boolean): strin
   return `It leaves ${mine ? 'you' : 'them'} ${BAND_WORDS[to]}.`;
 }
 
+/** WHAT A TRY THAT KEEPS THE RESULT STILL COSTS (his "Rc7 achieves nothing",
+ *  "keeps only a slight edge"): it gives back part of the edge, or leaves the
+ *  side a little worse than the better move would. Said only where the result
+ *  holds (`resultShift` is null) and the try costs half a pawn at least. */
+export function smallerShift(bestCp: number, mine: boolean, nothingSaid: boolean, costCp: number): string {
+  const from = bandStep(bestCp);
+  const own = mine ? 'your' : 'their';
+  const them = mine ? 'you' : 'them';
+  // A pawn or more, inside one band (a won game stays won, a lost one lost):
+  // a real cost, never "achieves nothing".
+  if (costCp >= SHIFT_COST_CP) {
+    if (from > 0) return `It gives back a big part of ${own} edge.`;
+    if (from === 0) return `It leaves ${them} clearly worse than the better move would.`;
+    return `It makes ${own} position a lot harder.`;
+  }
+  const lead = nothingSaid ? 'It' : 'It achieves nothing, and';
+  if (from > 0) return `${lead} gives back part of ${own} edge.`;
+  if (from === 0) return `${lead} leaves ${them} a little worse than the better move would.`;
+  return `${lead} makes ${own} position harder still.`;
+}
+
 /** WHY THE TRY FALLS SHORT on the board, from the computers that already read
  *  it (his "…d5 blocks Black's own bishop", "achieves nothing"): the bishop
  *  the move shuts in (`blocksOwn`), the pawn that kicks the piece where it
@@ -624,6 +645,8 @@ export function standingRefutations(args: {
   reads: readonly WeighRead[];
   /** Tries weighed for the plan (`ConsideredTries`), past the human floor. */
   considered?: ConsideredTries;
+  /** Told why a candidate was not said (the tries bench reads it). */
+  onDrop?: (uci: string, gate: StandingGate) => void;
 }): StandingRefuted[] {
   const best = bestOfReads(args.fen, args.reads);
   if (!best || best.read.mate !== null) return [];
@@ -637,15 +660,20 @@ export function standingRefutations(args: {
   const considered = args.considered ?? null;
   for (const { c, read, real } of readCandidates(args.fen, played, args.reads, args.rating, considered)) {
     const plan = considered?.get(c.uci) ?? null;
-    if ((real < TEMPTING_P_FLOOR && !plan) || read.mate !== null) continue;
+    const drop = (g: StandingGate): void => { args.onDrop?.(c.uci, g); };
+    if (real < TEMPTING_P_FLOOR && !plan) { drop('not-tempting'); continue; }
+    if (read.mate !== null) { drop('mate-line'); continue; }
     const tryCp = seatCp(read, mover);
     const cost = bestCp - tryCp;
     // The plan's direct try is weighed against the plan, not the eye: it
     // "leads nowhere" well before it costs a pawn (his Qc5 at −0.85, "leads
     // nowhere after …Qd7!") — the result still has to change.
-    if (cost < (plan ? PLAN_TRY_COST_CP : SHIFT_COST_CP)) continue;
-    const shift = resultShift(bestCp, tryCp, mine);
-    if (!shift) continue;
+    if (cost < (plan ? PLAN_TRY_COST_CP : ACHIEVES_NOTHING_CP)) { drop('small-cost'); continue; }
+    // THE RESULT HOLDS, BUT THE TRY ACHIEVES NOTHING (his ?! moves: of 240
+    // refuted tries, ~37 cost half a pawn to a pawn and keep the band): said
+    // as giving back part of the edge, with its reason like any other.
+    const bandShift = plan || cost >= SHIFT_COST_CP ? resultShift(bestCp, tryCp, mine) : null;
+    if (!bandShift && (plan || cost < ACHIEVES_NOTHING_CP)) { drop('same-result'); continue; }
     const m = moveOn(args.fen, c.uci);
     if (!m || read.moves.length < 2) continue;
     const sans: string[] = [];
@@ -658,20 +686,21 @@ export function standingRefutations(args: {
     // hold (`temptingOnBoard`, the one cost walker and its naming rule): this
     // reads the tries that cost the result with the material kept.
     const net = settledNetForLine(args.fen, sans, mover);
-    if (net !== null && net < 0) continue;
+    if (net !== null && net < 0) { drop('loses-material'); continue; }
     const reply = `${mover === 'w' ? '…' : ''}${sans[1]}`;
     // NO REASON, NO REFUTATION: his every rule-out says why it falls short.
     // The plan's try has its own reason: what became of the target.
     // WHAT THE LINE DOES (his "with a perpetual check", "and White promotes"),
     // then the reply's mechanism, then what changed on the board after it.
-    const story = lineStory(args.fen, read.moves, w.other);
+    const story = lineStory(args.fen, read.moves, w.other, read.mate === null ? read.evaluation : null);
     const mech = story?.text
       ?? tryMechanism(args.fen, m, sans, best.san, w.own, w.other)
       ?? (plan ? targetOutcome(args.fen, sans, plan.target, mover, w.other) : null)
       ?? changeReason({ fen: args.fen, student: args.student, rating: args.rating, other: w.other,
         tryLine: { moves: read.moves, cp: read.mate === null ? read.evaluation : null, mate: read.mate },
         bestLine: { moves: best.read.moves, cp: best.read.mate === null ? best.read.evaluation : null, mate: best.read.mate } });
-    if (!mech) continue;
+    if (!mech) { drop('no-reason'); continue; }
+    const shift = bandShift ?? smallerShift(bestCp, mine, /wins nothing/.test(mech), cost);
     const stem = stemKeyOf(`${args.fen}|result|${c.uci}`);
     const lead = plan
       ? (mine
@@ -687,8 +716,13 @@ export function standingRefutations(args: {
   return out.sort((x, y) => y.real - x.real).map(({ real: _real, ...t }) => t);
 }
 
+/** Why the result refuter left a candidate unsaid. */
+export type StandingGate = 'not-tempting' | 'mate-line' | 'small-cost' | 'same-result' | 'loses-material' | 'no-reason';
+
 /** A pawn, the tempting move's own bar: a smaller drop is the band's edge, not a cost. */
 export const SHIFT_COST_CP = TEMPTING_COST_CP;
+/** A try that keeps the result but achieves nothing: half a pawn given back. */
+export const ACHIEVES_NOTHING_CP = 50;
 /** The plan's direct try: under a pawn, as long as the result changes. */
 export const PLAN_TRY_COST_CP = 40;
 

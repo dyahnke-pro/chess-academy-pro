@@ -180,6 +180,8 @@ export interface LineStory {
 }
 
 const PERPETUAL_CHECKS = 3;
+/** A line that ends within this of level is a draw (White's seat, centipawns). */
+const PERPETUAL_LEVEL_CP = 50;
 
 /**
  * What the try's line does that no single board shows:
@@ -190,7 +192,7 @@ const PERPETUAL_CHECKS = 3;
  *  - `mates`: the other side mates in the line.
  * Null when the line does none of these. Pure: chess.js over the line.
  */
-export function lineStory(fen: string, tryLine: readonly string[], other: 'your' | 'their'): LineStory | null {
+export function lineStory(fen: string, tryLine: readonly string[], other: 'your' | 'their', tryCp: number | null = null): LineStory | null {
   let b: Chess;
   try { b = new Chess(fen); } catch { return null; }
   const mover = b.turn();
@@ -219,7 +221,10 @@ export function lineStory(fen: string, tryLine: readonly string[], other: 'your'
     const k = posKey(b);
     const n = (seen.get(k) ?? 0) + 1;
     seen.set(k, n);
-    if (!checksBroken && firstCheck && (checks >= PERPETUAL_CHECKS || n >= 2)) {
+    // A PERPETUAL IS A DRAW: the checks have to bring a position back, or the
+    // line has to end level — three checks the king walks out of are not one.
+    const levelEnd = tryCp !== null && Math.abs(tryCp) <= PERPETUAL_LEVEL_CP;
+    if (!checksBroken && firstCheck && (n >= 2 || (checks >= PERPETUAL_CHECKS && levelEnd))) {
       return { kind: 'perpetual', text: `${firstCheck} starts a perpetual check: ${theirWord} keep checking and the king can't get away.`, squares: checker ? [checker] : [] };
     }
   }
@@ -237,12 +242,14 @@ export function changeReason(args: {
   bestLine: LineRead;
   other: 'your' | 'their';
 }): string | null {
-  const story = lineStory(args.fen, args.tryLine.moves, args.other);
+  const story = lineStory(args.fen, args.tryLine.moves, args.other, args.tryLine.mate === null ? args.tryLine.cp : null);
   if (story) return story.text;
   const wc = whatChanged(args);
   // A reason is what the OTHER side gains: a fact about the try's own side
   // (advice to it, "before you take…") is no reason the try fails.
   const theirSeat = args.other === 'their' ? 'opponent' : 'student';
-  const hit = wc.appeared.find((c) => c.inLine && c.fact.seat === theirSeat && ['threat', 'resource'].includes(PICTURE_ROLE[c.fact.computer] ?? 'board'));
+  // A danger the try's side would walk into NEXT (`latent-danger`, "before you
+  // take on e5…") is advice for a later move, not what the reply did.
+  const hit = wc.appeared.find((c) => c.inLine && c.fact.seat === theirSeat && c.fact.kind !== 'latent-danger' && ['threat', 'resource'].includes(PICTURE_ROLE[c.fact.computer] ?? 'board'));
   return hit ? hit.fact.text : null;
 }

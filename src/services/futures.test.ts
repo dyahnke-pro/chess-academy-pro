@@ -10,6 +10,12 @@ describe('what the try line does (fixes 2–3)', () => {
     expect(s?.text).toMatch(/^…Qf3\+ starts a perpetual check/);
   });
 
+  it('three checks the king walks out of are no perpetual', () => {
+    // Same checks, but the line goes on unrepeated and ends with them winning.
+    const fen = '7k/6pp/8/8/5q2/8/7P/R6K w - - 0 1';
+    expect(lineStory(fen, ['a1b1', 'f4f3', 'h1g1', 'f3g4', 'g1f2', 'g4f4', 'f2e2'], 'their', -900)).toBeNull();
+  });
+
   it('reads a pawn that runs through and queens', () => {
     const s = lineStory('7k/8/8/8/8/8/p7/6K1 w - - 0 1', ['g1f2', 'a2a1q'], 'their');
     expect(s?.kind).toBe('promotes');
