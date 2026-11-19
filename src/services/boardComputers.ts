@@ -111,6 +111,9 @@ import { theirWorstPiece } from './theirWorstPiece';
 import { kingInOpen } from './kingInOpen';
 import { kingActivityGap } from './kingActivityGap';
 import { zugzwangIfPassed } from './zugzwangIfPassed';
+import { keySquaresOn, keySquareLine, keySquareSquares } from './keySquareRead';
+import { shoulderOn, shoulderLine, shoulderSquares } from './shoulderRead';
+import { connectedPassersOn, connectedPassersLine, connectedPassersSquares } from './connectedPassers';
 import { leverPasser } from './leverPasser';
 import { coordinationGap } from './coordinationGap';
 import { endgameVerdict } from './endgameVerdict';
@@ -1316,6 +1319,16 @@ export interface BoardContexts {
   /** AFTER the move: the capture released tension the engine wanted kept
    *  (`playedCp`: the mover's score after it, where the surface has it). */
   tensionReleased: { fenBefore: string; san: string; lines: readonly TensionLine[]; playedCp: number | null; reply: string | null; student: Color };
+  /** THE ENDGAME BOARD READS (Danya: "Kc5 takes the opposition and the king
+   *  reaches the key square"). Kings and pawns: a passed pawn's key squares
+   *  and whose king holds, gets or can step onto one. */
+  keySquareRead: { fen: string; student: Color };
+  /** A king shouldered away from a passed pawn by the other king, or cut off
+   *  by a rook along a file or rank, counted in king steps. */
+  shoulderRead: { fen: string; student: Color };
+  /** Two connected passed pawns a lone rook or minor cannot stop, proven by
+   *  an exact search. */
+  connectedPassers: { fen: string; student: Color };
 }
 
 export type ComputerId = keyof BoardContexts;
@@ -7650,6 +7663,75 @@ export const BOARD_COMPUTERS = {
       learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_READ,
       weaknesses: { wired: 'services/capabilityEvidence.ts' },
+    },
+  },
+  keySquareRead: {
+    // His "Kc5 takes the opposition and the king reaches the key square": the
+    // passed pawn's key squares and whose king has them. Both seats; the record
+    // files the student's king that can step onto one.
+    read: ({ fen, student }, fact) => safe(() => {
+      const r = keySquaresOn(fen, student);
+      if (!r) return null;
+      const text = keySquareLine(r, student);
+      const squares = keySquareSquares(r);
+      const asks = r.side === student && sideToMove(fen) === student && r.kind === 'steps';
+      return fact({ key: r.key, claims: [`key-squares:${r.pawn}`], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+        seat: r.side === student ? 'student' : 'opponent', namesStudentMove: asks, thread: LOCAL_THREAD, fen, ...(asks ? { skill: 'passive-king-endgame' } : {}) });
+    }),
+    computer: 'keySquaresOn',
+    kind: 'technique',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { wired: 'services/moveInsight.ts' },
+    },
+  },
+  shoulderRead: {
+    // His "White's king is pushed away from the e-pawn": the king kept from a
+    // passed pawn by the other king or a rook's wall, counted. Both seats; the
+    // record files the student's shoulder to keep.
+    read: ({ fen, student }, fact) => safe(() => {
+      const r = shoulderOn(fen, student);
+      if (!r) return null;
+      const text = shoulderLine(r, student);
+      const squares = shoulderSquares(r);
+      const asks = r.side === student && sideToMove(fen) === student;
+      return fact({ key: r.key, claims: [`shoulder:${r.king}:${r.pawn}`], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+        seat: r.side === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen, ...(asks ? { skill: 'passive-king-endgame' } : {}) });
+    }),
+    computer: 'shoulderOn',
+    kind: 'technique',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { wired: 'services/moveInsight.ts' },
+    },
+  },
+  connectedPassers: {
+    // His "the connected passers will seal the deal": two connected passed
+    // pawns a lone rook or minor cannot stop, proven by search. Both seats;
+    // the record files the student's pawns to push.
+    read: ({ fen, student }, fact) => safe(() => {
+      const r = connectedPassersOn(fen);
+      if (!r) return null;
+      const text = connectedPassersLine(r, student);
+      const squares = connectedPassersSquares(r);
+      const asks = r.side === student && sideToMove(fen) === student;
+      return fact({ key: r.key, claims: [`connected-passers:${r.pawns.join('')}`], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+        seat: r.side === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen, ...(asks ? { skill: 'passed-pawn-neglected' } : {}) });
+    }),
+    computer: 'connectedPassersOn',
+    kind: 'technique',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { wired: 'services/moveInsight.ts' },
     },
   },
 } satisfies { [K in ComputerId]: ComputerSpec<BoardContexts[K]> };

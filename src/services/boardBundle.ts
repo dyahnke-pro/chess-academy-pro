@@ -511,6 +511,9 @@ export const BUNDLE_ADAPTERS: { [K in ComputerId]: Adapter<K> } = {
   theirPreventTest: (b) => theirReadOf(b),
   theirTrigger: (b) => theirReadOf(b),
   tradeKept: (b) => { const MOVE = moveOf(b); const pre = priorAnalysis(b); const s = earlierOf(b); return MOVE && pre && s !== undefined ? { fenBefore: MOVE.fenBefore, san: MOVE.san, before: pre, priorMove: asLastMove(s), theirLast: asMove(s), student: b.student } : null; },
+  keySquareRead: (b) => ({ fen: b.fen, student: b.student }),
+  shoulderRead: (b) => ({ fen: b.fen, student: b.student }),
+  connectedPassers: (b) => ({ fen: b.fen, student: b.student }),
 };
 
 /** Every computer the bundle can fill, read on it. A computer that throws is
