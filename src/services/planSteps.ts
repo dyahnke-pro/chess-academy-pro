@@ -57,7 +57,38 @@ export function planSteps(fenAfter: string, line: readonly string[], lastMove: s
   firstIsStep = false): PlanSteps | null {
   const board = new Chess(fenAfter);
   const mover: Color = board.turn() === 'w' ? 'b' : 'w';
+  // THE BOARD NOW — what the plan is said against. A board read's first step
+  // is the engine's suggestion, so "now" is the board before it; a move
+  // already played leaves the board as it stands. Every piece, square and
+  // target the plan names is checked against this board, never a board the
+  // line only reaches (Danya, the art of maneuvering #0: "your knight on c3
+  // has a better road: e2 and then f4" with a knight standing on f4).
+  const now = firstIsStep && lastMove ? boardBefore(fenAfter, lastMove) : fenAfter;
+  if (!now) return null;
+  const nowBoard = new Chess(now, { skipValidation: true });
+  if (firstIsStep && lastMove) {
+    // The suggestion itself must be quiet: a check or a capture first is a
+    // fight, which the tactic computers say (endgame attacks #2 board 3: Qd8+
+    // first, then "Qd4, Qc5 and then Be2" with the queen already on d4).
+    try {
+      const m = nowBoard.moves({ verbose: true }).find((x) => x.from === lastMove.slice(0, 2) && x.to === lastMove.slice(2, 4));
+      if (!m || m.san.includes('+') || m.san.includes('#')) return null;
+      if (m.captured && !(allowTrades && line[0]?.slice(2, 4) === m.to)) return null;
+    } catch { return null; }
+  }
+  // Where each of the mover's pieces has stood in the plan, by the square it
+  // stands on now: a step back to a square it already stood on is a shuffle
+  // ("Rb5, Rb8 and then Rb5", modern chess technique #2), not a plan.
+  const walked = new Map<string, Set<string>>();
+  for (const sq of nowBoard.board().flat()) if (sq && sq.color === mover) walked.set(sq.square, new Set([sq.square]));
+  if (firstIsStep && lastMove) {
+    const was = walked.get(lastMove.slice(0, 2));
+    if (was) { walked.delete(lastMove.slice(0, 2)); was.add(lastMove.slice(2, 4)); walked.set(lastMove.slice(2, 4), was); }
+  }
   const steps: PlanStep[] = [];
+  /** Step index → the earlier step that cleared its square (one of the
+   *  mover's own pieces stands there now). */
+  const cleared = new Map<number, number>();
   const played: string[] = [];
   for (let i = 0; i < line.length && steps.length < maxSteps; i += 1) {
     const u = line[i];
@@ -74,10 +105,30 @@ export function planSteps(fenAfter: string, line: readonly string[], lastMove: s
     if (mv.captured) {
       // A plain trade is passed over: neither the capture nor the recapture
       // is a step of the plan, and neither is called a break.
-      if (allowTrades && (retakes(i + 1) || prevTook)) continue;
+      if (allowTrades && (retakes(i + 1) || prevTook)) {
+        if (mv.color === mover) { const was = walked.get(mv.from) ?? new Set([mv.from]); walked.delete(mv.from); walked.delete(mv.to); was.add(mv.to); walked.set(mv.to, was); }
+        else walked.delete(mv.to);
+        continue;
+      }
       return null;
     }
     if (mv.color !== mover) continue;
+    if (!mv.san.startsWith('O-O')) {
+      const was = walked.get(mv.from) ?? new Set([mv.from]);
+      if (was.has(mv.to)) return null;
+      // A step onto a square one of the mover's own pieces holds NOW is said
+      // against a board the student is not looking at ("Qd4" with the queen
+      // on d4, "e2 and then f4" with a knight on f4).
+      const there = nowBoard.get(mv.to as Square);
+      // Free only when a step of the plan itself left it — and then only if
+      // that step is said with it (checked once the plan's shape is known).
+      if (there && there.color === mover) {
+        const by = steps.findIndex((x) => x.from === mv.to);
+        cleared.set(steps.length, by);
+        if (by < 0) return null;
+      }
+      walked.delete(mv.from); was.add(mv.to); walked.set(mv.to, was);
+    }
     steps.push({ san: mv.san, piece: PIECE[mv.piece], from: mv.from, to: mv.to, castle: mv.san.startsWith('O-O'), brk: mv.piece === 'p' && isPawnBreak(before, mv.san, null) });
   }
   if (steps.length < 2) return null;
@@ -96,6 +147,12 @@ export function planSteps(fenAfter: string, line: readonly string[], lastMove: s
   for (const [sq, n] of counts) {
     if (n < 2) continue;
     const p = board.get(sq as Square);
+    // The target is a piece standing there NOW: "lining up on their knight on
+    // d3" with no knight on d3 named a piece the line only brings (how to win
+    // equal positions #1).
+    const pNow = nowBoard.get(sq as Square);
+    if (p && (!pNow || pNow.color !== p.color || pNow.type !== p.type)) continue;
+    if (!p && pNow) continue;
     const target = (p && p.color === enemy && p.type !== 'k') || (!p && near(sq));
     if (!target) continue;
     aim = sq;
@@ -106,6 +163,16 @@ export function planSteps(fenAfter: string, line: readonly string[], lastMove: s
   const first = firstIsStep && lastMove ? firstStep(fenAfter, lastMove) : null;
   const road = pieceManeuver(first ? first.before : fenAfter, board, first ? [first.step, ...steps] : steps, mover);
   const maneuver = road ? { ...road, justMoved: !first && !!lastMove && lastMove.slice(2, 4) === road.from } : null;
+  // A road names only its own piece's moves: a road square some OTHER step
+  // cleared reads as a square still taken on the board now ("your knight on
+  // c3 has a better road: e2 and then f4" with a knight on f4 that leaves
+  // only for a trade the sentence never says).
+  if (maneuver) {
+    for (const [k, by] of cleared) {
+      if (!maneuver.route.includes(steps[k].to)) continue;
+      if (!maneuver.route.includes(steps[by].to) || steps[by].piece !== maneuver.piece) return null;
+    }
+  }
   // Steps with nothing that ties them — no square they aim at, no break they
   // build to — are moves, not a plan. "Be7, castling and then Nc6, to finish
   // developing" said on every quiet move was filler (decision baseline
@@ -124,6 +191,29 @@ export function planSteps(fenAfter: string, line: readonly string[], lastMove: s
     }
   }
   return { steps, aim, aimPiece, line: played, maneuver, squares: [...(maneuver ? [maneuver.from] : []), ...steps.map((s) => s.to), ...(aim ? [aim] : [])] };
+}
+
+/** The board before `lastMove` was played on it, the moved piece put back
+ *  (a promotion back to a pawn, a castled king and rook back home). A
+ *  captured piece is not restored: the square is left empty, which is all the
+ *  plan's checks against the mover's own pieces need. */
+function boardBefore(fenAfter: string, lastMove: string): string | null {
+  try {
+    const b = new Chess(fenAfter);
+    const from = lastMove.slice(0, 2) as Square; const to = lastMove.slice(2, 4) as Square;
+    const p = b.get(to);
+    if (!p || b.get(from)) return null;
+    b.remove(to);
+    b.put(lastMove.length > 4 ? { type: 'p', color: p.color } : p, from);
+    if (p.type === 'k' && Math.abs(from.charCodeAt(0) - to.charCodeAt(0)) === 2) {
+      const rank = from[1]; const kingSide = to[0] === 'g';
+      const rFrom = `${kingSide ? 'f' : 'd'}${rank}` as Square; const rTo = `${kingSide ? 'h' : 'a'}${rank}` as Square;
+      const r = b.get(rFrom);
+      if (r) { b.remove(rFrom); b.put(r, rTo); }
+    }
+    const parts = b.fen().split(' '); parts[1] = p.color; parts[3] = '-';
+    return new Chess(parts.join(' '), { skipValidation: true }).fen();
+  } catch { return null; }
 }
 
 /** The plan's first step when it is `lastMove` itself, with the board before

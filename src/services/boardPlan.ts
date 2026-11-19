@@ -36,10 +36,10 @@ function sanOf(fen: string, uci: string): string | null {
   try { return new Chess(fen).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }).san; } catch { return null; }
 }
 
-/** THE SIEGE the engine's line builds on the target's file, from the first
- *  line that builds one. */
+/** THE SIEGE the engine's BEST line builds on the target's file — never a
+ *  weaker line's (the same rule as `stepsOf`). */
 export function siegeOf(fen: string, lines: readonly PlanLine[], whose: 'your' | 'their'): BoardPlanLine | null {
-  for (const l of lines) {
+  for (const l of lines.slice(0, 1)) {
     const first = l.moves[0];
     const san = first ? sanOf(fen, first) : null;
     if (!san) continue;
@@ -49,10 +49,14 @@ export function siegeOf(fen: string, lines: readonly PlanLine[], whose: 'your' |
   return null;
 }
 
-/** THE QUIET STEPS of the first engine line that shows a plan (a plain trade
- *  in it allowed). */
+/** THE QUIET STEPS of the engine's BEST line (a plain trade in it allowed).
+ *  Only the best line: a plan read off the second or third line is the slow
+ *  move the engine ranked below the point of the position (Danya, the Greek
+ *  gift lives on #0: "a4, Ba3 and then the c4 break" from a +2.10 line while
+ *  Bxh7+ is +4.14). When the best line is a tactic, the plan is silent and the
+ *  tactic computers speak. */
 export function stepsOf(fen: string, lines: readonly PlanLine[], whose: 'your' | 'their'): BoardPlanLine | null {
-  for (const l of lines) {
+  for (const l of lines.slice(0, 1)) {
     const first = l.moves[0];
     if (!first) continue;
     let after: string;
