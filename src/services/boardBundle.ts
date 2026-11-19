@@ -26,6 +26,7 @@ import { NO_SOUND_PLIES } from './thinkAloud';
 import { computeMustDefend } from './threatOut';
 import { detectSetUpChance } from './setUpChance';
 import { INACCURACY_CP, MISTAKE_CP } from './engineConstants';
+import { consideredTries } from './tryCandidates';
 
 export interface BoardBundle {
   /** The board read. */
@@ -127,6 +128,13 @@ const followOf = (b: BoardBundle): string[][] => { const s = lineSans(b); return
 const bestLine = (b: BoardBundle): readonly string[] => b.lines[0]?.moves ?? [];
 function linesAsAnalysis(ls: readonly EngineLine[]): AnalysisLine[] {
   return ls.map((l, i) => ({ rank: i + 1, evaluation: l.mate !== null ? (l.mate > 0 ? 100000 : -100000) : (l.cp ?? 0), mate: l.mate, moves: [...l.moves], depth: 0 })) as AnalysisLine[];
+}
+/** The picture's conclusions on the bundle's lines: each MultiPV line a read
+ *  of its first move, the tries weighed past the eye on the board. */
+function pictureCtx(b: BoardBundle): BoardContexts['pictureVerdict'] | null {
+  if (b.lines.length < 2) return null;
+  const reads = scoredLines(b.lines);
+  return { fen: b.fen, student: b.student, rating: b.rating, reads, considered: consideredTries(b.fen), refuted: null, lines: analysisOf(b) };
 }
 const priorAnalysis = (b: BoardBundle): AnalysisLine[] | null => (b.priorLines && b.priorLines.length > 0 ? linesAsAnalysis(b.priorLines) : null);
 const scoredLines = (ls: readonly EngineLine[]): Array<{ moves: readonly string[]; evaluation: number; mate: number | null }> =>
@@ -307,6 +315,9 @@ export const BUNDLE_ADAPTERS: { [K in ComputerId]: Adapter<K> } = {
   oppositeBishops: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, student: b.student } : null; },
   planSteps: (b) => (b.priorMove && b.lines[0] ? { fenAfter: b.fen, line: bestLine(b), student: b.student, played: playedUci(b) } : null),
   planOfTheBoard: (b) => (b.lines.length > 0 ? { fen: b.fen, lines: analysisOf(b), student: b.student, namesMoves: true } : null),
+  // The bundle's MultiPV is a fan: each line reads its first move.
+  pictureVerdict: (b) => pictureCtx(b),
+  picturePlan: (b) => pictureCtx(b),
   compensation: (b) => ({ fenAfter: b.fen, student: b.student, studentCp: studentCp(b) ?? 0, line: b.lines[0]?.moves ?? [] }),
   harmlessPin: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, student: b.student, line: b.lines[0]?.moves ?? [] } : null; },
   queenNet: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, student: b.student } : null; },

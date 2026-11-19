@@ -66,7 +66,8 @@ import { knownSlip, knownSlipIndexNow, knownSlipsAt, type KnownSlipContext } fro
 import { ifTheyPlay, treeSentence, sayable, baitBranch, baitSentence, everyTakeLoses, everyTakeSentence, type ReplyRead, type ReplyBranch, type TreeTense, landedSquare } from './ifTheyPlay';
 import { mateStakes } from './factStakes';
 import { MOTIF_OF_TACTIC, MOTIFS } from '../data/tacticMotifs';
-import { temptingRefuted, temptingOnBoard, standingRefutations, alsoGood, squareChoice, type WeighRead } from './weighedMoves';
+import { temptingRefuted, temptingOnBoard, standingRefutations, alsoGood, squareChoice, type WeighRead, type ConsideredTries, type TemptingRefuted, type StandingRefuted } from './weighedMoves';
+import { pictureConclusions, type PictureConclusions, type PictureLedgerIn } from './pictureVerdict';
 import { costStakes } from './factStakes';
 import { pawnBreak } from './pawnBreak';
 import { oppositeBishops } from './oppositeBishops';
@@ -334,6 +335,29 @@ import { bindingFact } from './threeFacts';
 import { pvSanToUci } from './principleAttribution';
 
 export type CoachSurface = 'learn' | 'review' | 'lesson' | 'play' | 'chat' | 'tactics' | 'weaknesses' | 'think';
+
+/** What the picture's conclusions read (`pictureVerdict`, `picturePlan`). */
+export interface PictureCtx {
+  fen: string;
+  student: Color;
+  rating: number;
+  reads: readonly WeighRead[] | null;
+  considered: ConsideredTries | null;
+  refuted: { tempting: readonly TemptingRefuted[]; standing: readonly StandingRefuted[] } | null;
+  lines: readonly AnalysisLine[] | null;
+  ledger?: PictureLedgerIn | null;
+}
+
+/** The conclusions of one board from its context: the refuters run on the
+ *  reads when the surface has not run them already. */
+function conclusionsOf(c: PictureCtx): PictureConclusions | null {
+  if (!c.reads || c.reads.length < 2) return null;
+  const considered = c.considered ?? undefined;
+  const tempting = c.refuted?.tempting ?? temptingOnBoard({ fen: c.fen, student: c.student, rating: c.rating, reads: c.reads, priorMove: null, considered });
+  const standing = c.refuted?.standing ?? standingRefutations({ fen: c.fen, student: c.student, rating: c.rating, reads: c.reads, considered });
+  return pictureConclusions({ fen: c.fen, student: c.student, rating: c.rating, reads: c.reads, considered: c.considered, tempting, standing,
+    lines: c.lines ? c.lines.map((l) => ({ moves: l.moves, evaluation: l.evaluation, mate: l.mate ?? null })) : undefined, ledger: c.ledger ?? null });
+}
 
 /** Where a computer reaches a surface — the FILE that calls it — or why not. */
 type SurfaceAnswer = { wired: string } | { not: string };
@@ -749,6 +773,16 @@ export interface BoardContexts {
    *  `fen`, best first. `namesMoves`: may it name a move the student is still
    *  to find (Learn's live board holds it). */
   planOfTheBoard: { fen: string; lines: readonly AnalysisLine[]; student: Color; namesMoves: boolean };
+  /** THE PICTURE'S CONCLUSIONS (WO-PICTURE-01 P3, `pictureVerdict`): on `fen`,
+   *  the verdict read after the tries and the try that survives them. `reads`:
+   *  one engine read per candidate from `fen` (the best among them — a fan, or
+   *  a MultiPV whose every line reads its first move); `considered`: the tries
+   *  weighed past the eye (`consideredTries`), null where the surface read none;
+   *  `refuted`: what the refuters already made on these reads, null to make it
+   *  here; `lines`: the engine's MultiPV on `fen` for the plan, null for the
+   *  best read alone; `ledger`: the ledger's counterplay read, when built. */
+  pictureVerdict: PictureCtx;
+  picturePlan: PictureCtx;
   /** COMPENSATION (`positionAssessment`): on `fenAfter`, a side down material
    *  and still level or better by the engine (`studentCp`, the student's
    *  seat), with the board reason that pays for it. `line`: the engine's line
@@ -1412,6 +1446,18 @@ const LIVE_READ: Record<CoachSurface, SurfaceAnswer> = {
   review: REVIEW_READ, lesson: LESSON_READ, tactics: TACTICS_COMPOSER,
   weaknesses: { not: 'a read of the board said in the moment — the record grades the move\'s own cost' },
   think: { not: 'a step board\'s teaching reads the move\'s own facts (moveThoughtFacts.stepThought), not the live board read' },
+};
+/** THE PICTURE'S CONCLUSIONS read the engine's read of every try on the
+ *  board: the tapped read (`boardReadFacts`, every surface's Read button and
+ *  a puzzle's read once solved) and chat's position answer
+ *  (`groundedAnswer`, its tempting reads) are the two places those reads are
+ *  made; the record files the posed question both ways (`moveInsight`). */
+const PICTURE_SURFACES: Record<CoachSurface, SurfaceAnswer> = {
+  learn: { wired: 'services/boardReadFacts.ts' }, review: { wired: 'services/boardReadFacts.ts' }, lesson: { wired: 'services/boardReadFacts.ts' },
+  play: { wired: 'services/boardReadFacts.ts' }, tactics: { wired: 'services/boardReadFacts.ts' },
+  chat: { wired: 'services/groundedAnswer.ts' },
+  weaknesses: { wired: 'services/moveInsight.ts' },
+  think: { not: 'a step board does not carry the engine reads of every try the conclusions are read from' },
 };
 /** LEARN HOW TO THINK (one coach, David 2026-11-17): the step's teaching reads
  *  the composer and the step board's registry reads (`moveThoughtFacts.stepThought`). */
@@ -3596,6 +3642,45 @@ export const BOARD_COMPUTERS = {
       weaknesses: { wired: 'services/moveInsight.ts' }, // `planPosed`: live Learn, both ways (no-plan)
       think: THINK,
     },
+  },
+  pictureVerdict: {
+    // Danya's verdict comes AFTER the tries ("hanging on the precipice, but
+    // very difficult to finish him off": …Qf6 is met by Rh5, …c4 fails to
+    // Nxg5): the band is the check, the failed tries are the source. Said
+    // only when the tries change the word — a band alone is the standing's.
+    read: (c, fact) => safe(() => {
+      const r = conclusionsOf(c);
+      if (!r || r.verdict.kind === 'plain') return null;
+      const mine = r.mover === c.student;
+      const key = `picture-verdict:${r.mover}:${r.verdict.kind}:${r.but.map((t) => t.uci).join(',')}`;
+      const squares = [...new Set(r.but.flatMap((t) => [t.uci.slice(0, 2), t.uci.slice(2, 4)]))];
+      const poses = mine && r.verdict.kind !== 'works-now';
+      return fact({ key, claims: [key], text: r.verdict.text, proof: squaresProof(r.verdict.text, squares) ?? NO_PROOF.description, squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: mine, thread: LOCAL_THREAD, fen: c.fen, ...(poses ? { skill: 'overvalued-attack' } : {}) });
+    }),
+    computer: 'pictureVerdict',
+    kind: 'verdict',
+    phase: ANY,
+    surfaces: PICTURE_SURFACES,
+  },
+  picturePlan: {
+    // "So the rook lift": the plan is the try that survives the failed ones,
+    // with the computed link that makes it the answer (the bishop on f7 guards
+    // the h-pawn …Rxh5 took after Rxa5).
+    read: (c, fact) => safe(() => {
+      const p = conclusionsOf(c)?.plan;
+      if (!p) return null;
+      const mover: Color = sideToMove(c.fen);
+      const mine = mover === c.student;
+      const key = `picture-plan:${mover}:${p.uci}`;
+      const proof = legalLineProof(c.fen, c.reads?.find((r) => r.moves[0] === p.uci)?.moves ?? [p.uci], lineSeatAt(c.fen, c.student)) ?? NO_PROOF.description;
+      return fact({ key, claims: [key], text: p.text, proof, squares: p.squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: mine, thread: LOCAL_THREAD, fen: c.fen, ...(mine ? { skill: 'overvalued-attack' } : {}) });
+    }),
+    computer: 'picturePlan',
+    kind: 'plan-now',
+    phase: ANY,
+    surfaces: PICTURE_SURFACES,
   },
   planSteps: {
     // The writers' "Bd3 and Qc2, both aimed at h7, then castle" (2026-11-12):

@@ -267,6 +267,10 @@ export const PICTURE_ROLE: Record<ComputerName, PictureRole> = {
   squareChoice: 'try',
   oppositeBishops: 'standing',
   planOfTheBoard: 'plan',
+  // The conclusions sit in the roles they conclude (futures.ts orders the
+  // roles a try's line changes; a conclusion is never one of those).
+  pictureVerdict: 'standing',
+  picturePlan: 'plan',
   planSteps: 'plan',
   evalReading: 'standing',
   compensation: 'standing',

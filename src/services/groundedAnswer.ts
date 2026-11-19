@@ -1662,6 +1662,13 @@ export function assemblePositionAssessment(opts: {
   // WHITE-perspective eval → student POV (flip sign for Black).
   const studentEvalCp = typeof opts.evalCp === 'number' ? (studentColor === 'white' ? opts.evalCp : -opts.evalCp) : null;
   const studentMateIn = typeof opts.mateIn === 'number' ? (studentColor === 'white' ? opts.mateIn : -opts.mateIn) : null;
+  // THE PICTURE'S CONCLUSIONS read off the tempting reads (the student's own
+  // turn only: on theirs the tries are the opponent's moves not yet played).
+  const picture = ((): BoardContexts['pictureVerdict'] | null => {
+    if (!opts.fen || !opts.tempting) return null;
+    try { if (new Chess(opts.fen).turn() !== sc) return null; } catch { return null; }
+    return { fen: opts.fen, student: sc, rating: opts.tempting.rating, reads: opts.tempting.reads, considered: consideredTries(opts.fen), refuted: null, lines: null };
+  })();
 
   if (typeof studentMateIn === 'number' && studentMateIn !== 0) {
     const n = Math.abs(studentMateIn);
@@ -1679,7 +1686,12 @@ export function assemblePositionAssessment(opts: {
     // +263 read "Decisive" here and "clearly better" in the move's own facts
     // on the same board (Danya's article boards, 2026-11-18).
     const band = evalBand(studentEvalCp);
-    if (band === 'level') parts.push(pick(BALANCED, seed));
+    // THE VERDICT READ AFTER THE TRIES (WO-PICTURE-01 P3): where the student's
+    // direct tries fail ("better, but hard to finish them off") the picture's
+    // word is the standing — the band alone would say half of it.
+    const pictureWord = picture ? readBoard('pictureVerdict', picture) : null;
+    if (pictureWord) parts.push(pictureWord.text);
+    else if (band === 'level') parts.push(pick(BALANCED, seed));
     else if (band === 'slightly') parts.push(pick(ahead ? SLIGHT_EDGE : SLIGHT_DEFICIT, seed));
     else if (band === 'clearly') parts.push(pick(ahead ? CLEAR_EDGE : CLEAR_DEFICIT, seed));
     else parts.push(pick(ahead ? winningStems(opts.fen ?? null, sc) : LOSING, seed));
@@ -1835,6 +1847,14 @@ export function assemblePositionAssessment(opts: {
       const t = mine ? readBoard('temptingNow', { fen: opts.fen, student: sc, rating: opts.tempting.rating, reads: opts.tempting.reads, priorMove: null }) : null;
       if (t && separate(t.text)) parts.push(t.text);
     } catch { /* the temptation is a bonus, never a blocker */ }
+  }
+  // THE TRY THAT SURVIVES the failed ones, with what makes it the answer
+  // (WO-PICTURE-01 P3: "so the rook lift").
+  if (picture) {
+    try {
+      const p = readBoard('picturePlan', picture);
+      if (p && separate(p.text)) parts.push(p.text);
+    } catch { /* the plan is a bonus, never a blocker */ }
   }
 
   // THE PLAN, ON DEMAND (David 2026-09-13: "Play with coach needs to on demand
@@ -6800,7 +6820,8 @@ import { findTiedDefenders } from './tiedDefender';
 export type { PositionalTopic } from '../coach/questionIntents';
 import type { PositionalTopic } from '../coach/questionIntents';
 import { unmarked } from '../utils/sanMark';
-import { readBoard, readBoardAll, minorityLever, positionReadKind } from './boardComputers';
+import { readBoard, readBoardAll, minorityLever, positionReadKind, type BoardContexts } from './boardComputers';
+import { consideredTries } from './tryCandidates';
 
 const PIECE_WORD: Record<string, string> = { p: 'pawns', n: 'knights', b: 'bishops', r: 'rooks', q: 'queen', k: 'king' };
 

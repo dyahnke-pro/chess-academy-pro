@@ -33,7 +33,9 @@ import { sayMoveClause } from './spokenMove';
 import { andList } from '../utils/andList';
 import { countWords } from '../utils/countWords';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
-import { readBoard, readBoardAll } from './boardComputers';
+import { readBoard, readBoardAll, readKey } from './boardComputers';
+import { consideredTries } from './tryCandidates';
+import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { theirWantedMoves } from './prophylaxis';
 import { openingWindowOpen } from './moveFundamentals';
 import { readConversion } from './conversionMethod';
@@ -933,10 +935,34 @@ export function planPosed(fen: string, playedUci: string, cpLoss: number | null,
     ...readBoardAll('squareForPiece', { fen, lines: engine, student: me }),
     ...readBoardAll('tradeRelievesCramp', { fen, lines: engine, student: me }),
   ].filter((f) => f.seat === 'student');
-  if (plans.length === 0) return [];
   const starts = playedUci === lines[0].moves[0];
-  return starts || cpLoss >= PLAN_MISSED_CP ? [{ tag: 'no-plan', posedImportance: PLAN_POSED }] : [];
+  const out: Array<{ tag: MisconceptionTagId; posedImportance: number }> = plans.length > 0 && (starts || cpLoss >= PLAN_MISSED_CP) ? [{ tag: 'no-plan', posedImportance: PLAN_POSED }] : [];
+  // THE PICTURE, BOTH WAYS (WO-PICTURE-01 P3): where the direct tries tempt
+  // and fail (`pictureVerdict`) and a slower move survives them
+  // (`picturePlan`), the board asks for patience. The survivor played holds
+  // it; one of the failed tries played, at a cost, misses it. Any other move
+  // answers a different question.
+  const picture = picturePosed(fen, me, playedUci, cpLoss, lines);
+  if (picture) out.push(picture);
+  return out;
 }
+
+/** The overreach the picture poses (`overvalued-attack`): held by the
+ *  survivor, missed by a failed direct try that cost the student. Each
+ *  MultiPV line is a read of its first move. */
+function picturePosed(fen: string, me: 'w' | 'b', playedUci: string, cpLoss: number, lines: ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate: number | null }>): { tag: MisconceptionTagId; posedImportance: number } | null {
+  if (lines.length < 2) return null;
+  const analysis = lines.map((l, i) => ({ rank: i + 1, evaluation: l.evaluation, mate: l.mate, moves: [...l.moves], depth: 0 }));
+  const ctx = { fen, student: me, rating: DEFAULT_STUDENT_RATING, reads: lines, considered: consideredTries(fen), refuted: null, lines: analysis };
+  const verdict = readBoard('pictureVerdict', ctx);
+  const plan = readBoard('picturePlan', ctx);
+  if (!verdict?.skill || !plan?.skill) return null;
+  const failed = readKey(verdict).split(':')[3]?.split(',') ?? [];
+  const held = playedUci === lines[0].moves[0];
+  const missed = failed.includes(playedUci) && cpLoss >= PLAN_MISSED_CP;
+  return held || missed ? { tag: verdict.skill as MisconceptionTagId, posedImportance: PICTURE_POSED } : null;
+}
+const PICTURE_POSED = 65;
 /** A move that cost this much skipped the plan; under it, a clean move off the plan says nothing. */
 const PLAN_MISSED_CP = 50;
 const PLAN_POSED = 65;

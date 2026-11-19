@@ -248,6 +248,8 @@ export const THINK_STEP: Record<ComputerName, ThinkAnswer> = {
   oppositeBishops: 'assess',
   planSteps: 'assess',
   planOfTheBoard: 'assess',
+  pictureVerdict: 'assess',
+  picturePlan: 'candidates',
   evalReading: 'assess',
   compensation: 'assess',
   pawnBreak: 'assess',
