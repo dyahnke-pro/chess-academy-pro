@@ -19,6 +19,8 @@ interface Case {
   held: string;
   /** The move that misses it (filed under the skill it was about). */
   missed: string;
+  /** The engine's line from the board (UCI), where the read needs it. */
+  line?: readonly string[];
 }
 
 const CASES: Case[] = [
@@ -33,6 +35,13 @@ const CASES: Case[] = [
   // Kg1 with only h2 left in front of it, their rook and queen bearing in.
   { computer: 'detectKingExposure', tag: 'weakened-king-safety', fen: '5rk1/8/8/8/7q/8/7P/5RK1 w - - 0 1', held: 'Kg2', missed: 'Rf2' },
   // Qxb7 is met by Nc5 and the queen has no square.
+  // David's game: their queen on f6 is trapped (…Qg6 Nf4 Qxd3 cxd3), seen
+  // from White's seat the move before — here Black to move must get out.
+  { computer: 'findTrappedPiece', tag: 'hung-material', fen: 'r1b1r1k1/1ppn1ppp/p2npq2/3p2B1/3P2PP/2PBPP2/P1P1N1Q1/2KR3R b - - 0 13', held: 'Qg6', missed: 'h6', line: ['f6g6', 'e2f4', 'g6d3', 'c2d3'] },
+  // The same board with White to move: their trapped queen is the student's to win.
+  { computer: 'findTrappedPiece', tag: 'missed-your-trapped-piece', fen: 'r1b1r1k1/1ppn1ppp/p2npq2/3p2B1/3P2PP/2PBPP2/P1P1N1Q1/2KR3R w - - 0 13', held: 'Bxf6', missed: 'a3', line: ['g5f6'] },
+  // A rook up, nothing left but the win to convert.
+  { computer: 'readConversion', tag: 'botched-conversion', fen: '6k1/8/8/8/8/8/5PPP/R5K1 w - - 0 40', held: 'Kf1', missed: 'Ra8+' },
   { computer: 'findQueenGrabTraps', tag: 'poisoned-pawn', fen: 'r2q1r1k/pppnn1p1/3p3p/1P1Qp3/8/P1N2N1P/5PP1/R1B1R1K1 w - - 1 17', held: 'Qb3', missed: 'Qxb7' },
 ];
 
@@ -45,7 +54,7 @@ function row(c: Case, outcome: 'held' | 'broken', i: number): CapabilityEvidence
 
 describe('the registry reads pose their skill to the record (both ways)', () => {
   it.each(CASES)('$computer teaches the board and carries its skill ($tag)', (c) => {
-    const f = registryPosedFacts(c.fen, c.fen.split(' ')[1] as 'w' | 'b').find((x) => x.computer === c.computer);
+    const f = registryPosedFacts(c.fen, c.fen.split(' ')[1] as 'w' | 'b', c.line ?? []).find((x) => x.computer === c.computer && x.skill === c.tag);
     expect(f, c.computer).toBeDefined();
     expect(f!.skill).toBe(c.tag);
   });
@@ -53,7 +62,7 @@ describe('the registry reads pose their skill to the record (both ways)', () => 
   it.each(CASES)('$computer: the board posed $tag — held on a clean move, broken on the miss', (c) => {
     // The moves are legal on the board (the test's own check).
     for (const san of [c.held, c.missed]) expect(new Chess(c.fen).move(san), san).toBeTruthy();
-    const alsoPosed = positionPosed(c.fen, {});
+    const alsoPosed = positionPosed(c.fen, c.line ? { bestLine: c.line } : {});
     expect(alsoPosed.map((p) => p.tag)).toContain(c.tag);
     const held = capabilityOutcomes({ fenBefore: c.fen, playedSan: c.held, moverColor: side(c.fen), cpLoss: 0, alsoPosed });
     expect(held.find((r) => r.tag === c.tag)?.outcome).toBe('held');
@@ -70,6 +79,6 @@ describe('the registry reads pose their skill to the record (both ways)', () => 
   });
 
   it('a quiet opening board poses none of them', () => {
-    expect(registryPosedFacts(new Chess().fen(), 'w')).toEqual([]);
+    expect(registryPosedFacts(new Chess().fen(), 'w', [])).toEqual([]);
   });
 });

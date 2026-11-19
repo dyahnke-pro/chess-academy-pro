@@ -33,7 +33,7 @@ import { sayMoveClause } from './spokenMove';
 import { andList } from '../utils/andList';
 import { countWords } from '../utils/countWords';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
-import { readBoard } from './boardComputers';
+import { readBoard, readBoardAll } from './boardComputers';
 import { openingWindowOpen } from './moveFundamentals';
 import { readConversion } from './conversionMethod';
 import { minorsAtHome } from './development';
@@ -798,13 +798,14 @@ export function positionPosed(
     // chance on the board the student moves on is the same read that names
     // the skill the board asked for. The fact carries its skill
     // (`CoachFact.skill`), so teaching and the record speak one vocabulary.
-    for (const f of registryPosedFacts(fen, me)) if (f.skill) add(f.skill as MisconceptionTagId, REGISTRY_POSED_WEIGHT[f.computer as RegistryPosedComputer] ?? 60);
+    for (const f of registryPosedFacts(fen, me, opts.bestLine ?? [])) if (f.skill) add(f.skill as MisconceptionTagId, REGISTRY_POSED_WEIGHT[f.computer as RegistryPosedComputer] ?? 60);
   } catch { /* an unreadable board posed nothing */ }
   return out;
 }
 
 /** The registry computers whose read poses a question to the side to move. */
-type RegistryPosedComputer = 'detectLatentFork' | 'detectLatentDanger' | 'detectTradeCreatesPin' | 'detectCentralKingDanger' | 'detectKingExposure' | 'findQueenGrabTraps';
+type RegistryPosedComputer = 'detectLatentFork' | 'detectLatentDanger' | 'detectTradeCreatesPin' | 'detectCentralKingDanger' | 'detectKingExposure' | 'findQueenGrabTraps'
+  | 'findTrappedPiece' | 'readConversion';
 
 /** How sharply each posed question is asked, on the heat map's scale. */
 const REGISTRY_POSED_WEIGHT: Record<RegistryPosedComputer, number> = {
@@ -814,22 +815,33 @@ const REGISTRY_POSED_WEIGHT: Record<RegistryPosedComputer, number> = {
   detectCentralKingDanger: 70,
   detectKingExposure: 65,
   findQueenGrabTraps: 80,
+  findTrappedPiece: 80,
+  readConversion: 65,
 };
 
 /** The registry's reads of the board the student moves on, each fact with
  *  the skill it poses (`skill`) — the knight fork two moves away (theirs or
  *  yours), the pin in waiting on your king or queen, the trade that walks into
  *  a pin, your king in the centre with the file opening, your king's broken
- *  shelter, the pawn that traps the queen that takes it. */
-export function registryPosedFacts(fen: string, me: 'w' | 'b'): Array<{ computer: string; skill?: string }> {
+ *  shelter, the pawn that traps the queen that takes it, a trapped piece
+ *  (theirs to win, yours to save), the won game to convert. `bestLineUci`:
+ *  the engine's line from the board (UCI), [] when none is known. */
+export function registryPosedFacts(fen: string, me: 'w' | 'b', bestLineUci: readonly string[]): Array<{ computer: string; skill?: string }> {
   return [
-    readBoard('latentFork', { fen, student: me }),
-    readBoard('latentDanger', { fen, student: me }),
-    readBoard('tradeDanger', { fen, student: me }),
-    readBoard('centralKingDanger', { fen, student: me, namesMoves: false }),
-    readBoard('kingExposure', { fen, side: me, student: me, owner: false }),
-    readBoard('queenGrabTrap', { fen }),
-  ].filter((f): f is NonNullable<typeof f> => f !== null);
+    ...readBoardAll('latentFork', { fen, student: me }),
+    ...readBoardAll('latentDanger', { fen, student: me }),
+    ...readBoardAll('tradeDanger', { fen, student: me }),
+    ...readBoardAll('centralKingDanger', { fen, student: me, namesMoves: false }),
+    ...readBoardAll('kingExposure', { fen, side: me, student: me, owner: false }),
+    ...readBoardAll('queenGrabTrap', { fen }),
+    // Their piece with no square to win, or yours to get out cheaply — said
+    // only where the engine's line takes it (no line, no claim).
+    ...readBoardAll('trappedPiece', { fen, student: me, lineUci: bestLineUci }),
+    // The won game to convert without throwing it back. (An opportunity a
+    // move may take or leave — the passer to push, the worst piece, the rook
+    // for the seventh — is not read here: a clean move is no answer to it.)
+    ...readBoardAll('conversion', { fen, student: me }),
+  ];
 }
 
 // ── THE FULL SPEED-RUN READ (catalogue A/B/C) ────────────────────────────────

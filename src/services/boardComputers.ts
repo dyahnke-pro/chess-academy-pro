@@ -2662,12 +2662,12 @@ export const BOARD_COMPUTERS = {
       const c = readConversion(fen, student);
       if (!c) return null;
       return fact({ key: `${c.step}|${c.passer ?? ''}`, claims: [`convert:${c.step}`], text: c.text, proof: NO_PROOF.description, squares: c.passer ? [c.passer] : [], stakes: null,
-        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen, skill: 'botched-conversion' });
     }),
     computer: 'readConversion',
     kind: 'convert',
     phase: ANY,
-    surfaces: LIVE_READ,
+    surfaces: { ...LIVE_READ, weaknesses: { wired: 'services/moveInsight.ts' } },
   },
 
   opponentIntent: {
@@ -4110,7 +4110,7 @@ export const BOARD_COMPUTERS = {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
       learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_READ,
-      weaknesses: { not: 'a reading of the board, no question of the student\'s posed' },
+      weaknesses: { not: 'an opportunity a move may take or leave without a fault: a clean move is no answer to it, so held cannot be read off the cost — the record needs the played move to say whether it was taken' },
     },
   },
   badBishop: {
@@ -4189,7 +4189,7 @@ export const BOARD_COMPUTERS = {
     computer: 'outsidePasserDecoy',
     kind: 'technique',
     phase: ANY,
-    surfaces: walkSurfaces(),
+    surfaces: { ...walkSurfaces(), weaknesses: { not: 'an opportunity a move may take or leave without a fault: a clean move is no answer to it, so held cannot be read off the cost — the record needs the played move to say whether it was taken' } },
   },
   zugzwangAt: {
     // The tablebase read is fetched by the surface (it is a request); its
@@ -5289,14 +5289,14 @@ export const BOARD_COMPUTERS = {
         const text = `Their ${theirs.piece} on ${theirs.square} is trapped — attacked by the ${theirs.attackerPiece} on ${theirs.attackerSquare}, and every escape square is covered. It's coming off the board.`;
         const squares = [theirs.square, theirs.attackerSquare];
         out.push(fact({ key: `trapped:${theirs.square}`, claims: [`trapped:${theirs.square}`], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: exchangeStakes(fen, [theirs.square]),
-          seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen }));
+          seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen, skill: 'missed-your-trapped-piece' }));
       }
       const mine = findTrappedPiece(fen, student, lineUci);
       if (mine) {
         const text = `Careful — your ${mine.piece} on ${mine.square} is trapped: attacked by the ${mine.attackerPiece} on ${mine.attackerSquare} with no safe square. Look for the cheapest way out.`;
         const squares = [mine.square, mine.attackerSquare];
         out.push(fact({ key: `trapped:${mine.square}`, claims: [`trapped:${mine.square}`], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: exchangeStakes(fen, [mine.square]),
-          seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen }));
+          seat: 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen, skill: 'hung-material' }));
       }
       return out.length ? out : null;
     }),
@@ -5307,7 +5307,7 @@ export const BOARD_COMPUTERS = {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
       learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_READ,
-      weaknesses: { not: 'a reading of the board — no question of the student\'s posed' },
+      weaknesses: { wired: 'services/moveInsight.ts' },
     },
   },
   worstPiece: {
@@ -5325,7 +5325,7 @@ export const BOARD_COMPUTERS = {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
       learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_READ,
-      weaknesses: { not: 'a reading of the board — no question of the student\'s posed' },
+      weaknesses: { not: 'an opportunity a move may take or leave without a fault: a clean move is no answer to it, so held cannot be read off the cost — the record needs the played move to say whether it was taken' },
     },
   },
   passerPush: {
@@ -5345,7 +5345,7 @@ export const BOARD_COMPUTERS = {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
       learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_READ,
-      weaknesses: { not: 'a reading of the board — no question of the student\'s posed' },
+      weaknesses: { not: 'an opportunity a move may take or leave without a fault: a clean move is no answer to it, so held cannot be read off the cost — the record needs the played move to say whether it was taken' },
     },
   },
   minority: {
