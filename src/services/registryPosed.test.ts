@@ -58,6 +58,17 @@ const CASES: Case[] = [
   { computer: 'kingInOpen', tag: 'weakened-king-safety', fen: '3qk3/8/8/8/8/8/3P4/R3K2R w - - 0 30', held: 'Kf2', missed: 'Ra2' },
   // Their two rooks on your second rank; your rook on a8 holds the back rank, and Ra1+ lets it go.
   { computer: 'seventhRankMate', tag: 'missed-opponents-threat', fen: 'r4k2/6RR/8/8/8/8/8/6K1 b - - 0 1', held: 'Ke8', missed: 'Ra1+' },
+  // Danya, how-to-avoid-blunders-part-1#4: no queens, and …Nxf4 is mate (yours), or the mate they threaten.
+  { computer: 'queenlessMate', tag: 'missed-your-mate', fen: '2r5/4p3/3p1npk/3n2N1/5P1N/1P1r2PK/4R2P/4R3 b - - 0 1', held: 'Nxf4', missed: 'e5' },
+  { computer: 'queenlessMate', tag: 'missed-their-mate', fen: '2r5/4p3/3p1npk/3n2N1/5P1N/1P1r2PK/4R2P/4R3 w - - 0 1', held: 'Kg2', missed: 'Re6' },
+  // The study: Bh8, the one bishop square out of the king's way to g7.
+  { computer: 'selfBlock', tag: 'passive-king-endgame', fen: 'k7/8/4p3/7P/8/3P4/1Bb4P/K7 w - - 0 1', held: 'Bh8', missed: 'Bd4', line: ["b2h8", "c2d3", "a1b2", "d3f5", "b2c3", "a8b7", "c3d4", "b7c6", "d4e5", "c6d7"] },
+  // Ribli: …Nxf3+ Bxf3 Qh4 threatens …Qxh2 mate, and the parry costs a pawn.
+  { computer: 'mateThreatLever', tag: 'missed-tactic', fen: 'r1bq1rk1/pp3ppp/3b4/3pn3/8/1P2PN2/P1Q1BPPP/R1B2RK1 b - - 0 12', held: 'Nxf3+', missed: 'Qf6', line: ["e5f3", "e2f3", "d8h4", "h2h3", "c8h3", "f1d1", "d6h2", "g1f1", "a8c8", "c2d3"] },
+  // Nc7+ … Ne6+: queen and knight leave the king on f8 one square.
+  { computer: 'queenKnightNet', tag: 'missed-tactic', fen: '3rk1r1/3q1p1R/6p1/1Np1b3/Q7/1P2P3/P3K3/5R2 w - - 0 32', held: 'Nc7+', missed: 'Nc3', line: ["b5c7", "e8f8", "h7f7", "d7f7", "c7e6", "f8e7", "a4a7", "e7e6", "a7f7", "e6d6"] },
+  // Pantsulaia: the rook on d2 slides to g2 and guards g7 (…Rb2+ first).
+  { computer: 'lateralRookDefence', tag: 'hung-material', fen: '6k1/pp3Rp1/2p1p2P/4P3/8/PP6/2rr2P1/1K3R2 b - - 0 33', held: 'Rb2+', missed: 'a5', line: ["c2b2", "b1a1", "b2a2", "a1b1", "d2b2", "b1c1", "b2g2", "c1b1", "a2b2", "b1c1"] },
   { computer: 'findQueenGrabTraps', tag: 'poisoned-pawn', fen: 'r2q1r1k/pppnn1p1/3p3p/1P1Qp3/8/P1N2N1P/5PP1/R1B1R1K1 w - - 1 17', held: 'Qb3', missed: 'Qxb7' },
 ];
 

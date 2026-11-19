@@ -1399,6 +1399,7 @@ export function computeMoveFacets(
       // come now and the equal move that asks questions compare top lines the
       // record does not keep.)
       add(readBoardAll('zugzwangIfPassed', { fen: fenAfter, student: studentColorWB })[0]);
+      add(readBoardAll('queenlessMate', { fen: fenAfter, student: studentColorWB })[0]);
       add(readBoardAll('theirWorstPiece', { fen: fenAfter, student: studentColorWB, bestLine: ctx.playedLineUci.length ? ctx.playedLineUci : null })[0]);
       add(readBoardAll('seventhRankMate', { fen: fenAfter, lines: null, student: studentColorWB })[0]);
       add(readBoardAll('pieceTempo', { fen: fenAfter, lines: null, student: studentColorWB })[0]);
@@ -1411,6 +1412,14 @@ export function computeMoveFacets(
         add(readBoardAll('coordinationGap', { fen: fenAfter, lines, student: studentColorWB })[0]);
         add(readBoardAll('endgameVerdict', { fen: fenAfter, lines, student: studentColorWB })[0]);
         add(readBoardAll('defenderInTime', { fen: fenAfter, lines, student: studentColorWB })[0]);
+        // Batch 3 (2026-11-19), on the record's one line.
+        add(readBoardAll('secondFront', { fen: fenAfter, lines, student: studentColorWB })[0]);
+        add(readBoardAll('lateralRookDefence', { fen: fenAfter, lines, student: studentColorWB })[0]);
+        add(readBoardAll('squareForPiece', { fen: fenAfter, lines, student: studentColorWB })[0]);
+        add(readBoardAll('tradeRelievesCramp', { fen: fenAfter, lines, student: studentColorWB })[0]);
+        add(readBoardAll('queenKnightNet', { fen: fenAfter, lines, student: studentColorWB })[0]);
+        add(readBoardAll('selfBlock', { fen: fenAfter, lines, student: studentColorWB })[0]);
+        add(readBoardAll('mateThreatLever', { fen: fenAfter, lines, student: studentColorWB })[0]);
       }
       add(readBoardAll('inaccessibleHole', { fenBefore, san, student: studentColorWB })[0]);
       // Both seats, worded from the student's: the box shrunk, the promotion
