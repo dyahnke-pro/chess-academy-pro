@@ -81,3 +81,18 @@ describe('the reasons reach the surfaces', () => {
     expect(a.keySquares).toContain('d7');
   });
 });
+
+describe('verdictWithReasons — space on the one rule (ownsMoreSpace)', () => {
+  it('knights on the rim #2: a territory of 6 to 3 is the reason White stands better', () => {
+    // Danya: "White has a massive space advantage". The read kept its own
+    // four-square margin and said "slightly better" with no reason.
+    const fen = '2kr3r/1b1nqpn1/1p1p2p1/p1pPp2p/P1P1P2P/1NPBBPP1/3Q4/2KR3R w - - 0 20';
+    const v = verdictWithReasons({ fen, evalCp: 105, mate: null, lines: lines('c1b1 b7a6 b3a1 d8g8 a1c2 g7e8 b1a1 f7f6 d1b1 g6g5'), student: 'w', lastMove: null, said: NONE });
+    expect(v?.reasons.map((r) => r.kind)).toContain('space');
+    expect(v?.text).toMatch(/give you more space/);
+  });
+  it('no space reason when the territory differs by a single square (positional combinations #0)', () => {
+    const fen = 'r1b1r1k1/1pqn1ppp/p1pb1n2/5N2/2B1P3/2N4P/PPQ2PP1/R1BR2K1 b - - 0 14';
+    expect(boardReasons(fen, 'b', lines('d6h2 g1h1 d7b6 c4f1 c8f5 e4f5 h2f4 c1f4 c7f4 g2g3'), null).some((r) => r.kind === 'space')).toBe(false);
+  });
+});

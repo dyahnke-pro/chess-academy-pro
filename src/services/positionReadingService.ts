@@ -1881,8 +1881,12 @@ interface SpaceInfo { white: number; black: number }
 /** "MORE SPACE", ONE RULE (claim harvest 2026-10-17: "You own more space" was
  *  read off a pawn-hit count (since deleted) while the weighing read territory,
  *  so the coach told White it owned more space with Black's pawns on e5, g6,
- *  h5 and f3). A side owns more space when its territory leads by the margin. */
-const MORE_SPACE_MARGIN = 2;
+ *  h5 and f3). A side owns more space when its territory leads by the margin.
+ *  Three squares, not two (2026-11-19, the verdict joining the one rule): a
+ *  lone pawn on the fourth rank claims exactly two squares behind it, so at
+ *  two 1.e4 alone was "more space"; at three it takes a pawn on the fifth or
+ *  two on the fourth — Danya's space boards lead by three or more. */
+const MORE_SPACE_MARGIN = 3;
 export function ownsMoreSpace(fen: string, side: 'w' | 'b'): boolean {
   const sp = computeTerritory(fen);
   return side === 'w' ? sp.white >= sp.black + MORE_SPACE_MARGIN : sp.black >= sp.white + MORE_SPACE_MARGIN;
