@@ -14,5 +14,8 @@ describe('forcingBestDecides', () => {
   it('negative control: a quiet best move never decides, nor a capture level with the rest', () => {
     expect(forcingBestDecides('r1bq1rk1/pp1n1ppp/2n1p3/3pP3/3P4/P1PB1N2/5PPP/R1BQ1RK1 w - - 0 1', [L(414, 'f1e1'), L(100, 'f3g5')])).toBe(false);
     expect(forcingBestDecides('r1bq1rk1/pp1n1ppp/2n1p3/3pP3/3P4/P1PB1N2/5PPP/R1BQ1RK1 w - - 0 1', [L(40, 'd3h7'), L(30, 'f3g5')])).toBe(false);
+    // An only move that holds the balance: Rxe5 saves the queen at +0.55,
+    // everything else is -2.00 — a sharp gap, but nothing decided.
+    expect(forcingBestDecides('r1bqrnk1/5ppp/p3p3/1p1pn1bN/3p2Q1/2PB4/PP3PPP/R1B1R1K1 w - - 0 16', [L(55, 'e1e5'), L(-200, 'g4g3')])).toBe(false);
   });
 });

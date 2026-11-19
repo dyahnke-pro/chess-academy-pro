@@ -1966,7 +1966,9 @@ export function threatTheyMake(fen: string, student: 'w' | 'b', md: MustDefend, 
 
 /** The engine's best move is FORCING and DECIDES: a mate for the side to
  *  move, or a check or capture whose line stands a sharp gap above the
- *  second line (`sharpGap`, the one sharpness bar). */
+ *  second line (`sharpGap`, the one sharpness bar) AND leaves the mover
+ *  clearly better — an only move that merely holds the balance decides
+ *  nothing. */
 export function forcingBestDecides(fen: string, lines: ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate?: number | null }>): boolean {
   const best = lines[0];
   const u = best?.moves[0];
@@ -1985,7 +1987,12 @@ export function forcingBestDecides(fen: string, lines: ReadonlyArray<{ moves: re
   // the point (the chess investigator #1: Nf6+ +4.03 against f4 +2.75).
   const raw = bestMoveGap(best.evaluation, second.evaluation);
   const gap = sharpGap(best.evaluation, second.evaluation);
-  return (gap !== null && gap >= SHARP_GAP_CP) || (best.evaluation * sign >= DECISIVE_CP && raw >= DECISIVE_LEAD_CP);
+  // A forcing move that only HOLDS is not a decision: a capture that saves
+  // your queen and leaves the game level (the Colle's Rxe5 at +0.55 over
+  // -2.00) is an only move, and the plan after it still needs saying. The
+  // sharp gap decides only when the line leaves the mover clearly better.
+  const moverCp = best.evaluation * sign;
+  return (gap !== null && gap >= SHARP_GAP_CP && moverCp >= SHARP_GAP_CP) || (moverCp >= DECISIVE_CP && raw >= DECISIVE_LEAD_CP);
 }
 const DECISIVE_CP = 300;
 const DECISIVE_LEAD_CP = 50;

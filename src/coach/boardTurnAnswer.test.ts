@@ -72,7 +72,10 @@ describe('plan and tactics questions are answered from the one read', () => {
     const a = await answerBoardTurn(ask('plan'), { fen: COLLE, history: [], studentColor: 'white' });
     expect(a).toMatch(/^Their knight on e5 attacks your queen on g4, and nothing defends it — and you can take the attacker without losing material\./);
     expect(a).toMatch(/(?:The plan|Here's the plan|The plan from here): break with a4 to hit their pawn on b5\./);
-    expect(a).toMatch(/Your knight on h5 is your problem piece/);
+    // The knight on h5 bears on g7 beside their king: a rim knight doing its
+    // job is no problem piece (rimKnightWorks, Danya's article boards
+    // 2026-11-18), so it is never called one.
+    expect(a).not.toMatch(/knight on h5 is your problem piece/);
   }, 60_000);
   it('"any tactics?" — only what is forcing on the board', async () => {
     expect(await answerBoardTurn(ask('tactics'), { fen: COLLE, history: [], studentColor: 'white' }))
