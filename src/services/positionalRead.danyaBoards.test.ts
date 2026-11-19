@@ -87,3 +87,19 @@ describe('positionalRead — three isolated pawns are counted, not listed', () =
     expect(o?.squares?.length).toBe(3);
   });
 });
+
+describe('positionalRead — the best-placed piece is the one doing the most', () => {
+  const best = (fen: string, student: 'white' | 'black', side: 'student' | 'opponent' = 'student'): string | undefined =>
+    readPosition(fen, student).find((o) => o.side === side && o.kind === 'piece' && /well placed|best-placed/.test(o.text))?.text;
+  it('weak squares, who cares #5: their knight entrenched on e5, not the rook behind it', () => {
+    expect(best('r3rq2/1b3pbk/p2p2p1/1pnPn1Bp/P1p1PR2/2P3NP/1PBQ2PN/5RK1 w - - 0 27', 'white', 'opponent')).toMatch(/Their knight on e5 is well placed/);
+  });
+  it('an open file beats a half-open one when no piece has an outpost', () => {
+    // Queen, the supporting actress #2: the rook on h1 owns the open h-file;
+    // the d1 rook's half-open d-file came first in board order.
+    expect(best('r1br1knQ/2q2pp1/p2bp3/1p1pn3/5B2/1NN2P2/PPP5/2KR1B1R w - - 0 23', 'white')).toMatch(/rook on h1 .*open h-file/);
+  });
+  it('quiet when no piece of the side is well placed (the opening position)', () => {
+    expect(best('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'white')).toBeUndefined();
+  });
+});

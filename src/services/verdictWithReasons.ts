@@ -29,7 +29,7 @@ import { initiativeRead, initiativeLine, type Initiative, type InitiativeLine } 
 import { settledBalance, quietBalance, type LastMove } from './material';
 import { kingCover, countKingAttack } from './kingSafety';
 import {
-  bishopPair, computeTerritory, findBlockades, findPassedPawns, findWeakPawns, pressureCount,
+  bishopPair, ownsMoreSpace, findBlockades, findPassedPawns, findWeakPawns, pressureCount,
 } from './positionReadingService';
 import { lockedPawnPairs } from './boardStructure';
 import { minorMatchupOn } from './minorMatchup';
@@ -209,9 +209,15 @@ export function boardReasons(fen: string, student: Color, lines: readonly Initia
   }
 
   // ── SPACE ── (territory behind the centre pawns, the engine's own term)
-  const t = computeTerritory(fen);
-  if (Math.abs(t.white - t.black) >= 4 && board.board().flat().filter((p) => p && p.type !== 'p' && p.type !== 'k').length >= 6) {
-    const x: Color = t.white > t.black ? 'w' : 'b';
+  // THE ONE RULE for "more space" (`ownsMoreSpace`): this read kept its own
+  // margin of four squares while the chat, the questions and the
+  // deliberation said "more space" at two, so a board the coach calls
+  // White's space never gave it as the reason White stands better (Danya,
+  // knights on the rim #2: "White has a massive space advantage", a
+  // territory of 6 to 3, and the verdict said "slightly better" bare).
+  const spaceSide: Color | null = ownsMoreSpace(fen, 'w') ? 'w' : ownsMoreSpace(fen, 'b') ? 'b' : null;
+  if (spaceSide && board.board().flat().filter((p) => p && p.type !== 'p' && p.type !== 'k').length >= 6) {
+    const x: Color = spaceSide;
     const pawns = board.findPiece({ type: 'p', color: x })
       .filter((sq) => 'cdef'.includes(sq[0]) && (x === 'w' ? Number(sq[1]) >= 4 : Number(sq[1]) <= 5))
       .sort();

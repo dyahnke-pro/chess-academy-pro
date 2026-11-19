@@ -51,6 +51,14 @@ import {
   type PieceQualityKind,
 } from './positionReadingService';
 
+/** Which good placement says the most about a piece, best first: a knight
+ *  on an outpost no pawn can chase is a fixture of the position; a rook on
+ *  the seventh bites on pawns; an open file beats a half-open one. The bad
+ *  kinds are never ranked here (only good notes are sorted). */
+const GOOD_PIECE_RANK: Record<PieceQualityKind, number> = {
+  'outpost': 0, 'seventh-rank': 1, 'open-file': 2, 'semi-open-file': 3, 'bad-bishop': 9, 'rim-knight': 9,
+};
+
 /** What makes a bad piece bad, said after its name in players' words ("Their
  *  bishop is their problem piece, hemmed in behind its own pawns") — never the
  *  note's label with its reason in brackets read aloud. */
@@ -345,7 +353,11 @@ function observationsFor(
   }
 
   const quality = findPieceQuality(fen);
-  const outpost = quality.find((q) => q.color === color && q.quality === 'good');
+  // THE BEST-PLACED PIECE IS THE ONE DOING THE MOST, never the first one the
+  // scan reaches (Danya, weak squares who cares #5: "Black's knight is
+  // entrenched on the ideal e5 square" — the read named the rook on e8 behind
+  // it, a8 → h1 order putting the rook first).
+  const outpost = quality.filter((q) => q.color === color && q.quality === 'good').sort((a, b) => GOOD_PIECE_RANK[a.kind] - GOOD_PIECE_RANK[b.kind])[0];
   if (outpost) {
     out.push({
       key: goodPieceIdeaKey(side, outpost.piece, outpost.kind, outpost.square), side, kind: 'piece', rank: rank('piece'),
