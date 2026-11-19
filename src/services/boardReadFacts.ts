@@ -32,6 +32,11 @@ import type { ReadFact } from './readDecider';
 import type { AnalysisLine, StockfishAnalysis } from '../types';
 import type { IntroTense } from '../utils/moveIntro';
 import type { ImportanceTier } from './narrationImportance';
+import { writerFor, momentPosture, plainThreatsSeenFor } from './writerRegister';
+
+/** A read the student asked for ("read this position"): the asked answer's
+ *  writer settings (`writerRegister`). */
+const ASKED_WRITER = writerFor('chat');
 
 /** One engine read of a board: its lines, best first. Null when unread. */
 export type BoardReader = (fen: string) => Promise<readonly AnalysisLine[] | null>;
@@ -93,7 +98,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
   if (!top) return { facts, tier: null };
 
   const pf = await computePositionFacts({
-    theory: i.theory, namesPlayedMove: true, boardComputers: 'composer', posture: 'asked', namesBestMove: !i.withhold,
+    theory: i.theory, namesPlayedMove: ASKED_WRITER.namesPlayedMove, boardComputers: 'composer', posture: momentPosture('chat'), namesBestMove: !i.withhold,
     fen: i.fen, moverColor: side, studentColor: i.studentColor, rating: i.rating, analysis: asAnalysis(i.before), history: [...i.history],
     studentNeedContext: i.studentNeedContext, ...(i.extra ?? {}),
   });
@@ -205,7 +210,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     const after = await i.read(fenB).catch(() => null);
     if (after) {
       for (const f of moveThoughtFacts({
-        fenBefore: i.fen, san, moverIsStudent: mine, namesPlayedMove: true, plainThreatsSeen: false, tense: i.tense, theory: false, story: false,
+        fenBefore: i.fen, san, moverIsStudent: mine, namesPlayedMove: ASKED_WRITER.namesPlayedMove, plainThreatsSeen: plainThreatsSeenFor(ASKED_WRITER, false), tense: i.tense, theory: false, story: false,
         prev: NO_PREV_CAPTURE, line: top.moves, history: [], theirLast: null, phrases: null, reads: { before: [...i.before], after: [...after], passBefore: [], passAfter: [] }, costCp: 0,
       })) {
         // A puzzle still being solved keeps only who stands better: what the

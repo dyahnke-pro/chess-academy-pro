@@ -116,6 +116,10 @@ import type { GamePly } from './gameEndReads';
 import { positionOf } from '../utils/samePosition';
 import { yieldToScreen } from '../utils/yieldToScreen';
 import { emitEverything, everythingListening } from './everythingEvents';
+import { writerFor, momentPosture, plainThreatsSeenFor, treeTense } from './writerRegister';
+
+/** Review's writer settings (`writerRegister`). */
+const REVIEW_WRITER = writerFor('review');
 
 // ─── Bad Habit Detection ────────────────────────────────────────────────────
 
@@ -424,7 +428,7 @@ export function recapSecondPerson(r: {
  *  where they belong. The book's statistics — the usual reply, how deep the
  *  theory runs, top-level games — stay behind the Theory button (the opening
  *  story's `theory` ground, still off in the walk). */
-const REVIEW_WALK_TEACHES_THEORY = true;
+const REVIEW_WALK_TEACHES_THEORY = REVIEW_WRITER.theory;
 
 export function segmentLitSquares(seg: Pick<ReviewMoveSegment, 'narration' | 'keySquares' | 'fenAfter' | 'fenBefore'>): string[] {
   const out = new Set<string>(seg.keySquares ?? []);
@@ -2197,7 +2201,7 @@ function* reviewSegmentSteps(
         || (swingCp != null && Math.abs(swingCp) >= 150);
       return buildReviewMoveBriefing({
         fenBefore: fenPair.fenBefore, san: m.san, prev: prevCap, phrases: reviewPhrases,
-        plainThreatsSeen: seesPlainThreats(reviewRecord.plainThreats),
+        plainThreatsSeen: plainThreatsSeenFor(REVIEW_WRITER, seesPlainThreats(reviewRecord.plainThreats)),
         moverIsStudent, studentSwingCp: swingCp, criticalMoment: critical,
         // The eval verdict + why (why the position is what it is) and the delta
         // (how this move moved it) — the reasons David wants to hear.
@@ -2450,7 +2454,7 @@ function* reviewSegmentSteps(
       if (moverColor === playerColor && studentColorWB && typeof m.preMoveEval === 'number' && typeof m.evaluation === 'number') {
         const sign = moverColor === 'white' ? 1 : -1;
         const bothCp = Math.abs(m.preMoveEval) < 5000 && Math.abs(m.evaluation) < 5000;
-        const hints = studentMoveTeaching({ theory: REVIEW_WALK_TEACHES_THEORY, namesStudentMoves: true,
+        const hints = studentMoveTeaching({ theory: REVIEW_WALK_TEACHES_THEORY, namesStudentMoves: REVIEW_WRITER.namesStudentMoves,
           fenBefore: fenPair.fenBefore,
           san: m.san,
           history: sansForRun.slice(0, m.ply),
@@ -2527,7 +2531,7 @@ function* reviewSegmentSteps(
       // the walk's after-the-door ledger; sized by the student's own record.
       if (studentColorWB && storyAll !== null) {
         let storyNames: string | null = null;
-        const reads = readBoardAll('openingStory', { history: sansForRun.slice(0, m.ply), fen: fenPair.fenAfter, student: studentColorWB, theory: false, namesStudentMoves: true });
+        const reads = readBoardAll('openingStory', { history: sansForRun.slice(0, m.ply), fen: fenPair.fenAfter, student: studentColorWB, theory: REVIEW_WRITER.storyTheory, namesStudentMoves: REVIEW_WRITER.namesStudentMoves });
         // THE OPENING NAMED AS IT IS IDENTIFIED — the SAME announcement Learn
         // speaks (`openingAnnouncementForGame`: the first name, each
         // refinement while in book, the departure), never a second namer.
@@ -2722,8 +2726,8 @@ function* reviewSegmentSteps(
         const leadSquares = new Set(stepLeads.flatMap((f) => [...f.squares]));
         const phrasesHere = new Map(thoughtPhrases);
         const memoryHere = { keys: new Set(thoughtKeys) };
-        const thoughtFacts = moveThoughtFacts({ namesPlayedMove: true, theory: REVIEW_WALK_TEACHES_THEORY, story: false, tense: 'past',
-          plainThreatsSeen: seesPlainThreats(reviewRecord.plainThreats),
+        const thoughtFacts = moveThoughtFacts({ namesPlayedMove: REVIEW_WRITER.namesPlayedMove, theory: REVIEW_WALK_TEACHES_THEORY, story: REVIEW_WRITER.story, tense: REVIEW_WRITER.tense,
+          plainThreatsSeen: plainThreatsSeenFor(REVIEW_WRITER, seesPlainThreats(reviewRecord.plainThreats)),
           fenBefore: fenPair.fenBefore, san: m.san, moverIsStudent: mine, prev: prevCap,
           line: moves.slice(i + 1, i + 1 + BRIEFING_LINE_PLIES).map((x) => x.san),
           theirLast: i > 0 ? { fenBefore: fenChain[i - 1].fenBefore, san: moves[i - 1].san } : null,
@@ -3277,7 +3281,7 @@ function* reviewSegmentSteps(
         // REVIEW IS A WALK: the student asked to be taken through the game, so a
         // quiet moment is a shorter beat, never a skipped one. Gating review on
         // the live-surface importance check cut this game to 6 narrated plies.
-        posture: 'walk',
+        posture: momentPosture('review'),
         // HOW TO THINK, not just what happened (David 2026-09-16). The signals
         // are ones this loop already holds — the attributor's own
         // `ignored-threat` finding, the cost, the move that was there — so the
@@ -5373,7 +5377,7 @@ async function augmentWithProjections(
       try { const m = next ? new Chess(s.fenAfter).move(next.san) : null; played = m ? `${m.from}${m.to}${m.promotion ?? ''}` : null; } catch { played = null; }
       const treeCtx = {
         fen: s.fenAfter, replies, rating, student: studentColorWB,
-        seconds: [s.recordReplyLine ?? null, s.recordReplyEarlier ?? null], played, tense: 'past' as const, liveBoard: null, madeBy: s.san,
+        seconds: [s.recordReplyLine ?? null, s.recordReplyEarlier ?? null], played, tense: treeTense(REVIEW_WRITER), liveBoard: null, madeBy: s.san,
       };
       // THE BAIT (WO-COACH-NEXT-TO-YOU-01 C4): the trap the student's move set,
       // said before the tree's other branches (the tree no longer repeats it).

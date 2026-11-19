@@ -16,6 +16,10 @@ import { moveThoughtFacts, type MoveThoughtInput } from './moveThoughtFacts';
 import type { IntentReads } from './moveIntent';
 import type { LearnFactParts } from './learnTurnDoor';
 import { namedSan, namesMoves, namesPlayableStudentMove, studentMovesInLine, type NamedMove } from './studentMoveNaming';
+import { writerFor, namesPlayedMoveFor, plainThreatsSeenFor } from './writerRegister';
+
+/** Learn's writer settings (`writerRegister`). */
+const LEARN_WRITER = writerFor('learn');
 
 // A piece move, a pawn capture or castling names a move wherever it stands. A
 // bare square ("the d5 square", "your pawn on e4") names one only after a word
@@ -96,7 +100,7 @@ export function learnThoughtTurn(args: {
   saidComputers: ReadonlySet<string>;
 }): Array<LearnFactParts & { gradeFen: string }> {
   const read = (m: LearnTurnMove, moverIsStudent: boolean): ThoughtFact[] => moveThoughtFacts({
-    fenBefore: m.fenBefore, san: m.san, moverIsStudent, namesPlayedMove: !moverIsStudent, plainThreatsSeen: false, tense: 'past', theory: true, story: true,
+    fenBefore: m.fenBefore, san: m.san, moverIsStudent, namesPlayedMove: namesPlayedMoveFor(LEARN_WRITER, moverIsStudent), plainThreatsSeen: plainThreatsSeenFor(LEARN_WRITER, false), tense: LEARN_WRITER.tense, theory: LEARN_WRITER.theory, story: LEARN_WRITER.story,
     prev: m.prev, line: null, history: [...m.history], theirLast: m.theirLast, phrases: null, reads: m.reads, costCp: m.costCp,
   });
   const facts = [...read(args.studentMove, true), ...(args.reply ? read(args.reply, false) : [])];

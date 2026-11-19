@@ -260,7 +260,7 @@ import { slipAnswerText } from './playCommentary';
 import { countWarning } from './countMethod';
 import { oppositeWingsRace } from './planRace';
 
-type CoachSurface = 'learn' | 'review' | 'lesson' | 'play' | 'chat' | 'tactics' | 'weaknesses' | 'think';
+export type CoachSurface = 'learn' | 'review' | 'lesson' | 'play' | 'chat' | 'tactics' | 'weaknesses' | 'think';
 
 /** Where a computer reaches a surface — the FILE that calls it — or why not. */
 type SurfaceAnswer = { wired: string } | { not: string };

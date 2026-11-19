@@ -19,6 +19,10 @@ import { NO_PREV_CAPTURE } from '../services/captureRun';
 import type { IntentReads } from '../services/moveIntent';
 import type { DecisiveReason } from '../services/decisiveReason';
 import { uciToSans } from '../services/structureJudgementKit';
+import { writerFor, thoughtSettings, plainThreatsSeenFor } from '../services/writerRegister';
+
+/** The asked answer's writer settings (`writerRegister`). */
+const CHAT_WRITER = writerFor('chat');
 
 export type ThoughtQuestion = 'plan' | 'why-best-move' | 'opponent-move';
 /** Every question the board answers from the coach's own read. */
@@ -127,11 +131,11 @@ export function answerQuestionThought(q: ThoughtQuestion, ctx: QuestionContext):
     try { for (const s of history.slice(0, -1)) b.move(s); } catch { return null; }
     return { fenBefore: b.fen(), san: history[k - 1] };
   })() : null;
-  const composed = questionThought({ namesPlayedMove: true, story: true,
+  const composed = questionThought({ ...thoughtSettings(CHAT_WRITER),
     fenBefore, san: mv.san, moverIsStudent, prev: runs[k] ?? NO_PREV_CAPTURE, line: line.length ? line : null, theirLast, history,
-    reads: ctx.reads, costCp: null, theory: true,
+    reads: ctx.reads, costCp: null,
     // Asked: the answer says what their move aims at, however plain.
-    plainThreatsSeen: false,
+    plainThreatsSeen: plainThreatsSeenFor(CHAT_WRITER, false),
   }, new Set(spec.groups), null, spec.move === 'best' ? ctx.reason : null);
   const text = composed.spoken.trim();
   return text ? { text, move: { san: mv.san, from: mv.from, to: mv.to } } : null;

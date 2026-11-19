@@ -125,6 +125,7 @@ import { classifyPhase } from './gamePhaseService';
 import { looseTrigger } from './looseTrigger';
 import { positionOf } from '../utils/samePosition';
 import { captureRunAfterMove, captureRunOfMoves } from './captureRun';
+import { BARE_READ } from './writerRegister';
 
 const PNAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -1319,7 +1320,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
       if (order && input.namesBestMove) speak(order);
       if (input.opponentLastMove) speak(readBoard('obligationLifted', { fenBefore: input.opponentLastMove.fenBefore, fenAfter: fen, student: studentColor }));
       // The book move is theory: said only where it was asked for.
-      if (input.theory && input.history?.length) speak(readBoard('bookMove', { history: input.history, student: studentColor, plain: false }));
+      if (input.theory && input.history?.length) speak(readBoard('bookMove', { history: input.history, student: studentColor, plain: BARE_READ.plainBookMove }));
       const own = input.lastMove;
       // The count, only when the student's last move lost it.
       if (own) speak(readBoard('countMethod', { fenBefore: own.fenBefore, playedSan: own.san, student: studentColor, costCp: own.cpLoss }));
@@ -1697,7 +1698,7 @@ function buildClauses(a: {
   // §9 king-safety — an exposed castled king under real fire. Ranks just below
   // the pin/skewer warnings: a drafty king is a standing danger, not a routine
   // plan. Uses the 'latent-danger' kind (same prophylactic family).
-  const exposureFact = kingExposure ? readBoard('kingExposure', { fen: a.fen, side: student, student, owner: false }) : null;
+  const exposureFact = kingExposure ? readBoard('kingExposure', { fen: a.fen, side: student, student, owner: BARE_READ.owner }) : null;
   if (exposureFact) ranked.push(readClause(exposureFact, 'latent-danger', a.fen));
 
   // Incoming fire — the opponent's standing threat against the student (their

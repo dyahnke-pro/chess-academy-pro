@@ -46,6 +46,10 @@ import { lineSeatAt } from '../utils/andList';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { minorsAtHome } from './development';
 import type { AnalysisLine, HeardVerdict } from '../types';
+import { writerFor, namesBetterMoveFor, slipRegister, geometryRegister } from './writerRegister';
+
+/** Review's writer settings (`writerRegister`). */
+const REVIEW_WRITER = writerFor('review');
 
 /** Has `color`'s king reached a castled square (g/c file on its back rank)? */
 function kingCastled(chess: Chess, color: Color): boolean {
@@ -531,7 +535,7 @@ export function computeMoveFacets(
         replyKeptWin: ctx.evaluation != null && ctx.replyEvaluation != null
           ? replyKeptWin(ctx.evaluation * (ctx.moverColor === 'white' ? -1 : 1), ctx.replyEvaluation * (ctx.moverColor === 'white' ? -1 : 1))
           : null,
-        namesBetterMove: true,
+        namesBetterMove: namesBetterMoveFor(REVIEW_WRITER, true),
       })
       : null;
     // The opponent's better move is THEIR idea, said to the student: "toward
@@ -571,7 +575,7 @@ export function computeMoveFacets(
     // and its point — unless the student then MISSED it (U8).
     const answer = opponentMoved && bestSan && fellShort && costsPoints && !reason && !consequence
       && !advantageWasMissed(ctx.allSans[ply] ?? null, ctx.replyBestSan)
-      ? readBoard('slipAnswer', { fen: fenAfter, prevCapture: captureRunAfterMove(ctx.prevCap, fenBefore, san), answerSan: ctx.replyBestSan, lineUci: ctx.playedLineUci, register: 'review' })?.text ?? null
+      ? readBoard('slipAnswer', { fen: fenAfter, prevCapture: captureRunAfterMove(ctx.prevCap, fenBefore, san), answerSan: ctx.replyBestSan, lineUci: ctx.playedLineUci, register: slipRegister(REVIEW_WRITER) })?.text ?? null
       : null;
     // What it allowed first, then the better move with its reason — the
     // heart of the app's order. A better move with no reason is a bare
@@ -1053,7 +1057,7 @@ export function computeMoveFacets(
     // Full the first time a principle speaks this game, a short stem after —
     // the one helper Learn's composer reads (`principleLine`).
     const seat = moverColor === 'white' ? 'w' : 'b';
-    const ownLead = readBoard('principle', { fenBefore, san, student: seat, taught: ctx.teaching.principlesTaught, stemKey: stemKeyOf(fenBefore), namesPlayedMove: true });
+    const ownLead = readBoard('principle', { fenBefore, san, student: seat, taught: ctx.teaching.principlesTaught, stemKey: stemKeyOf(fenBefore), namesPlayedMove: REVIEW_WRITER.namesPlayedMove });
     const lead = ownLead
       // A clean move that kept no opening rule: the rule the engine's move
       // kept (review walk 2026-10-02 — h4, g4, h5 were owed and silent). Never
@@ -1202,7 +1206,7 @@ export function computeMoveFacets(
   if (studentColorWB) {
     const reads = isStudent
       ? [
-        ...readBoardAll('structureMove', { fenBefore, san, student: studentColorWB, cpLoss: Math.max(0, ctx.costCp ?? 0), bestSan: ctx.bestMoveSan, bestUci: ctx.bestLineUci, reply: ctx.replyBestSan, namesBetterMove: true, namesStudentMoves: true }),
+        ...readBoardAll('structureMove', { fenBefore, san, student: studentColorWB, cpLoss: Math.max(0, ctx.costCp ?? 0), bestSan: ctx.bestMoveSan, bestUci: ctx.bestLineUci, reply: ctx.replyBestSan, namesBetterMove: namesBetterMoveFor(REVIEW_WRITER, true), namesStudentMoves: REVIEW_WRITER.namesStudentMoves }),
         // A STANDING FACT OF THE BOARD THE MOVE WAS PLAYED ON is said only
         // where the move left its squares as they were (prod Review
         // 2026-11-09, 39.Rxd6+: "Their d6 pawn is the key pawn: it guards
@@ -1281,7 +1285,7 @@ export function computeMoveFacets(
     const playedUci = ((): string | null => { try { const m = new Chess(fenBefore).move(san); return m ? `${m.from}${m.to}` : null; } catch { return null; } })();
     const playedBest = !!ctx.bestLineUci[0] && ctx.bestLineUci[0].slice(0, 4) === playedUci;
     const lom = ply >= 2 && ctx.teaching.prevFenBefore ? { fenBefore: ctx.teaching.prevFenBefore, san: ctx.allSans[ply - 2] } : undefined;
-    for (const g of readBoardAll('tacticGeometry', { fen: fenBefore, me: studentColorWB, pv: ctx.bestLineUci, register: 'review', played: san, ...(lom ? { lastOpponentMove: lom } : {}) })) {
+    for (const g of readBoardAll('tacticGeometry', { fen: fenBefore, me: studentColorWB, pv: ctx.bestLineUci, register: geometryRegister(REVIEW_WRITER), played: san, ...(lom ? { lastOpponentMove: lom } : {}) })) {
       if (g.namesStudentMove && playedBest) continue;
       facetOf(g, readKey(g));
     }
@@ -1317,7 +1321,7 @@ export function computeMoveFacets(
       // The engine's better move when this move cost an inaccuracy or more:
       // the square choice is not asked of a piece it took elsewhere.
       const beaten = Math.max(0, ctx.costCp ?? 0) >= INACCURACY_CP ? ctx.bestLineUci[0] ?? null : null;
-      const choice = readBoardAll('squareChoice', { fenBefore, san, student: studentColorWB, rating: w.rating, reads: w.reads, priorMove: prior, beaten, namesStudentMoves: true })[0];
+      const choice = readBoardAll('squareChoice', { fenBefore, san, student: studentColorWB, rating: w.rating, reads: w.reads, priorMove: prior, beaten, namesStudentMoves: REVIEW_WRITER.namesStudentMoves })[0];
       add(choice);
       // Why that square, the other way round: the piece put where nothing can
       // chase it (`outOfReach`). One answer a move — the same claim as the
@@ -1333,7 +1337,7 @@ export function computeMoveFacets(
         if (!ctx.teaching.prevFenBefore || ply < 2 || !ctx.allSans[ply - 2]) return null;
         try { return new Chess(ctx.teaching.prevFenBefore).move(ctx.allSans[ply - 2]).to; } catch { return null; }
       })();
-      add(readBoardAll('pawnBreak', { fenBefore, san, student: studentColorWB, lastTo, namesStudentMoves: true })[0]);
+      add(readBoardAll('pawnBreak', { fenBefore, san, student: studentColorWB, lastTo, namesStudentMoves: REVIEW_WRITER.namesStudentMoves })[0]);
       // Opposite-coloured bishops settled by this move, and what they mean.
       add(readBoardAll('oppositeBishops', { fenBefore, san, student: studentColorWB })[0]);
       // Knight against bishop made by this move, and which minor is better.
