@@ -3,10 +3,10 @@
  "source": "/home/user/urg-wt/audit-reports/danya-havecheck/ideas-labelled-2026-11-17.json",
  "counts": {
   "C": 51,
-  "A": 100,
+  "A": 101,
   "D": 28,
   "B": 26,
-  "E": 19
+  "E": 18
  },
  "eConcepts": [
   {
@@ -43,13 +43,6 @@
     "weak-squares-who-cares#7"
    ],
    "n": 2
-  },
-  {
-   "concept": "tensionGain",
-   "boards": [
-    "how-to-ruin-your-pawn-structure#0"
-   ],
-   "n": 1
   },
   {
    "concept": "fileNeedsPiece",
@@ -333,9 +326,9 @@
    "idea": "Damage your own structure (gxf6) to make inroads",
    "kind": "structure",
    "status": "said-wrong",
-   "group": "E",
-   "reason": "own-structure damage to make inroads: the opened file/lever gained by the recapture \u2014 tension/recapture-gain computer",
-   "concept": "tensionGain"
+   "group": "A",
+   "reason": "which way to recapture (gxf6 over Bxf6) = capture-choice (tradeKeptAt) \u2014 the recapture choice computer",
+   "existingComputer": "tradeKeptAt"
   },
   {
    "board": "how-to-ruin-your-pawn-structure#1",

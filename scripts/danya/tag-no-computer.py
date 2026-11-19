@@ -32,7 +32,7 @@ T = {
 24:('E','centre: counterplay against the centre — central control comparison','centre'),
 25:('A','dark-square play underestimated (colour complex)','findColorComplexWeakness'),
 26:('B','31...Re4!! sacrificial interference — engine line (depthClauses line)','depthClauses'),
-27:('E','own-structure damage to make inroads: the opened file/lever gained by the recapture — tension/recapture-gain computer','tensionGain'),
+27:('A','which way to recapture (gxf6 over Bxf6) = capture-choice (tradeKeptAt) — the recapture choice computer','tradeKeptAt'),
 28:('B','consequence line after Be2/Rg1 hxg4 — engine line','depthClauses'),
 29:('E','weak pawns held by a piece do not count (piece placement over structure)','heldWeakPawns'),
 30:('C','habit: never capture automatically (tension trigger: a capture exists)','tensionGain'),
