@@ -27,6 +27,9 @@ describe('urgentStrike', () => {
   });
   it('the reply is the other side\'s when they strike', () => {
     expect(urgentStrike(TAL, T, 'b')?.text).toContain('Spend it on Kb1 and you get the move you need');
+    // Their cost in a person's words — never "the engine has that … for they".
+    expect(urgentStrike(TAL, T, 'b')?.text).toMatch(/That costs them (?:about|more than|three|five)/);
+    expect(urgentStrike(TAL, T, 'b')?.text).not.toMatch(/engine|for they/);
   });
   it('a slow move under a pawn worse leaves the door open', () => {
     const close = [T[0], { ...T[1], cp: -60 }, { ...T[2], cp: -70 }];

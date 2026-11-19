@@ -16,7 +16,8 @@ describe('queenNet: list the queen\'s escapes', () => {
     const n = queenNet(RAID, 'Nd4');
     expect(n).toMatchObject({ queen: 'a2', taken: ['e6'], left: ['a4'], hits: false });
     const line = queenNetLine(n!, true, after(RAID, 'Nd4'));
-    expect(line).toMatch(/Their queen on a2 is running short of squares: your knight on d4 covers e6\. Its only safe square left is a4\./);
+    // The pieces by what they are; their squares are lit (`queenNet` squares), not read.
+    expect(line).toMatch(/Their queen is running short of squares: your knight covers e6\. Its only safe square left is a4\./);
   });
   it('a quiet move that takes none of its squares says nothing', () => {
     expect(queenNet(RAID, 'Bd3')).toBeNull();
@@ -34,7 +35,7 @@ describe('queenNet: a hit on a queen with nowhere to go', () => {
     expect(queenSafeSquares(BOXED, 'd1')).toEqual(['e2']);
     const n = queenNet(BOXED, 'Bg4');
     expect(n).toMatchObject({ queen: 'd1', taken: ['e2'], left: [], hits: true });
-    expect(queenNetLine(n!, true, after(BOXED, 'Bg4'))).toMatch(/Your bishop on g4 hits their queen on d1 and covers e2\. It has no safe square left\./);
+    expect(queenNetLine(n!, true, after(BOXED, 'Bg4'))).toMatch(/Your light-squared bishop hits their queen and covers e2\. It has no safe square left\./);
   });
   it('a queen at home with few squares is no net unless the move hits it', () => {
     // …Nd7 takes no square of the queen's and hits nothing.

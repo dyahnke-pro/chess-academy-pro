@@ -30,6 +30,7 @@ import { andList, countWord } from '../utils/andList';
 import { openSentence } from '../utils/openSentence';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { unmarked } from '../utils/sanMark';
+import { piecesSaid } from './pieceRef';
 
 export interface SiegePiece { square: Square; piece: PieceSymbol }
 
@@ -284,19 +285,26 @@ export function siegeLine(s: KingSiege, student: Color, fen: string): string {
     `${openSentence(n)} of ${atkOwner} pieces ${s.attackers.length === 1 ? 'aims' : 'aim'} at ${kingWord}${more}.`,
     `${openSentence(kingWord)} faces ${n} of ${atkOwner} pieces${more}.`,
   ], stemKeyOf(fen));
-  const defs = s.defenders.map((d) => `${NAME[d.piece]} on ${d.square}`);
+  // Each piece by what it is, the owner said once (the human voice: a list
+  // of squares is read off the board, never out loud — the squares are lit,
+  // `siegeSquares`).
+  const said = (ps: ReadonlyArray<{ piece: PieceSymbol; square: string }>): string[] => {
+    const pieceAt = new Map(ps.map((p) => [p.square, p.piece]));
+    return piecesSaid(fen, ps.map((p) => p.square), defOwner, (sq) => `${defOwner} ${NAME[pieceAt.get(sq) ?? 'p']} on ${sq}`);
+  };
+  const defs = said(s.defenders);
   const ofThem = defOwner === 'your' ? 'yours' : 'theirs';
   const guard = defs.length === 0
     ? `Nothing of ${ofThem} defends it.`
     : defs.length === 1
-      ? `Only ${defOwner} ${defs[0]} defends it.`
-      : `${openSentence(countWord(defs.length))} of ${ofThem} defend it: the ${andList(defs)}.`;
+      ? `Only ${defs[0]} defends it.`
+      : `${openSentence(countWord(defs.length))} of ${ofThem} defend it: ${andList(defs)}.`;
   const far = farFromHome(s);
   if (far.length === 0) return `${lead} ${guard}`;
-  const named = andList(far.map((p) => `${NAME[p.piece]} on ${p.square}`));
+  const named = andList(said(far));
   const tail = far.every((p) => p.moves === null)
-    ? `${openSentence(defOwner)} ${named} ${far.length === 1 ? 'is' : 'are'} out of play — three moves do not bring ${far.length === 1 ? 'it' : 'them'} back.`
-    : `${openSentence(defOwner)} ${named} ${far.length === 1 ? 'is' : 'are'} two moves or more from helping.`;
+    ? `${openSentence(named)} ${far.length === 1 ? 'is' : 'are'} out of play — three moves do not bring ${far.length === 1 ? 'it' : 'them'} back.`
+    : `${openSentence(named)} ${far.length === 1 ? 'is' : 'are'} two moves or more from helping.`;
   return `${lead} ${guard} ${tail}`;
 }
 

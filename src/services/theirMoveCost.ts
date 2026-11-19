@@ -17,6 +17,7 @@ import { isOutpost } from './outpost';
 import { minorRouteToSquare } from './positionReadingService';
 import { concessionParts } from './reviewTeachingPoints';
 import { andList } from '../utils/andList';
+import { seatPieceWords } from './pieceRef';
 
 interface TheirMoveCost {
   text: string;
@@ -85,7 +86,12 @@ export function theirMoveCost(fenBefore: string, san: string, studentColor: 'w' 
         if (isOutpost(before, sq, studentColor, false) || !isOutpost(after, sq, studentColor, false)) continue;
         const route = knightRoute(after, sq, studentColor);
         if (!route) continue;
-        const how = route.via ? `your knight on ${route.from} can get there via ${route.via}` : `your knight on ${route.from} can jump straight in`;
+        // The knight by what it is and the road by its length: the board
+        // lights the knight and the hop between (`squares`), the voice names
+        // only the square won (the human-squares rule: never three squares
+        // read out in one breath).
+        const knight = seatPieceWords(after.fen(), route.from, 'your', `your knight on ${route.from}`);
+        const how = route.via ? `${knight} can get there in two jumps` : `${knight} can jump straight in`;
         return {
           kind: 'hole',
           text: `Their ${played} costs them ${sq}: no pawn of theirs can ever guard it again, and ${how}.`,
