@@ -433,7 +433,7 @@ export function deriveNextPlanFacts(
   // chess strategy #6: "win their weak pawn on d6" two pushes from queening) —
   // the passer read owns it, as in positionalRead.
   const enemyToGo = (sq: string): number => (enemy === 'w' ? 8 - Number(sq[1]) : Number(sq[1]) - 1);
-  const besiegeable = struct.pawns.isolatedPawns[enemy].filter((sq) => !(struct.pawns.passedPawns[enemy].includes(sq) && enemyToGo(sq) <= 4));
+  const besiegeable = struct.pawns.isolatedPawns[enemy].filter((sq) => !(struct.pawns.passedPawns[enemy].includes(sq) && enemyToGo(sq) <= 2));
   const weak = besiegeable.find((sq) => 'cdef'.includes(sq[0])) ?? besiegeable[0];
   if (weak) {
     const block = `${weak[0]}${enemy === 'w' ? Number(weak[1]) + 1 : Number(weak[1]) - 1}`;

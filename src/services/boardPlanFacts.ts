@@ -10,12 +10,12 @@
  * engine is not consulted.
  */
 import { openSentence } from '../utils/openSentence';
-import { Chess } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
 import { deriveNextPlanFacts, worstPieceNote, worstPieceRoute } from './nextPlans';
 import { methodRead, methodPlanSentence, whyThisPlan } from './planChoice';
 import { stripThink } from '../utils/thinkPause';
 import { structurePlanFact } from './nextPlans';
-import { findPawnBreaks, findOpenFiles } from './positionReadingService';
+import { findPawnBreaks, findOpenFiles, breakContacts } from './positionReadingService';
 import { holeTargets } from './positionReadingService';
 import { isUndevelopedInOpening } from '../utils/undeveloped';
 import { flipSideToMove } from './threatOut';
@@ -89,17 +89,50 @@ export function boardPlanFacts(fen: string, side: 'white' | 'black', voice: 'you
   // A pawn break to open the position (findPawnBreaks reads the side to move).
   const asSide = chess.turn() === myC ? fen : voice === 'they' ? flipSideToMove(fen) : null;
   if (asSide) {
-    const breaks = findPawnBreaks(asSide);
-    if (breaks.length) levers.push({ kind: 'break', phrase: `break with ${orList(breaks)} to open the position`, squares: [...breaks] });
+    // THE BREAK NAMES WHAT IT HITS (Danya have-check 2026-11-19: "break with
+    // f5, b4 or c4 to open the position" named squares and no target). A
+    // break with no pawn to name is not offered.
+    const breakMover = new Chess(asSide).turn();
+    const hits = findPawnBreaks(asSide).map((b) => ({ b, hit: breakContacts(asSide, b, breakMover)[0] })).filter((x) => !!x.hit);
+    if (hits.length) {
+      const owner = breakMover === myC ? (voice === 'you' ? 'their' : 'your') : (voice === 'you' ? 'your' : 'their');
+      const targets = [...new Set(hits.map((h) => h.hit as string))];
+      levers.push({ kind: 'break', phrase: `break with ${orList(hits.map((h) => h.b))} to hit ${owner} pawn${targets.length > 1 ? 's' : ''} on ${andList(targets)}`, squares: [...hits.map((h) => h.b), ...targets] });
+    }
   }
-  // A rook belongs on an open / half-open file.
+  // A rook belongs on an open / half-open file — said for what it reaches
+  // there (Danya have-check 2026-11-19: "put a rook on the a, b, c, d, e, f, g
+  // or h file" on a bare board): a pawn of theirs at the end of a half-open
+  // file, or an open file's entry square nothing of theirs covers.
   const files = findOpenFiles(fen);
-  const rookFiles = [...new Set([...files.open, ...(myC === 'w' ? files.whiteSemiOpen : files.blackSemiOpen)])];
+  const foeC: 'w' | 'b' = myC === 'w' ? 'b' : 'w';
+  const theirSemi = myC === 'w' ? files.whiteSemiOpen : files.blackSemiOpen;
+  const reach = (f: string): string | null => {
+    const ranks = myC === 'w' ? [1, 2, 3, 4, 5, 6, 7, 8] : [8, 7, 6, 5, 4, 3, 2, 1];
+    for (const r of ranks) {
+      const sq = `${f}${r}`;
+      const p = chess.get(sq as Square);
+      if (p && p.color === foeC && p.type === 'p') return sq;
+    }
+    if (!files.open.includes(f)) return null;
+    const entry = `${f}${myC === 'w' ? 7 : 2}` as Square;
+    return chess.attackers(entry, foeC).length === 0 && !chess.get(entry) ? entry : null;
+  };
+  const rookFiles = [...new Set([...files.open, ...theirSemi])].map((f) => ({ f, at: reach(f) })).filter((x) => !!x.at);
   // …only for a side that HAS a rook (Danya's opposite-coloured-bishop boards,
   // 2026-11-18: "put a rook on the e or a file" on a board of bishops,
   // knights and pawns).
   const hasRook = chess.board().flat().some((p) => p && p.color === myC && p.type === 'r');
-  if (rookFiles.length && hasRook) levers.push({ kind: 'file', phrase: `put a rook on the ${orList(rookFiles)} file`, squares: [] });
+  if (rookFiles.length && hasRook) {
+    const pawnsHit = rookFiles.filter((x) => chess.get(x.at as Square)?.type === 'p').map((x) => x.at as string);
+    const entries = rookFiles.filter((x) => !chess.get(x.at as Square)).map((x) => x.at as string);
+    const owner = voice === 'you' ? 'their' : 'your';
+    const why = [
+      pawnsHit.length ? `hit ${owner} pawn${pawnsHit.length > 1 ? 's' : ''} on ${andList(pawnsHit)}` : null,
+      entries.length ? `get into ${owner} camp on ${orList(entries)}` : null,
+    ].filter(Boolean).join(' or ');
+    levers.push({ kind: 'file', phrase: `put a rook on the ${orList(rookFiles.map((x) => x.f))} file to ${why}`, squares: [...pawnsHit, ...entries] });
+  }
   // An outpost — a hole in THEIR camp a minor of yours can get to and hold
   // (the one bar, `holeTargets`), named for the piece that gets there: "plant
   // a knight" only where a knight arrives.
