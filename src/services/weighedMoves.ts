@@ -28,6 +28,7 @@
 //
 // PURE: chess.js, the human model's weights and the one cost walker. No engine.
 import { MATERIAL_VALUE } from './pieceValues';
+import { lineStory, changeReason } from './futures';
 import { Chess, type Color, type Move, type Square } from 'chess.js';
 import { humanMoveProbabilities, type ScoredMove } from './humanMove';
 import { costReason, reasonSans, reasonWinWords, type CostReason } from './costReason';
@@ -661,7 +662,15 @@ export function standingRefutations(args: {
     const reply = `${mover === 'w' ? '…' : ''}${sans[1]}`;
     // NO REASON, NO REFUTATION: his every rule-out says why it falls short.
     // The plan's try has its own reason: what became of the target.
-    const mech = tryMechanism(args.fen, m, sans, best.san, w.own, w.other) ?? (plan ? targetOutcome(args.fen, sans, plan.target, mover, w.other) : null);
+    // WHAT THE LINE DOES (his "with a perpetual check", "and White promotes"),
+    // then the reply's mechanism, then what changed on the board after it.
+    const story = lineStory(args.fen, read.moves, w.other);
+    const mech = story?.text
+      ?? tryMechanism(args.fen, m, sans, best.san, w.own, w.other)
+      ?? (plan ? targetOutcome(args.fen, sans, plan.target, mover, w.other) : null)
+      ?? changeReason({ fen: args.fen, student: args.student, rating: args.rating, other: w.other,
+        tryLine: { moves: read.moves, cp: read.mate === null ? read.evaluation : null, mate: read.mate },
+        bestLine: { moves: best.read.moves, cp: best.read.mate === null ? best.read.evaluation : null, mate: best.read.mate } });
     if (!mech) continue;
     const stem = stemKeyOf(`${args.fen}|result|${c.uci}`);
     const lead = plan
