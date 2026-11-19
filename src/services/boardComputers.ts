@@ -350,7 +350,16 @@ export interface PictureCtx {
 }
 
 /** The conclusions of one board from its context: the refuters run on the
- *  reads when the surface has not run them already. */
+ *  reads when the surface has not run them already. Read once per context:
+ *  the verdict, the plan and a caller that wants the tries themselves (the
+ *  read, `boardReadFacts`) share one computation. */
+const CONCLUSIONS_OF = new WeakMap<PictureCtx, PictureConclusions | null>();
+export function pictureConclusionsOf(c: PictureCtx): PictureConclusions | null {
+  if (CONCLUSIONS_OF.has(c)) return CONCLUSIONS_OF.get(c) ?? null;
+  const out = conclusionsOf(c);
+  CONCLUSIONS_OF.set(c, out);
+  return out;
+}
 function conclusionsOf(c: PictureCtx): PictureConclusions | null {
   if (!c.reads || c.reads.length < 2) return null;
   const considered = c.considered ?? undefined;
@@ -3656,7 +3665,7 @@ export const BOARD_COMPUTERS = {
     // Nxg5): the band is the check, the failed tries are the source. Said
     // only when the tries change the word — a band alone is the standing's.
     read: (c, fact) => safe(() => {
-      const r = conclusionsOf(c);
+      const r = pictureConclusionsOf(c);
       if (!r || r.verdict.kind === 'plain') return null;
       const mine = r.mover === c.student;
       const key = `picture-verdict:${r.mover}:${r.verdict.kind}:${r.but.map((t) => t.uci).join(',')}`;
@@ -3675,7 +3684,7 @@ export const BOARD_COMPUTERS = {
     // with the computed link that makes it the answer (the bishop on f7 guards
     // the h-pawn …Rxh5 took after Rxa5).
     read: (c, fact) => safe(() => {
-      const p = conclusionsOf(c)?.plan;
+      const p = pictureConclusionsOf(c)?.plan;
       if (!p) return null;
       const mover: Color = sideToMove(c.fen);
       const mine = mover === c.student;
@@ -7923,7 +7932,11 @@ export const BOARD_COMPUTERS = {
       // The stopper named is the student's move when it falls on their ply.
       const namesStudentMove = r.state === 'dead' && r.ply !== null && (r.ply % 2 === 0) === studentFirst;
       const key = `counterplay:${r.from}${r.to}:${r.state}`;
-      return fact({ key, claims: [key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+      // A DEAD break is one idea with the stopped break (`breakStopped`'s and
+      // the board plan's claim `stops-break:<san>`): "their …g6 break is dead"
+      // and "it takes the …g6 break away" are said once.
+      const stops = r.state === 'dead' ? [`stops-break:${them === 'b' ? '…' : ''}${r.from[0] === r.to[0] ? r.to : `${r.from[0]}x${r.to}`}`] : [];
+      return fact({ key, claims: [key, ...stops], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
         seat: 'opponent', namesStudentMove, thread: LOCAL_THREAD, fen: ctx.fen, ...(asks ? { skill: 'missed-opponents-threat' } : {}) });
     }),
     computer: 'pictureCounterplay',

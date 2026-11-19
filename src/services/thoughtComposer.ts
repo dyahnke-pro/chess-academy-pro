@@ -34,6 +34,7 @@ import type { HeatState } from './holdRate';
 import { sameIdea, isByProduct, type IdeaKind } from './ideaKind';
 import { buildVoicePackage, claimKey, joinSpoken, spokenSentenceKeys, type VoiceFact } from './voicePackage';
 import { TEACHING_MOVES } from './teachingMoves';
+import { buildPicture, isDetailOf } from './positionPicture';
 
 /** THE STEPS OF ONE THOUGHT, in the order they are said (WO-THINK-01):
  *    danger  — what is attacked on the board right now (always first);
@@ -558,6 +559,14 @@ export function composeThought(
     }
   }
 
+  // THE BECAUSE FOLLOWS ITS CONCLUSION (WO-PICTURE-01 P5, Danya's order: the
+  // plan, then why — "Black is not in much of a hurry, and a rook lift can be
+  // the solution"): the target and their counterplay the picture read are
+  // said right after the plan or verdict they support, when the picture links
+  // them (`isDetailOf`: the same piece on the same square of the same board).
+  // Unlinked, each keeps its own step.
+  becauseAfterConclusion(picked);
+
   // Say once, board-true: each picked fact through the one voice package, in
   // thought order, against everything already said (the memory, then this
   // thought's own earlier facts) — so a kept line is known by the fact it came
@@ -590,4 +599,25 @@ export function composeThought(
     });
   }
   return { spoken: joinSpoken(keptVoice), kept, held };
+}
+
+/** The picture's supports: what makes a plan or a verdict right. */
+const BECAUSE_COMPUTERS: ReadonlySet<string> = new Set(['pictureTarget', 'pictureCounterplay']);
+/** The conclusions a because is said behind: the plan, the verdict. */
+const CONCLUSION_COMPUTERS: ReadonlySet<string> = new Set(['picturePlan', 'planOfTheBoard', 'planSteps', 'pictureVerdict']);
+
+/** Move each linked because to right behind its conclusion, in place. */
+export function becauseAfterConclusion(picked: ThoughtFact[]): void {
+  const becauses = picked.filter((f) => BECAUSE_COMPUTERS.has(f.computer));
+  if (becauses.length === 0 || !picked.some((f) => CONCLUSION_COMPUTERS.has(f.computer))) return;
+  const pic = buildPicture(picked);
+  for (const b of becauses) {
+    const c = picked.find((f) => CONCLUSION_COMPUTERS.has(f.computer) && isDetailOf(pic, f.id, b.id));
+    if (!c) continue;
+    picked.splice(picked.indexOf(b), 1);
+    // Behind the conclusion and any because already moved behind it.
+    let at = picked.indexOf(c) + 1;
+    while (at < picked.length && BECAUSE_COMPUTERS.has(picked[at].computer) && isDetailOf(pic, c.id, picked[at].id)) at += 1;
+    picked.splice(at, 0, b);
+  }
 }
