@@ -1097,11 +1097,11 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   }
   if (studentToMove && lm) {
     const own = readBoard('trickSidestepped', { fenBefore: lm.fenBefore, san: lm.san, student: studentColor });
-    if (own) stoppedHere.push({ text: own.text, squares: own.squares, computer: 'trickSidestepped' });
+    if (own) stoppedHere.push({ text: own.text, squares: own.squares, lines: own.lines ?? [], computer: 'trickSidestepped' });
   }
   if (studentToMove && input.opponentLastMove && !stoppedReply) {
     const theirs = readBoard('trickSidestepped', { fenBefore: input.opponentLastMove.fenBefore, san: input.opponentLastMove.san, student: studentColor });
-    if (theirs) stoppedHere.push({ text: theirs.text, squares: theirs.squares, computer: 'trickSidestepped' });
+    if (theirs) stoppedHere.push({ text: theirs.text, squares: theirs.squares, lines: theirs.lines ?? [], computer: 'trickSidestepped' });
   }
   // S4 — who's better, and why, at the turn of the game.
   // The move that produced `fen` — material in the verdict is read settled.

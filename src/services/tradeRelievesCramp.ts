@@ -27,7 +27,14 @@ import { sideToMoveAs } from './threatOut';
 import { MATERIAL_VALUE } from './pieceValues';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
-export interface TradeRelievesCramp { cramped: Color; trade: string; target: Square; text: string; squares: Square[] }
+export interface TradeRelievesCramp {
+  cramped: Color; trade: string; target: Square; text: string; squares: Square[];
+  /** THE LINE TO THE TRADE (marks sweep 2026-11-19: "Bxc3 would take off your
+   *  knight on c3" drew nothing — the trade comes a few moves into the
+   *  engine's line, legal on no board the walk shows). From `fen`, the line's
+   *  moves through the trade and its take-back, drawn move by move. */
+  line: { fen: string; sans: string[] };
+}
 
 /** A side's crampedness, in percent: its pieces' safe squares this share of the other's or fewer. */
 const CRAMP_PERCENT = 85;
@@ -96,7 +103,7 @@ export function tradeRelievesCramp(fen: string, lines: readonly EngineLine[], st
           `They are short of room, so they want trades: ${m.san} would take off ${theirPiece}. Every trade eases their cramp, so don't hand them one for free.`,
           `With less space, they'll look to trade, and ${m.san} gets rid of ${theirPiece}. Keep pieces on and they stay cramped.`,
         ], key);
-      return { cramped, trade: m.san, target: m.to, text, squares: [m.from, m.to] };
+      return { cramped, trade: m.san, target: m.to, text, squares: [m.from, m.to], line: { fen, sans: moves.slice(0, i + 2).map((x) => x.san) } };
     }
   }
   return null;
