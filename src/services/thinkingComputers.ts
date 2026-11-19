@@ -302,6 +302,8 @@ export const THINK_STEP: Record<ComputerName, ThinkAnswer> = {
   selfBlock: 'calculate',
   mateThreatLever: 'forcing-moves',
   queenlessMate: 'forcing-moves',
+  matingNet: 'forcing-moves',
+  frozenTarget: 'assess',
   fortress: 'assess',
   oppositionTaken: 'assess',
   zugzwangMade: 'assess',

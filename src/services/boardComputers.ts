@@ -119,6 +119,8 @@ import { tactify } from './tactify';
 import { seventhRankMate } from './seventhRankMate';
 import { pieceTempo } from './pieceTempo';
 import { kingBoxMove } from './kingBox';
+import { matingNet } from './matingNet';
+import { frozenTarget } from './frozenTarget';
 import { centreDuo } from './centreDuo';
 import { noSafeChecks } from './noSafeChecks';
 import { promotionWithCheck } from './promotionWithCheck';
@@ -1313,6 +1315,12 @@ export interface BoardContexts {
   mateThreatLever: { fen: string; lines: readonly EngineLine[]; student: Color };
   /** No queens on the board, and a mate in one (made or threatened). */
   queenlessMate: { fen: string; student: Color };
+  /** A king with no square to go to, every flight covered, and a mate in one
+   *  there (made or threatened) — whatever pieces draw the net. */
+  matingNet: { fen: string; student: Color };
+  /** A weak pawn that cannot move, no pawn able to come to its aid, and more
+   *  pieces able to reach it than to guard it within two moves. */
+  frozenTarget: { fen: string; student: Color };
   /** AFTER the move: the capture released tension the engine wanted kept
    *  (`playedCp`: the mover's score after it, where the surface has it). */
   tensionReleased: { fenBefore: string; san: string; lines: readonly TensionLine[]; playedCp: number | null; reply: string | null; student: Color };
@@ -7603,6 +7611,50 @@ export const BOARD_COMPUTERS = {
     }),
     computer: 'queenlessMate',
     kind: 'method',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { wired: 'services/moveInsight.ts' },
+    },
+  },
+  // "…and the king is imprisoned": the king with no square to go to and a
+  // mate in one there, whatever draws the net. Both seats; the student's mate
+  // is held (never named), theirs is said. Filed both ways.
+  matingNet: {
+    read: (ctx, fact) => safe(() => {
+      const r = matingNet(ctx.fen, ctx.student);
+      if (!r) return null;
+      const key = `mating-net:${r.king}`;
+      const mine = r.side === ctx.student;
+      return fact({ key, claims: [key, `queenless-mate:${r.mate}`], text: r.text, proof: squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: ctx.fen, skill: mine ? 'missed-your-mate' : 'missed-their-mate' });
+    }),
+    computer: 'matingNet',
+    kind: 'king-read',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { wired: 'services/moveInsight.ts' },
+    },
+  },
+  // "The a6 pawn will fall, while the entire queenside is frozen": the weak
+  // pawn that cannot move, no pawn to its aid, out-counted over two moves.
+  // Both seats; the record files the student's own frozen pawn.
+  frozenTarget: {
+    read: (ctx, fact) => safe(() => {
+      const r = frozenTarget(ctx.fen, ctx.student);
+      if (!r) return null;
+      const key = `frozen-target:${r.pawn}`;
+      const mine = r.side === ctx.student;
+      return fact({ key, claims: [key], text: r.text, proof: squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description, squares: [...r.squares], stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: ctx.fen, ...(mine ? {} : { skill: 'created-pawn-weakness' }) });
+    }),
+    computer: 'frozenTarget',
+    kind: 'structure',
     phase: ANY,
     surfaces: {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,

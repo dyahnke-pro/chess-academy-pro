@@ -349,6 +349,8 @@ export const PICTURE_ROLE: Record<ComputerName, PictureRole> = {
   selfBlock: 'plan',
   mateThreatLever: 'threat',
   queenlessMate: 'threat',
+  matingNet: 'threat',
+  frozenTarget: 'weakness',
   pieceTempo: 'plan',
 };
 

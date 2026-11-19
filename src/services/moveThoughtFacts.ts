@@ -731,6 +731,9 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
             ...readBoardAll('seventhRankMate', { fen: after, lines: lines.length ? lines : null, student }).map((f) => ({ f, idea: 'attack-king' as IdeaKind, weight: 56 })),
             // Batch 3: no queens and still a mate (made or threatened).
             ...readBoardAll('queenlessMate', { fen: after, student }).map((f) => ({ f, idea: 'mate' as IdeaKind, weight: 66 })),
+            // The king with no square and a mate there; the weak pawn that falls, frozen.
+            ...readBoardAll('matingNet', { fen: after, student }).map((f) => ({ f, idea: 'mate' as IdeaKind, weight: 66 })),
+            ...readBoardAll('frozenTarget', { fen: after, student }).map((f) => ({ f, idea: 'weakness' as IdeaKind, weight: 52 })),
             // The siege as the board stands, both kings (the one fact set reads it too).
             ...readBoardAll('kingSiegeNow', { fen: after, student, studentCp: lines[0] && lines[0].mate === null ? (student === 'w' ? lines[0].cp : -lines[0].cp) : null }).map((f) => ({ f, idea: 'attack-king' as IdeaKind, weight: 58 })),
           ];
