@@ -27,7 +27,7 @@ import type { FactStakes } from './factStakes';
 import { LOCAL_THREAD, placeFact, stakesOf, type CoachFact, type ComputerName, type FactSeat } from './coachFact';
 import { threadKey } from './gameStory';
 import { findPinBreaks, pinBreakLine, pinBreakProof } from './pinBreak';
-import { findProphylaxis, prophylaxisKey, prophylaxisLine, prophylaxisIdea, prophylaxisProof } from './prophylaxis';
+import { findProphylaxis, prophylaxisKey, prophylaxisLine, prophylaxisIdea, prophylaxisProof, theirWantedMoves } from './prophylaxis';
 import { findEnablingMove, enablingMoveLine, enablingMoveProof } from './enablingMove';
 import { findTiedDefenders, newTiedDefender, tiedDefenderLine, tiedDefenderProof } from './tiedDefender';
 import { obligationLifted, obligationLiftedLine } from './obligationLifted';
@@ -199,6 +199,10 @@ export interface BoardContexts {
   /** The quiet move that stops their next pin, kick or fork — only when the
    *  engine's own top lines start with it. */
   prophylaxis: { fen: string; engineFirstMoves: readonly string[] };
+  /** Their move is the pin or kick a quiet move of the student's would have
+   *  stopped: `prevFen` the board before the student's last move, `studentSan`
+   *  that move, `fenBefore`/`san` their move now. */
+  prophylaxisMissed: { prevFen: string; studentSan: string; fenBefore: string; san: string; student: Color };
   /** A first, because it clears the road B needs (engine line from `fen`).
    *  Named for its computer (`findEnablingMove`): the move-order point —
    *  "X first, because Y right now runs into R" — is `moveOrder`'s own. */
@@ -894,7 +898,26 @@ export const BOARD_COMPUTERS = {
     computer: 'findProphylaxis',
     kind: 'timing',
     phase: ANY,
-    surfaces: { lesson: { not: 'a lesson says the stop as the move that made it (moveThoughtFacts: findProphylaxis, kind stop); this is the stop still to play, which a model line plays' }, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED, think: THINK },
+    surfaces: { lesson: { not: 'a lesson says the stop as the move that made it (moveThoughtFacts: findProphylaxis, kind stop); this is the stop still to play, which a model line plays' }, learn: LEARN, review: { not: 'Review says the stop after it was missed (prophylaxisMissed), never as advice on a game already played' }, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_NA, weaknesses: WEAK_OWED, think: THINK },
+  },
+  prophylaxisMissed: {
+    read: ({ prevFen, studentSan, fenBefore, san, student }, fact) => safe(() => {
+      const ph = findProphylaxis(prevFen);
+      if (!ph || ph.intent.san !== san || studentSan === ph.prevention.san) return null;
+      // …and it lands on the SAME piece now (Danya hv0P 6…Bb4: the stop was
+      // for a pin on the bishop on d2, and after Nc3 the bishop pins the knight
+      // instead — "Bb4 would pin your dark-squared bishop" named the wrong piece).
+      const landed = theirWantedMoves(fenBefore, student).find((w) => w.san === ph.intent.san);
+      if (landed?.hit[0]?.square !== ph.victim.square) return null;
+      const proof = prophylaxisProof(ph);
+      const key = prophylaxisKey(ph.intent.to);
+      return fact({ key: `missed:${key}`, claims: [key], text: `That is the ${ph.kind === 'pin' ? 'pin' : 'kick'} a quiet move would have stopped — ${proof.full}.`, proof, squares: ph.squares, stakes: null,
+        seat: 'opponent', namesStudentMove: true, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
+    }),
+    computer: 'findProphylaxis',
+    kind: 'timing',
+    phase: ANY,
+    surfaces: { lesson: { not: 'a lesson plays the stop; there is no missed stop in a taught line' }, learn: { not: 'Learn says the stop before the move (prophylaxis), never the miss after it' }, review: REVIEW, play: PLAY_ASK, chat: { not: 'chat answers about the board in front of it, not a past stop' }, tactics: TACTICS_NA, weaknesses: WEAK_OWED, think: { not: 'a step board has no earlier move to have stopped it' } },
   },
   enablingMove: {
     // "A first": names the student's first move (the live read speaks it only

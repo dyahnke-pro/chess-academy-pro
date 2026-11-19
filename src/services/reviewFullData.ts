@@ -36,7 +36,6 @@ import { assessPositionalEdge, phaseVerdictLine } from './reviewPositionalAssess
 import type { RefutedAlternative } from './refutedAlternative';
 import type { ReviewIntent } from './reviewMoveIntent';
 import { recordedMoveCost } from './moveCost';
-import { findProphylaxis, prophylaxisProof, theirWantedMoves } from './prophylaxis';
 import { lineProof, lineProofFromUci, legalLineProof, proofForStudent, squaresProof, isProof, NO_PROOF, type Proof } from './proof';
 import { readBoard, readBoardAll, readKey, principleKey } from './boardComputers';
 import { knownSlipsAt, type KnownSlipIndex } from './knownSlips';
@@ -1513,16 +1512,11 @@ export function computeMoveFacets(
   // computer Learn advises with): their move is exactly the one a quiet move of
   // the student's would have taken away, and the student did not play it.
   if (!isStudent && studentColorWB && ctx.teaching.prevFenBefore && ply >= 2) {
-    const ph = findProphylaxis(ctx.teaching.prevFenBefore);
-    // …and it lands on the SAME piece now (Danya hv0P 6…Bb4: the stop was
-    // for a pin on the bishop on d2, and after Nc3 the bishop pins the knight
-    // instead — "Bb4 would pin your dark-squared bishop" named the wrong piece).
-    const landed = ph ? theirWantedMoves(fenBefore, studentColorWB).find((w) => w.san === ph.intent.san) : undefined;
-    if (ph && ph.intent.san === san && ctx.allSans[ply - 2] !== ph.prevention.san && landed?.hit[0]?.square === ph.victim.square) {
-      const f = made('findProphylaxis', 'timing', `That is the ${ph.kind === 'pin' ? 'pin' : 'kick'} a quiet move would have stopped — ${prophylaxisProof(ph).full}.`);
-      facets.push(f);
-      recProof(f, prophylaxisProof(ph));
-      recSquares(f, [...ph.squares]);
+    const miss = readBoard('prophylaxisMissed', { prevFen: ctx.teaching.prevFenBefore, studentSan: ctx.allSans[ply - 2], fenBefore, san, student: studentColorWB });
+    if (miss) {
+      const f = put(miss.computer, 'timing', miss.text);
+      if (isProof(miss.proof)) recProof(f, miss.proof);
+      recSquares(f, miss.squares);
     }
   }
   // …and the GUARD THE STUDENT'S MOVE TIED DOWN (tiedDefender), still tied.
