@@ -60,6 +60,7 @@ import { memoOverTable, type TableMemo } from './tableMemo';
 import { evidenceMirror, slipMirror } from './recordMirror';
 import { kingSquareOutcome } from './kingWalk';
 import { prophylaxisAnswer } from './moveInsight';
+import { studentMoveStructure } from './structureReads';
 import {
   holdRecords, holdState, NEVER_POSED, HOLD_WINDOW, HOLD_MIN_POSED, HOLD_GREEN, HOLD_SHORT,
   type HoldRecord,
@@ -667,6 +668,23 @@ export function capabilityOutcomes(args: CapabilityMoveArgs): Array<{ tag: Misco
         const had = posed.find((p) => p.tag === 'missed-opponents-threat');
         if (had) { if (answer === 'broken') had.outcome = 'broken'; }
         else posed.push({ tag: 'missed-opponents-threat', posedImportance: PROPHYLAXIS_POSED, ...(answer === 'broken' ? { outcome: 'broken' as const } : {}) });
+      }
+    } catch { /* an unreadable board posed nothing */ }
+  }
+  // THE STRUCTURE JUDGEMENTS OF THE MOVE, both ways (`studentMoveStructure`):
+  // a read whose choice answered the board's question carries its own held tag
+  // (the right square, the file left shut, the pawn given back). Filed only on
+  // a clean move — a costly one is the slip's to name, never a structure
+  // read's guess.
+  if (movePlayedCleanly(args.cpLoss)) {
+    try {
+      let bestUci: string[] = [];
+      if (args.bestSan) { const b = new Chess(args.fenBefore).move(args.bestSan); bestUci = [`${b.from}${b.to}${b.promotion ?? ''}`]; }
+      const reads = studentMoveStructure({ fenBefore: args.fenBefore, san: args.playedSan, student: args.moverColor === 'white' ? 'w' : 'b', cpLoss: Math.max(0, args.cpLoss ?? 0),
+        bestSan: args.bestSan ?? null, bestUci, reply: null, namesBetterMove: true, namesStudentMoves: true });
+      for (const r of reads) {
+        if (!r.held || r.held.posedImportance < POSED_IMPORTANCE_MIN || posed.some((p) => p.tag === r.held?.tag)) continue;
+        posed.push({ tag: r.held.tag, posedImportance: r.held.posedImportance });
       }
     } catch { /* an unreadable board posed nothing */ }
   }

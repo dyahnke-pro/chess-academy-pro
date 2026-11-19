@@ -1346,7 +1346,6 @@ function structureFact(r: StructureRead, fact: MakeFact, fen: string, seat: Fact
   });
 }
 const STRUCT_TACTICS = { not: 'a structural judgement is about a game\'s plan; a puzzle poses one tactic' } as const;
-const STRUCT_WEAK = { not: 'owed — the weakness record keeps tags, not the structure read; the held rows ride recordTeachingEvidence' } as const;
 
 /** The piece a poisoned-by-the-line sentence names. */
 const POISON_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -1568,7 +1567,7 @@ export const BOARD_COMPUTERS = {
     computer: 'findPinBreaks',
     kind: 'tactic',
     phase: ANY,
-    surfaces: { lesson: LESSON_BOARD, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_COMPOSER, weaknesses: WEAK_OWED, think: THINK },
+    surfaces: { lesson: LESSON_BOARD, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_COMPOSER, weaknesses: { not: 'a pin a piece may walk out of: an opportunity the move may take or leave without a fault: a clean move is no answer to it, so held cannot be read off the cost' }, think: THINK },
   },
   pinBreakTheirs: {
     // Their piece the student pins can walk out the same way.
@@ -1582,7 +1581,7 @@ export const BOARD_COMPUTERS = {
     computer: 'findPinBreaks',
     kind: 'tactic',
     phase: ANY,
-    surfaces: { lesson: LESSON_BOARD, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_COMPOSER, weaknesses: WEAK_OWED, think: { not: 'the pin the student\'s move just made: a step board\'s own pins are read by pinBreakOwn' } },
+    surfaces: { lesson: LESSON_BOARD, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_COMPOSER, weaknesses: { not: 'their pinned piece that can walk out: an opportunity the move may take or leave without a fault: a clean move is no answer to it, so held cannot be read off the cost' }, think: { not: 'the pin the student\'s move just made: a step board\'s own pins are read by pinBreakOwn' } },
   },
   prophylaxis: {
     read: ({ fen, engineFirstMoves }, fact) => safe(() => {
@@ -1633,7 +1632,7 @@ export const BOARD_COMPUTERS = {
     computer: 'findEnablingMove',
     kind: 'move-order',
     phase: ANY,
-    surfaces: { lesson: LESSON_BOARD, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_COMPOSER, weaknesses: WEAK_OWED, think: THINK },
+    surfaces: { lesson: LESSON_BOARD, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_COMPOSER, weaknesses: { not: 'the move that makes the best line possible: an opportunity the move may take or leave without a fault: a clean move is no answer to it, so held cannot be read off the cost' }, think: THINK },
   },
   // ── REVIEW'S PER-MOVE FACETS (one-coach basket) ──
   tradeLedger: {
@@ -2156,7 +2155,7 @@ export const BOARD_COMPUTERS = {
     computer: 'newTiedDefender',
     kind: 'their-read',
     phase: ANY,
-    surfaces: { lesson: LESSON_NO_STUDENT_MOVE, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_READ, weaknesses: WEAK_OWED, think: { not: 'needs the student\'s move and their reply; a step board stops at one move' } },
+    surfaces: { lesson: LESSON_NO_STUDENT_MOVE, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_READ, weaknesses: { not: 'a pressure the student\'s move made, not a question the board posed: an opportunity the move may take or leave without a fault: a clean move is no answer to it, so held cannot be read off the cost' }, think: { not: 'needs the student\'s move and their reply; a step board stops at one move' } },
   },
   obligationLifted: {
     // What their move gave up: an attacker off a piece the student guarded.
@@ -2489,7 +2488,7 @@ export const BOARD_COMPUTERS = {
     computer: 'buildPriorityFirst',
     kind: 'priority',
     phase: ANY,
-    surfaces: { lesson: LESSON_BOARD, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_COMPOSER, weaknesses: WEAK_OWED, think: THINK },
+    surfaces: { lesson: LESSON_BOARD, learn: LEARN, review: REVIEW, play: COMPOSER, chat: COMPOSER, tactics: TACTICS_COMPOSER, weaknesses: { not: 'the target the best move aims at: an opportunity the move may take or leave without a fault: a clean move is no answer to it, so held cannot be read off the cost' }, think: THINK },
   },
   lastTimeHere: {
     // MEMORY BY POSITION (David 2026-10-15): the book-departure rows already
@@ -2603,14 +2602,14 @@ export const BOARD_COMPUTERS = {
     computer: 'studentMoveStructure',
     kind: 'judgement',
     phase: ANY,
-    surfaces: { lesson: LESSON_NO_STUDENT_MOVE, learn: { wired: 'services/learnBoardTeaching.ts' }, review: REVIEW, play: PLAY_READ, chat: { not: 'a move judgement answers "why was my move bad"; chat reads the board judgements (structureBoard)' }, tactics: TACTICS_READ, weaknesses: STRUCT_WEAK, think: { not: 'judges a move by its graded cost, which a step board\'s teaching does not compute' } },
+    surfaces: { lesson: LESSON_NO_STUDENT_MOVE, learn: { wired: 'services/learnBoardTeaching.ts' }, review: REVIEW, play: PLAY_READ, chat: { not: 'a move judgement answers "why was my move bad"; chat reads the board judgements (structureBoard)' }, tactics: TACTICS_READ, weaknesses: { wired: 'services/capabilityEvidence.ts' }, think: { not: 'judges a move by its graded cost, which a step board\'s teaching does not compute' } },
   },
   structureTheirMove: {
     read: ({ fenBefore, san, student }, fact) => safe(() => theirMoveStructure(fenBefore, san, student).map((r) => structureFact(r, fact, fenBefore, 'opponent'))),
     computer: 'theirMoveStructure',
     kind: 'judgement',
     phase: ANY,
-    surfaces: { lesson: LESSON_BOARD, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, tactics: STRUCT_TACTICS, weaknesses: STRUCT_WEAK, think: THINK },
+    surfaces: { lesson: LESSON_BOARD, learn: LEARN, review: REVIEW, play: PLAY_ASK, chat: CHAT_VIA_THOUGHT, tactics: STRUCT_TACTICS, weaknesses: { not: 'what their move did to your structure: no decision of the student\'s' }, think: THINK },
   },
   statusBand: {
     read: ({ fen, studentCp, prevStudentCp }, fact) => safe(() => {
@@ -3033,14 +3032,14 @@ export const BOARD_COMPUTERS = {
     computer: 'boardStructure',
     kind: 'judgement',
     phase: ANY,
-    surfaces: { lesson: LESSON_BOARD, learn: LEARN, review: REVIEW, play: COMPOSER, chat: { wired: 'services/groundedAnswer.ts' }, tactics: TACTICS_COMPOSER, weaknesses: STRUCT_WEAK, think: THINK },
+    surfaces: { lesson: LESSON_BOARD, learn: LEARN, review: REVIEW, play: COMPOSER, chat: { wired: 'services/groundedAnswer.ts' }, tactics: TACTICS_COMPOSER, weaknesses: { not: 'standing structural facts of the board: no move answers them; the move\'s own structure judgements are filed (structureMove, capabilityEvidence)' }, think: THINK },
   },
   structureLines: {
     read: ({ fen, student, lines, namesMoves }, fact) => safe(() => linesStructure(fen, student, lines, namesMoves).map((r) => structureFact(r, fact, fen, 'student'))),
     computer: 'linesStructure',
     kind: 'judgement',
     phase: ANY,
-    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ, weaknesses: STRUCT_WEAK, think: THINK },
+    surfaces: { lesson: { wired: 'services/moveThoughtFacts.ts' }, learn: LEARN, review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, tactics: TACTICS_READ, weaknesses: { not: 'plan choices read off the engine\'s lines: an opportunity the move may take or leave without a fault: a clean move is no answer to it, so held cannot be read off the cost' }, think: THINK },
   },
   planThread: {
     // A plan aim is a claim the plan arc shares, and the student's plan thread.
@@ -4374,7 +4373,7 @@ export const BOARD_COMPUTERS = {
     computer: 'enemyKingStuckInCenter',
     kind: 'king',
     phase: ANY,
-    surfaces: walkSurfaces(),
+    surfaces: { ...walkSurfaces(), weaknesses: { not: 'their king left in the centre: an opportunity the move may take or leave without a fault: a clean move is no answer to it, so held cannot be read off the cost' } },
   },
   opponentTarget: {
     read: ({ fenBefore, san, student }, fact) => safe(() => planBeatFact(buildOpponentMoveTeaching(fenBefore, san, student), fenBefore, 'opponent', fact)),
@@ -5221,7 +5220,7 @@ export const BOARD_COMPUTERS = {
       lesson: { not: 'a lesson plays the model line; there is no obvious stop of the student\'s to refute' },
       play: PLAY_ASK,
       tactics: TACTICS_NA,
-      weaknesses: WEAK_OWED,
+      weaknesses: { not: 'the miss is the obvious stop played, filed by its own cost; the stop that works is filed by moveInsight.prophylaxisAnswer' },
       think: { not: 'owed — the step board reads the composer, not the live depth read (depthClauses)' },
     },
   },
@@ -5327,7 +5326,7 @@ export const BOARD_COMPUTERS = {
       review: { not: 'owed — Review reads the king through its own walk' },
       learn: { not: 'owed — Learn reaches it through the composer (positionFacts)' },
       tactics: TACTICS_NA,
-      weaknesses: WEAK_OWED,
+      weaknesses: { not: 'their king\'s cracked shelter: an opportunity the move may take or leave without a fault: a clean move is no answer to it, so held cannot be read off the cost' },
       think: { not: 'owed — the step board reads the composer' },
     },
   },

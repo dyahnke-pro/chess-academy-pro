@@ -108,3 +108,16 @@ describe('the quiet stop, both ways (prophylaxis)', () => {
     expect(missed.find((r) => r.tag === 'missed-opponents-threat')?.outcome).toBe('broken');
   });
 });
+
+describe('the structure judgements of the move, both ways (studentMoveStructure)', () => {
+  // d5 trades off the isolated d4: the break that gets rid of the weak pawn.
+  const fen = '6k1/pp3ppp/4p3/8/3P4/8/PP3PPP/6K1 w - - 0 20';
+  it('a clean move the judgement says answered the question is held under its own tag', () => {
+    const held = capabilityOutcomes({ fenBefore: fen, playedSan: 'd5', moverColor: 'white', cpLoss: 10, bestSan: 'd5' });
+    expect(held.find((r) => r.tag === 'mistimed-pawn-break')?.outcome).toBe('held');
+  });
+  it('a costly move files no structure green (the slip names its own skill)', () => {
+    const costly = capabilityOutcomes({ fenBefore: fen, playedSan: 'd5', moverColor: 'white', cpLoss: 300, bestSan: 'Kf1', slipTag: 'hung-material' });
+    expect(costly.find((r) => r.tag === 'mistimed-pawn-break' && r.outcome === 'held')).toBeUndefined();
+  });
+});

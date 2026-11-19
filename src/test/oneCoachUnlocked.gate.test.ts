@@ -56,8 +56,11 @@ const LOCK_CEILING: Record<Exclude<CoachSurface, 'weaknesses'>, number> = {
  *  may only fall: a computer converted files held / missed for the student's
  *  move through the one record path (`moveInsight.positionPosed` →
  *  `capabilityOutcomes`) and its fact carries the skill. */
-const WEAKNESSES_OWED_CEILING = 69;
-const WEAKNESSES_UNWIRED_CEILING = 245;
+const WEAKNESSES_OWED_CEILING = 57;
+// 252 = 245 for the computers before 2026-11-19 round 2, plus the Danya
+// have-check computers that arrived with a reasoned `not` (a description or an
+// opportunity a clean move cannot answer); the four wired with them do not count.
+const WEAKNESSES_UNWIRED_CEILING = 252;
 
 /** Which functions of `moveThoughtFacts.ts` each surface's consumer calls:
  *  Learn's shared facts, Play's and a puzzle's tapped read (`boardReadFacts`)
