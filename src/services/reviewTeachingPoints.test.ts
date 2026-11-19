@@ -509,3 +509,15 @@ describe('a guarded grab is named in pieces, never points', () => {
     expect(why).not.toMatch(/\d\s*points?|\bpoints? for\b/);
   });
 });
+
+// Danya, rooks on the seventh revisited #0: no pawns on the board, so the
+// seventh is about the king it pens, never "chewing through the pawns".
+describe('rookOnSeventh — says what the rook does there', () => {
+  it('pawnless: pins the king, no pawns to eat', () => {
+    const t = rookOnSeventh('r4k2/6RR/8/8/8/8/8/6K1 w - - 0 1', 'w');
+    expect(t).toBe('your rook has reached the seventh on g7 — it pins their king to the back rank');
+  });
+  it('negative control: a pawn on the seventh is named', () => {
+    expect(rookOnSeventh('r4k2/p5R1/8/8/8/8/8/6K1 w - - 0 1', 'w')).toMatch(/it eats their pawn on a7/);
+  });
+});

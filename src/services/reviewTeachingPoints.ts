@@ -177,7 +177,15 @@ export function rookOnSeventh(fen: string, studentColorWB: Color): string | null
   try { chess = new Chess(fen); } catch { return null; }
   const rank = studentColorWB === 'w' ? '7' : '2';
   const rook = cells(chess).find((c) => c.type === 'r' && c.color === studentColorWB && c.square[1] === rank);
-  return rook ? `your rook has reached the seventh on ${rook.square} — a rook on the seventh is a pig, chewing through the pawns and pinning the king back` : null;
+  if (!rook) return null;
+  // What the rook does there, read off the board (Danya, rooks on the seventh
+  // revisited #0: "chewing through the pawns" with no pawns on the board).
+  const enemy: Color = studentColorWB === 'w' ? 'b' : 'w';
+  const pawns = cells(chess).filter((c) => c.type === 'p' && c.color === enemy && c.square[1] === rank).map((c) => c.square);
+  const king = cells(chess).find((c) => c.type === 'k' && c.color === enemy);
+  const pinned = !!king && king.square[1] === (studentColorWB === 'w' ? '8' : '1');
+  if (pawns.length > 0) return `your rook has reached the seventh on ${rook.square} — a rook on the seventh is a pig: it eats ${pawns.length === 1 ? `their pawn on ${pawns[0]}` : `their pawns along the rank`}${pinned ? ' and pins their king to the back rank' : ''}`;
+  return pinned ? `your rook has reached the seventh on ${rook.square} — it pins their king to the back rank` : null;
 }
 
 /**

@@ -484,9 +484,17 @@ export function deriveNextPlanFacts(
   const theirHeavyFiles = new Set(all.filter((c) => (c.type === 'r' || c.type === 'q') && c.color === enemy).map((c) => c.square[0]));
   const freeOpenFile = struct.pawns.openFiles.find((f) => !myHeavyFiles.has(f) && !theirHeavyFiles.has(f));
   if (freeOpenFile && myRooks.length > 0) {
+    // The seventh rank is said for what it holds (Danya, rooks on the seventh
+    // revisited #0: "where a rook attacks pawns from behind" on a board with
+    // no pawns): their pawns there, or their king penned on its back rank.
+    const seventh = studentColorWB === 'w' ? '7' : '2';
+    const back = studentColorWB === 'w' ? '8' : '1';
+    const pawnsOn7 = all.some((c) => c.type === 'p' && c.color === enemy && c.square[1] === seventh);
+    const kingOnBack = all.some((c) => c.type === 'k' && c.color === enemy && c.square[1] === back);
+    const why = pawnsOn7 ? ', where a rook attacks their pawns from behind' : kingOnBack ? ', where a rook pens their king on its back rank' : '';
     const then = myRooks.length >= 2
-      ? 'Then double your rooks on it, so nothing can challenge them, and aim for the seventh rank, where a rook attacks pawns from behind'
-      : 'Then aim for the seventh rank, where a rook attacks pawns from behind';
+      ? `Then double your rooks on it, so nothing can challenge them${why ? `, and aim for the seventh rank${why}` : ''}`
+      : why ? `Then aim for the seventh rank${why}` : 'Then use it to reach their camp';
     add('open-file', `seize the open ${freeOpenFile}-file`, `seizing the open ${freeOpenFile}-file`, `${rookReachBit(chess, myRooks, freeOpenFile)}. ${then}`, [], freeOpenFile);
   }
 
@@ -540,7 +548,8 @@ export function deriveNextPlanFacts(
       : nonPawnDiff > 0 ? 'your extra material'
       : pawnDiff >= 1 ? `your extra pawn${pawnDiff > 1 ? 's' : ''}`
       : 'your material edge';
-    add('convert', `convert your extra material`, `converting your extra material`, `trade pieces, keep the pawns, and keep it simple — every trade makes ${surplus} count for more`, []);
+    const anyPawns = all.some((c) => c.type === 'p' && c.color === studentColorWB);
+    add('convert', `convert your extra material`, `converting your extra material`, `trade pieces${anyPawns ? ', keep the pawns,' : ''} and keep it simple — every trade makes ${surplus} count for more`, []);
   }
 
   // 8. Bishop pair → open the position for the two bishops, HOW spelled out.
