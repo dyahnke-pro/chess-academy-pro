@@ -2636,7 +2636,9 @@ export const BOARD_COMPUTERS = {
       for (const [side, seat, skill] of [[student, 'opponent', 'missed-their-pin'], [them, 'student', 'missed-your-pin']] as const) {
         const d = detectLatentDanger(fen, side, { latentOnly: true });
         if (!d) continue;
-        const text = latentDangerClause(d, fen, student);
+        // A spoken sentence opens with its capital: the clause is built to
+        // follow other words in `moveInsight`, so the fact opens it here.
+        const text = openSentence(latentDangerClause(d, fen, student));
         // A LATENT line needs the pinning piece to arrive first.
         out.push(fact({ key: text, claims: [], text, proof: NO_PROOF.description,
           squares: [d.enemySquare, d.frontSquare, d.backSquare, ...(d.shieldSquare ? [d.shieldSquare] : [])],
@@ -2654,7 +2656,7 @@ export const BOARD_COMPUTERS = {
     read: ({ fen, student }, fact) => safe(() => {
       const d = detectTradeCreatesPin(fen, student);
       if (!d) return null;
-      const text = tradeDangerClause(d, fen);
+      const text = openSentence(tradeDangerClause(d, fen));
       // Said about the board AFTER the capture ("before you trade on e4: that
       // lines your bishop on e4 up…") — graded there, or it reads false now.
       const after = ((): string | null => { try { const c = new Chess(fen); return c.move({ from: d.tradeFrom, to: d.tradeTo, promotion: 'q' }) ? c.fen() : null; } catch { return null; } })();
@@ -4057,8 +4059,12 @@ export const BOARD_COMPUTERS = {
       if (!r) return null;
       const mine = r.mater === student;
       const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
+      // The run's proof is the run itself: the move and the line that mates,
+      // every move legal on the board.
+      const proof = line ? legalLineProof(fenBefore, [san, ...line], lineSeatAt(fenBefore, student)) : null;
+      if (!proof) return null;
       return fact({ key: `forced-run:${r.startPly}:${r.length}`, claims: ['forced-run'], text: FORCED_RUN_LINE,
-        proof: NO_PROOF.stated, squares: [], stakes: mateStakes(mine ? 'you' : 'them', 2, true),
+        proof, squares: [], stakes: mateStakes(mine ? 'you' : 'them', 2, true),
         seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter });
     }),
     computer: 'detectForcedMatingSequence',
@@ -4081,8 +4087,10 @@ export const BOARD_COMPUTERS = {
       const first = line.plies[0];
       const mine = (first.moverColor === 'white' ? 'w' : 'b') === student;
       const squares = [first.uci.slice(0, 2), first.uci.slice(2, 4)];
+      const proof = lineProofFromUci(first.fenBefore, line.plies.map((p) => p.uci), lineSeatAt(first.fenBefore, student));
+      if (!proof) return null;
       return fact({ key: `purpose:${line.plies.map((p) => p.uci).join(' ')}`, claims: [`purpose:${first.uci}`], text,
-        proof: lineProofFromUci(first.fenBefore, line.plies.map((p) => p.uci), lineSeatAt(first.fenBefore, student)) ?? NO_PROOF.stated, squares, stakes: null,
+        proof, squares, stakes: null,
         seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: first.fenBefore });
     }),
     computer: 'threatPurpose',
@@ -4119,9 +4127,13 @@ export const BOARD_COMPUTERS = {
   },
   count: {
     read: ({ fen, student }, fact) => safe(() => {
-      const text = (() => { const t = attackerDefenderCount(fen, student); return t ? `${openSentence(t)}.` : null; })();
-      if (!text) return null;
-      return fact({ key: `count:${text}`, claims: [`count:${fen.split(' ')[0]}`], text, proof: NO_PROOF.description, squares: [], stakes: null,
+      const read = attackerDefenderCount(fen, student);
+      if (!read) return null;
+      const text = `${openSentence(read.text)}.`;
+      // A count that says the piece has to move is the tempo the move that
+      // attacked it gained: one claim (`ideaClaim('tempo')`), said once
+      // (composerSaysOnce, g4 against the bishop on f5).
+      return fact({ key: `count:${text}`, claims: [`count:${fen.split(' ')[0]}`, ...(read.tempo ? [ideaClaim('tempo', [read.square])] : [])], text, proof: NO_PROOF.description, squares: [read.square], stakes: null,
         seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
     }),
     computer: 'attackerDefenderCount',
@@ -4263,8 +4275,11 @@ export const BOARD_COMPUTERS = {
     read: ({ fenBefore, lineUci, student, san }, fact) => safe(() => {
       const ml = mateLine(fenBefore, lineUci, student, san);
       if (!ml) return null;
-      return fact({ key: `mate-line:${fenBefore.split(' ')[0]}:${ml.sans.join(' ')}`, claims: [`mate-line:${ml.sans.join(' ')}`], text: ml.text, proof: NO_PROOF.stated, squares: ml.taken, stakes: mateStakes('you', 0, true),
-        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore, lines: [{ fen: fenBefore, sans: ml.sans.map((x) => x.replace(/^…/, '')) }] });
+      const sans = ml.sans.map((x) => x.replace(/^…/, ''));
+      const proof = lineProof({ fen: fenBefore, sans }, lineSeatAt(fenBefore, student));
+      if (!proof) return null;
+      return fact({ key: `mate-line:${fenBefore.split(' ')[0]}:${sans.join(',')}`, claims: [`mate-line:${sans.join(',')}`], text: ml.text, proof, squares: ml.taken, stakes: mateStakes('you', 0, true),
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore, lines: [{ fen: fenBefore, sans }] });
     }),
     computer: 'mateLine',
     kind: 'tactic',
@@ -4276,8 +4291,11 @@ export const BOARD_COMPUTERS = {
       const won = lineWins(fenBefore, lineUci, student, san, prior, seconds);
       if (!won) return null;
       const text = `That wins ${won.what}: ${lineShape(won.sans, lineSeatAt(fenBefore, student), fenBefore, 'first')}.`;
-      return fact({ key: `line-wins:${fenBefore.split(' ')[0]}:${won.sans.join(' ')}`, claims: [`line-wins:${won.sans.join(' ')}`], text, proof: NO_PROOF.stated, squares: [], stakes: { points: won.net, plies: 0 },
-        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore, lines: [{ fen: fenBefore, sans: won.sans.map((x) => x.replace(/^…/, '')) }] });
+      const sans = won.sans.map((x) => x.replace(/^…/, ''));
+      const proof = lineProof({ fen: fenBefore, sans }, lineSeatAt(fenBefore, student));
+      if (!proof) return null;
+      return fact({ key: `line-wins:${fenBefore.split(' ')[0]}:${sans.join(',')}`, claims: [`line-wins:${sans.join(',')}`], text, proof, squares: [], stakes: { points: won.net, plies: 0 },
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore, lines: [{ fen: fenBefore, sans }] });
     }),
     computer: 'lineWins',
     kind: 'tactic',
@@ -4438,7 +4456,9 @@ export const BOARD_COMPUTERS = {
       if (faultCp !== 0 || !tookOn || to !== tookOn || !san.includes('x')) return null;
       const rc = recaptureChoice(fenBefore, san, reply, namesStudentMoves);
       if (!rc) return null;
-      return fact({ key: `recapture-${to}`, claims: [`recapture-${to}`], text: rc, proof: squaresProof(rc, [to]) ?? NO_PROOF.stated, squares: [to], stakes: null,
+      const proof = squaresProof(rc, [to]);
+      if (!proof) return null;
+      return fact({ key: `recapture-${to}`, claims: [`recapture-${to}`], text: rc, proof, squares: [to], stakes: null,
         seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
     }),
     computer: 'recaptureChoice',
@@ -4457,8 +4477,10 @@ export const BOARD_COMPUTERS = {
       if (!ml) return null;
       const to = moveTo(fenBefore, san);
       const sq = [to, ...ml.taken];
+      const proof = lineProof({ fen: fenBefore, sans: ml.sans }, 'you') ?? squaresProof(ml.text, sq);
+      if (!proof) return null;
       return fact({ key: `${ml.quiet ? 'quiet' : '-'}|wins-line:${posKey(fenBefore)}`, claims: [`wins-line:${posKey(fenBefore)}`], text: ml.text,
-        proof: lineProof({ fen: fenBefore, sans: ml.sans }, 'you') ?? squaresProof(ml.text, sq) ?? NO_PROOF.stated, squares: sq, stakes: null,
+        proof, squares: sq, stakes: null,
         seat: 'student', namesStudentMove: namesPlayableStudentMove(studentMovesInLine(fenBefore, ml.sans, me, boardAfterSans(fenBefore, [san, reply]), 1)),
         thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore, lines: [{ fen: fenBefore, sans: ml.sans }] });
     }),
@@ -4474,8 +4496,10 @@ export const BOARD_COMPUTERS = {
       const w = lineWins(fenBefore, lineUci, me, san, prior, seconds);
       if (!w) return null;
       const to = moveTo(fenBefore, san);
+      const proof = lineProof({ fen: fenBefore, sans: w.sans }, 'you') ?? squaresProof(`That wins ${w.what}`, [to]);
+      if (!proof) return null;
       return fact({ key: `wins-line:${posKey(fenBefore)}`, claims: [`wins-line:${posKey(fenBefore)}`], text: `That wins ${w.what}: ${lineShape(w.sans, 'you', fenBefore, 'first')}.`,
-        proof: lineProof({ fen: fenBefore, sans: w.sans }, 'you') ?? squaresProof(`That wins ${w.what}`, [to]) ?? NO_PROOF.stated, squares: [to], stakes: null,
+        proof, squares: [to], stakes: null,
         seat: 'student', namesStudentMove: namesPlayableStudentMove(studentMovesInLine(fenBefore, w.sans, me, boardAfterSans(fenBefore, [san, reply]), 1)),
         thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore, lines: [{ fen: fenBefore, sans: w.sans }] });
     }),
@@ -4820,7 +4844,9 @@ export const BOARD_COMPUTERS = {
     read: ({ fen, student }, fact) => safe(() => {
       const kc = kingCourse(fen, student);
       if (!kc) return null;
-      return fact({ key: 'king-course', claims: ['king-course'], text: kc.text, proof: squaresProof(kc.text, [kc.target]) ?? NO_PROOF.stated, squares: [kc.target], stakes: null,
+      const proof = squaresProof(kc.text, [kc.target]);
+      if (!proof) return null;
+      return fact({ key: 'king-course', claims: ['king-course'], text: kc.text, proof, squares: [kc.target], stakes: null,
         seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
     }),
     computer: 'kingCourse',

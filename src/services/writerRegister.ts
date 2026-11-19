@@ -264,11 +264,6 @@ export const DECIDER: Record<CoachSurface, DeciderSettings> = {
   think: { posture: 'asked', steps: 'asked', volunteers: false, averageWords: null },
 };
 
-/** A surface's decider settings. */
-export function deciderFor(surface: CoachSurface): DeciderSettings {
-  return DECIDER[surface];
-}
-
 /** The door posture of a surface decided by `coachDecider.decide` (every
  *  surface but Learn, whose turn door is its own rule). */
 export function momentPosture(surface: Exclude<CoachSurface, 'learn'>): SurfacePosture {
@@ -284,16 +279,3 @@ export function averageWordsOf(surface: CoachSurface): number {
   if (n == null) throw new Error(`writerRegister: ${surface} has no average-words target`);
   return n;
 }
-
-/** THE ONE PER-SURFACE TABLE: each surface's writer half and decider half. */
-export interface SurfaceRow { writer: WriterSettings; decider: DeciderSettings }
-export const COACH_SURFACE: Record<CoachSurface, SurfaceRow> = {
-  learn: { writer: WRITER.learn, decider: DECIDER.learn },
-  review: { writer: WRITER.review, decider: DECIDER.review },
-  lesson: { writer: WRITER.lesson, decider: DECIDER.lesson },
-  play: { writer: WRITER.play, decider: DECIDER.play },
-  chat: { writer: WRITER.chat, decider: DECIDER.chat },
-  tactics: { writer: WRITER.tactics, decider: DECIDER.tactics },
-  weaknesses: { writer: WRITER.weaknesses, decider: DECIDER.weaknesses },
-  think: { writer: WRITER.think, decider: DECIDER.think },
-};

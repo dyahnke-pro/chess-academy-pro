@@ -31,6 +31,7 @@
  * Every clause is emitted ONLY when the board actually shows it (empty > generic >
  * invented). Squares/pieces are always real, so the narration-accuracy gate holds.
  */
+import { MATERIAL_VALUE } from './pieceValues';
 import { openSentence } from '../utils/openSentence';
 import { Chess, type Color, type Square } from 'chess.js';
 import { describeStructure } from './boardStructure';
@@ -41,11 +42,12 @@ import { cells, PIECE_NOUN, findWorstPlacedPiece, deriveNextPlans } from './next
 import { trappedAt, lineTakesPiece } from './trappedPiece';
 import { detectPlanRace, kingCatchesPasser, pushesToPromote } from './planRace';
 import { andList, withArticle, countWord } from '../utils/andList';
+import { withMover } from '../utils/sideToMove';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 // Re-exported: eight callers and tests import these from here (2026-09-19 leaf move).
 export { findWorstPlacedPiece, deriveNextPlans };
 
-const PIECE_VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+const PIECE_VAL = MATERIAL_VALUE;
 
 function isLight(sq: string): boolean { return ((sq.charCodeAt(0) - 97) + (Number(sq[1]) - 1)) % 2 === 1; }
 
@@ -54,11 +56,14 @@ function isLight(sq: string): boolean { return ((sq.charCodeAt(0) - 97) + (Numbe
  * single most valuable target where one side has MORE attackers than defenders:
  * an enemy piece the student can win, or a student piece under threat to shore up.
  */
-export function attackerDefenderCount(fen: string, studentColorWB: Color): string | null {
+/** The count with the piece it is about: its square, and whether it is a
+ *  TEMPO (a piece that can step away, so the count says it has to move — the
+ *  same claim as the move that kicked it, which the registry couples). */
+export function attackerDefenderCount(fen: string, studentColorWB: Color): { text: string; square: Square; tempo: boolean } | null {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return null; }
   const enemy: Color = studentColorWB === 'w' ? 'b' : 'w';
-  let best: { text: string; value: number } | null = null;
+  let best: { text: string; value: number; square: Square; tempo: boolean } | null = null;
   // OFFENSIVE only — the M2 lesson is "more attackers than defenders → it falls".
   // We deliberately do NOT flag the student's own overloaded piece: it collides
   // with an intentional sacrifice (the sacked rook/queen is MEANT to be loose).
@@ -84,12 +89,10 @@ export function attackerDefenderCount(fen: string, studentColorWB: Color): strin
   if ((fen.split(' ')[1] ?? '') === studentColorWB) {
     flipped = chess; // the real board — checks and all
   } else {
-    const flippedParts = fen.split(' ');
-    flippedParts[1] = studentColorWB;
-    flippedParts[3] = '-';
+    const flippedFen = withMover(fen, studentColorWB);
     try {
-      flipped = new Chess(flippedParts.join(' '));
-      if (flipped.inCheck()) flipped = null; // illegal null-move state — no claim
+      flipped = flippedFen ? new Chess(flippedFen) : null;
+      if (flipped?.inCheck()) flipped = null; // illegal null-move state — no claim
     } catch { flipped = null; }
   }
   for (const c of cells(chess)) {
@@ -112,13 +115,13 @@ export function attackerDefenderCount(fen: string, studentColorWB: Color): strin
     const theirMove = (fen.split(' ')[1] ?? '') !== studentColorWB;
     const escapes = theirMove && pieceHasSafeEscape(chess, sq, studentColorWB);
     const count = `count the attackers and defenders on their ${PIECE_NOUN[c.type]} on ${sq}: ${plural(atk, 'attacker')} to ${plural(def, 'defender')}`;
-    const cand = { value: PIECE_VAL[c.type] ?? 0,
+    const cand = { value: PIECE_VAL[c.type] ?? 0, square: sq, tempo: escapes,
       text: escapes
         ? `${count} — it's outnumbered, so it has to move, and that costs them the tempo`
         : `${count} — more attackers than defenders, so it falls` };
     if (!best || cand.value > best.value) best = cand;
   }
-  return best ? best.text : null;
+  return best ? { text: best.text, square: best.square, tempo: best.tempo } : null;
 }
 
 function plural(n: number, noun: string): string { return `${n} ${noun}${n === 1 ? '' : 's'}`; }
@@ -258,10 +261,10 @@ export function passedPawnPush(fen: string, studentColorWB: Color, passedSquare:
   if (race?.kind === 'passer-race' && race.yourPawn === passedSquare && !race.youQueenFirst) return null;
   const front = path[0];
   if (front) {
-    const pushed = new Chess(fen);
-    const parts = pushed.fen().split(' '); parts[1] = studentColorWB; parts[3] = '-';
+    const turned = withMover(new Chess(fen).fen(), studentColorWB);
+    if (!turned) return null;
     try {
-      const b = new Chess(parts.join(' '));
+      const b = new Chess(turned);
       b.move({ from: passedSquare as Square, to: front as Square, promotion: 'q' });
       if (legalSeeGainOn(b, front as Square) > 0) return null;
     } catch { return null; }

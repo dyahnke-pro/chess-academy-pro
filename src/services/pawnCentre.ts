@@ -22,7 +22,7 @@
 // unopposed). The three centre ideas it misses are about PIECES on central
 // squares, which this read deliberately does not claim.
 import { Chess, type Color, type Square } from 'chess.js';
-import { andList } from '../utils/andList';
+import { andList, countWord } from '../utils/andList';
 
 export interface PawnCentre {
   side: Color;
@@ -68,6 +68,11 @@ function centreOf(c: Chess, col: Color): { pawns: Square[]; joins: Square[] } {
   return { pawns, joins };
 }
 
+/** Squares on one rank whose files run without a gap (sorted by file). */
+function isRow(sqs: readonly Square[]): boolean {
+  return sqs.every((q, i) => q[1] === sqs[0][1] && (i === 0 || q.charCodeAt(0) === sqs[i - 1].charCodeAt(0) + 1));
+}
+
 /** The pawn centre one side owns unopposed, or null. `student` decides "you" / "they". */
 export function pawnCentre(fen: string, student: Color): PawnCentre | null {
   let c: Chess;
@@ -81,12 +86,17 @@ export function pawnCentre(fen: string, student: Color): PawnCentre | null {
     // One perspective (CLAUDE.md): the opponent is "their", never a colour.
     const owner = mine ? 'Your' : 'Their';
     const foe = mine ? 'They have' : 'You have';
-    const pawnWord = pawns.length === 1 ? `pawn on ${pawns[0]}` : `pawns on ${andList(pawns)}`;
+    // Two centre pawns are named by their files ("your d- and e-pawns"), the
+    // way a player says them; the board lights their squares.
+    const pawnWord = pawns.length === 1 ? `pawn on ${pawns[0]}` : `${pawns.map((p) => p[0]).join('- and ')}-pawns`;
     const joinClause = joins.length
       ? `, and ${andList(joins.map((j) => `the pawn on ${j}`))} can step up beside it`
       : '';
-    const text = `${owner} ${pawnWord} ${pawns.length === 1 ? 'holds' : 'hold'} the centre${joinClause}. ${foe} no centre pawn to challenge ${pawns.length === 1 ? 'it' : 'them'}, and ${pawns.length === 1 ? 'it takes' : 'they take'} ${andList(takes)} away from ${mine ? 'their' : 'your'} pieces.`;
-    return { side, pawns, joins, takes, text, squares: [...pawns, ...joins] };
+    // A person names a row of squares by its ends ("the four squares from c5
+    // to f5"), never square by square; the board lights each one.
+    const taken = takes.length >= 3 && isRow(takes) ? `the ${countWord(takes.length)} squares from ${takes[0]} to ${takes[takes.length - 1]}` : andList(takes);
+    const text = `${owner} ${pawnWord} ${pawns.length === 1 ? 'holds' : 'hold'} the centre${joinClause}. ${foe} no centre pawn to challenge ${pawns.length === 1 ? 'it' : 'them'}, and ${pawns.length === 1 ? 'it takes' : 'they take'} ${taken} away from ${mine ? 'their' : 'your'} pieces.`;
+    return { side, pawns, joins, takes, text, squares: [...new Set([...pawns, ...joins, ...takes])] };
   }
   return null;
 }

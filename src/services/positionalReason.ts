@@ -27,6 +27,7 @@ import { homeMinorCount } from './development';
 import { findPassedPawns, findOpenFiles, computeTerritory, kingSafetyRead } from './positionReadingService';
 import { centreDistance } from '../utils/centreDistance';
 import { phaseOfFen, type Phase } from './boardConcepts';
+import { withMover } from '../utils/sideToMove';
 
 export interface PositionalReason { tag: Exclude<MisconceptionTagId, 'other'>; note: string }
 
@@ -53,10 +54,10 @@ function kingOf(c: Chess, color: Color): Square | null {
 
 /** How many squares the side's pieces (not pawns, not the king) reach. */
 function activity(c: Chess, side: Color): number {
-  const parts = c.fen().split(' ');
-  parts[1] = side; parts[3] = '-';
+  const turned = withMover(c.fen(), side);
+  if (!turned) return 0;
   try {
-    return new Chess(parts.join(' ')).moves({ verbose: true }).filter((m) => m.piece !== 'p' && m.piece !== 'k').length;
+    return new Chess(turned).moves({ verbose: true }).filter((m) => m.piece !== 'p' && m.piece !== 'k').length;
   } catch { return 0; }
 }
 
@@ -77,10 +78,10 @@ function pieceReach(fen: string, san: string, board: Chess, side: Color): Map<st
   const out = new Map<string, { at: Square; type: string; n: number }>();
   let moved: { from: string; to: Square } | null = null;
   try { const m = new Chess(fen).move(san); moved = m ? { from: m.from, to: m.to } : null; } catch { moved = null; }
-  const parts = board.fen().split(' ');
-  parts[1] = side; parts[3] = '-';
+  const turnedFen = withMover(board.fen(), side);
+  if (!turnedFen) return out;
   let turned: Chess;
-  try { turned = new Chess(parts.join(' ')); } catch { return out; }
+  try { turned = new Chess(turnedFen); } catch { return out; }
   // A side in check moves only to answer it: its reach then measures the
   // check, not the piece (the better move checks, and their queen "reaches
   // 19 more squares" after the played one).

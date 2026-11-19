@@ -58,6 +58,6 @@ export function noSafeChecks(fen: string, student: Color): NoSafeChecks | null {
   const n = mine.all.length;
   const text = you
     ? `They have ${theirSans.length === 1 ? 'a safe check' : 'safe checks'} in ${andList(theirSans)}, and you are out of useful ones: your ${n === 1 ? 'only check gives' : `${countWord(n)} checks all give`} the checking piece away. Checks will not save you here — look for a quiet move or a deeper idea.`
-    : `They are out of useful checks — ${n === 1 ? 'their only check gives' : `all ${countWord(n)} of their checks give`} the checking piece away — while you have ${andList(theirSans)} in hand.`;
+    : `They are out of useful checks: ${n === 1 ? 'their only check gives' : `all ${countWord(n)} of their checks give`} the checking piece away. You still have ${andList(theirSans)} in hand.`;
   return { side, yourChecks: mine.all.map((m) => m.san), theirSafeChecks: theirSans, text, squares: theirs.safe.map((m) => m.to) };
 }

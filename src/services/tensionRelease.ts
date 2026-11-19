@@ -22,7 +22,7 @@
 // PURE: chess.js plus the engine lines the caller already holds (G0).
 import { computeMustDefend } from './threatOut';
 import { Chess, type Color, type Move, type PieceSymbol, type Square } from 'chess.js';
-import { MATERIAL_VALUE } from './pieceValues';
+import { CAPTURE_VALUE, MATERIAL_VALUE } from './pieceValues';
 import { isMinorAtHome } from './development';
 import { pieceScope } from './positionReadingService';
 import { moverCp } from './winChance';
@@ -201,7 +201,7 @@ export function tensionKept(fen: string, lines: readonly TensionLine[],
   // question, not the tension (decision baseline 2026-11-19: "Keep the
   // tension" said to a queen a bishop attacked). Two equal pieces eyeing each
   // other ARE the tension.
-  const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+  const VAL = CAPTURE_VALUE;
   if (computeMustDefend(fen, c.turn()).pieces.some((p) => p.attacker !== null && (VAL[p.attacker] ?? 0) < (VAL[p.piece] ?? 0))) return null;
   const best = bestQuiet(fen, lines);
   if (!best) return null;

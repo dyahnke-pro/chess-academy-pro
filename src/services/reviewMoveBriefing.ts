@@ -167,15 +167,16 @@ function evalVerdict(studentPovCp: number): string {
  *  balanced / tipping"). None that fits → none said: the old fallback "your
  *  pieces are the more active" counted no piece. `lines`: the engine's lines
  *  from `fen` (the initiative), or null. */
-function evalWhy(fen: string, studentPovCp: number, studentWB: 'w' | 'b', lastMove: LastMove | null, lines: readonly InitiativeLine[] | null): string[] {
+function evalWhy(fen: string, studentPovCp: number, studentWB: 'w' | 'b', lastMove: LastMove | null, lines: readonly InitiativeLine[] | null): { clauses: string[]; level: boolean } {
   const whiteCp = studentWB === 'w' ? studentPovCp : -studentPovCp;
   const v = verdictWithReasons({ fen, evalCp: whiteCp, mate: null, lines, student: studentWB, lastMove, said: NOTHING_SAID });
-  return v ? reasonClauses(v) : [];
+  return v ? { clauses: reasonClauses(v), level: v.favoured === null } : { clauses: [], level: false };
 }
 const NOTHING_SAID: ReadonlySet<ReasonKind> = new Set<ReasonKind>();
 /** The eval VERDICT + WHY as a lead sentence. */
 function explainEval(fen: string, studentPovCp: number, studentWB: 'w' | 'b', lastMove: LastMove | null, lines: readonly InitiativeLine[] | null): string {
-  const why = evalWhy(fen, studentPovCp, studentWB, lastMove, lines);
+  const read = evalWhy(fen, studentPovCp, studentWB, lastMove, lines);
+  const why = read.clauses;
   const verdict = evalVerdict(studentPovCp);
   const V = openSentence(verdict);
   if (why.length === 0) return `${V}.`;
@@ -183,7 +184,9 @@ function explainEval(fen: string, studentPovCp: number, studentWB: 'w' | 'b', la
   // reason that would take the sentence past two squares is its own sentence.
   const squaresIn = (t: string): number => new Set(t.match(/\b[a-h][1-8]\b/g) ?? []).size;
   if (why.length > 1 && squaresIn(why.join(' ')) > 2) return `${V} — ${why[0]}. ${why.slice(1).map((w) => `${openSentence(w)}.`).join(' ')}`;
-  return `${V} — ${why.join(', ')}.`;
+  // A level board's two reasons pull opposite ways — one for each side — so
+  // they are weighed against each other, never listed as one story.
+  return `${V} — ${why.join(read.level && why.length === 2 ? ', but ' : ', ')}.`;
 }
 /** THE POSITION'S STANDING, SAID WHEN IT MOVED: the verdict and the board's
  *  reason for it, on a band change or a real swing (≥ 40cp) — never as a

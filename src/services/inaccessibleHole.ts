@@ -110,6 +110,10 @@ export function inaccessibleHole(fenBefore: string, san: string, student: Color)
       if (!hole || !'cdef'.includes(hole[0])) continue;
       const occupant = after.get(hole);
       if (occupant && occupant.color === them) continue;
+      // Their own pawn standing there is no empty square to land on: what the
+      // push weakened is that pawn, which no pawn can guard now (gotham-jelena
+      // c4: "leaves d4 weak" with the d-pawn on d4) — a different claim.
+      if (occupant && occupant.type === 'p') continue;
       if (noPawnCanChallenge(before, hole, them) || !noPawnCanChallenge(after, hole, them)) continue;
       // Their minors' fastest road in.
       let best: number | null = null;
@@ -144,7 +148,7 @@ export function inaccessibleHole(fenBefore: string, san: string, student: Color)
       const stopText = stops.length
         ? `. In return it stops ${andList(stops.map((s) => `${foe} ${s.pawn[0]}-pawn reaching ${s.to}`))}`
         : '';
-      const text = `${mine ? 'Your' : 'Their'} pawn move leaves ${hole} weak in ${whose} camp, but ${reachText}, so the weakness does not matter yet${stopText}.`;
+      const text = `${mine ? 'Your' : 'Their'} pawn move leaves a weak square on ${hole} in ${whose} camp, but ${reachText}, so the weakness does not matter yet${stopText}.`;
       return { hole, moves: best, stops, text, squares: [hole, m.to, ...stops.map((s) => s.to)] };
     }
   }

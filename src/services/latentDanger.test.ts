@@ -35,7 +35,7 @@ describe('detectLatentDanger — the pin-in-waiting (David\'s heartbreak case)',
     const fen = '4r1k1/8/8/4N3/8/4B3/8/4K3 w - - 0 1';
     const d = detectLatentDanger(fen, 'w')!;
     const said = latentDangerClause(d, fen, 'b');
-    expect(said).toMatch(/^your rook looks through their knight at their bishop and their king behind it — once the knight moves, the bishop is pinned\.$/);
+    expect(said).toMatch(/^your rook looks through their knight at their bishop and their king behind it — once their knight moves, the bishop is pinned\.$/);
     expect(said).not.toMatch(/heads up/);
   });
 

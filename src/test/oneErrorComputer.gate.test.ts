@@ -92,6 +92,6 @@ describe('one error computer', () => {
   });
 
   it('Review names it — the game is over', () => {
-    expect(read('services/reviewFullData.ts')).toMatch(/errorWhy\(\{[\s\S]*?namesBetterMove:\s*true[\s\S]*?\}\)/);
+    expect(read('services/reviewFullData.ts')).toMatch(/errorWhy\(\{[\s\S]*?namesBetterMove:\s*(?:true|namesBetterMoveFor\(REVIEW_WRITER, true\))[\s\S]*?\}\)/);
   });
 });

@@ -9,7 +9,7 @@ import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import {
-  WRITER, DECIDER, COACH_SURFACE, BARE_READ,
+  WRITER, DECIDER, BARE_READ,
   namesBetterMoveFor, namesPlayedMoveFor, namesStudentMovesFor,
   slipRegister, geometryRegister, treeTense, momentPosture, averageWordsOf,
 } from '../services/writerRegister';
@@ -145,11 +145,5 @@ describe('the rows hold the CLAUDE.md rules', () => {
     expect(averageWordsOf('learn')).toBe(80);
     expect(averageWordsOf('review')).toBe(100);
     expect(() => averageWordsOf('chat')).toThrow();
-  });
-
-  it('the one table pairs each surface\'s two halves', () => {
-    for (const s of Object.keys(COACH_SURFACE) as Array<keyof typeof COACH_SURFACE>) {
-      expect(COACH_SURFACE[s]).toEqual({ writer: WRITER[s], decider: DECIDER[s] });
-    }
   });
 });

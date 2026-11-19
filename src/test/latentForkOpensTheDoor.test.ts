@@ -103,6 +103,6 @@ describe('T5 — the two-move fork reaches the decision', () => {
     // and any audit grouping by kind. One root, so one assertion.
     const src = readFileSync(resolve(__dirname, '../services/positionFacts.ts'), 'utf8');
     expect(src, 'the fork clause must pick its kind from the seat')
-      .toMatch(/latentFork\.forker === studentSeat \? 'latent-chance' : 'latent-danger'/);
+      .toMatch(/forkFact\.seat === 'student' \? 'latent-chance' : 'latent-danger'/);
   });
 });

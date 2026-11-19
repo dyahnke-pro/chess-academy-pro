@@ -107,7 +107,9 @@ export function moveIdeaFact(make: (p: ThoughtParts) => CoachFact, w: MoveWords,
   const said = closeSentence(m.text);
   const f = make({
     key: `${m.kind}~${m.idea}~${m.weight}~${m.restates ? 1 : 0}~${sq.join(',')}~${m.tag ?? ''}`,
-    claims: [`move:${from}${to}:${ideaClaim(m.idea, sq)}`, ...(m.extraClaims ?? [])],
+    // A TEMPO is a claim about the piece it hits, whoever says it: the count
+    // that says that piece has to move is the same claim (composerSaysOnce).
+    claims: [`move:${from}${to}:${ideaClaim(m.idea, sq)}`, ...(m.idea === 'tempo' ? [ideaClaim('tempo', sq)] : []), ...(m.extraClaims ?? [])],
     text: said, alsoText: m.alsoText ? closeSentence(m.alsoText) : undefined, squares: sq,
     stakes: null, thread: threadFor(m.kind, seat, m.squares),
     proof: squaresProof(said, [...new Set([to, ...m.squares])]) ?? NO_PROOF.description,

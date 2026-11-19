@@ -103,7 +103,9 @@ function goodPieceWork(fen: string, q: { square: string; piece: string; kind: Pi
   if (q.kind === 'seventh-rank') {
     const rank7 = q.color === 'w' ? '7' : '2';
     const back = q.color === 'w' ? '8' : '1';
-    const pawns = board.board().flat().flatMap((c) => (c && c.color === enemy && c.type === 'p' && c.square[1] === rank7 ? [c.square as string] : []));
+    // The pawns it ATTACKS there — a pawn behind another on the rank is not
+    // hit (Rxc2 vs b2–c2–h2 hits two, never "three of their pawns").
+    const pawns = board.board().flat().flatMap((c) => (c && c.color === enemy && c.type === 'p' && c.square[1] === rank7 && board.attackers(c.square, q.color).includes(q.square as Square) ? [c.square as string] : []));
     if (pawns.length > 0) {
       // One pawn is named; more are counted and lit (a list of squares read
       // out is the robot, David 2026-11-05).

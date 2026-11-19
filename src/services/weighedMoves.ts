@@ -27,6 +27,7 @@
 // square ruled out only for what the board shows goes wrong there.
 //
 // PURE: chess.js, the human model's weights and the one cost walker. No engine.
+import { MATERIAL_VALUE } from './pieceValues';
 import { Chess, type Color, type Move, type Square } from 'chess.js';
 import { humanMoveProbabilities, type ScoredMove } from './humanMove';
 import { costReason, reasonSans, reasonWinWords, type CostReason } from './costReason';
@@ -48,7 +49,7 @@ import { INACCURACY_CP } from './engineConstants';
 import { withMover } from '../utils/sideToMove';
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
-const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+const VALUE = MATERIAL_VALUE;
 
 /** A move that WALKS INTO MATE is weighed from this share of the eye's read
  *  (Danya, "how to avoid blunders" 39.Kh3??: "the checkmate check" — the king

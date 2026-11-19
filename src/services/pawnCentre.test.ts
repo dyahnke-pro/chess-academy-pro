@@ -13,7 +13,7 @@ describe('pawnCentre', () => {
     expect(r?.side).toBe('b');
     expect(r?.pawns).toEqual(['d5', 'e5']);
     expect(r?.takes).toEqual(['c4', 'd4', 'e4', 'f4']);
-    expect(r?.text).toContain('Your pawns on d5 and e5 hold the centre');
+    expect(r?.text).toContain('Your d- and e-pawns hold the centre');
     expect(pawnCentre(CARLSEN_ANAND, 'w')?.text).toContain('You have no centre pawn');
   });
   it('names White\'s d4 with e3 ready to join on Van Wely–Naroditsky', () => {

@@ -125,7 +125,10 @@ export function boardReasons(fen: string, student: Color, lines: readonly Initia
       // A king at home (its first two ranks) that has lost the pawns in
       // front of it, against a covered one.
       const backRanks = (sq: string, c: Color): boolean => (c === 'w' ? Number(sq[1]) <= 2 : Number(sq[1]) >= 7);
-      if (cy && cx && backRanks(cy.kingSquare, y) && cx.present - cy.present >= 2) {
+      // A king still in the middle is the next read's: the d- and e-pawns it
+      // stands behind are the ones an opening pushes (1.e4 c6 2.d4 is no king
+      // "without its pawn cover").
+      if (cy && cx && backRanks(cy.kingSquare, y) && !'de'.includes(cy.kingSquare[0]) && cx.present - cy.present >= 2) {
         const clause = `${foe} king has lost its pawn cover`;
         const left = cy.present === 0 ? 'no pawn left in front of it' : `a pawn in front of it on only ${count(cy.present)} of ${count(cy.of)} files`;
         out.push({ kind: 'king-shelter', side: x, weight: 140, clause,

@@ -96,8 +96,10 @@ export function boardPlanFacts(fen: string, side: 'white' | 'black', voice: 'you
     const hits = findPawnBreaks(asSide).map((b) => ({ b, hit: breakContacts(asSide, b, breakMover)[0] })).filter((x) => !!x.hit);
     if (hits.length) {
       const owner = breakMover === myC ? (voice === 'you' ? 'their' : 'your') : (voice === 'you' ? 'your' : 'their');
-      const targets = [...new Set(hits.map((h) => h.hit as string))];
-      levers.push({ kind: 'break', phrase: `break with ${orList(hits.map((h) => h.b))} to hit ${owner} pawn${targets.length > 1 ? 's' : ''} on ${andList(targets)}`, squares: [...hits.map((h) => h.b), ...targets] });
+      // One break and its target, the way a player says it ("break with c4 to
+      // hit their pawn on d5") — never a list of every lever and every pawn.
+      const lead = hits[0];
+      levers.push({ kind: 'break', phrase: `break with ${lead.b} to hit ${owner} pawn on ${lead.hit}`, squares: [lead.b, lead.hit as string] });
     }
   }
   // A rook belongs on an open / half-open file — said for what it reaches

@@ -15,11 +15,12 @@
 //
 // Doc: docs/plans/2026-08-26-coach-my-weakness-focus-lens.md §4.0c.
 
+import { CAPTURE_VALUE } from './pieceValues';
 import { Chess, type Square } from 'chess.js';
 import { legalSeeGain } from './positionReadingService';
 import { pieceRef } from './pieceRef';
 
-const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+const VAL = CAPTURE_VALUE;
 const FILES = 'abcdefgh';
 
 export interface LatentDanger {
@@ -257,7 +258,7 @@ export function latentDangerClause(
     const through = ref(d.shieldSquare, `${yours} ${shield} on ${d.shieldSquare}`);
     return mine
       ? `heads up: ${enemy} looks through ${through} at ${front} and your ${back} behind it — move the ${shield} and the ${PNAME[d.frontPiece]} is pinned.`
-      : `${enemy} looks through ${through} at ${front} and their ${back} behind it — once the ${shield} moves, the ${PNAME[d.frontPiece]} is pinned.`;
+      : `${enemy} looks through ${through} at ${front} and their ${back} behind it — once their ${shield} moves, the ${PNAME[d.frontPiece]} is pinned.`;
   }
   return mine
     ? `heads up: ${front} and your ${back} share that ${d.line} with ${enemy} — that ${d.line} is a pin.`

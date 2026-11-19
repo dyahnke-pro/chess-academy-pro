@@ -213,7 +213,9 @@ export function x() {}`;
   it('the positional read reads the structure thread, never a count hidden in the say-once set', () => {
     const pf = stripComments(readFileSync('src/services/positionFacts.ts', 'utf8'));
     expect(pf).not.toMatch(/plan:\$\{[^}]*\}#|\^plan:\(\.\+\)#/);
-    expect(pf).toMatch(/structurePlanEvent\(asked \? null : input\.structurePlanHeard/);
+    // The structure thread is the registry's read (`readBoard('structurePlan',
+    // { heard })`), handed the thread the student last heard.
+    expect(pf).toMatch(/readBoard\('structurePlan', \{[^}]*heard: asked \? null : input\.structurePlanHeard/);
   });
 });
 
@@ -288,7 +290,10 @@ export function x() {}`;
     const build = reviewBuild(readFileSync('src/services/coachFeatureService.ts', 'utf8'));
     expect(page).toMatch(/\[causalChainKey\(chain\)\]/);
     expect(page).not.toMatch(/`causal:/);
-    expect(build).toMatch(/causalChainKey\(chain\)/);
+    // Review reads the chain through the registry (`readBoard('causalChain')`),
+    // whose read keys it with the one `causalChainKey`.
+    expect(build).toMatch(/story\.commit\([^)]*claims: \[chain\.chainKey\]/);
+    expect(stripComments(readFileSync('src/services/boardComputers.ts', 'utf8'))).toMatch(/chainKey = causalChainKey\(chain\)/);
   });
 });
 

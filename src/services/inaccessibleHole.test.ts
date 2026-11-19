@@ -11,14 +11,14 @@ describe('inaccessibleHole', () => {
     expect(r?.hole).toBe('e4');
     expect(r?.moves).toBeNull();
     expect(r?.stops).toEqual([{ pawn: 'e6', to: 'e5' }]);
-    expect(r?.text).toContain('Your pawn move leaves e4 weak');
+    expect(r?.text).toContain('Your pawn move leaves a weak square on e4');
     expect(r?.text).toContain('stops their e-pawn reaching e5');
   });
   it('19.e4: d4 is weak but their nearest minor needs six moves', () => {
     const r = inaccessibleHole(E4, 'e4', 'w');
     expect(r?.hole).toBe('d4');
     expect(r?.moves).toBe(6);
-    expect(inaccessibleHole(E4, 'e4', 'b')?.text).toContain('Their pawn move leaves d4 weak');
+    expect(inaccessibleHole(E4, 'e4', 'b')?.text).toContain('Their pawn move leaves a weak square on d4');
   });
   it('stays silent when their knight reaches the hole at once', () => {
     expect(inaccessibleHole('4k3/8/3n4/8/8/5P2/6P1/4K3 w - - 0 1', 'f4', 'w')).toBeNull();
