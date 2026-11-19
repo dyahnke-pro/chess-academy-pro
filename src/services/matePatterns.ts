@@ -250,6 +250,17 @@ const RULES: Array<[string, Rule]> = [
     return g.protectors(r.square).some((p) => p.type === 'b');
   }],
 
+  // BACK-RANK: rook/queen checks along the king's home rank; every flight is
+  // self-blocked or on the rank. Read before Pillsbury's and the kill box: a
+  // bishop or queen covering a square ON the rank does not make a back-rank
+  // mate another pattern (Rxf1# with Kh1, g2/h2 and Be3 read "Pillsbury's").
+  ['back-rank-mate', (g) => {
+    const c = single(g, 'r') ?? single(g, 'q'); if (!c) return false;
+    const home = g.defender === 'w' ? 1 : 8;
+    if (g.king.sq.r !== home || c.sq.r !== home) return false;
+    return g.flights.filter((f) => f.sq.r !== home).every((f) => f.ownBlocked);
+  }],
+
   // PILLSBURY: rook checks down the file/rank, a bishop on the long diagonal covers the corner flight.
   ['pillsburys-mate', (g) => {
     const r = single(g, 'r'); if (!r) return false;
@@ -261,14 +272,6 @@ const RULES: Array<[string, Rule]> = [
     const r = single(g, 'r'); if (!r) return false;
     const q = byType(g.attackerPieces, 'q')[0]; if (!q || cheb(q.sq, g.king.sq) < 2) return false;
     return openFlights(g).some((f) => f.coveredBy.includes(q.square));
-  }],
-
-  // BACK-RANK: rook/queen checks along the king's home rank; every flight is self-blocked or on the rank.
-  ['back-rank-mate', (g) => {
-    const c = single(g, 'r') ?? single(g, 'q'); if (!c) return false;
-    const home = g.defender === 'w' ? 1 : 8;
-    if (g.king.sq.r !== home || c.sq.r !== home) return false;
-    return g.flights.filter((f) => f.sq.r !== home).every((f) => f.ownBlocked);
   }],
 
   // DAMIANO: queen mates on the rook file adjacent to the king, protected by a pawn.

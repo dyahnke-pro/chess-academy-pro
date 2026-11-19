@@ -53,6 +53,13 @@ describe('classifyMatePattern — proven on the mating-patterns lesson corpus', 
     expect(classifyMatePattern('not a fen')).toBeNull();
   });
 
+  it("a back-rank mate stays a back-rank mate when a bishop covers a square on the rank (puzzle read 2026-11-19)", () => {
+    // Rxf1#: Kh1 behind g2/h2, the bishop on e3 covering g1 — not Pillsbury's.
+    expect(classifyMatePattern('2r3k1/1R4pp/p7/2Np4/8/4b3/P1R3PP/5r1K w - - 0 31')?.id).toBe('back-rank-mate');
+    // NEGATIVE CONTROL: the bishop covering the square OFF the rank (g7) is Pillsbury's.
+    expect(classifyMatePattern('4R1k1/4pp1p/6pB/8/8/2P5/r5PP/6K1 b - - 0 26')?.id).toBe('pillsburys-mate');
+  });
+
   it('a plain queen mate with only a king to beat is the queen-mate fundamental', () => {
     // K+Q vs K: Qe7# with kings e6/e8 … use Kf6 + Qg7# vs Kh8.
     expect(classifyMatePattern('7k/6Q1/5K2/8/8/8/8/8 b - - 0 1')?.id).toBe('queen-mate');
