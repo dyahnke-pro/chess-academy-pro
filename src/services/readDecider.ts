@@ -29,6 +29,8 @@ export interface ReadFact {
   from: ReadFactFrom;
   kind: string;
   text: string;
+  /** The computer that made it (catalog name), where the read knows it. */
+  computer?: string;
 }
 
 export type ReadStep = 'verdict' | 'character' | 'priority' | 'their-move' | 'their-plan' | 'best-move' | 'tempting' | 'their-try' | 'plan' | 'second-front';
