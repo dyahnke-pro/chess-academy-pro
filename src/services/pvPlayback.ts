@@ -15,6 +15,7 @@
  * root promise is truncated/refused (`delivers=false`): a line we can't
  * verify is a line we don't teach.
  */
+import { openSentence } from '../utils/openSentence';
 import { isPawnBreak } from './pawnBreak';
 import { gainedBishopPair } from './bishopPair';
 import { andList, fileList, withArticle } from '../utils/andList';
@@ -1021,4 +1022,11 @@ export function pvLineFromUci(fen: string, uci: readonly string[]): PvLine | nul
     plies.push({ san: mv.san, uci: u, moverColor: mv.color === 'w' ? 'white' : 'black', fenBefore, fenAfter: board.fen(), facts });
   }
   return { plies, rootEvalCp: 0, terminalEvalCp: null, delivers: false, closeAlternative: null };
+}
+
+/** The mechanics line, owned by its mover: "The move axb5 captures …" →
+ *  "Your axb5 captures …" / "Their axb5 captures …". */
+export function seatMoveSubject(mech: string, isStudent: boolean): string {
+  const owner = isStudent ? 'Your' : 'Their';
+  return /^the move /i.test(mech) ? mech.replace(/^the move /i, `${owner} `) : openSentence(mech);
 }

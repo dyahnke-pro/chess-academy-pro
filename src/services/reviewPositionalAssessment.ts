@@ -16,7 +16,7 @@
  */
 import { evalBand, evalBandWords } from './evalBand';
 import { settledLeadFor, type LastMove } from './material';
-import { openSentence, continueSentence } from '../utils/openSentence';
+import { openSentence, continueSentence, sentenceEach } from '../utils/openSentence';
 import { goodPieceIdeaKey } from './positionReadingService';
 import { Chess, type Color } from 'chess.js';
 import { describeStructure } from './boardStructure';
@@ -372,4 +372,14 @@ function freshAssessment(fen: string, studentColorWB: Color, studentPovEvalCp: n
     verdict: a.verdict, reasons: a.reasons.filter((_, i) => keep[i]), reasonKeys: a.reasonKeys.filter((_, i) => keep[i]), reasonSquares: a.reasonSquares.filter((_, i) => keep[i]),
     counter: (a.counter ?? []).filter((_, i) => keepC[i]), counterKeys: (a.counterKeys ?? []).filter((_, i) => keepC[i]),
   };
+}
+
+/** THE POSITIONAL VERDICT, SAID (the ONE renderer: the facet and the walk's
+ *  atom-diff both say it here). One reason rides the verdict; more are a
+ *  sentence each, never joined on a semicolon read aloud. */
+export function positionalVerdictLine(word: string, reasons: readonly string[]): string {
+  const said = reasons.map((r) => r.trim()).filter(Boolean);
+  if (said.length === 0) return `You're ${word}.`;
+  if (said.length === 1) return `You're ${word}: ${said[0].replace(/\.$/, '')}.`;
+  return `You're ${word}. ${sentenceEach(said)}`;
 }
