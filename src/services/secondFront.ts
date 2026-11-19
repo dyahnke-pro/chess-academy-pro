@@ -88,7 +88,7 @@ export function secondFront(fen: string, lines: readonly EngineLine[], student: 
     ], key)
     : rotateStem([
       `Their pieces are all on the ${crowded}, with no way in there, so expect a second front: ${leverSan} against your pawn on ${lever.target}. Two weak wings are much harder to hold than one.`,
-      `They have no way through on the ${crowded}, so the danger is the other wing: ${leverSan} hits your pawn on ${lever.target}. Holding one wing is easy; holding both is not.`,
+      `They have no way through on the ${crowded}, so the danger is the other wing: ${leverSan} hits your pawn on ${lever.target}. Holding one wing is easy. Holding both is not.`,
     ], key);
   return { side, wing: crowded, lever: leverSan, target: lever.target, text, squares: [leverSan as Square, lever.target] };
 }

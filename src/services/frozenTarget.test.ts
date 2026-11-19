@@ -23,7 +23,9 @@ describe('frozenTarget', () => {
     expect(r!.attackers.map((a) => a.square)).toEqual(['b1', 'c6']);
     expect(r!.defenders.map((d) => d.square)).toEqual(['g8']);
     expect(r!.text).toMatch(/^Their pawn on a6 (will fall|cannot be held)\./);
-    expect(r!.text).toContain('Two of your pieces can reach it, the rook on b1 and the knight on c6, and only one of theirs can guard it.');
+    // Each piece by what it is, no list of squares read aloud (the board lights b1 and c6).
+    expect(r!.text).toContain('Two of your pieces can reach it, your rook and knight, and only one of theirs can guard it.');
+    expect(r!.squares).toEqual(expect.arrayContaining(['b1', 'c6']));
   });
 
   it('says it to the side losing the pawn', () => {

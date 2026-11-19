@@ -688,12 +688,28 @@ export function joinSpoken(kept: readonly VoiceFact[]): string {
 export function nameOnce(text: string): string {
   // The squares each owner's piece kind has been named on: the square goes
   // only when one piece of that kind has been named (two of their pawns keep
-  // theirs).
+  // theirs). A piece on a square is ONE piece whatever word names it: "the
+  // bishop on c5" after "their bishop on c5" is theirs (the lesson tape,
+  // 2026-11-19: "The target is the bishop on c5 … Count the attackers and
+  // defenders on their bishop on c5"), so "the" takes the owner its square was
+  // first named with.
   const squaresOf = new Map<string, Set<string>>();
+  const ownerAt = new Map<string, string>();
   return text.replace(/\b(your|their|the)\s+(king|queen|rook|bishop|knight|pawn)\s+on\s+([a-h][1-8])\b/gi, (whole, owner: string, piece: string, sq: string) => {
-    const kind = `${owner.toLowerCase()} ${piece.toLowerCase()}`;
+    const said = owner.toLowerCase();
+    const p = piece.toLowerCase();
+    const first = ownerAt.get(`${p}@${sq}`);
+    // "the" before any owner is known for the square: its own kind until one is.
+    const whose = said === 'the' ? (first ?? 'the') : said;
+    const kind = `${whose} ${p}`;
     const named = squaresOf.get(kind) ?? new Set<string>();
-    const again = named.has(sq) && named.size === 1;
+    if (!first) ownerAt.set(`${p}@${sq}`, whose);
+    else if (first === 'the' && said !== 'the') {
+      // The owner is known now: the square first named with "the" is theirs.
+      ownerAt.set(`${p}@${sq}`, whose);
+      named.add(sq);
+    }
+    const again = !!first && named.has(sq) && named.size === 1;
     named.add(sq);
     squaresOf.set(kind, named);
     return again ? `${owner} ${piece}` : whole;

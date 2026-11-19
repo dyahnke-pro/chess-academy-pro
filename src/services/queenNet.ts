@@ -19,6 +19,7 @@ import { MATERIAL_VALUE } from './pieceValues';
 import { sideToMoveAs } from './threatOut';
 import { PIECE_NAMES } from '../types/tacticTypes';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
+import { seatPieceWords } from './pieceRef';
 
 export interface QueenNet {
   /** Their queen. */
@@ -105,9 +106,13 @@ export function queenNetLine(n: QueenNet, moverIsStudent: boolean, fenAfter: str
   const left = n.left.length === 0
     ? 'It has no safe square left.'
     : `Its only safe square left is ${n.left[0]}.`;
+  // Each piece by what it is (`pieceRef`): the squares that matter are the
+  // ones taken and the one left; the pieces' own squares are lit, not read.
+  const mover = seatPieceWords(fenAfter, n.to, own, `${own} ${piece} on ${n.to}`);
+  const queen = seatPieceWords(fenAfter, n.queen, queenOwn, `${queenOwn} queen on ${n.queen}`);
   const lead = n.hits
-    ? `${cap(own)} ${piece} on ${n.to} hits ${queenOwn} queen on ${n.queen} and covers ${taken}.`
-    : `${cap(queenOwn)} queen on ${n.queen} is running short of squares: ${own} ${piece} on ${n.to} covers ${taken}.`;
+    ? `${cap(mover)} hits ${queen} and covers ${taken}.`
+    : `${cap(queen)} is running short of squares: ${mover} covers ${taken}.`;
   const habit = moverIsStudent
     ? ['List the queen\'s escapes.', 'Count the queen\'s squares.']
     : ['Count your queen\'s squares before it goes raiding.', 'List your queen\'s escapes.'];

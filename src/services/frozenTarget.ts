@@ -24,6 +24,7 @@ import { PIECE_NAMES } from '../types/tacticTypes';
 import { andList, countWord } from '../utils/andList';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { openSentence } from '../utils/openSentence';
+import { piecesSaid } from './pieceRef';
 
 export interface Reacher { square: Square; type: PieceSymbol; moves: 0 | 1 | 2 }
 
@@ -154,7 +155,9 @@ export function frozenTarget(fen: string, student: Color): FrozenTarget | null {
       const pawnOwn = mine ? 'their' : 'your';
       const pieceOwn = mine ? 'your' : 'their';
       const otherOwn = mine ? 'theirs' : 'yours';
-      const named = andList(attackers.map((a) => `the ${PIECE_NAMES[a.type]} on ${a.square}`));
+      // Each piece by what it is, the owner said once; the board lights them.
+      const typeAt = new Map(attackers.map((a) => [a.square as string, a.type]));
+      const named = andList(piecesSaid(fen, attackers.map((a) => a.square), pieceOwn, (sq) => `the ${PIECE_NAMES[typeAt.get(sq) ?? 'p']} on ${sq}`));
       const guard = defenders.length === 0
         ? `none of ${otherOwn} can guard it`
         : `only ${countWord(defenders.length)} of ${otherOwn} can guard it`;

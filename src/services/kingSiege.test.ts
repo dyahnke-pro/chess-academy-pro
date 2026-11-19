@@ -40,7 +40,8 @@ describe('kingSiege — attackers against defenders', () => {
     expect(siegeSpeaks(KNOCKOUT, s!, 300)).toBe(true);
     const line = siegeLine(s!, 'w', KNOCKOUT);
     expect(line).toMatch(/[Ff]our of your pieces|faces four of your pieces/);
-    expect(line).toContain('bishop on b8 is two moves or more from helping');
+    // Named by what it is (the only dark-squared bishop); b8 is lit, not said.
+    expect(line).toContain('Their dark-squared bishop is two moves or more from helping');
   });
 
   it('the battery behind the queen bears through it (the b2 bishop, c3 queen)', () => {

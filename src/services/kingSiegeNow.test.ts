@@ -17,7 +17,8 @@ describe('kingSiegeNow — the siege as the board stands', () => {
   it('reads the massed attack on their king, and the pieces far from home', () => {
     const [f] = readBoardAll('kingSiegeNow', { fen: MASS, student: 'w', studentCp: 218 });
     expect(f?.text).toMatch(/your pieces aims at their king on h7, and three more are a move away/);
-    expect(f?.text).toMatch(/rook on a8 and bishop on b7 are two moves or more from helping/);
+    // A square only where two pieces need telling apart (two rooks).
+    expect(f?.text).toMatch(/Their rook on a8 and light-squared bishop are two moves or more from helping/);
     expect(f?.seat).toBe('student');
   });
   it('says it from the other seat too', () => {

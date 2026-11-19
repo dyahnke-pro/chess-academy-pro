@@ -19,6 +19,7 @@ import { type EngineLine, PIECE_NAME, isQuiet, lineScore, playLine, sortedLines,
 import { MATERIAL_VALUE } from './pieceValues';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { sideToMoveAs } from './threatOut';
+import { costWords } from './engineConstants';
 
 export interface UrgentStrike { side: Color; strike: string; slow: string; reply: string | null; gainCp: number; text: string; squares: Square[] }
 
@@ -140,6 +141,9 @@ export function urgentStrike(fen: string, lines: readonly EngineLine[], student:
     : rotateStem(['They have to act now', 'They have no time to waste'], stemKeyOf(fen));
   const text = shut
     ? `${lead}: ${strike.san} works on this move. Spend it on ${slow.san} and ${t.who} answer ${reply.san} — ${shut.replace('{whose}', w.whose)}.`
-    : `${lead}: ${strike.san} works on this move. Spend it on ${slow.san} and ${t.who} get the move ${t.who} need, ${reply.san}: the engine has that ${(lost / 100).toFixed(1)} pawns worse for ${w.who}.`;
+    // The cost is the striker's, said as a person says it ("that costs you
+    // more than a point") — never the engine's number in the engine's name
+    // (the voice rule's engine-talk; "worse for they" was the old grammar).
+    : `${lead}: ${strike.san} works on this move. Spend it on ${slow.san} and ${t.who} get the move ${t.who} need, ${reply.san}. That costs ${w.who === 'you' ? 'you' : 'them'} ${costWords(lost)}.`;
   return { side, strike: strike.san, slow: slow.san, reply: reply.san, gainCp: best - slowCp, text, squares: [strike.from, strike.to, reply.to] };
 }

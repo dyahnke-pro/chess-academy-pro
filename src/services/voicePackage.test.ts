@@ -614,4 +614,13 @@ describe('nameOnce — the full name once (human voice rule 3)', () => {
     const t = 'It hits their pawn on d5. Their pawn on e4 is loose. And their pawn on d5 falls.';
     expect(nameOnce(t)).toBe(t);
   });
+  it('the same piece named with "the" is the piece already named', async () => {
+    const { nameOnce } = await import('./voicePackage');
+    expect(nameOnce('The target is the bishop on c5. Count the attackers on their bishop on c5.'))
+      .toBe('The target is the bishop on c5. Count the attackers on their bishop.');
+    expect(nameOnce('Your knight on f3 is pinned. The knight on f3 cannot move.'))
+      .toBe('Your knight on f3 is pinned. The knight cannot move.');
+    // NEGATIVE CONTROL: a different square keeps its name.
+    expect(nameOnce('Their bishop on c5 is loose. The bishop on e7 is not.')).toBe('Their bishop on c5 is loose. The bishop on e7 is not.');
+  });
 });

@@ -84,3 +84,15 @@ export function seatPieceWords(fen: string, square: string, owner: string, fallb
   const viewer: Color = owner === 'your' ? piece.color : piece.color === 'w' ? 'b' : 'w';
   return pieceRef(fen, square, viewer)?.words ?? fallback;
 }
+
+/** SEVERAL PIECES OF ONE SIDE, said as a person lists them ("their rook,
+ *  knight and dark-squared bishop"): each by what it is (`pieceRef`), the
+ *  owner said once, a square only where the words cannot tell two apart. The
+ *  board lights every square (the caller couples them). One item per square,
+ *  in the order given; the caller joins them (`andList`). */
+export function piecesSaid(fen: string, squares: readonly string[], owner: string, fallback: (sq: string) => string): string[] {
+  return squares.map((sq, i) => {
+    const words = seatPieceWords(fen, sq, owner, fallback(sq));
+    return i === 0 ? words : words.replace(/^(?:your|their|the) /, '');
+  });
+}
