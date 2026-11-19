@@ -107,3 +107,12 @@ describe('the registry read and its readers', () => {
     expect(facts.some((x) => x.computer === 'blockade' && x.squares.includes('d5'))).toBe(true);
   });
 });
+
+describe('a check is its own idea, never a blockade', () => {
+  it('the same bishop move in front of the isolated d-pawn is a blockade without check, and not one with check', () => {
+    // …Bd4 lands in front of White's isolated d3 pawn, guarded by the e5 pawn.
+    expect(blockade('k7/b7/8/4p3/8/3P4/8/7K b - - 0 1', 'Bd4')).not.toBeNull();
+    // With White's king on e3 the same move is check: the check is the move's idea.
+    expect(blockade('k7/b7/8/4p3/8/3PK3/8/8 b - - 0 1', 'Bd4+')).toBeNull();
+  });
+});

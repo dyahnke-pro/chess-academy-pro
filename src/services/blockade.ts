@@ -93,8 +93,9 @@ export function blockade(fenBefore: string, san: string): BlockadeRead | null {
   let after: Chess;
   let mv;
   try { after = new Chess(fenBefore); mv = after.move(san.replace(/[!?]+$/, '')); } catch { return null; }
-  // Mate or check is its own idea.
-  if (after.isCheckmate()) return null;
+  // Mate or check is its own idea (…Bf4+ is a check, not a blockade: the
+  // bishop is said for the check, and a blockade only if it stays).
+  if (after.isCheckmate() || after.inCheck()) return null;
   const fenAfter = after.fen();
   const mover = mv.color;
   const enemy = other(mover);
