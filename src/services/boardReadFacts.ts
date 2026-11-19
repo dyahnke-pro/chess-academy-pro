@@ -16,7 +16,7 @@
  */
 import { Chess } from 'chess.js';
 import { computePositionFacts, type PositionFactsInput } from './positionFacts';
-import { planTries } from './tryCandidates';
+import { consideredTries } from './tryCandidates';
 import { temptingOnBoard, standingRefutations, candidateMoves, TEMPTING_COST_CP, type WeighRead, type ConsideredTries } from './weighedMoves';
 import { seatCp } from './winChance';
 import { foldScore } from './humanReply';
@@ -198,10 +198,12 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     // THE PLAN'S DIRECT TRY (WO-PICTURE-01 P2): the frontal hit on their weak
     // pawn, the storm at their king — weighed for the plan, not for the eye,
     // so it is read whatever a player at the rating would pick.
-    const plan = planTries(i.fen);
-    const considered: ConsideredTries = new Map(plan.map((t) => [t.uci, { why: 'plan' as const, target: t.target }]));
+    // AND THE MOVES WEIGHED FOR A REASON (`reasonTries`): every capture and
+    // check, a passed pawn's push, the king's step in an ending, a quiet move
+    // that threatens or defends — each read, whatever the eye says.
+    const considered: ConsideredTries = consideredTries(i.fen);
     const weighed = candidateMoves(i.fen, i.rating, { played: null, scored: null });
-    const toRead = [...weighed.map((c) => ({ uci: c.uci, from: c.from, to: c.to })), ...plan.filter((t) => !weighed.some((c) => c.uci === t.uci)).map((t) => ({ uci: t.uci, from: t.uci.slice(0, 2), to: t.uci.slice(2, 4) }))];
+    const toRead = [...weighed.map((c) => ({ uci: c.uci, from: c.from, to: c.to })), ...[...considered.keys()].filter((u) => !weighed.some((c) => c.uci === u)).map((u) => ({ uci: u, from: u.slice(0, 2), to: u.slice(2, 4) }))];
     for (const c of toRead) {
       if (c.uci === top.moves[0]) continue;
       const after = new Chess(i.fen);
