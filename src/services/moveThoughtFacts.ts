@@ -625,7 +625,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       for (const f of readBoardAll('raceCount', { fenBefore: i.fenBefore, san: i.san, student })) {
         facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'passed-pawn', weight: 64 });
       }
-      for (const f of readBoardAll('promotionChoice', { fenBefore: i.fenBefore, san: i.san, student })) {
+      for (const f of readBoardAll('promotionChoice', { fenBefore: i.fenBefore, san: i.san, student, before: i.reads?.before ?? null })) {
         facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'promote', weight: 72 });
       }
       // Checks that come back to the same board (a perpetual) and the

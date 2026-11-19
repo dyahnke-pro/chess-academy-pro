@@ -1472,7 +1472,7 @@ export function computeMoveFacets(
         add(readBoardAll('zugzwangRead', { fenBefore, san, student: studentColorWB, after: null, passAfter: null })[0]);
         add(readBoardAll('theoreticalEnding', { fenBefore, san, student: studentColorWB, afterCp })[0]);
         add(readBoardAll('raceCount', { fenBefore, san, student: studentColorWB })[0]);
-        add(readBoardAll('promotionChoice', { fenBefore, san, student: studentColorWB })[0]);
+        add(readBoardAll('promotionChoice', { fenBefore, san, student: studentColorWB, before: null })[0]);
       }
       // THE KEY DEFENDER and PRACTICAL CHANCES, both seats (WO-DANYA-READS-01
       // #6, #7): the trade that takes off the piece doing a job alone, and the

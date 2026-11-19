@@ -1151,7 +1151,7 @@ export interface BoardContexts {
   /** WHICH PIECE TO MAKE (`promotionChoice`): the promotion `san` on
    *  `fenBefore` (either seat) — an underpromotion and the reason the queen
    *  fails, or a queen made where the board needed a lesser piece. */
-  promotionChoice: { fenBefore: string; san: string; student: Color };
+  promotionChoice: { fenBefore: string; san: string; student: Color; before: readonly AnalysisLine[] | null };
   /** THE KEY DEFENDER TRADED (`keyDefender`, Danya's "exchanging your
    *  opponent's most important piece removes the cog that makes his position
    *  run"): the move `san` on `fenBefore` (either seat) takes, or puts on the
@@ -1263,6 +1263,10 @@ export interface BoardContexts {
   /** Whose king is the fighting piece in an ending. `lines` null: posed by
    *  the count alone (the record's read, which keeps no score). */
   kingActivityGap: { fen: string; lines: readonly EngineLine[] | null; student: Color };
+  /** THE KING UNDER SIEGE AS THE BOARD STANDS (`kingSiege`, the standing
+   *  read): both kings, the student's own first. `studentCp`: the engine's
+   *  score for the student on this board, or null with no read. */
+  kingSiegeNow: { fen: string; student: Color; studentCp: number | null };
   /** Kings and pawns: the other side would be in zugzwang if it had the move. */
   zugzwangIfPassed: { fen: string; student: Color };
   /** The pawn lever in the engine's line that makes a passed pawn. */
@@ -6459,8 +6463,8 @@ export const BOARD_COMPUTERS = {
   promotionChoice: {
     // His "there are only two circumstances under which it makes sense to
     // underpromote": the piece made and why the queen fails, both seats.
-    read: ({ fenBefore, san, student }, fact) => safe(() => {
-      const p = promotionPlayed(fenBefore, san);
+    read: ({ fenBefore, san, student, before }, fact) => safe(() => {
+      const p = promotionPlayed(fenBefore, san, before);
       if (!p) return null;
       const pc = p.choice;
       const text = p.queenMissed ? queenMissedLine(pc, student) : promotionChoiceLine(pc, student, true);
@@ -7225,6 +7229,36 @@ export const BOARD_COMPUTERS = {
       learn: LEARN_VIA_THOUGHT,
       tactics: TACTICS_READ,
       weaknesses: { wired: 'services/moveInsight.ts' },
+    },
+  },
+  kingSiegeNow: {
+    // His "White has a formidable mass of pieces on the kingside while Black's
+    // rooks are far from the king", read on the board as it stands — the move
+    // read (`kingSiege`) says a siege only on the move that makes it, so a
+    // read of a standing board never heard one. Both kings, the student's first.
+    read: ({ fen, student, studentCp }, fact) => safe(() => {
+      const out: CoachFact[] = [];
+      for (const defender of [student, student === 'w' ? 'b' : 'w'] as const) {
+        const attacker = defender === 'w' ? 'b' : 'w';
+        const atkCp = studentCp === null ? null : attacker === student ? studentCp : -studentCp;
+        const s = kingSiege(fen, defender);
+        if (!s || !siegeSpeaks(fen, s, atkCp)) continue;
+        const text = siegeLine(s, student, fen);
+        const squares = siegeSquares(s);
+        out.push(fact({ key: s.key, claims: [s.key, `king-attack:${s.king}`], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
+          seat: attacker === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen }));
+      }
+      return out.length ? out : null;
+    }),
+    computer: 'kingSiege',
+    kind: 'king-read',
+    phase: ANY,
+    surfaces: {
+      learn: { wired: 'services/boardReadFacts.ts' }, play: { wired: 'services/boardReadFacts.ts' }, review: { wired: 'services/boardReadFacts.ts' },
+      lesson: { wired: 'services/boardReadFacts.ts' }, tactics: { wired: 'services/boardReadFacts.ts' },
+      chat: { not: 'chat\'s board answer reads the same siege on the board as it stands (`groundedAnswer` → `kingReadsOn`)' },
+      think: { not: 'the thinking steps judge a move; a siege that stood before it is no step of that move' },
+      weaknesses: { not: 'a reading of a standing board — no move of the student\'s it judges' },
     },
   },
   zugzwangIfPassed: {

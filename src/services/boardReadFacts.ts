@@ -35,6 +35,7 @@ import type { AnalysisLine, StockfishAnalysis } from '../types';
 import type { IntroTense } from '../utils/moveIntro';
 import type { ImportanceTier } from './narrationImportance';
 import { writerFor, momentPosture, plainThreatsSeenFor } from './writerRegister';
+import { readBoardAll } from './boardComputers';
 
 /** A read the student asked for ("read this position"): the asked answer's
  *  writer settings (`writerRegister`). */
@@ -157,6 +158,12 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
   // trade allowed), the second front when the target holds. Not on a puzzle
   // still being solved: a plan names its moves.
   if (!i.withhold) {
+    // THE KINGS AS THE BOARD STANDS (his "a formidable mass of pieces on the
+    // kingside, while Black's rooks are far from the king"): the siege on
+    // either king, the student's own first.
+    for (const f of readBoardAll('kingSiegeNow', { fen: i.fen, student: i.studentColor, studentCp: povCp })) {
+      facts.push({ from: 'position', kind: f.kind, text: f.text, computer: f.computer, squares: f.squares });
+    }
     const siege = siegeOf(i.fen, i.before, whose);
     if (siege) facts.push({ from: 'position', kind: 'siege', text: siege.text, computer: 'siege', squares: siege.squares });
     const steps = stepsOf(i.fen, i.before, whose);

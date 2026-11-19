@@ -1907,7 +1907,7 @@ export function assemblePositionAssessment(opts: {
       if (r) add(raceCountLine(r, sc), raceCountSquares(r));
     } catch { /* a bonus, never a blocker */ }
     try {
-      for (const pc of promotionChoicesOn(fen, opts.bestUci)) add(promotionChoiceLine(pc, sc, false), [pc.from, pc.to]);
+      for (const pc of promotionChoicesOn(fen, opts.bestUci, null)) add(promotionChoiceLine(pc, sc, false), [pc.from, pc.to]);
     } catch { /* a bonus, never a blocker */ }
     // THE KEY DEFENDER, standing (WO-DANYA-READS-01 #6): the piece of theirs
     // doing a job alone, when the engine's best line trades it off — the same
