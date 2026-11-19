@@ -165,7 +165,7 @@ const DIRECT_CALL_DEBT: Record<string, ReadonlyArray<string>> = {
   'coach/chatTurnAnswers.ts': ['computeMustDefend', 'readPosition'],
   'components/Coach/CoachGamePage.tsx': ['scanUpcomingTactics'],
   'components/Coach/CoachGameReview.tsx': ['intentWithFallback', 'renderThesis'],
-  'components/Coach/CoachTeachPage.tsx': ['buildPriorityFirst', 'buildOpponentIntent', 'studentMovePoint', 'intentWithFallback', 'openingAnnouncementForGame', 'theirOpeningVerdict', 'structureNamingLine', 'pieceQualityLines', 'opponentGapClause', 'buildRejectedTempting', 'characterTurn', 'buildCausalChain', 'payoffFor', 'openingBreak', 'backwardLook', 'learnFundamentalVerdict', 'studentMovePointFact', 'moveOrder', 'learnMoveReason', 'kingPawnUnderFire', 'cheaperAttackerHit', 'gambitPoint', 'prizeTeaching', 'temptingTurnClause', 'uncertaintyClause', 'candidateCompareRead', 'heldFoundText', 'slipAnswerText', 'buildPlayCommentary', 'detectBehaviors', 'buildPositionalRead'],
+  'components/Coach/CoachTeachPage.tsx': ['buildPriorityFirst', 'buildOpponentIntent', 'studentMovePoint', 'intentWithFallback', 'openingAnnouncementForGame', 'theirOpeningVerdict', 'pieceQualityLines', 'opponentGapClause', 'buildRejectedTempting', 'characterTurn', 'buildCausalChain', 'payoffFor', 'openingBreak', 'backwardLook', 'learnFundamentalVerdict', 'studentMovePointFact', 'moveOrder', 'learnMoveReason', 'kingPawnUnderFire', 'cheaperAttackerHit', 'temptingTurnClause', 'uncertaintyClause', 'candidateCompareRead', 'heldFoundText', 'slipAnswerText', 'buildPlayCommentary', 'detectBehaviors', 'buildPositionalRead'],
   'components/Tactics/PatternSchoolPage.tsx': ['detectTactics'],
   'hooks/usePhaseNarration.ts': ['renderThesis', 'speakDeepestLookahead'],
 };
