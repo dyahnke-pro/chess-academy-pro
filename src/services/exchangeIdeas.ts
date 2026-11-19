@@ -795,7 +795,7 @@ function idea(id: ExchangeIdeaId, text: string, squares: string[], proof: Proof,
 
 // ── THE AGGREGATOR — every surface asks this one function ─────────────────
 
-interface ExchangeIdeasInput {
+export interface ExchangeIdeasInput {
   /** The board now. */
   fen: string;
   student: Side;

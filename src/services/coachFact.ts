@@ -332,7 +332,7 @@ export const COMPUTER_CATALOG = {
   // each of those producers emits CoachFact under its own name.
   // THE POSITION COMPOSER'S COMPUTERS (P1-6c): every fact `computePositionFacts`
   // hands its door is made by one of these, named at the site that makes it.
-  statusBandChange: { file: 'services/positionFacts.ts', says: 'the game\'s standing crossed a band since the last read: better, level, worse, winning, lost' },
+  statusBandChange: { file: 'services/statusBand.ts', says: 'the game\'s standing crossed a band since the last read: better, level, worse, winning, lost' },
   buildDeliberation: { file: 'services/deliberation.ts', says: 'the moves the student would weigh here and why each falls short, then the move' },
   detectTradeCreatesPin: { file: 'services/latentDanger.ts', says: 'a trade the student is about to make lines their own pieces up for a pin or skewer' },
   detectLatentDanger: { file: 'services/latentDanger.ts', says: 'two of the student\'s pieces share a line their piece can reach: a pin in waiting' },
@@ -353,8 +353,8 @@ export const COMPUTER_CATALOG = {
   readConversion: { file: 'services/conversionMethod.ts', says: 'the next step converting a won position: the passer to escort, the trade to make' },
   computeImportance: { file: 'services/narrationImportance.ts', says: 'how much this moment earns voice; in a decided game, technique' },
   conceptForBoard: { file: 'services/conceptEngine.ts', says: 'the named concept this board shows: a tactic, a technique, a matchup' },
-  pinPressureConcept: { file: 'services/positionFacts.ts', says: 'a pin of the student\'s with its principle: pile on the pinned piece' },
-  guardRemovalConcept: { file: 'services/positionFacts.ts', says: 'remove the guard: the student\'s capture of the piece guarding another' },
+  pinPressureConcept: { file: 'services/boardTeachConcepts.ts', says: 'a pin of the student\'s with its principle: pile on the pinned piece' },
+  guardRemovalConcept: { file: 'services/boardTeachConcepts.ts', says: 'remove the guard: the student\'s capture of the piece guarding another' },
   readCriticalMoment: { file: 'services/criticalMoment.ts', says: 'a moment where one move matters most, for whoever is to move' },
   buildOpponentIntent: { file: 'services/opponentIntent.ts', says: 'what the opponent wants to do next and the squares it aims at' },
   computeLeansOn: { file: 'services/perturbation.ts', says: 'the piece each side leans on most: take it away and the position falls' },

@@ -287,7 +287,7 @@ export function methodBeatRead(s: MethodSignals, plyForVariety = 0): { habit: Me
  *  highlighted"). */
 export interface HabitTarget { words: string; square: string }
 
-interface LiveMethodSignals {
+export interface LiveMethodSignals {
   /** The engine's move here, SAN — what the method would find. */
   bestSan: string | null;
   /** Is a REAL threat standing against the student right now? From the

@@ -171,8 +171,9 @@ describe('it reaches the LIVE composer', () => {
     const live = factValue('must-defend', { points: 3, plies: 1 });
     expect(factValue('latent-chance', { points: 3, plies: 2 })).toBeLessThan(live);
     expect(factValue('latent-danger', { points: 3, plies: 2 })).toBeLessThan(live);
-    const src = await import('node:fs').then((fs) => fs.readFileSync('src/services/positionFacts.ts', 'utf8'));
-    expect(src).toMatch(/text: latentForkClause[\s\S]{0,600}stakes: \{ points: forkPoints\(.*\), plies: 2 \* latentFork\.moves \}/);
+    // The one writer of the fork's sentence and stakes is its registry entry.
+    const src = await import('node:fs').then((fs) => fs.readFileSync('src/services/boardComputers.ts', 'utf8'));
+    expect(src).toMatch(/latentForkClause\(f, seat\)[\s\S]{0,600}stakes: \{ points: forkPoints\(.*\), plies: 2 \* f\.moves \}/);
   });
 });
 

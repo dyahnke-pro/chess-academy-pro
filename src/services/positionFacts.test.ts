@@ -1,6 +1,7 @@
 import { MISCONCEPTION_TAGS } from '../data/misconceptionTags';
 import { describe, it, expect, vi } from 'vitest';
-import { computePositionFacts, clauseText, statusBandChange } from './positionFacts';
+import { computePositionFacts, clauseText } from './positionFacts';
+import { statusBandChange } from './statusBand';
 
 describe('statusBandChange — the general STATUS line', () => {
   it('speaks a directional line when the assessment crosses a band', () => {
