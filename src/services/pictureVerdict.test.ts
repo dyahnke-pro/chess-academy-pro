@@ -8,7 +8,7 @@
 //    matter … 36.Rxa5? Rxh5 … the first order of business is to make sure
 //    that the h5 pawn is safe": 36.Bf7.
 import { describe, it, expect } from 'vitest';
-import { pictureConclusions, type PictureVerdictIn } from './pictureVerdict';
+import { pictureVerdictOf, type PictureVerdictIn } from './pictureVerdict';
 import { consideredTries } from './tryCandidates';
 import { temptingOnBoard, standingRefutations, type WeighRead } from './weighedMoves';
 import { readBoard, type PictureCtx } from './boardComputers';
@@ -120,7 +120,7 @@ const SEVENTH = {
 
 describe('pictureVerdict — the verdict read after the tries', { timeout: 60_000 }, () => {
   it('the rook-lift board: better, but hard to finish — …c4 and …Qf6 among the tries that fail', () => {
-    const c = pictureConclusions(input(ROOKLIFT));
+    const c = pictureVerdictOf(input(ROOKLIFT));
     expect(c?.verdict.kind).toBe('hard-to-finish');
     expect(c?.verdict.word).toBe('slightly better, but hard to finish');
     const names = c?.but.map((t) => t.name) ?? [];
@@ -136,21 +136,21 @@ describe('pictureVerdict — the verdict read after the tries', { timeout: 60_00
   });
 
   it('the endgame board: Qc5 to hit b5 fails to …Qd7 — level, with no direct way in', () => {
-    const c = pictureConclusions(input(ENDGAME));
+    const c = pictureVerdictOf(input(ENDGAME));
     expect(c?.but.find((t) => t.name === 'Qc5')).toMatchObject({ look: 'plan', target: 'b5', reply: '…Qd7' });
     expect(c?.verdict.kind).toBe('no-direct-way');
     expect(c?.verdict.text).toMatch(/^It's level, and (there is no direct way in|the direct tries get nowhere)\. .*Qc5.* all fail\.$/);
   });
 
   it('the seventh-rank board: clearly better, but Rxa5 fails to …Rxh5 and the king walk fails', () => {
-    const c = pictureConclusions(input(SEVENTH));
+    const c = pictureVerdictOf(input(SEVENTH));
     expect(c?.verdict.kind).toBe('hard-to-finish');
     expect(c?.but.find((t) => t.name === 'Rxa5')).toMatchObject({ reply: '…Rxh5', replyTo: 'h5', replyTook: true });
     expect(c?.but.find((t) => t.name === 'Kf4')).toMatchObject({ look: 'king', by: 'material' });
   });
 
   it('NEGATIVE: no failed try read — the band is said plainly, and no plan is chosen by elimination', () => {
-    const c = pictureConclusions(input(ROOKLIFT, (u) => u === 'e6c7' || u === 'e6g7'));
+    const c = pictureVerdictOf(input(ROOKLIFT, (u) => u === 'e6c7' || u === 'e6g7'));
     expect(c?.but).toEqual([]);
     expect(c?.verdict).toMatchObject({ kind: 'plain', text: "You're slightly better." });
     expect(c?.plan).toBeNull();
@@ -162,7 +162,7 @@ describe('pictureVerdict — the verdict read after the tries', { timeout: 60_00
       { evaluation: 950, mate: null, moves: ['d1d5', 'e8e7', 'e1e2'] },
       { evaluation: 0, mate: null, moves: ['e1e2', 'd5f4', 'e2e3'] },
     ];
-    const c = pictureConclusions({ fen, student: 'w', rating: 1800, reads, considered: consideredTries(fen), tempting: [], standing: [] });
+    const c = pictureVerdictOf({ fen, student: 'w', rating: 1800, reads, considered: consideredTries(fen), tempting: [], standing: [] });
     expect(c?.verdict.kind).toBe('works-now');
     expect(c?.verdict.works?.name).toBe('Qxd5');
     expect(c?.plan).toBeNull();
@@ -171,13 +171,13 @@ describe('pictureVerdict — the verdict read after the tries', { timeout: 60_00
   it('NEGATIVE: a forced mate is the story — no conclusions', () => {
     const fen = '6k1/5ppp/8/8/8/8/8/R5K1 w - - 0 1';
     const reads: WeighRead[] = [{ evaluation: 100000, mate: 1, moves: ['a1a8'] }, { evaluation: 0, mate: null, moves: ['g1f2', 'g8f8'] }];
-    expect(pictureConclusions({ fen, student: 'w', rating: 1800, reads, considered: null, tempting: [], standing: [] })).toBeNull();
+    expect(pictureVerdictOf({ fen, student: 'w', rating: 1800, reads, considered: null, tempting: [], standing: [] })).toBeNull();
   });
 });
 
 describe('picturePlan — the try that survives, with the computed link', { timeout: 60_000 }, () => {
   it('the rook lift: Kb8 first, then the lift; on f7 the rook hits the knight that answers …d5', () => {
-    const p = pictureConclusions(input(ROOKLIFT))?.plan;
+    const p = pictureVerdictOf(input(ROOKLIFT))?.plan;
     expect(p?.san).toBe('…Kb8');
     expect(p?.named).toBe('the rook lift');
     expect(p?.text).toMatch(/^So the slower way: …Kb8 first, then the rook lift\./);
@@ -190,7 +190,7 @@ describe('picturePlan — the try that survives, with the computed link', { time
   });
 
   it('the seventh-rank board: first Bf7, which guards the h-pawn …Rxh5 takes after Rxa5 or Rd5', () => {
-    const p = pictureConclusions(input(SEVENTH))?.plan;
+    const p = pictureVerdictOf(input(SEVENTH))?.plan;
     expect(p?.san).toBe('Bf7');
     expect(p?.links).toHaveLength(1);
     expect(p?.links[0]).toMatchObject({ kind: 'guards-taken', at: 'f7', square: 'h5' });
@@ -200,7 +200,7 @@ describe('picturePlan — the try that survives, with the computed link', { time
   });
 
   it('NEGATIVE: no computed link, no "because" — the endgame board says the survivor alone', () => {
-    const p = pictureConclusions(input(ENDGAME))?.plan;
+    const p = pictureVerdictOf(input(ENDGAME))?.plan;
     expect(p?.san).toBe('Be2');
     expect(p?.links).toEqual([]);
     expect(p?.text).toMatch(/^So (first Be2|the quiet Be2 instead)\.$/);

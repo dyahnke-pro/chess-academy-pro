@@ -442,7 +442,7 @@ function boardAfterMoves(fen: string, reads: readonly WeighRead[], mover: Color,
 
 /** THE CONCLUSIONS of one board, or null on a forced mate (the mate is the
  *  story) or with no read. */
-export function pictureConclusions(i: PictureVerdictIn): PictureConclusions | null {
+export function pictureVerdictOf(i: PictureVerdictIn): PictureConclusions | null {
   const b = boardOf(i.fen);
   if (!b) return null;
   const mover = b.turn();
@@ -493,11 +493,11 @@ export function pictureConclusions(i: PictureVerdictIn): PictureConclusions | nu
 
 /** The verdict alone (the registry's `pictureVerdict`). */
 export function pictureVerdict(i: PictureVerdictIn): { verdict: PictureVerdictWord; but: FailedTry[] } | null {
-  const c = pictureConclusions(i);
+  const c = pictureVerdictOf(i);
   return c ? { verdict: c.verdict, but: c.but } : null;
 }
 
 /** The plan that survives (the registry's `picturePlan`). */
 export function picturePlan(i: PictureVerdictIn): PicturePlan | null {
-  return pictureConclusions(i)?.plan ?? null;
+  return pictureVerdictOf(i)?.plan ?? null;
 }

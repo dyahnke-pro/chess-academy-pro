@@ -67,7 +67,7 @@ import { ifTheyPlay, treeSentence, sayable, baitBranch, baitSentence, everyTakeL
 import { mateStakes } from './factStakes';
 import { MOTIF_OF_TACTIC, MOTIFS } from '../data/tacticMotifs';
 import { temptingRefuted, temptingOnBoard, standingRefutations, alsoGood, squareChoice, type WeighRead, type ConsideredTries, type TemptingRefuted, type StandingRefuted } from './weighedMoves';
-import { pictureConclusions, type PictureConclusions, type PictureLedgerIn } from './pictureVerdict';
+import { pictureVerdictOf, type PictureConclusions, type PictureLedgerIn } from './pictureVerdict';
 import { costStakes } from './factStakes';
 import { pawnBreak } from './pawnBreak';
 import { oppositeBishops } from './oppositeBishops';
@@ -356,7 +356,7 @@ function conclusionsOf(c: PictureCtx): PictureConclusions | null {
   const considered = c.considered ?? undefined;
   const tempting = c.refuted?.tempting ?? temptingOnBoard({ fen: c.fen, student: c.student, rating: c.rating, reads: c.reads, priorMove: null, considered });
   const standing = c.refuted?.standing ?? standingRefutations({ fen: c.fen, student: c.student, rating: c.rating, reads: c.reads, considered });
-  return pictureConclusions({ fen: c.fen, student: c.student, rating: c.rating, reads: c.reads, considered: c.considered, tempting, standing,
+  return pictureVerdictOf({ fen: c.fen, student: c.student, rating: c.rating, reads: c.reads, considered: c.considered, tempting, standing,
     lines: c.lines ? c.lines.map((l) => ({ moves: l.moves, evaluation: l.evaluation, mate: l.mate ?? null })) : undefined, ledger: c.ledger ?? null });
 }
 
