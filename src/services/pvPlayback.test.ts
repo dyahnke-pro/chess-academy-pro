@@ -423,11 +423,12 @@ describe('a check is said once', () => {
   const quiet = { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, gaveBack: null, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 };
   it('check: the mark comes off the SAN, the verb carries it', async () => {
     const { plyFactsSentence } = await import('./pvPlayback');
-    expect(plyFactsSentence({ ...quiet, isCheck: true }, 'Nh4+')).toMatch(/^The move Nh4 checks the king/);
+    // A lone check is said only by what it leaves them (2026-11-19).
+    expect(plyFactsSentence({ ...quiet, isCheck: true, newOpenFiles: ['h'] }, 'Nh4+', undefined, null)).toMatch(/^The move Nh4 gives check and opens/);
   });
   it('mate likewise', async () => {
     const { plyFactsSentence } = await import('./pvPlayback');
-    expect(plyFactsSentence({ ...quiet, isCheck: true, isMate: true }, 'Qh7#')).toBe('The move Qh7 delivers checkmate.');
+    expect(plyFactsSentence({ ...quiet, isCheck: true, isMate: true }, 'Qh7#', undefined, null)).toBe('The move Qh7 delivers checkmate.');
   });
 });
 
@@ -497,5 +498,18 @@ describe('the quiet-move rule: a move that only restates the board (WO-DECIDER-0
     const prev = { square: 'c3', capturedValue: 3, net: 3 };
     expect(moveOnlyRestates(c.fen(), 'bxc3', null, prev)).toBe(false);
     expect(plyFactsClause(c.fen(), 'bxc3', { prev, victimOwner: 'their', sanSaid: true })).toMatch(/wins the bishop pair/);
+  });
+});
+
+// Danya have-check 2026-11-19: "checks the king, forcing a reply" is true of
+// every check. A lone check is said by what it leaves them, or not at all.
+describe('a lone check inside a line', () => {
+  it('a back-rank check with one answer names it', () => {
+    const fen2 = '6k1/5pp1/7p/8/8/8/5PPP/3R2K1 w - - 0 1';
+    expect(plyFactsForMove(fen2, 'Rd8+', undefined, true)).toBe('You check the king, and their only answer is Kh7.');
+  });
+  it('a check with many answers says nothing', () => {
+    const fen = '4k3/3p4/2n5/8/8/8/8/R3K3 w - - 0 1';
+    expect(plyFactsForMove(fen, 'Ra8+', undefined, true)).toBeNull();
   });
 });

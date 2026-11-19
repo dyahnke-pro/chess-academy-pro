@@ -132,7 +132,7 @@ export function projectedLineVoice(
     }
     prevStudentTo = to;
     if (p.facts.isMate) return `${p.san} — checkmate.`;
-    const facts = plyFactsSentence(p.facts, p.san, true);
+    const facts = plyFactsSentence(p.facts, p.san, true, p.fenAfter);
     let base = facts;
     if (!base && opts.teachQuiet) {
       // Out of check the move's point is the check it answers — the king's
