@@ -19,11 +19,11 @@ const ctxOf = (b: Board, over: Partial<ReadContext> = {}): ReadContext => ({
   ...readContextOf({
     fen: b.fen,
     top: { evaluation: b.top.mate != null ? (b.top.mate > 0 ? 100000 : -100000) : (b.top.cp ?? 0), mate: b.top.mate },
-    bestUci: b.top.best, withheld: null, studentShot: false,
+    bestUci: b.top.best, withheld: null, studentShot: false, said: null,
   }),
   ...over,
 });
-const OPEN: ReadContext = { fen: null, bucket: 'open', best: [], withheld: [], puzzle: false, studentShot: false };
+const OPEN: ReadContext = { fen: null, bucket: 'open', best: [], withheld: [], puzzle: false, studentShot: false, said: new Set() };
 const said = (facts: readonly ReadFact[], ctx: ReadContext): string[] => decideRead(facts, ctx).facts.map((f) => f.text);
 
 describe('the read decider: his order, the fact he would say at each step', () => {
@@ -67,7 +67,8 @@ describe('the read decider: his order, the fact he would say at each step', () =
     expect(r.facts.map((f) => f.text)).toContain('Their pawn attacks your knight on d5.');
     expect(r.habit).toBe("Their threat first, your idea second: right now they're after your knight.");
     // A shot of your own comes first.
-    expect(decideRead(b.facts, ctxOf(b, { studentShot: true })).habit).toBe(READ_HABIT['forcing-scan']);
+    // The best move is quiet: the habit is the quiet threat, chosen for the board's point.
+    expect(decideRead(b.facts, ctxOf(b, { studentShot: true })).habit).toBe(READ_HABIT['quiet-shot']);
   });
 
   it('NEGATIVE CONTROL: a threat the best move ignores is not said (mastering-the-queen-sacrifice#0, Rc8 leaves the bishop)', () => {
@@ -119,7 +120,7 @@ describe('PUZZLE MODE: the answer withheld, the side to move winning', () => {
   const ctxOfPuzzle = (p: Puzzle, withheld: string[] | null): ReadContext => readContextOf({
     fen: p.fen,
     top: { evaluation: p.fen.split(' ')[1] === 'w' ? 400 : -400, mate: null },
-    bestUci: null, withheld, studentShot: false,
+    bestUci: null, withheld, studentShot: false, said: null,
   });
 
   it('a back-rank mate puzzle: the pattern and the attacking habit, never "what are they threatening?" (01qIp)', () => {
@@ -154,7 +155,7 @@ describe("the verdict's reason is said once (beginner chess strategy #6)", () =>
       { from: 'position', kind: 'standing', text: "You're losing — their passed pawn on d6 is two steps from queening, your isolated pawn on c3 is attacked once and nothing guards it.", squares: ['d6', 'c3'] },
       { from: 'position', kind: 'their-target', text: 'The target is your pawn on c3: it is isolated, so no pawn can ever guard it. Their king on d3 hits it, and nothing guards it.', squares: ['c3', 'd3'] },
     ];
-    const ctx = readContextOf({ fen, top: { evaluation: 500, mate: null }, bestUci: 'g7g5', withheld: null, studentShot: false });
+    const ctx = readContextOf({ fen, top: { evaluation: 500, mate: null }, bestUci: 'g7g5', withheld: null, studentShot: false, said: null });
     expect(decideRead(facts, ctx).facts.map((f) => f.kind)).toEqual(['standing']);
   });
 });

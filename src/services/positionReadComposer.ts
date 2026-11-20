@@ -249,6 +249,7 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
       bestUci: before[0]?.moves[0] ?? null,
       withheld: marks?.squares ?? null,
       studentShot: readHasShot(i.fen, studentCC, before, (tactics?.immediate ?? []).some((t) => t.side === 'student')),
+      said: i.story?.claims ?? null,
     }));
     readLines = decided.facts.map((f) => f.text);
     habitLine = decided.habit;

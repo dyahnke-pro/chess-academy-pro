@@ -491,14 +491,23 @@ export const CANDIDATES_HABIT = 'The habit that catches this: name two or three 
  *  (`liveMethodBeat` 'opponent-threat'), never a nameless habit line here; and
  *  "spend your clock on positions like this" is never said (David 2026-11-19:
  *  removed — clock advice is filler, it teaches nothing about the board). */
-export const READ_HABIT: Readonly<Record<'forcing-scan', string>> = {
+export type ReadHabitId = 'forcing-scan' | 'quiet-shot';
+export const READ_HABIT: Readonly<Record<ReadHabitId, string>> = {
   'forcing-scan': 'Habit for positions like this: CCT — every check, every capture, every threat, in that order, before you consider a quiet move.',
+  'quiet-shot': 'Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.',
 };
+/** THE HABIT IS CHOSEN FOR THE BOARD'S POINT (puzzle reads 2026-11-20: CCT
+ *  closed 29 of 29 reads, quiet moves included): a forcing best move closes
+ *  on CCT, a quiet one on the quiet threat. */
 export function readHabit(s: {
   /** A tactic on the board for the student, to play now. */
   studentShot: boolean;
-}): { habit: 'forcing-scan'; text: string } | null {
-  return s.studentShot ? { habit: 'forcing-scan', text: READ_HABIT['forcing-scan'] } : null;
+  /** REQUIRED: the best move checks or captures (null when unread). */
+  bestForcing: boolean | null;
+}): { habit: ReadHabitId; text: string } | null {
+  if (!s.studentShot) return null;
+  const habit: ReadHabitId = s.bestForcing === false ? 'quiet-shot' : 'forcing-scan';
+  return { habit, text: READ_HABIT[habit] };
 }
 
 export function correctionHabit(s: {

@@ -17,12 +17,22 @@ const BOARDS: Record<string, string> = {
 };
 const R = reads as unknown as Reads;
 const got: Record<string, string> = {};
+/** The same moves read in order WITH a story: each puzzle's ledger carries what its earlier moves said. */
+const told: Record<string, string> = {};
 const all: Array<{ id: string; fen: string }> = [];
 
 beforeAll(async () => {
   const fs = await import('node:fs');
   const rows = fs.readFileSync(`${process.cwd()}/src/services/__fixtures__/puzzles5.boards.jsonl`, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l) as { id: string; fen: string });
   for (const r of rows) { all.push(r); got[r.id] = (await readDanyaBoard(r.fen, R[readKey(r.fen)] ?? [], fixtureReader(R))).read; }
+  const ledger = new Map<string, string[]>();
+  for (const r of rows) {
+    const pz = r.id.split('#')[0];
+    const d = await readDanyaBoard(r.fen, R[readKey(r.fen)] ?? [], fixtureReader(R), ledger.get(pz) ?? []);
+    told[r.id] = d.read;
+    ledger.set(pz, [...(ledger.get(pz) ?? []), ...d.said]);
+  }
+  if (process.env.P5_DUMP) fs.writeFileSync(`${process.env.P5_DUMP}.told.json`, JSON.stringify(told, null, 1));
   if (process.env.P5_DUMP) fs.writeFileSync(process.env.P5_DUMP, JSON.stringify(got, null, 1));
 }, 600_000);
 
@@ -42,6 +52,20 @@ describe('five master puzzles, read move by move', () => {
   it('0IsE8 Rxf5: says exf5 runs into mate', () => { expect(of('0IsE8#1')).toMatch(/exf5[^.]*mate|mate[^.]*exf5/i); });
   it('0IsE8 Kg6: says it threatens Rf1#', () => { expect(of('0IsE8#5')).toMatch(/Rf1/); });
   it('0GvdU f1=N+: says why the knight', () => { expect(of('0GvdU#7')).toMatch(/knight|f1=Q/i); });
+  it('with a story, no general line twice in one puzzle', () => {
+    const twice: string[] = [];
+    for (const pz of new Set(Object.keys(told).map((k) => k.split('#')[0]))) {
+      const seen = new Set<string>();
+      for (const [k, t] of Object.entries(told)) {
+        if (!k.startsWith(`${pz}#`)) continue;
+        for (const sent of t.split(/(?<=[.!?])\s+/).filter((x) => x.length > 30 && !/^(You're|They're|It's level)/.test(x))) {
+          if (seen.has(sent)) twice.push(`${pz}: ${sent}`);
+          seen.add(sent);
+        }
+      }
+    }
+    expect(twice, twice.join('\n')).toEqual([]);
+  });
   it('ceilings: failed tries, words', () => {
     const ws = Object.values(got).map(words);
     const total = Object.values(got).reduce((n, t) => n + tries(t), 0);

@@ -444,7 +444,21 @@ export function endgameConceptFor(fen: string, student: 'w' | 'b'): ComputedConc
     const named = namedTechniqueFor(fen, m.cls, defending, student);
     if (named) return named;
   } catch { /* a predicate that throws teaches nothing — fall through to the principle */ }
+  // THE PAWNS ARE COUNTERPLAY ONLY WHILE THE PIECES ARE WINNING (puzzle reads
+  // 2026-11-20: "your pawns are your only counterplay" said to a side whose
+  // pawn was one push from queening): a pawn of the bare side two pushes or
+  // fewer from its last rank is the plan, not counterplay — the principle is
+  // not said.
+  if (defending && pawnNearQueening(fen, student)) return null;
   return renderMatchupConcept(m, defending);
+}
+
+function pawnNearQueening(fen: string, side: 'w' | 'b'): boolean {
+  const rows = fen.split(' ')[0].split('/');
+  const pawn = side === 'w' ? 'P' : 'p';
+  // rows[0] is rank 8: two pushes or fewer = rank 6–7 for White, 3–2 for Black.
+  const near = side === 'w' ? [1, 2] : [5, 6];
+  return near.some((r) => rows[r]?.includes(pawn));
 }
 
 interface ConceptForBoardOptions {

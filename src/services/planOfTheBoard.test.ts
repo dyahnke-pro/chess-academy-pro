@@ -70,7 +70,7 @@ describe('the read decider says the board\'s plan before a description', () => {
       { from: 'position', kind: 'structure-plan', computer: 'readPosition', text: 'Your rook on a1 is your best-placed piece — it has the half-open a-file.', squares: ['a1'] },
       { from: 'bestMove', kind: 'plan-steps', computer: 'planOfTheBoard', text: 'Next, the rook goes on to b3.', squares: ['e1', 'e3', 'b3'] },
     ];
-    const ctx = readContextOf({ fen: ROOK_LIFT, top: { evaluation: 147, mate: null }, bestUci: 'e1e3', withheld: null, studentShot: false });
+    const ctx = readContextOf({ fen: ROOK_LIFT, top: { evaluation: 147, mate: null }, bestUci: 'e1e3', withheld: null, studentShot: false, said: null });
     const said = decideRead(facts, ctx).facts.map((f) => f.computer);
     expect(said).toContain('planOfTheBoard');
     expect(said).not.toContain('readPosition');

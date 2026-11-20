@@ -41,7 +41,7 @@ interface PlanLever {
 /** A plan sentence and the squares it is about — the board lights every one
  *  while it is said (David 2026-11-05: "If a single square is being named it
  *  must also be highlighted"). */
-interface PlanSentence { text: string; squares: string[] }
+interface PlanSentence { text: string; squares: string[]; /** The plan's claim: its kind and the file it works on — one plan, one claim. */ claim: string }
 
 interface BoardPlanFacts {
   /** The structural trump (a passed pawn, an isolani), or null. A sentence. */
@@ -85,7 +85,8 @@ export function boardPlanFacts(fen: string, side: 'white' | 'black', voice: 'you
   const plans: PlanSentence[] = facts.map((f, i) => {
     const c = cap(f.text);
     const t = (i === 0 ? c : c.replace(/^The plan from here is to /, STEMS[(i - 1) % STEMS.length])).trim();
-    return { text: /[.!?]$/.test(t) ? t : `${t}.`, squares: [...f.squares] };
+    return { text: /[.!?]$/.test(t) ? t : `${t}.`, squares: [...f.squares], // A passer's plan is one plan however the pawn moves (exf4 changes its file).
+      claim: f.kind === 'passer' ? 'plan:passer' : `plan:${f.kind}:${f.file ?? f.squares[0]?.[0] ?? ''}` };
   });
   const levers: PlanLever[] = [];
   // A pawn break to open the position (findPawnBreaks reads the side to move).

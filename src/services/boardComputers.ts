@@ -3014,7 +3014,7 @@ export const BOARD_COMPUTERS = {
       const event = structurePlanEvent(heard, p);
       const text = event === 'announce' ? p.text : event === 'changed' ? planChangeSentence(p.text, 'statement') : '';
       if (!text) return null;
-      return fact({ key: `${p.id}|${p.ideaKey ?? ''}|${p.aim ?? ''}`, claims: [], text, proof: NO_PROOF.description, squares: [...(p.squares ?? [])], stakes: null,
+      return fact({ key: `${p.id}|${p.ideaKey ?? ''}|${p.aim ?? ''}`, claims: [p.ideaKey, p.aim].filter((c): c is string => !!c), text, proof: NO_PROOF.description, squares: [...(p.squares ?? [])], stakes: null,
         seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });
     }),
     computer: 'structurePlanFact',
@@ -3154,7 +3154,7 @@ export const BOARD_COMPUTERS = {
           seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen }));
       };
       if (withTrump && pf.trump) say(pf.trump, pf.trumpSquares);
-      for (const p of pf.plans) say(p.text, p.squares);
+      for (const p of pf.plans) say(p.text, p.squares, [p.claim]);
       const levers = leverSentence(pf.levers);
       if (levers) say(levers, pf.levers.flatMap((l) => l.squares), pf.levers.flatMap((l) => (l.claim ? [l.claim] : [])));
       return out;

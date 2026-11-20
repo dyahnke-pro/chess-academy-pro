@@ -39,7 +39,7 @@ import { jaccard, SAME_CLAIM_JACCARD } from './factSelector';
 import { Chess, type Square } from 'chess.js';
 import { PICTURE_ROLE, type PictureRole } from './positionPicture';
 import weightTable from '../data/read-decider-weights.json';
-import { readHabit, READ_HABIT } from './methodBeat';
+import { readHabit } from './methodBeat';
 import type { PictureConclusionId } from './gameStory';
 
 /** Where a board fact came from: the board's own reads, a tempting move
@@ -104,6 +104,11 @@ export interface ReadContext {
   puzzle: boolean;
   /** A tactic on the board for the student, to play now. */
   studentShot: boolean;
+  /** The game story's say-once ledger: claims already said this game. A
+   *  fact (past the standing and the picture's verdict and plan, which are
+   *  read fresh every board) whose claim is in it is not said again, nor is
+   *  the habit already closed on. */
+  said: ReadonlySet<string>;
 }
 
 /** Three pawns: the band where his reads stop planning and start converting. */
@@ -119,6 +124,8 @@ export function readContextOf(i: {
   bestUci: string | null;
   withheld: readonly string[] | null;
   studentShot: boolean;
+  /** REQUIRED: the story's said claims (`ReadStory.claims`), or null with no story. */
+  said: readonly string[] | null;
 }): ReadContext {
   const sign = i.fen.split(' ')[1] === 'b' ? -1 : 1;
   const mate = i.top?.mate ?? null;
@@ -132,6 +139,7 @@ export function readContextOf(i: {
     withheld: i.withheld ?? [],
     puzzle: !!i.withheld && moverWins,
     studentShot: i.studentShot,
+    said: new Set(i.said ?? []),
   };
 }
 
@@ -245,7 +253,11 @@ const ON_TARGET = 0.02;
 /** The read: one fact per step, in his order, and the habit that closes it. */
 const STANDING_KINDS: ReadonlySet<string> = new Set(['standing', 'standing-bare', 'eval', 'convert', 'compensation', 'verdict']);
 
-export function decideRead<F extends ReadFact>(facts: readonly F[], ctx: ReadContext): { facts: F[]; habit: string | null } {
+export function decideRead<F extends ReadFact>(factsIn: readonly F[], ctx: ReadContext): { facts: F[]; habit: string | null; said: string[] } {
+  // ONCE A GAME: what the story already said is not said again.
+  const toldBefore = (f: F): boolean => !STANDING_KINDS.has(f.kind) && f.computer !== 'pictureVerdict' && f.computer !== 'picturePlan'
+    && storyKeys(f).some((c) => ctx.said.has(c));
+  const facts = factsIn.filter((f) => !toldBefore(f));
   const out: F[] = [];
   let target = new Set<string>();
   const named = new Set<string>();
@@ -255,13 +267,21 @@ export function decideRead<F extends ReadFact>(facts: readonly F[], ctx: ReadCon
   const claimed = new Set<string>();
   // THE STANDING IS ONE CLAIM: a standing, an eval, a convert or a
   // compensation line each says who stands better — the read says one.
-  // AND THE STRUCTURE'S PLAN IS ONE CLAIM: every 'structure-plan' line
-  // answers the one question "what does this pawn structure ask for" — the
-  // read says its answer once (a shared claim key, the same idea; a plan of
-  // another producer — the board's plan, the plan's steps — is its own idea).
-  const claimsOf = (f: F): readonly string[] => (STANDING_KINDS.has(f.kind) ? [...(f.claims ?? []), 'standing']
-    : f.kind === 'structure-plan' ? [...(f.claims ?? []), 'structure-plan'] : (f.claims ?? []));
-  const sameClaim = (f: F): boolean => claimsOf(f).some((c) => claimed.has(c));
+  // TWO PLANS SHARE A CLAIM ONLY WHEN THEY ARE THE SAME PLAN (its goal and
+  // target, carried by the plan's own claim) — never because both are plans.
+  const claimsOf = (f: F): readonly string[] => (STANDING_KINDS.has(f.kind) ? [...(f.claims ?? []), 'standing'] : (f.claims ?? []));
+  // ONE RELEVANCE RULE: a second plan speaks only when it is linked to what
+  // was said — it works on a square the said plan or the best move works on.
+  // An unlinked plan is another conclusion, and it stays unspoken (Korchnoi:
+  // a3 and why, never the minority attack beside it).
+  const unlinkedPlan = (f: F): boolean => {
+    if (f.kind !== 'structure-plan') return false;
+    const plans = out.filter((g) => g.kind === 'structure-plan');
+    if (plans.length === 0) return false;
+    const about = new Set([...plans.flatMap((g) => g.squares), ...ctx.best]);
+    return !f.squares.some((sq) => about.has(sq));
+  };
+  const sameClaim = (f: F): boolean => claimsOf(f).some((c) => claimed.has(c)) || unlinkedPlan(f);
   const say = (f: F): void => {
     out.push(f);
     for (const sq of f.squares) named.add(sq);
@@ -350,7 +370,17 @@ export function decideRead<F extends ReadFact>(facts: readonly F[], ctx: ReadCon
       }
     }
   }
-  return { facts: withDetails(out, facts, ctx, argued), habit: habitOf(facts, ctx) };
+  const kept = withDetails(out, facts, ctx, argued);
+  const h = habitOf(facts, ctx);
+  const habit = h && !ctx.said.has(`habit:${h.id}`) ? h : null;
+  return { facts: kept, habit: habit?.text ?? null, said: [...kept.flatMap(storyKeys), ...(habit ? [`habit:${habit.id}`] : [])] };
+}
+
+/** A fact's keys in the story's ledger: its claims, or — for a fact with
+ *  none — its computer and the squares it is about (the same general line on
+ *  the same squares is the same idea). */
+function storyKeys(f: ReadFact): string[] {
+  return f.claims?.length ? [...f.claims] : [`fact:${f.computer ?? f.kind}:${[...f.squares].sort().join(',')}`];
 }
 
 /** May this fact be said here at all: not a restatement, not on a withheld
@@ -535,13 +565,19 @@ function withDetails<F extends ReadFact>(picked: readonly F[], all: readonly F[]
  *  only when the board proves their threat (a must-defend) and you have no
  *  shot of your own, the forcing scan when you have one. Nothing on a withheld
  *  board that is not a winning shot. */
-function habitOf(facts: readonly ReadFact[], ctx: ReadContext): string | null {
-  if (ctx.puzzle) return READ_HABIT['forcing-scan'];
+function habitOf(facts: readonly ReadFact[], ctx: ReadContext): { id: string; text: string } | null {
+  const bestForcing = ((): boolean | null => {
+    if (!ctx.fen || ctx.best.length < 2) return null;
+    try { const m = new Chess(ctx.fen).move({ from: ctx.best[0], to: ctx.best[1], promotion: 'q' }); return !!m.captured || /[+#]/.test(m.san); } catch { return null; }
+  })();
+  // A puzzle still being solved keeps CCT: a habit that says "quiet" hands over the answer's kind.
+  if (ctx.puzzle) { const r = readHabit({ studentShot: true, bestForcing: true }); return r ? { id: r.habit, text: r.text } : null; }
   if (ctx.withheld.length) return null;
   const real = facts.some((f) => f.kind === 'must-defend' && bestAnswers(f, ctx));
   // Their threat's habit is the live beat's, with the threat named.
-  if (real && !ctx.studentShot) return facts.find((f) => f.kind === 'opp-think')?.text ?? null;
-  return readHabit({ studentShot: ctx.studentShot })?.text ?? null;
+  if (real && !ctx.studentShot) { const t = facts.find((f) => f.kind === 'opp-think')?.text; return t ? { id: 'opp-think', text: t } : null; }
+  const r = readHabit({ studentShot: ctx.studentShot, bestForcing });
+  return r ? { id: r.habit, text: r.text } : null;
 }
 
 /** Does the best move answer the threat on this fact's square — the piece

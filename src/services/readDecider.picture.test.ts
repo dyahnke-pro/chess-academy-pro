@@ -4,7 +4,7 @@ import { decideRead, type ReadFact, type ReadContext } from './readDecider';
 // Danya, the positional rook lift #2 (Black to play): White's bishop on h6 is
 // stranded — the detail behind why …Qf6 tempts and why the win is hard.
 const FEN = '2kr2r1/1b5p/p2pn1qB/1pp1p1p1/4P3/1PPPQNP1/1P3P1R/3RK3 b - - 0 25';
-const ctx: ReadContext = { fen: FEN, bucket: 'open', best: ['d8', 'd7'], withheld: [], puzzle: false, studentShot: false };
+const ctx: ReadContext = { fen: FEN, bucket: 'open', best: ['d8', 'd7'], withheld: [], puzzle: false, studentShot: false, said: new Set() };
 
 describe('a read keeps the detail of its steps (WO-PICTURE-01 P4)', () => {
   const tempting: ReadFact = { from: 'tempting', kind: 'refuted', text: '…Qf6 to trap the bishop on h6 is met by Rh5.', squares: ['g6', 'f6', 'h6', 'h5'], stakes: 80 };

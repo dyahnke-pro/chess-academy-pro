@@ -6,10 +6,10 @@ import { readHabit, READ_HABIT } from './methodBeat';
 
 describe('readHabit', () => {
   it('a shot for the student is the forcing scan', () => {
-    expect(readHabit({ studentShot: true })?.habit).toBe('forcing-scan');
+    expect(readHabit({ studentShot: true, bestForcing: true })?.habit).toBe('forcing-scan');
   });
   it('a board with no shot gets no habit line — never clock advice (David 2026-11-19: "spend your clock" removed)', () => {
-    expect(readHabit({ studentShot: false })).toBeNull();
+    expect(readHabit({ studentShot: false, bestForcing: null })).toBeNull();
     for (const t of Object.values(READ_HABIT)) expect(t).not.toMatch(/clock|spend (your )?time|save your time/i);
   });
   it('each habit has one fixed wording (repetition builds the habit)', () => {

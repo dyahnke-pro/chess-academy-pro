@@ -12,7 +12,7 @@ export const readKey = (fen: string): string => fen.split(' ').slice(0, 4).join(
 export type Reads = Record<string, AnalysisLine[]>;
 export type Reader = (fen: string) => Promise<AnalysisLine[] | null>;
 
-export interface DanyaRead { read: string; facts: Array<{ kind: string; text: string }> }
+export interface DanyaRead { read: string; facts: Array<{ kind: string; text: string; claims?: readonly string[]; computer?: string }>; said: string[] }
 
 export function fixtureReader(reads: Reads): Reader {
   return (fen: string) => {
@@ -22,7 +22,9 @@ export function fixtureReader(reads: Reads): Reader {
   };
 }
 
-export async function readDanyaBoard(fen: string, before: AnalysisLine[], read: Reader): Promise<DanyaRead> {
+/** `said`: the game story's claims so far — a puzzle read in order passes
+ *  what the moves before it said (once a game). */
+export async function readDanyaBoard(fen: string, before: AnalysisLine[], read: Reader, said: readonly string[] | null = null): Promise<DanyaRead> {
   const side = new Chess(fen).turn();
   const pf = await boardReadFacts({ fen, studentColor: side, rating: 1800, before, read, withhold: false, readTempting: true, engineFutures: false, story: null,
     tense: 'now', history: [], theory: false, studentNeedContext: null } as unknown as Parameters<typeof boardReadFacts>[0]);
@@ -32,9 +34,11 @@ export async function readDanyaBoard(fen: string, before: AnalysisLine[], read: 
     bestUci: before[0]?.moves[0] ?? null,
     withheld: null,
     studentShot: readHasShot(fen, side, before, false),
+    said,
   }));
   return {
     read: [...decided.facts.map((f) => f.text), decided.habit ?? ''].map((t) => t.trim()).filter(Boolean).join(' '),
-    facts: pf.facts.map((f) => ({ kind: f.kind, text: f.text })),
+    facts: pf.facts.map((f) => ({ kind: f.kind, text: f.text, claims: f.claims ?? [], computer: f.computer })),
+    said: decided.said,
   };
 }

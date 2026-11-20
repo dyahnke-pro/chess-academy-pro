@@ -38,7 +38,7 @@ function readOf(b: Board, readTempting = true): Promise<{ facts: BoardFact[]; re
     const student = b.fen.split(' ')[1] as 'w' | 'b';
     const before = b.top.map(([ev, mv], k) => asLine(ev, mv.split(' '), k));
     const set = await boardReadFacts({ fen: b.fen, studentColor: student, rating: 1800, before, read: readerFor(b), withhold: false, tense: 'now', history: [], theory: false, readTempting, engineFutures: false, studentNeedContext: null, story: null });
-    const ctx = readContextOf({ fen: b.fen, top: { evaluation: before[0].evaluation, mate: null }, bestUci: before[0].moves[0], withheld: null, studentShot: false });
+    const ctx = readContextOf({ fen: b.fen, top: { evaluation: before[0].evaluation, mate: null }, bestUci: before[0].moves[0], withheld: null, studentShot: false, said: null });
     const read = decideRead(set.facts, ctx).facts;
     if (process.env.READ_SPEAKS_PRINT) console.log(`\n${b.fen}\n${read.map((f, i) => `${i + 1}. [${f.kind}${f.computer ? `:${f.computer}` : ''}] ${f.text}`).join('\n')}`);
     return { facts: set.facts, read };
@@ -126,7 +126,7 @@ describe('no support is stapled without a computed link', () => {
   // White to move: Nf3 with Nd4 and Ng5 behind it; their pawns on a7 and h7.
   const FEN = '4k3/p6p/8/8/8/5N2/8/4K3 w - - 0 1';
   // The best move left unread: the weights read the tries off it, not on it.
-  const ctx: ReadContext = { fen: FEN, bucket: 'open', best: [], withheld: [], puzzle: false, studentShot: false };
+  const ctx: ReadContext = { fen: FEN, bucket: 'open', best: [], withheld: [], puzzle: false, studentShot: false, said: new Set() };
   const verdict: ReadFact = { from: 'position', kind: 'verdict', computer: 'pictureVerdict', text: "You're slightly better, but it is hard to finish them off. Ng5 fails.", squares: ['f3', 'g5'], tries: ['f3g5'] };
   const plan: ReadFact = { from: 'position', kind: 'plan-now', computer: 'picturePlan', text: 'So first Nd4.', squares: ['f3', 'd4'], line: ['f3d4', 'e8d7', 'd4b5'] };
   const named: ReadFact = { from: 'tempting', kind: 'refuted', computer: 'temptingOnBoard', text: 'Ng5 is met by …h6.', squares: ['f3', 'g5'], move: 'f3g5' };
