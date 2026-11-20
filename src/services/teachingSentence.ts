@@ -365,7 +365,10 @@ export function renderTry(t: TryData): string {
     tail = `${strip(last)}, and ${onTry ? asClause(cost) : strip(name(cost)).replace(/^After\b/, 'after')}.`;
     // One "and" a sentence: a why that already runs on with one, or a long
     // one, keeps the cost its own sentence.
-    if (tail.split(/\s+/).length > 34 || /, and /.test(last)) tail = `${last} ${name(cost)}`;
+    // …and a cost that already has its own "and" ("achieves nothing, and
+    // gives back …"), or a sentence that is another idea ("But your …Bxe4
+    // stops it"), keeps the cost its own sentence.
+    if (tail.split(/\s+/).length > 34 || /, and /.test(last) || /, and /.test(cost) || /^But\b/.test(last)) tail = `${last} ${name(cost)}`;
   }
   return [...sentences.slice(0, -1), tail].join(' ');
 }
