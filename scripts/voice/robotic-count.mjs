@@ -12,7 +12,7 @@
  *   node scripts/voice/robotic-count.mjs [--samples=N] [--json]
  */
 import fs from 'node:fs';
-import { roboticMarks, MARKS } from './robotic-marks.mjs';
+import { roboticMarks, MARKS, sampleOf } from './robotic-marks.mjs';
 
 const args = Object.fromEntries(process.argv.slice(2).map((a) => a.replace(/^--/, '').split('=')).map(([k, v]) => [k, v ?? true]));
 const SAMPLES = Number(args.samples ?? 3);
@@ -44,6 +44,6 @@ if (args.json) {
   console.log('\nby pattern:');
   for (const [m, hits] of Object.entries(byMark).sort((a, b) => b[1].length - a[1].length)) {
     console.log(`  ${m.padEnd(16)} ${hits.length}`);
-    for (const h of hits.slice(0, SAMPLES)) console.log(`      [${h.key}] …${h.hit}…  ← ${h.text.slice(0, 220)}`);
+    for (const h of hits.slice(0, SAMPLES)) console.log(`      [${h.key}] …${h.hit}…  ← ${sampleOf(h.text)}`);
   }
 }

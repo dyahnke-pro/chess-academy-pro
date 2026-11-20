@@ -46,3 +46,19 @@ export function roboticMarks(raw) {
   if (eng) out.push({ mark: 'engine-talk', hit: text.slice(Math.max(0, eng.index - 20), eng.index + 50) });
   return out;
 }
+
+/** A spoken line shown as a sample: whole sentences up to `max` characters,
+ *  and a "[…]" marker whenever the line goes on — a sample cut mid-sentence
+ *  ("…Bxh7+? Then") reads as a producer that truncated the line. */
+export function sampleOf(text, max = 220) {
+  if (text.length <= max) return text;
+  const sentences = text.match(/[^.!?]+[.!?]+(?:\s+|$)|[^.!?]+$/g) ?? [text];
+  let out = '';
+  for (const s of sentences) {
+    if ((out + s).trimEnd().length > max) break;
+    out += s;
+  }
+  out = out.trimEnd();
+  if (!out) out = text.slice(0, max).replace(/\s+\S*$/, '');
+  return `${out} […]`;
+}
