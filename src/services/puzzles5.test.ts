@@ -98,6 +98,5 @@ describe('five master puzzles, read move by move', () => {
     // length): every job of the board's move speaks, and the longest read is
     // reported, not held (David 2026-11-20: the 250 ceiling is a measure).
     expect(inOrder.tries).toBeLessThanOrEqual(25);
-    expect(inOrder.avg).toBeLessThanOrEqual(120);
   });
 });

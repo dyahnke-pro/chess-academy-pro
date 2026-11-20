@@ -858,8 +858,8 @@ export interface TurnDecision {
    *  proves the skill (David 2026-09-30: "Short phrasing when green"). */
   faded: LearnLane[];
   /** THE PROOF LEDGER — the same contract as `CoachDecision` (one coach P1,
-   *  2026-10-07): the proof of every fact that SPOKE, keyed by its spoken
-   *  text, and the lanes that spoke a conclusion on the `stated` escape. */
+   *  2026-10-07): the proof of every fact that SPOKE, keyed by the fact's
+   *  id (never its words), and the lanes that spoke a conclusion on the `stated` escape. */
   proofOf: ReadonlyMap<string, Proof>;
   unproven: number;
   unprovenLanes: LearnLane[];
@@ -1223,8 +1223,15 @@ export function decideTurn(
   };
   // The turn is about the slip, so its own habit is the turn's one habit —
   // as it was when the habit rode inside the verdict (WO-ONE-COACH-01).
-  const slotRank = (x: Survivor): number =>
-    (OWED_ANSWER.has(x.lane) || x.lane === 'mistakeHabit' ? 1e6 : 0) - (fallbackReason(x.fact.claims) ? 1e6 : 0) + value(x);
+  // THE MOVE'S MOST IMPORTANT JOB, BY ITS STAKES (CLAUDE.md rule 3, by
+  // surface — Learn: one reason a move, the most important by its computed
+  // stakes; the lane's learned value only breaks a tie). An owed answer still
+  // comes first and a fallback reason last.
+  const slotRank = (x: Survivor): number => {
+    const slot = slotOf(x);
+    const byStakes = slot === 'yours-reason' || slot === 'their-reason' ? stakeOf(x) * 1e3 : 0;
+    return (OWED_ANSWER.has(x.lane) || x.lane === 'mistakeHabit' ? 1e9 : 0) - (fallbackReason(x.fact.claims) ? 1e9 : 0) + byStakes + value(x);
+  };
   const slotPick = new Map<Slot, Survivor>();
   for (const x of survivors) {
     const slot = slotOf(x);
@@ -1324,6 +1331,15 @@ export function decideTurn(
     // is still valued over a description: it leads its step.
     const thought = thoughtHold(x);
     if (subsumed.has(x)) { hold(x.lane, 'subsumed'); continue; }
+    // THE MOVE'S JOB IS REQUIRED (rule 3): the reason a move keeps — the
+    // student's and theirs — is never held as a restatement or off the
+    // danger's topic; a turn whose move job was computed says it.
+    const moveJob = x === slotPick.get('yours-reason') || x === slotPick.get('their-reason');
+    if (moveJob && !thought) {
+      keep.push(x.fact);
+      if (!spoke.includes(x.lane)) spoke.push(x.lane);
+      continue;
+    }
     if (!restates && !offTopic && !thought) {
       keep.push(x.fact);
       if (!spoke.includes(x.lane)) spoke.push(x.lane);
@@ -1426,7 +1442,7 @@ export function decideTurn(
     kept: keep,
     dropped: [
       ...verified.dropped,
-      ...survivors.filter((x) => !keep.includes(x.fact)).map((x) => ({ fact: x.fact, reason: 'a description that adds nothing to the lead' })),
+      ...survivors.filter((x) => !keep.includes(x.fact)).map((x) => ({ fact: x.fact, reason: 'a description that adds nothing to the lead', said: false })),
     ],
   };
   // THE LEAD IS WHAT SPOKE (prod Learn audit 2026-10-29, ply 18): a lead held
@@ -1444,19 +1460,24 @@ export function decideTurn(
     : null;
   // THE PROOF LEDGER over what spoke — the proof travels with the fact from
   // its producer (`LaneFact.proof`), never re-derived.
+  // Keyed by the FACT, never its words (CLAUDE.md rule 3: the door decides
+  // on data).
+  const proofKey = (k: VoiceFact): string => k.factId ?? `${laneFor(k) ?? '-'}|${(k.claims ?? []).join(',')}`;
   const proofOf = new Map<string, Proof>();
   const unprovenLanes: LearnLane[] = [];
   for (const k of keep) {
     const src = sourceOf(k);
     if (!src) continue;
-    if (isProof(src.proof)) proofOf.set(k.text, src.proof);
+    if (isProof(src.proof)) proofOf.set(proofKey(k), src.proof);
     else if (src.proof.none === 'stated' && !unprovenLanes.includes(src.lane)) unprovenLanes.push(src.lane);
   }
-  // THE WHY THAT WAS COMPUTED AND NOT SAID — measured, never decided here.
+  // THE WHY THAT WAS COMPUTED AND NOT SAID — measured, never decided here:
+  // a proven fact whose words the door cut (faded) — read off the door's own
+  // record, never off the sentence.
   const proofUnsaid: LearnLane[] = [];
   for (const k of keep) {
-    const p = proofOf.get(k.text); const lane = laneFor(k);
-    if (p && lane && p.short && !k.text.includes(p.short) && !proofUnsaid.includes(lane)) proofUnsaid.push(lane);
+    const p = proofOf.get(proofKey(k)); const lane = laneFor(k);
+    if (p && lane && p.short && faded.includes(lane) && !proofUnsaid.includes(lane)) proofUnsaid.push(lane);
   }
   const heldWithProof: LearnLane[] = [];
   const heldStaked: LearnLane[] = [];
@@ -1479,7 +1500,7 @@ export function decideTurn(
   // …and whether that reason carries a COMPUTED proof (a line, proven
   // squares) — the lane alone cannot say: `movePoint` carries both the
   // engine's winning line and a board description.
-  const ownProven = ownKept.some((x) => proofOf.has(x.fact.text));
+  const ownProven = ownKept.some((x) => proofOf.has(proofKey(x.fact)));
   // WHAT spoke inside a many-fact lane (A-plan P0: the weighing and the habit
   // ride the position-facts lane, so a lane count could not see them).
   const spokeKinds = keep.flatMap((f) => { const k = sourceOf(f)?.factKind; return k ? [k] : []; });

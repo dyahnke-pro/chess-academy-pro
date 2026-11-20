@@ -235,7 +235,7 @@ describe('the proof rides through the door (one-coach P3)', () => {
   it('a conclusion that carries its proof hands it back for Why', () => {
     const d = decide(blunder, student, { board: CALM_BOARD, facts: [doorFact(T, { squares: ['f4', 'g6'], proof })] }, 'walk');
     expect(d.spoken).toContain(T);
-    expect(d.proofOf.get(T)).toBe(proof);
+    expect([...d.proofOf.values()]).toContain(proof);
     expect(d.unproven).toBe(0);
   });
   it('a conclusion with no proof still speaks today, and is counted', () => {

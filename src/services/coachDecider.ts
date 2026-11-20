@@ -313,8 +313,8 @@ interface CoachDecision {
    *  narrating a move instead of teaching one — the thing the target
    *  (Naroditsky) never does. Required, so every construction answers it. */
   teaches: boolean;
-  /** The proof of every fact that SPOKE — Why reads it from here, never
-   *  re-derives it. */
+  /** The proof of every fact that SPOKE, keyed by the fact's id (never its
+   *  words) — Why reads it from here, never re-derives it. */
   proofOf: ReadonlyMap<string, Proof>;
   /** Conclusions that spoke WITHOUT a proof — the measured backlog. */
   unproven: number;
@@ -340,7 +340,7 @@ function proofLedger(spoken: readonly DoorFact[]): Pick<CoachDecision, 'proofOf'
   let unproven = 0;
   const unprovenKinds: string[] = [];
   for (const f of spoken) {
-    if (isProof(f.proof)) { proofOf.set(f.text, f.proof); continue; }
+    if (isProof(f.proof)) { proofOf.set(f.id, f.proof); continue; }
     if (FACT_PROOF[f.kind] === 'proven') { unproven += 1; unprovenKinds.push(f.kind); }
   }
   return { proofOf, unproven, unprovenKinds };
@@ -357,12 +357,15 @@ function emit(
    *  read for the staked counts. */
   facts: readonly DoorFact[],
   lead: DoorFact | null,
+  /** The facts that SPOKE, as objects: what the record reads, never the
+   *  spoken words matched back (CLAUDE.md rule 3: decide on data). */
+  said: readonly DoorFact[] = [],
 ): CoachDecision {
   // HOW EACH FACT AFTER THE LEAD IS JOINED TO IT (P1-11, measured — the door
   // still keeps a description by its squares): cause → effect (the lead's
   // line changes a relation it stands on), a shared square, or nothing.
   const leadSpoken = d.spoken.length > 0 ? lead : null;
-  const after = leadSpoken ? facts.filter((f) => f !== leadSpoken && d.spoken.includes(f.text)) : [];
+  const after = leadSpoken ? facts.filter((f) => f !== leadSpoken && said.includes(f)) : [];
   const linkOf = (f: DoorFact): 'cause-effect' | 'square' | 'none' =>
     (leadSpoken && causeEffect(leadSpoken, f) ? 'cause-effect' : leadSpoken && f.squares.some((s) => leadSpoken.squares.includes(s)) ? 'square' : 'none');
   emitCoachDecision({
@@ -399,8 +402,8 @@ function emit(
       door: 'moment',
       lines: [
         ...facts.filter((f) => f.text.trim()).map((f) => {
-          const said = d.spoken.includes(f.text);
-          return { computer: f.computer, kind: f.kind, text: f.text, said, why: said ? null : (quietWhy.get(f.text) ?? d.reason), fen: f.fen };
+          const spokeIt = said.includes(f);
+          return { computer: f.computer, kind: f.kind, text: f.text, said: spokeIt, why: spokeIt ? null : (quietWhy.get(f.text) ?? d.reason), fen: f.fen };
         }),
         ...(d.method ? [{ computer: 'methodBeat', kind: methodKind ?? 'method', text: d.method, said: true, why: null }] : []),
       ],
@@ -644,7 +647,7 @@ export function decide(
   const teaches = methodKind !== null || spokenFacts.some((f) => roleOf(f) === 'teach');
   // Said shorter — keyed by the words the surface renders.
   const fadedSpoken = new Map([...faded].filter(([f]) => spokenFacts.includes(f)).map(([f, l]) => [f.text, l] as const));
-  return emit(posture, { ...base, method: methodBeat, speak: true, reason: 'spoken', teaches, spoken, quiet: quietAll, faded: fadedSpoken, ...proofLedger(spokenFacts) }, student, methodKind, bundle.facts, spokenFacts[0] ?? null);
+  return emit(posture, { ...base, method: methodBeat, speak: true, reason: 'spoken', teaches, spoken, quiet: quietAll, faded: fadedSpoken, ...proofLedger(spokenFacts) }, student, methodKind, bundle.facts, spokenFacts[0] ?? null, spokenFacts);
 }
 
 /** WHICH HABITS THIS STUDENT KEEPS BREAKING, read off the weakness spine.

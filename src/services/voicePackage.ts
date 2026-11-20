@@ -238,7 +238,9 @@ export interface VoicePackage {
   /** Exactly what `spoken` was built from, in spoken order. Log THIS. */
   kept: VoiceFact[];
   /** What was refused and why, so a silent package is diagnosable. */
-  dropped: Array<{ fact: VoiceFact; reason: string }>;
+  /** `said`: refused because it was already said (a claim, a twin, a
+   *  duplicate) — data a decider reads, never the reason's words. */
+  dropped: Array<{ fact: VoiceFact; reason: string; said: boolean }>;
 }
 
 /** Verify one fact against its own board. Returns the text to speak — possibly
@@ -510,10 +512,10 @@ export function buildVoicePackage(
   for (const { f } of ordered) {
     const afterKeptFact = lastFactKept;
     lastFactKept = false;
-    if (f.claims?.some((c) => seen.has(claimKey(c)))) { dropped.push({ fact: f, reason: 'claim already said' }); continue; }
+    if (f.claims?.some((c) => seen.has(claimKey(c)))) { dropped.push({ fact: f, reason: 'claim already said', said: true }); continue; }
     const result = verify(f);
-    if ('reason' in result) { dropped.push({ fact: f, reason: result.reason }); continue; }
-    if (f.whole && sentencesOf(result.text).length < sentencesOf(stripMoveNumbers(f.text.trim())).length) { dropped.push({ fact: f, reason: 'part failed board grading' }); continue; }
+    if ('reason' in result) { dropped.push({ fact: f, reason: result.reason, said: false }); continue; }
+    if (f.whole && sentencesOf(result.text).length < sentencesOf(stripMoveNumbers(f.text.trim())).length) { dropped.push({ fact: f, reason: 'part failed board grading', said: false }); continue; }
     // Same sentence from two producers is one sentence to the ear — and the two
     // producers are often the two PACKAGES of one turn, which is why `seen` is
     // seeded above rather than starting empty.
@@ -556,7 +558,7 @@ export function buildVoicePackage(
       mine.delete(sayKey(fresh.pop() as string));
       why.add('duplicate');
     }
-    if (f.whole && why.size > 0) { dropped.push({ fact: f, reason: 'part already said' }); continue; }
+    if (f.whole && why.size > 0) { dropped.push({ fact: f, reason: 'part already said', said: true }); continue; }
     for (const k of mine) seen.add(k);
     if (fresh.length === 0) {
       // Whole-fact refusals report the STRONGEST cause, so a fact that lost one
@@ -565,7 +567,7 @@ export function buildVoicePackage(
       const reason = why.has('same observation, different moral')
         ? 'same observation, different moral'
         : why.has('duplicate') ? 'duplicate' : 'already said this turn';
-      dropped.push({ fact: f, reason });
+      dropped.push({ fact: f, reason, said: true });
       continue;
     }
     const key = sayKey(fresh.join(' '));

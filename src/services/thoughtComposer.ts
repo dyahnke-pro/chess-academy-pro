@@ -23,7 +23,7 @@
 //      interface talk).
 // Surfaces differ only in which steps they ask for and whose record they
 // read; the order and the choice are this file's.
-import { stripThink, THINK_MARK } from '../utils/thinkPause';
+import { stripThink } from '../utils/thinkPause';
 import type { SaidSet } from './gameStory';
 import { emitEverything, everythingListening } from './everythingEvents';
 import { stakeValue } from './factStakes';
@@ -397,11 +397,14 @@ function orderWith(record: ThoughtRecord | null): (a: ThoughtFact, b: ThoughtFac
   return (a, b, ia, ib) => (THOUGHT_ORDER[a.step] - THOUGHT_ORDER[b.step])
     // THE DANGER STEP is the nearest thing at stake first: a piece hanging now
     // before a threat that needs setting up.
-    || (a.step === 'danger' ? (stakeValue(b.stakes) ?? 0) - (stakeValue(a.stakes) ?? 0) : 0)
     // THE STORY FOLLOWS THE MOVE (his order: what the move changed first): the
     // opening's thread — the price paid, their setup, the key break — is said
     // behind whatever the move itself does in its step, never ahead of it.
     || (Number(a.source === 'openingStory') - Number(b.source === 'openingStory'))
+    // INSIDE EACH PART, THE COMPUTED STAKES RANK (CLAUDE.md rule 3; the
+    // danger step's "nearest thing at stake first" is the same rule); the
+    // learned kind weight only breaks a tie.
+    || ((stakeValue(b.stakes) ?? 0) - (stakeValue(a.stakes) ?? 0))
     || (valueOf(b, record) - valueOf(a, record))
     || (ia - ib);
 }
@@ -439,9 +442,7 @@ export function composeThought(
   // A lesson, Review, chat and a How-to-think step say the question and its
   // answer as one line — the mark is never spoken or shown (the priority read
   // reached a How-to-think step as "What's the priority here? ‖ Their pawn…").
-  const facts = given.map((f) => (f.text.includes(THINK_MARK) || (f.alsoText ?? '').includes(THINK_MARK)
-    ? { ...f, text: stripThink(f.text), ...(f.alsoText !== undefined ? { alsoText: stripThink(f.alsoText) } : {}) }
-    : f));
+  const facts = given.map((f) => ({ ...f, text: stripThink(f.text), ...(f.alsoText !== undefined ? { alsoText: stripThink(f.alsoText) } : {}) }));
   const reg = THOUGHT_REGISTER[surface];
   const held: ComposedThought['held'] = [];
   // ONE CLAIM, THE WORDS THAT SAY MORE: a fact whose idea another fact on the
@@ -479,8 +480,7 @@ export function composeThought(
   const voiceRefuses = (f: ThoughtFact): ComposedThought['held'][number]['why'] | null => {
     const pkg = buildVoicePackage([{ kind: 'computed', text: f.text, fen: f.fen, altFen: f.altFen, squares: f.squares, claims: f.claims, lines: f.lines, proof: f.proof }], undefined, pickedSaid);
     if (pkg.kept.length > 0) return null;
-    const reason = pkg.dropped.length > 0 ? pkg.dropped[0].reason : '';
-    return /already|duplicate|same observation/.test(reason) ? 'already-said' : 'refused';
+    return pkg.dropped[0]?.said ? 'already-said' : 'refused';
   };
   /** Say `said` (the fact as it will be heard) unless the voice refuses it;
    *  a refused fact is held and takes no place. */
@@ -587,8 +587,7 @@ export function composeThought(
   for (const f of picked) {
     const pkg = buildVoicePackage([{ kind: 'computed', text: f.text, fen: f.fen, altFen: f.altFen, squares: f.squares, claims: f.claims, lines: f.lines, proof: f.proof }], undefined, said);
     if (pkg.kept.length === 0) {
-      const reason = pkg.dropped.length > 0 ? pkg.dropped[0].reason : '';
-      held.push({ fact: f, why: /already|duplicate|same observation/.test(reason) ? 'already-said' : 'refused' });
+      held.push({ fact: f, why: pkg.dropped[0]?.said ? 'already-said' : 'refused' });
       continue;
     }
     const k = pkg.kept[0];

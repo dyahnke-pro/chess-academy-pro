@@ -364,5 +364,7 @@ export function renderMoveJobs(texts: readonly string[]): string {
   const [first, ...rest] = texts;
   const clauses = rest.map(jobClause).filter((c): c is string => !!c);
   if (clauses.length === 0) return first;
-  return `${first.trim().replace(/[.\s]*$/, '.')} It also ${andList(clauses)}.`;
+  // One idea a sentence: each further job its own short sentence, never an
+  // "and … and …" chain.
+  return [first.trim().replace(/[.\s]*$/, '.'), ...clauses.map((c, k) => `${k === 0 ? 'It also' : 'And it'} ${c}.`)].join(' ');
 }
