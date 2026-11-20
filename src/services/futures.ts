@@ -668,6 +668,11 @@ export function changeReason(args: ChangeReasonInput, more: EngineFutureFacts | 
   return changeReasonRead(args, more)?.text ?? null;
 }
 
+/** Computers whose fact is the game's STATE ("they're worse, so they're
+ *  setting you a problem"), not a relation on one board: never anchored to a
+ *  line's board. */
+const STATE_NOT_BOARD: ReadonlySet<string> = new Set(['practicalChance']);
+
 export interface ChangeReasonInput {
   fen: string;
   student: Color;
@@ -713,7 +718,7 @@ function changeReasonOf(args: ChangeReasonInput, more: EngineFutureFacts | null,
   const hit = wc.appeared.find((c) => c.inLine && c.fact.seat === theirSeat && c.fact.kind !== 'latent-danger' && ['threat', 'resource'].includes(PICTURE_ROLE[c.fact.computer] ?? 'board'));
   // A piece on a square, on the board the line reaches: stamped there. A
   // fact with no square (a standing, "they're worse, so…") is no board fact.
-  if (hit) return { text: hit.fact.text, board: hit.fact.squares.length > 0 ? hit.board : null };
+  if (hit) return { text: hit.fact.text, board: hit.fact.squares.length > 0 && !STATE_NOT_BOARD.has(hit.fact.computer) ? hit.board : null };
   const alive = comesAlive(args);
   return plain(alive ? comesAliveText(alive, args.other) : null);
 }

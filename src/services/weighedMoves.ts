@@ -55,8 +55,6 @@ import { withMover } from '../utils/sideToMove';
 import { replyJob } from './replyJob';
 import { fenAfter, pathWords, renderTry, renderTryReason, type TryData } from './teachingSentence';
 
-const fenAfterUci = (fen: string, uci: string): string => fenAfter(fen, [uci]) ?? fen;
-
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const VALUE = MATERIAL_VALUE;
 
@@ -908,7 +906,9 @@ export function standingRefutations(args: {
       replyFollow: jobSaid ? job?.follow ?? null : null,
       // The anchor said once and short: the try is named by the lead, so the
       // path is said from the reply on ("After …Qxh6, …").
-      why: kept, whyPath: whyPath.length > 1 ? pathWords(fenAfterUci(args.fen, whyPath[0]), whyPath.slice(1)) : null,
+      // …and kept short: the board's last move, which the line just reached
+      // ("After …Bc6, your knight on f3 …"), never a score sheet of the line.
+      why: kept, whyPath: whyPath.length > 1 ? pathWords(fenAfter(args.fen, whyPath.slice(0, -1)) ?? args.fen, whyPath.slice(-1)) : null,
       material, materialWho: cap(w.otherWho), mates: story?.kind === 'mates', shift,
     };
     const reason = kept && jobSaid ? kept.replace(/^It\b/, c.san) : kept;

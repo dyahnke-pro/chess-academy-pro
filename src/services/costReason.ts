@@ -347,7 +347,7 @@ export function allowedClause(r: CostReason, studentWB: 'w' | 'b'): string | nul
     if (r.mate) return `walks into mate: ${line}${markSaysMate(sans[sans.length - 1]) ? '' : ", and it's mate"}`;
     const won = reasonWinWords(r, []);
     // THE WHY BEFORE THE MATERIAL: the line that does it, then what it wins.
-    return won ? `lets ${whom} play ${line}, which wins ${won}` : null;
+    return won ? `lets ${whom} in: ${line} — ${whom === 'them' ? 'they win' : 'you win'} ${won}` : null;
   }
   return /x|\+|#/.test(sans[0]) ? `lets ${whom} play ${sans[0]}` : null;
 }
