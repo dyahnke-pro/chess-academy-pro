@@ -82,7 +82,7 @@ describe('board 4 — a grandmaster\'s blunder (blunders-a-grandmasters-perspect
 describe('board 5 — desperado defence (desperado-defense#0)', () => {
   it('says why …Qg4 fails, no h6 plan, no try without its reason', () => {
     const t = got.desperado.read;
-    expect(t).toMatch(/Qg4[^.]*(trap|Rh4)|(trap|Rh4)[^.]*Qg4/i);
+    expect(t).toMatch(/Qg4[^.]*(trap|Rh4)|(trap|Rh4|from h4)[^.]*(Qg4|queen on g4)/i);
     expect(allFacts('desperado')).not.toMatch(/\bh6\b[^.]*(plan|break)|break with h6/i);
     expect(t).not.toMatch(/\b(?:[KQRBN][a-h]?x?[a-h][1-8]|[a-h]x?[a-h]?[1-8])[+#]?\??,? (?:is|was) tempting\.?$/m);
   });

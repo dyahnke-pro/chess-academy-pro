@@ -352,14 +352,22 @@ function supportsOf<F extends ReadFact>(kind: 'tries' | 'line', lead: F, facts: 
   const ok = (f: F): boolean => sayable(f, ctx, [...out, ...got], sameClaim) && !got.some((g) => (g.claims ?? []).some((c) => (f.claims ?? []).includes(c)));
   if (kind === 'tries') {
     for (const uci of lead.tries ?? []) {
+      // A try the verdict NAMES is said with its reason (F2): the verdict has
+      // already judged it worth naming, so no second bar holds its "but".
       const f = facts.find((x) => x.move === uci && x.kind === 'refuted' && ok(x));
-      if (f && readWeight(f, ctx) >= TABLE.bar) got.push(f);
+      if (f) got.push(f);
     }
     return got;
   }
   if (!ctx.fen || !lead.line || lead.line.length === 0) return got;
   // The plan's own pieces: one the plan names AND its line moves.
-  const moved = new Set([...movedPieces(ctx.fen, lead.line)].filter((sq) => lead.squares.includes(sq)));
+  // (F2, Alekhine's gun: the plan's own STEPS — "Rc2, Rfc1 and then Rc3" —
+  // are its detail for any piece the line moves, named by the lead or not.)
+  const lineMoved = movedPieces(ctx.fen, lead.line);
+  // …and the squares those pieces travel through on the line (the steps name
+  // where the rooks go: c2, c1, c3).
+  const moved = new Set([...lineMoved].filter((sq) => lead.squares.includes(sq)));
+  lead.line.slice(0, 2 * LINE_MOVES).forEach((u, k) => { if (k % 2 === 0) lineMoved.add(u.slice(2, 4)); });
   // THE DETAILS: another plan fact about a piece this plan moves is the same
   // plan said in more detail (the rook's road for "the rook lift"), never a
   // rival plan about some other piece.
@@ -367,15 +375,20 @@ function supportsOf<F extends ReadFact>(kind: 'tries' | 'line', lead: F, facts: 
     if (f === lead || !PLAN_KINDS.has(f.kind) || !ok(f)) continue;
     if (f.squares.some((sq) => moved.has(sq))) got.push(f);
   }
+  const steps = facts.filter((f) => f !== lead && STEP_KINDS.has(f.kind) && f.squares.some((sq) => lineMoved.has(sq)));
   // THE BECAUSE: the target, or their counterplay, the plan's line goes after.
   for (const f of facts) {
     if (!BECAUSE_KINDS.has(f.kind) && f.computer !== 'pictureCounterplay') continue;
     if (!ok(f)) continue;
     if (lineReaches(ctx.fen, lead.line, f)) got.push(f);
   }
+  // The plan's steps, last: what it does and why first, then how it goes.
+  const step = steps.find((f) => ok(f));
+  if (step && !got.some((g) => STEP_KINDS.has(g.kind))) got.push(step);
   return got;
 }
 
+const STEP_KINDS: ReadonlySet<string> = new Set(['plan-steps', 'siege']);
 /** The plan kinds: a plan said again in more detail is one of these. */
 const PLAN_KINDS: ReadonlySet<string> = new Set(['plan-now', 'siege', 'plan-steps', 'plan-race', 'structure-plan']);
 /** The target kinds: a target is said as a plan's "because" — the first square
