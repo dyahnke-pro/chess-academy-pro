@@ -39,7 +39,8 @@ describe('board 1 — the Saavedra (a-guide-to-underpromotion#0)', () => {
     // pawns must be pushed" — is c7's reason, its own idea).
     expect((t.match(/passed pawn on c[67]|passer on c[67]/gi) ?? []).length).toBeLessThanOrEqual(1);
     expect(t).not.toMatch(/After Kxc7 only the kings/);
-    expect(t).not.toMatch(/pawn on c7/);
+    // "When the pawn on c7 promotes" is the promotion board, after c7 — true.
+    expect(t).not.toMatch(/passed pawn on c7/);
     noRepeat(t);
   });
 });
