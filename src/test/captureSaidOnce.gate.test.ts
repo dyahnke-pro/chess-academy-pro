@@ -16,6 +16,7 @@ import { findPinBreaks, pinBreakLine } from '../services/pinBreak';
 import { threatProof } from '../services/threatProof';
 import { captureLeadsTo } from '../services/captureLeadsTo';
 import { afterCaptureSan } from '../utils/captureWords';
+import { writerFor } from '../services/writerRegister';
 
 // SAY A CAPTURE ONCE (WO-STORY-MATRIX-01 Phase 1 step 4; David 2026-10-30:
 // "Redundant to say Qxd8 (narrated like: queen takes d8, takes the queen)").
@@ -178,7 +179,7 @@ const PRODUCERS: Record<string, { plies: Plies; run: Producer }> = {
   // The one composer's facts — every lesson, Learn and Review line.
   moveThoughtFacts: {
     plies: 'captures',
-    run: (p) => [true, false].flatMap((seat) => moveThoughtFacts({ namesPlayedMove: true, plainThreatsSeen: false, story: false, theory: true, tense: 'now', fenBefore: p.fenBefore, san: p.san, moverIsStudent: seat, prev: p.prev, line: p.line, history: [], theirLast: p.theirLast, phrases: null, reads: null, costCp: null })
+    run: (p) => [true, false].flatMap((seat) => moveThoughtFacts({ moveReads: writerFor('lesson').moveReads, namesPlayedMove: true, plainThreatsSeen: false, story: false, theory: true, tense: 'now', fenBefore: p.fenBefore, san: p.san, moverIsStudent: seat, prev: p.prev, line: p.line, history: [], theirLast: p.theirLast, phrases: null, reads: null, costCp: null })
       .flatMap((f) => [f.text, f.alsoText])),
   },
   reviewMoveBriefing: {

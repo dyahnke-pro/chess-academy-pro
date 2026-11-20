@@ -9,6 +9,7 @@ import { moveIntent, whatItDoes, type IntentReads } from './moveIntent';
 import { moveThoughtFacts } from './moveThoughtFacts';
 import { NO_PREV_CAPTURE } from './captureRun';
 import type { AnalysisLine } from '../types';
+import { writerFor } from './writerRegister';
 
 const L = (moves: string[], evaluation = 0): AnalysisLine => ({ rank: 1, evaluation, mate: null, moves });
 const uci = (fen: string, sans: readonly string[]): string[] => {
@@ -100,7 +101,7 @@ describe('a move the line goes on to play was not stopped', () => {
 });
 
 describe('the fundamentals’ "prepares e5" is said only when a line plays it', () => {
-  const facts = (line: readonly string[] | null, after: string[] | null) => moveThoughtFacts({ namesPlayedMove: true, plainThreatsSeen: false, story: false,
+  const facts = (line: readonly string[] | null, after: string[] | null) => moveThoughtFacts({ moveReads: writerFor('lesson').moveReads, namesPlayedMove: true, plainThreatsSeen: false, story: false,
     fenBefore: BENKO_D6, san: 'd6', tense: 'now', moverIsStudent: true, prev: NO_PREV_CAPTURE, line, theirLast: null, history: [],
     phrases: null, costCp: null, theory: true,
     reads: after ? { before: [L(['d7d6'], -40)], passBefore: [], after: [L(after, -40)], passAfter: [] } : null,

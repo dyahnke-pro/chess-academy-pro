@@ -61,6 +61,7 @@ export function benchInput(r: Row, counter?: { reads: number }): BoardReadInput 
       return Promise.resolve([line(1, l.evaluation, l.mate, l.moves, 12)]);
     },
     withhold: false,
+    engineFutures: false,
     tense: 'now',
     history: [],
     theory: true,

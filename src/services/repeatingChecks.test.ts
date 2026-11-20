@@ -4,6 +4,7 @@ import { perpetualCheck, perpetualStartedBy, perpetualLine, windmill, windmillSt
 import { readBoard } from './boardComputers';
 import { moveThoughtFacts } from './moveThoughtFacts';
 import { NO_PREV_CAPTURE } from './captureRun';
+import { writerFor } from './writerRegister';
 
 // Danya's game board, voiced note vc-4_Ev1a1_2Mg-62 (his White, after
 // …Kxg8 Rg1+ Kf8): the queen can check from b8 and d6 forever (…Qe8 blocks,
@@ -110,7 +111,7 @@ describe('both seats, through the one registry', () => {
 
 describe('the one composer says it', () => {
   it('a lesson or Review move that starts the checks carries the perpetual', () => {
-    const facts = moveThoughtFacts({ namesPlayedMove: true,
+    const facts = moveThoughtFacts({ moveReads: writerFor('review').moveReads, namesPlayedMove: true,
       plainThreatsSeen: false, story: false, theory: false, tense: 'past', fenBefore: FEN, san: 'Qb8+', moverIsStudent: true,
       prev: NO_PREV_CAPTURE, line: null, history: [], theirLast: null, phrases: null, costCp: 0,
       reads: { before: [], after: [], passBefore: [], passAfter: [] } as never,

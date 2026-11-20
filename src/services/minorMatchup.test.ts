@@ -6,6 +6,7 @@ import { readBoard } from './boardComputers';
 import { moveThoughtFacts } from './moveThoughtFacts';
 import { NO_PREV_CAPTURE } from './captureRun';
 import { lockedPawnPairs, structureSignature } from './boardStructure';
+import { writerFor } from './writerRegister';
 
 // Danya, voiced note vc-6-d45BL5GoY-35 (his Black, move 17): after Bxe4 he
 // takes back with the knight. White's bishop on e3 is shut in by its own c5
@@ -136,7 +137,7 @@ describe('the one registry and the one composer', () => {
     expect(readBoard('minorMatchup', { fenBefore: DANYA_NXE4, san: 'Nxe4', student: 'w' })?.seat).toBe('opponent');
   });
   it('a lesson or Review move that makes the matchup carries it', () => {
-    const facts = moveThoughtFacts({ namesPlayedMove: true,
+    const facts = moveThoughtFacts({ moveReads: writerFor('review').moveReads, namesPlayedMove: true,
       plainThreatsSeen: false, story: false, theory: false, tense: 'past', fenBefore: DANYA_NXE4, san: 'Nxe4', moverIsStudent: true,
       prev: NO_PREV_CAPTURE, line: null, history: [], theirLast: null, phrases: null, costCp: 0, reads: null,
     });

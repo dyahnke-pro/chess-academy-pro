@@ -5,10 +5,11 @@ import { Chess } from 'chess.js';
 import { moveThoughtFacts, questionThought } from './moveThoughtFacts';
 import { FACT_GROUP, type FactGroup } from './coachFact';
 import { NO_PREV_CAPTURE } from './captureRun';
+import { writerFor } from './writerRegister';
 
 const fenOf = (sans: string[]): string => { const c = new Chess(); for (const s of sans) c.move(s); return c.fen(); };
 const said = (history: string[], san: string, own: boolean): string[] =>
-  moveThoughtFacts({ namesPlayedMove: true, plainThreatsSeen: false, story: false, theory: false, tense: 'past', fenBefore: fenOf(history), san, moverIsStudent: own, prev: NO_PREV_CAPTURE, line: null, history, theirLast: null, phrases: null, reads: null, costCp: null })
+  moveThoughtFacts({ moveReads: writerFor('review').moveReads, namesPlayedMove: true, plainThreatsSeen: false, story: false, theory: false, tense: 'past', fenBefore: fenOf(history), san, moverIsStudent: own, prev: NO_PREV_CAPTURE, line: null, history, theirLast: null, phrases: null, reads: null, costCp: null })
     .map((f) => `${f.computer}: ${f.text}`);
 
 describe('the opening computers in the composer', () => {

@@ -28,7 +28,7 @@ function anySaid(id: string, san: string): string | null {
 
 describe('a refuter hands off only to one that speaks (his tries)', () => {
   it('a try that drops a pawn on a bigger cost is said with the pawn and the result', () => {
-    expect(said('a-guide-to-underpromotion#4', 'd8=Q')).toMatch(/They win a pawn in the line\. After it your edge is gone\.$/);
+    expect(said('a-guide-to-underpromotion#4', 'd8=Q')).toMatch(/They win a pawn in the line\. After d8=Q your edge is gone\.$/);
   });
   it('a try whose line mates is said with the mate, by whichever refuter names it', () => {
     expect(anySaid('how-to-survive-an-attack#2', 'bxc4')).toMatch(/Qb7#/);

@@ -7,8 +7,9 @@ import { composeThought } from './thoughtComposer';
 import { NO_PREV_CAPTURE } from './captureRun';
 import type { FactGroup } from './coachFact';
 import { newLessonVoice } from './reviewMoveBriefing';
+import { writerFor } from './writerRegister';
 
-const facts = (fenBefore: string, san: string, moverIsStudent: boolean) => moveThoughtFacts({ namesPlayedMove: true,
+const facts = (fenBefore: string, san: string, moverIsStudent: boolean) => moveThoughtFacts({ moveReads: writerFor('lesson').moveReads, namesPlayedMove: true,
   plainThreatsSeen: false, story: false, theory: false, fenBefore, san, prev: NO_PREV_CAPTURE, moverIsStudent,
   line: null, history: [], theirLast: null, reads: null, costCp: null, tense: 'now', phrases: newLessonVoice().phrases,
 });

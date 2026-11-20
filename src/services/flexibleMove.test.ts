@@ -5,6 +5,7 @@ import { readBoard } from './boardComputers';
 import { moveThoughtFacts } from './moveThoughtFacts';
 import { NO_PREV_CAPTURE } from './captureRun';
 import type { WeighRead } from './weighedMoves';
+import { writerFor } from './writerRegister';
 
 // Every board is a Danya speedrun position (public/data/voiced-teachings.json,
 // note id named), the move his game played there; the reads are the Danya
@@ -126,7 +127,7 @@ describe('the one registry and the one composer', () => {
     expect(theirs?.text).not.toMatch(/\b(we|our|us)\b/i);
   });
   it('a lesson or Review move carries it', () => {
-    const facts = moveThoughtFacts({ namesPlayedMove: true,
+    const facts = moveThoughtFacts({ moveReads: writerFor('review').moveReads, namesPlayedMove: true,
       plainThreatsSeen: false, story: false, theory: false, tense: 'past', fenBefore: NC3.fen, san: NC3.san, moverIsStudent: true,
       prev: NO_PREV_CAPTURE, line: null, history: [], theirLast: null, phrases: null, costCp: 0,
       reads: { before: NC3.reads.map((l, k) => ({ rank: k + 1, evaluation: l.evaluation, moves: [...l.moves], mate: null })), after: [], passBefore: [], passAfter: [] } as never,

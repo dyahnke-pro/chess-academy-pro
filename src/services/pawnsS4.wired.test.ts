@@ -4,6 +4,7 @@
 import { describe, expect, it } from 'vitest';
 import { moveThoughtFacts, questionThought } from './moveThoughtFacts';
 import { NO_PREV_CAPTURE } from './captureRun';
+import { writerFor } from './writerRegister';
 
 const base = { plainThreatsSeen: false, tense: 'past' as const, prev: NO_PREV_CAPTURE, line: null, theirLast: null, story: false, history: [], phrases: null, reads: null, costCp: null, theory: false };
 
@@ -13,7 +14,7 @@ describe('S4 pawn computers in the composer', () => {
     ['chainBase', 'r3kb1r/1p3p2/2n3b1/1p2P2p/2p2p1P/P1P1pP2/1P2N1P1/RN2KB1R b KQkq - 1 18', 'Bh6', true],
     ['pawnCutsGuard', 'r2q1rk1/pp3pbp/3p1np1/N3pb2/2p5/4B3/PP1QPPPP/R3KB1R b KQ - 1 13', 'c3', true],
   ] as const)('%s speaks on its board', (computer, fenBefore, san, moverIsStudent) => {
-    const facts = moveThoughtFacts({ namesPlayedMove: true, ...base, fenBefore, san, moverIsStudent });
+    const facts = moveThoughtFacts({ moveReads: writerFor('review').moveReads, namesPlayedMove: true, ...base, fenBefore, san, moverIsStudent });
     expect(facts.some((f) => f.computer === computer)).toBe(true);
   });
 });

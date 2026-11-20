@@ -17,6 +17,7 @@ import { NO_PREV_CAPTURE } from './captureRun';
 import { temptingKey } from './conceptKey';
 
 import { oneStem } from '../test/temptingStem';
+import { writerFor } from './writerRegister';
 
 
 interface Board { id: string; fen: string; reads: WeighRead[] }
@@ -151,7 +152,7 @@ describe('wired to the surfaces that read a board', () => {
     c.move('Qh5');
     expect(c.fen().split(' ')[0]).toBe(b.fen.split(' ')[0]);
     const after = b.reads.map((r, i) => ({ rank: i + 1, evaluation: r.evaluation, mate: r.mate, moves: [...r.moves] }));
-    const facts = lessonBoardFacts({ namesPlayedMove: true,
+    const facts = lessonBoardFacts({ moveReads: writerFor('review').moveReads, namesPlayedMove: true,
       fenBefore: before, san: 'Qh5', moverIsStudent: false, plainThreatsSeen: false, tense: 'past', theory: false, story: false,
       prev: NO_PREV_CAPTURE, line: [], history: [], theirLast: null,
       reads: { before: [], after, passBefore: [], passAfter: [] }, costCp: 0,

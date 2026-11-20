@@ -6,6 +6,7 @@ import { moveThoughtFacts } from './moveThoughtFacts';
 import { afterCapture, NO_PREV_CAPTURE, type PrevCaptureContext } from './captureRun';
 import { BRIEFING_LINE_PLIES } from './reviewMoveBriefing';
 import type { ThoughtFact } from './thoughtComposer';
+import { writerFor } from './writerRegister';
 
 /** Every move of Danya's notes, sampled (the Danya bench's positions, no reads
  *  needed): the board before the note's move, the move, the capture run, their
@@ -52,7 +53,7 @@ describe('CoachFact — the one fact shape (WO-STORY-MATRIX-01 P1-3)', () => {
     let facts = 0;
     const kinds = new Set<string>();
     for (const m of moves) {
-      for (const f of moveThoughtFacts({ namesPlayedMove: true, plainThreatsSeen: false, story: false, theory: true, tense: 'now', fenBefore: m.fenBefore, san: m.san, moverIsStudent: m.own, prev: m.prev, line: m.line, history: [], theirLast: m.theirLast, phrases: null, reads: null, costCp: null })) {
+      for (const f of moveThoughtFacts({ moveReads: writerFor('lesson').moveReads, namesPlayedMove: true, plainThreatsSeen: false, story: false, theory: true, tense: 'now', fenBefore: m.fenBefore, san: m.san, moverIsStudent: m.own, prev: m.prev, line: m.line, history: [], theirLast: m.theirLast, phrases: null, reads: null, costCp: null })) {
         facts += 1;
         kinds.add(f.kind);
         expect(f.group).toBe(FACT_GROUP[f.kind]);
@@ -80,7 +81,7 @@ describe('CoachFact — the one fact shape (WO-STORY-MATRIX-01 P1-3)', () => {
 
   it('a seat-free caller (moverIsStudent undefined) keeps the student\'s step', () => {
     const fen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
-    const facts = moveThoughtFacts({ namesPlayedMove: true, plainThreatsSeen: false, story: false, theory: true, tense: 'now', fenBefore: fen, san: 'Nf3', moverIsStudent: undefined, prev: NO_PREV_CAPTURE, line: null, history: [], theirLast: null, phrases: null, reads: null, costCp: null });
+    const facts = moveThoughtFacts({ moveReads: writerFor('lesson').moveReads, namesPlayedMove: true, plainThreatsSeen: false, story: false, theory: true, tense: 'now', fenBefore: fen, san: 'Nf3', moverIsStudent: undefined, prev: NO_PREV_CAPTURE, line: null, history: [], theirLast: null, phrases: null, reads: null, costCp: null });
     expect(facts.length).toBeGreaterThan(0);
     for (const f of facts) expect(f.step).toBe('yours');
   });
