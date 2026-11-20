@@ -24,10 +24,12 @@ import { detectNewThreat } from './groundedAnswer';
 import { threatStoppedBy } from './opponentMovePurpose';
 import { captureRead } from './positionReadingService';
 import { pieceRef } from './pieceRef';
-import { rotateStem, stemKeyOf } from '../utils/rotateStem';
+import { stemKeyOf } from '../utils/rotateStem';
+import { renderReplyJob, type ReplyJobData } from './teachingSentence';
 import { andList } from '../utils/andList';
 
-export type ReplyJobKind = 'recaptures' | 'steps-away' | 'guards' | 'blocks' | 'traps' | 'kicks' | 'contests' | 'counter' | 'heads-for';
+export type { ReplyJobKind } from './teachingSentence';
+import type { ReplyJobKind } from './teachingSentence';
 
 export interface ReplyJob {
   kind: ReplyJobKind;
@@ -95,15 +97,14 @@ export function replyJob(fen: string, tryLine: readonly string[], target: string
   const reply = `${replier === 'b' ? '…' : ''}${rm.san}`;
   const key = stemKeyOf(`${fen}|reply|${tryLine[0]}${tryLine[1]}`);
   const ref = (f: string, sq: string): string => pieceRef(f, sq, student)?.words ?? sq;
-  const theRepliers = `The ${NAME[rm.piece]}`;
-  const say = (kind: ReplyJobKind, clauses: string[], squares: string[]): ReplyJob => {
-    const clause = rotateStem(clauses, key);
-    return { kind, text: `${reply} ${clause}`, follow: `${theRepliers} ${clause}`, squares };
+  const say = (job: ReplyJobData, squares: string[]): ReplyJob => {
+    const r = renderReplyJob(job, reply, NAME[rm.piece], key);
+    return { kind: job.kind, text: r.text, follow: r.follow, squares };
   };
 
   // 1. IT TAKES BACK: the try captured, and the reply recaptures on its square.
   if (tm.captured && rm.captured && rm.to === tm.to) {
-    return say('recaptures', [`simply takes back.`, `just recaptures.`], [rm.to]);
+    return say({ kind: 'recaptures' }, [rm.to]);
   }
 
   // The try's own threat, and whether the reply ends it.
@@ -113,7 +114,7 @@ export function replyJob(fen: string, tryLine: readonly string[], target: string
 
   // 2. IT STEPS OUT OF THE ATTACK: the piece the try hit moves away.
   if (stopped && threatened.includes(rm.from) && !rm.captured && captureRead(b2, rm.to as Square, mover) === 0) {
-    return say('steps-away', [`steps out of the attack.`, `simply gets out of the way.`], [rm.from, rm.to]);
+    return say({ kind: 'steps-away' }, [rm.from, rm.to]);
   }
 
   // 3. IT GUARDS THE TARGET: the reply newly covers the square the try was
@@ -131,8 +132,7 @@ export function replyJob(fen: string, tryLine: readonly string[], target: string
     const before = flip ? captureRead(flip, t as Square, mover) : null;
     if (before === null || before <= 0) continue;
     const what = ref(b2, t);
-    if (rm.piece === 'k') return say('guards', [`holds ${what}.`, `defends ${what}.`], [t, rm.to]);
-    return say('guards', [`guards ${what}.`, `covers ${what}.`], [t, rm.to]);
+    return say({ kind: 'guards', what, king: rm.piece === 'k' }, [t, rm.to]);
   }
 
   // 4. IT BLOCKS THE LINE: the reply lands between the trying piece and what
@@ -149,7 +149,7 @@ export function replyJob(fen: string, tryLine: readonly string[], target: string
       const won = flip ? captureRead(flip, t as Square, mover) : null;
       if (won === null || won <= 0) continue;
       const own = mover === student ? 'your' : 'their';
-      return say('blocks', [`blocks ${own} ${NAME[tm.piece]}'s line to ${ref(b2, t)}.`, `cuts ${own} ${NAME[tm.piece]} off from ${ref(b2, t)}.`], [rm.to, t]);
+      return say({ kind: 'blocks', own, piece: NAME[tm.piece], what: ref(b2, t) }, [rm.to, t]);
     }
   }
 
@@ -161,7 +161,7 @@ export function replyJob(fen: string, tryLine: readonly string[], target: string
     if (onIt && b2b.get(tm.to as Square)?.color === mover) {
       const piece = ref(b2, tm.to);
       if (trappedAt(b2, tm.to) !== null) {
-        return say('traps', [`traps ${piece}: it has no safe square.`, `leaves ${piece} with nowhere to go.`], [tm.to, rm.to]);
+        return say({ kind: 'traps', piece }, [tm.to, rm.to]);
       }
       const guarded = b2b.isAttacked(tm.to as Square, mover);
       // A KICK SENDS IT AWAY: the line moves the trying piece on, taking
@@ -171,17 +171,17 @@ export function replyJob(fen: string, tryLine: readonly string[], target: string
       const leaves = next.slice(0, 2) === tm.to && !(() => { const w = new Chess(b2); return playUci(w, next)?.captured; })();
       const kicker = rm.piece === 'k' ? !guarded : value(rm.piece) < value(tm.piece) || !guarded;
       if (tm.piece !== 'p' && leaves && kicker) {
-        return say('kicks', [`kicks ${piece} away.`, `hits ${piece} and sends it packing.`], [tm.to, rm.to]);
+        return say({ kind: 'kicks', piece }, [tm.to, rm.to]);
       }
       // 6. IT CONTESTS THE LINE: a rook or queen meets the rook or queen the
       // try brought in, on the same rank or file.
       if ((tm.piece === 'r' || tm.piece === 'q') && rm.piece === tm.piece) {
         if (rm.to[1] === tm.to[1]) {
           const rank = mover === 'w' ? Number(tm.to[1]) : 9 - Number(tm.to[1]);
-          return say('contests', [`covers the ${ORDINAL[rank]} rank.`, `contests the ${ORDINAL[rank]} rank.`], [rm.to, tm.to]);
+          return say({ kind: 'contests', line: `${ORDINAL[rank]} rank` }, [rm.to, tm.to]);
         }
         if (rm.to[0] === tm.to[0]) {
-          return say('contests', [`covers the ${tm.to[0]}-file.`, `contests the ${tm.to[0]}-file.`], [rm.to, tm.to]);
+          return say({ kind: 'contests', line: `${tm.to[0]}-file` }, [rm.to, tm.to]);
         }
       }
     }
@@ -195,10 +195,10 @@ export function replyJob(fen: string, tryLine: readonly string[], target: string
   if (counter && counter.kind === 'capture') {
     const hit = ref(b2, counter.landing);
     // "In return" only answers a try that threatened something itself.
-    return say('counter', threat ? [`hits ${hit} in return.`, `counters by attacking ${hit}.`] : [`attacks ${hit}.`, `goes after ${hit}.`], [rm.to, counter.landing]);
+    return say({ kind: 'counter', hit, mate: false, inReturn: !!threat }, [rm.to, counter.landing]);
   }
   if (counter && counter.kind === 'mate') {
-    return say('counter', threat ? [`threatens mate in return.`, `hits back with a mate threat.`] : [`threatens mate.`, `sets up a mate threat.`], [rm.to, counter.landing]);
+    return say({ kind: 'counter', hit: null, mate: true, inReturn: !!threat }, [rm.to, counter.landing]);
   }
 
   // 8. IT HEADS FOR A SQUARE: the reply's piece moves on in the line, and
@@ -221,7 +221,7 @@ export function replyJob(fen: string, tryLine: readonly string[], target: string
           .sort((x, y) => value(new Chess(after).get(y as Square)?.type ?? '') - value(new Chess(after).get(x as Square)?.type ?? ''));
         if (hits.length > 0) {
           const hit = andList(hits.map((sq) => ref(after, sq)));
-          return say('heads-for', [`heads for ${nm.to}, where it hits ${hit}.`, `is on its way to ${nm.to}, to hit ${hit} from there.`], [rm.to, nm.to, ...hits]);
+          return say({ kind: 'heads-for', to: nm.to, hit }, [rm.to, nm.to, ...hits]);
         }
       }
     }

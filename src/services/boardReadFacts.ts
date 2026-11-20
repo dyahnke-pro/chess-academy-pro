@@ -32,7 +32,7 @@ import { planSteps, planStepsText } from './planSteps';
 import { andList } from '../utils/andList';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { moveThoughtFacts } from './moveThoughtFacts';
-import { standingRead } from './reviewMoveBriefing';
+import { signedBand, standingRead } from './reviewMoveBriefing';
 import { stakeValue } from './factStakes';
 import { classifyMatePattern } from './matePatterns';
 import { defenderCheckRun } from './checkRun';
@@ -176,7 +176,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
   // still being solved, where "there is a mate" is the hint.
   const studentMates = mateOnBoard && (top.evaluation > 0) === (i.studentColor === 'w');
   if (mateOnBoard && !i.withhold) {
-    facts.push({ from: 'position', kind: 'standing', text: studentMates ? 'There is a forced mate here for you.' : 'They have a forced mate here.', squares: [] });
+    facts.push({ from: 'position', kind: 'standing', text: studentMates ? 'There is a forced mate here for you.' : 'They have a forced mate here.', squares: [], claims: [`standing:mate${studentMates ? '+' : '-'}`] });
   }
   // A PUZZLE'S MATE, BY ITS PATTERN: on a board still being solved the mate's
   // name is the lesson and names no square of the answer (David's puzzle
@@ -192,7 +192,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     // A standing with no reason on the board is its own kind: the decider says
     // a verdict only with its reason.
     const st = standingRead(i.fen, povCp, i.studentColor, i.before);
-    facts.push({ from: 'position', kind: st.reasoned ? 'standing' : 'standing-bare', text: st.text, squares: [], reasonSquares: st.reasonSquares });
+    facts.push({ from: 'position', kind: st.reasoned ? 'standing' : 'standing-bare', text: st.text, squares: [], reasonSquares: st.reasonSquares, claims: [`standing:${signedBand(povCp)}`] });
     const k = boardKind(i.fen, i.studentColor, povCp, i.before);
     if (k) facts.push({ from: 'position', kind: 'character', text: k.text, squares: [] });
   }
@@ -335,7 +335,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
       const [t, ...more] = g;
       if (more.length === 0) { facts.push({ from: 'tempting', kind: 'refuted', text: t.text, computer: 'temptingOnBoard', squares: t.squares, move: t.uci, ...(shifts(t.uci) ? { bandShift: true } : {}) }); continue; }
       const oneReason = g.every((x) => x.reasonKey !== null && x.reasonKey === t.reasonKey);
-      const text = renderTryGroup(g.map((x) => x.san), [...new Set(g.map((x) => x.reply))], oneReason ? t.data : { ...t.data, why: null, whyPath: null });
+      const text = renderTryGroup(g.map((x) => x.data.name), [...new Set(g.map((x) => x.reply))], oneReason ? t.data : { ...t.data, why: null, whyPath: null });
       facts.push({ from: 'tempting', kind: 'refuted', text, computer: 'temptingOnBoard', squares: [...new Set(g.flatMap((x) => x.squares))], move: t.uci, also: more.map((x) => x.uci) });
     }
     // THE PICTURE'S CONCLUSIONS (WO-PICTURE-01 P3 → P5): the verdict read
@@ -358,7 +358,8 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     const told = <F extends Parameters<typeof tellPictureFacts>[0][number]>(fs: readonly F[]): F[] => (memory ? tellPictureFacts(fs, memory, i.studentColor) : [...fs]);
     for (const f of told(readBoardAll('pictureVerdict', picture))) {
       const merged = standing0 && sameBand && conc?.verdict.afterStanding ? `${standing0.text} ${conc.verdict.afterStanding}` : f.text;
-      facts.push({ from: 'position', kind: f.kind, text: merged, computer: f.computer, squares: f.squares, claims: f.claims, tries: conc?.but.map((t) => t.uci) ?? [], ...(merged !== f.text && standing0?.reasonSquares ? { reasonSquares: standing0.reasonSquares } : {}), ...(f.conclusion ? { conclusion: f.conclusion } : {}) });
+      facts.push({ from: 'position', kind: f.kind, text: merged, computer: f.computer, squares: f.squares, claims: f.claims, tries: conc?.but.map((t) => t.uci) ?? [], ...(merged !== f.text && standing0?.reasonSquares ? { reasonSquares: standing0.reasonSquares } : {}), ...(f.conclusion ? { conclusion: f.conclusion } : {}),
+        ...(conc ? { afterStanding: conc.verdict.afterStanding } : {}) });
     }
     for (const f of told(readBoardAll('picturePlan', picture))) {
       const line = tempting.find((r) => r.moves[0] === conc?.plan?.uci)?.moves ?? top.moves;

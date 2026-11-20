@@ -264,6 +264,9 @@ export const ORPHAN_LEAD = /^(?:It|This|That|These|Those|And|But)\b|^After this\
  *  after the line), the material the line wins, and the result's shift. */
 export interface TryData {
   san: string;
+  /** The try as it is said: its SAN, with "…" when Black plays it — the
+   *  mover read off the board, so a Black try never reads as White's. */
+  name: string;
   /** The reply, with "…" on a Black move. */
   reply: string;
   /** The try is the side to move's (the student's seat) — else theirs. */
@@ -285,12 +288,17 @@ export interface TryData {
   materialWho: string;
   /** The line mates. */
   mates: boolean;
-  /** The result's shift ("…throws the win"), its own sentence. */
+  /** The result's shift ("It throws the win"), written with the subject
+   *  "It" — the renderer names the try once, in the lead. */
   shift: string | null;
+  /** `result`: the band changes (a win thrown, the edge gone); `smaller`: the
+   *  band holds and part of the edge is given back. A try says ONE cost: the
+   *  result change, else the material, else the smaller shift. */
+  shiftKind: 'result' | 'smaller' | null;
 }
 
 function tryLead(t: TryData): string {
-  const { san, reply, mine, plan, stem } = t;
+  const { name: san, reply, mine, plan, stem } = t;
   if (plan) {
     if (plan.storm) {
       return mine
@@ -316,22 +324,50 @@ export function renderTryReason(t: TryData): string | null {
   return `After ${t.whyPath}, ${/^(?:[KQRBN][a-h1-8x]|O-O)/.test(why) ? why : why.replace(/^[A-Z](?=[a-z'’])/, (w) => w.toLowerCase())}`;
 }
 
-/** THE WHY BEFORE THE MATERIAL, then the result. */
-function tryBody(t: TryData, subject: string): string[] {
-  const end = t.mates ? (t.mine ? `${subject} loses the game.` : `${subject} loses them the game.`) : t.shift;
-  // The material is the why's consequence — said when no result sentence
-  // says the consequence already, and named by the try (a bare "They win a
-  // bishop in the line" is the same sentence on every try).
-  const material = t.material && (!end || !t.why) ? `${t.san} hands ${t.mine ? 'them' : 'you'} ${t.material} in the line.` : null;
-  return [renderTryReason(t), material, end].filter((x): x is string => !!x);
+/** ONE COST: the line's mate, the material it hands over, or the result's
+ *  shift — never two (a try that "hands them a pawn" and "gives back part of
+ *  your edge" said one cost twice). The material is the concrete one, so it
+ *  speaks before the band. Subject "It". */
+function tryCost(t: TryData): string | null {
+  if (t.mates) return t.mine ? 'It loses the game.' : 'It loses them the game.';
+  // The material, unless the reason already says what the line wins.
+  if (t.material && !(t.why && /\bwin/.test(t.why))) return `It hands ${t.mine ? 'them' : 'you'} ${t.material} in the line.`;
+  return t.shift;
 }
 
-/** One try, refuted: lead, the reply's job, the why, the material, the result.
- *  A reason that calls the try "It" names it: after "…, but X meets it" an
- *  "It" would point at the reply. */
+/** "It gives back part of your edge." → "it gives back part of your edge". */
+const asClause = (sentence: string): string => sentence.trim().replace(/[.\s]+$/, '').replace(/^(It|After)\b/, (w) => w.toLowerCase());
+
+/** One try, refuted: the lead names it ONCE, and after it the try is "it".
+ *  Its why, then its ONE cost, said as the second half of the sentence before
+ *  it — after the lead ("…Rf7 looks natural, but Nxb8 meets it: they win a
+ *  rook for two pawns in the line"), after a why about the try ("It wins
+ *  nothing: the trades leave the material level, and it gives back part of
+ *  your edge"), or after a sentence about the reply, naming the try there
+ *  ("…, and …Kh4 hands them a pawn in the line") — never a bare "It hands
+ *  them a pawn", the same sentence on every try. */
 export function renderTry(t: TryData): string {
-  const why = t.why ? { ...t, why: t.why.replace(/^It\b/, t.san) } : t;
-  return [tryLead(t), t.replyFollow, ...tryBody(why, t.replyFollow || t.why || t.material ? t.san : 'It')].filter(Boolean).join(' ');
+  const lead = tryLead(t);
+  const reason = renderTryReason(t);
+  const name = (x: string): string => x.replace(/^It\b/, t.name).replace(/^After it\b/, `After ${t.name}`);
+  const why = reason && t.replyFollow ? name(reason) : reason;
+  const cost = tryCost(t);
+  const sentences = [lead, t.replyFollow, why].filter((x): x is string => !!x);
+  if (!cost) return sentences.join(' ');
+  const last = sentences[sentences.length - 1];
+  const strip = (x: string): string => x.trim().replace(/[.\s]+$/, '');
+  let tail: string;
+  if (last === lead) {
+    tail = `${strip(lead)}: ${t.material && !t.mates && cost.startsWith('It hands') ? `${t.mine ? 'they' : 'you'} win ${t.material} in the line` : asClause(cost)}.`;
+  } else {
+    // "it" only where the sentence before is about the try itself.
+    const onTry = last === why && !!reason && /^It\b/.test(reason) && !t.replyFollow;
+    tail = `${strip(last)}, and ${onTry ? asClause(cost) : strip(name(cost)).replace(/^After\b/, 'after')}.`;
+    // One "and" a sentence: a why that already runs on with one, or a long
+    // one, keeps the cost its own sentence.
+    if (tail.split(/\s+/).length > 34 || /, and /.test(last)) tail = `${last} ${name(cost)}`;
+  }
+  return [...sentences.slice(0, -1), tail].join(' ');
 }
 
 /** Tries refuted for one reason (the decider grouped them): one sentence for
@@ -341,7 +377,7 @@ export function renderTryGroup(sans: readonly string[], replies: readonly string
   // The shared reason is about every try in the group: where it names the
   // first try, it names "each" of them.
   const each = two ? 'either' : 'each';
-  const why = shared.why ? shared.why.split(`…${shared.san}`).join(each).split(shared.san).join(each).replace(/^(either|each)\b/, (w) => cap(w)) : null;
+  const why = shared.why ? shared.why.split(`…${shared.san}`).join(each).split(shared.san).join(each).replace(/^(either|each)\b/, (w) => cap(w)).replace(/^It\b/, cap(each)) : null;
   return [`${andList([...sans])} ${two ? 'both' : 'all'} fail the same way: ${orList([...replies])} meets ${each}.`, renderTryReason({ ...shared, why })].filter(Boolean).join(' ');
 }
 
@@ -819,4 +855,110 @@ export function renderCounterplay(c: {
   if (c.alive) return `${head} ${rotateStem(['It is coming: the best line plays it.', 'Nothing stops it in the best line.'], c.stem)}`;
   // A stopper that mates ends the game before the resource can count.
   return `${head} ${c.stopper ? (/#$/.test(c.stopper.named) ? `But ${c.stopper.who} ${c.stopper.named} mates first.` : `But ${c.stopper.who} ${c.stopper.named} stops it.`) : 'But the best line stops it.'}`;
+}
+
+// ── THE REPLY'S JOB (family A1: `replyJob` returns the job as data) ──────────
+
+export type ReplyJobKind = 'recaptures' | 'steps-away' | 'guards' | 'blocks' | 'traps' | 'kicks' | 'contests' | 'counter' | 'heads-for';
+
+/** What the reply does against a try, as data (`replyJob` reads it). */
+export type ReplyJobData =
+  | { kind: 'recaptures' } | { kind: 'steps-away' }
+  | { kind: 'guards'; what: string; king: boolean }
+  | { kind: 'blocks'; own: 'your' | 'their'; piece: string; what: string }
+  | { kind: 'traps'; piece: string } | { kind: 'kicks'; piece: string }
+  | { kind: 'contests'; line: string }
+  | { kind: 'counter'; hit: string | null; mate: boolean; inReturn: boolean }
+  | { kind: 'heads-for'; to: string; hit: string };
+
+function replyJobClauses(j: ReplyJobData): string[] {
+  switch (j.kind) {
+    case 'recaptures': return ['simply takes back.', 'just recaptures.'];
+    case 'steps-away': return ['steps out of the attack.', 'simply gets out of the way.'];
+    case 'guards': return j.king ? [`holds ${j.what}.`, `defends ${j.what}.`] : [`guards ${j.what}.`, `covers ${j.what}.`];
+    case 'blocks': return [`blocks ${j.own} ${j.piece}'s line to ${j.what}.`, `cuts ${j.own} ${j.piece} off from ${j.what}.`];
+    case 'traps': return [`traps ${j.piece}: it has no safe square.`, `leaves ${j.piece} with nowhere to go.`];
+    case 'kicks': return [`kicks ${j.piece} away.`, `hits ${j.piece} and sends it packing.`];
+    case 'contests': return [`covers the ${j.line}.`, `contests the ${j.line}.`];
+    case 'counter':
+      if (j.mate) return j.inReturn ? ['threatens mate in return.', 'hits back with a mate threat.'] : ['threatens mate.', 'sets up a mate threat.'];
+      return j.inReturn ? [`hits ${j.hit} in return.`, `counters by attacking ${j.hit}.`] : [`attacks ${j.hit}.`, `goes after ${j.hit}.`];
+    case 'heads-for': return [`heads for ${j.to}, where it hits ${j.hit}.`, `is on its way to ${j.to}, to hit ${j.hit} from there.`];
+  }
+}
+
+/** The reply's job: named by its move ("…Qd7 guards your pawn on b5."), and
+ *  for a sentence that follows one naming the reply, by its piece ("The
+ *  queen guards …"). */
+export function renderReplyJob(j: ReplyJobData, reply: string, piece: string, stem: number): { text: string; follow: string } {
+  const clause = rotateStem(replyJobClauses(j), stem);
+  return { text: `${reply} ${clause}`, follow: `The ${piece} ${clause}` };
+}
+
+// ── THE ALARM, THE URGENCY AND THE CHECKS (family A1/A5) ────────────────────
+
+/** Their threat that does not have to be met yet (`falseAlarm`): the
+ *  question first, then the board's answer. */
+export function renderFalseAlarm(a: { threat: string; detail: string; first: string; answer: { san: string; after: boolean } | null }): string {
+  const tail = a.answer ? (a.answer.after ? `, and after ${a.threat}, ${a.answer.san} answers it` : `, and if they go ahead with ${a.threat}, ${a.answer.san} answers it`) : '';
+  return `Their move threatens ${a.threat} — it ${a.detail}. Do you have to react? No — ${a.first} comes first${tail}.`;
+}
+
+/** What comes before any plan (`boardUrgency`), one part a sentence. */
+export type UrgencyPart =
+  | { kind: 'mate'; mates: readonly string[] }
+  | { kind: 'win'; piece: string; square: string }
+  | { kind: 'take-attacker'; piece: string; square: string; hits: string }
+  | { kind: 'save'; named: string }
+  | { kind: 'promotion'; from: string; to: string };
+
+export function renderUrgency(u: UrgencyPart): string {
+  switch (u.kind) {
+    case 'mate': return `They threaten mate: ${orList([...u.mates])} ${u.mates.length === 1 ? 'is' : 'would be'} mate if you let it — stop that first.`;
+    case 'win': return `First, you can take their ${u.piece} on ${u.square} — that comes before anything else.`;
+    case 'take-attacker': return `First, take their ${u.piece} on ${u.square} — it attacks your ${u.hits}.`;
+    case 'save': return `First, your ${u.named} can be taken — that comes before any plan.`;
+    case 'promotion': return `Their pawn on ${u.from} is one step from promoting on ${u.to}.`;
+  }
+}
+
+/** The defender's checks, run out (`checkRun`): the first check and how the
+ *  run ends — the king walks out, or a piece blocks — never a score sheet. */
+export function renderCheckRun(c: {
+  piece: string; first: string; kingReply: string | null; checks: number; lastSq: string; answer: string;
+  ends: 'king-walks' | 'takes' | 'blocks'; kingWalks: boolean; then: string | null; promo: string | null;
+}): string {
+  const ends = c.ends === 'king-walks' ? `your king walks out to ${c.lastSq}` : c.ends === 'takes' ? `you take with ${c.answer}` : `you block with ${c.answer}`;
+  const run = c.checks <= 1
+    ? `Their ${c.piece} checks with ${c.first}, and ${ends}.`
+    : c.kingWalks
+      ? `Their ${c.piece} starts checking with ${c.first}. Your king answers with ${c.kingReply ?? ''} and keeps walking — after ${c.checks} checks it is out on ${c.lastSq}.`
+      : `Their ${c.piece} starts checking with ${c.first}. After ${c.checks} checks, ${ends} and the checks run out.`;
+  return `${run}${c.then ? ` Then they play ${c.then}.` : ''}${c.promo ? ` ${c.promo}` : ''}`;
+}
+
+/** Checks that only repeat the position (`endgameVerdict`). */
+export function renderChecksRepeat(seq: string, mine: boolean): string {
+  return mine
+    ? `Checking gets you nowhere here: ${seq} is the same position again. You need a new idea, not another check.`
+    : `Their checks go round in circles: ${seq} is the same position again. They need a new idea to make progress.`;
+}
+
+// ── HOW A TRY LOSES MATERIAL (`tryLossMechanism`: whyItFailed's kinds) ──────
+
+export type TryLoss =
+  | { kind: 'lands-en-prise'; piece: string; taker: string }
+  | { kind: 'guard-left'; piece: string; taker: string; lastGuard: boolean }
+  | { kind: 'held'; square: string; taker: string }
+  | { kind: 'left-hanging'; piece: string; taker: string };
+
+/** The why of a try's material loss, the try as "It": what it puts where, or
+ *  what it leaves. */
+export function renderTryLoss(d: TryLoss): string {
+  switch (d.kind) {
+    case 'lands-en-prise': return `It puts ${d.piece} where ${d.taker} takes it.`;
+    case 'guard-left': return d.lastGuard ? `It takes the last guard off ${d.piece}, and ${d.taker} takes it.` : `It loosens the guard on ${d.piece}, and ${d.taker} wins it.`;
+    case 'held': return `It takes on ${d.square}, but ${d.taker} takes back.`;
+    case 'left-hanging': return `It does nothing for ${d.piece}, which ${d.taker} still takes.`;
+  }
 }

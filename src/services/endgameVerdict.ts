@@ -18,6 +18,7 @@
 //                  nothing for six moves: no counterplay, and nothing falls.
 //   drawn        — a known drawing shape the engine's line confirms level
 //                  (`drawnEnding`): the side behind holds it.
+import { renderChecksRepeat } from './teachingSentence';
 import { Chess, type Color, type Square } from 'chess.js';
 import { type EngineLine, isQuiet, lineScore, playLine, sortedLines } from './engineLineRead';
 import { drawnEnding, type DrawReason } from './drawnEnding';
@@ -70,9 +71,7 @@ export function endgameVerdict(fen: string, lines: readonly EngineLine[], studen
     if (!loop.filter((m) => m.color === side).every((m) => m.san.includes('+'))) continue;
     if (best.moves[0] && best.moves[0].san === loop[0].san) continue;
     const seq = loop.map((m) => m.san).join(' ');
-    const text = mine
-      ? `Checking gets you nowhere here: ${seq} is the same position again. You need a new idea, not another check.`
-      : `Their checks go round in circles: ${seq} is the same position again. They need a new idea to make progress.`;
+    const text = renderChecksRepeat(seq, mine);
     return { kind: 'checksRepeat', side, text, squares: [loop[0].from, loop[0].to] };
   }
   const score = lineScore(ls[0], side);

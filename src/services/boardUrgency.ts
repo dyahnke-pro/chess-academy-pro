@@ -10,11 +10,12 @@
  * answer leads with. It reuses the shared threat computer (`computeMustDefend`,
  * pin-aware, exchange-checked) — no second board scan.
  */
+import { renderUrgency } from './teachingSentence';
 import { capturedSquare } from '../utils/capturedSquare';
 import { Chess, type Square } from 'chess.js';
 import { computeMustDefend, flipSideToMove, mateThreatsAgainst } from './threatOut';
 import { takingTheAttackerAnswers } from './positionReadingService';
-import { andList, orList } from '../utils/andList';
+import { andList } from '../utils/andList';
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
@@ -122,24 +123,24 @@ export function urgencyLead(u: BoardUrgency | null): string | null {
   // said with …Qxd1 mate on the board).
   if (u.mate.length > 0) {
     const mates = u.mate.map((m) => m.replace(/#$/, ''));
-    parts.push(`They threaten mate: ${orList(mates)} ${mates.length === 1 ? 'is' : 'would be'} mate if you let it — stop that first.`);
+    parts.push(renderUrgency({ kind: 'mate', mates }));
   }
   const biggestSave = u.save[0]?.value ?? 0;
   const winLeads = !!u.win && u.win.value >= biggestSave;
   if (u.win && winLeads) {
-    parts.push(`First, you can take their ${NAME[u.win.piece]} on ${u.win.square} — that comes before anything else.`);
+    parts.push(renderUrgency({ kind: 'win', piece: NAME[u.win.piece], square: u.win.square }));
   }
   if (u.save.length > 0 && !winLeads) {
     const named = andList(u.save.map((p) => `${NAME[p.piece]} on ${p.square}`));
     if (u.takeAttacker) {
       const hit = u.save.filter((p) => p.attacker === u.takeAttacker?.square).map((p) => `${NAME[p.piece]} on ${p.square}`);
-      parts.push(`First, take their ${NAME[u.takeAttacker.piece]} on ${u.takeAttacker.square} — it attacks your ${andList(hit.length ? hit : [named])}.`);
+      parts.push(renderUrgency({ kind: 'take-attacker', piece: NAME[u.takeAttacker.piece], square: u.takeAttacker.square, hits: andList(hit.length ? hit : [named]) }));
     } else {
-      parts.push(`First, your ${named} can be taken — that comes before any plan.`);
+      parts.push(renderUrgency({ kind: 'save', named }));
     }
   }
   if (u.promotion && !winLeads) {
-    parts.push(`Their pawn on ${u.promotion.from} is one step from promoting on ${u.promotion.to}.`);
+    parts.push(renderUrgency({ kind: 'promotion', from: u.promotion.from, to: u.promotion.to }));
   }
   return parts.length ? parts.join(' ') : null;
 }

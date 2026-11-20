@@ -44,6 +44,9 @@ import { seatCp, expectedScore } from './winChance';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { markSaysMate } from '../utils/sanMark';
 import { pieceRef } from './pieceRef';
+import { whyItFailed } from './whyItFailed';
+import { captureRead } from './positionReadingService';
+import { renderTryLoss } from './teachingSentence';
 import { openSentence } from '../utils/openSentence';
 import { temptingKey } from './conceptKey';
 import { INACCURACY_CP } from './engineConstants';
@@ -750,6 +753,53 @@ function tryMechanism(fen: string, m: Move, sans: readonly string[], bestSan: st
 
 const cap = openSentence;
 
+/** HOW A TRY LOSES ITS MATERIAL (the why behind "hands them a bishop"), from
+ *  the computer that already reads a move that drops material
+ *  (`whyItFailed`: the piece lands where it is taken, or the move took the
+ *  last guard off another piece, or the capture is answered by the
+ *  defender), and the piece it leaves hanging — attacked for gain before the
+ *  try and still taken in its line (`captureRead`). The words are the
+ *  renderer's (`renderTryLoss`), from the student's seat. Null when none
+ *  reads it. */
+export function tryLossMechanism(fen: string, m: Move, lineUci: readonly string[], student: Color): string | null {
+  const mover = m.color;
+  const other: Color = mover === 'w' ? 'b' : 'w';
+  let after: Chess;
+  try { after = new Chess(fen); after.move(m.san); } catch { return null; }
+  const ref = (f: string, sq: string): string | null => pieceRef(f, sq, student)?.words ?? null;
+  const w = (() => { try { return whyItFailed({ fenBefore: fen, playedSan: m.san, studentColor: mover === 'w' ? 'white' : 'black', playedLineUci: lineUci.slice(1) }); } catch { return null; } })();
+  if (w && w.squares.length >= 2 && (w.kind === 'lost-the-piece' || w.kind === 'abandoned-defender' || w.kind === 'held-by-defender')) {
+    const [target, taker] = w.squares;
+    const takerWords = ref(after.fen(), taker);
+    if (w.kind === 'held-by-defender') {
+      return takerWords ? renderTryLoss({ kind: 'held', square: target, taker: takerWords }) : null;
+    }
+    const piece = ref(after.fen(), target);
+    if (!piece || !takerWords) return null;
+    if (w.kind === 'lost-the-piece') return renderTryLoss({ kind: 'lands-en-prise', piece, taker: takerWords });
+    return renderTryLoss({ kind: 'guard-left', piece, taker: takerWords, lastGuard: after.attackers(target as Square, mover).length === 0 });
+  }
+  // LEFT HANGING: the other side's first capture in the line takes a piece
+  // that was already theirs to win before the try — the try did nothing for it.
+  const walk = new Chess(after.fen());
+  for (let i = 1; i < Math.min(lineUci.length, 6); i += 1) {
+    let mv: Move;
+    try { mv = walk.move({ from: lineUci[i].slice(0, 2), to: lineUci[i].slice(2, 4), promotion: lineUci[i][4] }); } catch { return null; }
+    if (mv.color !== other || !mv.captured) continue;
+    if (mv.to === m.to || mv.captured === 'p') return null;
+    // The taker already hit it before the try (from the same square), and
+    // after the try taking there still wins (`captureRead`, them to move).
+    let hitBefore = false;
+    try { hitBefore = new Chess(fen).attackers(mv.to as Square, other).includes(mv.from); } catch { return null; }
+    if (!hitBefore) return null;
+    if ((captureRead(after.fen(), mv.to as Square, other) ?? 0) <= 0) return null;
+    const piece = ref(after.fen(), mv.to);
+    const taker = ref(after.fen(), mv.from);
+    return piece && taker ? renderTryLoss({ kind: 'left-hanging', piece, taker }) : null;
+  }
+  return null;
+}
+
 /**
  * (A″) THE TRY THAT COSTS THE RESULT — Danya's choices, as he reads them: of
  * his 76 weighed moves, 3 are refuted by material or mate; the rest by what
@@ -876,6 +926,8 @@ export function standingRefutations(args: {
       // the material is the plainer why there.
       ?? ((): string | null => { lastMechanismKey = null; const t = tryMechanism(args.fen, m, sans, best.san, w.own, w.other); if (t && lostWords && (lastMechanismKey as string | null)?.startsWith('board-reason:')) return null; if (t) reasonKey = lastMechanismKey; return t; })()
       ?? (plan ? targetOutcome(args.fen, sans, plan.target, mover, w.other) : null)
+      // A piece lost: HOW it is lost is the why, and the material its consequence.
+      ?? (lostWords ? ((): string | null => { const t = tryLossMechanism(args.fen, m, read.moves, args.student); if (t) reasonKey = `loss:${t}`; return t; })() : null)
       // What changed on the board after the line is a reason only where the
       // line wins nothing: a piece lost is the plainer why.
       ?? (lostWords ? null : ((): string | null => {
@@ -898,10 +950,12 @@ export function standingRefutations(args: {
     const jobSaid = !!job && job.kind !== 'recaptures' && !(mech ?? '').includes(sans[1]) && !(job.kind === 'kicks' && /kicks/.test(mech ?? ''));
     // "…Kd5 holds the pawn on c6" and "the pawn on c6 still stands" are one idea.
     const kept = jobSaid && job?.kind === 'guards' && /still stands/.test(mech ?? '') ? null : mech;
-    const subject = jobSaid || kept || material ? c.san : 'It';
-    const shift = story?.kind === 'mates' ? null : shiftOf(subject) ?? smallerShift(bestCp, mine, !!kept && /wins nothing/.test(kept), cost, subject);
+    // The result sentence is written with "It": the renderer names the try
+    // once (the lead) and says ONE cost.
+    const bandSaid = story?.kind === 'mates' ? null : shiftOf('It');
+    const shift = story?.kind === 'mates' ? null : bandSaid ?? smallerShift(bestCp, mine, !!kept && /wins nothing/.test(kept), cost, 'It');
     const tryData: TryData = {
-      san: c.san, reply, mine, stem: stemKeyOf(`${args.fen}|result|${c.uci}`),
+      san: c.san, name: `${mover === 'b' ? '…' : ''}${c.san}`, reply, mine, stem: stemKeyOf(`${args.fen}|result|${c.uci}`),
       plan: plan ? { aim: planAim(plan, mine), storm: plan.storm } : null,
       replyFollow: jobSaid ? job?.follow ?? null : null,
       // The anchor said once and short: the try is named by the lead, so the
@@ -910,6 +964,7 @@ export function standingRefutations(args: {
       // ("After …Bc6, your knight on f3 …"), never a score sheet of the line.
       why: kept, whyPath: whyPath.length > 1 ? pathWords(fenAfter(args.fen, whyPath.slice(0, -1)) ?? args.fen, whyPath.slice(-1)) : null,
       material, materialWho: cap(w.otherWho), mates: story?.kind === 'mates', shift,
+      shiftKind: bandSaid ? 'result' : shift ? 'smaller' : null,
     };
     const reason = kept && jobSaid ? kept.replace(/^It\b/, c.san) : kept;
     const text = renderTry(tryData);

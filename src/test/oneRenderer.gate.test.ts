@@ -8,12 +8,15 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 // @ts-expect-error — a plain .mjs script, no types
-import { countTemplates, countRenderer, COMPOSING_SURFACES } from '../../scripts/voice/sentence-templates.mjs';
+import { countCoaching, countRenderer, COMPOSING_SURFACES, classOf } from '../../scripts/voice/sentence-templates.mjs';
 
 const baseline = JSON.parse(readFileSync('src/test/fixtures/sentence-templates.baseline.json', 'utf8')) as Record<string, number>;
 
 describe('one renderer', () => {
-  const now = countTemplates() as Record<string, number>;
+  // Only the COACHING class is gated (a computer's fact worded outside the
+  // renderer); locked lines, course content, UI, dev and kid copy are
+  // counted by the script and reported, never held here.
+  const now = countCoaching() as Record<string, number>;
   it('no file gains a hand-written template', () => {
     const grew = Object.entries(now).filter(([f, n]) => n > (baseline[f] ?? 0)).map(([f, n]) => `${f}: ${baseline[f] ?? 0} → ${n}`);
     expect(grew, grew.join('\n')).toEqual([]);
@@ -24,6 +27,10 @@ describe('one renderer', () => {
   });
   it('the renderer is counted by the same rule (a moved template shows up inside it)', () => {
     expect(countRenderer() as number).toBeGreaterThan(0);
+  });
+  it('a mixed or unknown file is coaching — nothing escapes the gate by class', () => {
+    expect(classOf('src/services/someNewComputer.ts') as string).toBe('coaching');
+    expect(classOf('src/services/groundedAnswer.ts') as string).toBe('coaching');
   });
   it('every composing surface is counted (none escapes)', () => {
     expect((COMPOSING_SURFACES as string[]).length).toBeGreaterThanOrEqual(18);

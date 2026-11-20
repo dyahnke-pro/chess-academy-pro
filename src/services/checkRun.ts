@@ -11,6 +11,7 @@
  *
  * Pure but for `read` (the engine, injected). Every move chess.js-validated.
  */
+import { renderCheckRun } from './teachingSentence';
 import { Chess, type Color } from 'chess.js';
 import { seatCp } from './winChance';
 import { promotionChoicesOn, promotionChoiceLine, type PromotionChoice } from './promotionChoice';
@@ -91,15 +92,11 @@ export async function defenderCheckRun(fen: string, best: string, student: Color
   const last = sans[sans.length - 1];
   const lastSq = /([a-h][1-8])(?:=[QRBN])?[+#]?$/.exec(last)?.[1] ?? '';
   const answer = moves[moves.length - 1];
-  const ends = /^K/.test(last) ? `your king walks out to ${lastSq}` : /x/.test(last) ? `you take with ${answer}` : `you block with ${answer}`;
   const piece = ({ R: 'rook', Q: 'queen', B: 'bishop', N: 'knight', K: 'king' } as Record<string, string>)[sans[0][0]] ?? 'pawn';
-  const checks = sans.length / 2;
-  const run = checks <= 1
-    ? `Their ${piece} checks with ${moves[0]}, and ${ends}.`
-    : /^K/.test(last) && /^K/.test(sans[1])
-    ? `Their ${piece} starts checking with ${moves[0]}. Your king answers with ${moves[1]} and keeps walking — after ${checks} checks it is out on ${lastSq}.`
-    : `Their ${piece} starts checking with ${moves[0]}. After ${checks} checks, ${ends} and the checks run out.`;
-  const tail = then ? ` Then they play ${defender === 'b' ? '…' : ''}${then}.` : '';
-  const promo = promotion ? ` ${promotionChoiceLine(promotion, student, false)}` : '';
-  return { sans, checksRead, then, promotion, text: `${run}${tail}${promo}` };
+  const text = renderCheckRun({
+    piece, first: moves[0], kingReply: moves[1] ?? null, checks: sans.length / 2, lastSq, answer,
+    ends: /^K/.test(last) ? 'king-walks' : /x/.test(last) ? 'takes' : 'blocks', kingWalks: /^K/.test(last) && /^K/.test(sans[1] ?? ''),
+    then: then ? `${defender === 'b' ? '…' : ''}${then}` : null, promo: promotion ? promotionChoiceLine(promotion, student, false) : null,
+  });
+  return { sans, checksRead, then, promotion, text };
 }

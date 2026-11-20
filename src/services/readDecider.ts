@@ -78,6 +78,10 @@ export interface ReadFact {
   checksRead?: readonly string[];
   /** Other tries this one fact refutes for the same reason (uci). */
   also?: readonly string[];
+  /** The verdict said after its band was already said this game: the text
+   *  without the standing ("Breaking through is another matter."); empty
+   *  when the verdict is the standing alone. */
+  afterStanding?: string;
   /** A try: the move (uci) the fact refutes. */
   move?: string;
   /** THE PICTURE'S VERDICT: the failed tries it names, in its own order — each
@@ -282,10 +286,19 @@ const ON_TARGET = 0.02;
 /** The read: one fact per step, in his order, and the habit that closes it. */
 const STANDING_KINDS: ReadonlySet<string> = new Set(['standing', 'standing-bare', 'eval', 'convert', 'compensation', 'verdict']);
 
-export function decideRead<F extends ReadFact>(factsIn: readonly F[], ctx: ReadContext): { facts: F[]; habit: string | null; said: string[] } {
+export function decideRead<F extends ReadFact>(factsIn0: readonly F[], ctx: ReadContext): { facts: F[]; habit: string | null; said: string[] } {
+  // THE STANDING REPEATS ONLY ON A CHANGE (CLAUDE.md, David 2026-11-20):
+  // once a band is said in a game, a standing in that band is not said again
+  // — its claim is the band (`standing:<band>`). A verdict whose band was
+  // said goes on without it (`afterStanding`).
+  const bandSaid = (f: F): boolean => (f.claims ?? []).some((c) => c.startsWith('standing:') && ctx.said.has(c));
+  const factsIn = factsIn0.flatMap((f): F[] => {
+    if (f.computer === 'pictureVerdict' && bandSaid(f)) return f.afterStanding ? [{ ...f, text: f.afterStanding }] : [];
+    return [f];
+  });
   // ONCE A GAME: what the story already said is not said again.
-  const toldBefore = (f: F): boolean => !STANDING_KINDS.has(f.kind) && f.computer !== 'pictureVerdict' && f.computer !== 'picturePlan'
-    && storyKeys(f).some((c) => ctx.said.has(c));
+  const toldBefore = (f: F): boolean => (f.computer === 'pictureVerdict' ? false : STANDING_KINDS.has(f.kind) ? bandSaid(f) : f.computer !== 'picturePlan'
+    && storyKeys(f).some((c) => ctx.said.has(c)));
   // ONE RELEVANCE RULE, in a decided read: a description of the board speaks
   // only when it is linked to the conclusion — it works on a square the best
   // line plays on (0Km5u …Qe3: "the target is your pawn on b5" and "push

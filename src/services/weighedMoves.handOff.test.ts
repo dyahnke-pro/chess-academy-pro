@@ -27,8 +27,10 @@ function anySaid(id: string, san: string): string | null {
 }
 
 describe('a refuter hands off only to one that speaks (his tries)', () => {
-  it('a try that drops a pawn on a bigger cost is said with the pawn and the result', () => {
-    expect(said('a-guide-to-underpromotion#4', 'd8=Q')).toMatch(/They win a pawn in the line\. After d8=Q your edge is gone\.$/);
+  it('a try that drops a pawn on a bigger cost is said with ONE cost — the pawn, never the pawn and the result', () => {
+    const s = said('a-guide-to-underpromotion#4', 'd8=Q');
+    expect(s).toMatch(/d8=Q hands them a pawn in the line\.$/);
+    expect(s).not.toMatch(/edge is gone/);
   });
   it('a try whose line mates is said with the mate, by whichever refuter names it', () => {
     expect(anySaid('how-to-survive-an-attack#2', 'bxc4')).toMatch(/Qb7#/);
@@ -37,7 +39,7 @@ describe('a refuter hands off only to one that speaks (his tries)', () => {
     const t = (tries as Row[]).find((r) => r.id === 'the-terrifying-grinder-of-chess#0' && r.try === 'Nd3');
     if (!t) throw new Error('no fixture row');
     const s = standingRefutations({ fen: t.fen, student: t.fen.split(' ')[1] as Color, rating: 1800, reads: t.reads, considered: consideredTries(t.fen) }).find((x) => x.san === 'Nd3')?.text ?? '';
-    expect(s).toMatch(/They win a knight for a pawn in the line/);
+    expect(s).toMatch(/: they win a knight for a pawn in the line\./);
     expect(s).not.toMatch(/worth|points/);
   });
 });

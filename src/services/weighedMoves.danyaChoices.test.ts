@@ -57,7 +57,7 @@ describe('the try refuted by what it does to the result', () => {
     expect(nx?.text).toMatch(/slightly worse/);
   });
 
-  it('the result sentence names the try once another sentence stands between (no "It" pointing at the reply)', () => {
+  it('a try is named once and says one cost (sicilianClosed #31 shape: "Bxc3 wins nothing… Bxc3 gives back part of your edge")', () => {
     const fen = '1r2r3/2p1b3/p1k5/2PN1p1p/6pP/PPR1BnK1/5P2/7R w - - 0 31';
     const reads = lines([
       { moves: ['d5b4', 'c6b7', 'b4d5', 'b7c6', 'd5b4'], cp: 0 },
@@ -65,10 +65,8 @@ describe('the try refuted by what it does to the result', () => {
       { moves: ['d5e7', 'e8e7', 'h1d1', 'a6a5', 'c3d3', 'e7e4', 'e3f4', 'b8b7', 'f4h6', 'f3e5'], cp: -122 },
     ]);
     const text = standingRefutations({ fen, student: 'w', rating: 1800, reads }).find((x) => x.san === 'Nxe7+')?.text ?? '';
-    const sentences = text.split(/(?<=\.) /);
-    expect(sentences.length).toBeGreaterThanOrEqual(3);
-    const last = sentences[sentences.length - 1];
-    expect(last.startsWith('Nxe7+ ')).toBe(true);
+    expect(text).toBe('Nxe7+ is the obvious try, but …Rxe7 is the answer. It wins nothing: the trades leave the material level, and it leaves you slightly worse.');
+    expect(text.split('Nxe7+').length - 1).toBe(1);
   });
 
   it('a try weighed for the plan is worded as the direct try failing', () => {

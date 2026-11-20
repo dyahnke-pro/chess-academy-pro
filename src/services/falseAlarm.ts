@@ -13,6 +13,7 @@
 // two are one claim, and saying both contradicts itself.
 //
 // Measured on 80 of his speedrun games: 4 lines, two of them his own points.
+import { renderFalseAlarm } from './teachingSentence';
 import { Chess, type Square } from 'chess.js';
 import type { AnalysisLine } from '../types';
 import { detectNewThreat, type DetectedThreat } from './groundedAnswer';
@@ -63,7 +64,7 @@ export function falseAlarm(
 
   const dot = (side: 'w' | 'b'): string => (side === 'b' ? '…' : '');
   const theirs = `${dot(them)}${threat.san}`;
-  let tail = '';
+  let answer: { san: string; after: boolean } | null = null;
   if (best.moves[1] && best.moves[2]) {
     try {
       const d = new Chess(c.fen());
@@ -71,18 +72,16 @@ export function falseAlarm(
       if (r?.san === threat.san) {
         const ans = d.move(moveOf(best.moves[2]));
         if (ans) {
-          tail = theirReply === threat.san
-            ? `, and after ${theirs}, ${dot(me)}${ans.san} answers it`
-            : `, and if they go ahead with ${theirs}, ${dot(me)}${ans.san} answers it`;
+          answer = { san: `${dot(me)}${ans.san}`, after: theirReply === threat.san };
         }
       }
-    } catch { tail = ''; }
+    } catch { answer = null; }
   }
   return {
     threat,
     // QUESTION FIRST, ANSWER SECOND (David 2026-09-30): the question the
     // student should ask on every threat, then the board's answer.
-    text: `Their move threatens ${theirs} — it ${threat.detail}. Do you have to react? No — ${dot(me)}${mine.san} comes first${tail}.`,
+    text: renderFalseAlarm({ threat: theirs, detail: threat.detail, first: `${dot(me)}${mine.san}`, answer }),
     squares: [...new Set([mine.from, mine.to, threat.from, threat.landing])],
   };
 }
