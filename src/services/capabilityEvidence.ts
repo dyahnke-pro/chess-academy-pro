@@ -607,7 +607,11 @@ export interface CapabilityMoveArgs {
    *  their threat, the escape square, a named pattern, the drawback the
    *  played move walked into). Both directions: held when the move was clean,
    *  broken when it was not — one vocabulary for teaching and diagnosis. */
-  alsoPosed?: ReadonlyArray<{ tag: MisconceptionTagId; posedImportance: number }>;
+  alsoPosed?: ReadonlyArray<{ tag: MisconceptionTagId; posedImportance: number;
+    /** A question whose answer the posing computer read off the move itself
+     *  (the picture's conclusions, `pictureAnswers`): 'broken' files the miss
+     *  whatever else the move cost, as the knight choice does. */
+    outcome?: 'broken' }>;
   /** WHAT A COSTLY MOVE WAS ABOUT — the slip's own classified tag, when the
    *  caller has it (the analysis sweep). Absent, it is classified here from the
    *  board and the best move. See `brokenOnlyOwnSkill`. */
@@ -661,7 +665,9 @@ export function capabilityOutcomes(args: CapabilityMoveArgs): Array<{ tag: Misco
     // The same bar as the fundamentals: a question the board barely asked is
     // not evidence either way (it had been skipped for these extras only).
     if (extra.posedImportance < POSED_IMPORTANCE_MIN) continue;
-    if (!posed.some((p) => p.tag === extra.tag)) posed.push({ tag: extra.tag, posedImportance: extra.posedImportance });
+    const had = posed.find((p) => p.tag === extra.tag);
+    if (had) { if (extra.outcome === 'broken') had.outcome = 'broken'; }
+    else posed.push({ tag: extra.tag, posedImportance: extra.posedImportance, ...(extra.outcome === 'broken' ? { outcome: 'broken' as const } : {}) });
   }
   // THE QUIET STOP (prophylaxis, both ways): where the engine's best move is
   // the stop of their pin or kick, the move answers it or lets it land.

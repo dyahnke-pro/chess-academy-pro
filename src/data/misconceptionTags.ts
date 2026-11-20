@@ -438,6 +438,34 @@ export const MISCONCEPTION_TAGS = [
     coachCue: 'Material lead of two points or more and the best move was a piece trade the played move avoided, or a deficit of two or more and the played move traded pieces the best move kept.',
     drill: { kind: 'principle' },
   },
+  // THE PICTURE'S CONCLUSIONS, RECORDED (WO-PICTURE-01): the target, the
+  // plan's target and their counterplay are spoken by the picture computers
+  // (`pictureLedger`); these rows file whether the student's own move
+  // answered them (`pictureLedger.pictureAnswers`).
+  {
+    id: 'missed-weak-target',
+    label: 'Ignored their weak spot',
+    bucket: 'positional',
+    blurb: "Their weakness was there to aim at, and your move added nothing against it.",
+    coachCue: 'The opponent had a weakness the student outnumbers (a weak pawn, a loose piece, a hole), the best move brought one more unit against it, and the played move did not and cost.',
+    drill: { kind: 'principle' },
+  },
+  {
+    id: 'missed-plan-route',
+    label: 'Missed the plan to a target',
+    bucket: 'positional',
+    blurb: "A piece of yours had a route to a target it would win in a few moves, and you did not start it.",
+    coachCue: 'A piece of the student had a three-or-four-move route to a target the defenders cannot cover in time, the best move started that route, and the played move did not and cost.',
+    drill: { kind: 'principle' },
+  },
+  {
+    id: 'allowed-counterplay',
+    label: 'Let their counterplay in',
+    bucket: 'positional',
+    blurb: "Their one resource (a pawn break, or a piece coming in with a threat) was yours to kill, and your move left it alive.",
+    coachCue: 'The opponent had one resource — a pawn break or a piece move that makes a threat — the best move made it unplayable, and the played move left it on and cost.',
+    drill: { kind: 'principle' },
+  },
 
   // ── ENDGAME ──────────────────────────────────────────────────────
   {

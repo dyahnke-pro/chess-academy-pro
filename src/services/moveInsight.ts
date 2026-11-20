@@ -53,6 +53,9 @@ import { detectNewThreat } from './groundedAnswer';
 import { kingReadsForBestLine, type KingReadId } from './kingAttackReads';
 import { castleByHand } from './kingWalk';
 import type { CoachFact } from './coachFact';
+import type { EngineLine } from './engineLineRead';
+import { pictureConclusions, pictureAnswers, PICTURE_ANSWER_POSED } from './pictureLedger';
+import { baseFactsOf } from './boardBundle';
 
 /** Which capability each king read POSES — exhaustive over the reads, so a new
  *  read fails to compile until someone decides. Null: a standing fact the
@@ -767,9 +770,21 @@ export function escapeSquareFirst(fen: string, bestSan: string | undefined): { h
  */
 export function positionPosed(
   fen: string,
-  opts: { bestSan?: string; lastMove?: { fenBefore: string; san: string }; /** The engine's line from the best move (UCI), when known — the mate read plays it out. */ bestLine?: readonly string[] },
-): Array<{ tag: MisconceptionTagId; posedImportance: number }> {
-  const out: Array<{ tag: MisconceptionTagId; posedImportance: number }> = [];
+  opts: {
+    bestSan?: string; lastMove?: { fenBefore: string; san: string }; /** The engine's line from the best move (UCI), when known — the mate read plays it out. */ bestLine?: readonly string[];
+    /** The move the student PLAYED here and what it cost, when the caller is
+     *  scoring it: the picture's conclusions (the target, the plan's target,
+     *  their counterplay) are posed only with it, because a clean move off
+     *  them is no evidence and only the move can say which (`pictureAnswers`).
+     *  The picture reads every computer on the board (~0.4 s), so only a
+     *  surface that scores one move at a time passes it (live Learn and Play,
+     *  the drills); the whole-game sweep (`autoAnalyzeGame`) does not — at
+     *  ~30 plies a game across a library it would hold the main thread for
+     *  hours on a phone. Filing imported games is owed with a worker. */
+    played?: { san: string; cpLoss: number | null };
+  },
+): Array<{ tag: MisconceptionTagId; posedImportance: number; outcome?: 'broken' }> {
+  const out: Array<{ tag: MisconceptionTagId; posedImportance: number; outcome?: 'broken' }> = [];
   const add = (tag: MisconceptionTagId, w: number): void => { if (!out.some((o) => o.tag === tag)) out.push({ tag, posedImportance: w }); };
   try {
     if (opts.lastMove) {
@@ -806,8 +821,35 @@ export function positionPosed(
     // the skill the board asked for. The fact carries its skill
     // (`CoachFact.skill`), so teaching and the record speak one vocabulary.
     for (const f of registryPosedFacts(fen, me, opts.bestLine ?? [])) if (f.skill) add(f.skill as MisconceptionTagId, REGISTRY_POSED_WEIGHT[f.computer as RegistryPosedComputer] ?? 60);
+    // THE PICTURE'S CONCLUSIONS, BOTH WAYS (WO-PICTURE-01): spoken by
+    // `pictureTarget` / `pictureCounterplay`, filed here off the move played.
+    if (opts.played) {
+      const playedUci = uciOfSan(fen, opts.played.san);
+      // The best move alone is a line of one when the caller kept no more.
+      const lines: EngineLine[] = opts.bestLine?.length ? [{ moves: opts.bestLine, cp: null, mate: null }] : bestUciOf(fen, opts.bestSan).map((u) => ({ moves: [u], cp: null, mate: null }));
+      // The picture the student hears rests on every computer's facts (the
+      // bundle, `moveThoughtFacts`); the record reads the same picture.
+      const c = playedUci && lines.length
+        ? pictureConclusions(baseFactsOf({ fen, student: me, lines, rating: DEFAULT_STUDENT_RATING, history: [], priorMove: null, priorMoveSeat: null, priorLines: null }), fen, lines)
+        : null;
+      for (const a of c && playedUci ? pictureAnswers(c, fen, playedUci, lines[0].moves[0], opts.played.cpLoss) : []) {
+        if (out.some((o) => o.tag === a.skill)) continue;
+        out.push({ tag: a.skill, posedImportance: PICTURE_ANSWER_POSED[a.skill], ...(a.outcome === 'broken' ? { outcome: 'broken' as const } : {}) });
+      }
+    }
   } catch { /* an unreadable board posed nothing */ }
   return out;
+}
+
+/** The best move as a one-move UCI line, when only its SAN is known. */
+function bestUciOf(fen: string, bestSan: string | undefined): string[] {
+  const u = bestSan ? uciOfSan(fen, bestSan) : null;
+  return u ? [u] : [];
+}
+
+/** The UCI of `san` on `fen`, or null. */
+function uciOfSan(fen: string, san: string): string | null {
+  try { const m = new Chess(fen).move(san); return `${m.from}${m.to}${m.promotion ?? ''}`; } catch { return null; }
 }
 
 /** The registry computers whose read poses a question to the side to move. */
@@ -815,7 +857,7 @@ type RegistryPosedComputer = 'detectLatentFork' | 'detectLatentDanger' | 'detect
   | 'findTrappedPiece' | 'readConversion' | 'noSafeChecks' | 'kingRace' | 'kingActivityGap' | 'zugzwangIfPassed' | 'mateLine' | 'kingInOpen' | 'seventhRankMate'
   | 'queenlessMate' | 'selfBlock' | 'mateThreatLever' | 'queenKnightNet' | 'lateralRookDefence' | 'kingSiege'
   | 'keySquaresOn' | 'kpDrawReason' | 'wonEnding' | 'shoulderOn' | 'connectedPassersOn' | 'matingNet' | 'frozenTarget'
-  | 'pictureLedger' | 'pictureCounterplay' | 'pictureTarget';
+  | 'pictureLedger';
 
 /** How sharply each posed question is asked, on the heat map's scale. */
 const REGISTRY_POSED_WEIGHT: Record<RegistryPosedComputer, number> = {
@@ -848,8 +890,6 @@ const REGISTRY_POSED_WEIGHT: Record<RegistryPosedComputer, number> = {
   matingNet: 90,
   frozenTarget: 60,
   pictureLedger: 65,
-  pictureCounterplay: 65,
-  pictureTarget: 60,
 };
 
 /** The registry's reads of the board the student moves on, each fact with
@@ -861,18 +901,14 @@ const REGISTRY_POSED_WEIGHT: Record<RegistryPosedComputer, number> = {
  *  the engine's line from the board (UCI), [] when none is known. */
 export function registryPosedFacts(fen: string, me: 'w' | 'b', bestLineUci: readonly string[]): Array<{ computer: string; skill?: string }> {
   const read = registryReads(fen, me, bestLineUci);
-  // THE PICTURE'S CONCLUSIONS, both ways (WO-PICTURE-01 P3), on the reads
-  // above and the board's own read: your weakness they outnumber (guard it),
-  // their break your next move kills (stop it), your target the best move
-  // goes after (start on it). A clean move answers each.
+  // THE LEDGER, both ways (WO-PICTURE-01 P3), on the reads above and the
+  // board's own read: your weakness they outnumber, with you to move, is a
+  // threat a clean move answers. The target, the plan's target and their
+  // counterplay pose only off the move played (`pictureAnswers`, in
+  // `positionPosed`): a clean move off them answered a different question.
   const facts = [...read, ...readBoardAll('positionRead', { fen, student: me })];
-  const lines = bestLineUci.length ? [{ moves: bestLineUci, cp: null, mate: null }] : [];
-  return [
-    ...read,
-    ...readBoardAll('pictureLedger', { fen, student: me, lines, facts }).filter((f) => f.skill),
-    ...readBoardAll('pictureCounterplay', { fen, student: me, lines, facts }).filter((f) => f.skill),
-    ...readBoardAll('pictureTarget', { fen, student: me, lines, facts }).filter((f) => f.skill),
-  ];
+  const lines: EngineLine[] = bestLineUci.length ? [{ moves: bestLineUci, cp: null, mate: null }] : [];
+  return [...read, ...readBoardAll('pictureLedger', { fen, student: me, lines, facts }).filter((f) => f.skill)];
 }
 
 function registryReads(fen: string, me: 'w' | 'b', bestLineUci: readonly string[]): CoachFact[] {

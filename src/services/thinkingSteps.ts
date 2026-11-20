@@ -209,6 +209,11 @@ export const TAG_STEP: Record<MisconceptionTagId, ThinkingStep | null> = {
   'passive-king-endgame': null,
   'passed-pawn-neglected': null,
   'passive-rook': null,
+  // The picture's conclusions (the target, the plan's route, their one
+  // resource): positional holes the picture itself teaches, not a step.
+  'missed-weak-target': null,
+  'missed-plan-route': null,
+  'allowed-counterplay': null,
   other: null,
 };
 

@@ -131,7 +131,7 @@ describe('the counterplay', () => {
     expect(counterplayText(r!, 'b', fen, lines)).toMatch(/dead: after d4 it no longer works/);
     const [f] = readBoardAll('pictureCounterplay', { fen, student: 'b', lines, facts: [named] });
     // The student's own next move kills it: posed both ways, and named, so Learn holds it.
-    expect(f.skill).toBe('missed-opponents-threat');
+    expect(f.skill).toBe('allowed-counterplay');
     expect(f.namesStudentMove).toBe(true);
     // Negative control: no fact names the break and the line does not play it — nothing to say.
     expect(counterplayOf(buildPicture([]), fen, lines, 'w')).toBeNull();

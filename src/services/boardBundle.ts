@@ -576,6 +576,14 @@ export function bundleKey(b: BoardBundle): string {
 const EVERY = new Map<string, CoachFact[]>();
 const EVERY_KEEP = 512;
 
+/** The facts every computer but the picture's conclusions reads on the
+ *  bundle — the fact set the conclusions rest on, on every surface. The record
+ *  reads the picture off this same set (`moveInsight.positionPosed`), so what
+ *  the student hears and what is filed are one picture. */
+export function baseFactsOf(b: BoardBundle): CoachFact[] {
+  return baseFacts(b);
+}
+
 /** Every computer the bundle can fill, read on it — the conclusions last, on
  *  the facts of the rest. A computer that throws is skipped (its own `safe`
  *  already guards it). A bundle read before is not read again. */

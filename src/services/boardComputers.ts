@@ -127,7 +127,7 @@ import { pieceTempo } from './pieceTempo';
 import { kingBoxMove } from './kingBox';
 import { matingNet } from './matingNet';
 import { frozenTarget } from './frozenTarget';
-import { pictureConclusions, ledgerKey, ledgerText, ledgerSquares, counterplayText, targetText, moveWorksOnTarget, planTargetText, moveWorksOnPlan } from './pictureLedger';
+import { pictureConclusions, ledgerKey, ledgerText, ledgerSquares, counterplayText, targetText, moveAnswersTarget, planTargetText, moveWorksOnPlan } from './pictureLedger';
 import { centreDuo } from './centreDuo';
 import { noSafeChecks } from './noSafeChecks';
 import { promotionWithCheck } from './promotionWithCheck';
@@ -8012,7 +8012,7 @@ export const BOARD_COMPUTERS = {
       // and "it takes the …g6 break away" are said once.
       const stops = r.state === 'dead' ? [`stops-break:${them === 'b' ? '…' : ''}${r.from[0] === r.to[0] ? r.to : `${r.from[0]}x${r.to}`}`] : [];
       return fact({ key, claims: [key, ...stops], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
-        seat: 'opponent', namesStudentMove, thread: LOCAL_THREAD, fen: ctx.fen, ...(asks ? { skill: 'missed-opponents-threat' } : {}) });
+        seat: 'opponent', namesStudentMove, thread: LOCAL_THREAD, fen: ctx.fen, ...(asks ? { skill: 'allowed-counterplay' } : {}) });
     }),
     computer: 'pictureCounterplay',
     kind: 'opponent-intent',
@@ -8038,10 +8038,15 @@ export const BOARD_COMPUTERS = {
       const planSquares = p && planText ? [p.best.entry.square, ...(p.best.decisive?.route ?? [])] : [];
       const squares = [...new Set([...(t ? [t.best.entry.square, ...(t.runnerUp ? [t.runnerUp.entry.square] : [])] : []), ...planSquares])];
       const first = ctx.lines[0]?.moves[0];
-      const asks = sideToMove(ctx.fen) === ctx.student && ((t !== null && moveWorksOnTarget(t, first)) || (p !== null && !!planText && moveWorksOnPlan(p, first)));
+      // The row the record files the answer under (`pictureLedger.pictureAnswers`):
+      // the target now when the best move goes at it, else the plan's route.
+      const toMove = sideToMove(ctx.fen) === ctx.student;
+      const asksTarget = toMove && t !== null && moveAnswersTarget(t, ctx.fen, first);
+      const asksPlan = toMove && p !== null && !!planText && moveWorksOnPlan(p, first);
+      const skill = asksTarget ? 'missed-weak-target' : asksPlan ? 'missed-plan-route' : null;
       const key = t ? `target:${t.best.entry.square}` : `plan-target:${(p as NonNullable<typeof p>).best.entry.square}`;
       return fact({ key, claims: [key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
-        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: ctx.fen, ...(asks ? { skill: 'no-plan' } : {}) });
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: ctx.fen, ...(skill ? { skill } : {}) });
     }),
     computer: 'pictureTarget',
     kind: 'priority',

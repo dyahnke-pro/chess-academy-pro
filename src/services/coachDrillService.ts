@@ -48,11 +48,12 @@ export function recordDrillEvidence(args: {
   fenBefore: string; playedSan: string; moverColor: 'white' | 'black';
   clean: boolean; bestSan: string; missTag?: MisconceptionTagId | null; prompted: boolean;
 }): void {
-  const posed = positionPosed(args.fenBefore, { bestSan: args.bestSan });
+  const cpLoss = args.clean ? 0 : MISTAKE_CP_DRILL;
+  const posed = positionPosed(args.fenBefore, { bestSan: args.bestSan, played: { san: args.playedSan, cpLoss } });
   if (args.missTag && !posed.some((p) => p.tag === args.missTag)) posed.push({ tag: args.missTag, posedImportance: 80 });
   void recordCapabilityEvidence({
     fenBefore: args.fenBefore, playedSan: args.playedSan, moverColor: args.moverColor,
-    cpLoss: args.clean ? 0 : MISTAKE_CP_DRILL, origin: 'drill', prompted: args.prompted, alsoPosed: posed,
+    cpLoss, origin: 'drill', prompted: args.prompted, alsoPosed: posed,
   });
 }
 const MISTAKE_CP_DRILL = 150;
