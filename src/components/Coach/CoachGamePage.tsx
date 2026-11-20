@@ -1644,6 +1644,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     corpusNotes: true,
     withhold: null, // a live game: nothing to withhold
     surface: 'play',
+    story: null, // Play volunteers nothing; the tapped read stands alone
     // The read now STREAMS into the chat below the board (see the effect below),
     // so no separate final-report inject — that would duplicate the streamed
     // bubble. David 2026-07-10: "no more special place for them."

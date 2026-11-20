@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4872 lines · 3 exports · 4 importers · 20 tests · 9 audits**
+**4874 lines · 3 exports · 4 importers · 21 tests · 9 audits**
 
 ## Locked rules that govern this surface
 
 - **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5740) — names `BLUNDER_CARD_ENABLED`, `CoachGamePage`
 - **The standard post-deploy ritual** (CLAUDE.md:7013) — names `CoachGamePage`
-- **🔒🔒 THE FULL-GAME AUDIT STANDARD (David 2026-07-13, LOCKED: "Save this audit format plz. This is the new standard.")** (CLAUDE.md:7168) — names `BLUNDER_CARD_ENABLED`, `PLAY_VOLUNTEERS_COACHING`
+- **🔒🔒 THE FULL-GAME AUDIT STANDARD (David 2026-07-13, LOCKED: "Save this audit format plz. This is the new standard.")** (CLAUDE.md:7169) — names `BLUNDER_CARD_ENABLED`, `PLAY_VOLUNTEERS_COACHING`
 
 ## Who calls in
 
@@ -49,6 +49,7 @@
 - `src/test/adventureBookWired.gate.test.ts`
 - `src/test/flipIsAViewNotASideSwap.test.ts`
 - `src/test/oneCoachDoor.gate.test.ts`
+- `src/test/oneCoachUnlocked.gate.test.ts`
 - `src/test/onePrice.gate.test.ts`
 - `src/test/oneRatedMoveDoor.gate.test.ts`
 - `src/test/playRecordsCapability.test.ts`

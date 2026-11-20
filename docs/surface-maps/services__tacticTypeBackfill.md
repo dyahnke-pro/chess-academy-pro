@@ -9,7 +9,7 @@
 ## Locked rules that govern this surface
 
 - **⏰ Standing notes** (CLAUDE.md:3216) — names `reconcileTacticTypes`
-- **The standard post-deploy ritual** (CLAUDE.md:7021) — names `tacticTypeBackfill`
+- **The standard post-deploy ritual** (CLAUDE.md:7068) — names `tacticTypeBackfill`
 
 ## Who calls in
 

@@ -53,7 +53,7 @@ import { foldStandingRefrains, emptyRefrainLedger } from './standingRefrains';
 import { renderStructureAtoms } from './structureProse';
 import { coachTurn, habitNeedFrom } from './coachDecider';
 import { advantageWasMissed } from './reviewWithholding';
-import { PLAN_THREAD_HOLD_PLIES, PLAN_THREAD_KINDS } from './planThread';
+import { PLAN_THREAD_HOLD_PLIES, PLAN_THREAD_KINDS, tellPictureFacts } from './planThread';
 import { createStoryStore, switchesSaid, storyLedger, storyThrough, threadKey, threadStated, threadVariant, PLAN_GOAL, phaseCrossed, openingAt, openingsNamed, noteOpening, lastVerdict, modelGameCited, storyTurn, type ThreadKey, type StoryStore, type StorySeed, type SaidSet } from './gameStory';
 import { boardStateAfter } from './boardState';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
@@ -2795,7 +2795,12 @@ function* reviewSegmentSteps(
         // fact is the move's second job and nothing follows it (two jobs a
         // move at most, M-TWO-JOBS).
         const led: ReadonlySet<ThoughtStep> = stepLeads.length > 0 ? new Set<ThoughtStep>([mine ? 'yours' : 'theirs']) : NOT_LED;
-        const thought = composeThought(thoughtFacts, 'review', memoryHere, led, thoughtRecord);
+        // THE PICTURE'S CONCLUSIONS AGAINST THE GAME'S STORY: one stated and
+        // unchanged is not said again; a changed one is said as the change,
+        // with its cause off the board (`planThread.tellPictureFacts`). The
+        // kept ones are stated in the story by `commitFacts` below.
+        const toldFacts = studentColorWB ? tellPictureFacts(thoughtFacts, story.current(), studentColorWB) : thoughtFacts;
+        const thought = composeThought(toldFacts, 'review', memoryHere, led, thoughtRecord);
         if (thought.spoken && !hintsSaid.has(id)) {
           const named = new Set(thought.kept.flatMap((f) => [...f.squares]));
           // The job's attack said here is the teaching statement of the

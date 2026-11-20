@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**162 lines · 7 exports · 13 importers · 7 tests · 0 audits**
+**165 lines · 7 exports · 14 importers · 8 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,6 +19,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/liveNeedGate.test.ts`
 - `src/services/oneGroupTable.gate.test.ts`
 - `src/services/positionFacts.ts`
+- `src/services/positionPicture.test.ts`
 - `src/services/puzzleMethod.ts`
 - `src/services/reviewFacetRank.ts`
 - `src/services/supportedFacts.test.ts`
@@ -44,8 +45,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `layerStandings` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:1640`
-- `src/services/positionFacts.ts:1454`
+- `src/services/coachFeatureService.ts:1698`
+- `src/services/positionFacts.ts:1399`
 - `src/services/puzzleMethod.ts:56`
 - `src/services/teachingLayers.test.ts:22`
 - `src/services/teachingLayers.test.ts:29`
@@ -55,7 +56,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/teachingLayers.test.ts:50`
 
 ### `layerBonus` (function) — 5 call sites
-- `src/services/coachDecider.ts:471`
+- `src/services/coachDecider.ts:482`
 - `src/services/teachingLayers.test.ts:24`
 - `src/services/teachingLayers.test.ts:25`
 - `src/services/teachingLayers.test.ts:33`
@@ -67,6 +68,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/factStakes.test.ts`
 - `src/services/liveNeedGate.test.ts`
 - `src/services/oneGroupTable.gate.test.ts`
+- `src/services/positionPicture.test.ts`
 - `src/services/supportedFacts.test.ts`
 - `src/services/teachingLayers.test.ts`
 - `src/services/thinkingSteps.test.ts`

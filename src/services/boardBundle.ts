@@ -49,6 +49,28 @@ export interface BoardBundle {
    *  caller holds them: the line is named by the one naming rule (`lineTrust`).
    *  Absent: one read. */
   seconds?: ReadonlyArray<readonly string[]>;
+  /** THE GAME AS ALREADY PLAYED, from a caller that keeps it as the game goes
+   *  (`playMove`, one move at a time): each move of `history` with its board.
+   *  Taken instead of replaying `history` from move 1 on every read, when it
+   *  matches `history` move for move and ends on `fen`; absent or not
+   *  matching, the game is replayed. Derived from `history`, so it is not part
+   *  of the read's key. */
+  game?: readonly PlayedMove[];
+}
+
+/** One move of a game, with the boards around it and what it took. */
+export interface PlayedMove { fenBefore: string; fenAfter: string; san: string; uci: string; to: string; captured: string | null; mover: Color }
+
+/** THE RUNNING GAME, one move longer: the move played on the last board (the
+ *  start board for an empty game) — one chess.js move, never a replay. Null
+ *  when the move is not legal there. */
+export function playMove(game: readonly PlayedMove[], san: string): PlayedMove[] | null {
+  const fenBefore = game.length > 0 ? game[game.length - 1].fenAfter : new Chess().fen();
+  try {
+    const c = new Chess(fenBefore);
+    const m = c.move(san);
+    return [...game, { fenBefore, fenAfter: c.fen(), san: m.san, uci: `${m.from}${m.to}${m.promotion ?? ''}`, to: m.to, captured: m.captured ?? null, mover: m.color }];
+  } catch { return null; }
 }
 
 type Adapter<K extends ComputerId> = ((b: BoardBundle) => BoardContexts[K] | null) | { needs: readonly string[] };
@@ -150,7 +172,7 @@ const scoredLines = (ls: readonly EngineLine[]): Array<{ moves: readonly string[
   linesAsAnalysis(ls).map((l) => ({ moves: l.moves, evaluation: l.evaluation, mate: l.mate }));
 
 /** One move of the game, with its board and what it took. */
-interface Played { fenBefore: string; san: string; uci: string; to: string; captured: string | null; mover: Color }
+type Played = PlayedMove;
 const sameBoard = (a: string, z: string): boolean => a.split(' ').slice(0, 2).join(' ') === z.split(' ').slice(0, 2).join(' ');
 const bareSan = (s: string): string => s.replace(/[+#!?]+$/, '');
 const GAMES = new WeakMap<BoardBundle, Played[] | null>();
@@ -161,13 +183,22 @@ function gameOf(b: BoardBundle): Played[] | null {
   if (GAMES.has(b)) return GAMES.get(b) ?? null;
   let out: Played[] | null = [];
   try {
-    const c = new Chess();
-    for (const san of b.history) {
-      const fenBefore = c.fen();
-      const m = c.move(san);
-      out.push({ fenBefore, san: m.san, uci: `${m.from}${m.to}${m.promotion ?? ''}`, to: m.to, captured: m.captured ?? null, mover: m.color });
+    // The caller's running game, when it is this history to this board: no
+    // replay. Otherwise the game is replayed from the start.
+    const given = b.game && b.game.length === b.history.length && b.game.every((m, k) => bareSan(m.san) === bareSan(b.history[k]))
+      && sameBoard(b.game.length > 0 ? b.game[b.game.length - 1].fenAfter : new Chess().fen(), b.fen) ? b.game : null;
+    let end: string;
+    if (given) { out = [...given]; end = b.fen; }
+    else {
+      const c = new Chess();
+      for (const san of b.history) {
+        const fenBefore = c.fen();
+        const m = c.move(san);
+        out.push({ fenBefore, fenAfter: c.fen(), san: m.san, uci: `${m.from}${m.to}${m.promotion ?? ''}`, to: m.to, captured: m.captured ?? null, mover: m.color });
+      }
+      end = c.fen();
     }
-    if (!sameBoard(c.fen(), b.fen)) out = null;
+    if (!sameBoard(end, b.fen)) out = null;
     const last = out && out.length > 0 ? out[out.length - 1] : null;
     if (out && b.priorMove && (!last || bareSan(last.san) !== bareSan(b.priorMove.san) || !sameBoard(last.fenBefore, b.priorMove.fenBefore))) out = null;
     if (out && !b.priorMove && out.length > 0) out = null;
@@ -562,10 +593,12 @@ function baseFacts(b: BoardBundle): CoachFact[] {
 
 /** Every field the bundle carries, so the read's key is the WHOLE bundle: a
  *  new field fails to compile here until it is part of the key. */
-const BUNDLE_KEY_FIELDS: Record<keyof BoardBundle, true> = {
+const BUNDLE_KEY_FIELDS: Record<keyof BoardBundle, boolean> = {
   fen: true, student: true, lines: true, rating: true, history: true, priorMove: true, priorMoveSeat: true, priorLines: true, seconds: true,
+  // The running game is `history` played: the same history is the same read.
+  game: false,
 };
-const KEY_ORDER = Object.keys(BUNDLE_KEY_FIELDS) as Array<keyof BoardBundle>;
+const KEY_ORDER = (Object.keys(BUNDLE_KEY_FIELDS) as Array<keyof BoardBundle>).filter((k) => BUNDLE_KEY_FIELDS[k]);
 /** The same bundle, by value: two bundles built apart for one board (the best
  *  line's futures, read again for every try a board read weighs) are one read. */
 export function bundleKey(b: BoardBundle): string {

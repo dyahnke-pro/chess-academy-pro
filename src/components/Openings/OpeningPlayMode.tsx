@@ -631,6 +631,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
     corpusNotes: true,   // a Play mount (2026-09-23)
     withhold: null,      // greyed while a punish callout is unrevealed, below
     surface: 'openings',
+    story: null, // a standalone board: no game story to tell against
   });
   const punishPending = !!punishCue && !punishRevealed;
   // THE LINE JUST STATED (the one Play-line button plays it): the punish line

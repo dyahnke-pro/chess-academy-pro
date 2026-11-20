@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**882 lines · 23 exports · 8 importers · 4 tests · 0 audits**
+**882 lines · 24 exports · 7 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,14 +12,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
+- `src/services/boardComputers.ts`
 - `src/services/capabilityEvidence.ts`
 - `src/services/exchangeIdeas.replied.test.ts`
 - `src/services/exchangeIdeas.test.ts`
 - `src/services/goldenPositional.test.ts`
 - `src/services/learnBoardTruth.realGame.test.ts`
-- `src/services/positionFacts.ts`
 - `src/services/positionTransformation.ts`
-- `src/services/reviewFullData.ts`
 
 ## Exports and every call site
 
@@ -60,7 +59,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeIdeas.test.ts:74`
 
 ### `captureAbandonsDuty` (function) — 3 call sites
-- `src/services/capabilityEvidence.ts:499`
+- `src/services/capabilityEvidence.ts:503`
 - `src/services/exchangeIdeas.test.ts:253`
 - `src/services/exchangeIdeas.test.ts:254`
 
@@ -122,13 +121,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/learnBoardTruth.realGame.test.ts:53`
 
 ### `cPawnBlock` (function) — 5 call sites
-- `src/services/capabilityEvidence.ts:557`
+- `src/services/capabilityEvidence.ts:567`
 - `src/services/exchangeIdeas.test.ts:174`
 - `src/services/exchangeIdeas.test.ts:176`
 - `src/services/exchangeIdeas.test.ts:177`
 - `src/services/exchangeIdeas.test.ts:179`
 
-### `exchangeIdeas` (function) — 9 call sites
+### `ExchangeIdeasInput` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `exchangeIdeas` (function) — 8 call sites
+- `src/services/boardComputers.ts:2101`
 - `src/services/exchangeIdeas.replied.test.ts:15`
 - `src/services/exchangeIdeas.replied.test.ts:19`
 - `src/services/exchangeIdeas.test.ts:169`
@@ -136,8 +139,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeIdeas.test.ts:218`
 - `src/services/exchangeIdeas.test.ts:219`
 - `src/services/exchangeIdeas.test.ts:223`
-- `src/services/positionFacts.ts:1358`
-- `src/services/reviewFullData.ts:1115`
 
 ## Tests
 

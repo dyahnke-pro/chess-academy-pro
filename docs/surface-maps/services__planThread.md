@@ -4,36 +4,39 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**297 lines · 9 exports · 7 importers · 6 tests · 1 audits**
+**417 lines · 14 exports · 9 importers · 7 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5929) — names `planThread`
-- **The standard post-deploy ritual** (CLAUDE.md:7020) — names `planThread`
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5975) — names `planThread`
+- **The standard post-deploy ritual** (CLAUDE.md:7067) — names `planThread`
 
 ## Who calls in
 
 - `src/services/boardComputers.ts`
+- `src/services/boardReadFacts.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/gameStory.rewind.test.ts`
 - `src/services/gameStory.ts`
+- `src/services/learnSharedFacts.ts`
+- `src/services/pictureStory.test.ts`
 - `src/services/planArcFade.test.ts`
 - `src/services/planThread.test.ts`
-- `src/services/positionFacts.ts`
 
 ## Exports and every call site
 
-### `planChangeSentence` (function) — 1 call site
-- `src/services/positionFacts.ts:990`
+### `planChangeSentence` (function) — 2 call sites
+- `src/services/boardComputers.ts:3011`
+- `src/services/boardComputers.ts:3727`
 
 ### `structurePlanEvent` (function) — 7 call sites
+- `src/services/boardComputers.ts:3010`
 - `src/services/planThread.test.ts:190`
 - `src/services/planThread.test.ts:191`
 - `src/services/planThread.test.ts:192`
 - `src/services/planThread.test.ts:198`
 - `src/services/planThread.test.ts:202`
 - `src/services/planThread.test.ts:206`
-- `src/services/positionFacts.ts:980`
 
 ### `PLAN_THREAD_HOLD_PLIES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -42,7 +45,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `adoptPlanTrial` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12382`
+- `src/components/Coach/CoachTeachPage.tsx:12397`
 - `src/services/gameStory.rewind.test.ts:27`
 - `src/services/planThread.test.ts:106`
 - `src/services/planThread.test.ts:113`
@@ -57,7 +60,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `planThreadTurn` (function) — 26 call sites
-- `src/services/boardComputers.ts:1028`
+- `src/services/boardComputers.ts:3260`
 - `src/services/gameStory.rewind.test.ts:25`
 - `src/services/planArcFade.test.ts:31`
 - `src/services/planChoice.test.ts:78`
@@ -84,9 +87,43 @@
 - `src/services/planThread.test.ts:222`
 - `src/services/planThread.test.ts:225`
 
+### `ConclusionMemory` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `conclusionCause` (function) — 3 call sites
+- `src/services/pictureStory.test.ts:49`
+- `src/services/pictureStory.test.ts:51`
+- `src/services/pictureStory.test.ts:53`
+
+### `ConclusionTold` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `tellConclusion` (function) — 6 call sites
+- `src/services/pictureStory.test.ts:63`
+- `src/services/pictureStory.test.ts:65`
+- `src/services/pictureStory.test.ts:67`
+- `src/services/pictureStory.test.ts:69`
+- `src/services/pictureStory.test.ts:76`
+- `src/services/pictureStory.test.ts:77`
+
+### `tellPictureFacts` (function) — 12 call sites
+- `src/services/boardReadFacts.ts:265`
+- `src/services/coachFeatureService.ts:2802`
+- `src/services/learnSharedFacts.ts:113`
+- `src/services/pictureStory.test.ts:22`
+- `src/services/pictureStory.test.ts:29`
+- `src/services/pictureStory.test.ts:35`
+- `src/services/pictureStory.test.ts:38`
+- `src/services/pictureStory.test.ts:71`
+- `src/services/pictureStory.test.ts:82`
+- `src/services/pictureStory.test.ts:99`
+- `src/services/pictureStory.test.ts:102`
+- `src/services/pictureStory.test.ts:103`
+
 ## Tests
 
 - `src/services/gameStory.rewind.test.ts`
+- `src/services/pictureStory.test.ts`
 - `src/services/planArcFade.test.ts`
 - `src/services/planChoice.test.ts`
 - `src/services/planThread.test.ts`

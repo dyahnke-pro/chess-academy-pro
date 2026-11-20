@@ -25,7 +25,7 @@ import { NO_PROOF, squaresProof, isProof, legalLineProof, lineProofFromUci, type
 import { lineSeatAt, withArticle } from '../utils/andList';
 import type { FactStakes } from './factStakes';
 import { LOCAL_THREAD, placeFact, stakesOf, type CoachFact, type CoachFactKind, type ComputerName, type FactSeat } from './coachFact';
-import { threadKey } from './gameStory';
+import { threadKey, PLAN_GOAL, type PictureConclusionId } from './gameStory';
 import { findPinBreaks, pinBreakLine, pinBreakProof } from './pinBreak';
 import { findProphylaxis, prophylaxisKey, prophylaxisLine, prophylaxisIdea, prophylaxisProof, prophylaxisThreatProof, theirWantedMoves } from './prophylaxis';
 import { inBetweenMove } from './inBetweenMove';
@@ -3698,8 +3698,11 @@ export const BOARD_COMPUTERS = {
       const key = `picture-verdict:${r.mover}:${r.verdict.kind}:${r.but.map((t) => t.uci).join(',')}`;
       const squares = [...new Set(r.but.flatMap((t) => [t.uci.slice(0, 2), t.uci.slice(2, 4)]))];
       const poses = mine && r.verdict.kind !== 'works-now';
+      // The verdict's thread: its word is the conclusion; a new word carries its
+      // own tries, so it needs no cause beyond them.
+      const conclusion: PictureConclusionId = { key: threadKey(mine ? 'student' : 'opponent', PLAN_GOAL.pictureVerdict), variant: `${r.verdict.kind}:${r.verdict.step}`, fen: c.fen, square: null, changedText: r.verdict.text, needsCause: false };
       return fact({ key, claims: [key], text: r.verdict.text, proof: squaresProof(r.verdict.text, squares) ?? NO_PROOF.description, squares, stakes: null,
-        seat: mine ? 'student' : 'opponent', namesStudentMove: mine, thread: LOCAL_THREAD, fen: c.fen, ...(poses ? { skill: 'overvalued-attack' } : {}) });
+        seat: mine ? 'student' : 'opponent', namesStudentMove: mine, thread: LOCAL_THREAD, fen: c.fen, conclusion, ...(poses ? { skill: 'overvalued-attack' } : {}) });
     }),
     computer: 'pictureVerdict',
     kind: 'verdict',
@@ -3717,8 +3720,14 @@ export const BOARD_COMPUTERS = {
       const mine = mover === c.student;
       const key = `picture-plan:${mover}:${p.uci}`;
       const proof = legalLineProof(c.fen, c.reads?.find((r) => r.moves[0] === p.uci)?.moves ?? [p.uci], lineSeatAt(c.fen, c.student)) ?? NO_PROOF.description;
+      // A plan of the board (`planOfTheBoard`) is the plan's thread: the plan is
+      // its kind and its target, and it never switches with nothing changed on
+      // the board. A best move with no plan behind it is about this move alone.
+      const conclusion: PictureConclusionId | null = p.plan
+        ? { key: threadKey(mine ? 'student' : 'opponent', PLAN_GOAL.picturePlan), variant: `${p.plan.kind}:${p.plan.target ?? ''}`, fen: c.fen, square: p.plan.target ?? p.plan.squares[0] ?? null, changedText: planChangeSentence(p.text, 'statement'), needsCause: true }
+        : null;
       return fact({ key, claims: [key], text: p.text, proof, squares: p.squares, stakes: null,
-        seat: mine ? 'student' : 'opponent', namesStudentMove: mine, thread: LOCAL_THREAD, fen: c.fen, ...(mine ? { skill: 'overvalued-attack' } : {}) });
+        seat: mine ? 'student' : 'opponent', namesStudentMove: mine, thread: LOCAL_THREAD, fen: c.fen, ...(conclusion ? { conclusion } : {}), ...(mine ? { skill: 'overvalued-attack' } : {}) });
     }),
     computer: 'picturePlan',
     kind: 'plan-now',
@@ -7980,8 +7989,9 @@ export const BOARD_COMPUTERS = {
       const asks = sideToMove(ctx.fen) === ctx.student && (pictureTarget(ctx.facts, ctx.fen, ctx.lines, them)?.now ?? null) !== null;
       // One claim per ledger: the same entries on two boards are the same idea.
       const key = `ledger:${ledgerKey(ledger)}`;
+      const conclusion: PictureConclusionId = { key: threadKey('student', PLAN_GOAL.pictureLedger), variant: ledgerKey(ledger), fen: ctx.fen, square: null, changedText: text, needsCause: false };
       return fact({ key, claims: [key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
-        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: ctx.fen, ...(asks ? { skill: 'missed-opponents-threat' } : {}) });
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: ctx.fen, conclusion, ...(asks ? { skill: 'missed-opponents-threat' } : {}) });
     }),
     computer: 'pictureLedger',
     kind: 'stock',
@@ -8010,8 +8020,11 @@ export const BOARD_COMPUTERS = {
       // the board plan's claim `stops-break:<san>`): "their …g6 break is dead"
       // and "it takes the …g6 break away" are said once.
       const stops = r.state === 'dead' ? [`stops-break:${them === 'b' ? '…' : ''}${r.from[0] === r.to[0] ? r.to : `${r.from[0]}x${r.to}`}`] : [];
+      // Their resource and its state are the conclusion; alive → dead carries
+      // its stopper in its own words.
+      const conclusion: PictureConclusionId = { key: threadKey('opponent', PLAN_GOAL.pictureCounterplay), variant: `${r.from}${r.to}:${r.state}`, fen: ctx.fen, square: r.to, changedText: text, needsCause: false };
       return fact({ key, claims: [key, ...stops], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
-        seat: 'opponent', namesStudentMove, thread: LOCAL_THREAD, fen: ctx.fen, ...(asks ? { skill: 'allowed-counterplay' } : {}) });
+        seat: 'opponent', namesStudentMove, thread: LOCAL_THREAD, fen: ctx.fen, conclusion, ...(asks ? { skill: 'allowed-counterplay' } : {}) });
     }),
     computer: 'pictureCounterplay',
     kind: 'opponent-intent',
@@ -8044,8 +8057,13 @@ export const BOARD_COMPUTERS = {
       const asksPlan = toMove && p !== null && !!planText && moveWorksOnPlan(p, first);
       const skill = asksTarget ? 'missed-weak-target' : asksPlan ? 'missed-plan-route' : null;
       const key = t ? `target:${t.best.entry.square}` : `plan-target:${(p as NonNullable<typeof p>).best.entry.square}`;
+      // The target is the conclusion (the square now, or the plan's): a new one
+      // is said as the change, with its cause off the board.
+      const square = t ? t.best.entry.square : (p as NonNullable<typeof p>).best.entry.square;
+      const changedText = [t ? targetText(t, ctx.student, true) : null, planText].filter((x): x is string => !!x).join(' ');
+      const conclusion: PictureConclusionId = { key: threadKey('student', PLAN_GOAL.pictureTarget), variant: t ? square : `plan:${square}`, fen: ctx.fen, square, changedText, needsCause: true };
       return fact({ key, claims: [key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
-        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: ctx.fen, ...(skill ? { skill } : {}) });
+        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: ctx.fen, conclusion, ...(skill ? { skill } : {}) });
     }),
     computer: 'pictureTarget',
     kind: 'priority',

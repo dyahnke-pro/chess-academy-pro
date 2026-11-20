@@ -50,7 +50,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingPositions.test.ts:20`
 
 ### `transposedOpening` (function) — 4 call sites
-- `src/services/boardComputers.ts:6293`
+- `src/services/boardComputers.ts:6302`
 - `src/services/openingAnnouncement.ts:267`
 - `src/services/openingPositions.test.ts:28`
 - `src/services/openingPositions.test.ts:37`

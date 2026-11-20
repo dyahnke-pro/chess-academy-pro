@@ -309,6 +309,7 @@ export function PuzzleBoard({
     corpusNotes: true, // the tactics drill is a kept corpus surface
     withhold: terminal ? null : solverFirstSan,
     surface: 'puzzle',
+    story: null, // a standalone board: no game story to tell against
   });
   const handleTeach = useCallback((): void => {
     // Taught before answering → the answer is recorded as prompted.

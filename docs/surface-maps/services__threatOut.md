@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**153 lines · 6 exports · 53 importers · 6 tests · 1 audits**
+**193 lines · 8 exports · 87 importers · 10 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:289) — names `MustDefend`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:302) — names `MustDefend`
 
 ## Who calls in
 
@@ -16,78 +16,121 @@
 - `src/coach/chatTurnAnswers.ts`
 - `src/coach/focus/focusChances.ts`
 - `src/coach/focus/tempoRun.ts`
+- `src/missions/scorers/skillSteer.ts`
+- `src/services/blockade.ts`
+- `src/services/boardBundle.ts`
+- `src/services/boardComputers.ts`
 - `src/services/boardPlanFacts.ts`
+- `src/services/boardTeachConcepts.ts`
 - `src/services/boardUrgency.ts`
+- `src/services/breakTiming.ts`
+- `src/services/candidateCct.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/coachMoveCommand.ts`
+- `src/services/conversionMethod.ts`
 - `src/services/counterThreat.ts`
 - `src/services/danyaBehaviors.ts`
+- `src/services/deepCombination.ts`
+- `src/services/deliberation.checkEscapeMate.test.ts`
 - `src/services/deliberation.ts`
+- `src/services/flexibleMove.ts`
 - `src/services/forkTrick.ts`
 - `src/services/frozenPiece.ts`
+- `src/services/frozenTarget.ts`
 - `src/services/groundedAnswer.ts`
 - `src/services/hardWalk.mates.test.ts`
 - `src/services/holdResource.ts`
 - `src/services/inaccuracyCall.ts`
 - `src/services/kidBoardAnswers.ts`
 - `src/services/kingAttack.ts`
+- `src/services/kingInOpen.ts`
+- `src/services/kingSiege.ts`
 - `src/services/kingWalk.ts`
 - `src/services/learnBoardTeaching.ts`
 - `src/services/learnRecordTerms.ts`
 - `src/services/learnReward.ts`
 - `src/services/liveTacticsContext.ts`
+- `src/services/mateThreatLever.ts`
+- `src/services/matingNet.ts`
 - `src/services/methodSignals.ts`
 - `src/services/moveInsight.ts`
 - `src/services/moveIntent.ts`
-- `src/services/moveThoughtFacts.ts`
+- `src/services/moveStops.ts`
+- `src/services/moveThreat.ts`
 - `src/services/mustDefendHabit.test.ts`
+- `src/services/narrationArrows.markers.measure.test.ts`
 - `src/services/narrationArrows.ts`
+- `src/services/noSafeChecks.ts`
 - `src/services/obligationLifted.ts`
 - `src/services/openingGenerator.ts`
+- `src/services/openingSlip.ts`
 - `src/services/opponentMoveReads.ts`
+- `src/services/oppositionRead.ts`
+- `src/services/outOfReach.ts`
+- `src/services/pictureLedger.ts`
 - `src/services/playCommentary.ts`
 - `src/services/playedMoveGrade.ts`
+- `src/services/poisonedPiece.ts`
+- `src/services/positionFacts.threatFirst.test.ts`
 - `src/services/positionFacts.ts`
 - `src/services/positionalRead.ts`
 - `src/services/principleAttribution.ts`
 - `src/services/prophylaxis.ts`
+- `src/services/queenHunt.ts`
+- `src/services/queenNet.ts`
+- `src/services/queenlessMate.ts`
 - `src/services/reviewHinge.ts`
-- `src/services/safetyHabits.ts`
+- `src/services/seventhRankMate.ts`
 - `src/services/slipDepth.measure.test.ts`
+- `src/services/slipDepth.ts`
 - `src/services/speedRunReads.ts`
 - `src/services/structureJudgementKit.ts`
 - `src/services/tacticsDetector.ts`
+- `src/services/tensionRelease.ts`
 - `src/services/thinkingKeyCheck.ts`
 - `src/services/threatAnswerEvidence.ts`
 - `src/services/threatOut.test.ts`
 - `src/services/threatProof.ts`
+- `src/services/tradeKept.ts`
+- `src/services/tradeRelievesCramp.ts`
 - `src/services/trappedPiece.ts`
+- `src/services/urgentStrike.ts`
 - `src/services/weaknessSpine.ts`
 - `src/services/whyItFailed.ts`
 - `src/services/whyNotLegal.ts`
+- `src/test/watchArrowSides.gate.test.ts`
 
 ## Exports and every call site
 
 ### `MustDefend` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `flipSideToMove` (function) — 25 call sites
+### `flipSideToMove` (function) — 35 call sites
 - `scripts/audit-lib/narrationAuditor.ts:73`
 - `scripts/audit-lib/narrationAuditor.ts:189`
-- `src/services/boardPlanFacts.ts:90`
-- `src/services/boardUrgency.ts:41`
-- `src/services/boardUrgency.ts:102`
-- `src/services/coachFeatureService.ts:6515`
-- `src/services/coachMoveCommand.ts:124`
-- `src/services/forkTrick.ts:138`
-- `src/services/learnBoardTeaching.ts:640`
-- `src/services/learnBoardTeaching.ts:658`
-- `src/services/liveTacticsContext.ts:505`
-- `src/services/liveTacticsContext.ts:925`
-- `src/services/moveIntent.ts:164`
-- `src/services/narrationArrows.ts:188`
-- `src/services/narrationArrows.ts:252`
-- `src/services/speedRunReads.ts:485`
+- `src/services/boardComputers.ts:5839`
+- `src/services/boardPlanFacts.ts:92`
+- `src/services/boardUrgency.ts:46`
+- `src/services/boardUrgency.ts:154`
+- `src/services/candidateCct.ts:49`
+- `src/services/coachFeatureService.ts:6768`
+- `src/services/coachMoveCommand.ts:148`
+- `src/services/conversionMethod.ts:73`
+- `src/services/forkTrick.ts:144`
+- `src/services/inaccuracyCall.ts:1015`
+- `src/services/learnBoardTeaching.ts:513`
+- `src/services/learnBoardTeaching.ts:531`
+- `src/services/liveTacticsContext.ts:503`
+- `src/services/liveTacticsContext.ts:923`
+- `src/services/moveIntent.ts:210`
+- `src/services/moveThreat.ts:73`
+- `src/services/narrationArrows.markers.measure.test.ts:137`
+- `src/services/narrationArrows.markers.measure.test.ts:256`
+- `src/services/narrationArrows.ts:302`
+- `src/services/noSafeChecks.ts:48`
+- `src/services/noSafeChecks.ts:51`
+- `src/services/openingSlip.ts:223`
+- `src/services/speedRunReads.ts:523`
 - `src/services/thinkingKeyCheck.ts:59`
 - `src/services/threatAnswerEvidence.ts:211`
 - `src/services/threatOut.test.ts:6`
@@ -95,92 +138,144 @@
 - `src/services/threatOut.test.ts:70`
 - `src/services/threatOut.test.ts:75`
 - `src/services/threatProof.ts:32`
-- `src/services/threatProof.ts:109`
-- `src/services/whyNotLegal.ts:197`
+- `src/services/threatProof.ts:120`
+- `src/services/whyNotLegal.ts:198`
+- `src/test/watchArrowSides.gate.test.ts:52`
 
-### `sideToMoveAs` (function) — 29 call sites
-- `src/services/coachFeatureService.ts:4842`
-- `src/services/coachFeatureService.ts:4855`
-- `src/services/coachFeatureService.ts:4868`
-- `src/services/coachFeatureService.ts:5465`
-- `src/services/coachFeatureService.ts:5551`
-- `src/services/danyaBehaviors.ts:168`
-- `src/services/danyaBehaviors.ts:379`
-- `src/services/danyaBehaviors.ts:394`
+### `sideToMoveAs` (function) — 58 call sites
+- `src/missions/scorers/skillSteer.ts:56`
+- `src/services/blockade.ts:69`
+- `src/services/boardTeachConcepts.ts:57`
+- `src/services/boardTeachConcepts.ts:89`
+- `src/services/breakTiming.ts:89`
+- `src/services/breakTiming.ts:199`
+- `src/services/coachFeatureService.ts:5015`
+- `src/services/coachFeatureService.ts:5028`
+- `src/services/coachFeatureService.ts:5041`
+- `src/services/coachFeatureService.ts:5646`
+- `src/services/coachFeatureService.ts:5732`
+- `src/services/danyaBehaviors.ts:159`
+- `src/services/danyaBehaviors.ts:357`
+- `src/services/danyaBehaviors.ts:372`
+- `src/services/flexibleMove.ts:233`
 - `src/services/frozenPiece.ts:93`
-- `src/services/holdResource.ts:44`
-- `src/services/inaccuracyCall.ts:1531`
+- `src/services/frozenTarget.ts:55`
+- `src/services/frozenTarget.ts:72`
+- `src/services/holdResource.ts:56`
+- `src/services/inaccuracyCall.ts:1651`
 - `src/services/kidBoardAnswers.ts:88`
-- `src/services/kingAttack.ts:42`
-- `src/services/kingWalk.ts:213`
-- `src/services/kingWalk.ts:214`
-- `src/services/openingGenerator.ts:3628`
-- `src/services/playCommentary.ts:115`
-- `src/services/positionalRead.ts:129`
-- `src/services/principleAttribution.ts:284`
-- `src/services/prophylaxis.ts:55`
-- `src/services/prophylaxis.ts:174`
-- `src/services/prophylaxis.ts:242`
-- `src/services/structureJudgementKit.ts:137`
-- `src/services/tacticsDetector.ts:222`
+- `src/services/kingAttack.ts:65`
+- `src/services/kingInOpen.ts:28`
+- `src/services/kingSiege.ts:366`
+- `src/services/kingSiege.ts:435`
+- `src/services/kingWalk.ts:221`
+- `src/services/kingWalk.ts:222`
+- `src/services/mateThreatLever.ts:43`
+- `src/services/moveStops.ts:43`
+- `src/services/moveStops.ts:54`
+- `src/services/moveStops.ts:203`
+- `src/services/openingGenerator.ts:3642`
+- `src/services/oppositionRead.ts:96`
+- `src/services/outOfReach.ts:54`
+- `src/services/pictureLedger.ts:298`
+- `src/services/pictureLedger.ts:799`
+- `src/services/pictureLedger.ts:834`
+- `src/services/pictureLedger.ts:1176`
+- `src/services/playCommentary.ts:117`
+- `src/services/poisonedPiece.ts:90`
+- `src/services/positionalRead.ts:230`
+- `src/services/principleAttribution.ts:291`
+- `src/services/prophylaxis.ts:56`
+- `src/services/prophylaxis.ts:191`
+- `src/services/prophylaxis.ts:259`
+- `src/services/queenHunt.ts:112`
+- `src/services/queenNet.ts:48`
+- `src/services/seventhRankMate.ts:36`
+- `src/services/structureJudgementKit.ts:142`
+- `src/services/tacticsDetector.ts:219`
 - `src/services/threatOut.test.ts:71`
 - `src/services/threatOut.test.ts:72`
-- `src/services/trappedPiece.ts:44`
+- `src/services/tradeRelievesCramp.ts:44`
+- `src/services/trappedPiece.ts:45`
+- `src/services/trappedPiece.ts:162`
+- `src/services/urgentStrike.ts:124`
 - `src/services/whyItFailed.ts:90`
 - `src/services/whyItFailed.ts:369`
 
-### `mateThreatsAgainst` (function) — 13 call sites
-- `src/coach/focus/focusChances.ts:574`
-- `src/coach/focus/focusChances.ts:803`
-- `src/services/deliberation.ts:633`
-- `src/services/deliberation.ts:634`
-- `src/services/groundedAnswer.ts:631`
-- `src/services/groundedAnswer.ts:767`
+### `mateThreatsAgainst` (function) — 16 call sites
+- `src/coach/focus/focusChances.ts:626`
+- `src/coach/focus/focusChances.ts:890`
+- `src/services/boardUrgency.ts:80`
+- `src/services/deliberation.checkEscapeMate.test.ts:22`
+- `src/services/deliberation.ts:680`
+- `src/services/deliberation.ts:687`
+- `src/services/groundedAnswer.ts:660`
+- `src/services/groundedAnswer.ts:796`
 - `src/services/hardWalk.mates.test.ts:49`
 - `src/services/hardWalk.mates.test.ts:60`
-- `src/services/learnRecordTerms.ts:168`
+- `src/services/inaccuracyCall.ts:284`
+- `src/services/matingNet.ts:73`
+- `src/services/moveStops.ts:149`
+- `src/services/positionFacts.ts:1962`
+- `src/services/queenlessMate.ts:40`
+- `src/services/threatProof.ts:36`
+
+### `hasMateThreat` (function) — 10 call sites
+- `src/coach/focus/focusChances.ts:625`
+- `src/coach/focus/focusChances.ts:658`
+- `src/services/deepCombination.ts:206`
+- `src/services/kingSiege.ts:573`
+- `src/services/learnRecordTerms.ts:177`
+- `src/services/pictureLedger.ts:766`
+- `src/services/positionFacts.ts:1963`
 - `src/services/threatAnswerEvidence.ts:91`
 - `src/services/threatAnswerEvidence.ts:92`
 - `src/services/threatAnswerEvidence.ts:97`
-- `src/services/threatProof.ts:36`
 
-### `computeMustDefend` (function) — 47 call sites
-- `src/coach/boardTurnAnswer.ts:193`
-- `src/coach/boardTurnAnswer.ts:217`
-- `src/coach/chatTurnAnswers.ts:360`
-- `src/coach/chatTurnAnswers.ts:381`
-- `src/services/boardUrgency.ts:55`
-- `src/services/boardUrgency.ts:57`
+### `computeMustDefend` (function) — 55 call sites
+- `src/coach/boardTurnAnswer.ts:209`
+- `src/coach/boardTurnAnswer.ts:233`
+- `src/coach/chatTurnAnswers.ts:361`
+- `src/coach/chatTurnAnswers.ts:382`
+- `src/services/boardBundle.ts:337`
+- `src/services/boardComputers.ts:6219`
+- `src/services/boardUrgency.ts:69`
+- `src/services/boardUrgency.ts:71`
+- `src/services/boardUrgency.ts:96`
 - `src/services/counterThreat.ts:41`
 - `src/services/counterThreat.ts:50`
 - `src/services/counterThreat.ts:54`
 - `src/services/counterThreat.ts:55`
-- `src/services/deliberation.ts:295`
-- `src/services/groundedAnswer.ts:616`
-- `src/services/groundedAnswer.ts:918`
-- `src/services/groundedAnswer.ts:949`
-- `src/services/groundedAnswer.ts:962`
+- `src/services/deliberation.ts:334`
+- `src/services/groundedAnswer.ts:645`
+- `src/services/groundedAnswer.ts:943`
+- `src/services/groundedAnswer.ts:974`
+- `src/services/groundedAnswer.ts:988`
 - `src/services/learnReward.ts:153`
 - `src/services/learnReward.ts:158`
-- `src/services/liveTacticsContext.ts:927`
+- `src/services/liveTacticsContext.ts:925`
 - `src/services/methodSignals.ts:43`
 - `src/services/methodSignals.ts:57`
-- `src/services/moveInsight.ts:206`
-- `src/services/moveThoughtFacts.ts:263`
+- `src/services/moveInsight.ts:216`
 - `src/services/mustDefendHabit.test.ts:13`
+- `src/services/noSafeChecks.ts:50`
 - `src/services/obligationLifted.ts:50`
 - `src/services/obligationLifted.ts:52`
-- `src/services/opponentMoveReads.ts:272`
-- `src/services/opponentMoveReads.ts:273`
 - `src/services/opponentMoveReads.ts:274`
-- `src/services/playedMoveGrade.ts:135`
-- `src/services/positionFacts.ts:670`
-- `src/services/replayFence.modern1690.test.ts:167`
-- `src/services/replayFence.modern1690.test.ts:172`
+- `src/services/opponentMoveReads.ts:275`
+- `src/services/opponentMoveReads.ts:276`
+- `src/services/playedMoveGrade.ts:136`
+- `src/services/positionFacts.threatFirst.test.ts:11`
+- `src/services/positionFacts.threatFirst.test.ts:17`
+- `src/services/positionFacts.ts:639`
+- `src/services/positionFacts.ts:1966`
+- `src/services/replayFence.modern1690.test.ts:168`
+- `src/services/replayFence.modern1690.test.ts:173`
 - `src/services/reviewHinge.ts:36`
-- `src/services/safetyHabits.ts:187`
-- `src/services/safetyHabits.ts:188`
-- `src/services/speedRunReads.ts:693`
+- `src/services/slipDepth.ts:150`
+- `src/services/slipDepth.ts:151`
+- `src/services/speedRunReads.ts:731`
+- `src/services/tensionRelease.ts:205`
 - `src/services/threatOut.test.ts:17`
 - `src/services/threatOut.test.ts:24`
 - `src/services/threatOut.test.ts:31`
@@ -189,9 +284,13 @@
 - `src/services/threatOut.test.ts:53`
 - `src/services/threatOut.test.ts:60`
 - `src/services/threatProof.ts:46`
-- `src/services/threatProof.ts:118`
-- `src/services/threatProof.ts:128`
-- `src/services/weaknessSpine.ts:224`
+- `src/services/threatProof.ts:129`
+- `src/services/threatProof.ts:139`
+- `src/services/tradeKept.ts:142`
+- `src/services/weaknessSpine.ts:225`
+
+### `mustDefendPieces` (function) — 1 call site
+- `src/services/pictureLedger.ts:757`
 
 ### `newThreat` (function) — 3 call sites
 - `src/coach/focus/tempoRun.ts:98`
@@ -200,12 +299,16 @@
 
 ## Tests
 
+- `src/services/deliberation.checkEscapeMate.test.ts`
 - `src/services/hardWalk.mates.test.ts`
 - `src/services/mustDefendHabit.test.ts`
+- `src/services/narrationArrows.markers.measure.test.ts`
+- `src/services/positionFacts.threatFirst.test.ts`
 - `src/services/replayFence.modern1690.test.ts`
 - `src/services/slipDepth.measure.test.ts`
 - `src/services/threatOut.test.ts`
 - `src/test/oneNullMove.gate.test.ts`
+- `src/test/watchArrowSides.gate.test.ts`
 
 ## Audits that reach it
 

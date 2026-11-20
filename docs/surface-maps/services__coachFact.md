@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**634 lines · 16 exports · 38 importers · 16 tests · 0 audits**
+**691 lines · 16 exports · 55 importers · 24 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,14 +13,17 @@
 - **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1555) — names `coachFact`
 - **🔒🔒 THE WHY STANDARD — FOUR MEASURES, NOT ONE NUMBER (David 2026-10-14: "Do we need 90%?" → "I like both plans")** (CLAUDE.md:2852) — names `FACT_GROUP`
 - **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5995) — names `HeldForm`
-- **The standard post-deploy ritual** (CLAUDE.md:7032) — names `coachFact`
+- **The standard post-deploy ritual** (CLAUDE.md:7033) — names `coachFact`
 
 ## Who calls in
 
 - `src/coach/questionThought.ts`
 - `src/components/Coach/CoachTeachPage.tsx`
+- `src/services/boardBundle.test.ts`
+- `src/services/boardBundle.ts`
 - `src/services/boardComputers.test.ts`
 - `src/services/boardComputers.ts`
+- `src/services/boardTeachConcepts.ts`
 - `src/services/coachDecider.ts`
 - `src/services/coachFact.test.ts`
 - `src/services/coachFeatureService.ts`
@@ -30,20 +33,32 @@
 - `src/services/deciderWeights.ts`
 - `src/services/decisionStakes.test.ts`
 - `src/services/defenceComputersChat.test.ts`
+- `src/services/engineComputers.ts`
 - `src/services/factRelations.test.ts`
 - `src/services/factSelector.ts`
+- `src/services/futures.relations.test.ts`
+- `src/services/futures.ts`
 - `src/services/gameStory.ts`
 - `src/services/kingGroupReads.test.ts`
 - `src/services/knownSlips.ts`
+- `src/services/learnBoardTeaching.ts`
 - `src/services/learnTurnDoor.ts`
 - `src/services/methodComputers.chat.test.ts`
+- `src/services/moveInsight.ts`
 - `src/services/moveThoughtFacts.ts`
 - `src/services/openingComputers.wired.test.ts`
 - `src/services/openingStory.ts`
 - `src/services/oppositeBishops.test.ts`
 - `src/services/pawnBreak.test.ts`
+- `src/services/pictureAnswers.test.ts`
+- `src/services/pictureLedger.test.ts`
+- `src/services/pictureLedger.ts`
+- `src/services/picturePerSurface.test.ts`
+- `src/services/pictureStory.test.ts`
 - `src/services/planThread.ts`
 - `src/services/positionFacts.ts`
+- `src/services/positionPicture.test.ts`
+- `src/services/positionPicture.ts`
 - `src/services/reviewFacet.ts`
 - `src/services/reviewFullData.ts`
 - `src/services/teachingFact.ts`
@@ -51,10 +66,12 @@
 - `src/services/thinkingComputers.gate.test.ts`
 - `src/services/thinkingComputers.ts`
 - `src/services/thoughtComposer.ts`
+- `src/services/thoughtReads.ts`
 - `src/services/tradeComputers.test.ts`
 - `src/test/chatAnswersInFull.gate.test.ts`
 - `src/test/doorFact.ts`
 - `src/test/learnDoorFixtures.ts`
+- `src/test/oneCoachUnlocked.gate.test.ts`
 
 ## Exports and every call site
 
@@ -78,68 +95,60 @@
 
 ### `isCoachFactKind` (function) — 2 call sites
 - `src/services/coachMoment.measure.test.ts:43`
-- `src/services/learnTurnDoor.ts:788`
+- `src/services/learnTurnDoor.ts:789`
 
-### `stepOf` (function) — 17 call sites
-- `src/services/boardComputers.test.ts:80`
-- `src/services/coachFact.test.ts:86`
-- `src/services/coachFact.test.ts:87`
-- `src/services/coachFeatureService.ts:2733`
-- `src/services/coachFeatureService.ts:3350`
-- `src/services/learnTurnDoor.ts:344`
-- `src/services/learnTurnDoor.ts:1072`
-- `src/services/learnTurnDoor.ts:1129`
-- `src/services/learnTurnDoor.ts:1152`
-- `src/services/learnTurnDoor.ts:1156`
-- `src/services/learnTurnDoor.ts:1210`
-- `src/services/learnTurnDoor.ts:1236`
-- `src/services/learnTurnDoor.ts:1246`
-- `src/services/learnTurnDoor.ts:1250`
-- `src/services/learnTurnDoor.ts:1386`
-- `src/services/learnTurnDoor.ts:1410`
-- `src/services/learnTurnDoor.ts:1463`
+### `stepOf` (function) — 19 call sites
+- `src/services/boardComputers.test.ts:78`
+- `src/services/coachFact.test.ts:89`
+- `src/services/coachFact.test.ts:90`
+- `src/services/coachFeatureService.ts:2747`
+- `src/services/coachFeatureService.ts:3363`
+- `src/services/learnTurnDoor.ts:345`
+- `src/services/learnTurnDoor.ts:1080`
+- `src/services/learnTurnDoor.ts:1137`
+- `src/services/learnTurnDoor.ts:1160`
+- `src/services/learnTurnDoor.ts:1164`
+- `src/services/learnTurnDoor.ts:1218`
+- `src/services/learnTurnDoor.ts:1244`
+- `src/services/learnTurnDoor.ts:1254`
+- `src/services/learnTurnDoor.ts:1258`
+- `src/services/learnTurnDoor.ts:1395`
+- `src/services/learnTurnDoor.ts:1419`
+- `src/services/learnTurnDoor.ts:1472`
+- `src/services/pictureVerdict.ts:172`
+- `src/services/pictureVerdict.ts:460`
 
-### `placeFact` (function) — 20 call sites
-- `src/services/boardComputers.ts:1242`
-- `src/services/boardComputers.ts:2793`
-- `src/services/learnTurnDoor.ts:804`
-- `src/services/moveThoughtFacts.ts:211`
-- `src/services/moveThoughtFacts.ts:632`
-- `src/services/moveThoughtFacts.ts:652`
-- `src/services/moveThoughtFacts.ts:721`
-- `src/services/moveThoughtFacts.ts:735`
-- `src/services/moveThoughtFacts.ts:1427`
-- `src/services/moveThoughtFacts.ts:1459`
-- `src/services/moveThoughtFacts.ts:1476`
+### `placeFact` (function) — 15 call sites
+- `src/services/boardComputers.ts:3266`
+- `src/services/boardComputers.ts:8120`
+- `src/services/learnTurnDoor.ts:805`
+- `src/services/moveThoughtFacts.ts:1309`
+- `src/services/moveThoughtFacts.ts:1326`
 - `src/services/openingStory.ts:422`
-- `src/services/positionFacts.ts:548`
+- `src/services/positionFacts.ts:500`
 - `src/services/reviewFacet.ts:85`
 - `src/services/reviewFacet.ts:113`
 - `src/services/reviewFacet.ts:125`
 - `src/services/teachingFact.ts:96`
-- `src/services/thoughtComposer.ts:159`
+- `src/services/thoughtComposer.ts:183`
+- `src/services/thoughtReads.ts:125`
 - `src/test/chatAnswersInFull.gate.test.ts:43`
 - `src/test/doorFact.ts:22`
 
-### `stakesOf` (function) — 19 call sites
-- `src/services/boardComputers.ts:1243`
-- `src/services/boardComputers.ts:2793`
-- `src/services/coachFact.test.ts:112`
-- `src/services/coachFact.test.ts:118`
-- `src/services/coachFact.test.ts:119`
-- `src/services/learnTurnDoor.ts:805`
-- `src/services/moveThoughtFacts.ts:212`
-- `src/services/moveThoughtFacts.ts:632`
-- `src/services/moveThoughtFacts.ts:653`
-- `src/services/moveThoughtFacts.ts:722`
-- `src/services/moveThoughtFacts.ts:736`
-- `src/services/moveThoughtFacts.ts:1428`
-- `src/services/moveThoughtFacts.ts:1460`
-- `src/services/moveThoughtFacts.ts:1477`
+### `stakesOf` (function) — 14 call sites
+- `src/services/boardComputers.ts:3267`
+- `src/services/boardComputers.ts:8120`
+- `src/services/coachFact.test.ts:115`
+- `src/services/coachFact.test.ts:121`
+- `src/services/coachFact.test.ts:122`
+- `src/services/learnTurnDoor.ts:806`
+- `src/services/moveThoughtFacts.ts:1310`
+- `src/services/moveThoughtFacts.ts:1327`
 - `src/services/openingStory.ts:423`
-- `src/services/positionFacts.ts:556`
+- `src/services/positionFacts.ts:508`
 - `src/services/reviewFacet.ts:96`
 - `src/services/teachingFact.ts:98`
+- `src/services/thoughtReads.ts:125`
 - `src/test/doorFact.ts:24`
 
 ### `COMPUTER_CATALOG` (const) — 0 call sites
@@ -162,6 +171,7 @@
 
 ## Tests
 
+- `src/services/boardBundle.test.ts`
 - `src/services/boardComputers.test.ts`
 - `src/services/coachFact.test.ts`
 - `src/services/coachMoment.measure.test.ts`
@@ -169,15 +179,22 @@
 - `src/services/decisionStakes.test.ts`
 - `src/services/defenceComputersChat.test.ts`
 - `src/services/factRelations.test.ts`
+- `src/services/futures.relations.test.ts`
 - `src/services/kingGroupReads.test.ts`
 - `src/services/methodComputers.chat.test.ts`
 - `src/services/oneGroupTable.gate.test.ts`
 - `src/services/openingComputers.wired.test.ts`
 - `src/services/oppositeBishops.test.ts`
 - `src/services/pawnBreak.test.ts`
+- `src/services/pictureAnswers.test.ts`
+- `src/services/pictureLedger.test.ts`
+- `src/services/picturePerSurface.test.ts`
+- `src/services/pictureStory.test.ts`
+- `src/services/positionPicture.test.ts`
 - `src/services/thinkingComputers.gate.test.ts`
 - `src/services/tradeComputers.test.ts`
 - `src/test/chatAnswersInFull.gate.test.ts`
+- `src/test/oneCoachUnlocked.gate.test.ts`
 
 ## Audits that reach it
 

@@ -98,6 +98,16 @@ export const PLAN_GOAL = {
    *  the static read of the structure (`buildMiddlegameOrientation`) must
    *  not then name another plan for that side. */
   arc: 'plan-aim:arc',
+  /** THE PICTURE'S CONCLUSIONS (`pictureVerdict`, `pictureLedger`): each a
+   *  thread whose `variant` is the conclusion itself (the target's square, the
+   *  plan's kind and target, the verdict word, their resource and its state),
+   *  so a conclusion already stated and unchanged is not said again as news,
+   *  and a change is said as a change (`planThread.tellPictureFacts`). */
+  pictureTarget: 'plan-aim:picture-target',
+  picturePlan: 'plan-aim:picture-plan',
+  pictureVerdict: 'plan-aim:picture-verdict',
+  pictureCounterplay: 'plan-aim:picture-counterplay',
+  pictureLedger: 'plan-aim:picture-ledger',
 } as const;
 
 /** One line of a thread the door kept. */
@@ -114,6 +124,17 @@ export interface ThreadSaid {
    *  from it (placement and side to move): a move from that board was
    *  prompted for the plan (P4 honesty: being told is not proving). */
   readonly board: string | null;
+  /** WHERE A CONCLUSION WAS STATED (the picture's threads): the board it was
+   *  read on and the square it is about, so a later change can be said with
+   *  its cause off the two boards (`planThread.conclusionCause`). Absent on a
+   *  plan line and on a checkpoint written before it existed. */
+  readonly at?: ConclusionAt | null;
+}
+
+/** The board a conclusion was read on and the square it names (null: none). */
+export interface ConclusionAt {
+  readonly fen: string;
+  readonly square: string | null;
 }
 
 /** A thread's story so far: every line of it the door kept, in order. */
@@ -232,6 +253,8 @@ export interface ThreadLine {
   readonly variant?: string | null;
   /** Said before the student's move from the board it is said on. */
   readonly told?: boolean;
+  /** A conclusion's board and square (`ThreadSaid.at`). */
+  readonly at?: ConclusionAt | null;
 }
 
 /** A line a computer produced on a board, with the keys saying it would
@@ -265,7 +288,7 @@ export interface StoryStore {
   commitThreads(ply: number, lines: readonly ThreadLine[], board?: string | null): void;
   /** Record the thread of every fact a door kept — a fact on a plan thread is
    *  a step on it; a fact about the move alone (`{ none: 'local' }`) is not. */
-  commitFacts(ply: number, kept: ReadonlyArray<Pick<CoachFact, 'thread'>>): void;
+  commitFacts(ply: number, kept: ReadonlyArray<Pick<CoachFact, 'thread' | 'conclusion'>>): void;
   /** Record events at `ply`: a board event when the board shows it, a said
    *  event where the line is said (a door's commit, a line said outright). */
   note(ply: number, events: readonly StoryEventInput[]): void;
@@ -371,6 +394,58 @@ export function threadVariant(story: GameStory, key: ThreadKey): string | null {
   const said = story.threads.get(key)?.said ?? [];
   for (let k = said.length - 1; k >= 0; k -= 1) if (said[k].kind === 'stated') return said[k].variant;
   return null;
+}
+
+/** THE LAST STATEMENT OF A THREAD (a conclusion's variant, ply and board),
+ *  or null — what a conclusion read now is compared with. */
+export function threadLast(story: Pick<GameStory, 'threads'>, key: ThreadKey): ThreadSaid | null {
+  const said = story.threads.get(key)?.said ?? [];
+  for (let k = said.length - 1; k >= 0; k -= 1) if (said[k].kind === 'stated') return said[k];
+  return null;
+}
+
+/** A conclusion as the thread line that states it. */
+export function conclusionLine(c: PictureConclusionId): ThreadLine {
+  return { key: c.key, kind: 'stated', variant: c.variant, at: { fen: c.fen, square: c.square } };
+}
+
+/** WHICH PICTURE CONCLUSION A FACT STATES (`CoachFact.conclusion`): its
+ *  thread, the conclusion itself (`variant`), the board it was read on, the
+ *  square it names, and its words when it is said as a change. */
+export interface PictureConclusionId {
+  readonly key: ThreadKey;
+  readonly variant: string;
+  readonly fen: string;
+  readonly square: string | null;
+  /** The same conclusion said as the NEW one ("The target is now …"). */
+  readonly changedText: string;
+  /** May it change only with a cause on the board (the target, the plan)?
+   *  False: its own words carry the change (a verdict and its tries, their
+   *  resource and its stopper). */
+  readonly needsCause: boolean;
+}
+
+/** WHAT A READ OF THE BOARD KNOWS OF THE GAME'S STORY — structured-cloneable
+ *  (the board read runs in a worker): the claims said and the picture's
+ *  threads. Learn's "read this position" hands it in; a standalone board
+ *  has none. */
+export interface ReadStory {
+  readonly ply: number;
+  readonly claims: readonly string[];
+  readonly threads: ReadonlyArray<readonly [ThreadKey, readonly ThreadSaid[]]>;
+}
+
+/** The read's snapshot of a story: what it said, and its picture threads. */
+export function readStoryOf(story: GameStory): ReadStory {
+  const picture = new Set<string>([PLAN_GOAL.pictureTarget, PLAN_GOAL.picturePlan, PLAN_GOAL.pictureVerdict, PLAN_GOAL.pictureCounterplay, PLAN_GOAL.pictureLedger]);
+  const threads: Array<readonly [ThreadKey, readonly ThreadSaid[]]> = [];
+  for (const [k, t] of story.threads) if (picture.has(`plan-aim:${k.split('|plan-aim:')[1]}`)) threads.push([k, t.said.map((s) => ({ ...s }))]);
+  return { ply: story.ply, claims: [...story.said.keys()], threads };
+}
+
+/** The threads of a read's snapshot, as the story's own map. */
+export function threadsOfRead(r: ReadStory): Pick<GameStory, 'threads'> {
+  return { threads: new Map(r.threads.map(([k, said]) => [k, { said }])) };
 }
 
 /** The boards a seat's plan was told on before the student moved from them. */
@@ -656,7 +731,7 @@ export function createStoryStore(gameId: string): StoryStore {
   };
   const putThread = (line: ThreadLine, at: number, board: string | null): void => {
     const t = threads.get(line.key) ?? { said: [] };
-    t.said.push({ ply: at, kind: line.kind, variant: line.variant ?? null, board: line.told && board ? boardKey(board) : null });
+    t.said.push({ ply: at, kind: line.kind, variant: line.variant ?? null, board: line.told && board ? boardKey(board) : null, ...(line.at ? { at: line.at } : {}) });
     threads.set(line.key, t);
   };
   const putEvents = (list: readonly StoryEventInput[] | undefined, at: number): void => {
@@ -678,10 +753,13 @@ export function createStoryStore(gameId: string): StoryStore {
     commitThreads(at: number, lines: readonly ThreadLine[], board: string | null = null): void {
       for (const l of lines) putThread(l, at, board);
     },
-    commitFacts(at: number, kept: ReadonlyArray<Pick<CoachFact, 'thread'>>): void {
+    commitFacts(at: number, kept: ReadonlyArray<Pick<CoachFact, 'thread' | 'conclusion'>>): void {
       for (const f of kept) {
         const key = threadOf(f);
         if (key) putThread({ key, kind: 'step' }, at, null);
+        // A picture conclusion kept is its thread STATED, with the conclusion
+        // itself as the variant and the board it was read on.
+        if (f.conclusion) putThread(conclusionLine(f.conclusion), at, null);
       }
     },
     note(at: number, list: readonly StoryEventInput[]): void {

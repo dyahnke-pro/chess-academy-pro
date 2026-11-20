@@ -18,7 +18,7 @@ const ANALYSIS = {
 const read = (withhold: string | null): Promise<string> => composePositionRead({
   fen: FEN, pgn: '', playerColor: 'white', openingName: null, rating: 1400,
   analysis: ANALYSIS, tacticsSkill: undefined, studentWeaknesses: [], studentNeedContext: null,
-  evalBoard: () => Promise.resolve('0'), isCancelled: () => false, corpusNotes: false, withhold, readTempting: false, surface: 'puzzle',
+  evalBoard: () => Promise.resolve('0'), isCancelled: () => false, corpusNotes: false, withhold, readTempting: false, surface: 'puzzle', story: null,
 });
 
 describe('the position read withholds a puzzle answer', () => {

@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**819 lines · 24 exports · 6 importers · 4 tests · 1 audits**
+**820 lines · 24 exports · 6 importers · 4 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6908) — names `coachDrillService`
+- **The standard post-deploy ritual** (CLAUDE.md:7046) — names `coachDrillService`
 
 ## Who calls in
 
@@ -22,23 +22,23 @@
 ## Exports and every call site
 
 ### `recordDrillEvidence` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3669`
-- `src/components/Coach/CoachTeachPage.tsx:3712`
+- `src/components/Coach/CoachTeachPage.tsx:3685`
+- `src/components/Coach/CoachTeachPage.tsx:3728`
 
 ### `CoachDrill` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isDrillableAid` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3765`
-- `src/components/Coach/CoachTeachPage.tsx:5408`
+- `src/components/Coach/CoachTeachPage.tsx:3781`
+- `src/components/Coach/CoachTeachPage.tsx:5424`
 - `src/services/coachDrillService.test.ts:72`
 - `src/services/coachDrillService.test.ts:75`
 - `src/services/coachDrillService.test.ts:109`
 
 ### `pickCoachDrill` (function) — 10 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3591`
-- `src/components/Coach/CoachTeachPage.tsx:3776`
-- `src/components/Coach/CoachTeachPage.tsx:5424`
+- `src/components/Coach/CoachTeachPage.tsx:3607`
+- `src/components/Coach/CoachTeachPage.tsx:3792`
+- `src/components/Coach/CoachTeachPage.tsx:5440`
 - `src/services/coachDrillService.test.ts:12`
 - `src/services/coachDrillService.test.ts:52`
 - `src/services/coachDrillService.test.ts:60`
@@ -48,7 +48,7 @@
 - `src/services/coachDrillService.test.ts:81`
 
 ### `pickMasterDrill` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3370`
+- `src/components/Coach/CoachTeachPage.tsx:3386`
 - `src/services/coachDrillService.test.ts:114`
 - `src/services/coachDrillService.test.ts:125`
 
@@ -56,7 +56,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `drillKeyOf` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3536`
+- `src/components/Coach/CoachTeachPage.tsx:3552`
 - `src/services/coachDrillService.mistakes.test.ts:74`
 
 ### `mistakePuzzleToDrill` (function) — 5 call sites
@@ -67,7 +67,7 @@
 - `src/services/coachDrillService.test.ts:40`
 
 ### `hasImportedGames` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3423`
+- `src/components/Coach/CoachTeachPage.tsx:3439`
 - `src/services/coachDrillService.mistakes.test.ts:245`
 - `src/services/coachDrillService.mistakes.test.ts:253`
 - `src/services/coachDrillService.mistakes.test.ts:261`
@@ -96,8 +96,8 @@
 - `src/services/coachDrillService.mistakes.test.ts:231`
 
 ### `buildMistakeDrillQueue` (function) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3386`
-- `src/components/Coach/CoachTeachPage.tsx:3459`
+- `src/components/Coach/CoachTeachPage.tsx:3402`
+- `src/components/Coach/CoachTeachPage.tsx:3475`
 - `src/services/coachDrillService.mistakes.test.ts:58`
 - `src/services/coachDrillService.mistakes.test.ts:66`
 - `src/services/coachDrillService.mistakes.test.ts:72`
@@ -117,36 +117,36 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `advanceMistakeDrill` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3561`
+- `src/components/Coach/CoachTeachPage.tsx:3577`
 - `src/services/coachDrillAdvance.test.ts:18`
 - `src/services/coachDrillAdvance.test.ts:28`
 - `src/services/coachDrillAdvance.test.ts:39`
 - `src/services/coachDrillAdvance.test.ts:50`
 
 ### `drillWrongTryReason` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3702`
+- `src/components/Coach/CoachTeachPage.tsx:3718`
 - `src/services/drillWrongTry.test.ts:15`
 - `src/services/drillWrongTry.test.ts:24`
 - `src/services/drillWrongTry.test.ts:28`
 - `src/services/drillWrongTry.test.ts:31`
 
 ### `drillHintBeat` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:14204`
+- `src/components/Coach/CoachTeachPage.tsx:14334`
 
 ### `customLessonPartLines` (function) — 1 call site
-- `src/components/Coach/CoachTeachPage.tsx:3463`
+- `src/components/Coach/CoachTeachPage.tsx:3479`
 
 ### `goodButWeakerBeat` (re-export) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3700`
+- `src/components/Coach/CoachTeachPage.tsx:3716`
 - `src/services/drillReasons.test.ts:24`
 - `src/services/drillReasons.test.ts:30`
 - `src/services/drillReasons.test.ts:31`
 - `src/services/drillReasons.test.ts:35`
 - `src/services/drillReasons.ts:36`
-- `src/test/captureSaidOnce.gate.test.ts:230`
+- `src/test/captureSaidOnce.gate.test.ts:229`
 
 ### `judgeDrillMove` (re-export) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3656`
+- `src/components/Coach/CoachTeachPage.tsx:3672`
 - `src/services/drillJudge.test.ts:21`
 - `src/services/drillJudge.test.ts:29`
 - `src/services/drillJudge.test.ts:35`
@@ -154,35 +154,35 @@
 - `src/services/drillJudge.ts:54`
 
 ### `lastMoveFromPgn` (re-export) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:14231`
+- `src/components/Coach/CoachTeachPage.tsx:14361`
 - `src/services/moveInsight.test.ts:129`
-- `src/services/moveInsight.ts:650`
-- `src/services/whyBestMove.ts:82`
+- `src/services/moveInsight.ts:660`
+- `src/services/whyBestMove.ts:83`
 
 ### `moveMissed` (re-export) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3664`
-- `src/services/groundedAnswer.ts:7637`
+- `src/components/Coach/CoachTeachPage.tsx:3680`
+- `src/services/groundedAnswer.ts:7915`
 - `src/services/moveInsight.lineAudit.test.ts:45`
 - `src/services/moveInsight.replay.test.ts:66`
 - `src/services/moveInsight.test.ts:37`
 - `src/services/moveInsight.test.ts:45`
 - `src/services/moveInsight.test.ts:136`
 - `src/services/moveInsight.test.ts:214`
-- `src/services/moveInsight.test.ts:228`
-- `src/services/moveInsight.test.ts:229`
-- `src/services/moveInsight.test.ts:265`
-- `src/services/moveInsight.test.ts:268`
-- `src/services/moveInsight.test.ts:311`
-- `src/services/moveInsight.ts:393`
+- `src/services/moveInsight.test.ts:230`
+- `src/services/moveInsight.test.ts:231`
+- `src/services/moveInsight.test.ts:267`
+- `src/services/moveInsight.test.ts:270`
+- `src/services/moveInsight.test.ts:313`
+- `src/services/moveInsight.ts:403`
 
 ### `positionAsk` (re-export) — 26 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3665`
-- `src/components/Coach/CoachTeachPage.tsx:14207`
-- `src/components/Coach/CoachTeachPage.tsx:14236`
-- `src/components/Puzzles/MistakePuzzleBoard.tsx:969`
-- `src/components/Puzzles/PuzzleBoard.tsx:694`
-- `src/components/Tactics/TacticSetupBoard.tsx:250`
-- `src/components/Tactics/TacticSetupBoard.tsx:440`
+- `src/components/Coach/CoachTeachPage.tsx:3681`
+- `src/components/Coach/CoachTeachPage.tsx:14337`
+- `src/components/Coach/CoachTeachPage.tsx:14366`
+- `src/components/Puzzles/MistakePuzzleBoard.tsx:986`
+- `src/components/Puzzles/PuzzleBoard.tsx:708`
+- `src/components/Tactics/TacticSetupBoard.tsx:252`
+- `src/components/Tactics/TacticSetupBoard.tsx:461`
 - `src/services/moveInsight.replay.test.ts:52`
 - `src/services/moveInsight.test.ts:53`
 - `src/services/moveInsight.test.ts:58`
@@ -195,13 +195,13 @@
 - `src/services/moveInsight.test.ts:179`
 - `src/services/moveInsight.test.ts:184`
 - `src/services/moveInsight.test.ts:204`
-- `src/services/moveInsight.test.ts:292`
-- `src/services/moveInsight.test.ts:298`
-- `src/services/moveInsight.test.ts:318`
-- `src/services/moveInsight.test.ts:321`
-- `src/services/moveInsight.ts:156`
+- `src/services/moveInsight.test.ts:294`
+- `src/services/moveInsight.test.ts:300`
+- `src/services/moveInsight.test.ts:320`
+- `src/services/moveInsight.test.ts:323`
+- `src/services/moveInsight.ts:163`
 - `src/services/thinkingAssessStep.ts:85`
-- `src/services/whyBestMove.ts:87`
+- `src/services/whyBestMove.ts:88`
 
 ## Tests
 

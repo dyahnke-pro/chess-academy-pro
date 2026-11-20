@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4382 lines · 31 exports · 22 importers · 25 tests · 10 audits**
+**4383 lines · 31 exports · 22 importers · 26 tests · 10 audits**
 
 ## Locked rules that govern this surface
 
@@ -23,7 +23,7 @@
 - **🔒 WHICH NOTES THE KEPT SURFACES MAY SPEAK — split by anchoring (David 2026-08-26).** (CLAUDE.md:5091) — names `WALKTHROUGH_GEN_REV`, `noteArrowSourceAt`, `openingGenerator`
 - **🔒🔒 THE REAL-GAME EXPERIENCE AUDIT — THE PLAYWRIGHT AUDIT STANDARD (David 2026-07-19, LOCKED, emphatic: "Lock this audit format into memory. This IS THE STANDARD!! This is the playwright audit!!").** (CLAUDE.md:6679) — names `generateOpening`
 - **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6925) — names `openingGenerator`
-- **The standard post-deploy ritual** (CLAUDE.md:7066) — names `WALKTHROUGH_GEN_REV`, `openingGenerator`
+- **The standard post-deploy ritual** (CLAUDE.md:7067) — names `WALKTHROUGH_GEN_REV`, `openingGenerator`
 
 ## Who calls in
 
@@ -74,7 +74,7 @@
 ### `getCachedOpening` (function) — 10 call sites
 - `src/components/Coach/CoachTeachPage.tsx:6819`
 - `src/components/Coach/CoachTeachPage.tsx:7711`
-- `src/hooks/useTeachWalkthrough.ts:2075`
+- `src/hooks/useTeachWalkthrough.ts:2076`
 - `src/services/lessonCacheKey.test.ts:61`
 - `src/services/lessonCacheKey.test.ts:68`
 - `src/services/lessonCacheKey.test.ts:106`
@@ -90,7 +90,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:6973`
 - `src/components/Coach/CoachTeachPage.tsx:7047`
 - `src/components/Coach/CoachTeachPage.tsx:7780`
-- `src/components/Coach/CoachTeachPage.tsx:13716`
+- `src/components/Coach/CoachTeachPage.tsx:13722`
 - `src/services/lessonCacheKey.test.ts:60`
 - `src/services/lessonCacheKey.test.ts:65`
 - `src/services/lessonCacheKey.test.ts:74`
@@ -230,7 +230,7 @@
 - `src/components/Coach/CoachTeachPage.tsx:6928`
 - `src/components/Coach/CoachTeachPage.tsx:7041`
 - `src/components/Coach/CoachTeachPage.tsx:7775`
-- `src/components/Coach/CoachTeachPage.tsx:13710`
+- `src/components/Coach/CoachTeachPage.tsx:13716`
 - `src/components/Openings/OpeningDetailPage.wiring.test.ts:91`
 - `src/services/generatedLesson.test.ts:5`
 - `src/services/generatedLesson.ts:43`
@@ -307,6 +307,7 @@
 - `src/test/corpusScope.test.ts`
 - `src/test/marksSweep.gate.test.ts`
 - `src/test/noSpokenSemicolon.gate.test.ts`
+- `src/test/writerRegister.gate.test.ts`
 
 ## Audits that reach it
 

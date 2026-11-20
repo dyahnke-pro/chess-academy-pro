@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**139 lines · 7 exports · 7 importers · 5 tests · 0 audits**
+**145 lines · 7 exports · 7 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -45,11 +45,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `answerQuestionThought` (function) — 9 call sites
 - `src/coach/questionThought.test.ts:33`
-- `src/coach/questionThought.test.ts:71`
-- `src/coach/questionThought.test.ts:74`
-- `src/coach/questionThought.test.ts:78`
-- `src/services/danyaBench.measure.test.ts:476`
-- `src/services/danyaBench.measure.test.ts:478`
+- `src/coach/questionThought.test.ts:77`
+- `src/coach/questionThought.test.ts:80`
+- `src/coach/questionThought.test.ts:84`
+- `src/services/danyaBench.measure.test.ts:477`
+- `src/services/danyaBench.measure.test.ts:479`
 - `src/services/movePurposeEngine.ts:170`
 - `src/test/chatAnswersEveryComputer.test.ts:76`
 - `src/test/chatAnswersEveryComputer.test.ts:93`
@@ -61,6 +61,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/danyaBench.measure.test.ts`
 - `src/test/chatAnswersEveryComputer.test.ts`
 - `src/test/chatAnswersInFull.gate.test.ts`
+- `src/test/oneCoachUnlocked.gate.test.ts`
+- `src/test/writerRegister.gate.test.ts`
 
 ## Audits that reach it
 

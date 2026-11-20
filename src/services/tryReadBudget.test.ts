@@ -155,7 +155,7 @@ describe('boardReadFacts — every try read, all asked together', () => {
       return [{ rank: 1, evaluation: 20, mate: null, moves: [] }];
     };
     await boardReadFacts({ fen, studentColor: 'w', rating: 1400, before: [{ rank: 1, evaluation: 30, mate: null, moves: ['c2c3', 'g8f6', 'd2d4'] }],
-      read, withhold: false, tense: 'now', history: [], theory: false, readTempting: true, engineFutures: false, studentNeedContext: null });
+      read, withhold: false, tense: 'now', history: [], theory: false, readTempting: true, engineFutures: false, studentNeedContext: null, story: null });
     // The eye's tries and the moves weighed for a reason are all read, side by side.
     expect(peak).toBeGreaterThan(1);
     expect(sources.get('eye') ?? 0).toBeGreaterThan(0);

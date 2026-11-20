@@ -19,7 +19,7 @@ import { characterTurn } from '../../services/positionCharacter';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { startLearnTranscript, stopLearnTranscript, noteLearnEntry } from '../../services/learnTranscript';
 import { createLearnMemory, markOpeningFactsSpoken, mateRunContinues, nextStem, instanceStem, rememberKeptClaims, type LearnMemory } from '../../services/learnMemory';
-import { STORY_KEY, PLAN_GOAL, keysUnder, threadKey, threadVariant, toldBoards, identityHeard, noteOpening, openingAt, openingBreak, switchesSaid, type StoryHeard } from '../../services/gameStory';
+import { STORY_KEY, PLAN_GOAL, readStoryOf, keysUnder, threadKey, threadVariant, toldBoards, identityHeard, noteOpening, openingAt, openingBreak, switchesSaid, type StoryHeard } from '../../services/gameStory';
 import { uid } from '../../utils/uid';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -8739,6 +8739,9 @@ export function CoachTeachPage({ mode }: {
     corpusNotes: false,
     withhold: null, // a live game: nothing to withhold
     surface: 'learn',
+    // The read is told against what this game already said (the picture's
+    // conclusions, the opening's story).
+    story: () => readStoryOf(learnMemRef.current.story.current()),
   });
 
   // PHASE TRANSITIONS — Learn never had them (2026-08-05). `usePhaseNarration`
@@ -13507,6 +13510,7 @@ export function CoachTeachPage({ mode }: {
                           reads: { before: mid.topLines, after: afterReply.topLines, passBefore: [], passAfter: [] },
                         } : null,
                         fenNow: fenAfterReply, student: playerColor === 'white' ? 'w' : 'b',
+                        story: learnMemRef.current.story,
                       });
                       for (const p of parts) queueSpokenHint(fenAfterReply, p);
                     }
