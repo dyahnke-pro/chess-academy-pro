@@ -296,9 +296,7 @@ function readCandidates(fen: string, played: Move, reads: readonly WeighRead[], 
 
 /** A move the eye finds OBVIOUS: at this share of the eye's read or above it
  *  is among the first moves a player looks at. */
-export const OBVIOUS_EYE = 0.12;
-/** …or one of the eye's first few looks. */
-export const OBVIOUS_RANK = 3;
+export const OBVIOUS_EYE = CANDIDATE_BAR;
 
 /**
  * THE TEMPTING TRY — the one definition (puzzle reads 2026-11-20: on a sharp
@@ -309,10 +307,9 @@ export const OBVIOUS_RANK = 3;
  * move the eye finds obvious or players really play. Whether it FAILS is the caller's measure.
  */
 export function temptingTry(fen: string, uci: string, eye: number, real: number): boolean {
+  // The eye's own look, cost not counted: the real share (cost counted) is
+  // no measure on a sharp board, where every losing move shares it.
   if (eye >= OBVIOUS_EYE) return true;
-  // Among the first moves the eye reaches for — the real share (cost
-  // counted) is no measure on a sharp board, where every losing move shares it.
-  try { if (eyeRead(fen, 1500).sort((a, b) => b.p - a.p).slice(0, OBVIOUS_RANK).some((r) => r.uci === uci)) return true; } catch { /* read the move itself */ }
   void real;
   let b: Chess;
   let m: Move;
@@ -877,20 +874,7 @@ export function standingRefutations(args: {
     const key = temptingKey(c.uci);
     out.push({ san: c.san, uci: c.uci, costCp: Math.round(cost), reply, text, squares: [...new Set([c.from, c.to, read.moves[1].slice(2, 4), ...(jobSaid && job ? job.squares : [])])], key, claims: [key], real, reasonKey, reasonText: reason ?? null });
   }
-  // TRIES THAT MEET THE SAME REPLY ARE ONE IDEA ("…Kh4, …Kf6 and …Kh6 all
-  // fail to Bd3"): said once, by the most tempting, the rest named with it.
-  const sorted = out.sort((x, y) => y.real - x.real);
-  const byReply = new Map<string, Array<StandingRefuted & { real: number }>>();
-  for (const t of sorted) { const g = byReply.get(t.reply) ?? []; g.push(t); byReply.set(t.reply, g); }
-  const grouped: StandingRefuted[] = [];
-  for (const g of byReply.values()) {
-    const [{ real: _real, ...head }, ...rest] = g;
-    if (rest.length === 0) { grouped.push(head); continue; }
-    const sans = g.map((t) => t.san);
-    const reason = head.reasonText && !/^It\b/.test(head.reasonText) ? ` ${head.reasonText}` : '';
-    grouped.push({ ...head, text: `${andList(sans)} ${sans.length === 2 ? 'both' : 'all'} fail to ${head.reply}.${reason}`, squares: [...new Set(g.flatMap((t) => t.squares))], claims: [...new Set(g.flatMap((t) => t.claims))] });
-  }
-  return grouped;
+  return out.sort((x, y) => y.real - x.real).map(({ real: _real, ...t }) => t);
 }
 
 /** What the difference reader compares for a try: its line against the best. */

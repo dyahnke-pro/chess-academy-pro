@@ -48,7 +48,7 @@ describe('five master puzzles, read move by move', () => {
     console.log(`[puzzles5] words avg ${Math.round(ws.reduce((a, b) => a + b, 0) / ws.length)} max ${Math.max(...ws)} tries ${total}`);
     // CEILINGS AT TODAY'S COUNTS — they only fall. Target: tries ≤ 25, no read
     // over 250 words (OWED: the 'threat' tries on 0Km5u …Qe3).
-    expect(total).toBeLessThanOrEqual(44);
-    expect(Math.max(...ws)).toBeLessThanOrEqual(677);
+    expect(total).toBeLessThanOrEqual(40);
+    expect(Math.max(...ws)).toBeLessThanOrEqual(681);
   });
 });

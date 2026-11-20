@@ -53,8 +53,12 @@ function expectArgument(read: readonly ReadFact[]): void {
   expect(v.computer).toBe('pictureVerdict');
   const tries = v.tries ?? [];
   expect(tries.length).toBeGreaterThan(0);
-  expect(read.slice(1, 1 + tries.length).map((f) => f.move)).toEqual(tries);
-  expect(read[1 + tries.length].computer).toBe('picturePlan');
+  // Tries that meet one reply are one idea, said once (`also` names the rest).
+  let k = 1;
+  const said: Array<string | undefined> = [];
+  while (said.length < tries.length && read[k] && read[k].computer !== 'picturePlan') { const f = read[k] as ReadFact & { also?: string[] }; said.push(f.move, ...(f.also ?? [])); k += 1; }
+  expect([...said].sort()).toEqual([...tries].sort());
+  expect(read[k].computer).toBe('picturePlan');
 }
 
 describe('the read says the picture in Danya\'s order', { timeout: 300_000 }, () => {

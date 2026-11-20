@@ -291,7 +291,9 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     // Qc3 and Qc2 each "…Rfc8 meets it. The better move puts your rook on the
     // open c-file"): grouped by the reason's key, never by its words, said once.
     const groups = new Map<string, typeof empty>();
-    for (const t of empty) { const k = t.reasonKey ?? t.uci; groups.set(k, [...(groups.get(k) ?? []), t]); }
+    // …and tries that meet the SAME reply are one idea too (puzzle reads
+    // 2026-11-20: …Kh4, …Kf6 and …Kh6 each "fail to Bd3", said four times).
+    for (const t of empty) { const k = t.reasonKey ?? `reply:${t.reply}`; groups.set(k, [...(groups.get(k) ?? []), t]); }
     // A TRY THAT CHANGES THE RESULT'S BAND (F2, board 4: …Ke7 throws the
     // win) is the verdict's own "but", said beside it.
     const bandOf = (uci: string): number | null => { const r = tempting.find((x) => x.moves[0] === uci); return r ? stepOfCp(seatCp(r, i.studentColor)) : null; };
