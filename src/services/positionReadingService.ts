@@ -993,6 +993,10 @@ interface ColorComplexWeakness {
 export function findColorComplexWeakness(fen: string): ColorComplexWeakness[] {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return []; }
+  // A COLOUR COMPLEX NEEDS BISHOPS ON THE BOARD (F5, Danya board 4): a
+  // complex is weak because its bishop is gone while a bishop still matters.
+  // In a knight-and-pawn ending every square is the same to every piece.
+  if (!chess.board().some((row) => row.some((c) => c?.type === 'b'))) return [];
   const holes = findWeakSquares(fen);
   const out: ColorComplexWeakness[] = [];
   for (const side of ['w', 'b'] as Color[]) {

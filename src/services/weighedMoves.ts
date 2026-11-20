@@ -650,7 +650,9 @@ function tryMechanism(fen: string, m: Move, sans: readonly string[], bestSan: st
     for (const t of detectTactics(tryBoard.fen()).tactics) {
       const word = LOOKS[t.type];
       if (!word || t.beneficiary !== replier || t.involvedSquares[0] !== rm.to) continue;
-      const targets = t.involvedSquares.slice(1).map((sq) => named(sq, m.color));
+      // Named from the STUDENT's seat (F5, Alekhine's gun: their try …Nb8
+      // read "Rc7 hits your knight on e7" for their knight).
+      const targets = t.involvedSquares.slice(1).map((sq) => named(sq, own === 'your' ? m.color : replier));
       if (targets.length === 0) continue;
       return `${replyWords} is ${word}: it hits ${andList(targets)}.`;
     }

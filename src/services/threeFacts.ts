@@ -200,6 +200,10 @@ function deepFactRead(fenBefore: string, san: string, line: readonly string[] | 
     forcedSoFar = forcedSoFar && lineIsForcing(reply.board.fen(), [`${n.from}${n.to}${n.promotion ?? ''}`], 1, n.color);
     const samePiece = pieceSq !== null && n.from === pieceSq;
     if (samePiece && chased) return null;
+    // A PAWN THAT PROMOTES IS NOT THE PIECE THAT GOES ON (F5, the Saavedra:
+    // "c7, heading on to f5 by way of c8" — the queen went to f5, not the
+    // pawn). The promotion is its own fact, told by the promotion computers.
+    if (samePiece && n.promotion) return null;
     if (samePiece) {
       const wasOn = pieceSq;
       pieceSq = n.to;

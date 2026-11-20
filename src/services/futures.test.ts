@@ -59,7 +59,7 @@ describe('the drawing resource, the race and the defender alive (WO-PICTURE-01)'
     const line = ['e6g7', 'e5f6', 'c2b2', 'f6g7', 'b2a3', 'g7f6', 'a3a4', 'f6f5', 'a4b5', 'f5g4'];
     const s = lineStory(fen, line, 'their', 0);
     expect(s?.kind).toBe('bareDraw');
-    expect(s?.text).toBe('After …Kxf5 only the kings are left: a draw.');
+    expect(s?.text).toBe('Once their king takes on f5, only the kings are left: a draw.');
   });
 
   it('a stalemate in the line is a draw', () => {

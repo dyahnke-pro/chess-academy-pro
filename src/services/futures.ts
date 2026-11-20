@@ -383,7 +383,12 @@ export function lineStory(fen: string, tryLine: readonly string[], other: 'your'
     // Nothing left that can mate: the capture that took the last of it.
     if (m.captured && b.isInsufficientMaterial()) {
       const bare = b.board().flat().every((p) => !p || p.type === 'k');
-      return { kind: 'bareDraw', text: bare ? `After ${sanWords} only the kings are left: a draw.` : `After ${sanWords} nothing is left that can mate: a draw.`, squares: [m.to] };
+      // WHOSE piece takes it is said (F5, the Saavedra: "After Kxc7 only the
+      // kings are left" read as the student's king).
+      const taker = (m.color === mover) === (other === 'your') ? 'their' : 'your';
+      const noun = ({ p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' } as Record<string, string>)[m.piece] ?? 'piece';
+      const takes = `once ${taker} ${noun} takes on ${m.to}`;
+      return { kind: 'bareDraw', text: bare ? `${takes[0].toUpperCase()}${takes.slice(1)}, only the kings are left: a draw.` : `${takes[0].toUpperCase()}${takes.slice(1)}, nothing is left that can mate: a draw.`, squares: [m.to] };
     }
     if (byOther && !checksBroken) {
       if (/\+$/.test(m.san)) {
