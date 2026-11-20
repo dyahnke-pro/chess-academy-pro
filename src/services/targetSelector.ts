@@ -25,6 +25,7 @@
 // builds it: never an instruction the engine did not play.
 //
 // PURE: chess.js and the board readers; no engine.
+import { sideToMoveAs } from './threatOut';
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { findWeakPawns, legalSeeGainFor } from './positionReadingService';
 import { mateInOneExists, pieceEnPrise } from './nextPlans';
@@ -121,10 +122,10 @@ function fileOpenFor(board: Chess, target: Square, me: Color): boolean {
  *  nothing for them). A capture is the other readers' (a trade, a win). */
 function reachersOf(fen: string, target: Square, me: Color, already: ReadonlySet<Square>): Array<{ from: Square; to: Square }> {
   const them: Color = me === 'w' ? 'b' : 'w';
-  const parts = fen.split(' ');
-  if (parts[1] !== me) { parts[1] = me; parts[3] = '-'; }
+  const turned = sideToMoveAs(fen, me);
+  if (!turned) return [];
   let board: Chess;
-  try { board = new Chess(parts.join(' ')); } catch { return []; }
+  try { board = new Chess(turned); } catch { return []; }
   if (board.inCheck()) return [];
   const out: Array<{ from: Square; to: Square }> = [];
   const seen = new Set<Square>();

@@ -17,7 +17,7 @@ describe('planSteps — one piece\'s road', () => {
     const p = boardPlan('4r1k1/pb3q1p/np1prpp1/2p4n/2P1P2B/1NPB1P2/P2Q2PP/3RR2K w - - 0 22',
       ['b3a1', 'a6b8', 'a1c2', 'b7c6', 'c2e3', 'b8d7', 'd3c2', 'd7e5', 'e1f1', 'f7g7']);
     expect(p?.maneuver).toEqual({ piece: 'knight', from: 'b3', route: ['a1', 'c2', 'e3'], justMoved: false, job: { kind: 'hole', square: 'd5', piece: null } });
-    expect(planStepsText(p!, 'your')).toBe('Your knight on b3 has a better road: a1, c2 and then e3. There it eyes d5, a hole in their camp.');
+    expect(planStepsText(p!, 'your')).toBe('Your knight on b3 has a better road. It goes by way of a1 to e3. There it eyes d5, a hole in their camp.');
   });
 
   it('a road back through its own start is a shuffle, not a road (positional-rook-lift, Rh1-h2-h1)', () => {
@@ -69,6 +69,6 @@ describe('a road says the job its end gives the piece, or is no road', () => {
     const c = new Chess(fen); c.move({ from: 'f8', to: 'd8' }); c.move({ from: 'd3', to: 'd4' });
     const p = planSteps(c.fen(), ['d6f8', 'f3f4', 'g5g6', 'd2f3', 'g6b6', 'd4e5', 'b6d6', 'e5e3'], 'd3d4', 3, true, true);
     expect(p?.maneuver?.job).toEqual({ kind: 'piece', square: 'g7', piece: 'pawn' });
-    expect(planStepsText(p!, 'their')).toBe('Their queen on d3 has a better road: d4 and then e5. There it hits your pawn on g7.');
+    expect(planStepsText(p!, 'their')).toBe('Their queen on d3 has a better road. It goes d4 and then e5. There it hits your pawn on g7.');
   });
 });

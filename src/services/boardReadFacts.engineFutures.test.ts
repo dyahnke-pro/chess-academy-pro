@@ -30,7 +30,7 @@ describe('the engine-backed difference reader has its production caller', () => 
     const line = (moves: string[], cp: number): AnalysisLine[] => [{ rank: 1, evaluation: cp, mate: null, moves }];
     const input: BoardReadInput = {
       fen: FEN, studentColor: 'b', rating: 1800, before: line(BEST, -252), history: [], theory: false, tense: 'now',
-      withhold: false, readTempting: true, engineFutures, studentNeedContext: null,
+      withhold: false, readTempting: true, engineFutures, studentNeedContext: null, story: null,
       read: async (fen, source) => { sources.push(source); return fen === afterTry ? line(TRY.slice(1), -5) : null; },
     };
     await boardReadFacts(input);

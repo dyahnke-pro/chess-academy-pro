@@ -19,6 +19,8 @@
  * read (no engine call). A fact is matched across the two boards by its
  * computer and its claims, so "their rook is active" on both is no change.
  */
+import { sideToMoveAs } from './threatOut';
+import { unmarked } from '../utils/sanMark';
 import { Chess, type Color, type Square } from 'chess.js';
 import { readEveryComputer, type BoardBundle } from './boardBundle';
 import type { CoachFact } from './coachFact';
@@ -364,7 +366,7 @@ export function lineStory(fen: string, tryLine: readonly string[], other: 'your'
     try { m = b.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { return null; }
     const byOther = m.color !== mover;
     const sanWords = `${m.color === 'b' ? '…' : ''}${m.san}`;
-    if (byOther && b.isCheckmate()) return { kind: 'mates', text: `${sanWords} is mate.`, squares: [m.to] };
+    if (byOther && b.isCheckmate()) return { kind: 'mates', text: `${m.color === 'b' ? '…' : ''}${unmarked(m.san)} is mate.`, squares: [m.to] };
     if (byOther && m.promotion) {
       // A rook or bishop in an engine line is a queen's stand-in (the same
       // score); a knight is the point of the move.
@@ -420,11 +422,10 @@ export interface ComesAlive {
 /** How many squares each piece of `side` could go to, its side to move. */
 function mobility(fen: string, side: Color): Map<Square, { type: string; n: number }> {
   const out = new Map<Square, { type: string; n: number }>();
-  const parts = fen.split(' ');
-  parts[1] = side;
-  parts[3] = '-';
+  const turned = sideToMoveAs(fen, side);
+  if (!turned) return out;
   let c: Chess;
-  try { c = new Chess(parts.join(' ')); } catch { return out; }
+  try { c = new Chess(turned); } catch { return out; }
   for (const p of c.board().flat()) {
     if (!p || p.color !== side || p.type === 'p') continue;
     out.set(p.square, { type: p.type, n: c.moves({ square: p.square }).length });

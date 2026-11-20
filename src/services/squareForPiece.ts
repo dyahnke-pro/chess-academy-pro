@@ -15,6 +15,7 @@
 // enemy bishop or knight from three or more safe squares to one or none (a
 // safe square: empty or holding an enemy of it, and no pawn of the pusher
 // hits it). Both seats.
+import { sideToMoveAs } from './threatOut';
 import { Chess, type Color, type Move, type Square } from 'chess.js';
 import { type EngineLine, PIECE_NAME, lineScore, other, playLine, sortedLines } from './engineLineRead';
 import { noPawnCanChallenge, relativeRank } from './outpost';
@@ -24,11 +25,11 @@ export interface SquareForPiece { side: Color; push: string; hole: Square; burie
 
 /** The piece's moves to squares no pawn of `against` hits (its own colour's turn forced). */
 function safeSquares(fen: string, sq: Square, against: Color): number {
-  const parts = fen.split(' ');
   const owner = against === 'w' ? 'b' : 'w';
-  parts[1] = owner; parts[3] = '-';
+  const turned = sideToMoveAs(fen, owner);
+  if (!turned) return -1;
   let c: Chess;
-  try { c = new Chess(parts.join(' ')); } catch { return -1; }
+  try { c = new Chess(turned); } catch { return -1; }
   const ms = c.moves({ square: sq, verbose: true });
   // Moves through the board's legality; a pinned piece reads as none either way.
   return ms.filter((m) => !c.attackers(m.to, against).some((a) => c.get(a)?.type === 'p')).length;

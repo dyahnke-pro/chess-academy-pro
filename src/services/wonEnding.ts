@@ -107,8 +107,8 @@ export function wonEnding(fen: string, student: Color, budget: number = KP_FAST_
     if (kingInSquare(kL, p.square, W, toMove === W)) continue;
     const promo = promoOf(p.square, W);
     return make('outsideSquare', rotateStem([
-      `${D.Whose} king is outside the square of ${U.whose} ${p.square[0]}-pawn: it cannot catch it, and the pawn runs through to ${promo}.`,
-      `${U.Whose} ${p.square[0]}-pawn simply runs: ${D.whose} king stands outside its square and never reaches ${promo} in time.`,
+      `${D.Whose} king on ${kL} is outside the square of ${U.whose} ${p.square[0]}-pawn on ${p.square}: it cannot catch it, and the pawn runs through to ${promo}.`,
+      `${U.Whose} ${p.square[0]}-pawn on ${p.square} simply runs: ${D.whose} king on ${kL} stands outside its square and never reaches ${promo} in time.`,
     ], k), [p.square, promo, kL]);
   }
 

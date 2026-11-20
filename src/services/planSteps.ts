@@ -434,10 +434,12 @@ export function planStepsText(p: PlanSteps, whose: 'your' | 'their'): string {
   if (p.maneuver) {
     const m = p.maneuver;
     const owner = whose === 'your' ? 'their' : 'your';
-    const road = m.route.length === 2 ? `${m.route[0]} and then ${m.route[1]}` : `${m.route.slice(0, -1).join(', ')} and then ${m.route.at(-1)}`;
+    // Never three squares in one breath (the human-squares rule): the piece
+    // and its square in one sentence, the road in the next.
+    const road = m.route.length === 2 ? `${m.route[0]} and then ${m.route[1]}` : `by way of ${m.route[0]} to ${m.route.at(-1)}`;
     const aim = p.aim ? ` There it lines up on ${p.aimPiece ? `${owner} ${p.aimPiece} on ${p.aim}` : `${p.aim}, next to ${owner} king`}.` : ` ${roadJobText(m.job, owner)}`;
     const who = whose === 'your' ? 'Your' : 'Their';
-    return m.justMoved ? `${who} ${m.piece} keeps going: ${road}.${aim}` : `${who} ${m.piece} on ${m.from} has a better road: ${road}.${aim}`;
+    return m.justMoved ? `${who} ${m.piece} keeps going: ${road}.${aim}` : `${who} ${m.piece} on ${m.from} has a better road. It goes ${road}.${aim}`;
   }
   const named = p.steps.map((s) => (s.castle ? 'castling' : s.brk ? `the ${s.san} break` : s.san));
   const list = named.length === 2 ? `${named[0]} and then ${named[1]}` : `${named.slice(0, -1).join(', ')} and then ${named.at(-1)}`;

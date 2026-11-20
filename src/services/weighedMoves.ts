@@ -664,7 +664,7 @@ function tryMechanism(fen: string, m: Move, sans: readonly string[], bestSan: st
   return why.note;
 }
 
-function cap(w: string): string { return w.charAt(0).toUpperCase() + w.slice(1); }
+const cap = openSentence;
 
 /**
  * (A″) THE TRY THAT COSTS THE RESULT — Danya's choices, as he reads them: of

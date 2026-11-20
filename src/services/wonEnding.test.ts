@@ -108,6 +108,6 @@ describe('wired', () => {
       bestLine: { moves: ['f7e7', 'a4a5'], cp: null, mate: null } });
     // f7→g8 leaves the square of the a-pawn; e7 stays in it.
     expect(r?.kind).toBe('lost');
-    expect(r?.text).toBe('That loses the pawn ending by force. Their a-pawn simply runs: your king stands outside its square and never reaches a8 in time. …Ke7 would have held the draw.');
+    expect(r?.text).toBe('That loses the pawn ending by force. Their a-pawn on a5 simply runs: your king on g8 stands outside its square and never reaches a8 in time. …Ke7 would have held the draw.');
   });
 });

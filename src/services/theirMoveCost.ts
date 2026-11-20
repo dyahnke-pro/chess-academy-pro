@@ -12,6 +12,7 @@
 //   · the lasting structural damage `concessionParts` already computes
 //     (king cover thinned, a passer granted, a new isolani).
 // Returns null when the move cost nothing a student can see.
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Square } from 'chess.js';
 import { isOutpost } from './outpost';
 import { minorRouteToSquare } from './positionReadingService';
@@ -94,7 +95,7 @@ export function theirMoveCost(fenBefore: string, san: string, studentColor: 'w' 
         const how = route.via ? `${knight} can get there in two jumps` : `${knight} can jump straight in`;
         return {
           kind: 'hole',
-          text: `Their ${played} costs them ${sq}: no pawn of theirs can ever guard it again, and ${how}.`,
+          text: `Their ${played} costs them ${sq}: no pawn of theirs can ever guard it again. ${openSentence(how)}.`,
           // The idea, not the hop (David 2026-11-05: "Yes it can point without saying the move").
           heldText: `Their ${played} costs them ${sq}: no pawn of theirs can ever guard it again — a square for your knight.`,
           squares: [sq, route.from, ...(route.via ? [route.via] : [])],

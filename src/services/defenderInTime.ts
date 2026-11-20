@@ -16,6 +16,7 @@
 // and the engine's best line does not win that pawn. Said to either seat.
 // EVERY knight-and-pawn race on the board is returned, shortest route first —
 // not a cap (G4.5): a second loose pawn the defence also reaches is its own fact.
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Color, type Square } from 'chess.js';
 import { type EngineLine, other, playLine, sortedLines } from './engineLineRead';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
@@ -27,7 +28,7 @@ const fr = (s: string): [number, number] => [s.charCodeAt(0) - 97, Number(s[1]) 
 const KNIGHT: Array<[number, number]> = [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]];
 const KING: Array<[number, number]> = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]];
 
-const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+const cap = openSentence;
 
 function pawnHit(c: Chess, s: Square, by: Color): boolean {
   return c.attackers(s, by).some((a) => c.get(a)?.type === 'p');

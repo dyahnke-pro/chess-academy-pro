@@ -17,6 +17,8 @@
  *
  * Pure: no engine call (the lines are handed in), no Dexie, no model.
  */
+import { openSentence } from '../utils/openSentence';
+import { CAPTURE_VALUE } from './pieceValues';
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import type { CoachFact } from './coachFact';
 import { buildPicture, type PictureObject, type PictureRole, type PositionPicture } from './positionPicture';
@@ -40,7 +42,7 @@ const sq = (f: number, r: number): Square | null => (f >= 0 && f < 8 && r >= 1 &
 const other = (c: Color): Color => (c === 'w' ? 'b' : 'w');
 const fwd = (c: Color): number => (c === 'w' ? 1 : -1);
 const placement = (fen: string): string => fen.split(' ')[0];
-const VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+const VALUE = CAPTURE_VALUE;
 const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
 function gridOf(fen: string): Grid | null {
@@ -250,7 +252,11 @@ function weakPieceTraits(g: Grid, s: Square, unit: Unit): WeakTrait[] {
   const steps = stepsOf(g, unit, s).filter((x) => !g.get(x));
   if (hitNow > 0 && steps.every((x) => { const gg = new Map(g); gg.delete(s); gg.set(x, unit); return lost(gg, x); })) t.push('no-safe-square');
   if (hitNow > 0 && (cheapestAttacker(g, s, them) < VALUE[unit.type] || hitNow > guards)) t.push('loose');
-  return t;
+  // A loose piece with a safe square is a tactic of the moment, said by the
+  // tactics computers; it steps away, so the standing ledger leaves it
+  // (gotham-jelena g4: "You can get at their weak spot: the bishop on f5"
+  // beside the kick that sends it home).
+  return t.includes('no-safe-square') ? t : [];
 }
 
 function weakKingTraits(g: Grid, s: Square, c: Color): WeakTrait[] {
@@ -513,7 +519,10 @@ export function targetOf(led: Ledger, attacker: Color): Target | null {
   if (!g) return null;
   const cands = led[other(attacker)].weaknesses.filter((e) => e.piece !== 'k').map((e) => candidateOf(g, e));
   cands.sort((x, y) => vulnerability(y) - vulnerability(x) || x.entry.square.localeCompare(y.entry.square));
-  const live = cands.filter((c) => c.attackers > c.defenders);
+  // A piece with a safe square is no target: it steps away from the siege
+  // (gotham-jelena g4: "Aim at the bishop on f5" said beside the kick that
+  // sends it home). A pawn, a hole, or a piece with nowhere to go stays put.
+  const live = cands.filter((c) => c.attackers > c.defenders && (c.entry.piece === null || c.entry.piece === 'p' || c.fixed));
   if (live.length === 0) return null;
   return { attacker, best: live[0], runnerUp: cands.find((c) => c !== live[0]) ?? null, candidates: cands };
 }
@@ -1091,7 +1100,7 @@ export function ledgerText(led: Ledger, student: Color): string | null {
     }
   }
   if (out.length === 0) return null;
-  return out.map((s) => s[0].toUpperCase() + s.slice(1)).join(' ');
+  return out.map(openSentence).join(' ');
 }
 
 /** The weakness that matters most: the most vulnerable by the target's own

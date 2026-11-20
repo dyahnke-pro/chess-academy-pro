@@ -129,9 +129,14 @@ describe('buildRejectedTempting', () => {
     expect(rt).toBeNull();
   });
 
-  it('a capture as good as the best move is not refuted — silence', () => {
+  it('a capture as good as the best move is not refuted — silence on it', () => {
+    // Qxd6 made as good as the best move is never the beat. Qxf7 still walks
+    // into …Qxd1# on the same read, so the beat may name THAT capture (the eye
+    // weighs every capture now); with both made equal the beat is silent.
     const same = lines.map((l) => (l.moves[0] === 'f8d6' ? { ...l, evaluation: lines[0].evaluation, mate: lines[0].mate } : l));
-    expect(buildRejectedTempting({ fen: jose.fen, studentColor: 'white', lines: same, rating: 1500 })).toBeNull();
+    expect(buildRejectedTempting({ fen: jose.fen, studentColor: 'white', lines: same, rating: 1500 })?.temptingSan).not.toBe('Qxd6');
+    const both = lines.map((l) => (l.moves[0] === 'f8d6' || l.moves[0] === 'f8f7' ? { ...l, evaluation: lines[0].evaluation, mate: lines[0].mate } : l));
+    expect(buildRejectedTempting({ fen: jose.fen, studentColor: 'white', lines: both, rating: 1500 })).toBeNull();
   });
 });
 

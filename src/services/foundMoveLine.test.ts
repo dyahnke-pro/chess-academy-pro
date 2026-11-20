@@ -42,7 +42,9 @@ describe('studentMoveTeaching — a winning move says its line (David 2026-09-30
     expect(line?.text).toBe('That wins a pawn: you play Nxd5 and, two moves later, you play Qxc3+.');
     expect(line?.arrows).toHaveLength(5);
   });
-  it('on one read the three-move line is held (the naming rule)', async () => {
+  // Every move of the winner is a capture or a check and every reply loses no
+  // less, so the board proves the line on one read (`boardProvesLine`, d4d4095).
+  it('on one read a line the board proves is named (the naming rule)', async () => {
     const { studentMoveTeaching } = await import('./learnBoardTeaching');
     const fen = 'r1b2rk1/pp2ppbp/2np1np1/q1pP4/2P5/1PNBPN2/PB3PPP/R2QK2R b KQ - 0 9';
     const hints = studentMoveTeaching({ linesAfter: [], namesStudentMoves: true, theory: true,
@@ -50,7 +52,7 @@ describe('studentMoveTeaching — a winning move says its line (David 2026-09-30
       bestLine: { rank: 1, evaluation: -270, mate: null, moves: ['f6d5', 'c4d5', 'g7c3', 'b2c3', 'a5c3', 'e1e2'] },
       reply: null, cpAfter: null,
     });
-    expect(hints.some((h) => /two moves later/.test(h.text))).toBe(false);
+    expect(hints.some((h) => /two moves later/.test(h.text))).toBe(true);
   });
 });
 

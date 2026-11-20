@@ -13,6 +13,7 @@
  * weighed by the coach's own weighing (`buildDeliberation`) beside the
  * engine's candidates, with its own engine line.
  */
+import { seatCp } from '../services/winChance';
 import { Chess, type Square } from 'chess.js';
 import type { ResolvedChatTurn, ChatKind } from './chatTurn';
 import { bestMoveReason, buildDeliberation, namedIsSound, namedMoveAnswer, spokenLines } from '../services/deliberation';
@@ -276,9 +277,7 @@ export async function developNextAnswer(board: BoardTurnInput, out?: { endorsed?
   const analysis = await engine.analysis(board.fen);
   const lines = analysis?.topLines?.filter((l) => l.moves?.length) ?? [];
   if (lines.length === 0) return null;
-  const sign = me === 'w' ? 1 : -1;
-  const score = (evalCp: number | null, mate: number | null): number =>
-    (mate != null ? (mate > 0 ? 100000 : -100000) : (evalCp ?? 0)) * sign;
+  const score = (evalCp: number | null, mate: number | null): number => seatCp({ evaluation: evalCp ?? 0, mate }, me);
   const prevCapture = captureRunOfMoves(null, board.history);
   const say = (san: string): string => {
     const why = moveWhy(board.fen, san, me, prevCapture);

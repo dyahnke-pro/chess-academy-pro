@@ -108,7 +108,7 @@ import { cutMarksWithWords, markItems } from './markAnchors';
 import type { PacedMark } from './markPacing';
 import { studentMoveTeaching, namedMoveArrows } from './learnBoardTeaching';
 import { FACET_ROLE, type FacetTag } from './reviewFacetRank';
-import { stepOf, type ComputerName, type CoachFact } from './coachFact';
+import { stepOf, FACT_GROUP, type ComputerName, type CoachFact } from './coachFact';
 import { reviewFacet, reworded, type ReviewFacet, type ReviewFacetParts } from './reviewFacet';
 import { type Proof } from './proof';
 import { newPhraseMemory } from '../utils/phraseMemory';
@@ -2859,7 +2859,12 @@ function* reviewSegmentSteps(
           // A kept fact's line rides with the words that say it ("It also heads
           // on to e6 a move later" — marks sweep 2026-11-12: said, never drawn).
           const keptLines = thought.kept.flatMap((f) => [...(f.lines ?? [])]);
-          const raw = fact('moveThoughtFacts', 'move-job', spoken, { identity: id, squares: [...named], ...(keptLines.length > 0 ? { lines: keptLines } : {}) });
+          // A thought that kept no fact about the move (a standing read alone —
+          // the ledger of their weak spots) is that read, not the move's job:
+          // it files under its own kind, so a move job always has the move.
+          const lead = thought.kept[0];
+          const jobTag: FacetTag = thought.kept.some((k) => FACT_GROUP[k.kind] === 'move') || !lead || !(lead.kind in FACET_ROLE) ? 'move-job' : lead.kind as FacetTag;
+          const raw = fact('moveThoughtFacts', jobTag, spoken, { identity: id, squares: [...named], ...(keptLines.length > 0 ? { lines: keptLines } : {}) });
           // Only a line that opens with the move may be followed by "It also"
           // (…Kxf7's lead was "Your bishop on c8 stays home for now").
           const headLeads = stepLeads.filter((f) => f.headsMove === true);

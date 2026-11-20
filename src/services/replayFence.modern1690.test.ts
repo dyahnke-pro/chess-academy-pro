@@ -109,7 +109,7 @@ describe('a gambit file is named as it is (ply 47)', () => {
     // sentence of its own.
     const page = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
     const src = readFileSync('src/services/boardComputers.ts', 'utf8');
-    expect(page).toMatch(/const gambitLine = gambitPoint\(/);
+    expect(page).toMatch(/const gambitLine = readBoard\('gambitPoint',/);
     expect(page).not.toMatch(/-file is open for your rook\.`/);
     expect(src).not.toMatch(/-file is open for your rook\.`/);
     expect(src).toMatch(/theirPawnOnFile \? 'half-open' : 'open'/);

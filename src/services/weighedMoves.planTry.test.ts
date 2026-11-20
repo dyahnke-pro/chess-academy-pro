@@ -11,7 +11,7 @@ const qc5 = { evaluation: -92, mate: null, moves: ['d4c5', 'b7d7', 'c5b5', 'd7d2
 describe("the plan's direct try, refuted by what became of its target", () => {
   it('Qc5 is weighed for the b5 pawn, met by …Qd7, and wins only the pawn', () => {
     const plan = planTries(FEN);
-    const considered = new Map(plan.map((t) => [t.uci, { why: 'plan' as const, target: t.target }]));
+    const considered = new Map(plan.map((t) => [t.uci, { why: 'plan' as const, target: t.target, storm: t.why === 'storm' }]));
     const out = standingRefutations({ fen: FEN, student: 'w', rating: 1400, reads: [best, qc5], considered });
     const t = out.find((x) => x.san === 'Qc5');
     expect(t?.text).toMatch(/Qc5 .*b5.*…Qd7/);

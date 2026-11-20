@@ -37,8 +37,8 @@ describe('the board plan', () => {
   it('the second front: only when the target holds and the board has a break on the other wing', () => {
     // A held isolated d-pawn (guarded by rook and queen, hit once) and a g4 break.
     const held = '3r2k1/5ppp/8/3p4/8/8/5PPP/3R2K1 w - - 0 1';
-    expect(switchWing(held, 'w', 'your')).toBeNull(); // no piece guards it but the rook: one attacker, one guard, and no break
-    expect(switchWing(KARPOV, 'b', 'your')).toBeNull(); // not the mover
+    expect(switchWing(held, 'w', 'your', [])).toBeNull(); // no piece guards it but the rook: one attacker, one guard, and no break
+    expect(switchWing(KARPOV, 'b', 'your', [])).toBeNull(); // not the mover
   });
 
   // Danya, the hardest move to make #1: "the queenside is permanently locked";

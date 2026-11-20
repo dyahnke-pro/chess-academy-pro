@@ -57,7 +57,7 @@ describe('standingRefutations says the reply\'s job', () => {
   const qc5 = { evaluation: -92, mate: null, moves: ['d4c5', 'b7d7', 'c5b5', 'd7d2', 'b5e2', 'd2c1', 'g1f2', 'f6d5'] };
 
   it('Qc5 runs into …Qd7, and the queen heads for d2 to hit the e3 pawn', () => {
-    const considered = new Map(planTries(FEN).map((t) => [t.uci, { why: 'plan' as const, target: t.target }]));
+    const considered = new Map(planTries(FEN).map((t) => [t.uci, { why: 'plan' as const, target: t.target, storm: t.why === 'storm' }]));
     const t = standingRefutations({ fen: FEN, student: 'w', rating: 1400, reads: [best, qc5], considered }).find((x) => x.san === 'Qc5');
     expect(t?.text).toMatch(/…Qd7\. The queen heads for d2, where it hits your e-pawn\./);
     expect(t?.squares).toContain('d2');

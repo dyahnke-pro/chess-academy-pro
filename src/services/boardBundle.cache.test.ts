@@ -4,7 +4,7 @@ import { describe, it, expect, vi } from 'vitest';
 const calls = vi.hoisted(() => ({ n: 0 }));
 vi.mock('./boardComputers', async (importOriginal) => {
   const real = await importOriginal<typeof import('./boardComputers')>();
-  return { ...real, readBoardAll: ((id: never, ctx: never) => { calls.n += 1; return real.readBoardAll(id, ctx); }) as typeof real.readBoardAll };
+  return { ...real, readBoardAll: ((id: never, ctx: never) => { calls.n += 1; return real.readBoardAll(id, ctx); }) as unknown as typeof real.readBoardAll };
 });
 
 import { readEveryComputer, bundleKey, type BoardBundle } from './boardBundle';

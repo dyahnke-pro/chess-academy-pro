@@ -578,6 +578,7 @@ const THOUGHT_COMPUTER: Record<ThoughtSource, string> = {
   gambitIdea: 'services/gambitIdea.ts#gambitIdea',
   moveWhy: 'services/deliberation.ts#moveWhy',
   briefing: 'services/reviewMoveBriefing.ts#buildReviewMoveBriefing',
+  picture: 'services/pictureLedger.ts#pictureConclusions',
   boardTeacher: 'services/reviewMoveTeaching.ts#buildReviewMoveTeachingFact',
   moveJob: 'services/bookMoveWhy.ts#moveJob',
   fundamental: 'services/moveFundamentals.ts#computeMoveFundamentals',

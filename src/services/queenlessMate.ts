@@ -10,6 +10,7 @@
 // mates at once — the side to move's (its own mate in one), or the other
 // side's, handed the move (the null move: the mate they threaten). The habit
 // is said with the mate it would have caught. Both seats.
+import { unmarked } from '../utils/sanMark';
 import { Chess, type Color, type Square } from 'chess.js';
 import { mateThreatsAgainst } from './threatOut';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
@@ -24,7 +25,7 @@ export function queenlessMate(fen: string, student: Color): QueenlessMate | null
   const key = stemKeyOf(`${fen}|queenless-mate`);
   const own = c.moves({ verbose: true }).find((m) => m.san.endsWith('#'));
   if (own) {
-    const san = own.san.replace('#', '');
+    const san = unmarked(own.san);
     const you = toMove === student;
     const text = you
       ? rotateStem([
@@ -39,7 +40,7 @@ export function queenlessMate(fen: string, student: Color): QueenlessMate | null
   }
   const threat = mateThreatsAgainst(fen, toMove).moves[0];
   if (!threat) return null;
-  const san = threat.san.replace('#', '');
+  const san = unmarked(threat.san);
   const you = toMove === student;
   const text = you
     ? rotateStem([

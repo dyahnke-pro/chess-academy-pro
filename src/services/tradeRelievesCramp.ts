@@ -19,6 +19,7 @@
 // taken back at once — an even trade (in the second read, of that planted
 // piece). Said to the side to move when it is the
 // cramped one (take it) and when it has the room (don't let it happen cheaply).
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Color, type Square } from 'chess.js';
 import { type EngineLine, PIECE_NAME, lineScore, other, playLine, sortedLines } from './engineLineRead';
 import { ownsMoreSpace } from './positionReadingService';
@@ -92,8 +93,8 @@ export function tradeRelievesCramp(fen: string, lines: readonly EngineLine[], st
       const theirPiece = `${you ? 'their' : 'your'} ${PIECE_NAME[m.captured]} on ${m.to}`;
       const text = mobility
         ? (you
-          ? `${theirPiece[0].toUpperCase()}${theirPiece.slice(1)} sits in your half, and your pieces have fewer squares than theirs, ${mobility.mine} against ${mobility.theirs}. Trade it off with ${m.san}: every trade eases the cramp.`
-          : `${theirPiece[0].toUpperCase()}${theirPiece.slice(1)} is the piece cramping them, and their pieces have fewer squares than yours, ${mobility.mine} against ${mobility.theirs}. Expect ${m.san} to trade it off.`)
+          ? `${openSentence(theirPiece)} sits in your half, and your pieces have fewer squares than theirs, ${mobility.mine} against ${mobility.theirs}. Trade it off with ${m.san}: every trade eases the cramp.`
+          : `${openSentence(theirPiece)} is the piece cramping them, and their pieces have fewer squares than yours, ${mobility.mine} against ${mobility.theirs}. Expect ${m.san} to trade it off.`)
         : you
         ? rotateStem([
           `You have less room to work with, so trades help you. ${m.san} takes off ${theirPiece}, and every pair that comes off leaves your pieces more space.`,

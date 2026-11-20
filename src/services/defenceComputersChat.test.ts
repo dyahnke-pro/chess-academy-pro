@@ -19,12 +19,13 @@ describe('the defence computers answer a question about the move in chat', () =>
   it('their pin (1Rejj 7.Bb5): harmless — b7 guards the knight, castling ends it', () => {
     const said = ask('r1bqkb1r/pp3ppp/2n1p3/3p4/2B1n3/5Q2/PPPP1PPP/RNB1K1NR w KQkq - 0 7', 'Bb5', false,
       [line(1, -208, ['f8c5', 'g1h3', 'e8g8', 'b5c6', 'b7c6', 'e1g1'])]);
-    expect(said).toMatch(/pins your knight on c6 to the king/);
+    // The knight on c6 is named earlier in the answer; the pin refers back (human voice rule 3).
+    expect(said).toMatch(/pins your knight (on c6 )?to the king/);
   });
   it('the queen net (hv0P 12.Nd4): e6 covered, a4 the one square left', () => {
     const said = ask('r1b1k2r/pppp1ppp/7n/4P3/1B2P3/5N2/q1P2PPP/1R1QKB1R w Kkq - 1 12', 'Nd4', true,
       [line(1, 578, ['c7c5', 'b4c5', 'a2a5'])]);
-    expect(said).toMatch(/your knight on d4 covers e6/);
+    expect(said).toMatch(/your knight (on d4 )?covers e6/);
   });
   it('both saved (FozbG 27.Ne7): the knight steps out and guards the rook', () => {
     const said = ask('2R2b1r/r2k1p1p/1p1qpP2/3N1p2/p2P2P1/4BQ1P/P4R2/6K1 w - - 1 27', 'Ne7', true,

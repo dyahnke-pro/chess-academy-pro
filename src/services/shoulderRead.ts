@@ -13,6 +13,7 @@
 // or shuts it out entirely. A static count: the pieces are where they stand.
 //
 // Kings, pawns and rooks only. PURE: chess.js reads the board.
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Color, type Square } from 'chess.js';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { countWord } from '../utils/andList';
@@ -191,8 +192,8 @@ export function shoulderLine(r: ShoulderRead, student: Color): string {
   const from = `From ${r.king}`;
   const without = `without ${mine ? 'your' : 'their'} ${r.by === 'k' ? 'king' : 'rook'} there`;
   parts.push(r.steps === null
-    ? `${from} it cannot get ${goal} at all as the board stands. ${without[0].toUpperCase()}${without.slice(1)}, it would take ${moves(r.free)}.`
-    : `${from} it needs ${moves(r.steps)} to get ${goal}. ${without[0].toUpperCase()}${without.slice(1)}, it would take ${moves(r.free)}.`);
+    ? `${from} it cannot get ${goal} at all as the board stands. ${openSentence(without)}, it would take ${moves(r.free)}.`
+    : `${from} it needs ${moves(r.steps)} to get ${goal}. ${openSentence(without)}, it would take ${moves(r.free)}.`);
   return parts.join(' ');
 }
 

@@ -15,10 +15,11 @@
 // search for the best square (no engine) found Danya's piece on 4 of 12 of his
 // boards and fired on 9 boards in 10 — the plan decides which piece, so the
 // engine's line does. Board-true, chess.js only (G0).
+import { CAPTURE_VALUE } from './pieceValues';
 import { Chess } from 'chess.js';
 import type { Color, PieceSymbol, Square } from 'chess.js';
 
-const VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+const VALUE = CAPTURE_VALUE;
 const STEPS: Record<'n' | 'b' | 'r' | 'q', Array<[number, number]>> = {
   n: [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]],
   b: [[1, 1], [1, -1], [-1, 1], [-1, -1]],

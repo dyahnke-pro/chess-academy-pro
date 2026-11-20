@@ -182,13 +182,13 @@ describe('one renderer for a move in a line (review audit 2026-10-14)', () => {
   const quiet = { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, gaveBack: null, newOpenFiles: [], newPassedPawns: [], passedPawnsHanded: [], outpostGained: null, shieldLost: 0 };
   it('names its mover and speaks in sentences — never "The move e6 outpost established on d5"', async () => {
     const { plyFactsSentence } = await import('./pvPlayback');
-    expect(plyFactsSentence({ ...quiet, outpostGained: 'd5' }, 'e6', true)).toBe('You plant an outpost on d5, where no pawn of theirs can chase it.');
-    expect(plyFactsSentence({ ...quiet, isMate: true, isCheck: true }, 'Qxf7#', true)).toMatch(/checkmate/);
+    expect(plyFactsSentence({ ...quiet, outpostGained: 'd5' }, 'e6', true, null)).toBe('You plant an outpost on d5, where no pawn of theirs can chase it.');
+    expect(plyFactsSentence({ ...quiet, isMate: true, isCheck: true }, 'Qxf7#', true, null)).toMatch(/checkmate/);
   });
   it('a bare capture that wins nothing says nothing, and a quiet ply is silent', async () => {
     const { plyFactsSentence } = await import('./pvPlayback');
-    expect(plyFactsSentence({ ...quiet, captured: 'pawn' }, 'dxe5', true)).toBeNull();
-    expect(plyFactsSentence(quiet, 'Nf3', true)).toBeNull();
+    expect(plyFactsSentence({ ...quiet, captured: 'pawn' }, 'dxe5', true, null)).toBeNull();
+    expect(plyFactsSentence(quiet, 'Nf3', true, null)).toBeNull();
   });
 });
 
@@ -460,7 +460,7 @@ describe('an outpost says what the move did (review tape 2026-10-15: "You plant 
     const f = computePlyFacts(before, c.fen(), { captured: mv.captured, san: mv.san, color: mv.color, promotion: mv.promotion });
     expect(f.outpostGained).toBe('d5');
     expect(f.outpostLanded).toBe(false);
-    const line = plyFactsSentence(f, 'e6', true) ?? '';
+    const line = plyFactsSentence(f, 'e6', true, null) ?? '';
     expect(line).toMatch(/make d5 an outpost for your knight/);
     expect(line).not.toMatch(/plant/);
   });

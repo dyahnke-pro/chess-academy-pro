@@ -1411,7 +1411,9 @@ export function computeMoveFacets(
       add(readBoardAll('shoulderRead', { fen: fenAfter, student: studentColorWB })[0]);
       add(readBoardAll('connectedPassers', { fen: fenAfter, student: studentColorWB })[0]);
       add(readBoardAll('queenlessMate', { fen: fenAfter, student: studentColorWB })[0]);
-      add(readBoardAll('matingNet', { fen: fenAfter, student: studentColorWB })[0]);
+      // The mate the move allowed is the verdict's own sentence; the net
+      // around the same king would say it a second time.
+      if (allowedMateHere === null) add(readBoardAll('matingNet', { fen: fenAfter, student: studentColorWB })[0]);
       add(readBoardAll('frozenTarget', { fen: fenAfter, student: studentColorWB })[0]);
       add(readBoardAll('theirWorstPiece', { fen: fenAfter, student: studentColorWB, bestLine: ctx.playedLineUci.length ? ctx.playedLineUci : null })[0]);
       add(readBoardAll('seventhRankMate', { fen: fenAfter, lines: null, student: studentColorWB })[0]);

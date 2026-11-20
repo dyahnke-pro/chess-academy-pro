@@ -14,8 +14,9 @@ import { describePlan, type SidePlan } from './lookaheadPlan';
 
 describe('the passer plan: the distance is a fact, the how is the steps', () => {
   it('"It is two pushes from queening. Here\'s how: escort it…" — never "Here\'s how: it is"', () => {
-    // White passed pawn on f6, no queens: the passer plan leads.
-    const plan = deriveNextPlanFacts('6k1/8/5P2/8/8/8/8/6K1 w - - 0 1', 'w', { namesStudentMoves: true }).find((p) => p.kind === 'passer');
+    // White passed pawn on f6, their king too far to catch it (a king that
+    // catches it is no plan, ac7947d): the passer plan leads.
+    const plan = deriveNextPlanFacts('k7/8/5P2/8/8/8/8/6K1 w - - 0 1', 'w', { namesStudentMoves: true }).find((p) => p.kind === 'passer');
     expect(plan?.text).toContain('the plan from here is to get your passed pawn on f6 promoting. It is two pushes from queening. Here\'s how: escort it with your king and pieces.');
     expect(plan?.text).not.toMatch(/Here's how: it is/i);
   });

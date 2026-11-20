@@ -66,6 +66,9 @@ export const PRINCIPLE_DEVICES: Readonly<Partial<Record<MisconceptionTagId, stri
   'overextended-pawn': 'The device: a pawn advances only as far as its neighbours can follow — before the push, find the pawn that will stand behind it, and if there is none, the push waits.',
   'bad-trade-material': 'The device: count the material before you trade — ahead, every piece off the board brings the win closer; behind, every piece off the board takes your chances with it.',
   'capture-toward-centre': 'The device: capture toward the centre is a default, not a law — before you recapture, check what the other pawn opens; a file cleared for your rook can be worth more than the central pawn.',
+  'missed-weak-target': 'The device: find their weakest spot and count who hits it. Bring one more piece against it than they can bring to guard it.',
+  'missed-plan-route': 'The device: pick a target your piece can reach in a few moves. Start the walk now, while their defenders are too far away to stop it.',
+  'allowed-counterplay': 'The device: name their one active idea before you move. If your move does not stop it, they get it for free.',
   // ── endgame ──
   'passive-king-endgame': 'The device: queens off, king on — the moment the endgame starts, the king walks toward the centre and works like a piece.',
   'mistimed-pawn-break': 'The device: prepare the break before you play it — every piece on its best square first, and only then the pawn goes.',

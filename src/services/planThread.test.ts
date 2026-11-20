@@ -195,11 +195,11 @@ describe('structurePlanEvent — a plan is announced once and carried until the 
   it('IDENTITY, NOT PROSE — advancing the pawn you were told to advance is not a new plan', () => {
     // The regression this replaced: the rendered sentence was compared, so
     // "your passed pawn on b5" → "on b6" read as the coach changing its mind.
-    expect(structurePlanEvent('passer-mine', { id: 'passer-mine', text: 'your passed pawn on b6 is the trump' })).toBe('carry');
+    expect(structurePlanEvent('passer-mine', { id: 'passer-mine' })).toBe('carry');
   });
 
   it('a race whose WINNER FLIPS really is a new plan', () => {
-    expect(structurePlanEvent('passer-race:you', { id: 'passer-race:them', text: 'they get there first' })).toBe('changed');
+    expect(structurePlanEvent('passer-race:you', { id: 'passer-race:them' })).toBe('changed');
   });
 
   it('a board with no plan says nothing', () => {

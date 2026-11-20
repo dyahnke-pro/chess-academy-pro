@@ -80,7 +80,7 @@ const side = (fen: string): 'white' | 'black' => (fen.split(' ')[1] === 'w' ? 'w
 
 function row(c: Case, outcome: 'held' | 'broken', i: number): CapabilityEvidenceRecord {
   return { id: `${c.tag}:${outcome}:${i}`, tag: c.tag, outcome, fen: c.fen, playedSan: outcome === 'held' ? c.held : c.missed, posedImportance: 70,
-    recordedAt: 1_700_000_000_000 + i * 60_000, origin: 'game', prompted: false, sourceGameId: `g${i}` };
+    recordedAt: 1_700_000_000_000 + i * 60_000, origin: 'review', prompted: false, sourceGameId: `g${i}` };
 }
 
 describe('the registry reads pose their skill to the record (both ways)', () => {

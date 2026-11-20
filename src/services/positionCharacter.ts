@@ -15,6 +15,7 @@
 // A switch is announced only once the new character has HELD for two reads:
 // one ply of a tactic flickering in and out of a line is not the position
 // changing, and a coach that announces every flicker is noise.
+import { sideToMoveAs } from './threatOut';
 import { Chess } from 'chess.js';
 import { quietBalance } from './material';
 import { legalSeeGainFor, findOpenFiles } from './positionReadingService';
@@ -226,9 +227,9 @@ const LOCKED_CLOSE_CP = 150;
 
 /** How many squares the side's pieces (not pawns or the king) reach. */
 function pieceReach(c: Chess, side: 'w' | 'b'): number {
-  const parts = c.fen().split(' ');
-  parts[1] = side; parts[3] = '-';
-  try { return new Chess(parts.join(' ')).moves({ verbose: true }).filter((m) => m.piece !== 'p' && m.piece !== 'k').length; } catch { return 0; }
+  const turned = sideToMoveAs(c.fen(), side);
+  if (!turned) return 0;
+  try { return new Chess(turned).moves({ verbose: true }).filter((m) => m.piece !== 'p' && m.piece !== 'k').length; } catch { return 0; }
 }
 
 const squareShade = (sq: string): number => (sq.charCodeAt(0) - 97 + Number(sq[1])) % 2;

@@ -66,7 +66,7 @@ describe('the picture reaches every surface through the one fact set', { timeout
   });
 
   it('chat: a question about the move hears the picture in the answer\'s facts', () => {
-    const t = questionThought({ ...thoughtSettings(writerFor('chat')), plainThreatsSeen: false, phrases: null,
+    const t = questionThought({ ...thoughtSettings(writerFor('chat')), plainThreatsSeen: false,
       fenBefore: FEN, san: 'Bf7', moverIsStudent: true, prev: NO_PREV_CAPTURE, line: null, theirLast: null, history: [], reads, costCp: 0 },
     new Set(['verdict', 'story', 'move']), null, null);
     expect(t.kept.map((f) => f.computer).some((c) => c === 'pictureVerdict' || c === 'picturePlan')).toBe(true);
@@ -114,7 +114,7 @@ describe('the picture reaches every surface through the one fact set', { timeout
       byFen.set(b.fen(), [{ rank: 1, depth: 16, evaluation: l.evaluation, mate: null, moves: l.moves.slice(1) }]);
     }
     const input = { fen: FEN, studentColor: 'w' as const, rating: 1800, before: fan.slice(0, 3), read: async (f: string) => byFen.get(f) ?? null,
-      withhold: false, tense: 'now' as const, history: [], theory: false, readTempting: true, studentNeedContext: null };
+      withhold: false, tense: 'now' as const, history: [], theory: false, readTempting: true, engineFutures: false, studentNeedContext: null };
     const fresh = await boardReadFacts({ ...input, story: null });
     const pics = fresh.facts.filter((f) => f.computer === 'pictureVerdict' || f.computer === 'picturePlan');
     expect(pics.map((f) => f.computer).sort()).toEqual(['picturePlan', 'pictureVerdict']);

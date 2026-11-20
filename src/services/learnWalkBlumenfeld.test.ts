@@ -124,7 +124,9 @@ describe('F4 / F13 — repeats and a false minority', () => {
     const said = new Set<string>(['student-break-c5']);
     const seen: string[] = [];
     for (let i = 0; i < 12; i++) {
-      const o = buildPositionalRead(fenAt(21), 'black', said);
+      // On the student's own move the plan's lever says the break (one
+      // producer, positionalRead `planSaysIt`), so read the board after it.
+      const o = buildPositionalRead(fenAt(22), 'black', said);
       if (!o) break;
       if (o.kind === 'lever') seen.push(o.text);
     }

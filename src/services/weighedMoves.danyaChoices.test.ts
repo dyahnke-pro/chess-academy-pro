@@ -78,7 +78,7 @@ describe('the try refuted by what it does to the result', () => {
       { moves: ['c3d3', 'f3e5', 'd3d1', 'b8b3', 'd5b4', 'c6b5', 'b4d5', 'e7d8', 'd1b1', 'b3b1'], cp: -121 },
       { moves: ['d5e7', 'e8e7', 'h1d1', 'a6a5', 'c3d3', 'e7e4', 'e3f4', 'b8b7', 'f4h6', 'f3e5'], cp: -122 },
     ]);
-    const considered = new Map([['d5e7', { why: 'plan' as const, target: 'their bishop on e7' }]]);
+    const considered = new Map([['d5e7', { why: 'plan' as const, target: 'their bishop on e7', storm: false }]]);
     const nx = standingRefutations({ fen, student: 'w', rating: 1800, reads, considered }).find((x) => x.san === 'Nxe7+');
     expect(nx?.text).toMatch(/their bishop on e7/);
     expect(nx?.text).toMatch(/…Rxe7/);

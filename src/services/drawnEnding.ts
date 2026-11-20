@@ -42,6 +42,7 @@
 //                    (`lockedPawns`). Material is level, so it is no one
 //                    side's draw: both hold it.
 // PURE: chess.js and the lines handed in (G0).
+import { withArticle } from '../utils/andList';
 import { Chess, type Color, type Square } from 'chess.js';
 import { type EngineLine, other, seatWords, sortedLines } from './engineLineRead';
 import { sideMaterial } from './pieceValues';
@@ -180,7 +181,7 @@ export function drawnEnding(fen: string, lines: readonly EngineLine[], student: 
     }
     if (detectBackRankDefence(fen)) {
       return { reason: 'backRank', side: down,
-        text: `${D.Whose} king sits on ${kd}, the queening square of the ${f}-pawn, with ${D.whose} rook far off along the back rank on ${dr}: against a ${rookPawnFile ? 'rook' : 'knight'} pawn there is no room to drive the king out, and every check along the rank is met. A draw.`,
+        text: `${D.Whose} king sits on ${kd}, the queening square of the ${f}-pawn, with ${D.whose} rook far off along the back rank on ${dr}: against ${withArticle(rookPawnFile ? 'rook' : 'knight')} pawn there is no room to drive the king out, and every check along the rank is met. A draw.`,
         squares: [kd, dr, p] };
     }
     const home = up === 'w' ? Number(p[1]) : 9 - Number(p[1]);

@@ -383,7 +383,7 @@ export function tellConclusion(memory: ConclusionMemory, c: PictureConclusionId,
   return { told: cause ? 'changed' : 'held', cause, last };
 }
 
-const capFirst = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+const capFirst = openSentence;
 
 /**
  * THE PICTURE'S FACTS, TOLD AGAINST THE GAME'S STORY — on every surface that
