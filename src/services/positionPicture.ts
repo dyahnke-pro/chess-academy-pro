@@ -458,14 +458,3 @@ export function isDetailOf(pic: PositionPicture, of: string, detail: string): bo
   return !!a && !!b && linkBetween(a, b) === 'object';
 }
 
-/** The facts in the picture linked to `id`, with how. */
-export function linkedTo(pic: PositionPicture, id: string): Array<{ entry: PictureEntry; kind: PictureLinkKind }> {
-  const out: Array<{ entry: PictureEntry; kind: PictureLinkKind }> = [];
-  for (const l of pic.links) {
-    const other = l.from === id ? l.to : l.to === id ? l.from : null;
-    if (!other) continue;
-    const e = pic.entries.get(other);
-    if (e) out.push({ entry: e, kind: l.kind });
-  }
-  return out;
-}

@@ -331,14 +331,16 @@ function exploitedLoosePieces(before: RelationSnapshot, after: RelationSnapshot,
   return out.sort((a, b) => VAL[b.type] - VAL[a.type]);
 }
 
-/** Test seam: the loose targets `san` newly attacks on `fenBefore`. */
-export function exploitedLooseTargets(fenBefore: string, san: string): Array<{ target: Square; type: PieceSymbol }> {
+/** The loose targets `san` newly attacks on `fenBefore`, dearest first — every
+ *  one, not the dearest alone (G4.5). The one reader the chain builders use. */
+export function exploitedLooseTargets(fenBefore: string, san: string): Array<{ target: Square; type: PieceSymbol; movedPieceAttacks: boolean }> {
   const before = snapshot(fenBefore);
   const c = new Chess(fenBefore);
-  const focus = c.move(san);
+  let focus: Move;
+  try { focus = c.move(san); } catch { return []; }
   const after = snapshot(c.fen());
   if (!before || !after) return [];
-  return exploitedLoosePieces(before, after, c, focus).map(({ target, type }) => ({ target, type }));
+  return exploitedLoosePieces(before, after, c, focus);
 }
 
 /** The focus move VACATED its from-square, unveiling a friendly line-piece's
@@ -457,7 +459,7 @@ function buildPrematureQueenDiscoveryChain(g: GameBoards, focusPly: number): Cau
   // 1. The tactic: did this move win/attack a LOOSE enemy piece it wasn't
   //    attacking before? Every loose target, dearest first: the chain is built on the first one
   // whose every link (an unveiled attacker, a missing defender) is proven.
-  for (const loose of exploitedLoosePieces(beforeSnap, afterSnap, after, focus)) {
+  for (const loose of exploitedLooseTargets(g.fens[focusPly - 1], focus.san)) {
     const chain = prematureQueenChainOn(g, focusPly, beforeSnap, afterSnap, after, focus, loose);
     if (chain) return chain;
   }

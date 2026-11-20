@@ -195,7 +195,7 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
     );
     const read = await boardReadOffThread({
       fen: i.fen, studentColor: studentCC, rating: i.rating, before, history: sans, theory: true, tense: 'now',
-      withhold: !!marks, readTempting: i.readTempting && !marks,
+      withhold: !!marks, readTempting: i.readTempting && !marks, engineFutures: tryReadBudget(i.surface).engineFutures,
       read: reader.read,
       // THE HEAT MAP + THE NEED TERM (B3): the student's record and the
       // last move on each side when the PGN produces this board.

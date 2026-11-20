@@ -93,8 +93,6 @@ class OutOfBudget extends Error {}
 interface Ctx { fresh: number; budget: number }
 
 const CACHE = new Map<string, Uint8Array>();
-/** Forget every solved slice (tests and measurements that time a cold solve). */
-export function kpClearCache(): void { CACHE.clear(); }
 const sliceKey = (wp: readonly number[], bp: readonly number[]): string => `${[...wp].sort((a, b) => a - b).join(',')}|${[...bp].sort((a, b) => a - b).join(',')}`;
 
 /** A slice already solved that is this one's mirror image: across the files

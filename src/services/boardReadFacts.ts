@@ -17,7 +17,9 @@
 import { Chess } from 'chess.js';
 import { computePositionFacts, type PositionFactsInput } from './positionFacts';
 import { consideredTries } from './tryCandidates';
-import { temptingOnBoard, standingRefutations, candidateMoves, TEMPTING_COST_CP, type WeighRead, type ConsideredTries } from './weighedMoves';
+import { temptingOnBoard, standingRefutations, candidateMoves, TEMPTING_COST_CP, type WeighRead, type ConsideredTries, type ChangeReasonArgs } from './weighedMoves';
+import { changeReasonWithEngine } from './futures';
+import type { BundleEngine } from './engineComputers';
 import { seatCp } from './winChance';
 import { foldScore } from './humanReply';
 import { boardReason } from './positionalReason';
@@ -76,6 +78,9 @@ export interface BoardReadInput {
   theory: boolean;
   /** Read the moves a player is drawn to (the student's turn only). */
   readTempting: boolean;
+  /** REQUIRED: read a try no pure reader finds a reason for again, with the
+   *  engine-backed computers on its futures (`tryReadBudget(surface).engineFutures`). */
+  engineFutures: boolean;
   /** REQUIRED: the student's record for the need term (null on a fitter's board). */
   studentNeedContext: PositionFactsInput['studentNeedContext'];
   /** Passed through to the board's reads: the record, and the last move on each side. */
@@ -232,7 +237,20 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     for (const t of refuted) facts.push({ from: 'tempting', kind: 'refuted', text: t.text, computer: 'temptingOnBoard', squares: [t.uci.slice(0, 2), t.uci.slice(2, 4)], move: t.uci });
     // A check or capture that wins nothing ("Nxe7+ Rxe7 gives no relief"):
     // the same computer's forcing-move shape, never beside its material refutation.
-    const standing = standingRefutations({ fen: i.fen, student: i.studentColor, rating: i.rating, reads: tempting, considered });
+    const noReason: ChangeReasonArgs[] = [];
+    let standing = standingRefutations({ fen: i.fen, student: i.studentColor, rating: i.rating, reads: tempting, considered,
+      onDrop: (_u, gate, f) => { if (gate === 'no-reason' && f) noReason.push(f); } });
+    // A TRY THE PURE READ LEAVES WITHOUT A REASON is read again where the
+    // surface has the time: the engine-backed computers on its futures
+    // (zugzwang, a threat's real point, what a move prepares) — the reason a
+    // standalone board cannot hold.
+    if (i.engineFutures && noReason.length > 0) {
+      const engine: BundleEngine = { analyzePosition: async (fen) => asAnalysis([...((await i.read(fen, 'future').catch(() => null)) ?? [])]) };
+      const reasons = new Map<string, string>();
+      const found = await Promise.all(noReason.map((f) => changeReasonWithEngine(f, engine).catch(() => null)));
+      noReason.forEach((f, k) => { const r = found[k]; if (r && f.tryLine.moves[0]) reasons.set(f.tryLine.moves[0], r); });
+      if (reasons.size > 0) standing = standingRefutations({ fen: i.fen, student: i.studentColor, rating: i.rating, reads: tempting, considered, engineReasons: reasons });
+    }
     const empty = standing.filter((t) => !refuted.some((r) => r.uci === t.uci));
     for (const t of empty) facts.push({ from: 'tempting', kind: 'refuted', text: t.text, computer: 'temptingOnBoard', squares: t.squares, move: t.uci });
     // THE PICTURE'S CONCLUSIONS (WO-PICTURE-01 P3 → P5): the verdict read

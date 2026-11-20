@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildPicture, linkBetween, linkedTo, PICTURE_ROLE } from './positionPicture';
+import { buildPicture, linkBetween, PICTURE_ROLE } from './positionPicture';
 import { COMPUTER_CATALOG } from './coachFact';
 import { doorFact } from '../test/doorFact';
 import { decide } from './coachDecider';
@@ -22,7 +22,7 @@ describe('the picture (WO-PICTURE-01)', () => {
     const pic = buildPicture([a, b]);
     expect(pic.entries.size).toBe(2);
     expect(pic.byObject.get('wN@f3')).toEqual([a.id, b.id]);
-    expect(linkedTo(pic, a.id).map((l) => l.kind)).toEqual(['object']);
+    expect(pic.links.filter((l) => l.from === a.id || l.to === a.id).map((l) => l.kind)).toEqual(['object']);
   });
 
   it('a shared EMPTY square is not a link — overlap alone proves nothing', () => {

@@ -2,9 +2,9 @@
 // holds. Textbook positions with known values, negative controls (a won board
 // is never called a draw), and Daniel Naroditsky's boards where the try's
 // pawn ending is solved.
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { Chess } from 'chess.js';
-import { kpClearCache, kpDrawReason, kpMoveValues, kpVerdict } from './kpSolver';
+import { kpDrawReason, kpMoveValues, kpVerdict } from './kpSolver';
 import { changeReason, kpResultChange } from './futures';
 
 const v = (fen: string): string | undefined => kpVerdict(fen)?.value;
@@ -106,19 +106,22 @@ describe('his boards: the try\'s pawn ending, solved', () => {
   const uci = (fen: string, sans: string[]): string[] => {
     const c = new Chess(fen); return sans.map((s) => { const m = c.move(s); return `${m.from}${m.to}${m.promotion ?? ''}`; });
   };
-  it('never-resign-prematurely: h6 loses the pawn ending, Kg8 holds the draw', () => {
+  it('never-resign-prematurely: h6 loses the pawn ending, Kg8 holds the draw', async () => {
     const fen = '8/4K1kp/6p1/6P1/7P/8/8/8 b - - 3 65';
     const args = { fen, student: 'b' as const, other: 'your' as const,
       tryLine: { moves: uci(fen, ['h6', 'Ke6', 'hxg5', 'hxg5', 'Kh8', 'Kf6']), cp: 900, mate: null },
       bestLine: { moves: uci(fen, ['Kg8']), cp: 0, mate: null } };
     // Cold, the board after Kg8 (four pawns, ~350 pawn slices) does not close
     // inside the fast budget: no claim, never a guess.
-    kpClearCache();
-    expect(kpResultChange(args)).toBeNull();
+    // A fresh module is a cold cache (no other test's slices).
+    vi.resetModules();
+    const cold = await import('./kpSolver');
+    const { kpResultChange: coldChange } = await import('./futures');
+    expect(coldChange(args)).toBeNull();
     // Once the board has been read in full (the cache a game keeps), it does.
     const best = new Chess(fen); best.move('Kg8');
-    expect(kpVerdict(best.fen())?.value).toBe('draw');
-    const r = kpResultChange(args);
+    expect(cold.kpVerdict(best.fen())?.value).toBe('draw');
+    const r = coldChange(args);
     expect(r?.kind).toBe('lost');
     expect(r?.text).toBe('That loses the pawn ending by force. …Kg8 would have held the draw.');
   }, 60000);

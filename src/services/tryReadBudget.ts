@@ -33,8 +33,10 @@ export type ReadSurface = 'learn' | 'play' | 'openings' | 'puzzle' | 'review';
  *  - `plan` and every `ConsideredWhy`: a move weighed for a reason
  *    (`tryCandidates.consideredTries`);
  *  - `their-eye`: their likely reply after our best move;
- *  - `best-after`: the board after the engine's best move (its fan). */
-export type TrySource = 'eye' | 'plan' | ConsideredWhy | 'their-eye' | 'best-after';
+ *  - `best-after`: the board after the engine's best move (its fan);
+ *  - `future`: a board down a try's line or the best line, read for the
+ *    engine-backed computers (`futures.changeReasonWithEngine`). */
+export type TrySource = 'eye' | 'plan' | ConsideredWhy | 'their-eye' | 'best-after' | 'future';
 
 export interface ReadBudget {
   depth: number;
@@ -45,6 +47,10 @@ export interface ReadBudget {
 export interface SurfaceReadBudget {
   /** Read the tries on the worker pool, in parallel (the singleton otherwise). */
   pool: boolean;
+  /** A try no pure reader finds a reason for is read again with the
+   *  engine-backed computers on its futures (`changeReasonWithEngine`): a
+   *  dozen extra reads a try, so only where the read runs in the background. */
+  engineFutures: boolean;
   reads: Record<TrySource, ReadBudget>;
 }
 
@@ -59,16 +65,16 @@ function every(tempting: ReadBudget, theirs: ReadBudget, bestAfter: ReadBudget):
   return {
     eye: tempting, plan: tempting, capture: tempting, check: tempting, passer: tempting, king: tempting,
     threat: tempting, defence: tempting, 'mate-threat': tempting, lever: tempting, double: tempting, reroute: tempting,
-    'their-eye': theirs, 'best-after': bestAfter,
+    'their-eye': theirs, 'best-after': bestAfter, future: theirs,
   };
 }
 
 export const TRY_READ_BUDGET: Record<ReadSurface, SurfaceReadBudget> = {
-  learn: { pool: true, reads: every(LIVE, LIVE, LIVE) },
-  play: { pool: true, reads: every(LIVE, LIVE, LIVE) },
-  openings: { pool: true, reads: every(LIVE, LIVE, LIVE) },
-  puzzle: { pool: true, reads: every(LIVE, LIVE, LIVE) },
-  review: { pool: true, reads: every(DEEP, REVIEW, REVIEW) },
+  learn: { pool: true, engineFutures: false, reads: every(LIVE, LIVE, LIVE) },
+  play: { pool: true, engineFutures: false, reads: every(LIVE, LIVE, LIVE) },
+  openings: { pool: true, engineFutures: false, reads: every(LIVE, LIVE, LIVE) },
+  puzzle: { pool: true, engineFutures: false, reads: every(LIVE, LIVE, LIVE) },
+  review: { pool: true, engineFutures: true, reads: every(DEEP, REVIEW, REVIEW) },
 };
 
 export function tryReadBudget(surface: ReadSurface): SurfaceReadBudget {

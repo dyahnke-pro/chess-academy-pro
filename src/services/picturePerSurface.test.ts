@@ -96,7 +96,7 @@ describe('the picture reaches every surface through the one fact set', { timeout
       byFen.set(b.fen(), [{ rank: 1, depth: 16, evaluation: l.evaluation, mate: null, moves: l.moves.slice(1) }]);
     }
     const set = await boardReadFacts({ fen: FEN, studentColor: 'w', rating: 1800, before: fan.slice(0, 3), read: async (f) => byFen.get(f) ?? null,
-      withhold: false, tense: 'now', history: [], theory: false, readTempting: true, studentNeedContext: null });
+      withhold: false, tense: 'now', history: [], theory: false, readTempting: true, engineFutures: false, studentNeedContext: null });
     const pics = set.facts.filter((f) => f.computer === 'pictureVerdict' || f.computer === 'picturePlan');
     expect(pics.map((f) => f.computer).sort()).toEqual(['picturePlan', 'pictureVerdict']);
     for (const f of pics) expect(f.from).toBe('position');
@@ -106,7 +106,7 @@ describe('the picture reaches every surface through the one fact set', { timeout
 
   it('NEGATIVE: a puzzle still being solved never hears the verdict (it names the tries)', async () => {
     const set = await boardReadFacts({ fen: FEN, studentColor: 'w', rating: 1800, before: fan.slice(0, 3), read: async () => null,
-      withhold: true, tense: 'now', history: [], theory: false, readTempting: true, studentNeedContext: null });
+      withhold: true, tense: 'now', history: [], theory: false, readTempting: true, engineFutures: false, studentNeedContext: null });
     expect(set.facts.some((f) => f.computer === 'pictureVerdict' || f.computer === 'picturePlan')).toBe(false);
   });
 });

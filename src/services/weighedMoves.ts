@@ -689,8 +689,14 @@ export function standingRefutations(args: {
   reads: readonly WeighRead[];
   /** Tries weighed for the plan (`ConsideredTries`), past the human floor. */
   considered?: ConsideredTries;
-  /** Told why a candidate was not said (the tries bench reads it). */
-  onDrop?: (uci: string, gate: StandingGate) => void;
+  /** Told why a candidate was not said (the tries bench reads it). A try
+   *  dropped for `no-reason` carries the two lines the difference reader
+   *  compares, so a caller with an engine can read the futures deeper. */
+  onDrop?: (uci: string, gate: StandingGate, futures?: ChangeReasonArgs) => void;
+  /** The difference reader's reasons, read with the engine-backed computers
+   *  on the futures (`futures.changeReasonWithEngine`), by try: the reason a
+   *  pure read could not find. */
+  engineReasons?: ReadonlyMap<string, string>;
 }): StandingRefuted[] {
   const best = bestOfReads(args.fen, args.reads);
   if (!best || best.read.mate !== null) return [];
@@ -764,15 +770,18 @@ export function standingRefutations(args: {
     // The plan's try has its own reason: what became of the target.
     // WHAT THE LINE DOES (his "with a perpetual check", "and White promotes"),
     // then the reply's mechanism, then what changed on the board after it.
+    const futureArgs: ChangeReasonArgs = { fen: args.fen, student: args.student, rating: args.rating, other: w.other,
+      tryLine: { moves: read.moves, cp: read.mate === null ? read.evaluation : null, mate: read.mate },
+      bestLine: { moves: best.read.moves, cp: best.read.mate === null ? best.read.evaluation : null, mate: best.read.mate } };
     const story = lineStory(args.fen, read.moves, w.other, read.mate === null ? read.evaluation : null);
     const mech = story?.text
       ?? lost
       ?? tryMechanism(args.fen, m, sans, best.san, w.own, w.other)
       ?? (plan ? targetOutcome(args.fen, sans, plan.target, mover, w.other) : null)
-      ?? changeReason({ fen: args.fen, student: args.student, rating: args.rating, other: w.other,
-        tryLine: { moves: read.moves, cp: read.mate === null ? read.evaluation : null, mate: read.mate },
-        bestLine: { moves: best.read.moves, cp: best.read.mate === null ? best.read.evaluation : null, mate: best.read.mate } });
-    if (!mech) { drop('no-reason'); continue; }
+      ?? changeReason(futureArgs)
+      ?? args.engineReasons?.get(c.uci)
+      ?? null;
+    if (!mech) { args.onDrop?.(c.uci, 'no-reason', futureArgs); continue; }
     // WHAT THE REPLY DOES (his "…Qd7 guards b5", "…h4 kicks the knight"):
     // the reply's job, said right after the lead names it — unless the reason
     // already says what the reply does (one idea said once). It explains a
@@ -807,6 +816,9 @@ export function standingRefutations(args: {
   }
   return out.sort((x, y) => y.real - x.real).map(({ real: _real, ...t }) => t);
 }
+
+/** What the difference reader compares for a try: its line against the best. */
+export type ChangeReasonArgs = Parameters<typeof changeReason>[0];
 
 /** Why the result refuter left a candidate unsaid. */
 export type StandingGate = 'not-tempting' | 'mate-line' | 'small-cost' | 'same-result' | 'loses-material' | 'no-reason';

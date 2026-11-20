@@ -3,12 +3,18 @@
 // so a live surface wants p95 under ~16 ms here. Times are CPU time.
 //   PHONE_COST_OUT=<file>   write every output (the proof the answers held)
 //   PHONE_COST_CHECK=<file> compare every output against an earlier write
-import { it, expect } from 'vitest';
+import { it, expect, vi } from 'vitest';
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import { counterplaysOf } from './pictureLedger';
 import { buildPicture } from './positionPicture';
-import { kpVerdict, kpClearCache, KP_FAST_BUDGET } from './kpSolver';
+import { KP_FAST_BUDGET } from './kpSolver';
+
+/** A cold kp solver: a fresh module holds no slices. */
+async function coldKpVerdict(): Promise<typeof import('./kpSolver')['kpVerdict']> {
+  vi.resetModules();
+  return (await import('./kpSolver')).kpVerdict;
+}
 
 const DROP = 'audit-reports/.fixtures/data-drop-david.json';
 const DROP_MAIN = '/home/user/chess-academy-pro/audit-reports/.fixtures/data-drop-david.json';
@@ -54,7 +60,7 @@ function stats(ms: number[]): { n: number; p50: number; p95: number; max: number
   return { n: s.length, p50: q(0.5), p95: q(0.95), max: +s[s.length - 1].toFixed(2) };
 }
 
-it.runIf(process.env.PHONE_COST === '1' && (existsSync(DROP) || existsSync(DROP_MAIN)))('phone cost: counterplay + kp solver', () => {
+it.runIf(process.env.PHONE_COST === '1' && (existsSync(DROP) || existsSync(DROP_MAIN)))('phone cost: counterplay + kp solver', async () => {
   const { mid, kp } = realBoards();
   const out: Record<string, unknown> = {};
   const pic = buildPicture([]);
@@ -74,7 +80,7 @@ it.runIf(process.env.PHONE_COST === '1' && (existsSync(DROP) || existsSync(DROP_
   // so a hit on another board's slices never hides the cost.
   const kpMs: number[] = [];
   for (const fen of kp) {
-    kpClearCache();
+    const kpVerdict = await coldKpVerdict();
     const t = process.cpuUsage();
     const v = kpVerdict(fen);
     kpMs.push(cpuMs(t));
@@ -83,7 +89,7 @@ it.runIf(process.env.PHONE_COST === '1' && (existsSync(DROP) || existsSync(DROP_
   // The live budget (futures.ts, boardComputers.ts), cold the same way.
   const kpFastMs: number[] = [];
   for (const fen of kp) {
-    kpClearCache();
+    const kpVerdict = await coldKpVerdict();
     const t = process.cpuUsage();
     const v = kpVerdict(fen, KP_FAST_BUDGET);
     kpFastMs.push(cpuMs(t));
