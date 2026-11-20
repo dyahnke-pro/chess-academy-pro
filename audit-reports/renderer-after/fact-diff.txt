@@ -1,0 +1,120 @@
+## alone:0Km5u#5-Qxf2+
+  + SPOKEN computeMoveFundamentals:fundamental[move:b6f2:idea:file:]@
+      You play Qxf2+ — it seizes the open f-file.
+## told:0Km5u#5-Qxf2+
+  + SPOKEN computeMoveFundamentals:fundamental[move:b6f2:idea:file:]@
+      You play Qxf2+ — it seizes the open f-file.
+## alone:0Km5u#11-Rd8
+  - SILENT readPosition:structure-plan[file-f|student-good-r-open-file-f]@f2,f8
+      Your rook on f8 is your best-placed piece — the f-file is clear all the way to f2, its road into their camp.
+  - SILENT quietThreat:aspect-threat[quiet-threat:b4]@b4,d8
+      Rd8 is quiet, but it threatens …b4 — they must answer that first.
+  + SPOKEN quietThreat:aspect-prepares[quiet-threat:b4]@b4,d8
+      Rd8 is quiet: it prepares …b4.
+## told:0Km5u#11-Rd8
+  - SILENT readPosition:structure-plan[file-f|student-good-r-open-file-f]@f2,f8
+      Your rook on f8 is your best-placed piece — the f-file is clear all the way to f2, its road into their camp.
+  - SILENT quietThreat:aspect-threat[quiet-threat:b4]@b4,d8
+      Rd8 is quiet, but it threatens …b4 — they must answer that first.
+  + SPOKEN quietThreat:aspect-prepares[quiet-threat:b4]@b4,d8
+      Rd8 is quiet: it prepares …b4.
+## alone:0Km5u#13-Kg8
+  - SILENT quietThreat:aspect-threat[quiet-threat:h6]@g8,h6
+      Kg8 is quiet, but it threatens …h6 — they must answer that first.
+  + SPOKEN quietThreat:aspect-prepares[quiet-threat:h6]@g8,h6
+      Kg8 is quiet: it prepares …h6.
+## told:0Km5u#13-Kg8
+  - SILENT quietThreat:aspect-threat[quiet-threat:h6]@g8,h6
+      Kg8 is quiet, but it threatens …h6 — they must answer that first.
+  + SPOKEN quietThreat:aspect-prepares[quiet-threat:h6]@g8,h6
+      Kg8 is quiet: it prepares …h6.
+  + SPOKEN readPosition:structure-plan[file-f|opponent-good-r-open-file-f]@f1,f7
+      Their rook on f1 is well placed — the f-file is clear all the way to f7, its road into your camp.
+## alone:0LeQy#9-Rg1+
+  + SPOKEN computeMustDefend:must-defend[loose:h6:50]@b6,h6
+      You're on top, but watch the counterpunch: their queen on b6 attacks your queen on h6, and nothing defends it — and you can take the attacker without losing material.
+  + SPOKEN computeMoveFundamentals:fundamental[move:a1g1:idea:file:]@
+      You go Rg1+, which takes the open g-file, pressing their king on g8.
+## told:0LeQy#9-Rg1+
+  + SPOKEN computeMustDefend:must-defend[loose:h6:50]@b6,h6
+      You're on top, but watch the counterpunch: their queen on b6 attacks your queen on h6, and nothing defends it — and you can take the attacker without losing material.
+  + SPOKEN computeMoveFundamentals:fundamental[move:a1g1:idea:file:]@
+      You go Rg1+, which takes the open g-file, pressing their king on g8.
+## alone:0GvdU#1-Ke3
+  - SILENT quietThreat:aspect-threat[quiet-threat:d2]@d2,e3
+      Ke3 is quiet, but it threatens …Kd2 — they must answer that first.
+  + SPOKEN quietThreat:aspect-prepares[quiet-threat:d2]@d2,e3
+      Ke3 is quiet: it prepares …Kd2.
+## told:0GvdU#1-Ke3
+  - SILENT quietThreat:aspect-threat[quiet-threat:d2]@d2,e3
+      Ke3 is quiet, but it threatens …Kd2 — they must answer that first.
+  + SPOKEN quietThreat:aspect-prepares[quiet-threat:d2]@d2,e3
+      Ke3 is quiet: it prepares …Kd2.
+## alone:0GvdU#5-Ke2
+  - SILENT quietThreat:aspect-threat[quiet-threat:e3]@e2,e3
+      Ke2 is quiet, but it threatens …e3 — they must answer that first.
+  + SPOKEN quietThreat:aspect-prepares[quiet-threat:e3]@e2,e3
+      Ke2 is quiet: it prepares …e3.
+## told:0GvdU#5-Ke2
+  - SILENT quietThreat:aspect-threat[quiet-threat:e3]@e2,e3
+      Ke2 is quiet, but it threatens …e3 — they must answer that first.
+  + SPOKEN quietThreat:aspect-prepares[quiet-threat:e3]@e2,e3
+      Ke2 is quiet: it prepares …e3.
+## alone:0GvdU#9-Nd2
+  + SPOKEN chainBase:judgement[chain-base:hit:b3|loose:b3|move:f1d2:idea:pressure:b3]@a4,b3,d2
+      Your knight goes after b3, the pawn at the base of their chain. It holds a4, and right now nothing guards it.
+## told:0GvdU#9-Nd2
+  + SPOKEN chainBase:judgement[chain-base:hit:b3|loose:b3|move:f1d2:idea:pressure:b3]@a4,b3,d2
+      Your knight goes after b3, the pawn at the base of their chain. It holds a4, and right now nothing guards it.
+## alone:0CegO#1-exf4+
+  - SILENT buildDeliberation:deliberation[rule-out:e5|tempting:g5h6]@e5,h6
+      Kh6? Then they answer fxe5 — they win a pawn.
+  + SPOKEN buildDeliberation:deliberation[rule-out:e5|tempting:g5h6]@e5
+      Kh6? Then they answer fxe5 — they win a pawn.
+## told:0CegO#1-exf4+
+  - SILENT buildDeliberation:deliberation[rule-out:e5|tempting:g5h6]@e5,h6
+      Kh6? Then they answer fxe5 — they win a pawn.
+  + SPOKEN buildDeliberation:deliberation[rule-out:e5|tempting:g5h6]@e5
+      Kh6? Then they answer fxe5 — they win a pawn.
+## alone:0CegO#3-h4
+  - SILENT quietThreat:aspect-threat[quiet-threat:f3]@f3,h4
+      h4 is quiet, but it threatens …f3 — they must answer that first.
+  + SPOKEN quietThreat:aspect-prepares[quiet-threat:f3]@f3,h4
+      h4 is quiet: it prepares …f3.
+## told:0CegO#3-h4
+  - SILENT quietThreat:aspect-threat[quiet-threat:f3]@f3,h4
+      h4 is quiet, but it threatens …f3 — they must answer that first.
+  + SPOKEN quietThreat:aspect-prepares[quiet-threat:f3]@f3,h4
+      h4 is quiet: it prepares …f3.
+## alone:0CegO#7-Kh4
+  + SPOKEN pieceRoute:route[move:g5h4:idea:route:f3,g3]@f3,g3
+      You go Kh4, sending the king on to f3, by way of g3.
+## told:0CegO#7-Kh4
+  + SPOKEN pieceRoute:route[move:g5h4:idea:route:f3,g3]@f3,g3
+      You go Kh4, sending the king on to f3, by way of g3.
+## alone:0CegO#9-f3
+  + SPOKEN computeMoveFundamentals:fundamental[move:f4f3:idea:passed-pawn:]@
+      You go f3, which pushes your passed pawn — passed pawns must be pushed.
+## told:0CegO#9-f3
+  + SPOKEN computeMoveFundamentals:fundamental[move:f4f3:idea:passed-pawn:]@
+      You go f3, which pushes your passed pawn — passed pawns must be pushed.
+## alone:0CegO#11-Kg3
+  + SPOKEN buildReviewMoveTeachingFact:board-teacher[move:h4g3:idea:king-activity:]@
+      You go Kg3, which marches up — in the endgame it stops hiding and becomes a fighting piece.
+## told:0CegO#11-Kg3
+  + SPOKEN buildReviewMoveTeachingFact:board-teacher[move:h4g3:idea:king-activity:]@
+      You go Kg3, which marches up — in the endgame it stops hiding and becomes a fighting piece.
+## danya:gun
+  - SILENT secondAttacker:move-job[second-attacker:c6:win]@b5,c1,c6
+      Your rook adds a second attacker on their knight on c6, beside the bishop on b5. That's two attackers, and the knight on e7 guards it. Taking on c6 now wins a piece.
+  + SPOKEN quietThreat:aspect-threat[quiet-threat:c6]@c1,c6
+      Rac1 is quiet, but it threatens Bxc6 — they must answer that first.
+  + SPOKEN pieceRoute:route[move:a1c1:idea:route:c2,c3]@c2,c3
+      You go Rac1, sending the rook on to c3, by way of c2.
+  + SPOKEN moveJob:move-job[move:a1c1:idea:threat:b5,c6]@b5,c6
+      You go Rac1, which joins your bishop against their knight on c6.
+## danya:desperado
+  + SPOKEN coordinationGap:judgement[coordination:w]@c7,g7
+      Their pieces work together: every one is guarded and in the game. Yours are scattered: your knight on c7 and your bishop on g7 do next to nothing.
+
+15 went silent, 31 newly spoken

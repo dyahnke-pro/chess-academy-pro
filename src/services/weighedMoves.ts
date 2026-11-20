@@ -870,7 +870,10 @@ export function standingRefutations(args: {
     let reasonKey: string | null = story ? `story:${story.kind}:${story.squares.join(',')}` : null;
     let whyPath: string[] = [];
     const mech = story?.text
-      ?? ((): string | null => { lastMechanismKey = null; const t = tryMechanism(args.fen, m, sans, best.san, w.own, w.other); if (t) reasonKey = lastMechanismKey; return t; })()
+      // The reply's mechanism; a positional comparison ("the better move puts
+      // your rook on the open c-file") is no mechanism of a material loss —
+      // the material is the plainer why there.
+      ?? ((): string | null => { lastMechanismKey = null; const t = tryMechanism(args.fen, m, sans, best.san, w.own, w.other); if (t && lostWords && (lastMechanismKey as string | null)?.startsWith('board-reason:')) return null; if (t) reasonKey = lastMechanismKey; return t; })()
       ?? (plan ? targetOutcome(args.fen, sans, plan.target, mover, w.other) : null)
       // What changed on the board after the line is a reason only where the
       // line wins nothing: a piece lost is the plainer why.

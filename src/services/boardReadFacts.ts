@@ -326,16 +326,6 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     // …and tries that meet the SAME reply are one idea too (puzzle reads
     // 2026-11-20: …Kh4, …Kf6 and …Kh6 each "fail to Bd3", said four times).
     for (const t of empty) { const k = t.reasonKey ?? `reply:${t.reply}`; groups.set(k, [...(groups.get(k) ?? []), t]); }
-    // A try alone in its reason's group that meets the same reply as another
-    // lone try is that idea again (…Qg4 and …Qg5 each "run into Rxf7"):
-    // merged, and said with no shared reason (their reasons differ).
-    const lone = [...groups.entries()].filter(([k, g]) => g.length === 1 && !k.startsWith('reply:'));
-    for (const [k, [t]] of lone) {
-      const mate = lone.find(([k2, [x]]) => k2 !== k && x.reply === t.reply && groups.has(k2));
-      if (!mate || !groups.has(k)) continue;
-      groups.delete(k); groups.delete(mate[0]);
-      groups.set(`reply:${t.reply}`, [t, mate[1][0], ...(groups.get(`reply:${t.reply}`) ?? [])]);
-    }
     // A TRY THAT CHANGES THE RESULT'S BAND (F2, board 4: …Ke7 throws the
     // win) is the verdict's own "but", said beside it.
     const bandOf = (uci: string): number | null => { const r = tempting.find((x) => x.moves[0] === uci); return r ? stepOfCp(seatCp(r, i.studentColor)) : null; };

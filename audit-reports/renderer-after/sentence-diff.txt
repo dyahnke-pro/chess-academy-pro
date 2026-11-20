@@ -1,0 +1,83 @@
+audit-reports/renderer-before/puzzles5.json.told.json {"avg":112,"max":244,"tries":21}
+audit-reports/renderer-after/puzzles5.json.told.json {"avg":113,"max":248,"tries":21}
+## 0Km5u#1-Kh8
+  - They win a rook for two pawns in the line.
+  - They win a rook and a bishop for a pawn in the line.
+  + Rf7 hands them a rook for two pawns in the line.
+  + Qxe6+ comes with check, so they gain a tempo.
+## 0Km5u#5-Qxf2+
+  + You play Qxf2+ — it seizes the open f-file.
+## 0Km5u#7-Qe3
+  - They win a bishop for two pawns in the line.
+  - On g4 the bishop hits their bishop, which answers …Bg4 with Bxg4.
+  + Qxg2 hands them a bishop for two pawns in the line.
+  + Later in the line, after …Bg4, the bishop on g4 hits their bishop, which answers …Bg4 with Bxg4.
+## 0Km5u#9-Bxd7
+  - They win a pawn in the line.
+  + Rf2 hands them a pawn in the line.
+## 0Km5u#11-Rd8
+  - They win a bishop in the line.
+  - Your rook on f8 is your best-placed piece — the f-file is clear all the way to f2, its road into their camp.
+  - Rd8 is quiet, but it threatens …b4 — they must answer that first.
+  - They win a queen for a rook in the line.
+  + Qd2+ hands them a bishop in the line.
+  + Kg8 hands them a bishop in the line.
+  + Rd8 is quiet: it prepares …b4.
+## 0Km5u#13-Kg8
+  - Rf8+ comes with check, so they gain a tempo.
+  - On d3 the queen hits their queen, which answers …Bf5 with Qxd8+.
+  - Kg8 is quiet, but it threatens …h6 — they must answer that first.
+  + Later in the line, after …Qd3+, the queen on d3 hits their queen, which answers …Bf5 with Qxd8+.
+  + Kg8 is quiet: it prepares …h6.
+  + Their rook on f1 is well placed — the f-file is clear all the way to f7, its road into your camp.
+## 0LeQy#1-Rxh6+
+  - They win a pawn in the line.
+  + Qc4 shuts in your bishop.
+## 0LeQy#3-Qf4
+  - They win a rook in the line.
+  - They win the exchange in the line.
+  - It takes the …f5 break away from them.
+  + Their pawn on d4 still stands.
+  + Qf4 takes the …f5 break away from them.
+## 0LeQy#7-Qxh6
+  - Your queen on f4 reaches 9 fewer squares after this than after the better move.
+  + Your queen on f4 reaches 9 fewer squares after either than after the better move.
+## 0LeQy#9-Rg1+
+  - They win a pawn in the line.
+  - Their queen on h6 attacks your rook on h1, and nothing defends it — and you can take the attacker without losing material.
+  - …Qg6 is a pin: it hits your e-pawn on e4 and your bishop.
+  + …fxe6+ comes with check, so they gain a tempo.
+  + You're on top, but watch the counterpunch: their queen on b6 attacks your queen on h6, and nothing defends it — and you can take the attacker without losing material.
+  + You go Rg1+, which takes the open g-file, pressing their king on g8.
+## 0GvdU#1-Ke3
+  - It wins their pawn on b3, and that is all it does.
+  - Ke3 is quiet, but it threatens …Kd2 — they must answer that first.
+  + Kc3 wins their pawn on b3, and that is all it does.
+  + Ke3 is quiet: it prepares …Kd2.
+## 0GvdU#5-Ke2
+  - Ke2 is quiet, but it threatens …e3 — they must answer that first.
+  + Ke2 is quiet: it prepares …e3.
+## 0GvdU#9-Nd2
+  + Your knight goes after b3, the pawn at the base of their chain.
+  + It holds a4, and right now nothing guards it.
+## 0CegO#1-exf4+
+  - They win a pawn in the line.
+  + Kh6 hands them a pawn in the line.
+## 0CegO#3-h4
+  - They win a pawn in the line.
+  - h4 is quiet, but it threatens …f3 — they must answer that first.
+  + g3+ hands them a pawn in the line.
+  + h4 is quiet: it prepares …f3.
+## 0CegO#7-Kh4
+  + You go Kh4, sending the king on to f3, by way of g3.
+## 0CegO#9-f3
+  + You go f3, which pushes your passed pawn — passed pawns must be pushed.
+## 0CegO#11-Kg3
+  + You go Kg3, which marches up — in the endgame it stops hiding and becomes a fighting piece.
+## 0IsE8#5-Kg6
+  - They win a knight in the line.
+  + Qxd7+ is a fork: it hits your king and your rook.
+## 0IsE8#11-Qxe5
+  - They win a bishop and a pawn in the line.
+  - It takes the b5 break away from them.
+  + …Qxe5 takes the b5 break away from them.
