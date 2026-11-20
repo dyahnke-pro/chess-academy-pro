@@ -237,10 +237,12 @@ export function breakStoppedLine(s: BreakStop, fenBefore: string, whose: 'your' 
   const other = whose === 'your' ? 'their' : 'your';
   const theyMove = student(fenBefore) === 'w' ? 'b' : 'w';
   const brk = `${theyMove === 'b' ? '…' : ''}${s.brk.san}`;
+  const stopSan = `${theyMove === 'w' ? '…' : ''}${s.stop.san}`;
   const key = stemKeyOf(`${fenBefore}|break-stop|${s.brk.from}${s.brk.to}`);
   const lead = rotateStem([
-    `This stops ${other} ${brk} break before it comes.`,
-    `It takes the ${brk} break away from ${whose === 'your' ? 'them' : 'you'}.`,
+    // NAMED, NEVER "This"/"It" (the orphan rule): the stop is the move.
+    `${stopSan} stops ${other} ${brk} break before it comes.`,
+    `${stopSan} takes the ${brk} break away from ${whose === 'your' ? 'them' : 'you'}.`,
   ], key);
   // The break is named once, in the lead (the human voice: never the same
   // square three times in one line — "…d5 break … …d5 would now just drop the

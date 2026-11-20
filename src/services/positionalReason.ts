@@ -133,6 +133,8 @@ export function concessionReason(fen: string, playedSan: string, bestSan: string
  *  for the mover; the largest gap past its bar decides. */
 export function boardReason(fen: string, playedSan: string, bestSan: string | null, phase: Phase): PositionalReason | null {
   if (!bestSan) return null;
+  // The move, named (never "this"/"that" — the orphan rule), "…" on Black's.
+  const movedSan = `${fen.split(' ')[1] === 'b' ? '…' : ''}${playedSan}`;
   const played = boardAfter(fen, playedSan);
   const bestBoard = boardAfter(fen, bestSan);
   if (!played || !bestBoard) return null;
@@ -154,7 +156,7 @@ export function boardReason(fen: string, playedSan: string, bestSan: string | nu
     const ksq = kingOf(played, mover);
     push(ks(played) - ks(bestBoard), 1,
       { tag: bestMove && /^O-O/.test(bestMove.san) ? 'king-stuck-center' : 'weakened-king-safety',
-        note: ksq ? `The king on ${ksq} is less sheltered after this than after the better move.` : 'The king is less sheltered after this than after the better move.' });
+        note: ksq ? `The king on ${ksq} is less sheltered after ${movedSan} than after the better move.` : `The king is less sheltered after ${movedSan} than after the better move.` });
   }
   if (phase === 'endgame') {
     const kp = kingOf(played, mover); const kb = kingOf(bestBoard, mover);
@@ -178,13 +180,13 @@ export function boardReason(fen: string, playedSan: string, bestSan: string | nu
     { tag: 'passive-rook', note: `The better move puts your rook on the ${rookGain}.` });
   const space = (c: Chess): number => { const t = computeTerritory(c.fen()); return mover === 'w' ? t.white - t.black : t.black - t.white; };
   push(space(bestBoard) - space(played), 2,
-    { tag: 'space-conceded', note: 'That gives up space in the centre the better move kept.' });
+    { tag: 'space-conceded', note: `${movedSan} gives up space in the centre the better move kept.` });
   const mine = biggestShift(fen, playedSan, played, bestSan, bestBoard, mover);
   if (mine && mine.gap >= 3) push(activity(bestBoard, mover) - activity(played, mover), 4,
-    { tag: 'misplaced-piece', note: `Your ${PIECE[mine.type] ?? 'piece'} on ${mine.at} reaches ${mine.gap} fewer squares after this than after the better move.` });
+    { tag: 'misplaced-piece', note: `Your ${PIECE[mine.type] ?? 'piece'} on ${mine.at} reaches ${mine.gap} fewer squares after ${movedSan} than after the better move.` });
   const theirs = biggestShift(fen, bestSan, bestBoard, playedSan, played, enemy);
   if (theirs && theirs.gap >= 3) push(activity(played, enemy) - activity(bestBoard, enemy), 4,
-    { tag: 'tempo-handed', note: `That frees their ${PIECE[theirs.type] ?? 'piece'} on ${theirs.at}: it reaches ${theirs.gap} more squares than after the better move.` });
+    { tag: 'tempo-handed', note: `${movedSan} frees their ${PIECE[theirs.type] ?? 'piece'} on ${theirs.at}: it reaches ${theirs.gap} more squares than after the better move.` });
   return gaps.length > 0 ? gaps.sort((a, b) => b.gap - a.gap)[0].reason : null;
 }
 

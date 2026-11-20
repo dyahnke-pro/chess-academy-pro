@@ -426,10 +426,15 @@ function linkText(i: PictureVerdictIn, l: SurvivorLink, mover: Color): string {
   const tries = orList(l.tries.map((t) => t.name));
   const replies = [...new Set(l.tries.map((t) => t.reply))];
   const reply = orList(replies);
-  if (l.kind === 'guards-taken') return `On ${l.at} the ${piece} guards ${ref(l.square)}, which ${reply} takes after ${tries}.`;
+  // THE LINK KNOWS ITS BOARD (CLAUDE.md rule 1): the board's own move links
+  // from the board on screen; a later move of the line is said where it is
+  // played — "later in the line, after Qe3" — never as if it stood now
+  // (0Km5u Qe3: "On g4 the bishop hits their bishop" was a move away).
+  const at = l.moveIndex === 0 ? `On ${l.at} the ${piece}` : `Later in the line, after ${l.moveSan}, the ${piece} on ${l.at}`;
+  if (l.kind === 'guards-taken') return `${at} guards ${ref(l.square)}, which ${reply} takes after ${tries}.`;
   // Each try with its own reply: "…g4 with Nh4 and …d5 with Nxe5".
-  if (l.kind === 'hits-replier') return `On ${l.at} the ${piece} hits ${ref(l.square)}, which answers ${andList(l.tries.map((t) => `${t.name} with ${t.reply}`))}.`;
-  return `On ${l.at} the ${piece} adds an attacker on ${ref(l.square)}, which ${reply} holds after ${tries}.`;
+  if (l.kind === 'hits-replier') return `${at} hits ${ref(l.square)}, which answers ${andList(l.tries.map((t) => `${t.name} with ${t.reply}`))}.`;
+  return `${at} adds an attacker on ${ref(l.square)}, which ${reply} holds after ${tries}.`;
 }
 
 /** The board after the mover's `idx`-th move of the best line (0 = the best move). */

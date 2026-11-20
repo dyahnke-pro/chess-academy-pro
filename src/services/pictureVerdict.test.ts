@@ -101,7 +101,7 @@ describe('picturePlan — the try that survives, with the computed link', { time
     expect(p?.text).toMatch(/^So the slower way: …Kb8 first, then the rook lift\./);
     expect(p?.links).toHaveLength(1);
     expect(p?.links[0]).toMatchObject({ kind: 'hits-replier', moveSan: '…Rf7', at: 'f7', square: 'f3' });
-    expect(p?.links[0].text).toBe('On f7 the rook hits their knight, which answers …g4 with Nh4 and …d5 with Nxe5.');
+    expect(p?.links[0].text).toBe('Later in the line, after …Rf7, the rook on f7 hits their knight, which answers …g4 with Nh4 and …d5 with Nxe5.');
     // NEGATIVE: …Qf6 later in the line guards e5, but the knight that took on
     // e5 has gone to d2 by then — a link holds only while the replier stands.
     expect(p?.links.some((l) => l.moveSan === '…Qf6')).toBe(false);

@@ -424,6 +424,7 @@ function observationsFor(
   // have-check: "best-placed — it has the half-open d-file" on 70 boards with
   // nothing it does there). Ranked best first; the first whose job the board
   // can name speaks, and one with no job is not praised.
+  // (Only a safe piece is "good": `findPieceQuality` reads `pieceIsSafe`.)
   const goods = quality.filter((q) => q.color === color && q.quality === 'good').sort((a, b) => GOOD_PIECE_RANK[a.kind] - GOOD_PIECE_RANK[b.kind]);
   const outpost = goods.map((q) => ({ q, work: goodPieceWork(fen, q, own) })).find((g) => g.work !== null) ?? null;
   if (outpost && outpost.work) {

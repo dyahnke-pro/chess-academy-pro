@@ -29,7 +29,7 @@ import { boardKind } from './positionCharacter';
 import { standingTarget, opponentTargets, targetLine } from './targetSelector';
 import { siegeOf, stepsOf, switchWing } from './boardPlan';
 import { planSteps, planStepsText } from './planSteps';
-import { andList, orList } from '../utils/andList';
+import { andList } from '../utils/andList';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { moveThoughtFacts } from './moveThoughtFacts';
 import { standingRead } from './reviewMoveBriefing';
@@ -47,6 +47,7 @@ import { tellPictureFacts } from './planThread';
 import { threadsOfRead, type ReadStory } from './gameStory';
 import { evalBand } from './evalBand';
 import type { TrySource } from './tryReadBudget';
+import { boardAfter, isForcingThreat, nowBoard, renderTryGroup } from './teachingSentence';
 
 /** A read the student asked for ("read this position"): the asked answer's
  *  writer settings (`writerRegister`). */
@@ -120,15 +121,28 @@ export interface BoardFactSet {
   tier: ImportanceTier | null;
 }
 
+/** A fact before its board is stamped: the bundle stamps every fact once,
+ *  as it hands the set over (`stampBoard`). */
+type DraftFact = Omit<BoardFact, 'board'>;
+
+/** THE BOARD STAMP (CLAUDE.md, EVERY FACT KNOWS ITS BOARD): a board fact is
+ *  about the board on screen; a tempting move's refutation about the board
+ *  after that try; what the best move does about the board after it. */
+export function stampBoard(fen: string, f: DraftFact, best: string | null): BoardFact {
+  const path = f.from === 'tempting' && f.move ? [f.move] : f.from === 'bestMove' && best ? [best] : [];
+  const board = path.length ? boardAfter(fen, path, f.from === 'tempting' ? 'try' : 'line') : null;
+  return { ...f, board: board ?? nowBoard(fen) };
+}
+
 export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
   const side: 'w' | 'b' = i.fen.split(' ')[1] === 'b' ? 'b' : 'w';
-  const facts: BoardFact[] = [];
+  const facts: DraftFact[] = [];
   // A FINISHED GAME HAS A READ WITH NO ENGINE (F4): the mate's pattern and
   // the material it was done with, from the side that delivered it.
   const finished = finishedRead(i.fen);
   if (finished) return { facts: [finished], tier: null };
   const top = i.before[0];
-  if (!top) return { facts, tier: null };
+  if (!top) return { facts: [], tier: null };
 
   const pf = await computePositionFacts({
     theory: i.theory, namesPlayedMove: ASKED_WRITER.namesPlayedMove, boardComputers: 'composer', posture: momentPosture('chat'), namesBestMove: !i.withhold,
@@ -147,11 +161,12 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
   // square its first step goes to, as its producer couples it — is where a
   // refuted try lands is that try, already ruled out.
   const refutedTo = (): Set<string> => new Set(facts.filter((f) => f.kind === 'refuted').flatMap((f) => [f.move, ...(f.also ?? [])]).filter((u): u is string => !!u).map((u) => u.slice(2, 4)));
-  const refutedPlan = (f: BoardFact, to: Set<string>): boolean => REFUTABLE_PLAN_KINDS.has(f.kind) && f.squares.length > 0 && to.has(f.squares[0]);
+  const refutedPlan = (f: DraftFact, to: Set<string>): boolean => REFUTABLE_PLAN_KINDS.has(f.kind) && f.squares.length > 0 && to.has(f.squares[0]);
   const done = (): BoardFactSet => {
     const to = refutedTo();
     const kept = facts.filter((f) => !refutedPlan(f, to));
-    return { facts: mateOnBoard ? kept.filter((f) => !BESIDE_MATE.has(f.kind)) : kept, tier: pf.importance.tier };
+    const said = mateOnBoard ? kept.filter((f) => !BESIDE_MATE.has(f.kind)) : kept;
+    return { facts: said.map((f) => stampBoard(i.fen, f, top.moves[0] ?? null)), tier: pf.importance.tier };
   };
 
   // THE STANDING and THE KIND OF POSITION: who stands better and why, read
@@ -311,6 +326,16 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     // …and tries that meet the SAME reply are one idea too (puzzle reads
     // 2026-11-20: …Kh4, …Kf6 and …Kh6 each "fail to Bd3", said four times).
     for (const t of empty) { const k = t.reasonKey ?? `reply:${t.reply}`; groups.set(k, [...(groups.get(k) ?? []), t]); }
+    // A try alone in its reason's group that meets the same reply as another
+    // lone try is that idea again (…Qg4 and …Qg5 each "run into Rxf7"):
+    // merged, and said with no shared reason (their reasons differ).
+    const lone = [...groups.entries()].filter(([k, g]) => g.length === 1 && !k.startsWith('reply:'));
+    for (const [k, [t]] of lone) {
+      const mate = lone.find(([k2, [x]]) => k2 !== k && x.reply === t.reply && groups.has(k2));
+      if (!mate || !groups.has(k)) continue;
+      groups.delete(k); groups.delete(mate[0]);
+      groups.set(`reply:${t.reply}`, [t, mate[1][0], ...(groups.get(`reply:${t.reply}`) ?? [])]);
+    }
     // A TRY THAT CHANGES THE RESULT'S BAND (F2, board 4: …Ke7 throws the
     // win) is the verdict's own "but", said beside it.
     const bandOf = (uci: string): number | null => { const r = tempting.find((x) => x.moves[0] === uci); return r ? stepOfCp(seatCp(r, i.studentColor)) : null; };
@@ -319,10 +344,8 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     for (const g of groups.values()) {
       const [t, ...more] = g;
       if (more.length === 0) { facts.push({ from: 'tempting', kind: 'refuted', text: t.text, computer: 'temptingOnBoard', squares: t.squares, move: t.uci, ...(shifts(t.uci) ? { bandShift: true } : {}) }); continue; }
-      const sans = g.map((x) => x.san);
-      const two = sans.length === 2;
-      const replies = [...new Set(g.map((x) => x.reply))];
-      const text = [`${andList(sans)} ${two ? 'both' : 'all'} fail the same way: ${orList(replies)} meets ${two ? 'either' : 'each'}.`, t.reasonText].filter(Boolean).join(' ');
+      const oneReason = g.every((x) => x.reasonKey !== null && x.reasonKey === t.reasonKey);
+      const text = renderTryGroup(g.map((x) => x.san), [...new Set(g.map((x) => x.reply))], oneReason ? t.data : { ...t.data, why: null, whyPath: null });
       facts.push({ from: 'tempting', kind: 'refuted', text, computer: 'temptingOnBoard', squares: [...new Set(g.flatMap((x) => x.squares))], move: t.uci, also: more.map((x) => x.uci) });
     }
     // THE PICTURE'S CONCLUSIONS (WO-PICTURE-01 P3 → P5): the verdict read
@@ -383,7 +406,13 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
         if (threatSan && (gain >= THREAT_GAIN_CP || (t.mate != null && t.mate * sign > 0))) {
           const mates = t.mate != null && t.mate * sign > 0;
           const to = t.moves[0].slice(2, 4);
-          facts.push({ from: 'bestMove', kind: 'aspect-threat', computer: 'quietThreat', text: `${quiet.san} is quiet, but it threatens ${side === 'b' ? '…' : ''}${threatSan}${mates ? ', with mate to follow' : ''} — they must answer that first.`, squares: [top.moves[0].slice(2, 4), to], stakes: stakeValue({ points: mates ? 100 : gain / 100, plies: 2 }), claims: [`quiet-threat:${to}`] });
+          // "THREATENS" ONLY A FORCING MOVE (CLAUDE.md rule 2): a check, a
+          // capture, a mate, a promotion, an attack on a bigger or loose
+          // piece. A quiet follow-up is what the move PREPARES (0Km5u …Rd8
+          // "threatens …b4", 0CegO Ke3 "…Kd2": no such threat).
+          const forcing = mates || isForcingThreat(free, t.moves[0]);
+          const follow = `${side === 'b' ? '…' : ''}${threatSan}`;
+          facts.push({ from: 'bestMove', kind: forcing ? 'aspect-threat' : 'aspect-prepares', computer: 'quietThreat', text: forcing ? `${quiet.san} is quiet, but it threatens ${follow}${mates ? ', with mate to follow' : ''} — they must answer that first.` : `${quiet.san} is quiet: it prepares ${follow}.`, squares: [top.moves[0].slice(2, 4), to], stakes: stakeValue({ points: mates ? 100 : gain / 100, plies: 2 }), claims: [`quiet-threat:${to}`] });
         }
       }
     }
@@ -403,7 +432,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
       const why = boardReason(i.fen, san, bestSan, phaseOfFen(i.fen) ?? 'middlegame');
       if (!why) continue;
       const lead = rotateStem([`${san} looks natural, but it isn't the move`, `${san} is tempting here, but it doesn't hold up`], stemKeyOf(`${i.fen}|positional|${san}`));
-      facts.push({ from: 'tempting', kind: 'refuted-positional', computer: 'boardReason', text: `${lead}: ${why.note.replace(/^./, (x) => x.toLowerCase())}`, squares: r.moves[0] ? [r.moves[0].slice(0, 2), r.moves[0].slice(2, 4)] : [] });
+      facts.push({ from: 'tempting', kind: 'refuted-positional', computer: 'boardReason', text: `${lead}: ${why.note.replace(/^(The|Your|Their|That|It)\b/, (x) => x.toLowerCase())}`, squares: r.moves[0] ? [r.moves[0].slice(0, 2), r.moves[0].slice(2, 4)] : [] });
     }
   }
 
@@ -497,7 +526,7 @@ export function finishedRead(fen: string): BoardFact | null {
     return 'The material is close to level.';
   };
   if (b.isStalemate()) {
-    return { from: 'position', kind: 'standing', text: `Stalemate: ${SIDE_NAME[mated]} has no legal move and is not in check, so it is a draw. ${material(winner)}`, squares: [] };
+    return { from: 'position', kind: 'standing', text: `Stalemate: ${SIDE_NAME[mated]} has no legal move and is not in check, so it is a draw. ${material(winner)}`, squares: [], board: nowBoard(fen) };
   }
   const king = b.board().flat().find((p) => p && p.type === 'k' && p.color === mated);
   const checkers = king ? b.attackers(king.square, winner) : [];
@@ -513,7 +542,7 @@ export function finishedRead(fen: string): BoardFact | null {
   const pattern = classifyMatePattern(fen);
   const name = pattern ? `, ${pattern.name.replace(/ Mate$/, ' mate')}` : '';
   const how = parts.length > 0 ? `: ${parts.join(', and ')}` : '';
-  return { from: 'position', kind: 'standing', text: `Checkmate${name}${how}. ${material(winner)}`, squares };
+  return { from: 'position', kind: 'standing', text: `Checkmate${name}${how}. ${material(winner)}`, squares, board: nowBoard(fen) };
 }
 
 const BAND_STEP: Record<ReturnType<typeof evalBand>, number> = { level: 0, slightly: 1, clearly: 2, decisive: 3 };

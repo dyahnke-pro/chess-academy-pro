@@ -35,6 +35,7 @@ import { unmarked } from '../utils/sanMark';
 import { liteMoves, makeLite, undoLite, type LiteMove } from './liteMoves';
 import { oppositionOn } from './oppositionRead';
 import { absolutePinRay } from './pinGeometry';
+import { pieceIsSafe } from './teachingSentence';
 
 /** Centipawn-free piece values for SEE + material reasoning (king ~ ∞). */
 const PIECE_VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
@@ -801,7 +802,10 @@ export function findPieceQuality(fen: string): PieceQualityNote[] {
   // Good pieces first (more satisfying to spot). EVERY NOTE, NO CAP (G4.5):
   // readers look a piece up in this list ("is the bishop on e3 bad?"), and
   // the first-four cut answered "no" for any bad piece sorted fifth.
-  return notes.sort((a, b) => (a.quality === b.quality ? 0 : a.quality === 'good' ? -1 : 1));
+  // A GOOD PIECE IS A SAFE PIECE (CLAUDE.md rule 2): an outpost, a rook on
+  // the seventh — praise of a piece attacked and not guarded (or attacked by
+  // a cheaper piece) is false, so every reader of "good" is safe at once.
+  return notes.filter((n) => n.quality !== 'good' || pieceIsSafe(fen, n.square)).sort((a, b) => (a.quality === b.quality ? 0 : a.quality === 'good' ? -1 : 1));
 }
 
 /** Every square a1..h8. */

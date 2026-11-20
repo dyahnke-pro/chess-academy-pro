@@ -53,6 +53,7 @@ import { boardReason } from './positionalReason';
 import { phaseOfFen } from './boardConcepts';
 import { withMover } from '../utils/sideToMove';
 import { replyJob } from './replyJob';
+import { pathWords, renderTry, renderTryReason, type TryData } from './teachingSentence';
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const VALUE = MATERIAL_VALUE;
@@ -617,6 +618,8 @@ export interface StandingRefuted {
   reasonKey: string | null;
   reasonText: string | null;
   claims: string[];
+  /** The try as data, for the one renderer (`teachingSentence.renderTry`). */
+  data: TryData;
 }
 
 /** The standing as a signed step from the mover's seat: 0 level, ±1 slightly,
@@ -729,7 +732,9 @@ function tryMechanism(fen: string, m: Move, sans: readonly string[], bestSan: st
   if (/\+$/.test(rm.san)) return `${replyWords} comes with check, so ${other === 'your' ? 'you gain' : 'they gain'} a tempo.`;
   const why = boardReason(fen, m.san, bestSan, phaseOfFen(fen) ?? 'middlegame');
   if (!why) return null;
-  lastMechanismKey = `board-reason:${why.tag}:${bestSan}:${why.note}`;
+  // Keyed by what it says of the board, the try's own name blanked: tries
+  // refuted for one board reason group (the note names each try).
+  lastMechanismKey = `board-reason:${why.tag}:${bestSan}:${why.note.split(m.san).join('MOVE')}`;
   // A board reason about a piece the line takes is false (Kf1?? …Bxc5: "your
   // bishop on c5 reaches fewer squares" — it is gone): the squares the line
   // captures on are not described.
@@ -849,57 +854,54 @@ export function standingRefutations(args: {
     const lostWords = net !== null && net < 0
       ? ((): string | null => { const l = computeExchangeLedger(args.fen, sans, mover === 'w' ? 'b' : 'w'); return l ? materialGainWords(l) : null; })()
       : null;
-    const lost = lostWords ? `${cap(w.otherWho)} win ${lostWords} in the line.` : null;
     const reply = `${mover === 'w' ? '…' : ''}${sans[1]}`;
     // NO REASON, NO REFUTATION: his every rule-out says why it falls short.
-    // The plan's try has its own reason: what became of the target.
-    // WHAT THE LINE DOES (his "with a perpetual check", "and White promotes"),
-    // then the reply's mechanism, then what changed on the board after it.
+    // THE WHY BEFORE THE MATERIAL (CLAUDE.md rule 2): the mechanism — what
+    // the line does, the reply's mechanism, what became of the plan's target,
+    // what changed on the board after it — and the material it wins is its
+    // consequence, said after it. A reason read on the board AFTER the line
+    // ("their queen on h6 attacks your rook on h1": true only after Rh1
+    // …Qxh6) carries that board's path, so the renderer says it there.
     const futureArgs: ChangeReasonArgs = { fen: args.fen, student: args.student, rating: args.rating, other: w.other,
       tryLine: { moves: read.moves, cp: read.mate === null ? read.evaluation : null, mate: read.mate },
       bestLine: { moves: best.read.moves, cp: best.read.mate === null ? best.read.evaluation : null, mate: best.read.mate } };
     const story = lineStory(args.fen, read.moves, w.other, read.mate === null ? read.evaluation : null);
     // The story the line tells is a computed reason too (its kind and squares).
     let reasonKey: string | null = story ? `story:${story.kind}:${story.squares.join(',')}` : null;
+    let whyPath: string[] = [];
     const mech = story?.text
-      ?? lost
       ?? ((): string | null => { lastMechanismKey = null; const t = tryMechanism(args.fen, m, sans, best.san, w.own, w.other); if (t) reasonKey = lastMechanismKey; return t; })()
       ?? (plan ? targetOutcome(args.fen, sans, plan.target, mover, w.other) : null)
-      ?? changeReason(futureArgs)
-      ?? args.engineReasons?.get(c.uci)
+      // What changed on the board after the line is a reason only where the
+      // line wins nothing: a piece lost is the plainer why.
+      ?? (lostWords ? null : ((): string | null => { const t = changeReason(futureArgs) ?? args.engineReasons?.get(c.uci) ?? null; if (t) whyPath = read.moves.slice(0, 2); return t; })())
       ?? null;
-    if (!mech) { args.onDrop?.(c.uci, 'no-reason', futureArgs); continue; }
+    // The material, the mechanism's consequence (or the reason itself when
+    // the line reads no other).
+    const material = lostWords && !(mech && /\bwin/.test(mech)) ? lostWords : null;
+    if (!mech && !material) { args.onDrop?.(c.uci, 'no-reason', futureArgs); continue; }
     // WHAT THE REPLY DOES (his "…Qd7 guards b5", "…h4 kicks the knight"):
     // the reply's job, said right after the lead names it — unless the reason
     // already says what the reply does (one idea said once). It explains a
     // refutation the board already gives a reason for; it never makes one.
     const job = replyJob(args.fen, read.moves, plan?.target ?? null, args.student);
     // A recapture is the trade, not a reason: the ledger already says what it nets.
-    const jobSaid = !!job && job.kind !== 'recaptures' && !mech.includes(sans[1]) && !(job.kind === 'kicks' && /kicks/.test(mech));
+    const jobSaid = !!job && job.kind !== 'recaptures' && !(mech ?? '').includes(sans[1]) && !(job.kind === 'kicks' && /kicks/.test(mech ?? ''));
     // "…Kd5 holds the pawn on c6" and "the pawn on c6 still stands" are one idea.
-    const kept = jobSaid && job?.kind === 'guards' && /still stands/.test(mech) ? null : mech;
-    // A reason that calls the try "It" (`tryMechanism`'s own lead) says so
-    // right after the lead; with the reply's job between them, "It" would
-    // point at the reply — the try is named instead.
+    const kept = jobSaid && job?.kind === 'guards' && /still stands/.test(mech ?? '') ? null : mech;
+    const subject = jobSaid || kept || material ? c.san : 'It';
+    const shift = story?.kind === 'mates' ? null : shiftOf(subject) ?? smallerShift(bestCp, mine, !!kept && /wins nothing/.test(kept), cost, subject);
+    const tryData: TryData = {
+      san: c.san, reply, mine, stem: stemKeyOf(`${args.fen}|result|${c.uci}`),
+      plan: plan ? { aim: planAim(plan, mine), storm: plan.storm } : null,
+      replyFollow: jobSaid ? job?.follow ?? null : null,
+      why: kept, whyPath: whyPath.length ? pathWords(args.fen, whyPath) : null,
+      material, materialWho: cap(w.otherWho), mates: story?.kind === 'mates', shift,
+    };
     const reason = kept && jobSaid ? kept.replace(/^It\b/, c.san) : kept;
-    // A line that mates ends the game: no band words for that.
-    const subject = jobSaid || reason ? c.san : 'It';
-    const shift = story?.kind === 'mates' ? (mine ? `${subject} loses the game.` : `${subject} loses them the game.`) : shiftOf(subject) ?? smallerShift(bestCp, mine, !!reason && /wins nothing/.test(reason), cost, subject);
-    const stem = stemKeyOf(`${args.fen}|result|${c.uci}`);
-    const lead = plan
-      ? (plan.storm
-        ? (mine
-          ? rotateStem([`${c.san} storms their king, but ${reply} meets it.`, `${c.san}, throwing a pawn at their king, runs into ${reply}.`], stem)
-          : rotateStem([`${c.san} stormed your king for them, but ${reply} meets it.`, `${c.san}, throwing a pawn at your king, ran into ${reply} for them.`], stem))
-        : mine
-        ? rotateStem([`${c.san} goes straight at ${planAim(plan, true)}, but ${reply} meets it.`, `${c.san} to hit ${planAim(plan, true)} directly runs into ${reply}.`], stem)
-        : rotateStem([`${c.san} went straight at ${planAim(plan, false)} for them, but ${reply} meets it.`, `${c.san} to hit ${planAim(plan, false)} directly ran into ${reply} for them.`], stem))
-      : mine
-      ? rotateStem([`${c.san} looks natural, but ${reply} meets it.`, `${c.san} is the obvious try, but ${reply} is the answer.`, `${c.san} is tempting, but ${reply} takes the sting out of it.`], stem)
-      : rotateStem([`${c.san} looked natural for them, but ${reply} meets it.`, `${c.san} was the obvious try for them, but ${reply} is the answer.`, `${c.san} was tempting for them, but ${reply} takes the sting out of it.`], stem);
-    const text = [lead, jobSaid ? job?.follow : null, reason, shift].filter(Boolean).join(' ');
+    const text = renderTry(tryData);
     const key = temptingKey(c.uci);
-    out.push({ san: c.san, uci: c.uci, costCp: Math.round(cost), reply, text, squares: [...new Set([c.from, c.to, read.moves[1].slice(2, 4), ...(jobSaid && job ? job.squares : [])])], key, claims: [key], real, reasonKey, reasonText: reason ?? null });
+    out.push({ san: c.san, uci: c.uci, costCp: Math.round(cost), reply, text, squares: [...new Set([c.from, c.to, read.moves[1].slice(2, 4), ...(jobSaid && job ? job.squares : [])])], key, claims: [key], real, reasonKey, reasonText: reason ? renderTryReason({ ...tryData, why: reason }) : null, data: tryData });
   }
   return out.sort((x, y) => y.real - x.real).map(({ real: _real, ...t }) => t);
 }

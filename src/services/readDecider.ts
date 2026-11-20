@@ -41,6 +41,8 @@ import { PICTURE_ROLE, type PictureRole } from './positionPicture';
 import weightTable from '../data/read-decider-weights.json';
 import { readHabit } from './methodBeat';
 import type { PictureConclusionId } from './gameStory';
+import type { FactBoard } from './teachingSentence';
+import { detectPlanRace } from './planRace';
 
 /** Where a board fact came from: the board's own reads, a tempting move
  *  refuted, or what the engine's best move does. */
@@ -50,6 +52,10 @@ export interface ReadFact {
   from: ReadFactFrom;
   kind: string;
   text: string;
+  /** REQUIRED: the board the fact was computed on — its key, the path from
+   *  the board on screen and the relation (CLAUDE.md, EVERY FACT KNOWS ITS
+   *  BOARD). Stamped once, by the board bundle (`boardReadFacts`). */
+  board: FactBoard;
   /** The computer that made it (catalog name), where the read knows it. */
   computer?: string;
   /** REQUIRED: the squares the fact is about, coupled by its producer (G4.5.1:
@@ -184,6 +190,10 @@ interface StepRow { step: ReadStep; kinds: readonly string[]; from?: readonly Re
    *  capture that loses a knight). */
   firstFrom?: readonly ReadFactFrom[] }
 
+/** The kinds that state what the best move DOES — its jobs, required in a
+ *  read whenever computed. */
+const MOVE_JOB_KINDS: ReadonlySet<string> = new Set(['move-job', 'route', 'judgement', 'aspect-threat', 'aspect-prepares', 'aspect-tactic-lands', 'aspect-wins', 'aspect-tactic-set-up', 'aspect-opens-king', 'stop', 'stopped', 'board-teacher', 'fundamental', 'technique', 'sac-why', 'checkmate', 'pawn-break', 'trade', 'provoke']);
+
 export const READ_STEPS: readonly StepRow[] = [
   // The standing with its reason; compensation and "convert" say the same
   // standing with the reason a player most needs.
@@ -198,7 +208,7 @@ export const READ_STEPS: readonly StepRow[] = [
   { step: 'their-plan', kinds: ['their-target', 'their-plan'], sayOnce: true },
   {
     step: 'best-move',
-    kinds: ['key-moment', 'timing', 'move-order', 'not-yet', 'checkmate', 'sac-why', 'aspect-threat', 'aspect-tactic-lands', 'aspect-wins', 'stop', 'stopped', 'move-job', 'aspect-tactic-set-up', 'board-teacher', 'technique', 'fundamental', 'king-read', 'pawn-break', 'trade', 'provoke', 'aspect-opens-king', 'count', 'contrast', 'nugget', 'trigger'],
+    kinds: ['route', 'judgement', 'key-moment', 'timing', 'move-order', 'not-yet', 'checkmate', 'sac-why', 'aspect-threat', 'aspect-prepares', 'aspect-tactic-lands', 'aspect-wins', 'stop', 'stopped', 'move-job', 'aspect-tactic-set-up', 'board-teacher', 'technique', 'fundamental', 'king-read', 'pawn-break', 'trade', 'provoke', 'aspect-opens-king', 'count', 'contrast', 'nugget', 'trigger'],
     // What the best move does — and the board's own pointers at it.
     from: ['bestMove'], positionKinds: ['timing', 'move-order', 'not-yet', 'king-read'],
   },
@@ -324,9 +334,18 @@ export function decideRead<F extends ReadFact>(factsIn: readonly F[], ctx: ReadC
   // runner" says the same pawns again. A target or a race line about a pawn
   // the verdict already named is that verdict said twice.
   let verdictPawns = new Set<string>();
+  const racePawns = ((): Set<string> => {
+    if (!ctx.fen) return new Set();
+    try {
+      const r = detectPlanRace(ctx.fen, ctx.fen.split(' ')[1] === 'b' ? 'b' : 'w');
+      return r?.kind === 'passer-race' ? new Set([r.yourPawn, r.theirPawn]) : new Set();
+    } catch { return new Set(); }
+  })();
   const restatesVerdict = (f: F): boolean => {
     if (verdictPawns.size === 0) return false;
-    const race = f.kind === 'plan-race' || (f.kind === 'structure-plan' && /^Both sides ha(ve|d) a runner/.test(f.text));
+    // A RACE, read off the board (never the words): a structure line on both
+    // runners the race detector finds.
+    const race = f.kind === 'plan-race' || (f.kind === 'structure-plan' && racePawns.size > 0 && [...racePawns].every((sq) => f.squares.includes(sq)));
     // A structure line about the verdict's pawns and nothing else ("your
     // passed pawn on c6 is two pushes from queening") is the verdict's
     // reason said again (F5, the Saavedra).
@@ -349,7 +368,7 @@ export function decideRead<F extends ReadFact>(factsIn: readonly F[], ctx: ReadC
       // A concept on a puzzle is about THIS board — a rule with no square is
       // off the point of the shot.
       && !(ctx.puzzle && row.step === 'concept' && x.squares.length === 0)
-      && !out.some((o) => o.text === x.text)
+      && !out.some((o) => sameFact(o, x))
       && !sameClaim(x)
       && !restatesVerdict(x)
       // ONE IDEA ONCE: a story line whose every square was named adds nothing.
@@ -363,12 +382,24 @@ export function decideRead<F extends ReadFact>(factsIn: readonly F[], ctx: ReadC
     const firsts = candidates.filter((x) => !!x.computer && !!row.first?.includes(x.computer));
     const firstFrom = row.firstFrom;
     const rank = (x: F): number => (firstFrom?.includes(x.from) ? 1 : 0);
-    const rest = candidates.filter((x) => !firsts.includes(x) && weightOf(x) >= TABLE.bar)
-      .sort((x, y) => rank(y) - rank(x) || weightOf(y) - weightOf(x) || (y.stakes ?? -1) - (x.stakes ?? -1));
+    // THE MOVE'S JOBS ARE REQUIRED (CLAUDE.md rule 3, by surface: a read
+    // says every job): a job the best move does that was computed is said,
+    // whatever its learned weight — the bar decides the board's other facts,
+    // never whether the move is explained. Inside a step the computed STAKES
+    // rank; the learned kind weight only breaks a tie.
+    const isJob = (x: F): boolean => row.step === 'best-move' && !ctx.puzzle && x.from === 'bestMove' && MOVE_JOB_KINDS.has(x.kind);
+    const barJob = candidates.some((x) => isJob(x) && (weightOf(x) >= TABLE.bar || firsts.includes(x)));
+    // The job the bar held, when none cleared it: the most important by its
+    // stakes, the weight breaking a tie — one reason, so the read stays one
+    // argument (the rest are the student's to ask for).
+    const topJob = barJob ? null : candidates.filter(isJob).sort((x, y) => (y.stakes ?? -1) - (x.stakes ?? -1) || weightOf(y) - weightOf(x))[0] ?? null;
+    const required = (x: F): boolean => x === topJob;
+    const rest = candidates.filter((x) => !firsts.includes(x) && (weightOf(x) >= TABLE.bar || required(x)))
+      .sort((x, y) => rank(y) - rank(x) || (y.stakes ?? -1) - (x.stakes ?? -1) || weightOf(y) - weightOf(x));
     let lead: F | null = null;
     const stepSaid: F[] = [];
     for (const pick of [...firsts, ...rest]) {
-      if (out.some((o) => o === pick || o.text === pick.text) || sameClaim(pick) || restatesVerdict(pick)) continue;
+      if (out.some((o) => sameFact(o, pick)) || sameClaim(pick) || restatesVerdict(pick)) continue;
       // Two facts of one step on the same squares (G4.5.1's subsumption bar)
       // are one claim about one geometry: the first, by order, says it.
       if (pick.squares.length > 0 && stepSaid.some((o) => o.squares.length > 0 && jaccard(o.squares, pick.squares) >= SAME_CLAIM_JACCARD)) continue;
@@ -401,6 +432,14 @@ export function decideRead<F extends ReadFact>(factsIn: readonly F[], ctx: ReadC
   return { facts: kept, habit: habit?.text ?? null, said: [...kept.flatMap(storyKeys), ...(habit ? [`habit:${habit.id}`] : [])] };
 }
 
+/** A FACT'S IDENTITY, read off its data — the computer, the kind, the move
+ *  it refutes, its claims, its squares and its board — never its words: the
+ *  decider decides on data (CLAUDE.md rule 3). */
+export function factId(f: ReadFact): string {
+  return [f.computer ?? '-', f.kind, f.move ?? '', [...(f.claims ?? [])].sort().join('|'), [...f.squares].sort().join(','), f.board?.key ?? '', (f.board?.path ?? []).join(' ')].join('#');
+}
+function sameFact(a: ReadFact, b: ReadFact): boolean { return a === b || factId(a) === factId(b); }
+
 /** A fact's keys in the story's ledger: its claims, or — for a fact with
  *  none — its computer and the squares it is about (the same general line on
  *  the same squares is the same idea). */
@@ -411,7 +450,7 @@ function storyKeys(f: ReadFact): string[] {
 /** May this fact be said here at all: not a restatement, not on a withheld
  *  square, not said already. */
 function sayable<F extends ReadFact>(f: F, ctx: ReadContext, out: readonly F[], sameClaim: (f: F) => boolean): boolean {
-  return !f.restates && !f.squares.some((s) => ctx.withheld.includes(s)) && !out.some((o) => o === f || o.text === f.text) && !sameClaim(f);
+  return !f.restates && !f.squares.some((s) => ctx.withheld.includes(s)) && !out.some((o) => sameFact(o, f)) && !sameClaim(f);
 }
 
 /** WHAT A CONCLUSION RESTS ON, in the order it is heard after it.
@@ -548,7 +587,7 @@ function withDetails<F extends ReadFact>(picked: readonly F[], all: readonly F[]
   const pieceAt = (sq: string): string | null => {
     try { const p = board.get(sq as Square); return p ? `${p.color}${p.type}` : null; } catch { return null; }
   };
-  const used = new Set<string>(picked.map((f) => f.text));
+  const used = new Set<string>(picked.map(factId));
   // ONE IDEA ONCE, BY ITS CLAIM — for a detail as for a step: a fact sharing
   // a claim key with one said is that idea again ("The plan: plant a knight in
   // one of the holes" and "Their light squares are holes … Put a knight on
@@ -565,7 +604,7 @@ function withDetails<F extends ReadFact>(picked: readonly F[], all: readonly F[]
     const pieces = new Set(lead.squares.filter((sq) => pieceAt(sq) !== null));
     if (pieces.size === 0) continue;
     for (const f of all) {
-      if (used.has(f.text) || f.restates || !sayable.has(f.kind)) continue;
+      if (used.has(factId(f)) || f.restates || !sayable.has(f.kind)) continue;
       if ((f.claims ?? []).some((c) => claimed.has(c))) continue;
       // A detail DESCRIBES the piece; it is never a second conclusion (another
       // plan, another try, another verdict, another move's job) — the step
@@ -577,7 +616,7 @@ function withDetails<F extends ReadFact>(picked: readonly F[], all: readonly F[]
       if (f.kind === 'must-defend' && !bestAnswers(f, ctx)) continue;
       if (f.squares.some((s) => ctx.withheld.includes(s))) continue;
       if (!f.squares.some((sq) => pieces.has(sq))) continue;
-      used.add(f.text);
+      used.add(factId(f));
       for (const c of f.claims ?? []) claimed.add(c);
       out.push(f);
     }
@@ -623,6 +662,9 @@ function bestAnswers(f: ReadFact, ctx: ReadContext): boolean {
       const guardsBefore = b.attackers(sq as Square, me).length;
       const after = new Chess(fen);
       after.move({ from, to, promotion: 'q' });
+      // A CHECK answers it too: they must meet the check first, and the
+      // threat is met with tempo (0LeQy Rg1+: their queen on b6 hits yours).
+      if (after.inCheck()) return true;
       return after.attackers(sq as Square, me).length > guardsBefore;
     });
   } catch { return false; }
