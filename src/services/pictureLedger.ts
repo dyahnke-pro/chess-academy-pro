@@ -1004,6 +1004,23 @@ export function pictureConclusions(facts: readonly CoachFact[], fen: string, lin
   return out;
 }
 
+/** The ledger alone (the registry's `pictureLedger`). */
+export function pictureLedger(facts: readonly CoachFact[], fen: string, lines: readonly EngineLine[]): Ledger | null {
+  return pictureConclusions(facts, fen, lines)?.ledger ?? null;
+}
+
+/** One side's one resource (the registry's `pictureCounterplay`). */
+export function pictureCounterplay(facts: readonly CoachFact[], fen: string, lines: readonly EngineLine[], side: Color): Counterplay | null {
+  return pictureConclusions(facts, fen, lines)?.counterplay[side] ?? null;
+}
+
+/** The target and the plan's target one side, attacking, goes for (the
+ *  registry's `pictureTarget`). */
+export function pictureTarget(facts: readonly CoachFact[], fen: string, lines: readonly EngineLine[], attacker: Color): { now: Target | null; plan: PlanTarget | null } | null {
+  const c = pictureConclusions(facts, fen, lines);
+  return c ? { now: c.target[attacker], plan: c.planTarget[attacker] } : null;
+}
+
 function computeConclusions(facts: readonly CoachFact[], fen: string, lines: readonly EngineLine[]): PictureConclusions | null {
   const pic = pictureOfBoard(facts, fen);
   const ledger = ledgerOf(pic, fen);

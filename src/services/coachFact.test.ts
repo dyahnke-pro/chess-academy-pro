@@ -66,7 +66,10 @@ describe('CoachFact — the one fact shape (WO-STORY-MATRIX-01 P1-3)', () => {
         // And the move order read off the board (`orderByThreat`, gap B1,
         // 2026-11-12): "…Nf6 straight away would allow a3" is the thought's
         // "not yet, first this", the step its kind's group gives.
-        if (f.source !== 'weighed' && f.source !== 'teachingMove' && f.source !== 'knownSlip' && f.kind !== 'move-order') expect(f.step).toBe(stepBefore(f));
+        // And the picture's conclusions (WO-PICTURE-01 P3, 2026-11-19): the
+        // ledger is a read of the board, said in the board step its kind's
+        // group gives — never the mover's step.
+        if (f.source !== 'weighed' && f.source !== 'teachingMove' && f.source !== 'knownSlip' && f.source !== 'picture' && f.kind !== 'move-order') expect(f.step).toBe(stepBefore(f));
         expect(COMPUTER_CATALOG[f.computer]).toBeDefined();
       }
     }
