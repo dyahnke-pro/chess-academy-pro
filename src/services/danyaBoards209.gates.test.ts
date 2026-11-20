@@ -8,13 +8,19 @@ import { Chess, type Square } from 'chess.js';
 import { fixtureReader, readDanyaBoard, readKey, type DanyaRead, type Reads } from '../test/danyaBoardRead';
 
 const R = JSON.parse(readFileSync('src/services/__fixtures__/danyaBoards209.reads.json', 'utf8')) as Reads;
-const BOARDS = JSON.parse(readFileSync('src/services/__fixtures__/danyaBoards209.boards.json', 'utf8')) as Array<{ id: string; fen: string }>;
+const ALL_BOARDS = JSON.parse(readFileSync('src/services/__fixtures__/danyaBoards209.boards.json', 'utf8')) as Array<{ id: string; fen: string }>;
+// DANYA_BOARDS_ALL=1 runs it (~10 min a quarter); DANYA_SHARD=i/n takes every
+// n-th board, so four shards run side by side and each writes its own counts.
+const RUN = process.env.DANYA_BOARDS_ALL === '1';
+const [SH, SN] = (process.env.DANYA_SHARD ?? '0/1').split('/').map(Number);
+const BOARDS = ALL_BOARDS.filter((_, k) => k % SN === SH);
 const PIECE: Record<string, string> = { pawn: 'p', knight: 'n', bishop: 'b', rook: 'r', queen: 'q', king: 'k' };
 /** Today's counts — a gate's hits may only fall. */
 const CEILING = { oneMove: Infinity, repeatedReason: Infinity, checksUnread: Infinity, finishedEmpty: 0, wrongOwner: Infinity, wrongSquare: Infinity, errors: Infinity };
 
 const got: Array<{ id: string; fen: string; r: DanyaRead | null; err: string | null; asked: Set<string> }> = [];
 beforeAll(async () => {
+  if (!RUN) return;
   for (const b of BOARDS) {
     // Every board the read asks the engine for: a defender's check is a try
     // when the board after it was read.
@@ -24,12 +30,12 @@ beforeAll(async () => {
     try { got.push({ ...b, r: await readDanyaBoard(b.fen, R[readKey(b.fen)] ?? [], reader), err: null, asked }); }
     catch (e) { got.push({ ...b, r: null, err: String(e).slice(0, 200), asked }); }
   }
-}, 600_000);
+}, 3_600_000);
 
 const MOVE_PHRASES = /(?:works now: |So first |the quiet |slower way: |You go )(…?[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?\+?)/g;
 const sentences = (t: string): string[] => t.split(/(?<=[.!?])\s+/).map((s) => s.trim()).filter((s) => s.length > 20);
 
-describe('the 209 article boards — six gates', () => {
+describe.skipIf(!RUN)('the 209 article boards — six gates', () => {
   it('counts each gate and holds its ceiling', () => {
     const hits: Record<keyof typeof CEILING, string[]> = { oneMove: [], repeatedReason: [], checksUnread: [], finishedEmpty: [], wrongOwner: [], wrongSquare: [], errors: [] };
     for (const g of got) {
@@ -65,9 +71,9 @@ describe('the 209 article boards — six gates', () => {
       }
     }
     mkdirSync('audit-reports', { recursive: true });
-    writeFileSync('audit-reports/danya209-gates.json', JSON.stringify({ boards: got.length, counts: Object.fromEntries(Object.entries(hits).map(([k, v]) => [k, v.length])), hits }, null, 1));
+    writeFileSync(`audit-reports/danya209-gates.${SH}of${SN}.json`, JSON.stringify({ boards: got.length, counts: Object.fromEntries(Object.entries(hits).map(([k, v]) => [k, v.length])), hits }, null, 1));
     console.log('GATES', JSON.stringify(Object.fromEntries(Object.entries(hits).map(([k, v]) => [k, v.length]))));
-    expect(got.length).toBe(209);
+    expect(got.length).toBe(BOARDS.length);
     for (const k of Object.keys(CEILING) as Array<keyof typeof CEILING>) expect(hits[k].length, `${k}: ${hits[k].slice(0, 5).join(' | ')}`).toBeLessThanOrEqual(CEILING[k]);
-  }, 600_000);
+  }, 3_600_000);
 });
