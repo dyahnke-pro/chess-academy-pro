@@ -16,7 +16,7 @@ const [SH, SN] = (process.env.DANYA_SHARD ?? '0/1').split('/').map(Number);
 const BOARDS = ALL_BOARDS.filter((_, k) => k % SN === SH);
 const PIECE: Record<string, string> = { pawn: 'p', knight: 'n', bishop: 'b', rook: 'r', queen: 'q', king: 'k' };
 /** Today's counts — a gate's hits may only fall. */
-const CEILING = { oneMove: Infinity, repeatedReason: Infinity, checksUnread: Infinity, finishedEmpty: 0, wrongOwner: Infinity, wrongSquare: Infinity, errors: Infinity };
+const CEILING = { oneMove: 0, repeatedReason: 55, checksUnread: 0, finishedEmpty: 0, wrongOwner: 4, wrongSquare: 14, errors: 0 };
 
 const got: Array<{ id: string; fen: string; r: DanyaRead | null; err: string | null; asked: Set<string> }> = [];
 beforeAll(async () => {
