@@ -96,12 +96,19 @@ describe('read this position — the provider is dead', () => {
 
     // The provider 401'd; what was SPOKEN is the raw computed register.
     const spoken = speakRecords.join(' ');
-    expect(spoken).toMatch(/This is the endgame now\./);
+    // The fork is what the board is about, spoken as computed. (The phase
+    // line "This is the endgame now." was deleted with the one read decider,
+    // 477061d: the character step says a KIND of position — drawing chances,
+    // locked, no counterplay — and none holds on this decided board.)
+    expect(spoken).toMatch(/a fork hits two targets at once/);
+    // ONE IDEA ONCE: the knight-on-a-hole plan is said by one computer, never
+    // again as the colour complex's "Put a knight on one".
+    expect((spoken.match(/knight (in|on) (one of the holes|one\b)|Put a knight on one|A knight belongs on one/g) ?? []).length).toBeLessThanOrEqual(1);
     // No queens: a king in the open is the ENDGAME's right square, not a
     // weakness — "files open toward your king" is the middlegame worry and
     // the positional read drops it without queens (hand walk 2340, moves 32-34).
     expect(spoken).not.toMatch(/open toward your king/);
     expect(spoken).not.toMatch(/⚠️/);
-    expect(result.current.currentText).toMatch(/This is the endgame now\./);
+    expect(result.current.currentText).toMatch(/a fork hits two targets at once/);
   }, 30_000);
 });

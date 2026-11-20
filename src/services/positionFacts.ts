@@ -430,6 +430,10 @@ interface ClauseParts {
    *  whose claim was already spoken this game — checked at SPEAK time, so a
    *  lane that ran before the claim was recorded cannot repeat it. */
   claim?: string;
+  /** THE CLAIM KEYS the computer that made it declared (`CoachFact.claims`):
+   *  carried through, so a reader downstream (the door, the read decider)
+   *  sees one idea said by two computers as one idea. */
+  claims?: readonly string[];
   /** The skill this clause teaches (a MisconceptionTagId), so the fade can
    *  shorten it once the student's record proves it. */
   skill?: string;
@@ -489,7 +493,7 @@ const INCOMING_KINDS: ReadonlySet<ClauseKind> = new Set<ClauseKind>(['must-defen
  *  proof is counted unproven by its kind at the door. Its hole in this
  *  student's record is joined where the record is in hand (`withHoles`). */
 function clause(computer: ComputerName, fen: string, p: ClauseParts): ClauseFact {
-  const { names, gradeFen, squares, stakes, proof, claim, conceptId, promise, lines, ...said } = p;
+  const { names, gradeFen, squares, stakes, proof, claim, claims, conceptId, promise, lines, ...said } = p;
   const seat: FactSeat = INCOMING_KINDS.has(p.kind) ? 'opponent' : 'student';
   return {
     ...said,
@@ -499,7 +503,7 @@ function clause(computer: ComputerName, fen: string, p: ClauseParts): ClauseFact
     computer,
     fen: gradeFen ?? fen,
     seat,
-    claims: [],
+    claims: [...(claims ?? [])],
     squares: squares ?? [],
     stakes: stakesOf(p.kind, stakes),
     proof: proof ?? NO_PROOF.description,
@@ -518,7 +522,7 @@ function clause(computer: ComputerName, fen: string, p: ClauseParts): ClauseFact
  *  it — the claim it says once a game, the move it names, the board it grades on. */
 function readClause(f: CoachFact, kind: ClauseKind, fen: string, extra: Partial<ClauseParts> = {}): ClauseFact {
   return clause(f.computer, fen, {
-    kind, text: f.text, squares: [...f.squares], proof: f.proof,
+    kind, text: f.text, squares: [...f.squares], proof: f.proof, claims: f.claims,
     ...(isStaked(f.stakes) ? { stakes: f.stakes } : {}),
     ...(f.lines ? { lines: f.lines.map((l) => ({ fen: l.fen, sans: [...l.sans] })) } : {}),
     // A held form rides only on a fact that names the student's move.

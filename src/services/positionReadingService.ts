@@ -877,6 +877,13 @@ export function campHoles(fen: string, owner: Color, user: Color): Square[] {
  * what lands there too, when nothing guards the square). `only` asks for one
  * kind of minor ("plant a knight on …"). Most central first.
  */
+/** THE CLAIM "a minor belongs on a hole in this side's camp" — one key for
+ *  every computer that says it (the plan's outpost lever, the colour-complex
+ *  read), so the idea is said once whichever computer says it first. */
+export function holesClaim(owner: Color): string {
+  return `holes:${owner}`;
+}
+
 export function holeTargets(fen: string, owner: Color, user: Color, only?: 'n' | 'b'): Square[] {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return []; }

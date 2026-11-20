@@ -16,7 +16,7 @@ import { methodRead, methodPlanSentence, whyThisPlan } from './planChoice';
 import { stripThink } from '../utils/thinkPause';
 import { structurePlanFact } from './nextPlans';
 import { findPawnBreaks, findOpenFiles, breakContacts } from './positionReadingService';
-import { holeTargets } from './positionReadingService';
+import { holeTargets, holesClaim } from './positionReadingService';
 import { isUndevelopedInOpening } from '../utils/undeveloped';
 import { flipSideToMove } from './threatOut';
 import { andList, orList } from '../utils/andList';
@@ -34,6 +34,8 @@ interface PlanLever {
   phrase: string;
   /** The squares the lever is about, coupled at emission (never read back from prose). */
   squares: string[];
+  /** The idea's claim key, when another computer can say the same idea. */
+  claim?: string;
 }
 
 /** A plan sentence and the squares it is about — the board lights every one
@@ -154,8 +156,8 @@ export function boardPlanFacts(fen: string, side: 'white' | 'black', voice: 'you
   // One or two holes are named; three or more are "the holes in their camp", lit on the
   // board (a list of squares read out is the robot, David 2026-11-05).
   const holeWords = (holes: readonly string[]): string => (holes.length <= 2 ? `on ${orList(holes)}` : 'in one of the holes in their camp');
-  if (knightHoles.length) levers.push({ kind: 'outpost', phrase: `plant a knight ${holeWords(knightHoles)}`, squares: [...knightHoles] });
-  else if (bishopHoles.length) levers.push({ kind: 'outpost', phrase: `post a bishop ${holeWords(bishopHoles)}`, squares: [...bishopHoles] });
+  if (knightHoles.length) levers.push({ kind: 'outpost', phrase: `plant a knight ${holeWords(knightHoles)}`, squares: [...knightHoles], claim: holesClaim(theirC) });
+  else if (bishopHoles.length) levers.push({ kind: 'outpost', phrase: `post a bishop ${holeWords(bishopHoles)}`, squares: [...bishopHoles], claim: holesClaim(theirC) });
   // In the opening the plan IS development: name the minors still home (walk 5,
   // 2026-09-23). Leads the levers.
   const home: Array<{ type: string; square: string }> = [];

@@ -44,6 +44,7 @@ import {
   breakContacts,
   rimKnightHeading,
   findColorComplexWeakness,
+  holesClaim,
   findMinorityAttack,
   findPassedPawns,
   findOpenFiles,
@@ -654,6 +655,10 @@ function observationsFor(
     const sqs = many ? `${countWord(cc.squares.length)} of them` : cc.squares.join(' and ');
     out.push({
       key: `${side}-complex-${cc.complex}`, side, kind: 'complex', rank: rank('complex'),
+      // A minor on a hole of this side's camp is ONE idea with the plan's
+      // outpost lever (`boardPlanFacts`, the same key): "plant a knight in one
+      // of the holes" and "Put a knight on one" are said once.
+      aliases: [holesClaim(color)],
       squares: [...cc.squares],
       text: own
         ? `Your ${cc.complex} squares are weak: with no bishop of that colour, no pawn or bishop of yours can cover ${sqs}. Their ${cc.by} can settle there.`

@@ -9,7 +9,7 @@ import { readBoardAll } from './boardComputers';
 import type { CoachFact } from './coachFact';
 import type { EngineLine } from './engineLineRead';
 import { buildPicture } from './positionPicture';
-import { counterplayOf, counterplaysOf, counterplayText, ledgerOf, pictureConclusions, pictureOfBoard, planRacesOf, planTargetOf, planTargetText, targetOf } from './pictureLedger';
+import { counterplayOf, counterplaysOf, counterplayText, ledgerOf, ledgerSquares, ledgerText, pictureConclusions, pictureOfBoard, planRacesOf, planTargetOf, planTargetText, targetOf } from './pictureLedger';
 
 interface Board { id: string; fen: string; lines: EngineLine[] }
 
@@ -70,6 +70,17 @@ describe('the ledger', () => {
     expect(c?.ledger.b.assets.map((e) => [e.object, e.working])).toEqual([['bP@d4', false]]);
     expect(c?.ledger.b.weaknesses.map((e) => e.object)).toEqual(['-@a5', 'bP@a6', '-@c6']);
     expect(c?.ledger.b.weaknesses.find((e) => e.object === 'bP@a6')?.traits).toContain('isolated');
+  });
+
+  it('the ledger in words names the worst weakness and counts the rest — no score sheet of squares; every one stays lit', () => {
+    const c = pictureConclusions(factsOn(MANEUVER), MANEUVER.fen, MANEUVER.lines);
+    const text = ledgerText(c!.ledger, 'w') ?? '';
+    // Three of Black's weak spots (a5, a6, c6): counted, the most vulnerable
+    // by the target's own comparison named.
+    expect(text).toMatch(/(You can get at three of their weak spots|Three of their weak spots are in your reach)\. The worst is the hole on a5\./);
+    expect(text).not.toMatch(/a6|c6/);
+    // The squares are not read out, but they are lit.
+    expect(ledgerSquares(c!.ledger)).toEqual(expect.arrayContaining(['a5', 'a6', 'c6']));
   });
 
   it('the rook lift #2: f2 and the stranded bishop are reachable; the king in the centre is not', () => {
@@ -135,6 +146,25 @@ describe('the counterplay', () => {
     expect(f.namesStudentMove).toBe(true);
     // Negative control: no fact names the break and the line does not play it — nothing to say.
     expect(counterplayOf(buildPicture([]), fen, lines, 'w')).toBeNull();
+  });
+
+  it('a capture break is named by its move and TAKES the pawn — never "the push to e4, against your pawn on e4"', () => {
+    // Black's …d5 pawn levers White's e4: the break is …dxe4, a capture.
+    const fen = 'rnbqkbnr/ppp2ppp/8/3pp3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3';
+    const named = { id: 'test:break-dxe4', computer: 'pawnBreak', fen, squares: ['d5', 'e4'], claims: [], text: 'dxe4 is their break.' } as unknown as CoachFact;
+    const lines: EngineLine[] = [{ moves: ['f1d3', 'd5e4', 'd3e4'], cp: 0, mate: null }];
+    const r = counterplaysOf(buildPicture([named]), fen, lines, 'b').find((x) => x.from === 'd5' && x.to === 'e4');
+    expect(r).toMatchObject({ kind: 'break' });
+    expect(r?.state).not.toBe('unsettled');
+    const text = counterplayText(r!, 'w', fen, lines) ?? '';
+    expect(text).toMatch(/^Their (one resource is the pawn break …dxe4, taking your pawn on e4\.|counterplay is …dxe4: the pawn takes your pawn on e4\.)/);
+    expect(text).not.toMatch(/(push|break) to e4/);
+    // A push still goes TO an empty square and hits the pawn beside it.
+    const pushFen = '4k3/8/8/8/3p4/8/2P1P3/4K3 w - - 0 1';
+    const pushNamed = { id: 'test:break-c3', computer: 'pawnBreak', fen: pushFen, squares: ['c3', 'd4'], claims: [], text: 'c3 is your break.' } as unknown as CoachFact;
+    const pl: EngineLine[] = [{ moves: ['c2c3', 'e8d7'], cp: 0, mate: null }];
+    const p = counterplaysOf(buildPicture([pushNamed]), pushFen, pl, 'w').find((x) => x.from === 'c2' && x.to === 'c3');
+    expect(counterplayText(p!, 'b', pushFen, pl)).toMatch(/^Their (one resource is the pawn break c3, hitting your pawn on d4|counterplay is the push c3, against your pawn on d4)\./);
   });
 
   it('negative control: with no line, the alive break is only unsettled', () => {

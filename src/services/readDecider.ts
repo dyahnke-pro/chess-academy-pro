@@ -435,6 +435,11 @@ function withDetails<F extends ReadFact>(picked: readonly F[], all: readonly F[]
     try { const p = board.get(sq as Square); return p ? `${p.color}${p.type}` : null; } catch { return null; }
   };
   const used = new Set<string>(picked.map((f) => f.text));
+  // ONE IDEA ONCE, BY ITS CLAIM — for a detail as for a step: a fact sharing
+  // a claim key with one said is that idea again ("The plan: plant a knight in
+  // one of the holes" and "Their light squares are holes … Put a knight on
+  // one" are one idea).
+  const claimed = new Set<string>(picked.flatMap((f) => f.claims ?? []));
   // Only what a read says at all: a kind no step takes (a played-out line, a
   // score sheet) is never a read's detail either.
   const steps = ctx.puzzle ? PUZZLE_STEPS : READ_STEPS;
@@ -447,6 +452,7 @@ function withDetails<F extends ReadFact>(picked: readonly F[], all: readonly F[]
     if (pieces.size === 0) continue;
     for (const f of all) {
       if (used.has(f.text) || f.restates || !sayable.has(f.kind)) continue;
+      if ((f.claims ?? []).some((c) => claimed.has(c))) continue;
       // A detail DESCRIBES the piece; it is never a second conclusion (another
       // plan, another try, another verdict, another move's job) — the step
       // already chose its one conclusion, and a rival plan heard as its
@@ -458,6 +464,7 @@ function withDetails<F extends ReadFact>(picked: readonly F[], all: readonly F[]
       if (f.squares.some((s) => ctx.withheld.includes(s))) continue;
       if (!f.squares.some((sq) => pieces.has(sq))) continue;
       used.add(f.text);
+      for (const c of f.claims ?? []) claimed.add(c);
       out.push(f);
     }
   }

@@ -127,7 +127,7 @@ import { pieceTempo } from './pieceTempo';
 import { kingBoxMove } from './kingBox';
 import { matingNet } from './matingNet';
 import { frozenTarget } from './frozenTarget';
-import { pictureConclusions, ledgerKey, ledgerText, ledgerSquares, counterplayText, targetText, moveAnswersTarget, planTargetText, moveWorksOnPlan } from './pictureLedger';
+import { pictureLedger, pictureCounterplay, pictureTarget, ledgerKey, ledgerText, ledgerSquares, counterplayText, targetText, moveAnswersTarget, planTargetText, moveWorksOnPlan } from './pictureLedger';
 import { centreDuo } from './centreDuo';
 import { noSafeChecks } from './noSafeChecks';
 import { promotionWithCheck } from './promotionWithCheck';
@@ -3145,14 +3145,14 @@ export const BOARD_COMPUTERS = {
       const pf = boardPlanFacts(fen, student === 'w' ? 'white' : 'black');
       if (!pf) return null;
       const out: CoachFact[] = [];
-      const say = (text: string, squares: readonly string[]): void => {
-        out.push(fact({ key: text, claims: [], text, proof: NO_PROOF.description, squares: [...squares], stakes: null,
+      const say = (text: string, squares: readonly string[], claims: readonly string[] = []): void => {
+        out.push(fact({ key: text, claims: [...claims], text, proof: NO_PROOF.description, squares: [...squares], stakes: null,
           seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen }));
       };
       if (withTrump && pf.trump) say(pf.trump, pf.trumpSquares);
       for (const p of pf.plans) say(p.text, p.squares);
       const levers = leverSentence(pf.levers);
-      if (levers) say(levers, pf.levers.flatMap((l) => l.squares));
+      if (levers) say(levers, pf.levers.flatMap((l) => l.squares), pf.levers.flatMap((l) => (l.claim ? [l.claim] : [])));
       return out;
     }),
     computer: 'boardPlanFacts',
@@ -7971,15 +7971,15 @@ export const BOARD_COMPUTERS = {
   // target with the best move going after it is the plan to start.
   pictureLedger: {
     read: (ctx, fact) => safe(() => {
-      const c = pictureConclusions(ctx.facts, ctx.fen, ctx.lines);
-      if (!c) return null;
-      const text = ledgerText(c.ledger, ctx.student);
+      const ledger = pictureLedger(ctx.facts, ctx.fen, ctx.lines);
+      if (!ledger) return null;
+      const text = ledgerText(ledger, ctx.student);
       if (!text) return null;
-      const squares = ledgerSquares(c.ledger);
+      const squares = ledgerSquares(ledger);
       const them: Color = ctx.student === 'w' ? 'b' : 'w';
-      const asks = sideToMove(ctx.fen) === ctx.student && c.target[them] !== null;
+      const asks = sideToMove(ctx.fen) === ctx.student && (pictureTarget(ctx.facts, ctx.fen, ctx.lines, them)?.now ?? null) !== null;
       // One claim per ledger: the same entries on two boards are the same idea.
-      const key = `ledger:${ledgerKey(c.ledger)}`;
+      const key = `ledger:${ledgerKey(ledger)}`;
       return fact({ key, claims: [key], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares, stakes: null,
         seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: ctx.fen, ...(asks ? { skill: 'missed-opponents-threat' } : {}) });
     }),
@@ -7995,9 +7995,8 @@ export const BOARD_COMPUTERS = {
   },
   pictureCounterplay: {
     read: (ctx, fact) => safe(() => {
-      const c = pictureConclusions(ctx.facts, ctx.fen, ctx.lines);
       const them: Color = ctx.student === 'w' ? 'b' : 'w';
-      const r = c?.counterplay[them] ?? null;
+      const r = pictureCounterplay(ctx.facts, ctx.fen, ctx.lines, them);
       if (!r) return null;
       const text = counterplayText(r, ctx.student, ctx.fen, ctx.lines);
       if (!text) return null;
@@ -8026,11 +8025,11 @@ export const BOARD_COMPUTERS = {
   },
   pictureTarget: {
     read: (ctx, fact) => safe(() => {
-      const c = pictureConclusions(ctx.facts, ctx.fen, ctx.lines);
-      const t = c?.target[ctx.student] ?? null;
+      const c = pictureTarget(ctx.facts, ctx.fen, ctx.lines, ctx.student);
+      const t = c?.now ?? null;
       // The plan's target: a race won in three or four moves, said beside the
       // target now when it is another thing, alone when there is none.
-      const p0 = c?.planTarget[ctx.student] ?? null;
+      const p0 = c?.plan ?? null;
       const p = p0 && p0.best.entry.object !== t?.best.entry.object ? p0 : null;
       const planText = p ? planTargetText(p, ctx.student) : null;
       if (!t && !planText) return null;
