@@ -310,7 +310,8 @@ export function renderTryReason(t: TryData): string | null {
   if (!t.why) return null;
   const why = t.why.trim();
   if (!t.whyPath) return why;
-  return `After ${t.whyPath}, ${why.replace(/^(Their|Your|The|A|An|It|This)\b/, (w) => w.toLowerCase())}`;
+  // The reason's first word joins the clause; a move (SAN) keeps its case.
+  return `After ${t.whyPath}, ${/^(?:[KQRBN][a-h1-8x]|O-O)/.test(why) ? why : why.replace(/^[A-Z](?=[a-z'’])/, (w) => w.toLowerCase())}`;
 }
 
 /** THE WHY BEFORE THE MATERIAL, then the result. */

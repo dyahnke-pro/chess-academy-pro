@@ -80,3 +80,12 @@ describe('the renderer writes the voice rules once', () => {
     expect(out.length).toBe(facts.length);
   });
 });
+
+describe('a reason on the board after the line', () => {
+  it('joins the clause in lower case, a move keeps its case', async () => {
+    const { renderTryReason } = await import('./teachingSentence');
+    const t = { san: 'Nxd4', reply: '…Bd7', mine: true, stem: 0, plan: null, replyFollow: null, whyPath: 'Nxd4 …Bd7', material: null, materialWho: 'They', mates: false, shift: null };
+    expect(renderTryReason({ ...t, why: "They're worse, so they're setting you a problem." })).toBe("After Nxd4 …Bd7, they're worse, so they're setting you a problem.");
+    expect(renderTryReason({ ...t, why: 'Qxd4 wins a pawn.' })).toBe('After Nxd4 …Bd7, Qxd4 wins a pawn.');
+  });
+});
