@@ -124,6 +124,12 @@ class MasterPlayCache {
       });
   }
 
+  /** Every resolved entry, oldest first, without bumping the LRU — what the
+   *  board-read worker mirrors (`boardReadData`). */
+  resolved(): Array<[string, MasterPlayResult]> {
+    return [...this.entries];
+  }
+
   /** Current count of resolved entries. Test-only. */
   size(): number {
     return this.entries.size;

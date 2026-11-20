@@ -12,15 +12,23 @@ type PositionMap = Record<string, [string, number]>;
 let positions: PositionMap | null = null;
 let loading = false;
 
-/** Fetch the index once, off the move path. */
-function warmOpeningPositions(): void {
-  if (positions || loading || typeof fetch !== 'function') return;
+let job: Promise<void> | null = null;
+/** Fetch the index once, off the move path; resolves when it has landed (or
+ *  cannot be had). */
+export function loadOpeningPositions(): Promise<void> {
+  if (positions || typeof fetch !== 'function') return Promise.resolve();
+  if (job) return job;
   loading = true;
   // Through the one /data/ loader (the native bundle strips public/data).
-  void loadDataJson('/data/opening-positions.json')
+  job = loadDataJson('/data/opening-positions.json')
     .then((j) => { if (j) positions = j as PositionMap; })
     .catch(() => undefined)
-    .finally(() => { loading = false; });
+    .finally(() => { loading = false; job = null; });
+  return job;
+}
+function warmOpeningPositions(): void {
+  if (positions || loading) return;
+  void loadOpeningPositions();
 }
 
 /** Whether the index has loaded (a null answer before then means "not yet"). */

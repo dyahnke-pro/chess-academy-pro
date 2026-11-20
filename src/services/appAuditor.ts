@@ -479,6 +479,9 @@ export type AuditKind =
    *  sequential singleton — the "stuck at 1" path. Was console-only until
    *  2026-09-05, which hid the asm spawn-timeout regression from every audit. */
   | 'analysis-pool-fallback'
+  /** A board read (`boardReadOffThread`) ran its computers on the MAIN thread:
+   *  no Worker here, the worker failed, or its input could not be cloned. */
+  | 'board-read-worker-fallback'
   | 'analysis-pool-warmed'
   | 'analysis-game-done'
   | 'analysis-sweep-summary'

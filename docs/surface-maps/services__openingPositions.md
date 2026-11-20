@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**49 lines · 4 exports · 5 importers · 2 tests · 0 audits**
+**57 lines · 5 exports · 10 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,38 +12,57 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
+- `src/services/boardComputers.ts`
+- `src/services/boardReadData.ts`
+- `src/services/danyaBench.measure.test.ts`
 - `src/services/openingAnnouncement.ts`
 - `src/services/openingEquivalence.ts`
 - `src/services/openingPositions.test.ts`
 - `src/services/openingStory.ts`
 - `src/services/orderComputers.test.ts`
+- `src/services/reviewNarrationRev.gate.test.ts`
+- `src/test/replayGame.ts`
 
 ## Exports and every call site
 
-### `openingPositionsLoaded` (function) — 2 call sites
-- `src/services/openingEquivalence.ts:160`
-- `src/services/openingStory.ts:129`
+### `loadOpeningPositions` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
-### `setOpeningPositions` (function) — 2 call sites
+### `openingPositionsLoaded` (function) — 2 call sites
+- `src/services/openingEquivalence.ts:169`
+- `src/services/openingStory.ts:194`
+
+### `setOpeningPositions` (function) — 8 call sites
+- `src/services/danyaBench.measure.test.ts:906`
+- `src/services/moveThoughtFacts.test.ts:404`
 - `src/services/openingPositions.test.ts:12`
-- `src/services/orderComputers.test.ts:44`
+- `src/services/orderComputers.test.ts:46`
+- `src/services/reviewNarrationRev.gate.test.ts:25`
+- `src/services/reviewOneClaimOnce.test.ts:39`
+- `src/services/reviewOneClaimOnce.test.ts:106`
+- `src/test/replayGame.ts:36`
 
 ### `openingAtPosition` (function) — 5 call sites
-- `src/services/openingEquivalence.ts:57`
-- `src/services/openingEquivalence.ts:61`
-- `src/services/openingEquivalence.ts:175`
-- `src/services/openingEquivalence.ts:236`
+- `src/services/openingEquivalence.ts:66`
+- `src/services/openingEquivalence.ts:70`
+- `src/services/openingEquivalence.ts:184`
+- `src/services/openingEquivalence.ts:245`
 - `src/services/openingPositions.test.ts:20`
 
-### `transposedOpening` (function) — 3 call sites
-- `src/services/openingAnnouncement.ts:233`
+### `transposedOpening` (function) — 4 call sites
+- `src/services/boardComputers.ts:6293`
+- `src/services/openingAnnouncement.ts:267`
 - `src/services/openingPositions.test.ts:28`
 - `src/services/openingPositions.test.ts:37`
 
 ## Tests
 
+- `src/services/danyaBench.measure.test.ts`
+- `src/services/moveThoughtFacts.test.ts`
 - `src/services/openingPositions.test.ts`
 - `src/services/orderComputers.test.ts`
+- `src/services/reviewNarrationRev.gate.test.ts`
+- `src/services/reviewOneClaimOnce.test.ts`
 
 ## Audits that reach it
 

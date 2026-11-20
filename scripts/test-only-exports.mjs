@@ -116,7 +116,9 @@ export function scan() {
   // Whole modules no production file names in an import.
   const imported = new Set();
   for (const [file, text] of texts) {
-    for (const m of text.matchAll(/(?:from\s+|import\s*\(\s*|import\s+)['"]([^'"\n]+)['"]/g)) {
+    // A module worker is loaded by URL (`new Worker(new URL('./x.worker.ts',
+    // import.meta.url))`, Vite's form): that names the module too.
+    for (const m of text.matchAll(/(?:from\s+|import\s*\(\s*|import\s+|new\s+URL\(\s*)['"]([^'"\n]+)['"]/g)) {
       imported.add(basename(m[1]).replace(/\.(tsx?|js|mjs)$/, ''));
     }
     for (const g of globbedFiles(file, text, prodFiles)) imported.add(basename(g).replace(/\.(tsx?|js|mjs)$/, ''));

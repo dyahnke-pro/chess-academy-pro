@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**233 lines · 2 exports · 3 importers · 6 tests · 0 audits**
+**230 lines · 4 exports · 5 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,6 +14,8 @@
 
 - `src/hooks/usePositionNarration.ts`
 - `src/services/positionReadComposer.withhold.test.ts`
+- `src/services/readHasShot.test.ts`
+- `src/services/tryReadBudget.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
 
 ## Exports and every call site
@@ -21,8 +23,22 @@
 ### `READ_SEAT` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `surfaceBoardReader` (function) — 3 call sites
+- `src/services/tryReadBudget.test.ts:95`
+- `src/services/tryReadBudget.test.ts:111`
+- `src/services/tryReadBudget.test.ts:114`
+
+### `readHasShot` (function) — 7 call sites
+- `src/services/readHasShot.test.ts:11`
+- `src/services/readHasShot.test.ts:15`
+- `src/services/readHasShot.test.ts:19`
+- `src/services/readHasShot.test.ts:20`
+- `src/services/readHasShot.test.ts:24`
+- `src/services/readHasShot.test.ts:25`
+- `src/services/readHasShot.test.ts:26`
+
 ### `composePositionRead` (function) — 3 call sites
-- `src/hooks/usePositionNarration.ts:228`
+- `src/hooks/usePositionNarration.ts:232`
 - `src/services/positionReadComposer.withhold.test.ts:18`
 - `src/test/everySurfaceSpeaks.test.ts:131`
 
@@ -32,8 +48,11 @@
 - `src/services/liveNeedWire.test.ts`
 - `src/services/positionReadComposer.withhold.test.ts`
 - `src/services/readHabit.test.ts`
+- `src/services/readHasShot.test.ts`
+- `src/services/tryReadBudget.test.ts`
 - `src/test/corpusScope.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
+- `src/test/oneCoachUnlocked.gate.test.ts`
 
 ## Audits that reach it
 
