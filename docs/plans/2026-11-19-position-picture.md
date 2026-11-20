@@ -79,3 +79,9 @@ just have an outline" → "Go".
 - No link without a computed relation (rule 2). A wrongly stapled detail is worse than none.
 - A conclusion never outruns its facts. If the ledger has no working asset for either side, the verdict word is the engine band, said plainly.
 - No `Math.random`. Phrasings are rotated (`rotateStem`).
+
+## RESUME (2026-11-20, branch `urg-wt`, backed up on origin)
+- Merged: picture P5/P6, record path, endings, ledger lever weakness, engine budget, worker read, story wiring, cleanup.
+- In flight: one agent fixing the ~40 ship-check failures (commits per group). Ship-check is NOT run until we ship.
+- Test next (David: reuse what we have, no engine run): `npx tsx scripts/board-read-stored.ts <article-reads.jsonl> <out.jsonl>` rebuilds today's read from the stored depth-16 lines; grade the saved 673 ideas in `audit-reports/danya-havecheck/ideas-labelled-2026-11-17.json` against it (said / said wrongly / missed + false lines). Tries bench today: 144/240.
+- Not pushed to main until David reads the 202 results.
