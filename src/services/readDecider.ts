@@ -35,6 +35,7 @@
  * Pure. One table, `READ_STEPS` + the weights, that the one door
  * (`coachDecider`) can read.
  */
+import { jaccard, SAME_CLAIM_JACCARD } from './factSelector';
 import { Chess, type Square } from 'chess.js';
 import { PICTURE_ROLE, type PictureRole } from './positionPicture';
 import weightTable from '../data/read-decider-weights.json';
@@ -232,6 +233,9 @@ export function readWeight(f: ReadFact, ctx: ReadContext): number {
 const ON_TARGET = 0.02;
 
 /** The read: one fact per step, in his order, and the habit that closes it. */
+const ONE_PLAN_KINDS: ReadonlySet<string> = new Set(['plan-now', 'siege', 'plan-steps', 'structure-plan']);
+const STANDING_KINDS: ReadonlySet<string> = new Set(['standing', 'standing-bare', 'eval', 'convert', 'compensation', 'verdict']);
+
 export function decideRead<F extends ReadFact>(facts: readonly F[], ctx: ReadContext): { facts: F[]; habit: string | null } {
   const out: F[] = [];
   let target = new Set<string>();
@@ -240,11 +244,14 @@ export function decideRead<F extends ReadFact>(facts: readonly F[], ctx: ReadCon
   // that idea in other words ("their …g6 break is dead", "it takes the …g6
   // break away").
   const claimed = new Set<string>();
-  const sameClaim = (f: F): boolean => (f.claims ?? []).some((c) => claimed.has(c));
+  // THE STANDING IS ONE CLAIM: a standing, an eval, a convert or a
+  // compensation line each says who stands better — the read says one.
+  const claimsOf = (f: F): readonly string[] => (STANDING_KINDS.has(f.kind) ? [...(f.claims ?? []), 'standing'] : (f.claims ?? []));
+  const sameClaim = (f: F): boolean => claimsOf(f).some((c) => claimed.has(c));
   const say = (f: F): void => {
     out.push(f);
     for (const sq of f.squares) named.add(sq);
-    for (const c of f.claims ?? []) claimed.add(c);
+    for (const c of claimsOf(f)) claimed.add(c);
   };
   const picture = !ctx.puzzle && facts.some((f) => f.computer === 'pictureVerdict' && f.kind === 'verdict');
   // A conclusion and what it rests on: their details are the supports the
@@ -284,28 +291,44 @@ export function decideRead<F extends ReadFact>(facts: readonly F[], ctx: ReadCon
       && !restatesVerdict(x)
       // ONE IDEA ONCE: a story line whose every square was named adds nothing.
       && (!row.sayOnce || x.squares.length === 0 || x.squares.some((sq) => !named.has(sq))));
-    let pick: F | null = candidates.find((x) => !!x.computer && !!row.first?.includes(x.computer)) ?? null;
-    let pickW = pick ? Infinity : -Infinity;
+    // EVERY FACT THAT CLEARS THE BAR SPEAKS (G4.5: a bar, never a cap of one
+    // a step). The picture's own computers lead their step; the rest follow
+    // by weight, then stakes. Each is re-checked against what the step has
+    // already said, so one idea is still said once.
     // The mate's pattern is the puzzle's lesson: said whenever it is found.
     const weightOf = (x: F): number => (x.kind === 'mate-pattern' ? 1 : readWeight(x, ctx) + (onTarget(x) ? ON_TARGET : 0));
+    const firsts = candidates.filter((x) => !!x.computer && !!row.first?.includes(x.computer));
     const firstFrom = row.firstFrom;
-    const preferred = firstFrom ? candidates.filter((x) => firstFrom.includes(x.from) && weightOf(x) >= TABLE.bar) : [];
-    for (const x of pick ? [] : preferred.length ? preferred : candidates) {
-      const w = weightOf(x);
-      if (w < TABLE.bar) continue;
-      if (w > pickW || (w === pickW && (x.stakes ?? -1) > (pick?.stakes ?? -1))) { pick = x; pickW = w; }
-    }
-    if (!pick) continue;
-    say(pick);
-    if (row.step === 'priority') target = new Set(pick.squares);
-    // The pawns the verdict's reason is about (a passer, a weak pawn). The
-    // picture's verdict names tries, not pawns.
-    if (row.step === 'verdict' && ctx.fen && !picture) {
-      try { const b = new Chess(ctx.fen); verdictPawns = new Set(pick.squares.filter((sq) => b.get(sq as Square)?.type === 'p')); } catch { /* an unreadable board names no pawn */ }
-    }
-    if (row.supports) {
-      argued.add(pick);
-      for (const f of supportsOf(row.supports, pick, facts, ctx, out, sameClaim)) { say(f); argued.add(f); }
+    const rank = (x: F): number => (firstFrom?.includes(x.from) ? 1 : 0);
+    const rest = candidates.filter((x) => !firsts.includes(x) && weightOf(x) >= TABLE.bar)
+      .sort((x, y) => rank(y) - rank(x) || weightOf(y) - weightOf(x) || (y.stakes ?? -1) - (x.stakes ?? -1));
+    let lead: F | null = null;
+    const stepSaid: F[] = [];
+    for (const pick of [...firsts, ...rest]) {
+      if (out.some((o) => o === pick || o.text === pick.text) || sameClaim(pick) || restatesVerdict(pick)) continue;
+      // Two facts of one step on the same squares (G4.5.1's subsumption bar)
+      // are one claim about one geometry: the first, by order, says it.
+      if (pick.squares.length > 0 && stepSaid.some((o) => o.squares.length > 0 && jaccard(o.squares, pick.squares) >= SAME_CLAIM_JACCARD)) continue;
+      // THE PLAN IS ONE CHOICE: the board's plans are alternatives to follow,
+      // not facts to add — the step says the one it ranks first (its own
+      // supports ride on it through `supportsOf`).
+      if (ONE_PLAN_KINDS.has(pick.kind) && stepSaid.some((o) => ONE_PLAN_KINDS.has(o.kind) || firsts.includes(o))) continue;
+      stepSaid.push(pick);
+      if (row.sayOnce && pick.squares.length > 0 && pick.squares.every((sq) => named.has(sq))) continue;
+      say(pick);
+      if (!lead) {
+        lead = pick;
+        if (row.step === 'priority') target = new Set(pick.squares);
+        // The pawns the verdict's reason is about (a passer, a weak pawn). The
+        // picture's verdict names tries, not pawns.
+        if (row.step === 'verdict' && ctx.fen && !picture) {
+          try { const bd = new Chess(ctx.fen); verdictPawns = new Set(pick.squares.filter((sq) => bd.get(sq as Square)?.type === 'p')); } catch { /* an unreadable board names no pawn */ }
+        }
+      }
+      if (row.supports) {
+        argued.add(pick);
+        for (const f of supportsOf(row.supports, pick, facts, ctx, out, sameClaim)) { say(f); argued.add(f); }
+      }
     }
   }
   return { facts: withDetails(out, facts, ctx, argued), habit: habitOf(facts, ctx) };

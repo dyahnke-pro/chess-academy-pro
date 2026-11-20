@@ -119,7 +119,7 @@ export function barForTier(tier: ImportanceTier): number {
   return BAR_BY_TIER[tier];
 }
 
-function jaccard(a: readonly string[], b: readonly string[]): number {
+export function jaccard(a: readonly string[], b: readonly string[]): number {
   if (a.length === 0 || b.length === 0) return 0;
   const A = new Set(a);
   const B = new Set(b);

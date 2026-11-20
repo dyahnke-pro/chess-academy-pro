@@ -31,7 +31,9 @@ describe('the read decider: his order, the fact he would say at each step', () =
     const s = said(korchnoi.facts, { ...OPEN, best: ['a2', 'a3'] });
     expect(s[0]).toMatch(/pawn down.*bishop pair/);
     expect(s[1]).toMatch(/^a3 first.*covers b4/);
-    expect(s[2]).toMatch(/^Nxb5 .*Qe8/);
+    // Every fact of the best-move step that clears the bar speaks (G4.5: a
+    // bar, not one a step), so the refutation follows them.
+    expect(s.findIndex((t) => /^Nxb5 .*Qe8/.test(t))).toBeGreaterThan(1);
     expect(korchnoi.facts.filter((f) => f.keptToday).some((f) => /minority attack/.test(f.text))).toBe(true);
     expect(s.some((t) => /minority attack/.test(t))).toBe(false);
   });
