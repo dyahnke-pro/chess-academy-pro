@@ -136,6 +136,13 @@ export type ConsideredTry = { why: 'plan'; target: string; storm: boolean } | { 
  *  plan's target, a capture, a check, a threat, a lever, a passer's push. A
  *  defence, a reroute or a doubling is weighed, never a temptation. */
 const TEMPTING_WHY: ReadonlySet<ConsideredTry['why']> = new Set(['plan', 'capture', 'check', 'threat', 'mate-threat', 'lever', 'passer']);
+/** A weighed try tempts when its reason goes at something and — past a
+ *  capture or a check — a player sees it (0IsE8 …Qxe5: ten plan tries on
+ *  f5 at an eye share under 1.5%, each walking into mate, were weighed). */
+function weighedTempting(w: ConsideredTry | null, eye: number): boolean {
+  if (!w || !TEMPTING_WHY.has(w.why)) return false;
+  return w.why === 'capture' || w.why === 'check' || eye >= CANDIDATE_BAR / 2;
+}
 
 /** What a plan's try goes after, in words: the weak pawn ("the pawn on b5"),
  *  or for a storm the king itself — never the king's square. */
@@ -297,6 +304,8 @@ function readCandidates(fen: string, played: Move, reads: readonly WeighRead[], 
 /** A move the eye finds OBVIOUS: at this share of the eye's read or above it
  *  is among the first moves a player looks at. */
 export const OBVIOUS_EYE = CANDIDATE_BAR;
+/** A direct attack is seen from half the eye's candidate bar. */
+export const ATTACK_EYE = CANDIDATE_BAR / 2;
 
 /**
  * THE TEMPTING TRY — the one definition (puzzle reads 2026-11-20: on a sharp
@@ -317,6 +326,10 @@ export function temptingTry(fen: string, uci: string, eye: number, real: number)
   if (m.captured || /[+#]/.test(m.san)) return true;
   const own = MATERIAL_VALUE[m.piece] ?? 0;
   const them = m.color === 'w' ? 'b' : 'w';
+  // A DIRECT ATTACK tempts only a player who sees it (puzzle reads
+  // 2026-11-20: on 0Km5u …Qe3 every bishop move "attacked" something at an
+  // eye share of 1%, and ten of them were weighed out loud).
+  if (eye < ATTACK_EYE) return false;
   for (const row of b.board()) for (const sq of row) {
     if (!sq || sq.color !== them || sq.type === 'k') continue;
     if (!b.attackers(sq.square, m.color).includes(m.to)) continue;
@@ -431,7 +444,7 @@ export function temptingRefutations(args: Parameters<typeof temptingRefuted>[0])
     if (real < TEMPTING_P_FLOOR && !mateWalk && !weighed && !matesMover(read, played.color)) continue;
     // TEMPTING AND FAILS: a try no player is drawn to is not weighed, however
     // it ends (a try the plan weighed and an eye-pulled walk into mate excepted).
-    if (!(weighed && TEMPTING_WHY.has(weighed.why)) && !mateWalk && !temptingTry(args.fenBefore, c.uci, c.eye, real)) continue;
+    if (!weighedTempting(weighed, c.eye) && !mateWalk && !temptingTry(args.fenBefore, c.uci, c.eye, real)) continue;
     const t = refuteCandidate(args.fenBefore, c, read, playedRead, args.student, args.priorMove, plan ? planAim(plan, played.color === args.student) : null);
     if (!t) continue;
     // A PIECE SIMPLY GIVEN AWAY IS NOT A TEMPTATION: their first reply takes
@@ -774,7 +787,7 @@ export function standingRefutations(args: {
     // it stays silent the line's own story says it here.
     if (read.mate !== null && refuteCandidate(args.fen, c, read, best.read, args.student, null, plan ? planAim(plan, mine) : null)) { drop('mate-line'); continue; }
     if (real < TEMPTING_P_FLOOR && !weighed) { drop('not-tempting'); continue; }
-    if (!(weighed && TEMPTING_WHY.has(weighed.why)) && !temptingTry(args.fen, c.uci, c.eye, real)) { drop('not-tempting'); continue; }
+    if (!weighedTempting(weighed, c.eye) && !temptingTry(args.fen, c.uci, c.eye, real)) { drop('not-tempting'); continue; }
     const tryCp = seatCp(read, mover);
     const cost = bestCp - tryCp;
     // The plan's direct try is weighed against the plan, not the eye: it
