@@ -47,7 +47,7 @@ import { tellPictureFacts } from './planThread';
 import { threadsOfRead, type ReadStory } from './gameStory';
 import { evalBand } from './evalBand';
 import type { TrySource } from './tryReadBudget';
-import { boardAfter, isForcingThreat, nowBoard, renderTryGroup } from './teachingSentence';
+import { boardAfter, isForcingThreat, nowBoard, renderQuietThreat, renderTryGroup } from './teachingSentence';
 
 /** A read the student asked for ("read this position"): the asked answer's
  *  writer settings (`writerRegister`). */
@@ -402,7 +402,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
           // "threatens …b4", 0CegO Ke3 "…Kd2": no such threat).
           const forcing = mates || isForcingThreat(free, t.moves[0]);
           const follow = `${side === 'b' ? '…' : ''}${threatSan}`;
-          facts.push({ from: 'bestMove', kind: forcing ? 'aspect-threat' : 'aspect-prepares', computer: 'quietThreat', text: forcing ? `${quiet.san} is quiet, but it threatens ${follow}${mates ? ', with mate to follow' : ''} — they must answer that first.` : `${quiet.san} is quiet: it prepares ${follow}.`, squares: [top.moves[0].slice(2, 4), to], stakes: stakeValue({ points: mates ? 100 : gain / 100, plies: 2 }), claims: [`quiet-threat:${to}`] });
+          facts.push({ from: 'bestMove', kind: forcing ? 'aspect-threat' : 'aspect-prepares', computer: 'quietThreat', text: renderQuietThreat({ san: quiet.san, follow, mates, forcing }), squares: [top.moves[0].slice(2, 4), to], stakes: stakeValue({ points: mates ? 100 : gain / 100, plies: 2 }), claims: [`quiet-threat:${to}`] });
         }
       }
     }

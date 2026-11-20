@@ -55,6 +55,7 @@ import { createStoryStore, storyLedger, type SaidSet, type StoryStore } from './
 import { withArticle } from '../utils/andList';
 import { afterCaptureSan } from '../utils/captureWords';
 import type { IdeaKind } from './ideaKind';
+import { renderAspectThreat } from './teachingSentence';
 
 /** The piece a SAN names by its first letter (a pawn move names none). */
 const SAN_PIECE: Record<string, string> = { N: 'knight', B: 'bishop', R: 'rook', Q: 'queen', K: 'king' };
@@ -372,7 +373,7 @@ export function moveAspects(input: {
   const threat = facts.isCheck ? null : detectNewThreat(fenBefore, fenAfter, moverWB);
   if (threat) {
     const kw = threat.kind === 'mate' ? 96 : 88;
-    aspects.push({ kind: 'aspect-threat', text: `threatening ${cleanSan(threat.san)} — ${threat.detail}`, verb: `threatens ${cleanSan(threat.san)} — ${threat.detail}`, idea: threat.kind === 'mate' ? 'mate' : 'threat', squares: [threatSquare(threat.san)].filter((x): x is string => !!x), weight: kw, keystone: true });
+    aspects.push({ kind: 'aspect-threat', ...renderAspectThreat(cleanSan(threat.san), threat.detail), idea: threat.kind === 'mate' ? 'mate' : 'threat', squares: [threatSquare(threat.san)].filter((x): x is string => !!x), weight: kw, keystone: true });
   }
 
   const recapture = !!mv.captured && prev.square === mv.to && prev.capturedValue > 0;

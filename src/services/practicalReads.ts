@@ -15,6 +15,7 @@ import { legalSeeGainFor, legalSeeGainOn, landingIsSafe, asIfToMove } from './po
 import { MATERIAL_VALUE, materialBalance } from './pieceValues';
 import { quietBalance } from './material';
 import { andList } from '../utils/andList';
+import { renderMateThreatTwoJobs } from './teachingSentence';
 
 /** A move the engine counts as sound. */
 const SOUND_CP = 50;
@@ -249,8 +250,7 @@ export function mateThreatWinsMore(fenBefore: string, san: string, student: Colo
   if (!r || r.mv.color !== student || r.mv.san.includes('+')) return null;
   const blow = secondBlow(r.after, student);
   if (!blow) return null;
-  const tail = blow.trap ? 'whatever stops it leaves their queen with nowhere to go' : 'whatever stops it leaves a piece of theirs loose';
-  const text = `${r.mv.san} threatens mate on ${blow.mateSq} — and ${tail}. One threat doing two jobs: don't hunt only the mate or only the material, line them up.`;
+  const text = renderMateThreatTwoJobs({ mine: true, san: r.mv.san, mateSq: blow.mateSq, trap: blow.trap });
   return withProof('mate-threat-wins-more', text, [r.mv.to, blow.mateSq], `mate-threat-wins-more:${blow.mateSq}`);
 }
 
@@ -263,8 +263,7 @@ export function mateThreatCostsYou(fenBefore: string, san: string, student: Colo
   if (!r || r.mv.color === student || r.mv.san.includes('+')) return null;
   const blow = secondBlow(r.after, other(student));
   if (!blow) return null;
-  const tail = blow.trap ? 'every defence leaves your queen short of squares' : 'every defence leaves a piece of yours loose';
-  const text = `${r.mv.san} threatens mate on ${blow.mateSq}, and ${tail} — stop the mate first, then pick the defence that gives up the least.`;
+  const text = renderMateThreatTwoJobs({ mine: false, san: r.mv.san, mateSq: blow.mateSq, trap: blow.trap });
   return withProof('mate-threat-costs-you', text, [r.mv.to, blow.mateSq], `mate-threat-costs-you:${blow.mateSq}`);
 }
 

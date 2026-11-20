@@ -19,6 +19,7 @@ import { CAPTURE_VALUE } from './pieceValues';
 import { Chess, type Square } from 'chess.js';
 import { legalSeeGain } from './positionReadingService';
 import { pieceRef } from './pieceRef';
+import { renderLatentPin, renderTradePin } from './teachingSentence';
 
 const VAL = CAPTURE_VALUE;
 const FILES = 'abcdefgh';
@@ -243,7 +244,7 @@ export function tradeDangerClause(
   const front = ref(d.frontSquare, `your ${PNAME[d.frontPiece]} on ${d.frontSquare}`);
   const enemy = ref(d.enemySquare, `their ${PNAME[d.enemyPiece]} on ${d.enemySquare}`);
   const back = ref(d.backSquare, `your ${PNAME[d.backPiece]} on ${d.backSquare}`);
-  return `before you take on ${d.tradeTo}, look past the trade: ${front} would stand between ${enemy} and ${back}, all on one ${d.line} — a pin.`;
+  return renderTradePin({ tradeTo: d.tradeTo, front, enemy, back, line: d.line });
 }
 
 /** The prophylactic warning — guide-don't-tell: name the alignment and the line,
@@ -271,14 +272,8 @@ export function latentDangerClause(
   // WHICH line, WHOSE piece, and WHAT opens it (Alekhine re-walk ply 19: "your
   // bishop on e2 and your queen share that diagonal — mind it" named no enemy
   // and no move; the student cannot act on a line they cannot find).
-  if (d.latent && d.shieldSquare && d.shieldPiece) {
-    const shield = PNAME[d.shieldPiece];
-    const through = ref(d.shieldSquare, `${yours} ${shield} on ${d.shieldSquare}`);
-    return mine
-      ? `heads up: ${enemy} looks through ${through} at ${front} and your ${back} behind it — move the ${shield} and the ${PNAME[d.frontPiece]} is pinned.`
-      : `${enemy} looks through ${through} at ${front} and their ${back} behind it — once their ${shield} moves, the ${PNAME[d.frontPiece]} is pinned.`;
-  }
-  return mine
-    ? `heads up: ${front} and your ${back} share that ${d.line} with ${enemy} — that ${d.line} is a pin.`
-    : `${front} and their ${back} share that ${d.line} with ${enemy} — that ${d.line} is a pin to aim at.`;
+  const shield = d.latent && d.shieldSquare && d.shieldPiece
+    ? { words: ref(d.shieldSquare, `${yours} ${PNAME[d.shieldPiece]} on ${d.shieldSquare}`), name: PNAME[d.shieldPiece] }
+    : null;
+  return renderLatentPin({ mine, front, frontName: PNAME[d.frontPiece], back, enemy, line: d.line, shield });
 }

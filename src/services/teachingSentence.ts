@@ -461,3 +461,163 @@ export function renderAllowedClause(a: AllowedData): string | null {
   if (a.mate) return `walks into mate: ${a.lineWords}${a.saysMate ? '' : ", and it's mate"}`;
   return a.won ? `lets ${a.whom} play ${a.sans[0]}, winning ${a.won}` : null;
 }
+
+// ── THREATS AND "PREPARES" (family A1) ─────────────────────────────────────
+// The threat computers (`moveThreat`, `latentDanger`, `computeMustDefend`,
+// `detectNewThreat`, `describeThreatPrevention`) return what the threat is;
+// the sentence is written here. "Threatens" is only ever said of a forcing
+// follow-up: a mate, a material win, or a move `isForcingThreat` passes.
+
+/** What a move threatens, read by `moveThreat`. */
+export type MoveThreatData =
+  | { kind: 'mate'; n: 2 | 3; lineWords: string }
+  | { kind: 'win'; won: string; lineWords: string };
+
+/** The move's predicate: "threatens mate in two: …" / "threatens to win the
+ *  pawn on d5: …" — a mate or a material win is forcing by its own count. */
+export function renderMoveThreat(t: MoveThreatData): string {
+  return t.kind === 'mate'
+    ? `threatens mate in ${t.n === 2 ? 'two' : 'three'}: ${t.lineWords}`
+    : `threatens to win ${t.won}: ${t.lineWords}`;
+}
+
+/** A new one-move threat (`detectNewThreat`), from the student's seat. The
+ *  threat move is forcing by `isForcingThreat` on its own board, else it is
+ *  said as what the move prepares. */
+export interface NewThreatData {
+  mine: boolean;
+  san: string;
+  /** What the threat move does ("forks your king and rook"). */
+  detail: string;
+  /** How the student's answer meets it (their threat only). */
+  answer: string | null;
+  /** The board the threat move is played on, and the move (uci). */
+  fen: string;
+  uci: string;
+  mate: boolean;
+}
+
+export function renderNewThreat(t: NewThreatData): string {
+  const forcing = t.mate || isForcingThreat(t.fen, t.uci);
+  if (t.mine) return forcing ? `You're now threatening ${t.san} — it ${t.detail}.` : `Your move prepares ${t.san} — it ${t.detail}.`;
+  const lead = forcing ? `Careful — their move threatens ${t.san}: it ${t.detail}.` : `Their move prepares ${t.san}: it ${t.detail}.`;
+  return t.answer ? `${lead} The answer: ${t.answer}.` : lead;
+}
+
+/** A piece the opponent attacks with more than it is guarded
+ *  (`computeMustDefend`): the piece leads, the attacker after it. */
+export interface MustDefendData {
+  /** "their knight" (with its square when it can be taken: "their knight on
+   *  f5"), or null when no single attacker is named. */
+  attacker: string | null;
+  /** "your rook on e1". */
+  piece: string;
+  undefended: boolean;
+  /** The attacker can be taken without losing material. */
+  takeable: boolean;
+  /** Said already this game: "Still — …". */
+  still: boolean;
+  /** The student is clearly winning (the prophylaxis framing). */
+  winning: boolean;
+}
+
+/** The hit alone — what a line's reason says (never the screen's standing). */
+export function renderMustDefendHit(d: MustDefendData): string {
+  const hit = `${d.attacker ?? 'they'} ${d.attacker ? 'attacks' : 'attack'} ${d.piece}${d.undefended ? ', and nothing defends it' : ''}${d.takeable ? ' — and you can take the attacker without losing material' : ''}`;
+  return `${cap(hit)}.`;
+}
+
+export function renderMustDefend(d: MustDefendData): string {
+  const hit = renderMustDefendHit(d);
+  const low = hit.charAt(0).toLowerCase() + hit.slice(1);
+  if (d.still) return `Still — ${low}`;
+  return d.winning ? `You're on top, but watch the counterpunch: ${low}` : hit;
+}
+
+/** HOW A DEFENCE MEETS A THREAT (`describeThreatPrevention`), as data. */
+export type ThreatAnswerData =
+  | { how: 'escape'; defense: string; piece: string; capture: string | null }
+  | { how: 'hit-guard'; defense: string; piece: string; square: string; sole: boolean }
+  | { how: 'add-defender'; defense: string; square: string }
+  | { how: 'step-off'; defense: string; piece: string }
+  | { how: 'rules-out'; defense: string; threat: string };
+
+export function renderThreatAnswer(a: ThreatAnswerData): string {
+  switch (a.how) {
+    case 'escape': return `${a.defense} gets the ${a.piece} out of the fire${a.capture ? `, ${a.capture} on the way` : ''}`;
+    case 'hit-guard': return a.sole
+      ? `${a.defense} meets it by hitting the ${a.piece} on ${a.square} — the piece holding the whole thing together`
+      : `${a.defense} meets it by hitting the ${a.piece} on ${a.square}, one of the pieces backing it up`;
+    case 'add-defender': return `${a.defense} meets it by adding a defender to ${a.square}, the square the threat needed`;
+    case 'step-off': return `${a.defense} meets it by stepping the ${a.piece} off the forking alignment`;
+    case 'rules-out': return `${a.defense} rules out ${a.threat} entirely`;
+  }
+}
+
+/** A pin waiting on a line (`latentDanger`): the pieces named on the board
+ *  it was read on, from the viewer's seat. */
+export interface LatentPinData {
+  /** The viewer owns the front piece: a danger ("heads up"), else a chance. */
+  mine: boolean;
+  front: string;
+  frontName: string;
+  back: string;
+  enemy: string;
+  line: string;
+  /** The piece between, when the pin needs it to move first. */
+  shield: { words: string; name: string } | null;
+}
+
+export function renderLatentPin(d: LatentPinData): string {
+  if (d.shield) {
+    return d.mine
+      ? `heads up: ${d.enemy} looks through ${d.shield.words} at ${d.front} and your ${d.back} behind it — move the ${d.shield.name} and the ${d.frontName} is pinned.`
+      : `${d.enemy} looks through ${d.shield.words} at ${d.front} and their ${d.back} behind it — once their ${d.shield.name} moves, the ${d.frontName} is pinned.`;
+  }
+  return d.mine
+    ? `heads up: ${d.front} and your ${d.back} share that ${d.line} with ${d.enemy} — that ${d.line} is a pin.`
+    : `${d.front} and their ${d.back} share that ${d.line} with ${d.enemy} — that ${d.line} is a pin to aim at.`;
+}
+
+/** A trade that would walk into a pin (`latentDanger`). */
+export function renderTradePin(d: { tradeTo: string; front: string; enemy: string; back: string; line: string }): string {
+  return `before you take on ${d.tradeTo}, look past the trade: ${d.front} would stand between ${d.enemy} and ${d.back}, all on one ${d.line} — a pin.`;
+}
+
+/** A quiet move with a follow-up (`quietThreat`, the board read): "threatens"
+ *  only when the follow-up is forcing on the board it is played on. */
+export function renderQuietThreat(q: { san: string; follow: string; mates: boolean; forcing: boolean }): string {
+  return q.forcing
+    ? `${q.san} is quiet, but it threatens ${q.follow}${q.mates ? ', with mate to follow' : ''} — they must answer that first.`
+    : `${q.san} is quiet: it prepares ${q.follow}.`;
+}
+
+/** A move's one-move threat (`detectNewThreat` on the briefing): the
+ *  participle and the predicate forms. */
+export function renderAspectThreat(san: string, detail: string): { text: string; verb: string } {
+  return { text: `threatening ${san} — ${detail}`, verb: `threatens ${san} — ${detail}` };
+}
+
+/** A mate threat used as a lever to win material (`mateThreatLever`). */
+export function renderMateLever(t: { you: boolean; first: boolean; move: string; mate: string; won: string; stem: number }): string {
+  const lead = t.first ? t.move : `In the best line, ${t.move}`;
+  return t.you
+    ? rotateStem([
+      `${lead} threatens ${t.mate} mate. The mate is the lever, not the goal: while they stop it, you pick up material, and the line wins you ${t.won}.`,
+      `Use the mate threat to win something: ${t.first ? t.move : `the line's ${t.move}`} threatens ${t.mate} mate, and stopping it costs them ${t.won}.`,
+    ], t.stem)
+    : rotateStem([
+      `Their ${t.move} would threaten ${t.mate} mate. They don't need to mate you: stopping it costs you ${t.won} in the best line.`,
+      `Watch for ${t.move}: it threatens ${t.mate} mate, and the price of stopping it is ${t.won}. A mate threat is how they turn pressure into material.`,
+    ], t.stem);
+}
+
+/** A mate threat whose every defence costs something else (`practicalReads`). */
+export function renderMateThreatTwoJobs(t: { mine: boolean; san: string; mateSq: string; trap: boolean }): string {
+  if (t.mine) {
+    const tail = t.trap ? 'whatever stops it leaves their queen with nowhere to go' : 'whatever stops it leaves a piece of theirs loose';
+    return `${t.san} threatens mate on ${t.mateSq} — and ${tail}. One threat doing two jobs: don't hunt only the mate or only the material, line them up.`;
+  }
+  const tail = t.trap ? 'every defence leaves your queen short of squares' : 'every defence leaves a piece of yours loose';
+  return `${t.san} threatens mate on ${t.mateSq}, and ${tail} — stop the mate first, then pick the defence that gives up the least.`;
+}

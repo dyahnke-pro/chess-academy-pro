@@ -20,6 +20,7 @@ import { sideToMoveAs } from './threatOut';
 import { materialBalance } from './pieceValues';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { countWords } from '../utils/countWords';
+import { renderMateLever } from './teachingSentence';
 
 export interface MateThreatLever { side: Color; move: string; mate: string; gain: number; text: string; squares: Square[] }
 
@@ -48,16 +49,7 @@ export function mateThreatLever(fen: string, lines: readonly EngineLine[], stude
     const key = stemKeyOf(`${fen}|mate-lever`);
     const won = countWords(gain, { unit: true });
     const mateSan = mate.san.replace('#', '');
-    const lead = i === 0 ? m.san : `In the best line, ${m.san}`;
-    const text = you
-      ? rotateStem([
-        `${lead} threatens ${mateSan} mate. The mate is the lever, not the goal: while they stop it, you pick up material, and the line wins you ${won}.`,
-        `Use the mate threat to win something: ${i === 0 ? m.san : `the line's ${m.san}`} threatens ${mateSan} mate, and stopping it costs them ${won}.`,
-      ], key)
-      : rotateStem([
-        `Their ${m.san} would threaten ${mateSan} mate. They don't need to mate you: stopping it costs you ${won} in the best line.`,
-        `Watch for ${m.san}: it threatens ${mateSan} mate, and the price of stopping it is ${won}. A mate threat is how they turn pressure into material.`,
-      ], key);
+    const text = renderMateLever({ you, first: i === 0, move: m.san, mate: mateSan, won, stem: key });
     return { side, move: m.san, mate: mate.san, gain, text, squares: [m.from, m.to, mate.to] };
   }
   return null;

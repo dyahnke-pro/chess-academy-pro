@@ -22,6 +22,7 @@ import { flipSideToMove } from './threatOut';
 import { seatCp } from './winChance';
 import { computeExchangeLedger, materialGainWords, settledNetForLine } from './exchangeLedger';
 import { lineSeatAt, lineShape } from '../utils/andList';
+import { renderMoveThreat } from './teachingSentence';
 
 export interface MoveThreat {
   /** The move's predicate: "threatens to win the pawn on d5: you play Bxf6, …". */
@@ -88,7 +89,7 @@ export function moveThreat(
     if (mateLine.length !== 2 * n - 1 || !/#$/.test(mateLine[mateLine.length - 1])) return null;
     const shape = lineShape(mateLine, lineSeatAt(pass, studentWB), pass, 'first');
     const squares = [...new Set(mateLine.map((x) => /([a-h][1-8])(?:=[QRBN])?[+#]?$/.exec(x)?.[1]).filter((x): x is string => !!x))];
-    return { clause: `threatens mate in ${n === 2 ? 'two' : 'three'}: ${shape}`, sans: mateLine, net: 0, squares };
+    return { clause: renderMoveThreat({ kind: 'mate', n: n === 2 ? 2 : 3, lineWords: shape }), sans: mateLine, net: 0, squares };
   }
   // It needs an answer.
   if (pov(pa, mover) - pov(answered, mover) < THREAT_ANSWER_CP) return null;
@@ -116,5 +117,5 @@ export function moveThreat(
   if (!won || line.length === 0) return null;
   const shape = lineShape(line, lineSeatAt(pass, studentWB), pass, 'first');
   const squares = [...new Set(line.map((s) => /([a-h][1-8])(?:=[QRBN])?[+#]?$/.exec(s)?.[1]).filter((x): x is string => !!x))];
-  return { clause: `threatens to win ${won}: ${shape}`, sans: line, net, squares };
+  return { clause: renderMoveThreat({ kind: 'win', won, lineWords: shape }), sans: line, net, squares };
 }

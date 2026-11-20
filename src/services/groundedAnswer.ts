@@ -12,7 +12,7 @@
  * Pure + side-effect-free so it's trivially testable and can't regress the
  * live chat. Wiring it into `getCoachChatResponse` is the next step.
  */
-import { renderSacrificeVerdict, type SacrificeVerdict } from './teachingSentence';
+import { renderSacrificeVerdict, renderThreatAnswer, type SacrificeVerdict } from './teachingSentence';
 import { candidateCct, candidateCctSentence } from './candidateCct';
 import { type WeighRead } from './weighedMoves';
 import { realMasterMoves } from './realMasterMoves';
@@ -7805,8 +7805,7 @@ export function describeThreatPrevention(
     // "defend" it (audit 2026-07-24: Qb3 / Nf6 / Re8 / Bxe6 were each wrongly
     // said to "add a defender" to the very square they FLED). Describe the escape.
     if (def.from === threat.landing) {
-      const cap = def.captured ? `, ${afterCaptureSan({ kind: 'nets', captured: def.captured, free: false, gave: null }, 'participle')} on the way` : '';
-      return `${defenseSan} gets the ${REVIEW_PIECE_NAME[def.piece]} out of the fire${cap}`;
+      return renderThreatAnswer({ how: 'escape', defense: defenseSan, piece: REVIEW_PIECE_NAME[def.piece], capture: def.captured ? afterCaptureSan({ kind: 'nets', captured: def.captured, free: false, gave: null }, 'participle') : null });
     }
     // (1) Undermine the guard: the defense attacks a guard of the landing sq.
     // "holding the WHOLE combination together" is only true when there is a
@@ -7815,10 +7814,7 @@ export function describeThreatPrevention(
     for (const g of threat.guards) {
       const cell = c.get(g as Square);
       if (cell && cell.color === threatWB && c.attackers(g as Square, defenderWB).includes(def.to)) {
-        const soleGuard = threat.guards.length === 1;
-        return soleGuard
-          ? `${defenseSan} meets it by hitting the ${REVIEW_PIECE_NAME[cell.type]} on ${g} — the piece holding the whole thing together`
-          : `${defenseSan} meets it by hitting the ${REVIEW_PIECE_NAME[cell.type]} on ${g}, one of the pieces backing it up`;
+        return renderThreatAnswer({ how: 'hit-guard', defense: defenseSan, piece: REVIEW_PIECE_NAME[cell.type], square: g, sole: threat.guards.length === 1 });
       }
     }
     // (2) Cover the landing square: it gains a defender from the defense. Don't
@@ -7827,13 +7823,13 @@ export function describeThreatPrevention(
     // when the threat was a capture/mate — describe what the move DID
     // (board-awareness sweep, 2026-07-22).
     if (c.attackers(threat.landing as Square, defenderWB).includes(def.to)) {
-      return `${defenseSan} meets it by adding a defender to ${threat.landing}, the square the threat needed`;
+      return renderThreatAnswer({ how: 'add-defender', defense: defenseSan, square: threat.landing });
     }
     // (3) Move the target: a forked piece stepped off the alignment.
     for (const t of threat.targets) {
       const sq = t.match(/on ([a-h][1-8])/)?.[1];
       if (sq && def.from === sq) {
-        return `${defenseSan} meets it by stepping the ${t.replace(/ on [a-h][1-8]/, '')} off the forking alignment`;
+        return renderThreatAnswer({ how: 'step-off', defense: defenseSan, piece: t.replace(/ on [a-h][1-8]/, '') });
       }
     }
     // (4) Verified relief: the threat move no longer works at all.
@@ -7844,7 +7840,7 @@ export function describeThreatPrevention(
       const probe = new Chess(flip.join(' '));
       if (!probe.inCheck()) {
         const still = probe.moves().some((m) => m.replace(/[+#!?]+$/, '') === threat.san.replace(/[+#!?]+$/, ''));
-        if (!still) return `${defenseSan} rules out ${threat.san} entirely`;
+        if (!still) return renderThreatAnswer({ how: 'rules-out', defense: defenseSan, threat: threat.san });
       }
     } catch { /* fall through */ }
     return null; // the defense fights elsewhere — don't claim what the board can't prove

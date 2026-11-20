@@ -309,6 +309,7 @@ import { countWarning } from './countMethod';
 import { oppositeWingsRace } from './planRace';
 // THE ONE FACT SET'S READS (the basket, 2026-11-19).
 import { moveIdeaFact, moveLead, moveGerund, moveSeat, closeSentence, placedAs, castlePrepClaim, linePlays, followPvOf, orderMatters, horizonSaid, replyAnswers, boardTeacherThought, deepThought, FACT_SET_SURFACES, JOB_WEIGHT, STOCK_PHRASE, onlyMove, type MoveWords, type FactSetMultiKind } from './thoughtReads';
+import { renderMustDefend, renderMustDefendHit, renderNewThreat } from './teachingSentence';
 import type { PhraseMemory } from '../utils/phraseMemory';
 import { sayIdea } from '../utils/phraseMemory';
 import type { FollowLines } from './exchangeLedger';
@@ -3115,12 +3116,16 @@ export const BOARD_COMPUTERS = {
       const winning = studentToMove && studentCp >= 200;
       // The answer the board allows, as a fact: their attacker taken for free.
       const takeable = !!(studentToMove && p.attackerSquare && takingTheAttackerAnswers(fen, p.attackerSquare as Square, student));
-      const hit = `${p.attacker ? `their ${POISON_NAME[p.attacker]}${takeable ? ` on ${p.attackerSquare}` : ''}` : 'they'} ${p.attacker ? 'attacks' : 'attack'} your ${POISON_NAME[p.piece.toLowerCase()]} on ${p.square}${p.defenders === 0 ? ', and nothing defends it' : ''}${takeable ? ' — and you can take the attacker without losing material' : ''}`;
-      const text = loose.still ? `Still — ${hit}.` : winning ? `You're on top, but watch the counterpunch: ${hit}.` : `${openSentence(hit)}.`;
+      const md0 = {
+        attacker: p.attacker ? `their ${POISON_NAME[p.attacker]}${takeable ? ` on ${p.attackerSquare}` : ''}` : null,
+        piece: `your ${POISON_NAME[p.piece.toLowerCase()]} on ${p.square}`,
+        undefended: p.defenders === 0, takeable, still: loose.still, winning,
+      };
+      const text = renderMustDefend(md0);
       // The standing that frames it ("you're on top") is a fact about the
       // board on screen: said once (`onceSaid`), and never carried to a
       // line's board (`changeReason` reads the bare hit).
-      const bare = `${openSentence(hit)}.`;
+      const bare = renderMustDefendHit(md0);
       return fact({ key: loose.key, claims: winning && !loose.still ? [loose.key, `standing:${signedBand(studentCp)}`] : [loose.key], text,
         ...(winning && !loose.still ? { onceSaid: { claim: `standing:${signedBand(studentCp)}`, text: bare } } : {}),
         // Its proof — the count and the capture, the same read Learn's warning speaks.
@@ -6078,9 +6083,7 @@ export const BOARD_COMPUTERS = {
       if (!t) return null;
       const mine = mover === student;
       const prevention = !mine && answerSan ? describeThreatPrevention(fenAfter, t, answerSan, mover) : null;
-      const text = mine
-        ? `${openSentence(`you're now threatening ${t.san} — it ${t.detail}`)}.`
-        : `Careful — their move threatens ${t.san}: it ${t.detail}.${prevention ? ` The answer: ${prevention}.` : ''}`;
+      const text = renderNewThreat({ mine, san: t.san, detail: t.detail, answer: prevention, fen: fenAfter, uci: `${t.from}${t.landing}`, mate: t.kind === 'mate' });
       // The proof is the geometry: the piece, where it lands, what it hits.
       const squares = [t.from, t.landing, ...t.targetSquares];
       return fact({ key: `${t.san}|${t.kind}|${t.landing}|${[...t.targetSquares].sort().join(',')}`, claims: [`threat:${t.landing}`], text,
