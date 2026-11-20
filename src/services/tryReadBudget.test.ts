@@ -105,6 +105,27 @@ describe('surfaceBoardReader — the tries on the pool, the best move\'s board o
     expect(released).toBe(1);
   });
 
+  it('a second read of the same board (a second tap) asks the engine nothing and answers the same', async () => {
+    let calls = 0;
+    const single = async (fen: string, depth: number): Promise<StockfishAnalysis> => { calls += 1; return analysis(fen, depth); };
+    const first = await surfaceBoardReader('learn', false, async () => null, single);
+    const a = await first.read('cache-board w', 'eye');
+    const second = await surfaceBoardReader('learn', false, async () => null, single);
+    const b = await second.read('cache-board w', 'eye');
+    expect(calls).toBe(1);
+    expect(b).toEqual(a);
+    // A deeper budget is another read.
+    const review = await surfaceBoardReader('review', false, async () => null, single);
+    await review.read('cache-board w', 'eye');
+    expect(calls).toBe(2);
+    // An empty read is not kept: the next tap asks again.
+    let empties = 0;
+    const empty = async (fen: string): Promise<StockfishAnalysis> => { empties += 1; return { ...analysis(fen, 12), topLines: [] }; };
+    await (await surfaceBoardReader('learn', false, async () => null, empty)).read('empty-board w', 'eye');
+    await (await surfaceBoardReader('learn', false, async () => null, empty)).read('empty-board w', 'eye');
+    expect(empties).toBe(2);
+  });
+
   it('asks for no pool when the read reads no tries, and falls back to the singleton when none can be had', async () => {
     let asked = 0;
     const single: string[] = [];

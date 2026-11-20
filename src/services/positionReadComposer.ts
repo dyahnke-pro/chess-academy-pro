@@ -19,7 +19,7 @@ import type { EvalBoardFn } from './perturbation';
 import { teachingSourceForBoard, generalizedTeaching, spokenBeatText } from './danyaTeachingService';
 import { lastMoveIfStudent, lastMoveIfOpponent, sansOfPgn } from './lastMoveOfLine';
 import type { StudentNeedContext } from './needScore';
-import type { StockfishAnalysis } from '../types';
+import type { AnalysisLine, StockfishAnalysis } from '../types';
 import type { WeaknessSignal } from './weaknessSignal';
 
 /** The seat every sentence of the read is computed in. The facts computers
@@ -48,12 +48,40 @@ export async function surfaceBoardReader(
   const pooled = pool && pool.engines.length > 0
     ? poolDispatcher(pool.engines.map((e) => ({ read: async (fen: string, b: ReadBudget) => (await e.analyzeDeep(fen, b.depth, b.budgetMs)).topLines ?? null })))
     : null;
-  const read: BoardReader = async (fen, source) => {
+  const read: BoardReader = (fen, source) => {
     const b = budget.reads[source];
-    if (pooled && source !== 'best-after') return pooled(fen, b);
-    return (await single(fen, b.depth, b.budgetMs)).topLines ?? null;
+    const viaPool = !!pooled && source !== 'best-after';
+    // A pool worker answers one line, the singleton its MultiPV fan: the route is part of the read.
+    return cachedTryRead(`${viaPool ? 'pool' : 'single'}|${b.depth}|${b.budgetMs}|${fen}`, async () => (
+      pooled && viaPool ? pooled(fen, b) : (await single(fen, b.depth, b.budgetMs)).topLines ?? null
+    ));
   };
   return { read, release: () => pool?.release() };
+}
+
+/** THE TRY READS, REMEMBERED (a second "read this position" tap, or a re-read
+ *  of the same board, re-asked the engine for every tempting move — ~19
+ *  searches a tap). A board read to the same depth and budget on the same
+ *  route answers the same lines, so it is read once. A read that failed or
+ *  came back empty is not kept. Bounded by age, oldest out first — a memory,
+ *  not a cap on what is said. */
+const TRY_READ_CACHE = new Map<string, Promise<readonly AnalysisLine[] | null>>();
+const TRY_READ_CACHE_SIZE = 512;
+function cachedTryRead(key: string, run: () => Promise<readonly AnalysisLine[] | null>): Promise<readonly AnalysisLine[] | null> {
+  const hit = TRY_READ_CACHE.get(key);
+  if (hit) {
+    TRY_READ_CACHE.delete(key);
+    TRY_READ_CACHE.set(key, hit);
+    return hit;
+  }
+  const p = run();
+  TRY_READ_CACHE.set(key, p);
+  if (TRY_READ_CACHE.size > TRY_READ_CACHE_SIZE) {
+    const oldest = TRY_READ_CACHE.keys().next().value;
+    if (oldest !== undefined) TRY_READ_CACHE.delete(oldest);
+  }
+  p.then((lines) => { if (!lines || lines.length === 0) TRY_READ_CACHE.delete(key); }, () => { TRY_READ_CACHE.delete(key); });
+  return p;
 }
 
 interface PositionReadInput {
