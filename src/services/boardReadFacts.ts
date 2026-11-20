@@ -119,6 +119,10 @@ export interface BoardFactSet {
 export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
   const side: 'w' | 'b' = i.fen.split(' ')[1] === 'b' ? 'b' : 'w';
   const facts: BoardFact[] = [];
+  // A FINISHED GAME HAS A READ WITH NO ENGINE (F4): the mate's pattern and
+  // the material it was done with, from the side that delivered it.
+  const finished = finishedRead(i.fen);
+  if (finished) return { facts: [finished], tier: null };
   const top = i.before[0];
   if (!top) return { facts, tier: null };
 
@@ -389,6 +393,48 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     }
   }
   return done();
+}
+
+const PIECE_POINTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+const SIDE_NAME = { w: 'White', b: 'Black' } as const;
+
+/** The read of a board with no legal move: checkmate (its pattern, the
+ *  mating piece and what guards it, the material it was done with) or
+ *  stalemate. Null on a board still in play. */
+export function finishedRead(fen: string): BoardFact | null {
+  let b: Chess;
+  try { b = new Chess(fen); } catch { return null; }
+  if (!b.isCheckmate() && !b.isStalemate()) return null;
+  const mated = b.turn();
+  const winner: 'w' | 'b' = mated === 'w' ? 'b' : 'w';
+  const points = { w: 0, b: 0 };
+  for (const row of b.board()) for (const p of row) if (p) points[p.color] += PIECE_POINTS[p.type];
+  const material = (side: 'w' | 'b'): string => {
+    const other: 'w' | 'b' = side === 'w' ? 'b' : 'w';
+    const gap = points[side] - points[other];
+    if (gap <= -3) return `${SIDE_NAME[side]} did it far behind in material: ${points[side]} points against ${SIDE_NAME[other]}'s ${points[other]}.`;
+    if (gap >= 3) return `${SIDE_NAME[side]} is ahead in material, ${points[side]} points against ${points[other]}.`;
+    return 'The material is close to level.';
+  };
+  if (b.isStalemate()) {
+    return { from: 'position', kind: 'standing', text: `Stalemate: ${SIDE_NAME[mated]} has no legal move and is not in check, so it is a draw. ${material(winner)}`, squares: [] };
+  }
+  const king = b.board().flat().find((p) => p && p.type === 'k' && p.color === mated);
+  const checkers = king ? b.attackers(king.square, winner) : [];
+  const parts: string[] = [];
+  const squares: string[] = [];
+  for (const sq of checkers) {
+    const piece = b.get(sq);
+    if (!piece) continue;
+    squares.push(sq);
+    const guards = b.attackers(sq, winner).map((g) => { const gp = b.get(g); return gp ? `the ${PIECE_NAME[gp.type]} on ${g}` : null; }).filter((x): x is string => !!x);
+    parts.push(`the ${PIECE_NAME[piece.type]} on ${sq} gives mate${guards.length > 0 ? `, guarded by ${guards.join(' and ')}` : ''}`);
+  }
+  const pattern = classifyMatePattern(fen);
+  const name = pattern ? `, ${pattern.name.replace(/ Mate$/, ' mate')}` : '';
+  const how = parts.length > 0 ? `: ${parts.join(', and ')}` : '';
+  return { from: 'position', kind: 'standing', text: `Checkmate${name}${how}. ${material(winner)}`, squares };
 }
 
 const BAND_STEP: Record<ReturnType<typeof evalBand>, number> = { level: 0, slightly: 1, clearly: 2, decisive: 3 };
