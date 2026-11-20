@@ -41,7 +41,7 @@ import { PICTURE_ROLE, type PictureRole } from './positionPicture';
 import weightTable from '../data/read-decider-weights.json';
 import { readHabit } from './methodBeat';
 import type { PictureConclusionId } from './gameStory';
-import type { FactBoard } from './teachingSentence';
+import { jobClause, renderMoveJobs, type FactBoard } from './teachingSentence';
 import { detectPlanRace } from './planRace';
 
 /** Where a board fact came from: the board's own reads, a tempting move
@@ -387,13 +387,12 @@ export function decideRead<F extends ReadFact>(factsIn: readonly F[], ctx: ReadC
     // whatever its learned weight — the bar decides the board's other facts,
     // never whether the move is explained. Inside a step the computed STAKES
     // rank; the learned kind weight only breaks a tie.
-    const isJob = (x: F): boolean => row.step === 'best-move' && !ctx.puzzle && x.from === 'bestMove' && MOVE_JOB_KINDS.has(x.kind);
-    const barJob = candidates.some((x) => isJob(x) && (weightOf(x) >= TABLE.bar || firsts.includes(x)));
-    // The job the bar held, when none cleared it: the most important by its
-    // stakes, the weight breaking a tie — one reason, so the read stays one
-    // argument (the rest are the student's to ask for).
-    const topJob = barJob ? null : candidates.filter(isJob).sort((x, y) => (y.stakes ?? -1) - (x.stakes ?? -1) || weightOf(y) - weightOf(x))[0] ?? null;
-    const required = (x: F): boolean => x === topJob;
+    // THE MOVE'S JOBS ARE REQUIRED (CLAUDE.md rule 3, by surface: a board
+    // read says EVERY job of the board's move): a job computed is said,
+    // whatever its learned weight. One idea once is the claim's work
+    // (`sameClaim`), and the jobs of one move are said as one sentence
+    // (`mergeMoveJobs`) — never a word ceiling (G4.5).
+    const required = (x: F): boolean => row.step === 'best-move' && !ctx.puzzle && x.from === 'bestMove' && MOVE_JOB_KINDS.has(x.kind);
     const rest = candidates.filter((x) => !firsts.includes(x) && (weightOf(x) >= TABLE.bar || required(x)))
       .sort((x, y) => rank(y) - rank(x) || (y.stakes ?? -1) - (x.stakes ?? -1) || weightOf(y) - weightOf(x));
     let lead: F | null = null;
@@ -426,10 +425,41 @@ export function decideRead<F extends ReadFact>(factsIn: readonly F[], ctx: ReadC
       }
     }
   }
-  const kept = withDetails(out, facts, ctx, argued);
+  const kept = mergeMoveJobs(withDetails(out, facts, ctx, argued));
   const h = habitOf(facts, ctx);
   const habit = h && !ctx.said.has(`habit:${h.id}`) ? h : null;
   return { facts: kept, habit: habit?.text ?? null, said: [...kept.flatMap(storyKeys), ...(habit ? [`habit:${habit.id}`] : [])] };
+}
+
+/** The move a job fact is about, off its claims (`move:<uci>:idea:…`). */
+function jobMove(f: ReadFact): string | null {
+  if (f.from !== 'bestMove' || !MOVE_JOB_KINDS.has(f.kind)) return null;
+  for (const c of f.claims ?? []) { const m = /^move:([a-h][1-8][a-h][1-8][qrbn]?):idea:/.exec(c); if (m) return m[1]; }
+  return null;
+}
+
+/** ONE MOVE, ONE SENTENCE (the decider's grouping): the jobs of the board's
+ *  move that can be said after it ("It also …") join the first, in the
+ *  decided order; a job in another shape stays its own fact. The merged fact
+ *  carries every claim and square, so the record of what was said is whole. */
+export function mergeMoveJobs<F extends ReadFact>(facts: readonly F[]): F[] {
+  const out: F[] = [];
+  const lead = new Map<string, number>();
+  const parts = new Map<number, string[]>();
+  for (const f of facts) {
+    const mv = jobMove(f);
+    const at = mv ? lead.get(mv) : undefined;
+    if (mv && at !== undefined && jobClause(f.text)) {
+      const host = out[at];
+      parts.get(at)?.push(f.text);
+      out[at] = { ...host, claims: [...new Set([...(host.claims ?? []), ...(f.claims ?? [])])], squares: [...new Set([...host.squares, ...f.squares])], stakes: host.stakes == null && f.stakes == null ? host.stakes : Math.max(host.stakes ?? -Infinity, f.stakes ?? -Infinity) };
+      continue;
+    }
+    if (mv && at === undefined) { lead.set(mv, out.length); parts.set(out.length, [f.text]); }
+    out.push(f);
+  }
+  for (const [at, texts] of parts) if (texts.length > 1) out[at] = { ...out[at], text: renderMoveJobs(texts) };
+  return out;
 }
 
 /** A FACT'S IDENTITY, read off its data — the computer, the kind, the move

@@ -28,7 +28,7 @@
 //
 // PURE: chess.js, the human model's weights and the one cost walker. No engine.
 import { MATERIAL_VALUE } from './pieceValues';
-import { lineStory, changeReason } from './futures';
+import { lineStory, changeReason, changeReasonRead } from './futures';
 import { Chess, type Color, type Move, type Square } from 'chess.js';
 import { humanMoveProbabilities, type ScoredMove } from './humanMove';
 import { costReason, reasonSans, reasonWinWords, type CostReason } from './costReason';
@@ -53,7 +53,9 @@ import { boardReason } from './positionalReason';
 import { phaseOfFen } from './boardConcepts';
 import { withMover } from '../utils/sideToMove';
 import { replyJob } from './replyJob';
-import { pathWords, renderTry, renderTryReason, type TryData } from './teachingSentence';
+import { fenAfter, pathWords, renderTry, renderTryReason, type TryData } from './teachingSentence';
+
+const fenAfterUci = (fen: string, uci: string): string => fenAfter(fen, [uci]) ?? fen;
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const VALUE = MATERIAL_VALUE;
@@ -743,7 +745,8 @@ function tryMechanism(fen: string, m: Move, sans: readonly string[], bestSan: st
     const walk = new Chess(fen);
     for (const san of sans) { const mv = walk.move(san); if (mv.captured) taken.add(mv.to); }
   } catch { /* read the squares taken so far */ }
-  if ((why.note.match(/\b[a-h][1-8]\b/g) ?? []).some((q) => taken.has(q))) return null;
+  // The squares the reason DESCRIBES — the try's own name in it is not one.
+  if ((why.note.split(m.san).join('').match(/\b[a-h][1-8]\b/g) ?? []).some((q) => taken.has(q))) return null;
   return why.note;
 }
 
@@ -877,7 +880,12 @@ export function standingRefutations(args: {
       ?? (plan ? targetOutcome(args.fen, sans, plan.target, mover, w.other) : null)
       // What changed on the board after the line is a reason only where the
       // line wins nothing: a piece lost is the plainer why.
-      ?? (lostWords ? null : ((): string | null => { const t = changeReason(futureArgs) ?? args.engineReasons?.get(c.uci) ?? null; if (t) whyPath = read.moves.slice(0, 2); return t; })())
+      ?? (lostWords ? null : ((): string | null => {
+        // Stamped ONLY when it states a board fact the line reaches.
+        const r = changeReasonRead(futureArgs);
+        if (r?.board) whyPath = [...r.board.path];
+        return r?.text ?? args.engineReasons?.get(c.uci) ?? null;
+      })())
       ?? null;
     // The material, the mechanism's consequence (or the reason itself when
     // the line reads no other).
@@ -898,7 +906,9 @@ export function standingRefutations(args: {
       san: c.san, reply, mine, stem: stemKeyOf(`${args.fen}|result|${c.uci}`),
       plan: plan ? { aim: planAim(plan, mine), storm: plan.storm } : null,
       replyFollow: jobSaid ? job?.follow ?? null : null,
-      why: kept, whyPath: whyPath.length ? pathWords(args.fen, whyPath) : null,
+      // The anchor said once and short: the try is named by the lead, so the
+      // path is said from the reply on ("After …Qxh6, …").
+      why: kept, whyPath: whyPath.length > 1 ? pathWords(fenAfterUci(args.fen, whyPath[0]), whyPath.slice(1)) : null,
       material, materialWho: cap(w.otherWho), mates: story?.kind === 'mates', shift,
     };
     const reason = kept && jobSaid ? kept.replace(/^It\b/, c.san) : kept;

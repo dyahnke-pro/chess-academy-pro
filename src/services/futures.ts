@@ -32,6 +32,7 @@ import { DRAW_LEVEL_CP, LOCKED_TEXT, lockedPawns, type LockedPawns } from './dra
 import { KP_FAST_BUDGET, kpDrawReason, kpVerdict, type KpValue } from './kpSolver';
 import { wonEnding } from './wonEnding';
 import { snapshot, diff, relationKey, relationSquare, type RelationSnapshot } from './relations';
+import { positionKey, type FactBoard } from './teachingSentence';
 
 export interface FutureBoard {
   fen: string;
@@ -39,6 +40,10 @@ export interface FutureBoard {
   ply: number;
   /** The rest of the line from here, UCI. */
   rest: readonly string[];
+  /** THE PATH (CLAUDE.md, EVERY FACT KNOWS ITS BOARD): the moves from the
+   *  board the line starts on to this one — what a fact read here is said
+   *  after. */
+  path: readonly string[];
   /** The move that reached this board: the board before it, its SAN, who
    *  played it, and the line from that board (this move first). */
   reached: { fenBefore: string; san: string; seat: Color; line: readonly string[] };
@@ -65,7 +70,7 @@ export function futureBoards(fen: string, moves: readonly string[]): { reply: Fu
     const fenBefore = b.fen();
     let m;
     try { m = b.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { break; }
-    const here: FutureBoard = { fen: b.fen(), ply: i + 1, rest: moves.slice(i + 1),
+    const here: FutureBoard = { fen: b.fen(), ply: i + 1, rest: moves.slice(i + 1), path: moves.slice(0, i + 1),
       reached: { fenBefore, san: m.san, seat: m.color, line: moves.slice(i) } };
     if (i === 1) reply = here;
     if (i >= 1 && !m.captured && !/[+#]$/.test(m.san)) { quiet = here; break; }
@@ -184,6 +189,10 @@ export interface Change {
   fact: CoachFact;
   /** It is about a square the line acted on, or a king. */
   inLine: boolean;
+  /** THE BOARD IT IS TRUE ON (CLAUDE.md, EVERY FACT KNOWS ITS BOARD): the
+   *  moves (uci) from the board the line starts on to the board it was read
+   *  on, and that board's key. */
+  board: FactBoard;
 }
 
 export interface WhatChanged {
@@ -242,8 +251,10 @@ export function whatChanged(args: {
       const rels = rd && own ? relationsOfFact(f, own) : null;
       return rels ? rels.some((k) => only.has(k)) : !sameOn(f, other);
     };
-    for (const f of onTry) if (changed(f, ts, gainedOnTry, bi)) appeared.push({ at, fact: f, inLine: f.squares.some((q) => tT.has(q)) });
-    for (const f of onBest) if (changed(f, bs, onlyOnBest, ti)) lost.push({ at, fact: f, inLine: f.squares.some((q) => bT.has(q)) });
+    const tBoard: FactBoard = { key: positionKey(tf.fen), path: tf.path, relation: 'try' };
+    const bBoard: FactBoard = { key: positionKey(bf.fen), path: bf.path, relation: 'line' };
+    for (const f of onTry) if (changed(f, ts, gainedOnTry, bi)) appeared.push({ at, fact: f, inLine: f.squares.some((q) => tT.has(q)), board: tBoard });
+    for (const f of onBest) if (changed(f, bs, onlyOnBest, ti)) lost.push({ at, fact: f, inLine: f.squares.some((q) => bT.has(q)), board: bBoard });
   }
   const seen = new Set<string>();
   const once = (xs: Change[]): Change[] => xs.sort((x, y) => rank(x) - rank(y)).filter((c) => {
@@ -653,16 +664,31 @@ export function kpResultChange(args: { fen: string; student: Color; tryLine: Lin
  *  a resource that appears on the board after it, about a square the line
  *  acted on or a king; then a piece of theirs that comes alive. Null when
  *  none. */
-export function changeReason(args: {
+export function changeReason(args: ChangeReasonInput, more: EngineFutureFacts | null = null): string | null {
+  return changeReasonRead(args, more)?.text ?? null;
+}
+
+export interface ChangeReasonInput {
   fen: string;
   student: Color;
   rating: number;
   tryLine: LineRead;
   bestLine: LineRead;
   other: 'your' | 'their';
-}, more: EngineFutureFacts | null = null): string | null {
+}
+
+/** The reason with its board: `board` is set ONLY when the reason states a
+ *  fact about a board the line reaches (a piece, a square, on that board) —
+ *  a verdict about the line (a draw, a solved ending, a fortress, a story, a
+ *  standing) is about no one board and carries none. */
+export function changeReasonRead(args: ChangeReasonInput, more: EngineFutureFacts | null = null): { text: string; board: FactBoard | null } | null {
+  const plain = (text: string | null): { text: string; board: null } | null => (text ? { text, board: null } : null);
+  return changeReasonOf(args, more, plain);
+}
+
+function changeReasonOf(args: ChangeReasonInput, more: EngineFutureFacts | null, plain: (t: string | null) => { text: string; board: null } | null): { text: string; board: FactBoard | null } | null {
   const story = lineStory(args.fen, args.tryLine.moves, args.other, args.tryLine.mate === null ? args.tryLine.cp : null);
-  if (story) return story.text;
+  if (story) return plain(story.text);
   const wc = whatChanged(args, more);
   // A reason is what the OTHER side gains: a fact about the try's own side
   // (advice to it, "before you take…") is no reason the try fails.
@@ -673,19 +699,21 @@ export function changeReason(args: {
   // corner pawn of the wrong colour"): the drawing shape is held by the side
   // answering the try, and the best line's board does not have it.
   const drawn = wc.appeared.find((c) => c.fact.seat === theirSeat && c.fact.claims.some((k) => k.startsWith('verdict:drawn:')));
-  if (drawn) return drawn.fact.text;
+  if (drawn) return plain(drawn.fact.text);
   // THE PAWNS LOCKED, NO WAY IN: the try's line freezes the chain level.
-  if (lockGained(args)) return LOCKED_TEXT;
+  if (lockGained(args)) return plain(LOCKED_TEXT);
   // THE PAWN ENDING, SOLVED: the try's line reaches a kings-and-pawns board
   // proven worse for the try's side than the best line's.
   const kp = kpResultChange(args);
-  if (kp) return kp.text;
+  if (kp) return plain(kp.text);
   // A FORTRESS THE TRY LETS THEM BUILD: a piece down, and the board's reason
   // the extra material cannot win.
   const fort = fortressGained(args);
-  if (fort) return fortressLine(fort.fortress, fort.fortress.defender === args.student, fort.fen);
+  if (fort) return plain(fortressLine(fort.fortress, fort.fortress.defender === args.student, fort.fen));
   const hit = wc.appeared.find((c) => c.inLine && c.fact.seat === theirSeat && c.fact.kind !== 'latent-danger' && ['threat', 'resource'].includes(PICTURE_ROLE[c.fact.computer] ?? 'board'));
-  if (hit) return hit.fact.text;
+  // A piece on a square, on the board the line reaches: stamped there. A
+  // fact with no square (a standing, "they're worse, so…") is no board fact.
+  if (hit) return { text: hit.fact.text, board: hit.fact.squares.length > 0 ? hit.board : null };
   const alive = comesAlive(args);
-  return alive ? comesAliveText(alive, args.other) : null;
+  return plain(alive ? comesAliveText(alive, args.other) : null);
 }

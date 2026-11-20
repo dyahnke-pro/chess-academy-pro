@@ -342,3 +342,27 @@ export function renderTryGroup(sans: readonly string[], replies: readonly string
   const why = shared.why ? shared.why.split(`…${shared.san}`).join(each).split(shared.san).join(each).replace(/^(either|each)\b/, (w) => cap(w)) : null;
   return [`${andList([...sans])} ${two ? 'both' : 'all'} fail the same way: ${orList([...replies])} meets ${each}.`, renderTryReason({ ...shared, why })].filter(Boolean).join(' ');
 }
+
+// ── THE MOVE'S JOBS (board read: every job speaks) ──────────────────────────
+// The decider groups the jobs of ONE move (one idea once, by claim); the
+// renderer says the move once and its jobs after it: "You go Rg1+, which gives
+// check. It also takes the open g-file, and it pins …". Never a repeated
+// "You go Rg1+, which …" per job.
+
+const JOB_LEAD = /^(?:You|They) (?:go|play) \S+?(?:, which | — it | — | ?: it |: )/;
+
+/** The job's clause with its "You go X, which" lead taken off; null when the
+ *  job is not said in that shape (it is then said on its own). */
+export function jobClause(text: string): string | null {
+  const m = JOB_LEAD.exec(text);
+  return m ? text.slice(m[0].length).trim().replace(/[.\s]+$/, '') : null;
+}
+
+/** One move's jobs, decided and ordered by the decider: the first in full,
+ *  the rest as "It also …". */
+export function renderMoveJobs(texts: readonly string[]): string {
+  const [first, ...rest] = texts;
+  const clauses = rest.map(jobClause).filter((c): c is string => !!c);
+  if (clauses.length === 0) return first;
+  return `${first.trim().replace(/[.\s]*$/, '.')} It also ${andList(clauses)}.`;
+}

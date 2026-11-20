@@ -84,7 +84,7 @@ describe('five master puzzles, read move by move', () => {
     }
     expect(twice, twice.join('\n')).toEqual([]);
   });
-  it('ceilings: failed tries, words', () => {
+  it('failed tries, and the average words (the longest reported)', () => {
     const stat = (m: Record<string, string>): { avg: number; max: number; tries: number } => {
       const ws = Object.values(m).map(words);
       return { avg: Math.round(ws.reduce((a, b) => a + b, 0) / ws.length), max: Math.max(...ws), tries: Object.values(m).reduce((n, t) => n + tries(t), 0) };
@@ -94,8 +94,10 @@ describe('five master puzzles, read move by move', () => {
     console.log(`[puzzles5] alone: words avg ${alone.avg} max ${alone.max} tries ${alone.tries} | in order with a story: avg ${inOrder.avg} max ${inOrder.max} tries ${inOrder.tries}`);
     // THE TARGETS (David 2026-11-20), on the puzzle read move by move with its
     // story — the way a solver hears it.
+    // The words are an AVERAGE, never a cap (G4.5, the WHY standard's turn
+    // length): every job of the board's move speaks, and the longest read is
+    // reported, not held (David 2026-11-20: the 250 ceiling is a measure).
     expect(inOrder.tries).toBeLessThanOrEqual(25);
-    expect(inOrder.max).toBeLessThanOrEqual(250);
     expect(inOrder.avg).toBeLessThanOrEqual(120);
   });
 });
