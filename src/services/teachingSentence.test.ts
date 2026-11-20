@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { anchorSentenceFact, anchorPastFact, boardAfter, nowBoard, positionKey, renderSentenceFact, isForcingThreat, pieceIsSafe, ORPHAN_LEAD, TENSE, type SentenceFact } from './teachingSentence';
+import { anchorSentenceFact, anchorPastFact, boardAfter, nowBoard, positionKey, renderSentenceFact, isForcingThreat, pieceIsSafe, ORPHAN_LEAD, TENSE, renderTry, type SentenceFact } from './teachingSentence';
 
 // 0LeQy before Rg1+: White Qh6, Ra1, Bd3, Kf3; Black Qb6.
 const LEQY = 'r4rk1/pp2bp2/1q5Q/4P3/3pP3/3B1K2/PP3P2/R7 w - - 1 26';
@@ -87,5 +87,17 @@ describe('a reason on the board after the line', () => {
     const t = { san: 'Nxd4', reply: '…Bd7', mine: true, stem: 0, plan: null, replyFollow: null, whyPath: 'Nxd4 …Bd7', material: null, materialWho: 'They', mates: false, shift: null };
     expect(renderTryReason({ ...t, why: "They're worse, so they're setting you a problem." })).toBe("After Nxd4 …Bd7, they're worse, so they're setting you a problem.");
     expect(renderTryReason({ ...t, why: 'Qxd4 wins a pawn.' })).toBe('After Nxd4 …Bd7, Qxd4 wins a pawn.');
+  });
+});
+
+describe('a try says its one cost on the sentence before it — never on another idea (2026-11-20 baseline: "But your Rxe5 stops it, and Bxh7+ leaves you losing")', () => {
+  const base = { san: 'Bxh7+', name: 'Bxh7+', reply: '…Kxh7', mine: true, stem: 1, plan: null, replyFollow: null, whyPath: null, material: null, materialWho: 'They', mates: false, shiftKind: 'result' as const };
+  it('a why whose last sentence is another idea keeps the cost its own sentence, the try named', () => {
+    const t = renderTry({ ...base, why: 'Their bishop is aimed at your rook. But your Rxe5 stops it.', shift: 'It leaves you losing.' });
+    expect(t).toMatch(/But your Rxe5 stops it\. Bxh7\+ leaves you losing\.$/);
+  });
+  it('a why about the try takes the cost as its second half', () => {
+    const t = renderTry({ ...base, why: 'It wins nothing: the trades leave the material level.', shift: 'It gives back part of your edge.', shiftKind: 'smaller' });
+    expect(t).toMatch(/It wins nothing: the trades leave the material level, and it gives back part of your edge\.$/);
   });
 });

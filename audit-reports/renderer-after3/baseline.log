@@ -1,0 +1,104 @@
+
+[1m[46m RUN [49m[22m [36mv4.0.18 [39m[90m/home/user/urg-wt[39m
+
+ [31m❯[39m src/test/decisionRows.baseline.test.ts [2m([22m[2m6 tests[22m[2m | [22m[31m4 failed[39m[2m | [22m[33m1 skipped[39m[2m)[22m[33m 313890[2mms[22m[39m
+[31m     [31m×[31m colle800[39m[33m 110981[2mms[22m[39m
+[31m     [31m×[31m sicilian1200[39m[33m 58022[2mms[22m[39m
+[31m     [31m×[31m sicilianClosed1000[39m[33m 94955[2mms[22m[39m
+[31m     [31m×[31m gotham-jelena[39m[33m 49927[2mms[22m[39m
+     [2m[90m↓[39m[22m reports the learn lane in numbers
+     [32m✓[39m the snapshot holds these games and no others[32m 1[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/decisionRows.baseline.test.ts[2m > [22mevery decision and every spoken line on the baseline games is unchanged[2m > [22mcolle800
+[31m[1mAssertionError[22m: expected 'review:colle800 spoken[28]\n  snapsho…' to be null[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+"review:colle800 spoken[28]
+  snapshot: \"29: Your queen joins the bishop on c1 against their bishop on g5. That's two attackers, and the queen on d8 guards it. Taking on g5 now wins a piece. It also stops …g6, which would hit your knight. Their one resource is the pawn break …f6, hitting your pawn on e5. The target is the bishop: five of your pieces and pawns can get at it, and only one of theirs can guard it. Their weak spot you can reach is the bishop. Count the attackers and defenders on their bishop: 2 attackers to 1 defender — it's outnumbered, so it has to move, and that costs them the tempo.\"
+  now:      \"29: Your queen joins the bishop on c1 against their bishop on g5. That's two attackers, and the queen on d8 guards it. Taking on g5 now wins a piece. It also stops …g6, which would hit your knight. Their one resource is the pawn break …f6, hitting your pawn on e5. Count the attackers and defenders on their bishop: 2 attackers to 1 defender — it's outnumbered, so it has to move, and that costs them the tempo.\""
+
+[36m [2m❯[22m src/test/decisionRows.baseline.test.ts:[2m155:103[22m[39m
+    [90m153| [39m        appendFileSync(process.env.BASELINE_DIFF, lines.map((l) => `${…
+    [90m154| [39m      }
+    [90m155| [39m      for (const [key, rec] of Object.entries(mine)) expect(firstDiffe…
+    [90m   | [39m                                                                                                      [31m^[39m
+    [90m156| [39m    }[33m,[39m [34m1_800_000[39m)[33m;[39m
+    [90m157| [39m  }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/decisionRows.baseline.test.ts[2m > [22mevery decision and every spoken line on the baseline games is unchanged[2m > [22msicilian1200
+[31m[1mAssertionError[22m: expected 'review:sicilian1200 rows[13]\n  snaps…' to be null[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+"review:sicilian1200 rows[13]
+  snapshot: {\"posture\":\"walk\",\"tier\":\"none\",\"rank\":0,\"speak\":true,\"reason\":\"spoken\",\"teaches\":true,\"needSpeak\":null,\"moveAdvice\":null,\"spokenCount\":2,\"quietCount\":5,\"quietBy\":{\"in-flux\":5},\"subsumed\":[],\"method\":false,\"stakedCount\":2,\"unproven\":0,\"unprovenKinds\":[],\"leadStaked\":false,\"supportLinks\":{\"cause-effect\":1,\"square\":0,\"none\":0}}
+  now:      {\"posture\":\"walk\",\"tier\":\"none\",\"rank\":0,\"speak\":true,\"reason\":\"spoken\",\"teaches\":true,\"needSpeak\":null,\"moveAdvice\":null,\"spokenCount\":2,\"quietCount\":5,\"quietBy\":{\"in-flux\":5},\"subsumed\":[],\"method\":false,\"stakedCount\":2,\"unproven\":0,\"unprovenKinds\":[],\"leadStaked\":false,\"supportLinks\":{\"cause-effect\":0,\"square\":0,\"none\":1}}"
+
+[36m [2m❯[22m src/test/decisionRows.baseline.test.ts:[2m155:103[22m[39m
+    [90m153| [39m        appendFileSync(process.env.BASELINE_DIFF, lines.map((l) => `${…
+    [90m154| [39m      }
+    [90m155| [39m      for (const [key, rec] of Object.entries(mine)) expect(firstDiffe…
+    [90m   | [39m                                                                                                      [31m^[39m
+    [90m156| [39m    }[33m,[39m [34m1_800_000[39m)[33m;[39m
+    [90m157| [39m  }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/decisionRows.baseline.test.ts[2m > [22mevery decision and every spoken line on the baseline games is unchanged[2m > [22msicilianClosed1000
+[31m[1mAssertionError[22m: expected 'review:sicilianClosed1000 rows[49]\n …' to be null[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+"review:sicilianClosed1000 rows[49]
+  snapshot: {\"posture\":\"walk\",\"tier\":\"none\",\"rank\":0,\"speak\":true,\"reason\":\"spoken\",\"teaches\":true,\"needSpeak\":null,\"moveAdvice\":null,\"spokenCount\":3,\"quietCount\":3,\"quietBy\":{\"unsupported\":2,\"subsumed\":1},\"subsumed\":[[\"Their dark squares are weak: three squares are holes no bishop of theirs covers.\",\"Six of your weak spots are in their reach. The worst is the hole on c6. Four of \"]],\"method\":false,\"stakedCount\":0,\"unproven\":0,\"unprovenKinds\":[],\"leadStaked\":false,\"supportLinks\":{\"cause-effect\":0,\"square\":2,\"none\":0}}
+  now:      {\"posture\":\"walk\",\"tier\":\"none\",\"rank\":0,\"speak\":true,\"reason\":\"spoken\",\"teaches\":true,\"needSpeak\":null,\"moveAdvice\":null,\"spokenCount\":3,\"quietCount\":3,\"quietBy\":{\"unsupported\":2,\"subsumed\":1},\"subsumed\":[[\"Their dark squares are weak: three squares are holes no bishop of theirs covers.\",\"Six of your weak spots are in their reach. The worst is the hole on c6.\"]],\"method\":false,\"stakedCount\":0,\"unproven\":0,\"unprovenKinds\":[],\"leadStaked\":false,\"supportLinks\":{\"cause-effect\":0,\"square\":2,\"none\":0}}"
+
+[36m [2m❯[22m src/test/decisionRows.baseline.test.ts:[2m155:103[22m[39m
+    [90m153| [39m        appendFileSync(process.env.BASELINE_DIFF, lines.map((l) => `${…
+    [90m154| [39m      }
+    [90m155| [39m      for (const [key, rec] of Object.entries(mine)) expect(firstDiffe…
+    [90m   | [39m                                                                                                      [31m^[39m
+    [90m156| [39m    }[33m,[39m [34m1_800_000[39m)[33m;[39m
+    [90m157| [39m  }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/decisionRows.baseline.test.ts[2m > [22mevery decision and every spoken line on the baseline games is unchanged[2m > [22mgotham-jelena
+[31m[1mAssertionError[22m: expected 'review:gotham-jelena spoken[13]\n  sn…' to be null[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+"review:gotham-jelena spoken[13]
+  snapshot: \"14: They are short of room, so they want trades: Bxc3 would take off your knight on c3. Every trade eases their cramp, so don't hand them one for free. It takes the d5 break away from you. The pawn would just be lost there now. They went for e6, which opens the diagonal for the bishop on f8. It opens the diagonals for both their queen and their dark-squared bishop at once — the most aggressive way to open the position. Their …e6 shuts in their own bishop on d7 — the pawn now sits on its colour, right in its way.\"
+  now:      \"14: They are short of room, so they want trades: Bxc3 would take off your knight on c3. Every trade eases their cramp, so don't offer them one. …e6 takes the d5 break away from you. The pawn would just be lost there now. They went for e6, which opens the diagonal for the bishop on f8. It opens the diagonals for both their queen and their dark-squared bishop at once — the most aggressive way to open the position. Their …e6 shuts in their own bishop on d7 — the pawn now sits on its colour, right in its way.\""
+
+[36m [2m❯[22m src/test/decisionRows.baseline.test.ts:[2m155:103[22m[39m
+    [90m153| [39m        appendFileSync(process.env.BASELINE_DIFF, lines.map((l) => `${…
+    [90m154| [39m      }
+    [90m155| [39m      for (const [key, rec] of Object.entries(mine)) expect(firstDiffe…
+    [90m   | [39m                                                                                                      [31m^[39m
+    [90m156| [39m    }[33m,[39m [34m1_800_000[39m)[33m;[39m
+    [90m157| [39m  }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (6)[39m
+[2m   Start at [22m 22:23:55
+[2m   Duration [22m 325.93s[2m (transform 8.71s, setup 193ms, import 11.17s, tests 313.89s, environment 504ms)[22m
+
+RUN2DONE

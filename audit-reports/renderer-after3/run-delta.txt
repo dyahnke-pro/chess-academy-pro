@@ -1,0 +1,126 @@
+## lesson:colle800 #27
+  - cxd4 goes straight for it.
+  + The direct way works now: cxd4.
+## lesson:colle800 #28
+  - cxd4 makes your position a lot harder.
+  - Your queen on d1 reaches 5 fewer squares after cxd4 than after the better move.
+  + Your queen on d1 reaches 5 fewer squares after cxd4 than after the better move, and cxd4 makes your position a lot harder.
+## lesson:colle800 #30
+  - Bxh7+ leaves you losing.
+  - But your Rxe5 stops it.
+  + But your Rxe5 stops it, and Bxh7+ leaves you losing.
+## lesson:colle800 #31
+  - Rxe5 goes straight for it.
+  + The direct way works now: Rxe5.
+## lesson:colle800 #38
+  - Qxf4 makes your position a lot harder.
+  - After …f6, their f6 is aimed at your bishop on g5.
+  + After …f6, their f6 is aimed at your bishop on g5, and Qxf4 makes your position a lot harder.
+## lesson:colle800 #45
+  - Bf6 goes straight for it.
+  + The direct way works now: Bf6.
+## lesson:gotham-jelena #16
+  - After …Bc6, your knight on f3 is the only defender of your queen — and it can be taken.
+  - Nf3 gives back a big part of your edge.
+  + After …Bc6, your knight on f3 is the only defender of your queen — and it can be taken, and Nf3 gives back a big part of your edge.
+## lesson:gotham-jelena #17
+  - d5 goes straight for it.
+  + The direct way works now: d5.
+## lesson:gotham-jelena #18
+  - After Bxd5 your edge is gone.
+  - Your queen on d1 reaches 6 fewer squares after Bxd5 than after the better move.
+  + Your queen on d1 reaches 6 fewer squares after Bxd5 than after the better move, and after Bxd5 your edge is gone.
+## lesson:gotham-jelena #22
+  - Qxe7+ lets the win slip: you're only clearly better after it.
+  - Qxe7+ wins nothing: the trades leave the material level.
+  + It wins nothing: the trades leave the material level, and it lets the win slip: you're only clearly better after it.
+## lesson:gotham-jelena #23
+  - Qc8+ goes straight for it.
+  + The direct way works now: Qc8+.
+## lesson:gotham-jelena #24
+  - Qxd8+ gives back a big part of your edge.
+  - Qxd8+ wins nothing: the trades leave the material level.
+  + It wins nothing: the trades leave the material level, and it gives back a big part of your edge.
+## lesson:sicilian1200 #10
+  - Nbd2 shuts in your dark-squared bishop.
+  + It shuts in your dark-squared bishop.
+## lesson:sicilian1200 #15
+  - Bxf3 goes straight for it.
+  + The direct way works now: Bxf3.
+## lesson:sicilian1200 #34
+  - …Nxd4 goes straight for it.
+  + The direct way works now: …Nxd4.
+## lesson:sicilian1200 #36
+  - Nxc5 makes your position a lot harder.
+  - If your knight moves, your queen on c2 is open to their queen.
+  - …Nd4 goes straight for it.
+  + If your knight moves, your queen on c2 is open to their queen, and Nxc5 makes your position a lot harder.
+  + The direct way works now: …Nd4.
+## lesson:sicilianClosed1000 #13
+  - Nh5 achieves nothing, and gives back part of your edge.
+  - Nh5 is the obvious try, but O-O is the answer.
+  - Nh5 hands them a pawn in the line.
+  + …Nh5 is the obvious try, but O-O is the answer: they win a pawn in the line.
+## lesson:sicilianClosed1000 #15
+  - Ncxe5 achieves nothing, and gives back part of your edge.
+  - Ncxe5 looks natural, but Bb5+ meets it.
+  + …Ncxe5 looks natural, but Bb5+ meets it.
+  + …Ncxe5 achieves nothing, and gives back part of your edge.
+## lesson:sicilianClosed1000 #16
+  - …Ngxe5 goes straight for it.
+  + The direct way works now: …Ngxe5.
+## lesson:sicilianClosed1000 #20
+  - …h6 goes straight for it.
+  + The direct way works now: …h6.
+## lesson:sicilianClosed1000 #21
+  - Qd4+ achieves nothing, and gives back part of your edge.
+  - Qd4+ looks natural, but Kh1 meets it.
+  + …Qd4+ looks natural, but Kh1 meets it.
+  + …Qd4+ achieves nothing, and gives back part of your edge.
+## lesson:sicilianClosed1000 #31
+  - Bxc3 is tempting, but bxc3 takes the sting out of it.
+  - Bxc3 wins nothing: the trades leave the material level.
+  - Bxc3 gives back part of your edge.
+  + …Bxc3 is tempting, but bxc3 takes the sting out of it.
+  + It wins nothing: the trades leave the material level, and it gives back part of your edge.
+## lesson:sicilianClosed1000 #41
+  - Kxg6 is tempting, but Ne4 takes the sting out of it.
+  - Kxg6 makes your position a lot harder.
+  - But your …Bxe4 stops it.
+  + …Kxg6 is tempting, but Ne4 takes the sting out of it.
+  + But your …Bxe4 stops it, and …Kxg6 makes your position a lot harder.
+## lesson:sicilianClosed1000 #45
+  - Bxc3 makes your position a lot harder.
+  - Bxc3 looks natural, but Bxb7 meets it.
+  - Bxc3 hands them a rook for a bishop and a pawn in the line.
+  + …Bxc3 looks natural, but Bxb7 meets it.
+  + It does nothing for your light-squared bishop, which their bishop still takes, and it hands them a rook for a bishop and a pawn in the line.
+## lesson:sicilianClosed1000 #51
+  - After Rae8 your edge is gone.
+  - But your …Rxe4 stops it.
+  - 51: Rae8 is the obvious try, but Rb1 is the answer.
+  + 51: …Rae8 is the obvious try, but Rb1 is the answer.
+  + But your …Rxe4 stops it, and after …Rae8 your edge is gone.
+## lesson:sicilianClosed1000 #55
+  - Re5 achieves nothing, and gives back part of your edge.
+  - Re5 is the obvious try, but Ne4 is the answer.
+  + …Re5 is the obvious try, but Ne4 is the answer.
+  + …Re5 achieves nothing, and gives back part of your edge.
+## lesson:sicilianClosed1000 #56
+  - …Re2 goes straight for it.
+  + The direct way works now: …Re2.
+## lesson:sicilianClosed1000 #57
+  - Rxc2 is the obvious try, but Ne4 is the answer.
+  - Rxc2 achieves nothing, and gives back part of your edge.
+  + …Rxc2 is the obvious try, but Ne4 is the answer.
+  + …Rxc2 achieves nothing, and gives back part of your edge.
+## lesson:sicilianClosed1000 #59
+  - h5 achieves nothing, and gives back part of your edge.
+  - h5 is tempting, but Ne3 takes the sting out of it.
+  + …h5 is tempting, but Ne3 takes the sting out of it.
+  + …h5 achieves nothing, and gives back part of your edge.
+## lesson:sicilianClosed1000 #61
+  - Re2 looks natural, but Ne5 meets it.
+  - Re2 achieves nothing, and gives back part of your edge.
+  + …Re2 looks natural, but Ne5 meets it.
+  + …Re2 achieves nothing, and gives back part of your edge.

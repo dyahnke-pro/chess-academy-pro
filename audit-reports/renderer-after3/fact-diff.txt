@@ -1,0 +1,44 @@
+## alone:0Km5u#1-Kh8
+  - SILENT -:standing@
+      You're slightly better — their king is still in the middle, you have the bishop pair.
+  + SPOKEN claim:standing:slightly+
+      You're slightly better — their king is still in the middle, you have the bishop pair.
+## told:0Km5u#1-Kh8
+  - SILENT -:standing@
+      You're slightly better — their king is still in the middle, you have the bishop pair.
+  + SPOKEN claim:standing:slightly+
+      You're slightly better — their king is still in the middle, you have the bishop pair.
+## alone:0Km5u#11-Rd8
+  - SILENT temptingOnBoard:refuted@g8,h4,h8
+      Kg8 is the obvious try, but h4 is the answer. Kg8 hands them a bishop in the line. Kg8 leaves you losing.
+## told:0Km5u#11-Rd8
+  - SILENT temptingOnBoard:refuted@g8,h4,h8
+      Kg8 is the obvious try, but h4 is the answer. Kg8 hands them a bishop in the line. Kg8 leaves you losing.
+## alone:0CegO#1-exf4+
+  - SILENT -:standing@
+      You're winning — your passed pawn on g4 is three steps from queening, their isolated pawn on f4 is attacked twice and guarded only once.
+  + SPOKEN claim:standing:decisive+
+      You're winning — your passed pawn on g4 is three steps from queening, their isolated pawn on f4 is attacked twice and guarded only once.
+## told:0CegO#1-exf4+
+  - SILENT -:standing@
+      You're winning — your passed pawn on g4 is three steps from queening, their isolated pawn on f4 is attacked twice and guarded only once.
+  + SPOKEN claim:standing:decisive+
+      You're winning — your passed pawn on g4 is three steps from queening, their isolated pawn on f4 is attacked twice and guarded only once.
+## alone:0IsE8#3-Kf7
+  - SILENT -:standing@
+      You're winning — you're up a piece.
+  + SPOKEN claim:standing:decisive+
+      You're winning — you're up a piece.
+## told:0IsE8#3-Kf7
+  - SILENT -:standing@
+      You're winning — you're up a piece.
+## alone:0IsE8#5-Kg6
+  - SILENT -:standing@
+      You're winning — you're up a piece, three of your pieces bear on their king against one defender.
+  + SPOKEN claim:standing:decisive+
+      You're winning — you're up a piece, three of your pieces bear on their king against one defender.
+## told:0IsE8#5-Kg6
+  - SILENT -:standing@
+      You're winning — you're up a piece, three of your pieces bear on their king against one defender.
+
+10 went silent, 6 newly spoken

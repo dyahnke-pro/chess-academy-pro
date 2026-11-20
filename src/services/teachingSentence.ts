@@ -368,7 +368,8 @@ export function renderTry(t: TryData): string {
     // …and a cost that already has its own "and" ("achieves nothing, and
     // gives back …"), or a sentence that is another idea ("But your …Bxe4
     // stops it"), keeps the cost its own sentence.
-    if (tail.split(/\s+/).length > 34 || /, and /.test(last) || /, and /.test(cost) || /^But\b/.test(last)) tail = `${last} ${name(cost)}`;
+    const lastSentence = last.split(/(?<=[.!?])\s+/).pop() ?? last;
+    if (lastSentence.split(/\s+/).length > 30 || /, and /.test(lastSentence) || /, and /.test(cost) || /^But\b/.test(lastSentence)) tail = `${last} ${name(cost)}`;
   }
   return [...sentences.slice(0, -1), tail].join(' ');
 }

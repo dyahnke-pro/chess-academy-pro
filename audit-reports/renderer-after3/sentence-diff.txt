@@ -1,0 +1,113 @@
+renderer-after2/puzzles5.json {"avg":164,"max":314,"tries":22}
+renderer-after3/puzzles5.json {"avg":163,"max":307,"tries":21}
+## 0Km5u#1-Kh8
+  - Rf7 looks natural, but Nxb8 meets it.
+  - Rf7 hands them a rook for two pawns in the line.
+  - Rf7 leaves you clearly worse.
+  - Be6 is tempting, but Qxe6+ takes the sting out of it.
+  - Qxe6+ comes with check, so they gain a tempo.
+  - Be6 leaves you losing.
+  + …Rf7 looks natural, but Nxb8 meets it.
+  + It does nothing for your rook on b8, which their knight still takes, and it hands them a rook for two pawns in the line.
+  + …Be6 is tempting, but Qxe6+ takes the sting out of it.
+  + Qxe6+ comes with check, so they gain a tempo, and …Be6 hands them a rook and a bishop for a pawn in the line.
+## 0Km5u#7-Qe3
+  - Qxg2 is the obvious try, but Re1 is the answer.
+  - Qxg2 hands them a bishop for two pawns in the line.
+  - After Qxg2 your edge is gone.
+  + …Qxg2 is the obvious try, but Re1 is the answer: they win a bishop for two pawns in the line.
+## 0Km5u#9-Bxd7
+  - Rf2 looks natural, but Re1 meets it.
+  - Rf2 hands them a pawn in the line.
+  - After Rf2 your edge is gone.
+  + …Rf2 looks natural, but Re1 meets it: they win a pawn in the line.
+## 0Km5u#11-Rd8
+  - Qd2+ is the obvious try, but Qxd2 is the answer.
+  - Qd2+ hands them a bishop in the line.
+  - Qd2+ leaves you losing.
+  - Kg8 is the obvious try, but h4 is the answer.
+  - Kg8 hands them a bishop in the line.
+  - Kg8 leaves you losing.
+  - Qf2 and Qf4 both fail the same way: Rf1 meets either.
+  + …Qd2+ is the obvious try, but Qxd2 is the answer: they win a bishop in the line.
+  + …Qf2 and …Qf4 both fail the same way: Rf1 meets either.
+## 0Km5u#13-Kg8
+  - Bf5 is the obvious try, but Qxd8+ is the answer.
+  - Qxd8+ comes with check, so they gain a tempo.
+  - After Bf5 your edge is gone.
+  - h6 and Be6 both fail the same way: Rf8+ meets either.
+  + …Bf5 is the obvious try, but Qxd8+ is the answer.
+  + Qxd8+ comes with check, so they gain a tempo, and after …Bf5 your edge is gone.
+  + …h6 and …Be6 both fail the same way: Rf8+ meets either.
+## 0LeQy#1-Rxh6+
+  - Qc4 shuts in your bishop.
+  - Qc4 throws the win: you're losing after it.
+  + It shuts in your bishop, and it hands them a pawn in the line.
+## 0LeQy#3-Qf4
+  - Their pawn on d4 still stands.
+  - Rd6 throws the win: you're losing after it.
+  + Their pawn on d4 still stands, and Rd6 hands them the exchange in the line.
+## 0LeQy#7-Qxh6
+  - Qxh6 goes straight for it.
+  + The direct way works now: Qxh6.
+## 0LeQy#9-Rg1+
+  - …fxe6+ comes with check, so they gain a tempo.
+  - e6 throws the win: you're losing after it.
+  + …fxe6+ comes with check, so they gain a tempo, and e6 hands them a pawn in the line.
+## 0GvdU#1-Ke3
+  - …Ke3 goes straight for it.
+  - Kc3 goes straight at the pawn on b3, but Kf2 meets it.
+  - Kc3 wins their pawn on b3, and that is all it does.
+  - Kc3 lets the win slip: you're only slightly better after it.
+  + The direct way works now: …Ke3.
+  + …Kc3 goes straight at the pawn on b3, but Kf2 meets it.
+  + It wins their pawn on b3, and that is all it does.
+  + …Kc3 lets the win slip: you're only slightly better after it.
+## 0GvdU#7-f1=N+
+  - …f1=N+ goes straight for it.
+  + The direct way works now: …f1=N+.
+## 0CegO#1-exf4+
+  - Kf6 is the obvious try, but f5 is the answer.
+  - The better move makes a passed pawn.
+  - Kf6 throws the win: you're losing after it.
+  - Kh4 looks natural, but fxe5 meets it.
+  - Their e-pawn runs through and queens on e8.
+  - Kh4 throws the win: you're losing after it.
+  - Kh6 is tempting, but fxe5 takes the sting out of it.
+  - Kh6 hands them a pawn in the line.
+  - Kh6 throws the win: you're losing after it.
+  + …Kf6 is the obvious try, but f5 is the answer.
+  + The better move makes a passed pawn, and …Kf6 throws the win: you're losing after it.
+  + …Kh4 looks natural, but fxe5 meets it.
+  + Their e-pawn runs through and queens on e8, and …Kh4 hands them a pawn in the line.
+  + …Kh6 is tempting, but fxe5 takes the sting out of it: they win a pawn in the line.
+## 0CegO#3-h4
+  - g3+ is tempting, but Kg2 takes the sting out of it.
+  - g3+ hands them a pawn in the line.
+  - g3+ throws the win: the game is level after it.
+  - f3, Kf6 and Kh6 all fail the same way: Bd3 meets each.
+  - Kh4 looks natural, but Bd3 meets it.
+  - Their b-pawn runs through and queens on b8: your king is one move too late to catch it.
+  - Kh4 throws the win: the game is level after it.
+  + …g3+ is tempting, but Kg2 takes the sting out of it: they win a pawn in the line.
+  + …f3, …Kf6 and …Kh6 all fail the same way: Bd3 meets each.
+  + …Kh4 looks natural, but Bd3 meets it.
+  + Their b-pawn runs through and queens on b8: your king is one move too late to catch it, and …Kh4 hands them a pawn in the line.
+## 0CegO#7-Kh4
+  - …Kh4 goes straight for it.
+  + The direct way works now: …Kh4.
+## 0CegO#11-Kg3
+  - …Kg3 goes straight for it.
+  + The direct way works now: …Kg3.
+## 0IsE8#5-Kg6
+  - Nxd7 is tempting, but Qxd7+ takes the sting out of it.
+  - Qxd7+ is a fork: it hits your king and your rook.
+  - Nxd7 throws the win: the game is level after it.
+  + …Nxd7 is tempting, but Qxd7+ takes the sting out of it.
+  + Qxd7+ is a fork: it hits your king and your rook, and …Nxd7 hands them a knight in the line.
+## 0IsE8#7-Kh5
+  - …Kh5 goes straight for it.
+  + The direct way works now: …Kh5.
+## 0IsE8#11-Qxe5
+  - Qg4 and Qg5 both fail the same way: Rxf7 meets either.
+  + …Qg4 and …Qg5 both fail the same way: Rxf7 meets either.
