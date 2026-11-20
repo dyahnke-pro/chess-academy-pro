@@ -3,12 +3,9 @@
 // (the tries, the futures) is read live at depth 16, as the dump did.
 //   npx tsx stored-read.ts <article-reads.jsonl> <out.jsonl>
 import { readFileSync, writeFileSync, appendFileSync } from 'node:fs';
-import { Chess } from 'chess.js';
 import { spawn } from 'node:child_process';
 const DEPTH = 16;
-import { boardReadFacts } from '../src/services/boardReadFacts';
-import { decideRead, readContextOf } from '../src/services/readDecider';
-import { readHasShot } from '../src/services/positionReadComposer';
+import { readDanyaBoard } from '../src/test/danyaBoardRead';
 import type { AnalysisLine } from '../src/types';
 
 const [, , inPath, outPath] = process.argv;
@@ -77,25 +74,18 @@ async function main(): Promise<void> {
     n += 1;
     const out: Record<string, unknown> = { id: r.id, fen: r.fen };
     try {
-      const side = new Chess(r.fen).turn();
       const before = stored.get(key(r.fen)) ?? [];
       const read = (fen: string): Promise<AnalysisLine[] | null> => { if (!stored.has(key(fen))) missed += 1; return live(fen); };
-      const pf = await boardReadFacts({ fen: r.fen, studentColor: side, rating: 1800, before, read, withhold: false, readTempting: true, engineFutures: false, story: null,
-        tense: 'now', history: [], theory: false, studentNeedContext: null } as unknown as Parameters<typeof boardReadFacts>[0]);
-      const decided = decideRead(pf.facts, readContextOf({
-        fen: r.fen,
-        top: before[0] ? { evaluation: before[0].evaluation, mate: before[0].mate ?? null } : null,
-        bestUci: before[0]?.moves[0] ?? null,
-        withheld: null,
-        studentShot: readHasShot(r.fen, side, before, false),
-      }));
-      out.read = [...decided.facts.map((f) => f.text), decided.habit ?? ''].map((t) => t.trim()).filter(Boolean).join(' ');
-      out.facts = pf.facts.map((f) => ({ kind: f.kind, text: f.text }));
+      const d = await readDanyaBoard(r.fen, before, read);
+      out.read = d.read;
+      out.facts = d.facts;
     } catch (e) { out.error = String(e).slice(0, 300); }
     appendFileSync(outPath, `${JSON.stringify(out)}\n`);
     if (n % 20 === 0) console.log(`${n}/${rows.length} reads-missing=${missed}`);
   }
   engine.quit();
+  // RECORD_READS=<path>: every read the run used (the boards' own + live), fen key → lines.
+  if (process.env.RECORD_READS) writeFileSync(process.env.RECORD_READS, JSON.stringify(Object.fromEntries(stored)));
   console.log(`DONE engine-reads=${missed}`);
 }
 void main();
