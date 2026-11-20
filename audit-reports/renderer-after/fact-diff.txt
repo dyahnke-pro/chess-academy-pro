@@ -1,120 +1,262 @@
+## alone:0Km5u#1-Kh8
+  - SILENT claim:rule-out:f2
+      Rf7? Then they play Nxb8 and, two moves later, you play Qxf2+ — you give up a rook for two pawns.
+## told:0Km5u#1-Kh8
+  - SILENT claim:rule-out:f2
+      Rf7? Then they play Nxb8 and, two moves later, you play Qxf2+ — you give up a rook for two pawns.
+## alone:0Km5u#3-fxe4
+  + SPOKEN claim:move:f5e4:idea:file:
+      You go fxe4, which half-opens the f-file for the rooks.
+## told:0Km5u#3-fxe4
+  + SPOKEN claim:move:f5e4:idea:file:
+      You go fxe4, which half-opens the f-file for the rooks.
 ## alone:0Km5u#5-Qxf2+
-  + SPOKEN computeMoveFundamentals:fundamental[move:b6f2:idea:file:]@
-      You play Qxf2+ — it seizes the open f-file.
+  + SPOKEN claim:move:b6f2:idea:file:
+      You play Qxf2+ — it seizes the open f-file. It also gives check, and their only answer is Kd1.
+  + SPOKEN claim:move:b6f2:idea:threat:
+      You play Qxf2+ — it seizes the open f-file. It also gives check, and their only answer is Kd1.
+  + SPOKEN claim:move:b6f2:idea:check:
+      You play Qxf2+ — it seizes the open f-file. It also gives check, and their only answer is Kd1.
 ## told:0Km5u#5-Qxf2+
-  + SPOKEN computeMoveFundamentals:fundamental[move:b6f2:idea:file:]@
-      You play Qxf2+ — it seizes the open f-file.
+  + SPOKEN claim:move:b6f2:idea:file:
+      You play Qxf2+ — it seizes the open f-file. It also gives check, and their only answer is Kd1.
+  + SPOKEN claim:move:b6f2:idea:threat:
+      You play Qxf2+ — it seizes the open f-file. It also gives check, and their only answer is Kd1.
+  + SPOKEN claim:move:b6f2:idea:check:
+      You play Qxf2+ — it seizes the open f-file. It also gives check, and their only answer is Kd1.
+## alone:0Km5u#7-Qe3
+  + SPOKEN claim:move:f2e3:idea:unpin:
+      You play Qe3 — it adds one guard to your pawn on e4, which their queen attacks. It also unpins your pawn on e5 — and the queen aims at their pawn on c3.
+  + SPOKEN claim:coordination:b
+      Your pieces work together: every one is guarded and in the game. Theirs are scattered: the knight on b8 and the queen on d5 have no guard.
+## told:0Km5u#7-Qe3
+  + SPOKEN claim:move:f2e3:idea:unpin:
+      You play Qe3 — it adds one guard to your pawn on e4, which their queen attacks. It also unpins your pawn on e5 — and the queen aims at their pawn on c3.
+  + SPOKEN claim:coordination:b
+      Your pieces work together: every one is guarded and in the game. Theirs are scattered: the knight on b8 and the queen on d5 have no guard.
+## alone:0Km5u#9-Bxd7
+  + SPOKEN claim:move:c8d7:idea:prevent:e2,g4
+      You go Bxd7, which completes your development — every minor piece is out. It also takes g4 away from their bishop on e2.
+## told:0Km5u#9-Bxd7
+  + SPOKEN claim:move:c8d7:idea:prevent:e2,g4
+      You go Bxd7, which completes your development — every minor piece is out. It also takes g4 away from their bishop on e2.
 ## alone:0Km5u#11-Rd8
-  - SILENT readPosition:structure-plan[file-f|student-good-r-open-file-f]@f2,f8
+  - SILENT claim:student-good-r-open-file-f
       Your rook on f8 is your best-placed piece — the f-file is clear all the way to f2, its road into their camp.
-  - SILENT quietThreat:aspect-threat[quiet-threat:b4]@b4,d8
-      Rd8 is quiet, but it threatens …b4 — they must answer that first.
-  + SPOKEN quietThreat:aspect-prepares[quiet-threat:b4]@b4,d8
-      Rd8 is quiet: it prepares …b4.
+  - SILENT claim:file-f
+      Your rook on f8 is your best-placed piece — the f-file is clear all the way to f2, its road into their camp.
+  - SILENT claim:rule-out:d7
+      Rg8? Then they play Qxd7, and the bishop on d7 is lost.
+  + SPOKEN claim:move:f8d8:idea:guard:d6,d7
+      You play Rd8 — it stops Qxf8, which would be mate. It also takes the open d-file, where the rook belongs. And it saves the rook from their queen on d6. And it guards the bishop on d7, which their queen attacks.
 ## told:0Km5u#11-Rd8
-  - SILENT readPosition:structure-plan[file-f|student-good-r-open-file-f]@f2,f8
+  - SILENT claim:student-good-r-open-file-f
       Your rook on f8 is your best-placed piece — the f-file is clear all the way to f2, its road into their camp.
-  - SILENT quietThreat:aspect-threat[quiet-threat:b4]@b4,d8
-      Rd8 is quiet, but it threatens …b4 — they must answer that first.
-  + SPOKEN quietThreat:aspect-prepares[quiet-threat:b4]@b4,d8
-      Rd8 is quiet: it prepares …b4.
-## alone:0Km5u#13-Kg8
-  - SILENT quietThreat:aspect-threat[quiet-threat:h6]@g8,h6
-      Kg8 is quiet, but it threatens …h6 — they must answer that first.
-  + SPOKEN quietThreat:aspect-prepares[quiet-threat:h6]@g8,h6
-      Kg8 is quiet: it prepares …h6.
+  - SILENT claim:file-f
+      Your rook on f8 is your best-placed piece — the f-file is clear all the way to f2, its road into their camp.
+  - SILENT claim:rule-out:d7
+      Rg8? Then they play Qxd7, and the bishop on d7 is lost.
+  + SPOKEN claim:move:f8d8:idea:guard:d6,d7
+      You play Rd8 — it stops Qxf8, which would be mate. It also takes the open d-file, where the rook belongs. And it saves the rook from their queen on d6. And it guards the bishop on d7, which their queen attacks.
 ## told:0Km5u#13-Kg8
-  - SILENT quietThreat:aspect-threat[quiet-threat:h6]@g8,h6
-      Kg8 is quiet, but it threatens …h6 — they must answer that first.
-  + SPOKEN quietThreat:aspect-prepares[quiet-threat:h6]@g8,h6
-      Kg8 is quiet: it prepares …h6.
-  + SPOKEN readPosition:structure-plan[file-f|opponent-good-r-open-file-f]@f1,f7
+  + SPOKEN claim:opponent-good-r-open-file-f
       Their rook on f1 is well placed — the f-file is clear all the way to f7, its road into your camp.
+  + SPOKEN claim:file-f
+      Their rook on f1 is well placed — the f-file is clear all the way to f7, its road into your camp.
+## alone:0LeQy#3-Qf4
+  + SPOKEN claim:move:c1f4:idea:pressure:g4
+      You go Qf4, which hits their bishop on g4, and nothing guards it.
+  + SPOKEN claim:count:r4rk1/pp2bpp1/7R/q3P3/3pPQb1/3B1N2/PP2KP2/R7
+      Count the attackers and defenders on their bishop on g4: 1 attacker to 0 defenders — it's outnumbered, so it has to move, and that costs them the tempo.
+  + SPOKEN claim:idea:tempo:g4
+      Count the attackers and defenders on their bishop on g4: 1 attacker to 0 defenders — it's outnumbered, so it has to move, and that costs them the tempo.
+## told:0LeQy#3-Qf4
+  + SPOKEN claim:move:c1f4:idea:pressure:g4
+      You go Qf4, which hits their bishop on g4, and nothing guards it.
+  + SPOKEN claim:count:r4rk1/pp2bpp1/7R/q3P3/3pPQb1/3B1N2/PP2KP2/R7
+      Count the attackers and defenders on their bishop on g4: 1 attacker to 0 defenders — it's outnumbered, so it has to move, and that costs them the tempo.
+  + SPOKEN claim:idea:tempo:g4
+      Count the attackers and defenders on their bishop on g4: 1 attacker to 0 defenders — it's outnumbered, so it has to move, and that costs them the tempo.
+## alone:0LeQy#7-Qxh6
+  + SPOKEN claim:move:f4h6:idea:file:
+      You go Qxh6, which prises open their king's cover. It also seizes the open h-file — a highway straight into their position. And it wins a pawn back.
+  + SPOKEN claim:move:f4h6:idea:win-material:
+      You go Qxh6, which prises open their king's cover. It also seizes the open h-file — a highway straight into their position. And it wins a pawn back.
+## told:0LeQy#7-Qxh6
+  + SPOKEN claim:move:f4h6:idea:file:
+      You go Qxh6, which prises open their king's cover. It also seizes the open h-file — a highway straight into their position. And it wins a pawn back.
+  + SPOKEN claim:move:f4h6:idea:win-material:
+      You go Qxh6, which prises open their king's cover. It also seizes the open h-file — a highway straight into their position. And it wins a pawn back.
 ## alone:0LeQy#9-Rg1+
-  + SPOKEN computeMustDefend:must-defend[loose:h6:50]@b6,h6
+  + SPOKEN claim:loose:h6:50
       You're on top, but watch the counterpunch: their queen on b6 attacks your queen on h6, and nothing defends it — and you can take the attacker without losing material.
-  + SPOKEN computeMoveFundamentals:fundamental[move:a1g1:idea:file:]@
-      You go Rg1+, which takes the open g-file, pressing their king on g8.
+  + SPOKEN claim:move:a1g1:idea:file:
+      You go Rg1+, which takes the open g-file, pressing their king on g8. It also gives check, and they can answer only with Bg5 or Qg6.
+  + SPOKEN claim:move:a1g1:idea:threat:
+      You go Rg1+, which takes the open g-file, pressing their king on g8. It also gives check, and they can answer only with Bg5 or Qg6.
+  + SPOKEN claim:move:a1g1:idea:check:
+      You go Rg1+, which takes the open g-file, pressing their king on g8. It also gives check, and they can answer only with Bg5 or Qg6.
 ## told:0LeQy#9-Rg1+
-  + SPOKEN computeMustDefend:must-defend[loose:h6:50]@b6,h6
+  + SPOKEN claim:loose:h6:50
       You're on top, but watch the counterpunch: their queen on b6 attacks your queen on h6, and nothing defends it — and you can take the attacker without losing material.
-  + SPOKEN computeMoveFundamentals:fundamental[move:a1g1:idea:file:]@
-      You go Rg1+, which takes the open g-file, pressing their king on g8.
-## alone:0GvdU#1-Ke3
-  - SILENT quietThreat:aspect-threat[quiet-threat:d2]@d2,e3
-      Ke3 is quiet, but it threatens …Kd2 — they must answer that first.
-  + SPOKEN quietThreat:aspect-prepares[quiet-threat:d2]@d2,e3
-      Ke3 is quiet: it prepares …Kd2.
-## told:0GvdU#1-Ke3
-  - SILENT quietThreat:aspect-threat[quiet-threat:d2]@d2,e3
-      Ke3 is quiet, but it threatens …Kd2 — they must answer that first.
-  + SPOKEN quietThreat:aspect-prepares[quiet-threat:d2]@d2,e3
-      Ke3 is quiet: it prepares …Kd2.
-## alone:0GvdU#5-Ke2
-  - SILENT quietThreat:aspect-threat[quiet-threat:e3]@e2,e3
-      Ke2 is quiet, but it threatens …e3 — they must answer that first.
-  + SPOKEN quietThreat:aspect-prepares[quiet-threat:e3]@e2,e3
-      Ke2 is quiet: it prepares …e3.
-## told:0GvdU#5-Ke2
-  - SILENT quietThreat:aspect-threat[quiet-threat:e3]@e2,e3
-      Ke2 is quiet, but it threatens …e3 — they must answer that first.
-  + SPOKEN quietThreat:aspect-prepares[quiet-threat:e3]@e2,e3
-      Ke2 is quiet: it prepares …e3.
+  + SPOKEN claim:move:a1g1:idea:file:
+      You go Rg1+, which takes the open g-file, pressing their king on g8. It also gives check, and they can answer only with Bg5 or Qg6.
+  + SPOKEN claim:move:a1g1:idea:threat:
+      You go Rg1+, which takes the open g-file, pressing their king on g8. It also gives check, and they can answer only with Bg5 or Qg6.
+  + SPOKEN claim:move:a1g1:idea:check:
+      You go Rg1+, which takes the open g-file, pressing their king on g8. It also gives check, and they can answer only with Bg5 or Qg6.
+## alone:0GvdU#3-f2
+  + SPOKEN claim:move:f3f2:idea:passed-pawn:
+      You play f2: it pushes your passed pawn — passed pawns must be pushed.
+## told:0GvdU#3-f2
+  + SPOKEN claim:move:f3f2:idea:passed-pawn:
+      You play f2: it pushes your passed pawn — passed pawns must be pushed.
+## alone:0GvdU#7-f1=N+
+  + SPOKEN claim:move:f2f1:idea:promote:
+      You play f1=N+: it promotes to a knight — underpromotion, chosen on purpose. It also gives check, and their king has to move.
+  + SPOKEN claim:move:f2f1:idea:threat:
+      You play f1=N+: it promotes to a knight — underpromotion, chosen on purpose. It also gives check, and their king has to move.
+  + SPOKEN claim:move:f2f1:idea:check:
+      You play f1=N+: it promotes to a knight — underpromotion, chosen on purpose. It also gives check, and their king has to move.
+## told:0GvdU#7-f1=N+
+  + SPOKEN claim:move:f2f1:idea:promote:
+      You play f1=N+: it promotes to a knight — underpromotion, chosen on purpose. It also gives check, and their king has to move.
+  + SPOKEN claim:move:f2f1:idea:threat:
+      You play f1=N+: it promotes to a knight — underpromotion, chosen on purpose. It also gives check, and their king has to move.
+  + SPOKEN claim:move:f2f1:idea:check:
+      You play f1=N+: it promotes to a knight — underpromotion, chosen on purpose. It also gives check, and their king has to move.
 ## alone:0GvdU#9-Nd2
-  + SPOKEN chainBase:judgement[chain-base:hit:b3|loose:b3|move:f1d2:idea:pressure:b3]@a4,b3,d2
-      Your knight goes after b3, the pawn at the base of their chain. It holds a4, and right now nothing guards it.
+  + SPOKEN claim:move:f1d2:idea:pressure:b3
+      You play Nd2 — it hits their pawn on b3, and nothing guards it. It also eyes f3 and their pawn on b3, squares no pawn of theirs can cover.
+  + SPOKEN claim:move:f1d2:idea:outpost:b3,f3
+      You play Nd2 — it hits their pawn on b3, and nothing guards it. It also eyes f3 and their pawn on b3, squares no pawn of theirs can cover.
 ## told:0GvdU#9-Nd2
-  + SPOKEN chainBase:judgement[chain-base:hit:b3|loose:b3|move:f1d2:idea:pressure:b3]@a4,b3,d2
-      Your knight goes after b3, the pawn at the base of their chain. It holds a4, and right now nothing guards it.
+  + SPOKEN claim:move:f1d2:idea:pressure:b3
+      You play Nd2 — it hits their pawn on b3, and nothing guards it. It also eyes f3 and their pawn on b3, squares no pawn of theirs can cover.
+  + SPOKEN claim:move:f1d2:idea:outpost:b3,f3
+      You play Nd2 — it hits their pawn on b3, and nothing guards it. It also eyes f3 and their pawn on b3, squares no pawn of theirs can cover.
 ## alone:0CegO#1-exf4+
-  - SILENT buildDeliberation:deliberation[rule-out:e5|tempting:g5h6]@e5,h6
-      Kh6? Then they answer fxe5 — they win a pawn.
-  + SPOKEN buildDeliberation:deliberation[rule-out:e5|tempting:g5h6]@e5
-      Kh6? Then they answer fxe5 — they win a pawn.
+  + SPOKEN claim:move:e5f4:idea:passed-pawn:
+      You play exf4+: it pushes your passed pawn — passed pawns must be pushed. It also gives check, and their king has to move.
+  + SPOKEN claim:move:e5f4:idea:threat:
+      You play exf4+: it pushes your passed pawn — passed pawns must be pushed. It also gives check, and their king has to move.
+  + SPOKEN claim:move:e5f4:idea:check:
+      You play exf4+: it pushes your passed pawn — passed pawns must be pushed. It also gives check, and their king has to move.
 ## told:0CegO#1-exf4+
-  - SILENT buildDeliberation:deliberation[rule-out:e5|tempting:g5h6]@e5,h6
-      Kh6? Then they answer fxe5 — they win a pawn.
-  + SPOKEN buildDeliberation:deliberation[rule-out:e5|tempting:g5h6]@e5
-      Kh6? Then they answer fxe5 — they win a pawn.
+  + SPOKEN claim:move:e5f4:idea:passed-pawn:
+      You play exf4+: it pushes your passed pawn — passed pawns must be pushed. It also gives check, and their king has to move.
+  + SPOKEN claim:move:e5f4:idea:threat:
+      You play exf4+: it pushes your passed pawn — passed pawns must be pushed. It also gives check, and their king has to move.
+  + SPOKEN claim:move:e5f4:idea:check:
+      You play exf4+: it pushes your passed pawn — passed pawns must be pushed. It also gives check, and their king has to move.
 ## alone:0CegO#3-h4
-  - SILENT quietThreat:aspect-threat[quiet-threat:f3]@f3,h4
-      h4 is quiet, but it threatens …f3 — they must answer that first.
-  + SPOKEN quietThreat:aspect-prepares[quiet-threat:f3]@f3,h4
-      h4 is quiet: it prepares …f3.
+  + SPOKEN claim:move:h5h4:idea:center:g3
+      You play h4: it bears down on g3, backing your g-pawn's push there — g3 sits right beside their king. It also pushes your passed pawn — passed pawns must be pushed.
+  + SPOKEN claim:move:h5h4:idea:passed-pawn:
+      You play h4: it bears down on g3, backing your g-pawn's push there — g3 sits right beside their king. It also pushes your passed pawn — passed pawns must be pushed.
 ## told:0CegO#3-h4
-  - SILENT quietThreat:aspect-threat[quiet-threat:f3]@f3,h4
-      h4 is quiet, but it threatens …f3 — they must answer that first.
-  + SPOKEN quietThreat:aspect-prepares[quiet-threat:f3]@f3,h4
-      h4 is quiet: it prepares …f3.
+  + SPOKEN claim:move:h5h4:idea:center:g3
+      You play h4: it bears down on g3, backing your g-pawn's push there — g3 sits right beside their king. It also pushes your passed pawn — passed pawns must be pushed.
+  + SPOKEN claim:move:h5h4:idea:passed-pawn:
+      You play h4: it bears down on g3, backing your g-pawn's push there — g3 sits right beside their king. It also pushes your passed pawn — passed pawns must be pushed.
+## alone:0CegO#5-h3
+  + SPOKEN claim:move:h4h3:idea:passed-pawn:
+      You go h3, which pushes your passed pawn — passed pawns must be pushed.
+## told:0CegO#5-h3
+  + SPOKEN claim:move:h4h3:idea:passed-pawn:
+      You go h3, which pushes your passed pawn — passed pawns must be pushed.
 ## alone:0CegO#7-Kh4
-  + SPOKEN pieceRoute:route[move:g5h4:idea:route:f3,g3]@f3,g3
+  + SPOKEN claim:move:g5h4:idea:route:f3,g3
       You go Kh4, sending the king on to f3, by way of g3.
 ## told:0CegO#7-Kh4
-  + SPOKEN pieceRoute:route[move:g5h4:idea:route:f3,g3]@f3,g3
+  + SPOKEN claim:move:g5h4:idea:route:f3,g3
       You go Kh4, sending the king on to f3, by way of g3.
 ## alone:0CegO#9-f3
-  + SPOKEN computeMoveFundamentals:fundamental[move:f4f3:idea:passed-pawn:]@
+  + SPOKEN claim:move:f4f3:idea:passed-pawn:
       You go f3, which pushes your passed pawn — passed pawns must be pushed.
 ## told:0CegO#9-f3
-  + SPOKEN computeMoveFundamentals:fundamental[move:f4f3:idea:passed-pawn:]@
+  + SPOKEN claim:move:f4f3:idea:passed-pawn:
       You go f3, which pushes your passed pawn — passed pawns must be pushed.
 ## alone:0CegO#11-Kg3
-  + SPOKEN buildReviewMoveTeachingFact:board-teacher[move:h4g3:idea:king-activity:]@
+  + SPOKEN claim:move:h4g3:idea:king-activity:
       You go Kg3, which marches up — in the endgame it stops hiding and becomes a fighting piece.
+  + SPOKEN claim:king-to-centre
+      Your king steps up to g3: with the queens off it is no longer a target but a fighting piece, and from the middle it reaches either wing.
 ## told:0CegO#11-Kg3
-  + SPOKEN buildReviewMoveTeachingFact:board-teacher[move:h4g3:idea:king-activity:]@
+  + SPOKEN claim:move:h4g3:idea:king-activity:
       You go Kg3, which marches up — in the endgame it stops hiding and becomes a fighting piece.
+  + SPOKEN claim:king-to-centre
+      Your king steps up to g3: with the queens off it is no longer a target but a fighting piece, and from the middle it reaches either wing.
+## alone:0IsE8#1-Rxf5
+  - SILENT claim:rule-out:g3
+      Kf7? Then they answer Nxg3 — they win a queen.
+  + SPOKEN claim:move:f8f5:idea:file:
+      You go Rxf5, which threatens Nf3+ — forks the king and queen on d2. It also seizes the open f-file — a highway straight into their position.
+## told:0IsE8#1-Rxf5
+  - SILENT claim:rule-out:g3
+      Kf7? Then they answer Nxg3 — they win a queen.
+  + SPOKEN claim:move:f8f5:idea:file:
+      You go Rxf5, which threatens Nf3+ — forks the king and queen on d2. It also seizes the open f-file — a highway straight into their position.
+## alone:0IsE8#5-Kg6
+  + SPOKEN claim:move:f7g6:idea:guard:d7,e4,f5
+      You play Kg6: it threatens Rf1# — delivers checkmate. It also adds one guard to your rook on f5, which their e-pawn attacks, and gets your king out of the check from their rook.
+  + SPOKEN claim:opponent-passer-e
+      Their passed pawn on e4 is held: your knight on e5 stands in front of it, and it cannot move while the knight stays.
+## told:0IsE8#5-Kg6
+  - SILENT depthClauses:speedrun-read@f5
+      There is something to collect, but your rook on f5 is loose and under fire — secure it first. The capture will still be there.
+  + SPOKEN claim:move:f7g6:idea:guard:d7,e4,f5
+      You play Kg6: it threatens Rf1# — delivers checkmate. It also adds one guard to your rook on f5, which their e-pawn attacks, and gets your king out of the check from their rook.
+  + SPOKEN claim:opponent-passer-e
+      Their passed pawn on e4 is held: your knight on e5 stands in front of it, and it cannot move while the knight stays.
+## alone:0IsE8#9-Bf7
+  + SPOKEN claim:move:c4f7:idea:pressure:e8
+      You go Bf7, which hits their queen on e8, and nothing guards it.
+## told:0IsE8#9-Bf7
+  + SPOKEN claim:move:c4f7:idea:pressure:e8
+      You go Bf7, which hits their queen on e8, and nothing guards it.
+  + SPOKEN claim:count:4Q3/1ppR1b2/p6p/P3nP1k/1P6/2P3q1/6B1/6K1
+      Count the attackers and defenders on their queen on e8: 1 attacker to 0 defenders — it's outnumbered, so it has to move, and that costs them the tempo.
+  + SPOKEN claim:idea:tempo:e8
+      Count the attackers and defenders on their queen on e8: 1 attacker to 0 defenders — it's outnumbered, so it has to move, and that costs them the tempo.
+## alone:0IsE8#11-Qxe5
+  + SPOKEN claim:move:g3e5:idea:pressure:c3
+      You go Qxe5, which hits their pawn on c3, and nothing guards it. It also seizes the open e-file. And it takes aim at the center, hitting d4, keeping the rook on d7 off it, and also keeping the rook off d5 and keeping the bishop off e4.
+  + SPOKEN claim:move:g3e5:idea:file:
+      You go Qxe5, which hits their pawn on c3, and nothing guards it. It also seizes the open e-file. And it takes aim at the center, hitting d4, keeping the rook on d7 off it, and also keeping the rook off d5 and keeping the bishop off e4.
+  + SPOKEN claim:move:g3e5:idea:center:d4,d5,e4
+      You go Qxe5, which hits their pawn on c3, and nothing guards it. It also seizes the open e-file. And it takes aim at the center, hitting d4, keeping the rook on d7 off it, and also keeping the rook off d5 and keeping the bishop off e4.
+  + SPOKEN claim:phrase:center
+      You go Qxe5, which hits their pawn on c3, and nothing guards it. It also seizes the open e-file. And it takes aim at the center, hitting d4, keeping the rook on d7 off it, and also keeping the rook off d5 and keeping the bishop off e4.
+## told:0IsE8#11-Qxe5
+  + SPOKEN claim:move:g3e5:idea:pressure:c3
+      You go Qxe5, which hits their pawn on c3, and nothing guards it. It also seizes the open e-file. And it takes aim at the center, hitting d4, keeping the rook on d7 off it, and also keeping the rook off d5 and keeping the bishop off e4.
+  + SPOKEN claim:move:g3e5:idea:file:
+      You go Qxe5, which hits their pawn on c3, and nothing guards it. It also seizes the open e-file. And it takes aim at the center, hitting d4, keeping the rook on d7 off it, and also keeping the rook off d5 and keeping the bishop off e4.
+  + SPOKEN claim:move:g3e5:idea:center:d4,d5,e4
+      You go Qxe5, which hits their pawn on c3, and nothing guards it. It also seizes the open e-file. And it takes aim at the center, hitting d4, keeping the rook on d7 off it, and also keeping the rook off d5 and keeping the bishop off e4.
+  + SPOKEN claim:phrase:center
+      You go Qxe5, which hits their pawn on c3, and nothing guards it. It also seizes the open e-file. And it takes aim at the center, hitting d4, keeping the rook on d7 off it, and also keeping the rook off d5 and keeping the bishop off e4.
+## danya:underpromotion
+  + SPOKEN claim:move:c6c7:idea:prevent:d5,d8
+      You go c7, which pushes your passed pawn — passed pawns must be pushed. It also takes d8 away from their rook on d5.
 ## danya:gun
-  - SILENT secondAttacker:move-job[second-attacker:c6:win]@b5,c1,c6
+  - SILENT claim:second-attacker:c6:win
       Your rook adds a second attacker on their knight on c6, beside the bishop on b5. That's two attackers, and the knight on e7 guards it. Taking on c6 now wins a piece.
-  + SPOKEN quietThreat:aspect-threat[quiet-threat:c6]@c1,c6
+  + SPOKEN claim:quiet-threat:c6
       Rac1 is quiet, but it threatens Bxc6 — they must answer that first.
-  + SPOKEN pieceRoute:route[move:a1c1:idea:route:c2,c3]@c2,c3
+  + SPOKEN claim:move:a1c1:idea:threat:b5,c6
+      You go Rac1, which takes the open c-file, pressing their knight on c6. It also joins your bishop against their knight on c6.
+  + SPOKEN claim:move:a1c1:idea:route:c2,c3
       You go Rac1, sending the rook on to c3, by way of c2.
-  + SPOKEN moveJob:move-job[move:a1c1:idea:threat:b5,c6]@b5,c6
-      You go Rac1, which joins your bishop against their knight on c6.
+  + SPOKEN claim:cramp-trade:c2
+      With less space, they'll look to trade, and Rxc2 gets rid of your rook on c2. Keep pieces on and they stay cramped.
+  + SPOKEN claim:safe-route:c1
+      Your rook on c1 is safe there, since nothing of theirs can hit it, and it can swing to c2 next.
 ## danya:desperado
-  + SPOKEN coordinationGap:judgement[coordination:w]@c7,g7
+  + SPOKEN claim:coordination:w
       Their pieces work together: every one is guarded and in the game. Yours are scattered: your knight on c7 and your bishop on g7 do next to nothing.
+  + SPOKEN claim:move:c8d8:idea:threat:g5
+      You go Qd8, which aims at their pawn on g5.
 
-15 went silent, 31 newly spoken
+12 went silent, 94 newly spoken

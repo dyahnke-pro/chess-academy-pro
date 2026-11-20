@@ -167,13 +167,13 @@
    },
    {
     "kind": "their-refuted",
-    "text": "Bxb5 was the obvious try for them, but …fxe4 is the answer. After Bxb5 …fxe4, your rook and queen form a battery on the b-file, bearing down on their bishop. Bxb5 achieves nothing, and makes their position harder still.",
+    "text": "Bxb5 was the obvious try for them, but …fxe4 is the answer. After …fxe4, your rook and queen form a battery on the b-file, bearing down on their bishop. Bxb5 achieves nothing, and makes their position harder still.",
     "claims": [],
     "computer": "temptingOnBoard"
    },
    {
     "kind": "their-refuted",
-    "text": "Qxd6 was the obvious try for them, but …Bb7 is the answer. The bishop counters by attacking their knight. After Qxd6 …Bb7, your queen pins their knight against their queen. If their knight moves, their queen on d6 is open to your queen. Qxd6 achieves nothing, and makes their position harder still.",
+    "text": "Qxd6 was the obvious try for them, but …Bb7 is the answer. The bishop counters by attacking their knight. After …Bb7, your queen pins their knight against their queen. If their knight moves, their queen on d6 is open to your queen. Qxd6 achieves nothing, and makes their position harder still.",
     "claims": [],
     "computer": "temptingOnBoard"
    },
@@ -206,7 +206,8 @@
     "kind": "standing",
     "from": "position",
     "text": "You're slightly better — their king is still in the middle, you have the bishop pair.",
-    "squares": []
+    "squares": [],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -217,7 +218,8 @@
      "f8",
      "f7",
      "b8"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -227,7 +229,8 @@
     "squares": [
      "c8",
      "e6"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "aspect-threat",
@@ -237,6 +240,9 @@
     "squares": [
      "h8",
      "e4"
+    ],
+    "claims": [
+     "quiet-threat:e4"
     ]
    },
    {
@@ -244,7 +250,11 @@
     "computer": "onlyMove",
     "from": "bestMove",
     "text": "You go Kh8, which is the only move that holds here — the next best, Rf7, gives up about a piece's worth.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:g8h8:idea:choice:",
+     "only:g8h8"
+    ]
    },
    {
     "kind": "deliberation",
@@ -257,6 +267,9 @@
      "e4",
      "e2",
      "f2"
+    ],
+    "claims": [
+     "tempting:f8f7"
     ]
    },
    {
@@ -268,6 +281,9 @@
      "f5",
      "e4",
      "f8"
+    ],
+    "claims": [
+     "plan-of-board:b:break:e4"
     ]
    }
   ]
@@ -440,13 +456,13 @@
    },
    {
     "kind": "their-refuted",
-    "text": "Bxb5 was the obvious try for them, but …fxe4 is the answer. After Bxb5 …fxe4, your rook and queen form a battery on the b-file, bearing down on their bishop. Bxb5 achieves nothing, and makes their position harder still.",
+    "text": "Bxb5 was the obvious try for them, but …fxe4 is the answer. After …fxe4, your rook and queen form a battery on the b-file, bearing down on their bishop. Bxb5 achieves nothing, and makes their position harder still.",
     "claims": [],
     "computer": "temptingOnBoard"
    },
    {
     "kind": "their-refuted",
-    "text": "Qxd6 was the obvious try for them, but …Bb7 is the answer. The bishop counters by attacking their knight. After Qxd6 …Bb7, your queen pins their knight against their queen. If their knight moves, their queen on d6 is open to your queen. Qxd6 achieves nothing, and makes their position harder still.",
+    "text": "Qxd6 was the obvious try for them, but …Bb7 is the answer. The bishop counters by attacking their knight. After …Bb7, your queen pins their knight against their queen. If their knight moves, their queen on d6 is open to your queen. Qxd6 achieves nothing, and makes their position harder still.",
     "claims": [],
     "computer": "temptingOnBoard"
    },
@@ -479,7 +495,8 @@
     "kind": "standing",
     "from": "position",
     "text": "You're slightly better — their king is still in the middle, you have the bishop pair.",
-    "squares": []
+    "squares": [],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -490,7 +507,8 @@
      "f8",
      "f7",
      "b8"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -500,7 +518,8 @@
     "squares": [
      "c8",
      "e6"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "aspect-threat",
@@ -510,6 +529,9 @@
     "squares": [
      "h8",
      "e4"
+    ],
+    "claims": [
+     "quiet-threat:e4"
     ]
    },
    {
@@ -517,7 +539,11 @@
     "computer": "onlyMove",
     "from": "bestMove",
     "text": "You go Kh8, which is the only move that holds here — the next best, Rf7, gives up about a piece's worth.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:g8h8:idea:choice:",
+     "only:g8h8"
+    ]
    },
    {
     "kind": "deliberation",
@@ -530,6 +556,9 @@
      "e4",
      "e2",
      "f2"
+    ],
+    "claims": [
+     "tempting:f8f7"
     ]
    },
    {
@@ -541,12 +570,15 @@
      "f5",
      "e4",
      "f8"
+    ],
+    "claims": [
+     "plan-of-board:b:break:e4"
     ]
    }
   ]
  },
  "alone:0Km5u#3-fxe4": {
-  "read": "You're clearly better — their king is still in the middle, you have the bishop pair. And the direct way works now: …fxe4. …fxe4 is a pawn break in the centre, and it half-opens the f-file for your rook already on it. Your pawn on e4 looks loose, but it can't be taken. After Qxe4, …Qxf2+ forces mate: you play Qxf2+, they answer Kd1 and you play Qd2#. You go fxe4, which is the only move that holds here — the next best, Bh4, gives up more than a rook's worth. Count the attackers and defenders on their knight on b8: 1 attacker to 0 defenders — it's outnumbered, so it has to move, and that costs them the tempo. Habit for positions like this: CCT — every check, every capture, every threat, in that order, before you consider a quiet move.",
+  "read": "You're clearly better — their king is still in the middle, you have the bishop pair. And the direct way works now: …fxe4. Your pawn on e4 looks loose, but it can't be taken. After Qxe4, …Qxf2+ forces mate: you play Qxf2+, they answer Kd1 and you play Qd2#. …fxe4 is a pawn break in the centre, and it half-opens the f-file for your rook already on it. You go fxe4, which half-opens the f-file for the rooks. You go fxe4, which is the only move that holds here — the next best, Bh4, gives up more than a rook's worth. Count the attackers and defenders on their knight on b8: 1 attacker to 0 defenders — it's outnumbered, so it has to move, and that costs them the tempo. Habit for positions like this: CCT — every check, every capture, every threat, in that order, before you consider a quiet move.",
   "facts": [
    {
     "kind": "standing",
@@ -605,7 +637,7 @@
    },
    {
     "kind": "refuted",
-    "text": "Be6 is the obvious try, but Ra6 is the answer. The rook goes after your queen. After …Be6 Ra6, Careful — their move threatens Rxb6: it wins a queen. The answer: Qxb8 gets the queen out of the fire, winning a knight on the way. Be6 leaves you losing.",
+    "text": "Be6 is the obvious try, but Ra6 is the answer. The rook goes after your queen. After Ra6, careful — their move threatens Rxb6: it wins a queen. The answer: Qxb8 gets the queen out of the fire, winning a knight on the way. Be6 leaves you losing.",
     "claims": [],
     "computer": "temptingOnBoard"
    },
@@ -812,10 +844,11 @@
   "said": [
    "picture-verdict:b:works-now:",
    "standing:clearly+",
-   "pawn-break:f5e4",
    "poisoned:e4",
    "bait-take:e4",
    "reply-tree:d5e4",
+   "pawn-break:f5e4",
+   "move:f5e4:idea:file:",
    "move:f5e4:idea:choice:",
    "only:f5e4",
    "count:1Nb2r1k/6pp/1q1p4/1p1Qp1b1/4p3/2P5/1P3PPP/R3KB1R",
@@ -828,7 +861,25 @@
     "computer": "pictureVerdict",
     "from": "position",
     "text": "You're clearly better — their king is still in the middle, you have the bishop pair. And the direct way works now: …fxe4.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "picture-verdict:b:works-now:",
+     "standing:clearly+"
+    ]
+   },
+   {
+    "kind": "move-job",
+    "computer": "poisonedPiece",
+    "from": "bestMove",
+    "text": "Your pawn on e4 looks loose, but it can't be taken. After Qxe4, …Qxf2+ forces mate: you play Qxf2+, they answer Kd1 and you play Qd2#.",
+    "squares": [
+     "e4"
+    ],
+    "claims": [
+     "poisoned:e4",
+     "bait-take:e4",
+     "reply-tree:d5e4"
+    ]
    },
    {
     "kind": "pawn-break",
@@ -839,15 +890,19 @@
      "f5",
      "e4",
      "f8"
+    ],
+    "claims": [
+     "pawn-break:f5e4"
     ]
    },
    {
-    "kind": "move-job",
-    "computer": "poisonedPiece",
+    "kind": "board-teacher",
+    "computer": "buildReviewMoveTeachingFact",
     "from": "bestMove",
-    "text": "Your pawn on e4 looks loose, but it can't be taken. After Qxe4, …Qxf2+ forces mate: you play Qxf2+, they answer Kd1 and you play Qd2#.",
-    "squares": [
-     "e4"
+    "text": "You go fxe4, which half-opens the f-file for the rooks.",
+    "squares": [],
+    "claims": [
+     "move:f5e4:idea:file:"
     ]
    },
    {
@@ -855,7 +910,11 @@
     "computer": "onlyMove",
     "from": "bestMove",
     "text": "You go fxe4, which is the only move that holds here — the next best, Bh4, gives up more than a rook's worth.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:f5e4:idea:choice:",
+     "only:f5e4"
+    ]
    },
    {
     "kind": "count",
@@ -864,12 +923,16 @@
     "text": "Count the attackers and defenders on their knight on b8: 1 attacker to 0 defenders — it's outnumbered, so it has to move, and that costs them the tempo.",
     "squares": [
      "b8"
+    ],
+    "claims": [
+     "count:1Nb2r1k/6pp/1q1p4/1p1Qp1b1/4p3/2P5/1P3PPP/R3KB1R",
+     "idea:tempo:b8"
     ]
    }
   ]
  },
  "told:0Km5u#3-fxe4": {
-  "read": "You're clearly better — their king is still in the middle, you have the bishop pair. And the direct way works now: …fxe4. …fxe4 is a pawn break in the centre, and it half-opens the f-file for your rook already on it. Your pawn on e4 looks loose, but it can't be taken. After Qxe4, …Qxf2+ forces mate: you play Qxf2+, they answer Kd1 and you play Qd2#. You go fxe4, which is the only move that holds here — the next best, Bh4, gives up more than a rook's worth. Count the attackers and defenders on their knight on b8: 1 attacker to 0 defenders — it's outnumbered, so it has to move, and that costs them the tempo. Habit for positions like this: CCT — every check, every capture, every threat, in that order, before you consider a quiet move.",
+  "read": "You're clearly better — their king is still in the middle, you have the bishop pair. And the direct way works now: …fxe4. Your pawn on e4 looks loose, but it can't be taken. After Qxe4, …Qxf2+ forces mate: you play Qxf2+, they answer Kd1 and you play Qd2#. …fxe4 is a pawn break in the centre, and it half-opens the f-file for your rook already on it. You go fxe4, which half-opens the f-file for the rooks. You go fxe4, which is the only move that holds here — the next best, Bh4, gives up more than a rook's worth. Count the attackers and defenders on their knight on b8: 1 attacker to 0 defenders — it's outnumbered, so it has to move, and that costs them the tempo. Habit for positions like this: CCT — every check, every capture, every threat, in that order, before you consider a quiet move.",
   "facts": [
    {
     "kind": "standing",
@@ -928,7 +991,7 @@
    },
    {
     "kind": "refuted",
-    "text": "Be6 is the obvious try, but Ra6 is the answer. The rook goes after your queen. After …Be6 Ra6, Careful — their move threatens Rxb6: it wins a queen. The answer: Qxb8 gets the queen out of the fire, winning a knight on the way. Be6 leaves you losing.",
+    "text": "Be6 is the obvious try, but Ra6 is the answer. The rook goes after your queen. After Ra6, careful — their move threatens Rxb6: it wins a queen. The answer: Qxb8 gets the queen out of the fire, winning a knight on the way. Be6 leaves you losing.",
     "claims": [],
     "computer": "temptingOnBoard"
    },
@@ -1135,10 +1198,11 @@
   "said": [
    "picture-verdict:b:works-now:",
    "standing:clearly+",
-   "pawn-break:f5e4",
    "poisoned:e4",
    "bait-take:e4",
    "reply-tree:d5e4",
+   "pawn-break:f5e4",
+   "move:f5e4:idea:file:",
    "move:f5e4:idea:choice:",
    "only:f5e4",
    "count:1Nb2r1k/6pp/1q1p4/1p1Qp1b1/4p3/2P5/1P3PPP/R3KB1R",
@@ -1151,7 +1215,25 @@
     "computer": "pictureVerdict",
     "from": "position",
     "text": "You're clearly better — their king is still in the middle, you have the bishop pair. And the direct way works now: …fxe4.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "picture-verdict:b:works-now:",
+     "standing:clearly+"
+    ]
+   },
+   {
+    "kind": "move-job",
+    "computer": "poisonedPiece",
+    "from": "bestMove",
+    "text": "Your pawn on e4 looks loose, but it can't be taken. After Qxe4, …Qxf2+ forces mate: you play Qxf2+, they answer Kd1 and you play Qd2#.",
+    "squares": [
+     "e4"
+    ],
+    "claims": [
+     "poisoned:e4",
+     "bait-take:e4",
+     "reply-tree:d5e4"
+    ]
    },
    {
     "kind": "pawn-break",
@@ -1162,15 +1244,19 @@
      "f5",
      "e4",
      "f8"
+    ],
+    "claims": [
+     "pawn-break:f5e4"
     ]
    },
    {
-    "kind": "move-job",
-    "computer": "poisonedPiece",
+    "kind": "board-teacher",
+    "computer": "buildReviewMoveTeachingFact",
     "from": "bestMove",
-    "text": "Your pawn on e4 looks loose, but it can't be taken. After Qxe4, …Qxf2+ forces mate: you play Qxf2+, they answer Kd1 and you play Qd2#.",
-    "squares": [
-     "e4"
+    "text": "You go fxe4, which half-opens the f-file for the rooks.",
+    "squares": [],
+    "claims": [
+     "move:f5e4:idea:file:"
     ]
    },
    {
@@ -1178,7 +1264,11 @@
     "computer": "onlyMove",
     "from": "bestMove",
     "text": "You go fxe4, which is the only move that holds here — the next best, Bh4, gives up more than a rook's worth.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:f5e4:idea:choice:",
+     "only:f5e4"
+    ]
    },
    {
     "kind": "count",
@@ -1187,12 +1277,16 @@
     "text": "Count the attackers and defenders on their knight on b8: 1 attacker to 0 defenders — it's outnumbered, so it has to move, and that costs them the tempo.",
     "squares": [
      "b8"
+    ],
+    "claims": [
+     "count:1Nb2r1k/6pp/1q1p4/1p1Qp1b1/4p3/2P5/1P3PPP/R3KB1R",
+     "idea:tempo:b8"
     ]
    }
   ]
  },
  "alone:0Km5u#5-Qxf2+": {
-  "read": "You're winning — their king is still in the middle, you have the bishop pair. And the direct way works now: …Qxf2+. You play Qxf2+ — it seizes the open f-file. You play Qxf2+: it is the only move that holds here — the next best, Bb7, gives up about a piece's worth. The queen takes f2 — and it sees f1, so they can't castle short. Habit for positions like this: CCT — every check, every capture, every threat, in that order, before you consider a quiet move.",
+  "read": "You're winning — their king is still in the middle, you have the bishop pair. And the direct way works now: …Qxf2+. You play Qxf2+ — it seizes the open f-file. It also gives check, and their only answer is Kd1. You play Qxf2+: it is the only move that holds here — the next best, Bb7, gives up about a piece's worth. The queen takes f2 — and it sees f1, so they can't castle short. Habit for positions like this: CCT — every check, every capture, every threat, in that order, before you consider a quiet move.",
   "facts": [
    {
     "kind": "standing",
@@ -1239,13 +1333,13 @@
    },
    {
     "kind": "refuted",
-    "text": "Rxf2 looks natural, but Qxe4 meets it. After …Rxf2 Qxe4, their rook can come to f1 and hit your rook on f2. It is coming: the best line plays it. Rxf2 throws the win: you're clearly worse after it.",
+    "text": "Rxf2 looks natural, but Qxe4 meets it. After Qxe4, their rook can come to f1 and hit your rook on f2. It is coming: the best line plays it. Rxf2 throws the win: you're clearly worse after it.",
     "claims": [],
     "computer": "temptingOnBoard"
    },
    {
     "kind": "refuted",
-    "text": "Qxb8 is the obvious try, but Ra8 is the answer. The rook hits your queen and sends it packing. After …Qxb8 Ra8, their rook attacks your queen on b8, and nothing defends it. Qxb8 throws the win: you're losing after it.",
+    "text": "Qxb8 is the obvious try, but Ra8 is the answer. The rook hits your queen and sends it packing. After Ra8, their rook attacks your queen on b8, and nothing defends it. Qxb8 throws the win: you're losing after it.",
     "claims": [],
     "computer": "temptingOnBoard"
    },
@@ -1257,7 +1351,7 @@
    },
    {
     "kind": "refuted",
-    "text": "b4 is the obvious try, but O-O is the answer. After …b4 O-O, their one resource is the pawn break cxb4, taking your pawn on b4. It is coming: the best line plays it. b4 throws the win: you're losing after it.",
+    "text": "b4 is the obvious try, but O-O is the answer. After O-O, their one resource is the pawn break cxb4, taking your pawn on b4. It is coming: the best line plays it. b4 throws the win: you're losing after it.",
     "claims": [],
     "computer": "temptingOnBoard"
    },
@@ -1275,7 +1369,7 @@
    },
    {
     "kind": "refuted",
-    "text": "Qb7 is the obvious try, but Qxb7 is the answer. After …Qb7 Qxb7, their resource is the knight on b8: from d7 it hits your rook on f8. Nothing stops it in the best line. Qb7 throws the win: you're losing after it.",
+    "text": "Qb7 is the obvious try, but Qxb7 is the answer. After Qxb7, their resource is the knight on b8: from d7 it hits your rook on f8. Nothing stops it in the best line. Qb7 throws the win: you're losing after it.",
     "claims": [],
     "computer": "temptingOnBoard"
    },
@@ -1389,6 +1483,8 @@
    "picture-verdict:b:works-now:",
    "standing:decisive+",
    "move:b6f2:idea:file:",
+   "move:b6f2:idea:threat:",
+   "move:b6f2:idea:check:",
    "move:b6f2:idea:choice:",
    "only:b6f2",
    "fact:depthClauses:f1,f2",
@@ -1400,21 +1496,34 @@
     "computer": "pictureVerdict",
     "from": "position",
     "text": "You're winning — their king is still in the middle, you have the bishop pair. And the direct way works now: …Qxf2+.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "picture-verdict:b:works-now:",
+     "standing:decisive+"
+    ]
    },
    {
     "kind": "fundamental",
     "computer": "computeMoveFundamentals",
     "from": "bestMove",
-    "text": "You play Qxf2+ — it seizes the open f-file.",
-    "squares": []
+    "text": "You play Qxf2+ — it seizes the open f-file. It also gives check, and their only answer is Kd1.",
+    "squares": [],
+    "claims": [
+     "move:b6f2:idea:file:",
+     "move:b6f2:idea:threat:",
+     "move:b6f2:idea:check:"
+    ]
    },
    {
     "kind": "key-moment",
     "computer": "onlyMove",
     "from": "bestMove",
     "text": "You play Qxf2+: it is the only move that holds here — the next best, Bb7, gives up about a piece's worth.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:b6f2:idea:choice:",
+     "only:b6f2"
+    ]
    },
    {
     "kind": "king-read",
@@ -1424,12 +1533,13 @@
     "squares": [
      "f2",
      "f1"
-    ]
+    ],
+    "claims": []
    }
   ]
  },
  "told:0Km5u#5-Qxf2+": {
-  "read": "You're winning — their king is still in the middle, you have the bishop pair. And the direct way works now: …Qxf2+. You play Qxf2+ — it seizes the open f-file. You play Qxf2+: it is the only move that holds here — the next best, Bb7, gives up about a piece's worth. The queen takes f2 — and it sees f1, so they can't castle short.",
+  "read": "You're winning — their king is still in the middle, you have the bishop pair. And the direct way works now: …Qxf2+. You play Qxf2+ — it seizes the open f-file. It also gives check, and their only answer is Kd1. You play Qxf2+: it is the only move that holds here — the next best, Bb7, gives up about a piece's worth. The queen takes f2 — and it sees f1, so they can't castle short.",
   "facts": [
    {
     "kind": "standing",
@@ -1476,13 +1586,13 @@
    },
    {
     "kind": "refuted",
-    "text": "Rxf2 looks natural, but Qxe4 meets it. After …Rxf2 Qxe4, their rook can come to f1 and hit your rook on f2. It is coming: the best line plays it. Rxf2 throws the win: you're clearly worse after it.",
+    "text": "Rxf2 looks natural, but Qxe4 meets it. After Qxe4, their rook can come to f1 and hit your rook on f2. It is coming: the best line plays it. Rxf2 throws the win: you're clearly worse after it.",
     "claims": [],
     "computer": "temptingOnBoard"
    },
    {
     "kind": "refuted",
-    "text": "Qxb8 is the obvious try, but Ra8 is the answer. The rook hits your queen and sends it packing. After …Qxb8 Ra8, their rook attacks your queen on b8, and nothing defends it. Qxb8 throws the win: you're losing after it.",
+    "text": "Qxb8 is the obvious try, but Ra8 is the answer. The rook hits your queen and sends it packing. After Ra8, their rook attacks your queen on b8, and nothing defends it. Qxb8 throws the win: you're losing after it.",
     "claims": [],
     "computer": "temptingOnBoard"
    },
@@ -1494,7 +1604,7 @@
    },
    {
     "kind": "refuted",
-    "text": "b4 is the obvious try, but O-O is the answer. After …b4 O-O, their one resource is the pawn break cxb4, taking your pawn on b4. It is coming: the best line plays it. b4 throws the win: you're losing after it.",
+    "text": "b4 is the obvious try, but O-O is the answer. After O-O, their one resource is the pawn break cxb4, taking your pawn on b4. It is coming: the best line plays it. b4 throws the win: you're losing after it.",
     "claims": [],
     "computer": "temptingOnBoard"
    },
@@ -1512,7 +1622,7 @@
    },
    {
     "kind": "refuted",
-    "text": "Qb7 is the obvious try, but Qxb7 is the answer. After …Qb7 Qxb7, their resource is the knight on b8: from d7 it hits your rook on f8. Nothing stops it in the best line. Qb7 throws the win: you're losing after it.",
+    "text": "Qb7 is the obvious try, but Qxb7 is the answer. After Qxb7, their resource is the knight on b8: from d7 it hits your rook on f8. Nothing stops it in the best line. Qb7 throws the win: you're losing after it.",
     "claims": [],
     "computer": "temptingOnBoard"
    },
@@ -1626,6 +1736,8 @@
    "picture-verdict:b:works-now:",
    "standing:decisive+",
    "move:b6f2:idea:file:",
+   "move:b6f2:idea:threat:",
+   "move:b6f2:idea:check:",
    "move:b6f2:idea:choice:",
    "only:b6f2",
    "fact:depthClauses:f1,f2"
@@ -1636,21 +1748,34 @@
     "computer": "pictureVerdict",
     "from": "position",
     "text": "You're winning — their king is still in the middle, you have the bishop pair. And the direct way works now: …Qxf2+.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "picture-verdict:b:works-now:",
+     "standing:decisive+"
+    ]
    },
    {
     "kind": "fundamental",
     "computer": "computeMoveFundamentals",
     "from": "bestMove",
-    "text": "You play Qxf2+ — it seizes the open f-file.",
-    "squares": []
+    "text": "You play Qxf2+ — it seizes the open f-file. It also gives check, and their only answer is Kd1.",
+    "squares": [],
+    "claims": [
+     "move:b6f2:idea:file:",
+     "move:b6f2:idea:threat:",
+     "move:b6f2:idea:check:"
+    ]
    },
    {
     "kind": "key-moment",
     "computer": "onlyMove",
     "from": "bestMove",
     "text": "You play Qxf2+: it is the only move that holds here — the next best, Bb7, gives up about a piece's worth.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:b6f2:idea:choice:",
+     "only:b6f2"
+    ]
    },
    {
     "kind": "king-read",
@@ -1660,12 +1785,13 @@
     "squares": [
      "f2",
      "f1"
-    ]
+    ],
+    "claims": []
    }
   ]
  },
  "alone:0Km5u#7-Qe3": {
-  "read": "You're clearly better — their king is still in the middle. But breaking through is another matter. …Qxg2 and …Bg4 both fail. Qxg2 is the obvious try, but Re1 is the answer. Qxg2 hands them a bishop for two pawns in the line. After Qxg2 your edge is gone. Bg4 looks natural, but it doesn't work: they play Bxg4 and you answer Qxg2 — they win a bishop for a pawn. So the quiet …Qe3 instead. Later in the line, after …Bg4, the bishop on g4 hits their bishop, which answers …Bg4 with Bxg4. Qe3 is quiet, but it threatens …Be6, with mate to follow — they must answer that first. You play Qe3 — it adds one guard to your pawn on e4, which their queen attacks. You go Qe3, which is the only move that holds here — the next best, Qxg2, gives up about a piece's worth. Two of your pieces aim at their king on d1, and two more are a move away. Three of theirs defend it: their queen, rook on a1 and rook on h1. Their knight is two moves or more from helping. Their king is still in the centre — every line that opens toward it is worth looking at. Their king on d1 is out in the open, with only one pawn of its own near it. Your rook on f8 and queen on e3 can both give check, and a king like that matters more than a pawn. Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.",
+  "read": "You're clearly better — their king is still in the middle. But breaking through is another matter. …Qxg2 and …Bg4 both fail. Qxg2 is the obvious try, but Re1 is the answer. Qxg2 hands them a bishop for two pawns in the line. After Qxg2 your edge is gone. Bg4 looks natural, but it doesn't work: they play Bxg4 and you answer Qxg2 — they win a bishop for a pawn. So the quiet …Qe3 instead. Later in the line, after …Bg4, the bishop on g4 hits their bishop, which answers …Bg4 with Bxg4. Qe3 is quiet, but it threatens …Be6, with mate to follow — they must answer that first. You play Qe3 — it adds one guard to your pawn on e4, which their queen attacks. It also unpins your pawn on e5 — and the queen aims at their pawn on c3. You go Qe3, which is the only move that holds here — the next best, Qxg2, gives up about a piece's worth. Two of your pieces aim at their king on d1, and two more are a move away. Three of theirs defend it: their queen, rook on a1 and rook on h1. Their knight is two moves or more from helping. Their king is still in the centre — every line that opens toward it is worth looking at. Their king on d1 is out in the open, with only one pawn of its own near it. Your rook on f8 and queen on e3 can both give check, and a king like that matters more than a pawn. Your pieces work together: every one is guarded and in the game. Theirs are scattered: the knight on b8 and the queen on d5 have no guard. Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.",
   "facts": [
    {
     "kind": "standing",
@@ -1814,7 +1940,7 @@
    },
    {
     "kind": "refuted",
-    "text": "Qf7 is the obvious try, but Qxf7 is the answer. After …Qf7 Qxf7, their rook on f1 attacks your rook on f7, and nothing defends it — and you can take the attacker without losing material. Qf7 leaves you losing.",
+    "text": "Qf7 is the obvious try, but Qxf7 is the answer. After Rf1, their rook on f1 attacks your rook on f7, and nothing defends it — and you can take the attacker without losing material. Qf7 leaves you losing.",
     "claims": [],
     "computer": "temptingOnBoard"
    },
@@ -1826,7 +1952,7 @@
    },
    {
     "kind": "refuted",
-    "text": "Bh3 is tempting, but gxh3 takes the sting out of it. The pawn is on its way to h4, to hit your bishop from there. After …Bh3 gxh3, their pawn on h4 attacks your bishop on g5, and nothing defends it — and you can take the attacker without losing material. Bh3 leaves you losing.",
+    "text": "Bh3 is tempting, but gxh3 takes the sting out of it. The pawn is on its way to h4, to hit your bishop from there. After h4, their pawn on h4 attacks your bishop on g5, and nothing defends it — and you can take the attacker without losing material. Bh3 leaves you losing.",
     "claims": [],
     "computer": "temptingOnBoard"
    },
@@ -2096,12 +2222,14 @@
    "picture-plan:b:f2e3",
    "quiet-threat:e6",
    "move:f2e3:idea:guard:d5,e4",
+   "move:f2e3:idea:unpin:",
    "move:f2e3:idea:choice:",
    "only:f2e3",
    "siege:d1:2v3",
    "king-attack:d1",
    "opponent-king-centre",
    "king-open:d1",
+   "coordination:b",
    "habit:quiet-shot"
   ],
   "kept": [
@@ -2115,6 +2243,10 @@
      "g2",
      "c8",
      "g4"
+    ],
+    "claims": [
+     "picture-verdict:b:hard-to-finish:f2g2,c8g4",
+     "standing:clearly+"
     ]
    },
    {
@@ -2126,7 +2258,8 @@
      "f2",
      "g2",
      "e1"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -2136,7 +2269,8 @@
     "squares": [
      "c8",
      "g4"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "plan-now",
@@ -2148,6 +2282,9 @@
      "e3",
      "g4",
      "e2"
+    ],
+    "claims": [
+     "picture-plan:b:f2e3"
     ]
    },
    {
@@ -2158,16 +2295,23 @@
     "squares": [
      "e3",
      "e6"
+    ],
+    "claims": [
+     "quiet-threat:e6"
     ]
    },
    {
     "kind": "move-job",
     "computer": "moveJob",
     "from": "bestMove",
-    "text": "You play Qe3 — it adds one guard to your pawn on e4, which their queen attacks.",
+    "text": "You play Qe3 — it adds one guard to your pawn on e4, which their queen attacks. It also unpins your pawn on e5 — and the queen aims at their pawn on c3.",
     "squares": [
      "e4",
      "d5"
+    ],
+    "claims": [
+     "move:f2e3:idea:guard:d5,e4",
+     "move:f2e3:idea:unpin:"
     ]
    },
    {
@@ -2175,7 +2319,11 @@
     "computer": "onlyMove",
     "from": "bestMove",
     "text": "You go Qe3, which is the only move that holds here — the next best, Qxg2, gives up about a piece's worth.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:f2e3:idea:choice:",
+     "only:f2e3"
+    ]
    },
    {
     "kind": "king-read",
@@ -2192,6 +2340,10 @@
      "a1",
      "h1",
      "b8"
+    ],
+    "claims": [
+     "siege:d1:2v3",
+     "king-attack:d1"
     ]
    },
    {
@@ -2201,6 +2353,9 @@
     "text": "Their king is still in the centre — every line that opens toward it is worth looking at.",
     "squares": [
      "d1"
+    ],
+    "claims": [
+     "opponent-king-centre"
     ]
    },
    {
@@ -2212,12 +2367,28 @@
      "d1",
      "f8",
      "e3"
+    ],
+    "claims": [
+     "king-open:d1"
+    ]
+   },
+   {
+    "kind": "judgement",
+    "computer": "coordinationGap",
+    "from": "bestMove",
+    "text": "Your pieces work together: every one is guarded and in the game. Theirs are scattered: the knight on b8 and the queen on d5 have no guard.",
+    "squares": [
+     "b8",
+     "d5"
+    ],
+    "claims": [
+     "coordination:b"
     ]
    }
   ]
  },
  "told:0Km5u#7-Qe3": {
-  "read": "You're clearly better — their king is still in the middle. But breaking through is another matter. …Qxg2 and …Bg4 both fail. Qxg2 is the obvious try, but Re1 is the answer. Qxg2 hands them a bishop for two pawns in the line. After Qxg2 your edge is gone. Bg4 looks natural, but it doesn't work: they play Bxg4 and you answer Qxg2 — they win a bishop for a pawn. So the quiet …Qe3 instead. Later in the line, after …Bg4, the bishop on g4 hits their bishop, which answers …Bg4 with Bxg4. Qe3 is quiet, but it threatens …Be6, with mate to follow — they must answer that first. You play Qe3 — it adds one guard to your pawn on e4, which their queen attacks. You go Qe3, which is the only move that holds here — the next best, Qxg2, gives up about a piece's worth. Two of your pieces aim at their king on d1, and two more are a move away. Three of theirs defend it: their queen, rook on a1 and rook on h1. Their knight is two moves or more from helping. Their king is still in the centre — every line that opens toward it is worth looking at. Their king on d1 is out in the open, with only one pawn of its own near it. Your rook on f8 and queen on e3 can both give check, and a king like that matters more than a pawn.",
+  "read": "You're clearly better — their king is still in the middle. But breaking through is another matter. …Qxg2 and …Bg4 both fail. Qxg2 is the obvious try, but Re1 is the answer. Qxg2 hands them a bishop for two pawns in the line. After Qxg2 your edge is gone. Bg4 looks natural, but it doesn't work: they play Bxg4 and you answer Qxg2 — they win a bishop for a pawn. So the quiet …Qe3 instead. Later in the line, after …Bg4, the bishop on g4 hits their bishop, which answers …Bg4 with Bxg4. Qe3 is quiet, but it threatens …Be6, with mate to follow — they must answer that first. You play Qe3 — it adds one guard to your pawn on e4, which their queen attacks. It also unpins your pawn on e5 — and the queen aims at their pawn on c3. You go Qe3, which is the only move that holds here — the next best, Qxg2, gives up about a piece's worth. Two of your pieces aim at their king on d1, and two more are a move away. Three of theirs defend it: their queen, rook on a1 and rook on h1. Their knight is two moves or more from helping. Their king is still in the centre — every line that opens toward it is worth looking at. Their king on d1 is out in the open, with only one pawn of its own near it. Your rook on f8 and queen on e3 can both give check, and a king like that matters more than a pawn. Your pieces work together: every one is guarded and in the game. Theirs are scattered: the knight on b8 and the queen on d5 have no guard.",
   "facts": [
    {
     "kind": "standing",
@@ -2366,7 +2537,7 @@
    },
    {
     "kind": "refuted",
-    "text": "Qf7 is the obvious try, but Qxf7 is the answer. After …Qf7 Qxf7, their rook on f1 attacks your rook on f7, and nothing defends it — and you can take the attacker without losing material. Qf7 leaves you losing.",
+    "text": "Qf7 is the obvious try, but Qxf7 is the answer. After Rf1, their rook on f1 attacks your rook on f7, and nothing defends it — and you can take the attacker without losing material. Qf7 leaves you losing.",
     "claims": [],
     "computer": "temptingOnBoard"
    },
@@ -2378,7 +2549,7 @@
    },
    {
     "kind": "refuted",
-    "text": "Bh3 is tempting, but gxh3 takes the sting out of it. The pawn is on its way to h4, to hit your bishop from there. After …Bh3 gxh3, their pawn on h4 attacks your bishop on g5, and nothing defends it — and you can take the attacker without losing material. Bh3 leaves you losing.",
+    "text": "Bh3 is tempting, but gxh3 takes the sting out of it. The pawn is on its way to h4, to hit your bishop from there. After h4, their pawn on h4 attacks your bishop on g5, and nothing defends it — and you can take the attacker without losing material. Bh3 leaves you losing.",
     "claims": [],
     "computer": "temptingOnBoard"
    },
@@ -2648,12 +2819,14 @@
    "picture-plan:b:f2e3",
    "quiet-threat:e6",
    "move:f2e3:idea:guard:d5,e4",
+   "move:f2e3:idea:unpin:",
    "move:f2e3:idea:choice:",
    "only:f2e3",
    "siege:d1:2v3",
    "king-attack:d1",
    "opponent-king-centre",
-   "king-open:d1"
+   "king-open:d1",
+   "coordination:b"
   ],
   "kept": [
    {
@@ -2666,6 +2839,10 @@
      "g2",
      "c8",
      "g4"
+    ],
+    "claims": [
+     "picture-verdict:b:hard-to-finish:f2g2,c8g4",
+     "standing:clearly+"
     ]
    },
    {
@@ -2677,7 +2854,8 @@
      "f2",
      "g2",
      "e1"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -2687,7 +2865,8 @@
     "squares": [
      "c8",
      "g4"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "plan-now",
@@ -2699,6 +2878,9 @@
      "e3",
      "g4",
      "e2"
+    ],
+    "claims": [
+     "picture-plan:b:f2e3"
     ]
    },
    {
@@ -2709,16 +2891,23 @@
     "squares": [
      "e3",
      "e6"
+    ],
+    "claims": [
+     "quiet-threat:e6"
     ]
    },
    {
     "kind": "move-job",
     "computer": "moveJob",
     "from": "bestMove",
-    "text": "You play Qe3 — it adds one guard to your pawn on e4, which their queen attacks.",
+    "text": "You play Qe3 — it adds one guard to your pawn on e4, which their queen attacks. It also unpins your pawn on e5 — and the queen aims at their pawn on c3.",
     "squares": [
      "e4",
      "d5"
+    ],
+    "claims": [
+     "move:f2e3:idea:guard:d5,e4",
+     "move:f2e3:idea:unpin:"
     ]
    },
    {
@@ -2726,7 +2915,11 @@
     "computer": "onlyMove",
     "from": "bestMove",
     "text": "You go Qe3, which is the only move that holds here — the next best, Qxg2, gives up about a piece's worth.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:f2e3:idea:choice:",
+     "only:f2e3"
+    ]
    },
    {
     "kind": "king-read",
@@ -2743,6 +2936,10 @@
      "a1",
      "h1",
      "b8"
+    ],
+    "claims": [
+     "siege:d1:2v3",
+     "king-attack:d1"
     ]
    },
    {
@@ -2752,6 +2949,9 @@
     "text": "Their king is still in the centre — every line that opens toward it is worth looking at.",
     "squares": [
      "d1"
+    ],
+    "claims": [
+     "opponent-king-centre"
     ]
    },
    {
@@ -2763,12 +2963,28 @@
      "d1",
      "f8",
      "e3"
+    ],
+    "claims": [
+     "king-open:d1"
+    ]
+   },
+   {
+    "kind": "judgement",
+    "computer": "coordinationGap",
+    "from": "bestMove",
+    "text": "Your pieces work together: every one is guarded and in the game. Theirs are scattered: the knight on b8 and the queen on d5 have no guard.",
+    "squares": [
+     "b8",
+     "d5"
+    ],
+    "claims": [
+     "coordination:b"
     ]
    }
   ]
  },
  "alone:0Km5u#9-Bxd7": {
-  "read": "You're clearly better — their king is still in the middle. And the direct way works now: …Bxd7. Rf2 looks natural, but Re1 meets it. Rf2 hands them a pawn in the line. After Rf2 your edge is gone. You're on top, but watch the counterpunch: their knight on d7 attacks your rook on f8, and nothing defends it — and you can take the attacker without losing material. You go Bxd7, which completes your development — every minor piece is out. You go Bxd7, which is the only move that holds here — the next best, Rf2, gives up about a piece's worth. Two of your pieces aim at their king on d1, and two more are a move away. Three of theirs defend it: their queen, rook on a1 and rook on h1. Their king on d1 is out in the open, with only one pawn of its own near it. Your rook on f8 and queen on e3 can both give check, and a king like that matters more than a pawn. Habit for positions like this: CCT — every check, every capture, every threat, in that order, before you consider a quiet move.",
+  "read": "You're clearly better — their king is still in the middle. And the direct way works now: …Bxd7. Rf2 looks natural, but Re1 meets it. Rf2 hands them a pawn in the line. After Rf2 your edge is gone. You're on top, but watch the counterpunch: their knight on d7 attacks your rook on f8, and nothing defends it — and you can take the attacker without losing material. You go Bxd7, which completes your development — every minor piece is out. It also takes g4 away from their bishop on e2. You go Bxd7, which is the only move that holds here — the next best, Rf2, gives up about a piece's worth. Two of your pieces aim at their king on d1, and two more are a move away. Three of theirs defend it: their queen, rook on a1 and rook on h1. Their king on d1 is out in the open, with only one pawn of its own near it. Your rook on f8 and queen on e3 can both give check, and a king like that matters more than a pawn. Habit for positions like this: CCT — every check, every capture, every threat, in that order, before you consider a quiet move.",
   "facts": [
    {
     "kind": "standing",
@@ -3035,7 +3251,7 @@
    },
    {
     "kind": "their-refuted",
-    "text": "h4 looked natural for them, but …Be6 meets it. After h4 …Be6, Taking your bishop on e6 walks into mate. If Qxe6, then Qd2 is mate. h4 makes their position a lot harder.",
+    "text": "h4 looked natural for them, but …Be6 meets it. After …Be6, taking your bishop on e6 walks into mate. If Qxe6, then Qd2 is mate. h4 makes their position a lot harder.",
     "claims": [],
     "computer": "temptingOnBoard"
    }
@@ -3047,6 +3263,7 @@
    "loose:f8:43",
    "move:c8d7:idea:develop:",
    "phrase:develop",
+   "move:c8d7:idea:prevent:e2,g4",
    "move:c8d7:idea:choice:",
    "only:c8d7",
    "siege:d1:2v3",
@@ -3063,6 +3280,10 @@
     "squares": [
      "f8",
      "f2"
+    ],
+    "claims": [
+     "picture-verdict:b:works-now:f8f2",
+     "standing:clearly+"
     ]
    },
    {
@@ -3074,7 +3295,8 @@
      "f8",
      "f2",
      "e1"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "must-defend",
@@ -3084,21 +3306,36 @@
     "squares": [
      "f8",
      "d7"
+    ],
+    "claims": [
+     "loose:f8:43"
     ]
    },
    {
     "kind": "fundamental",
     "computer": "computeMoveFundamentals",
     "from": "bestMove",
-    "text": "You go Bxd7, which completes your development — every minor piece is out.",
-    "squares": []
+    "text": "You go Bxd7, which completes your development — every minor piece is out. It also takes g4 away from their bishop on e2.",
+    "squares": [
+     "g4",
+     "e2"
+    ],
+    "claims": [
+     "move:c8d7:idea:develop:",
+     "phrase:develop",
+     "move:c8d7:idea:prevent:e2,g4"
+    ]
    },
    {
     "kind": "key-moment",
     "computer": "onlyMove",
     "from": "bestMove",
     "text": "You go Bxd7, which is the only move that holds here — the next best, Rf2, gives up about a piece's worth.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:c8d7:idea:choice:",
+     "only:c8d7"
+    ]
    },
    {
     "kind": "king-read",
@@ -3114,6 +3351,10 @@
      "d5",
      "a1",
      "h1"
+    ],
+    "claims": [
+     "siege:d1:2v3",
+     "king-attack:d1"
     ]
    },
    {
@@ -3125,12 +3366,15 @@
      "d1",
      "f8",
      "e3"
+    ],
+    "claims": [
+     "king-open:d1"
     ]
    }
   ]
  },
  "told:0Km5u#9-Bxd7": {
-  "read": "You're clearly better — their king is still in the middle. And the direct way works now: …Bxd7. Rf2 looks natural, but Re1 meets it. Rf2 hands them a pawn in the line. After Rf2 your edge is gone. You're on top, but watch the counterpunch: their knight on d7 attacks your rook on f8, and nothing defends it — and you can take the attacker without losing material. You go Bxd7, which completes your development — every minor piece is out. You go Bxd7, which is the only move that holds here — the next best, Rf2, gives up about a piece's worth.",
+  "read": "You're clearly better — their king is still in the middle. And the direct way works now: …Bxd7. Rf2 looks natural, but Re1 meets it. Rf2 hands them a pawn in the line. After Rf2 your edge is gone. You're on top, but watch the counterpunch: their knight on d7 attacks your rook on f8, and nothing defends it — and you can take the attacker without losing material. You go Bxd7, which completes your development — every minor piece is out. It also takes g4 away from their bishop on e2. You go Bxd7, which is the only move that holds here — the next best, Rf2, gives up about a piece's worth.",
   "facts": [
    {
     "kind": "standing",
@@ -3397,7 +3641,7 @@
    },
    {
     "kind": "their-refuted",
-    "text": "h4 looked natural for them, but …Be6 meets it. After h4 …Be6, Taking your bishop on e6 walks into mate. If Qxe6, then Qd2 is mate. h4 makes their position a lot harder.",
+    "text": "h4 looked natural for them, but …Be6 meets it. After …Be6, taking your bishop on e6 walks into mate. If Qxe6, then Qd2 is mate. h4 makes their position a lot harder.",
     "claims": [],
     "computer": "temptingOnBoard"
    }
@@ -3409,6 +3653,7 @@
    "loose:f8:43",
    "move:c8d7:idea:develop:",
    "phrase:develop",
+   "move:c8d7:idea:prevent:e2,g4",
    "move:c8d7:idea:choice:",
    "only:c8d7"
   ],
@@ -3421,6 +3666,10 @@
     "squares": [
      "f8",
      "f2"
+    ],
+    "claims": [
+     "picture-verdict:b:works-now:f8f2",
+     "standing:clearly+"
     ]
    },
    {
@@ -3432,7 +3681,8 @@
      "f8",
      "f2",
      "e1"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "must-defend",
@@ -3442,26 +3692,41 @@
     "squares": [
      "f8",
      "d7"
+    ],
+    "claims": [
+     "loose:f8:43"
     ]
    },
    {
     "kind": "fundamental",
     "computer": "computeMoveFundamentals",
     "from": "bestMove",
-    "text": "You go Bxd7, which completes your development — every minor piece is out.",
-    "squares": []
+    "text": "You go Bxd7, which completes your development — every minor piece is out. It also takes g4 away from their bishop on e2.",
+    "squares": [
+     "g4",
+     "e2"
+    ],
+    "claims": [
+     "move:c8d7:idea:develop:",
+     "phrase:develop",
+     "move:c8d7:idea:prevent:e2,g4"
+    ]
    },
    {
     "kind": "key-moment",
     "computer": "onlyMove",
     "from": "bestMove",
     "text": "You go Bxd7, which is the only move that holds here — the next best, Rf2, gives up about a piece's worth.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:c8d7:idea:choice:",
+     "only:c8d7"
+    ]
    }
   ]
  },
  "alone:0Km5u#11-Rd8": {
-  "read": "They're up material: a rook for a piece and a pawn, but you're winning: their king is still in the middle, you have the bishop pair and your passed pawn on e4. Qd2+ is the obvious try, but Qxd2 is the answer. Qd2+ hands them a bishop in the line. Qd2+ leaves you losing. Kg8 is the obvious try, but h4 is the answer. Kg8 hands them a bishop in the line. Kg8 leaves you losing. You're on top, but watch the counterpunch: their queen attacks your rook on f8, and nothing defends it. You play Rd8 — it stops Qxf8, which would be mate. You play Rd8 — it takes the open d-file, where the rook belongs. You play Rd8 — it saves the rook from their queen on d6. Rd8 is quiet: it prepares …b4. You play Rd8: it is the only move that holds here — the next best, Rg8, gives up about a piece's worth. Your back rank is thin: the king on h8 has no flight square, and only your rook on d8 stops Qf8 from being mate. Their king on d1 is out in the open, with only one pawn of its own near it. Your queen on e3 has 6 checks, and a king like that matters more than a pawn. Two of your pieces aim at their king on d1, and two more are a move away. Three of theirs defend it: their queen, rook on a1 and rook on h1. Qf2 and Qf4 both fail the same way: Rf1 meets either. Rg8? Then they play Qxd7, and the bishop on d7 is lost. Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.",
+  "read": "They're up material: a rook for a piece and a pawn, but you're winning: their king is still in the middle, you have the bishop pair and your passed pawn on e4. Qd2+ is the obvious try, but Qxd2 is the answer. Qd2+ hands them a bishop in the line. Qd2+ leaves you losing. Kg8 is the obvious try, but h4 is the answer. Kg8 hands them a bishop in the line. Kg8 leaves you losing. You're on top, but watch the counterpunch: their queen attacks your rook on f8, and nothing defends it. You play Rd8 — it stops Qxf8, which would be mate. It also takes the open d-file, where the rook belongs. And it saves the rook from their queen on d6. And it guards the bishop on d7, which their queen attacks. Rd8 is quiet: it prepares …b4. You play Rd8: it is the only move that holds here — the next best, Rg8, gives up about a piece's worth. Your back rank is thin: the king on h8 has no flight square, and only your rook on d8 stops Qf8 from being mate. Their king on d1 is out in the open, with only one pawn of its own near it. Your queen on e3 has 6 checks, and a king like that matters more than a pawn. Two of your pieces aim at their king on d1, and two more are a move away. Three of theirs defend it: their queen, rook on a1 and rook on h1. Qf2 and Qf4 both fail the same way: Rf1 meets either. Rg8? Then they play Qxd7, and the bishop on d7 is lost. Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.",
   "facts": [
    {
     "kind": "standing",
@@ -3827,6 +4092,7 @@
    "stops:Qxf8",
    "move:f8d8:idea:file:",
    "move:f8d8:idea:rescue:d6",
+   "move:f8d8:idea:guard:d6,d7",
    "quiet-threat:b4",
    "move:f8d8:idea:choice:",
    "only:f8d8",
@@ -3847,6 +4113,9 @@
     "squares": [
      "d1",
      "e4"
+    ],
+    "claims": [
+     "compensation:you:1"
     ]
    },
    {
@@ -3857,7 +4126,8 @@
     "squares": [
      "e3",
      "d2"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -3868,7 +4138,8 @@
      "h8",
      "g8",
      "h4"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "must-defend",
@@ -3877,29 +4148,26 @@
     "text": "You're on top, but watch the counterpunch: their queen attacks your rook on f8, and nothing defends it.",
     "squares": [
      "f8"
+    ],
+    "claims": [
+     "loose:f8:45"
     ]
    },
    {
     "kind": "stop",
     "computer": "moveStops",
     "from": "bestMove",
-    "text": "You play Rd8 — it stops Qxf8, which would be mate.",
-    "squares": []
-   },
-   {
-    "kind": "fundamental",
-    "computer": "computeMoveFundamentals",
-    "from": "bestMove",
-    "text": "You play Rd8 — it takes the open d-file, where the rook belongs.",
-    "squares": []
-   },
-   {
-    "kind": "fundamental",
-    "computer": "computeMoveFundamentals",
-    "from": "bestMove",
-    "text": "You play Rd8 — it saves the rook from their queen on d6.",
+    "text": "You play Rd8 — it stops Qxf8, which would be mate. It also takes the open d-file, where the rook belongs. And it saves the rook from their queen on d6. And it guards the bishop on d7, which their queen attacks.",
     "squares": [
-     "d6"
+     "d6",
+     "d7"
+    ],
+    "claims": [
+     "move:f8d8:idea:prevent:",
+     "stops:Qxf8",
+     "move:f8d8:idea:file:",
+     "move:f8d8:idea:rescue:d6",
+     "move:f8d8:idea:guard:d6,d7"
     ]
    },
    {
@@ -3910,6 +4178,9 @@
     "squares": [
      "d8",
      "b4"
+    ],
+    "claims": [
+     "quiet-threat:b4"
     ]
    },
    {
@@ -3917,7 +4188,11 @@
     "computer": "onlyMove",
     "from": "bestMove",
     "text": "You play Rd8: it is the only move that holds here — the next best, Rg8, gives up about a piece's worth.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:f8d8:idea:choice:",
+     "only:f8d8"
+    ]
    },
    {
     "kind": "king-read",
@@ -3929,6 +4204,9 @@
      "d8",
      "d6",
      "f8"
+    ],
+    "claims": [
+     "back-rank:h8:d8"
     ]
    },
    {
@@ -3939,6 +4217,9 @@
     "squares": [
      "d1",
      "e3"
+    ],
+    "claims": [
+     "king-open:d1"
     ]
    },
    {
@@ -3955,6 +4236,10 @@
      "d6",
      "a1",
      "h1"
+    ],
+    "claims": [
+     "siege:d1:2v3",
+     "king-attack:d1"
     ]
    },
    {
@@ -3967,7 +4252,8 @@
      "f2",
      "f1",
      "f4"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "deliberation",
@@ -3977,12 +4263,15 @@
     "squares": [
      "g8",
      "d7"
+    ],
+    "claims": [
+     "tempting:f8g8"
     ]
    }
   ]
  },
  "told:0Km5u#11-Rd8": {
-  "read": "They're up material: a rook for a piece and a pawn, but you're winning: their king is still in the middle, you have the bishop pair and your passed pawn on e4. Qd2+ is the obvious try, but Qxd2 is the answer. Qd2+ hands them a bishop in the line. Qd2+ leaves you losing. Kg8 is the obvious try, but h4 is the answer. Kg8 hands them a bishop in the line. Kg8 leaves you losing. You're on top, but watch the counterpunch: their queen attacks your rook on f8, and nothing defends it. You play Rd8 — it stops Qxf8, which would be mate. You play Rd8 — it takes the open d-file, where the rook belongs. You play Rd8 — it saves the rook from their queen on d6. Rd8 is quiet: it prepares …b4. You play Rd8: it is the only move that holds here — the next best, Rg8, gives up about a piece's worth. Your back rank is thin: the king on h8 has no flight square, and only your rook on d8 stops Qf8 from being mate. Qf2 and Qf4 both fail the same way: Rf1 meets either. Rg8? Then they play Qxd7, and the bishop on d7 is lost.",
+  "read": "They're up material: a rook for a piece and a pawn, but you're winning: their king is still in the middle, you have the bishop pair and your passed pawn on e4. Qd2+ is the obvious try, but Qxd2 is the answer. Qd2+ hands them a bishop in the line. Qd2+ leaves you losing. Kg8 is the obvious try, but h4 is the answer. Kg8 hands them a bishop in the line. Kg8 leaves you losing. You're on top, but watch the counterpunch: their queen attacks your rook on f8, and nothing defends it. You play Rd8 — it stops Qxf8, which would be mate. It also takes the open d-file, where the rook belongs. And it saves the rook from their queen on d6. And it guards the bishop on d7, which their queen attacks. Rd8 is quiet: it prepares …b4. You play Rd8: it is the only move that holds here — the next best, Rg8, gives up about a piece's worth. Your back rank is thin: the king on h8 has no flight square, and only your rook on d8 stops Qf8 from being mate. Qf2 and Qf4 both fail the same way: Rf1 meets either. Rg8? Then they play Qxd7, and the bishop on d7 is lost.",
   "facts": [
    {
     "kind": "standing",
@@ -4348,6 +4637,7 @@
    "stops:Qxf8",
    "move:f8d8:idea:file:",
    "move:f8d8:idea:rescue:d6",
+   "move:f8d8:idea:guard:d6,d7",
    "quiet-threat:b4",
    "move:f8d8:idea:choice:",
    "only:f8d8",
@@ -4364,6 +4654,9 @@
     "squares": [
      "d1",
      "e4"
+    ],
+    "claims": [
+     "compensation:you:1"
     ]
    },
    {
@@ -4374,7 +4667,8 @@
     "squares": [
      "e3",
      "d2"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -4385,7 +4679,8 @@
      "h8",
      "g8",
      "h4"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "must-defend",
@@ -4394,29 +4689,26 @@
     "text": "You're on top, but watch the counterpunch: their queen attacks your rook on f8, and nothing defends it.",
     "squares": [
      "f8"
+    ],
+    "claims": [
+     "loose:f8:45"
     ]
    },
    {
     "kind": "stop",
     "computer": "moveStops",
     "from": "bestMove",
-    "text": "You play Rd8 — it stops Qxf8, which would be mate.",
-    "squares": []
-   },
-   {
-    "kind": "fundamental",
-    "computer": "computeMoveFundamentals",
-    "from": "bestMove",
-    "text": "You play Rd8 — it takes the open d-file, where the rook belongs.",
-    "squares": []
-   },
-   {
-    "kind": "fundamental",
-    "computer": "computeMoveFundamentals",
-    "from": "bestMove",
-    "text": "You play Rd8 — it saves the rook from their queen on d6.",
+    "text": "You play Rd8 — it stops Qxf8, which would be mate. It also takes the open d-file, where the rook belongs. And it saves the rook from their queen on d6. And it guards the bishop on d7, which their queen attacks.",
     "squares": [
-     "d6"
+     "d6",
+     "d7"
+    ],
+    "claims": [
+     "move:f8d8:idea:prevent:",
+     "stops:Qxf8",
+     "move:f8d8:idea:file:",
+     "move:f8d8:idea:rescue:d6",
+     "move:f8d8:idea:guard:d6,d7"
     ]
    },
    {
@@ -4427,6 +4719,9 @@
     "squares": [
      "d8",
      "b4"
+    ],
+    "claims": [
+     "quiet-threat:b4"
     ]
    },
    {
@@ -4434,7 +4729,11 @@
     "computer": "onlyMove",
     "from": "bestMove",
     "text": "You play Rd8: it is the only move that holds here — the next best, Rg8, gives up about a piece's worth.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:f8d8:idea:choice:",
+     "only:f8d8"
+    ]
    },
    {
     "kind": "king-read",
@@ -4446,6 +4745,9 @@
      "d8",
      "d6",
      "f8"
+    ],
+    "claims": [
+     "back-rank:h8:d8"
     ]
    },
    {
@@ -4458,7 +4760,8 @@
      "f2",
      "f1",
      "f4"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "deliberation",
@@ -4468,6 +4771,9 @@
     "squares": [
      "g8",
      "d7"
+    ],
+    "claims": [
+     "tempting:f8g8"
     ]
    }
   ]
@@ -4836,6 +5142,10 @@
      "d7",
      "f5",
      "e6"
+    ],
+    "claims": [
+     "picture-verdict:b:hard-to-finish:d7f5,d7e6",
+     "standing:clearly+"
     ]
    },
    {
@@ -4847,7 +5157,8 @@
      "d7",
      "f5",
      "d8"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -4860,7 +5171,8 @@
      "f8",
      "d7",
      "e6"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "plan-now",
@@ -4872,6 +5184,9 @@
      "g8",
      "d3",
      "d6"
+    ],
+    "claims": [
+     "picture-plan:b:h8g8"
     ]
    },
    {
@@ -4882,6 +5197,9 @@
     "squares": [
      "g8",
      "h6"
+    ],
+    "claims": [
+     "quiet-threat:h6"
     ]
    },
    {
@@ -4892,6 +5210,9 @@
     "squares": [
      "d1",
      "e3"
+    ],
+    "claims": [
+     "king-open:d1"
     ]
    },
    {
@@ -4899,7 +5220,8 @@
     "computer": "defenderCheckRun",
     "from": "bestMove",
     "text": "Their queen checks with Qd5+, and you block with …Be6. Then they play Qxd8+.",
-    "squares": []
+    "squares": [],
+    "claims": []
    },
    {
     "kind": "concept",
@@ -4910,7 +5232,8 @@
      "h8",
      "f8",
      "f1"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "structure-plan",
@@ -4920,6 +5243,10 @@
     "squares": [
      "f1",
      "f7"
+    ],
+    "claims": [
+     "opponent-good-r-open-file-f",
+     "file-f"
     ]
    }
   ]
@@ -5286,6 +5613,10 @@
      "d7",
      "f5",
      "e6"
+    ],
+    "claims": [
+     "picture-verdict:b:hard-to-finish:d7f5,d7e6",
+     "standing:clearly+"
     ]
    },
    {
@@ -5297,7 +5628,8 @@
      "d7",
      "f5",
      "d8"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -5310,7 +5642,8 @@
      "f8",
      "d7",
      "e6"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "plan-now",
@@ -5322,6 +5655,9 @@
      "g8",
      "d3",
      "d6"
+    ],
+    "claims": [
+     "picture-plan:b:h8g8"
     ]
    },
    {
@@ -5332,6 +5668,9 @@
     "squares": [
      "g8",
      "h6"
+    ],
+    "claims": [
+     "quiet-threat:h6"
     ]
    },
    {
@@ -5339,7 +5678,8 @@
     "computer": "defenderCheckRun",
     "from": "bestMove",
     "text": "Their queen checks with Qd5+, and you block with …Be6. Then they play Qxd8+.",
-    "squares": []
+    "squares": [],
+    "claims": []
    },
    {
     "kind": "concept",
@@ -5350,7 +5690,8 @@
      "h8",
      "f8",
      "f1"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "structure-plan",
@@ -5360,6 +5701,10 @@
     "squares": [
      "f1",
      "f7"
+    ],
+    "claims": [
+     "opponent-good-r-open-file-f",
+     "file-f"
     ]
    }
   ]
@@ -5420,7 +5765,7 @@
    },
    {
     "kind": "refuted",
-    "text": "a3 is the obvious try, but …Qb6 is the answer. After a3 …Qb6, their one resource is the pawn break …f5, hitting your pawn on e4. It is coming: the best line plays it. a3 throws the win: you're clearly worse after it.",
+    "text": "a3 is the obvious try, but …Qb6 is the answer. After …Qb6, their one resource is the pawn break …f5, hitting your pawn on e4. It is coming: the best line plays it. a3 throws the win: you're clearly worse after it.",
     "claims": [],
     "computer": "temptingOnBoard"
    },
@@ -5577,6 +5922,10 @@
     "squares": [
      "c1",
      "c4"
+    ],
+    "claims": [
+     "picture-verdict:w:works-now:c1c4",
+     "standing:decisive+"
     ]
    },
    {
@@ -5588,14 +5937,18 @@
      "c1",
      "c4",
      "g5"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "aspect-opens-king",
     "computer": "moveAspects",
     "from": "bestMove",
     "text": "You go Rxh6+, which prises open their king's cover.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:h1h6:idea:attack-king:"
+    ]
    },
    {
     "kind": "king-read",
@@ -5609,6 +5962,10 @@
      "f3",
      "f8",
      "a8"
+    ],
+    "claims": [
+     "siege:h8:1v1",
+     "king-attack:h8"
     ]
    },
    {
@@ -5616,7 +5973,11 @@
     "computer": "onlyMove",
     "from": "bestMove",
     "text": "You go Rxh6+, which is the only move that holds here — the next best, Qf4, gives up about a piece's worth.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:h1h6:idea:choice:",
+     "only:h1h6"
+    ]
    },
    {
     "kind": "speedrun-read",
@@ -5630,7 +5991,8 @@
      "h4",
      "f5",
      "d6"
-    ]
+    ],
+    "claims": []
    }
   ]
  },
@@ -5690,7 +6052,7 @@
    },
    {
     "kind": "refuted",
-    "text": "a3 is the obvious try, but …Qb6 is the answer. After a3 …Qb6, their one resource is the pawn break …f5, hitting your pawn on e4. It is coming: the best line plays it. a3 throws the win: you're clearly worse after it.",
+    "text": "a3 is the obvious try, but …Qb6 is the answer. After …Qb6, their one resource is the pawn break …f5, hitting your pawn on e4. It is coming: the best line plays it. a3 throws the win: you're clearly worse after it.",
     "claims": [],
     "computer": "temptingOnBoard"
    },
@@ -5847,6 +6209,10 @@
     "squares": [
      "c1",
      "c4"
+    ],
+    "claims": [
+     "picture-verdict:w:works-now:c1c4",
+     "standing:decisive+"
     ]
    },
    {
@@ -5858,14 +6224,18 @@
      "c1",
      "c4",
      "g5"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "aspect-opens-king",
     "computer": "moveAspects",
     "from": "bestMove",
     "text": "You go Rxh6+, which prises open their king's cover.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:h1h6:idea:attack-king:"
+    ]
    },
    {
     "kind": "king-read",
@@ -5879,6 +6249,10 @@
      "f3",
      "f8",
      "a8"
+    ],
+    "claims": [
+     "siege:h8:1v1",
+     "king-attack:h8"
     ]
    },
    {
@@ -5886,7 +6260,11 @@
     "computer": "onlyMove",
     "from": "bestMove",
     "text": "You go Rxh6+, which is the only move that holds here — the next best, Qf4, gives up about a piece's worth.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:h1h6:idea:choice:",
+     "only:h1h6"
+    ]
    },
    {
     "kind": "speedrun-read",
@@ -5900,12 +6278,13 @@
      "h4",
      "f5",
      "d6"
-    ]
+    ],
+    "claims": []
    }
   ]
  },
  "alone:0LeQy#3-Qf4": {
-  "read": "You're winning, and Qf4 goes straight for it. Qc4, Qg1 and Qd2 all fail the same way: …Bxf3+ meets each. Rd6 goes straight at the pawn on d4, but …Bxd6 meets it. Their pawn on d4 still stands. Rd6 throws the win: you're losing after it. Qf4 takes the …f5 break away from them. The pawn would just be lost there now. Qf4 is quiet, but it threatens Rah1, with mate to follow — they must answer that first. Their king on g8 faces two of your pieces, and two more are a move away. Three of theirs defend it: their rook on a8, rook on f8 and dark-squared bishop. Your pawns on the e-file are doubled, so no pawn can guard the one on e5. Only your knight on f3 does, and it is tied to it. They have the bishop pair against your knight and bishop — two bishops grow stronger as the board opens, so keep it closed or trade one of them off. Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.",
+  "read": "You're winning, and Qf4 goes straight for it. Qc4, Qg1 and Qd2 all fail the same way: …Bxf3+ meets each. Rd6 goes straight at the pawn on d4, but …Bxd6 meets it. Their pawn on d4 still stands. Rd6 throws the win: you're losing after it. Qf4 takes the …f5 break away from them. The pawn would just be lost there now. You go Qf4, which hits their bishop on g4, and nothing guards it. They have the bishop pair against your knight and bishop — two bishops grow stronger as the board opens, so keep it closed or trade one of them off. Count the attackers and defenders on their bishop on g4: 1 attacker to 0 defenders — it's outnumbered, so it has to move, and that costs them the tempo. Your pawns on the e-file are doubled, so no pawn can guard the one on e5. Only your knight on f3 does, and it is tied to it. Qf4 is quiet, but it threatens Rah1, with mate to follow — they must answer that first. Their king on g8 faces two of your pieces, and two more are a move away. Three of theirs defend it: their rook on a8, rook on f8 and dark-squared bishop. Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.",
   "facts": [
    {
     "kind": "standing-bare",
@@ -6200,11 +6579,14 @@
    "fact:temptingOnBoard:d6,h6",
    "break-stop:f7f5",
    "stops-break:…f5",
+   "move:c1f4:idea:pressure:g4",
+   "opponent-bishop-pair",
+   "count:r4rk1/pp2bpp1/7R/q3P3/3pPQb1/3B1N2/PP2KP2/R7",
+   "idea:tempo:g4",
+   "student-doubled-e",
    "quiet-threat:h1",
    "siege:g8:2v3",
    "king-attack:g8",
-   "student-doubled-e",
-   "opponent-bishop-pair",
    "habit:quiet-shot"
   ],
   "kept": [
@@ -6218,6 +6600,10 @@
      "c4",
      "h6",
      "d6"
+    ],
+    "claims": [
+     "picture-verdict:w:works-now:c1c4,h6d6",
+     "standing:decisive+"
     ]
    },
    {
@@ -6231,7 +6617,8 @@
      "f3",
      "g1",
      "d2"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -6241,7 +6628,8 @@
     "squares": [
      "h6",
      "d6"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "stopped",
@@ -6253,6 +6641,61 @@
      "f4",
      "f7",
      "f5"
+    ],
+    "claims": [
+     "break-stop:f7f5",
+     "stops-break:…f5"
+    ]
+   },
+   {
+    "kind": "board-teacher",
+    "computer": "buildReviewMoveTeachingFact",
+    "from": "bestMove",
+    "text": "You go Qf4, which hits their bishop on g4, and nothing guards it.",
+    "squares": [
+     "g4"
+    ],
+    "claims": [
+     "move:c1f4:idea:pressure:g4"
+    ]
+   },
+   {
+    "kind": "structure-plan",
+    "computer": "readPosition",
+    "from": "position",
+    "text": "They have the bishop pair against your knight and bishop — two bishops grow stronger as the board opens, so keep it closed or trade one of them off.",
+    "squares": [
+     "e7",
+     "g4"
+    ],
+    "claims": [
+     "opponent-bishop-pair"
+    ]
+   },
+   {
+    "kind": "count",
+    "computer": "attackerDefenderCount",
+    "from": "bestMove",
+    "text": "Count the attackers and defenders on their bishop on g4: 1 attacker to 0 defenders — it's outnumbered, so it has to move, and that costs them the tempo.",
+    "squares": [
+     "g4"
+    ],
+    "claims": [
+     "count:r4rk1/pp2bpp1/7R/q3P3/3pPQb1/3B1N2/PP2KP2/R7",
+     "idea:tempo:g4"
+    ]
+   },
+   {
+    "kind": "structure-plan",
+    "computer": "readPosition",
+    "from": "position",
+    "text": "Your pawns on the e-file are doubled, so no pawn can guard the one on e5. Only your knight on f3 does, and it is tied to it.",
+    "squares": [
+     "e5",
+     "f3"
+    ],
+    "claims": [
+     "student-doubled-e"
     ]
    },
    {
@@ -6263,6 +6706,9 @@
     "squares": [
      "f4",
      "h1"
+    ],
+    "claims": [
+     "quiet-threat:h1"
     ]
    },
    {
@@ -6279,32 +6725,16 @@
      "a8",
      "f8",
      "e7"
-    ]
-   },
-   {
-    "kind": "structure-plan",
-    "computer": "readPosition",
-    "from": "position",
-    "text": "Your pawns on the e-file are doubled, so no pawn can guard the one on e5. Only your knight on f3 does, and it is tied to it.",
-    "squares": [
-     "e5",
-     "f3"
-    ]
-   },
-   {
-    "kind": "structure-plan",
-    "computer": "readPosition",
-    "from": "position",
-    "text": "They have the bishop pair against your knight and bishop — two bishops grow stronger as the board opens, so keep it closed or trade one of them off.",
-    "squares": [
-     "e7",
-     "g4"
+    ],
+    "claims": [
+     "siege:g8:2v3",
+     "king-attack:g8"
     ]
    }
   ]
  },
  "told:0LeQy#3-Qf4": {
-  "read": "You're winning, and Qf4 goes straight for it. Qc4, Qg1 and Qd2 all fail the same way: …Bxf3+ meets each. Rd6 goes straight at the pawn on d4, but …Bxd6 meets it. Their pawn on d4 still stands. Rd6 throws the win: you're losing after it. Qf4 takes the …f5 break away from them. The pawn would just be lost there now. Qf4 is quiet, but it threatens Rah1, with mate to follow — they must answer that first. Their king on g8 faces two of your pieces, and two more are a move away. Three of theirs defend it: their rook on a8, rook on f8 and dark-squared bishop. Your pawns on the e-file are doubled, so no pawn can guard the one on e5. Only your knight on f3 does, and it is tied to it. They have the bishop pair against your knight and bishop — two bishops grow stronger as the board opens, so keep it closed or trade one of them off. Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.",
+  "read": "You're winning, and Qf4 goes straight for it. Qc4, Qg1 and Qd2 all fail the same way: …Bxf3+ meets each. Rd6 goes straight at the pawn on d4, but …Bxd6 meets it. Their pawn on d4 still stands. Rd6 throws the win: you're losing after it. Qf4 takes the …f5 break away from them. The pawn would just be lost there now. You go Qf4, which hits their bishop on g4, and nothing guards it. They have the bishop pair against your knight and bishop — two bishops grow stronger as the board opens, so keep it closed or trade one of them off. Count the attackers and defenders on their bishop on g4: 1 attacker to 0 defenders — it's outnumbered, so it has to move, and that costs them the tempo. Your pawns on the e-file are doubled, so no pawn can guard the one on e5. Only your knight on f3 does, and it is tied to it. Qf4 is quiet, but it threatens Rah1, with mate to follow — they must answer that first. Their king on g8 faces two of your pieces, and two more are a move away. Three of theirs defend it: their rook on a8, rook on f8 and dark-squared bishop. Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.",
   "facts": [
    {
     "kind": "standing-bare",
@@ -6599,11 +7029,14 @@
    "fact:temptingOnBoard:d6,h6",
    "break-stop:f7f5",
    "stops-break:…f5",
+   "move:c1f4:idea:pressure:g4",
+   "opponent-bishop-pair",
+   "count:r4rk1/pp2bpp1/7R/q3P3/3pPQb1/3B1N2/PP2KP2/R7",
+   "idea:tempo:g4",
+   "student-doubled-e",
    "quiet-threat:h1",
    "siege:g8:2v3",
    "king-attack:g8",
-   "student-doubled-e",
-   "opponent-bishop-pair",
    "habit:quiet-shot"
   ],
   "kept": [
@@ -6617,6 +7050,10 @@
      "c4",
      "h6",
      "d6"
+    ],
+    "claims": [
+     "picture-verdict:w:works-now:c1c4,h6d6",
+     "standing:decisive+"
     ]
    },
    {
@@ -6630,7 +7067,8 @@
      "f3",
      "g1",
      "d2"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -6640,7 +7078,8 @@
     "squares": [
      "h6",
      "d6"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "stopped",
@@ -6652,6 +7091,61 @@
      "f4",
      "f7",
      "f5"
+    ],
+    "claims": [
+     "break-stop:f7f5",
+     "stops-break:…f5"
+    ]
+   },
+   {
+    "kind": "board-teacher",
+    "computer": "buildReviewMoveTeachingFact",
+    "from": "bestMove",
+    "text": "You go Qf4, which hits their bishop on g4, and nothing guards it.",
+    "squares": [
+     "g4"
+    ],
+    "claims": [
+     "move:c1f4:idea:pressure:g4"
+    ]
+   },
+   {
+    "kind": "structure-plan",
+    "computer": "readPosition",
+    "from": "position",
+    "text": "They have the bishop pair against your knight and bishop — two bishops grow stronger as the board opens, so keep it closed or trade one of them off.",
+    "squares": [
+     "e7",
+     "g4"
+    ],
+    "claims": [
+     "opponent-bishop-pair"
+    ]
+   },
+   {
+    "kind": "count",
+    "computer": "attackerDefenderCount",
+    "from": "bestMove",
+    "text": "Count the attackers and defenders on their bishop on g4: 1 attacker to 0 defenders — it's outnumbered, so it has to move, and that costs them the tempo.",
+    "squares": [
+     "g4"
+    ],
+    "claims": [
+     "count:r4rk1/pp2bpp1/7R/q3P3/3pPQb1/3B1N2/PP2KP2/R7",
+     "idea:tempo:g4"
+    ]
+   },
+   {
+    "kind": "structure-plan",
+    "computer": "readPosition",
+    "from": "position",
+    "text": "Your pawns on the e-file are doubled, so no pawn can guard the one on e5. Only your knight on f3 does, and it is tied to it.",
+    "squares": [
+     "e5",
+     "f3"
+    ],
+    "claims": [
+     "student-doubled-e"
     ]
    },
    {
@@ -6662,6 +7156,9 @@
     "squares": [
      "f4",
      "h1"
+    ],
+    "claims": [
+     "quiet-threat:h1"
     ]
    },
    {
@@ -6678,26 +7175,10 @@
      "a8",
      "f8",
      "e7"
-    ]
-   },
-   {
-    "kind": "structure-plan",
-    "computer": "readPosition",
-    "from": "position",
-    "text": "Your pawns on the e-file are doubled, so no pawn can guard the one on e5. Only your knight on f3 does, and it is tied to it.",
-    "squares": [
-     "e5",
-     "f3"
-    ]
-   },
-   {
-    "kind": "structure-plan",
-    "computer": "readPosition",
-    "from": "position",
-    "text": "They have the bishop pair against your knight and bishop — two bishops grow stronger as the board opens, so keep it closed or trade one of them off.",
-    "squares": [
-     "e7",
-     "g4"
+    ],
+    "claims": [
+     "siege:g8:2v3",
+     "king-attack:g8"
     ]
    }
   ]
@@ -6872,7 +7353,11 @@
     "computer": "pictureVerdict",
     "from": "position",
     "text": "You're winning, and the direct way works now: Kxf3.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "picture-verdict:w:works-now:",
+     "standing:decisive+"
+    ]
    },
    {
     "kind": "king-read",
@@ -6888,6 +7373,10 @@
      "a8",
      "f8",
      "e7"
+    ],
+    "claims": [
+     "siege:g8:2v3",
+     "king-attack:g8"
     ]
    },
    {
@@ -6895,7 +7384,8 @@
     "computer": "depthClauses",
     "from": "position",
     "text": "The king takes f3 allows a capture — the g-pawn takes h6 — and you play it anyway: look one move past the scary reply and nothing follows for them.",
-    "squares": []
+    "squares": [],
+    "claims": []
    },
    {
     "kind": "speedrun-read",
@@ -6906,7 +7396,8 @@
      "f4",
      "h6",
      "e5"
-    ]
+    ],
+    "claims": []
    }
   ]
  },
@@ -7077,14 +7568,19 @@
     "computer": "pictureVerdict",
     "from": "position",
     "text": "You're winning, and the direct way works now: Kxf3.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "picture-verdict:w:works-now:",
+     "standing:decisive+"
+    ]
    },
    {
     "kind": "speedrun-read",
     "computer": "depthClauses",
     "from": "position",
     "text": "The king takes f3 allows a capture — the g-pawn takes h6 — and you play it anyway: look one move past the scary reply and nothing follows for them.",
-    "squares": []
+    "squares": [],
+    "claims": []
    },
    {
     "kind": "speedrun-read",
@@ -7095,12 +7591,13 @@
      "f4",
      "h6",
      "e5"
-    ]
+    ],
+    "claims": []
    }
   ]
  },
  "alone:0LeQy#7-Qxh6": {
-  "read": "You're winning — their isolated pawn on h6 is attacked once and nothing guards it. And Qxh6 goes straight for it. Bc4 and Rh1 both fail the same way: …Qb6 or …Bg5 meets either. Your queen on f4 reaches 9 fewer squares after either than after the better move. You go Qxh6, which prises open their king's cover. Habit for positions like this: CCT — every check, every capture, every threat, in that order, before you consider a quiet move.",
+  "read": "You're winning — their isolated pawn on h6 is attacked once and nothing guards it. And Qxh6 goes straight for it. Bc4 and Rh1 both fail the same way: …Qb6 or …Bg5 meets either. Your queen on f4 reaches 9 fewer squares after either than after the better move. You go Qxh6, which prises open their king's cover. It also seizes the open h-file — a highway straight into their position. And it wins a pawn back. Habit for positions like this: CCT — every check, every capture, every threat, in that order, before you consider a quiet move.",
   "facts": [
    {
     "kind": "standing",
@@ -7348,6 +7845,8 @@
    "standing:decisive+",
    "fact:temptingOnBoard:a1,b6,c4,d3,g5,h1,h6",
    "move:f4h6:idea:attack-king:",
+   "move:f4h6:idea:file:",
+   "move:f4h6:idea:win-material:",
    "habit:forcing-scan"
   ],
   "kept": [
@@ -7361,6 +7860,10 @@
      "c4",
      "a1",
      "h1"
+    ],
+    "claims": [
+     "picture-verdict:w:works-now:d3c4,a1h1",
+     "standing:decisive+"
     ]
    },
    {
@@ -7376,19 +7879,25 @@
      "h1",
      "g5",
      "h6"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "aspect-opens-king",
     "computer": "moveAspects",
     "from": "bestMove",
-    "text": "You go Qxh6, which prises open their king's cover.",
-    "squares": []
+    "text": "You go Qxh6, which prises open their king's cover. It also seizes the open h-file — a highway straight into their position. And it wins a pawn back.",
+    "squares": [],
+    "claims": [
+     "move:f4h6:idea:attack-king:",
+     "move:f4h6:idea:file:",
+     "move:f4h6:idea:win-material:"
+    ]
    }
   ]
  },
  "told:0LeQy#7-Qxh6": {
-  "read": "You're winning — their isolated pawn on h6 is attacked once and nothing guards it. And Qxh6 goes straight for it. Bc4 and Rh1 both fail the same way: …Qb6 or …Bg5 meets either. Your queen on f4 reaches 9 fewer squares after either than after the better move. You go Qxh6, which prises open their king's cover.",
+  "read": "You're winning — their isolated pawn on h6 is attacked once and nothing guards it. And Qxh6 goes straight for it. Bc4 and Rh1 both fail the same way: …Qb6 or …Bg5 meets either. Your queen on f4 reaches 9 fewer squares after either than after the better move. You go Qxh6, which prises open their king's cover. It also seizes the open h-file — a highway straight into their position. And it wins a pawn back.",
   "facts": [
    {
     "kind": "standing",
@@ -7635,7 +8144,9 @@
    "picture-verdict:w:works-now:d3c4,a1h1",
    "standing:decisive+",
    "fact:temptingOnBoard:a1,b6,c4,d3,g5,h1,h6",
-   "move:f4h6:idea:attack-king:"
+   "move:f4h6:idea:attack-king:",
+   "move:f4h6:idea:file:",
+   "move:f4h6:idea:win-material:"
   ],
   "kept": [
    {
@@ -7648,6 +8159,10 @@
      "c4",
      "a1",
      "h1"
+    ],
+    "claims": [
+     "picture-verdict:w:works-now:d3c4,a1h1",
+     "standing:decisive+"
     ]
    },
    {
@@ -7663,19 +8178,25 @@
      "h1",
      "g5",
      "h6"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "aspect-opens-king",
     "computer": "moveAspects",
     "from": "bestMove",
-    "text": "You go Qxh6, which prises open their king's cover.",
-    "squares": []
+    "text": "You go Qxh6, which prises open their king's cover. It also seizes the open h-file — a highway straight into their position. And it wins a pawn back.",
+    "squares": [],
+    "claims": [
+     "move:f4h6:idea:attack-king:",
+     "move:f4h6:idea:file:",
+     "move:f4h6:idea:win-material:"
+    ]
    }
   ]
  },
  "alone:0LeQy#9-Rg1+": {
-  "read": "You're winning, and the direct way works now: Rg1+. e6 goes straight at the pawn on f7, but …fxe6+ meets it. …fxe6+ comes with check, so they gain a tempo. e6 throws the win: you're losing after it. Rh1 and Bc4 both fail the same way: …Qxh6 meets either. Qh2, Qf4, Qh3 and Qh5 all fail the same way: …Qg6 meets each. You're on top, but watch the counterpunch: their queen on b6 attacks your queen on h6, and nothing defends it — and you can take the attacker without losing material. You go Rg1+, which takes the open g-file, pressing their king on g8. Habit for positions like this: CCT — every check, every capture, every threat, in that order, before you consider a quiet move.",
+  "read": "You're winning, and the direct way works now: Rg1+. e6 goes straight at the pawn on f7, but …fxe6+ meets it. …fxe6+ comes with check, so they gain a tempo. e6 throws the win: you're losing after it. Rh1 and Bc4 both fail the same way: …Qxh6 meets either. Qh2, Qf4, Qh3 and Qh5 all fail the same way: …Qg6 meets each. You're on top, but watch the counterpunch: their queen on b6 attacks your queen on h6, and nothing defends it — and you can take the attacker without losing material. You go Rg1+, which takes the open g-file, pressing their king on g8. It also gives check, and they can answer only with Bg5 or Qg6. Habit for positions like this: CCT — every check, every capture, every threat, in that order, before you consider a quiet move.",
   "facts": [
    {
     "kind": "standing-bare",
@@ -7857,6 +8378,8 @@
    "fact:temptingOnBoard:f4,g6,h2,h3,h5,h6",
    "loose:h6:50",
    "move:a1g1:idea:file:",
+   "move:a1g1:idea:threat:",
+   "move:a1g1:idea:check:",
    "habit:forcing-scan"
   ],
   "kept": [
@@ -7873,6 +8396,10 @@
      "h6",
      "f4",
      "h5"
+    ],
+    "claims": [
+     "picture-verdict:w:works-now:e5e6,d3c4,h6f4,h6h5",
+     "standing:decisive+"
     ]
    },
    {
@@ -7883,7 +8410,8 @@
     "squares": [
      "e5",
      "e6"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -7896,7 +8424,8 @@
      "h6",
      "d3",
      "c4"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -7910,7 +8439,8 @@
      "f4",
      "h3",
      "h5"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "must-defend",
@@ -7920,19 +8450,27 @@
     "squares": [
      "h6",
      "b6"
+    ],
+    "claims": [
+     "loose:h6:50"
     ]
    },
    {
     "kind": "fundamental",
     "computer": "computeMoveFundamentals",
     "from": "bestMove",
-    "text": "You go Rg1+, which takes the open g-file, pressing their king on g8.",
-    "squares": []
+    "text": "You go Rg1+, which takes the open g-file, pressing their king on g8. It also gives check, and they can answer only with Bg5 or Qg6.",
+    "squares": [],
+    "claims": [
+     "move:a1g1:idea:file:",
+     "move:a1g1:idea:threat:",
+     "move:a1g1:idea:check:"
+    ]
    }
   ]
  },
  "told:0LeQy#9-Rg1+": {
-  "read": "You're winning, and the direct way works now: Rg1+. e6 goes straight at the pawn on f7, but …fxe6+ meets it. …fxe6+ comes with check, so they gain a tempo. e6 throws the win: you're losing after it. Rh1 and Bc4 both fail the same way: …Qxh6 meets either. Qh2, Qf4, Qh3 and Qh5 all fail the same way: …Qg6 meets each. You're on top, but watch the counterpunch: their queen on b6 attacks your queen on h6, and nothing defends it — and you can take the attacker without losing material. You go Rg1+, which takes the open g-file, pressing their king on g8.",
+  "read": "You're winning, and the direct way works now: Rg1+. e6 goes straight at the pawn on f7, but …fxe6+ meets it. …fxe6+ comes with check, so they gain a tempo. e6 throws the win: you're losing after it. Rh1 and Bc4 both fail the same way: …Qxh6 meets either. Qh2, Qf4, Qh3 and Qh5 all fail the same way: …Qg6 meets each. You're on top, but watch the counterpunch: their queen on b6 attacks your queen on h6, and nothing defends it — and you can take the attacker without losing material. You go Rg1+, which takes the open g-file, pressing their king on g8. It also gives check, and they can answer only with Bg5 or Qg6.",
   "facts": [
    {
     "kind": "standing-bare",
@@ -8113,7 +8651,9 @@
    "fact:temptingOnBoard:a1,c4,d3,h1,h6",
    "fact:temptingOnBoard:f4,g6,h2,h3,h5,h6",
    "loose:h6:50",
-   "move:a1g1:idea:file:"
+   "move:a1g1:idea:file:",
+   "move:a1g1:idea:threat:",
+   "move:a1g1:idea:check:"
   ],
   "kept": [
    {
@@ -8129,6 +8669,10 @@
      "h6",
      "f4",
      "h5"
+    ],
+    "claims": [
+     "picture-verdict:w:works-now:e5e6,d3c4,h6f4,h6h5",
+     "standing:decisive+"
     ]
    },
    {
@@ -8139,7 +8683,8 @@
     "squares": [
      "e5",
      "e6"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -8152,7 +8697,8 @@
      "h6",
      "d3",
      "c4"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -8166,7 +8712,8 @@
      "f4",
      "h3",
      "h5"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "must-defend",
@@ -8176,14 +8723,22 @@
     "squares": [
      "h6",
      "b6"
+    ],
+    "claims": [
+     "loose:h6:50"
     ]
    },
    {
     "kind": "fundamental",
     "computer": "computeMoveFundamentals",
     "from": "bestMove",
-    "text": "You go Rg1+, which takes the open g-file, pressing their king on g8.",
-    "squares": []
+    "text": "You go Rg1+, which takes the open g-file, pressing their king on g8. It also gives check, and they can answer only with Bg5 or Qg6.",
+    "squares": [],
+    "claims": [
+     "move:a1g1:idea:file:",
+     "move:a1g1:idea:threat:",
+     "move:a1g1:idea:check:"
+    ]
    }
   ]
  },
@@ -8399,6 +8954,10 @@
     "squares": [
      "d4",
      "c3"
+    ],
+    "claims": [
+     "picture-verdict:b:works-now:d4c3",
+     "standing:decisive+"
     ]
    },
    {
@@ -8410,7 +8969,8 @@
      "d4",
      "c3",
      "f2"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "structure-plan",
@@ -8421,6 +8981,10 @@
      "f3",
      "f2",
      "g3"
+    ],
+    "claims": [
+     "student-passer-f",
+     "plan-aim:passer:f"
     ]
    },
    {
@@ -8431,6 +8995,9 @@
     "squares": [
      "e3",
      "d2"
+    ],
+    "claims": [
+     "quiet-threat:d2"
     ]
    },
    {
@@ -8442,14 +9009,16 @@
      "e3",
      "d3",
      "b5"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "speedrun-read",
     "computer": "depthClauses",
     "from": "position",
     "text": "The king to e3 allows a capture — the bishop takes f5 — and you play it anyway: look one move past the scary reply and nothing follows for them.",
-    "squares": []
+    "squares": [],
+    "claims": []
    }
   ]
  },
@@ -8665,6 +9234,10 @@
     "squares": [
      "d4",
      "c3"
+    ],
+    "claims": [
+     "picture-verdict:b:works-now:d4c3",
+     "standing:decisive+"
     ]
    },
    {
@@ -8676,7 +9249,8 @@
      "d4",
      "c3",
      "f2"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "structure-plan",
@@ -8687,6 +9261,10 @@
      "f3",
      "f2",
      "g3"
+    ],
+    "claims": [
+     "student-passer-f",
+     "plan-aim:passer:f"
     ]
    },
    {
@@ -8697,6 +9275,9 @@
     "squares": [
      "e3",
      "d2"
+    ],
+    "claims": [
+     "quiet-threat:d2"
     ]
    },
    {
@@ -8708,19 +9289,21 @@
      "e3",
      "d3",
      "b5"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "speedrun-read",
     "computer": "depthClauses",
     "from": "position",
     "text": "The king to e3 allows a capture — the bishop takes f5 — and you play it anyway: look one move past the scary reply and nothing follows for them.",
-    "squares": []
+    "squares": [],
+    "claims": []
    }
   ]
  },
  "alone:0GvdU#3-f2": {
-  "read": "You're winning — your passed pawn on f3 is two steps from queening. And the direct way works now: …f2. f2 is quiet, but it threatens …f1=Q — they must answer that first. Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.",
+  "read": "You're winning — your passed pawn on f3 is two steps from queening. And the direct way works now: …f2. You play f2: it pushes your passed pawn — passed pawns must be pushed. f2 is quiet, but it threatens …f1=Q — they must answer that first. Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.",
   "facts": [
    {
     "kind": "standing",
@@ -8927,6 +9510,7 @@
   "said": [
    "picture-verdict:b:works-now:",
    "standing:decisive+",
+   "move:f3f2:idea:passed-pawn:",
    "quiet-threat:f1",
    "habit:quiet-shot"
   ],
@@ -8936,7 +9520,21 @@
     "computer": "pictureVerdict",
     "from": "position",
     "text": "You're winning — your passed pawn on f3 is two steps from queening. And the direct way works now: …f2.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "picture-verdict:b:works-now:",
+     "standing:decisive+"
+    ]
+   },
+   {
+    "kind": "fundamental",
+    "computer": "computeMoveFundamentals",
+    "from": "bestMove",
+    "text": "You play f2: it pushes your passed pawn — passed pawns must be pushed.",
+    "squares": [],
+    "claims": [
+     "move:f3f2:idea:passed-pawn:"
+    ]
    },
    {
     "kind": "aspect-threat",
@@ -8946,12 +9544,15 @@
     "squares": [
      "f2",
      "f1"
+    ],
+    "claims": [
+     "quiet-threat:f1"
     ]
    }
   ]
  },
  "told:0GvdU#3-f2": {
-  "read": "You're winning — your passed pawn on f3 is two steps from queening. And the direct way works now: …f2. f2 is quiet, but it threatens …f1=Q — they must answer that first.",
+  "read": "You're winning — your passed pawn on f3 is two steps from queening. And the direct way works now: …f2. You play f2: it pushes your passed pawn — passed pawns must be pushed. f2 is quiet, but it threatens …f1=Q — they must answer that first.",
   "facts": [
    {
     "kind": "standing",
@@ -9158,6 +9759,7 @@
   "said": [
    "picture-verdict:b:works-now:",
    "standing:decisive+",
+   "move:f3f2:idea:passed-pawn:",
    "quiet-threat:f1"
   ],
   "kept": [
@@ -9166,7 +9768,21 @@
     "computer": "pictureVerdict",
     "from": "position",
     "text": "You're winning — your passed pawn on f3 is two steps from queening. And the direct way works now: …f2.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "picture-verdict:b:works-now:",
+     "standing:decisive+"
+    ]
+   },
+   {
+    "kind": "fundamental",
+    "computer": "computeMoveFundamentals",
+    "from": "bestMove",
+    "text": "You play f2: it pushes your passed pawn — passed pawns must be pushed.",
+    "squares": [],
+    "claims": [
+     "move:f3f2:idea:passed-pawn:"
+    ]
    },
    {
     "kind": "aspect-threat",
@@ -9176,6 +9792,9 @@
     "squares": [
      "f2",
      "f1"
+    ],
+    "claims": [
+     "quiet-threat:f1"
     ]
    }
   ]
@@ -9416,7 +10035,11 @@
     "computer": "pictureVerdict",
     "from": "position",
     "text": "You're winning — your passed pawn on f2 is one step from queening. And the direct way works now: …Ke2.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "picture-verdict:b:works-now:",
+     "standing:decisive+"
+    ]
    },
    {
     "kind": "structure-plan",
@@ -9427,6 +10050,10 @@
      "f2",
      "f1",
      "h3"
+    ],
+    "claims": [
+     "student-passer-f",
+     "plan-aim:passer:f"
     ]
    },
    {
@@ -9437,6 +10064,9 @@
     "squares": [
      "e2",
      "e3"
+    ],
+    "claims": [
+     "quiet-threat:e3"
     ]
    },
    {
@@ -9444,7 +10074,8 @@
     "computer": "defenderCheckRun",
     "from": "bestMove",
     "text": "Their bishop checks with Bg4+, and your king walks out to e1. Then they play Kf4.",
-    "squares": []
+    "squares": [],
+    "claims": []
    }
   ]
  },
@@ -9682,7 +10313,11 @@
     "computer": "pictureVerdict",
     "from": "position",
     "text": "You're winning — your passed pawn on f2 is one step from queening. And the direct way works now: …Ke2.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "picture-verdict:b:works-now:",
+     "standing:decisive+"
+    ]
    },
    {
     "kind": "aspect-prepares",
@@ -9692,6 +10327,9 @@
     "squares": [
      "e2",
      "e3"
+    ],
+    "claims": [
+     "quiet-threat:e3"
     ]
    },
    {
@@ -9699,7 +10337,8 @@
     "computer": "defenderCheckRun",
     "from": "bestMove",
     "text": "Their bishop checks with Bg4+, and your king walks out to e1. Then they play Kf4.",
-    "squares": []
+    "squares": [],
+    "claims": []
    },
    {
     "kind": "speedrun-read",
@@ -9708,12 +10347,13 @@
     "text": "The king to e2 works whatever they answer — nothing of yours can be taken after it. After Kd2, your pawn on f2 can be collected.",
     "squares": [
      "f2"
-    ]
+    ],
+    "claims": []
    }
   ]
  },
  "alone:0GvdU#7-f1=N+": {
-  "read": "You're winning — your passed pawn on f2 is one step from queening. And …f1=N+ goes straight for it. You make a knight, not a queen. A queen on f1 is lost at once to Bb5+, a check that wins it. The knight on f1 gives check instead. The pawn to f1, promoting to a knight first — it's check, and the king has to choose between f4, g4, h4, h3 or g2. See where it goes, then plan around it. Habit for positions like this: CCT — every check, every capture, every threat, in that order, before you consider a quiet move.",
+  "read": "You're winning — your passed pawn on f2 is one step from queening. And …f1=N+ goes straight for it. You play f1=N+: it promotes to a knight — underpromotion, chosen on purpose. It also gives check, and their king has to move. You make a knight, not a queen. A queen on f1 is lost at once to Bb5+, a check that wins it. The knight on f1 gives check instead. The pawn to f1, promoting to a knight first — it's check, and the king has to choose between f4, g4, h4, h3 or g2. See where it goes, then plan around it. Habit for positions like this: CCT — every check, every capture, every threat, in that order, before you consider a quiet move.",
   "facts": [
    {
     "kind": "standing",
@@ -9908,6 +10548,9 @@
   "said": [
    "picture-verdict:b:works-now:",
    "standing:decisive+",
+   "move:f2f1:idea:promote:",
+   "move:f2f1:idea:threat:",
+   "move:f2f1:idea:check:",
    "promotion:8/3B4/1p6/p7/P3p3/1P4K1/4kp2/8:f2f1",
    "fact:depthClauses:f1,f4,g2,g4,h3,h4",
    "habit:forcing-scan"
@@ -9918,7 +10561,23 @@
     "computer": "pictureVerdict",
     "from": "position",
     "text": "You're winning — your passed pawn on f2 is one step from queening. And …f1=N+ goes straight for it.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "picture-verdict:b:works-now:",
+     "standing:decisive+"
+    ]
+   },
+   {
+    "kind": "fundamental",
+    "computer": "computeMoveFundamentals",
+    "from": "bestMove",
+    "text": "You play f1=N+: it promotes to a knight — underpromotion, chosen on purpose. It also gives check, and their king has to move.",
+    "squares": [],
+    "claims": [
+     "move:f2f1:idea:promote:",
+     "move:f2f1:idea:threat:",
+     "move:f2f1:idea:check:"
+    ]
    },
    {
     "kind": "technique",
@@ -9928,6 +10587,9 @@
     "squares": [
      "f2",
      "f1"
+    ],
+    "claims": [
+     "promotion:8/3B4/1p6/p7/P3p3/1P4K1/4kp2/8:f2f1"
     ]
    },
    {
@@ -9942,12 +10604,13 @@
      "h4",
      "h3",
      "g2"
-    ]
+    ],
+    "claims": []
    }
   ]
  },
  "told:0GvdU#7-f1=N+": {
-  "read": "You're winning — your passed pawn on f2 is one step from queening. And …f1=N+ goes straight for it. You make a knight, not a queen. A queen on f1 is lost at once to Bb5+, a check that wins it. The knight on f1 gives check instead. The pawn to f1, promoting to a knight first — it's check, and the king has to choose between f4, g4, h4, h3 or g2. See where it goes, then plan around it. Habit for positions like this: CCT — every check, every capture, every threat, in that order, before you consider a quiet move.",
+  "read": "You're winning — your passed pawn on f2 is one step from queening. And …f1=N+ goes straight for it. You play f1=N+: it promotes to a knight — underpromotion, chosen on purpose. It also gives check, and their king has to move. You make a knight, not a queen. A queen on f1 is lost at once to Bb5+, a check that wins it. The knight on f1 gives check instead. The pawn to f1, promoting to a knight first — it's check, and the king has to choose between f4, g4, h4, h3 or g2. See where it goes, then plan around it. Habit for positions like this: CCT — every check, every capture, every threat, in that order, before you consider a quiet move.",
   "facts": [
    {
     "kind": "standing",
@@ -10142,6 +10805,9 @@
   "said": [
    "picture-verdict:b:works-now:",
    "standing:decisive+",
+   "move:f2f1:idea:promote:",
+   "move:f2f1:idea:threat:",
+   "move:f2f1:idea:check:",
    "promotion:8/3B4/1p6/p7/P3p3/1P4K1/4kp2/8:f2f1",
    "fact:depthClauses:f1,f4,g2,g4,h3,h4",
    "habit:forcing-scan"
@@ -10152,7 +10818,23 @@
     "computer": "pictureVerdict",
     "from": "position",
     "text": "You're winning — your passed pawn on f2 is one step from queening. And …f1=N+ goes straight for it.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "picture-verdict:b:works-now:",
+     "standing:decisive+"
+    ]
+   },
+   {
+    "kind": "fundamental",
+    "computer": "computeMoveFundamentals",
+    "from": "bestMove",
+    "text": "You play f1=N+: it promotes to a knight — underpromotion, chosen on purpose. It also gives check, and their king has to move.",
+    "squares": [],
+    "claims": [
+     "move:f2f1:idea:promote:",
+     "move:f2f1:idea:threat:",
+     "move:f2f1:idea:check:"
+    ]
    },
    {
     "kind": "technique",
@@ -10162,6 +10844,9 @@
     "squares": [
      "f2",
      "f1"
+    ],
+    "claims": [
+     "promotion:8/3B4/1p6/p7/P3p3/1P4K1/4kp2/8:f2f1"
     ]
    },
    {
@@ -10176,12 +10861,13 @@
      "h4",
      "h3",
      "g2"
-    ]
+    ],
+    "claims": []
    }
   ]
  },
  "alone:0GvdU#9-Nd2": {
-  "read": "You're winning — you're up a pawn, your passed pawn on e4 is three steps from queening. And the direct way works now: …Nd2. Your knight goes after b3, the pawn at the base of their chain. It holds a4, and right now nothing guards it. Their bishop checks with Bb5+, and your king walks out to f2. Then they play Ke5. The knight to d2 works whatever they answer — nothing of yours can be taken after it. After Kd1, your pawn on e4 can be collected. Your passed pawn on e4 is a long-term trump — every trade that clears its path makes it stronger. The knight to d2 allows a check — the bishop to b5 — and you play it anyway: look one move past the scary reply and nothing follows for them. Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.",
+  "read": "You're winning — you're up a pawn, your passed pawn on e4 is three steps from queening. And the direct way works now: …Nd2. You play Nd2 — it hits their pawn on b3, and nothing guards it. It also eyes f3 and their pawn on b3, squares no pawn of theirs can cover. Their bishop checks with Bb5+, and your king walks out to f2. Then they play Ke5. The knight to d2 works whatever they answer — nothing of yours can be taken after it. After Kd1, your pawn on e4 can be collected. Your passed pawn on e4 is a long-term trump — every trade that clears its path makes it stronger. The knight to d2 allows a check — the bishop to b5 — and you play it anyway: look one move past the scary reply and nothing follows for them. Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.",
   "facts": [
    {
     "kind": "standing",
@@ -10459,9 +11145,8 @@
   "said": [
    "picture-verdict:b:works-now:",
    "standing:decisive+",
-   "chain-base:hit:b3",
    "move:f1d2:idea:pressure:b3",
-   "loose:b3",
+   "move:f1d2:idea:outpost:b3,f3",
    "fact:defenderCheckRun:",
    "fact:depthClauses:e4",
    "student-passer-e",
@@ -10474,17 +11159,24 @@
     "computer": "pictureVerdict",
     "from": "position",
     "text": "You're winning — you're up a pawn, your passed pawn on e4 is three steps from queening. And the direct way works now: …Nd2.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "picture-verdict:b:works-now:",
+     "standing:decisive+"
+    ]
    },
    {
-    "kind": "judgement",
-    "computer": "chainBase",
+    "kind": "board-teacher",
+    "computer": "buildReviewMoveTeachingFact",
     "from": "bestMove",
-    "text": "Your knight goes after b3, the pawn at the base of their chain. It holds a4, and right now nothing guards it.",
+    "text": "You play Nd2 — it hits their pawn on b3, and nothing guards it. It also eyes f3 and their pawn on b3, squares no pawn of theirs can cover.",
     "squares": [
-     "d2",
      "b3",
-     "a4"
+     "f3"
+    ],
+    "claims": [
+     "move:f1d2:idea:pressure:b3",
+     "move:f1d2:idea:outpost:b3,f3"
     ]
    },
    {
@@ -10492,7 +11184,8 @@
     "computer": "defenderCheckRun",
     "from": "bestMove",
     "text": "Their bishop checks with Bb5+, and your king walks out to f2. Then they play Ke5.",
-    "squares": []
+    "squares": [],
+    "claims": []
    },
    {
     "kind": "speedrun-read",
@@ -10501,7 +11194,8 @@
     "text": "The knight to d2 works whatever they answer — nothing of yours can be taken after it. After Kd1, your pawn on e4 can be collected.",
     "squares": [
      "e4"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "structure-plan",
@@ -10510,6 +11204,9 @@
     "text": "Your passed pawn on e4 is a long-term trump — every trade that clears its path makes it stronger.",
     "squares": [
      "e4"
+    ],
+    "claims": [
+     "student-passer-e"
     ]
    },
    {
@@ -10517,12 +11214,13 @@
     "computer": "depthClauses",
     "from": "position",
     "text": "The knight to d2 allows a check — the bishop to b5 — and you play it anyway: look one move past the scary reply and nothing follows for them.",
-    "squares": []
+    "squares": [],
+    "claims": []
    }
   ]
  },
  "told:0GvdU#9-Nd2": {
-  "read": "You're winning — you're up a pawn, your passed pawn on e4 is three steps from queening. And the direct way works now: …Nd2. Your knight goes after b3, the pawn at the base of their chain. It holds a4, and right now nothing guards it. The knight to d2 works whatever they answer — nothing of yours can be taken after it. After Kd1, your pawn on e4 can be collected. Your passed pawn on e4 is a long-term trump — every trade that clears its path makes it stronger.",
+  "read": "You're winning — you're up a pawn, your passed pawn on e4 is three steps from queening. And the direct way works now: …Nd2. You play Nd2 — it hits their pawn on b3, and nothing guards it. It also eyes f3 and their pawn on b3, squares no pawn of theirs can cover. The knight to d2 works whatever they answer — nothing of yours can be taken after it. After Kd1, your pawn on e4 can be collected. Your passed pawn on e4 is a long-term trump — every trade that clears its path makes it stronger.",
   "facts": [
    {
     "kind": "standing",
@@ -10800,9 +11498,8 @@
   "said": [
    "picture-verdict:b:works-now:",
    "standing:decisive+",
-   "chain-base:hit:b3",
    "move:f1d2:idea:pressure:b3",
-   "loose:b3",
+   "move:f1d2:idea:outpost:b3,f3",
    "fact:depthClauses:e4",
    "student-passer-e"
   ],
@@ -10812,17 +11509,24 @@
     "computer": "pictureVerdict",
     "from": "position",
     "text": "You're winning — you're up a pawn, your passed pawn on e4 is three steps from queening. And the direct way works now: …Nd2.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "picture-verdict:b:works-now:",
+     "standing:decisive+"
+    ]
    },
    {
-    "kind": "judgement",
-    "computer": "chainBase",
+    "kind": "board-teacher",
+    "computer": "buildReviewMoveTeachingFact",
     "from": "bestMove",
-    "text": "Your knight goes after b3, the pawn at the base of their chain. It holds a4, and right now nothing guards it.",
+    "text": "You play Nd2 — it hits their pawn on b3, and nothing guards it. It also eyes f3 and their pawn on b3, squares no pawn of theirs can cover.",
     "squares": [
-     "d2",
      "b3",
-     "a4"
+     "f3"
+    ],
+    "claims": [
+     "move:f1d2:idea:pressure:b3",
+     "move:f1d2:idea:outpost:b3,f3"
     ]
    },
    {
@@ -10832,7 +11536,8 @@
     "text": "The knight to d2 works whatever they answer — nothing of yours can be taken after it. After Kd1, your pawn on e4 can be collected.",
     "squares": [
      "e4"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "structure-plan",
@@ -10841,12 +11546,15 @@
     "text": "Your passed pawn on e4 is a long-term trump — every trade that clears its path makes it stronger.",
     "squares": [
      "e4"
+    ],
+    "claims": [
+     "student-passer-e"
     ]
    }
   ]
  },
  "alone:0CegO#1-exf4+": {
-  "read": "You're winning — your passed pawn on g4 is three steps from queening, their isolated pawn on f4 is attacked twice and guarded only once. Kf6 is the obvious try, but f5 is the answer. The better move makes a passed pawn. Kf6 throws the win: you're losing after it. Kh4 looks natural, but fxe5 meets it. Their e-pawn runs through and queens on e8. Kh4 throws the win: you're losing after it. Kh6 is tempting, but fxe5 takes the sting out of it. Kh6 hands them a pawn in the line. Kh6 throws the win: you're losing after it. Everything hinges on a king race to g2, the square that escorts your f-pawn home: your king needs 3 moves, theirs 2 — they get there first if nothing gets in the way. You play exf4+: it is the only move that holds here — the next best, Kf6, gives up more than a rook's worth. Kh6? Then they answer fxe5 — they win a pawn. Habit for positions like this: CCT — every check, every capture, every threat, in that order, before you consider a quiet move.",
+  "read": "You're winning — your passed pawn on g4 is three steps from queening, their isolated pawn on f4 is attacked twice and guarded only once. Kf6 is the obvious try, but f5 is the answer. The better move makes a passed pawn. Kf6 throws the win: you're losing after it. Kh4 looks natural, but fxe5 meets it. Their e-pawn runs through and queens on e8. Kh4 throws the win: you're losing after it. Kh6 is tempting, but fxe5 takes the sting out of it. Kh6 hands them a pawn in the line. Kh6 throws the win: you're losing after it. You play exf4+: it pushes your passed pawn — passed pawns must be pushed. It also gives check, and their king has to move. Everything hinges on a king race to g2, the square that escorts your f-pawn home: your king needs 3 moves, theirs 2 — they get there first if nothing gets in the way. You play exf4+: it is the only move that holds here — the next best, Kf6, gives up more than a rook's worth. Kh6? Then they answer fxe5 — they win a pawn. Habit for positions like this: CCT — every check, every capture, every threat, in that order, before you consider a quiet move.",
   "facts": [
    {
     "kind": "standing",
@@ -11006,6 +11714,9 @@
    "fact:temptingOnBoard:f5,f6,g5",
    "fact:temptingOnBoard:e5,g5,h4",
    "fact:temptingOnBoard:e5,g5,h6",
+   "move:e5f4:idea:passed-pawn:",
+   "move:e5f4:idea:threat:",
+   "move:e5f4:idea:check:",
    "king-race:f4:g2",
    "move:e5f4:idea:choice:",
    "only:e5f4",
@@ -11018,7 +11729,8 @@
     "kind": "standing",
     "from": "position",
     "text": "You're winning — your passed pawn on g4 is three steps from queening, their isolated pawn on f4 is attacked twice and guarded only once.",
-    "squares": []
+    "squares": [],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -11029,7 +11741,8 @@
      "g5",
      "f6",
      "f5"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -11040,7 +11753,8 @@
      "g5",
      "h4",
      "e5"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -11051,6 +11765,19 @@
      "g5",
      "h6",
      "e5"
+    ],
+    "claims": []
+   },
+   {
+    "kind": "fundamental",
+    "computer": "computeMoveFundamentals",
+    "from": "bestMove",
+    "text": "You play exf4+: it pushes your passed pawn — passed pawns must be pushed. It also gives check, and their king has to move.",
+    "squares": [],
+    "claims": [
+     "move:e5f4:idea:passed-pawn:",
+     "move:e5f4:idea:threat:",
+     "move:e5f4:idea:check:"
     ]
    },
    {
@@ -11063,6 +11790,9 @@
      "f4",
      "g5",
      "e3"
+    ],
+    "claims": [
+     "king-race:f4:g2"
     ]
    },
    {
@@ -11070,7 +11800,11 @@
     "computer": "onlyMove",
     "from": "bestMove",
     "text": "You play exf4+: it is the only move that holds here — the next best, Kf6, gives up more than a rook's worth.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:e5f4:idea:choice:",
+     "only:e5f4"
+    ]
    },
    {
     "kind": "deliberation",
@@ -11079,12 +11813,16 @@
     "text": "Kh6? Then they answer fxe5 — they win a pawn.",
     "squares": [
      "e5"
+    ],
+    "claims": [
+     "rule-out:e5",
+     "tempting:g5h6"
     ]
    }
   ]
  },
  "told:0CegO#1-exf4+": {
-  "read": "You're winning — your passed pawn on g4 is three steps from queening, their isolated pawn on f4 is attacked twice and guarded only once. Kf6 is the obvious try, but f5 is the answer. The better move makes a passed pawn. Kf6 throws the win: you're losing after it. Kh4 looks natural, but fxe5 meets it. Their e-pawn runs through and queens on e8. Kh4 throws the win: you're losing after it. Kh6 is tempting, but fxe5 takes the sting out of it. Kh6 hands them a pawn in the line. Kh6 throws the win: you're losing after it. Everything hinges on a king race to g2, the square that escorts your f-pawn home: your king needs 3 moves, theirs 2 — they get there first if nothing gets in the way. You play exf4+: it is the only move that holds here — the next best, Kf6, gives up more than a rook's worth. Kh6? Then they answer fxe5 — they win a pawn. Habit for positions like this: CCT — every check, every capture, every threat, in that order, before you consider a quiet move.",
+  "read": "You're winning — your passed pawn on g4 is three steps from queening, their isolated pawn on f4 is attacked twice and guarded only once. Kf6 is the obvious try, but f5 is the answer. The better move makes a passed pawn. Kf6 throws the win: you're losing after it. Kh4 looks natural, but fxe5 meets it. Their e-pawn runs through and queens on e8. Kh4 throws the win: you're losing after it. Kh6 is tempting, but fxe5 takes the sting out of it. Kh6 hands them a pawn in the line. Kh6 throws the win: you're losing after it. You play exf4+: it pushes your passed pawn — passed pawns must be pushed. It also gives check, and their king has to move. Everything hinges on a king race to g2, the square that escorts your f-pawn home: your king needs 3 moves, theirs 2 — they get there first if nothing gets in the way. You play exf4+: it is the only move that holds here — the next best, Kf6, gives up more than a rook's worth. Kh6? Then they answer fxe5 — they win a pawn. Habit for positions like this: CCT — every check, every capture, every threat, in that order, before you consider a quiet move.",
   "facts": [
    {
     "kind": "standing",
@@ -11244,6 +11982,9 @@
    "fact:temptingOnBoard:f5,f6,g5",
    "fact:temptingOnBoard:e5,g5,h4",
    "fact:temptingOnBoard:e5,g5,h6",
+   "move:e5f4:idea:passed-pawn:",
+   "move:e5f4:idea:threat:",
+   "move:e5f4:idea:check:",
    "king-race:f4:g2",
    "move:e5f4:idea:choice:",
    "only:e5f4",
@@ -11256,7 +11997,8 @@
     "kind": "standing",
     "from": "position",
     "text": "You're winning — your passed pawn on g4 is three steps from queening, their isolated pawn on f4 is attacked twice and guarded only once.",
-    "squares": []
+    "squares": [],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -11267,7 +12009,8 @@
      "g5",
      "f6",
      "f5"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -11278,7 +12021,8 @@
      "g5",
      "h4",
      "e5"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -11289,6 +12033,19 @@
      "g5",
      "h6",
      "e5"
+    ],
+    "claims": []
+   },
+   {
+    "kind": "fundamental",
+    "computer": "computeMoveFundamentals",
+    "from": "bestMove",
+    "text": "You play exf4+: it pushes your passed pawn — passed pawns must be pushed. It also gives check, and their king has to move.",
+    "squares": [],
+    "claims": [
+     "move:e5f4:idea:passed-pawn:",
+     "move:e5f4:idea:threat:",
+     "move:e5f4:idea:check:"
     ]
    },
    {
@@ -11301,6 +12058,9 @@
      "f4",
      "g5",
      "e3"
+    ],
+    "claims": [
+     "king-race:f4:g2"
     ]
    },
    {
@@ -11308,7 +12068,11 @@
     "computer": "onlyMove",
     "from": "bestMove",
     "text": "You play exf4+: it is the only move that holds here — the next best, Kf6, gives up more than a rook's worth.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:e5f4:idea:choice:",
+     "only:e5f4"
+    ]
    },
    {
     "kind": "deliberation",
@@ -11317,12 +12081,16 @@
     "text": "Kh6? Then they answer fxe5 — they win a pawn.",
     "squares": [
      "e5"
+    ],
+    "claims": [
+     "rule-out:e5",
+     "tempting:g5h6"
     ]
    }
   ]
  },
  "alone:0CegO#3-h4": {
-  "read": "You're winning — your passed pawn on f4 is three steps from queening. But breaking through is another matter. …g3+, …f3, …Kh4 and …Kf6 all fail. g3+ is tempting, but Kg2 takes the sting out of it. g3+ hands them a pawn in the line. g3+ throws the win: the game is level after it. f3, Kf6 and Kh6 all fail the same way: Bd3 meets each. Kh4 looks natural, but Bd3 meets it. Their b-pawn runs through and queens on b8: your king is one move too late to catch it. Kh4 throws the win: the game is level after it. So the quiet …h4 instead. h4 is quiet: it prepares …f3. You play h4: it is the only move that holds here — the next best, f3, gives up about a piece's worth. Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.",
+  "read": "You're winning — your passed pawn on f4 is three steps from queening. But breaking through is another matter. …g3+, …f3, …Kh4 and …Kf6 all fail. g3+ is tempting, but Kg2 takes the sting out of it. g3+ hands them a pawn in the line. g3+ throws the win: the game is level after it. f3, Kf6 and Kh6 all fail the same way: Bd3 meets each. Kh4 looks natural, but Bd3 meets it. Their b-pawn runs through and queens on b8: your king is one move too late to catch it. Kh4 throws the win: the game is level after it. So the quiet …h4 instead. h4 is quiet: it prepares …f3. You play h4: it bears down on g3, backing your g-pawn's push there — g3 sits right beside their king. It also pushes your passed pawn — passed pawns must be pushed. You play h4: it is the only move that holds here — the next best, f3, gives up about a piece's worth. Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.",
   "facts": [
    {
     "kind": "standing",
@@ -11591,6 +12359,8 @@
    "fact:temptingOnBoard:d3,g5,h4",
    "picture-plan:b:h5h4",
    "quiet-threat:f3",
+   "move:h5h4:idea:center:g3",
+   "move:h5h4:idea:passed-pawn:",
    "move:h5h4:idea:choice:",
    "only:h5h4",
    "habit:quiet-shot"
@@ -11609,6 +12379,10 @@
      "g5",
      "h4",
      "f6"
+    ],
+    "claims": [
+     "picture-verdict:b:hard-to-finish:g4g3,f4f3,g5h4,g5f6",
+     "standing:decisive+"
     ]
    },
    {
@@ -11620,7 +12394,8 @@
      "g4",
      "g3",
      "g2"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -11634,7 +12409,8 @@
      "g5",
      "f6",
      "h6"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -11645,7 +12421,8 @@
      "g5",
      "h4",
      "d3"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "plan-now",
@@ -11655,6 +12432,9 @@
     "squares": [
      "h5",
      "h4"
+    ],
+    "claims": [
+     "picture-plan:b:h5h4"
     ]
    },
    {
@@ -11665,6 +12445,22 @@
     "squares": [
      "h4",
      "f3"
+    ],
+    "claims": [
+     "quiet-threat:f3"
+    ]
+   },
+   {
+    "kind": "board-teacher",
+    "computer": "buildReviewMoveTeachingFact",
+    "from": "bestMove",
+    "text": "You play h4: it bears down on g3, backing your g-pawn's push there — g3 sits right beside their king. It also pushes your passed pawn — passed pawns must be pushed.",
+    "squares": [
+     "g3"
+    ],
+    "claims": [
+     "move:h5h4:idea:center:g3",
+     "move:h5h4:idea:passed-pawn:"
     ]
    },
    {
@@ -11672,12 +12468,16 @@
     "computer": "onlyMove",
     "from": "bestMove",
     "text": "You play h4: it is the only move that holds here — the next best, f3, gives up about a piece's worth.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:h5h4:idea:choice:",
+     "only:h5h4"
+    ]
    }
   ]
  },
  "told:0CegO#3-h4": {
-  "read": "You're winning — your passed pawn on f4 is three steps from queening. But breaking through is another matter. …g3+, …f3, …Kh4 and …Kf6 all fail. g3+ is tempting, but Kg2 takes the sting out of it. g3+ hands them a pawn in the line. g3+ throws the win: the game is level after it. f3, Kf6 and Kh6 all fail the same way: Bd3 meets each. Kh4 looks natural, but Bd3 meets it. Their b-pawn runs through and queens on b8: your king is one move too late to catch it. Kh4 throws the win: the game is level after it. So the quiet …h4 instead. h4 is quiet: it prepares …f3. You play h4: it is the only move that holds here — the next best, f3, gives up about a piece's worth. Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.",
+  "read": "You're winning — your passed pawn on f4 is three steps from queening. But breaking through is another matter. …g3+, …f3, …Kh4 and …Kf6 all fail. g3+ is tempting, but Kg2 takes the sting out of it. g3+ hands them a pawn in the line. g3+ throws the win: the game is level after it. f3, Kf6 and Kh6 all fail the same way: Bd3 meets each. Kh4 looks natural, but Bd3 meets it. Their b-pawn runs through and queens on b8: your king is one move too late to catch it. Kh4 throws the win: the game is level after it. So the quiet …h4 instead. h4 is quiet: it prepares …f3. You play h4: it bears down on g3, backing your g-pawn's push there — g3 sits right beside their king. It also pushes your passed pawn — passed pawns must be pushed. You play h4: it is the only move that holds here — the next best, f3, gives up about a piece's worth. Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.",
   "facts": [
    {
     "kind": "standing",
@@ -11946,6 +12746,8 @@
    "fact:temptingOnBoard:d3,g5,h4",
    "picture-plan:b:h5h4",
    "quiet-threat:f3",
+   "move:h5h4:idea:center:g3",
+   "move:h5h4:idea:passed-pawn:",
    "move:h5h4:idea:choice:",
    "only:h5h4",
    "habit:quiet-shot"
@@ -11964,6 +12766,10 @@
      "g5",
      "h4",
      "f6"
+    ],
+    "claims": [
+     "picture-verdict:b:hard-to-finish:g4g3,f4f3,g5h4,g5f6",
+     "standing:decisive+"
     ]
    },
    {
@@ -11975,7 +12781,8 @@
      "g4",
      "g3",
      "g2"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -11989,7 +12796,8 @@
      "g5",
      "f6",
      "h6"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -12000,7 +12808,8 @@
      "g5",
      "h4",
      "d3"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "plan-now",
@@ -12010,6 +12819,9 @@
     "squares": [
      "h5",
      "h4"
+    ],
+    "claims": [
+     "picture-plan:b:h5h4"
     ]
    },
    {
@@ -12020,6 +12832,22 @@
     "squares": [
      "h4",
      "f3"
+    ],
+    "claims": [
+     "quiet-threat:f3"
+    ]
+   },
+   {
+    "kind": "board-teacher",
+    "computer": "buildReviewMoveTeachingFact",
+    "from": "bestMove",
+    "text": "You play h4: it bears down on g3, backing your g-pawn's push there — g3 sits right beside their king. It also pushes your passed pawn — passed pawns must be pushed.",
+    "squares": [
+     "g3"
+    ],
+    "claims": [
+     "move:h5h4:idea:center:g3",
+     "move:h5h4:idea:passed-pawn:"
     ]
    },
    {
@@ -12027,12 +12855,16 @@
     "computer": "onlyMove",
     "from": "bestMove",
     "text": "You play h4: it is the only move that holds here — the next best, f3, gives up about a piece's worth.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:h5h4:idea:choice:",
+     "only:h5h4"
+    ]
    }
   ]
  },
  "alone:0CegO#5-h3": {
-  "read": "You're winning — your passed pawn on f4 is three steps from queening. And the direct way works now: …h3. The plan from here is to get your passed pawn on h4 promoting. It is three pushes from queening. Here's how: escort it with your king and pieces. Push it one safe square at a time, and every push brings it closer to promotion. h3 is quiet, but it threatens …g3+ — they must answer that first. Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.",
+  "read": "You're winning — your passed pawn on f4 is three steps from queening. And the direct way works now: …h3. The plan from here is to get your passed pawn on h4 promoting. It is three pushes from queening. Here's how: escort it with your king and pieces. Push it one safe square at a time, and every push brings it closer to promotion. You go h3, which pushes your passed pawn — passed pawns must be pushed. h3 is quiet, but it threatens …g3+ — they must answer that first. Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.",
   "facts": [
    {
     "kind": "standing",
@@ -12278,6 +13110,7 @@
    "picture-verdict:b:works-now:",
    "standing:decisive+",
    "plan:passer",
+   "move:h4h3:idea:passed-pawn:",
    "quiet-threat:g3",
    "habit:quiet-shot"
   ],
@@ -12287,7 +13120,11 @@
     "computer": "pictureVerdict",
     "from": "position",
     "text": "You're winning — your passed pawn on f4 is three steps from queening. And the direct way works now: …h3.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "picture-verdict:b:works-now:",
+     "standing:decisive+"
+    ]
    },
    {
     "kind": "structure-plan",
@@ -12296,6 +13133,19 @@
     "text": "The plan from here is to get your passed pawn on h4 promoting. It is three pushes from queening. Here's how: escort it with your king and pieces. Push it one safe square at a time, and every push brings it closer to promotion.",
     "squares": [
      "h4"
+    ],
+    "claims": [
+     "plan:passer"
+    ]
+   },
+   {
+    "kind": "fundamental",
+    "computer": "computeMoveFundamentals",
+    "from": "bestMove",
+    "text": "You go h3, which pushes your passed pawn — passed pawns must be pushed.",
+    "squares": [],
+    "claims": [
+     "move:h4h3:idea:passed-pawn:"
     ]
    },
    {
@@ -12306,12 +13156,15 @@
     "squares": [
      "h3",
      "g3"
+    ],
+    "claims": [
+     "quiet-threat:g3"
     ]
    }
   ]
  },
  "told:0CegO#5-h3": {
-  "read": "You're winning — your passed pawn on f4 is three steps from queening. And the direct way works now: …h3. The plan from here is to get your passed pawn on h4 promoting. It is three pushes from queening. Here's how: escort it with your king and pieces. Push it one safe square at a time, and every push brings it closer to promotion. h3 is quiet, but it threatens …g3+ — they must answer that first.",
+  "read": "You're winning — your passed pawn on f4 is three steps from queening. And the direct way works now: …h3. The plan from here is to get your passed pawn on h4 promoting. It is three pushes from queening. Here's how: escort it with your king and pieces. Push it one safe square at a time, and every push brings it closer to promotion. You go h3, which pushes your passed pawn — passed pawns must be pushed. h3 is quiet, but it threatens …g3+ — they must answer that first.",
   "facts": [
    {
     "kind": "standing",
@@ -12557,6 +13410,7 @@
    "picture-verdict:b:works-now:",
    "standing:decisive+",
    "plan:passer",
+   "move:h4h3:idea:passed-pawn:",
    "quiet-threat:g3"
   ],
   "kept": [
@@ -12565,7 +13419,11 @@
     "computer": "pictureVerdict",
     "from": "position",
     "text": "You're winning — your passed pawn on f4 is three steps from queening. And the direct way works now: …h3.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "picture-verdict:b:works-now:",
+     "standing:decisive+"
+    ]
    },
    {
     "kind": "structure-plan",
@@ -12574,6 +13432,19 @@
     "text": "The plan from here is to get your passed pawn on h4 promoting. It is three pushes from queening. Here's how: escort it with your king and pieces. Push it one safe square at a time, and every push brings it closer to promotion.",
     "squares": [
      "h4"
+    ],
+    "claims": [
+     "plan:passer"
+    ]
+   },
+   {
+    "kind": "fundamental",
+    "computer": "computeMoveFundamentals",
+    "from": "bestMove",
+    "text": "You go h3, which pushes your passed pawn — passed pawns must be pushed.",
+    "squares": [],
+    "claims": [
+     "move:h4h3:idea:passed-pawn:"
     ]
    },
    {
@@ -12584,6 +13455,9 @@
     "squares": [
      "h3",
      "g3"
+    ],
+    "claims": [
+     "quiet-threat:g3"
     ]
    }
   ]
@@ -12674,7 +13548,7 @@
    },
    {
     "kind": "refuted",
-    "text": "Kh6 looks natural, but Bc6 meets it. After …Kh6 Bc6, their bishop can come to d7 and hit your pawn on g4. But your …Kg5 stops it. Kh6 throws the win: the game is level after it.",
+    "text": "Kh6 looks natural, but Bc6 meets it. After Bc6, their bishop can come to d7 and hit your pawn on g4. But your …Kg5 stops it. Kh6 throws the win: the game is level after it.",
     "claims": [],
     "computer": "temptingOnBoard"
    },
@@ -12805,7 +13679,11 @@
     "computer": "pictureVerdict",
     "from": "position",
     "text": "You're winning — your passed pawn on h3 is two steps from queening. And …Kh4 goes straight for it.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "picture-verdict:b:works-now:",
+     "standing:decisive+"
+    ]
    },
    {
     "kind": "route",
@@ -12815,6 +13693,9 @@
     "squares": [
      "g3",
      "f3"
+    ],
+    "claims": [
+     "move:g5h4:idea:route:f3,g3"
     ]
    }
   ]
@@ -12905,7 +13786,7 @@
    },
    {
     "kind": "refuted",
-    "text": "Kh6 looks natural, but Bc6 meets it. After …Kh6 Bc6, their bishop can come to d7 and hit your pawn on g4. But your …Kg5 stops it. Kh6 throws the win: the game is level after it.",
+    "text": "Kh6 looks natural, but Bc6 meets it. After Bc6, their bishop can come to d7 and hit your pawn on g4. But your …Kg5 stops it. Kh6 throws the win: the game is level after it.",
     "claims": [],
     "computer": "temptingOnBoard"
    },
@@ -13035,7 +13916,11 @@
     "computer": "pictureVerdict",
     "from": "position",
     "text": "You're winning — your passed pawn on h3 is two steps from queening. And …Kh4 goes straight for it.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "picture-verdict:b:works-now:",
+     "standing:decisive+"
+    ]
    },
    {
     "kind": "route",
@@ -13045,6 +13930,9 @@
     "squares": [
      "g3",
      "f3"
+    ],
+    "claims": [
+     "move:g5h4:idea:route:f3,g3"
     ]
    }
   ]
@@ -13288,14 +14176,21 @@
     "computer": "pictureVerdict",
     "from": "position",
     "text": "You're winning — your passed pawn on h3 is two steps from queening. And the direct way works now: …f3.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "picture-verdict:b:works-now:",
+     "standing:decisive+"
+    ]
    },
    {
     "kind": "fundamental",
     "computer": "computeMoveFundamentals",
     "from": "bestMove",
     "text": "You go f3, which pushes your passed pawn — passed pawns must be pushed.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:f4f3:idea:passed-pawn:"
+    ]
    }
   ]
  },
@@ -13537,19 +14432,26 @@
     "computer": "pictureVerdict",
     "from": "position",
     "text": "You're winning — your passed pawn on h3 is two steps from queening. And the direct way works now: …f3.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "picture-verdict:b:works-now:",
+     "standing:decisive+"
+    ]
    },
    {
     "kind": "fundamental",
     "computer": "computeMoveFundamentals",
     "from": "bestMove",
     "text": "You go f3, which pushes your passed pawn — passed pawns must be pushed.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:f4f3:idea:passed-pawn:"
+    ]
    }
   ]
  },
  "alone:0CegO#11-Kg3": {
-  "read": "You're winning — your passed pawn on f3 is two steps from queening. And …Kg3 goes straight for it. Your passed pawn on f3 can't advance yet: their king on g1 covers f2. For now it needs guarding, not pushing. You go Kg3, which marches up — in the endgame it stops hiding and becomes a fighting piece. King to g3, not h5 — there their bishop checks and wins time. Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.",
+  "read": "You're winning — your passed pawn on f3 is two steps from queening. And …Kg3 goes straight for it. Your passed pawn on f3 can't advance yet: their king on g1 covers f2. For now it needs guarding, not pushing. You go Kg3, which marches up — in the endgame it stops hiding and becomes a fighting piece. King to g3, not h5 — there their bishop checks and wins time. Your king steps up to g3: with the queens off it is no longer a target but a fighting piece, and from the middle it reaches either wing. Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.",
   "facts": [
    {
     "kind": "standing",
@@ -13787,6 +14689,7 @@
    "plan-aim:passer:f",
    "move:h4g3:idea:king-activity:",
    "fact:depthClauses:e8,g3,h5",
+   "king-to-centre",
    "habit:quiet-shot"
   ],
   "kept": [
@@ -13795,7 +14698,11 @@
     "computer": "pictureVerdict",
     "from": "position",
     "text": "You're winning — your passed pawn on f3 is two steps from queening. And …Kg3 goes straight for it.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "picture-verdict:b:works-now:",
+     "standing:decisive+"
+    ]
    },
    {
     "kind": "structure-plan",
@@ -13806,6 +14713,10 @@
      "f3",
      "f2",
      "g1"
+    ],
+    "claims": [
+     "student-passer-f",
+     "plan-aim:passer:f"
     ]
    },
    {
@@ -13813,7 +14724,10 @@
     "computer": "buildReviewMoveTeachingFact",
     "from": "bestMove",
     "text": "You go Kg3, which marches up — in the endgame it stops hiding and becomes a fighting piece.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:h4g3:idea:king-activity:"
+    ]
    },
    {
     "kind": "king-read",
@@ -13824,12 +14738,25 @@
      "g3",
      "h5",
      "e8"
+    ],
+    "claims": []
+   },
+   {
+    "kind": "judgement",
+    "computer": "studentMoveStructure",
+    "from": "bestMove",
+    "text": "Your king steps up to g3: with the queens off it is no longer a target but a fighting piece, and from the middle it reaches either wing.",
+    "squares": [
+     "g3"
+    ],
+    "claims": [
+     "king-to-centre"
     ]
    }
   ]
  },
  "told:0CegO#11-Kg3": {
-  "read": "You're winning — your passed pawn on f3 is two steps from queening. And …Kg3 goes straight for it. Your passed pawn on f3 can't advance yet: their king on g1 covers f2. For now it needs guarding, not pushing. You go Kg3, which marches up — in the endgame it stops hiding and becomes a fighting piece. King to g3, not h5 — there their bishop checks and wins time.",
+  "read": "You're winning — your passed pawn on f3 is two steps from queening. And …Kg3 goes straight for it. Your passed pawn on f3 can't advance yet: their king on g1 covers f2. For now it needs guarding, not pushing. You go Kg3, which marches up — in the endgame it stops hiding and becomes a fighting piece. King to g3, not h5 — there their bishop checks and wins time. Your king steps up to g3: with the queens off it is no longer a target but a fighting piece, and from the middle it reaches either wing.",
   "facts": [
    {
     "kind": "standing",
@@ -14066,7 +14993,8 @@
    "student-passer-f",
    "plan-aim:passer:f",
    "move:h4g3:idea:king-activity:",
-   "fact:depthClauses:e8,g3,h5"
+   "fact:depthClauses:e8,g3,h5",
+   "king-to-centre"
   ],
   "kept": [
    {
@@ -14074,7 +15002,11 @@
     "computer": "pictureVerdict",
     "from": "position",
     "text": "You're winning — your passed pawn on f3 is two steps from queening. And …Kg3 goes straight for it.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "picture-verdict:b:works-now:",
+     "standing:decisive+"
+    ]
    },
    {
     "kind": "structure-plan",
@@ -14085,6 +15017,10 @@
      "f3",
      "f2",
      "g1"
+    ],
+    "claims": [
+     "student-passer-f",
+     "plan-aim:passer:f"
     ]
    },
    {
@@ -14092,7 +15028,10 @@
     "computer": "buildReviewMoveTeachingFact",
     "from": "bestMove",
     "text": "You go Kg3, which marches up — in the endgame it stops hiding and becomes a fighting piece.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:h4g3:idea:king-activity:"
+    ]
    },
    {
     "kind": "king-read",
@@ -14103,12 +15042,25 @@
      "g3",
      "h5",
      "e8"
+    ],
+    "claims": []
+   },
+   {
+    "kind": "judgement",
+    "computer": "studentMoveStructure",
+    "from": "bestMove",
+    "text": "Your king steps up to g3: with the queens off it is no longer a target but a fighting piece, and from the middle it reaches either wing.",
+    "squares": [
+     "g3"
+    ],
+    "claims": [
+     "king-to-centre"
     ]
    }
   ]
  },
  "alone:0IsE8#1-Rxf5": {
-  "read": "You're winning. You go Rxf5, which threatens Nf3+ — forks the king and queen on d2. You go Rxf5, which is the only move that holds here — the next best, Kf7, gives up more than a rook's worth. Their back rank is thin: the king on g1 has no flight square, and only their rook on d1 stops Rf1 from being mate. Your rook on f5 is poisoned. exf5 runs into Nf3+ Kh1 Qh2, and it's mate. Their king on g1 faces three of your pieces, and one more is a move away. Two of theirs defend it: their queen and rook. Their queen starts checking with Qd8+. Your king answers with …Kf7 and keeps walking — after 4 checks it is out on h5. Then they play Qxe5. Kf7? Then they answer Nxg3 — they win a queen. Habit for positions like this: CCT — every check, every capture, every threat, in that order, before you consider a quiet move.",
+  "read": "You're winning. Your rook on f5 is poisoned. exf5 runs into Nf3+ Kh1 Qh2, and it's mate. You go Rxf5, which threatens Nf3+ — forks the king and queen on d2. It also seizes the open f-file — a highway straight into their position. You go Rxf5, which is the only move that holds here — the next best, Kf7, gives up more than a rook's worth. Their back rank is thin: the king on g1 has no flight square, and only their rook on d1 stops Rf1 from being mate. Their king on g1 faces three of your pieces, and one more is a move away. Two of theirs defend it: their queen and rook. Their queen starts checking with Qd8+. Your king answers with …Kf7 and keeps walking — after 4 checks it is out on h5. Then they play Qxe5. Kf7? Then they answer Nxg3 — they win a queen. Habit for positions like this: CCT — every check, every capture, every threat, in that order, before you consider a quiet move.",
   "facts": [
    {
     "kind": "standing-bare",
@@ -14327,11 +15279,12 @@
   "said": [
    "move:f8f5:idea:eval:",
    "standing:decisive+",
+   "poisoned:f5",
    "move:f8f5:idea:threat:f3",
+   "move:f8f5:idea:file:",
    "move:f8f5:idea:choice:",
    "only:f8f5",
    "back-rank:g1:d1",
-   "poisoned:f5",
    "siege:g1:3v2",
    "king-attack:g1",
    "fact:defenderCheckRun:",
@@ -14344,15 +15297,35 @@
     "computer": "evalReading",
     "from": "bestMove",
     "text": "You're winning.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:f8f5:idea:eval:",
+     "standing:decisive+"
+    ]
+   },
+   {
+    "kind": "move-job",
+    "computer": "poisonedPiece",
+    "from": "bestMove",
+    "text": "Your rook on f5 is poisoned. exf5 runs into Nf3+ Kh1 Qh2, and it's mate.",
+    "squares": [
+     "f5"
+    ],
+    "claims": [
+     "poisoned:f5"
+    ]
    },
    {
     "kind": "aspect-threat",
     "computer": "moveAspects",
     "from": "bestMove",
-    "text": "You go Rxf5, which threatens Nf3+ — forks the king and queen on d2.",
+    "text": "You go Rxf5, which threatens Nf3+ — forks the king and queen on d2. It also seizes the open f-file — a highway straight into their position.",
     "squares": [
      "f3"
+    ],
+    "claims": [
+     "move:f8f5:idea:threat:f3",
+     "move:f8f5:idea:file:"
     ]
    },
    {
@@ -14360,7 +15333,11 @@
     "computer": "onlyMove",
     "from": "bestMove",
     "text": "You go Rxf5, which is the only move that holds here — the next best, Kf7, gives up more than a rook's worth.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:f8f5:idea:choice:",
+     "only:f8f5"
+    ]
    },
    {
     "kind": "king-read",
@@ -14372,15 +15349,9 @@
      "d1",
      "f5",
      "f1"
-    ]
-   },
-   {
-    "kind": "move-job",
-    "computer": "poisonedPiece",
-    "from": "bestMove",
-    "text": "Your rook on f5 is poisoned. exf5 runs into Nf3+ Kh1 Qh2, and it's mate.",
-    "squares": [
-     "f5"
+    ],
+    "claims": [
+     "back-rank:g1:d1"
     ]
    },
    {
@@ -14396,6 +15367,10 @@
      "e5",
      "d2",
      "d1"
+    ],
+    "claims": [
+     "siege:g1:3v2",
+     "king-attack:g1"
     ]
    },
    {
@@ -14403,7 +15378,8 @@
     "computer": "defenderCheckRun",
     "from": "bestMove",
     "text": "Their queen starts checking with Qd8+. Your king answers with …Kf7 and keeps walking — after 4 checks it is out on h5. Then they play Qxe5.",
-    "squares": []
+    "squares": [],
+    "claims": []
    },
    {
     "kind": "deliberation",
@@ -14413,12 +15389,15 @@
     "squares": [
      "f7",
      "g3"
+    ],
+    "claims": [
+     "tempting:e7f7"
     ]
    }
   ]
  },
  "told:0IsE8#1-Rxf5": {
-  "read": "You're winning. You go Rxf5, which threatens Nf3+ — forks the king and queen on d2. You go Rxf5, which is the only move that holds here — the next best, Kf7, gives up more than a rook's worth. Their back rank is thin: the king on g1 has no flight square, and only their rook on d1 stops Rf1 from being mate. Your rook on f5 is poisoned. exf5 runs into Nf3+ Kh1 Qh2, and it's mate. Their king on g1 faces three of your pieces, and one more is a move away. Two of theirs defend it: their queen and rook. Their queen starts checking with Qd8+. Your king answers with …Kf7 and keeps walking — after 4 checks it is out on h5. Then they play Qxe5. Kf7? Then they answer Nxg3 — they win a queen. Habit for positions like this: CCT — every check, every capture, every threat, in that order, before you consider a quiet move.",
+  "read": "You're winning. Your rook on f5 is poisoned. exf5 runs into Nf3+ Kh1 Qh2, and it's mate. You go Rxf5, which threatens Nf3+ — forks the king and queen on d2. It also seizes the open f-file — a highway straight into their position. You go Rxf5, which is the only move that holds here — the next best, Kf7, gives up more than a rook's worth. Their back rank is thin: the king on g1 has no flight square, and only their rook on d1 stops Rf1 from being mate. Their king on g1 faces three of your pieces, and one more is a move away. Two of theirs defend it: their queen and rook. Their queen starts checking with Qd8+. Your king answers with …Kf7 and keeps walking — after 4 checks it is out on h5. Then they play Qxe5. Kf7? Then they answer Nxg3 — they win a queen. Habit for positions like this: CCT — every check, every capture, every threat, in that order, before you consider a quiet move.",
   "facts": [
    {
     "kind": "standing-bare",
@@ -14637,11 +15616,12 @@
   "said": [
    "move:f8f5:idea:eval:",
    "standing:decisive+",
+   "poisoned:f5",
    "move:f8f5:idea:threat:f3",
+   "move:f8f5:idea:file:",
    "move:f8f5:idea:choice:",
    "only:f8f5",
    "back-rank:g1:d1",
-   "poisoned:f5",
    "siege:g1:3v2",
    "king-attack:g1",
    "fact:defenderCheckRun:",
@@ -14654,15 +15634,35 @@
     "computer": "evalReading",
     "from": "bestMove",
     "text": "You're winning.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:f8f5:idea:eval:",
+     "standing:decisive+"
+    ]
+   },
+   {
+    "kind": "move-job",
+    "computer": "poisonedPiece",
+    "from": "bestMove",
+    "text": "Your rook on f5 is poisoned. exf5 runs into Nf3+ Kh1 Qh2, and it's mate.",
+    "squares": [
+     "f5"
+    ],
+    "claims": [
+     "poisoned:f5"
+    ]
    },
    {
     "kind": "aspect-threat",
     "computer": "moveAspects",
     "from": "bestMove",
-    "text": "You go Rxf5, which threatens Nf3+ — forks the king and queen on d2.",
+    "text": "You go Rxf5, which threatens Nf3+ — forks the king and queen on d2. It also seizes the open f-file — a highway straight into their position.",
     "squares": [
      "f3"
+    ],
+    "claims": [
+     "move:f8f5:idea:threat:f3",
+     "move:f8f5:idea:file:"
     ]
    },
    {
@@ -14670,7 +15670,11 @@
     "computer": "onlyMove",
     "from": "bestMove",
     "text": "You go Rxf5, which is the only move that holds here — the next best, Kf7, gives up more than a rook's worth.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:f8f5:idea:choice:",
+     "only:f8f5"
+    ]
    },
    {
     "kind": "king-read",
@@ -14682,15 +15686,9 @@
      "d1",
      "f5",
      "f1"
-    ]
-   },
-   {
-    "kind": "move-job",
-    "computer": "poisonedPiece",
-    "from": "bestMove",
-    "text": "Your rook on f5 is poisoned. exf5 runs into Nf3+ Kh1 Qh2, and it's mate.",
-    "squares": [
-     "f5"
+    ],
+    "claims": [
+     "back-rank:g1:d1"
     ]
    },
    {
@@ -14706,6 +15704,10 @@
      "e5",
      "d2",
      "d1"
+    ],
+    "claims": [
+     "siege:g1:3v2",
+     "king-attack:g1"
     ]
    },
    {
@@ -14713,7 +15715,8 @@
     "computer": "defenderCheckRun",
     "from": "bestMove",
     "text": "Their queen starts checking with Qd8+. Your king answers with …Kf7 and keeps walking — after 4 checks it is out on h5. Then they play Qxe5.",
-    "squares": []
+    "squares": [],
+    "claims": []
    },
    {
     "kind": "deliberation",
@@ -14723,12 +15726,15 @@
     "squares": [
      "f7",
      "g3"
+    ],
+    "claims": [
+     "tempting:e7f7"
     ]
    }
   ]
  },
  "alone:0IsE8#3-Kf7": {
-  "read": "You're winning — you're up a piece. Kf7 is quiet, but it threatens …Nf3+, with mate to follow — they must answer that first. Their king on g1 has no luft. Only their rook on d1 guards the back rank — pull it away and Rf1 is mate. Taking your rook on f5 walks into mate. If exf5, then Nf3+ Kh1 Qh2 is mate. Three of your pieces aim at their king on g1, and one more is a move away. Only their rook defends it. Your b-pawn can still guard c5. They can never guard c4 the same way, so that square stays a hole for them. Their rook starts checking with Rd7+. Your king answers with …Kg6 and keeps walking — after 3 checks it is out on h5. Then they play Qxe5. You play Kf7: it is the only move that holds here — the next best, Ke6, gives up more than a rook's worth. King to f7, not e6 — there their queen checks and wins time. Ke6? Then they answer exf5+ and you play Kxf5 — you give up a rook for a pawn. Here's the plan: bring your knight to g5, an outpost no pawn can chase it from, and the h-pawn backs it up. The king to f7 allows a check — the rook to d7 — and you play it anyway: look one move past the scary reply and nothing follows for them. Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.",
+  "read": "You're winning — you're up a piece. Taking your rook on f5 walks into mate. If exf5, then Nf3+ Kh1 Qh2 is mate. Kf7 is quiet, but it threatens …Nf3+, with mate to follow — they must answer that first. Their king on g1 has no luft. Only their rook on d1 guards the back rank — pull it away and Rf1 is mate. Three of your pieces aim at their king on g1, and one more is a move away. Only their rook defends it. Your b-pawn can still guard c5. They can never guard c4 the same way, so that square stays a hole for them. Their rook starts checking with Rd7+. Your king answers with …Kg6 and keeps walking — after 3 checks it is out on h5. Then they play Qxe5. You play Kf7: it is the only move that holds here — the next best, Ke6, gives up more than a rook's worth. King to f7, not e6 — there their queen checks and wins time. Ke6? Then they answer exf5+ and you play Kxf5 — you give up a rook for a pawn. Here's the plan: bring your knight to g5, an outpost no pawn can chase it from, and the h-pawn backs it up. The king to f7 allows a check — the rook to d7 — and you play it anyway: look one move past the scary reply and nothing follows for them. Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.",
   "facts": [
    {
     "kind": "standing",
@@ -14999,9 +16005,9 @@
   ],
   "said": [
    "fact:standing:",
+   "poisoned:f5",
    "quiet-threat:f3",
    "back-rank:g1:d1",
-   "poisoned:f5",
    "siege:g1:3v1",
    "king-attack:g1",
    "fact:boardStructure:b7,c4,c5",
@@ -15020,7 +16026,20 @@
     "kind": "standing",
     "from": "position",
     "text": "You're winning — you're up a piece.",
-    "squares": []
+    "squares": [],
+    "claims": []
+   },
+   {
+    "kind": "move-job",
+    "computer": "poisonedPiece",
+    "from": "bestMove",
+    "text": "Taking your rook on f5 walks into mate. If exf5, then Nf3+ Kh1 Qh2 is mate.",
+    "squares": [
+     "f5"
+    ],
+    "claims": [
+     "poisoned:f5"
+    ]
    },
    {
     "kind": "aspect-threat",
@@ -15030,6 +16049,9 @@
     "squares": [
      "f7",
      "f3"
+    ],
+    "claims": [
+     "quiet-threat:f3"
     ]
    },
    {
@@ -15042,15 +16064,9 @@
      "d1",
      "f5",
      "f1"
-    ]
-   },
-   {
-    "kind": "move-job",
-    "computer": "poisonedPiece",
-    "from": "bestMove",
-    "text": "Taking your rook on f5 walks into mate. If exf5, then Nf3+ Kh1 Qh2 is mate.",
-    "squares": [
-     "f5"
+    ],
+    "claims": [
+     "back-rank:g1:d1"
     ]
    },
    {
@@ -15065,6 +16081,10 @@
      "c4",
      "e5",
      "d1"
+    ],
+    "claims": [
+     "siege:g1:3v1",
+     "king-attack:g1"
     ]
    },
    {
@@ -15076,21 +16096,27 @@
      "b7",
      "c5",
      "c4"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "technique",
     "computer": "defenderCheckRun",
     "from": "bestMove",
     "text": "Their rook starts checking with Rd7+. Your king answers with …Kg6 and keeps walking — after 3 checks it is out on h5. Then they play Qxe5.",
-    "squares": []
+    "squares": [],
+    "claims": []
    },
    {
     "kind": "key-moment",
     "computer": "onlyMove",
     "from": "bestMove",
     "text": "You play Kf7: it is the only move that holds here — the next best, Ke6, gives up more than a rook's worth.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:e7f7:idea:choice:",
+     "only:e7f7"
+    ]
    },
    {
     "kind": "king-read",
@@ -15101,7 +16127,8 @@
      "f7",
      "e6",
      "e8"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "deliberation",
@@ -15110,6 +16137,10 @@
     "text": "Ke6? Then they answer exf5+ and you play Kxf5 — you give up a rook for a pawn.",
     "squares": [
      "f5"
+    ],
+    "claims": [
+     "rule-out:f5",
+     "tempting:e7e6"
     ]
    },
    {
@@ -15121,14 +16152,16 @@
      "e5",
      "f7",
      "g5"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "speedrun-read",
     "computer": "depthClauses",
     "from": "position",
     "text": "The king to f7 allows a check — the rook to d7 — and you play it anyway: look one move past the scary reply and nothing follows for them.",
-    "squares": []
+    "squares": [],
+    "claims": []
    }
   ]
  },
@@ -15419,7 +16452,8 @@
     "kind": "standing",
     "from": "position",
     "text": "You're winning — you're up a piece.",
-    "squares": []
+    "squares": [],
+    "claims": []
    },
    {
     "kind": "aspect-threat",
@@ -15429,6 +16463,9 @@
     "squares": [
      "f7",
      "f3"
+    ],
+    "claims": [
+     "quiet-threat:f3"
     ]
    },
    {
@@ -15436,7 +16473,11 @@
     "computer": "onlyMove",
     "from": "bestMove",
     "text": "You play Kf7: it is the only move that holds here — the next best, Ke6, gives up more than a rook's worth.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:e7f7:idea:choice:",
+     "only:e7f7"
+    ]
    },
    {
     "kind": "king-read",
@@ -15447,7 +16488,8 @@
      "f7",
      "e6",
      "e8"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "deliberation",
@@ -15456,6 +16498,10 @@
     "text": "Ke6? Then they answer exf5+ and you play Kxf5 — you give up a rook for a pawn.",
     "squares": [
      "f5"
+    ],
+    "claims": [
+     "rule-out:f5",
+     "tempting:e7e6"
     ]
    },
    {
@@ -15467,19 +16513,21 @@
      "e5",
      "f7",
      "g5"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "speedrun-read",
     "computer": "depthClauses",
     "from": "position",
     "text": "The king to f7 allows a check — the rook to d7 — and you play it anyway: look one move past the scary reply and nothing follows for them.",
-    "squares": []
+    "squares": [],
+    "claims": []
    }
   ]
  },
  "alone:0IsE8#5-Kg6": {
-  "read": "You're winning — you're up a piece, three of your pieces bear on their king against one defender. Nxd7 is tempting, but Qxd7+ takes the sting out of it. Qxd7+ is a fork: it hits your king and your rook. Nxd7 throws the win: the game is level after it. Kg6 is quiet, but it threatens …Rf1#, with mate to follow — they must answer that first. You play Kg6: it threatens Rf1# — delivers checkmate. Their king on g1 faces three of your pieces, and one more is a move away. Nothing of theirs defends it. Their queen starts checking with Qe8+. After 2 checks, your king walks out to h5 and the checks run out. Then they play Qxe5. Ke6? Then they answer Qe7# — and it's mate. Nxd7? Then they play Qxd7+, you answer Kf8 and they play Qxf5+ — they win a knight back. Your b-pawn can still guard c5. They can never guard c4 the same way, so that square stays a hole for them. The king to g6 allows a check — the queen to e8 — and you play it anyway: look one move past the scary reply and nothing follows for them. Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.",
+  "read": "You're winning — you're up a piece, three of your pieces bear on their king against one defender. Nxd7 is tempting, but Qxd7+ takes the sting out of it. Qxd7+ is a fork: it hits your king and your rook. Nxd7 throws the win: the game is level after it. Kg6 is quiet, but it threatens …Rf1#, with mate to follow — they must answer that first. You play Kg6: it threatens Rf1# — delivers checkmate. It also adds one guard to your rook on f5, which their e-pawn attacks, and gets your king out of the check from their rook. Their passed pawn on e4 is held: your knight on e5 stands in front of it, and it cannot move while the knight stays. Their king on g1 faces three of your pieces, and one more is a move away. Nothing of theirs defends it. Their queen starts checking with Qe8+. After 2 checks, your king walks out to h5 and the checks run out. Then they play Qxe5. Ke6? Then they answer Qe7# — and it's mate. Nxd7? Then they play Qxd7+, you answer Kf8 and they play Qxf5+ — they win a knight back. Your b-pawn can still guard c5. They can never guard c4 the same way, so that square stays a hole for them. The king to g6 allows a check — the queen to e8 — and you play it anyway: look one move past the scary reply and nothing follows for them. Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.",
   "facts": [
    {
     "kind": "standing",
@@ -15772,6 +16820,8 @@
    "fact:temptingOnBoard:d7,e5",
    "quiet-threat:f1",
    "move:f7g6:idea:mate:f1",
+   "move:f7g6:idea:guard:d7,e4,f5",
+   "opponent-passer-e",
    "siege:g1:3v0",
    "king-attack:g1",
    "fact:defenderCheckRun:",
@@ -15788,7 +16838,8 @@
     "kind": "standing",
     "from": "position",
     "text": "You're winning — you're up a piece, three of your pieces bear on their king against one defender.",
-    "squares": []
+    "squares": [],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -15798,7 +16849,8 @@
     "squares": [
      "e5",
      "d7"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "aspect-threat",
@@ -15808,15 +16860,37 @@
     "squares": [
      "g6",
      "f1"
+    ],
+    "claims": [
+     "quiet-threat:f1"
     ]
    },
    {
     "kind": "aspect-threat",
     "computer": "moveAspects",
     "from": "bestMove",
-    "text": "You play Kg6: it threatens Rf1# — delivers checkmate.",
+    "text": "You play Kg6: it threatens Rf1# — delivers checkmate. It also adds one guard to your rook on f5, which their e-pawn attacks, and gets your king out of the check from their rook.",
     "squares": [
-     "f1"
+     "f1",
+     "f5",
+     "e4",
+     "d7"
+    ],
+    "claims": [
+     "move:f7g6:idea:mate:f1",
+     "move:f7g6:idea:guard:d7,e4,f5"
+    ]
+   },
+   {
+    "kind": "structure-plan",
+    "computer": "readPosition",
+    "from": "position",
+    "text": "Their passed pawn on e4 is held: your knight on e5 stands in front of it, and it cannot move while the knight stays.",
+    "squares": [
+     "e4"
+    ],
+    "claims": [
+     "opponent-passer-e"
     ]
    },
    {
@@ -15830,6 +16904,10 @@
      "f5",
      "c4",
      "e5"
+    ],
+    "claims": [
+     "siege:g1:3v0",
+     "king-attack:g1"
     ]
    },
    {
@@ -15837,7 +16915,8 @@
     "computer": "defenderCheckRun",
     "from": "bestMove",
     "text": "Their queen starts checking with Qe8+. After 2 checks, your king walks out to h5 and the checks run out. Then they play Qxe5.",
-    "squares": []
+    "squares": [],
+    "claims": []
    },
    {
     "kind": "deliberation",
@@ -15846,6 +16925,10 @@
     "text": "Ke6? Then they answer Qe7# — and it's mate.",
     "squares": [
      "e7"
+    ],
+    "claims": [
+     "rule-out:mate:e7",
+     "tempting:f7e6"
     ]
    },
    {
@@ -15855,6 +16938,10 @@
     "text": "Nxd7? Then they play Qxd7+, you answer Kf8 and they play Qxf5+ — they win a knight back.",
     "squares": [
      "f5"
+    ],
+    "claims": [
+     "rule-out:f5",
+     "tempting:e5d7"
     ]
    },
    {
@@ -15866,19 +16953,21 @@
      "b7",
      "c5",
      "c4"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "speedrun-read",
     "computer": "depthClauses",
     "from": "position",
     "text": "The king to g6 allows a check — the queen to e8 — and you play it anyway: look one move past the scary reply and nothing follows for them.",
-    "squares": []
+    "squares": [],
+    "claims": []
    }
   ]
  },
  "told:0IsE8#5-Kg6": {
-  "read": "You're winning — you're up a piece, three of your pieces bear on their king against one defender. Nxd7 is tempting, but Qxd7+ takes the sting out of it. Qxd7+ is a fork: it hits your king and your rook. Nxd7 throws the win: the game is level after it. Kg6 is quiet, but it threatens …Rf1#, with mate to follow — they must answer that first. You play Kg6: it threatens Rf1# — delivers checkmate. Ke6? Then they answer Qe7# — and it's mate. Your b-pawn can still guard c5. They can never guard c4 the same way, so that square stays a hole for them. There is something to collect, but your rook on f5 is loose and under fire — secure it first. The capture will still be there.",
+  "read": "You're winning — you're up a piece, three of your pieces bear on their king against one defender. Nxd7 is tempting, but Qxd7+ takes the sting out of it. Qxd7+ is a fork: it hits your king and your rook. Nxd7 throws the win: the game is level after it. Kg6 is quiet, but it threatens …Rf1#, with mate to follow — they must answer that first. You play Kg6: it threatens Rf1# — delivers checkmate. It also adds one guard to your rook on f5, which their e-pawn attacks, and gets your king out of the check from their rook. Their passed pawn on e4 is held: your knight on e5 stands in front of it, and it cannot move while the knight stays. Ke6? Then they answer Qe7# — and it's mate. Your b-pawn can still guard c5. They can never guard c4 the same way, so that square stays a hole for them.",
   "facts": [
    {
     "kind": "standing",
@@ -16171,17 +17260,19 @@
    "fact:temptingOnBoard:d7,e5",
    "quiet-threat:f1",
    "move:f7g6:idea:mate:f1",
+   "move:f7g6:idea:guard:d7,e4,f5",
+   "opponent-passer-e",
    "rule-out:mate:e7",
    "tempting:f7e6",
-   "fact:boardStructure:b7,c4,c5",
-   "fact:depthClauses:f5"
+   "fact:boardStructure:b7,c4,c5"
   ],
   "kept": [
    {
     "kind": "standing",
     "from": "position",
     "text": "You're winning — you're up a piece, three of your pieces bear on their king against one defender.",
-    "squares": []
+    "squares": [],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -16191,7 +17282,8 @@
     "squares": [
      "e5",
      "d7"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "aspect-threat",
@@ -16201,15 +17293,37 @@
     "squares": [
      "g6",
      "f1"
+    ],
+    "claims": [
+     "quiet-threat:f1"
     ]
    },
    {
     "kind": "aspect-threat",
     "computer": "moveAspects",
     "from": "bestMove",
-    "text": "You play Kg6: it threatens Rf1# — delivers checkmate.",
+    "text": "You play Kg6: it threatens Rf1# — delivers checkmate. It also adds one guard to your rook on f5, which their e-pawn attacks, and gets your king out of the check from their rook.",
     "squares": [
-     "f1"
+     "f1",
+     "f5",
+     "e4",
+     "d7"
+    ],
+    "claims": [
+     "move:f7g6:idea:mate:f1",
+     "move:f7g6:idea:guard:d7,e4,f5"
+    ]
+   },
+   {
+    "kind": "structure-plan",
+    "computer": "readPosition",
+    "from": "position",
+    "text": "Their passed pawn on e4 is held: your knight on e5 stands in front of it, and it cannot move while the knight stays.",
+    "squares": [
+     "e4"
+    ],
+    "claims": [
+     "opponent-passer-e"
     ]
    },
    {
@@ -16219,6 +17333,10 @@
     "text": "Ke6? Then they answer Qe7# — and it's mate.",
     "squares": [
      "e7"
+    ],
+    "claims": [
+     "rule-out:mate:e7",
+     "tempting:f7e6"
     ]
    },
    {
@@ -16230,16 +17348,8 @@
      "b7",
      "c5",
      "c4"
-    ]
-   },
-   {
-    "kind": "speedrun-read",
-    "computer": "depthClauses",
-    "from": "position",
-    "text": "There is something to collect, but your rook on f5 is loose and under fire — secure it first. The capture will still be there.",
-    "squares": [
-     "f5"
-    ]
+    ],
+    "claims": []
    }
   ]
  },
@@ -16490,7 +17600,11 @@
     "computer": "pictureVerdict",
     "from": "position",
     "text": "You're winning — their isolated pawn on f5 is attacked once and nothing guards it. And …Kh5 goes straight for it.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "picture-verdict:b:works-now:",
+     "standing:decisive+"
+    ]
    },
    {
     "kind": "structure-plan",
@@ -16501,7 +17615,8 @@
      "b7",
      "c5",
      "c4"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "aspect-threat",
@@ -16511,6 +17626,9 @@
     "squares": [
      "h5",
      "f3"
+    ],
+    "claims": [
+     "quiet-threat:f3"
     ]
    },
    {
@@ -16523,6 +17641,10 @@
      "g3",
      "c4",
      "e5"
+    ],
+    "claims": [
+     "siege:g1:2v0",
+     "king-attack:g1"
     ]
    },
    {
@@ -16530,14 +17652,16 @@
     "computer": "defenderCheckRun",
     "from": "bestMove",
     "text": "Their queen checks with Qe8+, and you block with …Bf7. Then they play Qxe5.",
-    "squares": []
+    "squares": [],
+    "claims": []
    },
    {
     "kind": "speedrun-read",
     "computer": "depthClauses",
     "from": "position",
     "text": "The king to h5 allows a check — the queen to e8 — and you play it anyway: look one move past the scary reply and nothing follows for them.",
-    "squares": []
+    "squares": [],
+    "claims": []
    }
   ]
  },
@@ -16781,12 +17905,16 @@
     "computer": "pictureVerdict",
     "from": "position",
     "text": "You're winning — their isolated pawn on f5 is attacked once and nothing guards it. And …Kh5 goes straight for it.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "picture-verdict:b:works-now:",
+     "standing:decisive+"
+    ]
    }
   ]
  },
  "alone:0IsE8#9-Bf7": {
-  "read": "You're winning, and the direct way works now: …Bf7. Your b-pawn can still guard c5. They can never guard c4 the same way, so that square stays a hole for them. Here's the plan: bring your knight to g5, an outpost no pawn can chase it from, and the h-pawn backs it up. Bf7 is quiet, but it threatens …Qe1+, with mate to follow — they must answer that first. Their king on g1 faces one of your pieces, and two more are a move away. Nothing of theirs defends it. Their queen is two moves or more from helping. Count the attackers and defenders on their queen on e8: 1 attacker to 0 defenders — it's outnumbered, so it has to move, and that costs them the tempo. Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.",
+  "read": "You're winning, and the direct way works now: …Bf7. Your b-pawn can still guard c5. They can never guard c4 the same way, so that square stays a hole for them. Here's the plan: bring your knight to g5, an outpost no pawn can chase it from, and the h-pawn backs it up. You go Bf7, which hits their queen on e8, and nothing guards it. Count the attackers and defenders on their queen on e8: 1 attacker to 0 defenders — it's outnumbered, so it has to move, and that costs them the tempo. Bf7 is quiet, but it threatens …Qe1+, with mate to follow — they must answer that first. Their king on g1 faces one of your pieces, and two more are a move away. Nothing of theirs defends it. Their queen is two moves or more from helping. Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.",
   "facts": [
    {
     "kind": "standing-bare",
@@ -17102,11 +18230,12 @@
    "standing:decisive+",
    "fact:boardStructure:b7,c4,c5",
    "fact:boardPlanFacts:e5,f7,g5",
+   "move:c4f7:idea:pressure:e8",
+   "count:4Q3/1ppR1b2/p6p/P3nP1k/1P6/2P3q1/6B1/6K1",
+   "idea:tempo:e8",
    "quiet-threat:e1",
    "siege:g1:1v0",
    "king-attack:g1",
-   "count:4Q3/1ppR1b2/p6p/P3nP1k/1P6/2P3q1/6B1/6K1",
-   "idea:tempo:e8",
    "habit:quiet-shot"
   ],
   "kept": [
@@ -17115,7 +18244,11 @@
     "computer": "pictureVerdict",
     "from": "position",
     "text": "You're winning, and the direct way works now: …Bf7.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "picture-verdict:b:works-now:",
+     "standing:decisive+"
+    ]
    },
    {
     "kind": "structure-plan",
@@ -17126,7 +18259,8 @@
      "b7",
      "c5",
      "c4"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "structure-plan",
@@ -17137,6 +18271,32 @@
      "e5",
      "f7",
      "g5"
+    ],
+    "claims": []
+   },
+   {
+    "kind": "board-teacher",
+    "computer": "buildReviewMoveTeachingFact",
+    "from": "bestMove",
+    "text": "You go Bf7, which hits their queen on e8, and nothing guards it.",
+    "squares": [
+     "e8"
+    ],
+    "claims": [
+     "move:c4f7:idea:pressure:e8"
+    ]
+   },
+   {
+    "kind": "count",
+    "computer": "attackerDefenderCount",
+    "from": "bestMove",
+    "text": "Count the attackers and defenders on their queen on e8: 1 attacker to 0 defenders — it's outnumbered, so it has to move, and that costs them the tempo.",
+    "squares": [
+     "e8"
+    ],
+    "claims": [
+     "count:4Q3/1ppR1b2/p6p/P3nP1k/1P6/2P3q1/6B1/6K1",
+     "idea:tempo:e8"
     ]
    },
    {
@@ -17147,6 +18307,9 @@
     "squares": [
      "f7",
      "e1"
+    ],
+    "claims": [
+     "quiet-threat:e1"
     ]
    },
    {
@@ -17160,21 +18323,16 @@
      "e5",
      "f7",
      "e8"
-    ]
-   },
-   {
-    "kind": "count",
-    "computer": "attackerDefenderCount",
-    "from": "bestMove",
-    "text": "Count the attackers and defenders on their queen on e8: 1 attacker to 0 defenders — it's outnumbered, so it has to move, and that costs them the tempo.",
-    "squares": [
-     "e8"
+    ],
+    "claims": [
+     "siege:g1:1v0",
+     "king-attack:g1"
     ]
    }
   ]
  },
  "told:0IsE8#9-Bf7": {
-  "read": "You're winning, and the direct way works now: …Bf7. Bf7 is quiet, but it threatens …Qe1+, with mate to follow — they must answer that first.",
+  "read": "You're winning, and the direct way works now: …Bf7. You go Bf7, which hits their queen on e8, and nothing guards it. Count the attackers and defenders on their queen on e8: 1 attacker to 0 defenders — it's outnumbered, so it has to move, and that costs them the tempo. Bf7 is quiet, but it threatens …Qe1+, with mate to follow — they must answer that first.",
   "facts": [
    {
     "kind": "standing-bare",
@@ -17488,6 +18646,9 @@
   "said": [
    "picture-verdict:b:works-now:",
    "standing:decisive+",
+   "move:c4f7:idea:pressure:e8",
+   "count:4Q3/1ppR1b2/p6p/P3nP1k/1P6/2P3q1/6B1/6K1",
+   "idea:tempo:e8",
    "quiet-threat:e1"
   ],
   "kept": [
@@ -17496,7 +18657,36 @@
     "computer": "pictureVerdict",
     "from": "position",
     "text": "You're winning, and the direct way works now: …Bf7.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "picture-verdict:b:works-now:",
+     "standing:decisive+"
+    ]
+   },
+   {
+    "kind": "board-teacher",
+    "computer": "buildReviewMoveTeachingFact",
+    "from": "bestMove",
+    "text": "You go Bf7, which hits their queen on e8, and nothing guards it.",
+    "squares": [
+     "e8"
+    ],
+    "claims": [
+     "move:c4f7:idea:pressure:e8"
+    ]
+   },
+   {
+    "kind": "count",
+    "computer": "attackerDefenderCount",
+    "from": "bestMove",
+    "text": "Count the attackers and defenders on their queen on e8: 1 attacker to 0 defenders — it's outnumbered, so it has to move, and that costs them the tempo.",
+    "squares": [
+     "e8"
+    ],
+    "claims": [
+     "count:4Q3/1ppR1b2/p6p/P3nP1k/1P6/2P3q1/6B1/6K1",
+     "idea:tempo:e8"
+    ]
    },
    {
     "kind": "aspect-threat",
@@ -17506,12 +18696,15 @@
     "squares": [
      "f7",
      "e1"
+    ],
+    "claims": [
+     "quiet-threat:e1"
     ]
    }
   ]
  },
  "alone:0IsE8#11-Qxe5": {
-  "read": "You're winning, and the direct way works now: …Qxe5. Qg4 and Qg5 both fail the same way: Rxf7 meets either. Kg4, going straight at the pawn on f5, fails: they play Rd4+ and Rxe5+ four moves later, and, two moves later, they play Re4#. …Qh2+ walks into the same mate on e4. b6 is the obvious try, but it doesn't hold up: they play Qxg3 and Rxd5 a move later, and, a move later, they play Bf3#. …Kg5 walks into the same mate on f3. You're on top, but watch the counterpunch: their queen on e5 attacks your queen on g3, and nothing defends it — and you can take the attacker without losing material. …Qxe5 takes the b5 break away from them. The pawn would just be lost there now. Their bishop starts checking with Bf3+. Your king answers with …Kh4 and keeps walking — after 3 checks it is out on f3. Then they play Rg2. Habit for positions like this: CCT — every check, every capture, every threat, in that order, before you consider a quiet move.",
+  "read": "You're winning, and the direct way works now: …Qxe5. Qg4 and Qg5 both fail the same way: Rxf7 meets either. Kg4, going straight at the pawn on f5, fails: they play Rd4+ and Rxe5+ four moves later, and, two moves later, they play Re4#. …Qh2+ walks into the same mate on e4. b6 is the obvious try, but it doesn't hold up: they play Qxg3 and Rxd5 a move later, and, a move later, they play Bf3#. …Kg5 walks into the same mate on f3. You're on top, but watch the counterpunch: their queen on e5 attacks your queen on g3, and nothing defends it — and you can take the attacker without losing material. …Qxe5 takes the b5 break away from them. The pawn would just be lost there now. You go Qxe5, which hits their pawn on c3, and nothing guards it. It also seizes the open e-file. And it takes aim at the center, hitting d4, keeping the rook on d7 off it, and also keeping the rook off d5 and keeping the bishop off e4. Their bishop starts checking with Bf3+. Your king answers with …Kh4 and keeps walking — after 3 checks it is out on f3. Then they play Rg2. Habit for positions like this: CCT — every check, every capture, every threat, in that order, before you consider a quiet move.",
   "facts": [
    {
     "kind": "standing-bare",
@@ -17794,6 +18987,10 @@
    "loose:g3:71",
    "break-stop:b4b5",
    "stops-break:b5",
+   "move:g3e5:idea:pressure:c3",
+   "move:g3e5:idea:file:",
+   "move:g3e5:idea:center:d4,d5,e4",
+   "phrase:center",
    "fact:defenderCheckRun:",
    "habit:forcing-scan"
   ],
@@ -17808,6 +19005,10 @@
      "g5",
      "g4",
      "h5"
+    ],
+    "claims": [
+     "picture-verdict:b:works-now:g3g5,g3g4,h5g4,h5g5",
+     "standing:decisive+"
     ]
    },
    {
@@ -17820,7 +19021,8 @@
      "g4",
      "f7",
      "g5"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -17832,7 +19034,8 @@
      "g4",
      "g3",
      "h2"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -17844,7 +19047,8 @@
      "b6",
      "h5",
      "g5"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "must-defend",
@@ -17854,6 +19058,9 @@
     "squares": [
      "g3",
      "e5"
+    ],
+    "claims": [
+     "loose:g3:71"
     ]
    },
    {
@@ -17866,6 +19073,28 @@
      "e5",
      "b4",
      "b5"
+    ],
+    "claims": [
+     "break-stop:b4b5",
+     "stops-break:b5"
+    ]
+   },
+   {
+    "kind": "board-teacher",
+    "computer": "buildReviewMoveTeachingFact",
+    "from": "bestMove",
+    "text": "You go Qxe5, which hits their pawn on c3, and nothing guards it. It also seizes the open e-file. And it takes aim at the center, hitting d4, keeping the rook on d7 off it, and also keeping the rook off d5 and keeping the bishop off e4.",
+    "squares": [
+     "c3",
+     "d4",
+     "d5",
+     "e4"
+    ],
+    "claims": [
+     "move:g3e5:idea:pressure:c3",
+     "move:g3e5:idea:file:",
+     "move:g3e5:idea:center:d4,d5,e4",
+     "phrase:center"
     ]
    },
    {
@@ -17873,12 +19102,13 @@
     "computer": "defenderCheckRun",
     "from": "bestMove",
     "text": "Their bishop starts checking with Bf3+. Your king answers with …Kh4 and keeps walking — after 3 checks it is out on f3. Then they play Rg2.",
-    "squares": []
+    "squares": [],
+    "claims": []
    }
   ]
  },
  "told:0IsE8#11-Qxe5": {
-  "read": "You're winning, and the direct way works now: …Qxe5. Qg4 and Qg5 both fail the same way: Rxf7 meets either. Kg4, going straight at the pawn on f5, fails: they play Rd4+ and Rxe5+ four moves later, and, two moves later, they play Re4#. …Qh2+ walks into the same mate on e4. b6 is the obvious try, but it doesn't hold up: they play Qxg3 and Rxd5 a move later, and, a move later, they play Bf3#. …Kg5 walks into the same mate on f3. You're on top, but watch the counterpunch: their queen on e5 attacks your queen on g3, and nothing defends it — and you can take the attacker without losing material. …Qxe5 takes the b5 break away from them. The pawn would just be lost there now.",
+  "read": "You're winning, and the direct way works now: …Qxe5. Qg4 and Qg5 both fail the same way: Rxf7 meets either. Kg4, going straight at the pawn on f5, fails: they play Rd4+ and Rxe5+ four moves later, and, two moves later, they play Re4#. …Qh2+ walks into the same mate on e4. b6 is the obvious try, but it doesn't hold up: they play Qxg3 and Rxd5 a move later, and, a move later, they play Bf3#. …Kg5 walks into the same mate on f3. You're on top, but watch the counterpunch: their queen on e5 attacks your queen on g3, and nothing defends it — and you can take the attacker without losing material. …Qxe5 takes the b5 break away from them. The pawn would just be lost there now. You go Qxe5, which hits their pawn on c3, and nothing guards it. It also seizes the open e-file. And it takes aim at the center, hitting d4, keeping the rook on d7 off it, and also keeping the rook off d5 and keeping the bishop off e4.",
   "facts": [
    {
     "kind": "standing-bare",
@@ -18160,7 +19390,11 @@
    "fact:temptingOnBoard:b6,b7,g5,h5",
    "loose:g3:71",
    "break-stop:b4b5",
-   "stops-break:b5"
+   "stops-break:b5",
+   "move:g3e5:idea:pressure:c3",
+   "move:g3e5:idea:file:",
+   "move:g3e5:idea:center:d4,d5,e4",
+   "phrase:center"
   ],
   "kept": [
    {
@@ -18173,6 +19407,10 @@
      "g5",
      "g4",
      "h5"
+    ],
+    "claims": [
+     "picture-verdict:b:works-now:g3g5,g3g4,h5g4,h5g5",
+     "standing:decisive+"
     ]
    },
    {
@@ -18185,7 +19423,8 @@
      "g4",
      "f7",
      "g5"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -18197,7 +19436,8 @@
      "g4",
      "g3",
      "h2"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -18209,7 +19449,8 @@
      "b6",
      "h5",
      "g5"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "must-defend",
@@ -18219,6 +19460,9 @@
     "squares": [
      "g3",
      "e5"
+    ],
+    "claims": [
+     "loose:g3:71"
     ]
    },
    {
@@ -18231,12 +19475,34 @@
      "e5",
      "b4",
      "b5"
+    ],
+    "claims": [
+     "break-stop:b4b5",
+     "stops-break:b5"
+    ]
+   },
+   {
+    "kind": "board-teacher",
+    "computer": "buildReviewMoveTeachingFact",
+    "from": "bestMove",
+    "text": "You go Qxe5, which hits their pawn on c3, and nothing guards it. It also seizes the open e-file. And it takes aim at the center, hitting d4, keeping the rook on d7 off it, and also keeping the rook off d5 and keeping the bishop off e4.",
+    "squares": [
+     "c3",
+     "d4",
+     "d5",
+     "e4"
+    ],
+    "claims": [
+     "move:g3e5:idea:pressure:c3",
+     "move:g3e5:idea:file:",
+     "move:g3e5:idea:center:d4,d5,e4",
+     "phrase:center"
     ]
    }
   ]
  },
  "danya:underpromotion": {
-  "read": "You're clearly better — your passed pawn on c6 is two steps from queening. And the direct way works now: c7. Ka6 is the obvious try, but …Rc5 is the answer. In the endgame the king belongs nearer the centre than a6. After Ka6 your edge is gone. Ka7 and Kb7 both fail the same way: …Rb5 or …Rd4 meets either. Once your king takes on c7, only the kings are left: a draw. Kc7 looks natural, but …Rc5 meets it. Once your king takes on c6, only the kings are left: a draw. After Kc7 your edge is gone. You go c7, which pushes your passed pawn — passed pawns must be pushed. You go c7, which is the only move that holds here — the next best, Ka6, gives up about a piece's worth. Their rook starts checking with …Rd6+. Your king answers with Kb5 and keeps walking — after 4 checks it is out on c2. Then they play …Rd4. When the pawn on c7 promotes, make a rook, not a queen. A queen on c8 walks into Rc4+, and taking the rook with Qxc4 is stalemate. The rook does the same work without that trick. Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.",
+  "read": "You're clearly better — your passed pawn on c6 is two steps from queening. And the direct way works now: c7. Ka6 is the obvious try, but …Rc5 is the answer. In the endgame the king belongs nearer the centre than a6. After Ka6 your edge is gone. Ka7 and Kb7 both fail the same way: …Rb5 or …Rd4 meets either. Once your king takes on c7, only the kings are left: a draw. Kc7 looks natural, but …Rc5 meets it. Once your king takes on c6, only the kings are left: a draw. After Kc7 your edge is gone. You go c7, which pushes your passed pawn — passed pawns must be pushed. It also takes d8 away from their rook on d5. You go c7, which is the only move that holds here — the next best, Ka6, gives up about a piece's worth. Their rook starts checking with …Rd6+. Your king answers with Kb5 and keeps walking — after 4 checks it is out on c2. Then they play …Rd4. When the pawn on c7 promotes, make a rook, not a queen. A queen on c8 walks into Rc4+, and taking the rook with Qxc4 is stalemate. The rook does the same work without that trick. Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.",
   "facts": [
    {
     "kind": "standing",
@@ -18397,6 +19663,7 @@
    "fact:temptingOnBoard:a7,b5,b6,b7,c5,c7,d4",
    "fact:temptingOnBoard:b6,c5,c7",
    "move:c6c7:idea:passed-pawn:",
+   "move:c6c7:idea:prevent:d5,d8",
    "move:c6c7:idea:choice:",
    "only:c6c7",
    "fact:defenderCheckRun:c7,c8",
@@ -18414,6 +19681,10 @@
      "a7",
      "b7",
      "c7"
+    ],
+    "claims": [
+     "picture-verdict:w:works-now:b6a6,b6a7,b6b7,b6c7",
+     "standing:clearly+"
     ]
    },
    {
@@ -18425,7 +19696,8 @@
      "b6",
      "a6",
      "c5"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -18440,7 +19712,8 @@
      "c7",
      "b7",
      "d4"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -18451,21 +19724,33 @@
      "b6",
      "c7",
      "c5"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "fundamental",
     "computer": "computeMoveFundamentals",
     "from": "bestMove",
-    "text": "You go c7, which pushes your passed pawn — passed pawns must be pushed.",
-    "squares": []
+    "text": "You go c7, which pushes your passed pawn — passed pawns must be pushed. It also takes d8 away from their rook on d5.",
+    "squares": [
+     "d8",
+     "d5"
+    ],
+    "claims": [
+     "move:c6c7:idea:passed-pawn:",
+     "move:c6c7:idea:prevent:d5,d8"
+    ]
    },
    {
     "kind": "key-moment",
     "computer": "onlyMove",
     "from": "bestMove",
     "text": "You go c7, which is the only move that holds here — the next best, Ka6, gives up about a piece's worth.",
-    "squares": []
+    "squares": [],
+    "claims": [
+     "move:c6c7:idea:choice:",
+     "only:c6c7"
+    ]
    },
    {
     "kind": "technique",
@@ -18475,12 +19760,13 @@
     "squares": [
      "c7",
      "c8"
-    ]
+    ],
+    "claims": []
    }
   ]
  },
  "danya:gun": {
-  "read": "You're clearly better — you have the initiative. But breaking through is another matter. Qc3, Qc2 and Qc1 all fail. Nh4, Rfd1, Qc3 and Qc2 all fail the same way: …Rac8 or …Rfc8 meets each. The better move puts your rook on the open c-file. Qc1 is the obvious try, but …Nxb4 is the answer. Qc1 hands them a pawn in the line. After Qc1 your edge is gone. So the quiet Rac1 instead. On c1 the rook hits their knight on c6, which answers Qc1 with …Nxb4. Rac1 is quiet, but it threatens Bxc6 — they must answer that first. After Rac1, Rc2 and Rfc1, your rook on c1 and your rook on c2 form a battery on the file, bearing down on their knight on c6 — a battery stacks two pieces on the same line, multiplying their pressure down it. You go Rac1, which takes the open c-file, pressing their knight on c6. You go Rac1, sending the rook on to c3, by way of c2. You go Rac1, which joins your bishop against their knight on c6. Count the attackers and defenders on their knight on c6: 2 attackers to 1 defender — it's outnumbered, so it has to move, and that costs them the tempo. Rac1 and Ra2 both hold here, and what separates them is that your rook does more on c1, with 9 squares from there against 6 on a2.",
+  "read": "You're clearly better — you have the initiative. But breaking through is another matter. Qc3, Qc2 and Qc1 all fail. Nh4, Rfd1, Qc3 and Qc2 all fail the same way: …Rac8 or …Rfc8 meets each. The better move puts your rook on the open c-file. Qc1 is the obvious try, but …Nxb4 is the answer. Qc1 hands them a pawn in the line. After Qc1 your edge is gone. So the quiet Rac1 instead. On c1 the rook hits their knight on c6, which answers Qc1 with …Nxb4. Rac1 is quiet, but it threatens Bxc6 — they must answer that first. After Rac1, Rc2 and Rfc1, your rook on c1 and your rook on c2 form a battery on the file, bearing down on their knight on c6 — a battery stacks two pieces on the same line, multiplying their pressure down it. You go Rac1, which takes the open c-file, pressing their knight on c6. It also joins your bishop against their knight on c6. You go Rac1, sending the rook on to c3, by way of c2. With less space, they'll look to trade, and Rxc2 gets rid of your rook on c2. Keep pieces on and they stay cramped. Count the attackers and defenders on their knight on c6: 2 attackers to 1 defender — it's outnumbered, so it has to move, and that costs them the tempo. Rac1 and Ra2 both hold here, and what separates them is that your rook does more on c1, with 9 squares from there against 6 on a2. Your rook on c1 is safe there, since nothing of theirs can hit it, and it can swing to c2 next.",
   "facts": [
    {
     "kind": "standing",
@@ -18704,11 +19990,13 @@
    "quiet-threat:c6",
    "fact:conceptForBoard:c1,c2,c6",
    "move:a1c1:idea:file:",
-   "move:a1c1:idea:route:c2,c3",
    "move:a1c1:idea:threat:b5,c6",
+   "move:a1c1:idea:route:c2,c3",
+   "cramp-trade:c2",
    "count:r4rk1/p3nqp1/Ppn1p2p/1B1pPp2/1P1P1P2/5N2/3Q2PP/2R2RK1",
    "idea:tempo:c6",
-   "also-good:a1c1:a1a2"
+   "also-good:a1c1:a1a2",
+   "safe-route:c1"
   ],
   "kept": [
    {
@@ -18721,6 +20009,10 @@
      "c3",
      "c2",
      "c1"
+    ],
+    "claims": [
+     "picture-verdict:w:hard-to-finish:d2c3,d2c2,d2c1",
+     "standing:clearly+"
     ]
    },
    {
@@ -18737,7 +20029,8 @@
      "d2",
      "c3",
      "c2"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -18748,7 +20041,8 @@
      "d2",
      "c1",
      "b4"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "plan-now",
@@ -18761,6 +20055,9 @@
      "c6",
      "c2",
      "c3"
+    ],
+    "claims": [
+     "picture-plan:w:a1c1"
     ]
    },
    {
@@ -18771,6 +20068,9 @@
     "squares": [
      "c1",
      "c6"
+    ],
+    "claims": [
+     "quiet-threat:c6"
     ]
    },
    {
@@ -18782,14 +20082,22 @@
      "c1",
      "c2",
      "c6"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "fundamental",
     "computer": "computeMoveFundamentals",
     "from": "bestMove",
-    "text": "You go Rac1, which takes the open c-file, pressing their knight on c6.",
-    "squares": []
+    "text": "You go Rac1, which takes the open c-file, pressing their knight on c6. It also joins your bishop against their knight on c6.",
+    "squares": [
+     "c6",
+     "b5"
+    ],
+    "claims": [
+     "move:a1c1:idea:file:",
+     "move:a1c1:idea:threat:b5,c6"
+    ]
    },
    {
     "kind": "route",
@@ -18799,16 +20107,22 @@
     "squares": [
      "c2",
      "c3"
+    ],
+    "claims": [
+     "move:a1c1:idea:route:c2,c3"
     ]
    },
    {
-    "kind": "move-job",
-    "computer": "moveJob",
+    "kind": "trade",
+    "computer": "tradeRelievesCramp",
     "from": "bestMove",
-    "text": "You go Rac1, which joins your bishop against their knight on c6.",
+    "text": "With less space, they'll look to trade, and Rxc2 gets rid of your rook on c2. Keep pieces on and they stay cramped.",
     "squares": [
-     "c6",
-     "b5"
+     "c8",
+     "c2"
+    ],
+    "claims": [
+     "cramp-trade:c2"
     ]
    },
    {
@@ -18818,6 +20132,10 @@
     "text": "Count the attackers and defenders on their knight on c6: 2 attackers to 1 defender — it's outnumbered, so it has to move, and that costs them the tempo.",
     "squares": [
      "c6"
+    ],
+    "claims": [
+     "count:r4rk1/p3nqp1/Ppn1p2p/1B1pPp2/1P1P1P2/5N2/3Q2PP/2R2RK1",
+     "idea:tempo:c6"
     ]
    },
    {
@@ -18828,6 +20146,22 @@
     "squares": [
      "c1",
      "a2"
+    ],
+    "claims": [
+     "also-good:a1c1:a1a2"
+    ]
+   },
+   {
+    "kind": "judgement",
+    "computer": "studentMoveStructure",
+    "from": "bestMove",
+    "text": "Your rook on c1 is safe there, since nothing of theirs can hit it, and it can swing to c2 next.",
+    "squares": [
+     "c1",
+     "c2"
+    ],
+    "claims": [
+     "safe-route:c1"
     ]
    }
   ]
@@ -18851,7 +20185,8 @@
     "text": "Checkmate, Opera mate: the rook on d8 gives mate, guarded by the bishop on g5. White did it far behind in material: 15 points against Black's 25.",
     "squares": [
      "d8"
-    ]
+    ],
+    "claims": []
    }
   ]
  },
@@ -19089,6 +20424,10 @@
     "squares": [
      "e8",
      "e7"
+    ],
+    "claims": [
+     "picture-verdict:b:works-now:e8e7",
+     "standing:clearly+"
     ]
    },
    {
@@ -19100,7 +20439,8 @@
      "e8",
      "e7",
      "d5"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "aspect-threat",
@@ -19110,6 +20450,9 @@
     "squares": [
      "d8",
      "b1"
+    ],
+    "claims": [
+     "quiet-threat:b1"
     ]
    },
    {
@@ -19121,7 +20464,8 @@
      "d8",
      "f8",
      "d7"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "technique",
@@ -19137,12 +20481,15 @@
      "d8",
      "c7",
      "b6"
+    ],
+    "claims": [
+     "defender-in-time:a5"
     ]
    }
   ]
  },
  "danya:desperado": {
-  "read": "You're clearly worse — your knight on b8 and knight on c7 each have one safe square. The active tries only make it worse. …Nxd5, …b5, …h6 and …Qg4 all fail. Nxd5 is the obvious try, but it doesn't hold up: they play Nxd5 — they win a knight for a pawn. b5 looks natural, but Nh4 meets it. b5 hands them a pawn in the line. b5 achieves nothing, and makes your position harder still. h6 looks natural, but it doesn't work: they play gxh6, you answer Bxh6 and they play hxg6 — they win a pawn. Qg4 is the obvious try, but a5 is the answer. After …Qg4 a5, their resource is the rook on h1: from h4 it hits your queen on g4. Nothing stops it in the best line. Qg4 achieves nothing, and makes your position harder still. So first …Qd8. Their pieces work together: every one is guarded and in the game. Yours are scattered: your knight on c7 and your bishop on g7 do next to nothing. Their plan from here: a5, Na4 and then the b4 break.",
+  "read": "You're clearly worse — your knight on b8 and knight on c7 each have one safe square. The active tries only make it worse. …Nxd5, …b5, …h6 and …Qg4 all fail. Nxd5 is the obvious try, but it doesn't hold up: they play Nxd5 — they win a knight for a pawn. b5 looks natural, but Nh4 meets it. b5 hands them a pawn in the line. b5 achieves nothing, and makes your position harder still. h6 looks natural, but it doesn't work: they play gxh6, you answer Bxh6 and they play hxg6 — they win a pawn. Qg4 is the obvious try, but a5 is the answer. After a5, their resource is the rook on h1: from h4 it hits your queen on g4. Nothing stops it in the best line. Qg4 achieves nothing, and makes your position harder still. So first …Qd8. Their pieces work together: every one is guarded and in the game. Yours are scattered: your knight on c7 and your bishop on g7 do next to nothing. You go Qd8, which aims at their pawn on g5. Their plan from here: a5, Na4 and then the b4 break.",
   "facts": [
    {
     "kind": "standing",
@@ -19175,7 +20522,7 @@
    },
    {
     "kind": "refuted",
-    "text": "Qg4 is the obvious try, but a5 is the answer. After …Qg4 a5, their resource is the rook on h1: from h4 it hits your queen on g4. Nothing stops it in the best line. Qg4 achieves nothing, and makes your position harder still.",
+    "text": "Qg4 is the obvious try, but a5 is the answer. After a5, their resource is the rook on h1: from h4 it hits your queen on g4. Nothing stops it in the best line. Qg4 achieves nothing, and makes your position harder still.",
     "claims": [],
     "computer": "temptingOnBoard"
    },
@@ -19253,6 +20600,7 @@
    "fact:temptingOnBoard:a5,c8,g4",
    "picture-plan:b:c8d8",
    "coordination:w",
+   "move:c8d8:idea:threat:g5",
    "fact:planSteps:a4,a4,a5,b2,b4,c3"
   ],
   "kept": [
@@ -19270,6 +20618,10 @@
      "h6",
      "c8",
      "g4"
+    ],
+    "claims": [
+     "picture-verdict:b:tries-worsen:c7d5,b7b5,h7h6,c8g4",
+     "standing:clearly-"
     ]
    },
    {
@@ -19280,7 +20632,8 @@
     "squares": [
      "c7",
      "d5"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -19291,7 +20644,8 @@
      "b7",
      "b5",
      "h4"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
@@ -19301,18 +20655,20 @@
     "squares": [
      "h7",
      "h6"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "refuted",
     "computer": "temptingOnBoard",
     "from": "tempting",
-    "text": "Qg4 is the obvious try, but a5 is the answer. After …Qg4 a5, their resource is the rook on h1: from h4 it hits your queen on g4. Nothing stops it in the best line. Qg4 achieves nothing, and makes your position harder still.",
+    "text": "Qg4 is the obvious try, but a5 is the answer. After a5, their resource is the rook on h1: from h4 it hits your queen on g4. Nothing stops it in the best line. Qg4 achieves nothing, and makes your position harder still.",
     "squares": [
      "c8",
      "g4",
      "a5"
-    ]
+    ],
+    "claims": []
    },
    {
     "kind": "plan-now",
@@ -19322,6 +20678,9 @@
     "squares": [
      "c8",
      "d8"
+    ],
+    "claims": [
+     "picture-plan:b:c8d8"
     ]
    },
    {
@@ -19332,6 +20691,21 @@
     "squares": [
      "c7",
      "g7"
+    ],
+    "claims": [
+     "coordination:w"
+    ]
+   },
+   {
+    "kind": "board-teacher",
+    "computer": "buildReviewMoveTeachingFact",
+    "from": "bestMove",
+    "text": "You go Qd8, which aims at their pawn on g5.",
+    "squares": [
+     "g5"
+    ],
+    "claims": [
+     "move:c8d8:idea:threat:g5"
     ]
    },
    {
@@ -19346,7 +20720,8 @@
      "a4",
      "b2",
      "b4"
-    ]
+    ],
+    "claims": []
    }
   ]
  }

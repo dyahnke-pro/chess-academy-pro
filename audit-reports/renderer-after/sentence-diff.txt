@@ -1,27 +1,39 @@
 audit-reports/renderer-before/puzzles5.json.told.json {"avg":112,"max":244,"tries":21}
-audit-reports/renderer-after/puzzles5.json.told.json {"avg":113,"max":248,"tries":21}
+audit-reports/renderer-after/puzzles5.json.told.json {"avg":127,"max":292,"tries":21}
 ## 0Km5u#1-Kh8
   - They win a rook for two pawns in the line.
   - They win a rook and a bishop for a pawn in the line.
   + Rf7 hands them a rook for two pawns in the line.
   + Qxe6+ comes with check, so they gain a tempo.
+## 0Km5u#3-fxe4
+  + You go fxe4, which half-opens the f-file for the rooks.
 ## 0Km5u#5-Qxf2+
   + You play Qxf2+ — it seizes the open f-file.
+  + It also gives check, and their only answer is Kd1.
 ## 0Km5u#7-Qe3
   - They win a bishop for two pawns in the line.
   - On g4 the bishop hits their bishop, which answers …Bg4 with Bxg4.
   + Qxg2 hands them a bishop for two pawns in the line.
   + Later in the line, after …Bg4, the bishop on g4 hits their bishop, which answers …Bg4 with Bxg4.
+  + It also unpins your pawn on e5 — and the queen aims at their pawn on c3.
+  + Your pieces work together: every one is guarded and in the game.
+  + Theirs are scattered: the knight on b8 and the queen on d5 have no guard.
 ## 0Km5u#9-Bxd7
   - They win a pawn in the line.
   + Rf2 hands them a pawn in the line.
+  + It also takes g4 away from their bishop on e2.
 ## 0Km5u#11-Rd8
   - They win a bishop in the line.
   - Your rook on f8 is your best-placed piece — the f-file is clear all the way to f2, its road into their camp.
+  - You play Rd8 — it takes the open d-file, where the rook belongs.
+  - You play Rd8 — it saves the rook from their queen on d6.
   - Rd8 is quiet, but it threatens …b4 — they must answer that first.
   - They win a queen for a rook in the line.
   + Qd2+ hands them a bishop in the line.
   + Kg8 hands them a bishop in the line.
+  + It also takes the open d-file, where the rook belongs.
+  + And it saves the rook from their queen on d6.
+  + And it guards the bishop on d7, which their queen attacks.
   + Rd8 is quiet: it prepares …b4.
 ## 0Km5u#13-Kg8
   - Rf8+ comes with check, so they gain a tempo.
@@ -39,9 +51,13 @@ audit-reports/renderer-after/puzzles5.json.told.json {"avg":113,"max":248,"tries
   - It takes the …f5 break away from them.
   + Their pawn on d4 still stands.
   + Qf4 takes the …f5 break away from them.
+  + You go Qf4, which hits their bishop on g4, and nothing guards it.
+  + Count the attackers and defenders on their bishop on g4: 1 attacker to 0 defenders — it's outnumbered, so it has to move, and that costs them the tempo.
 ## 0LeQy#7-Qxh6
   - Your queen on f4 reaches 9 fewer squares after this than after the better move.
   + Your queen on f4 reaches 9 fewer squares after either than after the better move.
+  + It also seizes the open h-file — a highway straight into their position.
+  + And it wins a pawn back.
 ## 0LeQy#9-Rg1+
   - They win a pawn in the line.
   - Their queen on h6 attacks your rook on h1, and nothing defends it — and you can take the attacker without losing material.
@@ -49,35 +65,60 @@ audit-reports/renderer-after/puzzles5.json.told.json {"avg":113,"max":248,"tries
   + …fxe6+ comes with check, so they gain a tempo.
   + You're on top, but watch the counterpunch: their queen on b6 attacks your queen on h6, and nothing defends it — and you can take the attacker without losing material.
   + You go Rg1+, which takes the open g-file, pressing their king on g8.
+  + It also gives check, and they can answer only with Bg5 or Qg6.
 ## 0GvdU#1-Ke3
   - It wins their pawn on b3, and that is all it does.
   - Ke3 is quiet, but it threatens …Kd2 — they must answer that first.
   + Kc3 wins their pawn on b3, and that is all it does.
   + Ke3 is quiet: it prepares …Kd2.
+## 0GvdU#3-f2
+  + You play f2: it pushes your passed pawn — passed pawns must be pushed.
 ## 0GvdU#5-Ke2
   - Ke2 is quiet, but it threatens …e3 — they must answer that first.
   + Ke2 is quiet: it prepares …e3.
+## 0GvdU#7-f1=N+
+  + You play f1=N+: it promotes to a knight — underpromotion, chosen on purpose.
+  + It also gives check, and their king has to move.
 ## 0GvdU#9-Nd2
-  + Your knight goes after b3, the pawn at the base of their chain.
-  + It holds a4, and right now nothing guards it.
+  + You play Nd2 — it hits their pawn on b3, and nothing guards it.
+  + It also eyes f3 and their pawn on b3, squares no pawn of theirs can cover.
 ## 0CegO#1-exf4+
   - They win a pawn in the line.
   + Kh6 hands them a pawn in the line.
+  + You play exf4+: it pushes your passed pawn — passed pawns must be pushed.
+  + It also gives check, and their king has to move.
 ## 0CegO#3-h4
   - They win a pawn in the line.
   - h4 is quiet, but it threatens …f3 — they must answer that first.
   + g3+ hands them a pawn in the line.
   + h4 is quiet: it prepares …f3.
+  + You play h4: it bears down on g3, backing your g-pawn's push there — g3 sits right beside their king.
+  + It also pushes your passed pawn — passed pawns must be pushed.
+## 0CegO#5-h3
+  + You go h3, which pushes your passed pawn — passed pawns must be pushed.
 ## 0CegO#7-Kh4
   + You go Kh4, sending the king on to f3, by way of g3.
 ## 0CegO#9-f3
   + You go f3, which pushes your passed pawn — passed pawns must be pushed.
 ## 0CegO#11-Kg3
   + You go Kg3, which marches up — in the endgame it stops hiding and becomes a fighting piece.
+  + Your king steps up to g3: with the queens off it is no longer a target but a fighting piece, and from the middle it reaches either wing.
+## 0IsE8#1-Rxf5
+  + It also seizes the open f-file — a highway straight into their position.
 ## 0IsE8#5-Kg6
   - They win a knight in the line.
+  - There is something to collect, but your rook on f5 is loose and under fire — secure it first.
+  - The capture will still be there.
   + Qxd7+ is a fork: it hits your king and your rook.
+  + It also adds one guard to your rook on f5, which their e-pawn attacks, and gets your king out of the check from their rook.
+  + Their passed pawn on e4 is held: your knight on e5 stands in front of it, and it cannot move while the knight stays.
+## 0IsE8#9-Bf7
+  + You go Bf7, which hits their queen on e8, and nothing guards it.
+  + Count the attackers and defenders on their queen on e8: 1 attacker to 0 defenders — it's outnumbered, so it has to move, and that costs them the tempo.
 ## 0IsE8#11-Qxe5
   - They win a bishop and a pawn in the line.
   - It takes the b5 break away from them.
   + …Qxe5 takes the b5 break away from them.
+  + You go Qxe5, which hits their pawn on c3, and nothing guards it.
+  + It also seizes the open e-file.
+  + And it takes aim at the center, hitting d4, keeping the rook on d7 off it, and also keeping the rook off d5 and keeping the bishop off e4.
