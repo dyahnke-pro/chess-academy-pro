@@ -20,7 +20,7 @@
 // diff is read line by line:
 //   DECISION_BASELINE_UPDATE=1 npx vitest run src/test/decisionRows.baseline.test.ts
 import { describe, it, expect } from 'vitest';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { computePositionFacts } from '../services/positionFacts';
 import { lastMoveIfOpponent, lastMoveIfStudent } from '../services/lastMoveOfLine';
 import { analysisOf, lessonLines, replayPlies, type ReplayGame } from './replayGame';
@@ -140,6 +140,18 @@ describe('every decision and every spoken line on the baseline games is unchange
         now[key] = rec;
       }
       if (!snapshot) return;
+      // BASELINE_DIFF=<file>: every changed spoken line, written as it is
+      // (snapshot vs now by index) — the review of a change, never an update.
+      if (process.env.BASELINE_DIFF) {
+        const lines: string[] = [];
+        for (const [key, rec] of Object.entries(mine)) {
+          const want = snapshot[key]?.spoken ?? [];
+          for (let i = 0; i < Math.max(want.length, rec.spoken.length); i++) {
+            if (want[i] !== rec.spoken[i]) lines.push(JSON.stringify({ key, i, was: want[i] ?? null, now: rec.spoken[i] ?? null }));
+          }
+        }
+        appendFileSync(process.env.BASELINE_DIFF, lines.map((l) => `${l}\n`).join(''));
+      }
       for (const [key, rec] of Object.entries(mine)) expect(firstDifference(key, snapshot[key], rec)).toBeNull();
     }, 1_800_000);
   }

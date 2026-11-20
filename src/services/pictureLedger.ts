@@ -1178,7 +1178,10 @@ export function counterplayText(c: Counterplay, student: Color, fen: string, lin
   const ply = c.ply ?? 0;
   const stopperSide: Color = (ply % 2 === 0) === (fen.split(' ')[1] === 'w') ? 'w' : 'b';
   const stopper = c.stoppedBy && stopperSide !== c.side ? sanOf(fen, lines[0]?.moves ?? [], ply) : null;
-  return `${head} ${stopper ? `But ${stopperSide === student ? 'your' : 'their'} ${stopperSide === 'b' ? '…' : ''}${stopper} stops it.` : 'But the best line stops it.'}`;
+  const who = stopperSide === student ? 'your' : 'their';
+  const named = stopper ? `${stopperSide === 'b' ? '…' : ''}${stopper}` : null;
+  // A stopper that mates ends the game before the resource can count.
+  return `${head} ${named ? (/#$/.test(named) ? `But ${who} ${named} mates first.` : `But ${who} ${named} stops it.`) : 'But the best line stops it.'}`;
 }
 
 /** A pawn break in words, named by its move (chess.js): a push goes TO an
