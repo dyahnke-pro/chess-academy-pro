@@ -620,6 +620,9 @@ describe('nameOnce — the full name once (human voice rule 3)', () => {
       .toBe('The target is the bishop on c5. Count the attackers on their bishop.');
     expect(nameOnce('Your knight on f3 is pinned. The knight on f3 cannot move.'))
       .toBe('Your knight on f3 is pinned. The knight cannot move.');
+    // A piece said to move between the mentions keeps its full name after it.
+    expect(nameOnce('Their knight can hit your rook on e8. But your …Re7 stops it. What works: the rook on e8.'))
+      .toBe('Their knight can hit your rook on e8. But your …Re7 stops it. What works: the rook on e8.');
     // NEGATIVE CONTROL: a different square keeps its name.
     expect(nameOnce('Their bishop on c5 is loose. The bishop on e7 is not.')).toBe('Their bishop on c5 is loose. The bishop on e7 is not.');
   });

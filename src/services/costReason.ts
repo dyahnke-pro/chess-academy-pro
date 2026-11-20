@@ -27,6 +27,7 @@ import { MATERIAL_VALUE } from './pieceValues';
 import type { TacticType } from '../types';
 import { lineSeatAt, lineShape } from '../utils/andList';
 import { markSaysMate } from '../utils/sanMark';
+import { renderAllowedClause } from './teachingSentence';
 
 /** A read of one board: its principal line, where it came from, and the other
  *  reads of the SAME board that may vouch for it. (Named `LineRead`: the board
@@ -341,15 +342,13 @@ export function allowedClause(r: CostReason, studentWB: 'w' | 'b'): string | nul
   if (r.kind !== 'allowed') return null;
   const sans = reasonSans(r);
   if (sans.length === 0) return null;
-  const whom = r.seat === 'you' ? 'them' : 'you';
-  if (r.trust.name) {
-    const line = lineShape(sans, lineSeatAt(r.fen, studentWB), r.fen, 'first');
-    if (r.mate) return `walks into mate: ${line}${markSaysMate(sans[sans.length - 1]) ? '' : ", and it's mate"}`;
-    const won = reasonWinWords(r, []);
-    // THE WHY BEFORE THE MATERIAL: the line that does it, then what it wins.
-    return won ? `lets ${whom} in: ${line} — ${whom === 'them' ? 'they win' : 'you win'} ${won}` : null;
-  }
-  return /x|\+|#/.test(sans[0]) ? `lets ${whom} play ${sans[0]}` : null;
+  const trusted = !!r.trust.name;
+  return renderAllowedClause({
+    whom: r.seat === 'you' ? 'them' : 'you', sans,
+    lineWords: trusted && r.mate ? lineShape(sans, lineSeatAt(r.fen, studentWB), r.fen, 'first') : '',
+    won: trusted && !r.mate ? reasonWinWords(r, []) : null,
+    mate: r.mate, saysMate: markSaysMate(sans[sans.length - 1]), trusted,
+  });
 }
 
 /** The line to the blow, as SAN with the black move marked (…Nxe5). */

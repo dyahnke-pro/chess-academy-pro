@@ -252,7 +252,7 @@ export function renderSentenceFact(f: AnchoredFact, surface: Surface, screenFen:
 }
 
 /** ORPHAN LEADS: a spoken fact may not start by pointing outside itself. */
-export const ORPHAN_LEAD = /^(?:It|This|That|These|Those)\b|^After this\b|^after this\b/;
+export const ORPHAN_LEAD = /^(?:It|This|That|These|Those|And|But)\b|^After this\b|^after this\b/;
 
 // ── THE TRIES FAMILY (step 2a) ─────────────────────────────────────────────
 // A tempting move refuted, returned as data by its computers
@@ -433,4 +433,31 @@ export function renderSacrificeVerdict(v: SacrificeVerdict): string {
 export function renderTemptingTurn(move: string, appeal: string | null, because: string): string {
   const lead = appeal === null ? `You’d love to play ${move}` : `You’d love to ${appeal} with ${move}`;
   return `${lead}, but it fails: ${because}.`;
+}
+
+// ── WHAT A COSTLY MOVE ALLOWS (`costReason`) ───────────────────────────────
+
+/** The allowed line as data: who it lets in, the line (SAN, "…" on a Black
+ *  move), what it wins, whether it mates, whether the reads vouch for it. */
+export interface AllowedData {
+  whom: 'them' | 'you';
+  sans: readonly string[];
+  /** The line said in full (a mate line is short and is the proof). */
+  lineWords: string;
+  won: string | null;
+  mate: boolean;
+  /** The line ends in a mark that already says mate ("#"). */
+  saysMate: boolean;
+  trusted: boolean;
+}
+
+/** The move's predicate: ONE sentence with the move as its subject — the
+ *  why (the blow) before the material, the line's KEY move said and the full
+ *  line left to the board: "lets them play Bxd8, winning a queen for a
+ *  bishop". A mate is said with its line. */
+export function renderAllowedClause(a: AllowedData): string | null {
+  if (a.sans.length === 0) return null;
+  if (!a.trusted) return /x|\+|#/.test(a.sans[0]) ? `lets ${a.whom} play ${a.sans[0]}` : null;
+  if (a.mate) return `walks into mate: ${a.lineWords}${a.saysMate ? '' : ", and it's mate"}`;
+  return a.won ? `lets ${a.whom} play ${a.sans[0]}, winning ${a.won}` : null;
 }

@@ -300,12 +300,13 @@ function verdictOf(i: PictureVerdictIn, mover: Color, step: number, but: FailedT
     : '';
   if (works && step > 0) {
     const text = rotateStem([`${lead}, and the direct way works now: ${works.name}.`, `${lead}, and ${works.name} goes straight for it.`], stem);
-    const after = rotateStem([`And the direct way works now: ${works.name}.`, `And ${works.name} goes straight for it.`], stem);
+    // Said on its own once the standing was said: never an orphan "And …".
+    const after = rotateStem([`The direct way works now: ${works.name}.`, `${works.name} goes straight for it.`], stem);
     return { kind: 'works-now', step, word: `${STEP_WORD[step]}, and it works now`, works, text, afterStanding: after };
   }
   if (but.length > 0 && step > 0) {
     const first = rotateStem([`${lead}, but it is hard to finish ${them} off.`, `${lead}, but breaking through is another matter.`], stem);
-    const after = rotateStem([`But it is hard to finish ${them} off.`, 'But breaking through is another matter.'], stem);
+    const after = rotateStem([`It is hard to finish ${them} off.`, 'Breaking through is another matter.'], stem);
     return { kind: 'hard-to-finish', step, word: `${STEP_WORD[step]}, but hard to finish`, works: null, text: `${first} ${butLine}${noCounterplay}`, afterStanding: `${after} ${butLine}${noCounterplay}` };
   }
   if (but.length > 0 && step === 0) {

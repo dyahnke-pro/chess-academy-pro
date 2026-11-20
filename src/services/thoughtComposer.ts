@@ -393,6 +393,9 @@ function valueOf(f: ThoughtFact, record: ThoughtRecord | null): number {
   return POLICY.depth[factDepth(f)] + (POLICY.ideaPrior[f.idea] ?? 0) + (POLICY.sourcePrior[f.source] ?? 0) + red + tierLift(f, record) + f.weight / 100;
 }
 
+/** The computers whose facts are tries — a move NOT played, refuted. */
+const TRY_SOURCES: ReadonlySet<ThoughtSource> = new Set<ThoughtSource>(['refuted', 'alternatives', 'weighed']);
+
 function orderWith(record: ThoughtRecord | null): (a: ThoughtFact, b: ThoughtFact, ia: number, ib: number) => number {
   return (a, b, ia, ib) => (THOUGHT_ORDER[a.step] - THOUGHT_ORDER[b.step])
     // THE DANGER STEP is the nearest thing at stake first: a piece hanging now
@@ -401,6 +404,10 @@ function orderWith(record: ThoughtRecord | null): (a: ThoughtFact, b: ThoughtFac
     // opening's thread — the price paid, their setup, the key break — is said
     // behind whatever the move itself does in its step, never ahead of it.
     || (Number(a.source === 'openingStory') - Number(b.source === 'openingStory'))
+    // THE MOVE'S JOB OUTRANKS A TRY (CLAUDE.md rule 3: the move and its jobs
+    // are required, the tempting tries come after them): in one step, a fact
+    // about the move played leads a try refuted, whatever their stakes.
+    || (Number(TRY_SOURCES.has(a.source)) - Number(TRY_SOURCES.has(b.source)))
     // INSIDE EACH PART, THE COMPUTED STAKES RANK (CLAUDE.md rule 3; the
     // danger step's "nearest thing at stake first" is the same rule); the
     // learned kind weight only breaks a tie.

@@ -718,7 +718,10 @@ function changeReasonOf(args: ChangeReasonInput, more: EngineFutureFacts | null,
   const hit = wc.appeared.find((c) => c.inLine && c.fact.seat === theirSeat && c.fact.kind !== 'latent-danger' && ['threat', 'resource'].includes(PICTURE_ROLE[c.fact.computer] ?? 'board'));
   // A piece on a square, on the board the line reaches: stamped there. A
   // fact with no square (a standing, "they're worse, so…") is no board fact.
-  if (hit) return { text: hit.fact.text, board: hit.fact.squares.length > 0 && !STATE_NOT_BOARD.has(hit.fact.computer) ? hit.board : null };
+  // THE BOARD ON SCREEN IS NEVER ANCHORED: a standing that frames the fact
+  // ("you're on top, but …") is about the screen, so a line's reason is the
+  // fact without it (`onceSaid.text`).
+  if (hit) return { text: hit.fact.onceSaid && hit.fact.onceSaid.claim.startsWith('standing:') ? hit.fact.onceSaid.text : hit.fact.text, board: hit.fact.squares.length > 0 && !STATE_NOT_BOARD.has(hit.fact.computer) ? hit.board : null };
   const alive = comesAlive(args);
   return plain(alive ? comesAliveText(alive, args.other) : null);
 }

@@ -94,6 +94,9 @@ export interface MoveIdea {
   lines?: readonly SpokenLine[];
   /** What else of the read a surface needs back (`thoughtKey().tag`). */
   tag?: string;
+  /** What the idea holds at stake, when its computer measured it (the only
+   *  move: what the next best gives up). */
+  stakes?: FactStakes | null;
 }
 
 /** THE MOVE'S FACT: its claim is the move's idea on its squares (two moves
@@ -116,7 +119,7 @@ export function moveIdeaFact(make: (p: ThoughtParts) => CoachFact, w: MoveWords,
     seat, namesStudentMove: false, fen: fenAfter, altFen: w.fenBefore,
     ...(m.lines && m.lines.length > 0 ? { lines: m.lines } : {}),
   });
-  return placedAs(f, m.kind, null);
+  return placedAs(f, m.kind, m.stakes ?? null);
 }
 
 /** A read placed by the kind its computer stated (one computer, several kinds
@@ -279,7 +282,7 @@ export function deepTag(f: CoachFact): { target: string; from: string } {
  *  the engine's best on the fan before it, the next best gives up at least
  *  the app's only-move gap, and the game is still in contest. Returns the
  *  next best and what it gives up — never a bare "only move" — or null. */
-export function onlyMove(fenBefore: string, playedUci: string, lines: readonly (LineScore & { moves: readonly string[] })[]): { secondSan: string; gives: string } | null {
+export function onlyMove(fenBefore: string, playedUci: string, lines: readonly (LineScore & { moves: readonly string[] })[]): { secondSan: string; gives: string; gapCp: number } | null {
   if (lines.length < 2 || lines[0].moves[0]?.slice(0, 4) !== playedUci.slice(0, 4)) return null;
   const best = moverCp(fenBefore, lines[0]);
   const gap = best - moverCp(fenBefore, lines[1]);
@@ -290,7 +293,7 @@ export function onlyMove(fenBefore: string, playedUci: string, lines: readonly (
   // WHAT IT GIVES UP, SAID AS MATERIAL (Learn prod audit 2026-11-18: "the
   // next best, h5, gives up far more" named nothing): the gap in the pieces a
   // player counts in.
-  return { secondSan, gives: pawns >= 5 ? "gives up more than a rook's worth" : pawns >= 3 ? "gives up about a piece's worth" : pawns === 2 ? 'gives up about two pawns' : 'gives up about a pawn' };
+  return { secondSan, gapCp: gap, gives: pawns >= 5 ? "gives up more than a rook's worth" : pawns >= 3 ? "gives up about a piece's worth" : pawns === 2 ? 'gives up about two pawns' : 'gives up about a pawn' };
 }
 
 /** THE REGISTRY ENTRIES WHOSE READS STATE SEVERAL KINDS of fact on the one

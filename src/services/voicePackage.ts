@@ -697,7 +697,19 @@ export function nameOnce(text: string): string {
   // first named with.
   const squaresOf = new Map<string, Set<string>>();
   const ownerAt = new Map<string, string>();
-  return text.replace(/\b(your|their|the)\s+(king|queen|rook|bishop|knight|pawn)\s+on\s+([a-h][1-8])\b/gi, (whole, owner: string, piece: string, sq: string) => {
+  // A PIECE SAID TO MOVE IS NAMED AGAIN IN FULL (sicilianClosed 54: "hit your
+  // rook on e8. But your …Re7 stops it. … the rook" — after the line moved a
+  // rook, "the rook" is any rook): a move of that piece kind ("…Re7", "Rxe8")
+  // forgets the squares its kind was named on.
+  const LETTER: Record<string, string> = { K: 'king', Q: 'queen', R: 'rook', B: 'bishop', N: 'knight' };
+  return text.replace(/\b(your|their|the)\s+(king|queen|rook|bishop|knight|pawn)\s+on\s+([a-h][1-8])\b|(?<![A-Za-z])([KQRBN])[a-h]?[1-8]?x?[a-h][1-8]\b/gi, (whole, owner: string | undefined, piece: string, sq: string, moved: string | undefined) => {
+    if (moved) {
+      const kind = LETTER[moved];
+      if (kind) for (const k of [...squaresOf.keys()]) if (k.endsWith(` ${kind}`)) squaresOf.delete(k);
+      if (kind) for (const k of [...ownerAt.keys()]) if (k.startsWith(`${kind}@`)) ownerAt.delete(k);
+      return whole;
+    }
+    if (!owner) return whole;
     const said = owner.toLowerCase();
     const p = piece.toLowerCase();
     const first = ownerAt.get(`${p}@${sq}`);

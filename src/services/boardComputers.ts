@@ -3117,7 +3117,12 @@ export const BOARD_COMPUTERS = {
       const takeable = !!(studentToMove && p.attackerSquare && takingTheAttackerAnswers(fen, p.attackerSquare as Square, student));
       const hit = `${p.attacker ? `their ${POISON_NAME[p.attacker]}${takeable ? ` on ${p.attackerSquare}` : ''}` : 'they'} ${p.attacker ? 'attacks' : 'attack'} your ${POISON_NAME[p.piece.toLowerCase()]} on ${p.square}${p.defenders === 0 ? ', and nothing defends it' : ''}${takeable ? ' — and you can take the attacker without losing material' : ''}`;
       const text = loose.still ? `Still — ${hit}.` : winning ? `You're on top, but watch the counterpunch: ${hit}.` : `${openSentence(hit)}.`;
-      return fact({ key: loose.key, claims: [loose.key], text,
+      // The standing that frames it ("you're on top") is a fact about the
+      // board on screen: said once (`onceSaid`), and never carried to a
+      // line's board (`changeReason` reads the bare hit).
+      const bare = `${openSentence(hit)}.`;
+      return fact({ key: loose.key, claims: winning && !loose.still ? [loose.key, `standing:${signedBand(studentCp)}`] : [loose.key], text,
+        ...(winning && !loose.still ? { onceSaid: { claim: `standing:${signedBand(studentCp)}`, text: bare } } : {}),
         // Its proof — the count and the capture, the same read Learn's warning speaks.
         proof: threatProof(fen, student, [p.square]) ?? NO_PROOF.description,
         squares: takeable && p.attackerSquare ? [p.square, p.attackerSquare] : [p.square],
@@ -6524,7 +6529,7 @@ export const BOARD_COMPUTERS = {
       const m = new Chess(w.fenBefore).move(w.san);
       const only = onlyMove(w.fenBefore, `${m.from}${m.to}`, fan);
       if (!only) return null;
-      return moveIdeaFact(fact, w, { kind: 'key-moment', idea: 'choice', weight: 66, text: moveLead(w, `is the only move that holds here — the next best, ${only.secondSan}, ${only.gives}`), alsoText: `It's the only move that holds here: the next best, ${only.secondSan}, ${only.gives}`, squares: [m.to], extraClaims: [`only:${m.from}${m.to}`] });
+      return moveIdeaFact(fact, w, { kind: 'key-moment', idea: 'choice', weight: 66, text: moveLead(w, `is the only move that holds here — the next best, ${only.secondSan}, ${only.gives}`), alsoText: `It's the only move that holds here: the next best, ${only.secondSan}, ${only.gives}`, squares: [m.to], extraClaims: [`only:${m.from}${m.to}`], stakes: { points: Math.round(only.gapCp / 100), plies: 1 } });
     }),
     computer: 'onlyMove',
     kind: 'key-moment',
