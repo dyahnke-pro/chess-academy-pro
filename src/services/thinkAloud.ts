@@ -176,7 +176,10 @@ export function sayLine(startFen: string, sans: readonly string[], me: 'w' | 'b'
     }
   }
   const out = lineAchieves(startFen, line.plies.map((p) => p.san), me);
-  const tail = out.text ? `, and ${out.text}` : '';
+  // The promotion is already said in the line ("your pawn to c8, promoting to
+  // a queen"): its outcome is not said again (F5, the Saavedra).
+  const promotionSaid = out.kind === 'promotion' && line.plies.some((p) => /=/.test(p.san));
+  const tail = out.text && !promotionSaid ? `, and ${out.text}` : '';
   const body = clauses.length === 1 ? clauses[0] : `${clauses.slice(0, -1).join(', ')}, then ${clauses[clauses.length - 1]}`;
   return { text: `${cap(body)}${tail}.`, line };
 }

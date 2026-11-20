@@ -90,8 +90,11 @@ describe('the read says the picture in Danya\'s order', { timeout: 300_000 }, ()
     expect(read[plan + 1].kind).toBe('priority');
     expect(read[plan + 1].squares).toEqual(['b5']);
     // NEGATIVE: the c-pawn's guard of d4 shares the queen's square with the
-    // line, but is no detail of a plan that never names the queen.
-    expect(read.some((f) => /Your c-pawn can still guard d4/.test(f.text))).toBe(false);
+    // line, but is no detail of a plan that never names the queen: it is not
+    // carried by the plan (it may speak as its own idea, after the plan's
+    // because — every fact over the bar speaks, G4.5).
+    const guard = read.findIndex((f) => /Your c-pawn can still guard d4/.test(f.text));
+    expect(guard === -1 || guard > plan + 1).toBe(true);
   });
 
   it('the seventh rank #2: clearly better, but hard to finish; first Bf7, its road, and the h-pawn it guards — the …g6 break said once', async () => {

@@ -60,6 +60,7 @@ export type BoardFact = ReadFact;
 
 /** What a read never says beside a forced mate: plans, conversion advice and
  *  the kind of position. */
+const REFUTABLE_PLAN_KINDS: ReadonlySet<string> = new Set(['structure-plan', 'plan-steps', 'plan-now', 'pawn-break']);
 const BESIDE_MATE: ReadonlySet<string> = new Set(['standing-bare', 'convert', 'compensation', 'eval', 'character', 'siege', 'plan-steps', 'plan-race', 'structure-plan', 'switch-wing', 'their-plan', 'refuted-positional']);
 
 /** The best move's facts that say who stands better, not what the move does. */
@@ -139,7 +140,17 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
   // A FORCED MATE IS THE STORY: no plan, no "finish developing", no kind of
   // position beside it (every-surface gate D, "plans beside mate").
   const mateOnBoard = top.mate != null;
-  const done = (): BoardFactSet => ({ facts: mateOnBoard ? facts.filter((f) => !BESIDE_MATE.has(f.kind)) : facts, tier: pf.importance.tier });
+  // NO PLAN STEP THE BOARD'S OWN READ REFUTES (F1/F5, board 5: "break with
+  // h6" beside "h6 … doesn't work"): a plan fact whose first square — the
+  // square its first step goes to, as its producer couples it — is where a
+  // refuted try lands is that try, already ruled out.
+  const refutedTo = (): Set<string> => new Set(facts.filter((f) => f.kind === 'refuted').flatMap((f) => [f.move, ...(f.also ?? [])]).filter((u): u is string => !!u).map((u) => u.slice(2, 4)));
+  const refutedPlan = (f: BoardFact, to: Set<string>): boolean => REFUTABLE_PLAN_KINDS.has(f.kind) && f.squares.length > 0 && to.has(f.squares[0]);
+  const done = (): BoardFactSet => {
+    const to = refutedTo();
+    const kept = facts.filter((f) => !refutedPlan(f, to));
+    return { facts: mateOnBoard ? kept.filter((f) => !BESIDE_MATE.has(f.kind)) : kept, tier: pf.importance.tier };
+  };
 
   // THE STANDING and THE KIND OF POSITION: who stands better and why, read
   // off this board (his read opens on it), and what kind of play it asks for.
