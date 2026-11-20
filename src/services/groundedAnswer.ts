@@ -12,6 +12,7 @@
  * Pure + side-effect-free so it's trivially testable and can't regress the
  * live chat. Wiring it into `getCoachChatResponse` is the next step.
  */
+import { renderSacrificeVerdict, type SacrificeVerdict } from './teachingSentence';
 import { candidateCct, candidateCctSentence } from './candidateCct';
 import { type WeighRead } from './weighedMoves';
 import { realMasterMoves } from './realMasterMoves';
@@ -2592,16 +2593,9 @@ export function assembleCandidateMoveAnswer(opts: {
     const stmEval = typeof opts.candidateEvalCp === 'number' ? opts.candidateEvalCp : null;
     const give = sacOffer.give;
     const after = evalPhrase(opts.candidateEvalCp, opts.candidateMateIn, mover, opts.studentColor);
-    let verdict: string | null = null;
-    if (typeof opts.candidateMateIn === 'number' && opts.candidateMateIn > 0) {
-      verdict = `${candNorm} is a sound sacrifice — it forces mate in ${opts.candidateMateIn}.`;
-    } else if (stmEval !== null && stmEval >= -30) {
-      verdict = `${candNorm} is sound — you give up ${give}, but the compensation is real${after ? `: after the best defence ${after}` : ''}.`;
-    } else if (stmEval !== null && stmEval >= -150) {
-      verdict = `${candNorm} is speculative — after the best defence the attack doesn't quite cover ${give}${bestSan ? `. ${openSentence(bestSan)} keeps it simpler` : ''}.`;
-    } else if (stmEval !== null) {
-      verdict = `${candNorm} is unsound — the attack doesn't work: after the best defence you're just down ${give}${after ? ` (${after})` : ''}${bestSan ? `. Play ${bestSan} instead` : ''}.`;
-    }
+    const judged: SacrificeVerdict['judged'] | null = typeof opts.candidateMateIn === 'number' && opts.candidateMateIn > 0 ? 'mates'
+      : stmEval === null ? null : stmEval >= -30 ? 'sound' : stmEval >= -150 ? 'speculative' : 'unsound';
+    const verdict = judged ? renderSacrificeVerdict({ cand: candNorm, give, mateIn: opts.candidateMateIn ?? null, judged, after, bestSan: bestSan ?? null }) : null;
     if (verdict) {
       const parts = [verdict];
       // Named, not "It": after "Play Bd7 instead" a bare "It gives check" was

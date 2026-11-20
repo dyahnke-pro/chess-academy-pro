@@ -22,6 +22,7 @@
 import { Chess, type Color, type Square, type PieceSymbol } from 'chess.js';
 import { rotateStem } from '../utils/rotateStem';
 import { andList, orList } from '../utils/andList';
+import { openSentence } from '../utils/openSentence';
 
 /** The board a fact is about, relative to the board on screen. */
 export type FactRelation = 'now' | 'past' | 'line' | 'try';
@@ -367,4 +368,69 @@ export function renderMoveJobs(texts: readonly string[]): string {
   // One idea a sentence: each further job its own short sentence, never an
   // "and … and …" chain.
   return [first.trim().replace(/[.\s]*$/, '.'), ...clauses.map((c, k) => `${k === 0 ? 'It also' : 'And it'} ${c}.`)].join(' ');
+}
+
+/** A candidate weighed and set aside, ASKED as a question ("Qf5? Then …"):
+ *  the line the reply opens, then what it shows (`deliberation`). */
+export interface AskedTry {
+  san: string;
+  /** The line from the reply on, in words; null when there is none. */
+  line: string | null;
+  /** What the line shows; joined by a dash, or ", and" for a piece lost. */
+  shows: string | null;
+  join: 'dash' | 'and';
+  /** No line and no loss: the move holds, only less precisely. */
+  playable?: boolean;
+}
+
+export function renderAskedTry(t: AskedTry): string {
+  if (t.playable) return `${t.san} is playable, but not as precise.`;
+  const tail = t.shows ? t.shows.trim().replace(/[.\s]+$/, '') : null;
+  if (!t.line) return `${t.san}? ${tail ? cap(tail) : ''}.`;
+  return `${t.san}? Then ${t.line}${tail ? (t.join === 'and' ? `, and ${tail}` : ` — ${tail}`) : ''}.`;
+}
+
+/** A try that goes nowhere: the reply sends the piece straight back. */
+export function renderReturnTry(name: string, reply: string, piece: string, from: string, stem: number): string {
+  return rotateStem([
+    `${name} is met by ${reply}, and the ${piece} goes back to ${from}.`,
+    `${name} runs into ${reply}, and the ${piece} heads straight back to ${from}.`,
+  ], stem);
+}
+
+/** The verdict's "but": the tries it names, refuted each by its own line
+ *  (said right after) — never a try without its why. */
+export function renderButLine(names: readonly string[], oneTarget: string | null, stem: number): string {
+  if (names.length === 1) return oneTarget ? `${names[0]}, going after ${oneTarget}, fails.` : `${names[0]} fails.`;
+  const two = names.length === 2;
+  return oneTarget
+    ? rotateStem([`Every direct try on ${oneTarget} fails: ${andList([...names])}.`, `${andList([...names])} ${two ? 'both go' : 'all go'} after ${oneTarget}, and ${two ? 'both' : 'all'} fail.`], stem)
+    : `${andList([...names])} ${two ? 'both' : 'all'} fail.`;
+}
+
+/** A sacrifice the student asked about (chat), judged on the best defence:
+ *  the try's verdict with its why — what is given and what comes back. */
+export interface SacrificeVerdict {
+  cand: string;
+  give: string;
+  mateIn: number | null;
+  /** The engine's judgement after the best defence. */
+  judged: 'mates' | 'sound' | 'speculative' | 'unsound';
+  /** The eval said in words, when there is one. */
+  after: string | null;
+  bestSan: string | null;
+}
+
+export function renderSacrificeVerdict(v: SacrificeVerdict): string {
+  if (v.judged === 'mates') return `${v.cand} is a sound sacrifice — it forces mate in ${v.mateIn ?? ''}.`;
+  if (v.judged === 'sound') return `${v.cand} is sound — you give up ${v.give}, but the compensation is real${v.after ? `: after the best defence ${v.after}` : ''}.`;
+  if (v.judged === 'speculative') return `${v.cand} is speculative — after the best defence the attack doesn't quite cover ${v.give}${v.bestSan ? `. ${openSentence(v.bestSan)} keeps it simpler` : ''}.`;
+  return `${v.cand} is unsound — the attack doesn't work: after the best defence you're just down ${v.give}${v.after ? ` (${v.after})` : ''}${v.bestSan ? `. Play ${v.bestSan} instead` : ''}.`;
+}
+
+/** The tempting move, affirmed then refuted with its one reason
+ *  (`tacticalRead`): "You'd love to grab it with …, but it fails: …". */
+export function renderTemptingTurn(move: string, appeal: string | null, because: string): string {
+  const lead = appeal === null ? `You’d love to play ${move}` : `You’d love to ${appeal} with ${move}`;
+  return `${lead}, but it fails: ${because}.`;
 }

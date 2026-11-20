@@ -13,6 +13,7 @@
 // invented — the deliberation is SPOKEN, not manufactured.
 //
 // Doc: docs/plans/2026-08-26-coach-my-weakness-focus-lens.md §4.0.
+import { renderAskedTry } from './teachingSentence';
 import { afterCaptureSan } from '../utils/captureWords';
 import { captureLeadsTo } from './captureLeadsTo';
 import { openSentence } from '../utils/openSentence';
@@ -389,13 +390,13 @@ function shortfallText(c: Candidate): string {
     // shaped again from the reply.
     if (c.proofSans && lineShapePlies(c.proofSans, c.refutation?.line?.fen ?? null, 'second').length < c.proofSans.length && c.proofSans[0] === c.san && c.proof.includes(' — ')) {
       // The reply opens what is left, so it is said as theirs (OS-8 gap 7).
-      return `${c.san}? Then ${lineShape(c.proofSans.slice(1), 'they', fenAfterSans(c.refutation?.line?.fen ?? null, c.proofSans.slice(0, 1)), 'first')} — ${c.proof.slice(c.proof.indexOf(' — ') + 3)}.`;
+      return renderAskedTry({ san: c.san, line: lineShape(c.proofSans.slice(1), 'they', fenAfterSans(c.refutation?.line?.fen ?? null, c.proofSans.slice(0, 1)), 'first'), shows: c.proof.slice(c.proof.indexOf(' — ') + 3), join: 'dash' });
     }
     // The proof opens with the candidate the question already named; it is
     // said from the reply on (the one reader of the line format).
     const rest = lineAfterFirst(c.san, c.proof);
-    if (rest !== c.proof) return `${c.san}? Then ${rest}.`;
-    return `${c.san}? ${openSentence(c.proof)}.`;
+    if (rest !== c.proof) return renderAskedTry({ san: c.san, line: rest, shows: null, join: 'dash' });
+    return renderAskedTry({ san: c.san, line: null, shows: openSentence(c.proof), join: 'dash' });
   }
   if (c.shortfall === 'trades-queens') {
     // THE TRADE IS A LINE, NOT A PROPERTY OF THE MOVE (hard walk 2026-10-10:
@@ -403,8 +404,8 @@ function shortfallText(c: Candidate): string {
     // One ply long means the move itself took the last queen off — said once,
     // by its SAN at the head of the line (2026-10-30: "Qxd8? Qxd8 takes the
     // last queen off" said the move and its capture twice).
-    const rest = c.tradeSans && c.tradeSans.length > 1 ? `Then ${seatedLine(c.tradeSans.slice(1), 'they')} — the queens come off` : 'The queens come off';
-    return `${c.san}? ${rest} — with more space or an attack going, you want them on. Every piece that comes off shrinks the edge.`;
+    const why = 'the queens come off — with more space or an attack going, you want them on. Every piece that comes off shrinks the edge';
+    return renderAskedTry({ san: c.san, line: c.tradeSans && c.tradeSans.length > 1 ? seatedLine(c.tradeSans.slice(1), 'they') : null, shows: why, join: 'dash' });
   }
   if (c.shortfall === 'drops-material' && c.drops) {
     // HOW IT FALLS, played out: the line from their reply to the capture.
@@ -413,10 +414,10 @@ function shortfallText(c: Candidate): string {
     // lost" — two bishops in one sentence).
     const noun = PNAME[c.drops.piece] ?? 'piece';
     return c.drops.line.length
-      ? `${c.san}? Then ${seatedLine(c.drops.line, 'they')}, and the ${noun}${c.drops.moved ? '' : ` on ${c.drops.square}`} is lost.`
-      : `${c.san}? That drops the ${noun} on ${c.drops.square}.`;
+      ? renderAskedTry({ san: c.san, line: seatedLine(c.drops.line, 'they'), shows: `the ${noun}${c.drops.moved ? '' : ` on ${c.drops.square}`} is lost`, join: 'and' })
+      : renderAskedTry({ san: c.san, line: null, shows: `That drops the ${noun} on ${c.drops.square}`, join: 'dash' });
   }
-  return `${c.san} is playable, but not as precise.`;
+  return renderAskedTry({ san: c.san, line: null, shows: null, join: 'dash', playable: true });
 }
 
 /**

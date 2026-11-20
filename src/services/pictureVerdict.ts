@@ -38,6 +38,7 @@
  *
  * Pure: chess.js, the refuters' outputs and the engine reads handed in.
  */
+import { renderButLine, renderReturnTry } from './teachingSentence';
 import { Chess, type Color, type Square } from 'chess.js';
 import { eyeRead, bestOfReads, type WeighRead, type ConsideredTries, type TemptingRefuted, type StandingRefuted } from './weighedMoves';
 import { planOfTheBoard, type BoardPlan, type PlanLineIn } from './planOfTheBoard';
@@ -273,10 +274,7 @@ function failedTries(i: PictureVerdictIn, mover: Color, bestUci: string, bestCp:
     const m = b ? playUci(b, uci) : null;
     if (!m) continue;
     const name = named(m.color, m.san);
-    const text = rotateStem([
-      `${name} is met by ${back.reply}, and the ${back.piece} goes back to ${back.from}.`,
-      `${name} runs into ${back.reply}, and the ${back.piece} heads straight back to ${back.from}.`,
-    ], stemKeyOf(`${i.fen}|returns|${uci}`));
+    const text = renderReturnTry(name, back.reply, back.piece, back.from, stemKeyOf(`${i.fen}|returns|${uci}`));
     add(uci, 'returns', text, Math.max(0, Math.round(bestCp - seatCp(read, mover))), back.reply);
   }
   return [...out.values()].sort((a, b) => b.eye - a.eye);
@@ -296,11 +294,7 @@ function verdictOf(i: PictureVerdictIn, mover: Color, step: number, but: FailedT
   const names = but.map((t) => t.name);
   const targets = [...new Set(but.map((t) => (t.look === 'plan' ? t.target : null)))];
   const oneTarget = targets.length === 1 && targets[0] ? aimWords(i.fen, targets[0], i.student) : null;
-  const butLine = names.length === 1
-    ? (oneTarget ? `${names[0]}, going after ${oneTarget}, fails.` : `${names[0]} fails.`)
-    : oneTarget
-      ? rotateStem([`Every direct try on ${oneTarget} fails: ${andList(names)}.`, `${andList(names)} ${names.length === 2 ? 'both go' : 'all go'} after ${oneTarget}, and ${names.length === 2 ? 'both' : 'all'} fail.`], stem)
-      : `${andList(names)} ${names.length === 2 ? 'both' : 'all'} fail.`;
+  const butLine = renderButLine(names, oneTarget, stem);
   const noCounterplay = i.ledger?.counterplay?.alive === false && step > 0
     ? ` ${mine ? 'They have' : 'You have'} no counterplay, so there is time.`
     : '';

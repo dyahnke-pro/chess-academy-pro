@@ -16,6 +16,7 @@
  * PURE assemblers (verdict, key-tactic pick, tempting pick) are exported and
  * unit-tested with hand-fed data — the engine wiring is a thin shell over them.
  */
+import { renderTemptingTurn } from './teachingSentence';
 import { evalBand } from './evalBand';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { settledLineEnd } from './material';
@@ -405,8 +406,7 @@ type SayAt = (san: string, fen: string | null) => string;
  *  eye, then why it fails in the one reason's words (`TemptingMove.because`).
  *  A capture already says its square ("the knight taking on e4"). */
 function temptingTurn(fen: string | null, san: string, appeal: string, because: string, sayN: SayAt): string {
-  const lead = appeal === 'capture' ? `You’d love to play ${sayN(san, fen)}` : `You’d love to ${APPEAL_AFFIRM[appeal] ?? 'play it'} with ${sayN(san, fen)}`;
-  return `${lead}, but it fails: ${because}.`;
+  return renderTemptingTurn(sayN(san, fen), appeal === 'capture' ? null : APPEAL_AFFIRM[appeal] ?? 'play it', because);
 }
 
 /**
