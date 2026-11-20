@@ -128,7 +128,7 @@ describe('a trade later in the line does not void the blow', () => {
       before: null, priorMove: null, against: null,
     });
     expect(r?.kind).toBe('allowed');
-    expect(r && allowedClause(r, 'b')).toMatch(/^lets them win a queen for a bishop/);
+    expect(r && allowedClause(r, 'b')).toMatch(/^lets them play .*, which wins a queen for a bishop/);
   });
 });
 

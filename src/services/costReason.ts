@@ -346,7 +346,8 @@ export function allowedClause(r: CostReason, studentWB: 'w' | 'b'): string | nul
     const line = lineShape(sans, lineSeatAt(r.fen, studentWB), r.fen, 'first');
     if (r.mate) return `walks into mate: ${line}${markSaysMate(sans[sans.length - 1]) ? '' : ", and it's mate"}`;
     const won = reasonWinWords(r, []);
-    return won ? `lets ${whom} win ${won}: ${line}` : null;
+    // THE WHY BEFORE THE MATERIAL: the line that does it, then what it wins.
+    return won ? `lets ${whom} play ${line}, which wins ${won}` : null;
   }
   return /x|\+|#/.test(sans[0]) ? `lets ${whom} play ${sans[0]}` : null;
 }
