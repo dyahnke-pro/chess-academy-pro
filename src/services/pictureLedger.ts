@@ -1073,14 +1073,34 @@ export function ledgerText(led: Ledger, student: Color): string | null {
         : rotateStem([`On their side: ${list}.`, `What is working for them: ${list}.`], key));
     }
     if (weak.length > 0) {
-      const list = andList(weak.map(weakPhrase));
-      out.push(mine
-        ? rotateStem([`They can get at your weak spots: ${list}.`, `Your weak spots they can reach: ${list}.`], key)
-        : rotateStem([`You can get at their weak spots: ${list}.`, `Their weak spots you can reach: ${list}.`], key));
+      // NAME WHAT MATTERS, LIGHT THE REST (the human-voice rule: "the hole on
+      // c6, …, h5" read out is a score sheet). One weakness is named; more are
+      // counted and the most vulnerable is named — every one stays lit on the
+      // board (`ledgerSquares`).
+      const worst = worstWeakness(led.fen, weak);
+      if (weak.length === 1) {
+        out.push(mine
+          ? rotateStem([`They can get at your weak spot: ${weakPhrase(worst)}.`, `Your weak spot they can reach is ${weakPhrase(worst)}.`], key)
+          : rotateStem([`You can get at their weak spot: ${weakPhrase(worst)}.`, `Their weak spot you can reach is ${weakPhrase(worst)}.`], key));
+      } else {
+        const n = countWord(weak.length);
+        out.push(mine
+          ? rotateStem([`They can get at ${n} of your weak spots. The worst is ${weakPhrase(worst)}.`, `${n} of your weak spots are in their reach. The worst is ${weakPhrase(worst)}.`], key)
+          : rotateStem([`You can get at ${n} of their weak spots. The worst is ${weakPhrase(worst)}.`, `${n} of their weak spots are in your reach. The worst is ${weakPhrase(worst)}.`], key));
+      }
     }
   }
   if (out.length === 0) return null;
   return out.map((s) => s[0].toUpperCase() + s.slice(1)).join(' ');
+}
+
+/** The weakness that matters most: the most vulnerable by the target's own
+ *  comparison (attackers against guards, can it run) — a king counted too. */
+function worstWeakness(fen: string, weak: readonly LedgerEntry[]): LedgerEntry {
+  const g = gridOf(fen);
+  if (!g) return weak[0];
+  const ranked = weak.map((e) => candidateOf(g, e)).sort((x, y) => vulnerability(y) - vulnerability(x) || x.entry.square.localeCompare(y.entry.square));
+  return ranked[0].entry;
 }
 
 const many = (n: number): string => countWord(n);

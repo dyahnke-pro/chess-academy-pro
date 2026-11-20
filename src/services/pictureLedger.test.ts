@@ -9,7 +9,7 @@ import { readBoardAll } from './boardComputers';
 import type { CoachFact } from './coachFact';
 import type { EngineLine } from './engineLineRead';
 import { buildPicture } from './positionPicture';
-import { counterplayOf, counterplaysOf, counterplayText, ledgerOf, pictureConclusions, pictureOfBoard, planRacesOf, planTargetOf, planTargetText, targetOf } from './pictureLedger';
+import { counterplayOf, counterplaysOf, counterplayText, ledgerOf, ledgerSquares, ledgerText, pictureConclusions, pictureOfBoard, planRacesOf, planTargetOf, planTargetText, targetOf } from './pictureLedger';
 
 interface Board { id: string; fen: string; lines: EngineLine[] }
 
@@ -70,6 +70,17 @@ describe('the ledger', () => {
     expect(c?.ledger.b.assets.map((e) => [e.object, e.working])).toEqual([['bP@d4', false]]);
     expect(c?.ledger.b.weaknesses.map((e) => e.object)).toEqual(['-@a5', 'bP@a6', '-@c6']);
     expect(c?.ledger.b.weaknesses.find((e) => e.object === 'bP@a6')?.traits).toContain('isolated');
+  });
+
+  it('the ledger in words names the worst weakness and counts the rest — no score sheet of squares; every one stays lit', () => {
+    const c = pictureConclusions(factsOn(MANEUVER), MANEUVER.fen, MANEUVER.lines);
+    const text = ledgerText(c!.ledger, 'w') ?? '';
+    // Three of Black's weak spots (a5, a6, c6): counted, the most vulnerable
+    // by the target's own comparison named.
+    expect(text).toMatch(/(You can get at three of their weak spots|Three of their weak spots are in your reach)\. The worst is the hole on a5\./);
+    expect(text).not.toMatch(/a6|c6/);
+    // The squares are not read out, but they are lit.
+    expect(ledgerSquares(c!.ledger)).toEqual(expect.arrayContaining(['a5', 'a6', 'c6']));
   });
 
   it('the rook lift #2: f2 and the stranded bishop are reachable; the king in the centre is not', () => {
