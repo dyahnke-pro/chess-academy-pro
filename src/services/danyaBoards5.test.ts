@@ -29,7 +29,7 @@ describe('board 1 — the Saavedra (a-guide-to-underpromotion#0)', () => {
     const t = got.underpromotion.read;
     expect(t).toMatch(/\bc7\b/);
     expect(t).toMatch(/rook[^.]*check|check[^.]*rook/i);
-    expect(t).toMatch(/\bb5\b/);
+    expect(t).toMatch(/Kb5\b/);
     expect(t).toMatch(/Rc4[^.]*stalemate|stalemate[^.]*Rc4/i);
     expect(t).toMatch(/c8=R|rook/);
   });

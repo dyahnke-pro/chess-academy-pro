@@ -65,6 +65,8 @@ export interface ReadFact {
   /** A try whose result lands in another band than the best move's ("…Ke7
    *  throws the win"): the verdict's "but". */
   bandShift?: boolean;
+  /** The defender's checks the read weighed as tries (uci). */
+  checksRead?: readonly string[];
   /** Other tries this one fact refutes for the same reason (uci). */
   also?: readonly string[];
   /** A try: the move (uci) the fact refutes. */
