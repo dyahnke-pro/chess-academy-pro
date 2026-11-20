@@ -120,7 +120,7 @@ describe('the counterplay', () => {
     // file) against the g5 bishop alone; the best line's Rf2 guards it again.
     expect(c?.counterplay.b).toMatchObject({ kind: 'piece', piece: 'n', from: 'f6', to: 'h5', hits: ['f4'], state: 'dead', ply: 4, stoppedBy: 'e2f2' });
     expect(counterplayText(c!.counterplay.b!, 'w', MANEUVER.fen, MANEUVER.lines))
-      .toMatch(/^Their (knight can come to h5 and hit|resource is the knight on f6: from h5 it hits) your pawn on f4\. But it is dead: after Rf2 it no longer works\.$/);
+      .toMatch(/^Their (knight can come to h5 and hit|resource is the knight on f6: from h5 it hits) your pawn on f4\. But your Rf2 stops it\.$/);
     // It rests on a fact about the pawn it hits.
     expect(restsOnFacts(facts, c!.counterplay.b!.factIds, 'wP@f4')).toBe(true);
   });
@@ -139,7 +139,7 @@ describe('the counterplay', () => {
     const lines: EngineLine[] = [{ moves: ['d5d4', 'e1d2', 'e8d7'], cp: 0, mate: null }];
     const r = counterplayOf(buildPicture([named]), fen, lines, 'w');
     expect(r).toMatchObject({ from: 'c2', to: 'c4', state: 'dead', ply: 0, stoppedBy: 'd5d4' });
-    expect(counterplayText(r!, 'b', fen, lines)).toMatch(/dead: after d4 it no longer works/);
+    expect(counterplayText(r!, 'b', fen, lines)).toMatch(/But your …d4 stops it\./);
     const [f] = readBoardAll('pictureCounterplay', { fen, student: 'b', lines, facts: [named] });
     // The student's own next move kills it: posed both ways, and named, so Learn holds it.
     expect(f.skill).toBe('allowed-counterplay');
@@ -277,7 +277,7 @@ describe('the piece counterplay', () => {
     const g5 = fact('test:g5', 'attackerDefenderCount', afterQf6, ['g5']);
     const r = counterplaysOf(buildPicture([g5]), afterQf6, lines, 'w').find((x) => x.from === 'h2' && x.to === 'h5');
     expect(r).toMatchObject({ kind: 'piece', piece: 'r', hits: ['g5'], state: 'dead', ply: 3, stoppedBy: 'g5g4', factIds: ['test:g5'] });
-    expect(counterplayText(r!, 'b', afterQf6, lines)).toMatch(/But it is dead: after g4 it no longer works\.$/);
+    expect(counterplayText(r!, 'b', afterQf6, lines)).toMatch(/But your …g4 stops it\.$/);
     // Line without …g4: the line neither plays nor stops it — unsettled, unsaid.
     const short: EngineLine[] = [{ ...lines[0], moves: lines[0].moves.slice(0, 3) }];
     const u = counterplaysOf(buildPicture([g5]), afterQf6, short, 'w').find((x) => x.from === 'h2' && x.to === 'h5');

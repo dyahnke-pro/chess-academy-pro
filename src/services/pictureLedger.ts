@@ -1171,8 +1171,14 @@ export function counterplayText(c: Counterplay, student: Color, fen: string, lin
   const head = c.kind === 'break' ? breakWords(c, fen, owner, whose, hitWords, key)
     : rotateStem([`${owner} ${NAME[c.piece]} can come to ${c.to} and hit ${hit}.`, `${owner} resource is the ${NAME[c.piece]} on ${c.from}: from ${c.to} it hits ${hit}.`], key);
   if (c.state === 'alive') return `${head} ${rotateStem(['It is coming: the best line plays it.', 'Nothing stops it in the best line.'], key)}`;
-  const stopper = c.stoppedBy ? sanOf(fen, lines[0]?.moves ?? [], c.ply ?? 0) : null;
-  return `${head} ${stopper ? `But it is dead: after ${stopper} it no longer works.` : 'But the best line stops it.'}`;
+  // THE STOPPER IS NAMED AS ITS SIDE'S MOVE, and only a move of the side it
+  // is stopped for (puzzle reads 2026-11-20: "their
+  // bishop can come to h5 … But it is dead: after h5 it no longer works" —
+  // …h5 said bare, read as the bishop's own square).
+  const ply = c.ply ?? 0;
+  const stopperSide: Color = (ply % 2 === 0) === (fen.split(' ')[1] === 'w') ? 'w' : 'b';
+  const stopper = c.stoppedBy && stopperSide !== c.side ? sanOf(fen, lines[0]?.moves ?? [], ply) : null;
+  return `${head} ${stopper ? `But ${stopperSide === student ? 'your' : 'their'} ${stopperSide === 'b' ? '…' : ''}${stopper} stops it.` : 'But the best line stops it.'}`;
 }
 
 /** A pawn break in words, named by its move (chess.js): a push goes TO an

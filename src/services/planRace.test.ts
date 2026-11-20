@@ -101,15 +101,16 @@ describe('planRace — the race, not just the plans', () => {
   });
 
   it('WITH QUEENS ON the race is a fact, not a marching order', () => {
-    // Read at Fischer–Spassky 1972 move 27: both runners three pushes away and
-    // the move White's, but with queens and rooks still on, "push, and make them
-    // be the one who stops to defend" sends the student into a sharp middlegame.
-    const FISCHER = '1r3n1k/r3q1p1/7p/p1p1Pp2/2Bp4/1P5Q/P5PP/2R2RK1 w - - 0 27';
-    const r = detectPlanRace(FISCHER, 'w');
-    expect(r).toMatchObject({ kind: 'passer-race', yourPushes: 3, theirPushes: 3, queensOn: true, youQueenFirst: true });
-    const c = planRaceClause(FISCHER, 'w', 'live') ?? '';
+    // Queens alone beside the pawns: the race the queen trade would start.
+    const QUEENS = '6qk/8/1P6/8/8/7p/8/Q5K1 w - - 0 1';
+    const r = detectPlanRace(QUEENS, 'w');
+    expect(r).toMatchObject({ kind: 'passer-race', queensOn: true });
+    const c = planRaceClause(QUEENS, 'w', 'live') ?? '';
     expect(c).toMatch(/once the queens come off/);
     expect(c).not.toMatch(/push, and make them be the one who stops/);
+    // A rook or a minor can stop a pawn, so with one on the board there is no
+    // race (David 2026-11-20): Fischer–Spassky 1972 move 27 reads none.
+    expect(detectPlanRace('1r3n1k/r3q1p1/7p/p1p1Pp2/2Bp4/1P5Q/P5PP/2R2RK1 w - - 0 27', 'w')).toBeNull();
     // …and with the queens gone the direct instruction comes back.
     const NO_QUEENS = '8/P7/8/8/7p/8/8/K6k w - - 0 1';
     expect(detectPlanRace(NO_QUEENS, 'w')).toMatchObject({ queensOn: false });
@@ -163,8 +164,7 @@ describe('the first queen, on arrival (Naroditsky, Pawn Races)', () => {
     expect(r && r.kind === 'passer-race' && r.firstQueenCovers).toBe(false);
   });
   it('not read with pieces on the board', () => {
-    const r = detectPlanRace('8/4k3/8/P7/7p/8/8/2K4R w - - 0 1', 'w');
-    expect(r && r.kind === 'passer-race' ? r.firstQueenCovers : 'x').toBeNull();
+    expect(detectPlanRace('8/4k3/8/P7/7p/8/8/2K4R w - - 0 1', 'w')).toBeNull();
   });
 });
 

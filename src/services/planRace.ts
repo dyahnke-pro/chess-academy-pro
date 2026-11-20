@@ -330,7 +330,13 @@ export function detectPlanRace(fen: string, studentColor: Color): PlanRace | nul
   // 1. BOTH sides have a passed pawn — the classic race.
   const mine = fastestRunner(chess, s.pawns.passedPawns[studentColor], studentColor);
   const theirs = fastestRunner(chess, s.pawns.passedPawns[opp], opp);
-  if (mine && theirs) {
+  // A RACE COUNTS ONLY WHEN NO PIECE CAN STOP THE PAWNS (puzzle reads
+  // 2026-11-20: "they get there first, so the endgame favours them" with a
+  // queen, a rook and a bishop each on the board and the student winning):
+  // kings and pawns, or — said as the race the queen trade would start —
+  // queens alone beside them.
+  const pieceCanStop = chess.board().flat().some((c) => !!c && c.type !== 'k' && c.type !== 'p' && c.type !== 'q');
+  if (mine && theirs && !pieceCanStop) {
     const youMoveFirst = chess.turn() === studentColor;
     const queensOn = chess.board().flat().some((c) => !!c && c.type === 'q');
     const race: PasserRace = {
