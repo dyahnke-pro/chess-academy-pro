@@ -39,6 +39,13 @@ same on every surface. The live checklist of the rules is the Rulebook
 artifact (https://claude.ai/artifact/NRthGVKnujdnRxpegdLrxP), built with David
 rule by rule.
 
+## 🔒🔒 EVERY FACT KNOWS ITS BOARD, AND ONE RENDERER WRITES THE TEACHING SENTENCE (David 2026-11-20: "We give it a rule to speak teaching sentences" → "we also need to mark the current board somehow with an identifier" → "Or past?" → "Lock these last two in")
+
+Found on the 5-puzzle grading (245 sentences): true facts about ANOTHER board were spoken as if about the one on screen ("their queen on h6 attacks your rook on h1" — true only after the try Rh1; "pawn on c7" when it stands on c6), and 76 files wrote their own prose (322 templates), so no voice rule could reach them.
+
+1. **Every fact carries its board:** the board's position key (FEN: pieces, side, castling, en passant), the PATH of moves from the board on screen, and the RELATION — `now` | `past` (moves already played) | `line` (the best line) | `try` (a hypothetical that fails). REQUIRED, stamped once by the board bundle when a computer reads a board. The renderer anchors by relation: now → present; past → past tense naming the move; line → "after …"; try → "if …". A fact whose key is not the board on screen and has no path cannot be rendered. Board checks (squares, owners) read each fact against ITS OWN board.
+2. **One renderer writes every teaching sentence.** Computers return data (who, does what, so what, proof, pattern); the renderer writes the sentence, so the voice rules live in one place: name the subject (no orphan "it"), the why before the material, "threatens" only for forcing moves (check, capture, mate, promotion, an attack on a piece worth more or unguarded), praise of a piece only when it is safe, one idea a sentence, rotated wording. A fact with no mechanism is never spoken as teaching — only as a linked support, or not at all. No new hand-written `text:` template outside the renderer (gate; the count only falls). Families move over in order: tries → threats → standing → pieces → plans.
+
 ## 🗣️ THE COACH TALKS LIKE A PERSON AT THE BOARD — every narration, every surface (David 2026-11-08: "I like your wording better than the robotic wording of the app" → "I want all narrations to follow this pattern" → "Maybe add a couple variations so they don't all sound the same")
 
 The facts are computed (G0); the SENTENCE is written for a person. Every line,
