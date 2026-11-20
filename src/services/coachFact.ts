@@ -24,7 +24,7 @@ import { NO_STAKES, type NoStakes, type Stakes } from './factStakes';
 import type { FactProof } from './proof';
 import type { SpokenLine } from './voicePackage';
 import type { WeaknessSignal } from './weaknessSignal';
-import type { ThreadKey } from './gameStory';
+import type { ThreadKey, PictureConclusionId } from './gameStory';
 import type { TacticType } from '../types';
 import type { FacetRole } from './reviewFacetRank';
 import type { StoryBeat } from './openingStory';
@@ -656,7 +656,11 @@ export interface CoachFact {
   marks?: FactMarks;
   /** Which beat of the opening's story it is (`openingStoryAt` only) — Learn
    *  speaks each beat in its own lane (`STORY_LANE`). */
-  storyBeat?: StoryBeat;
+  storyBeat?: StoryBeat;  /** THE PICTURE'S CONCLUSION IT STATES (`pictureVerdict`, `pictureLedger`
+   *  computers only): the game's story keeps it as a thread
+   *  (`StoryStore.commitFacts`), so an unchanged conclusion is said once and
+   *  a changed one is said as a change (`planThread.tellPictureFacts`). */
+  conclusion?: PictureConclusionId;
 }
 
 /** A fact said without the move it names — see `CoachFact.heldForm`. */

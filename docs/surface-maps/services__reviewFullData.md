@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2097 lines · 12 exports · 23 importers · 31 tests · 0 audits**
+**1690 lines · 12 exports · 24 importers · 34 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -20,6 +20,7 @@
 - `src/services/hangingVsUndefended.test.ts`
 - `src/services/orderComputers.test.ts`
 - `src/services/prematureBreak.test.ts`
+- `src/services/reviewAllowedMate.test.ts`
 - `src/services/reviewFullData.pinHolds.test.ts`
 - `src/services/reviewFullData.test.ts`
 - `src/services/reviewHeardCorrection.test.ts`
@@ -38,11 +39,8 @@
 
 ## Exports and every call site
 
-### `positionalVerdictLine` (function) — 1 call site
-- `src/services/coachFeatureService.ts:3044`
-
 ### `prematureBreakWhy` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1222`
+- `src/services/coachFeatureService.ts:1239`
 - `src/services/prematureBreak.test.ts:15`
 - `src/services/prematureBreak.test.ts:25`
 - `src/services/prematureBreak.test.ts:30`
@@ -56,18 +54,19 @@
 ### `NO_TEACHING_CONTEXT` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `computeMoveFacets` (function) — 60 call sites
+### `computeMoveFacets` (function) — 61 call sites
 - `src/services/batch2Wiring.test.ts:55`
 - `src/services/boardDelta.test.ts:15`
 - `src/services/boardDelta.test.ts:68`
-- `src/services/coachFeatureService.ts:2326`
-- `src/services/danyaBench.measure.test.ts:434`
+- `src/services/coachFeatureService.ts:2336`
+- `src/services/danyaBench.measure.test.ts:435`
 - `src/services/exchangeIdeas.test.ts:238`
 - `src/services/forkTrick.test.ts:62`
 - `src/services/hangingLine.test.ts:73`
 - `src/services/hangingVsUndefended.test.ts:13`
-- `src/services/orderComputers.test.ts:318`
+- `src/services/orderComputers.test.ts:326`
 - `src/services/pieceWish.test.ts:58`
+- `src/services/reviewAllowedMate.test.ts:17`
 - `src/services/reviewFullData.pinHolds.test.ts:19`
 - `src/services/reviewFullData.pinHolds.test.ts:45`
 - `src/services/reviewFullData.test.ts:18`
@@ -113,8 +112,8 @@
 - `src/services/tacticGeometry.test.ts:272`
 - `src/services/tacticGeometry.test.ts:277`
 - `src/services/unifiedBetterMoveReason.test.ts:39`
-- `src/services/weighedMoves.test.ts:253`
-- `src/services/weighedMoves.test.ts:266`
+- `src/services/weighedMoves.test.ts:255`
+- `src/services/weighedMoves.test.ts:268`
 - `src/test/teach02Wired.test.ts:28`
 - `src/test/teach02Wired.test.ts:68`
 
@@ -129,20 +128,28 @@
 - `src/services/reviewVerdictSentence.test.ts:27`
 - `src/services/reviewVerdictSentence.test.ts:30`
 
-### `correctionAgainstHeard` (function) — 4 call sites
+### `positionalVerdictLine` (re-export) — 3 call sites
+- `src/services/boardComputers.ts:2061`
+- `src/services/coachFeatureService.ts:3057`
+- `src/services/reviewPositionalAssessment.ts:380`
+
+### `correctionAgainstHeard` (re-export) — 6 call sites
+- `src/services/boardComputers.ts:2159`
+- `src/services/heardCorrection.ts:13`
 - `src/services/reviewHeardCorrection.test.ts:7`
 - `src/services/reviewHeardCorrection.test.ts:12`
 - `src/services/reviewHeardCorrection.test.ts:17`
 - `src/services/reviewHeardCorrection.test.ts:18`
 
-### `seatMoveSubject` (function) — 2 call sites
+### `seatMoveSubject` (re-export) — 4 call sites
+- `src/services/boardComputers.ts:2074`
+- `src/services/pvPlayback.ts:1038`
 - `src/services/reviewVerdictSentence.test.ts:15`
 - `src/test/captureSaidOnce.gate.test.ts:206`
 
-### `INFLUENCE_LOOSE_TAIL_RE` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `describeMoveInfluence` (function) — 9 call sites
+### `describeMoveInfluence` (re-export) — 11 call sites
+- `src/services/boardComputers.ts:2143`
+- `src/services/moveInfluence.ts:23`
 - `src/services/reviewFullData.test.ts:672`
 - `src/services/reviewFullData.test.ts:677`
 - `src/services/reviewFullData.test.ts:689`
@@ -153,7 +160,11 @@
 - `src/services/reviewNarrationFidelity.test.ts:48`
 - `src/services/reviewNarrationFidelity.test.ts:60`
 
-### `studentAnswer` (function) — 5 call sites
+### `INFLUENCE_LOOSE_TAIL_RE` (re-export) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `studentAnswer` (re-export) — 6 call sites
+- `src/services/playCommentary.ts:976`
 - `src/services/reviewFullData.test.ts:502`
 - `src/services/reviewFullData.test.ts:507`
 - `src/services/reviewFullData.test.ts:508`
@@ -173,6 +184,7 @@
 - `src/services/orderComputers.test.ts`
 - `src/services/pieceWish.test.ts`
 - `src/services/prematureBreak.test.ts`
+- `src/services/reviewAllowedMate.test.ts`
 - `src/services/reviewFullData.pinHolds.test.ts`
 - `src/services/reviewFullData.test.ts`
 - `src/services/reviewHeardCorrection.test.ts`
@@ -190,9 +202,11 @@
 - `src/services/weighedMoves.test.ts`
 - `src/test/captureSaidOnce.gate.test.ts`
 - `src/test/oneCoachSurfaces.gate.test.ts`
+- `src/test/oneCoachUnlocked.gate.test.ts`
 - `src/test/oneErrorComputer.gate.test.ts`
 - `src/test/oneFactShape.gate.test.ts`
 - `src/test/teach02Wired.test.ts`
+- `src/test/writerRegister.gate.test.ts`
 
 ## Audits that reach it
 

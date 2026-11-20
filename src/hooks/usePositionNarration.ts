@@ -17,6 +17,7 @@ import { DEFAULT_STUDENT_RATING } from '../services/ratingBands';
 import { useStudentNeed } from './useStudentNeed';
 import { composePositionRead, READ_SEAT } from '../services/positionReadComposer';
 import type { ReadSurface } from '../services/tryReadBudget';
+import type { ReadStory } from '../services/gameStory';
 
 interface UsePositionNarrationArgs {
   fen: string;
@@ -39,6 +40,10 @@ interface UsePositionNarrationArgs {
   /** The surface the read is on — REQUIRED: it sets the engine budget for the
    *  read's tries (`tryReadBudget`: live boards shallow and parallel, Review deep). */
   surface: ReadSurface;
+  /** The game's story the read is told against, taken when the student taps
+   *  (`gameStory.readStoryOf`). REQUIRED: Learn's mount hands its game's
+   *  story; every standalone board answers null. */
+  story: (() => ReadStory) | null;
 }
 
 interface UsePositionNarrationResult {
@@ -166,6 +171,10 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
     };
   }, []);
 
+  // The story is read when the student taps, through a ref, so a new getter on
+  // every render does not remake the read.
+  const storyRef = useRef(args.story);
+  storyRef.current = args.story;
   const cancel = useCallback(() => {
     activeTokenRef.current += 1;
     voiceService.stop();
@@ -245,6 +254,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
         withhold: args.withhold,
         readTempting: true,
         surface: args.surface,
+        story: storyRef.current ? storyRef.current() : null,
       });
       if (token !== activeTokenRef.current) return;
       if (!facts) {

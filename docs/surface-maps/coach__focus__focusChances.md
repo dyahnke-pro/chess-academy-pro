@@ -202,13 +202,21 @@
 - `src/coach/focus/focusChances.test.ts:477`
 - `src/coach/focus/focusRunner.ts:410`
 
-### `lineSans` (function) — 9 call sites
+### `lineSans` (function) — 17 call sites
 - `src/coach/focus/focusChances.test.ts:470`
 - `src/coach/focus/focusChances.test.ts:480`
 - `src/coach/focus/focusChances.test.ts:481`
-- `src/components/Coach/CoachTeachPage.tsx:14118`
-- `src/services/inaccuracyCall.ts:233`
-- `src/services/inaccuracyCall.ts:248`
+- `src/components/Coach/CoachTeachPage.tsx:14120`
+- `src/services/boardBundle.ts:158`
+- `src/services/boardBundle.ts:386`
+- `src/services/boardBundle.ts:440`
+- `src/services/boardBundle.ts:441`
+- `src/services/boardBundle.ts:481`
+- `src/services/boardBundle.ts:482`
+- `src/services/boardBundle.ts:483`
+- `src/services/boardBundle.ts:492`
+- `src/services/inaccuracyCall.ts:235`
+- `src/services/inaccuracyCall.ts:250`
 - `src/services/lessonFacts.measure.test.ts:190`
 - `src/services/lessonFacts.measure.test.ts:217`
 - `src/services/lessonFacts.measure.test.ts:267`

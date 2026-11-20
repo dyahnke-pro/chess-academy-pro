@@ -720,6 +720,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
     corpusNotes: true, // the tactics drill is a kept corpus surface
     withhold: state === 'correct' ? null : puzzle.bestMoveSan,
     surface: 'puzzle',
+    story: null, // a standalone board: no game story to tell against
   });
   // The bar's Hint: one step of the ladder. Help before answering makes the
   // solve prompted; the ladder's last step is the answer shown.

@@ -29,6 +29,7 @@ import { fortressOn, fortressLine, type Fortress } from './fortress';
 import { DRAW_LEVEL_CP, LOCKED_TEXT, lockedPawns, type LockedPawns } from './drawnEnding';
 import { KP_FAST_BUDGET, kpDrawReason, kpVerdict, type KpValue } from './kpSolver';
 import { wonEnding } from './wonEnding';
+import { snapshot, diff, relationKey, relationSquare, type RelationSnapshot } from './relations';
 
 export interface FutureBoard {
   fen: string;
@@ -133,6 +134,27 @@ function factKey(f: CoachFact): string {
 function sameOn(f: CoachFact, other: { keys: ReadonlySet<string>; texts: ReadonlySet<string> }): boolean {
   return other.keys.has(factKey(f)) || other.texts.has(`${f.computer}|${f.text}`);
 }
+/** A claim that states a board RELATION (`relations.ts`): a piece loose or
+ *  hanging on a square, a passed pawn on one. The producers key these with
+ *  what they need for say-once (`conceptKey.looseKey` adds the ply the spell
+ *  began), so two boards holding the same loose piece can carry different
+ *  claims; the relation is the same, and the relations diff says so. */
+const RELATION_CLAIM = /^(loose|hanging|passer):([a-h][1-8])(?![a-h1-8])/;
+
+/** The relation keys a fact states on its board's snapshot, or null when it
+ *  states none the snapshot can name (then it is matched by claims and words). */
+export function relationsOfFact(f: Pick<CoachFact, 'claims'>, snap: RelationSnapshot): string[] | null {
+  const keys: string[] = [];
+  for (const c of f.claims) {
+    const m = RELATION_CLAIM.exec(c);
+    if (!m) continue;
+    const here = snap.relations.filter((r) => r.kind === m[1] && relationSquare(r) === m[2]);
+    if (here.length === 0) return null;
+    keys.push(...here.map(relationKey));
+  }
+  return keys.length > 0 ? keys : null;
+}
+
 /** The squares the line acts on, its first moves' from and to, and both kings
  *  on the board it reaches: a change there is what the line did, a change
  *  elsewhere is the rest of the board. */
@@ -205,8 +227,21 @@ export function whatChanged(args: {
     const bi = index(onBest);
     const tT = touched(args.fen, args.tryLine.moves, tf.fen);
     const bT = touched(args.fen, args.bestLine.moves, bf.fen);
-    for (const f of onTry) if (!sameOn(f, bi)) appeared.push({ at, fact: f, inLine: f.squares.some((q) => tT.has(q)) });
-    for (const f of onBest) if (!sameOn(f, ti)) lost.push({ at, fact: f, inLine: f.squares.some((q) => bT.has(q)) });
+    // ONE DIFFER (relations.ts): a fact that states a board relation is a
+    // change exactly when the relations diff of the two boards has it — the
+    // try's board gained it (appeared) or the best's lost it (given up). The
+    // rest are matched by their claims and words, as before.
+    const ts = snapshot(tf.fen);
+    const bs = snapshot(bf.fen);
+    const rd = ts && bs ? diff(bs, ts) : null;
+    const gainedOnTry = new Set((rd?.gained ?? []).map(relationKey));
+    const onlyOnBest = new Set((rd?.lost ?? []).map(relationKey));
+    const changed = (f: CoachFact, own: RelationSnapshot | null, only: ReadonlySet<string>, other: { keys: ReadonlySet<string>; texts: ReadonlySet<string> }): boolean => {
+      const rels = rd && own ? relationsOfFact(f, own) : null;
+      return rels ? rels.some((k) => only.has(k)) : !sameOn(f, other);
+    };
+    for (const f of onTry) if (changed(f, ts, gainedOnTry, bi)) appeared.push({ at, fact: f, inLine: f.squares.some((q) => tT.has(q)) });
+    for (const f of onBest) if (changed(f, bs, onlyOnBest, ti)) lost.push({ at, fact: f, inLine: f.squares.some((q) => bT.has(q)) });
   }
   const seen = new Set<string>();
   const once = (xs: Change[]): Change[] => xs.sort((x, y) => rank(x) - rank(y)).filter((c) => {

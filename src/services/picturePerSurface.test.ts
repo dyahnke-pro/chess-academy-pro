@@ -1,3 +1,5 @@
+import { createStoryStore, readStoryOf } from './gameStory';
+import { LOCAL_THREAD } from './coachFact';
 // THE PICTURE ON EVERY SURFACE (WO-PICTURE-01 P6): the verdict read after the
 // tries and the plan that survives them reach each surface through the ONE
 // fact set (`moveThoughtFacts` → `pictureReads`), never a surface's own call.
@@ -72,7 +74,7 @@ describe('the picture reaches every surface through the one fact set', { timeout
 
   it('Learn: the student\'s move hands the picture to the door on the thought lane', () => {
     const fenNow = (() => { const b = new Chess(FEN); b.move('Bf7'); b.move('f4'); return b.fen(); })();
-    const out = learnThoughtTurn({ studentMove: { fenBefore: FEN, san: 'Bf7', history: [], prev: NO_PREV_CAPTURE, theirLast: null, reads, costCp: 0 }, reply: null, fenNow, student: 'w' });
+    const out = learnThoughtTurn({ studentMove: { fenBefore: FEN, san: 'Bf7', history: [], prev: NO_PREV_CAPTURE, theirLast: null, reads, costCp: 0 }, reply: null, fenNow, student: 'w', story: createStoryStore('t') });
     const v = out.find((f) => f.computer === 'pictureVerdict');
     expect(v?.lane).toBe('thought');
     // The plan names the student's move: the door holds it unless asked.
@@ -96,7 +98,7 @@ describe('the picture reaches every surface through the one fact set', { timeout
       byFen.set(b.fen(), [{ rank: 1, depth: 16, evaluation: l.evaluation, mate: null, moves: l.moves.slice(1) }]);
     }
     const set = await boardReadFacts({ fen: FEN, studentColor: 'w', rating: 1800, before: fan.slice(0, 3), read: async (f) => byFen.get(f) ?? null,
-      withhold: false, tense: 'now', history: [], theory: false, readTempting: true, studentNeedContext: null });
+      withhold: false, tense: 'now', history: [], theory: false, readTempting: true, studentNeedContext: null, story: null });
     const pics = set.facts.filter((f) => f.computer === 'pictureVerdict' || f.computer === 'picturePlan');
     expect(pics.map((f) => f.computer).sort()).toEqual(['picturePlan', 'pictureVerdict']);
     for (const f of pics) expect(f.from).toBe('position');
@@ -104,9 +106,32 @@ describe('the picture reaches every surface through the one fact set', { timeout
     expect(set.facts.filter((f) => f.computer === 'pictureVerdict')).toHaveLength(1);
   });
 
+  it('Learn\'s read is told against the game\'s story: a verdict and a plan the game already said are not said again', async () => {
+    const byFen = new Map<string, AnalysisLine[]>();
+    for (const l of fan) {
+      const b = new Chess(FEN);
+      b.move({ from: l.moves[0].slice(0, 2), to: l.moves[0].slice(2, 4) });
+      byFen.set(b.fen(), [{ rank: 1, depth: 16, evaluation: l.evaluation, mate: null, moves: l.moves.slice(1) }]);
+    }
+    const input = { fen: FEN, studentColor: 'w' as const, rating: 1800, before: fan.slice(0, 3), read: async (f: string) => byFen.get(f) ?? null,
+      withhold: false, tense: 'now' as const, history: [], theory: false, readTempting: true, studentNeedContext: null };
+    const fresh = await boardReadFacts({ ...input, story: null });
+    const pics = fresh.facts.filter((f) => f.computer === 'pictureVerdict' || f.computer === 'picturePlan');
+    expect(pics.map((f) => f.computer).sort()).toEqual(['picturePlan', 'pictureVerdict']);
+    // An empty story changes nothing.
+    const empty = await boardReadFacts({ ...input, story: readStoryOf(createStoryStore('g').current()) });
+    expect(empty.facts.filter((f) => f.computer === 'pictureVerdict' || f.computer === 'picturePlan').map((f) => f.text)).toEqual(pics.map((f) => f.text));
+    // The game said them: the read says neither again.
+    const story = createStoryStore('g');
+    story.commitFacts(3, pics.map((f) => ({ thread: LOCAL_THREAD, conclusion: f.conclusion })));
+    const told = await boardReadFacts({ ...input, story: structuredClone(readStoryOf(story.current())) });
+    expect(told.facts.some((f) => f.computer === 'pictureVerdict')).toBe(false);
+    expect(told.facts.filter((f) => f.computer === 'picturePlan').length).toBe(pics.some((f) => f.computer === 'picturePlan' && f.conclusion) ? 0 : 1);
+  });
+
   it('NEGATIVE: a puzzle still being solved never hears the verdict (it names the tries)', async () => {
     const set = await boardReadFacts({ fen: FEN, studentColor: 'w', rating: 1800, before: fan.slice(0, 3), read: async () => null,
-      withhold: true, tense: 'now', history: [], theory: false, readTempting: true, studentNeedContext: null });
+      withhold: true, tense: 'now', history: [], theory: false, readTempting: true, studentNeedContext: null, story: null });
     expect(set.facts.some((f) => f.computer === 'pictureVerdict' || f.computer === 'picturePlan')).toBe(false);
   });
 });

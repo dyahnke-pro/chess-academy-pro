@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**152 lines · 6 exports · 4 importers · 1 tests · 0 audits**
+**475 lines · 10 exports · 11 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,7 +13,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/services/boardComputers.ts`
+- `src/services/boardPlan.test.ts`
+- `src/services/boardPlan.ts`
+- `src/services/boardReadFacts.ts`
 - `src/services/moveThoughtFacts.ts`
+- `src/services/planOfTheBoard.test.ts`
+- `src/services/planOfTheBoard.ts`
+- `src/services/planSteps.boardNow.test.ts`
+- `src/services/planSteps.road.test.ts`
 - `src/services/planSteps.test.ts`
 - `src/services/reviewFullData.ts`
 
@@ -22,11 +29,34 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `PlanStep` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `PlanManeuver` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `RoadJob` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `PlanSteps` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `planSteps` (function) — 9 call sites
-- `src/services/boardComputers.ts:978`
+### `planSteps` (function) — 26 call sites
+- `src/services/boardComputers.ts:3742`
+- `src/services/boardPlan.test.ts:26`
+- `src/services/boardPlan.test.ts:27`
+- `src/services/boardPlan.ts:63`
+- `src/services/boardReadFacts.ts:197`
+- `src/services/planOfTheBoard.test.ts:34`
+- `src/services/planOfTheBoard.ts:185`
+- `src/services/planOfTheBoard.ts:197`
+- `src/services/planSteps.boardNow.test.ts:16`
+- `src/services/planSteps.boardNow.test.ts:19`
+- `src/services/planSteps.boardNow.test.ts:26`
+- `src/services/planSteps.boardNow.test.ts:33`
+- `src/services/planSteps.boardNow.test.ts:45`
+- `src/services/planSteps.boardNow.test.ts:51`
+- `src/services/planSteps.road.test.ts:12`
+- `src/services/planSteps.road.test.ts:38`
+- `src/services/planSteps.road.test.ts:63`
+- `src/services/planSteps.road.test.ts:70`
 - `src/services/planSteps.test.ts:10`
 - `src/services/planSteps.test.ts:17`
 - `src/services/planSteps.test.ts:22`
@@ -36,21 +66,43 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planSteps.test.ts:43`
 - `src/services/planSteps.test.ts:44`
 
-### `planStepsText` (function) — 4 call sites
-- `src/services/boardComputers.ts:982`
+### `hasMatingForce` (function) — 1 call site
+- `src/services/planOfTheBoard.ts:681`
+
+### `planStepsText` (function) — 10 call sites
+- `src/services/boardComputers.ts:3746`
+- `src/services/boardPlan.ts:64`
+- `src/services/boardReadFacts.ts:201`
+- `src/services/planSteps.boardNow.test.ts:46`
+- `src/services/planSteps.road.test.ts:20`
+- `src/services/planSteps.road.test.ts:41`
+- `src/services/planSteps.road.test.ts:72`
 - `src/services/planSteps.test.ts:13`
 - `src/services/planSteps.test.ts:31`
 - `src/services/planSteps.test.ts:36`
 
-### `planStepsKey` (function) — 1 call site
-- `src/services/boardComputers.ts:983`
+### `roadJobText` (function) — 2 call sites
+- `src/services/planOfTheBoard.ts:322`
+- `src/services/planOfTheBoard.ts:330`
 
-### `playedUci` (function) — 2 call sites
-- `src/services/moveThoughtFacts.ts:491`
-- `src/services/reviewFullData.ts:1654`
+### `planStepsKey` (function) — 1 call site
+- `src/services/boardComputers.ts:3747`
+
+### `playedUci` (function) — 7 call sites
+- `src/services/boardBundle.ts:238`
+- `src/services/boardBundle.ts:284`
+- `src/services/boardBundle.ts:359`
+- `src/services/boardBundle.ts:403`
+- `src/services/boardBundle.ts:404`
+- `src/services/moveThoughtFacts.ts:867`
+- `src/services/reviewFullData.ts:1365`
 
 ## Tests
 
+- `src/services/boardPlan.test.ts`
+- `src/services/planOfTheBoard.test.ts`
+- `src/services/planSteps.boardNow.test.ts`
+- `src/services/planSteps.road.test.ts`
 - `src/services/planSteps.test.ts`
 
 ## Audits that reach it

@@ -39,6 +39,7 @@ import { Chess, type Square } from 'chess.js';
 import { PICTURE_ROLE, type PictureRole } from './positionPicture';
 import weightTable from '../data/read-decider-weights.json';
 import { readHabit, READ_HABIT } from './methodBeat';
+import type { PictureConclusionId } from './gameStory';
 
 /** Where a board fact came from: the board's own reads, a tempting move
  *  refuted, or what the engine's best move does. */
@@ -69,6 +70,9 @@ export interface ReadFact {
    *  pieces it moves and the squares it reaches, what its "because" and its
    *  details are read against. */
   line?: readonly string[];
+  /** THE PICTURE'S CONCLUSION it states (`CoachFact.conclusion`): what a
+   *  surface with a game's story commits when the read is said. */
+  conclusion?: PictureConclusionId;
 }
 
 export type ReadStep = 'verdict' | 'character' | 'priority' | 'their-move' | 'their-plan' | 'best-move' | 'tempting' | 'their-try' | 'plan' | 'concept' | 'second-front' | 'mate-pattern';

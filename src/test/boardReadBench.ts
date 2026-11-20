@@ -66,5 +66,6 @@ export function benchInput(r: Row, counter?: { reads: number }): BoardReadInput 
     theory: true,
     readTempting: true,
     studentNeedContext: null,
+    story: null,
   };
 }

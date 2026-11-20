@@ -4,14 +4,16 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1103 lines · 6 exports · 29 importers · 19 tests · 0 audits**
+**1112 lines · 6 exports · 29 importers · 20 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6987) — names `reviewMoveTeaching`
+- **The standard post-deploy ritual** (CLAUDE.md:7034) — names `reviewMoveTeaching`
 
 ## Who calls in
 
+- `src/services/boardComputers.ts`
+- `src/services/capSweep2.test.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/countedWhenTradeEnds.test.ts`
 - `src/services/danyaBench.measure.test.ts`
@@ -19,14 +21,11 @@
 - `src/services/exchangeNotFinished.test.ts`
 - `src/services/falseJobs.test.ts`
 - `src/services/guardPressure.test.ts`
-- `src/services/learnBoardTeaching.ts`
 - `src/services/learnMoveTeaching.ts`
 - `src/services/lessonVoiceIdeas.test.ts`
-- `src/services/moveThoughtFacts.ts`
 - `src/services/pinIsAPin.test.ts`
 - `src/services/playCommentary.ts`
 - `src/services/projectedLineVoice.ts`
-- `src/services/reviewFullData.ts`
 - `src/services/reviewMoveBriefing.ts`
 - `src/services/reviewMoveTeaching.denied.test.ts`
 - `src/services/reviewMoveTeaching.oppositeWings.test.ts`
@@ -39,6 +38,7 @@
 - `src/services/squareRole.test.ts`
 - `src/services/tapeKc7Skewer.test.ts`
 - `src/services/teachMistakeWhy.test.ts`
+- `src/services/thoughtReads.ts`
 - `src/services/walkOct1Learn.test.ts`
 - `src/utils/hasRook.test.ts`
 
@@ -48,7 +48,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `quietMovePoint` (function) — 9 call sites
-- `src/services/playCommentary.ts:924`
+- `src/services/playCommentary.ts:931`
 - `src/services/reviewMoveTeaching.unpin.test.ts:11`
 - `src/services/reviewMoveTeaching.unpin.test.ts:15`
 - `src/services/reviewMoveTeaching.unpin.test.ts:26`
@@ -59,10 +59,10 @@
 - `src/services/walkOct1Learn.test.ts:85`
 
 ### `buildReviewMoveTeaching` (function) — 55 call sites
-- `src/services/coachFeatureService.ts:1288`
-- `src/services/coachFeatureService.ts:4370`
-- `src/services/danyaBench.measure.test.ts:499`
-- `src/services/discussionPractice.ts:174`
+- `src/services/coachFeatureService.ts:1329`
+- `src/services/coachFeatureService.ts:4410`
+- `src/services/danyaBench.measure.test.ts:500`
+- `src/services/discussionPractice.ts:181`
 - `src/services/guardPressure.test.ts:20`
 - `src/services/guardPressure.test.ts:24`
 - `src/services/guardPressure.test.ts:28`
@@ -81,7 +81,7 @@
 - `src/services/lessonVoiceIdeas.test.ts:65`
 - `src/services/lessonVoiceIdeas.test.ts:72`
 - `src/services/projectedLineVoice.ts:144`
-- `src/services/reviewMoveBriefing.ts:606`
+- `src/services/reviewMoveBriefing.ts:610`
 - `src/services/reviewMoveTeaching.denied.test.ts:8`
 - `src/services/reviewMoveTeaching.denied.test.ts:14`
 - `src/services/reviewMoveTeaching.pressureSeat.test.ts:12`
@@ -115,7 +115,9 @@
 - `src/services/squareRole.test.ts:44`
 - `src/utils/hasRook.test.ts:22`
 
-### `buildReviewMoveTeachingFact` (function) — 31 call sites
+### `buildReviewMoveTeachingFact` (function) — 32 call sites
+- `src/services/boardComputers.ts:1747`
+- `src/services/capSweep2.test.ts:20`
 - `src/services/countedWhenTradeEnds.test.ts:100`
 - `src/services/countedWhenTradeEnds.test.ts:115`
 - `src/services/exchangeNotFinished.test.ts:196`
@@ -128,8 +130,6 @@
 - `src/services/falseJobs.test.ts:82`
 - `src/services/falseJobs.test.ts:86`
 - `src/services/falseJobs.test.ts:106`
-- `src/services/learnBoardTeaching.ts:1259`
-- `src/services/moveThoughtFacts.ts:361`
 - `src/services/pinIsAPin.test.ts:16`
 - `src/services/reviewMoveTeaching.oppositeWings.test.ts:13`
 - `src/services/reviewMoveTeaching.oppositeWings.test.ts:18`
@@ -147,10 +147,10 @@
 - `src/services/reviewMoveTeaching.test.ts:267`
 - `src/services/reviewMoveTeaching.test.ts:272`
 - `src/services/tapeKc7Skewer.test.ts:29`
+- `src/services/thoughtReads.ts:244`
 
-### `nameEndgamePhase` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:4278`
-- `src/services/reviewFullData.ts:1801`
+### `nameEndgamePhase` (function) — 6 call sites
+- `src/services/boardComputers.ts:4728`
 - `src/services/reviewMoveTeaching.test.ts:140`
 - `src/services/reviewMoveTeaching.test.ts:142`
 - `src/services/reviewMoveTeaching.test.ts:147`
@@ -158,7 +158,7 @@
 - `src/services/reviewMoveTeaching.test.ts:156`
 
 ### `buildReviewConversionTeaching` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:4273`
+- `src/services/coachFeatureService.ts:4312`
 - `src/services/reviewMoveTeaching.test.ts:121`
 - `src/services/reviewMoveTeaching.test.ts:124`
 - `src/services/reviewMoveTeaching.test.ts:130`
@@ -168,6 +168,7 @@
 
 ## Tests
 
+- `src/services/capSweep2.test.ts`
 - `src/services/countedWhenTradeEnds.test.ts`
 - `src/services/danyaBench.measure.test.ts`
 - `src/services/exchangeNotFinished.test.ts`

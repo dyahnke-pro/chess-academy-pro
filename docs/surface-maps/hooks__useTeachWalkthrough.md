@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2686 lines · 8 exports · 5 importers · 3 tests · 4 audits**
+**2687 lines · 8 exports · 5 importers · 4 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -65,7 +65,7 @@
 - `src/hooks/useTeachWalkthrough.test.tsx:725`
 
 ### `isStartablePunishLesson` (re-export) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:17343`
+- `src/components/Coach/CoachTeachPage.tsx:17349`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:80`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:84`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:85`
@@ -98,7 +98,7 @@
 - `src/services/stageEntryValidity.ts:96`
 
 ### `isValidDrillLine` (re-export) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:17449`
+- `src/components/Coach/CoachTeachPage.tsx:17455`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:143`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:162`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:163`
@@ -110,6 +110,7 @@
 - `src/hooks/findMatchingTraps.test.ts`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts`
 - `src/hooks/useTeachWalkthrough.test.tsx`
+- `src/test/writerRegister.gate.test.ts`
 
 ## Audits that reach it
 

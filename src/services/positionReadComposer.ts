@@ -21,6 +21,7 @@ import { lastMoveIfStudent, lastMoveIfOpponent, sansOfPgn } from './lastMoveOfLi
 import type { StudentNeedContext } from './needScore';
 import type { StockfishAnalysis } from '../types';
 import type { WeaknessSignal } from './weaknessSignal';
+import type { ReadStory } from './gameStory';
 
 /** The seat every sentence of the read is computed in. The facts computers
  *  write "you / they", so the read speaks that seat end to end and the phraser
@@ -90,6 +91,10 @@ interface PositionReadInput {
   /** REQUIRED: the surface the read is on — its engine budget for the tries
    *  (`tryReadBudget`: Learn shallow and parallel, Review deep). */
   surface: ReadSurface;
+  /** REQUIRED: the game's story the read is told against (`ReadStory`, taken
+   *  when the student taps) — Learn's mount only; null on every standalone
+   *  board (`boardReadFacts.story`). */
+  story: ReadStory | null;
 }
 
 /** Below this the forcing best move is one of several (a capture or a
@@ -197,6 +202,7 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
       fen: i.fen, studentColor: studentCC, rating: i.rating, before, history: sans, theory: true, tense: 'now',
       withhold: !!marks, readTempting: i.readTempting && !marks,
       read: reader.read,
+      story: i.story,
       // THE HEAT MAP + THE NEED TERM (B3): the student's record and the
       // last move on each side when the PGN produces this board.
       studentNeedContext: i.studentNeedContext,

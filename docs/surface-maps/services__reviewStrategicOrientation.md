@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**271 lines · 5 exports · 6 importers · 3 tests · 1 audits**
+**270 lines · 5 exports · 5 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,9 +12,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
-- `src/services/coachFeatureService.ts`
+- `src/services/boardComputers.ts`
 - `src/services/planBeatShape.test.ts`
-- `src/services/reviewFullData.ts`
 - `src/services/reviewOpponentCommentary.ts`
 - `src/services/reviewStrategicOrientation.test.ts`
 - `src/services/reviewWalk900.test.ts`
@@ -35,22 +34,21 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planBeatShape.test.ts:55`
 - `src/services/planBeatShape.test.ts:78`
 
-### `buildMiddlegameOrientation` (function) — 16 call sites
-- `src/services/coachFeatureService.ts:3937`
-- `src/services/reviewFullData.ts:1688`
+### `buildMiddlegameOrientation` (function) — 15 call sites
+- `src/services/boardComputers.ts:2021`
 - `src/services/reviewStrategicOrientation.test.ts:4`
 - `src/services/reviewStrategicOrientation.test.ts:8`
-- `src/services/reviewStrategicOrientation.test.ts:18`
-- `src/services/reviewStrategicOrientation.test.ts:26`
-- `src/services/reviewStrategicOrientation.test.ts:36`
-- `src/services/reviewStrategicOrientation.test.ts:44`
+- `src/services/reviewStrategicOrientation.test.ts:19`
+- `src/services/reviewStrategicOrientation.test.ts:27`
+- `src/services/reviewStrategicOrientation.test.ts:37`
 - `src/services/reviewStrategicOrientation.test.ts:45`
-- `src/services/reviewStrategicOrientation.test.ts:49`
-- `src/services/reviewStrategicOrientation.test.ts:54`
-- `src/services/reviewStrategicOrientation.test.ts:66`
+- `src/services/reviewStrategicOrientation.test.ts:46`
+- `src/services/reviewStrategicOrientation.test.ts:50`
+- `src/services/reviewStrategicOrientation.test.ts:55`
 - `src/services/reviewStrategicOrientation.test.ts:67`
-- `src/services/reviewStrategicOrientation.test.ts:74`
-- `src/services/reviewStrategicOrientation.test.ts:76`
+- `src/services/reviewStrategicOrientation.test.ts:68`
+- `src/services/reviewStrategicOrientation.test.ts:75`
+- `src/services/reviewStrategicOrientation.test.ts:77`
 - `src/services/reviewWalk900.test.ts:33`
 
 ## Tests

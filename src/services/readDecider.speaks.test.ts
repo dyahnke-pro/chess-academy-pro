@@ -37,7 +37,7 @@ function readOf(b: Board, readTempting = true): Promise<{ facts: BoardFact[]; re
   if (!cache.has(key)) cache.set(key, (async () => {
     const student = b.fen.split(' ')[1] as 'w' | 'b';
     const before = b.top.map(([ev, mv], k) => asLine(ev, mv.split(' '), k));
-    const set = await boardReadFacts({ fen: b.fen, studentColor: student, rating: 1800, before, read: readerFor(b), withhold: false, tense: 'now', history: [], theory: false, readTempting, studentNeedContext: null });
+    const set = await boardReadFacts({ fen: b.fen, studentColor: student, rating: 1800, before, read: readerFor(b), withhold: false, tense: 'now', history: [], theory: false, readTempting, studentNeedContext: null, story: null });
     const ctx = readContextOf({ fen: b.fen, top: { evaluation: before[0].evaluation, mate: null }, bestUci: before[0].moves[0], withheld: null, studentShot: false });
     const read = decideRead(set.facts, ctx).facts;
     if (process.env.READ_SPEAKS_PRINT) console.log(`\n${b.fen}\n${read.map((f, i) => `${i + 1}. [${f.kind}${f.computer ? `:${f.computer}` : ''}] ${f.text}`).join('\n')}`);

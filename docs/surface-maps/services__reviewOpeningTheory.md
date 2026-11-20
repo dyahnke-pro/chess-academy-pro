@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1212 lines · 11 exports · 3 importers · 4 tests · 0 audits**
+**1212 lines · 11 exports · 3 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5847) — names `reviewOpeningTheory`
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5943) — names `reviewOpeningTheory`
 
 ## Who calls in
 
@@ -22,7 +22,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `resolveCuratedOpeningIdeas` (function) — 11 call sites
-- `src/components/Coach/CoachGameReview.tsx:2452`
+- `src/components/Coach/CoachGameReview.tsx:2387`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:49`
 - `src/services/reviewOpeningTheory.test.ts:84`
 - `src/services/reviewOpeningTheory.test.ts:85`
@@ -35,10 +35,10 @@
 - `src/services/reviewOpeningTheory.test.ts:524`
 
 ### `warmLectureSources` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:2435`
+- `src/components/Coach/CoachGameReview.tsx:2370`
 
 ### `buildOpeningTheoryLecture` (function) — 22 call sites
-- `src/components/Coach/CoachGameReview.tsx:2443`
+- `src/components/Coach/CoachGameReview.tsx:2378`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:46`
 - `src/services/reviewOpeningTheory.test.ts:35`
 - `src/services/reviewOpeningTheory.test.ts:64`
@@ -62,7 +62,7 @@
 - `src/test/corpusScope.test.ts:94`
 
 ### `enrichLectureWithEngine` (function) — 2 call sites
-- `src/components/Coach/CoachGameReview.tsx:2460`
+- `src/components/Coach/CoachGameReview.tsx:2395`
 - `src/services/reviewOpeningTheory.test.ts:284`
 
 ### `TheoryLectureBeat` (interface) — 0 call sites
@@ -74,7 +74,7 @@
 - `src/services/reviewOpeningTheory.test.ts:416`
 
 ### `buildTheoryLectureBeats` (function) — 17 call sites
-- `src/components/Coach/CoachGameReview.tsx:2451`
+- `src/components/Coach/CoachGameReview.tsx:2386`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:49`
 - `src/services/reviewOpeningTheory.test.ts:129`
 - `src/services/reviewOpeningTheory.test.ts:146`
@@ -93,21 +93,20 @@
 - `src/test/corpusScope.test.ts:95`
 
 ### `lectureNoteSelector` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:2452`
+- `src/components/Coach/CoachGameReview.tsx:2387`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:49`
 - `src/test/corpusScope.test.ts:95`
 
 ### `loadLectureCorpus` (function) — 1 call site
-- `src/components/Coach/CoachGameReview.tsx:2456`
+- `src/components/Coach/CoachGameReview.tsx:2391`
 
 ### `lectureSequence` (function) — 3 call sites
-- `src/components/Coach/CoachGameReview.tsx:1907`
+- `src/components/Coach/CoachGameReview.tsx:1936`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:52`
 - `src/services/reviewOpeningTheory.test.ts:476`
 
 ## Tests
 
-- `src/services/gemCrushLines.computed.test.ts`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts`
 - `src/services/reviewOpeningTheory.test.ts`
 - `src/test/corpusScope.test.ts`

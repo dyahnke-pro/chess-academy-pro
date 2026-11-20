@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**181 lines · 3 exports · 2 importers · 2 tests · 0 audits**
+**203 lines · 4 exports · 6 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,28 +12,36 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
+- `src/services/boardComputers.ts`
 - `src/services/coachFeatureService.ts`
+- `src/services/engineComputers.test.ts`
+- `src/services/engineComputers.ts`
+- `src/services/moveThoughtFacts.ts`
 - `src/services/threatPurpose.test.ts`
 
 ## Exports and every call site
 
-### `threatPurpose` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:5741`
+### `DECISIVE_LINE_CP` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `threatPurpose` (function) — 6 call sites
+- `src/services/boardComputers.ts:4376`
+- `src/services/engineComputers.test.ts:101`
 - `src/services/threatPurpose.test.ts:26`
 - `src/services/threatPurpose.test.ts:31`
 - `src/services/threatPurpose.test.ts:37`
 - `src/services/threatPurpose.test.ts:109`
 
 ### `lineBuilds` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:5742`
+- `src/services/coachFeatureService.ts:5775`
 - `src/services/threatPurpose.test.ts:88`
 - `src/services/threatPurpose.test.ts:91`
 - `src/services/threatPurpose.test.ts:95`
 - `src/services/threatPurpose.test.ts:98`
 
 ### `lineRestatesClaim` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:5622`
-- `src/services/coachFeatureService.ts:5708`
+- `src/services/coachFeatureService.ts:5655`
+- `src/services/coachFeatureService.ts:5741`
 - `src/services/threatPurpose.test.ts:50`
 - `src/services/threatPurpose.test.ts:51`
 - `src/services/threatPurpose.test.ts:55`
@@ -44,6 +52,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Tests
 
+- `src/services/engineComputers.test.ts`
 - `src/services/reviewDeepIdeaStem.test.ts`
 - `src/services/threatPurpose.test.ts`
 

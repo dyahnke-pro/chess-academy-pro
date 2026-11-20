@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2216 lines · 17 exports · 43 importers · 49 tests · 3 audits**
+**2003 lines · 17 exports · 45 importers · 52 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -25,6 +25,7 @@
 - `src/hooks/usePhaseNarration.door.test.ts`
 - `src/hooks/usePhaseNarration.ts`
 - `src/services/askedReadOnePawn.test.ts`
+- `src/services/boardReadFacts.ts`
 - `src/services/chatBoardRead.test.ts`
 - `src/services/chatBoardRead.ts`
 - `src/services/claimChecker.measure.test.ts`
@@ -44,11 +45,12 @@
 - `src/services/positionFacts.liveFundamental.test.ts`
 - `src/services/positionFacts.moveWhy.test.ts`
 - `src/services/positionFacts.pinPressure.test.ts`
+- `src/services/positionFacts.tacticDecides.test.ts`
 - `src/services/positionFacts.test.ts`
+- `src/services/positionFacts.threatFirst.test.ts`
 - `src/services/positionFacts.weakness.test.ts`
 - `src/services/positionFactsCache.ts`
 - `src/services/positionFactsRegistry.test.ts`
-- `src/services/positionReadComposer.ts`
 - `src/services/raceAimOneVoice.test.ts`
 - `src/services/reviewFacetRank.ts`
 - `src/services/speedRunReads.scale.test.ts`
@@ -77,21 +79,14 @@
 ### `LastMoveInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
+### `PositionFactsInput` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
 ### `PositionFactsResult` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `ClauseKind` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
-
-### `statusBandChange` (function) — 8 call sites
-- `src/services/positionFacts.test.ts:7`
-- `src/services/positionFacts.test.ts:8`
-- `src/services/positionFacts.test.ts:9`
-- `src/services/positionFacts.test.ts:10`
-- `src/services/positionFacts.test.ts:11`
-- `src/services/positionFacts.test.ts:14`
-- `src/services/positionFacts.test.ts:15`
-- `src/services/positionFacts.test.ts:16`
 
 ### `ClauseFact` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -105,39 +100,39 @@
 - `src/services/positionFacts.weakness.test.ts:71`
 
 ### `clauseClaims` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11572`
+- `src/components/Coach/CoachTeachPage.tsx:11578`
 - `src/hooks/usePhaseNarration.door.test.ts:78`
 - `src/hooks/usePhaseNarration.ts:471`
 - `src/services/raceAimOneVoice.test.ts:20`
 
-### `clauseText` (function) — 11 call sites
+### `clauseText` (function) — 10 call sites
 - `src/hooks/useLiveCoach.ts:305`
 - `src/services/chatBoardRead.ts:112`
 - `src/services/computerAccuracy.audit.test.ts:113`
-- `src/services/positionFacts.test.ts:262`
-- `src/services/positionFacts.test.ts:263`
-- `src/services/positionFacts.test.ts:304`
-- `src/services/positionFacts.test.ts:314`
-- `src/services/positionFacts.test.ts:374`
-- `src/services/positionFacts.test.ts:375`
-- `src/services/positionReadComposer.ts:167`
+- `src/services/positionFacts.test.ts:267`
+- `src/services/positionFacts.test.ts:268`
+- `src/services/positionFacts.test.ts:309`
+- `src/services/positionFacts.test.ts:319`
+- `src/services/positionFacts.test.ts:379`
+- `src/services/positionFacts.test.ts:380`
 - `src/services/whyBestMove.ts:152`
 
-### `computePositionFacts` (function) — 113 call sites
+### `computePositionFacts` (function) — 111 call sites
 - `src/coach/boardTurnAnswer.ts:177`
-- `src/components/Coach/CoachTeachPage.tsx:11413`
+- `src/components/Coach/CoachTeachPage.tsx:11419`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:271`
 - `src/hooks/usePhaseNarration.ts:433`
 - `src/services/askedReadOnePawn.test.ts:24`
 - `src/services/bluffDetector.test.ts:36`
 - `src/services/bluffDetector.test.ts:46`
+- `src/services/boardReadFacts.ts:120`
 - `src/services/chatBoardRead.ts:81`
 - `src/services/claimChecker.measure.test.ts:107`
 - `src/services/computerAccuracy.audit.test.ts:112`
 - `src/services/criticalMoment.frame.test.ts:24`
 - `src/services/criticalMoment.oneCount.test.ts:25`
-- `src/services/danyaBench.measure.test.ts:450`
+- `src/services/danyaBench.measure.test.ts:451`
 - `src/services/deliberation.ruleOutOnce.test.ts:86`
 - `src/services/deliberation.ruleOutOnce.test.ts:89`
 - `src/services/deliberation.ruleOutOnce.test.ts:98`
@@ -149,8 +144,6 @@
 - `src/services/liveNeedGate.test.ts:135`
 - `src/services/liveNeedGate.test.ts:149`
 - `src/services/liveNeedGate.test.ts:155`
-- `src/services/liveNeedWire.test.ts:22`
-- `src/services/liveNeedWire.test.ts:31`
 - `src/services/loopCloses.test.ts:112`
 - `src/services/looseStill.test.ts:59`
 - `src/services/positionFacts.convertOnce.test.ts:16`
@@ -161,60 +154,59 @@
 - `src/services/positionFacts.liveFundamental.test.ts:52`
 - `src/services/positionFacts.moveWhy.test.ts:21`
 - `src/services/positionFacts.pinPressure.test.ts:17`
-- `src/services/positionFacts.test.ts:25`
-- `src/services/positionFacts.test.ts:38`
-- `src/services/positionFacts.test.ts:57`
-- `src/services/positionFacts.test.ts:69`
-- `src/services/positionFacts.test.ts:75`
-- `src/services/positionFacts.test.ts:81`
-- `src/services/positionFacts.test.ts:94`
-- `src/services/positionFacts.test.ts:100`
-- `src/services/positionFacts.test.ts:111`
-- `src/services/positionFacts.test.ts:118`
+- `src/services/positionFacts.test.ts:30`
+- `src/services/positionFacts.test.ts:43`
+- `src/services/positionFacts.test.ts:62`
+- `src/services/positionFacts.test.ts:74`
+- `src/services/positionFacts.test.ts:80`
+- `src/services/positionFacts.test.ts:86`
+- `src/services/positionFacts.test.ts:99`
+- `src/services/positionFacts.test.ts:105`
+- `src/services/positionFacts.test.ts:116`
 - `src/services/positionFacts.test.ts:123`
 - `src/services/positionFacts.test.ts:128`
-- `src/services/positionFacts.test.ts:135`
-- `src/services/positionFacts.test.ts:144`
-- `src/services/positionFacts.test.ts:153`
-- `src/services/positionFacts.test.ts:162`
-- `src/services/positionFacts.test.ts:172`
-- `src/services/positionFacts.test.ts:189`
-- `src/services/positionFacts.test.ts:201`
-- `src/services/positionFacts.test.ts:211`
-- `src/services/positionFacts.test.ts:217`
-- `src/services/positionFacts.test.ts:230`
-- `src/services/positionFacts.test.ts:239`
-- `src/services/positionFacts.test.ts:242`
-- `src/services/positionFacts.test.ts:253`
-- `src/services/positionFacts.test.ts:268`
-- `src/services/positionFacts.test.ts:284`
-- `src/services/positionFacts.test.ts:300`
-- `src/services/positionFacts.test.ts:310`
-- `src/services/positionFacts.test.ts:318`
-- `src/services/positionFacts.test.ts:327`
-- `src/services/positionFacts.test.ts:352`
-- `src/services/positionFacts.test.ts:373`
-- `src/services/positionFacts.test.ts:389`
-- `src/services/positionFacts.test.ts:396`
-- `src/services/positionFacts.test.ts:408`
-- `src/services/positionFacts.test.ts:414`
-- `src/services/positionFacts.test.ts:423`
-- `src/services/positionFacts.test.ts:433`
-- `src/services/positionFacts.test.ts:446`
-- `src/services/positionFacts.test.ts:459`
-- `src/services/positionFacts.test.ts:472`
+- `src/services/positionFacts.test.ts:133`
+- `src/services/positionFacts.test.ts:140`
+- `src/services/positionFacts.test.ts:149`
+- `src/services/positionFacts.test.ts:158`
+- `src/services/positionFacts.test.ts:167`
+- `src/services/positionFacts.test.ts:177`
+- `src/services/positionFacts.test.ts:194`
+- `src/services/positionFacts.test.ts:206`
+- `src/services/positionFacts.test.ts:216`
+- `src/services/positionFacts.test.ts:222`
+- `src/services/positionFacts.test.ts:235`
+- `src/services/positionFacts.test.ts:244`
+- `src/services/positionFacts.test.ts:247`
+- `src/services/positionFacts.test.ts:258`
+- `src/services/positionFacts.test.ts:273`
+- `src/services/positionFacts.test.ts:289`
+- `src/services/positionFacts.test.ts:305`
+- `src/services/positionFacts.test.ts:315`
+- `src/services/positionFacts.test.ts:323`
+- `src/services/positionFacts.test.ts:332`
+- `src/services/positionFacts.test.ts:357`
+- `src/services/positionFacts.test.ts:378`
+- `src/services/positionFacts.test.ts:394`
+- `src/services/positionFacts.test.ts:401`
+- `src/services/positionFacts.test.ts:413`
+- `src/services/positionFacts.test.ts:419`
+- `src/services/positionFacts.test.ts:428`
+- `src/services/positionFacts.test.ts:438`
+- `src/services/positionFacts.test.ts:451`
+- `src/services/positionFacts.test.ts:464`
 - `src/services/positionFacts.test.ts:477`
-- `src/services/positionFacts.test.ts:488`
-- `src/services/positionFacts.test.ts:492`
-- `src/services/positionFacts.test.ts:496`
-- `src/services/positionFacts.test.ts:504`
-- `src/services/positionFacts.test.ts:514`
+- `src/services/positionFacts.test.ts:482`
+- `src/services/positionFacts.test.ts:493`
+- `src/services/positionFacts.test.ts:497`
+- `src/services/positionFacts.test.ts:501`
+- `src/services/positionFacts.test.ts:509`
+- `src/services/positionFacts.test.ts:519`
 - `src/services/positionFacts.weakness.test.ts:24`
 - `src/services/positionFacts.weakness.test.ts:52`
 - `src/services/positionFacts.weakness.test.ts:66`
 - `src/services/positionFacts.weakness.test.ts:67`
 - `src/services/positionFactsRegistry.test.ts:9`
-- `src/services/positionReadComposer.ts:139`
 - `src/services/raceAimOneVoice.test.ts:17`
 - `src/services/setUpChance.test.ts:109`
 - `src/services/speedRunReads.scale.test.ts:37`
@@ -239,26 +231,35 @@
 - `src/test/teach02Wired.test.ts:140`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11690`
+- `src/components/Coach/CoachTeachPage.tsx:11696`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
-### `pinPressureConcept` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `guardRemovalConcept` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `afterLine` (function) — 5 call sites
+### `afterLine` (function) — 7 call sites
 - `src/services/positionFacts.afterLine.test.ts:13`
 - `src/services/positionFacts.afterLine.test.ts:16`
 - `src/services/positionFacts.afterLine.test.ts:19`
 - `src/services/positionFacts.afterLine.test.ts:22`
 - `src/services/positionFacts.afterLine.test.ts:25`
+- `src/services/positionFacts.afterLine.test.ts:29`
+- `src/services/positionFacts.afterLine.test.ts:31`
+
+### `threatTheyMake` (function) — 3 call sites
+- `src/services/positionFacts.threatFirst.test.ts:11`
+- `src/services/positionFacts.threatFirst.test.ts:19`
+- `src/services/positionFacts.threatFirst.test.ts:21`
+
+### `forcingBestDecides` (function) — 5 call sites
+- `src/services/positionFacts.tacticDecides.test.ts:9`
+- `src/services/positionFacts.tacticDecides.test.ts:12`
+- `src/services/positionFacts.tacticDecides.test.ts:15`
+- `src/services/positionFacts.tacticDecides.test.ts:16`
+- `src/services/positionFacts.tacticDecides.test.ts:19`
 
 ### `conceptInstanceKey` (re-export) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9380`
-- `src/components/Coach/CoachTeachPage.tsx:9519`
+- `src/components/Coach/CoachTeachPage.tsx:9385`
+- `src/components/Coach/CoachTeachPage.tsx:9524`
+- `src/services/boardComputers.ts:5066`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/claimKeysLooseCount.test.ts:31`
@@ -266,8 +267,7 @@
 - `src/services/conceptKey.test.ts:9`
 - `src/services/conceptKey.ts:11`
 - `src/services/danyaBehaviors.ts:530`
-- `src/services/kingAttackReads.ts:662`
-- `src/services/learnBoardTeaching.ts:526`
+- `src/services/kingAttackReads.ts:677`
 - `src/services/looseStill.test.ts:37`
 - `src/services/replayFence.alekhine1500.test.ts:25`
 - `src/services/replayFence.alekhine1500.test.ts:26`
@@ -304,7 +304,9 @@
 - `src/services/positionFacts.liveFundamental.test.ts`
 - `src/services/positionFacts.moveWhy.test.ts`
 - `src/services/positionFacts.pinPressure.test.ts`
+- `src/services/positionFacts.tacticDecides.test.ts`
 - `src/services/positionFacts.test.ts`
+- `src/services/positionFacts.threatFirst.test.ts`
 - `src/services/positionFacts.weakness.test.ts`
 - `src/services/positionFactsRegistry.test.ts`
 - `src/services/raceAimOneVoice.test.ts`
@@ -325,6 +327,7 @@
 - `src/test/oneStoryState.gate.test.ts`
 - `src/test/preGateSeesTheStudent.test.ts`
 - `src/test/teach02Wired.test.ts`
+- `src/test/writerRegister.gate.test.ts`
 
 ## Audits that reach it
 

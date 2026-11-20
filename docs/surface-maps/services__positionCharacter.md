@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**192 lines · 9 exports · 6 importers · 4 tests · 0 audits**
+**309 lines · 12 exports · 11 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,10 +13,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/components/Coach/CoachTeachPage.tsx`
+- `src/services/boardReadFacts.ts`
 - `src/services/coachFeatureService.ts`
 - `src/services/gameStory.ts`
+- `src/services/positionCharacter.boardKind.test.ts`
+- `src/services/positionCharacter.engine.test.ts`
 - `src/services/positionCharacter.pin.test.ts`
 - `src/services/positionCharacter.test.ts`
+- `src/services/positionFacts.ts`
+- `src/services/positionReadComposer.ts`
 - `src/services/walkOct2a.test.ts`
 
 ## Exports and every call site
@@ -27,12 +32,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `SHARP_GAP_CP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `sharpGap` (function) — 5 call sites
+### `sharpGap` (function) — 7 call sites
 - `src/services/positionCharacter.test.ts:90`
 - `src/services/positionCharacter.test.ts:91`
 - `src/services/positionCharacter.test.ts:92`
 - `src/services/positionCharacter.test.ts:93`
 - `src/services/positionCharacter.test.ts:94`
+- `src/services/positionFacts.ts:1993`
+- `src/services/positionReadComposer.ts:124`
+
+### `bestMoveGap` (function) — 1 call site
+- `src/services/positionFacts.ts:1992`
 
 ### `provenTacticLive` (function) — 3 call sites
 - `src/services/positionCharacter.pin.test.ts:17`
@@ -65,17 +75,36 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `characterTurn` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11401`
-- `src/services/coachFeatureService.ts:2071`
-- `src/services/learnTurnDoor.test.ts:305`
-- `src/services/learnTurnDoor.test.ts:311`
-- `src/services/learnTurnDoor.test.ts:312`
-- `src/services/learnTurnDoor.test.ts:323`
-- `src/services/learnTurnDoor.test.ts:327`
+- `src/components/Coach/CoachTeachPage.tsx:11691`
+- `src/services/coachFeatureService.ts:2299`
+- `src/services/learnTurnDoor.test.ts:324`
+- `src/services/learnTurnDoor.test.ts:330`
+- `src/services/learnTurnDoor.test.ts:331`
+- `src/services/learnTurnDoor.test.ts:342`
+- `src/services/learnTurnDoor.test.ts:346`
+
+### `BoardKind` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `boardKind` (function) — 12 call sites
+- `src/services/boardReadFacts.ts:158`
+- `src/services/positionCharacter.boardKind.test.ts:8`
+- `src/services/positionCharacter.boardKind.test.ts:9`
+- `src/services/positionCharacter.boardKind.test.ts:14`
+- `src/services/positionCharacter.boardKind.test.ts:19`
+- `src/services/positionCharacter.engine.test.ts:12`
+- `src/services/positionCharacter.engine.test.ts:13`
+- `src/services/positionCharacter.engine.test.ts:19`
+- `src/services/positionCharacter.engine.test.ts:23`
+- `src/services/positionCharacter.engine.test.ts:27`
+- `src/services/positionCharacter.engine.test.ts:31`
+- `src/services/positionCharacter.engine.test.ts:36`
 
 ## Tests
 
 - `src/services/learnTurnDoor.test.ts`
+- `src/services/positionCharacter.boardKind.test.ts`
+- `src/services/positionCharacter.engine.test.ts`
 - `src/services/positionCharacter.pin.test.ts`
 - `src/services/positionCharacter.test.ts`
 - `src/services/walkOct2a.test.ts`

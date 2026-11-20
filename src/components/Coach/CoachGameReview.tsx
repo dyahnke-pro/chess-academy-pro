@@ -2247,6 +2247,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     corpusNotes: false,   // review carries no corpus notes (2026-09-23)
     withhold: null,       // greyed while a question is open, below
     surface: 'review',
+    story: null, // a standalone board: no game story to tell against
   });
   const reviewWhyBusyRef = useRef(false);
   const handleReviewWhy = useCallback(async (): Promise<void> => {

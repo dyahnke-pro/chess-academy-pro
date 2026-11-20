@@ -26,6 +26,8 @@ import { methodRead, methodPlanSentence, whyThisPlan, planWorth, type RouteArrow
 import { planStepLine } from './planStep';
 import { askThenAnswer } from '../utils/thinkPause';
 import { classifyPhase } from './gamePhaseService';
+import { snapshot, diff, type Relation } from './relations';
+import { threadLast, type GameStory, type PictureConclusionId, type ThreadSaid } from './gameStory';
 
 
 /** The plan kinds in the order `deriveNextPlanFacts` ranks them (lower =
@@ -75,7 +77,7 @@ export function planChangeSentence(text: string, shape: 'infinitive' | 'statemen
  *  the plan's KIND (`StructurePlanFact.id`), so advancing the pawn is `carry`
  *  and only a genuinely different plan (or a race whose winner FLIPPED) is
  *  `changed`. `lastHeard` is the id of the plan the student last heard. */
-export function structurePlanEvent(lastHeard: string | null, plan: StructurePlanFact | null): 'announce' | 'carry' | 'changed' | 'none' {
+export function structurePlanEvent(lastHeard: string | null, plan: Pick<StructurePlanFact, 'id'> | null): 'announce' | 'carry' | 'changed' | 'none' {
   if (!plan) return 'none';
   if (lastHeard === plan.id) return 'carry';
   return lastHeard ? 'changed' : 'announce';
@@ -293,4 +295,122 @@ function sameOccupant(fenA: string, fenB: string, sq: string | undefined): boole
     const b = new Chess(fenB).get(sq as Square);
     return a?.type === b?.type && a?.color === b?.color;
   } catch { return false; }
+}
+
+
+// ── THE PICTURE'S CONCLUSIONS, CARRIED ACROSS THE GAME ─────────────────────
+// The picture (`pictureVerdict`, `pictureLedger`) reads one board at a time:
+// the target, the plan, the verdict, their resource. Read again on the next
+// board it says the same thing again, as news — and a target that moved said
+// "The target is d6" with no word about c5. The game's story keeps each one as
+// a thread (`PLAN_GOAL.picture*`, the conclusion its variant), and THIS is
+// the plan thread's rule for them, the same identity rule the structure's
+// plan keeps (`structurePlanEvent`): the same conclusion is `carry` (said
+// once), a new one is `changed` — said as the change, with its cause off the
+// two boards. A target or a plan never switches with nothing changed on the
+// board: no cause, it is held, the way a wobbling plan is (`planThreadTurn`).
+
+/** What the story says of each conclusion's thread: its last statement. */
+export type ConclusionMemory = Pick<GameStory, 'threads'>;
+
+const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+
+function pieceAt(fen: string, sq: string): { color: Color; type: string } | null {
+  try { const p = new Chess(fen).get(sq as Square); return p ? { color: p.color, type: p.type } : null; } catch { return null; }
+}
+function countOf(fen: string, color: Color, type: string): number {
+  try { return new Chess(fen).board().flat().filter((c) => c && c.color === color && c.type === type).length; } catch { return 0; }
+}
+const ownerWord = (c: string, student: Color): string => (c === student ? 'your' : 'their');
+const codeWords = (code: string, sq: string, student: Color): string => `${ownerWord(code[0], student)} ${PIECE_NAME[code[1]]} on ${sq}`;
+
+/**
+ * WHY A CONCLUSION'S SQUARE CHANGED between the board it was stated on and the
+ * board now — read off the two boards' relations (`relations.diff`), never
+ * made up: the old square's piece gone (taken or moved), guarded now, or no
+ * longer hit; the new square's piece hit now, or its guard gone. Null when
+ * nothing on the two squares changed — then the conclusion has no cause to
+ * change, and it is held.
+ */
+export function conclusionCause(oldFen: string, nowFen: string, oldSq: string | null, newSq: string | null, student: Color): string | null {
+  const a = snapshot(oldFen);
+  const b = snapshot(nowFen);
+  if (!a || !b) return null;
+  const d = diff(a, b);
+  const on = (rs: readonly Relation[], kind: Relation['kind'], sq: string): Array<Extract<Relation, { kind: 'guard' | 'attack' }>> =>
+    rs.filter((r): r is Extract<Relation, { kind: 'guard' | 'attack' }> => r.kind === kind && 'square' in r && r.square === sq);
+  if (oldSq && oldSq !== newSq) {
+    const was = pieceAt(oldFen, oldSq);
+    const now = pieceAt(nowFen, oldSq);
+    if (was && (!now || now.color !== was.color || now.type !== was.type)) {
+      const name = `${ownerWord(was.color, student)} ${PIECE_NAME[was.type]} on ${oldSq}`;
+      const taken = countOf(nowFen, was.color, was.type) < countOf(oldFen, was.color, was.type);
+      return `${name} ${taken ? 'is gone' : 'has moved'}`;
+    }
+    if (was) {
+      const g = on(d.gained, 'guard', oldSq)[0];
+      if (g) return `${ownerWord(was.color, student)} ${PIECE_NAME[was.type]} on ${oldSq} is guarded by ${codeWords(g.byPiece, g.by, student)} now`;
+      const lost = on(d.lost, 'attack', oldSq)[0];
+      if (lost && on(b.relations, 'attack', oldSq).length === 0) return `${codeWords(lost.byPiece, lost.by, student)} no longer hits the ${PIECE_NAME[was.type]} on ${oldSq}`;
+    }
+  }
+  if (newSq) {
+    const here = pieceAt(nowFen, newSq);
+    if (here) {
+      const hit = on(d.gained, 'attack', newSq)[0];
+      if (hit) return `${codeWords(hit.byPiece, hit.by, student)} now hits ${ownerWord(here.color, student)} ${PIECE_NAME[here.type]} on ${newSq}`;
+      const unguarded = on(d.lost, 'guard', newSq)[0];
+      if (unguarded) return `${ownerWord(here.color, student)} ${PIECE_NAME[here.type]} on ${newSq} lost its guard on ${unguarded.by}`;
+    }
+  }
+  return null;
+}
+
+/** What the story does with one conclusion read now. */
+export type ConclusionTold = 'new' | 'same' | 'changed' | 'held';
+
+/** One conclusion against its thread: `new` (never stated), `same` (stated,
+ *  unchanged — not news), `changed` (said as the change), `held` (it changed
+ *  with nothing on the board to say why). The cause rides a `changed`. */
+export function tellConclusion(memory: ConclusionMemory, c: PictureConclusionId, student: Color): { told: ConclusionTold; cause: string | null; last: ThreadSaid | null } {
+  const last = threadLast(memory, c.key);
+  const event = structurePlanEvent(last?.variant ?? null, { id: c.variant });
+  if (event === 'announce' || event === 'none') return { told: 'new', cause: null, last };
+  if (event === 'carry') return { told: 'same', cause: null, last };
+  if (!c.needsCause) return { told: 'changed', cause: null, last };
+  const at = last?.at ?? null;
+  const cause = at ? conclusionCause(at.fen, c.fen, at.square, c.square, student) : null;
+  return { told: cause ? 'changed' : 'held', cause, last };
+}
+
+const capFirst = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+
+/**
+ * THE PICTURE'S FACTS, TOLD AGAINST THE GAME'S STORY — on every surface that
+ * has a story (Learn, Review, Learn's "read this position"). An unchanged
+ * conclusion is dropped (said once); a changed one is said as the change,
+ * its cause first ("Their pawn on c5 is gone. The target is now the pawn on
+ * d6: …"); one that changed with no cause is held. Facts in one batch are
+ * told in order, each against what the batch said before it. A fact with no
+ * conclusion passes untouched. Pure: the surface commits what its door keeps.
+ */
+export function tellPictureFacts<F extends { text: string; claims: readonly string[]; conclusion?: PictureConclusionId }>(facts: readonly F[], memory: ConclusionMemory, student: Color): F[] {
+  const batch = new Map(memory.threads);
+  const out: F[] = [];
+  for (const f of facts) {
+    const c = f.conclusion;
+    if (!c) { out.push(f); continue; }
+    const r = tellConclusion({ threads: batch }, c, student);
+    if (r.told === 'same' || r.told === 'held') continue;
+    const said: ThreadSaid = { ply: Number.MAX_SAFE_INTEGER, kind: 'stated', variant: c.variant, board: null, at: { fen: c.fen, square: c.square } };
+    batch.set(c.key, { said: [...(batch.get(c.key)?.said ?? []), said] });
+    if (r.told === 'new') { out.push(f); continue; }
+    // A change with its cause is a new sentence on this board: the claim said
+    // with the old one (a target that comes back) must not hold it. A change
+    // that carries itself (a verdict, the ledger, their resource) keeps its own
+    // claims — its content is the claim, and a content said before is not news.
+    if (!r.cause) { out.push({ ...f, text: c.changedText }); continue; }
+    out.push({ ...f, text: `${capFirst(r.cause)}. ${c.changedText}`, claims: f.claims.map((k) => `${k}@${c.fen.split(' ')[0]}`) });
+  }
+  return out;
 }

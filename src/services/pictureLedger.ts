@@ -1106,7 +1106,7 @@ function worstWeakness(fen: string, weak: readonly LedgerEntry[]): LedgerEntry {
 const many = (n: number): string => countWord(n);
 
 /** The target in words, with the comparison that chose it. */
-export function targetText(t: Target, student: Color): string {
+export function targetText(t: Target, student: Color, now: boolean = false): string {
   const mine = t.attacker === student;
   const thing = (c: TargetCandidate): string => (c.entry.piece === null ? `the hole on ${c.entry.square}` : `the ${NAME[c.entry.piece]} on ${c.entry.square}`);
   const units = t.best.levers > 0 ? 'pieces and pawns' : 'pieces';
@@ -1114,7 +1114,10 @@ export function targetText(t: Target, student: Color): string {
   const def = mine ? 'of theirs' : 'of yours';
   const why = `${many(t.best.attackers)} ${atk} can get at it, and only ${many(t.best.defenders)} ${def} can guard it`;
   const key = stemKeyOf(`${t.best.entry.object}|${t.attacker}`);
-  const lead = mine ? rotateStem(['The target is', 'Aim at'], key) : rotateStem(['Their target is', 'They will aim at'], key);
+  // Said as the NEW target (`now`), the lead says it changed: "The target is
+  // now the pawn on d6" (the game's story, `planThread.tellPictureFacts`).
+  const lead = now ? (mine ? 'The target is now' : 'Their target is now')
+    : mine ? rotateStem(['The target is', 'Aim at'], key) : rotateStem(['Their target is', 'They will aim at'], key);
   const ru = t.runnerUp;
   if (ru) return `${lead} ${thing(t.best)}, not ${thing(ru)}: ${why}.`;
   return `${lead} ${thing(t.best)}: ${why}.`;

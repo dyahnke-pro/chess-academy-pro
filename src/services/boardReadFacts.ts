@@ -38,6 +38,8 @@ import type { IntroTense } from '../utils/moveIntro';
 import type { ImportanceTier } from './narrationImportance';
 import { writerFor, momentPosture, plainThreatsSeenFor } from './writerRegister';
 import { readBoardAll, pictureConclusionsOf } from './boardComputers';
+import { tellPictureFacts } from './planThread';
+import { threadsOfRead, type ReadStory } from './gameStory';
 import { evalBand } from './evalBand';
 import type { TrySource } from './tryReadBudget';
 
@@ -78,6 +80,14 @@ export interface BoardReadInput {
   readTempting: boolean;
   /** REQUIRED: the student's record for the need term (null on a fitter's board). */
   studentNeedContext: PositionFactsInput['studentNeedContext'];
+  /** REQUIRED: the game's story, where the read is of a game the coach is
+   *  telling (Learn's "read this position"): the opening's story rides in the
+   *  best move's facts, and the picture's conclusions are told against what
+   *  the game already said (`planThread.tellPictureFacts` — an unchanged one
+   *  is not said again, a changed one is said as the change). Null on a
+   *  standalone board (a puzzle, Play, Review's Read, a lesson). Plain data:
+   *  the read runs in a worker. */
+  story: ReadStory | null;
   /** Passed through to the board's reads: the record, and the last move on each side. */
   extra?: Pick<PositionFactsInput, 'studentWeaknesses' | 'evalBoard' | 'lastMove' | 'opponentLastMove'>;
 }
@@ -249,13 +259,17 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     // them off …") — the band said once.
     const standing0 = facts.find((f) => f.kind === 'standing' && f.from === 'position' && !f.computer);
     const sameBand = !!conc && povCp !== null && stepOfCp(povCp) === conc.verdict.step;
-    for (const f of readBoardAll('pictureVerdict', picture)) {
+    // Told against the game's story when the read has one: the conclusion the
+    // game already said, unchanged, is not news.
+    const memory = i.story ? threadsOfRead(i.story) : null;
+    const told = <F extends Parameters<typeof tellPictureFacts>[0][number]>(fs: readonly F[]): F[] => (memory ? tellPictureFacts(fs, memory, i.studentColor) : [...fs]);
+    for (const f of told(readBoardAll('pictureVerdict', picture))) {
       const merged = standing0 && sameBand && conc?.verdict.afterStanding ? `${standing0.text} ${conc.verdict.afterStanding}` : f.text;
-      facts.push({ from: 'position', kind: f.kind, text: merged, computer: f.computer, squares: f.squares, claims: f.claims, tries: conc?.but.map((t) => t.uci) ?? [] });
+      facts.push({ from: 'position', kind: f.kind, text: merged, computer: f.computer, squares: f.squares, claims: f.claims, tries: conc?.but.map((t) => t.uci) ?? [], ...(f.conclusion ? { conclusion: f.conclusion } : {}) });
     }
-    for (const f of readBoardAll('picturePlan', picture)) {
+    for (const f of told(readBoardAll('picturePlan', picture))) {
       const line = tempting.find((r) => r.moves[0] === conc?.plan?.uci)?.moves ?? top.moves;
-      facts.push({ from: 'position', kind: f.kind, text: f.text, computer: f.computer, squares: f.squares, claims: f.claims, line: [...line] });
+      facts.push({ from: 'position', kind: f.kind, text: f.text, computer: f.computer, squares: f.squares, claims: f.claims, line: [...line], ...(f.conclusion ? { conclusion: f.conclusion } : {}) });
     }
     // A failed try no refuter words (the line that sends the piece straight
     // back, his "…Qf6 is met by Rh5, and the queen has to go back") is said
@@ -325,7 +339,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
       : null;
     if (after) {
       for (const f of moveThoughtFacts({
-        fenBefore: i.fen, san, moverIsStudent: mine, namesPlayedMove: ASKED_WRITER.namesPlayedMove, plainThreatsSeen: plainThreatsSeenFor(ASKED_WRITER, false), tense: i.tense, theory: false, story: false, moveReads: ASKED_WRITER.moveReads,
+        fenBefore: i.fen, san, moverIsStudent: mine, namesPlayedMove: ASKED_WRITER.namesPlayedMove, plainThreatsSeen: plainThreatsSeenFor(ASKED_WRITER, false), tense: i.tense, theory: false, story: !!i.story, moveReads: ASKED_WRITER.moveReads,
         prev: NO_PREV_CAPTURE, line: top.moves.slice(1), history: game.history, theirLast: game.theirLast, phrases: null, reads: { before: [...i.before], after: [...after], passBefore: [], passAfter: [], everyAfter, tries: triesRead }, costCp: 0,
       })) {
         // A puzzle still being solved keeps only who stands better: what the

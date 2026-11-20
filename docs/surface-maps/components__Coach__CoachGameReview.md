@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4234 lines · 2 exports · 3 importers · 20 tests · 6 audits**
+**4236 lines · 2 exports · 3 importers · 21 tests · 6 audits**
 
 ## Locked rules that govern this surface
 
@@ -44,6 +44,7 @@
 - `src/test/criticalMomentReach.test.ts`
 - `src/test/moveIntentReads.gate.test.ts`
 - `src/test/oneCoachDoor.gate.test.ts`
+- `src/test/oneCoachUnlocked.gate.test.ts`
 - `src/test/oneStoryState.gate.test.ts`
 - `src/test/reviewExplore.continuity.test.ts`
 
