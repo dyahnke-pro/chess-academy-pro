@@ -15,6 +15,7 @@
  * SAME facts the decider was trained on.
  */
 import { Chess } from 'chess.js';
+import { flipSideToMove } from './threatOut';
 import { computePositionFacts, type PositionFactsInput } from './positionFacts';
 import { consideredTries } from './tryCandidates';
 import { temptingOnBoard, standingRefutations, candidateMoves, TEMPTING_COST_CP, type WeighRead, type ConsideredTries, type ChangeReasonArgs } from './weighedMoves';
@@ -269,7 +270,23 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
       if (t) tempting.push({ evaluation: t.evaluation, mate: t.mate, moves: [b.uci, ...t.moves], earlier: t.earlier?.moves ? [b.uci, ...t.earlier.moves] : null });
     });
     const refuted = temptingOnBoard({ fen: i.fen, student: i.studentColor, rating: i.rating, reads: tempting, priorMove: null, considered });
-    for (const t of refuted) facts.push({ from: 'tempting', kind: 'refuted', text: t.text, computer: 'temptingOnBoard', squares: [t.uci.slice(0, 2), t.uci.slice(2, 4)], move: t.uci });
+    // TRIES THAT WALK INTO ONE MATE ARE ONE IDEA (0Km5u …Kg8: …Qxc3, …Bc8,
+    // …Be8 and …Bh4 each "they play Rf8+ … Qxf8#"): said once, by the most
+    // tempting, the rest named with it — grouped by the mating square.
+    const mateSq = (t: (typeof refuted)[number]): string | null => (t.reason.mate ? t.reason.plies.at(-1)?.uci.slice(2, 4) ?? null : null);
+    const mateGroups = new Map<string, typeof refuted>();
+    for (const t of refuted) { const k = mateSq(t); if (k) mateGroups.set(k, [...(mateGroups.get(k) ?? []), t]); }
+    for (const t of refuted) {
+      const k = mateSq(t);
+      const g = k ? mateGroups.get(k) ?? [] : [];
+      if (g.length > 1) {
+        if (g[0] !== t) continue;
+        const names = g.map((x) => `${side === 'b' ? '…' : ''}${x.san}`);
+        facts.push({ from: 'tempting', kind: 'refuted', text: `${t.text} ${andList(names.slice(1))} ${names.length === 2 ? 'walks' : 'walk'} into the same mate on ${k}.`, computer: 'temptingOnBoard', squares: [...new Set(g.flatMap((x) => [x.uci.slice(0, 2), x.uci.slice(2, 4)]))], move: t.uci, also: g.slice(1).map((x) => x.uci) });
+        continue;
+      }
+      facts.push({ from: 'tempting', kind: 'refuted', text: t.text, computer: 'temptingOnBoard', squares: [t.uci.slice(0, 2), t.uci.slice(2, 4)], move: t.uci });
+    }
     // A check or capture that wins nothing ("Nxe7+ Rxe7 gives no relief"):
     // the same computer's forcing-move shape, never beside its material refutation.
     const noReason: ChangeReasonArgs[] = [];
@@ -347,6 +364,28 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     if (top.moves[0]) {
       const run = await defenderCheckRun(i.fen, top.moves[0], i.studentColor, (fen) => i.read(fen, 'their-eye').catch(() => null)).catch(() => null);
       if (run) facts.push({ from: 'bestMove', kind: 'technique', computer: 'defenderCheckRun', text: run.text, squares: run.promotion ? [run.promotion.from, run.promotion.to] : [], checksRead: run.checksRead });
+    }
+    // THE QUIET MOVE SAYS ITS THREAT (0Km5u …Qe3, puzzle reads 2026-11-20:
+    // "the only move that holds" and never what it threatens): given a free
+    // move after it, the engine's best for the mover — said when it wins two
+    // pawns more than the board already holds, or mates.
+    if (mine && top.moves[0]) {
+      const quiet = ((): { san: string; after: string } | null => {
+        try { const b = new Chess(i.fen); const m = b.move({ from: top.moves[0].slice(0, 2), to: top.moves[0].slice(2, 4), promotion: top.moves[0][4] }); return m.captured || b.inCheck() ? null : { san: m.san, after: b.fen() }; } catch { return null; }
+      })();
+      const free = quiet ? flipSideToMove(quiet.after) : null;
+      const nm = free ? await i.read(free, 'best-after').catch(() => null) : null;
+      const t = nm?.[0];
+      if (quiet && free && t?.moves[0]) {
+        const sign = side === 'w' ? 1 : -1;
+        const gain = t.mate != null ? (t.mate * sign > 0 ? 10000 : -10000) : t.evaluation * sign - (top.mate == null ? top.evaluation * sign : 10000);
+        const threatSan = sanOf(free, t.moves[0]);
+        if (threatSan && (gain >= THREAT_GAIN_CP || (t.mate != null && t.mate * sign > 0))) {
+          const mates = t.mate != null && t.mate * sign > 0;
+          const to = t.moves[0].slice(2, 4);
+          facts.push({ from: 'bestMove', kind: 'aspect-threat', computer: 'quietThreat', text: `${quiet.san} is quiet, but it threatens ${side === 'b' ? '…' : ''}${threatSan}${mates ? ', with mate to follow' : ''} — they must answer that first.`, squares: [top.moves[0].slice(2, 4), to], stakes: stakeValue({ points: mates ? 100 : gain / 100, plies: 2 }), claims: [`quiet-threat:${to}`] });
+        }
+      }
     }
     // One rule-out a move: a try said by what it does to the result already
     // carries its board reason (`tryMechanism` reads `boardReason` too).
@@ -494,6 +533,9 @@ function sanOf(fen: string, uci: string | undefined): string | null {
   if (!uci) return null;
   try { return new Chess(fen).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }).san; } catch { return null; }
 }
+
+/** A quiet move's threat is said from two pawns' gain. */
+const THREAT_GAIN_CP = 200;
 
 /** The moves played to reach `fen` and the last of them, when the history
  *  replays to that board; an empty game otherwise (a puzzle, a set-up board). */

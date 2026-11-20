@@ -44,7 +44,9 @@ export type PromotionReason =
   | { kind: 'queen-trap'; trap: StalemateTrap }
   | { kind: 'knight-mates' }
   | { kind: 'knight-forks'; target: string }
-  | { kind: 'knight-checks'; gainCp: number };
+  | { kind: 'knight-checks'; gainCp: number }
+  /** The queen is lost at once: a check that wins it (a skewer behind the king). */
+  | { kind: 'queen-lost'; check: string };
 
 export interface PromotionChoice {
   side: Color;
@@ -126,6 +128,13 @@ export function promotionChoiceFor(fen: string, from: string, to: string, engine
     const qn = lineScore(lines, `${from}${to}q`, c.turn());
     if (kn !== null && qn !== null && kn - qn >= KNIGHT_CHECK_GAIN_CP) choice = { piece: 'n', reason: { kind: 'knight-checks', gainCp: kn - qn } };
   }
+  // THE QUEEN IS LOST AT ONCE (0GvdU …f1=N+, puzzle reads 2026-11-20): the
+  // knight checks, and a queen there falls to a check that wins it — said so
+  // the student hears why not the queen.
+  if (!choice && n && n.check && !n.stalemate && !q.mate) {
+    const check = queenLostTo(fen, moves.find((m) => m.promotion === 'q') as Move);
+    if (check) choice = { piece: 'n', reason: { kind: 'queen-lost', check } };
+  }
   if (!choice && fails(q)) {
     const ok = ORDER.slice(1).find((p) => { const r = by.get(p); return !!r && !fails(r); });
     if (ok) choice = { piece: ok, reason: q.stalemate ? { kind: 'queen-stalemates' } : { kind: 'queen-trap', trap: q.trap as StalemateTrap } };
@@ -137,6 +146,29 @@ export function promotionChoiceFor(fen: string, from: string, to: string, engine
     : [];
   return { side: c.turn(), from, to, piece: choice.piece, san: (by.get(choice.piece) as PieceRead).san, queenSan: q.san, reason: choice.reason, alsoFails,
     key: `promotion:${fen.split(' ')[0]}:${from}${to}` };
+}
+
+/** The check that wins the new queen at once, or null: after the queen
+ *  lands, a check of theirs after which every answer leaves the queen to be
+ *  taken for less than a queen. */
+function queenLostTo(fen: string, qMove: Move): string | null {
+  try {
+    const b = new Chess(fen); b.move(qMove);
+    const sq = qMove.to;
+    for (const c of b.moves({ verbose: true })) {
+      if (!/\+/.test(c.san) || c.captured === 'q') continue;
+      const x = new Chess(b.fen()); x.move(c);
+      const replies = x.moves({ verbose: true });
+      if (replies.length === 0) continue;
+      const lost = replies.every((r) => {
+        if (r.from === sq) return false;
+        const y = new Chess(x.fen()); y.move(r);
+        return y.moves({ verbose: true }).some((t) => t.to === sq && t.captured === 'q' && t.piece !== 'q');
+      });
+      if (lost) return c.san;
+    }
+  } catch { /* an unreadable board loses nothing */ }
+  return null;
 }
 
 /** Every promotion choice the side to move has on `fen` (one per pawn move). */
@@ -176,6 +208,8 @@ export function promotionChoiceLine(pc: PromotionChoice, student: Color, played:
       return `${lead} The knight on ${pc.to} comes with check, and a queen there gives none. That check is the tempo that wins: with a queen, ${mine ? 'they hold' : 'you hold'} the balance.`;
     case 'queen-stalemates':
       return `${lead} A queen on ${pc.to} would leave ${mine ? 'their' : 'your'} king no move and nothing else to move: stalemate.${also} The ${piece} does the job and leaves ${mine ? 'them' : 'you'} a move.`;
+    case 'queen-lost':
+      return `${lead} A queen on ${pc.to} is lost at once to ${pc.reason.check}, a check that wins it. The knight on ${pc.to} gives check instead.`;
     case 'queen-trap': {
       const t = pc.reason.trap;
       return `${lead} A queen on ${pc.to} walks into ${t.check}, and taking the ${t.bait} with ${t.capture} is stalemate.${also} The ${piece} does the same work without that trick.`;

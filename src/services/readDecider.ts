@@ -98,6 +98,15 @@ export interface ReadContext {
   bucket: ReadBucket;
   /** The best move's two squares (empty when unread). */
   best: readonly string[];
+  /** The best move's promotion piece, when it promotes. */
+  bestPromotion?: string;
+  /** The side to move is winning (two pawns or a mate): their slow plan is
+   *  then no conclusion of the read — the win is (0GvdU …f1=N+: "their plan
+   *  from here: Ke5, Kd6 and then the b4 break" a move from a new queen). */
+  moverWins?: boolean;
+  /** The squares the engine's best line plays on (its first moves): what a
+   *  decided read is about. */
+  lineSquares?: ReadonlySet<string>;
   /** Squares a read must not touch: a puzzle's answer, still being solved. */
   withheld: readonly string[];
   /** The answer is withheld and the side to move is winning (a puzzle). */
@@ -110,6 +119,11 @@ export interface ReadContext {
    *  the habit already closed on. */
   said: ReadonlySet<string>;
 }
+
+/** The best line's first moves a decided read is about. */
+const LINE_SQUARES_PLIES = 6;
+/** The descriptions that speak in a decided read only when linked to its line. */
+const LINKED_ONLY: ReadonlySet<string> = new Set(['their-target', 'target', 'structure-plan', 'structure', 'concept', 'character', 'judgement']);
 
 /** Three pawns: the band where his reads stop planning and start converting. */
 const DECIDED_CP = 300;
@@ -126,6 +140,8 @@ export function readContextOf(i: {
   studentShot: boolean;
   /** REQUIRED: the story's said claims (`ReadStory.claims`), or null with no story. */
   said: readonly string[] | null;
+  /** The best line's moves (UCI), when read. */
+  line?: readonly string[];
 }): ReadContext {
   const sign = i.fen.split(' ')[1] === 'b' ? -1 : 1;
   const mate = i.top?.mate ?? null;
@@ -136,6 +152,9 @@ export function readContextOf(i: {
     fen: i.fen,
     bucket: decided ? 'decided' : 'open',
     best: i.bestUci ? [i.bestUci.slice(0, 2), i.bestUci.slice(2, 4)] : [],
+    ...(i.bestUci && i.bestUci.length > 4 ? { bestPromotion: i.bestUci[4] } : {}),
+    moverWins,
+    lineSquares: new Set((i.line ?? []).slice(0, LINE_SQUARES_PLIES).flatMap((u) => [u.slice(0, 2), u.slice(2, 4)])),
     withheld: i.withheld ?? [],
     puzzle: !!i.withheld && moverWins,
     studentShot: i.studentShot,
@@ -257,7 +276,13 @@ export function decideRead<F extends ReadFact>(factsIn: readonly F[], ctx: ReadC
   // ONCE A GAME: what the story already said is not said again.
   const toldBefore = (f: F): boolean => !STANDING_KINDS.has(f.kind) && f.computer !== 'pictureVerdict' && f.computer !== 'picturePlan'
     && storyKeys(f).some((c) => ctx.said.has(c));
-  const facts = factsIn.filter((f) => !toldBefore(f));
+  // ONE RELEVANCE RULE, in a decided read: a description of the board speaks
+  // only when it is linked to the conclusion — it works on a square the best
+  // line plays on (0Km5u …Qe3: "the target is your pawn on b5" and "push
+  // your e-pawn" beside a mating attack on d1). Unlinked, it stays unspoken.
+  const unlinked = (f: F): boolean => !!ctx.moverWins && !!ctx.lineSquares?.size && f.from === 'position' && LINKED_ONLY.has(f.kind)
+    && !f.squares.some((sq) => ctx.lineSquares?.has(sq));
+  const facts = factsIn.filter((f) => !toldBefore(f) && !(ctx.moverWins && f.kind === 'their-plan') && !unlinked(f));
   const out: F[] = [];
   let target = new Set<string>();
   const named = new Set<string>();
@@ -568,7 +593,7 @@ function withDetails<F extends ReadFact>(picked: readonly F[], all: readonly F[]
 function habitOf(facts: readonly ReadFact[], ctx: ReadContext): { id: string; text: string } | null {
   const bestForcing = ((): boolean | null => {
     if (!ctx.fen || ctx.best.length < 2) return null;
-    try { const m = new Chess(ctx.fen).move({ from: ctx.best[0], to: ctx.best[1], promotion: 'q' }); return !!m.captured || /[+#]/.test(m.san); } catch { return null; }
+    try { const m = new Chess(ctx.fen).move({ from: ctx.best[0], to: ctx.best[1], promotion: ctx.bestPromotion ?? 'q' }); return !!m.captured || /[+#]/.test(m.san); } catch { return null; }
   })();
   // A puzzle still being solved keeps CCT: a habit that says "quiet" hands over the answer's kind.
   if (ctx.puzzle) { const r = readHabit({ studentShot: true, bestForcing: true }); return r ? { id: r.habit, text: r.text } : null; }

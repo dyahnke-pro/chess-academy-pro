@@ -132,16 +132,14 @@ export type ConsideredTries = ReadonlyMap<string, ConsideredTry>;
  *  plan's try is worded as going straight at its target. */
 export type ConsideredWhy = 'capture' | 'check' | 'passer' | 'king' | 'threat' | 'defence' | 'mate-threat' | 'lever' | 'double' | 'reroute';
 export type ConsideredTry = { why: 'plan'; target: string; storm: boolean } | { why: ConsideredWhy; target: null };
-/** The reasons that make a weighed try TEMPTING — it goes at something: the
- *  plan's target, a capture, a check, a threat, a lever, a passer's push. A
- *  defence, a reroute or a doubling is weighed, never a temptation. */
-const TEMPTING_WHY: ReadonlySet<ConsideredTry['why']> = new Set(['plan', 'capture', 'check', 'threat', 'mate-threat', 'lever', 'passer']);
-/** A weighed try tempts when its reason goes at something and — past a
- *  capture or a check — a player sees it (0IsE8 …Qxe5: ten plan tries on
- *  f5 at an eye share under 1.5%, each walking into mate, were weighed). */
+/** A weighed try tempts when — past a capture or a check — a player sees it
+ *  (0IsE8 …Qxe5: ten plan tries on f5 under 1.5% of the eye, each walking
+ *  into mate, were weighed out loud; 0Km5u …Qe3: ten bishop "threats" at 1%). */
 function weighedTempting(w: ConsideredTry | null, eye: number): boolean {
-  if (!w || !TEMPTING_WHY.has(w.why)) return false;
-  return w.why === 'capture' || w.why === 'check' || eye >= CANDIDATE_BAR / 2;
+  if (!w) return false;
+  // A regroup is weighed by a strong player whatever the eye's pull (his
+  // "Nd3 …Ba4" on the grinder board, at 0.7% of the eye).
+  return w.why === 'capture' || w.why === 'check' || w.why === 'reroute' || eye >= ATTACK_EYE;
 }
 
 /** What a plan's try goes after, in words: the weak pawn ("the pawn on b5"),
@@ -303,9 +301,9 @@ function readCandidates(fen: string, played: Move, reads: readonly WeighRead[], 
 
 /** A move the eye finds OBVIOUS: at this share of the eye's read or above it
  *  is among the first moves a player looks at. */
-export const OBVIOUS_EYE = CANDIDATE_BAR;
+export const OBVIOUS_EYE = CANDIDATE_BAR / 2;
 /** A direct attack is seen from half the eye's candidate bar. */
-export const ATTACK_EYE = CANDIDATE_BAR / 2;
+export const ATTACK_EYE = CANDIDATE_BAR / 4;
 
 /**
  * THE TEMPTING TRY — the one definition (puzzle reads 2026-11-20: on a sharp
@@ -337,6 +335,16 @@ export function temptingTry(fen: string, uci: string, eye: number, real: number)
     if (sq.type !== 'p' && b.attackers(sq.square, them).length === 0) return true;
   }
   return false;
+}
+
+/** The piece that moved now hits an enemy piece worth more than itself. */
+function attacksBigger(fen: string, uci: string): boolean {
+  try {
+    const b = new Chess(fen);
+    const m = b.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] });
+    const own = MATERIAL_VALUE[m.piece] ?? 0;
+    return b.board().flat().some((sq) => !!sq && sq.color !== m.color && sq.type !== 'k' && (MATERIAL_VALUE[sq.type] ?? 0) > own && b.attackers(sq.square, m.color).includes(m.to));
+  } catch { return false; }
 }
 
 /** Seat words for the side that moved and the other side. */
@@ -825,6 +833,12 @@ export function standingRefutations(args: {
     } catch { /* count the moves that played */ }
     if (sans.length < 2) continue;
     const net = settledNetForLine(args.fen, sans, mover);
+    // A PIECE SIMPLY GIVEN AWAY IS NOT A TEMPTATION here either (0Km5u …Kg8:
+    // "Qc1+ is tempting, but Rxc1 takes the sting out of it — they win a
+    // queen"): the reply takes the piece that moved, a rook's worth or more.
+    // A try that hits something bigger is weighed for what it hits (…Be6
+    // against the queen), whatever it costs.
+    if (read.mate === null && read.moves[1]?.slice(2, 4) === c.to && net !== null && net <= -4 && !attacksBigger(args.fen, c.uci)) { drop('not-tempting'); continue; }
     // HAND OFF ONLY TO A REFUTER THAT SPEAKS: a try whose line loses material
     // is the material refuter's when it names the loss; when it stays silent
     // (a pawn lost on a three-pawn cost, an unconfirmed line), the loss is

@@ -5,6 +5,7 @@
 // A read the fixture lacks throws, naming its FEN.
 import { describe, it, expect, beforeAll } from 'vitest';
 import reads from './__fixtures__/puzzles5.reads.json';
+import answerKey from './__fixtures__/puzzles5.key.json';
 import { fixtureReader, readDanyaBoard, readKey, type Reads } from '../test/danyaBoardRead';
 
 const BOARDS: Record<string, string> = {
@@ -19,6 +20,8 @@ const R = reads as unknown as Reads;
 const got: Record<string, string> = {};
 /** The same moves read in order WITH a story: each puzzle's ledger carries what its earlier moves said. */
 const told: Record<string, string> = {};
+/** …and the general lines each said (the verdict and the standing are read fresh every board). */
+const toldGeneral: Record<string, string[]> = {};
 const all: Array<{ id: string; fen: string }> = [];
 
 beforeAll(async () => {
@@ -30,6 +33,7 @@ beforeAll(async () => {
     const pz = r.id.split('#')[0];
     const d = await readDanyaBoard(r.fen, R[readKey(r.fen)] ?? [], fixtureReader(R), ledger.get(pz) ?? []);
     told[r.id] = d.read;
+    toldGeneral[r.id] = d.kept.filter((f) => f.computer !== 'pictureVerdict' && !['standing', 'eval', 'convert', 'compensation', 'verdict'].includes(f.kind)).map((f) => f.text);
     ledger.set(pz, [...(ledger.get(pz) ?? []), ...d.said]);
   }
   if (process.env.P5_DUMP) fs.writeFileSync(`${process.env.P5_DUMP}.told.json`, JSON.stringify(told, null, 1));
@@ -47,6 +51,20 @@ describe('five master puzzles, read move by move', () => {
     expect(t).not.toMatch(/and (?:\w+) more moves, /);
     expect(t).not.toMatch(/escapes the checks with [a-h]?[BNRQ]/);
   });
+  it('every read names the engine\'s move (or one within half a pawn)', () => {
+    const PIECE: Record<string, string> = { K: 'king', Q: 'queen', R: 'rook', B: 'bishop', N: 'knight' };
+    const missing = Object.entries(answerKey as Record<string, string[]>).filter(([id, sans]) => !sans.some((san) => {
+      const bare = san.replace(/[+#]$/, '');
+      const sq = /([a-h][1-8])(?:=[QRBN])?$/.exec(bare)?.[1] ?? '';
+      return got[id].includes(bare) || (PIECE[san[0]] && new RegExp(`${PIECE[san[0]]} to ${sq}`, 'i').test(got[id]));
+    })).map(([id]) => id);
+    expect(missing).toEqual([]);
+  });
+  it('0Km5u Kh8: says Rf7 and Be6 fail, and the f-file/f2 plan', () => {
+    const t = of('0Km5u#1');
+    expect(t).toMatch(/Rf7/); expect(t).toMatch(/Be6/); expect(t).toMatch(/f-file|f2/);
+  });
+  it('0Km5u Kg8: says Rf8+ and the back rank', () => { const t = of('0Km5u#13'); expect(t).toMatch(/Rf8\+/); expect(t).toMatch(/back rank/i); });
   it('0Km5u Qe3: says the …Be6 threat', () => { expect(of('0Km5u#7')).toMatch(/Be6/); });
   it('0Km5u Rd8: says it stops Qxf8 mate', () => { expect(of('0Km5u#11')).toMatch(/Qxf8|f8[^.]*mate|mate[^.]*f8/); });
   it('0IsE8 Rxf5: says exf5 runs into mate', () => { expect(of('0IsE8#1')).toMatch(/exf5[^.]*mate|mate[^.]*exf5/i); });
@@ -56,9 +74,9 @@ describe('five master puzzles, read move by move', () => {
     const twice: string[] = [];
     for (const pz of new Set(Object.keys(told).map((k) => k.split('#')[0]))) {
       const seen = new Set<string>();
-      for (const [k, t] of Object.entries(told)) {
+      for (const [k, ts] of Object.entries(toldGeneral)) {
         if (!k.startsWith(`${pz}#`)) continue;
-        for (const sent of t.split(/(?<=[.!?])\s+/).filter((x) => x.length > 30 && !/^(You're|They're|It's level)/.test(x))) {
+        for (const sent of ts.join(' ').split(/(?<=[.!?])\s+/).filter((x) => x.length > 30)) {
           if (seen.has(sent)) twice.push(`${pz}: ${sent}`);
           seen.add(sent);
         }
@@ -67,12 +85,17 @@ describe('five master puzzles, read move by move', () => {
     expect(twice, twice.join('\n')).toEqual([]);
   });
   it('ceilings: failed tries, words', () => {
-    const ws = Object.values(got).map(words);
-    const total = Object.values(got).reduce((n, t) => n + tries(t), 0);
-    console.log(`[puzzles5] words avg ${Math.round(ws.reduce((a, b) => a + b, 0) / ws.length)} max ${Math.max(...ws)} tries ${total}`);
-    // CEILINGS AT TODAY'S COUNTS — they only fall. Target: tries ≤ 25, no read
-    // over 250 words (OWED: the 'threat' tries on 0Km5u …Qe3).
-    expect(total).toBeLessThanOrEqual(33);
-    expect(Math.max(...ws)).toBeLessThanOrEqual(393);
+    const stat = (m: Record<string, string>): { avg: number; max: number; tries: number } => {
+      const ws = Object.values(m).map(words);
+      return { avg: Math.round(ws.reduce((a, b) => a + b, 0) / ws.length), max: Math.max(...ws), tries: Object.values(m).reduce((n, t) => n + tries(t), 0) };
+    };
+    const alone = stat(got);
+    const inOrder = stat(told);
+    console.log(`[puzzles5] alone: words avg ${alone.avg} max ${alone.max} tries ${alone.tries} | in order with a story: avg ${inOrder.avg} max ${inOrder.max} tries ${inOrder.tries}`);
+    // THE TARGETS (David 2026-11-20), on the puzzle read move by move with its
+    // story — the way a solver hears it.
+    expect(inOrder.tries).toBeLessThanOrEqual(25);
+    expect(inOrder.max).toBeLessThanOrEqual(250);
+    expect(inOrder.avg).toBeLessThanOrEqual(120);
   });
 });
