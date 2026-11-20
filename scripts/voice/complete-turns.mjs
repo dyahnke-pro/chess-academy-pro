@@ -4,7 +4,7 @@
 // sentence after its lead), and the line's point (a plan, a line or a
 // technique fact). The right move is the puzzles5 answer-key test's.
 import { readFileSync } from 'node:fs';
-const JOB = new Set(['move-job', 'route', 'judgement', 'aspect-threat', 'aspect-prepares', 'aspect-tactic-lands', 'aspect-wins', 'aspect-tactic-set-up', 'aspect-opens-king', 'stop', 'stopped', 'board-teacher', 'fundamental', 'technique', 'sac-why', 'checkmate', 'pawn-break', 'trade', 'provoke']);
+const JOB = new Set(['move-job', 'route', 'judgement', 'aspect-threat', 'aspect-prepares', 'aspect-tactic-lands', 'aspect-wins', 'aspect-tactic-set-up', 'aspect-opens-king', 'stop', 'stopped', 'board-teacher', 'fundamental', 'technique', 'sac-why', 'checkmate', 'pawn-break', 'trade', 'provoke', 'aspect-prepares']);
 const sents = (t) => t.split(/(?<=[.!?])\s+/).filter(Boolean).length;
 for (const f of process.argv.slice(2)) {
   const d = JSON.parse(readFileSync(f, 'utf8'));

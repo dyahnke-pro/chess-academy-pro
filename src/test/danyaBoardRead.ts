@@ -12,7 +12,7 @@ export const readKey = (fen: string): string => fen.split(' ').slice(0, 4).join(
 export type Reads = Record<string, AnalysisLine[]>;
 export type Reader = (fen: string) => Promise<AnalysisLine[] | null>;
 
-export interface DanyaRead { read: string; facts: Array<{ kind: string; text: string; claims?: readonly string[]; computer?: string }>; said: string[]; kept: Array<{ kind: string; computer?: string; from: string; text: string; squares: readonly string[] }> }
+export interface DanyaRead { read: string; facts: Array<{ kind: string; text: string; claims?: readonly string[]; computer?: string }>; said: string[]; kept: Array<{ kind: string; computer?: string; from: string; text: string; squares: readonly string[]; claims?: readonly string[] }> }
 
 export function fixtureReader(reads: Reads): Reader {
   return (fen: string) => {
@@ -41,6 +41,6 @@ export async function readDanyaBoard(fen: string, before: AnalysisLine[], read: 
     read: [...decided.facts.map((f) => f.text), decided.habit ?? ''].map((t) => t.trim()).filter(Boolean).join(' '),
     facts: pf.facts.map((f) => ({ kind: f.kind, text: f.text, claims: f.claims ?? [], computer: f.computer })),
     said: decided.said,
-    kept: decided.facts.map((f) => ({ kind: f.kind, computer: f.computer, from: f.from, text: f.text, squares: f.squares })),
+    kept: decided.facts.map((f) => ({ kind: f.kind, computer: f.computer, from: f.from, text: f.text, squares: f.squares, claims: f.claims ?? [] })),
   };
 }

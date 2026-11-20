@@ -442,12 +442,34 @@ function jobMove(f: ReadFact): string | null {
  *  move that can be said after it ("It also …") join the first, in the
  *  decided order; a job in another shape stays its own fact. The merged fact
  *  carries every claim and square, so the record of what was said is whole. */
+/** A job's idea and squares off its claim (`move:<uci>:idea:<idea>:<sq,…>`). */
+function jobIdeas(f: ReadFact): Array<{ family: string; squares: string[] }> {
+  return (f.claims ?? []).flatMap((c) => {
+    const m = /^move:[a-h1-8qrbn]+:idea:([a-z-]+):(.*)$/.exec(c);
+    return m ? [{ family: IDEA_FAMILY[m[1]] ?? m[1], squares: m[2] ? m[2].split(',') : [] }] : [];
+  });
+}
+/** Ideas that are one claim when they touch the same square: hitting a piece
+ *  is one idea whether a computer calls it pressure, a threat or an attack. */
+const IDEA_FAMILY: Record<string, string> = { pressure: 'hit', threat: 'hit', attack: 'hit', 'win-material': 'hit', check: 'check', file: 'file', 'passed-pawn': 'push', promote: 'push' };
+
 export function mergeMoveJobs<F extends ReadFact>(facts: readonly F[]): F[] {
   const out: F[] = [];
+  // ONE IDEA ONCE, BY CLAIM: a job of the same idea family on a square an
+  // earlier job of the move already named (or with no square, the same family)
+  // is that idea again ("hits their bishop on g4" / "attacks their bishop on g4").
+  const saidIdeas = new Map<string, Array<{ family: string; squares: string[] }>>();
+  const repeats = (mv: string, f: F): boolean => {
+    const prior = saidIdeas.get(mv) ?? [];
+    const mine = jobIdeas(f);
+    return mine.length > 0 && mine.every((i) => prior.some((p) => p.family === i.family && (i.squares.length === 0 || p.squares.length === 0 || i.squares.some((q) => p.squares.includes(q)))));
+  };
   const lead = new Map<string, number>();
   const parts = new Map<number, string[]>();
   for (const f of facts) {
     const mv = jobMove(f);
+    if (mv && repeats(mv, f)) continue;
+    if (mv) saidIdeas.set(mv, [...(saidIdeas.get(mv) ?? []), ...jobIdeas(f)]);
     const at = mv ? lead.get(mv) : undefined;
     if (mv && at !== undefined && jobClause(f.text)) {
       const host = out[at];

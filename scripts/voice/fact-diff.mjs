@@ -16,8 +16,13 @@ const keyOf = (f, claims) => {
 let silent = 0; let added = 0;
 for (const id of new Set([...Object.keys(before), ...Object.keys(after)])) {
   const B = before[id]; const A = after[id];
-  const bk = new Map((B?.kept ?? []).map((f) => [keyOf(f, claimsOf(B)), f.text]));
-  const ak = new Map((A?.kept ?? []).map((f) => [keyOf(f, claimsOf(A)), f.text]));
+  // A merged fact (one move's jobs said as one sentence) speaks EACH of its
+  // claims: keyed per claim, so a merge is not read as a silence.
+  const keys = (R) => new Map((R?.kept ?? []).flatMap((f) => {
+    const cl = (f.claims ?? claimsOf(R).get(f.text) ?? []).filter((x) => !/^(said|once):/.test(x));
+    return cl.length > 1 ? cl.map((c) => [`claim:${c}`, f.text]) : [[keyOf(f, claimsOf(R)), f.text]];
+  }));
+  const bk = keys(B); const ak = keys(A);
   const gone = [...bk].filter(([k]) => !ak.has(k));
   const neu = [...ak].filter(([k]) => !bk.has(k));
   if (!gone.length && !neu.length) continue;
