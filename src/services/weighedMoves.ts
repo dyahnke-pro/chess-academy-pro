@@ -551,6 +551,11 @@ export interface StandingRefuted {
   squares: string[];
   /** The tempting move's own claim: one rule-out a move, whichever shape said it. */
   key: string;
+  /** The computed reason's key (a board reason's tag, read against the
+   *  better move) — tries sharing it are refuted for one reason — and the
+   *  reason's sentence; null when the reason is the line's own. */
+  reasonKey: string | null;
+  reasonText: string | null;
   claims: string[];
 }
 
@@ -614,6 +619,10 @@ export function smallerShift(bestCp: number, mine: boolean, nothingSaid: boolean
  *  went (`pawnKick`), the check or capture whose line wins nothing (the
  *  ledger), or what the board after it gives up against the best move
  *  (`positionalReason.boardReason`). Null when none reads it. */
+/** The computed reason `tryMechanism` last returned, as a key (the board
+ *  reason's tag and the better move it is read against), or null. */
+let lastMechanismKey: string | null = null;
+
 function tryMechanism(fen: string, m: Move, sans: readonly string[], bestSan: string, own: 'your' | 'their', other: 'your' | 'their'): string | null {
   const blk = blocksOwn(fen, m);
   if (blk) {
@@ -660,6 +669,7 @@ function tryMechanism(fen: string, m: Move, sans: readonly string[], bestSan: st
   if (/\+$/.test(rm.san)) return `${replyWords} comes with check, so ${other === 'your' ? 'you gain' : 'they gain'} a tempo.`;
   const why = boardReason(fen, m.san, bestSan, phaseOfFen(fen) ?? 'middlegame');
   if (!why) return null;
+  lastMechanismKey = `board-reason:${why.tag}:${bestSan}:${why.note}`;
   // A board reason about a piece the line takes is false (Kf1?? …Bxc5: "your
   // bishop on c5 reaches fewer squares" — it is gone): the squares the line
   // captures on are not described.
@@ -782,9 +792,10 @@ export function standingRefutations(args: {
       tryLine: { moves: read.moves, cp: read.mate === null ? read.evaluation : null, mate: read.mate },
       bestLine: { moves: best.read.moves, cp: best.read.mate === null ? best.read.evaluation : null, mate: best.read.mate } };
     const story = lineStory(args.fen, read.moves, w.other, read.mate === null ? read.evaluation : null);
+    let reasonKey: string | null = null;
     const mech = story?.text
       ?? lost
-      ?? tryMechanism(args.fen, m, sans, best.san, w.own, w.other)
+      ?? ((): string | null => { lastMechanismKey = null; const t = tryMechanism(args.fen, m, sans, best.san, w.own, w.other); if (t) reasonKey = lastMechanismKey; return t; })()
       ?? (plan ? targetOutcome(args.fen, sans, plan.target, mover, w.other) : null)
       ?? changeReason(futureArgs)
       ?? args.engineReasons?.get(c.uci)
@@ -820,7 +831,7 @@ export function standingRefutations(args: {
       : rotateStem([`${c.san} looked natural for them, but ${reply} meets it.`, `${c.san} was the obvious try for them, but ${reply} is the answer.`, `${c.san} was tempting for them, but ${reply} takes the sting out of it.`], stem);
     const text = [lead, jobSaid ? job?.follow : null, reason, shift].filter(Boolean).join(' ');
     const key = temptingKey(c.uci);
-    out.push({ san: c.san, uci: c.uci, costCp: Math.round(cost), reply, text, squares: [...new Set([c.from, c.to, read.moves[1].slice(2, 4), ...(jobSaid && job ? job.squares : [])])], key, claims: [key], real });
+    out.push({ san: c.san, uci: c.uci, costCp: Math.round(cost), reply, text, squares: [...new Set([c.from, c.to, read.moves[1].slice(2, 4), ...(jobSaid && job ? job.squares : [])])], key, claims: [key], real, reasonKey: jobSaid ? null : reasonKey, reasonText: reason ?? null });
   }
   return out.sort((x, y) => y.real - x.real).map(({ real: _real, ...t }) => t);
 }

@@ -62,6 +62,11 @@ export interface ReadFact {
   /** The idea it states, as claim keys (`CoachFact.claims`): a fact sharing a
    *  claim with one already said is that idea again, never said twice. */
   claims?: readonly string[];
+  /** A try whose result lands in another band than the best move's ("…Ke7
+   *  throws the win"): the verdict's "but". */
+  bandShift?: boolean;
+  /** Other tries this one fact refutes for the same reason (uci). */
+  also?: readonly string[];
   /** A try: the move (uci) the fact refutes. */
   move?: string;
   /** THE PICTURE'S VERDICT: the failed tries it names, in its own order — each
@@ -325,6 +330,10 @@ export function decideRead<F extends ReadFact>(facts: readonly F[], ctx: ReadCon
           try { const bd = new Chess(ctx.fen); verdictPawns = new Set(pick.squares.filter((sq) => bd.get(sq as Square)?.type === 'p')); } catch { /* an unreadable board names no pawn */ }
         }
       }
+      // The verdict's "but": every try that changes the result's band.
+      if (row.step === 'verdict' && pick === lead && !picture) {
+        for (const f of facts) if (f.bandShift && f.kind === 'refuted' && sayable(f, ctx, out, sameClaim)) say(f);
+      }
       if (row.supports) {
         argued.add(pick);
         for (const f of supportsOf(row.supports, pick, facts, ctx, out, sameClaim)) { say(f); argued.add(f); }
@@ -354,7 +363,7 @@ function supportsOf<F extends ReadFact>(kind: 'tries' | 'line', lead: F, facts: 
     for (const uci of lead.tries ?? []) {
       // A try the verdict NAMES is said with its reason (F2): the verdict has
       // already judged it worth naming, so no second bar holds its "but".
-      const f = facts.find((x) => x.move === uci && x.kind === 'refuted' && ok(x));
+      const f = facts.find((x) => (x.move === uci || !!x.also?.includes(uci)) && x.kind === 'refuted' && ok(x));
       if (f) got.push(f);
     }
     return got;

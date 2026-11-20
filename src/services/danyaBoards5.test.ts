@@ -51,7 +51,8 @@ describe('board 2 — Alekhine\'s gun (alekhines-gun2#0)', () => {
   });
   it('never Rfc1, no reason twice, no "your knight on e7/b8"', () => {
     const t = got.gun.read;
-    expect(t).not.toMatch(/Rfc1/);
+    // Rfc1 is a later STEP of the plan (Rc2, Rfc1, Rc3), never the move.
+    expect(t).not.toMatch(/(quiet|first) Rfc1|Rfc1 (is|was) the move|go Rfc1/);
     noRepeat(t);
     expect(allFacts('gun')).not.toMatch(/your knight on (e7|b8)/);
   });
@@ -70,7 +71,7 @@ describe('board 4 — a grandmaster\'s blunder (blunders-a-grandmasters-perspect
   it('names …Kd8 as the move and says …Ke7 throws the win', () => {
     const t = got.blunder.read;
     expect(t).toMatch(/Kd8/);
-    expect(t).toMatch(/Ke7[^.]*(draw|level|throws|win)/i);
+    expect(t).toMatch(/Ke7[^.]*(draw|level|throws|win|edge is gone)/i);
     expect(t).not.toMatch(/Kf8 (is|was) the move|the move is …?Kf8/i);
     expect(t).not.toMatch(/Kd8 looks natural/);
   });

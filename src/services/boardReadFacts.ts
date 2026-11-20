@@ -28,6 +28,7 @@ import { boardKind } from './positionCharacter';
 import { standingTarget, opponentTargets, targetLine } from './targetSelector';
 import { siegeOf, stepsOf, switchWing } from './boardPlan';
 import { planSteps, planStepsText } from './planSteps';
+import { andList } from '../utils/andList';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { moveThoughtFacts } from './moveThoughtFacts';
 import { standingRead } from './reviewMoveBriefing';
@@ -274,7 +275,24 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
       if (reasons.size > 0) standing = standingRefutations({ fen: i.fen, student: i.studentColor, rating: i.rating, reads: tempting, considered, engineReasons: reasons });
     }
     const empty = standing.filter((t) => !refuted.some((r) => r.uci === t.uci));
-    for (const t of empty) facts.push({ from: 'tempting', kind: 'refuted', text: t.text, computer: 'temptingOnBoard', squares: t.squares, move: t.uci });
+    // TRIES REFUTED FOR ONE COMPUTED REASON ARE ONE IDEA (F2, Alekhine's gun:
+    // Qc3 and Qc2 each "…Rfc8 meets it. The better move puts your rook on the
+    // open c-file"): grouped by the reason's key, never by its words, said once.
+    const groups = new Map<string, typeof empty>();
+    for (const t of empty) { const k = t.reasonKey ? `${t.reasonKey}|${t.reply}` : t.uci; groups.set(k, [...(groups.get(k) ?? []), t]); }
+    // A TRY THAT CHANGES THE RESULT'S BAND (F2, board 4: …Ke7 throws the
+    // win) is the verdict's own "but", said beside it.
+    const bandOf = (uci: string): number | null => { const r = tempting.find((x) => x.moves[0] === uci); return r ? stepOfCp(seatCp(r, i.studentColor)) : null; };
+    const topBand = stepOfCp(seatCp(top, i.studentColor));
+    const shifts = (uci: string): boolean => { const b = bandOf(uci); return b !== null && b !== topBand; };
+    for (const g of groups.values()) {
+      const [t, ...more] = g;
+      if (more.length === 0) { facts.push({ from: 'tempting', kind: 'refuted', text: t.text, computer: 'temptingOnBoard', squares: t.squares, move: t.uci, ...(shifts(t.uci) ? { bandShift: true } : {}) }); continue; }
+      const sans = g.map((x) => x.san);
+      const two = sans.length === 2;
+      const text = [`${andList(sans)} ${two ? 'both' : 'all'} fail the same way: ${t.reply} meets ${two ? 'either' : 'each'}.`, t.reasonText].filter(Boolean).join(' ');
+      facts.push({ from: 'tempting', kind: 'refuted', text, computer: 'temptingOnBoard', squares: [...new Set(g.flatMap((x) => x.squares))], move: t.uci, also: more.map((x) => x.uci) });
+    }
     // THE PICTURE'S CONCLUSIONS (WO-PICTURE-01 P3 → P5): the verdict read
     // after these tries ("better, but hard to finish") and the try that
     // survives them, off the refutations just made. The decider says them in
@@ -305,7 +323,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     // back, his "…Qf6 is met by Rh5, and the queen has to go back") is said
     // in the verdict's own words, so every try the verdict names has its "but".
     for (const t of conc?.but ?? []) {
-      if (facts.some((f) => f.move === t.uci)) continue;
+      if (facts.some((f) => f.move === t.uci || f.also?.includes(t.uci))) continue;
       facts.push({ from: 'tempting', kind: 'refuted', text: t.text, computer: 'pictureVerdict', squares: [t.uci.slice(0, 2), t.uci.slice(2, 4)], move: t.uci });
     }
     // One rule-out a move: a try said by what it does to the result already
