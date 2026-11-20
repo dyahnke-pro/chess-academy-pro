@@ -63,6 +63,10 @@ export function knownSlipIndexNow(): KnownSlipIndex | null {
   }
   return loadedIndex;
 }
+/** Whether the index is in memory now (never starts a load). */
+export function knownSlipIndexLoaded(): boolean {
+  return loadedIndex !== null;
+}
 /** Tests and the replay harness hand the index in as the app holds it. */
 export function setKnownSlipIndexForTests(index: KnownSlipIndex | null): void {
   loadedIndex = index;

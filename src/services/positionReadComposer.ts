@@ -10,7 +10,8 @@ import { Chess } from 'chess.js';
 // them, most-important-first, in the order returned.
 import { buildFedTacticsContext } from './liveTacticsContext';
 import { sharpGap, SHARP_GAP_CP } from './positionCharacter';
-import { boardReadFacts, type BoardReader } from './boardReadFacts';
+import type { BoardReader } from './boardReadFacts';
+import { boardReadOffThread } from './boardReadOffThread';
 import { tryReadBudget, poolBudgetMs, poolDispatcher, type ReadSurface, type ReadBudget } from './tryReadBudget';
 import { decideRead, readContextOf } from './readDecider';
 import { stockfishEngine } from './stockfishEngine';
@@ -192,7 +193,7 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
       async (size, budgetMs) => (await import('./gameAnalysisService')).acquirePvEngines(size, budgetMs),
       (fen, depth, budgetMs) => stockfishEngine.analyzeWithBudget(fen, depth, budgetMs),
     );
-    const read = await boardReadFacts({
+    const read = await boardReadOffThread({
       fen: i.fen, studentColor: studentCC, rating: i.rating, before, history: sans, theory: true, tense: 'now',
       withhold: !!marks, readTempting: i.readTempting && !marks,
       read: reader.read,

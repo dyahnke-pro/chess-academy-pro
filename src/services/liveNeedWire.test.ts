@@ -17,8 +17,9 @@ import { readFileSync } from 'node:fs';
 const read = (p: string): string => readFileSync(p, 'utf8');
 
 /** The object literal(s) handed to computePositionFacts — or to the read's
- *  `boardReadFacts`, which hands its own on — in a file. */
-const CALL = /(computePositionFacts|boardReadFacts)\(\{/g;
+ *  `boardReadFacts` (in the board-read worker: `boardReadOffThread`), which
+ *  hands its own on — in a file. */
+const CALL = /(computePositionFacts|boardReadFacts|boardReadOffThread)\(\{/g;
 function composerCalls(src: string): string[] {
   const out: string[] = [];
   const starts = [...src.matchAll(CALL)].map((m) => m.index ?? 0);

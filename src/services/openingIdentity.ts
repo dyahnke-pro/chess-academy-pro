@@ -59,6 +59,8 @@ export function loadOpeningIdentity(): Promise<void> {
   return loading;
 }
 export function warmOpeningIdentity(): void { void loadOpeningIdentity(); }
+/** Whether the facts are in memory now (never starts a load). */
+export function openingIdentityLoaded(): boolean { return facts !== null; }
 
 /** For tests and callers that already hold the map. */
 export function setOpeningIdentity(map: IdentityMap | null): void { facts = map; }

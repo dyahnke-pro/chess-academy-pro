@@ -229,7 +229,11 @@ describe('one coach, unlocked', () => {
     expect(brf).toMatch(/moveThoughtFacts\(\{/);
     expect(brf).toMatch(/computePositionFacts\(\{[^}]*boardComputers: 'composer'/);
     expect(brf).toMatch(/history: game\.history/);
-    expect(read('services/positionReadComposer.ts')).toMatch(/boardReadFacts\(\{/);
+    // The composer's read runs `boardReadFacts` in the board-read worker
+    // (`boardReadOffThread`), which serves exactly that function.
+    expect(read('services/positionReadComposer.ts')).toMatch(/boardReadOffThread\(\{/);
+    expect(read('services/boardReadWorkerCore.ts')).toMatch(/boardReadFacts\(full\)/);
+    expect(read('services/boardReadOffThread.ts')).toMatch(/return boardReadFacts\(i\)/);
     expect(read('hooks/usePositionNarration.ts')).toMatch(/composePositionRead\(/);
     for (const f of ['components/Coach/CoachGamePage.tsx', 'components/Coach/CoachGameReview.tsx', 'components/Puzzles/PuzzleBoard.tsx', 'components/Puzzles/MistakePuzzleBoard.tsx', 'components/Tactics/TacticSetupBoard.tsx', 'components/Coach/CoachTeachPage.tsx']) {
       expect(read(f), f).toMatch(/usePositionNarration\(\{/);

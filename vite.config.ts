@@ -445,6 +445,9 @@ export default defineConfig(({ mode }) => {
     exclude: ['stockfish', 'kokoro-js'],
     include: ['openai', '@anthropic-ai/sdk'],
   },
+  // The board-read worker (`boardReadOffThread`) is a module worker whose
+  // graph has dynamic imports: ES output so Rollup can split it.
+  worker: { format: 'es' },
   build: {
     target: 'esnext',
     rollupOptions: {

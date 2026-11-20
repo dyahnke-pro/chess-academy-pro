@@ -93,6 +93,11 @@ export async function getHisPlayDb(): Promise<HisPlayDb | null> {
   return dbInflight;
 }
 
+/** Whether the his-play DB is in memory now (never starts a load). */
+export function hisPlayDbLoaded(): boolean {
+  return !!dbCache;
+}
+
 /** Test/SSR seam — inject a pre-loaded DB (e.g. read from disk in node). */
 export function __setHisPlayDbForTests(db: HisPlayDb | null): void {
   dbCache = db === null ? null : db;

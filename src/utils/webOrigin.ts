@@ -16,13 +16,21 @@ import { Capacitor } from '@capacitor/core';
 /** The deployed web app — every server route and every `public/` file. */
 export const WEB_ORIGIN = 'https://chess-academy-pro.vercel.app';
 
+/** A thread with no Capacitor bridge (the board-read worker) is told by the
+ *  page it serves whether it is inside the native app (`setNativeApp`). */
+let nativeOverride: boolean | null = null;
+export function setNativeApp(native: boolean): void { nativeOverride = native; }
+
 /** True inside the native app. Capacitor's `isNativePlatform()` is the
  *  scheme-independent signal; the protocol sniff is a defensive fallback. */
 export function isNativeApp(): boolean {
+  if (nativeOverride !== null) return nativeOverride;
   try {
     if (Capacitor.isNativePlatform()) return true;
   } catch { /* @capacitor/core unavailable — fall through */ }
-  return typeof window !== 'undefined' && window.location.protocol === 'capacitor:';
+  // `location`, not `window.location`: a worker (the board-read worker) has no
+  // window, and on the native app its origin is the app's too.
+  return typeof location !== 'undefined' && location.protocol === 'capacitor:';
 }
 
 /** `/api/x` or `/data/x.json` → absolute on native, unchanged on the web. */

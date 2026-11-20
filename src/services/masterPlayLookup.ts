@@ -189,6 +189,20 @@ async function getLocalDb(): Promise<LocalDb | null> {
   return localDbInflight;
 }
 
+/** Whether the local masters DB is in memory now (never starts a load). */
+export function mastersDbLoaded(): boolean {
+  return !!localDbCache;
+}
+
+/** The positions the live explorer answered with zero master games, so a
+ *  second thread's copy reads them as this one does (`boardReadData`). */
+export function confirmedEmptyPositions(): string[] {
+  return [...confirmedEmpty];
+}
+export function addConfirmedEmpty(keys: readonly string[]): void {
+  for (const k of keys) confirmedEmpty.add(k);
+}
+
 /** Test-only — reset the lazy-load cache. */
 export function __resetLocalDbForTests(): void {
   localDbCache = undefined;
