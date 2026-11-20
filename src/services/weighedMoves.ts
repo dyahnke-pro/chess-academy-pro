@@ -792,7 +792,8 @@ export function standingRefutations(args: {
       tryLine: { moves: read.moves, cp: read.mate === null ? read.evaluation : null, mate: read.mate },
       bestLine: { moves: best.read.moves, cp: best.read.mate === null ? best.read.evaluation : null, mate: best.read.mate } };
     const story = lineStory(args.fen, read.moves, w.other, read.mate === null ? read.evaluation : null);
-    let reasonKey: string | null = null;
+    // The story the line tells is a computed reason too (its kind and squares).
+    let reasonKey: string | null = story ? `story:${story.kind}:${story.squares.join(',')}` : null;
     const mech = story?.text
       ?? lost
       ?? ((): string | null => { lastMechanismKey = null; const t = tryMechanism(args.fen, m, sans, best.san, w.own, w.other); if (t) reasonKey = lastMechanismKey; return t; })()
@@ -831,7 +832,7 @@ export function standingRefutations(args: {
       : rotateStem([`${c.san} looked natural for them, but ${reply} meets it.`, `${c.san} was the obvious try for them, but ${reply} is the answer.`, `${c.san} was tempting for them, but ${reply} takes the sting out of it.`], stem);
     const text = [lead, jobSaid ? job?.follow : null, reason, shift].filter(Boolean).join(' ');
     const key = temptingKey(c.uci);
-    out.push({ san: c.san, uci: c.uci, costCp: Math.round(cost), reply, text, squares: [...new Set([c.from, c.to, read.moves[1].slice(2, 4), ...(jobSaid && job ? job.squares : [])])], key, claims: [key], real, reasonKey: jobSaid ? null : reasonKey, reasonText: reason ?? null });
+    out.push({ san: c.san, uci: c.uci, costCp: Math.round(cost), reply, text, squares: [...new Set([c.from, c.to, read.moves[1].slice(2, 4), ...(jobSaid && job ? job.squares : [])])], key, claims: [key], real, reasonKey, reasonText: reason ?? null });
   }
   return out.sort((x, y) => y.real - x.real).map(({ real: _real, ...t }) => t);
 }
