@@ -1249,14 +1249,15 @@ export function decideTurn(
   const thread = priorThread ? coreLive.find((x) => touches(x, priorThread)) ?? null : coreLive[0] ?? null;
   const threadSquares = thread ? (thread.fact.squares ?? []) : (priorThread ?? []);
   const coreKeep = new Set<Survivor>();
-  {
-    const usedStep = new Set<ThoughtStep>();
-    if (thread) { coreKeep.add(thread); usedStep.add(stepOf(thread)); }
-    for (const x of coreLive) {
-      if (x === thread) continue;
-      if (important(x)) { coreKeep.add(x); continue; }
-      if (!usedStep.has(stepOf(x)) && touches(x, threadSquares)) { coreKeep.add(x); usedStep.add(stepOf(x)); }
-    }
+  // RELEVANCE, NOT A COUNT (David 2026-11-20, G4.5): a core fact speaks when
+  // it is the thread, is news in its own right, or is LINKED to the thread —
+  // it works on a square the thread names. "One per step" was a count; an
+  // unlinked idea is another thread and stays unspoken.
+  if (thread) coreKeep.add(thread);
+  for (const x of coreLive) {
+    if (x === thread) continue;
+    if (important(x)) { coreKeep.add(x); continue; }
+    if (touches(x, threadSquares)) coreKeep.add(x);
   }
   /** Why the thought holds this fact, or null when it speaks. */
   const thoughtHold = (x: Survivor): HoldReason | null => {
