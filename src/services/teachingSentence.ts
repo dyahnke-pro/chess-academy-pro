@@ -645,7 +645,8 @@ export function renderPictureVerdict(v: {
   switch (v.kind) {
     case 'works-now': return {
       text: rotateStem([`${lead}, and the direct way works now: ${v.works}.`, `${lead}, and ${v.works} goes straight for it.`], v.stem),
-      afterStanding: rotateStem([`The direct way works now: ${v.works}.`, `${v.works} goes straight for it.`], v.stem),
+      // Said without the standing, "goes straight for it" has no "it".
+      afterStanding: `The direct way works now: ${v.works}.`,
       word: `${w}, and it works now`,
     };
     case 'hard-to-finish': {
