@@ -57,6 +57,20 @@ describe('the try refuted by what it does to the result', () => {
     expect(nx?.text).toMatch(/slightly worse/);
   });
 
+  it('the result sentence names the try once another sentence stands between (no "It" pointing at the reply)', () => {
+    const fen = '1r2r3/2p1b3/p1k5/2PN1p1p/6pP/PPR1BnK1/5P2/7R w - - 0 31';
+    const reads = lines([
+      { moves: ['d5b4', 'c6b7', 'b4d5', 'b7c6', 'd5b4'], cp: 0 },
+      { moves: ['c3d3', 'f3e5', 'd3d1', 'b8b3', 'd5b4', 'c6b5', 'b4d5', 'e7d8', 'd1b1', 'b3b1'], cp: -121 },
+      { moves: ['d5e7', 'e8e7', 'h1d1', 'a6a5', 'c3d3', 'e7e4', 'e3f4', 'b8b7', 'f4h6', 'f3e5'], cp: -122 },
+    ]);
+    const text = standingRefutations({ fen, student: 'w', rating: 1800, reads }).find((x) => x.san === 'Nxe7+')?.text ?? '';
+    const sentences = text.split(/(?<=\.) /);
+    expect(sentences.length).toBeGreaterThanOrEqual(3);
+    const last = sentences[sentences.length - 1];
+    expect(last.startsWith('Nxe7+ ')).toBe(true);
+  });
+
   it('a try weighed for the plan is worded as the direct try failing', () => {
     const fen = '1r2r3/2p1b3/p1k5/2PN1p1p/6pP/PPR1BnK1/5P2/7R w - - 0 31';
     const reads = lines([
@@ -71,8 +85,8 @@ describe('the try refuted by what it does to the result', () => {
   });
 
   it('a clear edge that stays an edge is the same result (negative control)', () => {
-    expect(resultShift(250, 120, true)).toBeNull();
-    expect(resultShift(250, 30, true)).toMatch(/edge is gone/);
-    expect(resultShift(-150, -400, true)).toBeNull();
+    expect(resultShift(250, 120, true, 'It')).toBeNull();
+    expect(resultShift(250, 30, true, 'It')).toMatch(/edge is gone/);
+    expect(resultShift(-150, -400, true, 'It')).toBeNull();
   });
 });

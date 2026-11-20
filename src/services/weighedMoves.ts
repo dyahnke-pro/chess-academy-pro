@@ -561,8 +561,11 @@ const BAND_WORDS: Readonly<Record<number, string>> = {
 
 /** What the try does to the result, from the mover's seat (his "throws the
  *  win", "keeps only a slight edge", "the edge is gone"): one sentence, or
- *  null when the band does not drop. */
-export function resultShift(bestCp: number, tryCp: number, mine: boolean): string | null {
+ *  null when the band does not drop. `subject` is what the sentence calls the
+ *  try: "It" right after the line that names it, the move itself once another
+ *  sentence (naming another move) stands between — REQUIRED, so no caller
+ *  leaves "it" pointing at the wrong move. */
+export function resultShift(bestCp: number, tryCp: number, mine: boolean, subject: string): string | null {
   const from = bandStep(bestCp);
   const to = bandStep(tryCp);
   // THE RESULT CHANGES, not the size of an edge: a win, an edge, level, or
@@ -572,27 +575,28 @@ export function resultShift(bestCp: number, tryCp: number, mine: boolean): strin
   if (result(to) >= result(from)) return null;
   const you = mine ? "you're" : "they're";
   const own = mine ? 'your' : 'their';
-  if (from === 3) return to === 0 ? 'It throws the win: the game is level after it.' : to > 0 ? `It lets the win slip: ${you} only ${BAND_WORDS[to]} after it.` : `It throws the win: ${you} ${BAND_WORDS[to]} after it.`;
-  if (from > 0 && to === 0) return `After it ${own} edge is gone.`;
-  return `It leaves ${mine ? 'you' : 'them'} ${BAND_WORDS[to]}.`;
+  const after = subject === 'It' ? 'it' : subject;
+  if (from === 3) return to === 0 ? `${subject} throws the win: the game is level after it.` : to > 0 ? `${subject} lets the win slip: ${you} only ${BAND_WORDS[to]} after it.` : `${subject} throws the win: ${you} ${BAND_WORDS[to]} after it.`;
+  if (from > 0 && to === 0) return `After ${after} ${own} edge is gone.`;
+  return `${subject} leaves ${mine ? 'you' : 'them'} ${BAND_WORDS[to]}.`;
 }
 
 /** WHAT A TRY THAT KEEPS THE RESULT STILL COSTS (his "Rc7 achieves nothing",
  *  "keeps only a slight edge"): it gives back part of the edge, or leaves the
  *  side a little worse than the better move would. Said only where the result
  *  holds (`resultShift` is null) and the try costs half a pawn at least. */
-export function smallerShift(bestCp: number, mine: boolean, nothingSaid: boolean, costCp: number): string {
+export function smallerShift(bestCp: number, mine: boolean, nothingSaid: boolean, costCp: number, subject: string): string {
   const from = bandStep(bestCp);
   const own = mine ? 'your' : 'their';
   const them = mine ? 'you' : 'them';
   // A pawn or more, inside one band (a won game stays won, a lost one lost):
   // a real cost, never "achieves nothing".
   if (costCp >= SHIFT_COST_CP) {
-    if (from > 0) return `It gives back a big part of ${own} edge.`;
-    if (from === 0) return `It leaves ${them} clearly worse than the better move would.`;
-    return `It makes ${own} position a lot harder.`;
+    if (from > 0) return `${subject} gives back a big part of ${own} edge.`;
+    if (from === 0) return `${subject} leaves ${them} clearly worse than the better move would.`;
+    return `${subject} makes ${own} position a lot harder.`;
   }
-  const lead = nothingSaid ? 'It' : 'It achieves nothing, and';
+  const lead = nothingSaid ? subject : `${subject} achieves nothing, and`;
   if (from > 0) return `${lead} gives back part of ${own} edge.`;
   if (from === 0) return `${lead} leaves ${them} a little worse than the better move would.`;
   return `${lead} makes ${own} position harder still.`;
@@ -719,7 +723,13 @@ export function standingRefutations(args: {
     // plan's lower bar needs the result to change; at half a pawn the plan's
     // try is weighed like any other (his "c4? bxc4", a plan try at −0.6 that
     // kept the band was dropped while the same move from the eye was said).
-    const bandShift = plan || cost >= SHIFT_COST_CP ? resultShift(bestCp, tryCp, mine) : null;
+    // The result sentence names the try by its move once another sentence
+    // stands between it and the lead (the reply's job, the reason): "It"
+    // there points at whatever that sentence named last ("Their d4 is aimed
+    // at your pawn. It achieves nothing" read as d4). Decided below, once the
+    // middle sentences are known; the band is read here.
+    const shiftOf = (subject: string): string | null => (plan || cost >= SHIFT_COST_CP ? resultShift(bestCp, tryCp, mine, subject) : null);
+    const bandShift = shiftOf('It');
     if (!bandShift && cost < ACHIEVES_NOTHING_CP) { drop('same-result'); continue; }
     const m = moveOn(args.fen, c.uci);
     if (!m || read.moves.length < 2) continue;
@@ -771,9 +781,14 @@ export function standingRefutations(args: {
     // A recapture is the trade, not a reason: the ledger already says what it nets.
     const jobSaid = !!job && job.kind !== 'recaptures' && !mech.includes(sans[1]) && !(job.kind === 'kicks' && /kicks/.test(mech));
     // "…Kd5 holds the pawn on c6" and "the pawn on c6 still stands" are one idea.
-    const reason = jobSaid && job?.kind === 'guards' && /still stands/.test(mech) ? null : mech;
+    const kept = jobSaid && job?.kind === 'guards' && /still stands/.test(mech) ? null : mech;
+    // A reason that calls the try "It" (`tryMechanism`'s own lead) says so
+    // right after the lead; with the reply's job between them, "It" would
+    // point at the reply — the try is named instead.
+    const reason = kept && jobSaid ? kept.replace(/^It\b/, c.san) : kept;
     // A line that mates ends the game: no band words for that.
-    const shift = story?.kind === 'mates' ? (mine ? 'It loses the game.' : 'It loses them the game.') : bandShift ?? smallerShift(bestCp, mine, !!reason && /wins nothing/.test(reason), cost);
+    const subject = jobSaid || reason ? c.san : 'It';
+    const shift = story?.kind === 'mates' ? (mine ? `${subject} loses the game.` : `${subject} loses them the game.`) : shiftOf(subject) ?? smallerShift(bestCp, mine, !!reason && /wins nothing/.test(reason), cost, subject);
     const stem = stemKeyOf(`${args.fen}|result|${c.uci}`);
     const lead = plan
       ? (plan.storm
