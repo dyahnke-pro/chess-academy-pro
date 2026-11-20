@@ -2957,6 +2957,16 @@ first testing the idea, is the failure mode this rule exists to kill. If you
 catch yourself agreeing, STOP and ask: where does this break, and how do I make
 it better?
 
+## 🔒🔒 LEAN WORK — HOW EVERY BUILD RUNS FROM NOW ON (David 2026-11-20: "The data usage has been amazing. Only 3 percent used so far today. All future work needs to continue in this manner.")
+
+What made it cheap, kept as the standard:
+1. **One builder agent at a time**, with a short, evidence-based brief (the cause, the files, the test, the stop point) — never a swarm unless David asks.
+2. **The coordinator does not read the agent's work in progress.** Progress checks are `git log` + `git status` only; the agent's report is the one read.
+3. **Plan first, evidence first:** inventory and measure before building; check the plan against the code before launch; the plan is corrected, not the build re-run.
+4. **Saved reads, no repeat engine runs:** fixtures for every test board; a missing read fails loudly.
+5. **Commit and push to the branch after every step** so nothing is lost and nothing restarts.
+6. **Short replies to David**, results as numbers and the lines that changed.
+
 ## 🔒🔒 SWARM COST RULES — learned the hard way (David 2026-10-07: "Lock in what we learned so it doesn't happen again")
 
 An overnight swarm burned half of David's weekly limit. About a third of it was
