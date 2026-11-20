@@ -1132,15 +1132,35 @@ export function counterplayText(c: Counterplay, student: Color, fen: string, lin
   if (c.state === 'unsettled') return null;
   const mine = c.side === student;
   const whose = mine ? 'their' : 'your';
-  const hit = andList(c.hits.map((h, i) => (c.hitPieces[i] === 'k' ? `${whose} king with mate` : `${whose} ${NAME[c.hitPieces[i]]} on ${h}`)));
+  const hitWords = (i: number): string => (c.hitPieces[i] === 'k' ? `${whose} king with mate` : `${whose} ${NAME[c.hitPieces[i]]} on ${c.hits[i]}`);
+  const hit = andList(c.hits.map((_, i) => hitWords(i)));
   const owner = mine ? 'Your' : 'Their';
   const key = stemKeyOf(c.kind === 'break' ? `${placement(fen)}|${c.to}` : `${placement(fen)}|${c.from}${c.to}`);
-  const head = c.kind === 'break'
-    ? rotateStem([`${owner} one resource is the pawn break to ${c.to}, hitting ${hit}.`, `${owner} counterplay is the push to ${c.to}, against ${hit}.`], key)
+  const head = c.kind === 'break' ? breakWords(c, fen, owner, whose, hitWords, key)
     : rotateStem([`${owner} ${NAME[c.piece]} can come to ${c.to} and hit ${hit}.`, `${owner} resource is the ${NAME[c.piece]} on ${c.from}: from ${c.to} it hits ${hit}.`], key);
   if (c.state === 'alive') return `${head} ${rotateStem(['It is coming: the best line plays it.', 'Nothing stops it in the best line.'], key)}`;
   const stopper = c.stoppedBy ? sanOf(fen, lines[0]?.moves ?? [], c.ply ?? 0) : null;
   return `${head} ${stopper ? `But it is dead: after ${stopper} it no longer works.` : 'But the best line stops it.'}`;
+}
+
+/** A pawn break in words, named by its move (chess.js): a push goes TO an
+ *  empty square and hits the pawns beside it; a capture TAKES the pawn on the
+ *  square it lands on ("…dxe4, taking your pawn on e4"), never a push onto a
+ *  square a pawn stands on. */
+function breakWords(c: Counterplay, fen: string, owner: string, whose: string, hitWords: (i: number) => string, key: number): string {
+  const takes = c.hits[0] === c.to;
+  let san = takes ? `${c.from[0]}x${c.to}` : c.to;
+  const board = sideToMoveAs(fen, c.side);
+  if (board) {
+    try { san = new Chess(board).move({ from: c.from, to: c.to, promotion: 'q' }).san; } catch { /* the square-built name stands */ }
+  }
+  const named = `${c.side === 'b' ? '…' : ''}${san}`;
+  if (!takes) {
+    const hit = andList(c.hits.map((_, i) => hitWords(i)));
+    return rotateStem([`${owner} one resource is the pawn break ${named}, hitting ${hit}.`, `${owner} counterplay is the push ${named}, against ${hit}.`], key);
+  }
+  const then = c.hits.length > 1 ? ` Then it hits ${andList(c.hits.slice(1).map((_, i) => hitWords(i + 1)))}.` : '';
+  return rotateStem([`${owner} one resource is the pawn break ${named}, taking ${whose} pawn on ${c.to}.`, `${owner} counterplay is ${named}: the pawn takes ${whose} pawn on ${c.to}.`], key) + then;
 }
 
 /** The SAN of ply `n` of a UCI line from `fen`. */
