@@ -299,8 +299,8 @@ function verdictOf(i: PictureVerdictIn, mover: Color, step: number, but: FailedT
   const butLine = names.length === 1
     ? (oneTarget ? `${names[0]}, going after ${oneTarget}, fails.` : `${names[0]} fails.`)
     : oneTarget
-      ? rotateStem([`Every direct try on ${oneTarget} fails: ${andList(names)}.`, `${andList(names)} all go after ${oneTarget}, and all fail.`], stem)
-      : `${andList(names)} all fail.`;
+      ? rotateStem([`Every direct try on ${oneTarget} fails: ${andList(names)}.`, `${andList(names)} ${names.length === 2 ? 'both go' : 'all go'} after ${oneTarget}, and ${names.length === 2 ? 'both' : 'all'} fail.`], stem)
+      : `${andList(names)} ${names.length === 2 ? 'both' : 'all'} fail.`;
   const noCounterplay = i.ledger?.counterplay?.alive === false && step > 0
     ? ` ${mine ? 'They have' : 'You have'} no counterplay, so there is time.`
     : '';

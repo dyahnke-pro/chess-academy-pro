@@ -132,6 +132,10 @@ export type ConsideredTries = ReadonlyMap<string, ConsideredTry>;
  *  plan's try is worded as going straight at its target. */
 export type ConsideredWhy = 'capture' | 'check' | 'passer' | 'king' | 'threat' | 'defence' | 'mate-threat' | 'lever' | 'double' | 'reroute';
 export type ConsideredTry = { why: 'plan'; target: string; storm: boolean } | { why: ConsideredWhy; target: null };
+/** The reasons that make a weighed try TEMPTING — it goes at something: the
+ *  plan's target, a capture, a check, a threat, a lever, a passer's push. A
+ *  defence, a reroute or a doubling is weighed, never a temptation. */
+const TEMPTING_WHY: ReadonlySet<ConsideredTry['why']> = new Set(['plan', 'capture', 'check', 'threat', 'mate-threat', 'lever', 'passer']);
 
 /** What a plan's try goes after, in words: the weak pawn ("the pawn on b5"),
  *  or for a storm the king itself — never the king's square. */
@@ -290,6 +294,41 @@ function readCandidates(fen: string, played: Move, reads: readonly WeighRead[], 
   return out.sort((x, y) => y.c.eye - x.c.eye);
 }
 
+/** A move the eye finds OBVIOUS: at this share of the eye's read or above it
+ *  is among the first moves a player looks at. */
+export const OBVIOUS_EYE = 0.12;
+/** …or one of the eye's first few looks. */
+export const OBVIOUS_RANK = 3;
+
+/**
+ * THE TEMPTING TRY — the one definition (puzzle reads 2026-11-20: on a sharp
+ * board nearly every move changes the result, so "changes the result" alone
+ * named 13 tries on one move). A try is weighed out loud only when a player
+ * would be drawn to it: a check, a capture, a direct attack (the piece that
+ * moved hits a piece worth more than itself, or a piece nothing guards), or a
+ * move the eye finds obvious or players really play. Whether it FAILS is the caller's measure.
+ */
+export function temptingTry(fen: string, uci: string, eye: number, real: number): boolean {
+  if (eye >= OBVIOUS_EYE) return true;
+  // Among the first moves the eye reaches for — the real share (cost
+  // counted) is no measure on a sharp board, where every losing move shares it.
+  try { if (eyeRead(fen, 1500).sort((a, b) => b.p - a.p).slice(0, OBVIOUS_RANK).some((r) => r.uci === uci)) return true; } catch { /* read the move itself */ }
+  void real;
+  let b: Chess;
+  let m: Move;
+  try { b = new Chess(fen); m = b.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }); } catch { return false; }
+  if (m.captured || /[+#]/.test(m.san)) return true;
+  const own = MATERIAL_VALUE[m.piece] ?? 0;
+  const them = m.color === 'w' ? 'b' : 'w';
+  for (const row of b.board()) for (const sq of row) {
+    if (!sq || sq.color !== them || sq.type === 'k') continue;
+    if (!b.attackers(sq.square, m.color).includes(m.to)) continue;
+    if ((MATERIAL_VALUE[sq.type] ?? 0) > own) return true;
+    if (sq.type !== 'p' && b.attackers(sq.square, them).length === 0) return true;
+  }
+  return false;
+}
+
 /** Seat words for the side that moved and the other side. */
 function seatWords(mover: Color, student: Color): { own: 'your' | 'their'; other: 'your' | 'their'; moverLine: LineSeat; otherLine: LineSeat; otherWho: 'you' | 'they' } {
   const mine = mover === student;
@@ -393,6 +432,9 @@ export function temptingRefutations(args: Parameters<typeof temptingRefuted>[0])
     // rarely it would be played — the full model prices the mate in, which is
     // the very reason a player must hear it.
     if (real < TEMPTING_P_FLOOR && !mateWalk && !weighed && !matesMover(read, played.color)) continue;
+    // TEMPTING AND FAILS: a try no player is drawn to is not weighed, however
+    // it ends (a try the plan weighed and an eye-pulled walk into mate excepted).
+    if (!(weighed && TEMPTING_WHY.has(weighed.why)) && !mateWalk && !temptingTry(args.fenBefore, c.uci, c.eye, real)) continue;
     const t = refuteCandidate(args.fenBefore, c, read, playedRead, args.student, args.priorMove, plan ? planAim(plan, played.color === args.student) : null);
     if (!t) continue;
     // A PIECE SIMPLY GIVEN AWAY IS NOT A TEMPTATION: their first reply takes
@@ -735,6 +777,7 @@ export function standingRefutations(args: {
     // it stays silent the line's own story says it here.
     if (read.mate !== null && refuteCandidate(args.fen, c, read, best.read, args.student, null, plan ? planAim(plan, mine) : null)) { drop('mate-line'); continue; }
     if (real < TEMPTING_P_FLOOR && !weighed) { drop('not-tempting'); continue; }
+    if (!(weighed && TEMPTING_WHY.has(weighed.why)) && !temptingTry(args.fen, c.uci, c.eye, real)) { drop('not-tempting'); continue; }
     const tryCp = seatCp(read, mover);
     const cost = bestCp - tryCp;
     // The plan's direct try is weighed against the plan, not the eye: it
@@ -834,7 +877,20 @@ export function standingRefutations(args: {
     const key = temptingKey(c.uci);
     out.push({ san: c.san, uci: c.uci, costCp: Math.round(cost), reply, text, squares: [...new Set([c.from, c.to, read.moves[1].slice(2, 4), ...(jobSaid && job ? job.squares : [])])], key, claims: [key], real, reasonKey, reasonText: reason ?? null });
   }
-  return out.sort((x, y) => y.real - x.real).map(({ real: _real, ...t }) => t);
+  // TRIES THAT MEET THE SAME REPLY ARE ONE IDEA ("…Kh4, …Kf6 and …Kh6 all
+  // fail to Bd3"): said once, by the most tempting, the rest named with it.
+  const sorted = out.sort((x, y) => y.real - x.real);
+  const byReply = new Map<string, Array<StandingRefuted & { real: number }>>();
+  for (const t of sorted) { const g = byReply.get(t.reply) ?? []; g.push(t); byReply.set(t.reply, g); }
+  const grouped: StandingRefuted[] = [];
+  for (const g of byReply.values()) {
+    const [{ real: _real, ...head }, ...rest] = g;
+    if (rest.length === 0) { grouped.push(head); continue; }
+    const sans = g.map((t) => t.san);
+    const reason = head.reasonText && !/^It\b/.test(head.reasonText) ? ` ${head.reasonText}` : '';
+    grouped.push({ ...head, text: `${andList(sans)} ${sans.length === 2 ? 'both' : 'all'} fail to ${head.reply}.${reason}`, squares: [...new Set(g.flatMap((t) => t.squares))], claims: [...new Set(g.flatMap((t) => t.claims))] });
+  }
+  return grouped;
 }
 
 /** What the difference reader compares for a try: its line against the best. */

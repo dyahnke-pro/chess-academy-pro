@@ -85,12 +85,21 @@ export async function defenderCheckRun(fen: string, best: string, student: Color
     }
   }
   const moves = sans.map((s, k) => (k % 2 === 0 ? `${defender === 'b' ? '…' : ''}${s}` : `${defender === 'b' ? '' : '…'}${s}`));
-  const pairs: string[] = [];
-  for (let k = 0; k < moves.length; k += 2) pairs.push(`${moves[k]} ${moves[k + 1]}`);
-  const escape = sans[sans.length - 1];
+  // IN HUMAN WORDS (puzzle reads 2026-11-20: "your king escapes the checks
+  // with Bf7" — Bf7 is a block, not a king move): the run as its first check
+  // and how it ends — the king walks out, or a piece blocks — never a score sheet.
+  const last = sans[sans.length - 1];
+  const lastSq = /([a-h][1-8])(?:=[QRBN])?[+#]?$/.exec(last)?.[1] ?? '';
+  const answer = moves[moves.length - 1];
+  const ends = /^K/.test(last) ? `your king walks out to ${lastSq}` : /x/.test(last) ? `you take with ${answer}` : `you block with ${answer}`;
   const piece = ({ R: 'rook', Q: 'queen', B: 'bishop', N: 'knight', K: 'king' } as Record<string, string>)[sans[0][0]] ?? 'pawn';
-  const run = `Their ${piece} checks: ${pairs.join(', ')}, and your king escapes the checks with ${escape}.`;
-  const tail = then ? ` Then ${defender === 'b' ? '…' : ''}${then}.` : '';
+  const checks = sans.length / 2;
+  const run = checks <= 1
+    ? `Their ${piece} checks with ${moves[0]}, and ${ends}.`
+    : /^K/.test(last) && /^K/.test(sans[1])
+    ? `Their ${piece} starts checking with ${moves[0]}. Your king answers with ${moves[1]} and keeps walking — after ${checks} checks it is out on ${lastSq}.`
+    : `Their ${piece} starts checking with ${moves[0]}. After ${checks} checks, ${ends} and the checks run out.`;
+  const tail = then ? ` Then they play ${defender === 'b' ? '…' : ''}${then}.` : '';
   const promo = promotion ? ` ${promotionChoiceLine(promotion, student, false)}` : '';
   return { sans, checksRead, then, promotion, text: `${run}${tail}${promo}` };
 }

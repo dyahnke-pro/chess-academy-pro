@@ -64,7 +64,7 @@ const key = (fen: string): string => fen.split(' ').slice(0, 4).join(' ');
 async function main(): Promise<void> {
   const rows = readFileSync(inPath, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l) as Row);
   const stored = new Map<string, AnalysisLine[]>();
-  for (const r of rows) stored.set(key(r.fen), r.lines.map((l, i) => ({ rank: i + 1, evaluation: l.cp, mate: l.mate, moves: l.moves }) as unknown as AnalysisLine));
+  for (const r of rows) if (r.lines?.length) stored.set(key(r.fen), r.lines.map((l, i) => ({ rank: i + 1, evaluation: l.cp, mate: l.mate, moves: l.moves }) as unknown as AnalysisLine));
   writeFileSync(outPath, '');
   const engine = new Engine();
   let queue: Promise<unknown> = Promise.resolve();
@@ -74,7 +74,7 @@ async function main(): Promise<void> {
     n += 1;
     const out: Record<string, unknown> = { id: r.id, fen: r.fen };
     try {
-      const before = stored.get(key(r.fen)) ?? [];
+      const before = stored.get(key(r.fen)) ?? await live(r.fen);
       const read = (fen: string): Promise<AnalysisLine[] | null> => { if (!stored.has(key(fen))) missed += 1; return live(fen); };
       const d = await readDanyaBoard(r.fen, before, read);
       out.read = d.read;

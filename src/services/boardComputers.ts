@@ -54,6 +54,11 @@ import { studentMoveStructure, theirMoveStructure, boardStructure, linesStructur
 import { STRUCTURE_ROLE } from './structureJudgementKit';
 import { countMethod } from './countMethod';
 import { countKey, temptingKey } from './conceptKey';
+
+/** The tempting-try claim of a move named by SAN (`temptingKey`). */
+function tryKeyOf(fen: string, san: string): string | null {
+  try { const m = new Chess(fen).move(san.replace(/^…/, '')); return temptingKey(`${m.from}${m.to}${m.promotion ?? ''}`); } catch { return null; }
+}
 import { buildPriorityFirst, studentMovePoint } from './playCommentary';
 import { openingStoryAt, STORY_KIND } from './openingStory';
 import { isEndgameByMaterial } from './gamePhaseService';
@@ -3209,7 +3214,10 @@ export const BOARD_COMPUTERS = {
       const out: CoachFact[] = ruleOuts(db, NOTHING_SAID).map((r) => {
         const said = closeSentence(r.text);
         const claim = r.claim ?? `choice:${m.from}${m.to}:${r.san}`;
-        return fact({ key: `choice|${claim}`, claims: [claim], text: said, squares: r.squares, stakes: costStakes(r.deltaCp),
+        // The try's own claim too: "X? Then …" after X was already refuted is
+        // the same idea (one rule-out a move, whichever shape said it).
+        const tryKey = tryKeyOf(w.fenBefore, r.san);
+        return fact({ key: `choice|${claim}`, claims: tryKey ? [claim, tryKey] : [claim], text: said, squares: r.squares, stakes: costStakes(r.deltaCp),
           proof: r.proof ?? squaresProof(said, r.squares) ?? NO_PROOF.description, seat, namesStudentMove: false, thread: LOCAL_THREAD, fen: w.fenBefore, altFen: fenAfter });
       });
       if (db.best.san === san && db.bestLineAfter && db.bestLineProof && !ctx.deep) {
@@ -3229,7 +3237,8 @@ export const BOARD_COMPUTERS = {
       const heldMarks = deliberationMarks(d, fen, said, HELD_WEIGHING_SAYS);
       // The choice is worth what the tempting alternative would cost.
       const worst = Math.max(0, ...d.alternatives.map((c) => c.deltaCp));
-      return fact({ key: text, claims: [], text, proof: NO_PROOF.description, squares: marks.squares, stakes: costStakes(worst),
+      const tryKeys = d.alternatives.filter((c) => text.includes(`${c.san}?`) || text.includes(`${c.san} `)).flatMap((c) => { const k = tryKeyOf(fen, c.san); return k ? [k] : []; });
+      return fact({ key: text, claims: tryKeys, text, proof: NO_PROOF.description, squares: marks.squares, stakes: costStakes(worst),
         seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen, lines: marks.lines,
         ...(held ? { heldForm: { text: held, proof: NO_PROOF.withheld, squares: heldMarks.squares, lines: heldMarks.lines } } : {}) });
     })),

@@ -111,7 +111,7 @@ export interface LastMoveInput {
 import type { TacticPatternType } from '../types/tacticTypes';
 import { definitionKey } from './conceptEngine';
 import { lineProof, NO_PROOF, type FactProof } from './proof';
-import { lineSeatAt, countWord } from '../utils/andList';
+import { lineSeatAt, andList } from '../utils/andList';
 import { habitIsOwed, HABIT_KIND } from './methodBeat';
 import { naturalDefenceFails, forcingLine, markSacrificeLine } from './methodSignals';
 import { habitNeedFrom } from './coachDecider';
@@ -1784,6 +1784,10 @@ function buildClauses(a: {
   else if (importance.tier === 'convert') ranked.push(clause('computeImportance', a.fen, { kind: 'convert', text: `This is technique now — convert it cleanly, no heroics.` }));
   const pushConcept = (): void => {
     if (!concept || (concept.source === 'tactic' && a.alreadySaid?.has(conceptInstanceKey(concept.id, concept.squares)))) return;
+    // A FACT ON A BOARD MORE THAN A FEW MOVES OUT IS NOT SAID (puzzle reads
+    // 2026-11-20: "After Qf4 and sixteen more moves, your queen pins…"): the
+    // student cannot see that board, and the line to it is a guess.
+    if (concept.line && concept.line.length > FUTURE_FACT_PLIES && concept.boardFen && !samePlacementFen(concept.boardFen, a.fen)) return;
     // The pile-on move of a pin of the student's is their own next move.
     const pinMover = ((): 'w' | 'b' | null => { try { return concept.pinMove ? new Chess(concept.pinMove.fen).turn() : null; } catch { return null; } })();
     const studentWB: 'w' | 'b' = studentSeat === 'white' ? 'w' : 'b';
@@ -1926,6 +1930,9 @@ function buildClauses(a: {
 
 /** The longest line said move by move: a combination's three or four plies. */
 const LINE_SAID_IN_FULL = 4;
+/** The farthest board a fact is said about: four moves a side. Past that the
+ *  line is a guess the student cannot follow. */
+const FUTURE_FACT_PLIES = 8;
 
 /** A concept that lives on a FUTURE board is said with the moves that reach
  *  it — "After cxb3+, moving your pawn on b3…" — never as a fact about the
@@ -1940,10 +1947,9 @@ export function afterLine(line: readonly string[] | undefined, boardFen: string 
   // so it reads for every detector sentence ("If you play Nd4, moving the
   // knight on e5 would unveil…"); "Play X and moving…" did not.
   if (line.length === 1 && fenNow.split(' ')[1] === student) return `If you play ${line[0]}, ${rest}`;
-  // A long line is said as its key move, never as a score sheet (THE COACH
-  // TALKS LIKE A PERSON, rule 4: "After Qc2, Bc6, Qb1, Nd7, Bc3, c4, Rd4,
-  // Qc5, Red1, your rook…" was a read of a board, 2026-11-19).
-  if (line.length > LINE_SAID_IN_FULL) return `After ${line[0]} and ${countWord(line.length - 1)} more moves, ${rest}`;
+  // A longer line is said as the mover's own moves, never a score sheet
+  // (THE COACH TALKS LIKE A PERSON, rule 4) and never "and N more moves".
+  if (line.length > LINE_SAID_IN_FULL) return `After ${andList(line.filter((_, k) => k % 2 === 0))}, ${rest}`;
   return `After ${line.join(', ')}, ${rest}`;
 }
 
