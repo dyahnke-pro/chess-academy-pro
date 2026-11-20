@@ -167,10 +167,10 @@ function evalVerdict(studentPovCp: number): string {
  *  balanced / tipping"). None that fits → none said: the old fallback "your
  *  pieces are the more active" counted no piece. `lines`: the engine's lines
  *  from `fen` (the initiative), or null. */
-function evalWhy(fen: string, studentPovCp: number, studentWB: 'w' | 'b', lastMove: LastMove | null, lines: readonly InitiativeLine[] | null): { clauses: string[]; level: boolean } {
+function evalWhy(fen: string, studentPovCp: number, studentWB: 'w' | 'b', lastMove: LastMove | null, lines: readonly InitiativeLine[] | null): { clauses: string[]; level: boolean; squares: string[] } {
   const whiteCp = studentWB === 'w' ? studentPovCp : -studentPovCp;
   const v = verdictWithReasons({ fen, evalCp: whiteCp, mate: null, lines, student: studentWB, lastMove, said: NOTHING_SAID });
-  return v ? { clauses: reasonClauses(v), level: v.favoured === null } : { clauses: [], level: false };
+  return v ? { clauses: reasonClauses(v), level: v.favoured === null, squares: [...v.squares] } : { clauses: [], level: false, squares: [] };
 }
 const NOTHING_SAID: ReadonlySet<ReasonKind> = new Set<ReasonKind>();
 /** The eval VERDICT + WHY as a lead sentence. */
@@ -206,9 +206,9 @@ export function evalReading(fenAfter: string, povBeforeCp: number | null, povAft
  *  2026-11-18: his read of a board opens on it), and whether the board gave
  *  it a reason — a bare "You're winning." says nothing a player can act on (the read decider says
  *  a verdict only with its reason). */
-export function standingRead(fen: string, studentPovCp: number, studentWB: 'w' | 'b', lines: readonly InitiativeLine[] | null): { text: string; reasoned: boolean } {
+export function standingRead(fen: string, studentPovCp: number, studentWB: 'w' | 'b', lines: readonly InitiativeLine[] | null): { text: string; reasoned: boolean; reasonSquares: string[] } {
   const read = evalWhy(fen, studentPovCp, studentWB, null, lines);
-  return { text: explainEvalOf(read, studentPovCp), reasoned: read.clauses.length > 0 };
+  return { text: explainEvalOf(read, studentPovCp), reasoned: read.clauses.length > 0, reasonSquares: read.squares };
 }
 /** The DELTA — how this move moved the eval (student POV cp swing). Null when it
  *  barely moved (a quiet move keeps its silence rather than "held the balance"

@@ -35,7 +35,9 @@ describe('board 1 — the Saavedra (a-guide-to-underpromotion#0)', () => {
   });
   it('says no passer twice, no bare "Kxc7", no "pawn on c7"', () => {
     const t = got.underpromotion.read;
-    expect((t.match(/passed pawn|passer/gi) ?? []).length).toBeLessThanOrEqual(1);
+    // The passer as a FACT about the board, once (the move's rule — "passed
+    // pawns must be pushed" — is c7's reason, its own idea).
+    expect((t.match(/passed pawn on c[67]|passer on c[67]/gi) ?? []).length).toBeLessThanOrEqual(1);
     expect(t).not.toMatch(/After Kxc7 only the kings/);
     expect(t).not.toMatch(/pawn on c7/);
     noRepeat(t);

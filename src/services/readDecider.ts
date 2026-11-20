@@ -65,6 +65,9 @@ export interface ReadFact {
   /** A try whose result lands in another band than the best move's ("…Ke7
    *  throws the win"): the verdict's "but". */
   bandShift?: boolean;
+  /** The squares the standing's reason is about ("your passed pawn on c6"),
+   *  where the fact says a standing with its reason. */
+  reasonSquares?: readonly string[];
   /** The defender's checks the read weighed as tries (uci). */
   checksRead?: readonly string[];
   /** Other tries this one fact refutes for the same reason (uci). */
@@ -279,6 +282,10 @@ export function decideRead<F extends ReadFact>(facts: readonly F[], ctx: ReadCon
   const restatesVerdict = (f: F): boolean => {
     if (verdictPawns.size === 0) return false;
     const race = f.kind === 'plan-race' || (f.kind === 'structure-plan' && /^Both sides ha(ve|d) a runner/.test(f.text));
+    // A structure line about the verdict's pawns and nothing else ("your
+    // passed pawn on c6 is two pushes from queening") is the verdict's
+    // reason said again (F5, the Saavedra).
+    if (f.kind === 'structure-plan' && f.squares.length > 0 && f.squares.every((sq) => verdictPawns.has(sq))) return true;
     if (!race && f.kind !== 'target' && f.kind !== 'their-target') return false;
     return f.squares.some((sq) => verdictPawns.has(sq));
   };
@@ -328,8 +335,9 @@ export function decideRead<F extends ReadFact>(facts: readonly F[], ctx: ReadCon
         if (row.step === 'priority') target = new Set(pick.squares);
         // The pawns the verdict's reason is about (a passer, a weak pawn). The
         // picture's verdict names tries, not pawns.
-        if (row.step === 'verdict' && ctx.fen && !picture) {
-          try { const bd = new Chess(ctx.fen); verdictPawns = new Set(pick.squares.filter((sq) => bd.get(sq as Square)?.type === 'p')); } catch { /* an unreadable board names no pawn */ }
+        if (row.step === 'verdict' && ctx.fen) {
+          const about = pick.reasonSquares ?? (picture ? [] : pick.squares);
+          try { const bd = new Chess(ctx.fen); verdictPawns = new Set(about.filter((sq) => bd.get(sq as Square)?.type === 'p')); } catch { /* an unreadable board names no pawn */ }
         }
       }
       // The verdict's "but": every try that changes the result's band.
