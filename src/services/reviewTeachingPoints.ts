@@ -61,6 +61,9 @@ function isLight(sq: string): boolean { return ((sq.charCodeAt(0) - 97) + (Numbe
  *  same claim as the move that kicked it, which the registry couples). */
 export interface CountRead { text: string; square: Square; tempo: boolean; piece: string; attackers: number; defenders: number }
 
+/** The count's verdict, written once for both readers of it. */
+const FALLS = 'more attackers than defenders, so it falls', FALLS_AGAIN = 'it falls too';
+
 export function attackerDefenderCount(fen: string, studentColorWB: Color): CountRead[] {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return []; }
@@ -122,7 +125,7 @@ export function attackerDefenderCount(fen: string, studentColorWB: Color): Count
     const cand = { value: PIECE_VAL[c.type] ?? 0, square: sq, tempo: escapes, piece: PIECE_NOUN[c.type], attackers: atk, defenders: def,
       text: escapes
         ? `${count} — it's outnumbered, so it has to move, and that costs them the tempo`
-        : `${count} — more attackers than defenders, so it falls` };
+        : `${count} — ${FALLS}` };
     found.push(cand);
   }
   return found.sort((a, b) => b.value - a.value).map(({ value: _v, ...f }) => f);
@@ -141,7 +144,7 @@ export function countSaid(reads: readonly CountRead[], fen: string): string {
   const tail = (r: CountRead, i: number): string => {
     const again = i > 0 && reads[i - 1].tempo === r.tempo;
     if (r.tempo) return again ? 'it has to move too' : "it's outnumbered, so it has to move, and that costs them the tempo";
-    return again ? 'it falls too' : 'more attackers than defenders, so it falls';
+    return again ? FALLS_AGAIN : FALLS;
   };
   const tally = (r: CountRead): string => `${plural(r.attackers, 'attacker')} to ${plural(r.defenders, 'defender')}`;
   const stems = (r: CountRead, i: number): string[] => [

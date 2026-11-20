@@ -18,7 +18,7 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 const HOME = join('src', 'services', 'winChance.ts');
-const CEILING = 15;
+const CEILING = 13; // 2026-11-20: boardBundle, engineComputers and boardComputers fold through seatCp.
 
 function walk(dir: string, out: string[]): string[] {
   for (const name of readdirSync(dir)) {

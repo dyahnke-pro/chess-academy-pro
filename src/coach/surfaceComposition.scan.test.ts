@@ -309,7 +309,8 @@ function walk(dir: string): string[] {
 function factImports(file: string): string[] {
   const src = readFileSync(file, 'utf8');
   const mods = new Set<string>();
-  for (const m of src.matchAll(/from '(?:\.\.\/)+services\/([A-Za-z0-9_]+)'/g)) {
+  // A type-only import computes nothing: it is not a call into a computer.
+  for (const m of src.matchAll(/^import (?!type )[^;]*?from '(?:\.\.\/)+services\/([A-Za-z0-9_]+)'/gms)) {
     if (!INFRA.has(m[1])) mods.add(m[1]);
   }
   return [...mods];
@@ -322,7 +323,7 @@ const SURFACES = [
 
 // ── SHRINK-ONLY CEILINGS, measured 2026-09-17. Lower them when you route a
 //    call through the composer. NEVER raise one.
-const TOTAL_CEILING = 240; // 2026-11-08: 238 measured once the mark schedule was named infrastructure (it replaced narrationSegments' reveal); 2026-10-20: one price — Play prices and labels through moveRating, the finished-game record is one autoAnalyzeGame entry
+const TOTAL_CEILING = 229; // 2026-11-20: 229 once a type-only import stopped counting (it computes nothing). 2026-11-08: 238 measured once the mark schedule was named infrastructure (it replaced narrationSegments' reveal); 2026-10-20: one price — Play prices and labels through moveRating, the finished-game record is one autoAnalyzeGame entry
 const PER_FILE_CEILING: Record<string, number> = {
   'components/Coach/CoachTeachPage.tsx': 59,
   'components/Coach/CoachGamePage.tsx': 31,

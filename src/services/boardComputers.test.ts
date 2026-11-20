@@ -28,6 +28,9 @@ describe('boardComputers — the one registry', () => {
           priorityFirst: /buildPriorityFirst\(/,
           // The record files these through the computer's own function.
           kingReadsBestLine: /kingReadsForBestLine\(/, castleByHand: /castleByHand\(/, wingWithoutPieces: /wingWithoutPieces\(/, tensionReleased: /tensionReleased\(/, kingSquares: /kingSquareOutcome\(/, tacticGeometry: /geometryMotif\(/,
+          // The record reads the target and the counterplay off the picture's one
+          // computation, the function both rows read (`pictureConclusions`).
+          pictureTarget: /pictureConclusions\(/, pictureCounterplay: /pictureConclusions\(/,
         };
         if (!viaRegistry && !(fnByComputer[id]?.test(code))) bad.push(`${id}/${surface}: ${ans.wired} never calls it`);
       }

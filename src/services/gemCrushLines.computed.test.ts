@@ -111,15 +111,19 @@ describe('gems: the Play rung callout stays on the opening pages; the coach read
     expect(importers).toEqual(expect.arrayContaining(['src/services/reviewFullData.ts', 'src/services/coachFeatureService.ts', 'src/services/boardComputers.ts']));
     const REVIEW_FILES = ['src/services/reviewFullData.ts', 'src/services/coachFeatureService.ts', 'src/components/Coach/CoachGameReview.tsx'];
     // The index is read only where the registry rows are called.
-    expect(importers.filter((p) => !REVIEW_FILES.includes(p) && p !== 'src/services/boardComputers.ts' && p !== 'src/services/moveThoughtFacts.ts')).toEqual([]);
+    // boardReadData only loads the file into the board-read worker (its
+    // `DATA_FILES` loader); it reads no gem.
+    expect(importers.filter((p) => !REVIEW_FILES.includes(p) && p !== 'src/services/boardComputers.ts' && p !== 'src/services/moveThoughtFacts.ts' && p !== 'src/services/boardReadData.ts')).toEqual([]);
     const callers = [...src].filter(([, c]) => /readBoard(?:All)?\('(?:knownSlip|trapAhead|slipsOnLine)'/.test(c)).map(([p]) => p).sort();
-    expect(callers).toEqual(['src/components/Coach/CoachTeachPage.tsx', 'src/services/moveThoughtFacts.ts', 'src/services/reviewFullData.ts']);
+    // Review reads the rows through the lesson's own reader (`knownSlipReads`).
+    expect(callers).toEqual(['src/components/Coach/CoachTeachPage.tsx', 'src/services/moveThoughtFacts.ts']);
     // Every coach surface that teaches a move is wired.
     const { BOARD_COMPUTERS } = await import('./boardComputers');
     // Each surface reads the index through ONE of the three rows (a move's
     // board, or Learn's last two moves): every coach surface is wired by one.
     const rows = [BOARD_COMPUTERS.knownSlip, BOARD_COMPUTERS.trapAhead, BOARD_COMPUTERS.slipsOnLine];
     for (const s of ['lesson', 'learn', 'chat', 'review'] as const) expect(rows.some((row) => 'wired' in row.surfaces[s])).toBe(true);
-    expect(BOARD_COMPUTERS.knownSlip.surfaces.review).toEqual({ wired: 'services/reviewFullData.ts' });
+    expect(BOARD_COMPUTERS.knownSlip.surfaces.review).toEqual({ wired: 'services/moveThoughtFacts.ts' });
+    expect(src.get('src/services/reviewFullData.ts')).toMatch(/knownSlipReads\(/);
   });
 });

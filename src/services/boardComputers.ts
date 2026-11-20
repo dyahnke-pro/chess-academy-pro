@@ -1571,8 +1571,7 @@ function safe<T>(f: () => T | null): T | null {
  *  never a refutation. */
 function stopRefuted(fen: string, uci: string, lines: ReadonlyArray<{ moves: readonly string[]; evaluation: number; mate: number | null }>): boolean {
   if (lines.length === 0) return false;
-  const sign = fen.split(' ')[1] === 'w' ? 1 : -1;
-  const cp = (l: { evaluation: number; mate: number | null }): number => (l.mate != null ? (l.mate > 0 ? 100000 : -100000) : l.evaluation) * sign;
+  const cp = (l: { evaluation: number; mate: number | null }): number => seatCp(l, fen.split(' ')[1] === 'w' ? 'w' : 'b');
   const at = lines.findIndex((l) => l.moves[0]?.slice(0, 4) === uci);
   if (at === 0) return false;
   return at > 0 && cp(lines[0]) - cp(lines[at]) >= criticalityThresholds().notable;

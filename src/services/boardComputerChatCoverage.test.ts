@@ -24,6 +24,12 @@ const READING = read('positionReadingService.ts');
 // The chat answer path: groundedAnswer holds every assemble*/answerBoardQuestion
 // lane the unified brain (getCoachChatResponse) calls.
 const CHAT_PATH = read('groundedAnswer.ts');
+// Chat reads most computers through the one registry (`readBoard('<row>', …)`):
+// a computer a row calls is consumed when the chat reads that row.
+const REGISTRY = read('boardComputers.ts');
+const ROWS: Array<{ id: string; body: string }> = REGISTRY.split(/\n(?=  [a-zA-Z0-9]+: \{\n)/).map((b) => ({ id: /^\s*([a-zA-Z0-9]+): \{/.exec(b)?.[1] ?? '', body: b })).filter((r) => r.id);
+const viaRegistry = (fn: string): boolean => ROWS.some((r) => new RegExp(`\\b${fn}\\b`).test(r.body)
+  && new RegExp(`readBoard(?:All)?\\('${r.id}'`).test(CHAT_PATH));
 
 /** Every `export function` name in positionReadingService. */
 function exportedFns(src: string): string[] {
@@ -88,6 +94,14 @@ const NOT_A_CHAT_LANE = new Set<string>([
   // material question is answered by assembleMaterialAnswer, and both count
   // through pieceValues.MATERIAL_VALUE
   'materialRead',
+  // Pieces of other computers (2026-11-20), reached through their lanes: the
+  // pawn a break hits (the lever reads), a rim knight on its way (the piece
+  // read), a discovered check a move opens (the influence read), and the
+  // claim key the outpost lever and the colour-complex read share.
+  'breakContacts',
+  'rimKnightHeading',
+  'opensDiscoveryOnKing',
+  'holesClaim',
 ]);
 
 describe('board-awareness computers all reach the chat Q&A (built-but-unwired gate)', () => {
@@ -100,7 +114,7 @@ describe('board-awareness computers all reach the chat Q&A (built-but-unwired ga
   it.each(fns.filter((f) => !NOT_A_CHAT_LANE.has(f)))(
     '%s is consumed by the chat answer path (groundedAnswer.ts)',
     (fn) => {
-      const referenced = new RegExp(`\\b${fn}\\b`).test(CHAT_PATH);
+      const referenced = new RegExp(`\\b${fn}\\b`).test(CHAT_PATH) || viaRegistry(fn);
       expect(
         referenced,
         `${fn} is a board computer that no chat lane consumes. Wire it into ` +

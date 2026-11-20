@@ -101,7 +101,7 @@ export function tradeRelievesCramp(fen: string, lines: readonly EngineLine[], st
           `Short of space, look to trade: ${m.san} removes ${theirPiece}. The fewer pieces on the board, the less their space matters.`,
         ], key)
         : rotateStem([
-          `They are short of room, so they want trades: ${m.san} would take off ${theirPiece}. Every trade eases their cramp, so don't hand them one for free.`,
+          `They are short of room, so they want trades: ${m.san} would take off ${theirPiece}. Every trade eases their cramp, so don't offer them one.`,
           `With less space, they'll look to trade, and ${m.san} gets rid of ${theirPiece}. Keep pieces on and they stay cramped.`,
         ], key);
       return { cramped, trade: m.san, target: m.to, text, squares: [m.from, m.to], line: { fen, sans: moves.slice(0, i + 2).map((x) => x.san) } };

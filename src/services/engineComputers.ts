@@ -14,6 +14,7 @@
  * `everyMove`, a search that fails) leaves that computer silent — never a
  * guessed input. Each board read is made once per call (`cached`).
  */
+import { seatCp } from './winChance';
 import { Chess, type Color } from 'chess.js';
 import type { BoardBundle } from './boardBundle';
 import { readBoardAll, type BoardContexts, type ComputerId } from './boardComputers';
@@ -61,11 +62,11 @@ export const ENGINE_READ_DEPTH = 12;
 const toMove = (fen: string): Color => (fen.split(' ')[1] === 'b' ? 'b' : 'w');
 
 function asAnalysis(ls: readonly EngineLine[]): AnalysisLine[] {
-  return ls.map((l, i) => ({ rank: i + 1, evaluation: l.mate !== null ? (l.mate > 0 ? 100000 : -100000) : (l.cp ?? 0), mate: l.mate, moves: [...l.moves] }));
+  return ls.map((l, i) => ({ rank: i + 1, evaluation: seatCp({ evaluation: l.cp ?? 0, mate: l.mate }, 'w'), mate: l.mate, moves: [...l.moves] }));
 }
 function lineCp(l: { evaluation: number; mate: number | null } | undefined): number | null {
   if (!l) return null;
-  if (l.mate !== null) return l.mate > 0 ? 100000 : -100000;
+  if (l.mate !== null) return seatCp({ evaluation: 0, mate: l.mate }, 'w');
   return l.evaluation;
 }
 
