@@ -3126,7 +3126,7 @@ export const BOARD_COMPUTERS = {
       // board on screen: said once (`onceSaid`), and never carried to a
       // line's board (`changeReason` reads the bare hit).
       const bare = renderMustDefendHit(md0);
-      return fact({ key: loose.key, claims: winning && !loose.still ? [loose.key, `standing:${signedBand(studentCp)}`] : [loose.key], text,
+      return fact({ key: loose.key, claims: [loose.key], text,
         ...(winning && !loose.still ? { onceSaid: { claim: `standing:${signedBand(studentCp)}`, text: bare } } : {}),
         // Its proof — the count and the capture, the same read Learn's warning speaks.
         proof: threatProof(fen, student, [p.square]) ?? NO_PROOF.description,
