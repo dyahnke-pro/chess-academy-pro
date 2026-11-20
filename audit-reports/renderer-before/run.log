@@ -1,0 +1,17 @@
+
+[1m[46m RUN [49m[22m [36mv4.0.18 [39m[90m/home/user/urg-wt[39m
+
+ [32m✓[39m src/services/danyaBoards5.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 18156[2mms[22m[39m
+ [32m✓[39m src/test/renderDump.measure.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 310492[2mms[22m[39m
+   [33m[2m✓[22m[39m dumps the facts of every board [33m 310488[2mms[22m[39m
+[90mstdout[2m | src/services/puzzles5.test.ts[2m > [22m[2mfive master puzzles, read move by move[2m > [22m[2mceilings: failed tries, words
+[22m[39m[puzzles5] alone: words avg 150 max 333 tries 22 | in order with a story: avg 112 max 244 tries 21
+
+ [32m✓[39m src/services/puzzles5.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 339723[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m21 passed[39m[22m[90m (21)[39m
+[2m   Start at [22m 17:05:40
+[2m   Duration [22m 358.69s[2m (transform 35.26s, setup 1.08s, import 46.45s, tests 668.37s, environment 8.77s)[22m
+
+done
