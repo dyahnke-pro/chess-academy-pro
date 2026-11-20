@@ -38,7 +38,7 @@
  *
  * Pure: chess.js, the refuters' outputs and the engine reads handed in.
  */
-import { renderButLine, renderReturnTry } from './teachingSentence';
+import { renderPictureVerdict, renderReturnTry } from './teachingSentence';
 import { Chess, type Color, type Square } from 'chess.js';
 import { eyeRead, bestOfReads, type WeighRead, type ConsideredTries, type TemptingRefuted, type StandingRefuted } from './weighedMoves';
 import { planOfTheBoard, type BoardPlan, type PlanLineIn } from './planOfTheBoard';
@@ -168,7 +168,6 @@ export interface PictureVerdictIn {
 }
 
 const BAND_STEP: Record<ReturnType<typeof evalBand>, number> = { level: 0, slightly: 1, clearly: 2, decisive: 3 };
-const STEP_WORD: Readonly<Record<number, string>> = { [-3]: 'losing', [-2]: 'clearly worse', [-1]: 'slightly worse', 0: 'level', 1: 'slightly better', 2: 'clearly better', 3: 'winning' };
 
 function stepOf(cp: number): number { return Math.sign(cp) * BAND_STEP[evalBand(cp)]; }
 function boardOf(fen: string): Chess | null { try { return new Chess(fen); } catch { return null; } }
@@ -288,36 +287,18 @@ function aimWords(fen: string, target: string, student: Color): string {
 /** 3. THE VERDICT WORD. */
 function verdictOf(i: PictureVerdictIn, mover: Color, step: number, but: FailedTry[], works: { uci: string; name: string } | null): PictureVerdictWord {
   const mine = mover === i.student;
-  const lead = step === 0 ? "It's level" : `${mine ? "You're" : "They're"} ${STEP_WORD[step]}`;
-  const them = mine ? 'them' : 'you';
   const stem = stemKeyOf(`${i.fen}|picture-verdict`);
   const names = but.map((t) => t.name);
   const targets = [...new Set(but.map((t) => (t.look === 'plan' ? t.target : null)))];
   const oneTarget = targets.length === 1 && targets[0] ? aimWords(i.fen, targets[0], i.student) : null;
-  const butLine = renderButLine(names, oneTarget, stem);
-  const noCounterplay = i.ledger?.counterplay?.alive === false && step > 0
-    ? ` ${mine ? 'They have' : 'You have'} no counterplay, so there is time.`
-    : '';
-  if (works && step > 0) {
-    const text = rotateStem([`${lead}, and the direct way works now: ${works.name}.`, `${lead}, and ${works.name} goes straight for it.`], stem);
-    // Said on its own once the standing was said: never an orphan "And …".
-    const after = rotateStem([`The direct way works now: ${works.name}.`, `${works.name} goes straight for it.`], stem);
-    return { kind: 'works-now', step, word: `${STEP_WORD[step]}, and it works now`, works, text, afterStanding: after };
-  }
-  if (but.length > 0 && step > 0) {
-    const first = rotateStem([`${lead}, but it is hard to finish ${them} off.`, `${lead}, but breaking through is another matter.`], stem);
-    const after = rotateStem([`It is hard to finish ${them} off.`, 'Breaking through is another matter.'], stem);
-    return { kind: 'hard-to-finish', step, word: `${STEP_WORD[step]}, but hard to finish`, works: null, text: `${first} ${butLine}${noCounterplay}`, afterStanding: `${after} ${butLine}${noCounterplay}` };
-  }
-  if (but.length > 0 && step === 0) {
-    const first = rotateStem([`${lead}, and there is no direct way in.`, `${lead}, and the direct tries get nowhere.`], stem);
-    const after = rotateStem(['There is no direct way in.', 'The direct tries get nowhere.'], stem);
-    return { kind: 'no-direct-way', step, word: 'level, with no direct way in', works: null, text: `${first} ${butLine}`, afterStanding: `${after} ${butLine}` };
-  }
-  if (but.length > 0) {
-    return { kind: 'tries-worsen', step, word: `${STEP_WORD[step]}, and the active tries make it worse`, works: null, text: `${lead}, and the active tries only make it worse. ${butLine}`, afterStanding: `The active tries only make it worse. ${butLine}` };
-  }
-  return { kind: 'plain', step, word: STEP_WORD[step], works: null, text: `${lead}.`, afterStanding: '' };
+  const noCounterplay = i.ledger?.counterplay?.alive === false && step > 0;
+  // THE DECISION: which verdict the board reads; the words are the renderer's.
+  const kind: PictureVerdictWord['kind'] = works && step > 0 ? 'works-now'
+    : but.length > 0 && step > 0 ? 'hard-to-finish'
+      : but.length > 0 && step === 0 ? 'no-direct-way'
+        : but.length > 0 ? 'tries-worsen' : 'plain';
+  const r = renderPictureVerdict({ kind, step, mine, works: works?.name ?? null, butNames: names, oneTarget, noCounterplay, stem });
+  return { kind, step, word: r.word, works: kind === 'works-now' ? works : null, text: r.text, afterStanding: r.afterStanding };
 }
 
 /** The best line's moves as SAN from `fen`, as far as they play. */

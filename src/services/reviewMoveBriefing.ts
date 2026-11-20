@@ -55,7 +55,7 @@ import { createStoryStore, storyLedger, type SaidSet, type StoryStore } from './
 import { withArticle } from '../utils/andList';
 import { afterCaptureSan } from '../utils/captureWords';
 import type { IdeaKind } from './ideaKind';
-import { renderAspectThreat } from './teachingSentence';
+import { renderAspectThreat, renderStanding, renderSwing } from './teachingSentence';
 
 /** The piece a SAN names by its first letter (a pawn move names none). */
 const SAN_PIECE: Record<string, string> = { N: 'knight', B: 'bishop', R: 'rook', Q: 'queen', K: 'king' };
@@ -154,12 +154,6 @@ function newNamedTactic(fenBefore: string, fenAfter: string, toSquare: string | 
  *  standing makes, so a lesson or a review says each standing once. */
 export const signedBand = (cp: number): string => `${evalBand(cp)}${evalBand(cp) === 'level' ? '' : cp > 0 ? '+' : '-'}`;
 
-function evalVerdict(studentPovCp: number): string {
-  // The one ladder (evalBand, census 2026-10-10); review's own words.
-  const band = evalBand(studentPovCp);
-  if (band === 'level') return 'roughly balanced';
-  return `you're ${evalBandWords(band, studentPovCp > 0 ? 'better' : 'worse')}`;
-}
 /** The board-true reasons that EXPLAIN the eval — the one reasons computer
  *  (`verdictWithReasons`, WO-DANYA-READS-01 #2): material, the kings, whose
  *  pieces are in play, the initiative, a running passer, the bishop pair,
@@ -179,17 +173,8 @@ function explainEval(fen: string, studentPovCp: number, studentWB: 'w' | 'b', la
   return explainEvalOf(evalWhy(fen, studentPovCp, studentWB, lastMove, lines), studentPovCp);
 }
 function explainEvalOf(read: { clauses: string[]; level: boolean }, studentPovCp: number): string {
-  const why = read.clauses;
-  const verdict = evalVerdict(studentPovCp);
-  const V = openSentence(verdict);
-  if (why.length === 0) return `${V}.`;
-  // A person names a square or two in a sentence, never a list: a second
-  // reason that would take the sentence past two squares is its own sentence.
-  const squaresIn = (t: string): number => new Set(t.match(/\b[a-h][1-8]\b/g) ?? []).size;
-  if (why.length > 1 && squaresIn(why.join(' ')) > 2) return `${V} — ${why[0]}. ${why.slice(1).map((w) => `${openSentence(w)}.`).join(' ')}`;
-  // A level board's two reasons pull opposite ways — one for each side — so
-  // they are weighed against each other, never listed as one story.
-  return `${V} — ${why.join(read.level && why.length === 2 ? ', but ' : ', ')}.`;
+  const band = evalBand(studentPovCp);
+  return renderStanding({ band, side: studentPovCp > 0 ? 'better' : 'worse', reasons: read.clauses, level: read.level });
 }
 /** THE POSITION'S STANDING, SAID WHEN IT MOVED: the verdict and the board's
  *  reason for it, on a band change or a real swing (≥ 40cp) — never as a
@@ -215,11 +200,7 @@ export function standingRead(fen: string, studentPovCp: number, studentWB: 'w' |
  *  barely moved (a quiet move keeps its silence rather than "held the balance"
  *  every ply). */
 function deltaTailClause(swing: number): string | null {
-  if (Math.abs(swing) < 40) return null;
-  return swing >= 150 ? 'It swung the game your way.'
-    : swing >= 40 ? 'It nudged the balance your way.'
-    : swing > -150 ? 'It gave a little ground.'
-    : 'It let a real edge slip.';
+  return renderSwing(swing);
 }
 
 interface ReviewMoveBriefingInput {

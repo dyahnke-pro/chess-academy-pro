@@ -23,6 +23,7 @@ import { Chess, type Color, type Square, type PieceSymbol } from 'chess.js';
 import { rotateStem } from '../utils/rotateStem';
 import { andList, orList } from '../utils/andList';
 import { openSentence } from '../utils/openSentence';
+import { evalBandWords, type EvalBand } from './evalBand';
 
 /** The board a fact is about, relative to the board on screen. */
 export type FactRelation = 'now' | 'past' | 'line' | 'try';
@@ -620,4 +621,69 @@ export function renderMateThreatTwoJobs(t: { mine: boolean; san: string; mateSq:
   }
   const tail = t.trap ? 'every defence leaves your queen short of squares' : 'every defence leaves a piece of yours loose';
   return `${t.san} threatens mate on ${t.mateSq}, and ${tail} — stop the mate first, then pick the defence that gives up the least.`;
+}
+
+// ── THE STANDING AND THE VERDICT (family A2) ───────────────────────────────
+
+/** The band word for a step of the one ladder (`evalBand`), from the mover. */
+export const STEP_WORD: Readonly<Record<number, string>> = { [-3]: 'losing', [-2]: 'clearly worse', [-1]: 'slightly worse', 0: 'level', 1: 'slightly better', 2: 'clearly better', 3: 'winning' };
+
+export type PictureVerdictKind = 'works-now' | 'hard-to-finish' | 'no-direct-way' | 'tries-worsen' | 'plain';
+
+/** The picture's verdict (`pictureVerdict` decides which), worded: the full
+ *  line with its standing, the line for after the standing was said (never an
+ *  orphan "And …"), and the verdict word. */
+export function renderPictureVerdict(v: {
+  kind: PictureVerdictKind; step: number; mine: boolean; works: string | null;
+  butNames: readonly string[]; oneTarget: string | null; noCounterplay: boolean; stem: number;
+}): { text: string; afterStanding: string; word: string } {
+  const lead = v.step === 0 ? "It's level" : `${v.mine ? "You're" : "They're"} ${STEP_WORD[v.step]}`;
+  const them = v.mine ? 'them' : 'you';
+  const butLine = renderButLine(v.butNames, v.oneTarget, v.stem);
+  const noCp = v.noCounterplay ? ` ${v.mine ? 'They have' : 'You have'} no counterplay, so there is time.` : '';
+  const w = STEP_WORD[v.step];
+  switch (v.kind) {
+    case 'works-now': return {
+      text: rotateStem([`${lead}, and the direct way works now: ${v.works}.`, `${lead}, and ${v.works} goes straight for it.`], v.stem),
+      afterStanding: rotateStem([`The direct way works now: ${v.works}.`, `${v.works} goes straight for it.`], v.stem),
+      word: `${w}, and it works now`,
+    };
+    case 'hard-to-finish': {
+      const first = rotateStem([`${lead}, but it is hard to finish ${them} off.`, `${lead}, but breaking through is another matter.`], v.stem);
+      const after = rotateStem([`It is hard to finish ${them} off.`, 'Breaking through is another matter.'], v.stem);
+      return { text: `${first} ${butLine}${noCp}`, afterStanding: `${after} ${butLine}${noCp}`, word: `${w}, but hard to finish` };
+    }
+    case 'no-direct-way': {
+      const first = rotateStem([`${lead}, and there is no direct way in.`, `${lead}, and the direct tries get nowhere.`], v.stem);
+      const after = rotateStem(['There is no direct way in.', 'The direct tries get nowhere.'], v.stem);
+      return { text: `${first} ${butLine}`, afterStanding: `${after} ${butLine}`, word: 'level, with no direct way in' };
+    }
+    case 'tries-worsen': return { text: `${lead}, and the active tries only make it worse. ${butLine}`, afterStanding: `The active tries only make it worse. ${butLine}`, word: `${w}, and the active tries make it worse` };
+    case 'plain': return { text: `${lead}.`, afterStanding: '', word: w };
+  }
+}
+
+/** THE STANDING, with the board's reasons (`verdictWithReasons` computes them;
+ *  `evalBand` the band): "You're slightly better — your pieces are …". A
+ *  person names a square or two in a sentence: a second reason that would
+ *  take it past two squares is its own sentence. A level board's two reasons
+ *  pull opposite ways, weighed with "but". */
+export function renderStanding(v: { band: string; side: 'better' | 'worse'; reasons: readonly string[]; level: boolean }): string {
+  const verdict = v.band === 'level' ? 'roughly balanced' : `you're ${evalBandWords(v.band as EvalBand, v.side)}`;
+  const V = openSentence(verdict);
+  const why = v.reasons;
+  if (why.length === 0) return `${V}.`;
+  const squaresIn = (t: string): number => new Set(t.match(/\b[a-h][1-8]\b/g) ?? []).size;
+  if (why.length > 1 && squaresIn(why.join(' ')) > 2) return `${V} — ${why[0]}. ${why.slice(1).map((w) => `${openSentence(w)}.`).join(' ')}`;
+  return `${V} — ${why.join(v.level && why.length === 2 ? ', but ' : ', ')}.`;
+}
+
+/** How a move moved the standing (student seat, cp swing); null when it
+ *  barely moved. */
+export function renderSwing(swing: number): string | null {
+  if (Math.abs(swing) < 40) return null;
+  return swing >= 150 ? 'It swung the game your way.'
+    : swing >= 40 ? 'It nudged the balance your way.'
+      : swing > -150 ? 'It gave a little ground.'
+        : 'It let a real edge slip.';
 }

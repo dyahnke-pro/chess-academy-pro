@@ -14,7 +14,7 @@
  *   1.5 – 3.0     clearly better / worse
  *   ≥ 3.0         winning / losing
  */
-type EvalBand = 'level' | 'slightly' | 'clearly' | 'decisive';
+export type EvalBand = 'level' | 'slightly' | 'clearly' | 'decisive';
 
 const EVAL_BAND_CP = { slightly: 50, clearly: 150, decisive: 300 } as const;
 
