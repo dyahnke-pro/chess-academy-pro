@@ -3701,8 +3701,13 @@ export const BOARD_COMPUTERS = {
       // The verdict's thread: its word is the conclusion; a new word carries its
       // own tries, so it needs no cause beyond them.
       const conclusion: PictureConclusionId = { key: threadKey(mine ? 'student' : 'opponent', PLAN_GOAL.pictureVerdict), variant: `${r.verdict.kind}:${r.verdict.step}`, fen: c.fen, square: null, changedText: r.verdict.text, needsCause: false };
-      return fact({ key, claims: [key], text: r.verdict.text, proof: squaresProof(r.verdict.text, squares) ?? NO_PROOF.description, squares, stakes: null,
-        seat: mine ? 'student' : 'opponent', namesStudentMove: mine, thread: LOCAL_THREAD, fen: c.fen, conclusion, ...(poses ? { skill: 'overvalued-attack' } : {}) });
+      // The band from the student's side, keyed as the standing's own claim
+      // (`signedBand`): said once, then the verdict says what comes after it.
+      const s = mine ? r.verdict.step : -r.verdict.step;
+      const standing = `standing:${['level', 'slightly', 'clearly', 'decisive'][Math.abs(s)]}${s > 0 ? '+' : s < 0 ? '-' : ''}`;
+      return fact({ key, claims: [key, standing], text: r.verdict.text, proof: squaresProof(r.verdict.text, squares) ?? NO_PROOF.description, squares, stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: mine, thread: LOCAL_THREAD, fen: c.fen, conclusion, ...(poses ? { skill: 'overvalued-attack' } : {}),
+        ...(r.verdict.afterStanding ? { onceSaid: { claim: standing, text: r.verdict.afterStanding } } : {}) });
     }),
     computer: 'pictureVerdict',
     kind: 'verdict',

@@ -650,6 +650,10 @@ export interface CoachFact {
   /** ITS WORDS BEHIND A LINE THAT NAMED THE MOVE ("It also …"): a surface
    *  that already said the move says this instead of naming it again. */
   alsoText?: string;
+  /** THE STANDING SAID ONCE (composerSaysOnce, gotham-jelena: "You're clearly
+   *  better" led the verdict on four moves running): when `claim` was already
+   *  said in this voice, the fact is said as `text`, without it. */
+  onceSaid?: { claim: string; text: string };
   /** The moves it draws, each only when the fact is said: their move it
    *  warns about, the move it asks the student to play (engine-vouched), a
    *  route walked hop by hop on its own boards. */

@@ -492,7 +492,11 @@ export function composeThought(
     for (const key of spokenSentenceKeys(pkg)) pickedSaid.add(key);
     return true;
   };
-  for (const f of sorted) {
+  for (const f0 of sorted) {
+    // A standing already said: the fact is said without it (`onceSaid`).
+    const f = memory && f0.onceSaid && memory.keys.has(claimKey(f0.onceSaid.claim))
+      ? { ...f0, text: f0.onceSaid.text, alsoText: undefined, claims: f0.claims.filter((c) => c !== f0.onceSaid?.claim) }
+      : f0;
     if (!reg.steps.has(f.step)) { held.push({ fact: f, why: 'step-not-asked' }); continue; }
     // ALREADY SAID in this lesson, review or game: it never takes a step's
     // lead, so the next fact of the step can say something new.
