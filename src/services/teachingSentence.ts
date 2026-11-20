@@ -369,7 +369,9 @@ export function renderTry(t: TryData): string {
     // gives back …"), or a sentence that is another idea ("But your …Bxe4
     // stops it"), keeps the cost its own sentence.
     const lastSentence = last.split(/(?<=[.!?])\s+/).pop() ?? last;
-    if (lastSentence.split(/\s+/).length > 30 || /, and /.test(lastSentence) || /, and /.test(cost) || /^But\b/.test(lastSentence)) tail = `${last} ${name(cost)}`;
+    // A sentence about another piece or board ("After …f6, their f6 is aimed
+    // at …") is another idea: the try's cost is its own sentence there.
+    if (!onTry || lastSentence.split(/\s+/).length > 30 || /, and |— and /.test(lastSentence) || /, and /.test(cost) || /^But\b/.test(lastSentence)) tail = `${last} ${name(cost)}`;
   }
   return [...sentences.slice(0, -1), tail].join(' ');
 }
