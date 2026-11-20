@@ -25,6 +25,7 @@ import { buildPicture, type PictureObject, type PictureRole, type PositionPictur
 import type { EngineLine } from './engineLineRead';
 import { andList, countWord } from '../utils/andList';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
+import { renderCounterplay, renderLedger, renderPlanTarget, renderTarget, type LedgerEntryWords } from './teachingSentence';
 import { bfsRoute } from './forwardTeaching';
 import { liteMoves, makeLite, undoLite } from './liteMoves';
 import { legalSeeGainOn } from './positionReadingService';
@@ -1042,65 +1043,27 @@ function computeConclusions(facts: readonly CoachFact[], fen: string, lines: rea
   };
 }
 
-// ── the words, said like a person at the board ───────────────────────────────
-
-/** A thing on the ledger, named once with "the": the sentence it sits in
- *  already says whose it is. */
-function assetPhrase(e: LedgerEntry): string {
-  const name = `the ${NAME[e.piece as PieceSymbol]} on ${e.square}`;
-  if (e.traits.includes('passed')) return `the passed pawn on ${e.square}`;
-  if (e.traits.includes('outpost')) return `${name}, on an outpost no pawn can kick`;
-  if (e.traits.includes('open-file')) return `${name}, on a file free of its own pawns`;
-  return name;
-}
-
-function weakPhrase(e: LedgerEntry): string {
-  if (e.piece === null) return `the hole on ${e.square}`;
-  const name = `the ${NAME[e.piece]} on ${e.square}`;
-  if (e.piece === 'k') return e.traits.includes('king-centre') ? 'the king, still in the centre' : 'the king, with an open file beside it';
-  if (e.traits.includes('no-safe-square')) return `${name}, which has no safe square`;
-  if (e.traits.includes('isolated')) return `the isolated pawn on ${e.square}`;
-  if (e.traits.includes('backward')) return `the backward pawn on ${e.square}`;
-  if (e.traits.includes('doubled')) return `the doubled pawn on ${e.square}`;
-  if (e.tied) return `${name}, held only by ${andList(e.tied.guards.map((x) => `the ${NAME[x.piece]} on ${x.square}`))}`;
-  return name;
-}
+// ── the words are the renderer's (`renderLedger`, `renderTarget`, …) ─────────
 
 /** The ledger in words: each side's working pluses, then what the other side
- *  can get at. One idea a sentence; the student's side first. */
+ *  can get at. A piece is praised only when it is safe on the board. */
 export function ledgerText(led: Ledger, student: Color): string | null {
-  const key = stemKeyOf(led.fen);
-  const out: string[] = [];
-  for (const c of [student, other(student)]) {
-    const working = led[c].assets.filter((e) => e.working);
-    const weak = led[c].weaknesses;
-    const mine = c === student;
-    if (working.length > 0) {
-      const list = andList(working.map(assetPhrase));
-      out.push(mine
-        ? rotateStem([`On your side of the ledger: ${list}.`, `What is working for you: ${list}.`], key)
-        : rotateStem([`On their side: ${list}.`, `What is working for them: ${list}.`], key));
-    }
-    if (weak.length > 0) {
-      // NAME WHAT MATTERS, LIGHT THE REST (the human-voice rule: "the hole on
-      // c6, …, h5" read out is a score sheet). One weakness is named; more are
-      // counted and the most vulnerable is named — every one stays lit on the
-      // board (`ledgerSquares`).
-      const worst = worstWeakness(led.fen, weak);
-      if (weak.length === 1) {
-        out.push(mine
-          ? rotateStem([`They can get at your weak spot: ${weakPhrase(worst)}.`, `Your weak spot they can reach is ${weakPhrase(worst)}.`], key)
-          : rotateStem([`You can get at their weak spot: ${weakPhrase(worst)}.`, `Their weak spot you can reach is ${weakPhrase(worst)}.`], key));
-      } else {
-        const n = countWord(weak.length);
-        out.push(mine
-          ? rotateStem([`They can get at ${n} of your weak spots. The worst is ${weakPhrase(worst)}.`, `${n} of your weak spots are in their reach. The worst is ${weakPhrase(worst)}.`], key)
-          : rotateStem([`You can get at ${n} of their weak spots. The worst is ${weakPhrase(worst)}.`, `${n} of their weak spots are in your reach. The worst is ${weakPhrase(worst)}.`], key));
-      }
-    }
-  }
-  if (out.length === 0) return null;
-  return out.map(openSentence).join(' ');
+  return renderLedger({
+    fen: led.fen, key: stemKeyOf(led.fen),
+    sides: [student, other(student)].map((c) => {
+      const weak = led[c].weaknesses;
+      return {
+        mine: c === student,
+        working: led[c].assets.filter((e) => e.working).map(ledgerWords),
+        weak: weak.length === 0 ? null : { count: weak.length, worst: ledgerWords(worstWeakness(led.fen, weak)) },
+      };
+    }),
+  });
+}
+
+/** A ledger entry as the renderer reads it. */
+function ledgerWords(e: LedgerEntry): LedgerEntryWords {
+  return { piece: e.piece === null ? null : NAME[e.piece], square: e.square, traits: e.traits, tiedTo: e.tied ? e.tied.guards.map((x) => ({ piece: NAME[x.piece], square: x.square })) : null };
 }
 
 /** The weakness that matters most: the most vulnerable by the target's own
@@ -1116,20 +1079,12 @@ const many = (n: number): string => countWord(n);
 
 /** The target in words, with the comparison that chose it. */
 export function targetText(t: Target, student: Color, now: boolean = false): string {
-  const mine = t.attacker === student;
   const thing = (c: TargetCandidate): string => (c.entry.piece === null ? `the hole on ${c.entry.square}` : `the ${NAME[c.entry.piece]} on ${c.entry.square}`);
-  const units = t.best.levers > 0 ? 'pieces and pawns' : 'pieces';
-  const atk = mine ? `of your ${units}` : `of their ${units}`;
-  const def = mine ? 'of theirs' : 'of yours';
-  const why = `${many(t.best.attackers)} ${atk} can get at it, and only ${many(t.best.defenders)} ${def} can guard it`;
-  const key = stemKeyOf(`${t.best.entry.object}|${t.attacker}`);
-  // Said as the NEW target (`now`), the lead says it changed: "The target is
-  // now the pawn on d6" (the game's story, `planThread.tellPictureFacts`).
-  const lead = now ? (mine ? 'The target is now' : 'Their target is now')
-    : mine ? rotateStem(['The target is', 'Aim at'], key) : rotateStem(['Their target is', 'They will aim at'], key);
-  const ru = t.runnerUp;
-  if (ru) return `${lead} ${thing(t.best)}, not ${thing(ru)}: ${why}.`;
-  return `${lead} ${thing(t.best)}: ${why}.`;
+  return renderTarget({
+    mine: t.attacker === student, now, thing: thing(t.best), runnerUp: t.runnerUp ? thing(t.runnerUp) : null,
+    attackers: t.best.attackers, defenders: t.best.defenders, levers: t.best.levers > 0,
+    stem: stemKeyOf(`${t.best.entry.object}|${t.attacker}`),
+  });
 }
 
 /** The plan's target in words: the piece that wins the race and its way
@@ -1139,18 +1094,12 @@ export function planTargetText(p: PlanTarget, student: Color): string | null {
   const d = r.decisive;
   if (!r.won || !d || r.entry.piece === null) return null;
   const mine = p.attacker === student;
-  const thing = `${mine ? 'their' : 'your'} ${NAME[r.entry.piece]} on ${r.entry.square}`;
-  const way = d.route.length <= 1 ? `to ${d.at}` : `by ${andList(d.route.slice(0, -1))} to ${d.at}`;
-  const key = stemKeyOf(`${r.entry.object}|${p.attacker}|plan`);
-  const owner = mine ? 'Your' : 'Their';
-  const head = rotateStem([`${owner} ${NAME[d.piece]} can go ${way} and hit ${thing}.`, `${owner} ${NAME[d.piece]} has a way to ${thing}: ${way.replace(/^to /, '')}.`], key);
-  const pieces = r.attackerReach.filter((x) => x.moves <= r.horizon).length;
-  const units = pieces < r.attackers ? 'pieces and pawns' : 'pieces';
-  const atk = `${countWord(r.attackers)} of ${mine ? 'your' : 'their'} ${units} ${r.attackers === 1 ? 'reaches' : 'reach'} it`;
-  const guard = r.defenders === 0
-    ? `${mine ? 'they have' : 'you have'} nothing that can guard it in time`
-    : `${mine ? 'they' : 'you'} can only bring ${countWord(r.defenders)} to guard it`;
-  return `${head} In ${countWord(r.horizon)} moves ${atk}, and ${guard}.`;
+  return renderPlanTarget({
+    mine, piece: NAME[d.piece], thing: `${mine ? 'their' : 'your'} ${NAME[r.entry.piece]} on ${r.entry.square}`,
+    route: d.route.slice(0, -1), at: d.at, horizon: r.horizon, attackers: r.attackers,
+    pawnsToo: r.attackerReach.filter((x) => x.moves <= r.horizon).length < r.attackers, defenders: r.defenders,
+    stem: stemKeyOf(`${r.entry.object}|${p.attacker}|plan`),
+  });
 }
 
 /** Does `uci` start the plan: a move of a piece on its way to the target? */
@@ -1164,44 +1113,30 @@ export function counterplayText(c: Counterplay, student: Color, fen: string, lin
   if (c.state === 'unsettled') return null;
   const mine = c.side === student;
   const whose = mine ? 'their' : 'your';
-  const hitWords = (i: number): string => (c.hitPieces[i] === 'k' ? `${whose} king with mate` : `${whose} ${NAME[c.hitPieces[i]]} on ${c.hits[i]}`);
-  const hit = andList(c.hits.map((_, i) => hitWords(i)));
-  const owner = mine ? 'Your' : 'Their';
   const key = stemKeyOf(c.kind === 'break' ? `${placement(fen)}|${c.to}` : `${placement(fen)}|${c.from}${c.to}`);
-  const head = c.kind === 'break' ? breakWords(c, fen, owner, whose, hitWords, key)
-    : rotateStem([`${owner} ${NAME[c.piece]} can come to ${c.to} and hit ${hit}.`, `${owner} resource is the ${NAME[c.piece]} on ${c.from}: from ${c.to} it hits ${hit}.`], key);
-  if (c.state === 'alive') return `${head} ${rotateStem(['It is coming: the best line plays it.', 'Nothing stops it in the best line.'], key)}`;
+  const hits = c.hits.map((sq, i) => (c.hitPieces[i] === 'k' ? `${whose} king with mate` : `${whose} ${NAME[c.hitPieces[i]]} on ${sq}`));
+  // A pawn break is named by its move (chess.js): a push goes TO an empty
+  // square; a capture TAKES the pawn on the square it lands on.
+  let brk: { named: string; takes: boolean } | null = null;
+  if (c.kind === 'break') {
+    const takes = c.hits[0] === c.to;
+    let san = takes ? `${c.from[0]}x${c.to}` : c.to;
+    const board = sideToMoveAs(fen, c.side);
+    if (board) {
+      try { san = new Chess(board).move({ from: c.from, to: c.to, promotion: 'q' }).san; } catch { /* the square-built name stands */ }
+    }
+    brk = { named: `${c.side === 'b' ? '…' : ''}${san}`, takes };
+  }
   // THE STOPPER IS NAMED AS ITS SIDE'S MOVE, and only a move of the side it
-  // is stopped for (puzzle reads 2026-11-20: "their
-  // bishop can come to h5 … But it is dead: after h5 it no longer works" —
-  // …h5 said bare, read as the bishop's own square).
-  const ply = c.ply ?? 0;
-  const stopperSide: Color = (ply % 2 === 0) === (fen.split(' ')[1] === 'w') ? 'w' : 'b';
-  const stopper = c.stoppedBy && stopperSide !== c.side ? sanOf(fen, lines[0]?.moves ?? [], ply) : null;
-  const who = stopperSide === student ? 'your' : 'their';
-  const named = stopper ? `${stopperSide === 'b' ? '…' : ''}${stopper}` : null;
-  // A stopper that mates ends the game before the resource can count.
-  return `${head} ${named ? (/#$/.test(named) ? `But ${who} ${named} mates first.` : `But ${who} ${named} stops it.`) : 'But the best line stops it.'}`;
-}
-
-/** A pawn break in words, named by its move (chess.js): a push goes TO an
- *  empty square and hits the pawns beside it; a capture TAKES the pawn on the
- *  square it lands on ("…dxe4, taking your pawn on e4"), never a push onto a
- *  square a pawn stands on. */
-function breakWords(c: Counterplay, fen: string, owner: string, whose: string, hitWords: (i: number) => string, key: number): string {
-  const takes = c.hits[0] === c.to;
-  let san = takes ? `${c.from[0]}x${c.to}` : c.to;
-  const board = sideToMoveAs(fen, c.side);
-  if (board) {
-    try { san = new Chess(board).move({ from: c.from, to: c.to, promotion: 'q' }).san; } catch { /* the square-built name stands */ }
+  // is stopped for (puzzle reads 2026-11-20).
+  let stopper: { who: 'your' | 'their'; named: string } | null = null;
+  if (c.state !== 'alive') {
+    const ply = c.ply ?? 0;
+    const stopperSide: Color = (ply % 2 === 0) === (fen.split(' ')[1] === 'w') ? 'w' : 'b';
+    const san = c.stoppedBy && stopperSide !== c.side ? sanOf(fen, lines[0]?.moves ?? [], ply) : null;
+    if (san) stopper = { who: stopperSide === student ? 'your' : 'their', named: `${stopperSide === 'b' ? '…' : ''}${san}` };
   }
-  const named = `${c.side === 'b' ? '…' : ''}${san}`;
-  if (!takes) {
-    const hit = andList(c.hits.map((_, i) => hitWords(i)));
-    return rotateStem([`${owner} one resource is the pawn break ${named}, hitting ${hit}.`, `${owner} counterplay is the push ${named}, against ${hit}.`], key);
-  }
-  const then = c.hits.length > 1 ? ` Then it hits ${andList(c.hits.slice(1).map((_, i) => hitWords(i + 1)))}.` : '';
-  return rotateStem([`${owner} one resource is the pawn break ${named}, taking ${whose} pawn on ${c.to}.`, `${owner} counterplay is ${named}: the pawn takes ${whose} pawn on ${c.to}.`], key) + then;
+  return renderCounterplay({ mine, alive: c.state === 'alive', piece: NAME[c.piece], from: c.from, to: c.to, hits, brk, whose, stopper, stem: key });
 }
 
 /** The SAN of ply `n` of a UCI line from `fen`. */

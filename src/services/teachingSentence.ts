@@ -21,7 +21,7 @@
  */
 import { Chess, type Color, type Square, type PieceSymbol } from 'chess.js';
 import { rotateStem } from '../utils/rotateStem';
-import { andList, orList } from '../utils/andList';
+import { andList, orList, countWord } from '../utils/andList';
 import { openSentence } from '../utils/openSentence';
 import { evalBandWords, type EvalBand } from './evalBand';
 
@@ -686,4 +686,136 @@ export function renderSwing(swing: number): string | null {
     : swing >= 40 ? 'It nudged the balance your way.'
       : swing > -150 ? 'It gave a little ground.'
         : 'It let a real edge slip.';
+}
+
+// ── PIECES (family A3) ─────────────────────────────────────────────────────
+// Praise of a piece is said only when the piece is SAFE on the board it is
+// read on (`pieceIsSafe`) — the renderer checks it, so no computer can praise
+// a hanging piece; a piece said with its work, never bare.
+
+export type PieceReadData =
+  | { kind: 'good'; fen: string; own: boolean; piece: string; square: string; work: string }
+  | { kind: 'stranded'; own: boolean; piece: string; square: string; covered: readonly string[] }
+  | { kind: 'bad'; own: boolean; piece: string; square: string; why: string };
+
+export function renderPieceRead(d: PieceReadData): string | null {
+  if (d.kind === 'good') {
+    if (!pieceIsSafe(d.fen, d.square)) return null;
+    return d.own ? `Your ${d.piece} on ${d.square} is your best-placed piece — ${d.work}.` : `Their ${d.piece} on ${d.square} is well placed — ${d.work}.`;
+  }
+  if (d.kind === 'stranded') {
+    const where = d.covered.length > 2 ? 'every square it can go to is covered'
+      : d.covered.length === 2 ? `${andList([...d.covered])} are both covered` : `${d.covered[0]} is covered`;
+    return d.own
+      ? `Your ${d.piece} on ${d.square} is stranded: ${where}, so it has no safe square — if it is attacked it has nowhere to go.`
+      : `Their ${d.piece} on ${d.square} is stranded: ${where}, so it has no safe square — attack it and it has nowhere to go.`;
+  }
+  return d.own
+    ? `Your ${d.piece} on ${d.square} is your problem piece, ${d.why}, so improving it is a plan in itself.`
+    : `Their ${d.piece} on ${d.square} is their problem piece, ${d.why}, and keeping it bad is worth as much as winning a pawn.`;
+}
+
+// ── PLANS AND TARGETS (family A4: the picture's ledger, target, counterplay) ─
+
+/** A ledger entry as words need it: the piece (null for a hole), its square,
+ *  its traits, and the guards it is tied to. */
+export interface LedgerEntryWords {
+  piece: string | null;
+  square: string;
+  traits: readonly string[];
+  tiedTo: ReadonlyArray<{ piece: string; square: string }> | null;
+}
+
+function assetWords(e: LedgerEntryWords): string {
+  const name = `the ${e.piece ?? 'piece'} on ${e.square}`;
+  if (e.traits.includes('passed')) return `the passed pawn on ${e.square}`;
+  if (e.traits.includes('outpost')) return `${name}, on an outpost no pawn can kick`;
+  if (e.traits.includes('open-file')) return `${name}, on a file free of its own pawns`;
+  return name;
+}
+
+function weakWords(e: LedgerEntryWords): string {
+  if (e.piece === null) return `the hole on ${e.square}`;
+  const name = `the ${e.piece} on ${e.square}`;
+  if (e.piece === 'king') return e.traits.includes('king-centre') ? 'the king, still in the centre' : 'the king, with an open file beside it';
+  if (e.traits.includes('no-safe-square')) return `${name}, which has no safe square`;
+  if (e.traits.includes('isolated')) return `the isolated pawn on ${e.square}`;
+  if (e.traits.includes('backward')) return `the backward pawn on ${e.square}`;
+  if (e.traits.includes('doubled')) return `the doubled pawn on ${e.square}`;
+  if (e.tiedTo) return `${name}, held only by ${andList(e.tiedTo.map((x) => `the ${x.piece} on ${x.square}`))}`;
+  return name;
+}
+
+const countOf = countWord;
+
+/** The ledger: each side's working pluses (a piece praised only when safe on
+ *  the board), then the weak spot the other side can reach. One idea a
+ *  sentence; the student's side first. */
+export function renderLedger(l: { fen: string; key: number; sides: ReadonlyArray<{ mine: boolean; working: readonly LedgerEntryWords[]; weak: { count: number; worst: LedgerEntryWords } | null }> }): string | null {
+  const out: string[] = [];
+  for (const sd of l.sides) {
+    // THE SAFE-PIECE RULE: a pawn or piece praised as working must be safe.
+    const working = sd.working.filter((e) => e.piece === null || pieceIsSafe(l.fen, e.square));
+    if (working.length > 0) {
+      const list = andList(working.map(assetWords));
+      out.push(sd.mine
+        ? rotateStem([`On your side of the ledger: ${list}.`, `What is working for you: ${list}.`], l.key)
+        : rotateStem([`On their side: ${list}.`, `What is working for them: ${list}.`], l.key));
+    }
+    if (sd.weak) {
+      const worst = weakWords(sd.weak.worst);
+      if (sd.weak.count === 1) {
+        out.push(sd.mine
+          ? rotateStem([`They can get at your weak spot: ${worst}.`, `Your weak spot they can reach is ${worst}.`], l.key)
+          : rotateStem([`You can get at their weak spot: ${worst}.`, `Their weak spot you can reach is ${worst}.`], l.key));
+      } else {
+        const n = countOf(sd.weak.count);
+        out.push(sd.mine
+          ? rotateStem([`They can get at ${n} of your weak spots. The worst is ${worst}.`, `${n} of your weak spots are in their reach. The worst is ${worst}.`], l.key)
+          : rotateStem([`You can get at ${n} of their weak spots. The worst is ${worst}.`, `${n} of their weak spots are in your reach. The worst is ${worst}.`], l.key));
+      }
+    }
+  }
+  return out.length === 0 ? null : out.map(openSentence).join(' ');
+}
+
+/** The target, with the count that chose it. */
+export function renderTarget(t: { mine: boolean; now: boolean; thing: string; runnerUp: string | null; attackers: number; defenders: number; levers: boolean; stem: number }): string {
+  const units = t.levers ? 'pieces and pawns' : 'pieces';
+  const why = `${countOf(t.attackers)} ${t.mine ? `of your ${units}` : `of their ${units}`} can get at it, and only ${countOf(t.defenders)} ${t.mine ? 'of theirs' : 'of yours'} can guard it`;
+  const lead = t.now ? (t.mine ? 'The target is now' : 'Their target is now')
+    : t.mine ? rotateStem(['The target is', 'Aim at'], t.stem) : rotateStem(['Their target is', 'They will aim at'], t.stem);
+  return t.runnerUp ? `${lead} ${t.thing}, not ${t.runnerUp}: ${why}.` : `${lead} ${t.thing}: ${why}.`;
+}
+
+/** The plan's target: the piece that wins the race and its way there, then
+ *  the count. */
+export function renderPlanTarget(p: { mine: boolean; piece: string; thing: string; route: readonly string[]; at: string; horizon: number; attackers: number; pawnsToo: boolean; defenders: number; stem: number }): string {
+  const way = p.route.length === 0 ? `to ${p.at}` : `by ${andList([...p.route])} to ${p.at}`;
+  const owner = p.mine ? 'Your' : 'Their';
+  const head = rotateStem([`${owner} ${p.piece} can go ${way} and hit ${p.thing}.`, `${owner} ${p.piece} has a way to ${p.thing}: ${way.replace(/^to /, '')}.`], p.stem);
+  const atk = `${countOf(p.attackers)} of ${p.mine ? 'your' : 'their'} ${p.pawnsToo ? 'pieces and pawns' : 'pieces'} ${p.attackers === 1 ? 'reaches' : 'reach'} it`;
+  const guard = p.defenders === 0
+    ? `${p.mine ? 'they have' : 'you have'} nothing that can guard it in time`
+    : `${p.mine ? 'they' : 'you'} can only bring ${countOf(p.defenders)} to guard it`;
+  return `${head} In ${countOf(p.horizon)} moves ${atk}, and ${guard}.`;
+}
+
+/** The counterplay — said alive or dead, its stopper named as its side's move. */
+export function renderCounterplay(c: {
+  mine: boolean; alive: boolean; piece: string; from: string; to: string; hits: readonly string[];
+  brk: { named: string; takes: boolean } | null; whose: string;
+  stopper: { who: 'your' | 'their'; named: string } | null; stem: number;
+}): string {
+  const owner = c.mine ? 'Your' : 'Their';
+  const hit = andList([...c.hits]);
+  let head: string;
+  if (c.brk && !c.brk.takes) head = rotateStem([`${owner} one resource is the pawn break ${c.brk.named}, hitting ${hit}.`, `${owner} counterplay is the push ${c.brk.named}, against ${hit}.`], c.stem);
+  else if (c.brk) {
+    const then = c.hits.length > 1 ? ` Then it hits ${andList(c.hits.slice(1))}.` : '';
+    head = rotateStem([`${owner} one resource is the pawn break ${c.brk.named}, taking ${c.whose} pawn on ${c.to}.`, `${owner} counterplay is ${c.brk.named}: the pawn takes ${c.whose} pawn on ${c.to}.`], c.stem) + then;
+  } else head = rotateStem([`${owner} ${c.piece} can come to ${c.to} and hit ${hit}.`, `${owner} resource is the ${c.piece} on ${c.from}: from ${c.to} it hits ${hit}.`], c.stem);
+  if (c.alive) return `${head} ${rotateStem(['It is coming: the best line plays it.', 'Nothing stops it in the best line.'], c.stem)}`;
+  // A stopper that mates ends the game before the resource can count.
+  return `${head} ${c.stopper ? (/#$/.test(c.stopper.named) ? `But ${c.stopper.who} ${c.stopper.named} mates first.` : `But ${c.stopper.who} ${c.stopper.named} stops it.`) : 'But the best line stops it.'}`;
 }

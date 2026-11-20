@@ -34,6 +34,7 @@ import { isolaniStructure, passerTrumpSentence } from './nextPlans';
 import { Chess, type Color, type Square } from 'chess.js';
 import { strandedAt } from './trappedPiece';
 import { countWord, andList } from '../utils/andList';
+import { renderPieceRead } from './teachingSentence';
 import {
   kingSafetyRead,
   developmentRead,
@@ -427,21 +428,20 @@ function observationsFor(
   // (Only a safe piece is "good": `findPieceQuality` reads `pieceIsSafe`.)
   const goods = quality.filter((q) => q.color === color && q.quality === 'good').sort((a, b) => GOOD_PIECE_RANK[a.kind] - GOOD_PIECE_RANK[b.kind]);
   const outpost = goods.map((q) => ({ q, work: goodPieceWork(fen, q, own) })).find((g) => g.work !== null) ?? null;
-  if (outpost && outpost.work) {
+  const goodText = outpost && outpost.work
+    ? renderPieceRead({ kind: 'good', fen, own, piece: NAME[outpost.q.piece] ?? 'piece', square: outpost.q.square, work: outpost.work.text })
+    : null;
+  if (outpost && outpost.work && goodText) {
     const q = outpost.q;
     out.push({
       key: goodPieceIdeaKey(side, q.piece, q.kind, q.square), side, kind: 'piece', rank: rank('piece'),
       aliases: q.kind === 'open-file' || q.kind === 'semi-open-file' ? [`file-${q.square[0]}`] : [],
       squares: [q.square, ...outpost.work.squares],
       ...(outpost.work.target ? { target: outpost.work.target } : {}),
-      text: own
-        ? `Your ${NAME[q.piece] ?? 'piece'} on ${q.square} is your best-placed piece — ${outpost.work.text}.`
-        // Not "their best-placed piece": the engine's piece read owns THEIR best
-        // ("the piece doing the most work for them"), and two computers crowning
-        // two different pieces on one move contradicted each other (hand walk
-        // 2340: rook d8 "best-placed", then knight c6 "most work"). This names
-        // the fact about the piece, which is true whichever wins that ranking.
-        : `Their ${NAME[q.piece] ?? 'piece'} on ${q.square} is well placed — ${outpost.work.text}.`,
+      // Not "their best-placed piece": the engine's piece read owns THEIR best
+      // ("the piece doing the most work for them") — this names the fact
+      // about the piece, true whichever wins that ranking (hand walk 2340).
+      text: goodText,
     });
   }
   // STRANDED (Danya, the positional rook lift #2: "White's bishop on h6 is
@@ -455,15 +455,9 @@ function observationsFor(
     // Two squares are named; three or more are "every square it can go to",
     // lit on the board (a list of squares read out is the robot, David
     // 2026-11-05).
-    const where = st.squares.length > 2 ? 'every square it can go to is covered'
-      : st.squares.length === 2 ? `${andList(st.squares)} are both covered` : `${st.squares[0]} is covered`;
-    out.push({
-      key: `${side}-stranded-${cell.type}`, side, kind: 'piece', rank: rank('piece'),
-      squares: [cell.square, ...st.squares],
-      text: own
-        ? `Your ${NAME[cell.type]} on ${cell.square} is stranded: ${where}, so it has no safe square — if it is attacked it has nowhere to go.`
-        : `Their ${NAME[cell.type]} on ${cell.square} is stranded: ${where}, so it has no safe square — attack it and it has nowhere to go.`,
-    });
+    const text = renderPieceRead({ kind: 'stranded', own, piece: NAME[cell.type], square: cell.square, covered: st.squares });
+    if (!text) continue;
+    out.push({ key: `${side}-stranded-${cell.type}`, side, kind: 'piece', rank: rank('piece'), squares: [cell.square, ...st.squares], text });
   }
   // Same rule as the join: a piece still on its starting square is not a
   // problem piece, it is a piece that has not been developed yet.
@@ -476,18 +470,10 @@ function observationsFor(
     return !own && q.kind === 'rim-knight' && !!b && rimKnightHeading(b, q.square as Square, color);
   };
   const bad = quality.find((q) => q.color === color && q.quality === 'bad' && q.square[1] !== startRank && !heading(q) && !wedgeBishop(fen, q));
-  if (bad) {
-    out.push({
-      key: `${side}-bad-${bad.square}`, side, kind: 'piece', rank: rank('piece'),
-      squares: [bad.square],
-      text: own
-        // ONE sentence each: the say-once dedupe works per sentence, and a
-        // tail left standing alone ("Keeping it bad is worth as much as
-        // winning a pawn.", hand walk 2026-09-25) names nothing.
-        ? `Your ${NAME[bad.piece] ?? 'piece'} on ${bad.square} is your problem piece, ${badPieceWords(bad)}, so improving it is a plan in itself.`
-        : `Their ${NAME[bad.piece] ?? 'piece'} on ${bad.square} is their problem piece, ${badPieceWords(bad)}, and keeping it bad is worth as much as winning a pawn.`,
-    });
-  }
+  // ONE sentence each: the say-once dedupe works per sentence (hand walk
+  // 2026-09-25).
+  const badText = bad ? renderPieceRead({ kind: 'bad', own, piece: NAME[bad.piece] ?? 'piece', square: bad.square, why: badPieceWords(bad) }) : null;
+  if (bad && badText) out.push({ key: `${side}-bad-${bad.square}`, side, kind: 'piece', rank: rank('piece'), squares: [bad.square], text: badText });
 
   // THE BISHOP PAIR, THEIRS. The student's own pair is a plan (`nextPlans`
   // "make your bishop pair count"); theirs is the long-term danger the student
