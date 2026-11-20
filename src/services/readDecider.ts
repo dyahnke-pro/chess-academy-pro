@@ -233,7 +233,6 @@ export function readWeight(f: ReadFact, ctx: ReadContext): number {
 const ON_TARGET = 0.02;
 
 /** The read: one fact per step, in his order, and the habit that closes it. */
-const ONE_PLAN_KINDS: ReadonlySet<string> = new Set(['plan-now', 'siege', 'plan-steps', 'structure-plan']);
 const STANDING_KINDS: ReadonlySet<string> = new Set(['standing', 'standing-bare', 'eval', 'convert', 'compensation', 'verdict']);
 
 export function decideRead<F extends ReadFact>(facts: readonly F[], ctx: ReadContext): { facts: F[]; habit: string | null } {
@@ -246,7 +245,12 @@ export function decideRead<F extends ReadFact>(facts: readonly F[], ctx: ReadCon
   const claimed = new Set<string>();
   // THE STANDING IS ONE CLAIM: a standing, an eval, a convert or a
   // compensation line each says who stands better — the read says one.
-  const claimsOf = (f: F): readonly string[] => (STANDING_KINDS.has(f.kind) ? [...(f.claims ?? []), 'standing'] : (f.claims ?? []));
+  // AND THE STRUCTURE'S PLAN IS ONE CLAIM: every 'structure-plan' line
+  // answers the one question "what does this pawn structure ask for" — the
+  // read says its answer once (a shared claim key, the same idea; a plan of
+  // another producer — the board's plan, the plan's steps — is its own idea).
+  const claimsOf = (f: F): readonly string[] => (STANDING_KINDS.has(f.kind) ? [...(f.claims ?? []), 'standing']
+    : f.kind === 'structure-plan' ? [...(f.claims ?? []), 'structure-plan'] : (f.claims ?? []));
   const sameClaim = (f: F): boolean => claimsOf(f).some((c) => claimed.has(c));
   const say = (f: F): void => {
     out.push(f);
@@ -309,10 +313,6 @@ export function decideRead<F extends ReadFact>(facts: readonly F[], ctx: ReadCon
       // Two facts of one step on the same squares (G4.5.1's subsumption bar)
       // are one claim about one geometry: the first, by order, says it.
       if (pick.squares.length > 0 && stepSaid.some((o) => o.squares.length > 0 && jaccard(o.squares, pick.squares) >= SAME_CLAIM_JACCARD)) continue;
-      // THE PLAN IS ONE CHOICE: the board's plans are alternatives to follow,
-      // not facts to add — the step says the one it ranks first (its own
-      // supports ride on it through `supportsOf`).
-      if (ONE_PLAN_KINDS.has(pick.kind) && stepSaid.some((o) => ONE_PLAN_KINDS.has(o.kind) || firsts.includes(o))) continue;
       stepSaid.push(pick);
       if (row.sayOnce && pick.squares.length > 0 && pick.squares.every((sq) => named.has(sq))) continue;
       say(pick);
