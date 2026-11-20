@@ -149,6 +149,9 @@ export interface WeighRead {
   mate: number | null;
   moves: readonly string[];
   earlier?: readonly string[] | null;
+  /** Read by the board's own deep search (its root MultiPV), not a try's
+   *  board read on its own. The board's move is the best of these. */
+  root?: boolean;
 }
 
 export interface CandidateMove {
@@ -494,7 +497,10 @@ export function bestOfReads(fen: string, reads: readonly WeighRead[]): { read: W
   if (!b) return null;
   const mover = b.turn();
   let best: { read: WeighRead; san: string; cp: number } | null = null;
-  for (const r of reads) {
+  // ONE MOVE PER BOARD: where the board's own search read moves, its best is
+  // the move — a try's separate read never outranks the search it came from.
+  const pool = reads.some((r) => r.root) ? reads.filter((r) => r.root) : reads;
+  for (const r of pool) {
     const m = r.moves[0] ? moveOn(fen, r.moves[0]) : null;
     if (!m) continue;
     const cp = seatCp(r, mover);

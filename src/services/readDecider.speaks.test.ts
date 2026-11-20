@@ -62,10 +62,12 @@ describe('the read says the picture in Danya\'s order', { timeout: 300_000 }, ()
     const { read } = await readOf(ROOKLIFT);
     expectArgument(read);
     // The verdict with its reason, the band said once.
-    expect(read[0].text).toMatch(/^You're slightly better — their king is still in the middle\. But (it is hard to finish them off|breaking through is another matter)\. .*…Qf6.* all fail\.$/);
+    // …Qf6 is NOT among them (F1, David 2026-11-20): it sits in the board's own
+    // MultiPV at −121 against −126, and a try the root read holds is scored
+    // from the root read, never from a separate shallower read of it.
+    expect(read[0].text).toMatch(/^You're slightly better — their king is still in the middle\. But (it is hard to finish them off|breaking through is another matter)\. .* all fail\.$/);
+    expect(read[0].text).not.toMatch(/…Qf6/);
     expect(read[0].text.match(/slightly better/g)).toHaveLength(1);
-    // …Qf6 has no refuter's sentence: it is said in the verdict's own words.
-    expect(read.some((f) => /^…Qf6 (is met by|runs into) Rh5, and the queen (goes|heads straight) back to g6\.$/.test(f.text))).toBe(true);
     const plan = read.findIndex((f) => f.computer === 'picturePlan');
     expect(read[plan].text).toMatch(/^So the slower way: …Kb8 first, then the rook lift\./);
     // The rook's road is the lift said in more detail, right behind it.

@@ -217,7 +217,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
   // best move's facts read the verdict and plan off them (`reads.tries`).
   let triesRead: WeighRead[] | null = null;
   if (!i.withhold && i.readTempting && mine) {
-    const tempting: WeighRead[] = [{ evaluation: top.evaluation, mate: top.mate, moves: top.moves }];
+    const tempting: WeighRead[] = [{ evaluation: top.evaluation, mate: top.mate, moves: top.moves, root: true }];
     triesRead = tempting;
     // THE PLAN'S DIRECT TRY (WO-PICTURE-01 P2): the frontal hit on their weak
     // pawn, the storm at their king — weighed for the plan, not for the eye,
@@ -232,8 +232,16 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
       ...[...considered].filter(([u]) => !weighed.some((c) => c.uci === u)).map(([u, t]) => ({ uci: u, from: u.slice(0, 2), to: u.slice(2, 4), source: t.why })),
     ];
     // Every try's board, read together (the pool runs them side by side), kept in order.
+    // ONE MOVE PER BOARD: a try the board's own deep read already holds
+    // (root MultiPV) is scored from that read, never re-read shallower — a
+    // second, shallower score of the same move is how a read named …Kf8 as
+    // the move while its own read had …Kd8 best.
+    for (const c of toRead) {
+      const root = i.before.find((l, k) => k > 0 && l.moves[0] === c.uci);
+      if (root && !tempting.some((t) => t.moves[0] === c.uci)) tempting.push({ evaluation: root.evaluation, mate: root.mate, moves: [...root.moves], earlier: root.earlier?.moves ? [...root.earlier.moves] : null, root: true });
+    }
     const boards = toRead.flatMap((c) => {
-      if (c.uci === top.moves[0]) return [];
+      if (c.uci === top.moves[0] || i.before.some((l) => l.moves[0] === c.uci)) return [];
       const after = new Chess(i.fen);
       try { after.move({ from: c.from, to: c.to, promotion: c.uci[4] }); } catch { return []; }
       return after.isGameOver() ? [] : [{ uci: c.uci, fen: after.fen(), source: c.source }];
