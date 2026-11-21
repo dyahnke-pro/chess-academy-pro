@@ -323,3 +323,12 @@ describe('the tempting move says what it looks like (Danya: "Bg5 looks like a pi
     expect(tryLooksLike(c.fen(), 'Be2', 'w')).toBeNull();
   });
 });
+
+describe('the move that meets a try is not the forced answer to its check (Danya: "Qg3+ Kh8 Qh4 fails to …f5")', () => {
+  it('follows the line past the answer to the check', async () => {
+    const { replyThatMeets } = await import('./weighedMoves');
+    expect(replyThatMeets(['Qg3+', 'Kh8', 'Qh4', 'f5', 'Qxh7#'], 'w')).toBe('…Kh8, then …f5');
+    expect(replyThatMeets(['Bc1', 'Kh8', 'Qh4'], 'w')).toBe('…Kh8');
+    expect(replyThatMeets(['Qg3+', 'Kh8'], 'w')).toBe('…Kh8');
+  });
+});
