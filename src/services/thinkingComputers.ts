@@ -192,6 +192,7 @@ export const THINK_STEP: Record<ComputerName, ThinkAnswer> = {
   buildOpponentDevelopmentRead: 'assess',
   nameEndgamePhase: 'assess',
   openingAnnouncementForGame: BOOK,
+  askedLineDeparture: BOOK,
   whatItAsks: 'answer-danger',
   moveThoughtFacts: 'candidates',
   theirOpeningVerdict: 'their-move-changed',

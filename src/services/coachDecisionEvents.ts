@@ -191,6 +191,11 @@ export interface LearnTurnRow {
    *  correction, a right move at a real decision, or quiet; null on a bare
    *  door with no turn. A quiet turn speaks only what speaks at any moment. */
   turnMoment?: 'correction' | 'decision' | 'quiet' | null;
+  /** The lanes that spoke under the door's own any-moment rule
+   *  (`speaksAnyMoment`) — so an audit reads the rule off the row instead of
+   *  keeping a copy of the lane list that drifts (LQ kept one, and went red
+   *  the day the opening's name joined the rule). Absent on older rows. */
+  spokeAnyMoment?: string[];
   held: string[];
   /** Lanes that spoke short because the skill is proven (the fade). */
   faded: string[];

@@ -284,17 +284,18 @@ describe('queueing is not saying — opening facts are marked from the voice (20
     const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
     expect(src).not.toMatch(/identityQueued/);
   });
-  it('the NAME carries its identity in one line, and hearing it marks both (2026-10-14)', () => {
+  it('hearing the name and the identity marks both; the identity is its own fact (2026-11-21)', () => {
     const mem = createLearnMemory({ livePlies: () => 0 });
     noteOpening(mem.story, 4, 'read', 'Scandinavian Defense');
-    markOpeningFactsSpoken(mem, [{ kind: 'opening', claims: ['opening-name:Scandinavian Defense', 'opening-identity:Scandinavian Defense'] }], 5);
+    markOpeningFactsSpoken(mem, [{ kind: 'opening', claims: ['opening-name:Scandinavian Defense'] }, { kind: 'computed', claims: ['opening-identity:Scandinavian Defense'] }], 5);
     expect(openingAt(mem.story.current(), 'named')).toBe('Scandinavian Defense');
     expect(identityHeard(mem.story.current())).toBe('opening-identity:Scandinavian Defense');
     const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
-    expect(src).toMatch(/announceLine = `\$\{announce\} \$\{idWith\.text\}`/);
+    // The name's line is the name; the identity rides its own lane, which the
+    // door holds on a calm move (learnMoment.test).
+    expect(src).toMatch(/announceLine = announce;/);
     expect(src).toMatch(/claims: announceClaims/);
-    // The identity that rode the name is not offered again (the story's read).
-    expect(src).toMatch(/identityRidesName && r\.storyBeat === 'identity'/);
+    expect(src).not.toMatch(/identityRidesName/);
   });
 });
 

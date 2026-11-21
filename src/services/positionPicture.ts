@@ -212,6 +212,7 @@ export const PICTURE_ROLE: Record<ComputerName, PictureRole> = {
   buildOpponentDevelopmentRead: 'move',
   nameEndgamePhase: 'standing',
   openingAnnouncementForGame: 'theory',
+  askedLineDeparture: 'theory',
   whatItAsks: 'threat',
   moveThoughtFacts: 'move',
   theirOpeningVerdict: 'move',

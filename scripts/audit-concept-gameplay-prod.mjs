@@ -826,18 +826,16 @@ async function main() {
       // quiet turn only what speaks at any moment spoke: the phase change, the
       // character, their emerging plan, the only-move moment, the stalemate.
       {
-        const ANY_MOMENT = new Set(['phase', 'character', 'planArc', 'positionFacts', 'stalemate']);
-        const QUIET_OK = new Set(['phase', 'character', 'stalemate']);
+        const QUIET_OK = new Set(['phase', 'character', 'stalemate', 'opening']);
         const unnamed = turns.filter((t) => !('turnMoment' in t)).length;
-        // The door's rule (`learnTurnDoor.speaksAnyMoment`): a fact of kind
-        // key-moment (the only-move moment, "slow down") speaks on any turn,
-        // whatever its lane — so a quiet turn may carry as many off-list lanes
-        // as it spoke key-moment facts, and no more.
+        // The door's rule is read OFF THE ROW (`spokeAnyMoment`, the lanes that
+        // spoke under `learnTurnDoor.speaksAnyMoment`), never a copy of its lane
+        // list here — the copy drifted the day the opening's name joined the
+        // rule and failed a correct door. A quiet turn may speak only those.
         const loud = turns.filter((t) => {
           if (t.turnMoment !== 'quiet') return false;
-          const off = (t.spoke ?? []).filter((l) => !ANY_MOMENT.has(l));
-          const keyMoments = (t.spokeKinds ?? []).filter((k) => k === 'key-moment').length;
-          return off.length > keyMoments;
+          const any = new Set(Array.isArray(t.spokeAnyMoment) ? t.spokeAnyMoment : []);
+          return (t.spoke ?? []).some((l) => !any.has(l));
         });
         const by = {};
         for (const t of turns) by[String(t.turnMoment)] = (by[String(t.turnMoment)] ?? 0) + 1;

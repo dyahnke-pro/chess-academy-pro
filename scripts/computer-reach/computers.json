@@ -1849,6 +1849,16 @@
   ]
  },
  {
+  "name": "askedLineDeparture (the game left the asked line)",
+  "file": "services/askedLineDeparture.ts",
+  "fn": "askedLineDeparture",
+  "says": "Where the game first left the line the student asked to play: 'Your move leaves the Najdorf on move 6. The line plays Be3 there.' Said once, in Learn's opening lane; Play's plan tracker reads the same computer.",
+  "origin": "map",
+  "nodes": [
+   "services/askedLineDeparture.ts#askedLineDeparture"
+  ]
+ },
+ {
   "name": "openingDatabaseBrief (chat: what an opening is, from the databases)",
   "file": "services/openingDatabaseBrief.ts",
   "fn": "openingDatabaseBrief",

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**695 lines · 16 exports · 55 importers · 24 tests · 0 audits**
+**696 lines · 16 exports · 55 importers · 24 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -101,8 +101,8 @@
 - `src/services/boardComputers.test.ts:81`
 - `src/services/coachFact.test.ts:90`
 - `src/services/coachFact.test.ts:91`
-- `src/services/coachFeatureService.ts:2748`
-- `src/services/coachFeatureService.ts:3369`
+- `src/services/coachFeatureService.ts:2756`
+- `src/services/coachFeatureService.ts:3377`
 - `src/services/learnTurnDoor.ts:346`
 - `src/services/learnTurnDoor.ts:1086`
 - `src/services/learnTurnDoor.ts:1147`
@@ -118,7 +118,7 @@
 
 ### `placeFact` (function) — 15 call sites
 - `src/services/boardComputers.ts:3284`
-- `src/services/boardComputers.ts:8146`
+- `src/services/boardComputers.ts:8147`
 - `src/services/learnTurnDoor.ts:809`
 - `src/services/moveThoughtFacts.ts:1309`
 - `src/services/moveThoughtFacts.ts:1326`
@@ -135,7 +135,7 @@
 
 ### `stakesOf` (function) — 14 call sites
 - `src/services/boardComputers.ts:3285`
-- `src/services/boardComputers.ts:8146`
+- `src/services/boardComputers.ts:8147`
 - `src/services/coachFact.test.ts:116`
 - `src/services/coachFact.test.ts:122`
 - `src/services/coachFact.test.ts:123`

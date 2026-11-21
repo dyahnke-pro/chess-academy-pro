@@ -134,6 +134,8 @@ import { findSiblingExtensionBranches, resolveOpeningEntry } from '../../service
 import { isTheoryLine } from '../../services/bookDeparture';
 import { PLAY_OPENING_RE, readsAsQuestion, resolvePlayName } from '../../coach/ask/playName';
 import { openingAnnouncementForGame, theirOpeningVerdict, openingNameForBoard, spokenOpeningLabel, studentJustLeftBook, warmOpeningBook, learnNameMaySpeak } from '../../services/openingAnnouncement';
+import { askedLineDeparture } from '../../services/askedLineDeparture';
+import { renderAskedLineLeft } from '../../services/teachingSentence';
 import { lastMoveCapturedOn, pendingRecapture, landingSquare } from '../../utils/justCaptured';
 import { resolveVoicedWalkthrough, resolveVoicedMatchup } from '../../data/voicedWalkthroughs';
 import { masterclassWalkthroughTree } from '../../services/masterclassWalkthroughAdapter';
@@ -9093,8 +9095,7 @@ export function CoachTeachPage({ mode }: {
     let threatSkill: string | undefined;
     let announceLine: string | null = null;
     let announceClaims: string[] = [];
-    let announceSquares: readonly string[] = [];
-    let identityRidesName = false;
+    let leftAskedLine: { text: string; claims: string[] } | null = null;
     const studentCC: 'w' | 'b' = args.studentColor === 'white' ? 'w' : 'b';
     const rating = activeProfile?.puzzleRating ?? activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING;
     const history = args.historyAfterReply;
@@ -9679,19 +9680,14 @@ export function CoachTeachPage({ mode }: {
         // note was reached by opening NAME, not by the board — floating. The
         // opening is still named; the floating idea clause is gone.
         announceLine = announce;
-        // THE NAME CARRIES ITS IDENTITY (2026-10-14): "This game is the
-        // Scandinavian Defense." went out alone and the identity a turn later,
-        // when the door was busy — one claim heard as two, the first with no
-        // reason. When the identity is ready it rides in the same line.
-        const idWith = storyReads.find((r) => r.storyBeat === 'identity') ?? null;
-        if (idWith) {
-          announceLine = `${announce} ${idWith.text}`;
-          announceClaims = [`opening-name:${det.name}`, readKey(idWith)];
-          announceSquares = idWith.squares;
-          identityRidesName = true;
-        } else {
-          announceClaims = [`opening-name:${det.name}`];
-        }
+        // THE NAME SPEAKS ALONE; THE IDENTITY IS ITS OWN FACT (2026-11-21). The
+        // identity used to ride inside the name's line (2026-10-14) — and the
+        // name's lane speaks on ANY turn, so on a calm book move the opening's
+        // whole identity was said where the door holds every other piece of
+        // opening teaching ('quiet-turn'). The identity is offered on its own
+        // lane below and the door decides it like any other fact.
+        announceLine = announce;
+        announceClaims = [`opening-name:${det.name}`];
         // GUARANTEE it is HEARD — naming the opening is R1 of the teaching arc,
         // his first move every game. The say-once ref is spent on THIS turn
         // (above), so if the instant package drops the announce because a tactic
@@ -9700,7 +9696,7 @@ export function CoachTeachPage({ mode }: {
         // Scandinavian that was never named). Queue it through the same reliable
         // late-package path as the plan/structure/register so a busy turn can't
         // swallow it.
-        queueSpokenHint(args.fenAfterReply, { computer: 'openingAnnouncementForGame', text: announceLine, lane: 'opening', proof: NO_PROOF.name, namesStudentMove: false, squares: announceSquares.length ? announceSquares : undefined, claims: announceClaims });
+        queueSpokenHint(args.fenAfterReply, { computer: 'openingAnnouncementForGame', text: announceLine, lane: 'opening', proof: NO_PROOF.name, namesStudentMove: false, claims: announceClaims });
         noteOpening(learnMemRef.current.story, history.length, 'queued', det.name);
         captureEvent('opening_announced', {
           surface: 'coach-teach', name: det.name, first: firstResolve, has_idea: false,
@@ -9713,7 +9709,17 @@ export function CoachTeachPage({ mode }: {
           fen: args.fenAfterReply,
         });
       }
-      // WHAT THE OPENING IS, when it did not ride the name, is the story's
+      // THE GAME LEAVES THE LINE THAT WAS ASKED FOR (David 2026-11-21): the one
+      // departure computer Play's plan tracker reads, on this wave's two plies
+      // (the student's move and the reply), so it is said once, where it
+      // happened. The asked line is the one the coach replies from.
+      const asked = useCoachMemoryStore.getState().intendedOpening;
+      if (asked) {
+        const askedMoves = asked.pgn?.trim() ? asked.pgn.trim().split(/\s+/) : getOpeningMoves(asked.name);
+        const left = askedMoves ? askedLineDeparture(history, askedMoves, studentCC, Math.max(0, history.length - 2)) : null;
+        if (left) leftAskedLine = { text: renderAskedLineLeft({ ...left, name: spokenOpeningLabel(asked.name) }), claims: [`asked-line-left:${asked.name}`] };
+      }
+      // WHAT THE OPENING IS is the story's
       // identity read below — offered every opening move until it is heard.
     } catch { /* announcement is a bonus, never a blocker */ }
 
@@ -10284,7 +10290,8 @@ export function CoachTeachPage({ mode }: {
       ...baitFacts,
       ...weighedFacts,
       ...teachingMoveFacts,
-      ...(announceLine ? [{ namesStudentMove: false, lane: 'opening' as const, computer: 'openingAnnouncementForGame' as const, text: announceLine, fen: args.fenAfterReply, proof: NO_PROOF.name, claims: announceClaims, ...(announceSquares.length ? { squares: announceSquares } : {}) }] : []),
+      ...(announceLine ? [{ namesStudentMove: false, lane: 'opening' as const, computer: 'openingAnnouncementForGame' as const, text: announceLine, fen: args.fenAfterReply, proof: NO_PROOF.name, claims: announceClaims }] : []),
+      ...(leftAskedLine ? [{ namesStudentMove: false, lane: 'opening' as const, computer: 'askedLineDeparture' as const, text: leftAskedLine.text, fen: args.fenAfterReply, proof: NO_PROOF.name, claims: leftAskedLine.claims }] : []),
       // Rate-matched Danya behavior — board-truth. MERGED with the positional
       // read into ONE board-read lane (David 2026-09-13: "computer and observation
       // can be merged"): it now speaks as `observation`, the single home for the
@@ -10294,8 +10301,8 @@ export function CoachTeachPage({ mode }: {
       // The hand-written masterclass beat, verified before it shipped
       // (narrationAccuracy, lessonIntegrity). No corpus note rides free play.
       // THE OPENING'S STORY, each beat in the lane that is its place in the turn
-      // (`STORY_LANE`); the identity that rode the name is not offered twice.
-      ...storyReads.flatMap((r) => (r.storyBeat && !(identityRidesName && r.storyBeat === 'identity')
+      // (`STORY_LANE`).
+      ...storyReads.flatMap((r) => (r.storyBeat
         ? [{ namesStudentMove: false, lane: STORY_LANE[r.storyBeat], computer: r.computer, text: r.text, fen: args.fenAfterReply, squares: r.squares, claims: r.claims, role: r.role, proof: r.proof }]
         : [])),
       // Corpus teaching reached by structure/concept transfer — BORROWED, and

@@ -942,3 +942,18 @@ export function oneMoveHead(text: string, san: string): string {
     return s.replace(re, it);
   }).join(' ');
 }
+
+/** THE GAME LEFT THE ASKED LINE (`askedLineDeparture`): said once, with where
+ *  and what the line plays there. The student's own move is never named in
+ *  Learn ("your move"); theirs is. Rotated on the departure ply. */
+export function renderAskedLineLeft(d: { name: string; seat: 'student' | 'opponent'; played: string; book: string; moveNumber: number; ply: number }): string {
+  return d.seat === 'student'
+    ? rotateStem([
+      `Your move leaves the ${d.name} on move ${d.moveNumber}. The line plays ${d.book} there.`,
+      `With your move the game is out of the ${d.name} on move ${d.moveNumber}. Its line goes ${d.book} there.`,
+    ], d.ply)
+    : rotateStem([
+      `They leave the ${d.name} on move ${d.moveNumber} with ${d.played}. The line plays ${d.book} there.`,
+      `${d.played} takes the game out of the ${d.name} on move ${d.moveNumber}. Its line goes ${d.book} there.`,
+    ], d.ply);
+}
