@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**960 lines · 71 exports · 33 importers · 7 tests · 35 audits**
+**973 lines · 73 exports · 34 importers · 7 tests · 35 audits**
 
 ## Locked rules that govern this surface
 
@@ -51,6 +51,7 @@
 - `src/services/readDecider.ts`
 - `src/services/replyJob.ts`
 - `src/services/reviewMoveBriefing.ts`
+- `src/services/reviewTeachingPoints.ts`
 - `src/services/tacticalRead.ts`
 - `src/services/teachingSentence.test.ts`
 - `src/services/temptingHope.test.ts`
@@ -793,10 +794,10 @@
 - `src/services/weighedMoves.ts:564`
 
 ### `renderAimWhy` (function) — 1 call site
-- `src/services/planSteps.ts:454`
+- `src/services/planSteps.ts:465`
 
 ### `renderPlanHeld` (function) — 1 call site
-- `src/services/planSteps.ts:460`
+- `src/services/planSteps.ts:471`
 
 ### `oneMoveHead` (function) — 5 call sites
 - `src/services/coachFeatureService.ts:649`
@@ -810,6 +811,13 @@
 - `src/services/askedLineDeparture.test.ts:35`
 - `src/services/askedLineDeparture.test.ts:39`
 - `src/services/askedLineDeparture.test.ts:43`
+
+### `renderBreakHits` (function) — 1 call site
+- `src/services/planSteps.ts:499`
+
+### `renderTally` (function) — 2 call sites
+- `src/services/reviewTeachingPoints.ts:125`
+- `src/services/reviewTeachingPoints.ts:150`
 
 ## Tests
 

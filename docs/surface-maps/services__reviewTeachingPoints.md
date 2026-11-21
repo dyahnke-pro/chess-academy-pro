@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**892 lines · 21 exports · 15 importers · 7 tests · 0 audits**
+**889 lines · 21 exports · 15 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -181,7 +181,7 @@
 - `src/services/nextPlans.test.ts:34`
 - `src/services/nextPlans.ts:117`
 - `src/services/nextPlans.ts:232`
-- `src/services/nextPlans.ts:554`
+- `src/services/nextPlans.ts:560`
 - `src/services/oneWorstPiece.test.ts:22`
 - `src/services/outpostOneTest.test.ts:19`
 - `src/services/pieceQuality.ts:191`
