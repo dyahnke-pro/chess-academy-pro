@@ -53,6 +53,23 @@ function hitWithTempo(c: Chess, sq: string, them: 'w' | 'b', skip: string | null
   return null;
 }
 
+/** The file a pawn recapture opens for the mover's rook — the one test the
+ *  recapture's "it opens the X-file for your rook" is said on, so the claim
+ *  that sentence carries (`fileClaim`) is read off the same board. */
+function opensFileFor(after: Chess, file: string, me: 'w' | 'b'): boolean {
+  return pawnsOnFile(after, file, me) === 0 && rookReachesFile(after.fen(), me, file);
+}
+
+/** The file the played pawn capture opens for the mover's rook, or null. */
+export function recaptureOpensFile(fenBefore: string, san: string): string | null {
+  try {
+    const after = new Chess(fenBefore);
+    const m = after.move(san);
+    if (m.piece !== 'p' || !m.captured) return null;
+    return opensFileFor(after, m.from[0], m.color) ? m.from[0] : null;
+  } catch { return null; }
+}
+
 function readRecapture(fenBefore: string, m: Move, me: 'w' | 'b', theirReply: string | null = null): RecaptureFacts {
   const plus: string[] = []; const minus: string[] = [];
   const after = new Chess(fenBefore); after.move(m.san);
@@ -60,7 +77,7 @@ function readRecapture(fenBefore: string, m: Move, me: 'w' | 'b', theirReply: st
   if (m.piece === 'p') {
     const from = m.from[0]; const to = m.to[0];
     // An open file outranks the direction (his gxf6: "the open g-file is worth more here").
-    if (pawnsOnFile(after, from, me) === 0 && rookReachesFile(after.fen(), me, from)) {
+    if (opensFileFor(after, from, me)) {
       plus.push(`it ${pawnsOnFile(after, from, them) ? 'half-opens' : 'opens'} the ${from}-file for your rook`);
     }
     if (CENTRE_DIST(to) < CENTRE_DIST(from)) plus.push('it takes back toward the centre');

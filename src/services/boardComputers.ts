@@ -18,7 +18,7 @@
 // call site — a claim with no caller fails.
 //
 // PURE: every computer here is pure; this module adds no chess of its own.
-import { ideaClaim, type IdeaKind } from './ideaKind';
+import { ideaClaim, fileClaim, type IdeaKind } from './ideaKind';
 import { Chess, type Color, type Move, type Square } from 'chess.js';
 import { legalSeeGainFor, signedLegalSeeFor, seeSequence } from './positionReadingService';
 import { NO_PROOF, squaresProof, isProof, legalLineProof, lineProofFromUci, type FactProof } from './proof';
@@ -274,7 +274,7 @@ import { theirOpeningVerdict, openingAnnouncementForGame } from './openingAnnoun
 import { type PlanBeat, type PlanArrow } from './reviewStrategicOrientation';
 import { buildCausalChain, findAllowedChain, findMissedChain, causalChainArrows, causalChainKey } from './causalChain';
 import { renderCausalChain } from './causalChainVoice';
-import { recaptureChoice } from './recaptureChoice';
+import { recaptureChoice, recaptureOpensFile } from './recaptureChoice';
 import { kneeJerk } from './kneeJerk';
 import { strongChoice } from './strongChoice';
 import { fileClaimed } from './planRace';
@@ -4783,7 +4783,8 @@ export const BOARD_COMPUTERS = {
       if (!rc) return null;
       const proof = squaresProof(rc, [to]);
       if (!proof) return null;
-      return fact({ key: `recapture-${to}`, claims: [`recapture-${to}`], text: rc, proof, squares: [to], stakes: null,
+      const opened = recaptureOpensFile(fenBefore, san);
+      return fact({ key: `recapture-${to}`, claims: [`recapture-${to}`, ...(opened ? [fileClaim(opened)] : [])], text: rc, proof, squares: [to], stakes: null,
         seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore });
     }),
     computer: 'recaptureChoice',
@@ -4995,7 +4996,7 @@ export const BOARD_COMPUTERS = {
       const next = ka.next ? { from: ka.next.uci.slice(0, 2), to: ka.next.uci.slice(2, 4) } : null;
       return fact({ key: `${ka.kind}|${ka.next?.uci ?? '-'}`,
         // "Qe1 heads for their king — Qg3 next" and "Qe1 prepares Qg3" are one idea.
-        claims: [`king-attack-${ka.kind}`, ...(ka.next ? [`prepares:${ka.next.uci}`] : [])], text: ka.text,
+        claims: [`king-attack-${ka.kind}`, ...(ka.kind === 'opens-file' && ka.squares[0] ? [fileClaim(ka.squares[0][0])] : []), ...(ka.next ? [`prepares:${ka.next.uci}`] : [])], text: ka.text,
         proof: squaresProof(ka.text, ka.squares) ?? NO_PROOF.stated, squares: ka.squares, stakes: null,
         seat: 'student', namesStudentMove: next ? namesPlayableStudentMove(namesMoves(sideToMove(fenBefore), boardAfterSans(fenBefore, [san, reply]), next)) : false,
         thread: LOCAL_THREAD, fen: boardAfter(fenBefore, san) ?? fenBefore, ...(next ? { marks: { play: next } } : {}) });
@@ -6136,7 +6137,7 @@ export const BOARD_COMPUTERS = {
       }
       return r.aspects.flatMap((a) => {
         const verb = a.horizon && horizonSaid(phrases, a.kind) ? `${a.verb}${a.horizon}` : a.verb;
-        const f = moveIdeaFact(fact, w, { kind: a.kind, idea: a.idea, weight: a.weight, text: moveLead(w, verb), alsoText: `It also ${verb}`, squares: a.squares, restates: a.restates === true, tag: a.kind === 'aspect-threat' ? a.squares[0] ?? '' : '' });
+        const f = moveIdeaFact(fact, w, { kind: a.kind, idea: a.idea, weight: a.weight, text: moveLead(w, verb), alsoText: `It also ${verb}`, squares: a.squares, restates: a.restates === true, tag: a.kind === 'aspect-threat' ? a.squares[0] ?? '' : '', ...(a.claims ? { extraClaims: a.claims } : {}) });
         return f ? [f] : [];
       });
     }),

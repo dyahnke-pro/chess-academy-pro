@@ -65,6 +65,19 @@ export const FUNDAMENTAL_IDEA: Record<MoveFundamentalId, IdeaKind> = {
 };
 
 /** The claim an idea makes on its squares — the say-once key. */
+/** ONE FILE OPENED, ONE CLAIM (prod Review 2026-11-21: "C-pawn takes d5:
+ *  it half-opens the c-file … You played c-pawn takes d5 — it half-opens the
+ *  c-file"): every computer that says a move opens a file claims it under this
+ *  one key, so the composer keeps the best of them and the rest stay quiet. */
+export function fileClaim(file: string): string {
+  return `opens-file:${file}`;
+}
+
+/** Does a fact claim a file opened (`fileClaim`)? */
+export function claimsFile(claims: readonly string[] | undefined): boolean {
+  return (claims ?? []).some((c) => c.startsWith('opens-file:'));
+}
+
 export function ideaClaim(kind: IdeaKind, squares: readonly string[]): string {
   return `idea:${kind}:${[...new Set(squares)].sort().join(',')}`;
 }

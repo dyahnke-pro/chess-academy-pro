@@ -29,7 +29,7 @@ import { BRIEFING_LINE_PLIES, buildReviewMoveBriefing } from './reviewMoveBriefi
 import { moveThoughtFacts } from './moveThoughtFacts';
 import { criticalityFromCandidates } from './criticalityScan';
 import { composeThought, speaksBehindLead, NOT_LED, type ThoughtStep, type ThoughtRecord } from './thoughtComposer';
-import { FUNDAMENTAL_IDEA, type IdeaKind } from './ideaKind';
+import { FUNDAMENTAL_IDEA, claimsFile, type IdeaKind } from './ideaKind';
 import { explainEvalByPieceQuality, worstPieceMobility, phraseBadPiece, type PieceQualityResult } from './pieceQuality';
 import { compareTwoMoves, type Evaluate } from './moveComparison';
 import { detectConcept } from './reviewConcepts';
@@ -2500,7 +2500,9 @@ function* reviewSegmentSteps(
           if (!isBundleRuleKind(h.kind)) continue;
           const id = `hint:${h.claims.join('|') || h.lane}`;
           if (hintsSaid.has(id)) continue;
-          facets.push(fact(h.computer, h.kind, h.text, { identity: id, squares: h.squares }));
+          // Its claims ride along (the king attack's file: the composer leaves
+          // an opened file to the line that says it).
+          facets.push(fact(h.computer, h.kind, h.text, { identity: id, squares: h.squares, claims: h.claims }));
         }
       }
       // THE LINE BEHIND A WINNING MOVE — parity with Learn (David 2026-09-30:
@@ -2736,6 +2738,10 @@ function* reviewSegmentSteps(
         const skipJob = told || heard || plainAttackAsksNothing || doesSaysJob;
         const ruleIdeas = new Set(facets.map((f) => ruleIdOf(f.identity)).filter((r): r is MoveFundamentalId => r !== null).map((r) => FUNDAMENTAL_IDEA[r]));
         for (const f of facets) { const idea = FACET_TEACHES_IDEA[f.tag] ?? COMPUTER_TEACHES_IDEA[f.computer]; if (idea) ruleIdeas.add(idea); }
+        // A facet that says a file the move opens (the king attack's "rips open the
+        // h-file", the recapture's "opens the c-file for your rook") leaves the
+        // file to itself (prod Review 2026-11-21: the h-file said twice).
+        for (const f of facets) if (claimsFile(f.claims)) ruleIdeas.add('file');
         // A line that already teaches this move ([rule], [point]…) leads its
         // step: the composer adds only a second job — a new claim that clears
         // the policy's floor (…Nxd5's rule said the recapture; "adds its

@@ -54,7 +54,7 @@ import type { PhraseMemory } from '../utils/phraseMemory';
 import { createStoryStore, storyLedger, type SaidSet, type StoryStore } from './gameStory';
 import { withArticle } from '../utils/andList';
 import { afterCaptureSan } from '../utils/captureWords';
-import type { IdeaKind } from './ideaKind';
+import { fileClaim, type IdeaKind } from './ideaKind';
 import { renderAspectThreat, renderStanding, renderSwing } from './teachingSentence';
 
 /** The piece a SAN names by its first letter (a pawn move names none). */
@@ -95,6 +95,8 @@ export interface Aspect {
    *  no consequence of its own (the quiet-move rule, WO-DECIDER-02). On a
    *  quiet move a line made of these alone is not said. */
   restates?: boolean;
+  /** Claims beyond the move's own idea (`fileClaim` for a file it opens). */
+  claims?: readonly string[];
 }
 
 /** Did the move UNCOVER an attack: does a piece of the mover's other than the
@@ -523,7 +525,7 @@ export function moveAspects(input: {
   // Said as a move's own fact, the file it opens is a road for the rooks long
   // after this move (S-LONG-HORIZON, round 4: his "we get the g-file" is about
   // the play to come).
-  if (settled.newOpenFiles.length > 0 && structureStands && hasRook(fenAfter, moverWB)) aspects.push({ kind: 'aspect-opens-file', text: `opening the ${settled.newOpenFiles[0]}-file`, verb: `opens the ${settled.newOpenFiles[0]}-file`, horizon: ', a road for the rooks from now on', idea: 'file', squares: [], weight: 44 });
+  if (settled.newOpenFiles.length > 0 && structureStands && hasRook(fenAfter, moverWB)) aspects.push({ kind: 'aspect-opens-file', claims: [fileClaim(settled.newOpenFiles[0])], text: `opening the ${settled.newOpenFiles[0]}-file`, verb: `opens the ${settled.newOpenFiles[0]}-file`, horizon: ', a road for the rooks from now on', idea: 'file', squares: [], weight: 44 });
 
   // 8. Structural damage the move INFLICTS on the opponent vs CONCEDES in its own
   //    camp — both are real ramifications; the self-inflicted one is a downside.
