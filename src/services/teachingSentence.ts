@@ -20,7 +20,7 @@
  * Pure: chess.js only.
  */
 import { CAPTURE_VALUE } from './pieceValues';
-import { Chess, type Color, type Square, type PieceSymbol } from 'chess.js';
+import { Chess, type Square } from 'chess.js';
 import { rotateStem } from '../utils/rotateStem';
 import { andList, orList, countWord } from '../utils/andList';
 import { openSentence, continueSentence } from '../utils/openSentence';
@@ -65,7 +65,6 @@ export function boardAfter(fen: string, path: readonly string[], relation: 'line
   return after ? { key: positionKey(after), path: [...path], relation } : null;
 }
 
-const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const VALUE: Readonly<Record<string, number>> = CAPTURE_VALUE;
 
 /** SAN of `uci` on `fen`, with "…" before a Black move. */
