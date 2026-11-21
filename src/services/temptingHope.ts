@@ -58,6 +58,9 @@ export function countingOn(fenBefore: string, tryUci: string, refutationUci: str
   if (!pick || pick.uci === refutationUci) return null;
   const m = play(b, pick.uci);
   if (!m || balance() < before) return null;
+  // A recapture written the same as the try ("gxf5" hoping for "gxf5") reads
+  // as the move hoping for itself (prod Review 2026-11-21): it says nothing.
+  if (m.san.replace(/[+#]$/, '') === t.san.replace(/[+#]$/, '')) return null;
   return `${m.color === 'b' ? '…' : ''}${m.san}`;
 }
 

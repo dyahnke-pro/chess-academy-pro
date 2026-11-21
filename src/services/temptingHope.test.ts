@@ -35,3 +35,10 @@ describe('why the refutation is easy to miss', () => {
     expect(easyToMiss(ELEPHANT, 'c3d5', 'f6d5', 1500)).toBeNull();
   });
 });
+
+describe('a recapture written the same as the try is never the hope (prod Review 2026-11-21: "With gxf5 they hoped for gxf5")', () => {
+  it('gxf5 hoping for …gxf5 says nothing', async () => {
+    const { countingOn } = await import('./temptingHope');
+    expect(countingOn('4k3/8/6p1/5p2/6P1/8/8/4K3 w - - 0 1', 'g4f5', 'e1d2', 1500)).toBeNull();
+  });
+});
