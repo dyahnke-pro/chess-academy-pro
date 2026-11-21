@@ -13,15 +13,15 @@ describe('positionalReason — what the move gave up on the board', () => {
   const fen = fenAfter(['e4', 'e5']);
   it('a pawn move that leaves a minor at home, against a developing move', () => {
     expect(boardReason(fen, 'a3', 'Nf3', 'opening', (fen).split(' ')[1] as 'w' | 'b')?.tag).toBe('neglected-development');
-    expect(positionalReason({ fen, playedSan: 'a3', bestSan: 'Nf3', namesBetterMove: false })?.note)
+    expect(positionalReason({ fen, playedSan: 'a3', bestSan: 'Nf3', namesBetterMove: false, student: 'w' })?.note)
       .toBe('A minor piece is still at home that the better move would have brought out.');
   });
   it('nothing to compare without a better move', () => {
-    expect(positionalReason({ fen, playedSan: 'a3', bestSan: null, namesBetterMove: true })).toBeNull();
+    expect(positionalReason({ fen, playedSan: 'a3', bestSan: null, namesBetterMove: true, student: 'w' })).toBeNull();
   });
   it('the record files the same reading the voice says (one computer)', () => {
     const filed = slipCause({ fen, playedSan: 'a3', bestSan: 'Nf3', phase: 'opening' });
-    const said = positionalReason({ fen, playedSan: 'a3', bestSan: 'Nf3', namesBetterMove: true });
+    const said = positionalReason({ fen, playedSan: 'a3', bestSan: 'Nf3', namesBetterMove: true, student: 'w' });
     expect(filed?.coachNote).toBe(said?.note);
   });
 });
