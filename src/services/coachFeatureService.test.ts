@@ -908,11 +908,15 @@ describe('one claim, spoken once — the opponent\'s reach into the centre (walk
   });
 });
 
-describe('pendingRecapture — no "if they sit still" in the middle of an exchange (walk 5, 2026-09-23)', () => {
+describe('the flux rule — no "if they sit still" in the middle of an exchange (walk 5, 2026-09-23; one rule, U2)', () => {
   it('…cxd4 with Nxd4 available is an exchange in progress; a quiet move is not', async () => {
-    const { pendingRecapture } = await import('./coachFeatureService');
+    const { inFluxAfter } = await import('./boardState');
     const before = 'rnbqkb1r/1p2pppp/p2p1n2/2p5/2BPP3/2N2N2/PPP2PPP/R1BQK2R b KQkq - 0 5';
-    expect(pendingRecapture(before, 'cxd4', 'rnbqkb1r/1p2pppp/p2p1n2/8/2BpP3/2N2N2/PPP2PPP/R1BQK2R w KQkq - 0 6')).toBe(true);
-    expect(pendingRecapture(before, 'e6', 'rnbqkb1r/1p3ppp/p2ppn2/2p5/2BPP3/2N2N2/PPP2PPP/R1BQK2R w KQkq - 0 6')).toBe(false);
+    expect(inFluxAfter(before, 'cxd4')).toBe('d4');
+    expect(inFluxAfter(before, 'e6')).toBeNull();
+  });
+  it('Review keeps no private copy of the rule', async () => {
+    const mod = await import('./coachFeatureService') as Record<string, unknown>;
+    expect(mod.pendingRecapture).toBeUndefined();
   });
 });

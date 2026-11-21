@@ -418,6 +418,7 @@ export const COMPUTER_CATALOG = {
   buildOpponentDevelopmentRead: { file: 'services/reviewOpponentCommentary.ts', says: 'how their development is going' },
   nameEndgamePhase: { file: 'services/reviewMoveTeaching.ts', says: 'the endgame reached, named' },
   openingAnnouncementForGame: { file: 'services/openingAnnouncement.ts', says: 'the opening this game is, named once with what it teaches' },
+  askedLineDeparture: { file: 'services/askedLineDeparture.ts', says: 'where the game left the opening line the student asked to play' },
   whatItAsks: { file: 'services/bookMoveWhy.ts', says: 'what their attack on a piece asks the student to do' },
   moveThoughtFacts: { file: 'services/moveThoughtFacts.ts', says: 'the move\'s thought: what it changed, the choices, the line' },
   theirOpeningVerdict: { file: 'services/openingAnnouncement.ts', says: 'what their opening move cost them' },

@@ -57,7 +57,7 @@ import { coachTurn, habitNeedFrom } from './coachDecider';
 import { advantageWasMissed } from './reviewWithholding';
 import { PLAN_THREAD_HOLD_PLIES, PLAN_THREAD_KINDS, tellPictureFacts } from './planThread';
 import { createStoryStore, switchesSaid, storyLedger, storyThrough, threadKey, threadStated, threadVariant, PLAN_GOAL, phaseCrossed, openingAt, openingsNamed, noteOpening, lastVerdict, modelGameCited, storyTurn, type ThreadKey, type StoryStore, type StorySeed, type SaidSet } from './gameStory';
-import { boardStateAfter } from './boardState';
+import { boardStateAfter, inFluxAfter } from './boardState';
 import { NO_BOOST, type StudentBoost } from './studentMomentBoost';
 import { FUNDAMENTAL_HABIT, habitIsOwed, type MethodHabit } from './methodBeat';
 import { noteSlip } from './learnBoardTeaching';
@@ -5656,7 +5656,9 @@ async function augmentWithProjections(
       // Nxd4 was always coming, and came. A capture the opponent can take back
       // is an exchange in progress; "what if they don't recapture" is not a
       // threat the student built, it is the opponent forgetting a move.
-      if (pendingRecapture(s.fenBefore, s.san, s.fenAfter)) continue;
+      // ONE FLUX RULE (`boardState.inFluxAfter`, U2): Learn's door, Review's
+      // board veto and this probe read the same exchange-in-progress test.
+      if (inFluxAfter(s.fenBefore, s.san) !== null) continue;
       const nullFen = sideToMoveAs(s.fenAfter, studentColorWB);
       if (!nullFen) continue;
       // maxPlies 7 = FOUR of the student's moves out (plies 1,3,5,7) — inside
@@ -6096,17 +6098,6 @@ const PAST_VERB: Record<string, string> = {
   offers: 'offered', offer: 'offered', grab: 'grabbed', settle: 'settled',
   meet: 'met', walk: 'walked', drop: 'dropped', recapture: 'recaptured', break: 'broke',
 };
-
-/** The student's move captured, and the opponent can take back on that square
- *  right now — an exchange still in progress. Pure chess.js. */
-export function pendingRecapture(fenBefore: string, san: string, fenAfter: string): boolean {
-  try {
-    const mv = new Chess(fenBefore).move(san);
-    if (!mv?.captured) return false;
-    const after = new Chess(fenAfter);
-    return after.moves({ verbose: true }).some((m) => m.to === mv.to && !!m.captured);
-  } catch { return false; }
-}
 
 const PROJECTION_MARKER = /(here's how you take advantage|the line runs|why [nbrqko][\w+#=-]* was better|why [a-h][\w+#=-]* was better|if they (sit still|try to run)|the engine confirms it|there's a deeper threat|deeper threat brewing|the real threat here|and the real threat|you're now threatening|now threatening|the pattern to spot|and once your opponent started slipping|watch out|careful)/i;
 // Verbs converted ONLY in verb position (after a subject or in a comma-series),

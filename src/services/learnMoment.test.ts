@@ -97,5 +97,30 @@ describe('the Learn page names the decision from the grade, never on a recapture
     // …and only the name: the rest of the opening's teaching stays quiet.
     expect(decideTurn([name, plan], '', undefined, null, null, false, turn(null, null)).spoke).toEqual(['opening']);
   });
+
+  // THE IDENTITY IS NOT SMUGGLED IN WITH THE NAME (2026-11-21): the page glued
+  // the opening's identity onto the name's line, and the name's lane speaks on
+  // any turn — so every calm book move that named the opening also said what
+  // the opening is about, which the door holds on a quiet turn. The identity
+  // is its own fact on its own lane, and the door decides it.
+  it('the identity is its own fact: held on a quiet turn beside the name', () => {
+    const name = fact('opening', 'This game is the Scandinavian Defense.', [], { claims: ['opening-name:Scandinavian Defense'] });
+    const identity = fact('openingIdentity', 'Black hits the e4-pawn at once and brings the queen out early.', ['d5', 'e4']);
+    let spoke: string[] = [];
+    const why = heldWhy(() => { spoke = decideTurn([name, identity], '', undefined, null, null, false, turn(null, null)).spoke; });
+    expect(spoke).toEqual(['opening']);
+    expect(why.openingIdentity).toBe('quiet-turn');
+    // The row names which lanes spoke under the any-moment rule, so the audit
+    // reads the rule off the door instead of keeping its own copy.
+    const rows: LearnTurnRow[] = [];
+    const off = onLearnTurn((r) => rows.push(r));
+    try { decideTurn([name, identity], '', undefined, null, null, false, turn(null, null)); } finally { off(); }
+    expect(rows.at(-1)?.spokeAnyMoment).toEqual(['opening']);
+    const page = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
+    // The name's line is the name alone, never the name with a story read glued on.
+    expect(page).toMatch(/announceLine = announce;/);
+    expect(page).not.toMatch(/announceLine = `\$\{announce\} /);
+    expect(page).not.toMatch(/identityRidesName/);
+  });
 });
 

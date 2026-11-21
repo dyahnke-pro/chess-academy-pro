@@ -91,7 +91,7 @@ import { limitStrengthElo } from '../../services/engineConstants';
 import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { resolveConfig as resolvePlayConfig, ratedPlayMove } from '../../services/coachPlaySession';
 import { detectOpening, getOpeningMoves, resolveOpeningEntry } from '../../services/openingDetectionService';
-import { stripSanAnnotations } from '../../data/openingWalkthroughs/validate';
+import { askedLineDeparture } from '../../services/askedLineDeparture';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { uciMoveToSan, uciLinesToSan } from '../../utils/uciToSan';
 import { db } from '../../db/schema';
@@ -988,31 +988,15 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       canonicalName = entry.canonicalName;
     }
     if (allEntries.length === 0) return;
-    // Replay user's path against the book PGN. First divergence wins.
-    let divergenceIdx = -1;
-    for (let i = 0; i < playedMoves.length; i += 1) {
-      if (i >= allEntries.length) break;
-      // Same-side moves only: book[i] is the i-th ply played from the
-      // start position; gameState.moves[i] is also the i-th ply.
-      if (
-        stripSanAnnotations(playedMoves[i]) !==
-        stripSanAnnotations(allEntries[i])
-      ) {
-        divergenceIdx = i;
-        break;
-      }
-    }
-    // Only fire if the JUST-played move (last entry) is the divergence.
-    // Prior moves matched the book; this one breaks it.
-    if (
-      divergenceIdx === playedMoves.length - 1 &&
-      divergenceIdx >= 0 &&
-      divergenceIdx < allEntries.length
-    ) {
+    // THE ONE DEPARTURE COMPUTER (`askedLineDeparture`, read by Learn too):
+    // only when the JUST-played move is the first to leave the line.
+    const left = askedLineDeparture(playedMoves, allEntries, intent.color === 'white' ? 'w' : 'b', playedMoves.length - 1);
+    if (left) {
       offBookFiredRef.current = true;
-      const movedSan = playedMoves[divergenceIdx];
-      const bookSan = allEntries[divergenceIdx];
-      const moveNumber = Math.floor(divergenceIdx / 2) + 1;
+      const divergenceIdx = left.ply;
+      const movedSan = left.played;
+      const bookSan = left.book;
+      const moveNumber = left.moveNumber;
       const dotted = divergenceIdx % 2 === 0 ? `${moveNumber}.` : `${moveNumber}…`;
       const whoMoved = divergenceIdx % 2 === 0 ? 'White' : 'Black';
       const studentMoved = whoMoved.toLowerCase() === intent.color;

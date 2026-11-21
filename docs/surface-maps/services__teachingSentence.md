@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**945 lines · 70 exports · 31 importers · 6 tests · 35 audits**
+**960 lines · 71 exports · 33 importers · 7 tests · 35 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,6 +22,8 @@
 
 ## Who calls in
 
+- `src/components/Coach/CoachTeachPage.tsx`
+- `src/services/askedLineDeparture.test.ts`
 - `src/services/boardComputers.ts`
 - `src/services/boardReadFacts.ts`
 - `src/services/boardUrgency.ts`
@@ -803,8 +805,15 @@
 - `src/services/teachingSentence.test.ts:66`
 - `src/services/teachingSentence.test.ts:67`
 
+### `renderAskedLineLeft` (function) — 4 call sites
+- `src/components/Coach/CoachTeachPage.tsx:9720`
+- `src/services/askedLineDeparture.test.ts:35`
+- `src/services/askedLineDeparture.test.ts:39`
+- `src/services/askedLineDeparture.test.ts:43`
+
 ## Tests
 
+- `src/services/askedLineDeparture.test.ts`
 - `src/services/planOfTheBoard.test.ts`
 - `src/services/readDecider.picture.test.ts`
 - `src/services/readDecider.speaks.test.ts`

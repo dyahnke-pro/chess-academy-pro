@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**306 lines · 13 exports · 19 importers · 15 tests · 1 audits**
+**311 lines · 13 exports · 19 importers · 15 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -82,9 +82,10 @@
 ### `LearnDecision` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `onLearnTurn` (function) — 18 call sites
+### `onLearnTurn` (function) — 19 call sites
 - `src/services/appAuditor.ts:2319`
 - `src/services/learnMoment.test.ts:32`
+- `src/services/learnMoment.test.ts:116`
 - `src/services/learnPhaseFocus.test.ts:112`
 - `src/services/learnTurnDoor.mission.test.ts:34`
 - `src/services/learnTurnDoor.mission.test.ts:67`
@@ -103,8 +104,8 @@
 - `src/services/verdictTurnGrade.test.ts:67`
 
 ### `emitLearnTurn` (function) — 2 call sites
-- `src/services/learnTurnDoor.ts:1521`
-- `src/services/learnTurnDoor.ts:1551`
+- `src/services/learnTurnDoor.ts:1522`
+- `src/services/learnTurnDoor.ts:1552`
 
 ## Tests
 

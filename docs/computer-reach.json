@@ -1,47 +1,48 @@
 {
  "about": "Which teaching computer reaches which surface, by a static call path from each surface root (scripts/computer-reach.mjs; the list is scripts/computer-reach/computers.json). learn: yes = through the focus runner, door = computed in a Learn turn and decided by Learn's turn door (spoken when the door keeps it); a door-only row says why in `door` (an adapter of computers the other surfaces read, or Learn-only by design).",
  "graph": {
-  "files": 1773,
-  "nodes": 18134
+  "files": 1774,
+  "nodes": 18136
  },
  "totals": {
-  "computers": 343,
-  "offTheSixSurfaces": 28,
-  "learnDoorOnly": 17,
-  "learnDoorOnlyUnexplained": 0,
+  "computers": 344,
+  "offTheSixSurfaces": 29,
+  "learnDoorOnly": 18,
+  "learnDoorOnlyUnexplained": 1,
   "otherScreensOnly": 10,
   "dead": 1,
   "missingFromCode": 0,
   "surfaces": {
    "learn": {
     "yes": 31,
-    "door": 227,
+    "door": 228,
     "no": 85
    },
    "review": {
     "yes": 240,
-    "no": 103
+    "no": 104
    },
    "lesson": {
     "yes": 183,
-    "no": 160
+    "no": 161
    },
    "chat": {
     "yes": 228,
-    "no": 115
+    "no": 116
    },
    "tapped": {
     "yes": 192,
-    "no": 151
+    "no": 152
    },
    "tactics": {
     "yes": 199,
-    "no": 144
+    "no": 145
    }
   }
  },
  "offTheSixSurfaces": {
   "learnDoorOnly": [
+   "services/askedLineDeparture.ts#askedLineDeparture",
    "services/backwardLook.ts#backwardLook",
    "services/danyaBehaviors.ts#detectBehaviors",
    "services/drillReasons.ts#(module)",
@@ -181,6 +182,25 @@
     "campaign"
    ],
    "where": "components/Coach/CoachTeachPage.tsx#CoachTeachPage"
+  },
+  {
+   "key": "services/askedLineDeparture.ts#askedLineDeparture",
+   "name": "askedLineDeparture (the game left the asked line)",
+   "file": "services/askedLineDeparture.ts",
+   "fn": "askedLineDeparture",
+   "says": "Where the game first left the line the student asked to play: 'Your move leaves the Najdorf on move 6. The line plays Be3 there.' Said once, in Learn's opening lane; Play's plan tracker reads the same computer.",
+   "origin": "map",
+   "learn": "door",
+   "review": "no",
+   "lesson": "no",
+   "chat": "no",
+   "tapped": "no",
+   "tactics": "no",
+   "app": true,
+   "other": [
+    "playSilent"
+   ],
+   "where": "components/Coach/CoachGamePage.tsx#CoachGamePage"
   },
   {
    "key": "services/attackLibrary.ts#knownAttack",
