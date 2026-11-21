@@ -275,7 +275,7 @@ export const googleProvider: TtsProvider = {
     // Personality goes through SSML on voices that accept it, and through
     // audioConfig on the ones that don't — same intent, different transport.
     // Applying both would double the effect.
-    const prosody = useSsml ? undefined : chirp3ProsodyFor(req.style, req.prosodyMode);
+    const prosody = useSsml ? undefined : chirp3ProsodyFor(req.style, req.prosodyMode, req.paced);
 
     let res = await postSynthesize(payload, voice, useSsml, prosody);
 

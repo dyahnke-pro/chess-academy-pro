@@ -220,7 +220,12 @@ export function getTtsUrl(text: string, voice: string, useSsml = true, style?: s
   // front. Each line is re-billed once, the first time it is actually played
   // again — pay-as-played, proportional to real listening rather than to corpus
   // size. Still: ONE deliberate bump, never a casual one (the gen-rev cost rule).
-  return `${base}/api/tts?text=${encodeURIComponent(text)}&voice=${encodeURIComponent(voice)}${ssmlParam}${styleParam}${prosodyParam}&v=3`;
+  //
+  // v=4 (David 2026-11-21: "increase voice speed JUST A TOUCH"): the server
+  // speaks v=4 clips at the coach's pace (`COACH_PACE`, +5 rate points). The
+  // pace is not in the cache key either, so the key changes once more — the
+  // same pay-as-played re-bill, never a mix of two speeds in one lesson.
+  return `${base}/api/tts?text=${encodeURIComponent(text)}&voice=${encodeURIComponent(voice)}${ssmlParam}${styleParam}${prosodyParam}&v=4`;
 }
 
 /** Lines at or under this length are synthesised whole — measured 2026-10-02,

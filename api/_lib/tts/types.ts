@@ -34,6 +34,10 @@ export interface SynthesisRequest {
   style?: string;
   /** '#25' decisive-beat prosody spike. */
   prosodyMode?: string;
+  /** REQUIRED: the coach's pace applies (`COACH_PACE`). True only for a clip
+   *  URL at `v=4` or later, so a CDN-cached clip at the old pace is never
+   *  mixed with a new one in one lesson. */
+  paced: boolean;
 }
 
 /**

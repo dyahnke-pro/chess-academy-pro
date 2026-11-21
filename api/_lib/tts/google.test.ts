@@ -245,13 +245,13 @@ describe('chirp3 personality prosody', () => {
     // He A/B-ed the shipping voice against slowed variants and picked the
     // unmodified one. voiceService sends NO style for the default personality,
     // so `undefined` must resolve to the same thing.
-    expect(chirp3ProsodyFor(undefined)).toEqual({ speakingRate: 1, volumeGainDb: 0 });
-    expect(chirp3ProsodyFor('default')).toEqual({ speakingRate: 1, volumeGainDb: 0 });
+    expect(chirp3ProsodyFor(undefined, undefined, false)).toEqual({ speakingRate: 1, volumeGainDb: 0 });
+    expect(chirp3ProsodyFor('default', undefined, false)).toEqual({ speakingRate: 1, volumeGainDb: 0 });
   });
 
   it('gives each personality a genuinely different register', () => {
     const styles = ['soft', 'default', 'edgy', 'drill-sergeant'];
-    const rates = styles.map((s) => chirp3ProsodyFor(s).speakingRate);
+    const rates = styles.map((s) => chirp3ProsodyFor(s, undefined, false).speakingRate);
     // Under Polly these were all identical — the picker moved a dead dial.
     expect(new Set(rates).size).toBe(styles.length);
     // soft < default < edgy < drill-sergeant
@@ -259,24 +259,32 @@ describe('chirp3 personality prosody', () => {
   });
 
   it('slows a critical moment OVER the personality base', () => {
-    expect(chirp3ProsodyFor('default', 'critical').speakingRate).toBeCloseTo(0.92, 3);
-    expect(chirp3ProsodyFor('edgy', 'critical').volumeGainDb).toBe(chirp3ProsodyFor('edgy').volumeGainDb);
+    expect(chirp3ProsodyFor('default', 'critical', false).speakingRate).toBeCloseTo(0.92, 3);
+    expect(chirp3ProsodyFor('edgy', 'critical', false).volumeGainDb).toBe(chirp3ProsodyFor('edgy', undefined, false).volumeGainDb);
   });
 
   it('composes the #25 spike OVER the personality base, never as a new register', () => {
-    expect(chirp3ProsodyFor('default', 'spike').speakingRate).toBeCloseTo(1.08, 3);
-    expect(chirp3ProsodyFor('edgy', 'spike').speakingRate).toBeCloseTo(1.13, 3);
+    expect(chirp3ProsodyFor('default', 'spike', false).speakingRate).toBeCloseTo(1.08, 3);
+    expect(chirp3ProsodyFor('edgy', 'spike', false).speakingRate).toBeCloseTo(1.13, 3);
     // Volume is the personality's, untouched by the spike.
-    expect(chirp3ProsodyFor('edgy', 'spike').volumeGainDb).toBe(chirp3ProsodyFor('edgy').volumeGainDb);
+    expect(chirp3ProsodyFor('edgy', 'spike', false).volumeGainDb).toBe(chirp3ProsodyFor('edgy', undefined, false).volumeGainDb);
   });
 
   it('clamps to Google’s accepted range and survives an unknown style', () => {
     for (const s of ['nonsense', '', 'DEFAULT']) {
-      const p = chirp3ProsodyFor(s);
+      const p = chirp3ProsodyFor(s, undefined, false);
       expect(p.speakingRate).toBeGreaterThanOrEqual(0.25);
       expect(p.speakingRate).toBeLessThanOrEqual(2);
     }
     // An unknown style falls back to the approved default rather than 400ing.
-    expect(chirp3ProsodyFor('nonsense')).toEqual({ speakingRate: 1, volumeGainDb: 0 });
+    expect(chirp3ProsodyFor('nonsense', undefined, false)).toEqual({ speakingRate: 1, volumeGainDb: 0 });
+  });
+
+  it('the coach\'s pace: +5 rate points on v=4 clips only, every style (David 2026-11-21)', () => {
+    expect(chirp3ProsodyFor(undefined, undefined, true).speakingRate).toBeCloseTo(1.05, 3);
+    expect(chirp3ProsodyFor('soft', undefined, true).speakingRate).toBeCloseTo(0.97, 3);
+    expect(chirp3ProsodyFor('default', 'critical', true).speakingRate).toBeCloseTo(0.97, 3);
+    // An old clip URL keeps the pace it was cached at.
+    expect(chirp3ProsodyFor(undefined, undefined, false).speakingRate).toBe(1);
   });
 });

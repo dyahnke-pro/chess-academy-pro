@@ -194,7 +194,7 @@ export function selectProviders(): TtsProvider[] {
   return chain;
 }
 
-async function synthesize(text: string, voice: string, req: Request, useSsml: boolean, style?: string, prosodyMode?: string): Promise<Response> {
+async function synthesize(text: string, voice: string, req: Request, useSsml: boolean, style: string | undefined, prosodyMode: string | undefined, paced: boolean): Promise<Response> {
   const cors = getCorsHeaders(req);
   const providers = selectProviders();
 
@@ -273,6 +273,7 @@ async function synthesize(text: string, voice: string, req: Request, useSsml: bo
     ssml: useSsml,
     style,
     prosodyMode,
+    paced,
   };
 
   let lastError: TtsProviderError | null = null;
@@ -431,7 +432,9 @@ export default async function handler(req: Request): Promise<Response> {
         });
       }
 
-      return synthesize(text, voice, req, useSsml, style, prosodyMode);
+      // The clip URL's version: v=4 clips carry the coach's pace (COACH_PACE).
+      const paced = Number(url.searchParams.get('v') ?? '0') >= 4;
+      return synthesize(text, voice, req, useSsml, style, prosodyMode, paced);
     }
 
     if (req.method === 'POST') {
@@ -444,7 +447,7 @@ export default async function handler(req: Request): Promise<Response> {
       const text = body.text?.trim() ?? '';
       const voice = body.voice ?? 'ruth';
       const useSsml = body.ssml === true;
-      return synthesize(text, voice, req, useSsml, body.style, body.prosody);
+      return synthesize(text, voice, req, useSsml, body.style, body.prosody, false);
     }
 
     return new Response('Method not allowed', { status: 405, headers: cors });

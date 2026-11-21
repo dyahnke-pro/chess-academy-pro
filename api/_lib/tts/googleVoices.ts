@@ -134,6 +134,14 @@ const CHIRP3_PROSODY_BY_STYLE: Record<string, Chirp3Prosody> = {
   'drill-sergeant': { speakingRate: 1.08, volumeGainDb: 3 },
 };
 
+/** THE COACH'S PACE (David 2026-11-21: "increase voice speed JUST A TOUCH,
+ *  like only a little bit"): +5 rate points on every style, applied on the
+ *  server so every playback path (stream, element, Web Audio buffer) plays the
+ *  same natural voice — a client playbackRate would raise the pitch on the
+ *  buffer path. Only for `paced` requests (clip URL v=4+): a v=3 clip cached
+ *  at the old pace must never sit beside a new one. */
+export const COACH_PACE = 0.05;
+
 /** Hard bounds Google enforces — clamp rather than let a bad style 400 us. */
 const RATE_MIN = 0.25;
 const RATE_MAX = 2.0;
@@ -146,8 +154,9 @@ const RATE_MAX = 2.0;
  * register. The SSML path also lifts pitch; Chirp3 can't, so the spike is
  * rate-only there.
  */
-export function chirp3ProsodyFor(style?: string, prosodyMode?: string): Chirp3Prosody {
-  const base = CHIRP3_PROSODY_BY_STYLE[style ?? 'default'] ?? CHIRP3_PROSODY_BY_STYLE.default;
+export function chirp3ProsodyFor(style: string | undefined, prosodyMode: string | undefined, paced: boolean): Chirp3Prosody {
+  const style0 = CHIRP3_PROSODY_BY_STYLE[style ?? 'default'] ?? CHIRP3_PROSODY_BY_STYLE.default;
+  const base = { ...style0, speakingRate: style0.speakingRate + (paced ? COACH_PACE : 0) };
   // `spike` lifts the decisive payoff; `critical` slows a moment the computer
   // judged critical, so the student hears it land (David 2026-10-18).
   const rate = prosodyMode === 'spike' ? base.speakingRate + 0.08
