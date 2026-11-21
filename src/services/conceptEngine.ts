@@ -122,7 +122,7 @@ const MATCHUP_PRINCIPLE: Record<MatchupClass, Register | null> = {
   'bishop-vs-knight': { full: 'bishop versus knight: the bishop wants open lines and both wings, the knight wants an outpost and a fixed structure.', short: 'Bishop vs knight — open vs outpost.' },
   'knight-endgame': { full: 'a knight ending plays much like a pawn ending — king activity and the passed pawn decide it.', short: 'Knight ending — like pawns.' },
   'minor-endgame': { full: 'a minor-piece ending goes to activity, the better piece, and a centralized king.', short: 'Minor ending — activity and king.' },
-  'rook-and-minor': { full: 'a rook-and-minor ending is won slowly: keep the pieces active and pile on the weakest pawn.', short: 'Rook and minor — stay active.' },
+  'rook-and-minor': { full: 'a rook-and-minor ending turns on activity: keep the pieces active and pile on the weakest pawn.', short: 'Rook and minor — stay active.' },
   'major-piece': { full: 'a major-piece ending turns on activity, the seventh rank, and king safety — a loose king invites perpetual check.', short: 'Major pieces — take the seventh.' },
   'mating-material': { full: 'this is enough to force mate — drive the lone king to the edge and box it in with king and piece together.', short: 'Force mate — king to the edge.' },
   complex: null,

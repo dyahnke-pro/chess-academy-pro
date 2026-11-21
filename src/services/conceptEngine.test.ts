@@ -341,3 +341,11 @@ describe('the endgame computers that had no reader (WO-STORY-MATRIX-01, 2026-10-
     expect(c?.full).toContain('usually a draw');
   });
 });
+
+describe('the rook-and-minor principle is true from both seats (Danya board, how to survive an attack #0: "won slowly" said to the side a pawn down)', () => {
+  it('says no win, whichever side hears it', async () => {
+    const { renderMatchupConcept } = await import('./conceptEngine');
+    const c = renderMatchupConcept({ cls: 'rook-and-minor', label: 'rook and minor ending' } as never, false);
+    expect(c?.full).toBe('A rook-and-minor ending turns on activity: keep the pieces active and pile on the weakest pawn.');
+  });
+});
