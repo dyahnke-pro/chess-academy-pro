@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
-import { deriveNextPlans } from './nextPlans';
+import { deriveNextPlanFacts, deriveNextPlans } from './nextPlans';
 describe('findWorstPlacedPiece — undeveloped is not misplaced (walk 5, 2026-09-23)', () => {
   it('at move 10 the bishop still on c8 is not "your worst piece"', async () => {
     const { Chess } = await import('chess.js');
@@ -71,5 +71,17 @@ describe('two passed pawns: the plan runs the better one, never the first in the
     const { deriveNextPlanFacts } = await import('./nextPlans');
     const plans = deriveNextPlanFacts('8/8/8/1k6/7P/8/P7/6K1 w - - 0 40', 'w', { namesStudentMoves: true });
     expect(plans.find((p) => p.kind === 'passer')?.text).toMatch(/passed pawn on h4/);
+  });
+});
+
+describe('a passer whose push drops it is no plan to promote (Danya have-check 2026-11-19)', () => {
+  it('the isolated d5 and c6 pawns are not "pushes from queening"', () => {
+    for (const fen of [
+      'r1b2rk1/pp4pp/3b4/3p2q1/8/1P1Q1P2/PB1N2PP/R3R2K b - - 0 18', // the double attack #2: their queen covers d4
+      'r4rk1/p3pp1p/b1p3p1/3nq3/8/6P1/P2BPPBP/2RQR1K1 b - - 0 17', // the anatomy of a brilliancy #2: their rook covers c5
+    ]) {
+      const kinds = deriveNextPlanFacts(fen, 'b', { namesStudentMoves: true }).map((p) => p.kind);
+      expect(kinds).not.toContain('passer');
+    }
   });
 });
