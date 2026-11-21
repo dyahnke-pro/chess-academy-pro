@@ -4453,7 +4453,12 @@ export const BOARD_COMPUTERS = {
       // A count that says the piece has to move is the tempo the move that
       // attacked it gained: one claim (`ideaClaim('tempo')`), said once
       // (composerSaysOnce, g4 against the bishop on f5).
-      return fact({ key: `count:${text}`, claims: [`count:${fen.split(' ')[0]}`, ...reads.filter((r) => r.tempo).map((r) => ideaClaim('tempo', [r.square]))], text, proof: NO_PROOF.description,
+      // A piece the count finds with NO guard is Review's loose piece ("their
+      // knight now hits your bishop, and nothing guards it", `loose:<sq>`):
+      // one claim, so a turn says it once (Alapin ply 22, …Nd5 against the
+      // bishop on f4: the count and the loose line both spoke).
+      const looseClaims = reads.filter((r) => r.defenders === 0).map((r) => `loose:${r.square}`);
+      return fact({ key: `count:${text}`, claims: [`count:${fen.split(' ')[0]}`, ...reads.filter((r) => r.tempo).map((r) => ideaClaim('tempo', [r.square])), ...looseClaims], text, proof: NO_PROOF.description,
         // Every piece the count names is lit (a named square is a marked one).
         squares: reads.map((r) => r.square), stakes: null,
         seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen });

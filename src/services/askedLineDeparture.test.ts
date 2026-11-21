@@ -31,35 +31,52 @@ describe('askedLineDeparture', () => {
   });
 });
 
-describe('the spoken line', () => {
-  it('Learn never names the student\'s own move; it names where and what the line plays', () => {
-    const mine = renderAskedLineLeft({ name: 'Najdorf', seat: 'student', played: 'g6', book: 'a6', moveNumber: 5, ply: 9 });
-    expect(mine).not.toMatch(/\bg6\b/);
-    expect(mine).toMatch(/Najdorf on move 5/);
-    expect(mine).toMatch(/a6/);
-    const theirs = renderAskedLineLeft({ name: 'Najdorf', seat: 'opponent', played: 'f3', book: 'Be3', moveNumber: 6, ply: 10 });
-    expect(theirs).toMatch(/\bf3\b/);
-    expect(theirs).not.toMatch(/\b(we|our|us)\b/i);
-    // Rotated on the ply, never random.
-    expect(renderAskedLineLeft({ name: 'Najdorf', seat: 'student', played: 'g6', book: 'a6', moveNumber: 5, ply: 10 })).not.toBe(mine);
+// Engine-read (Stockfish 18, depth 18, White's view): after 1.e4 e5 2.Nf3 Nc6
+// 3.Bc4, …Nf6 is +30 and …f6 is +161 — leaving the Two Knights with …f6 costs
+// Black 131. In the Najdorf after 5.Nc3, …a6 is +40 and …g6 +66 — 26, a fair
+// sideline.
+const TWO_KNIGHTS = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'd3'];
+const F6 = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'f6'];
+
+describe('the spoken line: only when leaving the line hurt (David 2026-11-21)', () => {
+  it('a costly departure says why the line\'s move was better, and never names the student\'s move', () => {
+    const r = askedLineLeft({ name: 'Two Knights', pgn: TWO_KNIGHTS.join(' ') }, F6, 'b', F6.length - 1, 131);
+    expect(r?.text).toMatch(/Two Knights on move 3/);
+    expect(r?.text).toMatch(/Nf6/);
+    expect(r?.text).toMatch(/costs you/);
+    expect(r?.text).not.toMatch(/\bf6\b(?!.*Nf6)|…f6/);
+    expect(r?.text).not.toMatch(/\b(we|our|us)\b/i);
+    expect(r?.squares.length).toBeGreaterThan(0);
+  });
+  it('a cheap departure, an unpriced move and the opponent leaving the line say nothing', () => {
+    const g6 = ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'g6'];
+    expect(askedLineLeft({ name: 'My Najdorf', pgn: NAJDORF.join(' ') }, g6, 'b', g6.length - 1, 26)).toBeNull();
+    expect(askedLineLeft({ name: 'Two Knights', pgn: TWO_KNIGHTS.join(' ') }, F6, 'b', F6.length - 1, null)).toBeNull();
+    const theirs = ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6', 'f3'];
+    expect(askedLineLeft({ name: 'My Najdorf', pgn: NAJDORF.join(' ') }, theirs, 'b', theirs.length - 1, 300)).toBeNull();
+  });
+  it('rotated on the ply, never random', () => {
+    const d = { name: 'Two Knights', book: 'Nf6', job: 'it hits your pawn on e4', left: null, moveNumber: 3 };
+    expect(renderAskedLineLeft({ ...d, ply: 5 })).not.toBe(renderAskedLineLeft({ ...d, ply: 6 }));
   });
 
-  it('Learn and Play both read the one asked-line path; neither surface calls the computer', () => {
+  it('Learn and Play both read the one asked-line path, with the move\'s price; neither surface calls the computer', () => {
     const learn = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
-    expect(learn).toMatch(/askedLineLeft\(asked, history, studentCC/);
+    expect(learn).toMatch(/askedLineLeft\(asked, history, studentCC, Math\.max\(0, history\.length - 2\), args\.slipCp\)/);
     expect(learn).toMatch(/lane: 'opening' as const, computer: 'askedLineDeparture'/);
     const play = readFileSync('src/components/Coach/CoachGamePage.tsx', 'utf8');
-    expect(play).toMatch(/askedLineLeft\(intent, playedMoves/);
-    expect(play).not.toMatch(/let divergenceIdx = -1/);
-    for (const page of [learn, play]) expect(page).not.toMatch(/askedLineDeparture\(/);
+    expect(play).toMatch(/askedLineLeft\(intent, played, [^)]*movePriced \? evalLoss : null\)/);
+    expect(play).not.toMatch(/let divergenceIdx = -1|Heads up — /);
+    for (const page of [learn, play]) expect(page).not.toMatch(/askedLineDeparture\(|renderAskedLineLeft/);
   });
 
   it('the asked line is the launched PGN when there is one, else the named opening', () => {
-    const played = ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'g6'];
-    const byPgn = askedLineLeft({ name: 'My Najdorf', pgn: NAJDORF.join(' ') }, played, 'b', played.length - 1);
-    expect(byPgn).toEqual({ departure: { ply: 9, played: 'g6', book: 'a6', moveNumber: 5, seat: 'student' }, canonicalName: 'My Najdorf' });
-    const byName = askedLineLeft({ name: 'Sicilian Defense: Najdorf Variation' }, played, 'b', played.length - 1);
-    expect(byName?.departure.book).toBe('a6');
-    expect(askedLineLeft({ name: 'no such opening zzz' }, played, 'b', 0)).toBeNull();
+    const byPgn = askedLineLeft({ name: 'My Two Knights', pgn: TWO_KNIGHTS.join(' ') }, F6, 'b', F6.length - 1, 131);
+    expect(byPgn?.departure).toEqual({ ply: 5, played: 'f6', book: 'Nf6', moveNumber: 3, seat: 'student' });
+    expect(byPgn?.canonicalName).toBe('My Two Knights');
+    expect(askedLineLeft({ name: 'no such opening zzz' }, F6, 'b', 0, 131)).toBeNull();
+    // With no job on the board for the line's move, nothing is said (never bare).
+    const qb6 = ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'Qb6'];
+    expect(askedLineLeft({ name: 'My Najdorf', pgn: NAJDORF.join(' ') }, qb6, 'b', qb6.length - 1, 200)).toBeNull();
   });
 });

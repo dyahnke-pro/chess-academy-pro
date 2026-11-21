@@ -3033,22 +3033,30 @@ function* reviewSegmentSteps(
         }
         {
           // The loose piece belongs to the side that did not move.
-          const looseSq = f0.tag === 'does' || f0.tag === 'move-job' ? looseSquareOf(f0) : null;
+          // The count's unguarded piece is a loose piece said too (its
+          // `loose:<sq>` claim, Alapin ply 22): it counts toward the habit.
+          const looseSq = f0.tag === 'does' || f0.tag === 'move-job' || f0.tag === 'count' ? looseSquareOf(f0) : null;
           if (looseSq) {
-            const owner: 'your' | 'their' = moverColor === playerColor ? 'their' : 'your';
+            // The count reads only the opponent's pieces (`attackerDefenderCount`
+            // is offensive), whoever moved.
+            const owner: 'your' | 'their' = f0.tag === 'count' || moverColor === playerColor ? 'their' : 'your';
             const n = looseCount(owner);
             if (n >= 2) continue;
             // A move the grader called sound is never a habit's evidence
             // (`soundPlies`, the habit computer's own rule): a piece left
-            // loose by a sacrifice that holds is a fact, not a habit.
-            if (n === 1 && !soundPlies.has(m.ply - 1)) {
+            // loose by a sacrifice that holds is a fact, not a habit — it is
+            // said, and it does not count toward the habit (Gotham–Jelena: two
+            // sound plies reached the count of two, the habit was never said
+            // and the third loose piece went silent).
+            const sound = soundPlies.has(m.ply - 1);
+            if (n === 1 && !sound) {
               const habit = owner === 'their'
                 ? "That's the second piece they've left with no guard this game. After every move of theirs, look first for what it leaves loose."
                 : "That's the second piece you've left with no guard this game. Before every move, check what it leaves unguarded.";
               // The producer's own tail pattern, never a copy of its words.
               f = reworded(f0, `${f0.text.replace(INFLUENCE_LOOSE_TAIL_RE, '')} ${habit}`);
             }
-            keep(f, () => { looseSaid.add(`${owner}#${n + 1}`); }, f0);
+            keep(f, () => { if (!sound) looseSaid.add(`${owner}#${n + 1}`); }, f0);
             continue;
           }
         }

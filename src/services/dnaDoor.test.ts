@@ -32,8 +32,8 @@ describe('the DNA outline at the door', () => {
       { lane: 'movePoint', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'The knight on f3 attacks the pawn on e5.', fen: FEN, squares: ['f3', 'e5'] },
     ]);
     const s = d.pkg.spoken;
-    expect(s.indexOf('attacks the pawn')).toBeLessThan(s.indexOf('short of a defender'));
-    expect(s.indexOf('Their knight on c6')).toBeLessThan(s.indexOf('attacks the pawn'));
+    expect(s.indexOf('attacks the e-pawn')).toBeLessThan(s.indexOf('short of a defender'));
+    expect(s.indexOf('Their knight on c6')).toBeLessThan(s.indexOf('attacks the e-pawn'));
   });
 });
 

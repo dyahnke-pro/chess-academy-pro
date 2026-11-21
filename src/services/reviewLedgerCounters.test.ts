@@ -30,10 +30,18 @@ const at = (segs: ReviewMoveSegment[], ply: number): string => segs.find((s) => 
 
 describe('the loose-piece count rides the seed', () => {
   it('a loose piece of theirs the walk already named makes the next one the habit, not the bare formula', () => {
-    expect(at(build(null), 22)).toMatch(/now (?:attacks|hits) their dark-squared bishop(?:, and nothing guards it|, which has no guard|, which is loose)/);
+    // …Nd5 hits the bishop on f4, which nothing guards. The count and the
+    // influence line make one claim (`loose:f4`): the turn says it once
+    // (2026-11-21 — both spoke, "one attacks it and nothing guards it" and
+    // "Your knight now hits their dark-squared bishop, and nothing guards it").
+    const unguarded = (t: string): number => (t.match(/nothing guards it|which has no guard|which is loose|no defenders?\b/g) ?? []).length;
+    const fresh = at(build(null), 22);
+    expect(fresh).toMatch(/their bishop: one attacks it and nothing guards it/);
+    expect(unguarded(fresh)).toBe(1);
+    expect(fresh).not.toMatch(/That's the second piece/);
     const seeded = at(build(seedOf(21, ['l:their#1'])), 22);
-    expect(seeded).not.toMatch(/nothing guards it|which has no guard|which is loose/);
-    expect(seeded).toMatch(/That's the second piece they've left with no guard this game\. After every move of theirs/);
+    expect(unguarded(seeded)).toBe(1);
+    expect(seeded).toMatch(/nothing guards it[^.]*\. That's the second piece they've left with no guard this game\. After every move of theirs/);
   }, 120000);
 });
 

@@ -923,7 +923,8 @@ export function renderPlanHeld(h: { piece: string | null; from: string | null; a
  *  takes the open e-file"): the move is named once a turn; a later sentence
  *  that leads with it again says "it". Only a sentence HEAD — a move named
  *  inside a sentence ("Bxb7+ was stronger than …") keeps its name. */
-export function oneMoveHead(text: string, san: string): string {
+export function oneMoveHead(text: string, san: string | undefined): string {
+  if (!san) return text;
   const bare = san.replace(/^…/, '').replace(/[+#!?]+$/, '');
   if (bare.length < 2) return text;
   const esc = bare.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -953,19 +954,18 @@ export function oneMoveHead(text: string, san: string): string {
   }).join(' ');
 }
 
-/** THE GAME LEFT THE ASKED LINE (`askedLineDeparture`): said once, with where
- *  and what the line plays there. The student's own move is never named in
- *  Learn ("your move"); theirs is. Rotated on the departure ply. */
-export function renderAskedLineLeft(d: { name: string; seat: 'student' | 'opponent'; played: string; book: string; moveNumber: number; ply: number }): string {
-  return d.seat === 'student'
-    ? rotateStem([
-      `Your move leaves the ${d.name} on move ${d.moveNumber}. The line plays ${d.book} there.`,
-      `With your move the game is out of the ${d.name} on move ${d.moveNumber}. Its line goes ${d.book} there.`,
-    ], d.ply)
-    : rotateStem([
-      `They leave the ${d.name} on move ${d.moveNumber} with ${d.played}. The line plays ${d.book} there.`,
-      `${d.played} takes the game out of the ${d.name} on move ${d.moveNumber}. Its line goes ${d.book} there.`,
-    ], d.ply);
+/** THE GAME LEFT THE ASKED LINE, AND IT HURT (`openingDetectionService.
+ *  askedLineLeft`): said once, with what the line's move does that the
+ *  student's does not. The student's own move is never named ("your move");
+ *  `job` is the book move's job ("it keeps their knight off b5"), `left` what
+ *  the student's move left undone. Rotated on the departure ply. */
+export function renderAskedLineLeft(d: { name: string; book: string; job: string; left: string | null; moveNumber: number; ply: number }): string {
+  const job = d.job.replace(/ — /g, ': ').replace(/^it /, '');
+  const left = d.left ? ` Your move ${d.left}.` : '';
+  return rotateStem([
+    `Your move leaves the ${d.name} on move ${d.moveNumber}, and it costs you. The line plays ${d.book} there: it ${job}.${left}`,
+    `Leaving the ${d.name} on move ${d.moveNumber} costs you here. Its move was ${d.book}, which ${job}.${left}`,
+  ], d.ply);
 }
 
 /** What a plan's break is for: the pawn it hits ("The break goes at your

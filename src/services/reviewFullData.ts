@@ -320,6 +320,16 @@ export function computeMoveFacets(
     const raw = put(f.computer, f.kind, f.text);
     recSquares(raw, f.squares);
     recStakes(raw, f.stakes);
+    // Its loose piece rides with it (Alapin ply 22: the count's "nothing
+    // guards it" and the influence line's were said in one turn): the
+    // `loose:<sq>` claim is the one Review's loose ledger (`looseSquareOf`)
+    // and the support rule (`supportedFacts`, a description that claims a
+    // loose piece is not a restatement) read. Only that claim: a description
+    // carrying the registry's bookkeeping claims (`delta:0`, `verdict:…`)
+    // would never read as the restatement it is (decision baseline
+    // 2026-11-21: four repeats came back when every claim rode along).
+    const loose = f.claims.filter((c) => c.startsWith('loose:'));
+    if (loose.length) raw.claims = [...(raw.claims ?? []), ...loose];
     return raw as F extends null ? null : ReviewFacet;
   };
   /** A registry fact said under Review's own tag, with everything it carries. */

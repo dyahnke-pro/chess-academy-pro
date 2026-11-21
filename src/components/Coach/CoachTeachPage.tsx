@@ -134,7 +134,6 @@ import { findSiblingExtensionBranches, resolveOpeningEntry } from '../../service
 import { isTheoryLine } from '../../services/bookDeparture';
 import { PLAY_OPENING_RE, readsAsQuestion, resolvePlayName } from '../../coach/ask/playName';
 import { openingAnnouncementForGame, theirOpeningVerdict, openingNameForBoard, spokenOpeningLabel, studentJustLeftBook, warmOpeningBook, learnNameMaySpeak } from '../../services/openingAnnouncement';
-import { renderAskedLineLeft } from '../../services/teachingSentence';
 import { lastMoveCapturedOn, pendingRecapture, landingSquare } from '../../utils/justCaptured';
 import { resolveVoicedWalkthrough, resolveVoicedMatchup } from '../../data/voicedWalkthroughs';
 import { masterclassWalkthroughTree } from '../../services/masterclassWalkthroughAdapter';
@@ -9715,8 +9714,10 @@ export function CoachTeachPage({ mode }: {
       // happened. The asked line is the one the coach replies from.
       const asked = useCoachMemoryStore.getState().intendedOpening;
       if (asked) {
-        const left = askedLineLeft(asked, history, studentCC, Math.max(0, history.length - 2))?.departure ?? null;
-        if (left) leftAskedLine = { text: renderAskedLineLeft({ ...left, name: spokenOpeningLabel(asked.name) }), claims: [`asked-line-left:${asked.name}`] };
+        // Only when leaving it cost the student (`askedLineLeft`): the move's
+        // one price, null when it is not priced yet.
+        const left = askedLineLeft(asked, history, studentCC, Math.max(0, history.length - 2), args.slipCp);
+        if (left) leftAskedLine = { text: left.text, claims: [`asked-line-left:${asked.name}`] };
       }
       // WHAT THE OPENING IS is the story's
       // identity read below — offered every opening move until it is heard.

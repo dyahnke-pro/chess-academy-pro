@@ -964,44 +964,9 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   // opening. One-shot per game so we don't nag every move past the
   // divergence point. User: "D yes!" — highest-enthusiasm upgrade in
   // the Play with Coach helping-hand pass.
+  // The line itself is said from the student's move handler, where the
+  // move's one price is known (`askedLineLeft`: only when leaving it hurt).
   const offBookFiredRef = useRef(false);
-  useEffect(() => {
-    if (offBookFiredRef.current) return;
-    const intent = useCoachMemoryStore.getState().intendedOpening;
-    if (!intent) return;
-    const playedMoves = gameState.moves.map((m) => m.san);
-    if (playedMoves.length === 0) return;
-    // THE ONE ASKED-LINE PATH (`openingDetectionService.askedLineLeft`, read
-    // by Learn too): it prefers the EXACT line the student launched (the
-    // openings Play tab passes the variation's own PGN), else the named
-    // opening's canonical entry — and fires only when the JUST-played move is
-    // the first to leave it.
-    const asked = askedLineLeft(intent, playedMoves, intent.color === 'white' ? 'w' : 'b', playedMoves.length - 1);
-    const left = asked?.departure ?? null;
-    const canonicalName = asked?.canonicalName ?? intent.name;
-    if (left) {
-      offBookFiredRef.current = true;
-      const divergenceIdx = left.ply;
-      const movedSan = left.played;
-      const bookSan = left.book;
-      const moveNumber = left.moveNumber;
-      const dotted = divergenceIdx % 2 === 0 ? `${moveNumber}.` : `${moveNumber}…`;
-      const whoMoved = divergenceIdx % 2 === 0 ? 'White' : 'Black';
-      const studentMoved = whoMoved.toLowerCase() === intent.color;
-      const verb = studentMoved ? 'You' : whoMoved;
-      const msg = studentMoved
-        ? `Heads up — ${verb} just left ${canonicalName} theory. The book here was ${dotted}${bookSan}, you played ${dotted}${movedSan}. Out of book.`
-        : `${verb} deviated from the book ${canonicalName} line at ${dotted}${movedSan} (theory was ${dotted}${bookSan}). You're on your own from here.`;
-      gameChatRef.current?.injectAssistantMessage(msg);
-      void logAppAudit({
-        kind: 'coach-surface-migrated',
-        category: 'subsystem',
-        source: 'CoachGamePage.planTracker',
-        summary: `off-book warning fired at ply ${divergenceIdx + 1} for "${canonicalName}"`,
-        details: `played=${movedSan}, book=${bookSan}, studentMoved=${studentMoved}`,
-      });
-    }
-  }, [gameState.moves]);
 
   // Reset plan-tracker on new game so the warning fires once per game,
   // not once per app session.
@@ -3078,6 +3043,30 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     // fault, so no slip line reads the 0.
     const evalLoss = endedInMate ? 0 : studentPrice?.costCp ?? 0;
     const movePriced = endedInMate || studentPrice !== null;
+
+    // ─── Plan tracker (Upgrade D) ─────────────────────────────────────────
+    // The student declared the opening they wanted to play; when THEIR move
+    // leaves that line and it cost them, say why the line's move was better
+    // (David 2026-11-21: "It should only speak if it hurts the user"). Once a
+    // game; a cheap departure, or theirs, says nothing.
+    if (!offBookFiredRef.current) {
+      const intent = useCoachMemoryStore.getState().intendedOpening;
+      if (intent) {
+        const played = [...prevMoves.map((m) => m.san), moveResult.san];
+        const asked = askedLineLeft(intent, played, intent.color === 'white' ? 'w' : 'b', played.length - 1, movePriced ? evalLoss : null);
+        if (asked) {
+          offBookFiredRef.current = true;
+          gameChatRef.current?.injectAssistantMessage(asked.text);
+          void logAppAudit({
+            kind: 'coach-surface-migrated',
+            category: 'subsystem',
+            source: 'CoachGamePage.planTracker',
+            summary: `off-book warning fired at ply ${asked.departure.ply + 1} for "${asked.canonicalName}"`,
+            details: `played=${asked.departure.played}, book=${asked.departure.book}, cost=${Math.round(evalLoss)}`,
+          });
+        }
+      }
+    }
 
     // ─── THE POSITIVE HALF OF THE STUDENT MODEL ────────────────────
     // Recorded here, off the ONE classification this surface already ran.
