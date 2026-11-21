@@ -64,11 +64,15 @@ export function boardStateAfter(fenBefore: string, san: string, fenAfter: string
   // A forced mate for EITHER side: the side not to move with an unstoppable
   // mate is just as decided ("You're a piece up — trade pieces" after Bf4+
   // with mate coming, review tape 2026-09-25).
+  return { ...boardStateAt(fenAfter, evalWhitePov), inFlux: inFluxAfter(fenBefore, san) };
+}
+
+/** The board state of `fen` with no move that produced it (nothing in flux):
+ *  the ONE mate trigger — a forced mate for either side by the engine's
+ *  number, or a mate in one for the side to move off the board. */
+export function boardStateAt(fen: string, evalWhitePov: number | null): BoardState {
   const engineMate = evalWhitePov !== null && isMateEval(evalWhitePov);
-  return {
-    inFlux: inFluxAfter(fenBefore, san),
-    mateOnBoard: engineMate || mateInOneOnBoard(fenAfter),
-  };
+  return { inFlux: null, mateOnBoard: engineMate || mateInOneOnBoard(fen) };
 }
 
 /** Kinds that state a STANDING fact — material, structure, a piece's standing,

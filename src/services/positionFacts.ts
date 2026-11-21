@@ -36,8 +36,7 @@ import { stemKeyOf } from '../utils/rotateStem';
 import { type ImportanceVerdict, type ImportanceSignals } from './narrationImportance';
 import { judgeMoment, coachTurn, type SurfacePosture } from './coachDecider';
 import { rememberPositionFacts } from './positionFactsCache';
-import { isMateEval } from './engineConstants';
-import { boardStateAfter, inFluxAfter, mateInOneOnBoard, type BoardState } from './boardState';
+import { boardStateAfter, boardStateAt, inFluxAfter, type BoardState } from './boardState';
 import type { QuietFact } from './factSelector';
 import { criticalityThresholds, type Severity } from './criticalityScan';
 import { computeMustDefend, hasMateThreat, mateThreatsAgainst, type MustDefend } from './threatOut';
@@ -1374,7 +1373,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   for (const c of composed) if (!clauseByText.has(c.text)) clauseByText.set(c.text, c);
   const boardHere: BoardState = producedBy
     ? boardStateAfter(producedBy.fenBefore, producedBy.san, fen, evalCpWhitePov)
-    : { inFlux: null, mateOnBoard: isMateEval(evalCpWhitePov) || mateInOneOnBoard(fen) };
+    : boardStateAt(fen, evalCpWhitePov);
   const decision = coachTurn({ signals: momentSignals, student: {
       rating,
       weaknesses: input.studentWeaknesses ?? [],
