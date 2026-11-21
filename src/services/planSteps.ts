@@ -13,6 +13,7 @@ import { isPawnBreak } from './pawnBreak';
 import { pieceWork } from './pieceWork';
 import { isUndevelopedInOpening } from '../utils/undeveloped';
 import { findWeakPawns, legalSeeGainFor } from './positionReadingService';
+import { renderAimWhy, renderPlanHeld } from './teachingSentence';
 
 const PIECE: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king', p: 'pawn' };
 
@@ -450,41 +451,13 @@ function attacksFrom(board: Chess, sq: string): string[] {
   return out;
 }
 
-const COUNT = ['no', 'one', 'two', 'three', 'four', 'five', 'six'];
-/** Why the aim is a target, in words from the planner's seat: the pawn's
- *  weakness, then the count when the planner's pieces outnumber the guards. */
-function aimWhyText(p: PlanSteps, whose: 'your' | 'their'): string {
-  const w = p.aimWhy;
-  if (!w) return '';
-  const owner = whose === 'your' ? 'their' : 'your';
-  const weak = w.weak === 'isolated' ? ' It is isolated, so no pawn can ever guard it.'
-    : w.weak === 'backward' ? ' It is backward: the pawns beside it have moved on and can no longer guard it.'
-      : w.weak === 'doubled' ? ' It is a doubled pawn, and the pawn in front of it cannot guard it.'
-        : w.weak === 'no-pawn-guard' ? ' No pawn guards it, so only pieces can.' : '';
-  const n = (k: number): string => COUNT[k] ?? String(k);
-  const theirs = owner === 'their' ? 'theirs' : 'yours';
-  const hit = `${n(w.hits)[0].toUpperCase()}${n(w.hits).slice(1)} of ${whose} pieces hit it`;
-  const guard = `${n(w.guards)} of ${theirs} guard${w.guards === 1 ? 's' : ''} it`;
-  // THE COUNT is the lesson, said only when it is the truth of the square:
-  // more hits than guards AND the exchange there wins it. A count alone is
-  // not a win — three rooks against a knight a pawn guards win nothing — so a
-  // count the exchange does not back is not said.
-  const count = w.hits > w.guards && w.wins ? ` ${hit}, and only ${guard}.` : '';
-  return `${weak}${count}`;
-}
+const aimWhyText = (p: PlanSteps, whose: 'your' | 'their'): string => renderAimWhy(p.aimWhy, whose);
 
-/** THE PLAN WITHOUT ITS MOVES — Learn's held form (LEARN NAMES NO MOVE
- *  UNASKED, carve-out 4): the piece and what it aims at, never the road or
- *  the steps, so the student still finds the moves. Null for their plan (it
- *  names no move of the student's) and for a plan with nothing to point at. */
+/** THE PLAN WITHOUT ITS MOVES — Learn's held form (`renderPlanHeld`). Null
+ *  for their plan (it names no move of the student's). */
 export function planStepsHeld(p: PlanSteps, whose: 'your' | 'their'): string | null {
   if (whose !== 'your') return null;
-  const target = p.aim ? (p.aimPiece ? `their ${p.aimPiece} on ${p.aim}` : `${p.aim}, next to their king`) : null;
-  if (p.maneuver) {
-    return `Your ${p.maneuver.piece} on ${p.maneuver.from} has a better square${target ? `, one aimed at ${target}` : ''}.${aimWhyText(p, whose)}`;
-  }
-  if (!target) return null;
-  return `Your pieces have a target: ${target}.${aimWhyText(p, whose)}`;
+  return renderPlanHeld({ piece: p.maneuver?.piece ?? null, from: p.maneuver?.from ?? null, aim: p.aim, aimPiece: p.aimPiece, why: aimWhyText(p, whose) });
 }
 
 /** The plan in words, from the student's seat. The break is named once, in

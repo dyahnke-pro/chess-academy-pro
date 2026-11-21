@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**888 lines · 67 exports · 29 importers · 6 tests · 35 audits**
+**916 lines · 69 exports · 30 importers · 6 tests · 35 audits**
 
 ## Locked rules that govern this surface
 
@@ -38,6 +38,7 @@
 - `src/services/pictureLedger.ts`
 - `src/services/pictureVerdict.ts`
 - `src/services/planOfTheBoard.test.ts`
+- `src/services/planSteps.ts`
 - `src/services/positionReadingService.ts`
 - `src/services/positionalRead.ts`
 - `src/services/practicalReads.ts`
@@ -787,6 +788,12 @@
 ### `renderEasyToMiss` (function) — 2 call sites
 - `src/services/temptingHope.test.ts:31`
 - `src/services/weighedMoves.ts:564`
+
+### `renderAimWhy` (function) — 1 call site
+- `src/services/planSteps.ts:454`
+
+### `renderPlanHeld` (function) — 1 call site
+- `src/services/planSteps.ts:460`
 
 ## Tests
 

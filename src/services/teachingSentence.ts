@@ -885,3 +885,31 @@ export function renderEasyToMiss(shape: 'quiet' | 'retreat', refutation: string,
     ? rotateStem([`${refutation} is easy to miss: it's a quiet move, not a capture or a check.`, `${refutation} is the move that's easy to overlook, because it takes nothing and gives no check.`], stem)
     : rotateStem([`${refutation} is easy to miss, because it's a move backward.`, `${refutation} is easy to overlook: the piece steps back instead of forward.`], stem);
 }
+
+/** WHY THE PLAN'S AIM IS A TARGET (David 2026-11-19: "why does it want to be
+ *  on that line?"), from the planner's seat: the pawn's weakness, then the
+ *  count — said only when more pieces hit it than guard it AND the exchange
+ *  there wins it (three rooks against a knight a pawn guards win nothing).
+ *  Leading space included; empty when there is nothing to say. */
+export function renderAimWhy(w: { weak: 'isolated' | 'backward' | 'doubled' | 'no-pawn-guard' | null; hits: number; guards: number; wins: boolean } | null, whose: 'your' | 'their'): string {
+  if (!w) return '';
+  const weak = w.weak === 'isolated' ? ' It is isolated, so no pawn can ever guard it.'
+    : w.weak === 'backward' ? ' It is backward: the pawns beside it have moved on and can no longer guard it.'
+      : w.weak === 'doubled' ? ' It is a doubled pawn, and the pawn in front of it cannot guard it.'
+        : w.weak === 'no-pawn-guard' ? ' No pawn guards it, so only pieces can.' : '';
+  const theirs = whose === 'your' ? 'theirs' : 'yours';
+  const count = w.hits > w.guards && w.wins
+    ? ` ${openSentence(countOf(w.hits))} of ${whose} pieces hit it, and only ${countOf(w.guards)} of ${theirs} guard${w.guards === 1 ? 's' : ''} it.`
+    : '';
+  return `${weak}${count}`;
+}
+
+/** THE PLAN WITHOUT ITS MOVES — Learn's held form (LEARN NAMES NO MOVE
+ *  UNASKED, carve-out 4): the piece and what it aims at, never the road, so
+ *  the student still finds the moves. Null with nothing to point at. */
+export function renderPlanHeld(h: { piece: string | null; from: string | null; aim: string | null; aimPiece: string | null; why: string }): string | null {
+  const target = h.aim ? (h.aimPiece ? `their ${h.aimPiece} on ${h.aim}` : `${h.aim}, next to their king`) : null;
+  if (h.piece && h.from) return `Your ${h.piece} on ${h.from} has a better square${target ? `, one aimed at ${target}` : ''}.${h.why}`;
+  if (!target) return null;
+  return `Your pieces have a target: ${target}.${h.why}`;
+}

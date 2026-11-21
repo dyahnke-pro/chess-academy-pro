@@ -488,7 +488,7 @@
 - `src/services/pinnedPawnGuard.ts:99`
 - `src/services/planRace.ts:657`
 - `src/services/planStep.ts:52`
-- `src/services/planSteps.ts:259`
+- `src/services/planSteps.ts:260`
 - `src/services/playCommentary.ts:500`
 - `src/services/poisonedPiece.ts:54`
 - `src/services/positionCharacter.ts:170`
@@ -958,7 +958,7 @@
 - `src/services/pawnJudgement.ts:86`
 - `src/services/pawnJudgement.ts:177`
 - `src/services/pawnJudgement.ts:306`
-- `src/services/planSteps.ts:255`
+- `src/services/planSteps.ts:256`
 - `src/services/playCommentary.ts:484`
 - `src/services/positionReadingService.test.ts:156`
 - `src/services/positionReadingService.test.ts:161`
