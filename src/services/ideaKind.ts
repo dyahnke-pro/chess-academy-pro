@@ -9,6 +9,7 @@
 // new kind fails to compile until someone says which idea it is.
 import type { BookJobKind } from './bookMoveWhy';
 import type { MoveFundamentalId } from './moveFundamentals';
+import { sameClaim } from './factSelector';
 
 export type IdeaKind =
   | 'mate' | 'win-material' | 'trade' | 'recapture' | 'rescue' | 'guard' | 'threat' | 'pressure'
@@ -122,5 +123,5 @@ export function sameIdea(a: { idea: IdeaKind; squares: readonly string[] }, b: {
   // on c6"). Ba4 said both (round 3).
   if (a.idea === 'rescue') return true;
   if (a.squares.length === 0 || b.squares.length === 0) return true;
-  return a.squares.some((s) => b.squares.includes(s));
+  return sameClaim({ sq: a.squares, family: a.idea }, { sq: b.squares, family: b.idea }, 'one-move');
 }

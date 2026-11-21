@@ -34,6 +34,7 @@ import thoughtPolicy from '../data/thought-policy.json';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import type { HeatState } from './holdRate';
 import { sameIdea, isByProduct, type IdeaKind } from './ideaKind';
+import { sameClaim } from './factSelector';
 import { buildVoicePackage, claimKey, joinSpoken, spokenSentenceKeys, type VoiceFact } from './voicePackage';
 import { TEACHING_MOVES } from './teachingMoves';
 import { buildPicture, isDetailOf } from './positionPicture';
@@ -438,7 +439,7 @@ export function speaksBehindLead(f: ThoughtFact, leadSquares: ReadonlySet<string
   // Behind a line that already teaches the move, what anyone sees adds nothing
   // ("…Nxd5 — the knight lands in the centre", then "it adds its weight to f4").
   if (depth === 'obvious') return false;
-  return depth === 'hidden' || !f.squares.some((s) => leadSquares.has(s));
+  return depth === 'hidden' || !sameClaim({ sq: f.squares, family: null }, { sq: [...leadSquares], family: null }, 'one-move');
 }
 
 /** ONE THOUGHT from the facts a move earned. */
@@ -467,7 +468,7 @@ export function composeThought(
   // (David 2026-11-12: importance from the evaluation): "hits your pawn on d5,
   // and nothing guards it" over "attacks your pawn on d5".
   const oneClaim = (f: ThoughtFact, g: ThoughtFact): boolean => g.step === f.step && g.text.trim().length > 0
-    && (factDepth(g) === 'hidden') === (factDepth(f) === 'hidden') && g.squares.some((s) => f.squares.includes(s));
+    && (factDepth(g) === 'hidden') === (factDepth(f) === 'hidden') && sameClaim({ sq: g.squares, family: null }, { sq: f.squares, family: null }, 'one-move');
   const staked = (f: ThoughtFact): number => stakeValue(f.stakes) ?? 0;
   const saidWithMore = (f: ThoughtFact): boolean => MOVE_STEPS.has(f.step) && facts.some((g) => g !== f && oneClaim(f, g)
     && ((SAYS_MORE[g.idea] ?? []).includes(f.idea) || (g.idea === f.idea && staked(g) > staked(f))));
@@ -536,8 +537,12 @@ export function composeThought(
       const outside = ledOutside.has(f.step);
       if (!lead && !outside) { if (pick(f)) leadOf.set(f.step, f); continue; }
       const depth = factDepth(f);
-      const sameClaim = picked.some((p) => p.step === f.step && (factDepth(p) === 'hidden') === (depth === 'hidden') && f.squares.some((s) => p.squares.includes(s)));
-      if (sameClaim) { held.push({ fact: f, why: 'same-idea' }); continue; }
+      // ONE SAME-CLAIM RULE with the Learn door and Review (`factSelector.sameClaim`),
+      // at the grain of one move's own job: a fact on the squares a picked fact
+      // of this step names is that claim in other words.
+      const oneOf = picked.some((p) => p.step === f.step && (factDepth(p) === 'hidden') === (depth === 'hidden')
+        && sameClaim({ sq: p.squares, family: null }, { sq: f.squares, family: null }, 'one-move'));
+      if (oneOf) { held.push({ fact: f, why: 'same-idea' }); continue; }
       const job = !isCost(f);
       const jobs = picked.filter((p) => p.step === f.step && !isCost(p));
       const jobsBefore = jobs.length + (outside ? 1 : 0);

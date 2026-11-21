@@ -35,7 +35,7 @@
  * Pure. One table, `READ_STEPS` + the weights, that the one door
  * (`coachDecider`) can read.
  */
-import { jaccard, SAME_CLAIM_JACCARD } from './factSelector';
+import { sameClaim as oneClaim } from './factSelector';
 import { Chess, type Square } from 'chess.js';
 import { PICTURE_ROLE, type PictureRole } from './positionPicture';
 import weightTable from '../data/read-decider-weights.json';
@@ -443,7 +443,7 @@ export function decideRead<F extends ReadFact>(factsIn0: readonly F[], ctx: Read
       if (out.some((o) => sameFact(o, pick)) || sameClaim(pick) || restatesVerdict(pick)) continue;
       // Two facts of one step on the same squares (G4.5.1's subsumption bar)
       // are one claim about one geometry: the first, by order, says it.
-      if (pick.squares.length > 0 && stepSaid.some((o) => o.squares.length > 0 && jaccard(o.squares, pick.squares) >= SAME_CLAIM_JACCARD)) continue;
+      if (stepSaid.some((o) => oneClaim({ sq: o.squares, family: null }, { sq: pick.squares, family: null }, 'geometry'))) continue;
       stepSaid.push(pick);
       if (row.sayOnce && pick.squares.length > 0 && pick.squares.every((sq) => named.has(sq))) continue;
       say(pick);
@@ -515,7 +515,7 @@ export function mergeMoveJobs<F extends ReadFact>(facts: readonly F[]): F[] {
   const repeats = (mv: string, f: F): boolean => {
     const prior = saidIdeas.get(mv) ?? [];
     const mine = jobIdeas(f);
-    return mine.length > 0 && mine.every((i) => prior.some((p) => p.family === i.family && (i.squares.length === 0 || p.squares.length === 0 || i.squares.some((q) => p.squares.includes(q)))));
+    return mine.length > 0 && mine.every((i) => prior.some((p) => p.family === i.family && (i.squares.length === 0 || p.squares.length === 0 || oneClaim({ sq: i.squares, family: null }, { sq: p.squares, family: null }, 'one-move'))));
   };
   const lead = new Map<string, number>();
   const parts = new Map<number, string[]>();

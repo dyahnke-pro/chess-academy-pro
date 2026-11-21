@@ -193,12 +193,26 @@ export function claimFamily(kind: string | null | undefined): string | null {
   return TACTIC_FAMILY.has(kind) ? 'tactic' : kind;
 }
 
+/** THE GRAIN a same-claim test reads at — REQUIRED, because the two are both
+ *  right and must never be a second copy:
+ *  - `geometry`: two facts read off one board, from any computer or seat —
+ *    Jaccard over their squares (G4.5.1), so a one-square teaching is never
+ *    eaten by a larger fact that happens to name its square;
+ *  - `one-move`: two lines about ONE move's own job (the lesson composer's move
+ *    steps, or one idea already compared) — any shared square is one claim in
+ *    other words ("guards e5" / "supports the center, guarding e5"). Measured:
+ *    reading the composer's move steps at `geometry` grain says "fighting for
+ *    the center on d4" and then "your knight bears down on d4" on one move
+ *    (decision baseline, 2026-11-21). */
+export type ClaimGrain = 'geometry' | 'one-move';
+
 export function sameClaim(
   a: { sq: readonly string[]; family: string | null },
   b: { sq: readonly string[]; family: string | null },
+  grain: ClaimGrain,
 ): boolean {
   if (a.sq.length === 0 || b.sq.length === 0) return false;
-  if (jaccard(a.sq, b.sq) < SAME_CLAIM_JACCARD) return false;
+  if (grain === 'one-move' ? !a.sq.some((s) => b.sq.includes(s)) : jaccard(a.sq, b.sq) < SAME_CLAIM_JACCARD) return false;
   if (a.family === null && b.family === null) return true;
   return a.family === b.family;
 }
@@ -236,7 +250,7 @@ export function selectFacts<F extends CoachFact>(
     // baseline, Sicilian Closed …Re2). The lesson composer folds them the same
     // way (`buildVoicePackage` reads the same claims).
     const g = cand.sq.length > 0
-      ? groups.find((grp) => sameClaim(grp[0], cand) || grp.some((x) => x.claims.some((c) => cand.claims.includes(c))))
+      ? groups.find((grp) => sameClaim(grp[0], cand, 'geometry') || grp.some((x) => x.claims.some((c) => cand.claims.includes(c))))
       : undefined;
     if (g) g.push(cand); else groups.push([cand]);
   }

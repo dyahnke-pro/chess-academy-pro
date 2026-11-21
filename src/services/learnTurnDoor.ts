@@ -1098,7 +1098,7 @@ export function decideTurn(
       // KIND is its family — the loose piece on e2 is not the pin through e2
       // (B12). A pin and the discovery behind it are both a tactic, and still
       // collapse.
-      if (!sameClaim({ sq: a.fact.squares ?? [], family: claimFamily(a.src.kind) }, { sq: b.fact.squares ?? [], family: claimFamily(b.src.kind) })) continue;
+      if (!sameClaim({ sq: a.fact.squares ?? [], family: claimFamily(a.src.kind) }, { sq: b.fact.squares ?? [], family: claimFamily(b.src.kind) }, 'geometry')) continue;
       const ad = DANGER_LANES.has(a.lane); const bd = DANGER_LANES.has(b.lane);
       // A MOVE'S VERDICT IS ITS OWN CLAIM: its cost ("it left e5 short of a
       // defender") shares squares with what the move does ("it attacks e5")
