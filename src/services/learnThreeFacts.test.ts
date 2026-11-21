@@ -38,7 +38,7 @@ describe('your move: what their last move aimed at, and how yours answers it', (
   it('…Bg7 against b4: it hits back on the side they are attacking', () => {
     const history = ['e4', 'c5', 'a3', 'g6', 'b4', 'Bg7'];
     const h = bindingTeaching({ fenBefore: fenAfter(history.slice(0, 5)), san: 'Bg7', history, plainThreats: 'green' });
-    expect(h?.text).toMatch(/^Their b4 is aimed at your pawn on c5, so your move hits back on the side they're attacking\.$/);
+    expect(h?.text).toMatch(/^Their pawn on b4 is aimed at your pawn on c5, so your move hits back on the side they're attacking\.$/);
     expect(h?.ownMoveReason).toBe(true);
     expect(h?.lane).toBe('movePoint');
   });
