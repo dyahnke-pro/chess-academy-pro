@@ -1,10 +1,10 @@
 {
-  "rev": 100,
+  "rev": 101,
   "parts": {
-    "chesscom-1038626480": "4eb02f153649ae6c",
-    "chesscom-1042725180": "bdd52a287582ffba",
-    "chesscom-1044361526": "07728e01d6f2a7b7",
-    "jMVMo1Ua": "d1f3099b3b28d3f0",
-    "colle800": "5f5f29c72fc21dde"
+    "chesscom-1038626480": "bc3774e85f8b447e",
+    "chesscom-1042725180": "7b77b6a5095bc361",
+    "chesscom-1044361526": "8f9a640917c582c9",
+    "jMVMo1Ua": "f1a157f15b3cf48a",
+    "colle800": "fdd9ea1475928302"
   }
 }
