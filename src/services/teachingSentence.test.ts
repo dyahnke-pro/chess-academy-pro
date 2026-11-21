@@ -67,3 +67,11 @@ describe('oneMoveHead — the move is named once a turn (prod Review 2026-11-21)
     expect(oneMoveHead('Your knight on d6 forks their king.', 'Nd6+')).toBe('Your knight on d6 forks their king.');
   });
 });
+
+describe('a quiet move is said with its seat (board read: "Rab8 is quiet" for Black\'s …Rab8)', () => {
+  it('a Black quiet move carries "…"; a White one does not', async () => {
+    const { renderQuietThreat } = await import('./teachingSentence');
+    expect(renderQuietThreat({ san: 'Rab8', follow: '…Ng3+', mates: false, forcing: true, mover: 'b' })).toBe('…Rab8 is quiet, but it threatens …Ng3+ — they must answer that first.');
+    expect(renderQuietThreat({ san: 'Rd3', follow: 'Rxd5', mates: false, forcing: false, mover: 'w' })).toBe('Rd3 is quiet: it prepares Rxd5.');
+  });
+});

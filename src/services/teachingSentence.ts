@@ -519,10 +519,14 @@ export function renderTradePin(d: { tradeTo: string; front: string; enemy: strin
 
 /** A quiet move with a follow-up (`quietThreat`, the board read): "threatens"
  *  only when the follow-up is forcing on the board it is played on. */
-export function renderQuietThreat(q: { san: string; follow: string; mates: boolean; forcing: boolean }): string {
+export function renderQuietThreat(q: { san: string; follow: string; mates: boolean; forcing: boolean;
+  /** REQUIRED — the side that plays the quiet move: a Black move carries its
+   *  "…" ("…Rab8 is quiet", Danya board read 2026-11-21 said "Rab8"). */
+  mover: 'w' | 'b' }): string {
+  const san = q.mover === 'b' && !q.san.startsWith('…') ? `…${q.san}` : q.san;
   return q.forcing
-    ? `${q.san} is quiet, but it threatens ${q.follow}${q.mates ? ', with mate to follow' : ''} — they must answer that first.`
-    : `${q.san} is quiet: it prepares ${q.follow}.`;
+    ? `${san} is quiet, but it threatens ${q.follow}${q.mates ? ', with mate to follow' : ''} — they must answer that first.`
+    : `${san} is quiet: it prepares ${q.follow}.`;
 }
 
 /** A move's one-move threat (`detectNewThreat` on the briefing): the

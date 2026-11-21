@@ -404,7 +404,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
           // "threatens …b4", 0CegO Ke3 "…Kd2": no such threat).
           const forcing = mates || isForcingThreat(free, t.moves[0]);
           const follow = `${side === 'b' ? '…' : ''}${threatSan}`;
-          facts.push({ from: 'bestMove', kind: forcing ? 'aspect-threat' : 'aspect-prepares', computer: 'quietThreat', text: renderQuietThreat({ san: `${side === 'b' ? '…' : ''}${quiet.san}`, follow, mates, forcing }), squares: [top.moves[0].slice(2, 4), to], stakes: stakeValue({ points: mates ? 100 : gain / 100, plies: 2 }), claims: [`quiet-threat:${to}`] });
+          facts.push({ from: 'bestMove', kind: forcing ? 'aspect-threat' : 'aspect-prepares', computer: 'quietThreat', text: renderQuietThreat({ san: quiet.san, follow, mates, forcing, mover: side }), squares: [top.moves[0].slice(2, 4), to], stakes: stakeValue({ points: mates ? 100 : gain / 100, plies: 2 }), claims: [`quiet-threat:${to}`] });
         }
       }
     }
