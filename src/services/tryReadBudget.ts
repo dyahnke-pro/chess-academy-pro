@@ -40,6 +40,11 @@ export type ReadSurface = 'learn' | 'play' | 'openings' | 'puzzle' | 'review';
  *    threatens (`boardReadFacts`, the quiet move says its threat). */
 export type TrySource = 'eye' | 'plan' | ConsideredWhy | 'their-eye' | 'best-after' | 'future' | 'quiet-threat';
 
+/** Reads of the singleton's MultiPV fan, never a pool worker's one line, and
+ *  outside the pool lease's budget: the best move's board and the quiet move's
+ *  threat probe (both read the board's own best answers). */
+export const SINGLETON_SOURCES: ReadonlySet<TrySource> = new Set<TrySource>(['best-after', 'quiet-threat']);
+
 export interface ReadBudget {
   depth: number;
   /** The search stops this long after it starts, with the line it reached. */
@@ -86,7 +91,7 @@ export function tryReadBudget(surface: ReadSurface): SurfaceReadBudget {
 /** The longest search a surface's pooled reads ask for. */
 export function poolBudgetMs(surface: ReadSurface): number {
   const b = TRY_READ_BUDGET[surface];
-  return Math.max(...(Object.keys(b.reads) as TrySource[]).filter((s) => s !== 'best-after').map((s) => b.reads[s].budgetMs));
+  return Math.max(...(Object.keys(b.reads) as TrySource[]).filter((s) => !SINGLETON_SOURCES.has(s)).map((s) => b.reads[s].budgetMs));
 }
 
 /** One engine of a pool: reads a board to a depth within a budget. */

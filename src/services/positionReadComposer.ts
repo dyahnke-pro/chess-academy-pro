@@ -14,7 +14,7 @@ import { buildFedTacticsContext } from './liveTacticsContext';
 import { sharpGap, SHARP_GAP_CP } from './positionCharacter';
 import type { BoardReader } from './boardReadFacts';
 import { boardReadOffThread } from './boardReadOffThread';
-import { tryReadBudget, poolBudgetMs, poolDispatcher, type ReadSurface, type ReadBudget } from './tryReadBudget';
+import { tryReadBudget, poolBudgetMs, poolDispatcher, type ReadSurface, type ReadBudget, SINGLETON_SOURCES } from './tryReadBudget';
 import { decideRead, readContextOf } from './readDecider';
 import { stockfishEngine } from './stockfishEngine';
 import type { EvalBoardFn } from './perturbation';
@@ -53,7 +53,7 @@ export async function surfaceBoardReader(
     : null;
   const read: BoardReader = (fen, source) => {
     const b = budget.reads[source];
-    const viaPool = !!pooled && source !== 'best-after';
+    const viaPool = !!pooled && !SINGLETON_SOURCES.has(source);
     // A pool worker answers one line, the singleton its MultiPV fan: the route is part of the read.
     return cachedTryRead(`${viaPool ? 'pool' : 'single'}|${b.depth}|${b.budgetMs}|${fen}`, async () => (
       pooled && viaPool ? pooled(fen, b) : (await single(fen, b.depth, b.budgetMs)).topLines ?? null

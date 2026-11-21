@@ -433,13 +433,22 @@ export function temptingRefuted(args: {
   // ONE TRY SAID: the one a player most needs to hear — a walk into mate
   // first, then the one most often played (the list itself runs best to
   // worst, David 2026-11-21; a single pick is the warning, not the list).
-  const all = temptingRefutations(args);
-  return all.find((t) => t.reason.mate) ?? [...all].sort((x, y) => y.eye - x.eye)[0] ?? null;
+  const all = refutationsWithReal(args);
+  const pick = all.find((t) => t.reason.mate) ?? [...all].sort((x, y) => y.real - x.real)[0];
+  if (!pick) return null;
+  const { real: _real, ...t } = pick;
+  return t;
 }
 
 /** Every tempting candidate the engine's line refutes, most tempting first —
  *  the measurement reads them all; a surface says the first. */
 export function temptingRefutations(args: Parameters<typeof temptingRefuted>[0]): TemptingRefuted[] {
+  return refutationsWithReal(args).map(({ real: _real, ...t }) => t);
+}
+
+/** The refutations with `real` (the model's probability against real evals)
+ *  kept, so the single pick can read how often each is actually played. */
+function refutationsWithReal(args: Parameters<typeof temptingRefuted>[0]): Array<TemptingRefuted & { real: number }> {
   const played = moveOn(args.fenBefore, args.san);
   if (!played) return [];
   const playedRead = readOf(args.reads, uciOf(played));
@@ -491,7 +500,7 @@ export function temptingRefutations(args: Parameters<typeof temptingRefuted>[0])
   // walks into mate last; equal costs keep the eye's order.
   // A walk into mate is the warning that leads; the rest best to worst
   // (David 2026-11-21), the cheapest refutation first.
-  return out.sort((x, y) => Number(y.reason.mate) - Number(x.reason.mate) || x.costCp - y.costCp || y.real - x.real).map(({ real: _real, ...t }) => t);
+  return out.sort((x, y) => Number(y.reason.mate) - Number(x.reason.mate) || x.costCp - y.costCp || y.real - x.real);
 }
 
 /** WHY ONE CANDIDATE FAILS, against the move it is measured with (`against`:

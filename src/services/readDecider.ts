@@ -50,6 +50,9 @@ import type { FactKind } from './reviewFacetRank';
 /** THE BOARD READ'S OWN KINDS, placed on the one fact vocabulary so the one
  *  shortener reads their layer. Null: never shortened by its layer (the
  *  standing, the position's character, a mate — the read's conclusions). */
+/** The read's danger facts: shortened, never silenced. */
+const DANGER_KINDS: ReadonlySet<string> = new Set(['refuted', 'their-refuted', 'refuted-positional', 'must-defend']);
+
 const READ_KIND_AS_FACT: Readonly<Record<string, FactKind | null>> = {
   'their-refuted': 'refuted', tries: 'refuted', 'refuted-positional': 'refuted',
   'switch-wing': 'plan-steps', siege: 'plan-steps', 'their-plan': 'plan-steps',
@@ -467,7 +470,14 @@ export function decideRead<F extends ReadFact>(factsIn0: readonly F[], ctx: Read
   // THE ONE SHORTENER (`recordShortening`): a fact this student has proven
   // is said shorter, or not at all — the same rule as Learn and Review.
   const kept = mergeMoveJobs(withDetails(out, facts, ctx, argued))
-    .map((f) => { const t = fadeText(f.text, shortenLevel(ctx.levels ?? null, f.skill ?? null, f.kind in READ_KIND_AS_FACT ? READ_KIND_AS_FACT[f.kind] : f.kind)); return t === f.text ? f : { ...f, text: t }; })
+    .map((f) => {
+      const level = shortenLevel(ctx.levels ?? null, f.skill ?? null, f.kind in READ_KIND_AS_FACT ? READ_KIND_AS_FACT[f.kind] : f.kind);
+      // A danger is never silenced, at most said short (Learn keeps a warning
+      // before the move, the composer its danger step): a refuted try and a
+      // threat to meet are what keep a proven student from walking into it.
+      const t = fadeText(f.text, level === 'silent' && DANGER_KINDS.has(f.kind) ? 'short' : level);
+      return t === f.text ? f : { ...f, text: t };
+    })
     .filter((f) => f.text.trim() !== '');
   const h = habitOf(facts, ctx);
   const habit = h && !ctx.said.has(`habit:${h.id}`) ? h : null;
