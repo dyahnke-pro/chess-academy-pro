@@ -4,6 +4,7 @@ import extendedOpenings from '../data/openings-lichess-extended.json';
 import repertoireData from '../data/repertoire.json';
 import type { DetectedOpening, OpeningVariation } from '../types';
 import { openingKeyFor } from './openingKey';
+import { askedLineDeparture, type AskedLineDeparture } from './askedLineDeparture';
 import { buildVariationTabs } from './variationTabs';
 import { MAX_SIBLING_BRANCHES } from '../utils/featureFlags';
 // Typed via `variationMiddlegameDepth.shared.d.mts` (2026-09-21) — the
@@ -2287,4 +2288,24 @@ export function studentSideForPlay(args: {
  *  an opening named inside a sentence (`findOpeningNameIn`). */
 export function openingAliasKeys(): readonly string[] {
   return Object.keys(NAME_ALIASES);
+}
+
+/** WHERE THE GAME LEFT THE LINE THE STUDENT ASKED FOR — the one path Learn's
+ *  opening lane and Play's plan tracker both read (David 2026-11-21). It owns
+ *  the asked line (the exact PGN the student launched, else the named
+ *  opening's canonical entry) and the departure computer; the surface only
+ *  says it. Null while the game is on the line, past its end, when the
+ *  departure came before `sinceIndex`, or when the name resolves to nothing. */
+export function askedLineLeft(
+  asked: { name: string; pgn?: string | null },
+  played: readonly string[],
+  studentColor: 'w' | 'b',
+  sinceIndex: number,
+): { departure: AskedLineDeparture; canonicalName: string } | null {
+  const pgn = asked.pgn?.trim();
+  const entry = pgn ? null : resolveOpeningEntry(asked.name);
+  const line = pgn ? pgn.split(/\s+/).filter(Boolean) : entry?.moves ?? [];
+  if (line.length === 0) return null;
+  const departure = askedLineDeparture(played, line, studentColor, sinceIndex);
+  return departure ? { departure, canonicalName: entry?.canonicalName ?? asked.name } : null;
 }

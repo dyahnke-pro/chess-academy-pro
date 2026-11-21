@@ -134,7 +134,6 @@ import { findSiblingExtensionBranches, resolveOpeningEntry } from '../../service
 import { isTheoryLine } from '../../services/bookDeparture';
 import { PLAY_OPENING_RE, readsAsQuestion, resolvePlayName } from '../../coach/ask/playName';
 import { openingAnnouncementForGame, theirOpeningVerdict, openingNameForBoard, spokenOpeningLabel, studentJustLeftBook, warmOpeningBook, learnNameMaySpeak } from '../../services/openingAnnouncement';
-import { askedLineDeparture } from '../../services/askedLineDeparture';
 import { renderAskedLineLeft } from '../../services/teachingSentence';
 import { lastMoveCapturedOn, pendingRecapture, landingSquare } from '../../utils/justCaptured';
 import { resolveVoicedWalkthrough, resolveVoicedMatchup } from '../../data/voicedWalkthroughs';
@@ -173,6 +172,7 @@ import {
 } from '../../services/sharedOpeningCache';
 import {
   getOpeningMoves,
+  askedLineLeft,
   findLinePickerOptions,
   findOpeningByPgnPrefix,
   resolveCuratedVariation,
@@ -9715,8 +9715,7 @@ export function CoachTeachPage({ mode }: {
       // happened. The asked line is the one the coach replies from.
       const asked = useCoachMemoryStore.getState().intendedOpening;
       if (asked) {
-        const askedMoves = asked.pgn?.trim() ? asked.pgn.trim().split(/\s+/) : getOpeningMoves(asked.name);
-        const left = askedMoves ? askedLineDeparture(history, askedMoves, studentCC, Math.max(0, history.length - 2)) : null;
+        const left = askedLineLeft(asked, history, studentCC, Math.max(0, history.length - 2))?.departure ?? null;
         if (left) leftAskedLine = { text: renderAskedLineLeft({ ...left, name: spokenOpeningLabel(asked.name) }), claims: [`asked-line-left:${asked.name}`] };
       }
       // WHAT THE OPENING IS is the story's

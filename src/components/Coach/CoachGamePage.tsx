@@ -90,8 +90,7 @@ import { stockfishEngine } from '../../services/stockfishEngine';
 import { limitStrengthElo } from '../../services/engineConstants';
 import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { resolveConfig as resolvePlayConfig, ratedPlayMove } from '../../services/coachPlaySession';
-import { detectOpening, getOpeningMoves, resolveOpeningEntry } from '../../services/openingDetectionService';
-import { askedLineDeparture } from '../../services/askedLineDeparture';
+import { detectOpening, getOpeningMoves, askedLineLeft } from '../../services/openingDetectionService';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { uciMoveToSan, uciLinesToSan } from '../../utils/uciToSan';
 import { db } from '../../db/schema';
@@ -972,25 +971,14 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     if (!intent) return;
     const playedMoves = gameState.moves.map((m) => m.san);
     if (playedMoves.length === 0) return;
-    // Prefer the EXACT line the student launched (e.g. from the openings
-    // Play tab, which passes the variation's own PGN) so a specific
-    // subline is tracked precisely instead of collapsing to the opening's
-    // main line. Fall back to resolving the declared name.
-    let allEntries: string[];
-    let canonicalName: string;
-    if (intent.pgn && intent.pgn.trim()) {
-      allEntries = intent.pgn.trim().split(/\s+/).filter(Boolean);
-      canonicalName = intent.name;
-    } else {
-      const entry = resolveOpeningEntry(intent.name);
-      if (!entry || entry.moves.length === 0) return;
-      allEntries = entry.moves;
-      canonicalName = entry.canonicalName;
-    }
-    if (allEntries.length === 0) return;
-    // THE ONE DEPARTURE COMPUTER (`askedLineDeparture`, read by Learn too):
-    // only when the JUST-played move is the first to leave the line.
-    const left = askedLineDeparture(playedMoves, allEntries, intent.color === 'white' ? 'w' : 'b', playedMoves.length - 1);
+    // THE ONE ASKED-LINE PATH (`openingDetectionService.askedLineLeft`, read
+    // by Learn too): it prefers the EXACT line the student launched (the
+    // openings Play tab passes the variation's own PGN), else the named
+    // opening's canonical entry — and fires only when the JUST-played move is
+    // the first to leave it.
+    const asked = askedLineLeft(intent, playedMoves, intent.color === 'white' ? 'w' : 'b', playedMoves.length - 1);
+    const left = asked?.departure ?? null;
+    const canonicalName = asked?.canonicalName ?? intent.name;
     if (left) {
       offBookFiredRef.current = true;
       const divergenceIdx = left.ply;

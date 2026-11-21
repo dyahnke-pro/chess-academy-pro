@@ -3,6 +3,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { askedLineDeparture } from './askedLineDeparture';
+import { askedLineLeft } from './openingDetectionService';
 import { renderAskedLineLeft } from './teachingSentence';
 
 const NAJDORF = ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6', 'Be3'];
@@ -43,12 +44,22 @@ describe('the spoken line', () => {
     expect(renderAskedLineLeft({ name: 'Najdorf', seat: 'student', played: 'g6', book: 'a6', moveNumber: 5, ply: 10 })).not.toBe(mine);
   });
 
-  it('Learn and Play both read the one computer; Play keeps no private loop', () => {
+  it('Learn and Play both read the one asked-line path; neither surface calls the computer', () => {
     const learn = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
-    expect(learn).toMatch(/askedLineDeparture\(history, askedMoves, studentCC/);
+    expect(learn).toMatch(/askedLineLeft\(asked, history, studentCC/);
     expect(learn).toMatch(/lane: 'opening' as const, computer: 'askedLineDeparture'/);
     const play = readFileSync('src/components/Coach/CoachGamePage.tsx', 'utf8');
-    expect(play).toMatch(/askedLineDeparture\(playedMoves, allEntries/);
+    expect(play).toMatch(/askedLineLeft\(intent, playedMoves/);
     expect(play).not.toMatch(/let divergenceIdx = -1/);
+    for (const page of [learn, play]) expect(page).not.toMatch(/askedLineDeparture\(/);
+  });
+
+  it('the asked line is the launched PGN when there is one, else the named opening', () => {
+    const played = ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'g6'];
+    const byPgn = askedLineLeft({ name: 'My Najdorf', pgn: NAJDORF.join(' ') }, played, 'b', played.length - 1);
+    expect(byPgn).toEqual({ departure: { ply: 9, played: 'g6', book: 'a6', moveNumber: 5, seat: 'student' }, canonicalName: 'My Najdorf' });
+    const byName = askedLineLeft({ name: 'Sicilian Defense: Najdorf Variation' }, played, 'b', played.length - 1);
+    expect(byName?.departure.book).toBe('a6');
+    expect(askedLineLeft({ name: 'no such opening zzz' }, played, 'b', 0)).toBeNull();
   });
 });
