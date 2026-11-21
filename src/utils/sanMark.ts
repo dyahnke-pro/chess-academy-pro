@@ -15,3 +15,9 @@ export function unmarked(san: string): string {
 export function markSaysMate(san: string | null | undefined): boolean {
   return !!san && /#$/.test(san);
 }
+
+/** A move said with its mover: a Black move carries "…" ("…Kh8"), a White one
+ *  none — so a sentence never reads Black's move as White's. */
+export function dotted(san: string, mover: 'w' | 'b'): string {
+  return mover === 'b' && !san.startsWith('…') ? `…${san}` : san;
+}

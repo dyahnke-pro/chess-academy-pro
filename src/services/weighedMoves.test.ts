@@ -78,13 +78,13 @@ describe('(A) the tempting move, refuted — on his games', () => {
   it('7…Ng4 (8urm2D1HhX8): …Nxe4 fails to dxe4', () => {
     const g = game('8urm2D1HhX8');
     const r = temptingRefuted({ fenBefore: g.fenBefore, san: g.played, student: seat(g.fenBefore), rating: 1500, reads: g.reads, priorMove: null });
-    expect(oneStem(r?.text)).toBe(oneStem('Nxe4 is tempting here, but it fails: they play dxe4 — they win a knight for a pawn.'));
+    expect(oneStem(r?.text)).toBe(oneStem('…Nxe4 is tempting here, but it fails: they play dxe4 — they win a knight for a pawn.'));
     // One loss is ruled out once, whichever computer said it (the
     // deliberation's claim for the same square).
     expect(r?.claims).toEqual(['tempting:f6e4', 'rule-out:e4']);
     // From the other seat the words turn: their temptation, your refutation.
     expect(oneStem(temptingRefuted({ fenBefore: g.fenBefore, san: g.played, student: other(seat(g.fenBefore)), rating: 1500, reads: g.reads, priorMove: null })?.text))
-      .toBe(oneStem('Nxe4 was tempting for them, but it fails: you play dxe4 — you win a knight for a pawn.'));
+      .toBe(oneStem('…Nxe4 was tempting for them, but it fails: you play dxe4 — you win a knight for a pawn.'));
   });
 
   it('14.Nc3 (Di-5aO2lddU): e3 drops the knight on a4', () => {
@@ -96,13 +96,13 @@ describe('(A) the tempting move, refuted — on his games', () => {
   it('17…Rb8 (HvrXmUORIcQ): …b6 drops the rook — and it is said before the queen capture that drops more', () => {
     const g = game('HvrXmUORIcQ');
     expect(oneStem(temptingRefuted({ fenBefore: g.fenBefore, san: g.played, student: seat(g.fenBefore), rating: 1500, reads: g.reads, priorMove: null })?.text))
-      .toBe(oneStem("b6 looks natural, but it doesn't work: they play Qxa8 — they win a rook."));
+      .toBe(oneStem("…b6 looks natural, but it doesn't work: they play Qxa8 — they win a rook."));
   });
 
   it('3…g6 (HiCeU8tIh0U): …Nf6 does not stop the mate', () => {
     const g = game('HiCeU8tIh0U');
     const r = temptingRefuted({ fenBefore: g.fenBefore, san: g.played, student: seat(g.fenBefore), rating: 1500, reads: g.reads, priorMove: null });
-    expect(oneStem(r?.text)).toBe(oneStem("Nf6 is tempting here, but it fails: they play Qxf7#."));
+    expect(oneStem(r?.text)).toBe(oneStem("…Nf6 is tempting here, but it fails: they play Qxf7#."));
     expect(r?.claims).toContain('rule-out:mate:f7');
   });
 
@@ -245,7 +245,7 @@ describe('through the one registry, to every surface', () => {
     const g = game('8urm2D1HhX8');
     const facts = moveThoughtFacts({ namesPlayedMove: true, moveReads: writerFor('lesson').moveReads, plainThreatsSeen: false, story: false, theory: true, tense: 'now', fenBefore: g.fenBefore, san: g.played, moverIsStudent: true, prev: NO_PREV_CAPTURE, line: null, theirLast: null, history: [], phrases: null,
       reads: { before: g.reads.map((r, i) => ({ rank: i + 1, evaluation: r.evaluation, mate: r.mate, moves: [...r.moves] })), passBefore: [], after: [], passAfter: [] }, costCp: null });
-    expect(facts.filter((f) => f.source === 'weighed').map((f) => oneStem(f.text))).toContain(oneStem('Nxe4 is tempting here, but it fails: they play dxe4 — they win a knight for a pawn.'));
+    expect(facts.filter((f) => f.source === 'weighed').map((f) => oneStem(f.text))).toContain(oneStem('…Nxe4 is tempting here, but it fails: they play dxe4 — they win a knight for a pawn.'));
   });
 
   it('Review says them off the record\'s reads, both seats', () => {

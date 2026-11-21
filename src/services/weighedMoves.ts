@@ -42,7 +42,7 @@ import { describeStructure, newPawnWeaknesses } from './boardStructure';
 import { lineProof, type Proof } from './proof';
 import { seatCp, expectedScore } from './winChance';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
-import { markSaysMate } from '../utils/sanMark';
+import { markSaysMate, dotted } from '../utils/sanMark';
 import { pieceRef } from './pieceRef';
 import { moveLossMechanism } from './inaccuracyCall';
 import { captureRead } from './positionReadingService';
@@ -537,22 +537,25 @@ function refuteCandidate(fenBefore: string, c: Pick<CandidateMove, 'uci' | 'san'
   // …Bxb2"): the reply a player expects, when it is not the refutation.
   const refuter = read.moves[1] ?? null;
   const hoped = rating !== null && refuter ? countingOn(fenBefore, c.uci, refuter, rating) : null;
+  // The try as it is said: a Black move with its "…" (miracle on the chess
+  // board #4: "Kh8 is the obvious try" in a read that said "…Kh8" one line up).
+  const name = dotted(c.san, mover);
   const lead = planTarget
     ? (mover === student
-      ? rotateStem([`${c.san}, going straight at ${planTarget}, fails`, `${c.san} to hit ${planTarget} directly doesn't work`], stem)
-      : rotateStem([`${c.san}, going straight at ${planTarget}, failed for them`, `${c.san} to hit ${planTarget} directly didn't work for them`], stem))
+      ? rotateStem([`${name}, going straight at ${planTarget}, fails`, `${name} to hit ${planTarget} directly doesn't work`], stem)
+      : rotateStem([`${name}, going straight at ${planTarget}, failed for them`, `${name} to hit ${planTarget} directly didn't work for them`], stem))
     : hoped
-    ? renderCountingOnLead(c.san, hoped, mover === student, stem)
+    ? renderCountingOnLead(name, hoped, mover === student, stem)
     : look
     ? (mover === student
-      ? rotateStem([`${c.san} looks like ${look}, but it fails`, `${c.san} sets up ${look}, but it doesn't work`], stem)
-      : rotateStem([`${c.san} looked like ${look} for them, but it fails`, `${c.san} would have set up ${look} for them, but it doesn't work`], stem))
+      ? rotateStem([`${name} looks like ${look}, but it fails`, `${name} sets up ${look}, but it doesn't work`], stem)
+      : rotateStem([`${name} looked like ${look} for them, but it fails`, `${name} would have set up ${look} for them, but it doesn't work`], stem))
     : mover === student
       // Three phrasings a seat (the human voice: a game never repeats a
       // formula more than twice; two stems put three tempting moves on one
       // wording a quarter of the time — the prod Review audit 2026-11-18).
-      ? rotateStem([`${c.san} is tempting here, but it fails`, `${c.san} looks natural, but it doesn't work`, `${c.san} is the obvious try, but it doesn't hold up`], stem)
-      : rotateStem([`${c.san} was tempting for them, but it fails`, `${c.san} looked natural for them, but it doesn't work`, `${c.san} was the obvious try for them, but it doesn't hold up`], stem);
+      ? rotateStem([`${name} is tempting here, but it fails`, `${name} looks natural, but it doesn't work`, `${name} is the obvious try, but it doesn't hold up`], stem)
+      : rotateStem([`${name} was tempting for them, but it fails`, `${name} looked natural for them, but it doesn't work`, `${name} was the obvious try for them, but it doesn't hold up`], stem);
   const because = `${lineShape(sans, w.otherLine, r.fen, 'first')}${result}`;
   const sq = blowSquare(sans);
   const key = temptingKey(c.uci);
@@ -1185,6 +1188,8 @@ export function moveDifference(
   const bm = moveOn(fenBefore, sanB);
   if (!a || !bm) return null;
   const side = a.color;
+  // The moves as they are said: a Black move with its "…" (`dotted`).
+  const nm = (san: string): string => dotted(san, side);
   const cmp = contrastMoves(fenBefore, a.san, bm.san);
   // The moved piece itself standing unguarded is where it went, not what the
   // other move keeps guarded ("Nh5 keeps your knight on d5 guarded"); and a
@@ -1195,7 +1200,7 @@ export function moveDifference(
   // pawn on a5 guarded, and Bxe4 leaves it loose").
   if (cmp && !([a.to, bm.to, a.from, bm.from] as string[]).includes(cmp.square) && hitAfter(fenBefore, cmp.drops, cmp.square)) {
     return { kind: 'loose', favours: cmp.keeps, other: cmp.drops, squares: [cmp.square],
-      text: `${cmp.keeps} keeps ${own} ${NAME[cmp.piece] ?? 'piece'} on ${cmp.square} guarded, and ${cmp.drops} leaves it loose`,
+      text: `${nm(cmp.keeps)} keeps ${own} ${NAME[cmp.piece] ?? 'piece'} on ${cmp.square} guarded, and ${nm(cmp.drops)} leaves it loose`,
       // The held forms name the piece, never the other move (David
       // 2026-11-07: "I want specificity when we teach. Not a general
       // statement" — "the other leaves one loose" named nothing).
@@ -1210,14 +1215,14 @@ export function moveDifference(
   if (opA && !opB) {
     const rook = `${own} rook on ${opA.rook}`;
     return { kind: 'file', favours: a.san, other: bm.san, squares: [opA.rook, `${opA.file}${a.color === 'w' ? 8 : 1}`],
-      text: `${a.san} opens the ${opA.file}-file for ${rook}, and ${bm.san} keeps it shut`,
+      text: `${nm(a.san)} opens the ${opA.file}-file for ${rook}, and ${nm(bm.san)} keeps it shut`,
       held: `${own === 'your' ? 'yours' : 'theirs'} opens the ${opA.file}-file for ${rook}`,
       heldOther: `the other opens the ${opA.file}-file for ${rook}` };
   }
   if (opB && !opA) {
     const rook = `${own} rook on ${opB.rook}`;
     return { kind: 'file', favours: bm.san, other: a.san, squares: [opB.rook, `${opB.file}${bm.color === 'w' ? 8 : 1}`],
-      text: `${bm.san} opens the ${opB.file}-file for ${rook}, and ${a.san} keeps it shut`,
+      text: `${nm(bm.san)} opens the ${opB.file}-file for ${rook}, and ${nm(a.san)} keeps it shut`,
       held: `${own === 'your' ? 'yours' : 'theirs'} opens the ${opB.file}-file for ${rook}`,
       heldOther: `the other opens the ${opB.file}-file for ${rook}` };
   }
@@ -1234,7 +1239,7 @@ export function moveDifference(
     const [f, o, faults] = newA.length === 0 ? [a, bm, newB] : [bm, a, newA];
     const { kind, square: sq } = faults[0];
     return { kind: 'structure', favours: f.san, other: o.san, squares: [sq],
-      text: `${f.san} keeps ${own} pawns whole, and ${o.san} leaves ${own === 'your' ? 'you' : 'them'} ${kind === 'doubled' ? 'doubled pawns' : 'an isolated pawn'} on ${sq}`,
+      text: `${nm(f.san)} keeps ${own} pawns whole, and ${nm(o.san)} leaves ${own === 'your' ? 'you' : 'them'} ${kind === 'doubled' ? 'doubled pawns' : 'an isolated pawn'} on ${sq}`,
       held: `${own === 'your' ? 'yours' : 'theirs'} keeps ${own} pawns whole, where the other leaves ${own === 'your' ? 'you' : 'them'} ${kind === 'doubled' ? 'doubled pawns' : 'an isolated pawn'}`,
       heldOther: `the other keeps the pawns whole, and ${own === 'your' ? 'yours leaves you' : 'theirs leaves them'} ${kind === 'doubled' ? 'doubled pawns' : 'an isolated pawn'}` };
   }
@@ -1318,7 +1323,7 @@ export function alsoGood(args: { fenBefore: string; san: string; student: Color;
     // from there" ran two dashes and a colon in one breath). The claim and its
     // difference stay ONE sentence: split, the voice kept "Nxe4 and dxe4 both
     // hold here." alone where it had refused the whole.
-    const text = `${played.san} and ${c.san} both hold here, and what separates them is that ${d.text}.`;
+    const text = `${dotted(played.san, mover)} and ${dotted(c.san, mover)} both hold here, and what separates them is that ${d.text}.`;
     // ROTATED on the board (prod focus audit 2026-11-09: "Another move was
     // worth the same here —" opened seven lines of one game). Each stem names
     // the other move, so "the other" in the difference has its referent.
@@ -1333,7 +1338,7 @@ export function alsoGood(args: { fenBefore: string; san: string; student: Color;
   // choosing between them.
   if (bothWin) {
     const c = bothWin.c;
-    const text = `${played.san} or ${c.san} — both keep the win, so take your pick.`;
+    const text = `${dotted(played.san, mover)} or ${dotted(c.san, mover)} — both keep the win, so take your pick.`;
     const heldText = mover === args.student ? 'Another move kept the win just as well — when you are winning, there is often more than one road.' : text;
     return { san: c.san, uci: c.uci, gapCp: bothWin.gap, difference: null, text, heldText,
       squares: [played.to, c.to], key: `also-good:${uciOf(played)}:${c.uci}` };

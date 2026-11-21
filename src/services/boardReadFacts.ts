@@ -326,7 +326,12 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     const groups = new Map<string, typeof empty>();
     // …and tries that meet the SAME reply are one idea too (puzzle reads
     // 2026-11-20: …Kh4, …Kf6 and …Kh6 each "fail to Bd3", said four times).
-    for (const t of empty) { const k = t.reasonKey ?? `reply:${t.reply}`; groups.set(k, [...(groups.get(k) ?? []), t]); }
+    // A try with no computed reason is grouped by its reply AND what the line
+    // costs: the same reply can refute one try by winning a pawn and another
+    // by winning a rook (miracle on the chess board #4: …Rd6, …Re6 and …Rg6
+    // "all fail the same way: b6 meets each" — b6 threatens a pawn after
+    // …Rd6 and wins the rook after the other two). The group says that cost.
+    for (const t of empty) { const k = t.reasonKey ?? `reply:${t.reply}:${t.data.mates ? 'mate' : (t.data.material ?? '')}`; groups.set(k, [...(groups.get(k) ?? []), t]); }
     // A TRY THAT CHANGES THE RESULT'S BAND (F2, board 4: …Ke7 throws the
     // win) is the verdict's own "but", said beside it.
     const bandOf = (uci: string): number | null => { const r = tempting.find((x) => x.moves[0] === uci); return r ? stepOfCp(seatCp(r, i.studentColor)) : null; };

@@ -75,7 +75,7 @@ describe('negative controls — a tempting move that works is never called refut
     const b = board('how-to-avoid-blunders-part-1#1');
     const said = temptingOnBoard({ fen: b.fen, student: 'b', rating: 1500, reads: b.reads, priorMove: null });
     expect(said.map((t) => t.san)).not.toContain('Bxg5');
-    expect(oneStem(said[0]?.text)).toBe(oneStem("Nxa3 looks natural, but it doesn't work: they play Bxa3 — they win a knight for a pawn."));
+    expect(oneStem(said[0]?.text)).toBe(oneStem("…Nxa3 looks natural, but it doesn't work: they play Bxa3 — they win a knight for a pawn."));
   });
 
   it('a queen simply given for a pawn is no temptation, and a loss the line does not explain is not said (Capablanca: Qxe6+, Bxe6+)', () => {

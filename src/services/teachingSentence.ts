@@ -274,7 +274,10 @@ export function renderTryGroup(sans: readonly string[], replies: readonly string
   // first try, it names "each" of them.
   const each = two ? 'either' : 'each';
   const why = shared.why ? shared.why.split(`…${shared.san}`).join(each).split(shared.san).join(each).replace(/^(either|each)\b/, (w) => cap(w)).replace(/^It\b/, cap(each)) : null;
-  return [`${andList([...sans])} ${two ? 'both' : 'all'} fail the same way: ${orList([...replies])} meets ${each}.`, renderTryReason({ ...shared, why })].filter(Boolean).join(' ');
+  // No computed reason: the group says what the line costs, as one try does
+  // ("they win a pawn in the line") — the grouping key holds it shared.
+  const cost = !why && shared.material && !shared.mates ? ` ${cap(shared.mine ? 'they' : 'you')} win ${shared.material} in the line.` : '';
+  return [`${andList([...sans])} ${two ? 'both' : 'all'} fail the same way: ${orList([...replies])} meets ${each}.${cost}`, renderTryReason({ ...shared, why })].filter(Boolean).join(' ');
 }
 
 // ── THE MOVE'S JOBS (board read: every job speaks) ──────────────────────────
