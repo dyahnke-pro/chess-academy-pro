@@ -102,7 +102,7 @@
 - `src/services/coachFact.test.ts:90`
 - `src/services/coachFact.test.ts:91`
 - `src/services/coachFeatureService.ts:2756`
-- `src/services/coachFeatureService.ts:3377`
+- `src/services/coachFeatureService.ts:3385`
 - `src/services/learnTurnDoor.ts:346`
 - `src/services/learnTurnDoor.ts:1086`
 - `src/services/learnTurnDoor.ts:1147`
@@ -118,24 +118,24 @@
 
 ### `placeFact` (function) — 15 call sites
 - `src/services/boardComputers.ts:3284`
-- `src/services/boardComputers.ts:8147`
+- `src/services/boardComputers.ts:8152`
 - `src/services/learnTurnDoor.ts:809`
 - `src/services/moveThoughtFacts.ts:1309`
 - `src/services/moveThoughtFacts.ts:1326`
 - `src/services/openingStory.ts:422`
-- `src/services/positionFacts.ts:500`
+- `src/services/positionFacts.ts:499`
 - `src/services/reviewFacet.ts:85`
 - `src/services/reviewFacet.ts:113`
 - `src/services/reviewFacet.ts:125`
 - `src/services/teachingFact.ts:96`
-- `src/services/thoughtComposer.ts:185`
+- `src/services/thoughtComposer.ts:186`
 - `src/services/thoughtReads.ts:128`
 - `src/test/chatAnswersInFull.gate.test.ts:43`
 - `src/test/doorFact.ts:22`
 
 ### `stakesOf` (function) — 14 call sites
 - `src/services/boardComputers.ts:3285`
-- `src/services/boardComputers.ts:8147`
+- `src/services/boardComputers.ts:8152`
 - `src/services/coachFact.test.ts:116`
 - `src/services/coachFact.test.ts:122`
 - `src/services/coachFact.test.ts:123`
@@ -143,7 +143,7 @@
 - `src/services/moveThoughtFacts.ts:1310`
 - `src/services/moveThoughtFacts.ts:1327`
 - `src/services/openingStory.ts:423`
-- `src/services/positionFacts.ts:508`
+- `src/services/positionFacts.ts:507`
 - `src/services/reviewFacet.ts:96`
 - `src/services/teachingFact.ts:98`
 - `src/services/thoughtReads.ts:128`

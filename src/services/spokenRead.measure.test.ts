@@ -15,7 +15,7 @@ import type { AnalysisLine } from '../types';
 function engine() {
   const p = spawn('/usr/games/stockfish');
   let buf = ''; let waiter: ((l: string[]) => void) | null = null; let acc: string[] = [];
-  p.stdout.on('data', (d) => { buf += d.toString(); let i; while ((i = buf.indexOf('\n')) >= 0) { const l = buf.slice(0, i); buf = buf.slice(i + 1); acc.push(l); if (l.startsWith('bestmove') && waiter) { const w = waiter; waiter = null; const a = acc; acc = []; w(a); } } });
+  p.stdout.on('data', (d: Buffer) => { buf += d.toString(); let i; while ((i = buf.indexOf('\n')) >= 0) { const l = buf.slice(0, i); buf = buf.slice(i + 1); acc.push(l); if (l.startsWith('bestmove') && waiter) { const w = waiter; waiter = null; const a = acc; acc = []; w(a); } } });
   const send = (s: string) => p.stdin.write(s + '\n'); send('uci');
   const read = (fen: string, multipv: number, depth: number): Promise<AnalysisLine[]> => new Promise((res) => {
     acc = []; waiter = (lines) => { const best = new Map<number, AnalysisLine>();
@@ -23,7 +23,7 @@ function engine() {
         const v = Number(m[4]); const white = fen.split(' ')[1] === 'w' ? 1 : -1; const mate = m[3] === 'mate' ? v * white : null;
         best.set(Number(m[2]), { rank: Number(m[2]), evaluation: mate != null ? (mate > 0 ? 100000 : -100000) : v * white, moves: m[5].split(' '), mate, depth } as AnalysisLine); }
       res([...best.values()].sort((a, b) => a.rank - b.rank)); };
-    send('setoption name MultiPV value ' + multipv); send('position fen ' + fen); send('go depth ' + depth); });
+    send(`setoption name MultiPV value ${multipv}`); send(`position fen ${fen}`); send(`go depth ${depth}`); });
   let chain: Promise<unknown> = Promise.resolve();
   return { read: (f: string, m: number, d: number): Promise<AnalysisLine[]> => { const r = chain.then(() => read(f, m, d)); chain = r.catch(() => null); return r; }, quit: () => p.kill() };
 }

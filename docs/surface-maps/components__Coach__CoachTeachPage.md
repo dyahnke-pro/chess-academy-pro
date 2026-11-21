@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**17653 lines · 3 exports · 4 importers · 88 tests · 12 audits**
+**17661 lines · 4 exports · 4 importers · 89 tests · 12 audits**
 
 ## Locked rules that govern this surface
 
@@ -23,6 +23,9 @@
 ## Exports and every call site
 
 ### `CONTINUE_GAME_RE` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `PHASE_AFTER_LATE_PAUSE_MS` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `buildPlayerStyleQuery` (function) — 2 call sites
@@ -105,6 +108,7 @@
 - `src/test/learnThreatVoiceWired.gate.test.ts`
 - `src/test/learnTrackAFollows.gate.test.ts`
 - `src/test/learnTrackAHeard.gate.test.ts`
+- `src/test/learnTurnSpeed.gate.test.ts`
 - `src/test/learnVerdictWave.gate.test.ts`
 - `src/test/lessonGameChip.gate.test.ts`
 - `src/test/mistakeTurnWired.gate.test.ts`

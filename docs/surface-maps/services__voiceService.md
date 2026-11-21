@@ -4,20 +4,20 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3200 lines · 15 exports · 111 importers · 110 tests · 30 audits**
+**3205 lines · 15 exports · 114 importers · 113 tests · 30 audits**
 
 ## Locked rules that govern this surface
 
-- **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:780) — names `CLOUD_VOICES`, `voiceService`
-- **G4. TTS = streaming canonical. Buffered MP3 is gone.** (CLAUDE.md:1245) — names `voiceService`
-- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1636) — names `voiceService`
-- **G9.1 The PRO-REP DEEP BUILD DOCTRINE — locked (David 2026-05-28, emphatic).** (CLAUDE.md:2059) — names `sanitizeForTTS`
-- **Golden rules (the most important — read these every time)** (CLAUDE.md:2715) — names `voiceService`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3833) — names `voiceService`
-- **🧒 Kids section — non-negotiables** (CLAUDE.md:4010) — names `voiceService`
-- **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:4315) — names `voiceService`
-- **Shared types / services** (CLAUDE.md:6016) — names `voiceService`
-- **The standard post-deploy ritual** (CLAUDE.md:6892) — names `voiceService`
+- **G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).** (CLAUDE.md:862) — names `CLOUD_VOICES`, `voiceService`
+- **G4. TTS = streaming canonical. Buffered MP3 is gone.** (CLAUDE.md:1327) — names `voiceService`
+- **G5. Verbosity setting is RESPECTED, not hinted at.** (CLAUDE.md:1724) — names `voiceService`
+- **G9.1 The PRO-REP DEEP BUILD DOCTRINE — locked (David 2026-05-28, emphatic).** (CLAUDE.md:2147) — names `sanitizeForTTS`
+- **Golden rules (the most important — read these every time)** (CLAUDE.md:2803) — names `voiceService`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3931) — names `voiceService`
+- **🧒 Kids section — non-negotiables** (CLAUDE.md:4108) — names `voiceService`
+- **Strict Narration Timing (IMPORTANT)** (CLAUDE.md:4413) — names `voiceService`
+- **Shared types / services** (CLAUDE.md:6193) — names `voiceService`
+- **The standard post-deploy ritual** (CLAUDE.md:7074) — names `voiceService`
 
 ## Who calls in
 
@@ -107,7 +107,10 @@
 - `src/hooks/useDiscussionPractice.test.ts`
 - `src/hooks/useDiscussionPractice.ts`
 - `src/hooks/useHintSystem.ts`
+- `src/hooks/useLineWalk.stated.test.ts`
+- `src/hooks/useLineWalk.ts`
 - `src/hooks/useLiveCoach.ts`
+- `src/hooks/useLiveMarks.ts`
 - `src/hooks/useNarration.test.tsx`
 - `src/hooks/useNarration.ts`
 - `src/hooks/usePhaseNarration.ts`
@@ -220,7 +223,7 @@
 - `src/utils/descriptiveNotation.test.ts:32`
 
 ### `sanitizeForTTS` (function) — 68 call sites
-- `src/components/Openings/OpeningDetailPage.tsx:706`
+- `src/components/Openings/OpeningDetailPage.tsx:766`
 - `src/components/Settings/VoiceSettingsPanel.tsx:119`
 - `src/components/Settings/VoiceSettingsPanel.tsx:161`
 - `src/hooks/useProseReader.ts:66`
@@ -378,8 +381,11 @@
 - `src/hooks/learnSilentCapture.test.ts`
 - `src/hooks/useDiscussionPractice.test.ts`
 - `src/hooks/useHintSystem.test.ts`
+- `src/hooks/useLineWalk.marks.test.ts`
+- `src/hooks/useLineWalk.stated.test.ts`
 - `src/hooks/useLiveCoach.needWire.test.tsx`
 - `src/hooks/useLiveCoach.test.tsx`
+- `src/hooks/useLiveMarks.test.ts`
 - `src/hooks/useNarration.test.tsx`
 - `src/hooks/usePhaseNarration.door.test.ts`
 - `src/hooks/usePositionNarration.degrade.test.ts`

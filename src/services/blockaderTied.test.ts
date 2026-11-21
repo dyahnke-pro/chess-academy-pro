@@ -31,7 +31,7 @@ describe('the board\'s plan and the structure plan claim one plan', () => {
   it('both carry nextPlanClaim for the weak pawn on b5', async () => {
     const { readBoard, readBoardAll } = await import('./boardComputers');
     // Stockfish, depth 12, Black to move (recorded for the spoken-read bench).
-    const lines = [{ moves: ['e2c3', 'g4f5', 'b6b5', 'b4b5', 'c3b5', 'h2g3', 'g8f7', 'g3f4', 'b5d6'], evaluation: 50, mate: null }];
+    const lines = [{ rank: 1, moves: ['e2c3', 'g4f5', 'b6b5', 'b4b5', 'c3b5', 'h2g3', 'g8f7', 'g3f4', 'b5d6'], evaluation: 50, mate: null }];
     const plan = readBoard('planOfTheBoard', { fen: MIRACLE, lines, student: 'b', namesMoves: true });
     const structure = readBoardAll('boardPlans', { fen: MIRACLE, student: 'b', withTrump: true });
     expect(plan?.text).toMatch(/weak pawn on b5/);

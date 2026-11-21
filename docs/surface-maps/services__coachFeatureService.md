@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6844 lines · 35 exports · 77 importers · 95 tests · 4 audits**
+**6852 lines · 35 exports · 77 importers · 95 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -152,8 +152,8 @@
 
 ### `foldReviewRefrains` (function) — 4 call sites
 - `src/components/Coach/CoachGameReview.tsx:1862`
-- `src/services/reviewLedgerCounters.test.ts:69`
-- `src/services/reviewLedgerCounters.test.ts:81`
+- `src/services/reviewLedgerCounters.test.ts:77`
+- `src/services/reviewLedgerCounters.test.ts:89`
 - `src/services/reviewRepeats.measure.test.ts:35`
 
 ### `ReviewMoveSegment` (interface) — 0 call sites
@@ -415,7 +415,7 @@
 - `src/services/advantageWasMissed.test.ts:11`
 - `src/services/advantageWasMissed.test.ts:14`
 - `src/services/advantageWasMissed.test.ts:15`
-- `src/services/reviewFullData.ts:579`
+- `src/services/reviewFullData.ts:589`
 - `src/services/reviewWithholding.ts:13`
 
 ### `detectBadHabits` (re-export) — 7 call sites

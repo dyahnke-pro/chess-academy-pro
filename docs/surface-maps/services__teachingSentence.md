@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**973 lines · 73 exports · 34 importers · 7 tests · 35 audits**
+**986 lines · 73 exports · 34 importers · 7 tests · 35 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,7 +22,6 @@
 
 ## Who calls in
 
-- `src/components/Coach/CoachTeachPage.tsx`
 - `src/services/askedLineDeparture.test.ts`
 - `src/services/boardComputers.ts`
 - `src/services/boardReadFacts.ts`
@@ -38,6 +37,7 @@
 - `src/services/latentDanger.ts`
 - `src/services/mateThreatLever.ts`
 - `src/services/moveThreat.ts`
+- `src/services/openingDetectionService.ts`
 - `src/services/pictureLedger.ts`
 - `src/services/pictureVerdict.ts`
 - `src/services/planOfTheBoard.test.ts`
@@ -91,8 +91,8 @@
 - `src/services/gemCrushLines.ts:222`
 - `src/services/gemCrushLines.ts:225`
 - `src/services/gemCrushLines.ts:251`
-- `src/services/openingDetectionService.ts:190`
-- `src/services/openingDetectionService.ts:194`
+- `src/services/openingDetectionService.ts:195`
+- `src/services/openingDetectionService.ts:199`
 - `src/services/positionProvenance.ts:57`
 - `src/services/positionProvenance.ts:69`
 - `src/services/positionProvenance.ts:84`
@@ -427,8 +427,8 @@
 - `src/services/threeFacts.test.ts:146`
 - `src/services/walk3.test.ts:13`
 - `src/services/walk3.test.ts:18`
-- `src/services/weighedMoves.ts:562`
-- `src/services/weighedMoves.ts:1000`
+- `src/services/weighedMoves.ts:565`
+- `src/services/weighedMoves.ts:1027`
 - `src/utils/legalMoveFor.test.ts:13`
 - `src/utils/legalMoveFor.test.ts:16`
 - `src/utils/legalMoveFor.test.ts:24`
@@ -437,8 +437,8 @@
 
 ### `nowBoard` (function) — 7 call sites
 - `src/services/boardReadFacts.ts:135`
-- `src/services/boardReadFacts.ts:521`
-- `src/services/boardReadFacts.ts:537`
+- `src/services/boardReadFacts.ts:526`
+- `src/services/boardReadFacts.ts:542`
 - `src/services/planOfTheBoard.test.ts:11`
 - `src/services/readDecider.picture.test.ts:4`
 - `src/services/readDecider.speaks.test.ts:18`
@@ -496,65 +496,65 @@
 - `src/services/boardComputers.ts:4332`
 - `src/services/boardComputers.ts:4358`
 - `src/services/boardComputers.ts:4380`
-- `src/services/boardComputers.ts:4788`
-- `src/services/boardComputers.ts:4811`
-- `src/services/boardComputers.ts:4830`
-- `src/services/boardComputers.ts:4843`
-- `src/services/boardComputers.ts:4859`
-- `src/services/boardComputers.ts:4875`
-- `src/services/boardComputers.ts:4898`
-- `src/services/boardComputers.ts:4910`
-- `src/services/boardComputers.ts:4923`
-- `src/services/boardComputers.ts:4938`
-- `src/services/boardComputers.ts:4948`
-- `src/services/boardComputers.ts:4965`
-- `src/services/boardComputers.ts:4981`
-- `src/services/boardComputers.ts:5002`
-- `src/services/boardComputers.ts:5023`
-- `src/services/boardComputers.ts:5039`
-- `src/services/boardComputers.ts:5051`
-- `src/services/boardComputers.ts:5073`
-- `src/services/boardComputers.ts:5097`
-- `src/services/boardComputers.ts:5221`
-- `src/services/boardComputers.ts:5284`
-- `src/services/boardComputers.ts:5442`
-- `src/services/boardComputers.ts:5519`
-- `src/services/boardComputers.ts:5843`
-- `src/services/boardComputers.ts:5985`
-- `src/services/boardComputers.ts:6004`
-- `src/services/boardComputers.ts:6023`
-- `src/services/boardComputers.ts:6074`
-- `src/services/boardComputers.ts:6220`
-- `src/services/boardComputers.ts:6243`
-- `src/services/boardComputers.ts:6325`
-- `src/services/boardComputers.ts:6435`
-- `src/services/boardComputers.ts:6482`
-- `src/services/boardComputers.ts:6559`
-- `src/services/boardComputers.ts:6581`
-- `src/services/boardComputers.ts:6601`
-- `src/services/boardComputers.ts:6697`
-- `src/services/boardComputers.ts:6721`
-- `src/services/boardComputers.ts:6746`
-- `src/services/boardComputers.ts:6800`
-- `src/services/boardComputers.ts:6821`
-- `src/services/boardComputers.ts:6842`
-- `src/services/boardComputers.ts:6860`
-- `src/services/boardComputers.ts:6883`
-- `src/services/boardComputers.ts:6907`
-- `src/services/boardComputers.ts:6936`
-- `src/services/boardComputers.ts:6962`
-- `src/services/boardComputers.ts:6978`
-- `src/services/boardComputers.ts:6995`
-- `src/services/boardComputers.ts:7013`
-- `src/services/boardComputers.ts:7036`
-- `src/services/boardComputers.ts:7060`
-- `src/services/boardComputers.ts:7088`
-- `src/services/boardComputers.ts:7106`
-- `src/services/boardComputers.ts:7288`
-- `src/services/boardComputers.ts:7310`
-- `src/services/boardComputers.ts:7330`
-- `src/services/boardComputers.ts:7350`
-- `src/services/boardComputers.ts:7873`
+- `src/services/boardComputers.ts:4793`
+- `src/services/boardComputers.ts:4816`
+- `src/services/boardComputers.ts:4835`
+- `src/services/boardComputers.ts:4848`
+- `src/services/boardComputers.ts:4864`
+- `src/services/boardComputers.ts:4880`
+- `src/services/boardComputers.ts:4903`
+- `src/services/boardComputers.ts:4915`
+- `src/services/boardComputers.ts:4928`
+- `src/services/boardComputers.ts:4943`
+- `src/services/boardComputers.ts:4953`
+- `src/services/boardComputers.ts:4970`
+- `src/services/boardComputers.ts:4986`
+- `src/services/boardComputers.ts:5007`
+- `src/services/boardComputers.ts:5028`
+- `src/services/boardComputers.ts:5044`
+- `src/services/boardComputers.ts:5056`
+- `src/services/boardComputers.ts:5078`
+- `src/services/boardComputers.ts:5102`
+- `src/services/boardComputers.ts:5226`
+- `src/services/boardComputers.ts:5289`
+- `src/services/boardComputers.ts:5447`
+- `src/services/boardComputers.ts:5524`
+- `src/services/boardComputers.ts:5848`
+- `src/services/boardComputers.ts:5990`
+- `src/services/boardComputers.ts:6009`
+- `src/services/boardComputers.ts:6028`
+- `src/services/boardComputers.ts:6079`
+- `src/services/boardComputers.ts:6225`
+- `src/services/boardComputers.ts:6248`
+- `src/services/boardComputers.ts:6330`
+- `src/services/boardComputers.ts:6440`
+- `src/services/boardComputers.ts:6487`
+- `src/services/boardComputers.ts:6564`
+- `src/services/boardComputers.ts:6586`
+- `src/services/boardComputers.ts:6606`
+- `src/services/boardComputers.ts:6702`
+- `src/services/boardComputers.ts:6726`
+- `src/services/boardComputers.ts:6751`
+- `src/services/boardComputers.ts:6805`
+- `src/services/boardComputers.ts:6826`
+- `src/services/boardComputers.ts:6847`
+- `src/services/boardComputers.ts:6865`
+- `src/services/boardComputers.ts:6888`
+- `src/services/boardComputers.ts:6912`
+- `src/services/boardComputers.ts:6941`
+- `src/services/boardComputers.ts:6967`
+- `src/services/boardComputers.ts:6983`
+- `src/services/boardComputers.ts:7000`
+- `src/services/boardComputers.ts:7018`
+- `src/services/boardComputers.ts:7041`
+- `src/services/boardComputers.ts:7065`
+- `src/services/boardComputers.ts:7093`
+- `src/services/boardComputers.ts:7111`
+- `src/services/boardComputers.ts:7293`
+- `src/services/boardComputers.ts:7315`
+- `src/services/boardComputers.ts:7335`
+- `src/services/boardComputers.ts:7355`
+- `src/services/boardComputers.ts:7878`
 - `src/services/boardReadFacts.ts:134`
 - `src/services/movePurposeEngine.tempting.test.ts:22`
 - `src/services/openingRoads.ts:39`
@@ -566,9 +566,9 @@
 - `src/services/openingStory.ts:300`
 - `src/services/openingStory.ts:387`
 - `src/services/positionalReason.ts:46`
-- `src/services/positionalReason.ts:138`
-- `src/services/positionalReason.ts:139`
-- `src/services/positionalReason.ts:197`
+- `src/services/positionalReason.ts:142`
+- `src/services/positionalReason.ts:143`
+- `src/services/positionalReason.ts:203`
 - `src/services/slipCause.ts:56`
 - `src/services/slipCause.ts:87`
 - `src/services/slipCause.ts:105`
@@ -582,7 +582,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isForcingThreat` (function) — 3 call sites
-- `src/services/boardReadFacts.ts:405`
+- `src/services/boardReadFacts.ts:410`
 - `src/services/teachingSentence.test.ts:10`
 - `src/services/teachingSentence.test.ts:12`
 
@@ -593,7 +593,7 @@
 - `src/services/teachingSentence.test.ts:17`
 
 ### `pathWords` (function) — 1 call site
-- `src/services/weighedMoves.ts:1000`
+- `src/services/weighedMoves.ts:1027`
 
 ### `Rendered` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -606,15 +606,15 @@
 - `src/services/teachingSentence.test.ts:26`
 - `src/services/teachingSentence.test.ts:32`
 - `src/services/teachingSentence.test.ts:33`
-- `src/services/weighedMoves.ts:1007`
+- `src/services/weighedMoves.ts:1034`
 
 ### `renderTry` (function) — 3 call sites
 - `src/services/teachingSentence.test.ts:40`
 - `src/services/teachingSentence.test.ts:44`
-- `src/services/weighedMoves.ts:1005`
+- `src/services/weighedMoves.ts:1032`
 
 ### `renderTryGroup` (function) — 1 call site
-- `src/services/boardReadFacts.ts:339`
+- `src/services/boardReadFacts.ts:344`
 
 ### `jobClause` (function) — 1 call site
 - `src/services/readDecider.ts:527`
@@ -666,7 +666,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `renderNewThreat` (function) — 1 call site
-- `src/services/boardComputers.ts:6092`
+- `src/services/boardComputers.ts:6097`
 
 ### `MustDefendData` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -696,8 +696,10 @@
 ### `renderTradePin` (function) — 1 call site
 - `src/services/latentDanger.ts:247`
 
-### `renderQuietThreat` (function) — 1 call site
-- `src/services/boardReadFacts.ts:407`
+### `renderQuietThreat` (function) — 3 call sites
+- `src/services/boardReadFacts.ts:412`
+- `src/services/teachingSentence.test.ts:74`
+- `src/services/teachingSentence.test.ts:75`
 
 ### `renderAspectThreat` (function) — 1 call site
 - `src/services/reviewMoveBriefing.ts:359`
@@ -781,17 +783,17 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `renderTryLoss` (function) — 4 call sites
-- `src/services/weighedMoves.ts:806`
-- `src/services/weighedMoves.ts:810`
-- `src/services/weighedMoves.ts:811`
-- `src/services/weighedMoves.ts:829`
+- `src/services/weighedMoves.ts:809`
+- `src/services/weighedMoves.ts:813`
+- `src/services/weighedMoves.ts:814`
+- `src/services/weighedMoves.ts:832`
 
 ### `renderCountingOnLead` (function) — 1 call site
-- `src/services/weighedMoves.ts:545`
+- `src/services/weighedMoves.ts:548`
 
 ### `renderEasyToMiss` (function) — 2 call sites
 - `src/services/temptingHope.test.ts:31`
-- `src/services/weighedMoves.ts:564`
+- `src/services/weighedMoves.ts:567`
 
 ### `renderAimWhy` (function) — 1 call site
 - `src/services/planSteps.ts:465`
@@ -799,18 +801,18 @@
 ### `renderPlanHeld` (function) — 1 call site
 - `src/services/planSteps.ts:471`
 
-### `oneMoveHead` (function) — 5 call sites
+### `oneMoveHead` (function) — 7 call sites
 - `src/services/coachFeatureService.ts:649`
 - `src/services/teachingSentence.test.ts:63`
 - `src/services/teachingSentence.test.ts:64`
 - `src/services/teachingSentence.test.ts:66`
 - `src/services/teachingSentence.test.ts:67`
+- `src/services/teachingSentence.test.ts:82`
+- `src/services/teachingSentence.test.ts:83`
 
-### `renderAskedLineLeft` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9720`
-- `src/services/askedLineDeparture.test.ts:35`
-- `src/services/askedLineDeparture.test.ts:39`
-- `src/services/askedLineDeparture.test.ts:43`
+### `renderAskedLineLeft` (function) — 2 call sites
+- `src/services/askedLineDeparture.test.ts:60`
+- `src/services/openingDetectionService.ts:2330`
 
 ### `renderBreakHits` (function) — 1 call site
 - `src/services/planSteps.ts:499`

@@ -45,7 +45,7 @@ describe('Learn: a turn\'s reads are retired by the next move', () => {
   });
 
   it('the eval bar drops the read of a board the game has left', () => {
-    expect(src).toMatch(/analyzePosition\(fen, 12, undefined, 'brain', \{ signal: leftBoard\.signal \}\)/);
+    expect(src).toMatch(/analyzePosition\(fen, COACH_TURN_DEPTH, undefined, 'brain', \{ signal: leftBoard\.signal \}\)/);
     expect(src).toContain('leftBoard.abort();');
   });
 });

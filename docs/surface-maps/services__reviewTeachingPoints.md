@@ -53,18 +53,18 @@
 - `src/services/reviewTeachingPoints.test.ts:455`
 
 ### `royalDefenderTarget` (function) — 3 call sites
-- `src/services/boardComputers.ts:4473`
+- `src/services/boardComputers.ts:4478`
 - `src/services/reviewNarrationFidelity.test.ts:69`
 - `src/services/reviewTeachingPoints.test.ts:39`
 
 ### `rookOnSeventh` (function) — 4 call sites
-- `src/services/boardComputers.ts:4490`
+- `src/services/boardComputers.ts:4495`
 - `src/services/reviewTeachingPoints.test.ts:47`
 - `src/services/reviewTeachingPoints.test.ts:517`
 - `src/services/reviewTeachingPoints.test.ts:521`
 
 ### `badEnemyBishop` (function) — 6 call sites
-- `src/services/boardComputers.ts:4507`
+- `src/services/boardComputers.ts:4512`
 - `src/services/reviewTeachingPoints.test.ts:52`
 - `src/services/reviewTeachingPoints.test.ts:53`
 - `src/services/reviewTeachingPoints.test.ts:482`
@@ -72,7 +72,7 @@
 - `src/services/theirWorstPiece.ts:31`
 
 ### `passedPawnPush` (function) — 8 call sites
-- `src/services/boardComputers.ts:5742`
+- `src/services/boardComputers.ts:5747`
 - `src/services/reviewTeachingPoints.test.ts:57`
 - `src/services/reviewTeachingPoints.test.ts:63`
 - `src/services/reviewTeachingPoints.test.ts:66`
@@ -82,7 +82,7 @@
 - `src/services/reviewTeachingPoints.test.ts:535`
 
 ### `buildReviewDeepestLookahead` (function) — 13 call sites
-- `src/services/coachFeatureService.ts:4000`
+- `src/services/coachFeatureService.ts:4008`
 - `src/services/reviewTeachingPoints.test.ts:295`
 - `src/services/reviewTeachingPoints.test.ts:298`
 - `src/services/reviewTeachingPoints.test.ts:299`
@@ -97,7 +97,7 @@
 - `src/services/reviewTeachingPoints.test.ts:415`
 
 ### `buildMissedShotSignal` (function) — 8 call sites
-- `src/services/coachFeatureService.ts:3759`
+- `src/services/coachFeatureService.ts:3767`
 - `src/services/reviewTeachingPoints.test.ts:367`
 - `src/services/reviewTeachingPoints.test.ts:380`
 - `src/services/reviewTeachingPoints.test.ts:394`
@@ -124,14 +124,14 @@
 - `src/services/boardComputers.ts:4430`
 
 ### `describeNotableMove` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:4293`
+- `src/services/coachFeatureService.ts:4301`
 - `src/services/reviewTeachingPoints.test.ts:179`
 - `src/services/reviewTeachingPoints.test.ts:186`
 - `src/services/reviewTeachingPoints.test.ts:200`
 - `src/services/reviewTeachingPoints.test.ts:210`
 
 ### `describeSimplifyingTrade` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:4019`
+- `src/services/coachFeatureService.ts:4027`
 - `src/services/plyFactsDialing.test.ts:75`
 - `src/services/plyFactsDialing.test.ts:81`
 - `src/services/plyFactsDialing.test.ts:82`
@@ -140,12 +140,12 @@
 - `src/services/plyFactsDialing.test.ts:91`
 
 ### `describeTradeConsequence` (function) — 1 call site
-- `src/services/coachFeatureService.ts:4028`
+- `src/services/coachFeatureService.ts:4036`
 
 ### `describeConcessions` (function) — 8 call sites
 - `src/services/backwardLook.ts:483`
-- `src/services/coachFeatureService.ts:3676`
-- `src/services/coachFeatureService.ts:3772`
+- `src/services/coachFeatureService.ts:3684`
+- `src/services/coachFeatureService.ts:3780`
 - `src/services/concessionInFlux.test.ts:13`
 - `src/services/concessionInFlux.test.ts:18`
 - `src/services/reviewTeachingPoints.test.ts:214`
@@ -156,8 +156,8 @@
 - `src/services/theirMoveCost.ts:158`
 
 ### `findTrappedPiece` (function) — 10 call sites
-- `src/services/boardComputers.ts:5694`
-- `src/services/boardComputers.ts:5701`
+- `src/services/boardComputers.ts:5699`
+- `src/services/boardComputers.ts:5706`
 - `src/services/moveInsight.ts:419`
 - `src/services/reviewTeachingPoints.test.ts:256`
 - `src/services/reviewTeachingPoints.test.ts:262`
@@ -174,14 +174,14 @@
 
 ### `findWorstPlacedPiece` (re-export) — 27 call sites
 - `src/services/badPieceOncePerPly.test.ts:15`
-- `src/services/coachFeatureService.ts:5840`
+- `src/services/coachFeatureService.ts:5848`
 - `src/services/groundedAnswer.ts:1500`
 - `src/services/moveInsight.ts:359`
 - `src/services/nextPlans.test.ts:10`
 - `src/services/nextPlans.test.ts:34`
 - `src/services/nextPlans.ts:117`
 - `src/services/nextPlans.ts:232`
-- `src/services/nextPlans.ts:560`
+- `src/services/nextPlans.ts:565`
 - `src/services/oneWorstPiece.test.ts:22`
 - `src/services/outpostOneTest.test.ts:19`
 - `src/services/pieceQuality.ts:191`
@@ -192,7 +192,7 @@
 - `src/services/pieceValueRead.ts:392`
 - `src/services/pieceWish.ts:50`
 - `src/services/planChoice.ts:107`
-- `src/services/planOfTheBoard.ts:500`
+- `src/services/planOfTheBoard.ts:505`
 - `src/services/planStopped.ts:135`
 - `src/services/principleAttribution.ts:1561`
 - `src/services/reviewNarrationDefects.test.ts:34`

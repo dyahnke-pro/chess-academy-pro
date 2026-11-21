@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1692 lines · 12 exports · 24 importers · 34 tests · 0 audits**
+**1702 lines · 12 exports · 24 importers · 34 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -40,7 +40,7 @@
 ## Exports and every call site
 
 ### `prematureBreakWhy` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1240`
+- `src/services/coachFeatureService.ts:1242`
 - `src/services/prematureBreak.test.ts:15`
 - `src/services/prematureBreak.test.ts:25`
 - `src/services/prematureBreak.test.ts:30`
@@ -58,7 +58,7 @@
 - `src/services/batch2Wiring.test.ts:55`
 - `src/services/boardDelta.test.ts:15`
 - `src/services/boardDelta.test.ts:68`
-- `src/services/coachFeatureService.ts:2337`
+- `src/services/coachFeatureService.ts:2339`
 - `src/services/danyaBench.measure.test.ts:436`
 - `src/services/exchangeIdeas.test.ts:238`
 - `src/services/forkTrick.test.ts:62`
@@ -130,7 +130,7 @@
 
 ### `positionalVerdictLine` (re-export) — 3 call sites
 - `src/services/boardComputers.ts:2066`
-- `src/services/coachFeatureService.ts:3063`
+- `src/services/coachFeatureService.ts:3079`
 - `src/services/reviewPositionalAssessment.ts:380`
 
 ### `correctionAgainstHeard` (re-export) — 6 call sites

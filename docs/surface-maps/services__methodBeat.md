@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**544 lines · 21 exports · 26 importers · 12 tests · 1 audits**
+**542 lines · 21 exports · 26 importers · 12 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -60,8 +60,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `habitIsOwed` (function) — 2 call sites
-- `src/services/coachFeatureService.ts:3749`
-- `src/services/positionFacts.ts:1176`
+- `src/services/coachFeatureService.ts:3765`
+- `src/services/positionFacts.ts:1175`
 
 ### `HABIT_KIND` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -85,7 +85,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `liveHabitKey` (function) — 11 call sites
-- `src/services/boardComputers.ts:4894`
+- `src/services/boardComputers.ts:4900`
 - `src/services/learnFundamentalNarration.ts:120`
 - `src/services/methodBeat.live.test.ts:112`
 - `src/services/methodBeat.live.test.ts:119`
@@ -98,8 +98,8 @@
 - `src/services/slipQuestion.test.ts:53`
 
 ### `habitSaidKey` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10815`
-- `src/components/Coach/CoachTeachPage.tsx:10816`
+- `src/components/Coach/CoachTeachPage.tsx:10846`
+- `src/components/Coach/CoachTeachPage.tsx:10847`
 - `src/services/learnBoardTeaching.ts:250`
 - `src/services/learnBoardTeaching.ts:989`
 - `src/services/slipQuestion.test.ts:53`

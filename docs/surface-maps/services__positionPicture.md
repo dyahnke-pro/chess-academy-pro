@@ -71,12 +71,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionPicture.test.ts:22`
 - `src/services/positionPicture.test.ts:31`
 - `src/services/positionPicture.test.ts:39`
-- `src/services/thoughtComposer.ts:642`
+- `src/services/thoughtComposer.ts:647`
 
 ### `isDetailOf` (function) — 3 call sites
 - `src/services/coachDecider.ts:565`
-- `src/services/thoughtComposer.ts:644`
 - `src/services/thoughtComposer.ts:649`
+- `src/services/thoughtComposer.ts:654`
 
 ## Tests
 

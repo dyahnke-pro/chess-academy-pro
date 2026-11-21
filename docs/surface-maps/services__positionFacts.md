@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2009 lines · 17 exports · 45 importers · 52 tests · 3 audits**
+**2013 lines · 17 exports · 45 importers · 52 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
@@ -100,7 +100,7 @@
 - `src/services/positionFacts.weakness.test.ts:71`
 
 ### `clauseClaims` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11577`
+- `src/components/Coach/CoachTeachPage.tsx:11602`
 - `src/hooks/usePhaseNarration.door.test.ts:78`
 - `src/hooks/usePhaseNarration.ts:471`
 - `src/services/raceAimOneVoice.test.ts:20`
@@ -119,7 +119,7 @@
 
 ### `computePositionFacts` (function) — 111 call sites
 - `src/coach/boardTurnAnswer.ts:178`
-- `src/components/Coach/CoachTeachPage.tsx:11418`
+- `src/components/Coach/CoachTeachPage.tsx:11443`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:271`
 - `src/hooks/usePhaseNarration.ts:433`
@@ -231,11 +231,11 @@
 - `src/test/teach02Wired.test.ts:140`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11695`
+- `src/components/Coach/CoachTeachPage.tsx:11720`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
-### `afterLine` (function) — 7 call sites
+### `afterLine` (function) — 8 call sites
 - `src/services/positionFacts.afterLine.test.ts:13`
 - `src/services/positionFacts.afterLine.test.ts:16`
 - `src/services/positionFacts.afterLine.test.ts:19`
@@ -243,6 +243,7 @@
 - `src/services/positionFacts.afterLine.test.ts:25`
 - `src/services/positionFacts.afterLine.test.ts:29`
 - `src/services/positionFacts.afterLine.test.ts:31`
+- `src/services/positionFacts.afterLine.test.ts:38`
 
 ### `threatTheyMake` (function) — 3 call sites
 - `src/services/positionFacts.threatFirst.test.ts:11`
@@ -257,9 +258,9 @@
 - `src/services/positionFacts.tacticDecides.test.ts:19`
 
 ### `conceptInstanceKey` (re-export) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9384`
-- `src/components/Coach/CoachTeachPage.tsx:9523`
-- `src/services/boardComputers.ts:5094`
+- `src/components/Coach/CoachTeachPage.tsx:9408`
+- `src/components/Coach/CoachTeachPage.tsx:9547`
+- `src/services/boardComputers.ts:5100`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/claimKeysLooseCount.test.ts:31`

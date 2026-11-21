@@ -64,41 +64,41 @@
 - `src/services/boardComputers.ts:3742`
 - `src/services/boardComputers.ts:4097`
 - `src/services/boardComputers.ts:4125`
-- `src/services/boardComputers.ts:4800`
-- `src/services/boardComputers.ts:4820`
-- `src/services/boardComputers.ts:4949`
-- `src/services/boardComputers.ts:4975`
-- `src/services/boardComputers.ts:5000`
-- `src/services/boardComputers.ts:5052`
-- `src/services/boardComputers.ts:5069`
-- `src/services/boardComputers.ts:5437`
-- `src/services/boardComputers.ts:5553`
-- `src/services/boardComputers.ts:6169`
-- `src/services/boardComputers.ts:6194`
-- `src/services/boardComputers.ts:6223`
-- `src/services/boardComputers.ts:6245`
-- `src/services/boardComputers.ts:6333`
-- `src/services/boardComputers.ts:6363`
-- `src/services/boardComputers.ts:6401`
-- `src/services/boardComputers.ts:6504`
-- `src/services/boardComputers.ts:6954`
-- `src/services/boardComputers.ts:6972`
-- `src/services/boardComputers.ts:6988`
-- `src/services/boardComputers.ts:7006`
-- `src/services/boardComputers.ts:7283`
-- `src/services/boardComputers.ts:7305`
-- `src/services/boardComputers.ts:7329`
-- `src/services/boardComputers.ts:7349`
-- `src/services/boardComputers.ts:7853`
-- `src/services/boardComputers.ts:7872`
-- `src/services/boardComputers.ts:7893`
-- `src/services/boardComputers.ts:7917`
-- `src/services/boardComputers.ts:7941`
-- `src/services/boardComputers.ts:7964`
-- `src/services/boardComputers.ts:7986`
-- `src/services/boardComputers.ts:8015`
-- `src/services/boardComputers.ts:8040`
-- `src/services/boardComputers.ts:8081`
+- `src/services/boardComputers.ts:4806`
+- `src/services/boardComputers.ts:4826`
+- `src/services/boardComputers.ts:4955`
+- `src/services/boardComputers.ts:4981`
+- `src/services/boardComputers.ts:5006`
+- `src/services/boardComputers.ts:5058`
+- `src/services/boardComputers.ts:5075`
+- `src/services/boardComputers.ts:5443`
+- `src/services/boardComputers.ts:5559`
+- `src/services/boardComputers.ts:6175`
+- `src/services/boardComputers.ts:6200`
+- `src/services/boardComputers.ts:6229`
+- `src/services/boardComputers.ts:6251`
+- `src/services/boardComputers.ts:6339`
+- `src/services/boardComputers.ts:6369`
+- `src/services/boardComputers.ts:6407`
+- `src/services/boardComputers.ts:6510`
+- `src/services/boardComputers.ts:6960`
+- `src/services/boardComputers.ts:6978`
+- `src/services/boardComputers.ts:6994`
+- `src/services/boardComputers.ts:7012`
+- `src/services/boardComputers.ts:7289`
+- `src/services/boardComputers.ts:7311`
+- `src/services/boardComputers.ts:7335`
+- `src/services/boardComputers.ts:7355`
+- `src/services/boardComputers.ts:7859`
+- `src/services/boardComputers.ts:7878`
+- `src/services/boardComputers.ts:7899`
+- `src/services/boardComputers.ts:7923`
+- `src/services/boardComputers.ts:7947`
+- `src/services/boardComputers.ts:7970`
+- `src/services/boardComputers.ts:7992`
+- `src/services/boardComputers.ts:8021`
+- `src/services/boardComputers.ts:8046`
+- `src/services/boardComputers.ts:8087`
 - `src/services/conceptEngine.test.ts:19`
 - `src/services/conceptEngine.test.ts:20`
 - `src/services/groundedMoveWhy.ts:83`
@@ -120,11 +120,12 @@
 - `src/services/conceptEngine.test.ts:82`
 - `src/services/learnWalkBlumenfeld.test.ts:141`
 
-### `renderMatchupConcept` (function) — 4 call sites
+### `renderMatchupConcept` (function) — 5 call sites
 - `src/services/conceptEngine.test.ts:56`
 - `src/services/conceptEngine.test.ts:62`
 - `src/services/conceptEngine.test.ts:67`
 - `src/services/conceptEngine.test.ts:92`
+- `src/services/conceptEngine.test.ts:348`
 
 ### `endgameConceptFor` (function) — 18 call sites
 - `src/services/conceptEngine.test.ts:258`
@@ -185,13 +186,13 @@
 - `src/services/conceptVocabulary.test.ts:63`
 
 ### `definitionKey` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8722`
+- `src/components/Coach/CoachTeachPage.tsx:8743`
 - `src/services/boardComputers.ts:2136`
 - `src/services/learnWalkBlumenfeld.test.ts:144`
-- `src/services/positionFacts.ts:1435`
-- `src/services/positionFacts.ts:1437`
-- `src/services/positionFacts.ts:1800`
-- `src/services/positionFacts.ts:1804`
+- `src/services/positionFacts.ts:1434`
+- `src/services/positionFacts.ts:1436`
+- `src/services/positionFacts.ts:1799`
+- `src/services/positionFacts.ts:1803`
 
 ### `tacticInvariant` (function) — 7 call sites
 - `src/services/boardComputers.ts:2134`

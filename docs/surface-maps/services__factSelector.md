@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**341 lines · 9 exports · 6 importers · 3 tests · 1 audits**
+**355 lines · 10 exports · 8 importers · 4 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,10 +19,12 @@
 
 - `src/services/coachDecider.ts`
 - `src/services/factSelector.test.ts`
+- `src/services/ideaKind.ts`
 - `src/services/learnTurnDoor.ts`
 - `src/services/positionFacts.ts`
 - `src/services/readDecider.ts`
 - `src/services/supportedFacts.test.ts`
+- `src/services/thoughtComposer.ts`
 
 ## Exports and every call site
 
@@ -42,18 +44,25 @@
 - `src/services/factSelector.test.ts:81`
 - `src/services/factSelector.test.ts:85`
 
-### `jaccard` (function) — 1 call site
-- `src/services/readDecider.ts:446`
+### `jaccard` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `claimFamily` (function) — 1 call site
 - `src/services/learnTurnDoor.ts:1101`
 
-### `sameClaim` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:2668`
+### `ClaimGrain` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `sameClaim` (function) — 9 call sites
+- `src/services/coachFeatureService.ts:2672`
+- `src/services/ideaKind.ts:126`
 - `src/services/learnTurnDoor.ts:1101`
 - `src/services/readDecider.ts:414`
 - `src/services/readDecider.ts:443`
 - `src/services/readDecider.ts:558`
+- `src/services/thoughtComposer.ts:442`
+- `src/services/thoughtComposer.ts:471`
+- `src/services/thoughtComposer.ts:544`
 
 ### `selectFacts` (function) — 18 call sites
 - `src/services/coachDecider.ts:532`
@@ -92,6 +101,7 @@
 - `src/services/factSelector.test.ts`
 - `src/services/supportedFacts.test.ts`
 - `src/test/oneSameClaim.gate.test.ts`
+- `src/test/oneSameClaimRule.gate.test.ts`
 
 ## Audits that reach it
 

@@ -4,14 +4,14 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**529 lines · 1 exports · 2 importers · 7 tests · 2 audits**
+**529 lines · 1 exports · 2 importers · 9 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4638) — names `usePhaseNarration`
-- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:4978) — names `usePhaseNarration`
-- **🔒🔒 SUPERSEDED 2026-08-05 — THE MID-GAME CARDS ARE GONE FROM LEARN. The RECORD stays; the INTERRUPTION does not.** (CLAUDE.md:5806) — names `usePhaseNarration`
-- **The standard post-deploy ritual** (CLAUDE.md:6936) — names `usePhaseNarration`
+- **🔒🔒 EVERY ALGO-BASED BUILD SHIPS WITH AN AUDIT TOOL — the decision must be observable, not just its prose (David 2026-09-20: "I want audit tools on all algo based builds").** (CLAUDE.md:4701) — names `usePhaseNarration`
+- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:5041) — names `usePhaseNarration`
+- **🔒🔒 SUPERSEDED 2026-08-05 — THE MID-GAME CARDS ARE GONE FROM LEARN. The RECORD stays; the INTERRUPTION does not.** (CLAUDE.md:5872) — names `usePhaseNarration`
+- **The standard post-deploy ritual** (CLAUDE.md:7055) — names `usePhaseNarration`
 
 ## Who calls in
 
@@ -21,7 +21,7 @@
 ## Exports and every call site
 
 ### `usePhaseNarration` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8751`
+- `src/components/Coach/CoachTeachPage.tsx:8793`
 - `src/hooks/usePhaseNarration.door.test.ts:64`
 - `src/hooks/usePhaseNarration.door.test.ts:90`
 
@@ -32,6 +32,8 @@
 - `src/services/learnTurnDoor.test.ts`
 - `src/services/liveNeedWire.test.ts`
 - `src/test/corpusScope.test.ts`
+- `src/test/learnTurnSpeed.gate.test.ts`
+- `src/test/oneCoachUnlocked.gate.test.ts`
 - `src/test/oneFactShape.gate.test.ts`
 - `src/test/oneStoryState.gate.test.ts`
 

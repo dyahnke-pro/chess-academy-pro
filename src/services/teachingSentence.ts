@@ -953,7 +953,7 @@ export function oneMoveHead(text: string, san: string | undefined): string {
     if (!named) { named = true; return s; }
     const [re, it] = headed;
     const out = s.replace(re, it);
-    return it === '' ? out.charAt(0).toUpperCase() + out.slice(1) : out;
+    return it === '' ? openSentence(out) : out;
   }).join(' ');
 }
 

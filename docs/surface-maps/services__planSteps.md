@@ -45,8 +45,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/boardPlan.ts:63`
 - `src/services/boardReadFacts.ts:236`
 - `src/services/planOfTheBoard.test.ts:36`
-- `src/services/planOfTheBoard.ts:185`
-- `src/services/planOfTheBoard.ts:197`
+- `src/services/planOfTheBoard.ts:188`
+- `src/services/planOfTheBoard.ts:200`
 - `src/services/planSteps.boardNow.test.ts:16`
 - `src/services/planSteps.boardNow.test.ts:19`
 - `src/services/planSteps.boardNow.test.ts:26`
@@ -67,7 +67,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planSteps.test.ts:44`
 
 ### `hasMatingForce` (function) — 1 call site
-- `src/services/planOfTheBoard.ts:681`
+- `src/services/planOfTheBoard.ts:686`
 
 ### `planStepsHeld` (function) — 3 call sites
 - `src/services/boardComputers.ts:3775`
@@ -90,8 +90,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planSteps.test.ts:82`
 
 ### `roadJobText` (function) — 2 call sites
-- `src/services/planOfTheBoard.ts:322`
-- `src/services/planOfTheBoard.ts:330`
+- `src/services/planOfTheBoard.ts:325`
+- `src/services/planOfTheBoard.ts:333`
 
 ### `planStepsKey` (function) — 1 call site
 - `src/services/boardComputers.ts:3770`
@@ -103,7 +103,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/boardBundle.ts:403`
 - `src/services/boardBundle.ts:404`
 - `src/services/moveThoughtFacts.ts:867`
-- `src/services/reviewFullData.ts:1365`
+- `src/services/reviewFullData.ts:1375`
 
 ## Tests
 

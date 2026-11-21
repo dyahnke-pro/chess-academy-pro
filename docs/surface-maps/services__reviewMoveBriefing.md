@@ -59,11 +59,11 @@
 
 ### `signedBand` (const) — 3 call sites
 - `src/services/boardComputers.ts:3130`
-- `src/services/boardComputers.ts:6488`
+- `src/services/boardComputers.ts:6493`
 - `src/services/boardReadFacts.ts:196`
 
 ### `evalReading` (function) — 5 call sites
-- `src/services/boardComputers.ts:6486`
+- `src/services/boardComputers.ts:6491`
 - `src/services/evalReading.test.ts:11`
 - `src/services/evalReading.test.ts:17`
 - `src/services/evalReading.test.ts:23`
@@ -73,7 +73,7 @@
 - `src/services/boardReadFacts.ts:195`
 
 ### `moveAspects` (function) — 13 call sites
-- `src/services/boardComputers.ts:6132`
+- `src/services/boardComputers.ts:6137`
 - `src/services/captureLeadsTo.test.ts:26`
 - `src/services/countedWhenTradeEnds.test.ts:38`
 - `src/services/countedWhenTradeEnds.test.ts:52`
