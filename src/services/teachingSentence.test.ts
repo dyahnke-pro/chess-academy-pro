@@ -56,3 +56,14 @@ describe('a resource with two targets names them by piece (humanSquares 2026-11-
     expect(renderCounterplay({ ...base, hits: ['your queen on c8'] })).toMatch(/your queen on c8/);
   });
 });
+
+describe('oneMoveHead — the move is named once a turn (prod Review 2026-11-21)', () => {
+  it('a later sentence that leads with the move says "it"', async () => {
+    const { oneMoveHead } = await import('./teachingSentence');
+    expect(oneMoveHead('fxe5 is a pawn break in the centre. You played fxe5 — it stops …Bb4.', 'fxe5')).toBe('fxe5 is a pawn break in the centre. It also stops …Bb4.');
+    expect(oneMoveHead('You played Qe2+ — it stops …c5. Your Qe2+ takes the open e-file.', 'Qe2+')).toBe('You played Qe2+ — it stops …c5. It takes the open e-file.');
+    // A move named inside a sentence is left alone; the first head is kept.
+    expect(oneMoveHead('Ndb5 was stronger than Bxb7+. Bxb7+ trades pieces while you are behind.', 'Bxb7+')).toBe('Ndb5 was stronger than Bxb7+. It trades pieces while you are behind.');
+    expect(oneMoveHead('Your knight on d6 forks their king.', 'Nd6+')).toBe('Your knight on d6 forks their king.');
+  });
+});

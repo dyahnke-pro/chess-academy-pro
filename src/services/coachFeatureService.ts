@@ -1,3 +1,4 @@
+import { oneMoveHead } from './teachingSentence';
 import { fadeLevelsFrom, fadeText } from './fadeText';
 import { withLayers } from './recordShortening';
 import { moveIntentsForGame, type ReviewIntent } from './reviewMoveIntent';
@@ -645,6 +646,7 @@ export function foldReviewRefrains(segments: ReviewMoveSegment[], story: StorySt
     if (!s.narration) continue;
     const before = new Set(ledger);
     s.narration = foldStandingRefrains(s.narration, ledger);
+    if (s.narration) s.narration = oneMoveHead(s.narration, s.san);
     if (!onStory) continue;
     const added = [...ledger].filter((x) => !before.has(x)).map((x) => `${REVIEW_SAID.refrain}${x}`);
     if (added.length > 0) story.commit(s.ply, { claims: added });

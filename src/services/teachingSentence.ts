@@ -913,3 +913,32 @@ export function renderPlanHeld(h: { piece: string | null; from: string | null; a
   if (!target) return null;
   return `Your pieces have a target: ${target}.${h.why}`;
 }
+
+/** ONE MOVE HEAD A TURN (prod Review 2026-11-21: "fxe5 is a pawn break … You
+ *  played fxe5 — it stops …Bb4", "You played Qe2+ — it stops …c5 … Your Qe2+
+ *  takes the open e-file"): the move is named once a turn; a later sentence
+ *  that leads with it again says "it". Only a sentence HEAD — a move named
+ *  inside a sentence ("Bxb7+ was stronger than …") keeps its name. */
+export function oneMoveHead(text: string, san: string): string {
+  const bare = san.replace(/^…/, '').replace(/[+#!?]+$/, '');
+  if (bare.length < 2) return text;
+  const esc = bare.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const move = `…?${esc}[+#]?`;
+  const heads: Array<[RegExp, string]> = [
+    [new RegExp(`^(?:You|They) (?:played|play|went for|go) ${move}(?: — it |, which | — |: it )`), 'It also '],
+    [new RegExp(`^(?:Your|Their) ${move} `), 'It '],
+    [new RegExp(`^${move}(?=:? )(?::)? `), 'It '],
+  ];
+  const sentences = text.split(/(?<=[.!?])\s+(?=[A-Z…a-h])/);
+  let named = false;
+  return sentences.map((s) => {
+    const headed = heads.find(([re]) => re.test(s));
+    if (!headed) {
+      if (new RegExp(`(?:^|[\\s(])${move}(?=[\\s,.:;—)]|$)`).test(s)) named = true;
+      return s;
+    }
+    if (!named) { named = true; return s; }
+    const [re, it] = headed;
+    return s.replace(re, it);
+  }).join(' ');
+}

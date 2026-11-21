@@ -6,7 +6,7 @@
 import { describe, it } from 'vitest';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
-import { buildReviewSegmentsForTests, type ReviewMoveInput } from './coachFeatureService';
+import { buildReviewSegmentsForTests, foldReviewRefrains, type ReviewMoveInput } from './coachFeatureService';
 import { setOpeningIdentity } from './openingIdentity';
 import { setOpeningPositions } from './openingPositions';
 import { createStoryStore } from './gameStory';
@@ -29,7 +29,10 @@ describe('Review repeats', () => {
         const [classification, preMoveEval, evaluation, bestMove] = g.ann[i] ?? [null, null, null, null];
         return { ply: i + 1, san, fenAfter: d.fen(), isCoachMove: g.side === 'white' ? i % 2 === 1 : i % 2 === 0, classification: classification ?? 'good', preMoveEval: preMoveEval ?? 0, evaluation: evaluation ?? 0, bestMove } as unknown as ReviewMoveInput;
       });
-      const segs = buildReviewSegmentsForTests(inputs, g.side, null, true, 1400, [], undefined, null, new Map(), new Map(), null, createStoryStore(g.id), new Map(), knownSlipIndexFromDisk());
+      const story = createStoryStore(g.id);
+      const segs = buildReviewSegmentsForTests(inputs, g.side, null, true, 1400, [], undefined, null, new Map(), new Map(), null, story, new Map(), knownSlipIndexFromDisk());
+      // The app's finishing pass over the walk (`generateReviewNarration`).
+      foldReviewRefrains(segs, story, null);
       for (const s of segs) {
         const t = s.narration ?? ''; if (!t) continue; turns++;
         const c2: Record<string, number> = {};
