@@ -75,3 +75,11 @@ describe('a quiet move is said with its seat (board read: "Rab8 is quiet" for Bl
     expect(renderQuietThreat({ san: 'Rd3', follow: 'Rxd5', mates: false, forcing: false, mover: 'w' })).toBe('Rd3 is quiet: it prepares Rxd5.');
   });
 });
+
+describe('oneMoveHead — the colon head and the "X, not Y" head (Review repeats 2026-11-21)', () => {
+  it('drops a repeated head and keeps the sentence', async () => {
+    const { oneMoveHead } = await import('./teachingSentence');
+    expect(oneMoveHead('axb5 is a pawn break. You play axb5: once they take back, their b-pawn is isolated.', 'axb5')).toBe('axb5 is a pawn break. Once they take back, their b-pawn is isolated.');
+    expect(oneMoveHead('You played exd5 — it half-opens the e-file. exd5, not Qxd5, which would just lose the queen to Bxd5.', 'exd5')).toBe('You played exd5 — it half-opens the e-file. Not Qxd5, which would just lose the queen to Bxd5.');
+  });
+});

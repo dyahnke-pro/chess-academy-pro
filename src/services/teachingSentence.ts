@@ -932,6 +932,11 @@ export function oneMoveHead(text: string, san: string): string {
     [new RegExp(`^(?:You|They) (?:played|play|went for|go) ${move}(?: — it |, which | — |: it )`), 'It also '],
     [new RegExp(`^(?:Your|Their) ${move} `), 'It '],
     [new RegExp(`^${move}(?=:? )(?::)? `), 'It '],
+    // "You play axb5: once they take back…" after axb5 was named: the head
+    // goes, the rest stands ("Once they take back…").
+    [new RegExp(`^(?:You|They) (?:played|play|went for|go) ${move}: `), ''],
+    // "exd5, not Qxd5, which would…" after exd5 was named: "Not Qxd5, …".
+    [new RegExp(`^${move}, not `), 'Not '],
   ];
   const sentences = text.split(/(?<=[.!?])\s+(?=[A-Z…a-h])/);
   let named = false;
@@ -943,7 +948,8 @@ export function oneMoveHead(text: string, san: string): string {
     }
     if (!named) { named = true; return s; }
     const [re, it] = headed;
-    return s.replace(re, it);
+    const out = s.replace(re, it);
+    return it === '' ? out.charAt(0).toUpperCase() + out.slice(1) : out;
   }).join(' ');
 }
 
