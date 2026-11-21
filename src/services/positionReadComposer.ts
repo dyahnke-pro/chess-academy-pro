@@ -8,6 +8,8 @@ import { Chess } from 'chess.js';
 //
 // G0: every sentence returned is computed; the caller's model only phrases
 // them, most-important-first, in the order returned.
+import { recordLevels } from './recordShortening';
+import { layerStandings } from './teachingLayers';
 import { buildFedTacticsContext } from './liveTacticsContext';
 import { sharpGap, SHARP_GAP_CP } from './positionCharacter';
 import type { BoardReader } from './boardReadFacts';
@@ -250,6 +252,10 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
       withheld: marks?.squares ?? null,
       studentShot: readHasShot(i.fen, studentCC, before, (tactics?.immediate ?? []).some((t) => t.side === 'student')),
       said: i.story?.claims ?? null,
+      // The one shortener's levels, from the reader's own record.
+      levels: i.studentNeedContext
+        ? recordLevels(i.studentNeedContext.heat, layerStandings(i.studentNeedContext.signals, i.studentNeedContext.capabilities))
+        : null,
       line: before[0]?.moves ?? [],
     }));
     readLines = decided.facts.map((f) => f.text);

@@ -24,7 +24,7 @@
 // Phrasing rotates on the board (`stemKeyOf` of the FEN), never at random.
 import { Chess, type Color, type PieceSymbol, type Square, type Move } from 'chess.js';
 import { kingRing, kingNeighbourhood, bearsOnSquare, kingCover } from './kingSafety';
-import { sideToMoveAs, hasMateThreat, mateThreatsAgainst } from './threatOut';
+import { sideToMoveAs, hasMateThreat } from './threatOut';
 import { MATERIAL_VALUE, sideMaterial } from './pieceValues';
 import { andList, countWord } from '../utils/andList';
 import { openSentence } from '../utils/openSentence';

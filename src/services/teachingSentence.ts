@@ -19,10 +19,11 @@
  *   - no orphan lead ("It …", "after this").
  * Pure: chess.js only.
  */
+import { CAPTURE_VALUE } from './pieceValues';
 import { Chess, type Color, type Square, type PieceSymbol } from 'chess.js';
 import { rotateStem } from '../utils/rotateStem';
 import { andList, orList, countWord } from '../utils/andList';
-import { openSentence } from '../utils/openSentence';
+import { openSentence, continueSentence } from '../utils/openSentence';
 import { evalBandWords, type EvalBand } from './evalBand';
 
 /** The board a fact is about, relative to the board on screen. */
@@ -64,82 +65,8 @@ export function boardAfter(fen: string, path: readonly string[], relation: 'line
   return after ? { key: positionKey(after), path: [...path], relation } : null;
 }
 
-/** Can a fact stamped `board` be said on the screen `screenFen`: its own
- *  board, or a board its path reaches. A past board is checked by
- *  `anchorPastFact`, which holds the earlier board. */
-export function boardReachable(board: FactBoard, screenFen: string): boolean {
-  if (board.relation === 'now') return board.path.length === 0 && board.key === positionKey(screenFen);
-  if (board.relation === 'past' || board.path.length === 0) return false;
-  const own = fenAfter(screenFen, board.path);
-  return !!own && positionKey(own) === board.key;
-}
-
-/** What a teaching fact's mechanism is — data, never prose. `why` is the
- *  computed reason of a try (a refuter's words until that family returns
- *  data); `material` the ledger's words for what the line wins. */
-export type Mechanism =
-  | { kind: 'try-fails'; reply: string; why: string | null; material: string | null; mates: boolean }
-  | { kind: 'attacks'; target: string }
-  | { kind: 'threatens'; follow: string; mate: boolean };
-
-export interface SentenceFact {
-  /** The piece's square on the fact's own board, or the move (uci) — played
-   *  from the screen — the fact is about. */
-  who: { square: string } | { move: string };
-  does: Mechanism;
-  /** The consequence for the side, as a computed id. */
-  soWhat: 'loses-the-game' | 'throws-the-win' | 'wins-material' | null;
-  proof: { short: string | null; full: readonly string[] };
-  pattern?: string | null;
-  board: FactBoard;
-  seat: Color;
-}
-
-declare const ANCHORED: unique symbol;
-/** A fact anchored on the screen: the only shape the renderer writes. */
-export type AnchoredFact = SentenceFact & { readonly [ANCHORED]: true; readonly ownFen: string };
-
-/** Anchor a fact on the board on screen; null — never rendered — when its
- *  board is another board with no path to it. */
-export function anchorSentenceFact(f: SentenceFact, screenFen: string): AnchoredFact | null {
-  if (!boardReachable(f.board, screenFen)) return null;
-  const own = f.board.relation === 'now' ? screenFen : fenAfter(screenFen, f.board.path);
-  return own ? ({ ...f, ownFen: own } as AnchoredFact) : null;
-}
-
-/** Anchor a fact about a PAST board: `pastFen` is the board it was computed
- *  on, and its path must lead from it to the screen. */
-export function anchorPastFact(f: SentenceFact, pastFen: string, screenFen: string): AnchoredFact | null {
-  if (f.board.relation !== 'past' || f.board.path.length === 0 || positionKey(pastFen) !== f.board.key) return null;
-  const reached = fenAfter(pastFen, f.board.path);
-  if (!reached || positionKey(reached) !== positionKey(screenFen)) return null;
-  return { ...f, ownFen: pastFen } as AnchoredFact;
-}
-
-/** ONE TENSE TABLE: relation × surface. */
-export const TENSE: Record<FactRelation, Record<Surface, 'present' | 'past' | 'if' | 'after'>> = {
-  now: { learn: 'present', read: 'present', chat: 'present', review: 'past' },
-  past: { learn: 'past', read: 'past', chat: 'past', review: 'past' },
-  line: { learn: 'after', read: 'after', chat: 'after', review: 'after' },
-  try: { learn: 'if', read: 'if', chat: 'if', review: 'if' },
-};
-
 const NAME: Record<PieceSymbol, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
-const VALUE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
-
-/** "your" / "their": the piece's colour ON THE FACT'S OWN BOARD against the
- *  seat. Null when no piece stands there. */
-export function ownerOf(f: AnchoredFact, square: string): 'your' | 'their' | null {
-  try { const p = new Chess(f.ownFen).get(square as Square); return p ? (p.color === f.seat ? 'your' : 'their') : null; } catch { return null; }
-}
-
-/** "your knight on e7", read off the fact's own board. */
-export function pieceWords(f: AnchoredFact, square: string): string | null {
-  try {
-    const p = new Chess(f.ownFen).get(square as Square);
-    return p ? `${p.color === f.seat ? 'your' : 'their'} ${NAME[p.type]} on ${square}` : null;
-  } catch { return null; }
-}
+const VALUE: Readonly<Record<string, number>> = CAPTURE_VALUE;
 
 /** SAN of `uci` on `fen`, with "…" before a Black move. */
 export function sanWords(fen: string, uci: string): string | null {
@@ -207,53 +134,7 @@ export function pathWords(fen: string, path: readonly string[]): string | null {
 
 export interface Rendered { spoken: string; shown: string; marks: { squares: string[]; arrows: Array<[string, string]> } }
 
-const cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
-const stemKey = (s: string): number => Array.from(s).reduce((n, ch) => (n * 31 + ch.charCodeAt(0)) >>> 0, 7);
-
-/** THE RENDERER: one anchored fact, one sentence (or a short run of
- *  sentences that state that one fact). It never adds, drops, merges or
- *  reorders facts — the decider has. */
-export function renderSentenceFact(f: AnchoredFact, surface: Surface, screenFen: string): Rendered | null {
-  const tense = TENSE[f.board.relation][surface];
-  const d = f.does;
-  if (d.kind === 'try-fails') {
-    if (!('move' in f.who)) return null;
-    const trySan = sanWords(screenFen, f.who.move);
-    if (!trySan) return null;
-    const mine = new Chess(screenFen).turn() === f.seat;
-    const stem = stemKey(`${f.board.key}|${f.who.move}`);
-    const lead = mine
-      ? rotateStem([`${trySan} looks natural, but ${d.reply} meets it.`, `${trySan} is the obvious try, but ${d.reply} is the answer.`, `${trySan} is tempting, but ${d.reply} takes the sting out of it.`], stem)
-      : rotateStem([`If they try ${trySan}, ${d.reply} meets it.`, `${trySan} would run into ${d.reply}.`], stem);
-    // THE WHY BEFORE THE MATERIAL.
-    const why = d.why ? `${cap(d.why.trim().replace(/[.\s]+$/, ''))}.` : null;
-    const cost = d.mates ? `${trySan} loses the game.` : d.material ? `${mine ? 'They' : 'You'} win ${d.material} in the line.` : null;
-    if (!why && !cost) return null;
-    const text = [lead, why, cost].filter(Boolean).join(' ');
-    return { spoken: text, shown: text, marks: { squares: [f.who.move.slice(2, 4)], arrows: [[f.who.move.slice(0, 2), f.who.move.slice(2, 4)]] } };
-  }
-  if (d.kind === 'attacks') {
-    if (!('square' in f.who)) return null;
-    const a = pieceWords(f, f.who.square);
-    const t = pieceWords(f, d.target);
-    if (!a || !t) return null;
-    const first = pathWords(screenFen, f.board.path);
-    const lead = tense === 'if' ? `If ${first ?? 'that'} is played, ${a}` : tense === 'after' ? `After ${first ?? 'the line'}, ${a}` : cap(a);
-    const verb = tense === 'past' ? 'attacked' : tense === 'if' ? 'would attack' : 'attacks';
-    const text = `${lead} ${verb} ${t}.`;
-    return { spoken: text, shown: text, marks: { squares: [f.who.square, d.target], arrows: [[f.who.square, d.target]] } };
-  }
-  if (!('move' in f.who)) return null;
-  const san = sanWords(screenFen, f.who.move);
-  const follow = sanWords(f.ownFen, d.follow);
-  if (!san || !follow) return null;
-  const forcing = d.mate || isForcingThreat(f.ownFen, d.follow);
-  const text = forcing ? `${san} threatens ${follow}${d.mate ? ', with mate to follow' : ''}.` : `${san} prepares ${follow}.`;
-  return { spoken: text, shown: text, marks: { squares: [d.follow.slice(2, 4)], arrows: [[d.follow.slice(0, 2), d.follow.slice(2, 4)]] } };
-}
-
-/** ORPHAN LEADS: a spoken fact may not start by pointing outside itself. */
-export const ORPHAN_LEAD = /^(?:It|This|That|These|Those|And|But)\b|^After this\b|^after this\b/;
+const cap = openSentence;
 
 // ── THE TRIES FAMILY (step 2a) ─────────────────────────────────────────────
 // A tempting move refuted, returned as data by its computers
@@ -572,7 +453,7 @@ export function renderMustDefendHit(d: MustDefendData): string {
 
 export function renderMustDefend(d: MustDefendData): string {
   const hit = renderMustDefendHit(d);
-  const low = hit.charAt(0).toLowerCase() + hit.slice(1);
+  const low = continueSentence(hit);
   if (d.still) return `Still — ${low}`;
   return d.winning ? `You're on top, but watch the counterpunch: ${low}` : hit;
 }
@@ -678,7 +559,7 @@ export type PictureVerdictKind = 'works-now' | 'hard-to-finish' | 'no-direct-way
 export function renderPictureVerdict(v: {
   kind: PictureVerdictKind; step: number; mine: boolean; works: string | null;
   butNames: readonly string[]; oneTarget: string | null; noCounterplay: boolean; stem: number;
-}): { text: string; afterStanding: string; word: string } {
+}): { text: string; afterStanding: string; joined: string; word: string } {
   const lead = v.step === 0 ? "It's level" : `${v.mine ? "You're" : "They're"} ${STEP_WORD[v.step]}`;
   const them = v.mine ? 'them' : 'you';
   const butLine = renderButLine(v.butNames, v.oneTarget, v.stem);
@@ -689,20 +570,24 @@ export function renderPictureVerdict(v: {
       text: rotateStem([`${lead}, and the direct way works now: ${v.works}.`, `${lead}, and ${v.works} goes straight for it.`], v.stem),
       // Said without the standing, "goes straight for it" has no "it".
       afterStanding: `The direct way works now: ${v.works}.`,
+      joined: `The direct way works now: ${v.works}.`,
       word: `${w}, and it works now`,
     };
     case 'hard-to-finish': {
       const first = rotateStem([`${lead}, but it is hard to finish ${them} off.`, `${lead}, but breaking through is another matter.`], v.stem);
       const after = rotateStem([`It is hard to finish ${them} off.`, 'Breaking through is another matter.'], v.stem);
-      return { text: `${first} ${butLine}${noCp}`, afterStanding: `${after} ${butLine}${noCp}`, word: `${w}, but hard to finish` };
+      // Right after the standing it is the standing's "but" (the contrast is
+      // the point: better, but hard to finish); said later, on its own.
+      const joined = rotateStem([`But it is hard to finish ${them} off.`, 'But breaking through is another matter.'], v.stem);
+      return { text: `${first} ${butLine}${noCp}`, afterStanding: `${after} ${butLine}${noCp}`, joined: `${joined} ${butLine}${noCp}`, word: `${w}, but hard to finish` };
     }
     case 'no-direct-way': {
       const first = rotateStem([`${lead}, and there is no direct way in.`, `${lead}, and the direct tries get nowhere.`], v.stem);
       const after = rotateStem(['There is no direct way in.', 'The direct tries get nowhere.'], v.stem);
-      return { text: `${first} ${butLine}`, afterStanding: `${after} ${butLine}`, word: 'level, with no direct way in' };
+      return { text: `${first} ${butLine}`, afterStanding: `${after} ${butLine}`, joined: `${after} ${butLine}`, word: 'level, with no direct way in' };
     }
-    case 'tries-worsen': return { text: `${lead}, and the active tries only make it worse. ${butLine}`, afterStanding: `The active tries only make it worse. ${butLine}`, word: `${w}, and the active tries make it worse` };
-    case 'plain': return { text: `${lead}.`, afterStanding: '', word: w };
+    case 'tries-worsen': return { text: `${lead}, and the active tries only make it worse. ${butLine}`, afterStanding: `The active tries only make it worse. ${butLine}`, joined: `The active tries only make it worse. ${butLine}`, word: `${w}, and the active tries make it worse` };
+    case 'plain': return { text: `${lead}.`, afterStanding: '', joined: '', word: w };
   }
 }
 
@@ -785,7 +670,9 @@ function weakWords(e: LedgerEntryWords): string {
   if (e.traits.includes('isolated')) return `the isolated pawn on ${e.square}`;
   if (e.traits.includes('backward')) return `the backward pawn on ${e.square}`;
   if (e.traits.includes('doubled')) return `the doubled pawn on ${e.square}`;
-  if (e.tiedTo) return `${name}, held only by ${andList(e.tiedTo.map((x) => `the ${x.piece} on ${x.square}`))}`;
+  // One guard is named with its square; more are named by piece (a sentence
+  // names two squares at most — the voice rule; the board lights them).
+  if (e.tiedTo) return `${name}, held only by ${e.tiedTo.length === 1 ? `the ${e.tiedTo[0].piece} on ${e.tiedTo[0].square}` : andList(e.tiedTo.map((x) => `the ${x.piece}`))}`;
   return name;
 }
 
@@ -834,9 +721,11 @@ export function renderTarget(t: { mine: boolean; now: boolean; thing: string; ru
 /** The plan's target: the piece that wins the race and its way there, then
  *  the count. */
 export function renderPlanTarget(p: { mine: boolean; piece: string; thing: string; route: readonly string[]; at: string; horizon: number; attackers: number; pawnsToo: boolean; defenders: number; stem: number }): string {
-  const way = p.route.length === 0 ? `to ${p.at}` : `by ${andList([...p.route])} to ${p.at}`;
+  // The route is drawn on the board; the sentence names where it ends and
+  // how far (a list of squares read aloud is a score sheet, the voice rule).
+  // (How far is the count sentence's job: "In four moves …".)
   const owner = p.mine ? 'Your' : 'Their';
-  const head = rotateStem([`${owner} ${p.piece} can go ${way} and hit ${p.thing}.`, `${owner} ${p.piece} has a way to ${p.thing}: ${way.replace(/^to /, '')}.`], p.stem);
+  const head = rotateStem([`${owner} ${p.piece} can get to ${p.at} and hit ${p.thing}.`, `${owner} ${p.piece} has a way to ${p.thing}: from ${p.at}.`], p.stem);
   const atk = `${countOf(p.attackers)} of ${p.mine ? 'your' : 'their'} ${p.pawnsToo ? 'pieces and pawns' : 'pieces'} ${p.attackers === 1 ? 'reaches' : 'reach'} it`;
   const guard = p.defenders === 0
     ? `${p.mine ? 'they have' : 'you have'} nothing that can guard it in time`
@@ -857,7 +746,7 @@ export function renderCounterplay(c: {
   else if (c.brk) {
     const then = c.hits.length > 1 ? ` Then it hits ${andList(c.hits.slice(1))}.` : '';
     head = rotateStem([`${owner} one resource is the pawn break ${c.brk.named}, taking ${c.whose} pawn on ${c.to}.`, `${owner} counterplay is ${c.brk.named}: the pawn takes ${c.whose} pawn on ${c.to}.`], c.stem) + then;
-  } else head = rotateStem([`${owner} ${c.piece} can come to ${c.to} and hit ${hit}.`, `${owner} resource is the ${c.piece} on ${c.from}: from ${c.to} it hits ${hit}.`], c.stem);
+  } else head = rotateStem([`${owner} ${c.piece} can come to ${c.to} and hit ${hit}.`, `${owner} resource is the ${c.piece}: from ${c.to} it hits ${hit}.`], c.stem);
   if (c.alive) return `${head} ${rotateStem(['It is coming: the best line plays it.', 'Nothing stops it in the best line.'], c.stem)}`;
   // A stopper that mates ends the game before the resource can count.
   return `${head} ${c.stopper ? (/#$/.test(c.stopper.named) ? `But ${c.stopper.who} ${c.stopper.named} mates first.` : `But ${c.stopper.who} ${c.stopper.named} stops it.`) : 'But the best line stops it.'}`;
@@ -967,4 +856,20 @@ export function renderTryLoss(d: TryLoss): string {
     case 'held': return `It takes on ${d.square}, but ${d.taker} takes back.`;
     case 'left-hanging': return `It does nothing for ${d.piece}, which ${d.taker} still takes.`;
   }
+}
+
+/** WHAT THE TEMPTING MOVE IS COUNTING ON, as the lead of its refutation
+ *  (`temptingHope.countingOn`): "Bxd1 is counting on Kxd1, but it fails". */
+export function renderCountingOnLead(trySan: string, hoped: string, mine: boolean, stem: number): string {
+  return mine
+    ? rotateStem([`${trySan} is counting on ${hoped}, but it fails`, `${trySan} hopes for ${hoped}, but it doesn't work`], stem)
+    : rotateStem([`${trySan} was counting on ${hoped} for them, but it fails`, `With ${trySan} they hoped for ${hoped}, but it doesn't work`], stem);
+}
+
+/** WHY THE REFUTATION IS EASY TO MISS (`temptingHope.easyToMiss`), the
+ *  refuting move named. */
+export function renderEasyToMiss(shape: 'quiet' | 'retreat', refutation: string, stem: number): string {
+  return shape === 'quiet'
+    ? rotateStem([`${refutation} is easy to miss: it's a quiet move, not a capture or a check.`, `${refutation} is the move that's easy to overlook, because it takes nothing and gives no check.`], stem)
+    : rotateStem([`${refutation} is easy to miss, because it's a move backward.`, `${refutation} is easy to overlook: the piece steps back instead of forward.`], stem);
 }

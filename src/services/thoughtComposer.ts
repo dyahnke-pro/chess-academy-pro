@@ -23,6 +23,8 @@
 //      interface talk).
 // Surfaces differ only in which steps they ask for and whose record they
 // read; the order and the choice are this file's.
+import { shortenLevel } from './recordShortening';
+import { fadeText, type FadeLevels } from './fadeText';
 import { stripThink } from '../utils/thinkPause';
 import type { SaidSet } from './gameStory';
 import { emitEverything, everythingListening } from './everythingEvents';
@@ -291,7 +293,12 @@ export function factDepth(f: Pick<ThoughtFact, 'restates' | 'source' | 'idea' | 
 /** THE STUDENT'S RECORD, for the surfaces that know whose game it is (Review).
  *  Read off the one heat map (`holdRate`), never a second estimator. A lesson
  *  is the same for everyone and a question was asked, so both pass null. */
-export interface ThoughtRecord { stateOf(skill: MisconceptionTagId): HeatState }
+export interface ThoughtRecord {
+  stateOf(skill: MisconceptionTagId): HeatState;
+  /** The one shortener's levels (`recordShortening.recordLevels`): skills and
+   *  layers together, read the same as every other door. */
+  levels: FadeLevels | null;
+}
 /** THE SKILL A FACT TEACHES, by its idea and whose move it is — the record's
  *  row it is read against. Exhaustive: a new idea fails to compile until it
  *  says which skill it teaches, or that it teaches none. */
@@ -501,7 +508,7 @@ export function composeThought(
   };
   for (const f0 of sorted) {
     // A standing already said: the fact is said without it (`onceSaid`).
-    const f = memory && f0.onceSaid && memory.keys.has(claimKey(f0.onceSaid.claim))
+    let f = memory && f0.onceSaid && memory.keys.has(claimKey(f0.onceSaid.claim))
       ? { ...f0, text: f0.onceSaid.text, alsoText: undefined, claims: f0.claims.filter((c) => c !== f0.onceSaid?.claim) }
       : f0;
     if (!reg.steps.has(f.step)) { held.push({ fact: f, why: 'step-not-asked' }); continue; }
@@ -514,7 +521,13 @@ export function composeThought(
     // THE RECORD PROVES IT: a skill the student holds (green) is not taught
     // again — unless it is a danger now, or a consequence the board hides
     // (one rule with Learn's threat voice: green and hidden still speaks).
-    if (f.step !== 'danger' && factDepth(f) !== 'hidden' && recordStateOf(f, record) === 'green') { held.push({ fact: f, why: 'record-green' }); continue; }
+    // THE ONE SHORTENER (`recordShortening`): the fact's skill, else its
+    // kind's layer. Silent is held; a danger or a hidden consequence still
+    // says its short form; short says the point alone.
+    const level = record ? shortenLevel(record.levels, IDEA_SKILL[f.idea][f.seat] ?? f.skill ?? null, f.kind) : null;
+    const keepsPoint = f.step === 'danger' || factDepth(f) === 'hidden';
+    if (level === 'silent' && !keepsPoint) { held.push({ fact: f, why: 'record-green' }); continue; }
+    if (level) { const t = fadeText(f.text, 'short'); if (t !== f.text) f = { ...f, text: t, alsoText: undefined }; }
     const lead = leadOf.get(f.step);
     // A FACT THAT ONLY RESTATES THE BOARD ("it gives check", "it brings your
     // knight out") is not a find: behind a fact of its step it adds nothing.

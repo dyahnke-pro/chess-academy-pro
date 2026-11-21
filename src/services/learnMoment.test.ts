@@ -86,4 +86,16 @@ describe('the Learn page names the decision from the grade, never on a recapture
     expect(page).toMatch(/kind: 'late'[^}]*decision: turnDecision/);
     expect(page).toMatch(/kind: 'instant'[^}]*decision: args\.decision/);
   });
+
+  // THE OPENING IS NAMED ON A QUIET TURN (David 2026-11-21: "No opening
+  // identified in learn?" → "yes"): the name when it is known, and the settled
+  // name once where the game leaves book (the lane's own say-once rule). A game
+  // of book moves is all quiet turns, so the quiet rule held the name every move.
+  it('the opening name speaks on a quiet turn', () => {
+    const name = fact('opening', 'This game is the Sicilian Defense: Accelerated Dragon.', [], { claims: ['opening-name:Sicilian Defense: Accelerated Dragon'] });
+    expect(decideTurn([name], '', undefined, null, null, false, turn(null, null)).spoke).toEqual(['opening']);
+    // …and only the name: the rest of the opening's teaching stays quiet.
+    expect(decideTurn([name, plan], '', undefined, null, null, false, turn(null, null)).spoke).toEqual(['opening']);
+  });
 });
+

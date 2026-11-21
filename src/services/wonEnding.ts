@@ -138,12 +138,12 @@ export function wonEnding(fen: string, student: Color, budget: number = KP_FAST_
       return make('keySquare', rotateStem([
         `${U.Whose} king on ${ks.king} stands on a key square of ${pawnName}: from there it escorts the pawn home, and the ending is won.`,
         `The ending is won because ${U.whose} king has reached ${ks.king}, a key square of ${pawnName}, and nothing can push it off.`,
-      ], k), [ks.king, ks.pawn as Square]);
+      ], k), [ks.king, ks.pawn]);
     }
     return make('opposition', rotateStem([
       `${U.who === 'you' ? 'You hold' : 'They hold'} the opposition: whichever way ${D.whose} king steps, ${U.whose} king goes to ${orList(ks.to)}, ${ks.to.length === 1 ? 'a key square' : 'each a key square'} of ${pawnName}. That wins.`,
       `The opposition wins it: ${D.whose} king has to give way, and ${U.whose} king walks to ${orList(ks.to)}, ${ks.to.length === 1 ? 'a key square' : 'each a key square'} of ${pawnName}.`,
-    ], k), [ks.king, ...ks.to, ks.pawn as Square]);
+    ], k), [ks.king, ...ks.to, ks.pawn]);
   }
 
   // ── A PROTECTED PASSER, AGAINST PAWNS OF THEIRS ──

@@ -269,3 +269,13 @@ describe('the flip — way ahead, the extra is their tactic for you to stop', ()
     expect(other.scan['wrong-pattern']).toBeGreaterThan(0);
   });
 });
+
+// THE GIFT IS A PIECE, NOT THE GAME (Learn walk 2026-11-21, 7…Qg5).
+describe('the plant prefers a smaller gift', () => {
+  it('inside a rank, a queen-sized slip is tried last', async () => {
+    const { readOrder, QUEEN_GIFT_CP } = await import('./focusPlant');
+    const slip = (uci: string, dropCp: number) => ({ uci, fenAfter: '', dropCp, took: 0, shown: null });
+    const order = readOrder([slip('queen', QUEEN_GIFT_CP + 200), slip('knight', 300)], () => 0).map((s) => s.uci);
+    expect(order).toEqual(['knight', 'queen']);
+  });
+});

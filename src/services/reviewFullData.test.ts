@@ -48,16 +48,17 @@ describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)'
   it('THE RACE COMES OUT of the review surface as a [plan-race] facet', () => {
     // "A wire that does not fire is not a wire" — the planRace unit gate proves
     // the COMPUTER; this proves the facet actually emerges from the surface a
-    // student hears. Fischer–Spassky 1972 move 27: White's e5 and Black's d4 are
-    // both passed and both three pushes from queening, with the move White's.
-    const FISCHER_BEFORE = '1r3n1k/r5p1/4q2p/p1p1Pp2/2Bp4/1P5Q/P5PP/2R2RK1 b - - 0 26';
+    // student hears. A king-and-pawn race: White's e5 and Black's d4 are both
+    // passed and both three pushes from queening, and no piece can stop them
+    // (a race counts only then, 2026-11-20).
+    const FISCHER_BEFORE = '7k/6p1/8/4P3/3p4/8/6P1/6K1 b - - 0 26';
     const c = new Chess(FISCHER_BEFORE);
-    const mv = c.move('Qe7');
+    const mv = c.move('Kg8');
     expect(mv).toBeTruthy();
     const facets = facetLines(computeMoveFacets({ secondReads: NO_SECOND_READ, seenFundamentals: new Set(), teaching: NO_TEACHING_CONTEXT,
       fenBefore: FISCHER_BEFORE,
       fenAfter: c.fen(),
-      san: 'Qe7',
+      san: 'Kg8',
       ply: 52,
       moverColor: 'black',
       playerColor: 'white',
@@ -76,8 +77,6 @@ describe('computeMoveFacets (David 2026-07-20 — uncapped full-data inventory)'
     expect(race).toMatch(/both sides had a runner/i); // cap()'d at the facet boundary
     expect(race).toMatch(/e5/);
     expect(race).toMatch(/d4/);
-    // …and with queens on it must not issue the endgame marching order.
-    expect(race).toMatch(/queens came off/);
   });
 
   it('attributes a non-good OPPONENT move to the opponent, never the student (opera ply-14 bug)', () => {

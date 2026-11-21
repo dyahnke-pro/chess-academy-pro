@@ -17,7 +17,7 @@
 // engine's line does. Board-true, chess.js only (G0).
 import { CAPTURE_VALUE } from './pieceValues';
 import { Chess } from 'chess.js';
-import type { Color, PieceSymbol, Square } from 'chess.js';
+import type { Color, Square } from 'chess.js';
 
 const VALUE = CAPTURE_VALUE;
 const STEPS: Record<'n' | 'b' | 'r' | 'q', Array<[number, number]>> = {

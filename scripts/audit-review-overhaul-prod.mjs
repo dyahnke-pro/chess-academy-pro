@@ -2012,6 +2012,12 @@ function isStudentPly(n) { return (n % 2 === 1) === (GAME.studentSide === 'white
     const pairs = decisions.flatMap((d) => d.subsumed ?? []);
     await add('DECIDER quiet-attributed-by-mechanism', Object.keys(quietBy).length > 0 || decisions.every((d) => (d.quietCount ?? 0) === 0),
       `${JSON.stringify(quietBy)} — subsumption and the floor are different bugs and quietCount alone cannot tell them apart`);
+    // THE ONE SHORTENER (2026-11-21): on David's record some facts are said
+    // shorter or silenced by what he has proven; the row says how many, so a
+    // shortener that never fires (the old Learn hole) is visible here.
+    const shortened = decisions.reduce((n, d) => n + (d.shortenedCount ?? 0), 0);
+    await add('DECIDER shortener-reported', decisions.every((d) => typeof d.shortenedCount === 'number'),
+      `shortened=${shortened} silencedProven=${decisions.reduce((n, d) => n + (d.quietBy?.proven ?? 0), 0)} over ${decisions.length} rows`);
     // B9 (2026-09-22): a row the DOOR closed files every one of its facts under
     // the gate that closed it — `quietBy.importance` or `quietBy.need`, the same
     // name `reason` carries — never under 'below-bar', which is the FLOOR's

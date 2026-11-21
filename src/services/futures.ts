@@ -19,6 +19,7 @@
  * read (no engine call). A fact is matched across the two boards by its
  * computer and its claims, so "their rook is active" on both is no change.
  */
+import { openSentence } from '../utils/openSentence';
 import { sideToMoveAs } from './threatOut';
 import { unmarked } from '../utils/sanMark';
 import { Chess, type Color, type Square } from 'chess.js';
@@ -399,7 +400,7 @@ export function lineStory(fen: string, tryLine: readonly string[], other: 'your'
       const taker = (m.color === mover) === (other === 'your') ? 'their' : 'your';
       const noun = ({ p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' } as Record<string, string>)[m.piece] ?? 'piece';
       const takes = `once ${taker} ${noun} takes on ${m.to}`;
-      return { kind: 'bareDraw', text: bare ? `${takes[0].toUpperCase()}${takes.slice(1)}, only the kings are left: a draw.` : `${takes[0].toUpperCase()}${takes.slice(1)}, nothing is left that can mate: a draw.`, squares: [m.to] };
+      return { kind: 'bareDraw', text: bare ? `${openSentence(takes)}, only the kings are left: a draw.` : `${openSentence(takes)}, nothing is left that can mate: a draw.`, squares: [m.to] };
     }
     if (byOther && !checksBroken) {
       if (/\+$/.test(m.san)) {

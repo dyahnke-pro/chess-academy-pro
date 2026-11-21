@@ -143,7 +143,6 @@ import { getUnifiedWeaknessProfile, themesForTactic } from '../../services/weakn
 import { ratingTrendNote, untriedFeatureNudge, coldStartGuidance, coldStartApplies, matchFirstRunChoice, firstRunFollowUp } from '../../services/classroomOpener';
 import { getActiveCoachingThread, threadCallbackFor, resetThreadCallbacks } from '../../services/coachThread';
 import { getCoachCurriculum, syncCoachCurriculum, curriculumArcLine } from '../../services/coachCurriculumService';
-import { getStudentDossier, dossierOpeningLine } from '../../services/studentDossier';
 import {
   buildCustomLessonPlan,
   matchCustomLessonRequest,
@@ -12899,6 +12898,7 @@ export function CoachTeachPage({ mode }: {
                         slipQuestion: () => {
                           if (fund?.id === 'ignored-threat' || look.stakes?.mate) return null;
                           const q = slipQuestion(fenBefore, move.san, look.lostSquare, playerColor === 'white' ? 'w' : 'b', look.guardLeft ?? null, look.punishLine ?? null, studentBestSan ?? null, cpLoss, !!look.punishLine);
+                          if (!q) return null;
                           learnMemRef.current.story.offer(fenAfterReply, { text: q.text, sentences: [q.key] });
                           return q.text;
                         },
@@ -13953,10 +13953,11 @@ export function CoachTeachPage({ mode }: {
                 // leads, the picker follows in the SAME message, spoken once,
                 // and it REPLACES the generic greeting. The picker alone names
                 // the holes (one ranking).
-                let stand = '';
-                try { stand = dossierOpeningLine(await getStudentDossier(), { omitPressing: true }); } catch { stand = ''; }
+                // THE RECORD STEERS, IT IS NEVER READ BACK (David 2026-10-28;
+                // walk 2026-11-21: "Missed deflections used to trip you up …
+                // that's real progress"). The picker names what to work on.
                 if (userInteractedRef.current) return;
-                const openerLine = withTrend([stand, plan.pickerLine].filter(Boolean).join(' '));
+                const openerLine = withTrend(plan.pickerLine);
                 replaceGreeting();
                 setMessages((prev) => [...prev, { id: uid('lesson-picker'), role: 'assistant', content: openerLine, timestamp: Date.now() }]);
                 // Chips match the words (defect 2): one per hole the picker

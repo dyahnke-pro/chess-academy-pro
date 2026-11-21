@@ -44,7 +44,7 @@ export interface ReplyJob {
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const ORDINAL = ['', 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth'];
-const value = (t: string): number => MATERIAL_VALUE[t as keyof typeof MATERIAL_VALUE] ?? 0;
+const value = (t: string): number => MATERIAL_VALUE[t] ?? 0;
 
 function playUci(b: Chess, u: string): Move | null {
   try { return b.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { return null; }
@@ -113,7 +113,7 @@ export function replyJob(fen: string, tryLine: readonly string[], target: string
   const threatened = threat ? (threat.kind === 'fork' ? threat.targetSquares : threat.kind === 'capture' ? [threat.landing] : []) : [];
 
   // 2. IT STEPS OUT OF THE ATTACK: the piece the try hit moves away.
-  if (stopped && threatened.includes(rm.from) && !rm.captured && captureRead(b2, rm.to as Square, mover) === 0) {
+  if (stopped && threatened.includes(rm.from) && !rm.captured && captureRead(b2, rm.to, mover) === 0) {
     return say({ kind: 'steps-away' }, [rm.from, rm.to]);
   }
 
@@ -156,14 +156,14 @@ export function replyJob(fen: string, tryLine: readonly string[], target: string
   // 5. IT HITS THE TRYING PIECE: traps it, or kicks it.
   if (!rm.captured && tm.piece !== 'k') {
     const b2b = new Chess(b2);
-    const onIt = b2b.attackers(tm.to as Square, replier).includes(rm.to)
-      && !new Chess(b1).attackers(tm.to as Square, replier).includes(rm.from);
-    if (onIt && b2b.get(tm.to as Square)?.color === mover) {
+    const onIt = b2b.attackers(tm.to, replier).includes(rm.to)
+      && !new Chess(b1).attackers(tm.to, replier).includes(rm.from);
+    if (onIt && b2b.get(tm.to)?.color === mover) {
       const piece = ref(b2, tm.to);
       if (trappedAt(b2, tm.to) !== null) {
         return say({ kind: 'traps', piece }, [tm.to, rm.to]);
       }
-      const guarded = b2b.isAttacked(tm.to as Square, mover);
+      const guarded = b2b.isAttacked(tm.to, mover);
       // A KICK SENDS IT AWAY: the line moves the trying piece on, taking
       // nothing (a piece left to be taken, or one that trades itself off, was
       // not kicked). A pawn is not kicked, and a king kicks only a loose piece.

@@ -60,7 +60,7 @@ describe('deepFact — what the move sets up, down the line', () => {
 describe('theirTarget — what their last move aims at', () => {
   it('their b4 is aimed at your c5 pawn (nothing guards it)', () => {
     const t = theirTarget({ fenBefore: fenAfter(['e4', 'c5', 'a3', 'g6']), san: 'b4' }, true, true);
-    expect(t?.text).toBe('their b4 is aimed at your pawn on c5');
+    expect(t?.text).toBe('their pawn on b4 is aimed at your pawn on c5');
     expect(t?.square).toBe('c5');
   });
   it('a pawn its guards cover is no target', () => {

@@ -81,6 +81,6 @@ describe('"why did they play that?"', () => {
   });
   it('a board set up on its own has no last move to explain', () => {
     const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3';
-    expect(answerQuestionThought('opponent-move', { fen, history: ['d4'], studentColor: 'black', bestUci: null, reads: null, reason: null })).toBeNull();
+    expect(answerQuestionThought('opponent-move', { fen, history: ['d4'], studentColor: 'black', bestUci: null, reads: null, reason: null})).toBeNull();
   });
 });

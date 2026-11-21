@@ -100,7 +100,10 @@ export function keySquaresOn(fen: string, student: Color): KeySquareRead | null 
   if (all.some((m) => m.type !== 'k' && m.type !== 'p')) return null;
   const kingsList = all.filter((m) => m.type === 'k');
   if (kingsList.length !== 2) return null;
-  const kings = { w: kingsList.find((k) => k.color === 'w')!.square, b: kingsList.find((k) => k.color === 'b')!.square } as Record<Color, Square>;
+  const wk = kingsList.find((k) => k.color === 'w');
+  const bk = kingsList.find((k) => k.color === 'b');
+  if (!wk || !bk) return null;
+  const kings: Record<Color, Square> = { w: wk.square, b: bk.square };
   const pawns = all.filter((m) => m.type === 'p');
   const opp = (() => { try { return readOpposition(fen); } catch { return null; } })();
   const reads: KeySquareRead[] = [];
@@ -172,5 +175,5 @@ export function keySquareLine(r: KeySquareRead, student: Color): string {
 
 /** The squares a read lights: the pawn, the key squares the king has or gets. */
 export function keySquareSquares(r: KeySquareRead): Square[] {
-  return [r.pawn as Square, ...r.to];
+  return [r.pawn, ...r.to];
 }

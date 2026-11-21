@@ -1213,6 +1213,14 @@ export function secondReadsOf(
   return { best: [before?.topLines?.[0]?.earlier?.moves ?? null], reply: [after?.topLines?.[0]?.earlier?.moves ?? null] };
 }
 
+/** THE MECHANISM READER, from the one error computer (`whyItFailed` is
+ *  called from this file only — `oneErrorComputer.gate`): how a move that
+ *  drops material loses it, for a computer that words a TRY's loss
+ *  (`weighedMoves.tryLossMechanism`) rather than a played error. */
+export function moveLossMechanism(args: Parameters<typeof whyItFailed>[0]): ReturnType<typeof whyItFailed> | null {
+  try { return whyItFailed(args); } catch { return null; }
+}
+
 export function errorWhy(args: {
   /** REQUIRED — the other reads of these boards, or `NO_SECOND_READ`. */
   secondReads: SecondReads;

@@ -7,7 +7,8 @@ import { readFileSync } from 'node:fs';
 import p5 from '../services/__fixtures__/puzzles5.reads.json';
 import d5 from '../services/__fixtures__/danyaBoards5.reads.json';
 import { fixtureReader, readDanyaBoard, readKey, type Reads } from './danyaBoardRead';
-import { ORPHAN_LEAD } from '../services/teachingSentence';
+/** ORPHAN LEADS: a spoken fact may not start by pointing outside itself. */
+const ORPHAN_LEAD = /^(?:It|This|That|These|Those|And|But)\b|^After this\b|^after this\b/;
 
 const DANYA = [
   '8/8/1KP5/3r4/8/8/8/k7 w - - 0 1',

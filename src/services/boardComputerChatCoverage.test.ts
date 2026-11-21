@@ -27,7 +27,7 @@ const CHAT_PATH = read('groundedAnswer.ts');
 // Chat reads most computers through the one registry (`readBoard('<row>', …)`):
 // a computer a row calls is consumed when the chat reads that row.
 const REGISTRY = read('boardComputers.ts');
-const ROWS: Array<{ id: string; body: string }> = REGISTRY.split(/\n(?=  [a-zA-Z0-9]+: \{\n)/).map((b) => ({ id: /^\s*([a-zA-Z0-9]+): \{/.exec(b)?.[1] ?? '', body: b })).filter((r) => r.id);
+const ROWS: Array<{ id: string; body: string }> = REGISTRY.split(/\n(?= {2}[a-zA-Z0-9]+: \{\n)/).map((b) => ({ id: /^\s*([a-zA-Z0-9]+): \{/.exec(b)?.[1] ?? '', body: b })).filter((r) => r.id);
 const viaRegistry = (fn: string): boolean => ROWS.some((r) => new RegExp(`\\b${fn}\\b`).test(r.body)
   && new RegExp(`readBoard(?:All)?\\('${r.id}'`).test(CHAT_PATH));
 

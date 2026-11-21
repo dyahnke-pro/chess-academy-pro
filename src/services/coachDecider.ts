@@ -33,7 +33,8 @@ import { boardVeto, isMateKind, type BoardState } from './boardState';
 import { computeImportance, type ImportanceSignals, type ImportanceTier, type ImportanceVerdict } from './narrationImportance';
 import { selectFacts, supportedFacts, barForTier, type QuietFact } from './factSelector';
 import { buildPicture, isDetailOf } from './positionPicture';
-import { fadeLevelOf, type FadeLevel, type FadeLevels } from './fadeText';
+import { type FadeLevel, type FadeLevels } from './fadeText';
+import { shortenLevel, withLayers } from './recordShortening';
 import { factValue, FACT_ROLE, FACT_LAYER, FACT_PROOF, type FactKind, type FacetRole } from './reviewFacetRank';
 import type { CoachFact } from './coachFact';
 import { THOUGHT_ORDER } from './thoughtComposer';
@@ -379,6 +380,9 @@ function emit(
     moveAdvice: student.moveAdvice ? (student.moveAdvice.reason ?? 'none') : null,
     spokenCount: d.spoken.length,
     quietCount: d.quiet.length,
+    // THE ONE SHORTENER, logged: facts said shorter for this student's
+    // record (silenced ones count under quietBy.proven).
+    shortenedCount: d.faded.size,
     quietBy: d.quiet.reduce<Record<string, number>>((acc, q) => {
       acc[q.why] = (acc[q.why] ?? 0) + 1;
       return acc;
@@ -490,6 +494,8 @@ export function decide(
   // habit is still owed is the habit's own standing, read below.
   const provenQuiet: QuietFact[] = [];
   const faded = new Map<DoorFact, FadeLevel>();
+  // The one shortener's levels: the student's skills and layers together.
+  const levels = withLayers(student.fade, student.layers);
   // The squares the mate's own teaching facts name — what a fact must touch to
   // be part of the mate's story beside it.
   const mateSquares = bundle.board.mateOnBoard
@@ -504,8 +510,7 @@ export function decide(
     // THE FADE, one rule with Learn (`fadeText`): amber speaks its short form,
     // green is silent (David 2026-11-16: "Green silent"); a DESCRIPTION in a
     // proven layer goes quiet below its value bar.
-    const level = fadeLevelOf(student.fade, f.skill)
-      ?? (student.layers[FACT_LAYER[f.kind]] === 'green' ? 'silent' as const : null);
+    const level = shortenLevel(levels, f.skill, f.kind);
     if (FACT_ROLE[f.kind] === 'teach') {
       // GREEN IS SILENT (David 2026-11-16), but a moment that is the board's
       // (a blunder, an only move, a live hang) still says the point: a green

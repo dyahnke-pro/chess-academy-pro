@@ -368,7 +368,7 @@ export function tacticalReadFromLines(
     // after the move wins material or mates, by the one reason walker; a
     // worse score alone was said as "it falls apart" with no reason.
     const why = refutationOf({
-      fen, uci: t.uci, student: studentColor === 'white' ? 'w' : 'b', priorMove: null,
+      fen, uci: t.uci, student: studentColor === 'white' ? 'w' : 'b', priorMove: null, rating: null,
       reads: topLines.filter((l) => l.moves.length > 0).map((l) => ({ evaluation: l.evaluation, mate: l.mate ?? null, moves: l.moves })),
     });
     if (why) tempting = { san: t.san, uci: t.uci, appeal: t.appeal, evalDropCp: t.evalDropCp, refutation, because: why.because };

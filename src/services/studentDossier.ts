@@ -15,7 +15,6 @@
 // The core derivation is PURE (deriveDossier); the I/O wrappers read the
 // lifecycle + curriculum and cache one row in the `meta` KV store (no new Dexie
 // store → no migration on live devices, same pattern as bookDeparturePrecompute).
-import { openSentence } from '../utils/openSentence';
 import { db } from '../db/schema';
 import { getWeaknessLifecycle, type WeaknessLifecycle, type WeaknessLifecycleEntry, type LifecycleTrend } from './weaknessLifecycle';
 import { getCoachCurriculum } from './coachCurriculumService';
@@ -60,7 +59,6 @@ export interface StudentDossier {
 const DOSSIER_KEY = 'coach-dossier.v1';
 const MAX_HOLES = 3;
 const MAX_STRENGTHS = 3;
-const FRESH_MS = 6 * 60 * 60 * 1000; // re-derive at most every 6h in the SWR path
 
 function toHole(e: WeaknessLifecycleEntry): DossierHole {
   return { clusterId: e.clusterId, label: e.label, bucket: e.bucket, trend: e.trend };
@@ -187,53 +185,3 @@ export async function refreshStudentDossierThrottled(minGapMs = 30_000): Promise
   await refreshStudentDossier();
 }
 
-/**
- * Read the dossier, stale-while-revalidate: return the cached row immediately
- * and refresh in the background when it's stale; compute synchronously on a cold
- * cache. Returns null only when there's genuinely nothing computable yet.
- */
-export async function getStudentDossier(now: number = Date.now()): Promise<StudentDossier | null> {
-  const cached = await readCached();
-  if (cached) {
-    if (now - cached.generatedAt > FRESH_MS) void refreshStudentDossier(now);
-    return cached;
-  }
-  return refreshStudentDossier(now);
-}
-
-/**
- * The code-authored line the coach opens a session with — "here's where you
- * stand." G0: no LLM; every clause is a computed dossier fact. '' when there's
- * not enough history (the caller then just shows the picker). Order: a win to
- * lead on (newly cleared > a strength), what's improving, then the one pattern
- * still costing the most.
- */
-export function dossierOpeningLine(
-  d: StudentDossier | null,
-  opts: { omitPressing?: boolean } = {},
-): string {
-  if (!d || !d.sampleFloorMet) return '';
-  const parts: string[] = [];
-  if (d.newlyCleared.length > 0) {
-    parts.push(`Since we last worked, you've cleared ${d.newlyCleared[0].toLowerCase()} — it's gone from your recent games.`);
-  } else if (d.strengths.length > 0) {
-    const s = d.strengths[0];
-    parts.push(s.kind === 'fixed'
-      ? `${cap(s.label)} used to trip you up and it's gone from your recent games — that's real progress.`
-      : `You've drilled ${s.label.toLowerCase()} shut — lean on that.`);
-  }
-  if (d.improving.length > 0) {
-    parts.push(`${cap(d.improving[0].label)} is trending the right way.`);
-  }
-  // When the lesson picker follows, IT names the holes — naming a different
-  // "top" one here contradicted it (walk 2026-10-04: three openers, two
-  // rankings). One opener, one ranking.
-  if (d.mostPressingLabel && !opts.omitPressing) {
-    parts.push(`The pattern still costing you the most is ${d.mostPressingLabel.toLowerCase()}.`);
-  }
-  return parts.join(' ').trim();
-}
-
-function cap(s: string): string {
-  return s.length ? openSentence(s) : s;
-}

@@ -25,7 +25,7 @@
  * "you", the opponent "they".
  */
 import { introWithGerund, introWithPredicate, type IntroTense } from '../utils/moveIntro';
-import { evalBand, evalBandWords } from './evalBand';
+import { evalBand } from './evalBand';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import type { LastMove } from './material';
 import { verdictWithReasons, reasonClauses, type ReasonKind } from './verdictWithReasons';

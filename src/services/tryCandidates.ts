@@ -140,7 +140,7 @@ export function reasonTries(fen: string): ReasonTry[] {
     const why: ReasonWhy | null = m.captured ? 'capture'
       : /[+#]/.test(m.san) ? 'check'
       : m.piece === 'p' && (passed.has(m.from) || !!m.promotion) ? 'passer'
-      : m.piece === 'k' && ending && !m.flags.includes('k') && !m.flags.includes('q') ? 'king'
+      : m.piece === 'k' && ending && !m.isKingsideCastle() && !m.isQueensideCastle() ? 'king'
       : weighedForWhatItDoes(fen, uci) ?? quietWhy(fen, m) ?? rerouteWhy(fen, m);
     if (why) out.push({ uci, san: m.san, why });
   }
@@ -201,7 +201,7 @@ function quietWhy(fen: string, m: Move): ReasonWhy | null {
  *    king standing on a wing.
  *  Nothing here says the regroup is good: the engine reads each. */
 function rerouteWhy(fen: string, m: Move): ReasonWhy | null {
-  if (m.captured || m.promotion || m.piece === 'p' || m.piece === 'k' || m.piece === 'q' || m.flags.includes('k') || m.flags.includes('q')) return null;
+  if (m.captured || m.promotion || m.piece === 'p' || m.piece === 'k' || m.piece === 'q' || m.isKingsideCastle() || m.isQueensideCastle()) return null;
   const route = m.piece === 'n' ? computePieceRoute(fen, m.from) : computeSliderRoute(fen, m.from);
   if (route?.route[0] === m.to) return 'reroute';
   const after = new Chess(fen);

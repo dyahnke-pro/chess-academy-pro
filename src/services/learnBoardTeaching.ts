@@ -8,6 +8,8 @@
 // makes; the page queues them into the Learn door, which ranks them.
 //
 // Pure: the engine reads are handed in by the page.
+import { habitNeedFrom } from './coachDecider';
+import { weaknessSignalsNow } from './weaknessSignalLoader';
 import { flipSideToMove } from './threatOut';
 import { type PlayedConcept } from './playedConcept';
 import { MATERIAL_VALUE } from './pieceValues';
@@ -981,8 +983,9 @@ export function slipQuestion(
   /** REQUIRED — the grade named what the move allowed (their reply does
    *  something), not only a better move it missed (`correctionHabit`). */
   allowed: boolean,
-): { text: string; key: string } {
-  const h = correctionHabit({ bestSan, cpLossCp: cpLoss, ignoredThreat: false, allowed, slip: { fenBefore, san: playedSan, lostSquare: lostSquare ?? null, guardLeft, student, punishLine } });
+): { text: string; key: string } | null {
+  const h = correctionHabit({ bestSan, cpLossCp: cpLoss, ignoredThreat: false, allowed, slip: { fenBefore, san: playedSan, lostSquare: lostSquare ?? null, guardLeft, student, punishLine }, habitNeed: habitNeedFrom(weaknessSignalsNow() ?? []) });
+  if (!h) return null;
   const key = habitSaidKey(h.habit);
   return { text: h.text, key };
 }

@@ -174,7 +174,7 @@ describe('their move says what it aims at', () => {
   const input = (line: string[]) => ({ moveReads: writerFor('lesson').moveReads, namesPlayedMove: true, plainThreatsSeen: false, story: false, theory: true, tense: 'now' as const, fenBefore: fen, san: 'd5', prev: NO_PREV_CAPTURE, moverIsStudent: false, line, history: sans, theirLast: null, phrases: null, reads: null, costCp: null });
   it('their move carries the aim as its own fact when the reply does not answer it', () => {
     const aim = moveThoughtFacts(input(['O-O'])).find((f) => f.computer === 'theirTarget');
-    expect(aim?.text).toBe('Their d5 is aimed at your bishop on c4.');
+    expect(aim?.text).toBe('Their pawn on d5 is aimed at your bishop on c4.');
     expect(aim?.step).toBe('theirs');
   });
   it('the reply that answers it says it instead (said once, with the answer)', () => {

@@ -31,6 +31,7 @@
  */
 import { cutMarksWithWords } from './markAnchors';
 import { fadeText, fadeLevelOf, type FadeLevels } from './fadeText';
+import { shortenLevel } from './recordShortening';
 import { isProof, type FactProof, type Proof } from './proof';
 import { emitLearnTurn, type LearnDecision, type LearnTurnTag, type PriceSearch } from './coachDecisionEvents';
 import { emitEverything, everythingListening } from './everythingEvents';
@@ -41,7 +42,7 @@ import { costStakes, stakeValue, stakeBar, isStaked, type Stakes } from './factS
 
 /** A pawn at stake, landing now — the door's "important" bar. */
 const PAWN_AT_STAKE = stakeBar(1);
-import { sameClaim } from './factSelector';
+import { sameClaim, claimFamily } from './factSelector';
 import type { FacetRole, FactKind } from './reviewFacetRank';
 import { isCoachFactKind, LOCAL_THREAD, placeFact, stakesOf, stepOf, type CoachFact, type CoachFactKind, type ComputerName, type HeldForm } from './coachFact';
 import { BOARD_COMPUTERS } from './boardComputers';
@@ -380,9 +381,12 @@ export function learnMoment(turn: LearnTurnTag | null, facts: readonly LaneFact[
 }
 /** What speaks at any moment: the phase change and what the game is now
  *  about, their new plan once it emerges, the only-move moment ("slow down"),
- *  and the stalemate a winning student is one move from giving. */
+ *  the stalemate a winning student is one move from giving, and the opening's
+ *  name (David 2026-11-21: "No opening identified in learn?" — a game of book
+ *  moves is all quiet turns; the lane says the name once when it is known and
+ *  once more where the game leaves book, `openingAnnouncement`). */
 function speaksAnyMoment(f: LaneFact): boolean {
-  if (f.lane === 'phase' || f.lane === 'character' || f.lane === 'stalemate') return true;
+  if (f.lane === 'phase' || f.lane === 'character' || f.lane === 'stalemate' || f.lane === 'opening') return true;
   if (f.lane === 'planArc') return f.claims.some((c) => /^plan:(?!student:)[^:]+:[^:]+:emerge$/.test(c));
   return f.kind === 'key-moment';
 }
@@ -882,7 +886,7 @@ export function pointerSpeaks(points: string, green: FadeLevels | null): boolean
   return fadeLevelOf(green, points) === null;
 }
 
-export function fadeWhenGreen(lane: LearnLane, text: string, green: FadeLevels | null, skill?: string): string {
+export function fadeWhenGreen(lane: LearnLane, text: string, green: FadeLevels | null, skill: string | undefined, kind: string | null): string {
   if (!green || green.size === 0) return text;
   const role = COMPUTER_ROLES[lane];
   // A fact's own skill (recorded through the same tag table) fades it; else
@@ -893,7 +897,9 @@ export function fadeWhenGreen(lane: LearnLane, text: string, green: FadeLevels |
   const before = !!role && saidBeforeTheMove(role);
   const fades = !!role?.tag && (role.held.state === 'wired' || before);
   const tag = skill ?? (fades ? role.tag : null);
-  const level = fadeLevelOf(green, tag);
+  // The one shortener (`recordShortening`): the skill or the lane's tag,
+  // else the teaching layer the fact's kind belongs to.
+  const level = shortenLevel(green, tag, kind);
   // A WARNING BEFORE THE MOVE is never silenced by the fade: the threat voice
   // already decided which threats a green student hears (`THREAT_VOICE`: a
   // hidden one keeps one short line), so the fade cuts it to that line at most.
@@ -1009,7 +1015,7 @@ export function decideTurn(
     // student can play next waits — the producer said which (REQUIRED).
     if (f.namesStudentMove) { if (!moveHeld.includes(f.lane)) moveHeld.push(f.lane); for (const c of f.claims) heldThisTurn?.add(c); continue; }
     if (pointsAtChance(f)) { if (!chanceHeld.includes(f.lane)) chanceHeld.push(f.lane); for (const c of f.claims) heldThisTurn?.add(c); continue; }
-    const text = fadeWhenGreen(f.lane, f.text, green ?? null, f.skill);
+    const text = fadeWhenGreen(f.lane, f.text, green ?? null, f.skill, f.kind ?? null);
     if (text !== f.text && !faded.includes(f.lane)) faded.push(f.lane);
     // Green is silent: the fade said nothing.
     if (!text.trim()) continue;
@@ -1088,7 +1094,11 @@ export function decideTurn(
     if (subsumed.has(a)) continue;
     for (const b of survivors) {
       if (a === b || subsumed.has(b)) continue;
-      if (!sameClaim({ sq: a.fact.squares ?? [], family: null }, { sq: b.fact.squares ?? [], family: null })) continue;
+      // ONE SAME-CLAIM RULE with Review (`factSelector.sameClaim`): the fact's
+      // KIND is its family — the loose piece on e2 is not the pin through e2
+      // (B12). A pin and the discovery behind it are both a tactic, and still
+      // collapse.
+      if (!sameClaim({ sq: a.fact.squares ?? [], family: claimFamily(a.src.kind) }, { sq: b.fact.squares ?? [], family: claimFamily(b.src.kind) })) continue;
       const ad = DANGER_LANES.has(a.lane); const bd = DANGER_LANES.has(b.lane);
       // A MOVE'S VERDICT IS ITS OWN CLAIM: its cost ("it left e5 short of a
       // defender") shares squares with what the move does ("it attacks e5")

@@ -14,6 +14,7 @@
  * offline fitter (`scripts/board-facts-dump.ts`, native Stockfish) build the
  * SAME facts the decider was trained on.
  */
+import { MATERIAL_VALUE } from './pieceValues';
 import { Chess } from 'chess.js';
 import { flipSideToMove } from './threatOut';
 import { computePositionFacts, type PositionFactsInput } from './positionFacts';
@@ -357,7 +358,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     const memory = i.story ? threadsOfRead(i.story) : null;
     const told = <F extends Parameters<typeof tellPictureFacts>[0][number]>(fs: readonly F[]): F[] => (memory ? tellPictureFacts(fs, memory, i.studentColor) : [...fs]);
     for (const f of told(readBoardAll('pictureVerdict', picture))) {
-      const merged = standing0 && sameBand && conc?.verdict.afterStanding ? `${standing0.text} ${conc.verdict.afterStanding}` : f.text;
+      const merged = standing0 && sameBand && conc?.verdict.joined ? `${standing0.text} ${conc.verdict.joined}` : f.text;
       facts.push({ from: 'position', kind: f.kind, text: merged, computer: f.computer, squares: f.squares, claims: f.claims, tries: conc?.but.map((t) => t.uci) ?? [], ...(merged !== f.text && standing0?.reasonSquares ? { reasonSquares: standing0.reasonSquares } : {}), ...(f.conclusion ? { conclusion: f.conclusion } : {}),
         ...(conc ? { afterStanding: conc.verdict.afterStanding } : {}) });
     }
@@ -388,7 +389,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
         try { const b = new Chess(i.fen); const m = b.move({ from: top.moves[0].slice(0, 2), to: top.moves[0].slice(2, 4), promotion: top.moves[0][4] }); return m.captured || b.inCheck() ? null : { san: m.san, after: b.fen() }; } catch { return null; }
       })();
       const free = quiet ? flipSideToMove(quiet.after) : null;
-      const nm = free ? await i.read(free, 'best-after').catch(() => null) : null;
+      const nm = free ? await i.read(free, 'quiet-threat').catch(() => null) : null;
       const t = nm?.[0];
       if (quiet && free && t?.moves[0]) {
         const sign = side === 'w' ? 1 : -1;
@@ -494,7 +495,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
   return done();
 }
 
-const PIECE_POINTS: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+const PIECE_POINTS: Readonly<Record<string, number>> = MATERIAL_VALUE;
 const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const SIDE_NAME = { w: 'White', b: 'Black' } as const;
 

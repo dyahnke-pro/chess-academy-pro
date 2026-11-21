@@ -2,6 +2,8 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { decideRead, readContextOf, readWeight, type ReadContext, type ReadFact } from './readDecider';
 import { READ_HABIT } from './methodBeat';
+import { nowBoard } from './teachingSentence';
+const TEST_BOARD = nowBoard('8/8/8/8/8/8/8/8 w - - 0 1');
 
 // Every fact the app's computers made on Korchnoi's board from Danya's "How to
 // avoid blunders" (a3 to play), with what the old read said (`keptToday`).
@@ -23,7 +25,7 @@ const ctxOf = (b: Board, over: Partial<ReadContext> = {}): ReadContext => ({
   }),
   ...over,
 });
-const OPEN: ReadContext = { fen: null, bucket: 'open', best: [], withheld: [], puzzle: false, studentShot: false, said: new Set() };
+const OPEN: ReadContext = { fen: null, levels: null, bucket: 'open', best: [], withheld: [], puzzle: false, studentShot: false, said: new Set() };
 const said = (facts: readonly ReadFact[], ctx: ReadContext): string[] => decideRead(facts, ctx).facts.map((f) => f.text);
 
 describe('the read decider: his order, the fact he would say at each step', () => {
@@ -88,13 +90,13 @@ describe('the read decider: his order, the fact he would say at each step', () =
   });
 
   it('the weights are learned per kind and position: plans fall quiet when the game is decided', () => {
-    const plan: ReadFact = { from: 'position', kind: 'structure-plan', computer: 'readPosition', text: 'x', squares: [] };
+    const plan: ReadFact = { board: TEST_BOARD, from: 'position', kind: 'structure-plan', computer: 'readPosition', text: 'x', squares: [] };
     expect(readWeight(plan, { ...OPEN, bucket: 'decided' })).toBeLessThan(readWeight(plan, OPEN));
   });
 
   it('a step with nothing to say stays empty; a fact is said once', () => {
-    expect(said([{ from: 'position', kind: 'nothing-he-reads', text: 'x', squares: [] }], OPEN)).toEqual([]);
-    const f: ReadFact = { from: 'tempting', kind: 'refuted', computer: 'temptingOnBoard', text: 'y', squares: [] };
+    expect(said([{ board: TEST_BOARD, from: 'position', kind: 'nothing-he-reads', text: 'x', squares: [] }], OPEN)).toEqual([]);
+    const f: ReadFact = { board: TEST_BOARD, from: 'tempting', kind: 'refuted', computer: 'temptingOnBoard', text: 'y', squares: [] };
     expect(said([f, { ...f }], OPEN)).toHaveLength(1);
   });
 
@@ -102,8 +104,8 @@ describe('the read decider: his order, the fact he would say at each step', () =
     const facts: ReadFact[] = [
       // A plan computer Danya's reads say (`boardStructure`, over the bar);
       // the read's own `readPosition` plans sit under it since the all-video fit.
-      { from: 'position', kind: 'structure-plan', computer: 'boardStructure', text: 'Their pawn on d5 is isolated — your rooks on d3 and d1 press it.', squares: ['d3', 'd1', 'd5'] },
-      { from: 'position', kind: 'concept', computer: 'conceptForBoard', text: 'Your rooks on d3 and d1 would form a battery on the d-file against d5.', squares: ['d3', 'd1', 'd5'] },
+      { board: TEST_BOARD, from: 'position', kind: 'structure-plan', computer: 'boardStructure', text: 'Their pawn on d5 is isolated — your rooks on d3 and d1 press it.', squares: ['d3', 'd1', 'd5'] },
+      { board: TEST_BOARD, from: 'position', kind: 'concept', computer: 'conceptForBoard', text: 'Your rooks on d3 and d1 would form a battery on the d-file against d5.', squares: ['d3', 'd1', 'd5'] },
     ];
     expect(said(facts, OPEN)).toEqual([facts[0].text]);
     // NEGATIVE CONTROL: a concept on a square not yet named is said.
@@ -111,7 +113,7 @@ describe('the read decider: his order, the fact he would say at each step', () =
   });
 
   it('the second front follows the story\'s own target, never another pawn', () => {
-    const wing: ReadFact = { from: 'position', kind: 'switch-wing', computer: 'switchWing', text: 'Their pawn on h7 holds. Open a second front: the c5 break.', squares: ['h7', 'c5'] };
+    const wing: ReadFact = { board: TEST_BOARD, from: 'position', kind: 'switch-wing', computer: 'switchWing', text: 'Their pawn on h7 holds. Open a second front: the c5 break.', squares: ['h7', 'c5'] };
     expect(said([wing], OPEN)).toEqual([]);
   });
 });
@@ -142,7 +144,7 @@ describe('PUZZLE MODE: the answer withheld, the side to move winning', () => {
     // the same plan on the puzzle stays silent. (The fixture's own plan
     // computers sit under the bar since the all-video fit, so the control
     // carries the plan the plan step says first.)
-    const plan: ReadFact = { from: 'position', kind: 'structure-plan', computer: 'planOfTheBoard', text: 'The plan: bring the knight on g8 into the game.', squares: ['g8'] };
+    const plan: ReadFact = { board: TEST_BOARD, from: 'position', kind: 'structure-plan', computer: 'planOfTheBoard', text: 'The plan: bring the knight on g8 into the game.', squares: ['g8'] };
     expect(decideRead([...p.facts, plan], { ...ctxOfPuzzle(p, null), bucket: 'open' }).facts.some((f) => f.kind === 'structure-plan')).toBe(true);
     expect(decideRead([...p.facts, plan], ctxOfPuzzle(p, ['h6', 'd2'])).facts.some((f) => f.kind === 'structure-plan')).toBe(false);
   });
@@ -152,10 +154,10 @@ describe("the verdict's reason is said once (beginner chess strategy #6)", () =>
   it('a target line about a pawn the verdict already named is not said again', () => {
     const fen = '8/5ppk/3P3p/8/8/2pK3P/5PP1/8 b - - 0 2';
     const facts: ReadFact[] = [
-      { from: 'position', kind: 'standing', text: "You're losing — their passed pawn on d6 is two steps from queening, your isolated pawn on c3 is attacked once and nothing guards it.", squares: ['d6', 'c3'] },
-      { from: 'position', kind: 'their-target', text: 'The target is your pawn on c3: it is isolated, so no pawn can ever guard it. Their king on d3 hits it, and nothing guards it.', squares: ['c3', 'd3'] },
+      { board: TEST_BOARD, from: 'position', kind: 'standing', text: "You're losing — their passed pawn on d6 is two steps from queening, your isolated pawn on c3 is attacked once and nothing guards it.", squares: ['d6', 'c3'] },
+      { board: TEST_BOARD, from: 'position', kind: 'their-target', text: 'The target is your pawn on c3: it is isolated, so no pawn can ever guard it. Their king on d3 hits it, and nothing guards it.', squares: ['c3', 'd3'] },
     ];
-    const ctx = readContextOf({ fen, top: { evaluation: 500, mate: null }, bestUci: 'g7g5', withheld: null, studentShot: false, said: null });
+    const ctx = readContextOf({ fen, top: { evaluation: 500, mate: null }, bestUci: 'g7g5', withheld: null, studentShot: false, said: null , levels: null});
     expect(decideRead(facts, ctx).facts.map((f) => f.kind)).toEqual(['standing']);
   });
 });

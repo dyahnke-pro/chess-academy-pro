@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { deriveDossier, dossierOpeningLine, refreshStudentDossier, refreshStudentDossierThrottled, type StudentDossier } from './studentDossier';
+import { deriveDossier, refreshStudentDossier, refreshStudentDossierThrottled, type StudentDossier } from './studentDossier';
 import type { WeaknessLifecycle, WeaknessLifecycleEntry, LifecycleStatus, LifecycleTrend } from './weaknessLifecycle';
 
 function entry(label: string, over: Partial<WeaknessLifecycleEntry> = {}): WeaknessLifecycleEntry {
@@ -33,7 +33,6 @@ describe('deriveDossier', () => {
     expect(d.sampleFloorMet).toBe(false);
     expect(d.chronicHoles).toEqual([]);
     expect(d.strengths).toEqual([]);
-    expect(dossierOpeningLine(d)).toBe('');
   });
 
   it('maps persistent → chronic, emerging → emerging, and picks the improving ones', () => {
@@ -96,33 +95,3 @@ describe('refresh guards (perf: no stacked full-library scans)', () => {
   });
 });
 
-describe('dossierOpeningLine (code-authored, G0)', () => {
-  it('leads with a newly-cleared win, then improving, then the top hole', () => {
-    const d: StudentDossier = {
-      generatedAt: 1, sampleFloorMet: true,
-      chronicHoles: [], emergingHoles: [],
-      improving: [{ clusterId: 'p', label: 'Pins', bucket: 'tactical', trend: 'improving' }],
-      strengths: [{ label: 'Hanging pieces', kind: 'fixed' }],
-      mostPressingLabel: 'Forks', newlyCleared: ['Back-rank tactics'],
-    };
-    const line = dossierOpeningLine(d);
-    expect(line).toContain('cleared back-rank tactics');
-    expect(line).toContain('Pins is trending');
-    expect(line).toContain('costing you the most is forks');
-  });
-
-  it('falls back to a strength when nothing was newly cleared', () => {
-    const d: StudentDossier = {
-      generatedAt: 1, sampleFloorMet: true,
-      chronicHoles: [], emergingHoles: [], improving: [],
-      strengths: [{ label: 'Rook endgames', kind: 'mastered' }],
-      mostPressingLabel: null, newlyCleared: [],
-    };
-    expect(dossierOpeningLine(d)).toContain('drilled rook endgames shut');
-  });
-
-  it('is empty below the sample floor', () => {
-    expect(dossierOpeningLine({ sampleFloorMet: false } as StudentDossier)).toBe('');
-    expect(dossierOpeningLine(null)).toBe('');
-  });
-});

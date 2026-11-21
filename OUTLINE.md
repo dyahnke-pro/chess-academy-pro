@@ -43,7 +43,7 @@ measurement or David's call · 🟡 open, low rank · ⛔ owned by another sessi
 - ✅ step 3: the ten groups built and on main (b0c70f2) — king attack · reasons behind the eval + initiative · plans + their targets · tempting move refuted · endgame technique · trades · practical chances · hidden combinations/traps · the habit on a read · the blunder check
 - 🔴 step 4: re-run the 202 boards every round as the yardstick
 - 🟠 the read decider rebuilt bare in his order (story → calm answer → tempting move refuted → habit), one computed fact a step; fitted table deleted; going position by position with David (branch, not main)
-- 🟡 missing computers for the read: why it was easy to miss; what the tempting move is counting on
+- ✅ missing computers for the read (2026-11-21, `temptingHope`): what the tempting move is counting on (a capture counts on its recapture, the human model's pick), why the refutation is easy to miss (a quiet move or a retreat the model gives under 4%); said in every tempting-move line
 
 ## 000zj. WO-LEARN-MOMENT-01 — Learn speaks on an error or a real decision, quiet otherwise; Review never repeats Learn (David 2026-11-18, PLAN.md)
 - ✅ the one error computer: what the better move wins (a mate threat, a piece), a capture said by what it takes, no "eyed" guess on a real miss

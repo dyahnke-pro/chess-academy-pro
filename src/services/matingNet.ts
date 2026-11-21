@@ -106,7 +106,9 @@ export function matingNet(fen: string, student: Color): MatingNet | null {
     const kingOwn = mine ? 'their' : 'your';
     const pieceOwn = mine ? 'your' : 'their';
     // One piece a sentence.
-    const covers = n.cover.map((p) => ` ${openSentence(pieceOwn)} ${PIECE_NAMES[p.type]} on ${p.square} covers ${andList(p.covers)}.`).join('');
+    // Two squares at most a sentence (the voice rule): a piece covering two
+    // is named without its own square, which the board lights.
+    const covers = n.cover.map((p) => ` ${openSentence(pieceOwn)} ${PIECE_NAMES[p.type]}${p.covers.length > 1 && n.cover.filter((q) => q.type === p.type).length === 1 ? '' : ` on ${p.square}`} covers ${andList(p.covers)}.`).join('');
     const key = stemKeyOf(`${fen}|mating-net`);
     const lead = n.flights.length === 0
       ? `${openSentence(kingOwn)} king on ${n.king} has no square to go to: its own pieces box it in.`

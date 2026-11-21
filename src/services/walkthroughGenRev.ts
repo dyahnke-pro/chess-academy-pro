@@ -100,4 +100,4 @@
 // restates its line, the count and the kick are one claim, the pawn centre
 // names its row by its ends, the hole a pawn move leaves is a square, the
 // seventh counts the pawns it attacks, a journey names its stop on the way.
-export const WALKTHROUGH_GEN_REV = '2026-11-19-saidonce';
+export const WALKTHROUGH_GEN_REV = '2026-11-21-shortener';

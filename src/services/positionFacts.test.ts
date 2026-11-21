@@ -95,7 +95,7 @@ describe('computePositionFacts — the composer', () => {
     // this used before spoke only "before you take on e5, look past the trade
     // … a pin" — and Nxe5 there simply loses the knight, so that warning is no
     // longer said (latentDanger: a capture that loses on its square is no trade).
-    const fen = '4r1k1/p4ppp/8/8/3P4/8/5PPP/3Q2K1 w - - 0 30';
+    const fen = '6k1/p4ppp/8/8/3P4/8/5PPP/3Q2K1 w - - 0 30';
     const first = await computePositionFacts({ theory: true, namesPlayedMove: true, boardComputers: 'surface', posture: 'walk', fen, moverColor: 'w', studentColor: 'w', analysis: flat, teachingBeat: true });
     const standing = first.clauses.filter((c) => c.kind === 'structure-plan' || c.kind === 'latent-danger' || c.kind === 'student-leans' || c.kind === 'opponent-leans');
     // The fixture must actually produce one, or this test proves nothing.
@@ -471,9 +471,10 @@ describe('at a deciding moment the move is HELD for the student to answer (David
 describe('a structure plan is said once by its PLAN, not its words (hand walk 1200)', () => {
   const flatAnalysis = { evaluation: 0, bestMove: '', depth: 12, topLines: [], nodesPerSecond: 0 } as unknown as Parameters<typeof computePositionFacts>[0]['analysis'];
   it('the pawn race does not repeat when only the counts move', async () => {
-    // White passer d4→d5, Black passer a7; queens on. Same verdict both plies.
-    const a = '4r1k1/p4ppp/8/8/3P4/8/5PPP/3Q2K1 w - - 0 30';
-    const b = '4r1k1/p4ppp/8/3P4/8/8/5PPP/3Q2K1 w - - 0 31';
+    // White passer d4→d5, Black passer a7; a queen beside them, no piece to
+    // stop the pawns (a race counts only then, 2026-11-20). Same verdict both plies.
+    const a = '6k1/p4ppp/8/8/3P4/8/5PPP/3Q2K1 w - - 0 30';
+    const b = '6k1/p4ppp/8/3P4/8/8/5PPP/3Q2K1 w - - 0 31';
     const first = await computePositionFacts({ theory: true, namesPlayedMove: true, boardComputers: 'surface', posture: 'walk', fen: a, moverColor: 'w', studentColor: 'w', analysis: flatAnalysis, teachingBeat: true });
     const plan = first.clauses.find((c) => c.kind === 'structure-plan');
     expect(plan, 'fixture must speak a plan').toBeTruthy();
@@ -488,7 +489,7 @@ describe('when the structure plan changes, the coach says so (David 2026-09-25)'
   const flatAnalysis = { evaluation: 0, bestMove: '', depth: 12, topLines: [], nodesPerSecond: 0 } as unknown as Parameters<typeof computePositionFacts>[0]['analysis'];
   it('a different plan is framed as a change; the same plan stays quiet', async () => {
     // Race (both runners) → then only THEIR passer is left.
-    const race = '4r1k1/p4ppp/8/8/3P4/8/5PPP/3Q2K1 w - - 0 30';
+    const race = '3q2k1/p4ppp/8/8/3P4/8/5PPP/3Q2K1 w - - 0 30';
     const theirsOnly = '4r1k1/p4ppp/8/8/8/8/5PPP/3Q2K1 w - - 0 32';
     const first = await computePositionFacts({ theory: true, namesPlayedMove: true, boardComputers: 'surface', posture: 'walk', fen: race, moverColor: 'w', studentColor: 'w', analysis: flatAnalysis, teachingBeat: true });
     const firstPlan = first.clauses.find((c) => c.kind === 'structure-plan');

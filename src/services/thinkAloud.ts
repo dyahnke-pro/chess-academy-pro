@@ -7,6 +7,7 @@
 //   first this" → what they keep doing wrong.
 // Every computer here is a pure board read (G0); the composer only orders and
 // joins. Lines are returned as WalkableLine so every spoken line is arrowed.
+import { seatCp } from './winChance';
 import { rotateStem } from '../utils/rotateStem';
 import { inBookCachedSync } from './masterPlayLookup';
 import { MIN_BOOK_GAMES } from './bookDeparture';
@@ -391,7 +392,7 @@ export function depthClauses(args: {
     // A KNOWN ATTACKING STRUCTURE, by its conditions (never "it feels right").
     if (toMove === args.studentColor) {
       const top = args.topLines[0];
-      const cp = top ? (top.mate != null ? (top.mate > 0 ? 100000 : -100000) : top.evaluation) * (args.studentColor === 'w' ? 1 : -1) : null;
+      const cp = top ? seatCp(top, args.studentColor === 'w' ? 'w' : 'b') : null;
       const ka = readBoard('knownAttack', { fen: args.fen, student: args.studentColor, studentCp: cp });
       if (ka && isProof(ka.proof)) out.push({ kind: 'attack-pattern', text: ka.text, proof: ka.proof, squares: [...ka.squares], claim: readKey(ka) });
     }

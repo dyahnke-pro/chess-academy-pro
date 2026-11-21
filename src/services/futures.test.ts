@@ -104,7 +104,7 @@ describe('a future board carries the move that reached it (WO-PICTURE-01 gap 1)'
     expect(b.lines[0].moves).toEqual(['h1g1', 'f3g4']);
   });
   it('the try is never given a made-up line: a board the try reached has none', () => {
-    const g = { fen: '7k/6pp/8/8/5q2/8/7P/1R5K b - - 1 1', ply: 1, rest: ['f4f3'], reached: { fenBefore: fen, san: 'Rb1', seat: 'w' as const, line: ['a1b1', 'f4f3'] } };
+    const g = { fen: '7k/6pp/8/8/5q2/8/7P/1R5K b - - 1 1', ply: 1, path: ['a1b1'], rest: ['f4f3'], reached: { fenBefore: fen, san: 'Rb1', seat: 'w' as const, line: ['a1b1', 'f4f3'] } };
     const b = bundleAt(g, line, 'w', 1800);
     expect(b.priorMove?.san).toBe('Rb1');
     expect(b.priorLines).toBeNull();

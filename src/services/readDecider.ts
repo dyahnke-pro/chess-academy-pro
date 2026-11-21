@@ -43,6 +43,18 @@ import { readHabit } from './methodBeat';
 import type { PictureConclusionId } from './gameStory';
 import { jobClause, renderMoveJobs, type FactBoard } from './teachingSentence';
 import { detectPlanRace } from './planRace';
+import { fadeText, type FadeLevels } from './fadeText';
+import { shortenLevel } from './recordShortening';
+import type { FactKind } from './reviewFacetRank';
+
+/** THE BOARD READ'S OWN KINDS, placed on the one fact vocabulary so the one
+ *  shortener reads their layer. Null: never shortened by its layer (the
+ *  standing, the position's character, a mate — the read's conclusions). */
+const READ_KIND_AS_FACT: Readonly<Record<string, FactKind | null>> = {
+  'their-refuted': 'refuted', tries: 'refuted', 'refuted-positional': 'refuted',
+  'switch-wing': 'plan-steps', siege: 'plan-steps', 'their-plan': 'plan-steps',
+  standing: null, character: null, 'mate-pattern': null, target: null, 'their-target': null,
+};
 
 /** Where a board fact came from: the board's own reads, a tempting move
  *  refuted, or what the engine's best move does. */
@@ -65,6 +77,8 @@ export interface ReadFact {
   stakes?: number | null;
   /** It only restates what the board shows (the composer's quiet-move rule). */
   restates?: boolean;
+  /** The skill the fact teaches (the record's tag), where its producer knows it. */
+  skill?: string;
   /** The idea it states, as claim keys (`CoachFact.claims`): a fact sharing a
    *  claim with one already said is that idea again, never said twice. */
   claims?: readonly string[];
@@ -103,6 +117,11 @@ export type ReadStep = 'verdict' | 'character' | 'priority' | 'their-move' | 'th
 export type ReadBucket = 'decided' | 'open';
 
 export interface ReadContext {
+  /** THE STUDENT'S LEVELS (`recordShortening.recordLevels`): how short each
+   *  fact is said to this student, the one shortener every door reads. Null
+   *  where no student is reading (a lesson's own board, a test). The real
+   *  builder (`readContextOf`) takes it REQUIRED. */
+  levels?: FadeLevels | null;
   /** The board read (null where the caller has only the facts). */
   fen: string | null;
   bucket: ReadBucket;
@@ -150,6 +169,9 @@ export function readContextOf(i: {
   studentShot: boolean;
   /** REQUIRED: the story's said claims (`ReadStory.claims`), or null with no story. */
   said: readonly string[] | null;
+  /** The student's levels (`recordLevels`); the live callers pass it (gate:
+   *  `oneShortener.gate`). */
+  levels?: FadeLevels | null;
   /** The best line's moves (UCI), when read. */
   line?: readonly string[];
 }): ReadContext {
@@ -160,6 +182,7 @@ export function readContextOf(i: {
   const moverWins = mate != null ? mate * sign > 0 : cp != null && cp >= PUZZLE_WIN_CP;
   return {
     fen: i.fen,
+    levels: i.levels ?? null,
     bucket: decided ? 'decided' : 'open',
     best: i.bestUci ? [i.bestUci.slice(0, 2), i.bestUci.slice(2, 4)] : [],
     ...(i.bestUci && i.bestUci.length > 4 ? { bestPromotion: i.bestUci[4] } : {}),
@@ -322,9 +345,12 @@ export function decideRead<F extends ReadFact>(factsIn0: readonly F[], ctx: Read
   // was said — it works on a square the said plan or the best move works on.
   // An unlinked plan is another conclusion, and it stays unspoken (Korchnoi:
   // a3 and why, never the minority attack beside it).
+  // Every kind of plan, the board's steps as much as the structure's: a
+  // second plan unlinked to the first ("Nf1, Ne3 and then Nd5" beside the
+  // rook lift) is another conclusion.
   const unlinkedPlan = (f: F): boolean => {
-    if (f.kind !== 'structure-plan') return false;
-    const plans = out.filter((g) => g.kind === 'structure-plan');
+    if (!PLAN_KINDS.has(f.kind)) return false;
+    const plans = out.filter((g) => PLAN_KINDS.has(g.kind));
     if (plans.length === 0) return false;
     const about = new Set([...plans.flatMap((g) => g.squares), ...ctx.best]);
     return !f.squares.some((sq) => about.has(sq));
@@ -438,7 +464,11 @@ export function decideRead<F extends ReadFact>(factsIn0: readonly F[], ctx: Read
       }
     }
   }
-  const kept = mergeMoveJobs(withDetails(out, facts, ctx, argued));
+  // THE ONE SHORTENER (`recordShortening`): a fact this student has proven
+  // is said shorter, or not at all — the same rule as Learn and Review.
+  const kept = mergeMoveJobs(withDetails(out, facts, ctx, argued))
+    .map((f) => { const t = fadeText(f.text, shortenLevel(ctx.levels ?? null, f.skill ?? null, f.kind in READ_KIND_AS_FACT ? READ_KIND_AS_FACT[f.kind] : f.kind)); return t === f.text ? f : { ...f, text: t }; })
+    .filter((f) => f.text.trim() !== '');
   const h = habitOf(facts, ctx);
   const habit = h && !ctx.said.has(`habit:${h.id}`) ? h : null;
   return { facts: kept, habit: habit?.text ?? null, said: [...kept.flatMap(storyKeys), ...(habit ? [`habit:${habit.id}`] : [])] };
@@ -629,7 +659,7 @@ function lineReaches(fen: string, line: readonly string[], f: ReadFact): boolean
     k += 1;
     if (m.to === at) return true;
     try {
-      if (b.attackers(at as Square, mover).includes(m.to as Square) && !before.attackers(at as Square, mover).includes(m.from as Square)) return true;
+      if (b.attackers(at as Square, mover).includes(m.to) && !before.attackers(at as Square, mover).includes(m.from)) return true;
     } catch { return false; }
   }
   return false;

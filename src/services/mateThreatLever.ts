@@ -18,7 +18,7 @@ import { Chess, type Color, type Square } from 'chess.js';
 import { type EngineLine, lineScore, playLine, sortedLines } from './engineLineRead';
 import { sideToMoveAs } from './threatOut';
 import { materialBalance } from './pieceValues';
-import { rotateStem, stemKeyOf } from '../utils/rotateStem';
+import { stemKeyOf } from '../utils/rotateStem';
 import { countWords } from '../utils/countWords';
 import { renderMateLever } from './teachingSentence';
 

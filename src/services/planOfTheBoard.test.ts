@@ -7,6 +7,8 @@ import { planSteps } from './planSteps';
 import { Chess } from 'chess.js';
 import { decideRead, readContextOf, type ReadFact } from './readDecider';
 import { linesOf } from '../test/replayGame';
+import { nowBoard } from './teachingSentence';
+const TEST_BOARD = nowBoard('8/8/8/8/8/8/8/8 w - - 0 1');
 
 const line = (moves: string[], evaluation: number, mate: number | null = null): PlanLineIn[] => [{ moves, evaluation, mate }];
 const plan = (fen: string, moves: string[], cp: number, mate: number | null = null) =>
@@ -66,11 +68,11 @@ describe('planOfTheBoard — the plan Danya says', () => {
 describe('the read decider says the board\'s plan before a description', () => {
   it('the board\'s one plan is the plan step\'s say, before any weight (a later list of steps weighs more)', () => {
     const facts: ReadFact[] = [
-      { from: 'bestMove', kind: 'plan-steps', computer: 'planSteps', text: 'Your plan from here: Nf1, Ne3 and then Nd5.', squares: ['f1', 'd5'] },
-      { from: 'position', kind: 'structure-plan', computer: 'readPosition', text: 'Your rook on a1 is your best-placed piece — it has the half-open a-file.', squares: ['a1'] },
-      { from: 'bestMove', kind: 'plan-steps', computer: 'planOfTheBoard', text: 'Next, the rook goes on to b3.', squares: ['e1', 'e3', 'b3'] },
+      { board: TEST_BOARD, from: 'bestMove', kind: 'plan-steps', computer: 'planSteps', text: 'Your plan from here: Nf1, Ne3 and then Nd5.', squares: ['f1', 'd5'] },
+      { board: TEST_BOARD, from: 'position', kind: 'structure-plan', computer: 'readPosition', text: 'Your rook on a1 is your best-placed piece — it has the half-open a-file.', squares: ['a1'] },
+      { board: TEST_BOARD, from: 'bestMove', kind: 'plan-steps', computer: 'planOfTheBoard', text: 'Next, the rook goes on to b3.', squares: ['e1', 'e3', 'b3'] },
     ];
-    const ctx = readContextOf({ fen: ROOK_LIFT, top: { evaluation: 147, mate: null }, bestUci: 'e1e3', withheld: null, studentShot: false, said: null });
+    const ctx = readContextOf({ fen: ROOK_LIFT, top: { evaluation: 147, mate: null }, bestUci: 'e1e3', withheld: null, studentShot: false, said: null , levels: null});
     const said = decideRead(facts, ctx).facts.map((f) => f.computer);
     expect(said).toContain('planOfTheBoard');
     expect(said).not.toContain('readPosition');

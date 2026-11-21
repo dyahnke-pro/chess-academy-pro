@@ -135,6 +135,10 @@ export interface PictureVerdictWord {
    *  reason ("You're slightly better — their king is in the middle."): the
    *  difficulty and the tries, without the band again. Empty on a plain band. */
   afterStanding: string;
+  /** The verdict said RIGHT AFTER the standing, in one read ("You're slightly
+   *  better — their king is in the middle. But breaking through is another
+   *  matter."): the standing's contrast kept. */
+  joined: string;
 }
 
 export interface PictureConclusions {
@@ -298,7 +302,7 @@ function verdictOf(i: PictureVerdictIn, mover: Color, step: number, but: FailedT
       : but.length > 0 && step === 0 ? 'no-direct-way'
         : but.length > 0 ? 'tries-worsen' : 'plain';
   const r = renderPictureVerdict({ kind, step, mine, works: works?.name ?? null, butNames: names, oneTarget, noCounterplay, stem });
-  return { kind, step, word: r.word, works: kind === 'works-now' ? works : null, text: r.text, afterStanding: r.afterStanding };
+  return { kind, step, word: r.word, works: kind === 'works-now' ? works : null, text: r.text, afterStanding: r.afterStanding, joined: r.joined };
 }
 
 /** The best line's moves as SAN from `fen`, as far as they play. */

@@ -17,14 +17,12 @@
  *
  * Pure: no engine call (the lines are handed in), no Dexie, no model.
  */
-import { openSentence } from '../utils/openSentence';
 import { CAPTURE_VALUE } from './pieceValues';
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import type { CoachFact } from './coachFact';
 import { buildPicture, type PictureObject, type PictureRole, type PositionPicture } from './positionPicture';
 import type { EngineLine } from './engineLineRead';
-import { andList, countWord } from '../utils/andList';
-import { rotateStem, stemKeyOf } from '../utils/rotateStem';
+import { stemKeyOf } from '../utils/rotateStem';
 import { renderCounterplay, renderLedger, renderPlanTarget, renderTarget, type LedgerEntryWords } from './teachingSentence';
 import { bfsRoute } from './forwardTeaching';
 import { liteMoves, makeLite, undoLite } from './liteMoves';
@@ -764,7 +762,7 @@ function keep<V>(m: Map<string, V>, k: string, v: V): V {
 }
 function mustDefendOf(fen: string, side: Color): Array<{ square: Square; piece: PieceSymbol }> {
   const k = `${fen}|${side}`;
-  return MUST_LIST.get(k) ?? keep(MUST_LIST, k, mustDefendPieces(fen, side).map((p) => ({ square: p.square as Square, piece: p.piece as PieceSymbol })));
+  return MUST_LIST.get(k) ?? keep(MUST_LIST, k, mustDefendPieces(fen, side).map((p) => ({ square: p.square, piece: p.piece as PieceSymbol })));
 }
 function mustSquaresOf(fen: string, side: Color): Set<string> {
   const k = `${fen}|${side}`;
@@ -1074,8 +1072,6 @@ function worstWeakness(fen: string, weak: readonly LedgerEntry[]): LedgerEntry {
   const ranked = weak.map((e) => candidateOf(g, e)).sort((x, y) => vulnerability(y) - vulnerability(x) || x.entry.square.localeCompare(y.entry.square));
   return ranked[0].entry;
 }
-
-const many = (n: number): string => countWord(n);
 
 /** The target in words, with the comparison that chose it. */
 export function targetText(t: Target, student: Color, now: boolean = false): string {

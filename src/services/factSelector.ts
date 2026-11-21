@@ -182,6 +182,17 @@ interface FactSelectOptions {
  *  must never be a guess, so a caller with no kind on BOTH sides (the Learn
  *  door, which reads one geometry from two seats) collapses on geometry alone,
  *  while a fact with a known family collapses only into its own. */
+/** ONE CLAIM FAMILY PER KIND (sweep 2026-11-21: one rule for Review and
+ *  Learn). One geometry read from two seats is one claim — a pin, the threat
+ *  it makes, the discovery behind it and the opponent's intent on those
+ *  squares (Learn walk #26, U6) are the tactic family; every other kind is its
+ *  own family (the loose piece on e2 is not the pin through e2, B12). */
+const TACTIC_FAMILY: ReadonlySet<string> = new Set(['tactic', 'threat', 'opponent-intent']);
+export function claimFamily(kind: string | null | undefined): string | null {
+  if (!kind) return null;
+  return TACTIC_FAMILY.has(kind) ? 'tactic' : kind;
+}
+
 export function sameClaim(
   a: { sq: readonly string[]; family: string | null },
   b: { sq: readonly string[]; family: string | null },
@@ -202,7 +213,7 @@ export function selectFacts<F extends CoachFact>(
   const said = alreadySaid ?? new Set<string>();
   const bar = order ? order.bar : barForTier(tier);
   const rankOf = (f: F): number => (order ? (order.rank.get(f.id) ?? 0) : facetRank(f.text, signals));
-  const scored = facts.map((f, i) => ({ f, text: f.text, i, rank: rankOf(f), sq: f.squares, family: f.kind as string, claims: f.claims ?? [] }));
+  const scored = facts.map((f, i) => ({ f, text: f.text, i, rank: rankOf(f), sq: f.squares, family: claimFamily(f.kind), claims: f.claims ?? [] }));
   // Highest rank first; authoring order breaks ties so the result is stable.
   const byRank = [...scored].sort((a, b) => (b.rank - a.rank) || (a.i - b.i));
 

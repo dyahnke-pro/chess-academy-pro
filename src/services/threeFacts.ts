@@ -360,7 +360,9 @@ export function theirTarget(theirLast: { fenBefore: string; san: string } | null
   const own = moverIsStudent ? 'your' : 'their';
   const other = moverIsStudent ? 'their' : 'your';
   const plain = moverIsStudent && plainSeen && threatVisibility({ fenBefore: theirLast.fenBefore, opponentSan: theirLast.san, attacker: r.move.to, targets: [best.square], pattern: 'hanging' }).visibility === 'plain';
-  return { text: `${other} ${r.move.san} is aimed at ${own} ${PIECE[best.type]} on ${best.square}`, square: best.square, by: r.move.to, ...(plain ? { plain } : {}) };
+  // A pawn is named as a pawn, never by its square alone ("their f6 is aimed at").
+  const subject = r.move.piece === 'p' ? `${other} pawn on ${r.move.to}` : `${other} ${r.move.san}`;
+  return { text: `${subject} is aimed at ${own} ${PIECE[best.type]} on ${best.square}`, square: best.square, by: r.move.to, ...(plain ? { plain } : {}) };
 }
 
 /**

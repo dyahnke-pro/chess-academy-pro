@@ -58,9 +58,9 @@ export function liveEngine(e: NativeEngine, log: EngineLog, tb: (fen: string) =>
 /** The stored reads as a `BundleEngine`: a board never read is a failed read. */
 export function recordedEngine(log: EngineLog): BundleEngine {
   return {
-    analyzePosition: async (fen, depth) => { const a = log.analyze[`${depth}|${fen}`]; if (!a) throw new Error(`no stored read ${fen}`); return a; },
-    evalBoard: async (fen) => { const t = log.eval[fen]; if (t === undefined) throw new Error(`no stored eval ${fen}`); return t; },
-    everyMove: async (fen) => log.every[fen] ?? null,
-    tablebase: async (fen) => log.tablebase[fen] ?? null,
+    analyzePosition: (fen, depth) => { const a = log.analyze[`${depth}|${fen}`]; return a ? Promise.resolve(a) : Promise.reject(new Error(`no stored read ${fen}`)); },
+    evalBoard: (fen) => { const t = log.eval[fen]; return t === undefined ? Promise.reject(new Error(`no stored eval ${fen}`)) : Promise.resolve(t); },
+    everyMove: (fen) => Promise.resolve(log.every[fen] ?? null),
+    tablebase: (fen) => Promise.resolve(log.tablebase[fen] ?? null),
   };
 }

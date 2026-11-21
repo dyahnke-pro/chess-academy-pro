@@ -120,7 +120,7 @@ describe('the counterplay', () => {
     // file) against the g5 bishop alone; the best line's Rf2 guards it again.
     expect(c?.counterplay.b).toMatchObject({ kind: 'piece', piece: 'n', from: 'f6', to: 'h5', hits: ['f4'], state: 'dead', ply: 4, stoppedBy: 'e2f2' });
     expect(counterplayText(c!.counterplay.b!, 'w', MANEUVER.fen, MANEUVER.lines))
-      .toMatch(/^Their (knight can come to h5 and hit|resource is the knight on f6: from h5 it hits) your pawn on f4\. But your Rf2 stops it\.$/);
+      .toMatch(/^Their (knight can come to h5 and hit|resource is the knight: from h5 it hits) your pawn on f4\. But your Rf2 stops it\.$/);
     // It rests on a fact about the pawn it hits.
     expect(restsOnFacts(facts, c!.counterplay.b!.factIds, 'wP@f4')).toBe(true);
   });
@@ -224,7 +224,7 @@ describe('the plan target (a race of up to four moves)', () => {
     const p = planTargetOf(led, 'w');
     expect(p?.best).toMatchObject({ won: true, horizon: 4, attackers: 1, defenders: 0 });
     expect(p?.best.decisive).toMatchObject({ from: 'g1', piece: 'n', moves: 4 });
-    expect(planTargetText(p!, 'w')).toMatch(/^Your knight (can go by [a-h][1-8], [a-h][1-8] and [a-h][1-8] to [a-h][1-8] and hit|has a way to) their pawn on a6.* In four moves one of your pieces reaches it, and they have nothing that can guard it in time\.$/);
+    expect(planTargetText(p!, 'w')).toMatch(/^Your knight (can get to [a-h][1-8] and hit|has a way to) their pawn on a6.* In four moves one of your pieces reaches it, and they have nothing that can guard it in time\.$/);
     const [f] = readBoardAll('pictureTarget', { fen: FAR, student: 'w', lines: [], facts });
     expect(f.text).toBe(planTargetText(p!, 'w'));
     expect(f.squares).toContain('a6');

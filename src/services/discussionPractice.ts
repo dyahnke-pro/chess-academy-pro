@@ -8,6 +8,8 @@
 // (or skips) -> classifyMisconception maps it to a closed-set tag -> we
 // log it to the shared bucket (gated by the learned/count-against rule).
 
+import { habitNeedFrom } from './coachDecider';
+import { weaknessSignalsNow } from './weaknessSignalLoader';
 import { continueSentence } from '../utils/openSentence';
 import { Chess, type Square } from 'chess.js';
 import { detectSlip, slipSeverityLabel, type SlipInput, type SlipResult } from './slipDetector';
@@ -164,8 +166,8 @@ export function buildSlipReveal(args: {
     namesBetterMove: true,
   }) : null;
   if (call) {
-    const habit = correctionHabit({ bestSan: args.bestSan ?? null, cpLossCp: args.cpLoss, ignoredThreat: false, slip: null, allowed: call.allowed });
-    return `That was ${call.sentence} ${habit.text}`.trim();
+    const habit = correctionHabit({ bestSan: args.bestSan ?? null, cpLossCp: args.cpLoss, ignoredThreat: false, slip: null, allowed: call.allowed, habitNeed: habitNeedFrom(weaknessSignalsNow() ?? []) });
+    return `That was ${call.sentence} ${habit?.text ?? ''}`.trim();
   }
   return args.bestSan ? answerShown(args.fenBefore, args.bestSan) : 'There was better.';
 }

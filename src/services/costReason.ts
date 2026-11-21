@@ -342,7 +342,7 @@ export function allowedClause(r: CostReason, studentWB: 'w' | 'b'): string | nul
   if (r.kind !== 'allowed') return null;
   const sans = reasonSans(r);
   if (sans.length === 0) return null;
-  const trusted = !!r.trust.name;
+  const trusted = r.trust.name;
   return renderAllowedClause({
     whom: r.seat === 'you' ? 'them' : 'you', sans,
     lineWords: trusted && r.mate ? lineShape(sans, lineSeatAt(r.fen, studentWB), r.fen, 'first') : '',

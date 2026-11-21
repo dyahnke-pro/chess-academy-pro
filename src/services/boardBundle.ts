@@ -13,6 +13,7 @@
  *
  * Pure. Generated from `BoardContexts`, then held by the compiler.
  */
+import { seatCp as lineScoreFor } from './winChance';
 import { Chess, type Color } from 'chess.js';
 import { readBoardAll, type BoardContexts, type ComputerId } from './boardComputers';
 import type { CoachFact } from './coachFact';
@@ -105,8 +106,7 @@ function studentMoveOf(b: BoardBundle): { fenBefore: string; san: string; mover:
 
 function lineCp(l: EngineLine | undefined): number | null {
   if (!l) return null;
-  if (l.mate !== null) return l.mate > 0 ? 100000 : -100000;
-  return l.cp;
+  return l.mate !== null ? lineScoreFor({ evaluation: 0, mate: l.mate }, 'w') : l.cp;
 }
 /** The engine's best move for the mover, from `fenBefore`. */
 function priorBest(b: BoardBundle): string | null {
@@ -158,7 +158,7 @@ const lineSans = (b: BoardBundle): string[] => sansOf(b.fen, b.lines[0]?.moves ?
 const followOf = (b: BoardBundle): string[][] => { const s = lineSans(b); return s.length > 0 ? [s] : []; };
 const bestLine = (b: BoardBundle): readonly string[] => b.lines[0]?.moves ?? [];
 function linesAsAnalysis(ls: readonly EngineLine[]): AnalysisLine[] {
-  return ls.map((l, i) => ({ rank: i + 1, evaluation: l.mate !== null ? (l.mate > 0 ? 100000 : -100000) : (l.cp ?? 0), mate: l.mate, moves: [...l.moves], depth: 0 })) as AnalysisLine[];
+  return ls.map((l, i) => ({ rank: i + 1, evaluation: lineScoreFor({ evaluation: l.cp ?? 0, mate: l.mate }, 'w'), mate: l.mate, moves: [...l.moves], depth: 0 })) as AnalysisLine[];
 }
 /** The picture's conclusions on the bundle's lines: each MultiPV line a read
  *  of its first move, the tries weighed past the eye on the board. */

@@ -17,6 +17,10 @@ function fact(over: Partial<ThoughtFact> & Pick<ThoughtFact, 'text' | 'idea'>): 
 }
 const said = (facts: ThoughtFact[], record: ThoughtRecord | null = null): string => composeThought(facts, 'lesson', null, NOT_LED, record).spoken;
 
+/** The record's states as the one shortener's levels (green silent, short short). */
+const levelsOf = (states: Record<string, string>): Map<string, 'short' | 'silent'> =>
+  new Map(Object.entries(states).flatMap(([k, v]): Array<[string, 'short' | 'silent']> => (v === 'green' ? [[k, 'silent']] : v === 'short' ? [[k, 'short']] : [])));
+
 describe('the one composer (WO-ONE-COACH-01)', () => {
   // Learn's think pause ("question ‖ answer") belongs to Learn's live turn: a
   // composed thought says the question and its answer as one line (a How-to-
@@ -156,7 +160,7 @@ describe('the one composer (WO-ONE-COACH-01)', () => {
 // THE STUDENT'S RECORD (David 2026-11-12: "Unless the student record shows it
 // doesn't need to be said").
 describe('the record decides what is held and what rises', () => {
-  const rec = (states: Record<string, 'red' | 'green' | 'short'>): ThoughtRecord => ({ stateOf: (t) => states[t] ?? 'grey' });
+  const rec = (states: Record<string, 'red' | 'green' | 'short'>): ThoughtRecord => ({ stateOf: (t) => states[t] ?? 'grey', levels: levelsOf(states) });
   const develop = fact({ idea: 'develop', text: 'You play Nf3 — it develops your knight.', squares: ['f3'] });
   it('a skill the record proves (green) is held', () => {
     const out = composeThought([develop], 'review', null, NOT_LED, rec({ 'neglected-development': 'green' }));
@@ -182,7 +186,7 @@ describe('the record decides what is held and what rises', () => {
 
 // THE THREE TIERS, ALGO'D TO THE STUDENT (WO-TIERS-01, David 2026-11-17).
 describe('facts, key concepts and advanced concepts weigh by the record', () => {
-  const rec = (states: Record<string, 'red' | 'green'>): ThoughtRecord => ({ stateOf: (t) => states[t] ?? 'grey' });
+  const rec = (states: Record<string, 'red' | 'green'>): ThoughtRecord => ({ stateOf: (t) => states[t] ?? 'grey', levels: levelsOf(states) });
   const keyGreen = rec(Object.fromEntries((Object.keys(IDEA_TIER) as Array<keyof typeof IDEA_TIER>)
     .filter((k) => IDEA_TIER[k] === 'key').map((k) => IDEA_SKILL[k].student).filter(Boolean).map((t) => [t as string, 'green' as const])));
   // Two jobs of one move, equal in every other way: a key concept (the long
@@ -226,3 +230,4 @@ describe('the fitted order', () => {
     expect(set('OBVIOUS_IDEAS')).toEqual(Object.entries(IDEA_DEPTH).filter(([, d]) => d === 'obvious').map(([k]) => k).sort());
   });
 });
+

@@ -5,7 +5,7 @@ import type { StockfishAnalysis } from '../types';
 import tries from './__fixtures__/danyaTries.reads.json';
 
 /** Every source a try can come from (the eye, the plan, each reason try, their reply, the best move's board). */
-const SOURCES: TrySource[] = ['eye', 'plan', 'capture', 'check', 'passer', 'king', 'threat', 'defence', 'mate-threat', 'lever', 'double', 'reroute', 'their-eye', 'best-after', 'future'];
+const SOURCES: TrySource[] = ['eye', 'plan', 'capture', 'check', 'passer', 'king', 'threat', 'defence', 'mate-threat', 'lever', 'double', 'reroute', 'their-eye', 'best-after', 'future', 'quiet-threat'];
 const SURFACES: ReadSurface[] = ['learn', 'play', 'openings', 'puzzle', 'review'];
 
 function analysis(fen: string, depth: number): StockfishAnalysis {

@@ -524,16 +524,20 @@ export function correctionHabit(s: {
    *  candidate list (the Learn preview of 2026-11-18: 31…f5 let Qb7 threaten
    *  mate and closed on "name two or three candidate moves"). */
   allowed: boolean;
-}): { habit: MethodHabit; text: string } {
+  /** REQUIRED — this student's habit standing (`habitNeedFrom`, the same one
+   *  Review reads): a habit their record says they have is not taught again. */
+  habitNeed: HabitNeed;
+}): { habit: MethodHabit; text: string } | null {
   // The method beat's own order: their threat played past first, then the
   // slip's question. A move that allowed something with no piece lost is the
   // blunder check; only a move that MISSED something reads the forcing scan or
   // the candidates.
   const read = methodBeatRead({
     tier: 'swing', cpLossCp: s.cpLossCp, bestSan: s.allowed ? null : s.bestSan, ignoredThreat: s.ignoredThreat,
-    isStudentMove: true, habitNeed: { 'forcing-scan': 'open' }, slip: s.slip,
+    isStudentMove: true, habitNeed: s.habitNeed, slip: s.slip,
   }, 0);
   if (read) return read;
-  if (s.allowed) return { habit: 'blunder-check', text: BLUNDER_CHECK_QUESTION };
-  return { habit: 'candidates', text: CANDIDATES_HABIT };
+  // The fallbacks are habits too: owed unless the record says they are held.
+  if (s.allowed) return habitIsOwed(s.habitNeed, 'blunder-check') ? { habit: 'blunder-check', text: BLUNDER_CHECK_QUESTION } : null;
+  return habitIsOwed(s.habitNeed, 'candidates') ? { habit: 'candidates', text: CANDIDATES_HABIT } : null;
 }

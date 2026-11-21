@@ -35,8 +35,10 @@ export type ReadSurface = 'learn' | 'play' | 'openings' | 'puzzle' | 'review';
  *  - `their-eye`: their likely reply after our best move;
  *  - `best-after`: the board after the engine's best move (its fan);
  *  - `future`: a board down a try's line or the best line, read for the
- *    engine-backed computers (`futures.changeReasonWithEngine`). */
-export type TrySource = 'eye' | 'plan' | ConsideredWhy | 'their-eye' | 'best-after' | 'future';
+ *    engine-backed computers (`futures.changeReasonWithEngine`);
+ *  - `quiet-threat`: a quiet best move given a free move after it — what it
+ *    threatens (`boardReadFacts`, the quiet move says its threat). */
+export type TrySource = 'eye' | 'plan' | ConsideredWhy | 'their-eye' | 'best-after' | 'future' | 'quiet-threat';
 
 export interface ReadBudget {
   depth: number;
@@ -65,7 +67,7 @@ function every(tempting: ReadBudget, theirs: ReadBudget, bestAfter: ReadBudget):
   return {
     eye: tempting, plan: tempting, capture: tempting, check: tempting, passer: tempting, king: tempting,
     threat: tempting, defence: tempting, 'mate-threat': tempting, lever: tempting, double: tempting, reroute: tempting,
-    'their-eye': theirs, 'best-after': bestAfter, future: theirs,
+    'their-eye': theirs, 'best-after': bestAfter, future: theirs, 'quiet-threat': bestAfter,
   };
 }
 

@@ -110,7 +110,7 @@ describe('tradeKept — the even trade not taken, and the board\'s reason', () =
 describe('chat answers with the trades (questionThought)', () => {
   const ask = (fenBefore: string, san: string, before: AnalysisLine[], after: AnalysisLine[], costCp: number, groups: FactGroup[], theirLast: { fenBefore: string; san: string } | null = null): ReturnType<typeof questionThought> =>
     questionThought({ namesPlayedMove: true, fenBefore, san, plainThreatsSeen: false, moverIsStudent: true, prev: { square: null, capturedValue: 0, net: 0 } as never, line: null,
-      theirLast, story: false, history: [], reads: { before, passBefore: [], after, passAfter: [] }, costCp, theory: false }, new Set(groups), null, null);
+      theirLast, story: false, history: [], reads: { before, passBefore: [], after, passAfter: [] }, costCp, theory: false }, new Set(groups), null, null, null);
   it('"why Qb5?" carries the queen-trade offer (S-ZY 22.Qb5)', () => {
     const fen = 'r2r2k1/p1p2ppp/QnP1p3/2q1P3/8/2N1P2P/PP3PP1/R2R2K1 w - - 5 22';
     const t = ask(fen, 'Qb5', lines([[283, null, ['d1d8']], [269, null, ['a2a4']], [259, null, ['a6b5']]]), lines([[259, null, ['c5c4']]]), 10, ['move']);

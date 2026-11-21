@@ -45,8 +45,6 @@ const ALLOWED: ReadonlyArray<{ file: string; field: string; count: number; why: 
     why: 'studentMoveTeaching takes no better-move setting and is shared by Learn, Review, lessons and chat; Review names the better move through its own structureMove read (reviewFullData) — an OPEN disagreement, reported' },
   { file: 'src/services/boardReadFacts.ts', field: 'theory', count: 1,
     why: 'the shown best move\'s own thought inside an asked read: who stands better and what the move does, never the opening' },
-  { file: 'src/services/boardReadFacts.ts', field: 'story', count: 1,
-    why: 'the shown best move\'s own thought inside an asked read carries no opening story' },
 ];
 
 /** The source with comments blanked (line numbers kept). */

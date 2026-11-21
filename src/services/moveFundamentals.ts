@@ -1170,7 +1170,8 @@ function openingIdeas(
               .filter((m) => m.captured && m.captured !== 'k' && m.captured !== 'p')
               .sort((a, b) => (MATERIAL_VALUE[b.captured ?? 'p'] ?? 0) - (MATERIAL_VALUE[a.captured ?? 'p'] ?? 0))[0];
             if (!hit) return '';
-            return hit.to === h.sq ? `, and attacks that ${PIECE_NAME[h.p.type]} from ${mv.to}` : `, and from ${mv.to} it hits their ${PIECE_NAME[hit.captured ?? 'p']} on ${hit.to}`;
+            // The square is the move's own, already named by it ("You go Qg3, …").
+            return hit.to === h.sq ? `, and attacks that ${PIECE_NAME[h.p.type]}` : `, and it hits their ${PIECE_NAME[hit.captured ?? 'p']} on ${hit.to}`;
           } catch { return ''; }
         })();
         out.push({

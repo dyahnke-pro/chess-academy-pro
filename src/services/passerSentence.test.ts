@@ -24,7 +24,8 @@ describe('a passed pawn is said as what the board makes of it', () => {
     expect(t).toBe('Your passed pawn on f7 is one push from queening once your rook on f8 steps aside — every move counts now.');
   });
   it('two runners: the race is said once, from your side; theirs is not "the danger" beside it', () => {
-    const fen = '8/1pRP4/p7/1kP2p2/1p6/4K2r/P7/8 w - - 0 67';
+    // No piece can stop the pawns (a race counts only then, 2026-11-20).
+    const fen = '8/1p1P4/p7/1kP2p2/1p6/4K3/P7/8 w - - 0 67';
     expect(passerTrumpSentence(fen, 'd7', true)).toMatch(/^Both sides have a runner: yours on d7 is one push from queening, theirs on f5 is four/);
     expect(passerTrumpSentence(fen, 'f5', false)).toBeNull();
     const said = readPosition(fen, 'white').map((o) => o.text).join(' ');

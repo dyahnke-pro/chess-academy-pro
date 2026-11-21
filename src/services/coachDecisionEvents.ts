@@ -58,6 +58,10 @@ export interface CoachDecisionRow {
   /** How many facts survived, and how many the selector silenced. */
   spokenCount: number;
   quietCount: number;
+  /** Facts said SHORTER for this student's record (`recordShortening`): the
+   *  amber half of the one shortener. Green-silenced facts count in
+   *  `quietBy.proven`. */
+  shortenedCount: number;
   /** WHICH MECHANISM silenced them, counted. 'subsumed' (collapsed as one
    *  claim about one geometry), 'below-bar' (the floor), 'said-already' (the
    *  say-once pass), and — when the DOOR closed before any fact was weighed —

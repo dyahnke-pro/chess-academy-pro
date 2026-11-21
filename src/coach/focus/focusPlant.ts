@@ -297,14 +297,21 @@ export async function findFocusPlant(
  * order (`shownRank`), smallest drop first within each rank. Ranking stops
  * once `PLANT_VERIFY_MAX` slips hold the top rank: the rest are never read.
  */
-function readOrder(slips: readonly SlipCandidate[], rankOf: (s: SlipCandidate) => 0 | 1 | 2): SlipCandidate[] {
+export function readOrder(slips: readonly SlipCandidate[], rankOf: (s: SlipCandidate) => 0 | 1 | 2): SlipCandidate[] {
   const byRank: [SlipCandidate[], SlipCandidate[], SlipCandidate[]] = [[], [], []];
   for (const s of slips) {
     if (byRank[0].length >= PLANT_VERIFY_MAX) break;
     byRank[rankOf(s)].push(s);
   }
-  return [...byRank[0], ...byRank[1], ...byRank[2]];
+  // THE GIFT IS A PIECE, NOT THE GAME (Learn walk 2026-11-21: 7…Qg5 handed
+  // over the queen at move 7 and the game was over by move 8). Inside a rank,
+  // a slip that gives a queen's worth goes last; the chance is still planted
+  // when nothing smaller poses one.
+  const small = (r: SlipCandidate[]): SlipCandidate[] => [...r.filter((x) => x.dropCp < QUEEN_GIFT_CP), ...r.filter((x) => x.dropCp >= QUEEN_GIFT_CP)];
+  return [...small(byRank[0]), ...small(byRank[1]), ...small(byRank[2])];
 }
+/** What a slip may cost before it is the game, not a lesson: a queen's worth. */
+export const QUEEN_GIFT_CP = 700;
 
 /**
  * WHAT THE COACH'S OWN LINE ALREADY SHOWS after a slip, read through the

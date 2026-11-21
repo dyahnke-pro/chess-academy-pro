@@ -32,7 +32,7 @@ describe('the three facts in the briefing', () => {
     expect(deep).not.toMatch(/f5/);
   });
   it('…Bg7 is bound to what b4 aims at', () => {
-    expect(say(5, { withFacts: true })).toMatch(/Their b4 is aimed at your pawn on c5, so this hits back on the side they're attacking\.$/);
+    expect(say(5, { withFacts: true })).toMatch(/Their pawn on b4 is aimed at your pawn on c5, so this hits back on the side they're attacking\.$/);
   });
   it('from the other seat it is their bishop and your rook', () => {
     expect(say(3, { withFacts: true, student: false })).toMatch(/making room for their bishop on g7, where it hits your rook on a1 once your b4 opens the diagonal/);

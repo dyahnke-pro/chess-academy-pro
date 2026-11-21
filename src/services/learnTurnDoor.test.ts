@@ -352,25 +352,25 @@ describe('the fade — short phrasing when the skill is green (David 2026-09-30)
   const TWO = 'That trade gives up your better minor piece. Keep the bishop that has open diagonals and trade the one blocked by its own pawns.';
   it('a lane on a PROVEN tag says nothing (green silent); amber says its first sentence', async () => {
     const { fadeWhenGreen } = await import('./learnTurnDoor');
-    expect(fadeWhenGreen('trade', TWO, new Set(['bad-trade']))).toBe('');
-    expect(fadeWhenGreen('trade', TWO, new Map([['bad-trade', 'short' as const]]))).toBe('That trade gives up your better minor piece.');
+    expect(fadeWhenGreen('trade', TWO, new Set(['bad-trade']), undefined, null)).toBe('');
+    expect(fadeWhenGreen('trade', TWO, new Map([['bad-trade', 'short' as const]]), undefined, null)).toBe('That trade gives up your better minor piece.');
   });
   it('grey or red keeps the full teaching (negative controls)', async () => {
     const { fadeWhenGreen } = await import('./learnTurnDoor');
-    expect(fadeWhenGreen('trade', TWO, new Set())).toBe(TWO);
-    expect(fadeWhenGreen('trade', TWO, null)).toBe(TWO);
-    expect(fadeWhenGreen('trade', TWO, new Set(['hung-material']))).toBe(TWO);
+    expect(fadeWhenGreen('trade', TWO, new Set(), undefined, null)).toBe(TWO);
+    expect(fadeWhenGreen('trade', TWO, null, undefined, null)).toBe(TWO);
+    expect(fadeWhenGreen('trade', TWO, new Set(['hung-material']), undefined, null)).toBe(TWO);
   });
   it('a lane whose held half is not wired never fades — the app cannot see it green', async () => {
     const { fadeWhenGreen } = await import('./learnTurnDoor');
     // blunderCheck is tagged hung-material but only speaks on a slip.
-    expect(fadeWhenGreen('blunderCheck', TWO, new Set(['hung-material']))).toBe(TWO);
+    expect(fadeWhenGreen('blunderCheck', TWO, new Set(['hung-material']), undefined, null)).toBe(TWO);
   });
   it('a warning said BEFORE the move fades on its skill proven elsewhere (David 2026-10-18)', async () => {
     const { fadeWhenGreen } = await import('./learnTurnDoor');
     const WARN = 'This loses the game if you ignore it — their bishop on g4 hits your queen on d1. Guarding it does not save it.';
-    expect(fadeWhenGreen('threat', WARN, new Set(['missed-opponents-threat']))).toBe('This loses the game if you ignore it — their bishop on g4 hits your queen on d1.');
-    expect(fadeWhenGreen('threat', WARN, new Set())).toBe(WARN);
+    expect(fadeWhenGreen('threat', WARN, new Set(['missed-opponents-threat']), undefined, null)).toBe('This loses the game if you ignore it — their bishop on g4 hits your queen on d1.');
+    expect(fadeWhenGreen('threat', WARN, new Set(), undefined, null)).toBe(WARN);
   });
   it('the door records the fade on its row', () => {
     const d = decideTurn([{ lane: 'trade', namesStudentMove: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: TWO, fen: FEN }], undefined, undefined, null, new Set(['bad-trade']));
@@ -869,12 +869,12 @@ describe('the fade follows the heat map: amber one short line, green silent (Dav
   const THREE = 'That trade gives up your better minor piece. Your bishop on c4 has open diagonals. Keep the bishop that has open diagonals and trade the one blocked by its own pawns.';
   it('a green skill says nothing', async () => {
     const { fadeWhenGreen } = await import('./learnTurnDoor');
-    expect(fadeWhenGreen('trade', THREE, new Map([['bad-trade', 'silent' as const]]))).toBe('');
+    expect(fadeWhenGreen('trade', THREE, new Map([['bad-trade', 'silent' as const]]), undefined, null)).toBe('');
   });
   it('an amber skill keeps the point alone; an unknown skill keeps the whole lesson', async () => {
     const { fadeWhenGreen } = await import('./learnTurnDoor');
-    expect(fadeWhenGreen('trade', THREE, new Map([['bad-trade', 'short' as const]]))).toBe('That trade gives up your better minor piece.');
-    expect(fadeWhenGreen('trade', THREE, new Map([['hung-material', 'short' as const]]))).toBe(THREE);
+    expect(fadeWhenGreen('trade', THREE, new Map([['bad-trade', 'short' as const]]), undefined, null)).toBe('That trade gives up your better minor piece.');
+    expect(fadeWhenGreen('trade', THREE, new Map([['hung-material', 'short' as const]]), undefined, null)).toBe(THREE);
   });
   it('the hold rate decides the level: green is silent, short (amber) is one line, red and grey are full', async () => {
     const { fadeLevelFor } = await import('./fadeText');
@@ -885,7 +885,7 @@ describe('the fade follows the heat map: amber one short line, green silent (Dav
     expect(fadeLevelFor(t('grey'))).toBeNull();
     expect(fadeLevelFor(t('red'))).toBeNull();
     expect(fadeLevelFor(undefined)).toBeNull();
-    expect(readFileSync('src/services/weaknessSignalLoader.ts', 'utf8')).toMatch(/fadeLevelsFrom\(\(await loadStudentRecord\(\)\)\.heat\)/);
+    expect(readFileSync('src/services/weaknessSignalLoader.ts', 'utf8')).toMatch(/recordLevels\(r\.heat, layerStandings\(r\.weaknesses, r\.capabilities\)\)/);
     expect(TEACH_CODE).toMatch(/const provenTagsRef = useFadeLevels\(\);/);
   });
 });
@@ -895,10 +895,10 @@ describe('rules and theory fade per skill (item 8, 2026-10-17)', () => {
   it('a rule line on a proven skill speaks its point alone; on an unknown skill, all of it', async () => {
     const { fadeWhenGreen } = await import('./learnTurnDoor');
     const levels = new Map([['neglected-development', 'short' as const]]);
-    expect(fadeWhenGreen('positionFacts', RULE, levels, 'neglected-development')).toBe('Your Nf3 develops a piece toward the centre.');
-    expect(fadeWhenGreen('positionFacts', RULE, levels, 'passive-rook')).toBe(RULE);
+    expect(fadeWhenGreen('positionFacts', RULE, levels, 'neglected-development', null)).toBe('Your Nf3 develops a piece toward the centre.');
+    expect(fadeWhenGreen('positionFacts', RULE, levels, 'passive-rook', null)).toBe(RULE);
     // No skill on the fact: the lane's own tag decides, and positionFacts has none.
-    expect(fadeWhenGreen('positionFacts', RULE, levels)).toBe(RULE);
+    expect(fadeWhenGreen('positionFacts', RULE, levels, undefined, null)).toBe(RULE);
   });
   it('the rule, the fundamental and the book move carry their skill to the door', () => {
     const pf = readFileSync('src/services/positionFacts.ts', 'utf8');

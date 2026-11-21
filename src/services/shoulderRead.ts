@@ -153,7 +153,7 @@ export function shoulderOn(fen: string, student: Color): ShoulderRead | null {
         const free = kingSteps(lifted, king, targets);
         if (free === null || free === 0) continue;
         if (steps !== null && steps - free < 2) continue;
-        reads.push({ mode, side: blocker, by: by.type as 'k' | 'r', bySquare: by.square, king: king.square, pawn: pawn.square, steps, free,
+        reads.push({ mode, side: blocker, by: by.type, bySquare: by.square, king: king.square, pawn: pawn.square, steps, free,
           key: `shoulder:${mode}:${by.square}:${king.square}:${pawn.square}` });
       }
     }

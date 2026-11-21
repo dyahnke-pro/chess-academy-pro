@@ -1,4 +1,5 @@
 import { fadeLevelsFrom, fadeText } from './fadeText';
+import { withLayers } from './recordShortening';
 import { moveIntentsForGame, type ReviewIntent } from './reviewMoveIntent';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { tacticGeometryKey } from './conceptKey';
@@ -1702,7 +1703,7 @@ function* reviewSegmentSteps(
   const reviewRecord: StudentRecord = { weaknesses: studentWeaknesses ?? [], capabilities: studentNeed?.capabilities ?? null, heat: studentNeed?.heat ?? new Map(), plainThreats: studentNeed?.plainThreats ?? 'grey' };
   // The same record decides what the composer holds as proven (green) and
   // raises as a hole (red) — read off the one heat map.
-  const thoughtRecord: ThoughtRecord = { stateOf: (skill) => reviewRecord.heat.get(skill)?.state ?? 'grey' };
+  const thoughtRecord: ThoughtRecord = { stateOf: (skill) => reviewRecord.heat.get(skill)?.state ?? 'grey', levels: withLayers(fade, layers) };
   // Package-completion once-per-game beats (David 2026-07-24: "complete the
   // package"): the simplify-when-ahead trade idea fires at most once (the
   // `tradeIdeaSpoken` flag in the story — no seed carried it before 8d).

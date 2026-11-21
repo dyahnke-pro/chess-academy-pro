@@ -1,4 +1,4 @@
-import { fadeLevelsFrom, type FadeLevel } from './fadeText';
+import { type FadeLevel } from './fadeText';
 // weaknessSignalLoader — the impure adapter that reads the durable weakness
 // model from Dexie and produces the precomputed WeaknessSignal[] the narration
 // selector consumes (Phase 1 of the unified coach).
@@ -51,6 +51,10 @@ let inflight: Promise<WeaknessSignal[]> | null = null;
  * (today's behavior) rather than throwing on a coaching surface. NEVER call on a
  * kid surface.
  */
+/** The last signals read (`loadWeaknessSignals`), for a line made at once (a
+ *  correction's habit): null until the record has been read once. */
+export function weaknessSignalsNow(): readonly WeaknessSignal[] | null { return cache?.sigs ?? null; }
+
 export async function loadWeaknessSignals(): Promise<WeaknessSignal[]> {
   if (cache && Date.now() - cache.at < TTL_MS) return cache.sigs;
   if (inflight) return inflight;
@@ -98,7 +102,11 @@ export async function loadFadeLevels(): Promise<Map<string, FadeLevel>> {
   try {
     // THE WHOLE RECORD (§C1): the heat tiles, slips and capabilities together.
     const { loadStudentRecord } = await import('./studentRecord');
-    return fadeLevelsFrom((await loadStudentRecord()).heat);
+    const { recordLevels } = await import('./recordShortening');
+    const { layerStandings } = await import('./teachingLayers');
+    const r = await loadStudentRecord();
+    // Skills AND layers: the one shortener's levels (`recordShortening`).
+    return recordLevels(r.heat, layerStandings(r.weaknesses, r.capabilities));
   } catch {
     return new Map();
   }

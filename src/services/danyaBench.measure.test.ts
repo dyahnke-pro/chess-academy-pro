@@ -475,9 +475,9 @@ const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Prom
     const reads = readsOf(p);
     const studentColor = p.student === 'w' ? 'white' as const : 'black' as const;
     if (p.own) {
-      return answerQuestionThought('why-best-move', { fen: p.fenBefore, history: p.history, studentColor, bestUci: uciOf(p.fenBefore, p.san), reads, reason: chatReasonOf(p) })?.text ?? null;
+      return answerQuestionThought('why-best-move', { fen: p.fenBefore, history: p.history, studentColor, bestUci: uciOf(p.fenBefore, p.san), reads, reason: chatReasonOf(p)})?.text ?? null;
     }
-    return answerQuestionThought('opponent-move', { fen: p.fenAfter, history: [...p.history, p.san], studentColor, bestUci: null, reads, reason: null })?.text ?? null;
+    return answerQuestionThought('opponent-move', { fen: p.fenAfter, history: [...p.history, p.san], studentColor, bestUci: null, reads, reason: null})?.text ?? null;
   },
   review: (p) => reviewNarration(p)?.replace(/\[[a-z0-9-]+\]\s*/gi, '') || null,
   reviewInventory: (p) => reviewFacets(p).map((f) => f.replace(/^\[[^\]]+\]\s*/, '')),
