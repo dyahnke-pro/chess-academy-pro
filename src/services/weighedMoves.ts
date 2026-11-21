@@ -846,22 +846,6 @@ export function tryLossMechanism(fen: string, m: Move, lineUci: readonly string[
  * (`temptingOnBoard`) is left to it; one it stays silent on is said here, with
  * its material and its result. Most tempting first.
  */
-/** THE MOVE THAT MEETS A TRY (Danya have-check, queen the supporting
- *  actress #5: "Qg3+ Kh8 Qh4 fails to …f5" — the app said "…Kh8 meets it",
- *  the forced answer to the check). A reply that only answers a check, while
- *  the try's side goes on, is the way into the line, not what meets it: the
- *  line is followed to the first reply that is not an answer to a check, and
- *  said with the forced steps before it ("…Kh8, then …f5"). */
-export function replyThatMeets(sans: readonly string[], mover: 'w' | 'b'): string {
-  const dot = mover === 'w' ? '…' : '';
-  let j = 1;
-  while (sans[j - 1]?.endsWith('+') && sans[j + 2] !== undefined) j += 2;
-  if (j === 1 || sans[j] === undefined) return `${dot}${sans[1]}`;
-  const forced = [];
-  for (let k = 1; k < j; k += 2) forced.push(`${dot}${sans[k]}`);
-  return `${forced.join(', ')}, then ${dot}${sans[j]}`;
-}
-
 export function standingRefutations(args: {
   fen: string;
   student: Color;
@@ -952,7 +936,7 @@ export function standingRefutations(args: {
     const lostWords = net !== null && net < 0
       ? ((): string | null => { const l = computeExchangeLedger(args.fen, sans, mover === 'w' ? 'b' : 'w'); return l ? materialGainWords(l) : null; })()
       : null;
-    const reply = replyThatMeets(sans, mover);
+    const reply = `${mover === 'w' ? '…' : ''}${sans[1]}`;
     // NO REASON, NO REFUTATION: his every rule-out says why it falls short.
     // THE WHY BEFORE THE MATERIAL (CLAUDE.md rule 2): the mechanism — what
     // the line does, the reply's mechanism, what became of the plan's target,
