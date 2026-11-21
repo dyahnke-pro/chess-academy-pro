@@ -22,6 +22,9 @@ describe('the Learn focus is wired at every place it needs a hand', () => {
   it.each([
     ['the game starts set up from the record', /const setup = await focusRef\.current\.setUp\(\)[\s\S]*?focusRef\.current\.start\(setup\)/],
     ['a plain classic entry starts one', /if \(focusKick\) void startFocusGame\(\)/],
+    // Two callers that both await the setup start ONE game (prod Learn audit
+    // 2026-11-21: the pre-game line said twice in a row).
+    ['a start already in flight is shared, never run twice', /if \(focusStartingRef\.current\) return focusStartingRef\.current/],
     ['a fresh board starts the next one', /void startFocusGame\(\);\s*return \{ ok: true \}/],
     ["the user's move is checked before the coach replies", /focusRef\.current\.moved\(/],
     ["the coach's reply hands over the next board", /focusRef\.current\.board\(/],

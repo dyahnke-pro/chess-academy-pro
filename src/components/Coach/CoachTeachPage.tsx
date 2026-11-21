@@ -2440,17 +2440,27 @@ export function CoachTeachPage({ mode }: {
    *  Always the tactics focus; the record sets its rung (never a rating) and
    *  the pre-game line is said. False in the Campaign, or once the board is no
    *  longer a fresh free game. */
-  const startFocusGame = useCallback(async (): Promise<boolean> => {
-    if (campaignRef.current) return false;
-    const freshBoard = (): boolean => gameRef.current.history.length === 0 && !walkthroughRef.current.isActive && !activeDrillRef.current && !lessonGameRef.current;
-    if (!freshBoard()) return false;
-    const setup = await focusRef.current.setUp();
-    if (!freshBoard() || focusRef.current.ownsGame()) return false;
-    steeredPliesRef.current = new Set();
-    coachMadePliesRef.current = new Set();
-    setFocusEnd(null);
-    focusRef.current.start(setup);
-    return true;
+  // ONE START AT A TIME (prod Learn audit 2026-11-21: the pre-game line said
+  // twice in a row): two callers that both awaited the setup both started the
+  // game. A second caller shares the start already in flight.
+  const focusStartingRef = useRef<Promise<boolean> | null>(null);
+  const startFocusGame = useCallback((): Promise<boolean> => {
+    if (focusStartingRef.current) return focusStartingRef.current;
+    const run = (async (): Promise<boolean> => {
+      if (campaignRef.current) return false;
+      const freshBoard = (): boolean => gameRef.current.history.length === 0 && !walkthroughRef.current.isActive && !activeDrillRef.current && !lessonGameRef.current;
+      if (!freshBoard()) return false;
+      const setup = await focusRef.current.setUp();
+      if (!freshBoard() || focusRef.current.ownsGame()) return false;
+      steeredPliesRef.current = new Set();
+      coachMadePliesRef.current = new Set();
+      setFocusEnd(null);
+      focusRef.current.start(setup);
+      return true;
+    })();
+    focusStartingRef.current = run;
+    void run.finally(() => { if (focusStartingRef.current === run) focusStartingRef.current = null; });
+    return run;
   }, []);
   // WHO OWNS THE VOICE (`learnVoice`): a mission, a focus, or nobody. Every
   // `free-play` line the page volunteers is dropped while one owns the game.
