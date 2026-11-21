@@ -13,7 +13,7 @@ import { isPawnBreak } from './pawnBreak';
 import { pieceWork } from './pieceWork';
 import { isUndevelopedInOpening } from '../utils/undeveloped';
 import { findWeakPawns, legalSeeGainFor } from './positionReadingService';
-import { renderAimWhy, renderPlanHeld } from './teachingSentence';
+import { renderAimWhy, renderPlanHeld, renderBreakHits } from './teachingSentence';
 
 const PIECE: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king', p: 'pawn' };
 
@@ -496,7 +496,7 @@ export function planStepsText(p: PlanSteps, whose: 'your' | 'their'): string {
   const why = p.aim ? `, the pieces lining up on ${p.aimPiece ? `${owner} ${p.aimPiece} on ${p.aim}` : `${p.aim}, next to ${owner} king`}` : '';
   // A list with no aim says what its break is for: the pawn it hits.
   const brkHit = p.aim ? undefined : p.steps.find((s) => s.brk && s.hits);
-  const brkWhy = brkHit ? ` The break goes at ${owner} pawn on ${brkHit.hits}.` : '';
+  const brkWhy = brkHit?.hits ? ` ${renderBreakHits(owner, brkHit.hits)}` : '';
   return `${whose === 'your' ? 'Your' : 'Their'} plan from here: ${list}${why}.${brkWhy}${aimWhyText(p, whose)}`;
 }
 

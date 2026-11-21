@@ -42,6 +42,7 @@ import { cells, PIECE_NOUN, findWorstPlacedPiece, deriveNextPlans } from './next
 import { trappedAt, lineTakesPiece } from './trappedPiece';
 import { detectPlanRace, kingCatchesPasser, pushesToPromote } from './planRace';
 import { andList, withArticle, countWord } from '../utils/andList';
+import { renderTally } from './teachingSentence';
 import { withMover } from '../utils/sideToMove';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 // Re-exported: eight callers and tests import these from here (2026-09-19 leaf move).
@@ -121,7 +122,7 @@ export function attackerDefenderCount(fen: string, studentColorWB: Color): Count
     // square falls; one with an escape is attacked and has to move.
     const theirMove = (fen.split(' ')[1] ?? '') !== studentColorWB;
     const escapes = theirMove && pieceHasSafeEscape(chess, sq, studentColorWB);
-    const count = `count the attackers and defenders on their ${PIECE_NOUN[c.type]} on ${sq}: ${tallyWords(atk, def)}`;
+    const count = `count the attackers and defenders on their ${PIECE_NOUN[c.type]} on ${sq}: ${renderTally(atk, def)}`;
     const cand = { value: PIECE_VAL[c.type] ?? 0, square: sq, tempo: escapes, piece: PIECE_NOUN[c.type], attackers: atk, defenders: def,
       text: escapes
         ? `${count} — it's outnumbered, so it has to move, and that costs them the tempo`
@@ -146,7 +147,7 @@ export function countSaid(reads: readonly CountRead[], fen: string): string {
     if (r.tempo) return again ? 'it has to move too' : "it's outnumbered, so it has to move, and that costs them the tempo";
     return again ? FALLS_AGAIN : FALLS;
   };
-  const tally = (r: CountRead): string => tallyWords(r.attackers, r.defenders);
+  const tally = (r: CountRead): string => renderTally(r.attackers, r.defenders);
   const stems = (r: CountRead, i: number): string[] => [
     `Their ${r.piece} on ${r.square}: ${tally(r)} — ${tail(r, i)}.`,
     `On ${r.square}, their ${r.piece}: ${tally(r)} — ${tail(r, i)}.`,
@@ -159,10 +160,6 @@ export function countSaid(reads: readonly CountRead[], fen: string): string {
 /** The count in words, and only the count that decides: "two attack it and
  *  only one guards it", "one attacks it and nothing guards it" (prod Review
  *  2026-11-21: "1 attacker to 0 defenders" read like a scoreboard). */
-function tallyWords(atk: number, def: number): string {
-  const a = `${countWord(atk)} ${atk === 1 ? 'attacks' : 'attack'} it`;
-  return def === 0 ? `${a} and nothing guards it` : `${a} and only ${countWord(def)} ${def === 1 ? 'guards' : 'guard'} it`;
-}
 
 /**
  * Can the piece on `sq` (its owner to move on `chess`) step to a square where

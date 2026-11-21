@@ -957,3 +957,16 @@ export function renderAskedLineLeft(d: { name: string; seat: 'student' | 'oppone
       `${d.played} takes the game out of the ${d.name} on move ${d.moveNumber}. Its line goes ${d.book} there.`,
     ], d.ply);
 }
+
+/** What a plan's break is for: the pawn it hits ("The break goes at your
+ *  pawn on c4."). `owner` is the side the break hits, from the student's seat. */
+export function renderBreakHits(owner: 'your' | 'their', square: string): string {
+  return `The break goes at ${owner} pawn on ${square}.`;
+}
+
+/** A count said in words, only where the attackers outnumber the guards
+ *  ("two attack it and only one guards it"). */
+export function renderTally(atk: number, def: number): string {
+  const a = `${countWord(atk)} ${atk === 1 ? 'attacks' : 'attack'} it`;
+  return def === 0 ? `${a} and nothing guards it` : `${a} and only ${countWord(def)} ${def === 1 ? 'guards' : 'guard'} it`;
+}
