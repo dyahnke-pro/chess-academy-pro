@@ -198,6 +198,14 @@ describe('criticalMoment — two registers, one claim', () => {
     expect(criticalMomentAsk(two, 0)).not.toMatch(/two moves keeps/);
   });
 
+  it('the two-move moment says what the other moves cost (prod Learn 2026-11-21: "Every other move costs more")', () => {
+    for (let ply = 0; ply < 4; ply += 1) {
+      const t = criticalMomentStatement(two, ply, null) ?? '';
+      expect(t).toMatch(/gives? up (?:about |the |part )|costs about/);
+      expect(t).not.toMatch(/costs more|concedes?\b|give it away/);
+    }
+  });
+
   it('the two-move moment says why it matters: slow down (Learn prod audit 2026-11-18)', () => {
     for (let ply = 0; ply < 4; ply += 1) {
       expect(criticalMomentStatement(two, ply, null)).toMatch(/, so (?:slow down|it's worth|take the extra)/);

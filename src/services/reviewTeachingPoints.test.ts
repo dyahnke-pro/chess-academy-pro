@@ -20,10 +20,10 @@ describe('reviewTeachingPoints — the missing Naroditsky messages (David 2026-0
     // After 4...Bxf3: the black bishop on f3 has 2 white attackers (Q d1, g2 pawn) and 0 defenders.
     const t = attackerDefenderCount(fenAfter(['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3']), 'w')[0]?.text ?? null;
     expect(t).not.toBeNull();
-    expect(t).toMatch(/attackers? to .*defender/i);
+    // In words, never a scoreboard (prod Review 2026-11-21: "1 attacker to 0 defenders").
+    expect(t).toMatch(/two attack it and nothing guards it/i);
     expect(t).toMatch(/it falls/i);
-    // Pluralization: "0 defenders" not "0 defender"; a lone attacker is singular.
-    expect(t).not.toMatch(/\b1 defenders\b|\b1 attackers\b/);
+    expect(t).not.toMatch(/\d+ attackers? to \d+ defenders?/);
   });
 
   it('M2 never flags the student\'s OWN overloaded (sacrificed) piece', () => {

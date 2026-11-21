@@ -726,6 +726,10 @@ export function nameOnce(text: string): string {
     const again = !!first && named.has(sq) && named.size === 1;
     named.add(sq);
     squaresOf.set(kind, named);
+    // A pawn said again keeps its file ("the d-pawn"): a bare "the pawn" is
+    // no pawn at all (prod Review 2026-11-21: "Their weak spot you can reach
+    // is the pawn", "yours with the pawn, theirs with the pawn").
+    if (again && p === 'pawn') return `${owner} ${sq[0]}-${piece}`;
     return again ? `${owner} ${piece}` : whole;
   });
 }

@@ -21,6 +21,7 @@
 // never on a mating move (that has its own sentence).
 //
 // Measured on 80 of his speedrun games: 0.6 lines a game.
+import { countWord } from '../utils/andList';
 import { sideToMoveAs } from './threatOut';
 import { Chess, type Square } from 'chess.js';
 import { countKingAttack, shelterSquares } from './kingSafety';
@@ -130,8 +131,11 @@ export function kingAttack(
   // into the attack").
   const played = namesPlayedMove ? `${dot}${mv.san}` : 'your move';
   const Played = namesPlayedMove ? played : 'Your move';
-  const tally = a.attackers.size >= 2 && a.attackers.size >= a.defenders.size
-    ? ` — ${a.attackers.size} of your pieces on it against ${a.defenders.size} defender${a.defenders.size === 1 ? '' : 's'}`
+  // The count is said only when it decides something — more attackers than
+  // defenders — and in words (prod Review 2026-11-21: "3 of your pieces on it
+  // against 3 defenders" said a level count as if it mattered).
+  const tally = a.attackers.size >= 2 && a.attackers.size > a.defenders.size
+    ? ` — ${countWord(a.attackers.size)} of your pieces against ${a.defenders.size === 0 ? 'no defender' : `only ${countWord(a.defenders.size)} defender${a.defenders.size === 1 ? '' : 's'}`}`
     : '';
   const out = (kind: KingAttackPoint['kind'], text: string, squares: string[]): KingAttackPoint =>
     ({ kind, text, squares: [...new Set([...squares, a.king])], attackers: a.attackers.size, defenders: a.defenders.size });

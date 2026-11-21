@@ -356,10 +356,10 @@ export function criticalMomentStatement(
         `${reply}, one move ${s}, and only one. Worth thinking it through.`,
       ], ply)
       : pick([
-        `${reply}, two moves ${s}. Everything else concedes, so it's worth slowing down.`,
-        `${reply}, two moves ${s}. The rest give it away, so take the extra minute.`,
-        `${reply}, it's narrow: two moves ${s}. Every other move costs more, so slow down.`,
-        `${reply}, exactly two moves ${s}. The rest concede, so it's worth thinking it through.`,
+        `${reply}, two moves ${s}. Anything else gives up ${gapWords(read.gapCp)}, so it's worth slowing down.`,
+        `${reply}, two moves ${s}. The rest give up ${gapWords(read.gapCp)}, so take the extra minute.`,
+        `${reply}, two moves ${s}. Every other move gives up ${gapWords(read.gapCp)}, so slow down.`,
+        `${reply}, exactly two moves ${s}. Anything else costs ${gapWords(read.gapCp)}, so it's worth thinking it through.`,
       ], ply) + lookAt(read.holdingSans);
   }
   return one
@@ -368,8 +368,8 @@ export function criticalMomentStatement(
       `For your next move, exactly one move ${s}. Slow down.`,
     ], ply)
     : pick([
-      `Your move now: exactly two moves ${s}. The rest concede, so it's worth thinking it through.`,
-      `For your next move, two moves ${s}. Everything else concedes, so slow down.`,
+      `Your move now: exactly two moves ${s}. Anything else gives up ${gapWords(read.gapCp)}, so it's worth thinking it through.`,
+      `For your next move, two moves ${s}. Everything else gives up ${gapWords(read.gapCp)}, so slow down.`,
     ], ply) + lookAt(read.holdingSans);
 }
 
@@ -384,6 +384,19 @@ export function criticalMomentSquares(after: { san: string; fenBefore: string } 
 }
 
 const SAN_PIECE: Record<string, string> = { K: 'king', Q: 'queen', R: 'rook', B: 'bishop', N: 'knight' };
+/** WHAT THE OTHER MOVES COST, in words (prod Learn 2026-11-21: "it's narrow:
+ *  two moves limit the damage. Every other move costs more" named no danger):
+ *  the fan's gap between the holding moves and the rest. */
+export function gapWords(gapCp: number): string {
+  const p = Math.abs(gapCp) / 100;
+  if (p >= 8) return 'the game';
+  if (p >= 4.5) return 'about a rook';
+  if (p >= 2.5) return 'about a piece';
+  if (p >= 1.5) return 'about two pawns';
+  if (p >= 0.75) return 'about a pawn';
+  return 'part of your position';
+}
+
 /** WHAT TO LOOK AT, never the move (52-errors #43: "two moves keep the win"
  *  with nothing to look at): the pieces the holding moves are played with. */
 export function lookAt(sans: readonly string[]): string {

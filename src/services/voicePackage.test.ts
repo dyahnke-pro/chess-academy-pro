@@ -603,6 +603,14 @@ describe('a trimmed fact keeps only the marks its words still state (marks sweep
   });
 });
 
+describe('nameOnce — a pawn said again keeps its file (prod Review 2026-11-21: "Their weak spot you can reach is the pawn")', () => {
+  it('"their pawn on d4" again is "their d-pawn", never "their pawn"', async () => {
+    const { nameOnce } = await import('./voicePackage');
+    expect(nameOnce('You hit their pawn on d4. Their weak spot is their pawn on d4.')).toBe('You hit their pawn on d4. Their weak spot is their d-pawn.');
+    expect(nameOnce('Hit your knight on f3. Then your knight on f3 moves.')).toBe('Hit your knight on f3. Then your knight moves.');
+  });
+});
+
 describe('nameOnce — the full name once (human voice rule 3)', () => {
   it('a piece named again drops its square', async () => {
     const { nameOnce } = await import('./voicePackage');
