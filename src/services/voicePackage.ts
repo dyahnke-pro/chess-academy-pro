@@ -37,6 +37,7 @@
 //   4. What is spoken and what is logged are the same object. A package that
 //      reports something other than what the student heard is worse than no
 //      log at all.
+import { claimKey } from './claimKey';
 import { cutMarksWithWords } from './markAnchors';
 import { openSentence } from '../utils/openSentence';
 import { closeSentence } from '../utils/thinkPause';
@@ -431,10 +432,8 @@ const sayKey = (s: string): string => {
   return key.length >= 12 ? key : full;
 };
 
-/** A claim's key in the ledger. Namespaced with a colon, which `sayKey` never
- *  produces, so a claim can never collide with a sentence. */
-/** The ledger key a claim is said under (one key space with the sentences). */
-export const claimKey = (c: string): string => `claim:${c}`;
+/** The ledger key a claim is said under — the one builder, `claimKey.ts`. */
+export { claimKey };
 
 export function buildVoicePackage(
   facts: VoiceFact[],

@@ -18,6 +18,7 @@
 // habit that finds it next time." Leading with the habit would preach before
 // the student has seen the evidence.
 import { openSentence } from '../utils/openSentence';
+import { claimKey } from './claimKey';
 import { isDecidingMoment } from './nextMoveAdvice';
 import type { ImportanceTier } from './narrationImportance';
 import type { Proof } from './proof';
@@ -345,11 +346,8 @@ interface LiveMethodBeat { text: string; key: string; habit: LiveHabit; proof?: 
 export type HabitId = LiveHabit | 'blunder-check' | 'what-it-guarded' | 'slow-down';
 /** The say-once claim a caller carries forward in its `alreadySaid` set. */
 export function liveHabitKey(habit: HabitId): string { return `method:${habit}`; }
-/** The same claim as the spoken-sentence ledger keys it — `voicePackage.claimKey`
- *  of the claim, spelled here because this leaf may not import the voice
- *  package (it closes a cycle through the deciding door); the two are held
- *  equal by `slipQuestion.test.ts`. */
-export function habitSaidKey(habit: HabitId): string { return `claim:${liveHabitKey(habit)}`; }
+/** The same claim as the spoken-sentence ledger keys it (the one `claimKey`). */
+export function habitSaidKey(habit: HabitId): string { return claimKey(liveHabitKey(habit)); }
 
 export function liveMethodBeat(s: LiveMethodSignals, plyForVariety = 0, said?: ReadonlySet<string>): LiveMethodBeat | null {
   if (!s.isStudentMove) return null;
