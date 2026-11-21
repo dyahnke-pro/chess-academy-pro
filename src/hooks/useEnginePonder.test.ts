@@ -57,7 +57,7 @@ describe('useEnginePonder', () => {
     expect(analyzeWithBudget).not.toHaveBeenCalled(); // debounced
     await vi.advanceTimersByTimeAsync(1000);
     expect(analyzeWithBudget).toHaveBeenCalledTimes(1);
-    expect(analyzeWithBudget).toHaveBeenCalledWith(FEN, 12, expect.any(Number));
+    expect(analyzeWithBudget).toHaveBeenCalledWith(FEN, 14, expect.any(Number));
     await Promise.resolve();
     expect(setCachedStockfish).toHaveBeenCalledWith(FEN, expect.objectContaining({ bestMove: 'e2e4' }));
   });

@@ -128,26 +128,22 @@ export function nextBoardGate(input: {
 }
 
 /** THE REPLY WAITS FOR THE REASON — FOR AT MOST THE CEILING, COUNTED FROM THE
- *  MOVE (David 2026-10-17, "Delay the computer move obviously"; OS-18). The
- *  reason's reads warm DURING the think pad, so the reply lands at the later of
- *  the pad and the reason, never past the ceiling. The pad used to run first
- *  and the ceiling start after it, so a reply could land pad + ceiling after
- *  the move — 4.9 s at 14.Rd5 — and the verdict, which names the reply, waited
- *  for it. */
+ *  MOVE (David 2026-10-17, "Delay the computer move obviously"; OS-18). It
+ *  waits for nothing else: the 1–2 s "thinking" pad is gone (David
+ *  2026-11-21: "remove the pause before coach speaks" — on his iPhone the
+ *  pad put every word of the turn a second or two later). A quiet move that
+ *  owes no reason replies at once. */
 export function replyWait(input: {
   /** When the student's move landed (`Date.now()` clock). */
   startedAt: number;
-  minThinkMs: number;
   reason: Promise<unknown>;
   ceilingMs: number;
   now?: () => number;
 }): Promise<void> {
   const now = input.now ?? Date.now;
   const left = (ms: number): number => Math.max(0, ms - (now() - input.startedAt));
-  const pad = new Promise<void>((r) => { setTimeout(r, left(input.minThinkMs)); });
-  const reason = Promise.race([
+  return Promise.race([
     input.reason.then(() => undefined, () => undefined),
     new Promise<void>((r) => { setTimeout(r, left(input.ceilingMs)); }),
   ]);
-  return Promise.all([pad, reason]).then(() => undefined);
 }

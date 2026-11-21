@@ -1,3 +1,4 @@
+import { COACH_TURN_DEPTH } from '../services/engineConstants';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { voiceService } from '../services/voiceService';
 import { stockfishEngine, resolveWorkerUrl } from '../services/stockfishEngine';
@@ -94,12 +95,11 @@ interface UsePhaseNarrationResult {
  *  was computed from. */
 const PHASE_REPORT_PLY_GRACE = 3;
 
-/** Stockfish analysis depth for phase narration. PHASE-LAG-01 set 12;
- *  PHASE-LAG-02 drops to 10 to match Read Position. Deterministic
- *  tactics detection runs on every FEN in buildChessContextMessage
- *  regardless, so the engine contributes only eval direction + top
- *  lines — not something that benefits from deeper search here. */
-const STOCKFISH_DEPTH = 10;
+/** Stockfish analysis depth for phase narration: the live board's one depth
+ *  (`COACH_TURN_DEPTH`). The phase board is the board the turn reads anyway;
+ *  at depth 10 it was a second search of it (one read per board, 2026-11-21).
+ *  The budget below still bounds the slow engine. */
+const STOCKFISH_DEPTH = COACH_TURN_DEPTH;
 const NARRATION_SPEAK_TIMEOUT_MS = 60_000;
 
 function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {

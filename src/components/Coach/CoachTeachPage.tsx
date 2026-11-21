@@ -524,6 +524,11 @@ interface TrackMarks {
 /** How long a line's marks wait for its audio to be on air (a wedged voice
  *  never strands them: they start at the deadline). */
 const ON_AIR_WAIT_MS = 4000;
+/** THE SECOND WAVE IS ONE WAVE (David 2026-11-21: "Let's do 2 waves. Merge 2
+ *  and 3 together, but with a 0.5 second pause"): the turn speaks its instant
+ *  line, then its late line, and a phase line of the same turn follows the
+ *  late one after this pause — never a third line at its own time. */
+export const PHASE_AFTER_LATE_PAUSE_MS = 500;
 
 const SUGGESTIONS = [
   'Walk me through the Vienna opening',
@@ -1567,13 +1572,18 @@ export function CoachTeachPage({ mode }: {
       void (async () => {
         try {
           // ONE READ PER BOARD (#155): a board with a kept read shows it and
-          // grades from it — no search; the bar reads only a new board.
+          // grades from it — no search; the bar reads only a new board, and at
+          // the turn's own depth, so it shares the turn's read of this board
+          // instead of searching it again (David's iPhone 2026-11-21: a
+          // depth-12 bar read ran ahead of the depth-14 turn read on the same
+          // board, was dropped when the board moved, and the turn searched
+          // from scratch — about 5 s of the slow engine per move).
           const kept = await keptBoardRead(fen);
           if (cancelled) return;
           const wrapped = kept && !isDraftRead(kept)
             ? { ok: true as const, value: kept }
             : await withTimeout(
-              stockfishEngine.analyzePosition(fen, 12, undefined, 'brain', { signal: leftBoard.signal }),
+              stockfishEngine.analyzePosition(fen, COACH_TURN_DEPTH, undefined, 'brain', { signal: leftBoard.signal }),
               5_000,
               'teach-eval-bar',
             );
@@ -8864,7 +8874,11 @@ export function CoachTeachPage({ mode }: {
       // is not spoken — its board is gone.
       const turnBoard = live?.fen ?? fen;
       const chainBefore = speechChainRef.current;
+      // One second wave: when this turn has already spoken (its late line),
+      // the phase line follows it after the fixed pause.
+      const afterTurnLine = !!live && live.said.trim().length > 0;
       const spoken = speechChainRef.current
+        .then(() => (afterTurnLine ? new Promise<void>((r) => { setTimeout(r, PHASE_AFTER_LATE_PAUSE_MS); }) : undefined))
         .then(() => (samePosition(liveFenRef.current ?? '', turnBoard) && learnVoiceAllows('door') ? voiceService.speakPackage(d.pkg) : undefined))
         .catch(() => undefined);
       // Its marks go up as it is said: registered after the speak on the same
@@ -11028,12 +11042,6 @@ export function CoachTeachPage({ mode }: {
         // position — and the FEN guard at the verdict site, doing its job,
         // therefore refused every single turn. The coach's own mistake callout
         // was wired end to end and could not fire once.
-        // THE PAD IS THEATER, NOT A PIPELINE STAGE (David 2026-08-07: "The
-        // two second wait time is for the opponents move… That doesn't mean
-        // the llm needs to stop and think"). The opponent's 1-2s "thinking"
-        // delays only the BOARD; the facts assembly and the LLM call run
-        // UNDERNEATH it, so the beat gets the pad's head start for free.
-        const minThink = 1000 + Math.floor(Math.random() * 1000); // 1000–2000ms
         // THE REPLY WAITS FOR THE REASON (David 2026-10-17: "Delay the computer
         // move obviously"). At a real decision moment, the reads the student's
         // move is explained from (the board between the moves and the two pass
@@ -11055,7 +11063,7 @@ export function CoachTeachPage({ mode }: {
           // THE VERDICT'S OWN READS: the price and the board between the moves.
           wait.waitPrice ? Promise.all([priceRead, midTurnRead]).catch(() => null) : null,
         ]);
-        const padDone = replyWait({ startedAt: thinkStart, minThinkMs: minThink, reason: reasonWarm, ceilingMs: wait.ceilingMs });
+        const padDone = replyWait({ startedAt: thinkStart, reason: reasonWarm, ceilingMs: wait.ceilingMs });
         if (reply) {
           // GROUNDING COMPLETENESS (David 2026-06-15): compute what the
           // reply ACTUALLY did — captured piece + squares — from the BEFORE

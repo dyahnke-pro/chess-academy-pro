@@ -54,7 +54,7 @@ describe('the reply waits for the reason for at most the ceiling, counted from t
     try {
       let landed = -1;
       const t0 = Date.now();
-      void replyWait({ startedAt: t0, minThinkMs: 2000, reason: new Promise(() => {}), ceilingMs: 2500 }).then(() => { landed = Date.now() - t0; });
+      void replyWait({ startedAt: t0, reason: new Promise(() => {}), ceilingMs: 2500 }).then(() => { landed = Date.now() - t0; });
       await vi.advanceTimersByTimeAsync(2499);
       expect(landed).toBe(-1);
       await vi.advanceTimersByTimeAsync(1);
@@ -63,23 +63,24 @@ describe('the reply waits for the reason for at most the ceiling, counted from t
       vi.useRealTimers();
     }
   });
-  it('a quick reason still keeps the think pad', async () => {
+  it('a quick reason replies at once — no think pad (David 2026-11-21)', async () => {
     const { vi } = await import('vitest');
     const { replyWait } = await import('./foregroundActivity');
     vi.useFakeTimers();
     try {
       let landed = -1;
       const t0 = Date.now();
-      void replyWait({ startedAt: t0, minThinkMs: 1500, reason: Promise.resolve(), ceilingMs: 2500 }).then(() => { landed = Date.now() - t0; });
-      await vi.advanceTimersByTimeAsync(1500);
-      expect(landed).toBe(1500);
+      void replyWait({ startedAt: t0, reason: Promise.resolve(), ceilingMs: 2500 }).then(() => { landed = Date.now() - t0; });
+      await vi.advanceTimersByTimeAsync(0);
+      expect(landed).toBe(0);
     } finally {
       vi.useRealTimers();
     }
   });
   it('Learn\'s reply waits through replyWait', () => {
     const page = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
-    expect(page).toMatch(/const padDone = replyWait\(\{ startedAt: thinkStart, minThinkMs: minThink, reason: reasonWarm, ceilingMs: wait\.ceilingMs \}\);/);
+    expect(page).toMatch(/const padDone = replyWait\(\{ startedAt: thinkStart, reason: reasonWarm, ceilingMs: wait\.ceilingMs \}\);/);
+    expect(page).not.toMatch(/minThink/);
     // …and what it waits on is the one rule (`learnReplyWait`), the verdict's
     // price included whenever a verdict may be due.
     expect(page).toMatch(/const wait = learnReplyWait\(/);

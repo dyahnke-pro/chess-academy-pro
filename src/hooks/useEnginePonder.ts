@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { stockfishEngine } from '../services/stockfishEngine';
 import { setCachedStockfish } from './stockfishFenCache';
+import { COACH_TURN_DEPTH } from '../services/engineConstants';
 
 /**
  * useEnginePonder — pondering on the student's clock (David 2026-07-03: "it
@@ -29,12 +30,14 @@ import { setCachedStockfish } from './stockfishFenCache';
  * busy, so it can never clobber a real, user-driven request. It's best-effort —
  * when it can't run, the on-demand grounding path still works, just cold.
  *
- * Depth 12 matches `buildFedTacticsContext`'s `analyzeWithBudget(fen, 12, …)` so
+ * The turn's own depth (COACH_TURN_DEPTH): a shallower ask (`buildFedTacticsContext`'s 12) is answered by this read, so
  * the engine cache (keyed by fen+depth) is an EXACT hit for the brain's
  * grounding; the fen-cache seed (depth-agnostic) covers the narration hooks.
  */
 
-const PONDER_DEPTH = 12;
+/** The live board's one depth (`COACH_TURN_DEPTH`): a ponder at another
+ *  depth is a second search of a board the turn reads anyway (2026-11-21). */
+const PONDER_DEPTH = COACH_TURN_DEPTH;
 /** Bound the background hold on the (slow, on iOS) engine — returns best-so-far
  *  and caches it. Generous because desktop resolves on depth well before it. */
 const PONDER_BUDGET_MS = 2500;

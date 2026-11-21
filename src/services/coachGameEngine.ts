@@ -1,7 +1,7 @@
 import { Chess } from 'chess.js';
 import { isHomeSteerWarm, pickHomeSteerMove, warmHomeSteer } from './homeOpeningSteer';
 import { stockfishEngine } from './stockfishEngine';
-import { limitStrengthElo, ENGINE_ELO_MIN } from './engineConstants';
+import { limitStrengthElo, ENGINE_ELO_MIN, COACH_TURN_DEPTH } from './engineConstants';
 import { humanReply, type EveryMoveRead } from './humanReply';
 import { getNextOpeningBookMove } from './openingDetectionService';
 import { findHangingPieces } from './tacticClassifier';
@@ -198,7 +198,9 @@ const STEER_GIFT_CP = 200;
  *  tactic the focus sets up always leads, and a positional question the
  *  record needs is the coach's pick only among moves that pose no tactic. */
 const SKILL_STEER_WEIGHT = 0.5;
-const STEER_VERIFY_DEPTH = 12;
+/** The steered reply's board is the board Learn's turn reads next, at the
+ *  turn depth — one read per board (2026-11-21). */
+const STEER_VERIFY_DEPTH = COACH_TURN_DEPTH;
 /** The earned slip's engine reads (WO-MISSIONS-02, §6a): the coach's own read
  *  of EVERY legal move (its candidates — where the slips come from) and up to
  *  PLANT_VERIFY_MAX student-side reads, all inside the iOS 2 s cap. Every legal
@@ -595,10 +597,12 @@ export async function getAdaptiveMove(
 }
 
 /** The engine's best move here: one bounded read in an exclusive hold, like
- *  every dial. Null when no read came back or it named no move. */
+ *  every dial. Null when no read came back or it named no move. At the turn's
+ *  depth: this is the board the student's move arrived at, which Learn's turn
+ *  reads at `COACH_TURN_DEPTH` anyway — one read per board (2026-11-21). */
 async function engineBestRead(fen: string): Promise<StockfishAnalysis | null> {
   const analysis = await withBudget(stockfishEngine.holdForQuestion(async (engine) => {
-    try { return await engine.analyzePosition(fen, 12, undefined, BAND_BUDGET_MS); } catch { return null; }
+    try { return await engine.analyzePosition(fen, COACH_TURN_DEPTH, undefined, BAND_BUDGET_MS); } catch { return null; }
   }).catch(() => null), 2 * BAND_BUDGET_MS);
   const best = analysis?.bestMove;
   return analysis && best && best !== '(none)' ? analysis : null;
