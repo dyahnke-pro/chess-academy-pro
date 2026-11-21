@@ -16,7 +16,7 @@ describe('afterLine — a future board is said as the moves that reach it', () =
     expect(afterLine(['Nd4'], FUTURE, NOW, 'w', 'Moving the knight on e5 would unveil an attack.')).toBe('If you play Nd4, moving the knight on e5 would unveil an attack.');
   });
   it('a longer line keeps "After …"', () => {
-    expect(afterLine(['Qd2', 'Nf6'], FUTURE, NOW, 'w', TEXT)).toMatch(/^After Qd2, Nf6, your queen/);
+    expect(afterLine(['Qd2', 'Nf6'], FUTURE, NOW, 'w', TEXT)).toMatch(/^After Qd2, …Nf6, your queen/);
   });
   it("a line starting with the opponent's move keeps \"After …\"", () => {
     expect(afterLine(['Qd2'], FUTURE, NOW, 'b', TEXT)).toMatch(/^After Qd2, /);
@@ -28,6 +28,13 @@ describe('afterLine — a future board is said as the moves that reach it', () =
     const line = ['Qc2', 'Bc6', 'Qb1', 'Nd7', 'Bc3', 'c4', 'Rd4', 'Qc5', 'Red1'];
     expect(afterLine(line, FUTURE, NOW, 'w', TEXT)).toBe('After Qc2, Qb1, Bc3, Rd4 and Red1, your queen on d2 and your bishop on e3 form a battery.');
     // Four plies are still said move by move.
-    expect(afterLine(line.slice(0, 4), FUTURE, NOW, 'w', TEXT)).toMatch(/^After Qc2, Bc6, Qb1, Nd7, /);
+    expect(afterLine(line.slice(0, 4), FUTURE, NOW, 'w', TEXT)).toMatch(/^After Qc2, …Bc6, Qb1, …Nd7, /);
+  });
+});
+
+describe('a line said after a Black move marks Black\'s moves (Danya read: "After Bd5, Qf2, Qe4, your queen pins")', () => {
+  it('Black to move: the first and third moves carry "…"', () => {
+    const now = '8/8/8/8/8/8/8/k6K b - - 0 1';
+    expect(afterLine(['Bd5', 'Qf2', 'Qe4'], '8/8/8/8/8/8/8/k5K1 w - - 0 1', now, 'b', 'Your queen pins their knight.')).toMatch(/^After …Bd5, Qf2, …Qe4, your queen pins/);
   });
 });

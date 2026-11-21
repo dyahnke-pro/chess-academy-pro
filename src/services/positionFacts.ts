@@ -1949,8 +1949,13 @@ export function afterLine(line: readonly string[] | undefined, boardFen: string 
   if (line.length === 1 && fenNow.split(' ')[1] === student) return `If you play ${line[0]}, ${rest}`;
   // A longer line is said as the mover's own moves, never a score sheet
   // (THE COACH TALKS LIKE A PERSON, rule 4) and never "and N more moves".
-  if (line.length > LINE_SAID_IN_FULL) return `After ${andList(line.filter((_, k) => k % 2 === 0))}, ${rest}`;
-  return `After ${line.join(', ')}, ${rest}`;
+  // EVERY BLACK MOVE CARRIES ITS "…" (Danya have-check read: "After Bd5,
+  // Qf2, Qe4, your queen pins" — Black's two moves and White's one, with no
+  // way to hear whose is whose).
+  const first = fenNow.split(' ')[1] === 'b' ? 1 : 0;
+  const seated = line.map((m, k) => ((k + first) % 2 === 1 && !m.startsWith('…') ? `…${m}` : m));
+  if (line.length > LINE_SAID_IN_FULL) return `After ${andList(seated.filter((_, k) => k % 2 === 0))}, ${rest}`;
+  return `After ${seated.join(', ')}, ${rest}`;
 }
 
 function samePlacementFen(a: string, b: string): boolean {
