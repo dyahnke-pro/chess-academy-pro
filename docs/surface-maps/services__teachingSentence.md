@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**916 lines · 69 exports · 30 importers · 6 tests · 35 audits**
+**945 lines · 70 exports · 31 importers · 6 tests · 35 audits**
 
 ## Locked rules that govern this surface
 
@@ -26,6 +26,7 @@
 - `src/services/boardReadFacts.ts`
 - `src/services/boardUrgency.ts`
 - `src/services/checkRun.ts`
+- `src/services/coachFeatureService.ts`
 - `src/services/costReason.ts`
 - `src/services/deliberation.ts`
 - `src/services/endgameVerdict.ts`
@@ -492,65 +493,65 @@
 - `src/services/boardComputers.ts:4332`
 - `src/services/boardComputers.ts:4358`
 - `src/services/boardComputers.ts:4380`
-- `src/services/boardComputers.ts:4787`
-- `src/services/boardComputers.ts:4810`
-- `src/services/boardComputers.ts:4829`
-- `src/services/boardComputers.ts:4842`
-- `src/services/boardComputers.ts:4858`
-- `src/services/boardComputers.ts:4874`
-- `src/services/boardComputers.ts:4897`
-- `src/services/boardComputers.ts:4909`
-- `src/services/boardComputers.ts:4922`
-- `src/services/boardComputers.ts:4937`
-- `src/services/boardComputers.ts:4947`
-- `src/services/boardComputers.ts:4964`
-- `src/services/boardComputers.ts:4980`
-- `src/services/boardComputers.ts:5001`
-- `src/services/boardComputers.ts:5022`
-- `src/services/boardComputers.ts:5038`
-- `src/services/boardComputers.ts:5050`
-- `src/services/boardComputers.ts:5072`
-- `src/services/boardComputers.ts:5096`
-- `src/services/boardComputers.ts:5220`
-- `src/services/boardComputers.ts:5283`
-- `src/services/boardComputers.ts:5441`
-- `src/services/boardComputers.ts:5518`
-- `src/services/boardComputers.ts:5842`
-- `src/services/boardComputers.ts:5984`
-- `src/services/boardComputers.ts:6003`
-- `src/services/boardComputers.ts:6022`
-- `src/services/boardComputers.ts:6073`
-- `src/services/boardComputers.ts:6219`
-- `src/services/boardComputers.ts:6242`
-- `src/services/boardComputers.ts:6324`
-- `src/services/boardComputers.ts:6434`
-- `src/services/boardComputers.ts:6481`
-- `src/services/boardComputers.ts:6558`
-- `src/services/boardComputers.ts:6580`
-- `src/services/boardComputers.ts:6600`
-- `src/services/boardComputers.ts:6696`
-- `src/services/boardComputers.ts:6720`
-- `src/services/boardComputers.ts:6745`
-- `src/services/boardComputers.ts:6799`
-- `src/services/boardComputers.ts:6820`
-- `src/services/boardComputers.ts:6841`
-- `src/services/boardComputers.ts:6859`
-- `src/services/boardComputers.ts:6882`
-- `src/services/boardComputers.ts:6906`
-- `src/services/boardComputers.ts:6935`
-- `src/services/boardComputers.ts:6961`
-- `src/services/boardComputers.ts:6977`
-- `src/services/boardComputers.ts:6994`
-- `src/services/boardComputers.ts:7012`
-- `src/services/boardComputers.ts:7035`
-- `src/services/boardComputers.ts:7059`
-- `src/services/boardComputers.ts:7087`
-- `src/services/boardComputers.ts:7105`
-- `src/services/boardComputers.ts:7287`
-- `src/services/boardComputers.ts:7309`
-- `src/services/boardComputers.ts:7329`
-- `src/services/boardComputers.ts:7349`
-- `src/services/boardComputers.ts:7872`
+- `src/services/boardComputers.ts:4788`
+- `src/services/boardComputers.ts:4811`
+- `src/services/boardComputers.ts:4830`
+- `src/services/boardComputers.ts:4843`
+- `src/services/boardComputers.ts:4859`
+- `src/services/boardComputers.ts:4875`
+- `src/services/boardComputers.ts:4898`
+- `src/services/boardComputers.ts:4910`
+- `src/services/boardComputers.ts:4923`
+- `src/services/boardComputers.ts:4938`
+- `src/services/boardComputers.ts:4948`
+- `src/services/boardComputers.ts:4965`
+- `src/services/boardComputers.ts:4981`
+- `src/services/boardComputers.ts:5002`
+- `src/services/boardComputers.ts:5023`
+- `src/services/boardComputers.ts:5039`
+- `src/services/boardComputers.ts:5051`
+- `src/services/boardComputers.ts:5073`
+- `src/services/boardComputers.ts:5097`
+- `src/services/boardComputers.ts:5221`
+- `src/services/boardComputers.ts:5284`
+- `src/services/boardComputers.ts:5442`
+- `src/services/boardComputers.ts:5519`
+- `src/services/boardComputers.ts:5843`
+- `src/services/boardComputers.ts:5985`
+- `src/services/boardComputers.ts:6004`
+- `src/services/boardComputers.ts:6023`
+- `src/services/boardComputers.ts:6074`
+- `src/services/boardComputers.ts:6220`
+- `src/services/boardComputers.ts:6243`
+- `src/services/boardComputers.ts:6325`
+- `src/services/boardComputers.ts:6435`
+- `src/services/boardComputers.ts:6482`
+- `src/services/boardComputers.ts:6559`
+- `src/services/boardComputers.ts:6581`
+- `src/services/boardComputers.ts:6601`
+- `src/services/boardComputers.ts:6697`
+- `src/services/boardComputers.ts:6721`
+- `src/services/boardComputers.ts:6746`
+- `src/services/boardComputers.ts:6800`
+- `src/services/boardComputers.ts:6821`
+- `src/services/boardComputers.ts:6842`
+- `src/services/boardComputers.ts:6860`
+- `src/services/boardComputers.ts:6883`
+- `src/services/boardComputers.ts:6907`
+- `src/services/boardComputers.ts:6936`
+- `src/services/boardComputers.ts:6962`
+- `src/services/boardComputers.ts:6978`
+- `src/services/boardComputers.ts:6995`
+- `src/services/boardComputers.ts:7013`
+- `src/services/boardComputers.ts:7036`
+- `src/services/boardComputers.ts:7060`
+- `src/services/boardComputers.ts:7088`
+- `src/services/boardComputers.ts:7106`
+- `src/services/boardComputers.ts:7288`
+- `src/services/boardComputers.ts:7310`
+- `src/services/boardComputers.ts:7330`
+- `src/services/boardComputers.ts:7350`
+- `src/services/boardComputers.ts:7873`
 - `src/services/boardReadFacts.ts:134`
 - `src/services/movePurposeEngine.tempting.test.ts:22`
 - `src/services/openingRoads.ts:39`
@@ -662,7 +663,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `renderNewThreat` (function) — 1 call site
-- `src/services/boardComputers.ts:6091`
+- `src/services/boardComputers.ts:6092`
 
 ### `MustDefendData` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -696,7 +697,7 @@
 - `src/services/boardReadFacts.ts:407`
 
 ### `renderAspectThreat` (function) — 1 call site
-- `src/services/reviewMoveBriefing.ts:357`
+- `src/services/reviewMoveBriefing.ts:359`
 
 ### `renderMateLever` (function) — 1 call site
 - `src/services/mateThreatLever.ts:52`
@@ -715,10 +716,10 @@
 - `src/services/pictureVerdict.ts:304`
 
 ### `renderStanding` (function) — 1 call site
-- `src/services/reviewMoveBriefing.ts:177`
+- `src/services/reviewMoveBriefing.ts:179`
 
 ### `renderSwing` (function) — 1 call site
-- `src/services/reviewMoveBriefing.ts:203`
+- `src/services/reviewMoveBriefing.ts:205`
 
 ### `PieceReadData` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -794,6 +795,13 @@
 
 ### `renderPlanHeld` (function) — 1 call site
 - `src/services/planSteps.ts:460`
+
+### `oneMoveHead` (function) — 5 call sites
+- `src/services/coachFeatureService.ts:649`
+- `src/services/teachingSentence.test.ts:63`
+- `src/services/teachingSentence.test.ts:64`
+- `src/services/teachingSentence.test.ts:66`
+- `src/services/teachingSentence.test.ts:67`
 
 ## Tests
 

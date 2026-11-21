@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**6845 lines · 36 exports · 76 importers · 94 tests · 4 audits**
+**6853 lines · 36 exports · 77 importers · 95 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
@@ -80,6 +80,7 @@
 - `src/services/reviewRealSweep.test.ts`
 - `src/services/reviewRefuted.test.ts`
 - `src/services/reviewRegister.test.ts`
+- `src/services/reviewRepeats.measure.test.ts`
 - `src/services/reviewStemVariety.test.ts`
 - `src/services/reviewUnpinOnce.test.ts`
 - `src/services/reviewWalk1500.test.ts`
@@ -149,10 +150,11 @@
 - `src/services/reviewReadsLearn.test.ts:26`
 - `src/services/reviewReadsLearn.test.ts:32`
 
-### `foldReviewRefrains` (function) — 3 call sites
+### `foldReviewRefrains` (function) — 4 call sites
 - `src/components/Coach/CoachGameReview.tsx:1862`
 - `src/services/reviewLedgerCounters.test.ts:69`
 - `src/services/reviewLedgerCounters.test.ts:81`
+- `src/services/reviewRepeats.measure.test.ts:35`
 
 ### `ReviewMoveSegment` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -183,7 +185,7 @@
 ### `STORY_PROVEN_GAMES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `buildReviewSegmentsForTests` (function) — 119 call sites
+### `buildReviewSegmentsForTests` (function) — 120 call sites
 - `src/services/batch2Wiring.test.ts:75`
 - `src/services/coachFeatureService.causalChain.test.ts:30`
 - `src/services/coachFeatureService.causalChain.test.ts:44`
@@ -294,6 +296,7 @@
 - `src/services/reviewOneClaimOnce.test.ts:147`
 - `src/services/reviewOneFailureSentence.test.ts:16`
 - `src/services/reviewOneLineOnce.test.ts:16`
+- `src/services/reviewRepeats.measure.test.ts:33`
 - `src/services/reviewTheirHabit.test.ts:24`
 - `src/services/reviewUnpinOnce.test.ts:19`
 - `src/services/reviewZugzwang.test.ts:22`
@@ -353,10 +356,10 @@
 - `src/services/coachFeatureService.test.ts:626`
 
 ### `pendingRecapture` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8887`
-- `src/components/Coach/CoachTeachPage.tsx:8992`
-- `src/components/Coach/CoachTeachPage.tsx:11965`
-- `src/components/Coach/CoachTeachPage.tsx:12368`
+- `src/components/Coach/CoachTeachPage.tsx:8897`
+- `src/components/Coach/CoachTeachPage.tsx:9002`
+- `src/components/Coach/CoachTeachPage.tsx:11975`
+- `src/components/Coach/CoachTeachPage.tsx:12378`
 - `src/services/coachFeatureService.test.ts:915`
 - `src/services/coachFeatureService.test.ts:916`
 - `src/services/phaseTransitionDetector.test.ts:575`
@@ -516,6 +519,7 @@
 - `src/services/reviewRealSweep.test.ts`
 - `src/services/reviewRefuted.test.ts`
 - `src/services/reviewRegister.test.ts`
+- `src/services/reviewRepeats.measure.test.ts`
 - `src/services/reviewStemVariety.test.ts`
 - `src/services/reviewTheirHabit.test.ts`
 - `src/services/reviewTurnLength.test.ts`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**748 lines · 16 exports · 35 importers · 24 tests · 0 audits**
+**750 lines · 16 exports · 35 importers · 24 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -59,11 +59,11 @@
 
 ### `signedBand` (const) — 3 call sites
 - `src/services/boardComputers.ts:3130`
-- `src/services/boardComputers.ts:6487`
+- `src/services/boardComputers.ts:6488`
 - `src/services/boardReadFacts.ts:196`
 
 ### `evalReading` (function) — 5 call sites
-- `src/services/boardComputers.ts:6485`
+- `src/services/boardComputers.ts:6486`
 - `src/services/evalReading.test.ts:11`
 - `src/services/evalReading.test.ts:17`
 - `src/services/evalReading.test.ts:23`
@@ -73,7 +73,7 @@
 - `src/services/boardReadFacts.ts:195`
 
 ### `moveAspects` (function) — 13 call sites
-- `src/services/boardComputers.ts:6131`
+- `src/services/boardComputers.ts:6132`
 - `src/services/captureLeadsTo.test.ts:26`
 - `src/services/countedWhenTradeEnds.test.ts:38`
 - `src/services/countedWhenTradeEnds.test.ts:52`
@@ -91,7 +91,7 @@
 - `src/services/capSweep2.test.ts:50`
 - `src/services/captureRun.test.ts:46`
 - `src/services/captureRun.test.ts:58`
-- `src/services/coachFeatureService.ts:2224`
+- `src/services/coachFeatureService.ts:2226`
 - `src/services/guardPressure.test.ts:42`
 - `src/services/materialSites.test.ts:20`
 - `src/services/reviewMoveBriefing.test.ts:13`
