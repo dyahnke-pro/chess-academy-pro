@@ -35,7 +35,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `attackerDefenderCount` (function) — 8 call sites
-- `src/services/boardComputers.ts:4444`
+- `src/services/boardComputers.ts:4449`
 - `src/services/capSweep2.test.ts:27`
 - `src/services/reviewNarrationDefects.test.ts:96`
 - `src/services/reviewNarrationDefects.test.ts:105`
@@ -45,7 +45,7 @@
 - `src/services/reviewTeachingPoints.test.ts:437`
 
 ### `countSaid` (function) — 1 call site
-- `src/services/boardComputers.ts:4447`
+- `src/services/boardComputers.ts:4452`
 
 ### `pieceHasSafeEscape` (function) — 3 call sites
 - `src/services/reviewTeachingPoints.test.ts:442`
@@ -53,18 +53,18 @@
 - `src/services/reviewTeachingPoints.test.ts:455`
 
 ### `royalDefenderTarget` (function) — 3 call sites
-- `src/services/boardComputers.ts:4468`
+- `src/services/boardComputers.ts:4473`
 - `src/services/reviewNarrationFidelity.test.ts:69`
 - `src/services/reviewTeachingPoints.test.ts:39`
 
 ### `rookOnSeventh` (function) — 4 call sites
-- `src/services/boardComputers.ts:4485`
+- `src/services/boardComputers.ts:4490`
 - `src/services/reviewTeachingPoints.test.ts:47`
 - `src/services/reviewTeachingPoints.test.ts:517`
 - `src/services/reviewTeachingPoints.test.ts:521`
 
 ### `badEnemyBishop` (function) — 6 call sites
-- `src/services/boardComputers.ts:4502`
+- `src/services/boardComputers.ts:4507`
 - `src/services/reviewTeachingPoints.test.ts:52`
 - `src/services/reviewTeachingPoints.test.ts:53`
 - `src/services/reviewTeachingPoints.test.ts:482`
@@ -72,7 +72,7 @@
 - `src/services/theirWorstPiece.ts:31`
 
 ### `passedPawnPush` (function) — 8 call sites
-- `src/services/boardComputers.ts:5736`
+- `src/services/boardComputers.ts:5741`
 - `src/services/reviewTeachingPoints.test.ts:57`
 - `src/services/reviewTeachingPoints.test.ts:63`
 - `src/services/reviewTeachingPoints.test.ts:66`
@@ -121,7 +121,7 @@
 - `src/services/reviewTeachingPoints.test.ts:506`
 
 ### `temptingCaptureRead` (function) — 1 call site
-- `src/services/boardComputers.ts:4425`
+- `src/services/boardComputers.ts:4430`
 
 ### `describeNotableMove` (function) — 5 call sites
 - `src/services/coachFeatureService.ts:4285`
@@ -156,8 +156,8 @@
 - `src/services/theirMoveCost.ts:158`
 
 ### `findTrappedPiece` (function) — 10 call sites
-- `src/services/boardComputers.ts:5688`
-- `src/services/boardComputers.ts:5695`
+- `src/services/boardComputers.ts:5693`
+- `src/services/boardComputers.ts:5700`
 - `src/services/moveInsight.ts:419`
 - `src/services/reviewTeachingPoints.test.ts:256`
 - `src/services/reviewTeachingPoints.test.ts:262`

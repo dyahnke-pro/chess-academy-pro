@@ -76,7 +76,7 @@ import { pictureVerdictOf, type PictureConclusions, type PictureLedgerIn } from 
 import { costStakes } from './factStakes';
 import { pawnBreak } from './pawnBreak';
 import { oppositeBishops } from './oppositeBishops';
-import { planSteps, planStepsText, planStepsKey } from './planSteps';
+import { planSteps, planStepsText, planStepsKey, planStepsHeld } from './planSteps';
 import { planOfTheBoard } from './planOfTheBoard';
 import { compensation } from './compensation';
 import { openingTheoryFacts } from './openingTheory';
@@ -3769,9 +3769,14 @@ export const BOARD_COMPUTERS = {
       const text = planStepsText(p, mine ? 'your' : 'their');
       const key = planStepsKey(p, mover);
       const proof = legalLineProof(fenAfter, p.line, lineSeatAt(fenAfter, student)) ?? NO_PROOF.description;
+      // Learn's held form (LEARN NAMES NO MOVE UNASKED, carve-out 4): the
+      // piece, what it aims at and why — never the road (David 2026-11-19:
+      // "why does it want to be on that line?").
+      const held = mine ? planStepsHeld(p, 'your') : null;
       return fact({ key, claims: [key], text, proof, squares: p.squares, stakes: null,
         seat: mine ? 'student' : 'opponent', namesStudentMove: mine, thread: LOCAL_THREAD, fen: fenAfter,
-        ...(isProof(proof) && proof.line ? { lines: [proof.line] } : {}) });
+        ...(isProof(proof) && proof.line ? { lines: [proof.line] } : {}),
+        ...(held ? { heldForm: { text: held, proof: NO_PROOF.description, squares: p.aim ? [p.aim] : [], points: 'no-plan' as const } } : {}) });
     }),
     computer: 'planSteps',
     kind: 'plan-steps',

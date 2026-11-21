@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**477 lines · 10 exports · 11 importers · 5 tests · 0 audits**
+**540 lines · 11 exports · 11 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -69,7 +69,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `hasMatingForce` (function) — 1 call site
 - `src/services/planOfTheBoard.ts:681`
 
-### `planStepsText` (function) — 10 call sites
+### `planStepsHeld` (function) — 3 call sites
+- `src/services/boardComputers.ts:3775`
+- `src/services/planSteps.test.ts:67`
+- `src/services/planSteps.test.ts:70`
+
+### `planStepsText` (function) — 12 call sites
 - `src/services/boardComputers.ts:3769`
 - `src/services/boardPlan.ts:64`
 - `src/services/boardReadFacts.ts:240`
@@ -80,6 +85,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planSteps.test.ts:13`
 - `src/services/planSteps.test.ts:31`
 - `src/services/planSteps.test.ts:36`
+- `src/services/planSteps.test.ts:57`
+- `src/services/planSteps.test.ts:63`
 
 ### `roadJobText` (function) — 2 call sites
 - `src/services/planOfTheBoard.ts:322`

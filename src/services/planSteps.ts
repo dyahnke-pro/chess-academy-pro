@@ -12,6 +12,7 @@ import { Chess, type Color, type Square } from 'chess.js';
 import { isPawnBreak } from './pawnBreak';
 import { pieceWork } from './pieceWork';
 import { isUndevelopedInOpening } from '../utils/undeveloped';
+import { findWeakPawns, legalSeeGainFor } from './positionReadingService';
 
 const PIECE: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king', p: 'pawn' };
 
@@ -45,6 +46,13 @@ export interface PlanSteps {
    *  square next to their king. The owner is said from the STUDENT's seat in
    *  `planStepsText` (their plan aims at YOUR knight). */
   aimPiece: string | null;
+  /** WHY the aim is a target (David 2026-11-19: "why does it want to be on
+   *  that line?"), read on the plan's last board: what is weak about a pawn
+   *  there (no pawn can guard it), and how many of the planner's pieces hit
+   *  it against how many guard it. Null for an empty square by the king. */
+  aimWhy: { weak: 'isolated' | 'backward' | 'doubled' | 'no-pawn-guard' | null; hits: number; guards: number;
+    /** The exchange count on that square wins material for the planner. */
+    wins: boolean } | null;
   /** The whole line played to the plan's last step (UCI), for the proof. */
   line: string[];
   /** One piece walked two or more steps to a better square, or null. */
@@ -232,7 +240,25 @@ export function planSteps(fenAfter: string, line: readonly string[], lastMove: s
       if (guards.includes(brkStep.to)) return null;
     }
   }
-  return { steps, aim, aimPiece, line: played, maneuver, squares: [...(maneuver ? [maneuver.from] : []), ...steps.map((s) => s.to), ...(aim ? [aim] : [])] };
+  let aimWhy: PlanSteps['aimWhy'] = null;
+  if (aim && aimPiece) {
+    const sq = aim as Square;
+    // Counted the way the aim is found (`attacksFrom`): through a battery, so
+    // three rooks stacked on the c-file are three hits, not one.
+    const bearing = (c: Color): Square[] => board.board().flat()
+      .filter((x): x is NonNullable<typeof x> => !!x && x.color === c && x.square !== sq && attacksFrom(board, x.square).includes(sq))
+      .map((x) => x.square);
+    const hits = bearing(mover).length;
+    const guarders = bearing(enemy);
+    let weak: NonNullable<PlanSteps['aimWhy']>['weak'] = null;
+    if (aimPiece === 'pawn') {
+      const w = findWeakPawns(board.fen(), enemy);
+      weak = w.isolated.includes(sq) ? 'isolated' : w.backward.includes(sq) ? 'backward' : w.doubled.includes(sq) ? 'doubled'
+        : guarders.some((g) => board.get(g)?.type === 'p') || sq[1] === (enemy === 'w' ? '2' : '7') ? null : 'no-pawn-guard';
+    }
+    aimWhy = { weak, hits, guards: guarders.length, wins: legalSeeGainFor(board.fen(), sq, mover) > 0 };
+  }
+  return { steps, aim, aimPiece, aimWhy, line: played, maneuver, squares: [...(maneuver ? [maneuver.from] : []), ...steps.map((s) => s.to), ...(aim ? [aim] : [])] };
 }
 
 /** The board before `lastMove` was played on it, the moved piece put back
@@ -424,6 +450,43 @@ function attacksFrom(board: Chess, sq: string): string[] {
   return out;
 }
 
+const COUNT = ['no', 'one', 'two', 'three', 'four', 'five', 'six'];
+/** Why the aim is a target, in words from the planner's seat: the pawn's
+ *  weakness, then the count when the planner's pieces outnumber the guards. */
+function aimWhyText(p: PlanSteps, whose: 'your' | 'their'): string {
+  const w = p.aimWhy;
+  if (!w) return '';
+  const owner = whose === 'your' ? 'their' : 'your';
+  const weak = w.weak === 'isolated' ? ' It is isolated, so no pawn can ever guard it.'
+    : w.weak === 'backward' ? ' It is backward: the pawns beside it have moved on and can no longer guard it.'
+      : w.weak === 'doubled' ? ' It is a doubled pawn, and the pawn in front of it cannot guard it.'
+        : w.weak === 'no-pawn-guard' ? ' No pawn guards it, so only pieces can.' : '';
+  const n = (k: number): string => COUNT[k] ?? String(k);
+  const theirs = owner === 'their' ? 'theirs' : 'yours';
+  const hit = `${n(w.hits)[0].toUpperCase()}${n(w.hits).slice(1)} of ${whose} pieces hit it`;
+  const guard = `${n(w.guards)} of ${theirs} guard${w.guards === 1 ? 's' : ''} it`;
+  // THE COUNT is the lesson, said only when it is the truth of the square:
+  // more hits than guards AND the exchange there wins it. A count alone is
+  // not a win — three rooks against a knight a pawn guards win nothing — so a
+  // count the exchange does not back is not said.
+  const count = w.hits > w.guards && w.wins ? ` ${hit}, and only ${guard}.` : '';
+  return `${weak}${count}`;
+}
+
+/** THE PLAN WITHOUT ITS MOVES — Learn's held form (LEARN NAMES NO MOVE
+ *  UNASKED, carve-out 4): the piece and what it aims at, never the road or
+ *  the steps, so the student still finds the moves. Null for their plan (it
+ *  names no move of the student's) and for a plan with nothing to point at. */
+export function planStepsHeld(p: PlanSteps, whose: 'your' | 'their'): string | null {
+  if (whose !== 'your') return null;
+  const target = p.aim ? (p.aimPiece ? `their ${p.aimPiece} on ${p.aim}` : `${p.aim}, next to their king`) : null;
+  if (p.maneuver) {
+    return `Your ${p.maneuver.piece} on ${p.maneuver.from} has a better square${target ? `, one aimed at ${target}` : ''}.${aimWhyText(p, whose)}`;
+  }
+  if (!target) return null;
+  return `Your pieces have a target: ${target}.${aimWhyText(p, whose)}`;
+}
+
 /** The plan in words, from the student's seat. The break is named once, in
  *  its place among the steps ("Bd3, Bc2 and then the d4 break") — never the
  *  move and again as what it builds to. */
@@ -439,7 +502,7 @@ export function planStepsText(p: PlanSteps, whose: 'your' | 'their'): string {
     const road = m.route.length === 2 ? `${m.route[0]} and then ${m.route[1]}` : `by way of ${m.route[0]} to ${m.route.at(-1)}`;
     const aim = p.aim ? ` There it lines up on ${p.aimPiece ? `${owner} ${p.aimPiece} on ${p.aim}` : `${p.aim}, next to ${owner} king`}.` : ` ${roadJobText(m.job, owner)}`;
     const who = whose === 'your' ? 'Your' : 'Their';
-    return m.justMoved ? `${who} ${m.piece} keeps going: ${road}.${aim}` : `${who} ${m.piece} on ${m.from} has a better road. It goes ${road}.${aim}`;
+    return m.justMoved ? `${who} ${m.piece} keeps going: ${road}.${aim}${aimWhyText(p, whose)}` : `${who} ${m.piece} on ${m.from} has a better road. It goes ${road}.${aim}${aimWhyText(p, whose)}`;
   }
   const named = p.steps.map((s) => (s.castle ? 'castling' : s.brk ? `the ${s.san} break` : s.san));
   const list = named.length === 2 ? `${named[0]} and then ${named[1]}` : `${named.slice(0, -1).join(', ')} and then ${named.at(-1)}`;
@@ -447,7 +510,7 @@ export function planStepsText(p: PlanSteps, whose: 'your' | 'their'): string {
   // their pieces, theirs at yours.
   const owner = whose === 'your' ? 'their' : 'your';
   const why = p.aim ? `, the pieces lining up on ${p.aimPiece ? `${owner} ${p.aimPiece} on ${p.aim}` : `${p.aim}, next to ${owner} king`}` : '';
-  return `${whose === 'your' ? 'Your' : 'Their'} plan from here: ${list}${why}.`;
+  return `${whose === 'your' ? 'Your' : 'Their'} plan from here: ${list}${why}.${aimWhyText(p, whose)}`;
 }
 
 /** The road's job said after the road (one idea a sentence): "There it hits

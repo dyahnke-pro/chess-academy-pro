@@ -35,7 +35,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewForcedSequence.test.ts:68`
 
 ### `forcedRunAt` (function) — 1 call site
-- `src/services/boardComputers.ts:4372`
+- `src/services/boardComputers.ts:4377`
 
 ### `FORCED_RUN_LINE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

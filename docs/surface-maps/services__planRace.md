@@ -79,7 +79,7 @@
 - `src/services/reviewTeachingPoints.ts:292`
 
 ### `planRaceClause` (function) — 20 call sites
-- `src/services/boardComputers.ts:5817`
+- `src/services/boardComputers.ts:5822`
 - `src/services/conceptEngine.ts:640`
 - `src/services/kingAttackReads.test.ts:194`
 - `src/services/nextPlans.structure.test.ts:73`
@@ -101,13 +101,13 @@
 - `src/services/planRace.test.ts:159`
 
 ### `fileClaimed` (function) — 4 call sites
-- `src/services/boardComputers.ts:4865`
+- `src/services/boardComputers.ts:4870`
 - `src/services/planRace.test.ts:142`
 - `src/services/planRace.test.ts:149`
 - `src/services/planRace.test.ts:150`
 
 ### `planRaceProof` (function) — 2 call sites
-- `src/services/boardComputers.ts:5820`
+- `src/services/boardComputers.ts:5825`
 - `src/services/kingAttackReads.test.ts:195`
 
 ### `OPPOSITE_WINGS_CLAIM` (const) — 0 call sites
@@ -117,7 +117,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `oppositeWingsRace` (function) — 9 call sites
-- `src/services/boardComputers.ts:5469`
+- `src/services/boardComputers.ts:5474`
 - `src/services/kingAttackReads.ts:736`
 - `src/services/openingStory.test.ts:119`
 - `src/services/planRace.test.ts:199`

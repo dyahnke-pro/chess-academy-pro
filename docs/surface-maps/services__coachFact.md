@@ -118,7 +118,7 @@
 
 ### `placeFact` (function) — 15 call sites
 - `src/services/boardComputers.ts:3284`
-- `src/services/boardComputers.ts:8141`
+- `src/services/boardComputers.ts:8146`
 - `src/services/learnTurnDoor.ts:809`
 - `src/services/moveThoughtFacts.ts:1309`
 - `src/services/moveThoughtFacts.ts:1326`
@@ -135,7 +135,7 @@
 
 ### `stakesOf` (function) — 14 call sites
 - `src/services/boardComputers.ts:3285`
-- `src/services/boardComputers.ts:8141`
+- `src/services/boardComputers.ts:8146`
 - `src/services/coachFact.test.ts:116`
 - `src/services/coachFact.test.ts:122`
 - `src/services/coachFact.test.ts:123`

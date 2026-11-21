@@ -25,7 +25,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `threatPurpose` (function) — 6 call sites
-- `src/services/boardComputers.ts:4399`
+- `src/services/boardComputers.ts:4404`
 - `src/services/engineComputers.test.ts:101`
 - `src/services/threatPurpose.test.ts:26`
 - `src/services/threatPurpose.test.ts:31`

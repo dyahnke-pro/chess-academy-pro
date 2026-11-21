@@ -749,7 +749,10 @@ export function renderCounterplay(c: {
   stopper: { who: 'your' | 'their'; named: string } | null; stem: number;
 }): string {
   const owner = c.mine ? 'Your' : 'Their';
-  const hit = andList([...c.hits]);
+  // Two targets or more are named by piece: "from d8 it hits your queen on c8
+  // and your rook on h1" read three squares in one sentence (humanSquares
+  // gate, 2026-11-21). The board lights each target's square.
+  const hit = andList(c.hits.length > 1 ? c.hits.map((h) => h.replace(/ on [a-h][1-8]$/, '')) : [...c.hits]);
   let head: string;
   if (c.brk && !c.brk.takes) head = rotateStem([`${owner} one resource is the pawn break ${c.brk.named}, hitting ${hit}.`, `${owner} counterplay is the push ${c.brk.named}, against ${hit}.`], c.stem);
   else if (c.brk) {

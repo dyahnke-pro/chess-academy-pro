@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3145 lines · 85 exports · 183 importers · 34 tests · 2 audits**
+**3145 lines · 85 exports · 184 importers · 34 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -131,6 +131,7 @@
 - `src/services/planChoice.ts`
 - `src/services/planRace.ts`
 - `src/services/planStep.ts`
+- `src/services/planSteps.ts`
 - `src/services/playCommentary.ts`
 - `src/services/poisonedPiece.ts`
 - `src/services/positionCharacter.ts`
@@ -350,7 +351,7 @@
 
 ### `signedCaptureRead` (function) — 4 call sites
 - `src/components/Coach/CoachTeachPage.tsx:12990`
-- `src/services/boardComputers.ts:5378`
+- `src/services/boardComputers.ts:5383`
 - `src/services/principleAttribution.ts:359`
 - `src/services/principleAttribution.ts:862`
 
@@ -363,7 +364,7 @@
 - `src/services/weighedMoves.ts:235`
 - `src/services/weighedMoves.ts:236`
 
-### `legalSeeGainFor` (function) — 177 call sites
+### `legalSeeGainFor` (function) — 178 call sites
 - `src/coach/focus/castlingWatch.ts:159`
 - `src/coach/focus/castlingWatch.ts:161`
 - `src/coach/focus/focusChances.ts:393`
@@ -394,8 +395,8 @@
 - `src/services/blockade.ts:106`
 - `src/services/bluffDetector.ts:54`
 - `src/services/bluffDetector.ts:148`
-- `src/services/boardComputers.ts:5335`
-- `src/services/boardComputers.ts:7109`
+- `src/services/boardComputers.ts:5340`
+- `src/services/boardComputers.ts:7114`
 - `src/services/boardState.ts:42`
 - `src/services/bothSaved.ts:51`
 - `src/services/breakTiming.ts:93`
@@ -487,6 +488,7 @@
 - `src/services/pinnedPawnGuard.ts:99`
 - `src/services/planRace.ts:657`
 - `src/services/planStep.ts:52`
+- `src/services/planSteps.ts:259`
 - `src/services/playCommentary.ts:500`
 - `src/services/poisonedPiece.ts:54`
 - `src/services/positionCharacter.ts:170`
@@ -646,7 +648,7 @@
 - `src/services/tacticsDetector.ts:135`
 
 ### `seeSequence` (function) — 7 call sites
-- `src/services/boardComputers.ts:8218`
+- `src/services/boardComputers.ts:8223`
 - `src/services/exchangeIdeas.ts:194`
 - `src/services/exchangeIdeas.ts:616`
 - `src/services/groundedAnswer.ts:2419`
@@ -815,7 +817,7 @@
 - `src/services/minorMatchup.ts:94`
 
 ### `findColorComplexWeakness` (function) — 10 call sites
-- `src/services/boardComputers.ts:5786`
+- `src/services/boardComputers.ts:5791`
 - `src/services/colorComplexUse.test.ts:10`
 - `src/services/colorComplexUse.test.ts:14`
 - `src/services/colorComplexUse.test.ts:18`
@@ -828,8 +830,8 @@
 
 ### `findMinorityAttack` (function) — 14 call sites
 - `src/services/boardComputers.chatReads.test.ts:30`
-- `src/services/boardComputers.ts:5757`
-- `src/services/boardComputers.ts:5763`
+- `src/services/boardComputers.ts:5762`
+- `src/services/boardComputers.ts:5768`
 - `src/services/computedTruth.fuzz.test.ts:174`
 - `src/services/learnWalkBlumenfeld.test.ts:120`
 - `src/services/minorityLeverCheck.test.ts:12`
@@ -904,7 +906,7 @@
 - `src/services/positionalTruth.corpus.test.ts:134`
 
 ### `structureTransfer` (function) — 7 call sites
-- `src/services/boardComputers.ts:5418`
+- `src/services/boardComputers.ts:5423`
 - `src/services/groundedAnswer.ts:7199`
 - `src/services/positionReadingService.test.ts:947`
 - `src/services/positionReadingService.test.ts:948`
@@ -936,7 +938,7 @@
 - `src/services/positionalRead.ts:513`
 - `src/services/positionalRead.ts:551`
 
-### `findWeakPawns` (function) — 32 call sites
+### `findWeakPawns` (function) — 33 call sites
 - `src/services/centreDuo.ts:37`
 - `src/services/concessionBeat.ts:249`
 - `src/services/concessionBeat.ts:250`
@@ -956,6 +958,7 @@
 - `src/services/pawnJudgement.ts:86`
 - `src/services/pawnJudgement.ts:177`
 - `src/services/pawnJudgement.ts:306`
+- `src/services/planSteps.ts:255`
 - `src/services/playCommentary.ts:484`
 - `src/services/positionReadingService.test.ts:156`
 - `src/services/positionReadingService.test.ts:161`

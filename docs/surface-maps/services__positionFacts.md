@@ -259,7 +259,7 @@
 ### `conceptInstanceKey` (re-export) — 16 call sites
 - `src/components/Coach/CoachTeachPage.tsx:9384`
 - `src/components/Coach/CoachTeachPage.tsx:9523`
-- `src/services/boardComputers.ts:5089`
+- `src/services/boardComputers.ts:5094`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/claimKeysLooseCount.test.ts:31`

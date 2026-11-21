@@ -45,3 +45,14 @@ describe('a try says its one cost on the sentence before it — never on another
     expect(t).toMatch(/It wins nothing: the trades leave the material level, and it gives back part of your edge\.$/);
   });
 });
+
+describe('a resource with two targets names them by piece (humanSquares 2026-11-21: "from d8 it hits your queen on c8 and your rook on h1")', () => {
+  it('one target keeps its square, two lose theirs', async () => {
+    const { renderCounterplay } = await import('./teachingSentence');
+    const base = { mine: false, alive: true, piece: 'queen', from: 'd1', to: 'd8', brk: null, whose: 'your', stopper: null, stem: 1 };
+    const two = renderCounterplay({ ...base, hits: ['your queen on c8', 'your rook on h1'] });
+    expect(two).not.toMatch(/c8|h1/);
+    expect(two).toMatch(/your queen and your rook/);
+    expect(renderCounterplay({ ...base, hits: ['your queen on c8'] })).toMatch(/your queen on c8/);
+  });
+});

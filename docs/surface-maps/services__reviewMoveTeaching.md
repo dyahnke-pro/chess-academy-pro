@@ -150,7 +150,7 @@
 - `src/services/thoughtReads.ts:247`
 
 ### `nameEndgamePhase` (function) — 6 call sites
-- `src/services/boardComputers.ts:4751`
+- `src/services/boardComputers.ts:4756`
 - `src/services/reviewMoveTeaching.test.ts:140`
 - `src/services/reviewMoveTeaching.test.ts:142`
 - `src/services/reviewMoveTeaching.test.ts:147`

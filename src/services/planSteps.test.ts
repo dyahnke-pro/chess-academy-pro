@@ -44,3 +44,29 @@ describe('planSteps — the plan in the engine line, said as one idea', () => {
     expect(planSteps(fen, line, 'c2c3')).toBeNull();
   });
 });
+
+describe('the aim says why it is a target, and Learn holds the road (David 2026-11-19: "why does it want to be on that line?")', () => {
+  const p = {
+    steps: [], aim: 'e5', aimPiece: 'pawn', line: [],
+    aimWhy: { weak: 'isolated' as const, hits: 3, guards: 1, wins: true },
+    maneuver: { piece: 'knight', from: 'b1', route: ['d2', 'f3'], justMoved: false },
+    squares: ['b1', 'e5'],
+  };
+  it('the text gives the weakness and the count the exchange backs', async () => {
+    const { planStepsText } = await import('./planSteps');
+    const t = planStepsText(p as never, 'your');
+    expect(t).toMatch(/isolated, so no pawn can ever guard it/);
+    expect(t).toMatch(/Three of your pieces hit it, and only one of theirs guards it/);
+  });
+  it('a count the exchange does not win is not said', async () => {
+    const { planStepsText } = await import('./planSteps');
+    expect(planStepsText({ ...p, aimWhy: { ...p.aimWhy, wins: false } } as never, 'your')).not.toMatch(/hit it/);
+  });
+  it('the held form names the piece and the target, never the road', async () => {
+    const { planStepsHeld } = await import('./planSteps');
+    const h = planStepsHeld(p as never, 'your') ?? '';
+    expect(h).toMatch(/their pawn on e5/);
+    expect(h).not.toMatch(/d2|f3/);
+    expect(planStepsHeld(p as never, 'their')).toBeNull();
+  });
+});

@@ -38,7 +38,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `rookReachesFile` (function) — 3 call sites
-- `src/services/boardComputers.ts:5401`
+- `src/services/boardComputers.ts:5406`
 - `src/services/danyaBehaviors.ts:722`
 - `src/services/recaptureChoice.ts:63`
 
@@ -54,7 +54,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `readPosition` (function) — 69 call sites
 - `src/coach/chatTurnAnswers.ts:271`
-- `src/services/boardComputers.ts:5609`
+- `src/services/boardComputers.ts:5614`
 - `src/services/capSweep2.test.ts:15`
 - `src/services/lookaheadPlan.ts:1264`
 - `src/services/lookaheadPlan.ts:1533`

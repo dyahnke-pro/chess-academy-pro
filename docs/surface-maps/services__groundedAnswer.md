@@ -1073,7 +1073,7 @@
 - `src/data/patternRegistry.ts:43`
 - `src/data/patternRegistry.ts:123`
 - `src/services/bluffDetector.ts:79`
-- `src/services/boardComputers.ts:6082`
+- `src/services/boardComputers.ts:6087`
 - `src/services/captureThreatAnswerable.test.ts:13`
 - `src/services/captureThreatAnswerable.test.ts:29`
 - `src/services/engineDeltaLines.ts:53`
@@ -1116,7 +1116,7 @@
 
 ### `describeThreatPrevention` (function) — 3 call sites
 - `src/data/patternRegistry.ts:103`
-- `src/services/boardComputers.ts:6085`
+- `src/services/boardComputers.ts:6090`
 - `src/services/reviewNarrationFidelity.test.ts:177`
 
 ### `ComparedMove` (interface) — 0 call sites

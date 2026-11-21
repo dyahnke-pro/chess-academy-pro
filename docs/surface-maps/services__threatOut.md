@@ -114,7 +114,7 @@
 ### `flipSideToMove` (function) — 36 call sites
 - `scripts/audit-lib/narrationAuditor.ts:73`
 - `scripts/audit-lib/narrationAuditor.ts:189`
-- `src/services/boardComputers.ts:5862`
+- `src/services/boardComputers.ts:5867`
 - `src/services/boardPlanFacts.ts:93`
 - `src/services/boardReadFacts.ts:391`
 - `src/services/boardUrgency.ts:47`
@@ -252,7 +252,7 @@
 - `src/coach/chatTurnAnswers.ts:361`
 - `src/coach/chatTurnAnswers.ts:382`
 - `src/services/boardBundle.ts:337`
-- `src/services/boardComputers.ts:6240`
+- `src/services/boardComputers.ts:6245`
 - `src/services/boardUrgency.ts:70`
 - `src/services/boardUrgency.ts:72`
 - `src/services/boardUrgency.ts:97`
