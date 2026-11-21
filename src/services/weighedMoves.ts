@@ -846,6 +846,30 @@ export function tryLossMechanism(fen: string, m: Move, lineUci: readonly string[
  * (`temptingOnBoard`) is left to it; one it stays silent on is said here, with
  * its material and its result. Most tempting first.
  */
+/** THE MOVE THAT MEETS A TRY. An only legal move is not a refutation (Danya,
+ *  queen the supporting actress #5: after Qg3+ the one legal move is …Kh8,
+ *  and the line goes on Qh4 …f5 — "…Kh8 meets it" named the forced step).
+ *  Each reply that is the ONLY legal move on its board, with the line going
+ *  on, is passed over (proven by chess.js, never guessed), and the reply
+ *  that meets the try is said with the forced steps before it. */
+export function replyThatMeets(fen: string, sans: readonly string[]): string {
+  const b = boardOf(fen);
+  const dot = b?.turn() === 'w' ? '…' : '';
+  if (!b) return `${dot}${sans[1]}`;
+  let j = 1;
+  try {
+    b.move(sans[0]);
+    while (sans[j + 2] !== undefined && b.moves().length === 1) {
+      b.move(sans[j]); b.move(sans[j + 1]);
+      j += 2;
+    }
+  } catch { j = 1; }
+  if (j === 1) return `${dot}${sans[1]}`;
+  const forced: string[] = [];
+  for (let k = 1; k < j; k += 2) forced.push(`${dot}${sans[k]}`);
+  return `${forced.join(', ')}, then ${dot}${sans[j]}`;
+}
+
 export function standingRefutations(args: {
   fen: string;
   student: Color;
@@ -936,7 +960,7 @@ export function standingRefutations(args: {
     const lostWords = net !== null && net < 0
       ? ((): string | null => { const l = computeExchangeLedger(args.fen, sans, mover === 'w' ? 'b' : 'w'); return l ? materialGainWords(l) : null; })()
       : null;
-    const reply = `${mover === 'w' ? '…' : ''}${sans[1]}`;
+    const reply = replyThatMeets(args.fen, sans);
     // NO REASON, NO REFUTATION: his every rule-out says why it falls short.
     // THE WHY BEFORE THE MATERIAL (CLAUDE.md rule 2): the mechanism — what
     // the line does, the reply's mechanism, what became of the plan's target,

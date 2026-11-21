@@ -323,3 +323,16 @@ describe('the tempting move says what it looks like (Danya: "Bg5 looks like a pi
     expect(tryLooksLike(c.fen(), 'Be2', 'w')).toBeNull();
   });
 });
+
+describe('an only legal move is not what meets a try (Danya: "Qg3+ Kh8 Qh4 fails to …f5")', () => {
+  it('passes over …Kh8, the one legal move after Qg3+, to …f5', async () => {
+    const { replyThatMeets } = await import('./weighedMoves');
+    const fen = 'r2q1rk1/pb3p1p/1pnppp2/2p5/2PPP3/BPNQ4/P5PP/R4RK1 w - - 0 15';
+    expect(replyThatMeets(fen, ['Qg3+', 'Kh8', 'Qh4', 'f5'])).toBe('…Kh8, then …f5');
+  });
+  it('a reply that had a choice is the reply (no skip): Bc1 …Kh8', async () => {
+    const { replyThatMeets } = await import('./weighedMoves');
+    const fen = 'r2q1rk1/pb3p1p/1pnppp2/2p5/2PPP3/BPNQ4/P5PP/R4RK1 w - - 0 15';
+    expect(replyThatMeets(fen, ['Bc1', 'Kh8', 'Qh3', 'f5'])).toBe('…Kh8');
+  });
+});
