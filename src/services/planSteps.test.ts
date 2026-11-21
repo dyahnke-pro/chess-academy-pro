@@ -28,7 +28,7 @@ describe('planSteps — the plan in the engine line, said as one idea', () => {
 
   it('the break is named once, in its place among the steps', () => {
     const p = planSteps(after('d4', 'd5', 'Nf3'), ['g8f6', 'c2c4', 'e7e6', 'b1c3'], null);
-    expect(p && planStepsText(p, 'your')).toBe('Your plan from here: the c4 break and then Nc3.');
+    expect(p && planStepsText(p, 'your')).toBe('Your plan from here: the c4 break and then Nc3. The break goes at their pawn on d5.');
   });
 
   it("their plan aims at YOUR piece: the owner is said from the student's seat", () => {
@@ -68,5 +68,17 @@ describe('the aim says why it is a target, and Learn holds the road (David 2026-
     expect(h).toMatch(/their pawn on e5/);
     expect(h).not.toMatch(/d2|f3/);
     expect(planStepsHeld(p as never, 'their')).toBeNull();
+  });
+});
+
+describe('a plan list says what its break is for (Danya have-check 2026-11-19: "Bf8, Ne7 and then the d5 break" with no purpose)', () => {
+  it('names the pawn the break hits when the list has no aim', async () => {
+    const { planStepsText } = await import('./planSteps');
+    const p = { steps: [
+      { san: 'Bf8', piece: 'bishop', from: 'e7', to: 'f8', castle: false, brk: false },
+      { san: 'Ne7', piece: 'knight', from: 'c6', to: 'e7', castle: false, brk: false },
+      { san: 'd5', piece: 'pawn', from: 'd6', to: 'd5', castle: false, brk: true, hits: 'c4' },
+    ], aim: null, aimPiece: null, aimWhy: null, line: [], maneuver: null, squares: [] };
+    expect(planStepsText(p, 'their')).toBe('Their plan from here: Bf8, Ne7 and then the d5 break. The break goes at your pawn on c4.');
   });
 });

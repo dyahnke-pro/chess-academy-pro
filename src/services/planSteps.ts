@@ -20,7 +20,10 @@ const PIECE: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 
 export interface PlanStep { san: string; piece: string; from: string; to: string; castle: boolean; brk: boolean;
   /** The piece was taken on its square later in the line (a trade): a step
    *  from that square is another piece's, never this road going on. */
-  lost?: true }
+  lost?: true;
+  /** A break: the enemy pawn it hits the moment it lands (what the break is
+   *  FOR — Danya have-check, a plan list said with no purpose). */
+  hits?: string }
 /** ONE PIECE'S ROAD in the plan (Danya: "the knight reroutes to a3", "the
  *  queen must leave h5 for the queenside"): a piece the line moves two or more
  *  times in a row of its own steps, that does more work at the end of the road
@@ -156,7 +159,15 @@ export function planSteps(fenAfter: string, line: readonly string[], lastMove: s
       }
       walked.delete(mv.from); was.add(mv.to); walked.set(mv.to, was);
     }
-    steps.push({ san: mv.san, piece: PIECE[mv.piece], from: mv.from, to: mv.to, castle: mv.san.startsWith('O-O'), brk: mv.piece === 'p' && isPawnBreak(before, mv.san, null) });
+    const isBrk = mv.piece === 'p' && isPawnBreak(before, mv.san, null);
+    const step: PlanStep = { san: mv.san, piece: PIECE[mv.piece], from: mv.from, to: mv.to, castle: mv.san.startsWith('O-O'), brk: isBrk };
+    if (isBrk) {
+      const d = mv.color === 'w' ? 1 : -1;
+      const hit = [-1, 1].map((df) => `${String.fromCharCode(mv.to.charCodeAt(0) + df)}${Number(mv.to[1]) + d}`)
+        .find((sq) => /^[a-h][1-8]$/.test(sq) && board.get(sq as Square)?.type === 'p' && board.get(sq as Square)?.color !== mv.color);
+      if (hit) step.hits = hit;
+    }
+    steps.push(step);
   }
   // A board read's first step is a step of the road too ("Re3 and then b3":
   // the rook lift, the-positional-rook-lift #0): one step after it is a road
@@ -483,7 +494,10 @@ export function planStepsText(p: PlanSteps, whose: 'your' | 'their'): string {
   // their pieces, theirs at yours.
   const owner = whose === 'your' ? 'their' : 'your';
   const why = p.aim ? `, the pieces lining up on ${p.aimPiece ? `${owner} ${p.aimPiece} on ${p.aim}` : `${p.aim}, next to ${owner} king`}` : '';
-  return `${whose === 'your' ? 'Your' : 'Their'} plan from here: ${list}${why}.${aimWhyText(p, whose)}`;
+  // A list with no aim says what its break is for: the pawn it hits.
+  const brkHit = p.aim ? undefined : p.steps.find((s) => s.brk && s.hits);
+  const brkWhy = brkHit ? ` The break goes at ${owner} pawn on ${brkHit.hits}.` : '';
+  return `${whose === 'your' ? 'Your' : 'Their'} plan from here: ${list}${why}.${brkWhy}${aimWhyText(p, whose)}`;
 }
 
 /** The road's job said after the road (one idea a sentence): "There it hits
