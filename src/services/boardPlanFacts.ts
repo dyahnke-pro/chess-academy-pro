@@ -11,7 +11,7 @@
  */
 import { openSentence } from '../utils/openSentence';
 import { Chess, type Square } from 'chess.js';
-import { deriveNextPlanFacts, worstPieceNote, worstPieceRoute } from './nextPlans';
+import { deriveNextPlanFacts, worstPieceNote, worstPieceRoute, nextPlanClaim } from './nextPlans';
 import { methodRead, methodPlanSentence, whyThisPlan } from './planChoice';
 import { stripThink } from '../utils/thinkPause';
 import { structurePlanFact } from './nextPlans';
@@ -85,8 +85,7 @@ export function boardPlanFacts(fen: string, side: 'white' | 'black', voice: 'you
   const plans: PlanSentence[] = facts.map((f, i) => {
     const c = cap(f.text);
     const t = (i === 0 ? c : c.replace(/^The plan from here is to /, STEMS[(i - 1) % STEMS.length])).trim();
-    return { text: /[.!?]$/.test(t) ? t : `${t}.`, squares: [...f.squares], // A passer's plan is one plan however the pawn moves (exf4 changes its file).
-      claim: f.kind === 'passer' ? 'plan:passer' : `plan:${f.kind}:${f.file ?? f.squares[0]?.[0] ?? ''}` };
+    return { text: /[.!?]$/.test(t) ? t : `${t}.`, squares: [...f.squares], claim: nextPlanClaim(f) };
   });
   const levers: PlanLever[] = [];
   // A pawn break to open the position (findPawnBreaks reads the side to move).

@@ -65,7 +65,7 @@
 import { Chess, type Color, type Square } from 'chess.js';
 import { planSteps, roadJobText, hasMatingForce, type PlanSteps } from './planSteps';
 import { siegeOf } from './boardPlan';
-import { deriveNextPlanFacts, findWorstPlacedPiece, structurePlanFact, worstReason, type PlanKind } from './nextPlans';
+import { deriveNextPlanFacts, findWorstPlacedPiece, nextPlanClaim, structurePlanFact, worstReason, type PlanKind } from './nextPlans';
 import { pawnBreak } from './pawnBreak';
 import { openSentence } from '../utils/openSentence';
 import { sideMaterial } from './pieceValues';
@@ -105,6 +105,9 @@ export interface BoardPlan {
   target: string | null;
   /** The mover's move in the best line that starts it (0 = the best move). */
   starts: number;
+  /** The plan's own claims, when another computer says the same plan (a
+   *  structure plan: `nextPlanClaim`). */
+  claims: string[];
 }
 
 export interface PlanLineIn { moves: readonly string[]; evaluation: number; mate: number | null }
@@ -400,7 +403,7 @@ export function planOfTheBoard(i: PlanOfTheBoardIn): BoardPlan | null {
       if (p.kind === 'passer' && !passerRuns) continue;
       const s = structureStarts(p.kind, p.squares, moves, board);
       if (s < 0) continue;
-      out.push({ kind: p.kind, text: goalAndWay(openSentence(p.text)), squares: p.squares, target: p.squares[0] ?? null, starts: s });
+      out.push({ kind: p.kind, text: goalAndWay(openSentence(p.text)), squares: p.squares, target: p.squares[0] ?? null, starts: s, claims: [nextPlanClaim(p)] });
     }
   }
 
@@ -450,7 +453,7 @@ export function planOfTheBoard(i: PlanOfTheBoardIn): BoardPlan | null {
   const { c, r } = order[0];
   const planText = r?.text ? referBack(c.text, r) : c.text;
   return { kind: c.kind, text: r?.text ? `${r.text} ${planText}` : planText, why: r, planText,
-    squares: [...new Set([...(r?.squares ?? []), ...c.squares])], target: c.target, starts: c.starts };
+    squares: [...new Set([...(r?.squares ?? []), ...c.squares])], target: c.target, starts: c.starts, claims: c.claims ?? [] };
 }
 
 /** A plan candidate, before its reason is read. */
@@ -460,6 +463,8 @@ interface Cand {
   squares: string[];
   target: string | null;
   starts: number;
+  /** The plan's own claims (`BoardPlan.claims`). */
+  claims?: string[];
   /** A road's piece: where it stands, its name, and whether the best move is
    *  its first step. */
   road?: { from: string; piece: string; end: string; fromTheMove: boolean };

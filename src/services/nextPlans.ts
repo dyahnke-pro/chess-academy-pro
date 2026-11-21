@@ -278,6 +278,17 @@ export function deriveNextPlans(
 /** The plan kinds `deriveNextPlanFacts` emits — one per numbered branch. */
 export type PlanKind = 'king-attack' | 'passer' | 'weak-pawn' | 'open-file' | 'outpost' | 'worst-piece' | 'convert' | 'bishop-pair';
 
+/** THE ONE CLAIM OF A PLAN `deriveNextPlanFacts` makes: its kind and the
+ *  file it works on (a passer is one plan however the pawn moves — exf4
+ *  changes its file). Every computer that says one of these plans claims it
+ *  here, so the board's plan (`planOfTheBoard`) and the structure plan
+ *  (`boardPlanFacts`) saying the same plan fold into one (the miracle board:
+ *  "The plan from here is to win their weak pawn on b5. Here's how: …" said
+ *  twice in one read). */
+export function nextPlanClaim(f: { kind: string; file?: string | null; squares: readonly string[] }): string {
+  return f.kind === 'passer' ? 'plan:passer' : `plan:${f.kind}:${f.file ?? f.squares[0]?.[0] ?? ''}`;
+}
+
 /** A plan with the board objects it is about, so a later move can be checked
  *  against them (`planStopped`) — never read back out of the sentence. */
 export interface PlanFact {
@@ -762,9 +773,14 @@ export function passerTrumpSentence(fen: string, square: string, own: boolean): 
     const front = frontSquare(square, pawn.color);
     if (block.kind === 'enemy' && front) {
       const piece = STRUCT_PIECE_NOUN[block.piece ?? 'p'];
+      // THE BLOCKADER IS TIED TO IT (Danya, "miracle on the chess board":
+      // "Black's rook is tied down (to blockading b5)"): when nothing else of
+      // its side covers the pawn's path, the piece in front cannot leave —
+      // the blockade costs that piece its freedom, both seats.
+      const tied = block.piece && block.piece !== 'p' && block.piece !== 'k' && blockaderTied(chess, square, pawn.color, front);
       return own
-        ? `Your passed pawn on ${square} is blockaded by their ${piece} on ${front} — challenge or drive off that ${piece} before it can run.`
-        : `Their passed pawn on ${square} is held: your ${piece} on ${front} stands in front of it, and it cannot move while the ${piece} stays.`;
+        ? `Your passed pawn on ${square} is blockaded by their ${piece} on ${front} — challenge or drive off that ${piece} before it can run.${tied ? ` That ${piece} is tied to the job: nothing else of theirs covers the pawn's path.` : ''}`
+        : `Their passed pawn on ${square} is held: your ${piece} on ${front} stands in front of it, and it cannot move while the ${piece} stays.${tied ? ` But your ${piece} is tied to that job: nothing else of yours covers the pawn's path.` : ''}`;
     }
     const student: Color = own ? pawn.color : (pawn.color === 'w' ? 'b' : 'w');
     const race = detectPlanRace(fen, student);
@@ -830,6 +846,29 @@ const theirPasserDanger = (square: string): string =>
 const STRUCT_PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
 /** The square directly in front of a pawn (toward promotion), or null off-board. */
+/** Is the piece blockading the passer on `pawnSquare` its side's only cover
+ *  of the pawn's path? The path is every square from the blockade to the
+ *  queening square; read on the board with the blockader lifted off, so a
+ *  line it was masking counts. Pure: chess.js only. */
+export function blockaderTied(chess: Chess, pawnSquare: string, pawnColor: Color, front: string): boolean {
+  const holder: Color = pawnColor === 'w' ? 'b' : 'w';
+  let lifted: Chess;
+  try { lifted = new Chess(chess.fen()); } catch { return false; }
+  lifted.remove(front as Square);
+  const file = pawnSquare[0];
+  const fromRank = Number(front[1]);
+  const step = pawnColor === 'w' ? 1 : -1;
+  const lastRank = pawnColor === 'w' ? 8 : 1;
+  for (let r = fromRank; ; r += step) {
+    const s = `${file}${r}` as Square;
+    const on = lifted.get(s);
+    if (on && on.color === holder) return false;
+    if (lifted.attackers(s, holder).length > 0) return false;
+    if (r === lastRank) break;
+  }
+  return true;
+}
+
 function frontSquare(square: string, color: Color): string | null {
   const file = square[0];
   const rank = Number.parseInt(square[1] ?? '0', 10);

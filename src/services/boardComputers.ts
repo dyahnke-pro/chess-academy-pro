@@ -3688,7 +3688,7 @@ export const BOARD_COMPUTERS = {
       const proof = legalLineProof(fen, lines[0]?.moves ?? [], lineSeatAt(fen, student)) ?? NO_PROOF.description;
       // The step that led to the plan is one claim with its own computer's
       // fact (their break the best move takes away is `breakStopped`'s).
-      return fact({ key, claims: [key, ...(p.why?.claims ?? [])], text: p.text, proof, squares: p.squares, stakes: null,
+      return fact({ key, claims: [key, ...(p.why?.claims ?? []), ...p.claims], text: p.text, proof, squares: p.squares, stakes: null,
         seat: mine ? 'student' : 'opponent', namesStudentMove: mine && namesMoves, thread: LOCAL_THREAD, fen });
     }),
     computer: 'planOfTheBoard',
