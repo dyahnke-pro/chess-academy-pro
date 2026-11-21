@@ -12,7 +12,7 @@ const uciOf = (fen: string, sans: string[]): string[] => { const c = new Chess(f
 describe('positionalReason — what the move gave up on the board', () => {
   const fen = fenAfter(['e4', 'e5']);
   it('a pawn move that leaves a minor at home, against a developing move', () => {
-    expect(boardReason(fen, 'a3', 'Nf3', 'opening')?.tag).toBe('neglected-development');
+    expect(boardReason(fen, 'a3', 'Nf3', 'opening', (fen).split(' ')[1] as 'w' | 'b')?.tag).toBe('neglected-development');
     expect(positionalReason({ fen, playedSan: 'a3', bestSan: 'Nf3', namesBetterMove: false })?.note)
       .toBe('A minor piece is still at home that the better move would have brought out.');
   });
@@ -49,21 +49,29 @@ describe('the error computer says the positional reason, never the cost alone', 
 describe('boardReason names its piece', () => {
   const fen = '6k1/p4pp1/2p5/1pp1P3/3q1PPp/P3NQ1P/b1P1K3/8 b - - 0 30';
   it('the piece that loses squares', () => {
-    expect(boardReason(fen, 'c4', 'g6', 'endgame')?.note ?? boardReason(fen, 'c4', 'g6', 'middlegame')?.note)
+    expect(boardReason(fen, 'c4', 'g6', 'endgame', (fen).split(' ')[1] as 'w' | 'b')?.note ?? boardReason(fen, 'c4', 'g6', 'middlegame', (fen).split(' ')[1] as 'w' | 'b')?.note)
       .toBe('Your bishop on a2 reaches 3 fewer squares after …c4 than after the better move.');
   });
   it('their piece it frees', () => {
-    expect(boardReason(fen, 'c4', 'Qe5', 'middlegame')?.note).toBe('…c4 frees their knight on e3: it reaches 6 more squares than after the better move.');
+    expect(boardReason(fen, 'c4', 'Qe5', 'middlegame', (fen).split(' ')[1] as 'w' | 'b')?.note).toBe('…c4 frees their knight on e3: it reaches 6 more squares than after the better move.');
   });
   it('the rook and its file', () => {
-    expect(boardReason('r2r2k1/qp3ppp/1np1p1b1/p7/P2P2N1/2P5/1P1QBPPP/R4RK1 w - - 0 22', 'd5', 'Rfe1', 'middlegame')?.note)
+    expect(boardReason('r2r2k1/qp3ppp/1np1p1b1/p7/P2P2N1/2P5/1P1QBPPP/R4RK1 w - - 0 22', 'd5', 'Rfe1', 'middlegame', ('r2r2k1/qp3ppp/1np1p1b1/p7/P2P2N1/2P5/1P1QBPPP/R4RK1 w - - 0 22').split(' ')[1] as 'w' | 'b')?.note)
       .toBe('The better move puts your rook on the half-open e-file.');
   });
 });
 
 describe('boardReason never reads a check as a freed piece', () => {
   it('the tactical detector #0: the better move checks — no "frees their queen"', () => {
-    const n = boardReason('3Q1bk1/pp5p/r3b1p1/8/4Nq2/5P2/PP6/K2RR3 w - - 0 30', 'Nd6', 'Qxf8+', 'middlegame')?.note ?? '';
+    const n = boardReason('3Q1bk1/pp5p/r3b1p1/8/4Nq2/5P2/PP6/K2RR3 w - - 0 30', 'Nd6', 'Qxf8+', 'middlegame', ('3Q1bk1/pp5p/r3b1p1/8/4Nq2/5P2/PP6/K2RR3 w - - 0 30').split(' ')[1] as 'w' | 'b')?.note ?? '';
     expect(n).not.toMatch(/frees their queen/);
+  });
+});
+
+describe('a positional reason names pieces from the student\'s seat (Danya have-check: "…Nb8 … Your knight on b8" for their knight)', () => {
+  it('their move reads "Their knight"; the same move as the student\'s reads "Your knight"', () => {
+    const b = new Chess('r2q1rk1/pb3p1p/1pnppp2/2p5/2PPP3/BPNQ4/P5PP/R4RK1 w - - 0 15'); b.move('d5');
+    expect(boardReason(b.fen(), 'Nb8', 'Qe8', 'middlegame', 'w')?.note).toBe('Their knight on b8 reaches 4 fewer squares after …Nb8 than after the better move.');
+    expect(boardReason(b.fen(), 'Nb8', 'Qe8', 'middlegame', 'b')?.note).toBe('Your knight on b8 reaches 4 fewer squares after …Nb8 than after the better move.');
   });
 });

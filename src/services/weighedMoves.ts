@@ -764,7 +764,7 @@ function tryMechanism(fen: string, m: Move, sans: readonly string[], bestSan: st
     }
   } catch { /* no motif read */ }
   if (/\+$/.test(rm.san)) return `${replyWords} comes with check, so ${other === 'your' ? 'you gain' : 'they gain'} a tempo.`;
-  const why = boardReason(fen, m.san, bestSan, phaseOfFen(fen) ?? 'middlegame');
+  const why = boardReason(fen, m.san, bestSan, phaseOfFen(fen) ?? 'middlegame', own === 'your' ? m.color : (m.color === 'w' ? 'b' : 'w'));
   if (!why) return null;
   // Keyed by what it says of the board, the try's own name blanked: tries
   // refuted for one board reason group (the note names each try).

@@ -421,7 +421,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
       if (seatCp(tempting[0], side) - seatCp(r, side) < TEMPTING_COST_CP) continue;
       // The board after the two moves, said in the present (the concession
       // reads a move already played: "it took your last defender").
-      const why = boardReason(i.fen, san, bestSan, phaseOfFen(i.fen) ?? 'middlegame');
+      const why = boardReason(i.fen, san, bestSan, phaseOfFen(i.fen) ?? 'middlegame', i.studentColor);
       if (!why) continue;
       const lead = rotateStem([`${san} looks natural, but it isn't the move`, `${san} is tempting here, but it doesn't hold up`], stemKeyOf(`${i.fen}|positional|${san}`));
       facts.push({ from: 'tempting', kind: 'refuted-positional', computer: 'boardReason', text: `${lead}: ${why.note.replace(/^(The|Your|Their|That|It)\b/, (x) => x.toLowerCase())}`, squares: r.moves[0] ? [r.moves[0].slice(0, 2), r.moves[0].slice(2, 4)] : [] });

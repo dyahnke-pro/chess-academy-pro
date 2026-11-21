@@ -1555,7 +1555,7 @@ export function errorWhy(args: {
   const positional = !consequence && !failed && !should && args.allowedMate === null && args.missedMate === null
     && (args.quality === 'mistake' || args.quality === 'blunder') && !allowedReason() && !missedReason()
     && !(bestSan && bestWinsOnBoard(args.fenBefore, bestSan))
-    ? (() => { try { return positionalReason({ fen: args.fenBefore, playedSan: args.playedSan, bestSan, namesBetterMove: args.namesBetterMove })?.note ?? null; } catch { return null; } })()
+    ? (() => { try { return positionalReason({ fen: args.fenBefore, playedSan: args.playedSan, bestSan, namesBetterMove: args.namesBetterMove, student: args.moverColor === 'white' ? 'w' : 'b' })?.note ?? null; } catch { return null; } })()
     : null;
   // THE REPLY THE CONSEQUENCE NAMED, whichever reader named it (prod Review
   // audit 2026-11-08, Carlsen–Caruana 26…Qd4: "it let them play Re4, which

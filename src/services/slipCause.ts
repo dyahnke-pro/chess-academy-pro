@@ -141,7 +141,7 @@ export function slipCause(input: SlipCauseInput): SlipCause | null {
 
   // 3. THE BOARD after the two moves, then 4. THE BEST MOVE'S JOB — the one
   //    positional computer; the record names the better move (it is filed).
-  const board = boardReason(input.fen, input.playedSan, input.bestSan ?? null, input.phase) ?? bestJobReason(input.fen, input.bestSan ?? null);
+  const board = boardReason(input.fen, input.playedSan, input.bestSan ?? null, input.phase, input.fen.split(' ')[1] === 'b' ? 'b' : 'w') ?? bestJobReason(input.fen, input.bestSan ?? null);
   if (board) return { tag: board.tag, coachNote: board.note };
   // No best move to compare against: nothing can be named honestly.
   return null;

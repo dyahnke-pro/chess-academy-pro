@@ -131,7 +131,11 @@ export function concessionReason(fen: string, playedSan: string, bestSan: string
 
 /** THE BOARD after the two moves. Each reading is a count where more is worse
  *  for the mover; the largest gap past its bar decides. */
-export function boardReason(fen: string, playedSan: string, bestSan: string | null, phase: Phase): PositionalReason | null {
+/** `student` is REQUIRED: the reason names pieces from the student's seat
+ *  ("your knight" / "their knight"), whichever side made the move — a
+ *  try of theirs read "your knight on b8 reaches fewer squares" for their
+ *  knight (Danya have-check board, queen the supporting actress #5). */
+export function boardReason(fen: string, playedSan: string, bestSan: string | null, phase: Phase, student: Color): PositionalReason | null {
   if (!bestSan) return null;
   // The move, named (never "this"/"that" — the orphan rule), "…" on Black's.
   const movedSan = `${fen.split(' ')[1] === 'b' ? '…' : ''}${playedSan}`;
@@ -141,6 +145,8 @@ export function boardReason(fen: string, playedSan: string, bestSan: string | nu
   const mover = new Chess(fen).turn();
   const enemy: Color = mover === 'w' ? 'b' : 'w';
   const bestMove = new Chess(fen).move(bestSan);
+  const moverOwn = mover === student ? 'your' : 'their';
+  const enemyOwn = enemy === student ? 'your' : 'their';
   const gaps: Array<{ gap: number; reason: PositionalReason }> = [];
   const push = (gap: number, bar: number, reason: PositionalReason): void => { if (gap >= bar) gaps.push({ gap: gap / bar, reason }); };
   if (phase === 'opening') {
@@ -177,16 +183,16 @@ export function boardReason(fen: string, playedSan: string, bestSan: string | nu
     return bm && bm.piece === 'r' && onFile(bm.to) && !onFile(bm.from) ? `${files.open.includes(bm.to[0]) ? 'open' : 'half-open'} ${bm.to[0]}-file` : null;
   })();
   if (rookGain) push(rooksOnOpenFiles(bestBoard, mover) - rooksOnOpenFiles(played, mover), 1,
-    { tag: 'passive-rook', note: `The better move puts your rook on the ${rookGain}.` });
+    { tag: 'passive-rook', note: `The better move puts ${moverOwn} rook on the ${rookGain}.` });
   const space = (c: Chess): number => { const t = computeTerritory(c.fen()); return mover === 'w' ? t.white - t.black : t.black - t.white; };
   push(space(bestBoard) - space(played), 2,
     { tag: 'space-conceded', note: `${movedSan} gives up space in the centre the better move kept.` });
   const mine = biggestShift(fen, playedSan, played, bestSan, bestBoard, mover);
   if (mine && mine.gap >= 3) push(activity(bestBoard, mover) - activity(played, mover), 4,
-    { tag: 'misplaced-piece', note: `Your ${PIECE[mine.type] ?? 'piece'} on ${mine.at} reaches ${mine.gap} fewer squares after ${movedSan} than after the better move.` });
+    { tag: 'misplaced-piece', note: `${moverOwn === 'your' ? 'Your' : 'Their'} ${PIECE[mine.type] ?? 'piece'} on ${mine.at} reaches ${mine.gap} fewer squares after ${movedSan} than after the better move.` });
   const theirs = biggestShift(fen, bestSan, bestBoard, playedSan, played, enemy);
   if (theirs && theirs.gap >= 3) push(activity(played, enemy) - activity(bestBoard, enemy), 4,
-    { tag: 'tempo-handed', note: `${movedSan} frees their ${PIECE[theirs.type] ?? 'piece'} on ${theirs.at}: it reaches ${theirs.gap} more squares than after the better move.` });
+    { tag: 'tempo-handed', note: `${movedSan} frees ${enemyOwn} ${PIECE[theirs.type] ?? 'piece'} on ${theirs.at}: it reaches ${theirs.gap} more squares than after the better move.` });
   return gaps.length > 0 ? gaps.sort((a, b) => b.gap - a.gap)[0].reason : null;
 }
 
@@ -228,9 +234,11 @@ export function positionalReason(args: {
   bestSan: string | null;
   /** REQUIRED — the surface's answer (LEARN NAMES NO MOVE UNASKED). */
   namesBetterMove: boolean;
+  /** REQUIRED — the seat the pieces are named from (`boardReason`). */
+  student: Color;
 }): PositionalReason | null {
   const phase = phaseOfFen(args.fen) ?? 'middlegame';
   return concessionReason(args.fen, args.playedSan, args.bestSan)
-    ?? boardReason(args.fen, args.playedSan, args.bestSan, phase)
+    ?? boardReason(args.fen, args.playedSan, args.bestSan, phase, args.student)
     ?? (args.namesBetterMove ? bestJobReason(args.fen, args.bestSan) : null);
 }
