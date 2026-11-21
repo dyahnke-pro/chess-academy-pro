@@ -131,7 +131,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `exchangeIdeas` (function) — 8 call sites
-- `src/services/boardComputers.ts:2101`
+- `src/services/boardComputers.ts:2106`
 - `src/services/exchangeIdeas.replied.test.ts:15`
 - `src/services/exchangeIdeas.replied.test.ts:19`
 - `src/services/exchangeIdeas.test.ts:169`

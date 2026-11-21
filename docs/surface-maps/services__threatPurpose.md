@@ -25,7 +25,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `threatPurpose` (function) — 6 call sites
-- `src/services/boardComputers.ts:4376`
+- `src/services/boardComputers.ts:4399`
 - `src/services/engineComputers.test.ts:101`
 - `src/services/threatPurpose.test.ts:26`
 - `src/services/threatPurpose.test.ts:31`
@@ -33,15 +33,15 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/threatPurpose.test.ts:109`
 
 ### `lineBuilds` (function) — 5 call sites
-- `src/services/coachFeatureService.ts:5775`
+- `src/services/coachFeatureService.ts:5781`
 - `src/services/threatPurpose.test.ts:88`
 - `src/services/threatPurpose.test.ts:91`
 - `src/services/threatPurpose.test.ts:95`
 - `src/services/threatPurpose.test.ts:98`
 
 ### `lineRestatesClaim` (function) — 9 call sites
-- `src/services/coachFeatureService.ts:5655`
-- `src/services/coachFeatureService.ts:5741`
+- `src/services/coachFeatureService.ts:5661`
+- `src/services/coachFeatureService.ts:5747`
 - `src/services/threatPurpose.test.ts:50`
 - `src/services/threatPurpose.test.ts:51`
 - `src/services/threatPurpose.test.ts:55`

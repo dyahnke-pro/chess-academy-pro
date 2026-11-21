@@ -184,4 +184,11 @@ describe('a teaching sentence that names whose piece keeps its subject (2026-11-
     expect(joinReview([c], false, 'Nc6', 'past')).toBe(`${introWithPredicate('opponent', 'Nc6', 'joins the fight for e5, backing their e-pawn\'s push there', 'past')}.`);
     expect(joinReview([toClause('Your pawn joins the fight for d4.')], true, 'c3', 'past')).toBe(`${introWithPredicate('student', 'c3', 'joins the fight for d4', 'past')}.`);
   });
+
+  it('a sentence led by its own clause keeps it — never "dxc3: it once you take back" (baseline 2026-11-21)', async () => {
+    const { toClause, joinReview } = await import('./reviewMoveBriefing');
+    const c = toClause('Once you take back, your c-pawn is isolated — a target with no neighbor to defend it.');
+    expect(c).toBe('once you take back, your c-pawn is isolated — a target with no neighbor to defend it');
+    expect(joinReview([c], false, 'dxc3', 'now')).not.toMatch(/\bit once\b/);
+  });
 });

@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:7034) — names `reviewMoveTeaching`
+- **The standard post-deploy ritual** (CLAUDE.md:7054) — names `reviewMoveTeaching`
 
 ## Who calls in
 
@@ -59,10 +59,10 @@
 - `src/services/walkOct1Learn.test.ts:85`
 
 ### `buildReviewMoveTeaching` (function) — 55 call sites
-- `src/services/coachFeatureService.ts:1329`
-- `src/services/coachFeatureService.ts:4410`
-- `src/services/danyaBench.measure.test.ts:500`
-- `src/services/discussionPractice.ts:181`
+- `src/services/coachFeatureService.ts:1330`
+- `src/services/coachFeatureService.ts:4416`
+- `src/services/danyaBench.measure.test.ts:501`
+- `src/services/discussionPractice.ts:183`
 - `src/services/guardPressure.test.ts:20`
 - `src/services/guardPressure.test.ts:24`
 - `src/services/guardPressure.test.ts:28`
@@ -81,7 +81,7 @@
 - `src/services/lessonVoiceIdeas.test.ts:65`
 - `src/services/lessonVoiceIdeas.test.ts:72`
 - `src/services/projectedLineVoice.ts:144`
-- `src/services/reviewMoveBriefing.ts:610`
+- `src/services/reviewMoveBriefing.ts:592`
 - `src/services/reviewMoveTeaching.denied.test.ts:8`
 - `src/services/reviewMoveTeaching.denied.test.ts:14`
 - `src/services/reviewMoveTeaching.pressureSeat.test.ts:12`
@@ -116,7 +116,7 @@
 - `src/utils/hasRook.test.ts:22`
 
 ### `buildReviewMoveTeachingFact` (function) — 32 call sites
-- `src/services/boardComputers.ts:1747`
+- `src/services/boardComputers.ts:1752`
 - `src/services/capSweep2.test.ts:20`
 - `src/services/countedWhenTradeEnds.test.ts:100`
 - `src/services/countedWhenTradeEnds.test.ts:115`
@@ -147,10 +147,10 @@
 - `src/services/reviewMoveTeaching.test.ts:267`
 - `src/services/reviewMoveTeaching.test.ts:272`
 - `src/services/tapeKc7Skewer.test.ts:29`
-- `src/services/thoughtReads.ts:244`
+- `src/services/thoughtReads.ts:247`
 
 ### `nameEndgamePhase` (function) — 6 call sites
-- `src/services/boardComputers.ts:4728`
+- `src/services/boardComputers.ts:4751`
 - `src/services/reviewMoveTeaching.test.ts:140`
 - `src/services/reviewMoveTeaching.test.ts:142`
 - `src/services/reviewMoveTeaching.test.ts:147`
@@ -158,7 +158,7 @@
 - `src/services/reviewMoveTeaching.test.ts:156`
 
 ### `buildReviewConversionTeaching` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:4312`
+- `src/services/coachFeatureService.ts:4318`
 - `src/services/reviewMoveTeaching.test.ts:121`
 - `src/services/reviewMoveTeaching.test.ts:124`
 - `src/services/reviewMoveTeaching.test.ts:130`

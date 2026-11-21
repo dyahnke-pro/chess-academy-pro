@@ -33,8 +33,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingStory.ts:194`
 
 ### `setOpeningPositions` (function) — 8 call sites
-- `src/services/danyaBench.measure.test.ts:906`
-- `src/services/moveThoughtFacts.test.ts:404`
+- `src/services/danyaBench.measure.test.ts:908`
+- `src/services/moveThoughtFacts.test.ts:405`
 - `src/services/openingPositions.test.ts:12`
 - `src/services/orderComputers.test.ts:46`
 - `src/services/reviewNarrationRev.gate.test.ts:25`
@@ -50,7 +50,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/openingPositions.test.ts:20`
 
 ### `transposedOpening` (function) — 4 call sites
-- `src/services/boardComputers.ts:6302`
+- `src/services/boardComputers.ts:6323`
 - `src/services/openingAnnouncement.ts:267`
 - `src/services/openingPositions.test.ts:28`
 - `src/services/openingPositions.test.ts:37`

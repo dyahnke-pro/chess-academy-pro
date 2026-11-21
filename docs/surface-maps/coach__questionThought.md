@@ -35,7 +35,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/boardTurnAnswer.planOrder.test.ts:42`
 - `src/coach/boardTurnAnswer.planOrder.test.ts:43`
 - `src/coach/boardTurnAnswer.planOrder.test.ts:44`
-- `src/coach/boardTurnAnswer.ts:193`
+- `src/coach/boardTurnAnswer.ts:194`
 
 ### `QuestionContext` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -48,8 +48,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/questionThought.test.ts:77`
 - `src/coach/questionThought.test.ts:80`
 - `src/coach/questionThought.test.ts:84`
-- `src/services/danyaBench.measure.test.ts:477`
-- `src/services/danyaBench.measure.test.ts:479`
+- `src/services/danyaBench.measure.test.ts:478`
+- `src/services/danyaBench.measure.test.ts:480`
 - `src/services/movePurposeEngine.ts:170`
 - `src/test/chatAnswersEveryComputer.test.ts:76`
 - `src/test/chatAnswersEveryComputer.test.ts:93`

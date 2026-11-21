@@ -30,13 +30,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `verdictBand` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:1256`
+- `src/services/coachFeatureService.ts:1257`
 - `src/services/exchangeLedger.test.ts:99`
 - `src/services/exchangeLedger.test.ts:101`
 
 ### `assessPositionalEdge` (function) — 29 call sites
-- `src/services/boardComputers.ts:2055`
-- `src/services/boardComputers.ts:4673`
+- `src/services/boardComputers.ts:2060`
+- `src/services/boardComputers.ts:4696`
 - `src/services/exchangeLedger.test.ts:68`
 - `src/services/exchangeLedger.test.ts:69`
 - `src/services/exchangeLedger.test.ts:76`
@@ -66,8 +66,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/walkOct2a.test.ts:89`
 
 ### `materialEdgeWords` (function) — 5 call sites
-- `src/services/groundedAnswer.ts:2868`
-- `src/services/groundedAnswer.ts:2869`
+- `src/services/groundedAnswer.ts:2862`
+- `src/services/groundedAnswer.ts:2863`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:31`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:34`
 - `src/services/replayFence.bowdler1000.rewalk.test.ts:37`
@@ -79,7 +79,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionFacts.ts:1118`
 
 ### `phaseVerdictLine` (function) — 13 call sites
-- `src/services/boardComputers.ts:2002`
+- `src/services/boardComputers.ts:2007`
 - `src/services/learnTurnDoor.phaseWave.test.ts:120`
 - `src/services/learnWalkNimzo.test.ts:21`
 - `src/services/learnWalkNimzo.test.ts:30`
@@ -100,8 +100,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionFacts.ts:1118`
 
 ### `positionalVerdictLine` (function) — 2 call sites
-- `src/services/boardComputers.ts:2061`
-- `src/services/coachFeatureService.ts:3057`
+- `src/services/boardComputers.ts:2066`
+- `src/services/coachFeatureService.ts:3063`
 
 ## Tests
 

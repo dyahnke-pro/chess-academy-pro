@@ -4,16 +4,17 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**891 lines · 12 exports · 26 importers · 10 tests · 13 audits**
+**905 lines · 12 exports · 26 importers · 10 tests · 13 audits**
 
 ## Locked rules that govern this surface
 
-- **The tools are COMPUTERS** (CLAUDE.md:392) — names `conceptEngine`
-- **The standard post-deploy ritual** (CLAUDE.md:7030) — names `conceptEngine`
+- **The tools are COMPUTERS** (CLAUDE.md:402) — names `conceptEngine`
+- **The standard post-deploy ritual** (CLAUDE.md:7050) — names `conceptEngine`
 
 ## Who calls in
 
 - `src/components/Coach/CoachTeachPage.tsx`
+- `src/services/boardComputers.ts`
 - `src/services/claimKeyParity.test.ts`
 - `src/services/conceptCoverage.report.test.ts`
 - `src/services/conceptEngine.futureTechnique.test.ts`
@@ -35,14 +36,13 @@
 - `src/services/puzzleConceptHint.ts`
 - `src/services/refutedAlternative.ts`
 - `src/services/refutedAlternativeCore.ts`
-- `src/services/reviewFullData.ts`
 - `src/services/tacticAlertService.ts`
 - `src/services/tacticTypeUnification.test.ts`
 - `src/test/auditConceptGameplayCues.test.ts`
 
 ## Exports and every call site
 
-### `sideToMove` (function) — 21 call sites
+### `sideToMove` (function) — 62 call sites
 - `src/components/Coach/ExplainPositionSessionView.tsx:157`
 - `src/components/Coach/ExplainPositionSessionView.tsx:158`
 - `src/components/Coach/ExplainPositionSessionView.tsx:255`
@@ -51,13 +51,54 @@
 - `src/data/endgame-side-correctness.test.ts:51`
 - `src/data/grounding/groundingLib.ts:56`
 - `src/data/groundingMistakes.test.ts:38`
-- `src/services/boardComputers.ts:606`
-- `src/services/boardComputers.ts:1955`
-- `src/services/boardComputers.ts:1983`
-- `src/services/boardComputers.ts:2542`
-- `src/services/boardComputers.ts:2560`
-- `src/services/boardComputers.ts:2576`
-- `src/services/boardComputers.ts:2594`
+- `src/services/boardComputers.ts:1587`
+- `src/services/boardComputers.ts:1873`
+- `src/services/boardComputers.ts:1888`
+- `src/services/boardComputers.ts:1903`
+- `src/services/boardComputers.ts:1917`
+- `src/services/boardComputers.ts:1931`
+- `src/services/boardComputers.ts:2093`
+- `src/services/boardComputers.ts:2150`
+- `src/services/boardComputers.ts:2296`
+- `src/services/boardComputers.ts:3219`
+- `src/services/boardComputers.ts:3742`
+- `src/services/boardComputers.ts:4092`
+- `src/services/boardComputers.ts:4120`
+- `src/services/boardComputers.ts:4795`
+- `src/services/boardComputers.ts:4815`
+- `src/services/boardComputers.ts:4944`
+- `src/services/boardComputers.ts:4970`
+- `src/services/boardComputers.ts:4995`
+- `src/services/boardComputers.ts:5047`
+- `src/services/boardComputers.ts:5064`
+- `src/services/boardComputers.ts:5432`
+- `src/services/boardComputers.ts:5548`
+- `src/services/boardComputers.ts:6164`
+- `src/services/boardComputers.ts:6189`
+- `src/services/boardComputers.ts:6218`
+- `src/services/boardComputers.ts:6240`
+- `src/services/boardComputers.ts:6328`
+- `src/services/boardComputers.ts:6358`
+- `src/services/boardComputers.ts:6396`
+- `src/services/boardComputers.ts:6499`
+- `src/services/boardComputers.ts:6949`
+- `src/services/boardComputers.ts:6967`
+- `src/services/boardComputers.ts:6983`
+- `src/services/boardComputers.ts:7001`
+- `src/services/boardComputers.ts:7278`
+- `src/services/boardComputers.ts:7300`
+- `src/services/boardComputers.ts:7324`
+- `src/services/boardComputers.ts:7344`
+- `src/services/boardComputers.ts:7848`
+- `src/services/boardComputers.ts:7867`
+- `src/services/boardComputers.ts:7888`
+- `src/services/boardComputers.ts:7912`
+- `src/services/boardComputers.ts:7936`
+- `src/services/boardComputers.ts:7959`
+- `src/services/boardComputers.ts:7981`
+- `src/services/boardComputers.ts:8010`
+- `src/services/boardComputers.ts:8035`
+- `src/services/boardComputers.ts:8076`
 - `src/services/conceptEngine.test.ts:19`
 - `src/services/conceptEngine.test.ts:20`
 - `src/services/groundedMoveWhy.ts:83`
@@ -77,7 +118,7 @@
 - `src/services/conceptEngine.test.ts:71`
 - `src/services/conceptEngine.test.ts:73`
 - `src/services/conceptEngine.test.ts:82`
-- `src/services/learnWalkBlumenfeld.test.ts:139`
+- `src/services/learnWalkBlumenfeld.test.ts:141`
 
 ### `renderMatchupConcept` (function) — 4 call sites
 - `src/services/conceptEngine.test.ts:56`
@@ -102,10 +143,11 @@
 - `src/services/endgameTechnique.test.ts:61`
 - `src/services/endgameTechnique.test.ts:74`
 - `src/services/endgameTechnique.test.ts:224`
-- `src/services/groundedAnswer.ts:4404`
-- `src/services/groundedAnswer.ts:7258`
+- `src/services/groundedAnswer.ts:4412`
+- `src/services/groundedAnswer.ts:7268`
 
 ### `conceptForBoard` (function) — 12 call sites
+- `src/services/boardComputers.ts:3183`
 - `src/services/claimKeyParity.test.ts:24`
 - `src/services/conceptEngine.test.ts:104`
 - `src/services/conceptEngine.test.ts:111`
@@ -116,8 +158,7 @@
 - `src/services/conceptEngine.test.ts:191`
 - `src/services/conceptEngine.test.ts:209`
 - `src/services/conceptEngine.test.ts:282`
-- `src/services/liveTacticsContext.ts:123`
-- `src/services/positionFacts.ts:1045`
+- `src/services/liveTacticsContext.ts:122`
 
 ### `conceptForLine` (function) — 17 call sites
 - `src/services/conceptCoverage.report.test.ts:59`
@@ -143,28 +184,25 @@
 - `src/services/conceptEngine.test.ts:182`
 - `src/services/conceptVocabulary.test.ts:63`
 
-### `definitionKey` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8723`
-- `src/services/learnWalkBlumenfeld.test.ts:142`
-- `src/services/positionFacts.ts:1495`
-- `src/services/positionFacts.ts:1497`
-- `src/services/positionFacts.ts:1958`
-- `src/services/positionFacts.ts:1962`
-- `src/services/reviewFullData.ts:761`
-- `src/services/reviewFullData.ts:764`
-- `src/services/reviewFullData.ts:765`
+### `definitionKey` (function) — 7 call sites
+- `src/components/Coach/CoachTeachPage.tsx:8722`
+- `src/services/boardComputers.ts:2136`
+- `src/services/learnWalkBlumenfeld.test.ts:144`
+- `src/services/positionFacts.ts:1435`
+- `src/services/positionFacts.ts:1437`
+- `src/services/positionFacts.ts:1800`
+- `src/services/positionFacts.ts:1804`
 
-### `tacticInvariant` (function) — 8 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8726`
+### `tacticInvariant` (function) — 7 call sites
+- `src/services/boardComputers.ts:2134`
 - `src/services/dnaLineNarrator.ts:57`
 - `src/services/projectedLineVoice.ts:99`
 - `src/services/puzzleConceptExplanation.ts:132`
-- `src/services/reviewFullData.ts:760`
 - `src/services/tacticAlertService.ts:148`
 - `src/services/tacticTypeUnification.test.ts:205`
 - `src/test/auditConceptGameplayCues.test.ts:24`
 
-### `materialBalance` (re-export) — 71 call sites
+### `materialBalance` (re-export) — 75 call sites
 - `scripts/pro-repertoire/mine-alapin-traps.mjs:41`
 - `scripts/pro-repertoire/mine-alapin-traps.mjs:90`
 - `scripts/pro-repertoire/mine-alapin-traps.mjs:94`
@@ -206,16 +244,20 @@
 - `scripts/pro-repertoire/mine-ruy-traps.mjs:94`
 - `scripts/pro-repertoire/mine-ruy-traps.mjs:103`
 - `src/services/captureRun.ts:85`
-- `src/services/compensation.ts:60`
+- `src/services/compensation.ts:64`
 - `src/services/conceptEngine.test.ts:24`
 - `src/services/conceptEngine.test.ts:26`
 - `src/services/conceptEngine.test.ts:28`
+- `src/services/deliberation.ts:987`
+- `src/services/deliberation.ts:993`
 - `src/services/endgameMoveReads.ts:94`
 - `src/services/exchangeLedger.ts:376`
 - `src/services/gambitIdea.ts:94`
 - `src/services/gambitIdea.ts:120`
 - `src/services/holdResource.ts:48`
 - `src/services/howItWins.ts:13`
+- `src/services/lineTrust.ts:78`
+- `src/services/mateThreatLever.ts:38`
 - `src/services/material.ts:41`
 - `src/services/material.ts:57`
 - `src/services/materialClaimValidator.test.ts:24`
@@ -228,11 +270,11 @@
 - `src/services/opponentMoveReads.ts:449`
 - `src/services/pawnMajority.ts:131`
 - `src/services/pieceValues.ts:46`
-- `src/services/positionReadingService.ts:2046`
+- `src/services/positionReadingService.ts:2167`
 - `src/services/practicalChance.ts:102`
 - `src/services/practicalChance.ts:112`
 - `src/services/practicalChance.ts:200`
-- `src/services/practicalReads.ts:31`
+- `src/services/practicalReads.ts:32`
 - `src/services/sideMaterial.test.ts:12`
 - `src/services/tradeWords.ts:36`
 - `src/test/onePieceValueTable.test.ts:46`

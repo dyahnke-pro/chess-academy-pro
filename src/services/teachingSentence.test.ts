@@ -25,6 +25,13 @@ describe('a reason on the board after the line', () => {
     expect(renderTryReason({ ...t, why: "They're worse, so they're setting you a problem." })).toBe("After Nxd4 …Bd7, they're worse, so they're setting you a problem.");
     expect(renderTryReason({ ...t, why: 'Qxd4 wins a pawn.' })).toBe('After Nxd4 …Bd7, Qxd4 wins a pawn.');
   });
+
+  it('a path that is only the reply the lead named is not anchored again (colle800: "…f6 meets it. After …f6, their pawn on f6 is aimed at …")', async () => {
+    const { renderTryReason } = await import('./teachingSentence');
+    const t = { san: 'Qxf4', name: 'Qxf4', reply: '…f6', mine: true, stem: 0, plan: null, replyFollow: null, whyPath: '…f6', material: null, materialWho: 'They', mates: false, shift: null, shiftKind: null };
+    expect(renderTryReason({ ...t, why: 'Their pawn on f6 is aimed at your bishop on g5.' })).toBe('That pawn is aimed at your bishop on g5.');
+    expect(renderTryReason({ ...t, why: 'Your queen has no square.' })).toBe('Then your queen has no square.');
+  });
 });
 
 describe('a try says its one cost on the sentence before it — never on another idea (2026-11-20 baseline: "But your Rxe5 stops it, and Bxh7+ leaves you losing")', () => {

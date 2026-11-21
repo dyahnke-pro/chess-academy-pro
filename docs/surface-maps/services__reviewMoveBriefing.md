@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**759 lines · 15 exports · 35 importers · 24 tests · 0 audits**
+**748 lines · 16 exports · 35 importers · 24 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **⏰ Standing notes** (CLAUDE.md:3263) — names `buildReviewMoveBriefing`
-- **The standard post-deploy ritual** (CLAUDE.md:7034) — names `Aspect`
+- **⏰ Standing notes** (CLAUDE.md:3283) — names `buildReviewMoveBriefing`
+- **The standard post-deploy ritual** (CLAUDE.md:7054) — names `Aspect`
 
 ## Who calls in
 
@@ -57,21 +57,23 @@
 ### `Aspect` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `signedBand` (const) — 1 call site
-- `src/services/boardComputers.ts:6461`
+### `signedBand` (const) — 3 call sites
+- `src/services/boardComputers.ts:3130`
+- `src/services/boardComputers.ts:6482`
+- `src/services/boardReadFacts.ts:196`
 
 ### `evalReading` (function) — 5 call sites
-- `src/services/boardComputers.ts:6459`
+- `src/services/boardComputers.ts:6480`
 - `src/services/evalReading.test.ts:11`
 - `src/services/evalReading.test.ts:17`
 - `src/services/evalReading.test.ts:23`
 - `src/services/verdictWithReasons.test.ts:72`
 
 ### `standingRead` (function) — 1 call site
-- `src/services/boardReadFacts.ts:156`
+- `src/services/boardReadFacts.ts:195`
 
 ### `moveAspects` (function) — 13 call sites
-- `src/services/boardComputers.ts:6105`
+- `src/services/boardComputers.ts:6126`
 - `src/services/captureLeadsTo.test.ts:26`
 - `src/services/countedWhenTradeEnds.test.ts:38`
 - `src/services/countedWhenTradeEnds.test.ts:52`
@@ -81,15 +83,15 @@
 - `src/services/midExchangeStructure.test.ts:13`
 - `src/services/reviewMoveBriefing.test.ts:71`
 - `src/services/reviewMoveBriefing.test.ts:73`
-- `src/services/thoughtReads.ts:233`
-- `src/test/captureSaidOnce.gate.test.ts:190`
+- `src/services/thoughtReads.ts:236`
+- `src/test/captureSaidOnce.gate.test.ts:191`
 - `src/utils/hasRook.test.ts:17`
 
 ### `buildReviewMoveBriefing` (function) — 24 call sites
 - `src/services/capSweep2.test.ts:50`
 - `src/services/captureRun.test.ts:46`
 - `src/services/captureRun.test.ts:58`
-- `src/services/coachFeatureService.ts:2223`
+- `src/services/coachFeatureService.ts:2224`
 - `src/services/guardPressure.test.ts:42`
 - `src/services/materialSites.test.ts:20`
 - `src/services/reviewMoveBriefing.test.ts:13`
@@ -109,17 +111,22 @@
 - `src/services/reviewMoveBriefing.test.ts:173`
 - `src/services/threeFacts.briefing.test.ts:18`
 - `src/services/threeFacts.briefing.test.ts:44`
-- `src/test/captureSaidOnce.gate.test.ts:186`
+- `src/test/captureSaidOnce.gate.test.ts:187`
 
-### `toClause` (function) — 3 call sites
+### `toClause` (function) — 4 call sites
 - `src/services/reviewMoveBriefing.test.ts:182`
 - `src/services/reviewMoveBriefing.test.ts:185`
-- `src/services/thoughtReads.ts:249`
+- `src/services/reviewMoveBriefing.test.ts:190`
+- `src/services/thoughtReads.ts:252`
 
-### `joinReview` (function) — 3 call sites
+### `SUBJECT_LED` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `joinReview` (function) — 4 call sites
 - `src/services/reviewMoveBriefing.test.ts:184`
 - `src/services/reviewMoveBriefing.test.ts:185`
-- `src/services/thoughtReads.ts:249`
+- `src/services/reviewMoveBriefing.test.ts:192`
+- `src/services/thoughtReads.ts:252`
 
 ### `LessonVoice` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -127,41 +134,41 @@
 ### `newLessonVoice` (function) — 48 call sites
 - `src/hooks/useTeachWalkthrough.ts:903`
 - `src/hooks/useTeachWalkthrough.ts:904`
-- `src/services/danyaBench.measure.test.ts:467`
-- `src/services/decisionStakes.test.ts:50`
+- `src/services/danyaBench.measure.test.ts:468`
+- `src/services/decisionStakes.test.ts:51`
 - `src/services/exchangeNotFinished.test.ts:281`
 - `src/services/gamesCourse.ts:368`
-- `src/services/kingGroupReads.test.ts:13`
-- `src/services/kingGroupReads.test.ts:16`
+- `src/services/kingGroupReads.test.ts:14`
+- `src/services/kingGroupReads.test.ts:17`
 - `src/services/lessonVoice.story.test.ts:29`
 - `src/services/lessonVoice.story.test.ts:41`
-- `src/services/moveThoughtFacts.test.ts:21`
-- `src/services/moveThoughtFacts.test.ts:66`
-- `src/services/moveThoughtFacts.test.ts:80`
-- `src/services/moveThoughtFacts.test.ts:86`
-- `src/services/moveThoughtFacts.test.ts:91`
-- `src/services/moveThoughtFacts.test.ts:96`
-- `src/services/moveThoughtFacts.test.ts:109`
-- `src/services/moveThoughtFacts.test.ts:113`
-- `src/services/moveThoughtFacts.test.ts:126`
-- `src/services/moveThoughtFacts.test.ts:152`
-- `src/services/moveThoughtFacts.test.ts:183`
-- `src/services/moveThoughtFacts.test.ts:194`
-- `src/services/moveThoughtFacts.test.ts:210`
-- `src/services/moveThoughtFacts.test.ts:214`
-- `src/services/moveThoughtFacts.test.ts:232`
-- `src/services/moveThoughtFacts.test.ts:268`
-- `src/services/moveThoughtFacts.test.ts:271`
-- `src/services/moveThoughtFacts.test.ts:294`
-- `src/services/moveThoughtFacts.test.ts:319`
-- `src/services/moveThoughtFacts.test.ts:363`
-- `src/services/moveThoughtFacts.test.ts:373`
-- `src/services/moveThoughtFacts.test.ts:393`
-- `src/services/moveThoughtFacts.test.ts:408`
-- `src/services/moveThoughtFacts.test.ts:423`
-- `src/services/moveThoughtFacts.test.ts:438`
-- `src/services/moveThoughtFacts.test.ts:453`
-- `src/services/moveThoughtFacts.test.ts:466`
+- `src/services/moveThoughtFacts.test.ts:22`
+- `src/services/moveThoughtFacts.test.ts:67`
+- `src/services/moveThoughtFacts.test.ts:81`
+- `src/services/moveThoughtFacts.test.ts:87`
+- `src/services/moveThoughtFacts.test.ts:92`
+- `src/services/moveThoughtFacts.test.ts:97`
+- `src/services/moveThoughtFacts.test.ts:110`
+- `src/services/moveThoughtFacts.test.ts:114`
+- `src/services/moveThoughtFacts.test.ts:127`
+- `src/services/moveThoughtFacts.test.ts:153`
+- `src/services/moveThoughtFacts.test.ts:184`
+- `src/services/moveThoughtFacts.test.ts:195`
+- `src/services/moveThoughtFacts.test.ts:211`
+- `src/services/moveThoughtFacts.test.ts:215`
+- `src/services/moveThoughtFacts.test.ts:233`
+- `src/services/moveThoughtFacts.test.ts:269`
+- `src/services/moveThoughtFacts.test.ts:272`
+- `src/services/moveThoughtFacts.test.ts:295`
+- `src/services/moveThoughtFacts.test.ts:320`
+- `src/services/moveThoughtFacts.test.ts:364`
+- `src/services/moveThoughtFacts.test.ts:374`
+- `src/services/moveThoughtFacts.test.ts:394`
+- `src/services/moveThoughtFacts.test.ts:409`
+- `src/services/moveThoughtFacts.test.ts:424`
+- `src/services/moveThoughtFacts.test.ts:439`
+- `src/services/moveThoughtFacts.test.ts:454`
+- `src/services/moveThoughtFacts.test.ts:467`
 - `src/services/moveThoughtFacts.ts:1051`
 - `src/services/moveThoughtFacts.ts:1163`
 - `src/services/openingGenerator.ts:2059`

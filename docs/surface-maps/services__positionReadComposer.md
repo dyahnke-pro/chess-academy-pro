@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**236 lines · 4 exports · 5 importers · 9 tests · 0 audits**
+**272 lines · 4 exports · 6 importers · 10 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:5021) — names `composePositionRead`
+- **🔒🔒 CORPUS NOTES SPEAK ONLY WHERE THE STUDENT ASKED FOR A LESSON — "teach me X opening", chat, tactics drill, endgame lessons (David 2026-09-23: "I want corpus notes removed from all coach sections except for 'teach me x opening'" → "Just remove corpus notes for learn with coach (free play) and review with coach" → "Keep chat corpus notes. That's not narration.").** (CLAUDE.md:5041) — names `composePositionRead`
 
 ## Who calls in
 
@@ -16,6 +16,7 @@
 - `src/services/positionReadComposer.withhold.test.ts`
 - `src/services/readHasShot.test.ts`
 - `src/services/tryReadBudget.test.ts`
+- `src/test/danyaBoardRead.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
 
 ## Exports and every call site
@@ -23,12 +24,17 @@
 ### `READ_SEAT` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `surfaceBoardReader` (function) — 3 call sites
+### `surfaceBoardReader` (function) — 8 call sites
 - `src/services/tryReadBudget.test.ts:95`
 - `src/services/tryReadBudget.test.ts:111`
-- `src/services/tryReadBudget.test.ts:114`
+- `src/services/tryReadBudget.test.ts:113`
+- `src/services/tryReadBudget.test.ts:118`
+- `src/services/tryReadBudget.test.ts:124`
+- `src/services/tryReadBudget.test.ts:125`
+- `src/services/tryReadBudget.test.ts:132`
+- `src/services/tryReadBudget.test.ts:135`
 
-### `readHasShot` (function) — 7 call sites
+### `readHasShot` (function) — 8 call sites
 - `src/services/readHasShot.test.ts:11`
 - `src/services/readHasShot.test.ts:15`
 - `src/services/readHasShot.test.ts:19`
@@ -36,6 +42,7 @@
 - `src/services/readHasShot.test.ts:24`
 - `src/services/readHasShot.test.ts:25`
 - `src/services/readHasShot.test.ts:26`
+- `src/test/danyaBoardRead.ts:36`
 
 ### `composePositionRead` (function) — 3 call sites
 - `src/hooks/usePositionNarration.ts:241`
@@ -53,6 +60,7 @@
 - `src/test/corpusScope.test.ts`
 - `src/test/everySurfaceSpeaks.test.ts`
 - `src/test/oneCoachUnlocked.gate.test.ts`
+- `src/test/oneShortener.gate.test.ts`
 
 ## Audits that reach it
 

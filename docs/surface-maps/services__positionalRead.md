@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**970 lines · 9 exports · 22 importers · 18 tests · 1 audits**
+**957 lines · 9 exports · 22 importers · 18 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -38,7 +38,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Exports and every call site
 
 ### `rookReachesFile` (function) — 3 call sites
-- `src/services/boardComputers.ts:5378`
+- `src/services/boardComputers.ts:5401`
 - `src/services/danyaBehaviors.ts:722`
 - `src/services/recaptureChoice.ts:63`
 
@@ -54,7 +54,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `readPosition` (function) — 69 call sites
 - `src/coach/chatTurnAnswers.ts:271`
-- `src/services/boardComputers.ts:5586`
+- `src/services/boardComputers.ts:5609`
 - `src/services/capSweep2.test.ts:15`
 - `src/services/lookaheadPlan.ts:1264`
 - `src/services/lookaheadPlan.ts:1533`
@@ -62,7 +62,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/narrationAdversarial.test.ts:85`
 - `src/services/narrationAdversarial.test.ts:176`
 - `src/services/nextPlans.structureIdeaKey.test.ts:13`
-- `src/services/passerSentence.test.ts:30`
+- `src/services/passerSentence.test.ts:31`
 - `src/services/positionalRead.danyaBoards.test.ts:6`
 - `src/services/positionalRead.danyaBoards.test.ts:35`
 - `src/services/positionalRead.danyaBoards.test.ts:41`
@@ -124,9 +124,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/everySurfaceSpeaks.test.ts:123`
 
 ### `buildPositionalRead` (function) — 17 call sites
-- `src/components/Coach/CoachTeachPage.tsx:10026`
+- `src/components/Coach/CoachTeachPage.tsx:10025`
 - `src/services/claimChecker.measure.test.ts:134`
-- `src/services/learnWalkBlumenfeld.test.ts:127`
+- `src/services/learnWalkBlumenfeld.test.ts:129`
 - `src/services/learnWalkNimzo.test.ts:38`
 - `src/services/narrationAdversarial.test.ts:104`
 - `src/services/narrationAdversarial.test.ts:177`

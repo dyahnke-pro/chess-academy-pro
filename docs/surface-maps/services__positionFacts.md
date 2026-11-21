@@ -4,18 +4,18 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2003 lines · 17 exports · 45 importers · 52 tests · 3 audits**
+**2009 lines · 17 exports · 45 importers · 52 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
-- **The tools are COMPUTERS** (CLAUDE.md:392) — names `positionFacts`
-- **🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").** (CLAUDE.md:764) — names `positionFacts`
-- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1436) — names `positionFacts`
-- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4594) — names `ClauseKind`, `positionFacts`
-- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4746) — names `positionFacts`
-- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5947) — names `computePositionFacts`, `positionFacts`
-- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6913) — names `positionFacts`
-- **The standard post-deploy ritual** (CLAUDE.md:7030) — names `positionFacts`
+- **The tools are COMPUTERS** (CLAUDE.md:402) — names `positionFacts`
+- **🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").** (CLAUDE.md:774) — names `positionFacts`
+- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1446) — names `positionFacts`
+- **🔒🔒 EVERYTHING IS ALGO-BASED AND TAILORS TO THE USER — supreme law for every decision the coach makes (David 2026-09-17: "we are ALL ALGO BASED! we teach based off of recorded mistakes. but if no information on player then i guess we should teach at their level" → "everything from now on is algo based so it tailors to the user. write that down").** (CLAUDE.md:4614) — names `ClauseKind`, `positionFacts`
+- **🔒🔒 THE RATING IS ALGO-BASED AND TAILORED TO THE USER — there is no hand-set preset, and the teaching layer must READ THE ADAPTIVE ONE (David 2026-09-17: "we use algo based ratings now, tailered specifically to the user").** (CLAUDE.md:4766) — names `positionFacts`
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5967) — names `computePositionFacts`, `positionFacts`
+- **🔒🔒 TWO AUDITS EVERY RUN — ONE PER SURFACE (David 2026-09-16: "Have you ran a learn with coach session? I want two audits each run. One for each surface").** (CLAUDE.md:6933) — names `positionFacts`
+- **The standard post-deploy ritual** (CLAUDE.md:7050) — names `positionFacts`
 
 ## Who calls in
 
@@ -92,7 +92,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `orderByValue` (function) — 2 call sites
-- `src/coach/boardTurnAnswer.ts:193`
+- `src/coach/boardTurnAnswer.ts:194`
 - `src/services/chatBoardRead.ts:105`
 
 ### `clauseValue` (function) — 2 call sites
@@ -100,7 +100,7 @@
 - `src/services/positionFacts.weakness.test.ts:71`
 
 ### `clauseClaims` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11578`
+- `src/components/Coach/CoachTeachPage.tsx:11577`
 - `src/hooks/usePhaseNarration.door.test.ts:78`
 - `src/hooks/usePhaseNarration.ts:471`
 - `src/services/raceAimOneVoice.test.ts:20`
@@ -118,21 +118,21 @@
 - `src/services/whyBestMove.ts:152`
 
 ### `computePositionFacts` (function) — 111 call sites
-- `src/coach/boardTurnAnswer.ts:177`
-- `src/components/Coach/CoachTeachPage.tsx:11419`
+- `src/coach/boardTurnAnswer.ts:178`
+- `src/components/Coach/CoachTeachPage.tsx:11418`
 - `src/hooks/useLiveCoach.needWire.test.tsx:44`
 - `src/hooks/useLiveCoach.ts:271`
 - `src/hooks/usePhaseNarration.ts:433`
 - `src/services/askedReadOnePawn.test.ts:24`
 - `src/services/bluffDetector.test.ts:36`
 - `src/services/bluffDetector.test.ts:46`
-- `src/services/boardReadFacts.ts:120`
+- `src/services/boardReadFacts.ts:148`
 - `src/services/chatBoardRead.ts:81`
 - `src/services/claimChecker.measure.test.ts:107`
 - `src/services/computerAccuracy.audit.test.ts:112`
 - `src/services/criticalMoment.frame.test.ts:24`
 - `src/services/criticalMoment.oneCount.test.ts:25`
-- `src/services/danyaBench.measure.test.ts:451`
+- `src/services/danyaBench.measure.test.ts:452`
 - `src/services/deliberation.ruleOutOnce.test.ts:86`
 - `src/services/deliberation.ruleOutOnce.test.ts:89`
 - `src/services/deliberation.ruleOutOnce.test.ts:98`
@@ -195,13 +195,13 @@
 - `src/services/positionFacts.test.ts:438`
 - `src/services/positionFacts.test.ts:451`
 - `src/services/positionFacts.test.ts:464`
-- `src/services/positionFacts.test.ts:477`
-- `src/services/positionFacts.test.ts:482`
-- `src/services/positionFacts.test.ts:493`
-- `src/services/positionFacts.test.ts:497`
-- `src/services/positionFacts.test.ts:501`
-- `src/services/positionFacts.test.ts:509`
-- `src/services/positionFacts.test.ts:519`
+- `src/services/positionFacts.test.ts:478`
+- `src/services/positionFacts.test.ts:483`
+- `src/services/positionFacts.test.ts:494`
+- `src/services/positionFacts.test.ts:498`
+- `src/services/positionFacts.test.ts:502`
+- `src/services/positionFacts.test.ts:510`
+- `src/services/positionFacts.test.ts:520`
 - `src/services/positionFacts.weakness.test.ts:24`
 - `src/services/positionFacts.weakness.test.ts:52`
 - `src/services/positionFacts.weakness.test.ts:66`
@@ -231,7 +231,7 @@
 - `src/test/teach02Wired.test.ts:140`
 
 ### `convertKey` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11696`
+- `src/components/Coach/CoachTeachPage.tsx:11695`
 - `src/services/positionFacts.convertOnce.test.ts:24`
 - `src/services/positionFacts.convertOnce.test.ts:40`
 
@@ -257,9 +257,9 @@
 - `src/services/positionFacts.tacticDecides.test.ts:19`
 
 ### `conceptInstanceKey` (re-export) — 16 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9385`
-- `src/components/Coach/CoachTeachPage.tsx:9524`
-- `src/services/boardComputers.ts:5066`
+- `src/components/Coach/CoachTeachPage.tsx:9384`
+- `src/components/Coach/CoachTeachPage.tsx:9523`
+- `src/services/boardComputers.ts:5089`
 - `src/services/claimKeyParity.test.ts:27`
 - `src/services/claimKeyParity.test.ts:30`
 - `src/services/claimKeysLooseCount.test.ts:31`

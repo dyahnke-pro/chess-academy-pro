@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**475 lines · 10 exports · 11 importers · 5 tests · 0 audits**
+**477 lines · 10 exports · 11 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -39,12 +39,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `planSteps` (function) — 26 call sites
-- `src/services/boardComputers.ts:3742`
+- `src/services/boardComputers.ts:3765`
 - `src/services/boardPlan.test.ts:26`
 - `src/services/boardPlan.test.ts:27`
 - `src/services/boardPlan.ts:63`
-- `src/services/boardReadFacts.ts:197`
-- `src/services/planOfTheBoard.test.ts:34`
+- `src/services/boardReadFacts.ts:236`
+- `src/services/planOfTheBoard.test.ts:36`
 - `src/services/planOfTheBoard.ts:185`
 - `src/services/planOfTheBoard.ts:197`
 - `src/services/planSteps.boardNow.test.ts:16`
@@ -70,9 +70,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planOfTheBoard.ts:681`
 
 ### `planStepsText` (function) — 10 call sites
-- `src/services/boardComputers.ts:3746`
+- `src/services/boardComputers.ts:3769`
 - `src/services/boardPlan.ts:64`
-- `src/services/boardReadFacts.ts:201`
+- `src/services/boardReadFacts.ts:240`
 - `src/services/planSteps.boardNow.test.ts:46`
 - `src/services/planSteps.road.test.ts:20`
 - `src/services/planSteps.road.test.ts:41`
@@ -86,7 +86,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planOfTheBoard.ts:330`
 
 ### `planStepsKey` (function) — 1 call site
-- `src/services/boardComputers.ts:3747`
+- `src/services/boardComputers.ts:3770`
 
 ### `playedUci` (function) — 7 call sites
 - `src/services/boardBundle.ts:238`

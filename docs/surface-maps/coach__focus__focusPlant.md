@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**392 lines · 18 exports · 8 importers · 3 tests · 2 audits**
+**399 lines · 20 exports · 8 importers · 3 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:241) — names `MISS_SPACING_PLIES`, `OwedPattern`, `PlantState`, `focusPlant`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:251) — names `MISS_SPACING_PLIES`, `OwedPattern`, `PlantState`, `focusPlant`
 
 ## Who calls in
 
@@ -57,8 +57,8 @@
 - `src/coach/focus/focusPlant.test.ts:93`
 - `src/coach/focus/focusPlant.test.ts:94`
 - `src/coach/focus/focusPlant.test.ts:95`
-- `src/coach/focus/focusRunner.ts:420`
-- `src/coach/focus/focusRunner.ts:434`
+- `src/coach/focus/focusRunner.ts:421`
+- `src/coach/focus/focusRunner.ts:435`
 
 ### `OwedPattern` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -73,7 +73,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `carryHeads` (function) — 1 call site
-- `src/coach/focus/focusRunner.ts:568`
+- `src/coach/focus/focusRunner.ts:569`
 
 ### `plantAsk` (function) — 35 call sites
 - `src/coach/focus/focusPlant.test.ts:15`
@@ -109,8 +109,8 @@
 - `src/coach/focus/focusPlant.test.ts:84`
 - `src/coach/focus/focusPlant.test.ts:85`
 - `src/coach/focus/focusPlant.test.ts:88`
-- `src/coach/focus/focusRunner.ts:922`
-- `src/components/Coach/CoachTeachPage.tsx:8594`
+- `src/coach/focus/focusRunner.ts:924`
+- `src/components/Coach/CoachTeachPage.tsx:8603`
 
 ### `FocusPlantReject` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -141,7 +141,13 @@
 - `src/coach/focus/focusPlant.test.ts:265`
 - `src/coach/focus/focusPlant.test.ts:266`
 - `src/coach/focus/focusPlant.test.ts:267`
-- `src/services/coachGameEngine.ts:886`
+- `src/services/coachGameEngine.ts:918`
+
+### `readOrder` (function) — 1 call site
+- `src/coach/focus/focusPlant.test.ts:278`
+
+### `QUEEN_GIFT_CP` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `shownRank` (function) — 1 call site
 - `src/missions/earnedSlip.ts:268`

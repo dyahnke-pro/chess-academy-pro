@@ -1,42 +1,42 @@
 {
  "about": "Which teaching computer reaches which surface, by a static call path from each surface root (scripts/computer-reach.mjs; the list is scripts/computer-reach/computers.json). learn: yes = through the focus runner, door = computed in a Learn turn and decided by Learn's turn door (spoken when the door keeps it); a door-only row says why in `door` (an adapter of computers the other surfaces read, or Learn-only by design).",
  "graph": {
-  "files": 1707,
-  "nodes": 17016
+  "files": 1773,
+  "nodes": 18125
  },
  "totals": {
-  "computers": 345,
-  "offTheSixSurfaces": 27,
+  "computers": 343,
+  "offTheSixSurfaces": 28,
   "learnDoorOnly": 17,
   "learnDoorOnlyUnexplained": 0,
   "otherScreensOnly": 10,
-  "dead": 0,
+  "dead": 1,
   "missingFromCode": 0,
   "surfaces": {
    "learn": {
     "yes": 31,
-    "door": 224,
-    "no": 90
+    "door": 227,
+    "no": 85
    },
    "review": {
-    "yes": 237,
-    "no": 108
+    "yes": 240,
+    "no": 103
    },
    "lesson": {
-    "yes": 161,
-    "no": 184
+    "yes": 183,
+    "no": 160
    },
    "chat": {
-    "yes": 223,
-    "no": 122
+    "yes": 228,
+    "no": 115
    },
    "tapped": {
-    "yes": 183,
-    "no": 162
+    "yes": 192,
+    "no": 151
    },
    "tactics": {
-    "yes": 174,
-    "no": 171
+    "yes": 199,
+    "no": 144
    }
   }
  },
@@ -72,7 +72,9 @@
    "services/shareableInsightsService.ts#(module)",
    "services/tacticAlertService.ts#detectGameplayTactic"
   ],
-  "dead": []
+  "dead": [
+   "services/reviewTeachingPoints.ts#explainTemptingCapture"
+  ]
  },
  "missingFromCode": [],
  "computers": [
@@ -189,15 +191,18 @@
    "origin": "map",
    "learn": "door",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "insights",
+    "endgame"
    ]
   },
   {
@@ -291,15 +296,18 @@
    "origin": "map",
    "learn": "door",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "insights",
+    "endgame"
    ]
   },
   {
@@ -1005,10 +1013,10 @@
     "ofReach": {
      "services/pieceWish.ts#pieceWish": {
       "review": "yes",
-      "lesson": "no",
-      "chat": "no",
-      "tapped": "no",
-      "tactics": "no"
+      "lesson": "yes",
+      "chat": "yes",
+      "tapped": "yes",
+      "tactics": "yes"
      },
      "services/positionReadingService.ts#findOpenFiles": {
       "review": "yes",
@@ -1109,16 +1117,19 @@
    "says": "Which alternatives are ruled out LOUD (only with a reason: a proof line, a dropped piece, a queen-trade principle; a loss already heard is n",
    "origin": "map",
    "learn": "door",
-   "review": "no",
-   "lesson": "no",
+   "review": "yes",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "insights",
+    "endgame"
    ]
   },
   {
@@ -1626,15 +1637,18 @@
    "origin": "extra",
    "learn": "door",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "insights",
+    "endgame"
    ]
   },
   {
@@ -1669,15 +1683,18 @@
    "origin": "map",
    "learn": "door",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "insights",
+    "endgame"
    ]
   },
   {
@@ -2225,6 +2242,7 @@
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -2429,16 +2447,18 @@
    "says": "An uncastled central king with central pawn tension and an enemy rook/queen on its file, castling still reachable; and the castle with the f",
    "origin": "map",
    "learn": "door",
-   "review": "no",
-   "lesson": "no",
+   "review": "yes",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -2449,16 +2469,18 @@
    "says": "A castled king with >= 2 of 3 shield pawns gone AND enemy bishop/rook/queen bearing on its zone (only with their queen on)",
    "origin": "map",
    "learn": "door",
-   "review": "no",
-   "lesson": "no",
+   "review": "yes",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -2515,19 +2537,16 @@
    "says": "An enemy line-piece aimed through at most one of the student's own shields at a student piece with king/queen behind it",
    "origin": "map",
    "learn": "door",
-   "review": "yes",
-   "lesson": "yes",
+   "review": "no",
+   "lesson": "no",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "yes",
+   "tactics": "no",
    "app": true,
    "other": [
-    "openingsPage",
     "kid",
     "campaign",
-    "playSilent",
-    "insights",
-    "endgame"
+    "playSilent"
    ]
   },
   {
@@ -2569,6 +2588,7 @@
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -3434,13 +3454,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -3472,13 +3493,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -3494,13 +3516,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -3516,13 +3539,14 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -3558,16 +3582,18 @@
    "origin": "extra",
    "learn": "door",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "insights",
+    "endgame"
    ]
   },
   {
@@ -3682,7 +3708,7 @@
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
-   "tapped": "no",
+   "tapped": "yes",
    "tactics": "yes",
    "app": true,
    "other": [
@@ -3783,13 +3809,15 @@
    "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "insights",
+    "endgame"
    ]
   },
   {
@@ -4180,15 +4208,18 @@
    "origin": "map",
    "learn": "door",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "insights",
+    "endgame"
    ]
   },
   {
@@ -4200,15 +4231,18 @@
    "origin": "map",
    "learn": "door",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "insights",
+    "endgame"
    ]
   },
   {
@@ -4489,13 +4523,18 @@
    "origin": "extra",
    "learn": "door",
    "review": "yes",
-   "lesson": "no",
-   "chat": "no",
-   "tapped": "no",
-   "tactics": "no",
+   "lesson": "yes",
+   "chat": "yes",
+   "tapped": "yes",
+   "tactics": "yes",
    "app": true,
    "other": [
-    "playSilent"
+    "openingsPage",
+    "kid",
+    "campaign",
+    "playSilent",
+    "insights",
+    "endgame"
    ]
   },
   {
@@ -4816,7 +4855,7 @@
    "says": "Whether the structure plan is new, carried or changed since it was announced, and the 'the plan changes' sentence",
    "origin": "map",
    "learn": "door",
-   "review": "no",
+   "review": "yes",
    "lesson": "no",
    "chat": "yes",
    "tapped": "yes",
@@ -4981,17 +5020,18 @@
    "says": "Every positional observation for both sides, ranked (king, development, weak pawns, piece quality, breaks, colour complex, minority attack,",
    "origin": "map",
    "learn": "door",
-   "review": "no",
-   "lesson": "no",
+   "review": "yes",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -5096,6 +5136,7 @@
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -5293,7 +5334,7 @@
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
-   "tapped": "no",
+   "tapped": "yes",
    "tactics": "yes",
    "app": true,
    "other": [
@@ -5676,15 +5717,20 @@
    "fn": "(module)",
    "says": "reviewForcedSequence — detect a FORCED checking sequence that ends in mate, so the review can TEACH the forcing-move concept (David 2026-0",
    "origin": "extra",
-   "learn": "no",
+   "learn": "door",
    "review": "yes",
-   "lesson": "no",
-   "chat": "no",
-   "tapped": "no",
-   "tactics": "no",
+   "lesson": "yes",
+   "chat": "yes",
+   "tapped": "yes",
+   "tactics": "yes",
    "app": true,
    "other": [
-    "playSilent"
+    "openingsPage",
+    "kid",
+    "campaign",
+    "playSilent",
+    "insights",
+    "endgame"
    ]
   },
   {
@@ -5783,15 +5829,20 @@
    "fn": "nameEndgamePhase",
    "says": "Names a clean endgame type with its rule ('a rook endgame — activity over material…'); names smothered/back-rank mate; endgame king centrali",
    "origin": "map",
-   "learn": "no",
+   "learn": "door",
    "review": "yes",
-   "lesson": "no",
-   "chat": "no",
-   "tapped": "no",
-   "tactics": "no",
+   "lesson": "yes",
+   "chat": "yes",
+   "tapped": "yes",
+   "tactics": "yes",
    "app": true,
    "other": [
-    "playSilent"
+    "openingsPage",
+    "kid",
+    "campaign",
+    "playSilent",
+    "insights",
+    "endgame"
    ]
   },
   {
@@ -5918,15 +5969,20 @@
    "fn": "(module)",
    "says": "reviewPieceItinerary — §1 \"piece routes as itineraries\" (the transcript gap: Naroditsky narrates a knight's journey \"f3–d2–c4\", not three si",
    "origin": "extra",
-   "learn": "no",
+   "learn": "door",
    "review": "yes",
-   "lesson": "no",
-   "chat": "no",
-   "tapped": "no",
-   "tactics": "no",
+   "lesson": "yes",
+   "chat": "yes",
+   "tapped": "yes",
+   "tactics": "yes",
    "app": true,
    "other": [
-    "playSilent"
+    "openingsPage",
+    "kid",
+    "campaign",
+    "playSilent",
+    "insights",
+    "endgame"
    ]
   },
   {
@@ -5979,15 +6035,20 @@
    "fn": "attackerDefenderCount",
    "says": "More attackers than defenders on a target (verified), the defender of their king, a rook on the seventh, a bad enemy bishop, the student's w",
    "origin": "map",
-   "learn": "no",
+   "learn": "door",
    "review": "yes",
-   "lesson": "no",
-   "chat": "no",
-   "tapped": "no",
-   "tactics": "no",
+   "lesson": "yes",
+   "chat": "yes",
+   "tapped": "yes",
+   "tactics": "yes",
    "app": true,
    "other": [
-    "playSilent"
+    "openingsPage",
+    "kid",
+    "campaign",
+    "playSilent",
+    "insights",
+    "endgame"
    ]
   },
   {
@@ -5999,7 +6060,7 @@
    "origin": "map",
    "learn": "door",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
    "tactics": "yes",
@@ -6009,7 +6070,8 @@
     "kid",
     "campaign",
     "playSilent",
-    "insights"
+    "insights",
+    "endgame"
    ]
   },
   {
@@ -6020,15 +6082,14 @@
    "says": "A tempting capture the line ignores and what it walks into (one telling per capture).",
    "origin": "map",
    "learn": "no",
-   "review": "yes",
+   "review": "no",
    "lesson": "no",
    "chat": "no",
    "tapped": "no",
    "tactics": "no",
-   "app": true,
-   "other": [
-    "playSilent"
-   ]
+   "app": false,
+   "other": [],
+   "where": "dead (no production caller)"
   },
   {
    "key": "services/reviewTeachingPoints.ts#trappedOnBoard",
@@ -6369,7 +6430,7 @@
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
-   "tapped": "no",
+   "tapped": "yes",
    "tactics": "yes",
    "app": true,
    "other": [
@@ -6613,15 +6674,18 @@
    "origin": "map",
    "learn": "door",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "insights",
+    "endgame"
    ]
   },
   {
@@ -6633,7 +6697,7 @@
    "origin": "map",
    "learn": "door",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
    "tactics": "yes",
@@ -6643,7 +6707,8 @@
     "kid",
     "campaign",
     "playSilent",
-    "insights"
+    "insights",
+    "endgame"
    ]
   },
   {
@@ -6697,15 +6762,18 @@
    "origin": "map",
    "learn": "door",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "insights",
+    "endgame"
    ]
   },
   {
@@ -6714,46 +6782,6 @@
    "file": "services/thinkAloud.ts",
    "fn": "lineAchieves",
    "says": "What a line achieves where it ENDS (mate, promotion, a pawn ending with the extra pawn, settled material, a file opened toward their king, t",
-   "origin": "map",
-   "learn": "door",
-   "review": "no",
-   "lesson": "no",
-   "chat": "yes",
-   "tapped": "yes",
-   "tactics": "no",
-   "app": true,
-   "other": [
-    "kid",
-    "campaign",
-    "playSilent"
-   ]
-  },
-  {
-   "key": "services/thinkAloud.ts#notYet",
-   "name": "notYet + inBetweenMove — 'not yet, first this' (the in-between move)",
-   "file": "services/thinkAloud.ts",
-   "fn": "notYet",
-   "says": "A capture is on the board, the engine's best is a different FORCING move (check or a hit on a piece worth >= the mover), and the capture is",
-   "origin": "map",
-   "learn": "door",
-   "review": "no",
-   "lesson": "no",
-   "chat": "yes",
-   "tapped": "yes",
-   "tactics": "no",
-   "app": true,
-   "other": [
-    "kid",
-    "campaign",
-    "playSilent"
-   ]
-  },
-  {
-   "key": "services/thinkAloud.ts#obviousStopFlaw",
-   "name": "thinkAloud.obviousStopFlaw (the obvious stop that fails)",
-   "file": "services/thinkAloud.ts",
-   "fn": "obviousStopFlaw",
-   "says": "findProphylaxis's pawn stop creates a hook for their pawn and the engine ranks it a notable step below best: 'They want …Bg4, pinning your k",
    "origin": "map",
    "learn": "door",
    "review": "no",
@@ -7172,14 +7200,21 @@
    "fn": "threatPurpose",
    "says": "Their move looks aimed at one piece but the engine line wins something else (another piece, the king, a winning queen trade)",
    "origin": "map",
-   "learn": "no",
+   "learn": "door",
    "review": "yes",
-   "lesson": "no",
-   "chat": "no",
-   "tapped": "no",
-   "tactics": "no",
+   "lesson": "yes",
+   "chat": "yes",
+   "tapped": "yes",
+   "tactics": "yes",
    "app": true,
-   "other": []
+   "other": [
+    "openingsPage",
+    "kid",
+    "campaign",
+    "playSilent",
+    "insights",
+    "endgame"
+   ]
   },
   {
    "key": "services/threeFacts.ts#binding",
@@ -7190,13 +7225,18 @@
    "origin": "map",
    "learn": "door",
    "review": "yes",
-   "lesson": "no",
-   "chat": "no",
-   "tapped": "no",
-   "tactics": "no",
+   "lesson": "yes",
+   "chat": "yes",
+   "tapped": "yes",
+   "tactics": "yes",
    "app": true,
    "other": [
-    "playSilent"
+    "openingsPage",
+    "kid",
+    "campaign",
+    "playSilent",
+    "insights",
+    "endgame"
    ]
   },
   {
@@ -7277,15 +7317,18 @@
    "origin": "map",
    "learn": "door",
    "review": "yes",
-   "lesson": "no",
+   "lesson": "yes",
    "chat": "yes",
    "tapped": "yes",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
+    "openingsPage",
     "kid",
     "campaign",
-    "playSilent"
+    "playSilent",
+    "insights",
+    "endgame"
    ],
    "registry": [
     "tiedDefender"
@@ -7437,6 +7480,7 @@
     "kid",
     "campaign",
     "playSilent",
+    "insights",
     "endgame"
    ]
   },
@@ -7470,7 +7514,7 @@
    "review": "yes",
    "lesson": "no",
    "chat": "no",
-   "tapped": "no",
+   "tapped": "yes",
    "tactics": "no",
    "app": true,
    "other": []

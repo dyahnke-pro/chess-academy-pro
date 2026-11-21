@@ -29,10 +29,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewPieceItinerary.test.ts:56`
 
 ### `itineraryAt` (function) — 1 call site
-- `src/services/boardComputers.ts:4325`
+- `src/services/boardComputers.ts:4348`
 
 ### `itineraryLine` (function) — 1 call site
-- `src/services/boardComputers.ts:4328`
+- `src/services/boardComputers.ts:4351`
 
 ## Tests
 

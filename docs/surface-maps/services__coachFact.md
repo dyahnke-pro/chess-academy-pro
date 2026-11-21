@@ -4,16 +4,16 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**691 lines · 16 exports · 55 importers · 24 tests · 0 audits**
+**695 lines · 16 exports · 55 importers · 24 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
 - **❤️ THE HEART OF THE APP — the coach THINKS OUT LOUD FOR the student (David 2026-10-07: "THIS IS THE HEART AND SOUL OF THE APP! THIS IS THE BEHAVIOR THAT TEACHES. THIS IS WHAT ALL THE COMPUTERS ARE BUILT FOR! SO WE CAN THINK OUT LOUD FOR THE USER!")** (CLAUDE.md:31) — names `coachFact`
-- **🔒🔒 ONE COACH, HOW TO THINK INCLUDED — every computer answers for every surface (David 2026-11-17: "Make sure how to think gets these computers. It should because we have a unified coach structure. That is a non negotiable rule.")** (CLAUDE.md:411) — names `COMPUTER_CATALOG`
-- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1555) — names `coachFact`
-- **🔒🔒 THE WHY STANDARD — FOUR MEASURES, NOT ONE NUMBER (David 2026-10-14: "Do we need 90%?" → "I like both plans")** (CLAUDE.md:2852) — names `FACT_GROUP`
-- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5995) — names `HeldForm`
-- **The standard post-deploy ritual** (CLAUDE.md:7033) — names `coachFact`
+- **🔒🔒 ONE COACH, HOW TO THINK INCLUDED — every computer answers for every surface (David 2026-11-17: "Make sure how to think gets these computers. It should because we have a unified coach structure. That is a non negotiable rule.")** (CLAUDE.md:421) — names `COMPUTER_CATALOG`
+- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1565) — names `coachFact`
+- **🔒🔒 THE WHY STANDARD — FOUR MEASURES, NOT ONE NUMBER (David 2026-10-14: "Do we need 90%?" → "I like both plans")** (CLAUDE.md:2862) — names `FACT_GROUP`
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:6015) — names `HeldForm`
+- **The standard post-deploy ritual** (CLAUDE.md:7053) — names `coachFact`
 
 ## Who calls in
 
@@ -95,33 +95,31 @@
 
 ### `isCoachFactKind` (function) — 2 call sites
 - `src/services/coachMoment.measure.test.ts:43`
-- `src/services/learnTurnDoor.ts:789`
+- `src/services/learnTurnDoor.ts:793`
 
-### `stepOf` (function) — 19 call sites
-- `src/services/boardComputers.test.ts:78`
-- `src/services/coachFact.test.ts:89`
+### `stepOf` (function) — 17 call sites
+- `src/services/boardComputers.test.ts:81`
 - `src/services/coachFact.test.ts:90`
-- `src/services/coachFeatureService.ts:2747`
-- `src/services/coachFeatureService.ts:3363`
-- `src/services/learnTurnDoor.ts:345`
-- `src/services/learnTurnDoor.ts:1080`
-- `src/services/learnTurnDoor.ts:1137`
-- `src/services/learnTurnDoor.ts:1160`
-- `src/services/learnTurnDoor.ts:1164`
-- `src/services/learnTurnDoor.ts:1218`
-- `src/services/learnTurnDoor.ts:1244`
-- `src/services/learnTurnDoor.ts:1254`
-- `src/services/learnTurnDoor.ts:1258`
-- `src/services/learnTurnDoor.ts:1395`
-- `src/services/learnTurnDoor.ts:1419`
-- `src/services/learnTurnDoor.ts:1472`
-- `src/services/pictureVerdict.ts:172`
-- `src/services/pictureVerdict.ts:460`
+- `src/services/coachFact.test.ts:91`
+- `src/services/coachFeatureService.ts:2748`
+- `src/services/coachFeatureService.ts:3369`
+- `src/services/learnTurnDoor.ts:346`
+- `src/services/learnTurnDoor.ts:1086`
+- `src/services/learnTurnDoor.ts:1147`
+- `src/services/learnTurnDoor.ts:1170`
+- `src/services/learnTurnDoor.ts:1174`
+- `src/services/learnTurnDoor.ts:1228`
+- `src/services/learnTurnDoor.ts:1261`
+- `src/services/learnTurnDoor.ts:1422`
+- `src/services/learnTurnDoor.ts:1446`
+- `src/services/learnTurnDoor.ts:1504`
+- `src/services/pictureVerdict.ts:176`
+- `src/services/pictureVerdict.ts:445`
 
 ### `placeFact` (function) — 15 call sites
-- `src/services/boardComputers.ts:3266`
-- `src/services/boardComputers.ts:8120`
-- `src/services/learnTurnDoor.ts:805`
+- `src/services/boardComputers.ts:3284`
+- `src/services/boardComputers.ts:8141`
+- `src/services/learnTurnDoor.ts:809`
 - `src/services/moveThoughtFacts.ts:1309`
 - `src/services/moveThoughtFacts.ts:1326`
 - `src/services/openingStory.ts:422`
@@ -130,25 +128,25 @@
 - `src/services/reviewFacet.ts:113`
 - `src/services/reviewFacet.ts:125`
 - `src/services/teachingFact.ts:96`
-- `src/services/thoughtComposer.ts:183`
-- `src/services/thoughtReads.ts:125`
+- `src/services/thoughtComposer.ts:185`
+- `src/services/thoughtReads.ts:128`
 - `src/test/chatAnswersInFull.gate.test.ts:43`
 - `src/test/doorFact.ts:22`
 
 ### `stakesOf` (function) — 14 call sites
-- `src/services/boardComputers.ts:3267`
-- `src/services/boardComputers.ts:8120`
-- `src/services/coachFact.test.ts:115`
-- `src/services/coachFact.test.ts:121`
+- `src/services/boardComputers.ts:3285`
+- `src/services/boardComputers.ts:8141`
+- `src/services/coachFact.test.ts:116`
 - `src/services/coachFact.test.ts:122`
-- `src/services/learnTurnDoor.ts:806`
+- `src/services/coachFact.test.ts:123`
+- `src/services/learnTurnDoor.ts:810`
 - `src/services/moveThoughtFacts.ts:1310`
 - `src/services/moveThoughtFacts.ts:1327`
 - `src/services/openingStory.ts:423`
 - `src/services/positionFacts.ts:508`
 - `src/services/reviewFacet.ts:96`
 - `src/services/teachingFact.ts:98`
-- `src/services/thoughtReads.ts:125`
+- `src/services/thoughtReads.ts:128`
 - `src/test/doorFact.ts:24`
 
 ### `COMPUTER_CATALOG` (const) — 0 call sites

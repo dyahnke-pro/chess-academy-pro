@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5975) — names `planThread`
-- **The standard post-deploy ritual** (CLAUDE.md:7067) — names `planThread`
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5995) — names `planThread`
+- **The standard post-deploy ritual** (CLAUDE.md:7087) — names `planThread`
 
 ## Who calls in
 
@@ -26,11 +26,11 @@
 ## Exports and every call site
 
 ### `planChangeSentence` (function) — 2 call sites
-- `src/services/boardComputers.ts:3011`
-- `src/services/boardComputers.ts:3727`
+- `src/services/boardComputers.ts:3016`
+- `src/services/boardComputers.ts:3750`
 
 ### `structurePlanEvent` (function) — 7 call sites
-- `src/services/boardComputers.ts:3010`
+- `src/services/boardComputers.ts:3015`
 - `src/services/planThread.test.ts:190`
 - `src/services/planThread.test.ts:191`
 - `src/services/planThread.test.ts:192`
@@ -45,7 +45,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `adoptPlanTrial` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12397`
+- `src/components/Coach/CoachTeachPage.tsx:12396`
 - `src/services/gameStory.rewind.test.ts:27`
 - `src/services/planThread.test.ts:106`
 - `src/services/planThread.test.ts:113`
@@ -60,7 +60,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `planThreadTurn` (function) — 26 call sites
-- `src/services/boardComputers.ts:3260`
+- `src/services/boardComputers.ts:3278`
 - `src/services/gameStory.rewind.test.ts:25`
 - `src/services/planArcFade.test.ts:31`
 - `src/services/planChoice.test.ts:78`
@@ -107,8 +107,8 @@
 - `src/services/pictureStory.test.ts:77`
 
 ### `tellPictureFacts` (function) — 12 call sites
-- `src/services/boardReadFacts.ts:265`
-- `src/services/coachFeatureService.ts:2802`
+- `src/services/boardReadFacts.ts:359`
+- `src/services/coachFeatureService.ts:2803`
 - `src/services/learnSharedFacts.ts:113`
 - `src/services/pictureStory.test.ts:22`
 - `src/services/pictureStory.test.ts:29`

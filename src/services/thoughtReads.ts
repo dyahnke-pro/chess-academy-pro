@@ -20,7 +20,7 @@ import { criticalityThresholds } from './criticalityScan';
 import { moverCp, type LineScore } from './winChance';
 import type { BookJobKind } from './bookMoveWhy';
 import { deepFact, bindingFact, moveHit, type TheirTarget } from './threeFacts';
-import { moveAspects, joinReview, toClause } from './reviewMoveBriefing';
+import { moveAspects, joinReview, toClause, SUBJECT_LED } from './reviewMoveBriefing';
 import { buildReviewMoveTeachingFact } from './reviewMoveTeaching';
 import { NO_PREV_CAPTURE } from './captureRun';
 import { NO_FOLLOW } from './exchangeLedger';
@@ -246,7 +246,7 @@ export function replyAnswers(fen: string, line: readonly string[] | null, aim: T
 export function boardTeacherThought(make: (p: ThoughtParts) => CoachFact, w: MoveWords, phrases: PhraseMemory | null): CoachFact | null {
   const t = buildReviewMoveTeachingFact(w.fenBefore, w.san, w.moverIsStudent !== false, phrases);
   if (!t) return null;
-  const subjectLed = /^(The|A|An|This|That|Their|Your)\b/.test(t.text);
+  const subjectLed = SUBJECT_LED.test(t.text);
   return moveIdeaFact(make, w, {
     kind: 'board-teacher', idea: t.idea, weight: 50,
     text: unnamed(w) ? moveGerund(w, toClause(t.text)) : joinReview([toClause(t.text)], w.moverIsStudent, w.san, w.tense),

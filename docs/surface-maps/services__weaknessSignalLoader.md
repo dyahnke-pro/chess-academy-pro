@@ -4,17 +4,19 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**155 lines · 7 exports · 10 importers · 6 tests · 0 audits**
+**163 lines · 8 exports · 12 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:7031) — names `weaknessSignalLoader`
+- **The standard post-deploy ritual** (CLAUDE.md:7098) — names `weaknessSignalLoader`
 
 ## Who calls in
 
 - `src/components/Openings/OpeningPlayMode.tsx`
 - `src/hooks/useWeaknessSignals.ts`
 - `src/services/coachFeatureService.ts`
+- `src/services/discussionPractice.ts`
+- `src/services/learnBoardTeaching.ts`
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/recordReaders.oneRead.test.ts`
 - `src/services/studentNeedLoader.ts`
@@ -25,10 +27,14 @@
 
 ## Exports and every call site
 
+### `weaknessSignalsNow` (function) — 2 call sites
+- `src/services/discussionPractice.ts:169`
+- `src/services/learnBoardTeaching.ts:987`
+
 ### `loadWeaknessSignals` (function) — 9 call sites
 - `src/components/Openings/OpeningPlayMode.tsx:84`
 - `src/hooks/useWeaknessSignals.ts:24`
-- `src/services/coachFeatureService.ts:6419`
+- `src/services/coachFeatureService.ts:6464`
 - `src/services/loopCloses.review.integration.test.ts:82`
 - `src/services/puzzleService.ts:353`
 - `src/services/studentNeedLoader.ts:235`

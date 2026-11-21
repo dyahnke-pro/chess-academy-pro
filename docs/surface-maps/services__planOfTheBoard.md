@@ -34,8 +34,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `breakPlanText` (function) — 2 call sites
-- `src/services/planOfTheBoard.test.ts:59`
 - `src/services/planOfTheBoard.test.ts:61`
+- `src/services/planOfTheBoard.test.ts:63`
 
 ### `stepsText` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -44,12 +44,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `planOfTheBoard` (function) — 6 call sites
-- `src/services/boardComputers.ts:3665`
-- `src/services/pictureVerdict.ts:479`
-- `src/services/planOfTheBoard.test.ts:13`
-- `src/services/planOfTheBoard.test.ts:86`
-- `src/services/planOfTheBoard.test.ts:108`
-- `src/services/planOfTheBoard.test.ts:113`
+- `src/services/boardComputers.ts:3683`
+- `src/services/pictureVerdict.ts:464`
+- `src/services/planOfTheBoard.test.ts:15`
+- `src/services/planOfTheBoard.test.ts:88`
+- `src/services/planOfTheBoard.test.ts:110`
+- `src/services/planOfTheBoard.test.ts:115`
 
 ## Tests
 

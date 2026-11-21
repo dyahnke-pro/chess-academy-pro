@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**235 lines · 5 exports · 5 importers · 1 tests · 0 audits**
+**237 lines · 5 exports · 5 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -27,20 +27,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/slipCause.ts:116`
 
 ### `boardReason` (function) — 8 call sites
-- `src/services/boardReadFacts.ts:294`
+- `src/services/boardReadFacts.ts:424`
 - `src/services/positionalReason.test.ts:15`
 - `src/services/positionalReason.test.ts:52`
 - `src/services/positionalReason.test.ts:56`
 - `src/services/positionalReason.test.ts:59`
 - `src/services/positionalReason.test.ts:66`
 - `src/services/slipCause.ts:144`
-- `src/services/weighedMoves.ts:649`
+- `src/services/weighedMoves.ts:767`
 
 ### `bestJobReason` (function) — 1 call site
 - `src/services/slipCause.ts:144`
 
 ### `positionalReason` (function) — 4 call sites
-- `src/services/inaccuracyCall.ts:1550`
+- `src/services/inaccuracyCall.ts:1558`
 - `src/services/positionalReason.test.ts:16`
 - `src/services/positionalReason.test.ts:20`
 - `src/services/positionalReason.test.ts:24`

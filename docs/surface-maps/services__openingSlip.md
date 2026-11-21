@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5940) — names `openingSlip`
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5960) — names `openingSlip`
 
 ## Who calls in
 
@@ -26,7 +26,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `openingSlip` (function) — 5 call sites
-- `src/services/boardComputers.ts:2423`
+- `src/services/boardComputers.ts:2428`
 - `src/services/openingSlip.measure.test.ts:39`
 - `src/services/openingSlip.test.ts:26`
 - `src/services/openingSlip.test.ts:128`
@@ -38,7 +38,7 @@
 - `src/services/openingSlip.test.ts:125`
 
 ### `mastersBook` (function) — 2 call sites
-- `src/services/boardComputers.ts:2421`
+- `src/services/boardComputers.ts:2426`
 - `src/services/openingSlip.measure.test.ts:37`
 
 ### `bookMoveRead` (function) — 5 call sites

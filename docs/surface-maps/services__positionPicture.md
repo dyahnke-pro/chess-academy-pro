@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**472 lines · 11 exports · 10 importers · 5 tests · 0 audits**
+**461 lines · 10 exports · 10 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -51,8 +51,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionPicture.test.ts:40`
 
 ### `buildPicture` (function) — 21 call sites
-- `src/services/coachDecider.ts:549`
-- `src/services/phoneCost.measure.test.ts:60`
+- `src/services/coachDecider.ts:557`
+- `src/services/phoneCost.measure.test.ts:66`
 - `src/services/pictureAnswers.test.ts:51`
 - `src/services/pictureLedger.test.ts:50`
 - `src/services/pictureLedger.test.ts:96`
@@ -67,19 +67,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/pictureLedger.test.ts:283`
 - `src/services/pictureLedger.test.ts:288`
 - `src/services/pictureLedger.test.ts:296`
-- `src/services/pictureLedger.ts:990`
+- `src/services/pictureLedger.ts:998`
 - `src/services/positionPicture.test.ts:22`
 - `src/services/positionPicture.test.ts:31`
 - `src/services/positionPicture.test.ts:39`
-- `src/services/thoughtComposer.ts:619`
+- `src/services/thoughtComposer.ts:642`
 
 ### `isDetailOf` (function) — 3 call sites
-- `src/services/coachDecider.ts:557`
-- `src/services/thoughtComposer.ts:621`
-- `src/services/thoughtComposer.ts:626`
-
-### `linkedTo` (function) — 1 call site
-- `src/services/positionPicture.test.ts:25`
+- `src/services/coachDecider.ts:565`
+- `src/services/thoughtComposer.ts:644`
+- `src/services/thoughtComposer.ts:649`
 
 ## Tests
 

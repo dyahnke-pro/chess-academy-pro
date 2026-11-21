@@ -49,14 +49,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `newThreatsAtTurn` (function) — 7 call sites
 - `src/coach/focus/focusChances.ts:345`
 - `src/coach/focus/focusChances.ts:723`
-- `src/services/learnBoardTeaching.ts:1084`
+- `src/services/learnBoardTeaching.ts:1087`
 - `src/services/threatAnswerEvidence.measure.test.ts:58`
 - `src/services/threatAnswerEvidence.test.ts:38`
 - `src/services/threatAnswerEvidence.test.ts:42`
 - `src/services/threatAnswerEvidence.test.ts:52`
 
 ### `recordThreatAnswer` (function) — 1 call site
-- `src/services/learnBoardTeaching.ts:1085`
+- `src/services/learnBoardTeaching.ts:1088`
 
 ## Tests
 

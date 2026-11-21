@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **The tools are COMPUTERS** (CLAUDE.md:392) — names `detectTactics`
-- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5766) — names `detectTactics`
+- **The tools are COMPUTERS** (CLAUDE.md:402) — names `detectTactics`
+- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5786) — names `detectTactics`
 
 ## Who calls in
 
@@ -75,7 +75,7 @@
 - `src/services/tacticLineRotation.test.ts:22`
 
 ### `tacticDescription` (function) — 5 call sites
-- `src/services/boardComputers.ts:2338`
+- `src/services/boardComputers.ts:2343`
 - `src/services/lookaheadPlan.ts:137`
 - `src/services/tacticLineRotation.test.ts:31`
 - `src/services/tacticLineRotation.test.ts:34`
@@ -85,14 +85,14 @@
 - `src/components/Tactics/PatternSchoolPage.tsx:71`
 - `src/missions/patterns/agreement.test.ts:48`
 - `src/missions/patterns/agreement.test.ts:65`
-- `src/services/boardComputers.ts:2278`
+- `src/services/boardComputers.ts:2283`
 - `src/services/boardConcepts.ts:296`
 - `src/services/computerAccuracy.audit.test.ts:117`
-- `src/services/conceptEngine.ts:516`
-- `src/services/conceptEngine.ts:757`
+- `src/services/conceptEngine.ts:530`
+- `src/services/conceptEngine.ts:771`
 - `src/services/danyaBehaviors.ts:491`
-- `src/services/discussionPractice.ts:61`
-- `src/services/discussionPractice.ts:106`
+- `src/services/discussionPractice.ts:63`
+- `src/services/discussionPractice.ts:108`
 - `src/services/learnRecordTerms.ts:178`
 - `src/services/learnWalkOct3c.test.ts:91`
 - `src/services/learnWalkOct3c.test.ts:97`
@@ -139,9 +139,9 @@
 - `src/services/reviewDepth.eval.measure.test.ts:258`
 - `src/services/reviewFullData.ts:773`
 - `src/services/reviewFullData.ts:795`
-- `src/services/reviewFullData.ts:1523`
-- `src/services/reviewMoveBriefing.ts:139`
+- `src/services/reviewFullData.ts:1525`
 - `src/services/reviewMoveBriefing.ts:140`
+- `src/services/reviewMoveBriefing.ts:141`
 - `src/services/reviewNarrationFidelity.test.ts:227`
 - `src/services/reviewOpponentCommentary.ts:74`
 - `src/services/reviewWalk1500.test.ts:23`
@@ -152,7 +152,7 @@
 - `src/services/tacticLaneVocabulary.test.ts:69`
 - `src/services/tacticVisuals.ts:43`
 - `src/services/tacticVisuals.ts:60`
-- `src/services/tacticalRead.ts:159`
+- `src/services/tacticalRead.ts:160`
 - `src/services/tacticsDetector.expansion.test.ts:10`
 - `src/services/tacticsDetector.expansion.test.ts:73`
 - `src/services/tacticsDetector.groundTruth.test.ts:48`
@@ -199,8 +199,8 @@
 - `src/services/threatAnswerEvidence.ts:213`
 - `src/services/threatSaidOnce.os1.test.ts:17`
 - `src/services/weaknessAnalyzer.ts:1184`
-- `src/services/weighedMoves.ts:333`
-- `src/services/weighedMoves.ts:640`
+- `src/services/weighedMoves.ts:398`
+- `src/services/weighedMoves.ts:756`
 - `src/test/narrationScanner.ts:135`
 
 ## Tests

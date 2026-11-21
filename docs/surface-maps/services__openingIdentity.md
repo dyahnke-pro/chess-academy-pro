@@ -51,7 +51,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `warmOpeningIdentity` (function) — 3 call sites
 - `src/components/Coach/CoachGameReview.tsx:366`
-- `src/components/Coach/CoachTeachPage.tsx:1082`
+- `src/components/Coach/CoachTeachPage.tsx:1081`
 - `src/services/reviewOpeningTheory.ts:268`
 
 ### `openingIdentityLoaded` (function) — 0 call sites
@@ -66,9 +66,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachFeatureService.reviewNoise.test.ts:171`
 - `src/services/coachFeatureService.studentJob.test.ts:15`
 - `src/services/coachFeatureService.studentJob.test.ts:23`
-- `src/services/danyaBench.measure.test.ts:905`
+- `src/services/danyaBench.measure.test.ts:907`
 - `src/services/learnBoardTeaching.openingPlan.test.ts:13`
-- `src/services/moveThoughtFacts.test.ts:403`
+- `src/services/moveThoughtFacts.test.ts:404`
 - `src/services/openingDatabaseBrief.test.ts:12`
 - `src/services/openingGenerator.explorerBranches.test.ts:76`
 - `src/services/openingIdea.test.ts:9`
@@ -87,13 +87,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/test/replayGame.ts:35`
 
 ### `identityFor` (function) — 3 call sites
-- `src/services/coachFeatureService.ts:2568`
+- `src/services/coachFeatureService.ts:2569`
 - `src/services/openingIdentity.test.ts:36`
 - `src/services/openingStory.ts:281`
 
 ### `planFor` (function) — 10 call sites
-- `src/services/coachFeatureService.ts:2568`
-- `src/services/learnBoardTeaching.ts:580`
+- `src/services/coachFeatureService.ts:2569`
+- `src/services/learnBoardTeaching.ts:582`
 - `src/services/lookaheadPlan.ts:547`
 - `src/services/lookaheadPlan.ts:1247`
 - `src/services/lookaheadPlan.ts:1248`
@@ -110,7 +110,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isWaypointOpening` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:2568`
+- `src/services/coachFeatureService.ts:2569`
 - `src/services/openingAnnouncement.ts:114`
 - `src/services/openingStory.ts:255`
 - `src/services/openingStory.ts:262`

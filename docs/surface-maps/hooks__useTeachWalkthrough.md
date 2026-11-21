@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3820) — names `useTeachWalkthrough`
-- **Deployment Policy** (CLAUDE.md:6455) — names `useTeachWalkthrough`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3840) — names `useTeachWalkthrough`
+- **Deployment Policy** (CLAUDE.md:6475) — names `useTeachWalkthrough`
 
 ## Who calls in
 
@@ -46,7 +46,7 @@
 
 ### `useTeachWalkthrough` (function) — 18 call sites
 - `src/components/Coach/CoachEndgamePage.tsx:120`
-- `src/components/Coach/CoachTeachPage.tsx:1093`
+- `src/components/Coach/CoachTeachPage.tsx:1092`
 - `src/hooks/useTeachWalkthrough.test.tsx:87`
 - `src/hooks/useTeachWalkthrough.test.tsx:96`
 - `src/hooks/useTeachWalkthrough.test.tsx:135`
@@ -65,7 +65,7 @@
 - `src/hooks/useTeachWalkthrough.test.tsx:725`
 
 ### `isStartablePunishLesson` (re-export) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:17349`
+- `src/components/Coach/CoachTeachPage.tsx:17350`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:80`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:84`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:85`
@@ -98,7 +98,7 @@
 - `src/services/stageEntryValidity.ts:96`
 
 ### `isValidDrillLine` (re-export) — 6 call sites
-- `src/components/Coach/CoachTeachPage.tsx:17455`
+- `src/components/Coach/CoachTeachPage.tsx:17456`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:143`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:162`
 - `src/hooks/useTeachWalkthrough.punishGuards.test.ts:163`

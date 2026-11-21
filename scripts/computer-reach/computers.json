@@ -3167,29 +3167,6 @@
   ]
  },
  {
-  "name": "notYet + inBetweenMove — 'not yet, first this' (the in-between move)",
-  "file": "services/thinkAloud.ts",
-  "fn": "notYet",
-  "says": "A capture is on the board, the engine's best is a different FORCING move (check or a hit on a piece worth >= the mover), and the capture is",
-  "origin": "map",
-  "nodes": [
-   "services/thinkAloud.ts#notYet"
-  ]
- },
- {
-  "name": "thinkAloud.obviousStopFlaw (the obvious stop that fails)",
-  "file": "services/thinkAloud.ts",
-  "fn": "obviousStopFlaw",
-  "says": "findProphylaxis's pawn stop creates a hook for their pawn and the engine ranks it a notable step below best: 'They want …Bg4, pinning your k",
-  "origin": "map",
-  "nodes": [
-   "services/thinkAloud.ts#obviousStopFlaw"
-  ],
-  "aka": [
-   "obviousStopFlaw — the obvious stop that does not work"
-  ]
- },
- {
   "name": "thinkingAnswerDangerStep",
   "file": "services/thinkingAnswerDangerStep.ts",
   "fn": "(module)",

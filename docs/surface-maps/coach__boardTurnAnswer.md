@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**530 lines · 6 exports · 9 importers · 10 tests · 0 audits**
+**529 lines · 6 exports · 9 importers · 11 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -36,9 +36,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/boardTurnAnswer.test.ts:30`
 - `src/coach/boardTurnAnswer.test.ts:39`
 - `src/coach/boardTurnAnswer.test.ts:63`
-- `src/coach/boardTurnAnswer.test.ts:90`
-- `src/coach/boardTurnAnswer.test.ts:110`
-- `src/coach/boardTurnAnswer.test.ts:126`
+- `src/coach/boardTurnAnswer.test.ts:93`
+- `src/coach/boardTurnAnswer.test.ts:113`
+- `src/coach/boardTurnAnswer.test.ts:129`
 - `src/coach/chatTurnRow.outcome.test.ts:29`
 - `src/coach/chatTurnRow.outcome.test.ts:37`
 - `src/coach/developNext.test.ts:17`
@@ -71,12 +71,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/boardTurnAnswer.test.ts:54`
 - `src/coach/boardTurnAnswer.test.ts:55`
 - `src/coach/boardTurnAnswer.test.ts:72`
-- `src/coach/boardTurnAnswer.test.ts:78`
-- `src/coach/boardTurnAnswer.test.ts:82`
-- `src/coach/boardTurnAnswer.test.ts:103`
-- `src/coach/boardTurnAnswer.test.ts:117`
-- `src/coach/boardTurnAnswer.test.ts:138`
-- `src/coach/boardTurnAnswer.test.ts:144`
+- `src/coach/boardTurnAnswer.test.ts:81`
+- `src/coach/boardTurnAnswer.test.ts:85`
+- `src/coach/boardTurnAnswer.test.ts:106`
+- `src/coach/boardTurnAnswer.test.ts:120`
+- `src/coach/boardTurnAnswer.test.ts:141`
+- `src/coach/boardTurnAnswer.test.ts:147`
 - `src/coach/dispatchCoachTurn.ts:583`
 - `src/coach/dispatchCoachTurn.ts:637`
 
@@ -107,6 +107,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/coach/handWalk1009.test.ts`
 - `src/coach/lineOutcome.test.ts`
 - `src/test/chatAnswersInFull.gate.test.ts`
+- `src/test/oneCoachUnlocked.gate.test.ts`
 
 ## Audits that reach it
 

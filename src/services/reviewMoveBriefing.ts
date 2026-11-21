@@ -677,8 +677,15 @@ export function toClause(sentence: string): string {
   // "Your knight …" / "Their knight …" HAVE a subject (the board teacher names
   // whose piece since 2026-11-08): read as verb-led, they became "it their
   // knight joins the fight" on every Review and lesson turn.
-  return /^(The|A|An|This|That|Your|Their)\b/.test(s) ? clause : `it ${clause}`;
+  // A sentence led by a clause of its own ("Once you take back, your c-pawn
+  // is isolated") has its subject after the comma: read as verb-led it became
+  // "They play dxc3: it once you take back, …" (baseline 2026-11-21).
+  return SUBJECT_LED.test(s) ? clause : `it ${clause}`;
 }
+
+/** A teaching sentence that carries its own subject: an article or an owner,
+ *  or a leading clause ("Once …, ", "If …, ", "When …, ", "After …, "). */
+export const SUBJECT_LED = /^(?:(?:The|A|An|This|That|Your|Their)\b|(?:Once|If|When|After|Before|Unless)\b[^,]*,\s)/;
 
 /** Join the ranked aspect clauses into one review-register sentence, seat-stamped:
  *  the student is "you", the opponent "they". A seat-free caller gets "The move X". */

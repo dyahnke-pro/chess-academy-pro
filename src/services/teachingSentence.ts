@@ -202,7 +202,17 @@ export function renderTryReason(t: TryData): string | null {
   const why = t.why.trim();
   if (!t.whyPath) return why;
   // The reason's first word joins the clause; a move (SAN) keeps its case.
-  return `After ${t.whyPath}, ${/^(?:[KQRBN][a-h1-8x]|O-O)/.test(why) ? why : why.replace(/^[A-Z](?=[a-z'’])/, (w) => w.toLowerCase())}`;
+  const joined = /^(?:[KQRBN][a-h1-8x]|O-O)/.test(why) ? why : why.replace(/^[A-Z](?=[a-z'’])/, (w) => w.toLowerCase());
+  // The path IS the reply the lead just named ("…f6 meets it. After …f6,
+  // their pawn on f6 is aimed at …" said the move and its square three
+  // times): no second anchor, and the piece the reply moved is "that pawn".
+  if (t.whyPath.trim() === t.reply.trim()) {
+    const to = /([a-h][1-8])(?:=[QRBN])?$/.exec(t.reply.replace(/[+#!?]+$/, ''))?.[1];
+    const own = to ? new RegExp(`^(?:Their|Your) (\\w+) on ${to}\\b`).exec(why) : null;
+    if (own) return `That ${own[1]}${why.slice(own[0].length)}`;
+    return `Then ${joined}`;
+  }
+  return `After ${t.whyPath}, ${joined}`;
 }
 
 /** ONE COST: the line's mate, the material it hands over, or the result's

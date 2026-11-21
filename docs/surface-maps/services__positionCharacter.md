@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**309 lines · 12 exports · 11 importers · 6 tests · 0 audits**
+**310 lines · 12 exports · 11 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -38,11 +38,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionCharacter.test.ts:92`
 - `src/services/positionCharacter.test.ts:93`
 - `src/services/positionCharacter.test.ts:94`
-- `src/services/positionFacts.ts:1993`
-- `src/services/positionReadComposer.ts:124`
+- `src/services/positionFacts.ts:1999`
+- `src/services/positionReadComposer.ts:154`
 
 ### `bestMoveGap` (function) — 1 call site
-- `src/services/positionFacts.ts:1992`
+- `src/services/positionFacts.ts:1998`
 
 ### `provenTacticLive` (function) — 3 call sites
 - `src/services/positionCharacter.pin.test.ts:17`
@@ -75,8 +75,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `characterTurn` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:11691`
-- `src/services/coachFeatureService.ts:2299`
+- `src/components/Coach/CoachTeachPage.tsx:11690`
+- `src/services/coachFeatureService.ts:2300`
 - `src/services/learnTurnDoor.test.ts:324`
 - `src/services/learnTurnDoor.test.ts:330`
 - `src/services/learnTurnDoor.test.ts:331`
@@ -87,7 +87,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `boardKind` (function) — 12 call sites
-- `src/services/boardReadFacts.ts:158`
+- `src/services/boardReadFacts.ts:197`
 - `src/services/positionCharacter.boardKind.test.ts:8`
 - `src/services/positionCharacter.boardKind.test.ts:9`
 - `src/services/positionCharacter.boardKind.test.ts:14`

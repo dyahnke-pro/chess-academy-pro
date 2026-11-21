@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:258) — names `PLANTABLE`, `chanceHoldOf`, `chancesAt`, `focusChances`
-- **🔒🔒 LEARN SPEAKS ON A MOMENT, AND IS QUIET OTHERWISE (David 2026-11-18: "So learn narrations are needed only when the player makes an error of some kind … And it knows when not to say anything. Like a chess coach." → "Or it can be used to reenforce proper move behavior" → "It gets more quiet if you make all the right moves. But it speaks on errors").** (CLAUDE.md:5902) — names `focusChances`, `walkedInto`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:268) — names `PLANTABLE`, `chanceHoldOf`, `chancesAt`, `focusChances`
+- **🔒🔒 LEARN SPEAKS ON A MOMENT, AND IS QUIET OTHERWISE (David 2026-11-18: "So learn narrations are needed only when the player makes an error of some kind … And it knows when not to say anything. Like a chess coach." → "Or it can be used to reenforce proper move behavior" → "It gets more quiet if you make all the right moves. But it speaks on errors").** (CLAUDE.md:5922) — names `focusChances`, `walkedInto`
 
 ## Who calls in
 
@@ -64,7 +64,7 @@
 - `src/coach/focus/focusChances.test.ts:512`
 - `src/coach/focus/focusChances.test.ts:516`
 - `src/coach/focus/focusChances.test.ts:519`
-- `src/components/Coach/CoachTeachPage.tsx:2437`
+- `src/components/Coach/CoachTeachPage.tsx:2436`
 
 ### `FocusMove` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -151,13 +151,13 @@
 - `src/coach/focus/focusChances.test.ts:505`
 - `src/coach/focus/focusChances.test.ts:515`
 - `src/coach/focus/focusChances.test.ts:531`
-- `src/coach/focus/focusPlant.ts:370`
+- `src/coach/focus/focusPlant.ts:377`
 - `src/coach/focus/focusRunner.ts:429`
 
 ### `yourChancesAt` (function) — 3 call sites
 - `src/coach/focus/focusChances.test.ts:532`
 - `src/coach/focus/focusPlant.ts:279`
-- `src/coach/focus/focusPlant.ts:336`
+- `src/coach/focus/focusPlant.ts:343`
 
 ### `judgeChance` (function) — 25 call sites
 - `src/coach/focus/focusChances.test.ts:133`
@@ -206,7 +206,7 @@
 - `src/coach/focus/focusChances.test.ts:470`
 - `src/coach/focus/focusChances.test.ts:480`
 - `src/coach/focus/focusChances.test.ts:481`
-- `src/components/Coach/CoachTeachPage.tsx:14120`
+- `src/components/Coach/CoachTeachPage.tsx:14121`
 - `src/services/boardBundle.ts:158`
 - `src/services/boardBundle.ts:386`
 - `src/services/boardBundle.ts:440`

@@ -35,7 +35,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planBeatShape.test.ts:78`
 
 ### `buildMiddlegameOrientation` (function) — 15 call sites
-- `src/services/boardComputers.ts:2021`
+- `src/services/boardComputers.ts:2026`
 - `src/services/reviewStrategicOrientation.test.ts:4`
 - `src/services/reviewStrategicOrientation.test.ts:8`
 - `src/services/reviewStrategicOrientation.test.ts:19`
