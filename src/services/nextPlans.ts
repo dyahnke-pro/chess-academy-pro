@@ -400,13 +400,7 @@ export function deriveNextPlanFacts(
       // A pawn ending's passer their king takes is no plan to promote (Danya,
       // beginner chess strategy #6: c3 "two pushes from queening" with their
       // king beside c2).
-      // A push that drops the pawn is no plan to promote, and the structure
-      // read already says so ("can't advance yet … needs guarding"): one
-      // reader, `passerStopper`, decides for both (Danya have-check, the
-      // double attack #2 and the anatomy of a brilliancy #2 — the isolated
-      // d5 / c6 "four pushes from queening" beside "it can't advance").
-      return !(blocker && blocker.color === enemy) && kingCatchesPasser(chess, sq, studentColorWB, 'now') !== true
-        && passerStopper(chess.fen(), sq, studentColorWB) === null;
+      return !(blocker && blocker.color === enemy) && kingCatchesPasser(chess, sq, studentColorWB, 'now') !== true;
     })
     .map((sq, i) => ({ sq, i }))
     .sort((a, b) => pushesLeft(a.sq) - pushesLeft(b.sq) || Number(kingInFront(a.sq)) - Number(kingInFront(b.sq)) || kingReach(b.sq) - kingReach(a.sq) || a.i - b.i)[0]?.sq;
