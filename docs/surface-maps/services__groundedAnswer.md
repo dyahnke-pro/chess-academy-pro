@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**8099 lines · 123 exports · 109 importers · 86 tests · 8 audits**
+**8144 lines · 124 exports · 110 importers · 87 tests · 8 audits**
 
 ## Locked rules that govern this surface
 
@@ -33,6 +33,7 @@
 - `src/components/Tactics/TacticSetupBoard.tsx`
 - `src/hooks/useHintSystem.ts`
 - `src/services/answerBoardQuestion.test.ts`
+- `src/services/askedLineDeparture.test.ts`
 - `src/services/attackAssessment.test.ts`
 - `src/services/bestMoveQuietLine.test.ts`
 - `src/services/bluffDetector.ts`
@@ -417,8 +418,8 @@
 - `src/services/coachFeatureService.test.ts:70`
 - `src/services/coachFeatureService.test.ts:85`
 - `src/services/coachFeatureService.test.ts:92`
-- `src/services/coachFeatureService.ts:3681`
-- `src/services/coachFeatureService.ts:3713`
+- `src/services/coachFeatureService.ts:3697`
+- `src/services/coachFeatureService.ts:3729`
 - `src/services/computerAccuracy.audit.test.ts:111`
 - `src/services/explainBestMoveLines.test.ts:15`
 - `src/services/explainBestMoveLines.test.ts:19`
@@ -436,7 +437,7 @@
 
 ### `captureHasCounterTactic` (function) — 2 call sites
 - `src/services/inaccuracyCall.ts:1161`
-- `src/services/reviewTeachingPoints.ts:116`
+- `src/services/reviewTeachingPoints.ts:117`
 
 ### `describeMoveGeometry` (function) — 21 call sites
 - `src/coach/chatTurnAnswers.ts:748`
@@ -466,7 +467,7 @@
 - `src/services/quietPurposeSquares.test.ts:22`
 
 ### `describeMoveMerit` (function) — 7 call sites
-- `src/services/coachFeatureService.ts:1292`
+- `src/services/coachFeatureService.ts:1294`
 - `src/services/keySquares.test.ts:85`
 - `src/services/keySquares.test.ts:94`
 - `src/services/keySquares.test.ts:98`
@@ -479,7 +480,7 @@
 - `src/services/brilliancy.ts:130`
 - `src/services/coachFeatureService.test.ts:101`
 - `src/services/coachFeatureService.test.ts:107`
-- `src/services/coachFeatureService.ts:1292`
+- `src/services/coachFeatureService.ts:1294`
 
 ### `describeEscape` (function) — 4 call sites
 - `src/services/describeEscape.test.ts:10`
@@ -507,7 +508,7 @@
 - `src/services/hardWalk.mates.test.ts:84`
 
 ### `explainMoveOrder` (function) — 8 call sites
-- `src/services/coachFeatureService.ts:1154`
+- `src/services/coachFeatureService.ts:1156`
 - `src/services/groundedAnswer.test.ts:1045`
 - `src/services/groundedAnswer.test.ts:1053`
 - `src/services/groundedAnswer.test.ts:1060`
@@ -1073,7 +1074,7 @@
 - `src/data/patternRegistry.ts:43`
 - `src/data/patternRegistry.ts:123`
 - `src/services/bluffDetector.ts:79`
-- `src/services/boardComputers.ts:6087`
+- `src/services/boardComputers.ts:6093`
 - `src/services/captureThreatAnswerable.test.ts:13`
 - `src/services/captureThreatAnswerable.test.ts:29`
 - `src/services/engineDeltaLines.ts:53`
@@ -1087,12 +1088,12 @@
 - `src/services/opponentMovePurpose.ts:64`
 - `src/services/replyJob.ts:111`
 - `src/services/replyJob.ts:193`
-- `src/services/reviewMoveBriefing.ts:354`
+- `src/services/reviewMoveBriefing.ts:356`
 - `src/services/reviewNarrationFidelity.test.ts:141`
 - `src/services/reviewNarrationFidelity.test.ts:150`
 - `src/services/reviewNarrationFidelity.test.ts:162`
 - `src/services/reviewNarrationFidelity.test.ts:176`
-- `src/services/reviewTeachingPoints.ts:395`
+- `src/services/reviewTeachingPoints.ts:398`
 - `src/test/captureSaidOnce.gate.test.ts:226`
 
 ### `captureThreatIsAnswerable` (function) — 2 call sites
@@ -1100,13 +1101,13 @@
 - `src/services/captureThreatAnswerable.test.ts:18`
 
 ### `describeStudentThreat` (function) — 4 call sites
-- `src/services/coachFeatureService.ts:3960`
+- `src/services/coachFeatureService.ts:3976`
 - `src/services/reviewNarrationFidelity.test.ts:107`
 - `src/services/reviewNarrationFidelity.test.ts:119`
 - `src/services/reviewNarrationFidelity.test.ts:127`
 
 ### `forkAlignmentClause` (function) — 1 call site
-- `src/services/reviewTeachingPoints.ts:440`
+- `src/services/reviewTeachingPoints.ts:443`
 
 ### `describeThreatRecognition` (function) — 4 call sites
 - `src/services/learnMoveTeaching.ts:131`
@@ -1116,7 +1117,7 @@
 
 ### `describeThreatPrevention` (function) — 3 call sites
 - `src/data/patternRegistry.ts:103`
-- `src/services/boardComputers.ts:6090`
+- `src/services/boardComputers.ts:6096`
 - `src/services/reviewNarrationFidelity.test.ts:177`
 
 ### `ComparedMove` (interface) — 0 call sites
@@ -1153,14 +1154,25 @@
 - `src/services/coachApi.ts:6287`
 - `src/services/coachApi.ts:6313`
 
+### `askedLineLeft` (function) — 9 call sites
+- `src/components/Coach/CoachGamePage.tsx:3056`
+- `src/components/Coach/CoachTeachPage.tsx:9732`
+- `src/services/askedLineDeparture.test.ts:43`
+- `src/services/askedLineDeparture.test.ts:53`
+- `src/services/askedLineDeparture.test.ts:54`
+- `src/services/askedLineDeparture.test.ts:56`
+- `src/services/askedLineDeparture.test.ts:74`
+- `src/services/askedLineDeparture.test.ts:77`
+- `src/services/askedLineDeparture.test.ts:80`
+
 ### `seatPieceReferences` (re-export) — 40 call sites
-- `src/components/Coach/CoachTeachPage.tsx:9388`
+- `src/components/Coach/CoachTeachPage.tsx:9411`
 - `src/services/boardComputers.ts:2092`
 - `src/services/boardComputers.ts:2153`
 - `src/services/boardComputers.ts:2290`
-- `src/services/coachFeatureService.ts:5459`
-- `src/services/coachFeatureService.ts:5548`
-- `src/services/coachFeatureService.ts:6601`
+- `src/services/coachFeatureService.ts:5475`
+- `src/services/coachFeatureService.ts:5564`
+- `src/services/coachFeatureService.ts:6608`
 - `src/services/liveTacticsContext.ts:484`
 - `src/services/liveTacticsContext.ts:493`
 - `src/services/lookaheadPlan.ts:141`
@@ -1172,8 +1184,8 @@
 - `src/services/reviewBoardAwareness.test.ts:55`
 - `src/services/reviewBoardAwareness.test.ts:56`
 - `src/services/reviewBoardAwareness.test.ts:57`
-- `src/services/reviewFullData.ts:550`
-- `src/services/reviewFullData.ts:571`
+- `src/services/reviewFullData.ts:560`
+- `src/services/reviewFullData.ts:581`
 - `src/services/reviewNarrationFidelity.test.ts:22`
 - `src/services/reviewNarrationFidelity.test.ts:30`
 - `src/services/reviewNarrationFidelity.test.ts:36`
@@ -1205,6 +1217,7 @@
 - `src/coach/questionWalk.sicilian1200.test.ts`
 - `src/components/Coach/CoachGamePage.playSilent.test.ts`
 - `src/services/answerBoardQuestion.test.ts`
+- `src/services/askedLineDeparture.test.ts`
 - `src/services/attackAssessment.test.ts`
 - `src/services/bestMoveQuietLine.test.ts`
 - `src/services/boardUrgency.test.ts`

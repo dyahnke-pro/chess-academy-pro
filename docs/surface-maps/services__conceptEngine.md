@@ -144,8 +144,8 @@
 - `src/services/endgameTechnique.test.ts:61`
 - `src/services/endgameTechnique.test.ts:74`
 - `src/services/endgameTechnique.test.ts:224`
-- `src/services/groundedAnswer.ts:4412`
-- `src/services/groundedAnswer.ts:7268`
+- `src/services/groundedAnswer.ts:4420`
+- `src/services/groundedAnswer.ts:7276`
 
 ### `conceptForBoard` (function) — 12 call sites
 - `src/services/boardComputers.ts:3183`
@@ -186,7 +186,7 @@
 - `src/services/conceptVocabulary.test.ts:63`
 
 ### `definitionKey` (function) — 7 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8743`
+- `src/components/Coach/CoachTeachPage.tsx:8742`
 - `src/services/boardComputers.ts:2136`
 - `src/services/learnWalkBlumenfeld.test.ts:144`
 - `src/services/positionFacts.ts:1434`

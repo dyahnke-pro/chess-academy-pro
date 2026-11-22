@@ -175,7 +175,7 @@
 ### `findWorstPlacedPiece` (re-export) — 27 call sites
 - `src/services/badPieceOncePerPly.test.ts:15`
 - `src/services/coachFeatureService.ts:5848`
-- `src/services/groundedAnswer.ts:1500`
+- `src/services/groundedAnswer.ts:1508`
 - `src/services/moveInsight.ts:359`
 - `src/services/nextPlans.test.ts:10`
 - `src/services/nextPlans.test.ts:34`

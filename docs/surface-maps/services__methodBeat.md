@@ -98,8 +98,8 @@
 - `src/services/slipQuestion.test.ts:53`
 
 ### `habitSaidKey` (function) — 5 call sites
+- `src/components/Coach/CoachTeachPage.tsx:10845`
 - `src/components/Coach/CoachTeachPage.tsx:10846`
-- `src/components/Coach/CoachTeachPage.tsx:10847`
 - `src/services/learnBoardTeaching.ts:250`
 - `src/services/learnBoardTeaching.ts:989`
 - `src/services/slipQuestion.test.ts:53`
@@ -125,7 +125,7 @@
 - `src/services/mustDefendHabit.test.ts:15`
 
 ### `liveMethodBeatFor` (function) — 24 call sites
-- `src/services/groundedAnswer.ts:4073`
+- `src/services/groundedAnswer.ts:4081`
 - `src/services/methodBeat.live.test.ts:15`
 - `src/services/methodBeat.live.test.ts:19`
 - `src/services/methodBeat.live.test.ts:20`

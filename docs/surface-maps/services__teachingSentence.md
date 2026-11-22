@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**986 lines · 73 exports · 34 importers · 7 tests · 35 audits**
+**986 lines · 73 exports · 33 importers · 7 tests · 35 audits**
 
 ## Locked rules that govern this surface
 
@@ -23,7 +23,6 @@
 ## Who calls in
 
 - `src/services/askedLineDeparture.test.ts`
-- `src/services/askedLineLeft.ts`
 - `src/services/boardComputers.ts`
 - `src/services/boardReadFacts.ts`
 - `src/services/boardUrgency.ts`
@@ -91,8 +90,8 @@
 - `src/services/gemCrushLines.ts:222`
 - `src/services/gemCrushLines.ts:225`
 - `src/services/gemCrushLines.ts:251`
-- `src/services/openingDetectionService.ts:191`
-- `src/services/openingDetectionService.ts:195`
+- `src/services/openingDetectionService.ts:190`
+- `src/services/openingDetectionService.ts:194`
 - `src/services/positionProvenance.ts:57`
 - `src/services/positionProvenance.ts:69`
 - `src/services/positionProvenance.ts:84`
@@ -644,7 +643,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `renderSacrificeVerdict` (function) — 1 call site
-- `src/services/groundedAnswer.ts:2598`
+- `src/services/groundedAnswer.ts:2606`
 
 ### `renderTemptingTurn` (function) — 1 call site
 - `src/services/tacticalRead.ts:409`
@@ -681,11 +680,11 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `renderThreatAnswer` (function) — 5 call sites
-- `src/services/groundedAnswer.ts:7808`
-- `src/services/groundedAnswer.ts:7817`
-- `src/services/groundedAnswer.ts:7826`
-- `src/services/groundedAnswer.ts:7832`
-- `src/services/groundedAnswer.ts:7843`
+- `src/services/groundedAnswer.ts:7816`
+- `src/services/groundedAnswer.ts:7825`
+- `src/services/groundedAnswer.ts:7834`
+- `src/services/groundedAnswer.ts:7840`
+- `src/services/groundedAnswer.ts:7851`
 
 ### `LatentPinData` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -812,7 +811,7 @@
 
 ### `renderAskedLineLeft` (function) — 2 call sites
 - `src/services/askedLineDeparture.test.ts:60`
-- `src/services/askedLineLeft.ts:50`
+- `src/services/groundedAnswer.ts:8141`
 
 ### `renderBreakHits` (function) — 1 call site
 - `src/services/planSteps.ts:499`

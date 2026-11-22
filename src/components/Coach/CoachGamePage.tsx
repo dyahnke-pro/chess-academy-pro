@@ -91,7 +91,6 @@ import { limitStrengthElo } from '../../services/engineConstants';
 import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { resolveConfig as resolvePlayConfig, ratedPlayMove } from '../../services/coachPlaySession';
 import { detectOpening, getOpeningMoves } from '../../services/openingDetectionService';
-import { askedLineLeft } from '../../services/askedLineLeft';
 import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUtils';
 import { uciMoveToSan, uciLinesToSan } from '../../utils/uciToSan';
 import { db } from '../../db/schema';
@@ -114,7 +113,7 @@ import type {
 } from '../../types';
 import type { MoveResult } from '../../hooks/useChessGame';
 import { classifyMoveFull, priceAndClassifyLiveMove, findKeyMoments, type MovePrice } from '../../services/moveRating';
-import { ownHangingLine as hangingLineFor } from '../../services/groundedAnswer';
+import { ownHangingLine as hangingLineFor, askedLineLeft } from '../../services/groundedAnswer';
 import { LocalizedCoachText } from './ChatMessage';
 import { DEFAULT_STUDENT_RATING } from '../../services/ratingBands';
 

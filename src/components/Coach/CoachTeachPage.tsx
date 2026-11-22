@@ -169,7 +169,6 @@ import {
   readSharedCache,
   writeSharedCache,
 } from '../../services/sharedOpeningCache';
-import { askedLineLeft } from '../../services/askedLineLeft';
 import {
   getOpeningMoves,
   findLinePickerOptions,
@@ -333,7 +332,7 @@ import { detectOpponentGap, opponentGapClause, gapEchoedByVerdict } from '../../
 import { tacticsAreFreshFor, buildTacticsLiveContext, buildFedTacticsContext, openThreatLine, isLoudAlarm, dangerRank, PIECE_DANGER_RANK, upcomingTacticSquares } from '../../services/liveTacticsContext';
 import { buildCausalChain, causalChainHighlights, causalChainKey } from '../../services/causalChain';
 import { renderCausalChain } from '../../services/causalChainVoice';
-import { seatPieceReferences } from '../../services/groundedAnswer';
+import { seatPieceReferences, askedLineLeft } from '../../services/groundedAnswer';
 import { rankByPopularity, popularityLabel, type RankedLineOption } from '../../services/linePickerPopularity';
 import { stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
 import { applyCandidateArrows, candidateHighlightMarkers, gradeNarrationText } from '../../services/coachAnswerGates';

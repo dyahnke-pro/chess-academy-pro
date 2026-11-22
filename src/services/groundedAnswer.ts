@@ -12,12 +12,20 @@
  * Pure + side-effect-free so it's trivially testable and can't regress the
  * live chat. Wiring it into `getCoachChatResponse` is the next step.
  */
-import { renderSacrificeVerdict, renderThreatAnswer, type SacrificeVerdict } from './teachingSentence';
+import { renderSacrificeVerdict, renderThreatAnswer, renderAskedLineLeft, type SacrificeVerdict } from './teachingSentence';
 import { candidateCct, candidateCctSentence } from './candidateCct';
 import { type WeighRead } from './weighedMoves';
 import { realMasterMoves } from './realMasterMoves';
 import { purposeFromLine } from './movePurpose';
-import { costWords } from './engineConstants';
+import { costWords, MISTAKE_CP } from './engineConstants';
+// The asked-line departure (`askedLineLeft`, below): lives here, beside the
+// coach's other computed sentences, NOT in openingDetectionService — the lookup
+// module must not import the teaching chain, which reaches back into it (with
+// that cycle a test mocking it got the real module under its mock, 2026-11-21).
+import { resolveOpeningEntry } from './openingDetectionService';
+import { askedLineDeparture, type AskedLineDeparture } from './askedLineDeparture';
+import { bookMoveWhy } from './bookMoveWhy';
+import { spokenOpeningLabel } from './openingAnnouncement';
 import { evalBand, evalBandWords } from './evalBand';
 import { openSentence, continueSentence, sentenceEach } from '../utils/openSentence';
 import { MATERIAL_VALUE } from './pieceValues';
@@ -8095,4 +8103,41 @@ export function lastCaptureOf(history: readonly string[] | undefined): PrevCaptu
   if (!history || history.length === 0) return null;
   const run = captureRunOfMoves(null, history);
   return run?.square ? run : null;
+}
+
+/** WHERE THE GAME LEFT THE LINE THE STUDENT ASKED FOR — the one path Learn's
+ *  opening lane and Play's plan tracker both read (David 2026-11-21). It owns
+ *  the asked line (the exact PGN the student launched, else the named
+ *  opening's canonical entry) and the departure computer; the surface only
+ *  says it.
+ *
+ *  🔒 IT SPEAKS ONLY WHEN LEAVING THE LINE HURT (David 2026-11-21: "It should
+ *  only speak if it hurts the user. Like staying on book was better
+ *  because…"): the student's own move left it, the move cost at least a
+ *  mistake (`MISTAKE_CP`, the surface's one price — REQUIRED, null when the
+ *  move is not priced, and then nothing is said), and the board shows what the
+ *  line's move does that theirs does not (`bookMoveWhy`; never bare, the
+ *  opening-slip rule). The opponent leaving the line costs the student
+ *  nothing, so it is never said. Null otherwise. */
+export function askedLineLeft(
+  asked: { name: string; pgn?: string | null },
+  played: readonly string[],
+  studentColor: 'w' | 'b',
+  sinceIndex: number,
+  costCp: number | null,
+): { text: string; squares: string[]; departure: AskedLineDeparture; canonicalName: string } | null {
+  if (costCp === null || costCp < MISTAKE_CP) return null;
+  const pgn = asked.pgn?.trim();
+  const entry = pgn ? null : resolveOpeningEntry(asked.name);
+  const line = pgn ? pgn.split(/\s+/).filter(Boolean) : entry?.moves ?? [];
+  if (line.length === 0) return null;
+  const departure = askedLineDeparture(played, line, studentColor, sinceIndex);
+  if (!departure || departure.seat !== 'student') return null;
+  let fen: string;
+  try { const c = new Chess(); for (const san of played.slice(0, departure.ply)) c.move(san); fen = c.fen(); } catch { return null; }
+  const why = bookMoveWhy(fen, departure.book, departure.played, studentColor);
+  if (!why?.job) return null;
+  const canonicalName = entry?.canonicalName ?? asked.name;
+  const text = renderAskedLineLeft({ name: spokenOpeningLabel(canonicalName), book: departure.book, job: why.job, left: why.left ?? null, moveNumber: departure.moveNumber, ply: departure.ply });
+  return { text, squares: [...why.squares], departure, canonicalName };
 }
