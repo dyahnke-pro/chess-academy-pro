@@ -4,7 +4,6 @@ import extendedOpenings from '../data/openings-lichess-extended.json';
 import repertoireData from '../data/repertoire.json';
 import type { DetectedOpening, OpeningVariation } from '../types';
 import { openingKeyFor } from './openingKey';
-import { askedLineDeparture, type AskedLineDeparture } from './askedLineDeparture';
 import { buildVariationTabs } from './variationTabs';
 import { MAX_SIBLING_BRANCHES } from '../utils/featureFlags';
 // Typed via `variationMiddlegameDepth.shared.d.mts` (2026-09-21) — the
