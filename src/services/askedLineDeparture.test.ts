@@ -3,7 +3,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { askedLineDeparture } from './askedLineDeparture';
-import { askedLineLeft } from './openingDetectionService';
+import { askedLineLeft } from './askedLineLeft';
 import { renderAskedLineLeft } from './teachingSentence';
 
 const NAJDORF = ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6', 'Be3'];

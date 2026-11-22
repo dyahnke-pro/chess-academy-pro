@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2333 lines · 33 exports · 67 importers · 36 tests · 2 audits**
+**2292 lines · 32 exports · 67 importers · 35 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -30,7 +30,7 @@
 - `src/data/voicedWalkthroughs.test.ts`
 - `src/data/voicedWalkthroughs.ts`
 - `src/services/analyticsService.ts`
-- `src/services/askedLineDeparture.test.ts`
+- `src/services/askedLineLeft.ts`
 - `src/services/autoAnalyzeGame.ts`
 - `src/services/boardComputers.ts`
 - `src/services/bookDeparture.ts`
@@ -99,9 +99,9 @@
 - `src/coach/sources/middlegamePlan.ts:51`
 - `src/coach/sources/modelGames.ts:57`
 - `src/coach/sources/playerGames.ts:160`
-- `src/components/Coach/CoachGamePage.tsx:1569`
-- `src/components/Coach/CoachGamePage.tsx:3154`
-- `src/components/Coach/CoachGamePage.tsx:3226`
+- `src/components/Coach/CoachGamePage.tsx:1570`
+- `src/components/Coach/CoachGamePage.tsx:3155`
+- `src/components/Coach/CoachGamePage.tsx:3227`
 - `src/components/Coach/CoachTeachPage.tsx:11284`
 - `src/services/builtReplies.ts:39`
 - `src/services/builtReplies.ts:63`
@@ -173,7 +173,7 @@
 - `src/services/openingGenerator.ts:3131`
 - `src/services/openingGenerator.ts:3221`
 
-### `resolveOpeningEntry` (function) — 90 call sites
+### `resolveOpeningEntry` (function) — 91 call sites
 - `src/coach/ask/playName.ts:53`
 - `src/coach/requestSteps.ts:90`
 - `src/components/Coach/CoachTeachPage.tsx:5943`
@@ -185,6 +185,7 @@
 - `src/data/voicedWalkthroughs.test.ts:113`
 - `src/data/voicedWalkthroughs.ts:110`
 - `src/data/voicedWalkthroughs.ts:197`
+- `src/services/askedLineLeft.ts:40`
 - `src/services/builtReplies.ts:37`
 - `src/services/builtReplies.ts:59`
 - `src/services/coachApi.ts:6417`
@@ -297,10 +298,10 @@
 
 ### `getOpeningMoves` (function) — 27 call sites
 - `src/coach/tools/cerebellum/localOpeningBook.ts:84`
-- `src/components/Coach/CoachGamePage.tsx:530`
-- `src/components/Coach/CoachGamePage.tsx:583`
-- `src/components/Coach/CoachGamePage.tsx:2177`
-- `src/components/Coach/CoachGamePage.tsx:3155`
+- `src/components/Coach/CoachGamePage.tsx:531`
+- `src/components/Coach/CoachGamePage.tsx:584`
+- `src/components/Coach/CoachGamePage.tsx:2178`
+- `src/components/Coach/CoachGamePage.tsx:3156`
 - `src/components/Coach/CoachTeachPage.deepDive.test.ts:55`
 - `src/components/Coach/CoachTeachPage.deepDive.test.ts:74`
 - `src/components/Coach/CoachTeachPage.teachRescue.test.ts:37`
@@ -472,17 +473,6 @@
 ### `openingAliasKeys` (function) — 1 call site
 - `src/services/openingFuzzyMatcher.ts:353`
 
-### `askedLineLeft` (function) — 9 call sites
-- `src/components/Coach/CoachGamePage.tsx:3056`
-- `src/components/Coach/CoachTeachPage.tsx:9733`
-- `src/services/askedLineDeparture.test.ts:43`
-- `src/services/askedLineDeparture.test.ts:53`
-- `src/services/askedLineDeparture.test.ts:54`
-- `src/services/askedLineDeparture.test.ts:56`
-- `src/services/askedLineDeparture.test.ts:74`
-- `src/services/askedLineDeparture.test.ts:77`
-- `src/services/askedLineDeparture.test.ts:80`
-
 ## Tests
 
 - `src/components/Coach/CoachGamePage.abandon.test.tsx`
@@ -494,7 +484,6 @@
 - `src/services/allSectionDepth.measure.test.ts`
 - `src/services/analysisDeterminism.pool.test.ts`
 - `src/services/analysisTelemetry.test.ts`
-- `src/services/askedLineDeparture.test.ts`
 - `src/services/computedVoiceAudit.report.test.ts`
 - `src/services/evalCommentAnnotations.test.ts`
 - `src/services/fantasyName.test.ts`

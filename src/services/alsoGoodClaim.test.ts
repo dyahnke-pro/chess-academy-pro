@@ -15,6 +15,6 @@ describe('both keep the win is one claim, whatever the moves', () => {
     expect(a.flatMap((f) => f.claims)).toEqual(['also-good:both-win']);
     // …and where the board separates them, it says how (Danya: "it opens the
     // f-file, a road for the rooks").
-    expect(b.map((f) => f.text).join(' ')).toMatch(/fxe4 opens the f-file for your rook on f8, and dxe4 keeps it shut/);
+    expect(b.map((f) => f.text).join(' ')).toMatch(/…fxe4 opens the f-file for your rook on f8, and …dxe4 keeps it shut/);
   });
 });

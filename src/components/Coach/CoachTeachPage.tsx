@@ -169,9 +169,9 @@ import {
   readSharedCache,
   writeSharedCache,
 } from '../../services/sharedOpeningCache';
+import { askedLineLeft } from '../../services/askedLineLeft';
 import {
   getOpeningMoves,
-  askedLineLeft,
   findLinePickerOptions,
   findOpeningByPgnPrefix,
   resolveCuratedVariation,

@@ -59,7 +59,9 @@ describe('the phase wave never force-cuts the line playing', () => {
     const start = code.indexOf('speakFacts: async (facts, fen) => {');
     const end = code.indexOf('onReport:', start);
     const door = code.slice(start, end);
-    expect(door).toMatch(/speechChainRef\.current\s*\.then\(\(\) => \(samePosition\([^)]*\) && learnVoiceAllows\('door'\) \? voiceService\.speakPackage\(d\.pkg\)/);
+    // (After the turn's late line, the phase line waits its fixed pause on the
+    // same chain — one second wave, 2026-11-21.)
+    expect(door).toMatch(/speechChainRef\.current\s*(?:\.then\(\(\) => \(afterTurnLine \? [^\n]*\)\s*)?\.then\(\(\) => \(samePosition\([^)]*\) && learnVoiceAllows\('door'\) \? voiceService\.speakPackage\(d\.pkg\)/);
     expect(door).not.toMatch(/await voiceService\.speakPackage\(/);
   });
 });

@@ -41,7 +41,7 @@ describe('weighedReads (the review\'s per-candidate reads)', () => {
     expect(stored?.depth).toBe(16);
     // …and those reads are what Review's computer says the refutation from.
     expect(oneStem(temptingRefuted({ fenBefore: G.fenBefore, san: G.played, student: 'b', rating: 1500, reads: stored!.reads, priorMove: null })?.text))
-      .toBe(oneStem('Nxe4 is tempting here, but it fails: they play dxe4 — they win a knight for a pawn.'));
+      .toBe(oneStem('…Nxe4 is tempting here, but it fails: they play dxe4 — they win a knight for a pawn.'));
   });
 
   it('no engine, no reads — never a guessed record', async () => {

@@ -23,6 +23,7 @@
 ## Who calls in
 
 - `src/services/askedLineDeparture.test.ts`
+- `src/services/askedLineLeft.ts`
 - `src/services/boardComputers.ts`
 - `src/services/boardReadFacts.ts`
 - `src/services/boardUrgency.ts`
@@ -37,7 +38,6 @@
 - `src/services/latentDanger.ts`
 - `src/services/mateThreatLever.ts`
 - `src/services/moveThreat.ts`
-- `src/services/openingDetectionService.ts`
 - `src/services/pictureLedger.ts`
 - `src/services/pictureVerdict.ts`
 - `src/services/planOfTheBoard.test.ts`
@@ -91,8 +91,8 @@
 - `src/services/gemCrushLines.ts:222`
 - `src/services/gemCrushLines.ts:225`
 - `src/services/gemCrushLines.ts:251`
+- `src/services/openingDetectionService.ts:191`
 - `src/services/openingDetectionService.ts:195`
-- `src/services/openingDetectionService.ts:199`
 - `src/services/positionProvenance.ts:57`
 - `src/services/positionProvenance.ts:69`
 - `src/services/positionProvenance.ts:84`
@@ -812,7 +812,7 @@
 
 ### `renderAskedLineLeft` (function) — 2 call sites
 - `src/services/askedLineDeparture.test.ts:60`
-- `src/services/openingDetectionService.ts:2330`
+- `src/services/askedLineLeft.ts:50`
 
 ### `renderBreakHits` (function) — 1 call site
 - `src/services/planSteps.ts:499`

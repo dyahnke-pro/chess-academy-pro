@@ -103,6 +103,9 @@ async function main() {
       ageRatingOverride: 'NONE', ageRatingOverrideV2: 'NONE',
       // Not a social-media app (no profiles, feeds or user-to-user posting).
       socialMedia: false, socialMediaAgeRestricted: false,
+      // Apple's 2026 questions (readiness 2026-11-21 read them blank): no dating
+      // or relationship content, and no location is shared with anyone.
+      datingAndRelationships: false, sharedLocation: false,
     };
     console.log(`age rating before: ${JSON.stringify(before)}`);
     const blank = Object.keys(before).filter((k) => (before[k] === null || before[k] === undefined) && !OPTIONAL.has(k));
@@ -113,15 +116,25 @@ async function main() {
       const patch = (attributes) => api('PATCH', `/v1/ageRatingDeclarations/${decl.id}`, {
         data: { type: 'ageRatingDeclarations', id: decl.id, attributes },
       });
+      // Apple types its newer questions as either a yes/no or a level; a
+      // refused `false` is the level form, answered NONE.
+      const ENUM_RETRY = ['datingAndRelationships', 'sharedLocation'];
       try {
         await patch(fill);
       } catch (e) {
+        const enumKeys = ENUM_RETRY.filter((k) => fill[k] === false);
+        if (enumKeys.length && /datingAndRelationships|sharedLocation|ENUM|enum|invalid/i.test(String(e.message))) {
+          console.log(`PATCH refused (${String(e.message).split('\n')[0]}) — retrying ${enumKeys.join(', ')} as NONE`);
+          for (const k of enumKeys) fill[k] = 'NONE';
+          await patch(fill);
+        } else {
         // "Age restricted" is a follow-up to "is it social media": Apple may
         // refuse it once social media is no. Answer the rest without it.
         if (!('socialMediaAgeRestricted' in fill)) throw e;
         console.log(`PATCH refused (${String(e.message).split('\n')[0]}) — retrying without socialMediaAgeRestricted`);
         delete fill.socialMediaAgeRestricted;
         await patch(fill);
+        }
       }
       const after = (await readDecl()).attributes || {};
       console.log(`✓ answered ${Object.keys(fill).join(', ')} · after: ${JSON.stringify(after)}`);
