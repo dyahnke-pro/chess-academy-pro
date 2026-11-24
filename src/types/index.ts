@@ -1165,6 +1165,11 @@ export interface UserPreferences {
    *  this same persisted value (David 2026-09-13). Default ON. An explicit Hint
    *  the student taps still draws its arrow. */
   coachBoardMarkersOn?: boolean;
+  /** Coins, star bursts, the jackpot bar and their sounds and buzzes — every
+   *  reward effect, on every surface (`rewardService` is the one door). Off
+   *  shows none; the record still counts. Default ON (David 2026-11-24: the
+   *  coach turns them off when asked). */
+  rewardEffectsOn?: boolean;
   coachVerbosity?: CoachVerbosity;
   /** Live phase-transition narration verbosity. 'off' silences the
    *  coach at phase boundaries; 'brief'/'standard'/'full' set the
