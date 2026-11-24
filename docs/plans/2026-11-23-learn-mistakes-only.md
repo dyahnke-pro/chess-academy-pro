@@ -35,6 +35,9 @@ Learn says the repair as a plan, never as a move ("your pawns on the dark square
 ## Say it short, like a person (David 2026-11-24)
 Use the fewest words that carry the idea: never 10 words when 5 will do. Each slot is one short sentence that names the piece and the square, with no throat-clearing ("Now,", "the idea is that", "what this means is"). The words get shorter; the facts don't. The gate (`mistakeLesson.test.ts`) fails any stem over 14 words, and any stem that repeats a word already said in the same turn's slots (piece and square names excepted). This limit is on the phrasing written into the recipe, never on how many facts are said.
 
+## Learn names no move at all: principles instead (David 2026-11-24)
+In Learn the BETTER MOVE slot becomes a principle that says what the better move did, never the move itself ("Retreat the bishop to keep it", never "Bc1 kept it"). The REPAIR slot is a principle too ("Put your pawns on dark squares"), never a move. This replaces carve-out 3 (the better move named once past) for Learn; CLAUDE.md is updated in the same build. Review and chat still name the move.
+
 ## Order — the computer job comes first
 
 ### Phase 1 — the cards (the build spec) ← NOW
