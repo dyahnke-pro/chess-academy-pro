@@ -8,7 +8,7 @@ There is one list of causes, kept in the error computer (`MistakeCauseKind`). Ev
 
 Learn speaks only after the move, and it never names the move just played or your next move.
 
-**Every slot has 3 phrasings of the same idea.** They are rotated on the board, never picked at random, and the facts stay the same. `{…}` is filled from the board. The focus clue and the mission lines are the only lines that stay word-for-word.
+**Every slot has 5 phrasings of the same idea (3 drafted here; the build writes the other 2 per slot and the gate checks for 5).** They are rotated on the board, never picked at random, and the facts stay the same. `{…}` is filled from the board. The focus clue and the mission lines are the only lines that stay word-for-word.
 
 ---
 
