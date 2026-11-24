@@ -34,15 +34,11 @@ Review. Any of those starting ends the focus game.
 
 1. **The hold rate measures UNPROMPTED skill.**
 2. **Every miss gets taught.**
-3. **The question before the move follows the record** (WO-COACH-NEXT-TO-YOU-01
-   C2/C3, 2026-11-06 — REPLACES "the coach speaks on a miss, never on a find
-   nobody asked about", deleted). The board's lead chance is asked (the target
-   and the habit, never the move) when its skill is red or grey on the
-   student's record and has not been found twice this game; amber is not asked
-   and gets the clue after a miss; green gets neither, and its miss is
-   explained by the door. One question a board (`learn-focus-question`). A
-   find is said only when it answers a question said out loud; every other
-   find is silent and counted in the end line.
+3. **Nothing is said before the move; a mistake is said after it, as one lesson**
+   (WO-LEARN-MISTAKES-ONLY, David 2026-11-24 — REPLACES "the question before the
+   move follows the record", deleted). Spec: `docs/plans/2026-11-23-learn-mistakes-only.md`.
+   The focus keeps its chances, plants, rung and record; it no longer asks a
+   question before the student moves.
 
 ## 3. Scoring — prompted chances are excluded BOTH ways (root fix)
 

@@ -205,20 +205,19 @@ chance for the user to find the focus."
   focus is tactics, finding and preventing them! You will have at least one
   chance this game for a winning tactic, but your opponent will also be trying
   to set up its own tactics. Stay vigilant!"
-- 🔒 **THE QUESTION BEFORE THE MOVE FOLLOWS THE RECORD** (WO-COACH-NEXT-TO-YOU-01
-  C2/C3, David 2026-11-06: "Give more guidance in some areas, but stay silent
-  in others" → "We can unlock the silent narrations"). 🔴 This REPLACES "the
-  focus speaks on a miss, never on a find nobody asked about" and "rung 0 asks
-  its first chance", both DELETED (the Lake Butler rule). The board's lead
-  chance is asked — the target and the habit, never the move — when its
-  skill is RED or GREY on the student's record (`holdState`; absent is not
-  mastered) and has not been found twice this game; AMBER is not asked and
-  gets the clue after a miss (tier permitting); GREEN gets neither — its miss
-  is explained by the door and counts against the green. One question a board
-  (`coachMoment.MOMENT_DIAL`, `focusRunner.chanceDial`, row
-  `learn-focus-question`). A find pays its coins and burst and is said only
-  when it answers a question said out loud. ONE exception, his (2026-10-22):
-  the TEMPO RUN's line, said when the run has ended (below).
+- 🔒 **LEARN SPEAKS ONLY AFTER A MISTAKE, AS ONE LESSON** (WO-LEARN-MISTAKES-ONLY,
+  David 2026-11-23/24; spec `docs/plans/2026-11-23-learn-mistakes-only.md`). 🔴
+  This REPLACES "THE QUESTION BEFORE THE MOVE FOLLOWS THE RECORD", DELETED (the
+  Lake Butler rule). Nothing is said before the student moves. After a move, Learn
+  speaks only on a mistake by either side, at the floor in force: a mistake
+  (≥ 100 cp) speaks; an inaccuracy speaks only when a computer shows the mechanism.
+  The turn is: the principle broken (this board inside it) → what it costs → the
+  better move as a PRINCIPLE → how to recover (a second principle, checked on the
+  board) → the habit (record RED/GREY only). No move is ever named in Learn. Each
+  slot has 5 rotated phrasings of at most 14 words. The coach's own mistake is said
+  only when the student's record on the skill that punishes it is RED/GREY (AMBER
+  one clause, GREEN silent). A mistake with no computable cause is silent and
+  logged (`mistake-lesson` → PostHog `mistake_lesson`), never guessed.
 - **THE RUNG — the only thing the record decides** (`focusRung.ts`, one scale
   `TacticsRung` 0–3 read by the chance reader, the plant and the student):
   0 Beginner (the piece that just moved there) · 1 Intermediate (a two-move
@@ -5994,32 +5993,11 @@ is named with its why (`backwardLook` coach side, `namesBetterMove: true`).
 Before the student's move, a plan step that IS a legal move right now is held
 too (`planThreadTurn` `holdPlayable`, the two-plans line's waypoints).
 
-🔄 **CARVE-OUT 3 — THE STUDENT'S BETTER MOVE, ONCE IT IS PAST (David
-2026-10-20, his 13.Bc3: "You should hear what Bc3 allowed (Ne5 and the fork
-threat on e3), what the better move did, and the habit that catches it next
-time").** A mistake turn is three things: what the move allowed, what the
-better move DID (named, with its job — "a4 was the move — it would prepare a5
-to kick their queen off b6 and free your pawn on d4 from the pin"), and the
-habit that catches it ("before a piece moves, what is it guarding?"). The
-better move is named only when it is no longer the student's to find:
-`pastBetterNameable` holds it whenever it is still playable AND the engine's
-best move for them on the next board, and whenever the reply is unknown. The
-rule still protects the student's NEXT move; a moment already past is the
-lesson.
-
-🔄 **CARVE-OUT 4 — POINTERS, BY THE RECORD (David 2026-11-05: "keep the point
-at moves without stating them for beginners but not … for players that don't
-need it").** A fact that names the student's next move may speak its HELD FORM —
-the idea in words that name no move ("Their queen on c3 is doing the most work —
-one of your moves challenges it", "The plan here: grab space — …"). A pointer at
-the next decision (`HeldForm.points`, the skill it hints at) speaks only while
-that skill is red or grey in the student's record (`pointerSpeaks`: no fade
-level), ONCE A GAME per skill (its `pointer:<skill>` claim rides the say-once
-ledger, so the skill's other moments stay unprompted and the record keeps
-measuring it), and the move it points at counts as prompted. Amber or green: the
-student finds it alone. A focus chance stays the focus's (`names-chance` holds a
-pointer on its squares). One place decides it: the Learn door (`learnTurnDoor`);
-the arrow door keeps the move off the board.
+🔄 **THE BETTER MOVE, ONCE PAST — REVIEW AND CHAT ONLY (David 2026-11-24).** 🔴
+Carve-outs 3 and 4 (the better move named in Learn once past; pointers by the
+record) are DELETED for Learn (the Lake Butler rule). Learn says the better move's
+JOB as a principle and never names a move (§ LEARN FOCUS, "LEARN SPEAKS ONLY AFTER
+A MISTAKE"). Review and chat still name the better move, with its job.
 
 🔒 **NOR THE MOVE THEY JUST PLAYED (David 2026-11-09: "the user knows that,
 they see it play out").** Learn says "your move" ("Your move was a blunder —
