@@ -109,6 +109,17 @@ Pilots: `docs/teaching-cards/pilot-cards.md` (pictureVerdict, readPosition — r
 ### New mistake causes (merged into errorWhy's one list)
 ignored-threat · tempo-wasted · colour-conceded · traded-into-target · passer-handed · compensation-lost · stalemate · technique-broken (+ walks-into-fork made live). Final list goes to David with the lesson wording.
 
+## Missing items — running list (add as found; David 2026-11-24: "keep an eye out for missing items we need")
+Computers / readers not built yet:
+- [ ] **Retreat of a piece just developed** (the tempo-wasted case with no reader).
+- [ ] **The 12 still-unexplained costly moves** in David's games: a missed-tempo pawn push (b5), a pawn move that shuts in its own bishop (d3), …Qd4 letting d5 go, quiet rook-ending moves (Re6, Rb1). Each needs its own cause reader: own-bishop blocked, missed tempo, rook-ending activity.
+- [ ] **Hanging pawns structure** — no computer (census: Danya teaches it, we never say it).
+- [ ] **The "pass in your head" test**, two halves. Skip the move: what would they play? Let them play it after your move: why does it fail now? `moveIntent.stopReason`, `breakStopped` and `stopsBreak` check one move only. They should read the engine line instead (the Rd1 / …e5 dxe6 board, which still has to be found in saved data for its test).
+- [ ] **Endgame defender rules** for the classes `DEFENDER_PRINCIPLE` lacks (only 2 covered).
+- [ ] **Learn saves the coach's own move reads** for Review (the instant-Review job).
+- [ ] **A recovery board check per state** (docs/teaching-cards/recovery/) — each must become a pure function.
+- [ ] **A source for "make a second weakness"**, the queen-down fortress, and the cost of an escape-square push (one strong source each today).
+
 ## Data (saved, no new runs)
 - `audit-reports/teaching-census-data/`: lines-*.jsonl (16 games, every offered/said line), boards-?.jsonl (952 positions), g-*.jsonl (David's 12 games with engine reads), compare.json (Danya concepts vs ours), computer-map-raw.json.
 - `audit-reports/danya-havecheck/` (224 boards with his ideas placed), `/home/user/danya-full/` (18,368 ideas), `src/test/fixtures/` (decision baseline, replay games), `audit-reports/.fixtures/danya-bench/` (7,477 engine reads), `audit-reports/.fixtures/data-drop-david.json`.
