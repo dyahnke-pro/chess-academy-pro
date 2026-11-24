@@ -344,7 +344,8 @@ import { tacticalReadFromLines, temptingTurnClause, uncertaintyClause, candidate
 import { findHangingBySee, signedLegalSeeFor, signedCaptureRead } from '../../services/positionReadingService';
 import { BehaviorScheduler, detectBehaviors, WISH_KEY_PREFIX, WISHES_A_GAME } from '../../services/danyaBehaviors';
 import { stockfishCache } from '../../services/stockfishCache';
-import { COACH_TURN_DEPTH, MISTAKE_CP, NEXT_BOARD_READ_MS } from '../../services/engineConstants';
+import { COACH_TURN_DEPTH, INACCURACY_CP, MISTAKE_CP, NEXT_BOARD_READ_MS } from '../../services/engineConstants';
+import { writerFor } from '../../services/writerRegister';
 import type { StockfishAnalysis } from '../../types';
 import { fetchLichessExplorer } from '../../services/lichessExplorerService';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, replyMadeAChance, studentPlayingRating } from '../../services/coachGameEngine';
@@ -11015,6 +11016,17 @@ export function CoachTeachPage({ mode }: {
         const priceRead: Promise<MovePrice | null> = preStudentRead && !preStudentRead.isMate
           ? studentMovePrice(fenBefore, `${move.from}${move.to}${move.promotion ?? ''}`, preStudentRead, COACH_TURN_DEPTH)
           : Promise.resolve(null);
+        // THE GAME'S GRADED SOUND PLIES — the habit computer's evidence rule:
+        // a move whose settled price is under an inaccuracy is sound, so a
+        // piece it leaves en prise is a sacrifice, never "loose again".
+        {
+          const mem = learnMemRef.current;
+          const gameId = mem.gameId;
+          const ply = move.history.length;
+          void priceRead.then((p) => {
+            if (p && p.settled && p.costCp < INACCURACY_CP && mem.gameId === gameId) mem.soundPlies.add(ply);
+          }).catch(() => { /* an unpriced move stays ungraded */ });
+        }
         const verdictUrgent = !!preStudentRead && !studentMoveInBook && (studentCpLoss === null || studentGradeFault);
         // THE BOARD BETWEEN THE TWO MOVES, read once and used twice (see below),
         // sent BEFORE the post-reply warm read on every turn (Learn speed,
@@ -11451,6 +11463,8 @@ export function CoachTeachPage({ mode }: {
                       // what they keep doing (`depthClauses` → `opponentHabits`)
                       // always saw an empty game (swarm design 1 + 8, 2026-10-07).
                       history: [...move.history, m.san],
+                      // The game's graded sound plies (habit evidence).
+                      soundPlies: learnMemRef.current.soundPlies,
                       moverColor: probe.turn(),
                       studentColor: playerColor === 'white' ? 'w' : 'b',
                       rating,
@@ -12669,7 +12683,7 @@ export function CoachTeachPage({ mode }: {
                       const tie = readBoard('tiedDefender', { fenBefore, fenAfterMove: move.fen, fenAfterReply, student: playerColor === 'white' ? 'w' : 'b' });
                       if (tie) queueSpokenHint(fenAfterReply, { computer: tie.computer, text: tie.text, lane: 'movePoint', proof: tie.proof, namesStudentMove: false, squares: tie.squares, claims: tie.claims });
                     }
-                    for (const h of studentMoveTeaching({ theory: true, namesStudentMoves: false,
+                    for (const h of studentMoveTeaching({ theory: true, namesStudentMoves: false, unpricedCredit: writerFor('learn').unpricedCredit,
                       fenBefore, san: move.san, history: move.history, cpLoss, bothCp: bothCp && cpLoss !== null,
                       bestSan: studentBestSan, bestLine: preStudentRead.topLines?.[0], topLines: preStudentRead.topLines, reply: reply ?? null,
                       linesAfter: (mid?.topLines ?? []).map((l) => l.moves),
@@ -13535,6 +13549,7 @@ export function CoachTeachPage({ mode }: {
                         } : null,
                         fenNow: fenAfterReply, student: playerColor === 'white' ? 'w' : 'b',
                         story: learnMemRef.current.story,
+                        soundPlies: learnMemRef.current.soundPlies,
                       });
                       for (const p of parts) queueSpokenHint(fenAfterReply, p);
                     }
@@ -14894,7 +14909,7 @@ export function CoachTeachPage({ mode }: {
         {!walkthrough.isActive && (
           <div className="relative z-20 h-0">
             <div className="pointer-events-none absolute inset-x-0 bottom-0">
-              <JackpotBar streak={learnTally.streak} gain={jackpot.gain} />
+              {(activeProfile?.preferences.rewardEffectsOn ?? true) && <JackpotBar streak={learnTally.streak} gain={jackpot.gain} />}
               <LearnRewardBar provenTags={provenTags} />
               <SkillLevelBar move={skillMove} />
             </div>

@@ -12,6 +12,7 @@ import { Chess, type Move, type Square } from 'chess.js';
 import { rookReachesFile } from './positionalRead';
 import { pawnsOf } from './boardStructure';
 import { openSentence } from '../utils/openSentence';
+import { creditableCost, type UnpricedCredit } from './engineConstants';
 
 interface RecaptureFacts {
   san: string;
@@ -136,7 +137,14 @@ export function recaptureChoice(
    *  student's own move, so there it is "that recapture" (LEARN NAMES NO
    *  MOVE UNASKED). */
   namesPlayedMove: boolean,
+  /** REQUIRED: the recapture's cost, null unpriced. The line credits the
+   *  move, so it speaks only under the one praise rule (`creditableCost`):
+   *  Rxg2 at 217 cp was "Rxg2, not Qxg2" (learn-mistakes-only bug 3). */
+  costCp: number | null,
+  /** REQUIRED: what an unpriced move is to the praise rule (the surface's). */
+  unpriced: UnpricedCredit,
 ): string | null {
+  if (!creditableCost(costCp, unpriced)) return null;
   let played: Move; const b = new Chess(fenBefore);
   try { played = b.move(playedSan); } catch { return null; }
   if (!played?.captured || played.promotion) return null;

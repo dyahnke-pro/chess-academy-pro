@@ -31,22 +31,34 @@ describe('fileTrade — rooks traded for an open file', () => {
   // S-ZY 24.Rd1: "forces the rook trade: if Black declines, White owns the d-file".
   const fen = '3r2k1/p1p1qppp/1nP1p3/1Q2P3/8/2N1P2P/PP3PP1/R5K1 w - - 0 24';
   it('the challenge: their only rook faced on the open file', () => {
-    const t = fileTradeAt(fen, 'Rd1', 59, null);
+    const t = fileTradeAt(fen, 'Rd1', 30, null, 'refused');
     expect(t).toMatchObject({ kind: 'challenge', file: 'd', rook: 'd1', facing: { square: 'd8' } });
     expect(fileTradeLine(t!, true, fen)).toMatch(/d-file/);
   });
   it('is quiet when they have a second rook to bring over', () => {
-    expect(fileTradeAt('3r2kr/p1p1qpp1/1nP1p3/1Q2P3/8/2N1P2P/PP3PP1/R5K1 w - - 0 24', 'Rd1', 59, null)).toBeNull();
+    expect(fileTradeAt('3r2kr/p1p1qpp1/1nP1p3/1Q2P3/8/2N1P2P/PP3PP1/R5K1 w - - 0 24', 'Rd1', 30, null, 'refused')).toBeNull();
   });
   // 4T9 19…Rxc1: "these trades hand you control of the open c-file".
   const fen2 = '2r2rk1/pp3pbp/3p2p1/4pb2/8/8/PP1KPPPP/2R2B1R b - - 2 19';
   it('the hand-off: after the king takes back, the other rook takes the file', () => {
-    const t = fileTradeAt(fen2, 'Rxc1', 13, ['d2c1', 'f8c8']);
+    const t = fileTradeAt(fen2, 'Rxc1', 13, ['d2c1', 'f8c8'], 'refused');
     expect(t).toMatchObject({ kind: 'hand-off', file: 'c', on: 'c1', retaker: 'k', next: { from: 'f8', to: 'c8' } });
     expect(fileTradeLine(t!, true, fen2)).toMatch(/c-file/);
   });
   it('is quiet when the engine line goes elsewhere after the trade', () => {
-    expect(fileTradeAt(fen2, 'Rxc1', 13, ['d2c1', 'e5e4'])).toBeNull();
+    expect(fileTradeAt(fen2, 'Rxc1', 13, ['d2c1', 'e5e4'], 'refused')).toBeNull();
+  });
+  // learn-mistakes-only bug 3: the line credits the move, so an inaccuracy is
+  // never "the file is yours" (g chesscom-1013773584 ply 59 Rf1 at 80 cp).
+  it('is quiet on an inaccuracy or an unpriced move (the one praise rule)', () => {
+    const rf1 = '2k5/1p1n4/8/p2p4/6RP/3B1rp1/PPP5/1K5R w - - 1 30';
+    expect(fileTradeAt(rf1, 'Rf1', 30, null, 'refused')).toMatchObject({ kind: 'challenge', file: 'f' });
+    expect(fileTradeAt(rf1, 'Rf1', 80, null, 'refused')).toBeNull();
+    expect(fileTradeAt(rf1, 'Rf1', 50, null, 'refused')).toBeNull();
+    expect(fileTradeAt(rf1, 'Rf1', null, null, 'refused')).toBeNull();
+    // A lesson's taught line is credited unpriced.
+    expect(fileTradeAt(rf1, 'Rf1', null, null, 'taught-line')).toMatchObject({ kind: 'challenge' });
+    expect(fileTradeAt(rf1, 'Rf1', 80, null, 'taught-line')).toBeNull();
   });
 });
 
@@ -122,7 +134,7 @@ describe('chat answers with the trades (questionThought)', () => {
     expect(t.kept.some((f) => f.computer === 'pawnEndingTradeAt')).toBe(true);
   });
   it('"why Rd1?" carries the file challenge, and "why Nc3?" the trade kept (QUk 8.Nc3)', () => {
-    const rd1 = ask('3r2k1/p1p1qppp/1nP1p3/1Q2P3/8/2N1P2P/PP3PP1/R5K1 w - - 0 24', 'Rd1', lines([[302, null, ['a2a4']], [283, null, ['b5a5']], [269, null, ['a1c1']]]), lines([[243, null, ['d8d1']]]), 59, ['move']);
+    const rd1 = ask('3r2k1/p1p1qppp/1nP1p3/1Q2P3/8/2N1P2P/PP3PP1/R5K1 w - - 0 24', 'Rd1', lines([[302, null, ['a2a4']], [283, null, ['b5a5']], [269, null, ['a1c1']]]), lines([[272, null, ['d8d1']]]), 30, ['move']);
     expect(rd1.kept.some((f) => f.computer === 'fileTradeAt')).toBe(true);
     const quk = 'r3kb1r/pp1b1ppp/1qn1p2n/2ppP3/3P4/3B1N2/PPP2PPP/RNBQR1K1 w kq - 8 8';
     const nc3 = ask(quk, 'Nc3', lines([[46, null, ['c2c3']], [44, null, ['b1c3']], [43, null, ['h2h3']], [43, null, ['b2b3']]]), lines([[38, null, ['c5d4']]]), 2, ['choices']);

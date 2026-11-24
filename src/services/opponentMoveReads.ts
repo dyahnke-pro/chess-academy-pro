@@ -435,7 +435,9 @@ function longestForwardRay(c: Chess, sq: string, color: 'w' | 'b'): string[] {
  * the engine rates the position at least a pawn and a half better for you
  * than the material says, and its move for you is not a recapture.
  */
-export function wronglyExpected(fenBefore: string, san: string, student: 'w' | 'b', topLines: readonly EngineLine[]): Read | null {
+export function wronglyExpected(fenBefore: string, san: string, student: 'w' | 'b', topLines: readonly EngineLine[],
+  /** The student's move just before theirs, where the caller holds it. */
+  prev?: { fenBefore: string; san: string } | null): Read | null {
   let after: Chess; let mv: Move;
   try {
     const b = new Chess(fenBefore);
@@ -444,6 +446,14 @@ export function wronglyExpected(fenBefore: string, san: string, student: 'w' | '
     mv = after.move(san);
   } catch { return null; }
   if (!mv.captured || !topLines[0]) return null;
+  // A RECAPTURE IS A TRADE, NOT A GRAB (learn-mistakes-only bug 5: g
+  // chesscom-1002984876 ply 12 …Kxd8 — "the queen on d8 looked free to them"
+  // while the queens were being traded). Their capture takes back on the
+  // square the student just captured on; with no move in hand, a capture that
+  // only wins back material the student was up before it is the same trade.
+  const prevTook = (() => { try { if (!prev) return null; const m = new Chess(prev.fenBefore).move(prev.san); return m.captured ? m.to : null; } catch { return null; } })();
+  if (prevTook === mv.to) return null;
+  if (!prev && materialBalance(fenBefore) * (student === 'w' ? 1 : -1) >= (MATERIAL_VALUE[mv.captured] ?? 0)) return null;
   // It looked free: you can't win the capturing piece back on the square.
   if (signedLegalSeeFor(after.fen(), mv.to, student) > 0) return null;
   const studentMaterial = materialBalance(after.fen()) * (student === 'w' ? 1 : -1);
@@ -600,7 +610,7 @@ export function readTheirMove(args: {
     push(quietDanger(args.fenBefore, args.san, args.student));
     if (args.prev) push(obligationLifts(args.prev.fenBefore, args.prev.san, args.san, args.student));
     push(bishopOffPlan(args.fenBefore, args.san, args.student, args.topLines, args.theirMoveFlagged));
-    push(wronglyExpected(args.fenBefore, args.san, args.student, args.topLines));
+    push(wronglyExpected(args.fenBefore, args.san, args.student, args.topLines, args.prev ?? null));
     if (!out.some((r) => r.kind === 'wrongly-expected')) push(helpedYou(args.fenBefore, args.san, args.student, args.topLines));
     const fen = ((): string | null => { try { const c = new Chess(args.fenBefore); c.move(args.san); return c.fen(); } catch { return null; } })();
     if (fen) {

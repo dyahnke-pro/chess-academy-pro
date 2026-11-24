@@ -276,6 +276,11 @@ describe('a promotion is named by the piece it makes', () => {
   it('captures and a promotion together', async () => {
     const { gainWords } = await import('./exchangeLedger');
     expect(gainWords(['r'], [], ['q'])).toBe('a rook, and a new queen');
+    // learn-mistakes-only bug 10: an under-promotion is said as one, never
+    // "a new rook" (read as a rook won).
+    expect(gainWords([], [], ['r'])).toBe('a pawn promoted to a rook');
+    expect(gainWords(['b'], [], ['n'])).toBe('a bishop, and a pawn promoted to a knight');
+    expect(gainWords([], [], ['r'])).not.toMatch(/new rook/);
   });
 });
 

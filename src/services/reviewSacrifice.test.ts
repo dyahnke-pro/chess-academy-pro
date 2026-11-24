@@ -63,11 +63,15 @@ describe('describeSacBreaksKingShield (David 2026-07-20 — the exchange-sac WHY
   const PRE_RXD7 = ['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5', 'Bxf3', 'Qxf3', 'dxe5', 'Bc4', 'Nf6', 'Qb3', 'Qe7', 'Nc3', 'c6', 'Bg5', 'b5', 'Nxb5', 'cxb5', 'Bxb5+', 'Nbd7', 'O-O-O', 'Rd8'];
 
   it('names the exchange give + the king-shield removal for Rxd7', () => {
-    const clause = describeSacBreaksKingShield(fenAfter(PRE_RXD7), 'Rxd7');
+    const clause = describeSacBreaksKingShield(fenAfter(PRE_RXD7), 'Rxd7', 'w');
     expect(clause).not.toBeNull();
     expect(clause).toMatch(/exchange/i);
     expect(clause).toMatch(/knight/i);
     expect(clause).toMatch(/king/i);
+    // learn-mistakes-only bug 9: worded from the student's seat — their
+    // sacrifice is "They give up", never "You give up".
+    expect(clause).toMatch(/^You give up/);
+    expect(describeSacBreaksKingShield(fenAfter(PRE_RXD7), 'Rxd7', 'b')).toMatch(/^They give up the exchange.*, but they tear the knight away from beside your king/);
     // Never trips the "<piece> on <square>" board-accuracy pattern.
     expect(clause).not.toMatch(/\b(knight|bishop|rook|queen|pawn|king)\s+on\s+[a-h][1-8]\b/i);
   });
@@ -75,11 +79,11 @@ describe('describeSacBreaksKingShield (David 2026-07-20 — the exchange-sac WHY
   it('returns null for a capture nowhere near the enemy king', () => {
     // 7.dxe5 grabs a pawn far from Black\'s e8 king — not a shield removal.
     const early = ['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'dxe5'];
-    expect(describeSacBreaksKingShield(fenAfter(early.slice(0, -1)), 'dxe5')).toBeNull();
+    expect(describeSacBreaksKingShield(fenAfter(early.slice(0, -1)), 'dxe5', 'w')).toBeNull();
   });
 
   it('returns null for a non-capture', () => {
-    expect(describeSacBreaksKingShield(new Chess().fen(), 'e4')).toBeNull();
+    expect(describeSacBreaksKingShield(new Chess().fen(), 'e4', 'w')).toBeNull();
   });
 });
 

@@ -94,6 +94,13 @@ export interface LearnMemory {
   /** The student's pieces loose now, each with the ply its spell began —
    *  `looseClaim` reads it to say a loose piece once, then once "still". */
   looseSpells: LooseSpells;
+  /** THE GAME'S GRADED SOUND PLIES (1-based): each student move whose one
+   *  price came in settled and under an inaccuracy. The habit computer's
+   *  evidence rule (`habitsOf`): a sound sacrifice is never "a piece left loose
+   *  again" — Learn passed an empty set and said exactly that
+   *  (learn-mistakes-only bug 1). Cleared by a new game; a takeback drops the
+   *  plies past the board it returns to. */
+  readonly soundPlies: Set<number>;
   /** Tactic motif → the move number it was first taught (S6 transfer). */
   /** Structurally `MotifLedger` — this module imports nothing (pure memory). */
   readonly motifLastSpoken: Map<string, { move: number; instance: string; seen: number }>;
@@ -198,6 +205,7 @@ export function createLearnMemory(opts: { livePlies: () => number; onNewGame?: (
     motifLastSpoken,
     lastTacticKey: '',
     looseSpells: new Map(),
+    soundPlies: new Set<number>(),
     heldMove: null,
     theirPrep: null,
     slipAnswer: null,
@@ -211,6 +219,7 @@ export function createLearnMemory(opts: { livePlies: () => number; onNewGame?: (
       return forgot;
     },
     rewind(plies: number): void {
+      for (const p of [...mem.soundPlies]) if (p > plies) mem.soundPlies.delete(p);
       story.rewind(plies);
     },
     jump(plies: number): void {
@@ -222,6 +231,7 @@ export function createLearnMemory(opts: { livePlies: () => number; onNewGame?: (
       motifLastSpoken.clear();
       mem.lastTacticKey = '';
       mem.looseSpells = new Map();
+      mem.soundPlies.clear();
       mem.heldMove = null;
       mem.theirPrep = null;
       mem.slipAnswer = null;

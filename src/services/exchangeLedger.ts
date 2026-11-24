@@ -199,7 +199,15 @@ export function netPieceWords(took: readonly string[], gave: readonly string[]):
 export function gainWords(took: readonly string[], gave: readonly string[], promoted: readonly PieceLetter[]): string | null {
   const caps = netPieceWords(took, gave);
   if (promoted.length === 0) return caps;
-  const made = nameSide(promoted).replace(/^(a|an|two|three|four) /, (m) => (m === 'a ' || m === 'an ' ? 'a new ' : `${m}new `));
+  // A pawn made into a queen is "a new queen"; made into anything else it is
+  // said as the promotion it was — "a new rook" read as if a rook were won
+  // (learn-mistakes-only bug 10, "That wins a new rook … h8=R").
+  const queens = promoted.filter((x) => x === 'q');
+  const under = promoted.filter((x) => x !== 'q');
+  const parts: string[] = [];
+  if (queens.length > 0) parts.push(nameSide(queens).replace(/^(a|an|two|three|four) /, (m) => (m === 'a ' || m === 'an ' ? 'a new ' : `${m}new `)));
+  for (const x of under) parts.push(`a pawn promoted to ${nameSide([x])}`);
+  const made = parts.join(' and ');
   return caps ? `${caps}, and ${made}` : made;
 }
 

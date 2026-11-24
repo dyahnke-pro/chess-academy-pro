@@ -75,3 +75,20 @@ describe('the one null-move rule (census 2026-10-10)', () => {
     expect(flipSideToMove('4k3/8/8/8/8/8/8/R3K3 w - - 0 1')?.split(' ')[1]).toBe('b');
   });
 });
+
+// learn-mistakes-only bug 4: a trade in progress is not a hanging piece.
+describe('computeMustDefend — the piece in the middle of a trade it started', () => {
+  it('Bxf6 is not "hanging to the g7 pawn" (g chesscom-1001055178 ply 17); a piece that took less still is', async () => {
+    const { Chess } = await import('chess.js');
+    const fenBefore = 'r2qk2r/ppp1bpp1/2n1pn1p/3p2B1/3P4/1P3PP1/P1P2PBP/RN1Q1RK1 w kq - 0 9';
+    const c = new Chess(fenBefore); c.move('Bxf6');
+    const fen = c.fen();
+    // Without the move, the board alone reads the bishop as hanging (the old report).
+    expect(computeMustDefend(fen, 'w').pieces.some((p) => p.square === 'f6')).toBe(true);
+    expect(computeMustDefend(fen, 'w', { fenBefore, san: 'Bxf6' }).pieces.some((p) => p.square === 'f6')).toBe(false);
+    // A knight that took a pawn and can be taken stays reported.
+    const f2 = '4k3/8/3p4/4p3/8/5N2/8/4K3 w - - 0 1';
+    const d = new Chess(f2); d.move('Nxe5');
+    expect(computeMustDefend(d.fen(), 'w', { fenBefore: f2, san: 'Nxe5' }).pieces.some((p) => p.square === 'e5')).toBe(true);
+  });
+});

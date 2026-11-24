@@ -539,7 +539,7 @@ const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Prom
     const bestSan = best ? sansOf(p.fenBefore, [best.uci], 1).at(0) ?? null : null;
     return notYetPlayed(p.fenBefore, p.san, bestSan, costCp(p) ?? 999)?.text ?? null;
   },
-  speedRun: (p) => depthClauses({ theory: true,
+  speedRun: (p) => depthClauses({ theory: true, sound: null,
     fen: p.fenAfter, history: [...p.note.lineSan],
     topLines: linesOf(p.after).map((l) => ({ moves: l.moves, evaluation: l.evaluation, mate: l.mate })),
     studentColor: p.student, nameMove: true,

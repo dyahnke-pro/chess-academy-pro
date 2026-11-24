@@ -3,7 +3,7 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
 import {
-  abandonedDuty, cPawnBlock, defenderTrade, denyExchange, exchangeForAttacker, exchangeIdeas,
+  abandonedDuty, cPawnBlock, defenderTrade, denyExchange, exchangeForAttacker, exchangeIdeas, PRAISES_THE_MOVE,
   IDEA_KIND, knightSquares, maintenanceTrade, materialArithmetic, onlyDevelopedTrade, prepareRecapture,
   previousOwnMove, safeBecause, simplestWin, threatCost, tradeChoice, wingForCentre, type ExchangeIdea,
 } from './exchangeIdeas';
@@ -60,10 +60,10 @@ describe('trades', () => {
   });
 
   it('deny the exchange that would double your pawns', () => {
-    const r = wellFormed(denyExchange(fa('e4 e5 Nf3 Nc6 Bb5'), 'Nce7', 'b', null));
+    const r = wellFormed(denyExchange(fa('e4 e5 Nf3 Nc6 Bb5'), 'Nce7', 'b', 0));
     expect(r.text).toMatch(/Your knight leaves c6, so their bishop can no longer take it there and double your pawns/);
     // Moving to d4 walks into the same damage (Nxd4 exd4 doubles the d-pawns).
-    expect(denyExchange(fa('e4 e5 Nf3 Nc6 Bb5'), 'Nd4', 'b', null)).toBeNull();
+    expect(denyExchange(fa('e4 e5 Nf3 Nc6 Bb5'), 'Nd4', 'b', 0)).toBeNull();
   });
 
   it('the duty a recapture abandons: the back rank', () => {
@@ -90,11 +90,11 @@ describe('trades', () => {
   });
 
   it('prepare the recapture before the capture', () => {
-    const r = wellFormed(prepareRecapture(fa('d4 Nf6 c4 e6 Nc3 Bb4'), 'Qc2', 'w', null));
+    const r = wellFormed(prepareRecapture(fa('d4 Nf6 c4 e6 Nc3 Bb4'), 'Qc2', 'w', 0));
     expect(r.text).toBe('Your queen goes to c2 first, so if they take on c3 it takes back instead of a pawn.');
     expect(r.proof.line?.sans).toEqual(['Bxc3+', 'Qxc3']);
     // e3 does not give the knight a piece recapture.
-    expect(prepareRecapture(fa('d4 Nf6 c4 e6 Nc3 Bb4'), 'e3', 'w', null)).toBeNull();
+    expect(prepareRecapture(fa('d4 Nf6 c4 e6 Nc3 Bb4'), 'e3', 'w', 0)).toBeNull();
   });
 });
 
@@ -294,3 +294,17 @@ describe('safeBecause — the move must cause the loss (prod walk 2026-10-19)', 
   });
 });
 
+
+// learn-mistakes-only bug 3: a read that credits the move speaks only when the
+// move's cost is known and under an inaccuracy (g chesscom-1012441262 ply 33
+// Nxh5 at 115 cp was "trades off one of the pieces aimed at your king").
+describe('the one praise rule at the entry', () => {
+  const fen = 'r1bq1rk1/ppp2ppp/3b4/8/6n1/5N1P/PPPPBPP1/RNBQ1RK1 w - - 0 8';
+  const c = new Chess(fen); c.move('hxg4');
+  const run = (costCp: number | null) => exchangeIdeas({ fen: c.fen(), student: 'w', lines: [], nameMove: false,
+    studentMove: { fenBefore: fen, san: 'hxg4', costCp, bestSan: null, history: null } });
+  it('a sound trade is credited; a costly or unpriced one is not', () => {
+    expect(run(0).some((x) => x.id === 'defender-trade')).toBe(true);
+    for (const cost of [115, 50, null]) expect(run(cost).some((x) => PRAISES_THE_MOVE[x.id])).toBe(false);
+  });
+});

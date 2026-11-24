@@ -256,7 +256,7 @@ import { correctionAgainstHeard } from './heardCorrection';
 
 import { settledExchange } from './exchangeLedger';
 import { inFluxAfter } from './boardState';
-import { MISTAKE_CP } from './engineConstants';
+import { MISTAKE_CP, creditableCost, type UnpricedCredit } from './engineConstants';
 
 import { detectTactics, tacticDescription } from './tacticsDetector';
 import { verifyForkOnBoard } from './tacticVerification';
@@ -526,7 +526,7 @@ export interface BoardContexts {
   /** How a mating sacrifice works (`explainMatingSacMechanism`). */
   sacMechanism: { sans: readonly string[]; sacIdx: number };
   /** The sacrifice that breaks the king's shield (`describeSacBreaksKingShield`). */
-  sacKingShield: { fenBefore: string; san: string };
+  sacKingShield: { fenBefore: string; san: string; student: Color };
   /** The board's structure state (`describeStructure`): files, outposts, pawns. */
   structureState: { fen: string };
   /** Who's better and why at the turn of the game (`phaseVerdictLine`). */
@@ -986,7 +986,7 @@ export interface BoardContexts {
   openingNamed: { det: { name: string } | null; history: readonly string[]; spokenName: string | null; student: Color; transposed: boolean; fen: string };
   /** `student` REQUIRED: "what you get for it" is the student's payoff only; the opponent's sac is "what they get". */
   sacPayoff: { fenAfter: string; mover: Color; student: Color; moverPovEvalCp: number | null; moverPovBeforeCp: number | null; kingCentreTaught: boolean };
-  sacShield: { fenBefore: string; san: string };
+  sacShield: { fenBefore: string; san: string; student: Color };
   takeStock: { fenBefore: string; san: string; fen: string; student: Color; studentPovCp: number | null };
   kingHuntCue: { fen: string; student: Color };
   opponentTarget: { fenBefore: string; san: string; student: Color };
@@ -996,7 +996,13 @@ export interface BoardContexts {
    *  the bundle Review and the lessons also read). `faultCp` is the graded
    *  cost a lane may name as a fault (0 when the grader does not call it one);
    *  `reply` their answer when it is already on the board. */
-  recapture: { fenBefore: string; san: string; theirLast: string | null; reply: string | null; faultCp: number; namesStudentMoves: boolean };
+  recapture: { fenBefore: string; san: string; theirLast: string | null; reply: string | null; faultCp: number; namesStudentMoves: boolean;
+    /** REQUIRED: the move's RAW cost (null unpriced) — the praise rule
+     *  (`creditableCost`): a recapture that cost something is never credited,
+     *  whatever the grader's fault call (Rxg2 at 217 cp, still winning). */
+    costCp: number | null;
+    /** REQUIRED: what an unpriced move is to the praise rule (the surface's). */
+    unpricedCredit: UnpricedCredit };
   /** The engine's move the student played, and the mate its line forces. */
   mateLine: { fenBefore: string; san: string; bestSan: string | null; lineUci: readonly string[]; reply: string | null };
   /** The engine's move the student played, and the material its line wins
@@ -1017,7 +1023,7 @@ export interface BoardContexts {
   /** Was the trade a good deal (`prior`: their move before, for the trade ledger). */
   tradeDeal: { fenBefore: string; san: string; reply: string | null; faultCp: number; values: readonly PieceValue[] | undefined; prior: LastMove | null; namesStudentMoves: boolean; ply: number };
   /** Pieces brought to their king, on a move that did not cost a pawn. */
-  kingAttack: { fenBefore: string; san: string; reply: string | null; cpLoss: number | null; namesStudentMoves: boolean; linesAfter: ReadonlyArray<readonly string[]> };
+  kingAttack: { fenBefore: string; san: string; reply: string | null; cpLoss: number | null; namesStudentMoves: boolean; linesAfter: ReadonlyArray<readonly string[]>; unpricedCredit: UnpricedCredit };
   /** A rule broken for a reason, on a move the engine agrees with (`history`: the moves before it). */
   ruleException: { fenBefore: string; san: string; history: readonly string[]; reply: string | null; bothCp: boolean; cpLoss: number | null };
   /** Their threat the engine's move rightly ignored (`theirFenBefore`: the board before their move). */
@@ -1121,7 +1127,9 @@ export interface BoardContexts {
   passerPush: { fen: string; student: Color; pushed: string | null };
   minority: { fen: string; student: Color };
   colourComplex: { fen: string; student: Color };
-  raceOfPlans: { fen: string; student: Color };
+  /** REQUIRED `register`: 'review' about a finished game, 'live' on a board
+   *  still in play (the race said in the present). */
+  raceOfPlans: { fen: string; student: Color; register: 'review' | 'live' };
   /** WHAT THEIR MOVE COST THEM (`theirCost`): their move `san` on
    *  `fenBefore` opened a hole a knight of the student's reaches, shut in a
    *  bishop, or gave up castling — the student's to use. The key starts with
@@ -1142,8 +1150,8 @@ export interface BoardContexts {
    *  twice in the moves so far (`history`, from the start), with the plan
    *  against it; `sound`: the plies the grader called sound (never a habit's
    *  evidence), empty where no grades are in hand. One fact per habit. */
-  theirHabit: { history: readonly string[]; student: Color; sound: ReadonlySet<number> };
-  yourHabit: { history: readonly string[]; student: Color; sound: ReadonlySet<number> };
+  theirHabit: { history: readonly string[]; student: Color; sound: ReadonlySet<number> | null };
+  yourHabit: { history: readonly string[]; student: Color; sound: ReadonlySet<number> | null };
   /** A KNOWN ATTACKING STRUCTURE (`knownAttack`) on `fen` for the student, by
    *  its conditions; `studentCp`: the student's score, or null. */
   knownAttack: { fen: string; student: Color; studentCp: number | null };
@@ -1162,7 +1170,14 @@ export interface BoardContexts {
   bluff: { fenBefore: string; san: string; reply: string | null; student: Color };
   /** WHAT SEPARATES TWO GOOD MOVES (`contrast`): the student's sound `san`
    *  and the engine's `bestSan` on `fenBefore`, and what one leaves undefended. */
-  contrast: { fenBefore: string; san: string; bestSan: string; student: Color };
+  contrast: { fenBefore: string; san: string; bestSan: string; student: Color;
+    /** REQUIRED: the played move's cost, null unpriced. "Your move keeps …
+     *  defended" credits the move: the one praise rule (`creditableCost`) —
+     *  on a costly or unpriced move only the "leaves it with no guard" side is
+     *  said (learn-mistakes-only bug 3: …f5 at 174 cp was credited). */
+    costCp: number | null;
+    /** REQUIRED: what an unpriced move is to the praise rule (the surface's). */
+    unpricedCredit: UnpricedCredit };
   /** The rule a clean move kept. `taught` is the surface's say-once ledger of
    *  rules: full the first time, a stem after. */
   /** The new threat a move made (`mover` moved, `fenBefore` → `fenAfter`).
@@ -1275,7 +1290,7 @@ export interface BoardContexts {
   tradeOffer: { fenBefore: string; san: string; student: Color; costCp: number | null; afterCp: number | null };
   /** A rook trade for an open file: the challenge, or the trade that hands
    *  the file over. `line`: the engine's line after the move (uci). */
-  fileTrade: { fenBefore: string; san: string; student: Color; costCp: number | null; line: readonly string[] | null };
+  fileTrade: { fenBefore: string; san: string; student: Color; costCp: number | null; line: readonly string[] | null; unpricedCredit: UnpricedCredit };
   /** The trade into a won king-and-pawn ending, along the engine's line after
    *  the move (`after`, the opponent to move). */
   pawnEndingTrade: { fenBefore: string; san: string; student: Color; costCp: number | null; after: AnalysisLine | null };
@@ -1966,10 +1981,10 @@ export const BOARD_COMPUTERS = {
     surfaces: { ...reviewFacetSurfaces(), weaknesses: WEAK_SAC_TOLD },
   },
   sacKingShield: {
-    read: ({ fenBefore, san }, fact) => safe(() => {
-      const shield = describeSacBreaksKingShield(fenBefore, san);
+    read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const shield = describeSacBreaksKingShield(fenBefore, san, student);
       if (!shield) return null;
-      return fact({ key: `shield:${san}`, claims: [`shield:${san}`], text: `${shield}.`, proof: NO_PROOF.description, squares: [], stakes: null, seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore });
+      return fact({ key: `shield:${san}`, claims: [`shield:${san}`], text: `${shield}.`, proof: NO_PROOF.description, squares: [], stakes: null, seat: sideToMove(fenBefore) === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore });
     }),
     computer: 'describeSacBreaksKingShield',
     kind: 'sac-why',
@@ -4687,12 +4702,12 @@ export const BOARD_COMPUTERS = {
     surfaces: { ...walkSurfaces(), weaknesses: WEAK_SAC_TOLD },
   },
   sacShield: {
-    read: ({ fenBefore, san }, fact) => safe(() => {
-      const clause = describeSacBreaksKingShield(fenBefore, san);
+    read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const clause = describeSacBreaksKingShield(fenBefore, san, student);
       if (!clause) return null;
       const withCheck = /\+$/.test(san) ? ', and it lands with check' : '';
       return fact({ key: `sac-shield:${fenBefore.split(' ')[0]}:${san}`, claims: [`sac-shield:${san}`], text: `${clause}${withCheck}.`, proof: NO_PROOF.description, squares: [], stakes: null,
-        seat: 'student', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore });
+        seat: sideToMove(fenBefore) === student ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenBefore });
     }),
     computer: 'describeSacBreaksKingShield',
     kind: 'sac',
@@ -4780,11 +4795,11 @@ export const BOARD_COMPUTERS = {
   recapture: {
     // WHICH PIECE TAKES BACK, AND WHY — on a recapture the grader does not call
     // a fault. A faulty recapture is the one error computer's.
-    read: ({ fenBefore, san, theirLast, reply, faultCp, namesStudentMoves }, fact) => safe(() => {
+    read: ({ fenBefore, san, theirLast, reply, faultCp, namesStudentMoves, costCp, unpricedCredit }, fact) => safe(() => {
       const tookOn = theirLast ? /x([a-h][1-8])/.exec(theirLast)?.[1] ?? null : null;
       const to = moveTo(fenBefore, san);
       if (faultCp !== 0 || !tookOn || to !== tookOn || !san.includes('x')) return null;
-      const rc = recaptureChoice(fenBefore, san, reply, namesStudentMoves);
+      const rc = recaptureChoice(fenBefore, san, reply, namesStudentMoves, costCp, unpricedCredit);
       if (!rc) return null;
       const proof = squaresProof(rc, [to]);
       if (!proof) return null;
@@ -4888,7 +4903,8 @@ export const BOARD_COMPUTERS = {
     // THE BLUNDER CHECK, earned only by what the board did — with its stake
     // and its square: what they took is what rode on it (Learn audit 2026-10-14).
     read: ({ fenBefore, san, reply, faultCp, again, ply }, fact) => safe(() => {
-      const bc = blunderCheck(fenBefore, san, reply, faultCp, again);
+      const student = sideToMove(fenBefore);
+      const bc = blunderCheck(fenBefore, san, reply, faultCp, again, student);
       if (!bc) return null;
       let lost: { square: string; piece: string } | null = null;
       try {
@@ -4994,9 +5010,11 @@ export const BOARD_COMPUTERS = {
     // BRINGING PIECES TO THEIR KING — not on a move that cost a pawn; that
     // move's lesson is the cost. "…heads for their king — Qg3 next" names the
     // student's next move: drawn as the move to play (`marks.play`).
-    read: ({ fenBefore, san, reply, cpLoss, namesStudentMoves, linesAfter }, fact) => safe(() => {
-      if (cpLoss === null || cpLoss >= 100) return null;
-      const ka = kingAttack(fenBefore, san, false, namesStudentMoves, linesAfter);
+    read: ({ fenBefore, san, reply, cpLoss, namesStudentMoves, linesAfter, unpricedCredit }, fact) => safe(() => {
+      // The line credits the move: the one praise rule (`creditableCost`).
+      if (!creditableCost(cpLoss, unpricedCredit)) return null;
+      // Every caller reads the student's own move: the mover is the student.
+      const ka = kingAttack(fenBefore, san, false, namesStudentMoves, linesAfter, sideToMove(fenBefore));
       if (!ka) return null;
       const next = ka.next ? { from: ka.next.uci.slice(0, 2), to: ka.next.uci.slice(2, 4) } : null;
       return fact({ key: `${ka.kind}|${ka.next?.uci ?? '-'}`,
@@ -5824,8 +5842,8 @@ export const BOARD_COMPUTERS = {
     },
   },
   raceOfPlans: {
-    read: ({ fen, student }, fact) => safe(() => {
-      const race = planRaceClause(fen, student, 'review');
+    read: ({ fen, student, register }, fact) => safe(() => {
+      const race = planRaceClause(fen, student, register);
       if (!race) return null;
       const text = `${openSentence(race)}.`;
       return fact({ key: `race:${fen.split(' ')[0]}`, claims: ['plan-race'], text, proof: planRaceProof(fen, student) ?? NO_PROOF.description, squares: [], stakes: null,
@@ -6598,11 +6616,12 @@ export const BOARD_COMPUTERS = {
     },
   },
   contrast: {
-    read: ({ fenBefore, san, bestSan, student }, fact) => safe(() => {
+    read: ({ fenBefore, san, bestSan, student, costCp, unpricedCredit }, fact) => safe(() => {
       const strip = (x: string): string => x.replace(/[+#!?]+$/, '');
       if (strip(bestSan) === strip(san)) return null;
       const c = contrastMoves(fenBefore, san, bestSan);
       if (!c) return null;
+      if (strip(c.keeps) === strip(san) && !creditableCost(costCp, unpricedCredit)) return null;
       const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
       // The piece it names must stand on that square on the REAL board after
       // the move played — the other candidate's board is hypothetical.
@@ -6972,8 +6991,8 @@ export const BOARD_COMPUTERS = {
     surfaces: TRADE_SURFACES,
   },
   fileTrade: {
-    read: ({ fenBefore, san, student, costCp, line }, fact) => safe(() => {
-      const t = fileTradeAt(fenBefore, san, costCp, line);
+    read: ({ fenBefore, san, student, costCp, line, unpricedCredit }, fact) => safe(() => {
+      const t = fileTradeAt(fenBefore, san, costCp, line, unpricedCredit);
       if (!t) return null;
       const mine = sideToMove(fenBefore) === student;
       const text = fileTradeLine(t, mine, fenBefore);

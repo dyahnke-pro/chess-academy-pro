@@ -4,8 +4,11 @@
 // for the student, worded to the student.
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { habitsOf, opponentHabits, depthClauses, NO_SOUND_PLIES } from './thinkAloud';
+import { habitsOf, opponentHabits, depthClauses } from './thinkAloud';
 import { buildReviewSegmentsForTests, type ReviewMoveInput } from './coachFeatureService';
+
+/** Every ply graded, none called sound. */
+const NO_SOUND_PLIES: ReadonlySet<number> = new Set<number>();
 
 const G2 = 'e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bg4 h3 Nc6 hxg4 O-O-O d5 e6 Bd2 exd5 Be2 Nxg4 O-O Bc5 a3 Bxf2+ Rxf2 Nxf2 Kxf2 Qc5+ Kf1 Nd4 Be3 Nxf3 Bxc5 Nh2+ Ke1 c6 Qd3 d4 Bxd4 Rd6 Rd1 Re6 Qf5 f6 Kd2 Kb8 Qf4+ Ka8 Kc1'.split(' ');
 
@@ -18,8 +21,22 @@ describe('the student\'s habit, from the same computer', () => {
   });
   it('Learn\'s depth read carries it', () => {
     const c = new Chess(); for (const s of G2) c.move(s);
-    const out = depthClauses({ theory: true, fen: c.fen(), history: G2, topLines: [], studentColor: 'b', nameMove: false });
+    const out = depthClauses({ theory: true, sound: NO_SOUND_PLIES, fen: c.fen(), history: G2, topLines: [], studentColor: 'b', nameMove: false });
     expect(out.find((x) => x.kind === 'your-habit')?.text).toMatch(/you've left a piece loose/);
+  });
+  // learn-mistakes-only bug 1: Learn passed an empty sound set whatever the
+  // grades said, so a sound sacrifice was "a piece left loose again".
+  it('Learn\'s depth read takes the game\'s graded sound plies: sound moves are never the habit\'s evidence', () => {
+    const c = new Chess(); for (const s of G2) c.move(s);
+    const blackPlies = new Set(G2.map((_, i) => i + 1).filter((p) => p % 2 === 0));
+    const out = depthClauses({ theory: true, sound: blackPlies, fen: c.fen(), history: G2, topLines: [], studentColor: 'b', nameMove: false });
+    expect(out.some((x) => x.kind === 'your-habit' && /left a piece loose/.test(x.text))).toBe(false);
+  });
+  it('an ungraded game calls no move loose (a sound sacrifice looks loose on the board)', () => {
+    const c = new Chess(); for (const s of G2) c.move(s);
+    const out = depthClauses({ theory: true, sound: null, fen: c.fen(), history: G2, topLines: [], studentColor: 'b', nameMove: false });
+    expect(out.some((x) => /left a piece loose/.test(x.text))).toBe(false);
+    expect(habitsOf(G2, 'b', 'your', null).some((h) => h.kind === 'loose')).toBe(false);
   });
   it('Review names it on the move that made it a habit', () => {
     const c = new Chess();

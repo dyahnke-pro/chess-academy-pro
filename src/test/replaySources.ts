@@ -4,6 +4,7 @@ import { onCoachDecision, type CoachDecisionRow } from '../services/coachDecisio
 import { computePositionFacts, type PositionFactsResult } from '../services/positionFacts';
 import { mateContext } from '../utils/mateContext';
 import { analysisOf, linesOf, replayPlies, reviewSegments, type ReplayGame } from './replayGame';
+import { INACCURACY_CP } from '../services/engineConstants';
 
 export interface FixtureGame extends ReplayGame { id: string; rating: number }
 
@@ -36,9 +37,13 @@ export async function learnSource(g: FixtureGame, onTurns?: (turns: Array<Array<
   let planHeard: string | null = null;
   const out: SourceRecord = { rows: [], spoken: [] };
   const turns: Array<Array<{ kind: string; text: string; claim: string }>> = [];
+  // The game's graded sound plies, as the page keeps them (`LearnMemory.
+  // soundPlies`): each student move priced under an inaccuracy.
+  const soundPlies = new Set<number>();
   for (let k = 0; k + 1 < plies.length; k++) {
     const p = plies[k];
     const r = plies[k + 1];
+    if (p.own && p.costCp !== null && p.costCp < INACCURACY_CP) soundPlies.add(k + 1);
     if (!p.own || r.after.length === 0) continue;
     const historySans = g.sans.slice(0, k + 1);
     const { rows, result } = await withRows(() => computePositionFacts({ theory: true, namesPlayedMove: true,
@@ -46,6 +51,7 @@ export async function learnSource(g: FixtureGame, onTurns?: (turns: Array<Array<
       posture: 'walk',
       fen: r.fenAfter,
       history: g.sans.slice(0, k + 2),
+      soundPlies: new Set(soundPlies),
       moverColor: student,
       studentColor: student,
       rating: g.rating,

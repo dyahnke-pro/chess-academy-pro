@@ -80,3 +80,30 @@ describe('the itinerary in the one basket (unification)', () => {
     expect(readBoard('pieceItinerary', { fenBefore: '8/8/8/8/8/8/8/K6k w - - 0 1', san: 'Kb1', student: 'w', history: ['e4'] })).toBeNull();
   }, 60_000);
 });
+
+// learn-mistakes-only bug 8: a capture is no journey, and no stock tail.
+describe('detectPieceItineraries — no route on a capture', () => {
+  it('a knight that takes on its third square is not "a journey"; a quiet landing is, without the patience line', () => {
+    // The knight goes g1-f3-d2, then takes a bishop on c4: a trade, not a reroute.
+    const takes = ['e4', 'e5', 'Nf3', 'Nc6', 'd3', 'd6', 'Nfd2', 'Bf5', 'g3', 'Bc8', 'g4', 'Bd7', 'f3', 'Be6', 'Bg2', 'Bc4', 'Nxc4'];
+    const r = detectPieceItineraries(takes, 'white');
+    expect([...r.values()].some((it) => it.route[it.route.length - 1] === 'c4')).toBe(false);
+    const quiet = detectPieceItineraries(['e4', 'e5', 'Nf3', 'Nc6', 'd3', 'd6', 'Nfd2', 'Nf6', 'Nc4'], 'white');
+    const it = [...quiet.values()][0];
+    expect(it.text).not.toMatch(/patience|reroutes instead/);
+  });
+});
+
+// A capture ENDS the journey: no route passes through a capture square.
+describe('detectPieceItineraries — a capture ends the journey', () => {
+  it('the knight that took on c4 and walks on: its journey starts on c4, never through it', () => {
+    // Knight g1-f3-d2, takes the bishop on c4, then c4-e3-d5.
+    const sans = ['e4', 'e5', 'Nf3', 'Nc6', 'd3', 'd6', 'Nfd2', 'Bf5', 'g3', 'Bc8', 'g4', 'Bd7', 'f3', 'Be6', 'Bg2', 'Bc4', 'Nxc4', 'a6', 'Ne3', 'b5', 'Nd5'];
+    const routes = [...detectPieceItineraries(sans, 'white').values()];
+    for (const it of routes) {
+      expect(it.route.slice(1, -1)).not.toContain('c4');
+      expect(it.text).not.toMatch(/by way of c4/);
+    }
+    expect(routes.some((it) => it.route[0] === 'g1')).toBe(false);
+  });
+});

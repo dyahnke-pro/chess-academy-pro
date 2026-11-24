@@ -33,12 +33,19 @@ export function blunderCheck(
   cpLoss: number,
   /** The full question was already said this game: say the short callback
    *  (the habit is built by asking it again, never by silence after once). */
-  again = false,
+  again: boolean,
+  /** REQUIRED: the student's colour. The habit is the MOVER's: on the
+   *  student's move it is asked of them, "your" piece; on theirs it is not
+   *  the student's habit and nothing is said — its capture would be the
+   *  student's next move (learn-mistakes-only bug 9: "taking your knight on
+   *  e4" on THEIR move). */
+  student: 'w' | 'b',
 ): string | null {
   if (!reply || cpLoss < BLUNDER_CHECK_CP) return null;
   let c: Chess;
   let mine;
   try { c = new Chess(fenBefore); mine = c.move(san); } catch { return null; }
+  const theirs = mine.color !== student;
   const afterMove = c.fen();
   let r;
   try { r = c.move(reply.replace(/^…/, '')); } catch { return null; }
@@ -59,6 +66,9 @@ export function blunderCheck(
   // is the question the habit asks first.
   if (!answer && /[+#]$/.test(r.san)) answer = `their check, ${r.color === 'b' ? '…' : ''}${r.san}`;
   if (!answer) return null;
+  // The habit is asked of the student about the student's own move: on
+  // theirs there is no question of the student's to ask.
+  if (theirs) return null;
   return again ? blunderCheckAgain(answer, fenBefore) : blunderCheckAnswer(answer);
 }
 

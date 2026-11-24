@@ -35,7 +35,7 @@ describe('review walk 2065', () => {
   });
 
   it('Rxc7+ (ply 71): no "attack rolls on" with no attacker left; the pawn ending is the point', () => {
-    expect(describeSacBreaksKingShield(fenAt(70), 'Rxc7+')).toBeNull();
+    expect(describeSacBreaksKingShield(fenAt(70), 'Rxc7+', 'w')).toBeNull();
     const comp = sacrificeCompensation(fenAt(71), 'w', 800, true, 800);
     expect(comp.join(' ')).toMatch(/king-and-pawn ending/);
   });

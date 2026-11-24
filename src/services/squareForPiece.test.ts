@@ -16,4 +16,22 @@ describe('squareForPiece', () => {
   it('stays silent where the board does not have it', () => {
     expect(squareForPiece('r1b2rk1/5pbp/1q2p3/1pn5/3p4/3B1N2/PP2QPPP/R1B2RK1 w - - 0 16', N, 'w')).toBeNull();
   });
+  // learn-mistakes-only bug 10: "The plan with g4 leaves a hole on f4." —
+  // a sentence keep cut the reason off. Every phrasing's FIRST sentence
+  // carries both the hole and the buried piece.
+  it('every phrasing says the hole and the buried piece in one sentence', () => {
+    const seen = new Set<string>();
+    for (let n = 10; n < 40; n += 1) {
+      const fen = `r1bq1rk1/1pp3pp/p1pb1p2/8/3NPP2/3QB3/PPP3PP/R4RK1 w - - 0 ${n}`;
+      for (const student of ['w', 'b'] as const) {
+        const r = squareForPiece(fen, L, student);
+        if (!r) continue;
+        const first = r.text.split(/(?<=\.)\s/)[0];
+        expect(first).toMatch(/e5/);
+        expect(first).toMatch(/c8/);
+        seen.add(r.text.slice(0, 20));
+      }
+    }
+    expect(seen.size).toBeGreaterThan(2);
+  });
 });

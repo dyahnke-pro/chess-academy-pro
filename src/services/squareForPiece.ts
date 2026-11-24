@@ -81,7 +81,10 @@ export function squareForPiece(fen: string, lines: readonly EngineLine[], studen
         const text = you
           ? rotateStem([
             `${lead} gives up the ${holes[0]} square for good, but it shuts in ${theirs} ${PIECE_NAME[p.type]} on ${p.square}. A square for a piece is a trade worth making.`,
-            `${lead} leaves a hole on ${holes[0]}. In return ${theirs} ${PIECE_NAME[p.type]} on ${p.square} is left with nowhere to go, and a buried piece is worth more than a square.`,
+            // ONE SENTENCE CARRIES BOTH HALVES (learn-mistakes-only bug 10:
+            // "The plan with g4 leaves a hole on f4." was said with its reason
+            // cut off — a sentence keep downstream kept the first one only).
+            `${lead} leaves a hole on ${holes[0]}, but in return ${theirs} ${PIECE_NAME[p.type]} on ${p.square} is left with nowhere to go. A buried piece is worth more than a square.`,
           ], key)
           : rotateStem([
             `Watch for ${m.san}: it gives them a hole on ${holes[0]}, but it shuts in ${theirs} ${PIECE_NAME[p.type]} on ${p.square}. They are trading a square for a piece.`,

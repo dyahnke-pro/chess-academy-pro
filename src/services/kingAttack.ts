@@ -107,6 +107,10 @@ export function kingAttack(
    *  reply first). A piece "heads for their king" only where a line plays
    *  its next hop; empty — no line was read — and the hop is never claimed. */
   linesAfter: ReadonlyArray<readonly string[]>,
+  /** REQUIRED: the student's colour — the words are the student's seat:
+   *  "your pieces … their king" on the student's move, "their pieces … your
+   *  king" on theirs (learn-mistakes-only bug 9: always "your"). */
+  student: 'w' | 'b',
 ): KingAttackPoint | null {
   let before: Chess; let after: Chess; let mv;
   try {
@@ -129,13 +133,16 @@ export function kingAttack(
   // named (Learn: David 2026-11-09, "the user knows that, they see it play
   // out" — prod focus audit heard "Queen to e1 with check brings your queen
   // into the attack").
-  const played = namesPlayedMove ? `${dot}${mv.san}` : 'your move';
-  const Played = namesPlayedMove ? played : 'Your move';
+  const mine = me === student;
+  const own = mine ? 'your' : 'their';
+  const king = mine ? 'their king' : 'your king';
+  const played = namesPlayedMove || !mine ? `${dot}${mv.san}` : 'your move';
+  const Played = namesPlayedMove || !mine ? played : 'Your move';
   // The count is said only when it decides something — more attackers than
   // defenders — and in words (prod Review 2026-11-21: "3 of your pieces on it
   // against 3 defenders" said a level count as if it mattered).
   const tally = a.attackers.size >= 2 && a.attackers.size > a.defenders.size
-    ? ` — ${countWord(a.attackers.size)} of your pieces against ${a.defenders.size === 0 ? 'no defender' : `only ${countWord(a.defenders.size)} defender${a.defenders.size === 1 ? '' : 's'}`}`
+    ? ` — ${countWord(a.attackers.size)} of ${own} pieces against ${a.defenders.size === 0 ? 'no defender' : `only ${countWord(a.defenders.size)} defender${a.defenders.size === 1 ? '' : 's'}`}`
     : '';
   const out = (kind: KingAttackPoint['kind'], text: string, squares: string[]): KingAttackPoint =>
     ({ kind, text, squares: [...new Set([...squares, a.king])], attackers: a.attackers.size, defenders: a.defenders.size });
@@ -143,7 +150,7 @@ export function kingAttack(
   if (mv.captured === 'p' && shelter?.includes(mv.to)) {
     // A capture is the subject's verb already ("Bxh6 takes away" is spoken
     // "bishop takes h6 takes away", prod walk 2026-10-18): lead with the move.
-    return out('strips-shelter', `With ${played}, one of the pawns in front of their king is gone — the cover is coming apart${tally}.`, [mv.to]);
+    return out('strips-shelter', `With ${played}, one of the pawns in front of ${king} is gone — the cover is coming apart${tally}.`, [mv.to]);
   }
   // A DEFENDER STANDS BY THE KING (walk 2026-09-30: "…Rxe4 takes off a
   // defender of their king" of a rook three squares away, that had just taken
@@ -151,23 +158,23 @@ export function kingAttack(
   const nearKing = Math.max(Math.abs(mv.to.charCodeAt(0) - a.king.charCodeAt(0)), Math.abs(Number(mv.to[1]) - Number(a.king[1]))) <= 2;
   if (mv.captured && mv.captured !== 'p' && shelter && nearKing && b.defenders.has(mv.to) && a.defenders.size < b.defenders.size
     && after.attackers(mv.to, them).length === 0 && a.attackers.size >= 2) {
-    return out('removes-defender', `With ${played}, a defender of their king is gone${tally}.`, [mv.to]);
+    return out('removes-defender', `With ${played}, a defender of ${king} is gone${tally}.`, [mv.to]);
   }
   if (mv.piece === 'p') {
     const kf = a.king.charCodeAt(0);
     const files = [kf - 1, kf, kf + 1].filter((f) => f >= 97 && f <= 104).map((f) => String.fromCharCode(f));
     const pawnsOn = (c: Chess, file: string): number => c.board().flat().filter((x) => x?.type === 'p' && x.square[0] === file).length;
     const opened = files.find((f) => pawnsOn(before, f) > 0 && pawnsOn(after, f) === 0);
-    if (opened && shelter) return out('opens-file', `${Played} rips open the ${opened}-file next to their king.`, [`${opened}${a.king[1]}`]);
+    if (opened && shelter) return out('opens-file', `${Played} rips open the ${opened}-file next to ${king}.`, [`${opened}${a.king[1]}`]);
     if (a.attackers.size - b.attackers.size >= 2) {
-      return out('opens-lines', `${Played} opens lines at their king${tally || ` — ${a.attackers.size} of your pieces now bear on it`}.`, [mv.to]);
+      return out('opens-lines', `${Played} opens lines at ${king}${tally || ` — ${a.attackers.size} of ${own} pieces now bear on it`}.`, [mv.to]);
     }
     return null;
   }
   // Bringing a piece over is a quiet move; a capture is about the material.
   if (mv.piece === 'k' || !shelter || mv.captured) return null;
   if (a.attackers.has(mv.to) && !b.attackers.has(mv.from) && a.attackers.size > b.attackers.size && a.attackers.size >= 2) {
-    return out('adds-attacker', `${Played} brings your ${NAME[mv.piece]} into the attack on their king${tally}.`, [mv.to]);
+    return out('adds-attacker', `${Played} brings ${own} ${NAME[mv.piece]} into the attack on ${king}${tally}.`, [mv.to]);
   }
   if (!a.attackers.has(mv.to) && !b.attackers.has(mv.from) && a.attackers.size >= 1) {
     const kf = a.king.charCodeAt(0);
@@ -179,12 +186,12 @@ export function kingAttack(
       // Held: the idea, never the square — and no arrow to it.
       if (!namesStudentMoves) {
         const text = namesPlayedMove
-          ? `${played} heads for their king — one more ${NAME[mv.piece]} move brings it to bear.`
-          : `Your ${NAME[mv.piece]} heads for their king — one more move brings it to bear.`;
+          ? `${played} heads for ${king} — one more ${NAME[mv.piece]} move brings it to bear.`
+          : `${mine ? 'Your' : 'Their'} ${NAME[mv.piece]} heads for ${king} — one more move brings it to bear.`;
         return out('heads-for-king', text, [mv.to]);
       }
       return {
-        ...out('heads-for-king', `${played} heads for their king — ${dot}${next.san} next brings the ${NAME[mv.piece]} to bear.`, [mv.to, next.to]),
+        ...out('heads-for-king', `${played} heads for ${king} — ${dot}${next.san} next brings the ${NAME[mv.piece]} to bear.`, [mv.to, next.to]),
         next: { san: next.san, uci: `${mv.to}${next.to}` },
       };
     }

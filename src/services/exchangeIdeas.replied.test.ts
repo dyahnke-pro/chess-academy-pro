@@ -8,7 +8,9 @@ import { exchangeIdeas } from './exchangeIdeas';
 const BEFORE_RD5 = 'r1b1kr2/pp2p1bp/2np2p1/q5N1/4PBn1/1QN5/PP3PPP/3RR1K1 w - - 10 14';
 const AFTER_RD5 = 'r1b1kr2/pp2p1bp/2np2p1/q2R2N1/4PBn1/1QN5/PP3PPP/4R1K1 b - - 11 14';
 const AFTER_QB4 = 'r1b1kr2/pp2p1bp/2np2p1/3R2N1/1q2PBn1/1QN5/PP3PPP/4R1K1 w - - 12 15';
-const studentMove = { fenBefore: BEFORE_RD5, san: 'Rd5', costCp: 190, bestSan: 'e5', history: null };
+const studentMove = { fenBefore: BEFORE_RD5, san: 'Rd5', costCp: 0, bestSan: 'e5', history: null };
+// (Priced sound here: this test is about a reply already made. At its real
+// 190 cp the defence idea is a credit the one praise rule refuses.)
 
 describe('exchangeIdeas — a read of their reply after they have replied', () => {
   it('on the board after the student’s move, the read holds: their queen on a5 drops', () => {
