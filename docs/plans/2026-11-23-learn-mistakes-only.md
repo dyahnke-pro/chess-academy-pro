@@ -9,6 +9,9 @@ LESSON (board example inside) → CONSEQUENCE → BETTER MOVE + JOB (once past) 
 No board restatement. Learn never names the student's next move or the move they just played. Silence otherwise.
 Approved voice: "Trading off your dark-squared bishop hands them the dark squares, and d4 is the first target. Before you trade a bishop, ask which colour you're giving away."
 
+## Rule for every sentence the build writes: say it several ways (David 2026-11-24)
+Every recipe slot (LESSON, CONSEQUENCE, BETTER MOVE, HABIT) holds **at least 3 phrasings of the same idea**, rotated with `rotateStem` keyed on the board, never `Math.random`, so a game never repeats itself. The idea and the facts stay the same; only the words change. A gate (`mistakeLesson.test.ts`) fails any recipe slot with fewer than 3 phrasings and any two phrasings that are word-for-word the same once squares and pieces are blanked. The only exceptions are the ones already locked: the focus clue and the mission lines stay fixed.
+
 ## Order — the computer job comes first
 
 ### Phase 1 — the cards (the build spec) ← NOW
@@ -21,7 +24,7 @@ Pilots: `docs/teaching-cards/pilot-cards.md` (pictureVerdict, readPosition — r
 
 ### Phase 2 — the build (from the cards; separate go)
 1. Facts: every computer exposes its dropped "why" as typed fields (cards §B2/§F); `errorWhy` exports its cause (`MistakeCause`, exhaustive: costReason kind+motif, whyItFailed kinds incl. walks-into-fork, positionalReason kinds, mate).
-2. The recipe table: `mistakeLesson.ts`, `Record<MistakeCause, LessonRecipe>` from the cards' §D rows; missing slot → silent + logged.
+2. The recipe table: `mistakeLesson.ts`, `Record<MistakeCause, LessonRecipe>` from the cards' §D rows, ≥3 rotated phrasings per slot; missing slot → silent + logged.
 3. Sensitivity: the cards' §F threshold changes, each proven on its miss board and its guard board.
 4. The composer: lesson → consequence → better move → habit; the board-restatement step removed.
 5. Learn's voice gate: mistake turns only, after the move; delete the before-move focus question and the pointers (CLAUDE.md sections replaced).
