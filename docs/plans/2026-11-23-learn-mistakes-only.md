@@ -46,6 +46,17 @@ The REPAIR slot is required on every mistake turn, not only permanent concession
 
 Each recovery principle is researched from at least 2 independent sources: the book corpus (`chess-concepts.json`) plus reputable chess writing. The sources are recorded on the recipe row. Each principle has a deterministic board check that it applies here (e.g. "attack their king" needs pieces able to reach it and the queens still on). It is written in the approved voice with 5 phrasings. With no recovery that applies, the turn stays silent rather than naming the error bare.
 
+## Decided (David 2026-11-24)
+- **When Learn speaks: the rule in force today.** A mistake (≥ 100 cp) speaks. An inaccuracy (50–99 cp, `INACCURACY_CP`) speaks only when a computer shows the mechanism (errorWhy `failed`/cause), never on the cost alone. The opponent's mistakes follow the same floor, then the record rule above.
+- **We never make anything up: a mistake with no computable cause is silent and LOGGED.** Every mistake turn writes one `mistake-lesson` audit row (local Dexie log). It is mirrored to PostHog as `mistake_lesson` through `analytics.AUDIT_EVENT_MAP` (`src/services/analytics.ts:82`), so the gaps can be counted on real users and closed computer by computer. Props:
+  - `seat` (you/them), `cost_cp`, `phase`, `surface`;
+  - `cause` (MistakeCauseKind or null), `motif`, `tag`;
+  - `spoken` (bool), `silent_why`: no-cause | no-recovery | missing-slot | record-green | below-floor | decided-game;
+  - `slots_filled` (lesson/consequence/better/repair/habit);
+  - `build_id`.
+
+  No FEN and no text; the device id comes from the super-properties. A test asserts every silent mistake writes the row, and the mirror keeps the kind (`analytics.test.ts`). The usage report can then rank `silent_why = no-cause` by `tag` and `phase` to say which computer to build next.
+
 ## Order — the computer job comes first
 
 ### Phase 1 — the cards (the build spec) ← NOW
