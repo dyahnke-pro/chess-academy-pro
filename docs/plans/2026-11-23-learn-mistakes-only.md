@@ -42,6 +42,12 @@ Pilots: `docs/teaching-cards/pilot-cards.md` (pictureVerdict, readPosition — r
 - [ ] Wording defects: "their both rooks" (latentFork); under-promotion "a new rook" (lineWins); mate in one listed as a "safe check" (noSafeChecks); cut-off "The plan with g4 leaves a hole on f4" (squareForPiece).
 - [ ] Duplicates to merge (G8.5): two `queenSafeSquares`; three pinned-guard readers; `obligationLifts` twin; `moveAllows` registry lane vs errorWhy's read; `buildPriorityFirst` + `pictureTarget` both filing missed-weak-target; `describeStructure` (648 fired, 0 said) deleted.
 - [ ] Squares not handed to the decider (dropped as unsupported): `royalDefenderTarget` (64), `enemyKingStuckInCenter` (14 of 284 said), `rookOnSeventh`, `badEnemyBishop`, `endgameVerdict`, `pieceWish`.
+- [ ] Wrong skill filed: "your piece gets kicked, you lose time" tied to `tempo-handed` (which means "your move frees their piece", `positionalReason.ts:195`) in squareChoice, outOfReach, itineraryAt, queenChased → `misplaced-piece` + errorWhy `allowed-threat`.
+- [ ] `positionalReason.ts:222` tags any king move as `passive-king-endgame` with no phase check (a middlegame king step files the wrong skill).
+- [ ] Missing record tags the cards lean on: no `back-rank`, no `queen-out-early`; `passive-rook` reads files only (no seventh rank, no rook behind the passer).
+- [ ] passedPawnPush says "push it" but passes `namesStudentMove: false` (`boardComputers.ts:5751`) and reads only the first passer (:5745); structurePlanFact `passer-mine` (`nextPlans.ts:1014`) says "push it" before the move.
+- [ ] buildPriorityFirst `resolve` judges "you found it" by SAN string (`playCommentary.ts:532`) — coordinates rule (G4.5.2); its miss branch never checks whether the student's move also hit the target.
+- [ ] Duplicate diffs: describeStructure / centreDuo / frozenTarget each plan their own before/after compare — extend `boardStructure.newPawnWeaknesses` (:387); `holeAccess` (`moveInsight.ts:1371`) and inaccessibleHole make the same claim twice → one producer.
 
 ### New mistake causes (merged into errorWhy's one list)
 ignored-threat · tempo-wasted · colour-conceded · traded-into-target · passer-handed · compensation-lost · stalemate · technique-broken (+ walks-into-fork made live). Final list goes to David with the lesson wording.
