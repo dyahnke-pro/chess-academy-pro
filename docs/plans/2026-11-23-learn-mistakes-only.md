@@ -57,6 +57,11 @@ Each recovery principle is researched from at least 2 independent sources: the b
 
   No FEN and no text; the device id comes from the super-properties. A test asserts every silent mistake writes the row, and the mirror keeps the kind (`analytics.test.ts`). The usage report can then rank `silent_why = no-cause` by `tag` and `phase` to say which computer to build next.
 
+## Review opens instantly (David 2026-11-24, next job on this branch)
+1. **A Learn game opens Review with no load.** Learn already reads every move it plays. It saves only the student's graded plies, though (`learnGameRecord.buildLearnGameRecord`), so Review re-reads the whole game. Fix: Learn saves the reads it already has for both seats. The coach's own moves are scored in `humanReply`, which reads every legal move. Review reuses them and asks the engine only for what is missing.
+2. **Every game streams.** The walk starts at move 1 while the engine reads ahead a few moves. A move only waits for its own reads, and the deep read of a costly move runs ahead of the walk. Nothing is cut; only the order changes.
+3. **Measure first:** time the first open of one of David's Learn games and one imported game, before and after, on the same device class.
+
 ## Order — the computer job comes first
 
 ### Phase 1 — the cards (the build spec) ← NOW
