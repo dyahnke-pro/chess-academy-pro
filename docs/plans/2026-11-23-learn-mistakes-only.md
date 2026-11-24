@@ -38,6 +38,14 @@ Use the fewest words that carry the idea: never 10 words when 5 will do. Each sl
 ## Learn names no move at all: principles instead (David 2026-11-24)
 In Learn the BETTER MOVE slot becomes a principle that says what the better move did, never the move itself ("Retreat the bishop to keep it", never "Bc1 kept it"). The REPAIR slot is a principle too ("Put your pawns on dark squares"), never a move. This replaces carve-out 3 (the better move named once past) for Learn; CLAUDE.md is updated in the same build. Review and chat still name the move.
 
+## Every error names how to recover (David 2026-11-24: "No point naming an error if we don't say how to fix it")
+The REPAIR slot is required on every mistake turn, not only permanent concessions. It is keyed on the state the mistake leaves (computed from the ledger, the eval and the board), so it applies to both seats. Examples:
+- down material → keep pieces on, avoid trades, make it complicated, go after their king;
+- up material, after their mistake → trade pieces, not pawns, and simplify;
+- king exposed, colour conceded, weak pawn, passed pawn against, initiative lost, a worse ending.
+
+Each recovery principle is researched from at least 2 independent sources: the book corpus (`chess-concepts.json`) plus reputable chess writing. The sources are recorded on the recipe row. Each principle has a deterministic board check that it applies here (e.g. "attack their king" needs pieces able to reach it and the queens still on). It is written in the approved voice with 5 phrasings. With no recovery that applies, the turn stays silent rather than naming the error bare.
+
 ## Order — the computer job comes first
 
 ### Phase 1 — the cards (the build spec) ← NOW
