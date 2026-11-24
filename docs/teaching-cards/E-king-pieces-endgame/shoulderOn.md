@@ -1,7 +1,7 @@
 # Card — `shoulderOn` (the king or rook that cuts a king off from a pawn)
 
 ## A. Identity
-- `src/services/shoulderRead.ts` — `shoulderOn(fen, student)` (the read where one piece costs a king the most), `shoulderLine(r, student)`, `shoulderSquares`; helpers `attacked`, `kingSteps` (BFS with the moving king a ghost), `standsBetween`, `rookWall`. Endings with kings, pawns and rooks only. Kind `technique` (census).
+- `src/services/shoulderRead.ts:126` — `shoulderOn(fen, student)` (the read where one piece costs a king the most), `shoulderLine(r, student)` (:169), `shoulderSquares` (:201); helpers `attacked`, `kingSteps` (BFS with the moving king a ghost), `standsBetween`, `rookWall`. Endings with kings, pawns and rooks only. Registry `boardComputers.ts:~7943` (entry ends `:7951`), kind `technique` (census).
 - Census: 59 fired / 26 said (held already-said 28, beside-mate 5).
 
 ## B. Facts
@@ -22,13 +22,13 @@
 | id | angle | seat | condition | slots | LESSON stems | CONSEQUENCE | BETTER-MOVE | HABIT | Learn variant | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | SH1 | PLAN (lost own cut-off) | S | fenBefore read (side student, cost c) lost by the student's costly move | by, line, king | "In rook endings, cutting the king off by a file is worth more than a pawn: your rook on {by} kept their king {c} moves from the pawn." / "Don't give up a cut-off — the king you let back stops your pawn." | "Their king reaches {pawn} now." | "{best} kept the rook on the {line}." (once past) | "Before moving a rook in an ending, ask whose king it's keeping out." | "That let their king back toward your pawn." | the move won material | C trigger |
-| SH2 | PREV (let theirs in) | S | fenAfter read with side them, king = student's | — | "Their rook cuts your king off along the {line}: stop it before it settles." | "Your king needs {steps} moves instead of {free}." | "{best} kept your king on the right side." | SH1 habit | "Their rook cuts your king off from the pawn." | — | C |
-| SH3 | KNOW (shoulder) | both | by = k | — | "Shoulder the other king: stand your king between it and the pawn." | — | — | — | — | Review only unless cost | H |
+| SH2 | PREV (let theirs in) | S | fenAfter read with side them, king = student's | — | "Their rook cuts your king off along the {line}: stop it before it settles." | "Your king needs {steps} moves instead of {free}." | "{best} kept your king on the right side." | SH1 habit | "A king cut off by a file can't stop a pawn — theirs now cuts yours off along the {line}." | — | C |
+| SH3 | KNOW (shoulder) | both | SH1 or SH2 fires with `by = k` (the cut-off was a king shoulder) | — | "Shoulder the other king: stand your king between it and the pawn." | — | — | SH1 habit | same | no SH1/SH2 (a standing shoulder is Review only) | H |
 | — | phase | — | endings only | | | | | | | | |
 | — | record | — | RED/GREY full · AMBER "Their rook cuts your king off." · GREEN silent | | | | | | | | |
 
 ## E. Mistake link
-- Student: `positionalReason` `passive-rook` / `passive-king-endgame` / `passed-pawn-neglected` (`positionalReason.ts:167-196`) → SH1/SH2; costReason allowed (the pawn lost) → SH2.
+- Student: `positionalReason` `passive-rook` / `passive-king-endgame` / `passed-pawn-neglected` (`positionalReason.ts:170/172/186`) → SH1/SH2; costReason allowed (the pawn lost) → SH2.
 
 ## F. Build changes
 1. Return `all: ShoulderRead[]` and `cost`; `wall: 'file' | 'rank' | null` typed.

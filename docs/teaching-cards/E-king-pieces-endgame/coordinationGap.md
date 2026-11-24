@@ -21,14 +21,14 @@
 ## D. Lesson recipes
 | id | angle | seat | condition | slots | LESSON stems | CONSEQUENCE | BETTER-MOVE | HABIT | Learn variant | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| CG1 | KNOW (loose pieces) | S scattered | student's costly move left a piece loose (B3) and the gap fires for them | piece | "Loose pieces drop off: your {piece} on {sq} has no guard, and one attack wins it." / "Keep every piece guarded or busy; a scattered army loses pieces to simple attacks." | "{attacker} hits it next." | "{best} kept the {piece} guarded." (once past) | "Before every move, check each of your pieces: is it attacked, and is it guarded?" (the focus CLUE wording, fixed) | "Your {piece} on {sq} has no guard now." | errorWhy already names the hanging piece (same claim) | C |
-| CG2 | STRAT (idle) | S | idle pieces + positional cost | — | "A piece that does nothing is a piece you don't have: bring the {piece} into play." | — | — | pieceWish habit | — | — | H |
-| CG3 | STRAT (attack the scattered) | S coordinated, missed | student's move slow while their pieces loose | — | "When their pieces are scattered, attack the loose one: it can't be defended and moved at once." | — | — | — | — | — | H |
+| CG1 | KNOW (loose pieces) | S scattered | student's costly move left a piece loose (B3) and the gap fires for them | piece | "Loose pieces drop off: your {piece} on {sq} has no guard, and one attack wins it." / "Keep every piece guarded or busy; a scattered army loses pieces to simple attacks." | "{attacker} hits it next." | "{best} kept the {piece} guarded." (once past) | "Before every move, check each of your pieces: is it attacked, and is it guarded?" (the focus CLUE wording, fixed) | "A scattered army loses pieces to simple attacks — your {piece} on {sq} has no guard." | errorWhy already names the hanging piece (same claim) | C |
+| CG2 | STRAT (idle) | S | gap fires for the student (scattered) AND `positionalReason` `misplaced-piece` names one of `idle` | piece | "A piece that does nothing is a piece you don't have: your {piece} on {sq} is sitting out." | — | errorWhy better move (once past) | pieceWish habit | "Your {piece} on {sq} is sitting out of the game." | the idle piece is the one just moved | H |
+| CG3 | STRAT (attack the scattered) | S coordinated, missed | gap fires with the student as `side`, and errorWhy `missed-win` whose target is one of `loose` | loose piece | "When their pieces are scattered, attack the loose one: it can't be defended and moved at once — their {piece} on {sq} had no guard." | — | "{best} hit it." (once past) | "Every move, check: is something of theirs loose?" | "Their {piece} on {sq} was loose." (said only once past — `pastBetterNameable`; else it is the student's find) | target not in `loose` | H |
 | — | phase | — | move ≥15 | | | | | | | | |
 | — | record | — | RED/GREY full · AMBER "Your {piece} has no guard." · GREEN silent | | | | | | | | |
 
 ## E. Mistake link
-- Student: `whyItFailed` `abandoned-defender` (the move undefended a piece) → CG1; `positionalReason` `misplaced-piece` → CG2; `costReason` missed (a loose piece of theirs) → CG3.
+- Student: `whyItFailed` `abandoned-defender` (the move undefended a piece) / `left-hanging` (E6) → CG1; `positionalReason` `misplaced-piece` → CG2; `costReason` missed (a loose piece of theirs) → CG3.
 
 ## F. Build changes
 1. `coordinationGap.ts:18` — add `attacked: Square[]` (loose ∧ attacked) and the good side's counts.

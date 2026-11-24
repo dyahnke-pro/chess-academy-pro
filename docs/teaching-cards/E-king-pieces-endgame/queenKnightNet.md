@@ -1,7 +1,7 @@
 # Card — `queenKnightNet` (queen and knight closing the net)
 
 ## A. Identity
-- `src/services/queenKnightNet.ts:47` `queenKnightNet(fen, lines, student)`; helpers `kingSquares` (:23), `covered` (:39). Standing-board read on the engine's best line (first four moves of the favoured side). Kind `king-read`.
+- `src/services/queenKnightNet.ts:47` `queenKnightNet(fen, lines, student)`; helpers `kingSquares` (:23), `covered` (:39). Standing-board read on the engine's best line (first four moves of the favoured side). Registry `boardComputers.ts:7740`, kind `king-read`.
 - Census: 3 fired / 3 said.
 
 ## B. Facts
@@ -21,9 +21,9 @@
 ## D. Lesson recipes
 | id | angle | seat | condition | slots | LESSON stems | CONSEQUENCE | BETTER-MOVE | HABIT | Learn variant | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| QN1 | KNOW (geometry) | S defender | their net in the line, student's move cost (allowed) | king | "Queen and knight are the deadliest pair near a king: the knight covers the squares a queen can't, so together they leave {king} with nowhere to go." | "{left} for your king, and mate follows." | "{defence} kept two squares free." (once past) | "When their queen and knight are both near your king, keep your pawn cover and trade one of them." | "Their queen and knight now box your king in." | line not favouring them | H + C defence |
-| QN2 | PREV | S defender | same | — | "Trade the knight or the queen: one of the pair alone can't make the net." | — | "{trade} broke up the pair." | QN1 | — | no trade legal | C |
-| QN3 | KNOW (attacker missed) | S attacker | net in the best line, student played otherwise (missed) | — | "With a queen and a knight near their king, look for the squares the queen can't reach — the knight takes those." | — | "{first move} started the net." | — | "Your queen and knight had their king boxed in." | — | H |
+| QN1 | KNOW (geometry) | S defender | their net in the line, student's move cost (allowed) | king | "Queen and knight are the deadliest pair near a king: the knight covers the squares a queen can't, so together they leave {king} with nowhere to go." | "{left} for your king, and mate follows." | "{defence} kept two squares free." (once past) | "When their queen and knight are both near your king, keep your pawn cover and trade one of them." | "A queen and a knight together cover every square a king can run to — that's what your king walked into." | line not favouring them | H + C defence |
+| QN2 | PREV | S defender | same | — | "Trade the knight or the queen: one of the pair alone can't make the net." | — | "{trade} broke up the pair." (once past, only when errorWhy's better move is that trade) | QN1 | "Trading one of the pair was the way out." | no trade legal; better move not a trade | C |
+| QN3 | KNOW (attacker missed) | S attacker | net in the best line, student played otherwise (missed) | — | "With a queen and a knight near their king, look for the squares the queen can't reach — the knight takes those." | — | "{first move} started the net." | — | "With your queen and knight near their king, the net was there to close." (said only when `pastBetterNameable`; else a pointer → silent) | the net's first move still playable | H |
 | — | phase | — | any (queen required) | | | | | | | | |
 | — | record | — | RED/GREY full · AMBER "Queen and knight — watch your king." · GREEN silent | | | | | | | | |
 

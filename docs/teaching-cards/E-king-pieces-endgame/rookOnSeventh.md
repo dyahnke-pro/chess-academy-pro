@@ -1,7 +1,7 @@
 # Card — `rookOnSeventh` (a rook on the seventh)
 
 ## A. Identity
-- `src/services/reviewTeachingPoints.ts:214` `rookOnSeventh(fen, studentColorWB)` → string | null. Registry `boardComputers.ts:4493` `rook7` (kind `rook7`), `squares: []`, `seat: 'student'` — the STUDENT's rook only.
+- `src/services/reviewTeachingPoints.ts:214` `rookOnSeventh(fen, studentColorWB)` → string | null. Registry `boardComputers.ts:~4493` `rook7` (entry ends `:4500`) (kind `rook7`), `squares: []`, `seat: 'student'` — the STUDENT's rook only.
 - Census: 72 fired / 30 said. Held: already-said 18, **unsupported 13** (no squares), beside-mate 5, in-flux 3, same-idea 3.
 
 ## B. Facts
@@ -21,22 +21,23 @@
 ## D. Lesson recipes
 | id | angle | seat | condition | slots | LESSON stems | CONSEQUENCE | BETTER-MOVE | HABIT | Learn variant | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| R71 | PREV | S defender | THEIR rook reached the student's 2nd rank on their move, and the student's prior move allowed it (cost) | rook, pawns | "A rook on your second rank eats pawns and shuts your king in: don't let it in." / "Guard the entry square of your second rank before their rook arrives." | "Their rook on {sq} takes {pawn} next." | "{best} covered {entry}." (once past) | "Before you leave a file, check which rank their rook can reach." | "Their rook is on your second rank now." | — | C (colour mirror) |
-| R72 | STRAT (missed) | S attacker | costReason missed / positional `passive-rook` where best puts the rook on the 7th | — | "Rooks belong on the seventh: there they eat pawns and keep the king on its back rank." | "On {sq} it hits {pawns}." | "{best} put the rook on the seventh." | "Every rook move, ask: can it reach their second rank?" | "Your rook could reach the seventh." (square held) | — | H positionalReason (`positionalReason.ts:188-196` names the open file, not the rank) |
-| R73 | CALC | S attacker | rook on 7th, student's move didn't take a free pawn (safePawns) with cost | — | "A rook on the seventh earns its place by taking pawns: the pawn on {sq} was free." | — | "{best} took {sq}." | — | "There was a free pawn on the seventh." | not safe | C safePawns |
+| R71 | PREV | S defender | THEIR rook reached the student's 2nd rank on their move, and the student's prior move allowed it (cost) | rook, pawns | "A rook on your second rank eats pawns and shuts your king in: don't let it in." / "Guard the entry square of your second rank before their rook arrives." | "Their rook on {sq} takes {pawn} next." | "{best} covered {entry}." (once past) | "Before you leave a file, check which rank their rook can reach." | "A rook on your second rank eats pawns and shuts your king in — theirs got there." | — | C (colour mirror) |
+| R72 | STRAT (missed) | S attacker | costReason missed / positional `passive-rook` where best puts the rook on the 7th | — | "Rooks belong on the seventh: there they eat pawns and keep the king on its back rank." | "On {sq} it hits {pawns}." | "{best} put the rook on the seventh." | "Every rook move, ask: can it reach their second rank?" | "Rooks belong on the seventh — yours could have been there." (only when `pastBetterNameable`; else a pointer → silent) | the rook move still playable | H positionalReason (`positionalReason.ts:180-186` names the open file, not the rank — R72 needs a seventh-rank branch, F5) |
+| R73 | CALC | S attacker | rook on 7th, student's move didn't take a free pawn (safePawns) with cost | — | "A rook on the seventh earns its place by taking pawns: the pawn on {sq} was free." | — | "{best} took {sq}." | — | "A rook on the seventh earns its place by taking pawns — one was free." (same naming guard as R72) | not safe; pawn still takeable | C safePawns |
 | R74 | combo + seventhRankMate | — | two heavies | — | handled by `seventhRankMate` | | | | | | |
 | — | phase | — | any; strongest in rook endings | | | | | | | | |
 | — | record | — | RED/GREY full · AMBER "Their rook is on your second rank." · GREEN silent | | | | | | | | |
 
 ## E. Mistake link
 - Student defender: `costReason` allowed with the rook landing on rank 2 → R71.
-- Student attacker: `positionalReason` `passive-rook` (rook gain, `positionalReason.ts:186-196`) / costReason missed → R72/R73.
+- Student attacker: `positionalReason` `passive-rook` (rook gain, `positionalReason.ts:180-186`) / costReason missed → R72/R73.
 
 ## F. Build changes
 1. `reviewTeachingPoints.ts:214` — return `{ rook, pawns, pinned, seat }` (object), a REQUIRED `who: 'student' | 'opponent'` read for both colours.
 2. `boardComputers.ts:4497` — `squares: [rook, ...pawns]` (fixes 13 `unsupported`); fire on the move that ARRIVES (fenBefore no rook there) to stop 18 already-said.
 3. Add `safePawns` (legalSeeGainFor).
 4. Recipes R71–R73 → `mistakeLesson.ts`.
+5. `positionalReason.ts:180-186` — the `passive-rook` gain reads only files; add the seventh-rank gain (best move's rook lands on rank 7/2 with `rookOnSeventh` true on the best board) so R72 has a cause, note "The better move puts your rook on the seventh."
 
 ## G. Proof boards
 - `lines-0.jsonl#3945` ("Your rook has reached the seventh on e7, where it eats their pawn on b7 and shuts their king in", held in-flux).

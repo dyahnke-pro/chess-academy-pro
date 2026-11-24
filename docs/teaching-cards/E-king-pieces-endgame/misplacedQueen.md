@@ -1,7 +1,7 @@
 # Card — `misplacedQueen` (the queen doing little where she stands)
 
 ## A. Identity
-- `src/services/misplacedQueen.ts:38` `misplacedQueen(fen, lines, student)`; `queenTargets` (:19), `pieceWork`. Registry `boardComputers.ts:7389` (kind `quality`). Standing board; both seats.
+- `src/services/misplacedQueen.ts:40` `misplacedQueen(fen, lines, student)`; `queenTargets` (:19), `pieceWork`. Registry `boardComputers.ts:~7389` (entry ends `:7395`) (kind `quality`). Standing board; both seats.
 - Census: 2 / 2.
 
 ## B. Facts
@@ -21,13 +21,13 @@
 ## D. Lesson recipes
 | id | angle | seat | condition | slots | LESSON stems | CONSEQUENCE | BETTER-MOVE | HABIT | Learn variant | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| MQ1 | PLAN | S | student's queen misplaced, student's costly move was elsewhere and best = the queen move | from, to, hits | "Your strongest piece should be doing the most: the queen on {from} hits almost nothing." | "On {to} it would hit {hits}." (once past) | "{best} put the queen where it hits {hits}." | "Ask every few moves: is my queen doing as much as it can?" | "Your queen on {from} does very little there." | — | H |
-| MQ2 | CONSEQ | S | student's own queen move to a passive square (cost) | — | "A queen move should hit something: on {to} it attacks nothing their side cares about." | — | as MQ1 | MQ1 | "Your queen went somewhere it does little." | queen was attacked (flight) | C trigger |
+| MQ1 | PLAN | S | student's queen misplaced, student's costly move was elsewhere and best = the queen move | from, to, hits | "Your strongest piece should be doing the most: the queen on {from} hits almost nothing." | "On {to} it would hit {hits}." (once past) | "{best} put the queen where it hits {hits}." | "Ask every few moves: is my queen doing as much as it can?" | "Your strongest piece should do the most — the queen on {from} hits almost nothing." (the better queen square held while playable) | better queen move still playable keeps {to} unsaid | H |
+| MQ2 | CONSEQ | S | student's own queen move to a passive square (cost) | — | "A queen move should hit something: on {to} it attacks nothing their side cares about." | — | as MQ1 | MQ1 | "A queen move should hit something — this one landed where it attacks nothing they care about." | queen was attacked (flight) | C trigger |
 | MQ3 | seat O | O | their queen misplaced | — | "Their queen on {from} is out of play: attack where it can't help." | | | | Review only unless their misplacement is graded a mistake | | H |
 | — | record | — | RED/GREY full · AMBER "Your queen does little there." · GREEN silent | | | | | | | | |
 
 ## E. Mistake link
-- Student: `positionalReason` `misplaced-piece` (activity gap, `positionalReason.ts:203-205`) on a queen → MQ1/MQ2.
+- Student: `positionalReason` `misplaced-piece` (activity gap, `positionalReason.ts:192`; `bestJobReason` "The queen belonged on c7", :223) on a queen → MQ1/MQ2.
 
 ## F. Build changes
 1. `misplacedQueen.ts:17` — add `line` index and `ply`; add `misplacedQueenMove(fenBefore, san, lines)` for MQ2.

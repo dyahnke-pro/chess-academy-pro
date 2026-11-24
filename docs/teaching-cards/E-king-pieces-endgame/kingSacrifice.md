@@ -1,8 +1,8 @@
 # Card — `kingSacrifice` / `describeSacBreaksKingShield` (the sacrifice at the king)
 
 ## A. Identity
-- `src/services/kingSiege.ts:537` `kingSacrifice(fenBefore, san, line, moverCp, moverMate)`; renderer `kingSacrificeLine` (:611), `kingSacrificeSquares` (:633). Registry `boardComputers.ts:4093` (kind `sac-why`, needs `sacLineNamed` :1595 — the line trusted); also `deepCombination.ts:179/288` (excludes / reuses it).
-- `src/services/reviewSacrifice.ts:160` `describeSacBreaksKingShield(fenBefore, san)`; registry `boardComputers.ts:1965` `sacKingShield` (Review facets, kind `sac-why`) and `:4688` `sacShield` (walk surfaces, kind `sac`). Both hand `seat: 'student'` and the clause opens "You give up…" (:187-189) whoever moved.
+- `src/services/kingSiege.ts:537` `kingSacrifice(fenBefore, san, line, moverCp, moverMate)`; renderer `kingSacrificeLine` (:611), `kingSacrificeSquares` (:633). Registry `boardComputers.ts:~4093` (entry ends `:4109`) (kind `sac-why`, needs `sacLineNamed` :1595 — the line trusted); also `deepCombination.ts:179/288` (excludes / reuses it).
+- `src/services/reviewSacrifice.ts:160` `describeSacBreaksKingShield(fenBefore, san)`; registry `boardComputers.ts:1970` `sacKingShield` (Review facets, kind `sac-why`) and `:4691` `sacShield` (walk surfaces, kind `sac`). Both hand `seat: 'student'` and the clause opens "You give up…" (:187-189) whoever moved.
 - Census: 3 / 3 (Review 2, lesson 1).
 
 ## B. Facts
@@ -23,8 +23,8 @@
 | id | angle | seat | condition | slots | LESSON stems | CONSEQUENCE | BETTER-MOVE | HABIT | Learn variant | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | KX1 | CALC (accepted, lost) | S defender | THEIR kingSacrifice, the student's acceptance was the costly move (costReason allowed) | opens, follow | "A piece offered at your king is bait: before you take, look at what the capture opens — here the {opens}." / "Taking a sacrificed piece near your king is only safe if their follow-up runs out of checks." | "After the capture, {follow} {outcome}." | "{decline} kept the king's shelter." (once past) | "Before you take a piece near your king, count their checks after it." | "That capture opened your king: {follow first} follows." (their move named) | outcome `material` with no king follow (B3) | H; C declineLine |
-| KX2 | KNOW (missed sac) | S attacker | costReason missed with bestSan a kingSacrifice | opens | "When their king's shelter has one key defender, a sacrifice that removes it can be worth a piece — the follow-up must be checks or mate threats." | "{follow} {outcome}." | "{best} gave the piece to {opens}." (Review / after) | "When your pieces gather near their king, look at the sacrifice on the shelter pawn." | "There was a sacrifice at their king." | — | C kingSacrifice(fenBefore, bestSan, line) |
-| KX3 | CALC (unsound sac) | S attacker | student sacrificed, no kingSacrifice (outcome null) + cost | — | "A sacrifice needs a forced follow-up: without checks or a mate threat after the capture, it's just a piece lost." | — | "{best} kept the piece." | "Before you sacrifice, play the line to the end: checks, captures, mate threats." | "The sacrifice had no follow-up." | not a sacrifice (given < 2) | C (run with the student's san: null + given ≥2) |
+| KX2 | KNOW (missed sac) | S attacker | costReason missed with bestSan a kingSacrifice | opens | "When their king's shelter has one key defender, a sacrifice that removes it can be worth a piece — the follow-up must be checks or mate threats." | "{follow} {outcome}." | "{best} gave the piece to {opens}." (Review / after) | "When your pieces gather near their king, look at the sacrifice on the shelter pawn." | "There was a sacrifice at their king." (only when `pastBetterNameable`; while it is still on, it points at the student's next move → silent) | sacrifice still playable | C kingSacrifice(fenBefore, bestSan, line) |
+| KX3 | CALC (unsound sac) | S attacker | student's move gives ≥2 points near their king, the engine reply takes it, and kingSacrifice returns null for `follow` empty or `outcome` null (needs F6 `whyNot`), with a cost | — | "A sacrifice needs a forced follow-up: without checks or a mate threat after the capture, it's just a piece lost." | — | "{best} kept the piece." | "Before you sacrifice, play the line to the end: checks, captures, mate threats." | "The sacrifice had no follow-up." | not a sacrifice (given < 2) | C — today a null return cannot tell "not a sacrifice" from "a sacrifice with no follow-up" (:548-594 all return null); F6 |
 | KX4 | KNOW (shield) | S | describeSacBreaksKingShield on the move | — | "Giving the exchange for the piece beside the king is a classic: the king loses its guard and the attack goes on." | — | — | — | Review only (a good move) | seat: clause is hardwired "You" — never on THEIR move until fixed | H |
 | KX5 | exception | — | straight recapture (:560) | — | silent: "a trade, not a sacrifice" | | | | | | |
 | — | phase | — | gated by "near the king"; endgame cases rare (shield gate needs an attacker left) | | | | | | | | |
@@ -41,6 +41,7 @@
 3. `reviewSacrifice.ts:160` — take a REQUIRED `who: 'you' | 'they'` (the mover's seat); `boardComputers.ts:1970/4691` pass it instead of `seat: 'student'`.
 4. Pure `declineLine(fenBefore, san, lines)` for KX1's better move.
 5. Recipes KX1–KX3 → `mistakeLesson.ts`.
+6. `kingSiege.ts:537` — add `kingSacrificeWhyNot(...)` (or a `reason` on a null-shaped result): `'not-near' | 'not-given' | 'not-taken' | 'trade' | 'no-follow' | 'no-outcome' | 'nothing-opened'`; KX3 fires on `no-follow` / `no-outcome` only.
 
 ## G. Proof boards
 - KX1/KX2 shape: `lines-1.jsonl#6323` (…Nxe4 gives up the knight; Qxb2 follow — the F.2 case).

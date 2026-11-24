@@ -22,11 +22,11 @@
 ## D. Lesson recipes
 | id | angle | seat | condition | slots | LESSON stems | CONSEQUENCE | BETTER-MOVE | HABIT | Learn variant | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| KO1 | EVAL/KNOW | S defender | student's king in open after the student's costly move | king, checkers | "A king with no pawns in front is worth more than any pawn: your king on {king} can be checked by their {checkers}." / "An exposed king turns every check into a tempo for them." | "Each check comes with a threat, and one of them hits {target}." (forkingCheck) | "{best} kept the king behind its pawns." | "Before you take a pawn near your king, ask how many checks you hand them." | "Your king on {king} is in the open now: their {checkers} can all check it." | cover ≥2; attacker no queen | H; C forkingCheck |
+| KO1 | EVAL/KNOW | S defender | student's king in open after the student's costly move | king, checkers | "A king with no pawns in front is worth more than any pawn: your king on {king} can be checked by their {checkers}." / "An exposed king turns every check into a tempo for them." | "Each check comes with a threat, and one of them hits {target}." (forkingCheck) | "{best} kept the king behind its pawns." | "Before you take a pawn near your king, ask how many checks you hand them." | "A king with no pawns in front hands them a check every move — their {checkers} have them now." | cover ≥2; attacker no queen | H; C forkingCheck |
 | KO2 | EVAL | S attacker | their king in open | — | "When their king is out in the open, material stops counting: checks and threats decide." / "Don't trade queens when their king is exposed — the queen is the piece that hunts it." | "Your {checkers} have {n} checks between them." | — | "With their king exposed, look at every check first." | after their mistake: "Their king on {king} is out in the open now." | — | H, B2 checks |
 | KO3 | PLAN (defender) | S defender | shelterHome exists | home square | "An exposed king goes home first: walk it back behind its pawns before you do anything else." | — | "{best} started the walk to {home}." (once past) | KO1 | — | no home in 2 moves | C shelterHome |
-| KO4 | STRAT (queens) | S defender | attacker has queen; student can trade | — | "When your king is exposed, trading queens takes away their best attacker." | — | "{best} offered the queen trade." | — | — | trade loses material | C (chess.js: queen-trade move exists) |
-| KO5 | CONSEQ (counterfactual: pawn grab) | S defender | the move that exposed it was a capture by the king's own pawn/king walk | — | "Grabbing a pawn with your king's pawns opens the doors: the pawn was worth less than the shelter." | — | — | KO1 | — | not a capture | C howExposed |
+| KO4 | STRAT (queens) | S defender | attacker has queen; errorWhy's better move is a queen trade (`bestSan` captures/offers the queen — chess.js on fenBefore) | — | "When your king is exposed, trading queens takes away their best attacker." | — | "{best} offered the queen trade." (once past) | "When your king is exposed, look for the queen trade first." | "Your king was exposed — trading queens takes away their best attacker." | trade loses material; better move is not the queen trade | C (chess.js: queen-trade move exists) |
+| KO5 | CONSEQ (counterfactual: pawn grab) | S defender | the move that exposed it was a capture by the king's own pawn/king walk | — | "Grabbing a pawn with your king's pawns opens the doors: the pawn was worth less than the shelter." | — | — | KO1 | "A pawn taken with your king's cover costs more than it wins." (no move named) | not a capture | C howExposed |
 | KO6 | combo + errorWhy | S defender | costReason allowed with a check in the blow line | — | "Checks on an open king come with threats: here the check on {sq} wins {target}." | "That's the {target} gone." | — | KO1 | "That left your king open to {first check}." (their move named) | — | H costReason |
 | KO7 | exception | — | no queen for attacker | — | silent by gate (:50): "with queens off an open king is often an active king" — endgame cards own it | — | — | — | — | — | — |
 | — | phase endgame | — | — | n/a — gated by the attacker's queen; kingActivityGap teaches the flip | | | | | | | |
@@ -42,6 +42,7 @@
 2. New pure `forkingCheck` (in `kingInOpen.ts`): the check move landing on a square that also attacks an undefended/higher-value piece. Enables KO1/KO6 consequence.
 3. New pure `shelterHome(fen, side)` (king BFS ≤2 moves to a square where `kingCover.present ≥ 2`). Enables KO3.
 4. Registry `boardComputers.ts:7427` reads a standing board; for the mistake turn compare fenBefore/fenAfter (`howExposed`) so the recipe ties to the move that exposed the king.
+6. KO4 names the queen trade only as the better move once past (`pastBetterNameable`, `inaccuracyCall.ts:1610`, CLAUDE.md carve-out 3); its condition is errorWhy's own better move, never a separate search.
 5. Text at :76-78 is replaced by recipes in `mistakeLesson.ts` for Learn; keep for chat.
 
 ## G. Proof boards
@@ -50,4 +51,4 @@
 - Guard: `vc-1rcEbI44WqE-41` (same king, already said — say-once holds it).
 
 ## H. Open questions
-- KO4 (trade queens when exposed) is a strategic recommendation that names a move — only Review, or also Learn after the move once past?
+- none — KO4's naming question moved to §F6 (answered by carve-out 3).

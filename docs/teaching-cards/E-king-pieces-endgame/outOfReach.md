@@ -1,7 +1,7 @@
 # Card — `outOfReach` (a square nothing can chase the piece from)
 
 ## A. Identity
-- `src/services/outOfReach.ts:64` `outOfReach(fenBefore, san, altUcis)`; helpers `pawnCanReach` (:37), `chaseOf` (:47), renderer `outOfReachLine` (:96). Read through `boardReadFacts`/`moveThoughtFacts` (census `outOfReach (boardRead)`, kind `contrast`).
+- `src/services/outOfReach.ts:64` `outOfReach(fenBefore, san, altUcis)`; helpers `pawnCanReach` (:37), `chaseOf` (:47), renderer `outOfReachLine` (:96). Registry `boardComputers.ts:7095` (entry), read through `boardReadFacts`/`moveThoughtFacts` (census `outOfReach (boardRead)`, kind `contrast`).
 - Census: 65 fired / 64 said.
 
 ## B. Facts
@@ -16,19 +16,19 @@
 | LESSON | partly | "out of reach: no pawn of theirs can kick it" + the contrast — a good-move reason | rule form; mistake form |
 | CONSEQUENCE | partly | "On h3, Rxc3 would have chased it." | for the mistake: the chase move and the tempo |
 | BETTER MOVE + JOB | no | — | `safeAlt` once past |
-| HABIT | no | — | record `misplaced-piece` / `tempo-handed` |
+| HABIT | no | — | record `misplaced-piece` |
 
 ## D. Lesson recipes
 | id | angle | seat | condition | slots | LESSON stems | CONSEQUENCE | BETTER-MOVE | HABIT | Learn variant | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| OR1 | KNOW (chased square) | S mistake | student's piece lands where `chasedAt` (a pawn or smaller piece hits it next move) and the move cost | piece, chaser | "Put a piece where nothing smaller can chase it: on {sq} their {chaser} hits it, and you lose the move." / "A piece that has to run again hands them a free move." | "Their {chaser move} gains a tempo." | "{best} put the {piece} on {safe}, out of reach." (once past) | "Before a piece lands, ask: what smaller piece of theirs can hit it there?" | "Your {piece} can be chased there by their {chaser}." | squareChoice says the same kick (same claim key) | C chasedAt |
+| OR1 | KNOW (chased square) | S mistake | student's piece lands where `chasedAt` (a pawn or smaller piece hits it next move) and the move cost | piece, chaser | "Put a piece where nothing smaller can chase it: on {sq} their {chaser} hits it, and you lose the move." / "A piece that has to run again hands them a free move." | "Their {chaser move} gains a tempo." | "{best} put the {piece} on {safe}, out of reach." (once past) | "Before a piece lands, ask: what smaller piece of theirs can hit it there?" | "A piece that something smaller can chase has to move again — their {chaser} hits your {piece} there." | squareChoice says the same kick (same claim key) | C chasedAt |
 | OR2 | STRAT (outpost-ish) | S | today's fire (good move) | — | Review only: "On {sq} no pawn of theirs can kick it" | | | | silent in Learn | | H |
-| OR3 | seat O | O | their piece on a chaseable square after their costly move | — | "Their {piece} can be chased: hit it with a smaller piece and gain time." | — | — | — | after their move: "Their {piece} on {sq} can be chased by a pawn." (push held) | namesStudentMove | C |
+| OR3 | seat O | O | their piece on a chaseable square after their costly move | — | "Their {piece} can be chased: hit it with a smaller piece and gain time." | — | — | — | after their move: "Their {piece} stands where something smaller of yours can chase it." (the chasing move is never named) | namesStudentMove | C |
 | — | phase | — | the queen rows ("no smaller piece") apply in any phase; endgame king excluded | | | | | | | | |
 | — | record | — | RED/GREY · AMBER "Your piece can be chased there." · GREEN silent | | | | | | | | |
 
 ## E. Mistake link
-- Student: `positionalReason` `tempo-handed` / `misplaced-piece` (`positionalReason.ts:203-208`), `bestJobReason` "The knight belonged on e5" → OR1 explains why.
+- Student: `positionalReason` `misplaced-piece` (`positionalReason.ts:192`; `bestJobReason` "The knight belonged on e5", :223) and errorWhy `allowed-threat` (E12) when the reply is the chase → OR1 explains why. Not `tempo-handed` (that tag means the move frees THEIR piece, :195).
 - Opponent: OR3.
 
 ## F. Build changes

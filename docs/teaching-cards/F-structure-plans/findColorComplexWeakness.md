@@ -1,7 +1,7 @@
 # Card — `findColorComplexWeakness` (family F)
 
 ### A. Identity
-- Computer: `findColorComplexWeakness(fen)` — `src/services/positionReadingService.ts:997-1060` (helpers `findWeakSquares` :831, `minorSettles` :921, `landsSafely` :905, `squareColor` :585).
+- Computer: `findColorComplexWeakness(fen)` — `src/services/positionReadingService.ts:997-1060` (helpers `findWeakSquares` :831, `minorSettles` :922, `landsSafely` :906, `squareColor` :585).
 - Adapter: `boardComputers.ts:5792-5826` (`colourComplex`), CoachFactKind `complex` (FACT_GROUP → `structure`, `coachFact.ts:134`). Also read inside `positionalRead.ts:637-650` (readPosition's `complex` observation).
 - Surfaces: lesson, review, play-read, chat (via thought), think, learn (via thought), tactics-read; weaknesses: not ("a reading of the board").
 - Census: fired 437 / said 62 (`computer-map-raw.json`); not-said reasons: already-said 287, unsupported 54, in-flux 17, subsumed ~14, beside-mate 2.
@@ -10,9 +10,9 @@
 - **B1 handed over** (`ColorComplexWeakness`, :975-984): `side` (whose complex is weak), `complex` ('light'|'dark'), `squares` (the holes of that colour in the side's own half, rank 3-6, `findWeakSquares`), `by` ('knight'|'bishop' — the enemy minor that can settle on one).
 - **B2 computed but dropped**
   - `hasBishopOfColor` (:1007) — which bishop the side still has (so the *other* bishop's survival — "you kept the light one" — is known and dropped).
-  - `exploiter` (:1017) — the enemy piece type per colour; only `by` of the first passing hole survives.
-  - The hole the minor actually settles on (`h` at :1046, the loop's winner) is dropped: `squares` returns ALL holes, not the one proven reachable. The adapter then says "five squares are holes" — the specific square the lesson needs is thrown away.
-  - `minorSettles` returns the type, not the route/the piece square (`a`, `mid` at :956/:969) — "the knight on e7 reaches d5 via c6" is computed and dropped.
+  - `exploiter` (:1022) — the enemy piece type per colour; only `by` of the first passing hole survives.
+  - The hole the minor actually settles on (`h` at :1044-1045, the loop's winner) is dropped: `squares` returns ALL holes, not the one proven reachable. The adapter then says "five squares are holes" — the specific square the lesson needs is thrown away.
+  - `minorSettles` returns the type, not the route/the piece square (`a` :951 / `mid` :958-968) — "the knight on e7 reaches d5 via c6" is computed and dropped.
 - **B3 cheap to compute** (chess.js, same board)
   - **Pawns of the side on the weak colour** attacked/eyed by the enemy's same-colour bishop (David's board: d4 on a dark square, hit by Bf6 along f6-e5-d4). Today pawns are never counted — a pawn is not a hole. `chess.attackers(pawnSq, enemy)` filtered to bishops of that colour + x-ray through own pieces.
   - **The trade event**: did the last move (either seat) remove the side's bishop of this colour? Compare `hasBishopOfColor` on fenBefore vs fenAfter — one extra call. This is the *mistake* trigger the computer lacks: it reads a standing board, never "your move gave it away".
@@ -22,11 +22,11 @@
 - **B4 gates** (file:line, value)
   - Any bishop on the board (:1003) — else `[]`.
   - Hole zone ranks 3-6 (`findWeakSquares` :837), side's OWN half only (:1013-1014: white rank ≤4, black ≥5).
-  - Side has NO bishop of that colour (:1037).
-  - Enemy has an exploiter (knight, or same-colour bishop) (:1038).
-  - **≥ 2 holes of that colour in the own half (:1040, `cHoles.length < 2`).**
-  - At least one hole: not a/h file, empty, no own minor covering it, and the enemy minor `minorSettles` within two moves safely (:1046-1052).
-  - **The miss (David, chesscom-1001055178, ply 17, 9.Bxf6 Bxf6):** after the trade, White's dark holes in own half = c3, a3 (2 → passes :1040). a3 is skipped as rim; c3 is covered by White's Nb1 (`ownerMinorCovers`) → `by` null → returns `[]` (run, §G). The lesson's real target is the **d4 pawn** on a dark square, which no gate ever looks at.
+  - Side has NO bishop of that colour (:1030).
+  - Enemy has an exploiter (knight, or same-colour bishop) (:1031; any enemy knight makes BOTH colours exploitable, :1025).
+  - **≥ 2 holes of that colour in the own half (:1033, `cHoles.length < 2`).**
+  - At least one hole: not a/h file, empty, no own minor covering it, and the enemy minor `minorSettles` within two moves safely (:1044-1052).
+  - **The miss (David, chesscom-1001055178, ply 17, 9.Bxf6 Bxf6):** after the trade, White's dark holes in own half = c3, a3 (2 → passes :1033). a3 is skipped as rim; c3 is covered by White's Nb1 (`ownerMinorCovers`) → `by` null → returns `[]` (run, §G). The lesson's real target is the **d4 pawn** on a dark square, which no gate ever looks at.
 
 ### C. Sentence readiness
 | slot | today | field | missing |
@@ -48,12 +48,13 @@ Fields: CC = this computer; T = trade-event (B3); P = pawn targets on the colour
 | CC5 | own plan — pawns onto the other colour | S weak on X | CC/P fires for S, S has pawns on X squares | pawn squares | "When you're weak on the dark squares, put your pawns on dark squares to guard them, or your bishop on the light ones has nothing to defend." (stem keyed: weak colour X → pawns ON X) | — | — | — | Review/chat only (no mistake attaches unless a pawn move left X) | — | C: pawn squares by colour |
 | CC6 | their plan | O exploits | E present and its diagonal hits ≥1 P | E sq, P sq | "Their bishop on f6 is the piece the dark squares belong to: everything it looks at is a target." | "It's aiming at d4 now, and after c5 it hits it twice." (only if the saved pv has the lever) | — | — | after the trade (CC1 consequence) | pv absent → no "after" clause | C: attacks + saved pv |
 | CC7 | strategize (when trading is fine) | either | trade removes S's X-bishop but O's X-bishop also gone or O has no exploiter | — | "Trading this bishop was safe: they have no piece left that can use the dark squares." | — | — | — | Review/chat only (not a mistake) | — | C |
-| CC8 | knowledge — bad vs good bishop | S | the bishop S kept is blocked by own pawns on its colour (`findPieceQuality` bad bishop) | — | "You kept the bishop that's blocked by your own pawns and traded the one that guarded your weak squares — the wrong one to keep." | — | BM | CC1 habit | after the move | badbishop reader must agree | C: combine `findPieceQuality` |
+| CC8 | knowledge — bad vs good bishop | S | the bishop S kept is blocked by own pawns on its colour (`findPieceQuality` bad bishop) | — | "Keep the bishop that guards your weak colour, not the one your own pawns block: the light-squared bishop behind e4 and d5 is the one left now." | — | BM | CC1 habit | after the move | badbishop reader must agree | C: combine `findPieceQuality` |
 | CC9 | knowledge — king's colour | S castled | the weak colour X contains S king's shelter squares (f3/g2/h3 or f6/g7/h6 colour X) and O has queen + X-bishop | squares | "With your dark-squared bishop gone, the dark squares around your king are the ones their queen and bishop will mate on." | "Watch h2 and g3 now." | BM | CC1 habit | after the move | O lacks queen; ending | C |
 | CC10 | phase: endgame | either | ending, opposite-coloured bishops or minor ending, pawns of S on E's colour | P | "In a bishop ending, your pawns on its colour are its targets: put them on the other colour." | — | — | — | Review | no bishops (:1003 already) | C |
 | CC11 | combine — minority/break | O | CC fires and O's lever (pawnBreak/leverPasser) hits P on X | lever target | "Their bishop on the dark squares and the c5 break hit the same pawn: d4 is under two attacks now." | — | — | — | after the move | both facts must name the same pawn | C: join with pawnBreak |
 | CC12 | counterfactual | S | S's trade; BM is a bishop retreat | BM pv | (=CC1 BETTER-MOVE) | — | "Bc1 kept it, guarding d4 from b2." | — | after the move | BM not a bishop move → drop the slot | H |
 | CC13 | exception — trade wins tempo / material | S | trade is the engine's best or within 30cp | — | silent (not a mistake) | — | — | — | — | — | H |
+| CC15 | both seats — prevent (their trade coming) | S | standing: O's minor can trade S's last X-bishop next move and E (O's X-bishop) survives; S's move ignored it, cost ≥ inaccuracy | colour, the bishop | "Your last dark-squared bishop is the piece they want to trade: let it go and their bishop rules d4." | | the engine best that moved/protected it | CC1 habit | after the move | O's trade costs them material | C (one chess.js capture check on fenAfter) |
 | CC14 | record | — | skill RED/GREY: full CC1; AMBER: "That trade gave them your dark squares."; GREEN: silent | | | | | | | | |
 - Angles not applying: **calculate (count)** — a colour weakness is not a count; the count lives in the pawn-target attackers/defenders (frozenTarget/pictureTarget) and is joined via CC11. **Both seats** — covered by CC1/CC2. **timing before move** — Learn never speaks before the move.
 
@@ -62,12 +63,13 @@ Fields: CC = this computer; T = trade-event (B3); P = pawn targets on the colour
 - **CC2** explains the opponent's same mistake (seat O).
 - **CC3/CC6/CC11** are consequence clauses attached to the above.
 - **CC5/CC7/CC10** Review/chat only.
+- Cause names (errorWhy §D): CC1/CC8/CC9/CC12/CC15 → **E15 positional** with the new concession `colour-conceded` (F3); CC9 can also arrive as **E1 allowed-mate / E13 king-hunt** when the colour is mated on; CC2 = the same on their move (O seat).
 
 ### F. Build changes
-1. `positionReadingService.ts:975-984` — extend `ColorComplexWeakness` with `settle: { square, piece, from, via|null }` (expose `h`, `a`, `mid` from :1046/`minorSettles` :956/:969) and `bishopKept: Square|null` (from `hasBishopOfColor`, :1007). Enables CC3, CC8.
+1. `positionReadingService.ts:975-984` — extend `ColorComplexWeakness` with `settle: { square, piece, from, via|null }` (expose `h`, `a`, `mid` from :1045/`minorSettles` :951/:958-968) and `bishopKept: Square|null` (from `hasBishopOfColor`, :1007). Enables CC3, CC8.
 2. New pure `colourConceded(fenBefore, san)` beside it: returns `{ side, colour, traded: Square, enemyBishop: Square|null, pawnTargets: Square[] (side's pawns on that colour attacked or x-rayed by the enemy same-colour bishop), holes: Square[] }` when the move removed the side's last bishop of that colour. **This does not use the ≥2-hole gate** — the trade + an enemy same-colour bishop + ≥1 pawn target or ≥1 hole is enough. Enables CC1/CC2/CC6. Miss board it catches: David ply 17 (d4). Guard board it must not fire on: a trade where the enemy has no bishop of that colour (CC7), and `vc--Y5bZoD6TM0-55` style endings handled by the existing gate.
 3. `concessionBeat.ts:30` — add `DrawbackKind 'colour-conceded'` and `positionalReason.ts:36` map it to a tag (`created-pawn-weakness` or a new `colour-complex` misconception tag — owner call H1). Makes it a `MistakeCause`.
-4. Sensitivity of the standing read: `:1040` `cHoles.length < 2` → keep for the *standing* fact, but count **pawn targets on the colour** toward the threshold (`cHoles.length + pawnTargets.length < 2`). Catches David after 9…Bxf6 (holes c3,a3 + pawn d4); must still not fire on `vc-1rcEbI44WqE-99` (rook+bishop ending, no own-half holes usable — verify).
+4. Sensitivity of the standing read: `:1033` `cHoles.length < 2` → keep for the *standing* fact, but count **pawn targets on the colour** toward the threshold (`cHoles.length + pawnTargets.length < 2`). Catches David after 9…Bxf6 (holes c3,a3 + pawn d4); must still not fire on `vc-1rcEbI44WqE-99` (rook+bishop ending, no own-half holes usable — verify).
 5. `boardComputers.ts:5800-5811` — delete the "five squares are holes" count renderers ("Their dark squares are weak: five squares are holes…") — board restatement; the recipe table (`mistakeLesson`) words CC1-CC12 from the typed fields.
 6. Recipe rows CC1, CC2, CC3, CC6, CC8, CC9, CC11, CC12 → `mistakeLesson` `Record<MistakeCause, LessonRecipe>` under cause `colour-conceded`.
 

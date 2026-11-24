@@ -21,7 +21,7 @@
 ## D. Lesson recipes
 | id | angle | seat | condition | slots | LESSON stems | CONSEQUENCE | BETTER-MOVE | HABIT | Learn variant | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| KT1 | PREV (their attack ignored) | S defender | THEIR previous move was a kingAttack point (mirror), the student's reply cost (costReason allowed on the king) | kind, piece | "When they bring a piece to your king, your next move answers it: count their attackers against your defenders before anything else." / "Every piece that joins an attack on your king asks for a defender in return." | "{attackers} against {defenders} now, and the next one breaks through." | "{best} brought a defender to {sq}." (once past) | "After every move of theirs near your king, ask: what did that piece add?" | "Their {piece} joined the attack on your king — and your move didn't answer it." | their move had no kingAttack point | C mirror call |
+| KT1 | PREV (their attack ignored) | S defender | THEIR previous move was a kingAttack point (mirror), the student's reply cost (costReason allowed on the king) | kind, piece | "When they bring a piece to your king, your next move answers it: count their attackers against your defenders before anything else." / "Every piece that joins an attack on your king asks for a defender in return." | "{attackers} against {defenders} now, and the next one breaks through." | "{best} brought a defender to {sq}." (once past) | "After every move of theirs near your king, ask: what did that piece add?" | "A piece that joins the attack on your king asks for an answer — their {piece} got none." | their move had no kingAttack point | C mirror call |
 | KT2 | CONSEQ (shelter stripped) | S defender | their move `strips-shelter` or `removes-defender` and the student recaptured elsewhere / ignored | — | "A capture in front of your king is never just a pawn: it is the door." | — | — | KT1 | — | — | C |
 | KT3 | STRAT (attacker, missed) | S attacker | costReason missed where best move is a kingAttack point (`adds-attacker` / `opens-file`) | — | "In an attack, bring one more piece before you strike: the attack works when attackers outnumber defenders." | — | "{best} brought the {piece} in." | "When you attack the king, ask which piece isn't in it yet." | "Your attack needed one more piece." | — | C call kingAttack on bestSan |
 | KT4 | praise (today) | S | good move | — | Review only (earned praise). Learn silent under the mistake-only gate | | | | | | |
@@ -38,6 +38,7 @@
 2. Return `before: {attackers, defenders}` (from `b`, :121) so the delta is a typed field.
 3. `boardComputers.ts:4998` — keep the cpLoss gate for the praise read; add a mistake-turn read: on the student's costly move, call kingAttack on the OPPONENT's previous move (KT1) and on the student's `bestSan` (KT3).
 4. Recipes KT1–KT3 → `mistakeLesson.ts`.
+5. KT4 (the praise read, cpLoss < 100) leaves the Learn turn with the mistake-only gate; Review keeps it. No code in this computer changes for that — the gate is the voice door's.
 
 ## G. Proof boards
 - Praise shape: `lines-0.jsonl#97` ("Nh5 brings your knight into the attack"), `lines-2.jsonl#384` ("…Rg8… two of your pieces against only one defender").
@@ -45,4 +46,4 @@
 - KT1: owed — a board where their attacker joined and the student's reply cost; to be found in `g-*.jsonl` once the mirror call exists.
 
 ## H. Open questions
-- In mistakes-only Learn, the student's GOOD attacking move is now silent. Confirm that the praise line (KT4) is dropped from Learn (Review keeps it).
+- none — the KT4 praise question is already decided by the WO (Learn speaks only on a mistake, `docs/plans/2026-11-23-learn-mistakes-only.md`); moved to §F5.

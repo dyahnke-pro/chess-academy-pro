@@ -35,3 +35,5 @@
 | nameEndgamePhase | L yes / C no / B no / H no | 5 | 3 | 1 |
 | endgameVerdict | L yes / C partly / B no / H no | 5 | 3 | 1 |
 | castlingWatch | L partly / C partly / B yes / H yes (fixed) | 4 (+3 n/a) | 3 | 3 |
+
+**Checked 2026-11-24** — see `CHECK.md` (35 cards: citations, causes, Learn voice, unbuildable rows). The per-card counts above are the authors'; the checker added KS11 and rebuilt KE7, EV4, EV5 into full rows.

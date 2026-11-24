@@ -13,7 +13,7 @@
 
 ### B. Facts
 - **B1** `StructureRead[]` {act, text, squares, proof, key, heldForm?} — `STRUCTURE_ROLE` marks every act 'teach' (`structureJudgementKit.ts`).
-- **B2 dropped**: keyPawn — the attackers on Q (`qAttackers`, :121) are in the proof only; secondWeakness — `pressureCount` (attackers/defenders of p1, :89) in the proof only; maskedWeakness — the push SAN (named in text, held in Learn); restriction — the wall square only.
+- **B2 dropped**: keyPawn — the attackers on Q (`qAttackers`, `pawnJudgement.ts:121`) are in the proof only; secondWeakness — `pressureCount` (attackers/defenders of p1, `pawnJudgement.ts:89`) in the proof only; maskedWeakness — the push SAN (named in text, held in Learn); restriction — the wall square only.
 - **B3 cheap**: the DIFF across the student's move — a read that APPEARS for the opponent (`boardStructure(fenAfter, them)`) = the student's move gave them a key pawn / a hole / a masked weakness; and a student read that DISAPPEARS = the student's move threw away an asset (e.g. moved the pawn that kept the hole).
 - **B4 gates**: per read (keyPawn: P attacked, Q's only pawn guard P, Q safe now and lost without P; secondWeakness: move ≥ 12, p1 balanced and not one attacker short, p2 ≥3 files away and aimable; mirroredAsymmetry …).
 
@@ -29,14 +29,15 @@
 | id | angle | seat | condition | slots | LESSON stems | CONSEQUENCE | BETTER-MOVE | HABIT | Learn | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | BS1 | key pawn — S missed it | S | keyPawn read on fenBefore (S to move), best move attacks P, S's move didn't, cost ≥ inaccuracy | P, Q | "Find the pawn that holds the others: their f7 guards g6, and if f7 drops, g6 goes with it." | | best (past) | "Look for the one pawn that holds their structure together." | after | | H |
-| BS2 | key pawn — S created one for them | S | B3: keyPawn appears for O after S's move | | "Your pawn on f2 is now the only guard of g3 — lose it and g3 goes too." | | best | | after | | C |
+| BS2 | key pawn — S created one for them | S | B3: keyPawn appears for O after S's move | | "A pawn that holds another becomes the target: f2 is now the only guard of g3, so lose it and g3 goes too." | | best | | after | | C |
 | BS3 | second weakness | S | secondWeakness fires; S kept hitting p1 (cost ≥ inaccuracy) | p1, p2 | "Don't rush a pawn that holds: make a second weakness on the other wing — their pieces can't guard both." | | best (the lever on p2) | "When one weakness holds, look for a second." | after | | H |
-| BS4 | mirrored hole | S | mirroredAsymmetry for O after S's move (S's pawn move gave them the asymmetry) | | "A pawn can never move back: your c-pawn left, so c4 is a hole you can't guard again." | | best | "Before a pawn move, ask which square it stops guarding." | after | | C |
+| BS4 | mirrored hole | S | mirroredAsymmetry for O after S's move (S's pawn move gave them the asymmetry) | | "A pawn can never move back: no pawn of yours can guard c4 again, and it's a hole for their knight." | | best | "Before a pawn move, ask which square it stops guarding." | after | | C |
 | BS5 | restriction / blocked pawn / file entry / masked | either | standing | | (existing texts) | | | | Review/chat | | H |
+| BS7 | both seats — they handed you a key pawn / hole | O | B3 diff on THEIR move: a keyPawn / mirroredAsymmetry read appears for S, their cost ≥ mistake | P, Q / hole | "A pawn move can't be taken back: they left d5 with no pawn that can ever guard it." | | — | — | Review/chat only in full; Learn lesson only, square held (the student's find) | never the square before the student moves | C (F1) |
 | BS6 | record | — | RED/GREY full; AMBER one clause; GREEN silent | | | | | | | | |
 
 ### E. Mistake link
-- BS1/BS3: `no-plan` / `missed-weak-target`. BS2/BS4: `created-pawn-weakness` / `outpost-conceded`. Seat S; O versions in Review.
+- BS1/BS3: tags `no-plan` / `missed-weak-target` → errorWhy **E15 positional** (no-plan is silent in E15 today; `missed-weak-target` is a record tag from `misconceptionClassifier`, not one positionalReason emits — the build must route it) or **E14 missed-win** when the better move wins the key pawn. BS2/BS4: `created-pawn-weakness` / concession `pawn-weakened` / `outpost-conceded` → **E15**. BS7 seat O (Review/chat; Learn lesson only).
 
 ### F. Build changes
 1. New `boardStructureDiff(fenBefore, fenAfter, student)` — reads appearing for the opponent / disappearing for the student (B3); the mistake trigger for BS2/BS4.

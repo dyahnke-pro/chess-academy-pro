@@ -1,23 +1,23 @@
 # Card — `readPosition` (family F) — pilot card 2 re-cut into the template
 
 ### A. Identity
-- `readPosition(fen, studentColor)` — `src/services/positionalRead.ts:798-846`; per-side `observationsFor` :302-697; the proven joins `joinsFor` :716-790; the single-sentence face `buildPositionalRead` :848-884; `leverStem` :886; `RANK` :213-219; `OPPONENT_PENALTY = 5` :223.
+- `readPosition(fen, studentColor)` — `src/services/positionalRead.ts:798-846`; per-side `observationsFor` :302-697; the proven joins `joinsFor` :716-790; the single-sentence face `buildPositionalRead` :848-884; `leverStem` :886; `RANK` :214-~222; `OPPONENT_PENALTY = 5` :224.
 - Adapter `positionRead` `boardComputers.ts:5615-5642`, kind `structure-plan` (key `<kind>|<key>`). Surfaces: chat (groundedAnswer), play (positionFacts), **learn (wired via positionFacts)**, lesson (read), tactics (composer); review: not; think: not.
 - Census: 2,578 fired / 1,961 said (chat 1,961 of them); not-said in-flux 296, beside-mate 34, many `subsumed` by plan lines. Teaching map: **P (half state)**.
 
 ### B. Facts
-- **B1** `PositionalObservation` :184-211: `key`, `aliases`, `side` (student|opponent), `kind` (`ObservationKind` :170-178: plan, king, development, piece, structure, lever, minority, passer, complex, file, pair), `rank`, `text`, `heldText` (king only), `squares`, `target`.
+- **B1** `PositionalObservation` :180-~211: `key`, `aliases`, `side` (student|opponent), `kind` (`ObservationKind` :169-178: plan, king, development, piece, structure, lever, minority, passer, complex, file, pair), `rank`, `text`, `heldText` (king only), `squares`, `target`.
 - **B2 dropped** — per kind, the variable that carried the why:
-  - king: `kingSafetyRead` result `king` (:327) — `castled`, `openFilesNearKing`, `exposed`; `castleIsOneMoveAway` (:333); `roads` (:375); `castle` / `onto` (:381-382) — kept only as prose.
-  - development: `asleep`, `lead`, `moveNo` (:401-408) — counts in prose only.
-  - piece: `quality` notes (:420), `outpost.work` (:429 — the target the good piece hits), `strandedAt` squares (:455), `bad` kind/why (:473).
+  - king: `kingSafetyRead` result `king` (:317) — `castled`, `openFilesNearKing`, `exposed`; `castleIsOneMoveAway` (:328-329); `roads` (:366); `castle` (:374) / `onto` (:375) — kept only as prose.
+  - development: `asleep`, `lead`, `moveNo` (:399/:406/:407) — counts in prose only.
+  - piece: `quality` notes (:421), `outpost.work` (:430 — the target the good piece hits), `strandedAt` squares (:453), `bad` kind/why (:473).
   - pair: `pair.rival` (:484).
-  - structure: `weak.isolated/doubled/backward` (:497), `doubledRead.loose/tied` (:540-552).
-  - lever: `breaks[0]` and `hit` (:579-584) only — `breakContacts` gives the TARGET, but no consequence is computed (no file, no SEE, no lone pawn, no defence). `planSaysIt` suppresses the student's own break on the student's turn (:589).
+  - structure: `weak.isolated/doubled/backward` (:497), `doubledRead.loose/tied` (:544-559).
+  - lever: `breaks[0]` (:581) and `hit` (:586) only — `breakContacts` gives the TARGET, but no consequence is computed (no file, no SEE, no lone pawn, no defence). `planSaysIt` suppresses the student's own break on the student's turn (:590).
   - minority / passer / complex — the sub-computers' own dropped fields (see their cards).
-  - file: `entry` square (:678), `entryFree` (:679).
+  - file: `entry` square (:680), `entryFree` (:681).
 - **B3 cheap** (chess.js on the same board; the pilot's "data to compute" list): the break's consequence (file opened, lone pawn, SEE on the target) and the three ways to meet it; colour-complex pawn targets (findColorComplexWeakness card); attackers vs defenders on the weak pawn / the good piece's target; the king's way to castle; the next piece to develop (`squareChoice`); heavy piece to the file (`heavyPieceToFile` :910 exists); the worst piece's route (`pieceRoute`); the square in front of a weak pawn and who reaches it. And THE MISTAKE VIEW — the same read on fenBefore vs fenAfter of a move (which observation the move CREATED for the other side).
-- **B4 gates**: king reads need queens on (:318); own "castle" only when castling is one move away; theirs from move 8 (:331-333); king-open-file needs an enemy heavy piece able to use the file (:362-376); development needs queens on, ≥2 home minors and a lead ≥2 (or ≥1 from move 6) (:395-408); no lever talk with ≥3 own minors at home (:578); a break must have a pawn to name (:584); weak pawns only when `canBeAimedAt` (:513); doubled only when one is loose/tied (:531-552); file only for the student, a rook able to step on, entry square empty and uncovered (:663-681); `racingPasser` mutes all but passer/king (:830); joins supersede bare piece facts (:822); a lever/piece about a pawn the structure read already names is cut (:835-838).
+- **B4 gates**: king reads need queens on (:316-317); own "castle" only when castling is one move away; theirs from move 8 (:328-329); king-open-file needs an enemy heavy piece able to use the file (:366); development needs queens on, ≥2 home minors and a lead ≥2 (or ≥1 from move 6) (:398-408); no lever talk with ≥3 own minors at home (:581); a break must have a pawn to name (:586-591); weak pawns only when `canBeAimedAt` (:513); doubled only when one is loose/tied (:544-559); file only for the student, a rook able to step on, entry square empty and uncovered (:663-683); `racingPasser` (:822) mutes all but passer/king; joins supersede bare piece facts (:822); a lever/piece about a pawn the structure read already names is cut (:835-838).
 
 ### C. Sentence readiness
 | slot | today | field | missing |
@@ -32,9 +32,9 @@ The pilot's grid (docs/teaching-cards/pilot-cards.md CARD 2, kinds K, D, G, B, S
 
 | id | angle | seat | condition (diff + fields) | slots | LESSON stems (2–3) | CONSEQUENCE | BETTER-MOVE | HABIT | Learn | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| RP-K1 | consequence — king left in centre | S | new `king` (S) after S's move, cost ≥ inaccuracy, best = O-O | | "A king in the middle is in the way of every line that opens." / "Castle before the centre opens, not after." | "The e-file opens after …e5, and your king is on it." (if a break toward it, B3) | "Castling first got the king off the e-file." | "Every move, ask: if the centre opened now, would my king be safe?" | after | ending / queens off (:318) | H + C |
+| RP-K1 | consequence — king left in centre | S | new `king` (S) after S's move, cost ≥ inaccuracy, best = O-O | | "A king in the middle is in the way of every line that opens." / "Castle before the centre opens, not after." | "The e-file opens after …e5, and your king is on it." (if a break toward it, B3) | "Castling first got the king off the e-file." | "Every move, ask: if the centre opened now, would my king be safe?" | after | ending / queens off (:316) | H + C |
 | RP-K2 | their king stuck | O | `king` (O) stuck, S's move failed to open lines (best = the break toward it) | | "When their king is stuck in the centre, open lines toward it before it gets out." | | engine best | | after | O can castle | H |
-| RP-K3 | open file at S king | S | new `king-open-file` after S's move | road | "An open file next to your king is the road an attack comes down." | heavy piece that uses it | engine best (castle off / contest) | | after | no enemy heavy piece (:376) | H |
+| RP-K3 | open file at S king | S | new `king-open-file` after S's move | road | "An open file next to your king is the road an attack comes down." | heavy piece that uses it | engine best (castle off / contest) | | after | no enemy heavy piece (:366) | H |
 | RP-D1 | development — moved twice / pawn move | S | new `development` (S behind) after S's move | asleep | "A piece still at home can't fight: you're two pieces behind." / "Moving the same piece twice in the opening hands them a free move." | | engine best (a developing move) | "In the opening, ask which piece isn't out yet." | after | the move threatens something (ruleException) | H |
 | RP-D2 | ahead — punish | O behind | `development` (O) and S's move was a slow pawn move | | "When you're ahead in development, open the position before they catch up." | | engine best (the break) | | after | | H |
 | RP-G1 | good piece traded / let go | S | `piece` good (S) on fenBefore, gone on fenAfter by S's trade | | "Don't trade your best piece for one of their worse ones." | | | | after | the trade won material | C diff |
@@ -46,16 +46,19 @@ The pilot's grid (docs/teaching-cards/pilot-cards.md CARD 2, kinds K, D, G, B, S
 | RP-X1 | pair given | S | new `pair` (O) after S traded a bishop | | "Two bishops grow stronger as the board opens: giving up yours hands them the pair." | | engine best | | after | | H |
 | RP-X2 | colour complex | S | see findColorComplexWeakness CC1 | | | | | | | | |
 | RP-X3 | minority / passer / file | either | see findMinorityAttack, passedPawnPush, file rows | | | | | | | | |
+| RP-K4 | their king left in the centre (O mistake) | O | new `king` (O) stuck after THEIR move (their cost ≥ mistake, they skipped castling) | | "A king that skips castling has to survive every line that opens." | | — | — | Learn: lesson only, the break toward it held (student's next move) | O castles next move anyway | H |
+| RP-S2 | their weak pawn made | O | new `structure` (O iso/doubled) after THEIR move | | "A pawn no other pawn can guard needs a piece to babysit it: theirs on c6 does now." | | — | — | Learn: lesson only | harmlessWeakPawns holds | H |
 | RP-REC | record | — | per kind's skill: RED/GREY full; AMBER one clause; GREEN silent | | | | | | | | |
 - Not applying: the standing read itself on a non-mistake turn — under this WO it is chat/Review only; Learn never speaks a bare observation (the "half state" lines).
 
 ### E. Mistake link
-- RP-K1/K3: `positionalReason` `king-stuck-center` (:210) and concession `file-opened` → `weakened-king-safety`. Seat S. RP-K2 seat O.
-- RP-D1: `neglected-development` (:154). RP-B1/RP-J1: `misplaced-piece` (:192/:223) / `no-plan`. RP-S1: `pawn-weakened` → `created-pawn-weakness`. RP-L1: costReason `allowed` / `file-opened`; RP-X1: no cause today (bishop pair conceded → same new cause as `colour-conceded`, or its own).
+- Cause names (errorWhy §D): every RP row is an **E15 positional** tag row (king-stuck-center / weakened-king-safety / neglected-development / misplaced-piece / pawn-weakened) or, when the cost lands in the window, **E13 king-hunt** (RP-K1/K3) and **E11 allowed-capture** (RP-S1/RP-L1). RP-K4/RP-S2 are their side.
+- RP-K1/K3: `positionalReason` `king-stuck-center` (`positionalReason.ts:210`) and concession `file-opened` → `weakened-king-safety`. Seat S. RP-K2 seat O.
+- RP-D1: `neglected-development` (`positionalReason.ts:154`). RP-B1/RP-J1: `misplaced-piece` (`positionalReason.ts:192/:223`) / `no-plan`. RP-S1: `pawn-weakened` → `created-pawn-weakness`. RP-L1: costReason `allowed` / `file-opened`; RP-X1: no cause today (bishop pair conceded → same new cause as `colour-conceded`, or its own).
 
 ### F. Build changes
-1. `positionalRead.ts:184-211` — add a typed payload per kind (`facts: KingFacts | DevFacts | LeverFacts | …`) carrying the B2 variables, so recipes never parse `text`.
-2. `positionalRead.ts:579-597` (the lever rung) — compute the break's consequence (file opened after the capture, SEE on `hit`, lone pawn after) via the pawnBreak card's new `meetBreak` / exposed fields; the current text "it challenges your pawn on d4" (no consequence) is a restatement — delete it from Learn.
+1. `positionalRead.ts:180-211` — add a typed payload per kind (`facts: KingFacts | DevFacts | LeverFacts | …`) carrying the B2 variables, so recipes never parse `text`.
+2. `positionalRead.ts:581-600` (the lever rung) — compute the break's consequence (file opened after the capture, SEE on `hit`, lone pawn after) via the pawnBreak card's new `meetBreak` / exposed fields; the current text "it challenges your pawn on d4" (no consequence) is a restatement — delete it from Learn.
 3. New `readPositionDiff(fenBefore, fenAfter, student)` — observations new after the move, by `key` → the mistake trigger for every RP row.
 4. Learn path (positionFacts `learn: wired`) — speak readPosition only through `mistakeLesson` rows; remove the standing-read speech from Learn.
 5. Delete `leverStem` (:886, "c5 is a pawn break for you now.") from Learn — pure restatement.
@@ -63,8 +66,8 @@ The pilot's grid (docs/teaching-cards/pilot-cards.md CARD 2, kinds K, D, G, B, S
 ### G. Proof boards
 - **Ran** `readPosition` (scratch vitest) on David `chesscom-1001055178` after 9.Bxf6 Bxf6 (`r2qk2r/ppp2pp1/2n1pb1p/3p4/3P4/1P3PP1/P1P2PBP/RN1Q1RK1 w kq - 0 10`): **no observations at all** — the move's real lesson (the dark squares, d4) is invisible to the read. After the engine line `c3 Ne7 Qd3 c5`: one observation, `opponent lever` "Their pawn break is the push to e5: it challenges your pawn on d4." — the pilot's no-consequence complaint, reproduced. Same run: `boardPlanFacts` levers = develop b1 / break c4 at d5 / rook to the e-file; `boardStructure` [], `frozenTarget` null, `pawnCentre` null.
 - Census rows (chat): "Your king is still in the centre and castling is one move away — tuck it in before the centre opens." / "You still have 2 minor pieces at home…" (computer-map-raw samples).
-- Guard: racing passer boards (:830 mutes all but passer/king).
+- Guard: racing passer boards (:822 mutes all but passer/king).
 
 ### H. Open questions
-1. Should Learn keep ANY standing read (e.g. the king in the centre) on a non-mistake turn? The WO says silence; confirm the king exception is gone too.
+1. The king in the centre on a NON-mistake turn (castling one move away, nothing lost yet): silent under the WO, or the one standing warning kept?
 2. RP-X1 (bishop pair given up) — its own cause, or folded into `colour-conceded`?

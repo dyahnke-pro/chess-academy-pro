@@ -1,7 +1,7 @@
 # Card — `pieceWish` (your worst piece and the square it wants)
 
 ## A. Identity
-- `src/services/pieceWish.ts:44` `pieceWish(fen, viewer, lastTo)` over `nextPlans.findWorstPlacedPiece` / `worstPieceRoute` / `worstReason`. Registry `boardComputers.ts:5727` (kind `worst`). From move 10 (:45).
+- `src/services/pieceWish.ts:44` `pieceWish(fen, viewer, lastTo)` over `nextPlans.findWorstPlacedPiece` / `worstPieceRoute` / `worstReason`. Registry `boardComputers.ts:~5727` (entry ends `:5733`, kind `worst`). From move 10 (:45).
 - Census: 21 fired / 7 said (held already-said 5, **unsupported 4**, same-idea 3).
 
 ## B. Facts
@@ -21,10 +21,10 @@
 ## D. Lesson recipes
 | id | angle | seat | condition | slots | LESSON stems | CONSEQUENCE | BETTER-MOVE | HABIT | Learn variant | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| PW1 | PLAN (improve worst) | S | student's move cost (positional) and the better move is the first step of the wish route | piece, from, target, aim | "Improve your worst piece: the {piece} on {from} {reason}, and on {target} it {aim}." / "When there's nothing to attack, the plan is your piece doing least." | "Until it moves, you play a piece down." | "{best} started the {piece} toward {target}." (once past) | "On every quiet move, ask which piece is doing least." | "Your {piece} on {from} is your worst piece." (target held) | best ≠ route step (then it isn't this cause) | C |
-| PW2 | STRAT | S | the student's move made a GOOD piece better while the worst stayed (cost) | — | "Moving a good piece to a better square helps less than moving the worst one at all." | — | as PW1 | PW1 | — | — | C |
-| PW3 | KNOW (rim) | S | kind = rim knight | — | "A knight on the rim is dim: from the edge it covers half its squares." | — | — | — | — | — | H kind |
-| PW4 | KNOW (bad bishop) | S | kind = bad bishop | — | "A bishop behind its own pawns is a tall pawn: move the pawns or move the bishop." | — | — | — | — | badEnemyBishop's own card covers theirs | H |
+| PW1 | PLAN (improve worst) | S | student's move cost (positional) and the better move is the first step of the wish route | piece, from, target, aim | "Improve your worst piece: the {piece} on {from} {reason}, and on {target} it {aim}." / "When there's nothing to attack, the plan is your piece doing least." | "Until it moves, you play a piece down." | "{best} started the {piece} toward {target}." (once past) | "On every quiet move, ask which piece is doing least." | "When there's nothing to attack, improve the piece doing least — your {piece} on {from}." (target held while still playable) | best ≠ route step (then it isn't this cause) | C |
+| PW2 | STRAT | S | the student's move made a GOOD piece better while the worst stayed (cost) | — | "Moving a good piece to a better square helps less than moving the worst one at all." | — | as PW1 | PW1 | "Your move improved a good piece while the {piece} on {from} stayed worst." | the played piece is the worst piece | C |
+| PW3 | KNOW (rim) | S | PW1 fires AND kind = rim knight (a knowledge clause on PW1's turn, never alone) | — | "A knight on the rim is dim: from the edge it covers half its squares." | — | — | — | — | — | H kind |
+| PW4 | KNOW (bad bishop) | S | PW1 fires AND kind = bad bishop (clause on PW1's turn) | — | "A bishop behind its own pawns is a tall pawn: move the pawns or move the bishop." | — | — | — | — | badEnemyBishop's own card covers theirs | H |
 | — | phase | — | move ≥10; endgame king trips go to kingActivityGap | | | | | | | | |
 | — | record | — | RED/GREY full · AMBER "Your worst piece is the {piece}." · GREEN silent | | | | | | | | |
 

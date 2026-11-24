@@ -1,7 +1,7 @@
 # Card — `endgameVerdict` (sit tight, no progress, checks repeat, drawn)
 
 ## A. Identity
-- `src/services/endgameVerdict.ts` `endgameVerdict(fen, lines, student)` → kinds `drawn` (`drawnEnding`), `checksRepeat` (a line of only checks back to the start, `renderChecksRepeat`), `noProgress` (queens off, no far pawn, |score| ≤50, the first six best moves quiet with no lever), `sitTight` (score −100…−350 for the side to move, quiet first move, no capture against it). Kind `verdict` (census). Either seat.
+- `src/services/endgameVerdict.ts` `endgameVerdict(fen, lines, student)` → kinds `drawn` (`drawnEnding`), `checksRepeat` (a line of only checks back to the start, `renderChecksRepeat`), `noProgress` (queens off, no far pawn, |score| ≤50, the first six best moves quiet with no lever), `sitTight` (score −100…−350 for the side to move, quiet first move, no capture against it). Registry `boardComputers.ts:~7550` (entry ends `:7562`), kind `verdict` (census). Either seat.
 - Census: 111 fired / 33 said. Held: already-said 39, **unsupported 35** (`squares: []` on noProgress / sitTight), in-flux 4.
 
 ## B. Facts
@@ -24,8 +24,8 @@
 | EV1 | STRAT (sit tight broken) | S worse | sitTight on fenBefore for the student, the student's move forcing / forward with cost | — | "When you have no counterplay, the defence is patience: every active move gives them a target." / "A worse ending is held by guarding everything and waiting, not by lashing out." | "Now {target} can be taken." | "{best} kept everything guarded." (once past) | "When worse, before every move ask: does this give them something to hit?" | "That gave them a target — sitting tight held." | — | C trigger |
 | EV2 | STRAT (no progress broken) | S | noProgress on fenBefore, student pawn push / lever with cost | — | "When nothing can be forced, a pawn move is a commitment you can't take back: maneuver instead." | — | "{best} improved a piece." | "In a quiet ending, prefer piece moves to pawn moves." | "That pawn move gave something away." | — | C |
 | EV3 | CALC (took the draw) | S better | checksRepeat for the student, played = loop[0], top ≥100 | — | "Better positions are won by a plan, not by checks: repeating moves throws the advantage away." | "It's a draw by repetition." | "{best} kept the winning line." | "When better, ask before a check: does it get me anywhere?" | "Those checks only repeat the position." | best = repeat | H |
-| EV4 | KNOW (drawn ending) | S | `drawn` and the student traded into it with cost | — | handed to `drawnEnding`'s reason (wrong bishop, fortress …) | | | | | | H |
-| EV5 | seat O | O | their sitTight / noProgress | — | "They will sit tight: to win, you need a plan that makes something fall." (Review; Learn only on a student mistake) | | | | | | H |
+| EV4 | KNOW (drawn ending) | S | `drawn` on fenAfter, not on fenBefore, the student's capture made it, errorWhy cost (a win thrown into a draw) | the reason | `drawnEnding`'s own reason as the lesson ("A rook's pawn with the wrong bishop is a draw …" — same claim as minorMatchup MM2) | "It's a draw now." | "{best} kept the win." (once past) | "Before a trade in a won ending, ask: can they still draw it?" | "That trade turned the win into a draw." | not drawn before vs after | H |
+| EV5 | seat O | O | their sitTight broken by THEIR costly forward move (their mistake) | target | "A worse side that lashes out gives you a target — their move left {target} to hit." | — | — | — | after their move, the target named as a piece, the capture never named | the capture is the student's next move | C (same trigger, other seat) |
 | — | record | — | RED/GREY full · AMBER "Sit tight — guard everything." · GREEN silent | | | | | | | | |
 
 ## E. Mistake link

@@ -21,11 +21,13 @@
 ### D. Lesson recipes
 | id | angle | seat | condition | slots | LESSON stems | CONSEQUENCE | BETTER-MOVE | HABIT | Learn | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| PST1 | missed race | S | B3 | square, their pawn | "When both of you want a pawn on the same square, the first one there keeps it — and e5 was yours to take." / "A central square two pawns are racing for belongs to whoever pushes first." | "Their pawn takes e5 now and your knight loses its square." (if a piece of S used it) | "e5 was the push, safe on that move." / with support: "Nf3 first made e5 safe." | "In the opening, look for the square both pawns want." | after | S's move was the support move (then it's the plan) | C (B3) |
+| PST1 | missed race | S | B3 | square, their pawn | "When both of you want a pawn on the same square, the first one there keeps it — and e5 was yours to take." / "A central square two pawns are racing for belongs to whoever pushes first." | "Their pawn takes e5 now and your knight loses its square." (if a piece of S used it) | "e5 was the push, safe on that move." / with support: "Nf3 first made e5 safe." | "In the opening, look for the square both pawns want." | after; the square is named only when THEIR pawn now stands on it (the race is over) — while the push is still the student's to play, Learn says only "the square both pawns wanted" | S's move was the support move (then it's the plan) | C (B3) |
 | PST2 | won race (credit) | S | fires | | (existing) | | | | Review only | | H |
+| PST4 | both seats — they lost the race | O | B3 run for THEIR move (their race, they played other, their cost ≥ inaccuracy) | | "The first pawn to a contested square keeps it." | | | | Review/chat; Learn lesson only (taking the square is the student's next move) | — | C (B3, side flipped) |
 | PST3 | record | — | RED/GREY full; AMBER one clause; GREEN silent | | | | | | | | |
 
 ### E. Mistake link
+- Cause names (errorWhy §D): PST1 → **E15 positional** `space-conceded` / `mistimed-pawn-break`; PST4 their side.
 - PST1: `space-conceded` (`positionalReason.ts:189`) / `mistimed-pawn-break` when the best move was the push. Seat S.
 
 ### F. Build changes

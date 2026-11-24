@@ -1,7 +1,7 @@
 # Card — `kingActivityGap` (the more active king in an ending)
 
 ## A. Identity
-- `src/services/kingActivityGap.ts` `kingActivityGap(fen, lines, student)`; `centre` = king distance to d4/d5/e4/e5; `pawnDist` = nearest enemy pawn. Registry `boardComputers.ts:7446` (kind `technique`), weaknesses `moveInsight.ts` (files the student's passive king).
+- `src/services/kingActivityGap.ts:21` `kingActivityGap(fen, lines, student)`; `centre` = king distance to d4/d5/e4/e5; `pawnDist` = nearest enemy pawn. Registry `boardComputers.ts:~7446` (entry ends `:7455`) (kind `technique`), weaknesses `moveInsight.ts` (files the student's passive king).
 - Census: 8 fired / 4 said.
 
 ## B. Facts
@@ -21,13 +21,13 @@
 ## D. Lesson recipes
 | id | angle | seat | condition | slots | LESSON stems | CONSEQUENCE | BETTER-MOVE | HABIT | Learn variant | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| KG1 | KNOW (the flip) | S passive | student's costly move left the student's king passive (gap ≥2) | kings, steps | "In the endgame the rule flips: bring the king to the centre — your king on {p} is {n} steps away while theirs on {a} is fighting." / "With the queens off, the king is a strong piece: use it." | "Their king reaches your pawns first." | "{best} brought the king toward {sq}." (once past) | "In the endgame, every quiet move: can my king come closer?" | "Your king is far from the fight — theirs is in it." | queens on | H |
+| KG1 | KNOW (the flip) | S passive | student's costly move left the student's king passive (gap ≥2) | kings, steps | "In the endgame the rule flips: bring the king to the centre — your king on {p} is {n} steps away while theirs on {a} is fighting." / "With the queens off, the king is a strong piece: use it." | "Their king reaches your pawns first." | "{best} brought the king toward {sq}." (once past) | "In the endgame, every quiet move: can my king come closer?" | "In the endgame the king is a fighting piece — theirs came forward and yours stayed back." | queens on | H |
 | KG2 | STRAT (yours active, kept it) | S active | (good) | — | Review only | | | | silent | | H |
 | KG3 | combo + kingRace | both | race exists | — | handed to kingRace | | | | | | |
 | — | record | — | RED/GREY full · AMBER "Bring your king in." · GREEN silent | | | | | | | | |
 
 ## E. Mistake link
-- Student: `positionalReason` `passive-king-endgame` (`positionalReason.ts:167-170`, "the king belongs nearer the centre") and `bestJobReason` "The king belonged on X" (:222) → KG1.
+- Student: `positionalReason` `passive-king-endgame` (`positionalReason.ts:170`, endgame only; "the king belongs nearer the centre") and `bestJobReason` "The king belonged on X" (:222) → KG1.
 
 ## F. Build changes
 1. Return `pawnDist` both sides; trigger `madeWorse(fenBefore, san)`.

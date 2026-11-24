@@ -1,7 +1,7 @@
 # Card — `lateralRookDefence` (a raiding rook that defends sideways)
 
 ## A. Identity
-- `src/services/lateralRookDefence.ts` `lateralRookDefence(fen, lines, student)` — in the side to move's best line (≥ −30cp), a rook in the enemy half slides along its own rank and newly guards an attacked piece of its side. Kind `defence-idea`. Either seat.
+- `src/services/lateralRookDefence.ts:25` `lateralRookDefence(fen, lines, student)` — in the side to move's best line (≥ −30cp), a rook in the enemy half slides along its own rank and newly guards an attacked piece of its side. Registry `boardComputers.ts:~7675` (entry ends `:7683`), kind `defence-idea`. Either seat.
 - Census: 5 fired / 5 said.
 
 ## B. Facts
@@ -21,13 +21,13 @@
 ## D. Lesson recipes
 | id | angle | seat | condition | slots | LESSON stems | CONSEQUENCE | BETTER-MOVE | HABIT | Learn variant | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| LR1 | CALC (miscounted defender) | S attacker | THEIR rook defends sideways; the student's costly move went for the target (costReason allowed/`held-by-defender`) | rook, to, target | "Count the sideways defenders too: their rook on {from} slides to {to} and guards {target}, so it isn't as loose as it looks." / "A raiding rook can defend along its rank — check the rank before you call a piece loose." | "The attack on {target} gains nothing." | "{best} …" (once past) | "Before you go for a piece, count every defender, including rooks along a rank." | "Their rook can defend that sideways." | — | C B3 |
-| LR2 | KNOW (own) | S defender | student's piece attacked, student's move went home with the rook when the lateral guard existed (cost) | — | "An active rook doesn't need to go home to defend: slide it along the rank." | — | "{best} kept the rook active and guarded {target}." | — | "Your rook could defend from where it was." | — | H |
+| LR1 | CALC (miscounted defender) | S attacker | THEIR rook defends sideways; the student's costly move went for the target (costReason allowed/`held-by-defender`) | rook, to, target | "Count the sideways defenders too: their rook on {from} slides to {to} and guards {target}, so it isn't as loose as it looks." / "A raiding rook can defend along its rank — check the rank before you call a piece loose." | "The attack on {target} gains nothing." | "{best} kept the piece and the move." (once past) | "Before you go for a piece, count every defender, including rooks along a rank." | "A raiding rook can defend along its rank — theirs covered that piece from the side." | lateral guard is not the recapturer in whyItFailed | C B3 |
+| LR2 | KNOW (own) | S defender | student's piece attacked, student's move went home with the rook when the lateral guard existed (cost) | — | "An active rook doesn't need to go home to defend: slide it along the rank." | — | "{best} kept the rook active and guarded {target}." | — | "An active rook defends sideways — yours didn't need to go home." | lateral guard did not exist on fenBefore | H |
 | — | phase | — | any, mostly rook endings | | | | | | | | |
 | — | record | — | RED/GREY full · AMBER "Their rook defends that sideways." · GREEN silent | | | | | | | | |
 
 ## E. Mistake link
-- Student: `whyItFailed` `held-by-defender` (the capture loses after recaptures) where the defender is the lateral rook → LR1; `positionalReason` `passive-rook` → LR2.
+- Student: errorWhy `took-guarded` / `eyed-guarded` (the `held-by-defender` sub-shapes, E3/E4) where the guard is the lateral rook → LR1; `positionalReason` `passive-rook` → LR2.
 
 ## F. Build changes
 1. Add `ply`, `attackers: Square[]` to the result.

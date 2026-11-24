@@ -1,15 +1,15 @@
 # Card — `squareForPiece` (family F)
 
 ### A. Identity
-- `squareForPiece(fen, lines, student)` — `src/services/squareForPiece.ts:51-95`; `holesLeft` :33, `safeSquares` :21. Reads the ENGINE lines of the side to move (a before-move read).
+- `squareForPiece(fen, lines, student)` — `src/services/squareForPiece.ts:56-95`; `holesLeft` :38, `safeSquares` :27. Reads the ENGINE lines of the side to move (a before-move read).
 - Adapter `boardComputers.ts:7694-7710`, kind `structure`; `namesStudentMove: r.side === student` (:7700). Surfaces: lesson, review, play, chat, think, learn (via thought), tactics; **weaknesses: wired** (`moveInsight` `planPosed`, no-plan).
 - Census: 11 / 4 said. **Defect:** census said "The plan with g4 leaves a hole on f4." in the lesson (`vc-1zfJ7ABoh8k-12`) — a truncated line that names the student's NEXT move and drops the reason (what it buries).
 
 ### B. Facts
-- **B1** `SquareForPiece` :19: `side`, `push` (SAN), `hole`, `buried` (enemy minor's square), `text`, `squares`.
-- **B2 dropped**: `was`/`now` safe-square counts (:77-78, e.g. 4 → 0) — the proof of "buried" — dropped; `i` (which of the line's moves the push is) reduced to "The plan with"; the line's score gap `top - lineScore(l)` (:62).
+- **B1** `SquareForPiece` :24: `side`, `push` (SAN), `hole`, `buried` (enemy minor's square), `text`, `squares`.
+- **B2 dropped**: `was`/`now` safe-square counts (:74-75, e.g. 4 → 0) — the proof of "buried" — dropped; `i` (which of the line's moves the push is) reduced to "The plan with" (:80); the line's score gap `top - lineScore(l)` (:64).
 - **B3 cheap**: after the student's move (the mistake case): did the student play a push that made the hole WITHOUT burying anything (the bad half — that's inaccessibleHole/holeMade's lesson), or skip the push the engine wanted (the lesson becomes the better move: "g4 was the plan: it gave up f4 but shut in their bishop").
-- **B4 gates**: lines within 50 cp of the best (:62); push among the side's first 3 moves of the line (:64-65, i = 0,2,4); quiet pawn push (:66); hole on c–f, pusher's 4th rank+, permanently unguardable (:37-46); an enemy B/N with ≥3 safe squares before and ≤1 after (:77-79).
+- **B4 gates**: lines within 50 cp of the best (:64); push among the side's first 3 moves of the line (:65-66, i = 0,2,4 of a 5-ply playout); quiet pawn push (:68); hole on c–f, pusher's 4th rank+, permanently unguardable (`holesLeft` :38-54); an enemy B/N with ≥3 safe squares before and ≤1 after (:74-76).
 
 ### C. Sentence readiness
 | slot | today | field | missing |
@@ -28,12 +28,13 @@
 | SP4 | record | — | no-plan (moveInsight) RED/GREY full; AMBER one clause; GREEN silent | | | | | | | | |
 
 ### E. Mistake link
+- Cause names (errorWhy §D): SP1 → **E15 positional** `no-plan` (or `mistimed-pawn-break` when the push is a lever); SP2 Review/chat.
 - SP1: `positionalReason` `no-plan` (`positionalReason.ts:220`, "X was the move the position asked for") — squareForPiece is the WHY for that generic note when the best move is the burying push. Seat S.
 - SP2: Review/chat.
 
 ### F. Build changes
-1. Expose `safeBefore`, `safeAfter` (:77-78) and `lineIndex` on `SquareForPiece`.
-2. Learn: stop speaking this before-move read (adapter :7700 sets `namesStudentMove` but the census shows the truncated "The plan with g4 leaves a hole on f4." was SAID in a lesson — the refusal is not holding there; trace which path spoke it). Under this WO Learn reads it only on the board BEFORE the student's move, after the move is played (SP1).
+1. Expose `safeBefore`, `safeAfter` (:74-75) and `lineIndex` on `SquareForPiece`.
+2. The truncated census line is THIS computer: the second rotated stem (:84) is "`${lead} leaves a hole on ${holes[0]}. In return … buried …`" with `lead = 'The plan with g4'` (:80, i > 0); the reason lives in the SECOND sentence and a per-sentence keep downstream kept only the first. Fix at the producer: one sentence carries both halves ("g4 gives up f4 for good but shuts in their bishop on h5"), so no sentence cut can drop the reason. The adapter (`boardComputers.ts:7700`) marks the student's push `namesStudentMove: true`, which Learn refuses; the census line came from the lesson surface, which does not. Under this WO Learn reads it only on the board BEFORE the student's move, after the move is played (SP1).
 3. `mistakeLesson`: `no-plan` with best = push → SP1.
 
 ### G. Proof boards
@@ -41,4 +42,4 @@
 - Defect board: `vc-1zfJ7ABoh8k-12` (the truncated said line).
 
 ### H. Open questions
-1. Which producer spoke the truncated "The plan with g4 leaves a hole on f4." (said=true, lesson)? Needs a trace in the build.
+- none (the truncated line's producer is traced in §F2 — a build question, not a behaviour one).

@@ -1,7 +1,7 @@
 # Card — `defenderInTime` (the race to defend a loose-looking pawn)
 
 ## A. Identity
-- `src/services/defenderInTime.ts` — `defenderInTime(fen, lines, student)` → `DefenderInTime[]`; BFS `bfs` over knight and king steps avoiding pawn-covered squares. Endings with no queens; the side to move's knight vs the other king. Kind `technique` (census). Either seat.
+- `src/services/defenderInTime.ts:65` — `defenderInTime(fen, lines, student)` → `DefenderInTime[]`; BFS `bfs` over knight and king steps avoiding pawn-covered squares. Endings with no queens; the side to move's knight vs the other king. Registry `boardComputers.ts:~7576` (entry ends `:7584`), kind `technique` (census). Either seat.
 - Census: 139 fired / 67 said (held already-said ~50%, same-idea 13).
 
 ## B. Facts
@@ -21,14 +21,14 @@
 ## D. Lesson recipes
 | id | angle | seat | condition | slots | LESSON stems | CONSEQUENCE | BETTER-MOVE | HABIT | Learn variant | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| DT1 | CALC (chased a held pawn) | S attacker | student's costly knight move = `route[0]` toward `pawn`, walk ≤ route | n, m | "A loose pawn is only a target if you get there first: your knight needs {n} moves, their king {m}." / "In the endgame, count both trips before you chase a pawn." | "The king arrives first, and the knight's trip is wasted." | "{best} went for {otherTarget}, where you win the race." (once past) | "Before chasing a pawn, count your moves and theirs." | "Their king gets there first — the pawn holds." | walk > route (then it's a real target) | C trigger |
-| DT2 | PREV (own pawn) | S defender | student's move left a pawn whose king walk > their knight route (the mirror, defence too slow), cost | — | "Your king must reach a loose pawn before their knight does: count it." | "Their knight takes {pawn}." | "{best} started the king toward {pawn}." | DT1 habit | "Your king is a move too slow to defend {pawn}." | — | C mirror |
+| DT1 | CALC (chased a held pawn) | S attacker | student's costly knight move = `route[0]` toward `pawn`, walk ≤ route | n, m | "A loose pawn is only a target if you get there first: your knight needs {n} moves, their king {m}." / "In the endgame, count both trips before you chase a pawn." | "The king arrives first, and the knight's trip is wasted." | "{best} went for {otherTarget}, where you win the race." (once past) | "Before chasing a pawn, count your moves and theirs." | "In the endgame, count both trips before you chase a pawn — their king got there first." | walk > route (then it's a real target) | C trigger |
+| DT2 | PREV (own pawn) | S defender | student's move left a pawn whose king walk > their knight route (the mirror, defence too slow), cost | — | "Your king must reach a loose pawn before their knight does: count it." | "Their knight takes {pawn}." | "{best} started the king toward {pawn}." | DT1 habit | "A loose pawn needs the king there first — yours is a move too slow for {pawn}." | — | C mirror |
 | DT3 | KNOW | both | standing (today) | — | Review only: the count (the current text) | | | | silent in Learn | | H |
 | — | phase | — | endings only (no queens) | | | | | | | | |
 | — | record | — | RED/GREY full · AMBER "Their king gets there first." · GREEN silent | | | | | | | | |
 
 ## E. Mistake link
-- Student: `positionalReason` (endgame gap) / costReason none on a slow knight trip → DT1; `costReason` allowed (pawn lost) → DT2.
+- Student: `positionalReason` `misplaced-piece` (the knight's scope gap) or `unexplained` on a slow knight trip → DT1 (DT1 is the cause errorWhy cannot name: today a costed knight trip with no positional tag is silent, E20); errorWhy `allowed-capture` / `left-hanging` (pawn lost) → DT2.
 
 ## F. Build changes
 1. Return `margin = walk.length − route.length` (typed).

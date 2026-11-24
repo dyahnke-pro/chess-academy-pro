@@ -1,7 +1,7 @@
 # Card — `seventhRankMate` (two heavy pieces on the seventh that cannot mate)
 
 ## A. Identity
-- `src/services/seventhRankMate.ts:41` `seventhRankMate(fen, lines, student)`; helper `noMatingCheck` (:33). Registry: standing-board read (kind `technique`, census). Both seats.
+- `src/services/seventhRankMate.ts:41` `seventhRankMate(fen, lines, student)`; helper `noMatingCheck` (:33). Registry `boardComputers.ts:7625` (standing-board read, kind `technique`). Both seats.
 - Census: 8 fired / 6 said (held in-flux 2).
 
 ## B. Facts
@@ -21,10 +21,10 @@
 ## D. Lesson recipes
 | id | angle | seat | condition | slots | LESSON stems | CONSEQUENCE | BETTER-MOVE | HABIT | Learn variant | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| SR1 | KNOW (false mate hunt) | S attacker | condition true on fenBefore, student's move cost (a check that went nowhere / a mate try) | guard/touch | "Two rooks on the seventh mate only when the eighth rank is free: while their {guard} guards it, the rooks are for pawns, not mate." / "When the king touches one of your rooks, the seventh-rank mate is gone — take material instead." | "The checks just push the king around." | "{best} took the pawn on {sq}." (once past) | "Before hunting mate with rooks on the seventh, ask what guards the eighth rank." | "No mate with the rooks while the {guard} guards the back rank." | a mate exists (engine) | H; C pawnsOnSeventh |
+| SR1 | KNOW (false mate hunt) | S attacker | condition true on fenBefore, student's move cost (a check that went nowhere / a mate try) | guard/touch | "Two rooks on the seventh mate only when the eighth rank is free: while their {guard} guards it, the rooks are for pawns, not mate." / "When the king touches one of your rooks, the seventh-rank mate is gone — take material instead." | "The checks just push the king around." | "{best} took the pawn on {sq}." (once past) | "Before hunting mate with rooks on the seventh, ask what guards the eighth rank." | "Rooks on the seventh don't mate while the back rank is guarded — your rooks were for their pawns." | a mate exists (engine) | H; C pawnsOnSeventh |
 | SR2 | PREV (defender) | S defender | condition with student defending, student's move let the guard off the back rank / king step away from touching | — | "Keep the back rank guarded and the king next to a rook: that is all it takes to stop two rooks on the seventh." | "Without it, the doubled rooks mate." | "{best} kept the {guard} on the back rank." | "With their rooks on your second rank, never take the guard off your back rank." | "That took the guard off your back rank." | — | C (condition flips false on fenAfter and the attacker now mates) |
-| SR3 | PLAN | S attacker | `thirdPiece` | piece | "Two rooks on the seventh plus one more piece is a mating attack: bring the {piece} in." | — | — | — | — | — | C |
-| SR4 | CONSEQ (deflection) | S attacker | `deflect` exists | — | "Pull the guard off the eighth rank and the rooks mate." | — | — | — | — | — | C |
+| SR3 | PLAN | S attacker | condition true on fenBefore, student's move cost (missed), errorWhy's better move brings `thirdPiece` in | piece | "Two rooks on the seventh plus one more piece is a mating attack: the {piece} was the one to bring." | — | "{best} brought the {piece} to the back rank." (once past) | SR1 | "The rooks on the seventh needed one more piece." | better move is not the third piece | C |
+| SR4 | CONSEQ (deflection) | S attacker | condition true on fenBefore, student's move cost (missed), errorWhy's better move is `deflect` (pulls the guard off the back rank) | guard | "When one piece guards the back rank against your rooks, pull it away and the rooks mate: their {guard} was overloaded." | — | "{best} dragged the {guard} off the back rank." (once past) | SR1 | "Their {guard} was the only thing stopping your rooks." | better move not a deflection | C |
 | — | phase | — | any phase; mostly endgames — fine | | | | | | | | |
 | — | record | — | RED/GREY full · AMBER "No rook mate while the back rank is guarded." · GREEN silent | | | | | | | | |
 

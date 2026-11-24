@@ -21,7 +21,7 @@
 ## D. Lesson recipes
 | id | angle | seat | condition | slots | LESSON stems | CONSEQUENCE | BETTER-MOVE | HABIT | Learn variant | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| KC1 | KNOW (mistake: king to the centre) | S | `towardCentre`, queens on, student's king move cost | to, lines | "The further the king is from the centre, the safer it is: on {to} it stands where the lines open first." / "A king in the middle is in the way of every line that opens." | "The {file}-file and the {diag} diagonal both run through {to}." (openLinesAt) | "{best} kept the king on {from}." | "Before a king move in the middlegame, ask: is it heading for the corner or the centre?" | "Your king walked into the centre with their queen on the board." | queens off; endgame | C towardCentre |
+| KC1 | KNOW (mistake: king to the centre) | S | `towardCentre`, queens on, student's king move cost | to, lines | "The further the king is from the centre, the safer it is: on {to} it stands where the lines open first." / "A king in the middle is in the way of every line that opens." | "The {file}-file and the {diag} diagonal both run through {to}." (openLinesAt) | "{best} kept the king on {from}." | "Before a king move in the middlegame, ask: is it heading for the corner or the centre?" | "With queens on, the centre is where the lines open first — a king there is in the way of all of them." | queens off; endgame | C towardCentre |
 | KC2 | KNOW (their king to centre) | O | their king move toward centre, cost | — | "Their king walked into the centre: open lines toward it." | — | — | — | after their move: "Their king walked into the centre." | — | C |
 | KC3 | praise (today's fire) | S good move | gate as today | — | (EARNED_PRAISE only — no mistake → Learn silent under WO-LEARN-MISTAKES-ONLY; Review keeps the rule) | — | — | — | silent | — | H |
 | KC4 | phase: endgame (the flip) | both | endgame | — | handled by `kingActivityGap`: "In the endgame the rule flips: bring the king to the centre." | | | | | NOT_ENDING gate here | — |
@@ -32,10 +32,12 @@
 - Student: `positionalReason` `weakened-king-safety` / `king-stuck-center` (shelter gap includes `inCenter`, `positionalReason.ts:159`) on a king move → KC1.
 - Opponent: KC2.
 - Today's fire (KC3) is never a mistake turn: Review/chat only.
+- ⚠️ Latent mis-tag found by the checker: `positionalReason.ts:222` (`bestJobReason`) tags ANY king best move `passive-king-endgame`, with no phase check — so in a middlegame where the better move was a king step to the corner (KC1's better move), the record files `passive-king-endgame` instead of `king-stuck-center`/`weakened-king-safety`. KC1's HABIT would read the wrong skill. See §F4.
 
 ## F. Build changes
 1. `kingWalk.ts:256` — add `kingTowardCentre(fenBefore, san, who)` (the mirror gate) returning `{from, to, lines}`; expose `from`/`to` on both.
 2. Pure `openLinesAt(fen, sq)` (findOpenFiles + diagonal scan) for KC1's consequence.
+4. `positionalReason.ts:222` — the king branch of `bestJobReason` reads the phase: `passive-king-endgame` only in the endgame; in the middlegame a king best move tags `king-stuck-center` (from d/e/f) or `weakened-king-safety`. Root fix for the KC1 habit link (and for every computer whose better move is a king move).
 3. Recipe KC1/KC2 → `mistakeLesson.ts` (cause `positional:king-stuck-center` with a king move). The rule sentence (:269) becomes the LESSON stem source; the Learn praise firing is removed by the mistake-only gate.
 
 ## G. Proof boards
