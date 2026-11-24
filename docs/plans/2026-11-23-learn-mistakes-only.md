@@ -119,6 +119,8 @@ ignored-threat · tempo-wasted · colour-conceded · traded-into-target · passe
 Computers / readers not built yet:
 - [ ] **Retreat of a piece just developed** (the tempo-wasted case with no reader).
 - [ ] **The 12 still-unexplained costly moves** in David's games: a missed-tempo pawn push (b5), a pawn move that shuts in its own bishop (d3), …Qd4 letting d5 go, quiet rook-ending moves (Re6, Rb1). Each needs its own cause reader: own-bishop blocked, missed tempo, rook-ending activity.
+- [x] Built 2026-11-24 (causeReaders, stopInLine, endgameDefenderRules, hangingPawns, bishopShutBy): retreat, shut-in bishop, missed tempo, pawn let go, rook activity, pass-in-your-head, defender rules — 6 of the 12 explained.
+- [ ] **Still unexplained (6):** …Bg4 (113), …Re6 (137), …Bxf4 (202), Qf3 (318), e5 (108), …f6 (100, a trade — correctly no cause).
 - [ ] **Hanging pawns structure** — no computer (census: Danya teaches it, we never say it).
 - [ ] **The "pass in your head" test**, two halves. Skip the move: what would they play? Let them play it after your move: why does it fail now? `moveIntent.stopReason`, `breakStopped` and `stopsBreak` check one move only. They should read the engine line instead (the Rd1 / …e5 dxe6 board, which still has to be found in saved data for its test).
 - [ ] **Endgame defender rules** for the classes `DEFENDER_PRINCIPLE` lacks (only 2 covered).
