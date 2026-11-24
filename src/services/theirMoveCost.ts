@@ -60,6 +60,40 @@ function bishopMobility(board: Chess, sq: string): number {
 }
 
 /**
+ * A PAWN MOVE THAT SHUTS IN ITS OWN BISHOP — the one reader, either seat (the
+ * mover's): the pawn lands on its bishop's colour, in front of a bishop still
+ * behind the chain, and takes three or more squares from it, leaving it one
+ * or none. Null otherwise (a bishop already in front of the pawn is the good
+ * bishop of that structure; one with two squares left is not shut in).
+ */
+export function bishopShutBy(fenBefore: string, san: string): { bishop: string; pawn: string; drop: number } | null {
+  let before: Chess; let after: Chess; let mv;
+  try { before = new Chess(fenBefore); after = new Chess(fenBefore); mv = after.move(san); } catch { return null; }
+  if (!mv || mv.piece !== 'p') return null;
+  const me = mv.color;
+  const bishops = before.board().flat().filter((c) => c && c.type === 'b' && c.color === me).map((c) => (c as { square: string }).square);
+  const toDark = (mv.to.charCodeAt(0) - 97 + Number(mv.to[1]) - 1) % 2 === 0;
+  for (const b of bishops) {
+    const bDark = (b.charCodeAt(0) - 97 + Number(b[1]) - 1) % 2 === 0;
+    if (bDark !== toDark) continue;
+    // SHUT IN means BEHIND the chain. A bishop already out in front of the
+    // pawn is the good bishop of that structure (…d6 with the bishop on c5,
+    // e3 with it on g5 — chat probe 2026-10-02 called both "shut in").
+    const behind = me === 'w' ? Number(b[1]) < Number(mv.to[1]) : Number(b[1]) > Number(mv.to[1]);
+    if (!behind) continue;
+    const was = bishopMobility(before, b);
+    const now = bishopMobility(after, b);
+    // SHUT IN means it has nowhere left to go: …c5 in the French leaves the
+    // f8 bishop e7 and d6, and is no shut-in (Danya speedrun tapes: said in
+    // 8 of 20 games, of a bishop with two or more squares left). From three
+    // squares or more down to one or none is shut in (d3 with the f1 bishop
+    // behind it and the queen on b5: c4, d3, e2 down to e2 — g 1036689856).
+    if (was >= 3 && now <= 1 && was - now >= 2) return { bishop: b, pawn: mv.to, drop: was - now };
+  }
+  return null;
+}
+
+/**
  * The cost of THEIR move `san` played from `fenBefore`, for the student
  * (`studentColor`). Null when nothing usable changed.
  */
@@ -104,30 +138,14 @@ export function theirMoveCost(fenBefore: string, san: string, studentColor: 'w' 
     }
   }
 
-  // 2. Their own bishop shut in by the pawn they just moved.
-  if (mv.piece === 'p') {
-    const bishops = before.board().flat().filter((c) => c && c.type === 'b' && c.color === them).map((c) => (c as { square: string }).square);
-    const toDark = (mv.to.charCodeAt(0) - 97 + Number(mv.to[1]) - 1) % 2 === 0;
-    for (const b of bishops) {
-      const bDark = (b.charCodeAt(0) - 97 + Number(b[1]) - 1) % 2 === 0;
-      if (bDark !== toDark) continue;
-      // SHUT IN means BEHIND the chain. A bishop already out in front of the
-      // pawn is the good bishop of that structure (…d6 with the bishop on c5,
-      // e3 with it on g5 — chat probe 2026-10-02 called both "shut in").
-      const behind = them === 'w' ? Number(b[1]) < Number(mv.to[1]) : Number(b[1]) > Number(mv.to[1]);
-      if (!behind) continue;
-      const drop = bishopMobility(before, b) - bishopMobility(after, b);
-      // SHUT IN means it has nowhere left to go: …c5 in the French leaves the
-      // f8 bishop e7 and d6, and is no shut-in (Danya speedrun tapes: said in
-      // 8 of 20 games, of a bishop with two or more squares left).
-      if (drop >= 3 && bishopMobility(after, b) <= 1) {
-        return {
-          kind: 'bishop-shut',
-          text: `Their ${played} shuts in their own bishop on ${b} — the pawn now sits on its colour, right in its way.`,
-          squares: [b, mv.to],
-        };
-      }
-    }
+  // 2. Their own bishop shut in by the pawn they just moved (the one reader).
+  const shut = bishopShutBy(fenBefore, san);
+  if (shut) {
+    return {
+      kind: 'bishop-shut',
+      text: `Their ${played} shuts in their own bishop on ${shut.bishop} — the pawn now sits on its colour, right in its way.`,
+      squares: [shut.bishop, shut.pawn],
+    };
   }
 
   // 3. Castling given up by a king move that is not castling.
