@@ -54,3 +54,42 @@
 
 ## H. Open questions
 - None beyond the pilot's.
+
+
+## Restored from the pilot grid (David approved these; the re-cut dropped them)
+Each row keeps its angle, condition, data, lesson and guard. These join §D and are written to the same voice and recipe rules.
+
+| angle | condition | data | the lesson | guard |
+|---|---|---|---|---|
+| STRAT (O seat) | hard-to-finish, O better | H | When they're better but can't break through, your job is to give them nothing to aim at: keep every piece guarded and wait. | not when their direct try works |
+| STRAT + L dead | hard-to-finish, no counterplay | H | When your opponent has nothing to do, time is on your side: improve slowly and let them run out of good moves. | not when counterplay is alive |
+| PREV + L alive | better, counterplay alive | H | Before you press for more, stop their one source of play. A won position is lost by ignoring the counterattack. | — |
+| PLAN | no-direct-way, level | H | In a level position with no direct way in, the game is won by the better plan, not the better shot. | — |
+| CALC | works-now | H (net) | When you're better, look for the direct shot first. If the forcing line wins material, play it before they fix it. | net must be ≥ a pawn after the line settles |
+| STRAT (timing) | works-now, didn't work a move earlier | C: same try on the previous board's saved read | Chances come and go. The shot that didn't work a move ago works now because something changed: notice what changed. | previous read must show it failing |
+| phase: endgame | step ≥1, ending | H | In the endgame, an advantage you can't convert is just a draw. Convert with the king and the passer, not with tricks. | ending detected |
+| combo: + bad piece | no-direct-way, S has a bad piece | H | When nothing direct works, fix your worst piece first. | — |
+| exception | works-now but costs king safety | C: king-exposure read after the line | The direct win is right even though it looks risky: the forcing line leaves them no time to hit back. | line ends with S king safe |
+| record | — | — | RED/GREY: full lesson · AMBER: "Better, but nothing direct works — improve first." · GREEN: silent | — |
+| RECOG | eye high | H (eye) | The move that jumps out first is often the one your opponent is ready for. | eye ≥ top 3 |
+| IDENT | always | C: piece on replyFrom (chess.js) | Find the piece that answers your idea: that is the piece doing their defending. | — |
+| KNOW (capture) | look = capture | H | Every capture changes the board in two ways: what you take, and what opens. Check both. | — |
+| KNOW (threat) | look = threat | H | A threat is only strong if they can't answer it with a bigger threat. | reply creates a threat ≥ yours |
+| KNOW (lever) | look = lever | H | A pawn break is a good idea at the wrong time if the pawn it hits is defended enough. Add support first, then break. | target defended ≥ attacked |
+| KNOW (king, ending) | look = king | H | In the endgame the king walk is strong only when it can't be cut off. Check which ranks and files their rook controls. | ending |
+| STRAT (storm) | look = storm | H | A pawn storm only works if it's faster than their answer. Count how long each side's attack takes. | — |
+| PLAN (prepares) | a link answers this try | H (links) | When the direct try fails, ask what one quiet move would make it work, and play that first. | link exists |
+| seat O | the try is theirs | H | When their natural move fails, expect them to find the quieter one. Watch for it. | — |
+| timing: Learn before move | S to move, try is S's | H | Learn: "The obvious capture here doesn't work — ask what they take back with." (no move named) | never name the try's square to the student before the move |
+| timing: Review | after the move | H | Review names the try, the reply and the lesson in full. | — |
+| counterfactual | S played the try | H (cost) | This is the move you played: the reply was there, and it cost you [n]. Next time, check the reply first. | S's move = the try |
+| record | — | — | AMBER: "The obvious try fails — check the reply." GREEN: silent | — |
+| CONSEQ | works | H | Material won by force is the clearest advantage in chess: once you have it, trade pieces and convert. | — |
+| HABIT | works, S missed it | H (S played other) | You had a winning shot here. Every move, look at checks, captures and threats first: that's how you find it. | S's move ≠ W |
+| seat O | works for them | H | They have a forcing line here. When you see one for them, stop it before your own plan. | — |
+| timing: Learn before move | S to move | H | Learn: "There's a direct way to win material here." (move held) | never name W before the move unless asked |
+| PLAN (steps) | board plan steps | H | A plan is a few steps in order: name them, then play the first one. | — |
+| STRAT (order) | link at later move | H | Order matters: the first move makes the second one work. | moveIndex > 0 |
+| timing: Learn | S to move | H | Learn: "The direct way fails — which of your pieces would make it work?" | move held |
+| PREV | alive | H | Find their one source of play and take it away before anything else. | — |
+| STRAT | dead | H | With no counterplay to fear, you can take your time. | — |

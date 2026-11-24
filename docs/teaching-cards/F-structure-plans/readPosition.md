@@ -71,3 +71,44 @@ The pilot's grid (docs/teaching-cards/pilot-cards.md CARD 2, kinds K, D, G, B, S
 ### H. Open questions
 1. The king in the centre on a NON-mistake turn (castling one move away, nothing lost yet): silent under the WO, or the one standing warning kept?
 2. RP-X1 (bishop pair given up) — its own cause, or folded into `colour-conceded`?
+
+
+## Restored from the pilot grid (David approved these; the re-cut dropped them)
+Each row keeps its angle, condition, data, lesson and guard. These join §D and are written to the same voice and recipe rules.
+
+| angle | condition | data | the lesson | guard |
+|---|---|---|---|---|
+| CONSEQ | central file open / opening | H | Once a central file opens, a king still in the middle can be checked down it. | file open or break pending |
+| IDENT | which side safer | H (castlingWing) | Castle on the side where the pawns in front of your king are still home. | — |
+| PLAN | castling blocked | C: piece between king and rook | Clear the way to castle: the last piece out is often the one blocking it. | piece on f1/g1 or b1–d1 |
+| PLAN | can't castle | H (castleByHand) | When you can't castle, walk the king to safety by hand. | lost rights |
+| combo: + development lead | S king centre, O ahead | H | Behind in development with your king in the centre is the worst combination: castle and develop before anything else. | — |
+| STRAT (behind) | S behind | H | When you're behind in development, keep it closed and catch up. | — |
+| IDENT | which piece next | C: home minor + best square (squareChoice) | Develop the piece with the fewest good squares first: the others can wait. | — |
+| exception | twice with a threat | H (ruleException) | Moving a piece twice is fine when it wins something or forces a reply. | the move threatens |
+| KNOW | always | H | Knights before bishops; castle early; don't bring the queen out too soon. | opening |
+| phase | middlegame on | — | doesn't apply after development is complete — reason: no home minors | — |
+| RECOG | good piece found | H | Know which of your pieces is doing the most: that's the one to keep and build around. | — |
+| IDENT | target on its line | H | A piece is strong when it hits something. Name what it's aiming at. | target exists |
+| CALC | target loose | H | An attacked piece with no guard is a target right now. | no defenders |
+| PLAN | heavy piece can join | C: heavyPieceToFile | Doubling on a file doubles the pressure: the second piece wins the target. | piece can reach |
+| CONSEQ | target pinned / tied | C: pin & tied readers | A pinned piece can't escape, so pile on it. | pin holds |
+| seat O | their best piece | H | Their best piece is the one to trade off. | — |
+| combo: + their worst | S best vs O worst | H | Trade their good piece, keep their bad one: the game turns on the pieces left. | — |
+| PLAN | has a route | C: pieceRoute/pieceWish | Find the route that brings your worst piece into the game. | route legal |
+| PLAN (pawns) | bad bishop, own pawns | C: pawn moves that free it | Move your pawns off the bishop's colour to free it. | — |
+| KNOW | always | H | Improve your worst piece. | — |
+| IDENT | the square in front | C: square ahead + who can land there | The square in front of an isolated pawn is the best home for an enemy knight. | knight can reach |
+| CALC | attackers vs defenders | C: count | Count the pressure on the weak pawn: when attackers outnumber defenders, it falls. | — |
+| IDENT | target pawn | H | A break is aimed at a pawn: find which one. | — |
+| CONSEQ (wins pawn) | SEE after push > 0 | C: SEE | A break that hits a pawn guarded fewer times than it's attacked just wins it. | SEE ≥ 100 |
+| KNOW (named) | named structure | H (namedPawnStructure) | Every pawn structure has its typical breaks: in the [name], it's [break]. | name matches |
+| seat O | their break | H | Ask every move: which break do they want, and is it ready? | — |
+| timing: Learn | S to move, S break | H | Learn: "Their pawn on e4 is the one to challenge." (push held) | never name the push square before the move unasked |
+| combo: + their king centre | S break opens toward their king | H | The break that opens the centre is the attack when their king hasn't castled. | king uncastled |
+| STRAT (pair) | S has pair | H | Two bishops work best in an open position: open lines for them. | — |
+| CONSEQ (pair given up) | trade gives up pair | H | Giving up a bishop gives up control of its colour. Ask which squares you're giving away. | — |
+| IDENT (complex) | bishop gone, theirs remains | H + C: targets on that colour incl. pawns | When your bishop of one colour is gone, their bishop of that colour rules those squares. Watch your pawns on that colour. | their same-colour bishop on board |
+| PLAN (complex) | a minor can settle | H | Plant a piece on the weak colour's squares: they have nothing to chase it with. | piece reaches the hole |
+| PREV (passer, O) | their passer | H | Blockade a passed pawn: the square in front of it is the place to stop it. | — |
+| KNOW (passer) | passer | H | The best blocker of a passed pawn is a knight. | — |
