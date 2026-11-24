@@ -23,7 +23,7 @@ It is said after the student's reply, and it never names the student's move. The
 ## The REPAIR slot: how to live with a loss that can't be undone (David 2026-11-24)
 When a mistake leaves something permanent (a bishop traded off, a pawn left weak, a passer let loose, the king's cover pushed), the turn also says how to adapt. The order is LESSON → CONSEQUENCE → BETTER MOVE (past) → REPAIR → HABIT.
 
-REPAIR is computed from the board, never written freehand. Each repair rule has a deterministic check that it is possible here:
+REPAIR is said as a second PRINCIPLE (the one that overcomes the loss) with this board inside it, e.g. "When you've lost a bishop, your pawns become it: put them on its colour." It is computed from the board, never written freehand. Each repair rule has a deterministic check that it is possible here:
 - colour conceded: put your pawns on the lost bishop's colour, cover the holes with a knight, trade off their good bishop. The check: which pawns can still reach that colour, and which knight can reach the hole.
 - weak pawn: keep pieces near it, trade the pieces that attack it, or push it and trade it off.
 - passer let loose: blockade it with a knight, bring the king, or put a rook behind it.
