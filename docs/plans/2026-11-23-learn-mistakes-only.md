@@ -32,6 +32,9 @@ REPAIR is said as a second PRINCIPLE (the one that overcomes the loss) with this
 
 Learn says the repair as a plan, never as a move ("your pawns on the dark squares", never "c3"). Review may name the move. Each repair has 5 rotated phrasings. With no computable repair the slot is silent.
 
+## Say it short, like a person (David 2026-11-24)
+Use the fewest words that carry the idea: never 10 words when 5 will do. Each slot is one short sentence that names the piece and the square, with no throat-clearing ("Now,", "the idea is that", "what this means is"). The words get shorter; the facts don't. The gate (`mistakeLesson.test.ts`) fails any stem over 14 words, and any stem that repeats a word already said in the same turn's slots (piece and square names excepted). This limit is on the phrasing written into the recipe, never on how many facts are said.
+
 ## Order — the computer job comes first
 
 ### Phase 1 — the cards (the build spec) ← NOW
