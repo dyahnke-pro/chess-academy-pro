@@ -37,6 +37,7 @@ import { detectLatentFork } from './latentFork';
 import { gambitFile } from './inaccuracyCall';
 import { proofCut } from './exchangeLedger';
 import { Chess, type Square, type Color, type Move } from 'chess.js';
+import { renderWalkedIntoFork } from './teachingSentence';
 
 interface WhyItFailed {
   /** One sentence, past tense — the move has already been played. */
@@ -424,13 +425,12 @@ export function whyItFailed(args: {
     if (nowHit.length >= 2 && homeHit.length < nowHit.length && wins) {
       const forkerType = forkReply.piece;
       const hit = nowHit.map((sq) => `your ${NAME[after.get(sq)?.type ?? 'p']} on ${sq}`);
-      const list = `${hit.slice(0, -1).join(', ')} and ${hit[hit.length - 1]}`;
       const taken = nowHit.find((sq) => lineTakes(sq)) ?? null;
       return {
         kind: 'walks-into-fork',
         squares: [forkReply.to, ...nowHit],
         lost: taken,
-        line: `That let their ${NAME[forkerType]} in on ${forkReply.to}, where it hits ${list} at once.`,
+        line: renderWalkedIntoFork({ forker: NAME[forkerType], square: forkReply.to, targets: hit }),
       };
     }
   }

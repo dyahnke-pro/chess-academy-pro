@@ -983,3 +983,10 @@ export function renderTally(atk: number, def: number): string {
   const a = `${countWord(atk)} ${atk === 1 ? 'attacks' : 'attack'} it`;
   return def === 0 ? `${a} and nothing guards it` : `${a} and only ${countWord(def)} ${def === 1 ? 'guards' : 'guard'} it`;
 }
+
+/** THE FORK A MOVE WALKED INTO (`whyItFailed` walks-into-fork): their piece
+ *  lands on `square` and hits every target at once. */
+export function renderWalkedIntoFork(f: { forker: string; square: string; targets: readonly string[] }): string {
+  const list = f.targets.length > 1 ? `${f.targets.slice(0, -1).join(', ')} and ${f.targets[f.targets.length - 1]}` : f.targets[0];
+  return `That let their ${f.forker} in on ${f.square}, where it hits ${list} at once.`;
+}
