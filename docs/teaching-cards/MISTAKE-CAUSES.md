@@ -311,6 +311,8 @@ Fires when the move does nothing their best line has to answer: a check that cha
   - Every move, ask: does this force anything?
 
 ### colour-conceded
+**Approved (David 2026-11-24):** "Your dark-squared bishop is gone, so d4 has no guard. Their bishop on f6 will feel at home now. Put your pawns on dark squares to help regain control of the dark squares."
+
 Fires when you trade your last bishop of one colour while they keep theirs. The targets are your pawns and squares on that colour.
 - **L**
   - Trading off your {colour}-squared bishop hands them the {colour} squares, and {target} is the first target.

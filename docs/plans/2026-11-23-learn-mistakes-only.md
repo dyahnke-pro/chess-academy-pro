@@ -7,7 +7,7 @@ Branch `learn-mistakes-only` (worktree /home/user/urg-me). Never main until Davi
 Learn speaks ONLY after the student has played, ONLY on a mistake by either side, and ONLY as the lesson sentence:
 LESSON (board example inside) → CONSEQUENCE → BETTER MOVE + JOB (once past) → HABIT (record RED/GREY).
 No board restatement. Learn never names the student's next move or the move they just played. Silence otherwise.
-Approved voice: "Trading off your dark-squared bishop hands them the dark squares, and d4 is the first target. Before you trade a bishop, ask which colour you're giving away."
+Approved voice (David 2026-11-24, the reference turn every recipe is written to): "Your dark-squared bishop is gone, so d4 has no guard. Their bishop on f6 will feel at home now. Put your pawns on dark squares to help regain control of the dark squares."
 
 ## Rule for every sentence the build writes: say it several ways (David 2026-11-24)
 Every recipe slot (LESSON, CONSEQUENCE, BETTER MOVE, HABIT) holds **at least 5 phrasings of the same idea**, rotated with `rotateStem` keyed on the board, never `Math.random`, so a game never repeats itself. The idea and the facts stay the same; only the words change. A gate (`mistakeLesson.test.ts`) fails any recipe slot with fewer than 5 phrasings and any two phrasings that are word-for-word the same once squares and pieces are blanked. The only exceptions are the ones already locked: the focus clue and the mission lines stay fixed.
