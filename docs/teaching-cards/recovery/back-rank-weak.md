@@ -22,6 +22,6 @@
 
 ## Sources
 - https://en.wikipedia.org/wiki/Back-rank_checkmate
-- https://www.chess.com/terms/back-rank-mate
+- https://www.chess.com/article/view/chess-tactics (back rank mate)
 - https://chess.com/terms/chess-defense (an h/g pawn advance helps prevent back-rank mate)
 - concept:end-rook-7th (the mirror: a rook pins the king to its back rank)

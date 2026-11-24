@@ -53,14 +53,18 @@ interface WhyItFailed {
    *  (walk 900, 17…Bg1 — "the rook on f1 just takes it" after they played
    *  Nxg4). The caller that knows the reply chooses. */
   missed?: string;
-  kind:
-    | 'held-by-defender'    // the capture loses the exchange after recaptures
-    | 'answered-by-tactic'  // an in-between check hits the attacker
-    | 'lost-the-piece'      // the moved piece itself is taken for too little
-    | 'abandoned-defender'  // moving it undefended one of your own pieces
-    | 'abandoned-square'    // moving it left a square their knight forks from
-    | 'walks-into-fork';    // the move let a reply hit two of your pieces
+  kind: WhyItFailedKind;
 }
+
+/** The mechanism by which a move failed — one `MistakeCause` each
+ *  (`mistakeCause.FAILED_KIND`). */
+export type WhyItFailedKind =
+  | 'held-by-defender'    // the capture loses the exchange after recaptures
+  | 'answered-by-tactic'  // an in-between check hits the attacker
+  | 'lost-the-piece'      // the moved piece itself is taken for too little
+  | 'abandoned-defender'  // moving it undefended one of your own pieces
+  | 'abandoned-square'    // moving it left a square their knight forks from
+  | 'walks-into-fork';    // the move let a reply hit two of your pieces
 
 const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 const NAME: Record<string, string> = {

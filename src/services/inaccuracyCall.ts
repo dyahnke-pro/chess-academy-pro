@@ -27,6 +27,7 @@
 // G0 throughout: severity is arithmetic, the better move comes from the engine,
 // and the reason comes from replaying the engine's own line. Nothing here asks a
 // model what it thinks.
+import { classifyMistake, type MistakeCause } from './mistakeCause';
 import { capturedSquare } from '../utils/capturedSquare';
 import { evalBand } from './evalBand';
 import { andList, lineShape, lineShapePlies, seatedLine, lineSeatAt } from '../utils/andList';
@@ -1090,7 +1091,10 @@ export function allowedReply(
  *  The proof is the line those words name, drawn on the board, when there is
  *  one. The contract is light (David 2026-10-10: "Not every miss needs the
  *  proof"): with no why at all, the grade says its cost. */
-interface ErrorWhy {
+export interface ErrorWhy {
+  /** THE CAUSE AS DATA (`mistakeCause`): what every recipe keys on; the
+   *  sentences above are this cause said in errorWhy's own words. */
+  cause: MistakeCause;
   /** "it let them win a piece …" / "it let a forced mate slip" / "it let them
    *  play …d5, which …" — null when nothing it allowed can be said. */
   consequence: string | null;
@@ -1567,7 +1571,31 @@ export function errorWhy(args: {
   // The piece a mechanism left to be taken is the lost square too, so a
   // fundamental naming the same hung piece stays quiet (one fact once).
   const failedLost = failedRead?.lost ?? undefined;
+  // THE POSITIONAL TAG, kept even when the better move is named (`should`):
+  // the sentence goes to the better move, the record still needs the tag
+  // (26 of 87 live costly moves dropped it, card errorWhy F5).
+  const positionalTag = args.allowedMate === null && args.missedMate === null && (args.quality === 'mistake' || args.quality === 'blunder')
+    ? (() => { try { return positionalReason({ fen: args.fenBefore, playedSan: args.playedSan, bestSan, namesBetterMove: false, student: args.moverColor === 'white' ? 'w' : 'b' })?.tag ?? null; } catch { return null; } })()
+    : null;
+  const playedCaptures = (() => { try { return !!new Chess(args.fenBefore).move(args.playedSan)?.captured; } catch { return false; } })();
+  const allowedR = caused ? allowedReason() : null;
+  const missedR = missedReason();
+  const cause = classifyMistake({
+    allowedMate: args.allowedMate !== null,
+    missedMate: args.missedMate !== null,
+    failedKind: failedRead?.kind ?? null,
+    playedCaptures,
+    allowedWins: !!punishment || !!single || !!farLoss,
+    allowedMotif: allowedR?.motif ?? null,
+    allowedThreat: !!allowed,
+    kingHunt: !!hunt,
+    missedMotif: missedR?.motif ?? null,
+    missedWins: !!missedR && !missedR.mate,
+    tag: positionalTag,
+    causedByMove: caused,
+  });
   return {
+    cause,
     consequence,
     tail,
     failed,
