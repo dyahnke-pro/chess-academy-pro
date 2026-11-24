@@ -1,9 +1,9 @@
 # queenNet / queenHunt / findTrappedPiece — card (one concept: the piece with no safe square)
 
 ## A. Identity
-- `queenNet(fenBefore, san)` — `src/services/queenNet.ts` (+ its own `queenSafeSquares`, SEE rule); words `queenNetLine`. Board computer `queenNet` boardComputers.ts:3835-3850, kind `tactic`.
-- `queenHunt(fenBefore, san, line)` — `src/services/queenHunt.ts` (shapes boxed | one-square | escape; `trapMove`, `pinnedToKing`, a SECOND exported `queenSafeSquares` with a different rule); words `queenHuntLine`. Board computer `queenHunt` boardComputers.ts:7025-7043, kind `move-job`.
-- `findTrappedPiece(fen, side, lineUci)` / `trappedOnBoard` — `src/services/reviewTeachingPoints.ts:855-888` over the ONE trapped computer `trappedAt` (`src/services/trappedPiece.ts`). Board computer boardComputers.ts:5695-5715, kind `trapped`, skills `missed-your-trapped-piece` / `hung-material`.
+- `queenNet(fenBefore, san)` — `src/services/queenNet.ts:70` (+ its own `queenSafeSquares` :43, SEE rule); words `queenNetLine` :101. Board computer `queenNet` boardComputers.ts:3835-3850, kind `tactic`.
+- `queenHunt(fenBefore, san, line)` — `src/services/queenHunt.ts:97` (shapes boxed | one-square | escape; `trapMove` :71, `pinnedToKing` :87, a SECOND exported `queenSafeSquares` :47 with a different rule); words `queenHuntLine` :158. Board computer `queenHunt` boardComputers.ts:7025-7043, kind `move-job`.
+- `findTrappedPiece(fen, side, lineUci)` / `trappedOnBoard` — `src/services/reviewTeachingPoints.ts:855-895` (trappedOnBoard :870) over the ONE trapped computer `trappedAt` (`src/services/trappedPiece.ts:31`). Board computer `trappedPiece` boardComputers.ts:5694-5715, kind `trapped`, skills `missed-your-trapped-piece` / `hung-material`.
 - Shared claim `queen-run:<sq>` between queenNet and queenHunt (one says it).
 - Census: queenNet 15/10, queenHunt 10/8, findTrappedPiece 3/2.
 
@@ -14,9 +14,9 @@
 - Trapped: `square`, `piece` (Q/R only), `attackerSquare`, `attackerPiece`; only when the engine line takes it (`lineTakesPiece`).
 ### B2. Dropped
 - **ROT: two `queenSafeSquares` with different rules** — queenNet.ts: "safe" = SEE on landing < 1; queenHunt.ts: unsafe if any attacker worth < 9 (cheaper), else safe only if defended (= trappedAt's escape rule). Same board, two answers to "how many squares does the queen have". The queenNet one also ignores the "defended by own" nuance.
-- trappedAt's second pass: other moves that rescue the piece (a block, a counter-threat) — "no rescue" is the full proof; only "every escape square is covered" is said.
+- trappedAt's rescue test (trappedPiece.ts:43-45, `stillWinnable`) — "no rescue" is the full proof; only "every escape square is covered" is said.
 - queenNet `beforeSafe` (squares before the move) — the count drop ("it had four squares, now one").
-- findTrappedPiece: knights and bishops excluded (Q/R only, :872) though `trappedAt` handles any non-pawn — the trapped-minor lesson is only in detectTactics' `trapped_piece` (Review).
+- findTrappedPiece: knights and bishops excluded (Q/R only, `trappedOnBoard`, reviewTeachingPoints.ts:879) though `trappedAt` handles any non-pawn — the trapped-minor lesson is only in detectTactics' `trapped_piece` (Review).
 ### B3. Cheap
 - The owner's mistake move that walked the piece in: did the student's own move put the queen there (mv.piece === 'q' and `queenSafeSquares(after, mv.to)` ≤ 1 AND opponent then hunts)? → "the queen raid" mistake.
 - The escape the student missed: queenHunt `escape` shape run on the student's alternatives (best move = a queen retreat).
@@ -53,9 +53,9 @@ n/a: phase (any — queen traps mostly middlegame; no phase rule computed).
 
 ## F. Build changes
 1. ONE `queenSafeSquares`: delete the copy in queenNet.ts and import queenHunt.ts's (the trappedAt escape rule) — or better, derive both from `trappedAt`'s escape test (`trappedPiece.ts`, the move loop) exported as `safeEscapes(fen, sq)` for any piece. Fixes two answers to one question (rot rule).
-2. findTrappedPiece (reviewTeachingPoints.ts:872) — include N and B (trappedAt already handles them); the "minor trapped" lesson is then said where the line takes it.
+2. findTrappedPiece (`trappedOnBoard`, reviewTeachingPoints.ts:879) — include N and B (trappedAt already handles them); the "minor trapped" lesson is then said where the line takes it.
 3. Expose `beforeSafe.length` in QueenNet → QN-6 ("four squares to one").
-4. trappedAt — return `rescues: []` checked (empty = proof) → QN-7.
+4. trappedAt (trappedPiece.ts:43) — return the rescue that was checked (today a boolean that returns null) → QN-7.
 5. QN-1 wiring: on the student's queen move, run queenNet/queenHunt on the OPPONENT's reply (they hunt) and attach to errorWhy when cost ≥ mistake (recipe `queen-raid`).
 6. Words → recipes; keep the `queen-run` shared claim.
 

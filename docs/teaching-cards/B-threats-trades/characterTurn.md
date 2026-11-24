@@ -1,14 +1,14 @@
 # characterTurn — the position's character changes (sharp / quiet / conversion / defence)
 
 ## A. Identity
-- File: `src/services/positionCharacter.ts` (309 lines): `characterTurn(state, said, r)` (177–199) → `characterOf` (69–78), `stepCharacter` (149–155), `provenTacticLive` (65–67), `sharpGap` / `bestMoveGap` (42–55), `looseOnBoard` (168–174). Stems: `SWITCH` (91–113), `TACTICAL_WHY` (127–136). Constants `DECISIVE_MATERIAL = 3`, `SHARP_GAP_CP = 150`, `DECIDED_CP = 300` (33–38). Second half `BoardKind` reads (drawing-chances / locked / no-counterplay, 209–).
+- File: `src/services/positionCharacter.ts` (309 lines): `characterTurn(state, said, r)` (177–199) → `characterOf` (70–~82), `stepCharacter` (141–147), `provenTacticLive` (66–68), `sharpGap` / `bestMoveGap` (48–~62), `looseOnBoard` (166–~174). Stems: `SWITCH` (92–~112), `TACTICAL_WHY` (124–~136). Constants `DECISIVE_MATERIAL = 3`, `SHARP_GAP_CP = 150`, `DECIDED_CP = 300` (38–43). Second half `BoardKind` reads (drawing-chances / locked / no-counterplay, 212ff, `boardKind` 239).
 - Callers: `CoachTeachPage.tsx` 11714 (Learn steps it on its live read) and `coachFeatureService.ts` 2302 (Review). Reach (computer-reach: coachFact 437 lists it): review, learn. Census: 11 review lines (9 said, 2 `beside-mate`) — "You are down material now — the job is to make it hard: keep pieces on…", "The position has turned sharp — there is a tactic on the board, so check every capture and check before anything quiet."
 
 ## B. Facts
-- **B1** `CharacterStep` (115–119): `next` (state: `current`, `pending`), `switched {to, text} | null`. `Character` = tactical | positional | conversion | defence.
-- **B2 dropped:** the inputs that decided the character — `quietBalance` (material, 72), `tacticLive`, `gap` — are not returned; WHY a switch was suppressed (`mateOnBoard`, `quietOnCheck`, `quietButConcrete`, 190–198) — returns `switched: null` with no reason; which move made the change (`lastSan` is an input only).
+- **B1** `CharacterStep` (114–~118): `next` (state: `current`, `pending`), `switched {to, text} | null`. `Character` = tactical | positional | conversion | defence.
+- **B2 dropped:** the inputs that decided the character — `quietBalance` (material, 73), `tacticLive`, `gap` — are not returned; WHY a switch was suppressed (`mateOnBoard`, `quietOnCheck`, `quietButConcrete`, 190–198) — returns `switched: null` with no reason; which move made the change (`lastSan` is an input only).
 - **B3 cheap:** on a mistake turn, whether THE MISTAKE caused the switch (the character before the student's move ≠ after, and the cause is material: positional → defence, or tactical with the tactic created by the move) — one extra `characterOf` on the board before the move.
-- **B4 gates:** a switch is announced only after holding two reads (`pending`, 152–154); the first read settles silently (150); suppressed beside a forced mate, "quiet" on a check, "quiet" while a tactic / a wide gap / loose material is on the board (190–198); sharp = a proven tactic or a best-move gap ≥ 150 (not when both lines are decided the same way, 44).
+- **B4 gates:** a switch is announced only after holding two reads (`pending`, 144); the first read settles silently (142); suppressed beside a forced mate, "quiet" on a check, "quiet" while a tactic / a wide gap / loose material is on the board (190–198); sharp = a proven tactic or a best-move gap ≥ 150 (not when both lines are decided the same way, `DECIDED_CP` 43 in `sharpGap`).
 
 ## C. Sentence readiness
 | slot | today | field | missing |

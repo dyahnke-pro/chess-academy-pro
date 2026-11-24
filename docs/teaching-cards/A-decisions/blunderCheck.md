@@ -22,14 +22,15 @@
 ## D. Lesson recipes
 | id | angle | seat | condition | slots | LESSON | CONSEQUENCE | BETTER | HABIT | Learn | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| BC1 | consequence (left en prise) | S | capture branch | piece, sq, reply piece | "A piece left where it can be taken for free is the commonest way to lose. Your {piece} on {sq} had no answer to {reply piece}." / "Every move changes what is guarded: after this one your {piece} on {sq} could simply be taken." | "They win the {piece}." | errorWhy better + job | "Blunder check before you let go: what checks, captures and threats do they have once it lands?" | after move; habit LAST | not a like-for-like trade (:49) | H |
+| BC1 | consequence (left en prise) | S | capture branch | piece, sq, reply piece | "A piece left where it can be taken for free is simply lost. Your {piece} on {sq} had no answer to their {reply piece}." / "Every move changes what is guarded: after this one your {piece} on {sq} could simply be taken." | "They win the {piece}." | errorWhy better + job | "Blunder check before you let go: what checks, captures and threats do they have once it lands?" | after move; habit LAST | not a like-for-like trade (:49) | H |
 | BC2 | identify (guard removed) | S | capture branch + B3 `guardLeft` or defender count dropped to 0 | guard piece | "Before a piece moves, ask what it is guarding. Your {mover} was the last guard of the {piece} on {sq}." | BC1 | — | "Ask what a piece guards before it moves." (`slipHabit` 'what-it-guarded') | | guard really left (count before >0, after 0) | C |
 | BC3 | knowledge (check first) | S | check branch | check san | "Checks come first in their reply, so they come first in your blunder check. Here their check was the start of it." | the line after the check (errorWhy) | — | BC1 | | check must start the losing line (errorWhy agrees) | H + C |
-| BC4 | their seat | O | same gates, opponent mover | | "They let go of the piece without checking your captures: their {piece} on {sq} is free." | "You win the {piece}." | the capture is the student's next move → Learn holds it | — | Learn: never name the capture; "a piece of theirs is loose" (focus clue rule) | today wording hard-codes "your" (:54) — the pure run on g:1012441262#44 (O) produced "taking your knight on e4", wrong seat | C (seat param) |
+| BC4 | their seat | O | same gates, opponent mover | | "They let go of a piece without checking your captures: one of theirs is loose." (piece and square held until the student has moved — focus clue rule) | "You win the {piece}." | the capture is the student's next move → Learn holds it | — | Learn: never name the capture; "a piece of theirs is loose" (focus clue rule) | today wording hard-codes "your" (:54) — the pure run on g:1012441262#44 (O) produced "taking your knight on e4", wrong seat | C (seat param) |
 | BC5 | record | S | | | RED/GREY BC1–BC3 full · AMBER callback stem (:78-80) · GREEN silent | | | | | | H |
 | — | plan, strategize, phase | — | n/a — a blunder check is phase-free; no plan fact | | | | | | | | |
 
 ## E. Mistake link
+- errorWhy causes: `left-hanging` (E6) BC1, `abandoned-defender` (E7) BC2, `answered-by-check` (E5) / `allowed-mate` (E1) BC3, `left-hanging` O-seat (E6o) BC4. All attach to a mistake turn (cost ≥ 150).
 - `whyItFailed`: `lost-the-piece`, `abandoned-defender`, `walks-into-fork` (check/capture reply), `answered-by-tactic` (BC3); costReason `allowed`, `blowPlies` 1. Student today; opponent via BC4.
 
 ## F. Build changes

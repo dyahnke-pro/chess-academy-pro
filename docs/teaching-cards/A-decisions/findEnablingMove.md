@@ -21,12 +21,13 @@
 ## D. Lesson recipes
 | id | angle | seat | condition | slots | LESSON | CONSEQUENCE | BETTER | HABIT | Learn | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| EM1 | plan / order | S | mistake turn, best = A, enablingMove fires on bestPv | blocker, piece | "Sometimes your own piece is in the way of your best plan: the {blocker} stood on the {piece}'s road." | "{B} would have {B's point}" (moveIntent on B) | "{A} first, then {B}." | EM habit | after move | B must be part of the line that makes best best (cost gap) | H + C |
+| EM1 | plan / order | S | mistake turn, best = A, enablingMove fires on bestPv | blocker, piece | "Sometimes your own piece is in the way of your best plan: the {blocker} stood on the {piece}'s road." | "{B} would have {B's point}" (moveIntent on B) | "{A} first, then {B}." | EM habit | after move | B must be a mover ply inside the first 5 plies of bestPv (the line that prices best), and B must not be legal on the board after the played move (else A was not needed) | H + C |
 | EM2 | their seat | O | same for their mistake | | "Their own {blocker} blocked their {piece}; clearing it first was their plan." | — | n/a | — | Review only (no student lesson) | | H |
 | EM3 | record | S | | | RED/GREY EM1 · AMBER "Clear the road first." · GREEN silent | | | | | | H |
 | — | calc, endgame, prevent | — | n/a | | | | | | | | |
 
 ## E. Mistake link
+- errorWhy: EM1 attaches to `missed-win` (E14) when the missed line runs through B, else to `positional` (E15) with the record tag of the fundamental `wrong-move-order` (`principleAttribution`); EM2 is Review only.
 - costReason `missed` where the missed line's key move is B (rook to the file, bishop to the diagonal); principle `wrong-move-order`. Student seat.
 
 ## F. Build changes

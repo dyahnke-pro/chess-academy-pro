@@ -1,29 +1,29 @@
 # whyItFailed — card (the failure mechanism kinds)
 
 ## A. Identity
-- `whyItFailed({fenBefore, playedSan, studentColor, playedLineUci})` — `src/services/whyItFailed.ts:178-501`; helpers `seeInitiate` :104, `seeGain` :160, `captureNet` :167, `pinnedToMore` :140, `counterWinsBack` :124, `attackedFrom` :71.
-- Called ONLY from `inaccuracyCall.ts` (gate `oneErrorComputer.gate`): `errorWhy` :1339 (`failedRaw`, when `caused && allowedMate === null`) and `moveLossMechanism` :1220 (a try's loss, weighedMoves).
+- `whyItFailed({fenBefore, playedSan, studentColor, playedLineUci})` — `src/services/whyItFailed.ts:177-501`; helpers `seeInitiate` :102, `seeGain` :160, `captureNet` :166, `pinnedToMore` :141, `counterWinsBack` :129, `attackedFrom` :71.
+- Called ONLY from `inaccuracyCall.ts` (gate `oneErrorComputer.gate`): `errorWhy` :1339 (`failedRaw`, when `caused && allowedMate === null`) and `moveLossMechanism` :1221 (a try's loss, weighedMoves).
 - Mover-generic: `studentColor` = the mover's colour, so it explains either seat's mistake.
 
 ## B. Facts
-### B1. Handed over (`WhyItFailed`, :43-63)
+### B1. Handed over (`WhyItFailed`, :41-63)
 `line` (past-tense sentence), `squares` (target, refuter), `lost` (where material was lost, or null — REQUIRED), `missed?` (the line when the reply didn't take), `kind`:
-- `held-by-defender` (two shapes: a capture that loses after recaptures :282-289; an eyed target the guard holds :427-434)
-- `lost-the-piece` (moved piece left hanging, costs ≥ piece value − 1) :295-303
-- `abandoned-defender` (moving it removed the only guard of another piece) :311-356
-- `abandoned-square` (moving it uncovered a knight-fork square their reply reaches) :358-386
-- `answered-by-tactic` (target unguarded but their in-between check hits the attacker) :437-461
+- `held-by-defender` (two shapes: a capture that loses after recaptures :262-275; an eyed target the guard holds :441-470)
+- `lost-the-piece` (moved piece left hanging, costs ≥ piece value − 1) :278-290
+- `abandoned-defender` (moving it removed the only guard of another piece) :300-340
+- `abandoned-square` (moving it uncovered a knight-fork square their reply reaches) :345-380
+- `answered-by-tactic` (target unguarded but their in-between check hits the attacker) :475-500
 - **`walks-into-fork` — DECLARED (:62) BUT NEVER RETURNED.** No branch produces it; the mistake-cause enum the WO plan names ("whyItFailed kinds incl. walks-into-fork") has a dead member. A move that lets a reply fork two pieces (not via an abandoned square) has no kind.
 ### B2. Dropped
-- `studentDown` / `proof.ledger` (the settled net, :207-208) — the material in pieces exists as `named` only in prose.
+- `studentDown` / `proof.ledger` (the settled net, :220) — the material in pieces exists as `named` only in prose.
 - In `abandoned-defender`: whether other defenders remained (two line variants) — chosen in prose only.
-- `pinsTarget` / `realGuards` filters (:403-404) — "a pinned guard doesn't hold" computed, used only as a gate.
-- The `gambitFile` exclusion (:274) — "this is a gambit pawn, not a blunder" is a teaching fact silenced.
+- `pinsTarget` / `realGuards` filters (:430-431) — "a pinned guard doesn't hold" computed, used only as a gate.
+- The `gambitFile` exclusion (:257) — "this is a gambit pawn, not a blunder" is a teaching fact silenced.
 ### B3. Cheap
 - `walks-into-fork`: after the played move, the engine's first reply `r` (playedLineUci[0]) lands a fork per `verifyForkOnBoard`/`computePlyFacts(...).tacticLanded === 'fork'`, AND the same reply on the board before the move (sideToMoveAs(fenBefore, them)) does not fork → kind `walks-into-fork`, squares = [r.to, ...targets]. Same shape as `abandoned-square` minus the "your piece guarded the square" condition.
 - `ignored-threat` (needed by secondAttacker SA-1, pinPressure PP-1, latentFork LF-2): the loss existed before the move (`causedByTheMove` false) AND the played move did not stop it → today errorWhy says nothing caused; add as a kind.
 ### B4. Gates
-Student to move on fenBefore; playedSan legal; outcome only from the engine line (WO-OUTCOME-01): `lineTakes(sq)`; gambit pawn excluded; lost-the-piece only when the loss ≥ piece value − 1; abandoned-defender: the swap is new, clean (no counter-win back); abandoned-square: the fork exists after the reply only because the guard left; held-by-defender (eyed): non-capture, nothing lost on the line, swap −1..−2, real (unpinned) guard, target not pinned; answered-by-tactic: no guards and a checking reply hitting the attacker. errorWhy drops `held-by-defender` (eyed) when the better move's line wins material (:1344-1350).
+Student to move on fenBefore; playedSan legal; outcome only from the engine line (WO-OUTCOME-01): `lineTakes(sq)`; gambit pawn excluded; lost-the-piece only when the loss ≥ piece value − 1; abandoned-defender: the swap is new, clean (no counter-win back); abandoned-square: the fork exists after the reply only because the guard left; held-by-defender (eyed): non-capture, nothing lost on the line, swap −1..−2, real (unpinned) guard, target not pinned; answered-by-tactic: no guards and a checking reply hitting the attacker. errorWhy drops `held-by-defender` (eyed) when the better move's line wins material (inaccuracyCall.ts:1347-1349).
 
 ## C. Sentence readiness
 | slot | today | field | missing |
@@ -53,11 +53,11 @@ n/a: phase/plan/strategize — mechanism computer.
 - Kind → skill tag for the record (owed mapping): held-by-defender → `hung-material`; lost-the-piece → `hung-material`; abandoned-defender → `hung-material`; abandoned-square → `missed-their-fork`; answered-by-tactic → `missed-opponents-threat`; walks-into-fork → `missed-their-fork`; ignored-threat → `missed-opponents-threat`.
 
 ## F. Build changes
-1. whyItFailed.ts:62 — either implement `walks-into-fork` (B3, after the abandoned-square block :386) or delete the member; the WO plan names it in `MistakeCause`, so implement.
+1. whyItFailed.ts:62 — either implement `walks-into-fork` (B3, after the abandoned-square block :380) or delete the member; the WO plan names it in `MistakeCause`, so implement.
 2. Add kind `ignored-threat`: computed in errorWhy (it owns `causedByTheMove`): the loss was not caused AND the played move did not stop it → recipe WF-8 (consumes secondAttacker/pinPressure/latentFork as the threat's lesson).
 3. Return `ledger: {took, gave, netPawns}` and `pinnedGuard` flags typed (B2) instead of prose-only.
 4. Export `kind` through errorWhy as part of `MistakeCause` (Phase 2 F1); `line` becomes the CONSEQUENCE field; the recipe adds LESSON + HABIT by kind (D) — no new prose in this file.
-5. Gambit: return `{kind: 'gambit'}` instead of `null` (:274) so Review can say WF-9; Learn ignores it unless cost.
+5. Gambit: return `{kind: 'gambit'}` instead of `null` (:257) so Review can say WF-9; Learn ignores it unless cost.
 
 ## G. Proof boards
 - Code comments carry the hand-walk boards: 23.Nh4 oct3g (lost-the-piece guard ≥ piece−1), 13.Bc3 David's Learn game 2026-10-20 (abandoned-square, e3 fork of d1/f1), Smith-Morra 8.Bxf7+ (held-by-defender, `lost` f7), walk 2026-09-30 d6 queen (abandoned-defender newness), Naroditsky a5 (gambit).

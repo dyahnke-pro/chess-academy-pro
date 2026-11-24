@@ -3,7 +3,7 @@
 ## A. Identity
 - `detectTacticType(fen, bestMoveUci, pvUci?, previous?)` → `TacticType` — `src/services/missedTacticService.ts:131-139`; `detectTacticLine` :162-178 (name + `setup`); core `nameLine` :185-273; helpers `firstLandedTactic` :294, `discoveredCheckWins` :330, `xRayRecaptureWins` :358, `runsToPromotion` :385, `pinnedDefendersOnly` :279; authority table `TACTIC_TYPE_AUTHORITY: Record<TacticType, …>` :81-105.
 - Vocabulary: `TacticType` (types/index.ts:1944-1970, 20 members) → `MOTIF_OF_TACTIC` (tacticMotifs.ts:103, 17 MotifIds + null for `tactical_sequence`) → record tags `MOTIFS[m].yours/theirs`, `SPOT_CUES[m]`, `levelOf`. Live side bridge `TACTIC_TO_PATTERN` (tacticVocabulary.ts:147).
-- Callers: costReason.ts:227 (the MISTAKE CAUSE's motif), motifNaming.ts:33, setUpChance.ts:248, mistakePuzzleService (630/922/1333), tacticClassifierService (292/417), tacticAlertService, tacticCreateService, tacticTypeBackfill.
+- Callers of `detectTacticType` (type only): costReason.ts:227 (the MISTAKE CAUSE's motif), setUpChance.ts:248, tacticAlertService, tacticCreateService. Callers of `detectTacticLine` (type + setup): motifNaming.ts:33, mistakePuzzleService (630/922/1333), tacticClassifierService (292/417), tacticTypeBackfill. (Checker 2026-11-23: the card listed all as `detectTacticType`.)
 - Not a speaking computer (census 0/0) — it is the KEY.
 
 ## B. Facts
@@ -12,6 +12,7 @@ One `TacticType`: promotion | hanging_piece | fork | pin | skewer | discovered_a
 ### B2. Dropped
 - The `landed` flag (whether a tactic the line LANDS named it vs a set-up / mechanics name) — returned by `nameLine` but `detectTacticType` keeps only `.type`. A recipe needs it: "the fork lands" vs "the line is a deflection".
 - WHICH ply landed it and its squares (`firstLandedTactic` returns only the type; `computePlyFacts(...).tacticLanded` has the squares) — the lesson's example (which piece forks what) is recomputed by every consumer, or lost.
+- **The SET-UP motif on the mistake path**: costReason.ts:227 calls `detectTacticType`, not `detectTacticLine`, so a mistake cause whose line opens with a deflection/interference and lands a fork carries only `fork` — the set-up the record files (tacticClassifierService:292/417 via detectTacticLine) never reaches the lesson. Teach and catch read the same line through two doors with different outputs (rot rule); TT-16 cannot fire on a mistake turn today.
 - `walkerTactic` vs `first` disagreement (the biggest-gain motif vs the first landed) — two answers, the second dropped.
 ### B3. Cheap
 - Return `{ type, landed, ply, squares, agent, targets }` from `firstLandedTactic` (computePlyFacts already has them).
@@ -55,7 +56,7 @@ n/a angles: the classifier answers WHICH, not why/when — every angle lives in 
 
 ## F. Build changes
 1. missedTacticService.ts — export `detectTacticRead(fen, uci, pv, previous): { type, landed, setup, ply, squares, agent, targets }` (B2/B3); `detectTacticType` stays a thin `.type` wrapper (callers unchanged).
-2. costReason.ts:227 — store the full read (`motifRead`) on `CostReason` so `MistakeCause` carries the example squares (no consumer re-derives them).
+2. costReason.ts:227 — call the full read (via `detectTacticLine`/the new `detectTacticRead`, never the type-only wrapper) and store it (`motifRead`, incl. `setup`) on `CostReason` so `MistakeCause` carries the example squares (no consumer re-derives them).
 3. `MistakeCause` (Phase 2 F1) keyed on `MotifId` (via MOTIF_OF_TACTIC) — exhaustive `Record<MotifId | 'none', LessonRecipe>`; `none` = consequence-only.
 4. Fix the vocabulary split at the rule table: tacticInvariant F1 (`MOTIF_RULE: Record<MotifId, Register>`).
 

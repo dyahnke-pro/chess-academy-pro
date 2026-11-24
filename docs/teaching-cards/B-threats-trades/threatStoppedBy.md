@@ -1,15 +1,15 @@
 # threatStoppedBy (+ playItAnyway) — the quiet move that stopped your threat
 
 ## A. Identity
-- File: `src/services/opponentMovePurpose.ts` (158 lines): `threatStoppedBy(studentFenBefore, studentFenAfter, replySan, studentWB)` (58–119), `stillWorks` (37–56), `playItAnyway(stop, fenNow, topLines, studentWB)` (121–158).
+- File: `src/services/opponentMovePurpose.ts` (158 lines): `threatStoppedBy(studentFenBefore, studentFenAfter, replySan, studentWB)` (58–119), `stillWorks` (34–56), `playItAnyway(stop, fenNow, topLines, studentWB)` (121–158).
 - Registry: `boardComputers.ts` `threatStoppedBy` (5866–5880) and `playItAnyway` (5888–5900), seat `opponent`.
 - Reach: learn door, review, lesson, chat, tapped, tactics. Census: 49 lines (43 said): lesson 31, review 18. Run: 13 fires (7 on a student threat stopped by their reply, 6 swapped seats), 3 where the stopper was an opponent move that cost them ≥ 100.
 
 ## B. Facts
-- **B1** `StoppedThreat` (31–35): `threat` (the full `DetectedThreat` of the student's move), `reply` (their SAN), `text` ("Their …Qd7 has a point: it stops your Nxd8, which was winning material."). `PlayItAnyway`: `text`, `san`, `line` (4 plies of the engine's line), `squares`.
-- **B2 dropped:** HOW the reply stopped it — `stillWorks` (37–56) returns a boolean, the four mechanisms (the move is now illegal, the mate no longer mates, the capture no longer nets, the fork victims left) are not returned; the text names the threat "by its kind" (95–103) and drops the victim squares on purpose (board-truth, the victim moved).
+- **B1** `StoppedThreat` (28–33): `threat` (the full `DetectedThreat` of the student's move), `reply` (their SAN), `text` ("Their …Qd7 has a point: it stops your Nxd8, which was winning material."). `PlayItAnyway`: `text`, `san`, `line` (4 plies of the engine's line), `squares`.
+- **B2 dropped:** HOW the reply stopped it — `stillWorks` (34–56) returns a boolean, the four mechanisms (the move is now illegal, the mate no longer mates, the capture no longer nets, the fork victims left) are not returned; the text names the threat "by its kind" (95–103) and drops the victim squares on purpose (board-truth, the victim moved).
 - **B3 cheap:** the mechanism (B2) as an enum — each `stillWorks` branch knows it; `describeThreatPrevention(studentFenAfter, threat, replySan, student)` already returns the prevention job in words (escape / hit-guard / add-defender / step-off / rules-out).
-- **B4 gates:** null if the student's move created no new threat (64); a take-back reply is not a stop (77–87); null if the threat still works after the reply (88). `playItAnyway`: not for mate (127), the student to move (130), the same move within 30 cp of best (137), a line ≥ 2 plies (144).
+- **B4 gates:** null if the student's move created no new threat (65); a take-back reply is not a stop (77–82); null if the threat still works after the reply (84). `playItAnyway`: not for mate (127), the student to move (130), the same move within 30 cp of best (140), a line ≥ 2 plies (146).
 
 ## C. Sentence readiness
 | slot | today | field | missing |
@@ -37,7 +37,7 @@ Not applicable: plan, phase, structure angles.
 - Opponent: TS3 = their **allowed** while stopping.
 
 ## F. Build changes
-1. `stillWorks` (37): return `'illegal' | 'no-longer-mates' | 'no-longer-nets' | 'victims-left' | null` instead of a boolean; `StoppedThreat` gains `mechanism` (TS1, TS4).
+1. `stillWorks` (34): return `'illegal' | 'no-longer-mates' | 'no-longer-nets' | 'victims-left' | null` instead of a boolean; `StoppedThreat` gains `mechanism` (TS1, TS4).
 2. `StoppedThreat` gains `wasWorth` (the threat's `rank`/net before the reply — the consequence that was prevented).
 3. Learn: the "Their …Qd7 has a point" line today speaks on every stop (a good move of theirs, no mistake) — under mistakes-only it speaks only in TS1–TS3; delete the standing Learn speak.
 

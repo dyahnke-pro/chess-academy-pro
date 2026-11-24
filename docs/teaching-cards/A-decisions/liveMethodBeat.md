@@ -1,8 +1,8 @@
 # liveMethodBeat — the habit to run now, on the live board
 
 ## A. Identity
-- `src/services/methodBeat.ts:352` `liveMethodBeat(s: LiveMethodSignals, ply, said)`; habits `LiveHabit = opponent-threat | forcing-scan | loose-trigger | candidates | look-again | calc-now | mark-line` (:330); key `liveHabitKey` (:337).
-- Registry `liveMethod` `boardComputers.ts:3143-3156`, kind `method` (`HABIT_KIND` :103: opp-think / forcing-scan / method), LIVE_READ, student seat, once a game per habit. Census 255/212 (chat 112+60, learn 40; 43 held beside-mate).
+- `src/services/methodBeat.ts:352` `liveMethodBeat(s: LiveMethodSignals, ply, said)`; habits `LiveHabit = opponent-threat | forcing-scan | loose-trigger | candidates | look-again | calc-now | mark-line` (:337); key `liveHabitKey` (:348).
+- Registry `liveMethod` `boardComputers.ts:3143-3156`, kind `method` (`HABIT_KIND` :131: opp-think / forcing-scan / method), LIVE_READ, student seat, once a game per habit. Census 255/212 (chat 112+60, learn 40; 43 held beside-mate).
 
 ## B. Facts
 - B1: `{ text, key, habit, proof?, squares }` (:333).
@@ -31,6 +31,7 @@
 | — | their seat | — | n/a — a habit is taught to the person playing (:353) | | | | | | | | |
 
 ## E. Mistake link
+- HABIT-slot supplier only (no lesson of its own except LM4/LM5): LM1 → `allowed-capture`/`allowed-tactic` with the threat standing (E10/E11), LM2 → `missed-win` (E14), LM3 → `missed-win` motif `hanging_piece`, LM4 → `answered-by-check` (E5), LM5 → `took-guarded`/unsound sac (E3). LM6 Review/chat only.
 - Supplies the HABIT for: costReason `allowed` with the threat standing before (LM1, principle `ignored-threat`), costReason `missed` forcing (LM2, `passive-when-forcing-existed`), loose piece missed (LM3), `whyItFailed answered-by-tactic` on a defence (LM4).
 
 ## F. Build changes

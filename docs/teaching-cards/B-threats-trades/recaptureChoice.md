@@ -1,14 +1,14 @@
 # recaptureChoice — which piece takes back, and why
 
 ## A. Identity
-- File: `src/services/recaptureChoice.ts` (171 lines): `recaptureChoice(fenBefore, playedSan, theirReply, namesPlayedMove)` (129–171), `readRecapture(fenBefore, m, me, theirReply)` (88–117, the facts), `recaptureOpensFile` (64–71), `hitWithTempo` (40–54).
+- File: `src/services/recaptureChoice.ts` (171 lines): `recaptureChoice(fenBefore, playedSan, theirReply, namesPlayedMove)` (129–171), `readRecapture(fenBefore, m, me, theirReply)` (73–~110, the facts), `recaptureOpensFile` (64–71), `hitWithTempo` (40–54).
 - Registry: student's move only (`studentMove` adapter); kind `rule`. Reach: learn door, review, lesson, chat, tactics (tapped no). Census: 21 lines (16 said): "Bxf3, not gxf3, which would double your pawns on the f-file." / "Nxd4 — the knight lands in the centre on d4. Qxd4 would just lose the queen to Bxd4." Run: 33 fires (14 student recaptures; 19 opponent recaptures run for the census of the facts — the words are the mover's, so the registry never says those).
 
 ## B. Facts
-- **B1** a sentence. Internally `RecaptureFacts {san, plus[], minus[]}` (19–25) for the played recapture and the first other option.
-- **B2 dropped:** `readRecapture`'s full plus/minus lists for BOTH recaptures — only the differences, and only `plus[0]` / `minus[0]` (152–156); options beyond `options[0]` (147) — with three ways to take back, the third is never compared; the `hitWithTempo` move (the kick) is in words only.
+- **B1** a sentence. Internally `RecaptureFacts {san, plus[], minus[]}` (16–25) for the played recapture and the first other option.
+- **B2 dropped:** `readRecapture`'s full plus/minus lists for BOTH recaptures — only the differences, and only `plus[0]` / `minus[0]` (152–156); options beyond `options[0]` (148) — with three ways to take back, the third is never compared; the `hitWithTempo` move (the kick) is in words only.
 - **B3 cheap:** export `readRecapture` per option (every recapture's facts): the recapture-mistake explanation (the played one's `minus`) comes for free — today the function **refuses** to explain a faulty recapture by design (the header 118–127: "a recapture that is a fault is the one error computer's to explain") and `errorWhy` does not read these facts.
-- **B4 gates:** the played move captures, no promotion (142); another recapture on the same square exists (144); only differences are spoken (151–153); a placement-only plus ("the knight lands in the centre") is said only against the other's cost (165–167). No cost gate — the run found the praise on a costly recapture: g chesscom-1020779996 ply 63 Rxg2 (cost 217) "Rxg2, not Qxg2, which would just lose the queen to Bxg2."
+- **B4 gates:** the played move captures, no promotion (142); another recapture on the same square exists (145); only differences are spoken (151–153); a placement-only plus ("the knight lands in the centre") is said only against the other's cost (165–167). No cost gate in the computer — the header (118–125) says the CALLER must not ask on a faulty recapture, and a caller does: the run found the praise on a costly recapture: g chesscom-1020779996 ply 63 Rxg2 (cost 217) "Rxg2, not Qxg2, which would just lose the queen to Bxg2."
 
 ## C. Sentence readiness
 | slot | today | field | missing |
@@ -40,7 +40,7 @@ Not applicable: calculate a line (one-move comparison), plan.
 ## F. Build changes
 1. Export `readRecapture` and make its plus/minus typed: `{ kind: 'opens-file' | 'toward-centre' | 'away-from-centre' | 'doubles' | 'isolates' | 'frees-bishop' | 'centre-knight' | 'loses-piece' | 'queen-kicked' | 'castling', file?, square?, by? }[]` (B2/B3).
 2. Lift the "never explain a faulty recapture" rule (118–127): `errorWhy` reads `readRecapture(played).minus` as the cause of a recapture mistake (RC-WRONG); `recaptureChoice` the sentence stays Review's for a sound recapture only — gate it on the move's cost < 50 (the run's Rxg2 praise at 217 cp must go silent).
-3. Compare every option, not `options[0]` (147).
+3. Compare every option, not `options[0]` (148).
 4. Seat words: the facts are written "your" — take the seat as a parameter so RC6 can be said for their recapture.
 
 ## G. Proof boards (run)

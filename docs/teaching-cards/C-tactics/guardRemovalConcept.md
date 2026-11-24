@@ -1,8 +1,8 @@
 # guardRemovalConcept — card
 
 ## A. Identity
-- `guardRemovalConcept(fen, student)` — `src/services/boardTeachConcepts.ts:69-92`, over `findGuardRemovals(fen, holder)` — `src/services/guardRemoval.ts` (find loop + `everyReplyLosesAPiece`).
-- Board computer `guardRemoval` — `src/services/boardComputers.ts:3200-3205`, kind `concept`, `LIVE_READ`. `isGuardRemovalMove` (record, by coordinates).
+- `guardRemovalConcept(fen, student)` — `src/services/boardTeachConcepts.ts:67-91`, over `findGuardRemovals(fen, holder)` — `src/services/guardRemoval.ts:112` (find loop + `everyReplyLosesAPiece` :82).
+- Board computer `guardRemoval` — `src/services/boardComputers.ts:3201-3207`, kind `concept`, `LIVE_READ`. `isGuardRemovalMove` (guardRemoval.ts:175, record, by coordinates).
 - Sibling: `detectTactics.findRemovableGuards` (static shape, Review) — two readers of one concept; this one is proven (every reply loses a piece).
 - Census: 5 fired / 5 said (learn 1, chat 4).
 
@@ -17,7 +17,7 @@
 - The student's defence after the opponent's chance: add a second guard to `target` or move `target` (chess.js legal moves that make `attackers(target, student) ≥ 2` or move it to a safe square).
 ### B4. Gates
 - Target ≥ minor, not king, attacked by holder, exactly ONE guard, guard not king; target not already won by SEE; capture of guard must be SEE ≥ 0; chase: cheaper piece or undefended guard, chaser safe; every reply must lose a piece (net ≥ 2) and a check reply defeats proof.
-- Student's chance said without the move (boardTeachConcepts.ts:63-66 comment, :80-81) — correct; theirs names their move.
+- Student's chance said without the move (boardTeachConcepts.ts:63-66 comment, :80) — correct; theirs names their move.
 
 ## C. Sentence readiness
 | slot | today | field | missing |
@@ -43,10 +43,10 @@ n/a: phase (any), strategize (tactical). Combination with `overload` (detectTact
 - whyItFailed `abandoned-defender` (the moved piece was the only guard) → GR-1's lesson stem applies (the student REMOVED their own guard): "A piece held by one guard is only as safe as the guard — and you moved it."
 
 ## F. Build changes
-1. guardRemoval.ts `everyReplyLosesAPiece` — return the minimum net and the reply that comes closest (B2) → GR-3 proof.
-2. Merge with `tacticsDetector.findRemovableGuards` (:498-557): one concept, two readers (static vs proven). The static one feeds Review's `tactic` line; make it read `findGuardRemovals` so a guard removal said in Review is the proven one (rot rule: two readers of one concept).
+1. guardRemoval.ts:82 `everyReplyLosesAPiece` (returns boolean today) — return the minimum net and the reply that comes closest (B2) → GR-3 proof.
+2. Merge with `tacticsDetector.findRemovableGuards` (tacticsDetector.ts:489-544): one concept, two readers (static vs proven). The static one feeds Review's `tactic` line; make it read `findGuardRemovals` so a guard removal said in Review is the proven one (rot rule: two readers of one concept).
 3. New `guardWaysOut(fen, gr, student)` → GR-1 BETTER-MOVE.
-4. boardTeachConcepts.ts:78-81 — return typed GuardRemoval; recipe words it principle-first. No before-move speech in Learn.
+4. boardTeachConcepts.ts:79-83 — return typed GuardRemoval; recipe words it principle-first. No before-move speech in Learn.
 5. Recipe `abandoned-defender` (whyItFailed) reuses GR-1 lesson stem.
 
 ## G. Proof boards

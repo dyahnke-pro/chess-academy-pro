@@ -1,15 +1,15 @@
 # theirMoveCost — what their move gave up
 
 ## A. Identity
-- File: `src/services/theirMoveCost.ts` (161 lines), `theirMoveCost(fenBefore, san, studentColor)` (66–161); helpers `knightRoute` → `minorRouteToSquare` (35–38), `bishopMobility` (40–55); calls `isOutpost`, `concessionParts`.
+- File: `src/services/theirMoveCost.ts` (161 lines), `theirMoveCost(fenBefore, san, studentColor)` (66–161); helpers `knightRoute` → `minorRouteToSquare` (40–43), `bishopMobility` (45–60); calls `isOutpost`, `concessionParts`.
 - Registry: `boardComputers.ts` `theirCost` (5843–5859), kind `their-cost`, seat `opponent`, one claim per hole (`holeKey`), a `heldForm` (no knight hop) for the hole kind.
 - Reach: learn door, review, lesson, chat, tapped, tactics. Census: 78 lines (71 said); held 3 `already-said`, 2 `same-idea`, 2 `beside-mate`. Run: 53 fires (32 on their moves; 21 when called with the seats swapped on the student's move — the computer is seat-symmetric, the registry only calls it for their move).
 
 ## B. Facts
-- **B1** `TheirMoveCost` (16–23): `kind` hole | bishop-shut | castling | structure, `text`, `heldText?`, `squares` (the hole + the knight + the hop; the bishop + the pawn; king from/to; the pawn).
-- **B2 dropped:** the knight route's `via` square is in `squares` but its length ("one jump / two") is the only thing said; `bishopMobility` before/after (101) — the numbers ("from 5 squares to 1") dropped; `concessionParts` returns a LIST and the registry keeps the joined text — the kind of each part (king-cover is filtered out, 156); only the FIRST cost is returned (each branch `return`s) — a move that makes a hole AND shuts a bishop says one.
+- **B1** `TheirMoveCost` (23–29, not exported): `kind` hole | bishop-shut | castling | structure, `text`, `heldText?`, `squares` (the hole + the knight + the hop; the bishop + the pawn; king from/to; the pawn).
+- **B2 dropped:** the knight route's `via` square is in `squares` but its length ("one jump / two") is the only thing said; `bishopMobility` before/after (the `drop` at ~120–123) — the numbers ("from 5 squares to 1") dropped; `concessionParts` returns a LIST and the registry keeps the joined text — the kind of each part (king-cover is filtered out, 158); only the FIRST cost is returned (each branch `return`s) — a move that makes a hole AND shuts a bishop says one.
 - **B3 cheap:** the cost the engine put on the move (every caller has the read; not an input) — needed so a cost is said only when it is the mistake; the student-seat call (the same function with the seats swapped) for the student's own concession.
-- **B4 gates:** null on the student's own turn (69); hole: a pawn move, a square newly an outpost (85), a student knight within 2 jumps (86); bishop: same colour, behind the pawn, mobility drop ≥ 3 and ≤ 1 left (118); castling: queens on, a non-castling king move with rights (127–133); structure: `concessionParts` minus king cover (156). No cp gate at all — it fires on cost-0 moves (run: g-1012441262 ply 10 …Kxf7 cost 0, the castling row).
+- **B4 gates:** null on the student's own turn (70); hole: a pawn move, a square newly an outpost (87), a student knight within 2 jumps (89); bishop: same colour, behind the pawn, mobility drop ≥ 3 and ≤ 1 left (123); castling: queens on, a non-castling king move with rights (137–139); structure: `concessionParts` minus king cover (158–159). No cp gate at all — it fires on cost-0 moves (run: g-1012441262 ply 10 …Kxf7 cost 0, the castling row).
 
 ## C. Sentence readiness
 | slot | today | field | missing |
@@ -24,7 +24,7 @@ Causes: **TC-O** their move cost ≥ floor for them and this computer names a co
 
 | id | angle | seat | condition | slots | LESSON stems | CONSEQUENCE | BETTER MOVE | HABIT | Learn variant | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| TC1 | knowledge (outpost) | O | TC-O, kind hole | hole sq, knight | "A pawn move can't be taken back: once no pawn can guard {sq}, it belongs to your knight for good." / "Every pawn push leaves squares behind — their {move} gave up {sq} for ever." | "Your knight on {from} gets there in {n} jumps." | — | — | after the student's reply; if the student's reply started the route, silent | the square is attackable by their minor next move (`isOutpost` false after) | H |
+| TC1 | knowledge (outpost) | O | TC-O, kind hole | hole sq, knight | "A pawn move can't be taken back: once no pawn can guard {sq}, it belongs to your knight for good." / "Every pawn push leaves squares behind — their {move} gave up {sq} for ever." | "Your knight on {from} gets there in {n} jumps." | — | — | after the student's reply, using `heldText` (the hole without the knight hop — the hop is the student's future move); if the student's reply started the route, silent | the square is attackable by their minor next move (`isOutpost` false after) | H |
 | TC2 | knowledge (outpost, own) | S | TC-S, kind hole | — | "A pawn push leaves a square behind for ever: {sq} is now a home for their knight." | "Their knight on {from} reaches it in {n}." | "{best} kept the pawn back." | "Before a pawn moves, look at the squares it stops guarding." | full; the move is "your pawn move" never by name | positionalReason 'space-conceded' fired (one cause) | C: seat-swapped call |
 | TC3 | knowledge (bad bishop) | O / S | kind bishop-shut | bishop, pawn | "A pawn on its bishop's colour shuts the bishop in: the bishop on {b} has {n} squares left." | "It stays bad until the pawns change." | S: "{best} kept the diagonal open." | "Put your pawns on the other colour from your bishop." | full | — | H + C (mobility numbers B2) |
 | TC4 | consequence (castling lost) | O / S | kind castling, cost ≥ floor | king | "A king that moves before castling has to find safety by hand, and that costs moves." | "Their rooks stay disconnected." | S: "{best} kept castling." | "Keep the right to castle until you've castled." | full | queens off (already) | H |
@@ -40,8 +40,8 @@ Not applicable: calculate (no line), their plan (a cost is a static concession).
 
 ## F. Build changes
 1. Expose the student-seat call: rename to `moveCost(fenBefore, san, viewer)` returning `{ seat: 'mover-is-student' | 'mover-is-opponent', … }`; the registry `theirCost` keeps calling it for their move; `errorWhy` calls it for the student's move when `positionalReason` returns a concession tag, to fill the specific square.
-2. Return ALL costs (`costs: TheirMoveCost[]`), not the first (each branch returns at 92, 119, 135, 157).
-3. Add `mobility: { before, after }` for bishop-shut (B2, 101) and `jumps: 1 | 2` for the hole.
+2. Return ALL costs (`costs: TheirMoveCost[]`), not the first (each branch returns at 96, 124, 140, 159).
+3. Add `mobility: { before, after }` for bishop-shut (B2, ~120) and `jumps: 1 | 2` for the hole.
 4. Gate the Learn use on the move's cost (≥ floor) in the recipe — the computer itself stays cp-free so Review can teach the concession on a cost-0 move as TC6.
 
 ## G. Proof boards (run)

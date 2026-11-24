@@ -23,7 +23,7 @@
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | TR1 | recognize (look) | both | `refutationOf(played)` non-null, `look` set | look | "A move that looks like {a pin} is only a pin if it holds. This one fails to {reply}." | because | best + bestWhy | "Before the move that looks good, find their best reply." | after move; "this move", never its SAN | trust.name (lineTrust) | H (via refutationOf) |
 | TR2 | calculate (counting on) | both | `hoped` set | hoped reply | "Don't play a move that only works if they answer the way you hope. You were counting on {hoped}; they had {reply}." | because | best | "Check their best reply, not the one you want." | after move | hoped ≠ refuter | H (typed) |
-| TR3 | habit (easy to miss) | both | `missShape` set | shape | "The refutation was a quiet move: quiet moves are the ones we miss, because they take nothing and give no check." | | | "After every candidate, look for their quiet answer too." | after move | missShape computed at rating | H (typed) |
+| TR3 | habit (easy to miss) | both | `missShape` set | shape | "Quiet replies are the easiest to miss, because they take nothing and give no check. Here their answer was one." | | | "After every candidate, look for their quiet answer too." | after move | missShape computed at rating | H (typed) |
 | TR4 | consequence (mate) | both | reason.mate | | "A move that walks into mate loses everything else it does." | "it's mate" (line) | best (stops the mate) | "Check every check they have." | | | H |
 | TR5 | their seat (tempting for them, unplayed) | O | today's read (an unplayed try of theirs) | | Review only — the try was not played; a mistakes-only Learn is silent | | | | silent | | H |
 | TR6 | their seat (played) | O | refutationOf(their played move) | | "Their move looked natural, but it fails: {because}." | | the punish is the student's next move → Learn holds the line, says the lesson | — | Learn: lesson words, no move (pointer rule) | | H |
@@ -31,6 +31,7 @@
 | — | endgame / plan | — | the plan-target lead ("going straight at {target}") is the plan family's; included via `planAim` | | | | | | | | |
 
 ## E. Mistake link
+- errorWhy: TR1–TR4 → `allowed-tactic`/`allowed-capture`/`allowed-mate` (E10/E11/E1) — the same cause, with the "why it looked good" half; TR6 O-seat; TR5 Review only.
 - costReason `allowed` (every motif the one classifier names, + mate) — this computer is the error computer's own walker used on a try; for a played mistake TR1–TR4 explain the SAME cause errorWhy explains, with the "why it looked good" half errorWhy lacks. Both seats.
 
 ## F. Build changes

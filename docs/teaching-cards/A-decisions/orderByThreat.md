@@ -27,11 +27,12 @@
 | — | endgame, calc depth | — | n/a | | | | | | | | |
 
 ## E. Mistake link
+- errorWhy: OT1 → `allowed-tactic` (E10, motif pin/fork) or `allowed-threat` (E12, kick); OT2 the O-seat; OT3 Review only.
 - principle `wrong-move-order`; costReason `allowed` with motif pin/fork (the reply). One cause → OT1 (shared with findEnablingMove EM1, pieceOutFirst PO2: three facts, one cause; pick by which computer fires).
 
 ## F. Build changes
 1. Type `kind: 'pin'|'fork'|'kick'|'check'` and `hit: {square, piece}[]` (B2).
-2. New `wrongOrder(fenBefore, playedSan, bestSan, replySan)` in `orderByThreat.ts` reusing `theirWantedMoves` (B3).
+2. Do not add a second order detector: the fundamental `wrong-move-order` (`principleAttribution.ts`, tested in `principleAttribution.moveOrder.test.ts`) already finds "the student played the engine's second move first". OT1 = that attribution + `theirWantedMoves` (here) on the board after the played move to name the reply kind (pin/fork/kick). One cause, one detector.
 3. Register OT1/OT2 under cause `wrong-move-order`.
 
 ## G. Proof boards

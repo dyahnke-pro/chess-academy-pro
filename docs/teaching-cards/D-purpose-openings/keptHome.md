@@ -7,7 +7,7 @@
 - **B1** "Your bishop on c1 stays home for now, and it has a job there: if their rook checks on f8, it blocks on f4."
 - **B2 dropped:** the check move and block move (in squares only).
 - **B3 cheap — the inversion:** a MISTAKE that DEVELOPED the blocker: the student moved the home bishop that was the only block of a check, then the check came (errorWhy king-hunt / allowed-capture with check) → "the bishop had a job at home". Detect: before the move a check of theirs was blockable only by the moved piece from its home square; after the move it is not.
-- **B4 gates:** only after a KING move with castling rights gone (`:291`); king on d/e/f file; their q/r/b check; a home bishop blocks.
+- **B4 gates:** only after a KING move with castling rights gone (`:292`); king on d/e/f (`:294`); king on d/e/f file; their q/r/b check; a home bishop blocks.
 
 ## C. Readiness
 | slot | today | field | missing |

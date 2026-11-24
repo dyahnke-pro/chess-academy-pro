@@ -1,17 +1,17 @@
 # poisonedPiece — card
 
 ## A. Identity
-- `poisonedPiece(fenBefore, san)` — `src/services/poisonedPiece.ts` (`checkMate` ≤ 2-move checking mate, `poisonedOn`); words `poisonedPieceLine`.
-- Board computer `poisonedPiece` — `src/services/boardComputers.ts:~7100-7142`, kind `move-job`; a second branch uses `everyTakeLoses` (the reply-fan: every capture loses, mate OR material) for a piece just moved there.
+- `poisonedPiece(fenBefore, san)` — `src/services/poisonedPiece.ts:72` (`checkMate` :30 ≤ 2-move checking mate, `poisonedOn` :53); words `poisonedPieceLine` :99.
+- Board computer `poisonedPiece` — `src/services/boardComputers.ts:7105-7142`, kind `move-job`; a second branch uses `everyTakeLoses` (boardComputers.ts:7121, the reply-fan: every capture loses, mate OR material) for a piece just moved there.
 - Census: 4 fired / 4 said (review 1, lesson 3); 1 voiced board.
 
 ## B. Facts
 ### B1. Handed over (`PoisonedPiece`)
 `square`, `piece`, `capture` (their capture SAN), `mate` (the checking mate line after it).
 ### B2. Dropped
-- `poisonedOn` requires EVERY capture of the piece to allow mate (`if (!mate) return null` in the loop) — "whichever way you take it" is the proof and is not said.
+- `poisonedOn` requires EVERY capture of the piece to allow mate (`if (!mate) return null` in the loop, :65) — "whichever way you take it" is the proof and is not said.
 - The SEE gain (≥ 1) — the bait's apparent value.
-- The new-ness test (poisoned now, not before — `sqBefore`) — "your move made it poisoned" vs "it already was".
+- The new-ness test (poisoned now, not before — `sqBefore`, :88-91) — "your move made it poisoned" vs "it already was".
 ### B3. Cheap
 - The defender's mistake: the student TOOK a poisoned piece (S's capture landed on the poisoned square and the reply line mates) — whyItFailed/costReason mate.
 ### B4. Gates

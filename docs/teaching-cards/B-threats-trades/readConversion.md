@@ -1,15 +1,15 @@
 # readConversion — how to win a won game, the step the board is on
 
 ## A. Identity
-- File: `src/services/conversionMethod.ts` (167 lines): `readConversion(fen, student)` (46–157), `kingOpen` (161–167), `CONVERSION_EDGE = 3` (44). Steps: finish-development, attack-king, trade-pieces, make-passer, escort-passer, cut-off-king (32).
+- File: `src/services/conversionMethod.ts` (167 lines): `readConversion(fen, student)` (46–157), `kingOpen` (160–167), `CONVERSION_EDGE = 3` (43). Steps: finish-development, attack-king, trade-pieces, make-passer, escort-passer, cut-off-king (30).
 - Registry: `boardComputers.ts` `conversion` (2921–2933), kind `convert`, seat `student`, claim `convert:<step>`, skill `botched-conversion`. The DIAGNOSIS half is `conversionDetector` (`botched-conversion` tag, `capabilityEvidence` 494).
 - Reach: learn door, review, lesson, chat, tapped, tactics. Census: 114 lines (84 said): chat 92, learn 12, review 10; held 18 `beside-mate`, 12 `in-flux`. Run: 152 fires (81 student-side boards, 71 when it was their move); 9 student moves costing ≥ 100 while ahead.
 
 ## B. Facts
-- **B1** `ConversionRead` (34–41): `step`, `edge` (settled, pawns), `passer` (square | null), `text`.
+- **B1** `ConversionRead` (32–42, not exported): `step`, `edge` (settled, pawns), `passer` (square | null), `text`.
 - **B2 dropped:** `hangs` / `owed` (60–92) — what is about to be lost and so not counted; `theirPieces`, `theirPawns` (101–102); the attack counts in the attack-king step are in words only (`k.attackers.size`, `k.defenders.size`, 117); `outsidePasserDecoy` result beyond the text.
 - **B3 cheap:** whether the student's move FOLLOWED the step (on the board before the move): finish-development → did the move develop a home minor / castle; trade-pieces → did it trade a piece (equal capture) or a PAWN (a pawn trade breaks the rule); make-passer → did it push toward a passer (a candidate pawn on a majority); escort-passer → did it push / support the passer; cut-off-king → did it take a file/rank from the lone king. One chess.js check per step on the move played.
-- **B4 gates:** null when not ahead by ≥ 3 settled pawns (94; with the hanging/rescue accounting 60–93); null when the student is in check (68); step order (106–156).
+- **B4 gates:** null when not ahead by ≥ 3 settled pawns (101; with the hanging/rescue accounting 60–100); null when the student is to move and in check (69); step order (106–156).
 - **Wording rule broken (V3, no statistic spoken):** `boardEdgeWords` (utils/countWords.ts 30) falls back to a POINT count whenever the material does not decompose ("You're up 5 points", census lines-0.jsonl:4590; "You're up 3 points" in the run on a board mid-trade, g-1012441262 ply 35).
 
 ## C. Sentence readiness

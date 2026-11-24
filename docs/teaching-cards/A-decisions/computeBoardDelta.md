@@ -21,13 +21,14 @@
 | id | angle | seat | condition | slots | LESSON | CONSEQUENCE | BETTER | HABIT | Learn | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | BD1 | abandons | both | mistake; kind abandons; B3 SEE > 0 | piece, sq | (cause: abandoned-defender) | "It walked away from your {piece} on {sq}, and nothing guards it now." | | MB2 habit | CONSEQUENCE | SEE > 0; one claim `loose:<sq>` | C |
-| BD2 | weakens | both | mistake; kind weakens; B3 a minor of theirs reaches the square in ≤ 2 | squares | "A pawn move is forever: the squares it passes can never be guarded by a pawn again." | "{sq} is now a home for their {piece}." | | "Before a pawn moves, look at the squares it stops guarding." | after move | reach proven | C |
+| BD2 | weakens | both | mistake; kind weakens; B3 a minor of theirs reaches the square in ≤ 2 | squares | "A pawn move is forever: the squares it stops guarding stay weak. {sq} is one of them." (one claim `hole:<sq>` with renderFundamentalVerdict FV4) | "{sq} is now a home for their {piece}." | | "Before a pawn moves, look at the squares it stops guarding." | after move | reach proven | C |
 | BD3 | rights | S | mistake; castling given up; king still central | | "Castling is a right you lose for good: give it up only for something real." | "Your king stays in the middle." | | | | not in an ending | H |
-| BD4 | blocks | both | mistake; kind blocks | piece | "A piece that shuts in your own bishop costs you that bishop's whole diagonal." | | | | | ≥ 2 squares lost | H |
+| BD4 | blocks | both | mistake; kind blocks | piece | "A piece parked in front of your own bishop costs you its whole diagonal. Your {blocker} on {sq} now shuts the bishop in." | | | | | ≥ 2 squares lost | H |
 | BD5 | uncovers (their seat) | O | their move opened a line onto a student piece | target | (opponent-intent family) | "Their {piece}'s line opened onto your {target}." | | | Learn: only as consequence of the student's earlier mistake | | H |
 | BD6 | description alone | — | no teaching point | | n/a — silent (the 437 `unsupported` holds are correct) | | | | | | — |
 
 ## E. Mistake link
+- CONSEQUENCE-slot supplier: BD1 → `abandoned-defender`/`left-hanging` (E7/E6); BD2 → `positional` concession `pawn-weakened`/`outpost-conceded` (E15); BD3 → tag `king-stuck-center`; BD4 → `misplaced-piece`; BD5 rides the student's earlier cause; BD6 silent.
 - positionalReason `defender-left` (BD1), `pawn-weakened`/`outpost-conceded` (BD2), `file-opened` (uncovers onto the king), castling-rights (principle `king-left-in-centre`).
 
 ## F. Build changes

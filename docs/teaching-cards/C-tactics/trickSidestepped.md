@@ -1,16 +1,16 @@
 # trickSidestepped — card (over `forkTrickFor`)
 
 ## A. Identity
-- `trickSidestepped(fenBefore, san, moverWB, trickOwner)` — `src/services/forkTrick.ts` (end); the trick itself `forkTrickFor(fen, by)` / `findTrick` / `forkAfter` (same file).
-- Board computer `trickSidestepped` — `src/services/boardComputers.ts:5907-5918`, kind `stopped`; also read by `positionFacts.ts:1103-1110` (the "stopped here" block, both seats).
+- `trickSidestepped(fenBefore, san, moverWB, trickOwner)` — `src/services/forkTrick.ts:132`; the trick itself `forkTrickFor(fen, by)` :81 / `findTrick` :87 / `forkAfter` :44 (same file).
+- Board computer `trickSidestepped` — `src/services/boardComputers.ts:5908-5920`, kind `stopped`; also read by `positionFacts.ts:1102-1110` (the "stopped here" block, both seats).
 - Census: 17 fired / 14 said (lesson 8, chat 5, review 2, learn 2).
 
 ## B. Facts
 ### B1. Handed over
 `TrickSidestep` {trick: ForkTrick {capture, recapture, fork, forkSquare, victims[], hitsKing}, text, squares [forkSquare, moved-to], line {fen, sans}}.
 ### B2. Dropped
-- `given` (the material the capture gives first, `cap.piece − cap.captured`) — the size of the bait.
-- "every recapture loses to a fork" (`every` loop) — the proof that the trick is forced.
+- `given` (:93, the material the capture gives first, `cap.piece − cap.captured`) — the size of the bait.
+- "every recapture loses to a fork" (`every` loop, :101-109) — the proof that the trick is forced.
 - WHICH feature the sidestep changed (moved a victim, guarded the fork square, made the recapture unnecessary) — not computed; only "sidesteps".
 ### B3. Cheap
 - The miss: the opponent's trick existed after the student's move (`forkTrickFor(fenAfterSmove, them)` non-null) AND they played it → the student walked into it (mistake).

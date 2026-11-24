@@ -1,15 +1,15 @@
 # buildOpponentIntent — their strongest try (engine fan)
 
 ## A. Identity
-- File: `src/services/opponentIntent.ts` (101 lines): `buildOpponentIntent({analysis, fen, max=2})` (55–95), `opponentIntentFacts(oi)` (97–101).
+- File: `src/services/opponentIntent.ts` (101 lines): `buildOpponentIntent({analysis, fen, max=2})` (55–86), `opponentIntentFacts(oi)` (97–101).
 - Registry: `boardComputers.ts` `opponentIntent` (2936–2950), kind `opponent-intent`, seat `opponent`, `claims: []`, proof `NO_PROOF.description`. Also built inside `positionFacts.ts` 734–736 (only when the opponent is to move and the opening is not quiet).
 - Reach: learn door, chat, tapped — review/lesson/tactics **no**. Census: 323 lines, all chat (297 said, 26 held: 24 `in-flux`, 2 `beside-mate`). The one sentence it has: "keep an eye on the opponent's Qd3 — that's their strongest try here." — names a move, gives no reason (map: **P**).
 
 ## B. Facts
-- **B1** `OpponentIntent.plans[]` (20–36): `opponentMove` (SAN of line k's first move), `studentReply` (SAN of ply 2), `evalCp` (white-POV, mate ±100000), `squares` (from/to of their move). Top 2 lines.
-- **B2 dropped:** every ply past 2 of each PV (the line is in hand, 66–68); the gap between plan 1 and plan 2 (`evalCp` difference — whether their best try is the ONLY good one); `studentReply` is computed then withheld by the renderer (opponentIntentFacts uses only `plans[0].opponentMove`, 98–100); what the move captures / attacks (chess.js has the move object in `uciToSan`, 39–45, and throws it away).
+- **B1** `OpponentIntent.plans[]` (20–36): `opponentMove` (SAN of line k's first move), `studentReply` (SAN of ply 2), `evalCp` (white-POV, mate ±100000), `squares` (from/to of their move). Top 2 lines (`DEFAULT_MAX`, 47).
+- **B2 dropped:** every ply past 2 of each PV (the line is in hand, 69–79); the gap between plan 1 and plan 2 (`evalCp` difference — whether their best try is the ONLY good one); `studentReply` is computed then withheld by the renderer (opponentIntentFacts uses only `plans[0].opponentMove`, 98–100); what the move captures / attacks (chess.js has the move object in `uciToSan`, 39–45, and throws it away).
 - **B3 cheap:** what their move hits — `detectNewThreat(fen, fenAfterTheirMove, them)` on the same line; whether it is a capture and what it wins (`captured` from the chess.js move); the line's net (`settledNetForLine`); the eval swing from the current eval to `plans[0].evalCp` = what the student's last move allowed.
-- **B4 gates:** null when no line has a move (64); de-dup by first move (93); in `positionFacts` only off the quiet opening and when the opponent is to move (734). No value floor: a quiet "Kh7" is named as their "strongest try".
+- **B4 gates:** null when no line has a move (66); de-dup by first move (83); in `positionFacts` only off the quiet opening and when the opponent is to move (734). No value floor: a quiet "Kh7" is named as their "strongest try".
 
 ## C. Sentence readiness
 | slot | today | field | missing |

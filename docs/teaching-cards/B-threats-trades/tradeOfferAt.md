@@ -1,14 +1,14 @@
 # tradeOfferAt — a quiet move that offers an even trade while ahead
 
 ## A. Identity
-- File: `src/services/tradeOffer.ts` (85 lines): `tradeOfferAt(fenBefore, san, costCp, afterCp, moverIsStudent)` (41–72), `tradeOfferLine` (74–85). Constants `SOUND_CP = 50`, `AHEAD_CP = 100` (18–20). The student's queen offer a piece or more up belongs to `queenTradeRead` (55).
+- File: `src/services/tradeOffer.ts` (85 lines): `tradeOfferAt(fenBefore, san, costCp, afterCp, moverIsStudent)` (41–72), `tradeOfferLine` (74–85). Constants `SOUND_CP = 50`, `AHEAD_CP = 100` (21–23). The student's queen offer a piece or more up belongs to `queenTradeRead` (55).
 - Registry: `boardComputers.ts` `tradeOfferAt` (6969), kind `trade`. Census: 1 lesson line, said ("The knight on f4 invites a trade. With a pawn more, the fewer pieces left, the easier the win."). Run: 1 fire (g-1018863294 ply 48 …Nf4, cost 24).
 
 ## B. Facts
-- **B1** `TradeOffer` (22–28): `piece`, `square`, `facing {piece, square}`, `up` (the lead in words).
-- **B2 dropped:** the lead number (`leadOf`, 52) — only the words.
+- **B1** `TradeOffer` (25–~32): `piece`, `square`, `facing {piece, square}`, `up` (the lead in words).
+- **B2 dropped:** the lead number (`leadOf`, 51) — only the words.
 - **B3 cheap:** the inverse forms: (a) the student was ahead (lead ≥ 1, engine ≥ 100 for the student) and their offer was DECLINED by a retreat that cost ≥ floor; (b) the student was BEHIND and offered / accepted a trade (that is `tradeJudgement` TJ6 / `tradeKeptAt` TK3 — one cause).
-- **B4 gates:** cost < 50 and the engine ≥ 100 for the mover after (42); a non-capture by a queen or minor (48); lead ≥ 1 (53); an even swap on the square with a same-value taker that the moved piece attacks back (60–70).
+- **B4 gates:** cost < 50 and the engine ≥ 100 for the mover after (42); a non-capture by a queen or minor (47); lead ≥ 1 (52); the student's queen offer at ≥ 3 up is `queenTradeRead`'s (55); an even swap on the square with a same-class taker (59–61) and the square guarded by the mover (62–69).
 
 ## C. Sentence readiness
 | slot | today | field | missing |

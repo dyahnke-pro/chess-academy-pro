@@ -22,12 +22,13 @@
 | id | angle | seat | condition | slots | LESSON | CONSEQUENCE | BETTER | HABIT | Learn | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | IB1 | knowledge (zwischenzug) | S | B3 inverse fires | sq, first kind | "A capture that isn't going anywhere can wait. The {check/threat} came first, and the piece on {sq} was still there after." | errorWhy: what taking first let them do | "{first} first, then take on {sq}." | IB habit | after move | B3 must prove the capture still there (line) | C |
-| IB2 | their seat | O | they took at once and missed theirs | | "They grabbed at once and missed an in-between move: you get to answer first." | | n/a | | Review / Learn on their mistake | | C |
+| IB2 | their seat | O | they took at once and missed theirs | | "Grabbing at once can miss an in-between move. Their capture came before their check, so you get to answer first." | | n/a | | Review / Learn on their mistake | | C |
 | IB3 | good move | both | today's fire | | Review/lesson only | | | | silent in Learn | | H |
 | IB4 | record | S | | | RED/GREY IB1 · AMBER "The check came first." · GREEN silent | | | | | | H |
 | — | endgame, plan | — | n/a | | | | | | | | |
 
 ## E. Mistake link
+- errorWhy: IB1 → `missed-win` motif `zwischenzug` (E14); IB2 the O-seat of it; IB3 Review only.
 - costReason `missed` motif `zwischenzug` (the one classifier files it); kneeJerk when the capture was a recapture (one recipe: IB1 subsumes KJ1, claim `not-yet:<sq>`).
 
 ## F. Build changes

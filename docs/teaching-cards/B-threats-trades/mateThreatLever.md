@@ -1,15 +1,15 @@
 # mateThreatLever — the mate threat that wins something else
 
 ## A. Identity
-- File: `src/services/mateThreatLever.ts` (57 lines): `mateThreatLever(fen, lines, student)` (27–57); renderer `teachingSentence.renderMateLever` (542–553).
+- File: `src/services/mateThreatLever.ts` (57 lines): `mateThreatLever(fen, lines, student)` (27–56); renderer `teachingSentence.renderMateLever` (542–553).
 - Registry: `boardComputers.ts` `mateThreatLever` (7769–7788), kind `tactic`, seat = side to move, skill `missed-tactic` filed for the student's lever.
 - Reach: lesson, review, learn (via the thought), chat, tactics, weaknesses. Census: 12 lines (10 said; 2 held `already-said`). Run: 4 fires; 3 on mistakes — g-1002984876 ply 61 Bd6 (student, cost 229) handed Black the lever Bd4 → Re1#; g-1005776142 ply 56 …d3 (student, cost 260).
 
 ## B. Facts
 - **B1** `MateThreatLever` (25): `side` (whose lever), `move` (the quiet move in the best line), `mate` (the mating move it threatens), `gain` (material the line wins, points), `text`, `squares` (move from/to + mate square).
-- **B2 dropped:** the index `i` of the lever in the line (only `first` survives into the renderer); the defence the other side plays (`moves[i+1]`) and WHY it costs — the line's material swing is one number; `lineScore` of the line (the cp, 32).
+- **B2 dropped:** the index `i` of the lever in the line (only `first` survives into the renderer); the defence the other side plays (`moves[i+1]`) and WHY it costs — the line's material swing is one number; `lineScore` of the line (the cp, 34).
 - **B3 cheap:** the defence move (`moves[i+1]` is in `playLine`'s output) and what it gives up (the next capture of the lever side in the line) — the CONSEQUENCE "to stop it you give up the pawn on g6".
-- **B4 gates:** side to move must be ≥ 100 cp better in the line (32) and the line must not mate (34); the gain ≥ 1 pawn by the line's end, ≤ 10 moves (35–37); the lever is one of the side's first three moves, quiet (no capture/check/promotion, 40); the null-move probe finds mate in one (41–43).
+- **B4 gates:** the best line must not be a mate line (32), side to move must be ≥ 100 cp better in the line (34) and no move of the played line may mate (36); the gain ≥ 1 pawn by the line's end, ≤ 10 moves (35–39); the lever is one of the side's first three moves, quiet (no capture/check/promotion, 40–43); the null-move probe finds mate in one (44–47). Note: `gain` is the line's whole material swing, not proven to come from the defence of the mate — ML1/ML2's "stopping it costs you {gain}" needs F1 `gives` to be the first capture after the defence, else say the line's total without "stopping it costs".
 
 ## C. Sentence readiness
 | slot | today | field | missing |

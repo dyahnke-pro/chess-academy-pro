@@ -20,13 +20,14 @@
 ## D. Lesson recipes
 | id | angle | seat | condition | slots | LESSON | CONSEQUENCE | BETTER | HABIT | Learn | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| OM1 | strategize (time) | S | inverse: played ≠ best, best is only move, cost ≥ mistake | best, gives | "Some positions have one move that holds and the rest lose. This was one; the moment to slow down." | errorWhy | "{best} was the only move: {its job}" | "When a move feels forced, check that every reply is covered." / "Slow down when the position is sharp." | after move | |best| < 400; gap proven by the fan | C |
+| OM1 | strategize (time) | S | inverse: `lines[0]` ≠ played, gap(lines[0], lines[1]) ≥ `criticalityThresholds().onlyMove`, \|best\| < 400, cost ≥ mistake (the same test as `thoughtReads.ts:286-289` minus the played-is-best check) | best, gives | "When only one move holds, the position is asking you to slow down. Here one move kept the balance and every other gave up {gives}." / "Sharp positions punish the natural move. One move held here, and the rest lost {gives}." | errorWhy | "{best} was the only move: {its job}" | "When a move feels forced, check that every reply is covered." / "Slow down when the position is sharp." | after move | |best| < 400; gap proven by the fan | C |
 | OM2 | found (praise) | S | today | | Review/lesson only | | | | silent in Learn | | H |
 | OM3 | their seat | O | they missed their only move | | "They needed the one move here and didn't find it." | | n/a | | Learn: on their mistake, with the punish held | | C |
 | OM4 | record | S | | | RED/GREY OM1 · AMBER "Only one move held." · GREEN silent | | | | | | H |
 | — | plan, endgame-specific | — | n/a | | | | | | | | |
 
 ## E. Mistake link
+- errorWhy: OM1 is a frame/habit clause riding ANY cause (E1–E15) on a board with one holding move; OM3 the O-seat; OM2 Review only.
 - Any errorWhy cause on a board whose fan has count 1 (critical) — OM1 is the HABIT/frame clause for it (methodBeat `slow-down` is the same habit; one claim).
 
 ## F. Build changes

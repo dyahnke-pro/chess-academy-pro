@@ -2,14 +2,14 @@
 
 ## A. Identity
 - File: `src/services/tradeRelievesCramp.ts` (111 lines): `tradeRelievesCramp(fen, lines, student)` (51–111), `safeMoves` (44–49), `CRAMP_PERCENT = 85` (41); uses `ownsMoreSpace` (the one space rule).
-- Registry: `boardComputers.ts` `tradeRelievesCramp` (7721), kind `trade`; also `moveThoughtFacts` 767 (idea `trade`, weight 48), `reviewFullData` 1444, `moveInsight` 999.
+- Registry: `boardComputers.ts` `tradeRelievesCramp` (7713), kind `trade`; also `moveThoughtFacts` 767 (idea `trade`, weight 48), `reviewFullData` 1444, `moveInsight` 999.
 - Reach: lesson, review, learn via the thought, chat, tactics, weaknesses. Census: 123 lines (77 said): lesson 110 (64 said, 46 held `already-said`), review 13. Run: 32 fires (18 their move, 14 the student's), 4 on an opponent move costing ≥ 100.
 
 ## B. Facts
-- **B1** `TradeRelievesCramp` (29–36): `cramped` (colour), `trade` (SAN, inside the engine line), `target` (square taken), `text`, `squares`, `line {fen, sans}` (the line up to the trade and take-back).
+- **B1** `TradeRelievesCramp` (31–40): `cramped` (colour), `trade` (SAN, inside the engine line), `target` (square taken), `text`, `squares`, `line {fen, sans}` (the line up to the trade and take-back).
 - **B2 dropped:** which rule decided "cramped" — pawns (`byPawns`) or mobility (`mobility.mine/theirs`) — is only visible in the words; `intruders` (the planted pieces); the line index of the trade (how many moves away).
 - **B3 cheap:** whether the trade is `trade`-ply 0 (available NOW) or later in the line — `moves.slice(0, i+2)` already has it; whether the student's move just made (or allowed) the trade.
-- **B4 gates:** a middlegame (a queen on, 4+ pieces a side, 63–64); cramped by pawns, or by mobility ≤ 85% with an intruder minor on the cramped side's 3rd/4th rank (69–77); a line within 50 cp of best (82); the cramped side's first three moves (88); an even trade taken straight back (89–93).
+- **B4 gates:** a middlegame (a queen on, 4+ pieces a side, 57–58); cramped by pawns, or by mobility ≤ 85% with an intruder minor on the cramped side's 3rd/4th rank (59–71); a line within 50 cp of best (78); the cramped side's first three moves (84); an even trade (a bishop counted as a knight) taken straight back (85–90), on an intruder square unless the pawn rule fired (91).
 - **False at times (board truth):** the target is named by the piece that stands on `m.to` AT THE TRADE inside the line, while the sentence is said about the board now. Run: g chesscom-1012441262 ply 16 …Bg4 — "Bxf3 would take off your knight on f3" with White's QUEEN on f3 on the board said (the knight reaches f3 later in the line).
 
 ## C. Sentence readiness
@@ -38,7 +38,7 @@ Not applicable: endgame (gated out — the room that matters there is the kings'
 - Opponent: CR4.
 
 ## F. Build changes
-1. Board truth (`tradeRelievesCramp.ts` 96): name the target by the piece on `m.to` on the CURRENT board, or — when it differs — say it as a line ("after {line}, {trade} takes off your knight"); never "your knight on f3" when f3 holds a queen now. Board that must change: g chesscom-1012441262 ply 16 …Bg4.
+1. Board truth (`tradeRelievesCramp.ts` 95, `theirPiece` from `m.captured` inside the line): name the target by the piece on `m.to` on the CURRENT board, or — when it differs — say it as a line ("after {line}, {trade} takes off your knight"); never "your knight on f3" when f3 holds a queen now. Board that must change: g chesscom-1012441262 ply 16 …Bg4.
 2. Return `rule: 'pawns' | 'mobility'`, `mobility`, `intruders`, `tradePly` (B2/B3).
 3. CR-OFFER needs the before/after diff: the trade at ply 0 after the student's move and not before (call on both boards).
 4. Speak in Learn only on CR1/CR2 (the 46 `already-said` holds are the standing read repeating).

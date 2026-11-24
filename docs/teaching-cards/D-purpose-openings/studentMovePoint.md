@@ -1,13 +1,13 @@
 # CARD — `studentMovePoint` (the point of a sound move)
 
 ## A. Identity
-`src/services/playCommentary.ts:829` `studentMovePoint` → text; `studentMovePointFact :~860` → `{text, squares, stakes, line, claim?}`; `slipAnswerText :~935` ("You found it" / "c5 was the answer to their slip"); `quietMovePoint` (unpin, luft, kick), `gainedBishopPair`, `BISHOP_PAIR_POINT`. Census 4/4 (review), kind `point`.
+`src/services/playCommentary.ts:829` `studentMovePoint` → text; `studentMovePointFact :864` → `{text, squares, stakes, line, claim?}`; `slipAnswerText :948` ("You found it" / "c5 was the answer to their slip"); `quietMovePoint` (unpin, luft, kick), `gainedBishopPair`, `BISHOP_PAIR_POINT`. Census 4/4 (review), kind `point`.
 
 ## B. Facts
 - **B1** text + `stakes {points, plies}` + `line` (ledger-proven win) + `claim` (kick key).
-- **B2 dropped:** the point's KIND (material / exchange / bishop-pair / unpin / luft / kick) is only prose; `net`, `takeBack` count (`:909`) folded into words.
+- **B2 dropped:** the point's KIND (material / exchange / bishop-pair / unpin / luft / kick) is only prose; `net`, `takeBack` count (`:911`) folded into words.
 - **B3 cheap:** type the kind; run on the BETTER move after a mistake (its job for the BETTER slot), and on the answer to their slip that the student missed (errorWhy `missed-win` seat S when the prior move was their mistake).
-- **B4 gates:** recapture is never a win (`takesBack`, `:887`); net from `settledExchange` over the line (`:899`); "nothing takes it back" from `captureRead` on the board (`:909`); a capture's point is the capture (`:924`).
+- **B4 gates:** recapture is never a win (`takesBack`, `:886`); net from `settledExchange` over the line (`:899`); "nothing takes it back" from `captureRead` on the board (`:911`); a capture's point is the capture (`:924`).
 
 ## C. Readiness
 | slot | today | field | missing |
@@ -30,7 +30,7 @@
 `missed-win` (SP1), the student's missed answer to `them`-seat mistakes (SP2), `allowed-mate` back rank (SP4); BETTER slot for most material causes.
 
 ## F. Build changes
-1. `MovePointFact` (`:~853`) — add `kind: 'wins'|'exchange'|'bishop-pair'|'unpin'|'luft'|'kick'`.
+1. `MovePointFact` (`:856`) — add `kind: 'wins'|'exchange'|'bishop-pair'|'unpin'|'luft'|'kick'`.
 2. Tense: a `past` form for the better move ("would have won …") read by the composer, not new prose here.
 3. SP1–SP5 into `mistakeLesson` (`missed-win`, the `slip-unpunished` sub-case of `missed-win` with prior-move-was-their-mistake).
 

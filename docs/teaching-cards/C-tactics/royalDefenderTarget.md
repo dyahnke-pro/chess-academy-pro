@@ -1,21 +1,21 @@
 # royalDefenderTarget — card
 
 ## A. Identity
-- `royalDefenderTarget(fen, studentColorWB)` — `src/services/reviewTeachingPoints.ts:190-212` (M6, "king and queen are the worst defenders").
-- Board computer `royal` — `src/services/boardComputers.ts:4471-4486`, kind `royal`, **`squares: []`**, claims `royal:<board>`.
+- `royalDefenderTarget(fen, studentColorWB)` — `src/services/reviewTeachingPoints.ts:190-211` (M6, "king and queen are the worst defenders").
+- Board computer `royal` — `src/services/boardComputers.ts:4476-4491`, kind `royal`, **`squares: []`**, claims `royal:<board>`.
 - Census: 212 fired / 76 said; held `unsupported` 64, `already-said` 64, beside-mate 7.
 
 ## B. Facts
 ### B1. Handed over
 A STRING only ("their bishop on g5 is guarded only by the queen — and the king and queen are the worst defenders …").
 ### B2. Dropped
-- The target square `sq`, piece type, defender squares, which royal(s) — all computed (:197-209) and flattened into prose. The board computer then passes `squares: []` (boardComputers.ts:4475) — so the support step (`supportedFacts`, FACT_ROLE) cannot link it to a teaching point → **64 lines held as `unsupported`**: a computed teaching fact silenced by a dropped field. ROOT CAUSE of the "Q (unsupported)" row in the map.
-- Attacker squares (it requires ≥1 attacker, :196).
+- The target square `sq`, piece type, defender squares, which royal(s) — all computed (:194-208) and flattened into prose. The board computer then passes `squares: []` (boardComputers.ts:4480) — so the support step (`supportedFacts`, FACT_ROLE) cannot link it to a teaching point → **64 lines held as `unsupported`**: a computed teaching fact silenced by a dropped field. ROOT CAUSE of the "Q (unsupported)" row in the map.
+- Attacker squares (it requires ≥1 attacker, :197).
 ### B3. Cheap
 - Whether hitting the royal guard is possible NOW: a student move that attacks the queen/king-guard (checks the king / attacks the queen) while the target stays attacked → the actual tactic (deflection). chess.js: for each student move, `after.attackers(guardSq, student)` new and target still attacked.
 - SEE on the target (a queen guard on a bishop attacked by a pawn already loses — then it's simply hanging).
 ### B4. Gates
-Enemy non-pawn non-king piece attacked by the student, ≥1 defender, ALL defenders K/Q. Returns only the FIRST such piece (loop returns on first hit — a G4.5-style single answer, not a cap on facts but drops others).
+Enemy non-pawn non-king piece attacked by the student (:195-197), ≥1 defender (:199), ALL defenders K/Q (:200). A QUEEN target is NOT excluded (:195) — the census line "Their queen on d8 is guarded only by the king" comes from that. Returns only the FIRST such piece (loop returns on first hit — a G4.5-style single answer, not a cap on facts but drops others).
 
 ## C. Sentence readiness
 | slot | today | field | missing |
@@ -40,8 +40,8 @@ n/a: phase, plan, strategize (tactical). Combination: overload (detectTactics DT
 - Without B3 the lesson attaches to NO mistake turn → Review only today.
 
 ## F. Build changes
-1. reviewTeachingPoints.ts:190 — return a typed `RoyalTarget[] {target, piece, guards:[{sq,type}], attackers}` (ALL of them, not the first) instead of a string; skip target type `q` (an attacked queen moves — its guard is irrelevant, census "Their queen on d8 is guarded only by the king").
-2. boardComputers.ts:4475 — `squares: [target, ...guards]` → stops the 64 `unsupported` holds.
+1. reviewTeachingPoints.ts:190-211 — return a typed `RoyalTarget[] {target, piece, guards:[{sq,type}], attackers}` (ALL of them, not the first) instead of a string; skip target type `q` (an attacked queen moves — its guard is irrelevant, census "Their queen on d8 is guarded only by the king").
+2. boardComputers.ts:4480 — `squares: [target, ...guards]` → stops the 64 `unsupported` holds.
 3. Add `hitsRoyalGuard(fen, rt, mover): {san, from, to} | null` (B3) → RD-1 BETTER-MOVE.
 4. Seat parameter: allow reading the STUDENT's pieces (RD-2) by calling with the opponent colour.
 5. Words → recipe `royal-guard`.

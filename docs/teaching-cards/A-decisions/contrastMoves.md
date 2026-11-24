@@ -23,11 +23,12 @@
 | CT1 | identify (guard left) | S | mistake turn, `drops` = played, B3 SEE > 0 | piece, sq | "Every move changes what is guarded. This one left your {piece} on {sq} with no guard, and they can take it." | "They win the {piece}." | "{keeps} kept it defended." | "Before a piece moves, ask what it is guarding." | after move | B3 SEE > 0 — a loose pawn nobody can take is no lesson | C |
 | CT2 | positional (loose pawn) | S | drops = played, piece pawn, SEE = 0 | | "A pawn with no guard is a target for later: {keeps} kept your {pawn} defended." | | keeps | | only if inaccuracies speak / Review | | H |
 | CT3 | praise-inverse guard | S | keeps = played on a MISTAKE turn | | NEVER — measured: on 60 mistake turns contrast fired, 27 times the mistake was the move that "keeps" a piece defended, i.e. it praised the mistake (e.g. g:1001055178#46 `…f5` loss 174 "keeps the queen on e7") | | | | silent | the mistake's cause is elsewhere | — |
-| CT4 | their seat | O | their move dropped a guard | | "Their move left their {piece} on {sq} unguarded." | | the capture is the student's → held | | Learn: pointer rule | | C |
+| CT4 | their seat | O | their move dropped a guard | | "Every move changes what is guarded. Their move left a piece of theirs without a guard." | | the capture is the student's → held | | Learn: piece and square held until the student has moved (pointer rule) | | C |
 | CT5 | record | S | | | RED/GREY CT1 · AMBER "It left your {piece} unguarded." · GREEN silent | | | | | | H |
 | — | plan, endgame, calc | — | n/a | | | | | | | | |
 
 ## E. Mistake link
+- errorWhy: CT1 → `abandoned-defender` (E7) / `left-hanging` (E6); CT2 Review only (no SEE gain, an inaccuracy at most); CT4 → E6o.
 - whyItFailed `abandoned-defender`; positionalReason `defender-left`. One cause → CT1 (shared with blunderCheck BC2, computeBoardDelta "walks away from"). Student seat; opponent via CT4.
 
 ## F. Build changes

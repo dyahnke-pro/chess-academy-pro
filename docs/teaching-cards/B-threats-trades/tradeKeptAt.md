@@ -1,14 +1,14 @@
 # tradeKeptAt — the even trade the move kept off the board, and why
 
 ## A. Identity
-- File: `src/services/tradeKept.ts` (247 lines): `tradeKeptAt(input)` (149–207), `reasonFor(input, c, cap)` (89–143), `tradeKeptLine(k, moverIsStudent, fen)` (209–247). Constants `SOUND_CP = 50`, `DECIDED_CP = 300`, `DECIDED_SLACK_CP = 100`, `MIN_LINES = 3` (38–45).
+- File: `src/services/tradeKept.ts` (247 lines): `tradeKeptAt(input)` (149–207), `reasonFor(input, c, cap)` (87–145), `tradeKeptLine(k, moverIsStudent, fen)` (209–247). Constants `SOUND_CP = 50`, `DECIDED_CP = 300`, `DECIDED_SLACK_CP = 100`, `MIN_LINES = 3` (33–38).
 - Registry: `boardComputers.ts` `tradeKeptAt` (7020), kind `capture-choice`. Reach: lesson via moveThoughtFacts (and Review / Learn via the thought). Census: 9 lesson lines, all said ("Taking on f3 was there, but the bishop on g4 is the guard of the pawn on f5. After the trade, your bishop on d3 takes it."). Run: 4 fires, none on a mistake (it only fires on sound moves).
 
 ## B. Facts
-- **B1** `TradeKept` (53–58): `trade {piece, from, to, captured}`, `reason` (`guard {guarded, by}` | `pressure {king, squares}` | `behind` | `no-threat`), `steppedAway`.
+- **B1** `TradeKept` (46–53): `trade {piece, from, to, captured}`, `reason` (`guard {guarded, by}` | `pressure {king, squares}` | `behind` | `no-threat`), `steppedAway`.
 - **B2 dropped:** the other candidate trades with their reasons (the loop returns the first, 205); the cost of the kept trade (`cl` score, 187) — how much worse trading was; the settled lead number behind `behind` (`settledLeadFor`, 128).
 - **B3 cheap:** the INVERSE for mistakes — `reasonFor` run on the capture the student PLAYED (the student traded, the trade cost ≥ floor, and a reason not to trade exists): guard (the trading piece guarded something that is now lost), pressure, behind. `reasonFor` is pure and takes any capture.
-- **B4 gates:** ≥ 3 engine lines (151); not in check (154); the played move is not a capture and does not itself threaten an equal-or-bigger piece (159–166); the played move is within 50 cp of best (or ≥ 300 and within 100) (171–172); the trade is even by SEE, takes back exist, and is engine-worse than the move played (175–188); guard / pressure / behind / no-threat reasons (89–143).
+- **B4 gates:** ≥ 3 engine lines (151); not in check (154); the played move is not a capture and does not itself threaten an equal-or-bigger piece (159–166); the played move is within 50 cp of best (or ≥ 300 and within 100) (174); the trade is even by SEE, takes back exist, and is engine-worse than the move played (175–188); guard / pressure / behind / no-threat reasons (87–145).
 
 ## C. Sentence readiness
 | slot | today | field | missing |

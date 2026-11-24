@@ -27,12 +27,14 @@
 | CM3 | knowledge (cheaper attacker) | S | capture branch, def ≥ att but the cheapest attacker of theirs is worth less than the piece you put there | attacker type | "Guards don't help when the attacker is cheaper: a pawn takes your bishop and a guard only takes back a pawn." | — | — | CM1 habit | | only when piece values differ ≥ 2 | C (attacker types) |
 | CM4 | prevent / own plan | S | B3 finds a move that adds an attacker so SEE ≥ 0 | that move, its piece | "When the count is one short, add an attacker first. Then the capture works." | — | "{adder} first would have made the capture work." | "Count, and if you are one short, bring one more piece." | after move only | adder must be legal and not itself hang (SEE on its square) | C |
 | CM5 | their seat | O | their capture/landing loses the count | — | "They took without counting: {att} against {def} on {sq}. The trades leave you ahead." | "You win material in the exchange." | the student's punishing recapture is the student's next move → held in Learn | — | Learn: name the square, not the recapture | needs a mover param (student-only today :34) | C |
+| CM7 | phase: endgame | S | CM1/CM2 fires with `phaseOfFen` endgame | piece | "In the endgame a single lost pawn is often the game: count before every capture." | CM1 | CM1 | CM1 habit | same | phase endgame only | C (phaseOfFen) |
 | CM6 | record | S | | | RED/GREY full · AMBER "Count before you take on {sq}." · GREEN silent | | | | | | H |
 | — | endgame / phase | — | same rule in every phase; no phase variant needed | | | | | | | | |
 | — | strategize, their plan | — | n/a — the count is tactical arithmetic, no plan facts in its inputs | | | | | | | | |
 | — | exception | S | sound sac (engine price < 100) | — | never said (cost gate :30) | | | | | | H |
 
 ## E. Mistake link
+- errorWhy causes: `took-guarded` (E3, capture branch), `left-hanging` (E6, landing branch, 0 guards), `allowed-capture` (E11, landing branch with guards). CM3 refines E3/E4. All rows attach to a mistake turn.
 - Teaches `whyItFailed: held-by-defender` (capture branch) and `lost-the-piece` (landing branch); costReason `allowed` with no motif (plain exchange). Student seat today; opponent after CM5's param.
 
 ## F. Build changes

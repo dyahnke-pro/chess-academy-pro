@@ -21,12 +21,13 @@
 | id | angle | seat | condition | slots | LESSON | CONSEQUENCE | BETTER | HABIT | Learn | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | KP1 | strategize (initiative) | S | gate passes | best kind | "When you're winning and they're on the ropes, a quiet move gives them the one thing they need: time." | "Their reply {reply} untangled {what}" (B3) | "{best} kept forcing: it {hits the X / gave check}." | "Checks and captures first while they're tied up." | after move, best named (past) | still winning after (≥300) — it is a lesson about a lead, not a blunder | C |
-| KP2 | evaluate | S | band dropped (decisive → clearly) | bands | "A winning position stays winning only while you keep the pressure: the edge shrank from {a} to {b}." | — | KP1 | KP1 | | band really changed | C |
-| KP3 | their seat | O | opponent was winning and let up | | "They let you off the hook: a quiet move when they had forcing ones. Use the free move." | — | n/a | — | Learn: says the chance exists, holds the move | seat param | C |
+| KP2 | evaluate | S | band dropped (decisive → clearly) | bands | "A winning position stays winning only while you keep the pressure. Give them one quiet move and they untangle." (band words never read as numbers) | — | KP1 | KP1 | | band really changed | C |
+| KP3 | their seat | O | opponent was winning and let up | | "They let you off the hook: a quiet move when they had forcing ones. Use the free move." | — | n/a | — | Learn: "They let up: a quiet move when they had forcing ones." — nothing about what to do with it (a pointer at the student's next move) | seat param | C |
 | KP4 | record | S | | | RED/GREY full · AMBER "Keep forcing while they're tied up." · GREEN silent | | | | | | H |
 | — | prevent, calculate, phase | — | n/a — no line or phase facts in its inputs | | | | | | | | |
 
 ## E. Mistake link
+- errorWhy cause: `missed-win` (E14), the motif of the forcing best; cpLoss ≥ 100 so every row is a mistake turn. KP2 needs `evalBand` before/after (C).
 - costReason `missed` (the forcing line the move skipped), any motif; also `botched-conversion` fundamental (principleVoice) — same idea: ONE recipe, keyed on the cause "missed forcing line while winning".
 
 ## F. Build changes
@@ -41,4 +42,4 @@
 - Guard: g:1020632112#69 O `Bd4` loss 2000 fired for the opponent — mate-flattened cost; only an O-seat recipe may use it, and the 2000 is the mate scale, not a pawn count.
 
 ## H. Open questions
-- none beyond family-wide: inaccuracy vs mistake threshold.
+- none.

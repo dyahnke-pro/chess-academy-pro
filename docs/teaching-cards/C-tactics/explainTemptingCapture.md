@@ -2,19 +2,19 @@
 
 ## A. Identity
 - `explainTemptingCapture(fen, chosenSan, perspective, lineSans, told)` / `temptingCaptureRead(...)` / core `temptingCaptureText` — `src/services/reviewTeachingPoints.ts:466-608`.
-- Board computer `temptingCapture` — `src/services/boardComputers.ts:4426-4446`, kind `tactic`; lesson (moveThoughtFacts), review (projectedLineVoice), learn via thought.
+- Board computer `temptingCapture` — `src/services/boardComputers.ts:4425-4446`, kind `tactic`; lesson (moveThoughtFacts), review (projectedLineVoice), learn via thought.
 - Census: 224 fired / 144 said (all lesson), held already-said 79.
 
 ## B. Facts
 ### B1. Handed over
 `{ text, key }` — key = `from+to+victim` of the biggest capture (victim ≥ minor) the mover did NOT play.
-Three outcomes (temptingCaptureText): (a) the capturer is TRAPPED and the line lets it go (`findTrappedPiece` branch, ~:560); (b) "NOT free — guarded by the X on Y, so Qxc7 just trades your queen for a rook" (`oppNet − victimVal ≥ 1`); (c) a pawn recapture rips open a file at the mover's own king (`oppNet − victimVal == 0`, recapturer a pawn, heavy piece on the file).
+Three outcomes (temptingCaptureText): (a) the capturer is TRAPPED and the line lets it go (`findTrappedPiece` branch, :562); (b) "NOT free — guarded by the X on Y, so Qxc7 just trades your queen for a rook" (`oppNet − victimVal ≥ 1`, :584); (c) a pawn recapture rips open a file at the mover's own king (`oppNet − victimVal == 0`, :595, recapturer a pawn, heavy piece on the file).
 ### B2. Dropped
-- `oppNet` (SEE the recapturing side gains) — the cost in material ("you'd lose 6 points") is only in "trades your queen for a rook".
+- `oppNet` (:549, SEE the recapturing side gains) — the cost in material ("you'd lose 6 points") is only in "trades your queen for a rook".
 - The recapturer square/piece (`recapFrom`, `recapNoun`) are in prose only — not typed.
 - Only the SINGLE biggest capture (`caps[0]`, sort :533) is examined; other tempting captures dropped.
 ### B3. Cheap
-- The mistake case: the mover DID take (today returns null when `chosen` = the capture, :539-540) → that is whyItFailed `held-by-defender` ("That took the X, but the Y takes back"). Same fact, opposite branch — the lesson stems apply.
+- The mistake case: the mover DID take (today returns null when `chosen` = the capture, :543-544) → that is whyItFailed `held-by-defender` ("That took the X, but the Y takes back"). Same fact, opposite branch — the lesson stems apply.
 ### B4. Gates
 Capture victim ≥ minor; mover chose something else; capturer Q/R — trapped branch; recap SEE net ≥ 1 (lose ≥ a pawn) for (b); even trade by a pawn opening a file to own king for (c). `told` say-once.
 
@@ -43,7 +43,7 @@ n/a: phase, plan, strategize. Combination: attackerDefenderCount (count) — the
 
 ## F. Build changes
 1. reviewTeachingPoints.ts:508-608 — return a typed read `{victim, victimSq, capturer, recapturer, recapFrom, oppNet, branch}` instead of only text.
-2. Expose the TAKEN branch: when `chosen` IS the capture (:539-540) return the same read with `taken: true` → recipe TC-1 can read it beside whyItFailed (one source of the recapturer, no second prose).
+2. Expose the TAKEN branch: when `chosen` IS the capture (:543-544) return the same read with `taken: true` → recipe TC-1 can read it beside whyItFailed (one source of the recapturer, no second prose).
 3. Examine every capture ≥ minor, not only `caps[0]` (rot rule: a cap on computed facts) — the recipe picks.
 4. Words → recipe `took-guarded-piece` / `trade-opens-file`; delete the three rotated stems.
 

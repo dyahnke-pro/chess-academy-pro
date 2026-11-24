@@ -1,8 +1,8 @@
 # bothSaved — card
 
 ## A. Identity
-- `bothSaved(fenBefore, san, replies)` — `src/services/bothSaved.ts` (`lost`, main fn); words `bothSavedLine`.
-- Board computer `bothSaved` — `src/services/boardComputers.ts:3904-3922`, kind `defence-idea`; fires on the move PLAYED.
+- `bothSaved(fenBefore, san, replies)` — `src/services/bothSaved.ts:67` (`lost` :50); words `bothSavedLine` :100.
+- Board computer `bothSaved` — `src/services/boardComputers.ts:3897-3922`, kind `defence-idea`; fires on the move PLAYED.
 - Sibling: `desperadoAt` (when no single move saves both).
 - Census: 4 fired / 4 said (review 2, lesson 2).
 
@@ -10,7 +10,7 @@
 ### B1. Handed over (`BothSaved`)
 `moved` {piece, from, to}, `other` {piece, square} (the second hanging piece the moved one now guards), `san`, `key`.
 ### B2. Dropped
-- The hanging list before the move (`findHangingBySee` ≥ 2) — what each hung to (attacker squares).
+- The hanging list before the move (`findHangingBySee` ≥ 2, :73) — what each hung to (attacker squares).
 - `lost()`'s verdict per piece against the engine's replies — the proof that after the move nothing is lost.
 - It reads only the PLAYED move: a save that EXISTED but wasn't played (the mistake) is not searched.
 ### B3. Cheap

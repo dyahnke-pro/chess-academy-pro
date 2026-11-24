@@ -1,21 +1,21 @@
 # newTiedDefender — card
 
 ## A. Identity
-- `findTiedDefenders(fen, student)` / `newTiedDefender(fenBefore, fenAfter, student)` — `src/services/tiedDefender.ts` (whole file, 78 lines); proof `tiedDefenderProof`, line `tiedDefenderLine`.
-- Board computer `tiedDefender` — `src/services/boardComputers.ts:2352-2368`, kind `their-read`, student's move only (guard at :2359), must still hold after their reply (:2362).
+- `findTiedDefenders(fen, student)` / `newTiedDefender(fenBefore, fenAfter, student)` — `src/services/tiedDefender.ts` (whole file, 78 lines: `findTiedDefenders` :36, `newTiedDefender` :61, `lifted` :31); proof `tiedDefenderProof` :66, line `tiedDefenderLine` :75.
+- Board computer `tiedDefender` — `src/services/boardComputers.ts:2352-2368`, kind `their-read`, student's move only (guard at :2360), must still hold after their reply (:2363).
 - Census: 99 fired / 88 said (lesson 85, review 14).
 
 ## B. Facts
 ### B1. Handed over (`TiedDefender`)
 `defender` {square, piece}, `target` {square, piece}, `attackers`, `defenders` counts. Proof `kind:'count' exact`.
 ### B2. Dropped
-- WHY it is tied: the counterfactual `lifted(fen, g)` → SEE > 0 without that guard (`findTiedDefenders`). The line says "the guard that holds it" but not "if it moves, the pawn on e6 falls" — the consequence is computed and implied only.
-- All ties after the first (`.find`), and all ties of the STUDENT's own pieces (reverse seat never computed — `findTiedDefenders` only reads `them` pieces).
+- WHY it is tied: the counterfactual `lifted(fen, g)` (:50) → SEE > 0 without that guard (`findTiedDefenders`). The line says "the guard that holds it" but not "if it moves, the pawn on e6 falls" — the consequence is computed and implied only.
+- All ties after the first (`.find`, :63), and all ties of the STUDENT's own pieces (reverse seat never computed — `findTiedDefenders(fen, student)` reads the opponent's pieces; no caller passes the other colour).
 ### B3. Cheap
 - Reverse seat: `findTiedDefenders(fen, them)` = the student's pieces tied down by the opponent.
 - The PAYOFF move: a student move that attacks the tied defender, or forces it to move (check it can't ignore) → deflection; chess.js scan over legal moves: after it, the target's SEE > 0.
 ### B4. Gates
-Target non-king, attacked, not already loose (SEE ≤ 0); guard non-king whose removal makes SEE > 0; created by the student's move (absent before); still holds after their reply; never said on the opponent's own move (:2359).
+Target non-king, attacked, not already loose (SEE ≤ 0); guard non-king whose removal makes SEE > 0; created by the student's move (absent before); still holds after their reply; never said on the opponent's own move (boardComputers.ts:2360).
 Census line "That is what pressure buys — a piece that cannot leave." — a lesson tail, but the lead is a board restatement.
 
 ## C. Sentence readiness
@@ -41,7 +41,7 @@ n/a: phase (any), their plan (n/a). Combination: detectTactics overload (DT-O1) 
 - costReason `missed` motif `deflection`/`overloaded_piece` → TD-4.
 
 ## F. Build changes
-1. tiedDefender.ts `TiedDefender` — add `falls: {square, gain}` (SEE without the guard) → TD-1/2 consequence.
+1. tiedDefender.ts:36-58 `TiedDefender` — add `falls: {square, gain}` (SEE without the guard) → TD-1/2 consequence.
 2. Export `findTiedDefenders` for either holder (already takes `student` — call with `them` for TD-2; no code change, a new call site).
 3. Add `deflectors(fen, tie, mover)` (B3) → TD-4.
 4. Learn: drop the before-move/after-own-move positive line (TD-3) from Learn speech (WO); recipes `tied-guard-left` (TD-1/TD-2) attach to whyItFailed abandoned-defender.

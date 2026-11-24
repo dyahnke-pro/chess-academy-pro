@@ -7,14 +7,14 @@
 
 ## B. Facts (per read; every read returns `{kind, text, proof, squares, stakes?, namesMove, claim}` (57–69))
 - **quietDanger** — their QUIET move (no capture, no check, 129) sets up mate in one (`matesInOne` on the null-move board, 137–139) when they also had checks available (133) and no mate already (135). Dropped: the list of checks they did not play (`checks`, 133) and the mating move's piece. `namesMove false`.
-- **ideaCondition** — a second-best line (≥ 100 cp worse, 194) whose rook/queen move puts a piece on a knight's fork square (fork ≥ 3 points, unsafe for the student). The condition move IS the student's mistake if played. `namesMove false`. Dropped: which line (index), the cp gap.
-- **obligationLifts** — a piece that hung before the student's move, the student guarded it, and their move took the attacker off (279–290). Duplicates `obligationLifted.ts` (see that card).
+- **ideaCondition** — a second-best line (≥ 100 cp worse, 193) whose rook/queen move puts a piece on a knight's fork square (fork ≥ 3 points, unsafe for the student). The condition move IS the student's mistake if played. `namesMove false`. Dropped: which line (index), the cp gap.
+- **obligationLifts** — a piece that hung before the student's move, the student's move LEFT it hanging (`still`, 275/278 — the card said "guarded it", inverted), and their move took the attacker off (276–290). Duplicates `obligationLifted.ts` (see that card).
 - **bishopOffPlan** — branch 1 (`theirMoveFlagged === true`, 356): their bishop runs into its own pawn(s); branch 2: one pawn of the student's shuts the bishop's diagonal within a pawn of best (namesMove TRUE). Dropped: `reach` length (the bishop's forward squares, 355).
-- **wronglyExpected** — their capture lost: SEE says the square is not winning for the student (`signedLegalSeeFor ≤ 0`, 446) but the engine is ≥ 150 cp above the material (449), and the engine's reply is NOT the recapture (452). namesMove TRUE (the student's punishing move).
+- **wronglyExpected** — their capture lost: SEE says the square is not winning for the student (`signedLegalSeeFor ≤ 0`, 448) but the engine is ≥ 150 cp above the material (451), and the engine's reply is NOT the recapture (455). namesMove TRUE (the student's punishing move).
 - **helpedYou** — the engine's best move for the student now hits the piece they moved (gain of time) or became possible / stopped dropping material (494–528). namesMove TRUE.
 - **wedgedPawn** — the best move takes a pawn on the student's third rank next to their king and no pawn can retake (560–566). namesMove TRUE.
 - **B3 cheap:** their move's cost is passed in only as a flag (`theirMoveFlagged`, used only by bishopOffPlan) — the cp value itself is in hand at every caller; the student's move after theirs (to say "you found it" vs "you missed it") is not an input.
-- **B4 gates:** listed per read above; all null when it is the student's move on `fenBefore` (reads of THEIR move). wronglyExpected's 150 cp floor (449); ideaCondition's 100 cp gap (194) and fork ≥ 3 (220); bishopOffPlan's 50 cp band (366).
+- **B4 gates:** listed per read above; all null when it is the student's move on `fenBefore` (reads of THEIR move). wronglyExpected's 150 cp floor (451); ideaCondition's 100 cp gap (193) and fork ≥ 3 (209); bishopOffPlan's 50 cp band (377).
 
 ## C. Sentence readiness
 | slot | today | field | missing |
@@ -50,7 +50,7 @@ Not applicable: plan / endgame-phase angles (each read is one move deep); the st
 1. `opponentMoveReads.ts` 586: add `theirCostCp: number | null` (replace the boolean `theirMoveFlagged`) and `studentReply: string | null` so each read can say "found / missed" (RT4, RT5, RT7, RT8 need it).
 2. `wronglyExpected` 438–476: skip when their capture RECAPTURES on a square the student just captured on (the prior move captured on `mv.to`). Board it must not fire on (run): g chesscom-1002984876 ply 12 …Kxd8 `rn1Qkb1r/ppp2ppp/5n2/4p3/4P1b1/5N2/PPP1BPPP/RNB1K2R b KQkq - 0 6` → said "The queen on d8 looked free to them" — the queens were being traded.
 3. Delete `obligationLifts` (264–320) here; keep the one `obligationLifted.ts` computer (both run on every surface: the census has 41 obligationLifted + 5 obligation-lifts lines saying the same claim).
-4. `helpedYou` 516–518: the "it makes X possible" reason fires on castling (run: g chesscom-1012441262 ply 38 …Qxb2 "it makes castling short possible") — restrict "possible" to moves that win material or check (a legal-move change alone is not a favour).
+4. `helpedYou` 519–521 (the `!before` branch): the "it makes X possible" reason fires on castling (run: g chesscom-1012441262 ply 38 …Qxb2 "it makes castling short possible") — restrict "possible" to moves that win material or check (a legal-move change alone is not a favour).
 5. Each read returns `cause` (its `MistakeCause` member) and the rule-stem key; the renderers' prose moves to `mistakeLesson`.
 
 ## G. Proof boards (run)

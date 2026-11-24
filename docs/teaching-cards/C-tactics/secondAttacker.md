@@ -1,7 +1,7 @@
 # secondAttacker — card
 
 ## A. Identity
-- `secondAttacker(fenBefore, san)` — `src/services/secondAttacker.ts` (main fn, `mateByCapture`); words `secondAttackerLine(s, own, fen)`.
+- `secondAttacker(fenBefore, san)` — `src/services/secondAttacker.ts:43` (main fn, `mateByCapture` :91); words `secondAttackerLine(s, own, fen)` :117.
 - Board computer `secondAttacker` — `src/services/boardComputers.ts:7053-7075`, kind `move-job`, seat = mover, `namesStudentMove: mine`; lesson-board / learn-via-thought / review via moveThoughtFacts.
 - Census: 58 fired / 47 said (lesson 53, review 5); 1+ voiced boards.
 
@@ -9,8 +9,8 @@
 ### B1. Handed over (`SecondAttacker`)
 `target`, `targetPiece`, `newcomer` {square, piece}, `partner` {square, piece}, `attackers` (count after), `guards[]` {square, piece}, `gain` (SEE pawns after), `mate` (capture SAN that mates).
 ### B2. Dropped
-- `gainBefore` (SEE before the move, must be ≤ 0) — the "it was safe one move ago, now it isn't" contrast is the lesson's hinge and is not said.
-- Rejected cases: newcomer worth LESS than the target (`worth(mv.piece) < worth(cell.type)` skips) — a pawn/minor joining against a rook is the stronger version ("a cheaper attacker") and is dropped by this computer.
+- `gainBefore` (:71, SEE before the move, must be ≤ 0, :72) — the "it was safe one move ago, now it isn't" contrast is the lesson's hinge and is not said.
+- Rejected cases: newcomer worth LESS than the target (`worth(mv.piece) < worth(cell.type)` skips, :70) — a pawn/minor joining against a rook is the stronger version ("a cheaper attacker") and is dropped by this computer.
 ### B3. Cheap
 - The defender's answer: student moves (when the mover is the opponent) that add a guard or move the target so SEE ≤ 0 — chess.js over legal moves with `legalSeeGainFor`.
 - Whether the student's ACTUAL reply met it: `legalSeeGainFor(afterReply, target, them) ≥ 1` → missed defence (the mistake).
@@ -42,11 +42,12 @@ n/a: phase (any), strategize (tactical count). Combination: attackerDefenderCoun
 - costReason `missed` (S) → SA-3.
 
 ## F. Build changes
-1. secondAttacker.ts main fn — expose `gainBefore` (B2).
+1. secondAttacker.ts:71-88 — expose `gainBefore` (B2).
 2. Add `meetsSecondAttacker(fenAfterReply, sa, defender): boolean` and `defences(fenAfterTheirMove, sa, student): {san, kind}[]` (B3) → SA-1.
 3. Wire SA-1: on the student's reply, run `secondAttacker` on the opponent's PREVIOUS move; if not met and errorWhy cost ≥ mistake → recipe `ignored-second-attacker`.
 4. `secondAttackerLine` deleted from speech; recipe words it rule-first; dedupe with `count` by `target`.
-5. SA-6 sensitivity: allow `worth(mv.piece) < worth(target)` when SEE after ≥ 1 (old: skip; new: keep, word as cheaper attacker). Miss board to find on the data (census has none — open).
+6. SA-6 ownership (moved from §H): the cheaper-attacker JOIN belongs here (it is a move that adds an attacker); the static "a smaller piece attacks a bigger one" read stays with attackerDefenderCount AD-6. One claim key on the target square dedupes them.
+5. SA-6 sensitivity (secondAttacker.ts:70): allow `worth(mv.piece) < worth(target)` when SEE after ≥ 1 (old: skip; new: keep, word as cheaper attacker). Miss board to find on the data (census has none — open).
 
 ## G. Proof boards
 - vc-_4xbS0Crtic-12 (voiced): "Your rook adds a second attacker on their pawn on e4, beside the knight on f6. That's two attackers, and the knight on c3 guards it. Taking on e4 now wins a pawn." (SA-2 shape; Review).
@@ -54,4 +55,4 @@ n/a: phase (any), strategize (tactical count). Combination: attackerDefenderCoun
 - Guard: the attack is a sacrifice offer (S's reply ignores it on purpose and the engine agrees) → errorWhy cost below mistake → silent.
 
 ## H. Open questions
-1. SA-6: should the cheaper-attacker case (today skipped) be taught under this card, or left to attackerDefenderCount/explainTemptingCapture?
+1. none (checker 2026-11-23: the SA-6 ownership question was a build question — answered in F6).

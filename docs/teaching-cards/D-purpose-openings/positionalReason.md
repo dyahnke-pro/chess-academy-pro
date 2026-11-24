@@ -1,14 +1,14 @@
 # CARD — `positionalReason` (why a move cost when nothing is won or lost)
 
 ## A. Identity
-`src/services/positionalReason.ts:231` `positionalReason({fen, playedSan, bestSan, namesBetterMove, student})` → `PositionalReason {tag: MisconceptionTagId, note}` (`:32`). Order: `concessionReason :122` (`findStudentDrawback`, `concessionBeat.ts:377`, 5 `DrawbackKind`s mapped by `CONCESSION_TAG :36`) → `boardReason :137` (the largest gap between the board after the played move and after the better move, each past its bar) → `bestJobReason :200` (names the better move; only when the surface may). Readers: `errorWhy` (`inaccuracyCall.ts:1563`, `.note` only) and the record (`slipCause`). No census label of its own (it speaks inside errorWhy's line).
+`src/services/positionalReason.ts:231` `positionalReason({fen, playedSan, bestSan, namesBetterMove, student})` → `PositionalReason {tag: MisconceptionTagId, note}` (`:32`). Order: `concessionReason :123` (`findStudentDrawback`, `concessionBeat.ts:377`, 5 `DrawbackKind`s mapped by `CONCESSION_TAG :36`) → `boardReason :138` (the largest gap between the board after the played move and after the better move, each past its bar) → `bestJobReason :201` (names the better move; only when the surface may). Readers: `errorWhy` (`inaccuracyCall.ts:1563`, `.note` only) and the record (`slipCause`). No census label of its own (it speaks inside errorWhy's line).
 
 ## B. Facts
 - **B1** `tag` + `note`.
-- **B2 dropped:** in errorWhy the `tag` is dropped (`:1563`); and errorWhy never calls it when the better move is named (`:1559 !should`) — on David's live costly moves 26 of 87 had a tag no one read; the `gap` sizes (`push(gap/bar)`, `:146`) and the per-reading numbers (shield pawns, open files near king, centre distance, activity counts) are dropped.
-- **B3 cheap:** all readings, not just the largest (a list of gaps, `gaps` `:196`); the concession's `DrawbackKind` itself (`findStudentDrawback(...).kind`).
-- **B4 gates:** board bars: development 1 (opening only), king shelter 1 (not endgame), endgame king 1 / passer 1 (endgame), passive rook 1 (best is a rook to an open file), space 2, activity 4 with a 3-square piece shift (`:148-195`).
-- **Defect:** every board note names the played move (`movedSan`, `:139`: "The king on h1 is less sheltered after Kh1 than after the better move", "…d6 gives up space…", "Your bishop on c8 reaches 5 fewer squares after …Bg7"). On David's 87 live costly moves 31 notes named it — illegal in Learn. The `bestJobReason` fallbacks ("The rook belonged on g8.", "a6 was the move the position asked for.") are verdicts with no reason.
+- **B2 dropped:** in errorWhy the `tag` is dropped (`:1563`); and errorWhy never calls it when the better move is named (`:1559 !should`) — on David's live costly moves 26 of 87 had a tag no one read; the `gap` sizes (`push(gap/bar)`, `:151`) and the per-reading numbers (shield pawns, open files near king, centre distance, activity counts) are dropped.
+- **B3 cheap:** all readings, not just the largest (a list of gaps, `gaps` `:150`, only `[0]` returned `:196`); the concession's `DrawbackKind` itself (`findStudentDrawback(...).kind`).
+- **B4 gates:** board bars: development 1 (opening only), king shelter 1 (not endgame), endgame king 1 / passer 1 (endgame), passive rook 1 (best is a rook to an open file), space 2, activity 4 with a 3-square piece shift (`:152-195`).
+- **Defect:** every board note names the played move (`movedSan`, `:141`: "The king on h1 is less sheltered after Kh1 than after the better move", "…d6 gives up space…", "Your bishop on c8 reaches 5 fewer squares after …Bg7"). On David's 87 live costly moves 31 notes named it — illegal in Learn. The `bestJobReason` fallbacks ("The rook belonged on g8.", "a6 was the move the position asked for.") are verdicts with no reason.
 
 ## C. Readiness
 | slot | today | field | missing |
@@ -27,18 +27,20 @@
 | PR4 | passed-pawn-neglected | S/O | passer gap | | "Passed pawns must be pushed: a passer standing still is a target." | | | | same | endgame | H |
 | PR5 | passive-rook | S/O | rook gain | file | "Rooks belong on open files." | | "Rd1 took the open d-file." | "Ask where each rook sees the most." | same | named file | H |
 | PR6 | space-conceded | S/O | space gap ≥ 2 | | "Giving up the centre gives their pieces room to come in." | | | | same | | H |
-| PR7 | misplaced-piece | S/O | activity gap ≥ 4, piece shift ≥ 3 | piece, squares | "A piece is only as good as the squares it reaches." / "Improve your worst piece first." | "The knight on g8 has six fewer squares than it needed." | better square | "Before you move, find your worst piece." | same | piece named | H |
+| PR7 | misplaced-piece | S/O | activity gap ≥ 4, piece shift ≥ 3 | piece, squares | "A piece is only as good as the squares it reaches." / "Improve your worst piece first." | "The knight on g8 has six fewer squares than it needed." | better square | "Before you move, find your worst piece." | when the misplaced piece is the piece just moved, its square is not said (it names the move): "The knight has six fewer squares than it needed." | piece named | H |
 | PR8 | tempo-handed | S/O | their piece freed | piece | "A move that frees their worst piece helps them more than you." | "Their rook on e8 comes alive." | | | same | | H |
 | PR9 | concessions (5) | S/O | `findStudentDrawback` kind | | defender-left: "A piece that guards something has a job." · file-opened: "Opening a file next to your own king invites their rooks." · piece-offside: "A piece far from your king can't help defend it." · pawn-weakened: "A pawn that can't be defended by another pawn needs a piece to babysit it." · outpost-conceded: "A square no pawn can attack is a home for their knight." | the concession's `said` (already in seat words) | | per kind | same | | H |
 | PR10 | no-plan / bestJob fallback | S/O | `bestJobReason` only | | silent | | | | silent | no board reason | H |
 | PR11 | missed-tactic (bestJob check) | S | best is a check | | → errorWhy missed-win | | | | | | — |
+| PR12 | mistimed-pawn-break (bestJob lever) | S/O | `bestJobReason` returns `mistimed-pawn-break` (`:219`, the better move is a lever) — today's note "The pawn break X was the timely one" has no why | | → breakStopped-stopsBreak B2 (the break's aim from `pawnBreak` on the better move); without that aim: silent like PR10 | | "d5 was the break, hitting the knight." (aim required) | "Each move, ask: is my break ready now?" | same, break named only past | the aim must be computed (breakStopped F1); never the bare "timely" note | C |
+| PR13 | missed-opponents-threat (concession defender-left) | S | `CONCESSION_TAG['defender-left']` (`:37`) — the tag the record files | | the PR9 defender-left lesson; the RECORD tag is `missed-opponents-threat`, so the habit row is bindingFact BF1's ("After every move of theirs, ask: what does it attack?") | | | BF1 habit | same | | H |
 
 ## E. Mistake link
 errorWhy cause kind `positional` (D0 of the errorWhy card) — the whole positional half, both seats.
 
 ## F. Build changes
 1. `positionalReason` returns `{tag, note, kind: DrawbackKind | BoardReading, gaps: {reading, gap}[]}`.
-2. `boardReason` notes drop `movedSan` (`:139`) — the recipe's CONSEQUENCE words the reading without the move.
+2. `boardReason` notes drop `movedSan` (`:141`) — the recipe's CONSEQUENCE words the reading without the move.
 3. `bestJobReason` returns the tag only (no note) for the no-reason fallbacks; recipe PR10 = silent.
 4. errorWhy calls it even when the better move is named (errorWhy card F5).
 

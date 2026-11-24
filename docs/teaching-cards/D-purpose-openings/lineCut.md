@@ -5,9 +5,9 @@
 
 ## B. Facts
 - **B1** piece ("your bishop"), lost ("your pawn on d4" / "their knight on c3" / "d4"), squares [from, to, sq].
-- **B2 dropped:** the candidate's `weight` (own guard 3 / enemy attack 2 / centre square 1, `:51-54`) = WHAT KIND of cut (a guard removed vs an attack blocked vs a square) — dropped; whether the cut guard was the ONLY guard; whether the enemy piece that is no longer attacked can now do something.
+- **B2 dropped:** the candidate's `weight` (own guard 3 / enemy attack 2 / centre square 1, `:55-57`) = WHAT KIND of cut (a guard removed vs an attack blocked vs a square) — dropped; whether the cut guard was the ONLY guard; whether the enemy piece that is no longer attacked can now do something.
 - **B3 cheap:** (a) kind; (b) consequence: for a guard cut — `attackers(sq, them)` vs `attackers(sq, me)` after the move (is the piece now loose? SEE gain for them); for an attack cut — was the attack a real threat before (SEE ≥ 1 before); (c) link to errorWhy: the cut guard's square == `lostSquare` (the cut is the mechanism).
-- **B4 gates:** no capture moves (`:33`); moved piece's own line skipped (`:42`); own pieces only if central or attacked (`:52`).
+- **B4 gates:** no capture moves (`:34`); moved piece's own line skipped (`:42`); own pieces only if central or attacked (`:55`).
 
 ## C. Readiness
 | slot | today | field | missing |
@@ -20,7 +20,7 @@
 ## D. Lesson recipes
 | id | angle | seat | condition | slots | LESSON stems | CONSEQUENCE | BETTER-MOVE | HABIT | Learn variant | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| L1 | geometry (interference, self) | S mistake | kind guard-cut AND cut square == errorWhy lostSquare | piece, guarded | "A piece dropped onto your own line can cut a guard: your knight on e4 now stands between the queen and the pawn it guarded." | "The pawn on d4 has lost its guard and falls." | better job | "Before you put a piece somewhere, ask whose line it blocks." | same | must be the mistake's cause | C |
+| L1 | geometry (interference, self) | S mistake | kind guard-cut AND cut square == errorWhy lostSquare | piece, guarded | "A piece dropped onto your own line can cut a guard: your knight on e4 now stands between the queen and the pawn it guarded." | "The pawn on d4 has lost its guard and falls." | better job | "Before you put a piece somewhere, ask whose line it blocks." | the landing square is not said (it IS the move just played): "A piece dropped onto your own line can cut a guard: the knight now stands between your queen and the pawn on d4." | must be the mistake's cause | C |
 | L2 | attack blocked | S mistake | kind attack-cut, the attack was a real threat (SEE ≥ 1 before), cost ≥ mistake | | "Don't block your own attack: the bishop was hitting the knight until your move stood in the way." | "Their knight is free again." | | | same | | C |
 | L3 | (description) | — | kind square-cut alone | | silent (description, no cost) | | | | silent | — | H |
 | L4 | both seats (interference motif) | O | their move cuts their own guard → student wins | | pointer → H1 | | | | held | | C |

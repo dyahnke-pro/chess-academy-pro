@@ -1,24 +1,24 @@
 # attackerDefenderCount — card
 
 ## A. Identity
-- `attackerDefenderCount(fen, studentColorWB)` — `src/services/reviewTeachingPoints.ts:68-129` (M2); words `countSaid(reads, fen)` :137-155; `pieceHasSafeEscape` :167.
-- Board computer `count` — `src/services/boardComputers.ts:4448-4470`, kind `count`, claims `count:<board>`, `tempo` idea claim, `loose:<sq>` claim; lesson / review / chat / learn-via-thought.
+- `attackerDefenderCount(fen, studentColorWB)` — `src/services/reviewTeachingPoints.ts:68-133` (M2); words `countSaid(reads, fen)` :141; `pieceHasSafeEscape` :169.
+- Board computer `count` — `src/services/boardComputers.ts:4447-4470`, kind `count`, claims `count:<board>`, `tempo` idea claim, `loose:<sq>` claim; lesson / review / chat / learn-via-thought.
 - Census: 211 fired / 140 said (review 70, lesson 141); held: already-said 30, in-flux 25, unsupported 9.
 
 ## B. Facts
 ### B1. Handed over (`CountRead`)
 `text`, `square`, `tempo` (piece can step away — it's the opponent's move and it has a safe escape), `piece`, `attackers`, `defenders`.
 ### B2. Dropped
-- `net` = pin-aware SEE gain (`legalSeeGainOn`, :111) — the material it actually wins is computed and not handed over (only "it falls").
-- The capture `cap` (the first legal capture on the square, :109).
-- `captureHasCounterTactic` result (:113) — candidates rejected because the capture walks into a counter-tactic: a computed "it looks outnumbered but taking walks into X" fact (the patternFails lesson) dropped.
+- `net` = pin-aware SEE gain (`legalSeeGainOn`, :115) — the material it actually wins is computed and not handed over (only "it falls").
+- The capture `cap` (the first legal capture on the square, :113).
+- `captureHasCounterTactic` result (:117) — candidates rejected because the capture walks into a counter-tactic: a computed "it looks outnumbered but taking walks into X" fact (the patternFails lesson) dropped.
 - The ATTACKERS' and DEFENDERS' identities — only counts; "two attack it: the rook on c1 and the bishop on b2" not handed over.
 ### B3. Cheap
-- The defender-side count for the student's own piece (deliberately skipped, :80-83, sacrifice collision) — compute it ONLY on a mistake turn where errorWhy says a piece was lost: "your knight on e5 was attacked twice and guarded once".
+- The defender-side count for the student's own piece (deliberately skipped, :75-77, sacrifice collision) — compute it ONLY on a mistake turn where errorWhy says a piece was lost: "your knight on e5 was attacked twice and guarded once".
 - Who added the decisive attacker (diff with fenBefore) → the move that made it fall.
 ### B4. Gates
-- Enemy non-pawn non-king pieces only (offensive, :97); atk > def; legal capture exists; SEE > 0; no counter-tactic; tempo split when it's their move and the piece can escape (:116-122).
-- Pawns excluded (:97) — a pawn outnumbered never counts.
+- Enemy non-pawn non-king pieces only (offensive, :107); atk > def (:111); legal capture exists (:114); SEE > 0 (:116); no counter-tactic (:117); tempo split when it's their move and the piece can escape (:123-124).
+- Pawns excluded (:107) — a pawn outnumbered never counts.
 
 ## C. Sentence readiness
 | slot | today | field | missing |
@@ -31,7 +31,7 @@
 ## D. Lesson recipes
 | id | angle | seat | condition | slots | LESSON stems | CONSEQUENCE | BETTER-MOVE | HABIT | Learn variant | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| AD-1 | calculate (their slip) | O's move left their piece outnumbered; S to move | reads non-empty, !tempo, O's move graded mistake+ | square, piece, atk, def, net | "Count before you trade: more attackers than defenders and the piece falls. Their knight on e5 is attacked twice and guarded once." / "Two against one wins. Their bishop on g5 has one guard and two attackers." | "Taking wins a piece." (net B2) | n/a (S to move — the move is held in Learn) | spotCue free-piece `underdefended` | Learn after THEIR mistake: the lesson + target, never the capture | tempo=true (it can step away) → AD-3 | H + B2 |
+| AD-1 | calculate (their slip) | O's move left their piece outnumbered; S to move | reads non-empty, !tempo, O's move graded mistake+ | square, piece, atk, def, net | "Count before you trade: more attackers than defenders and the piece falls. Their knight on e5 is attacked twice and guarded once." / "Two against one wins. Their bishop on g5 has one guard and two attackers." | "Taking wins a piece." (net B2) | n/a (S to move — the move is held in Learn) | spotCue free-piece `underdefended` | Learn after THEIR mistake: the lesson + target, never the capture (the target square points at the student's next move — see §H1) | tempo=true (it can step away) → AD-3 | H + B2 |
 | AD-2 | calculate (S missed it) | S played elsewhere while a read was !tempo; cost ≥ inaccuracy | read on fenBefore S move | same | "When their piece is attacked more than it's guarded, take it before it gets help. Their knight on e5 was outnumbered." | "It was a free piece." | "Nxe5 was the move — two attackers on one guard." (cap, once past) | count habit | after, past-only | still available after reply → hold | H + B2 |
 | AD-3 | consequence (tempo) | O | tempo=true | — | "An outnumbered piece that can run costs a move: it has to step away." | "That's a tempo for you." | | | Review | — | H |
 | AD-4 | prevent (own piece) | S's move left own piece outnumbered → lost | B3 own count, errorWhy lost-the-piece / abandoned-defender | own square, counts | "Count your own pieces too: your knight on e5 had two attackers and one guard." | "So it was lost." | errorWhy best ("Qd4 added the second guard") | "After every move, count attackers and guards on the pieces you just left." | after | sacrifice (errorWhy says it was planned: deepCombination) → silent | C |
@@ -46,8 +46,8 @@ n/a: phase (any), strategize/plan (tactical count).
 - secondAttacker card covers the move that ADDS the attacker (AD-2 better-move job).
 
 ## F. Build changes
-1. reviewTeachingPoints.ts:111-124 — add `net`, `capture {from,to,san}`, `attackerSquares`, `defenderSquares` to `CountRead` → AD-1/2.
-2. :113 — collect rejected counter-tactic candidates as `refuted: {square, reply}` → AD-5 / patternFails.
+1. reviewTeachingPoints.ts:113-131 — add `net`, `capture {from,to,san}`, `attackerSquares`, `defenderSquares` to `CountRead` → AD-1/2.
+2. :117 — collect rejected counter-tactic candidates as `refuted: {square, reply}` → AD-5 / patternFails.
 3. New `ownCount(fen, square, student)` (same body, student's piece, no SEE gate) — called only from the mistake recipe when errorWhy kind ∈ lost-the-piece/abandoned-defender → AD-4.
 4. `countSaid` deleted from speech; recipe table words it. Keep `loose:` / `tempo` claims for dedupe.
 

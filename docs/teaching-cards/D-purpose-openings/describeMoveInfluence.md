@@ -5,7 +5,7 @@
 
 ## B. Facts
 - **B1** a sentence: enemy pieces now eyed (loose or worth more), central squares fought for (with `squareRole`), "and nothing guards it".
-- **B2 dropped:** `pressReason {loose, target}` (`:53`) leaks only via `shapeOut.loose`; the list of eyed targets typed is not returned (prose).
+- **B2 dropped:** `pressReason {loose, target}` (declared `:35`, set `:58`) leaks only via `shapeOut.loose`; the list of eyed targets typed is not returned (prose).
 - **B3 cheap:** for a MISTAKE — run on THEIR reply after the student's move: their moved piece now hits a loose student piece → the consequence; and the reverse on the played move: the student's piece moved to a square where IT is the loose one (whyItFailed lost-the-piece already).
 - **B4 gates:** only loose or bigger enemy targets (`:57-63`); king only loose; centre squares only with a role (`:75-82`).
 

@@ -1,8 +1,8 @@
 # pinPressureConcept — card
 
 ## A. Identity
-- `pinPressureConcept(fen, student)` — `src/services/boardTeachConcepts.ts:28-60`, over `findPinPressure(fen, holder)` — `src/services/pinPressure.ts:84-137`.
-- Board computer `pinPressure` — `src/services/boardComputers.ts:3193-3198`, kind `concept`, surfaces `LIVE_READ`. `isPinPressureMove` used by the record (pinPressure.ts end).
+- `pinPressureConcept(fen, student)` — `src/services/boardTeachConcepts.ts:28-62`, over `findPinPressure(fen, holder)` — `src/services/pinPressure.ts:97-148`.
+- Board computer `pinPressure` — `src/services/boardComputers.ts:3194-3200`, kind `concept`, surfaces `LIVE_READ`. (There is no `isPinPressureMove`; the record's pin skills `missed-their-pin`/`missed-your-pin` are written by the `pins` board computer, boardComputers.ts:2845, and `moveFundamentals.ts:212` `pile-on-pin`.)
 - Census: 27 fired / 27 said (learn 9, chat 18); 9 voiced boards.
 
 ## B. Facts
@@ -10,15 +10,15 @@
 `side` (holder, to move), `pinner`, `pinned`, `behind`, `pinnedPiece`, `moves[]` (san, from, to, piece, `byPawn`) — every move that adds an attacker AND wins the piece (pawns first).
 `BoardConcept.full` text, `squares`, `pinMove {fen,san}`.
 ### B2. Dropped
-- `before` attacker count (pinPressure.ts:101) and the after-count — the arithmetic ("one attacker, two defenders → two and two") is the proof and is never said.
-- Rejected moves and why: `winsOnCapture(fenAfter, m.to, them)` (the piler is itself lost), `pawnCanKick(fenAfter, pinner)` (the pinner gets kicked), `findPinBreaks` (pin breaks) — the three ways a pile-on fails are computed and dropped (:121-123).
+- `before` attacker count (pinPressure.ts:114) and the after-count (:121) — the arithmetic ("one attacker, two defenders → two and two") is the proof and is never said.
+- Rejected moves and why: `winsOnCapture(fenAfter, m.to, them)` (the piler is itself lost), `pawnCanKick(fenAfter, pinner)` (the pinner gets kicked), `findPinBreaks` (pin breaks) — the three ways a pile-on fails are computed and dropped (:131, :137, :140).
 - `behind` piece type for the consequence (K → absolute, Q/R → "the queen behind it").
 ### B3. Cheap
 - Defender count on `pinned` before/after the pile-on (`chess.attackers` both colours) → CALC row.
 - For the opponent's pile-on: the student's ways out — interpose on the pin line, move `behind` off the line, add a defender, kick the pinner with a pawn (`pawnCanKick` already exists, run for the student).
 ### B4. Gates
-- Pins from `detectTactics` (beneficiary = holder) (:97); pinned not king; move must add an attacker (:113), keep the pin (:114-117), win the piece (pawn: any non-pawn victim; else SEE) (:119-120); piler not lost, pinner not kickable by a pawn, pin not breakable (:121-123).
-- Concept picks the student's pile-on first, else theirs (boardTeachConcepts.ts:36-38). The student's version NAMES THE MOVE ("Qf3 adds a second attacker") — before the move this breaks LEARN NAMES NO MOVE UNASKED; the WO deletes before-move speech.
+- Pins from `detectTactics` (beneficiary = holder) (:108); pinned not king (:113); move must add an attacker (:121), keep the pin (:123-126), win the piece (pawn: any non-pawn victim; else SEE) (:127-129); piler not lost (:131), pinner not kickable by a pawn (:137), pin not breakable (:140).
+- Concept picks the student's pile-on first, else theirs (boardTeachConcepts.ts:35-37). The student's version NAMES THE MOVE ("Qf3 adds a second attacker") — before the move this breaks LEARN NAMES NO MOVE UNASKED; the WO deletes before-move speech.
 
 ## C. Sentence readiness
 | slot | today | field | missing |
@@ -47,16 +47,16 @@ n/a: phase — pins in every phase, no phase rule computed; strategize — tacti
 - whyItFailed `held-by-defender` with a pinned guard (`pinnedToMore`) — the reverse case; teaches PP-7 consequence.
 
 ## F. Build changes
-1. pinPressure.ts:101-133 — add `countBefore`, `countAfter`, `defenders` to `PinPressureMove` (B2) → PP-3.
-2. pinPressure.ts:121-123 — record rejection reasons per candidate (`rejected: {san, why: 'piler-lost'|'pinner-kicked'|'pin-breaks'}[]`) → PP-5/6 exception rows.
+1. pinPressure.ts:114-141 — add `countBefore`, `countAfter`, `defenders` to `PinPressureMove` (B2) → PP-3.
+2. pinPressure.ts:131-140 — record rejection reasons per candidate (`rejected: {san, why: 'piler-lost'|'pinner-kicked'|'pin-breaks'}[]`) → PP-5/6 exception rows.
 3. New `pinWaysOut(fen, pin, student)` (pinPressure.ts): interpose / step off / add defender / pawn kick, each a legal move found by chess.js → PP-1 BETTER-MOVE job word.
-4. boardTeachConcepts.ts:43-51 — delete the composed sentences; return the typed `PinPressure` + seat; recipe table words it principle-first. Learn: no before-move speech (WO).
+4. boardTeachConcepts.ts:44-51 — delete the composed sentences; return the typed `PinPressure` + seat; recipe table words it principle-first. Learn: no before-move speech (WO).
 5. Caused check: PP-1 fires only when `findPinPressure(fenBefore-their-reply-board)` was empty (the student's move allowed the pile-on).
 
 ## G. Proof boards
 - PP-1 (O seat): vc-_X7t6o3o6JM-30 `2r2r1k/pp2Npb1/4bnp1/2n1N2p/5BPP/4PP2/PPPq4/1K1R1B1R w - - 1 16` (their queen pins e-pawn → Nd5 pile-on); vc-1rcEbI44WqE-37 `1nkr3r/Qpp1bppp/4p3/1PP1Pb2/3P4/4BN1P/P1q1BKP1/R6R b - - 0 19` (their queen pins the bishop to the king; Bd3 pile-on).
 - PP-2 (S seat): vc-1tbpB-Qrqds-18 `r1bqk2r/p2p1pp1/p1n1pn1p/4P1B1/3P4/2P5/P4PPP/R2QK1NR w KQkq - 0 10` (Bg5 pins f6 to queen; Qf3); vc-1zfJ7ABoh8k-41.
-- Guard: a pin where the pinner can be kicked by a pawn (PP-5) — rejected by :122.
+- Guard: a pin where the pinner can be kicked by a pawn (PP-5) — rejected by pinPressure.ts:137.
 
 - **Pure-function run (chess.js only, scratch vitest, deleted after):** `findPinPressure(after vc-1tbpB-Qrqds-18, 'w')` → pinner g5, pinned f6 (knight), behind d8, moves `[Qf3]` — PP-2 board confirmed.
 

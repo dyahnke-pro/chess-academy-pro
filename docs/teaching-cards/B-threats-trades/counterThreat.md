@@ -6,10 +6,10 @@
 - Reach: learn door (+ lesson via the bundle), chat via tapped/play ask; review **no** (Review reads the left piece as loose and the hit as a threat through its own facets). Census: 9 lines, 8 said (lesson). Run: 6 fires (3 each seat), 1 student move cost ≥ 100 (g-1020632112 ply 16 …Ng5, cost 124).
 
 ## B. Facts
-- **B1** `CounterThreat` (16–24): `left {piece, square}` (the mover's piece still attacked), `hit {piece, square, by}` (the bigger enemy piece newly attacked, and the attacker's square), `line {fen, sans:[take, back]} | null` (the other side takes the piece left; the mover takes the bigger one), `squares`.
-- **B2 dropped:** the full list of threatened pieces (`threatened`, 40) and of hit pieces (sorted, `[0]` kept, 54); the SEE net of each (`computeMustDefend` values) — "worth more" is decided on piece type only (`CAPTURE_VALUE`, 53), not on what the exchange nets; whether the bigger threat is a CHECK or comes with tempo; whether the opponent has a third option (a counter-counter) — not checked.
+- **B1** `CounterThreat` (20–28): `left {piece, square}` (the mover's piece still attacked), `hit {piece, square, by}` (the bigger enemy piece newly attacked, and the attacker's square), `line {fen, sans:[take, back]} | null` (the other side takes the piece left; the mover takes the bigger one), `squares`.
+- **B2 dropped:** the full list of threatened pieces (`threatened`, 41) and of hit pieces (sorted, `[0]` kept, 55–57); the SEE net of each (`computeMustDefend` values) — "worth more" is decided on piece type only (`CAPTURE_VALUE`, 56), not on what the exchange nets; whether the bigger threat is a CHECK or comes with tempo; whether the opponent has a third option (a counter-counter) — not checked.
 - **B3 cheap:** whether the other side has an answer that saves the bigger piece AND takes the left one (a zwischenzug: move the big piece with a capture / check) — one scan of the replies on `fenAfter` that move `hit.square` and capture or check; the net of the line (`settledNetForLine` on `line.sans`).
-- **B4 gates:** the left piece must be ≥ 3 points, not the king (40); still attacked after the move, and not the piece that moved (47); the hit piece is newly en prise (SEE) and worth more by type (52–54); the line is built only when a capture of the left piece exists (63–68). Student credit only under 60 cp (registry 5076).
+- **B4 gates:** the left piece must be ≥ 3 points, not the king (41); still attacked after the move, and not the piece that moved (50–51); the hit piece is newly en prise (SEE) and worth more by type (54–57); the line is built only when a capture of the left piece exists (62–69). The king is excluded from `hit` (56) — a counter-CHECK is never a counter-threat here. Student credit only under 60 cp (registry 5076).
 
 ## C. Sentence readiness
 | slot | today | field | missing |
@@ -37,7 +37,7 @@ Not applicable: plan, phase, structure angles (a one-move tactic).
 - Opponent: CTH4 (Review).
 
 ## F. Build changes
-1. `counterThreat.ts` 52–54: decide "worth more" on the SEE net of the hit (`computeMustDefend` value), not piece type — a queen attacked but guarded enough by a cheaper piece's exchange is still worth less than the left piece in some lines (keep the type rule as a tie-break).
+1. `counterThreat.ts` 54–57: decide "worth more" on the SEE net of the hit (`computeMustDefend` value), not piece type — a queen attacked but guarded enough by a cheaper piece's exchange is still worth less than the left piece in some lines (keep the type rule as a tie-break).
 2. Add `zwischenzug: string | null` (B3: a reply that saves `hit` with a capture or check) → CTH3 and a guard for CTH1.
 3. Add the tag `missed-counter-threat` and route CTH1/CTH2 through `mistakeLesson`; keep `counterThreatLine`'s idea sentence as the CTH lesson stem (it is already the approved voice; move it into the recipe table).
 4. `boardComputers.ts` 5076: the student's costly counter-threat (cost ≥ 60) is dropped today — under mistakes-only it is CTH3's trigger, not a silence.

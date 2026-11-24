@@ -1,13 +1,13 @@
 # CARD — `pieceMovedAgain` (one piece moved again while the others wait)
 
 ## A. Identity
-`src/services/pieceMovedAgain.ts:105` `pieceMovedAgain(history, san, student, costCp)` → `MovedAgain {kind: 'detour'|'back'|'count', mover, key, squares, text}` (`:36-44`); `pieceTrips`, `homeMinors`. Census 38/34 (lesson 25, review 13), kinds `fundamental`, `principle`.
+`src/services/pieceMovedAgain.ts:105` `pieceMovedAgain(history, san, student, costCp)` → `MovedAgain {kind: 'detour'|'back'|'count', mover, key, squares, text}` (`:38-46`); `pieceTrips`, `homeMinors`. Census 38/34 (lesson 25, review 13), kinds `fundamental`, `principle`.
 
 ## B. Facts
 - **B1** kind + text ("That's their queen's fourth move, and their knight on g1 and bishop on f1 still haven't moved." / "Two moves to get their bishop to a3: it could have gone there straight from c1.").
 - **B2 dropped:** `t.moves` (count), `home` list, `kicker` (who chased it), `chased` — prose only.
 - **B3 cheap:** link to the cost — the move's cost against `homeMinorCount` delta of the better move (errorWhy positional `neglected-development`/`tempo-handed`).
-- **B4 gates:** history < 30 plies (`OPENING_PLIES`); no capture/check; n/b/q only; fine (< 30cp) and not chased → null (`FINE_CP`, `:106,134`); a landing that hits a winnable piece → null (`:111`).
+- **B4 gates:** history < 30 plies (`OPENING_PLIES`); no capture/check; n/b/q only; fine (< 30cp) and not chased → null (`FINE_CP = 30 :32`, `:141`, `:169`); a landing that hits a winnable piece → null (`:146`); history < 30 plies checked `:106`.
 
 ## C. Readiness
 | slot | today | field | missing |

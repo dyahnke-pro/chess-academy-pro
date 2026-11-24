@@ -7,7 +7,7 @@
 - **B1** as typed; clause rotated.
 - **B2 dropped:** `was` (the knight's safe squares before), so "how much it lost" is only implicit.
 - **B3 cheap:** (a) the REVERSE seat — THEIR move cages the STUDENT's knight (`pieceCage(fenAfterStudent, theirReply, false)`): the student's previous move put the knight where it can be caged (rim / advanced square) = a placement mistake when the cost follows; (b) knights only today — the same `safeSquares` reader works for bishops (bad bishop / trapped bishop) — trapped_piece motif link.
-- **B4 gates:** no capture/check (`:72`); knight not at home/first square (`:83`); not already lost (`:85`); ≤1 safe square left, the move itself covers every taken square (`:89-92`); had ≥2 before (`:94`).
+- **B4 gates:** no capture/check (`:72`); knight not at home/first square (`:83`); not already lost (`:85`); ≤1 safe square left, the move itself covers every taken square (`:89-92`); had ≥2 before (`:96`).
 
 ## C. Readiness
 | slot | today | field | missing |

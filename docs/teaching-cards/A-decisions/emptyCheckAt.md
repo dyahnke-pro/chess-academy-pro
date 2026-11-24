@@ -22,22 +22,24 @@
 ## D. Lesson recipes
 | id | angle | seat | condition | slots | LESSON | CONSEQUENCE | BETTER | HABIT | Learn | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| EC1 | knowledge | both | fires, kind block | piece, reply | "A check that can just be blocked gains nothing. {Own} {piece} gave check and {reply} closed it." / "Checks are only strong when they win something: here a block ends it." | "Now the {piece} stands where it can be hit" (only when B3 attacked) | "{best} was the move" (grade) | "Give check when it gains something, not because it's there." | after move, student seat: lesson+habit; never name the move just played | not when cost < 50 | H + C |
+| EC1 | knowledge | both | fires, kind block | piece, reply | "A check that can just be blocked gains nothing: the block ends it, and the {piece} has spent a move." / "Checks are only strong when they win something. Here one block and the check is over." | "Now the {piece} stands where it can be hit" (only when B3 attacked) | "{best} was the move — it {job}." (errorWhy better + job, past only) | "Give check when it gains something, not because it's there." | after move, student seat: lesson+habit; never name the move just played | not when cost < 50 | H + C |
 | EC2 | consequence (tempo) | both | B3: blocker developed a piece | blocker | "A check that lets them block with a developing move hands them a tempo." | "{Their} {blocker} came out for free." | — | EC1 | | blocker came from home square | C |
 | EC3 | phase: opening | both | B3: mover has ≥ 2 undeveloped minors | count | "In the opening, a check with your pieces at home is a wasted move: develop first, check later." | — | — | "Pieces out before checks." | | opening (move ≤ 12) | C |
-| EC4 | their seat | O | fires for opponent | — | "Their check went nowhere: you stepped aside and they have spent a move." | "You are a tempo up." | n/a | — | Learn: say only if their check was a mistake (cost gate) | | H |
+| EC4 | their seat | O | fires for opponent | — | "Their check went nowhere: you stepped aside and they have spent a move." | "You are a tempo up." | n/a | — | Learn: say only if their check was a mistake (cost gate); NEVER the reply SAN — at O seat the reply is the student's next move (`emptyCheckLine` :50 puts `e.reply` in every stem) | | H |
 | EC5 | record | S | | | RED/GREY full · AMBER "A check that wins nothing wastes a move." · GREEN silent | | | | | | H |
 | — | endgame | — | checks that drive a king ARE useful in endings; the cost gate already excludes them | | | | | | | | |
 | — | plan, prevent, strategize | — | n/a — no plan facts in inputs | | | | | | | | |
 
 ## E. Mistake link
+- errorWhy: no cause kind fits (the cost is lost time, not material) → today these turns land in `positional` only if `positionalReason` tags `tempo-handed`, else `unexplained` (E20, silent). Build F4 is required for any EC row to reach a mistake turn; until then EC1–EC4 are Review/chat only.
 - Teaches a `missed` cost with no tactic (the move was simply worse) when the played move was a check: no MistakeCause kind covers "wasted tempo" today → needs cause `positional:tempo-wasted` (or reuse principle `tempo-handed`).
 
 ## F. Build changes
 1. `emptyCheck.ts:30` add `costCp`, `checkerHit: boolean` (B3), `blockDevelops: boolean`, `homeMinors: number` to `EmptyCheck`.
-2. Change the claim at :46 "Now the {piece} has to move again" to be said only when `checkerHit`.
+2. Change the claim at :53/:54 (stems 1 and 2 of `emptyCheckLine` :46) "Now the {piece} has to move again" to be said only when `checkerHit`.
 3. Recipe rows EC1–EC4 into `mistakeLesson`; delete the three stems' board restatement ("they simply block it with g3").
 4. Add MistakeCause `tempo-wasted` (shared with principle `tempo-handed`).
+5. `emptyCheckLine` :50 — drop `e.reply` from the O-seat render (the reply is the student's next move).
 
 ## G. Proof boards
 - g:1020779996#10 O `Qh4+` reply g3 (block), loss 82, `rnbqkb1r/pppn1ppp/4p3/3pP3/5P2/3P4/PPPN2PP/R1BQKBNR b KQkq - 0 5` → EC1/EC3 (Danya's own Ytkf3 shape).

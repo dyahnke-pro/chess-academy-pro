@@ -1,9 +1,9 @@
 # knightSquareTaken — card
 
 ## A. Identity
-- `knightSquareTaken(fenBefore, san, mine, costCp)` — `src/services/knightSquareTaken.ts` (58 lines; `HOME` c3→b1, f3→g1, c6→b8, f6→g8).
-- Board computer `knightSquareTaken` — `src/services/boardComputers.ts:2643-2662`, kind `principle`, phase NOT_ENDING, role `teach`; lesson via moveThoughtFacts.
-- Already mistake-only: returns null below `INACCURACY_CP` (`costCp < INACCURACY_CP`).
+- `knightSquareTaken(fenBefore, san, mine, costCp)` — `src/services/knightSquareTaken.ts` (58 lines; `HOME` :18 c3→b1, f3→g1, c6→b8, f6→g8).
+- Board computer `knightSquareTaken` — `src/services/boardComputers.ts:2645-2664`, kind `principle`, phase NOT_ENDING, role `teach`; lesson via moveThoughtFacts.
+- Already mistake-only: returns null below `INACCURACY_CP` (`costCp < INACCURACY_CP`, :32).
 - Census: 2 fired / 2 said (lesson).
 
 ## B. Facts
@@ -28,7 +28,7 @@ Pawn single push to c3/f3/c6/f6 with the knight still on its home square; cost �
 ## D. Lesson recipes
 | id | angle | seat | condition | slots | LESSON stems | CONSEQUENCE | BETTER-MOVE | HABIT | Learn variant | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| KS-1 | knowledge (development) | S mistake | fires (cost ≥ inaccuracy, student mover) | pawnSquare, knight, roads | "A knight's best square in the opening is c3 or f3 — a pawn there leaves it nowhere good. The pawn on c3 took the b1 knight's square." / "Don't block your knight's natural square with a pawn." | "Now it has to come out by a3 or d2." (+ B3: "and d2 blocks your bishop") | errorWhy best ("Nc3 was the move — the knight's own square") | "Before a pawn move in the opening, ask which piece's square it takes." | after | the system plays c3 on purpose (Caro/London structures) — errorWhy cost says it's a mistake anyway | H + C |
+| KS-1 | knowledge (development) | S mistake | fires (cost ≥ inaccuracy, student mover) | pawnSquare, knight, roads | "A knight's natural square in the opening is in front of its bishop's pawn (c3/f3, or c6/f6 for Black) — a pawn there leaves it nowhere good. The pawn on c3 took the b1 knight's square." / "Don't block your knight's natural square with a pawn." | "Now it has to come out by a3 or d2." (+ B3: "and d2 blocks your bishop") | errorWhy best ("Nc3 was the move — the knight's own square") | "Before a pawn move in the opening, ask which piece's square it takes." | Learn: "That pawn took your knight's natural square — now it has to come out by the edge." (the pawn's square, which IS the move just played, is not named) | the system plays c3 on purpose (Caro/London structures) — errorWhy cost says it's a mistake anyway | H + C |
 | KS-2 | their mistake | O | fires with mine=false | same | "Their pawn on f6 took their own knight's square — the g8 knight has nowhere good to go." | "They're slow to develop." | n/a | | after THEIR mistake | — | H |
 | KS-3 | strategize | both | roads empty | — | "A knight with no square out is a piece out of the game." | | | | | — | H |
 | KS-REC | record | — | development skill tag | | RED/GREY full; AMBER "That pawn took the knight's square."; GREEN silent | | | | | | holdRate |

@@ -1,7 +1,7 @@
 # phaseVerdictLine — taking stock at a phase change
 
 ## A. Identity
-- `src/services/reviewPositionalAssessment.ts:301` `phaseVerdictLine(fen, student, studentPovCp, phase, heard, lastMove)`; keys `phaseVerdictKeys` :350, say-once `phaseStockKey` :297. Reads `assessPositionalEdge` (via `freshAssessment` :357).
+- `src/services/reviewPositionalAssessment.ts:301` `phaseVerdictLine(fen, student, studentPovCp, phase, heard, lastMove)`; keys `phaseVerdictKeys` :360, say-once `phaseStockKey` :297. Reads `assessPositionalEdge` (via `freshAssessment` :367).
 - Registry `phaseVerdict` `boardComputers.ts:2005-2017`, kind `stock`, claim `phase:<phase>`, LIVE_READ + review. Census 14/14 (review).
 
 ## B. Facts

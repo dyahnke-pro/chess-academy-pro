@@ -1,13 +1,13 @@
 # CARD — `computeMoveFundamentals` (which fundamental a move serves)
 
 ## A. Identity
-`src/services/moveFundamentals.ts:350` `computeMoveFundamentals(fenBefore, san, mover)` → `MoveFundamental[]` (`:116`: `id: MoveFundamentalId, weight, led, selfContained, imperative, pointer, squares, forcing?, names?`); `reasonFor(lead)` (the rule's "why it matters"), `reasonHolds`, `IS_OPENING_PRINCIPLE`, `REPEAT_TEACHES`, `FUNDAMENTAL_IDEA` (`ideaKind.ts:40`). Ids (grep): remove-guard, attack-defender, center, development, development-complete, keep-working, king-activity, king-safety, luft, open-diagonal, open-file, outpost, passed-pawn, pile-on-pin, prepare-break, promotion, prophylaxis, queen-off-file, rook-behind-pawn, space, tempo. Census 1649 offered / 651 said (lesson 1438, review 211), verdict "P/S ('stakes out the center')"; 777 dropped already-said.
+`src/services/moveFundamentals.ts:350` `computeMoveFundamentals(fenBefore, san, mover)` → `MoveFundamental[]` (`:116`: `id: MoveFundamentalId, weight, led, selfContained, imperative, pointer, squares, forcing?, names?`); `reasonFor(lead)` (`:1533`, not exported — the rule's "why it matters"), `reasonHolds`, `IS_OPENING_PRINCIPLE`, `REPEAT_TEACHES`, `FUNDAMENTAL_IDEA` (`ideaKind.ts:40`). Ids (grep): remove-guard, attack-defender, center, development, development-complete, keep-working, king-activity, king-safety, luft, open-diagonal, open-file, outpost, passed-pawn, pile-on-pin, prepare-break, promotion, prophylaxis, queen-off-file, rook-behind-pawn, space, tempo. Census 1649 offered / 651 said (lesson 1438, review 211), verdict "P/S ('stakes out the center')"; 777 dropped already-said.
 
 ## B. Facts
 - **B1** each fundamental with four renderings (led / selfContained / imperative / pointer) and its weight.
 - **B2 dropped:** the rule's REASON (`reasonFor`) only rides with `principleLine`; the `imperative` (a lesson form that names no move!) is used only by the ranked briefing and pointers; `weight` vs other ids dropped at the composer.
 - **B3 cheap:** the DIFFERENCE between the better move's fundamentals and the played move's = what the mistake gave up. Pure run on David's 109 costly moves: best-not-played most common: center 14, tempo 10, open-file 9, outpost 6, development 5, keep-working 5, space 4, passed-pawn 4, king-safety 3, open-diagonal 3.
-- **B4 gates:** empty when the piece hangs on its square (recapture-safety guard); `openingWindowOpen` (`:333`) decides opening ids.
+- **B4 gates:** empty when the piece hangs on its square (recapture-safety guard); `openingWindowOpen` (`:329`) decides opening ids.
 
 ## C. Readiness
 | slot | today | field | missing |
@@ -31,6 +31,9 @@
 | F9 | keep-working | S | delta keep-working | | "Keep your pieces doing a job: a piece that stops guarding gives them a target." | | | | same | | H |
 | F10 | prophylaxis | S | delta prophylaxis | | (findProphylaxis P1) | | | | | | — |
 | F11 | both seats | O mistake | their fundamental miss | | Review only (their positional slip is not the student's lesson unless it creates a chance) | | | | silent in Learn | | H |
+| F12 | king-activity (endgame) | S mistake | delta king-activity, endgame phase, positional `passive-king-endgame` | king | "In the endgame the king is a fighting piece: bring it toward the centre and the pawns." | | `led` on best ("Kf2 heads for the centre") | "When the queens come off, ask: where is my king going?" | same | endgame only (`phaseOfFen`) | H |
+| F13 | open-diagonal | S mistake | delta open-diagonal (a pawn move that frees a home bishop), opening, positional `neglected-development`/`misplaced-piece` | bishop | "A bishop behind its own pawns is a tall pawn: open its diagonal before you need it." | | "d3 opened the c1 bishop's diagonal." | "Ask whether each bishop can see out." | same | the freed bishop must be on its home square | H |
+| F14 | prepare-break | S mistake | delta prepare-break | | (breakPrep BP1 owns the lesson; this id only selects it) | | | | | | — |
 
 ## E. Mistake link
 errorWhy `positional` (all tags) — the delta picks the lesson when the cost is the position (52% of live costly moves on David's record had no material cause).

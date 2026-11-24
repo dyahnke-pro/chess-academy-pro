@@ -1,7 +1,7 @@
 # CARD — `pieceTempo` (a move with gain of time)
 
 ## A. Identity
-`src/services/pieceTempo.ts:46` `pieceTempo(fen, lines, student)` → `PieceTempo {side, from, moves[], target, text, squares}` (`:24`); `newHits :31`. Reads `pieceWork`, `standsSafe`, the engine lines. Census 76/49 (lesson 62, review 14), kind `timing`.
+`src/services/pieceTempo.ts:46` `pieceTempo(fen, lines, student)` → `PieceTempo {side, from, moves[], target, text, squares}` (`:24`); `newHits :30`. Reads `pieceWork`, `standsSafe`, the engine lines. Census 76/49 (lesson 62, review 14), kind `timing`.
 
 ## B. Facts
 - **B1** as above; text names the tempo moves ("Bb7 hits their rook on f3, so they have to answer it").

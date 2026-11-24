@@ -6,7 +6,7 @@
 ## B. Facts
 - **B1** "lets you play …Nxf3+, winning a queen for a knight" / "walks into mate: you play Rxf3#" / untrusted: "lets you play fxe6" (first move only, when it is x/+/#).
 - **B2 dropped:** the whole `CostReason` is in hand — `motif`, `blowPlies`, `ledger`, `netForWinner`, `mate`, `trust` — only the words survive; `won` text.
-- **B3** — **this is a SECOND door to the same cause**: `errorWhy` (`inaccuracyCall.ts:1287` `allowedReason`) reads the same `costReason` 'allowed' for the same move, with `source: 'record'` instead of `'deep'`. Two producers of "what the move allowed" (census: 63 Learn lines "It lets you play …" beside errorWhy's Review "It let you play …"). Untrusted lines say a bare move with no why ("It lets you play hxg6." — 4 of 10 census samples) — a named move without a reason.
+- **B3** — **this is a SECOND door to the same cause**: `errorWhy` (`inaccuracyCall.ts:1283` `allowedReason`, read via `readReason :1267`) reads the same `costReason` 'allowed' for the same move, with `source: 'record'` instead of `'deep'`. Two producers of "what the move allowed" (census: 63 Learn lines "It lets you play …" beside errorWhy's Review "It let you play …"). Untrusted lines say a bare move with no why ("It lets you play hxg6." — 4 of 10 census samples) — a named move without a reason.
 - **B4 gates:** `costCp ≥ 100` (costReason), `kind === 'allowed'` only (`:342`), untrusted → only x/+/# first move (`teachingSentence.ts:396`), trusted non-mate needs `won`.
 
 ## C. Readiness

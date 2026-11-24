@@ -1,11 +1,11 @@
 # CARD — `buildReviewMoveTeachingFact` (the board teacher: the move's one job)
 
 ## A. Identity
-`src/services/reviewMoveTeaching.ts:529` `buildReviewMoveTeachingFact(fenBefore, san, moverIsStudent, phrases)` → `MoveTeachingFact {text, squares, claim?, idea: IdeaKind, restates?}` (`:508`); wrapper `buildReviewMoveTeaching :517`; `pieceEyes`, `sayIdea` (phrase memory), castling/opposite-wings branch (`:562`), capture-taken-back guard (`:589`), winnable-target branch (`:609`). The largest producer in this family: census 1812 offered / 922 said (lesson 1571, review 241), kinds `board-teacher`, `two-jobs`; dropped 590 same-idea, 115 by-product, 86 restates. Verdict "P (generic 'joins the fight')".
+`src/services/reviewMoveTeaching.ts:529` `buildReviewMoveTeachingFact(fenBefore, san, moverIsStudent, phrases)` → `MoveTeachingFact {text, squares, claim?, idea: IdeaKind, restates?}` (`:508`); wrapper `buildReviewMoveTeaching :517`; `pieceEyes`, `sayIdea` (phrase memory), castling/opposite-wings branch (`:561-569`), capture-taken-back guard (`:589`), winnable-target branch (`:611`, said `:819`). The largest producer in this family: census 1812 offered / 922 said (lesson 1571, review 241), kinds `board-teacher`, `two-jobs`; dropped 590 same-idea, 115 by-product, 86 restates. Verdict "P (generic 'joins the fight')".
 
 ## B. Facts
 - **B1** `text`, `squares`, `idea` (one of the 31 `IdeaKind`s, `ideaKind.ts:14`), `restates`.
-- **B2 dropped:** `moverEyes` (enemies / friends / squares the piece sees, `:605`), `winnableTarget` (loose or bigger enemy piece, `:609-615`), `minorAttacksPiece`; these decide the sentence then vanish.
+- **B2 dropped:** `moverEyes` (enemies / friends / squares the piece sees, `:608`), `winnableTarget` (loose or bigger enemy piece, `:611-619`), `minorAttacksPiece :620`, `minorAttacksPiece`; these decide the sentence then vanish.
 - **B3 cheap:** this computer reads ONE move and says its job. For a mistake: run it on the BETTER move — its `idea` is the better move's job kind (`BetterJobKind` = `IdeaKind`), and its text the BETTER slot's job when nothing sharper (errorWhy's own `reason`) exists. Run it on their reply for the CONSEQUENCE only when `idea ∈ {threat, tactic, check, win-material, pressure}`.
 - **B4 gates:** a capture whose piece is taken back says nothing from its square (`:589`); minors skip the developing gloss only on a real target; phrase memory says an idea in full once.
 
@@ -24,7 +24,7 @@ The teaching rows are keyed on the better move's `idea` (used by errorWhy's BETT
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | RT1 | develop | S mistake | better idea = develop, positional `neglected-development`/`no-plan`, opening | piece | "In the opening every move should bring a new piece out." | | "Bd2 brought the last bishop out." | "Count the pieces still at home." | same | opening phase only | H |
 | RT2 | castle | S mistake | better idea = castle | | "Castle before the centre opens, not after." | | "O-O got the king out of the centre." | "Is your king safe if the centre opens now?" | same | | H |
-| RT3 | opposite wings | S/O | castling to opposite wings (`:568`) | kings | "With the kings on opposite wings, the race is on: throw your pawns at their king, fast." | | | | Review/chat unless a mistake | | H |
+| RT3 | opposite wings | S/O | castling to opposite wings (`:569`) | kings | "With the kings on opposite wings, the race is on: throw your pawns at their king, fast." | | | | Review/chat unless a mistake | | H |
 | RT4 | threat / pressure | S mistake | better idea = threat with winnable target | target | "The best quiet move often makes a threat: it forces their reply and keeps the move." | | "Bb7 hit the rook on f3." | | same | target winnable | H |
 | RT5 | file / diagonal / outpost | S mistake | better idea ∈ {file, diagonal, outpost}, positional `passive-rook`/`misplaced-piece` | | file: "Rooks belong on open files." · diagonal: "A bishop on an open diagonal reaches both wings." · outpost: "A knight on a square no pawn can hit is a monster." | | | | same | | H |
 | RT6 | (description) | — | idea ∈ {center, space, develop} on a good move | | silent | | | | silent | no mistake | H |

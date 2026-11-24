@@ -1,7 +1,7 @@
 # deepCombination — card
 
 ## A. Identity
-- `deepCombination(fenBefore, san, line, moverCp, moverMate)` — `src/services/deepCombination.ts` (main fn, `shortestAt`, `forcing`, `netWon`); words `deepCombinationLine` (rotated stems).
+- `deepCombination(fenBefore, san, line, moverCp, moverMate)` — `src/services/deepCombination.ts:90` (main fn, `shortestAt` :190, `forcing` :204, `netWon` :210); words `deepCombinationLine` (rotated stems).
 - Board computer `deepCombination` — `src/services/boardComputers.ts:4119-4135`, kind `sac-why`, gated by `sacLineNamed` (lineTrust); both seats.
 - Defers to `kingSacrifice` (kingSiege) when the sac opens the king (main fn, last check).
 - Census: 9 fired / 9 said (review 4, lesson 5).
@@ -10,14 +10,14 @@
 ### B1. Handed over (`DeepCombination`)
 `mover`, `san`, `given` {piece, square}, `lead` (moves before the offer), `offered` {san, color, to}, `accepted` (offer → take), `takenFen`, `follow` (forced follow-up), `line`, `outcome` mate|ahead|back, `won`, `net`, `key`.
 ### B2. Dropped
-- `followed` count of forcing moves after the take and `lastForcing` — "every move after the take was a check or a capture, so they never got time" is the mechanism and is not said.
-- `b0` balance and the dip size (`balance(walk) ≤ b0 − 2`) — HOW MUCH was given (the sacrifice size) is in `given.piece` only.
+- `followed` (:137) count of forcing moves after the take and `lastForcing` (:138) — "every move after the take was a check or a capture, so they never got time" is the mechanism and is not said.
+- `b0` balance (:99) and the dip size (`balance(walk) ≤ b0 − SAC_POINTS`, :115) — HOW MUCH was given (the sacrifice size) is in `given.piece` only.
 - The forcing kind per follow-up move (check / capture / mate threat via `hasMateThreat`).
 ### B3. Cheap
 - Motif of the follow-up (detectTacticType on `follow` from `takenFen`) → "it's a fork after the take".
 - For the defender's seat: was declining possible and better? (engine reads have the alternative replies' cp — saved `replies[1]`).
 ### B4. Gates
-Engine ≥ +150cp (`DEEP_COMBO_CP`) or mate for the mover; sacrifice within the first 4 plies and ≥ 2 points; the offered piece not simply hanging before (`legalSeeGainFor(fenBefore, offered.from) > 0` → null); the move after the take is not a recapture on the same square; ≥1 forcing follow-up; outcome mate / net ≥ 1 / net 0 (back + clearly better); not a king sacrifice; the line trusted (`sacLineNamed`).
+Engine ≥ +150cp (`DEEP_COMBO_CP`, :42, checked :92) or mate for the mover; sacrifice within the first 4 plies and ≥ 2 points; the offered piece not simply hanging before (`legalSeeGainFor(fenBefore, offered.from) > 0` → null); the move after the take is not a recapture on the same square; ≥1 forcing follow-up; outcome mate / net ≥ 1 / net 0 (back + clearly better); not a king sacrifice; the line trusted (`sacLineNamed`).
 
 ## C. Sentence readiness
 | slot | today | field | missing |
@@ -46,7 +46,7 @@ n/a: phase (any; endgame sacs rare, no rule computed), strategize (n/a — concr
 - whyItFailed never explains a sac (it explains own losses) — DC complements it.
 
 ## F. Build changes
-1. deepCombination.ts — expose `followed`, `forcingKinds: ('check'|'capture'|'mate-threat')[]` per follow-up move → DC-1 LESSON ("every move after it forces").
+1. deepCombination.ts:137-150 — expose `followed`, `forcingKinds: ('check'|'capture'|'mate-threat')[]` per follow-up move → DC-1 LESSON ("every move after it forces").
 2. Add `followMotif` via detectTacticType(takenFen, follow[0], follow) → spotCue key.
 3. DC-2 caller: on S's take (S's move captures `given.square` after O's offer), compare the saved engine reads of S's alternatives (replies[]) — if a decline is ≥ inaccuracy better, recipe `took-the-bait`.
 4. `deepCombinationLine` deleted from speech; recipe words rule-first; keep `lineShape` key-moves for CONSEQUENCE.

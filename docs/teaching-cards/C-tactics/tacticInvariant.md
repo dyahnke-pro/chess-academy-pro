@@ -2,7 +2,7 @@
 
 ## A. Identity
 - `tacticInvariant(type)` — `src/services/conceptEngine.ts:901-904` over `TACTIC_INVARIANT: Record<Exclude<TacticPatternType,'none'>, Register>` :89-101 (`full` + `short`), names `TACTIC_NAME` :103-108; say-once key `definitionKey` (`def:<type>`).
-- Board computer `tacticRule` — `src/services/boardComputers.ts:2134-2145`, kind `rule`, text "Remember — <full>", `squares: []`; Learn wired via CoachTeachPage.
+- Board computer `tacticRule` — `src/services/boardComputers.ts:2132-2145`, kind `rule`, text "Remember — <full>", `squares: []`; Learn wired via CoachTeachPage.
 - Census: 3 fired / 3 said (review).
 
 ## B. Facts
@@ -38,7 +38,7 @@ n/a: seat (rules are seat-free; the recipe seats the example), phase, plan, calc
 ## F. Build changes
 1. conceptEngine.ts:89 — replace `TACTIC_INVARIANT: Record<TacticPatternType…>` with `MOTIF_RULE: Record<MotifId, Register>` (tacticMotifs' vocabulary, exhaustive — a new motif fails to compile until it has a rule); `tacticInvariant(type)` maps a pattern through `PATTERN_TO_TACTIC` → `MOTIF_OF_TACTIC`. Keeps battery/mate_threat (live-only patterns) in a small side table.
 2. Author the 9 missing rules (TI-3) as board-free principle sentences.
-3. boardComputers.ts:2137 — "Remember — " prefix deleted; the rule is the recipe's LESSON frame with the board example spliced, not a stand-alone line.
+3. boardComputers.ts:2132-2145 — "Remember — " prefix deleted; the rule is the recipe's LESSON frame with the board example spliced, not a stand-alone line.
 
 ## G. Proof boards
 - Text (lines-2, review): "Remember — a discovered attack unveils a second attacker by moving the piece in front, so two threats land at once."; "Remember — removing the guard takes away the piece defending a key square, and what it protected falls." (bare rule, no example — the TI-1 change adds it).

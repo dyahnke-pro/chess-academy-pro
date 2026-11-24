@@ -1,7 +1,7 @@
 # CARD — `openingAnnouncementForGame` (the opening's name, the book departure)
 
 ## A. Identity
-`src/services/openingAnnouncement.ts:228` `openingAnnouncementForGame(det, history, spokenName, studentColor, transposed)` → string; reads `bookDeparture`, `planFor`, `openingAnnouncement`; siblings `studentJustLeftBook :248`, `openingNameForBoard :255`, `leftBookSentence`. Census 7/7 (Review), kind `opening` ("It's the King's Gambit Accepted." / "You left the book with the pawn to h4.").
+`src/services/openingAnnouncement.ts:228` `openingAnnouncementForGame(det, history, spokenName, studentColor, transposed)` → string; reads `bookDeparture`, `planFor`, `openingAnnouncement`; siblings `studentJustLeftBook :254`, `openingNameForBoard :262`, `leftBookSentence`. Census 7/7 (Review), kind `opening` ("It's the King's Gambit Accepted." / "You left the book with the pawn to h4.").
 
 ## B. Facts
 - **B1** the name, and the departure sentence.

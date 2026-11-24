@@ -1,15 +1,15 @@
 # tensionKept / tensionReleased — keep the tension; taking first frees their piece
 
 ## A. Identity
-- File: `src/services/tensionRelease.ts` (256 lines): `tensionKept(fen, lines, student)` (195–219, before the move), `tensionReleased(fenBefore, playedSan, lines, playedCp, reply, student)` (232–251, after the move), `gainsOf` (115–165, what their recapture gains), `isTensionCapture` (68–76), `recaptureFor` (78–98), `bestQuiet` (168–177). Constants `KEEP_GAP_CP = 30`, `RELEASE_GAP_CP = 50` (49–51).
-- Registry: `boardComputers.ts` `tensionKept` (7861) and `tensionReleased` (7880), kind `trade-idea`; `moveThoughtFacts` 708 / 715 (weight 60 / 54); `reviewFullData` 1460.
+- File: `src/services/tensionRelease.ts` (256 lines): `tensionKept(fen, lines, student)` (195–~228, before the move), `tensionReleased(fenBefore, playedSan, lines, playedCp, reply, student)` (232–251, after the move), `gainsOf` (115–165, what their recapture gains), `isTensionCapture` (68–76), `recaptureFor` (78–96), `bestQuiet` (170–178). Constants `KEEP_GAP_CP = 30`, `RELEASE_GAP_CP = 50` (52–54).
+- Registry: `boardComputers.ts` `tensionKept` (7851) and `tensionReleased` (7871), kind `trade-idea`; `moveThoughtFacts` 708 / 715 (weight 60 / 54); `reviewFullData` 1460.
 - Reach: lesson, review, learn via the thought. Census: tensionKept 8 lesson (5 said; 2 `already-said`, 1 `same-idea`), tensionReleased 12 (7 said, 5 held `in-flux`). Run: tensionReleased 3 (2 on student moves; g-1012441262 ply 33 Nxh5 cost 115, g-1013773584 ply 37 Nxg4 cost 51), tensionKept 6.
 
 ## B. Facts
-- **B1** `TensionRead` (37–47): `capture`, `recapture`, `best` (the quiet best move), `gapCp` (how much worse the capture is), `gains[]` (`TensionGain {kind develops | opens-file | frees-piece | takes-centre | isolates-pawn, text, squares}`), `text`, `squares`.
-- **B2 dropped:** `tensionKept` keeps the capture with most gains (213) — the other tension captures and their gains are dropped; `pieceScope` before/after numbers behind "frees" (150–151).
+- **B1** `TensionRead` (37–50): `capture`, `recapture`, `best` (the quiet best move), `gapCp` (how much worse the capture is), `gains[]` (`TensionGain {kind develops | opens-file | frees-piece | takes-centre | isolates-pawn, text, squares}`), `text`, `squares`.
+- **B2 dropped:** `tensionKept` keeps the capture with most gains (~216–220) — the other tension captures and their gains are dropped; `pieceScope` before/after numbers behind "frees" (150–151).
 - **B3 cheap:** the job of the quiet best (`best`) — what it does that the capture didn't (a developing move, a guard) — from the move itself (`moveIntent` / the piece developed).
-- **B4 gates:** a tension capture = pawn×pawn or an equal piece the opponent can recapture (68–76); tensionKept: null if the side to move has a piece hit by a cheaper attacker (201 — a threat first), the engine's top move must be quiet (174), the capture ≥ 30 cp worse (209); tensionReleased: the played capture ≥ 50 cp worse than the quiet best (244), the recapture must gain something (`gains` non-empty, 182).
+- **B4 gates:** a tension capture = pawn×pawn or an equal piece the opponent can recapture (68–76); tensionKept: null if the side to move has a piece hit by a cheaper attacker (205 — a threat first), the engine's top move must be quiet (176), the capture ≥ 30 cp worse (215); tensionReleased: the played capture ≥ 50 cp worse than the quiet best (245), the recapture must exist and gain something (`gains` non-empty, 182–184).
 
 ## C. Sentence readiness
 | slot | today | field | missing |
@@ -29,7 +29,7 @@
 | TR3 | consequence (development) | S | TR-EARLY, gain develops | piece | "Trading in the opening can hand them a free developing move: their {piece} comes out with the recapture." | | | | full | — | H |
 | TR4 | consequence (isolated pawn) | S | TR-EARLY, gain isolates-pawn | pawn | "The exchange left your pawn on {sq} with no neighbours." | | | | full | — | H |
 | TR5 | opponent seat | O | their tension capture released early (cost ≥ 50 for them) | — | "They took first and helped you: your recapture {gains}." | | | | after the student's reply (their mistake) | the student's recapture was not the gaining one (then it is the student's mistake too) | H |
-| TR6 | timing (the threat first) | S | tensionKept's 201 gate fired (a piece hit by a cheaper attacker) | — | owned by `computeMustDefend` MD3 (answer the threat first) | | | | | | |
+| TR6 | timing (the threat first) | S | tensionKept's 205 gate fired (a piece hit by a cheaper attacker) | — | owned by `computeMustDefend` MD3 (answer the threat first) | | | | | | |
 | TR7 | record | S | — | — | RED/GREY full · AMBER "That released the tension too early." · GREEN silent | | | | | | `holdState` on `released-tension` (new) |
 
 Not applicable: calculate (the engine's gap is the proof), endgame (tension is a middlegame/opening idea; no ending guard exists — a pawn exchange in an ending that creates a passer is a different lesson, F3).

@@ -7,7 +7,7 @@
 - **B1** each beat as a CoachFact with stakes, seat, squares, proof.
 - **B2 dropped:** for `structure-cost` the hole square and the enemy piece route (`holeAccess`) are typed inside the fact's text only ("…fxe6 has a cost for them: no pawn of theirs can cover e4 again. Your knight on c3 is one move from it"); `character` (both kings same side) repeated (most of the 801 already-said).
 - **B3 cheap:** `structure-cost` IS a mistake lesson when the pawn move that left the hole cost ≥ mistake (errorWhy positional `created-pawn-weakness` / concession `pawn-weakened`/`outpost-conceded`) — join on the hole square; `consequence` (what their move gave away) is the O-seat mistake lesson.
-- **B4 gates:** `theory: false` holds name/plan beats (Review walk); a beat naming a student move is dropped when `namesStudentMoves` false (`:416`).
+- **B4 gates:** `theory: false` holds name/plan beats (Review walk); a beat naming a student move is dropped when `namesStudentMoves` false (`:419`).
 
 ## C. Readiness
 | slot | today | field | missing |

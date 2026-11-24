@@ -6,7 +6,7 @@ The key card of WO-LEARN-MISTAKES-ONLY. Every Learn mistake turn (both seats) ke
 
 - **Computer:** `errorWhy` — `src/services/inaccuracyCall.ts:1224-1590`. Return type `ErrorWhy` at `:1093-1140` (`interface`, **not exported**).
 - **Readers it composes:** `costReason` (`src/services/costReason.ts:246`, allowed/missed + `motif`), `whyItFailed` (`src/services/whyItFailed.ts:177`, 6 declared kinds), `punishmentOf` (`inaccuracyCall.ts:1926`), `replyPunishment` (single reply), `allowedReply` (`:1027`), `kingHunt` (`:978`), the far loss (`:1453-1460`), `positionalReason` (`src/services/positionalReason.ts:231`), `mateLine`, `betterMoveFact`/`phraseBetterMove` (`:170/:190`), `betterMovesTheTarget` (`:1830`), `betterMoveWins` (`:274`), `betterGuardsTheLine` (`:1872`), `boardHalfReason` (`:290`), `betterStopsMate` (`:1899`), `causedByTheMove` (`:1638`), `landedTacticFor`.
-- **Wrappers / renderers:** `errorGradeSentence` (`:1674`), `errorWhySentence` (`:1708`), `errorWhyFor` (`:1717`, no better move), `errorCallFor` (`:1751`, chat), `callInaccuracyDetailed` (`:640`, Learn's `backwardLook.ts:349,409`), `pastBetterNameable` (`:1610`, the Learn naming gate).
+- **Wrappers / renderers:** `errorGradeSentence` (`:1674`), `errorWhySentence` (`:1708`), `errorWhyFor` (`:1717`, no better move), `errorCallFor` (`:1751`, chat), `callInaccuracyDetailed` (`:640`, Learn's `backwardLook.ts:216`; `errorWhyFor` at `backwardLook.ts:445`), `pastBetterNameable` (`:1610`, the Learn naming gate).
 - **Callers:** `mistakeNarration.ts:459`, `turningPoints.ts:345`, `reviewFullData.ts:537`, `groundedAnswer.ts:3163`, `slipCause.ts:130` (the record), plus `errorWhyFor`/`errorCallFor` in `backwardLook`, `discussionPractice`, `coachApi`, `coachFeatureService`, `groundedAnswer`, `playedMoveGrade`, `puzzleTeaching`.
 - **CoachFactKind:** `quality` (census: 196 lines, all Review, all said). Surfaces (computer-reach.json `:251`): review, lesson, chat, tapped, tactics.
 
@@ -27,20 +27,20 @@ The key card of WO-LEARN-MISTAKES-ONLY. Every Learn mistake turn (both seats) ke
 ### B2. Computed internally and DROPPED (the cause, thrown away)
 | dropped value | where | what it is |
 |---|---|---|
-| `failedRead.kind` | `:1394-1398` | `'held-by-defender' \| 'answered-by-tactic' \| 'lost-the-piece' \| 'abandoned-defender' \| 'abandoned-square' \| 'walks-into-fork'` — only `guardLeft` leaks it (`:1586`) |
+| `failedRead.kind` | `:1342-1349` (`failedRaw` → `failedRead`) | `'held-by-defender' \| 'answered-by-tactic' \| 'lost-the-piece' \| 'abandoned-defender' \| 'abandoned-square' \| 'walks-into-fork'` — only `guardLeft` leaks it (`:1587`) |
 | held-by-defender sub-shape | `whyItFailed.ts:268` vs `:463` | **took a guarded piece** (`mv.captured`) vs **eyed a guarded piece** (illusory threat) — two different lessons, one kind |
 | `failedRead.lost`, recapturer square/type | `whyItFailed.ts:265-288` | the piece that takes back, the ledger words ("a knight for a pawn") |
-| `allowedRead` (`CostReason`) | `:1287` | `kind`, **`motif: TacticType`**, `netForWinner`, `blowPlies`, `ledger`, `trust.name`, `mate` |
-| `missedRead` (`CostReason`) | `:1288` | the WIN the better move had (motif, net, blow). Used only as a guard (`:1322,1388`) and for `betterMoveWins`; **never becomes the cause**. On David's 87 live costly moves, 12 (14%) had a missed reason and no consequence at all |
-| which branch fired | `:1504-1513` | punishment / missedMate / single / allowed / hunt / farLoss — collapsed into one prose string |
+| `allowedRead` (`CostReason`) | `:1281` | `kind`, **`motif: TacticType`**, `netForWinner`, `blowPlies`, `ledger`, `trust.name`, `mate` |
+| `missedRead` (`CostReason`) | `:1282` | the WIN the better move had (motif, net, blow). Used only as a guard (`:1348`, `:1556`) and for `betterMoveWins`; **never becomes the cause**. On David's 87 live costly moves, 12 (14%) had a missed reason and no consequence at all |
+| which branch fired | `:1455-1461` (`consequence` ternary) | punishment / missedMate / single / allowed / hunt / farLoss — collapsed into one prose string |
 | `punishment.why` structure | `punishmentOf :1926` | what is won and by which capture; only prose |
 | `allowed`'s reply action | `allowedReply :1027` → `moveWhy` | the clause kind (attacks / checks / pins / x-ray / forks / threatens / traps) — only prose matched by `ALLOWED_DOES_SOMETHING` (`:973`) |
 | `hunt.checks` | `kingHunt :978` | the checking moves, joined to prose |
-| `farLoss` r.blowPlies, r.motif | `:1456-1460` | how far on, what kind |
+| `farLoss` r.blowPlies, r.motif | `:1413-1420` | how far on, what kind |
 | `positionalReason(...).tag` | `:1563` (`.note` kept, `.tag` dropped) | the `MisconceptionTagId` (13 board kinds + 5 concession kinds via `CONCESSION_TAG`) |
 | positional when better is named | `:1559` `!should` | on 26 of 87 live costly moves (30%) the better move was named and the positional tag (misplaced-piece, no-plan, mistimed-pawn-break, passive-rook, weakened-king-safety …) was never read |
-| `caused` | `:1386` | the threat was already on the board (the move did not cause it) |
-| `stopsMate`, `bestMate` | `:1304` | the better move's job was to stop/deliver mate |
+| `caused` | `:1332` | the threat was already on the board (the move did not cause it) |
+| `stopsMate`, `bestMate` | `:1287-1296` | the better move's job was to stop/deliver mate |
 | `fact.kind` | `betterMoveFact :170` | `checks-first` etc. — the better move's job kind |
 | `pattern` | `landedTacticFor` | kept only when `should` |
 
@@ -55,20 +55,20 @@ The key card of WO-LEARN-MISTAKES-ONLY. Every Learn mistake turn (both seats) ke
 ### B4. Gates and thresholds
 | gate | file:line | value |
 |---|---|---|
-| reason read only for mistake+ | `:1263` | `quality === 'inaccuracy'` → no costReason |
-| cost when no score | `:1260` | blunder 300 / mistake 100 / else 0 |
+| reason read only for mistake+ | `:1268` | `quality === 'inaccuracy'` → no costReason |
+| cost when no score | `:1265` | blunder 300 / mistake 100 / else 0 |
 | `costReason` floor | `costReason.ts:272` | `costCp >= 100` |
 | `reasonNeed` | `costReason.ts:76` | must win ≥ max(1, round(0.6·cost/100)) pawns |
 | punishment needs 4 plies | `punishmentOf :1928` | `replyLineUci.length < 4` → null |
-| single reply | `:1425` | line length 1–3 |
+| single reply | `:1383` | line length 1–3 |
 | hunt | `kingHunt :981,1002` | line ≥3, ≥2 checks in first 12 plies |
-| hunt over small win | `:1410` | win × 2 < cost |
-| far loss | `:1453-1458` | named only on `trust.name` |
+| hunt over small win | `:1372-1375` | win × 2 < cost |
+| far loss | `:1413-1420` | named only on `trust.name` |
 | held-by-defender illusory | `whyItFailed.ts:438` | `swap < 0 && swap >= -2` and real guards |
 | lost-the-piece | `whyItFailed.ts:279` | loses ≥ piece value − 1 |
 | positional | `:1559-1561` | mistake/blunder only, no consequence/failed/should, no allowed/missed reason |
 | better move named | `:1292-1299` | `namesBetterMove` (Learn: `pastBetterNameable :1610`) |
-| allowed mate | `:1320` | any reason other than "stop the mate" is held |
+| allowed mate | `:1297-1298` | any reason other than "stop the mate" is held |
 
 ## C. Sentence readiness
 
@@ -100,6 +100,8 @@ export type MistakeCauseKind =
   | 'king-hunt'           // kingHunt
   | 'missed-win'          // missedRead non-null, nothing allowed (the better move's motif)
   | 'positional'          // positionalReason tag (with concession DrawbackKind when from findStudentDrawback)
+  | 'still-hanging'      // their slip: missedCaptureStillOn (E21, O seat only)
+  | 'gambit-offer'       // inaccuracy: gambitFile (E22)
   | 'unexplained';        // cost only
 export interface MistakeCause {
   kind: MistakeCauseKind;
@@ -125,11 +127,11 @@ Voice key: LESSON is general with the board's example inside; Learn never names 
 
 | id | angle | seat | condition (fields) | slots | LESSON stems (rotated) | CONSEQUENCE | BETTER-MOVE | HABIT | Learn variant | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| E1 | consequence (mate) | S | `allowed-mate`, mateIn | refuter, mateIn | "A king with no escape square dies to one check. Before you move, look at every check they have." / "Mate threats outrank everything: a loose king loses faster than any piece." | "Their first check, …Qh4+, starts it." (≤3 plies played out, `mateLine`) | "X stopped it, covering h4." (`betterStopsMate`) | "Every move, ask what checks they have." | "That walks into a forced mate. Check every check they have before you let go." | never with a reason other than the mate (`:1320`) | H |
+| E1 | consequence (mate) | S | `allowed-mate`, mateIn | refuter, mateIn | "A king with no escape square dies to one check. Before you move, look at every check they have." / "Mate threats outrank everything: a loose king loses faster than any piece." | "Their first check, …Qh4+, starts it." (≤3 plies played out, `mateLine`) | "X stopped it, covering h4." (`betterStopsMate`) | "Every move, ask what checks they have." | "That walks into a forced mate. Check every check they have before you let go." | never with a reason other than the mate (`:1297`) | H |
 | E1o | consequence | O | `allowed-mate`, seat them | | "When their king has no room, the checks come first: look for the one that leaves no square." | "You have mate, starting with …" | (their better move: Review only) | — | "They've let you in: there's a forced mate." (Learn names the student's mating move only after it is past — held) | never name the student's next move | H |
 | E2 | calculate | S | `missed-mate` | mateIn | "A forced mate beats any material: when their king is short of squares, look at checks first." | "It slipped away." | "X started it: …" (`mateLine`) | "Checks first, every move." | "There was a forced mate here." (move held while still playable) | `pastBetterNameable` false → hold the move | H |
 | E3 | identify / knowledge | S | `took-guarded`, target, refuter | target.piece, refuter | "A piece is only free if nothing can take back." / "Before you capture, count who takes back: the pawn on f7 had the king behind it." | "You come out a bishop for a pawn." (ledger) | "O-O kept the bishop and castled." | "Before every capture, ask: what takes back?" | same, no move named ("That capture …") | ledger net < 0 only | H (B2 sub-shape) |
-| E3o | both seats | O | `took-guarded` theirs | | "They grabbed a guarded pawn: when your opponent captures, check what you can take back with." | "You win a knight for a pawn." | — | — | "Take back: their capture loses material." held? (it is the student's next move → **hold the square**; say "they've given you material") | never name the recapture | H |
+| E3o | both seats | O | `took-guarded` theirs | | "They grabbed a guarded pawn: when your opponent captures, check what you can take back with." | "You win a knight for a pawn." | — | — | "Their capture was guarded: it gives you material." (the recapture is the student's next move → never named) | never name the recapture | H |
 | E4 | recognize (illusory threat) | S | `eyed-guarded` | target, guard | "A threat on a guarded piece isn't a threat. Count the guards before you aim at something." | "The knight on f3 holds d4, so taking there gives up your bishop." | better job | "Count attackers and defenders before you attack." | same | swap ∈ [−2,0), real guards | H |
 | E5 | calculate (tempo) | S | `answered-by-check` | refuter | "A free piece is only free if they have no check first. A check that hits your attacker wins back the time." | "…Qg5+ checks and hits the knight on e4 at once." | | "Before a grab, look at their checks." | same | the reply really checks and hits mv.to | H |
 | E6 | recognize | S | `left-hanging` | piece, taker | "A piece on a square nothing guards can just be taken. Ask where your piece will stand and who covers it." | "The queen on f4 takes the rook." | "Be5 kept the rook out of reach and hit the queen." | "Before you let go, ask: is the piece guarded where it lands?" | same, no move named | loses ≥ value−1 (`whyItFailed.ts:279`) | H |
@@ -142,12 +144,14 @@ Voice key: LESSON is general with the board's example inside; Learn never names 
 | E12 | identify (their reply) | S | `allowed-threat` | reply action, target | "A move that lets them hit something with tempo hands them the initiative." / "Leaving a bishop where a knight can hit it costs you the move back." | "…Qd7 hits the knight on e6, and it has to move." | | "Ask what their best reply attacks." | same | reply must DO something (`ALLOWED_DOES_SOMETHING`) | H (action dropped) |
 | E13 | king safety | S | `king-hunt` | checks | "A king without pawn cover can be chased across the board. Keep the pawns in front of it." | "…Bxc3+ and …Qe7+ come with check." | "Nge2 guarded d4 and kept the king covered." | "Count their checks before you open your king." | same | ≥2 checks | H |
 | E14 | calculate (missed) | S | `missed-win`, motif | motif, net | "When their piece is loose, look for the capture first." (hanging) / "A check that wins time comes first: checks, then the capture." (zwischenzug) / per-motif "your" side of `Record<TacticType>` (e.g. pin: "When their piece is pinned to the king, pile on it.") | "It was there to win a bishop." | "Nf4 won the bishop within two moves." (only past) | "Every move, look at checks, captures and threats first." | "There was a win here." (move held while playable) | `missedRead.trust.name` for any line named | H (dropped today) |
-| E15 | positional (per tag) | S/O | `positional`, tag | tag | `Record<PositionalTag>`: misplaced-piece: "A piece is only as good as the squares it reaches: your knight on g8 has far fewer than it needed." · neglected-development: "A piece still at home can't fight." · king-stuck-center / weakened-king-safety: "Every pawn move in front of your king is a hole you can't take back." · space-conceded: "Giving up the centre gives their pieces room." · passive-rook: "Rooks belong on open files." · passive-king-endgame: "In the endgame the king is a fighting piece: bring it to the centre." · passed-pawn-neglected: "Passed pawns must be pushed." · mistimed-pawn-break: "A pawn break works only when it's timed: now, before they cover the square." · no-plan: (no lesson — see H) · tempo-handed: "A move that frees their worst piece helps them more than you." · concession kinds (defender-left / file-opened / piece-offside / pawn-weakened / outpost-conceded) from `findStudentDrawback` | the note without the move's name ("Your king on h1 has less cover than it needed.") | better job | per-tag habit | same, **never "after Bg7"** | tag present; for `no-plan` and `bestJobReason` fallback ("The rook belonged on g8") → silent | H (tag dropped; note names move) |
+| E15 | positional (per tag) | S/O | `positional`, tag | tag | `Record<PositionalTag>`: misplaced-piece: "A piece is only as good as the squares it reaches: your knight on g8 has far fewer than it needed." · neglected-development: "A piece still at home can't fight." · king-stuck-center / weakened-king-safety: "Every pawn move in front of your king is a hole you can't take back." · space-conceded: "Giving up the centre gives their pieces room." · passive-rook: "Rooks belong on open files." · passive-king-endgame: "In the endgame the king is a fighting piece: bring it to the centre." · passed-pawn-neglected: "Passed pawns must be pushed." · mistimed-pawn-break: "A pawn break works only when it's timed: now, before they cover the square." · no-plan: (no lesson — see H) · tempo-handed: "A move that frees their worst piece helps them more than you." · concession kinds (defender-left / file-opened / piece-offside / pawn-weakened / outpost-conceded) from `findStudentDrawback` | the note without the move's name ("Your king on h1 has less cover than it needed.") | better job | per-tag habit | same, **never "after Bg7"**; a misplaced piece that is the piece just moved is named without its square | tag present; for `no-plan` and `bestJobReason` fallback ("The rook belonged on g8") → silent | H (tag dropped; note names move) |
 | E16 | counterfactual | S | any, `causedByMove=false` | | — (no lesson: the threat was already there) → treat as the **previous** mistake | | | | silent | `causedByTheMove` false | H |
 | E17 | phase: endgame | S | any cause in endgame | phase | endgame lesson replaces middlegame stem (e.g. E6 → "In the endgame every pawn counts: a loose one is a lost one.") | | | | | phase endgame | C (phaseOfFen) |
 | E18 | strategize (decided) | S/O | `|eval before| ≥ 500` | | silent (decided game) | | | | silent | — | H (the eval) |
 | E19 | record | S | tag's hold state | | RED/GREY full lesson + habit · AMBER lesson only, one clause · GREEN silent (the miss counts) | | | | | | H (holdRate) |
 | E20 | unexplained | S/O | `unexplained` | — | none → silent + logged (`mistake-lesson` row `why:'no-cause'`) | | | | silent | — | H |
+| E21 | prevent (threat still on) | O | their slip, `missedCaptureStillOn` (`inaccuracyCall.ts:2080`, used `:848`) returns {piece, square} | piece, square | "A threat they don't take is still a threat: your queen on a5 can still be taken." / "Their miss doesn't fix your problem: the piece is still loose." | — | — (their better move: "Bxa5 won it", Review) | "Every move, check which of your pieces are still attacked." | "They let your queen go, but it's still loose." (piece named — it is the student's own piece, not a move; owner call H6) | read off the engine line, never "is attacked" (`:2085`) | H (today prose only, `letGo`) |
+| E22 | strategize (gambit) | S | inaccuracy only, `gambitFile` (`:2126`, used `:903`) returns a file | file | "A pawn offered to open a file at their king is a practical try, not a free one: you get the c-file, not the pawn back." | "If they take, the f-file opens toward their king." | "The engine prefers X" (Review only) | — | same, no move named ("Your pawn offer …") | not on a blunder (`:903`); inaccuracy speaks only if H4 says yes | H (today prose, branch `:904-909`) |
 
 Doesn't apply: **own plan / their plan** (errorWhy reads one move, not plans — the plan computers own it); **evaluate** (the eval is the input, never the lesson).
 
@@ -155,10 +159,10 @@ Doesn't apply: **own plan / their plan** (errorWhy reads one move, not plans —
 This IS the mistake computer: every row of §D is a mistake cause, both seats. Each other card in this family attaches its lessons to these kinds (e.g. `moveJob` guard-job → E7, `findProphylaxis` → E12/E10 pin, `breakStopped` → E15 mistimed-pawn-break, `pieceMovedAgain` → E15 neglected-development / tempo-handed).
 
 ## F. Build changes
-1. `inaccuracyCall.ts:1093` — `export interface ErrorWhy` and add `cause: MistakeCause` (D0). Fill it at `:1504` from the branch that fired; `failedRead.kind` (`:1394`), `allowedReason()`/`missedReason()` motif/net/blowPlies, `positionalReason().tag` (`:1563`), `caused` (`:1386`), `stopsMate`.
+1. `inaccuracyCall.ts:1093` — `export interface ErrorWhy` and add `cause: MistakeCause` (D0). Fill it in the return (`:1570-1588`) from the branch that fired (`consequence` ternary `:1455-1461`); `failedRead.kind` (`:1347`), `allowedReason()`/`missedReason()` motif/net/blowPlies, `positionalReason().tag` (`:1563`), `caused` (`:1332`), `stopsMate` (`:1287`).
 2. `whyItFailed.ts:56` — split `held-by-defender` into `took-guarded` (`:268`) and `eyed-guarded` (`:463`) (or add `captured: boolean`); expose `refuter: {square, piece}` and `ledgerWords` as fields.
 3. `whyItFailed.ts` — emit `walks-into-fork` (declared `:62`, never returned): after the first reply, a fork from `detectLatentFork`-style attackers on the reply square hitting ≥2 pieces, material lost over `playedLineUci` (ledger). Proof board needed (E9; search the 952 boards).
-4. `inaccuracyCall.ts:1504` — add the `missed-win` branch: when nothing was allowed and `missedReason()` names a motif (`trust.name`), set the cause (12 of 87 live moves). Prose stays out; the recipe speaks.
+4. `inaccuracyCall.ts:1455` — add the `missed-win` branch: when nothing was allowed and `missedReason()` names a motif (`trust.name`), set the cause (12 of 87 live moves). Prose stays out; the recipe speaks.
 5. `inaccuracyCall.ts:1559` — compute `positionalReason` even when `should` is set; keep it as `cause.tag` (26 of 87 live moves had the tag dropped).
 6. `positionalReason.ts:148-195` — notes stop naming the played move (`movedSan`): the recipe words the consequence; Learn rule "never names the move just played". 31 of 87 live notes named it.
 7. `positionalReason.ts:200-224` (`bestJobReason`) — `no-plan` and the "belonged on X" fallback yield `tag` but no lesson (recipe: silent).
@@ -192,3 +196,4 @@ Census (Review lines, `lines-1.jsonl:207`): "Their e5 was a blunder … It let y
 3. `no-plan` / "belonged on X": silent, or one generic "the position asked for a different plan" line?
 4. Inaccuracies: `costReason` does not run below 100cp. Learn speaks "on a mistake" — does an inaccuracy (50–99cp) count?
 5. One cause per turn (the strongest) or two when the mechanism and the motif differ (e.g. took-guarded + king-stuck-center on Bxf7+)?
+6. E21: after their slip, may Learn name the student's still-loose piece ("your queen on a5 is still loose")? It points at the student's next move (saving it) without naming the move.

@@ -1,11 +1,11 @@
 # CARD — `moveStops` (what a move takes away)
 
 ## A. Identity
-`src/services/moveStops.ts:96` `moveStops(fenBefore, san, mine)` → `MoveStop[]`; also `stopsBreak :198` (own card). Reads `theirWantedMoves` (`prophylaxis.ts:189`), `mateThreatsAgainst`, `winningChecks :~45`, `KNIGHT_SQUARES`. Callers: `boardComputers.ts:2537, 2562`. Kinds `stop`, `two-jobs` (census 292 offered / 187 said; lesson 228, review 64).
+`src/services/moveStops.ts:96` `moveStops(fenBefore, san, mine)` → `MoveStop[]`; also `stopsBreak :198` (own card). Reads `theirWantedMoves` (`prophylaxis.ts:189`), `mateThreatsAgainst`, `winningChecks :41`, `KNIGHT_SQUARES`. Callers: `boardComputers.ts:2537, 2562`. Kinds `stop`, `two-jobs` (census 292 offered / 187 said; lesson 228, review 64).
 
 ## B. Facts
 - **B1** `MoveStop {kind: 'pin'|'kick'|'fork'|'check'|'square'|'break'|'mate', san, would, clause, squares}` (`:17`).
-- **B2 dropped:** the stopped move's `hit[]` with piece types (in `TheirWant.hit`, `prophylaxis.ts:177`) survives only as prose in `would`; the "now met by a pawn" variant's `taker` square (`:118`) is prose; the mate's `flight` square (`:150`) prose; `TheirWant.motif` dropped.
+- **B2 dropped:** the stopped move's `hit[]` with piece types (in `TheirWant.hit`, `prophylaxis.ts:181`) survives only as prose in `would`; the "now met by a pawn" variant's `taker` square (`:118`) is prose; the mate's `flight` square (`:152`) prose; `TheirWant.motif` (`prophylaxis.ts:184`) dropped.
 - **B3 cheap — THE REVERSE, `moveLetsIn`** (name chosen because `boardComputers.ts:6168` already has a registry entry `moveAllows` = the `costReason`→`allowedClause` reader; this is the geometric one): the same reader run the other way — `theirWantedMoves(fenAfter)` minus `theirWantedMoves(fenBefore)` (and `winningChecks`, `mateThreatsAgainst` after vs before). This is what a MISTAKE did: it let in a pin / kick / fork / winning check / mate. On David's 109 costly moves, 13 let in a new one (e.g. …Bh5 let in Ne6 forking queen d8 and rook f8 — the game's actual punishment). Also: run `moveStops` on the BETTER move minus the played move (9 of 109: the better move stopped a kick/pin the played one did not).
 - **B4 gates:** threatened piece walked away = rescue, not stop (`:122`); square kind only for a pawn move that stays (`:174`); winning check must win material (`winningChecks`); a check of the mover's stops no mate (`:146`).
 

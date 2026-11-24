@@ -1,7 +1,7 @@
 # assessPositionalEdge — the verdict word and the itemised assets
 
 ## A. Identity
-- `src/services/reviewPositionalAssessment.ts:88` `assessPositionalEdge(fen, studentWB, studentPovCp, lastMove)` → `PositionalAssessment { verdict, reasons, reasonKeys, reasonSquares, counter, counterKeys }`; asset list `assetsFor` (:~140-280: material, king tucked vs centre, frozen piece, bishop pair, open file, isolated, doubled, passer, development lead); the one ladder `verdictBand` :78; renderer `positionalVerdictLine` :378.
+- `src/services/reviewPositionalAssessment.ts:88` `assessPositionalEdge(fen, studentWB, studentPovCp, lastMove)` → `PositionalAssessment { verdict, reasons, reasonKeys, reasonSquares, counter, counterKeys }`; asset list `assetsFor` (:156: material, king tucked vs centre, frozen piece, bishop pair, open file, isolated, doubled, passer, development lead); the one ladder `verdictBand` :79; renderer `positionalVerdictLine` :380.
 - Registry `positionalVerdict` `boardComputers.ts:2058-2074` (Review facet) and `takeStock` :4702-4716 (≥ 2 reasons). Census 876 fired / 0 said (708 held `unsupported`, 117 `in-flux`).
 
 ## B. Facts
@@ -28,6 +28,7 @@
 | — | other angles | — | n/a | | | | | | | | |
 
 ## E. Mistake link
+- CONSEQUENCE-slot supplier for errorWhy `positional` (E15) turns only; AE3 knowledge rides AE1/AE2; AE4 Review only.
 - positionalReason `pawn-weakened` (iso/doubled keys), `file-opened` (file key), `piece-offside` (frozen piece); a "bishop pair given up" cause (shared with tradeJudgement, family B).
 
 ## F. Build changes

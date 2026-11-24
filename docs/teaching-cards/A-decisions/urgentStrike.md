@@ -20,14 +20,15 @@
 ## D. Lesson recipes
 | id | angle | seat | condition | slots | LESSON | CONSEQUENCE | BETTER | HABIT | Learn | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| US1 | timing | S | urgentStrike on the board before; played ≠ strike; cost ≥ mistake; B3: strike gone after the real reply | strike, why active | "Some chances last one move. The strike was on now, and after their reply it is gone." | shut reason ("their pawn takes your pawn on d4") | "{strike} had to be played at once." | "When something works now, ask whether it will still work next move." | after move (past) | B3 must prove the real board closed it | C |
-| US2 | timing (cost only) | S | `gone` branch (gap ≥ 100, strike still legal) | cost | "Their position was about to consolidate; the quiet move gave them the time." | "That cost about {cost}." | strike | US1 | | quiet strike only (:134) | H |
-| US3 | their seat | O | strike was theirs and they missed it | | "They had a strike on this move and didn't play it; the chance is gone." | — | n/a | — | Learn: on their mistake | | H |
-| US4 | combo + prevent | S | the opponent's strike was on and the student's move didn't stop it | | "When they have a strike next move, stop it before your own plan." | | | | combine with computeMustDefend | | C |
+| US1 | timing | S | urgentStrike on the board before; played ≠ strike; cost ≥ mistake; B3: strike gone after the real reply | strike, why active | "Some chances last one move: your {strike piece} could hit {target} from {sq} right now, and their reply shuts that door." / "A strike that works now may not work next move. Their reply closes the line to {target}." | shut reason ("their pawn takes your pawn on d4") | "{strike} had to be played at once." | "When something works now, ask whether it will still work next move." | after move (past) | B3 must prove the real board closed it | C |
+| US2 | timing (cost only) | S | US1's pre-move read with the `gone` branch (gap ≥ 100, strike still legal), played ≠ strike, cost ≥ mistake | cost | "They were one move from consolidating. A quiet move gave them that move." | "That cost about {cost}." | strike | US1 | | quiet strike only (:134) | H |
+| US3 | their seat | O | strike was theirs and they missed it | | "They had a strike on this move and didn't play it. Now it is gone." | — | n/a | — | Learn: on their mistake | | H |
+| US4 | combo + prevent | S | `urgentStrike(fenAfter, afterLines, student)` returns side = opponent AND the student's move cost ≥ mistake | their strike piece, target | "When they have a strike ready, stop it before your own plan. Their {piece} hits {target} next." | errorWhy allowed cause | best (past) | "Before your own plan, ask what they want to play next." | after move; never names the student's answer | strike must be the errorWhy allowed line's first move | C (the after-move fan) |
 | US5 | record | S | | | RED/GREY US1 · AMBER "That chance lasted one move." · GREEN silent | | | | | | H |
 | — | endgame | — | race reads are endgame's (kingRace); n/a here | | | | | | | | |
 
 ## E. Mistake link
+- errorWhy: US1/US2 → `missed-win` (E14) or `positional` `mistimed-pawn-break` (E15) when the strike is a pawn break; US3 the O-seat of the same; US4 → `allowed-threat`/`allowed-tactic` (E12/E10).
 - costReason `missed` where the best line starts with the strike (any motif) and B3 says it closed; positional "missed break" (`premature`/`mistimed-pawn-break` inverse). Both seats.
 
 ## F. Build changes

@@ -2,8 +2,8 @@
 
 computer | slots ready (L/C/B/H) | lessons found | build edits | open questions
 ---|---|---|---|---
-detectTactics | L partly / C partly / B no / H no | 15 | 8 | 2
-detectLatentFork | L partly / C partly / B no / H no | 8 | 5 | 2
+detectTactics | L partly / C partly / B no / H no | 16 | 8 | 2
+detectLatentFork | L partly / C partly / B no / H no | 9 | 5 | 2
 detectSetUpChance | L partly / C partly / B yes(after) / H no | 6 | 5 | 2
 pinPressureConcept | L yes / C partly / B partly / H no | 8 | 5 | 1
 guardRemovalConcept | L yes / C partly / B partly / H yes | 6 | 5 | 1
@@ -12,7 +12,7 @@ findPinBreaks | L yes / C partly / B partly / H yes | 5 | 3 | 0
 pinnedPawnGuard | L yes / C partly / B no / H no | 5 | 4 | 0
 attackerDefenderCount | L yes / C partly / B no / H yes | 7 | 4 | 1
 royalDefenderTarget | L yes / C partly / B no / H no | 4 | 5 | 0
-secondAttacker | L partly / C yes / B no / H no | 7 | 5 | 1
+secondAttacker | L partly / C yes / B no / H no | 7 | 6 | 0
 newTiedDefender | L partly / C partly / B no / H no | 5 | 4 | 0
 lineWins | L no / C yes / B partly / H no | 6 | 5 | 0
 deepCombination | L partly / C yes / B partly / H no | 7 | 4 | 1

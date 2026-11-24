@@ -1,7 +1,7 @@
 # CARD — `moveJob` / `moveIntent` (what a move is for)
 
 ## A. Identity
-- **moveIntent** — `src/services/moveIntent.ts:253` (`moveIntent`), helpers `denied :830`, `stopReason :~668`, `whatTheStopDid`, `whatItDoes`, `unlockedMoves :894`, `phrase :~528`, `intentRule :929`, `preventsNamedIdea :946`. Callers: `boardComputers.ts:6519`, `decisiveReason.ts:356`, `movePurpose.ts:40-41` (two passes: `DEFAULT_INTENT` then `{prepare:'line', prevent:'concrete'}`).
+- **moveIntent** — `src/services/moveIntent.ts:253` (`moveIntent`), helpers `denied :830`, `stopReason :686`, `whatTheStopDid`, `whatItDoes`, `unlockedMoves :894`, `phrase :574`, `intentRule :929`, `preventsNamedIdea :946`. Callers: `boardComputers.ts:6519`, `decisiveReason.ts:356`, `movePurpose.ts:40-41` (two passes: `DEFAULT_INTENT` then `{prepare:'line', prevent:'concrete'}`).
 - **moveJob** — `src/services/bookMoveWhy.ts:807` → `rankedMoveJob :~846`: capture → castle(null) → check → king-guard → escape → attack(+guard) → rescue → guard → `stopsJob` → `prophylaxisJob` → `stopsPushJob` → develop+castle → `clearsRoadJob` → `preparesJob` → castlesNext → develop.
 - **CoachFactKind:** `move-job`, `two-jobs` (census label `moveJob`: 1251 offered / 563 said; lesson 1060, review 191; dropped 492 same-idea, 167 restates).
 
@@ -13,23 +13,23 @@
 ### B2. Computed and dropped
 | value | where | what |
 |---|---|---|
-| `stopReason(...)` as a TYPE | `moveIntent.ts:~668-700` | returned only as prose ("you cover d5 twice to their one" / "the pawn would just be lost on e5" / "the knight would just be taken") — the count (`mine`, `theirs`) and the kind (lost-by-count vs out-counted vs covered-king-square) are dropped |
-| `threatDid` (`whatTheStopDid`) | `:505` | `{verb, castle, develops}` — prose verb only ("hit the knight on f5", "take the rook on h8") |
-| `does` (`whatItDoes`) | `:510` | prepared move's point (castle / hit X / file) — prose verb |
-| the pass line | `reads.passBefore` loop `:288` | which of their moves was the THREAT and its whole pass line (`line.moves`) — only uci/san kept |
-| `gone` reason | `:318-324` | illegal now vs scored worse vs off the list — dropped |
-| `mateGone` | `:331` | kept as `mate` |
-| `unlocked` list | `:383` | every move unlocked, only the engine-played one kept |
+| `stopReason(...)` as a TYPE | `moveIntent.ts:686-717` (counts `mine`/`theirs` at `:708-709`) | returned only as prose ("you cover d5 twice to their one" / "the pawn would just be lost on e5" / "the knight would just be taken") — the count (`mine`, `theirs`) and the kind (lost-by-count vs out-counted vs covered-king-square) are dropped |
+| `threatDid` (`whatTheStopDid :733`) | `:534` | `{verb, castle, develops}` — prose verb only ("hit the knight on f5", "take the rook on h8") |
+| `does` (`whatItDoes :754`) | `:538` | prepared move's point (castle / hit X / file) — prose verb |
+| the pass line | `reads.passBefore` loop `:290` | which of their moves was the THREAT and its whole pass line (`line.moves`) — only uci/san kept |
+| `gone` reason | `:323-329` | illegal now vs scored worse vs off the list — dropped |
+| `mateGone` | `:339` | kept as `mate` |
+| `unlocked` list | `:374` (pick `:388`) | every move unlocked, only the engine-played one kept |
 | moveJob `kind` reaches Learn only via the door's `FACT_GROUP`; the **target** of a guard/attack is in `squares[0]` but not typed (piece type, attacker) | `bookMoveWhy.ts` guardJob/attackJob | |
 
 ### B3. Cheap to compute — THE PASS-IN-YOUR-HEAD TEST (the fix to `stopReason`)
 Two questions, both from reads the surface already holds:
 1. **Skip the move → what would they play?** `reads.passBefore[0]` (null move before) — already read; keep its whole line `line.moves` and its score `threatCp`.
-2. **Let them play it after your move → why does it fail now?** Today `stopReason` (`:~688`) plays the stopped move ONE ply on the board after the move and asks `legalSeeGainFor(c.fen(), m.to, mover) <= 0` → "the pawn would just be lost on e5". That is a one-move board check. When the real refutation is a line (David's board: …e5 failed to dxe6, opening the d-file), it says a false or thin reason. The engine already has the line: `reads.after.find(l => l.moves[0] === prevents.uci)?.moves` (MultiPV after the move) or `reads.everyAfter.replies.find(r => r.uci === prevents.uci)?.pv` (`ifTheyPlay.ReplyRead.pv`, `ifTheyPlay.ts:51`). Read that line with the ONE ledger (`costReason({fenBefore: fenAfter, playedSan: prevents.san, mover: opp, …, after: {uci: pv.slice(1)}})`) → kind + motif + what it wins/opens. Name the line only on `lineTrust`. If neither read lists the move → no reason (silent), never the one-ply guess.
+2. **Let them play it after your move → why does it fail now?** Today `stopReason` (`:686`) plays the stopped move ONE ply on the board after the move and asks `legalSeeGainFor(c.fen(), m.to, mover) <= 0` → "the pawn would just be lost on e5". That is a one-move board check. When the real refutation is a line (David's board: …e5 failed to dxe6, opening the d-file), it says a false or thin reason. The engine already has the line: `reads.after.find(l => l.moves[0] === prevents.uci)?.moves` (MultiPV after the move) or `reads.everyAfter.replies.find(r => r.uci === prevents.uci)?.pv` (`ifTheyPlay.ReplyRead.pv`, `ifTheyPlay.ts:51`). Read that line with the ONE ledger (`costReason({fenBefore: fenAfter, playedSan: prevents.san, mover: opp, …, after: {uci: pv.slice(1)}})`) → kind + motif + what it wins/opens. Name the line only on `lineTrust`. If neither read lists the move → no reason (silent), never the one-ply guess.
 3. Typed result: `StopProof = {kind: 'lost-on-square'|'out-counted'|'covered'|'line', count?: {mine, theirs}, line?: CostReason}`.
 
 ### B4. Gates
-`THREAT_CP = 100 :181` · `PREPARE_CP = 50 :183` · `STOPPED_PLIES = 6 :187` · `PREPARED_PLIES = 6 :193` · `GONE_CP = 60 :195` · reply played = not stopped `:342` · line plays it within 3 moves `:345-349` · book: stop must be x/+/# `:450` · prepared piece move needs `whatItDoes` `:457` · hitting move → not prepares `:462` · saved piece → not prepares `:478` · take-back → not prepares `:488` · quiet stop needs a reason `:508`.
+`THREAT_CP = 100 :181` · `PREPARE_CP = 50 :183` · `STOPPED_PLIES = 6 :186` · `PREPARED_PLIES = 6 :191` · `GONE_CP = 60 :193` · reply played = not stopped `:349` · line plays it within 3 moves `:350-354` · book: stop must be x/+/# `:459` · prepared piece move needs `whatItDoes` `:460` · hitting move → not prepares `:474-476` · saved piece → not prepares `:478` · take-back → not prepares `:488` · quiet stop needs a reason `:522`.
 
 ## C. Sentence readiness
 | slot | today | field | missing |
@@ -42,7 +42,7 @@ Two questions, both from reads the surface already holds:
 ## D. Lesson recipes
 | id | angle | seat | condition | slots | LESSON stems | CONSEQUENCE | BETTER-MOVE | HABIT | Learn variant | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| J1 | prevent | S mistake | played move had no `prevents` AND `passBefore[0]` threat ≥ THREAT_CP is still on after it (errorWhy cause allowed-threat/allowed-tactic) | threat san, target | "Before your own plan, ask what they would play if you passed. Their …Bg4 was coming, and it pins your knight." / "Every move answers a question: what is their threat?" | "Now …Bg4 lands." | "h3 took g4 away first." (moveIntent on bestSan, `prevents`) | "Before every move, ask: if I passed, what would they play?" | same, better move only once past | threat must not be the move they then played (`:342` inverted: it IS what they played → proven) | H passBefore |
+| J1 | prevent | S mistake | played move had no `prevents` AND `passBefore[0]` threat ≥ THREAT_CP is still on after it (errorWhy cause allowed-threat/allowed-tactic) | threat san, target | "Before your own plan, ask what they would play if you passed. Their …Bg4 was coming, and it pins your knight." / "Every move answers a question: what is their threat?" | "Now …Bg4 lands." | "h3 took g4 away first." (moveIntent on bestSan, `prevents`) | "Before every move, ask: if I passed, what would they play?" | same, better move only once past | threat must not be the move they then played (`:349` inverted: it IS what they played → proven) | H passBefore |
 | J2 | calculate (the stop's proof) | S/O | better move `prevents` + StopProof.line | line kind | "A move stops a threat when the threat now loses: count it, or play it out." | "If they push …e5 now, dxe6 opens the d-file onto the queen." (StopProof line, named on `lineTrust`) | | "Play their idea out in your head after your move: does it still work?" | same | StopProof from the engine line only, never the one-ply SEE when a line exists | C (B3) |
 | J3 | count | S/O | StopProof `out-counted` | mine, theirs | "A pawn break needs more support than the square has guards." | "You cover d5 twice to their once, so …d5 just loses the pawn." | | "Count attackers and defenders on the break square." | same | mine > theirs > 0 | H (prose) → type it |
 | J4 | own plan (prepares) | S mistake | better move `prepares` a break/development the played move left impossible | prepared move | "The quiet move first, then the break: prepare it so the pawn lands supported." | "Without it, …d5 just drops the pawn." | "c6 prepared …d5, so the pawn comes with support." | "Before a break, ask what supports the landing square." | prepared move named only past | `prepares` in engine line ≤ 6 plies | H |
@@ -54,8 +54,9 @@ Two questions, both from reads the surface already holds:
 | J10 | their plan | O | their move `prepares` X (good move, no mistake) | | Review/chat only (Learn speaks only on mistakes) | | | | silent in Learn | no mistake | H |
 | J11 | both seats (their miss) | O mistake | their move did not stop the student's threat (pass test from their seat) | | "They didn't ask what you threatened." — **pointer at the student's next move** → H2 | | | | held (owner call) | never name the student's threat move | H |
 | J12 | exception (stop isn't real) | — | `stopReason` one-ply "would just be lost" but engine line says it works | | guard only: never said | | | | | StopProof line contradicts one-ply → silent | C |
+| J13 | prevent (mate) / knowledge | S mistake | better move's `prevents.mate === true` (`mateGone`, `moveIntent.ts:339`) and the played move left the mate on (errorWhy `allowed-mate`) | mate square | "A king boxed in by its own pawns dies to one check on the back rank: give it air before they bring a rook." / "When mate is the threat, stopping it comes before anything else." | "Re8 is mate now." | "h6 gave the king the h7 square." | "Every move, ask: can they mate me in one?" | same, mate move said (it is THEIR move), better move only once past | `prevents.mate` must be set (the mate threat really existed in the pass line) | H (`mate` kept on `prevents`) |
 
-Doesn't apply: endgame phase specific (jobs are phase-agnostic; the endgame king/passer jobs live in other computers); evaluate.
+Doesn't apply: endgame phase specific (J13 covers the back-rank case, any phase) (jobs are phase-agnostic; the endgame king/passer jobs live in other computers); evaluate.
 
 ## E. Mistake link
 - Explains **allowed-threat / allowed-tactic** (errorWhy E10/E12) through J1 (the threat you did not stop), both seats.
@@ -63,7 +64,7 @@ Doesn't apply: endgame phase specific (jobs are phase-agnostic; the endgame king
 - Positional `no-plan` / `neglected-development` (E15) via J4/J5.
 
 ## F. Build changes
-1. `moveIntent.ts:~668` `stopReason` → return `StopProof` (typed); add the `line` kind read from `reads.after`/`reads.everyAfter` pv for the stopped move, through `costReason` (B3). The one-ply SEE stays only when no engine line for that move exists, and is dropped when a line exists and disagrees (J12).
+1. `moveIntent.ts:686` `stopReason` → return `StopProof` (typed); add the `line` kind read from `reads.after`/`reads.everyAfter` pv for the stopped move, through `costReason` (B3). The one-ply SEE stays only when no engine line for that move exists, and is dropped when a line exists and disagrees (J12).
 2. `moveIntent.ts:166` `MoveIntent` — add `stopProof: StopProof | null`, `threatDid: PreparedPoint | null`, `does: PreparedPoint | null`, `passLine: string[]` (the threat's pass line).
 3. `bookMoveWhy.ts:807` `moveJob` — add typed `target: {square, piece} | null` and `attackerOf?` for guard/rescue/attack kinds.
 4. `inaccuracyCall.ts` `boardHalfReason :290` / errorWhy better reason — call `moveIntent`/`moveJob` on `bestSan` with the same reads, map job kind → `BetterJobKind` for `MistakeCause.better.job`.

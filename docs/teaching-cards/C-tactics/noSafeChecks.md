@@ -1,7 +1,7 @@
 # noSafeChecks — card
 
 ## A. Identity
-- `noSafeChecks(fen, student)` — `src/services/noSafeChecks.ts` (63 lines; `checks(fen)` = all checks / safe checks by SEE).
+- `noSafeChecks(fen, student)` — `src/services/noSafeChecks.ts` (63 lines; main :35; `checks(fen)` :22 = all checks / safe checks by SEE).
 - Board computer `noSafeChecks` — `src/services/boardComputers.ts:7235-7255`, kind `tactic`, said once a game per side (key `no-safe-checks:<side>`), skill `missed-opponents-threat` when the student is the side out of checks.
 - Census: 84 fired / 45 said (lesson 67, review 17); held already-said 39. Map: "P (odd wording)".
 
@@ -9,7 +9,7 @@
 ### B1. Handed over
 `side` (side to move, out of safe checks), `yourChecks` (all its checks — each gives the piece away), `theirSafeChecks` (the other side's safe checks/mates), `text`, `squares`.
 ### B2. Dropped
-- `mateThreat` flag and `computeMustDefend(fen, side0).pieces` — the REASON the side wants a check at all (it is under threat). The text never says what is threatened.
+- `mateThreat` flag (:49) and `computeMustDefend(fen, side0).pieces` (:50, used only as a gate) — the REASON the side wants a check at all (it is under threat). The text never says what is threatened.
 - That a "safe check" may be MATE ("while you still have Qxg7#") — the text lists a mate as if it were a mere check (the odd wording: a mate in one buried in a sentence about checks).
 ### B3. Cheap
 - The quiet defence: the side's legal non-check moves that meet `computeMustDefend` (re-run after each) → "a quiet move that guards g7".

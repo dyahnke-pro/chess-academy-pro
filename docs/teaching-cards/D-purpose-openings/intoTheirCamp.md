@@ -1,13 +1,13 @@
 # CARD — `intoTheirCamp` (infiltration, lifts, connecting the rooks)
 
 ## A. Identity
-`src/services/intoTheirCamp.ts:198` `intoTheirCamp(fenBefore, san)` → `IntoTheirCamp` (`:49`), kinds `CampKind = 'infiltration'|'seventh-doubled'|'lift'|'swing'|'connect'|'cut-off'` (`:39`); readers `infiltration :~149`, `rooksOnSeventh`, `findRookLift`, `rooksSeeEachOther`; `campIdea`, `campNamesDeep`. Census 87/72 (lesson 63, review 24); verdict P.
+`src/services/intoTheirCamp.ts:198` `intoTheirCamp(fenBefore, san)` → `IntoTheirCamp` (`:49`), kinds `CampKind = 'infiltration'|'seventh-doubled'|'lift'|'swing'|'connect'|'cut-off'` (`:39`); readers `infiltration :149`, `rooksOnSeventh`, `findRookLift`, `rooksSeeEachOther`; `campIdea`, `campNamesDeep`. Census 87/72 (lesson 63, review 24); verdict P.
 
 ## B. Facts
 - **B1** `{kind, moved, route (open/half-open file | hole), targets [{piece, square, won?}], boxedKing, rooks, between, squares, seventhText?, key}`.
 - **B2 dropped:** nothing big — the fields are typed; the `won` flag per target is present; what is dropped is the PURPOSE in Learn: "cut-off" fires on the move that LEFT the rooks cut off (a description) with no cost.
 - **B3 cheap:** the mistake inversions — (a) **their infiltration allowed**: after the student's move their best reply is an `intoTheirCamp` infiltration with `won` targets (run on their reply) = consequence; (b) **the better move was the infiltration** (positional `passive-rook` / `missed-weak-target`) — 2 of 109 of David's costly moves had `campBest = connect`.
-- **B4 gates:** check/mate → null; capture → null; piece lands unsafe → null (`:216`).
+- **B4 gates:** check/game over → null (`:207`); a capture or an unsafe landing skips the infiltration/seventh/lift readers (`:212-214`, `legalSeeGainFor === 0`); `cut-off` is said ONLY on the side's move 12 exactly (`CUT_OFF_MOVE :85`, `:265`) — a description keyed to a move number, not to a cost (C3's guard replaces it).
 
 ## C. Readiness
 | slot | today | field | missing |

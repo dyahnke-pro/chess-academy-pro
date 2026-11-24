@@ -27,6 +27,7 @@
 | — | endgame, calc, phase-opening | — | n/a — move ≥ 12, level only | | | | | | | | |
 
 ## E. Mistake link
+- TF1/TF3: Review only (no mistake).
 - Only through TF2: the student's mistake answering a problem-posing move (any errorWhy cause). tactify itself is never a mistake.
 
 ## F. Build changes
@@ -39,4 +40,4 @@
 - 12 hits, 1 with loss ≥ 100. Danya: vc-_X7t6o3o6JM-33, vc-_zT8aWZh2x0-59.
 
 ## H. Open questions
-- Is "you played the equal move that asked less" ever worth saying in Learn (it is not a mistake)?
+- None. (Whether TF1 speaks in Learn is answered by the WO: Learn is mistakes-only, so TF1 is Review only.)

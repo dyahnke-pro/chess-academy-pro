@@ -1,13 +1,13 @@
 # CARD — `breakPrep` (the move that gets a break ready)
 
 ## A. Identity
-`src/services/breakTiming.ts:55` `breakPrep(fenBefore, san, lineAfter)` → `BreakPrep` (`:37`); renderer `breakPrepLine :~142`; sibling `breakDueNow :~165`. Census `breakPrep` 8/8 (lesson 5, review 3), kind `move-job`.
+`src/services/breakTiming.ts:55` `breakPrep(fenBefore, san, lineAfter)` → `BreakPrep` (`:37`); renderer `breakPrepLine :138`; sibling `breakDueNow :160`. Census `breakPrep` 8/8 (lesson 5, review 3), kind `move-job`.
 
 ## B. Facts
 - **B1** `{prep, brk, between, reason: 'clears-square'|'guards-square'|'rook-on-file', file, squares, key}`.
-- **B2 dropped:** `pawnBreak(fenHere, m.san)` (`:85`) — what the break DOES is computed then thrown away; `lostBefore` (`:91`) and the SEE numbers; `prepTouches`.
+- **B2 dropped:** `pawnBreak(fenHere, m.san)` (`:82`) — what the break DOES is computed then thrown away; `lostBefore` (`:88-94`) and the SEE numbers; `prepTouches`.
 - **B3 cheap:** the mistake inversion — the student **broke without preparing**: the played move IS a break (`isPawnBreak`), its square was lost (SEE ≥ 1) and the better move is a `breakPrep` for the same break (run `breakPrep(fen, bestSan, bestLine.slice(1))` → same `brk`) → "prepare first". Also `breakDueNow` vs played.
-- **B4 gates:** no capture/check prep (`:58`); a break move itself returns null (`:60`); line walked 4 plies, ≤1 own non-pawn move between (`:69-80`); a capture in between kills it (`:73`).
+- **B4 gates:** no capture/check prep (`:59`); a break move itself returns null (`:61`); line walked 4 plies, ≤1 own non-pawn move between (`:67-83`); a capture in between kills it (`:74`).
 
 ## C. Readiness
 | slot | today | field | missing |

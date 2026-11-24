@@ -22,24 +22,25 @@
 | id | angle | seat | condition | slots | LESSON | CONSEQUENCE | BETTER | HABIT | Learn | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | PO1 | knowledge (move order) | both | today's fire | piece, pawn | "Bring the bishop out before the pawn that would shut it in." | — | — | — | Review/lesson only (fires on good moves; Learn is mistakes-only) | | H |
-| PO2 | counterfactual (inverse) | S | student's pawn push cost ≥ mistake AND B3 finds the bishop shut in (mobility drop ≥ 3) AND the best move was that bishop | bishop, pawn sq | "Get the bishop out before the pawn that blocks it. Your pawn on {sq} now walls in the {colour} bishop." | "It has {n} squares left, all behind your pawns." | "{best} first, then the pawn." | "Before a pawn move, ask which of your pieces it shuts in." | after move | best must be that bishop's move | C |
-| PO3 | their seat | O | inverse for opponent | | "They shut their own bishop in: the pawn on {sq} blocks its road." | "That bishop will be a poor piece for a long time." | n/a | — | Learn: say on their mistake | | C |
+| PO2 | counterfactual (inverse) | S | student's pawn push cost ≥ mistake AND B3 finds the bishop shut in (mobility drop ≥ 3) AND the best move was that bishop | bishop, pawn sq | "Get the bishop out before the pawn that blocks it. Your pawn on {sq} now walls in the {colour} bishop." | "It has {n} squares left, all behind your pawns." | "{best} first, then the pawn." | "Before a pawn move, ask which of your pieces it shuts in." | after move | best must be that bishop's move | H (`principleAttribution.ts:1338` buried-own-bishop) |
+| PO3 | their seat | O | inverse for opponent | | "They shut their own bishop in: the pawn on {sq} blocks its road." | "Their bishop on {sq} is stuck behind its own pawns until that pawn moves again." | n/a | — | Learn: say on their mistake | | C |
 | PO4 | record | S | | | RED/GREY PO2 · AMBER "Bishop out before the pawn." · GREEN silent | | | | | | H |
 | — | phase | — | opening only (home-rank bishops) | | | | | | | | |
 | — | calculate, prevent, endgame | — | n/a | | | | | | | | |
 
 ## E. Mistake link
+- errorWhy cause: `positional` with tag `misplaced-piece` (E15) when positionalReason fires; the fundamental `buried-own-bishop` reaches the turn through renderFundamentalVerdict. PO1 is Review/lesson only.
 - Principle `buried-own-bishop` (principleVoice) is the same cause: PO2 is its lesson. positionalReason `piece-offside` is close. Today pieceOutFirst never attaches to a mistake (fires on the good order only).
 
 ## F. Build changes
-1. New pure `pawnShutsBishop(fenBefore, san)` in `pieceOutFirst.ts` → `{ bishop, pawnSq, squaresBefore, squaresAfter }`.
+1. Do NOT write a new helper: the inverse is ALREADY computed by the fundamental `buried-own-bishop` (`principleAttribution.ts:1338`, data `{ bishop, blocker, blockerPiece, squaresLeft }`, mapped to tag `misplaced-piece` at `:111`). PO2/PO3 read that attribution's data; a second detector would be the drift the rot rule forbids.
 2. Register PO2/PO3 under the cause `buried-own-bishop`; one recipe with principleVoice's `buried-own-bishop` verdict (subsume — same claim).
 3. `pieceOutFirst` stays Review/lesson only (good-move teaching).
 
 ## G. Proof boards
 - g:1001055178#4 O `…Bg4` loss 51 → follow …e6 (PO1, good order, Review only).
 - g:1001055178#13 S `Bg5` loss 31 → follow f4 (PO1).
-- No inverse case run (needs PO2's new helper).
+- No inverse case run here; the inverse is `buried-own-bishop` (`principleAttribution.ts:1338`) — its own proof boards are the fundamentals card's.
 
 ## H. Open questions
 - None.

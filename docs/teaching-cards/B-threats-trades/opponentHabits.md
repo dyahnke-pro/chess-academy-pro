@@ -1,11 +1,11 @@
 # opponentHabits — what they keep doing (their seat of habitsOf)
 
 ## A. Identity
-- File: `src/services/thinkAloud.ts` `opponentHabits(sans, opp, sound)` (197–199) = `habitsOf(sans, opp, 'their', sound)`. Registry `theirHabit` (`boardComputers.ts` 5926–5951) adds THE TEMPO COMPUTER `tempoCount(history, student)` (tempoCount.ts 81ff) spliced before the "still at home" habit (5932–5935).
+- File: `src/services/thinkAloud.ts` `opponentHabits(sans, opp, sound)` (197–199) = `habitsOf(sans, opp, 'their', sound)`. Registry `theirHabit` (`boardComputers.ts` 5927–5951) adds THE TEMPO COMPUTER `tempoCount(history, student)` (tempoCount.ts 81ff) spliced before the "still at home" habit (5932–5935).
 - Reach: learn door, review, lesson, chat, tapped, tactics. Census: 621 lines (51 said): lesson 609 (41 said; 567 held `already-said`) — the largest repetition in the family. Said: "That's two times now they've left a piece loose under your attack — they don't check what their move leaves behind. After every move of theirs, look first for what they left loose."
 
 ## B. Facts
-- Same as `habitsOf` B1–B4 for the opponent's side, plus `tempoCount`'s "their bishop's third move already, and you have two minor pieces out to their one" (opening only, `TEMPO_OPENING_PLIES`).
+- Same as `habitsOf` B1–B4 for the opponent's side (including the defeated `sound` gate: Learn passes `NO_SOUND_PLIES`, so their sound sacrifice counts as a loose piece — habitsOf F3), plus `tempoCount`'s "their bishop's third move already, and you have two minor pieces out to their one" (opening only, `TEMPO_OPENING_PLIES`).
 - **B2 dropped:** as habitsOf — which of their moves left pieces loose (the student's missed chances), only the count.
 - **B3 cheap:** for each `looseAt` instance, whether the STUDENT took it (the next ply captured that square) — the dual-use half: their habit is the student's repeated chance.
 
@@ -34,7 +34,7 @@ Not applicable: calculate / phase beyond the counters' own gates.
 - Opponent: their own mistakes are the instances; never said as "their mistake" alone (that is MD6's turn).
 
 ## F. Build changes
-1. As `habitsOf` F1 (instances, not counts) and F2 (speak on an instance that the student missed, not every ply — the 567 holds).
+1. As `habitsOf` F1 (instances, not counts), F3 (real sound plies) and F2 (speak on an instance that the student missed, not every ply — the 567 holds).
 2. Add `tookBy: {ply, took: boolean}[]` per instance (B3) → OH1.
 3. `tempoCount` stays a separate computer; the splice at 5932–5935 keeps one "their habit" turn.
 

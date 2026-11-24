@@ -1,12 +1,12 @@
 # CARD — `openingTheoryFacts` (main move, alternatives, reply, score)
 
 ## A. Identity
-`src/services/openingTheory.ts:85` `openingTheoryFacts(fenBefore, san, mine)` → `TheoryFact[]` (`:36`: `kind: 'book-standing'|'book-alternatives'|'book-reply'|'book-score'`, clause, sentence, squares, names); `readBoard :48` (masters' table, `masterMovesCachedSync`), `aimOf :73` (= `moveJob` clause). Thresholds `THEORY_MIN_GAMES 40`, `MAIN_SHARE 15`, `ALT_SHARE 10`, `RARE_SHARE 5`, `SCORE_EDGE .05`, `SCORE_MIN_GAMES 100` (`:20-31`). Census 823 offered / 579 said (Learn only), kinds book-reply 270, book-alternatives 250, book-standing 177, two-jobs 126. Verdict "S (popularity, no idea)" — the largest stating producer in this family.
+`src/services/openingTheory.ts:85` `openingTheoryFacts(fenBefore, san, mine)` → `TheoryFact[]` (`:36`: `kind: 'book-standing'|'book-alternatives'|'book-reply'|'book-score'`, clause, sentence, squares, names); `readBoard :50` (masters' table, `masterMovesCachedSync`), `aimOf :71` (= `moveJob` clause). Thresholds `THEORY_MIN_GAMES 40`, `MAIN_SHARE 15`, `ALT_SHARE 10`, `RARE_SHARE 5`, `SCORE_EDGE .05`, `SCORE_MIN_GAMES 100` (`:20-32`). Census 823 offered / 579 said (Learn only), kinds book-reply 270, book-alternatives 250, book-standing 177, two-jobs 126. Verdict "S (popularity, no idea)" — the largest stating producer in this family.
 
 ## B. Facts
 - **B1** standing ("It's the main move here — masters almost always play it"), alternatives with aims ("Masters also play b3 here, which covers c4…"), reply ("Masters almost always answer with …Nf6"), score.
 - **B2 dropped:** `pct`, `games`, `score` numbers (words only), the alternative's aim reasons when deduped (`aimKey`).
-- **B3 cheap:** the one MISTAKE shape here is **the student left the masters' moves and it cost** ("leaves the masters' moves — X is the main move", `:113`) — that is `openingSlip`'s job (its own card) with the why. Everything else is a description of a good move.
+- **B3 cheap:** the one MISTAKE shape here is **the student left the masters' moves and it cost** ("leaves the masters' moves — X is the main move", `:109`) — that is `openingSlip`'s job (its own card) with the why. Everything else is a description of a good move.
 - **B4 gates:** as the constants above.
 
 ## C. Readiness

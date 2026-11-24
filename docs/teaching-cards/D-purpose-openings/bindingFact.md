@@ -1,13 +1,13 @@
 # CARD — `bindingFact` (how the move answers theirs)
 
 ## A. Identity
-`src/services/threeFacts.ts:380` `bindingFact(fenBefore, san, target, ownPointSquare, moverIsStudent)` → `{text, idea: 'guard'|'threat'}`; `binding :375`; `TheirTarget :56` from `theirTarget(...)` (`:~330`). Census 127 offered / 60 said; kinds `binding` 85, `two-jobs` 42; census verdict "S (unclear 'this')".
+`src/services/threeFacts.ts:380` `bindingFact(fenBefore, san, target, ownPointSquare, moverIsStudent)` → `{text, idea: 'guard'|'threat'}`; `binding :374`; `TheirTarget :56` from `theirTarget(...)` (`:327`). Census 127 offered / 60 said; kinds `binding` 85, `two-jobs` 42; census verdict "S (unclear 'this')".
 
 ## B. Facts
 - **B1** text ("and this covers it" / "and this goes after the knight doing it" / "so this hits back on the side they're attacking"), `idea`.
 - **B2 dropped:** guard counts before/after (`:403`), the attacker's piece, the target's piece type, `TheirTarget.plain` (visibility).
 - **B3 cheap — THE MISS:** `theirTarget` exists AND `bindingFact(played) === null` AND the target is the errorWhy cause's lost/attacked square → "they aimed at X and your move did not answer it". This is the single most common learner mistake ("missed-opponents-threat", 15 of David's 109 costly moves tagged so by positionalReason).
-- **B4 gates:** capture of the attacker / moving the target → null (`:390`); plain hit guarded → null (`:404`, David's "stating the obvious"); hit-back only if worth ≥ target, same wing (`:420-424`).
+- **B4 gates:** capture of the attacker / moving the target → null (`:387`, a trade that takes the guard `:392`); plain hit guarded → null (`:399`, David's "stating the obvious"); hit-back only if worth ≥ target, same wing (`:417-419`).
 
 ## C. Readiness
 | slot | today | field | missing |

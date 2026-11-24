@@ -1,15 +1,15 @@
 # pinnedPawnGuard — card
 
 ## A. Identity
-- `pinnedPawnGuard(fenBefore, san, mine)` — `src/services/pinnedPawnGuard.ts` (`pinnerOf`, `captureSquares`, main fn); text rotated 3 stems.
-- Board computer `pinnedPawnGuard` — `src/services/boardComputers.ts:6820-6835`, kind `tactic`, stakes `gain` plies 1; lesson / learn-via-thought / review / chat.
+- `pinnedPawnGuard(fenBefore, san, mine)` — `src/services/pinnedPawnGuard.ts:73` (`pinnerOf` :50, `captureSquares` :36); text rotated 3 stems.
+- Board computer `pinnedPawnGuard` — `src/services/boardComputers.ts:6817-6835`, kind `tactic`, stakes `gain` plies 1; lesson / learn-via-thought / review / chat.
 - Census: 3 fired / 3 said; 1 voiced board.
 
 ## B. Facts
 ### B1. Handed over (`PinnedPawnGuardRead`)
 `key`, `text`, `squares` [moved piece, target, pinned pawn, pinner], `mine`, `gain` (pawns won by the count), `proof`.
 ### B2. Dropped
-- The counterfactual already computed: `unpinned` SEE (pinner removed) < `gain` — i.e. "if the pawn weren't pinned the target would be safe" (main fn) — this IS the lesson and is not said.
+- The counterfactual already computed: `unpinned` SEE (pinner removed) < `gain` — i.e. "if the pawn weren't pinned the target would be safe" (pinnedPawnGuard.ts:97-99; used only as a gate) — this IS the lesson and is not said.
 - `target` piece type is in words; the pawn's file (`cell.square`) as "the f7 pawn" yes; the king square not named.
 ### B3. Cheap
 - For the victim's side: the move that would have unpinned (king step off the line, interpose) — chess.js on fenBefore.
@@ -38,11 +38,11 @@ n/a: phase (any); strategize (tactical); plan (n/a).
 ## E. Mistake link
 - costReason `allowed`, motif `pin` (detectTacticType 2a `pinnedDefendersOnly`, missedTacticService.ts:279) — the same fact from the classifier side → PG-1 seat O.
 - costReason `missed` motif `pin` / `hanging_piece` → PG-2 seat S.
-- whyItFailed `held-by-defender` is the INVERSE: its `realGuards` filter drops pinned guards (`pinnedToMore`, whyItFailed.ts:140) — one concept, three readers (this, pinnedDefendersOnly, pinnedToMore).
+- whyItFailed `held-by-defender` is the INVERSE: its `realGuards` filter drops pinned guards (`pinnedToMore`, whyItFailed.ts:141, used :430-431) — one concept, three readers (this, pinnedDefendersOnly, pinnedToMore).
 
 ## F. Build changes
 1. pinnedPawnGuard.ts — return `unpinnedGain` (B2) and the pawn's king square → PG-3.
-2. One "pinned guard" reader: `pinnedToMore` (whyItFailed.ts:140), `pinnedDefendersOnly` (missedTacticService.ts:279) and `pinnerOf` here answer the same question three ways (pinned to king vs to more). Fold into one exported `pinnedGuard(board, sq, by)` in pinGeometry → shared vocabulary for teach + catch (rot rule).
+2. One "pinned guard" reader: `pinnedToMore` (whyItFailed.ts:141), `pinnedDefendersOnly` (missedTacticService.ts:279) and `pinnerOf` here answer the same question three ways (pinned to king vs to more). Fold into one exported `pinnedGuard(board, sq, by)` in pinGeometry → shared vocabulary for teach + catch (rot rule).
 3. Victim-side caller: run on the opponent's move (`mine=false`) when it attacks the student's piece, and on the student's mistake turn check the target was S's.
 4. Words → recipe `pinned-guard`; delete the rotated stems.
 

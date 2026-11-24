@@ -23,7 +23,7 @@ Student to move (all); `register` live vs review splits: live = the engine's mov
 ## C. Sentence readiness
 | slot | today | field | missing |
 |---|---|---|---|
-| LESSON | yes | `idea` (e.g. "One of their pieces is doing a job — make it take something, and the job goes undone.") | idea exists for 7 of 13 acts; missing for pinnerIsPinned, falseMateBlock, discoveryAudit, counterfactualFork, loadedLine |
+| LESSON | yes | `idea` (e.g. "One of their pieces is doing a job — make it take something, and the job goes undone.") | idea exists for 8 of 13 readers (interference :285, clearance :328, decoy :372, deflection :380, zwischenzug :468, forkForPlan :507, kickFails :577, pawnBlockGone :656, interposeFacing :691); missing for pinnerIsPinned, falseMateBlock, discoveryAudit, counterfactualFork, loadedLine |
 | CONSEQUENCE | partly | `stakes` / text | gain in words |
 | BETTER MOVE + JOB | yes (review register) | `text` with `namesMove` ("First b5 was the way: once their bishop took on b5, it no longer guarded …") | must be gated to after the move |
 | HABIT | partly | some `idea`s end on a habit ("Before you post a piece, always check that kick.") | spotCue by `motif` |
@@ -55,9 +55,9 @@ n/a: phase (any; pawnBlockGone opening-heavy, no rule computed).
 - costReason `allowed` with O's geometry → GE-OPP (needs B3).
 
 ## F. Build changes
-1. tacticGeometry.ts — add `idea` (move-free lesson) to the 6 readers that lack it: pinnerIsPinned :173, falseMateBlock :217, discoveryAudit :390, counterfactualFork :587, pawnBlockGone :622, loadedLine :703.
+1. tacticGeometry.ts — add `idea` (move-free lesson) to the 5 readers that lack it: pinnerIsPinned :173, falseMateBlock :217, discoveryAudit :390, counterfactualFork :587, loadedLine :703 (pawnBlockGone already has one, :656).
 2. Add `gain` in words to `GeometryRead` (from `stakes.points` via the one material-word helper).
-3. Opponent seat: `geometryReads({ ...ctx, me: them, fen: boardTheyMoveFrom, pv: theirBestLine })` — readers only check `studentMoves(ctx)` against `ctx.me`, so a seat flip is a call-site change (boardComputers.ts:3294 passes the student seat) → GE-OPP.
+3. Opponent seat: `geometryReads({ ...ctx, me: them, fen: boardTheyMoveFrom, pv: theirBestLine })` — readers only check `studentMoves(ctx)` against `ctx.me`, so a seat flip is a call-site change (boardComputers.ts:3292-3305 passes the student seat) → GE-OPP.
 4. Recipe table: key `geometry:<act>`; LESSON = `idea`, BETTER-MOVE = review-register text (gated by `pastBetterNameable`); kill the live-register text in Learn (names the move before it's played).
 5. kickFails as a STUDENT mistake: today it reads the opponent's kick on the student's post; add the reverse read on the student's own played pawn kick (`ctx.played` in review).
 

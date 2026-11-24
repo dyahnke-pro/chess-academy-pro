@@ -1,8 +1,8 @@
 # stalemateTrick — card
 
 ## A. Identity
-- `stalemateTrick(fenBefore, san)` (the losing side's bait — every capture of it stalemates), `stalemateTraps(fenAfter)` (a natural move that walks into a stalemate check two deep), `stalemateWatch(fen, student)` (the winning side's stalemating moves) — `src/services/stalemateWatch.ts`.
-- Board computer `stalemateTrick` — `src/services/boardComputers.ts:~3862-3900`, kind `tactic`, under-promotions skipped; deep trap first, then trick.
+- `stalemateTrick(fenBefore, san)` (the losing side's bait — every capture of it stalemates), `stalemateTraps(fenAfter)` (a natural move that walks into a stalemate check two deep), `stalemateWatch(fen, student)` (the winning side's stalemating moves) — `src/services/stalemateWatch.ts` (`stalemateWatch` :24, `stalemateTrick` :62, `stalemateTraps` :122).
+- Board computer `stalemateTrick` — `src/services/boardComputers.ts:3859-3896`, kind `tactic`, under-promotions skipped; deep trap first, then trick.
 - Census: 2 fired / 2 said (review 1, lesson 1): "Careful — taking the pawn on d4 would be stalemate … Leave the bait alone."
 
 ## B. Facts
@@ -11,7 +11,7 @@
 - StalemateWatch: `text`, `squares`, `moves[]`.
 - StalemateTrap: `natural`, `check`, `capture`, `squares`, `bait`, `checkFrom`, who falls in.
 ### B2. Dropped
-- Material edge (`behind ≥ CONVERSION_EDGE`) — "you're winning, so the only way to lose it is this" — the stake.
+- Material edge (`behind ≥ CONVERSION_EDGE`, stalemateWatch.ts:69; watch :31) — "you're winning, so the only way to lose it is this" — the stake.
 - The stalemated king's square and the reason it has no move (which squares are covered) — chess.js has them after the capture.
 ### B3. Cheap
 - The student's mistake: S (winning) played a stalemating capture / a move allowing the trap → the game result went to draw (`isStalemate` on the board after S's move or one move later).
@@ -30,7 +30,7 @@ Behind side ≥ conversion edge down (trick) / student ahead (watch); a capture 
 ## D. Lesson recipes
 | id | angle | seat | condition | slots | LESSON stems | CONSEQUENCE | BETTER-MOVE | HABIT | Learn variant | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| ST-1 | prevent (S stalemated / walked in) | S mistake | S winning, S's move = a stalemating capture or allowed the trap (B3), errorWhy cost ≥ mistake (the eval drops to 0) | captures, bait | "When you're winning, the only way to throw it away is stalemate: check that their king still has a move. Taking the pawn on d4 left the king with none." / "A cornered king with no pieces left to move is bait for stalemate. Leave it a square." | "A won game became a draw." | errorWhy best ("Kc3 kept the win — it left the king b1") | "Before every capture in a won ending, check their king still has a move." | after | the game is not won (edge < conversion) | H + C |
+| ST-1 | prevent (S stalemated / walked in) | S mistake | S winning, S's move = a stalemating capture or allowed the trap (B3), errorWhy cost ≥ mistake (the eval drops to 0) | captures, bait | "When you're winning, the only way to throw it away is stalemate: check that their king still has a move. Taking the pawn on d4 left the king with none." / "A cornered king with no pieces left to move is bait for stalemate. Leave it a square." | "A won game became a draw." | errorWhy best ("Kc3 kept the win — it left the king b1") | "Before every capture in a won ending, check their king still has a move." | Learn: "When you're winning, the only way to throw it away is stalemate. That capture left their king with no move." (the captured square — the move just played — not named) | the game is not won (edge < conversion) | H + C |
 | ST-2 | their trick avoided | S | today's warning (before) | — | Review / chat only (before-move warning removed from Learn) | | | | Review | — | H |
 | ST-3 | knowledge (stalemate trick) | O | O set a trick (bait offered) | bait | "A side that's lost looks for stalemate: a piece offered next to a king with no moves is a trap." | | | | Review | — | H |
 | ST-4 | phase | both | ending | — | "In the endgame, a king with no legal moves and nothing else to move is stalemate — a draw." | | | | | — | H |

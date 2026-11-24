@@ -5,9 +5,9 @@
 
 ## B. Facts
 - **B1** `{text, verb, target, squares, follow {piece, from, to, san, uci}, hit {square, type, words}, opener {san,from,to}|null, lineIndex}`.
-- **B2 dropped:** `via` (the path square), `forcedSoFar`, `stoodStill` (`:183-195`) — whether the follow-up was forced; whether the hit WINS (ledger) is not read — "hits their rook on a1" is a hit, not a win.
+- **B2 dropped:** `via` (the path square), `forcedSoFar`, `stoodStill` (`:160-200`, `forcedSoFar :160`, `via :167`, `stoodStill :196`) — whether the follow-up was forced; whether the hit WINS (ledger) is not read — "hits their rook on a1" is a hit, not a win.
 - **B3 cheap:** (a) run on the BETTER move's line (the better move's deep job: "Rg8 heads to g6, hitting the bishop on h6"); (b) run on THEIR reply line after the student's mistake: their move sets up a hit two moves on → the consequence's second step; (c) the ledger over the follow-up (win or just a hit).
-- **B4 gates:** line ≥ 2; a check or a chased piece ends it (`:176-182`); a recapture of the moved piece ends it (`:186`); same mover (`:191`).
+- **B4 gates:** line ≥ 2; a check ends it (`:179`); a recapture of the moved piece ends it (`:186`); same mover (`:194`); the read itself is `deepFactRead :150`.
 
 ## C. Readiness
 | slot | today | field | missing |

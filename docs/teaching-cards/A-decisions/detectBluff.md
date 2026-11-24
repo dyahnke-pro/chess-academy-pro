@@ -24,18 +24,20 @@
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | BL1 | recognize + prevent (over-reaction) | S | prior opponent move was a bluff AND student's move moves/guards a target AND cost ≥ mistake | bluff piece, target | "A piece that attacks something it can't win is not a threat. Their {piece} on {sq} hit your {target}, but it was safe where it stood." / "Don't answer an attack that wins nothing: your {target} was guarded enough." | "Moving it spent your move for nothing." | "{best} used the move" (grade) | "Before you react to an attack, ask what it really wins." | after the student's move | the reaction must be what cost (errorWhy cause none/positional) | C (reaction read) |
 | BL2 | their seat (their mistake) | O | bluff move itself cost them ≥ mistake | | "A move that only looks aggressive often leaves something behind. Their {piece} wandered in and {what it left}." | errorWhy allowed cause | the punish is the student's next move → held | — | Learn: lesson + "there is something to take" only on RED/GREY (pointer rule) | | H + errorWhy |
-| BL3 | knowledge (beginner) | S | opening (move ≤ 10) | | "At club level many attacks are bluffs. Count before you flinch." | | | BL1 | | | H |
+| BL3 | phase: opening | S | BL1 fires AND move ≤ 10 | bluff piece | "In the opening a piece that hits something guarded is just developing. Your {target} was guarded, so the answer was to keep developing." | BL1 | BL1 | BL1 | same | BL1's guard | H |
 | BL4 | record | S | | | RED/GREY full · AMBER "That attack won nothing — no need to react." · GREEN silent | | | | | | H |
 | — | endgame, plan, calc line | — | n/a — the detector reads one move's hits | | | | | | | | |
 | — | exception | — | a pin or guard removal is not a bluff (already excluded :68/:73) | | | | | | | | |
 
 ## E. Mistake link
+- BL1/BL3: no errorWhy cause covers a tempo spent answering nothing → `unexplained` (E20, silent) until F3 adds `tempo-wasted`; Review/chat only until then.
+- BL2: errorWhy O-seat `allowed-capture` / `allowed-tactic` / `left-hanging` (E11/E10/E6o) on their bluff move — attaches today.
 - Student mistake: a tempo spent on a non-threat — no `errorWhy` cause kind (needs `positional:tempo-wasted`, shared with emptyCheckAt).
 - Opponent mistake: costReason `allowed` on their bluff move (BL2).
 
 ## F. Build changes
 1. Keep `detectBluff` pure; add `reactedToBluff(prev: Bluff, fenBefore, studentSan): boolean` (moved a target, or added a guard to one) in `bluffDetector.ts`.
-2. Registry: a second read on the STUDENT's move that looks back one ply (needs `theirLast` in ctx) → BL1. Remove the pre-move Learn say (new Learn speaks only after the move).
+2. Registry: a second read on the STUDENT's move that looks back one ply (the ctx at `boardComputers.ts:1162` has no previous move: add `theirLast: { fenBefore, san } | null`, the shape `moveJobRead` already takes at `:1178`) → BL1. Remove the pre-move Learn say (new Learn speaks only after the move).
 3. Add cause `tempo-wasted` (shared with emptyCheckAt, principle `tempo-handed`).
 4. Sentence to `mistakeLesson`; `bluffClause` kept for Review/chat.
 

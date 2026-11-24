@@ -28,7 +28,7 @@
 - Only MF1 (`abandoned-defender`), via the one `loose:<sq>` claim shared with contrastMoves / computeBoardDelta / blunderCheck.
 
 ## F. Build changes
-1. Delete the eval-bar sentences (reviewFullData.ts :~738, :~770): they describe the engine, not the board.
+1. Delete the eval-bar sentences (`reviewFullData.ts:738`, `:769`): they describe the engine, not the board.
 2. The loose line is one producer (`hangingLine`); on the mistake turn it is the CONSEQUENCE clause under claim `loose:<sq>`.
 3. No new computer — computeMoveFacets stays Review's basket; Learn reads the registry reads directly.
 

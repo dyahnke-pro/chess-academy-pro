@@ -1,23 +1,23 @@
 # lineWins — card
 
 ## A. Identity
-- `lineWins(fen, lineUci, side, firstSan, prior, seconds, opts)` — `src/services/lineCalc.ts:26-95` (ledger `heardProofCut`, trust `lineTrust`, words `materialWords`/`gainAfterLine`); arrows `lineArrows`.
-- Board computers: `lineWinsAt` (boardComputers.ts:4618-4632, Review walk, `squares: []`) and `winsLine` (:4824-4840, the student's played best move's line).
+- `lineWins(fen, lineUci, side, firstSan, prior, seconds, opts)` — `src/services/lineCalc.ts:37-122` (`LineWin` :20) (ledger `heardProofCut`, trust `lineTrust`, words `materialWords`/`gainAfterLine`); arrows `lineArrows`.
+- Board computers: `lineWinsAt` (boardComputers.ts:4618-4632, Review walk, `squares: []`) and `winsLine` (:4823-4840, the student's played best move's line).
 - Census: 20 fired / 20 said, all Review.
 
 ## B. Facts
 ### B1. Handed over (`LineWin`)
 `net` (pawns, ledger, prior capture subtracted), `what` ("a queen and a pawn for a bishop"), `afterLine`, `sans`, `plies` (from, to, color, fen, san).
 ### B2. Dropped
-- The ledger's `studentWon` / `opponentWon` arrays (piece letters) are folded into `what` — the typed material list is lost to recipes (needed for "you give a bishop and get the queen").
+- The ledger's `studentWon` / `opponentWon` arrays (`took`/`gave`, :101-102, piece letters) and `made` (`studentPromoted`, :111) are folded into `what` — the typed material list is lost to recipes (needed for "you give a bishop and get the queen").
 - The MOTIF of the line — never classified here; `detectTacticType` on the same line is one call away.
 - `proof.plies` (where the line's material settles) vs the longer engine line — the settle point is the consequence moment.
-- The prior-capture correction (`priorTook`, :67-72) — "they had taken a knight first, so the line only gets it back" is a teaching fact (recapture vs win) dropped.
+- The prior-capture correction (`priorTook`, :104-110) — "they had taken a knight first, so the line only gets it back" is a teaching fact (recapture vs win) dropped.
 ### B3. Cheap
 - `detectTacticType(fen, lineUci[0], lineUci)` → motif word for the LESSON slot.
 - First move kind (check / capture / quiet) from `plies[0].san` → "it starts with a check".
 ### B4. Gates
-Ledger net ≥ 1 pawn after the prior capture; not mate (mateLine owns that); ≥ 2 plies; first move must equal `firstSan`; `lineTrust(...).name` (the naming rule: near / agreed / forcing-agreed); `winsLine` only when the played move = best.
+≥ 2 plies by default (`minPlies`, lineCalc.ts:76); ledger net ≥ 1 pawn after the prior capture (:109); not mate (mateLine owns that); ≥ 2 plies; first move must equal `firstSan`; `lineTrust(...).name` (the naming rule: near / agreed / forcing-agreed); `winsLine` only when the played move = best.
 Wording defect: census "That wins a new rook: you play R1g4+ and, two moves later, you play h8=R" — under-promotion said as "a new rook" (promotedIn path) — the line is a promotion to rook; words should say "a pawn promoted to a rook".
 
 ## C. Sentence readiness
@@ -44,7 +44,7 @@ n/a: phase (any), plan/strategize (lines are tactical), prevent (LW-2 covers).
 - Own lessons: LW-1 (missed, S), LW-2 (allowed, O).
 
 ## F. Build changes
-1. lineCalc.ts `LineWin` — add `took`, `gave` (typed piece lists, :62-64), `settlePly` (= proof.plies), `priorTook` → recipes LW-3/LW-4.
+1. lineCalc.ts:20-30 `LineWin` — add `took`, `gave` (typed piece lists, :101-102), `made` (:111), `settlePly` (= proof.plies), `priorTook` → recipes LW-3/LW-4.
 2. Add `motif: TacticType` (detectTacticType on the shown line) → LW-1/LW-2 LESSON.
 3. Fix the under-promotion words ("a new rook") in `materialWords`/`gainAfterLine` for `made` ≠ q.
 4. boardComputers.ts:4622 — the sentence "That wins X: you play …" becomes the CONSEQUENCE field of the recipe; spoken with key moves only (rule 4).

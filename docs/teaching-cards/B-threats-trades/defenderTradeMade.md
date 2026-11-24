@@ -1,15 +1,15 @@
 # defenderTradeMade — trading off the piece that holds their position together
 
 ## A. Identity
-- File: `src/services/keyDefender.ts` (369 lines): `defenderTradeMade(fenBefore, san, costCp, after)` (245–250) → `defenderTradeBy` (209–243) → `keyDefenderAt` (184–190) → `defenderJobs` (124–); standing sibling `keyDefenderPlan(fen, best)` (273–310, registry `keyDefenderPlan` 5593–5601); renderer `keyDefenderLine` (335–369). Constants `SOUND_CP = 50`, `HELPS_CP = 50`, `PLAN_MOVES = 3`, `MIN_SQUARES = 2`, `PATH_AHEAD = 3` (32–41).
-- Registry: `boardComputers.ts` `defenderTradeMade` (6720–6735), kind `trade`, either seat.
+- File: `src/services/keyDefender.ts` (369 lines): `defenderTradeMade(fenBefore, san, costCp, after)` (245–250) → `defenderTradeBy` (209–243) → `keyDefenderAt` (184–190) → `defenderJobs` (124–); standing sibling `keyDefenderPlan(fen, best)` (273–310, registry `keyDefenderPlan` 5593–5601); renderer `keyDefenderLine` (335–369). Constants `SOUND_CP = 50`, `HELPS_CP = 50`, `PLAN_MOVES = 3`, `MIN_SQUARES = 2`, `PATH_AHEAD = 3` (43–51).
+- Registry: `boardComputers.ts` `defenderTradeMade` (6720–6735, read at 6724), kind `trade`, either seat.
 - Reach (computer-reach): the keyDefender row is not in computer-reach by name; the registry wires lesson/review via moveThoughtFacts. Census: 7 lines (6 said) — "The queen on e3 does a job no other piece of theirs does: it covers the holes on d4 and d3. This trade takes it off. Once it's gone, those holes are yours to use." Run: 1 fire (the student's …Qxe3+, cost 0).
 
 ## B. Facts
-- **B1** `DefenderTrade` (52–60): `defender {side, piece, square, jobs[]}`, `trader {piece, square}`, `how` takes | offers, `san`, `key`. `DefenderJob` (43–47): man {square, piece} | king {squares} | holes {squares} | passer {pawn, square}.
+- **B1** `DefenderTrade` (67–77): `defender {side, piece, square, jobs[]}`, `trader {piece, square}`, `how` takes | offers, `san`, `key`. `DefenderJob` (53–58): man {square, piece} | king {squares} | holes {squares} | passer {pawn, square}.
 - **B2 dropped:** the engine's score after (`seatCp(after, mover)`, 248) is a gate only; `jobs` are all returned but the renderer leads with `jobs[0]` for the consequence (348–357).
 - **B3 cheap:** the MISSED form — `keyDefenderPlan` on the board before the student's move (engine's best line trades the defender within 3 moves) when the student did not start it; the ALLOWED form — `keyDefenderPlan` on the board after the student's move, for the opponent, where it was absent before (the student's move let them trade the student's key defender).
-- **B4 gates:** an equal-value capture with an even legal exchange (219–221) or a move that puts that trade on the board where it was not (227–241); the move cost < 50 (SOUND_CP) and the trader ≥ 50 cp up after (246–248). It only ever fires on a GOOD move.
+- **B4 gates:** an equal-value, non-pawn capture with an even legal exchange (218–219) or a move that puts that trade on the board where it was not (227–241); the move cost < 50 (SOUND_CP) and the trader ≥ 50 cp up after (246–248). It only ever fires on a GOOD move.
 
 ## C. Sentence readiness
 | slot | today | field | missing |

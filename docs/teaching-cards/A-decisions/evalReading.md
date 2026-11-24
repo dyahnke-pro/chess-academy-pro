@@ -22,12 +22,13 @@
 | id | angle | seat | condition | slots | LESSON | CONSEQUENCE | BETTER | HABIT | Learn | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | ER1 | consequence (new reason) | both | mistake turn; band dropped; a reason kind new after the move (B3) | reason kind | — (cause's lesson leads) | "That leaves you {band}: {new reason}." e.g. "That leaves you clearly worse: their king is safe and yours is still in the centre." | | | after move, CONSEQUENCE slot | the reason must be new; no bare band ("Roughly balanced." never said) | C |
-| ER2 | evaluate (result) | both | band crosses a result line (win→edge, edge→level) | bands | "Being better is not winning: the move took you from {a} to {b}." | | | | | | H (bands) |
+| ER2 | evaluate (result) | both | band crosses a result line (win→edge, edge→level) | bands | "Being better is not the same as winning. After this one you're only {b}." (band words, never numbers) | | | | | | H (bands) |
 | ER3 | knowledge (eval ≠ promise) | both | — | | "The evaluation is a summary of what each side can do, not a promise." | | | | Review only (generic) | never in Learn alone | H |
 | ER4 | restatement | both | reason present before and after | | n/a — silent (the student watched it) | | | | silent | | C |
 | — | all other angles | — | n/a — a standing reader supplies consequence only | | | | | | | | |
 
 ## E. Mistake link
+- CONSEQUENCE-slot supplier only (ER1/ER2 ride any errorWhy cause, mainly `positional` E15); ER3 Review only; ER4 silent.
 - The CONSEQUENCE slot for every cause whose effect is positional (positionalReason kinds; result-shift); material causes already carry their consequence (ledger), so ER1 adds only non-material reasons (king-centre, passer, initiative…).
 
 ## F. Build changes

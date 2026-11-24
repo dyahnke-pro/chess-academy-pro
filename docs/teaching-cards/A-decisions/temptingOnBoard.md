@@ -23,17 +23,18 @@
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | TO1 | recognize → played | S | a try on the pre-move list = the move played | as TR1 | TR1 stems | because | best + bestWhy | TR habit | after move | uci match exact | C (join) |
 | TO2 | evaluate (result) | S | standing try = played, resultShift non-null | shift | "A move can cost the game without losing a piece: this one {throws the win / gives back the edge} because {reasonText}." | resultShift | best | "Before you play it, ask what it does to the result, not just to the material." | after move | reasonText non-null (no bare "gives back part of your edge") | H |
-| TO3 | strategize ("achieves nothing") | S | standing smallerShift, cost 50–99 | | "A forcing move that wins nothing is a wasted move: the trades leave the material level." | | best | | only if inaccuracies are Learn turns | | H |
+| TO3 | strategize ("achieves nothing") | S | standing smallerShift, cost 50–99 | | "A forcing move that wins nothing is a wasted move: the trades leave the material level." | | best | | only if inaccuracies are Learn turns (else Review only) | | H |
 | TO4 | their seat | O | their played move ∈ their pre-move list | | TR6 | | held | | | | C |
 | TO5 | pre-move warning | S | the list before the move, not played | | n/a in new Learn (banned: before the move) · Review/chat/lesson keep it | | | | silent | | H |
 | TO6 | record | S | | | RED/GREY full · AMBER one clause · GREEN silent | | | | | | H |
 | — | endgame/phase | — | same walker all phases | | | | | | | | |
 
 ## E. Mistake link
+- errorWhy: TO1 → `allowed-tactic`/`allowed-capture`/`allowed-mate` (E10/E11/E1); TO2 → `unexplained` today (no material cause) until F4 `result-shift`, so TO2 is Review/chat only until then; TO3 inaccuracy (Review only); TO5 Review/chat/lesson only.
 - Same causes as temptingRefuted (costReason `allowed`, all motifs, mate) plus TO2's result-only cause (no material) → needs cause `result-shift` (the try changes the band with a board reason: `reasonKey`).
 
 ## F. Build changes
-1. Mistake turn: join the pre-move list (cached per board — `conclusionsOf` already caches, `boardComputers.ts:369`) with the played uci → TO1/TO2/TO4.
+1. Mistake turn: join the pre-move list (cached per board — `conclusionsOf` already caches, `boardComputers.ts:368`) with the played uci → TO1/TO2/TO4.
 2. Replace the module variable `lastMechanismKey` (:724) with a returned field on `StandingRefuted`.
 3. Learn registry stays `not` for the pre-move form; add the post-move join as the Learn read.
 4. Add MistakeCause `result-shift { reasonKey }`.

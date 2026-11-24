@@ -1,8 +1,8 @@
 # desperadoAt — card
 
 ## A. Identity
-- `desperadoAt(fenBefore, san, bestUci)` — `src/services/desperado.ts` (+ `lostAnyway`); words `desperadoLine` (found / missed × one / two hanging × survives).
-- Board computer `desperadoMove` — `src/services/boardComputers.ts:6301-6310` (`moveIdeaFact`, idea `rescue`, weight 66), kind `defence-idea`, FACT_SET_SURFACES.
+- `desperadoAt(fenBefore, san, bestUci)` — `src/services/desperado.ts:43` (+ `lostAnyway` :84); words `desperadoLine` :104 (found / missed × one / two hanging × survives).
+- Board computer `desperadoMove` — `src/services/boardComputers.ts:6299-6310` (`moveIdeaFact`, idea `rescue`, weight 66), kind `defence-idea`, FACT_SET_SURFACES.
 - Census: 2 fired / 2 said (lesson).
 
 ## B. Facts
@@ -29,7 +29,7 @@ Mover has a hanging non-pawn (SEE); best is a capture BY a hanging piece of a pi
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | DS-1 | strategize (sell the doomed piece) | S mistake | found=false, other≠null, cost ≥ inaccuracy | piece, other, captured | "When two pieces hang, you can only save one — so make the other cost something first. Your queen and knight were both hanging." / "Sell the piece you can't save: one capture on its way out." | "Instead the knight went for nothing." (B3) | "Qxg5 was the move — it took a bishop before the knight went." (once past) | "When a piece is lost anyway, look for what it can take on its way out." | after | found=true (positive) | H |
 | DS-2 | strategize (lost anyway) | S mistake | found=false, other=null | piece, captured | "A piece that can't be saved should still take something. Nothing could save the queen on f4 — but it could take a bishop first." | "It went for nothing." | san (once past) | same | after | — | H |
-| DS-3 | their seat | O | O missed their sale (found=false with O mover) | — | "Their queen was lost anyway and they let it go for nothing — that's a free bishop's worth more for you." | | | | after THEIR mistake (positive for S) | — | H |
+| DS-3 | their seat | O | O missed their sale (found=false with O mover) | — | "A piece that's lost anyway should take something on its way out. Their queen on f4 was lost and went for nothing." | | | | after THEIR mistake (positive for S) | — | H |
 | DS-4 | knowledge (found) | S | found=true | — | "Good: two pieces hung and the knight took a bishop on its way out." | | | | Review / praise | — | H |
 | DS-REC | record | — | `hung-material` (two-pieces-hanging defence) | | RED/GREY full; AMBER "Sell the piece you can't save."; GREEN silent | | | | | | holdRate |
 n/a: phase (any), prevent (the hanging state came earlier — bothSaved/errorWhy own that).

@@ -22,12 +22,13 @@
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | PC1 | their problem, student fails | S (reply) | practicalChance fired for the opponent's move AND the student's reply was the trap or not the only move AND cost ≥ mistake | trap/only | "When the worse side sets a problem, the obvious answer is often the wrong one. The capture that looked free gave the edge back." / "Only one reply kept your edge; the rest let them back in." | errorWhy | "{only} kept it." | "When they're worse and still active, look at every forcing reply before you pick one." | after the student's reply | B3 join required | C |
 | PC2 | student worse, sets problem | S | today, student seat | | Review/lesson praise | | | | silent in Learn | | H |
-| PC3 | opponent falls for the student's problem | O | student's practicalChance, opponent erred | | "Your problem worked: they took the bait." | | | | Learn: on their mistake (punish held) | | C |
-| PC4 | deep | S | deep ≥ 4, the student then erred in the long line | | "A long winning line is where mistakes happen: their defence made you calculate {n} moves." | | | "Slow down and calculate when the win is long." | | | C |
+| PC3 | opponent falls for the student's problem | O | student's practicalChance, opponent erred | | "A problem set from a worse position works only when they misread it, and they did: the capture that looked free gives the edge back." | | | | Learn: on their mistake (punish held) | | C |
+| PC4 | deep | S | practicalChance fired on the opponent's previous move with `deep` set (4–6 own moves to win) AND the student's move cost ≥ mistake | | "A win that takes {n} moves has to be calculated all the way. Their defence asked for exactly that." | | | "Slow down and calculate when the win is long." | | | C |
 | PC5 | record | S | | | RED/GREY full · AMBER one clause · GREEN silent | | | | | | H |
 | — | endgame, plan | — | n/a | | | | | | | | |
 
 ## E. Mistake link
+- errorWhy: PC1/PC4 frame the student's reply cause (E10/E11/E14); PC3 the O-seat cause; PC2 Review only.
 - The student's reply mistake after a problem-posing move: errorWhy `allowed`/`missed` any motif; PC1 frames it. practicalChance itself never fires on a mistake (sound < 50).
 
 ## F. Build changes

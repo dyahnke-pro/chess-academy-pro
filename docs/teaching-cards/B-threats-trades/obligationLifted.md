@@ -3,14 +3,14 @@
 ## A. Identity
 - File: `src/services/obligationLifted.ts` (70 lines): `obligationLifted(fenBefore, fenAfter, student)` (34–66), `obligationLiftedLine(o)` (68–70).
 - Registry: `boardComputers.ts` `obligationLifted` (2373–2384), kind `their-read`, seat `opponent`, claim `lifted:<sq>`.
-- **Duplicate (rot):** `opponentMoveReads.obligationLifts` (264–320) computes the same claim from three boards (it also requires that the student had guarded it) and renders it in three other stems. The census holds 12 obligationLifted lines as "subsumed by" the readTheirMove twin ("Their bishop left d7, so your pawn on g4…" subsumed by "With their bishop on c6, your pawn on g4 no longer hangs…").
+- **Duplicate (rot):** `opponentMoveReads.obligationLifts` (264–320) computes the same claim from three boards (it also requires that the student's move LEFT the piece hanging — `still` at 275/278: the student did NOT guard it, and their move lifted the threat anyway) and renders it in three other stems. The census holds 12 obligationLifted lines as "subsumed by" the readTheirMove twin ("Their bishop left d7, so your pawn on g4…" subsumed by "With their bishop on c6, your pawn on g4 no longer hangs…").
 - Reach: learn door, review, lesson, chat, tapped, tactics. Census: 41 lines (11 said): chat 15, review 11, lesson 15; held 9 `same-idea`, 6 `in-flux`, 12 subsumed by the twin. Run: 22 fires (12 on their moves, 10 swapped).
 
 ## B. Facts
-- **B1** `ObligationLifted` (11–18): `square`, `piece` (the student's piece no longer under fire), `from`, `to`, `theirPiece` (the attacker that left).
-- **B2 dropped:** the `computeMustDefend` value of the piece before (`was`, 47) — how much the duty was worth; other pieces still hanging (`now`, 49) — a lifted duty while another piece still hangs is a different turn.
+- **B1** `ObligationLifted` (15–23, not exported): `square`, `piece` (the student's piece no longer under fire), `from`, `to`, `theirPiece` (the attacker that left).
+- **B2 dropped:** the `computeMustDefend` value of the piece before (`was`, 50) — how much the duty was worth; other pieces still hanging (`now`, 52) — a lifted duty while another piece still hangs is a different turn.
 - **B3 cheap:** whether the student's NEXT move still spent itself on the lifted duty (added a guard to `square` / moved the piece) — the wasted move; what the freed move could have done (the engine's best).
-- **B4 gates:** their move only (37); the piece hung before (SEE, 47), not now (52), still on its square (53–54), the moved piece attacked it before and does not now (56–57). No cp gate.
+- **B4 gates:** their move only (38); the piece hung before (SEE, 50–51), not now (56), still on its square (57–58), the moved piece attacked it before and does not now (60–61). No cp gate.
 
 ## C. Sentence readiness
 | slot | today | field | missing |
@@ -27,6 +27,7 @@ Cause **OL-WASTE** (S): their move lifted the duty, the student's next move stil
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | OL1 | recognize (the duty is gone) | S | OL-WASTE | piece, their piece | "Duties change every move: once their {theirPiece} left {from}, your {piece} on {sq} no longer needed you." / "Check what their move stopped attacking — a guard you no longer need is a free move." | "Your move went to a job that was already done." | "{best} used the free move: {job}." | "After every move of theirs, re-check what still needs guarding." | full; "your move" | another piece still hangs (B2 — then the guard is right) | C (B3) |
 | OL2 | opponent seat | O | their move lifted a duty of THEIRS on the student's last move and they spent the next move guarding anyway (cost ≥ floor) | — | "They kept guarding a piece that was already safe." | | | | Review | — | C (swapped call) |
+| OL4 | counterfactual (got away with it) | S | F1 `leftHangingByStudent` true and the student's previous move cost ≥ floor | piece, sq | "A threat you ignore doesn't go away because they missed it once: your {piece} on {sq} was hanging after your last move." | "They let it go — next time they won't." | "{best} would have kept it safe." (the previous board's best) | "Answer their threat before you play your own idea." | Review only — in Learn it is the previous turn's lesson (MD1 already spoke there) | the previous turn already said MD1 (say-once) | C (F1 field) |
 | OL3 | record | S | — | — | RED/GREY full · AMBER "That guard wasn't needed any more." · GREEN silent | | | | | | `holdState` on `tempo-handed` |
 
 Not applicable: calculate / plan / phase / structure (a one-move duty read). The standing "you don't have to guard it" line with no wasted move is not a mistake → silent in Learn (Review/chat only).
@@ -36,7 +37,7 @@ Not applicable: calculate / plan / phase / structure (a one-move duty read). The
 - Opponent: OL2.
 
 ## F. Build changes
-1. Delete `opponentMoveReads.obligationLifts` (264–320) and its `readTheirMove` call (600); one computer, one claim (`lifted:<sq>`). Port its one extra gate (the student had guarded it, 280) into `obligationLifted` as a field `wasGuardedByStudent` rather than a filter.
+1. Delete `opponentMoveReads.obligationLifts` (264–320) and its `readTheirMove` call (600); one computer, one claim (`lifted:<sq>`). Port its one extra gate (the student's own move had left the piece hanging, 278) into `obligationLifted` as a field `leftHangingByStudent` rather than a filter — that case is the student's earlier mistake that went unpunished (the record's miss on `threat-ignored`), not a lift to praise.
 2. Add `wasWorth` (the `computeMustDefend` value before, B2) and `stillHanging: string[]` (B2) to `ObligationLifted`.
 3. Add `spentOn(fenAfter, studentSan, o): boolean` (B3) → cause OL-WASTE in `mistakeLesson`.
 

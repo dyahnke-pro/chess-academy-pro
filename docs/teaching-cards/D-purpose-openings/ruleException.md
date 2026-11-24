@@ -1,13 +1,13 @@
 # CARD — `ruleException` (breaking a rule for a reason)
 
 ## A. Identity
-`src/services/ruleException.ts:70` `ruleException(fenBefore, san, historySans)` → `RuleException {rule: 'twice'|'shield-pawn'|'early-queen', text, squares}` (`:24`, not exported); `hitBy :32`, `centreClosed :48`. Caller passes only moves within 20cp of best (header `:6`). Census 12 offered / 4 said (lesson 8, review 4), kind `rule-exception`.
+`src/services/ruleException.ts:70` `ruleException(fenBefore, san, historySans)` → `RuleException {rule: 'twice'|'shield-pawn'|'early-queen', text, squares}` (`:28`, not exported); `hitBy :38`, `centreClosed :55`. Caller passes only moves within 20cp of best (header `:6`). Census 12 offered / 4 said (lesson 8, review 4), kind `rule-exception`.
 
 ## B. Facts
 - **B1** rule + text ("…Nd4 moves the same piece twice — usually a waste of time in the opening, but here it hits the queen on b5").
-- **B2 dropped:** `hit` target piece/square typed (only in text/squares); the development lead number (`lead`, `:103`).
-- **B3 cheap — THE MISTAKE SIDE:** the same three rules detect the BROKEN-WITHOUT-REASON case: the rule is broken (same piece twice / shield pawn / early queen), `hit` is null, no lead, and the move cost ≥ mistake → the rule applies → that is a positional lesson (overlaps `pieceMovedAgain` for 'twice'). Today that branch returns null (`:108`, "a rule broken for no visible reason is the engine's secret").
-- **B4 gates:** fullmove ≤ 12 for twice (`:96`); history must reach the same board (`:104`); wasHit → excused (`:106`); queen move by move 10 with 2 minors home; shield pawn needs their queen on.
+- **B2 dropped:** `hit` target piece/square typed (only in text/squares); the development lead number (`lead`, `:102`).
+- **B3 cheap — THE MISTAKE SIDE:** the same three rules detect the BROKEN-WITHOUT-REASON case: the rule is broken (same piece twice / shield pawn / early queen), `hit` is null, no lead, and the move cost ≥ mistake → the rule applies → that is a positional lesson (overlaps `pieceMovedAgain` for 'twice'). Today that branch falls through (`why` null at `:103-106`, `:117-120`; final `return null :127`; "a rule broken for no visible reason is the engine's secret").
+- **B4 gates:** fullmove ≤ 12 for twice (`:88`); history must reach the same board (`:98`); wasHit → excused (`:100`); queen move by move 10 with 2 minors home; shield pawn needs their queen on.
 
 ## C. Readiness
 | slot | today | field | missing |

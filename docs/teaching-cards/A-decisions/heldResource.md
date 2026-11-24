@@ -23,12 +23,12 @@
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | HR1 | timing (kept) | S | today's fire | knight sq | "A pin is strongest when there is a piece to pin. Keep the bishop back until their knight comes to {sq}." | "then the capture doubles their pawns" | — | — | Review/lesson only | | H |
 | HR2 | timing (spent early, inverse) | S | B3 inverse fires | bishop move | "A check with nothing to pin is easily parried. The bishop came out before their knight was on {sq}, so it bit on nothing." | "It gets kicked and you lose the time." | "{best} — the bishop stays home until the knight comes out." | "Save a pin for the piece it will pin." | after move | the early bishop move must be the cost (errorWhy positional / tempo) | C |
-| HR3 | their seat | O | they spent it early | | "Their early bishop check pins nothing; you can block with a developing move." | — | n/a | — | Learn: on their mistake only | | C |
+| HR3 | their seat | O | they spent it early | | "An early bishop check with nothing behind to pin is easy to answer, and the bishop has spent its move." | — | n/a | — | Learn: on their mistake only; never say how to answer it (the student's next move) | | C |
 | HR4 | record | S | | | RED/GREY HR2 · AMBER "Save the pin for a piece." · GREEN silent | | | | | | H |
 | — | endgame, calc, prevent | — | n/a (opening-only line) | | | | | | | | |
 
 ## E. Mistake link
-- Today: none (fires only on cpLoss < 30). HR2 would teach principle `tempo-handed` / `early-queen-sortie`-like piece sorties; cause `tempo-wasted`.
+- Today: none (fires only on cpLoss < 30) — HR1 is Review/lesson only. HR2/HR3 need cause `tempo-wasted` (shared with emptyCheckAt/detectBluff, F2); until then they reach no mistake turn. HR2 would teach principle `tempo-handed` / `early-queen-sortie`-like piece sorties; cause `tempo-wasted`.
 
 ## F. Build changes
 1. `holdResource.ts`: export `spentEarly(fenBefore, san, cpLoss)` = the move played is the bishop move that `holdIdea(fenBefore, …)` says to save; cost ≥ 100.

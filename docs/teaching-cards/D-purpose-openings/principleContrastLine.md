@@ -5,9 +5,9 @@
 
 ## B. Facts
 - **B1** "The opening rule in this spot is to castle your king to safety and bring the rook toward the center, with O-O. A king left in the middle gets caught the moment the center opens." / "The opening move here was Bd2 — it completes your development".
-- **B2 dropped:** the lead fundamental's id/weight (in `id` only); `played` fundamentals list (`:1820`) — the played move had NO opening principle (that is the condition).
+- **B2 dropped:** the lead fundamental's id/weight (in `id` only); `played` fundamentals list (`:1817`) — the played move had NO opening principle (that is the condition).
 - **B3 cheap:** none needed — it already is the mistake lesson shape (rule + reason + better move). Cheap extra: allow it on a costly move even when the played move had SOME principle (a weaker one) — use the fundamental delta.
-- **B4 gates:** bestSan ≠ played; opening window open (`:1816`); not a forced reply; played move applies no opening principle (`:1821`); full rule once (`taught`) else short "The opening move here was X — it …".
+- **B4 gates:** bestSan ≠ played; opening window open (`:1815`); not a forced reply; played move applies no opening principle (`:1818`); full rule once (`taught`) else short "The opening move here was X — it …".
 
 ## C. Readiness
 | slot | today | field | missing |
@@ -27,7 +27,7 @@
 errorWhy `positional` with tags `neglected-development`, `king-stuck-center`, `space-conceded`, `no-plan` in the opening (S seat). On David's 109 costly moves it fired on 10 (e.g. Bxf7+ → O-O rule; …Qf6 → Nf6 develop rule).
 
 ## F. Build changes
-1. Allow it with a fundamental delta (played had a weaker principle) — `played.length` test (`:1821`) → compare weights.
+1. Allow it with a fundamental delta (played had a weaker principle) — `played.length` test (`:1818`) → compare weights.
 2. Learn: its Learn variant holds the better move while `pastBetterNameable` is false (the rule alone).
 3. Moves into `mistakeLesson` as the positional/opening recipe; the computer stops rendering two stems itself (recipes own the words).
 

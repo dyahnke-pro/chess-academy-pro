@@ -1,7 +1,7 @@
 # patternFails — card
 
 ## A. Identity
-- `patternFails(fen, lines, playedSan)` — `src/services/patternFails.ts` (`patternOf` = forking-check | free-grab; main walks lines[1..]).
+- `patternFails(fen, lines, playedSan)` — `src/services/patternFails.ts:83` (`patternOf` :49 = forking-check | free-grab; main walks lines[1..]).
 - Teaching fact via `orderTeaching.ts:114-115` (`computer: 'patternFails'`, kind `refuted`, evidence tag `calculation-depth` posedImportance 70, event `coach_pattern_fails`); role `computerRoles.ts:80` (held wired, broken = SLIP, askable via orderReads).
 - Census: 4 fired / 4 said (lesson).
 
@@ -9,10 +9,10 @@
 ### B1. Handed over (`PatternFail`)
 `text`, `tempting` (SAN), `pattern` forking-check|free-grab, `target`, `counter` (their counter-check), `loses` (words: ledger-named or count, or "the game to mate"), `proof`, `squares`.
 ### B2. Dropped
-- `bestCp − cp` gap (≥ 150cp) — how much worse the pattern is than the best.
+- `bestCp − cp` gap (≥ 150cp, `PATTERN_FAIL_GAP_CP` :37, checked :98) — how much worse the pattern is than the best.
 - `worst` vs `end` material dip (the line may lose more mid-way than at its end).
 - The `mated` flag is folded into words.
-- The PLAYED move is explicitly skipped (`if (playedSan && strip(playedSan) === strip(san)) continue;`) — the one time the pattern failure is a MISTAKE (the student played it) this computer stays silent and leaves it to errorWhy.
+- The PLAYED move is explicitly skipped (`if (playedSan && strip(playedSan) === strip(san)) continue;`, :96) — the one time the pattern failure is a MISTAKE (the student played it) this computer stays silent and leaves it to errorWhy.
 ### B3. Cheap
 - Run with `playedSan = null` and filter to the played move's line (saved read after the played move) → the played pattern's failure in the same words.
 ### B4. Gates
@@ -41,7 +41,7 @@ n/a: phase, plan. Combination: poisonedPiece (grab → mate) and deepCombination
 - costReason `allowed` after the student played a check/grab → PF-1/PF-2.
 
 ## F. Build changes
-1. patternFails.ts — add `mode: 'alternative' | 'played'`; when `playedSan` is given AND its own line is passed, read it instead of skipping (B2/B3) → PF-1/PF-2.
+1. patternFails.ts:83-96 — add `mode: 'alternative' | 'played'`; when `playedSan` is given AND its own line is passed, read it instead of skipping (B2/B3) → PF-1/PF-2.
 2. Expose `gapCp`, `worstDip`, `mated` typed.
 3. Words → recipe `false-pattern` (forking-check/free-grab); errorWhy's `answered-by-tactic` line becomes the CONSEQUENCE, this the LESSON.
 

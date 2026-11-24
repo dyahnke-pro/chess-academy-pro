@@ -1,7 +1,7 @@
 # plyFactsForMove — what the move did (captures, check, tactic landed, file opened)
 
 ## A. Identity
-- `src/services/pvPlayback.ts:929` `plyFactsForMove(fenBefore, san, prev, moverIsStudent)` → `computePlyFacts` → `plyFactsSentence` :947. Registry `plyFacts` `boardComputers.ts:2075-2085`, kind `move`, claim `move:<san>`, Review facet. Census 198 fired / 0 said (all held `unsupported`).
+- `src/services/pvPlayback.ts:929` `plyFactsForMove(fenBefore, san, prev, moverIsStudent)` → `computePlyFacts` → `plyFactsSentence` :950. Registry `plyFacts` `boardComputers.ts:2075-2085`, kind `move`, claim `move:<san>`, Review facet. Census 198 fired / 0 said (all held `unsupported`).
 
 ## B. Facts
 - B1: one sentence ("You take their rook and win material." / "You take their bishop and unleash a discovered attack.").
@@ -26,10 +26,11 @@
 | PF4 | restatement | — | captures / check / tactic landed on the student's own move | | n/a — Learn never says what the student just played | | | | silent | | — |
 
 ## E. Mistake link
+- CONSEQUENCE-slot supplier for errorWhy `positional` (E15) turns: PF2 → tag `weakened-king-safety`, PF3 → concession `file-opened`; PF1 has no cause today (`passer-handed` needed, else Review only); PF4 Review only.
 - positionalReason `file-opened`, `pawn-weakened` (shield), passer handed (no cause today → `passer-handed`).
 
 ## F. Build changes
-1. Export `plyFacts(fenBefore, san, prev): PlyFacts` typed (the object is already computed at :937); the sentence stays Review's.
+1. No new export needed: `computePlyFacts` is already exported (`pvPlayback.ts:394`) and returns the typed `PlyFacts`; the mistake turn calls it (or `plyFactsForMove` returns the object beside the sentence). The sentence stays Review's.
 2. PF1–PF3 are CONSEQUENCE rows keyed on their typed facts; PF4 deleted from spoken Learn.
 
 ## G. Proof boards

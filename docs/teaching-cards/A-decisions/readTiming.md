@@ -22,16 +22,17 @@
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | RT1 | timing (premature, inverse) | S | B3 fires, cost ≥ mistake | piece, sq, capturer | "The right move at the wrong time loses. Right now their {capturer} takes on {sq}; a move later it couldn't." | "You lose the {piece}." | "{best} first; then the move works." | RT habit | after move | B3 must show the later board safe | C |
 | RT2 | timing (good) | both | today | | Review/lesson only | | | | silent in Learn | | H |
-| RT3 | their seat | O | their premature move | | "They played it a move too early: the {piece} on {sq} can be taken." | | held | | Learn: pointer rule | | C |
+| RT3 | their seat | O | their premature move | | "A move played a move too early can just lose a piece. Theirs did." | | held | | Learn: piece and square held (the take is the student's next move) | | C |
 | RT4 | record | S | | | RED/GREY RT1 · AMBER "A move too early." · GREEN silent | | | | | | H |
 | — | plan, endgame | — | n/a | | | | | | | | |
 
 ## E. Mistake link
+- errorWhy: RT1 → `left-hanging` (E6) / `allowed-capture` (E11) as the more specific variant; RT3 → `left-hanging` O-seat (E6o); RT2 Review only.
 - whyItFailed `lost-the-piece` when the move is premature; costReason `allowed` blowPlies 1. RT1 is the "why now is wrong" angle of the same cause as blunderCheck BC1 — pick RT1 only when B3 proves a later board is safe (more specific).
 
 ## F. Build changes
 1. Expose `gain` (B2).
-2. New `tooEarly(fenNow, san, laterFen)` (B3) in `moveTiming.ts`.
+2. No new function: the inverse IS `readTiming(fenBefore, laterFen, san)` with `laterFen` = the board after bestPv[0] and bestPv[1] — it returns non-null exactly when the move loses on the board played and is safe one move later. Add a registry read on the mistake turn with that call.
 3. Recipe RT1 joins cause `lost-the-piece` as a more specific variant (priority over BC1 when it fires).
 
 ## G. Proof boards

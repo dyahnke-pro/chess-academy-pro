@@ -1,7 +1,7 @@
 # harmlessPin — card
 
 ## A. Identity
-- `harmlessPin(fenBefore, san, line)` — `src/services/harmlessPin.ts` (`pinsFrom`, `pinStands`, `pawnGuard`, main fn); words `harmlessPinLine(h, pinnerIsStudent, fenAfter)` (rotated 3 stems).
+- `harmlessPin(fenBefore, san, line)` — `src/services/harmlessPin.ts:99-153` (`pinsFrom` :51, `pinStands` :79, `pawnGuard` :88); words `harmlessPinLine(h, pinnerIsStudent, fenAfter)` :158 (rotated 3 stems).
 - Board computer `harmlessPin` — `src/services/boardComputers.ts:3811-3830`, kind `defence-idea`; surfaces lesson (moveThoughtFacts), review, play-ask, chat-via-thought, Learn via thought.
 - Census: 8 fired / 8 said (review 3, lesson 5); 2 voiced boards.
 
@@ -9,9 +9,9 @@
 ### B1. Handed over (`HarmlessPin`)
 `pinner` {square, piece}, `pinned` {square, piece}, `target` {square, k|q}, `guard` (the pawn guarding the pinned piece), `end` {how: castles|blocks|kicks|steps, san, square}, `pinnerColor`, `key`.
 ### B2. Dropped
-- `theirMoves` count (how many pinned-side moves until the pin ends — ≤2) — the "two checks" proof is not said as a count.
-- The `kick` candidate when a pawn hits the pinner but the line does not use it — the alternative way out.
-- That the pinning move was NOT a capture and not a check (gate) = "a pin that costs them nothing to meet".
+- `theirMoves` count (:115/:130, how many pinned-side moves until the pin ends — ≤2) — the "two checks" proof is not said as a count.
+- The `kick` candidate (:117/:138) when a pawn hits the pinner but the pinner does not step away on the line — then `end` stays null and the whole read returns null (:144), so the kick is lost with it.
+- That the pinning move was NOT a capture and not a check (gate, :104) = "a pin that costs them nothing to meet".
 ### B3. Cheap
 - Tempo cost for the pinner: after `end.how='kicks'`, does the pinner have to retreat (its moves from `end` board all backwards / it trades itself)? → "the bishop loses a move".
 - The student's OVERREACTION: when the opponent made the harmless pin and the student's actual reply ≠ `end.san` and errorWhy cost ≥ inaccuracy (e.g. h3/g4 weakening, giving up a piece) — compare played reply to the engine's end move.
@@ -29,7 +29,7 @@
 ## D. Lesson recipes
 | id | angle | seat | condition | slots | LESSON stems | CONSEQUENCE | BETTER-MOVE | HABIT | Learn variant | guard | data |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| HP-1 | evaluate (own pin) | S pinned, S's move cost ≥ inaccuracy | pinnerColor = S | pinner, guard, end | "A pin only matters if it can't be shaken off. Your bishop on g5 pins the knight, but a pawn guards it and h6 ends it." / "Rate a pin in two checks: is the pinned piece guarded, and can they break it next move? Here both are yes." | "So the bishop just gets kicked and loses a move." (B3) | errorWhy best + job | "Before you pin, ask: is the piece guarded, and can they break the pin next move?" | after | cost < inaccuracy → silent (a harmless pin is often still fine) | H + C |
+| HP-1 | evaluate (own pin) | S is the pinner, S's move cost ≥ inaccuracy | pinnerColor = S | pinner, guard, end | "A pin only matters if it can't be shaken off. Your bishop on g5 pins the knight, but a pawn guards it and h6 ends it." / "Rate a pin in two checks: is the pinned piece guarded, and can they break it next move? Here both are yes." | "So the bishop just gets kicked and loses a move." (B3) | errorWhy best + job | "Before you pin, ask: is the piece guarded, and can they break the pin next move?" | after | cost < inaccuracy → silent (a harmless pin is often still fine) | H + C |
 | HP-2 | evaluate (their pin, overreaction) | O pinned S; S's reply ≠ end.san, cost ≥ inaccuracy | B3 | guard, end | "Not every pin is a threat. Their bishop on g4 pins your knight, but a pawn guards it and castling ends it — there was nothing to fix." | "The move you spent on it weakened your king instead." (only if the played reply's cost is the weakness — errorWhy) | "O-O was the move — castling ends the pin." (end.san, once past) | same habit | after | the pin was NOT harmless on the played line (line differs) | C |
 | HP-3 | knowledge | both | end.how | how | castles: "Castling breaks a pin to the king." blocks: "A piece in between ends a pin." kicks: "A pawn on the pinner ends it — and gains a move." steps: "Moving the queen off the line ends a pin to the queen." | | | | Review | — | H |
 | HP-4 | calculate | both | theirMoves | B2 | "One move and the pin is gone: count how long a pin lasts before you build on it." | | | | Review | — | B2 |
@@ -42,7 +42,7 @@ n/a: phase (opening-middlegame typical, no phase computed); combination with pin
 - Not a costReason material cause; Review/Learn on the mistake turn only.
 
 ## F. Build changes
-1. harmlessPin.ts main fn — expose `theirMoves` and the unused `kick` (B2).
+1. harmlessPin.ts:146-153 — expose `theirMoves` and the unused `kick` (B2).
 2. Add `pinnerLosesTempo(endBoard, pinner)` (chess.js: legal moves of the pinner after the kick that are safe and none advances) → HP-1 consequence.
 3. New caller: on the student's reply to an opponent move, `harmlessPin(fenBeforeTheirMove, theirSan, lineAfter)` non-null AND student played ≠ `end.san` AND errorWhy cost ≥ inaccuracy → recipe HP-2. Today only the pinner's move is read.
 4. Words move to `mistakeLesson` recipe `pin-harmless`; `harmlessPinLine` deleted (renderer leads with board restatement).

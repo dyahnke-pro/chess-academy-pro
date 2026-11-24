@@ -26,17 +26,19 @@
 | KJ2 | consequence (now) | S | gate passes, best not a check, errorWhy has an `allowed` reason | errorWhy cause | "A recapture is not always the best move. Taking back here gave them {cause words}." | errorWhy line | "{best} came first." | KJ1 habit | same | needs errorWhy cause; silent otherwise | C |
 | KJ3 | counterfactual / calculate | S | best captures elsewhere (`/x/` and square ≠ sq) | target square | "Two captures were on the board, and the bigger one came first: {best} wins more than taking back on {sq}." | "Taking back on {sq} left the bigger win." | "{best} took first." | "Count every capture on the board before you take back." | Learn: no move names before; after: named | best capture must win more (SEE) than the recapture | C (SEE) |
 | KJ4 | their seat | O | same gates with mover = opponent | — | "They took back by reflex. When a capture is answered on autopilot, look for the move they skipped." | — | n/a (their better move: Review only) | — | Learn: say only when it hands the student a punish (combine with errorWhy) | today the computer is student-only (registry seat 'student'); O seat needs a seat param | C (seat param) |
+| KJ6 | combination (onlyMove / priority) | S | gate passes AND best is a quiet move that attacks a bigger piece (inBetweenMove kind threat) | target piece | "A recapture can wait when you have a bigger threat: hit the {target} first, and the piece on {sq} is still there after." | KJ1 | "{best} hit the {target} first." (past) | KJ1 habit | same | bestKind 'threat' only; the recapture must still be on after best + reply (`waits`) | C (inBetweenMove `:171-178`) |
 | KJ5 | record | S | — | — | RED/GREY: full KJ1/KJ2 · AMBER: "A recapture can wait — {best} came first." · GREEN: silent | | | | | | H (record via correctionHabit habitNeed) |
 | — | prevent, own plan, their plan, phase, endgame, strategize | — | n/a — a reflex recapture is a decision-order fault; no plan/phase fact exists in its inputs | | | | | | | | |
 | — | exception | S | the recapture is the only move holding (onlyMove would say so) | — | never said — the reflex was right | | | | | onlyMove on the recapture | H |
 
 ## E. Mistake link
+- errorWhy cause: `missed-win` with motif `zwischenzug` (E14) is the main hook; KJ2 rides `allowed-capture`/`allowed-tactic` (E10/E11). Every row attaches to a mistake turn (cost ≥ 100).
 - Teaches: `costReason missed` where the missed line starts with a check/threat (motif `zwischenzug` from `detectTacticType`); `costReason allowed` after a recapture. Both seats only after KJ4's seat param; student seat today.
 - Not a cause on its own: it is the HABIT for "missed in-between move". Join on the same turn as errorWhy.
 
 ## F. Build changes
 1. `kneeJerk.ts:15` — return a typed `{ square, bestSan, bestKind: 'check'|'capture'|'threat'|'quiet', waits: boolean }` instead of a string; the sentence moves to `mistakeLesson` (KJ1–KJ3).
-2. `kneeJerk.ts` — compute `waits` with `inBetweenMove(fenBefore, bestPv, 'best')` (needs `bestPv` param; the registry ctx has `bestUci`?); `bestKind` from chess.js on bestSan.
+2. `kneeJerk.ts` — compute `waits` with `inBetweenMove(fenBefore, bestPv, 'best')` (the ctx at `boardComputers.ts:1005` has no best line today: add `bestUci: readonly string[]`, the same field `kickAfterRecapture` already takes at `:515`, filled from the move's own engine read); `bestKind` from chess.js on bestSan.
 3. Add a REQUIRED `mover: 'student'|'opponent'` param; registry `boardComputers.ts:4844` passes it; drop the hard-coded `seat: 'student'`.
 4. Habit wording becomes a `correctionHabit` habit id (`methodBeat.ts`) `recapture-first`, so the record decides (RED/GREY/AMBER/GREEN) instead of the once-a-game claim.
 5. Delete the fixed string at :22 once the recipe table speaks it.

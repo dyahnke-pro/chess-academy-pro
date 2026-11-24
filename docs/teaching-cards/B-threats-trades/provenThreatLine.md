@@ -1,15 +1,15 @@
 # provenThreatLine — the proof behind "this costs you a piece"
 
 ## A. Identity
-- File: `src/services/threatProof.ts` (142 lines): `threatProof(fen, student, squares)` (31–103), `provenThreatLine(line, fen, student, squares)` (105–117), `threatStakes` (119–136), `looseClaims` (138–142).
+- File: `src/services/threatProof.ts` (142 lines): `threatProof(fen, student, squares)` (31–~100), `provenThreatLine(line, fen, student, squares)` (106–117), `threatStakes` (119–136), `looseClaims` (138–142).
 - Registry: `boardComputers.ts` `threatCost` (2763–2775, computer `provenThreatLine`, kind `threat`, seat `student`) — wraps a warning written by ANOTHER surface (the threat lane, `trapped`, 2754) with its proof; also used for the threat-answer proof (2784).
 - Reach: learn door, review, chat, tapped, tactics (lesson no). Census: 4 review lines (2 said, 2 held `in-flux`): "Careful — your knight on e5 is hanging. Nothing guards it, so they can take it. Nxe5 — they win a knight."
 
 ## B. Facts
 - **B1** a `Proof`: `kind` line (mate) | count (material), `exact: true`, `short`, `full`, `line {fen, sans:[capture]}`, `squares`. Words include the count ("attacked twice, guarded once") or the net ("trades their pawn for your bishop, and you come out behind even after you take back").
-- **B2 dropped:** `hits` (attacker count, 44) and `named.defenders` go into words only; `cheaper` (54) is a boolean in prose; the ledger `free` (51) — its full settled exchange — is reduced to `describeProofResult`.
+- **B2 dropped:** `hits` (attacker count, 52) and `named.defenders` go into words only; `cheaper` (67) is a boolean in prose; the ledger `free` (61) — its full settled exchange — is reduced to `describeProofResult`.
 - **B3 cheap:** expose `{ attackers: hits, defenders, cheaperAttacker, net: named.value, mate: san | null }` as fields — every number is already computed.
-- **B4 gates:** null when the flip is illegal (32); mate threat first (35–44); a named piece among `squares` with an attacker (45–46); a legal capture of it (48). No cp gate (it proves a warning someone else decided to say).
+- **B4 gates:** null when the flip is illegal (32); mate threat first (35–43); a named piece among `squares` with an attacker (45–46); a legal capture of it (48). No cp gate (it proves a warning someone else decided to say).
 
 ## C. Sentence readiness
 | slot | today | field | missing |
