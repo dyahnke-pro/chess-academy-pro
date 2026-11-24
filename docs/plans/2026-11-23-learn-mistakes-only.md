@@ -12,6 +12,14 @@ Approved voice: "Trading off your dark-squared bishop hands them the dark square
 ## Rule for every sentence the build writes: say it several ways (David 2026-11-24)
 Every recipe slot (LESSON, CONSEQUENCE, BETTER MOVE, HABIT) holds **at least 5 phrasings of the same idea**, rotated with `rotateStem` keyed on the board, never `Math.random`, so a game never repeats itself. The idea and the facts stay the same; only the words change. A gate (`mistakeLesson.test.ts`) fails any recipe slot with fewer than 5 phrasings and any two phrasings that are word-for-word the same once squares and pieces are blanked. The only exceptions are the ones already locked: the focus clue and the mission lines stay fixed.
 
+## The opponent's mistake is said by the record (David 2026-11-24)
+When the coach (the opponent) makes a mistake, Learn speaks it only if the student needs the hint. The heat map decides on the skill that finds it (the cause's record tag on the student's side: punishing a loose piece, a fork, a pin…):
+- RED or GREY: the full lesson.
+- AMBER: one short clause.
+- GREEN: silent.
+
+It is said after the student's reply, and it never names the student's move. The same hold-rate read (`holdRate`) is used for the habit slot.
+
 ## Order — the computer job comes first
 
 ### Phase 1 — the cards (the build spec) ← NOW
