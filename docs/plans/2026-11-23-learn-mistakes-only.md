@@ -66,6 +66,12 @@ Each recovery principle is researched from at least 2 independent sources: the b
 - **Coins and celebrations off on request**, done (commit 1f02f1b). `rewardEffectsOn` is read at the one reward door, there is a Settings toggle, and the coach's settings action handles "turn off the coins / star bursts / celebrations".
 - **A requested opening is still played.** "Play the Caro-Kann against me" sets the intended opening, and the coach's reply order stays: the move the student dictated, then the opening's book move, then the engine (`CoachTeachPage.resolveCoachReplyMove`). This build changes only what Learn SAYS, never which move the coach plays. The tape adds a check: on a requested opening, every coach move is the book move while the game stays on the line.
 
+## Four refinements (David 2026-11-24: "I like your suggestions")
+1. **A good decision gets one line.** When the student finds a real decision (the only move, a prophylactic move, the move that holds), Learn says one short line on why it worked. This happens only while that skill is RED or GREY on the record, and stops once the skill is proven. It is the one exception to "mistakes only".
+2. **Short turns on repeats.** A small mistake on a skill the student was told about this game gets the LESSON sentence only: no consequence, recovery or habit.
+3. **Recovery only when the state changes.** The REPAIR line is said when the position's state changes (the first time material goes down, the first time the king is opened…), not on every mistake after it. The state's say-once is cleared when the state ends.
+4. **The consequence may name their move once it is played.** Their reply is past, so it is not the student's next move: "their king took back on f7". The student's own moves are still never named in Learn.
+
 ## Order — the computer job comes first
 
 ### Phase 1 — the cards (the build spec) ← NOW
