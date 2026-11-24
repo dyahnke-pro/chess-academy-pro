@@ -27,6 +27,7 @@
 // G0 throughout: severity is arithmetic, the better move comes from the engine,
 // and the reason comes from replaying the engine's own line. Nothing here asks a
 // model what it thinks.
+import { mustDefendPieces } from './threatOut';
 import { classifyMistake, type MistakeCause } from './mistakeCause';
 import { capturedSquare } from '../utils/capturedSquare';
 import { evalBand } from './evalBand';
@@ -1578,7 +1579,24 @@ export function errorWhy(args: {
     ? (() => { try { return positionalReason({ fen: args.fenBefore, playedSan: args.playedSan, bestSan, namesBetterMove: false, student: args.moverColor === 'white' ? 'w' : 'b' })?.tag ?? null; } catch { return null; } })()
     : null;
   const playedCaptures = (() => { try { return !!new Chess(args.fenBefore).move(args.playedSan)?.captured; } catch { return false; } })();
-  const allowedR = caused ? allowedReason() : null;
+  const anyAllowed = allowedReason();
+  const allowedR = caused ? anyAllowed : null;
+  // A THREAT ALREADY ON THE BOARD that the move did not answer: the reply line
+  // wins material, the move did not cause it (card errorWhy E16 / C WF-8).
+  // The reason walker cannot see it (the threat is in the better move's line
+  // too), so it is read off the board: a piece of the mover's that hung before
+  // the move still hangs after it, and their reply takes it.
+  const ignoredThreat = args.allowedMate === null && (() => {
+    try {
+      const mv = moverWB;
+      const before = new Set(mustDefendPieces(args.fenBefore, mv).map((p) => p.square));
+      if (!before.size) return false;
+      const c = new Chess(args.fenBefore); c.move(args.playedSan);
+      const still = mustDefendPieces(c.fen(), mv).filter((p) => before.has(p.square));
+      const u = replyLineUci[0];
+      return !!u && still.some((p) => p.square === u.slice(2, 4));
+    } catch { return false; }
+  })();
   const missedR = missedReason();
   const cause = classifyMistake({
     allowedMate: args.allowedMate !== null,
@@ -1586,9 +1604,10 @@ export function errorWhy(args: {
     failedKind: failedRead?.kind ?? null,
     playedCaptures,
     allowedWins: !!punishment || !!single || !!farLoss,
-    allowedMotif: allowedR?.motif ?? null,
+    allowedMotif: (allowedR ?? (ignoredThreat ? anyAllowed : null))?.motif ?? null,
     allowedThreat: !!allowed,
     kingHunt: !!hunt,
+    ignoredThreat,
     missedMotif: missedR?.motif ?? null,
     missedWins: !!missedR && !missedR.mate,
     tag: positionalTag,

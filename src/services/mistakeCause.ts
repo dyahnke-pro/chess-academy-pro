@@ -29,6 +29,7 @@ export type MistakeCauseKind =
   | 'allowed-capture'
   | 'allowed-threat'
   | 'king-hunt'
+  | 'ignored-threat'
   | 'missed-win'
   | 'positional'
   | 'unexplained';
@@ -58,6 +59,9 @@ export interface MistakeCauseReads {
   /** A reply that attacks / checks / pins but wins nothing yet. */
   allowedThreat: boolean;
   kingHunt: boolean;
+  /** The reply line wins material, but the threat was on the board before
+   *  the move: the move failed to answer it. */
+  ignoredThreat: boolean;
   missedMotif: TacticType | null;
   missedWins: boolean;
   tag: Exclude<MisconceptionTagId, 'other'> | null;
@@ -87,5 +91,8 @@ export function classifyMistake(r: MistakeCauseReads): MistakeCause {
   if (r.kingHunt) return { ...base, kind: 'king-hunt', motif: null };
   if (r.missedWins) return { ...base, kind: 'missed-win', motif: r.missedMotif };
   if (r.tag) return { ...base, kind: 'positional', motif: null };
+  // Last before unexplained: a board reading of the move itself (a defender
+  // it took away, a square it gave up) says more than "it was already hanging".
+  if (r.ignoredThreat) return { ...base, kind: 'ignored-threat', motif: r.allowedMotif };
   return { ...base, kind: 'unexplained', motif: null };
 }

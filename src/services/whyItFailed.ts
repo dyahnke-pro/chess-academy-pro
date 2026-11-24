@@ -384,6 +384,57 @@ export function whyItFailed(args: {
     }
   }
 
+  // ── WALKED INTO A FORK (their first reply hits two of yours) ─────────────
+  //
+  // Declared since the kind list was written and never returned (teaching
+  // cards C/D, 2026-11-23). Their engine reply lands on a square from which it
+  // attacks two or more of the mover's pieces (the king counts; a target worth
+  // less than the forker counts only when nothing guards it), the line then
+  // takes one of them and the student comes out down, and the same reply on
+  // the board before the move forks fewer. All three halves are read, none
+  // guessed: no line, no fork.
+  const forkReply = lineMoves[0];
+  if (forkReply && studentDown > 0) {
+    const forked = (board: Chess, from: Square): Square[] => {
+      const forker = board.get(from);
+      if (!forker) return [];
+      const fv = VALUE[forker.type] ?? 0;
+      const hits = attackedFrom(board, from, them).filter((sq) => {
+        const p = board.get(sq);
+        if (!p || p.color !== me) return false;
+        return (VALUE[p.type] ?? 0) > fv || board.attackers(sq, me).length === 0;
+      });
+      // `attackedFrom` skips kings: a fork with check counts the king.
+      const king = board.inCheck() ? board.findPiece({ type: 'k', color: me })[0] : undefined;
+      return king && board.attackers(king, them).includes(from) ? [king, ...hits] : hits;
+    };
+    let nowHit: Square[] = [];
+    let homeHit: Square[] = [];
+    try {
+      const c = new Chess(after.fen());
+      c.move({ from: forkReply.from, to: forkReply.to, promotion: forkReply.promotion });
+      nowHit = forked(c, forkReply.to as Square);
+    } catch { nowHit = []; }
+    try {
+      const h = new Chess(sideToMoveAs(before.fen(), them) ?? before.fen());
+      h.move({ from: forkReply.from, to: forkReply.to, promotion: forkReply.promotion });
+      homeHit = forked(h, forkReply.to as Square);
+    } catch { homeHit = []; }
+    const wins = nowHit.some((sq) => lineTakes(sq));
+    if (nowHit.length >= 2 && homeHit.length < nowHit.length && wins) {
+      const forkerType = forkReply.piece;
+      const hit = nowHit.map((sq) => `your ${NAME[after.get(sq)?.type ?? 'p']} on ${sq}`);
+      const list = `${hit.slice(0, -1).join(', ')} and ${hit[hit.length - 1]}`;
+      const taken = nowHit.find((sq) => lineTakes(sq)) ?? null;
+      return {
+        kind: 'walks-into-fork',
+        squares: [forkReply.to, ...nowHit],
+        lost: taken,
+        line: `That let their ${NAME[forkerType]} in on ${forkReply.to}, where it hits ${list} at once.`,
+      };
+    }
+  }
+
   // The rest of the geometry keys off what the move NEWLY hits. A piece the
   // student was already attacking is not the idea behind this move, so claiming
   // it was would put a reason in their mouth they never had.
