@@ -62,6 +62,10 @@ Each recovery principle is researched from at least 2 independent sources: the b
 2. **Every game streams.** The walk starts at move 1 while the engine reads ahead a few moves. A move only waits for its own reads, and the deep read of a costly move runs ahead of the walk. Nothing is cut; only the order changes.
 3. **Measure first:** time the first open of one of David's Learn games and one imported game, before and after, on the same device class.
 
+## Two guards (David 2026-11-24)
+- **Coins and celebrations off on request**, done (commit 1f02f1b). `rewardEffectsOn` is read at the one reward door, there is a Settings toggle, and the coach's settings action handles "turn off the coins / star bursts / celebrations".
+- **A requested opening is still played.** "Play the Caro-Kann against me" sets the intended opening, and the coach's reply order stays: the move the student dictated, then the opening's book move, then the engine (`CoachTeachPage.resolveCoachReplyMove`). This build changes only what Learn SAYS, never which move the coach plays. The tape adds a check: on a requested opening, every coach move is the book move while the game stays on the line.
+
 ## Order — the computer job comes first
 
 ### Phase 1 — the cards (the build spec) ← NOW
