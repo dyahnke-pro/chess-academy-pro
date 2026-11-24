@@ -20,6 +20,18 @@ When the coach (the opponent) makes a mistake, Learn speaks it only if the stude
 
 It is said after the student's reply, and it never names the student's move. The same hold-rate read (`holdRate`) is used for the habit slot.
 
+## The REPAIR slot: how to live with a loss that can't be undone (David 2026-11-24)
+When a mistake leaves something permanent (a bishop traded off, a pawn left weak, a passer let loose, the king's cover pushed), the turn also says how to adapt. The order is LESSON → CONSEQUENCE → BETTER MOVE (past) → REPAIR → HABIT.
+
+REPAIR is computed from the board, never written freehand. Each repair rule has a deterministic check that it is possible here:
+- colour conceded: put your pawns on the lost bishop's colour, cover the holes with a knight, trade off their good bishop. The check: which pawns can still reach that colour, and which knight can reach the hole.
+- weak pawn: keep pieces near it, trade the pieces that attack it, or push it and trade it off.
+- passer let loose: blockade it with a knight, bring the king, or put a rook behind it.
+- king cover gone: keep defenders near the king, trade off their attackers (queens first), don't open more lines.
+- misplaced piece: bring it back toward the centre.
+
+Learn says the repair as a plan, never as a move ("your pawns on the dark squares", never "c3"). Review may name the move. Each repair has 5 rotated phrasings. With no computable repair the slot is silent.
+
 ## Order — the computer job comes first
 
 ### Phase 1 — the cards (the build spec) ← NOW
