@@ -14,6 +14,7 @@
 import type { TacticType } from '../types';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import type { WhyItFailedKind } from './whyItFailed';
+import type { StructuralCause } from './structuralCause';
 
 export type MistakeCauseKind =
   | 'allowed-mate'
@@ -31,6 +32,15 @@ export type MistakeCauseKind =
   | 'king-hunt'
   | 'ignored-threat'
   | 'missed-win'
+  // The structural causes (`structuralCause`, MISTAKE-CAUSES.md §B): what a
+  // costly move changed that is not material.
+  | 'stalemate'
+  | 'technique-broken'
+  | 'passer-handed'
+  | 'compensation-lost'
+  | 'traded-into-target'
+  | 'colour-conceded'
+  | 'tempo-wasted'
   | 'positional'
   | 'unexplained';
 
@@ -44,6 +54,9 @@ export interface MistakeCause {
   tag: Exclude<MisconceptionTagId, 'other'> | null;
   /** False when the threat was already on the board before the move. */
   causedByMove: boolean;
+  /** The structural reader's facts (target square, colour, pawn …) when the
+   *  kind is one of the structural causes; null otherwise. */
+  detail: StructuralCause | null;
 }
 
 /** What errorWhy read, flattened: each field is one reader's verdict. */
@@ -66,6 +79,8 @@ export interface MistakeCauseReads {
   missedWins: boolean;
   tag: Exclude<MisconceptionTagId, 'other'> | null;
   causedByMove: boolean;
+  /** The one structural reading of the move (`readStructuralCause`), or null. */
+  structural: StructuralCause | null;
 }
 
 /** One `whyItFailed` mechanism → its cause, exhaustively. */
@@ -80,16 +95,21 @@ const FAILED_KIND: Record<WhyItFailedKind, (captures: boolean) => MistakeCauseKi
 
 /** The order is errorWhy's own: mate first, then the mechanism, then what the
  *  reply line wins, the threat, the hunt, what the better move wins, the
- *  board's positional reading. Nothing read → `unexplained`. */
+ *  structural reading, the board's positional reading. Nothing read →
+ *  `unexplained`. A stalemate is the one structural cause told straight after
+ *  the mate it is the opposite of: the game is drawn on the board, and what
+ *  else the line wins or misses no longer counts. */
 export function classifyMistake(r: MistakeCauseReads): MistakeCause {
-  const base = { tag: r.tag, causedByMove: r.causedByMove };
+  const base = { tag: r.tag, causedByMove: r.causedByMove, detail: null };
   if (r.allowedMate) return { ...base, kind: 'allowed-mate', motif: null };
+  if (r.structural?.kind === 'stalemate') return { ...base, kind: 'stalemate', motif: null, detail: r.structural };
   if (r.missedMate) return { ...base, kind: 'missed-mate', motif: null };
   if (r.failedKind) return { ...base, kind: FAILED_KIND[r.failedKind](r.playedCaptures), motif: r.allowedMotif };
   if (r.allowedWins) return { ...base, kind: r.allowedMotif ? 'allowed-tactic' : 'allowed-capture', motif: r.allowedMotif };
   if (r.allowedThreat) return { ...base, kind: 'allowed-threat', motif: r.allowedMotif };
   if (r.kingHunt) return { ...base, kind: 'king-hunt', motif: null };
   if (r.missedWins) return { ...base, kind: 'missed-win', motif: r.missedMotif };
+  if (r.structural) return { ...base, kind: r.structural.kind, motif: null, detail: r.structural };
   if (r.tag) return { ...base, kind: 'positional', motif: null };
   // Last before unexplained: a board reading of the move itself (a defender
   // it took away, a square it gave up) says more than "it was already hanging".

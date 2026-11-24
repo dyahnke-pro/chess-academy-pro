@@ -5,7 +5,7 @@ import { errorWhy } from './inaccuracyCall';
 const none: MistakeCauseReads = {
   allowedMate: false, missedMate: false, failedKind: null, playedCaptures: false,
   allowedWins: false, allowedMotif: null, allowedThreat: false, kingHunt: false, ignoredThreat: false,
-  missedMotif: null, missedWins: false, tag: null, causedByMove: true,
+  missedMotif: null, missedWins: false, tag: null, causedByMove: true, structural: null,
 };
 
 describe('classifyMistake', () => {

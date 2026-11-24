@@ -29,6 +29,7 @@
 // model what it thinks.
 import { mustDefendPieces } from './threatOut';
 import { classifyMistake, type MistakeCause } from './mistakeCause';
+import { readStructuralCause, stalemateCause, type StructuralArgs } from './structuralCause';
 import { capturedSquare } from '../utils/capturedSquare';
 import { evalBand } from './evalBand';
 import { andList, lineShape, lineShapePlies, seatedLine, lineSeatAt } from '../utils/andList';
@@ -1598,6 +1599,18 @@ export function errorWhy(args: {
     } catch { return false; }
   })();
   const missedR = missedReason();
+  // THE STRUCTURAL READING (`structuralCause`): what the move changed that is
+  // not material. Read only where no reader above has the cause — except the
+  // stalemate, which outranks everything but the mate it is the opposite of.
+  const structuralArgs: StructuralArgs = {
+    fenBefore: args.fenBefore, playedSan: args.playedSan, replyLineUci, bestLineUci: args.bestLineUci,
+    bestSan, costCp: args.costCp ?? null, priorMove: args.priorMove,
+  };
+  const earlierCause = !!failedRead || !!punishment || !!single || !!farLoss || !!allowed || !!hunt
+    || args.missedMate !== null || (!!missedR && !missedR.mate);
+  const structural = args.allowedMate !== null ? null
+    : earlierCause ? (() => { try { return stalemateCause(structuralArgs); } catch { return null; } })()
+      : readStructuralCause(structuralArgs);
   const cause = classifyMistake({
     allowedMate: args.allowedMate !== null,
     missedMate: args.missedMate !== null,
@@ -1612,6 +1625,7 @@ export function errorWhy(args: {
     missedWins: !!missedR && !missedR.mate,
     tag: positionalTag,
     causedByMove: caused,
+    structural,
   });
   return {
     cause,
