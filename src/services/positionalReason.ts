@@ -29,7 +29,19 @@ import { centreDistance } from '../utils/centreDistance';
 import { phaseOfFen, type Phase } from './boardConcepts';
 import { withMover } from '../utils/sideToMove';
 
-export interface PositionalReason { tag: Exclude<MisconceptionTagId, 'other'>; note: string }
+export interface PositionalReason {
+  tag: Exclude<MisconceptionTagId, 'other'>;
+  note: string;
+  /** The square the reading is about (the king, the piece that lost or gained
+   *  reach), and that piece — typed, so a recipe never reads them back out of
+   *  the note. Absent where the reading names no square. */
+  at?: string;
+  piece?: string;
+  /** Whose piece `at` holds: the mover's, or the other side's. */
+  whose?: 'mover' | 'other';
+  /** `passive-rook`: the file the better move puts the rook on. */
+  file?: string;
+}
 
 /** What each concession is a lapse in — one row per kind, so a new kind fails
  *  to compile until someone files it. */
@@ -162,12 +174,13 @@ export function boardReason(fen: string, playedSan: string, bestSan: string | nu
     const ksq = kingOf(played, mover);
     push(ks(played) - ks(bestBoard), 1,
       { tag: bestMove && /^O-O/.test(bestMove.san) ? 'king-stuck-center' : 'weakened-king-safety',
-        note: ksq ? `The king on ${ksq} is less sheltered after ${movedSan} than after the better move.` : `The king is less sheltered after ${movedSan} than after the better move.` });
+        note: ksq ? `The king on ${ksq} is less sheltered after ${movedSan} than after the better move.` : `The king is less sheltered after ${movedSan} than after the better move.`,
+        ...(ksq ? { at: ksq, piece: 'king', whose: 'mover' as const } : {}) });
   }
   if (phase === 'endgame') {
     const kp = kingOf(played, mover); const kb = kingOf(bestBoard, mover);
     if (kp && kb) push(centreDistance(kp) - centreDistance(kb), 1,
-      { tag: 'passive-king-endgame', note: `In the endgame the king belongs nearer the centre than ${kp}.` });
+      { tag: 'passive-king-endgame', note: `In the endgame the king belongs nearer the centre than ${kp}.`, at: kp, piece: 'king', whose: 'mover' });
     push(findPassedPawns(bestBoard.fen(), mover).length - findPassedPawns(played.fen(), mover).length, 1,
       { tag: 'passed-pawn-neglected', note: 'The better move makes a passed pawn.' });
   }
@@ -183,16 +196,16 @@ export function boardReason(fen: string, playedSan: string, bestSan: string | nu
     return bm && bm.piece === 'r' && onFile(bm.to) && !onFile(bm.from) ? `${files.open.includes(bm.to[0]) ? 'open' : 'half-open'} ${bm.to[0]}-file` : null;
   })();
   if (rookGain) push(rooksOnOpenFiles(bestBoard, mover) - rooksOnOpenFiles(played, mover), 1,
-    { tag: 'passive-rook', note: `The better move puts ${moverOwn} rook on the ${rookGain}.` });
+    { tag: 'passive-rook', note: `The better move puts ${moverOwn} rook on the ${rookGain}.`, file: rookGain.replace(/^(open|half-open) /, '') });
   const space = (c: Chess): number => { const t = computeTerritory(c.fen()); return mover === 'w' ? t.white - t.black : t.black - t.white; };
   push(space(bestBoard) - space(played), 2,
     { tag: 'space-conceded', note: `${movedSan} gives up space in the centre the better move kept.` });
   const mine = biggestShift(fen, playedSan, played, bestSan, bestBoard, mover);
   if (mine && mine.gap >= 3) push(activity(bestBoard, mover) - activity(played, mover), 4,
-    { tag: 'misplaced-piece', note: `${moverOwn === 'your' ? 'Your' : 'Their'} ${PIECE[mine.type] ?? 'piece'} on ${mine.at} reaches ${mine.gap} fewer squares after ${movedSan} than after the better move.` });
+    { tag: 'misplaced-piece', note: `${moverOwn === 'your' ? 'Your' : 'Their'} ${PIECE[mine.type] ?? 'piece'} on ${mine.at} reaches ${mine.gap} fewer squares after ${movedSan} than after the better move.`, at: mine.at, piece: PIECE[mine.type] ?? 'piece', whose: 'mover' });
   const theirs = biggestShift(fen, bestSan, bestBoard, playedSan, played, enemy);
   if (theirs && theirs.gap >= 3) push(activity(played, enemy) - activity(bestBoard, enemy), 4,
-    { tag: 'tempo-handed', note: `${movedSan} frees ${enemyOwn} ${PIECE[theirs.type] ?? 'piece'} on ${theirs.at}: it reaches ${theirs.gap} more squares than after the better move.` });
+    { tag: 'tempo-handed', note: `${movedSan} frees ${enemyOwn} ${PIECE[theirs.type] ?? 'piece'} on ${theirs.at}: it reaches ${theirs.gap} more squares than after the better move.`, at: theirs.at, piece: PIECE[theirs.type] ?? 'piece', whose: 'other' });
   return gaps.length > 0 ? gaps.sort((a, b) => b.gap - a.gap)[0].reason : null;
 }
 
@@ -219,7 +232,13 @@ export function bestJobReason(fen: string, bestSan: string | null): PositionalRe
     if (lever) return { tag: 'mistimed-pawn-break', note: said(`The pawn break ${bestMove.san} was the timely one.`) };
     return { tag: 'no-plan', note: said(`${bestMove.san} was the move the position asked for.`) };
   }
-  if (bestMove.piece === 'k') return { tag: 'passive-king-endgame', note: said(`The king belonged on ${bestMove.to}.`) };
+  // A KING MOVE IS AN ENDGAME KING'S JOB ONLY IN THE ENDGAME
+  // (learn-mistakes-only bug 11: a middlegame king step filed
+  // `passive-king-endgame`). Before the endgame no skill is proven by the
+  // move alone: nothing is filed.
+  if (bestMove.piece === 'k') {
+    return phaseOfFen(fen) === 'endgame' ? { tag: 'passive-king-endgame', note: said(`The king belonged on ${bestMove.to}.`) } : null;
+  }
   return { tag: 'misplaced-piece', note: said(`The ${PIECE[bestMove.piece] ?? 'piece'} belonged on ${bestMove.to}.`) };
 }
 

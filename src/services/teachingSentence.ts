@@ -25,6 +25,8 @@ import { rotateStem } from '../utils/rotateStem';
 import { andList, orList, countWord } from '../utils/andList';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { evalBandWords, type EvalBand } from './evalBand';
+import type { MistakeCauseKind } from './mistakeCause';
+import type { MisconceptionTagId } from '../data/misconceptionTags';
 
 /** The board a fact is about, relative to the board on screen. */
 export type FactRelation = 'now' | 'past' | 'line' | 'try';
@@ -990,3 +992,1005 @@ export function renderWalkedIntoFork(f: { forker: string; square: string; target
   const list = f.targets.length > 1 ? `${f.targets.slice(0, -1).join(', ')} and ${f.targets[f.targets.length - 1]}` : f.targets[0];
   return `That let their ${f.forker} in on ${f.square}, where it hits ${list} at once.`;
 }
+
+// ══ THE MISTAKE LESSON (WO-LEARN-MISTAKES-ONLY) ═══════════════════════════
+// The phrasing tables and the slot renderer for `mistakeLesson` (selection,
+// record gate, silent_why and the audit row live there). Every stem: 5
+// phrasings, ≤14 words, no move, rotated on the board (mistakeLesson.test).
+// Written in the MOVER's voice; `seatWords` turns it for the other seat.
+
+export type LessonSlot = 'lesson' | 'consequence' | 'better' | 'repair' | 'habit';
+export const LESSON_SLOTS: readonly LessonSlot[] = ['lesson', 'consequence', 'better', 'repair', 'habit'];
+
+/** The fields a stem may name — each read from a computed value (`fillsFor`). */
+export type FillKey =
+  | 'piece' | 'sq'           // the piece the move moved, where it stands now
+  | 'tPiece' | 'target'      // the piece the mechanism is about (failedSquares[0] / lostSquare)
+  | 'opPiece' | 'opSq'       // the piece that refutes it (failedSquares[1]: guard, taker, attacker)
+  | 'king'                   // the mover's king
+  | 'checkPiece' | 'checkSq' // their first check in the reply line (mover's seat only)
+  | 'what'                   // the material the line wins, in words
+  | 'motif'                  // the tactic, with its article ("a fork")
+  | 'colour' | 'pawn' | 'n' | 'file'
+  | 'down'                   // a deficit in pawns, in words (compensation)
+  | 'cap'                    // the piece the better move takes
+  | 'a' | 'b'                // a fork's two targets
+  | 'theirMove'              // their reply once played, in words
+  | 'gives' | 'victim'       // the good decision's fields
+  | 'answer';                // how an empty check was met
+
+export interface SlotRecipe {
+  /** Every field the stems name; one missing → the slot is silent. */
+  needs: readonly FillKey[];
+  stems: readonly string[];
+}
+
+export interface LessonRecipe {
+  lesson: SlotRecipe | null;
+  consequence: SlotRecipe | null;
+  habit: SlotRecipe | null;
+  /** The habit family the AMBER clause comes from. */
+  family: HabitFamily;
+  /** The repair states this cause leaves, tried before the ledger's own. */
+  repairs: readonly RepairState[];
+}
+
+export const S = (needs: readonly FillKey[], stems: readonly string[]): SlotRecipe => ({ needs, stems });
+
+// ── the habit families (AMBER: one short clause) ───────────────────────────
+/** The slot fields a mistake stem may name (filled by `mistakeLesson.fillsFor`). */
+export type Fills = Partial<Record<FillKey, string>>;
+
+export type HabitFamily = 'checks' | 'captures' | 'loose' | 'tactics' | 'threats' | 'structure' | 'endgame' | 'tempo' | 'plan';
+export const HABIT_SHORT: Record<HabitFamily, readonly string[]> = {
+  checks: ['Checks first.', 'Look at their checks.', 'Count the checks first.', 'Their checks, every move.', 'First, every check they have.'],
+  captures: ['Count who takes back.', 'Recaptures first.', 'Count the recapture.', 'Who takes back?', 'Count the trade first.'],
+  loose: ['Check for loose pieces.', 'Anything loose?', 'Guard where it lands.', 'Look for loose pieces.', 'Is it guarded there?'],
+  tactics: ['Look for their tactic.', 'Watch for the trick.', 'What can they hit at once?', 'Check two-piece hits.', 'Scan for their shot.'],
+  threats: ['What does their move threaten?', 'Read their last move.', 'Threats first.', 'Ask what they attack.', 'Answer their threat first.'],
+  structure: ['Mind the pawns left behind.', 'Look at the pawns after.', 'Pawns decide the long game.', 'Check what the trade leaves.', 'Watch the structure.'],
+  endgame: ['Rule first, then moves.', 'Play the ending by its rule.', 'Method before calculation.', 'Know the ending\'s rule.', 'Endings: method first.'],
+  tempo: ['Make every move count.', 'Does it force anything?', 'No moves they can ignore.', 'Every move needs a job.', 'Ask what it makes them do.'],
+  plan: ['Ask what the position wants.', 'Improve your worst piece.', 'Find the plan first.', 'What does each piece need?', 'Look for the plan.'],
+};
+
+// ── the repair states (the plan to live with what the mistake left) ────────
+export type RepairState =
+  | 'colour-conceded' | 'colour-won'
+  | 'weak-pawn' | 'weak-pawn-theirs'
+  | 'passer-against' | 'passer-mine'
+  | 'down-queen' | 'down-piece-middlegame' | 'down-piece-endgame' | 'down-exchange' | 'down-pawn-middlegame' | 'down-pawn-endgame'
+  | 'up-material'
+  | 'king-exposed'
+  | 'initiative-lost' | 'initiative-won'
+  | 'technique-key-square' | 'technique-opposition' | 'technique-rook'
+  | 'leave-a-square'
+  | 'attack-their-king'
+  | 'down-material-queens-off';
+
+export interface RepairRecipe {
+  needs: readonly FillKey[];
+  stems: readonly string[];
+  /** Sources the principle rests on (recovery/<state>.md). */
+  sources: readonly string[];
+}
+
+/** Every repair, worded to the STUDENT (never swapped). The check that it
+ *  applies on this board is `repairApplies`. */
+export const REPAIRS: Record<RepairState, RepairRecipe> = {
+  'colour-conceded': {
+    needs: ['colour'],
+    stems: [
+      'Put your pawns on {colour} squares to help regain control of the {colour} squares.',
+      'Your pawns must guard the {colour} squares now that the bishop is gone.',
+      'Let your pawns do the bishop\'s work: set them on {colour} squares.',
+      'Pawns on {colour} squares can cover what the missing bishop used to.',
+      'Fill the gap with pawns: stand them on the {colour} squares.',
+    ],
+    sources: ['Library: Capablanca cf-12', 'Library: Nimzowitsch ms-70', 'https://www.chess.com/article/view/the-weak-dark-square-complex'],
+  },
+  'colour-won': {
+    needs: ['colour'],
+    stems: [
+      'Their {colour} squares are weak now: aim your pieces at them.',
+      'Nothing of theirs guards the {colour} squares any more; move in there.',
+      'Plant a piece on a {colour} square; they can never chase it.',
+      'Use the {colour} squares they gave up: put your pieces there.',
+      'With that bishop gone, the {colour} squares are yours to take.',
+    ],
+    sources: ['Library: Nimzowitsch ms-70', 'https://www.chessprogramming.org/Color_Weakness'],
+  },
+  'weak-pawn': {
+    needs: ['pawn'],
+    stems: [
+      'Keep a piece close to the pawn on {pawn} so it holds.',
+      'Guard the pawn on {pawn} with pieces, and trade off what attacks it.',
+      'Look after the pawn on {pawn}: one defender for every attacker.',
+      'Make the pawn on {pawn} hard to win: defend it and keep pieces active.',
+      'Defend {pawn} with pieces, then push it to trade it off.',
+    ],
+    sources: ['Library: Nimzowitsch ms-12', 'concept:pos-weak-pawns', 'https://www.chess.com/article/view/weak-pawns'],
+  },
+  'weak-pawn-theirs': {
+    needs: [],
+    stems: [
+      'Pile up on their weak pawn: attack it more than it\'s defended.',
+      'Their weak pawn is the target now; aim your pieces at it.',
+      'Fix the weak pawn in place first, then win it.',
+      'Put a piece in front of the weak pawn and bring more attackers.',
+      'Keep going after the weak pawn until it falls.',
+    ],
+    sources: ['Library: Nimzowitsch ms-12', 'concept:pos-weak-pawns'],
+  },
+  'passer-against': {
+    needs: ['pawn'],
+    stems: [
+      'Put a piece in front of the pawn on {pawn}; a knight blocks best.',
+      'Blockade the passed pawn on {pawn} before it runs.',
+      'Stop {pawn} first: a piece on the square in front of it.',
+      'A passed pawn must be held: get a piece in front of {pawn}.',
+      'Bring your king or a knight in front of the pawn on {pawn}.',
+    ],
+    sources: ['Library: Nimzowitsch ms-21 (blockade)', 'concept:end-passed-pawn', 'https://www.chess.com/terms/passed-pawn-chess'],
+  },
+  'passer-mine': {
+    needs: [],
+    stems: [
+      'Push your passed pawn while its road is safe.',
+      'Your passed pawn is free now: support it forward.',
+      'Get a rook behind the passed pawn and walk it up.',
+      'Your free pawn has a clear road; use it.',
+      'Back the passed pawn with pieces and push it.',
+    ],
+    sources: ['Library: Nimzowitsch ms-21', 'concept:end-passed-pawn'],
+  },
+  'down-queen': {
+    needs: [],
+    stems: [
+      'Without the queen, keep every piece guarded and look for checks.',
+      'A queen down, hunt for perpetual check and leave nothing loose.',
+      'Down the queen, keep your pieces together and look for checks.',
+      'Lost the queen? Guard everything, and keep checking their king.',
+      'With the queen gone, make a wall: pieces guarded, pawns linked.',
+    ],
+    sources: ['https://en.wikipedia.org/wiki/Fortress_(chess)', 'concept:end-perpetual-check'],
+  },
+  'down-piece-middlegame': {
+    needs: [],
+    stems: [
+      'Down material, keep the queens on and make it messy.',
+      'Behind in material, avoid trades and go after their king.',
+      'Material down, every trade helps them, so keep pieces on.',
+      'Behind on material, play for an attack, not for trades.',
+      'Short of material, keep it complicated and keep pieces on.',
+    ],
+    sources: ['Library: Capablanca cf-31', 'https://www.chess.com/article/view/how-to-play-when-you-are-down-material'],
+  },
+  'down-piece-endgame': {
+    needs: [],
+    stems: [
+      'Down material in the ending, trade their pawns and keep yours.',
+      'Behind in the ending, every pawn traded brings the draw closer.',
+      'Material down late on, trade pawns: no pawns, no win.',
+      'In a lost-looking ending, swap off their pawns one by one.',
+      'Behind in material, make their last pawns disappear.',
+    ],
+    sources: ['Library: Capablanca cf-14', 'https://www.chess.com/article/view/drawing-techniques'],
+  },
+  'down-exchange': {
+    needs: [],
+    stems: [
+      'Down the exchange, make your minor piece stronger than their rook.',
+      'A rook for a minor piece: keep files closed and the minor busy.',
+      'Behind the exchange, keep lines shut so their rook has nowhere to go.',
+      'Give your minor piece a strong square and keep the files closed.',
+      'Down the exchange, a pawn more and a great minor can hold.',
+    ],
+    sources: ['Library: Nimzowitsch ms-40', 'https://www.chess.com/article/view/the-exchange-sacrifice'],
+  },
+  'down-pawn-middlegame': {
+    needs: [],
+    stems: [
+      'A pawn down, stay active: every piece should have a job.',
+      'Behind by a pawn, play for activity and keep the pressure on.',
+      'A pawn short, make your pieces count more than theirs.',
+      'Down a pawn, keep pieces busy and look for counterplay.',
+      'One pawn behind, active pieces make up for it.',
+    ],
+    sources: ['Library: Capablanca cf-31', 'concept:pos-activity'],
+  },
+  'down-pawn-endgame': {
+    needs: [],
+    stems: [
+      'A pawn down in the ending, trade pawns, not pieces.',
+      'Behind by a pawn late on, swap pawns off and keep your rook active.',
+      'In the ending a pawn down, fewer pawns means more drawing chances.',
+      'A pawn short in the endgame, trade pawns and activate your king.',
+      'Down a pawn in the ending, aim for a rook ending and trade pawns.',
+    ],
+    sources: ['Library: Capablanca cf-14', 'https://www.chess.com/article/view/rook-endgames'],
+  },
+  'up-material': {
+    needs: [],
+    stems: [
+      'You\'re ahead now: trade pieces, not pawns.',
+      'Ahead in material, simplify: every trade brings the win closer.',
+      'With more material, swap pieces and keep your pawns.',
+      'You have the extra material: trade down and keep it simple.',
+      'Ahead, offer trades of pieces and stop their counterplay first.',
+    ],
+    sources: ['Library: Capablanca cf-14', 'https://www.chess.com/article/view/how-to-convert-a-winning-position'],
+  },
+  'king-exposed': {
+    needs: [],
+    stems: [
+      'With your king open, trade queens and keep defenders close.',
+      'An open king wants the queens off and pieces nearby.',
+      'Keep defenders near your king and offer the queen trade.',
+      'Your king is bare: bring pieces back and don\'t push more pawns there.',
+      'Guard the open king first: defenders home, queens off if you can.',
+    ],
+    sources: ['Library: Capablanca cf-31', 'concept:pos-king-safety', 'https://www.chess.com/article/view/king-safety'],
+  },
+  'initiative-lost': {
+    needs: [],
+    stems: [
+      'Answer their threats first, then bring your pieces back into play.',
+      'Meet the threat, then improve a piece before you strike back.',
+      'They have the initiative: defend calmly, then hit back when it ends.',
+      'Stop their threat first, then make your own.',
+      'Defend with moves that also improve a piece.',
+    ],
+    sources: ['concept:pos-tempo', 'https://www.chess.com/article/view/the-initiative-in-chess'],
+  },
+  'initiative-won': {
+    needs: [],
+    stems: [
+      'They gave you a free move: use it to make a threat.',
+      'You have the time now; bring a piece into the attack.',
+      'Use the tempo they handed you to improve your worst piece.',
+      'A free move is a gift: make it count with a threat.',
+      'Take the initiative they gave away: keep asking questions.',
+    ],
+    sources: ['concept:pos-tempo', 'https://www.chess.com/article/view/the-initiative-in-chess'],
+  },
+  'technique-key-square': {
+    needs: ['pawn'],
+    stems: [
+      'Get your king onto a key square in front of the pawn on {pawn}.',
+      'In king and pawn endings, the king leads: in front of {pawn}.',
+      'Your king belongs ahead of the pawn on {pawn}, not behind it.',
+      'March the king up in front of {pawn}; the pawn follows.',
+      'The king on a key square wins it: aim it in front of {pawn}.',
+    ],
+    sources: ['Library: Capablanca cf-3', 'https://en.wikipedia.org/wiki/King_and_pawn_versus_king_endgame'],
+  },
+  'technique-opposition': {
+    needs: [],
+    stems: [
+      'Face their king with one square between, and make them give way.',
+      'Take the opposition: kings facing, one square apart, them to move.',
+      'Stand opposite their king so it must step aside.',
+      'Kings face to face with one square between: the other must yield.',
+      'Win the opposition back and their king has to retreat.',
+    ],
+    sources: ['Library: Capablanca cf-3', 'https://en.wikipedia.org/wiki/Opposition_(chess)'],
+  },
+  'technique-rook': {
+    needs: ['pawn'],
+    stems: [
+      'Get your rook back behind the passed pawn on {pawn}.',
+      'Rooks belong behind passed pawns: put yours behind {pawn}.',
+      'From behind {pawn} the rook pushes it; in front it only blocks.',
+      'Bring the rook behind the pawn on {pawn} and keep it active.',
+      'Rook behind the passer on {pawn}: that is where it works.',
+    ],
+    sources: ['Library: Capablanca cf-14 (Tarrasch rule)', 'https://www.chess.com/article/view/rook-endgames'],
+  },
+  'down-material-queens-off': {
+    needs: [],
+    stems: [
+      'Queens are off and you\'re down material: keep the other pieces on.',
+      'Behind with the queens gone, don\'t trade: every swap helps them.',
+      'Down material without queens, keep the position tense and pieces on.',
+      'With queens traded and material down, go after their pawns, not trades.',
+      'Short of material with no queens, make it messy and keep pieces.',
+    ],
+    sources: ['https://www.chess.com/blog/attilaturzo/6-strategies-to-save-bad-positions', 'https://www.dummies.com/article/home-auto-hobbies/games/board-games/chess/examining-the-material-element-in-chess-200397/'],
+  },
+  'attack-their-king': {
+    needs: [],
+    stems: [
+      'Their king is open now: start with every check you have.',
+      'Go after the bare king: checks first, then bring more pieces.',
+      'Their king has no cover; look at each check before anything else.',
+      'An open king is the target: bring pieces and check.',
+      'Their shield is gone, so attack the king with everything.',
+    ],
+    sources: ['concept:pos-king-safety', 'Library: Capablanca cf-31'],
+  },
+  'leave-a-square': {
+    needs: [],
+    stems: [
+      'You\'re winning: leave their king a square on every move.',
+      'Ahead, always give their king somewhere to go.',
+      'Keep their king a legal move until you can mate it.',
+      'Before each move, make sure their king can still step.',
+      'Win it with mate, not by leaving their king no moves.',
+    ],
+    sources: ['concept:end-stalemate', 'https://en.wikipedia.org/wiki/Stalemate'],
+  },
+};
+
+// ── the recipes ────────────────────────────────────────────────────────────
+export const HABIT = {
+  checks: S([], ['Every move, look at every check they could give.', 'Before you let go, count their checks.', 'Their checks first, every single move.', 'Look for their checks before you look for your plan.', 'Ask each move: what checks do they have?']),
+  myChecks: S([], ['Checks first, every move.', 'Every time, look at your checks before anything else.', 'Start with checks, then captures, then threats.', 'Look at every check you have before a quiet move.', 'Before a quiet move, try every check in your head.']),
+  recapture: S([], ['Before every capture, ask what takes back.', 'Count the recaptures before you take.', 'Every capture: who takes back, and what\'s left?', 'Before you take, count attackers and defenders.', 'Take only after you have counted the trade.']),
+  guards: S([], ['Count attackers and defenders before you attack.', 'Before you aim at a piece, count its guards.', 'Attackers against defenders, every time.', 'Count the guards before you call it a threat.', 'Ask what defends it before you go after it.']),
+  checkGrab: S([], ['Before a grab, look at their checks.', 'Check their checks before you take anything.', 'Before you capture, ask whether they have a check that hits back.', 'Look for a check that wins the piece back.', 'A grab waits until their checks are counted.']),
+  landing: S([], ['Before you let go, ask whether the piece is guarded where it lands.', 'Every move, check the landing square: who covers it?', 'Look where the piece is going, and who guards it there.', 'Is the new square guarded? Ask before you move.', 'Count the guards on the square you move to.']),
+  job: S([], ['Before a piece moves, ask what it is guarding.', 'What does this piece protect? Ask before it leaves.', 'Check a piece\'s job before you move it.', 'Every piece guards something: know what before it moves.', 'Ask what falls if this piece walks away.']),
+  forkSquares: S([], ['Look at the squares your pieces guard, not just the pieces.', 'Before you move, check which squares go unguarded.', 'Watch the squares as well as the pieces.', 'Ask which squares this move stops guarding.', 'Guard the squares their knight wants.']),
+  knight: S([], ['After your move, check every square their knight can reach.', 'Where can their knight jump next? Look before you let go.', 'Count the knight\'s squares before you put two pieces near it.', 'Check if one jump hits two of your pieces.', 'Before you move, trace their knight\'s next jumps.']),
+  captures: S([], ['Before you let go, scan their captures.', 'Every move, ask what they can take.', 'Look at their captures first.', 'List everything they could take after your move.', 'Ask what of yours is loose after this move.']),
+  threats: S([], ['Before you move, ask which of your pieces their reply would attack.', 'Before you let go, list the pieces of yours they could hit next.', 'Every move, ask: what can they attack after this?', 'Ask which piece of yours their best reply goes after.', 'Picture their strongest reply and the piece it hits.']),
+  readTheirs: S([], ['After every move of theirs, ask what it attacks.', 'Their move first: what does it threaten?', 'Before your plan, read their last move.', 'Read the threat in their move before your own idea.', 'Ask what their last move wants.']),
+  shield: S([], ['Count their checks before you open your king.', 'Before you move a pawn near your king, count their checks.', 'Every pawn move near your king, ask who gets in.', 'Keep the king\'s pawns until you know it is safe.', 'Ask who comes in before you open your king.']),
+  forcing: S([], ['Every move, look at checks, captures and threats first.', 'Checks, captures, threats: every time.', 'Before a quiet move, look for the forcing ones.', 'Look for a forcing move before you settle for a quiet one.', 'First ask what you can force.']),
+  trade: S([], ['Before you trade, look at the pawns that are left.', 'What does the trade do to your pawns? Ask first.', 'Count the weak pawns after the trade, not just the material.', 'Picture the pawns after the trade before you make it.', 'A trade leaves a structure: check it first.']),
+  bishop: S([], ['Before you trade a bishop, ask which colour you\'re giving away.', 'Which squares does this bishop hold? Ask before you trade it.', 'Trade a bishop only when you know whose squares those become.', 'Count the pawns on its colour before you trade a bishop.', 'Ask who rules that colour once the bishop is gone.']),
+  passer: S([], ['Before you trade pawns, ask whether one of theirs comes out free.', 'Watch for a pawn of theirs with an open road.', 'Every pawn trade, check what it leaves free.', 'Ask if your move frees one of their pawns.', 'Look for their pawn that nothing can stop.']),
+  sac: S([], ['After a sacrifice, ask every move whether this keeps them busy.', 'Down material, every move must threaten something.', 'After a sacrifice, never give them a quiet move.', 'A sacrifice pays only while you keep forcing.', 'Keep the pressure on until the material comes back.']),
+  stalemate: S([], ['When they have only the king, check its moves before every move.', 'Every move against a bare king, count its squares.', 'Before you move, make sure their king can still move.', 'Count their king\'s legal moves before each of yours.', 'In a won ending, ask: can their king still move?']),
+  method: S([], ['In the ending, play the rule before you calculate.', 'Know the rule of the ending first.', 'Endings: method first, then moves.', 'Ask which rule this ending follows before you move.', 'Find the ending\'s rule, then the move that keeps it.']),
+  tempo: S([], ['Before you move, ask what it makes them do.', 'If they can ignore it, don\'t play it.', 'Every move, ask: does this force anything?', 'Before a check, ask what it wins.', 'Ask what your move asks of them.']),
+  plan: S([], ['Ask what the position wants before you move.', 'Find your worst piece and improve it.', 'Every move, ask which piece is doing least.', 'Look for the plan before the move.', 'Ask where each piece belongs.']),
+} as const;
+
+
+export const RECIPES: Record<MistakeCauseKind, LessonRecipe> = {
+  'allowed-mate': {
+    lesson: S(['king'], [
+      'A boxed king dies to checks it can\'t block: your king on {king}.',
+      'Mate comes before material, and your king on {king} had too few squares.',
+      'Your king on {king} had no escape and no way to block.',
+      'Once your king on {king} is boxed in, every check is deadly.',
+      'Material means nothing once your king on {king} can be mated.',
+    ]),
+    consequence: S(['checkPiece', 'checkSq'], [
+      'Their {checkPiece} starts the checks from {checkSq}, and they don\'t stop.',
+      'It starts with their {checkPiece} checking on {checkSq}, and ends in mate.',
+      'Their {checkPiece} checks on {checkSq} first, and there\'s no way out.',
+      'The checks begin with their {checkPiece} on {checkSq}, then mate.',
+      'One check from their {checkPiece} on {checkSq}, and the mate follows.',
+    ]),
+    habit: HABIT.checks, family: 'checks', repairs: ['king-exposed'],
+  },
+  'missed-mate': {
+    lesson: S(['king'], [
+      'A forced mate beats any material, and their king on {king} was trapped.',
+      'Their king on {king} was short of squares: checks came first.',
+      'Mate was there against the king on {king}, worth more than every piece.',
+      'With their king on {king} boxed in, the checks win the game.',
+      'Their king on {king} had nowhere to go, so look at checks first.',
+    ]),
+    consequence: null,
+    habit: HABIT.myChecks, family: 'checks', repairs: [],
+  },
+  'took-guarded': {
+    lesson: S(['tPiece', 'target', 'opPiece'], [
+      'The {tPiece} on {target} had the {opPiece} behind it, so it wasn\'t free.',
+      'Before you capture, count who takes back: the {opPiece} guards {target}.',
+      'A piece is only free if nothing takes back; the {opPiece} guards {target}.',
+      'Taking on {target} with something worth more loses, because the {opPiece} recaptures.',
+      'The {opPiece} was guarding {target}, so the capture costs more than it wins.',
+    ]),
+    consequence: S(['what'], ['You lose {what}.', 'The trade gives away {what}.', 'When it settles, you\'ve lost {what}.', 'Count it out: that is {what}.', 'The capture ends up costing {what}.']),
+    habit: HABIT.recapture, family: 'captures', repairs: [],
+  },
+  'eyed-guarded': {
+    lesson: S(['tPiece', 'target', 'opPiece'], [
+      'A threat on a piece that\'s guarded enough wins nothing: the {opPiece} holds {target}.',
+      'The {tPiece} on {target} was guarded by the {opPiece}, so the aim was empty.',
+      'Count the guards before you aim: the {opPiece} covers the {tPiece} on {target}.',
+      'Aiming at the {tPiece} on {target} gets nothing while the {opPiece} guards it.',
+      'With the {opPiece} behind it, the {tPiece} on {target} was never in danger.',
+    ]),
+    consequence: null,
+    habit: HABIT.guards, family: 'captures', repairs: [],
+  },
+  'answered-by-check': {
+    lesson: S(['tPiece', 'target'], [
+      'Your {tPiece} on {target} is open to a check that also hits it.',
+      'A check that also hits your {tPiece} on {target} wins the time back.',
+      'Before you go after anything, look for their checks: your {tPiece} on {target}.',
+      'Your {tPiece} on {target} was loose to a check with a second threat.',
+      'One check of theirs can attack your king and the {tPiece} on {target}.',
+    ]),
+    consequence: S(['what'], ['The check wins back {what}.', 'The check costs {what}.', 'After the check, you\'ve lost {what}.', 'You end up losing {what}.', 'The in-between check nets them {what}.']),
+    habit: HABIT.checkGrab, family: 'checks', repairs: [],
+  },
+  'left-hanging': {
+    lesson: S(['tPiece', 'target'], [
+      'A piece nothing guards can just be taken: your {tPiece} on {target}.',
+      'Your {tPiece} on {target} stands where nothing defends it.',
+      'Where your piece lands, something has to cover it, and {target} had nothing.',
+      'An unguarded piece is a target: the {tPiece} on {target}.',
+      'Nothing of yours covers {target}, so the {tPiece} there is loose.',
+    ]),
+    consequence: S(['opPiece', 'tPiece', 'target'], [
+      'Their {opPiece} takes the {tPiece} on {target}.',
+      'The {tPiece} on {target} falls to their {opPiece}.',
+      'Their {opPiece} just picks off the {tPiece} on {target}.',
+      'Their {opPiece} wins the {tPiece} on {target} for nothing.',
+      'The {tPiece} on {target} is lost to their {opPiece}.',
+    ]),
+    habit: HABIT.landing, family: 'loose', repairs: [],
+  },
+  'abandoned-defender': {
+    lesson: S(['tPiece', 'target'], [
+      'A defender has a job, and the {tPiece} on {target} needed it.',
+      'Move a defender and what it guarded falls: the {tPiece} on {target}.',
+      'Your {tPiece} on {target} lost its only guard.',
+      'Every piece guards something, and this one held the {tPiece} on {target}.',
+      'The moved piece was holding the {tPiece} on {target}; now nothing does.',
+    ]),
+    consequence: S(['opPiece', 'tPiece', 'target'], [
+      'Their {opPiece} can take the {tPiece} on {target} once the guard has gone.',
+      'With the guard gone, the {tPiece} on {target} drops to their {opPiece}.',
+      'Nothing holds the {tPiece} on {target} any more, and the {opPiece} takes it.',
+      'Their {opPiece} wins the {tPiece} on {target}.',
+      'The {tPiece} on {target} falls to their {opPiece}.',
+    ]),
+    habit: HABIT.job, family: 'loose', repairs: [],
+  },
+  'abandoned-fork-square': {
+    lesson: S(['target'], [
+      'A square can need a guard too: from {target} a knight hits two pieces.',
+      'A knight that lands on {target} forks two of your pieces.',
+      'Some squares are dangerous by themselves, and {target} is one.',
+      'The move stopped guarding {target}, the square their knight forks from.',
+      'Your pieces sit a knight\'s jump from {target}, and nothing covers it now.',
+    ]),
+    consequence: S(['target'], ['Their knight reaches {target} and hits two pieces.', 'Once their knight lands on {target}, two pieces are attacked.', 'From {target}, their knight forks, and one piece goes.', 'Their knight jumps to {target}, and you can save only one.', 'The fork on {target} wins material.']),
+    habit: HABIT.forkSquares, family: 'tactics', repairs: [],
+  },
+  'walks-into-fork': {
+    lesson: S(['target'], [
+      'Two pieces a jump from one square invite a fork: that square is {target}.',
+      'Your pieces both sit a jump from {target}, and their knight can land there.',
+      'When one square hits two of your pieces, a fork is waiting: {target}.',
+      'From {target}, one piece of theirs attacks two of yours.',
+      'The move left two pieces that {target} attacks at once.',
+    ]),
+    consequence: S(['target'], ['A piece of theirs lands on {target} and hits two, so one goes.', 'From {target} the fork hits two pieces, and you save one.', 'The fork from {target} wins material.', 'Two pieces are attacked from {target}; one is lost.', 'They fork from {target} and come out ahead.']),
+    habit: HABIT.knight, family: 'tactics', repairs: [],
+  },
+  'allowed-tactic': {
+    lesson: S(['motif', 'tPiece', 'target'], [
+      'Your move lets them play {motif} that wins your {tPiece} on {target}.',
+      'After your move, {motif} wins your {tPiece} on {target}.',
+      'Your {tPiece} on {target} falls to {motif} after this move.',
+      'The pieces now stand for {motif} against your {tPiece} on {target}.',
+      'One move gave them {motif}, and your {tPiece} on {target} is the prize.',
+    ]),
+    consequence: S(['what'], ['They win {what}.', 'That costs {what}.', 'You lose {what}.', 'It ends with {what} gone.', 'The tactic nets them {what}.']),
+    habit: HABIT.threats, family: 'tactics', repairs: [],
+  },
+  'allowed-capture': {
+    lesson: S(['tPiece', 'target'], [
+      'Something was left loose, and the {tPiece} on {target} gets taken.',
+      'A loose piece doesn\'t last: the {tPiece} on {target}.',
+      'Leave something unguarded and it goes: the {tPiece} on {target}.',
+      'The {tPiece} on {target} had too few defenders after your move.',
+      'Your {tPiece} on {target} could be won after the move.',
+    ]),
+    consequence: S(['what'], ['They win {what}.', 'That loses {what}.', 'They pick up {what}.', 'It costs {what}.', 'You give up {what}.']),
+    habit: HABIT.captures, family: 'loose', repairs: [],
+  },
+  'allowed-threat': {
+    lesson: S(['tPiece', 'target'], [
+      'Your {tPiece} on {target} can now be hit with tempo.',
+      'Your move left the {tPiece} on {target} open to an attack with tempo.',
+      'The {tPiece} on {target} is now easy for them to attack.',
+      'Your {tPiece} on {target} stands where an attack on it gains them time.',
+      'A piece they can hit with tempo hands them time: your {tPiece} on {target}.',
+    ]),
+    consequence: null,
+    habit: HABIT.threats, family: 'threats', repairs: ['initiative-lost'],
+  },
+  'king-hunt': {
+    lesson: S(['king'], [
+      'A king without pawn cover can be chased, and yours on {king} is open.',
+      'Open up the king on {king} and the checks keep coming.',
+      'The pawns in front of your king on {king} were its shield.',
+      'Your king on {king} has lost its cover.',
+      'With its shield gone, your king on {king} is a target.',
+    ]),
+    consequence: S(['checkPiece', 'checkSq'], ['Their {checkPiece} starts checking on {checkSq}, and more follow.', 'The king gets chased, starting with their {checkPiece} on {checkSq}.', 'Check after check, beginning with their {checkPiece} on {checkSq}.', 'Their {checkPiece} on {checkSq} opens a hunt for your king.', 'The hunt begins with their {checkPiece} on {checkSq}.']),
+    habit: HABIT.shield, family: 'checks', repairs: ['king-exposed'],
+  },
+  'ignored-threat': {
+    lesson: S(['tPiece', 'target'], [
+      'A threat doesn\'t go away by itself: the {tPiece} on {target} was attacked.',
+      'Their last move said what it wanted: the {tPiece} on {target}.',
+      'When they attack something, it comes before your plan: the {tPiece} on {target}.',
+      'The {tPiece} on {target} was hit, and the move left it there.',
+      'An attack on the {tPiece} on {target} needed an answer first.',
+    ]),
+    consequence: S(['tPiece', 'target'], ['The {tPiece} on {target} falls to the attack you left.', 'The attack lands, and the {tPiece} on {target} goes.', 'They carry out the threat and take the {tPiece} on {target}.', 'The {tPiece} on {target} is lost.', 'They win the {tPiece} on {target}.']),
+    habit: HABIT.readTheirs, family: 'threats', repairs: ['initiative-lost'],
+  },
+  'missed-win': {
+    lesson: S(['tPiece', 'target'], [
+      'When their piece is loose, look for the capture first: the {tPiece} on {target}.',
+      'A loose piece of theirs is a chance: the {tPiece} on {target}.',
+      'They left the {tPiece} on {target} hanging, so take it.',
+      'The {tPiece} on {target} could be won by force.',
+      'Their {tPiece} on {target} was there for the taking.',
+    ]),
+    consequence: S(['what'], ['It was there to win {what}.', 'That was {what} for the taking.', 'You could have won {what}.', 'The chance to win {what} is gone.', 'It would have netted {what}.']),
+    habit: HABIT.forcing, family: 'tactics', repairs: [],
+  },
+  stalemate: {
+    lesson: S(['king'], [
+      'A king with no move and no check is stalemate: their king on {king}.',
+      'Their king on {king} has no legal move, so a win becomes a draw.',
+      'Leave the king on {king} no squares without check and it\'s drawn.',
+      'Stalemate turns a win into a draw: the king on {king} needs a move.',
+      'The king on {king} is boxed in but not in check: stalemate.',
+    ]),
+    consequence: S([], ['The game is drawn.', 'It\'s a draw on the spot.', 'That\'s half a point thrown away.', 'The win becomes a draw.', 'A won game ends level.']),
+    habit: HABIT.stalemate, family: 'endgame', repairs: ['leave-a-square'],
+  },
+  'technique-broken': {
+    lesson: S(['n'], [
+      'Endings have rules that win by themselves: {n}.',
+      'In this ending the rule is {n}, and it does the work.',
+      'Some endings are won by method, not calculation: {n}.',
+      'The ending\'s rule, {n}, was broken here.',
+      'This ending is held or won by one rule: {n}.',
+    ]),
+    consequence: null,
+    habit: HABIT.method, family: 'endgame', repairs: [],
+  },
+  'passer-handed': {
+    lesson: S(['pawn'], [
+      'A passed pawn must be blockaded, and the one on {pawn} runs free.',
+      'Give them a passed pawn and you spend pieces stopping it: {pawn}.',
+      'A pawn with nothing in front of it runs, and {pawn} just got loose.',
+      'Their pawn on {pawn} has a clear road now.',
+      'Nothing of yours can stop the pawn on {pawn} by itself.',
+    ]),
+    consequence: S(['pawn', 'n'], ['The pawn on {pawn} is {n} squares from queening.', 'It has {n} squares to go from {pawn}.', 'From {pawn}, a queen is {n} steps away.', 'The pawn on {pawn} needs {n} moves to queen.', '{n} squares stand between {pawn} and a queen.']),
+    habit: HABIT.passer, family: 'structure', repairs: [],
+  },
+  'compensation-lost': {
+    lesson: S(['down'], [
+      'Down {down} for an attack, every move must keep the pressure.',
+      'A sacrifice pays only while they\'re busy, and you\'re {down} down.',
+      'Down {down}, you have to keep asking questions.',
+      'You gave {down} for activity, so a quiet move lets them breathe.',
+      'With {down} invested, the attack can\'t pause.',
+    ]),
+    consequence: S(['down'], ['They have time to regroup, and you\'re just {down} down.', 'The attack fades, and you\'re left {down} down.', 'They consolidate, and the {down} doesn\'t come back.', 'Now it\'s simply {down} less.', 'The pressure is gone, and so is the {down}.']),
+    habit: HABIT.sac, family: 'tempo', repairs: [],
+  },
+  'traded-into-target': {
+    lesson: S(['pawn'], [
+      'A trade changes the pawns too: this one leaves your pawn on {pawn} weak.',
+      'After the trade, your pawn on {pawn} has no friends.',
+      'Every trade leaves a structure, and this one leaves {pawn} weak.',
+      'The swap left your pawn on {pawn} where pawns can\'t guard it.',
+      'Your pawn on {pawn} is alone after the trade.',
+    ]),
+    consequence: S(['pawn'], ['They can aim at {pawn} again and again.', 'The pawn on {pawn} becomes the thing they attack.', 'Their pieces can pile up on {pawn}.', '{pawn} is the target for the rest of the game.', 'They\'ll go after the pawn on {pawn}.']),
+    habit: HABIT.trade, family: 'structure', repairs: [],
+  },
+  'colour-conceded': {
+    lesson: S(['colour', 'target'], [
+      'Your {colour}-squared bishop is gone, so {target} has no guard.',
+      'Trading off your {colour}-squared bishop hands them the {colour} squares, starting with {target}.',
+      'Without your {colour}-squared bishop, nothing fights for {target}.',
+      'Your last {colour}-squared bishop held {target}; now nothing guards it.',
+      'With the {colour}-squared bishop traded, {target} has lost its guard.',
+    ]),
+    consequence: S(['opSq'], [
+      'Their bishop on {opSq} will feel at home now.',
+      'Their bishop on {opSq} has those squares to itself.',
+      'Nothing challenges their bishop on {opSq} any more.',
+      'Their bishop on {opSq} rules that colour now.',
+      'Their bishop on {opSq} is the strongest piece on those squares.',
+    ]),
+    habit: HABIT.bishop, family: 'structure', repairs: [],
+  },
+  'tempo-wasted': {
+    lesson: S(['piece'], [
+      'Every move should add something, and the {piece} move can be ignored.',
+      'A move they can ignore is a move given away: the {piece}.',
+      'Time is a piece too, and the {piece} spent it.',
+      'The {piece} moved without forcing anything.',
+      'Their best reply doesn\'t need to answer the {piece}.',
+    ]),
+    consequence: null,
+    habit: HABIT.tempo, family: 'tempo', repairs: ['initiative-lost'],
+  },
+  positional: {
+    // The positional lesson is keyed on the tag (`POSITIONAL`); this row is
+    // only the fallback shape and is never filled.
+    lesson: null, consequence: null, habit: HABIT.plan, family: 'plan', repairs: [],
+  },
+  unexplained: { lesson: null, consequence: null, habit: null, family: 'plan', repairs: [] },
+};
+
+/** THE POSITIONAL LESSON, by the record tag the board files the move under.
+ *  A tag with no row here speaks nothing (missing-slot) — no generic line. */
+export const POSITIONAL: Partial<Record<Exclude<MisconceptionTagId, 'other'>, { lesson: SlotRecipe; consequence: SlotRecipe | null; repairs: readonly RepairState[] }>> = {
+  'weakened-king-safety': {
+    lesson: S(['king'], [
+      'The king on {king} has less cover than it needed.',
+      'Your king on {king} is more open after this.',
+      'Pawns and pieces near the king on {king} are its shelter.',
+      'Every pawn that leaves the king on {king} opens a door.',
+      'The king on {king} lost some of its shield.',
+    ]),
+    consequence: null,
+    repairs: ['king-exposed'],
+  },
+  'king-stuck-center': {
+    lesson: S(['king'], [
+      'A king left on {king} in the middle gets caught when lines open.',
+      'Your king on {king} still wants to castle.',
+      'A king belongs behind pawns, not on {king} in the centre.',
+      'The king on {king} is in the open middle.',
+      'Castling would have hidden the king on {king}.',
+    ]),
+    consequence: null,
+    repairs: ['king-exposed'],
+  },
+  'misplaced-piece': {
+    lesson: S(['tPiece', 'target'], [
+      'A piece is as good as its squares: your {tPiece} on {target} has few.',
+      'Your {tPiece} on {target} does less than it could.',
+      'The {tPiece} on {target} is out of play.',
+      'A piece belongs where it reaches most, unlike the {tPiece} on {target}.',
+      'Your {tPiece} on {target} has little to do there.',
+    ]),
+    consequence: null,
+    repairs: [],
+  },
+  'tempo-handed': {
+    lesson: S(['tPiece', 'target'], [
+      'Your move set their {tPiece} on {target} free.',
+      'Their {tPiece} on {target} reaches much more now.',
+      'A move that frees their pieces helps them: the {tPiece} on {target}.',
+      'Their {tPiece} on {target} has open lines after this.',
+      'The {tPiece} on {target} was boxed in; now it isn\'t.',
+    ]),
+    consequence: null,
+    repairs: [],
+  },
+  'passive-rook': {
+    lesson: S(['file'], [
+      'Rooks want open files, and the {file} was waiting.',
+      'A rook belongs on an open file, and the {file} is one.',
+      'Your rook does little behind pawns; the {file} was open.',
+      'The {file} was the rook\'s road into their camp.',
+      'Rooks need open lines: the {file} offered one.',
+    ]),
+    consequence: null,
+    repairs: [],
+  },
+  'passive-king-endgame': {
+    lesson: S(['king'], [
+      'In the endgame the king is a fighter, not on {king}.',
+      'Your king on {king} is far from the action.',
+      'Endings are won by active kings, and {king} is on the edge.',
+      'In the ending, bring the king from {king} toward the centre.',
+      'The king on {king} sits back while the ending is decided.',
+    ]),
+    consequence: null,
+    repairs: [],
+  },
+};
+
+
+export const MISTAKE_NUMBER_WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven'];
+/** Material in words for a count of pawns (the ledger's units). */
+export function materialWords(pawns: number): string | null {
+  if (pawns >= 9) return 'the queen';
+  if (pawns >= 5) return 'a rook';
+  if (pawns >= 3) return 'a piece';
+  if (pawns === 2) return 'two pawns';
+  if (pawns === 1) return 'a pawn';
+  return null;
+}
+export const motifArticle = (w: string): string => (/^[aeiou]|^x-/.test(w) ? `an ${w}` : `a ${w}`);
+export const COLOUR_NAME = { dark: 'dark', light: 'light' } as const;
+
+export const TECHNIQUE_RULE: Record<'key-square' | 'opposition' | 'rook-behind-passer', string> = {
+  'key-square': 'the king in front of its pawn',
+  opposition: 'kings face to face, the other must give way',
+  'rook-behind-passer': 'rooks behind passed pawns',
+};
+
+
+/** Material in words, from the ledger's PIECES (never a net pawn count):
+ *  "a bishop for a pawn", "a knight", "two pawns". `lost`: the side's own
+ *  pieces that went; `got`: what it took in return. */
+export function tradeWords(lost: readonly string[], got: readonly string[]): string | null {
+  const NOUN: Record<string, [string, string]> = { p: ['a pawn', 'pawns'], n: ['a knight', 'knights'], b: ['a bishop', 'bishops'], r: ['a rook', 'rooks'], q: ['the queen', 'queens'] };
+  const VAL: Record<string, number> = { q: 9, r: 5, b: 3, n: 3, p: 1 };
+  const words = (xs: readonly string[]): string | null => {
+    if (!xs.length) return null;
+    const count = new Map<string, number>();
+    for (const x of xs) count.set(x, (count.get(x) ?? 0) + 1);
+    const parts = [...count.entries()].sort((a, b) => VAL[b[0]] - VAL[a[0]]).map(([t, n]) => (n === 1 ? NOUN[t][0] : `${MISTAKE_NUMBER_WORDS[n] ?? String(n)} ${NOUN[t][1]}`));
+    return andList(parts);
+  };
+  // The pieces traded over the line, both sides — never a net that cancels
+  // like for like ("a rook and a knight for a knight").
+  const l = words(lost);
+  if (!l) return null;
+  const g = words(got);
+  return g ? `${l} for ${g}` : l;
+}
+
+/** A MISSED TACTIC, by the one classifier's motif, with the piece its line
+ *  actually wins (net of what comes back). */
+export const MISSED_MOTIF: SlotRecipe = S(['motif', 'tPiece', 'target'], [
+  '{motif} was there to win their {tPiece} on {target}.',
+  'Their {tPiece} on {target} could be won with {motif}.',
+  'Look for {motif}: it would have won the {tPiece} on {target}.',
+  'With {motif}, the {tPiece} on {target} would have fallen.',
+  'The {tPiece} on {target} was there to be won by {motif}.',
+]);
+
+/** A fork's targets and the piece it lands with, in words. */
+export const FORK_LESSON: { yours: SlotRecipe; theirs: SlotRecipe } = {
+  // Your missed fork: their two pieces, one move away from both.
+  yours: S(['a', 'b'], [
+    'Their {a} and {b} could both be hit by one move: a fork.',
+    'One move hit their {a} and {b} at once; one had to fall.',
+    'A fork was there: their {a} and {b} both stood in one piece\'s reach.',
+    'Two of their pieces, the {a} and the {b}, sat one fork apart.',
+    'When one move hits two pieces, look for it: their {a} and {b}.',
+  ]),
+  theirs: S(['a', 'b'], [
+    'They had a fork on your {a} and {b} and passed it by.',
+    'One move of theirs hit your {a} and {b}, and they missed it.',
+    'Your {a} and {b} stood one fork apart, and they let it go.',
+    'They could have hit your {a} and {b} together.',
+    'A fork on your {a} and {b} was there for them.',
+  ]),
+};
+
+/** THE BETTER MOVE'S JOB, said as a principle — never the move (Learn names
+ *  no move). Read from the better move on the board (`betterJob` in
+ *  mistakeLesson); no job read → the slot is silent. */
+export type BetterJob = 'cover-king' | 'force-mate' | 'take-loose' | 'save-piece' | 'guard-piece' | 'castle' | 'develop-threat' | 'develop' | 'take-attacker' | 'pawn-break' | 'push-passer' | 'king-up';
+export const BETTER_JOBS: Record<BetterJob, { yours: SlotRecipe; theirs: SlotRecipe }> = {
+  'cover-king': {
+    yours: S([], ['Give the king room before anything else.', 'Make an escape square for the king first.', 'King safety first: open a square for it.', 'Clear a flight square for the king before attacking.', 'First give the king air, then play on.']),
+    theirs: S([], ['They needed to give their king room first.', 'Their king needed an escape square before anything else.', 'Their first job was a flight square for the king.', 'King safety came first for them.', 'They had to give their king air.']),
+  },
+  'force-mate': {
+    yours: S([], ['Start with the checks: they force the mate.', 'Check first, and keep checking to the mate.', 'The forcing checks came before any quiet move.', 'Begin with a check and the king has no way out.', 'Checks first: the mate was forced.']),
+    theirs: S([], ['They had checks that forced mate.', 'Their checks led to a forced mate.', 'They could have mated by checking first.', 'A forced mate began with their check.', 'They missed checks that end the game.']),
+  },
+  'take-loose': {
+    yours: S(['cap'], ['Take the loose {cap} before anything else.', 'Win the undefended {cap} first.', 'Capture the hanging {cap} while it\'s there.', 'A loose {cap} comes first: take it.', 'Pick up the free {cap} first.']),
+    theirs: S(['cap'], ['They could have taken a loose {cap} first.', 'An undefended {cap} was there for them.', 'They left a free {cap} on the board.', 'Taking the loose {cap} was their job.', 'They passed up a hanging {cap}.']),
+  },
+  'save-piece': {
+    yours: S(['tPiece'], ['Move the attacked {tPiece} to safety first.', 'Rescue the {tPiece} before anything else.', 'Get the {tPiece} out of danger first.', 'The attacked {tPiece} needed to move first.', 'First save the {tPiece}, then play on.']),
+    theirs: S(['tPiece'], ['They needed to move their {tPiece} to safety.', 'Their {tPiece} had to get out of danger first.', 'Saving the {tPiece} was their first job.', 'Their attacked {tPiece} needed to move.', 'They had to rescue the {tPiece} first.']),
+  },
+  'guard-piece': {
+    yours: S(['tPiece'], ['Guard the {tPiece} before you push on.', 'Add a defender to the {tPiece} first.', 'Cover the {tPiece} before anything else.', 'First protect the {tPiece}, then play on.', 'The {tPiece} needed one more guard first.']),
+    theirs: S(['tPiece'], ['They needed to guard their {tPiece} first.', 'Their {tPiece} needed one more defender.', 'Protecting the {tPiece} was their job.', 'They had to cover the {tPiece} before anything else.', 'Their {tPiece} wanted a guard first.']),
+  },
+  castle: {
+    yours: S([], ['Get the king castled before you attack.', 'Castle first, then start the play.', 'Tuck the king away before anything else.', 'King safety first: castle.', 'Castle the king, then bring the rest out.']),
+    theirs: S([], ['They needed to castle first.', 'Their king wanted to castle before anything else.', 'Castling was their first job.', 'They should have tucked the king away.', 'Their king needed the safety of castling.']),
+  },
+  'develop-threat': {
+    yours: S([], ['Develop with a threat first.', 'Bring a piece out with an attack on something.', 'Develop and threaten in one move.', 'A developing move that hits something comes first.', 'Get a piece out that also makes a threat.']),
+    theirs: S([], ['They had a developing move with a threat.', 'Their best was to develop and attack at once.', 'They could have brought a piece out with a threat.', 'A developing threat was their move.', 'They needed to develop with tempo.']),
+  },
+  develop: {
+    yours: S([], ['Bring out another piece first.', 'Develop a piece before anything else.', 'Get the pieces out first.', 'Finish your development first.', 'Another piece into play comes first.']),
+    theirs: S([], ['They needed to bring out another piece.', 'Their development came first.', 'They should have got a piece out.', 'Another piece of theirs needed to come out.', 'Their job was to finish developing.']),
+  },
+  'take-attacker': {
+    yours: S(['opPiece'], ['Take out the attacking {opPiece} first.', 'Remove the {opPiece} that does the damage.', 'Capture the attacker, the {opPiece}, before anything else.', 'Get rid of the attacking {opPiece} first.', 'The {opPiece} doing the attacking should go first.']),
+    theirs: S([], ['They needed to take out your attacker.', 'Removing your attacking piece was their job.', 'They had to deal with your attacker first.', 'Their best was to capture the attacker.', 'They should have removed the attacking piece.']),
+  },
+  'pawn-break': {
+    yours: S([], ['Strike at their pawns with a break first.', 'Open the position with a pawn break.', 'Hit their pawn chain with a pawn first.', 'A pawn break was the timely plan.', 'Challenge their pawns with a break.']),
+    theirs: S([], ['They had a timely pawn break.', 'Their pawn break was the plan.', 'They needed to strike with a pawn.', 'A break against your pawns was their move.', 'They should have challenged your pawns.']),
+  },
+  'push-passer': {
+    yours: S([], ['Push the passed pawn while its road is open.', 'Advance the free pawn first.', 'The passed pawn wants to move: push it.', 'Run with the passed pawn first.', 'A passed pawn should be pushed while it can.']),
+    theirs: S([], ['They needed to push their passed pawn.', 'Their free pawn wanted to run.', 'Advancing the passed pawn was their job.', 'Their passed pawn should have moved.', 'They let their passed pawn stand still.']),
+  },
+  'king-up': {
+    yours: S([], ['Bring the king toward the middle first.', 'In the ending, march the king forward.', 'Activate the king before anything else.', 'The king belongs nearer the centre now.', 'Walk the king into the game.']),
+    theirs: S([], ['Their king needed to come forward.', 'They had to activate their king.', 'Their king belonged nearer the centre.', 'They should have walked the king up.', 'Their king needed to join the ending.']),
+  },
+};
+
+/** THE THEIR-SEAT FORMS — their mistake, told to the student. Never a square
+ *  the student can now strike (that is the student's next move): their piece
+ *  by type, or the idea. A cause with no row here is silent on their seat. */
+export const THEIR_SEAT: Partial<Record<MistakeCauseKind, { lesson: SlotRecipe; consequence: SlotRecipe | null }>> = {
+  'allowed-mate': {
+    lesson: S([], ['Their king is boxed in, with checks it can\'t block coming.', 'Their move leaves their king with no room.', 'Their king has no escape square now.', 'Their king is short of air, and that decides before material.', 'Their move lets their king get trapped.']),
+    consequence: null,
+  },
+  'king-hunt': {
+    lesson: S([], ['Their king has lost its pawn cover.', 'Their move opens up their own king.', 'Their king\'s shield is gone.', 'Without its pawns, their king is a target.', 'Their king stands bare now.']),
+    consequence: null,
+  },
+  'took-guarded': {
+    lesson: S([], ['They took a piece that was guarded, so it wasn\'t free.', 'Their capture runs into a recapture.', 'They grabbed something you could take back.', 'Their capture forgot to count the recapture.', 'The piece they took was defended.']),
+    consequence: S(['what'], ['The trade costs them {what}.', 'They lose {what} in the exchange.', 'When it settles, they\'ve given up {what}.', 'Their grab costs {what}.', 'They end up losing {what}.']),
+  },
+  'eyed-guarded': {
+    lesson: S([], ['Their attack hits a piece of yours that is guarded enough.', 'They aimed at something you had defended.', 'Their threat wins nothing: your piece is covered.', 'They attacked a guarded piece.', 'Their move looks at a piece that is safe.']),
+    consequence: null,
+  },
+  'answered-by-check': {
+    lesson: S(['tPiece'], ['Their move leaves their {tPiece} open to a check that also hits it.', 'A check of yours can hit their {tPiece} at the same time.', 'Their {tPiece} can be hit by a check with a second threat.', 'They left their {tPiece} where a check also attacks it.', 'One check can attack their king and their {tPiece}.']),
+    consequence: S(['what'], ['That check can win {what} back.', 'Their grab can cost {what}.', 'The check takes back {what}.', 'It can end with them losing {what}.', 'A check nets {what} back.']),
+  },
+  'left-hanging': {
+    lesson: S(['tPiece'], ['Their {tPiece} was left with nothing guarding it.', 'Their {tPiece} stands unguarded.', 'They left their {tPiece} loose.', 'Nothing of theirs covers their {tPiece} now.', 'Their {tPiece} has no defender.']),
+    consequence: null,
+  },
+  'abandoned-defender': {
+    lesson: S(['tPiece'], ['Their move pulled the guard away from their {tPiece}.', 'Their {tPiece} lost its only defender.', 'The piece that guarded their {tPiece} walked away.', 'Their {tPiece} is unguarded now that its defender moved.', 'They moved the piece that held their {tPiece}.']),
+    consequence: null,
+  },
+  'abandoned-fork-square': {
+    lesson: S([], ['Their move left a fork square unguarded.', 'They stopped guarding a square where one jump hits two pieces.', 'A square that forks two of their pieces is open now.', 'Their move uncovered a knight fork square.', 'One of their fork squares lost its guard.']),
+    consequence: null,
+  },
+  'walks-into-fork': {
+    lesson: S([], ['Their pieces now stand where one move hits two of them.', 'Their move lines two pieces up for a fork.', 'Two of their pieces are a fork apart.', 'They put two pieces where one move attacks both.', 'Their move walks into a fork.']),
+    consequence: null,
+  },
+  'allowed-tactic': {
+    lesson: S(['motif'], ['Their move leaves room for {motif} on your side.', 'After their move, you have {motif}.', 'Their pieces now stand where {motif} works for you.', 'Their move sets up {motif} for you.', 'There is {motif} for you after that.']),
+    consequence: S(['what'], ['It can win {what}.', 'That tactic nets {what}.', 'It costs them {what}.', 'They can lose {what}.', 'There is {what} to be won.']),
+  },
+  'allowed-capture': {
+    lesson: S(['tPiece'], ['Their {tPiece} is short of defenders after that move.', 'Their move leaves their {tPiece} loose.', 'Their {tPiece} can be won after that.', 'They left their {tPiece} without enough guards.', 'Their {tPiece} is the weak point now.']),
+    consequence: S(['what'], ['There is {what} to be won.', 'It can cost them {what}.', 'They can lose {what}.', 'Their move gives away {what}.', 'That drops {what}.']),
+  },
+  'allowed-threat': {
+    lesson: S(['tPiece'], ['Their move leaves their {tPiece} open to an attack with tempo.', 'Their {tPiece} can be hit with gain of time.', 'They left their {tPiece} where it can be chased.', 'Their {tPiece} becomes a target with tempo.', 'Their {tPiece} can be attacked and must move.']),
+    consequence: null,
+  },
+  'ignored-threat': {
+    lesson: S(['tPiece'], ['They left their {tPiece} under attack.', 'Their {tPiece} was attacked, and they didn\'t answer.', 'They ignored the threat to their {tPiece}.', 'Their move left the attacked {tPiece} where it was.', 'The attack on their {tPiece} went unanswered.']),
+    consequence: null,
+  },
+  stalemate: {
+    lesson: S([], ['Their move leaves your king no move and no check: stalemate.', 'They stalemated your king.', 'Your king has no legal move, and it isn\'t check.', 'Their move ends the game in stalemate.', 'They boxed your king in without check.']),
+    consequence: S([], ['The game is drawn.', 'It\'s a draw on the spot.', 'Their win turns into a draw.', 'Half a point comes your way.', 'The game ends level.']),
+  },
+  'technique-broken': {
+    lesson: S(['n'], ['They broke the ending\'s rule: {n}.', 'Their move breaks the method: {n}.', 'The ending has a rule, {n}, and they left it.', 'They ignored the ending\'s rule: {n}.', 'Their move goes against the rule: {n}.']),
+    consequence: null,
+  },
+  'passer-handed': {
+    lesson: S([], ['Their move lets one of your pawns run free.', 'You have a passed pawn after their move.', 'Their move clears the road for a pawn of yours.', 'One of your pawns is passed now.', 'They let a pawn of yours loose.']),
+    consequence: S(['n'], ['It is {n} squares from queening.', 'Your free pawn has {n} squares to go.', 'A queen is {n} steps away.', 'It needs {n} moves to queen.', '{n} squares stand between it and a queen.']),
+  },
+  'compensation-lost': {
+    lesson: S(['down'], ['They gave {down} for an attack, then let it stop.', 'Their quiet move lets the attack fade, {down} down.', 'Down {down}, they stopped asking questions.', 'They invested {down} and then played slowly.', 'Their attack needed every move, and they paused.']),
+    consequence: S(['down'], ['Now they are just {down} down.', 'You get time to regroup, {down} up.', 'The pressure is gone, and so is their {down}.', 'They\'re simply {down} short now.', 'You can consolidate the extra {down}.']),
+  },
+  'traded-into-target': {
+    lesson: S([], ['Their trade leaves one of their pawns weak.', 'After the trade, a pawn of theirs has no friends.', 'Their swap leaves a lonely pawn behind.', 'The trade gives them a weak pawn.', 'Their pawn structure is worse after the trade.']),
+    consequence: null,
+  },
+  'colour-conceded': {
+    lesson: S(['colour'], ['Their {colour}-squared bishop is gone, so their {colour} squares are weak.', 'They traded off their {colour}-squared bishop and its squares with it.', 'Without their {colour}-squared bishop, the {colour} squares are yours.', 'Their last {colour}-squared bishop has left the board.', 'They gave up the bishop that held the {colour} squares.']),
+    consequence: null,
+  },
+  'tempo-wasted': {
+    lesson: S(['piece'], ['Their {piece} move forces nothing.', 'You can ignore their {piece} move.', 'Their {piece} moved without a threat.', 'Their {piece} move asks nothing of you.', 'The {piece} move gives you a free hand.']),
+    consequence: null,
+  },
+};
+
+/** The positional forms for their seat, by tag (no square named). */
+export const POSITIONAL_THEM: Partial<Record<Exclude<MisconceptionTagId, 'other'>, { lesson: SlotRecipe; consequence: SlotRecipe | null }>> = {
+  'weakened-king-safety': {
+    lesson: S([], ['Their king has less cover than before.', 'Their move weakens their own king.', 'Their king is more open now.', 'Their king lost some of its shelter.', 'They loosened the pawns around their king.']),
+    consequence: null,
+  },
+  'king-stuck-center': {
+    lesson: S([], ['Their king is still in the middle.', 'They left their king uncastled in the centre.', 'Their king hasn\'t castled yet.', 'Their king stands on the open middle.', 'Their king is stuck in the centre.']),
+    consequence: null,
+  },
+  'misplaced-piece': {
+    lesson: S(['tPiece'], ['Their {tPiece} has few squares there.', 'Their {tPiece} is out of play.', 'They put their {tPiece} where it does little.', 'Their {tPiece} sits idle.', 'Their {tPiece} reaches little from there.']),
+    consequence: null,
+  },
+  'tempo-handed': {
+    lesson: S([], ['Their move gives one of your pieces more room.', 'They freed one of your pieces.', 'Your pieces breathe more after their move.', 'Their move opens lines for your pieces.', 'One of your pieces is unboxed now.']),
+    consequence: null,
+  },
+  'passive-rook': {
+    lesson: S([], ['Their rook stays behind its pawns.', 'They left an open file to you.', 'Their rook misses the open file.', 'Their rook isn\'t on an open line.', 'Their rook does little where it stands.']),
+    consequence: null,
+  },
+  'passive-king-endgame': {
+    lesson: S([], ['Their king stays back in the ending.', 'Their king is far from the action.', 'They kept the king passive in the endgame.', 'Their king isn\'t walking toward the centre.', 'Their king sits back while the ending is decided.']),
+    consequence: null,
+  },
+};
+
+export function fillStem(stem: string, fills: Fills): string {
+  return stem.replace(/\{(\w+)\}/g, (_, k: string) => fills[k as FillKey] ?? `{${k}}`);
+}
+export const capitaliseStem = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
+
+/** Said one slot: rotated on `key`, skipping a stem the previous turn said
+ *  (`avoid`), or null when a field it needs is missing. Returns the stem
+ *  used, so the next turn can avoid it. */
+export function renderMistakeSlot(r: SlotRecipe | null | undefined, fills: Fills, key: number, avoid: ReadonlySet<string> = new Set()): { text: string; stem: string } | null {
+  if (!r || !r.stems.length) return null;
+  if (r.needs.some((k) => !fills[k])) return null;
+  for (let i = 0; i < r.stems.length; i += 1) {
+    const stem = rotateStem(r.stems, key + i);
+    if (avoid.has(stem) && i < r.stems.length - 1) continue;
+    return { text: capitaliseStem(fillStem(stem, fills)), stem };
+  }
+  return null;
+}
+
+/** THEIR MOVE, ONCE PLAYED (refinement 4): the consequence may name it in
+ *  words ("their king took back on f7") — it is past, never the student's
+ *  next move. Used with a loss (`what`). */
+export const THEIR_MOVE_CONSEQUENCE: SlotRecipe = S(['theirMove', 'what'], [
+  'Then {theirMove}, and you\'ve lost {what}.',
+  '{theirMove}: that costs {what}.',
+  'When {theirMove}, that was {what} lost.',
+  'After {theirMove}, you\'ve given up {what}.',
+  '{theirMove}, which costs {what}.',
+]);
+
+/** AN EMPTY CHECK (`emptyCheckAt`): what answered it, and that it won
+ *  nothing. `answer`: "block" or "king step". */
+export const EMPTY_CHECK_LESSON: SlotRecipe = S(['piece', 'answer'], [
+  'Your {piece} gave a check that a simple {answer} ends; nothing was won.',
+  'A check met by a {answer} wins nothing: your {piece} spent a move.',
+  'Your {piece}\'s check is answered by a {answer}, and the move is gone.',
+  'Checks only help when they win something; a {answer} ends this one.',
+  'A {answer} answers the check, and your {piece} gained nothing.',
+]);
+
+/** THE GOOD DECISION (refinement 1): one line on why a found decision worked,
+ *  only while that skill is red or grey. No move named. */
+export type GoodDecision = 'only-move' | 'prophylaxis';
+export const GOOD_DECISION: Record<GoodDecision, SlotRecipe> = {
+  'only-move': S(['gives'], [
+    'Only one move held here, and you found it: the rest {gives}.',
+    'That was the only move; all the others {gives}.',
+    'One move kept it together, and the others {gives}.',
+    'You found the one move: all the others {gives}.',
+    'Nothing else worked here; the other moves {gives}.',
+  ]),
+  prophylaxis: S(['victim'], [
+    'You stopped their idea before it came: your {victim} stays safe.',
+    'Prevention first: their plan against your {victim} is off.',
+    'You saw their threat to your {victim} coming and took it away.',
+    'Stopping their move against your {victim} was the right call.',
+    'Their idea against your {victim} never gets started now.',
+  ]),
+};

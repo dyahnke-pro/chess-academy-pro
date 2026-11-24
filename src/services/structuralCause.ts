@@ -44,7 +44,7 @@ export type StructuralCause =
   | { kind: 'colour-conceded'; colour: 'light' | 'dark'; target: string; enemyBishop: string; pawnTargets: string[]; holes: string[] }
   /** A move they can ignore: a check that is simply blocked, or an answer to
    *  a piece that threatened nothing. */
-  | { kind: 'tempo-wasted'; how: 'empty-check' | 'answered-bluff'; squares: string[] };
+  | { kind: 'tempo-wasted'; how: 'empty-check' | 'answered-bluff'; squares: string[]; answer?: 'block' | 'king' };
 
 export type StructuralCauseKind = StructuralCause['kind'];
 
@@ -183,7 +183,7 @@ export function techniqueBroken(a: StructuralArgs): StructuralCause | null {
   // The better move keeps that rook where it is.
   const bestMv = (() => { try { return new Chess(a.fenBefore).move(a.bestSan); } catch { return null; } })();
   if (!bestMv || bestMv.from === mv.from) return null;
-  if (best.get(mv.from as Square)?.type !== 'r' || !behindPasser(best, mv.from)) return null;
+  if (best.get(mv.from)?.type !== 'r' || !behindPasser(best, mv.from)) return null;
   return { kind: 'technique-broken', rule: 'rook-behind-passer', piece: 'r', square: mv.from, better: a.bestSan };
 }
 
@@ -217,7 +217,7 @@ export function passerHanded(a: StructuralArgs): StructuralCause | null {
   for (const p of findPassedPawns(settled.fen(), them)) {
     if (had.has(p[0]) || bestFiles.has(p[0])) continue;
     if (!ending && relativeRank(p, them) < 4) continue;
-    if (legalSeeGainFor(settled.fen(), p as Square, mover) > 0) continue;
+    if (legalSeeGainFor(settled.fen(), p, mover) > 0) continue;
     return shape(p, settled, 'created');
   }
   return null;
@@ -380,7 +380,7 @@ export function colourConceded(fenBefore: string, san: string, replyLineUci: rea
  *  targets or adds a guard to one, quietly. */
 export function tempoWasted(a: StructuralArgs): StructuralCause | null {
   const empty = emptyCheckAt(a.fenBefore, a.playedSan, a.costCp, a.replyLineUci[0] ?? null);
-  if (empty) return { kind: 'tempo-wasted', how: 'empty-check', squares: empty.squares };
+  if (empty) return { kind: 'tempo-wasted', how: 'empty-check', squares: empty.squares, answer: empty.kind };
   if (!a.priorMove) return null;
   const bluff = detectBluff(a.priorMove.fenBefore, a.priorMove.san, a.bestSan);
   if (!bluff) return null;

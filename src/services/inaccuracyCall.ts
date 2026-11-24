@@ -37,7 +37,7 @@ import { bareCaptureLead, bestMoveReason, moveWhy } from './deliberation';
 import { captureLeadsTo } from './captureLeadsTo';
 import { captureHasCounterTactic } from './groundedAnswer';
 import { toOtherSeat } from '../utils/seatPronouns';
-import { Chess, type Square } from 'chess.js';
+import { Chess, type PieceSymbol, type Square } from 'chess.js';
 import { planFromUci, isCostClause } from './lookaheadPlan';
 import { classifyMove, type MoveQuality } from './moveRating';
 import type { SameSearchScores } from './moveCost';
@@ -1027,6 +1027,36 @@ function followUpLines(fenAfter: string, replySan: string, why: string): SpokenL
   return null;
 }
 
+/** WHAT THEIR REPLY DOES, AS DATA (card errorWhy F8): the reply's action and
+ *  its target on the board after it — a capture of the mover's piece, a check
+ *  on the mover's king, or the mover's most valuable piece the replying piece
+ *  newly attacks. The target is the MOVER's piece, by square, type and colour,
+ *  read off the board (never the replying piece's own square). */
+export interface ReplyAct {
+  kind: 'capture' | 'check' | 'attack';
+  target: { square: string; piece: PieceSymbol; color: 'w' | 'b' };
+}
+export function replyAct(fenAfter: string, replyUci: string | undefined): ReplyAct | null {
+  if (!replyUci) return null;
+  try {
+    const before = new Chess(fenAfter);
+    const mover = before.turn() === 'w' ? 'b' : 'w';
+    const c = new Chess(fenAfter);
+    const r = c.move({ from: replyUci.slice(0, 2), to: replyUci.slice(2, 4), promotion: replyUci[4] });
+    if (!r) return null;
+    if (r.captured) return { kind: 'capture', target: { square: r.to, piece: r.captured, color: mover } };
+    if (c.inCheck()) { const k = c.findPiece({ type: 'k', color: mover })[0]; return k ? { kind: 'check', target: { square: k, piece: 'k', color: mover } } : null; }
+    let best: ReplyAct['target'] | null = null;
+    for (const p of c.board().flat()) {
+      if (!p || p.color !== mover || p.type === 'k') continue;
+      if (!c.attackers(p.square, r.color).includes(r.to)) continue;
+      if (before.attackers(p.square, r.color).includes(r.from)) continue;
+      if (!best || MATERIAL_VALUE[p.type] > MATERIAL_VALUE[best.piece]) best = { square: p.square, piece: p.type, color: mover };
+    }
+    return best ? { kind: 'attack', target: best } : null;
+  } catch { return null; }
+}
+
 export function allowedReply(
   fenBefore: string, playedSan: string, replyLineUci: readonly string[], moverColor: 'white' | 'black',
 ): { said: string; line: { fen: string; uci: string[] }; lines?: SpokenLine[] } | null {
@@ -1144,6 +1174,14 @@ export interface ErrorWhy {
   /** The square or piece the moved piece stopped guarding, when the mechanism
    *  is a guard it left (`whyItFailed` 'abandoned-square' / 'abandoned-defender'). */
   guardLeft?: string;
+  /** The one reason walker's lines (`costReason`), as data for a recipe that
+   *  names the piece won: what the move allowed (from the board after it) and
+   *  what it missed (from the board before it). Never words. */
+  allowedReasonLine?: { fen: string; uci: string[] };
+  missedReasonLine?: { fen: string; uci: string[] };
+  /** What the reply the move allowed DOES, typed (`replyAct`) — set whenever
+   *  a reply reader (single reply, allowed reply) named the cause. */
+  allowedAct?: ReplyAct;
 }
 
 /** NO LINE KNOWN: the board's own answer to the played move — the capture of
@@ -1646,6 +1684,9 @@ export function errorWhy(args: {
     ...(pattern ? { pattern } : {}),
     ...(args.allowedMate === null && namedReply ? { punishFirst: namedReply } : {}),
     ...(failed && (failedRead?.kind === 'abandoned-square' || failedRead?.kind === 'abandoned-defender') && failedRead.squares[0] ? { guardLeft: failedRead.squares[0] } : {}),
+    ...((single || allowed || ignoredThreat) ? (() => { try { const c = new Chess(args.fenBefore); c.move(args.playedSan); const a = replyAct(c.fen(), replyLineUci[0]); return a ? { allowedAct: a } : {}; } catch { return {}; } })() : {}),
+    ...(anyAllowed && !anyAllowed.mate ? { allowedReasonLine: { fen: anyAllowed.fen, uci: anyAllowed.plies.map((x) => x.uci) } } : {}),
+    ...(missedR && !missedR.mate ? { missedReasonLine: { fen: missedR.fen, uci: missedR.plies.map((x) => x.uci) } } : {}),
   };
 }
 

@@ -169,7 +169,7 @@ describe('tempo-wasted', () => {
   it('5…Qh4+ g3 is a check that goes nowhere', () => {
     expect(tempoWasted(args({
       fenBefore: 'rnbqkb1r/pppn1ppp/4p3/3pP3/5P2/3P4/PPPN2PP/R1BQKBNR b KQkq - 0 5', playedSan: 'Qh4+', costCp: 82, replyLineUci: ['g2g3', 'h4d8'],
-    }))).toEqual({ kind: 'tempo-wasted', how: 'empty-check', squares: ['h4', 'g3'] });
+    }))).toEqual({ kind: 'tempo-wasted', how: 'empty-check', squares: ['h4', 'g3'], answer: 'block' });
   });
   // David's Smith-Morra 8.Bxf7+ Kxf7: a check that captures is not empty.
   it('guard: a check that captures', () => {
