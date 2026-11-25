@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**578 lines · 8 exports · 9 importers · 8 tests · 0 audits**
+**581 lines · 8 exports · 10 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -18,6 +18,7 @@
 - `src/components/Puzzles/PuzzleBoard.tsx`
 - `src/services/gameAnalysisService.ts`
 - `src/services/puzzleMissService.ts`
+- `src/services/stampScan.test.ts`
 - `src/services/tacticClassifierService.fill.test.ts`
 - `src/services/tacticClassifierService.test.ts`
 - `src/services/tacticalProfileService.ts`
@@ -65,8 +66,9 @@
 - `src/services/tacticClassifierService.test.ts:37`
 - `src/services/tacticClassifierService.test.ts:45`
 
-### `backfillClassifiedTactics` (function) — 6 call sites
+### `backfillClassifiedTactics` (function) — 7 call sites
 - `src/components/Insights/GameInsightsPage.tsx:147`
+- `src/services/stampScan.test.ts:80`
 - `src/services/tacticClassifierService.fill.test.ts:38`
 - `src/services/tacticClassifierService.fill.test.ts:47`
 - `src/services/tacticClassifierService.fill.test.ts:53`
@@ -80,6 +82,7 @@
 - `src/components/Puzzles/PuzzleBoard.evidence.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.oneLinePerMiss.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.test.tsx`
+- `src/services/stampScan.test.ts`
 - `src/services/tacticClassifierService.fill.test.ts`
 - `src/services/tacticClassifierService.test.ts`
 - `src/test/seatResolversReadDeclaredSeat.test.ts`

@@ -19,6 +19,7 @@
 // too (their key is the same computation); the student-side filters live in
 // the readers.
 import { db } from '../db/schema';
+import { keysNotStampedAt } from './stampScan';
 import { logAppAudit } from './appAuditor';
 import { openingKeyFromPgn } from './openingKey';
 import type { GameRecord } from '../types';
@@ -59,10 +60,11 @@ export async function reconcileOpeningKeys(
 ): Promise<OpeningKeyBackfillResult> {
   const r: OpeningKeyBackfillResult = { scanned: 0, recomputed: 0, changed: 0, unkeyed: 0 };
   if (schedule.startDelayMs > 0) await sleep(schedule.startDelayMs);
-  const rows = await db.games.toArray();
-  r.scanned = rows.length;
-  const stale = rows.filter((row) => row.openingKeyRev !== OPENING_KEY_REV);
-  if (stale.length === 0) return r;
+  // Keys only (`stampScan`): this runs every boot, and a game at the rev must
+  // cost nothing — not a load of its whole analysis to read one stamp.
+  r.scanned = await db.games.count();
+  const staleKeys = await keysNotStampedAt(db.games, 'openingKeyRev', OPENING_KEY_REV);
+  if (staleKeys.length === 0) return r;
   const batch = Math.max(1, schedule.batch);
   let writes: GameRecord[] = [];
   const flush = async (): Promise<void> => {
@@ -71,12 +73,16 @@ export async function reconcileOpeningKeys(
     await db.games.bulkPut(w);
   };
   let first = true;
-  for (const row of stale) {
-    if (!first) await schedule.yieldBetweenRows();
-    first = false;
-    const next = remintGameRow(row, r);
-    if (next) writes.push(next);
-    if (writes.length >= batch) await flush();
+  // A batch of stale rows loaded at a time, never the whole library.
+  for (let i = 0; i < staleKeys.length; i += batch) {
+    for (const row of await db.games.bulkGet(staleKeys.slice(i, i + batch))) {
+      if (!row) continue;
+      if (!first) await schedule.yieldBetweenRows();
+      first = false;
+      const next = remintGameRow(row, r);
+      if (next) writes.push(next);
+      if (writes.length >= batch) await flush();
+    }
   }
   await flush();
   if (r.recomputed > 0) {

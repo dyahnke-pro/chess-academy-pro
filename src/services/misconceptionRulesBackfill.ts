@@ -18,7 +18,8 @@ import { isFixtureGame } from './fixtureGames';
 import { gameDateMs } from '../utils/gameDate';
 import { PRODUCTION_BACKFILL_SCHEDULE, sleep, type BackfillSchedule } from './backfillSchedule';
 import { emitWeaknessModelChanged } from './weaknessModelEvents';
-import type { MisconceptionTagRecord, MistakePuzzle } from '../types';
+import type { GameRecord, MisconceptionTagRecord, MistakePuzzle } from '../types';
+import { keysNotStampedAt, pickRows } from './stampScan';
 
 export { POSITIVE_HALF_REV } from '../data/misconceptionTags';
 import { POSITIVE_HALF_REV } from '../data/misconceptionTags';
@@ -48,12 +49,36 @@ interface RulesBackfillResult {
   collapsed: number;
 }
 
-/** The games whose stored auto-analysis rows were classified under older rules. */
+/** The games whose stored auto-analysis rows were classified under older rules.
+ *  Keys only for the stamped rows (`stampScan`): only rows not stamped at
+ *  this revision are loaded. */
 export async function gamesBehindRules(): Promise<string[]> {
-  const rows = await db.misconceptionTags
-    .filter((r) => r.source === 'auto-analysis' && !!r.sourceGameId && r.rulesRev !== MISCONCEPTION_RULES_REV)
-    .toArray();
-  return [...new Set(rows.map((r) => r.sourceGameId as string))];
+  const keys = await keysNotStampedAt(db.misconceptionTags, 'rulesRev', MISCONCEPTION_RULES_REV);
+  const ids = await pickRows(db.misconceptionTags, keys, (r) =>
+    (r.source === 'auto-analysis' && !!r.sourceGameId && r.rulesRev !== MISCONCEPTION_RULES_REV ? r.sourceGameId : null));
+  return [...new Set(ids)];
+}
+
+/** A game a record pass reads: the student's own, analysed in full. */
+function isReadableGame(g: GameRecord): boolean {
+  return !g.isMasterGame && !!g.fullyAnalyzed && (g.annotations?.length ?? 0) > 0 && !isFixtureGame(g);
+}
+
+/** The games that MAY be behind on `stampField`, found without loading a
+ *  game: every game not stamped at `rev`, plus every stamped game `stillBehind`
+ *  says this device has not really read. Only those are loaded, and only the
+ *  readable ones returned, newest first. */
+async function gamesBehindStamp(
+  stampField: 'positiveHalfRev' | 'threatHalfRev',
+  rev: string,
+  stillBehind: (id: string) => boolean,
+): Promise<string[]> {
+  const [unstamped, stamped] = await Promise.all([
+    keysNotStampedAt(db.games, stampField, rev),
+    db.games.where(stampField).equals(rev).primaryKeys(),
+  ]);
+  const candidates = [...unstamped, ...stamped.filter(stillBehind)];
+  return newestFirst(await pickRows(db.games, candidates, (g) => (isReadableGame(g) ? { id: g.id, date: g.date } : null)));
 }
 
 /** Analysed games of the student's that have not been read for the positive
@@ -65,11 +90,7 @@ export async function gamesBehindPositiveHalf(): Promise<string[]> {
   // stayed on that device — so a game with no record row here is behind
   // whatever its stamp says.
   const recorded = await gamesWithRecord();
-  const games = await db.games
-    .filter((g) => !g.isMasterGame && !!g.fullyAnalyzed && (g.annotations?.length ?? 0) > 0
-      && !isFixtureGame(g) && (g.positiveHalfRev !== POSITIVE_HALF_REV || !recorded.has(g.id)))
-    .toArray();
-  return newestFirst(games);
+  return gamesBehindStamp('positiveHalfRev', POSITIVE_HALF_REV, (id) => !recorded.has(id));
 }
 
 /** Newest game first, so the heat map's recent weeks fill before the old ones. */
@@ -85,18 +106,18 @@ function newestFirst(games: ReadonlyArray<{ id: string; date?: string | null }>)
 export async function gamesBehindThreatHalf(): Promise<string[]> {
   const readHere = await readOnThisDevice();
   const withRows = new Set<string>();
-  await db.capabilityEvidence.each((r) => { if (r.sourceGameId && THREAT_MOTIF_TAGS.has(r.tag)) withRows.add(r.sourceGameId); });
-  const games = await db.games
-    .filter((g) => !g.isMasterGame && !!g.fullyAnalyzed && (g.annotations?.length ?? 0) > 0
-      && !isFixtureGame(g) && (g.threatHalfRev !== THREAT_HALF_REV || (!withRows.has(g.id) && !readHere.has(g.id))))
-    .toArray();
-  return newestFirst(games);
+  await db.capabilityEvidence.where('tag').anyOf([...THREAT_MOTIF_TAGS])
+    .each((r) => { if (r.sourceGameId) withRows.add(r.sourceGameId); });
+  return gamesBehindStamp('threatHalfRev', THREAT_HALF_REV, (id) => !withRows.has(id) && !readHere.has(id));
 }
 
 /** Games this device's skill record holds rows for. */
 async function gamesWithRecord(): Promise<Set<string>> {
   const ids = await readOnThisDevice();
-  await db.capabilityEvidence.each((r) => { if (r.sourceGameId) ids.add(r.sourceGameId); });
+  // The game index's own keys: no evidence row is loaded.
+  for (const id of await db.capabilityEvidence.orderBy('sourceGameId').uniqueKeys()) {
+    if (typeof id === 'string' && id.length > 0) ids.add(id);
+  }
   return ids;
 }
 

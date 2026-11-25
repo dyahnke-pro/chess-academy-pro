@@ -1095,6 +1095,19 @@ class ChessAcademyDB extends Dexie {
     // from the same read and says the same verdict and the same better move.
     // Additive cache, no migration — an older install has kept nothing yet.
     this.version(47).stores({ boardReads: 'key, savedAt' });
+
+    // v48 — THE READERS' STAMPS ARE INDEXED (2026-11-25, an App Store user's
+    // phone in a /weaknesses crash loop). Finding "games not yet read" loaded
+    // every game with its full analysis just to compare one stamp, several
+    // times a launch until a pass completed. Indexed, the stamped set is a
+    // keys-only read and only the unread rows are loaded (`stampScan`).
+    // Index only: the browser builds it on open, no row changes.
+    this.version(48).stores({
+      games: 'id, source, eco, date, isMasterGame, openingId, positiveHalfRev, threatHalfRev, recordPriceRev, tacticsClassifiedRev, openingKeyRev',
+      misconceptionTags: 'id, tag, source, status, createdAt, openingId, sourceGameId, rulesRev',
+    }).upgrade(async () => {
+      // Index only: nothing to migrate.
+    });
   }
 }
 
