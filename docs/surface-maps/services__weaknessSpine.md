@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1112 lines · 21 exports · 41 importers · 24 tests · 2 audits**
+**1114 lines · 21 exports · 42 importers · 26 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
-- **🔗 CAPABILITY PARITY — IF ONE SIGNAL CARRIES IT, THEY ALL DO (David 2026-09-16: "if tactics and puzzles have something so should everything else. The goal is one coach with the same structure and capabilities everywhere, just used differently depending on the tab or functions it's performing").** (CLAUDE.md:663) — names `WeaknessProvenance`
-- **The standard post-deploy ritual** (CLAUDE.md:6940) — names `weaknessSpine`
+- **🔗 CAPABILITY PARITY — IF ONE SIGNAL CARRIES IT, THEY ALL DO (David 2026-09-16: "if tactics and puzzles have something so should everything else. The goal is one coach with the same structure and capabilities everywhere, just used differently depending on the tab or functions it's performing").** (CLAUDE.md:723) — names `WeaknessProvenance`
+- **The standard post-deploy ritual** (CLAUDE.md:7098) — names `weaknessSpine`
 
 ## Who calls in
 
@@ -53,6 +53,7 @@
 - `src/services/weaknessSpine.fundamentals.test.ts`
 - `src/services/weaknessSpine.memo.test.ts`
 - `src/services/weaknessSpine.test.ts`
+- `src/services/weaknessesReadOnce.test.ts`
 - `src/test/kidIsolation.gate.test.ts`
 
 ## Exports and every call site
@@ -79,8 +80,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `bucketForMistake` (function) — 10 call sites
-- `src/services/coachDrillService.ts:384`
-- `src/services/coachDrillService.ts:568`
+- `src/services/coachDrillService.ts:385`
+- `src/services/coachDrillService.ts:569`
 - `src/services/conceptSchedule.ts:18`
 - `src/services/quietSetUpOwnGames.test.ts:48`
 - `src/services/tacticTypeBackfill.test.ts:94`
@@ -91,8 +92,8 @@
 - `src/services/weaknessSpine.test.ts:369`
 
 ### `themesForTactic` (function) — 4 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3588`
-- `src/services/coachDrillService.ts:659`
+- `src/components/Coach/CoachTeachPage.tsx:3623`
+- `src/services/coachDrillService.ts:660`
 - `src/services/drillVocabulary.test.ts:43`
 - `src/services/drillVocabulary.test.ts:53`
 
@@ -164,16 +165,16 @@
 - `src/services/weaknessSpine.test.ts:259`
 - `src/services/weaknessSpine.test.ts:272`
 
-### `getUnifiedWeaknessProfile` (function) — 51 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3499`
-- `src/components/Coach/CoachTeachPage.tsx:13713`
+### `getUnifiedWeaknessProfile` (function) — 53 call sites
+- `src/components/Coach/CoachTeachPage.tsx:3534`
+- `src/components/Coach/CoachTeachPage.tsx:13878`
 - `src/components/Coach/TrainingPlanRolodexPage.tsx:72`
-- `src/components/Insights/HeatMapPanel.tsx:113`
+- `src/components/Insights/HeatMapPanel.tsx:114`
 - `src/components/Tactics/TacticalProfilePage.tsx:62`
 - `src/services/bucketPipelineAudit.ts:157`
-- `src/services/coachApi.ts:2326`
-- `src/services/coachApi.ts:4727`
-- `src/services/coachApi.ts:5303`
+- `src/services/coachApi.ts:2353`
+- `src/services/coachApi.ts:4762`
+- `src/services/coachApi.ts:5338`
 - `src/services/coachCurriculumService.ts:170`
 - `src/services/coachCurriculumService.ts:183`
 - `src/services/coachThread.ts:49`
@@ -190,8 +191,8 @@
 - `src/services/recordReprice.test.ts:130`
 - `src/services/recordReprice.test.ts:132`
 - `src/services/thinkingLessonStart.ts:110`
-- `src/services/upNextLoader.ts:148`
-- `src/services/weaknessSignalLoader.ts:60`
+- `src/services/upNextLoader.ts:147`
+- `src/services/weaknessSignalLoader.ts:66`
 - `src/services/weaknessSpine.fundamentals.test.ts:48`
 - `src/services/weaknessSpine.fundamentals.test.ts:62`
 - `src/services/weaknessSpine.fundamentals.test.ts:77`
@@ -216,6 +217,8 @@
 - `src/services/weaknessSpine.test.ts:332`
 - `src/services/weaknessSpine.test.ts:340`
 - `src/services/weaknessSpine.test.ts:394`
+- `src/services/weaknessesMemory.measure.test.ts:60`
+- `src/services/weaknessesReadOnce.test.ts:58`
 
 ## Tests
 
@@ -242,6 +245,8 @@
 - `src/services/weaknessSpine.fundamentals.test.ts`
 - `src/services/weaknessSpine.memo.test.ts`
 - `src/services/weaknessSpine.test.ts`
+- `src/services/weaknessesMemory.measure.test.ts`
+- `src/services/weaknessesReadOnce.test.ts`
 - `src/test/kidIsolation.gate.test.ts`
 
 ## Audits that reach it
