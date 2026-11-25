@@ -68,7 +68,7 @@ export function holdBackfills(): () => void {
 }
 
 /** How many backfill holds are live. */
-export function backfillHoldCount(): number {
+export function backfillHoldCountForTests(): number {
   return backfillHolds;
 }
 

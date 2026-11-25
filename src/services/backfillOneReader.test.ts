@@ -5,7 +5,7 @@
 // breaker) for the whole session.
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { PRODUCTION_BACKFILL_SCHEDULE } from './backfillSchedule';
-import { holdBackfills, backfillHoldCount } from './foregroundActivity';
+import { holdBackfills, backfillHoldCountForTests } from './foregroundActivity';
 
 afterEach(() => { vi.useRealTimers(); });
 
@@ -30,6 +30,6 @@ describe('backfills wait while the batch analysis runs', () => {
     await vi.advanceTimersByTimeAsync(5_000);
     expect(passed).toBe(false);
     release();
-    expect(backfillHoldCount()).toBe(0);
+    expect(backfillHoldCountForTests()).toBe(0);
   });
 });
