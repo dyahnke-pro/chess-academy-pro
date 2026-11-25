@@ -12,7 +12,8 @@ import { REP_PUZZLE_CAP } from '../../services/repCompletion';
 import { logAppAudit } from '../../services/appAuditor';
 import { SkillMetersStrip } from './SkillMetersStrip';
 import { meterOfTag, type SkillMeterId } from '../../services/skillMeters';
-import { buildSkillTimelines, currentStrength, parseGameDate, relativeDay, TIMELINE_WEEKS, type SkillTimeline } from '../../services/skillTimeline';
+import { gameDatesById } from '../../services/gameDates';
+import { buildSkillTimelines, currentStrength, relativeDay, TIMELINE_WEEKS, type SkillTimeline } from '../../services/skillTimeline';
 
 /**
  * The HEAT MAP on Weaknesses → Overview (David 2026-10-01, redrawn
@@ -108,23 +109,18 @@ export function HeatMapPanel(): JSX.Element | null {
   useEffect(() => {
     let cancelled = false;
     void (async () => {
-      const [allEvidence, weaknesses, seen, slips, games] = await Promise.all([
+      const [allEvidence, weaknesses, seen, slips, gameDates] = await Promise.all([
         db.capabilityEvidence.toArray().catch(() => []),
         getUnifiedWeaknessProfile().catch((): UnifiedWeakness[] => []),
         db.meta.get(SEEN_KEY).catch(() => undefined),
         db.misconceptionTags.toArray().catch(() => []),
-        db.games.toArray().catch(() => []),
+        gameDatesById().catch(() => new Map<string, number>()),
       ]);
       // The timeline is the USE reading — a lesson tap is not a game week.
       const evidence = allEvidence.filter(isUseEvidence);
       if (cancelled) return;
       const t = heatMap(allEvidence, slips, { now });
       void mirrorHeatMap(t);
-      const gameDates = new Map<string, number>();
-      for (const g of games) {
-        const d = parseGameDate(g.date);
-        if (d !== null) gameDates.set(g.id, d);
-      }
       const lines = buildSkillTimelines(t.map((x) => x.tag), slips, evidence, gameDates, now);
       setTiles(t);
       // The KNOW reading (lesson answers) — the other half of each tile.
@@ -155,7 +151,7 @@ export function HeatMapPanel(): JSX.Element | null {
           weeksWithData: lines.reduce((n, l) => n + l.weeks.filter((c) => c.score !== null).length, 0),
         }),
       });
-    })();
+    })().catch(() => { /* best-effort: the panel stays hidden until the next open */ });
     return () => { cancelled = true; };
   }, [now]);
 

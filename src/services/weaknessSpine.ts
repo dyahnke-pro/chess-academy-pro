@@ -20,7 +20,7 @@
 import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
-import { getMisconceptionProfile, isMisconceptionDue, slipWeight, type MisconceptionAggregate } from './misconceptionService';
+import { aggregateMisconceptions, isMisconceptionDue, slipWeight, type MisconceptionAggregate } from './misconceptionService';
 import { FUNDAMENTAL_IDS, FUNDAMENTAL_TAG, type FundamentalId } from './principleAttribution';
 import { FUNDAMENTAL_LABEL } from './fundamentalsCatalog';
 import { getMisconceptionTag, isMisconceptionTagId, type MisconceptionTagId } from '../data/misconceptionTags';
@@ -1012,8 +1012,7 @@ async function computeUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]> {
       'r',
       [db.misconceptionTags, db.mistakePuzzles, db.openingWeakSpots, db.classifiedTactics, db.games],
       async () => {
-        const [misAgg, rawMis, rawMistakes, weakSpots, rawTactics, rawGames] = await Promise.all([
-          getMisconceptionProfile({ countedOnly: true }),
+        const [rawMis, rawMistakes, weakSpots, rawTactics, rawGames] = await Promise.all([
           db.misconceptionTags.toArray(),
           db.mistakePuzzles.toArray(),
           db.openingWeakSpots.toArray(),
@@ -1026,8 +1025,11 @@ async function computeUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]> {
         // student's name, and every aggregator below then ranked a demo
         // game's mistakes as the student's own. The game rows are excluded by
         // `isFixtureGame`; the derived rows by their `sourceGameId`, which is
-        // the same `sample-*` id. `getMisconceptionProfile` applies the same
+        // the same `sample-*` id. `aggregateMisconceptions` applies the same
         // predicate inside, so `misAgg` arrives clean.
+        // ONE read of the store, both uses (2026-11-25): the aggregate is
+        // built from the rows already held, never a second whole-store copy.
+        const misAgg = aggregateMisconceptions(rawMis, { countedOnly: true });
         const allMis = rawMis.filter((r) => !isFixtureDerived(r));
         const mistakes = rawMistakes.filter((r) => !isFixtureDerived(r));
         const tactics = rawTactics.filter((r) => !isFixtureDerived(r));

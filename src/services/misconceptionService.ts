@@ -272,11 +272,22 @@ function phaseToBucket(
 export async function getMisconceptionProfile(
   opts?: { countedOnly?: boolean },
 ): Promise<MisconceptionAggregate[]> {
+  return aggregateMisconceptions(await db.misconceptionTags.toArray(), opts);
+}
+
+/** The profile from rows already read — so a caller that holds the store's
+ *  rows (the weakness spine) never reads the whole store a second time. On a
+ *  real library that second copy was thousands of rows held twice at once on
+ *  /weaknesses (2026-11-25, an iPhone whose web view reloaded there). */
+export function aggregateMisconceptions(
+  tagRows: readonly MisconceptionTagRecord[],
+  opts?: { countedOnly?: boolean },
+): MisconceptionAggregate[] {
   const now = Date.now();
   // 🔒 FIXTURES ARE NOT THE STUDENT (D5, 2026-09-22): a slip captured while
   // reviewing a seeded `sample-*` game is a slip in a DEMO, so it never enters
   // the student's misconception profile — display or weakness analysis alike.
-  const raw = (await db.misconceptionTags.toArray()).filter((r) => !isFixtureDerived(r));
+  const raw = tagRows.filter((r) => !isFixtureDerived(r));
   // The Thinking-Errors display reads everything; the weakness analysis passes
   // countedOnly so display-only (un-learned) slips don't inflate the formal
   // weakness profile. Legacy rows have no `counted` field → treated as counted.

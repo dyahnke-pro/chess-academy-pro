@@ -253,4 +253,25 @@ describe('GameInsightsPage', () => {
     await waitFor(() => { expect(screen.getByTestId('insights-analysed-count')).toHaveTextContent('14 of 937'); });
     act(() => { useAppStore.getState().setBackgroundAnalysis(false, null); });
   });
+  it('a run that ends while the app is HIDDEN reloads the tabs only once it is visible (2026-11-25)', async () => {
+    // A read started while hidden dies when iOS suspends the page — the
+    // unhandled "cursor that doesn't exist" a new App Store user hit five times.
+    const { useAppStore } = await import('../../stores/appStore');
+    const setVis = (v: 'visible' | 'hidden'): void => {
+      Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => v });
+      document.dispatchEvent(new Event('visibilitychange'));
+    };
+    mockGetAnalysisCounts.mockResolvedValue({ totalGames: 10, analyzedGameCount: 5, gamesNeedingAnalysis: 5 });
+    render(<GameInsightsPage />);
+    await waitFor(() => { expect(mockGetOverviewInsights).toHaveBeenCalledTimes(1); });
+    act(() => { useAppStore.getState().setBackgroundAnalysis(true, '1/5 — a vs b'); });
+    await new Promise((r) => setTimeout(r, 20));
+    const before = mockGetOverviewInsights.mock.calls.length;
+    setVis('hidden');
+    act(() => { useAppStore.getState().setBackgroundAnalysis(false, null); });
+    await new Promise((r) => setTimeout(r, 20));
+    expect(mockGetOverviewInsights, 'read started while hidden').toHaveBeenCalledTimes(before);
+    act(() => { setVis('visible'); });
+    await waitFor(() => { expect(mockGetOverviewInsights).toHaveBeenCalledTimes(before + 1); });
+  });
 });

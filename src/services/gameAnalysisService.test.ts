@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { db } from '../db/schema';
 import { countGamesNeedingAnalysis, analyzeAllGames, analyzeRecentGames, gameNeedsAnalysis, ANALYSIS_DEPTH, ANALYSIS_PACKAGE_SIZE } from './gameAnalysisService';
 import { buildGameRecord, buildUserProfile } from '../test/factories';
@@ -313,6 +313,41 @@ describe('gameAnalysisService', () => {
       // Exactly the remainder is still waiting for the next invocation.
       const stillNeeding = await countGamesNeedingAnalysis();
       expect(stillNeeding).toBe(total - ANALYSIS_PACKAGE_SIZE);
+    });
+  });
+
+  describe('analyzeAllGames — the app going to the background', () => {
+    afterEach(() => {
+      Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => 'visible' });
+    });
+
+    it('a run stopped by backgrounding starts NO aggregate weakness read (iOS kills it on suspend)', async () => {
+      // 2026-11-25, new App Store user: every "cursor that doesn't exist" sat
+      // on a resume — the hidden abort ran the eight-store weakness read into
+      // the suspension. The resumed run does that refresh on a live page.
+      for (const id of ['bg-a', 'bg-b']) {
+        await db.games.add(buildGameRecord({ id, pgn: '1. e4 e5 2. Nf3 Nc6 1/2-1/2', annotations: null, isMasterGame: false }));
+      }
+      let hid = false;
+      mockAnalyzePosition.mockImplementation(() => {
+        if (!hid) {
+          hid = true;
+          Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => 'hidden' });
+          document.dispatchEvent(new Event('visibilitychange'));
+        }
+        return Promise.resolve(mockAnalysis(25, 'e2e4'));
+      });
+      const phases: string[] = [];
+      await analyzeAllGames((p) => phases.push(p.phase));
+      expect(mockComputeWeaknessProfile).not.toHaveBeenCalled();
+      expect(phases).not.toContain('computing_weaknesses');
+    });
+
+    it('a run that finishes while visible still refreshes the weakness profile', async () => {
+      await db.games.add(buildGameRecord({ id: 'vis-a', pgn: '1. e4 e5 2. Nf3 Nc6 1/2-1/2', annotations: null, isMasterGame: false }));
+      mockAnalyzePosition.mockResolvedValue(mockAnalysis(25, 'e2e4'));
+      await analyzeAllGames();
+      expect(mockComputeWeaknessProfile).toHaveBeenCalledTimes(1);
     });
   });
 

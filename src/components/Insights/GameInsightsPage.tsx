@@ -1,6 +1,7 @@
 import { HeatMapPanel } from './HeatMapPanel';
 import { PageHelp } from '../Layout/PageHelp';
 import { useState, useEffect, useRef } from 'react';
+import { whenVisible } from '../../utils/whenVisible';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, RefreshCw, Search, Sparkles } from 'lucide-react';
@@ -112,7 +113,11 @@ export function GameInsightsPage(): JSX.Element {
         // background (yielding, per game) and refresh the tab as games land.
         // Never inline — deriving the whole library on open froze the app.
         const refresh = (): void => {
-          if (!cancelled) void getTacticInsights().then((t) => { if (!cancelled) setTactics(t); });
+          if (!cancelled) {
+            void getTacticInsights()
+              .then((t) => { if (!cancelled) setTactics(t); })
+              .catch(() => { /* the next refresh or the end-of-run reload fills it */ });
+          }
         };
         return backfillClassifiedTactics({
           onGame: (done, total) => { if (done % 25 === 0 && done < total) refresh(); },
@@ -142,7 +147,12 @@ export function GameInsightsPage(): JSX.Element {
   // freshly-populated classifications feed into the accuracy stats.
   useEffect(() => {
     if (prevBgRunning.current && !bgAnalysisRunning) {
-      void loadAll();
+      // A run stopped by backgrounding ends while the app is HIDDEN; a read
+      // started then dies when iOS suspends the page (the unhandled "cursor
+      // that doesn't exist", 2026-11-25). Reload once the student is back.
+      void whenVisible()
+        .then(loadAll)
+        .catch(() => { /* best-effort: the tabs keep what they last read */ });
     }
     prevBgRunning.current = bgAnalysisRunning;
   }, [bgAnalysisRunning]);
@@ -156,8 +166,13 @@ export function GameInsightsPage(): JSX.Element {
       source: 'GameInsightsPage.handleRefresh',
       summary: 'manual refresh of all 4 tabs',
     });
-    await loadAll();
-    setRefreshing(false);
+    try {
+      await loadAll();
+    } catch {
+      /* best-effort: the tabs keep what they last read */
+    } finally {
+      setRefreshing(false);
+    }
   }
 
   function handleAnalyze(): void {

@@ -137,7 +137,7 @@ function resolveWorkerPoolSize(): number {
     // is the app's DELIBERATE safe iOS build (the WASM/multi builds are the ones
     // that crash-storm — see resolveWorkerUrl). e1534fc's real complaint — "2
     // asm engines grinding 831 games = hot phone" — is a BATCH-SIZE problem, and
-    // it is fixed by ANALYSIS_PACKAGE_SIZE (10 games/tap), not by removing the
+    // it is fixed by ANALYSIS_PACKAGE_SIZE (games per tap), not by removing the
     // one engine path that actually finishes.
     //
     // 🔒 DO NOT SUBTRACT A RESERVE FROM A NUMBER THAT IS ALREADY ONE (David
@@ -2685,13 +2685,14 @@ export async function analyzeRecentGames(
  *
  * David 2026-09-05: a full library (his was 831 games) never finished in one
  * run on the phone — it either ground for hours or got interrupted by an iOS
- * suspend before the end. We analyze in bounded PACKAGES of 10 newest-first (David 2026-10-18: "10 at a time instead of 50")
+ * suspend before the end. We analyze in bounded PACKAGES of 5 newest-first (David 2026-10-18: "10 at a time instead of 50";
+ * 2026-11-25: 5, after a new iPhone user's web view kept reloading mid-import)
  * and then STOP. Each analyzed game persists as it finishes and is filtered
  * out of the next `gameNeedsAnalysis` scan, so the next tap of the Analyze
- * Games button picks up the next 10 with no cursor to track. Bounded work,
+ * Games button picks up the next package with no cursor to track. Bounded work,
  * visible completion, user-controlled cadence.
  */
-export const ANALYSIS_PACKAGE_SIZE = 10;
+export const ANALYSIS_PACKAGE_SIZE = 5;
 
 /**
  * Batch-analyze up to ANALYSIS_PACKAGE_SIZE imported/played games that lack
@@ -3037,6 +3038,18 @@ export async function analyzeAllGames(
       details: JSON.stringify({ analyzed, completed, failed, batch: games.length, stopped, poolExhausted }),
     });
   }
+
+  // 🔒 A RUN STOPPED BY BACKGROUNDING NEVER STARTS THE AGGREGATE READS (new App
+  // Store user, 2026-11-25: five "Attempt to iterate a cursor that doesn't
+  // exist" / "open a cursor … without an in-progress transaction"). The
+  // `hidden` abort used to fall straight into `recomputeWeaknessFromGames` — an
+  // eight-store read transaction started the instant iOS began suspending the
+  // app. WebKit tears down the IndexedDB transactions of a suspended page, so
+  // that read died on resume, every time (each error sat after an 8–12 minute
+  // gap, beside the resume's OTA check). The resumed run (the resume handler in
+  // `runBackgroundAnalysis`) ends in this same refresh, on a live page.
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- mutated by visibilitychange handler
+  if (_abortAnalysis && !_userCancelled) return analyzed;
 
   onProgress?.({
     currentGame: games.length,
