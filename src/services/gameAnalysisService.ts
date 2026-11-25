@@ -1,4 +1,5 @@
 import { setUpPosed } from './setUpChance';
+import { noteAnalysis } from './sessionWatch';
 import { applyVerdict, getVerdicts, saveVerdict, toVerdictLabel, verdictKey, verdictOutranks, VERDICT_TRUST_DEPTH } from './moveVerdictStore';
 import { holdBackground, backgroundHolds } from './foregroundActivity';
 import { finishedBoardEval } from './finishedBoard';
@@ -942,11 +943,13 @@ export async function spawnWorkers<W = DedicatedWorker>(
   if (phone) {
     for (let i = 0; i < count; i++) {
       try { out.push(await spawn(first + i)); } catch { /* skipped, as the parallel path does */ }
+      noteAnalysis(first + out.length, true);
     }
     return out;
   }
   const results = await Promise.allSettled(Array.from({ length: count }, (_, i) => spawn(first + i)));
   for (const r of results) if (r.status === 'fulfilled') out.push(r.value);
+  noteAnalysis(first + out.length, true);
   return out;
 }
 
@@ -1012,6 +1015,7 @@ function scheduleIdleRetire(): void {
     // Only retire if nothing was acquired since (acquirePool cancels this timer).
     for (const w of _warmPool) w.destroy();
     _warmPool = [];
+    noteAnalysis(0, false);
   }, POOL_IDLE_RETIRE_MS);
   // Don't keep the process alive for this in Node/test contexts.
   (_idleRetireTimer as { unref?: () => void }).unref?.();

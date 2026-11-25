@@ -51,6 +51,7 @@ import { initBilling, getStableAnalyticsId } from './services/billingService';
 import { useFreeTierStore } from './stores/freeTierStore';
 import { ReviewPrompt } from './components/Feedback/ReviewPrompt';
 import { withWebOrigin } from './utils/webOrigin';
+import { startSessionWatch } from './services/sessionWatch';
 
 const AcademyPage = lazyPage('AcademyPage', () => import('./components/Academy/AcademyPage').then((m) => m.AcademyPage));
 const CourseSyllabusPage = lazyPage('CourseSyllabusPage', () => import('./components/Academy/CourseSyllabusPage').then((m) => m.CourseSyllabusPage));
@@ -197,6 +198,8 @@ export function App(): JSX.Element {
   useEffect(() => { void ensureSyncedCredits(); }, []);
   // The free allowance survives a reinstall: mirrored under the Keychain id.
   useEffect(() => { void startFreeTierSync(); }, []);
+  // A session the web view was killed in reports itself on the next launch.
+  useEffect(() => { void startSessionWatch(); }, []);
   // Spaced-review reminders: on the phone, planned from the due dates it
   // holds (native only — a no-op on the web app).
   const profileReady = Boolean(activeProfile);
