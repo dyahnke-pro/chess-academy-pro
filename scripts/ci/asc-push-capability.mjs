@@ -47,7 +47,7 @@ async function main() {
   if (!bundle) throw new Error(`bundle id ${BUNDLE_ID} not found in the developer portal`);
   console.log(`bundleId ${BUNDLE_ID} = ${bundle.id} (${bundle.attributes?.platform})`);
 
-  const caps = await api('GET', `/v1/bundleIds/${bundle.id}/bundleIdCapabilities?limit=200`);
+  const caps = await api('GET', `/v1/bundleIds/${bundle.id}/bundleIdCapabilities`);
   const types = (caps.data || []).map((c) => c.attributes?.capabilityType);
   console.log(`capabilities now: ${types.join(', ') || '(none)'}`);
   if (types.includes('PUSH_NOTIFICATIONS')) {
