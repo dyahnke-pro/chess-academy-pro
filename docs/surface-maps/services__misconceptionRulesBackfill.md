@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**288 lines · 10 exports · 6 importers · 6 tests · 0 audits**
+**290 lines · 10 exports · 6 importers · 6 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -54,7 +54,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/misconceptionRulesBackfill.dedupe.test.ts:34`
 
 ### `reconcileMisconceptionRules` (function) — 14 call sites
-- `src/services/dataLoader.ts:1001`
+- `src/services/dataLoader.ts:1012`
 - `src/services/heatMapFill.measure.test.ts:55`
 - `src/services/misconceptionRulesBackfill.dedupe.test.ts:41`
 - `src/services/misconceptionRulesBackfill.dedupe.test.ts:45`
