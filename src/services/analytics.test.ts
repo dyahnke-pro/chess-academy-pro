@@ -93,6 +93,18 @@ describe('stockfish defects route to Error Tracking (David 2026-06-15)', () => {
   });
 });
 
+describe('a stall on a HIDDEN page is an event, never an exception (2026-11-25)', () => {
+  // Backgrounded stalls ("page was BACKGROUNDED … not an engine fault",
+  // hidden=true) were $exceptions and mailed David as errors. They have their
+  // own kind now, mapped to a plain product event.
+  it('stockfish-analysis-suspended is a product event', () => {
+    expect(auditKindToEvent('stockfish-analysis-suspended')).toBe('stockfish_analysis_suspended');
+    expect(() =>
+      mirrorAuditEvent(entry({ kind: 'stockfish-analysis-suspended', category: 'subsystem', summary: 'hidden=true' })),
+    ).not.toThrow();
+  });
+});
+
 describe('defect-kind exceptions carry the diagnostic text (David: unreproducible sanitizer-leak)', () => {
   // A real `sanitizer-leak` fired in prod with nothing but the generic
   // "Piece-letter shorthand survived sanitizeForTTS" summary — the actual

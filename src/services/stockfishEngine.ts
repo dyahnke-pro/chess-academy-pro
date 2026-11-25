@@ -1507,7 +1507,7 @@ class StockfishEngine {
         if (this.pending === held) this.recoverStuckAnalysis(`${reason} (after suspend re-arm)`);
       }, ANALYSIS_HARD_TIMEOUT_MS);
       void logAppAudit({
-        kind: 'stockfish-analysis-stalled',
+        kind: 'stockfish-analysis-suspended',
         category: 'subsystem',
         source: 'stockfishEngine.recoverStuckAnalysis',
         summary: `${reason} — page was BACKGROUNDED during this analysis; not an engine fault. Re-armed once (variant=${this.workerVariant ?? '?'})`,
@@ -1990,7 +1990,9 @@ class StockfishEngine {
               // search that overruns means the worker is not executing at all.
               const elapsedMs = Date.now() - startedAt;
               void logAppAudit({
-                kind: 'stockfish-analysis-stalled',
+                // Hidden: iOS froze this search with the page — not an engine
+                // fault, so it must never reach Error Tracking.
+                kind: this._hiddenDuringPending ? 'stockfish-analysis-suspended' : 'stockfish-analysis-stalled',
                 category: 'subsystem',
                 source: 'stockfishEngine._dispatchAnalysis',
                 summary: `no bestmove in ${ANALYSIS_STALL_MS}ms — variant=${this.workerVariant ?? '?'} depth=${depth} budget=${budgetMs ?? 'none'} elapsed=${elapsedMs}ms hidden=${this._hiddenDuringPending} fen=${fen.slice(0, 40)}`,

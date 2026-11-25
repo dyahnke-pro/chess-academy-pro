@@ -85,6 +85,9 @@ describe('a suspended page is not an engine fault', () => {
     expect(eng.pending, 'the in-flight analysis is kept for the resume handler').not.toBeNull();
     expect(audits.some((a) => /BACKGROUNDED/.test(a.summary))).toBe(true);
     expect(audits.some((a) => /demoted to asm/.test(a.summary))).toBe(false);
+    // Not an engine fault, so never the exception-class kind (2026-11-25).
+    const bg = audits.find((a) => /BACKGROUNDED/.test(a.summary));
+    expect(bg?.kind).toBe('stockfish-analysis-suspended');
   });
 
   it('forgives the suspension exactly ONCE — a genuinely dead engine still recovers', async () => {
@@ -229,5 +232,7 @@ describe('the 12s stall log carries its own diagnosis', () => {
 
     const summary = audits.find((a) => a.source === 'stockfishEngine._dispatchAnalysis')?.summary;
     expect(summary, 'a backgrounded stall must be self-evident in the log').toContain('hidden=true');
+    const kind = audits.find((a) => a.source === 'stockfishEngine._dispatchAnalysis')?.kind;
+    expect(kind, 'a hidden stall is a plain event, not an exception').toBe('stockfish-analysis-suspended');
   });
 });
