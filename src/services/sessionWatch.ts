@@ -13,6 +13,7 @@
  */
 import { db } from '../db/schema';
 import { captureEvent } from './analytics';
+import { holdBackfills } from './foregroundActivity';
 
 const KEY = 'session-watch';
 const BEAT_MS = 3000;
@@ -56,19 +57,67 @@ function routeNow(): string {
   try { return window.location.pathname; } catch { return ''; }
 }
 
+/** The previous session's record, read ONCE per launch and before this
+ *  session's first beat overwrites it — the watch and the crash-loop breaker
+ *  share this one read, so neither can see this session's own heartbeat. */
+let started = false;
+let cleanNow: (() => Promise<void>) | null = null;
+
+/** The app is about to reload itself on purpose (an OTA bundle applied):
+ *  mark this session clean first, so the reload is never reported as a
+ *  kill (2026-11-25: the first two reports were the launch install). */
+export async function markSessionClean(): Promise<void> {
+  if (cleanNow) await cleanNow();
+}
+let previousRead: Promise<Record<string, unknown> | null> | null = null;
+
+function readPrevious(): Promise<Record<string, unknown> | null> {
+  if (!previousRead) {
+    previousRead = (async () => {
+      try {
+        const rec = await db.meta.get(KEY);
+        const prev = rec?.value ? (JSON.parse(rec.value) as SessionBeat) : null;
+        return killReport(prev, Date.now());
+      } catch { return null; /* a bad record is just dropped */ }
+    })();
+  }
+  return previousRead;
+}
+
+/**
+ * 🔒 THE CRASH-LOOP BREAKER (2026-11-25). A web view killed on /weaknesses
+ * while the batch ran reloaded onto /weaknesses, and everything that killed
+ * it started again on open — a loop the student could not leave. When the
+ * last session was killed in front of the student, THIS session starts no
+ * heavy work on its own: no automatic batch analysis, no whole-library
+ * derivations on page open. A tap still runs them; the next clean session
+ * is back to normal.
+ */
+export function lastSessionWasKilled(): Promise<boolean> {
+  if (typeof window === 'undefined') return Promise.resolve(false);
+  return readPrevious().then((r) => r !== null);
+}
+
+/** Tests only: forget the per-launch read. */
+export function __resetSessionWatchForTests(): void {
+  previousRead = null;
+  started = false;
+}
+
 /** Start the watch once at boot. Reports the previous session if it was
  *  killed, then beats for this one. */
-let started = false;
 
 export async function startSessionWatch(): Promise<void> {
   if (started || typeof window === 'undefined' || typeof document === 'undefined') return;
   started = true;
-  try {
-    const rec = await db.meta.get(KEY);
-    const prev = rec?.value ? (JSON.parse(rec.value) as SessionBeat) : null;
-    const report = killReport(prev, Date.now());
-    if (report) captureEvent('webview_killed', report);
-  } catch { /* a bad record is just dropped */ }
+  const report = await readPrevious();
+  if (report) {
+    captureEvent('webview_killed', report);
+    // The crash-loop breaker: the boot backfills re-read the whole library,
+    // and a pass killed mid-way restarts on every launch. Held for this
+    // session; the next clean launch runs them.
+    holdBackfills();
+  }
 
   const startedAt = Date.now();
   let clean = document.visibilityState === 'hidden';
@@ -82,4 +131,8 @@ export async function startSessionWatch(): Promise<void> {
     beat();
   });
   window.addEventListener('pagehide', () => { clean = true; beat(); });
+  cleanNow = async () => {
+    clean = true;
+    await write({ startedAt, lastBeat: Date.now(), route: routeNow(), clean, poolWorkers, analysing });
+  };
 }

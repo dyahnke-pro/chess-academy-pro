@@ -28,3 +28,37 @@ describe('the report is sent after analytics starts', () => {
     expect(app.slice(init, watch).length).toBeLessThan(400);
   });
 });
+
+// 🔒 THE CRASH-LOOP BREAKER (2026-11-25): a launch after a killed session must
+// know it, and must read the PREVIOUS record — never this session's own beat.
+describe('the crash-loop breaker reads the previous session', () => {
+  it('a killed previous session is seen, even after this session starts beating', async () => {
+    const { db } = await import('../db/schema');
+    const sw = await import('./sessionWatch');
+    sw.__resetSessionWatchForTests();
+    await db.meta.put({ key: 'session-watch', value: JSON.stringify(beat({ clean: false })) });
+    await sw.startSessionWatch(); // overwrites the record with this session's beat
+    expect(await sw.lastSessionWasKilled()).toBe(true);
+  });
+
+  it('a clean previous session holds nothing', async () => {
+    const { db } = await import('../db/schema');
+    const sw = await import('./sessionWatch');
+    sw.__resetSessionWatchForTests();
+    await db.meta.put({ key: 'session-watch', value: JSON.stringify(beat({ clean: true })) });
+    expect(await sw.lastSessionWasKilled()).toBe(false);
+  });
+});
+
+// An OTA bundle applied at launch reloads the page from native code (no
+// pagehide): the first two reports on 2026-11-25 were that reload, not kills.
+describe('an applied bundle is not a kill', () => {
+  it('markSessionClean writes the session clean before the reload', async () => {
+    const { db } = await import('../db/schema');
+    const { startSessionWatch, markSessionClean } = await import('./sessionWatch');
+    await startSessionWatch();
+    await markSessionClean();
+    const rec = await db.meta.get('session-watch');
+    expect(JSON.parse(rec?.value ?? '{}').clean).toBe(true);
+  });
+});

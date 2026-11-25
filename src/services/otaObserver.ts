@@ -26,6 +26,7 @@
  * only reports facts the plugin emits. The fix comes AFTER the evidence, not
  * from a hunch.
  */
+import { markSessionClean } from './sessionWatch';
 import { Capacitor } from '@capacitor/core';
 import { CapacitorUpdater } from '@capgo/capacitor-updater';
 import { logAppAudit, type AuditKind } from './appAuditor';
@@ -335,6 +336,7 @@ export async function installStagedBundleOnLaunch(
         if (isAnalyticsEnabled()) {
           captureEvent('ota_user_forced_install', { from: currentVersion, to: newest.version, stagedCount: pending.length });
         }
+        await markSessionClean(); // an applied bundle reloads the page — not a kill
         await CapacitorUpdater.set({ id: newest.id }); // applies + reloads
         return true;
       }
@@ -391,6 +393,7 @@ export async function installStagedBundleOnLaunch(
     if (isAnalyticsEnabled()) {
       captureEvent('ota_launch_install', { from: currentVersion, to: target.version, toId: target.id });
     }
+    await markSessionClean(); // an applied bundle reloads the page — not a kill
     await CapacitorUpdater.set({ id: target.id }); // applies + reloads the app
     return true;
   } catch (err) {
