@@ -149,6 +149,15 @@ describe('sanitizeForTTS', () => {
       'Dr. P',
       'R.I.P.',
       'This is just normal narration without chess shorthand.',
+      // A FILE letter naming a pawn or a file is not a piece letter (prod
+      // sanitizer-leak alerts 2026-11-23..25, every one of them these words).
+      'it would be kicked by their b-pawn',
+      'it concedes an isolated pawn on the b-file of your own',
+      'White lines the rook up on the b-file behind the b4-pawn',
+      'Their b-pawn looks loose',
+      'From there it would hit their knight and their b-pawn.',
+      'So b-knight to d2 starts a classic tour',
+      'The Réti — knight to f3 and c4 with a kingside fianchetto',
       '',
     ];
     for (const t of shouldNotLeak) {

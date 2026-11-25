@@ -9,6 +9,8 @@ const PIECE: Record<string, string> = {
   N: 'Knight', B: 'Bishop', R: 'Rook', Q: 'Queen', K: 'King',
 };
 
+const RANK_ORDINALS = ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth'] as const;
+
 /** Speak a square so TTS reads it clearly: "f5" → "f 5". */
 function spellSquare(sq: string): string {
   return /^[a-h][1-8]$/.test(sq) ? `${sq[0]} ${sq[1]}` : sq;
@@ -33,14 +35,22 @@ export function sanToSpeech(sanRaw: string | undefined | null): string {
   const piece = PIECE[s[0]];
   if (piece) {
     // Disambiguation = the file/rank between the piece letter and dest
-    // (minus any capture 'x'). Spoken so "Rad8" → "Rook a to d 8".
+    // (minus any capture 'x'), said the way a coach says it and the way
+    // sanitizeForTTS says it: "Nbd7" → "b-knight to d 7", "N2f3" → "Knight
+    // from the second rank to f 3". The old "Knight b to d 7" was robotic,
+    // and its bare "b to" is the piece-letter shape the sanitizer-leak alarm
+    // exists to catch (prod alerts on Learn and in the chat, 2026-09..11).
     const mid = s.slice(1, -2).replace('x', '');
-    const disamb = mid ? `${mid.split('').join(' ')} ` : '';
-    return `${piece} ${disamb}${takes ? 'takes ' : 'to '}${spellSquare(dest)}${promo}${suffix}`;
+    const verb = `${takes ? 'takes ' : 'to '}${spellSquare(dest)}${promo}${suffix}`;
+    if (/^[a-h]$/.test(mid)) return `${mid}-${piece.toLowerCase()} ${verb}`;
+    if (/^[1-8]$/.test(mid)) return `${piece} from the ${RANK_ORDINALS[Number(mid) - 1]} rank ${verb}`;
+    if (/^[a-h][1-8]$/.test(mid)) return `${piece} from ${spellSquare(mid)} ${verb}`;
+    return `${piece} ${verb}`;
   }
-  // Pawn move (no piece letter). Capture form: "exd5" → "e takes d 5".
+  // Pawn move (no piece letter). Capture form: "exd5" → "e-pawn takes d 5"
+  // (a bare "b takes c 5" is a piece-letter shape to the ear and the alarm).
   if (takes) {
-    return `${s[0]} takes ${spellSquare(dest)}${promo}${suffix}`;
+    return `${s[0]}-pawn takes ${spellSquare(dest)}${promo}${suffix}`;
   }
   return `Pawn to ${spellSquare(dest)}${promo}${suffix}`;
 }

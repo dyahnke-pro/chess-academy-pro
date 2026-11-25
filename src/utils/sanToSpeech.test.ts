@@ -9,16 +9,23 @@ describe('sanToSpeech — Learn dictates the move', () => {
     expect(sanToSpeech('Qd6')).toBe('Queen to d 6');
   });
   it('speaks disambiguation letters/digits', () => {
-    expect(sanToSpeech('Ngf6')).toBe('Knight g to f 6');
-    expect(sanToSpeech('N2f3')).toBe('Knight 2 to f 3');
-    expect(sanToSpeech('Nbd7')).toBe('Knight b to d 7');
-    expect(sanToSpeech('Rad8')).toBe('Rook a to d 8');
-    expect(sanToSpeech('Nbxd2')).toBe('Knight b takes d 2');
+    expect(sanToSpeech('Ngf6')).toBe('g-knight to f 6');
+    expect(sanToSpeech('N2f3')).toBe('Knight from the second rank to f 3');
+    expect(sanToSpeech('Nbd7')).toBe('b-knight to d 7');
+    expect(sanToSpeech('Rad8')).toBe('a-rook to d 8');
+    expect(sanToSpeech('Nbxd2')).toBe('b-knight takes d 2');
+    expect(sanToSpeech('Qh4e1')).toBe('Queen from h 4 to e 1');
+  });
+  it('never says a bare piece-letter shape the leak alarm flags (prod 2026-09..11)', async () => {
+    const { detectSanitizerLeak } = await import('../services/voiceService');
+    for (const san of ['Nbd7', 'Nbd2', 'Rad8', 'Rfe1', 'Nbxd2', 'Qh4e1', 'N2f3', 'bxc5', 'exd5', 'Bxf7+']) {
+      expect(detectSanitizerLeak(sanToSpeech(san)), san).toBe(false);
+    }
   });
   it('captures', () => {
     expect(sanToSpeech('Nxd4')).toBe('Knight takes d 4');
-    expect(sanToSpeech('exd5')).toBe('e takes d 5');
-    expect(sanToSpeech('cxd5')).toBe('c takes d 5');
+    expect(sanToSpeech('exd5')).toBe('e-pawn takes d 5');
+    expect(sanToSpeech('cxd5')).toBe('c-pawn takes d 5');
   });
   it('pawn pushes', () => {
     expect(sanToSpeech('e5')).toBe('Pawn to e 5');

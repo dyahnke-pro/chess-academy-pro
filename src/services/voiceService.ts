@@ -379,9 +379,16 @@ const ISOLATED_PIECE_LETTER_RE =
  *  expanded but didn't. The auditor wires this after every TTS call
  *  so a new LLM shape slipping past the sanitizer regexes surfaces
  *  in the app audit log. Independent of the narrationAuditor's
- *  factual-claim checks — different failure mode, same defense. */
+ *  factual-claim checks — different failure mode, same defense.
+ *
+ *  A letter followed by a hyphen is a FILE, never a piece: "their b-pawn",
+ *  "the b-file", "b-knight to d2" are the sanitizer's correct output. Every
+ *  prod sanitizer-leak alert of 2026-11-23..25 was one of those words (the
+ *  case-insensitive "their b" matched), so the alarm reported no leak at all.
+ *  Nor is a capital before an accented letter: "The Réti" (JS `\b` treats
+ *  "é" as a non-word character, so "The R" read as a piece). */
 const LEAK_DETECTOR_RE =
-  /\b[PNBRQK]\s+(?:on|to|at|from|hangs|hanging|is|was|takes|attacks|defends|sits|stands|covers|controls|threatens|protects|supports)\b|\b(?:hanging|loose|dropped|undefended|attacked|captured|save|protect|lose|hang|the|a|an|my|your|their|our|his|her|weak|strong|enemy|opposing|black['\u2019]s|white['\u2019]s)\s+[PNBRQK]\b/i;
+  /\b[PNBRQK]\s+(?:on|to|at|from|hangs|hanging|is|was|takes|attacks|defends|sits|stands|covers|controls|threatens|protects|supports)\b|\b(?:hanging|loose|dropped|undefended|attacked|captured|save|protect|lose|hang|the|a|an|my|your|their|our|his|her|weak|strong|enemy|opposing|black['\u2019]s|white['\u2019]s)\s+[PNBRQK]\b(?![-\u2010\u2011\u00C0-\u024F])/i;
 export function detectSanitizerLeak(text: string): boolean {
   if (!text) return false;
   return LEAK_DETECTOR_RE.test(text);
