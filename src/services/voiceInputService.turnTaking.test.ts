@@ -105,6 +105,40 @@ describe('voiceInputService — turn-taking conversation mode (native)', () => {
     un();
   });
 
+  it('one spoken question submits ONCE — partials iOS flushes after the stop never re-submit (prod 2026-11-25)', async () => {
+    // The live break: iOS delivers the refined transcript AFTER stop(), and
+    // the 'stopped' event submitted it as a second question — two LLM
+    // answers, spoken twice, per utterance.
+    const onResult = vi.fn();
+    const un = await startConversation({ onResult });
+
+    emitPartial('Basically why go with the ball against against a chain of bo');
+    await vi.advanceTimersByTimeAsync(2100); // pause → submit + stop()
+    await flushAsync();
+    emitPartial('Miss basically why go with the ball against against a chain'); // post-stop flush
+    emitPartial('Miss basically why go with the ball against a chain of pawns');
+    emitStopped();
+    await flushAsync();
+    await vi.advanceTimersByTimeAsync(2100);
+    await flushAsync();
+
+    expect(onResult).toHaveBeenCalledTimes(1);
+    expect(onResult).toHaveBeenCalledWith('Basically why go with the ball against against a chain of bo');
+    un();
+  });
+
+  it('a session iOS ends on its own (no pause submit) still submits its utterance once', async () => {
+    const onResult = vi.fn();
+    const un = await startConversation({ onResult });
+    emitPartial('in pawns with e4');
+    emitStopped();
+    await flushAsync();
+    await vi.advanceTimersByTimeAsync(2100);
+    expect(onResult).toHaveBeenCalledTimes(1);
+    expect(onResult).toHaveBeenCalledWith('in pawns with e4');
+    un();
+  });
+
   it('re-arms the mic only AFTER the reply finishes speaking (two-phase wait)', async () => {
     const un = await startConversation({ onResult: vi.fn() });
     pluginStart.mockClear();

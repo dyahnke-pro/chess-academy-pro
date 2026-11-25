@@ -275,6 +275,14 @@ class VoiceInputService {
   /** True while an auto-restart is already scheduled/in-flight, so overlapping
    *  triggers (silence + iOS session-cap 'stopped') don't double-start. */
   private nativeRestarting = false;
+  /** True from the moment a native recognizer session is started until its
+   *  utterance is submitted (or the session is torn down). Partials that
+   *  arrive while it is false belong to a turn already sent: iOS flushes the
+   *  refined transcript AFTER `stop()`, so without this gate the 'stopped'
+   *  event re-submitted it as a SECOND question (prod 2026-11-25: "Basically
+   *  why go…" then "Miss basically why go…", each answered). One utterance,
+   *  one submit. */
+  private nativeTurnOpen = false;
 
   /** Running inside the native app shell (Capacitor WKWebView), where the
    *  native speech plugin is available and Web Speech is not. */
@@ -458,6 +466,7 @@ class VoiceInputService {
     this.clearNativeSilenceTimer();
     if (this.nativeListening) {
       this.nativeListening = false;
+      this.nativeTurnOpen = false;
       // Manual stop (user tapped the mic off): iOS won't deliver its own
       // `listeningState:stopped` with the final transcript before we tear the
       // session down, and that event's guard then short-circuits — so a
@@ -501,6 +510,9 @@ class VoiceInputService {
     this.nativeSilenceTimer = setTimeout(() => {
       this.nativeSilenceTimer = null;
       if (!this.nativeListening) return;
+      // The turn is closed BEFORE the stop: anything the recognizer flushes
+      // after this belongs to the turn just sent and must not submit again.
+      this.nativeTurnOpen = false;
       // Dispatch the utterance NOW (the manual-stop lesson: iOS may not
       // deliver a final 'stopped' payload), then tear the engine down while
       // KEEPING listeners + the continuous flag — the 'stopped' event drives
@@ -509,10 +521,7 @@ class VoiceInputService {
       const pending = this.nativeLatest.trim();
       this.nativeLatest = '';
       this.speechStartFired = false;
-      if (pending) {
-        this.audit('mic-final-dispatched', `end-of-utterance submit: "${pending.slice(0, 60)}"`);
-        this.dispatchFinal(pending);
-      }
+      if (pending) this.dispatchFinal(pending, 'end-of-utterance');
       this.nativeListening = false;
       void this.turnSubmitStopNative();
     }, NATIVE_SILENCE_MS);
@@ -599,9 +608,11 @@ class VoiceInputService {
       for (let attempt = 0; attempt < NATIVE_REARM_MAX_ATTEMPTS && !started; attempt++) {
         if (aborted() || this.nativeListening) return;
         try {
+          this.nativeTurnOpen = true;
           await this.nativeSR.start({ language: 'en-US', maxResults: 2, partialResults: true, popup: false });
           started = true;
         } catch (e) {
+          this.nativeTurnOpen = false;
           lastErr = e;
           const msg = (e as Error)?.message ?? String(e);
           if (!isTransientAudioSessionError(msg)) break; // real failure — don't spin
@@ -691,6 +702,9 @@ class VoiceInputService {
       await SpeechRecognition.addListener('partialResults', (data: { matches: string[] }) => {
         const m = data.matches?.[0]?.trim();
         if (!m) return;
+        // A partial after the turn was submitted is the recognizer flushing
+        // the SAME utterance on stop — never a new question.
+        if (!this.nativeTurnOpen) return;
         // ECHO GUARD (continuous mode): the mic stays hot while the coach speaks
         // its reply, so it would capture the coach's OWN voice and send it back
         // → an infinite self-conversation. Drop anything heard while TTS is
@@ -731,10 +745,8 @@ class VoiceInputService {
         // The recognizer is down either way; isListening() must say so while
         // the re-arm cycle waits out the coach's reply.
         this.nativeListening = false;
-        if (final) {
-          this.audit('mic-final-dispatched', `session-stop submit: "${final.slice(0, 60)}"`);
-          this.dispatchFinal(final);
-        }
+        this.nativeTurnOpen = false;
+        if (final) this.dispatchFinal(final, 'session-stop');
         if (this.nativeContinuous && !this.userStopped) {
           void this.restartNativeSession();
           return;
@@ -760,6 +772,7 @@ class VoiceInputService {
       // ×N, permissions all granted). Give the route a proper settle window when
       // TTS was actually up; stay snappy from cold (no collision to clear).
       await new Promise((resolve) => setTimeout(resolve, wasSpeaking ? 450 : 150));
+      this.nativeTurnOpen = true;
       await SpeechRecognition.start({ language: 'en-US', maxResults: 2, partialResults: true, popup: false });
       // CONVERSATION MODE (turn-taking, David 2026-07-11): one tap arms a
       // whole back-and-forth. Each pause auto-submits and tears the
@@ -770,6 +783,7 @@ class VoiceInputService {
       this.audit('mic-started', 'native speech recognition started (conversation mode)');
     } catch (e) {
       this.nativeListening = false;
+      this.nativeTurnOpen = false;
       this.audit('mic-start-failed', `native start threw: ${(e as Error)?.message ?? e}`, this.capabilitySnapshot());
       this.errorHandler?.('unavailable');
       this.endHandler?.();
@@ -808,6 +822,7 @@ class VoiceInputService {
     this.nativeLatest = '';
     this.speechStartFired = false;
     this.nativeListening = false;
+    this.nativeTurnOpen = false;
     try {
       const { SpeechRecognition } = await import('@capacitor-community/speech-recognition');
       await SpeechRecognition.stop().catch(() => { /* already stopped */ });
@@ -1128,7 +1143,7 @@ class VoiceInputService {
     }
   }
 
-  private dispatchFinal(text: string): void {
+  private dispatchFinal(text: string, via = 'final'): void {
     if (this.finalDispatched) return;
     const trimmed = text.trim();
     if (!trimmed) return;
@@ -1137,7 +1152,7 @@ class VoiceInputService {
     // failure is diagnosable from the stream instead of guessed.
     this.audit(
       'mic-final-dispatched',
-      `dispatch "${trimmed.slice(0, 60)}" → ${this.resultHandlers.length} handler(s)`,
+      `${via} dispatch "${trimmed.slice(0, 60)}" → ${this.resultHandlers.length} handler(s)`,
     );
     this.finalDispatched = true;
     // Reset the per-utterance interim/final state so the next
