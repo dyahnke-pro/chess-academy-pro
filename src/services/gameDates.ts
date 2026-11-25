@@ -13,7 +13,7 @@ export async function gameDatesById(): Promise<Map<string, number>> {
   const out = new Map<string, number>();
   await db.games.orderBy('date').eachKey((date, cursor) => {
     const d = parseGameDate(typeof date === 'string' ? date : undefined);
-    if (d !== null) out.set(String(cursor.primaryKey), d);
+    if (d !== null) out.set(cursor.primaryKey, d);
   });
   return out;
 }
