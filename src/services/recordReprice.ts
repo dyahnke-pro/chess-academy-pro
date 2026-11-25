@@ -27,6 +27,7 @@ import { repriceAnnotations } from './annotationReprice';
 import type { MoveScorer } from './pvPlayback';
 import { determinePlayerColor, replayPgnToFens } from './mistakePuzzleService';
 import { isFixtureGame } from './fixtureGames';
+import { keysNotStampedAt, pickRows } from './stampScan';
 import { REVIEW_READ_DEPTH } from './engineConstants';
 import { usernameForGame } from './autoAnalyzeGame';
 
@@ -52,11 +53,10 @@ const NONE: RecordRepriceResult = { priced: 0, annotationsRelabeled: 0, rowsRela
 
 /** Analysed games whose annotations were not re-priced under `RECORD_PRICE_REV`. */
 export async function gamesBehindPrice(): Promise<string[]> {
-  const games = await db.games
-    .filter((g) => !g.isMasterGame && !!g.fullyAnalyzed && (g.annotations?.length ?? 0) > 0
-      && !isFixtureGame(g) && g.recordPriceRev !== RECORD_PRICE_REV)
-    .toArray();
-  return games.map((g) => g.id);
+  // Keys only for the stamped games (`stampScan`); only the rest are loaded.
+  const keys = await keysNotStampedAt(db.games, 'recordPriceRev', RECORD_PRICE_REV);
+  return pickRows(db.games, keys, (g) => (!g.isMasterGame && !!g.fullyAnalyzed && (g.annotations?.length ?? 0) > 0
+    && !isFixtureGame(g) && g.recordPriceRev !== RECORD_PRICE_REV ? g.id : null));
 }
 
 /** Re-price one game and relabel the rows built from it. Stamps the game, so

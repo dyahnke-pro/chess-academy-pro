@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**288 lines · 10 exports · 6 importers · 6 tests · 0 audits**
+**311 lines · 10 exports · 7 importers · 7 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -16,21 +16,27 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/dataLoader.ts`
 - `src/services/misconceptionRulesBackfill.dedupe.test.ts`
 - `src/services/misconceptionRulesBackfill.test.ts`
+- `src/services/stampScan.test.ts`
 - `src/services/syncService.ts`
 - `src/services/threatHalfBackfill.test.ts`
 
 ## Exports and every call site
 
-### `gamesBehindRules` (function) — 1 call site
+### `gamesBehindRules` (function) — 3 call sites
 - `src/services/misconceptionRulesBackfill.test.ts:29`
+- `src/services/stampScan.test.ts:76`
+- `src/services/stampScan.test.ts:91`
 
-### `gamesBehindPositiveHalf` (function) — 4 call sites
+### `gamesBehindPositiveHalf` (function) — 6 call sites
 - `src/services/misconceptionRulesBackfill.stall.test.ts:56`
 - `src/services/misconceptionRulesBackfill.test.ts:63`
 - `src/services/misconceptionRulesBackfill.test.ts:66`
 - `src/services/misconceptionRulesBackfill.test.ts:102`
+- `src/services/stampScan.test.ts:77`
+- `src/services/stampScan.test.ts:103`
 
-### `gamesBehindThreatHalf` (function) — 2 call sites
+### `gamesBehindThreatHalf` (function) — 3 call sites
+- `src/services/stampScan.test.ts:78`
 - `src/services/threatHalfBackfill.test.ts:80`
 - `src/services/threatHalfBackfill.test.ts:83`
 
@@ -54,7 +60,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/misconceptionRulesBackfill.dedupe.test.ts:34`
 
 ### `reconcileMisconceptionRules` (function) — 14 call sites
-- `src/services/dataLoader.ts:1001`
+- `src/services/dataLoader.ts:1012`
 - `src/services/heatMapFill.measure.test.ts:55`
 - `src/services/misconceptionRulesBackfill.dedupe.test.ts:41`
 - `src/services/misconceptionRulesBackfill.dedupe.test.ts:45`
@@ -79,6 +85,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/misconceptionRulesBackfill.stall.test.ts`
 - `src/services/misconceptionRulesBackfill.test.ts`
 - `src/services/recordReprice.test.ts`
+- `src/services/stampScan.test.ts`
 - `src/services/threatHalfBackfill.test.ts`
 
 ## Audits that reach it

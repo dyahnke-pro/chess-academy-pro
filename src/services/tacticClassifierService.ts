@@ -6,6 +6,7 @@ import { MOTIFS, MOTIF_OF_TACTIC, tacticTypesOf } from '../data/tacticMotifs';
 import { useAppStore } from '../stores/appStore';
 import { TACTIC_TYPE_REV } from './tacticTypeBackfill';
 import { PRODUCTION_BACKFILL_SCHEDULE, sleep, type BackfillSchedule } from './backfillSchedule';
+import { keysNotStampedAt, pickRows } from './stampScan';
 import type { ClassifiedTactic, TacticType, GameRecord } from '../types';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
@@ -462,9 +463,11 @@ export function backfillClassifiedTactics(opts: {
     if (schedule.startDelayMs > 0) await sleep(schedule.startDelayMs);
     // Never beside the batch, which classifies every game it analyses.
     await schedule.yieldBetweenRows();
-    const pending = await db.games
-      .filter((g) => g.tacticsClassifiedRev !== TACTIC_TYPE_REV && !!g.annotations && g.annotations.length > 0)
-      .primaryKeys();
+    // Keys only for the classified games (`stampScan`): a `.filter()` still
+    // deserialises every game with its analysis to read one stamp.
+    const unstamped = await keysNotStampedAt(db.games, 'tacticsClassifiedRev', TACTIC_TYPE_REV);
+    const pending = await pickRows(db.games, unstamped, (g) =>
+      (g.tacticsClassifiedRev !== TACTIC_TYPE_REV && !!g.annotations && g.annotations.length > 0 ? g.id : null));
     let total = 0;
     let done = 0;
     for (const id of pending) {

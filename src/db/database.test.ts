@@ -15,7 +15,7 @@ describe('Database Schema', () => {
   });
 
   it('has the correct schema version', () => {
-    expect(db.verno).toBe(47);
+    expect(db.verno).toBe(48);
   });
 
   it('has the boardReads store (v47 — one read per board, across Learn games)', () => {

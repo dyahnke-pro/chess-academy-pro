@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**576 lines · 8 exports · 9 importers · 7 tests · 0 audits**
+**581 lines · 8 exports · 10 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6698) — names `tacticClassifierService`
+- **The standard post-deploy ritual** (CLAUDE.md:7070) — names `tacticClassifierService`
 
 ## Who calls in
 
@@ -18,6 +18,7 @@
 - `src/components/Puzzles/PuzzleBoard.tsx`
 - `src/services/gameAnalysisService.ts`
 - `src/services/puzzleMissService.ts`
+- `src/services/stampScan.test.ts`
 - `src/services/tacticClassifierService.fill.test.ts`
 - `src/services/tacticClassifierService.test.ts`
 - `src/services/tacticalProfileService.ts`
@@ -28,8 +29,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `motifThemeLabels` (function) — 7 call sites
-- `src/components/Debug/OpeningBlundersPage.tsx:712`
-- `src/components/Debug/OpeningBlundersPage.tsx:928`
+- `src/components/Debug/OpeningBlundersPage.tsx:714`
+- `src/components/Debug/OpeningBlundersPage.tsx:930`
 - `src/components/Debug/openingTrapChip.ts:30`
 - `src/components/Debug/openingTrapChip.ts:33`
 - `src/services/tacticClassifierService.test.ts:74`
@@ -37,7 +38,7 @@
 - `src/services/tacticClassifierService.test.ts:76`
 
 ### `focusThemeLabel` (function) — 6 call sites
-- `src/components/Puzzles/PuzzleBoard.tsx:273`
+- `src/components/Puzzles/PuzzleBoard.tsx:280`
 - `src/services/tacticClassifierService.test.ts:57`
 - `src/services/tacticClassifierService.test.ts:58`
 - `src/services/tacticClassifierService.test.ts:63`
@@ -45,16 +46,16 @@
 - `src/services/tacticClassifierService.test.ts:68`
 
 ### `getTacticTypeFromThemes` (function) — 3 call sites
-- `src/components/Puzzles/PuzzleBoard.tsx:271`
+- `src/components/Puzzles/PuzzleBoard.tsx:278`
 - `src/services/puzzleMissService.ts:57`
 - `src/services/puzzleMissService.ts:81`
 
 ### `getPrimaryThemeLabel` (function) — 2 call sites
-- `src/components/Puzzles/PuzzleBoard.tsx:274`
+- `src/components/Puzzles/PuzzleBoard.tsx:281`
 - `src/services/tacticClassifierService.test.ts:56`
 
 ### `classifyTacticsFromGame` (function) — 6 call sites
-- `src/services/gameAnalysisService.ts:2389`
+- `src/services/gameAnalysisService.ts:2533`
 - `src/services/tacticClassifierService.fill.test.ts:61`
 - `src/services/tacticClassifierService.fill.test.ts:65`
 - `src/services/tacticClassifierService.fill.test.ts:66`
@@ -65,8 +66,9 @@
 - `src/services/tacticClassifierService.test.ts:37`
 - `src/services/tacticClassifierService.test.ts:45`
 
-### `backfillClassifiedTactics` (function) — 6 call sites
-- `src/components/Insights/GameInsightsPage.tsx:117`
+### `backfillClassifiedTactics` (function) — 7 call sites
+- `src/components/Insights/GameInsightsPage.tsx:147`
+- `src/services/stampScan.test.ts:80`
 - `src/services/tacticClassifierService.fill.test.ts:38`
 - `src/services/tacticClassifierService.fill.test.ts:47`
 - `src/services/tacticClassifierService.fill.test.ts:53`
@@ -75,10 +77,12 @@
 
 ## Tests
 
+- `src/components/Insights/GameInsightsPage.crashLoop.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.deepRun.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.evidence.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.oneLinePerMiss.test.tsx`
 - `src/components/Puzzles/PuzzleBoard.test.tsx`
+- `src/services/stampScan.test.ts`
 - `src/services/tacticClassifierService.fill.test.ts`
 - `src/services/tacticClassifierService.test.ts`
 - `src/test/seatResolversReadDeclaredSeat.test.ts`
