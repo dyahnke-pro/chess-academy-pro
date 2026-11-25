@@ -72,7 +72,7 @@ describe('analysis worker pool — engine choice per platform', () => {
     expect(t).toBeLessThanOrEqual(4);
   });
 
-  it('gives a REPORTING iPhone the full pool — 4 is already Apple\'s conservative figure', () => {
+  it('gives a REPORTING iPhone the full phone pool (2, one compile at a time — the 2026-11-25 web-view kills)', () => {
     // 🚨 THE NO-OP THAT SHIPPED (David 2026-09-05, "still seems slow"; the
     // device's warm-up audit said `2/2 pool workers warm`). A real iPhone
     // reports hardwareConcurrency = 4 for a 6-core part. Subtracting a 2-core
@@ -80,17 +80,17 @@ describe('analysis worker pool — engine choice per platform', () => {
     // very width the change existed to double. Never stack our reserve on top
     // of Apple's.
     const t = poolSizeFor({ native: true, platform: 'ios', plugin: true, cores: 4 });
-    expect(t).toBe(4);
+    expect(t).toBe(2);
   });
 
   it('assumes a 6-core phone if a WebView ever DOES hide the count', () => {
     const t = poolSizeFor({ native: true, platform: 'ios', plugin: true, cores: undefined });
-    expect(t).toBe(4);
+    expect(t).toBe(2);
   });
 
-  it('never exceeds 4 on a phone, however many cores it reports', () => {
+  it('never exceeds 2 on a phone, however many cores it reports', () => {
     const t = poolSizeFor({ native: true, platform: 'ios', plugin: true, cores: 10 });
-    expect(t).toBe(4);
+    expect(t).toBe(2);
   });
 
   it('pools on native Android too, capped for UI + voice', () => {

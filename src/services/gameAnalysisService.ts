@@ -76,7 +76,13 @@ const PHONE_ASSUMED_CORES = 6;
  *  time-slices with the others and thermally throttles ALL of them — the
  *  "hot phone" of the e1534fc era. (David 2026-09-05: "how many bots can we
  *  add?" — four.) */
-const PHONE_POOL_CAP = 4;
+const PHONE_POOL_CAP = 2;
+// 🔒 TWO, AND ONE AT A TIME (2026-11-25, a new App Store user's web view was
+// killed over and over within seconds of the batch pool spawning, and each
+// reload auto-resumed the sweep and spawned it again). Each asm engine is its
+// own JS context that cold-compiles 1.58MB of asm.js inside the WebContent
+// process; four compiling at once is the memory spike iOS kills. Two engines,
+// spawned one after the other on a phone, keep the peak at half.
 
 /** A phone: the native app, or mobile-web iOS (Safari never reports native). */
 function onPhone(): boolean {
@@ -922,17 +928,35 @@ export async function warmAnalysisPoolAtLaunch(): Promise<number> {
  * single-flight; a spawn failure leaves whatever came up. Returns the warm
  * count. Safe to call anywhere — a no-op where `Worker` does not exist.
  */
+/** Spawn `count` pool workers, numbered from `first`. On a phone they come up
+ *  ONE AFTER ANOTHER, so only one asm.js compile is ever in flight (the
+ *  WebContent memory spike iOS kills); elsewhere in parallel. A failed spawn
+ *  is skipped, as before. */
+export async function spawnWorkers<W = DedicatedWorker>(
+  count: number,
+  first: number,
+  phone: boolean = onPhone(),
+  spawn: (index: number) => Promise<W> = spawnDedicatedWorker as unknown as (index: number) => Promise<W>,
+): Promise<W[]> {
+  const out: W[] = [];
+  if (phone) {
+    for (let i = 0; i < count; i++) {
+      try { out.push(await spawn(first + i)); } catch { /* skipped, as the parallel path does */ }
+    }
+    return out;
+  }
+  const results = await Promise.allSettled(Array.from({ length: count }, (_, i) => spawn(first + i)));
+  for (const r of results) if (r.status === 'fulfilled') out.push(r.value);
+  return out;
+}
+
 export async function warmAnalysisPool(): Promise<number> {
   if (typeof Worker === 'undefined') return 0;
   if (_warmPool.length > 0) return _warmPool.length;
   if (_warmPromise) { await _warmPromise; return _warmPool.length; }
   const started = Date.now();
   const run = (async (): Promise<void> => {
-    const results = await Promise.allSettled(
-      Array.from({ length: WORKER_POOL_SIZE }, (_, i) => spawnDedicatedWorker(i)),
-    );
-    const spawned: DedicatedWorker[] = [];
-    for (const r of results) if (r.status === 'fulfilled') spawned.push(r.value);
+    const spawned = await spawnWorkers(WORKER_POOL_SIZE, 0);
     _warmPool.push(...spawned);
     void logAppAudit({
       kind: 'analysis-pool-warmed',
@@ -962,10 +986,7 @@ async function acquirePool(size: number): Promise<DedicatedWorker[]> {
   }
   const shortfall = size - alive.length;
   if (shortfall > 0) {
-    const results = await Promise.allSettled(
-      Array.from({ length: shortfall }, (_, i) => spawnDedicatedWorker(alive.length + i)),
-    );
-    for (const r of results) if (r.status === 'fulfilled') alive.push(r.value);
+    for (const r of await spawnWorkers(shortfall, alive.length)) alive.push(r);
     if (alive.length === 0) throw new Error('no analysis pool worker could be spawned');
   }
   return alive;
