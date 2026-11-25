@@ -96,6 +96,7 @@ const EXEMPT: Record<string, string> = {
   'api/monitor.ts': 'Vercel cron, hourly, Redis-locked by a lastrun key — no client calls it',
   'api/voice-failure-watch.ts': 'cron-shaped watcher behind a lastrun lock — no client calls it',
   'api/ota/manifest.ts': 'one GET per NATIVE update check; the web app (where audits run) never calls it',
+  'api/_lib/pushTokens.ts': 'store helper, not a route: its callers check — push-register calls isAuditTraffic, devReply is admin-only',
 };
 
 function walk(dir: string, out: string[] = []): string[] {
@@ -116,7 +117,7 @@ describe('every Redis door checks for audit traffic', () => {
   });
 
   it('finds the Redis routes (non-vacuous)', () => {
-    expect(redisFiles).toEqual(expect.arrayContaining(['api/messages.ts', 'api/referrals.ts', 'api/audit-stream.ts', 'api/_lib/usageGuard.ts']));
+    expect(redisFiles).toEqual(expect.arrayContaining(['api/messages.ts', 'api/referrals.ts', 'api/audit-stream.ts', 'api/_lib/usageGuard.ts', 'api/_lib/pushTokens.ts']));
   });
 
   it('each one calls isAuditTraffic or is exempt with a reason', () => {

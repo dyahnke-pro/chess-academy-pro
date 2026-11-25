@@ -32,6 +32,11 @@ const config: CapacitorConfig = {
     allowsLinkPreview: false,
   },
   plugins: {
+    // Remote push (David 2026-11-25): a reply from David shows as a banner even
+    // while the app is open. Native setting — takes effect with a new build.
+    PushNotifications: {
+      presentationOptions: ['badge', 'sound', 'banner', 'list'],
+    },
     SplashScreen: {
       launchShowDuration: 1000,
       launchAutoHide: true,

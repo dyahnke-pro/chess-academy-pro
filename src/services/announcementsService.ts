@@ -2,6 +2,7 @@ import { db } from '../db/schema';
 import { getDeviceId } from './deviceIdentity';
 import { isAuditMarkedPage } from './appAuditor';
 import { withWebOrigin } from '../utils/webOrigin';
+import { askForPushOnce } from './pushService';
 
 /** A message from the developer to users, shown behind the home-screen bell. */
 export interface Announcement {
@@ -149,6 +150,9 @@ export async function sendReply(body: string): Promise<boolean> {
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ action: 'reply', device, body: text }),
     });
+    // The student just wrote to David — the moment an answer is expected, so
+    // the one push-permission ask (native iOS only) happens here.
+    if (res.ok) void askForPushOnce('bell-reply');
     return res.ok;
   } catch { return false; }
 }
@@ -303,6 +307,7 @@ export async function postFeedbackToInbox(input: {
         email: input.email ?? '',
       }),
     });
+    if (res.ok) void askForPushOnce('feedback');
     return res.ok;
   } catch { return false; }
 }

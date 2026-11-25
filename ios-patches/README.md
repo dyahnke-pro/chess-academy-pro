@@ -22,6 +22,19 @@ Without this patch, Polly TTS fails silently in those conditions and
 the student sees / hears nothing. See `src/services/voiceService.ts`
 for the web-side fallback chain that kicks in when Polly drops.
 
+### `App/AppDelegate.swift` — remote push callbacks
+
+The two `didRegisterForRemoteNotifications…` callbacks forward the APNs
+token (or the failure) to `@capacitor/push-notifications`, which cannot see
+them on its own (2026-11-25, `docs/push-notifications.md`).
+
+### `App/App.entitlements`
+
+The `aps-environment` entitlement for push. `cap add ios` writes no
+entitlements file, so `scripts/ios-push-entitlements.mjs` copies it into
+`ios/App/App/` and sets `CODE_SIGN_ENTITLEMENTS` on the App target's Debug and
+Release configurations. It fails the build if either is left without it.
+
 ## Applying
 
 Handled automatically by `npm run setup:ios` (see `package.json`):
@@ -30,6 +43,7 @@ Handled automatically by `npm run setup:ios` (see `package.json`):
 npx cap add ios          # skip if ios/ already exists
 npx cap sync ios         # regenerates ios/App/App/AppDelegate.swift
 cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
+node scripts/ios-push-entitlements.mjs .
 ```
 
 Re-run the script after every `cap sync` — the copy step idempotently

@@ -36,6 +36,7 @@ import { ReferralPanel } from './components/Referral/ReferralPanel';
 import { ensureSyncedCredits } from './services/referralService';
 import { startFreeTierSync } from './services/freeTierSync';
 import { startReviewReminders } from './services/reviewReminders';
+import { startPush } from './services/pushService';
 import { LoadingScreen } from './components/ui/LoadingScreen';
 import { ErrorBoundary } from './components/ui/ErrorBoundary';
 import { BuildVersionWidget } from './components/Debug/BuildVersionWidget';
@@ -202,6 +203,10 @@ export function App(): JSX.Element {
   // holds (native only — a no-op on the web app).
   const profileReady = Boolean(activeProfile);
   useEffect(() => { if (profileReady) startReviewReminders(); }, [profileReady]);
+  // Remote push (native iOS only): listen for taps, and refile the token of a
+  // phone that already allowed notifications. Never prompts — the ask happens
+  // when the student first writes to David (pushService.askForPushOnce).
+  useEffect(() => { void startPush(); }, []);
 
   // Unlock Web Speech API on first user gesture (required on iOS/WKWebView)
   useEffect(() => {

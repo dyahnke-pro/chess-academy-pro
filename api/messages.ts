@@ -18,6 +18,7 @@
  */
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { isAuditTraffic } from './_lib/auditTraffic.js';
+import { notifyDevice, devReplyAlert, type DeviceNotifyOutcome } from './_lib/pushTokens.js';
 
 export interface Broadcast {
   id: string;
@@ -270,7 +271,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
         const ts = Date.now();
         await store.addThreadMessage(device, { from: 'dev', body: text, ts });
         await store.touchDevice(device, ts);
-        res.status(200).json({ ok: true });
+        // A push so a user who is not in the app hears about it (David
+        // 2026-11-25). Awaited before the response (a Vercel function may be
+        // frozen once it answers), bounded by the sender's own timeout, and a
+        // failed push never fails the reply: the message is already filed.
+        let push: DeviceNotifyOutcome;
+        try { push = await notifyDevice(device, devReplyAlert(text)); } catch { push = { sent: false, why: 'failed' }; }
+        res.status(200).json({ ok: true, push: push.sent ? 'sent' : push.why });
         return;
       }
 
