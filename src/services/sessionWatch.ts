@@ -58,8 +58,11 @@ function routeNow(): string {
 
 /** Start the watch once at boot. Reports the previous session if it was
  *  killed, then beats for this one. */
+let started = false;
+
 export async function startSessionWatch(): Promise<void> {
-  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+  if (started || typeof window === 'undefined' || typeof document === 'undefined') return;
+  started = true;
   try {
     const rec = await db.meta.get(KEY);
     const prev = rec?.value ? (JSON.parse(rec.value) as SessionBeat) : null;

@@ -14,3 +14,17 @@ describe('was the last session killed?', () => {
     expect(killReport(null, 65000)).toBeNull();
   });
 });
+
+// The report must leave the phone: the first wiring ran the watch at mount,
+// before analytics started, and PostHog dropped the event (2026-11-25).
+describe('the report is sent after analytics starts', () => {
+  it('App starts the watch right after initAnalytics, not at mount', async () => {
+    const { readFileSync } = await import('node:fs');
+    const app = readFileSync('src/App.tsx', 'utf8');
+    const init = app.indexOf('initAnalytics({');
+    const watch = app.indexOf('startSessionWatch()');
+    expect(init).toBeGreaterThan(0);
+    expect(watch).toBeGreaterThan(init);
+    expect(app.slice(init, watch).length).toBeLessThan(400);
+  });
+});

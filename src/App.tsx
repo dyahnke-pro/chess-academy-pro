@@ -198,8 +198,6 @@ export function App(): JSX.Element {
   useEffect(() => { void ensureSyncedCredits(); }, []);
   // The free allowance survives a reinstall: mirrored under the Keychain id.
   useEffect(() => { void startFreeTierSync(); }, []);
-  // A session the web view was killed in reports itself on the next launch.
-  useEffect(() => { void startSessionWatch(); }, []);
   // Spaced-review reminders: on the phone, planned from the due dates it
   // holds (native only — a no-op on the web app).
   const profileReady = Boolean(activeProfile);
@@ -330,6 +328,9 @@ export function App(): JSX.Element {
         // opt-out. Stays anonymous until auth lands (Phase 3) — never
         // identify with the shared 'main' profile id.
         initAnalytics({ optedOut: profile.preferences.analyticsOptOut === true });
+        // A session the web view was killed in reports itself on the next
+        // launch — started only now, after analytics, or its report is dropped.
+        void startSessionWatch();
 
         // Productization Phase 4 — resolve subscription entitlement via
         // RevenueCat. No-op without a platform SDK key (keyless build stays
