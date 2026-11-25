@@ -239,7 +239,7 @@ echo "ci_post_clone: verified UIScene lifecycle ($SCENE_CHECK)"
 # LIVE 2026-10-22. 4.0.8 carries the one-thought coach (Learn's door speaking in
 # focus games, Review's reasons, the reversed-matrix chat answers). The build
 # number is Xcode Cloud's run counter, new and higher on every build.
-PINNED_MARKETING_VERSION="4.0.9"
+PINNED_MARKETING_VERSION="4.0.10"
 # DURABLE PREFLIGHT (2026-09-09): the pinned string self-heals. resolve-marketing
 # -version.mjs reads the LIVE App Store version (public iTunes lookup, no ASC
 # keys) and, if the pin isn't already above it, bumps the patch — so a forgotten
