@@ -1,5 +1,6 @@
 import { db } from '../db/schema';
 import { DEVICE_LOCAL_META_KEYS } from './misconceptionRulesBackfill';
+import { SESSION_WATCH_KEY } from './sessionWatch';
 import { asOpeningKey } from './openingKey';
 import type { CapabilityEvidenceRecord } from './capabilityEvidence';
 import type { BossAttemptRecord, DialStateRecord, MissionResultRecord, PatternStatRecord } from '../missions/missionCard';
@@ -269,7 +270,10 @@ export async function importUserData(json: string): Promise<void> {
     // built it (David's laptop, 2026-10-19: meters blank over 938 games).
     // The device's own id is identity, not data: importing it made a restored
     // laptop BECOME the backup's device (David 2026-10-19: Send my data hid).
-    const local = new Set([...DEVICE_LOCAL_META_KEYS, DEVICE_ID_KEY]);
+    // The session heartbeat too: a backup is written while the session is
+    // live, so its beat always reads "not clean" — restored, it would read as
+    // a killed session and hold the restored device's work (2026-11-25).
+    const local = new Set([...DEVICE_LOCAL_META_KEYS, DEVICE_ID_KEY, SESSION_WATCH_KEY]);
     await db.meta.bulkPut((data.meta as Array<{ key: string; value: string }>).filter((m) => !local.has(m.key)));
   }
 }

@@ -216,7 +216,7 @@ export async function importChessComGames(
   // the student is on /coach/teach waiting for the coach to move.
   if (importedGameIds.length > 0 && !opts.skipPostProcessing) {
     void generateMistakePuzzlesForBatch(importedGameIds, username);
-    runBackgroundAnalysis();
+    runBackgroundAnalysis('auto');
   }
 
   return imported;

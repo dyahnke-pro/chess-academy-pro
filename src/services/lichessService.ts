@@ -165,7 +165,7 @@ export async function importLichessGames(
   // engine stays free for the coach's stockfish_eval calls.
   if (importedGameIds.length > 0 && !opts.skipPostProcessing) {
     void generateMistakePuzzlesForBatch(importedGameIds, username);
-    runBackgroundAnalysis();
+    runBackgroundAnalysis('auto');
   }
 
   return imported;

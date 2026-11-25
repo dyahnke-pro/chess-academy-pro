@@ -85,7 +85,7 @@ export function AnalyzeGamesButton({
       source: source ? `AnalyzeGamesButton.${source}` : 'AnalyzeGamesButton',
       summary: `analyze kickoff from ${source ?? 'unknown'} — ${unanalyzedCount ?? '?'} unanalyzed`,
     });
-    runBackgroundAnalysis();
+    runBackgroundAnalysis('user');
   };
 
   const isAnalyzing = bgRunning;

@@ -460,6 +460,8 @@ export function backfillClassifiedTactics(opts: {
   const schedule = opts.schedule ?? PAGE_BACKFILL_SCHEDULE;
   fillInFlight = (async () => {
     if (schedule.startDelayMs > 0) await sleep(schedule.startDelayMs);
+    // Never beside the batch, which classifies every game it analyses.
+    await schedule.yieldBetweenRows();
     const pending = await db.games
       .filter((g) => g.tacticsClassifiedRev !== TACTIC_TYPE_REV && !!g.annotations && g.annotations.length > 0)
       .primaryKeys();

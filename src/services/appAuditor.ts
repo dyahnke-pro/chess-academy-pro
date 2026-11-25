@@ -500,6 +500,15 @@ export type AuditKind =
   // can fail silently. Surfaces WHY the bar is stuck at 0.0
   // (David 2026-06-15).
   | 'stockfish-analysis-stalled'
+  // The same watchdog firing on a search that ran while the page was HIDDEN:
+  // iOS froze the worker and the timer together, so the miss proves nothing
+  // about the engine. Its own kind so it is a product event, never a
+  // `$exception` that emails David (2026-11-25: backgrounded stalls were most
+  // of his PostHog error mail).
+  | 'stockfish-analysis-suspended'
+  // The crash-loop breaker held heavy work because the last session's web
+  // view was killed in front of the student (2026-11-25, sessionWatch).
+  | 'crash-loop-breaker'
   // A line from ANOTHER search reached an open read (its first move is not a
   // move of the read's side to move) and was ignored. The shared worker carries
   // no search id, so this counts how often two searches crossed (walk

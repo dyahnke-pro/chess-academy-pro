@@ -325,6 +325,14 @@ describe('syncService', () => {
       expect(restoredCoach.activeOpeningCardId.white).toBe('italian');
     });
 
+    it('a restore never brings the backup device\'s session heartbeat (a live beat reads as a kill)', async () => {
+      await db.meta.put({ key: 'session-watch', value: JSON.stringify({ startedAt: 0, lastBeat: 1, route: '/weaknesses', clean: false, poolWorkers: 2, analysing: true }) });
+      const exported = await exportUserData();
+      await db.meta.clear();
+      await importUserData(exported);
+      expect(await db.meta.get('session-watch')).toBeUndefined();
+    });
+
     it('a restore never takes over the backup device\'s identity', async () => {
       await db.meta.put({ key: 'analytics_device_id', value: 'phone-id' });
       const exported = await exportUserData();

@@ -19,6 +19,7 @@ import { AnalyzeGamesButton } from '../Games/AnalyzeGamesButton';
 import { useAppStore } from '../../stores/appStore';
 import { routeChatIntent } from '../../services/coachSessionRouter';
 import { logAppAudit } from '../../services/appAuditor';
+import { lastSessionWasKilled } from '../../services/sessionWatch';
 import { OverviewTab } from './OverviewTab';
 import { ShareableInsightsStrip } from './ShareableInsightsStrip';
 import { RecentGamesStrip } from './RecentGamesStrip';
@@ -105,27 +106,52 @@ export function GameInsightsPage(): JSX.Element {
     ]);
   }
 
+  // 🔒 THE CRASH-LOOP BREAKER (2026-11-25). When the last session's web view
+  // was killed, this page reads nothing heavy on its own: the whole-library
+  // derivations were running when it died, and the relaunch landed right back
+  // here and started them again. The student taps to load the report.
+  const [heldAfterKill, setHeldAfterKill] = useState(false);
+  const [deriveKey, setDeriveKey] = useState(0);
   useEffect(() => {
     let cancelled = false;
-    void loadAll()
-      .then(() => {
-        // Missed tactics are read from a cache; fill whatever it lacks in the
-        // background (yielding, per game) and refresh the tab as games land.
-        // Never inline — deriving the whole library on open froze the app.
-        const refresh = (): void => {
-          if (!cancelled) {
-            void getTacticInsights()
-              .then((t) => { if (!cancelled) setTactics(t); })
-              .catch(() => { /* the next refresh or the end-of-run reload fills it */ });
-          }
-        };
-        return backfillClassifiedTactics({
-          onGame: (done, total) => { if (done % 25 === 0 && done < total) refresh(); },
-        }).then(refresh);
+    void (deriveKey > 0 ? Promise.resolve(false) : lastSessionWasKilled())
+      .then((killed) => {
+        if (cancelled) return;
+        if (killed) {
+          setHeldAfterKill(true);
+          void logAppAudit({
+            kind: 'crash-loop-breaker',
+            category: 'subsystem',
+            source: 'GameInsightsPage',
+            summary: 'last session was killed — the report waits for a tap instead of deriving on open',
+          });
+          return;
+        }
+        setHeldAfterKill(false);
+        derive();
       })
-      .catch(() => { /* best-effort: the tab still renders from the cache */ });
+      .catch(() => { if (!cancelled) derive(); });
+    function derive(): void {
+      void loadAll()
+        .then(() => {
+          // Missed tactics are read from a cache; fill whatever it lacks in the
+          // background (yielding, per game) and refresh the tab as games land.
+          // Never inline — deriving the whole library on open froze the app.
+          const refresh = (): void => {
+            if (!cancelled) {
+              void getTacticInsights()
+                .then((t) => { if (!cancelled) setTactics(t); })
+                .catch(() => { /* the next refresh or the end-of-run reload fills it */ });
+            }
+          };
+          return backfillClassifiedTactics({
+            onGame: (done, total) => { if (done % 25 === 0 && done < total) refresh(); },
+          }).then(refresh);
+        })
+        .catch(() => { /* best-effort: the tab still renders from the cache */ });
+    }
     return () => { cancelled = true; };
-  }, []);
+  }, [deriveKey]);
 
   // LIVE header (walk 2026-10-04 #16): every batch progress tick re-reads the
   // analysed count (cheap) and folds it into the overview, so the header and
@@ -188,7 +214,7 @@ export function GameInsightsPage(): JSX.Element {
       source: 'GameInsightsPage.handleAnalyze',
       summary: 'student tapped "Analyze N games now" — background Stockfish run started',
     });
-    runBackgroundAnalysis();
+    runBackgroundAnalysis('user');
   }
 
   async function handleSearch(e: React.SyntheticEvent): Promise<void> {
@@ -423,7 +449,23 @@ export function GameInsightsPage(): JSX.Element {
 
       {/* Content — in the page's single scroll flow (no nested scroller). */}
       <div className="px-5 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6">
-        {gameDataTab && !currentTabData && (
+        {gameDataTab && !currentTabData && heldAfterKill && (
+          <div className="flex flex-col items-center gap-3 p-10 text-center" data-testid="insights-held-after-kill">
+            <span className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+              The app closed unexpectedly last time, so your report waits for you.
+            </span>
+            <button
+              type="button"
+              onClick={() => { setHeldAfterKill(false); setDeriveKey((k) => k + 1); }}
+              className="px-4 py-2 rounded-xl text-sm font-semibold"
+              style={{ background: 'var(--color-accent)', color: 'var(--color-bg)' }}
+              data-testid="insights-load-report-btn"
+            >
+              Load my report
+            </button>
+          </div>
+        )}
+        {gameDataTab && !currentTabData && !heldAfterKill && (
           <div className="flex items-center justify-center p-12" data-testid="insights-loading">
             <span className="text-sm" style={{ color: 'var(--color-text-muted)' }}>Analysing your games...</span>
           </div>

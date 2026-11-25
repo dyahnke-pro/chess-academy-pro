@@ -191,6 +191,8 @@ export async function reconcileMisconceptionRules(
   if (done?.value === BACKFILL_REVS && healed && deduped) return r;
   if (!healed) await db.meta.put({ key: RECORD_HEAL_KEY, value: 'checked' });
   if (schedule.startDelayMs > 0) await sleep(schedule.startDelayMs);
+  // The whole-library scans below wait their turn too (one reader at a time).
+  await schedule.yieldBetweenRows();
   if (!deduped) {
     const c = await collapseDuplicateRecordRows();
     r.collapsed = c.rows + c.puzzles;

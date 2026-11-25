@@ -43,6 +43,42 @@ export function holdBackground(): () => void {
   };
 }
 
+/**
+ * 🔒 ONE HEAVY RECORD READER AT A TIME (2026-11-25, an App Store user's web
+ * view killed again and again on /weaknesses). The batch analysis already
+ * re-reads every game it analyses — misconceptions, mistake puzzles, missed
+ * tactics — and the boot / page backfills ran the SAME per-game reads over the
+ * rest of the library at the same moment. Measured on a 966-game record: the
+ * misconception re-read alone allocated ~290 MB/s; two of them at once is the
+ * GC storm a phone's web view is killed in. While a batch runs (or after a
+ * killed session, the crash-loop breaker) every backfill waits between rows.
+ * Separate from `holds` on purpose: the batch waits on `holds` itself.
+ */
+let backfillHolds = 0;
+
+/** Hold every backfill until the returned release is called (once). */
+export function holdBackfills(): () => void {
+  backfillHolds += 1;
+  let released = false;
+  return () => {
+    if (released) return;
+    released = true;
+    backfillHolds = Math.max(0, backfillHolds - 1);
+  };
+}
+
+/** How many backfill holds are live. */
+export function backfillHoldCount(): number {
+  return backfillHolds;
+}
+
+/** Resolves once no backfill hold is live. */
+export async function waitWhileBackfillsHeld(
+  sleep: (ms: number) => Promise<void> = (ms) => new Promise((r) => { setTimeout(r, ms); }),
+): Promise<void> {
+  while (backfillHolds > 0) await sleep(500);
+}
+
 /** Resolves once no hold is live. */
 export async function waitWhileHeld(
   sleep: (ms: number) => Promise<void> = (ms) => new Promise((r) => { setTimeout(r, ms); }),

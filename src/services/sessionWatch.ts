@@ -15,7 +15,8 @@ import { db } from '../db/schema';
 import { captureEvent } from './analytics';
 import { holdBackfills } from './foregroundActivity';
 
-const KEY = 'session-watch';
+export const SESSION_WATCH_KEY = 'session-watch';
+const KEY = SESSION_WATCH_KEY;
 const BEAT_MS = 3000;
 
 export interface SessionBeat {

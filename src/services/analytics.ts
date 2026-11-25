@@ -200,6 +200,11 @@ const AUDIT_EVENT_MAP: Partial<Record<AuditKind, string>> = {
   // itself surfaces separately as stockfish-error ($exception).
   'stockfish-variant-resolved': 'stockfish_variant',
   'stockfish-variant-fallback': 'stockfish_variant_fallback',
+  // A watchdog miss on a search that ran while the page was hidden — not an
+  // engine fault, so a plain event, never Error Tracking (2026-11-25).
+  'stockfish-analysis-suspended': 'stockfish_analysis_suspended',
+  // Heavy work held for one session after a killed web view (2026-11-25).
+  'crash-loop-breaker': 'crash_loop_breaker',
   // Coach OPPONENT move sourcing (David 2026-07-11: "the computer's moves are
   // total garbage" on iPhone — Learn/Play replies). The layered picker
   // (masters → lichess games → skill-limited Stockfish → random floor) logs

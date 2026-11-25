@@ -1,7 +1,7 @@
 import { setUpPosed } from './setUpChance';
-import { noteAnalysis } from './sessionWatch';
+import { noteAnalysis, lastSessionWasKilled } from './sessionWatch';
 import { applyVerdict, getVerdicts, saveVerdict, toVerdictLabel, verdictKey, verdictOutranks, VERDICT_TRUST_DEPTH } from './moveVerdictStore';
-import { holdBackground, backgroundHolds } from './foregroundActivity';
+import { holdBackground, backgroundHolds, holdBackfills } from './foregroundActivity';
 import { finishedBoardEval } from './finishedBoard';
 import { Capacitor } from '@capacitor/core';
 import { reviewBudget, deterministicAnalysisForAudit, DETERMINISTIC_FAN_NODES, DETERMINISTIC_FAN_WATCHDOG_MS } from './analysisDeterminism';
@@ -3396,9 +3396,40 @@ let _backgroundRunning = false;
  * Safe to call multiple times — only one run at a time.
  * Called automatically after game imports.
  */
-export function runBackgroundAnalysis(): void {
+/** Who asked for a batch: the student's tap, or the app on its own (an
+ *  import's post-processing). Required, so a new caller has to answer it —
+ *  the crash-loop breaker holds only the automatic ones. */
+export type AnalysisTrigger = 'user' | 'auto';
+
+export function runBackgroundAnalysis(trigger: AnalysisTrigger): void {
+  if (_backgroundRunning) return;
+  if (trigger === 'auto') {
+    // 🔒 THE CRASH-LOOP BREAKER (2026-11-25): a session that follows a killed
+    // one starts no batch on its own — the batch is what was running when the
+    // web view died, and every relaunch restarted it.
+    void lastSessionWasKilled().then((killed) => {
+      if (killed) {
+        void logAppAudit({
+          kind: 'crash-loop-breaker',
+          category: 'subsystem',
+          source: 'gameAnalysisService.runBackgroundAnalysis',
+          summary: 'last session was killed — automatic batch analysis held for this session (a tap still runs it)',
+        });
+        return;
+      }
+      startBackgroundRun();
+    }).catch(() => startBackgroundRun());
+    return;
+  }
+  startBackgroundRun();
+}
+
+function startBackgroundRun(): void {
   if (_backgroundRunning) return;
   _backgroundRunning = true;
+  // ONE HEAVY READER AT A TIME (2026-11-25): the batch re-reads every game it
+  // analyses, so every backfill waits for the run to end.
+  const releaseBackfills = holdBackfills();
   _userCancelled = false; // a fresh run clears any prior user cancel
 
   const store = useAppStore.getState();
@@ -3425,6 +3456,7 @@ export function runBackgroundAnalysis(): void {
     })
     .finally(() => {
       _backgroundRunning = false;
+      releaseBackfills();
       useAppStore.getState().setBackgroundAnalysis(false, null);
 
       // If aborted due to backgrounding, auto-restart when app returns — but
@@ -3434,13 +3466,13 @@ export function runBackgroundAnalysis(): void {
         if (document.visibilityState === 'visible') {
           _abortAnalysis = false;
           // Defer to avoid synchronous re-entry
-          setTimeout(() => runBackgroundAnalysis(), 500);
+          setTimeout(() => startBackgroundRun(), 500);
         } else {
           const resumeHandler = (): void => {
             if (document.visibilityState === 'visible') {
               document.removeEventListener('visibilitychange', resumeHandler);
               _abortAnalysis = false;
-              runBackgroundAnalysis();
+              startBackgroundRun();
             }
           };
           document.addEventListener('visibilitychange', resumeHandler);

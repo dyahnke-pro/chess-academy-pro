@@ -13,10 +13,13 @@
 //   4. THE STUDENT FIRST (2026-10-19) — heavy units wait while the student is
 //      on a live board (`foregroundActivity`), so a re-read of 949 games never
 //      runs under a Learn game's coach.
+//   5. ONE READER AT A TIME (2026-11-25) — every row waits while the batch
+//      analysis runs or the crash-loop breaker holds (`holdBackfills`): two
+//      whole-library re-reads at once is what a phone's web view was killed in.
 // A second backfill (the opening-key re-mint, A1) has the same shape; it
 // reads the same schedule so the rule cannot drift between them. One import
 // (the foreground leaf, itself import-free): a leaf any reconciler can read.
-import { waitForForegroundQuiet, waitWhileHeld } from './foregroundActivity';
+import { waitForForegroundQuiet, waitWhileBackfillsHeld, waitWhileHeld } from './foregroundActivity';
 
 export interface BackfillSchedule {
   /** Milliseconds to wait before touching the database. */
@@ -45,8 +48,9 @@ export const PRODUCTION_BACKFILL_SCHEDULE: BackfillSchedule = {
   batch: 10,
   // Every row, every backfill: a Learn game on the board stops the pass
   // between rows, not only before a whole game (the hold, foregroundActivity).
-  yieldBetweenRows: async () => { await waitWhileHeld(); await idleYield(); },
-  waitForQuiet: () => waitForForegroundQuiet(),
+  // And never beside the batch analysis, which reads the same games (rule 5).
+  yieldBetweenRows: async () => { await waitWhileHeld(); await waitWhileBackfillsHeld(); await idleYield(); },
+  waitForQuiet: async () => { await waitWhileBackfillsHeld(); await waitForForegroundQuiet(); },
 };
 
 /** Tests and one-shot callers: no delay, no yield — the same rows, at once. */
