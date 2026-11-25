@@ -143,3 +143,36 @@ describe('NotificationBell — message telemetry (David 2026-09-08)', () => {
     await waitFor(() => expect(props('message_cta_tapped').some((p) => p.cta === 'invite')).toBe(true));
   });
 });
+
+describe('NotificationBell — a tapped push opens it', () => {
+  it('opens only the bell on screen, once, and marks the reply read', async () => {
+    const { requestBellOpen, resetPushForTests } = await import('../../services/pushService');
+    resetPushForTests();
+    // jsdom lays nothing out: the bell inside #shown is "on screen", the other is not.
+    const rects = vi.spyOn(Element.prototype, 'getClientRects').mockImplementation(function (this: Element) {
+      return (this.closest('[data-testid="shown"]') ? [{}] : []) as unknown as DOMRectList;
+    });
+    try {
+      render(<div><span data-testid="hidden"><NotificationBell /></span><span data-testid="shown"><NotificationBell /></span></div>);
+      await waitFor(() => expect(screen.getAllByTestId('notification-dot').length).toBe(2));
+      requestBellOpen();
+      await waitFor(() => expect(screen.getAllByTestId('notification-panel')).toHaveLength(1));
+      expect(captureEvent).toHaveBeenCalledWith('message_read', { kind: 'thread', message_ts: 1000, via: 'push' });
+    } finally {
+      rects.mockRestore();
+    }
+  });
+
+  it('a tap that lands before the bell mounts opens it once it has loaded', async () => {
+    const { requestBellOpen, resetPushForTests } = await import('../../services/pushService');
+    resetPushForTests();
+    requestBellOpen();
+    const rects = vi.spyOn(Element.prototype, 'getClientRects').mockImplementation(() => [{}] as unknown as DOMRectList);
+    try {
+      render(<NotificationBell />);
+      expect(await screen.findByTestId('notification-panel')).toBeTruthy();
+    } finally {
+      rects.mockRestore();
+    }
+  });
+});

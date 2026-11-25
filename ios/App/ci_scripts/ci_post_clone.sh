@@ -94,6 +94,12 @@ node scripts/verify-app-icon.mjs
 # Reapply the AVAudioSession AppDelegate patch (cap regenerates ios/).
 cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
 
+# Push Notifications entitlement (David 2026-11-25). `cap add` writes no
+# entitlements file, so copy ours and point the App target at it. The script
+# exits 1 if either Debug or Release is left without it — a build that cannot
+# receive a push must be red, not shipped.
+node scripts/ios-push-entitlements.mjs .
+
 # UIScene lifecycle — REQUIRED or iOS 27 refuses to launch the app (build 206,
 # 2026-10-21: EXC_BREAKPOINT in _UIApplicationEvaluateRuntimeIssueForNoScene-
 # LifecycleAdoption on iOS 27.0.1, before any app code ran). Capacitor >= 8.5

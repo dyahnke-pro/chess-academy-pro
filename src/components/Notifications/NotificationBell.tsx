@@ -27,6 +27,7 @@ import {
   type FeedbackItem,
 } from '../../services/announcementsService';
 import { captureEvent } from '../../services/analytics';
+import { OPEN_BELL_EVENT, PUSH_RECEIVED_EVENT, takePendingBellOpen } from '../../services/pushService';
 
 /**
  * NotificationBell — the Home-screen developer ↔ user message channel.
@@ -300,12 +301,45 @@ export function NotificationBell(): JSX.Element {
     setThreads(await fetchAllThreads());
   }, [activeDevice, devReplyText]);
 
+  // A tapped push notification opens the bell (pushService). The app renders a
+  // bell in the header and one in the sidebar; only the one ON SCREEN takes
+  // the open, so a tap never stacks two panels. A tap that cold-launched the
+  // app waits until the inbox has loaded, then opens with the reply in it.
+  const bellRef = useRef<HTMLButtonElement | null>(null);
+  useEffect(() => {
+    if (loading) return;
+    const claim = (): void => {
+      const el = bellRef.current;
+      if (!el || el.getClientRects().length === 0) return;
+      if (!takePendingBellOpen()) return;
+      void loadInbox().then((inbox) => {
+        setOpen(true);
+        const newestDev = inbox.thread.filter((m) => m.from === 'dev').at(-1);
+        if (newestDev) {
+          captureEvent('message_read', { kind: 'thread', message_ts: newestDev.ts, via: 'push' });
+          void markThreadSeen(newestDev.ts); setLastSeenThreadTs(newestDev.ts);
+        }
+      });
+    };
+    claim();
+    window.addEventListener(OPEN_BELL_EVENT, claim);
+    return () => window.removeEventListener(OPEN_BELL_EVENT, claim);
+  }, [loading, loadInbox]);
+
+  // A push that arrives while the app is open: refresh so the dot lights.
+  useEffect(() => {
+    const refresh = (): void => { void loadInbox(); };
+    window.addEventListener(PUSH_RECEIVED_EVENT, refresh);
+    return () => window.removeEventListener(PUSH_RECEIVED_EVENT, refresh);
+  }, [loadInbox]);
+
   const activeThread = threads.find((t) => t.device === activeDevice);
 
   return (
     <>
       <button
         type="button"
+        ref={bellRef}
         onClick={openPanel}
         aria-label={unread ? 'Messages — you have a new message' : 'Messages'}
         data-testid="notification-bell"

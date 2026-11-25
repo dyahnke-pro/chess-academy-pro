@@ -20,7 +20,8 @@
 //      .playback-only default doesn't permit mic capture.
 //
 //  If this file drifts from Capacitor's default, bring forward the
-//  upstream changes but PRESERVE the AVAudioSession setup call.
+//  upstream changes but PRESERVE the AVAudioSession setup call AND the two
+//  remote-notification callbacks (push, 2026-11-25).
 //
 //  🔒 UIScene LIFECYCLE (2026-10-21). iOS 27 will not launch an app that has
 //  not adopted scenes: build 206 (4.0.6) died at launch on iOS 27.0.1 with
@@ -170,6 +171,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   /// background (the case that left David's audio dead until a relaunch).
   @objc private func handleDidBecomeActive(_ note: Notification) {
     configureAudioSession()
+  }
+
+  // Remote push (David 2026-11-25): hand the APNs device token, or the
+  // failure, to @capacitor/push-notifications — the plugin cannot see these
+  // UIApplicationDelegate callbacks on its own.
+  func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+    NotificationCenter.default.post(name: .capacitorDidRegisterForRemoteNotifications, object: deviceToken)
+  }
+
+  func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+    NotificationCenter.default.post(name: .capacitorDidFailToRegisterForRemoteNotifications, object: error)
   }
 
   func application(

@@ -1,0 +1,29 @@
+name: ASC — enable Push Notifications capability
+
+# Turns on PUSH_NOTIFICATIONS for com.chessacademy.pro in the developer portal
+# so the app's aps-environment entitlement can be signed (David 2026-11-25).
+# Idempotent; run once before the first push-capable build.
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Report only, change nothing'
+        type: boolean
+        default: false
+
+jobs:
+  push-capability:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Enable PUSH_NOTIFICATIONS on the bundle id
+        env:
+          ASC_KEY_P8: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          APP_BUNDLE_ID: com.chessacademy.pro
+          DRY_RUN: ${{ inputs.dry_run && '1' || '0' }}
+        run: node scripts/ci/asc-push-capability.mjs

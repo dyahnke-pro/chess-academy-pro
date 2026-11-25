@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyLists-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Remote push (David 2026-11-25). "development" is what Xcode writes for
+	     the capability; an App Store / TestFlight export re-signs it with the
+	     distribution profile's value, "production". -->
+	<key>aps-environment</key>
+	<string>development</string>
+</dict>
+</plist>
