@@ -43,8 +43,8 @@ export interface TheoryRead {
  *  from 2% of their games (the named-roads bar), a deeper one from 5%. `visit`
  *  sees each step with the moves that reach it (said with their "…") and the
  *  board before it; the first sentence it returns is the read. */
-export const ROAD_BAR_NEXT = 0.02;
-export const ROAD_BAR_DEEPER = 0.05;
+const ROAD_BAR_NEXT = 0.02;
+const ROAD_BAR_DEEPER = 0.05;
 export function walkRoadsAhead<T>(
   fen: string,
   history: readonly string[],
@@ -518,7 +518,7 @@ const planMemo = new Map<string, MastersPlanRead | null>();
  *  the board the move reaches (`planStillAhead`). The mover's own break is the
  *  plan when it has one, else the other side's, each with its seat; the piece
  *  the plan brings likewise. Reads are remembered by board. */
-export const THEORY_BREAK_SHARE = 0.2;
+const THEORY_BREAK_SHARE = 0.2;
 export function planAheadRead(i: { history: readonly string[]; san: string; mover: Color; whose: 'your' | 'their'; movesAt: (fen: string) => readonly LocalDbMove[] | null }): {
   plan: { goal: KeyMove; goalSquare: string; lead: readonly KeyMove[]; whose: 'your' | 'their' } | null;
   piece: PlacedPiece | null;
