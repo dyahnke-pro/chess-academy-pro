@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**762 lines · 24 exports · 4 importers · 3 tests · 0 audits**
+**837 lines · 22 exports · 4 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -22,16 +22,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `TheoryRead` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `ROAD_BAR_NEXT` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `ROAD_BAR_DEEPER` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `walkRoadsAhead` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `structureRead` (function) — 11 call sites
+### `structureRead` (function) — 13 call sites
 - `src/services/theoryReads.roads.test.ts:76`
 - `src/services/theoryReads.roads.test.ts:80`
 - `src/services/theoryReads.roads.test.ts:106`
@@ -40,6 +34,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/theoryReads.roads.test.ts:193`
 - `src/services/theoryReads.roads.test.ts:198`
 - `src/services/theoryReads.roads.test.ts:247`
+- `src/services/theoryReads.roads.test.ts:275`
+- `src/services/theoryReads.roads.test.ts:276`
 - `src/services/theoryReads.test.ts:11`
 - `src/services/theoryReads.test.ts:12`
 - `src/services/theorySheets.measure.test.ts:79`
@@ -68,16 +64,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/theoryReads.roads.test.ts:186`
 - `src/services/theorySheets.measure.test.ts:82`
 
-### `pieceJobRead` (function) — 5 call sites
+### `pieceJobRead` (function) — 8 call sites
 - `src/services/theoryReads.roads.test.ts:175`
 - `src/services/theoryReads.roads.test.ts:176`
+- `src/services/theoryReads.roads.test.ts:264`
+- `src/services/theoryReads.roads.test.ts:265`
+- `src/services/theoryReads.roads.test.ts:268`
 - `src/services/theoryReads.test.ts:24`
 - `src/services/theoryReads.test.ts:25`
 - `src/services/theorySheets.measure.test.ts:83`
 
-### `sacrificeRead` (function) — 3 call sites
+### `sacrificeRead` (function) — 4 call sites
 - `src/services/theoryReads.roads.test.ts:224`
 - `src/services/theoryReads.roads.test.ts:227`
+- `src/services/theoryReads.roads.test.ts:283`
 - `src/services/theorySheets.measure.test.ts:80`
 
 ### `hangsRead` (function) — 5 call sites
@@ -104,22 +104,21 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `centreRead` (function) — 1 call site
 - `src/services/theorySheets.measure.test.ts:79`
 
-### `THEORY_BREAK_SHARE` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `planAheadRead` (function) — 2 call sites
 - `src/services/theoryReads.roads.test.ts:208`
 - `src/services/theorySheets.measure.test.ts:74`
 
-### `choiceAheadRead` (function) — 4 call sites
+### `choiceAheadRead` (function) — 5 call sites
 - `src/services/theoryReads.roads.test.ts:235`
 - `src/services/theoryReads.roads.test.ts:239`
 - `src/services/theoryReads.roads.test.ts:240`
+- `src/services/theoryReads.roads.test.ts:299`
 - `src/services/theorySheets.measure.test.ts:85`
 
-### `theoryExtras` (function) — 4 call sites
+### `theoryExtras` (function) — 5 call sites
 - `src/services/reviewOpeningTheory.ts:819`
 - `src/services/theoryReads.roads.test.ts:212`
+- `src/services/theoryReads.roads.test.ts:292`
 - `src/services/theoryReads.test.ts:48`
 - `src/services/theoryReads.test.ts:50`
 
@@ -141,6 +140,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `gambitAcceptedRead` (function) — 3 call sites
 - `src/services/theoryReads.roads.test.ts:133`
 - `src/services/theoryReads.roads.test.ts:135`
+- `src/services/theorySheets.measure.test.ts:80`
+
+### `gambitDeclinedRead` (function) — 4 call sites
+- `src/services/theoryReads.roads.test.ts:255`
+- `src/services/theoryReads.roads.test.ts:256`
+- `src/services/theoryReads.roads.test.ts:257`
 - `src/services/theorySheets.measure.test.ts:80`
 
 ### `gambitStandingRead` (function) — 4 call sites

@@ -49,8 +49,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `withoutCastleTail` (const) — 4 call sites
 - `src/services/openingTheory.ts:106`
 - `src/services/openingTheory.ts:153`
-- `src/services/theoryReads.ts:320`
-- `src/services/theoryReads.ts:576`
+- `src/services/theoryReads.ts:336`
+- `src/services/theoryReads.ts:603`
 
 ### `keyMovesOf` (function) — 1 call site
 - `src/services/theoryComposer.test.ts:11`
@@ -94,7 +94,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/theoryComposer.test.ts:65`
 - `src/services/theoryComposer.test.ts:70`
 - `src/services/theoryComposer.test.ts:78`
-- `src/services/theoryReads.ts:615`
+- `src/services/theoryReads.ts:678`
 - `src/services/theorySheets.measure.test.ts:75`
 
 ### `roadsFrom` (function) — 9 call sites
