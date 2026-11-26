@@ -44,7 +44,10 @@ import type { SameSearchScores } from './moveCost';
 import { BLUNDER_CP, DECIDED_EVAL_CP, costWords, GRADE_WORD, costFitsGrade, type SpokenGradeLabel } from './engineConstants';
 import { MATERIAL_VALUE } from './pieceValues';
 import { mateLine } from './lineCalc';
-import { costReason, reasonSans, reasonWinWords, type CostReason } from './costReason';
+import { costReason, reasonNeed, reasonSans, reasonWinWords, type CostReason } from './costReason';
+import { defenderHit, pawnLetGo, rookActivityLost } from './causeReaders';
+import { bishopShutBy } from './theirMoveCost';
+import type { CauseDetail } from './mistakeCause';
 import { positionalReason } from './positionalReason';
 import { landedTacticFor } from './pvPlayback';
 import { proofCut } from './exchangeLedger';
@@ -1649,6 +1652,25 @@ export function errorWhy(args: {
   const structural = args.allowedMate !== null ? null
     : earlierCause ? (() => { try { return stalemateCause(structuralArgs); } catch { return null; } })()
       : readStructuralCause(structuralArgs);
+  // THE CAUSE READERS (`causeReaders`): read only where no reader above has
+  // the cause and no structural reading did — the pawn a longer line wins (on
+  // a cost a pawn or so explains), the bishop shut in or the rook off its
+  // file, and the lone guard the better move hits.
+  const noCauseYet = !earlierCause && !structural && args.allowedMate === null;
+  const smallCost = args.costCp != null ? reasonNeed(args.costCp) <= 1 : args.quality !== 'blunder';
+  const letGo = noCauseYet && smallCost && args.bestLineUci
+    ? (() => { try { return pawnLetGo(args.fenBefore, args.playedSan, replyLineUci, args.bestLineUci); } catch { return null; } })()
+    : null;
+  const positionalDetail: Extract<CauseDetail, { kind: 'positional' }> | null = noCauseYet ? (() => {
+    try {
+      const shut = bishopShutBy(args.fenBefore, args.playedSan);
+      if (shut) return { kind: 'positional', how: 'bishop-shut', tag: 'misplaced-piece', piece: 'b', square: shut.bishop, by: shut.pawn };
+      const rook = rookActivityLost(args.fenBefore, args.playedSan, bestSan);
+      if (rook) return { kind: 'positional', how: 'rook-activity', tag: 'passive-rook', piece: 'r', square: rook.to, by: rook.file };
+    } catch { /* a reader that cannot read says nothing */ }
+    return null;
+  })() : null;
+  const loneGuard = noCauseYet ? (() => { try { return defenderHit(args.fenBefore, args.playedSan, args.bestLineUci); } catch { return null; } })() : null;
   const cause = classifyMistake({
     allowedMate: args.allowedMate !== null,
     missedMate: args.missedMate !== null,
@@ -1664,6 +1686,9 @@ export function errorWhy(args: {
     tag: positionalTag,
     causedByMove: caused,
     structural,
+    pawnLetGo: letGo ? { kind: 'allowed-capture', pawn: letGo.pawn, plies: letGo.plies } : null,
+    positionalDetail,
+    defenderHit: loneGuard ? { kind: 'defender-hit', defender: loneGuard.defender, target: loneGuard.target } : null,
   });
   return {
     cause,

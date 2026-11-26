@@ -15,6 +15,7 @@ import type { TacticType } from '../types';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import type { WhyItFailedKind } from './whyItFailed';
 import type { StructuralCause } from './structuralCause';
+import type { CauseReaderKey } from './teachingSentence';
 
 export type MistakeCauseKind =
   | 'allowed-mate'
@@ -54,9 +55,32 @@ export interface MistakeCause {
   tag: Exclude<MisconceptionTagId, 'other'> | null;
   /** False when the threat was already on the board before the move. */
   causedByMove: boolean;
-  /** The structural reader's facts (target square, colour, pawn …) when the
-   *  kind is one of the structural causes; null otherwise. */
-  detail: StructuralCause | null;
+  /** The reader's facts (target square, colour, pawn …): the structural
+   *  reader's on a structural kind, a cause reader's on the kind it files
+   *  under (`causeReaderKey`); null otherwise. */
+  detail: CauseDetail | null;
+}
+
+/** The facts a reader hands over with the cause. The structural causes, and
+ *  the cause readers filed under an existing kind: the lone guard the better
+ *  move hits (`missed-win`), the pawn the line wins later (`allowed-capture`),
+ *  the bishop shut in or the rook off its file (`positional`). */
+export type CauseDetail =
+  | StructuralCause
+  | { kind: 'defender-hit'; defender: string; target: string }
+  | { kind: 'allowed-capture'; pawn: string; plies: number }
+  | { kind: 'positional'; how: 'bishop-shut' | 'rook-activity'; tag: 'misplaced-piece' | 'passive-rook'; piece: 'b' | 'r'; square: string; by: string };
+
+/** Which cause-reader lesson a detail is told by (`CAUSE_READER_LESSONS`):
+ *  the tempo ones by how, the lone guard, the pawn let go, the positional
+ *  ones by how. Null: the cause's own recipe tells it. */
+export function causeReaderKey(d: CauseDetail | null): CauseReaderKey | null {
+  if (!d) return null;
+  if (d.kind === 'tempo-wasted') return d.how === 'retreat' || d.how === 'missed-tempo' || d.how === 'wrong-order' || d.how === 'freed-square' ? d.how : null;
+  if (d.kind === 'defender-hit') return 'defender-hit';
+  if (d.kind === 'allowed-capture') return 'pawn-let-go';
+  if (d.kind === 'positional') return d.how;
+  return null;
 }
 
 /** What errorWhy read, flattened: each field is one reader's verdict. */
@@ -81,6 +105,12 @@ export interface MistakeCauseReads {
   causedByMove: boolean;
   /** The one structural reading of the move (`readStructuralCause`), or null. */
   structural: StructuralCause | null;
+  /** The better move hits the one guard of a piece of theirs (`defenderHit`). */
+  defenderHit: Extract<CauseDetail, { kind: 'defender-hit' }> | null;
+  /** The reply line wins a pawn the better line keeps (`pawnLetGo`). */
+  pawnLetGo: Extract<CauseDetail, { kind: 'allowed-capture' }> | null;
+  /** The bishop shut in by its own pawn, or the rook off its open file. */
+  positionalDetail: Extract<CauseDetail, { kind: 'positional' }> | null;
 }
 
 /** One `whyItFailed` mechanism → its cause, exhaustively. */
@@ -109,8 +139,11 @@ export function classifyMistake(r: MistakeCauseReads): MistakeCause {
   if (r.allowedThreat) return { ...base, kind: 'allowed-threat', motif: r.allowedMotif };
   if (r.kingHunt) return { ...base, kind: 'king-hunt', motif: null };
   if (r.missedWins) return { ...base, kind: 'missed-win', motif: r.missedMotif };
+  if (r.defenderHit) return { ...base, kind: 'missed-win', motif: null, detail: r.defenderHit };
   if (r.structural) return { ...base, kind: r.structural.kind, motif: null, detail: r.structural };
-  if (r.tag) return { ...base, kind: 'positional', motif: null };
+  if (r.pawnLetGo) return { ...base, kind: 'allowed-capture', motif: null, detail: r.pawnLetGo };
+  if (r.tag) return { ...base, kind: 'positional', motif: null, detail: r.positionalDetail?.tag === r.tag ? r.positionalDetail : null };
+  if (r.positionalDetail) return { ...base, tag: r.positionalDetail.tag, kind: 'positional', motif: null, detail: r.positionalDetail };
   // Last before unexplained: a board reading of the move itself (a defender
   // it took away, a square it gave up) says more than "it was already hanging".
   if (r.ignoredThreat) return { ...base, kind: 'ignored-threat', motif: r.allowedMotif };

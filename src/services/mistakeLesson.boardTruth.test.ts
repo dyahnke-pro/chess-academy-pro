@@ -10,7 +10,7 @@ vi.mock('./appAuditor', () => ({ logAppAudit: () => Promise.resolve() }));
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { Chess } from 'chess.js';
 import { errorWhy, NO_SECOND_READ } from './inaccuracyCall';
-import { boardTrue, composeGoodDecision, composeMistakeLesson, nextGameMemory, NEW_GAME_MEMORY } from './mistakeLesson';
+import { boardTrue, composeGoodDecision, composeMistakeLesson, nextGameMemory, NEW_GAME_MEMORY, withStems } from './mistakeLesson';
 
 const DIR = 'audit-reports/teaching-census-data';
 interface Line { uci: string; cp: number | null; mate: number | null; pv: string[] }
@@ -44,7 +44,7 @@ describe.runIf(existsSync(`${DIR}/g-0.jsonl`))('mistake lessons on David\'s game
           if (cost < 50 || bestSan === san) {
             if (seat === 'you') {
               const gd = composeGoodDecision({ fenBefore: fen, playedSan: san, lines: r.before.map((l) => ({ evaluation: l.cp ?? ((l.mate ?? 0) > 0 ? 100000 : -100000), mate: l.mate, moves: l.pv })), holdOf: () => undefined, ply: i + 1, memory: mem, priorMove: pm });
-              if (gd) { good.push({ game: g.id, ply: i + 1, move: mv, kind: gd.kind, text: gd.text }); mem = { ...mem, lastStems: new Set([gd.stem]) }; }
+              if (gd) { good.push({ game: g.id, ply: i + 1, move: mv, kind: gd.kind, text: gd.text }); mem = withStems(mem, [gd.stem]); }
             }
             return;
           }

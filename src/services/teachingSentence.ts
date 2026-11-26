@@ -19,6 +19,7 @@
  *   - no orphan lead ("It …", "after this").
  * Pure: chess.js only.
  */
+import { DEFENDER_RULE_TECHNIQUE, type DefenderRuleId } from './endgameDefenderRules';
 import { CAPTURE_VALUE } from './pieceValues';
 import { Chess, type Square } from 'chess.js';
 import { rotateStem } from '../utils/rotateStem';
@@ -1017,7 +1018,8 @@ export type FillKey =
   | 'a' | 'b'                // a fork's two targets
   | 'theirMove'              // their reply once played, in words
   | 'gives' | 'victim'       // the good decision's fields
-  | 'answer';                // how an empty check was met
+  | 'answer'                 // how an empty check was met
+  | 'trapped';               // the better move traps their queen (a flag)
 
 export interface SlotRecipe {
   /** Every field the stems name; one missing → the slot is silent. */
@@ -1093,8 +1095,8 @@ export const REPAIRS: Record<RepairState, RepairRecipe> = {
     needs: ['colour'],
     stems: [
       'Their {colour} squares are weak now: aim your pieces at them.',
-      'Nothing of theirs guards the {colour} squares any more; move in there.',
-      'Plant a piece on a {colour} square; they can never chase it.',
+      'Nothing of theirs guards the {colour} squares any more. Move in there.',
+      'Plant a piece on a {colour} square. They can never chase it.',
       'Use the {colour} squares they gave up: put your pieces there.',
       'With that bishop gone, the {colour} squares are yours to take.',
     ],
@@ -1115,17 +1117,17 @@ export const REPAIRS: Record<RepairState, RepairRecipe> = {
     needs: [],
     stems: [
       'Pile up on their weak pawn: attack it more than it\'s defended.',
-      'Their weak pawn is the target now; aim your pieces at it.',
+      'Their weak pawn is the target now. Aim your pieces at it.',
       'Fix the weak pawn in place first, then win it.',
       'Put a piece in front of the weak pawn and bring more attackers.',
-      'Keep going after the weak pawn until it falls.',
+      'Keep your pieces on the weak pawn. It can\'t move out of the way.',
     ],
     sources: ['Library: Nimzowitsch ms-12', 'concept:pos-weak-pawns'],
   },
   'passer-against': {
     needs: ['pawn'],
     stems: [
-      'Put a piece in front of the pawn on {pawn}; a knight blocks best.',
+      'Put a piece in front of the pawn on {pawn}. A knight blocks best.',
       'Blockade the passed pawn on {pawn} before it runs.',
       'Stop {pawn} first: a piece on the square in front of it.',
       'A passed pawn must be held: get a piece in front of {pawn}.',
@@ -1139,7 +1141,7 @@ export const REPAIRS: Record<RepairState, RepairRecipe> = {
       'Push your passed pawn while its road is safe.',
       'Your passed pawn is free now: support it forward.',
       'Get a rook behind the passed pawn and walk it up.',
-      'Your free pawn has a clear road; use it.',
+      'Your free pawn has a clear road. Use it.',
       'Back the passed pawn with pieces and push it.',
     ],
     sources: ['Library: Nimzowitsch ms-21', 'concept:end-passed-pawn'],
@@ -1246,8 +1248,8 @@ export const REPAIRS: Record<RepairState, RepairRecipe> = {
   'initiative-won': {
     needs: [],
     stems: [
-      'They gave you a free move: use it to make a threat.',
-      'You have the time now; bring a piece into the attack.',
+      'A free move is best spent on a threat.',
+      'You have the time now. Bring a piece into the attack.',
       'Use the tempo they handed you to improve your worst piece.',
       'A free move is a gift: make it count with a threat.',
       'Take the initiative they gave away: keep asking questions.',
@@ -1260,7 +1262,7 @@ export const REPAIRS: Record<RepairState, RepairRecipe> = {
       'Get your king onto a key square in front of the pawn on {pawn}.',
       'In king and pawn endings, the king leads: in front of {pawn}.',
       'Your king belongs ahead of the pawn on {pawn}, not behind it.',
-      'March the king up in front of {pawn}; the pawn follows.',
+      'March the king up in front of {pawn}. The pawn follows.',
       'The king on a key square wins it: aim it in front of {pawn}.',
     ],
     sources: ['Library: Capablanca cf-3', 'https://en.wikipedia.org/wiki/King_and_pawn_versus_king_endgame'],
@@ -1281,7 +1283,7 @@ export const REPAIRS: Record<RepairState, RepairRecipe> = {
     stems: [
       'Get your rook back behind the passed pawn on {pawn}.',
       'Rooks belong behind passed pawns: put yours behind {pawn}.',
-      'From behind {pawn} the rook pushes it; in front it only blocks.',
+      'From behind {pawn} the rook pushes it. In front it only blocks.',
       'Bring the rook behind the pawn on {pawn} and keep it active.',
       'Rook behind the passer on {pawn}: that is where it works.',
     ],
@@ -1303,7 +1305,7 @@ export const REPAIRS: Record<RepairState, RepairRecipe> = {
     stems: [
       'Their king is open now: start with every check you have.',
       'Go after the bare king: checks first, then bring more pieces.',
-      'Their king has no cover; look at each check before anything else.',
+      'Their king has no cover. Look at each check before anything else.',
       'An open king is the target: bring pieces and check.',
       'Their shield is gone, so attack the king with everything.',
     ],
@@ -1382,7 +1384,7 @@ export const RECIPES: Record<MistakeCauseKind, LessonRecipe> = {
     lesson: S(['tPiece', 'target', 'opPiece'], [
       'The {tPiece} on {target} had the {opPiece} behind it, so it wasn\'t free.',
       'Before you capture, count who takes back: the {opPiece} guards {target}.',
-      'A piece is only free if nothing takes back; the {opPiece} guards {target}.',
+      'A piece is only free if nothing takes back. The {opPiece} guards {target}.',
       'Taking on {target} with something worth more loses, because the {opPiece} recaptures.',
       'The {opPiece} was guarding {target}, so the capture costs more than it wins.',
     ]),
@@ -1423,7 +1425,7 @@ export const RECIPES: Record<MistakeCauseKind, LessonRecipe> = {
       'Their {opPiece} takes the {tPiece} on {target}.',
       'The {tPiece} on {target} falls to their {opPiece}.',
       'Their {opPiece} just picks off the {tPiece} on {target}.',
-      'Their {opPiece} wins the {tPiece} on {target} for nothing.',
+      'Their {opPiece} captures the {tPiece} on {target}, and nothing takes back.',
       'The {tPiece} on {target} is lost to their {opPiece}.',
     ]),
     habit: HABIT.landing, family: 'loose', repairs: [],
@@ -1434,7 +1436,7 @@ export const RECIPES: Record<MistakeCauseKind, LessonRecipe> = {
       'Move a defender and what it guarded falls: the {tPiece} on {target}.',
       'Your {tPiece} on {target} lost its only guard.',
       'Every piece guards something, and this one held the {tPiece} on {target}.',
-      'The moved piece was holding the {tPiece} on {target}; now nothing does.',
+      'The moved piece was holding the {tPiece} on {target}. Now nothing does.',
     ]),
     consequence: S(['opPiece', 'tPiece', 'target'], [
       'Their {opPiece} can take the {tPiece} on {target} once the guard has gone.',
@@ -1464,7 +1466,7 @@ export const RECIPES: Record<MistakeCauseKind, LessonRecipe> = {
       'From {target}, one piece of theirs attacks two of yours.',
       'The move left two pieces that {target} attacks at once.',
     ]),
-    consequence: S(['target'], ['A piece of theirs lands on {target} and hits two, so one goes.', 'From {target} the fork hits two pieces, and you save one.', 'The fork from {target} wins material.', 'Two pieces are attacked from {target}; one is lost.', 'They fork from {target} and come out ahead.']),
+    consequence: S(['target'], ['A piece of theirs lands on {target} and hits two, so one goes.', 'From {target} the fork hits two pieces, and you save one.', 'The fork from {target} wins material.', 'Two pieces are attacked from {target}. One is lost.', 'They fork from {target} and come out ahead.']),
     habit: HABIT.knight, family: 'tactics', repairs: [],
   },
   'allowed-tactic': {
@@ -1514,7 +1516,7 @@ export const RECIPES: Record<MistakeCauseKind, LessonRecipe> = {
   'ignored-threat': {
     lesson: S(['tPiece', 'target'], [
       'A threat doesn\'t go away by itself: the {tPiece} on {target} was attacked.',
-      'Their last move said what it wanted: the {tPiece} on {target}.',
+      'Read what their move attacks: the {tPiece} on {target}.',
       'When they attack something, it comes before your plan: the {tPiece} on {target}.',
       'The {tPiece} on {target} was hit, and the move left it there.',
       'An attack on the {tPiece} on {target} needed an answer first.',
@@ -1563,7 +1565,7 @@ export const RECIPES: Record<MistakeCauseKind, LessonRecipe> = {
       'Their pawn on {pawn} has a clear road now.',
       'Nothing of yours can stop the pawn on {pawn} by itself.',
     ]),
-    consequence: S(['pawn', 'n'], ['The pawn on {pawn} is {n} squares from queening.', 'It has {n} squares to go from {pawn}.', 'From {pawn}, a queen is {n} steps away.', 'The pawn on {pawn} needs {n} moves to queen.', '{n} squares stand between {pawn} and a queen.']),
+    consequence: S(['n'], ['It is {n} squares from queening.', 'It has {n} squares to go.', 'A queen is {n} steps away.', 'It needs {n} moves to queen.', '{n} squares stand between it and a queen.']),
     habit: HABIT.passer, family: 'structure', repairs: [],
   },
   'compensation-lost': {
@@ -1593,7 +1595,7 @@ export const RECIPES: Record<MistakeCauseKind, LessonRecipe> = {
       'Your {colour}-squared bishop is gone, so {target} has no guard.',
       'Trading off your {colour}-squared bishop hands them the {colour} squares, starting with {target}.',
       'Without your {colour}-squared bishop, nothing fights for {target}.',
-      'Your last {colour}-squared bishop held {target}; now nothing guards it.',
+      'Your last {colour}-squared bishop held {target}. Now nothing guards it.',
       'With the {colour}-squared bishop traded, {target} has lost its guard.',
     ]),
     consequence: S(['opSq'], [
@@ -1666,7 +1668,7 @@ export const POSITIONAL: Partial<Record<Exclude<MisconceptionTagId, 'other'>, { 
       'Their {tPiece} on {target} reaches much more now.',
       'A move that frees their pieces helps them: the {tPiece} on {target}.',
       'Their {tPiece} on {target} has open lines after this.',
-      'The {tPiece} on {target} was boxed in; now it isn\'t.',
+      'The {tPiece} on {target} was boxed in. Now it isn\'t.',
     ]),
     consequence: null,
     repairs: [],
@@ -1675,7 +1677,7 @@ export const POSITIONAL: Partial<Record<Exclude<MisconceptionTagId, 'other'>, { 
     lesson: S(['file'], [
       'Rooks want open files, and the {file} was waiting.',
       'A rook belongs on an open file, and the {file} is one.',
-      'Your rook does little behind pawns; the {file} was open.',
+      'A rook belongs on the open {file}, not behind pawns.',
       'The {file} was the rook\'s road into their camp.',
       'Rooks need open lines: the {file} offered one.',
     ]),
@@ -1709,7 +1711,11 @@ export function materialWords(pawns: number): string | null {
 export const motifArticle = (w: string): string => (/^[aeiou]|^x-/.test(w) ? `an ${w}` : `a ${w}`);
 export const COLOUR_NAME = { dark: 'dark', light: 'light' } as const;
 
-export const TECHNIQUE_RULE: Record<'key-square' | 'opposition' | 'rook-behind-passer', string> = {
+/** An ending's rule in words: every defender rule (`DEFENDER_RULE_TECHNIQUE`),
+ *  and the three the king-and-pawn and rook readers say in their own words. */
+export type TechniqueRule = DefenderRuleId | 'key-square' | 'opposition';
+export const TECHNIQUE_RULE: Record<TechniqueRule, string> = {
+  ...DEFENDER_RULE_TECHNIQUE,
   'key-square': 'the king in front of its pawn',
   opposition: 'kings face to face, the other must give way',
   'rook-behind-passer': 'rooks behind passed pawns',
@@ -1747,23 +1753,66 @@ export const MISSED_MOTIF: SlotRecipe = S(['motif', 'tPiece', 'target'], [
   'The {tPiece} on {target} was there to be won by {motif}.',
 ]);
 
+/** A queen the better move would have trapped (`queenNet` on the better
+ *  move): every square it had is gone. */
+export const TRAPPED_LESSON: SlotRecipe = S(['tPiece', 'target'], [
+  'Their {tPiece} on {target} could be trapped: it had no safe square left.',
+  'One move would have left their {tPiece} on {target} with nowhere to go.',
+  'Their {tPiece} on {target} was short of squares, and it could be trapped.',
+  'A piece with no way out is a target: their {tPiece} on {target}.',
+  'Their {tPiece} on {target} could be caught with no safe square.',
+]);
+
+/** THE CAUSE READERS' LESSONS (`causeReaders`, `mistakeCause.causeReaderKey`):
+ *  a move whose cost no material reason explains, told by what it gave away.
+ *  `yours` names the board; `theirs` names nothing the student's next move
+ *  could find. */
+export type CauseReaderKey = 'retreat' | 'missed-tempo' | 'wrong-order' | 'freed-square' | 'defender-hit' | 'pawn-let-go' | 'bishop-shut' | 'rook-activity';
+export const CAUSE_READER_LESSONS: Record<CauseReaderKey, { yours: SlotRecipe; theirs: SlotRecipe }> = {
+  retreat: {
+    yours: S(['piece'], ['Your {piece} went back home, and the time it spent coming out is gone.', 'A piece that goes back to its first rank gives the move away.', 'Your {piece} retreats for no reason, so you are a move behind.', 'Pieces belong forward: sending your {piece} back hands them a free move.', 'Nothing made the {piece} retreat, and the tempo is lost.']),
+    theirs: S(['piece'], ['Their {piece} went back for no reason.', 'They retreated a piece nothing was chasing.', 'Their {piece} retreat gives you a free move.', 'They spent a move putting their {piece} back.', 'Nothing forced their {piece} back, so you are a move up.']),
+  },
+  'missed-tempo': {
+    yours: S(['tPiece', 'target'], ['Hit their {tPiece} on {target} first. A quiet move let them breathe.', 'A move with tempo was there, hitting their {tPiece} on {target}.', 'Attack their {tPiece} on {target} before playing slowly.', 'Their {tPiece} on {target} could be hit, and the quiet move let it be.', 'You could hit their {tPiece} on {target}, and the quiet move let them off.']),
+    theirs: S(['tPiece', 'target'], ['They could have hit your {tPiece} on {target}, and played quietly.', 'Your {tPiece} on {target} was there to attack, and they let it be.', 'They let you breathe when they could have hit your {tPiece} on {target}.', 'Their quiet move left your {tPiece} on {target} alone.', 'They passed up a move with tempo against your {tPiece} on {target}.']),
+  },
+  'wrong-order': {
+    yours: S(['tPiece', 'target'], ['Force first: your {tPiece} to {target} comes before this move.', 'Your move was good one move later, after your {tPiece} to {target}.', 'Play the forcing move first, your {tPiece} to {target}, then this one.', 'Your {tPiece} to {target} first gains a move, and the order matters.', 'Your {tPiece} to {target} forces first, and this move comes after.']),
+    theirs: S([], ['They had the right idea in the wrong order.', 'Their move was better one move later, after a forcing one.', 'They skipped the forcing move that should come first.', 'Their order cost them a move.', 'They played it a move too soon.']),
+  },
+  'freed-square': {
+    yours: S(['target', 'tPiece', 'opSq'], ['Chasing that piece freed {target} for their {tPiece} on {opSq}.', 'A chase can hand them {target}, the square their {tPiece} on {opSq} needed.', 'A chased piece leaves {target} behind, and their {tPiece} on {opSq} takes it.', 'Their {tPiece} on {opSq} was in trouble, and now it has {target}.', 'Driving that piece off {target} gave their {tPiece} on {opSq} a way home.']),
+    theirs: S([], ['Their chase freed a square your piece needed.', 'They drove your piece off and opened a way out for another.', 'Their move gave your stuck piece somewhere to go.', 'The square they chased you off is now your way out.', 'Their chase helped your piece in trouble.']),
+  },
+  'defender-hit': {
+    yours: S(['tPiece', 'target', 'opPiece', 'opSq'], ['Hit the lone guard: the {opPiece} on {opSq} alone held their {tPiece} on {target}.', 'Attack the {opPiece} on {opSq} first, and the {tPiece} on {target} it holds falls.', 'One guard held their {tPiece} on {target}. Chase the {opPiece} on {opSq}.', 'Only the {opPiece} on {opSq} held their {tPiece} on {target}. Hit it.', 'Count the guards of their {tPiece} on {target}: only the {opPiece} on {opSq}.']),
+    theirs: S([], ['They missed that your piece had only one guard.', 'They could have chased the one defender of your piece.', 'Your piece hung on a single guard, and they let it be.', 'They did not hit the defender of your attacked piece.', 'One guard held your piece, and they missed it.']),
+  },
+  'pawn-let-go': {
+    yours: S(['pawn'], ['Your pawn on {pawn} is lost a few moves later.', 'A pawn can be lost in a short line: the one on {pawn}.', 'After the trades, your pawn on {pawn} has too few guards.', 'Look two moves ahead: the pawn on {pawn} falls there.', 'The pawn on {pawn} was guarded before. Now it goes.']),
+    theirs: S([], ['Their move lets a pawn of theirs go.', 'A pawn of theirs falls a few moves on.', 'They leave a pawn short of guards.', 'Their move costs them a pawn in the line.', 'One of their pawns can be won now.']),
+  },
+  'bishop-shut': {
+    yours: S(['target', 'pawn'], ['Your pawn on {pawn} blocks your own bishop on {target}.', 'The bishop on {target} is shut in behind the pawn on {pawn}.', 'Pawns on your bishop\'s colour block it: {target} has no squares now.', 'Your bishop on {target} lost its diagonal to the pawn on {pawn}.', 'A bishop behind its own pawns does little, like the one on {target}.']),
+    theirs: S([], ['Their pawn move shuts in their own bishop.', 'Their bishop is stuck behind their pawns now.', 'They blocked their own bishop with a pawn.', 'Their bishop has nowhere to go after that pawn move.', 'Their pawn sits on its bishop\'s colour, right in its way.']),
+  },
+  'rook-activity': {
+    yours: S(['target', 'file'], ['Rooks belong on open files, and yours left the {file}-file.', 'Your rook on {target} does less than it did on the {file}-file.', 'The open {file}-file is theirs to take now.', 'Your rook gave up the {file}-file for a quieter square.', 'A rook off the open file sits idle on {target}.']),
+    theirs: S([], ['Their rook left the open file.', 'They gave up an open file with their rook.', 'Their rook is quieter where it went.', 'The open file is yours to take now.', 'Their rook stepped off its best line.']),
+  },
+};
+
 /** A fork's targets and the piece it lands with, in words. */
-export const FORK_LESSON: { yours: SlotRecipe; theirs: SlotRecipe } = {
+export const FORK_LESSON: { yours: SlotRecipe } = {
   // Your missed fork: their two pieces, one move away from both.
   yours: S(['a', 'b'], [
-    'Their {a} and {b} could both be hit by one move: a fork.',
-    'One move hit their {a} and {b} at once; one had to fall.',
-    'A fork was there: their {a} and {b} both stood in one piece\'s reach.',
-    'Two of their pieces, the {a} and the {b}, sat one fork apart.',
-    'When one move hits two pieces, look for it: their {a} and {b}.',
-  ]),
-  theirs: S(['a', 'b'], [
-    'They had a fork on your {a} and {b} and passed it by.',
-    'One move of theirs hit your {a} and {b}, and they missed it.',
-    'Your {a} and {b} stood one fork apart, and they let it go.',
-    'They could have hit your {a} and {b} together.',
-    'A fork on your {a} and {b} was there for them.',
-  ]),
+      'Their {a} and {b} could both be hit by one move: a fork.',
+      'One move hit their {a} and {b} at once. One had to fall.',
+      'Their {a} and {b} stood one move from a fork.',
+      'Two of their pieces, the {a} and the {b}, sat one fork apart.',
+      'When one move hits two pieces, look for it: their {a} and {b}.',
+    ]),
 };
 
 /** THE BETTER MOVE'S JOB, said as a principle — never the move (Learn names
@@ -1874,7 +1923,7 @@ export const THEIR_SEAT: Partial<Record<MistakeCauseKind, { lesson: SlotRecipe; 
     consequence: null,
   },
   'ignored-threat': {
-    lesson: S(['tPiece'], ['They left their {tPiece} under attack.', 'Their {tPiece} was attacked, and they didn\'t answer.', 'They ignored the threat to their {tPiece}.', 'Their move left the attacked {tPiece} where it was.', 'The attack on their {tPiece} went unanswered.']),
+    lesson: S(['tPiece', 'target', 'opPiece'], ['They left their {tPiece} on {target} under attack, and your {opPiece} takes it.', 'Their {tPiece} on {target} was attacked, and your {opPiece} wins it.', 'They ignored the threat: your {opPiece} takes their {tPiece} on {target}.', 'Their move left the {tPiece} on {target} for your {opPiece}.', 'The attack on their {tPiece} on {target} went unanswered, so your {opPiece} takes it.']),
     consequence: null,
   },
   stalemate: {
@@ -1968,10 +2017,10 @@ export const THEIR_MOVE_CONSEQUENCE: SlotRecipe = S(['theirMove', 'what'], [
 /** AN EMPTY CHECK (`emptyCheckAt`): what answered it, and that it won
  *  nothing. `answer`: "block" or "king step". */
 export const EMPTY_CHECK_LESSON: SlotRecipe = S(['piece', 'answer'], [
-  'Your {piece} gave a check that a simple {answer} ends; nothing was won.',
+  'Your {piece} gave a check that a simple {answer} ends. Nothing was won.',
   'A check met by a {answer} wins nothing: your {piece} spent a move.',
   'Your {piece}\'s check is answered by a {answer}, and the move is gone.',
-  'Checks only help when they win something; a {answer} ends this one.',
+  'Checks only help when they win something. A {answer} ends this one.',
   'A {answer} answers the check, and your {piece} gained nothing.',
 ]);
 
@@ -1981,10 +2030,10 @@ export type GoodDecision = 'only-move' | 'prophylaxis';
 export const GOOD_DECISION: Record<GoodDecision, SlotRecipe> = {
   'only-move': S(['gives'], [
     'Only one move held here, and you found it: the rest {gives}.',
-    'That was the only move; all the others {gives}.',
+    'That was the only move. All the others {gives}.',
     'One move kept it together, and the others {gives}.',
     'You found the one move: all the others {gives}.',
-    'Nothing else worked here; the other moves {gives}.',
+    'Nothing else worked here. The other moves {gives}.',
   ]),
   prophylaxis: S(['victim'], [
     'You stopped their idea before it came: your {victim} stays safe.',

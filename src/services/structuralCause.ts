@@ -26,6 +26,9 @@ import { detectBluff } from './bluffDetector';
 import { keySquaresOn } from './keySquareRead';
 import { CONVERSION_EDGE } from './conversionMethod';
 import { relativeRank } from './outpost';
+import { DEFENDER_RULES, type DefenderRuleId } from './endgameDefenderRules';
+import { classifyMatchup } from './endgameMatchup';
+import { freedSquare, minorRetreat, missedTempo, wrongOrder } from './causeReaders';
 
 export type StructuralCause =
   /** The move (or the reply it allowed) leaves their king no legal move and
@@ -33,7 +36,7 @@ export type StructuralCause =
   | { kind: 'stalemate'; king: string; plies: number }
   /** An ending's method broken: the mover's king left/missed the key square,
    *  the opposition was given up, or a rook left its place behind a passer. */
-  | { kind: 'technique-broken'; rule: 'key-square' | 'opposition' | 'rook-behind-passer'; piece: 'k' | 'r'; square: string; better: string | null }
+  | { kind: 'technique-broken'; rule: TechniqueBrokenRule; piece: 'k' | 'r'; square: string; better: string | null }
   /** Their pawn that is newly passed (or whose blockade the move lifted). */
   | { kind: 'passer-handed'; pawn: string; toQueen: number; kingDistance: number; how: 'created' | 'blockade-lifted' }
   /** Down material for an attack, a quiet move, and the attack is gone. */
@@ -44,7 +47,15 @@ export type StructuralCause =
   | { kind: 'colour-conceded'; colour: 'light' | 'dark'; target: string; enemyBishop: string; pawnTargets: string[]; holes: string[] }
   /** A move they can ignore: a check that is simply blocked, or an answer to
    *  a piece that threatened nothing. */
-  | { kind: 'tempo-wasted'; how: 'empty-check' | 'answered-bluff'; squares: string[]; answer?: 'block' | 'king' };
+  | { kind: 'tempo-wasted'; how: TempoWastedHow; squares: string[]; answer?: 'block' | 'king' };
+
+/** The ending rules a played move can break (`techniqueBroken`). */
+export type TechniqueBrokenRule = 'key-square' | 'opposition' | 'rook-behind-passer' | 'king-in-front-of-pawn' | 'philidor-third-rank';
+/** How a move gave the tempo away: a check simply met, an answer to a move
+ *  that threatened nothing, an unforced retreat, a quiet move where a move
+ *  with tempo was there, the right move in the wrong order, a chase that frees
+ *  their stuck piece (`causeReaders`). */
+export type TempoWastedHow = 'empty-check' | 'answered-bluff' | 'retreat' | 'missed-tempo' | 'wrong-order' | 'freed-square';
 
 export type StructuralCauseKind = StructuralCause['kind'];
 
@@ -129,6 +140,11 @@ export function stalemateCause(a: StructuralArgs): StructuralCause | null {
 }
 
 // ── technique-broken ───────────────────────────────────────────────────────
+/** Does this ending's class hold `rule` among its defender rules? */
+function endingRule(fen: string, rule: DefenderRuleId): boolean {
+  try { return DEFENDER_RULES[classifyMatchup(fen).cls].includes(rule); } catch { return false; }
+}
+
 /** An ending's rule the better move kept and the played move broke:
  *  - kings and pawns: the mover's king on a key square of its passer, or
  *    holding it by the opposition (`keySquaresOn`), after the better move and
@@ -156,6 +172,15 @@ export function techniqueBroken(a: StructuralArgs): StructuralCause | null {
     if (oppositionRead(best.fen(), mover)?.holds && !oppositionRead(played.fen(), mover)?.holds) {
       return { kind: 'technique-broken', rule: 'opposition', piece: 'k', square: king(best), better: a.bestSan };
     }
+    // The defender's king in front of the passer (`DEFENDER_RULES`): it stood
+    // in front of their passer, the played move left, the better move stays.
+    const inFront = (b: Chess): boolean => {
+      const k = king(b);
+      return !!k && findPassedPawns(b.fen(), other(mover)).some((p) => p[0] === k[0] && (other(mover) === 'w' ? Number(k[1]) > Number(p[1]) : Number(k[1]) < Number(p[1])));
+    };
+    if (endingRule(a.fenBefore, 'king-in-front-of-pawn') && inFront(before) && !inFront(played) && inFront(best)) {
+      return { kind: 'technique-broken', rule: 'king-in-front-of-pawn', piece: 'k', square: king(before), better: a.bestSan };
+    }
     return null;
   }
   // The rook behind the passer: only in an ending (no queens, few pieces).
@@ -178,7 +203,21 @@ export function techniqueBroken(a: StructuralArgs): StructuralCause | null {
   };
   let mv;
   try { mv = new Chess(a.fenBefore).move(a.playedSan); } catch { return null; }
-  if (!mv || mv.piece !== 'r' || mv.captured || !behindPasser(before, mv.from)) return null;
+  if (!mv || mv.piece !== 'r' || mv.captured) return null;
+  // THE PHILIDOR THIRD RANK (`DEFENDER_RULES`): one rook each, their passers
+  // no further than the fifth rank, the defender's rook leaves its third
+  // rank while the better move keeps a rook there.
+  const oneRookEach = pieces.every((p) => p.type === 'k' || p.type === 'p' || p.type === 'r')
+    && pieces.filter((p) => p.type === 'r' && p.color === mover).length === 1
+    && pieces.filter((p) => p.type === 'r' && p.color !== mover).length === 1;
+  const third = mover === 'w' ? '3' : '6';
+  const theirPassers = findPassedPawns(a.fenBefore, other(mover));
+  if (oneRookEach && endingRule(a.fenBefore, 'philidor-third-rank') && theirPassers.length > 0 && theirPassers.every((p) => relativeRank(p, other(mover)) <= 5)
+    && mv.from[1] === third && mv.to[1] !== third && !played.inCheck()
+    && best.board().flat().some((p) => p?.type === 'r' && p.color === mover && p.square[1] === third)) {
+    return { kind: 'technique-broken', rule: 'philidor-third-rank', piece: 'r', square: mv.from, better: a.bestSan };
+  }
+  if (!behindPasser(before, mv.from)) return null;
   if (behindPasser(played, mv.to)) return null;
   // The better move keeps that rook where it is.
   const bestMv = (() => { try { return new Chess(a.fenBefore).move(a.bestSan); } catch { return null; } })();
@@ -381,6 +420,23 @@ export function colourConceded(fenBefore: string, san: string, replyLineUci: rea
 export function tempoWasted(a: StructuralArgs): StructuralCause | null {
   const empty = emptyCheckAt(a.fenBefore, a.playedSan, a.costCp, a.replyLineUci[0] ?? null);
   if (empty) return { kind: 'tempo-wasted', how: 'empty-check', squares: empty.squares, answer: empty.kind };
+  const bluffed = answeredBluff(a);
+  if (bluffed) return bluffed;
+  // The cause readers that give the move away (`causeReaders`).
+  const back = minorRetreat(a.fenBefore, a.playedSan);
+  if (back) return { kind: 'tempo-wasted', how: 'retreat', squares: [back.from, back.to] };
+  const tempo = missedTempo(a.fenBefore, a.playedSan, a.bestSan);
+  if (tempo) return { kind: 'tempo-wasted', how: 'missed-tempo', squares: tempo.target ? [tempo.target] : [] };
+  if (a.bestLineUci && wrongOrder(a.fenBefore, a.playedSan, a.bestLineUci)) {
+    return { kind: 'tempo-wasted', how: 'wrong-order', squares: [a.bestLineUci[0].slice(0, 2), a.bestLineUci[0].slice(2, 4)] };
+  }
+  const freed = freedSquare(a.fenBefore, a.playedSan, a.replyLineUci, a.bestSan);
+  return freed ? { kind: 'tempo-wasted', how: 'freed-square', squares: [freed.square, freed.from] } : null;
+}
+
+/** A move that answers their previous move when that move threatened nothing
+ *  (`detectBluff`): it moves one of the bluff's targets or adds a guard. */
+function answeredBluff(a: StructuralArgs): StructuralCause | null {
   if (!a.priorMove) return null;
   const bluff = detectBluff(a.priorMove.fenBefore, a.priorMove.san, a.bestSan);
   if (!bluff) return null;

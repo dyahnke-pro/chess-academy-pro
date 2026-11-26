@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 const logged: Array<{ kind: string; context?: string }> = [];
 vi.mock('./appAuditor', () => ({ logAppAudit: (e: { kind: string; context?: string }) => { logged.push(e); return Promise.resolve(); } }));
 
-import { allSlots, composeGoodDecision, composeMistakeLesson, nextGameMemory, NEW_GAME_MEMORY, RECIPES, REPAIRS, POSITIONAL, type MistakeLessonInput } from './mistakeLesson';
+import { allSlots, composeGoodDecision, composeMistakeLesson, nextGameMemory, NEW_GAME_MEMORY, withStems, RECIPES, REPAIRS, POSITIONAL, type MistakeLessonInput } from './mistakeLesson';
 import { errorWhy, NO_SECOND_READ } from './inaccuracyCall';
 import type { HoldRecord } from './holdRate';
 
@@ -111,14 +111,36 @@ describe('the table gate', () => {
     for (const r of Object.values(POSITIONAL)) expect(r!.lesson.stems.length).toBeGreaterThanOrEqual(5);
   });
   it('their seat never names a square the student can now strike', () => {
+    // Two exceptions: their ignored threat, whose fill comes only from the
+    // capture the student already played (proved below), so it is past; and
+    // their missed tempo, whose square holds the STUDENT's own piece (what
+    // they could have hit), never a square the student strikes.
+    const PAST_OR_OWN = new Set(['them:ignored-threat.lesson', 'reader-them:missed-tempo']);
     for (const { where, stems, seat } of allSlots()) {
-      if (seat !== 'them') continue;
+      if (seat !== 'them' || PAST_OR_OWN.has(where)) continue;
       for (const st of stems) expect(st, where).not.toMatch(/\{(target|sq|opSq|king|pawn|checkSq|file|opPiece)\}/);
     }
   });
+  describe('their ignored threat names your piece only once it took (1.e4 d5 2.exd5 Qxd5 3.Nc3 Bg4)', () => {
+    const FEN = 'rnb1kbnr/ppp1pppp/8/3q4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 3';
+    const ew = { cause: { kind: 'ignored-threat' as const, motif: null, tag: 'missed-opponents-threat' as const, causedByMove: false, detail: null }, failedSquares: [], lostSquare: 'd5' };
+    const theirs = (over: Partial<MistakeLessonInput> = {}): MistakeLessonInput => input({
+      ew, fenBefore: FEN, playedSan: 'Bg4', replyLineUci: ['c3d5'], bestSan: 'Qa5', seat: 'them', costCp: 900, holdOf: () => RED, ...over,
+    });
+    it('after Nxd5 the lesson says the knight took the queen on d5', () => {
+      const out = composeMistakeLesson(theirs({ studentReplySan: 'Nxd5' }));
+      expect(out.slots.lesson).toMatch(/knight/);
+      expect(out.slots.lesson).toMatch(/queen on d5/);
+    });
+    it('before the student took, nothing is said (the capture is still playable)', () => {
+      const out = composeMistakeLesson(theirs({ studentReplySan: 'a3' }));
+      expect(out.text).toBeNull();
+      expect(out.silentWhy).toBe('missing-slot');
+    });
+  });
   it('a turn never repeats the stems of the turn before', () => {
     const first = composeMistakeLesson(input({ holdOf: () => RED }));
-    const second = composeMistakeLesson(input({ holdOf: () => RED, memory: { ...NEW_GAME_MEMORY, lastStems: new Set(first.stems) } }));
+    const second = composeMistakeLesson(input({ holdOf: () => RED, memory: withStems(NEW_GAME_MEMORY, first.stems) }));
     for (const st of second.stems) expect(first.stems).not.toContain(st);
   });
 });

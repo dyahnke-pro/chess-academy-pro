@@ -11,11 +11,19 @@
 //                         that the better line keeps.
 //   rookActivityLost    — a rook leaves an open or half-open file for a worse
 //                         one while the better move keeps it there.
+//   wrongOrder          — the played move is the better line's own third ply:
+//                         the forcing move had to come first.
+//   freedSquare         — the chase sends their piece off a square another
+//                         piece of theirs needed to get out.
+//   defenderHit         — the better move hits the one guard of a piece of
+//                         theirs, and the line wins that piece.
 //   (the bishop shut in by its own pawn is `theirMoveCost.bishopShutBy`, the
 //   hanging pawns `nextPlans.hangingPawns` — one reader each, both seats.)
-import { Chess, type Color } from 'chess.js';
+import { Chess, type Color, type Square } from 'chess.js';
 import { computeMustDefend, newThreat } from './threatOut';
 import { findOpenFiles } from './positionReadingService';
+import { isPassedPawnAt } from './boardStructure';
+import { CAPTURE_VALUE } from './pieceValues';
 
 const other = (c: Color): Color => (c === 'w' ? 'b' : 'w');
 
@@ -81,22 +89,22 @@ export function missedTempo(fenBefore: string, playedSan: string, bestSan: strin
   return { bestSan: b.m.san, how: 'threat', target: hit?.square ?? null };
 }
 
-// ── 4. A centre pawn let go ─────────────────────────────────────────────────
-
+// ── 4. A pawn let go ─────────────────────────────────────────────────────────
 export interface PawnLetGo { pawn: string; plies: number }
-
 const CENTRE_FILES = new Set(['c', 'd', 'e', 'f']);
+/** How far the reply line is read for the pawn it wins. */
+const LET_GO_PLIES = 10;
 const pawnsOf = (c: Chess, side: Color): number => c.board().flat().filter((x) => x?.type === 'p' && x.color === side).length;
 /** The pawn count for `side` against the other side's — a pawn taken back
  *  is a trade, not a pawn let go. */
 const pawnEdge = (c: Chess, side: Color): number => pawnsOf(c, side) - pawnsOf(c, other(side));
-
 /** The reply line (their move first, after the played move) takes a pawn of
- *  the mover's on the c–f files within `plies` and the mover's pawn edge
- *  (its pawns less theirs) is down there, while the better line (its first
- *  move first) keeps that edge to the same depth. `pawn`: the square of the pawn taken. Kind
- *  `allowed-capture` (the pawn is the material; the line is longer than the
- *  one-move capture read sees). */
+ *  the mover's — a centre pawn (c–f files) within `plies`, or later in the
+ *  line a passed pawn of the mover's — and the mover's pawn edge (its pawns
+ *  less theirs) is down there, while the better line keeps that edge to the
+ *  same depth. `pawn`: the square of the pawn taken. Kind `allowed-capture`
+ *  (the pawn is the material; the line is longer than the one-move capture
+ *  read sees). */
 export function pawnLetGo(
   fenBefore: string, playedSan: string,
   replyLineUci: readonly string[], bestLineUci: readonly string[] | null,
@@ -110,14 +118,17 @@ export function pawnLetGo(
   let at = 0;
   try {
     const c = new Chess(p.c.fen());
-    for (const [k, u] of replyLineUci.slice(0, plies).entries()) {
+    for (const [k, u] of replyLineUci.slice(0, LET_GO_PLIES).entries()) {
+      const passed = (() => { try { return isPassedPawnAt(c.fen(), u.slice(2, 4), me); } catch { return false; } })();
       const m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
       if (!m) break;
-      if (!taken && m.color !== me && m.captured === 'p' && CENTRE_FILES.has(m.to[0])) { taken = m.to; at = k + 1; }
+      if (!taken && m.color !== me && m.captured === 'p' && (k < plies ? CENTRE_FILES.has(m.to[0]) : passed)) { taken = m.to; at = k + 1; }
+      // Past `plies` the line is read on only for a passer of theirs taken.
+      if (taken && k + 1 >= Math.max(plies, at)) break;
     }
     if (!taken || pawnEdge(c, me) >= start) return null;
   } catch { return null; }
-  const best = playUci(fenBefore, bestLineUci, plies + 1);
+  const best = playUci(fenBefore, bestLineUci, Math.max(plies, at) + 1);
   const before = new Chess(fenBefore);
   if (!best || pawnEdge(best, me) < pawnEdge(before, me)) return null;
   return { pawn: taken, plies: at };
@@ -151,4 +162,89 @@ export function rookActivityLost(fenBefore: string, playedSan: string, bestSan: 
   const keeps = b.c.board().flat().some((x) => x?.type === 'r' && x.color === me && x.square[0] === m.from[0]);
   if (!keeps) return null;
   return { from: m.from, to: m.to, file: m.from[0], was: was === 2 ? 'open' : 'half-open' };
+}
+
+// ── 6. The right idea in the wrong order ────────────────────────────────────
+export interface WrongOrder { first: string; how: 'check' | 'capture'; played: string }
+/** The played move is the better line's third ply (the mover's next move):
+ *  the line's first move is a check or a capture, their answer, then the
+ *  played move — it was right one move later. */
+export function wrongOrder(fenBefore: string, playedSan: string, bestLineUci: readonly string[] | null): WrongOrder | null {
+  if (!bestLineUci || bestLineUci.length < 3) return null;
+  const p = playSan(fenBefore, playedSan);
+  if (!p) return null;
+  const uci = `${p.m.from}${p.m.to}${p.m.promotion ?? ''}`;
+  if (bestLineUci[0] === uci || bestLineUci[2] !== uci) return null;
+  try {
+    const c = new Chess(fenBefore);
+    const first = c.move({ from: bestLineUci[0].slice(0, 2), to: bestLineUci[0].slice(2, 4), promotion: bestLineUci[0][4] });
+    if (!first) return null;
+    const how = c.inCheck() ? 'check' : first.captured ? 'capture' : null;
+    if (!how) return null;
+    if (!c.move({ from: bestLineUci[1].slice(0, 2), to: bestLineUci[1].slice(2, 4), promotion: bestLineUci[1][4] })) return null;
+    if (!c.move({ from: p.m.from, to: p.m.to, promotion: p.m.promotion })) return null;
+    return { first: first.san, how, played: p.m.san };
+  } catch { return null; }
+}
+
+// ── 7. A chase that frees their stuck piece ─────────────────────────────────
+export interface FreedSquare { square: string; chased: string; piece: string; from: string }
+/** The played move attacks a piece of theirs (not a pawn), the reply moves it
+ *  off its square, and their next move puts another piece of theirs on that
+ *  square — a piece the better move would have attacked more. `square`: the
+ *  square the chase freed; `from`: where the freed piece came from. */
+export function freedSquare(fenBefore: string, playedSan: string, replyLineUci: readonly string[], bestSan: string | null): FreedSquare | null {
+  if (!bestSan || replyLineUci.length < 3) return null;
+  const p = playSan(fenBefore, playedSan);
+  const b = playSan(fenBefore, bestSan);
+  if (!p || !b) return null;
+  const me = p.m.color;
+  const foe = other(me);
+  const sq = replyLineUci[0].slice(0, 2);
+  const chased = p.c.get(sq as Square);
+  if (!chased || chased.color !== foe || chased.type === 'p' || !p.c.attackers(sq as Square, me).includes(p.m.to)) return null;
+  const c = new Chess(p.c.fen());
+  try {
+    if (!c.move({ from: sq, to: replyLineUci[0].slice(2, 4), promotion: replyLineUci[0][4] })) return null;
+    if (!c.move({ from: replyLineUci[1].slice(0, 2), to: replyLineUci[1].slice(2, 4), promotion: replyLineUci[1][4] })) return null;
+    const into = c.move({ from: replyLineUci[2].slice(0, 2), to: replyLineUci[2].slice(2, 4), promotion: replyLineUci[2][4] });
+    if (!into || into.to !== sq || into.color !== foe) return null;
+    const was = new Chess(fenBefore).attackers(into.from, me).length;
+    if (b.c.attackers(into.from, me).length <= was) return null;
+    return { square: sq, chased: chased.type, piece: into.piece, from: into.from };
+  } catch { return null; }
+}
+
+// ── 8. The lone guard hit ───────────────────────────────────────────────────
+export interface DefenderHit { defender: string; target: string; plies: number }
+/** A piece of theirs (not the king, not a pawn) that the mover attacks has
+ *  exactly one guard; the better move — quiet, not the played move — attacks
+ *  that guard (unattacked before and after the played move), and within three
+ *  plies of the better line the mover takes the piece (worth a minor or more). */
+export function defenderHit(fenBefore: string, playedSan: string, bestLineUci: readonly string[] | null): DefenderHit | null {
+  if (!bestLineUci?.length) return null;
+  const p = playSan(fenBefore, playedSan);
+  if (!p) return null;
+  const me = p.m.color;
+  const foe = other(me);
+  const before = new Chess(fenBefore);
+  try {
+    const b = new Chess(fenBefore);
+    const best = b.move({ from: bestLineUci[0].slice(0, 2), to: bestLineUci[0].slice(2, 4), promotion: bestLineUci[0][4] });
+    if (!best || best.captured || best.san === p.m.san) return null;
+    for (const cell of before.board().flat()) {
+      if (!cell || cell.color !== foe || cell.type === 'k' || cell.type === 'p') continue;
+      const guards = before.attackers(cell.square, foe);
+      if (guards.length !== 1 || before.attackers(cell.square, me).length === 0) continue;
+      const guard = guards[0];
+      if (!b.attackers(guard, me).includes(best.to) || before.attackers(guard, me).length > 0 || p.c.attackers(guard, me).length > 0) continue;
+      const line = new Chess(b.fen());
+      for (const [k, u] of bestLineUci.slice(1, 4).entries()) {
+        const m = line.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
+        if (!m) break;
+        if (m.color === me && m.to === cell.square && m.captured && CAPTURE_VALUE[m.captured] >= 3) return { defender: guard, target: cell.square, plies: k + 2 };
+      }
+    }
+  } catch { return null; }
+  return null;
 }

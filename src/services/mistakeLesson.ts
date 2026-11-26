@@ -36,7 +36,8 @@
 // serves both seats. The REPAIR is always the STUDENT's (on their mistake it
 // is the conversion), so it is never swapped.
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
-import type { MistakeCause, MistakeCauseKind } from './mistakeCause';
+import { causeReaderKey, type MistakeCause, type MistakeCauseKind } from './mistakeCause';
+import { queenNet } from './queenNet';
 import type { ErrorWhy } from './inaccuracyCall';
 import { MOTIFS, MOTIF_OF_TACTIC } from '../data/tacticMotifs';
 import { holdState, type HeatState, type HoldRecord } from './holdRate';
@@ -52,7 +53,7 @@ import { bestJobReason, positionalReason } from './positionalReason';
 import { DECIDED_EVAL_CP, INACCURACY_CP, MISTAKE_CP } from './engineConstants';
 import { logAppAudit } from './appAuditor';
 import {
-  BETTER_JOBS, COLOUR_NAME, EMPTY_CHECK_LESSON, FORK_LESSON, GOOD_DECISION, MISSED_MOTIF, THEIR_MOVE_CONSEQUENCE, HABIT_SHORT, LESSON_SLOTS, MISTAKE_NUMBER_WORDS, POSITIONAL, POSITIONAL_THEM, RECIPES, REPAIRS, TECHNIQUE_RULE, THEIR_SEAT,
+  BETTER_JOBS, CAUSE_READER_LESSONS, COLOUR_NAME, EMPTY_CHECK_LESSON, FORK_LESSON, GOOD_DECISION, MISSED_MOTIF, THEIR_MOVE_CONSEQUENCE, HABIT_SHORT, LESSON_SLOTS, MISTAKE_NUMBER_WORDS, POSITIONAL, POSITIONAL_THEM, RECIPES, REPAIRS, TECHNIQUE_RULE, THEIR_SEAT, TRAPPED_LESSON,
   materialWords, motifArticle, renderMistakeSlot, tradeWords,
   type BetterJob, type GoodDecision, type Fills, type LessonSlot, type RepairState, type SlotRecipe,
 } from './teachingSentence';
@@ -114,6 +115,13 @@ export interface MistakeLessonInput {
   /** Their reply as played, once it is on the board (refinement 4); null
    *  before it. Read on the student's own mistake only. */
   theirReplySan?: string | null;
+  /** Their lesson is said first this turn: the student's opens on "Your…"
+   *  or "You…", so the two seats never blur. */
+  seatLed?: boolean;
+  /** On THEIR mistake: the student's reply as played (their lesson is said
+   *  after it). The one student move a lesson may name the piece of — it is
+   *  past — and only when it took what their mistake left. */
+  studentReplySan?: string | null;
 }
 
 /** WHAT THIS GAME HAS SAID (refinements 2 and 3), owned by the caller and
@@ -123,14 +131,25 @@ export interface MistakeGameMemory {
   taught: ReadonlySet<string>;
   /** Repair states said this game and still holding on the board. */
   repairs: ReadonlySet<RepairState>;
-  /** The stems the previous spoken turn used: never said twice in a row. */
-  lastStems: ReadonlySet<string>;
+  /** The stems of the last four spoken turns: none is said again so soon. */
+  recentStems: ReadonlyArray<ReadonlySet<string>>;
   /** Habits said this game (by skill tag, else cause). */
   habits: ReadonlySet<string>;
   /** The previous spoken turn closed on a habit. */
   lastHadHabit: boolean;
 }
-export const NEW_GAME_MEMORY: MistakeGameMemory = { taught: new Set(), repairs: new Set(), lastStems: new Set(), habits: new Set(), lastHadHabit: false };
+export const NEW_GAME_MEMORY: MistakeGameMemory = { taught: new Set(), repairs: new Set(), recentStems: [], habits: new Set(), lastHadHabit: false };
+/** How many spoken turns a stem waits before it may be said again. */
+const STEM_MEMORY_TURNS = 4;
+/** Every stem the recent turns said (the rotation skips them). */
+export function recentStemsOf(memory: MistakeGameMemory): ReadonlySet<string> {
+  return new Set(memory.recentStems.flatMap((x) => [...x]));
+}
+/** Fold one more turn's stems into the memory (a line said outside the
+ *  lesson, e.g. the good decision). */
+export function withStems(memory: MistakeGameMemory, stems: readonly string[]): MistakeGameMemory {
+  return { ...memory, recentStems: [...memory.recentStems, new Set(stems)].slice(-STEM_MEMORY_TURNS) };
+}
 
 /** The computed fields one turn may name. Reply-line fields only on the
  *  student's own mistake: on theirs the reply is the student's next move. */
@@ -154,6 +173,12 @@ export function fillsFor(input: MistakeLessonInput): Fills {
     if (k) f.king = k;
   } else if (kingSq) f.king = kingSq;
   const ownSeat = input.seat === 'you';
+  /** The student's piece that took on `sq` with the reply they PLAYED — the
+   *  piece, never the move, and never a capture still to be played. */
+  const takerOn = (sq: string): string | undefined => {
+    if (!input.studentReplySan) return undefined;
+    try { const m = new Chess(after.fen()).move(input.studentReplySan); return m && m.to === sq && m.captured ? NAME[m.piece] : undefined; } catch { return undefined; }
+  };
   if (ownSeat && input.replyLineUci.length) {
     const c = new Chess(after.fen());
     for (const u of input.replyLineUci.slice(0, 6)) {
@@ -193,11 +218,23 @@ export function fillsFor(input: MistakeLessonInput): Fills {
       if (w && after.get(w.sq as Square)?.color === mover) { f.target = w.sq; f.tPiece = w.piece; }
     }
   }
+  // THEIR IGNORED THREAT names the student's piece that took (vague-line fix:
+  // "They ignored the threat: your knight takes their pawn on b5"), only once
+  // that capture is played; otherwise the lesson has no form and is silent.
+  if (!ownSeat && cause.kind === 'ignored-threat') {
+    const t = f.target ? takerOn(f.target) : undefined;
+    if (t) f.opPiece = t; else delete f.opPiece;
+  }
   if (cause.kind === 'missed-win') {
     delete f.target; delete f.tPiece;
-    const w = wonIn(input.ew.missedReasonLine, mover);
-    if (w) { f.target = w.sq; f.tPiece = w.piece; }
-    if (cause.motif === 'fork' && input.ew.missedReasonLine) {
+    // A queen the better move traps (`queenNet`: no safe square left).
+    const net = input.bestSan ? (() => { try { return queenNet(input.fenBefore, input.bestSan); } catch { return null; } })() : null;
+    const trapped = !!net && net.left.length === 0;
+    if (net && trapped) { f.target = net.queen; f.tPiece = 'queen'; f.trapped = 'yes'; }
+    const w = trapped ? null : wonIn(input.ew.missedReasonLine, mover);
+    // A capture the played move already made is no missed win.
+    if (w && !(mv.captured && w.sq === mv.to)) { f.target = w.sq; f.tPiece = w.piece; }
+    if (!trapped && cause.motif === 'fork' && input.ew.missedReasonLine) {
       const c = new Chess(input.ew.missedReasonLine.fen);
       for (const u of input.ew.missedReasonLine.uci) {
         const m = play(c, u); if (!m) break;
@@ -266,6 +303,15 @@ export function fillsFor(input: MistakeLessonInput): Fills {
       if (pr.file) f.file = pr.file;
     }
   }
+  // The cause readers' facts (`causeReaders`): the pieces and squares their
+  // lessons name, read off the board before the move.
+  if (d?.kind === 'allowed-capture') f.pawn = d.pawn;
+  if (d?.kind === 'positional') { f.target = d.square; f.tPiece = NAME[d.piece]; f.pawn = d.by; f.file = d.by; }
+  const pieceBefore = (sq: string | undefined): string | undefined => { try { const p = sq ? before.get(sq as Square) : null; return p ? NAME[p.type] : undefined; } catch { return undefined; } };
+  if (d?.kind === 'tempo-wasted' && d.how === 'missed-tempo' && d.squares[0]) { f.target = d.squares[0]; f.tPiece = pieceBefore(d.squares[0]); }
+  if (d?.kind === 'tempo-wasted' && d.how === 'wrong-order') { f.tPiece = pieceBefore(d.squares[0]); f.target = d.squares[1]; }
+  if (d?.kind === 'tempo-wasted' && d.how === 'freed-square') { f.target = d.squares[0]; f.opSq = d.squares[1]; f.tPiece = pieceBefore(d.squares[1]); }
+  if (d?.kind === 'defender-hit') { f.target = d.target; f.tPiece = pieceBefore(d.target); f.opSq = d.defender; f.opPiece = pieceBefore(d.defender); }
   // Their reply, once played: in words, never as a move (refinement 4).
   if (ownSeat && input.theirReplySan) {
     try {
@@ -421,7 +467,7 @@ function repairFor(input: MistakeLessonInput, recipeRepairs: readonly RepairStat
   for (const state of [...seated, ...ledgerStates]) {
     const fills = repairApplies(state, ctx);
     if (!fills) continue;
-    const said = renderMistakeSlot(REPAIRS[state], fills, key, input.memory.lastStems);
+    const said = renderMistakeSlot(REPAIRS[state], fills, key, recentStemsOf(input.memory));
     if (said) return { ...said, state };
   }
   return null;
@@ -481,7 +527,7 @@ export function nextGameMemory(memory: MistakeGameMemory, out: MistakeLesson | n
   if (out?.text && out.habitKey) habits.add(out.habitKey);
   return {
     taught, repairs, habits,
-    lastStems: out?.text ? new Set(out.stems) : memory.lastStems,
+    recentStems: out?.text ? [...memory.recentStems, new Set(out.stems)].slice(-STEM_MEMORY_TURNS) : memory.recentStems,
     lastHadHabit: out?.text ? !!out.habitKey : memory.lastHadHabit,
   };
 }
@@ -567,7 +613,9 @@ function composeInner(input: MistakeLessonInput): MistakeLesson {
   if (input.evalBeforeCp != null && Math.abs(input.evalBeforeCp) >= DECIDED_EVAL_CP) return silent('decided-game');
   // The floor in force: a mistake speaks; an inaccuracy only with a mechanism
   // a computer shows (any cause but the positional reading).
-  if (cost < INACCURACY_CP || (cost < MISTAKE_CP && cause.kind === 'positional')) return silent('below-floor');
+  // A mate allowed or missed, and a stalemate, speak whatever the cost read.
+  const decisive = cause.kind === 'allowed-mate' || cause.kind === 'missed-mate' || cause.kind === 'stalemate';
+  if (!decisive && (cost < INACCURACY_CP || (cost < MISTAKE_CP && cause.kind === 'positional'))) return silent('below-floor');
   // A win THEY missed is the student's own piece left loose: its lesson is
   // worded to the side that could take, so it has no form for their seat.
   if (input.seat === 'them' && (cause.kind === 'missed-win' || cause.kind === 'missed-mate')) return silent('missing-slot');
@@ -579,15 +627,24 @@ function composeInner(input: MistakeLessonInput): MistakeLesson {
   // ROTATION: each slot keyed on the board, the game's ply and the slot, so
   // two boards never move in step; the previous turn's stems are skipped.
   const keyOf = (slot: string): number => stemKeyOf(`${input.fenBefore}|${input.playedSan}|${input.ply ?? ''}|${slot}`);
-  const avoid = input.memory.lastStems;
+  const avoid = recentStemsOf(input.memory);
   const fills = fillsFor(input);
   // A "free piece" is a capture, not a tactic: it is told as one.
   const kind: MistakeCauseKind = cause.kind === 'allowed-tactic' && cause.motif && MOTIF_OF_TACTIC[cause.motif] === 'free-piece' ? 'allowed-capture' : cause.kind;
   const recipe = RECIPES[kind];
   const posTag = cause.kind === 'positional' && cause.tag ? cause.tag : null;
   const forms: { lesson: SlotRecipe | null; consequence: SlotRecipe | null } = (() => {
+    // A cause reader's fact is told by its own lesson; the consequence is the
+    // cause's own.
+    const reader = causeReaderKey(cause.detail);
+    if (reader) {
+      const own = yours ? (posTag ? POSITIONAL[posTag] : recipe) : (posTag ? POSITIONAL_THEM[posTag] : THEIR_SEAT[kind]);
+      return { lesson: CAUSE_READER_LESSONS[reader][yours ? 'yours' : 'theirs'], consequence: own?.consequence ?? null };
+    }
     if (yours) {
       if (posTag) { const p = POSITIONAL[posTag]; return { lesson: p?.lesson ?? null, consequence: p?.consequence ?? null }; }
+      // A queen the better move would have trapped.
+      if (kind === 'missed-win' && fills.trapped) return { lesson: TRAPPED_LESSON, consequence: recipe.consequence };
       // A missed fork is told as a fork, with both targets.
       if (kind === 'missed-win' && fills.a && fills.b) return { lesson: FORK_LESSON.yours, consequence: recipe.consequence };
       // A missed tactic is told by its motif, with the piece its line wins.
@@ -614,7 +671,9 @@ function composeInner(input: MistakeLessonInput): MistakeLesson {
     if (!boardTrue(x.text, boards, studentColor)) { dropped += 1; return; }
     slots[slot] = x.text; stems.push(x.stem);
   };
-  say('lesson', forms.lesson, fills);
+  // After their lesson, the student's opens on "Your…"/"You…" (seat-led).
+  const led = input.seatLed && forms.lesson ? forms.lesson.stems.filter((x) => /^(?:Your|You)\b/.test(x)) : [];
+  say('lesson', led.length > 0 && forms.lesson ? { ...forms.lesson, stems: led } : forms.lesson, fills);
   if (!slots.lesson) return { ...silent('missing-slot', slots, heat), dropped };
   // A SMALL MISTAKE ON A SKILL TAUGHT THIS GAME: the lesson alone (refinement 2).
   if (cost < MISTAKE_CP && tag && input.memory.taught.has(tag)) {
@@ -723,6 +782,8 @@ export function composeGoodDecision(input: {
   memory: MistakeGameMemory;
   /** Their move before it: a recapture on the square it took on is no decision. */
   priorMove: { fenBefore: string; san: string } | null;
+  /** Their lesson is said first this turn: the line opens on "Your…". */
+  seatLed?: boolean;
 }): { text: string; kind: GoodDecision; stem: string } | null {
   let mv;
   try { mv = new Chess(input.fenBefore).move(input.playedSan); } catch { return null; }
@@ -733,7 +794,9 @@ export function composeGoodDecision(input: {
   const key = (k: string): number => stemKeyOf(`${input.fenBefore}|${input.playedSan}|${input.ply ?? ''}|good:${k}`);
   const open = (tag: string): boolean => { const h = holdState(input.holdOf(tag)); return h === 'red' || h === 'grey'; };
   const say = (kind: GoodDecision, f: Fills): { text: string; kind: GoodDecision; stem: string } | null => {
-    const x = renderMistakeSlot(GOOD_DECISION[kind], f, key(kind), input.memory.lastStems);
+    const r = GOOD_DECISION[kind];
+    const led = input.seatLed ? r.stems.filter((x) => /^(?:Your|You)\b/.test(x)) : [];
+    const x = renderMistakeSlot(led.length ? { ...r, stems: led } : r, f, key(kind), recentStemsOf(input.memory));
     return x ? { ...x, kind } : null;
   };
   const only = (() => { try { return onlyMove(input.fenBefore, uci, input.lines.map((l) => ({ evaluation: l.evaluation, mate: l.mate ?? null, moves: l.moves }))); } catch { return null; } })();
@@ -796,7 +859,8 @@ export function allSlots(): Array<{ where: string; stems: readonly string[]; sea
   }
   for (const [k, r] of Object.entries(BETTER_JOBS)) { out.push({ where: `better:${k}`, stems: r.yours.stems, seat: 'you' }); out.push({ where: `better-them:${k}`, stems: r.theirs.stems, seat: 'them' }); }
   out.push({ where: 'fork.yours', stems: FORK_LESSON.yours.stems, seat: 'you' });
-  out.push({ where: 'fork.theirs', stems: FORK_LESSON.theirs.stems, seat: 'them' });
+  out.push({ where: 'trapped', stems: TRAPPED_LESSON.stems, seat: 'you' });
+  for (const [k, r] of Object.entries(CAUSE_READER_LESSONS)) { out.push({ where: `reader:${k}`, stems: r.yours.stems, seat: 'you' }); out.push({ where: `reader-them:${k}`, stems: r.theirs.stems, seat: 'them' }); }
   out.push({ where: 'missed-motif', stems: MISSED_MOTIF.stems, seat: 'you' });
   out.push({ where: 'empty-check', stems: EMPTY_CHECK_LESSON.stems, seat: 'you' });
   out.push({ where: 'their-move.consequence', stems: THEIR_MOVE_CONSEQUENCE.stems, seat: 'you' });

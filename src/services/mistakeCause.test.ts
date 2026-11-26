@@ -6,6 +6,7 @@ const none: MistakeCauseReads = {
   allowedMate: false, missedMate: false, failedKind: null, playedCaptures: false,
   allowedWins: false, allowedMotif: null, allowedThreat: false, kingHunt: false, ignoredThreat: false,
   missedMotif: null, missedWins: false, tag: null, causedByMove: true, structural: null,
+  defenderHit: null, pawnLetGo: null, positionalDetail: null,
 };
 
 describe('classifyMistake', () => {
