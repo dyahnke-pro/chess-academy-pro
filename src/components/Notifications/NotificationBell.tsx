@@ -65,6 +65,12 @@ function Bubble({ m }: { m: ThreadMessage }): JSX.Element {
   );
 }
 
+/** The newest unread David reply this app run has already opened the bell
+ *  for — one bell takes it, so header and sidebar never both pop. */
+let launchOpenedTs = 0;
+/** Tests only: reset (0) or switch off (Infinity) the launch open. */
+export function setLaunchOpenedForTests(ts: number): void { launchOpenedTs = ts; }
+
 export function NotificationBell(): JSX.Element {
   // Admin (David) — declared first because the telemetry gates below read it
   // (a non-admin device is a real user receiving/reading a message).
@@ -325,6 +331,20 @@ export function NotificationBell(): JSX.Element {
     window.addEventListener(OPEN_BELL_EVENT, claim);
     return () => window.removeEventListener(OPEN_BELL_EVENT, claim);
   }, [loading, loadInbox]);
+
+  // A reply from David the student has not seen opens the bell by itself,
+  // once, when the app opens (David 2026-11-26: a dot alone was missed by a
+  // user who kept using the app). Only the bell on screen takes it (header vs
+  // sidebar); opening marks the reply seen, so one reply never opens twice.
+  useEffect(() => {
+    if (loading || admin) return;
+    const newestDev = thread.filter((m) => m.from === 'dev').at(-1);
+    if (!newestDev || newestDev.ts <= lastSeenThreadTs || launchOpenedTs >= newestDev.ts) return;
+    const el = bellRef.current;
+    if (!el || el.getClientRects().length === 0) return;
+    launchOpenedTs = newestDev.ts;
+    openPanel();
+  }, [loading, admin, thread, lastSeenThreadTs, openPanel]);
 
   // A push that arrives while the app is open: refresh so the dot lights.
   useEffect(() => {

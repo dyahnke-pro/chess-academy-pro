@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { NotificationBell } from './NotificationBell';
+import { NotificationBell, setLaunchOpenedForTests } from './NotificationBell';
 
 // Stateful mock so the seen-marker actually moves and the sync event fires.
 let seenId: string | null = null;
@@ -48,7 +48,7 @@ vi.mock('../../services/announcementsService', () => ({
   }),
 }));
 
-beforeEach(() => { seenId = null; seenTs = 0; delivered = new Set(); read = new Set(); captureEvent.mockClear(); });
+beforeEach(() => { setLaunchOpenedForTests(Number.POSITIVE_INFINITY); seenId = null; seenTs = 0; delivered = new Set(); read = new Set(); captureEvent.mockClear(); });
 
 describe('NotificationBell — unread dot', () => {
   it('shows a red dot while there is an unread message, and CLEARS it once read', async () => {
@@ -171,6 +171,37 @@ describe('NotificationBell — a tapped push opens it', () => {
     try {
       render(<NotificationBell />);
       expect(await screen.findByTestId('notification-panel')).toBeTruthy();
+    } finally {
+      rects.mockRestore();
+    }
+  });
+});
+
+describe('NotificationBell — an unread reply from David opens the bell on launch', () => {
+  it('opens once on its own, on the bell on screen only, and marks the reply read', async () => {
+    setLaunchOpenedForTests(0);
+    const rects = vi.spyOn(Element.prototype, 'getClientRects').mockImplementation(function (this: Element) {
+      return (this.closest('[data-testid="shown"]') ? [{}] : []) as unknown as DOMRectList;
+    });
+    try {
+      render(<div><span data-testid="hidden"><NotificationBell /></span><span data-testid="shown"><NotificationBell /></span></div>);
+      await waitFor(() => expect(screen.getAllByTestId('notification-panel')).toHaveLength(1));
+      expect(captureEvent).toHaveBeenCalledWith('message_read', { kind: 'thread', message_ts: 1000 });
+      expect(seenTs).toBe(1000);
+    } finally {
+      rects.mockRestore();
+    }
+  });
+
+  it('does not open when the reply was already seen', async () => {
+    setLaunchOpenedForTests(0);
+    seenTs = 1000;
+    const rects = vi.spyOn(Element.prototype, 'getClientRects').mockImplementation(() => [{}] as unknown as DOMRectList);
+    try {
+      render(<NotificationBell />);
+      await screen.findByTestId('notification-bell');
+      await new Promise((r) => setTimeout(r, 50));
+      expect(screen.queryByTestId('notification-panel')).toBeNull();
     } finally {
       rects.mockRestore();
     }
