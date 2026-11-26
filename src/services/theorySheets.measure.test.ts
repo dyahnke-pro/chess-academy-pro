@@ -126,6 +126,7 @@ describe.runIf(!!process.env.THEORY_SHEETS && existsSync('data/sources/wikibooks
     const misses: string[] = [];
     const allMisses: Record<string, string[]> = {};
     let coreBoards = 0; let silentBoards = 0;
+    const dump: string[] = [];
     notes.forEach((n, i) => {
       if (i % every !== 0) return;
       const text = prose(n.text);
@@ -136,7 +137,10 @@ describe.runIf(!!process.env.THEORY_SHEETS && existsSync('data/sources/wikibooks
         let s: ReturnType<typeof said>;
         try { s = said(n, withName); } catch { continue; }
         const t = T[set][withName ? 'name' : 'noname'];
-        if (set === 'core' && withName) { coreBoards += 1; if (s.lines.length === 0) silentBoards += 1; }
+        if (set === 'core' && withName) {
+          coreBoards += 1; if (s.lines.length === 0) silentBoards += 1;
+          if (dump.length < 120 && coreBoards % 7 === 0) dump.push(`### ${n.lineSan.join(' ')}\nASKED ${asked.join(',')} | SAID ${[...s.kinds].join(',')}\n${s.lines.map(([k, l]) => `- [${k}] ${l}`).join('\n')}`);
+        }
         for (const k of asked) {
           const e = (t[k] ??= { asked: 0, said: 0 });
           e.asked += 1;
@@ -165,6 +169,7 @@ describe.runIf(!!process.env.THEORY_SHEETS && existsSync('data/sources/wikibooks
     mkdirSync('audit-reports', { recursive: true });
     writeFileSync('audit-reports/theory-sheets.json', JSON.stringify(report, null, 2));
     console.log(JSON.stringify(report, null, 2));
+    writeFileSync('audit-reports/theory-sheet-samples.md', dump.join('\n\n'));
     // Core misses only (the held-out set is never printed).
     writeFileSync('audit-reports/theory-sheet-misses.md', Object.entries(allMisses).map(([k, v]) => `## ${k} (${v.length})\n${v.filter((_, j) => j % Math.max(1, Math.floor(v.length / 40)) === 0).slice(0, 40).join('\n')}`).join('\n\n'));
     if (misses.length) console.log(`MISSES ${showMisses}\n${misses.join('\n')}`);
