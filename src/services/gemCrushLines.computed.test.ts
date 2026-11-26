@@ -109,11 +109,14 @@ describe('gems: the Play rung callout stays on the opening pages; the coach read
     // test harness (src/test/) reads the index off disk the way Review does.
     const importers = [...src].filter(([p, c]) => !p.startsWith('src/test/') && /from '[./]*(?:services\/)?knownSlips'/.test(c)).map(([p]) => p);
     expect(importers).toEqual(expect.arrayContaining(['src/services/reviewFullData.ts', 'src/services/coachFeatureService.ts', 'src/services/boardComputers.ts']));
-    const REVIEW_FILES = ['src/services/reviewFullData.ts', 'src/services/coachFeatureService.ts', 'src/components/Coach/CoachGameReview.tsx'];
+    // reviewOpeningTheory is Review's Theory button: it hands the index to the
+    // theory composer's trap read (`theoryReads.trapRead`), which asks only
+    // whether the index is in memory (its memo is kept only then).
+    const REVIEW_FILES = ['src/services/reviewFullData.ts', 'src/services/coachFeatureService.ts', 'src/components/Coach/CoachGameReview.tsx', 'src/services/reviewOpeningTheory.ts'];
     // The index is read only where the registry rows are called.
     // boardReadData only loads the file into the board-read worker (its
     // `DATA_FILES` loader); it reads no gem.
-    expect(importers.filter((p) => !REVIEW_FILES.includes(p) && p !== 'src/services/boardComputers.ts' && p !== 'src/services/moveThoughtFacts.ts' && p !== 'src/services/boardReadData.ts')).toEqual([]);
+    expect(importers.filter((p) => !REVIEW_FILES.includes(p) && p !== 'src/services/boardComputers.ts' && p !== 'src/services/moveThoughtFacts.ts' && p !== 'src/services/boardReadData.ts' && p !== 'src/services/theoryReads.ts')).toEqual([]);
     const callers = [...src].filter(([, c]) => /readBoard(?:All)?\('(?:knownSlip|trapAhead|slipsOnLine)'/.test(c)).map(([p]) => p).sort();
     // Review reads the rows through the lesson's own reader (`knownSlipReads`).
     expect(callers).toEqual(['src/components/Coach/CoachTeachPage.tsx', 'src/services/moveThoughtFacts.ts']);

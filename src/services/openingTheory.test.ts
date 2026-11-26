@@ -29,9 +29,10 @@ describe('openingTheoryFacts', () => {
     expect(openingTheoryFacts(fenAfter('e4 c6 d4'), 'd5', false).some((x) => x.kind === 'book-reply')).toBe(false);
     expect(openingTheoryFacts(fenAfter('e4 e5'), 'Nf3', true).find((x) => x.kind === 'book-reply')?.sentence ?? '').toMatch(/^The usual reply is …Nc6\. It /);
   });
-  it('the main move and the reply are said by their job, never by how many masters play them', () => {
+  it('the main move is said bare (its job is the move\'s own fact), never by how many masters play it', () => {
     const f = openingTheoryFacts(fenAfter('e4 e5'), 'Nf3', true);
-    expect(f.find((x) => x.kind === 'book-standing')?.sentence).toMatch(/^(It's the main move here|That's the main line)\. It attacks their pawn on e5\.$/);
+    // The standing carrying the job too said it twice (composerSaysOnce).
+    expect(f.find((x) => x.kind === 'book-standing')?.sentence).toMatch(/^(It's the main move here|That's the main line)\.$/);
     for (const t of f) expect(t.sentence).not.toMatch(/almost always|usually play|masters play it|\d%/);
   });
   it('the key decision is said on the move that made it, each road by its job', () => {

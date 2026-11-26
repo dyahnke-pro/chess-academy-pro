@@ -9,6 +9,7 @@
 // A sacrifice is neither: "Nxf7, …Kxf7 wins" is the opponent giving a piece on
 // purpose and the punisher taking it back — the opponent's move was a
 // sacrifice, not a slip.
+import { MATERIAL_VALUE } from './pieceValues';
 import { Chess } from 'chess.js';
 import bar from '../data/trap-bar.json';
 import { MATE_CP } from './mateScale';
@@ -28,7 +29,6 @@ export interface SlipRead {
 export const TRAP_BAR_CP: number = bar.trapCp;
 export const KNOWN_MISTAKE_FLOOR_CP: number = bar.knownCp;
 
-const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 
 /** The punisher's material gain at each ply of the line, in pawns (positive =
  *  the punisher is up). Null when the line does not play. */
@@ -42,7 +42,7 @@ function gainAlong(fen: string, sans: readonly string[]): number[] | null {
     let m;
     try { m = c.move(san); } catch { return null; }
     if (!m) return null;
-    const take = m.captured ? VALUE[m.captured] ?? 0 : 0;
+    const take = m.captured ? MATERIAL_VALUE[m.captured] ?? 0 : 0;
     gain += m.color === slipper ? -take : take;
     out.push(gain);
   }

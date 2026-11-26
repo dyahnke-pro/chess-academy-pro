@@ -17,6 +17,7 @@
 //     what it teaches.
 //   • CASTLING is said once.
 //   • A TRAP comes from the one trap computer's words (`trapLine`).
+import { openSentence } from '../utils/openSentence';
 import { Chess, type Color } from 'chess.js';
 import { moveJob, MINE, THEIRS } from './bookMoveWhy';
 import { NO_FOLLOW } from './exchangeLedger';
@@ -32,7 +33,6 @@ export interface KeyMove { san: string; piece: string; color: Color }
 export type Whose = 'your' | 'their';
 const NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 const wordsOf = (w: Whose): typeof MINE => (w === 'your' ? MINE : THEIRS);
-const Cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
 const clean = (s: string): string => s.replace(/[+#!?]+$/, '');
 export const dotted = (san: string, color: Color): string => (color === 'b' ? `…${clean(san)}` : clean(san));
 const isCastle = (san: string): boolean => /^O-O/.test(san);
@@ -54,7 +54,7 @@ export function keyMovesOf(lead: readonly KeyMove[]): KeyMove[] {
 export function planGoalLine(i: { whose: Whose; goal: KeyMove; lead: readonly KeyMove[] }): string {
   const keys = keyMovesOf(i.lead.filter((m) => m.san !== i.goal.san));
   const goal = dotted(i.goal.san, i.goal.color);
-  const Who = Cap(i.whose);
+  const Who = openSentence(i.whose);
   return keys.length === 0
     ? `${Who} plan builds to ${goal}.`
     : `${Who} plan: ${andList(keys.map((k) => dotted(k.san, k.color)))}, to break with ${goal}.`;
@@ -69,7 +69,7 @@ export function pieceHomeLine(i: { whose: Whose; piece: PlacedPiece }): string |
   try { job = moveJob(i.piece.fen, i.piece.san, i.piece.color, wordsOf(i.whose), null, NO_FOLLOW); } catch { job = null; }
   if (!job?.clause) return null;
   const noun = NOUN[i.piece.piece] ?? 'piece';
-  return `${Cap(i.whose)} ${noun} belongs on ${i.piece.to}. ${Cap(job.clause)}.`;
+  return `${openSentence(i.whose)} ${noun} belongs on ${i.piece.to}. ${openSentence(job.clause)}.`;
 }
 
 /** Castling, said once. `said` holds the claims already spoken; a hit says
@@ -99,10 +99,12 @@ export function keyDecisionLine(i: { fen: string; san: string; mover: Color; who
   const mine = jobOf(chosen.san);
   if (!mine) return null;
   const others = real.filter((r) => r !== chosen).map((r) => ({ r, job: jobOf(r.san) })).filter((x) => x.job && x.job !== mine);
+  // A decision is between two ideas: roads that all do the chosen road's job
+  // are no decision, and the move's own job is said by the move.
   const alt = others[0];
-  const head = `The key decision: ${dotted(chosen.san, i.mover)}. ${Cap(mine)}.`;
-  const text = alt ? `${head} ${dotted(alt.r.san, i.mover)} is the other road. ${Cap(alt.job ?? '')}.` : head;
-  return { text, names: [chosen.san, ...(alt ? [alt.r.san] : [])] };
+  if (!alt) return null;
+  const text = `The key decision: ${dotted(chosen.san, i.mover)}. ${openSentence(mine)}. ${dotted(alt.r.san, i.mover)} is the other road. ${openSentence(alt.job ?? '')}.`;
+  return { text, names: [chosen.san, alt.r.san] };
 }
 
 export type TheorySentenceKind = 'decision' | 'plan' | 'piece' | 'castle' | 'trap' | 'structure' | 'move-order' | 'gambit' | 'endgame';

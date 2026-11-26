@@ -4,6 +4,11 @@
 // own each fact: `namedStructure`, `boardStructure`, `openingEquivalence`. A
 // reader returns a sentence only when the move CHANGED the board that way —
 // never a standing description repeated every move.
+import { famousTrapRead, famousTrapName } from './famousTraps';
+import { MATERIAL_VALUE } from './pieceValues';
+import { homeSquaresOf } from './development';
+import { openSentence } from '../utils/openSentence';
+import { sideToMoveAs } from './threatOut';
 import { Chess, type Color, type Move, type Square } from 'chess.js';
 import { namedStructureFormed, namedStructureLine } from './namedStructure';
 import { lockedPawnPairs, structureSignature } from './boardStructure';
@@ -26,7 +31,7 @@ import type { ClubGem } from './clubGems';
 import { withoutCastleTail, composeTheoryTurn, type KeyMove, type PlacedPiece } from './theoryComposer';
 import { mastersPlanRead, planStillAhead, type MastersPlanRead } from './mastersPlanRead';
 import { positionOf } from '../utils/samePosition';
-import { andList, orList } from '../utils/andList';
+import { andList, orList, fileList } from '../utils/andList';
 
 export interface TheoryRead {
   text: string;
@@ -76,7 +81,6 @@ export function walkRoadsAhead<T>(
   return null;
 }
 
-const FILE_NAME: Record<string, string> = { a: 'a', b: 'b', c: 'c', d: 'd', e: 'e', f: 'f', g: 'g', h: 'h' };
 
 /** The pawn structure the move made: a NAMED one (Carlsbad, Maroczy…), else a
  *  locked centre, an isolated central pawn, doubled pawns or a newly open file. */
@@ -102,7 +106,7 @@ export function structureRead(i: { fenBefore: string; san: string; mover: Color;
   if (now.iqp && !was.iqp && !inFlight) return { text: 'That leaves an isolated pawn in the centre: it grips the squares in front of it, but it has no pawn to guard it, so its pieces must.', squares: [] };
   if (now.doubled && !was.doubled && !inFlight) return { text: 'That doubles a pawn: a weakness to aim at, paid for with an open file.', squares: [] };
   const opened = now.openFiles.filter((f) => !was.openFiles.includes(f));
-  if (opened.length) return { text: `The ${opened.map((f) => FILE_NAME[f] ?? f).join(' and ')}-file is open now: that is where rooks belong.`, squares: [] };
+  if (opened.length) return { text: openSentence(`${fileList(opened)} ${opened.length > 1 ? 'are' : 'is'} open now: that is where rooks belong.`), squares: [] };
   // A pawn majority the move made: more pawns on a wing (or in the centre)
   // than the other side has there — the passed pawn of the long run.
   const pawnsOn = (c: Chess, f: string, col: Color): string[] => ['1', '2', '3', '4', '5', '6', '7', '8'].map((r) => `${f}${r}`).filter((sq) => { const p = c.get(sq as never); return !!p && p.type === 'p' && p.color === col; });
@@ -118,7 +122,7 @@ export function structureRead(i: { fenBefore: string; san: string; mover: Color;
       const side = after.turn() === 'w' ? 'White' : 'Black';
       const byPiece = after.moves({ verbose: true }).some((m) => m.to === mvx.to && m.piece !== 'p');
       return { text: byPiece
-        ? `Taking back on ${mvx.to} with a pawn doubles ${side}'s pawns; a piece can take back instead.`
+        ? `Taking back on ${mvx.to} with a pawn doubles ${side}'s pawns. A piece can take back instead.`
         : `${side} can only take back on ${mvx.to} with a pawn, and that doubles their pawns.`, squares: [mvx.to] };
     }
   }
@@ -141,8 +145,7 @@ export function structureRead(i: { fenBefore: string; san: string; mover: Color;
   // would have shut it in there is still to come.
   {
     const mvb = after.history({ verbose: true }).pop();
-    const home = i.mover === 'w' ? ['c1', 'f1'] : ['c8', 'f8'];
-    if (mvb?.piece === 'b' && home.includes(mvb.from)) {
+    if (mvb?.piece === 'b' && homeSquaresOf('b', i.mover).includes(mvb.from)) {
       const b0 = new Chess(i.fenBefore);
       const pushes = b0.moves({ verbose: true }).filter((m) => m.piece === 'p' && ['d', 'e'].includes(m.from[0]) && Math.abs(Number(m.to[1]) - Number(m.from[1])) === 1);
       const shuts = pushes.find((m) => { const x = new Chess(i.fenBefore); x.move(m.san); return bishopHemmedByOwnPawns(x, mvb.from, i.mover); });
@@ -317,8 +320,9 @@ export function pieceJobRead(i: { fenBefore: string; san: string; mover: Color }
     const reach = (c: Chess, sq: string): number => {
       const p = c.get(sq as never);
       if (!p) return 0;
-      const turned = c.fen().split(' '); turned[1] = p.color; turned[3] = '-';
-      try { return new Chess(turned.join(' ')).moves({ square: sq as never }).length; } catch { return 0; }
+      const turned = sideToMoveAs(c.fen(), p.color);
+      if (!turned) return 0;
+      try { return new Chess(turned).moves({ square: sq as never }).length; } catch { return 0; }
     };
     const before = new Chess(i.fenBefore);
     const opened: string[] = [];
@@ -335,7 +339,7 @@ export function pieceJobRead(i: { fenBefore: string; san: string; mover: Color }
   if (!job?.clause) return null;
   const clause = withoutCastleTail(job.clause);
   // A job that names the move it prepares states the plan behind the move.
-  return { text: `${PIECE_NAME[mv.piece].charAt(0).toUpperCase()}${PIECE_NAME[mv.piece].slice(1)} to ${mv.to}. It ${clause.replace(/^it /, '')}.`.replace(/^(\w+) to (\w+)\. It /, '$1 on $2: it '), squares: [mv.to], ...(/\bprepares\b/.test(clause) ? { saysPlan: true } : {}) };
+  return { text: `${openSentence(PIECE_NAME[mv.piece])} to ${mv.to}. It ${clause.replace(/^it /, '')}.`.replace(/^(\w+) to (\w+)\. It /, '$1 on $2: it '), squares: [mv.to], ...(/\bprepares\b/.test(clause) ? { saysPlan: true } : {}) };
 }
 
 const PIECE_WORD: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
@@ -350,7 +354,7 @@ function piecesGiven(fenBefore: string, san: string, mover: Color, withCheck: bo
   // A plain trade in flight gives nothing; a sacrifice (`withCheck`) is read
   // net of what its capture took.
   if (!withCheck && (a.inCheck() || inFluxAfter(fenBefore, san))) return null;
-  const took = withCheck && mv.captured ? (VAL[mv.captured] ?? 0) : 0;
+  const took = withCheck && mv.captured ? (MATERIAL_VALUE[mv.captured] ?? 0) : 0;
   const was = new Set(findHangingBySee(fenBefore).filter((h) => h.color === mover).map((h) => h.square));
   const now = findHangingBySee(a.fen()).map((h) => (h.square === mv.to ? { ...h, gain: h.gain - took } : h))
     .filter((h) => h.color === mover && h.gain >= 2 && !was.has(h.square));
@@ -358,7 +362,7 @@ function piecesGiven(fenBefore: string, san: string, mover: Color, withCheck: bo
   if (!h) return null;
   const them: Color = mover === 'w' ? 'b' : 'w';
   const takes = a.moves({ verbose: true }).filter((m) => m.to === h.square && m.color === them)
-    .sort((x, y) => (VAL[x.piece] ?? 10) - (VAL[y.piece] ?? 10))[0];
+    .sort((x, y) => (x.piece === 'k' ? 10 : MATERIAL_VALUE[x.piece] ?? 10) - (y.piece === 'k' ? 10 : MATERIAL_VALUE[y.piece] ?? 10))[0];
   if (!takes) return null;
   return { square: h.square, piece: h.piece, gain: h.gain, defended: h.defended, takes };
 }
@@ -398,7 +402,7 @@ export function hangsRead(fenBefore: string, san: string, mover: Color, movesAt?
   if (!g) return null;
   const said = `${g.takes.color === 'b' ? '…' : ''}${g.takes.san.replace(/[+#]$/, '')}`;
   // A rook for a minor piece is the exchange.
-  const what = g.gain < 3 ? (g.piece === 'r' && VAL[g.takes.piece] === 3 ? 'the exchange' : null) : `the ${PIECE_WORD[g.piece]} on ${g.square}`;
+  const what = g.gain < 3 ? (g.piece === 'r' && MATERIAL_VALUE[g.takes.piece] === 3 ? 'the exchange' : null) : `the ${PIECE_WORD[g.piece]} on ${g.square}`;
   if (!what) return null;
   // A guarded piece that loses the exchange is "won", never "hanging".
   return { text: g.defended || g.gain < 3 ? `That lets ${said} win ${what}.` : `That leaves the ${PIECE_WORD[g.piece]} on ${g.square} hanging: ${said} wins it.`, squares: [g.square] };
@@ -411,10 +415,16 @@ export function hangsRead(fenBefore: string, san: string, mover: Color, movesAt?
  *  trap computer (`classifySlip`: a trap, a known mistake, or nothing to say)
  *  and worded by the seat (`trapWords`); every line is replayed by `trapLine`
  *  (a blow that hits, checks, mates or takes nothing is not said). */
+/** The masters' moves on the board after a move, most played first. */
+function roadsAfter(fenBefore: string, san: string, movesAt: (fen: string) => readonly LocalDbMove[] | null): string[] {
+  try { const c = new Chess(fenBefore); c.move(san); return (movesAt(c.fen()) ?? []).map((m) => m.san); } catch { return []; }
+}
+
 export function trapRead(i: { fenBefore: string; san: string; mover: Color; slipsAt: (fen: string) => readonly ClubGem[]; movesAt: (fen: string) => readonly LocalDbMove[] | null }): TheoryRead | null {
   const them: Color = i.mover === 'w' ? 'b' : 'w';
   const slipBy = (slipper: Color): 'student' | 'opponent' => (slipper === i.mover ? 'student' : 'opponent');
-  const kindOf = (fen: string, g: ClubGem): SlipKind | null => classifySlip({ engineCp: g.mate ? MATE_CP : g.endCp, line: { fen, slip: g.slip, punish: g.punish.split(/\s+/).filter(Boolean) } });
+  // A famous trap is always said (by its name); its kind is what it wins.
+  const kindOf = (fen: string, g: ClubGem): SlipKind | null => classifySlip({ engineCp: g.mate ? MATE_CP : g.endCp, line: { fen, slip: g.slip, punish: g.punish.split(/\s+/).filter(Boolean) } }) ?? (g.name ? 'known-mistake' : null);
   const say = (fen: string, g: ClubGem, slipper: Color, lead: (kind: SlipKind) => string): TheoryRead | null => {
     const kind = kindOf(fen, g);
     if (!kind) return null;
@@ -422,6 +432,10 @@ export function trapRead(i: { fenBefore: string; san: string; mover: Color; slip
     if (!t) return null;
     return { text: slipBy(slipper) === 'student' ? t.text : `${lead(kind)}${t.text}`, squares: t.squares };
   };
+  // F. A FAMOUS TRAP, by name (`famousTrapRead`): the slip played, on offer
+  // here, or one move away — always named, saying what the engine says it wins.
+  const famous = famousTrapRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover, student: i.mover, roads: roadsAfter(i.fenBefore, i.san, i.movesAt) });
+  if (famous) return famous;
   // 0. The move itself leaves a piece hanging: a piece of the mover's that the
   // other side wins by the exchange count (a minor piece's worth or more), and
   // that was not hanging before the move. Never on a check or a trade in flight.
@@ -458,7 +472,7 @@ export function trapRead(i: { fenBefore: string; san: string; mover: Color; slip
     const slipper = board.turn();
     const pre = sans.length === 1 ? `If they answer ${sans[0]}, ` : `If play goes ${andList(sans)}, `;
     for (const g of i.slipsAt(board.fen())) {
-      const r = say(board.fen(), g, slipper, (kind) => `${pre}${slipNoun(kind, 'opponent') === 'trap' ? 'a trap is waiting' : 'a known mistake is waiting'}. `);
+      const r = say(board.fen(), g, slipper, (kind) => `${pre}${g.name ? `${famousTrapName(g.name)} is waiting` : slipNoun(kind, 'opponent') === 'trap' ? 'a trap is waiting' : 'a known mistake is waiting'}. `);
       if (r) return r;
     }
     return null;
@@ -754,13 +768,12 @@ export function namedRoadsRead(i: { fen: string; movesAt: (fen: string) => reado
 }
 
 
-const MAT: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 function balance(c: Chess): { pawns: number; pieces: number } {
   let pawns = 0; let pieces = 0;
   for (const row of c.board()) for (const p of row) {
     if (!p) continue;
     const s = p.color === 'w' ? 1 : -1;
-    if (p.type === 'p') pawns += s; else pieces += s * MAT[p.type];
+    if (p.type === 'p') pawns += s; else pieces += s * MATERIAL_VALUE[p.type];
   }
   return { pawns, pieces };
 }
@@ -807,7 +820,6 @@ export function gambitStandingRead(i: { fenBefore: string; san: string; mover: C
   return { text: `${Side} is ${n === 1 ? 'a pawn' : 'two pawns'} down here: that is the gambit's price, paid for time, development and open lines.`, squares: [] };
 }
 
-const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
 /** A REPLY THAT IGNORES THE ATTACK: the move just played attacks a piece (worth
  *  more than the attacker, or undefended), a reply the masters really play
  *  leaves it there, and the capture wins it. Said as the approved off-line hang. */
@@ -822,7 +834,7 @@ export function hangRead(i: { fen: string; mover: Color; movesAt: (fen: string) 
     try { c.move(road.san); } catch { continue; }
     for (const cap of c.moves({ verbose: true })) {
       if (cap.color !== i.mover || !cap.captured || cap.captured === 'p') continue;
-      const worth = (VAL[cap.captured] ?? 0) - ((VAL[cap.piece] ?? 9));
+      const worth = (MATERIAL_VALUE[cap.captured] ?? 0) - (cap.piece === 'k' ? 9 : MATERIAL_VALUE[cap.piece] ?? 9);
       const t = new Chess(c.fen());
       t.move(cap.san);
       const defended = t.attackers(cap.to, them).length > 0;

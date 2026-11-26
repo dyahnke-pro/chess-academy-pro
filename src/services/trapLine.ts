@@ -6,12 +6,12 @@
 // The student's own slip reads "Watch out: …h6 allows Nxf7. Their knight …".
 // Everything said is read off the board by chess.js; a winning move that hits,
 // checks, mates or takes nothing has no blow to name, so nothing is said.
+import { MATERIAL_VALUE } from './pieceValues';
 import { Chess, type Move, type Square } from 'chess.js';
 import type { FactSeat } from './coachFact';
 import { andList } from '../utils/andList';
 
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
-const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 
 export interface TrapLineInput {
   /** The board before the slip. */
@@ -72,7 +72,7 @@ function pinned(c: Chess, mover: Move): { front: { piece: string; square: Square
     }
     if (seen.length === 2 && seen[0].piece !== 'k') {
       const [front, back] = seen;
-      if (back.piece === 'k' || (VALUE[back.piece] ?? 0) > (VALUE[front.piece] ?? 0)) return { front, back };
+      if (back.piece === 'k' || (MATERIAL_VALUE[back.piece] ?? 0) > (MATERIAL_VALUE[front.piece] ?? 0)) return { front, back };
     }
   }
   return null;
@@ -81,7 +81,7 @@ function pinned(c: Chess, mover: Move): { front: { piece: string; square: Square
 function readBlow(after: Chess, mover: Move): Blow | null {
   const victim = mover.color === 'w' ? 'b' : 'w';
   if (after.isCheckmate()) return { kind: 'mate', targets: [], captured: mover.captured ?? null };
-  const targets = attacked(after, mover.to, victim).filter((t) => (VALUE[t.piece] ?? 0) > (VALUE[mover.piece] ?? 0) || after.attackers(t.square, victim).length === 0);
+  const targets = attacked(after, mover.to, victim).filter((t) => (MATERIAL_VALUE[t.piece] ?? 0) > (MATERIAL_VALUE[mover.piece] ?? 0) || after.attackers(t.square, victim).length === 0);
   const check = after.isCheck();
   if (targets.length + (check ? 1 : 0) >= 2) return { kind: 'fork', targets, captured: mover.captured ?? null };
   if (check) return { kind: 'check', targets, captured: mover.captured ?? null };

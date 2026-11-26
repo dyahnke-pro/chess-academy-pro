@@ -27,15 +27,21 @@ describe('theoryReads — what the move changed on the board', () => {
   const gem = (slip: string, punish: string, endCp: number, mate = false): ClubGem => ({ tier: 'trap', line: '', slip, by: 'black', best: null, games: 100, share: 10, moverScore: null, punish, mate, won: 0, endCp, juice: 0 });
   const at = (sans: string[], gems: ClubGem[]) => (f: string): readonly ClubGem[] => (f.split(' ').slice(0, 4).join(' ') === fenOf(sans).split(' ').slice(0, 4).join(' ') ? gems : []);
   it('a trap around the move is replayed by trapLine, seat-correct', () => {
-    const slipsAt = at(['e4', 'e5', 'Bc4', 'Nc6', 'Qh5'], [gem('Nf6', 'Qxf7#', 0, true)]);
-    const r = trapRead({ fenBefore: fenOf(['e4', 'e5', 'Bc4', 'Nc6']), san: 'Qh5', mover: 'w', slipsAt, movesAt: () => null });
+    // A board no famous trap is filed on (Scholar's Mate itself is named by
+    // the famous index — famousTraps.test).
+    const slipsAt = at(['e4', 'e5', 'Bc4', 'Bc5', 'Qh5'], [gem('Nf6', 'Qxf7#', 0, true)]);
+    const r = trapRead({ fenBefore: fenOf(['e4', 'e5', 'Bc4', 'Bc5']), san: 'Qh5', mover: 'w', slipsAt, movesAt: () => null });
     expect(r?.text).toBe('A trap is set here. If they play …Nf6, Qxf7 is mate. Your queen mates on f7. The pattern: f7 is guarded only by their king. When your queen sits on h5, every slow move they make lets you look at f7.');
   });
   it('a slip under the trap bar is a known mistake, never a trap; under the floor, nothing', () => {
-    const fenBefore = fenOf(['e4', 'e5', 'Bc4', 'Nc6']);
-    const known = trapRead({ fenBefore, san: 'Qh5', mover: 'w', slipsAt: at(['e4', 'e5', 'Bc4', 'Nc6', 'Qh5'], [gem('Nf6', 'Qxf7#', 120)]), movesAt: () => null });
+    const fenBefore = fenOf(['e4', 'e5', 'Bc4', 'Bc5']);
+    const known = trapRead({ fenBefore, san: 'Qh5', mover: 'w', slipsAt: at(['e4', 'e5', 'Bc4', 'Bc5', 'Qh5'], [gem('Nf6', 'Qxf7#', 120)]), movesAt: () => null });
     expect(known?.text).toMatch(/^A known mistake is on offer here\. /);
-    expect(trapRead({ fenBefore, san: 'Qh5', mover: 'w', slipsAt: at(['e4', 'e5', 'Bc4', 'Nc6', 'Qh5'], [gem('Nf6', 'Qxf7#', 20)]), movesAt: () => null })).toBeNull();
+    expect(trapRead({ fenBefore, san: 'Qh5', mover: 'w', slipsAt: at(['e4', 'e5', 'Bc4', 'Bc5', 'Qh5'], [gem('Nf6', 'Qxf7#', 20)]), movesAt: () => null })).toBeNull();
+  });
+  it('a famous trap is named first, with its blow and the pattern behind it', () => {
+    const r = trapRead({ fenBefore: fenOf(['e4', 'e5', 'Bc4', 'Nc6']), san: 'Qh5', mover: 'w', slipsAt: () => [], movesAt: () => null });
+    expect(r?.text).toBe("This is Scholar's Mate: if they play …Nf6, Qxf7 leads to mate. The pattern: f7 is guarded only by their king. When your queen sits on h5, every slow move they make lets you look at f7.");
   });
   it('a reply the masters play that ignores the attack on a piece is the off-line hang', () => {
     const fen = fenOf(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'd4']);

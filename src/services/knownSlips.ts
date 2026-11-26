@@ -29,7 +29,8 @@ import { clubGemBoards, clubGemForIndex, type ClubGem } from './clubGems';
 import { computeExchangeLedger, netPieceWords } from './exchangeLedger';
 import { slipNoun } from './trapWords';
 import { trapLine } from './trapLine';
-import { getAllPunishGems, isKnownSlipGem, isWeaponGem, MATE_CP } from '../data/lessons/punishGems';
+import { getAllPunishGems, isKnownSlipGem, isWeaponGem, MATE_CP, TRAP_BAR_CP } from '../data/lessons/punishGems';
+import { famousTrapsAt, famousTrapName } from './famousTraps';
 import { legalLineProof, NO_PROOF, type Proof } from './proof';
 import { lineSeatAt } from '../utils/andList';
 import { rotateStem } from '../utils/rotateStem';
@@ -119,7 +120,16 @@ export function curatedSlipBoards(): Readonly<Record<string, readonly ClubGem[]>
 export function knownSlipsAt(index: KnownSlipIndex | null, fen: string): readonly ClubGem[] {
   const key = boardKey(fen);
   const club = index?.[key];
-  return club && club.length > 0 ? club : curatedSlipBoards()[key] ?? [];
+  const found = club && club.length > 0 ? club : curatedSlipBoards()[key] ?? [];
+  // A FAMOUS trap on this board is said by its name, first (`famousTraps`).
+  const famous = famousTrapsAt(fen);
+  if (famous.length === 0) return found;
+  const named: ClubGem[] = famous.map((t) => ({
+    tier: t.mate || t.endCp >= TRAP_BAR_CP ? 'trap' : 'known',
+    line: t.line, slip: t.slip, by: t.by === 'w' ? 'white' : 'black', best: null, games: 0, share: 0, moverScore: null,
+    punish: t.punish.join(' '), mate: t.mate, won: 0, endCp: t.endCp, juice: Number.MAX_SAFE_INTEGER, name: t.name,
+  }));
+  return [...named, ...found.filter((g) => !famous.some((t) => sameMove(fen, g.slip, t.slip)))];
 }
 
 /** Two moves are the same move on this board — by COORDINATES, never by SAN
@@ -244,7 +254,10 @@ export function knownSlip(ctx: KnownSlipContext): KnownSlipRead | null {
   // KNOWN — it chose the slip; it is never said.
   // Rotated on how many the game has said (never rolled): one formula is
   // never said three times a game.
-  const text = rotateStem(on === 'reached'
+  const famousName = gem.name ? famousTrapName(gem.name) : null;
+  const text = famousName
+    ? (on === 'reached' ? `This is ${famousName}: ${slipSaid}, and ${result}.` : `That is ${famousName}: ${result}.`)
+    : rotateStem(on === 'reached'
     ? [
       `A known ${name} here: ${slipSaid}, and ${result}.`,
       `${slipSaid} is a known ${name} on this board, and ${result}.`,

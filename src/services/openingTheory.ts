@@ -100,13 +100,11 @@ export function openingTheoryFacts(fenBefore: string, san: string, mine: boolean
   const top = here.moves[0];
   const topSaid = dotted(top.san, mover);
   if (played && clean(top.san) === clean(san) && played.pct >= MAIN_SHARE) {
-    // SAID BY ITS JOB, NEVER BY POPULARITY (round 9): what the move does is the
-    // teaching; how many masters play it is only why it is known.
-    const jobRaw = aimOf(fenBefore, san, mover, mine);
-    const job = jobRaw ? withoutCastleTail(jobRaw) : null;
-    out.push(job
-      ? { kind: 'book-standing', clause: `is the main move here — it ${job.replace(/^it /, '')}`, sentence: rotateStem([`It's the main move here. It ${job.replace(/^it /, '')}.`, `That's the main line. It ${job.replace(/^it /, '')}.`], key), squares: [to], names: [san] }
-      : { kind: 'book-standing', clause: 'is the main move here', sentence: rotateStem(["It's the main move here.", "That's the main line."], key), squares: [to], names: [san] });
+    // NEVER BY POPULARITY (round 9): how many masters play it is only why it
+    // is known. Its job is the move's own fact, said once by the move (the
+    // standing carrying it too said "attacks their bishop on f5 … kicks their
+    // bishop off f5" — composerSaysOnce).
+    out.push({ kind: 'book-standing', clause: 'is the main move here', sentence: rotateStem(["It's the main move here.", "That's the main line."], key), squares: [to], names: [san] });
   } else if (played && played.pct >= MAIN_SHARE) {
     out.push({ kind: 'book-standing', clause: `is one of the main moves here, beside ${topSaid}`, sentence: `It's one of the main moves here, beside ${topSaid}.`, squares: [to, top.to], names: [san, top.san] });
   } else if (played && played.pct < RARE_SHARE) {
