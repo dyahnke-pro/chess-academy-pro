@@ -265,11 +265,14 @@ export function trapRead(i: { fenBefore: string; san: string; mover: Color; boar
   const roads = i.movesAt(after.fen()) ?? [];
   const total = roads.reduce((n, m) => n + m.games, 0);
   for (const road of [...roads].sort((a, b) => b.games - a.games)) {
-    if (total === 0 || road.games / total < 0.15) break;
+    // The roads masters play (the named-roads bar: 2% of their games).
+    if (total === 0 || road.games / total < 0.02) break;
     const next = new Chess(after.fen());
-    try { next.move(road.san); } catch { continue; }
+    let rm;
+    try { rm = next.move(road.san); } catch { continue; }
+    const lead = road.games / total >= 0.15 ? 'Behind the usual reply, a trap waits. ' : `If they answer ${rm.color === 'b' ? '…' : ''}${road.san.replace(/[+#]$/, '')}, a trap waits. `;
     for (const g of i.boards[key(next.fen())] ?? []) {
-      const r = say(next.fen(), g, i.mover, 'Behind the usual reply, a trap waits. ');
+      const r = say(next.fen(), g, i.mover, lead);
       if (r) return r;
     }
   }

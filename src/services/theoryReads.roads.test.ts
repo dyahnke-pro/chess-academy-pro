@@ -113,3 +113,16 @@ describe('structureRead — the chain and the space a pawn move makes', () => {
     expect(structureRead({ fenBefore: fenOf(['e4', 'e5']), san: 'Nf3', mover: 'w' })).toBeNull();
   });
 });
+
+describe('trapRead — a trap behind any road masters play', () => {
+  it('a trap behind a 5% road is said with that road', async () => {
+    const { trapRead } = await import('./theoryReads');
+    const fenBefore = fenOf(['e4', 'e5', 'Nf3', 'd6', 'Bc4']);
+    const behind = fenOf(['e4', 'e5', 'Nf3', 'd6', 'Bc4', 'Bg4', 'Nc3']).split(' ').slice(0, 4).join(' ');
+    const boards = { [behind]: [{ slip: 'g6', punish: 'Nxe5 Bxd1 Bxf7+ Ke7 Nd5#' }] };
+    const movesAt = (f: string) => (f.startsWith(fenOf(['e4', 'e5', 'Nf3', 'd6', 'Bc4', 'Bg4']).split(' ')[0]) ? [{ san: 'h3', games: 95 }, { san: 'Nc3', games: 5 }] as never[] : null);
+    const r = trapRead({ fenBefore, san: 'Bg4', mover: 'b', boards, movesAt });
+    expect(r).not.toBeNull();
+    expect(r?.text).not.toMatch(/usual reply/);
+  });
+});
