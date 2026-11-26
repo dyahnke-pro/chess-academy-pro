@@ -244,6 +244,24 @@ export function pieceJobRead(i: { fenBefore: string; san: string; mover: Color }
   if (mv.piece === 'p' && ['g3', 'b3', 'g6', 'b6'].includes(mv.to) && c.get(`${mv.to[0] === 'g' ? 'f' : 'c'}${home}` as never)?.type === 'b') {
     return { text: `It prepares the fianchetto: the bishop will own the long diagonal from ${mv.to[0] === 'g' ? 'g' : 'b'}${home === '1' ? '2' : '7'}.`, squares: [mv.to] };
   }
+  // A pawn move that opens lines: the mover's bishops, rooks and queen that
+  // reach at least two more squares now, because the pawn left their path.
+  if (mv.piece === 'p') {
+    const reach = (c: Chess, sq: string): number => {
+      const p = c.get(sq as never);
+      if (!p) return 0;
+      const turned = c.fen().split(' '); turned[1] = p.color; turned[3] = '-';
+      try { return new Chess(turned.join(' ')).moves({ square: sq as never }).length; } catch { return 0; }
+    };
+    const before = new Chess(i.fenBefore);
+    const opened: string[] = [];
+    for (const row of c.board()) for (const p of row) {
+      if (!p || p.color !== i.mover || !['b', 'r', 'q'].includes(p.type)) continue;
+      if (reach(c, p.square) - reach(before, p.square) >= 2) opened.push(`the ${PIECE_NAME[p.type]} on ${p.square}`);
+    }
+    if (opened.length) return { text: `It opens lines for ${andList(opened)}.`, squares: [mv.to] };
+    return null;
+  }
   if (!PIECE_NAME[mv.piece]) return null;
   let job: ReturnType<typeof moveJob> = null;
   try { job = moveJob(i.fenBefore, i.san, i.mover, MINE, null, NO_FOLLOW); } catch { job = null; }

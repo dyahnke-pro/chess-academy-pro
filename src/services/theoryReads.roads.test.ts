@@ -168,3 +168,11 @@ describe('gambitAheadRead — a gambit two moves down a masters road', () => {
     expect(r?.text).toBe('After …c5, d4 is the Smith-Morra Gambit, a line where a pawn is offered for time and open lines.');
   });
 });
+
+describe('pieceJobRead — the lines a pawn move opens', () => {
+  it('1.e4 opens lines for the bishop and the queen; a rook pawn opens nothing', async () => {
+    const { pieceJobRead } = await import('./theoryReads');
+    expect(pieceJobRead({ fenBefore: new Chess().fen(), san: 'e4', mover: 'w' })?.text).toBe('It opens lines for the queen on d1 and the bishop on f1.');
+    expect(pieceJobRead({ fenBefore: new Chess().fen(), san: 'h3', mover: 'w' })).toBeNull();
+  });
+});
