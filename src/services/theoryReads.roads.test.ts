@@ -233,7 +233,10 @@ describe('choiceAheadRead — the choice the next move faces', () => {
     const { choiceAheadRead } = await import('./theoryReads');
     const fenBefore = fenOf(['e4', 'e5']);
     const r = choiceAheadRead({ fenBefore, san: 'Nf3', mover: 'w', movesAt: () => [{ san: 'Nc6', games: 60 }, { san: 'Nf6', games: 30 }, { san: 'd6', games: 10 }] as never[] });
-    expect(r?.text).toMatch(/^Next, the choice is theirs: …Nc6, which .*, …Nf6, which .* or …d6, which .*\.$/);
+    // …d6 guards e5 like …Nc6: one job, so one road.
+    expect(r?.text).toBe('Next, the choice is theirs: …Nc6 or …Nf6. …Nc6 adds one guard to their pawn on e5, which your knight on f3 attacks. …Nf6 attacks your pawn on e4.');
+    // Roads that do one job are no choice.
+    expect(choiceAheadRead({ fenBefore: fenOf(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4']), san: 'Bc5', mover: 'b', movesAt: () => [{ san: 'Nc3', games: 50 }, { san: 'Nh3', games: 50 }] as never[] })?.text ?? '').not.toMatch(/Nc3 brings your knight out\. Nh3 brings your knight out/);
     expect(choiceAheadRead({ fenBefore, san: 'Nf3', mover: 'w', movesAt: () => [{ san: 'Nc6', games: 95 }, { san: 'Nf6', games: 5 }] as never[] })).toBeNull();
   });
 });

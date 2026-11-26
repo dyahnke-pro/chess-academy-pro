@@ -250,7 +250,7 @@ export function transpositionRead(i: { history: readonly string[]; movesAt: (fen
   const now = (openingAtPosition(c.fen())?.plies ?? 0) >= i.history.length ? transposedOpening(c.fen(), i.history.length, detectOpeningByOrder([...i.history])) : null;
   if (now) return { text: `This transposes into ${theName(now)}: the same position by another move order.`, squares: [] };
   // The masters' roads ahead, shallowest first: a road at the next move counts
-  // from 2% of their games (the named-roads bar), a deeper one from 10%.
+  // from 2% of their games (the named-roads bar), a deeper one from 5%.
   type Node = { fen: string; sans: string[]; history: string[] };
   let frontier: Node[] = [{ fen: c.fen(), sans: [], history: [...i.history] }];
   for (let depth = 1; depth <= 3; depth += 1) {
@@ -259,7 +259,7 @@ export function transpositionRead(i: { history: readonly string[]; movesAt: (fen
       const roads = i.movesAt(node.fen) ?? [];
       const total = roads.reduce((n, m) => n + m.games, 0);
       for (const r of [...roads].sort((a, b) => b.games - a.games)) {
-        if (total === 0 || r.games / total < (depth === 1 ? 0.02 : 0.1)) break;
+        if (total === 0 || r.games / total < (depth === 1 ? 0.02 : 0.05)) break;
         const n2 = new Chess(node.fen);
         let mv;
         try { mv = n2.move(r.san); } catch { continue; }
@@ -589,16 +589,21 @@ export function choiceAheadRead(i: { fenBefore: string; san: string; mover: Colo
   if (total === 0) return null;
   const real = [...roads].sort((a, b) => b.games - a.games).filter((r) => r.games / total >= 0.1);
   if (real.length < 2 || real[0].games / total >= 0.85) return null;
-  const said: string[] = []; const squares: string[] = [];
+  const names: string[] = []; const jobs: string[] = []; const squares: string[] = [];
   for (const r of real) {
     let job: ReturnType<typeof moveJob> = null;
     try { job = moveJob(fen, r.san, them, THEIRS, null, NO_FOLLOW); } catch { job = null; }
     if (!job?.clause) return null;
+    const clause = withoutCastleTail(job.clause).replace(/^it /, '');
+    // Two roads that do the same job are one road, not a choice.
+    if (jobs.includes(clause)) continue;
     const m = new Chess(fen).move(r.san);
-    said.push(`${them === 'b' ? '…' : ''}${r.san.replace(/[+#]$/, '')}, which ${withoutCastleTail(job.clause).replace(/^it /, '')}`);
-    squares.push(m.to);
+    const said = `${them === 'b' ? '…' : ''}${r.san.replace(/[+#]$/, '')}`;
+    names.push(said); jobs.push(clause); squares.push(m.to);
   }
-  return { text: `Next, the choice is theirs: ${orList(said)}.`, squares, claim: `decision:${positionOf(fen)}` };
+  if (names.length < 2) return null;
+  // One idea a sentence: the roads, then what each does.
+  return { text: `Next, the choice is theirs: ${orList(names)}. ${names.map((n, k) => `${n} ${jobs[k]}.`).join(' ')}`, squares, claim: `decision:${positionOf(fen)}` };
 }
 
 /** The move before the last of `history`, with its board. */
