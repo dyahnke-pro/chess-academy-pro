@@ -29,7 +29,8 @@ import { clubGemBoards, clubGemForIndex, type ClubGem } from './clubGems';
 import { computeExchangeLedger, netPieceWords } from './exchangeLedger';
 import { slipNoun } from './trapWords';
 import { trapLine } from './trapLine';
-import { getAllPunishGems, isKnownSlipGem, isWeaponGem, MATE_CP, TRAP_BAR_CP } from '../data/lessons/punishGems';
+import { getAllPunishGems, isKnownSlipGem, isWeaponGem, MATE_CP } from '../data/lessons/punishGems';
+import { classifySlip } from './trapComputer';
 import { famousTrapsAt, famousTrapName } from './famousTraps';
 import { legalLineProof, NO_PROOF, type Proof } from './proof';
 import { lineSeatAt } from '../utils/andList';
@@ -125,7 +126,7 @@ export function knownSlipsAt(index: KnownSlipIndex | null, fen: string): readonl
   const famous = famousTrapsAt(fen);
   if (famous.length === 0) return found;
   const named: ClubGem[] = famous.map((t) => ({
-    tier: t.mate || t.endCp >= TRAP_BAR_CP ? 'trap' : 'known',
+    tier: classifySlip({ engineCp: t.mate ? MATE_CP : t.endCp, line: { fen, slip: t.slip, punish: t.punish } }) === 'trap' ? 'trap' : 'known',
     line: t.line, slip: t.slip, by: t.by === 'w' ? 'white' : 'black', best: null, games: 0, share: 0, moverScore: null,
     punish: t.punish.join(' '), mate: t.mate, won: 0, endCp: t.endCp, juice: Number.MAX_SAFE_INTEGER, name: t.name,
   }));
