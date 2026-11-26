@@ -115,7 +115,9 @@ export interface TheoryTurnIn {
   /** Whose move it is, from the student's seat. */
   whose: Whose;
   roads: readonly RoadRead[];
-  plan?: { goal: KeyMove; goalSquare: string; lead: readonly KeyMove[] } | null;
+  /** The plan, with whose it is — REQUIRED: a plan read for the other side is
+   *  theirs, never "your plan". */
+  plan?: { goal: KeyMove; goalSquare: string; lead: readonly KeyMove[]; whose: Whose } | null;
   piece?: PlacedPiece | null;
   castle?: { side: 'short' | 'long' } | null;
   said: ReadonlySet<string>;
@@ -129,7 +131,7 @@ export interface TheoryTurnIn {
   /** The named roads from the board the move reaches (`namedRoadsRead`). */
   namedRoads?: { text: string; squares: string[] } | null;
   /** A trap read off the board by `theoryReads.trapRead` (already worded). */
-  trapSaid?: { text: string; squares: string[] } | null;
+  trapSaid?: { text: string; squares: string[]; slipPlayed?: boolean } | null;
   /** The slip a trap rests on, when the board holds one. */
   trap?: { fen: string; slip: string; punish: readonly string[]; slipBy: FactSeat; before?: string | null } | null;
 }
@@ -141,7 +143,7 @@ export function composeTheoryTurn(i: TheoryTurnIn): TheorySentence[] {
   const decision = keyDecisionLine({ fen: i.fen, san: i.san, mover: i.mover, whose: i.whose, roads: i.roads });
   if (decision) out.push({ kind: 'decision', text: decision.text, squares: [], claim: `decision:${i.fen.split(' ').slice(0, 4).join(' ')}` });
   if (i.namedRoads) out.push({ kind: 'decision', text: i.namedRoads.text, squares: i.namedRoads.squares });
-  if (i.plan) out.push({ kind: 'plan', text: planGoalLine({ whose: i.whose, goal: i.plan.goal, lead: i.plan.lead }), squares: [i.plan.goalSquare] });
+  if (i.plan) out.push({ kind: 'plan', text: planGoalLine({ whose: i.plan.whose, goal: i.plan.goal, lead: i.plan.lead }), squares: [i.plan.goalSquare] });
   if (i.piece) {
     const t = pieceHomeLine({ whose: i.whose, piece: i.piece });
     if (t) out.push({ kind: 'piece', text: t, squares: [i.piece.to] });
@@ -150,7 +152,9 @@ export function composeTheoryTurn(i: TheoryTurnIn): TheorySentence[] {
     const c = castleOnce({ whose: i.whose, side: i.castle.side, said: i.said });
     if (c) out.push({ kind: 'castle', text: c.text, squares: [], claim: c.claim });
   }
-  if (i.gambit) out.push({ kind: 'gambit', text: i.gambit.text, squares: i.gambit.squares });
+  // A move that is itself a known slip offers nothing: the pawn it gives is
+  // the mistake, never a gambit.
+  if (i.gambit && !i.trapSaid?.slipPlayed) out.push({ kind: 'gambit', text: i.gambit.text, squares: i.gambit.squares });
   if (i.structure) out.push({ kind: 'structure', text: i.structure.text, squares: i.structure.squares });
   if (i.moveOrder) out.push({ kind: 'move-order', text: i.moveOrder.text, squares: i.moveOrder.squares });
   if (i.pieceJob) out.push({ kind: 'piece', text: i.pieceJob.text, squares: i.pieceJob.squares });

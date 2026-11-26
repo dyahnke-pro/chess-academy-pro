@@ -176,3 +176,13 @@ describe('pieceJobRead — the lines a pawn move opens', () => {
     expect(pieceJobRead({ fenBefore: new Chess().fen(), san: 'h3', mover: 'w' })).toBeNull();
   });
 });
+
+describe('transpositionRead — wasted tempi are no transposition', () => {
+  it('a named board the index reaches in fewer moves than the road is not said', async () => {
+    const { transpositionRead } = await import('./theoryReads');
+    // 1.e4 e5 2.Nf3 Nc6 3.Ng1 Nb8: the start-of-game e4 e5 board, four plies late.
+    const plies = (f: string): number => (Number(f.split(' ')[5]) - 1) * 2 + (f.split(' ')[1] === 'b' ? 1 : 0);
+    const chain: Record<number, string> = { 4: 'Ng1', 5: 'Nb8' };
+    expect(transpositionRead({ history: ['e4', 'e5', 'Nf3', 'Nc6'], movesAt: (f) => (chain[plies(f)] ? [{ san: chain[plies(f)], games: 50 } as never] : null) })).toBeNull();
+  });
+});

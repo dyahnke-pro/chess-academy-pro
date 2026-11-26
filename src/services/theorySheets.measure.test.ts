@@ -87,7 +87,7 @@ describe.runIf(!!process.env.THEORY_SHEETS && existsSync('data/sources/wikibooks
     const home = ahead ? (mover === 'w' ? ahead.whitePiece : ahead.blackPiece) ?? (mover === 'w' ? ahead.blackPiece : ahead.whitePiece) : null;
     const turn = composeTheoryTurn({
       fen: fenBefore, san, mover, whose: 'your', roads: roadsFrom(masterMovesCachedSync(fenBefore)),
-      plan: goal && brk ? { goal, goalSquare: brk.square, lead: brk.lead ?? [] } : null,
+      plan: goal && brk ? { goal, goalSquare: brk.square, lead: brk.lead ?? [], whose: mine ? 'your' : 'their' } : null,
       piece: home?.fen && home.color ? { piece: home.piece, to: home.to, san: home.san, color: home.color, fen: home.fen } : null,
       structure: structureRead({ fenBefore, san, mover, prior: history.length ? { fenBefore: fenOf(history.slice(0, -1)), san: history[history.length - 1] } : null }) ?? centreRead({ fenBefore, san, mover }),
       gambit: gambitRead({ fenBefore, san, mover }) ?? gambitAcceptedRead({ fenBefore, san, mover }) ?? gambitAheadRead({ fen: fenAfter, movesAt: (f) => masterMovesCachedSync(f) }) ?? gambitStandingRead({ fenBefore, san, mover }),

@@ -82,6 +82,11 @@ describe('a plan read off another board keeps only what lies ahead (Alekhine wal
     expect(r?.blackPiece?.san).toBe('Nc6');
     expect(mastersPlanLine(r, 'w', null)?.text ?? '').not.toMatch(/d6/);
   });
+  it('a key move already on the board is dropped from the plan\'s lead', () => {
+    const withLead: MastersPlanRead = { ...plan, black: { ...plan.black!, lead: [{ san: 'Nf6', piece: 'n', color: 'b' }, { san: 'g6', piece: 'p', color: 'b' }] } };
+    const c = new Chess(); for (const m of ['d4', 'Nf6', 'c4']) c.move(m);
+    expect(planStillAhead(withLead, c.fen())?.black?.lead?.map((m) => m.san)).toEqual(['g6']);
+  });
   it('NEGATIVE CONTROL: before the break it still speaks', () => {
     const c = new Chess(); for (const m of ['e4', 'Nf6', 'e5', 'Nd5', 'd4']) c.move(m);
     expect(planStillAhead(plan, c.fen())?.black?.san).toBe('d6');

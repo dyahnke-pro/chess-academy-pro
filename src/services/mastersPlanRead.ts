@@ -205,7 +205,16 @@ export function planStillAhead(read: MastersPlanRead | null, fen: string): Maste
     if (!x) return null;
     const p = at(x.from);
     const land = at(x.square);
-    return p && p.type === 'p' && p.color === side && land?.color !== side ? x : null;
+    if (!(p && p.type === 'p' && p.color === side && land?.color !== side)) return null;
+    // A key move already on the board is no longer ahead: its piece stands on
+    // the square the move lands on.
+    const lead = x.lead?.filter((m) => {
+      const to = m.san.replace(/[+#!?]+$/, '').match(/([a-h][1-8])(?:=[QRBN])?$/)?.[1];
+      if (!to) return true;
+      const there = at(to);
+      return !(there && there.type === m.piece && there.color === m.color);
+    });
+    return lead && x.lead && lead.length !== x.lead.length ? { ...x, lead } : x;
   };
   const pieceAhead = (x: PieceHome | null, side: 'w' | 'b'): PieceHome | null => {
     if (!x) return null;

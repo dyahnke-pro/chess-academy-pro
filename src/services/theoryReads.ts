@@ -25,7 +25,13 @@ import type { ClubGem } from './clubGems';
 import { withoutCastleTail, composeTheoryTurn } from './theoryComposer';
 import { andList } from '../utils/andList';
 
-export interface TheoryRead { text: string; squares: string[] }
+export interface TheoryRead {
+  text: string;
+  squares: string[];
+  /** A trap read about the move itself being a known slip: the move's offer
+   *  is then the mistake, never a gambit. */
+  slipPlayed?: boolean;
+}
 
 const FILE_NAME: Record<string, string> = { a: 'a', b: 'b', c: 'c', d: 'd', e: 'e', f: 'f', g: 'g', h: 'h' };
 
@@ -199,7 +205,7 @@ const theName = (name: string): string => (/^(?!King|Queen)\S+['’]s\b/.test(na
 export function transpositionRead(i: { history: readonly string[]; movesAt: (fen: string) => readonly LocalDbMove[] | null }): TheoryRead | null {
   const c = new Chess();
   try { for (const s of i.history) c.move(s); } catch { return null; }
-  const now = transposedOpening(c.fen(), i.history.length, detectOpeningByOrder([...i.history]));
+  const now = (openingAtPosition(c.fen())?.plies ?? 0) >= i.history.length ? transposedOpening(c.fen(), i.history.length, detectOpeningByOrder([...i.history])) : null;
   if (now) return { text: `This transposes into ${theName(now)}: the same position by another move order.`, squares: [] };
   // The masters' roads ahead, shallowest first: a road at the next move counts
   // from 2% of their games (the named-roads bar), a deeper one from 10%.
@@ -217,7 +223,9 @@ export function transpositionRead(i: { history: readonly string[]; movesAt: (fen
         try { mv = n2.move(r.san); } catch { continue; }
         const said = `${mv.color === 'b' ? '…' : ''}${r.san.replace(/[+#]$/, '')}`;
         const history = [...node.history, r.san];
-        const into = transposedOpening(n2.fen(), history.length, detectOpeningByOrder(history));
+        // A named board the index reaches in fewer moves than the road takes
+        // is the same board with tempi wasted, not a transposition.
+        const into = (openingAtPosition(n2.fen())?.plies ?? 0) >= history.length ? transposedOpening(n2.fen(), history.length, detectOpeningByOrder(history)) : null;
         const sans = [...node.sans, said];
         if (into) {
           return sans.length === 1
@@ -314,13 +322,13 @@ export function trapRead(i: { fenBefore: string; san: string; mover: Color; slip
   // other side wins by the exchange count (a minor piece's worth or more), and
   // that was not hanging before the move. Never on a check or a trade in flight.
   const hung = hangsRead(i.fenBefore, i.san, i.mover);
-  if (hung) return hung;
+  if (hung) return { ...hung, slipPlayed: true };
   // 1. The move played is a known slip.
   const slipHere = i.slipsAt(i.fenBefore).find((g) => g.slip.replace(/[+#]$/, '') === i.san.replace(/[+#]$/, ''));
   if (slipHere) {
     const kind = kindOf(i.fenBefore, slipHere);
     const r = kind ? say(i.fenBefore, slipHere, i.mover, () => '') : null;
-    if (kind && r) return { text: `That is ${knownLead(kind, 'student')}. ${r.text}`, squares: r.squares };
+    if (kind && r) return { text: `That is ${knownLead(kind, 'student')}. ${r.text}`, squares: r.squares, slipPlayed: true };
   }
   // 1b. The move played keeps clear of a known slip on the same board: the
   // natural alternative that loses.

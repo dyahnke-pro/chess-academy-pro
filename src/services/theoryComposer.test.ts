@@ -51,11 +51,24 @@ describe('theoryComposer — the turn in order', () => {
     const turn = composeTheoryTurn({
       fen, san: 'Bc4', mover: 'w', whose: 'your',
       roads: [{ san: 'Bc4', pct: 60 }, { san: 'd4', pct: 40 }],
-      plan: { goal: mv('d4', 'p'), goalSquare: 'd4', lead: [mv('c3', 'p'), mv('O-O', 'k')] },
+      plan: { goal: mv('d4', 'p'), goalSquare: 'd4', lead: [mv('c3', 'p'), mv('O-O', 'k')], whose: 'your' },
       castle: { side: 'short' },
       said,
     });
     expect(turn.map((t) => t.kind)).toEqual(['decision', 'plan', 'castle']);
     expect(turn[1].text).toBe('Your plan: c3, to break with d4.');
+  });
+});
+
+describe('theoryComposer — a plan is said from its own seat, and a played slip is no gambit', () => {
+  it('their plan reads "Their plan"', () => {
+    const turn = composeTheoryTurn({ fen: fenOf(['c4', 'e5']), san: 'g3', mover: 'w', whose: 'your', roads: [], said: new Set(),
+      plan: { goal: mv('d5', 'p', 'b'), goalSquare: 'd5', lead: [mv('Nf6', 'n', 'b')], whose: 'their' } });
+    expect(turn.find((t) => t.kind === 'plan')?.text).toBe('Their plan: …Nf6, to break with …d5.');
+  });
+  it('a move that is a known slip says no gambit beside it', () => {
+    const turn = composeTheoryTurn({ fen: fenOf(['Nf3']), san: 'e5', mover: 'b', whose: 'your', roads: [], said: new Set(),
+      gambit: { text: 'It offers the pawn on e5.', squares: ['e5'] }, trapSaid: { text: 'That is a known mistake.', squares: [], slipPlayed: true } });
+    expect(turn.some((t) => t.kind === 'gambit')).toBe(false);
   });
 });
