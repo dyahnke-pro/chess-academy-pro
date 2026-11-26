@@ -13,6 +13,7 @@ import { readFileSync, existsSync, writeFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import { __setLocalDbForTests, masterMovesCachedSync } from './masterPlayLookup';
 import { mastersPlanRead } from './mastersPlanRead';
+import { __setContinuationsForTests } from './mastersContinuation';
 import { composeTheoryTurn, roadsFrom, type KeyMove } from './theoryComposer';
 
 interface Note { lineSan: string[]; positionKey: string; explains: string; teaches: string; plans: string; phase: string }
@@ -32,7 +33,10 @@ const TAGS: Record<Idea | 'structure' | 'trap' | 'move-order' | 'gambit' | 'endg
 const hash = (s: string): number => { let h = 0; for (const ch of s) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return h; };
 
 describe.runIf(!!process.env.THEORY_SHEETS && existsSync('public/data/voiced-teachings.json'))('theory idea sheets', () => {
-  beforeAll(() => { __setLocalDbForTests(JSON.parse(readFileSync('public/data/openings-masters-db.json', 'utf8'))); });
+  beforeAll(() => {
+    __setLocalDbForTests(JSON.parse(readFileSync('public/data/openings-masters-db.json', 'utf8')));
+    if (existsSync('public/data/masters-continuations.json')) __setContinuationsForTests((JSON.parse(readFileSync('public/data/masters-continuations.json', 'utf8')) as { positions: never }).positions);
+  });
   it('scores the composer against the written notes', () => {
     const raw = JSON.parse(readFileSync('public/data/voiced-teachings.json', 'utf8')) as Record<string, Note[]>;
     const notes = Object.values(raw).flat().filter((n) => n.lineSan?.length && n.lineSan.length <= 24 && n.phase === 'opening');
