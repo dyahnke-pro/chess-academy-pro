@@ -58,7 +58,8 @@ describe('getTacticInsights reads the cache and never classifies inline', () => 
 
   it('shares ONE games-table read across insights asked for at the same moment', { timeout: 20000 }, async () => {
     const { getOverviewInsights, getTacticInsights, getOpeningInsights, getMistakeInsights } = await import('./gameInsightsService');
-    const spy = vi.spyOn(db.games, 'filter');
+    // The read is the paged library scan (`gameScan`): one key read per pass.
+    const spy = vi.spyOn(db.games, 'toCollection');
     await Promise.all([getOverviewInsights(), getTacticInsights(), getOpeningInsights(), getMistakeInsights()]);
     expect(spy).toHaveBeenCalledTimes(1);
     // A later ask reads fresh — nothing is served from a settled snapshot.

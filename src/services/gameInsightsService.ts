@@ -11,6 +11,8 @@ import { gameNeedsAnalysis } from './gameAnalysisService';
 import { TACTIC_TYPE_REV } from './tacticTypeBackfill';
 import { MOTIF_OF_TACTIC, tacticTypesOf, type MotifId } from '../data/tacticMotifs';
 import { getOpeningNameByEco } from './openingDetectionService';
+import { headerOf, scanGames, SCAN_PAGE_SIZE, type GameHeader } from './gameScan';
+import { pickRows } from './stampScan';
 import type {
   GameInsightStats,
   GameRecord,
@@ -49,25 +51,25 @@ function getPlayerColorWithUsername(
   return null;
 }
 
-function getOpponentName(game: GameRecord, playerColor: 'white' | 'black'): string {
+function getOpponentName(game: GameHeader, playerColor: 'white' | 'black'): string {
   return playerColor === 'white' ? game.black : game.white;
 }
 
-function getOpponentElo(game: GameRecord, playerColor: 'white' | 'black'): number | null {
+function getOpponentElo(game: GameHeader, playerColor: 'white' | 'black'): number | null {
   return playerColor === 'white' ? game.blackElo : game.whiteElo;
 }
 
-function isWin(game: GameRecord, playerColor: 'white' | 'black'): boolean {
+function isWin(game: GameHeader, playerColor: 'white' | 'black'): boolean {
   return (playerColor === 'white' && game.result === '1-0') ||
     (playerColor === 'black' && game.result === '0-1');
 }
 
-function isLoss(game: GameRecord, playerColor: 'white' | 'black'): boolean {
+function isLoss(game: GameHeader, playerColor: 'white' | 'black'): boolean {
   return (playerColor === 'white' && game.result === '0-1') ||
     (playerColor === 'black' && game.result === '1-0');
 }
 
-function isDraw(game: GameRecord): boolean {
+function isDraw(game: GameHeader): boolean {
   return game.result === '1/2-1/2';
 }
 
@@ -97,9 +99,23 @@ async function getUsername(): Promise<string | null> {
     profile.name;
 }
 
+/** One of the player's games as the insights read it: its header plus what
+ *  the insights derive from its PGN and annotations, computed while the full
+ *  record is in hand and then let go (`gameScan`, 2026-11-26 — holding every
+ *  record to answer this is what got the web view killed). */
 interface AnnotatedGame {
-  game: GameRecord;
+  game: GameHeader;
   playerColor: 'white' | 'black';
+  fullMoves: number;
+  vsComputer: boolean;
+  awaitsAnalysis: boolean;
+  hasAnnotations: boolean;
+  /** The game's insight stats — null when it has no annotations. */
+  stats: GameInsightStats | null;
+  /** The player stood at +2 or better at some point. */
+  hadAdvantage: boolean;
+  /** Mistakes and blunders in the last ten annotated moves. */
+  lateErrors: number;
 }
 
 /** Centipawns a played move may trail the engine's best and still count as
@@ -181,7 +197,7 @@ function awaitsAnalysis(game: GameRecord): boolean {
 export async function getAnalysisCounts(): Promise<{ totalGames: number; analyzedGameCount: number; gamesNeedingAnalysis: number }> {
   const playerGames = await getPlayerGames();
   let gamesNeedingAnalysis = 0;
-  for (const { game } of playerGames) if (awaitsAnalysis(game)) gamesNeedingAnalysis++;
+  for (const g of playerGames) if (g.awaitsAnalysis) gamesNeedingAnalysis++;
   return { totalGames: playerGames.length, analyzedGameCount: playerGames.length - gamesNeedingAnalysis, gamesNeedingAnalysis };
 }
 
@@ -192,18 +208,96 @@ function getPlayerGames(): Promise<AnnotatedGame[]> {
   return playerGamesInFlight;
 }
 
-async function readPlayerGames(): Promise<AnnotatedGame[]> {
-  const allGames = await db.games
-    .filter((g) => !g.isMasterGame && g.result !== '*')
-    .toArray();
-  const username = await getUsername();
-
-  const result: AnnotatedGame[] = [];
-  for (const game of allGames) {
-    const color = getPlayerColorWithUsername(game, username);
-    if (color) {
-      result.push({ game, playerColor: color });
+/**
+ * Each game's summary, kept for the session and dropped the moment that game
+ * is written (2026-11-26). The page re-asked for the whole library every 25
+ * games of the tactic backfill, and every open re-read it — each a pass over
+ * every full record, PGN and engine lines and all, to rebuild summaries that
+ * had not changed. Only a game nobody has summarised (new, or rewritten) is
+ * read now. A write that touches only the stamps the summary does not read
+ * from (its insight stats, the tactic classifier's stamp) keeps it.
+ */
+const summaryCache = new Map<string, AnnotatedGame | null>();
+let summaryCacheUser: string | null | undefined;
+let summaryHooked = false;
+/** A write landing while a game is being summarised must not leave the
+ *  pre-write summary behind: each drop is stamped, and a summary read before
+ *  its game's last drop is discarded. */
+let writeSeq = 0;
+const lastWriteAt = new Map<string, number>();
+const SUMMARY_SAFE_FIELDS: ReadonlySet<string> = new Set(['insightStats', 'tacticsClassifiedRev', 'foundTacticTypes']);
+function hookSummaryCache(): void {
+  if (summaryHooked) return;
+  summaryHooked = true;
+  db.on('close', () => { summaryCache.clear(); });
+  const drop = (key: unknown): void => {
+    if (typeof key !== 'string') return;
+    summaryCache.delete(key);
+    lastWriteAt.set(key, ++writeSeq);
+  };
+  db.games.hook('creating', (key) => { drop(key); });
+  db.games.hook('deleting', (key) => { drop(key); });
+  db.games.hook('updating', (mods, key) => {
+    const fields = Object.keys(mods as Record<string, unknown>);
+    if (fields.every((f) => SUMMARY_SAFE_FIELDS.has(f))) {
+      const cached = typeof key === 'string' ? summaryCache.get(key) : undefined;
+      const rev = (mods as { tacticsClassifiedRev?: string }).tacticsClassifiedRev;
+      if (cached && rev !== undefined) cached.game = { ...cached.game, tacticsClassifiedRev: rev };
+      return;
     }
+    drop(key);
+  });
+}
+
+/** Tests only: forget the summaries. */
+export function clearPlayerGameSummaries(): void { summaryCache.clear(); }
+
+async function summarise(game: GameRecord, username: string | null): Promise<AnnotatedGame | null> {
+  if (game.isMasterGame || game.result === '*') return null;
+  const playerColor = getPlayerColorWithUsername(game, username);
+  if (!playerColor) return null;
+  const anns = game.annotations ?? [];
+  const hasAnnotations = anns.length > 0;
+  let stats: GameInsightStats | null = null;
+  if (hasAnnotations) {
+    await sliceYield();
+    stats = statsFor(game, playerColor);
+  }
+  let hadAdvantage = false;
+  for (const a of anns) {
+    if (a.evaluation === null) continue;
+    if ((playerColor === 'white' ? a.evaluation : -a.evaluation) >= 200) { hadAdvantage = true; break; }
+  }
+  let lateErrors = 0;
+  for (const a of anns.slice(-10)) if (a.classification === 'blunder' || a.classification === 'mistake') lateErrors++;
+  return {
+    game: headerOf(game), playerColor,
+    fullMoves: countFullMovesInPgn(game.pgn),
+    vsComputer: isComputerOpponent(game),
+    awaitsAnalysis: awaitsAnalysis(game),
+    hasAnnotations, stats, hadAdvantage, lateErrors,
+  };
+}
+
+async function readPlayerGames(): Promise<AnnotatedGame[]> {
+  hookSummaryCache();
+  const username = await getUsername();
+  if (username !== summaryCacheUser) { summaryCache.clear(); summaryCacheUser = username; }
+  const keys = await db.games.toCollection().primaryKeys();
+  const unread = keys.filter((k) => !summaryCache.has(k));
+  const readFrom = writeSeq;
+  await pickRows(db.games, unread, async (game) => {
+    const summary = await summarise(game, username);
+    if ((lastWriteAt.get(game.id) ?? 0) <= readFrom) summaryCache.set(game.id, summary);
+    return null;
+  }, SCAN_PAGE_SIZE);
+  await persistStats();
+  const result: AnnotatedGame[] = [];
+  for (const k of keys) {
+    // A game rewritten mid-read is summarised from what was read; the next
+    // ask reads it again.
+    const s = summaryCache.get(k);
+    if (s) result.push(s);
   }
   return result;
 }
@@ -374,7 +468,7 @@ export async function getOverviewInsights(): Promise<OverviewInsights> {
     endgame: { accuracy: 0, count: 0, mistakes: 0 },
   };
 
-  for (const { game, playerColor } of playerGames) {
+  for (const { game, playerColor, fullMoves, vsComputer, awaitsAnalysis: waiting, stats } of playerGames) {
     // W/L/D
     if (isWin(game, playerColor)) wins++;
     else if (isLoss(game, playerColor)) losses++;
@@ -395,12 +489,12 @@ export async function getOverviewInsights(): Promise<OverviewInsights> {
     // games' moves but divided by ALL games → diluted (~½ on a corpus
     // that's only partly analyzed). Same denominator-mismatch class as the
     // drilldown err/game bug (David 2026-06-12).
-    totalMoves += countFullMovesInPgn(game.pgn);
+    totalMoves += fullMoves;
 
     // Opponent ELO
     // A computer set to a strength is not a rated opponent (walk 6, W3): it
     // sits out every opponent-rating stat.
-    const vsPerson = !isComputerOpponent(game);
+    const vsPerson = !vsComputer;
     const oppElo = vsPerson ? getOpponentElo(game, playerColor) : null;
     if (oppElo) {
       totalElo += oppElo;
@@ -423,9 +517,7 @@ export async function getOverviewInsights(): Promise<OverviewInsights> {
     // contribute — sparse `detectBlunders()` annotations on import would
     // otherwise zero out every average (and produce a misleading "zero
     // blunders" strength) because most moves have no classification.
-    if (!gameNeedsAnalysis(game, { depthUpgrade: false })) {
-      await sliceYield();
-      const stats = statsFor(game, playerColor);
+    if (!waiting && stats) {
       if (stats.plies === 0) continue;
 
       addClassifications(totalCounts, stats.counts);
@@ -498,17 +590,15 @@ export async function getOverviewInsights(): Promise<OverviewInsights> {
   let zeroBlunderGames = 0;
   let analyzedGameCount = 0;
   let gamesNeedingAnalysis = 0;
-  for (const { game, playerColor } of playerGames) {
-    if (awaitsAnalysis(game)) {
+  for (const g of playerGames) {
+    if (g.awaitsAnalysis) {
       gamesNeedingAnalysis++;
       continue;
     }
     analyzedGameCount++;
-    const stats = statsFor(game, playerColor);
-    if (stats.plies === 0) continue;
-    if (stats.counts.blunder === 0) zeroBlunderGames++;
+    if (!g.stats || g.stats.plies === 0) continue;
+    if (g.stats.counts.blunder === 0) zeroBlunderGames++;
   }
-  await persistStats();
   if (zeroBlunderGames >= 3) strengths.push(`${zeroBlunderGames} games with zero blunders`);
 
   return {
@@ -793,26 +883,14 @@ export async function getMistakeInsights(): Promise<MistakeInsights> {
 
   // Thrown wins: games where player had +200cp advantage and lost
   let thrownWins = 0;
-  for (const { game, playerColor } of playerGames) {
+  for (const { game, playerColor, hadAdvantage } of playerGames) {
     if (!isLoss(game, playerColor)) continue;
-    if (!game.annotations || game.annotations.length === 0) continue;
-
-    const hadAdvantage = game.annotations.some((ann) => {
-      if (ann.evaluation === null) return false;
-      const signedEval = playerColor === 'white' ? ann.evaluation : -ann.evaluation;
-      return signedEval >= 200;
-    });
     if (hadAdvantage) thrownWins++;
   }
 
   // Late-game collapses: 2+ errors in last 10 moves
   let lateGameCollapses = 0;
-  for (const { game } of playerGames) {
-    if (!game.annotations || game.annotations.length === 0) continue;
-    const lastMoves = game.annotations.slice(-10);
-    const lateErrors = lastMoves.filter(
-      (m) => m.classification === 'blunder' || m.classification === 'mistake',
-    ).length;
+  for (const { lateErrors } of playerGames) {
     if (lateErrors >= 2) lateGameCollapses++;
   }
 
@@ -878,12 +956,8 @@ export async function getTacticInsights(): Promise<TacticInsights> {
   const worstMisses: TacticalMoment[] = [];
   let totalMissed = 0;
 
-  for (const { game, playerColor } of playerGames) {
-    if (!game.annotations || game.annotations.length === 0) continue;
-
-    await sliceYield();
-    const stats = statsFor(game, playerColor);
-    if (stats.plies === 0) continue;
+  for (const { game, playerColor, stats } of playerGames) {
+    if (!stats || stats.plies === 0) continue;
 
     totalBrilliant += stats.counts.brilliant;
     totalGreat += stats.counts.great;
@@ -919,8 +993,8 @@ export async function getTacticInsights(): Promise<TacticInsights> {
   const playerGameIds = new Set(playerGames.map(({ game }) => game.id));
   const classified = (await db.classifiedTactics.toArray())
     .filter((t) => playerGameIds.has(t.sourceGameId));
-  const gamesPendingClassification = playerGames.filter(({ game }) =>
-    game.tacticsClassifiedRev !== TACTIC_TYPE_REV && !!game.annotations && game.annotations.length > 0,
+  const gamesPendingClassification = playerGames.filter(({ game, hasAnnotations }) =>
+    game.tacticsClassifiedRev !== TACTIC_TYPE_REV && hasAnnotations,
   ).length;
   totalMissed = classified.length;
   for (const m of classified) {
@@ -968,9 +1042,7 @@ export async function getTacticInsights(): Promise<TacticInsights> {
     ? Math.round((totalFound / (totalFound + totalMissed)) * 100)
     : 0;
 
-  const annotatedGameCount = playerGames.filter(
-    ({ game }) => game.annotations && game.annotations.length > 0,
-  ).length;
+  const annotatedGameCount = playerGames.filter((g) => g.hasAnnotations).length;
 
   const missedByMotifArr = Array.from(missedByMotif.entries())
     .map(([motif, data]) => ({
@@ -989,7 +1061,6 @@ export async function getTacticInsights(): Promise<TacticInsights> {
   if (totalBrilliant >= 3) strengths.push(`${totalBrilliant} brilliant moves found`);
   if (totalGreat >= 5) strengths.push(`${totalGreat} great moves found`);
 
-  await persistStats();
   return {
     tacticsFound: { brilliant: totalBrilliant, great: totalGreat },
     avgBrilliantsPerGame: annotatedGameCount > 0
@@ -1050,11 +1121,11 @@ export async function getLastGameResult(): Promise<LastGameLike | null> {
   const pg = await getPlayerGames();
   if (pg.length === 0) return null;
   const sorted = [...pg].sort((a, b) => (b.game.date ?? '').localeCompare(a.game.date ?? ''));
-  const { game, playerColor } = sorted[0];
+  const { game, playerColor, fullMoves } = sorted[0];
   const outcome: 'win' | 'loss' | 'draw' = isWin(game, playerColor) ? 'win' : isLoss(game, playerColor) ? 'loss' : 'draw';
   const opponent = (playerColor === 'white' ? game.black : game.white) || null;
   const opening = game.eco ? (getOpeningNameByEco(game.eco) ?? null) : null;
-  const movesPlayed = game.pgn ? countFullMovesInPgn(game.pgn) : null;
+  const movesPlayed = fullMoves > 0 ? fullMoves : null;
   return { outcome, playerColor, opponent, opening, endReason: terminationPhrase(game.termination), movesPlayed };
 }
 
@@ -1091,7 +1162,7 @@ export async function getLastGameErrors(offset = 0): Promise<LastGameErrors | nu
   const outcome: 'win' | 'loss' | 'draw' = isWin(game, playerColor) ? 'win' : isLoss(game, playerColor) ? 'loss' : 'draw';
   const opponent = (playerColor === 'white' ? game.black : game.white) || null;
   const opening = game.eco ? (getOpeningNameByEco(game.eco) ?? null) : null;
-  const analyzed = !!game.annotations && game.annotations.length > 0;
+  const analyzed = sorted[idx].hasAnnotations;
 
   const puzzles = (await db.mistakePuzzles.where('sourceGameId').equals(game.id).toArray());
   const errorCount = {
@@ -1186,11 +1257,17 @@ const STYLE_PROFILE_MIN_GAMES = 5;
  * counter-repertoire recommendations). Pure aggregation — G0.
  */
 export async function getPlayerStyleProfile(): Promise<PlayerStyleProfile | null> {
-  const games = await getPlayerGames();
+  // Its own pass: the style reads the annotations, which the shared summaries
+  // let go of (`gameScan`).
+  const username = await getUsername();
+  const styles = await scanGames((game) => (
+    !game.isMasterGame && game.result !== '*' && getPlayerColorWithUsername(game, username)
+      ? classifyGameStyle(game).style
+      : null
+  ));
   const breakdown: Partial<Record<GameStyle, number>> = {};
   let total = 0;
-  for (const { game } of games) {
-    const { style } = classifyGameStyle(game);
+  for (const style of styles) {
     if (style === 'unanalyzed') continue;
     breakdown[style] = (breakdown[style] ?? 0) + 1;
     total += 1;

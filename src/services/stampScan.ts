@@ -23,20 +23,30 @@ export async function keysNotStampedAt<T, I>(table: Table<T, string, I>, stampFi
 
 /** Read only these rows (the ones a keys-only read said may be behind), a
  *  few at a time, keeping only what `pick` returns — so a whole library behind
- *  is never held in memory at once, analysis and all. */
+ *  is never held in memory at once, analysis and all. `pick` may be async; the
+ *  thread is handed back between chunks. The one paged reader (`gameScan`
+ *  walks the whole games table through it). */
 export async function pickRows<T, I, R>(
   table: Table<T, string, I>,
   keys: readonly string[],
-  pick: (row: T) => R | null,
+  pick: (row: T) => R | null | Promise<R | null>,
   chunk = 25,
 ): Promise<R[]> {
   const out: R[] = [];
   for (let i = 0; i < keys.length; i += chunk) {
-    for (const row of await table.bulkGet(keys.slice(i, i + chunk))) {
+    const page = await table.bulkGet(keys.slice(i, i + chunk));
+    pickPeak = Math.max(pickPeak, page.length);
+    for (const row of page) {
       if (row === undefined) continue;
-      const r = pick(row);
+      const r = await pick(row);
       if (r !== null) out.push(r);
     }
+    if (i + chunk < keys.length) await new Promise<void>((resolve) => { setTimeout(resolve, 0); });
   }
   return out;
 }
+
+/** The most full rows any `pickRows` page has held — read by the tests. */
+let pickPeak = 0;
+export function pickRowsPeak(): number { return pickPeak; }
+export function resetPickRowsPeak(): void { pickPeak = 0; }

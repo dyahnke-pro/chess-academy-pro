@@ -509,6 +509,7 @@ export type AuditKind =
   // The crash-loop breaker held heavy work because the last session's web
   // view was killed in front of the student (2026-11-25, sessionWatch).
   | 'crash-loop-breaker'
+  | 'launch-landed-home'
   // A line from ANOTHER search reached an open read (its first move is not a
   // move of the read's side to move) and was ignored. The shared worker carries
   // no search id, so this counts how often two searches crossed (walk

@@ -17,6 +17,7 @@
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import type { GameRecord } from '../types';
+import { scanGames } from './gameScan';
 import { findTheoryDeparture } from './theoryDeparture';
 import { resolvePlayerColor } from './conversionDetector';
 import type { BookDepartureRow } from './bookDepartureWeakness';
@@ -113,12 +114,18 @@ async function readCache(): Promise<CacheShape | null> {
 }
 
 let refreshing = false;
-async function refresh(games: readonly GameRecord[], names: Names, rating: number): Promise<void> {
+async function refresh(gameCount: number, names: Names, rating: number): Promise<void> {
   if (refreshing) return;
   refreshing = true;
   try {
-    const rows = await computeBookDepartureRows(games, names, rating);
-    await db.meta.put({ key: META_KEY, value: JSON.stringify({ at: Date.now(), gameCount: games.length, rows } satisfies CacheShape) });
+    // Its own read of the few recent games it scans (`gameScan`): the callers
+    // hand over headers, and the full records are never all held at once.
+    const recent = (await scanGames((g) => (g.fullyAnalyzed && g.annotations && g.annotations.length >= 4 ? { id: g.id, date: g.date } : null)))
+      .sort((a, b) => (Date.parse(b.date) || 0) - (Date.parse(a.date) || 0))
+      .slice(0, MAX_GAMES);
+    const full = (await db.games.bulkGet(recent.map((r) => r.id))).filter((g): g is GameRecord => !!g);
+    const rows = await computeBookDepartureRows(full, names, rating);
+    await db.meta.put({ key: META_KEY, value: JSON.stringify({ at: Date.now(), gameCount, rows } satisfies CacheShape) });
   } catch { /* best-effort — the cache just stays stale */ }
   finally { refreshing = false; }
 }
@@ -131,13 +138,13 @@ async function refresh(games: readonly GameRecord[], names: Names, rating: numbe
  * "precompute once per game, stay scoped" contract (David 2026-09-08).
  */
 export async function getCachedBookDepartureRows(
-  games: readonly GameRecord[],
+  games: ReadonlyArray<{ id: string }>,
   names: Names,
   rating: number,
 ): Promise<BookDepartureRow[]> {
   const cache = await readCache();
   const stale = !cache || Date.now() - cache.at > TTL_MS || cache.gameCount !== games.length;
-  if (stale) void refresh(games, names, rating);
+  if (stale) void refresh(games.length, names, rating);
   return cache?.rows ?? [];
 }
 
