@@ -11,10 +11,11 @@ import { openingEquivalence } from './openingEquivalence';
 import { pawnMajority } from './pawnMajority';
 import { inFluxAfter } from './boardState';
 import { findHangingBySee, bishopHemmedByOwnPawns, findWeakPawns } from './positionReadingService';
-import { openingAtPosition } from './openingPositions';
+import { openingAtPosition, openingPositionsLoaded } from './openingPositions';
 import { transposedOpening } from './openingPositions';
 import { detectOpeningByOrder } from './openingDetectionService';
-import type { LocalDbMove } from './masterPlayLookup';
+import { mastersDbLoaded, type LocalDbMove } from './masterPlayLookup';
+import { knownSlipIndexLoaded } from './knownSlips';
 import { moveJob, MINE, THEIRS } from './bookMoveWhy';
 import { NO_FOLLOW } from './exchangeLedger';
 import { hangLine, trapLine } from './trapLine';
@@ -615,6 +616,42 @@ function priorOf(history: readonly string[]): { fenBefore: string; san: string }
   try { const c = new Chess(); for (const s of history.slice(0, -1)) c.move(s); return { fenBefore: c.fen(), san: history[history.length - 1] }; } catch { return null; }
 }
 
+/** The reads of one move, pure over the board and the tables: remembered by
+ *  the line, so the Review's lecture — built again when the corpus and the
+ *  engine land — reads each move once. */
+interface MoveReads {
+  ahead: ReturnType<typeof planAheadRead>;
+  choice: ReturnType<typeof choiceAheadRead>;
+  structure: TheoryRead | null; gambit: TheoryRead | null; endgame: TheoryRead | null;
+  namedRoads: TheoryRead | null; moveOrder: TheoryRead | null; trap: TheoryRead | null; pieceJob: TheoryRead | null;
+}
+const readsMemo = new Map<string, MoveReads>();
+function movesReads(i: { history: readonly string[]; fenBefore: string; san: string; mover: Color; movesAt: (fen: string) => readonly LocalDbMove[] | null; slipsAt: (fen: string) => readonly ClubGem[] }): MoveReads {
+  const key = `${i.history.join(' ')}|${i.san}`;
+  const hit = readsMemo.get(key);
+  if (hit) return hit;
+  const after = (() => { const c = new Chess(i.fenBefore); c.move(i.san); return c.fen(); })();
+  const m = { fenBefore: i.fenBefore, san: i.san, mover: i.mover };
+  const reads: MoveReads = {
+    ahead: planAheadRead({ history: i.history, san: i.san, mover: i.mover, whose: 'your', movesAt: i.movesAt }),
+    choice: choiceAheadRead({ ...m, movesAt: i.movesAt }),
+    structure: structureRead({ ...m, prior: priorOf(i.history) }) ?? centreRead(m),
+    gambit: gambitRead(m) ?? sacrificeRead({ ...m, movesAt: i.movesAt }) ?? gambitAcceptedRead(m) ?? gambitDeclinedRead(m) ?? gambitAheadRead({ fen: after, movesAt: i.movesAt }) ?? gambitStandingRead(m),
+    endgame: endgameRead({ fenBefore: i.fenBefore, san: i.san, movesAt: i.movesAt }),
+    namedRoads: namedRoadsRead({ fen: after, movesAt: i.movesAt }),
+    moveOrder: moveOrderRead({ history: [...i.history, i.san], student: i.mover }) ?? transpositionRead({ history: [...i.history, i.san], movesAt: i.movesAt }),
+    trap: trapRead({ ...m, slipsAt: i.slipsAt, movesAt: i.movesAt }),
+    pieceJob: pieceJobRead(m),
+  };
+  // Remembered only once every table it reads is in memory: a read taken
+  // while one is still loading is not the answer the loaded table gives.
+  if (mastersDbLoaded() && openingPositionsLoaded() && knownSlipIndexLoaded()) {
+    if (readsMemo.size > 300) readsMemo.clear();
+    readsMemo.set(key, reads);
+  }
+  return reads;
+}
+
 export function theoryExtras(i: {
   history: readonly string[]; fenBefore: string; san: string; mover: Color;
   movesAt: (fen: string) => readonly LocalDbMove[] | null;
@@ -628,23 +665,22 @@ export function theoryExtras(i: {
     return r;
   };
   const fresh = (r: TheoryRead | null): TheoryRead | null => { if (!r || i.said.has(r.text)) return null; i.said.add(r.text); return r; };
-  const ahead = planAheadRead({ history: i.history, san: i.san, mover: i.mover, whose: 'your', movesAt: i.movesAt });
+  const r = movesReads(i);
   // The plan and the piece it brings are news when they change.
-  const planText = ahead.plan ? `plan:${ahead.plan.whose}:${ahead.plan.goal.san}:${ahead.plan.lead.map((m) => m.san).join(',')}` : null;
-  const pieceText = ahead.piece ? `piece:${ahead.piece.color}:${ahead.piece.san}` : null;
-  const plan = planText && !i.said.has(planText) ? (i.said.add(planText), ahead.plan) : null;
-  const piece = pieceText && !i.said.has(pieceText) ? (i.said.add(pieceText), ahead.piece) : null;
-  const choice = choiceAheadRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover, movesAt: i.movesAt });
-  const choiceAhead = choice && !i.said.has(choice.claim) ? (i.said.add(choice.claim), choice) : null;
+  const planText = r.ahead.plan ? `plan:${r.ahead.plan.whose}:${r.ahead.plan.goal.san}:${r.ahead.plan.lead.map((m) => m.san).join(',')}` : null;
+  const pieceText = r.ahead.piece ? `piece:${r.ahead.piece.color}:${r.ahead.piece.san}` : null;
+  const plan = planText && !i.said.has(planText) ? (i.said.add(planText), r.ahead.plan) : null;
+  const piece = pieceText && !i.said.has(pieceText) ? (i.said.add(pieceText), r.ahead.piece) : null;
+  const choiceAhead = r.choice && !i.said.has(r.choice.claim) ? (i.said.add(r.choice.claim), r.choice) : null;
   const turn = composeTheoryTurn({
     fen: i.fenBefore, san: i.san, mover: i.mover, whose: 'your', roads: [], plan, piece, choiceAhead,
-    structure: once('structure', structureRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover, prior: priorOf(i.history) }) ?? centreRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })),
-    gambit: once('gambit', gambitRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover }) ?? sacrificeRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover, movesAt: i.movesAt }) ?? gambitAcceptedRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover }) ?? gambitDeclinedRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover }) ?? gambitAheadRead({ fen: (() => { const c = new Chess(i.fenBefore); c.move(i.san); return c.fen(); })(), movesAt: i.movesAt }) ?? gambitStandingRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })),
-    endgame: once('endgame', endgameRead({ fenBefore: i.fenBefore, san: i.san, movesAt: i.movesAt })),
-    namedRoads: fresh(namedRoadsRead({ fen: (() => { const c = new Chess(i.fenBefore); c.move(i.san); return c.fen(); })(), movesAt: i.movesAt })),
-    moveOrder: fresh(moveOrderRead({ history: [...i.history, i.san], student: i.mover }) ?? transpositionRead({ history: [...i.history, i.san], movesAt: i.movesAt })),
-    trapSaid: fresh(trapRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover, slipsAt: i.slipsAt, movesAt: i.movesAt })),
-    pieceJob: i.withPieceJob ? fresh(pieceJobRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })) : null,
+    structure: once('structure', r.structure),
+    gambit: once('gambit', r.gambit),
+    endgame: once('endgame', r.endgame),
+    namedRoads: fresh(r.namedRoads),
+    moveOrder: fresh(r.moveOrder),
+    trapSaid: fresh(r.trap),
+    pieceJob: i.withPieceJob ? fresh(r.pieceJob) : null,
     said: i.said,
   });
   return turn.map((t) => t.text);

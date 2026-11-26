@@ -284,3 +284,11 @@ describe('sacrificeRead — a named gambit is played on purpose', () => {
     expect(r?.text).toBe('Nxe5 gives up the knight: a sacrifice, played for the attack and the time it wins.');
   });
 });
+
+describe('theoryExtras — a rebuilt lecture says the same', () => {
+  it('the second build of a move (remembered reads) matches the first', async () => {
+    const { theoryExtras } = await import('./theoryReads');
+    const args = (said: Set<string>) => ({ history: ['d4', 'd5'], fenBefore: fenOf(['d4', 'd5']), san: 'c4', mover: 'w' as const, movesAt: () => null, slipsAt: () => [], said, withPieceJob: true });
+    expect(theoryExtras(args(new Set()))).toEqual(theoryExtras(args(new Set())));
+  });
+});
