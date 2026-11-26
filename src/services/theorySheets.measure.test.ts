@@ -41,6 +41,7 @@ const prose = (t: string): string => t
   .replace(/\{\{[^{}]*\}\}/g, '').replace(/\{\{[\s\S]*?\n\}\}/g, '').replace(/<table[\s\S]*?<\/table>/g, '').replace(/<[^>]+>/g, '')
   .replace(/\[\[(?:[^|\]]*\|)?([^\]]*)\]\]/g, '$1').replace(/'''?/g, '')
   .split('\n').map((l) => l.trim()).filter((l) => l && !/^[=|*{}!:]/.test(l)).join(' ');
+const fenOf = (sans: readonly string[]): string => { const c = new Chess(); for (const s of sans) c.move(s); return c.fen(); };
 const hash = (s: string): number => { let h = 0; for (const ch of s) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return h; };
 
 interface Note { title: string; lineSan: string[]; text: string }
@@ -89,7 +90,7 @@ describe.runIf(!!process.env.THEORY_SHEETS && existsSync('data/sources/wikibooks
       fen: fenBefore, san, mover, whose: 'your', roads: roadsFrom(masterMovesCachedSync(fenBefore)),
       plan: goal && brk ? { goal, goalSquare: brk.square, lead: brk.lead ?? [] } : null,
       piece: home?.fen && home.color ? { piece: home.piece, to: home.to, san: home.san, color: home.color, fen: home.fen } : null,
-      structure: structureRead({ fenBefore, san, mover }) ?? centreRead({ fenBefore, san, mover }),
+      structure: structureRead({ fenBefore, san, mover, prior: history.length ? { fenBefore: fenOf(history.slice(0, -1)), san: history[history.length - 1] } : null }) ?? centreRead({ fenBefore, san, mover }),
       gambit: gambitRead({ fenBefore, san, mover }) ?? gambitAheadRead({ fen: fenAfter, movesAt: (f) => masterMovesCachedSync(f) }) ?? gambitStandingRead({ fenBefore, san, mover }),
       endgame: endgameRead({ fenBefore, san, movesAt: (f) => masterMovesCachedSync(f) }),
       moveOrder: moveOrderRead({ history: n.lineSan, student: mover }) ?? transpositionRead({ history: n.lineSan, movesAt: (f) => masterMovesCachedSync(f) }),

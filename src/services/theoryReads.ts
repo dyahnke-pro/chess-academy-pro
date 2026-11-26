@@ -8,6 +8,8 @@ import { Chess, type Color } from 'chess.js';
 import { namedStructureFormed, namedStructureLine } from './namedStructure';
 import { lockedPawnPairs, structureSignature } from './boardStructure';
 import { openingEquivalence } from './openingEquivalence';
+import { pawnMajority } from './pawnMajority';
+import { inFluxAfter } from './boardState';
 import { openingAtPosition } from './openingPositions';
 import { transposedOpening } from './openingPositions';
 import { detectOpeningByOrder } from './openingDetectionService';
@@ -25,7 +27,11 @@ const FILE_NAME: Record<string, string> = { a: 'a', b: 'b', c: 'c', d: 'd', e: '
 
 /** The pawn structure the move made: a NAMED one (Carlsbad, Maroczy…), else a
  *  locked centre, an isolated central pawn, doubled pawns or a newly open file. */
-export function structureRead(i: { fenBefore: string; san: string; mover: Color }): TheoryRead | null {
+export function structureRead(i: { fenBefore: string; san: string; mover: Color;
+  /** The move before this one (its board and SAN), so a recapture is read
+   *  against the board before the trade began. */
+  prior?: { fenBefore: string; san: string } | null;
+}): TheoryRead | null {
   const named = namedStructureFormed(i.fenBefore, i.san);
   if (named) return { text: namedStructureLine(named, i.mover), squares: named.squares };
   let after: Chess;
@@ -39,8 +45,7 @@ export function structureRead(i: { fenBefore: string; san: string; mover: Color 
   }
   // A capture the other side takes back at once is an exchange in flight: the
   // doubled or isolated pawn it shows is not on the board after the recapture.
-  const lastMove = after.history({ verbose: true }).pop();
-  const inFlight = !!lastMove?.captured && after.attackers(lastMove.to as never, after.turn()).length > 0;
+  const inFlight = inFluxAfter(i.fenBefore, i.san) !== null;
   if (now.iqp && !was.iqp && !inFlight) return { text: 'That leaves an isolated pawn in the centre: it grips the squares in front of it, but it has no pawn to guard it, so its pieces must.', squares: [] };
   if (now.doubled && !was.doubled && !inFlight) return { text: 'That doubles a pawn: a weakness to aim at, paid for with an open file.', squares: [] };
   const opened = now.openFiles.filter((f) => !was.openFiles.includes(f));
@@ -50,15 +55,22 @@ export function structureRead(i: { fenBefore: string; san: string; mover: Color 
   const pawnsOn = (c: Chess, f: string, col: Color): string[] => ['1', '2', '3', '4', '5', '6', '7', '8'].map((r) => `${f}${r}`).filter((sq) => { const p = c.get(sq as never); return !!p && p.type === 'p' && p.color === col; });
   const before = new Chess(i.fenBefore);
   const centre = (c: Chess, col: Color): number => pawnsOn(c, 'd', col).length + pawnsOn(c, 'e', col).length;
+  // A recapture is read against the board before the trade began.
+  const base = i.prior && inFluxAfter(i.prior.fenBefore, i.prior.san) ? new Chess(i.prior.fenBefore) : before;
   let majority: string | null = null;
   for (const col of ['w', 'b'] as Color[]) {
     const foe: Color = col === 'w' ? 'b' : 'w';
-    if (!majority && centre(after, col) > centre(after, foe) && !(centre(before, col) > centre(before, foe))) {
+    if (!majority && !inFlight && centre(after, col) > centre(after, foe) && !(centre(base, col) > centre(base, foe))) {
       majority = `${col === 'w' ? 'White' : 'Black'} has the central pawn majority now: more pawns on the d- and e-files to build the centre with.`;
     }
   }
-  if (!majority && now.queensideMajority && now.queensideMajority !== was.queensideMajority) {
-    majority = `${now.queensideMajority === 'w' ? 'White' : 'Black'} has the queenside pawn majority now: in the long run it makes a passed pawn there.`;
+  // A wing majority made: the one majority computer (`pawnMajority`), read
+  // against the board before the trade began.
+  if (!majority) {
+    const made = pawnMajority(i.fenBefore, i.san, i.prior ?? null);
+    if (made?.event === 'created' && made.majority.healthy) {
+      majority = `${made.majority.side === 'w' ? 'White' : 'Black'} has the ${made.majority.wing} pawn majority now: in the long run it makes a passed pawn there.`;
+    }
   }
   // A file half-open for one side (its own pawn gone, theirs still there): the
   // rook's file, aimed at that pawn. The mover's file first.
@@ -73,6 +85,40 @@ export function structureRead(i: { fenBefore: string; san: string; mover: Color 
     }
   }
   if (majority) return { text: majority, squares: [] };
+  // A PAWN CHAIN the move makes: the moved pawn joins a diagonal of three or
+  // more of the mover's pawns. Its base (the pawn nearest home) is where the
+  // other side strikes at it.
+  const mv = after.history({ verbose: true }).pop();
+  if (mv?.piece === 'p') {
+    const mine = (c: Chess, sq: string): boolean => { const p = c.get(sq as never); return !!p && p.type === 'p' && p.color === i.mover; };
+    const chainThrough = (c: Chess, sq: string): string[] => {
+      const best: string[][] = [];
+      for (const df of [1, -1]) {
+        const line = [sq];
+        for (const dir of [1, -1]) {
+          let f = sq.charCodeAt(0); let r = Number(sq[1]);
+          for (;;) {
+            f += df * dir; r += dir;
+            const s = `${String.fromCharCode(f)}${r}`;
+            if (f < 97 || f > 104 || r < 1 || r > 8 || !mine(c, s)) break;
+            line.push(s);
+          }
+        }
+        best.push(line);
+      }
+      return best.sort((a, b) => b.length - a.length)[0];
+    };
+    const chain = chainThrough(after, mv.to);
+    if (chain.length >= 3 && chainThrough(before, mv.from).length < 3) {
+      const sorted = [...chain].sort((a, b) => (i.mover === 'w' ? Number(a[1]) - Number(b[1]) : Number(b[1]) - Number(a[1])));
+      return { text: `That makes a pawn chain, ${andList(sorted)}: solid, and its base on ${sorted[0]} is where it can be attacked.`, squares: sorted };
+    }
+    // SPACE: a centre pawn on the fifth rank no pawn of theirs can take.
+    const fifth = i.mover === 'w' ? '5' : '4';
+    if ('cdef'.includes(mv.to[0]) && mv.to[1] === fifth && after.attackers(mv.to as never, i.mover === 'w' ? 'b' : 'w').every((s) => after.get(s)?.type !== 'p')) {
+      return { text: `The pawn on ${mv.to} takes space: it cramps their pieces behind it and splits the board.`, squares: [mv.to] };
+    }
+  }
   return null;
 }
 
@@ -313,6 +359,12 @@ export function ownGemBoards(gems: Parameters<typeof gemBoards>[0]): Record<stri
  *  and a trap around it. A structure, an endgame turn or a gambit is news once a
  *  game (`said`). The piece's own job is said only when `withPieceJob` (the
  *  caller has no why of its own for the move). */
+/** The move before the last of `history`, with its board. */
+function priorOf(history: readonly string[]): { fenBefore: string; san: string } | null {
+  if (!history.length) return null;
+  try { const c = new Chess(); for (const s of history.slice(0, -1)) c.move(s); return { fenBefore: c.fen(), san: history[history.length - 1] }; } catch { return null; }
+}
+
 export function theoryExtras(i: {
   history: readonly string[]; fenBefore: string; san: string; mover: Color;
   movesAt: (fen: string) => readonly LocalDbMove[] | null;
@@ -328,7 +380,7 @@ export function theoryExtras(i: {
   const fresh = (r: TheoryRead | null): TheoryRead | null => { if (!r || i.said.has(r.text)) return null; i.said.add(r.text); return r; };
   const turn = composeTheoryTurn({
     fen: i.fenBefore, san: i.san, mover: i.mover, whose: 'your', roads: [],
-    structure: once('structure', structureRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover }) ?? centreRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })),
+    structure: once('structure', structureRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover, prior: priorOf(i.history) }) ?? centreRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })),
     gambit: once('gambit', gambitRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover }) ?? gambitAheadRead({ fen: (() => { const c = new Chess(i.fenBefore); c.move(i.san); return c.fen(); })(), movesAt: i.movesAt }) ?? gambitStandingRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })),
     endgame: once('endgame', endgameRead({ fenBefore: i.fenBefore, san: i.san, movesAt: i.movesAt })),
     namedRoads: fresh(namedRoadsRead({ fen: (() => { const c = new Chess(i.fenBefore); c.move(i.san); return c.fen(); })(), movesAt: i.movesAt })),

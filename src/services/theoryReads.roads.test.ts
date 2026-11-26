@@ -74,9 +74,11 @@ describe('structureRead — the half-open file and the majority a capture makes'
   it('the Sicilian\'s cxd4 half-opens the c-file and gives Black the central majority', async () => {
     const { structureRead } = await import('./theoryReads');
     const r = structureRead({ fenBefore: fenOf(['e4', 'c5', 'Nf3', 'd6', 'd4']), san: 'cxd4', mover: 'b' });
-    expect(r?.text).toBe('The c-file is half-open for Black now: a rook there bears down on the pawn on c2. Black has the central pawn majority now: more pawns on the d- and e-files to build the centre with.');
-    // Nothing new after the recapture: the structure was said when it was made.
-    expect(structureRead({ fenBefore: fenOf(['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4']), san: 'Nxd4', mover: 'w' })).toBeNull();
+    expect(r?.text).toBe('The c-file is half-open for Black now: a rook there bears down on the pawn on c2.');
+    // The majority is the board after the recapture, read against the board
+    // before the trade began.
+    const m = structureRead({ fenBefore: fenOf(['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4']), san: 'Nxd4', mover: 'w', prior: { fenBefore: fenOf(['e4', 'c5', 'Nf3', 'd6', 'd4']), san: 'cxd4' } });
+    expect(m?.text).toBe('Black has the central pawn majority now: more pawns on the d- and e-files to build the centre with.');
   });
 });
 
@@ -95,5 +97,19 @@ describe('endgameRead — the queens off', () => {
     expect(q).toBeNull();
     const trade = endgameRead({ fenBefore: fenOf(['e4', 'd6', 'd4', 'e5', 'dxe5']), san: 'dxe5', movesAt: () => [{ san: 'Qxd8+', games: 80 } as never] });
     expect(trade?.text).toBe('The usual reply Qxd8 trades the queens: the game is heading for an endgame.');
+  });
+});
+
+describe('structureRead — the chain and the space a pawn move makes', () => {
+  it('the London pyramid c3-d4-e3 is a chain with its base', async () => {
+    const { structureRead } = await import('./theoryReads');
+    const r = structureRead({ fenBefore: fenOf(['d4', 'Nf6', 'Bf4', 'e6', 'e3', 'd5', 'Nd2', 'c5']), san: 'c3', mover: 'w' });
+    expect(r?.text).toMatch(/^That makes a pawn chain, /);
+  });
+  it('the Benoni d5 takes space', async () => {
+    const { structureRead } = await import('./theoryReads');
+    const r = structureRead({ fenBefore: fenOf(['d4', 'Nf6', 'c4', 'c5']), san: 'd5', mover: 'w' });
+    expect(r?.text).toBe('The pawn on d5 takes space: it cramps their pieces behind it and splits the board.');
+    expect(structureRead({ fenBefore: fenOf(['e4', 'e5']), san: 'Nf3', mover: 'w' })).toBeNull();
   });
 });
