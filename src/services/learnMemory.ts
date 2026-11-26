@@ -45,6 +45,7 @@
 /** "No think-aloud has fired yet." Far enough below any real ply that the
  *  first gap test passes. */
 import type { Proof } from './proof';
+import type { MistakeGameMemory } from './mistakeLesson';
 import type { LooseSpells } from './conceptKey';
 import { createStoryStore, identityHeard, noteOpening, openingAt, type StoryStore } from './gameStory';
 
@@ -101,6 +102,13 @@ export interface LearnMemory {
    *  (learn-mistakes-only bug 1). Cleared by a new game; a takeback drops the
    *  plies past the board it returns to. */
   readonly soundPlies: Set<number>;
+  /** THE MISTAKE LESSON'S GAME MEMORY (`mistakeLesson.nextGameMemory`) as of
+   *  the latest turn, or null before the first: what this game has taught,
+   *  which repairs hold, the recent stems. Checkpointed by ply, so a rewind
+   *  forgets the turns past the board it returns to. */
+  mistakes(): MistakeGameMemory | null;
+  /** Fold a turn's memory in at its ply. */
+  noteMistakes(ply: number, memory: MistakeGameMemory): void;
   /** Tactic motif → the move number it was first taught (S6 transfer). */
   /** Structurally `MotifLedger` — this module imports nothing (pure memory). */
   readonly motifLastSpoken: Map<string, { move: number; instance: string; seen: number }>;
@@ -197,6 +205,7 @@ export function createLearnMemory(opts: { livePlies: () => number; onNewGame?: (
   const { livePlies, onNewGame } = opts;
   const story = createStoryStore(mintGameId());
   const motifLastSpoken = new Map<string, { move: number; instance: string; seen: number }>();
+  let mistakeLog: Array<{ ply: number; memory: MistakeGameMemory }> = [];
   const mem: LearnMemory = {
     story,
     get gameId(): string { return story.current().gameId; },
@@ -206,6 +215,10 @@ export function createLearnMemory(opts: { livePlies: () => number; onNewGame?: (
     lastTacticKey: '',
     looseSpells: new Map(),
     soundPlies: new Set<number>(),
+    mistakes: () => mistakeLog.at(-1)?.memory ?? null,
+    noteMistakes(ply: number, memory: MistakeGameMemory): void {
+      mistakeLog = [...mistakeLog.filter((x) => x.ply < ply), { ply, memory }];
+    },
     heldMove: null,
     theirPrep: null,
     slipAnswer: null,
@@ -220,6 +233,7 @@ export function createLearnMemory(opts: { livePlies: () => number; onNewGame?: (
     },
     rewind(plies: number): void {
       for (const p of [...mem.soundPlies]) if (p > plies) mem.soundPlies.delete(p);
+      mistakeLog = mistakeLog.filter((x) => x.ply <= plies);
       story.rewind(plies);
     },
     jump(plies: number): void {
@@ -232,6 +246,7 @@ export function createLearnMemory(opts: { livePlies: () => number; onNewGame?: (
       mem.lastTacticKey = '';
       mem.looseSpells = new Map();
       mem.soundPlies.clear();
+      mistakeLog = [];
       mem.heldMove = null;
       mem.theirPrep = null;
       mem.slipAnswer = null;

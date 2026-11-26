@@ -1079,6 +1079,17 @@ export function allowedReply(
     // attack, a check, a pin, a win. "…e5, which stakes out the centre" is a
     // description of their move, not why yours failed; empty > generic.
     if (!why || !ALLOWED_DOES_SOMETHING.test(why)) return null;
+    // A PLAIN HIT COSTS SOMETHING ONLY IF THE HITTING PIECE STAYS (Coach Build
+    // Board: "can be hit" only when the hit costs something): an attack by a
+    // piece the mover simply takes off its square is no reason the move
+    // failed (…Bd2 "attacks the rook on e1" with Qxd2 winning the bishop).
+    if (!reply.captured && !/\b(?:checks?|forks?|pins?|skewers?|wins?|winning|traps?|mates?|checkmate|x-ray)\b/i.test(why)) {
+      const afterReply = new Chess(fenAfter);
+      afterReply.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] });
+      const mover: 'w' | 'b' = moverColor === 'white' ? 'w' : 'b';
+      // A piece (never a pawn's lever) the mover wins outright: the whole piece.
+      if (reply.piece !== 'p' && signedLegalSeeFor(afterReply.fen(), reply.to, mover) >= MATERIAL_VALUE[reply.piece]) return null;
+    }
     // A CAPTURE THEY ARE PAID BACK FOR IS A TRADE, not "takes your rook" (probe
     // 2026-10-10, Rc8: Rxc8 Rxc8). Said only when the mover is behind over
     // the whole line, the played move's own capture included.

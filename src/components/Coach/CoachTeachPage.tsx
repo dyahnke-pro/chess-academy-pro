@@ -62,7 +62,7 @@ import { dialLevel } from '../../missions/ladder';
 import { MissionBanner } from './MissionBanner';
 import type { LearnMode, MissionCard, MissionId, MissionOutcome, MissionPhase, PatternId, PlantedShot, PlantScan } from '../../missions/missionCard';
 import { useLearnRecordWatch } from '../../hooks/useLearnRecordWatch';
-import { getMisconceptionTag } from '../../data/misconceptionTags';
+import { getMisconceptionTag, type MisconceptionTagId } from '../../data/misconceptionTags';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessBoard } from '../Board/ChessBoard';
 import type { NarrationArrow, NarrationHighlight, PunishLesson } from '../../types/walkthroughTree';
@@ -309,6 +309,8 @@ import { stripDisprovenSentences } from '../../services/boardClaimValidator';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { voiceService } from '../../services/voiceService';
 import { mateContext } from '../../utils/mateContext';
+import { isFault, learnGoodDecision, learnMistakeTurn, type LearnMistakeInput } from '../../services/learnMistakeTurn';
+import { NEW_GAME_MEMORY, nextGameMemory, withStems } from '../../services/mistakeLesson';
 import { speakLearn, registerLearnVoiceOwner, learnVoiceAllows, learnVoiceOwner } from '../../services/learnVoice';
 import { heldFoundText, heldVerdictText } from '../../services/deliberation';
 import { applyCoachSetting } from '../../services/coachSettingsAction';
@@ -2129,6 +2131,10 @@ export function CoachTeachPage({ mode }: {
     fenBefore: string; playedSan: string; evalAfterWhiteCp: number;
     afterIsMate: boolean; afterMateIn: number | null; fenAfter: string;
   } | null>(null);
+  /** THE COACH'S MOVE, read and priced, waiting for the student's reply: its
+   *  mistake lesson is said after that reply (`learnMistakeTurn`, seat
+   *  'them'), so no move the student could still play is ever named. */
+  const theirMistakeRef = useRef<(Omit<LearnMistakeInput, 'seat' | 'theirReplySan' | 'studentReplySan' | 'holdOf' | 'memory' | 'seatLed'> & { fenAfter: string }) | null>(null);
   /** The moment Stockfish reports a forced mate FOR the student, the async engine
    *  pass flags it here (keyed by the FEN it read) so the instant package can call
    *  the mating NET at mate-in-N — not wait for the board to reach mate-in-1
@@ -10578,12 +10584,15 @@ export function CoachTeachPage({ mode }: {
     // focus miss stops here, the coach has not replied, and the clue is said —
     // "Try again" takes back the user's move only, "Play on" runs this flow
     // for it (and the coach punishes).
+    // The focus said its own line on this move: no mistake lesson on top.
+    let ownsTheMoveForFocus = false;
     if (!opts?.ownerCleared && focusRef.current.ownsGame()) {
       const before = liveFenRef.current;
       const read = (studentBestReadRef.current && samePosition(studentBestReadRef.current.fen, before) ? studentBestReadRef.current.analysis : null)
         ?? (latestEvalRef.current?.fen === before ? latestEvalRef.current.analysis ?? null : null);
       focusBoardsRef.current = { fenBefore: before, fenAfter: move.fen };
       const verdict = focusRef.current.moved({ fenBefore: before, san: move.san, fenAfter: move.fen, student: playerColor === 'white' ? 'w' : 'b', cpLoss: null, lines: read?.topLines ?? null });
+      ownsTheMoveForFocus = verdict.credited;
       if (verdict.verdict === 'hold') {
         focusHeldMoveRef.current = { move, fenBefore: before };
         return;
@@ -12671,6 +12680,40 @@ export function CoachTeachPage({ mode }: {
                     const tradeTable = tradeTo && reply && reply.replace(/^…/, '').includes(`x${tradeTo}`)
                       ? await stockfishEngine.evalBoard(fenBefore).then((raw) => (raw ? parseEvalTable(raw) : undefined)).catch(() => undefined)
                       : undefined;
+                    // ── THE MISTAKE TURN (WO-LEARN-MISTAKES-ONLY) ────────────────
+                    // Learn's one volunteered voice: their mistake (the coach's
+                    // last move) after the student's reply, then the student's,
+                    // or one good-decision line. Everything below still runs for
+                    // the record; the old door's waves are held (`learnVoice`).
+                    try {
+                      const studentW: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
+                      const holdOf = (tag: string) => studentRecordRef.current.capabilities?.get(tag as MisconceptionTagId)?.hold;
+                      let mem = learnMemRef.current.mistakes() ?? NEW_GAME_MEMORY;
+                      const pend = theirMistakeRef.current;
+                      theirMistakeRef.current = null;
+                      let theirsText: string | null = null;
+                      if (pend && samePosition(pend.fenAfter, fenBefore)) {
+                        const { fenAfter: theirBoard, ...pendIn } = pend;
+                        const t = learnMistakeTurn({ ...pendIn, seat: 'them', theirReplySan: null, studentReplySan: move.san, holdOf, memory: mem, seatLed: false });
+                        mem = nextGameMemory(mem, t, theirBoard, studentW);
+                        theirsText = t.text;
+                      }
+                      const yours = learnMistakeTurn({
+                        seat: 'you', fenBefore, playedSan: move.san, moverColor: playerColor, before: preStudentRead, after: mid,
+                        costCp: cpLoss, bestSan: studentBestSan, priorMove: fenBefore ? priorMoveLeadingTo(lastBoardMoveRef.current, fenBefore) : null,
+                        theirReplySan: reply ? reply.replace(/^…/, '') : null, studentReplySan: null, holdOf, memory: mem, ply: move.history.length, seatLed: !!theirsText,
+                      });
+                      let next = nextGameMemory(mem, yours, fenAfterReply, studentW);
+                      let yoursText = yours.text;
+                      if (!yoursText && cpLoss !== null && !isFault(cpLoss)) {
+                        const good = learnGoodDecision({ fenBefore, playedSan: move.san, before: preStudentRead, holdOf, memory: mem, ply: move.history.length, priorMove: fenBefore ? priorMoveLeadingTo(lastBoardMoveRef.current, fenBefore) : null, seatLed: !!theirsText, focusOwnsMove: ownsTheMoveForFocus });
+                        if (good) { yoursText = good.text; next = withStems(next, [good.stem]); }
+                      }
+                      learnMemRef.current.noteMistakes(move.history.length, next);
+                      for (const line of [theirsText, yoursText]) {
+                        if (line) chainLine(line, () => speakLearn(line, { channel: 'mistake', forced: true, intent: 'learn-live' }));
+                      }
+                    } catch { /* the lesson never blocks the turn */ }
                     // THE THREAD ACROSS MOVES (David 2026-10-06): the student's move
                     // pays off an idea the coach said earlier — close the loop.
                     {
@@ -13445,6 +13488,19 @@ export function CoachTeachPage({ mode }: {
                     // The ONE price of the coach's move; unpriced stays null.
                     const coachPrice = bothCp ? await liveMovePrice(cm.fenBefore, uciOfSan(cm.fenBefore, cm.playedSan) ?? '', mid, COACH_TURN_DEPTH) : null;
                     const cpLoss: number | null = bothCp ? coachPrice?.costCp ?? null : 0;
+                    // THEIR MISTAKE LESSON waits for the student's reply (said
+                    // with it): the coach's move, its reads and its one price.
+                    {
+                      const afterRead = samePosition(nextBoardFen ?? '', cm.fenAfter) ? await nextBoardRead : null;
+                      theirMistakeRef.current = {
+                        fenBefore: cm.fenBefore, playedSan: cm.playedSan, fenAfter: cm.fenAfter, moverColor: coachColor,
+                        before: mid,
+                        after: afterRead ?? { isMate: cm.afterIsMate, mateIn: cm.afterMateIn, evaluation: cm.evalAfterWhiteCp, topLines: [] },
+                        costCp: cpLoss, bestSan: uciSanAt(cm.fenBefore, mid.bestMove),
+                        priorMove: fenBefore ? priorMoveLeadingTo({ fenBefore, san: move.san }, cm.fenBefore) : null,
+                        ply: move.history.length + 1,
+                      };
+                    }
                     // THE SAME MODEL THE STUDENT'S MOVE GOES THROUGH, pointed at
                     // the coach's. It asks the identical question, so it runs the
                     // identical lanes: name the thing conceded if code can —

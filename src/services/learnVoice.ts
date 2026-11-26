@@ -10,13 +10,17 @@
  *                   a seat or road button, a command);
  *   - `lesson`    — a walkthrough, drill, stage or play-out (each of those
  *                   ends a mission or focus game when it starts);
- *   - `door`      — the Learn turn door's own decision (its instant, late and
- *                   phase waves, and the answer it owes): the one voice of a
- *                   free-play game, focus games included (David 2026-10-30:
- *                   "One voice"). Dropped only while a mission owns the game;
- *   - `free-play` — any other line the coach volunteers during a live game
- *                   (a line outside the door).
- * A `free-play` line is DROPPED while a mission or a focus owns the game. The
+ *   - `mistake`   — the mistake lesson (`learnMistakeTurn`): Learn's one
+ *                   volunteered voice — after the student's move, only on a
+ *                   mistake by either side, or the one good-decision line
+ *                   (WO-LEARN-MISTAKES-ONLY, David 2026-11-23). Dropped only
+ *                   while a mission owns the game;
+ *   - `door`      — the old turn door's waves (instant, late, phase, the
+ *                   answer it owed): HELD. Learn says nothing before the move
+ *                   and nothing but the lesson after it;
+ *   - `free-play` — any other line the coach volunteers during a live game:
+ *                   HELD, for the same reason.
+ * The
  * channel is a required field, so a new speak site does not compile until it
  * says which it is — the leak cannot be written by forgetting.
  *
@@ -28,7 +32,7 @@ import { logAppAudit } from './appAuditor';
 import { emitEverything } from './everythingEvents';
 import type { VoiceOwner } from './learnTurnDoor';
 
-export type LearnVoiceChannel = 'owner' | 'asked' | 'lesson' | 'door' | 'free-play';
+export type LearnVoiceChannel = 'owner' | 'asked' | 'lesson' | 'mistake' | 'door' | 'free-play';
 
 const OPEN = (): VoiceOwner => 'open';
 let ownerOf: () => VoiceOwner = OPEN;
@@ -45,8 +49,8 @@ export function learnVoiceOwner(): VoiceOwner {
 
 /** May a line on this channel speak now? */
 export function learnVoiceAllows(channel: LearnVoiceChannel): boolean {
-  if (channel === 'door') return ownerOf() !== 'mission';
-  return channel !== 'free-play' || ownerOf() === 'open';
+  if (channel === 'mistake') return ownerOf() !== 'mission';
+  return channel !== 'door' && channel !== 'free-play';
 }
 
 export function speakLearn(

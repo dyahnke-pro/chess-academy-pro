@@ -79,7 +79,9 @@ export interface FocusRunner {
    *  and the coach waits; 'reply' — go on (`punish`: a focus miss stands);
    *  'probe' — the castling watch needs the what-if read first: hold the move,
    *  read `probe`'s boards and call `castleRead`. */
-  moved: (move: FocusMove) => { verdict: 'hold' | 'reply' | 'probe'; punish: boolean; probe?: CastleProbe };
+  /** `credited`: the focus said its own line on this move (a clue, a find) —
+   *  the move is the focus's, and no mistake lesson is said on top of it. */
+  moved: (move: FocusMove) => { verdict: 'hold' | 'reply' | 'probe'; punish: boolean; probe?: CastleProbe; credited: boolean };
   /** The castling probe's reads (the student's view, cp; null when a read failed). */
   castleRead: (fenBefore: string, realCp: number | null, whatIfCp: number | null) => void;
   tryAgain: () => void;
@@ -208,13 +210,14 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
     dispatch({ kind: 'board', ...b }, { replyIsInline: true });
   }, [dispatch]);
   const read = useCallback((fen: string, lines: readonly ReadLine[]) => { dispatch({ kind: 'read', fen, lines }, { replyIsInline: true }); }, [dispatch]);
-  const moved = useCallback((move: FocusMove): { verdict: 'hold' | 'reply' | 'probe'; punish: boolean; probe?: CastleProbe } => {
+  const moved = useCallback((move: FocusMove): { verdict: 'hold' | 'reply' | 'probe'; punish: boolean; probe?: CastleProbe; credited: boolean } => {
     const effects = dispatch({ kind: 'moved', move }, { replyIsInline: true });
-    if (effects.some((e) => e.kind === 'hold')) return { verdict: 'hold', punish: false };
+    const credited = effects.some((e) => e.kind === 'say');
+    if (effects.some((e) => e.kind === 'hold')) return { verdict: 'hold', punish: false, credited };
     const probe = effects.find((e): e is Extract<FocusEffect, { kind: 'probe' }> => e.kind === 'probe');
-    if (probe) return { verdict: 'probe', punish: false, probe: probe.probe };
+    if (probe) return { verdict: 'probe', punish: false, probe: probe.probe, credited };
     const reply = effects.find((e): e is Extract<FocusEffect, { kind: 'reply' }> => e.kind === 'reply');
-    return { verdict: 'reply', punish: !!reply?.punish };
+    return { verdict: 'reply', punish: !!reply?.punish, credited };
   }, [dispatch]);
   const tryAgain = useCallback(() => { dispatch({ kind: 'try-again' }, { replyIsInline: false }); }, [dispatch]);
   const playOn = useCallback(() => { dispatch({ kind: 'play-on' }, { replyIsInline: false }); }, [dispatch]);
