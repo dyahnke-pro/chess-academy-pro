@@ -105,7 +105,7 @@ describe('mastersBreakIdea — the key break as an idea (opening model beat 8)',
   const read: MastersPlanRead = { games: 5000, white: null, black: { san: 'd5', square: 'd5', from: 'd6', share: 0.6 }, whitePiece: null, blackPiece: null, whiteCastle: null, blackCastle: null };
   it('says what the break CHANGES — it takes away the hole the structure left', () => {
     const idea = mastersBreakIdea(read, 'b', fenOf(line), ['d5']);
-    expect(idea?.text).toBe('The break that changes this structure is …d5: a pawn on d5 changes the structure and takes away the hole there. Masters from here usually get it in.');
+    expect(idea?.text).toBe('The break that changes this structure is …d5: a pawn on d5 changes the structure and takes away the hole there.');
     expect(idea?.move).toEqual({ from: 'd6', to: 'd5' });
     expect(idea?.aim).toBe('plan-aim:break:d5');
   });

@@ -139,7 +139,7 @@ describe('openingStory — Smith-Morra key move', () => {
   });
   it('a piece route that still needs preparing is the key idea: the rook to d1, behind the queen', () => {
     const k = beat(story(SMITH_MORRA, 14, 'w'), 'key-break');
-    expect(k?.text).toBe('The key piece in this structure is your rook on f1: master games from here almost always bring it to d1.');
+    expect(k?.text).toBe('The key piece in this structure is your rook on f1: it belongs on d1.');
     // The rook cannot reach d1 yet, so the idea names no move of the student's.
     expect(k?.namesStudentMove).toBe(false);
   });

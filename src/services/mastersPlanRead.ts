@@ -13,7 +13,6 @@
 import { Chess, type Square } from 'chess.js';
 import { introWithPredicate } from '../utils/moveIntro.ts';
 import type { LocalDbMove } from './masterPlayLookup';
-import { shareAdverb } from '../utils/shareWords.ts';
 import { positionOf } from '../utils/samePosition.ts';
 
 export type MovesAt = (fen: string) => readonly LocalDbMove[] | null;
@@ -251,7 +250,7 @@ export function mastersBreakIdea(
   if (!br && home) {
     const NAME: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
     return {
-      text: `The key piece in this structure is your ${NAME[home.piece] ?? 'piece'} on ${home.from}: master games from here ${shareAdverb(Math.round(home.share * 100))} bring it to ${home.to}.`,
+      text: `The key piece in this structure is your ${NAME[home.piece] ?? 'piece'} on ${home.from}: it belongs on ${home.to}.`,
       squares: [home.to, home.from], move: { from: home.from, to: home.to }, aim: `plan-aim:route:${home.from}-${home.to}`, share: home.share,
     };
   }
@@ -270,7 +269,7 @@ export function mastersBreakIdea(
         : null;
   if (!what) return null;
   return {
-    text: `The break that changes this structure is ${dot}: ${what}. Masters from here ${shareAdverb(Math.round(br.share * 100))} get it in.`,
+    text: `The break that changes this structure is ${dot}: ${what}.`,
     squares: [br.square, br.from, ...struck],
     move: { from: br.from, to: br.square },
     aim: `plan-aim:break:${br.square}`,
@@ -306,10 +305,9 @@ export function preparesBreakClause(
   const coverers = b.attackers(brk.square as Square, moved.color);
   if (!coverers.includes(moved.to)) return null;
   const whose = moverIsStudent ? 'your' : 'their';
-  const pct = Math.round(brk.share * 100);
   // The break's square is said once ("prepares d4: their knight on f3
   // covers d4, and masters push d4" said it three times, 2026-11-12).
-  return { clause: `prepares ${brk.san}: ${whose} ${PIECE_NAME[moved.piece]} on ${moved.to} covers the square, and masters push it in ${pct}% of their games from here`, squares: [moved.to, brk.square] };
+  return { clause: `prepares ${brk.san}: ${whose} ${PIECE_NAME[moved.piece]} on ${moved.to} covers the square the break lands on`, squares: [moved.to, brk.square] };
 }
 
 /** The break-prep said as the move's whole beat (the opening brief). */
