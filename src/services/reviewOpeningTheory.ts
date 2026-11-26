@@ -841,10 +841,10 @@ export function buildTheoryLectureBeats(
   // gambit, the transposition, the queens coming off, a trap around it — each
   // news once.
   const extrasSaid = new Set<string>();
-  const theoryExtrasFor = (prefixSans: readonly string[], fenBefore: string, san: string): string => {
+  const theoryExtrasFor = (prefixSans: readonly string[], fenBefore: string, san: string, withPieceJob: boolean): string => {
     try {
       const mover = new Chess(fenBefore).turn();
-      const lines = theoryExtras({ history: prefixSans, fenBefore, san, mover, movesAt: (f) => masterMovesCachedSync(f), boards: ownGemBoards(getAllPunishGems()), said: extrasSaid });
+      const lines = theoryExtras({ history: prefixSans, fenBefore, san, mover, movesAt: (f) => masterMovesCachedSync(f), boards: ownGemBoards(getAllPunishGems()), said: extrasSaid, withPieceJob });
       return lines.length ? ` ${lines.join(' ')}` : '';
     } catch { return ''; }
   };
@@ -860,7 +860,8 @@ export function buildTheoryLectureBeats(
         if (note) return ` ${note.trim()}`;
       } catch { /* no note — computed */ }
     }
-    return `${freshWhy(fenBefore, san)}${theoryExtrasFor(prefixSans, fenBefore, san)}`;
+    const why = freshWhy(fenBefore, san);
+    return `${why}${theoryExtrasFor(prefixSans, fenBefore, san, why === '')}`;
   };
 
   // The masters line walked from the book move, each step's teaching the

@@ -34,9 +34,3 @@ export function slipHeading(slipBy: FactSeat, count: number): string {
   if (slipBy === 'student') return 'Watch out';
   return count === 1 ? 'Their known mistake' : 'Their known mistakes';
 }
-
-/** A title for a warning the student must avoid: "Watch out: the Elephant". */
-export function warningTitle(name: string, slipBy: FactSeat): string {
-  const bare = name.replace(/^Watch out:\s*/i, '').replace(/\btrap\b/gi, '').replace(/\s{2,}/g, ' ').trim();
-  return slipBy === 'student' ? `Watch out: ${bare.replace(/^the\s+/i, 'the ')}` : name;
-}

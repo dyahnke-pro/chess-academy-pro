@@ -4,17 +4,17 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**145 lines · 9 exports · 3 importers · 1 tests · 0 audits**
+**160 lines · 9 exports · 3 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:6928) — names `openingTheory`
+- **The standard post-deploy ritual** (CLAUDE.md:7038) — names `openingTheory`
 
 ## Who calls in
 
 - `src/services/boardComputers.ts`
-- `src/services/moveThoughtFacts.ts`
 - `src/services/openingTheory.test.ts`
+- `src/services/theorySheets.measure.test.ts`
 
 ## Exports and every call site
 
@@ -42,19 +42,23 @@
 ### `TheoryFact` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `openingTheoryFacts` (function) — 8 call sites
-- `src/services/boardComputers.ts:511`
-- `src/services/moveThoughtFacts.ts:396`
+### `openingTheoryFacts` (function) — 11 call sites
+- `src/services/boardComputers.ts:2460`
+- `src/services/boardComputers.ts:2478`
 - `src/services/openingTheory.test.ts:17`
 - `src/services/openingTheory.test.ts:23`
 - `src/services/openingTheory.test.ts:29`
 - `src/services/openingTheory.test.ts:30`
 - `src/services/openingTheory.test.ts:33`
-- `src/services/openingTheory.test.ts:41`
+- `src/services/openingTheory.test.ts:38`
+- `src/services/openingTheory.test.ts:46`
+- `src/services/openingTheory.test.ts:54`
+- `src/services/theorySheets.measure.test.ts:104`
 
 ## Tests
 
 - `src/services/openingTheory.test.ts`
+- `src/services/theorySheets.measure.test.ts`
 
 ## Audits that reach it
 

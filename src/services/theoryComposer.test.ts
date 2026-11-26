@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
-import { castleOnce, composeTheoryTurn, keyDecisionLine, keyMovesOf, pieceHomeLine, planGoalLine, replyByJob, type KeyMove } from './theoryComposer';
+import { castleOnce, composeTheoryTurn, keyDecisionLine, keyMovesOf, pieceHomeLine, planGoalLine, type KeyMove } from './theoryComposer';
 
 const fenOf = (sans: string[]): string => { const c = new Chess(); for (const s of sans) c.move(s); return c.fen(); };
 const mv = (san: string, piece: string, color: 'w' | 'b' = 'w'): KeyMove => ({ san, piece, color });
@@ -28,11 +28,6 @@ describe('theoryComposer — castling is said once', () => {
 
 describe('theoryComposer — said by what the move does, never by popularity', () => {
   const fen = fenOf(['e4', 'e5', 'Nf3', 'Nc6']);
-  it('a reply is its job', () => {
-    const t = replyByJob({ fen, san: 'Bc4', mover: 'w', whose: 'your' });
-    expect(t).toMatch(/^Bc4: it /);
-    expect(t).not.toMatch(/masters|usually|%/);
-  });
   it('the key decision is said on the move that made it, each road by its job', () => {
     const d = keyDecisionLine({ fen, san: 'Bc4', mover: 'w', whose: 'your', roads: [{ san: 'Bc4', pct: 60 }, { san: 'd4', pct: 30 }, { san: 'Nc3', pct: 10 }] });
     expect(d?.text).toMatch(/^The key decision: Bc4\. It brings your bishop out/);

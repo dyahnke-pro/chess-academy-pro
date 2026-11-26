@@ -105,14 +105,6 @@ export function keyDecisionLine(i: { fen: string; san: string; mover: Color; who
   return { text, names: [chosen.san, ...(alt ? [alt.r.san] : [])] };
 }
 
-/** A reply said by what it DOES ("Bc4 brings the bishop out, aimed at f7"),
- *  never by "masters usually play it". Null when the board shows no job. */
-export function replyByJob(i: { fen: string; san: string; mover: Color; whose: Whose }): string | null {
-  let job: ReturnType<typeof moveJob> = null;
-  try { job = moveJob(i.fen, i.san, i.mover, wordsOf(i.whose), null, NO_FOLLOW); } catch { job = null; }
-  return job?.clause ? `${dotted(i.san, i.mover)}: ${job.clause}.` : null;
-}
-
 export type TheorySentenceKind = 'decision' | 'plan' | 'piece' | 'castle' | 'trap' | 'structure' | 'move-order' | 'gambit' | 'endgame';
 export interface TheorySentence { kind: TheorySentenceKind; text: string; squares: string[]; claim?: string }
 

@@ -17,7 +17,7 @@ describe('trapSeatWording', () => {
   });
   it('the student\'s own slip is never worded as a trap, whatever its kind', () => {
     for (const kind of ['trap', 'known-mistake'] as const) {
-      for (const text of [words.knownLead(kind, 'student'), words.clubLore(kind, 'student'), words.slipChip(kind, 'student'), words.warningTitle('Elephant Trap', 'student')]) {
+      for (const text of [words.knownLead(kind, 'student'), words.clubLore(kind, 'student'), words.slipChip(kind, 'student')]) {
         expect(text).not.toMatch(/trap/i);
       }
     }

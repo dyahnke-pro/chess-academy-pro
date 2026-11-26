@@ -36,9 +36,9 @@ describe('theoryReads — what the move changed on the board', () => {
   });
   it('a structure, a gambit or an endgame turn is news once a game', () => {
     const said = new Set<string>();
-    const a = theoryExtras({ history: ['d4', 'd5'], fenBefore: fenOf(['d4', 'd5']), san: 'c4', mover: 'w', movesAt: () => null, boards: {}, said });
+    const a = theoryExtras({ history: ['d4', 'd5'], fenBefore: fenOf(['d4', 'd5']), san: 'c4', mover: 'w', movesAt: () => null, boards: {}, said, withPieceJob: false });
     expect(a.length).toBe(1);
-    const b = theoryExtras({ history: ['d4', 'd5'], fenBefore: fenOf(['d4', 'd5']), san: 'c4', mover: 'w', movesAt: () => null, boards: {}, said });
+    const b = theoryExtras({ history: ['d4', 'd5'], fenBefore: fenOf(['d4', 'd5']), san: 'c4', mover: 'w', movesAt: () => null, boards: {}, said, withPieceJob: false });
     expect(b).toEqual([]);
   });
 });

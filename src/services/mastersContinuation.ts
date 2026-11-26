@@ -38,7 +38,5 @@ export function continuationMovesSync(fen: string): LocalDbMove[] | null {
   return hit && hit.length > 0 ? hit : null;
 }
 
-export function continuationsLoaded(): boolean { return !!table; }
-
 /** Test seam — inject a table directly. */
 export function __setContinuationsForTests(t: Table | null): void { table = t; inflight = null; }
