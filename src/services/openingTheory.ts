@@ -11,7 +11,7 @@
 import { Chess, type Color } from 'chess.js';
 import { masterMovesCachedSync, type LocalDbMove } from './masterPlayLookup';
 import { moveJob, MINE, THEIRS } from './bookMoveWhy';
-import { keyDecisionLine } from './theoryComposer';
+import { keyDecisionLine, withoutCastleTail } from './theoryComposer';
 import { NO_FOLLOW } from './exchangeLedger';
 import { shareAdverb } from '../utils/shareWords';
 import { scoreWords } from './explorerTranslate';
@@ -102,7 +102,8 @@ export function openingTheoryFacts(fenBefore: string, san: string, mine: boolean
   if (played && clean(top.san) === clean(san) && played.pct >= MAIN_SHARE) {
     // SAID BY ITS JOB, NEVER BY POPULARITY (round 9): what the move does is the
     // teaching; how many masters play it is only why it is known.
-    const job = aimOf(fenBefore, san, mover, mine);
+    const jobRaw = aimOf(fenBefore, san, mover, mine);
+    const job = jobRaw ? withoutCastleTail(jobRaw) : null;
     out.push(job
       ? { kind: 'book-standing', clause: `is the main move here — it ${job.replace(/^it /, '')}`, sentence: rotateStem([`It's the main move here — it ${job.replace(/^it /, '')}.`, `That's the main line: it ${job.replace(/^it /, '')}.`], key), squares: [to], names: [san] }
       : { kind: 'book-standing', clause: 'is the main move here', sentence: rotateStem(["It's the main move here.", "That's the main line."], key), squares: [to], names: [san] });
@@ -148,7 +149,8 @@ export function openingTheoryFacts(fenBefore: string, san: string, mine: boolean
     const reply = next.moves[0];
     const r = dotted(reply.san, them);
     // The reply by its JOB (round 9); the share only tells which reply it is.
-    const replyAim = aimOf(fenAfter, reply.san, them, !mine);
+    const replyRaw = aimOf(fenAfter, reply.san, them, !mine);
+    const replyAim = replyRaw ? withoutCastleTail(replyRaw) : null;
     out.push(replyAim
       ? { kind: 'book-reply', clause: `is met by ${r}, which ${replyAim}`, sentence: `The usual reply is ${r}: it ${replyAim}.`, squares: [reply.to], names: [reply.san] }
       : { kind: 'book-reply', clause: `is ${shareAdverb(reply.pct)} met by ${r} in master games`, sentence: `Masters ${shareAdverb(reply.pct)} answer with ${r}.`, squares: [reply.to], names: [reply.san] });

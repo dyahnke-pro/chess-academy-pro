@@ -36,6 +36,9 @@ const Cap = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
 const clean = (s: string): string => s.replace(/[+#!?]+$/, '');
 export const dotted = (san: string, color: Color): string => (color === 'b' ? `…${clean(san)}` : clean(san));
 const isCastle = (san: string): boolean => /^O-O/.test(san);
+/** Castling is said once, by its own sentence: a job that also says "clears the
+ *  way to castle" drops that tail where a theory line carries the job. */
+export const withoutCastleTail = (clause: string): string => clause.replace(/,? and (?:clears the way to castle|gets (?:you|them) ready to castle)[^.,;]*/i, '').replace(/ so (?:you|they) can castle[^.,;]*/i, '');
 
 /** The moves a plan SAYS: never castling, pawn moves first, at most two. */
 export function keyMovesOf(lead: readonly KeyMove[]): KeyMove[] {
@@ -91,7 +94,7 @@ export function keyDecisionLine(i: { fen: string; san: string; mover: Color; who
   if (!chosen) return null;
   const w = wordsOf(i.whose);
   const jobOf = (san: string): string | null => {
-    try { return moveJob(i.fen, san, i.mover, w, null, NO_FOLLOW)?.clause?.replace(/^it /, 'it ') ?? null; } catch { return null; }
+    try { const c = moveJob(i.fen, san, i.mover, w, null, NO_FOLLOW)?.clause; return c ? withoutCastleTail(c) : null; } catch { return null; }
   };
   const mine = jobOf(chosen.san);
   if (!mine) return null;

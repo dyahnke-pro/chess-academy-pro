@@ -52,6 +52,7 @@ import {
 } from './masterPlayPersistence';
 import { logAppAudit } from './appAuditor';
 import { loadDataJson } from './dataFile';
+import { continuationMovesSync, ensureContinuationsLoaded } from './mastersContinuation';
 import type { LichessExplorerResult } from '../types';
 
 /** Sparse local-DB shape produced by `scripts/enrich-openings-db.mjs`.
@@ -214,6 +215,7 @@ export function __resetLocalDbForTests(): void {
  *  during the (sync) review segment build. No-op cost after the first call. */
 export async function ensureMastersDbLoaded(): Promise<void> {
   await getLocalDb();
+  await ensureContinuationsLoaded();
 }
 
 /** Sync masters moves at a position — the review's opening-plan BACKUP source
@@ -223,7 +225,9 @@ export async function ensureMastersDbLoaded(): Promise<void> {
 export function mastersMovesSync(fen: string): LocalDbMove[] | null {
   if (!localDbCache) return null;
   const hit = readLocal(localDbCache, fen);
-  return hit && hit.moves.length > 0 ? hit.moves : null;
+  // THE BOOK FIRST, THEN THE CONTINUATIONS (`mastersContinuation`): where the
+  // file ends, recent master games between 2500s go on.
+  return hit && hit.moves.length > 0 ? hit.moves : continuationMovesSync(fen);
 }
 
 /** In book here, from what is ALREADY IN MEMORY: true / false, or null when
