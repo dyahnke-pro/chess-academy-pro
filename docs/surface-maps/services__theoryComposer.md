@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**231 lines · 18 exports · 7 importers · 4 tests · 1 audits**
+**247 lines · 18 exports · 7 importers · 4 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -46,10 +46,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/weighedMoves.ts:1341`
 - `src/utils/sanMark.ts:21`
 
-### `withoutCastleTail` (const) — 3 call sites
+### `withoutCastleTail` (const) — 4 call sites
 - `src/services/openingTheory.ts:106`
 - `src/services/openingTheory.ts:153`
-- `src/services/theoryReads.ts:127`
+- `src/services/theoryReads.ts:320`
+- `src/services/theoryReads.ts:576`
 
 ### `keyMovesOf` (function) — 1 call site
 - `src/services/theoryComposer.test.ts:11`
@@ -88,10 +89,13 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `TheoryTurnIn` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `composeTheoryTurn` (function) — 3 call sites
+### `composeTheoryTurn` (function) — 6 call sites
 - `src/services/theoryComposer.test.ts:51`
-- `src/services/theoryReads.ts:256`
-- `src/services/theorySheets.measure.test.ts:88`
+- `src/services/theoryComposer.test.ts:65`
+- `src/services/theoryComposer.test.ts:70`
+- `src/services/theoryComposer.test.ts:78`
+- `src/services/theoryReads.ts:615`
+- `src/services/theorySheets.measure.test.ts:75`
 
 ### `roadsFrom` (function) — 9 call sites
 - `src/components/Coach/CoachTeachPage.tsx:8670`
@@ -102,7 +106,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/branchExplorer.roads.test.ts:33`
 - `src/services/branchExplorer.roads.test.ts:34`
 - `src/services/branchExplorer.ts:210`
-- `src/services/theorySheets.measure.test.ts:89`
+- `src/services/theorySheets.measure.test.ts:76`
 
 ### `legalOn` (function) — 3 call sites
 - `src/services/arrowEngine.ts:224`
@@ -114,9 +118,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mastersPlanRead.test.ts:26`
 - `src/services/mastersPlanRead.test.ts:27`
 - `src/services/mastersPlanRead.test.ts:83`
-- `src/services/mastersPlanRead.test.ts:97`
-- `src/services/mastersPlanRead.test.ts:98`
-- `src/services/reviewOpeningTheory.ts:1144`
+- `src/services/mastersPlanRead.test.ts:102`
+- `src/services/mastersPlanRead.test.ts:103`
+- `src/services/reviewOpeningTheory.ts:1116`
 
 ## Tests
 

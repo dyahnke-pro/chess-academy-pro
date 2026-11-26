@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**296 lines · 14 exports · 3 importers · 2 tests · 0 audits**
+**762 lines · 24 exports · 4 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,6 +13,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Who calls in
 
 - `src/services/reviewOpeningTheory.ts`
+- `src/services/theoryReads.roads.test.ts`
 - `src/services/theoryReads.test.ts`
 - `src/services/theorySheets.measure.test.ts`
 
@@ -21,60 +22,140 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `TheoryRead` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `structureRead` (function) — 3 call sites
-- `src/services/theoryReads.test.ts:10`
+### `ROAD_BAR_NEXT` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `ROAD_BAR_DEEPER` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `walkRoadsAhead` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `structureRead` (function) — 11 call sites
+- `src/services/theoryReads.roads.test.ts:76`
+- `src/services/theoryReads.roads.test.ts:80`
+- `src/services/theoryReads.roads.test.ts:106`
+- `src/services/theoryReads.roads.test.ts:111`
+- `src/services/theoryReads.roads.test.ts:113`
+- `src/services/theoryReads.roads.test.ts:193`
+- `src/services/theoryReads.roads.test.ts:198`
+- `src/services/theoryReads.roads.test.ts:247`
 - `src/services/theoryReads.test.ts:11`
-- `src/services/theorySheets.measure.test.ts:92`
+- `src/services/theoryReads.test.ts:12`
+- `src/services/theorySheets.measure.test.ts:79`
 
 ### `gambitRead` (function) — 3 call sites
-- `src/services/theoryReads.test.ts:14`
-- `src/services/theoryReads.test.ts:16`
-- `src/services/theorySheets.measure.test.ts:93`
+- `src/services/theoryReads.test.ts:15`
+- `src/services/theoryReads.test.ts:17`
+- `src/services/theorySheets.measure.test.ts:80`
 
-### `endgameRead` (function) — 3 call sites
-- `src/services/theoryReads.test.ts:19`
+### `endgameRead` (function) — 9 call sites
+- `src/services/theoryReads.roads.test.ts:89`
+- `src/services/theoryReads.roads.test.ts:90`
+- `src/services/theoryReads.roads.test.ts:94`
+- `src/services/theoryReads.roads.test.ts:96`
+- `src/services/theoryReads.roads.test.ts:98`
+- `src/services/theoryReads.roads.test.ts:144`
 - `src/services/theoryReads.test.ts:20`
-- `src/services/theorySheets.measure.test.ts:94`
+- `src/services/theoryReads.test.ts:21`
+- `src/services/theorySheets.measure.test.ts:81`
 
 ### `moveOrderRead` (function) — 1 call site
-- `src/services/theorySheets.measure.test.ts:95`
+- `src/services/theorySheets.measure.test.ts:82`
 
-### `transpositionRead` (function) — 1 call site
-- `src/services/theorySheets.measure.test.ts:95`
+### `transpositionRead` (function) — 3 call sites
+- `src/services/theoryReads.roads.test.ts:68`
+- `src/services/theoryReads.roads.test.ts:186`
+- `src/services/theorySheets.measure.test.ts:82`
 
-### `pieceJobRead` (function) — 3 call sites
-- `src/services/theoryReads.test.ts:23`
+### `pieceJobRead` (function) — 5 call sites
+- `src/services/theoryReads.roads.test.ts:175`
+- `src/services/theoryReads.roads.test.ts:176`
 - `src/services/theoryReads.test.ts:24`
-- `src/services/theorySheets.measure.test.ts:96`
+- `src/services/theoryReads.test.ts:25`
+- `src/services/theorySheets.measure.test.ts:83`
 
-### `trapRead` (function) — 2 call sites
-- `src/services/theoryReads.test.ts:28`
-- `src/services/theorySheets.measure.test.ts:97`
+### `sacrificeRead` (function) — 3 call sites
+- `src/services/theoryReads.roads.test.ts:224`
+- `src/services/theoryReads.roads.test.ts:227`
+- `src/services/theorySheets.measure.test.ts:80`
 
-### `gambitAheadRead` (function) — 1 call site
-- `src/services/theorySheets.measure.test.ts:93`
+### `hangsRead` (function) — 5 call sites
+- `src/services/theoryReads.roads.test.ts:152`
+- `src/services/theoryReads.roads.test.ts:154`
+- `src/services/theoryReads.roads.test.ts:155`
+- `src/services/theoryReads.roads.test.ts:157`
+- `src/services/theoryReads.roads.test.ts:225`
+
+### `trapRead` (function) — 7 call sites
+- `src/services/theoryReads.roads.test.ts:124`
+- `src/services/theoryReads.test.ts:31`
+- `src/services/theoryReads.test.ts:36`
+- `src/services/theoryReads.test.ts:38`
+- `src/services/theoryReads.test.ts:60`
+- `src/services/theoryReads.test.ts:72`
+- `src/services/theorySheets.measure.test.ts:86`
+
+### `gambitAheadRead` (function) — 3 call sites
+- `src/services/theoryReads.roads.test.ts:16`
+- `src/services/theoryReads.roads.test.ts:166`
+- `src/services/theorySheets.measure.test.ts:80`
 
 ### `centreRead` (function) — 1 call site
-- `src/services/theorySheets.measure.test.ts:92`
+- `src/services/theorySheets.measure.test.ts:79`
 
-### `gemBoards` (function) — 2 call sites
-- `src/services/theoryReads.test.ts:27`
-- `src/services/theorySheets.measure.test.ts:60`
+### `THEORY_BREAK_SHARE` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
 
-### `ownGemBoards` (function) — 1 call site
-- `src/services/reviewOpeningTheory.ts:847`
+### `planAheadRead` (function) — 2 call sites
+- `src/services/theoryReads.roads.test.ts:208`
+- `src/services/theorySheets.measure.test.ts:74`
 
-### `theoryExtras` (function) — 3 call sites
-- `src/services/reviewOpeningTheory.ts:847`
-- `src/services/theoryReads.test.ts:39`
-- `src/services/theoryReads.test.ts:41`
+### `choiceAheadRead` (function) — 4 call sites
+- `src/services/theoryReads.roads.test.ts:235`
+- `src/services/theoryReads.roads.test.ts:239`
+- `src/services/theoryReads.roads.test.ts:240`
+- `src/services/theorySheets.measure.test.ts:85`
+
+### `theoryExtras` (function) — 4 call sites
+- `src/services/reviewOpeningTheory.ts:819`
+- `src/services/theoryReads.roads.test.ts:212`
+- `src/services/theoryReads.test.ts:48`
+- `src/services/theoryReads.test.ts:50`
+
+### `nameRelativeTo` (function) — 5 call sites
+- `src/services/reviewOpeningTheory.ts:695`
+- `src/services/reviewOpeningTheory.ts:794`
+- `src/services/reviewOpeningTheory.ts:1037`
+- `src/services/theoryReads.roads.test.ts:43`
+- `src/services/theoryReads.roads.test.ts:45`
+
+### `namedRoadsRead` (function) — 6 call sites
+- `src/services/theoryReads.roads.test.ts:20`
+- `src/services/theoryReads.roads.test.ts:22`
+- `src/services/theoryReads.roads.test.ts:29`
+- `src/services/theoryReads.roads.test.ts:33`
+- `src/services/theoryReads.roads.test.ts:36`
+- `src/services/theorySheets.measure.test.ts:84`
+
+### `gambitAcceptedRead` (function) — 3 call sites
+- `src/services/theoryReads.roads.test.ts:133`
+- `src/services/theoryReads.roads.test.ts:135`
+- `src/services/theorySheets.measure.test.ts:80`
+
+### `gambitStandingRead` (function) — 4 call sites
+- `src/services/theoryReads.roads.test.ts:53`
+- `src/services/theoryReads.roads.test.ts:58`
+- `src/services/theoryReads.roads.test.ts:59`
+- `src/services/theorySheets.measure.test.ts:80`
 
 ### `hangRead` (function) — 2 call sites
-- `src/services/theoryReads.test.ts:33`
-- `src/services/theoryReads.test.ts:35`
+- `src/services/theoryReads.test.ts:42`
+- `src/services/theoryReads.test.ts:44`
 
 ## Tests
 
+- `src/services/theoryReads.roads.test.ts`
 - `src/services/theoryReads.test.ts`
 - `src/services/theorySheets.measure.test.ts`
 
