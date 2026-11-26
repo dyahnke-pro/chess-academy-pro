@@ -363,7 +363,7 @@ function mastersPlay(fen: string, san: string, movesAt: (fen: string) => readonl
   const roads = movesAt(fen) ?? [];
   const total = roads.reduce((n, m) => n + m.games, 0);
   const r = roads.find((m) => m.san.replace(/[+#]$/, '') === san.replace(/[+#]$/, ''));
-  return !!r && total > 0 && r.games / total >= 0.02;
+  return !!r && total > 0 && r.games / total >= ROAD_BAR_NEXT;
 }
 
 export function hangsRead(fenBefore: string, san: string, mover: Color, movesAt?: (fen: string) => readonly LocalDbMove[] | null): TheoryRead | null {
@@ -680,7 +680,7 @@ export function namedRoadsRead(i: { fen: string; movesAt: (fen: string) => reado
   // A bar, never a count: the named roads masters play (2% of their games
   // here) — a road nobody plays is a name, not theory.
   const total = [...share.values()].reduce((n, g) => n + g, 0);
-  const said = roads.filter((r) => total > 0 && r.games / total >= 0.02).sort((a, b) => b.games - a.games);
+  const said = roads.filter((r) => total > 0 && r.games / total >= ROAD_BAR_NEXT).sort((a, b) => b.games - a.games);
   if (!said.length) return null;
   const mover = c.turn();
   const parts = said.map((r) => `${mover === 'b' ? '…' : ''}${r.san.replace(/[+#]$/, '')} ${r.said}`);
@@ -742,7 +742,7 @@ export function hangRead(i: { fen: string; mover: Color; movesAt: (fen: string) 
   const total = roads.reduce((n, m) => n + m.games, 0);
   if (total === 0) return null;
   for (const road of [...roads].sort((a, b) => b.games - a.games)) {
-    if (road.games / total < 0.03) break;
+    if (road.games / total < ROAD_BAR_NEXT) break;
     const c = new Chess(i.fen);
     try { c.move(road.san); } catch { continue; }
     for (const cap of c.moves({ verbose: true })) {
