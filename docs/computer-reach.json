@@ -1,17 +1,17 @@
 {
  "about": "Which teaching computer reaches which surface, by a static call path from each surface root (scripts/computer-reach.mjs; the list is scripts/computer-reach/computers.json). learn: yes = through the focus runner, door = computed in a Learn turn and decided by Learn's turn door (spoken when the door keeps it); a door-only row says why in `door` (an adapter of computers the other surfaces read, or Learn-only by design).",
  "graph": {
-  "files": 1774,
-  "nodes": 18137
+  "files": 1785,
+  "nodes": 18241
  },
  "totals": {
   "computers": 344,
-  "offTheSixSurfaces": 29,
+  "offTheSixSurfaces": 30,
   "learnDoorOnly": 18,
   "learnDoorOnlyUnexplained": 1,
   "otherScreensOnly": 10,
-  "dead": 1,
-  "missingFromCode": 0,
+  "dead": 2,
+  "missingFromCode": 1,
   "surfaces": {
    "learn": {
     "yes": 31,
@@ -19,8 +19,8 @@
     "no": 85
    },
    "review": {
-    "yes": 240,
-    "no": 104
+    "yes": 239,
+    "no": 105
    },
    "lesson": {
     "yes": 183,
@@ -74,10 +74,13 @@
    "services/tacticAlertService.ts#detectGameplayTactic"
   ],
   "dead": [
+   "services/mastersPlanRead.ts#mastersPlanLine",
    "services/reviewTeachingPoints.ts#explainTemptingCapture"
   ]
  },
- "missingFromCode": [],
+ "missingFromCode": [
+  "services/mastersPlanRead.ts#mastersPlanLine"
+ ],
  "computers": [
   {
    "key": "coach/chatTurnAnswers.ts#(module)",
@@ -2943,15 +2946,14 @@
    "says": "'The plan in this structure: your break is …c5 — masters from here usually play it, and theirs is d5' (or your piece's usual square + castli",
    "origin": "map",
    "learn": "no",
-   "review": "yes",
+   "review": "no",
    "lesson": "no",
    "chat": "no",
    "tapped": "no",
    "tactics": "no",
-   "app": true,
-   "other": [
-    "playSilent"
-   ]
+   "app": false,
+   "other": [],
+   "where": "dead (no production caller)"
   },
   {
    "key": "services/mastersPlanRead.ts#mastersPlanRead",

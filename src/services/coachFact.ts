@@ -413,7 +413,7 @@ export const COMPUTER_CATALOG = {
   knownAttack: { file: 'services/attackLibrary.ts', says: 'a known attacking pattern on the board' },
   detectForcedMatingSequence: { file: 'services/reviewForcedSequence.ts', says: 'a forced checking run to mate' },
   buildMiddlegameOrientation: { file: 'services/reviewStrategicOrientation.ts', says: 'where the middlegame is going for each side' },
-  mastersPlanLine: { file: 'services/mastersPlanRead.ts', says: 'the plan masters played from this opening' },
+  mastersPlanLine: { file: 'services/theoryComposer.ts', says: 'the plan masters played from this opening' },
   buildOpponentMoveTeaching: { file: 'services/reviewOpponentCommentary.ts', says: 'what their move targets' },
   buildOpponentDevelopmentRead: { file: 'services/reviewOpponentCommentary.ts', says: 'how their development is going' },
   nameEndgamePhase: { file: 'services/reviewMoveTeaching.ts', says: 'the endgame reached, named' },

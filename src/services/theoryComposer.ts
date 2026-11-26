@@ -69,7 +69,7 @@ export function pieceHomeLine(i: { whose: Whose; piece: PlacedPiece }): string |
   try { job = moveJob(i.piece.fen, i.piece.san, i.piece.color, wordsOf(i.whose), null, NO_FOLLOW); } catch { job = null; }
   if (!job?.clause) return null;
   const noun = NOUN[i.piece.piece] ?? 'piece';
-  return `${Cap(i.whose)} ${noun} belongs on ${i.piece.to}: ${job.clause.replace(/^it /, 'it ')}.`;
+  return `${Cap(i.whose)} ${noun} belongs on ${i.piece.to}. ${Cap(job.clause)}.`;
 }
 
 /** Castling, said once. `said` holds the claims already spoken; a hit says
@@ -100,8 +100,8 @@ export function keyDecisionLine(i: { fen: string; san: string; mover: Color; who
   if (!mine) return null;
   const others = real.filter((r) => r !== chosen).map((r) => ({ r, job: jobOf(r.san) })).filter((x) => x.job && x.job !== mine);
   const alt = others[0];
-  const head = `The key decision: ${dotted(chosen.san, i.mover)} — ${mine}.`;
-  const text = alt ? `${head} ${dotted(alt.r.san, i.mover)} is the other road — ${alt.job}.` : head;
+  const head = `The key decision: ${dotted(chosen.san, i.mover)}. ${Cap(mine)}.`;
+  const text = alt ? `${head} ${dotted(alt.r.san, i.mover)} is the other road. ${Cap(alt.job ?? '')}.` : head;
   return { text, names: [chosen.san, ...(alt ? [alt.r.san] : [])] };
 }
 

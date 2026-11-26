@@ -27,17 +27,17 @@ describe('openingTheoryFacts', () => {
   it('the reply masters give is named with their dots', () => {
     // A split field (after 2…d5 White plays e5, Nc3, exd5 or Nd2) names no reply.
     expect(openingTheoryFacts(fenAfter('e4 c6 d4'), 'd5', false).some((x) => x.kind === 'book-reply')).toBe(false);
-    expect(openingTheoryFacts(fenAfter('e4 e5'), 'Nf3', true).find((x) => x.kind === 'book-reply')?.sentence ?? '').toMatch(/^The usual reply is …Nc6: it /);
+    expect(openingTheoryFacts(fenAfter('e4 e5'), 'Nf3', true).find((x) => x.kind === 'book-reply')?.sentence ?? '').toMatch(/^The usual reply is …Nc6\. It /);
   });
   it('the main move and the reply are said by their job, never by how many masters play them', () => {
     const f = openingTheoryFacts(fenAfter('e4 e5'), 'Nf3', true);
-    expect(f.find((x) => x.kind === 'book-standing')?.sentence).toMatch(/^(It's the main move here|That's the main line): it attacks their pawn on e5\.$/);
+    expect(f.find((x) => x.kind === 'book-standing')?.sentence).toMatch(/^(It's the main move here|That's the main line)\. It attacks their pawn on e5\.$/);
     for (const t of f) expect(t.sentence).not.toMatch(/almost always|usually play|masters play it|\d%/);
   });
   it('the key decision is said on the move that made it, each road by its job', () => {
     const f = openingTheoryFacts(fenAfter('e4 e6 d4 d5'), 'e5', true);
     const d = f.find((x) => x.sentence.startsWith('The key decision: e5'));
-    expect(d?.sentence).toMatch(/Nc3 is the other road — it /);
+    expect(d?.sentence).toMatch(/Nc3 is the other road\. It /);
     expect(d?.names).toEqual(['e5', 'Nc3']);
     // The road it names is not said again.
     expect(f.some((x) => /^Masters also play Nc3/.test(x.sentence))).toBe(false);

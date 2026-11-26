@@ -35,8 +35,8 @@ describe('theoryComposer — said by what the move does, never by popularity', (
   });
   it('the key decision is said on the move that made it, each road by its job', () => {
     const d = keyDecisionLine({ fen, san: 'Bc4', mover: 'w', whose: 'your', roads: [{ san: 'Bc4', pct: 60 }, { san: 'd4', pct: 30 }, { san: 'Nc3', pct: 10 }] });
-    expect(d?.text).toMatch(/^The key decision: Bc4 — it brings your bishop out/);
-    expect(d?.text).toMatch(/d4 is the other road — it joins your knight/);
+    expect(d?.text).toMatch(/^The key decision: Bc4\. It brings your bishop out/);
+    expect(d?.text).toMatch(/d4 is the other road\. It joins your knight/);
     expect(d?.text).not.toMatch(/masters|usually|\d%/);
   });
   it('no decision where one move is plainly the move, or the move played is not one of the roads', () => {
@@ -45,7 +45,7 @@ describe('theoryComposer — said by what the move does, never by popularity', (
   });
   it('a piece the plan brings gets its own sentence with its job', () => {
     const t = pieceHomeLine({ whose: 'your', piece: { piece: 'b', to: 'c4', san: 'Bc4', color: 'w', fen } });
-    expect(t).toMatch(/^Your bishop belongs on c4: it /);
+    expect(t).toMatch(/^Your bishop belongs on c4\. It /);
   });
 });
 

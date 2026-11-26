@@ -637,7 +637,7 @@ const FACT_COMPUTER: Record<FactKind, string> = {
   complex: 'services/positionReadingService.ts#findColorComplexWeakness',
   structure: 'services/boardStructure.ts#describeStructure',
   verdict: 'services/reviewPositionalAssessment.ts#assessPositionalEdge',
-  opening: 'services/mastersPlanRead.ts#mastersPlanLine',
+  opening: 'services/theoryComposer.ts#mastersPlanLine',
   // The opening's story names each beat's kind (P1-4); the priority before
   // the move is one kind on every surface.
   'opening-cost': 'services/openingStory.ts#openingStoryAt',

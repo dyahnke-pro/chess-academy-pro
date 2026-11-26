@@ -95,7 +95,7 @@ describe('a live board holds the student plan step that is their next move (Davi
   const read = { white: null, black: null, whitePiece: { piece: 'b', from: 'f1', to: 'c4', san: 'Bc4', weight: 1, fen, color: 'w' }, blackPiece: null } as unknown as MastersPlanRead;
   it('held on the live board, named in review', () => {
     expect(mastersPlanLine(read, 'w', fen)).toBeNull();
-    expect(mastersPlanLine(read, 'w', null)?.text).toMatch(/^Your bishop belongs on c4: it /);
+    expect(mastersPlanLine(read, 'w', null)?.text).toMatch(/^Your bishop belongs on c4\. It /);
   });
 });
 

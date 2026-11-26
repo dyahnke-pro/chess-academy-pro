@@ -105,7 +105,7 @@ export function openingTheoryFacts(fenBefore: string, san: string, mine: boolean
     const jobRaw = aimOf(fenBefore, san, mover, mine);
     const job = jobRaw ? withoutCastleTail(jobRaw) : null;
     out.push(job
-      ? { kind: 'book-standing', clause: `is the main move here — it ${job.replace(/^it /, '')}`, sentence: rotateStem([`It's the main move here — it ${job.replace(/^it /, '')}.`, `That's the main line: it ${job.replace(/^it /, '')}.`], key), squares: [to], names: [san] }
+      ? { kind: 'book-standing', clause: `is the main move here — it ${job.replace(/^it /, '')}`, sentence: rotateStem([`It's the main move here. It ${job.replace(/^it /, '')}.`, `That's the main line. It ${job.replace(/^it /, '')}.`], key), squares: [to], names: [san] }
       : { kind: 'book-standing', clause: 'is the main move here', sentence: rotateStem(["It's the main move here.", "That's the main line."], key), squares: [to], names: [san] });
   } else if (played && played.pct >= MAIN_SHARE) {
     out.push({ kind: 'book-standing', clause: `is one of the main moves here, beside ${topSaid}`, sentence: `It's one of the main moves here, beside ${topSaid}.`, squares: [to, top.to], names: [san, top.san] });
@@ -123,7 +123,7 @@ export function openingTheoryFacts(fenBefore: string, san: string, mine: boolean
   // THE KEY DECISION (theoryComposer): on the move that made it, each road by
   // its job. The road it names is not said again below.
   const decision = keyDecisionLine({ fen: fenBefore, san, mover, whose: mine ? 'your' : 'their', roads: here.moves.map((m) => ({ san: m.san, pct: m.pct })) });
-  if (decision) out.push({ kind: 'book-alternatives', clause: decision.text.replace(/^The key decision: /, 'is the key decision here: '), sentence: decision.text, squares: [to, ...here.moves.filter((m) => decision.names.includes(m.san) && clean(m.san) !== clean(san)).map((m) => m.to)], names: decision.names });
+  if (decision) out.push({ kind: 'book-alternatives', clause: decision.text.replace(/^The key decision: /, 'is the key decision here. '), sentence: decision.text, squares: [to, ...here.moves.filter((m) => decision.names.includes(m.san) && clean(m.san) !== clean(san)).map((m) => m.to)], names: decision.names });
   const ownAim = aimOf(fenBefore, san, mover, mine);
   const aimKey = (a: string): string => a.split(/[,—:]/)[0].trim();
   for (const m of here.moves.filter((x) => clean(x.san) !== clean(san) && x.pct >= ALT_SHARE && !(decision && decision.names.includes(x.san)))) {
@@ -152,7 +152,7 @@ export function openingTheoryFacts(fenBefore: string, san: string, mine: boolean
     const replyRaw = aimOf(fenAfter, reply.san, them, !mine);
     const replyAim = replyRaw ? withoutCastleTail(replyRaw) : null;
     out.push(replyAim
-      ? { kind: 'book-reply', clause: `is met by ${r}, which ${replyAim}`, sentence: `The usual reply is ${r}: it ${replyAim}.`, squares: [reply.to], names: [reply.san] }
+      ? { kind: 'book-reply', clause: `is met by ${r}, which ${replyAim}`, sentence: `The usual reply is ${r}. It ${replyAim}.`, squares: [reply.to], names: [reply.san] }
       : { kind: 'book-reply', clause: `is ${shareAdverb(reply.pct)} met by ${r} in master games`, sentence: `Masters ${shareAdverb(reply.pct)} answer with ${r}.`, squares: [reply.to], names: [reply.san] });
   }
   return out;
