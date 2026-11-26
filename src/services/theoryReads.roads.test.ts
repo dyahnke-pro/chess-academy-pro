@@ -214,3 +214,16 @@ describe('planAheadRead — the plan the Theory lecture says on the move', () =>
     __setLocalDbForTests(null);
   }, 120_000);
 });
+
+describe('sacrificeRead — a piece given on purpose', () => {
+  it('a masters move that gives a piece is a sacrifice, never "hanging"', async () => {
+    const { sacrificeRead, hangsRead } = await import('./theoryReads');
+    // The Fried Liver: 6.Nxf7 gives the knight.
+    const fen = fenOf(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'Ng5', 'd5', 'exd5', 'Nxd5']);
+    const movesAt = () => [{ san: 'd4', games: 60 }, { san: 'Nxf7', games: 40 }] as never[];
+    expect(sacrificeRead({ fenBefore: fen, san: 'Nxf7', mover: 'w', movesAt })?.text).toBe('Nxf7 gives up the knight: a sacrifice, played for the attack and the time it wins.');
+    expect(hangsRead(fen, 'Nxf7', 'w', movesAt)).toBeNull();
+    // A move masters do not play is no sacrifice.
+    expect(sacrificeRead({ fenBefore: fenOf(['a4', 'e5']), san: 'Ra3', mover: 'w', movesAt: () => [{ san: 'e4', games: 99 }] as never[] })).toBeNull();
+  });
+});

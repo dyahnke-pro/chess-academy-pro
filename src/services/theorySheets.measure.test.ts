@@ -17,7 +17,7 @@ import { Chess } from 'chess.js';
 import { __setLocalDbForTests, masterMovesCachedSync } from './masterPlayLookup';
 import { __setContinuationsForTests } from './mastersContinuation';
 import { composeTheoryTurn, roadsFrom, type TheorySentenceKind } from './theoryComposer';
-import { planAheadRead, gambitAcceptedRead, gambitStandingRead, namedRoadsRead, structureRead, gambitRead, endgameRead, moveOrderRead, transpositionRead, pieceJobRead, trapRead, gambitAheadRead, centreRead } from './theoryReads';
+import { sacrificeRead, planAheadRead, gambitAcceptedRead, gambitStandingRead, namedRoadsRead, structureRead, gambitRead, endgameRead, moveOrderRead, transpositionRead, pieceJobRead, trapRead, gambitAheadRead, centreRead } from './theoryReads';
 import { knownSlipsAt, knownSlipIndexNow, setKnownSlipIndexForTests } from './knownSlips';
 import { openingTheoryFacts } from './openingTheory';
 import { setOpeningPositions, openingAtPosition } from './openingPositions';
@@ -77,7 +77,7 @@ describe.runIf(!!process.env.THEORY_SHEETS && existsSync('data/sources/wikibooks
       plan: ahead.plan,
       piece: ahead.piece,
       structure: structureRead({ fenBefore, san, mover, prior: history.length ? { fenBefore: fenOf(history.slice(0, -1)), san: history[history.length - 1] } : null }) ?? centreRead({ fenBefore, san, mover }),
-      gambit: gambitRead({ fenBefore, san, mover }) ?? gambitAcceptedRead({ fenBefore, san, mover }) ?? gambitAheadRead({ fen: fenAfter, movesAt: (f) => masterMovesCachedSync(f) }) ?? gambitStandingRead({ fenBefore, san, mover }),
+      gambit: gambitRead({ fenBefore, san, mover }) ?? sacrificeRead({ fenBefore, san, mover, movesAt: (f) => masterMovesCachedSync(f) }) ?? gambitAcceptedRead({ fenBefore, san, mover }) ?? gambitAheadRead({ fen: fenAfter, movesAt: (f) => masterMovesCachedSync(f) }) ?? gambitStandingRead({ fenBefore, san, mover }),
       endgame: endgameRead({ fenBefore, san, movesAt: (f) => masterMovesCachedSync(f) }),
       moveOrder: moveOrderRead({ history: n.lineSan, student: mover }) ?? transpositionRead({ history: n.lineSan, movesAt: (f) => masterMovesCachedSync(f) }),
       pieceJob: pieceJobRead({ fenBefore, san, mover }),

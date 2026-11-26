@@ -4,7 +4,7 @@
 // own each fact: `namedStructure`, `boardStructure`, `openingEquivalence`. A
 // reader returns a sentence only when the move CHANGED the board that way —
 // never a standing description repeated every move.
-import { Chess, type Color } from 'chess.js';
+import { Chess, type Color, type Move, type Square } from 'chess.js';
 import { namedStructureFormed, namedStructureLine } from './namedStructure';
 import { lockedPawnPairs, structureSignature } from './boardStructure';
 import { openingEquivalence } from './openingEquivalence';
@@ -308,24 +308,60 @@ export function pieceJobRead(i: { fenBefore: string; san: string; mover: Color }
 
 const PIECE_WORD: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
 /** The move leaves one of the mover's pieces to be won by the exchange count. */
-export function hangsRead(fenBefore: string, san: string, mover: Color): TheoryRead | null {
-  let a: Chess; let mv;
+/** A piece of the mover's the move leaves to be won by the exchange count
+ *  (a minor piece or the exchange), that was not so before the move. Checks
+ *  count (a sacrifice with check still gives the piece); a trade in flight does
+ *  not. */
+function piecesGiven(fenBefore: string, san: string, mover: Color, withCheck: boolean): { square: Square; piece: string; gain: number; defended: boolean; takes: Move } | null {
+  let a: Chess; let mv: Move;
   try { a = new Chess(fenBefore); mv = a.move(san); } catch { return null; }
-  if (a.inCheck() || inFluxAfter(fenBefore, san)) return null;
+  // A plain trade in flight gives nothing; a sacrifice (`withCheck`) is read
+  // net of what its capture took.
+  if (!withCheck && (a.inCheck() || inFluxAfter(fenBefore, san))) return null;
+  const took = withCheck && mv.captured ? (VAL[mv.captured] ?? 0) : 0;
   const was = new Set(findHangingBySee(fenBefore).filter((h) => h.color === mover).map((h) => h.square));
-  const now = findHangingBySee(a.fen()).filter((h) => h.color === mover && h.gain >= 2 && !was.has(h.square));
+  const now = findHangingBySee(a.fen()).map((h) => (h.square === mv.to ? { ...h, gain: h.gain - took } : h))
+    .filter((h) => h.color === mover && h.gain >= 2 && !was.has(h.square));
   const h = now.sort((x, y) => y.gain - x.gain)[0];
   if (!h) return null;
   const them: Color = mover === 'w' ? 'b' : 'w';
   const takes = a.moves({ verbose: true }).filter((m) => m.to === h.square && m.color === them)
     .sort((x, y) => (VAL[x.piece] ?? 10) - (VAL[y.piece] ?? 10))[0];
   if (!takes) return null;
-  const said = `${them === 'b' ? '…' : ''}${takes.san.replace(/[+#]$/, '')}`;
-  // A guarded piece that loses the exchange is "won", never "hanging".
+  return { square: h.square as Square, piece: h.piece, gain: h.gain, defended: h.defended, takes };
+}
+
+/** A SACRIFICE: a move masters play (the roads bar, 2% of their games) that
+ *  gives a piece or the exchange by the exchange count. Played on purpose,
+ *  so said as a sacrifice — never as a piece left hanging. */
+export function sacrificeRead(i: { fenBefore: string; san: string; mover: Color; movesAt: (fen: string) => readonly LocalDbMove[] | null }): TheoryRead | null {
+  if (!mastersPlay(i.fenBefore, i.san, i.movesAt)) return null;
+  const g = piecesGiven(i.fenBefore, i.san, i.mover, true);
+  if (!g) return null;
+  // Net of what it took: a minor piece for a pawn, or a rook for a minor piece.
+  const what = g.piece === 'r' && g.gain < 4 ? 'the exchange' : `the ${PIECE_WORD[g.piece]}`;
+  return { text: `${i.mover === 'b' ? '…' : ''}${i.san.replace(/[+#]$/, '')} gives up ${what}: a sacrifice, played for the attack and the time it wins.`, squares: [g.square] };
+}
+
+/** Do the masters play this move here (2% of their games)? */
+function mastersPlay(fen: string, san: string, movesAt: (fen: string) => readonly LocalDbMove[] | null): boolean {
+  const roads = movesAt(fen) ?? [];
+  const total = roads.reduce((n, m) => n + m.games, 0);
+  const r = roads.find((m) => m.san.replace(/[+#]$/, '') === san.replace(/[+#]$/, ''));
+  return !!r && total > 0 && r.games / total >= 0.02;
+}
+
+export function hangsRead(fenBefore: string, san: string, mover: Color, movesAt?: (fen: string) => readonly LocalDbMove[] | null): TheoryRead | null {
+  // A move masters play is a sacrifice, never a piece left hanging.
+  if (movesAt && mastersPlay(fenBefore, san, movesAt)) return null;
+  const g = piecesGiven(fenBefore, san, mover, false);
+  if (!g) return null;
+  const said = `${g.takes.color === 'b' ? '…' : ''}${g.takes.san.replace(/[+#]$/, '')}`;
   // A rook for a minor piece is the exchange.
-  const what = h.gain < 3 ? (h.piece === 'r' && VAL[takes.piece] === 3 ? 'the exchange' : null) : `the ${PIECE_WORD[h.piece]} on ${h.square}`;
+  const what = g.gain < 3 ? (g.piece === 'r' && VAL[g.takes.piece] === 3 ? 'the exchange' : null) : `the ${PIECE_WORD[g.piece]} on ${g.square}`;
   if (!what) return null;
-  return { text: h.defended || h.gain < 3 ? `That lets ${said} win ${what}.` : `That leaves the ${PIECE_WORD[h.piece]} on ${h.square} hanging: ${said} wins it.`, squares: [h.square] };
+  // A guarded piece that loses the exchange is "won", never "hanging".
+  return { text: g.defended || g.gain < 3 ? `That lets ${said} win ${what}.` : `That leaves the ${PIECE_WORD[g.piece]} on ${g.square} hanging: ${said} wins it.`, squares: [g.square] };
 }
 
 /** THE TRAPS AROUND THE MOVE, from the one known-slip index (`slipsAt` —
@@ -349,7 +385,7 @@ export function trapRead(i: { fenBefore: string; san: string; mover: Color; slip
   // 0. The move itself leaves a piece hanging: a piece of the mover's that the
   // other side wins by the exchange count (a minor piece's worth or more), and
   // that was not hanging before the move. Never on a check or a trade in flight.
-  const hung = hangsRead(i.fenBefore, i.san, i.mover);
+  const hung = hangsRead(i.fenBefore, i.san, i.mover, i.movesAt);
   if (hung) return { ...hung, slipPlayed: true };
   // 1. The move played is a known slip.
   const slipHere = i.slipsAt(i.fenBefore).find((g) => g.slip.replace(/[+#]$/, '') === i.san.replace(/[+#]$/, ''));
@@ -552,7 +588,7 @@ export function theoryExtras(i: {
   const turn = composeTheoryTurn({
     fen: i.fenBefore, san: i.san, mover: i.mover, whose: 'your', roads: [], plan, piece,
     structure: once('structure', structureRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover, prior: priorOf(i.history) }) ?? centreRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })),
-    gambit: once('gambit', gambitRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover }) ?? gambitAcceptedRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover }) ?? gambitAheadRead({ fen: (() => { const c = new Chess(i.fenBefore); c.move(i.san); return c.fen(); })(), movesAt: i.movesAt }) ?? gambitStandingRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })),
+    gambit: once('gambit', gambitRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover }) ?? sacrificeRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover, movesAt: i.movesAt }) ?? gambitAcceptedRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover }) ?? gambitAheadRead({ fen: (() => { const c = new Chess(i.fenBefore); c.move(i.san); return c.fen(); })(), movesAt: i.movesAt }) ?? gambitStandingRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })),
     endgame: once('endgame', endgameRead({ fenBefore: i.fenBefore, san: i.san, movesAt: i.movesAt })),
     namedRoads: fresh(namedRoadsRead({ fen: (() => { const c = new Chess(i.fenBefore); c.move(i.san); return c.fen(); })(), movesAt: i.movesAt })),
     moveOrder: fresh(moveOrderRead({ history: [...i.history, i.san], student: i.mover }) ?? transpositionRead({ history: [...i.history, i.san], movesAt: i.movesAt })),
