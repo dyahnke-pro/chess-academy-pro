@@ -366,12 +366,19 @@ function piecesGiven(fenBefore: string, san: string, mover: Color, withCheck: bo
  *  gives a piece or the exchange by the exchange count. Played on purpose,
  *  so said as a sacrifice — never as a piece left hanging. */
 export function sacrificeRead(i: { fenBefore: string; san: string; mover: Color; movesAt: (fen: string) => readonly LocalDbMove[] | null }): TheoryRead | null {
-  if (!mastersPlay(i.fenBefore, i.san, i.movesAt)) return null;
+  // Played on purpose: masters play it, or the opening index names the board
+  // it reaches a gambit (the Halloween's Nxe5, the Jerome's Bxf7+).
+  if (!mastersPlay(i.fenBefore, i.san, i.movesAt) && !namedGambitAfter(i.fenBefore, i.san)) return null;
   const g = piecesGiven(i.fenBefore, i.san, i.mover, true);
   if (!g) return null;
   // Net of what it took: a minor piece for a pawn, or a rook for a minor piece.
   const what = g.piece === 'r' && g.gain < 4 ? 'the exchange' : `the ${PIECE_WORD[g.piece]}`;
   return { text: `${i.mover === 'b' ? '…' : ''}${i.san.replace(/[+#]$/, '')} gives up ${what}: a sacrifice, played for the attack and the time it wins.`, squares: [g.square] };
+}
+
+/** Does the opening index name the board this move reaches a gambit? */
+function namedGambitAfter(fen: string, san: string): boolean {
+  try { const c = new Chess(fen); c.move(san); return /Gambit/.test(openingAtPosition(c.fen())?.name ?? ''); } catch { return false; }
 }
 
 /** Do the masters play this move here (2% of their games)? */
@@ -383,8 +390,9 @@ function mastersPlay(fen: string, san: string, movesAt: (fen: string) => readonl
 }
 
 export function hangsRead(fenBefore: string, san: string, mover: Color, movesAt?: (fen: string) => readonly LocalDbMove[] | null): TheoryRead | null {
-  // A move masters play is a sacrifice, never a piece left hanging.
-  if (movesAt && mastersPlay(fenBefore, san, movesAt)) return null;
+  // A move masters play, or a named gambit, is a sacrifice, never a piece
+  // left hanging.
+  if ((movesAt && mastersPlay(fenBefore, san, movesAt)) || namedGambitAfter(fenBefore, san)) return null;
   const g = piecesGiven(fenBefore, san, mover, false);
   if (!g) return null;
   const said = `${g.takes.color === 'b' ? '…' : ''}${g.takes.san.replace(/[+#]$/, '')}`;
@@ -442,10 +450,10 @@ export function trapRead(i: { fenBefore: string; san: string; mover: Color; slip
   // 2b. The move attacks something, and a reply masters play ignores it.
   const hang = hangRead({ fen: after.fen(), mover: i.mover, movesAt: i.movesAt });
   if (hang) return hang;
-  // 3. One waits down a road masters play, up to two moves on (`walkRoadsAhead`):
+  // 3. One waits down a road masters play, up to three moves on (`walkRoadsAhead`):
   // the slip of whoever moves on that board — the mover's own a "Watch out".
   return walkRoadsAhead(after.fen(), [], i.movesAt, ({ after: board, sans }) => {
-    if (sans.length > 2) return null;
+    // Every board the road walk reaches (three moves deep).
     const slipper = board.turn();
     const pre = sans.length === 1 ? `If they answer ${sans[0]}, ` : `If play goes ${andList(sans)}, `;
     for (const g of i.slipsAt(board.fen())) {

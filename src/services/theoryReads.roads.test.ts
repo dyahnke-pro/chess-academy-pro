@@ -276,3 +276,11 @@ describe('structureRead — the bishop out before its pawns', () => {
     expect(structureRead({ fenBefore: fenOf(['d4', 'd5', 'c4', 'c6', 'Nf3', 'Nf6', 'Nc3', 'dxc4', 'a4']), san: 'Bf5', mover: 'b' })?.text).toMatch(/before …e6 would shut it in/);
   });
 });
+
+describe('sacrificeRead — a named gambit is played on purpose', () => {
+  it('the Halloween Gambit Nxe5 gives up the knight, though masters do not play it', async () => {
+    const { sacrificeRead } = await import('./theoryReads');
+    const r = sacrificeRead({ fenBefore: fenOf(['e4', 'e5', 'Nf3', 'Nc6', 'Nc3', 'Nf6']), san: 'Nxe5', mover: 'w', movesAt: () => [{ san: 'Bb5', games: 99 }] as never[] });
+    expect(r?.text).toBe('Nxe5 gives up the knight: a sacrifice, played for the attack and the time it wins.');
+  });
+});
