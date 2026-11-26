@@ -37,10 +37,42 @@ export function structureRead(i: { fenBefore: string; san: string; mover: Color 
     const pairs = lockedPawnPairs(after).filter((p) => 'cdef'.includes(p.white[0]));
     return { text: `The centre is locked: ${pairs.map((p) => `${p.white} and ${p.black}`).join(' and ')} face each other, so neither side can push there and the play moves to the wings.`, squares: pairs.flatMap((p) => [p.white, p.black]) };
   }
-  if (now.iqp && !was.iqp) return { text: 'That leaves an isolated pawn in the centre: it grips the squares in front of it, but it has no pawn to guard it, so its pieces must.', squares: [] };
-  if (now.doubled && !was.doubled) return { text: 'That doubles a pawn: a weakness to aim at, paid for with an open file.', squares: [] };
+  // A capture the other side takes back at once is an exchange in flight: the
+  // doubled or isolated pawn it shows is not on the board after the recapture.
+  const lastMove = after.history({ verbose: true }).pop();
+  const inFlight = !!lastMove?.captured && after.attackers(lastMove.to as never, after.turn()).length > 0;
+  if (now.iqp && !was.iqp && !inFlight) return { text: 'That leaves an isolated pawn in the centre: it grips the squares in front of it, but it has no pawn to guard it, so its pieces must.', squares: [] };
+  if (now.doubled && !was.doubled && !inFlight) return { text: 'That doubles a pawn: a weakness to aim at, paid for with an open file.', squares: [] };
   const opened = now.openFiles.filter((f) => !was.openFiles.includes(f));
   if (opened.length) return { text: `The ${opened.map((f) => FILE_NAME[f] ?? f).join(' and ')}-file is open now: that is where rooks belong.`, squares: [] };
+  // A pawn majority the move made: more pawns on a wing (or in the centre)
+  // than the other side has there — the passed pawn of the long run.
+  const pawnsOn = (c: Chess, f: string, col: Color): string[] => ['1', '2', '3', '4', '5', '6', '7', '8'].map((r) => `${f}${r}`).filter((sq) => { const p = c.get(sq as never); return !!p && p.type === 'p' && p.color === col; });
+  const before = new Chess(i.fenBefore);
+  const centre = (c: Chess, col: Color): number => pawnsOn(c, 'd', col).length + pawnsOn(c, 'e', col).length;
+  let majority: string | null = null;
+  for (const col of ['w', 'b'] as Color[]) {
+    const foe: Color = col === 'w' ? 'b' : 'w';
+    if (!majority && centre(after, col) > centre(after, foe) && !(centre(before, col) > centre(before, foe))) {
+      majority = `${col === 'w' ? 'White' : 'Black'} has the central pawn majority now: more pawns on the d- and e-files to build the centre with.`;
+    }
+  }
+  if (!majority && now.queensideMajority && now.queensideMajority !== was.queensideMajority) {
+    majority = `${now.queensideMajority === 'w' ? 'White' : 'Black'} has the queenside pawn majority now: in the long run it makes a passed pawn there.`;
+  }
+  // A file half-open for one side (its own pawn gone, theirs still there): the
+  // rook's file, aimed at that pawn. The mover's file first.
+  for (const col of [i.mover, i.mover === 'w' ? 'b' : 'w'] as Color[]) {
+    const foe: Color = col === 'w' ? 'b' : 'w';
+    for (const f of 'abcdefgh') {
+      if (pawnsOn(before, f, col).length === 0 || pawnsOn(after, f, col).length > 0) continue;
+      const target = pawnsOn(after, f, foe);
+      if (!target.length || pawnsOn(before, f, foe).length === 0) continue;
+      const aim = col === 'w' ? target[0] : target[target.length - 1];
+      return { text: `The ${f}-file is half-open for ${col === 'w' ? 'White' : 'Black'} now: a rook there bears down on the pawn on ${aim}.${majority ? ` ${majority}` : ''}`, squares: [aim] };
+    }
+  }
+  if (majority) return { text: majority, squares: [] };
   return null;
 }
 
@@ -60,14 +92,28 @@ export function gambitRead(i: { fenBefore: string; san: string; mover: Color }):
   return null;
 }
 
-/** The queens come off: the game turns toward an endgame. */
-export function endgameRead(i: { fenBefore: string; san: string }): TheoryRead | null {
+/** The queens come off: the game turns toward an endgame. Said when the move
+ *  takes the last queen off, when the queens are already off (an opening that
+ *  goes straight to an ending, the Berlin's), or when the masters' usual reply
+ *  trades them. */
+export function endgameRead(i: { fenBefore: string; san: string; movesAt?: (fen: string) => readonly LocalDbMove[] | null }): TheoryRead | null {
   const was = structureSignature(i.fenBefore);
   let after: string;
   try { const c = new Chess(i.fenBefore); c.move(i.san); after = c.fen(); } catch { return null; }
   const now = structureSignature(after);
-  if (!was || !now || !was.queensOn || now.queensOn) return null;
-  return { text: 'The queens come off, so the game heads for an endgame: the pawn structure and an active king decide it now.', squares: [] };
+  if (!was || !now) return null;
+  if (was.queensOn && !now.queensOn) return { text: 'The queens come off, so the game heads for an endgame: the pawn structure and an active king decide it now.', squares: [] };
+  if (!was.queensOn && !now.queensOn) return { text: 'With the queens off the board, this is already an endgame in spirit: the pawn structure and the king\'s activity matter more than an attack.', squares: [] };
+  const roads = i.movesAt?.(after) ?? [];
+  const total = roads.reduce((n, m) => n + m.games, 0);
+  const top = [...roads].sort((a, b) => b.games - a.games)[0];
+  if (top && total > 0 && top.games / total >= 0.3) {
+    const c = new Chess(after);
+    let mv;
+    try { mv = c.move(top.san); } catch { return null; }
+    if (mv.captured === 'q' && mv.piece === 'q') return { text: `The usual reply ${mv.color === 'b' ? '…' : ''}${top.san.replace(/[+#]$/, '')} trades the queens: the game is heading for an endgame.`, squares: [mv.to] };
+  }
+  return null;
 }
 
 /** The board is a named opening reached another way, or the same one with the
@@ -80,31 +126,41 @@ export function moveOrderRead(i: { history: readonly string[]; student: Color })
 /** A TRANSPOSITION, said where the move order matters: the board IS a named
  *  opening the move order did not reach, or the masters' usual reply lands on
  *  one. "If they answer …c5, it transposes into the Sicilian Defense." */
+/** A name with its article: "the Sicilian Defense", "Petrov's Defense". */
+const theName = (name: string): string => (/^(?!King|Queen)\S+['’]s\b/.test(name) ? name : `the ${name}`);
+
 export function transpositionRead(i: { history: readonly string[]; movesAt: (fen: string) => readonly LocalDbMove[] | null }): TheoryRead | null {
   const c = new Chess();
   try { for (const s of i.history) c.move(s); } catch { return null; }
   const now = transposedOpening(c.fen(), i.history.length, detectOpeningByOrder([...i.history]));
-  if (now) return { text: `This transposes into the ${now}: the same position by another move order.`, squares: [] };
-  const roads = i.movesAt(c.fen()) ?? [];
-  const total = roads.reduce((n, m) => n + m.games, 0);
-  for (const r of [...roads].sort((a, b) => b.games - a.games)) {
-    if (total === 0 || r.games / total < 0.1) break;
-    const next = new Chess(c.fen());
-    let mv;
-    try { mv = next.move(r.san); } catch { continue; }
-    const into = transposedOpening(next.fen(), i.history.length + 1, detectOpeningByOrder([...i.history, r.san]));
-    if (into) return { text: `If the reply is ${mv.color === 'b' ? '…' : ''}${r.san.replace(/[+#]$/, '')}, the game transposes into the ${into}.`, squares: [mv.to] };
-    // …or the move after it does.
-    const second = i.movesAt(next.fen()) ?? [];
-    const total2 = second.reduce((n, m) => n + m.games, 0);
-    for (const s2 of [...second].sort((a, b) => b.games - a.games)) {
-      if (total2 === 0 || s2.games / total2 < 0.1) break;
-      const n2 = new Chess(next.fen());
-      let m2;
-      try { m2 = n2.move(s2.san); } catch { continue; }
-      const into2 = transposedOpening(n2.fen(), i.history.length + 2, detectOpeningByOrder([...i.history, r.san, s2.san]));
-      if (into2) return { text: `After ${mv.color === 'b' ? '…' : ''}${r.san.replace(/[+#]$/, '')} and ${m2.color === 'b' ? '…' : ''}${s2.san.replace(/[+#]$/, '')}, the game transposes into the ${into2}.`, squares: [mv.to, m2.to] };
+  if (now) return { text: `This transposes into ${theName(now)}: the same position by another move order.`, squares: [] };
+  // The masters' roads ahead, shallowest first: a road at the next move counts
+  // from 2% of their games (the named-roads bar), a deeper one from 10%.
+  type Node = { fen: string; sans: string[]; history: string[] };
+  let frontier: Node[] = [{ fen: c.fen(), sans: [], history: [...i.history] }];
+  for (let depth = 1; depth <= 3; depth += 1) {
+    const next: Node[] = [];
+    for (const node of frontier) {
+      const roads = i.movesAt(node.fen) ?? [];
+      const total = roads.reduce((n, m) => n + m.games, 0);
+      for (const r of [...roads].sort((a, b) => b.games - a.games)) {
+        if (total === 0 || r.games / total < (depth === 1 ? 0.02 : 0.1)) break;
+        const n2 = new Chess(node.fen);
+        let mv;
+        try { mv = n2.move(r.san); } catch { continue; }
+        const said = `${mv.color === 'b' ? '…' : ''}${r.san.replace(/[+#]$/, '')}`;
+        const history = [...node.history, r.san];
+        const into = transposedOpening(n2.fen(), history.length, detectOpeningByOrder(history));
+        const sans = [...node.sans, said];
+        if (into) {
+          return sans.length === 1
+            ? { text: `If the reply is ${sans[0]}, the game transposes into ${theName(into)}.`, squares: [mv.to] }
+            : { text: `After ${andList(sans)}, the game transposes into ${theName(into)}.`, squares: [mv.to] };
+        }
+        next.push({ fen: n2.fen(), sans, history });
+      }
     }
+    frontier = next;
   }
   return null;
 }
@@ -274,7 +330,7 @@ export function theoryExtras(i: {
     fen: i.fenBefore, san: i.san, mover: i.mover, whose: 'your', roads: [],
     structure: once('structure', structureRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover }) ?? centreRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })),
     gambit: once('gambit', gambitRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover }) ?? gambitAheadRead({ fen: (() => { const c = new Chess(i.fenBefore); c.move(i.san); return c.fen(); })(), movesAt: i.movesAt }) ?? gambitStandingRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })),
-    endgame: once('endgame', endgameRead({ fenBefore: i.fenBefore, san: i.san })),
+    endgame: once('endgame', endgameRead({ fenBefore: i.fenBefore, san: i.san, movesAt: i.movesAt })),
     namedRoads: fresh(namedRoadsRead({ fen: (() => { const c = new Chess(i.fenBefore); c.move(i.san); return c.fen(); })(), movesAt: i.movesAt })),
     moveOrder: fresh(moveOrderRead({ history: [...i.history, i.san], student: i.mover }) ?? transpositionRead({ history: [...i.history, i.san], movesAt: i.movesAt })),
     trapSaid: fresh(trapRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover, boards: i.boards, movesAt: i.movesAt })),

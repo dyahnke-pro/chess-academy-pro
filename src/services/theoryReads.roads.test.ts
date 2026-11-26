@@ -59,3 +59,41 @@ describe('gambitStandingRead — the pawn the gambit gave', () => {
     expect(gambitStandingRead({ fenBefore: fenOf(['e4', 'e5']), san: 'Nf3', mover: 'w' })).toBeNull();
   });
 });
+
+describe('transpositionRead — the roads ahead, more than one move deep', () => {
+  it('a transposition two moves ahead is said with the moves that reach it', async () => {
+    const { transpositionRead } = await import('./theoryReads');
+    const chain: Record<number, string> = { 1: 'd5', 2: 'd4' };
+    const plies = (f: string): number => (Number(f.split(' ')[5]) - 1) * 2 + (f.split(' ')[1] === 'b' ? 1 : 0);
+    const r = transpositionRead({ history: ['Nf3'], movesAt: (f) => (chain[plies(f)] ? [{ san: chain[plies(f)], games: 100 } as never] : null) });
+    expect(r?.text).toBe("After …d5 and d4, the game transposes into the Queen's Pawn Game: Zukertort Variation.");
+  });
+});
+
+describe('structureRead — the half-open file and the majority a capture makes', () => {
+  it('the Sicilian\'s cxd4 half-opens the c-file and gives Black the central majority', async () => {
+    const { structureRead } = await import('./theoryReads');
+    const r = structureRead({ fenBefore: fenOf(['e4', 'c5', 'Nf3', 'd6', 'd4']), san: 'cxd4', mover: 'b' });
+    expect(r?.text).toBe('The c-file is half-open for Black now: a rook there bears down on the pawn on c2. Black has the central pawn majority now: more pawns on the d- and e-files to build the centre with.');
+    // Nothing new after the recapture: the structure was said when it was made.
+    expect(structureRead({ fenBefore: fenOf(['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4']), san: 'Nxd4', mover: 'w' })).toBeNull();
+  });
+});
+
+describe('endgameRead — the queens off', () => {
+  it('an ending reached in the opening is said; queens on and no trade ahead is not', async () => {
+    const { endgameRead } = await import('./theoryReads');
+    const berlin = fenOf(['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'Nf6', 'O-O', 'Nxe4', 'd4', 'Nd6', 'Bxc6', 'dxc6', 'dxe5', 'Nf5', 'Qxd8+', 'Kxd8']);
+    expect(endgameRead({ fenBefore: berlin, san: 'Nc3' })?.text).toMatch(/^With the queens off the board, this is already an endgame/);
+    expect(endgameRead({ fenBefore: fenOf(['e4', 'e5']), san: 'Nf3' })).toBeNull();
+  });
+  it('the masters\' usual reply trading queens is said', async () => {
+    const { endgameRead } = await import('./theoryReads');
+    const t = endgameRead({ fenBefore: fenOf(['e4', 'e5', 'Nf3', 'd6', 'd4', 'exd4', 'Nxd4', 'Nf6', 'Nc3']), san: 'd5', movesAt: () => [{ san: 'exd5', games: 80 } as never] });
+    expect(t).toBeNull();
+    const q = endgameRead({ fenBefore: fenOf(['e4', 'd6', 'd4', 'e5']), san: 'dxe5', movesAt: () => [{ san: 'dxe5', games: 80 } as never] });
+    expect(q).toBeNull();
+    const trade = endgameRead({ fenBefore: fenOf(['e4', 'd6', 'd4', 'e5', 'dxe5']), san: 'dxe5', movesAt: () => [{ san: 'Qxd8+', games: 80 } as never] });
+    expect(trade?.text).toBe('The usual reply Qxd8 trades the queens: the game is heading for an endgame.');
+  });
+});

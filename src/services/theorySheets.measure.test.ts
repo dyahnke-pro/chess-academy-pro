@@ -91,7 +91,7 @@ describe.runIf(!!process.env.THEORY_SHEETS && existsSync('data/sources/wikibooks
       piece: home?.fen && home.color ? { piece: home.piece, to: home.to, san: home.san, color: home.color, fen: home.fen } : null,
       structure: structureRead({ fenBefore, san, mover }) ?? centreRead({ fenBefore, san, mover }),
       gambit: gambitRead({ fenBefore, san, mover }) ?? gambitAheadRead({ fen: fenAfter, movesAt: (f) => masterMovesCachedSync(f) }) ?? gambitStandingRead({ fenBefore, san, mover }),
-      endgame: endgameRead({ fenBefore, san }),
+      endgame: endgameRead({ fenBefore, san, movesAt: (f) => masterMovesCachedSync(f) }),
       moveOrder: moveOrderRead({ history: n.lineSan, student: mover }) ?? transpositionRead({ history: n.lineSan, movesAt: (f) => masterMovesCachedSync(f) }),
       pieceJob: pieceJobRead({ fenBefore, san, mover }),
       namedRoads: namedRoadsRead({ fen: fenAfter, movesAt: (f) => masterMovesCachedSync(f) }),
