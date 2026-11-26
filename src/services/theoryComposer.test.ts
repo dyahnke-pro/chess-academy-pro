@@ -72,3 +72,11 @@ describe('theoryComposer — a plan is said from its own seat, and a played slip
     expect(turn.some((t) => t.kind === 'gambit')).toBe(false);
   });
 });
+
+describe('theoryComposer — a named structure states the plans', () => {
+  it('the structure sentence that says each plan is marked as saying one', () => {
+    const turn = composeTheoryTurn({ fen: fenOf(['e4', 'e6', 'd4', 'd5']), san: 'e5', mover: 'w', whose: 'your', roads: [], said: new Set(),
+      structure: { text: 'That makes it the French pawn chain. Your plan is to …', squares: [], saysPlan: true } });
+    expect(turn.find((t) => t.kind === 'structure')?.saysPlan).toBe(true);
+  });
+});

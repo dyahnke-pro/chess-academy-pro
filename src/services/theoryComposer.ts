@@ -106,7 +106,11 @@ export function keyDecisionLine(i: { fen: string; san: string; mover: Color; who
 }
 
 export type TheorySentenceKind = 'decision' | 'plan' | 'piece' | 'castle' | 'trap' | 'structure' | 'move-order' | 'gambit' | 'endgame';
-export interface TheorySentence { kind: TheorySentenceKind; text: string; squares: string[]; claim?: string }
+export interface TheorySentence {
+  kind: TheorySentenceKind; text: string; squares: string[]; claim?: string;
+  /** A sentence of another kind that also states the plan (a named structure). */
+  saysPlan?: boolean;
+}
 
 export interface TheoryTurnIn {
   fen: string;
@@ -123,7 +127,7 @@ export interface TheoryTurnIn {
   said: ReadonlySet<string>;
   /** What the move changed on the board, read by `theoryReads` (each only when
    *  it has something true to say). */
-  structure?: { text: string; squares: string[] } | null;
+  structure?: { text: string; squares: string[]; saysPlan?: boolean } | null;
   moveOrder?: { text: string; squares: string[] } | null;
   gambit?: { text: string; squares: string[] } | null;
   endgame?: { text: string; squares: string[] } | null;
@@ -160,7 +164,7 @@ export function composeTheoryTurn(i: TheoryTurnIn): TheorySentence[] {
   // A move that is itself a known slip offers nothing: the pawn it gives is
   // the mistake, never a gambit.
   if (i.gambit && !i.trapSaid?.slipPlayed) out.push({ kind: 'gambit', text: i.gambit.text, squares: i.gambit.squares });
-  if (i.structure) out.push({ kind: 'structure', text: i.structure.text, squares: i.structure.squares });
+  if (i.structure) out.push({ kind: 'structure', text: i.structure.text, squares: i.structure.squares, ...(i.structure.saysPlan ? { saysPlan: true } : {}) });
   if (i.moveOrder) out.push({ kind: 'move-order', text: i.moveOrder.text, squares: i.moveOrder.squares });
   if (i.pieceJob) out.push({ kind: 'piece', text: i.pieceJob.text, squares: i.pieceJob.squares });
   if (i.trapSaid) out.push({ kind: 'trap', text: i.trapSaid.text, squares: i.trapSaid.squares });

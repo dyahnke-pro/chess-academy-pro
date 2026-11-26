@@ -88,7 +88,7 @@ describe.runIf(!!process.env.THEORY_SHEETS && existsSync('data/sources/wikibooks
     });
     const kinds = new Set<Idea>();
     const lines: Array<[Idea, string]> = [];
-    for (const t of turn) for (const k of KIND_IDEAS[t.kind]) { kinds.add(k); lines.push([k, t.text]); }
+    for (const t of turn) for (const k of [...KIND_IDEAS[t.kind], ...(t.saysPlan ? ['plan' as Idea] : [])]) { kinds.add(k); lines.push([k, t.text]); }
     // Book alternatives at the board are the choices said.
     if (openingTheoryFacts(fenBefore, san, true).some((f) => f.kind === 'book-alternatives')) kinds.add('decision');
     if (withName) {

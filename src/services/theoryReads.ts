@@ -33,6 +33,8 @@ export interface TheoryRead {
   /** A trap read about the move itself being a known slip: the move's offer
    *  is then the mistake, never a gambit. */
   slipPlayed?: boolean;
+  /** The sentence also says each side's plan (a named structure's plans). */
+  saysPlan?: boolean;
 }
 
 /** THE ROADS AHEAD — the one walk the theory reads share (transpositions,
@@ -83,7 +85,7 @@ export function structureRead(i: { fenBefore: string; san: string; mover: Color;
   prior?: { fenBefore: string; san: string } | null;
 }): TheoryRead | null {
   const named = namedStructureFormed(i.fenBefore, i.san);
-  if (named) return { text: namedStructureLine(named, i.mover), squares: named.squares };
+  if (named) return { text: namedStructureLine(named, i.mover), squares: named.squares, saysPlan: true };
   let after: Chess;
   try { after = new Chess(i.fenBefore); after.move(i.san); } catch { return null; }
   const was = structureSignature(i.fenBefore);
