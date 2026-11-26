@@ -6,8 +6,8 @@
 //   TRAP_RECALL=1 npx vitest run src/services/trapRecall.measure.test.ts
 import { describe, it } from 'vitest';
 import { Chess } from 'chess.js';
-import { execFileSync } from 'node:child_process';
-import { existsSync, writeFileSync, mkdirSync } from 'node:fs';
+import { spawn } from 'node:child_process';
+import { existsSync, writeFileSync, mkdirSync, appendFileSync } from 'node:fs';
 import { classifySlip } from './trapComputer';
 import { trapLine } from './trapLine';
 import { MATE_CP } from './mateScale';
@@ -58,18 +58,29 @@ const LESSONS: Lesson[] = [
 ];
 
 const ENGINE = 'node_modules/stockfish/bin/stockfish-18-lite-single.js';
-const stockfish = (fen: string): { cp: number; best: string[] } => {
-  // The WASM build reads UCI from stdin and quits at EOF, so stdin is held open
-  // while the search runs.
-  const out = execFileSync('bash', ['-c', `(printf 'uci\\nposition fen ${fen}\\ngo depth 14\\n'; sleep 9) | timeout 30 node ${ENGINE}`], { timeout: 60_000, maxBuffer: 64 * 1024 * 1024 }).toString();
-  const last = [...out.matchAll(/info depth 14 .*?score (cp|mate) (-?\d+).*? pv ([^\n]+)/g)].pop();
-  if (!last) return { cp: 0, best: [] };
+const DEPTH = Number(process.env.TRAP_RECALL_DEPTH ?? 20);
+/** One engine read, waited on to its bestmove (the bar is read at depth, not a
+ *  timer): the score for the side to move and its line. */
+const stockfish = (fen: string): Promise<{ cp: number; best: string[] }> => new Promise((resolve) => {
+  const p = spawn('node', [ENGINE]);
+  let out = '';
+  const done = (): void => {
+    const last = [...out.matchAll(/info depth \d+ .*?score (cp|mate) (-?\d+).*? pv ([^\n]+)/g)].pop();
+    p.kill();
+    if (!last) { resolve({ cp: 0, best: [] }); return; }
+    const v = Number(last[2]);
+    resolve({ cp: last[1] === 'mate' ? (v > 0 ? MATE_CP : -MATE_CP) : v, best: last[3].trim().split(/\s+/).slice(0, 10) });
+  };
+  const timer = setTimeout(done, 180_000);
+  p.stdout.on('data', (d: Buffer) => { out += d.toString(); if (/\nbestmove /.test(out)) { clearTimeout(timer); done(); } });
+  p.stdin.write(`uci\nposition fen ${fen}\ngo depth ${DEPTH}\n`);
+});
   const v = Number(last[2]);
   return { cp: last[1] === 'mate' ? (v > 0 ? MATE_CP : -MATE_CP) : v, best: last[3].trim().split(/\s+/).slice(0, 8) };
 };
 
-const punishAfter = (fen: string): { cp: number; seq: string[] } => {
-  const read = stockfish(fen);
+const punishAfter = async (fen: string): Promise<{ cp: number; seq: string[] }> => {
+  const read = await stockfish(fen);
   const seq: string[] = []; const p = new Chess(fen);
   for (const u of read.best) { try { seq.push(p.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san); } catch { break; } }
   return { cp: read.cp, seq };
@@ -80,9 +91,11 @@ const lessonMoves = (l: LessonScript | undefined): string => {
 };
 
 describe.runIf(!!process.env.TRAP_RECALL && existsSync('node_modules/stockfish/bin/stockfish-18-lite-single.js'))('famous-trap recall', () => {
-  it('reports which the one computer calls a trap', () => {
+  it('reports which the one computer calls a trap', async () => {
     const rows: string[] = [];
     let traps = 0;
+    mkdirSync('audit-reports', { recursive: true });
+    writeFileSync('audit-reports/theory-trap-recall.progress', '');
     for (const f of FAMOUS) {
       const c = new Chess();
       let ok = true;
@@ -91,12 +104,13 @@ describe.runIf(!!process.env.TRAP_RECALL && existsSync('node_modules/stockfish/b
       const fenBefore = c.fen();
       try { c.move(f.slip); } catch { rows.push(`${f.name}: SLIP ILLEGAL`); continue; }
       // The punisher's read, from their own seat (the side to move now).
-      const read = stockfish(c.fen());
+      const read = await stockfish(c.fen());
       const punishSeq = []; const p = new Chess(c.fen());
       for (const u of read.best) { try { const m = p.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); punishSeq.push(m.san); } catch { break; } }
       const kind = classifySlip({ engineCp: read.cp, line: { fen: fenBefore, slip: f.slip, punish: punishSeq } });
       if (kind === 'trap') traps += 1;
       const sentence = trapLine({ fen: fenBefore, slip: f.slip, punish: punishSeq, slipBy: 'opponent' })?.text ?? '(no blow to name)';
+      appendFileSync('audit-reports/theory-trap-recall.progress', `${f.name}\n`);
       rows.push(`${f.name}: ${kind ?? 'not a slip'} (${read.cp >= MATE_CP / 10 ? 'mate' : `${read.cp}cp`}) — ${sentence}`);
     }
     // The named-trap lessons: the lesson's slip is called a slip by the one
@@ -117,7 +131,7 @@ describe.runIf(!!process.env.TRAP_RECALL && existsSync('node_modules/stockfish/b
       for (const s of l.line.split(' ')) c.move(s);
       const fenBefore = c.fen();
       c.move(l.slip);
-      const r = punishAfter(c.fen());
+      const r = await punishAfter(c.fen());
       const kind = classifySlip({ engineCp: r.cp, line: { fen: fenBefore, slip: l.slip, punish: r.seq } });
       const t = trapLine({ fen: fenBefore, slip: l.slip, punish: r.seq, slipBy: l.seat });
       const seatOk = !t || l.seat === 'opponent' || !/trap/i.test(t.text);
@@ -129,5 +143,5 @@ describe.runIf(!!process.env.TRAP_RECALL && existsSync('node_modules/stockfish/b
     const text = `Famous traps called a trap: ${traps} of ${FAMOUS.length}\n${rows.join('\n')}\n\nNamed-trap lessons that work: ${work} of ${LESSONS.length}\n${lrows.join('\n')}\n`;
     writeFileSync('audit-reports/theory-trap-recall.md', text);
     console.log(text);
-  }, 600_000);
+  }, 7_200_000);
 });
