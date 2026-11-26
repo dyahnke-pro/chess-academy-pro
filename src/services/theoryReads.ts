@@ -10,7 +10,7 @@ import { lockedPawnPairs, structureSignature } from './boardStructure';
 import { openingEquivalence } from './openingEquivalence';
 import { pawnMajority } from './pawnMajority';
 import { inFluxAfter } from './boardState';
-import { findHangingBySee } from './positionReadingService';
+import { findHangingBySee, bishopHemmedByOwnPawns } from './positionReadingService';
 import { openingAtPosition } from './openingPositions';
 import { transposedOpening } from './openingPositions';
 import { detectOpeningByOrder } from './openingDetectionService';
@@ -65,6 +65,32 @@ export function structureRead(i: { fenBefore: string; san: string; mover: Color;
   const pawnsOn = (c: Chess, f: string, col: Color): string[] => ['1', '2', '3', '4', '5', '6', '7', '8'].map((r) => `${f}${r}`).filter((sq) => { const p = c.get(sq as never); return !!p && p.type === 'p' && p.color === col; });
   const before = new Chess(i.fenBefore);
   const centre = (c: Chess, col: Color): number => pawnsOn(c, 'd', col).length + pawnsOn(c, 'e', col).length;
+  // A capture in flight whose every pawn recapture doubles the recapturer's
+  // pawns: the structure the trade is about (Nxf6, …exf6 or …gxf6).
+  if (inFlight) {
+    const mvx = after.history({ verbose: true }).pop();
+    const takers = after.moves({ verbose: true }).filter((m) => m.to === mvx?.to && m.piece === 'p');
+    const doubles = (m: { san: string }): boolean => { const x = new Chess(after.fen()); x.move(m.san); const s = structureSignature(x.fen()); return !!s?.doubled && !now.doubled; };
+    if (mvx && takers.length > 0 && takers.every(doubles)) {
+      const side = after.turn() === 'w' ? 'White' : 'Black';
+      const byPiece = after.moves({ verbose: true }).some((m) => m.to === mvx.to && m.piece !== 'p');
+      return { text: byPiece
+        ? `Taking back on ${mvx.to} with a pawn doubles ${side}'s pawns; a piece can take back instead.`
+        : `${side} can only take back on ${mvx.to} with a pawn, and that doubles their pawns.`, squares: [mvx.to] };
+    }
+  }
+  // A pawn move that shuts the mover's own bishop in behind its pawns.
+  {
+    const mvp = after.history({ verbose: true }).pop();
+    if (mvp?.piece === 'p') {
+      for (const row of after.board()) for (const p of row) {
+        if (!p || p.type !== 'b' || p.color !== i.mover) continue;
+        if (bishopHemmedByOwnPawns(after, p.square, i.mover) && !bishopHemmedByOwnPawns(new Chess(i.fenBefore), p.square, i.mover)) {
+          return { text: `That shuts the bishop on ${p.square} in behind its own pawns: a bad bishop until it gets out.`, squares: [p.square, mvp.to] };
+        }
+      }
+    }
+  }
   // A recapture is read against the board before the trade began.
   const base = i.prior && inFluxAfter(i.prior.fenBefore, i.prior.san) ? new Chess(i.prior.fenBefore) : before;
   let majority: string | null = null;

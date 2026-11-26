@@ -186,3 +186,16 @@ describe('transpositionRead — wasted tempi are no transposition', () => {
     expect(transpositionRead({ history: ['e4', 'e5', 'Nf3', 'Nc6'], movesAt: (f) => (chain[plies(f)] ? [{ san: chain[plies(f)], games: 50 } as never] : null) })).toBeNull();
   });
 });
+
+describe('structureRead — the doubled pawns a trade makes, and the bishop shut in', () => {
+  it('Caro-Kann 5.Nxf6: only a pawn takes back, and it doubles', async () => {
+    const { structureRead } = await import('./theoryReads');
+    const r = structureRead({ fenBefore: fenOf(['e4', 'c6', 'd4', 'd5', 'Nc3', 'dxe4', 'Nxe4', 'Nf6']), san: 'Nxf6', mover: 'w' });
+    expect(r?.text).toBe('Black can only take back on f6 with a pawn, and that doubles their pawns.');
+  });
+  it('…e6 before …Bf5 shuts the bishop in', async () => {
+    const { structureRead } = await import('./theoryReads');
+    const r = structureRead({ fenBefore: fenOf(['d4', 'd5', 'c4']), san: 'e6', mover: 'b' });
+    expect(r?.text).toBe('That shuts the bishop on c8 in behind its own pawns: a bad bishop until it gets out.');
+  });
+});
