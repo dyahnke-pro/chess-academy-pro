@@ -10,7 +10,7 @@ import { lockedPawnPairs, structureSignature } from './boardStructure';
 import { openingEquivalence } from './openingEquivalence';
 import { pawnMajority } from './pawnMajority';
 import { inFluxAfter } from './boardState';
-import { findHangingBySee, bishopHemmedByOwnPawns } from './positionReadingService';
+import { findHangingBySee, bishopHemmedByOwnPawns, findWeakPawns } from './positionReadingService';
 import { openingAtPosition } from './openingPositions';
 import { transposedOpening } from './openingPositions';
 import { detectOpeningByOrder } from './openingDetectionService';
@@ -79,6 +79,20 @@ export function structureRead(i: { fenBefore: string; san: string; mover: Color;
       return { text: byPiece
         ? `Taking back on ${mvx.to} with a pawn doubles ${side}'s pawns; a piece can take back instead.`
         : `${side} can only take back on ${mvx.to} with a pawn, and that doubles their pawns.`, squares: [mvx.to] };
+    }
+  }
+  // A BACKWARD PAWN the move makes (the one weak-pawn reader, `findWeakPawns`):
+  // a pawn its neighbours have left behind, said with the file it stands on.
+  if (!inFlight) {
+    for (const col of [i.mover === 'w' ? 'b' : 'w', i.mover] as Color[]) {
+      const was = new Set(findWeakPawns(i.fenBefore, col).backward);
+      const fresh = findWeakPawns(after.fen(), col).backward.filter((s) => !was.has(s));
+      if (fresh.length) {
+        const sq = fresh[0];
+        const foe: Color = col === 'w' ? 'b' : 'w';
+        const halfOpen = !after.board().flat().some((p) => p && p.type === 'p' && p.color === foe && p.square[0] === sq[0]);
+        return { text: `That leaves ${col === 'w' ? 'White' : 'Black'} a backward pawn on ${sq}: no pawn can guard it${halfOpen ? ', and it stands on a half-open file for the other side\'s rooks' : ''}.`, squares: [sq] };
+      }
     }
   }
   // A pawn move that shuts the mover's own bishop in behind its pawns.

@@ -237,3 +237,11 @@ describe('choiceAheadRead — the choice the next move faces', () => {
     expect(choiceAheadRead({ fenBefore, san: 'Nf3', mover: 'w', movesAt: () => [{ san: 'Nc6', games: 95 }, { san: 'Nf6', games: 5 }] as never[] })).toBeNull();
   });
 });
+
+describe('structureRead — the backward pawn a move makes', () => {
+  it('…d6 with the e-pawn gone ahead and d5 held by White\'s pawns is a backward pawn', async () => {
+    const { structureRead } = await import('./theoryReads');
+    const r = structureRead({ fenBefore: '4k3/3p4/8/4p3/2P1P3/8/8/4K3 b - - 0 1', san: 'd6', mover: 'b' });
+    expect(r?.text).toBe("That leaves Black a backward pawn on d6: no pawn can guard it, and it stands on a half-open file for the other side's rooks.");
+  });
+});
