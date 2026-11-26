@@ -32,6 +32,8 @@ describe('Review says the known slip ahead, both seats, on his Scotch Gambit gam
     // have rotated by here.
     expect(walk.get(6)).toContain('Here, Ng5 is a known mistake at club level: after …Be7 you have the better game.');
     expect(walk.get(8)).toContain('Nxd4 is a known trap on this board, and after …Bxd4 you win two knights for a bishop and a pawn.');
+    // The trap sentence rides on it (trapLine): what the winning move hits, read off the board.
+    expect(walk.get(8)).toMatch(/Your bishop (?:attacks|takes|forks|pins|gives)/);
   });
   it('their slip ahead is the student\'s chance ("you"), the student\'s own is "they"', () => {
     expect(walk.get(10)).toContain('Here, Qd5 is a known mistake at club level: after …Qe7 you have the better game.');

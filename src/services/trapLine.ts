@@ -25,7 +25,7 @@ export interface TrapLineInput {
   before?: string | null;
 }
 
-export interface TrapLine { text: string; squares: Square[] }
+export interface TrapLine { text: string; anchor: string; blow: string; pattern: string | null; squares: Square[] }
 
 const dotted = (san: string, color: 'w' | 'b'): string => (color === 'b' ? `…${san.replace(/^…/, '')}` : san.replace(/^…/, ''));
 const clean = (san: string): string => san.replace(/[+#]$/, '');
@@ -156,5 +156,5 @@ export function trapLine(i: TrapLineInput): TrapLine | null {
   }
   const pattern = readPattern(afterSlip, blow, punisherIs);
   const squares = [slip.to, blow.from, blow.to, ...read.targets.map((t) => t.square)] as Square[];
-  return { text: [anchor, blowText, pattern].filter(Boolean).join(' '), squares: [...new Set(squares)] };
+  return { text: [anchor, blowText, pattern].filter(Boolean).join(' '), anchor, blow: blowText, pattern, squares: [...new Set(squares)] };
 }

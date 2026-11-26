@@ -28,6 +28,7 @@ import { unmarked } from '../utils/sanMark';
 import { clubGemBoards, clubGemForIndex, type ClubGem } from './clubGems';
 import { computeExchangeLedger, netPieceWords } from './exchangeLedger';
 import { slipNoun } from './trapWords';
+import { trapLine } from './trapLine';
 import { getAllPunishGems, isKnownSlipGem, isWeaponGem, MATE_CP } from '../data/lessons/punishGems';
 import { legalLineProof, NO_PROOF, type Proof } from './proof';
 import { lineSeatAt } from '../utils/andList';
@@ -260,6 +261,9 @@ export function knownSlip(ctx: KnownSlipContext): KnownSlipRead | null {
         `${slipSaid} is a known ${name} on this board, and ${result}.`,
         `Club players go wrong with ${slipSaid} here — a known ${name}: ${result}.`,
       ], ctx.told);
+  // THE BLOW AND ITS PATTERN (David 2026-11-25): what the winning move hits and
+  // the habit behind it, read by `trapLine` off the board — a trap only.
+  const blowLine = name === 'trap' ? trapLine({ fen, slip: slipSan, punish: [punishSan], slipBy }) : null;
   const squares: string[] = [];
   try {
     const b = new Chess(fen);
@@ -292,7 +296,7 @@ export function knownSlip(ctx: KnownSlipContext): KnownSlipRead | null {
     : undefined;
   return {
     key: `known-slip:${mover}:${unmarked(slipSan)}>${unmarked(punishSan)}`,
-    text,
+    text: blowLine && !exactMate ? `${text} ${blowLine.blow}${blowLine.pattern ? ` ${blowLine.pattern}` : ''}` : text,
     proof,
     squares: [...new Set(squares)],
     stakes,
