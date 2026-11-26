@@ -18,7 +18,7 @@ import { __setLocalDbForTests, masterMovesCachedSync } from './masterPlayLookup'
 import { __setContinuationsForTests } from './mastersContinuation';
 import { mastersPlanRead, planStillAhead, type MastersPlanRead } from './mastersPlanRead';
 import { composeTheoryTurn, roadsFrom, type KeyMove, type TheorySentenceKind } from './theoryComposer';
-import { structureRead, gambitRead, endgameRead, moveOrderRead, transpositionRead, pieceJobRead, trapRead, gambitAheadRead, centreRead, gemBoards } from './theoryReads';
+import { gambitStandingRead, namedRoadsRead, structureRead, gambitRead, endgameRead, moveOrderRead, transpositionRead, pieceJobRead, trapRead, gambitAheadRead, centreRead, gemBoards } from './theoryReads';
 import { openingTheoryFacts } from './openingTheory';
 import { setOpeningPositions, openingAtPosition } from './openingPositions';
 import { setOpeningIdentity, identityFor } from './openingIdentity';
@@ -90,10 +90,11 @@ describe.runIf(!!process.env.THEORY_SHEETS && existsSync('data/sources/wikibooks
       plan: goal && brk ? { goal, goalSquare: brk.square, lead: brk.lead ?? [] } : null,
       piece: home?.fen && home.color ? { piece: home.piece, to: home.to, san: home.san, color: home.color, fen: home.fen } : null,
       structure: structureRead({ fenBefore, san, mover }) ?? centreRead({ fenBefore, san, mover }),
-      gambit: gambitRead({ fenBefore, san, mover }) ?? gambitAheadRead({ fen: fenAfter, movesAt: (f) => masterMovesCachedSync(f) }),
+      gambit: gambitRead({ fenBefore, san, mover }) ?? gambitAheadRead({ fen: fenAfter, movesAt: (f) => masterMovesCachedSync(f) }) ?? gambitStandingRead({ fenBefore, san, mover }),
       endgame: endgameRead({ fenBefore, san }),
       moveOrder: moveOrderRead({ history: n.lineSan, student: mover }) ?? transpositionRead({ history: n.lineSan, movesAt: (f) => masterMovesCachedSync(f) }),
       pieceJob: pieceJobRead({ fenBefore, san, mover }),
+      namedRoads: namedRoadsRead({ fen: fenAfter, movesAt: (f) => masterMovesCachedSync(f) }),
       trapSaid: trapRead({ fenBefore, san, mover, boards: clubBoards as never, movesAt: (f) => masterMovesCachedSync(f) }),
       said: new Set(),
     });
@@ -123,6 +124,7 @@ describe.runIf(!!process.env.THEORY_SHEETS && existsSync('data/sources/wikibooks
     type Tally = Record<string, { asked: number; said: number }>;
     const T: Record<'core' | 'held', Record<'name' | 'noname', Tally>> = { core: { name: {}, noname: {} }, held: { name: {}, noname: {} } };
     const misses: string[] = [];
+    const allMisses: Record<string, string[]> = {};
     notes.forEach((n, i) => {
       if (i % every !== 0) return;
       const text = prose(n.text);
@@ -137,7 +139,14 @@ describe.runIf(!!process.env.THEORY_SHEETS && existsSync('data/sources/wikibooks
           const e = (t[k] ??= { asked: 0, said: 0 });
           e.asked += 1;
           if (s.kinds.has(k)) e.said += 1;
-          else if (set === 'core' && withName && showMisses === k && misses.length < 25) misses.push(`${n.lineSan.join(' ')} :: ${(text.match(TAGS[k])?.[0]) ?? ''}`);
+          else if (set === 'core' && withName) {
+            const m = text.match(TAGS[k]);
+            const at = m?.index ?? 0;
+            const row = `${n.lineSan.join(' ')} :: …${text.slice(Math.max(0, at - 120), at + 160)}…`;
+            if (showMisses === k && misses.length < 25) misses.push(row);
+            const list = (allMisses[k] ??= []);
+            list.push(row);
+          }
         }
       }
     });
@@ -153,6 +162,8 @@ describe.runIf(!!process.env.THEORY_SHEETS && existsSync('data/sources/wikibooks
     mkdirSync('audit-reports', { recursive: true });
     writeFileSync('audit-reports/theory-sheets.json', JSON.stringify(report, null, 2));
     console.log(JSON.stringify(report, null, 2));
+    // Core misses only (the held-out set is never printed).
+    writeFileSync('audit-reports/theory-sheet-misses.md', Object.entries(allMisses).map(([k, v]) => `## ${k} (${v.length})\n${v.filter((_, j) => j % Math.max(1, Math.floor(v.length / 40)) === 0).slice(0, 40).join('\n')}`).join('\n\n'));
     if (misses.length) console.log(`MISSES ${showMisses}\n${misses.join('\n')}`);
   }, 900_000);
 });

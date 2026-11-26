@@ -32,7 +32,7 @@ import repertoire from '../data/repertoire.json';
 import { bookMoveWhy } from './bookMoveWhy';
 import { openingEquivalence } from './openingEquivalence';
 import { mastersPlanLine } from './theoryComposer';
-import { theoryExtras, ownGemBoards } from './theoryReads';
+import { theoryExtras, ownGemBoards, nameRelativeTo } from './theoryReads';
 import { getAllPunishGems } from '../data/lessons/punishGems';
 import { masterMovesCachedSync } from './masterPlayLookup';
 import { mastersPlanRead, planStillAhead, type MastersPlanRead, type MovesAt } from './mastersPlanRead';
@@ -695,34 +695,6 @@ export function familyName(prefixSans: readonly string[], san: string, current: 
   return after && after !== here ? nameRelativeTo(after, here) : null;
 }
 
-/** An opening name said relative to the one the game is in: the family part
- *  dropped when shared ("the Mieses Variation"), with its article. Null when
- *  it is the current opening itself. */
-function nameRelativeTo(name: string, current: string): string | null {
-  const n = name.trim();
-  let base = current.trim();
-  if (!n || n === base) return null;
-  // The longest part of the current name the new one extends: "Vienna Game:
-  // Stanley Variation, Meitner-Mieses Gambit" under "Vienna Game: Stanley
-  // Variation" is "the Meitner-Mieses Gambit".
-  let short = n;
-  for (;;) {
-    if (n.startsWith(`${base},`) || n.startsWith(`${base}:`)) { short = n.slice(base.length + 1).trim(); break; }
-    const cut = Math.max(base.lastIndexOf(','), base.lastIndexOf(':'));
-    if (cut <= 0) break;
-    base = base.slice(0, cut).trim();
-  }
-  // The road's own name is its last part ("Stanley Variation, Three Knights
-  // Variation" → "Three Knights Variation").
-  short = short.split(',').pop()?.trim() ?? '';
-  if (!short) return null;
-  // A bare adjective is said with its family ("Closed" → "Closed Sicilian").
-  if (!/(?:Variation|Defen[cs]e|Gambit|Attack|System|Line|Opening|Game|Countergambit|Trap)$/i.test(short)) {
-    const head = n.split(':')[0].replace(/\s+(?:Defen[cs]e|Opening|Game)$/i, '').trim();
-    if (head && !short.split(/\s+/).includes(head)) short = `${short} ${head}`;
-  }
-  return /^\S+['’]s\b/.test(short) ? short : `the ${short}`;
-}
 
 /** Moves listed with the family each one commits to, when the DB names one
  *  and the names tell the moves apart. */

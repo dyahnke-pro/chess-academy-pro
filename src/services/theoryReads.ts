@@ -17,6 +17,7 @@ import { NO_FOLLOW } from './exchangeLedger';
 import { hangLine, trapLine } from './trapLine';
 import { slipNoun } from './trapWords';
 import { withoutCastleTail, composeTheoryTurn } from './theoryComposer';
+import { andList } from '../utils/andList';
 
 export interface TheoryRead { text: string; squares: string[] }
 
@@ -189,6 +190,22 @@ export function gambitAheadRead(i: { fen: string; movesAt: (fen: string) => read
       return { text: `${mv.color === 'b' ? '…' : ''}${r.san.replace(/[+#]$/, '')} is the ${gambit}: a pawn is offered for time and open lines.`, squares: [mv.to] };
     }
   }
+  // Where masters' games are thin, any legal move the opening index names a
+  // gambit ("5.Nd5!? is the Belgrade gambit").
+  if (!roads.length) {
+    let c: Chess;
+    try { c = new Chess(i.fen); } catch { return null; }
+    for (const m of c.moves({ verbose: true })) {
+      c.move(m.san);
+      const name = openingAtPosition(c.fen())?.name;
+      c.undo();
+      const last = name?.split(/[:,]/).pop()?.trim() ?? '';
+      const here = openingAtPosition(i.fen)?.name ?? '';
+      if (!name || name === here || !/Gambit$/.test(last) || here.includes(last)) continue;
+      const offer = gambitRead({ fenBefore: i.fen, san: m.san, mover: m.color })?.squares[0];
+      return { text: `${m.color === 'b' ? '…' : ''}${m.san.replace(/[+#]$/, '')} is the ${last}: it gives up ${offer ? `the pawn on ${offer}` : 'material'} for time and open lines.`, squares: [m.to, ...(offer ? [offer] : [])] };
+    }
+  }
   return null;
 }
 
@@ -256,14 +273,107 @@ export function theoryExtras(i: {
   const turn = composeTheoryTurn({
     fen: i.fenBefore, san: i.san, mover: i.mover, whose: 'your', roads: [],
     structure: once('structure', structureRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover }) ?? centreRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })),
-    gambit: once('gambit', gambitRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover }) ?? gambitAheadRead({ fen: (() => { const c = new Chess(i.fenBefore); c.move(i.san); return c.fen(); })(), movesAt: i.movesAt })),
+    gambit: once('gambit', gambitRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover }) ?? gambitAheadRead({ fen: (() => { const c = new Chess(i.fenBefore); c.move(i.san); return c.fen(); })(), movesAt: i.movesAt }) ?? gambitStandingRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })),
     endgame: once('endgame', endgameRead({ fenBefore: i.fenBefore, san: i.san })),
+    namedRoads: fresh(namedRoadsRead({ fen: (() => { const c = new Chess(i.fenBefore); c.move(i.san); return c.fen(); })(), movesAt: i.movesAt })),
     moveOrder: fresh(moveOrderRead({ history: [...i.history, i.san], student: i.mover }) ?? transpositionRead({ history: [...i.history, i.san], movesAt: i.movesAt })),
     trapSaid: fresh(trapRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover, boards: i.boards, movesAt: i.movesAt })),
     pieceJob: i.withPieceJob ? fresh(pieceJobRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })) : null,
     said: i.said,
   });
   return turn.map((t) => t.text);
+}
+
+/** An opening name said relative to the one the game is in: the family part
+ *  dropped when shared ("the Mieses Variation"), with its article. Null when
+ *  it is the current opening itself. */
+export function nameRelativeTo(name: string, current: string): string | null {
+  const n = name.trim();
+  let base = current.trim();
+  if (!n || n === base) return null;
+  // The longest part of the current name the new one extends: "Vienna Game:
+  // Stanley Variation, Meitner-Mieses Gambit" under "Vienna Game: Stanley
+  // Variation" is "the Meitner-Mieses Gambit".
+  let short = n;
+  for (;;) {
+    if (n.startsWith(`${base},`) || n.startsWith(`${base}:`)) { short = n.slice(base.length + 1).trim(); break; }
+    const cut = Math.max(base.lastIndexOf(','), base.lastIndexOf(':'));
+    if (cut <= 0) break;
+    base = base.slice(0, cut).trim();
+  }
+  // The road's own name is its last part ("Stanley Variation, Three Knights
+  // Variation" → "Three Knights Variation").
+  short = short.split(',').pop()?.trim() ?? '';
+  if (!short) return null;
+  // A bare adjective is said with its family ("Closed" → "Closed Sicilian").
+  if (!/(?:Variation|Defen[cs]e|Gambit|Attack|System|Line|Opening|Game|Countergambit|Trap)$/i.test(short)) {
+    const head = n.split(':')[0].replace(/\s+(?:Defen[cs]e|Opening|Game)$/i, '').trim();
+    if (head && !short.includes(head)) short = `${short} ${head}`;
+  }
+  return /^\S+['’]s\b/.test(short) ? short : `the ${short}`;
+}
+
+/** THE ROADS BY NAME (Wikibooks' way: "5.Nd5!? is the Belgrade gambit"). The
+ *  side to move's legal moves that reach a position the opening index names,
+ *  each said by its name relative to where the game is. Masters' moves first.
+ *  A gambit road is left to `gambitAheadRead`. Null with no named road. */
+export function namedRoadsRead(i: { fen: string; movesAt: (fen: string) => readonly LocalDbMove[] | null; skip?: ReadonlySet<string> }): TheoryRead | null {
+  let c: Chess;
+  try { c = new Chess(i.fen); } catch { return null; }
+  const here = openingAtPosition(i.fen)?.name ?? '';
+  const share = new Map((i.movesAt(i.fen) ?? []).map((m) => [m.san.replace(/[+#]$/, ''), m.games]));
+  const roads: Array<{ san: string; to: string; said: string; games: number }> = [];
+  const names = new Set<string>();
+  for (const m of c.moves({ verbose: true })) {
+    c.move(m.san);
+    const name = openingAtPosition(c.fen())?.name;
+    c.undo();
+    if (!name || name === here || names.has(name)) continue;
+    if (/Gambit/.test(name.split(',').pop() ?? '')) continue;
+    const said = here ? nameRelativeTo(name, here) : `the ${name}`;
+    if (!said || i.skip?.has(said)) continue;
+    names.add(name);
+    roads.push({ san: m.san, to: m.to, said, games: share.get(m.san.replace(/[+#]$/, '')) ?? 0 });
+  }
+  // A bar, never a count: the named roads masters play (2% of their games
+  // here) — a road nobody plays is a name, not theory.
+  const total = [...share.values()].reduce((n, g) => n + g, 0);
+  const said = roads.filter((r) => total > 0 && r.games / total >= 0.02).sort((a, b) => b.games - a.games);
+  if (!said.length) return null;
+  const mover = c.turn();
+  const parts = said.map((r) => `${mover === 'b' ? '…' : ''}${r.san.replace(/[+#]$/, '')} ${r.said}`);
+  const text = parts.length === 1
+    ? `${parts[0].replace(/ (the |\S+['’]s )/, ' is $1')}.`
+    : `The roads from here have names: ${andList(parts)}.`;
+  return { text, squares: said.map((r) => r.to) };
+}
+
+
+const MAT: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+function balance(c: Chess): { pawns: number; pieces: number } {
+  let pawns = 0; let pieces = 0;
+  for (const row of c.board()) for (const p of row) {
+    if (!p) continue;
+    const s = p.color === 'w' ? 1 : -1;
+    if (p.type === 'p') pawns += s; else pieces += s * MAT[p.type];
+  }
+  return { pawns, pieces };
+}
+/** THE GAMBIT STANDING: one side is a pawn or two down, the pieces level, and
+ *  it was so before the move too (a capture waiting to be taken back is not a
+ *  standing). Said from the board: who gave the pawn and what it buys. */
+export function gambitStandingRead(i: { fenBefore: string; san: string; mover: Color }): TheoryRead | null {
+  let b: Chess; let a: Chess;
+  try { b = new Chess(i.fenBefore); a = new Chess(i.fenBefore); a.move(i.san); } catch { return null; }
+  const was = balance(b); const now = balance(a);
+  if (now.pieces !== 0 || was.pieces !== 0) return null;
+  if (Math.abs(now.pawns) < 1 || Math.abs(now.pawns) > 2 || Math.sign(was.pawns) !== Math.sign(now.pawns)) return null;
+  // A pawn the side down can take back at once is an exchange in flight.
+  const down: Color = now.pawns > 0 ? 'b' : 'w';
+  if (a.turn() === down && a.moves({ verbose: true }).some((m) => m.captured === 'p' && a.attackers(m.to, down === 'w' ? 'b' : 'w').length === 0)) return null;
+  const n = Math.abs(now.pawns);
+  const Side = down === 'w' ? 'White' : 'Black';
+  return { text: `${Side} is ${n === 1 ? 'a pawn' : 'two pawns'} down here: that is the gambit's price, paid for time, development and open lines.`, squares: [] };
 }
 
 const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
