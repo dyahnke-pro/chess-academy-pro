@@ -87,7 +87,13 @@ function isBreak(c: Chess, m: { piece: string; captured?: string; to: string; co
   return false;
 }
 
-export function mastersPlanRead(fen: string, movesAt: MovesAt): MastersPlanRead | null {
+export function mastersPlanRead(fen: string, movesAt: MovesAt, opts?: {
+  /** The share a break must reach to be the plan (default `MIN_BREAK_SHARE`). A
+   *  theory surface that SAYS "a plan" for the board's leading break passes a
+   *  lower bar; "usually" wording stays on the default. */
+  minBreakShare?: number;
+}): MastersPlanRead | null {
+  const minBreak = opts?.minBreakShare ?? MIN_BREAK_SHARE;
   const root = movesAt(fen);
   const rootGames = root?.reduce((n, m) => n + m.games, 0) ?? 0;
   if (!root || rootGames < MIN_ROOT_GAMES) return null;
@@ -166,7 +172,7 @@ export function mastersPlanRead(fen: string, movesAt: MovesAt): MastersPlanRead 
   walk(fen, 1, 0, new Set(), null, null);
   const top = (side: 'w' | 'b'): PlanBreak | null => {
     const best = [...tally[side].values()].sort((a, b) => b.weight - a.weight)[0];
-    if (!best || best.weight < MIN_BREAK_SHARE) return null;
+    if (!best || best.weight < minBreak) return null;
     return { san: best.san, square: best.square, from: best.from, share: Math.min(1, best.weight), lead: best.lead };
   };
   const white = top('w'); const black = top('b');

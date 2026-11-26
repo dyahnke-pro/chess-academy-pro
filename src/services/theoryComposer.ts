@@ -133,6 +133,9 @@ export interface TheoryTurnIn {
   moveOrder?: { text: string; squares: string[] } | null;
   gambit?: { text: string; squares: string[] } | null;
   endgame?: { text: string; squares: string[] } | null;
+  pieceJob?: { text: string; squares: string[] } | null;
+  /** A trap read off the board by `theoryReads.trapRead` (already worded). */
+  trapSaid?: { text: string; squares: string[] } | null;
   /** The slip a trap rests on, when the board holds one. */
   trap?: { fen: string; slip: string; punish: readonly string[]; slipBy: FactSeat; before?: string | null } | null;
 }
@@ -155,6 +158,8 @@ export function composeTheoryTurn(i: TheoryTurnIn): TheorySentence[] {
   if (i.gambit) out.push({ kind: 'gambit', text: i.gambit.text, squares: i.gambit.squares });
   if (i.structure) out.push({ kind: 'structure', text: i.structure.text, squares: i.structure.squares });
   if (i.moveOrder) out.push({ kind: 'move-order', text: i.moveOrder.text, squares: i.moveOrder.squares });
+  if (i.pieceJob) out.push({ kind: 'piece', text: i.pieceJob.text, squares: i.pieceJob.squares });
+  if (i.trapSaid) out.push({ kind: 'trap', text: i.trapSaid.text, squares: i.trapSaid.squares });
   if (i.endgame) out.push({ kind: 'endgame', text: i.endgame.text, squares: i.endgame.squares });
   if (i.trap) {
     const t: TrapLine | null = trapLine(i.trap);

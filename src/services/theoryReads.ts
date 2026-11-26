@@ -8,6 +8,15 @@ import { Chess, type Color } from 'chess.js';
 import { namedStructureFormed, namedStructureLine } from './namedStructure';
 import { lockedPawnPairs, structureSignature } from './boardStructure';
 import { openingEquivalence } from './openingEquivalence';
+import { openingAtPosition } from './openingPositions';
+import { transposedOpening } from './openingPositions';
+import { detectOpeningByOrder } from './openingDetectionService';
+import type { LocalDbMove } from './masterPlayLookup';
+import { moveJob, MINE } from './bookMoveWhy';
+import { NO_FOLLOW } from './exchangeLedger';
+import { trapLine } from './trapLine';
+import { slipNoun } from './trapWords';
+import { withoutCastleTail } from './theoryComposer';
 
 export interface TheoryRead { text: string; squares: string[] }
 
@@ -65,4 +74,125 @@ export function endgameRead(i: { fenBefore: string; san: string }): TheoryRead |
 export function moveOrderRead(i: { history: readonly string[]; student: Color }): TheoryRead | null {
   const eq = openingEquivalence(i.history, i.student);
   return eq ? { text: eq.text, squares: eq.squares } : null;
+}
+
+/** A TRANSPOSITION, said where the move order matters: the board IS a named
+ *  opening the move order did not reach, or the masters' usual reply lands on
+ *  one. "If they answer …c5, it transposes into the Sicilian Defense." */
+export function transpositionRead(i: { history: readonly string[]; movesAt: (fen: string) => readonly LocalDbMove[] | null }): TheoryRead | null {
+  const c = new Chess();
+  try { for (const s of i.history) c.move(s); } catch { return null; }
+  const now = transposedOpening(c.fen(), i.history.length, detectOpeningByOrder([...i.history]));
+  if (now) return { text: `This transposes into the ${now}: the same position by another move order.`, squares: [] };
+  const roads = i.movesAt(c.fen()) ?? [];
+  const total = roads.reduce((n, m) => n + m.games, 0);
+  for (const r of [...roads].sort((a, b) => b.games - a.games)) {
+    if (total === 0 || r.games / total < 0.1) break;
+    const next = new Chess(c.fen());
+    let mv;
+    try { mv = next.move(r.san); } catch { continue; }
+    const into = transposedOpening(next.fen(), i.history.length + 1, detectOpeningByOrder([...i.history, r.san]));
+    if (into) return { text: `If the reply is ${mv.color === 'b' ? '…' : ''}${r.san.replace(/[+#]$/, '')}, the game transposes into the ${into}.`, squares: [mv.to] };
+  }
+  return null;
+}
+
+const PIECE_NAME: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
+
+/** What the piece that just moved DOES where it stands (a piece move), or the
+ *  fianchetto a pawn move prepares. Said by its job; no job, no sentence. */
+export function pieceJobRead(i: { fenBefore: string; san: string; mover: Color }): TheoryRead | null {
+  let c: Chess;
+  let mv;
+  try { c = new Chess(i.fenBefore); mv = c.move(i.san); } catch { return null; }
+  const home = i.mover === 'w' ? '1' : '8';
+  if (mv.piece === 'p' && ['g3', 'b3', 'g6', 'b6'].includes(mv.to) && c.get(`${mv.to[0] === 'g' ? 'f' : 'c'}${home}` as never)?.type === 'b') {
+    return { text: `It prepares the fianchetto: the bishop will own the long diagonal from ${mv.to[0] === 'g' ? 'g' : 'b'}${home === '1' ? '2' : '7'}.`, squares: [mv.to] };
+  }
+  if (!PIECE_NAME[mv.piece]) return null;
+  let job: ReturnType<typeof moveJob> = null;
+  try { job = moveJob(i.fenBefore, i.san, i.mover, MINE, null, NO_FOLLOW); } catch { job = null; }
+  if (!job?.clause) return null;
+  const clause = withoutCastleTail(job.clause);
+  return { text: `${PIECE_NAME[mv.piece].charAt(0).toUpperCase()}${PIECE_NAME[mv.piece].slice(1)} to ${mv.to}. It ${clause.replace(/^it /, '')}.`.replace(/^(\w+) to (\w+)\. It /, '$1 on $2: it '), squares: [mv.to] };
+}
+
+interface ClubGemRow { slip: string; punish: string }
+/** THE TRAPS AROUND THE MOVE, from the club-gem index (`boards`, by 4-field
+ *  FEN): the move played IS a known slip; a slip is available on this board;
+ *  or one waits behind the masters' usual reply. Every line is replayed by
+ *  `trapLine` (a blow that hits, checks, mates or takes nothing is not said). */
+export function trapRead(i: { fenBefore: string; san: string; mover: Color; boards: Record<string, ClubGemRow[]>; movesAt: (fen: string) => readonly LocalDbMove[] | null }): TheoryRead | null {
+  const key = (f: string): string => f.split(' ').slice(0, 4).join(' ');
+  const them: Color = i.mover === 'w' ? 'b' : 'w';
+  const slipBy = (slipper: Color): 'student' | 'opponent' => (slipper === i.mover ? 'student' : 'opponent');
+  const say = (fen: string, g: ClubGemRow, slipper: Color, lead: string): TheoryRead | null => {
+    const t = trapLine({ fen, slip: g.slip, punish: g.punish.split(/\s+/).filter(Boolean), slipBy: slipBy(slipper) });
+    if (!t) return null;
+    return { text: slipBy(slipper) === 'student' ? t.text : `${lead}${t.text}`, squares: t.squares };
+  };
+  // 1. The move played is a known slip.
+  const slipHere = (i.boards[key(i.fenBefore)] ?? []).find((g) => g.slip.replace(/[+#]$/, '') === i.san.replace(/[+#]$/, ''));
+  if (slipHere) {
+    const r = say(i.fenBefore, slipHere, i.mover, '');
+    if (r) return { text: `That is a known ${slipNoun('known-mistake', 'student')}. ${r.text}`, squares: r.squares };
+  }
+  let after: Chess;
+  try { after = new Chess(i.fenBefore); after.move(i.san); } catch { return null; }
+  // 2. A slip is on offer on this board.
+  for (const g of i.boards[key(after.fen())] ?? []) {
+    const r = say(after.fen(), g, them, 'A trap is set here. ');
+    if (r) return r;
+  }
+  // 3. One waits behind the masters' usual reply.
+  const roads = i.movesAt(after.fen()) ?? [];
+  const total = roads.reduce((n, m) => n + m.games, 0);
+  for (const road of [...roads].sort((a, b) => b.games - a.games)) {
+    if (total === 0 || road.games / total < 0.15) break;
+    const next = new Chess(after.fen());
+    try { next.move(road.san); } catch { continue; }
+    for (const g of i.boards[key(next.fen())] ?? []) {
+      const r = say(next.fen(), g, i.mover, 'Behind the usual reply, a trap waits. ');
+      if (r) return r;
+    }
+  }
+  return null;
+}
+
+/** A GAMBIT ON OFFER: one of the masters' moves here reaches a position the
+ *  opening index names a gambit ("Budapest Gambit", "Benko Gambit"). */
+export function gambitAheadRead(i: { fen: string; movesAt: (fen: string) => readonly LocalDbMove[] | null }): TheoryRead | null {
+  const roads = i.movesAt(i.fen) ?? [];
+  const total = roads.reduce((n, m) => n + m.games, 0);
+  for (const r of [...roads].sort((a, b) => b.games - a.games)) {
+    if (total === 0 || r.games / total < 0.02) break;
+    const c = new Chess(i.fen);
+    let mv;
+    try { mv = c.move(r.san); } catch { continue; }
+    const name = openingAtPosition(c.fen())?.name;
+    const gambit = name?.split(':')[0].match(/[A-Z][\w'’ -]*Gambit(?: (?:Accepted|Declined))?/)?.[0];
+    if (gambit && !/(Queen|King).s Gambit (Accepted|Declined)/.test(gambit)) {
+      return { text: `${mv.color === 'b' ? '…' : ''}${r.san.replace(/[+#]$/, '')} is the ${gambit}: a pawn is offered for time and open lines.`, squares: [mv.to] };
+    }
+  }
+  return null;
+}
+
+const CENTRE: string[] = ['d4', 'e4', 'd5', 'e5'];
+/** THE CENTRE, said when the move changes it: who holds it with pawns, or the
+ *  tension between them. */
+export function centreRead(i: { fenBefore: string; san: string; mover: Color }): TheoryRead | null {
+  let b: Chess; let a: Chess;
+  try { b = new Chess(i.fenBefore); a = new Chess(i.fenBefore); a.move(i.san); } catch { return null; }
+  const held = (c: Chess, col: Color): string[] => CENTRE.filter((sq) => { const p = c.get(sq as never); return !!p && p.type === 'p' && p.color === col; });
+  const sw = (col: Color): string => (col === 'w' ? 'White' : 'Black');
+  const mine = held(a, i.mover); const myBefore = held(b, i.mover);
+  const them: Color = i.mover === 'w' ? 'b' : 'w';
+  if (mine.length >= 2 && myBefore.length < mine.length) return { text: `${sw(i.mover)} takes the centre with pawns on ${mine.join(' and ')}: space, and the pieces get room behind them.`, squares: mine };
+  const theirs = held(a, them);
+  if (mine.length && theirs.length) {
+    const faced = mine.filter((sq) => theirs.some((t) => t[0] === sq[0]) || theirs.some((t) => Math.abs(t.charCodeAt(0) - sq.charCodeAt(0)) === 1 && Number(t[1]) !== Number(sq[1])));
+    if (faced.length && held(b, i.mover).join() !== mine.join()) return { text: `The centre is tense: ${mine[0]} and ${theirs[0]} face each other, and a capture there can open the position.`, squares: [mine[0], theirs[0]] };
+  }
+  return null;
 }

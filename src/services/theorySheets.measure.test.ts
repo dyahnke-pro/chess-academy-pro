@@ -18,12 +18,10 @@ import { __setLocalDbForTests, masterMovesCachedSync } from './masterPlayLookup'
 import { __setContinuationsForTests } from './mastersContinuation';
 import { mastersPlanRead, planStillAhead, type MastersPlanRead } from './mastersPlanRead';
 import { composeTheoryTurn, roadsFrom, type KeyMove, type TheorySentenceKind } from './theoryComposer';
-import { structureRead, gambitRead, endgameRead, moveOrderRead } from './theoryReads';
+import { structureRead, gambitRead, endgameRead, moveOrderRead, transpositionRead, pieceJobRead, trapRead, gambitAheadRead, centreRead } from './theoryReads';
 import { openingTheoryFacts } from './openingTheory';
 import { setOpeningPositions, openingAtPosition } from './openingPositions';
 import { setOpeningIdentity, identityFor } from './openingIdentity';
-import { gemsOnLine } from './clubGems';
-import { trapLine } from './trapLine';
 
 type Idea = 'plan' | 'break' | 'pieces' | 'structure' | 'trap' | 'decision' | 'move-order' | 'gambit' | 'endgame';
 const IDEAS: Idea[] = ['plan', 'break', 'pieces', 'structure', 'trap', 'decision', 'move-order', 'gambit', 'endgame'];
@@ -35,7 +33,8 @@ const TAGS: Record<Idea, RegExp> = {
   trap: /\b(trap|blunder\w*|falls? (?:for|into)|walks? into|refut\w*|loses? (?:a |the )?(?:piece|queen|pawn|material|bishop|knight|rook))\b|\d\.{1,3}\s*[A-Za-z][A-Za-z0-9+#=-]*\?/i,
   decision: /\b(alternatively|alternative|instead of|can also|may also|also possible|another (?:option|way|move)|sideline|rather than|options?|choice)\b/i,
   'move-order': /\b(transpos\w*|move[- ]order|reach(?:es)? the same|same position)\b/i,
-  gambit: /\b(gambit|sacrific\w*|pawn down|down a pawn|offers? (?:a|the) pawn|giv\w+ up a pawn)\b/i,
+  // Case-sensitive on "gambit": "Queen's Gambit" is a name, not an idea.
+  gambit: /\b(gambit|sacrific\w*|pawn down|down a pawn|offers? (?:a|the) pawn|giv\w+ up a pawn)\b/,
   endgame: /\b(endgame|queens? (?:are |get )?(?:traded|exchanged|off)|simplif\w*)\b/i,
 };
 const prose = (t: string): string => t
@@ -43,7 +42,6 @@ const prose = (t: string): string => t
   .replace(/\[\[(?:[^|\]]*\|)?([^\]]*)\]\]/g, '$1').replace(/'''?/g, '')
   .split('\n').map((l) => l.trim()).filter((l) => l && !/^[=|*{}!:]/.test(l)).join(' ');
 const hash = (s: string): number => { let h = 0; for (const ch of s) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return h; };
-const key4 = (fen: string): string => fen.split(' ').slice(0, 4).join(' ');
 
 interface Note { title: string; lineSan: string[]; text: string }
 const KIND_IDEAS: Record<TheorySentenceKind, Idea[]> = {
@@ -77,7 +75,7 @@ describe.runIf(!!process.env.THEORY_SHEETS && existsSync('data/sources/wikibooks
     const walk = new Chess();
     const fens: string[] = [walk.fen()];
     for (const s of n.lineSan) { walk.move(s); fens.push(walk.fen()); }
-    for (let k = fens.length - 1; k >= 0 && !read; k -= 1) read = mastersPlanRead(fens[k], (f) => masterMovesCachedSync(f));
+    for (let k = fens.length - 1; k >= 0 && !read; k -= 1) read = mastersPlanRead(fens[k], (f) => masterMovesCachedSync(f), { minBreakShare: 0.2 });
     const ahead = planStillAhead(read, fenAfter);
     const mine = ahead ? (mover === 'w' ? ahead.white : ahead.black) : null;
     const theirs = ahead ? (mover === 'w' ? ahead.black : ahead.white) : null;
@@ -85,16 +83,16 @@ describe.runIf(!!process.env.THEORY_SHEETS && existsSync('data/sources/wikibooks
     const goalColor = mine ? mover : (mover === 'w' ? 'b' : 'w');
     const goal: KeyMove | null = brk ? { san: brk.san, piece: 'p', color: goalColor } : null;
     const home = ahead ? (mover === 'w' ? ahead.whitePiece : ahead.blackPiece) ?? (mover === 'w' ? ahead.blackPiece : ahead.whitePiece) : null;
-    const gem = (clubBoards[key4(fenAfter)] ?? [])[0] as { slip: string; punish: string } | undefined;
     const turn = composeTheoryTurn({
       fen: fenBefore, san, mover, whose: 'your', roads: roadsFrom(masterMovesCachedSync(fenBefore)),
       plan: goal && brk ? { goal, goalSquare: brk.square, lead: brk.lead ?? [] } : null,
       piece: home?.fen && home.color ? { piece: home.piece, to: home.to, san: home.san, color: home.color, fen: home.fen } : null,
-      structure: structureRead({ fenBefore, san, mover }),
-      gambit: gambitRead({ fenBefore, san, mover }),
+      structure: structureRead({ fenBefore, san, mover }) ?? centreRead({ fenBefore, san, mover }),
+      gambit: gambitRead({ fenBefore, san, mover }) ?? gambitAheadRead({ fen: fenAfter, movesAt: (f) => masterMovesCachedSync(f) }),
       endgame: endgameRead({ fenBefore, san }),
-      moveOrder: moveOrderRead({ history: n.lineSan, student: mover }),
-      trap: gem ? { fen: fenAfter, slip: gem.slip, punish: gem.punish.split(/\s+/), slipBy: 'opponent' } : null,
+      moveOrder: moveOrderRead({ history: n.lineSan, student: mover }) ?? transpositionRead({ history: n.lineSan, movesAt: (f) => masterMovesCachedSync(f) }),
+      pieceJob: pieceJobRead({ fenBefore, san, mover }),
+      trapSaid: trapRead({ fenBefore, san, mover, boards: clubBoards as never, movesAt: (f) => masterMovesCachedSync(f) }),
       said: new Set(),
     });
     const kinds = new Set<Idea>();
@@ -102,7 +100,6 @@ describe.runIf(!!process.env.THEORY_SHEETS && existsSync('data/sources/wikibooks
     for (const t of turn) for (const k of KIND_IDEAS[t.kind]) { kinds.add(k); lines.push([k, t.text]); }
     // Book alternatives at the board are the choices said.
     if (openingTheoryFacts(fenBefore, san, true).some((f) => f.kind === 'book-alternatives')) kinds.add('decision');
-    void gemsOnLine; void trapLine;
     if (withName) {
       const name = openingAtPosition(fenAfter)?.name ?? null;
       const f = name ? identityFor(name)?.facts : null;
