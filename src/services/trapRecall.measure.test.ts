@@ -7,10 +7,11 @@
 import { describe, it } from 'vitest';
 import { Chess } from 'chess.js';
 import { spawn } from 'node:child_process';
-import { existsSync, writeFileSync, mkdirSync, appendFileSync } from 'node:fs';
+import { existsSync, writeFileSync, mkdirSync, appendFileSync, readFileSync } from 'node:fs';
 import { classifySlip } from './trapComputer';
 import { trapLine } from './trapLine';
 import { MATE_CP } from './mateScale';
+import { knownSlipsAt, knownSlipIndexNow, setKnownSlipIndexForTests } from './knownSlips';
 import { ITALIAN_GAME_TRAP_LESSONS } from '../data/lessons/italianGameTrapLessons';
 import { RUY_TRAP_LESSONS } from '../data/lessons/ruyTrapLessons';
 import { CARO_TRAP_LESSONS } from '../data/lessons/caroKannTrapLessons';
@@ -63,7 +64,9 @@ const LESSONS: Lesson[] = [
   { id: 'karpov-qe2-mate', line: 'e4 c6 d4 d5 Nc3 dxe4 Nxe4 Nd7 Qe2', slip: 'Ngf6', seat: 'student' },
 ];
 
-const ENGINE = 'node_modules/stockfish/bin/stockfish-18-lite-single.js';
+// The full network, not the lite one: the bar is read by the strongest engine
+// the repo ships (the lite net read the Halosar at +2.8, the full one +3.3).
+const ENGINE = 'node_modules/stockfish/bin/stockfish-18-single.js';
 const DEPTH = Number(process.env.TRAP_RECALL_DEPTH ?? 20);
 /** One engine read, waited on to its bestmove (the bar is read at depth, not a
  *  timer): the score for the side to move and its line. */
@@ -79,7 +82,7 @@ const stockfish = (fen: string): Promise<{ cp: number; best: string[] }> => new 
   };
   const timer = setTimeout(done, 180_000);
   p.stdout.on('data', (d: Buffer) => { out += d.toString(); if (/\nbestmove /.test(out)) { clearTimeout(timer); done(); } });
-  p.stdin.write(`uci\nposition fen ${fen}\ngo depth ${DEPTH}\n`);
+  p.stdin.write(`uci\nsetoption name Hash value 64\nposition fen ${fen}\ngo depth ${DEPTH}\n`);
 });
 /** The punisher's read AT THE QUIET END OF THE FORCED LINE (the bar's own
  *  definition): the engine's line from the board after the slip, played
@@ -108,12 +111,13 @@ const lessonMoves = (l: LessonScript | undefined): string => {
   return Array.isArray(last?.moves) ? last.moves.join(' ') : (last?.moves ?? '');
 };
 
-describe.runIf(!!process.env.TRAP_RECALL && existsSync('node_modules/stockfish/bin/stockfish-18-lite-single.js'))('famous-trap recall', () => {
+describe.runIf(!!process.env.TRAP_RECALL && existsSync('node_modules/stockfish/bin/stockfish-18-single.js'))('famous-trap recall', () => {
   it('reports which the one computer calls a trap', async () => {
     const rows: string[] = [];
     let traps = 0;
     mkdirSync('audit-reports', { recursive: true });
     writeFileSync('audit-reports/theory-trap-recall.progress', '');
+    setKnownSlipIndexForTests((JSON.parse(readFileSync('public/data/club-gems.json', 'utf8')) as { boards: never }).boards);
     for (const f of FAMOUS) {
       const c = new Chess();
       let ok = true;
@@ -122,14 +126,19 @@ describe.runIf(!!process.env.TRAP_RECALL && existsSync('node_modules/stockfish/b
       const fenBefore = c.fen();
       try { c.move(f.slip); } catch { rows.push(`${f.name}: SLIP ILLEGAL`); continue; }
       // The punisher's read, from their own seat (the side to move now).
-      const pr = await punishAfter(c.fen());
+      // THE APP'S OWN READ FIRST: the known-slip index the Theory lecture and
+      // Review speak from (`knownSlipsAt`, its quiet-end reads at depth 22).
+      // Only a slip the index does not hold is read by the engine here.
+      const indexed = knownSlipsAt(knownSlipIndexNow(), fenBefore).find((g) => g.slip.replace(/[+#]$/, '') === f.slip.replace(/[+#]$/, ''));
+      const pr = indexed ? { cp: indexed.mate ? MATE_CP : indexed.endCp, seq: indexed.punish.split(' ') } : await punishAfter(c.fen());
       const read = { cp: pr.cp };
       const punishSeq = f.punish ? f.punish.split(' ') : pr.seq;
+      const source = indexed ? 'index' : 'engine';
       const kind = classifySlip({ engineCp: read.cp, line: { fen: fenBefore, slip: f.slip, punish: punishSeq } });
       if (kind === 'trap') traps += 1;
       const sentence = trapLine({ fen: fenBefore, slip: f.slip, punish: punishSeq, slipBy: 'opponent' })?.text ?? '(no blow to name)';
       appendFileSync('audit-reports/theory-trap-recall.progress', `${f.name}\n`);
-      rows.push(`${f.name}: ${kind ?? 'not a slip'} (${read.cp >= MATE_CP / 10 ? 'mate' : `${read.cp}cp`}) — ${sentence}`);
+      rows.push(`${f.name}: ${kind ?? 'not a slip'} (${read.cp >= MATE_CP / 10 ? 'mate' : `${read.cp}cp`}, ${source}) — ${sentence}`);
     }
     // The named-trap lessons: the lesson's slip is called a slip by the one
     // computer, and worded from the lesson's seat ("trap" never for the student).
