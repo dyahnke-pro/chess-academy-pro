@@ -113,7 +113,7 @@ export function replyByJob(i: { fen: string; san: string; mover: Color; whose: W
   return job?.clause ? `${dotted(i.san, i.mover)}: ${job.clause}.` : null;
 }
 
-export type TheorySentenceKind = 'decision' | 'plan' | 'piece' | 'castle' | 'trap';
+export type TheorySentenceKind = 'decision' | 'plan' | 'piece' | 'castle' | 'trap' | 'structure' | 'move-order' | 'gambit' | 'endgame';
 export interface TheorySentence { kind: TheorySentenceKind; text: string; squares: string[]; claim?: string }
 
 export interface TheoryTurnIn {
@@ -127,6 +127,12 @@ export interface TheoryTurnIn {
   piece?: PlacedPiece | null;
   castle?: { side: 'short' | 'long' } | null;
   said: ReadonlySet<string>;
+  /** What the move changed on the board, read by `theoryReads` (each only when
+   *  it has something true to say). */
+  structure?: { text: string; squares: string[] } | null;
+  moveOrder?: { text: string; squares: string[] } | null;
+  gambit?: { text: string; squares: string[] } | null;
+  endgame?: { text: string; squares: string[] } | null;
   /** The slip a trap rests on, when the board holds one. */
   trap?: { fen: string; slip: string; punish: readonly string[]; slipBy: FactSeat; before?: string | null } | null;
 }
@@ -146,6 +152,10 @@ export function composeTheoryTurn(i: TheoryTurnIn): TheorySentence[] {
     const c = castleOnce({ whose: i.whose, side: i.castle.side, said: i.said });
     if (c) out.push({ kind: 'castle', text: c.text, squares: [], claim: c.claim });
   }
+  if (i.gambit) out.push({ kind: 'gambit', text: i.gambit.text, squares: i.gambit.squares });
+  if (i.structure) out.push({ kind: 'structure', text: i.structure.text, squares: i.structure.squares });
+  if (i.moveOrder) out.push({ kind: 'move-order', text: i.moveOrder.text, squares: i.moveOrder.squares });
+  if (i.endgame) out.push({ kind: 'endgame', text: i.endgame.text, squares: i.endgame.squares });
   if (i.trap) {
     const t: TrapLine | null = trapLine(i.trap);
     if (t) out.push({ kind: 'trap', text: [t.anchor, t.blow, t.pattern].filter(Boolean).join(' '), squares: t.squares });

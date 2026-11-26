@@ -1,84 +1,159 @@
-// THE IDEA SHEET SCORER (rebuilt). Each written note (the voiced corpus: a
-// person's own sentence about one opening position) is read for the IDEAS it
-// carries — decision, plan, break, pieces — and the theory composer is asked
-// what it says at the same position. An idea scores when the composer says an
-// idea of that kind there. Run: THEORY_SHEETS=1 [THEORY_SHEETS_EVERY=8]
-//   npx vitest run src/services/theorySheets.measure.test.ts
-// "core" = notes on positions in the first 12 plies; "held-out" = every
-// fourth note the tuning never read (positionKey hash), so a rule tuned on one
-// board is not scored on that board. Ideas the composer does not own (structure,
-// trap, move order, gambit, endgame) are reported, never scored against it.
+// THE IDEA SHEETS (round 9's measure, rebuilt). For each opening position a
+// written note exists for (Wikibooks "Chess Opening Theory", reference only —
+// `data/sources/wikibooks/`, fetched by scripts/theory/scrape-wikibooks.mjs), the
+// note's IDEAS are read — plan, break, pieces, structure, trap, decision,
+// move-order, gambit, endgame — and each is scored: did the theory narrator say
+// an idea of that kind at that position? Micro-average, two sets:
+//   core      the openings the tuning reads;
+//   held-out  every opening whose first four plies hash to 0 mod 4 — NEVER
+//             printed, never read while tuning, only scored.
+// Each set is scored with the opening's name (the identity facts the name
+// brings) and without it.
+//   THEORY_SHEETS=1 [THEORY_SHEETS_EVERY=n] [THEORY_SHEETS_MISSES=kind] \
+//     npx vitest run src/services/theorySheets.measure.test.ts
 import { describe, it, beforeAll } from 'vitest';
-import { readFileSync, existsSync, writeFileSync } from 'node:fs';
+import { readFileSync, existsSync, writeFileSync, mkdirSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import { __setLocalDbForTests, masterMovesCachedSync } from './masterPlayLookup';
-import { mastersPlanRead } from './mastersPlanRead';
 import { __setContinuationsForTests } from './mastersContinuation';
-import { composeTheoryTurn, roadsFrom, type KeyMove } from './theoryComposer';
+import { mastersPlanRead, planStillAhead, type MastersPlanRead } from './mastersPlanRead';
+import { composeTheoryTurn, roadsFrom, type KeyMove, type TheorySentenceKind } from './theoryComposer';
+import { structureRead, gambitRead, endgameRead, moveOrderRead } from './theoryReads';
+import { openingTheoryFacts } from './openingTheory';
+import { setOpeningPositions, openingAtPosition } from './openingPositions';
+import { setOpeningIdentity, identityFor } from './openingIdentity';
+import { gemsOnLine } from './clubGems';
+import { trapLine } from './trapLine';
 
-interface Note { lineSan: string[]; positionKey: string; explains: string; teaches: string; plans: string; phase: string }
-type Idea = 'decision' | 'plan' | 'break' | 'pieces';
-const OWN: Idea[] = ['decision', 'plan', 'break', 'pieces'];
-const TAGS: Record<Idea | 'structure' | 'trap' | 'move-order' | 'gambit' | 'endgame', RegExp> = {
-  decision: /\b(choice|decision|alternativ|instead|or you can|you can also|option|sideline|either)\b/i,
-  plan: /\b(plan|idea is|aim|goal|going to|want to|wants to|strateg)/i,
-  break: /\b(break|lever|undermin|c5|d5|f5|e5)\b.*\b(break|push|strike)|\bbreak\b|\bundermin/i,
-  pieces: /\b(outpost|reroute|belongs|best square|good square|knight|bishop|rook|queen)\b.*\b(goes|go to|should|route|square|lands?)\b/i,
-  structure: /\b(structure|pawn chain|isolated|backward|doubled|hanging pawns|open file|half-open)/i,
-  trap: /\b(trap|blunder|falls? for|walks? into)\b/i,
-  'move-order': /\b(move order|transpos|before playing)/i,
-  gambit: /\b(gambit|sacrific|pawn down)/i,
-  endgame: /\b(endgame|ending)\b/i,
+type Idea = 'plan' | 'break' | 'pieces' | 'structure' | 'trap' | 'decision' | 'move-order' | 'gambit' | 'endgame';
+const IDEAS: Idea[] = ['plan', 'break', 'pieces', 'structure', 'trap', 'decision', 'move-order', 'gambit', 'endgame'];
+const TAGS: Record<Idea, RegExp> = {
+  plan: /\b(plan|aims? to|aiming|intends?|idea (?:is|behind)|strategy|wants? to|hopes? to|goal)\b/i,
+  break: /\b(break|lever|undermin\w*|strik\w* at|pawn (?:push|storm)|advanc\w+ the)\b/i,
+  pieces: /\b(outpost|fianchetto|long diagonal|reroute|belongs? on|best square|good square|ideal square|eyeing|targeting|aimed at|pressure on)\b/i,
+  structure: /\b(pawn structure|pawn chain|isolated|backward|doubled|hanging pawns|pawn island|open file|half-open|closed (?:centre|center|position)|locked|pawn majority|space advantage)\b/i,
+  trap: /\b(trap|blunder\w*|falls? (?:for|into)|walks? into|refut\w*|loses? (?:a |the )?(?:piece|queen|pawn|material|bishop|knight|rook))\b|\d\.{1,3}\s*[A-Za-z][A-Za-z0-9+#=-]*\?/i,
+  decision: /\b(alternatively|alternative|instead of|can also|may also|also possible|another (?:option|way|move)|sideline|rather than|options?|choice)\b/i,
+  'move-order': /\b(transpos\w*|move[- ]order|reach(?:es)? the same|same position)\b/i,
+  gambit: /\b(gambit|sacrific\w*|pawn down|down a pawn|offers? (?:a|the) pawn|giv\w+ up a pawn)\b/i,
+  endgame: /\b(endgame|queens? (?:are |get )?(?:traded|exchanged|off)|simplif\w*)\b/i,
 };
+const prose = (t: string): string => t
+  .replace(/\{\{[^{}]*\}\}/g, '').replace(/\{\{[\s\S]*?\n\}\}/g, '').replace(/<table[\s\S]*?<\/table>/g, '').replace(/<[^>]+>/g, '')
+  .replace(/\[\[(?:[^|\]]*\|)?([^\]]*)\]\]/g, '$1').replace(/'''?/g, '')
+  .split('\n').map((l) => l.trim()).filter((l) => l && !/^[=|*{}!:]/.test(l)).join(' ');
 const hash = (s: string): number => { let h = 0; for (const ch of s) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return h; };
+const key4 = (fen: string): string => fen.split(' ').slice(0, 4).join(' ');
 
-describe.runIf(!!process.env.THEORY_SHEETS && existsSync('public/data/voiced-teachings.json'))('theory idea sheets', () => {
+interface Note { title: string; lineSan: string[]; text: string }
+const KIND_IDEAS: Record<TheorySentenceKind, Idea[]> = {
+  decision: ['decision'], plan: ['plan', 'break'], piece: ['pieces'], castle: [], trap: ['trap'],
+  structure: ['structure'], 'move-order': ['move-order'], gambit: ['gambit'], endgame: ['endgame'],
+};
+
+describe.runIf(!!process.env.THEORY_SHEETS && existsSync('data/sources/wikibooks/wikibooks-notes.json'))('theory idea sheets', () => {
+  let clubBoards: Record<string, never[]> = {};
   beforeAll(() => {
     __setLocalDbForTests(JSON.parse(readFileSync('public/data/openings-masters-db.json', 'utf8')));
     if (existsSync('public/data/masters-continuations.json')) __setContinuationsForTests((JSON.parse(readFileSync('public/data/masters-continuations.json', 'utf8')) as { positions: never }).positions);
+    setOpeningPositions(JSON.parse(readFileSync('public/data/opening-positions.json', 'utf8')));
+    setOpeningIdentity(JSON.parse(readFileSync('public/data/opening-identity.json', 'utf8')));
+    clubBoards = (JSON.parse(readFileSync('public/data/club-gems.json', 'utf8')) as { boards: Record<string, never[]> }).boards;
   });
-  it('scores the composer against the written notes', () => {
-    const raw = JSON.parse(readFileSync('public/data/voiced-teachings.json', 'utf8')) as Record<string, Note[]>;
-    const notes = Object.values(raw).flat().filter((n) => n.lineSan?.length && n.lineSan.length <= 24 && n.phase === 'opening');
-    const every = Number(process.env.THEORY_SHEETS_EVERY ?? 8);
-    const tally: Record<'core' | 'held', Record<string, { asked: number; said: number }>> = { core: {}, held: {} };
-    const bump = (set: 'core' | 'held', k: string, said: boolean): void => { const t = (tally[set][k] ??= { asked: 0, said: 0 }); t.asked += 1; if (said) t.said += 1; };
-    const others: Record<string, number> = {};
+
+  /** What the narrator says at this position, as idea kinds. */
+  function said(n: Note, withName: boolean): { kinds: Set<Idea>; lines: Array<[Idea, string]> } {
+    const c = new Chess();
+    const history = n.lineSan.slice(0, -1);
+    for (const s of history) c.move(s);
+    const fenBefore = c.fen();
+    const san = n.lineSan[n.lineSan.length - 1];
+    const mover = c.turn();
+    c.move(san);
+    const fenAfter = c.fen();
+    // The plan is read at the deepest book position the line reached, and keeps
+    // what still lies ahead on this board (the Theory lecture's own rule).
+    let read: MastersPlanRead | null = null;
+    const walk = new Chess();
+    const fens: string[] = [walk.fen()];
+    for (const s of n.lineSan) { walk.move(s); fens.push(walk.fen()); }
+    for (let k = fens.length - 1; k >= 0 && !read; k -= 1) read = mastersPlanRead(fens[k], (f) => masterMovesCachedSync(f));
+    const ahead = planStillAhead(read, fenAfter);
+    const mine = ahead ? (mover === 'w' ? ahead.white : ahead.black) : null;
+    const theirs = ahead ? (mover === 'w' ? ahead.black : ahead.white) : null;
+    const brk = mine ?? theirs;
+    const goalColor = mine ? mover : (mover === 'w' ? 'b' : 'w');
+    const goal: KeyMove | null = brk ? { san: brk.san, piece: 'p', color: goalColor } : null;
+    const home = ahead ? (mover === 'w' ? ahead.whitePiece : ahead.blackPiece) ?? (mover === 'w' ? ahead.blackPiece : ahead.whitePiece) : null;
+    const gem = (clubBoards[key4(fenAfter)] ?? [])[0] as { slip: string; punish: string } | undefined;
+    const turn = composeTheoryTurn({
+      fen: fenBefore, san, mover, whose: 'your', roads: roadsFrom(masterMovesCachedSync(fenBefore)),
+      plan: goal && brk ? { goal, goalSquare: brk.square, lead: brk.lead ?? [] } : null,
+      piece: home?.fen && home.color ? { piece: home.piece, to: home.to, san: home.san, color: home.color, fen: home.fen } : null,
+      structure: structureRead({ fenBefore, san, mover }),
+      gambit: gambitRead({ fenBefore, san, mover }),
+      endgame: endgameRead({ fenBefore, san }),
+      moveOrder: moveOrderRead({ history: n.lineSan, student: mover }),
+      trap: gem ? { fen: fenAfter, slip: gem.slip, punish: gem.punish.split(/\s+/), slipBy: 'opponent' } : null,
+      said: new Set(),
+    });
+    const kinds = new Set<Idea>();
+    const lines: Array<[Idea, string]> = [];
+    for (const t of turn) for (const k of KIND_IDEAS[t.kind]) { kinds.add(k); lines.push([k, t.text]); }
+    // Book alternatives at the board are the choices said.
+    if (openingTheoryFacts(fenBefore, san, true).some((f) => f.kind === 'book-alternatives')) kinds.add('decision');
+    void gemsOnLine; void trapLine;
+    if (withName) {
+      const name = openingAtPosition(fenAfter)?.name ?? null;
+      const f = name ? identityFor(name)?.facts : null;
+      if (f) {
+        if (f.gambit) kinds.add('gambit');
+        if (f.aims.length) kinds.add('structure');
+        if (f.plan) { kinds.add('plan'); kinds.add('break'); }
+        if (f.provokes) kinds.add('decision');
+      }
+    }
+    return { kinds, lines };
+  }
+
+  it('scores the narrator against the written notes', () => {
+    const all = JSON.parse(readFileSync('data/sources/wikibooks/wikibooks-notes.json', 'utf8')) as Note[];
+    const notes = all.filter((n) => n.lineSan.length >= 2 && n.lineSan.length <= 30 && prose(n.text).length >= 250);
+    const every = Number(process.env.THEORY_SHEETS_EVERY ?? 1);
+    const showMisses = process.env.THEORY_SHEETS_MISSES as Idea | undefined;
+    type Tally = Record<string, { asked: number; said: number }>;
+    const T: Record<'core' | 'held', Record<'name' | 'noname', Tally>> = { core: { name: {}, noname: {} }, held: { name: {}, noname: {} } };
+    const misses: string[] = [];
     notes.forEach((n, i) => {
       if (i % every !== 0) return;
-      const set: 'core' | 'held' = hash(n.positionKey) % 4 === 0 ? 'held' : 'core';
-      const text = `${n.explains} ${n.teaches} ${n.plans}`;
-      const asked = (Object.keys(TAGS) as Array<keyof typeof TAGS>).filter((k) => TAGS[k].test(text));
+      const text = prose(n.text);
+      const asked = IDEAS.filter((k) => TAGS[k].test(text));
       if (!asked.length) return;
-      const c = new Chess();
-      const history = n.lineSan.slice(0, -1);
-      try { for (const s of history) c.move(s); } catch { return; }
-      const fenBefore = c.fen();
-      const san = n.lineSan[n.lineSan.length - 1];
-      let mover; try { mover = c.turn(); c.move(san); } catch { return; }
-      const fenAfter = c.fen();
-      const read = mastersPlanRead(fenAfter, (f) => masterMovesCachedSync(f));
-      const brk = read ? (mover === 'w' ? read.white : read.black) : null;
-      const goal: KeyMove | null = brk ? { san: brk.san, piece: 'p', color: mover } : null;
-      const piece = read ? (mover === 'w' ? read.whitePiece : read.blackPiece) : null;
-      const turn = composeTheoryTurn({
-        fen: fenBefore, san, mover, whose: 'your', roads: roadsFrom(masterMovesCachedSync(fenBefore)),
-        plan: goal && brk ? { goal, goalSquare: brk.square, lead: brk.lead ?? [] } : null,
-        piece: piece?.fen && piece.color ? { piece: piece.piece, to: piece.to, san: piece.san, color: piece.color, fen: piece.fen } : null,
-        said: new Set(),
-      });
-      const says = new Set(turn.map((t) => t.kind));
-      const said: Record<Idea, boolean> = { decision: says.has('decision'), plan: says.has('plan'), break: says.has('plan'), pieces: says.has('piece') };
-      for (const k of asked) {
-        if ((OWN as string[]).includes(k)) bump(set, k, said[k as Idea]); else others[k] = (others[k] ?? 0) + 1;
+      const set: 'core' | 'held' = hash(n.lineSan.slice(0, 4).join(' ')) % 4 === 0 ? 'held' : 'core';
+      for (const withName of [true, false]) {
+        let s: ReturnType<typeof said>;
+        try { s = said(n, withName); } catch { continue; }
+        const t = T[set][withName ? 'name' : 'noname'];
+        for (const k of asked) {
+          const e = (t[k] ??= { asked: 0, said: 0 });
+          e.asked += 1;
+          if (s.kinds.has(k)) e.said += 1;
+          else if (set === 'core' && withName && showMisses === k && misses.length < 25) misses.push(`${n.lineSan.join(' ')} :: ${(text.match(TAGS[k])?.[0]) ?? ''}`);
+        }
       }
     });
-    const pct = (s: Record<string, { asked: number; said: number }>): { overall: number; byKind: Record<string, string> } => {
-      const a = Object.values(s).reduce((x, y) => x + y.asked, 0); const b = Object.values(s).reduce((x, y) => x + y.said, 0);
-      return { overall: a ? Math.round((100 * b) / a) : 0, byKind: Object.fromEntries(Object.entries(s).map(([k, v]) => [k, `${Math.round((100 * v.said) / v.asked)}% of ${v.asked}`])) };
+    const score = (t: Tally): { overall: number; byKind: Record<string, string> } => {
+      const a = Object.values(t).reduce((x, y) => x + y.asked, 0); const b = Object.values(t).reduce((x, y) => x + y.said, 0);
+      return { overall: a ? Math.round((100 * b) / a) : 0, byKind: Object.fromEntries(Object.entries(t).map(([k, v]) => [k, `${Math.round((100 * v.said) / v.asked)} (${v.asked})`])) };
     };
-    const report = { core: pct(tally.core), heldOut: pct(tally.held), notScoredIdeaCounts: others, sampledEvery: every };
+    const report = {
+      core: { withName: score(T.core.name), withoutName: score(T.core.noname) },
+      heldOut: { withName: { overall: score(T.held.name).overall }, withoutName: { overall: score(T.held.noname).overall } },
+      positions: notes.length,
+    };
+    mkdirSync('audit-reports', { recursive: true });
     writeFileSync('audit-reports/theory-sheets.json', JSON.stringify(report, null, 2));
     console.log(JSON.stringify(report, null, 2));
-  }, 600_000);
+    if (misses.length) console.log(`MISSES ${showMisses}\n${misses.join('\n')}`);
+  }, 900_000);
 });
