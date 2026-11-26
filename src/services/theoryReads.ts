@@ -144,7 +144,7 @@ export function structureRead(i: { fenBefore: string; san: string; mover: Color;
     if (mvb?.piece === 'b' && home.includes(mvb.from)) {
       const b0 = new Chess(i.fenBefore);
       const pushes = b0.moves({ verbose: true }).filter((m) => m.piece === 'p' && ['d', 'e'].includes(m.from[0]) && Math.abs(Number(m.to[1]) - Number(m.from[1])) === 1);
-      const shuts = pushes.find((m) => { const x = new Chess(i.fenBefore); x.move(m.san); return bishopHemmedByOwnPawns(x, mvb.from as Square, i.mover); });
+      const shuts = pushes.find((m) => { const x = new Chess(i.fenBefore); x.move(m.san); return bishopHemmedByOwnPawns(x, mvb.from, i.mover); });
       if (shuts) {
         return { text: `The bishop gets out before ${i.mover === 'b' ? '…' : ''}${shuts.san} would shut it in: it stands outside the pawn chain.`, squares: [mvb.to, shuts.to] };
       }
@@ -359,7 +359,7 @@ function piecesGiven(fenBefore: string, san: string, mover: Color, withCheck: bo
   const takes = a.moves({ verbose: true }).filter((m) => m.to === h.square && m.color === them)
     .sort((x, y) => (VAL[x.piece] ?? 10) - (VAL[y.piece] ?? 10))[0];
   if (!takes) return null;
-  return { square: h.square as Square, piece: h.piece, gain: h.gain, defended: h.defended, takes };
+  return { square: h.square, piece: h.piece, gain: h.gain, defended: h.defended, takes };
 }
 
 /** A SACRIFICE: a move masters play (the roads bar, 2% of their games) that
