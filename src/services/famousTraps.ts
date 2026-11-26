@@ -20,6 +20,7 @@ import data from '../data/famous-traps.json';
 import { computeExchangeLedger, netPieceWords } from './exchangeLedger';
 import { andList } from '../utils/andList';
 import { trapLine } from './trapLine';
+import { unmarked } from '../utils/sanMark';
 import type { FactSeat } from './coachFact';
 
 export interface FamousTrap {
@@ -131,7 +132,7 @@ export function famousTrapLine(i: { trap: FamousTrap; slipBy: FactSeat; before?:
   const o = famousOutcome(t, punisher);
   const moves = keyMoves(t);
   if (/#$/.test(t.slip)) {
-    return { text: i.slipBy === 'opponent' ? `This is ${name}: ${slipSaid} mates.` : `Watch out: this is ${name}. ${slipSaid} is mate.`, squares };
+    return { text: i.slipBy === 'opponent' ? `This is ${name}: ${slipSaid} mates.` : `Watch out: this is ${name}. ${unmarked(slipSaid)} is mate.`, squares };
   }
   const blowList = andList(moves);
   const result = o.verb === 'mate'
@@ -147,7 +148,7 @@ export function famousTrapLine(i: { trap: FamousTrap; slipBy: FactSeat; before?:
   }
   if (i.played) return withTail({ text: `That walks into ${name}: ${result}.`, squares });
   const pre = i.before ? `After ${said(i.before.san, i.before.color)}, ` : '';
-  return withTail({ text: `Watch out: this is ${name}. ${pre}${slipSaid} allows ${blowList}, and ${o.verb === 'mate' ? 'it is mate' : o.verb === 'win' ? `they win ${o.words}` : o.words}.`, squares });
+  return withTail({ text: `Watch out: this is ${name}. ${pre}${unmarked(slipSaid)} allows ${blowList}, and ${o.verb === 'mate' ? 'it is mate' : o.verb === 'win' ? `they win ${o.words}` : o.words}.`, squares });
 }
 
 /** THE FAMOUS TRAP AT A MOVE of the taught line, both seats:
