@@ -181,6 +181,6 @@ export function hangLine(i: { fen: string; ignore: string; takes: string; ignore
   const piece = NAME[take.captured];
   const text = i.ignoredBy === 'opponent'
     ? `Before ${dotted(clean(reply.san), ignorer)}, if they ignore the attack on ${take.to}, ${clean(take.san)} takes the ${piece}.`
-    : `Watch out: if you ignore the attack on ${take.to}, ${dotted(clean(take.san), take.color)} takes your ${piece}.`;
+    : `Before ${dotted(clean(reply.san), ignorer)}, watch out: ignore the attack on ${take.to} and ${dotted(clean(take.san), take.color)} takes your ${piece}.`;
   return { text, squares: [take.to, reply.to] as Square[] };
 }

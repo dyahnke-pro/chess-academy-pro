@@ -39,7 +39,7 @@ describe('hangLine — the off-line hang, in the approved shape', () => {
   });
   it('the student\'s own ignoring is a Watch out', () => {
     const l = hangLine({ fen, ignore: 'd6', takes: 'dxc5', ignoredBy: 'student' });
-    expect(l?.text).toBe('Watch out: if you ignore the attack on c5, dxc5 takes your bishop.');
+    expect(l?.text).toBe('Before …d6, watch out: ignore the attack on c5 and dxc5 takes your bishop.');
   });
   it('a reply that moves the piece, or a capture that does not play, is not a hang', () => {
     expect(hangLine({ fen, ignore: 'Bxd4', takes: 'Nxd4', ignoredBy: 'opponent' })).toBeNull();
