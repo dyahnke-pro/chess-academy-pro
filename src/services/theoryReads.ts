@@ -334,19 +334,23 @@ export function trapRead(i: { fenBefore: string; san: string; mover: Color; slip
 /** A GAMBIT ON OFFER: one of the masters' moves here reaches a position the
  *  opening index names a gambit ("Budapest Gambit", "Benko Gambit"). */
 export function gambitAheadRead(i: { fen: string; movesAt: (fen: string) => readonly LocalDbMove[] | null }): TheoryRead | null {
+  const here = openingAtPosition(i.fen)?.name ?? '';
+  // The gambit a board is named for: the last part of its name, or its family
+  // ("Budapest Gambit"), never the Queen's or King's Gambit Accepted/Declined
+  // (a name, not a pawn offered) and never one the board is already in.
+  const gambitOf = (fen: string): string | null => {
+    const name = openingAtPosition(fen)?.name;
+    if (!name) return null;
+    const parts = name.split(/[:,]/).map((p) => p.trim());
+    const g = [...parts].reverse().find((p) => /Gambit(?: (?:Accepted|Declined))?$/.test(p));
+    if (!g || /^(?:Queen|King)['’]s Gambit(?: (?:Accepted|Declined))?$/.test(g) || here.includes(g)) return null;
+    return g;
+  };
+  const said = (m: { color: Color; san: string }): string => `${m.color === 'b' ? '…' : ''}${m.san.replace(/[+#]$/, '')}`;
+  // The pawn the move itself offers, when it does; else the line's offer.
+  const tail = (offer: string | null): string => (offer ? `: it gives up the pawn on ${offer} for time and open lines.` : ', a line where a pawn is offered for time and open lines.');
+  const offerOf = (fen: string, san: string, color: Color): string | null => gambitRead({ fenBefore: fen, san, mover: color })?.squares[0] ?? null;
   const roads = i.movesAt(i.fen) ?? [];
-  const total = roads.reduce((n, m) => n + m.games, 0);
-  for (const r of [...roads].sort((a, b) => b.games - a.games)) {
-    if (total === 0 || r.games / total < 0.02) break;
-    const c = new Chess(i.fen);
-    let mv;
-    try { mv = c.move(r.san); } catch { continue; }
-    const name = openingAtPosition(c.fen())?.name;
-    const gambit = name?.split(':')[0].match(/[A-Z][\w'’ -]*Gambit(?: (?:Accepted|Declined))?/)?.[0];
-    if (gambit && !/(Queen|King).s Gambit (Accepted|Declined)/.test(gambit)) {
-      return { text: `${mv.color === 'b' ? '…' : ''}${r.san.replace(/[+#]$/, '')} is the ${gambit}: a pawn is offered for time and open lines.`, squares: [mv.to] };
-    }
-  }
   // Where masters' games are thin, any legal move the opening index names a
   // gambit ("5.Nd5!? is the Belgrade gambit").
   if (!roads.length) {
@@ -354,14 +358,40 @@ export function gambitAheadRead(i: { fen: string; movesAt: (fen: string) => read
     try { c = new Chess(i.fen); } catch { return null; }
     for (const m of c.moves({ verbose: true })) {
       c.move(m.san);
-      const name = openingAtPosition(c.fen())?.name;
+      const g = gambitOf(c.fen());
       c.undo();
-      const last = name?.split(/[:,]/).pop()?.trim() ?? '';
-      const here = openingAtPosition(i.fen)?.name ?? '';
-      if (!name || name === here || !/Gambit$/.test(last) || here.includes(last)) continue;
-      const offer = gambitRead({ fenBefore: i.fen, san: m.san, mover: m.color })?.squares[0];
-      return { text: `${m.color === 'b' ? '…' : ''}${m.san.replace(/[+#]$/, '')} is the ${last}: it gives up ${offer ? `the pawn on ${offer}` : 'material'} for time and open lines.`, squares: [m.to, ...(offer ? [offer] : [])] };
+      if (!g) continue;
+      const offer = offerOf(i.fen, m.san, m.color);
+      return { text: `${said(m)} is the ${g}${tail(offer)}`, squares: [m.to, ...(offer ? [offer] : [])] };
     }
+    return null;
+  }
+  // The masters' roads, up to three moves ahead: the next move from 2% of
+  // their games, a deeper one from 10%.
+  type Node = { fen: string; sans: string[] };
+  let frontier: Node[] = [{ fen: i.fen, sans: [] }];
+  for (let depth = 1; depth <= 3; depth += 1) {
+    const next: Node[] = [];
+    for (const node of frontier) {
+      const rs = i.movesAt(node.fen) ?? [];
+      const total = rs.reduce((n, m) => n + m.games, 0);
+      for (const r of [...rs].sort((x, y) => y.games - x.games)) {
+        if (total === 0 || r.games / total < (depth === 1 ? 0.02 : 0.1)) break;
+        const c = new Chess(node.fen);
+        let mv;
+        try { mv = c.move(r.san); } catch { continue; }
+        const g = gambitOf(c.fen());
+        const sans = [...node.sans, said(mv)];
+        if (g) {
+          const offer = offerOf(node.fen, r.san, mv.color);
+          return sans.length === 1
+            ? { text: `${sans[0]} is the ${g}${tail(offer)}`, squares: [mv.to, ...(offer ? [offer] : [])] }
+            : { text: `After ${andList(sans.slice(0, -1))}, ${sans[sans.length - 1]} is the ${g}${tail(offer)}`, squares: [mv.to, ...(offer ? [offer] : [])] };
+        }
+        next.push({ fen: c.fen(), sans });
+      }
+    }
+    frontier = next;
   }
   return null;
 }

@@ -157,3 +157,14 @@ describe('hangsRead — the move that drops a piece', () => {
     expect(hangsRead(fenOf(['e4', 'd5']), 'exd5', 'w')).toBeNull();
   });
 });
+
+describe('gambitAheadRead — a gambit two moves down a masters road', () => {
+  it('after …c5, d4 is the Smith-Morra Gambit by the index', async () => {
+    const { gambitAheadRead } = await import('./theoryReads');
+    const plies = (f: string): number => (Number(f.split(' ')[5]) - 1) * 2 + (f.split(' ')[1] === 'b' ? 1 : 0);
+    const chain: Record<number, string> = { 1: 'c5', 2: 'd4' };
+    const r = gambitAheadRead({ fen: fenOf(['e4']), movesAt: (f) => (chain[plies(f)] ? [{ san: chain[plies(f)], games: 50 } as never] : null) });
+    // d4 itself offers nothing (the queen takes back on d4): the line is the gambit.
+    expect(r?.text).toBe('After …c5, d4 is the Smith-Morra Gambit, a line where a pawn is offered for time and open lines.');
+  });
+});
