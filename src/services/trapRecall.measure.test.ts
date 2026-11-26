@@ -75,10 +75,6 @@ const stockfish = (fen: string): Promise<{ cp: number; best: string[] }> => new 
   p.stdout.on('data', (d: Buffer) => { out += d.toString(); if (/\nbestmove /.test(out)) { clearTimeout(timer); done(); } });
   p.stdin.write(`uci\nposition fen ${fen}\ngo depth ${DEPTH}\n`);
 });
-  const v = Number(last[2]);
-  return { cp: last[1] === 'mate' ? (v > 0 ? MATE_CP : -MATE_CP) : v, best: last[3].trim().split(/\s+/).slice(0, 8) };
-};
-
 const punishAfter = async (fen: string): Promise<{ cp: number; seq: string[] }> => {
   const read = await stockfish(fen);
   const seq: string[] = []; const p = new Chess(fen);
