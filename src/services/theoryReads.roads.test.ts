@@ -227,3 +227,13 @@ describe('sacrificeRead — a piece given on purpose', () => {
     expect(sacrificeRead({ fenBefore: fenOf(['a4', 'e5']), san: 'Ra3', mover: 'w', movesAt: () => [{ san: 'e4', games: 99 }] as never[] })).toBeNull();
   });
 });
+
+describe('choiceAheadRead — the choice the next move faces', () => {
+  it('two real roads, each by its job; one plain move is no choice', async () => {
+    const { choiceAheadRead } = await import('./theoryReads');
+    const fenBefore = fenOf(['e4', 'e5']);
+    const r = choiceAheadRead({ fenBefore, san: 'Nf3', mover: 'w', movesAt: () => [{ san: 'Nc6', games: 60 }, { san: 'Nf6', games: 30 }, { san: 'd6', games: 10 }] as never[] });
+    expect(r?.text).toMatch(/^Next, the choice is theirs: …Nc6, which .*, …Nf6, which .* or …d6, which .*\.$/);
+    expect(choiceAheadRead({ fenBefore, san: 'Nf3', mover: 'w', movesAt: () => [{ san: 'Nc6', games: 95 }, { san: 'Nf6', games: 5 }] as never[] })).toBeNull();
+  });
+});

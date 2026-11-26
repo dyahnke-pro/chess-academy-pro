@@ -17,7 +17,7 @@ import { Chess } from 'chess.js';
 import { __setLocalDbForTests, masterMovesCachedSync } from './masterPlayLookup';
 import { __setContinuationsForTests } from './mastersContinuation';
 import { composeTheoryTurn, roadsFrom, type TheorySentenceKind } from './theoryComposer';
-import { sacrificeRead, planAheadRead, gambitAcceptedRead, gambitStandingRead, namedRoadsRead, structureRead, gambitRead, endgameRead, moveOrderRead, transpositionRead, pieceJobRead, trapRead, gambitAheadRead, centreRead } from './theoryReads';
+import { choiceAheadRead, sacrificeRead, planAheadRead, gambitAcceptedRead, gambitStandingRead, namedRoadsRead, structureRead, gambitRead, endgameRead, moveOrderRead, transpositionRead, pieceJobRead, trapRead, gambitAheadRead, centreRead } from './theoryReads';
 import { knownSlipsAt, knownSlipIndexNow, setKnownSlipIndexForTests } from './knownSlips';
 import { openingTheoryFacts } from './openingTheory';
 import { setOpeningPositions, openingAtPosition } from './openingPositions';
@@ -82,6 +82,7 @@ describe.runIf(!!process.env.THEORY_SHEETS && existsSync('data/sources/wikibooks
       moveOrder: moveOrderRead({ history: n.lineSan, student: mover }) ?? transpositionRead({ history: n.lineSan, movesAt: (f) => masterMovesCachedSync(f) }),
       pieceJob: pieceJobRead({ fenBefore, san, mover }),
       namedRoads: namedRoadsRead({ fen: fenAfter, movesAt: (f) => masterMovesCachedSync(f) }),
+      choiceAhead: choiceAheadRead({ fenBefore, san, mover, movesAt: (f) => masterMovesCachedSync(f) }),
       trapSaid: trapRead({ fenBefore, san, mover, slipsAt: (f) => knownSlipsAt(knownSlipIndexNow(), f), movesAt: (f) => masterMovesCachedSync(f) }),
       said: new Set(),
     });

@@ -128,6 +128,8 @@ export interface TheoryTurnIn {
   gambit?: { text: string; squares: string[] } | null;
   endgame?: { text: string; squares: string[] } | null;
   pieceJob?: { text: string; squares: string[] } | null;
+  /** The choice on the board the move reaches (`choiceAheadRead`). */
+  choiceAhead?: { text: string; squares: string[] } | null;
   /** The named roads from the board the move reaches (`namedRoadsRead`). */
   namedRoads?: { text: string; squares: string[] } | null;
   /** A trap read off the board by `theoryReads.trapRead` (already worded). */
@@ -142,6 +144,7 @@ export function composeTheoryTurn(i: TheoryTurnIn): TheorySentence[] {
   const out: TheorySentence[] = [];
   const decision = keyDecisionLine({ fen: i.fen, san: i.san, mover: i.mover, whose: i.whose, roads: i.roads });
   if (decision) out.push({ kind: 'decision', text: decision.text, squares: [], claim: `decision:${i.fen.split(' ').slice(0, 4).join(' ')}` });
+  if (i.choiceAhead) out.push({ kind: 'decision', text: i.choiceAhead.text, squares: i.choiceAhead.squares });
   if (i.namedRoads) out.push({ kind: 'decision', text: i.namedRoads.text, squares: i.namedRoads.squares });
   if (i.plan) out.push({ kind: 'plan', text: planGoalLine({ whose: i.plan.whose, goal: i.plan.goal, lead: i.plan.lead }), squares: [i.plan.goalSquare] });
   if (i.piece) {

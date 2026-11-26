@@ -15,7 +15,7 @@ import { openingAtPosition } from './openingPositions';
 import { transposedOpening } from './openingPositions';
 import { detectOpeningByOrder } from './openingDetectionService';
 import type { LocalDbMove } from './masterPlayLookup';
-import { moveJob, MINE } from './bookMoveWhy';
+import { moveJob, MINE, THEIRS } from './bookMoveWhy';
 import { NO_FOLLOW } from './exchangeLedger';
 import { hangLine, trapLine } from './trapLine';
 import { slipNoun, knownLead } from './trapWords';
@@ -25,7 +25,7 @@ import type { ClubGem } from './clubGems';
 import { withoutCastleTail, composeTheoryTurn, type KeyMove, type PlacedPiece } from './theoryComposer';
 import { mastersPlanRead, planStillAhead, type MastersPlanRead } from './mastersPlanRead';
 import { positionOf } from '../utils/samePosition';
-import { andList } from '../utils/andList';
+import { andList, orList } from '../utils/andList';
 
 export interface TheoryRead {
   text: string;
@@ -560,6 +560,33 @@ export function planAheadRead(i: { history: readonly string[]; san: string; move
   return none;
 }
 
+/** THE CHOICE AHEAD (Wikibooks' "Black has two main responses: …"): on the
+ *  board the move reaches, the masters' real roads (10% of their games each,
+ *  none at 85% or more), each said by what it does. Silent where one move is
+ *  plainly the move or a road has no job to say. Its claim is the board's
+ *  decision, so the decision is said once. */
+export function choiceAheadRead(i: { fenBefore: string; san: string; mover: Color; movesAt: (fen: string) => readonly LocalDbMove[] | null }): (TheoryRead & { claim: string }) | null {
+  let c: Chess;
+  try { c = new Chess(i.fenBefore); c.move(i.san); } catch { return null; }
+  const fen = c.fen();
+  const them = c.turn();
+  const roads = i.movesAt(fen) ?? [];
+  const total = roads.reduce((n, m) => n + m.games, 0);
+  if (total === 0) return null;
+  const real = [...roads].sort((a, b) => b.games - a.games).filter((r) => r.games / total >= 0.1);
+  if (real.length < 2 || real[0].games / total >= 0.85) return null;
+  const said: string[] = []; const squares: string[] = [];
+  for (const r of real) {
+    let job: ReturnType<typeof moveJob> = null;
+    try { job = moveJob(fen, r.san, them, THEIRS, null, NO_FOLLOW); } catch { job = null; }
+    if (!job?.clause) return null;
+    const m = new Chess(fen).move(r.san);
+    said.push(`${them === 'b' ? '…' : ''}${r.san.replace(/[+#]$/, '')}, which ${withoutCastleTail(job.clause).replace(/^it /, '')}`);
+    squares.push(m.to);
+  }
+  return { text: `Next, the choice is theirs: ${orList(said)}.`, squares, claim: `decision:${positionOf(fen)}` };
+}
+
 /** The move before the last of `history`, with its board. */
 function priorOf(history: readonly string[]): { fenBefore: string; san: string } | null {
   if (!history.length) return null;
@@ -585,8 +612,10 @@ export function theoryExtras(i: {
   const pieceText = ahead.piece ? `piece:${ahead.piece.color}:${ahead.piece.san}` : null;
   const plan = planText && !i.said.has(planText) ? (i.said.add(planText), ahead.plan) : null;
   const piece = pieceText && !i.said.has(pieceText) ? (i.said.add(pieceText), ahead.piece) : null;
+  const choice = choiceAheadRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover, movesAt: i.movesAt });
+  const choiceAhead = choice && !i.said.has(choice.claim) ? (i.said.add(choice.claim), choice) : null;
   const turn = composeTheoryTurn({
-    fen: i.fenBefore, san: i.san, mover: i.mover, whose: 'your', roads: [], plan, piece,
+    fen: i.fenBefore, san: i.san, mover: i.mover, whose: 'your', roads: [], plan, piece, choiceAhead,
     structure: once('structure', structureRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover, prior: priorOf(i.history) }) ?? centreRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })),
     gambit: once('gambit', gambitRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover }) ?? sacrificeRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover, movesAt: i.movesAt }) ?? gambitAcceptedRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover }) ?? gambitAheadRead({ fen: (() => { const c = new Chess(i.fenBefore); c.move(i.san); return c.fen(); })(), movesAt: i.movesAt }) ?? gambitStandingRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })),
     endgame: once('endgame', endgameRead({ fenBefore: i.fenBefore, san: i.san, movesAt: i.movesAt })),
