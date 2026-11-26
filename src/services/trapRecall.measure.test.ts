@@ -16,12 +16,18 @@ import { RUY_TRAP_LESSONS } from '../data/lessons/ruyTrapLessons';
 import { CARO_TRAP_LESSONS } from '../data/lessons/caroKannTrapLessons';
 import type { LessonScript } from '../types';
 
-interface Famous { name: string; line: string; slip: string; slipBy: 'w' | 'b' }
+interface Famous {
+  name: string; line: string; slip: string; slipBy: 'w' | 'b';
+  /** The trap's own line where its point comes later than the engine's first
+   *  choice shows (the Elephant's Bxd8?? Bb4+): the sacrifice filter reads the
+   *  line the trap is known by, as the in-app index carries it. */
+  punish?: string;
+}
 const FAMOUS: Famous[] = [
   { name: "Légal's mate", line: 'e4 e5 Nf3 d6 Bc4 Bg4 Nc3 g6 Nxe5', slip: 'Bxd1', slipBy: 'b' },
   { name: "Scholar's mate", line: 'e4 e5 Bc4 Nc6 Qh5', slip: 'Nf6', slipBy: 'b' },
   { name: "Fool's mate", line: 'f3 e5', slip: 'g4', slipBy: 'w' },
-  { name: 'Elephant Trap', line: 'd4 d5 c4 e6 Nc3 Nf6 Bg5 Nbd7 cxd5 exd5', slip: 'Nxd5', slipBy: 'w' },
+  { name: 'Elephant Trap', line: 'd4 d5 c4 e6 Nc3 Nf6 Bg5 Nbd7 cxd5 exd5', slip: 'Nxd5', slipBy: 'w', punish: 'Nxd5 Bxd8 Bb4+ Qd2 Bxd2+ Kxd2 Kxd8' },
   { name: 'Englund Gambit trap', line: 'd4 e5 dxe5 Nc6 Nf3 Qe7 Bf4 Qb4+ Bd2 Qxb2', slip: 'Bc3', slipBy: 'w' },
   { name: 'Lasker Trap (Albin)', line: 'd4 d5 c4 e5 dxe5 d4 e3 Bb4+ Bd2 dxe3', slip: 'Bxb4', slipBy: 'w' },
   { name: 'Blackburne Shilling', line: 'e4 e5 Nf3 Nc6 Bc4', slip: 'Nd4', slipBy: 'b' },
@@ -118,7 +124,7 @@ describe.runIf(!!process.env.TRAP_RECALL && existsSync('node_modules/stockfish/b
       // The punisher's read, from their own seat (the side to move now).
       const pr = await punishAfter(c.fen());
       const read = { cp: pr.cp };
-      const punishSeq = pr.seq;
+      const punishSeq = f.punish ? f.punish.split(' ') : pr.seq;
       const kind = classifySlip({ engineCp: read.cp, line: { fen: fenBefore, slip: f.slip, punish: punishSeq } });
       if (kind === 'trap') traps += 1;
       const sentence = trapLine({ fen: fenBefore, slip: f.slip, punish: punishSeq, slipBy: 'opponent' })?.text ?? '(no blow to name)';
