@@ -257,3 +257,14 @@ describe('gambitDeclinedRead — the offered pawn left alone', () => {
     expect(gambitDeclinedRead({ fenBefore: fenOf(['e4', 'e5']), san: 'Nf3', mover: 'w' })).toBeNull();
   });
 });
+
+describe('pieceJobRead — a job that prepares a move states the plan', () => {
+  it('the fianchetto and a "prepares" job are marked as plans; a plain development is not', async () => {
+    const { pieceJobRead } = await import('./theoryReads');
+    expect(pieceJobRead({ fenBefore: fenOf(['Nf3', 'Nf6']), san: 'g3', mover: 'w' })?.saysPlan).toBe(true);
+    const nc3 = pieceJobRead({ fenBefore: fenOf(['c4', 'Nf6']), san: 'Nc3', mover: 'w' });
+    expect(nc3?.text).toMatch(/prepares e4/);
+    expect(nc3?.saysPlan).toBe(true);
+    expect(pieceJobRead({ fenBefore: fenOf(['d4', 'Nf6', 'Bf4', 'd5', 'e3', 'e6']), san: 'Nf3', mover: 'w' })?.saysPlan).toBeUndefined();
+  });
+});

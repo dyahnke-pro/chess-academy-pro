@@ -293,7 +293,7 @@ export function pieceJobRead(i: { fenBefore: string; san: string; mover: Color }
   try { c = new Chess(i.fenBefore); mv = c.move(i.san); } catch { return null; }
   const home = i.mover === 'w' ? '1' : '8';
   if (mv.piece === 'p' && ['g3', 'b3', 'g6', 'b6'].includes(mv.to) && c.get(`${mv.to[0] === 'g' ? 'f' : 'c'}${home}` as never)?.type === 'b') {
-    return { text: `It prepares the fianchetto: the bishop will own the long diagonal from ${mv.to[0] === 'g' ? 'g' : 'b'}${home === '1' ? '2' : '7'}.`, squares: [mv.to] };
+    return { text: `It prepares the fianchetto: the bishop will own the long diagonal from ${mv.to[0] === 'g' ? 'g' : 'b'}${home === '1' ? '2' : '7'}.`, squares: [mv.to], saysPlan: true };
   }
   // A pawn move that opens lines: the mover's bishops, rooks and queen that
   // reach at least two more squares now, because the pawn left their path.
@@ -318,7 +318,8 @@ export function pieceJobRead(i: { fenBefore: string; san: string; mover: Color }
   try { job = moveJob(i.fenBefore, i.san, i.mover, MINE, null, NO_FOLLOW); } catch { job = null; }
   if (!job?.clause) return null;
   const clause = withoutCastleTail(job.clause);
-  return { text: `${PIECE_NAME[mv.piece].charAt(0).toUpperCase()}${PIECE_NAME[mv.piece].slice(1)} to ${mv.to}. It ${clause.replace(/^it /, '')}.`.replace(/^(\w+) to (\w+)\. It /, '$1 on $2: it '), squares: [mv.to] };
+  // A job that names the move it prepares states the plan behind the move.
+  return { text: `${PIECE_NAME[mv.piece].charAt(0).toUpperCase()}${PIECE_NAME[mv.piece].slice(1)} to ${mv.to}. It ${clause.replace(/^it /, '')}.`.replace(/^(\w+) to (\w+)\. It /, '$1 on $2: it '), squares: [mv.to], ...(/\bprepares\b/.test(clause) ? { saysPlan: true } : {}) };
 }
 
 const PIECE_WORD: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };

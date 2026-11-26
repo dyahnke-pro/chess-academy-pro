@@ -131,7 +131,7 @@ export interface TheoryTurnIn {
   moveOrder?: { text: string; squares: string[] } | null;
   gambit?: { text: string; squares: string[] } | null;
   endgame?: { text: string; squares: string[] } | null;
-  pieceJob?: { text: string; squares: string[] } | null;
+  pieceJob?: { text: string; squares: string[]; saysPlan?: boolean } | null;
   /** The choice on the board the move reaches (`choiceAheadRead`). */
   choiceAhead?: { text: string; squares: string[] } | null;
   /** The named roads from the board the move reaches (`namedRoadsRead`). */
@@ -166,7 +166,7 @@ export function composeTheoryTurn(i: TheoryTurnIn): TheorySentence[] {
   if (i.gambit && !i.trapSaid?.slipPlayed) out.push({ kind: 'gambit', text: i.gambit.text, squares: i.gambit.squares });
   if (i.structure) out.push({ kind: 'structure', text: i.structure.text, squares: i.structure.squares, ...(i.structure.saysPlan ? { saysPlan: true } : {}) });
   if (i.moveOrder) out.push({ kind: 'move-order', text: i.moveOrder.text, squares: i.moveOrder.squares });
-  if (i.pieceJob) out.push({ kind: 'piece', text: i.pieceJob.text, squares: i.pieceJob.squares });
+  if (i.pieceJob) out.push({ kind: 'piece', text: i.pieceJob.text, squares: i.pieceJob.squares, ...(i.pieceJob.saysPlan ? { saysPlan: true } : {}) });
   if (i.trapSaid) out.push({ kind: 'trap', text: i.trapSaid.text, squares: i.trapSaid.squares });
   if (i.endgame) out.push({ kind: 'endgame', text: i.endgame.text, squares: i.endgame.squares });
   if (i.trap) {
