@@ -13,6 +13,7 @@
  * club gems) is engine-verified; we only look it up by the exact position and
  * compute the arrow squares via chess.js.
  */
+import { clubLore } from './trapWords';
 import { openSentence } from '../utils/openSentence';
 import { settledBalance } from './material';
 import { computeExchangeLedger, proofCut } from './exchangeLedger';
@@ -351,7 +352,7 @@ export function findLivePunishment(
   // "This move", never its square: the punish usually lands on it (…f3 exf3),
   // and a square named here is the answer given away.
   const trap = isWeaponGem(gem);
-  const lore = trap ? "That's a known trap at club level. " : "That's a known mistake at club level. ";
+  const lore = clubLore(trap ? 'trap' : 'known-mistake', 'opponent');
   const callout = `${lore}${CALLOUTS[gem.inaccuracy.length % CALLOUTS.length]}`;
 
   // SHOW THE LINE LANDING, not just its first move (David 2026-08-01: "make

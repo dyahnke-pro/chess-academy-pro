@@ -67,11 +67,12 @@ function hasNarrationFor(id: string): boolean {
  *  ±MATE_CP. This REPLACES the 2026-05-24 tiers, under which a +0.5
  *  "positional" edge surfaced as a weapon: only 54 of 344 mined gems and 15 of
  *  45 gambit gems were real traps. */
-export const TRAP_BAR_CP = 300;
+export { TRAP_BAR_CP } from '../../services/trapComputer';
 export { MATE_CP } from '../../services/mateScale';
 import { MATE_CP } from '../../services/mateScale';
+import { classifySlip } from '../../services/trapComputer';
 export function isWeaponGem(gem: PunishGem): boolean {
-  return gem.tier === 'confirmed' && gem.engineCp !== null && gem.engineCp >= TRAP_BAR_CP;
+  return gem.tier === 'confirmed' && classifySlip({ engineCp: gem.engineCp }) === 'trap';
 }
 
 /** A KNOWN MISTAKE (F04, 2026-10-07): an engine-verified slip worth at least

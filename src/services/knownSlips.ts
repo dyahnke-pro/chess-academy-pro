@@ -27,6 +27,7 @@ import { Chess } from 'chess.js';
 import { unmarked } from '../utils/sanMark';
 import { clubGemBoards, clubGemForIndex, type ClubGem } from './clubGems';
 import { computeExchangeLedger, netPieceWords } from './exchangeLedger';
+import { slipNoun } from './trapWords';
 import { getAllPunishGems, isKnownSlipGem, isWeaponGem, MATE_CP } from '../data/lessons/punishGems';
 import { legalLineProof, NO_PROOF, type Proof } from './proof';
 import { lineSeatAt } from '../utils/andList';
@@ -226,7 +227,7 @@ export function knownSlip(ctx: KnownSlipContext): KnownSlipRead | null {
   const [slipSan, punishSan] = sans;
   const slipBy: FactSeat = mover === student ? 'student' : 'opponent';
   const punisher = slipBy === 'student' ? 'they' : 'you';
-  const name = isWeaponGem(asGem) ? 'trap' : 'mistake';
+  const name = slipNoun(isWeaponGem(asGem) ? 'trap' : 'known-mistake', slipBy);
   // What it costs: a mate on the board, or the line's own result.
   // Black's moves are said with their dots (decision baseline 2026-11-12: "A
   // known mistake here: e5" of Black's …e5 read as White's move).

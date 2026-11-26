@@ -1,0 +1,5 @@
+{
+  "_comment": "THE ONE TRAP BAR (RULEBOOK F04, David 2026-10-07). A trap wins at least a piece (trapCp) or mates, proven by the engine at the quiet end of the forced playout. A slip worth at least knownCp is a known mistake, never a trap. Read only by src/services/trapComputer.ts.",
+  "trapCp": 300,
+  "knownCp": 50
+}
