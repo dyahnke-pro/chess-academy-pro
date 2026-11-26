@@ -1,4 +1,5 @@
 import { PageHelp } from '../Layout/PageHelp';
+import { normalizeChessUsername } from '../../utils/chessUsername';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { importLichessGames, importLichessStats } from '../../services/lichessService';
@@ -216,7 +217,7 @@ export function ImportPage(): JSX.Element {
           }
         }
 
-        await db.profiles.update(target.id, { ...updates, ...preferencesPatch({ [prefKey]: username.trim() }) });
+        await db.profiles.update(target.id, { ...updates, ...preferencesPatch({ [prefKey]: normalizeChessUsername(username) }) });
         const refreshed = await db.profiles.get(target.id);
         if (refreshed) {
           setActiveProfile(refreshed);

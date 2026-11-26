@@ -1,4 +1,5 @@
 import { db } from '../db/schema';
+import { normalizeChessUsername } from '../utils/chessUsername';
 import type { GameRecord, PlatformStats } from '../types';
 import { detectBlunders, extractClockMs, annotationsFromEvalComments, EVAL_COMMENT_ANALYSIS_DEPTH } from './gameImportUtils';
 import { openingKeyFromPgn } from './openingKey';
@@ -75,6 +76,7 @@ export async function importLichessGames(
   onProgress?: (count: number, status?: string) => void,
   opts: ImportLichessOptions = {},
 ): Promise<number> {
+  username = normalizeChessUsername(username);
   onProgress?.(0, 'Fetching games from Lichess...');
 
   const response = await fetch(
@@ -179,6 +181,7 @@ export async function importLichessGames(
 export async function importLichessStats(
   username: string,
 ): Promise<PlatformStats> {
+  username = normalizeChessUsername(username);
   const response = await fetch(
     `https://lichess.org/api/user/${encodeURIComponent(username)}`,
     {

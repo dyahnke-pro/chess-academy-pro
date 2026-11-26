@@ -1,4 +1,5 @@
 import { setUpPosed } from './setUpChance';
+import { retryAfterSuspension } from './idbResilience';
 import { noteAnalysis, lastSessionWasKilled } from './sessionWatch';
 import { headerOf, scanGames, type GameHeader } from './gameScan';
 import { applyVerdict, getVerdicts, saveVerdict, toVerdictLabel, verdictKey, verdictOutranks, VERDICT_TRUST_DEPTH } from './moveVerdictStore';
@@ -3347,9 +3348,11 @@ async function recomputeWeaknessFromGames(): Promise<void> {
   // "cursor that doesn't exist"). Root-fixed in computeWeaknessProfile (one
   // shared read transaction); this catch is the belt-and-suspenders.
   try {
-    await updateEloFromImportedGames(profile);
+    // Reads iOS cut off by suspending the app run again once it is back
+    // (`idbResilience`) — the reported "aggregate weakness refresh failed".
+    await retryAfterSuspension(() => updateEloFromImportedGames(profile));
 
-    const weaknessProfile = await computeWeaknessProfile(profile);
+    const weaknessProfile = await retryAfterSuspension(() => computeWeaknessProfile(profile));
     useAppStore.getState().setWeaknessProfile(weaknessProfile);
 
     const updatedProfile = await db.profiles.get(profile.id);

@@ -307,7 +307,7 @@ export async function speakDeviceVoiceBounded(text: string, rate: number): Promi
   try {
     const voice = isLatinScript(text) ? undefined : null;
     const won = await Promise.race([
-      speechService.speak(text, { ...WEB_SPEECH_FALLBACK, rate, voice }).then(() => 'done' as const, () => 'done' as const),
+      Promise.resolve().then(() => speechService.speak(text, { ...WEB_SPEECH_FALLBACK, rate, voice })).then(() => 'done' as const, () => 'done' as const),
       bound,
     ]);
     if (won === 'timeout') speechService.stop();

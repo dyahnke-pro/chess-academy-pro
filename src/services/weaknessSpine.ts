@@ -17,6 +17,7 @@
 // Training Plan reads the unified list; the Weaknesses page folds the
 // misconception half in via weaknessAnalyzer.analyzeMisconceptions.
 
+import { retryAfterSuspension } from './idbResilience';
 import { openSentence } from '../utils/openSentence';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
@@ -949,7 +950,9 @@ function mergeByKey(rows: UnifiedWeakness[]): UnifiedWeakness[] {
 const SPINE_MAX_AGE_MS = 5 * 60 * 1000;
 const spineMemo = memoOverTable(
   () => [db.misconceptionTags, db.mistakePuzzles, db.openingWeakSpots, db.classifiedTactics, db.games, db.puzzleMisses, db.findSquareAttempts],
-  async () => ({ at: Date.now(), profile: await computeUnifiedWeaknessProfile() }),
+  // A read iOS cut off by suspending the app runs again once it is back
+  // (`idbResilience`).
+  async () => ({ at: Date.now(), profile: await retryAfterSuspension(computeUnifiedWeaknessProfile) }),
 );
 let spineKey: string | null = null;
 let spineMetaHooked = false;
