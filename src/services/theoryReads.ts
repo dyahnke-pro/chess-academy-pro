@@ -424,21 +424,18 @@ export function trapRead(i: { fenBefore: string; san: string; mover: Color; slip
   // 2b. The move attacks something, and a reply masters play ignores it.
   const hang = hangRead({ fen: after.fen(), mover: i.mover, movesAt: i.movesAt });
   if (hang) return hang;
-  // 3. One waits behind the masters' usual reply.
-  const roads = i.movesAt(after.fen()) ?? [];
-  const total = roads.reduce((n, m) => n + m.games, 0);
-  for (const road of [...roads].sort((a, b) => b.games - a.games)) {
-    // The roads masters play (the named-roads bar: 2% of their games).
-    if (total === 0 || road.games / total < 0.02) break;
-    const next = new Chess(after.fen());
-    try { next.move(road.san); } catch { continue; }
-    // The slip behind the road is the mover's own: said as a "Watch out".
-    for (const g of i.slipsAt(next.fen())) {
-      const r = say(next.fen(), g, i.mover, () => '');
+  // 3. One waits down a road masters play, up to two moves on (`walkRoadsAhead`):
+  // the slip of whoever moves on that board — the mover's own a "Watch out".
+  return walkRoadsAhead(after.fen(), [], i.movesAt, ({ after: board, sans }) => {
+    if (sans.length > 2) return null;
+    const slipper = board.turn();
+    const pre = sans.length === 1 ? `If they answer ${sans[0]}, ` : `If play goes ${andList(sans)}, `;
+    for (const g of i.slipsAt(board.fen())) {
+      const r = say(board.fen(), g, slipper, (kind) => `${pre}${slipNoun(kind, 'opponent') === 'trap' ? 'a trap is waiting' : 'a known mistake is waiting'}. `);
       if (r) return r;
     }
-  }
-  return null;
+    return null;
+  });
 }
 
 /** A GAMBIT ON OFFER: one of the masters' moves here reaches a position the
