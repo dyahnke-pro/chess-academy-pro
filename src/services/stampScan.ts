@@ -35,7 +35,6 @@ export async function pickRows<T, I, R>(
   const out: R[] = [];
   for (let i = 0; i < keys.length; i += chunk) {
     const page = await table.bulkGet(keys.slice(i, i + chunk));
-    pickPeak = Math.max(pickPeak, page.length);
     for (const row of page) {
       if (row === undefined) continue;
       const r = await pick(row);
@@ -57,7 +56,3 @@ export async function forEachRow<T, I>(
   await pickRows<T, I, never>(table, keys, async (row) => { await visit(row); return null; }, chunk);
 }
 
-/** The most full rows any `pickRows` page has held — read by the tests. */
-let pickPeak = 0;
-export function pickRowsPeak(): number { return pickPeak; }
-export function resetPickRowsPeak(): void { pickPeak = 0; }

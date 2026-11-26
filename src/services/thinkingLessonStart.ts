@@ -10,6 +10,8 @@
 // the recorder and the evidence store separately is a surface that can wire
 // them differently from the next one (the coach/third-coach divergence the
 // surface-composition gate measures).
+import { pickRows } from './stampScan';
+import { SCAN_PAGE_SIZE } from './gameScan';
 import { gameDateMs } from '../utils/gameDate';
 import type { StepStanding } from './thinkingLesson';
 import type { AnsweredQuestion, LessonProgress, StepKit } from './thinkingLessonSession';
@@ -567,10 +569,9 @@ export function resetTransferReportForTests(): void {
  */
 export async function loadThinkingTransfer(): Promise<StepTransfer[]> {
   try {
-    const [evidence, slipRows, games] = await Promise.all([
+    const [evidence, slipRows] = await Promise.all([
       db.capabilityEvidence.toArray(),
       db.misconceptionTags.toArray(),
-      db.games.toArray(),
     ]);
     const analysed = new Set<string>();
     const slips: TransferSlip[] = [];
@@ -580,12 +581,14 @@ export async function loadThinkingTransfer(): Promise<StepTransfer[]> {
       slips.push({ tag: r.tag, gameId: r.sourceGameId });
     }
     for (const r of evidence) if (r.sourceGameId) analysed.add(r.sourceGameId);
-    const played: TransferGame[] = [];
-    for (const g of games) {
-      if (g.isMasterGame || isFixtureGame(g) || !analysed.has(g.id)) continue;
+    // Only the games a slip or an answer came from, a page at a time — this
+    // runs at boot (Up next), and reading the whole library here held every
+    // imported game in memory at launch (2026-11-26, the /weaknesses kills).
+    const played: TransferGame[] = await pickRows(db.games, [...analysed], (g) => {
+      if (g.isMasterGame || isFixtureGame(g)) return null;
       const at = gamePlayedAt(g.date);
-      if (at !== null) played.push({ id: g.id, playedAt: at });
-    }
+      return at === null ? null : { id: g.id, playedAt: at };
+    }, SCAN_PAGE_SIZE);
     const out = thinkingTransfer({ evidence, useProfile: summariseEvidence(foldForSteps(evidence), foldForSteps(slipRows), {}, 'use'), games: played, slips });
     reportTransfer(out, played.length);
     return out;

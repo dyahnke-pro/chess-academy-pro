@@ -35,6 +35,10 @@ const SETTLE_MS = Number(process.env.AUDIT_SETTLE_MS ?? 30000);
 const HELD = process.env.AUDIT_HELD === '1';
 // Share of games imported but not yet analysed (a big chess.com import).
 const UNANALYSED = Number(process.env.AUDIT_UNANALYSED ?? 0);
+// AUDIT_DIRECT=1: the launch iOS gives a killed web view — the app boots
+// straight at /weaknesses (no home screen first). Peak is then measured from
+// the navigation itself, against the home boot's settled heap.
+const DIRECT = process.env.AUDIT_DIRECT === '1';
 const OUT_DIR = `audit-reports/weaknesses-memory-${new Date().toISOString().replace(/[:.]/g, '-')}`;
 
 let seed = 11;
@@ -112,6 +116,9 @@ async function main() {
   const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 414, height: 896 } });
   await ctx.addInitScript(autoDismissCalibration);
   await ctx.addInitScript(muteTtsForAudit);
+  // AUDIT_IDB_TALLY=<file>: an init script that counts the rows each store
+  // read returns, with the app stack that asked (names the producer).
+  if (process.env.AUDIT_IDB_TALLY) await ctx.addInitScript({ path: process.env.AUDIT_IDB_TALLY });
   const page = await ctx.newPage();
   const pageErrors = [];
   page.on('pageerror', (e) => pageErrors.push(String(e)));
@@ -205,12 +212,37 @@ async function main() {
   await gc();
   const base = await heapMb();
   console.log(`  · home-screen baseline heap ${base.toFixed(0)} MB`);
+  // AUDIT_ALLOC_PROFILE=1: sample every allocation (collected ones too) from
+  // the navigation to the settle, and print the functions that allocated most
+  // — names which producer reads the library.
+  const PROFILE = process.env.AUDIT_ALLOC_PROFILE === '1';
+  if (PROFILE) {
+    await cdp.send('HeapProfiler.enable');
+    await cdp.send('HeapProfiler.startSampling', { samplingInterval: 32768, includeObjectsCollectedByMajorGC: true, includeObjectsCollectedByMinorGC: true });
+  }
   const t0 = Date.now();
   let loaded = false;
   const peak = await samplePeak(async () => {
-    await page.locator('a[href="/weaknesses"]:visible').first().click({ timeout: 30000, noWaitAfter: true });
-    await page.waitForURL(/\/weaknesses/, { timeout: 60000 });
-    loaded = await page.waitForFunction(
+    if (DIRECT) {
+      await page.evaluate(() => { window.dispatchEvent(new Event('pagehide')); });
+      if (HELD) {
+        await page.evaluate(async () => {
+          const db = await new Promise((res, rej) => { const r = indexedDB.open('ChessAcademyDB'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+          await new Promise((res, rej) => {
+            const tx = db.transaction('meta', 'readwrite');
+            tx.objectStore('meta').put({ key: 'session-watch', value: JSON.stringify({ startedAt: Date.now() - 3000, lastBeat: Date.now(), route: '/weaknesses', clean: false, poolWorkers: 0, analysing: false }) });
+            tx.oncomplete = () => res(); tx.onerror = () => rej(tx.error);
+          });
+          db.close();
+        });
+      }
+      await page.goto(`${BASE_URL}${process.env.AUDIT_DIRECT_PATH ?? "/weaknesses"}`, { waitUntil: "domcontentloaded" });
+    } else {
+      await page.locator('a[href="/weaknesses"]:visible').first().click({ timeout: 30000, noWaitAfter: true });
+      await page.waitForURL(/\/weaknesses/, { timeout: 60000 });
+    }
+    // A control boot onto another page (AUDIT_DIRECT_PATH=/): no report to wait for.
+    loaded = DIRECT && !(process.env.AUDIT_DIRECT_PATH ?? '/weaknesses').startsWith('/weaknesses') ? true : await page.waitForFunction(
       (held) => !!document.body && !!document.querySelector('[data-testid="tab-tactics"]')
         && (held ? !!document.querySelector('[data-testid="insights-held-after-kill"]') : !document.body.innerText.includes('Analysing your games')),
       HELD, { timeout: 300000 },
@@ -218,6 +250,39 @@ async function main() {
     await page.waitForTimeout(SETTLE_MS);
   });
   const loadMs = Date.now() - t0;
+  if (process.env.AUDIT_IDB_TALLY) {
+    const t = await page.evaluate(() => window.__idbTally ?? {});
+    console.log('  · rows read per store since the navigation:');
+    for (const [k, v] of Object.entries(t).filter(([k]) => k.startsWith('games')).sort((a, b) => b[1].n - a[1].n)) {
+      console.log(`      ${k}: ${v.n} rows, ${v.calls} calls`);
+      for (const [st, c] of Object.entries(v.stacks).sort((a, b) => b[1] - a[1]).slice(0, 12)) console.log(`          ${c}× ${st}`);
+    }
+  }
+  if (process.env.AUDIT_GAMES_READS === '1') {
+    const r = await page.evaluate(() => window.__gamesReads ?? {});
+    console.log('  · games reads by caller:');
+    for (const [k, v] of Object.entries(r).sort((a, b) => b[1] - a[1]).slice(0, 40)) console.log(`      ${v}× ${k}`);
+  }
+  if (PROFILE) {
+    const { profile } = await cdp.send('HeapProfiler.stopSampling');
+    const byFn = new Map();
+    const walk = (n, stack) => {
+      const cf = n.callFrame;
+      const here = `${cf.functionName || '(anon)'} ${cf.url.split('/').pop()}:${cf.lineNumber + 1}`;
+      const st = [...stack, here];
+      if (n.selfSize > 0) {
+        // Attribute to the nearest frame from app code, with two callers.
+        const app = st.filter((f) => /src\/|assets\//.test(f) || /\.tsx?:/.test(f)).slice(-3).join(' < ');
+        byFn.set(app || here, (byFn.get(app || here) ?? 0) + n.selfSize);
+      }
+      for (const c of n.children) walk(c, st);
+    };
+    walk(profile.head, []);
+    const top = [...byFn.entries()].sort((a, b) => b[1] - a[1]).slice(0, 25);
+    console.log('  · top allocators (MB):');
+    for (const [k, v] of top) console.log(`      ${(v / 1048576).toFixed(1)}  ${k}`);
+    await writeFile(`${OUT_DIR}/alloc-profile.json`, JSON.stringify(top, null, 1));
+  }
   const shown = await page.evaluate(() => ({
     header: document.querySelector('[data-testid="insights-analysed-count"]')?.textContent ?? null,
     held: !!document.querySelector('[data-testid="insights-held-after-kill"]'),

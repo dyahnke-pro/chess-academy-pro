@@ -14,7 +14,7 @@
 // That is the sanctioned randomness (CLAUDE.md: the opponent's moves are
 // genuinely random on purpose); a single continuation is deterministic.
 import { Chess } from 'chess.js';
-import { scanGames, type GameHeader } from './gameScan';
+import { headerOf, scanGames, type GameHeader } from './gameScan';
 import { useAppStore } from '../stores/appStore';
 import { logAppAudit } from './appAuditor';
 import { isFixtureGame } from './fixtureGames';
@@ -168,13 +168,12 @@ async function buildFor(colour: PlayerColor, trigger: string): Promise<HomeSteer
     // its opening moves, never the whole library held at once (2026-11-26).
     const identity = identityNow();
     let gameCount = 0;
-    const openings = await scanGames((g) => {
+    const homeGames = await scanGames((g) => {
       if (g.isMasterGame || isFixtureGame(g)) return null;
       gameCount++;
-      return isHomeOpeningGame(g, identity, { [colour]: { family: choice.family } }) ? openingSans(g.pgn, STEER_MAX_PLY) : null;
+      return isHomeOpeningGame(g, identity, { [colour]: { family: choice.family } }) ? { ...headerOf(g), pgn: g.pgn } : null;
     });
-    const index: SteerIndex = new Map();
-    for (const sans of openings) addOpponentReplies(index, sans, colour);
+    const index = buildSteerIndex(homeGames, identity, colour, choice.family);
     const entry: HomeSteerEntry = { index, family: choice.family, games: gameCount, builtAt: Date.now(), buildMs: Date.now() - t0 };
     setHomeSteerEntry(colour, entry);
     void logAppAudit({

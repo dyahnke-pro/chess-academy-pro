@@ -21,7 +21,6 @@ vi.mock('../stores/appStore', () => ({
 }));
 
 import { SCAN_PAGE_SIZE } from './gameScan';
-import { pickRowsPeak, resetPickRowsPeak } from './stampScan';
 import { getOverviewInsights, getOpeningInsights, getMistakeInsights, getTacticInsights, getAnalysisCounts } from './gameInsightsService';
 import { planAnalysisBatch } from './gameAnalysisService';
 import { getHomeOpeningRankings, __resetHomeOpeningCacheForTests } from './homeOpeningService';
@@ -49,12 +48,12 @@ describe('what /weaknesses reads on open holds one page of games, never the libr
     await db.profiles.put({ id: 'main', name: 'student', preferences: { chessComUsername: 'student' } } as never);
     await seedGames();
     __resetHomeOpeningCacheForTests();
-    resetPickRowsPeak();
   });
   afterEach(() => { vi.restoreAllMocks(); });
 
   it('no reader materialises the games table, and no page holds more than SCAN_PAGE_SIZE records', async () => {
     const whole = [vi.spyOn(db.games, 'toArray'), vi.spyOn(db.games, 'filter'), vi.spyOn(db.games, 'orderBy')];
+    const pages = vi.spyOn(db.games, 'bulkGet');
     const [overview, , , , counts, plan] = await Promise.all([
       getOverviewInsights(), getOpeningInsights(), getMistakeInsights(), getTacticInsights(),
       getAnalysisCounts(), planAnalysisBatch(), getHomeOpeningRankings({ force: true }), getUnifiedWeaknessProfile(),
@@ -64,7 +63,8 @@ describe('what /weaknesses reads on open holds one page of games, never the libr
     expect(overview.totalGames).toBe(GAMES);
     expect(counts.totalGames).toBe(GAMES);
     expect(plan.waiting).toBeGreaterThan(0);
-    expect(pickRowsPeak()).toBeGreaterThan(0);
-    expect(pickRowsPeak()).toBeLessThanOrEqual(SCAN_PAGE_SIZE);
+    const sizes = pages.mock.calls.map((c) => (c[0] as unknown[]).length);
+    expect(sizes.length).toBeGreaterThan(0);
+    expect(Math.max(...sizes)).toBeLessThanOrEqual(SCAN_PAGE_SIZE);
   });
 });
