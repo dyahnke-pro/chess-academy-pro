@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
-import { trapLine } from './trapLine';
+import { hangLine, trapLine } from './trapLine';
 
 const play = (sans: string[]): string => { const c = new Chess(); for (const s of sans) c.move(s); return c.fen(); };
 const FORK_FEN = play(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6', 'Ng5']);
@@ -27,5 +27,22 @@ describe('trapLine — one anchor, the blow, one pattern', () => {
   it('a winning move that hits, checks, mates and takes nothing is not said', () => {
     const quiet = play(['e4', 'e5']);
     expect(trapLine({ fen: quiet, slip: 'Nf3', punish: ['a6'], slipBy: 'opponent' })).toBeNull();
+  });
+});
+
+describe('hangLine — the off-line hang, in the approved shape', () => {
+  // 1.e4 e5 2.Nf3 Nc6 3.Bc4 Bc5 4.d4 — the pawn attacks the bishop on c5.
+  const fen = play(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'd4']);
+  it('says the anchor, the attacked square, and the capture', () => {
+    expect(hangLine({ fen, ignore: 'd6', takes: 'dxc5', ignoredBy: 'opponent' })?.text)
+      .toBe('Before …d6, if they ignore the attack on c5, dxc5 takes the bishop.');
+  });
+  it('the student\'s own ignoring is a Watch out', () => {
+    const l = hangLine({ fen, ignore: 'd6', takes: 'dxc5', ignoredBy: 'student' });
+    expect(l?.text).toBe('Watch out: if you ignore the attack on c5, dxc5 takes your bishop.');
+  });
+  it('a reply that moves the piece, or a capture that does not play, is not a hang', () => {
+    expect(hangLine({ fen, ignore: 'Bxd4', takes: 'Nxd4', ignoredBy: 'opponent' })).toBeNull();
+    expect(hangLine({ fen, ignore: 'd6', takes: 'Qxd6', ignoredBy: 'opponent' })).toBeNull();
   });
 });

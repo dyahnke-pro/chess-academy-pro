@@ -32,6 +32,9 @@ import repertoire from '../data/repertoire.json';
 import { bookMoveWhy } from './bookMoveWhy';
 import { openingEquivalence } from './openingEquivalence';
 import { mastersPlanLine } from './theoryComposer';
+import { theoryExtras, ownGemBoards } from './theoryReads';
+import { getAllPunishGems } from '../data/lessons/punishGems';
+import { masterMovesCachedSync } from './masterPlayLookup';
 import { mastersPlanRead, planStillAhead, type MastersPlanRead, type MovesAt } from './mastersPlanRead';
 import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
 import { noteArrowSourceAt } from './openingGenerator';
@@ -834,6 +837,18 @@ export function buildTheoryLectureBeats(
     return ` ${w}`;
   };
 
+  // WHAT ELSE THE THEORY SAYS (theoryReads): the structure the move makes, a
+  // gambit, the transposition, the queens coming off, a trap around it — each
+  // news once.
+  const extrasSaid = new Set<string>();
+  const theoryExtrasFor = (prefixSans: readonly string[], fenBefore: string, san: string): string => {
+    try {
+      const mover = new Chess(fenBefore).turn();
+      const lines = theoryExtras({ history: prefixSans, fenBefore, san, mover, movesAt: (f) => masterMovesCachedSync(f), boards: ownGemBoards(getAllPunishGems()), said: extrasSaid });
+      return lines.length ? ` ${lines.join(' ')}` : '';
+    } catch { return ''; }
+  };
+
   // The teaching for a move: the voiced note at the board it reaches, else the
   // computed why (deduped as above).
   const teach = (prefixSans: readonly string[], fenBefore: string, san: string): string => {
@@ -845,7 +860,7 @@ export function buildTheoryLectureBeats(
         if (note) return ` ${note.trim()}`;
       } catch { /* no note — computed */ }
     }
-    return freshWhy(fenBefore, san);
+    return `${freshWhy(fenBefore, san)}${theoryExtrasFor(prefixSans, fenBefore, san)}`;
   };
 
   // The masters line walked from the book move, each step's teaching the

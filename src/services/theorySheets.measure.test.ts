@@ -18,7 +18,7 @@ import { __setLocalDbForTests, masterMovesCachedSync } from './masterPlayLookup'
 import { __setContinuationsForTests } from './mastersContinuation';
 import { mastersPlanRead, planStillAhead, type MastersPlanRead } from './mastersPlanRead';
 import { composeTheoryTurn, roadsFrom, type KeyMove, type TheorySentenceKind } from './theoryComposer';
-import { structureRead, gambitRead, endgameRead, moveOrderRead, transpositionRead, pieceJobRead, trapRead, gambitAheadRead, centreRead } from './theoryReads';
+import { structureRead, gambitRead, endgameRead, moveOrderRead, transpositionRead, pieceJobRead, trapRead, gambitAheadRead, centreRead, gemBoards } from './theoryReads';
 import { openingTheoryFacts } from './openingTheory';
 import { setOpeningPositions, openingAtPosition } from './openingPositions';
 import { setOpeningIdentity, identityFor } from './openingIdentity';
@@ -57,6 +57,8 @@ describe.runIf(!!process.env.THEORY_SHEETS && existsSync('data/sources/wikibooks
     setOpeningPositions(JSON.parse(readFileSync('public/data/opening-positions.json', 'utf8')));
     setOpeningIdentity(JSON.parse(readFileSync('public/data/opening-identity.json', 'utf8')));
     clubBoards = (JSON.parse(readFileSync('public/data/club-gems.json', 'utf8')) as { boards: Record<string, never[]> }).boards;
+    const mine = gemBoards([...(JSON.parse(readFileSync('src/data/punish-gems.json', 'utf8')) as never[]), ...(JSON.parse(readFileSync('src/data/gambit-punish-gems.json', 'utf8')) as never[])]);
+    clubBoards = { ...clubBoards, ...Object.fromEntries(Object.entries(mine).map(([k, v]) => [k, [...(clubBoards[k] ?? []), ...v] as never[]])) };
   });
 
   /** What the narrator says at this position, as idea kinds. */

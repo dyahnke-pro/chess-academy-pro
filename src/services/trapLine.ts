@@ -158,3 +158,29 @@ export function trapLine(i: TrapLineInput): TrapLine | null {
   const squares = [slip.to, blow.from, blow.to, ...read.targets.map((t) => t.square)] as Square[];
   return { text: [anchor, blowText, pattern].filter(Boolean).join(' '), anchor, blow: blowText, pattern, squares: [...new Set(squares)] };
 }
+
+/** THE OFF-LINE HANG, said in the approved shape (round 10): after the move
+ *  that attacks a piece, the reply that ignores the attack, and the capture
+ *  that wins it — "Before …d6, if they ignore the attack on c5, dxc5 takes the
+ *  bishop." The student's own ignoring reads "Watch out: if you ignore the
+ *  attack on c5, …". Null unless the capture really takes the piece that stood
+ *  on the attacked square after the ignoring move. */
+export function hangLine(i: { fen: string; ignore: string; takes: string; ignoredBy: FactSeat }): { text: string; squares: Square[] } | null {
+  let c: Chess;
+  try { c = new Chess(i.fen); } catch { return null; }
+  const ignorer = c.turn();
+  let reply: Move;
+  try { reply = c.move(i.ignore); } catch { return null; }
+  let take: Move;
+  try { take = c.move(i.takes); } catch { return null; }
+  if (!reply || !take?.captured) return null;
+  // The attacked piece is the one the capture takes, and it was already
+  // standing there before the ignoring move: the reply left it attacked.
+  const was = new Chess(i.fen).get(take.to);
+  if (!was || was.type !== take.captured || was.color !== ignorer || reply.to === take.to) return null;
+  const piece = NAME[take.captured];
+  const text = i.ignoredBy === 'opponent'
+    ? `Before ${dotted(clean(reply.san), ignorer)}, if they ignore the attack on ${take.to}, ${clean(take.san)} takes the ${piece}.`
+    : `Watch out: if you ignore the attack on ${take.to}, ${dotted(clean(take.san), take.color)} takes your ${piece}.`;
+  return { text, squares: [take.to, reply.to] as Square[] };
+}

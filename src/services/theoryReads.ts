@@ -14,7 +14,7 @@ import { detectOpeningByOrder } from './openingDetectionService';
 import type { LocalDbMove } from './masterPlayLookup';
 import { moveJob, MINE } from './bookMoveWhy';
 import { NO_FOLLOW } from './exchangeLedger';
-import { trapLine } from './trapLine';
+import { hangLine, trapLine } from './trapLine';
 import { slipNoun } from './trapWords';
 import { withoutCastleTail } from './theoryComposer';
 
@@ -93,6 +93,17 @@ export function transpositionRead(i: { history: readonly string[]; movesAt: (fen
     try { mv = next.move(r.san); } catch { continue; }
     const into = transposedOpening(next.fen(), i.history.length + 1, detectOpeningByOrder([...i.history, r.san]));
     if (into) return { text: `If the reply is ${mv.color === 'b' ? '…' : ''}${r.san.replace(/[+#]$/, '')}, the game transposes into the ${into}.`, squares: [mv.to] };
+    // …or the move after it does.
+    const second = i.movesAt(next.fen()) ?? [];
+    const total2 = second.reduce((n, m) => n + m.games, 0);
+    for (const s2 of [...second].sort((a, b) => b.games - a.games)) {
+      if (total2 === 0 || s2.games / total2 < 0.1) break;
+      const n2 = new Chess(next.fen());
+      let m2;
+      try { m2 = n2.move(s2.san); } catch { continue; }
+      const into2 = transposedOpening(n2.fen(), i.history.length + 2, detectOpeningByOrder([...i.history, r.san, s2.san]));
+      if (into2) return { text: `After ${mv.color === 'b' ? '…' : ''}${r.san.replace(/[+#]$/, '')} and ${m2.color === 'b' ? '…' : ''}${s2.san.replace(/[+#]$/, '')}, the game transposes into the ${into2}.`, squares: [mv.to, m2.to] };
+    }
   }
   return null;
 }
@@ -144,6 +155,9 @@ export function trapRead(i: { fenBefore: string; san: string; mover: Color; boar
     const r = say(after.fen(), g, them, 'A trap is set here. ');
     if (r) return r;
   }
+  // 2b. The move attacks something, and a reply masters play ignores it.
+  const hang = hangRead({ fen: after.fen(), mover: i.mover, movesAt: i.movesAt });
+  if (hang) return hang;
   // 3. One waits behind the masters' usual reply.
   const roads = i.movesAt(after.fen()) ?? [];
   const total = roads.reduce((n, m) => n + m.games, 0);
@@ -193,6 +207,84 @@ export function centreRead(i: { fenBefore: string; san: string; mover: Color }):
   if (mine.length && theirs.length) {
     const faced = mine.filter((sq) => theirs.some((t) => t[0] === sq[0]) || theirs.some((t) => Math.abs(t.charCodeAt(0) - sq.charCodeAt(0)) === 1 && Number(t[1]) !== Number(sq[1])));
     if (faced.length && held(b, i.mover).join() !== mine.join()) return { text: `The centre is tense: ${mine[0]} and ${theirs[0]} face each other, and a capture there can open the position.`, squares: [mine[0], theirs[0]] };
+  }
+  return null;
+}
+
+/** The hand-written and mined gems filed by the board of their slip, in the
+ *  shape `trapRead` reads (the club index's own shape). Pure. */
+export function gemBoards(gems: ReadonlyArray<{ lineMoves: string; inaccuracy: string; punish: string; punishSeq?: string[]; tier?: string; engineCp?: number | null }>): Record<string, ClubGemRow[]> {
+  const out: Record<string, ClubGemRow[]> = {};
+  for (const g of gems) {
+    if (g.tier !== 'confirmed') continue;
+    try {
+      const c = new Chess();
+      for (const m of g.lineMoves.split(/\s+/).filter(Boolean)) c.move(m);
+      const key = c.fen().split(' ').slice(0, 4).join(' ');
+      (out[key] ??= []).push({ slip: g.inaccuracy, punish: (g.punishSeq && g.punishSeq.length ? g.punishSeq : [g.punish]).join(' ') });
+    } catch { /* a line that does not play is no gem */ }
+  }
+  return out;
+}
+
+let gemIndex: Record<string, ClubGemRow[]> | null = null;
+/** The hand-written and mined gems by board, built once from the gem files. */
+export function ownGemBoards(gems: Parameters<typeof gemBoards>[0]): Record<string, ClubGemRow[]> {
+  gemIndex ??= gemBoards(gems);
+  return gemIndex;
+}
+
+/** EVERYTHING ELSE THE THEORY SAYS ABOUT A MOVE, as sentences: the pawn
+ *  structure it makes, a gambit it offers or one on offer, the transposition,
+ *  the queens coming off, and a trap around it. Each sentence once per `said`
+ *  (a structure or an endgame is news once). */
+export function theoryExtras(i: {
+  history: readonly string[]; fenBefore: string; san: string; mover: Color;
+  movesAt: (fen: string) => readonly LocalDbMove[] | null;
+  boards: Record<string, ClubGemRow[]>;
+  said: Set<string>;
+}): string[] {
+  const reads: Array<[string, TheoryRead | null]> = [
+    ['structure', structureRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })],
+    ['gambit', gambitRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })],
+    ['endgame', endgameRead({ fenBefore: i.fenBefore, san: i.san })],
+    ['move-order', transpositionRead({ history: [...i.history, i.san], movesAt: i.movesAt })],
+    ['trap', trapRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover, boards: i.boards, movesAt: i.movesAt })],
+  ];
+  const out: string[] = [];
+  for (const [kind, r] of reads) {
+    if (!r || i.said.has(r.text)) continue;
+    // A structure, an endgame turn or a gambit is said once a game.
+    if (kind === 'structure' || kind === 'endgame' || kind === 'gambit') { if (i.said.has(`kind:${kind}`)) continue; i.said.add(`kind:${kind}`); }
+    i.said.add(r.text);
+    out.push(r.text);
+  }
+  return out;
+}
+
+const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
+/** A REPLY THAT IGNORES THE ATTACK: the move just played attacks a piece (worth
+ *  more than the attacker, or undefended), a reply the masters really play
+ *  leaves it there, and the capture wins it. Said as the approved off-line hang. */
+export function hangRead(i: { fen: string; mover: Color; movesAt: (fen: string) => readonly LocalDbMove[] | null }): TheoryRead | null {
+  const them: Color = i.mover === 'w' ? 'b' : 'w';
+  const roads = i.movesAt(i.fen) ?? [];
+  const total = roads.reduce((n, m) => n + m.games, 0);
+  if (total === 0) return null;
+  for (const road of [...roads].sort((a, b) => b.games - a.games)) {
+    if (road.games / total < 0.03) break;
+    const c = new Chess(i.fen);
+    try { c.move(road.san); } catch { continue; }
+    for (const cap of c.moves({ verbose: true })) {
+      if (cap.color !== i.mover || !cap.captured || cap.captured === 'p') continue;
+      const worth = (VAL[cap.captured] ?? 0) - ((VAL[cap.piece] ?? 9));
+      const t = new Chess(c.fen());
+      t.move(cap.san);
+      const defended = t.attackers(cap.to, them).length > 0;
+      if (defended && worth <= 0) continue;
+      const line = hangLine({ fen: i.fen, ignore: road.san, takes: cap.san, ignoredBy: 'opponent' });
+      if (line) return line;
+    }
   }
   return null;
 }
