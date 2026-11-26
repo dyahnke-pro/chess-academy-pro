@@ -11,6 +11,10 @@ import { existsSync, writeFileSync, mkdirSync } from 'node:fs';
 import { classifySlip } from './trapComputer';
 import { trapLine } from './trapLine';
 import { MATE_CP } from './mateScale';
+import { ITALIAN_GAME_TRAP_LESSONS } from '../data/lessons/italianGameTrapLessons';
+import { RUY_TRAP_LESSONS } from '../data/lessons/ruyTrapLessons';
+import { CARO_TRAP_LESSONS } from '../data/lessons/caroKannTrapLessons';
+import type { LessonScript } from '../types';
 
 interface Famous { name: string; line: string; slip: string; slipBy: 'w' | 'b' }
 const FAMOUS: Famous[] = [
@@ -24,9 +28,35 @@ const FAMOUS: Famous[] = [
   { name: "Noah's Ark", line: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 d6 d4 b5 Bb3 Nxd4 Nxd4 exd4 Qxd4 c5 Qd5 Be6 Qc6+ Bd7 Qd5', slip: 'c4', slipBy: 'b' },
   { name: 'Fried Liver', line: 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5', slip: 'Nxf7', slipBy: 'w' },
   { name: 'Damiano Defence', line: 'e4 e5 Nf3', slip: 'f6', slipBy: 'b' },
-  { name: 'Parham Attack (Qh5)', line: 'e4 e5 Qh5', slip: 'Nc6', slipBy: 'b' },
-  { name: 'Monkey Trap', line: 'e4 e5 Nf3 d6 Bc4 Nc6 Nc3 Bg4', slip: 'Nxe5', slipBy: 'w' },
+  { name: 'Kieninger Trap', line: 'd4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3 Bb4+ Nbd2 Qe7 a3 Ngxe5', slip: 'axb4', slipBy: 'w' },
+  { name: 'Stafford Gambit (Bg5??)', line: 'e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5', slip: 'Bg5', slipBy: 'w' },
+  { name: 'Petrov Nc6+ trap', line: 'e4 e5 Nf3 Nf6 Nxe5 Nxe4 Qe2', slip: 'Nf6', slipBy: 'b' },
+  { name: 'Caro-Kann smothered mate', line: 'e4 c6 d4 d5 Nc3 dxe4 Nxe4 Nd7 Qe2', slip: 'Ngf6', slipBy: 'b' },
+  { name: "Owen's Defence trap", line: 'e4 b6 d4 Bb7 Bd3', slip: 'f5', slipBy: 'b' },
+  { name: 'Siberian Trap', line: 'e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 e6 Bc4 Qc7 O-O Nf6 Qe2 Ng4', slip: 'h3', slipBy: 'w' },
+  { name: 'Mortimer Trap', line: 'e4 e5 Nf3 Nc6 Bb5 Nf6 d3 Ne7', slip: 'Nxe5', slipBy: 'w' },
+  { name: 'Tarrasch Trap', line: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Nxe4 d4 b5 Bb3 d5 dxe5 Be6 c3 Be7 Re1 O-O Nd4', slip: 'Qd7', slipBy: 'b' },
+  { name: 'Fishing Pole', line: 'e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Ng4 h3 h5', slip: 'hxg4', slipBy: 'w' },
+  { name: "Queen's Gambit Accepted b5 trap", line: 'd4 d5 c4 dxc4 e3 b5 a4', slip: 'c6', slipBy: 'b' },
+  { name: 'Magnus Smith Trap', line: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6 Bc4 g6 Nxc6 bxc6 e5', slip: 'dxe5', slipBy: 'b' },
+  { name: 'Halosar Trap', line: 'd4 d5 e4 dxe4 Nc3 Nf6 f3 exf3 Qxf3 Qxd4 Be3 Qb4 O-O-O', slip: 'Bg4', slipBy: 'b' },
+  { name: 'Wurzburger Trap', line: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 d3', slip: 'Qh4+', slipBy: 'b' },
 ];
+// THE NAMED-TRAP LESSONS: each lesson's slip, from the seat the lesson teaches
+// (a weapon: the opponent slips; a warning: the student must not). The line is
+// checked against the lesson's own moves so the measure cannot drift from it.
+interface Lesson { id: string; line: string; slip: string; seat: 'student' | 'opponent' }
+const LESSONS: Lesson[] = [
+  { id: 'legals-mate', line: 'e4 e5 Nf3 Nc6 Bc4 d6 Nc3 Bg4 h3', slip: 'Bh5', seat: 'opponent' },
+  { id: 'fried-liver', line: 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5', slip: 'Nxd5', seat: 'opponent' },
+  { id: 'tarrasch', line: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Nxe4 d4 b5 Bb3 d5 dxe5 Be6 c3 Be7 Re1 O-O Nd4', slip: 'Qd7', seat: 'opponent' },
+  { id: 'blackburne-shilling', line: 'e4 e5 Nf3 Nc6 Bc4 Nd4', slip: 'Nxe5', seat: 'student' },
+  { id: 'noahs-ark', line: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 b5 Bb3 d6 d4 Nxd4 Nxd4 exd4', slip: 'Qxd4', seat: 'student' },
+  { id: 'mortimer', line: 'e4 e5 Nf3 Nc6 Bb5 Nf6 d3 Ne7', slip: 'Nxe5', seat: 'student' },
+  { id: 'fishing-pole', line: 'e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Ng4 h3 h5', slip: 'hxg4', seat: 'student' },
+  { id: 'karpov-qe2-mate', line: 'e4 c6 d4 d5 Nc3 dxe4 Nxe4 Nd7 Qe2', slip: 'Ngf6', seat: 'student' },
+];
+
 const ENGINE = 'node_modules/stockfish/bin/stockfish-18-lite-single.js';
 const stockfish = (fen: string): { cp: number; best: string[] } => {
   // The WASM build reads UCI from stdin and quits at EOF, so stdin is held open
@@ -36,6 +66,17 @@ const stockfish = (fen: string): { cp: number; best: string[] } => {
   if (!last) return { cp: 0, best: [] };
   const v = Number(last[2]);
   return { cp: last[1] === 'mate' ? (v > 0 ? MATE_CP : -MATE_CP) : v, best: last[3].trim().split(/\s+/).slice(0, 8) };
+};
+
+const punishAfter = (fen: string): { cp: number; seq: string[] } => {
+  const read = stockfish(fen);
+  const seq: string[] = []; const p = new Chess(fen);
+  for (const u of read.best) { try { seq.push(p.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san); } catch { break; } }
+  return { cp: read.cp, seq };
+};
+const lessonMoves = (l: LessonScript | undefined): string => {
+  const last = l?.beats[l.beats.length - 1] as unknown as { moves?: string[] | string } | undefined;
+  return Array.isArray(last?.moves) ? last.moves.join(' ') : (last?.moves ?? '');
 };
 
 describe.runIf(!!process.env.TRAP_RECALL && existsSync('node_modules/stockfish/bin/stockfish-18-lite-single.js'))('famous-trap recall', () => {
@@ -58,8 +99,34 @@ describe.runIf(!!process.env.TRAP_RECALL && existsSync('node_modules/stockfish/b
       const sentence = trapLine({ fen: fenBefore, slip: f.slip, punish: punishSeq, slipBy: 'opponent' })?.text ?? '(no blow to name)';
       rows.push(`${f.name}: ${kind ?? 'not a slip'} (${read.cp >= MATE_CP / 10 ? 'mate' : `${read.cp}cp`}) — ${sentence}`);
     }
+    // The named-trap lessons: the lesson's slip is called a slip by the one
+    // computer, and worded from the lesson's seat ("trap" never for the student).
+    const all = { ...ITALIAN_GAME_TRAP_LESSONS, ...RUY_TRAP_LESSONS, ...CARO_TRAP_LESSONS } as Record<string, LessonScript>;
+    let work = 0;
+    const lrows: string[] = [];
+    for (const l of LESSONS) {
+      const own = lessonMoves(all[l.id]);
+      // The lesson's own moves up to the slip: a warning lesson plays the right
+      // move where the slip would go, so the line may leave it in its last two
+      // plies (the slip's own approach), never before.
+      const ownMoves = own.split(' ');
+      const mine = l.line.split(' ');
+      const firstDiff = mine.findIndex((m, k) => ownMoves[k] !== m);
+      const shared = own.length > 0 && (firstDiff === -1 || firstDiff >= mine.length - 2);
+      const c = new Chess();
+      for (const s of l.line.split(' ')) c.move(s);
+      const fenBefore = c.fen();
+      c.move(l.slip);
+      const r = punishAfter(c.fen());
+      const kind = classifySlip({ engineCp: r.cp, line: { fen: fenBefore, slip: l.slip, punish: r.seq } });
+      const t = trapLine({ fen: fenBefore, slip: l.slip, punish: r.seq, slipBy: l.seat });
+      const seatOk = !t || l.seat === 'opponent' || !/trap/i.test(t.text);
+      const ok = shared && !!kind && !!t && seatOk;
+      if (ok) work += 1;
+      lrows.push(`${l.id}: ${ok ? 'works' : 'FAILS'} (${kind ?? 'not a slip'}${shared ? '' : ', line not the lesson\'s'}${seatOk ? '' : ', wrong-seat wording'}) — ${t?.text ?? '(no sentence)'}`);
+    }
     mkdirSync('audit-reports', { recursive: true });
-    const text = `Famous traps called a trap: ${traps} of ${FAMOUS.length}\n${rows.join('\n')}\n`;
+    const text = `Famous traps called a trap: ${traps} of ${FAMOUS.length}\n${rows.join('\n')}\n\nNamed-trap lessons that work: ${work} of ${LESSONS.length}\n${lrows.join('\n')}\n`;
     writeFileSync('audit-reports/theory-trap-recall.md', text);
     console.log(text);
   }, 600_000);
