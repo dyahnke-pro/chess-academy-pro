@@ -201,21 +201,23 @@ export function coinNotes(coins: number): Note[] {
 export function ringCoins(coins: number): void {
   try {
     if (coins <= 0) return;
-    const { sound, haptics } = prefs();
+    const { sound, haptics, effects } = prefs();
+    if (!effects) return;
     if (sound) playNotes(coinNotes(coins));
     if (haptics) vibrate(coins >= 100 ? 'heavy' : coins >= 40 ? 'medium' : 'light');
   } catch { /* a coin must never break the move it pays for */ }
 }
 
-function prefs(): { sound: boolean; haptics: boolean } {
+function prefs(): { sound: boolean; haptics: boolean; effects: boolean } {
   try {
     const p = useAppStore.getState().activeProfile?.preferences;
-    return { sound: p?.soundEnabled ?? true, haptics: p?.hapticsEnabled ?? true };
+    return { sound: p?.soundEnabled ?? true, haptics: p?.hapticsEnabled ?? true, effects: p?.rewardEffectsOn ?? true };
   } catch {
-    // No store (a test double, an early boot) — the defaults are both on.
-    return { sound: true, haptics: true };
+    // No store (a test double, an early boot) — the defaults are all on.
+    return { sound: true, haptics: true, effects: true };
   }
 }
+
 
 function playNotes(notes: Note[]): void {
   try {
@@ -256,7 +258,8 @@ export function reward(e: RewardEvent): void {
 
 function fire(e: RewardEvent): void {
   const spec = REWARD_SPECS[e.kind];
-  const { sound, haptics } = prefs();
+  const { sound, haptics, effects } = prefs();
+  if (!effects) return;
   if (sound) playNotes(spec.notes(e.step ?? 0));
   if (haptics) {
     for (const [style, delay] of spec.haptics) {

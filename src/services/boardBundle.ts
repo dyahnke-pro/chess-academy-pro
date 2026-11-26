@@ -23,7 +23,6 @@ import { afterCapture, NO_PREV_CAPTURE, type PrevCaptureContext } from './captur
 import type { MoveWords } from './thoughtReads';
 import type { LastMove } from './material';
 import { emptyPlanThread } from './gameStory';
-import { NO_SOUND_PLIES } from './thinkAloud';
 import { computeMustDefend } from './threatOut';
 import { detectSetUpChance } from './setUpChance';
 import { INACCURACY_CP, MISTAKE_CP } from './engineConstants';
@@ -57,6 +56,10 @@ export interface BoardBundle {
    *  matching, the game is replayed. Derived from `history`, so it is not part
    *  of the read's key. */
   game?: readonly PlayedMove[];
+  /** The plies (1-based) of `history` the grader called sound, where the
+   *  caller holds the game's grades. Absent: the moves are ungraded, so no
+   *  move is a loose-piece habit's evidence (a sound sacrifice looks loose). */
+  soundPlies?: ReadonlySet<number>;
 }
 
 /** One move of a game, with the boards around it and what it took. */
@@ -284,7 +287,7 @@ export const BUNDLE_ADAPTERS: { [K in ComputerId]: Adapter<K> } = {
   kingReadsBestLine: (b) => { const MOVE = studentMoveOf(b); const best = b.priorLines?.[0]?.moves ?? []; const u = playedUci(b); return MOVE && best.length > 0 && u !== null && best[0] !== u ? { fenBefore: MOVE.fenBefore, student: b.student, bestUci: best } : null; },
   sacCompensation: (b) => { const MOVE = moveOf(b); return MOVE && b.lines[0] ? { fenBefore: MOVE.fenBefore, san: MOVE.san, fenAfter: b.fen, mover: MOVE.mover, moverCp: seatCp(b.lines[0], MOVE.mover), moverCpBefore: seatCp(b.priorLines?.[0], MOVE.mover), student: b.student, line: bestLine(b) } : null; },
   sacMechanism: { needs: ["sacIdx: which game move is the mating sacrifice (the caller's sacrifice read)"] },
-  sacKingShield: (b) => { const MOVE = studentMoveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san } : null; },
+  sacKingShield: (b) => { const MOVE = studentMoveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, student: b.student } : null; },
   structureState: (b) => ({ fen: b.fen }),
   phaseVerdict: { needs: ["phase: the turn of the game the transition detector found (the stock-take is said only then)"] },
   middlegameOrientation: (b) => ({ fen: b.fen, student: b.student, seat: 'both', san: b.priorMove?.san ?? null }),
@@ -334,7 +337,7 @@ export const BUNDLE_ADAPTERS: { [K in ComputerId]: Adapter<K> } = {
   refutedAlt: { needs: ["popular: the games database's moves at the student's level"] },
   trapChance: (b) => ({ fen: b.fen, student: b.student, line: b.lines[0]?.moves ?? null, priorMove: b.priorMove }),
   setUpChance: (b) => { if (toMove(b.fen) !== b.student || b.lines.length === 0) return null; const read = detectSetUpChance(b.fen, analysisOf(b), b.student, 'full'); return read ? { fen: b.fen, read } : null; },
-  mustDefend: (b) => { const cp = studentCp(b); return cp !== null ? { fen: b.fen, student: b.student, read: computeMustDefend(b.fen, b.student), studentToMove: toMove(b.fen) === b.student, studentCp: cp, looseSpells: null } : null; },
+  mustDefend: (b) => { const cp = studentCp(b); return cp !== null ? { fen: b.fen, student: b.student, read: computeMustDefend(b.fen, b.student, b.priorMove), studentToMove: toMove(b.fen) === b.student, studentCp: cp, looseSpells: null } : null; },
   liveMethod: { needs: ["signals: the live surface's method signals"] },
   boardPlans: (b) => ({ fen: b.fen, student: b.student, withTrump: true }),
   boardConcept: (b) => ({ fen: b.fen, student: b.student, rating: b.rating, analysis: b.lines.length > 0 ? { topLines: analysisOf(b), evaluation: lineCp(b.lines[0]) ?? 0 } : undefined }),
@@ -406,13 +409,13 @@ export const BUNDLE_ADAPTERS: { [K in ComputerId]: Adapter<K> } = {
   theirOpeningChoice: (b) => { const MOVE = theirMove(b); const loss = cpLossOf(b); return MOVE && loss !== null && gameOf(b) ? { history: b.history, student: b.student, cpLoss: loss, coachChose: false, fen: b.fen } : null; },
   openingNamed: { needs: ["det, spokenName, transposed: the opening detector's read and what the game already called it"] },
   sacPayoff: (b) => { const MOVE = moveOf(b); return MOVE ? { fenAfter: b.fen, mover: MOVE.mover, student: b.student, moverPovEvalCp: seatCp(b.lines[0], MOVE.mover), moverPovBeforeCp: seatCp(b.priorLines?.[0], MOVE.mover), kingCentreTaught: false } : null; },
-  sacShield: (b) => { const MOVE = studentMoveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san } : null; },
+  sacShield: (b) => { const MOVE = studentMoveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, student: b.student } : null; },
   takeStock: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, fen: b.fen, student: b.student, studentPovCp: studentCp(b) } : null; },
   kingHuntCue: (b) => ({ fen: b.fen, student: b.student }),
   opponentTarget: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, student: b.student } : null; },
   causalChain: (b) => (gameOf(b) && b.history.length > 0 ? { sans: b.history, ply: b.history.length, student: b.student, rating: b.rating, fen: b.fen } : null),
   endgamePhase: (b) => ({ fen: b.fen, student: b.student }),
-  recapture: (b) => { const m = studentMove(b); const s = earlierOf(b); return m && s !== undefined ? { fenBefore: m.fenBefore, san: m.san, theirLast: s?.san ?? null, reply: null, faultCp: m.loss, namesStudentMoves: true } : null; },
+  recapture: (b) => { const m = studentMove(b); const s = earlierOf(b); return m && s !== undefined ? { fenBefore: m.fenBefore, san: m.san, theirLast: s?.san ?? null, reply: null, faultCp: m.loss, namesStudentMoves: true, costCp: m.loss, unpricedCredit: 'refused' } : null; },
   mateLine: (b) => { const MOVE = studentMoveOf(b); return MOVE && b.priorLines ? { fenBefore: MOVE.fenBefore, san: MOVE.san, bestSan: priorBest(b), lineUci: b.priorLines[0]?.moves ?? [], reply: replySan(b) } : null; },
   winsLine: (b) => { const m = studentMove(b); const s = earlierOf(b); const best = b.priorLines?.[0]; return m && s !== undefined && best ? { fenBefore: m.fenBefore, san: m.san, bestSan: priorBest(b), lineUci: best.moves, reply: replySan(b), prior: asMove(s), seconds: b.seconds ?? [] } : null; },
   kneeJerk: (b) => { const m = studentMove(b); const s = earlierOf(b); return m && s !== undefined ? { fenBefore: m.fenBefore, san: m.san, theirLast: s?.san ?? null, bestSan: priorBest(b), faultCp: m.loss } : null; },
@@ -424,7 +427,7 @@ export const BUNDLE_ADAPTERS: { [K in ComputerId]: Adapter<K> } = {
   outsidePasserDecoy: (b) => { const MOVE = studentMoveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san } : null; },
   keepPressing: (b) => { const m = studentMove(b); return m ? { fenBefore: m.fenBefore, san: m.san, bestSan: priorBest(b), faultCp: m.loss, cpAfter: studentCp(b) } : null; },
   tradeDeal: (b) => { const m = studentMove(b); const s = earlierOf(b); return m && s !== undefined ? { fenBefore: m.fenBefore, san: m.san, reply: replySan(b), faultCp: m.loss, values: undefined, prior: asLastMove(s), namesStudentMoves: true, ply: plyOf(b) } : null; },
-  kingAttack: (b) => { const m = studentMove(b); return m && b.lines.length > 0 ? { fenBefore: m.fenBefore, san: m.san, reply: replySan(b), cpLoss: m.loss, namesStudentMoves: true, linesAfter: b.lines.map((l) => l.moves) } : null; },
+  kingAttack: (b) => { const m = studentMove(b); return m && b.lines.length > 0 ? { fenBefore: m.fenBefore, san: m.san, reply: replySan(b), cpLoss: m.loss, namesStudentMoves: true, linesAfter: b.lines.map((l) => l.moves), unpricedCredit: 'refused' } : null; },
   ruleException: (b) => { const m = studentMove(b); const before = sansBefore(b); return m && before ? { fenBefore: m.fenBefore, san: m.san, history: before, reply: replySan(b), bothCp: seatCp(b.priorLines?.[0], 'w') !== null && seatCp(b.lines[0], 'w') !== null, cpLoss: m.loss } : null; },
   falseAlarm: (b) => { const m = studentMove(b); const s = earlierOf(b); const pre = priorAnalysis(b); return m && s && pre ? { theirFenBefore: s.fenBefore, fenBefore: m.fenBefore, studentSan: m.san, bestLine: pre[0], reply: null } : null; },
   pushOrHold: (b) => { const MOVE = studentMoveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, cpAfter: studentCp(b) } : null; },
@@ -461,17 +464,17 @@ export const BUNDLE_ADAPTERS: { [K in ComputerId]: Adapter<K> } = {
   passerPush: (b) => { const MOVE = moveOf(b); const m = MOVE && MOVE.mover === b.student ? new Chess(MOVE.fenBefore).move(MOVE.san) : null; return { fen: b.fen, student: b.student, pushed: m && m.piece === 'p' ? m.to : null }; },
   minority: (b) => ({ fen: b.fen, student: b.student }),
   colourComplex: (b) => ({ fen: b.fen, student: b.student }),
-  raceOfPlans: (b) => ({ fen: b.fen, student: b.student }),
+  raceOfPlans: (b) => ({ fen: b.fen, student: b.student, register: 'live' }),
   theirCost: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, student: b.student } : null; },
   threatStopped: (b) => { const MOVE = theirMove(b); const s = earlierOf(b); return MOVE && s ? { studentFenBefore: s.fenBefore, studentFenAfter: MOVE.fenBefore, reply: MOVE.san, student: b.student } : null; },
   playItAnyway: (b) => { const MOVE = theirMove(b); const s = earlierOf(b); return MOVE && s ? { studentFenBefore: s.fenBefore, studentFenAfter: MOVE.fenBefore, reply: MOVE.san, fenNow: b.fen, lines: scoredLines(b.lines), student: b.student } : null; },
   trickSidestepped: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, student: b.student } : null; },
-  theirHabit: (b) => (gameOf(b) ? { history: b.history, student: b.student, sound: NO_SOUND_PLIES } : null),
-  yourHabit: (b) => (gameOf(b) ? { history: b.history, student: b.student, sound: NO_SOUND_PLIES } : null),
+  theirHabit: (b) => (gameOf(b) ? { history: b.history, student: b.student, sound: b.soundPlies ?? null } : null),
+  yourHabit: (b) => (gameOf(b) ? { history: b.history, student: b.student, sound: b.soundPlies ?? null } : null),
   knownAttack: (b) => ({ fen: b.fen, student: b.student, studentCp: studentCp(b) }),
   timing: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, history: b.history, student: b.student } : null; },
   bluff: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, reply: replySan(b), student: b.student } : null; },
-  contrast: (b) => { const MOVE = moveOf(b); const best = priorBest(b); return MOVE && best ? { fenBefore: MOVE.fenBefore, san: MOVE.san, bestSan: best, student: b.student } : null; },
+  contrast: (b) => { const MOVE = moveOf(b); const best = priorBest(b); return MOVE && best ? { fenBefore: MOVE.fenBefore, san: MOVE.san, bestSan: best, student: b.student, costCp: cpLossOf(b), unpricedCredit: 'refused' } : null; },
   newThreat: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, fenAfter: b.fen, mover: MOVE.mover, student: b.student, answerSan: MOVE.mover !== b.student ? replySan(b) : null } : null; },
   moveAspect: (b) => { const words = wordsOf(b); const caps = capturesOf(b); return words && caps ? { words, prev: caps.before, follow: followOf(b), phrases: null } : null; },
   moveThreatDeep: { needs: ["reads.passAfter: a null-move engine read of the board after the move — made where an engine is at hand, `engineComputers.readEngineComputers`"] },
@@ -514,7 +517,7 @@ export const BUNDLE_ADAPTERS: { [K in ComputerId]: Adapter<K> } = {
   queenChased: (b) => { const MOVE = moveOf(b); return MOVE ? { history: b.history, fenBefore: MOVE.fenBefore, san: MOVE.san, student: b.student } : null; },
   blockade: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, student: b.student } : null; },
   tradeOffer: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, student: b.student, costCp: null, afterCp: studentCp(b) } : null; },
-  fileTrade: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, student: b.student, costCp: null, line: b.lines[0]?.moves ?? null } : null; },
+  fileTrade: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, student: b.student, costCp: null, line: b.lines[0]?.moves ?? null, unpricedCredit: 'refused' } : null; },
   pawnEndingTrade: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, student: b.student, costCp: cpLossOf(b), after: analysisOf(b)[0] ?? null } : null; },
   queenHunt: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, student: b.student, line: b.lines[0]?.moves ?? null } : null; },
   secondAttacker: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, student: b.student } : null; },
@@ -594,7 +597,7 @@ function baseFacts(b: BoardBundle): CoachFact[] {
 /** Every field the bundle carries, so the read's key is the WHOLE bundle: a
  *  new field fails to compile here until it is part of the key. */
 const BUNDLE_KEY_FIELDS: Record<keyof BoardBundle, boolean> = {
-  fen: true, student: true, lines: true, rating: true, history: true, priorMove: true, priorMoveSeat: true, priorLines: true, seconds: true,
+  fen: true, student: true, lines: true, rating: true, history: true, priorMove: true, priorMoveSeat: true, priorLines: true, seconds: true, soundPlies: true,
   // The running game is `history` played: the same history is the same read.
   game: false,
 };
@@ -602,7 +605,7 @@ const KEY_ORDER = (Object.keys(BUNDLE_KEY_FIELDS) as Array<keyof BoardBundle>).f
 /** The same bundle, by value: two bundles built apart for one board (the best
  *  line's futures, read again for every try a board read weighs) are one read. */
 export function bundleKey(b: BoardBundle): string {
-  return JSON.stringify(KEY_ORDER.map((k) => b[k] ?? null));
+  return JSON.stringify(KEY_ORDER.map((k) => (k === 'soundPlies' ? (b.soundPlies ? [...b.soundPlies].sort((x, y) => x - y) : null) : b[k] ?? null)));
 }
 /** The reads already made, by bundle. Every computer is pure over the bundle,
  *  so a bundle read once is read. Oldest out first, past the keep. */

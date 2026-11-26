@@ -227,7 +227,7 @@ export async function thinkingStepTeaching(step: ThinkingStep, pos: LessonPositi
     asked = { namesPlayedMove: true,
       fenBefore, san, moverIsStudent: mover === 'student', prev: NO_PREV_CAPTURE, line,
       theirLast: mover === 'student' && pos.beforeFen && pos.prevSan ? { fenBefore: pos.beforeFen, san: pos.prevSan } : null,
-      history: [], story: false, reads, costCp: null, theory: false, plainThreatsSeen: false,
+      history: [], story: false, reads, costCp: null, theory: false, plainThreatsSeen: false, register: 'live',
     };
   }
   const board = {

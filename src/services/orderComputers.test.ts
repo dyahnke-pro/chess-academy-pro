@@ -306,7 +306,7 @@ describe('WIRED BOTH WAYS — every lane answers, and each surface carries the f
 
   it('POSITION READS (chat, read-position, Why, live coach): the one producer carries them', () => {
     const fen = fenOf('c4 e5 Nc3');
-    const clauses = depthClauses({ theory: true,
+    const clauses = depthClauses({ theory: true, sound: null,
       fen, history: 'c4 e5 Nc3'.split(' '),
       topLines: [{ moves: ['g8f6'], evaluation: 0, mate: null }],
       studentColor: 'b', nameMove: false,
@@ -315,7 +315,7 @@ describe('WIRED BOTH WAYS — every lane answers, and each surface carries the f
     expect(t?.text, clauses.map((c) => c.kind).join(',')).toMatch(/e5/);
     expect(t?.proof && isProof(t.proof)).toBe(true);
 
-    const eq = depthClauses({ theory: true, fen: fenOf('c4 e5 Nc3 Nf6'), history: 'c4 e5 Nc3 Nf6'.split(' '), topLines: [], studentColor: 'b', nameMove: false });
+    const eq = depthClauses({ theory: true, sound: null, fen: fenOf('c4 e5 Nc3 Nf6'), history: 'c4 e5 Nc3 Nf6'.split(' '), topLines: [], studentColor: 'b', nameMove: false });
     expect(eq.find((c) => c.kind === 'equivalence')?.text).toMatch(/Sicilian/);
   });
 

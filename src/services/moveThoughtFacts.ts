@@ -51,6 +51,7 @@ import type { AnalysisLine } from '../types';
 import { campIdea } from './intoTheirCamp';
 import { exchangeSacIdea } from './exchangeSacrifice';
 import { majorityIdea } from './pawnMajority';
+import type { UnpricedCredit } from './engineConstants';
 
 export interface MoveThoughtInput {
   fenBefore: string;
@@ -91,6 +92,18 @@ export interface MoveThoughtInput {
    *  the moves weighed, the known slips — `WriterSettings.moveReads`)? Review
    *  reads them in its facet builder and says them through its decider. */
   moveReads: boolean;
+  /** REQUIRED: the register (`WriterSettings.register`): 'review' about a
+   *  finished game, 'live' at a board still in play — the plan race is said
+   *  in the present on a live board (learn-mistakes-only bug 9). */
+  register: 'review' | 'live';
+  /** REQUIRED: what an unpriced move is to the praise rule
+   *  (`WriterSettings.unpricedCredit` — a lesson's taught line is credited). */
+  unpricedCredit: UnpricedCredit;
+  /** REQUIRED: the plies (1-based, of `history` + this move) the grader called
+   *  sound, where the game is graded (Review's grades, Learn's prices); null
+   *  for an ungraded line (a lesson, a question) — then no move is a
+   *  loose-piece habit's evidence, since a sound sacrifice looks loose. */
+  soundPlies: ReadonlySet<number> | null;
   history: readonly string[];
   /** The lesson's phrase memory (an idea said in full once, then referred to). */
   phrases: PhraseMemory | null;
@@ -271,7 +284,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
     const costHere = i.costCp ?? (b0 && playedLine ? Math.max(0, seatCp(b0, mover) - seatCp(playedLine, mover)) : null);
     const trades = [
       ...readBoardAll('tradeOffer', { ...base, afterCp }).map((f) => ({ f, idea: 'trade' as IdeaKind, weight: 64 })),
-      ...readBoardAll('fileTrade', { ...base, line: a0?.moves ?? null }).map((f) => ({ f, idea: 'file' as IdeaKind, weight: 66 })),
+      ...readBoardAll('fileTrade', { ...base, line: a0?.moves ?? null, unpricedCredit: i.unpricedCredit }).map((f) => ({ f, idea: 'file' as IdeaKind, weight: 66 })),
       ...readBoardAll('pawnEndingTrade', { ...base, after: a0 }).map((f) => ({ f, idea: 'trade' as IdeaKind, weight: 70 })),
       ...readBoardAll('tradeKept', { fenBefore: i.fenBefore, san: i.san, student: studentWB, before: i.reads.before, priorMove, theirLast: i.theirLast }).map((f) => ({ f, idea: 'choice' as IdeaKind, weight: 58 })),
       // THE KEY DEFENDER (Danya group 6): the trade that takes off the piece
@@ -549,7 +562,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
           for (const f of readBoardAll('passerPush', { ...onBoard, pushed: (() => { try { const m = new Chess(i.fenBefore).move(i.san); return m.piece === 'p' ? m.to : null; } catch { return null; } })() })) add(f, 'passed-pawn', 58);
           for (const f of readBoardAll('minority', onBoard)) add(f, 'plan', 52);
           for (const f of readBoardAll('colourComplex', onBoard)) add(f, 'weakness', 50);
-          for (const f of readBoardAll('raceOfPlans', onBoard)) add(f, 'plan', 60);
+          for (const f of readBoardAll('raceOfPlans', { ...onBoard, register: i.register })) add(f, 'plan', 60);
         }
       }
       // What their move cost them, for the student to use.
@@ -580,8 +593,8 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       // structure the board offers the student.
       {
         const game = [...i.history, i.san];
-        for (const f of readBoardAll('theirHabit', { history: game, student, sound: new Set<number>() })) facts.push({ ...f, source: 'teachingMove', idea: 'plan', weight: 54 });
-        for (const f of readBoardAll('yourHabit', { history: game, student, sound: new Set<number>() })) facts.push({ ...f, source: 'teachingMove', idea: 'plan', weight: 54 });
+        for (const f of readBoardAll('theirHabit', { history: game, student, sound: i.soundPlies })) facts.push({ ...f, source: 'teachingMove', idea: 'plan', weight: 54 });
+        for (const f of readBoardAll('yourHabit', { history: game, student, sound: i.soundPlies })) facts.push({ ...f, source: 'teachingMove', idea: 'plan', weight: 54 });
         for (const f of readBoardAll('knownAttack', { fen: i.fenBefore, student, studentCp: null })) facts.push({ ...f, source: 'teachingMove', idea: 'attack-king', weight: 64 });
       }
       // Reading their move: what it threatens quietly, needs, lifted, wrongly
@@ -599,7 +612,7 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       {
         const bestUci = i.reads?.before[0]?.moves[0] ?? null;
         const bestSan = bestUci ? (() => { try { return new Chess(i.fenBefore).move({ from: bestUci.slice(0, 2), to: bestUci.slice(2, 4), promotion: bestUci[4] }).san; } catch { return null; } })() : null;
-        if (bestSan && new Chess(i.fenBefore).turn() === student) for (const f of readBoardAll('contrast', { fenBefore: i.fenBefore, san: i.san, bestSan, student })) facts.push({ ...f, source: 'teachingMove', idea: 'plan', weight: 54 });
+        if (bestSan && new Chess(i.fenBefore).turn() === student) for (const f of readBoardAll('contrast', { fenBefore: i.fenBefore, san: i.san, bestSan, student, costCp: i.costCp, unpricedCredit: i.unpricedCredit })) facts.push({ ...f, source: 'teachingMove', idea: 'plan', weight: 54 });
       }
       // The fortress, both seats: a piece down and a draw the board explains,
       // read off the engine's lines after the move.
@@ -1023,10 +1036,13 @@ function withDecisionGap(facts: ThoughtFact[], i: MoveThoughtInput, from: string
  *  top-three clause list (`lessonBeat`), which picked by aspect weight alone,
  *  cut at three and never heard the move's job or its fundamentals. '' when
  *  nothing earned a word: silence beats a repeat. */
-export function lessonThought(shown: Omit<MoveThoughtInput, 'phrases' | 'tense' | 'plainThreatsSeen' | 'moveReads'>, voice: LessonVoice, refuted: RefutedAlternative | null): string {
+export function lessonThought(shown: Omit<MoveThoughtInput, 'phrases' | 'tense' | 'plainThreatsSeen' | 'moveReads' | 'soundPlies' | 'unpricedCredit'>, voice: LessonVoice, refuted: RefutedAlternative | null): string {
   // A lesson shows the move as it is played: its words are the present's. It
   // reads no student record, so a plain threat is taught.
-  const input: Omit<MoveThoughtInput, 'phrases'> = { ...shown, tense: 'now', plainThreatsSeen: false, moveReads: writerFor('lesson').moveReads };
+  // A taught line is ungraded: no move of it is a loose-piece habit's evidence.
+  const input: Omit<MoveThoughtInput, 'phrases'> = { ...shown, tense: 'now', plainThreatsSeen: false, moveReads: writerFor('lesson').moveReads, soundPlies: null,
+    // A lesson's move is a taught book line: credited unpriced (the one praise rule).
+    unpricedCredit: writerFor('lesson').unpricedCredit };
   // The line's story is at this move's ply: what it says is said here.
   voice.story.reach(plyOfFen(input.fenBefore));
   const facts = moveThoughtFacts({ ...input, phrases: voice.phrases });
@@ -1045,9 +1061,9 @@ const MOVE_STEPS_OF_STORY: ReadonlySet<string> = new Set(['yours', 'theirs']);
  *  the groups the question asks about ("why did they play that?" — their
  *  move, their side, the danger, the line; `questionThought.QUESTION_IDEAS`):
  *  one ordering for every surface, never a lane's own stack of sentences. */
-export function questionThought(asked: Omit<MoveThoughtInput, 'phrases' | 'tense' | 'moveReads'>, groups: ReadonlySet<FactGroup>, refuted: RefutedAlternative | null, reason: DecisiveReason | null): ComposedThought {
+export function questionThought(asked: Omit<MoveThoughtInput, 'phrases' | 'tense' | 'moveReads' | 'soundPlies' | 'unpricedCredit'>, groups: ReadonlySet<FactGroup>, refuted: RefutedAlternative | null, reason: DecisiveReason | null): ComposedThought {
   // A question is answered on the board in front of the student, in the present.
-  const input: Omit<MoveThoughtInput, 'phrases'> = { ...asked, tense: 'now', moveReads: writerFor('chat').moveReads };
+  const input: Omit<MoveThoughtInput, 'phrases'> = { ...asked, tense: 'now', moveReads: writerFor('chat').moveReads, soundPlies: null, unpricedCredit: writerFor('chat').unpricedCredit };
   const voice = newLessonVoice();
   voice.story.reach(plyOfFen(input.fenBefore));
   const facts = moveThoughtFacts({ ...input, phrases: voice.phrases });
@@ -1159,11 +1175,11 @@ export function lessonBoardFacts(i: Omit<MoveThoughtInput, 'phrases'>): ThoughtF
  *  the one composer's facts on the step's move (`asked`, null on a board with
  *  no move to explain) and the registry's reads of the step board, kept to
  *  the computers that serve THIS step (`THINK_STEP`), in the thought's order. */
-export function stepThought(step: ThinkingStep, board: StepBoard, asked: Omit<MoveThoughtInput, 'phrases' | 'tense' | 'moveReads'> | null): ComposedThought {
+export function stepThought(step: ThinkingStep, board: StepBoard, asked: Omit<MoveThoughtInput, 'phrases' | 'tense' | 'moveReads' | 'soundPlies' | 'unpricedCredit'> | null): ComposedThought {
   const voice = newLessonVoice();
   const all: ThoughtFact[] = [];
   if (asked) {
-    const input: Omit<MoveThoughtInput, 'phrases'> = { ...asked, tense: 'now', moveReads: writerFor('think').moveReads };
+    const input: Omit<MoveThoughtInput, 'phrases'> = { ...asked, tense: 'now', moveReads: writerFor('think').moveReads, soundPlies: null, unpricedCredit: writerFor('think').unpricedCredit };
     voice.story.reach(plyOfFen(input.fenBefore));
     all.push(...moveThoughtFacts({ ...input, phrases: voice.phrases }), ...studentMoveFacts(input));
   }
@@ -1236,7 +1252,7 @@ export function studentMoveFacts(i: Omit<MoveThoughtInput, 'phrases'>): ThoughtF
   let out: ReturnType<typeof studentMoveTeaching>;
   try {
     out = studentMoveTeaching({
-      theory: i.theory, namesStudentMoves: true,
+      theory: i.theory, namesStudentMoves: true, unpricedCredit: i.unpricedCredit,
       fenBefore: i.fenBefore, san: i.san.replace(/[!?]+$/, ''),
       history: [...i.history, i.san.replace(/[!?]+$/, '')],
       cpLoss: i.costCp,

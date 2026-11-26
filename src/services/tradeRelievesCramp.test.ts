@@ -31,3 +31,22 @@ describe('tradeRelievesCramp', () => {
     expect(moves.at(-1)?.captured).toBeTruthy();
   });
 });
+
+// learn-mistakes-only bug 5: the target is named as it stands NOW. g
+// chesscom-1012441262 ply 16 …Bg4: "Bxf3 would take off your knight on f3"
+// with White's queen on f3 (the knight reaches f3 later in the line).
+describe('the trade is said only when its pieces stand there now', () => {
+  it('never "your knight on f3" with the queen on f3', async () => {
+    const { Chess } = await import('chess.js');
+    const c = new Chess();
+    for (const m of 'e4 g6 d4 Bg7 Nf3 d6 Bc4 Nc6 Bxf7+ Kxf7 Ng5+ Ke8 Qf3 Nf6 c3 Bg4'.split(' ')) c.move(m);
+    const after = [
+      { moves: ['f3d3', 'h7h6', 'g5f3', 'g4h5', 'd4d5', 'h5f3', 'd3f3', 'c6e5'], cp: -351, mate: null },
+      { moves: ['f3e3', 'h7h6', 'g5f3', 'e7e5', 'd4d5', 'c6e7', 'c3c4', 'f6h5'], cp: -378, mate: null },
+      { moves: ['f3g3', 'h7h6', 'f2f3', 'h6g5', 'f3g4', 'f6e4', 'g3f3', 'd6d5'], cp: -385, mate: null },
+    ];
+    const r = tradeRelievesCramp(c.fen(), after, 'w');
+    expect(r?.text ?? '').not.toMatch(/knight on f3/);
+    if (r) expect(new Chess(c.fen()).get(r.target)?.type).toBe(r.text.match(/(knight|bishop|rook) on/)?.[1]?.[0] === 'k' ? 'n' : r.text.match(/(knight|bishop|rook) on/)?.[1]?.[0]);
+  });
+});

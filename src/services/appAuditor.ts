@@ -46,6 +46,9 @@ const APP_AUDIT_LOG_MAX_ENTRIES = 1500;
 export type AuditCategory = 'narration' | 'runtime' | 'subsystem' | 'app';
 
 export type AuditKind =
+  // ONE row per mistake turn (mistakeLesson.composeMistakeLesson): its cause,
+  // the slots it filled, and why it stayed silent — no FEN, no text.
+  | 'mistake-lesson'
   // Grounded board-question router (coachApi.boardQuestion) — the aspect answered
   | 'coach-grounded-answer'
   // Temporary board-verdict prod triage logging (coachApi). Added here because

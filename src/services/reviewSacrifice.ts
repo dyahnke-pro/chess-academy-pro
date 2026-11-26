@@ -157,7 +157,11 @@ const PIECE_NOUN: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop'
  * the "<piece> on <square>" pattern so it never trips narrationBoardAccurate on a
  * square the capture just vacated.
  */
-export function describeSacBreaksKingShield(fenBefore: string, san: string): string | null {
+export function describeSacBreaksKingShield(fenBefore: string, san: string,
+  /** REQUIRED: the student's colour — the clause is worded from their seat
+   *  ("You give up …" only when the student made the sacrifice;
+   *  learn-mistakes-only bug 9: it was "You give up" whoever moved). */
+  student: 'w' | 'b'): string | null {
   let board: Chess;
   let mv: ReturnType<Chess['move']> | null;
   // Guard the SAN apply too — chess.js throws on an illegal move (e.g. `O-O`
@@ -183,10 +187,13 @@ export function describeSacBreaksKingShield(fenBefore: string, san: string): str
   if (!attackersLeft) return null;
   const capName = PIECE_NOUN[mv.captured] ?? 'piece';
   const isExchange = mv.piece === 'r' && (mv.captured === 'n' || mv.captured === 'b');
+  const mine = mv.color === student;
+  const Who = mine ? 'You' : 'They';
+  const who = mine ? 'you' : 'they';
   const give = isExchange
-    ? 'You give up the exchange — a rook for a minor piece'
-    : `You give up the ${PIECE_NOUN[mv.piece] ?? 'piece'}`;
-  return `${give}, but you tear the ${capName} away from beside their king and the attack rolls straight on`;
+    ? `${Who} give up the exchange — a rook for a minor piece`
+    : `${Who} give up the ${PIECE_NOUN[mv.piece] ?? 'piece'}`;
+  return `${give}, but ${who} tear the ${capName} away from beside ${mine ? 'their' : 'your'} king and the attack rolls straight on`;
 }
 
 /** Does `square` stand beside `color`'s king — one of the eight squares

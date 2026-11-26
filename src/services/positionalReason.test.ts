@@ -75,3 +75,15 @@ describe('a positional reason names pieces from the student\'s seat (Danya have-
     expect(boardReason(b.fen(), 'Nb8', 'Qe8', 'middlegame', 'b')?.note).toBe('Your knight on b8 reaches 4 fewer squares after …Nb8 than after the better move.');
   });
 });
+
+// learn-mistakes-only bug 11: a king move is filed `passive-king-endgame`
+// only in the endgame.
+describe('bestJobReason — the king move and its phase', () => {
+  it('a middlegame king step files no endgame skill; an endgame king move does', async () => {
+    const { bestJobReason } = await import('./positionalReason');
+    const middle = 'r1bq1rk1/pp2bppp/2n1pn2/3p4/2PP4/2N1PN2/PP2BPPP/R1BQ1RK1 w - - 0 9';
+    expect(bestJobReason(middle, 'Kh1')?.tag).not.toBe('passive-king-endgame');
+    const ending = '8/5k2/8/3p4/3P4/8/5K2/8 w - - 0 50';
+    expect(bestJobReason(ending, 'Ke3')?.tag).toBe('passive-king-endgame');
+  });
+});

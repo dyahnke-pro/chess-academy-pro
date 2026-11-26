@@ -10,16 +10,16 @@
 //  · THE HAND-OFF — a rook takes their rook on the file; after their cheapest
 //    retake no rook or queen of theirs is on the file, and the engine's line
 //    goes on with the mover's other rook or queen onto it.
-// Said only on a move that is no mistake (the engine's cost under
-// `MISTAKE_CP`): the line states what the trade does, never that the move was
-// best. PURE: chess.js and the
+// Said only on a sound move (the one praise rule, `creditableCost`: the cost
+// known and under an inaccuracy): the line states what the trade does, never
+// that the move was best. PURE: chess.js and the
 // position reader.
 import { openSentence } from '../utils/openSentence';
 import { CAPTURE_VALUE } from './pieceValues';
 import { Chess, type PieceSymbol, type Square } from 'chess.js';
 import { signedLegalSeeFor } from './positionReadingService';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
-import { MISTAKE_CP } from './engineConstants';
+import { creditableCost, type UnpricedCredit } from './engineConstants';
 import { other, PIECE_WORD, tradeSeat } from './tradeWords';
 
 
@@ -48,10 +48,15 @@ function majorsOn(c: Chess, file: string, color: 'w' | 'b'): Square[] {
 }
 
 /** The file trade `san` makes on `fenBefore`; `costCp`: the engine's cost of
- *  the move for its mover (null: unknown, nothing said); `line`: the engine's
+ *  the move for its mover (null: unknown, nothing said; an inaccuracy or worse:
+ *  nothing said); `line`: the engine's
  *  best line after the move (uci, the retake first), or null. */
-export function fileTradeAt(fenBefore: string, san: string, costCp: number | null, line: readonly string[] | null): FileTrade | null {
-  if (costCp === null || costCp >= MISTAKE_CP) return null;
+export function fileTradeAt(fenBefore: string, san: string, costCp: number | null, line: readonly string[] | null,
+  /** REQUIRED: what an unpriced move is to the praise rule (the surface's). */
+  unpriced: UnpricedCredit): FileTrade | null {
+  // The line credits the move: the one praise rule (`creditableCost`). The
+  // old gate was a MISTAKE, so Rf1 at 80 cp was "the file is yours".
+  if (!creditableCost(costCp, unpriced)) return null;
   let c: Chess;
   try { c = new Chess(fenBefore); } catch { return null; }
   let mv;

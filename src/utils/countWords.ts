@@ -23,14 +23,17 @@ const PAWN_WORDS = ['', 'a pawn', 'two pawns', 'three pawns', 'four pawns', 'fiv
  * the board actually shows. A piece is named only when the board's piece
  * difference IS that piece (plus extra pawns) AND is worth exactly `edge`;
  * a settled lead the board does not show yet (a recapture still to come), or
- * a mix (a queen for a rook and a minor), is said by count. Replaces the
+ * a mix (a queen for a rook and a minor), is "material" (never a point count). Replaces the
  * point-threshold namers (`>= 3 → 'a piece'`) that called the exchange and a
  * pawn "a piece" and two minors "a rook".
  */
 export function boardEdgeWords(fen: string, side: 'w' | 'b', edge: number): string {
   const n = Math.round(edge);
+  // NO STATISTIC SPOKEN (learn-mistakes-only bug 6: "You're up 5 points"):
+  // a lead the board does not show as pieces is "material", never a count.
+  const unnamed = (): string => (n <= 2 ? countWords(n) : 'material');
   let c: Chess;
-  try { c = new Chess(fen); } catch { return countWords(n); }
+  try { c = new Chess(fen); } catch { return unnamed(); }
   const them: 'w' | 'b' = side === 'w' ? 'b' : 'w';
   const count = (color: 'w' | 'b', t: string): number => {
     let k = 0;
@@ -42,9 +45,9 @@ export function boardEdgeWords(fen: string, side: 'w' | 'b', edge: number): stri
   const r = diff('r');
   const minors = diff('n') + diff('b');
   const p = diff('p');
-  if (q * 9 + r * 5 + minors * 3 + p !== n) return countWords(n);
+  if (q * 9 + r * 5 + minors * 3 + p !== n) return unnamed();
   // Their extra pawns make it a mix (two pieces for a pawn), named below.
-  if (p < 0) return materialMix({ q, r, m: minors, p }) ?? countWords(n);
+  if (p < 0) return materialMix({ q, r, m: minors, p }) ?? unnamed();
   const tail = p === 0 ? '' : ` and ${PAWN_WORDS[p] ?? `${p} pawns`}`;
   if (q === 1 && r === 0 && minors === 0) return `a queen${tail}`;
   if (q === 0 && r === 1 && minors === 0) return `a rook${tail}`;
@@ -58,7 +61,7 @@ export function boardEdgeWords(fen: string, side: 'w' | 'b', edge: number): stri
     const mix = materialMix({ q, r, m: minors, p });
     if (mix) return mix;
   }
-  return countWords(n);
+  return unnamed();
 }
 
 const UNIT: Record<'q' | 'r' | 'm' | 'p', [string, string]> = { q: ['queen', 'queens'], r: ['rook', 'rooks'], m: ['piece', 'pieces'], p: ['pawn', 'pawns'] };

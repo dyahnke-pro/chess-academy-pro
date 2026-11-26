@@ -233,3 +233,16 @@ describe('a race needs two storms: pawns on two files, not landed yet (Danya: th
     expect(oppositeWingsRace('2r3k1/1b3q1p/p3pPpQ/1p2p3/8/PN6/1PP4P/1K3R2 w - - 0 33', 'w', 'live')).toBeNull();
   });
 });
+
+// learn-mistakes-only bug 9: the registry read follows the surface's register
+// — a live board hears the race in the present, never "both sides had".
+describe('raceOfPlans — the register follows the surface', () => {
+  it('live is present tense, review past', async () => {
+    const { readBoard } = await import('./boardComputers');
+    const live = readBoard('raceOfPlans', { fen: LEVEL_YOURS, student: 'w', register: 'live' })?.text ?? '';
+    const review = readBoard('raceOfPlans', { fen: LEVEL_YOURS, student: 'w', register: 'review' })?.text ?? '';
+    expect(live).toMatch(/both sides have a runner/i);
+    expect(live).not.toMatch(/\bhad\b|\bwas\b/);
+    expect(review).toMatch(/both sides had a runner/i);
+  }, 60000);
+});

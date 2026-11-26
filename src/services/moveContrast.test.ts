@@ -38,3 +38,17 @@ describe('the contrast compares a piece that stands on both boards', () => {
     expect(c?.square).not.toBe('c8');
   });
 });
+
+// learn-mistakes-only bug 3: "Your move keeps … defended" credits the move —
+// the one praise rule; the "leaves it with no guard" side stays on any cost.
+describe('the contrast read credits only a sound move', () => {
+  it('keeps-direction: said at 0 cp, refused at 174 cp and unpriced; drops-direction said at 174 cp', async () => {
+    const { readBoard } = await import('./boardComputers');
+    const keeps = (costCp: number | null) => readBoard('contrast', { fenBefore: FEN, san: 'Rfd1', bestSan: 'Rad1', student: 'w', costCp, unpricedCredit: 'refused' });
+    expect(keeps(0)?.text).toMatch(/^Your move keeps your a-pawn/);
+    expect(keeps(174)).toBeNull();
+    expect(keeps(null)).toBeNull();
+    expect(readBoard('contrast', { fenBefore: FEN, san: 'Rfd1', bestSan: 'Rad1', student: 'w', costCp: null, unpricedCredit: 'taught-line' })?.text).toMatch(/^Your move keeps/);
+    expect(readBoard('contrast', { fenBefore: FEN, san: 'Rad1', bestSan: 'Rfd1', student: 'w', costCp: 174, unpricedCredit: 'refused' })?.text).toMatch(/^Your move leaves your a-pawn/);
+  }, 60000);
+});

@@ -27,6 +27,9 @@
 // G0 throughout: severity is arithmetic, the better move comes from the engine,
 // and the reason comes from replaying the engine's own line. Nothing here asks a
 // model what it thinks.
+import { mustDefendPieces } from './threatOut';
+import { classifyMistake, type MistakeCause } from './mistakeCause';
+import { readStructuralCause, stalemateCause, type StructuralArgs } from './structuralCause';
 import { capturedSquare } from '../utils/capturedSquare';
 import { evalBand } from './evalBand';
 import { andList, lineShape, lineShapePlies, seatedLine, lineSeatAt } from '../utils/andList';
@@ -34,7 +37,7 @@ import { bareCaptureLead, bestMoveReason, moveWhy } from './deliberation';
 import { captureLeadsTo } from './captureLeadsTo';
 import { captureHasCounterTactic } from './groundedAnswer';
 import { toOtherSeat } from '../utils/seatPronouns';
-import { Chess, type Square } from 'chess.js';
+import { Chess, type PieceSymbol, type Square } from 'chess.js';
 import { planFromUci, isCostClause } from './lookaheadPlan';
 import { classifyMove, type MoveQuality } from './moveRating';
 import type { SameSearchScores } from './moveCost';
@@ -1024,6 +1027,36 @@ function followUpLines(fenAfter: string, replySan: string, why: string): SpokenL
   return null;
 }
 
+/** WHAT THEIR REPLY DOES, AS DATA (card errorWhy F8): the reply's action and
+ *  its target on the board after it — a capture of the mover's piece, a check
+ *  on the mover's king, or the mover's most valuable piece the replying piece
+ *  newly attacks. The target is the MOVER's piece, by square, type and colour,
+ *  read off the board (never the replying piece's own square). */
+export interface ReplyAct {
+  kind: 'capture' | 'check' | 'attack';
+  target: { square: string; piece: PieceSymbol; color: 'w' | 'b' };
+}
+export function replyAct(fenAfter: string, replyUci: string | undefined): ReplyAct | null {
+  if (!replyUci) return null;
+  try {
+    const before = new Chess(fenAfter);
+    const mover = before.turn() === 'w' ? 'b' : 'w';
+    const c = new Chess(fenAfter);
+    const r = c.move({ from: replyUci.slice(0, 2), to: replyUci.slice(2, 4), promotion: replyUci[4] });
+    if (!r) return null;
+    if (r.captured) return { kind: 'capture', target: { square: r.to, piece: r.captured, color: mover } };
+    if (c.inCheck()) { const k = c.findPiece({ type: 'k', color: mover })[0]; return k ? { kind: 'check', target: { square: k, piece: 'k', color: mover } } : null; }
+    let best: ReplyAct['target'] | null = null;
+    for (const p of c.board().flat()) {
+      if (!p || p.color !== mover || p.type === 'k') continue;
+      if (!c.attackers(p.square, r.color).includes(r.to)) continue;
+      if (before.attackers(p.square, r.color).includes(r.from)) continue;
+      if (!best || MATERIAL_VALUE[p.type] > MATERIAL_VALUE[best.piece]) best = { square: p.square, piece: p.type, color: mover };
+    }
+    return best ? { kind: 'attack', target: best } : null;
+  } catch { return null; }
+}
+
 export function allowedReply(
   fenBefore: string, playedSan: string, replyLineUci: readonly string[], moverColor: 'white' | 'black',
 ): { said: string; line: { fen: string; uci: string[] }; lines?: SpokenLine[] } | null {
@@ -1090,7 +1123,10 @@ export function allowedReply(
  *  The proof is the line those words name, drawn on the board, when there is
  *  one. The contract is light (David 2026-10-10: "Not every miss needs the
  *  proof"): with no why at all, the grade says its cost. */
-interface ErrorWhy {
+export interface ErrorWhy {
+  /** THE CAUSE AS DATA (`mistakeCause`): what every recipe keys on; the
+   *  sentences above are this cause said in errorWhy's own words. */
+  cause: MistakeCause;
   /** "it let them win a piece …" / "it let a forced mate slip" / "it let them
    *  play …d5, which …" — null when nothing it allowed can be said. */
   consequence: string | null;
@@ -1138,6 +1174,14 @@ interface ErrorWhy {
   /** The square or piece the moved piece stopped guarding, when the mechanism
    *  is a guard it left (`whyItFailed` 'abandoned-square' / 'abandoned-defender'). */
   guardLeft?: string;
+  /** The one reason walker's lines (`costReason`), as data for a recipe that
+   *  names the piece won: what the move allowed (from the board after it) and
+   *  what it missed (from the board before it). Never words. */
+  allowedReasonLine?: { fen: string; uci: string[] };
+  missedReasonLine?: { fen: string; uci: string[] };
+  /** What the reply the move allowed DOES, typed (`replyAct`) — set whenever
+   *  a reply reader (single reply, allowed reply) named the cause. */
+  allowedAct?: ReplyAct;
 }
 
 /** NO LINE KNOWN: the board's own answer to the played move — the capture of
@@ -1567,7 +1611,62 @@ export function errorWhy(args: {
   // The piece a mechanism left to be taken is the lost square too, so a
   // fundamental naming the same hung piece stays quiet (one fact once).
   const failedLost = failedRead?.lost ?? undefined;
+  // THE POSITIONAL TAG, kept even when the better move is named (`should`):
+  // the sentence goes to the better move, the record still needs the tag
+  // (26 of 87 live costly moves dropped it, card errorWhy F5).
+  const positionalTag = args.allowedMate === null && args.missedMate === null && (args.quality === 'mistake' || args.quality === 'blunder')
+    ? (() => { try { return positionalReason({ fen: args.fenBefore, playedSan: args.playedSan, bestSan, namesBetterMove: false, student: args.moverColor === 'white' ? 'w' : 'b' })?.tag ?? null; } catch { return null; } })()
+    : null;
+  const playedCaptures = (() => { try { return !!new Chess(args.fenBefore).move(args.playedSan)?.captured; } catch { return false; } })();
+  const anyAllowed = allowedReason();
+  const allowedR = caused ? anyAllowed : null;
+  // A THREAT ALREADY ON THE BOARD that the move did not answer: the reply line
+  // wins material, the move did not cause it (card errorWhy E16 / C WF-8).
+  // The reason walker cannot see it (the threat is in the better move's line
+  // too), so it is read off the board: a piece of the mover's that hung before
+  // the move still hangs after it, and their reply takes it.
+  const ignoredThreat = args.allowedMate === null && (() => {
+    try {
+      const mv = moverWB;
+      const before = new Set(mustDefendPieces(args.fenBefore, mv).map((p) => p.square));
+      if (!before.size) return false;
+      const c = new Chess(args.fenBefore); c.move(args.playedSan);
+      const still = mustDefendPieces(c.fen(), mv).filter((p) => before.has(p.square));
+      const u = replyLineUci[0];
+      return !!u && still.some((p) => p.square === u.slice(2, 4));
+    } catch { return false; }
+  })();
+  const missedR = missedReason();
+  // THE STRUCTURAL READING (`structuralCause`): what the move changed that is
+  // not material. Read only where no reader above has the cause — except the
+  // stalemate, which outranks everything but the mate it is the opposite of.
+  const structuralArgs: StructuralArgs = {
+    fenBefore: args.fenBefore, playedSan: args.playedSan, replyLineUci, bestLineUci: args.bestLineUci,
+    bestSan, costCp: args.costCp ?? null, priorMove: args.priorMove,
+  };
+  const earlierCause = !!failedRead || !!punishment || !!single || !!farLoss || !!allowed || !!hunt
+    || args.missedMate !== null || (!!missedR && !missedR.mate);
+  const structural = args.allowedMate !== null ? null
+    : earlierCause ? (() => { try { return stalemateCause(structuralArgs); } catch { return null; } })()
+      : readStructuralCause(structuralArgs);
+  const cause = classifyMistake({
+    allowedMate: args.allowedMate !== null,
+    missedMate: args.missedMate !== null,
+    failedKind: failedRead?.kind ?? null,
+    playedCaptures,
+    allowedWins: !!punishment || !!single || !!farLoss,
+    allowedMotif: (allowedR ?? (ignoredThreat ? anyAllowed : null))?.motif ?? null,
+    allowedThreat: !!allowed,
+    kingHunt: !!hunt,
+    ignoredThreat,
+    missedMotif: missedR?.motif ?? null,
+    missedWins: !!missedR && !missedR.mate,
+    tag: positionalTag,
+    causedByMove: caused,
+    structural,
+  });
   return {
+    cause,
     consequence,
     tail,
     failed,
@@ -1585,6 +1684,9 @@ export function errorWhy(args: {
     ...(pattern ? { pattern } : {}),
     ...(args.allowedMate === null && namedReply ? { punishFirst: namedReply } : {}),
     ...(failed && (failedRead?.kind === 'abandoned-square' || failedRead?.kind === 'abandoned-defender') && failedRead.squares[0] ? { guardLeft: failedRead.squares[0] } : {}),
+    ...((single || allowed || ignoredThreat) ? (() => { try { const c = new Chess(args.fenBefore); c.move(args.playedSan); const a = replyAct(c.fen(), replyLineUci[0]); return a ? { allowedAct: a } : {}; } catch { return {}; } })() : {}),
+    ...(anyAllowed && !anyAllowed.mate ? { allowedReasonLine: { fen: anyAllowed.fen, uci: anyAllowed.plies.map((x) => x.uci) } } : {}),
+    ...(missedR && !missedR.mate ? { missedReasonLine: { fen: missedR.fen, uci: missedR.plies.map((x) => x.uci) } } : {}),
   };
 }
 

@@ -30,7 +30,7 @@ import { legalSeeGainFor } from './positionReadingService';
 import { hasMateThreat } from './threatOut';
 import { settledNetForLine, gainWords, promotedIn, type PieceLetter } from './exchangeLedger';
 import { kingSacrifice, kingSacrificeLine, kingSacrificeSquares } from './kingSiege';
-import { andList, lineShape } from '../utils/andList';
+import { andList, lineShape, withArticle } from '../utils/andList';
 import { openSentence } from '../utils/openSentence';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 
@@ -250,7 +250,14 @@ export function deepCombinationLine(d: DeepCombination, student: Color, fen: str
     : d.outcome === 'ahead'
       ? (d.won
         ? `${openSentence(subject)} win ${d.won}.`
-        : promotes(d.line) ? `${openSentence(subject)} make a new ${NAME[promotedIn(d.line.filter((_, i) => i % 2 === 0))[0]]} and come out ahead in material.` : `${openSentence(subject)} come out ahead in material.`)
+        : promotes(d.line) ? (() => {
+          // A new queen is "a new queen"; any other promotion is said as one
+          // ("promote a pawn to a rook"), never "a new rook".
+          const made = promotedIn(d.line.filter((_, i) => i % 2 === 0))[0];
+          return made === 'q'
+            ? `${openSentence(subject)} make a new queen and come out ahead in material.`
+            : `${openSentence(subject)} promote a pawn to ${withArticle(NAME[made])} and come out ahead in material.`;
+        })() : `${openSentence(subject)} come out ahead in material.`)
       : `${openSentence(subject)} win the material back, and ${mine ? 'you are' : 'they are'} clearly better.`;
   const accepted = andList(d.accepted.map((s, i) => dots(s, i % 2 === 0 ? foe : d.mover)));
   const key = stemKeyOf(`${fen}|deepCombination|${d.key}`);

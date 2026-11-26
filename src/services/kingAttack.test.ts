@@ -2,6 +2,7 @@
 import { describe, it, expect } from 'vitest';
 import { kingAttack } from './kingAttack';
 import fixture from './__fixtures__/kingAttack-his.json';
+const moverOf = (fen: string): 'w' | 'b' => (fen.split(' ')[1] === 'b' ? 'b' : 'w');
 
 interface P { key: string; fen: string; san: string }
 const at = (key: string): P => {
@@ -23,7 +24,7 @@ const LINES_AFTER: Record<string, string[][]> = {
     ['c7c6', 'c1d2', 'd6d5', 'e4e5', 'f6e4', 'd2e3', 'c5b3', 'a2b3', 'f7f6', 'c3e4'],
   ],
 };
-const run = (key: string) => { const p = at(key); return kingAttack(p.fen, p.san, true, true, LINES_AFTER[key] ?? []); };
+const run = (key: string) => { const p = at(key); return kingAttack(p.fen, p.san, true, true, LINES_AFTER[key] ?? [], moverOf(p.fen)); };
 
 describe('kingAttack — bringing pieces to the king', () => {
   it('exf7+: "eliminating one of the pawns that form their kingside foundation"', () => {
@@ -61,13 +62,13 @@ describe('kingAttack — bringing pieces to the king', () => {
   });
 
   it('says nothing on move one', () => {
-    expect(kingAttack('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'e4', true, true, [])).toBeNull();
+    expect(kingAttack('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'e4', true, true, [], moverOf('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'))).toBeNull();
   });
 });
 
 describe('removes-defender — only a piece standing by the king', () => {
   it('taking back a rook three squares from the king is a recapture, not an attack (walk 2026-09-30)', () => {
-    const out = kingAttack('4r3/p1p2pk1/2pq3p/2b5/4R3/6B1/PPP2P1P/R4K2 b - - 0 21', 'Rxe4', true, true, []);
+    const out = kingAttack('4r3/p1p2pk1/2pq3p/2b5/4R3/6B1/PPP2P1P/R4K2 b - - 0 21', 'Rxe4', true, true, [], moverOf('4r3/p1p2pk1/2pq3p/2b5/4R3/6B1/PPP2P1P/R4K2 b - - 0 21'));
     expect(out?.kind).not.toBe('removes-defender');
   });
 });
@@ -75,7 +76,7 @@ describe('removes-defender — only a piece standing by the king', () => {
 describe('heads-for-king — the hop is a move the engine plays (pass-3 false facts, class B)', () => {
   it('no line read, no hop: Re3 is not said to head for g3', () => {
     const p = at('vMY6Wr3niUg:29');
-    expect(kingAttack(p.fen, p.san, true, true, [])?.kind).not.toBe('heads-for-king');
+    expect(kingAttack(p.fen, p.san, true, true, [], moverOf(p.fen))?.kind).not.toBe('heads-for-king');
   });
 
   it('Petrov 7…Be7: no line plays …Bh4, so the bishop does not "head for their king"', () => {
@@ -89,15 +90,33 @@ describe('heads-for-king — the hop is a move the engine plays (pass-3 false fa
       ['b1c3', 'e4c3', 'b2c3', 'e8g8', 'h2h3', 'e7d6', 'f3h2', 'f8e8', 'f2f4', 'c6a5'],
       ['b1d2', 'e4d2', 'c1d2', 'c8g4', 'c2c3', 'e8g8', 'd2f4', 'e7d6', 'f4g3', 'd8d7'],
     ];
-    expect(kingAttack(fen, 'Be7', true, true, lines)).toBeNull();
-    expect(kingAttack(fen, 'Be7', false, false, lines)).toBeNull();
+    expect(kingAttack(fen, 'Be7', true, true, lines, moverOf(fen))).toBeNull();
+    expect(kingAttack(fen, 'Be7', false, false, lines, moverOf(fen))).toBeNull();
   });
 
   it('the held form still speaks where the line plays the hop: "Your rook heads for their king"', () => {
     const p = at('vMY6Wr3niUg:29');
-    const held = kingAttack(p.fen, p.san, false, false, LINES_AFTER['vMY6Wr3niUg:29']);
+    const held = kingAttack(p.fen, p.san, false, false, LINES_AFTER['vMY6Wr3niUg:29'], moverOf(p.fen));
     expect(held?.text).toBe('Your rook heads for their king — one more move brings it to bear.');
     expect(held?.next).toBeUndefined();
     expect(held?.squares).not.toContain('g3');
+  });
+});
+
+// learn-mistakes-only bug 9: the words are the student's seat on either move.
+describe('kingAttack — their move is "their pieces", aimed at "your king"', () => {
+  it('the same board read for the other seat swaps the words', () => {
+    let read = 0;
+    for (const [k, l] of Object.entries(LINES_AFTER)) {
+      const p = at(k);
+      const mover = moverOf(p.fen);
+      const mine = kingAttack(p.fen, p.san, true, true, l, mover);
+      if (!mine) continue;
+      const theirs = kingAttack(p.fen, p.san, true, true, l, mover === 'w' ? 'b' : 'w');
+      expect(theirs?.text ?? '').not.toMatch(/your (pawn|knight|bishop|rook|queen) into|of your pieces|their king/);
+      expect(theirs?.text ?? '').toMatch(/your king/);
+      read += 1;
+    }
+    expect(read).toBeGreaterThan(0);
   });
 });

@@ -474,8 +474,10 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
       : null;
     if (after) {
       for (const f of moveThoughtFacts({
-        fenBefore: i.fen, san, moverIsStudent: mine, namesPlayedMove: ASKED_WRITER.namesPlayedMove, plainThreatsSeen: plainThreatsSeenFor(ASKED_WRITER, false), tense: i.tense, theory: false, story: !!i.story, moveReads: ASKED_WRITER.moveReads,
-        prev: NO_PREV_CAPTURE, line: top.moves.slice(1), history: game.history, theirLast: game.theirLast, phrases: null, reads: { before: [...i.before], after: [...after], passBefore: [], passAfter: [], everyAfter, tries: triesRead }, costCp: 0,
+        fenBefore: i.fen, san, moverIsStudent: mine, namesPlayedMove: ASKED_WRITER.namesPlayedMove, plainThreatsSeen: plainThreatsSeenFor(ASKED_WRITER, false), tense: i.tense, theory: false, story: !!i.story, moveReads: ASKED_WRITER.moveReads, register: ASKED_WRITER.register, unpricedCredit: ASKED_WRITER.unpricedCredit,
+        prev: NO_PREV_CAPTURE, line: top.moves.slice(1), history: game.history, theirLast: game.theirLast, phrases: null,
+        // An asked board's game carries no grades here.
+        soundPlies: null, reads: { before: [...i.before], after: [...after], passBefore: [], passAfter: [], everyAfter, tries: triesRead }, costCp: 0,
       })) {
         // A puzzle still being solved keeps only who stands better: what the
         // best move does is the answer.

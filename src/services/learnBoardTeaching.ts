@@ -97,6 +97,9 @@ export interface StudentMoveInput {
    *  the ONE price. Null when nobody could price it: every cost-graded hint
    *  stays quiet rather than read "unpriced" as "free". */
   cpLoss: number | null;
+  /** REQUIRED: what an unpriced move is to the praise rule
+   *  (`WriterSettings.unpricedCredit`: a lesson's taught line is credited). */
+  unpricedCredit: UnpricedCredit;
   /** Both engine reads are centipawns (no mate on either side). */
   bothCp: boolean;
   /** The engine's best move at `fenBefore`, SAN. */
@@ -216,7 +219,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingFact[] {
   // better move with its reason, and a second reason here contradicted it
   // (Colle replay 2026-11-05, 20.Qxf4). The right recapture chosen answers the
   // capture-toward-centre question — held (P4 dual-use).
-  const rc = readBoard('recapture', { fenBefore: i.fenBefore, san: i.san, theirLast, reply: i.reply, faultCp, namesStudentMoves: i.namesStudentMoves });
+  const rc = readBoard('recapture', { fenBefore: i.fenBefore, san: i.san, theirLast, reply: i.reply, faultCp, namesStudentMoves: i.namesStudentMoves, costCp: i.cpLoss, unpricedCredit: i.unpricedCredit });
   if (rc) out.push(fromBoard('recapture', rc, { event: null, arrows: [], evidence: { tag: 'capture-toward-centre' as const, posedImportance: 60 } }));
 
   // THE LINE BEHIND A WINNING MOVE (David 2026-09-30: "teach more line
@@ -290,7 +293,7 @@ export function studentMoveTeaching(i: StudentMoveInput): TeachingFact[] {
 
   // BRINGING PIECES TO THEIR KING — "…heads for their king — Qg3 next": the
   // next hop, as the move to play.
-  const ka = readBoard('kingAttack', { fenBefore: i.fenBefore, san: i.san, reply: i.reply, cpLoss: i.cpLoss, namesStudentMoves: i.namesStudentMoves, linesAfter: i.linesAfter });
+  const ka = readBoard('kingAttack', { fenBefore: i.fenBefore, san: i.san, reply: i.reply, cpLoss: i.cpLoss, namesStudentMoves: i.namesStudentMoves, linesAfter: i.linesAfter, unpricedCredit: i.unpricedCredit });
   if (ka) {
     const next = ka.marks?.play;
     out.push(fromBoard('kingAttack', ka, {
@@ -687,7 +690,7 @@ export function studentMoveAnswerLines(history: readonly string[], ply: number, 
   if (!fenBefore || ply < 0 || ply >= history.length) return [];
   // The student asked ("was that a good move?"): theory may answer.
   const hints = studentMoveTeaching({
-    theory: CHAT_WRITER.theory, namesStudentMoves: CHAT_WRITER.namesStudentMoves,
+    theory: CHAT_WRITER.theory, namesStudentMoves: CHAT_WRITER.namesStudentMoves, unpricedCredit: CHAT_WRITER.unpricedCredit,
     fenBefore, san: history[ply], history: history.slice(0, ply + 1), cpLoss, bothCp: true,
     bestSan, bestLine: undefined, reply: history[ply + 1] ?? null, cpAfter: null,
     // No engine line after the move is read here: no follow-up is named.
@@ -823,6 +826,7 @@ import { promisesOpen, slipCount, type GamePromise, type StoryStore } from './ga
 import { positionOf } from '../utils/samePosition';
 import { captureRunOfMoves, type PrevCaptureContext } from './captureRun';
 import { NAMES_NO_MOVE, namesMoves, boardAfterSans } from './studentMoveNaming';
+import type { UnpricedCredit } from './engineConstants';
 
 export type { GamePromise } from './gameStory';
 

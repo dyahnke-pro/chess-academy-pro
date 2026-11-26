@@ -36,7 +36,10 @@ describe('buildMiddlegameOrientation (§1 anchor + §2 both-sides plans)', () =>
     const fen = '4k3/p4ppp/8/8/8/8/PPP2PP1/4K3 w - - 0 1';
     const beat = buildMiddlegameOrientation(fen, 'b');
     expect(beat).not.toBeNull();
-    expect(beat!.text).toMatch(/opponent/i);
+    // learn-mistakes-only bug 9: "their", never "your opponent's" (one
+    // perspective: the opponent is they/their).
+    expect(beat!.text).toMatch(/their plan is to push/i);
+    expect(beat!.text).not.toMatch(/opponent/i);
   });
 
   it("keeps each side's plan on its own move (WO-TEACH-02 SEAT)", () => {
@@ -44,10 +47,10 @@ describe('buildMiddlegameOrientation (§1 anchor + §2 both-sides plans)', () =>
     const fen = '4k3/p4ppp/8/8/8/8/PPP2PP1/4K3 w - - 0 1';
     const mine = buildMiddlegameOrientation(fen, 'b', undefined, 'student')?.text ?? '';
     const theirs = buildMiddlegameOrientation(fen, 'b', undefined, 'opponent')?.text ?? '';
-    expect(mine).not.toMatch(/opponent's plan/);
-    expect(theirs).toMatch(/opponent's plan/);
+    expect(mine).not.toMatch(/their plan/i);
+    expect(theirs).toMatch(/their plan/i);
     expect(theirs).not.toMatch(/your plan/i);
-    expect(buildMiddlegameOrientation(fen, 'b', undefined, 'both')?.text).toMatch(/opponent's plan/);
+    expect(buildMiddlegameOrientation(fen, 'b', undefined, 'both')?.text).toMatch(/their plan/i);
   });
 
   it('stays silent when the pawns are symmetric — no clear plan (empty > generic)', () => {

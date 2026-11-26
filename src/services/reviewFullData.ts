@@ -944,7 +944,7 @@ export function computeMoveFacets(
     // of terminal event — a cross-kind tempo number (pawn pushes vs rook moves)
     // is incomparable, and a confidently wrong number is worse than silence.
     {
-      const race = readBoard('raceOfPlans', { fen: fenAfter, student: studentColorWB });
+      const race = readBoard('raceOfPlans', { fen: fenAfter, student: studentColorWB, register: REVIEW_WRITER.register });
       if (race) { basketFacet(race); const raw = facets[facets.length - 1]; recProof(raw, isProof(race.proof) ? race.proof : null); }
     }
   }
@@ -983,7 +983,7 @@ export function computeMoveFacets(
         const sacFailed = ctx.classification === 'mistake' || ctx.classification === 'blunder' || ctx.classification === 'miss';
         if (isStudent && !sacFailed) {
           sayFact(readBoard('sacMechanism', { sans: ctx.allSans, sacIdx: ply - 1 }), 'sac-why');
-          sayFact(readBoard('sacKingShield', { fenBefore, san }), 'sac-why');
+          if (studentColorWB) sayFact(readBoard('sacKingShield', { fenBefore, san, student: studentColorWB }), 'sac-why');
         }
       }
     }
@@ -995,7 +995,8 @@ export function computeMoveFacets(
   const goodish = ctx.classification === null || ctx.classification === 'good' || ctx.classification === 'book'
     || ctx.classification === 'great' || ctx.classification === 'excellent';
   if (isStudent && goodish && ctx.bestMoveSan && ctx.bestMoveSan.replace(/[+#!?]+$/, '') !== san.replace(/[+#!?]+$/, '')) {
-    if (studentColorWB) basketFacet(readBoard('contrast', { fenBefore, san, bestSan: ctx.bestMoveSan, student: studentColorWB }));
+    if (studentColorWB) basketFacet(readBoard('contrast', { fenBefore, san, bestSan: ctx.bestMoveSan, student: studentColorWB, unpricedCredit: REVIEW_WRITER.unpricedCredit,
+      costCp: ctx.costCp ?? (ctx.preMoveEval != null && ctx.evaluation != null && !isMateEval(ctx.preMoveEval) && !isMateEval(ctx.evaluation) ? (ctx.preMoveEval - ctx.evaluation) * (studentColorWB === 'w' ? 1 : -1) : null) }));
   }
 
   // ── 7d. TIMING (WO-LAYERS-01 step 7) — the student's move, played a turn

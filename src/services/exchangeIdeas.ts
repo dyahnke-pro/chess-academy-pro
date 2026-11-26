@@ -34,6 +34,7 @@ import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { lineSeatAt, withArticle } from '../utils/andList';
 import { imageryFor, type ImageryKey } from './factImagery';
 import { unmarked } from '../utils/sanMark';
+import { creditableCost } from './engineConstants';
 
 export type ExchangeIdeaId =
   | 'only-developed' | 'defender-trade' | 'exchange-for-attacker' | 'deny-exchange'
@@ -63,6 +64,34 @@ export const IDEA_KIND: Record<ExchangeIdeaId, ExchangeIdeaKind> = {
   'knight-squares': 'nugget',
   'c-pawn-block': 'nugget',
 };
+
+/** A read that CREDITS the student's move (its trade, its defence, its
+ *  safety). Exhaustive: a new read fails to compile until it says whether it
+ *  praises. A praise read speaks only on a move whose cost is KNOWN and under
+ *  an inaccuracy (learn-mistakes-only bug 3: Nxh5 at 115 cp and Bxf8 at 268 cp
+ *  were credited "trades off one of the pieces aimed at your king"). */
+export const PRAISES_THE_MOVE: Record<ExchangeIdeaId, boolean> = {
+  'only-developed': true,
+  'defender-trade': true,
+  'exchange-for-attacker': true,
+  'deny-exchange': true,
+  'abandoned-duty': true,
+  'trade-choice': false,
+  'spoil-their-pawns': true,
+  'maintenance-trade': true,
+  'prepare-recapture': true,
+  'threat-cost': true,
+  'simplest-win': false,
+  'safe-because': true,
+  'wing-for-centre': false,
+  'material-arithmetic': false,
+  'knight-squares': false,
+  'c-pawn-block': false,
+};
+
+// exchangeIdeas reads graded games only (Learn, Review, chat): an unpriced
+// move is not credited.
+const creditable = (costCp: number | null): boolean => creditableCost(costCp, 'refused');
 
 export interface ExchangeIdea {
   id: ExchangeIdeaId;
@@ -221,7 +250,7 @@ export function defenderTrade(fenBefore: string, san: string, student: Side): Ex
  *  minor piece that was attacking their king, accepting the recapture — kept
  *  only where the engine did not count it a mistake. */
 export function exchangeForAttacker(fenBefore: string, san: string, student: Side, costCp: number | null): ExchangeIdea | null {
-  if (costCp === null || costCp >= 50) return null;
+  if (!creditable(costCp)) return null;
   const before = load(fenBefore);
   const r = play(fenBefore, san);
   if (!before || !r || r.m.color !== student || r.m.piece !== 'r' || (r.m.captured !== 'n' && r.m.captured !== 'b')) return null;
@@ -272,7 +301,7 @@ function fileOpenedForRook(fen: string, take: Move, student: Side): { san: strin
  *  student's piece leaves the square where their minor could take it and
  *  force a pawn recapture that doubles the student's pawns. */
 export function denyExchange(fenBefore: string, san: string, student: Side, costCp: number | null): ExchangeIdea | null {
-  if (costCp !== null && costCp >= 50) return null;
+  if (!creditable(costCp)) return null;
   const r = play(fenBefore, san);
   if (!r || r.m.color !== student || r.m.captured || (r.m.piece !== 'n' && r.m.piece !== 'b')) return null;
   const asIf = asIfToMove(fenBefore, other(student));
@@ -417,7 +446,7 @@ export function spoilTheirPawns(fenBefore: string, san: string, student: Side): 
  *  was defended, so it takes a pawn and is taken back — it wins nothing, it
  *  only keeps the pawn count. */
 export function maintenanceTrade(fenBefore: string, san: string, student: Side, costCp: number | null): ExchangeIdea | null {
-  if (costCp !== null && costCp >= 50) return null;
+  if (!creditable(costCp)) return null;
   const r = play(fenBefore, san);
   if (!r || r.m.color !== student || r.m.piece !== 'p' || r.m.captured !== 'p') return null;
   const them = other(student);
@@ -435,7 +464,7 @@ export function maintenanceTrade(fenBefore: string, san: string, student: Side, 
  *  a square where their capture would otherwise force a doubling pawn
  *  recapture ("knight to e2 first, so a knight retakes on c3"). */
 export function prepareRecapture(fenBefore: string, san: string, student: Side, costCp: number | null): ExchangeIdea | null {
-  if (costCp !== null && costCp >= 50) return null;
+  if (!creditable(costCp)) return null;
   const r = play(fenBefore, san);
   if (!r || r.m.color !== student || r.m.captured || r.m.piece === 'p' || r.m.piece === 'k') return null;
   const asThemBefore = asIfToMove(fenBefore, other(student));
@@ -838,6 +867,7 @@ export function exchangeIdeas(input: ExchangeIdeasInput): ExchangeIdea[] {
     const studentBoard = afterStudent && afterStudent.move(san) ? afterStudent.fen() : null;
     const replied = !!studentBoard && boardKey(studentBoard) !== boardKey(input.fen);
     const studentPush = (x: ExchangeIdea | null): void => {
+      if (x && PRAISES_THE_MOVE[x.id] && !creditable(costCp)) return;
       if (x && replied && x.proof.line && studentBoard && boardKey(x.proof.line.fen) === boardKey(studentBoard)) return;
       push(x);
     };

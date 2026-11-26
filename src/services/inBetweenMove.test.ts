@@ -19,7 +19,7 @@ describe('the in-between move', () => {
     expect(readBoard('notYet', { fen: FEN, bestSan: 'Re8+', pv: PV, student: 'w' })?.text).toMatch(/^The capture on d5 is not going anywhere\. Not yet — first .* with check, and take after\.$/);
   });
   it('the live read carries its proof: the line through the capture, drawn and marked', () => {
-    const clause = depthClauses({ theory: true, fen: FEN, history: [], topLines: [{ moves: PV, evaluation: 300, mate: null }], studentColor: 'w', nameMove: true })
+    const clause = depthClauses({ theory: true, sound: null, fen: FEN, history: [], topLines: [{ moves: PV, evaluation: 300, mate: null }], studentColor: 'w', nameMove: true })
       .find((d) => d.kind === 'not-yet');
     expect(clause?.lines).toEqual([{ fen: FEN, sans: ['Re8+', 'Kh7', 'Bxd5'] }]);
     expect(clause?.squares).toEqual(['d5']);

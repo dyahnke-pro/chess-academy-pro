@@ -120,6 +120,21 @@ export function describeEvalCp(evaluation: number): string {
 
 /** At or above this, the move gave up enough to be called an inaccuracy. */
 export const INACCURACY_CP = 50;
+/** What an UNPRICED move is to the praise rule, decided by the surface
+ *  (`WriterSettings.unpricedCredit`): on a graded game (Learn, Review, chat) a
+ *  missing price is not proof the move was sound — 'refused'; a lesson's move
+ *  is a taught book line — 'taught-line', credited when unpriced. */
+export type UnpricedCredit = 'refused' | 'taught-line';
+
+/** THE ONE PRAISE RULE (learn-mistakes-only bug 3): a line that credits a
+ *  move — its trade, its recapture, its file, what it keeps — speaks only when
+ *  the move's cost is under an inaccuracy. A priced move over it is never
+ *  credited (four readers praised moves of 80–372 cp); an unpriced one only
+ *  where the surface says its moves are a taught line (`unpriced`). */
+export function creditableCost(costCp: number | null | undefined, unpriced: UnpricedCredit): boolean {
+  if (typeof costCp === 'number') return costCp < INACCURACY_CP;
+  return unpriced === 'taught-line';
+}
 /** At or above this, a mistake. */
 export const MISTAKE_CP = 100;
 /** At or above this, a blunder — unless the mover is still clearly winning. */

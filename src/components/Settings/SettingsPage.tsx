@@ -948,7 +948,7 @@ function ReviewRemindersSection({ profile, setProfile }: TabProps): JSX.Element 
 // ─── Coach Gameplay Section ──────────────────────────────────────────────────
 
 function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
-  const handleToggle = async (key: 'coachBlunderAlerts' | 'coachTacticAlerts' | 'coachPositionalTips' | 'coachMissedTacticTakeback' | 'coachReviewVoice' | 'coachInGameDiscussion' | 'coachedReview' | 'readingChallengesInReview' | 'calcHintVoice' | 'coachBoardMarkersOn' | 'skillLevelBars', value: boolean): Promise<void> => {
+  const handleToggle = async (key: 'coachBlunderAlerts' | 'coachTacticAlerts' | 'coachPositionalTips' | 'coachMissedTacticTakeback' | 'coachReviewVoice' | 'coachInGameDiscussion' | 'coachedReview' | 'readingChallengesInReview' | 'calcHintVoice' | 'coachBoardMarkersOn' | 'skillLevelBars' | 'rewardEffectsOn', value: boolean): Promise<void> => {
     const updatedPrefs = { ...profile.preferences, [key]: value };
     await db.profiles.update(profile.id, changedPreferences(profile.preferences, updatedPrefs));
     setProfile({ ...profile, preferences: updatedPrefs });
@@ -999,6 +999,13 @@ function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
         checked={profile.preferences.coachBoardMarkersOn ?? true}
         onChange={(v) => void handleToggle('coachBoardMarkersOn', v)}
         testId="coach-board-markers-toggle"
+      />
+      <ToggleRow
+        label="Coins & Celebrations"
+        tooltip="Coins, star bursts, the jackpot bar and their sounds. Off hides all of them on every screen; your progress keeps counting."
+        checked={profile.preferences.rewardEffectsOn ?? true}
+        onChange={(v) => void handleToggle('rewardEffectsOn', v)}
+        testId="reward-effects-toggle"
       />
       <ToggleRow
         label="Skill Level Bars"
