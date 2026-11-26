@@ -174,7 +174,7 @@ const ALTERNATIVE_BEFORE =
 // board: "Bb5 is the main move", "Masters also play Bc4 here", "…Nxd5 is a
 // known trap" (2026-11-12: "Bb5 is the main move. Masters also play Bc4"
 // moved the bishop to b5 on the plan's board and drew Bc4 from there).
-const ALTERNATIVE_AFTER = /^\s+(?:is|was|isn't)\s+(?:the\s+main\s+move|one\s+of\s+the\s+main\s+moves|a\s+known\s+(?:mistake|trap)|the\s+usual)/i;
+const ALTERNATIVE_AFTER = /^\s+(?:is|was|isn't)\s+(?:the\s+main\s+move|one\s+of\s+the\s+main\s+moves|the\s+other\s+road|a\s+known\s+(?:mistake|trap)|the\s+usual)/i;
 
 // NO CAP (David 2026-08-10: "If the coach says a move or square they need to be
 // arrowed or highlighted… Remove all caps. We can add them back on once I see
