@@ -49,6 +49,16 @@ const FAMOUS: Famous[] = [
   { name: 'Halosar Trap', line: 'd4 d5 e4 dxe4 Nc3 Nf6 f3 exf3 Qxf3 Qxd4 Be3 Qb4 O-O-O', slip: 'Bg4', slipBy: 'b' },
   { name: 'Wurzburger Trap', line: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 d3 Qh4+ g3', slip: 'Nxg3', slipBy: 'b' },
 ];
+// WIKIPEDIA'S "LIST OF CHESS TRAPS" (data/sources/drive, reference only) — the
+// named traps it lists, plus Fool's and Scholar's mate from its See also. The
+// three it lists that the 23 above do not carry, on the moves its articles give.
+const WIKI_LIST = new Set(["Légal's mate", "Scholar's mate", "Fool's mate", 'Elephant Trap', 'Englund Gambit trap', 'Lasker Trap (Albin)', 'Blackburne Shilling', "Noah's Ark", 'Kieninger Trap', 'Siberian Trap', 'Mortimer Trap', 'Tarrasch Trap', 'Fishing Pole', 'Magnus Smith Trap', 'Halosar Trap', 'Wurzburger Trap', 'Monticelli Trap', 'Marshall Trap (Petrov)', 'Rubinstein Trap']);
+const WIKI_EXTRA: Famous[] = [
+  { name: 'Monticelli Trap', line: 'd4 Nf6 c4 e6 Nf3 Bb4+ Bd2 Bxd2+ Qxd2 b6 g3 Bb7 Bg2 O-O Nc3 Ne4 Qc2', slip: 'Nxc3', slipBy: 'b' },
+  { name: 'Marshall Trap (Petrov)', line: 'e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 d4 d5 Bd3 Bd6 O-O O-O c4 Bg4 cxd5 f5', slip: 'Re1', slipBy: 'w' },
+  { name: 'Rubinstein Trap', line: 'd4 d5 Nf3 Nf6 c4 e6 Bg5 Nbd7 e3 Be7 Nc3 O-O Rc1 Re8 Qc2 a6 cxd5 exd5 Bd3 c6 O-O Ne4 Bf4', slip: 'f5', slipBy: 'b' },
+];
+
 // THE NAMED-TRAP LESSONS: each lesson's slip, from the seat the lesson teaches
 // (a weapon: the opponent slips; a warning: the student must not). The line is
 // checked against the lesson's own moves so the measure cannot drift from it.
@@ -118,7 +128,8 @@ describe.runIf(!!process.env.TRAP_RECALL && existsSync('node_modules/stockfish/b
     mkdirSync('audit-reports', { recursive: true });
     writeFileSync('audit-reports/theory-trap-recall.progress', '');
     setKnownSlipIndexForTests((JSON.parse(readFileSync('public/data/club-gems.json', 'utf8')) as { boards: never }).boards);
-    for (const f of FAMOUS) {
+    let wikiTraps = 0;
+    for (const f of [...FAMOUS, ...WIKI_EXTRA]) {
       const c = new Chess();
       let ok = true;
       for (const s of f.line.split(' ')) { try { c.move(s); } catch { ok = false; break; } }
@@ -135,7 +146,8 @@ describe.runIf(!!process.env.TRAP_RECALL && existsSync('node_modules/stockfish/b
       const punishSeq = f.punish ? f.punish.split(' ') : pr.seq;
       const source = indexed ? 'index' : 'engine';
       const kind = classifySlip({ engineCp: read.cp, line: { fen: fenBefore, slip: f.slip, punish: punishSeq } });
-      if (kind === 'trap') traps += 1;
+      if (kind === 'trap' && FAMOUS.includes(f)) traps += 1;
+      if (kind === 'trap' && WIKI_LIST.has(f.name)) wikiTraps += 1;
       const sentence = trapLine({ fen: fenBefore, slip: f.slip, punish: punishSeq, slipBy: 'opponent' })?.text ?? '(no blow to name)';
       appendFileSync('audit-reports/theory-trap-recall.progress', `${f.name}\n`);
       rows.push(`${f.name}: ${kind ?? 'not a slip'} (${read.cp >= MATE_CP / 10 ? 'mate' : `${read.cp}cp`}, ${source}) — ${sentence}`);
@@ -167,7 +179,7 @@ describe.runIf(!!process.env.TRAP_RECALL && existsSync('node_modules/stockfish/b
       lrows.push(`${l.id}: ${ok ? 'works' : 'FAILS'} (${kind ?? 'not a slip'}${shared ? '' : ', line not the lesson\'s'}${seatOk ? '' : ', wrong-seat wording'}) — ${t?.text ?? '(no sentence)'}`);
     }
     mkdirSync('audit-reports', { recursive: true });
-    const text = `Famous traps called a trap: ${traps} of ${FAMOUS.length}\n${rows.join('\n')}\n\nNamed-trap lessons that work: ${work} of ${LESSONS.length}\n${lrows.join('\n')}\n`;
+    const text = `Famous traps called a trap: ${traps} of ${FAMOUS.length}\nWikipedia's List of chess traps called a trap: ${wikiTraps} of ${WIKI_LIST.size}\n${rows.join('\n')}\n\nNamed-trap lessons that work: ${work} of ${LESSONS.length}\n${lrows.join('\n')}\n`;
     writeFileSync('audit-reports/theory-trap-recall.md', text);
     console.log(text);
   }, 7_200_000);
