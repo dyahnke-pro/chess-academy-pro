@@ -126,3 +126,22 @@ describe('trapRead — a trap behind any road masters play', () => {
     expect(r?.text).not.toMatch(/usual reply/);
   });
 });
+
+describe('gambitAcceptedRead — the offered pawn taken', () => {
+  it('the Slav\'s …dxc4 takes the offered pawn; a capture taken back is no gambit', async () => {
+    const { gambitAcceptedRead } = await import('./theoryReads');
+    expect(gambitAcceptedRead({ fenBefore: fenOf(['d4', 'd5', 'c4', 'c6', 'Nf3', 'Nf6', 'Nc3']), san: 'dxc4', mover: 'b' })?.text)
+      .toBe('…dxc4 takes the offered pawn: the gambit accepted. Now White plays for the time and the open lines it paid for.');
+    expect(gambitAcceptedRead({ fenBefore: fenOf(['e4', 'd5']), san: 'exd5', mover: 'w' })).toBeNull();
+  });
+});
+
+describe('endgameRead — the queen trade on a road ahead', () => {
+  it('the Caro-Kann d3 line: after …dxe4 and dxe4, the queens come off', async () => {
+    const { endgameRead } = await import('./theoryReads');
+    const plies = (f: string): number => (Number(f.split(' ')[5]) - 1) * 2 + (f.split(' ')[1] === 'b' ? 1 : 0);
+    const chain: Record<number, string> = { 5: 'dxe4', 6: 'dxe4', 7: 'Qxd1+' };
+    const r = endgameRead({ fenBefore: fenOf(['e4', 'c6', 'd3', 'd5']), san: 'Nf3', movesAt: (f) => (chain[plies(f)] ? [{ san: chain[plies(f)], games: 50 } as never] : null) });
+    expect(r?.text).toBe('After …dxe4 and dxe4, …Qxd1 trades the queens: an early endgame is one of the roads from here.');
+  });
+});

@@ -153,14 +153,31 @@ export function endgameRead(i: { fenBefore: string; san: string; movesAt?: (fen:
   if (!was || !now) return null;
   if (was.queensOn && !now.queensOn) return { text: 'The queens come off, so the game heads for an endgame: the pawn structure and an active king decide it now.', squares: [] };
   if (!was.queensOn && !now.queensOn) return { text: 'With the queens off the board, this is already an endgame in spirit: the pawn structure and the king\'s activity matter more than an attack.', squares: [] };
-  const roads = i.movesAt?.(after) ?? [];
-  const total = roads.reduce((n, m) => n + m.games, 0);
-  const top = [...roads].sort((a, b) => b.games - a.games)[0];
-  if (top && total > 0 && top.games / total >= 0.3) {
-    const c = new Chess(after);
-    let mv;
-    try { mv = c.move(top.san); } catch { return null; }
-    if (mv.captured === 'q' && mv.piece === 'q') return { text: `The usual reply ${mv.color === 'b' ? '…' : ''}${top.san.replace(/[+#]$/, '')} trades the queens: the game is heading for an endgame.`, squares: [mv.to] };
+  // The queens trade on a road masters play, up to three moves ahead (a road
+  // from 10% of their games at its board).
+  if (!i.movesAt) return null;
+  type Node = { fen: string; sans: string[] };
+  let frontier: Node[] = [{ fen: after, sans: [] }];
+  for (let depth = 1; depth <= 3; depth += 1) {
+    const next: Node[] = [];
+    for (const node of frontier) {
+      const roads = i.movesAt(node.fen) ?? [];
+      const total = roads.reduce((n, m) => n + m.games, 0);
+      for (const r of [...roads].sort((a, b) => b.games - a.games)) {
+        if (total === 0 || r.games / total < 0.1) break;
+        const c = new Chess(node.fen);
+        let mv;
+        try { mv = c.move(r.san); } catch { continue; }
+        const said = `${mv.color === 'b' ? '…' : ''}${r.san.replace(/[+#]$/, '')}`;
+        if (mv.captured === 'q' && mv.piece === 'q') {
+          return node.sans.length === 0 && r.games / total >= 0.3
+            ? { text: `The usual reply ${said} trades the queens: the game is heading for an endgame.`, squares: [mv.to] }
+            : { text: `${node.sans.length ? `After ${andList(node.sans)}, ` : ''}${said} trades the queens: an early endgame is one of the roads from here.`, squares: [mv.to] };
+        }
+        next.push({ fen: c.fen(), sans: [...node.sans, said] });
+      }
+    }
+    frontier = next;
   }
   return null;
 }
@@ -368,7 +385,7 @@ export function theoryExtras(i: {
   const turn = composeTheoryTurn({
     fen: i.fenBefore, san: i.san, mover: i.mover, whose: 'your', roads: [],
     structure: once('structure', structureRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover, prior: priorOf(i.history) }) ?? centreRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })),
-    gambit: once('gambit', gambitRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover }) ?? gambitAheadRead({ fen: (() => { const c = new Chess(i.fenBefore); c.move(i.san); return c.fen(); })(), movesAt: i.movesAt }) ?? gambitStandingRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })),
+    gambit: once('gambit', gambitRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover }) ?? gambitAcceptedRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover }) ?? gambitAheadRead({ fen: (() => { const c = new Chess(i.fenBefore); c.move(i.san); return c.fen(); })(), movesAt: i.movesAt }) ?? gambitStandingRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })),
     endgame: once('endgame', endgameRead({ fenBefore: i.fenBefore, san: i.san, movesAt: i.movesAt })),
     namedRoads: fresh(namedRoadsRead({ fen: (() => { const c = new Chess(i.fenBefore); c.move(i.san); return c.fen(); })(), movesAt: i.movesAt })),
     moveOrder: fresh(moveOrderRead({ history: [...i.history, i.san], student: i.mover }) ?? transpositionRead({ history: [...i.history, i.san], movesAt: i.movesAt })),
@@ -454,6 +471,20 @@ function balance(c: Chess): { pawns: number; pieces: number } {
   }
   return { pawns, pieces };
 }
+/** THE GAMBIT ACCEPTED: the move takes a pawn with the material level before
+ *  it, and nothing takes back on that square — the pawn was offered. */
+export function gambitAcceptedRead(i: { fenBefore: string; san: string; mover: Color }): TheoryRead | null {
+  let b: Chess; let a: Chess; let mv;
+  try { b = new Chess(i.fenBefore); a = new Chess(i.fenBefore); mv = a.move(i.san); } catch { return null; }
+  if (mv.captured !== 'p') return null;
+  const was = balance(b);
+  if (was.pawns !== 0 || was.pieces !== 0) return null;
+  const them: Color = i.mover === 'w' ? 'b' : 'w';
+  if (a.attackers(mv.to as never, them).length > 0) return null;
+  const said = `${i.mover === 'b' ? '…' : ''}${mv.san.replace(/[+#]$/, '')}`;
+  return { text: `${said} takes the offered pawn: the gambit accepted. Now ${them === 'w' ? 'White' : 'Black'} plays for the time and the open lines it paid for.`, squares: [mv.to] };
+}
+
 /** THE GAMBIT STANDING: one side is a pawn or two down, the pieces level, and
  *  it was so before the move too (a capture waiting to be taken back is not a
  *  standing). Said from the board: who gave the pawn and what it buys. */
