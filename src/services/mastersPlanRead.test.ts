@@ -2,7 +2,8 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync, existsSync } from 'node:fs';
 import { Chess } from 'chess.js';
-import { mastersPlanRead, mastersPlanLine, planStillAhead, mastersBreakIdea, MIN_ROOT_GAMES, type MovesAt, type MastersPlanRead } from './mastersPlanRead';
+import { mastersPlanLine } from './theoryComposer';
+import { mastersPlanRead, planStillAhead, mastersBreakIdea, MIN_ROOT_GAMES, type MovesAt, type MastersPlanRead } from './mastersPlanRead';
 
 const key = (f: string): string => f.split(' ').slice(0, 4).join(' ');
 const fenOf = (line: string): string => { const c = new Chess(); line.split(' ').filter(Boolean).forEach((m) => c.move(m)); return c.fen(); };
@@ -21,8 +22,9 @@ describe('mastersPlanRead — the break master games go for', () => {
     const r = mastersPlanRead(fenOf('e4 e6 d4 d5 e5'), at);
     expect(r?.black?.san).toBe('c5');
     expect(r!.black!.share).toBeCloseTo(0.9, 2);
-    expect(mastersPlanLine(r, 'b', null)?.text).toBe('The plan in this structure: your break is …c5 — masters from here almost always play it.');
-    expect(mastersPlanLine(r, 'w', null)?.text).toBe('The plan in this structure: their break is …c5.');
+    // Said by its goal, never by how many masters play it (theoryComposer).
+    expect(mastersPlanLine(r, 'b', null)?.text).toBe('Your plan builds to …c5.');
+    expect(mastersPlanLine(r, 'w', null)?.text).toBe('Their plan builds to …c5.');
   });
 
   it('taking the pawn that just arrived answers their break — it is not a break (walk 2026-09-30)', () => {
@@ -90,10 +92,10 @@ describe('a live board holds the student plan step that is their next move (Davi
   // 1.e4 c5 2.d4 cxd4 3.c3 dxc3 — White to move, Bc4 legal: "your bishop on f1
   // usually goes to c4 (Bc4)" named his next move.
   const fen = 'rnbqkbnr/pp1ppppp/8/8/4P3/2p5/PP3PPP/RNBQKBNR w KQkq - 0 4';
-  const read = { white: null, black: null, whitePiece: { piece: 'b', from: 'f1', to: 'c4', san: 'Bc4', weight: 1 }, blackPiece: null } as unknown as MastersPlanRead;
+  const read = { white: null, black: null, whitePiece: { piece: 'b', from: 'f1', to: 'c4', san: 'Bc4', weight: 1, fen, color: 'w' }, blackPiece: null } as unknown as MastersPlanRead;
   it('held on the live board, named in review', () => {
     expect(mastersPlanLine(read, 'w', fen)).toBeNull();
-    expect(mastersPlanLine(read, 'w', null)?.text).toMatch(/c4/);
+    expect(mastersPlanLine(read, 'w', null)?.text).toMatch(/^Your bishop belongs on c4: it /);
   });
 });
 

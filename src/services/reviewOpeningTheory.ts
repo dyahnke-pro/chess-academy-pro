@@ -31,7 +31,8 @@ import { readBoard, sayOnce } from './boardComputers';
 import repertoire from '../data/repertoire.json';
 import { bookMoveWhy } from './bookMoveWhy';
 import { openingEquivalence } from './openingEquivalence';
-import { mastersPlanRead, mastersPlanLine, planStillAhead, type MastersPlanRead, type MovesAt } from './mastersPlanRead';
+import { mastersPlanLine } from './theoryComposer';
+import { mastersPlanRead, planStillAhead, type MastersPlanRead, type MovesAt } from './mastersPlanRead';
 import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
 import { noteArrowSourceAt } from './openingGenerator';
 import { loadFarmedCorpora } from './farmedCorpusData';
@@ -1121,8 +1122,10 @@ export function buildTheoryLectureBeats(
   // name the moves: the game is over. The curated idea (seat-matched by the
   // caller) speaks only when the masters' data says nothing.
   const seat: 'w' | 'b' = studentColor === 'black' ? 'b' : 'w';
-  const planText = studentColor ? mastersPlanLine(lecture.planRead, seat, null)?.text ?? null : null;
   const character = studentColor ? characterLine(lecture.planRead, seat) : null;
+  // Castling is said once: the character line carries it where it speaks.
+  const castlingSaid = new Set(character && /castle/i.test(character) ? ['castle:your', 'castle:their'] : []);
+  const planText = studentColor ? mastersPlanLine(lecture.planRead, seat, null, castlingSaid)?.text ?? null : null;
   const computed = [planText, character].filter(Boolean).join(' ');
   const curated = ideas[0] ? `The takeaway for this opening: ${ideas[0].replace(/[.!?]?\s*$/, '.')}` : '';
   // The summary closes it: did the student get the break this opening is for?

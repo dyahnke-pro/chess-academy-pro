@@ -24,6 +24,7 @@ import type { LocalDbMove } from './masterPlayLookup';
 import { trapLine, type TrapLine } from './trapLine';
 import type { FactSeat } from './coachFact';
 import { andList } from '../utils/andList';
+import type { MastersPlanRead, PlanBreak } from './mastersPlanRead';
 
 /** A move of the mover's on the way to a plan's goal. */
 export interface KeyMove { san: string; piece: string; color: Color }
@@ -159,3 +160,61 @@ export function roadsFrom(moves: readonly LocalDbMove[] | null): RoadRead[] {
 export function legalOn(fen: string, san: string): boolean {
   try { new Chess(fen).move(san); return true; } catch { return false; }
 }
+
+// THE PLAN AS THE STUDENT HEARS IT (moved from mastersPlanRead, which stays a
+// leaf the offline builders run under node).
+/** The sentence, from the student's seat. Null when neither side has a break
+ *  master games agree on. */
+export function mastersPlanLine(
+  read: MastersPlanRead | null,
+  student: 'w' | 'b',
+  /** REQUIRED — the board a live surface speaks on, or null where the move may
+   *  be named (review: the game is over). On a live board a step of the
+   *  student's that is LEGAL right now is their next move, so it is held
+   *  (David's Smith-Morra replay 2026-10-19, move 3: "your bishop on f1 usually
+   *  goes to c4 (Bc4)" with Bc4 legal — LEARN NAMES NO MOVE UNASKED). */
+  holdPlayableOn: string | null,
+  /** Claims already spoken (castling is said once). */
+  said?: ReadonlySet<string>,
+): { text: string; squares: string[]; arrows: Array<{ from: string; to: string }>; claims: string[] } | null {
+  if (!read) return null;
+  const playable = (step: { from: string; square?: string; to?: string } | null | undefined): boolean => {
+    if (!step || !holdPlayableOn) return false;
+    try {
+      const c = new Chess(holdPlayableOn);
+      if (c.turn() !== student) return false;
+      return c.moves({ verbose: true }).some((m) => m.from === step.from && m.to === (step.to ?? step.square));
+    } catch { return false; }
+  };
+  const them: 'w' | 'b' = student === 'w' ? 'b' : 'w';
+  const mineRaw = student === 'w' ? read.white : read.black;
+  const mine = playable(mineRaw) ? null : mineRaw;
+  const theirs = student === 'w' ? read.black : read.white;
+  const myPieceRaw = student === 'w' ? read.whitePiece : read.blackPiece;
+  const myPiece = playable(myPieceRaw) ? null : myPieceRaw;
+  const myCastle = student === 'w' ? read.whiteCastle : read.blackCastle;
+  const sentences: string[] = [];
+  const squares: string[] = [];
+  const arrows: Array<{ from: string; to: string }> = [];
+  const claims: string[] = [];
+  const goalOf = (br: PlanBreak, side: 'w' | 'b'): { san: string; piece: string; color: 'w' | 'b' } => ({ san: br.san, piece: 'p', color: side });
+  if (mine) {
+    sentences.push(planGoalLine({ whose: 'your', goal: goalOf(mine, student), lead: mine.lead ?? [] }));
+    squares.push(mine.square); arrows.push({ from: mine.from, to: mine.square });
+  }
+  if (myPiece?.fen && myPiece.color) {
+    const t = pieceHomeLine({ whose: 'your', piece: { piece: myPiece.piece, to: myPiece.to, san: myPiece.san, color: myPiece.color, fen: myPiece.fen } });
+    if (t) { sentences.push(t); squares.push(myPiece.to); arrows.push({ from: myPiece.from, to: myPiece.to }); }
+  }
+  if (myCastle && (mine || myPiece)) {
+    const c = castleOnce({ whose: 'your', side: myCastle.side, said: said ?? new Set() });
+    if (c) { sentences.push(c.text); claims.push(c.claim); }
+  }
+  if (theirs) {
+    sentences.push(planGoalLine({ whose: 'their', goal: goalOf(theirs, them), lead: theirs.lead ?? [] }));
+    squares.push(theirs.square); arrows.push({ from: theirs.from, to: theirs.square });
+  }
+  if (!sentences.length) return null;
+  return { text: sentences.join(' '), squares, arrows, claims };
+}
+

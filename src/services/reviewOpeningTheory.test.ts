@@ -452,7 +452,7 @@ describe('the review opening section in his style (David 2026-10-19)', () => {
       whitePiece: null, blackPiece: null, whiteCastle: { side: 'long', share: 0.7 }, blackCastle: { side: 'short', share: 0.8 },
     };
     const outro = buildTheoryLectureBeats(lec!, ['a seat-blind curated idea'], 'black').find((b) => b.kind === 'outro');
-    expect(outro?.fact).toBe('The plan in this structure: your break is …f5 — masters from here usually play it, and theirs is d4. Masters castle on opposite wings here — you short, they long — so the middlegame is a race: each side throws its pawns at the other king.');
+    expect(outro?.fact).toBe('Your plan builds to …f5. Their plan builds to d4. Masters castle on opposite wings here — you short, they long — so the middlegame is a race: each side throws its pawns at the other king.');
   });
 });
 
