@@ -35,6 +35,44 @@ export interface TheoryRead {
   slipPlayed?: boolean;
 }
 
+/** THE ROADS AHEAD — the one walk the theory reads share (transpositions,
+ *  a gambit ahead, the queens coming off): the masters' moves from `fen`,
+ *  shallowest first, up to three moves deep. A road at the next move counts
+ *  from 2% of their games (the named-roads bar), a deeper one from 5%. `visit`
+ *  sees each step with the moves that reach it (said with their "…") and the
+ *  board before it; the first sentence it returns is the read. */
+export const ROAD_BAR_NEXT = 0.02;
+export const ROAD_BAR_DEEPER = 0.05;
+export function walkRoadsAhead<T>(
+  fen: string,
+  history: readonly string[],
+  movesAt: (fen: string) => readonly LocalDbMove[] | null,
+  visit: (step: { move: Move; before: string; after: Chess; sans: string[]; history: string[]; share: number }) => T | null,
+): T | null {
+  type Node = { fen: string; sans: string[]; history: string[] };
+  let frontier: Node[] = [{ fen, sans: [], history: [...history] }];
+  for (let depth = 1; depth <= 3; depth += 1) {
+    const next: Node[] = [];
+    for (const node of frontier) {
+      const roads = movesAt(node.fen) ?? [];
+      const total = roads.reduce((n, m) => n + m.games, 0);
+      for (const r of [...roads].sort((a, b) => b.games - a.games)) {
+        if (total === 0 || r.games / total < (depth === 1 ? ROAD_BAR_NEXT : ROAD_BAR_DEEPER)) break;
+        const c = new Chess(node.fen);
+        let mv: Move;
+        try { mv = c.move(r.san); } catch { continue; }
+        const sans = [...node.sans, `${mv.color === 'b' ? '…' : ''}${r.san.replace(/[+#]$/, '')}`];
+        const hist = [...node.history, r.san];
+        const hit = visit({ move: mv, before: node.fen, after: c, sans, history: hist, share: r.games / total });
+        if (hit) return hit;
+        next.push({ fen: c.fen(), sans, history: hist });
+      }
+    }
+    frontier = next;
+  }
+  return null;
+}
+
 const FILE_NAME: Record<string, string> = { a: 'a', b: 'b', c: 'c', d: 'd', e: 'e', f: 'f', g: 'g', h: 'h' };
 
 /** The pawn structure the move made: a NAMED one (Carlsbad, Maroczy…), else a
@@ -202,33 +240,15 @@ export function endgameRead(i: { fenBefore: string; san: string; movesAt?: (fen:
   if (!was || !now) return null;
   if (was.queensOn && !now.queensOn) return { text: 'The queens come off, so the game heads for an endgame: the pawn structure and an active king decide it now.', squares: [] };
   if (!was.queensOn && !now.queensOn) return { text: 'With the queens off the board, this is already an endgame in spirit: the pawn structure and the king\'s activity matter more than an attack.', squares: [] };
-  // The queens trade on a road masters play, up to three moves ahead (a road
-  // from 10% of their games at its board).
+  // The queens trade on a road masters play, up to three moves ahead.
   if (!i.movesAt) return null;
-  type Node = { fen: string; sans: string[] };
-  let frontier: Node[] = [{ fen: after, sans: [] }];
-  for (let depth = 1; depth <= 3; depth += 1) {
-    const next: Node[] = [];
-    for (const node of frontier) {
-      const roads = i.movesAt(node.fen) ?? [];
-      const total = roads.reduce((n, m) => n + m.games, 0);
-      for (const r of [...roads].sort((a, b) => b.games - a.games)) {
-        if (total === 0 || r.games / total < 0.1) break;
-        const c = new Chess(node.fen);
-        let mv;
-        try { mv = c.move(r.san); } catch { continue; }
-        const said = `${mv.color === 'b' ? '…' : ''}${r.san.replace(/[+#]$/, '')}`;
-        if (mv.captured === 'q' && mv.piece === 'q') {
-          return node.sans.length === 0 && r.games / total >= 0.3
-            ? { text: `The usual reply ${said} trades the queens: the game is heading for an endgame.`, squares: [mv.to] }
-            : { text: `${node.sans.length ? `After ${andList(node.sans)}, ` : ''}${said} trades the queens: an early endgame is one of the roads from here.`, squares: [mv.to] };
-        }
-        next.push({ fen: c.fen(), sans: [...node.sans, said] });
-      }
-    }
-    frontier = next;
-  }
-  return null;
+  return walkRoadsAhead(after, [], i.movesAt, ({ move, sans, share }) => {
+    if (move.captured !== 'q' || move.piece !== 'q') return null;
+    const said = sans[sans.length - 1];
+    return sans.length === 1 && share >= 0.3
+      ? { text: `The usual reply ${said} trades the queens: the game is heading for an endgame.`, squares: [move.to] }
+      : { text: `${sans.length > 1 ? `After ${andList(sans.slice(0, -1))}, ` : ''}${said} trades the queens: an early endgame is one of the roads from here.`, squares: [move.to] };
+  });
 }
 
 /** The board is a named opening reached another way, or the same one with the
@@ -249,37 +269,16 @@ export function transpositionRead(i: { history: readonly string[]; movesAt: (fen
   try { for (const s of i.history) c.move(s); } catch { return null; }
   const now = (openingAtPosition(c.fen())?.plies ?? 0) >= i.history.length ? transposedOpening(c.fen(), i.history.length, detectOpeningByOrder([...i.history])) : null;
   if (now) return { text: `This transposes into ${theName(now)}: the same position by another move order.`, squares: [] };
-  // The masters' roads ahead, shallowest first: a road at the next move counts
-  // from 2% of their games (the named-roads bar), a deeper one from 5%.
-  type Node = { fen: string; sans: string[]; history: string[] };
-  let frontier: Node[] = [{ fen: c.fen(), sans: [], history: [...i.history] }];
-  for (let depth = 1; depth <= 3; depth += 1) {
-    const next: Node[] = [];
-    for (const node of frontier) {
-      const roads = i.movesAt(node.fen) ?? [];
-      const total = roads.reduce((n, m) => n + m.games, 0);
-      for (const r of [...roads].sort((a, b) => b.games - a.games)) {
-        if (total === 0 || r.games / total < (depth === 1 ? 0.02 : 0.05)) break;
-        const n2 = new Chess(node.fen);
-        let mv;
-        try { mv = n2.move(r.san); } catch { continue; }
-        const said = `${mv.color === 'b' ? '…' : ''}${r.san.replace(/[+#]$/, '')}`;
-        const history = [...node.history, r.san];
-        // A named board the index reaches in fewer moves than the road takes
-        // is the same board with tempi wasted, not a transposition.
-        const into = (openingAtPosition(n2.fen())?.plies ?? 0) >= history.length ? transposedOpening(n2.fen(), history.length, detectOpeningByOrder(history)) : null;
-        const sans = [...node.sans, said];
-        if (into) {
-          return sans.length === 1
-            ? { text: `If the reply is ${sans[0]}, the game transposes into ${theName(into)}.`, squares: [mv.to] }
-            : { text: `After ${andList(sans)}, the game transposes into ${theName(into)}.`, squares: [mv.to] };
-        }
-        next.push({ fen: n2.fen(), sans, history });
-      }
-    }
-    frontier = next;
-  }
-  return null;
+  // The masters' roads ahead (`walkRoadsAhead`).
+  return walkRoadsAhead(c.fen(), i.history, i.movesAt, ({ move, after, sans, history }) => {
+    // A named board the index reaches in fewer moves than the road takes is
+    // the same board with tempi wasted, not a transposition.
+    const into = (openingAtPosition(after.fen())?.plies ?? 0) >= history.length ? transposedOpening(after.fen(), history.length, detectOpeningByOrder(history)) : null;
+    if (!into) return null;
+    return sans.length === 1
+      ? { text: `If the reply is ${sans[0]}, the game transposes into ${theName(into)}.`, squares: [move.to] }
+      : { text: `After ${andList(sans)}, the game transposes into ${theName(into)}.`, squares: [move.to] };
+  });
 }
 
 const PIECE_NAME: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
@@ -477,34 +476,15 @@ export function gambitAheadRead(i: { fen: string; movesAt: (fen: string) => read
     }
     return null;
   }
-  // The masters' roads, up to three moves ahead: the next move from 2% of
-  // their games, a deeper one from 10%.
-  type Node = { fen: string; sans: string[] };
-  let frontier: Node[] = [{ fen: i.fen, sans: [] }];
-  for (let depth = 1; depth <= 3; depth += 1) {
-    const next: Node[] = [];
-    for (const node of frontier) {
-      const rs = i.movesAt(node.fen) ?? [];
-      const total = rs.reduce((n, m) => n + m.games, 0);
-      for (const r of [...rs].sort((x, y) => y.games - x.games)) {
-        if (total === 0 || r.games / total < (depth === 1 ? 0.02 : 0.1)) break;
-        const c = new Chess(node.fen);
-        let mv;
-        try { mv = c.move(r.san); } catch { continue; }
-        const g = gambitOf(c.fen());
-        const sans = [...node.sans, said(mv)];
-        if (g) {
-          const offer = offerOf(node.fen, r.san, mv.color);
-          return sans.length === 1
-            ? { text: `${sans[0]} is the ${g}${tail(offer)}`, squares: [mv.to, ...(offer ? [offer] : [])] }
-            : { text: `After ${andList(sans.slice(0, -1))}, ${sans[sans.length - 1]} is the ${g}${tail(offer)}`, squares: [mv.to, ...(offer ? [offer] : [])] };
-        }
-        next.push({ fen: c.fen(), sans });
-      }
-    }
-    frontier = next;
-  }
-  return null;
+  // The masters' roads ahead (`walkRoadsAhead`).
+  return walkRoadsAhead(i.fen, [], i.movesAt, ({ move, before, after, sans }) => {
+    const g = gambitOf(after.fen());
+    if (!g) return null;
+    const offer = offerOf(before, move.san, move.color);
+    return sans.length === 1
+      ? { text: `${sans[0]} is the ${g}${tail(offer)}`, squares: [move.to, ...(offer ? [offer] : [])] }
+      : { text: `After ${andList(sans.slice(0, -1))}, ${sans[sans.length - 1]} is the ${g}${tail(offer)}`, squares: [move.to, ...(offer ? [offer] : [])] };
+  });
 }
 
 const CENTRE: string[] = ['d4', 'e4', 'd5', 'e5'];
