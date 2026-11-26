@@ -10,6 +10,7 @@ import { lockedPawnPairs, structureSignature } from './boardStructure';
 import { openingEquivalence } from './openingEquivalence';
 import { pawnMajority } from './pawnMajority';
 import { inFluxAfter } from './boardState';
+import { findHangingBySee } from './positionReadingService';
 import { openingAtPosition } from './openingPositions';
 import { transposedOpening } from './openingPositions';
 import { detectOpeningByOrder } from './openingDetectionService';
@@ -251,6 +252,28 @@ export function pieceJobRead(i: { fenBefore: string; san: string; mover: Color }
   return { text: `${PIECE_NAME[mv.piece].charAt(0).toUpperCase()}${PIECE_NAME[mv.piece].slice(1)} to ${mv.to}. It ${clause.replace(/^it /, '')}.`.replace(/^(\w+) to (\w+)\. It /, '$1 on $2: it '), squares: [mv.to] };
 }
 
+const PIECE_WORD: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
+/** The move leaves one of the mover's pieces to be won by the exchange count. */
+export function hangsRead(fenBefore: string, san: string, mover: Color): TheoryRead | null {
+  let a: Chess; let mv;
+  try { a = new Chess(fenBefore); mv = a.move(san); } catch { return null; }
+  if (a.inCheck() || inFluxAfter(fenBefore, san)) return null;
+  const was = new Set(findHangingBySee(fenBefore).filter((h) => h.color === mover).map((h) => h.square));
+  const now = findHangingBySee(a.fen()).filter((h) => h.color === mover && h.gain >= 2 && !was.has(h.square));
+  const h = now.sort((x, y) => y.gain - x.gain)[0];
+  if (!h) return null;
+  const them: Color = mover === 'w' ? 'b' : 'w';
+  const takes = a.moves({ verbose: true }).filter((m) => m.to === h.square && m.color === them)
+    .sort((x, y) => (VAL[x.piece] ?? 10) - (VAL[y.piece] ?? 10))[0];
+  if (!takes) return null;
+  const said = `${them === 'b' ? '…' : ''}${takes.san.replace(/[+#]$/, '')}`;
+  // A guarded piece that loses the exchange is "won", never "hanging".
+  // A rook for a minor piece is the exchange.
+  const what = h.gain < 3 ? (h.piece === 'r' && VAL[takes.piece] === 3 ? 'the exchange' : null) : `the ${PIECE_WORD[h.piece]} on ${h.square}`;
+  if (!what) return null;
+  return { text: h.defended || h.gain < 3 ? `That lets ${said} win ${what}.` : `That leaves the ${PIECE_WORD[h.piece]} on ${h.square} hanging: ${said} wins it.`, squares: [h.square] };
+}
+
 /** THE TRAPS AROUND THE MOVE, from the one known-slip index (`slipsAt` —
  *  `knownSlips.knownSlipsAt`: the club index, the curated gems where it holds
  *  none): the move played IS a known slip; a slip is available on this board;
@@ -269,6 +292,11 @@ export function trapRead(i: { fenBefore: string; san: string; mover: Color; slip
     if (!t) return null;
     return { text: slipBy(slipper) === 'student' ? t.text : `${lead(kind)}${t.text}`, squares: t.squares };
   };
+  // 0. The move itself leaves a piece hanging: a piece of the mover's that the
+  // other side wins by the exchange count (a minor piece's worth or more), and
+  // that was not hanging before the move. Never on a check or a trade in flight.
+  const hung = hangsRead(i.fenBefore, i.san, i.mover);
+  if (hung) return hung;
   // 1. The move played is a known slip.
   const slipHere = i.slipsAt(i.fenBefore).find((g) => g.slip.replace(/[+#]$/, '') === i.san.replace(/[+#]$/, ''));
   if (slipHere) {

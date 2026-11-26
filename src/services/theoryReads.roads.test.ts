@@ -145,3 +145,15 @@ describe('endgameRead — the queen trade on a road ahead', () => {
     expect(r?.text).toBe('After …dxe4 and dxe4, …Qxd1 trades the queens: an early endgame is one of the roads from here.');
   });
 });
+
+describe('hangsRead — the move that drops a piece', () => {
+  it('1.a4 e5 2.Ra3 leaves the rook to …Bxa3; a developing move drops nothing', async () => {
+    const { hangsRead } = await import('./theoryReads');
+    expect(hangsRead(fenOf(['a4', 'e5']), 'Ra3', 'w')?.text).toBe('That lets …Bxa3 win the exchange.');
+    // A queen move that leaves nothing en prise says nothing.
+    expect(hangsRead(fenOf(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nf6']), 'Qe2', 'w')).toBeNull();
+    expect(hangsRead(fenOf(['e4', 'e5']), 'Nf3', 'w')).toBeNull();
+    // A trade still in flight is not a piece dropped.
+    expect(hangsRead(fenOf(['e4', 'd5']), 'exd5', 'w')).toBeNull();
+  });
+});
