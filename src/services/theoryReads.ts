@@ -170,7 +170,7 @@ export function gambitRead(i: { fenBefore: string; san: string; mover: Color }):
     const t = new Chess(c.fen());
     t.move(m.san);
     if (t.attackers(m.to, i.mover).length === 0) {
-      return { text: `It offers the pawn on ${m.to}. That is a gambit: the pawn is given for time and open lines, and the pawn can be taken because nothing takes the capturing piece back.`, squares: [m.to] };
+      return { text: `It offers the pawn on ${m.to}: a gambit, the pawn given for time and open lines.`, squares: [m.to] };
     }
   }
   return null;

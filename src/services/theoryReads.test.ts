@@ -13,7 +13,7 @@ describe('theoryReads — what the move changed on the board', () => {
   });
   it('a pawn the opponent can take for nothing is a gambit', () => {
     const r = gambitRead({ fenBefore: fenOf(['d4', 'd5']), san: 'c4', mover: 'w' });
-    expect(r?.text).toMatch(/^It offers the pawn on c4\. That is a gambit/);
+    expect(r?.text).toBe('It offers the pawn on c4: a gambit, the pawn given for time and open lines.');
     expect(gambitRead({ fenBefore: fenOf(['e4', 'e5']), san: 'Nf3', mover: 'w' })).toBeNull();
   });
   it('the last queen coming off turns toward an endgame', () => {
