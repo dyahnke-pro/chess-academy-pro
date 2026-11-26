@@ -64,6 +64,14 @@ export function isSacrificeLine(fen: string, slip: string, punish: readonly stri
   let r;
   try { r = c.move(punish[0]); } catch { return false; }
   if (!r || r.to !== s.to || !r.captured) return false;
+  // The slipper's next move in the line takes nothing: a slip that goes on to
+  // take (the Elephant's Nxd5?? Nxd5 Bxd8, reaching for the queen) is a
+  // combination that fails, not a piece given on purpose.
+  if (punish.length >= 2) {
+    let n;
+    try { n = c.move(punish[1]); } catch { return false; }
+    if (n?.captured) return false;
+  }
   const afterRecapture = gains[1];
   const end = gains[gains.length - 1];
   const isMate = /#$/.test(punish[punish.length - 1] ?? '');

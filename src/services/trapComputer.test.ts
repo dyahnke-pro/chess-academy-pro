@@ -27,6 +27,12 @@ describe('trapComputer — the one bar', () => {
     expect(isSacrificeLine(SAC_FEN, 'Nxf7', ['Kxf7', 'Qf3+'])).toBe(true);
     expect(classifySlip({ engineCp: 450, line: { fen: SAC_FEN, slip: 'Nxf7', punish: ['Kxf7', 'Qf3+'] } })).toBeNull();
   });
+  it('a capture that reaches for more and fails is no sacrifice: the Elephant Trap', () => {
+    const fen = play(['d4', 'd5', 'c4', 'e6', 'Nc3', 'Nf6', 'Bg5', 'Nbd7', 'cxd5', 'exd5']);
+    const punish = ['Nxd5', 'Bxd8', 'Bb4+', 'Qd2', 'Bxd2+', 'Kxd2', 'Kxd8'];
+    expect(isSacrificeLine(fen, 'Nxd5', punish)).toBe(false);
+    expect(classifySlip({ engineCp: 327, line: { fen, slip: 'Nxd5', punish } })).toBe('trap');
+  });
   it('a quiet slip that loses to a fork is a trap', () => {
     expect(isSacrificeLine(FORK_FEN, 'h6', ['Nxf7'])).toBe(false);
     expect(classifySlip({ engineCp: 400, line: { fen: FORK_FEN, slip: 'h6', punish: ['Nxf7'] } })).toBe('trap');

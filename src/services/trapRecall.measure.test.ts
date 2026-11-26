@@ -22,11 +22,11 @@ const FAMOUS: Famous[] = [
   { name: "Scholar's mate", line: 'e4 e5 Bc4 Nc6 Qh5', slip: 'Nf6', slipBy: 'b' },
   { name: "Fool's mate", line: 'f3 e5', slip: 'g4', slipBy: 'w' },
   { name: 'Elephant Trap', line: 'd4 d5 c4 e6 Nc3 Nf6 Bg5 Nbd7 cxd5 exd5', slip: 'Nxd5', slipBy: 'w' },
-  { name: 'Englund Gambit trap', line: 'd4 e5 dxe5 Nc6 Nf3 Qe7 Bf4 Qb4+ Bd2 Qxb2 Bc3 Bb4 Qd2', slip: 'Bxc3', slipBy: 'b' },
+  { name: 'Englund Gambit trap', line: 'd4 e5 dxe5 Nc6 Nf3 Qe7 Bf4 Qb4+ Bd2 Qxb2', slip: 'Bc3', slipBy: 'w' },
   { name: 'Lasker Trap (Albin)', line: 'd4 d5 c4 e5 dxe5 d4 e3 Bb4+ Bd2 dxe3', slip: 'Bxb4', slipBy: 'w' },
   { name: 'Blackburne Shilling', line: 'e4 e5 Nf3 Nc6 Bc4', slip: 'Nd4', slipBy: 'b' },
-  { name: "Noah's Ark", line: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 d6 d4 b5 Bb3 Nxd4 Nxd4 exd4 Qxd4 c5 Qd5 Be6 Qc6+ Bd7 Qd5', slip: 'c4', slipBy: 'b' },
-  { name: 'Fried Liver', line: 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5', slip: 'Nxf7', slipBy: 'w' },
+  { name: "Noah's Ark", line: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 d6 d4 b5 Bb3 Nxd4 Nxd4 exd4', slip: 'Qxd4', slipBy: 'w' },
+  { name: 'Fried Liver', line: 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5', slip: 'Nxd5', slipBy: 'b' },
   { name: 'Damiano Defence', line: 'e4 e5 Nf3', slip: 'f6', slipBy: 'b' },
   { name: 'Kieninger Trap', line: 'd4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3 Bb4+ Nbd2 Qe7 a3 Ngxe5', slip: 'axb4', slipBy: 'w' },
   { name: 'Stafford Gambit (Bg5??)', line: 'e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5', slip: 'Bg5', slipBy: 'w' },
@@ -40,7 +40,7 @@ const FAMOUS: Famous[] = [
   { name: "Queen's Gambit Accepted b5 trap", line: 'd4 d5 c4 dxc4 e3 b5 a4', slip: 'c6', slipBy: 'b' },
   { name: 'Magnus Smith Trap', line: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6 Bc4 g6 Nxc6 bxc6 e5', slip: 'dxe5', slipBy: 'b' },
   { name: 'Halosar Trap', line: 'd4 d5 e4 dxe4 Nc3 Nf6 f3 exf3 Qxf3 Qxd4 Be3 Qb4 O-O-O', slip: 'Bg4', slipBy: 'b' },
-  { name: 'Wurzburger Trap', line: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 d3', slip: 'Qh4+', slipBy: 'b' },
+  { name: 'Wurzburger Trap', line: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 d3 Qh4+ g3', slip: 'Nxg3', slipBy: 'b' },
 ];
 // THE NAMED-TRAP LESSONS: each lesson's slip, from the seat the lesson teaches
 // (a weapon: the opponent slips; a warning: the student must not). The line is
@@ -50,7 +50,7 @@ const LESSONS: Lesson[] = [
   { id: 'legals-mate', line: 'e4 e5 Nf3 Nc6 Bc4 d6 Nc3 Bg4 h3', slip: 'Bh5', seat: 'opponent' },
   { id: 'fried-liver', line: 'e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5', slip: 'Nxd5', seat: 'opponent' },
   { id: 'tarrasch', line: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Nxe4 d4 b5 Bb3 d5 dxe5 Be6 c3 Be7 Re1 O-O Nd4', slip: 'Qd7', seat: 'opponent' },
-  { id: 'blackburne-shilling', line: 'e4 e5 Nf3 Nc6 Bc4 Nd4', slip: 'Nxe5', seat: 'student' },
+  { id: 'blackburne-shilling', line: 'e4 e5 Nf3 Nc6 Bc4 Nd4 Nxe5 Qg5', slip: 'Nxf7', seat: 'student' },
   { id: 'noahs-ark', line: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 b5 Bb3 d6 d4 Nxd4 Nxd4 exd4', slip: 'Qxd4', seat: 'student' },
   { id: 'mortimer', line: 'e4 e5 Nf3 Nc6 Bb5 Nf6 d3 Ne7', slip: 'Nxe5', seat: 'student' },
   { id: 'fishing-pole', line: 'e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Ng4 h3 h5', slip: 'hxg4', seat: 'student' },
