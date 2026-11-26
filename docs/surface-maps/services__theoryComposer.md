@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**247 lines · 18 exports · 7 importers · 4 tests · 1 audits**
+**248 lines · 18 exports · 7 importers · 4 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -89,11 +89,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `TheoryTurnIn` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `composeTheoryTurn` (function) — 6 call sites
+### `composeTheoryTurn` (function) — 7 call sites
 - `src/services/theoryComposer.test.ts:51`
 - `src/services/theoryComposer.test.ts:65`
 - `src/services/theoryComposer.test.ts:70`
 - `src/services/theoryComposer.test.ts:78`
+- `src/services/theoryComposer.test.ts:87`
 - `src/services/theoryReads.ts:678`
 - `src/services/theorySheets.measure.test.ts:75`
 
