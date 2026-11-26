@@ -81,4 +81,3 @@ export function classifySlip(read: SlipRead): SlipKind | null {
   return null;
 }
 
-export function isTrap(read: SlipRead): boolean { return classifySlip(read) === 'trap'; }

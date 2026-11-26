@@ -1,17 +1,17 @@
 {
  "about": "Which teaching computer reaches which surface, by a static call path from each surface root (scripts/computer-reach.mjs; the list is scripts/computer-reach/computers.json). learn: yes = through the focus runner, door = computed in a Learn turn and decided by Learn's turn door (spoken when the door keeps it); a door-only row says why in `door` (an adapter of computers the other surfaces read, or Learn-only by design).",
  "graph": {
-  "files": 1785,
-  "nodes": 18241
+  "files": 1786,
+  "nodes": 18256
  },
  "totals": {
   "computers": 344,
-  "offTheSixSurfaces": 30,
+  "offTheSixSurfaces": 29,
   "learnDoorOnly": 18,
   "learnDoorOnlyUnexplained": 1,
   "otherScreensOnly": 10,
-  "dead": 2,
-  "missingFromCode": 1,
+  "dead": 1,
+  "missingFromCode": 0,
   "surfaces": {
    "learn": {
     "yes": 31,
@@ -19,8 +19,8 @@
     "no": 85
    },
    "review": {
-    "yes": 239,
-    "no": 105
+    "yes": 240,
+    "no": 104
    },
    "lesson": {
     "yes": 183,
@@ -74,13 +74,10 @@
    "services/tacticAlertService.ts#detectGameplayTactic"
   ],
   "dead": [
-   "services/mastersPlanRead.ts#mastersPlanLine",
    "services/reviewTeachingPoints.ts#explainTemptingCapture"
   ]
  },
- "missingFromCode": [
-  "services/mastersPlanRead.ts#mastersPlanLine"
- ],
+ "missingFromCode": [],
  "computers": [
   {
    "key": "coach/chatTurnAnswers.ts#(module)",
@@ -2937,23 +2934,6 @@
     "insights",
     "endgame"
    ]
-  },
-  {
-   "key": "services/mastersPlanRead.ts#mastersPlanLine",
-   "name": "mastersPlanLine (the plan sentence)",
-   "file": "services/mastersPlanRead.ts",
-   "fn": "mastersPlanLine",
-   "says": "'The plan in this structure: your break is …c5 — masters from here usually play it, and theirs is d5' (or your piece's usual square + castli",
-   "origin": "map",
-   "learn": "no",
-   "review": "no",
-   "lesson": "no",
-   "chat": "no",
-   "tapped": "no",
-   "tactics": "no",
-   "app": false,
-   "other": [],
-   "where": "dead (no production caller)"
   },
   {
    "key": "services/mastersPlanRead.ts#mastersPlanRead",
@@ -6731,6 +6711,24 @@
     "playSilent",
     "insights",
     "endgame"
+   ]
+  },
+  {
+   "key": "services/theoryComposer.ts#mastersPlanLine",
+   "name": "mastersPlanLine (the plan sentence)",
+   "file": "services/theoryComposer.ts",
+   "fn": "mastersPlanLine",
+   "says": "'Your plan: b4 and a4, to break with c5. Their plan builds to d5.' (goal plus at most two key moves; a piece the plan brings in its own sentence with its job; castli",
+   "origin": "map",
+   "learn": "no",
+   "review": "yes",
+   "lesson": "no",
+   "chat": "no",
+   "tapped": "no",
+   "tactics": "no",
+   "app": true,
+   "other": [
+    "playSilent"
    ]
   },
   {

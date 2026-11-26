@@ -16,7 +16,7 @@ import { moveJob, MINE } from './bookMoveWhy';
 import { NO_FOLLOW } from './exchangeLedger';
 import { hangLine, trapLine } from './trapLine';
 import { slipNoun } from './trapWords';
-import { withoutCastleTail } from './theoryComposer';
+import { withoutCastleTail, composeTheoryTurn } from './theoryComposer';
 
 export interface TheoryRead { text: string; squares: string[] }
 
@@ -234,32 +234,36 @@ export function ownGemBoards(gems: Parameters<typeof gemBoards>[0]): Record<stri
   return gemIndex;
 }
 
-/** EVERYTHING ELSE THE THEORY SAYS ABOUT A MOVE, as sentences: the pawn
- *  structure it makes, a gambit it offers or one on offer, the transposition,
- *  the queens coming off, and a trap around it. Each sentence once per `said`
- *  (a structure or an endgame is news once). */
+/** EVERYTHING ELSE THE THEORY SAYS ABOUT A MOVE, composed in order by
+ *  `composeTheoryTurn`: the pawn structure it makes (or the centre it takes), a
+ *  gambit it offers or one on offer, the transposition, the queens coming off,
+ *  and a trap around it. A structure, an endgame turn or a gambit is news once a
+ *  game (`said`). The piece's own job is said only when `withPieceJob` (the
+ *  caller has no why of its own for the move). */
 export function theoryExtras(i: {
   history: readonly string[]; fenBefore: string; san: string; mover: Color;
   movesAt: (fen: string) => readonly LocalDbMove[] | null;
   boards: Record<string, ClubGemRow[]>;
   said: Set<string>;
+  withPieceJob: boolean;
 }): string[] {
-  const reads: Array<[string, TheoryRead | null]> = [
-    ['structure', structureRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })],
-    ['gambit', gambitRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })],
-    ['endgame', endgameRead({ fenBefore: i.fenBefore, san: i.san })],
-    ['move-order', transpositionRead({ history: [...i.history, i.san], movesAt: i.movesAt })],
-    ['trap', trapRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover, boards: i.boards, movesAt: i.movesAt })],
-  ];
-  const out: string[] = [];
-  for (const [kind, r] of reads) {
-    if (!r || i.said.has(r.text)) continue;
-    // A structure, an endgame turn or a gambit is said once a game.
-    if (kind === 'structure' || kind === 'endgame' || kind === 'gambit') { if (i.said.has(`kind:${kind}`)) continue; i.said.add(`kind:${kind}`); }
-    i.said.add(r.text);
-    out.push(r.text);
-  }
-  return out;
+  const once = (kind: string, r: TheoryRead | null): TheoryRead | null => {
+    if (!r || i.said.has(r.text) || i.said.has(`kind:${kind}`)) return null;
+    i.said.add(`kind:${kind}`); i.said.add(r.text);
+    return r;
+  };
+  const fresh = (r: TheoryRead | null): TheoryRead | null => { if (!r || i.said.has(r.text)) return null; i.said.add(r.text); return r; };
+  const turn = composeTheoryTurn({
+    fen: i.fenBefore, san: i.san, mover: i.mover, whose: 'your', roads: [],
+    structure: once('structure', structureRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover }) ?? centreRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })),
+    gambit: once('gambit', gambitRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover }) ?? gambitAheadRead({ fen: (() => { const c = new Chess(i.fenBefore); c.move(i.san); return c.fen(); })(), movesAt: i.movesAt })),
+    endgame: once('endgame', endgameRead({ fenBefore: i.fenBefore, san: i.san })),
+    moveOrder: fresh(moveOrderRead({ history: [...i.history, i.san], student: i.mover }) ?? transpositionRead({ history: [...i.history, i.san], movesAt: i.movesAt })),
+    trapSaid: fresh(trapRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover, boards: i.boards, movesAt: i.movesAt })),
+    pieceJob: i.withPieceJob ? fresh(pieceJobRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })) : null,
+    said: i.said,
+  });
+  return turn.map((t) => t.text);
 }
 
 const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9 };
@@ -288,3 +292,4 @@ export function hangRead(i: { fen: string; mover: Color; movesAt: (fen: string) 
   }
   return null;
 }
+

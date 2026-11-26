@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1756) — names `deriveNarrationArrows`
+- **G6. Arrows on every step-by-step coach move — DRAWN BY CODE, never by the model, never validated after the fact.** (CLAUDE.md:1809) — names `deriveNarrationArrows`
 
 ## Who calls in
 
@@ -29,7 +29,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `deriveNarrationArrows` (function) — 21 call sites
-- `src/data/lessons/punishGems.ts:247`
+- `src/data/lessons/punishGems.ts:249`
 - `src/services/continuationMoveNarration.universal.test.ts:125`
 - `src/services/continuationMoveNarration.universal.test.ts:148`
 - `src/services/falseJobs.test.ts:75`
@@ -47,7 +47,7 @@
 - `src/services/narrationArrows.test.ts:75`
 - `src/services/narrationArrows.test.ts:83`
 - `src/services/narrationArrows.test.ts:89`
-- `src/services/openingGenerator.ts:1316`
+- `src/services/openingGenerator.ts:1317`
 - `src/test/watchArrowSides.gate.test.ts:130`
 - `src/test/watchArrowSides.gate.test.ts:168`
 
