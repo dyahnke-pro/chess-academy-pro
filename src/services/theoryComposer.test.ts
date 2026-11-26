@@ -80,3 +80,13 @@ describe('theoryComposer — a named structure states the plans', () => {
     expect(turn.find((t) => t.kind === 'structure')?.saysPlan).toBe(true);
   });
 });
+
+describe('theoryComposer — the piece the plan brings is part of the plan', () => {
+  it('the piece sentence is marked as saying the plan', () => {
+    const fen = fenOf(['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6']);
+    const turn = composeTheoryTurn({ fen, san: 'Be3', mover: 'w', whose: 'your', roads: [], said: new Set(),
+      piece: { piece: 'n', to: 'd5', san: 'Nd5', color: 'w', fen } });
+    const p = turn.find((t) => t.kind === 'piece');
+    if (p) expect(p.saysPlan).toBe(true);
+  });
+});

@@ -155,7 +155,8 @@ export function composeTheoryTurn(i: TheoryTurnIn): TheorySentence[] {
     // The piece is said from its own seat: the other side's piece is theirs.
     const whose: Whose = i.piece.color === i.mover ? i.whose : (i.whose === 'your' ? 'their' : 'your');
     const t = pieceHomeLine({ whose, piece: i.piece });
-    if (t) out.push({ kind: 'piece', text: t, squares: [i.piece.to] });
+    // The piece the masters' plan brings is part of the plan.
+    if (t) out.push({ kind: 'piece', text: t, squares: [i.piece.to], saysPlan: true });
   }
   if (i.castle) {
     const c = castleOnce({ whose: i.whose, side: i.castle.side, said: i.said });
