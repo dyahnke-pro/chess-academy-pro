@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**160 lines · 9 exports · 3 importers · 2 tests · 0 audits**
+**158 lines · 9 exports · 3 importers · 2 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -50,9 +50,9 @@
 - `src/services/openingTheory.test.ts:29`
 - `src/services/openingTheory.test.ts:30`
 - `src/services/openingTheory.test.ts:33`
-- `src/services/openingTheory.test.ts:38`
-- `src/services/openingTheory.test.ts:46`
-- `src/services/openingTheory.test.ts:54`
+- `src/services/openingTheory.test.ts:39`
+- `src/services/openingTheory.test.ts:47`
+- `src/services/openingTheory.test.ts:55`
 - `src/services/theorySheets.measure.test.ts:93`
 
 ## Tests

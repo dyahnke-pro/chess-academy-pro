@@ -2,7 +2,7 @@
  "meta": {
   "depth": 22,
   "built": "2026-11-26",
-  "traps": 38
+  "traps": 37
  },
  "traps": [
   {
@@ -641,34 +641,6 @@
     "Ne5"
    ],
    "endCp": 407,
-   "mate": false
-  },
-  {
-   "order": 55,
-   "name": "Englund Queen Trap",
-   "source": "anti-openings: Englund Queen Trap (…Qxb2)",
-   "line": "d4",
-   "board": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq -",
-   "slip": "e5",
-   "by": "b",
-   "punish": [
-    "dxe5",
-    "Nc6",
-    "Nf3",
-    "Qe7",
-    "Bf4",
-    "Qb4+",
-    "Bd2",
-    "Qxb2",
-    "Nc3",
-    "Bb4",
-    "Rb1",
-    "Qa3",
-    "Nd5",
-    "Ba5",
-    "Rb5"
-   ],
-   "endCp": 128,
    "mate": false
   }
  ]

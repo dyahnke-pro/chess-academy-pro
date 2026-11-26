@@ -120,7 +120,7 @@ export function openingTheoryFacts(fenBefore: string, san: string, mine: boolean
   // …Nc6, which prepares e5").
   // THE KEY DECISION (theoryComposer): on the move that made it, each road by
   // its job. The road it names is not said again below.
-  const decision = keyDecisionLine({ fen: fenBefore, san, mover, whose: mine ? 'your' : 'their', roads: here.moves.map((m) => ({ san: m.san, pct: m.pct })) });
+  const decision = keyDecisionLine({ fen: fenBefore, san, mover, whose: mine ? 'your' : 'their', roads: here.moves.map((m) => ({ san: m.san, pct: m.pct })), sayChosen: false });
   if (decision) out.push({ kind: 'book-alternatives', clause: decision.text.replace(/^The key decision: /, 'is the key decision here. '), sentence: decision.text, squares: [to, ...here.moves.filter((m) => decision.names.includes(m.san) && clean(m.san) !== clean(san)).map((m) => m.to)], names: decision.names });
   const ownAim = aimOf(fenBefore, san, mover, mine);
   const aimKey = (a: string): string => a.split(/[,—:]/)[0].trim();

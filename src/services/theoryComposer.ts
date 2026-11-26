@@ -86,7 +86,10 @@ export interface RoadRead { san: string; pct: number }
  *  two real roads and the move played is one of them. Each road is said by its
  *  job. Null where one move is plainly the move, or the chosen road has no job
  *  to say. */
-export function keyDecisionLine(i: { fen: string; san: string; mover: Color; whose: Whose; roads: readonly RoadRead[] }): { text: string; names: string[] } | null {
+/** `sayChosen` — REQUIRED: false where the move's own job is said by the move
+ *  (a lesson's turn says it first; the decision then names only the road not
+ *  taken, never the job twice). */
+export function keyDecisionLine(i: { fen: string; san: string; mover: Color; whose: Whose; roads: readonly RoadRead[]; sayChosen: boolean }): { text: string; names: string[] } | null {
   const MAIN = 10; const CLEAR = 85;
   const real = i.roads.filter((r) => r.pct >= MAIN).sort((a, b) => b.pct - a.pct);
   if (real.length < 2 || real[0].pct >= CLEAR) return null;
@@ -103,7 +106,7 @@ export function keyDecisionLine(i: { fen: string; san: string; mover: Color; who
   // are no decision, and the move's own job is said by the move.
   const alt = others[0];
   if (!alt) return null;
-  const text = `The key decision: ${dotted(chosen.san, i.mover)}. ${openSentence(mine)}. ${dotted(alt.r.san, i.mover)} is the other road. ${openSentence(alt.job ?? '')}.`;
+  const text = `The key decision: ${dotted(chosen.san, i.mover)}.${i.sayChosen ? ` ${openSentence(mine)}.` : ''} ${dotted(alt.r.san, i.mover)} is the other road. ${openSentence(alt.job ?? '')}.`;
   return { text, names: [chosen.san, alt.r.san] };
 }
 
@@ -148,7 +151,7 @@ export interface TheoryTurnIn {
  *  when it has something true to say. */
 export function composeTheoryTurn(i: TheoryTurnIn): TheorySentence[] {
   const out: TheorySentence[] = [];
-  const decision = keyDecisionLine({ fen: i.fen, san: i.san, mover: i.mover, whose: i.whose, roads: i.roads });
+  const decision = keyDecisionLine({ fen: i.fen, san: i.san, mover: i.mover, whose: i.whose, roads: i.roads, sayChosen: true });
   if (decision) out.push({ kind: 'decision', text: decision.text, squares: [], claim: `decision:${i.fen.split(' ').slice(0, 4).join(' ')}` });
   if (i.choiceAhead) out.push({ kind: 'decision', text: i.choiceAhead.text, squares: i.choiceAhead.squares });
   if (i.namedRoads) out.push({ kind: 'decision', text: i.namedRoads.text, squares: i.namedRoads.squares });

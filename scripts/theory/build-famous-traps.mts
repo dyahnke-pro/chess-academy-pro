@@ -130,10 +130,11 @@ if (MERGE) {
   all.sort((a, b) => a.order - b.order);
   const keep = new Map<string, FamousTrap>();
   for (const t of all) {
-    // A slip the engine found in a long named line must cost a pawn or mate;
-    // a famous-trap-lines entry is the move the trap is known by and keeps
-    // the known-mistake floor.
-    if (!t.mate && !t.source.startsWith('famous-trap-lines') && t.endCp < 100) continue;
+    // A famous-trap-lines entry is the move the trap is known by: always kept.
+    // The opening index's line ends on its trap, so a pawn is enough there;
+    // a course's or lesson's long line needs a pawn and a half (a gambit's
+    // first move is no trap: the anti-openings' "Englund Queen Trap" read …e5).
+    if (!t.mate && !t.source.startsWith('famous-trap-lines') && t.endCp < (t.source.startsWith('opening index') ? 100 : 150)) continue;
     const key = `${t.board}|${t.slip}`;
     if (!keep.has(key)) keep.set(key, t);
   }

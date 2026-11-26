@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**837 lines · 22 exports · 4 importers · 3 tests · 0 audits**
+**849 lines · 22 exports · 4 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -87,13 +87,14 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/theoryReads.roads.test.ts:157`
 - `src/services/theoryReads.roads.test.ts:225`
 
-### `trapRead` (function) — 7 call sites
+### `trapRead` (function) — 8 call sites
 - `src/services/theoryReads.roads.test.ts:124`
-- `src/services/theoryReads.test.ts:31`
-- `src/services/theoryReads.test.ts:36`
+- `src/services/theoryReads.test.ts:33`
 - `src/services/theoryReads.test.ts:38`
-- `src/services/theoryReads.test.ts:60`
-- `src/services/theoryReads.test.ts:72`
+- `src/services/theoryReads.test.ts:40`
+- `src/services/theoryReads.test.ts:43`
+- `src/services/theoryReads.test.ts:66`
+- `src/services/theoryReads.test.ts:78`
 - `src/services/theorySheets.measure.test.ts:86`
 
 ### `gambitAheadRead` (function) — 3 call sites
@@ -119,8 +120,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/reviewOpeningTheory.ts:819`
 - `src/services/theoryReads.roads.test.ts:212`
 - `src/services/theoryReads.roads.test.ts:292`
-- `src/services/theoryReads.test.ts:48`
-- `src/services/theoryReads.test.ts:50`
+- `src/services/theoryReads.test.ts:54`
+- `src/services/theoryReads.test.ts:56`
 
 ### `nameRelativeTo` (function) — 5 call sites
 - `src/services/reviewOpeningTheory.ts:695`
@@ -155,11 +156,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/theorySheets.measure.test.ts:80`
 
 ### `hangRead` (function) — 2 call sites
-- `src/services/theoryReads.test.ts:42`
-- `src/services/theoryReads.test.ts:44`
+- `src/services/theoryReads.test.ts:48`
+- `src/services/theoryReads.test.ts:50`
 
 ## Tests
 
+- `src/services/gemCrushLines.computed.test.ts`
 - `src/services/theoryReads.roads.test.ts`
 - `src/services/theoryReads.test.ts`
 - `src/services/theorySheets.measure.test.ts`

@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**248 lines · 18 exports · 7 importers · 4 tests · 1 audits**
+**253 lines · 18 exports · 7 importers · 4 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -33,8 +33,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/kpSolver.ts:651`
 - `src/services/kpSolver.ts:655`
 - `src/services/openingTheory.ts:101`
-- `src/services/openingTheory.ts:132`
-- `src/services/openingTheory.ts:150`
+- `src/services/openingTheory.ts:130`
+- `src/services/openingTheory.ts:148`
 - `src/services/trapLine.ts:133`
 - `src/services/trapLine.ts:134`
 - `src/services/trapLine.ts:138`
@@ -46,11 +46,10 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/weighedMoves.ts:1341`
 - `src/utils/sanMark.ts:21`
 
-### `withoutCastleTail` (const) — 4 call sites
-- `src/services/openingTheory.ts:106`
-- `src/services/openingTheory.ts:153`
-- `src/services/theoryReads.ts:336`
-- `src/services/theoryReads.ts:603`
+### `withoutCastleTail` (const) — 3 call sites
+- `src/services/openingTheory.ts:151`
+- `src/services/theoryReads.ts:340`
+- `src/services/theoryReads.ts:617`
 
 ### `keyMovesOf` (function) — 1 call site
 - `src/services/theoryComposer.test.ts:11`
@@ -75,7 +74,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `keyDecisionLine` (function) — 4 call sites
-- `src/services/openingTheory.ts:125`
+- `src/services/openingTheory.ts:123`
 - `src/services/theoryComposer.test.ts:32`
 - `src/services/theoryComposer.test.ts:38`
 - `src/services/theoryComposer.test.ts:39`
@@ -95,7 +94,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/theoryComposer.test.ts:70`
 - `src/services/theoryComposer.test.ts:78`
 - `src/services/theoryComposer.test.ts:87`
-- `src/services/theoryReads.ts:678`
+- `src/services/theoryReads.ts:692`
 - `src/services/theorySheets.measure.test.ts:75`
 
 ### `roadsFrom` (function) — 9 call sites
