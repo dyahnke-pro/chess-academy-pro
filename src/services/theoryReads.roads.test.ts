@@ -292,3 +292,11 @@ describe('theoryExtras — a rebuilt lecture says the same', () => {
     expect(theoryExtras(args(new Set()))).toEqual(theoryExtras(args(new Set())));
   });
 });
+
+describe('choiceAheadRead — a road with no job is left out, and said so', () => {
+  it('reads "Among their main choices" when a real road has nothing to say', async () => {
+    const { choiceAheadRead } = await import('./theoryReads');
+    const r = choiceAheadRead({ fenBefore: fenOf(['e4', 'e5']), san: 'Nf3', mover: 'w', movesAt: () => [{ san: 'Nc6', games: 40 }, { san: 'a6', games: 30 }, { san: 'Nf6', games: 30 }] as never[] });
+    expect(r?.text).toMatch(/^Among their main choices: …Nc6 and …Nf6\./);
+  });
+});

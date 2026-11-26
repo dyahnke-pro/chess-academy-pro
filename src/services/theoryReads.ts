@@ -594,10 +594,12 @@ export function choiceAheadRead(i: { fenBefore: string; san: string; mover: Colo
   const real = [...roads].sort((a, b) => b.games - a.games).filter((r) => r.games / total >= 0.1);
   if (real.length < 2 || real[0].games / total >= 0.85) return null;
   const names: string[] = []; const jobs: string[] = []; const squares: string[] = [];
+  let partial = false;
   for (const r of real) {
     let job: ReturnType<typeof moveJob> = null;
     try { job = moveJob(fen, r.san, them, THEIRS, null, NO_FOLLOW); } catch { job = null; }
-    if (!job?.clause) return null;
+    // A road with no job to say is left out, and the list says it is not all.
+    if (!job?.clause) { partial = true; continue; }
     const clause = withoutCastleTail(job.clause).replace(/^it /, '');
     // Two roads that do the same job are one road, not a choice.
     if (jobs.includes(clause)) continue;
@@ -607,7 +609,8 @@ export function choiceAheadRead(i: { fenBefore: string; san: string; mover: Colo
   }
   if (names.length < 2) return null;
   // One idea a sentence: the roads, then what each does.
-  return { text: `Next, the choice is theirs: ${orList(names)}. ${names.map((n, k) => `${n} ${jobs[k]}.`).join(' ')}`, squares, claim: `decision:${positionOf(fen)}` };
+  const head = partial ? `Among their main choices: ${andList(names)}.` : `Next, the choice is theirs: ${orList(names)}.`;
+  return { text: `${head} ${names.map((n, k) => `${n} ${jobs[k]}.`).join(' ')}`, squares, claim: `decision:${positionOf(fen)}` };
 }
 
 /** The move before the last of `history`, with its board. */
