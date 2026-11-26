@@ -125,6 +125,7 @@ describe.runIf(!!process.env.THEORY_SHEETS && existsSync('data/sources/wikibooks
     const T: Record<'core' | 'held', Record<'name' | 'noname', Tally>> = { core: { name: {}, noname: {} }, held: { name: {}, noname: {} } };
     const misses: string[] = [];
     const allMisses: Record<string, string[]> = {};
+    let coreBoards = 0; let silentBoards = 0;
     notes.forEach((n, i) => {
       if (i % every !== 0) return;
       const text = prose(n.text);
@@ -135,6 +136,7 @@ describe.runIf(!!process.env.THEORY_SHEETS && existsSync('data/sources/wikibooks
         let s: ReturnType<typeof said>;
         try { s = said(n, withName); } catch { continue; }
         const t = T[set][withName ? 'name' : 'noname'];
+        if (set === 'core' && withName) { coreBoards += 1; if (s.lines.length === 0) silentBoards += 1; }
         for (const k of asked) {
           const e = (t[k] ??= { asked: 0, said: 0 });
           e.asked += 1;
@@ -158,6 +160,7 @@ describe.runIf(!!process.env.THEORY_SHEETS && existsSync('data/sources/wikibooks
       core: { withName: score(T.core.name), withoutName: score(T.core.noname) },
       heldOut: { withName: { overall: score(T.held.name).overall }, withoutName: { overall: score(T.held.noname).overall } },
       positions: notes.length,
+      coreSilent: `${silentBoards} of ${coreBoards} core boards hear nothing from the composer`,
     };
     mkdirSync('audit-reports', { recursive: true });
     writeFileSync('audit-reports/theory-sheets.json', JSON.stringify(report, null, 2));

@@ -51,3 +51,13 @@ describe('theoryReads — what the move changed on the board', () => {
     expect(b).toEqual([]);
   });
 });
+
+describe('trapRead — the slip the move keeps clear of', () => {
+  it('a known slip on the same board that the move did not play is said as one to avoid', () => {
+    const fenBefore = fenOf(['e4', 'e5', 'Bc4', 'Nc6', 'Qh5']);
+    const slipsAt = (f: string) => (f.split(' ').slice(0, 4).join(' ') === fenBefore.split(' ').slice(0, 4).join(' ')
+      ? [{ tier: 'trap', line: '', slip: 'Nf6', by: 'black', best: 'g6', games: 1, share: 1, moverScore: null, punish: 'Qxf7#', mate: true, won: 0, endCp: 0, juice: 0 } as never] : []);
+    const r = trapRead({ fenBefore, san: 'g6', mover: 'b', slipsAt, movesAt: () => null });
+    expect(r?.text).toBe('The move keeps clear of a known mistake. Watch out: …Nf6 allows Qxf7, and it is mate. Their queen mates on f7. The pattern: f7 is guarded only by your king. When their queen sits on h5, every slow move you make lets them look at f7.');
+  });
+});

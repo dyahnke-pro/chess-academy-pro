@@ -304,6 +304,13 @@ export function trapRead(i: { fenBefore: string; san: string; mover: Color; slip
     const r = kind ? say(i.fenBefore, slipHere, i.mover, () => '') : null;
     if (kind && r) return { text: `That is ${knownLead(kind, 'student')}. ${r.text}`, squares: r.squares };
   }
+  // 1b. The move played keeps clear of a known slip on the same board: the
+  // natural alternative that loses.
+  for (const g of i.slipsAt(i.fenBefore)) {
+    if (g.slip.replace(/[+#]$/, '') === i.san.replace(/[+#]$/, '')) continue;
+    const r = say(i.fenBefore, g, i.mover, () => '');
+    if (r) return { text: `The move keeps clear of ${knownLead(kindOf(i.fenBefore, g) ?? 'known-mistake', 'student')}. ${r.text}`, squares: r.squares };
+  }
   let after: Chess;
   try { after = new Chess(i.fenBefore); after.move(i.san); } catch { return null; }
   // 2. A slip is on offer on this board.
