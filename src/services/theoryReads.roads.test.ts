@@ -248,3 +248,12 @@ describe('structureRead — the backward pawn a move makes', () => {
     expect(r?.text).toBe("That leaves Black a backward pawn on d6: no pawn can guard it, and it stands on a half-open file for the other side's rooks.");
   });
 });
+
+describe('gambitDeclinedRead — the offered pawn left alone', () => {
+  it('QGD …e6 leaves the c4 pawn; a board with no free pawn says nothing', async () => {
+    const { gambitDeclinedRead } = await import('./theoryReads');
+    expect(gambitDeclinedRead({ fenBefore: fenOf(['d4', 'd5', 'c4']), san: 'e6', mover: 'b' })?.text).toBe('It leaves the offered pawn on c4 alone: the gambit declined.');
+    expect(gambitDeclinedRead({ fenBefore: fenOf(['d4', 'd5', 'c4']), san: 'dxc4', mover: 'b' })).toBeNull();
+    expect(gambitDeclinedRead({ fenBefore: fenOf(['e4', 'e5']), san: 'Nf3', mover: 'w' })).toBeNull();
+  });
+});

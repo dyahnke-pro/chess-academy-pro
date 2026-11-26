@@ -615,7 +615,7 @@ export function theoryExtras(i: {
   const turn = composeTheoryTurn({
     fen: i.fenBefore, san: i.san, mover: i.mover, whose: 'your', roads: [], plan, piece, choiceAhead,
     structure: once('structure', structureRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover, prior: priorOf(i.history) }) ?? centreRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })),
-    gambit: once('gambit', gambitRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover }) ?? sacrificeRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover, movesAt: i.movesAt }) ?? gambitAcceptedRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover }) ?? gambitAheadRead({ fen: (() => { const c = new Chess(i.fenBefore); c.move(i.san); return c.fen(); })(), movesAt: i.movesAt }) ?? gambitStandingRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })),
+    gambit: once('gambit', gambitRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover }) ?? sacrificeRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover, movesAt: i.movesAt }) ?? gambitAcceptedRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover }) ?? gambitDeclinedRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover }) ?? gambitAheadRead({ fen: (() => { const c = new Chess(i.fenBefore); c.move(i.san); return c.fen(); })(), movesAt: i.movesAt }) ?? gambitStandingRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })),
     endgame: once('endgame', endgameRead({ fenBefore: i.fenBefore, san: i.san, movesAt: i.movesAt })),
     namedRoads: fresh(namedRoadsRead({ fen: (() => { const c = new Chess(i.fenBefore); c.move(i.san); return c.fen(); })(), movesAt: i.movesAt })),
     moveOrder: fresh(moveOrderRead({ history: [...i.history, i.san], student: i.mover }) ?? transpositionRead({ history: [...i.history, i.san], movesAt: i.movesAt })),
@@ -713,6 +713,18 @@ export function gambitAcceptedRead(i: { fenBefore: string; san: string; mover: C
   if (a.attackers(mv.to as never, them).length > 0) return null;
   const said = `${i.mover === 'b' ? '…' : ''}${mv.san.replace(/[+#]$/, '')}`;
   return { text: `${said} takes the offered pawn: the gambit accepted. Now ${them === 'w' ? 'White' : 'Black'} plays for the time and the open lines it paid for.`, squares: [mv.to] };
+}
+
+/** THE GAMBIT DECLINED: the board offered the mover a pawn — one it could
+ *  take with nothing taking back — and the move leaves it. */
+export function gambitDeclinedRead(i: { fenBefore: string; san: string; mover: Color }): TheoryRead | null {
+  let b: Chess; let mv;
+  try { b = new Chess(i.fenBefore); mv = new Chess(i.fenBefore).move(i.san); } catch { return null; }
+  const them: Color = i.mover === 'w' ? 'b' : 'w';
+  const offered = b.moves({ verbose: true }).filter((m) => m.captured === 'p' && (() => { const t = new Chess(i.fenBefore); t.move(m.san); return t.attackers(m.to as never, them).length === 0; })());
+  if (!offered.length || offered.some((m) => m.san === mv.san)) return null;
+  const sq = offered[0].to;
+  return { text: `It leaves the offered pawn on ${sq} alone: the gambit declined.`, squares: [sq] };
 }
 
 /** THE GAMBIT STANDING: one side is a pawn or two down, the pieces level, and
