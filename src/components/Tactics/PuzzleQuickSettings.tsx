@@ -111,7 +111,7 @@ export function PuzzleQuickSettings(): JSX.Element {
           <Toggle
             icon={coachVoiceOn ? <Volume2 size={14} /> : <VolumeX size={14} />}
             label="Voice narration"
-            sublabel="Polly speaks puzzle intros + outros"
+            sublabel="The coach speaks puzzle intros + outros"
             checked={coachVoiceOn}
             onChange={() => toggleCoachVoice()}
             testId="qs-toggle-voice"

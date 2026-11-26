@@ -295,3 +295,26 @@ describe('lichessExplorerService', () => {
   });
 
 });
+
+describe('the explorer is asked one request at a time (2026-11-26)', () => {
+  it('two asks for the same position at once are one request; different positions never overlap', async () => {
+    const mod = await import('./lichessExplorerService');
+    await mod._resetLichessExplorerForTests();
+    let open = 0;
+    let peak = 0;
+    const calls: string[] = [];
+    const fetchSpy = vi.spyOn(globalThis, 'fetch').mockImplementation(async (url) => {
+      calls.push(url as string);
+      open++; peak = Math.max(peak, open);
+      await new Promise((r) => { setTimeout(r, 20); });
+      open--;
+      return new Response(JSON.stringify({ white: 1, draws: 1, black: 1, moves: [], topGames: [] }), { status: 200 });
+    });
+    const a = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
+    const b = 'rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq - 0 1';
+    await Promise.all([mod.fetchLichessExplorer(a), mod.fetchLichessExplorer(a), mod.fetchLichessExplorer(b)]);
+    expect(calls).toHaveLength(2);
+    expect(peak).toBe(1);
+    fetchSpy.mockRestore();
+  });
+});

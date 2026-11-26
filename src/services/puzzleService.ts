@@ -1,4 +1,5 @@
 import { loadDataJson } from './dataFile';
+import { retryAfterSuspension } from './idbResilience';
 import { rankThemeTargets } from './puzzleThemeTargets';
 import { db } from '../db/schema';
 import { safeRatingKey } from '../utils/ratingKey';
@@ -140,11 +141,14 @@ async function addMissingInChunks(
     // between chunks for whatever a student is waiting on right now.
     if (opts.background) await foregroundSettled();
     const chunk = records.slice(i, i + SEED_CHUNK);
-    await db.transaction('rw', db.puzzles, async () => {
+    // A chunk iOS cut off by suspending the app runs again once it is back
+    // (`idbResilience`) — it re-checks its own ids, so a rerun adds only what
+    // is still missing.
+    await retryAfterSuspension(() => db.transaction('rw', db.puzzles, async () => {
       const existing = await db.puzzles.bulkGet(chunk.map((r) => r.id));
       const missing = chunk.filter((_, j) => existing[j] === undefined);
       if (missing.length > 0) await db.puzzles.bulkAdd(missing);
-    });
+    }));
   }
 }
 

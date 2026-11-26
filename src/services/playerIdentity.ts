@@ -37,7 +37,10 @@ export function isEngineName(name: string): boolean {
   return ENGINE_NAME_RE.test(name);
 }
 
-export function resolvePlayerColor(game: GameRecord, identity: PlayerIdentity): PlayerColor | null {
+/** The fields a seat is resolved from — any game shape that carries them. */
+export type SeatFields = Pick<GameRecord, 'white' | 'black' | 'studentSide' | 'source' | 'result'>;
+
+export function resolvePlayerColor(game: SeatFields, identity: PlayerIdentity): PlayerColor | null {
   // 🔒 AN EXPLICIT DECLARATION BEATS EVERY HEURISTIC, AND IT WAS ALREADY ON THE
   // RECORD. `GameRecord.studentSide` has existed the whole time (model games
   // are gated on it) and no resolver read it — so a review of a game whose
@@ -91,7 +94,7 @@ export function resolvePlayerColor(game: GameRecord, identity: PlayerIdentity): 
 }
 
 /** The student's outcome, or null when the game is unfinished. */
-export function resolveGameOutcome(game: GameRecord, color: PlayerColor): GameOutcome | null {
+export function resolveGameOutcome(game: Pick<GameRecord, 'result'>, color: PlayerColor): GameOutcome | null {
   if (game.result === '1/2-1/2') return 'draw';
   if (game.result === '1-0') return color === 'white' ? 'win' : 'loss';
   if (game.result === '0-1') return color === 'black' ? 'win' : 'loss';

@@ -169,6 +169,8 @@ export function _resetLichessCircuitBreaker(): void {
   lichessRateLimitedUntil = null;
   cloudEvalCache.clear();
   cloudEvalInflight.clear();
+  explorerInflight.clear();
+  explorerLastAt = 0;
 }
 
 /** Test-only — reset the circuit AND forget every answer kept on the device,
@@ -290,7 +292,7 @@ export async function fetchLichessExplorer(
   const stored = await storedExplorerAnswer(key);
   if (stored && Date.now() - stored.savedAt < EXPLORER_FRESH_MS) return stored.data;
   try {
-    const data = await fetchLichessExplorerLive(fen, source, ratings);
+    const data = await explorerOnce(key, () => fetchLichessExplorerLive(fen, source, ratings));
     void keepExplorerAnswer(key, data);
     return data;
   } catch (err) {
@@ -305,6 +307,34 @@ export async function fetchLichessExplorer(
     }
     throw err;
   }
+}
+
+/**
+ * 🔒 ONE EXPLORER REQUEST AT A TIME, SPACED (2026-11-26). Lichess rate-limits
+ * the explorer by address and asks for one request at a time; the app fanned
+ * out in parallel (a lesson's tree walk, the coach's look-ahead, the eval
+ * bar's book check) and 9 App Store users hit the 30 s cooldown 70 times in a
+ * month, each a stretch with no book data. The same position asked twice at
+ * once is one request, and live requests leave the device one after another,
+ * `EXPLORER_SPACING_MS` apart.
+ */
+const EXPLORER_SPACING_MS = 250;
+const explorerInflight = new Map<string, Promise<LichessExplorerResult>>();
+let explorerLane: Promise<unknown> = Promise.resolve();
+let explorerLastAt = 0;
+function explorerOnce(key: string, run: () => Promise<LichessExplorerResult>): Promise<LichessExplorerResult> {
+  const running = explorerInflight.get(key);
+  if (running) return running;
+  const turn = explorerLane.then(async () => {
+    const wait = explorerLastAt + EXPLORER_SPACING_MS - Date.now();
+    if (wait > 0) await new Promise<void>((r) => { setTimeout(r, wait); });
+    explorerLastAt = Date.now();
+    return run();
+  });
+  explorerLane = turn.catch(() => undefined);
+  const p = turn.finally(() => { explorerInflight.delete(key); });
+  explorerInflight.set(key, p);
+  return p;
 }
 
 async function fetchLichessExplorerLive(

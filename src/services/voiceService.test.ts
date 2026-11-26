@@ -53,20 +53,10 @@ describe('voiceService', () => {
   });
 
   describe('fallback to speechService', () => {
-    // Web Speech is currently kill-switched (WEB_SPEECH_FALLBACK_ENABLED
-    // = false in voiceService.ts) because the sentence-streaming
-    // pattern was firing Polly AND Web Speech on the same content,
-    // producing overlapping coach voices. Until the dual-engine
-    // queueing is repaired, `speakFallback` is a no-op — it does NOT
-    // call speechService.speak. These tests verify:
-    //   1. The code path reaches the fallback tier (via getCurrentTier
-    //      === 'web-speech'), so the tier resolution still works.
-    //   2. setVoice IS still called when systemVoiceURI is set (it
-    //      runs before the kill-switched speak).
-    //   3. speechService.speak is NOT called — if a future PR removes
-    //      the kill-switch without first fixing the dual-engine bug,
-    //      these assertions will trip and force the author to re-read
-    //      the comment in voiceService.ts.
+    // 🔒 THE LAST TIER SPEAKS (2026-11-26). The final fallback, reached only
+    // once the cloud voice has failed, speaks the line in the device voice
+    // (bounded so a hung synthesis cannot hold its caller). It used to skip
+    // the line: 11 App Store users heard silence where the coach spoke.
 
     it('reaches web-speech tier when no profile exists', async () => {
       // No profile in DB at all
@@ -75,8 +65,7 @@ describe('voiceService', () => {
       // Path reached the web-speech tier (the no-prefs branch sets
       // lastTier to 'web-speech' before calling speakFallback).
       expect(voiceService.getCurrentTier()).toBe('web-speech');
-      // Kill-switch in effect: speech was NOT actually emitted.
-      expect(speechService.speak).not.toHaveBeenCalled();
+      expect(speechService.speak).toHaveBeenCalled();
     });
 
     it('returns muted when voiceEnabled is false', async () => {
@@ -105,7 +94,7 @@ describe('voiceService', () => {
       await voiceService.speak('Fallback test');
 
       expect(voiceService.getCurrentTier()).toBe('web-speech');
-      expect(speechService.speak).not.toHaveBeenCalled();
+      expect(speechService.speak).toHaveBeenCalled();
     });
 
     it('reaches web-speech tier when Polly API returns error', async () => {
@@ -128,7 +117,7 @@ describe('voiceService', () => {
 
       // Polly failed → cooldown → fall through to web-speech tier.
       expect(voiceService.getCurrentTier()).toBe('web-speech');
-      expect(speechService.speak).not.toHaveBeenCalled();
+      expect(speechService.speak).toHaveBeenCalled();
     });
 
     it('reaches web-speech tier when fetch throws a network error', async () => {
@@ -146,7 +135,7 @@ describe('voiceService', () => {
       await voiceService.speak('Network fail');
 
       expect(voiceService.getCurrentTier()).toBe('web-speech');
-      expect(speechService.speak).not.toHaveBeenCalled();
+      expect(speechService.speak).toHaveBeenCalled();
     });
 
     it('still applies system voice URI when set in preferences', async () => {
@@ -162,12 +151,9 @@ describe('voiceService', () => {
 
       await voiceService.speak('Custom voice');
 
-      // setVoice IS called even with the speak kill-switch on — it
-      // runs before speakFallback. When the kill-switch is removed,
-      // the configured voice is already primed.
       expect(speechService.setVoice).toHaveBeenCalledWith('Microsoft Aria Online (Natural)');
       expect(voiceService.getCurrentTier()).toBe('web-speech');
-      expect(speechService.speak).not.toHaveBeenCalled();
+      expect(speechService.speak).toHaveBeenCalled();
     });
   });
 
@@ -619,5 +605,40 @@ describe('a capture named as the sentence subject is said in plain English (Davi
     // A capture that IS the verb stays one.
     expect(sanitizeForTTS('They take back with Kxd1.')).toBe('They take back with king takes d1.');
     expect(sanitizeForTTS('Bxh7+ Kxh7.')).toMatch(/^Bishop takes h7/);
+  });
+});
+
+describe('the device-voice tier is bounded and the warmup backs off (2026-11-26)', () => {
+  it('a synthesis that never ends is cancelled at its bound, not waited on forever', async () => {
+    vi.useFakeTimers();
+    try {
+      const { speakDeviceVoiceBounded, deviceVoiceBoundMs } = await import('./voiceService');
+      const { speechService: ss } = await import('./speechService');
+      vi.spyOn(ss, 'speak').mockReturnValue(new Promise<void>(() => undefined));
+      const stop = vi.spyOn(ss, 'stop').mockImplementation(() => undefined);
+      let done = false;
+      void speakDeviceVoiceBounded('a line', 1).then(() => { done = true; });
+      await vi.advanceTimersByTimeAsync(deviceVoiceBoundMs('a line', 1) + 10);
+      expect(done).toBe(true);
+      expect(stop).toHaveBeenCalled();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('a line in another script asks for the system voice, not the English one', async () => {
+    const { speakDeviceVoiceBounded } = await import('./voiceService');
+    const { speechService: ss } = await import('./speechService');
+    const speak = vi.spyOn(ss, 'speak').mockResolvedValue(undefined);
+    speak.mockClear();
+    await speakDeviceVoiceBounded('هذه القطعة لك', 1);
+    expect(speak.mock.calls[0][1]?.voice).toBeNull();
+    await speakDeviceVoiceBounded('Your knight on f3 is loose.', 1);
+    expect(speak.mock.calls[1][1]?.voice).toBeUndefined();
+  });
+
+  it('each failed warmup in a row doubles the wait, to the ceiling', async () => {
+    const { warmupRetryMs } = await import('./voiceService');
+    expect([1, 2, 3, 4, 5, 9].map(warmupRetryMs)).toEqual([20_000, 40_000, 80_000, 120_000, 120_000, 120_000]);
   });
 });

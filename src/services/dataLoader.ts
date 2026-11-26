@@ -1,5 +1,6 @@
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
+import { retryAfterSuspension } from './idbResilience';
 import type { Table } from 'dexie';
 import { createDefaultSrsFields } from './srsEngine';
 import ecoData from '../data/openings-lichess.json';
@@ -224,13 +225,15 @@ async function seedCuratedTable<R extends { id: string }>(
     // with `sanitizeTreeStages` on the cache-read boundary.
     const prep = normalize ?? ((entry: R): R => ({ ...entry }));
     for (let i = 0; i < source.length; i += 200) {
-      await table.bulkPut(source.slice(i, i + 200).map((entry) => prep(entry)));
+      await retryAfterSuspension(() => table.bulkPut(source.slice(i, i + 200).map((entry) => prep(entry))));
       if (i + 200 < source.length) await yieldToEventLoop();
     }
     const validIds = new Set(source.map((r) => r.id));
-    const all = await table.toArray();
-    const stale = all.filter((r) => !validIds.has(r.id)).map((r) => r.id);
-    if (stale.length > 0) await table.bulkDelete(stale);
+    await retryAfterSuspension(async () => {
+      const all = await table.toArray();
+      const stale = all.filter((r) => !validIds.has(r.id)).map((r) => r.id);
+      if (stale.length > 0) await table.bulkDelete(stale);
+    });
   } catch (err) {
     console.warn(`[dataLoader] ${label} seed hiccup — retries next boot:`, err);
   }
@@ -433,7 +436,9 @@ export async function reconcileProRepertoires(): Promise<void> {
   // transient transaction, and the bulkPut + orphan sweep + revision bump
   // can race → "Attempt to get records from database without an in-progress
   // transaction" (Dexie runtime error, caught in prod 2026-06-30).
-  await db.transaction('rw', db.openings, db.meta, async () => {
+  // A transaction iOS cuts off by suspending the app runs again once it is
+  // back (`idbResilience`): the body is an idempotent reconcile.
+  await retryAfterSuspension(() => db.transaction('rw', db.openings, db.meta, async () => {
     // Re-check inside the transaction in case a concurrent reconcile applied
     // the revision between the read above and acquiring the write lock.
     const meta = await db.meta.get(PRO_REVISION_KEY);
@@ -541,7 +546,7 @@ export async function reconcileProRepertoires(): Promise<void> {
     }
 
     await db.meta.put({ key: PRO_REVISION_KEY, value: PRO_DATA_REVISION });
-  });
+  }));
 }
 
 /**
@@ -568,7 +573,9 @@ async function reconcileBaseRepertoire(): Promise<void> {
 
   // Single rw transaction so the for-of get() loop, bulkPut, orphan sweep,
   // and revision bump share one scope (David 2026-06-30, prod catch).
-  await db.transaction('rw', db.openings, db.meta, async () => {
+  // A transaction iOS cuts off by suspending the app runs again once it is
+  // back (`idbResilience`): the body is an idempotent reconcile.
+  await retryAfterSuspension(() => db.transaction('rw', db.openings, db.meta, async () => {
     const meta = await db.meta.get(BASE_REVISION_KEY);
     if (meta?.value === BASE_DATA_REVISION) return;
 
@@ -647,7 +654,7 @@ async function reconcileBaseRepertoire(): Promise<void> {
     if (orphans.length > 0) await db.openings.bulkDelete(orphans);
 
     await db.meta.put({ key: BASE_REVISION_KEY, value: BASE_DATA_REVISION });
-  });
+  }));
 }
 
 // ─── Course Files: gambits.json + anti-openings.json ─────────────────────────
@@ -690,7 +697,9 @@ async function reconcileCourseFile(file: CourseFile): Promise<void> {
   // Positions OUTSIDE the transaction (see reconcileBaseRepertoire).
   const posById = await precomputePositions(file.entries);
   const defaults = createDefaultSrsFields();
-  await db.transaction('rw', db.openings, db.meta, async () => {
+  // A transaction iOS cuts off by suspending the app runs again once it is
+  // back (`idbResilience`): the body is an idempotent reconcile.
+  await retryAfterSuspension(() => db.transaction('rw', db.openings, db.meta, async () => {
     const stored = await db.openings.bulkGet(file.entries.map((e) => e.id));
     const records = file.entries.map((entry, k): OpeningRecord => {
       const { fen, uci } = posById.get(entry.id) ?? computePosition(entry.pgn);
@@ -733,7 +742,7 @@ async function reconcileCourseFile(file: CourseFile): Promise<void> {
     const dropped = prev ? (JSON.parse(prev.value) as string[]).filter((id) => !now.has(id)) : [];
     if (dropped.length > 0) await db.openings.bulkDelete(dropped);
     await db.meta.put({ key: file.idsKey, value: JSON.stringify([...now]) });
-  });
+  }));
 }
 
 /** Mirror the gambit and anti-opening course files into `db.openings`,

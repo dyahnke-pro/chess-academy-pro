@@ -1,4 +1,4 @@
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, Suspense, type ReactNode } from 'react';
 import { lazyPage } from './utils/lazyPage';
 import { PageFallback } from './components/ui/PageFallback';
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
@@ -52,7 +52,7 @@ import { initBilling, getStableAnalyticsId } from './services/billingService';
 import { useFreeTierStore } from './stores/freeTierStore';
 import { ReviewPrompt } from './components/Feedback/ReviewPrompt';
 import { withWebOrigin } from './utils/webOrigin';
-import { startSessionWatch } from './services/sessionWatch';
+import { startSessionWatch, launchLanding } from './services/sessionWatch';
 
 const AcademyPage = lazyPage('AcademyPage', () => import('./components/Academy/AcademyPage').then((m) => m.AcademyPage));
 const CourseSyllabusPage = lazyPage('CourseSyllabusPage', () => import('./components/Academy/CourseSyllabusPage').then((m) => m.CourseSyllabusPage));
@@ -173,6 +173,39 @@ function CoachActuatorBridge(): null {
     setCoachDifficulty(targetElo >= base + 100 ? 'hard' : targetElo <= base - 100 ? 'easy' : 'medium');
   }), [setCoachDifficulty]);
   return null;
+}
+
+/**
+ * 🔒 A KILLED LAUNCH LANDS ON HOME (2026-11-26). iOS reopens a killed web view
+ * at the URL it died on; a page that killed it would open and kill it again.
+ * Holds the routes for the one meta read that says whether the last session
+ * was killed, then sends a killed launch to '/' before any page mounts.
+ */
+function KilledLaunchLanding({ children }: { children: ReactNode }): JSX.Element | null {
+  const navigate = useNavigate();
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    let alive = true;
+    const opened = window.location.pathname;
+    void launchLanding(opened)
+      .then((landing) => {
+        if (!alive) return;
+        if (landing) {
+          void logAppAudit({
+            kind: 'launch-landed-home',
+            category: 'app',
+            source: 'App.KilledLaunchLanding',
+            summary: `last session was killed — launch sent home from ${opened}`,
+            details: JSON.stringify({ opened }),
+          });
+          void navigate(landing, { replace: true });
+        }
+      })
+      .catch(() => undefined)
+      .finally(() => { if (alive) setReady(true); });
+    return () => { alive = false; };
+  }, [navigate]);
+  return ready ? <>{children}</> : null;
 }
 
 export function App(): JSX.Element {
@@ -584,7 +617,7 @@ export function App(): JSX.Element {
       <NativeBackButton />
       <CoachActuatorBridge />
       <Suspense fallback={<PageFallback />}>
-      <Routes>
+      <KilledLaunchLanding><Routes>
         {/* Standalone legal route — no app chrome, so the production URL
             (/privacy) doubles as the hosted privacy-policy link the App
             Store + Google Play both require. */}
@@ -779,7 +812,7 @@ export function App(): JSX.Element {
           <Route path="/kid/level-select/:piece/:game" element={<ErrorBoundary><PieceLevelSelect /></ErrorBoundary>} />
           <Route path="/kid/:piece" element={<ErrorBoundary><KidPiecePage /></ErrorBoundary>} />
         </Route>
-      </Routes>
+      </Routes></KilledLaunchLanding>
       </Suspense>
       <BuildVersionWidget />
       <StarAnimationLayer />

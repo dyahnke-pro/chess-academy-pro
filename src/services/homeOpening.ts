@@ -20,7 +20,8 @@
 //   • Score is (wins + ½ draws) / decided — a fact about the record, never a
 //     rating; the coach reads it to find the weaknesses INSIDE the home
 //     opening, not to decide how much to say (CLAUDE.md: rating is strength).
-import type { GameRecord, OpeningKey } from '../types';
+import type { OpeningKey } from '../types';
+import type { GameHeader } from './gameScan';
 import { resolvePlayerColor, resolveGameOutcome, type PlayerColor, type PlayerIdentity } from './playerIdentity';
 import { openingEntryForKey, openingFamily } from './openingKey';
 
@@ -96,7 +97,7 @@ const scoreOf = (t: Tally): number => {
 
 /** Rank the student's families for one colour, most-played first. */
 export function rankHomeOpeningCandidates(
-  games: readonly GameRecord[],
+  games: readonly GameHeader[],
   identity: PlayerIdentity,
   colour: PlayerColor,
 ): HomeOpeningRanking {
@@ -181,7 +182,7 @@ export function toChoice(c: HomeOpeningCandidate, source: HomeOpeningChoice['sou
  *  whose home family the game's key resolves to? A Pirc the student faced as
  *  White is not their Pirc. */
 export function isHomeOpeningGame(
-  g: GameRecord,
+  g: GameHeader,
   identity: PlayerIdentity,
   home: Partial<Record<PlayerColor, { family: string } | null>>,
 ): boolean {
@@ -200,12 +201,12 @@ export function isHomeOpeningGame(
  *  games in it are analysed, so a batch that takes "50 most recent" leaves the
  *  coach recommending the Pirc with nothing to say about it. Stable within
  *  each half (newest first). */
-export function orderGamesForAnalysis<T extends GameRecord>(
+export function orderGamesForAnalysis<T extends GameHeader>(
   games: readonly T[],
   identity: PlayerIdentity,
   home: Partial<Record<PlayerColor, { family: string } | null>>,
 ): { home: T[]; rest: T[] } {
-  const stamp = (g: GameRecord): number => (g.date ? new Date(g.date).getTime() : 0);
+  const stamp = (g: GameHeader): number => (g.date ? new Date(g.date).getTime() : 0);
   const byDate = [...games].sort((a, b) => stamp(b) - stamp(a));
   const homeGames: T[] = [];
   const rest: T[] = [];

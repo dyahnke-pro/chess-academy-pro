@@ -7,6 +7,7 @@
 // tool — inputs, the term that carried it, the verdict).
 import { db } from '../db/schema';
 import { isFixtureGame } from './fixtureGames';
+import { headerOf, scanGames, type GameHeader } from './gameScan';
 import { useAppStore } from '../stores/appStore';
 import { logAppAudit } from './appAuditor';
 import { invalidateHomeSteer } from './homeSteerCache';
@@ -37,10 +38,23 @@ function identityOf(p: UserProfile | null): PlayerIdentity {
   };
 }
 
+/** The student's games as headers — the ranking reads a few fields a game,
+ *  so it never holds a whole record (`gameScan`). */
+let headersInFlight: Promise<GameHeader[]> | null = null;
+function studentGameHeaders(): Promise<GameHeader[]> {
+  // One pass shared by every ask at the same moment (the page asks for the
+  // rankings and the choices together, and the analyse button asks again).
+  if (!headersInFlight) {
+    headersInFlight = scanGames((g) => (!g.isMasterGame && !isFixtureGame(g) ? headerOf(g) : null))
+      .finally(() => { headersInFlight = null; });
+  }
+  return headersInFlight;
+}
+
 /** Both colours' rankings, memoized for five minutes on the game count. */
 export async function getHomeOpeningRankings(opts: { force?: boolean } = {}): Promise<Record<PlayerColor, HomeOpeningRanking>> {
   // Fixtures are not the student (D5): a seeded demo never votes for a home opening.
-  const games = await db.games.filter((g) => !g.isMasterGame && !isFixtureGame(g)).toArray();
+  const games = await studentGameHeaders();
   const identity = identityOf(await loadProfile());
   // Keyed on the game count AND the identity: a ranking computed before the
   // username landed in the profile must not be served after it did.
@@ -152,6 +166,6 @@ export async function getHomeGameIds(): Promise<ReadonlySet<string>> {
   if (!home.white && !home.black) return new Set();
   const profile = await loadProfile();
   const identity = identityOf(profile);
-  const games = await db.games.filter((g) => !g.isMasterGame && !isFixtureGame(g)).toArray();
+  const games = await studentGameHeaders();
   return new Set(games.filter((g) => isHomeOpeningGame(g, identity, home)).map((g) => g.id));
 }

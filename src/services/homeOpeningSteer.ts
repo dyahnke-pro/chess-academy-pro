@@ -14,7 +14,7 @@
 // That is the sanctioned randomness (CLAUDE.md: the opponent's moves are
 // genuinely random on purpose); a single continuation is deterministic.
 import { Chess } from 'chess.js';
-import { db } from '../db/schema';
+import { headerOf, scanGames, type GameHeader } from './gameScan';
 import { useAppStore } from '../stores/appStore';
 import { logAppAudit } from './appAuditor';
 import { isFixtureGame } from './fixtureGames';
@@ -70,7 +70,7 @@ export function openingSans(pgn: string, maxPly: number): string[] {
 
 /** Build the index from the student's home games: the OPPONENT's replies at
  *  every position the games reached, for the given student colour. Pure. */
-export function buildSteerIndex(games: readonly GameRecord[], identity: PlayerIdentity, colour: PlayerColor, family: string): SteerIndex {
+export function buildSteerIndex(games: ReadonlyArray<GameHeader & Pick<GameRecord, 'pgn'>>, identity: PlayerIdentity, colour: PlayerColor, family: string): SteerIndex {
   const index: SteerIndex = new Map();
   for (const g of games) {
     if (!isHomeOpeningGame(g, identity, { [colour]: { family } })) continue;
@@ -164,15 +164,23 @@ async function buildFor(colour: PlayerColor, trigger: string): Promise<HomeSteer
     const home = await getHomeOpenings();
     const choice = home[colour];
     if (!choice) return null;
-    const games = await db.games.filter((g) => !g.isMasterGame && !isFixtureGame(g)).toArray();
-    const index = buildSteerIndex(games, identityNow(), colour, choice.family);
-    const entry: HomeSteerEntry = { index, family: choice.family, games: games.length, builtAt: Date.now(), buildMs: Date.now() - t0 };
+    // A page of games at a time (`gameScan`): each home game hands over only
+    // its opening moves, never the whole library held at once (2026-11-26).
+    const identity = identityNow();
+    let gameCount = 0;
+    const homeGames = await scanGames((g) => {
+      if (g.isMasterGame || isFixtureGame(g)) return null;
+      gameCount++;
+      return isHomeOpeningGame(g, identity, { [colour]: { family: choice.family } }) ? { ...headerOf(g), pgn: g.pgn } : null;
+    });
+    const index = buildSteerIndex(homeGames, identity, colour, choice.family);
+    const entry: HomeSteerEntry = { index, family: choice.family, games: gameCount, builtAt: Date.now(), buildMs: Date.now() - t0 };
     setHomeSteerEntry(colour, entry);
     void logAppAudit({
       kind: 'home-steer-warmed',
       category: 'subsystem',
       source: 'homeOpeningSteer.buildFor',
-      summary: `colour=${colour} family=${choice.family} positions=${index.size} games=${games.length} buildMs=${entry.buildMs} trigger=${trigger}`,
+      summary: `colour=${colour} family=${choice.family} positions=${index.size} games=${gameCount} buildMs=${entry.buildMs} trigger=${trigger}`,
     });
     return entry;
   })().finally(() => { inFlight.delete(colour); });

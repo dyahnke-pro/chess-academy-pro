@@ -35,7 +35,7 @@ function plyIndex(moveNumber: number, color: 'white' | 'black'): number {
  * only if it carries per-ply clock data (`clockRemainingMs`); each of its
  * mistakes is mapped to its ply and kept when the clock was at/under the bar.
  */
-export function detectTimeTrouble(games: GameRecord[], mistakes: MistakePuzzle[]): TimeTroubleHit[] {
+export function detectTimeTrouble(games: ReadonlyArray<Pick<GameRecord, 'id' | 'clockRemainingMs'>>, mistakes: MistakePuzzle[]): TimeTroubleHit[] {
   const clockByGame = new Map<string, number[]>();
   for (const g of games) {
     if (g.clockRemainingMs && g.clockRemainingMs.length > 0) clockByGame.set(g.id, g.clockRemainingMs);

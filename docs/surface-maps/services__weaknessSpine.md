@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1114 lines · 21 exports · 42 importers · 26 tests · 2 audits**
+**1134 lines · 21 exports · 43 importers · 27 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
@@ -34,6 +34,7 @@
 - `src/services/fundamentalReachesDecider.test.ts`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/fundamentalsRecordLoop.integration.test.ts`
+- `src/services/gameScan.test.ts`
 - `src/services/homeOpeningPlan.test.ts`
 - `src/services/homeOpeningPlan.ts`
 - `src/services/loopCloses.review.integration.test.ts`
@@ -165,7 +166,7 @@
 - `src/services/weaknessSpine.test.ts:259`
 - `src/services/weaknessSpine.test.ts:272`
 
-### `getUnifiedWeaknessProfile` (function) — 53 call sites
+### `getUnifiedWeaknessProfile` (function) — 54 call sites
 - `src/components/Coach/CoachTeachPage.tsx:3534`
 - `src/components/Coach/CoachTeachPage.tsx:13878`
 - `src/components/Coach/TrainingPlanRolodexPage.tsx:72`
@@ -185,12 +186,13 @@
 - `src/services/fundamentalReachesDecider.test.ts:115`
 - `src/services/fundamentalsPipeline.realGame.test.ts:355`
 - `src/services/fundamentalsRecordLoop.integration.test.ts:92`
+- `src/services/gameScan.test.ts:59`
 - `src/services/homeOpeningPlan.ts:181`
 - `src/services/loopCloses.review.integration.test.ts:75`
 - `src/services/puzzleMissService.test.ts:63`
 - `src/services/recordReprice.test.ts:130`
 - `src/services/recordReprice.test.ts:132`
-- `src/services/thinkingLessonStart.ts:110`
+- `src/services/thinkingLessonStart.ts:112`
 - `src/services/upNextLoader.ts:147`
 - `src/services/weaknessSignalLoader.ts:66`
 - `src/services/weaknessSpine.fundamentals.test.ts:48`
@@ -232,6 +234,7 @@
 - `src/services/fundamentalReachesDecider.test.ts`
 - `src/services/fundamentalsPipeline.realGame.test.ts`
 - `src/services/fundamentalsRecordLoop.integration.test.ts`
+- `src/services/gameScan.test.ts`
 - `src/services/homeOpeningPlan.test.ts`
 - `src/services/loopCloses.review.integration.test.ts`
 - `src/services/puzzleMissService.test.ts`

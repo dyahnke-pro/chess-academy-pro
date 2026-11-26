@@ -1,4 +1,5 @@
 import { db } from '../db/schema';
+import { normalizeChessUsername } from '../utils/chessUsername';
 import type { GameRecord, PlatformStats, TimeControlStats } from '../types';
 import { detectBlunders, extractClockMs, annotationsFromEvalComments, EVAL_COMMENT_ANALYSIS_DEPTH } from './gameImportUtils';
 import { openingKeyFromPgn } from './openingKey';
@@ -132,6 +133,7 @@ export async function importChessComGames(
   onProgress?: (count: number, status?: string) => void,
   opts: ImportChessComOptions = {},
 ): Promise<number> {
+  username = normalizeChessUsername(username);
   // Step 1: Fetch archives list
   onProgress?.(0, 'Fetching game archives...');
 
@@ -230,6 +232,7 @@ export async function importChessComGames(
 export async function importChessComStats(
   username: string,
 ): Promise<PlatformStats> {
+  username = normalizeChessUsername(username);
   const response = await fetch(
     `https://api.chess.com/pub/player/${encodeURIComponent(username.toLowerCase())}/stats`,
     { signal: AbortSignal.timeout(10000) },

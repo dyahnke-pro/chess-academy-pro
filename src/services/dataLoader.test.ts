@@ -129,9 +129,10 @@ describe('loadMiddlegamePlansData — prune', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
     const bulkDelete = vi
       .spyOn(db.middlegamePlans, 'bulkDelete')
-      .mockRejectedValueOnce(new Error('Transaction aborted'));
+      .mockRejectedValue(new Error('Transaction aborted'));
 
-    // Must NOT reject even though the prune's bulkDelete throws.
+    // Must NOT reject even though the prune's bulkDelete keeps throwing
+    // (it is retried — `idbResilience` — then swallowed).
     await expect(loadMiddlegamePlansData()).resolves.toBeUndefined();
     expect(bulkDelete).toHaveBeenCalled();
     expect(warn).toHaveBeenCalledWith(
@@ -141,6 +142,21 @@ describe('loadMiddlegamePlansData — prune', () => {
 
     bulkDelete.mockRestore();
     warn.mockRestore();
+  });
+
+  it('a prune iOS cut off once runs again and finishes (2026-11-26)', async () => {
+    await db.middlegamePlans.put({
+      id: 'mp-stale-once', openingId: 'pirc-defence', criticalPositionFen: '8/8/8/8/8/8/8/8 w - - 0 1',
+      title: 'stale', overview: '', pawnBreaks: [], pieceManeuvers: [], strategicThemes: [], endgameTransitions: [],
+    } as never);
+    const real = db.middlegamePlans.bulkDelete.bind(db.middlegamePlans);
+    const bulkDelete = vi.spyOn(db.middlegamePlans, 'bulkDelete')
+      .mockRejectedValueOnce(new Error('Attempt to delete range from database without an in-progress transaction'))
+      .mockImplementation(real);
+    await loadMiddlegamePlansData();
+    expect(bulkDelete).toHaveBeenCalledTimes(2);
+    expect(await db.middlegamePlans.get('mp-stale-once')).toBeUndefined();
+    bulkDelete.mockRestore();
   });
 });
 

@@ -25,7 +25,7 @@ import { useAppStore } from '../stores/appStore';
 import type { GameRecord } from '../types';
 import { DEFAULT_STUDENT_RATING } from './ratingBands';
 import { logAppAudit } from './appAuditor';
-import { isFixtureGame } from './fixtureGames';
+import { isFixtureGame, isFixtureGameId } from './fixtureGames';
 
 /** Re-exported so there is ONE literal in the app — see `DEFAULT_STUDENT_RATING`. */
 export const DEFAULT_RATING = DEFAULT_STUDENT_RATING;
@@ -44,6 +44,9 @@ export interface RatingEstimate {
   /** Number of games the estimate was derived from (0 for profile/default). */
   sampleSize: number;
 }
+
+/** Imported games read per page while looking for the newest rating. */
+const IMPORTED_PAGE = 20;
 
 /** Parse the game date; falls back to epoch for invalid strings. */
 function parseDate(date: string): number {
@@ -163,25 +166,36 @@ export async function getPlayerRatingEstimate(): Promise<RatingEstimate> {
   // has a rating" and this rung answered 1500 for a device that had never
   // played a move. Filtered here, at the reader, so the chain can only ever see
   // games the student played.
-  const importedGames = (await db.games
-    .where('source')
-    .anyOf('lichess', 'chesscom')
-    // An unrated play-vs-computer game carries no rating of the student's own
-    // (walk 6, W3 — the same predicate the Insights opponent stats use).
-    .toArray()).filter((g) => !isFixtureGame(g) && !isComputerOpponent(g));
-
-  if (importedGames.length > 0) {
-    const sorted = importedGames
-      .slice()
-      .sort((a, b) => parseDate(b.date) - parseDate(a.date));
-    for (const game of sorted) {
-      const rating = ratingFromImportedGame(game, username);
-      if (rating !== null && rating > 0) {
-        return reportEstimate({
-          rating,
-          source: 'imported-games',
-          sampleSize: importedGames.length,
-        });
+  // 🔒 NEVER THE WHOLE LIBRARY AT BOOT (2026-11-26). This runs on every launch
+  // (`calibrateStrength`), and it read every imported game in full to use the
+  // newest one with a rating — on a big chess.com library that was the whole
+  // library in memory within a second of launch, beside the web view's other
+  // boot work (an App Store user's kills at 0–3 s). Now: the imported games'
+  // keys and dates off the indexes (no row loaded), then rows newest first, a
+  // page at a time, stopping at the first that answers.
+  const importedKeys = await db.games.where('source').anyOf('lichess', 'chesscom').primaryKeys();
+  if (importedKeys.length > 0) {
+    const dates = new Map<string, number>();
+    await db.games.orderBy('date').eachKey((date, cursor) => {
+      dates.set(cursor.primaryKey, typeof date === 'string' ? parseDate(date) : 0);
+    });
+    const newestFirst = importedKeys
+      .filter((k) => !isFixtureGameId(k))
+      .sort((a, b) => (dates.get(b) ?? 0) - (dates.get(a) ?? 0));
+    for (let i = 0; i < newestFirst.length; i += IMPORTED_PAGE) {
+      const page = await db.games.bulkGet(newestFirst.slice(i, i + IMPORTED_PAGE));
+      for (const game of page) {
+        // An unrated play-vs-computer game carries no rating of the student's own
+        // (walk 6, W3 — the same predicate the Insights opponent stats use).
+        if (!game || isFixtureGame(game) || isComputerOpponent(game)) continue;
+        const rating = ratingFromImportedGame(game, username);
+        if (rating !== null && rating > 0) {
+          return reportEstimate({
+            rating,
+            source: 'imported-games',
+            sampleSize: newestFirst.length,
+          });
+        }
       }
     }
   }

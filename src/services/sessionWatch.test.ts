@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { killReport, type SessionBeat } from './sessionWatch';
+import { killReport, landingAfterKill, type SessionBeat } from './sessionWatch';
 
 const beat = (o: Partial<SessionBeat>): SessionBeat => ({ startedAt: 0, lastBeat: 5000, route: '/weaknesses', clean: false, poolWorkers: 4, analysing: true, ...o });
 
@@ -60,5 +60,21 @@ describe('an applied bundle is not a kill', () => {
     await markSessionClean();
     const rec = await db.meta.get('session-watch');
     expect(JSON.parse(rec?.value ?? '{}').clean).toBe(true);
+  });
+});
+
+// 🔒 A KILLED LAUNCH LANDS ON HOME (2026-11-26): iOS reopened a killed web view
+// at /weaknesses, which killed it again — 11 kills in two days on one phone.
+
+describe('landingAfterKill', () => {
+  const killed = { route: '/weaknesses', alive_s: 3, gap_s: 10, pool_workers: 0, analysing: false };
+  it('a native launch after a kill goes home, from the page that died and any other', () => {
+    expect(landingAfterKill(killed, '/weaknesses', true)).toBe('/');
+    expect(landingAfterKill(killed, '/coach/teach', true)).toBe('/');
+  });
+  it('stays put when nothing was killed, when it is already home, and on the web', () => {
+    expect(landingAfterKill(null, '/weaknesses', true)).toBeNull();
+    expect(landingAfterKill(killed, '/', true)).toBeNull();
+    expect(landingAfterKill(killed, '/weaknesses', false)).toBeNull();
   });
 });
