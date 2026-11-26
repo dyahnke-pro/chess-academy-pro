@@ -199,3 +199,18 @@ describe('structureRead — the doubled pawns a trade makes, and the bishop shut
     expect(r?.text).toBe('That shuts the bishop on c8 in behind its own pawns: a bad bishop until it gets out.');
   });
 });
+
+describe('planAheadRead — the plan the Theory lecture says on the move', () => {
+  it('after the French Advance e5, the plan ahead is theirs: …c5', async () => {
+    const { planAheadRead, theoryExtras } = await import('./theoryReads');
+    const { __setLocalDbForTests, masterMovesCachedSync } = await import('./masterPlayLookup');
+    __setLocalDbForTests(JSON.parse(readFileSync('public/data/openings-masters-db.json', 'utf8')));
+    const r = planAheadRead({ history: ['e4', 'e6', 'd4', 'd5'], san: 'e5', mover: 'w', whose: 'your', movesAt: (f) => masterMovesCachedSync(f) });
+    expect(r.plan?.goal.san).toBe('c5');
+    expect(r.plan?.whose).toBe('their');
+    const said = new Set<string>();
+    const lines = theoryExtras({ history: ['e4', 'e6', 'd4', 'd5'], fenBefore: fenOf(['e4', 'e6', 'd4', 'd5']), san: 'e5', mover: 'w', movesAt: (f) => masterMovesCachedSync(f), slipsAt: () => [], said, withPieceJob: false });
+    expect(lines.join(' ')).toMatch(/Their plan[^.]*…c5/);
+    __setLocalDbForTests(null);
+  }, 120_000);
+});

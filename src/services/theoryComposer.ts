@@ -145,7 +145,9 @@ export function composeTheoryTurn(i: TheoryTurnIn): TheorySentence[] {
   if (i.namedRoads) out.push({ kind: 'decision', text: i.namedRoads.text, squares: i.namedRoads.squares });
   if (i.plan) out.push({ kind: 'plan', text: planGoalLine({ whose: i.plan.whose, goal: i.plan.goal, lead: i.plan.lead }), squares: [i.plan.goalSquare] });
   if (i.piece) {
-    const t = pieceHomeLine({ whose: i.whose, piece: i.piece });
+    // The piece is said from its own seat: the other side's piece is theirs.
+    const whose: Whose = i.piece.color === i.mover ? i.whose : (i.whose === 'your' ? 'their' : 'your');
+    const t = pieceHomeLine({ whose, piece: i.piece });
     if (t) out.push({ kind: 'piece', text: t, squares: [i.piece.to] });
   }
   if (i.castle) {

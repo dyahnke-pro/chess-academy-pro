@@ -22,7 +22,9 @@ import { slipNoun, knownLead } from './trapWords';
 import { classifySlip, type SlipKind } from './trapComputer';
 import { MATE_CP } from './mateScale';
 import type { ClubGem } from './clubGems';
-import { withoutCastleTail, composeTheoryTurn } from './theoryComposer';
+import { withoutCastleTail, composeTheoryTurn, type KeyMove, type PlacedPiece } from './theoryComposer';
+import { mastersPlanRead, planStillAhead, type MastersPlanRead } from './mastersPlanRead';
+import { positionOf } from '../utils/samePosition';
 import { andList } from '../utils/andList';
 
 export interface TheoryRead {
@@ -480,6 +482,48 @@ export function centreRead(i: { fenBefore: string; san: string; mover: Color }):
  *  and a trap around it. A structure, an endgame turn or a gambit is news once a
  *  game (`said`). The piece's own job is said only when `withPieceJob` (the
  *  caller has no why of its own for the move). */
+const planMemo = new Map<string, MastersPlanRead | null>();
+/** THE PLAN AHEAD, for the theory composer: the masters' plan read at the
+ *  deepest position on the line with games enough to read one (the theory
+ *  surfaces' break bar, `THEORY_BREAK_SHARE`), keeping what still lies ahead on
+ *  the board the move reaches (`planStillAhead`). The mover's own break is the
+ *  plan when it has one, else the other side's, each with its seat; the piece
+ *  the plan brings likewise. Reads are remembered by board. */
+export const THEORY_BREAK_SHARE = 0.2;
+export function planAheadRead(i: { history: readonly string[]; san: string; mover: Color; whose: 'your' | 'their'; movesAt: (fen: string) => readonly LocalDbMove[] | null }): {
+  plan: { goal: KeyMove; goalSquare: string; lead: readonly KeyMove[]; whose: 'your' | 'their' } | null;
+  piece: PlacedPiece | null;
+} {
+  const none = { plan: null, piece: null };
+  const walk = new Chess();
+  const fens: string[] = [walk.fen()];
+  try { for (const s of [...i.history, i.san]) { walk.move(s); fens.push(walk.fen()); } } catch { return none; }
+  const fenAfter = fens[fens.length - 1];
+  const flip = (w: 'your' | 'their'): 'your' | 'their' => (w === 'your' ? 'their' : 'your');
+  for (let k = fens.length - 1; k >= 0; k -= 1) {
+    const key = positionOf(fens[k]);
+    let read = planMemo.get(key);
+    if (read === undefined) {
+      read = mastersPlanRead(fens[k], (f) => i.movesAt(f), { minBreakShare: THEORY_BREAK_SHARE });
+      if (planMemo.size > 400) planMemo.clear();
+      planMemo.set(key, read);
+    }
+    if (!read) continue;
+    const ahead = planStillAhead(read, fenAfter);
+    if (!ahead) return none;
+    const mineBrk = i.mover === 'w' ? ahead.white : ahead.black;
+    const theirBrk = i.mover === 'w' ? ahead.black : ahead.white;
+    const brk = mineBrk ?? theirBrk;
+    const goalColor: Color = mineBrk ? i.mover : (i.mover === 'w' ? 'b' : 'w');
+    const home = (i.mover === 'w' ? ahead.whitePiece : ahead.blackPiece) ?? (i.mover === 'w' ? ahead.blackPiece : ahead.whitePiece);
+    return {
+      plan: brk ? { goal: { san: brk.san, piece: 'p', color: goalColor }, goalSquare: brk.square, lead: brk.lead ?? [], whose: mineBrk ? i.whose : flip(i.whose) } : null,
+      piece: home?.fen && home.color ? { piece: home.piece, to: home.to, san: home.san, color: home.color, fen: home.fen } : null,
+    };
+  }
+  return none;
+}
+
 /** The move before the last of `history`, with its board. */
 function priorOf(history: readonly string[]): { fenBefore: string; san: string } | null {
   if (!history.length) return null;
@@ -499,8 +543,14 @@ export function theoryExtras(i: {
     return r;
   };
   const fresh = (r: TheoryRead | null): TheoryRead | null => { if (!r || i.said.has(r.text)) return null; i.said.add(r.text); return r; };
+  const ahead = planAheadRead({ history: i.history, san: i.san, mover: i.mover, whose: 'your', movesAt: i.movesAt });
+  // The plan and the piece it brings are news when they change.
+  const planText = ahead.plan ? `plan:${ahead.plan.whose}:${ahead.plan.goal.san}:${ahead.plan.lead.map((m) => m.san).join(',')}` : null;
+  const pieceText = ahead.piece ? `piece:${ahead.piece.color}:${ahead.piece.san}` : null;
+  const plan = planText && !i.said.has(planText) ? (i.said.add(planText), ahead.plan) : null;
+  const piece = pieceText && !i.said.has(pieceText) ? (i.said.add(pieceText), ahead.piece) : null;
   const turn = composeTheoryTurn({
-    fen: i.fenBefore, san: i.san, mover: i.mover, whose: 'your', roads: [],
+    fen: i.fenBefore, san: i.san, mover: i.mover, whose: 'your', roads: [], plan, piece,
     structure: once('structure', structureRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover, prior: priorOf(i.history) }) ?? centreRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })),
     gambit: once('gambit', gambitRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover }) ?? gambitAcceptedRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover }) ?? gambitAheadRead({ fen: (() => { const c = new Chess(i.fenBefore); c.move(i.san); return c.fen(); })(), movesAt: i.movesAt }) ?? gambitStandingRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })),
     endgame: once('endgame', endgameRead({ fenBefore: i.fenBefore, san: i.san, movesAt: i.movesAt })),

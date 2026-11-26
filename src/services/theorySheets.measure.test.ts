@@ -16,9 +16,8 @@ import { readFileSync, existsSync, writeFileSync, mkdirSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import { __setLocalDbForTests, masterMovesCachedSync } from './masterPlayLookup';
 import { __setContinuationsForTests } from './mastersContinuation';
-import { mastersPlanRead, planStillAhead, type MastersPlanRead } from './mastersPlanRead';
-import { composeTheoryTurn, roadsFrom, type KeyMove, type TheorySentenceKind } from './theoryComposer';
-import { gambitAcceptedRead, gambitStandingRead, namedRoadsRead, structureRead, gambitRead, endgameRead, moveOrderRead, transpositionRead, pieceJobRead, trapRead, gambitAheadRead, centreRead } from './theoryReads';
+import { composeTheoryTurn, roadsFrom, type TheorySentenceKind } from './theoryComposer';
+import { planAheadRead, gambitAcceptedRead, gambitStandingRead, namedRoadsRead, structureRead, gambitRead, endgameRead, moveOrderRead, transpositionRead, pieceJobRead, trapRead, gambitAheadRead, centreRead } from './theoryReads';
 import { knownSlipsAt, knownSlipIndexNow, setKnownSlipIndexForTests } from './knownSlips';
 import { openingTheoryFacts } from './openingTheory';
 import { setOpeningPositions, openingAtPosition } from './openingPositions';
@@ -71,24 +70,12 @@ describe.runIf(!!process.env.THEORY_SHEETS && existsSync('data/sources/wikibooks
     const mover = c.turn();
     c.move(san);
     const fenAfter = c.fen();
-    // The plan is read at the deepest book position the line reached, and keeps
-    // what still lies ahead on this board (the Theory lecture's own rule).
-    let read: MastersPlanRead | null = null;
-    const walk = new Chess();
-    const fens: string[] = [walk.fen()];
-    for (const s of n.lineSan) { walk.move(s); fens.push(walk.fen()); }
-    for (let k = fens.length - 1; k >= 0 && !read; k -= 1) read = mastersPlanRead(fens[k], (f) => masterMovesCachedSync(f), { minBreakShare: 0.2 });
-    const ahead = planStillAhead(read, fenAfter);
-    const mine = ahead ? (mover === 'w' ? ahead.white : ahead.black) : null;
-    const theirs = ahead ? (mover === 'w' ? ahead.black : ahead.white) : null;
-    const brk = mine ?? theirs;
-    const goalColor = mine ? mover : (mover === 'w' ? 'b' : 'w');
-    const goal: KeyMove | null = brk ? { san: brk.san, piece: 'p', color: goalColor } : null;
-    const home = ahead ? (mover === 'w' ? ahead.whitePiece : ahead.blackPiece) ?? (mover === 'w' ? ahead.blackPiece : ahead.whitePiece) : null;
+    // The plan ahead: the lecture's own computer (`planAheadRead`).
+    const ahead = planAheadRead({ history, san, mover, whose: 'your', movesAt: (f) => masterMovesCachedSync(f) });
     const turn = composeTheoryTurn({
       fen: fenBefore, san, mover, whose: 'your', roads: roadsFrom(masterMovesCachedSync(fenBefore)),
-      plan: goal && brk ? { goal, goalSquare: brk.square, lead: brk.lead ?? [], whose: mine ? 'your' : 'their' } : null,
-      piece: home?.fen && home.color ? { piece: home.piece, to: home.to, san: home.san, color: home.color, fen: home.fen } : null,
+      plan: ahead.plan,
+      piece: ahead.piece,
       structure: structureRead({ fenBefore, san, mover, prior: history.length ? { fenBefore: fenOf(history.slice(0, -1)), san: history[history.length - 1] } : null }) ?? centreRead({ fenBefore, san, mover }),
       gambit: gambitRead({ fenBefore, san, mover }) ?? gambitAcceptedRead({ fenBefore, san, mover }) ?? gambitAheadRead({ fen: fenAfter, movesAt: (f) => masterMovesCachedSync(f) }) ?? gambitStandingRead({ fenBefore, san, mover }),
       endgame: endgameRead({ fenBefore, san, movesAt: (f) => masterMovesCachedSync(f) }),
