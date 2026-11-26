@@ -161,6 +161,12 @@ const VERCEL_ORIGIN = WEB_ORIGIN;
  *  whole session its voice (David's native log, 2026-07-31). */
 const WARMUP_RETRY_MS = 20_000;
 
+/** The wait before the next probe after `failures` failed probes in a row:
+ *  20 s, then doubling, capped at the cooldown ceiling. */
+export function warmupRetryMs(failures: number): number {
+  return Math.min(WARMUP_RETRY_MS * 2 ** Math.max(0, failures - 1), POLLY_COOLDOWN_MAX_MS);
+}
+
 /**
  * True when running inside the native (Capacitor) app, where the web assets
  * are served from a `capacitor://…` origin and `/api/tts` must be called
@@ -281,12 +287,35 @@ export const CLOUD_VOICES = [
 // Web Speech fallback settings
 const WEB_SPEECH_FALLBACK = { rate: 0.95, pitch: 0.78 };
 
-/** Master kill-switch for the Web Speech tier. Disabled because the
- *  current sentence-streaming pattern was firing Polly AND Web Speech
- *  on the same content, producing overlapping coach voices. Re-enable
- *  once the dual-engine queueing is repaired so only one tier speaks
- *  any given chunk. */
-const WEB_SPEECH_FALLBACK_ENABLED = false;
+/** Longest a device-voice line may take before it is cancelled: its own
+ *  length at a slow pace, plus the iOS start-up delay. */
+export function deviceVoiceBoundMs(text: string, rate: number): number {
+  return 3000 + Math.ceil((text.length * 90) / Math.max(0.5, rate));
+}
+
+/** A line in another script is read by the system's own voice for it, never
+ *  by the English voice the device tier prefers. */
+function isLatinScript(text: string): boolean {
+  return !/[^\t\n\r\u0020-\u024F\u1E00-\u1EFF\u2000-\u206F\u2190-\u21FF]/.test(text);
+}
+
+/** The device voice for one line, resolved when it ends or when its bound
+ *  runs out (then cancelled) — whichever comes first. */
+export async function speakDeviceVoiceBounded(text: string, rate: number): Promise<void> {
+  let timer: ReturnType<typeof setTimeout> | null = null;
+  const bound = new Promise<'timeout'>((resolve) => { timer = setTimeout(() => resolve('timeout'), deviceVoiceBoundMs(text, rate)); });
+  try {
+    const voice = isLatinScript(text) ? undefined : null;
+    const won = await Promise.race([
+      speechService.speak(text, { ...WEB_SPEECH_FALLBACK, rate, voice }).then(() => 'done' as const, () => 'done' as const),
+      bound,
+    ]);
+    if (won === 'timeout') speechService.stop();
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}
+
 
 /** How long to cool down Polly after a failed call before trying again.
  *  A one-off 429 / 503 from AWS or a transient network hiccup shouldn't
@@ -812,6 +841,8 @@ class VoiceService {
    *  transient blip doesn't drop the user to Web Speech for the whole
    *  session. */
   private pollyAvailable = false;
+  /** Warmup probes failed in a row — sets the backoff (`warmupRetryMs`). */
+  private warmupFailures = 0;
   /** When non-null, Polly is in cooldown until this timestamp. Reads
    *  of `pollyAvailable` treat a past cooldown as expired and
    *  re-enable Polly automatically. */
@@ -984,8 +1015,9 @@ class VoiceService {
         clearTimeout(timeout);
 
         if (res.ok) {
-          // Polly is live — enable it and prime AudioContext
+          // The cloud voice is live — enable it and prime AudioContext
           this.pollyAvailable = true;
+          this.warmupFailures = 0;
           const buf = await res.arrayBuffer();
           const ctx = getSharedAudioContext();
           try { await ctx.decodeAudioData(buf); } catch { /* tiny clip may fail — ok */ }
@@ -1012,7 +1044,13 @@ class VoiceService {
    *  audit trail at all. */
   private warmupFailed(reason: string): void {
     this.pollyAvailable = false;
-    this.pollyCooldownUntil = Date.now() + WARMUP_RETRY_MS;
+    // 🔒 BACKED OFF, NEVER A FIXED 20 s LOOP (2026-11-26): a phone with no
+    // route to the voice (an aborted probe on every try) re-probed every 20 s
+    // for the whole session. Each failure in a row doubles the wait, up to the
+    // cooldown ceiling; a success resets it.
+    this.warmupFailures += 1;
+    const wait = warmupRetryMs(this.warmupFailures);
+    this.pollyCooldownUntil = Date.now() + wait;
     // Dynamic import — voiceService deliberately takes no hard dep on
     // appAuditor (see the note further down this file).
     void import('./appAuditor').then(({ logAppAudit }) => {
@@ -1020,7 +1058,7 @@ class VoiceService {
         kind: 'tts-failure',
         category: 'subsystem',
         source: 'voiceService.warmup',
-        summary: `Polly warmup probe failed (${reason}) — retrying in ${Math.round(WARMUP_RETRY_MS / 1000)}s; narration is Web Speech until then`,
+        summary: `cloud voice warmup probe failed (${reason}, ${this.warmupFailures} in a row) — retrying in ${Math.round(wait / 1000)}s; narration is the device voice until then`,
       });
     }).catch(() => undefined);
   }
@@ -2023,10 +2061,10 @@ class VoiceService {
         // switched off, nothing plays: the line is SKIPPED. The old summary
         // said "→ Web Speech" either way, so a silent skip read as a robot
         // voice nobody ever heard.
-        summary: `cloud voice failed (${cloudReason}) → ${WEB_SPEECH_FALLBACK_ENABLED ? 'Web Speech' : 'line skipped, no fallback voice'} for "${text.slice(0, 32)}"`,
+        summary: `cloud voice failed (${cloudReason}) → device voice for "${text.slice(0, 32)}"`,
         details: JSON.stringify({
           fromTier: 'cloud',
-          toTier: WEB_SPEECH_FALLBACK_ENABLED ? 'web-speech' : 'skipped',
+          toTier: 'web-speech',
           reason: cloudReason,
           cloudStatus: this.lastSpeakDiagnostic.cloudStatus ?? null,
           textLength: text.length,
@@ -2045,7 +2083,7 @@ class VoiceService {
     this.lastSpeakDiagnostic.tier = 'web-speech';
     if (!this.lastSpeakDiagnostic.error) {
       this.lastSpeakDiagnostic.error =
-        'fell through to web-speech (cloud voice failed; web-speech is disabled)';
+        'fell through to the device voice (cloud voice failed)';
     }
   }
 
@@ -2158,7 +2196,7 @@ class VoiceService {
         kind: 'polly-fallback',
         category: 'subsystem',
         source: 'voiceService.speakCloud',
-        summary: `Polly cooling down for ${Math.round(ms / 1000)}s`,
+        summary: `cloud voice cooling down for ${Math.round(ms / 1000)}s`,
         details: reason,
       });
     });
@@ -2915,7 +2953,7 @@ audio.playbackRate = this.speed;
           `API error ${response.status} aws=${awsError}${retryAfterRaw ? ` retry-after=${retryAfterRaw}s` : ''}`,
           cooldownMs,
         );
-        this.lastSpeakDiagnostic.error = `Polly /api/tts returned ${response.status} (${awsError})`;
+        this.lastSpeakDiagnostic.error = `cloud voice /api/tts returned ${response.status} (${awsError})`;
         return false;
       }
 
@@ -2967,7 +3005,7 @@ audio.playbackRate = this.speed;
             kind: 'tts-failure',
             category: 'subsystem',
             source: 'voiceService.speakCloud',
-            summary: 'Polly fetched audio but AudioContext could not resume — audio not played',
+            summary: 'cloud voice fetched audio but AudioContext could not resume — audio not played',
             details: `text (first 80): ${text.slice(0, 80)}; voice=${voice}`,
           });
         }).catch(() => undefined);
@@ -2979,7 +3017,7 @@ audio.playbackRate = this.speed;
         return false;
       }
       const msg = error instanceof Error ? error.message : String(error);
-      this.lastSpeakDiagnostic.error = `Polly fetch threw: ${msg}`;
+      this.lastSpeakDiagnostic.error = `cloud voice fetch threw: ${msg}`;
       this.coolDownPolly(msg);
       this.playing = false;
       this.currentSource = null;
@@ -3068,19 +3106,19 @@ audio.playbackRate = this.speed;
       const res = await fetch(url, { signal: createTimeoutSignal(10_000) });
       this.lastSpeakDiagnostic.cloudStatus = res.status;
       if (!res.ok) {
-        this.lastSpeakDiagnostic.error = `buffered Polly fallback /api/tts ${res.status}`;
+        this.lastSpeakDiagnostic.error = `buffered cloud voice fallback /api/tts ${res.status}`;
         return false;
       }
       const arrayBuffer = await res.arrayBuffer();
       this.setAudioCacheEntry(cacheKey, arrayBuffer);
       const played = await this.playAudioBuffer(arrayBuffer.slice(0));
       if (!played) {
-        this.lastSpeakDiagnostic.error ??= 'buffered Polly fallback: AudioContext could not resume';
+        this.lastSpeakDiagnostic.error ??= 'buffered cloud voice fallback: AudioContext could not resume';
       }
       return played;
     } catch (err: unknown) {
       if (err instanceof DOMException && err.name === 'AbortError') return false;
-      this.lastSpeakDiagnostic.error = `buffered Polly fallback threw: ${err instanceof Error ? err.message : String(err)}`;
+      this.lastSpeakDiagnostic.error = `buffered cloud voice fallback threw: ${err instanceof Error ? err.message : String(err)}`;
       return false;
     }
   }
@@ -3140,9 +3178,8 @@ audio.playbackRate = this.speed;
    *  AudioContext can't unlock) don't produce total silence — the user
    *  at least hears native speech.
    *
-   *  The flag-gated paths (speakFast / speakQueuedForced) still
-   *  respect WEB_SPEECH_FALLBACK_ENABLED so the original streaming-
-   *  overlap bug doesn't reappear in the coach chat. */
+   *  Bounded (`speakDeviceVoiceBounded`) so a synthesis iOS never ends
+   *  cannot hold its caller. */
   private async speakFallback(text: string): Promise<void> {
     // Audit-driven (build 6459def+ Finding 142): the master kill-switch
     // at line 113 is meant to disable the Web Speech tier entirely.
@@ -3155,8 +3192,15 @@ audio.playbackRate = this.speed;
     // window — user reported as "board froze for a while after phase
     // shift." With the flag honored here, Polly failures result in
     // silent skips rather than UI-blocking hangs.
-    if (!WEB_SPEECH_FALLBACK_ENABLED) return;
-    await speechService.speak(text, { ...WEB_SPEECH_FALLBACK, rate: this.speed });
+    // 🔒 THE LAST TIER SPEAKS — IN THE DEVICE VOICE, BOUNDED (2026-11-26).
+    // With the kill-switch honoured here, every cloud failure SKIPPED the
+    // line: 11 App Store users in 30 days heard silence where the coach
+    // spoke ("cloud voice not live … line skipped, no fallback voice"). This
+    // is the final tier — the cloud voice already failed, so nothing else is
+    // playing this line (the old kill-switch for it is gone). The hang it guarded against is
+    // bounded instead: a synthesis that never reports its end is cancelled
+    // after its own length's worth of time, so no caller waits forever.
+    await speakDeviceVoiceBounded(text, this.speed);
   }
 
   /**

@@ -192,7 +192,9 @@ class SpeechService {
       utterance.rate = options.rate ?? this.rate;
       utterance.pitch = options.pitch ?? 0.78;
       utterance.volume = options.volume ?? 1.0;
-      utterance.voice = options.voice ?? this.preferredVoice;
+      // `voice: null` asks for the system's default voice (a line in another
+      // script); undefined keeps the preferred one.
+      utterance.voice = options.voice === null ? null : (options.voice ?? this.preferredVoice);
 
       if (options.onBoundary) {
         const handler = options.onBoundary;

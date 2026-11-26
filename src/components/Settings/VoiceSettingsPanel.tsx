@@ -239,7 +239,7 @@ export function VoiceSettingsPanel(): JSX.Element {
             data-testid="polly-toggle"
           >
             <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-              {cloudEnabled ? 'Polly first' : 'System voice first'}
+              {cloudEnabled ? 'Cloud voice first' : 'System voice first'}
             </span>
             <span
               aria-hidden="true"
@@ -474,15 +474,15 @@ function describeTier(
 ): { label: string; description: string; color: string } {
   if (cloudEnabled && !cloudLive && tier !== 'cloud') {
     return {
-      label: 'Polly cooling down',
-      description: 'Recent TTS call failed — using fallback. Will retry automatically.',
+      label: 'Cloud voice cooling down',
+      description: 'Recent cloud voice call failed — using the device voice. Will retry automatically.',
       color: '#f59e0b',
     };
   }
   switch (tier) {
     case 'cloud':
       return {
-        label: 'Polly (Cloud Voice) active',
+        label: 'Cloud voice active',
         description: 'Premium AI voice is serving the coach audio.',
         color: '#22c55e',
       };

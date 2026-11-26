@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**3212 lines · 15 exports · 114 importers · 114 tests · 30 audits**
+**3264 lines · 18 exports · 114 importers · 114 tests · 30 audits**
 
 ## Locked rules that govern this surface
 
@@ -139,41 +139,44 @@
 ## Exports and every call site
 
 ### `getManagedMediaSource` (function) — 3 call sites
-- `src/services/voiceService.test.ts:411`
+- `src/services/voiceService.test.ts:399`
+- `src/services/voiceService.test.ts:403`
 - `src/services/voiceService.test.ts:415`
-- `src/services/voiceService.test.ts:427`
 
 ### `isIosUserAgent` (function) — 7 call sites
+- `src/services/voiceService.test.ts:324`
 - `src/services/voiceService.test.ts:336`
-- `src/services/voiceService.test.ts:348`
-- `src/services/voiceService.test.ts:349`
-- `src/services/voiceService.test.ts:354`
-- `src/services/voiceService.test.ts:359`
-- `src/services/voiceService.test.ts:364`
-- `src/services/voiceService.test.ts:365`
+- `src/services/voiceService.test.ts:337`
+- `src/services/voiceService.test.ts:342`
+- `src/services/voiceService.test.ts:347`
+- `src/services/voiceService.test.ts:352`
+- `src/services/voiceService.test.ts:353`
 
 ### `createTimeoutSignal` (function) — 4 call sites
-- `src/services/voiceService.test.ts:369`
-- `src/services/voiceService.test.ts:373`
-- `src/services/voiceService.test.ts:386`
-- `src/services/voiceService.test.ts:400`
+- `src/services/voiceService.test.ts:357`
+- `src/services/voiceService.test.ts:361`
+- `src/services/voiceService.test.ts:374`
+- `src/services/voiceService.test.ts:388`
 
 ### `canStreamProgressivePlaybackFor` (function) — 13 call sites
-- `src/services/voiceService.test.ts:264`
-- `src/services/voiceService.test.ts:289`
+- `src/services/voiceService.test.ts:252`
+- `src/services/voiceService.test.ts:277`
+- `src/services/voiceService.test.ts:282`
+- `src/services/voiceService.test.ts:287`
+- `src/services/voiceService.test.ts:292`
+- `src/services/voiceService.test.ts:293`
 - `src/services/voiceService.test.ts:294`
 - `src/services/voiceService.test.ts:299`
 - `src/services/voiceService.test.ts:304`
-- `src/services/voiceService.test.ts:305`
-- `src/services/voiceService.test.ts:306`
-- `src/services/voiceService.test.ts:311`
-- `src/services/voiceService.test.ts:316`
-- `src/services/voiceService.test.ts:321`
-- `src/services/voiceService.test.ts:326`
-- `src/services/voiceService.test.ts:327`
-- `src/services/voiceService.test.ts:332`
+- `src/services/voiceService.test.ts:309`
+- `src/services/voiceService.test.ts:314`
+- `src/services/voiceService.test.ts:315`
+- `src/services/voiceService.test.ts:320`
 
 ### `resolvePollyVoice` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `warmupRetryMs` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `getTtsUrl` (function) — 4 call sites
@@ -197,6 +200,14 @@
 
 ### `CLOUD_VOICES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
+
+### `deviceVoiceBoundMs` (function) — 1 call site
+- `src/services/voiceService.test.ts:623`
+
+### `speakDeviceVoiceBounded` (function) — 3 call sites
+- `src/services/voiceService.test.ts:622`
+- `src/services/voiceService.test.ts:636`
+- `src/services/voiceService.test.ts:638`
 
 ### `VoiceTier` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -288,10 +299,10 @@
 - `src/services/sanitizeForTTS.test.ts:343`
 - `src/services/voiceService.sentenceFirst.test.ts:127`
 - `src/services/voiceService.sentenceFirst.test.ts:139`
-- `src/services/voiceService.test.ts:617`
-- `src/services/voiceService.test.ts:618`
-- `src/services/voiceService.test.ts:620`
-- `src/services/voiceService.test.ts:621`
+- `src/services/voiceService.test.ts:605`
+- `src/services/voiceService.test.ts:606`
+- `src/services/voiceService.test.ts:608`
+- `src/services/voiceService.test.ts:609`
 
 ### `sayOnceBlocks` (function) — 4 call sites
 - `src/services/voiceService.repeatOnPurpose.test.ts:17`
