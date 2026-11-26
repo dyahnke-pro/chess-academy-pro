@@ -75,11 +75,27 @@ const stockfish = (fen: string): Promise<{ cp: number; best: string[] }> => new 
   p.stdout.on('data', (d: Buffer) => { out += d.toString(); if (/\nbestmove /.test(out)) { clearTimeout(timer); done(); } });
   p.stdin.write(`uci\nposition fen ${fen}\ngo depth ${DEPTH}\n`);
 });
+/** The punisher's read AT THE QUIET END OF THE FORCED LINE (the bar's own
+ *  definition): the engine's line from the board after the slip, played
+ *  while its moves capture or check, then read again on that quiet board —
+ *  from the punisher's seat. */
 const punishAfter = async (fen: string): Promise<{ cp: number; seq: string[] }> => {
   const read = await stockfish(fen);
   const seq: string[] = []; const p = new Chess(fen);
   for (const u of read.best) { try { seq.push(p.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san); } catch { break; } }
-  return { cp: read.cp, seq };
+  if (Math.abs(read.cp) >= MATE_CP / 10) return { cp: read.cp, seq };
+  const q = new Chess(fen);
+  let forced = 0;
+  for (const san of seq) {
+    const m = q.move(san);
+    if (!m.captured && !q.inCheck()) { q.undo(); break; }
+    forced += 1;
+  }
+  if (forced === 0) return { cp: read.cp, seq };
+  const quiet = await stockfish(q.fen());
+  // The quiet board's side to move is the punisher after an even count of
+  // forced plies, the slipper after an odd one.
+  return { cp: forced % 2 === 0 ? quiet.cp : -quiet.cp, seq };
 };
 const lessonMoves = (l: LessonScript | undefined): string => {
   const last = l?.beats[l.beats.length - 1] as unknown as { moves?: string[] | string } | undefined;
@@ -100,9 +116,9 @@ describe.runIf(!!process.env.TRAP_RECALL && existsSync('node_modules/stockfish/b
       const fenBefore = c.fen();
       try { c.move(f.slip); } catch { rows.push(`${f.name}: SLIP ILLEGAL`); continue; }
       // The punisher's read, from their own seat (the side to move now).
-      const read = await stockfish(c.fen());
-      const punishSeq = []; const p = new Chess(c.fen());
-      for (const u of read.best) { try { const m = p.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); punishSeq.push(m.san); } catch { break; } }
+      const pr = await punishAfter(c.fen());
+      const read = { cp: pr.cp };
+      const punishSeq = pr.seq;
       const kind = classifySlip({ engineCp: read.cp, line: { fen: fenBefore, slip: f.slip, punish: punishSeq } });
       if (kind === 'trap') traps += 1;
       const sentence = trapLine({ fen: fenBefore, slip: f.slip, punish: punishSeq, slipBy: 'opponent' })?.text ?? '(no blow to name)';
