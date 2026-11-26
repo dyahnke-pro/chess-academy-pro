@@ -268,3 +268,11 @@ describe('pieceJobRead — a job that prepares a move states the plan', () => {
     expect(pieceJobRead({ fenBefore: fenOf(['d4', 'Nf6', 'Bf4', 'd5', 'e3', 'e6']), san: 'Nf3', mover: 'w' })?.saysPlan).toBeUndefined();
   });
 });
+
+describe('structureRead — the bishop out before its pawns', () => {
+  it('the London Bf4 gets out before e3; the Slav …Bf5 before …e6', async () => {
+    const { structureRead } = await import('./theoryReads');
+    expect(structureRead({ fenBefore: fenOf(['d4', 'd5']), san: 'Bf4', mover: 'w' })?.text).toBe('The bishop gets out before e3 would shut it in: it stands outside the pawn chain.');
+    expect(structureRead({ fenBefore: fenOf(['d4', 'd5', 'c4', 'c6', 'Nf3', 'Nf6', 'Nc3', 'dxc4', 'a4']), san: 'Bf5', mover: 'b' })?.text).toMatch(/before …e6 would shut it in/);
+  });
+});

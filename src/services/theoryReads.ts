@@ -135,6 +135,21 @@ export function structureRead(i: { fenBefore: string; san: string; mover: Color;
       }
     }
   }
+  // A BISHOP OUT BEFORE ITS PAWNS SHUT IT IN (the London's Bf4 before e3, the
+  // Slav's …Bf5 before …e6): the bishop leaves home, and the pawn move that
+  // would have shut it in there is still to come.
+  {
+    const mvb = after.history({ verbose: true }).pop();
+    const home = i.mover === 'w' ? ['c1', 'f1'] : ['c8', 'f8'];
+    if (mvb?.piece === 'b' && home.includes(mvb.from)) {
+      const b0 = new Chess(i.fenBefore);
+      const pushes = b0.moves({ verbose: true }).filter((m) => m.piece === 'p' && ['d', 'e'].includes(m.from[0]) && Math.abs(Number(m.to[1]) - Number(m.from[1])) === 1);
+      const shuts = pushes.find((m) => { const x = new Chess(i.fenBefore); x.move(m.san); return bishopHemmedByOwnPawns(x, mvb.from as Square, i.mover); });
+      if (shuts) {
+        return { text: `The bishop gets out before ${i.mover === 'b' ? '…' : ''}${shuts.san} would shut it in: it stands outside the pawn chain.`, squares: [mvb.to, shuts.to] };
+      }
+    }
+  }
   // A pawn move that shuts the mover's own bishop in behind its pawns.
   {
     const mvp = after.history({ verbose: true }).pop();
