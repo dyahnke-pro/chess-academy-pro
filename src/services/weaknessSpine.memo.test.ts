@@ -52,7 +52,7 @@ describe('getUnifiedWeaknessProfile — kept until its own inputs change', () =>
 
   it('an answer row (the write most moves make) does not rebuild it', async () => {
     const first = await getUnifiedWeaknessProfile();
-    const reads = vi.spyOn(db.games, 'filter');
+    const reads = vi.spyOn(db.games, 'toCollection');
     await db.capabilityEvidence.add(answer('a1'));
     await db.meta.put({ key: 'app-audit-log.v1', value: '[]' });   // the audit log's 2 s flush
     const again = await getUnifiedWeaknessProfile();
@@ -70,7 +70,7 @@ describe('getUnifiedWeaknessProfile — kept until its own inputs change', () =>
 
   it('a write to one of its meta rows rebuilds it', async () => {
     await getUnifiedWeaknessProfile();
-    const reads = vi.spyOn(db.games, 'filter');
+    const reads = vi.spyOn(db.games, 'toCollection');
     await db.table('meta').put({ key: ADDRESSED_CONVERSIONS_META_KEY, value: [] });   // as `addAddressedConversion` writes it
     await getUnifiedWeaknessProfile();
     expect(reads).toHaveBeenCalledTimes(1);
@@ -79,7 +79,7 @@ describe('getUnifiedWeaknessProfile — kept until its own inputs change', () =>
 
   it('a change of the names or the rating it ranks against rebuilds it', async () => {
     await getUnifiedWeaknessProfile();
-    const reads = vi.spyOn(db.games, 'filter');
+    const reads = vi.spyOn(db.games, 'toCollection');
     const p = buildUserProfile();
     useAppStore.setState({ activeProfile: { ...p, preferences: { ...p.preferences, chessComUsername: 'someone-else' } } });
     await getUnifiedWeaknessProfile();
@@ -89,7 +89,7 @@ describe('getUnifiedWeaknessProfile — kept until its own inputs change', () =>
 
   it('is never served older than five minutes (due dates move with the clock)', async () => {
     await getUnifiedWeaknessProfile();
-    const reads = vi.spyOn(db.games, 'filter');
+    const reads = vi.spyOn(db.games, 'toCollection');
     const now = Date.now();
     const clock = vi.spyOn(Date, 'now').mockReturnValue(now + 5 * 60 * 1000 + 1);
     await getUnifiedWeaknessProfile();

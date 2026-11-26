@@ -40,7 +40,7 @@ interface ConversionUsernames {
 
 /** Resolve which side the student played. Returns null when we can't be sure
  *  — we skip rather than guess a color (CLAUDE.md: "when unsure, skip"). */
-export function resolvePlayerColor(game: GameRecord, names: ConversionUsernames): 'white' | 'black' | null {
+export function resolvePlayerColor(game: Pick<GameRecord, 'studentSide' | 'source' | 'white' | 'black'>, names: ConversionUsernames): 'white' | 'black' | null {
   // THE DECLARED SEAT FIRST — the rule lives in `playerIdentity.resolvePlayerColor`
   // and every seat resolver reads it before any name heuristic (gate:
   // `seatResolversReadDeclaredSeat.test.ts`). Found 2026-09-20: the spine's game

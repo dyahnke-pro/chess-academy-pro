@@ -205,6 +205,7 @@ const AUDIT_EVENT_MAP: Partial<Record<AuditKind, string>> = {
   'stockfish-analysis-suspended': 'stockfish_analysis_suspended',
   // Heavy work held for one session after a killed web view (2026-11-25).
   'crash-loop-breaker': 'crash_loop_breaker',
+  'launch-landed-home': 'launch_landed_home',
   // Coach OPPONENT move sourcing (David 2026-07-11: "the computer's moves are
   // total garbage" on iPhone — Learn/Play replies). The layered picker
   // (masters → lichess games → skill-limited Stockfish → random floor) logs

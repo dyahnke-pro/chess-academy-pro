@@ -1,5 +1,6 @@
 import { setUpPosed } from './setUpChance';
 import { noteAnalysis, lastSessionWasKilled } from './sessionWatch';
+import { headerOf, scanGames, type GameHeader } from './gameScan';
 import { applyVerdict, getVerdicts, saveVerdict, toVerdictLabel, verdictKey, verdictOutranks, VERDICT_TRUST_DEPTH } from './moveVerdictStore';
 import { holdBackground, backgroundHolds, holdBackfills } from './foregroundActivity';
 import { finishedBoardEval } from './finishedBoard';
@@ -2669,9 +2670,7 @@ export async function analyzeRecentGames(
   n: number,
   onProgress?: (p: { current: number; total: number; label: string }) => void,
 ): Promise<number> {
-  const allGames = await db.games
-    .filter((g) => gameNeedsAnalysis(g, { depthUpgrade: false }))
-    .toArray();
+  const allGames = await waitingGameHeaders();
 
   if (allGames.length === 0) {
     onProgress?.({ current: 0, total: 0, label: 'No games to analyze.' });
@@ -2679,7 +2678,7 @@ export async function analyzeRecentGames(
   }
 
   // Home openings first (A2), then newest — see `pickAnalysisBatch`.
-  const batch = (await pickAnalysisBatch(allGames, Math.max(0, n))).batch;
+  const batch = await fullRecords((await pickAnalysisBatch(allGames, Math.max(0, n))).batch);
   let analyzed = 0;
 
   for (let i = 0; i < batch.length; i++) {
@@ -2735,7 +2734,21 @@ export const ANALYSIS_PACKAGE_SIZE = 5;
  * newest of the rest fill the package. Degrades to newest-first when the home
  * openings cannot be read (no profile, a cold record).
  */
-export async function pickAnalysisBatch<T extends GameRecord>(
+/** Every game still waiting for analysis, as headers (`gameScan`): the plan
+ *  and the picker read a few fields a game, never the whole library at once —
+ *  the analyse button reads this on every mount, and holding every imported
+ *  record to count them is what the web view was killed for (2026-11-26). */
+function waitingGameHeaders(): Promise<GameHeader[]> {
+  return scanGames((g) => (gameNeedsAnalysis(g, { depthUpgrade: false }) ? headerOf(g) : null));
+}
+
+/** The full records of a picked batch, in its order. */
+async function fullRecords(headers: readonly GameHeader[]): Promise<GameRecord[]> {
+  const rows = await db.games.bulkGet(headers.map((h) => h.id));
+  return rows.filter((g): g is GameRecord => !!g);
+}
+
+export async function pickAnalysisBatch<T extends GameHeader>(
   candidates: readonly T[],
   packageSize: number,
 ): Promise<{ batch: T[]; homeCount: number; homeFamilies: string[] }> {
@@ -2833,9 +2846,7 @@ async function drainGameQueue<W extends { destroy: () => void }>(
  * `analyzeAllGames`, so the label and the run cannot disagree.
  */
 export async function planAnalysisBatch(): Promise<{ waiting: number; batch: number; homeCount: number }> {
-  const waiting = await db.games
-    .filter((g) => gameNeedsAnalysis(g, { depthUpgrade: false }))
-    .toArray();
+  const waiting = await waitingGameHeaders();
   if (waiting.length === 0) return { waiting: 0, batch: 0, homeCount: 0 };
   const picked = await pickAnalysisBatch(waiting, ANALYSIS_PACKAGE_SIZE);
   return { waiting: waiting.length, batch: picked.batch.length, homeCount: picked.homeCount };
@@ -2852,15 +2863,13 @@ export function analyzeLabel(verb: string, batch: number, waiting: number): stri
 export async function analyzeAllGames(
   onProgress?: (progress: BatchAnalysisProgress) => void,
 ): Promise<number> {
-  const allGames = await db.games
-    .filter((g) => gameNeedsAnalysis(g, { depthUpgrade: false }))
-    .toArray();
+  const allGames = await waitingGameHeaders();
 
   // THE HOME OPENINGS' GAMES FIRST — all of them — then newest, capped to one
   // package (A2). The remainder is left un-annotated and picked up by the next
   // invocation.
   const picked = await pickAnalysisBatch(allGames, ANALYSIS_PACKAGE_SIZE);
-  const games = picked.batch;
+  const games = await fullRecords(picked.batch);
   void logAppAudit({
     kind: 'analysis-batch-ordered',
     category: 'subsystem',

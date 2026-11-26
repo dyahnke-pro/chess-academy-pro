@@ -135,7 +135,7 @@ describe('warmHomeSteer — the first move never races a build (walk 4, 2026-09-
     await warmHomeSteer();
     expect(isHomeSteerWarm('black')).toBe(true);
     expect(isHomeSteerWarm('white')).toBe(false); // no White home — nothing cached, nothing to go stale
-    const filter = vi.spyOn(db.games, 'filter');
+    const filter = vi.spyOn(db.games, 'toCollection');
     const pick = await pickHomeSteerMove(new Chess().fen(), 'black');
     expect(pick?.san).toBe('e4');
     expect(filter).not.toHaveBeenCalled();
@@ -144,7 +144,7 @@ describe('warmHomeSteer — the first move never races a build (walk 4, 2026-09-
 
   it('two callers inside one build share it — one index, not two', async () => {
     await getHomeOpeningRankings();
-    const filter = vi.spyOn(db.games, 'filter');
+    const filter = vi.spyOn(db.games, 'toCollection');
     await Promise.all([warmHomeSteer('black', 'play-mount'), pickHomeSteerMove(new Chess().fen(), 'black')]);
     // ONE build = two table reads: `getHomeOpenings` reads the games to form its
     // memo key, then the build reads them for the index. Two separate builds

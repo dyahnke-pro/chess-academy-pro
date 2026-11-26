@@ -11,6 +11,7 @@
  * the student, and reports it once as `webview_killed` with what was on screen
  * and what was running. One record, overwritten; nothing grows.
  */
+import { Capacitor } from '@capacitor/core';
 import { db } from '../db/schema';
 import { captureEvent } from './analytics';
 import { holdBackfills } from './foregroundActivity';
@@ -99,10 +100,44 @@ export function lastSessionWasKilled(): Promise<boolean> {
   return readPrevious().then((r) => r !== null);
 }
 
+/**
+ * 🔒 A KILLED LAUNCH LANDS ON HOME (2026-11-26). iOS reloads a killed web view
+ * at the URL it died on, so a page that killed it opened again on launch and
+ * killed it again — 11 kills in two days on one phone, 8 of them on
+ * /weaknesses within 3 s of launch. The launch after a kill goes to the home
+ * screen; the student taps back in. PURE: the path to land on, or null to
+ * stay where the launch opened.
+ */
+export function landingAfterKill(report: Record<string, unknown> | null, path: string, native: boolean): string | null {
+  // NATIVE ONLY: iOS reloading a killed web view is the loop. On the web a
+  // refresh can lose the clean-exit write and read as a kill, and a reload
+  // there must keep its page.
+  if (!native || !report) return null;
+  if (path === '/' || path === '') return null;
+  return '/';
+}
+
+/** The path a killed launch opened on before it was sent home — carried on
+ *  the `webview_killed` report (analytics starts after the landing). */
+let landedFrom: string | null = null;
+
+/** The launch's landing: '/' when the last session was killed off the home
+ *  screen (carried on the `webview_killed` report as `landed_home_from`), else null. */
+export async function launchLanding(path: string): Promise<string | null> {
+  if (typeof window === 'undefined') return null;
+  const report = await readPrevious();
+  let native = false;
+  try { native = Capacitor.isNativePlatform(); } catch { native = false; }
+  const landing = landingAfterKill(report, path, native);
+  if (landing) landedFrom = path;
+  return landing;
+}
+
 /** Tests only: forget the per-launch read. */
 export function __resetSessionWatchForTests(): void {
   previousRead = null;
   started = false;
+  landedFrom = null;
 }
 
 /** Start the watch once at boot. Reports the previous session if it was
@@ -113,7 +148,7 @@ export async function startSessionWatch(): Promise<void> {
   started = true;
   const report = await readPrevious();
   if (report) {
-    captureEvent('webview_killed', report);
+    captureEvent('webview_killed', landedFrom ? { ...report, landed_home_from: landedFrom } : report);
     // The crash-loop breaker: the boot backfills re-read the whole library,
     // and a pass killed mid-way restarts on every launch. Held for this
     // session; the next clean launch runs them.

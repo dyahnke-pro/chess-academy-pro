@@ -35,6 +35,7 @@ import type { Transaction } from 'dexie';
 import { detectTimeTrouble, type TimeTroubleHit } from './timeTroubleDetector';
 import { getSquareHeatmap, type SquareHeatmapEntry } from './findSquareService';
 import { aggregateBookDepartures } from './bookDepartureWeakness';
+import { headerOf, scanGames } from './gameScan';
 import { BOOK_DEPARTURE_META_KEY, getCachedBookDepartureRows } from './bookDeparturePrecompute';
 import { useAppStore } from '../stores/appStore';
 import { isFixtureDerived, isFixtureGame } from './fixtureGames';
@@ -727,7 +728,7 @@ function finalEnding(gameId: string, pgn: string): EndgameType {
 /** Roll up blown-winning-position games into a single conversion weakness.
  *  PREVIOUSLY MISSING: per-move evals were stored but never scanned for the
  *  "was winning, didn't convert" pattern. */
-export function aggregateConversionFailures(failures: ConversionFailure[], games: GameRecord[] = [], gameIndex?: GameProvenanceIndex): UnifiedWeakness[] {
+export function aggregateConversionFailures(failures: ConversionFailure[], games: ReadonlyArray<Pick<GameRecord, 'id' | 'pgn'>> = [], gameIndex?: GameProvenanceIndex): UnifiedWeakness[] {
   if (failures.length === 0) return [];
   const toRow = (key: string, label: string, rows: ConversionFailure[]): UnifiedWeakness => {
     const lastSeenAt = rows.reduce((m, f) => Math.max(m, f.date ? Date.parse(f.date) || 0 : 0), 0);
@@ -787,7 +788,7 @@ export function aggregateConversionFailures(failures: ConversionFailure[], games
  *  empty when the sample is thin or the pattern isn't real. */
 export function aggregateStrongerOpponentErrors(
   mistakes: MistakePuzzle[],
-  games: GameRecord[],
+  games: ReadonlyArray<Pick<GameRecord, 'id' | 'studentSide' | 'source' | 'white' | 'black' | 'whiteElo' | 'blackElo'>>,
   names: { lichessUsername?: string; chessComUsername?: string },
   now: number = Date.now(),
 ): UnifiedWeakness[] {
@@ -1010,15 +1011,13 @@ async function computeUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]> {
   const [direct, heatmap, addressedConv] = await Promise.all([
     db.transaction(
       'r',
-      [db.misconceptionTags, db.mistakePuzzles, db.openingWeakSpots, db.classifiedTactics, db.games],
+      [db.misconceptionTags, db.mistakePuzzles, db.openingWeakSpots, db.classifiedTactics],
       async () => {
-        const [rawMis, rawMistakes, weakSpots, rawTactics, rawGames] = await Promise.all([
+        const [rawMis, rawMistakes, weakSpots, rawTactics] = await Promise.all([
           db.misconceptionTags.toArray(),
           db.mistakePuzzles.toArray(),
           db.openingWeakSpots.toArray(),
           db.classifiedTactics.toArray(),
-          // D5 (B7a): a fixture's conversion failures are not the student's.
-          db.games.filter((g) => !isFixtureGame(g)).toArray(),
         ]);
         // 🔒 FIXTURES ARE NOT THE STUDENT (D5, 2026-09-22). Reviewing the
         // seeded Vienna sample wrote its slips into these stores under the
@@ -1033,21 +1032,39 @@ async function computeUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]> {
         const allMis = rawMis.filter((r) => !isFixtureDerived(r));
         const mistakes = rawMistakes.filter((r) => !isFixtureDerived(r));
         const tactics = rawTactics.filter((r) => !isFixtureDerived(r));
-        const games = rawGames.filter((g) => !isFixtureGame(g));
-        return { misAgg, allMis, mistakes, weakSpots, tactics, games };
+        return { misAgg, allMis, mistakes, weakSpots, tactics };
       },
     ),
     getSquareHeatmap(),
     getAddressedConversions(),
   ]);
+  // THE GAMES, A PAGE AT A TIME (`gameScan`, 2026-11-26): the spine reads a
+  // header, the clock and its conversion check per game — computed while the
+  // full record is in hand, never the whole library held at once (holding it
+  // beside the insights' copy is what got /weaknesses killed on a phone). The
+  // paged reads open their own short transactions, outside the shared one.
+  const prefsForScan = useAppStore.getState().activeProfile?.preferences;
+  const scanNames = { lichessUsername: prefsForScan?.lichessUsername, chessComUsername: prefsForScan?.chessComUsername };
+  const scanned = await scanGames((g) => {
+    // D5 (B7a): a fixture's games are not the student's.
+    if (isFixtureGame(g)) return null;
+    const failures = detectConversionFailures([g], scanNames);
+    return {
+      game: { ...headerOf(g), clockRemainingMs: g.clockRemainingMs },
+      failures,
+      pgn: failures.length > 0 ? g.pgn : null,
+    };
+  });
+  const games = scanned.map((r) => r.game);
+  const failedGames = scanned.filter((r) => r.pgn !== null).map((r) => ({ id: r.game.id, pgn: r.pgn as string }));
   // Its own store, read on its own (like the heatmap) — never inside the
   // shared transaction above, and never the 15k-row puzzles table.
   const puzzleMisses = await db.puzzleMisses.toArray().catch(() => [] as PuzzleMissRecord[]);
-  const { misAgg, allMis, mistakes, weakSpots, tactics, games } = direct;
+  const { misAgg, allMis, mistakes, weakSpots, tactics } = direct;
 
   const prefs = useAppStore.getState().activeProfile?.preferences;
   const names = { lichessUsername: prefs?.lichessUsername, chessComUsername: prefs?.chessComUsername };
-  const conversions = detectConversionFailures(games, names)
+  const conversions = scanned.flatMap((r) => r.failures)
     .filter((c) => !addressedConv.has(positionOf(c.fen)));
 
   // BOOK DEPARTURES (Phase 3) — read the precomputed, cost-gated departures from
@@ -1096,7 +1113,7 @@ async function computeUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]> {
     ...aggregateClassifiedTactics(tactics),
     ...aggregatePuzzleMisses(puzzleMisses),
     ...aggregateOpeningWeakSpots(weakSpots),
-    ...aggregateConversionFailures(conversions, games, gameIndex),
+    ...aggregateConversionFailures(conversions, failedGames, gameIndex),
     ...aggregateBoardVision(heatmap),
     ...aggregateTimeTrouble(detectTimeTrouble(games, mistakes), gameIndex),
     ...aggregateStrongerOpponentErrors(mistakes, games, names),
