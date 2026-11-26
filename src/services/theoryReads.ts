@@ -17,7 +17,10 @@ import type { LocalDbMove } from './masterPlayLookup';
 import { moveJob, MINE } from './bookMoveWhy';
 import { NO_FOLLOW } from './exchangeLedger';
 import { hangLine, trapLine } from './trapLine';
-import { slipNoun } from './trapWords';
+import { slipNoun, knownLead } from './trapWords';
+import { classifySlip, type SlipKind } from './trapComputer';
+import { MATE_CP } from './mateScale';
+import type { ClubGem } from './clubGems';
 import { withoutCastleTail, composeTheoryTurn } from './theoryComposer';
 import { andList } from '../utils/andList';
 
@@ -231,31 +234,36 @@ export function pieceJobRead(i: { fenBefore: string; san: string; mover: Color }
   return { text: `${PIECE_NAME[mv.piece].charAt(0).toUpperCase()}${PIECE_NAME[mv.piece].slice(1)} to ${mv.to}. It ${clause.replace(/^it /, '')}.`.replace(/^(\w+) to (\w+)\. It /, '$1 on $2: it '), squares: [mv.to] };
 }
 
-interface ClubGemRow { slip: string; punish: string }
-/** THE TRAPS AROUND THE MOVE, from the club-gem index (`boards`, by 4-field
- *  FEN): the move played IS a known slip; a slip is available on this board;
- *  or one waits behind the masters' usual reply. Every line is replayed by
- *  `trapLine` (a blow that hits, checks, mates or takes nothing is not said). */
-export function trapRead(i: { fenBefore: string; san: string; mover: Color; boards: Record<string, ClubGemRow[]>; movesAt: (fen: string) => readonly LocalDbMove[] | null }): TheoryRead | null {
-  const key = (f: string): string => f.split(' ').slice(0, 4).join(' ');
+/** THE TRAPS AROUND THE MOVE, from the one known-slip index (`slipsAt` —
+ *  `knownSlips.knownSlipsAt`: the club index, the curated gems where it holds
+ *  none): the move played IS a known slip; a slip is available on this board;
+ *  or one waits behind a road masters play. Each slip is classified by the one
+ *  trap computer (`classifySlip`: a trap, a known mistake, or nothing to say)
+ *  and worded by the seat (`trapWords`); every line is replayed by `trapLine`
+ *  (a blow that hits, checks, mates or takes nothing is not said). */
+export function trapRead(i: { fenBefore: string; san: string; mover: Color; slipsAt: (fen: string) => readonly ClubGem[]; movesAt: (fen: string) => readonly LocalDbMove[] | null }): TheoryRead | null {
   const them: Color = i.mover === 'w' ? 'b' : 'w';
   const slipBy = (slipper: Color): 'student' | 'opponent' => (slipper === i.mover ? 'student' : 'opponent');
-  const say = (fen: string, g: ClubGemRow, slipper: Color, lead: string): TheoryRead | null => {
+  const kindOf = (fen: string, g: ClubGem): SlipKind | null => classifySlip({ engineCp: g.mate ? MATE_CP : g.endCp, line: { fen, slip: g.slip, punish: g.punish.split(/\s+/).filter(Boolean) } });
+  const say = (fen: string, g: ClubGem, slipper: Color, lead: (kind: SlipKind) => string): TheoryRead | null => {
+    const kind = kindOf(fen, g);
+    if (!kind) return null;
     const t = trapLine({ fen, slip: g.slip, punish: g.punish.split(/\s+/).filter(Boolean), slipBy: slipBy(slipper) });
     if (!t) return null;
-    return { text: slipBy(slipper) === 'student' ? t.text : `${lead}${t.text}`, squares: t.squares };
+    return { text: slipBy(slipper) === 'student' ? t.text : `${lead(kind)}${t.text}`, squares: t.squares };
   };
   // 1. The move played is a known slip.
-  const slipHere = (i.boards[key(i.fenBefore)] ?? []).find((g) => g.slip.replace(/[+#]$/, '') === i.san.replace(/[+#]$/, ''));
+  const slipHere = i.slipsAt(i.fenBefore).find((g) => g.slip.replace(/[+#]$/, '') === i.san.replace(/[+#]$/, ''));
   if (slipHere) {
-    const r = say(i.fenBefore, slipHere, i.mover, '');
-    if (r) return { text: `That is a known ${slipNoun('known-mistake', 'student')}. ${r.text}`, squares: r.squares };
+    const kind = kindOf(i.fenBefore, slipHere);
+    const r = kind ? say(i.fenBefore, slipHere, i.mover, () => '') : null;
+    if (kind && r) return { text: `That is ${knownLead(kind, 'student')}. ${r.text}`, squares: r.squares };
   }
   let after: Chess;
   try { after = new Chess(i.fenBefore); after.move(i.san); } catch { return null; }
   // 2. A slip is on offer on this board.
-  for (const g of i.boards[key(after.fen())] ?? []) {
-    const r = say(after.fen(), g, them, 'A trap is set here. ');
+  for (const g of i.slipsAt(after.fen())) {
+    const r = say(after.fen(), g, them, (kind) => (slipNoun(kind, 'opponent') === 'trap' ? 'A trap is set here. ' : 'A known mistake is on offer here. '));
     if (r) return r;
   }
   // 2b. The move attacks something, and a reply masters play ignores it.
@@ -268,11 +276,10 @@ export function trapRead(i: { fenBefore: string; san: string; mover: Color; boar
     // The roads masters play (the named-roads bar: 2% of their games).
     if (total === 0 || road.games / total < 0.02) break;
     const next = new Chess(after.fen());
-    let rm;
-    try { rm = next.move(road.san); } catch { continue; }
-    const lead = road.games / total >= 0.15 ? 'Behind the usual reply, a trap waits. ' : `If they answer ${rm.color === 'b' ? '…' : ''}${road.san.replace(/[+#]$/, '')}, a trap waits. `;
-    for (const g of i.boards[key(next.fen())] ?? []) {
-      const r = say(next.fen(), g, i.mover, lead);
+    try { next.move(road.san); } catch { continue; }
+    // The slip behind the road is the mover's own: said as a "Watch out".
+    for (const g of i.slipsAt(next.fen())) {
+      const r = say(next.fen(), g, i.mover, () => '');
       if (r) return r;
     }
   }
@@ -333,29 +340,6 @@ export function centreRead(i: { fenBefore: string; san: string; mover: Color }):
   return null;
 }
 
-/** The hand-written and mined gems filed by the board of their slip, in the
- *  shape `trapRead` reads (the club index's own shape). Pure. */
-export function gemBoards(gems: ReadonlyArray<{ lineMoves: string; inaccuracy: string; punish: string; punishSeq?: string[]; tier?: string; engineCp?: number | null }>): Record<string, ClubGemRow[]> {
-  const out: Record<string, ClubGemRow[]> = {};
-  for (const g of gems) {
-    if (g.tier !== 'confirmed') continue;
-    try {
-      const c = new Chess();
-      for (const m of g.lineMoves.split(/\s+/).filter(Boolean)) c.move(m);
-      const key = c.fen().split(' ').slice(0, 4).join(' ');
-      (out[key] ??= []).push({ slip: g.inaccuracy, punish: (g.punishSeq && g.punishSeq.length ? g.punishSeq : [g.punish]).join(' ') });
-    } catch { /* a line that does not play is no gem */ }
-  }
-  return out;
-}
-
-let gemIndex: Record<string, ClubGemRow[]> | null = null;
-/** The hand-written and mined gems by board, built once from the gem files. */
-export function ownGemBoards(gems: Parameters<typeof gemBoards>[0]): Record<string, ClubGemRow[]> {
-  gemIndex ??= gemBoards(gems);
-  return gemIndex;
-}
-
 /** EVERYTHING ELSE THE THEORY SAYS ABOUT A MOVE, composed in order by
  *  `composeTheoryTurn`: the pawn structure it makes (or the centre it takes), a
  *  gambit it offers or one on offer, the transposition, the queens coming off,
@@ -371,7 +355,7 @@ function priorOf(history: readonly string[]): { fenBefore: string; san: string }
 export function theoryExtras(i: {
   history: readonly string[]; fenBefore: string; san: string; mover: Color;
   movesAt: (fen: string) => readonly LocalDbMove[] | null;
-  boards: Record<string, ClubGemRow[]>;
+  slipsAt: (fen: string) => readonly ClubGem[];
   said: Set<string>;
   withPieceJob: boolean;
 }): string[] {
@@ -388,7 +372,7 @@ export function theoryExtras(i: {
     endgame: once('endgame', endgameRead({ fenBefore: i.fenBefore, san: i.san, movesAt: i.movesAt })),
     namedRoads: fresh(namedRoadsRead({ fen: (() => { const c = new Chess(i.fenBefore); c.move(i.san); return c.fen(); })(), movesAt: i.movesAt })),
     moveOrder: fresh(moveOrderRead({ history: [...i.history, i.san], student: i.mover }) ?? transpositionRead({ history: [...i.history, i.san], movesAt: i.movesAt })),
-    trapSaid: fresh(trapRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover, boards: i.boards, movesAt: i.movesAt })),
+    trapSaid: fresh(trapRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover, slipsAt: i.slipsAt, movesAt: i.movesAt })),
     pieceJob: i.withPieceJob ? fresh(pieceJobRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover })) : null,
     said: i.said,
   });

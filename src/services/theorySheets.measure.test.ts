@@ -18,7 +18,8 @@ import { __setLocalDbForTests, masterMovesCachedSync } from './masterPlayLookup'
 import { __setContinuationsForTests } from './mastersContinuation';
 import { mastersPlanRead, planStillAhead, type MastersPlanRead } from './mastersPlanRead';
 import { composeTheoryTurn, roadsFrom, type KeyMove, type TheorySentenceKind } from './theoryComposer';
-import { gambitStandingRead, namedRoadsRead, structureRead, gambitRead, endgameRead, moveOrderRead, transpositionRead, pieceJobRead, trapRead, gambitAheadRead, centreRead, gemBoards } from './theoryReads';
+import { gambitStandingRead, namedRoadsRead, structureRead, gambitRead, endgameRead, moveOrderRead, transpositionRead, pieceJobRead, trapRead, gambitAheadRead, centreRead } from './theoryReads';
+import { knownSlipsAt, knownSlipIndexNow, setKnownSlipIndexForTests } from './knownSlips';
 import { openingTheoryFacts } from './openingTheory';
 import { setOpeningPositions, openingAtPosition } from './openingPositions';
 import { setOpeningIdentity, identityFor } from './openingIdentity';
@@ -51,15 +52,13 @@ const KIND_IDEAS: Record<TheorySentenceKind, Idea[]> = {
 };
 
 describe.runIf(!!process.env.THEORY_SHEETS && existsSync('data/sources/wikibooks/wikibooks-notes.json'))('theory idea sheets', () => {
-  let clubBoards: Record<string, never[]> = {};
   beforeAll(() => {
     __setLocalDbForTests(JSON.parse(readFileSync('public/data/openings-masters-db.json', 'utf8')));
     if (existsSync('public/data/masters-continuations.json')) __setContinuationsForTests((JSON.parse(readFileSync('public/data/masters-continuations.json', 'utf8')) as { positions: never }).positions);
     setOpeningPositions(JSON.parse(readFileSync('public/data/opening-positions.json', 'utf8')));
     setOpeningIdentity(JSON.parse(readFileSync('public/data/opening-identity.json', 'utf8')));
-    clubBoards = (JSON.parse(readFileSync('public/data/club-gems.json', 'utf8')) as { boards: Record<string, never[]> }).boards;
-    const mine = gemBoards([...(JSON.parse(readFileSync('src/data/punish-gems.json', 'utf8')) as never[]), ...(JSON.parse(readFileSync('src/data/gambit-punish-gems.json', 'utf8')) as never[])]);
-    clubBoards = { ...clubBoards, ...Object.fromEntries(Object.entries(mine).map(([k, v]) => [k, [...(clubBoards[k] ?? []), ...v] as never[]])) };
+    // The lecture's own index: the club slips, the curated gems where it holds none.
+    setKnownSlipIndexForTests((JSON.parse(readFileSync('public/data/club-gems.json', 'utf8')) as { boards: never }).boards);
   });
 
   /** What the narrator says at this position, as idea kinds. */
@@ -96,7 +95,7 @@ describe.runIf(!!process.env.THEORY_SHEETS && existsSync('data/sources/wikibooks
       moveOrder: moveOrderRead({ history: n.lineSan, student: mover }) ?? transpositionRead({ history: n.lineSan, movesAt: (f) => masterMovesCachedSync(f) }),
       pieceJob: pieceJobRead({ fenBefore, san, mover }),
       namedRoads: namedRoadsRead({ fen: fenAfter, movesAt: (f) => masterMovesCachedSync(f) }),
-      trapSaid: trapRead({ fenBefore, san, mover, boards: clubBoards as never, movesAt: (f) => masterMovesCachedSync(f) }),
+      trapSaid: trapRead({ fenBefore, san, mover, slipsAt: (f) => knownSlipsAt(knownSlipIndexNow(), f), movesAt: (f) => masterMovesCachedSync(f) }),
       said: new Set(),
     });
     const kinds = new Set<Idea>();

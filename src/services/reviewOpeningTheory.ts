@@ -32,8 +32,8 @@ import repertoire from '../data/repertoire.json';
 import { bookMoveWhy } from './bookMoveWhy';
 import { openingEquivalence } from './openingEquivalence';
 import { mastersPlanLine } from './theoryComposer';
-import { theoryExtras, ownGemBoards, nameRelativeTo } from './theoryReads';
-import { getAllPunishGems } from '../data/lessons/punishGems';
+import { theoryExtras, nameRelativeTo } from './theoryReads';
+import { knownSlipsAt, knownSlipIndexNow } from './knownSlips';
 import { masterMovesCachedSync } from './masterPlayLookup';
 import { mastersPlanRead, planStillAhead, type MastersPlanRead, type MovesAt } from './mastersPlanRead';
 import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
@@ -816,7 +816,7 @@ export function buildTheoryLectureBeats(
   const theoryExtrasFor = (prefixSans: readonly string[], fenBefore: string, san: string, withPieceJob: boolean): string => {
     try {
       const mover = new Chess(fenBefore).turn();
-      const lines = theoryExtras({ history: prefixSans, fenBefore, san, mover, movesAt: (f) => masterMovesCachedSync(f), boards: ownGemBoards(getAllPunishGems()), said: extrasSaid, withPieceJob });
+      const lines = theoryExtras({ history: prefixSans, fenBefore, san, mover, movesAt: (f) => masterMovesCachedSync(f), slipsAt: (f) => knownSlipsAt(knownSlipIndexNow(), f), said: extrasSaid, withPieceJob });
       return lines.length ? ` ${lines.join(' ')}` : '';
     } catch { return ''; }
   };

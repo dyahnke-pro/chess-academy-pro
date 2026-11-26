@@ -119,9 +119,9 @@ describe('trapRead — a trap behind any road masters play', () => {
     const { trapRead } = await import('./theoryReads');
     const fenBefore = fenOf(['e4', 'e5', 'Nf3', 'd6', 'Bc4']);
     const behind = fenOf(['e4', 'e5', 'Nf3', 'd6', 'Bc4', 'Bg4', 'Nc3']).split(' ').slice(0, 4).join(' ');
-    const boards = { [behind]: [{ slip: 'g6', punish: 'Nxe5 Bxd1 Bxf7+ Ke7 Nd5#' }] };
+    const slipsAt = (f: string) => (f.split(' ').slice(0, 4).join(' ') === behind ? [{ tier: 'trap', line: '', slip: 'g6', by: 'black', best: null, games: 1, share: 1, moverScore: null, punish: 'Nxe5 Bxd1 Bxf7+ Ke7 Nd5#', mate: true, won: 0, endCp: 0, juice: 0 } as never] : []);
     const movesAt = (f: string) => (f.startsWith(fenOf(['e4', 'e5', 'Nf3', 'd6', 'Bc4', 'Bg4']).split(' ')[0]) ? [{ san: 'h3', games: 95 }, { san: 'Nc3', games: 5 }] as never[] : null);
-    const r = trapRead({ fenBefore, san: 'Bg4', mover: 'b', boards, movesAt });
+    const r = trapRead({ fenBefore, san: 'Bg4', mover: 'b', slipsAt, movesAt });
     expect(r).not.toBeNull();
     expect(r?.text).not.toMatch(/usual reply/);
   });
