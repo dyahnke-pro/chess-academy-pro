@@ -77,6 +77,11 @@ let voiceRejecter: ((err: Error) => void) | null = null;
 vi.mock('../services/coachApi', () => ({
   voiceFacts: vi.fn((facts: string, opts: Record<string, unknown>) => {
     voiceCalls.push({ facts, opts });
+    // The read is phrased in two parts (the opening, then the deep part —
+    // `usePositionNarration.staged.test` drives both). These tests control the
+    // FIRST part's phrasing; a later part of the same tap passes through as
+    // computed (`whole` below says the whole read).
+    if (voiceCalls.length > 1) return Promise.resolve(facts);
     return new Promise<string | null>((resolve, reject) => {
       voiceResolver = resolve;
       voiceRejecter = reject;
@@ -100,6 +105,16 @@ const callsOn = (fen: string): number => vi.mocked(stockfishEngine.analyzeWithBu
  *  use (~5 s cold under vitest, ~1.7 s warm): the waits allow for it. */
 const READ_WAIT = { timeout: 20_000 };
 vi.setConfig({ testTimeout: 30_000 });
+/** The whole read: the first part as phrased, then every later part. */
+const whole = (first: string): string => [first, ...voiceCalls.slice(1).map((c) => c.facts.replace(/\s{2,}/g, ' ').trim())].filter(Boolean).join(' ');
+/** Every utterance the read queued, resolved one by one until the hook idles. */
+async function drain(result: { current: { isNarrating: boolean } }): Promise<void> {
+  for (let i = 0; i < 40 && result.current.isNarrating; i += 1) {
+    const pending = speakRecords[speakRecords.length - 1];
+    act(() => { pending?.resolve(); });
+    await new Promise((r) => setTimeout(r, 20));
+  }
+}
 
 function defaultArgs(): Parameters<typeof usePositionNarration>[0] {
   return {
@@ -185,18 +200,18 @@ describe('usePositionNarration', () => {
       voiceResolver?.(phrased);
     });
 
-    await waitFor(() => expect(result.current.currentText).toBe(phrased));
+    await waitFor(() => expect(result.current.currentText).toBe(whole(phrased)));
     // Two sentences → two utterances, chained (the second waits on the first).
     await waitFor(() => expect(speakRecords.length).toBe(1));
     expect(speakRecords[0].text).toBe('Okay, still in the opening.');
-    expect(reports).toEqual([phrased]);
+    await waitFor(() => expect(reports).toEqual([whole(phrased)]));
     // Still narrating until speech resolves
     expect(result.current.isNarrating).toBe(true);
 
     act(() => { speakRecords[0].resolve(); });
     await waitFor(() => expect(speakRecords.length).toBe(2));
     expect(speakRecords[1].text).toBe('Your bishop pair is your asset.');
-    act(() => { speakRecords[1].resolve(); });
+    await drain(result);
     await waitFor(() => expect(result.current.isNarrating).toBe(false));
   });
 
@@ -219,7 +234,7 @@ describe('usePositionNarration', () => {
     // The computed read, in the raw register (`speakableFacts`).
     const raw = voiceCalls[0].facts.replace(/\s{2,}/g, ' ').trim();
     expect(raw.length).toBeGreaterThan(0);
-    expect(result.current.currentText).toBe(raw);
+    await waitFor(() => expect(result.current.currentText).toBe(whole(raw)));
     expect(raw.startsWith(speakRecords[0].text.trim())).toBe(true);
     expect(result.current.error).toContain('provider exploded');
   });
@@ -307,7 +322,7 @@ describe('usePositionNarration', () => {
 
       // Board-unfreeze invariant is unchanged — but the button is NOT dead: the
       // computed read is spoken in the raw register instead of "timed out".
-      expect(result.current.currentText).toBe(voiceCalls[0].facts.replace(/\s{2,}/g, ' ').trim());
+      expect(result.current.currentText).toBe(whole(voiceCalls[0].facts.replace(/\s{2,}/g, ' ').trim()));
       expect(speakRecords.length).toBe(1);
       expect(auditCalls.some((c) => c.kind === 'llm-error' && /timed out/i.test(c.summary))).toBe(true);
       // The raw read is several sentences; each utterance waits on the last.
@@ -340,7 +355,7 @@ describe('usePositionNarration', () => {
     expect(firstCallCount).toBe(1);
 
     // Finish first speak so the hook is idle again.
-    speakRecords[0].resolve();
+    await drain(result);
     await waitFor(() => expect(result.current.isNarrating).toBe(false));
 
     voiceResolver = null;
@@ -370,7 +385,7 @@ describe('usePositionNarration', () => {
     await waitFor(() => expect(voiceCalls.length).toBe(1), READ_WAIT);
     voiceResolver?.('one.');
     await waitFor(() => expect(speakRecords.length).toBe(1));
-    speakRecords[0].resolve();
+    await drain(result);
     await waitFor(() => expect(result.current.isNarrating).toBe(false));
 
     const SICILIAN = 'rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2';
