@@ -139,7 +139,7 @@ export function lessonLines(game: ReplayGame): string[] {
   const voice = newLessonVoice();
   // The game's own reads, as the lesson generator's engine pass reads them:
   // the fan before each move and the read after it.
-  return replayPlies(game).map((p) => lessonThought({ namesPlayedMove: true, theory: true, story: true,
+  return replayPlies(game).map((p) => lessonThought({ register: 'review', namesPlayedMove: true, theory: true, story: true,
     fenBefore: p.fenBefore, san: p.san, prev: p.prev, moverIsStudent: p.own, line: p.line, theirLast: p.theirLast, history: p.history,
     reads: p.before.length || p.after.length ? { before: linesOf(p.before), after: linesOf(p.after), passBefore: [], passAfter: [] } : null,
     costCp: p.costCp,

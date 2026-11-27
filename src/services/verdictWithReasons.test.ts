@@ -38,7 +38,9 @@ describe('verdictWithReasons', () => {
     expect(all.some((r) => r.kind === 'initiative' && r.side === 'b')).toBe(true);
     const v = verdictWithReasons({ fen, evalCp: 201, mate: null, lines: lines('d5d4 c3d4 a5d2 e1d2 g7h6 d2d1 h6c1 d1c1'), student: 'b', lastMove: null, said: NONE })!;
     expect(v.reasons.every((r) => r.side === 'w')).toBe(true);
-    expect(v.text).toBe("They're up material: a piece for a pawn.");
+    // The piece leads; the engine's line, which ends with them a pawn further
+    // up, is its evidence (2026-11-26).
+    expect(v.text).toBe("They're up material: a piece for a pawn. They win a pawn in the best line.");
   });
 
   it('on a level board, the initiative (the-greek-gift-sacrifice-lives-on #3, +0.34)', () => {

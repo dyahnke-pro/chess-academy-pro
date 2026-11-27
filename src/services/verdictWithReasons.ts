@@ -83,10 +83,9 @@ export interface VerdictWithReasons {
   /** The reasons as sentences, from the student's seat. */
   text: string;
   squares: Square[];
-  /** The proving lines' moves as arrows (from, to), in order. */
-  arrows: Array<[Square, Square]>;
   /** The proving lines in SAN from the board read (`SpokenLine`'s shape), so
-   *  a surface plays them out move by move with its arrows. */
+   *  a surface plays them out move by move with its arrows (one line per
+   *  reason that has one). */
   proofLines: Array<{ fen: string; sans: string[] }>;
 }
 
@@ -696,9 +695,6 @@ export function verdictWithReasons(input: {
   }
   if (picked.length === 0) return null;
   const squares = [...new Set(picked.flatMap((r) => [...r.squares, ...(r.line ?? []).flatMap((u) => [u.slice(0, 2), u.slice(2, 4)] as Square[])]))];
-  const arrowKeys = new Set<string>();
-  const arrows = picked.flatMap((r) => (r.line ?? []).map((u): [Square, Square] => [u.slice(0, 2) as Square, u.slice(2, 4) as Square]))
-    .filter(([a, b]) => (arrowKeys.has(a + b) ? false : (arrowKeys.add(a + b), true)));
   const proofLines = picked.flatMap((r) => {
     if (!r.line?.length) return [];
     const c = new Chess(input.fen);
@@ -706,7 +702,7 @@ export function verdictWithReasons(input: {
     for (const u of r.line) { try { sans.push(c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }).san); } catch { break; } }
     return sans.length ? [{ fen: input.fen, sans }] : [];
   });
-  return { favoured, reasons: picked, text: picked.map((r) => r.sentence).join(' '), squares, arrows, proofLines };
+  return { favoured, reasons: picked, text: picked.map((r) => r.sentence).join(' '), squares, proofLines };
 }
 
 /** The reasons as clauses after a verdict ("— you're a piece up, their king is

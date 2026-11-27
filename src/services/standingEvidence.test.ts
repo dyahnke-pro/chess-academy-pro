@@ -18,7 +18,6 @@ describe('the reasons the count missed', () => {
     const v = read('rn2kb1r/pp3ppn/2p1p3/3pP2p/3q1P2/P1NBBQ1P/1PP3P1/R3K2R b KQkq - 1 12', 557, 'w',
       [['h7g5', 'f3e2', 'f8c5', 'e3d4', 'c5d4', 'f4g5', 'd4c3', 'b2c3', 'b8d7', 'g5g6']])!;
     expect(v.text).toBe('Their queen on d4 is trapped: every square it has loses it.');
-    expect(v.arrows.at(-1)).toEqual(['e3', 'd4']);
     expect(v.proofLines[0].sans.at(-1)).toBe('Bxd4');
   });
 
@@ -32,7 +31,7 @@ describe('the reasons the count missed', () => {
     const v = read('4Rbk1/2p2p1p/pqN3p1/2nP4/8/2Q4P/Pr3PP1/3R2K1 b - - 1 28', 768, 'w',
       [['b6c6', 'd5c6', 'b2b5', 'e8f8', 'g8f8', 'c3f6', 'b5b8']])!;
     expect(v.text).toContain('Their king on g8 has no square to step to, and two of your pieces bear on it.');
-    expect(v.arrows.length).toBeGreaterThan(0);
+    expect(v.proofLines.length).toBeGreaterThan(0);
   });
 
   it('a queen hit with tempo', () => {
@@ -52,7 +51,7 @@ describe('the reasons the count missed', () => {
     const v = read('2kr4/ppp2pp1/2n1b3/3pb3/P3p2q/BP4p1/R1PPPPB1/1N1QR1K1 w - - 0 19', -735, 'b',
       [['f2g3', 'e5g3', 'b1c3', 'g3e1', 'a3c5', 'e1g3', 'c3b5', 'h4h2', 'g1f1']])!;
     expect(v.text).toBe("You win a rook's worth in the best line.");
-    expect(v.arrows).toEqual([['f2', 'g3'], ['e5', 'g3'], ['b1', 'c3'], ['g3', 'e1']]);
+    expect(v.proofLines[0].sans).toEqual(['fxg3', 'Bxg3', 'Nc3', 'Bxe1']);
   });
 
   it('a level board says why it is level, with its count', () => {

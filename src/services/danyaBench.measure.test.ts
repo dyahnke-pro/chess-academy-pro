@@ -389,7 +389,7 @@ function once<T>(fn: (p: Position) => T): (p: Position) => T {
 const lessonPick = once((p: Position): { facts: ThoughtFact[]; composed: ComposedThought } => {
   // The lesson's own inputs: the engine's reads around the move (its choices
   // are the move's own facts now — the weighing is no longer spliced here).
-  const facts = moveThoughtFacts({ moveReads: writerFor('lesson').moveReads, namesPlayedMove: true, plainThreatsSeen: false, theory: true, story: true, tense: 'now',
+  const facts = moveThoughtFacts({ register: 'review', soundPlies: null, unpricedCredit: 'refused', moveReads: writerFor('lesson').moveReads, namesPlayedMove: true, plainThreatsSeen: false, theory: true, story: true, tense: 'now',
     fenBefore: p.fenBefore, san: p.san, moverIsStudent: p.own, prev: p.prev,
     line: lineAhead(p), history: p.history, theirLast: p.theirLast, phrases: null, reads: readsOf(p), costCp: costCp(p),
   });
@@ -462,7 +462,7 @@ const TAG = /\[([a-z0-9-]+)\]/gi;
 const tagsOf = (text: string | null): string[] => [...(text ?? '').matchAll(TAG)].map((m) => m[1].toLowerCase());
 
 const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Promise<string | string[] | null>> = {
-  lesson: (p) => lessonThought({ namesPlayedMove: true, theory: true, story: true,
+  lesson: (p) => lessonThought({ register: 'review', namesPlayedMove: true, theory: true, story: true,
     fenBefore: p.fenBefore, san: p.san, prev: p.prev, moverIsStudent: p.own,
     line: lineAhead(p), history: p.history, theirLast: p.theirLast, reads: readsOf(p), costCp: costCp(p),
   }, newLessonVoice(), null),
@@ -485,7 +485,7 @@ const SOURCES: Record<SourceId, (p: Position) => string | string[] | null | Prom
   studentMove: (p) => {
     if (!p.own) return null;
     const best = p.best;
-    return studentMoveTeaching({ linesAfter: [], namesStudentMoves: true, theory: true,
+    return studentMoveTeaching({ unpricedCredit: 'refused', linesAfter: [], namesStudentMoves: true, theory: true,
       fenBefore: p.fenBefore, san: p.san, history: p.history, cpLoss: costCp(p), bothCp: true,
       bestSan: best ? sansOf(p.fenBefore, [best.uci], 1).at(0) ?? null : null,
       bestLine: linesOf(p.before)[0], reply: p.reply ? sansOf(p.fenAfter, [p.reply.uci], 1).at(0) ?? null : null,
@@ -1001,7 +1001,7 @@ it.runIf(RUN)('Danya bench: built vs said, per idea and per source', async () =>
     // EVERY COMPOSER FACT, SCORED BY ITS OWN IDEA: how often Danya says the
     // idea a source states, when that source states it (the learned order).
     {
-      const facts = moveThoughtFacts({ moveReads: writerFor('lesson').moveReads, namesPlayedMove: true, plainThreatsSeen: false, theory: true, story: true, tense: 'now',
+      const facts = moveThoughtFacts({ register: 'review', soundPlies: null, unpricedCredit: 'refused', moveReads: writerFor('lesson').moveReads, namesPlayedMove: true, plainThreatsSeen: false, theory: true, story: true, tense: 'now',
         fenBefore: p.fenBefore, san: p.san, moverIsStudent: p.own, prev: p.prev,
         line: lineAhead(p), history: p.history, theirLast: p.theirLast, phrases: null, reads: readsOf(p), costCp: costCp(p),
       });

@@ -8,7 +8,7 @@ import { NO_PREV_CAPTURE } from './captureRun';
 const ASK_MOVE: ReadonlySet<FactGroup> = new Set(['move', 'theirSide', 'danger', 'line', 'story', 'structure', 'tactics', 'concepts']);
 const line = (rank: number, evaluation: number, moves: string[]) => ({ rank, evaluation, moves, mate: null });
 function ask(fenBefore: string, san: string, moverIsStudent: boolean, after: ReturnType<typeof line>[]): string {
-  return questionThought({ namesPlayedMove: true,
+  return questionThought({ register: 'review', namesPlayedMove: true,
     story: false, theory: false, plainThreatsSeen: false, fenBefore, san, moverIsStudent, prev: NO_PREV_CAPTURE, line: null,
     theirLast: null, history: [], costCp: null,
     reads: { before: [], after, passBefore: [], passAfter: [] } as never,

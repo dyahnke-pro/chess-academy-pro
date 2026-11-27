@@ -9,7 +9,7 @@ import type { FactGroup } from './coachFact';
 import { newLessonVoice } from './reviewMoveBriefing';
 import { writerFor } from './writerRegister';
 
-const facts = (fenBefore: string, san: string, moverIsStudent: boolean) => moveThoughtFacts({ moveReads: writerFor('lesson').moveReads, namesPlayedMove: true,
+const facts = (fenBefore: string, san: string, moverIsStudent: boolean) => moveThoughtFacts({ register: 'review', soundPlies: null, unpricedCredit: 'refused', moveReads: writerFor('lesson').moveReads, namesPlayedMove: true,
   plainThreatsSeen: false, story: false, theory: false, fenBefore, san, prev: NO_PREV_CAPTURE, moverIsStudent,
   line: null, history: [], theirLast: null, reads: null, costCp: null, tense: 'now', phrases: newLessonVoice().phrases,
 });
@@ -41,7 +41,7 @@ describe('the king group in the composer', () => {
 });
 
 describe('the king group answers in chat (questionThought, the move group)', () => {
-  const ask = (fenBefore: string, san: string, groups: readonly FactGroup[] = ['move']): string => questionThought({ namesPlayedMove: true,
+  const ask = (fenBefore: string, san: string, groups: readonly FactGroup[] = ['move']): string => questionThought({ register: 'review', namesPlayedMove: true,
     plainThreatsSeen: false, story: false, theory: false, fenBefore, san, prev: NO_PREV_CAPTURE, moverIsStudent: true,
     line: null, history: [], theirLast: null, reads: null, costCp: null,
   }, new Set(groups), null, null).spoken;

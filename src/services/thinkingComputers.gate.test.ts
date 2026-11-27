@@ -55,7 +55,7 @@ describe('every computer answers for Learn how to think', () => {
         const asked = step === 'their-move-changed'
           ? (theirLast ? { fenBefore: theirLast.fenBefore, san: theirLast.san, moverIsStudent: false } : null)
           : { fenBefore: fen, san: mv.san, moverIsStudent: true };
-        const out = stepThought(step, { fen, pv, played: null, theirLast }, asked ? { namesPlayedMove: true,
+        const out = stepThought(step, { fen, pv, played: null, theirLast }, asked ? { register: 'review' as const, unpricedCredit: 'refused' as const, soundPlies: null, namesPlayedMove: true,
           ...asked, prev: NO_PREV_CAPTURE, line: null, theirLast: asked.moverIsStudent ? theirLast : null, history: [],
           story: false, reads: null, costCp: null, theory: false, plainThreatsSeen: false,
         } : null);
