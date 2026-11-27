@@ -362,6 +362,15 @@ export type AuditKind =
   /** The question before the student's move, decided by the record of the
    *  chance's skill (WO-COACH-NEXT-TO-YOU-01 C2/C3). */
   | 'learn-focus-question'
+  /** A phase focus's skill scored on the student's move (develop and castle,
+   *  the attack on the king, endgame technique — `focusRotation`). */
+  | 'learn-focus-skill'
+  /** The coach preferred an equal trade in an ending the student leads
+   *  (`focusTrades`, the focus's trade preference). */
+  | 'focus-trade'
+  /** The coach's slip that opened its own king to the student's attack
+   *  (`attackPlant`). */
+  | 'focus-attack-plant'
   | 'focus-punish'
   /** A technique ending (`bestPlay` on): the coach played its engine-best move. */
   | 'mission-best-play'

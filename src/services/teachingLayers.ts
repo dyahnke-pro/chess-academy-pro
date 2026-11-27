@@ -93,6 +93,7 @@ export const TAG_LAYER: Record<MisconceptionTagId, TeachingLayer> = {
   'mistimed-pawn-break': 'plan',
   'bad-trade': 'plan',
   'overvalued-attack': 'plan',
+  'missed-king-attack': 'plan',
   'missed-weak-target': 'plan',
   'missed-plan-route': 'plan',
   'allowed-counterplay': 'plan',

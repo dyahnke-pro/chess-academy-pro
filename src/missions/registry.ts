@@ -8,6 +8,8 @@ import {
   checkDevelopAndCastle,
   developAndCastleProgress,
   developAndCastleShowMove,
+  DEVELOP_MISS_PHRASE,
+  CASTLING_LOST_PHRASE,
 } from './checks/developAndCastle';
 import {
   FREE_PIECE_CLOSES_AT_MOVE,
@@ -81,7 +83,8 @@ export const MISSIONS: Record<MissionId, MissionCard> = {
     check: checkDevelopAndCastle,
     progress: developAndCastleProgress,
     showMove: developAndCastleShowMove,
-    missPhrase: 'One move per piece — bring out a new one.',
+    missPhrase: DEVELOP_MISS_PHRASE,
+    missPhraseFor: { 'castling-lost': CASTLING_LOST_PHRASE },
     passLine: 'Mission complete — every piece out and your king is safe!',
     passEnds: 'play-on',
     // The find is the pass (no earlier moment to pay).

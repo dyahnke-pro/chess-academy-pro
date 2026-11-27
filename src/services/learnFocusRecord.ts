@@ -23,6 +23,7 @@ import type { OwedPattern } from '../coach/focus/focusPlant';
 import type { SeatTally } from '../coach/focus/focusRunner';
 import { LEFT_LOOSE_TAG, type ChanceDifficulty } from '../coach/focus/focusChances';
 import type { RungGame, TacticsRung } from '../coach/focus/focusRung';
+import type { MissionPhase } from '../missions/missionCard';
 
 export interface LearnFocusResultRecord {
   id: string;
@@ -47,6 +48,9 @@ export interface LearnFocusResultRecord {
    *  carried); a bare tag is a row from before their side carried, and is
    *  yours. */
   carry?: Array<OwedPattern | MisconceptionTagId>;
+  /** The skill each phase taught (`focusRotation`), so the next game's
+   *  rotation moves on; absent on older rows. */
+  phases?: Partial<Record<MissionPhase, MisconceptionTagId>>;
   at: number;
   /** Rows older than WO-FOCUS-TACTICS-01 carried how the game was scaffolded. */
   mode?: string;
@@ -72,6 +76,13 @@ export function rungGamesFrom(rows: readonly LearnFocusResultRecord[]): RungGame
   return rows.flatMap((r) => (typeof r.rung === 'number' && r.atRung ? [{ rung: r.rung, found: r.atRung.found, missed: r.atRung.missed, at: r.at }] : []));
 }
 
+/** The skill each phase taught in the newest focus game that says (a tag a
+ *  later build retired is dropped). */
+export function lastPicksOf(rows: readonly LearnFocusResultRecord[]): Partial<Record<MissionPhase, MisconceptionTagId>> {
+  const phases = [...rows].reverse().find((r) => r.phases)?.phases ?? {};
+  return Object.fromEntries(Object.entries(phases).filter(([, t]) => isMisconceptionTagId(t))) as Partial<Record<MissionPhase, MisconceptionTagId>>;
+}
+
 export async function loadFocusSetupInput(): Promise<Omit<FocusSetupInput, 'rand'>> {
   const [profile, results] = await Promise.all([
     getCapabilityProfile('use').catch((): CapabilityProfile => new Map()),
@@ -87,7 +98,7 @@ export async function loadFocusSetupInput(): Promise<Omit<FocusSetupInput, 'rand
     if (p.seat === 'defend' && p.tag === LEFT_LOOSE_TAG) return [];
     return isMisconceptionTagId(p.tag) && (p.seat === 'exploit' || p.seat === 'defend') ? [p] : [];
   });
-  return { holds, games: rungGamesFrom(results), tempoBest: tempoBestOf(results), carry };
+  return { holds, games: rungGamesFrom(results), tempoBest: tempoBestOf(results), carry, lastPicks: lastPicksOf(results) };
 }
 
 /** A focus chance answered, on the record (one writer, the lane-evidence

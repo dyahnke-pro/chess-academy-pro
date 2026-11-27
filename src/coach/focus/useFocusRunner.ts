@@ -123,7 +123,7 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
   const writeResult = useCallback((result: FocusResult) => {
     void writeLearnFocusResult({
       gameId: handsRef.current.gameId() ?? `learn-${Date.now()}`, focus: result.focus, rung: result.rung,
-      tally: result.tally, atRung: result.atRung, presented: result.presented, tempoRun: result.tempo.longest, carry: result.carry, at: Date.now(),
+      tally: result.tally, atRung: result.atRung, presented: result.presented, tempoRun: result.tempo.longest, carry: result.carry, phases: result.phases, at: Date.now(),
     });
   }, []);
 
@@ -141,6 +141,17 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
           for (const tag of e.chance.setupTag ? [e.chance.tag, e.chance.setupTag] : [e.chance.tag]) {
             recordFocusAnswer({ tag, outcome: e.outcome, fen: e.fen, san: e.san, prompted: e.prompted, steered: e.steered, takenBack: e.takenBack, gameId: h.gameId() });
           }
+          break;
+        case 'record-skill':
+          recordFocusAnswer({ tag: e.tag, outcome: e.outcome, fen: e.fen, san: e.san, prompted: false, steered: e.steered, takenBack: false, gameId: h.gameId() });
+          void logAppAudit({
+            kind: 'learn-focus-skill',
+            category: 'subsystem',
+            source: 'useFocusRunner',
+            summary: `${e.phase} ${e.tag}: ${e.outcome}${e.steered ? ' (steered)' : ''}${e.spoke ? ' — spoke' : ''}`,
+            details: JSON.stringify({ phase: e.phase, tag: e.tag, outcome: e.outcome, steered: e.steered, spoke: e.spoke, san: e.san }),
+            fen: e.fen,
+          });
           break;
         case 'record-deciding':
           recordDecidingMiss({ fen: e.fen, san: e.san, bestUci: h.bestUciAt(e.fen), gameId: h.gameId() });
@@ -200,7 +211,7 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
       kind: 'learn-focus-chosen',
       category: 'subsystem',
       source: 'useFocusRunner',
-      summary: `${setup.focus} rung ${setup.rung} (${RUNG_TIERS[setup.rung].title}) — ${setup.reason}; window ${setup.window.length} game(s); defend ${setup.seatStates.defend}, exploit ${setup.seatStates.exploit}; levels ${setup.levels.join('+')}; target ply ${setup.targetPly}`,
+      summary: `${setup.focus} rung ${setup.rung} (${RUNG_TIERS[setup.rung].title}) — ${setup.reason}; phases ${setup.phases.opening.skill} / ${setup.phases.middlegame.skill} / ${setup.phases.endgame.skill}; window ${setup.window.length} game(s); defend ${setup.seatStates.defend}, exploit ${setup.seatStates.exploit}; levels ${setup.levels.join('+')}; target ply ${setup.targetPly}`,
       details: JSON.stringify(setup),
     });
     dispatch({ kind: 'start', setup }, { replyIsInline: true });

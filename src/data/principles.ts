@@ -57,6 +57,7 @@ export const PRINCIPLE_DEVICES: Readonly<Partial<Record<MisconceptionTagId, stri
   'missed-your-clearance': "The device: when your own piece blocks the square or line you need, move it away with a threat — the line opens with tempo.",
   'missed-your-interference': "The device: when their defender guards along a line, drop a piece onto that line — the guard is cut off and what it held falls.",
   'overvalued-attack': 'The device: count attackers against defenders before you sacrifice — if the defenders arrive faster than your reserves, the attack is a loan you cannot repay.',
+  'missed-king-attack': 'The device: when their king is open, list the moves that bring one more piece to bear on it before any quiet move — an attack waits for no one.',
   'poisoned-pawn': 'The device: before you grab a pawn with a piece, find its way home — if every retreat is cut off or chased, the pawn is bait and the piece is the price.',
   // ── positional ──
   'weakened-king-safety': 'The device: the pawns in front of your king move only for a concrete, named reason — every push opens a door that never closes again.',

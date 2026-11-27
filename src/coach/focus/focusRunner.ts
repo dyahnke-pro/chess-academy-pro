@@ -40,6 +40,10 @@ import {
 import { askLine, clueLine, creditLine, endLine, recapLabel, shownLine, spotLine } from './focusLines';
 import { DECIDING_LINE, type FocusId, type FocusSeat } from './focusCard';
 import type { FocusSetup } from './focusSetup';
+import type { MissionPhase } from '../../missions/missionCard';
+import { createPhaseTransitionState, detectPhaseTransition, type PhaseTransitionState } from '../../services/phaseTransitionDetector';
+import { PHASES } from './focusRotation';
+import { judgeOpeningMove, NO_OPENING_JUDGE, type OpeningJudgeState, type SkillVerdict } from './openingJudge';
 import type { HeatState } from '../../services/holdRate';
 import { momentDial, type MomentDial } from '../../services/coachMoment';
 import { carryHeads, NO_PLANTS, plantAsk, presents, type FocusPlantAsk, type OwedPattern, type PlantState } from './focusPlant';
@@ -201,6 +205,13 @@ export interface FocusRunState {
   /** A line was said about the user's last move (a clue, a STOP, a credit…):
    *  a run that move ended is left for the recap, never said on top of it. */
   spoke: boolean;
+  /** ONE FOCUS PER PHASE (`focusRotation`): the game's phase now, read by
+   *  the ONE phase detector (`detectPhaseTransition`) on the student's moves,
+   *  and its ledger. */
+  phase: MissionPhase;
+  phaseFlags: PhaseTransitionState;
+  /** The opening focus's scores so far (`openingJudge`). */
+  opening: OpeningJudgeState;
 }
 
 /** What a focus find pays, by what was found — the same reward vocabulary
@@ -224,7 +235,7 @@ const TEMPO_RUN_REWARD: RewardKind = 'tempoRun';
 const TEMPO_BEST_REWARD: RewardKind = 'newBest';
 /** The lines about the user's own move: one of these said, and a run the
  *  move ended waits for the recap. */
-const MOVE_LINES: ReadonlySet<SayLine> = new Set<SayLine>(['credit', 'clue', 'shown', 'deciding', 'castle-stop', 'castle-reminder']);
+const MOVE_LINES: ReadonlySet<SayLine> = new Set<SayLine>(['credit', 'clue', 'shown', 'deciding', 'castle-stop', 'castle-reminder', 'phase-miss']);
 /** A rung-up: its own moment (David 2026-10-22: "Make sure the dopamine tools
  *  are linked"). */
 const RUNG_UP_REWARD: RewardKind = 'levelUp';
@@ -244,7 +255,7 @@ const EMPTY_TALLY = (): Record<FocusSeat, SeatTally> => ({
 
 const NO_CASTLE: CastleState = { reminded: false, boards: [], probe: null };
 
-export const FOCUS_IDLE: FocusRunState = { setup: null, found: {}, board: null, pause: null, decidingUsed: false, carried: [], tally: EMPTY_TALLY(), atRung: { found: 0, missed: 0 }, missed: [], plant: NO_PLANTS, castle: NO_CASTLE, tempo: NO_RUN, stood: [], lastMove: null, spoke: false };
+export const FOCUS_IDLE: FocusRunState = { setup: null, found: {}, board: null, pause: null, decidingUsed: false, carried: [], tally: EMPTY_TALLY(), atRung: { found: 0, missed: 0 }, missed: [], plant: NO_PLANTS, castle: NO_CASTLE, tempo: NO_RUN, stood: [], lastMove: null, spoke: false, phase: 'opening', phaseFlags: createPhaseTransitionState(), opening: NO_OPENING_JUDGE };
 
 export type FocusEvent =
   | { kind: 'start'; setup: FocusSetup }
@@ -264,7 +275,7 @@ export type FocusEvent =
   | { kind: 'castle-read'; fenBefore: string; realCp: number | null; whatIfCp: number | null }
   | { kind: 'game-over'; at: number };
 
-export type SayLine = 'announce' | 'ask' | 'credit' | 'clue' | 'shown' | 'deciding' | 'end' | 'rung-up' | 'castle-stop' | 'castle-reminder' | 'tempo-had' | 'tempo-let-off';
+export type SayLine = 'announce' | 'ask' | 'credit' | 'clue' | 'shown' | 'deciding' | 'end' | 'rung-up' | 'castle-stop' | 'castle-reminder' | 'tempo-had' | 'tempo-let-off' | 'phase-miss';
 
 export interface FocusTurnRow {
   ply: number;
@@ -313,6 +324,9 @@ export interface FocusResult {
   /** The patterns owed to the next game, the most recent miss first, each
    *  with its seat (`PlantState.owed`): the next game plants the head of each. */
   carry: OwedPattern[];
+  /** The skill each phase the game reached taught (`focusRotation`): the
+   *  next game's rotation moves on from it. */
+  phases: Partial<Record<MissionPhase, MisconceptionTagId>>;
 }
 
 export type FocusEffect =
@@ -322,6 +336,9 @@ export type FocusEffect =
   /** A steered chance: the page files the ply in `steeredPlies`. */
   | { kind: 'steered'; ply: number }
   | { kind: 'record'; chance: FocusChance; outcome: 'held' | 'broken'; fen: string; san: string; prompted: boolean; steered: boolean; takenBack: boolean }
+  /** A phase focus's skill scored on the student's move (`openingJudge`,
+   *  `kingAttackJudge`, `endgameTechniqueJudge`): the lane-evidence door. */
+  | { kind: 'record-skill'; tag: MisconceptionTagId; outcome: 'held' | 'broken'; fen: string; san: string; steered: boolean; phase: MissionPhase; spoke: boolean }
   /** A deciding blunder taken back: the page files the miss under its classified tag. */
   | { kind: 'record-deciding'; fen: string; san: string }
   /** Stop before the coach replies; the banner offers its buttons. */
@@ -515,6 +532,7 @@ function endOf(open: FocusRunState, at: number): FocusStep {
     progress: next.step === 'up' ? [rungUpLine(next.rung), rungProgressLine(next)].filter(Boolean).join(' ') : rungProgressLine(next),
     missed: s.missed,
     tempo: { longest, best: setup.tempoBest, newBest },
+    phases: Object.fromEntries(PHASES.slice(0, PHASES.indexOf(s.phase) + 1).map((p) => [p, setup.phases[p].skill])),
   };
   const effects: FocusEffect[] = [...closed.effects, { kind: 'say', text, line: 'end' }];
   if (newBest) effects.push({ kind: 'reward', reward: TEMPO_BEST_REWARD, square: null, ply: s.board?.ply ?? 0, label: `NEW BEST · TEMPO RUN ×${longest}` });
@@ -590,7 +608,7 @@ function stepInner(s: FocusRunState, e: FocusEvent): FocusStep {
       const boards = s.castle.boards.map((x) => (sameBoard(x.fen, e.fen) ? { ...x, lines: e.lines } : x));
       return onBoard({ ...s, castle: { ...s.castle, boards } }, { ...s.board, lines: e.lines });
     }
-    case 'moved': return onMoved(s, e.move);
+    case 'moved': return withPhaseFocus(s, onMoved(s, e.move), e.move);
     case 'try-again': {
       const p = s.pause;
       if (!p || p.retries !== 0) return { state: s, effects: [] };
@@ -909,6 +927,50 @@ function onMoved(s0: FocusRunState, m: FocusMove): FocusStep {
     return { state: { ...state, castle: { ...state.castle, probe: { fenBefore: m.fenBefore, san: m.san, ply, student: m.student, probe } } }, effects };
   }
   return b ? goOn(state, m, ply, effects, m.lines ?? b.lines) : { state, effects: [...effects, { kind: 'reply', punish: false }] };
+}
+
+/** THE PHASE'S OWN JUDGE (`focusRotation`): the opening's develop rule; in
+ *  the middlegame the attack on the king; in the endgame its technique. */
+function judgePhase(s: FocusRunState, m: FocusMove): { verdicts: SkillVerdict[]; state: Partial<FocusRunState> } {
+  if (s.phase === 'opening') {
+    const r = judgeOpeningMove(m.fenBefore, m.san, s.opening);
+    return { verdicts: r.verdicts, state: { opening: r.state } };
+  }
+  return { verdicts: [], state: {} };
+}
+
+/**
+ * ONE FOCUS PER PHASE, on the student's move: the phase's judge scores it
+ * (every verdict reaches the record, held and missed), a miss of the skill the
+ * phase teaches this game is said in its fixed words — once a move, never on
+ * top of a line already said about it, never on a skill the record holds
+ * green — and the ONE phase detector moves the game on. A retry after Try
+ * again is the same decision and is not scored twice.
+ */
+function withPhaseFocus(before: FocusRunState, step: FocusStep, m: FocusMove): FocusStep {
+  const setup = before.setup;
+  if (!setup || (before.pause && before.pause.retries === 1)) return step;
+  const judged = judgePhase(before, m);
+  const pick = setup.phases[before.phase];
+  const effects = [...step.effects];
+  let said = effects.some((e) => e.kind === 'say');
+  const steered = !!before.board && sameBoard(before.board.fen, m.fenBefore) && (before.board.steered || before.board.planted !== null);
+  const sayAt = effects.findIndex((e) => e.kind === 'reply' || e.kind === 'hold' || e.kind === 'probe');
+  const added: FocusEffect[] = [];
+  for (const v of judged.verdicts) {
+    const speak = !said && v.outcome === 'broken' && !!v.line && v.tag === pick.skill && setup.tagStates[v.tag] !== 'green';
+    if (speak && v.line) { added.push({ kind: 'say', text: v.line, line: 'phase-miss' }); said = true; }
+    added.push({ kind: 'record-skill', tag: v.tag, outcome: v.outcome, fen: m.fenBefore, san: m.san, steered, phase: before.phase, spoke: speak });
+  }
+  effects.splice(sayAt >= 0 ? sayAt : effects.length, 0, ...added);
+  // The phase the move leaves the game in (the student's move is what the
+  // detector reads, the board after it).
+  const flags = { ...before.phaseFlags };
+  const ply = before.board && sameBoard(before.board.fen, m.fenBefore) ? before.board.ply : 0;
+  detectPhaseTransition({ fen: m.fenAfter, san: m.san, moveNumber: ply, isCoachMove: false }, flags, m.student === 'w' ? 'white' : 'black');
+  const phase: MissionPhase = flags.middlegameToEndgameFired ? 'endgame' : flags.openingToMiddlegameFired ? 'middlegame' : before.phase;
+  const state: FocusRunState = { ...step.state, ...judged.state, phaseFlags: flags, phase };
+  return { state: added.some((e) => e.kind === 'say') ? { ...state, spoke: true } : state, effects };
 }
 
 function row(s: FocusRunState, chance: FocusChance, ply: number, outcome: ChanceVerdict, spoke: FocusTurnRow['spoke'], prompted: boolean, steered: boolean, planted: boolean, held: boolean, retry: boolean, reward: RewardKind | null): FocusTurnRow {

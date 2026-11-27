@@ -89,6 +89,7 @@ export const METER_OF_TAG: Record<Exclude<MisconceptionTagId, 'other'>, SkillMet
   'bad-trade-material': 'threats',
   'calculation-depth': 'calculation',
   'overvalued-attack': 'calculation',
+  'missed-king-attack': 'king-safety',
   'no-plan': 'planning',
   'created-pawn-weakness': 'planning',
   'overextended-pawn': 'planning',

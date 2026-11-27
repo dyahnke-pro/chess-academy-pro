@@ -6,7 +6,8 @@ import { FOCUS_IDLE, focusPlantAsk, stepFocus, type FocusEffect, type FocusEvent
 import type { FocusSetup } from './focusSetup';
 import type { OwedPattern } from './focusPlant';
 import type { FocusMove } from './focusChances';
-import { DECIDING_LINE, PREGAME_LINE } from './focusCard';
+import { DECIDING_LINE } from './focusCard';
+import { planPhases, pregameLine } from './focusRotation';
 import type { RungGame, TacticsRung } from './focusRung';
 
 // Scenario tests: the runner is sequence-dependent, so each test walks a game.
@@ -21,9 +22,11 @@ const move = (fen: string, san: string, cpLoss: number | null = null): FocusMove
  *  tests were written against). */
 const ALL_TAGS = MISCONCEPTION_TAGS.map((t) => t.id);
 const statesAll = (st: HeatState): FocusSetup['tagStates'] => Object.fromEntries(ALL_TAGS.map((t) => [t, st])) as FocusSetup['tagStates'];
+const PHASES0 = planPhases(new Map(), new Set(['beginner']), {});
+const PREGAME_LINE = pregameLine(PHASES0);
 const setup = (over: Partial<FocusSetup> = {}): FocusSetup => ({
   focus: 'tactics', rung: 0, reason: 'seed', window: [],
-  seatStates: { defend: 'red', exploit: 'red' }, levels: ['beginner'], targetPly: 12, line: PREGAME_LINE, tempoBest: 0, carry: [],
+  seatStates: { defend: 'red', exploit: 'red' }, levels: ['beginner'], targetPly: 12, phases: PHASES0, line: PREGAME_LINE, tempoBest: 0, carry: [],
   tagStates: statesAll('short'), ...over,
 });
 const at = (rung: TacticsRung, over: Partial<FocusSetup> = {}): FocusSetup => setup({ rung, ...over });

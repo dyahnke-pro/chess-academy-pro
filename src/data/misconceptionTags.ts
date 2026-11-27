@@ -268,6 +268,20 @@ export const MISCONCEPTION_TAGS = [
     coachCue: 'Cutting a defender off with an interposed piece was the best move and the played move missed it.',
     drill: { kind: 'tactic', puzzleThemes: ['interference'] },
   },
+  // THE ATTACK ON THE KING (Coach Build Board "4. Focuses", David
+  // 2026-11-24: "tactics or attack the king" is the middlegame's focus). The
+  // board's best move went after their king — took a shelter pawn, removed a
+  // defender, brought a piece to bear (`kingAttack`, the one attacking-move
+  // reader) — and beat everything else; the played move let the attack go.
+  // Scored by the focus's own judge (`kingAttackJudge`), held and missed.
+  {
+    id: 'missed-king-attack',
+    label: 'Let a king attack go',
+    bucket: 'tactical',
+    blurb: "Their king was open and the attack was the move — you played something else.",
+    coachCue: 'The best move attacked the enemy king (took a shelter pawn, removed a defender, brought a piece to bear) and clearly beat every other move; the played move was not an attacking move and cost.',
+    drill: { kind: 'tactic', puzzleThemes: ['kingsideAttack', 'attackingF2F7'] },
+  },
   {
     id: 'calculation-depth',
     label: 'Long tactical sequences',
