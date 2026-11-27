@@ -1152,7 +1152,7 @@ export function loadLectureCorpus(): Promise<unknown> {
 
 /** One step of the lecture as it is PERFORMED: a move made on the board, or a
  *  line said about the board as it stands. */
-type LectureStep =
+export type LectureStep =
   | { kind: 'position'; fen: string }
   | { kind: 'move'; fenBefore: string; san: string; uci: string; fenAfter: string }
   | { kind: 'say'; text: string; fen: string; /** set on a line walked move by move: said before the why */ moveSan?: string };

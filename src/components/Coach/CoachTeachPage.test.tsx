@@ -354,14 +354,11 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
       expect(screen.getByTestId('teach-nav-status')).toHaveTextContent('Live');
     });
 
-    it('keeps Takeback as a separate control — reviewing must not be the thing that deletes a move', async () => {
+    it('has no Takeback button: Back only looks, and a different move on a looked-back board is the takeback (2026-11-24)', async () => {
       render(<CoachTeachPage mode="classic" />);
       await screen.findByTestId('teach-nav-row');
-      // The whole point of adding navigation: stepping back and destroying the
-      // move are different acts, and Learn used to offer only the destructive
-      // one. Both must be present and distinct.
-      expect(screen.getByTestId('teach-takeback')).toBeInTheDocument();
-      expect(screen.getByTestId('teach-nav-prev')).not.toBe(screen.getByTestId('teach-takeback'));
+      expect(screen.queryByTestId('teach-takeback')).toBeNull();
+      expect(screen.getByTestId('teach-nav-prev')).toBeInTheDocument();
     });
   });
 

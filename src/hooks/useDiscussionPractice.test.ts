@@ -335,7 +335,7 @@ describe('recordGradedMove — the door for an already-graded move', () => {
     act(() => {
       result.current.recordGradedMove({
         fenBefore: FEN_BEFORE, playedSan: 'e4', moverColor: 'white',
-        cpLoss: 0, sourceGameId: 'game-123', seedRating: 400, evalBeforeMover: 20,
+        cpLoss: 0, sourceGameId: 'game-123', seedRating: 400, evalBeforeMover: 20, prompted: false,
       });
     });
     expect(recordMoveEvidence).toHaveBeenCalledTimes(1);
@@ -345,12 +345,23 @@ describe('recordGradedMove — the door for an already-graded move', () => {
     });
   });
 
+  it('a move from a board the coach told (a hint, Why naming it) is recorded prompted (2026-11-24)', () => {
+    const { result } = renderHook(() => useDiscussionPractice(true, { capabilityOrigin: 'play' }));
+    act(() => {
+      result.current.recordGradedMove({
+        fenBefore: FEN_BEFORE, playedSan: 'e4', moverColor: 'white',
+        cpLoss: 0, sourceGameId: 'game-123', seedRating: 400, evalBeforeMover: 20, prompted: true,
+      });
+    });
+    expect(vi.mocked(recordMoveEvidence).mock.calls[0][0]).toMatchObject({ prompted: true });
+  });
+
   it('NEVER analyses — an ungradeable move records nothing rather than reading as clean', () => {
     const { result } = renderHook(() => useDiscussionPractice(true, { capabilityOrigin: 'play' }));
     act(() => {
       result.current.recordGradedMove({
         fenBefore: FEN_BEFORE, playedSan: 'e4', moverColor: 'white',
-        cpLoss: null, sourceGameId: 'game-123', seedRating: 400, evalBeforeMover: 20,
+        cpLoss: null, sourceGameId: 'game-123', seedRating: 400, evalBeforeMover: 20, prompted: false,
       });
     });
     expect(recordMoveEvidence).not.toHaveBeenCalled();
@@ -365,7 +376,7 @@ describe('recordGradedMove — the door for an already-graded move', () => {
     act(() => {
       result.current.recordGradedMove({
         fenBefore: FEN_BEFORE, playedSan: 'e4', moverColor: 'white',
-        cpLoss: 0, sourceGameId: 'game-123', seedRating: 400, evalBeforeMover: 20,
+        cpLoss: 0, sourceGameId: 'game-123', seedRating: 400, evalBeforeMover: 20, prompted: false,
       });
     });
     expect(recordMoveEvidence).not.toHaveBeenCalled();

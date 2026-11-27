@@ -506,7 +506,6 @@ const BUTTONS = {
     { id: 'why-button', kind: 'why', effect: 'message', optional: true },
     { id: 'teach-read-position-btn', kind: 'read-position', effect: 'tts' },
     { id: 'coach-tips-toggle', kind: 'tips', effect: 'clickable' },
-    { id: 'teach-takeback', kind: 'takeback', effect: 'clickable', optional: true },
     { id: 'teach-restart', kind: 'restart', effect: 'clickable', destructive: true, optional: true },
   ],
   // optional:true on Play — an aggressive audit game can reach game-over, which
@@ -517,7 +516,6 @@ const BUTTONS = {
     { id: 'why-button', kind: 'why', effect: 'message', optional: true },
     { id: 'read-position-btn', kind: 'read-position', effect: 'tts', optional: true },
     { id: 'coach-tips-toggle', kind: 'tips', effect: 'clickable', optional: true },
-    { id: 'takeback-btn', kind: 'takeback', effect: 'clickable', optional: true },
     { id: 'restart-btn', kind: 'restart', effect: 'clickable', destructive: true, optional: true },
     { id: 'resign-btn', kind: 'resign', effect: 'clickable', destructive: true, confirm: 'resign-yes', optional: true },
   ],
