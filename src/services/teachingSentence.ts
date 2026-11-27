@@ -23,7 +23,7 @@ import { DEFENDER_RULE_TECHNIQUE, type DefenderRuleId } from './endgameDefenderR
 import { CAPTURE_VALUE } from './pieceValues';
 import { Chess, type Square } from 'chess.js';
 import { rotateStem } from '../utils/rotateStem';
-import { andList, orList, countWord, withArticle } from '../utils/andList';
+import { andList, orList, countWord } from '../utils/andList';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { evalBandWords, type EvalBand } from './evalBand';
 import type { MistakeCauseKind } from './mistakeCause';
