@@ -132,6 +132,7 @@ import { seventhRankMate } from './seventhRankMate';
 import { pieceTempo } from './pieceTempo';
 import { kingBoxMove } from './kingBox';
 import { matingNet } from './matingNet';
+import { checkCensus, attackLeader, defenderArrival } from './attackReads';
 import { frozenTarget } from './frozenTarget';
 import { pictureLedger, pictureCounterplay, pictureTarget, ledgerKey, ledgerText, ledgerSquares, counterplayText, targetText, moveAnswersTarget, planTargetText, moveWorksOnPlan } from './pictureLedger';
 import { centreDuo } from './centreDuo';
@@ -1396,6 +1397,12 @@ export interface BoardContexts {
   /** A king with no square to go to, every flight covered, and a mate in one
    *  there (made or threatened) — whatever pieces draw the net. */
   matingNet: { fen: string; student: Color };
+  /** THE ATTACK QUESTIONS (`attackReads`): every check leaving the king one
+   *  square; which piece leads the attack and which follows; the defender
+   *  too far to arrive before the mate. */
+  checkCensus: { fen: string; lines: readonly EngineLine[] | null; student: Color };
+  attackLeader: { fen: string; lines: readonly EngineLine[]; student: Color; namesMoves: boolean };
+  defenderArrival: { fen: string; lines: readonly EngineLine[]; student: Color };
   /** A weak pawn that cannot move, no pawn able to come to its aid, and more
    *  pieces able to reach it than to guard it within two moves. */
   frozenTarget: { fen: string; student: Color };
@@ -7845,6 +7852,84 @@ export const BOARD_COMPUTERS = {
         seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: ctx.fen, skill: mine ? 'missed-your-mate' : 'missed-their-mate' });
     }),
     computer: 'matingNet',
+    kind: 'king-read',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { wired: 'services/moveInsight.ts' },
+    },
+  },
+  // "Both of their checks leave your king one square: f1": the mating-square
+  // census. Both seats; the record files the student's king left one square
+  // (theirs to take away) and the student's own checks with one square left.
+  checkCensus: {
+    read: (ctx, fact) => safe(() => {
+      const r = checkCensus(ctx.fen, ctx.lines, ctx.student);
+      if (!r) return null;
+      const key = `census:${r.king}:${r.flight}`;
+      const mine = r.attacker === ctx.student;
+      const proof = legalLineProof(r.fen, r.line, lineSeatAt(r.fen, ctx.student), true) ?? squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description;
+      return fact({ key, claims: [key], text: r.text, proof, squares: [...r.squares], stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: ctx.fen,
+        skill: mine ? 'missed-set-up' : 'weakened-king-safety' });
+    }),
+    computer: 'checkCensus',
+    kind: 'king-read',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { wired: 'services/moveInsight.ts' },
+    },
+  },
+  // "Your knight leads the attack: Ng5 first, then the queen follows with Qh5":
+  // the order of an attack off the engine's line, with the board's why. Both
+  // seats; the student's own is their move to find, named only where the
+  // surface may.
+  attackLeader: {
+    read: (ctx, fact) => safe(() => {
+      const r = attackLeader(ctx.fen, ctx.lines, ctx.student, ctx.namesMoves);
+      if (!r) return null;
+      const key = `attack-lead:${r.leader.from}${r.leader.to}:${r.follower.from}${r.follower.to}`;
+      const mine = r.side === ctx.student;
+      const names = !mine || ctx.namesMoves;
+      const proof = legalLineProof(ctx.fen, r.line, lineSeatAt(ctx.fen, ctx.student), false) ?? squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description;
+      return fact({ key, claims: [key], text: r.text, proof, squares: [...r.squares], stakes: null,
+        seat: mine ? 'student' : 'opponent', namesStudentMove: mine && names, thread: LOCAL_THREAD, fen: ctx.fen,
+        ...(names ? { lines: [{ fen: ctx.fen, sans: r.line }] } : {}),
+        skill: mine ? 'missed-tactic' : 'missed-opponents-threat' });
+    }),
+    computer: 'attackLeader',
+    kind: 'king-read',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { wired: 'services/moveInsight.ts' },
+    },
+  },
+  // "Their queen on b6 needs two moves to help their king. Your mate takes
+  // two moves": the race the defender loses, proven by the mate line. Both
+  // seats; filed as the student's mate (theirs to find) or theirs (to stop).
+  defenderArrival: {
+    read: (ctx, fact) => safe(() => {
+      const r = defenderArrival(ctx.fen, ctx.lines, ctx.student);
+      if (!r) return null;
+      const key = `arrival:${r.king}:${r.nearest.square}`;
+      const mine = r.side === ctx.student;
+      const proof = mine ? squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description
+        : legalLineProof(ctx.fen, r.line, lineSeatAt(ctx.fen, ctx.student), true) ?? squaresProof(r.text, [...r.squares]) ?? NO_PROOF.description;
+      return fact({ key, claims: [key], text: r.text, proof, squares: [...r.squares],
+        stakes: mateStakes(mine ? 'you' : 'them', r.mateIn * 2 - 1, true),
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: ctx.fen,
+        ...(mine ? {} : { lines: [{ fen: ctx.fen, sans: r.line }] }),
+        skill: mine ? 'missed-your-mate' : 'missed-their-mate' });
+    }),
+    computer: 'defenderArrival',
     kind: 'king-read',
     phase: ANY,
     surfaces: {

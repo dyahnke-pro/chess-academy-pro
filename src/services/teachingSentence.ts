@@ -565,6 +565,64 @@ export function renderMateThreatTwoJobs(t: { mine: boolean; san: string; mateSq:
   return `${t.san} threatens mate on ${t.mateSq}, and ${tail} — stop the mate first, then pick the defence that gives up the least.`;
 }
 
+// ── THE ATTACK QUESTIONS (`attackReads`) ────────────────────────────────────
+
+/** The mating-square census: every check leaves the king one square. */
+export function renderCheckCensus(t: { mine: boolean; king: string; flight: string; checks: number; stem: number }): string {
+  const all = t.checks === 2 ? 'Both' : `All ${countWord(t.checks)}`;
+  if (t.mine) {
+    return rotateStem([
+      `${all} of your checks leave their king on ${t.king} one square: ${t.flight}. That square is all that stands between your checks and mate.`,
+      `Every check you have lets their king out the same way, to ${t.flight}. Take ${t.flight} away, and a check mates.`,
+      `Count their king's squares: after any of your checks it has only ${t.flight}. That one square is the whole defence.`,
+    ], t.stem);
+  }
+  return rotateStem([
+    `${all} of their checks leave your king on ${t.king} one square: ${t.flight}. Keep ${t.flight} open, or a check mates.`,
+    `Every check they have lets your king out the same way, to ${t.flight}. If ${t.flight} goes, a check is mate.`,
+    `Your king's only answer to any of their checks is ${t.flight}. Guard that square before it is taken away.`,
+  ], t.stem);
+}
+
+/** Which piece leads the attack, the follower, and the board's why. */
+export function renderAttackLeader(t: {
+  mine: boolean; names: boolean; leader: string; leaderSan: string; follower: string; followerSan: string;
+  followerSquare: string; check: boolean; covers: boolean; clears: boolean; stem: number;
+}): string {
+  const L = PIECE_WORD[t.leader]; const F = PIECE_WORD[t.follower];
+  const own = t.mine ? 'Your' : 'Their';
+  const why = t.check ? `It comes with check, so there is no time to stop the ${F}.`
+    : t.covers ? `It covers ${t.followerSquare}, the square the ${F} needs.`
+      : `It clears the way for the ${F}.`;
+  if (t.names) {
+    return rotateStem([
+      `${own} ${L} leads the attack: ${t.leaderSan} first, then the ${F} follows with ${t.followerSan}. ${why}`,
+      `The ${L} goes in first with ${t.leaderSan}, and the ${F} joins with ${t.followerSan}. ${why}`,
+    ], t.stem);
+  }
+  return rotateStem([
+    `${own} ${L} should lead this attack, with the ${F} behind it. ${why}`,
+    `The ${L} goes in first and the ${F} follows. ${why}`,
+  ], t.stem);
+}
+
+/** The defender's nearest piece is too far to arrive before the mate. */
+export function renderDefenderArrival(t: { mine: boolean; king: string; piece: string; square: string; moves: number | null; mateIn: number; stem: number }): string {
+  const P = PIECE_WORD[t.piece];
+  const far = t.moves === null ? 'more than three moves' : `${countWord(t.moves)} moves`;
+  const mate = `${countWord(t.mateIn)} moves`;
+  if (t.mine) {
+    return rotateStem([
+      `Their ${P} on ${t.square} needs ${far} to help their king. Your mate takes ${mate}. It arrives too late.`,
+      `Help for their king is too far away: the ${P} on ${t.square} needs ${far}, and the mate comes in ${mate}.`,
+    ], t.stem);
+  }
+  return rotateStem([
+    `Your ${P} on ${t.square} needs ${far} to reach your king. Their mate takes ${mate}. It cannot arrive in time.`,
+    `Your king's help is too far away: the ${P} on ${t.square} needs ${far}, and their mate comes in ${mate}.`,
+  ], t.stem);
+}
+
 // ── THE STANDING AND THE VERDICT (family A2) ───────────────────────────────
 
 /** The band word for a step of the one ladder (`evalBand`), from the mover. */

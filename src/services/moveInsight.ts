@@ -857,7 +857,7 @@ type RegistryPosedComputer = 'detectLatentFork' | 'detectLatentDanger' | 'detect
   | 'findTrappedPiece' | 'readConversion' | 'noSafeChecks' | 'kingRace' | 'kingActivityGap' | 'zugzwangIfPassed' | 'mateLine' | 'kingInOpen' | 'seventhRankMate'
   | 'queenlessMate' | 'selfBlock' | 'mateThreatLever' | 'queenKnightNet' | 'lateralRookDefence' | 'kingSiege'
   | 'keySquaresOn' | 'kpDrawReason' | 'wonEnding' | 'shoulderOn' | 'connectedPassersOn' | 'matingNet' | 'frozenTarget'
-  | 'pictureLedger';
+  | 'pictureLedger' | 'checkCensus' | 'attackLeader' | 'defenderArrival';
 
 /** How sharply each posed question is asked, on the heat map's scale. */
 const REGISTRY_POSED_WEIGHT: Record<RegistryPosedComputer, number> = {
@@ -890,6 +890,9 @@ const REGISTRY_POSED_WEIGHT: Record<RegistryPosedComputer, number> = {
   matingNet: 90,
   frozenTarget: 60,
   pictureLedger: 65,
+  checkCensus: 70,
+  attackLeader: 65,
+  defenderArrival: 85,
 };
 
 /** The registry's reads of the board the student moves on, each fact with
@@ -958,6 +961,9 @@ function registryReads(fen: string, me: 'w' | 'b', bestLineUci: readonly string[
     // A king with no square and a mate there (yours to find, theirs to stop),
     // and your own weak pawn frozen and out-counted (the student's to limit).
     ...readBoardAll('matingNet', { fen, student: me }),
+    // Every check leaving a king one square (yours to take away, or yours to
+    // keep open): the mating-square census.
+    ...readBoardAll('checkCensus', { fen, lines: null, student: me }),
     ...readBoardAll('frozenTarget', { fen, student: me }).filter((f) => f.skill),
     // Your king under siege as the board stands (the count of attackers and
     // defenders, unscored here: the engine's agreement is the teaching half's).
@@ -966,7 +972,10 @@ function registryReads(fen: string, me: 'w' | 'b', bestLineUci: readonly string[
       if (!bestLineUci.length) return [];
       const lines = [{ moves: bestLineUci, cp: null, mate: null }];
       return [...readBoardAll('selfBlock', { fen, lines, student: me }), ...readBoardAll('mateThreatLever', { fen, lines, student: me }), ...readBoardAll('queenKnightNet', { fen, lines, student: me }),
-        ...readBoardAll('lateralRookDefence', { fen, lines, student: me })];
+        ...readBoardAll('lateralRookDefence', { fen, lines, student: me }),
+        // The attack the line leads (which piece first), and the mate the
+        // defender's help cannot arrive in time for.
+        ...readBoardAll('attackLeader', { fen, lines, student: me, namesMoves: false }), ...readBoardAll('defenderArrival', { fen, lines, student: me })];
     })(),
     // The forced mate the engine's line plays for the student (two moves or
     // more; the line has to end in mate).

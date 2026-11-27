@@ -574,6 +574,9 @@ export const BUNDLE_ADAPTERS: { [K in ComputerId]: Adapter<K> } = {
   connectedPassers: (b) => ({ fen: b.fen, student: b.student }),
   wonEndingRead: (b) => ({ fen: b.fen, student: b.student }),
   matingNet: (b) => ({ fen: b.fen, student: b.student }),
+  checkCensus: (b) => ({ fen: b.fen, lines: b.lines.length ? b.lines : null, student: b.student }),
+  attackLeader: (b) => ({ fen: b.fen, lines: b.lines, student: b.student, namesMoves: true }),
+  defenderArrival: (b) => ({ fen: b.fen, lines: b.lines, student: b.student }),
   frozenTarget: (b) => ({ fen: b.fen, student: b.student }),
   // The conclusions read every other computer's facts on the bundle (`baseFacts`).
   pictureLedger: (b) => ({ fen: b.fen, student: b.student, lines: b.lines, facts: baseFacts(b) }),
