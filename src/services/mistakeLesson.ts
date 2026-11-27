@@ -42,9 +42,11 @@ import { MOTIFS, MOTIF_OF_TACTIC } from '../data/tacticMotifs';
 import { holdState, type HeatState, type HoldRecord } from './holdRate';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { phaseOfFen, type Phase } from './boardConcepts';
-import { materialBalance } from './pieceValues';
+import { materialBalance, MATERIAL_VALUE } from './pieceValues';
 import { capturesWinMaterial, kingSafetyRead } from './positionReadingService';
 import { trappedAt } from './trappedPiece';
+import { withArticle } from '../utils/andList';
+import { minorsAtHome } from './development';
 import { onlyMove } from './thoughtReads';
 import { findProphylaxis } from './prophylaxis';
 import { detectTacticLine } from './missedTacticService';
@@ -54,7 +56,7 @@ import { DECIDED_EVAL_CP, INACCURACY_CP, MISTAKE_CP } from './engineConstants';
 import { logAppAudit } from './appAuditor';
 import {
   BETTER_JOBS, COLOUR_NAME, EMPTY_CHECK_LESSON, FORK_LESSON, GOOD_DECISION, MISSED_MOTIF, THEIR_MOVE_CONSEQUENCE, HABIT_SHORT, LESSON_SLOTS, MISTAKE_NUMBER_WORDS, POSITIONAL, POSITIONAL_THEM, RECIPES, REPAIRS, TECHNIQUE_RULE, THEIR_SEAT,
-  materialWords, motifArticle, renderMistakeSlot, tradeWords,
+  materialWords, renderMistakeSlot, tradeWords,
   type BetterJob, type GoodDecision, type Fills, type LessonSlot, type RepairState, type SlotRecipe,
 } from './teachingSentence';
 
@@ -66,7 +68,7 @@ export {
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
 
-const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+const VALUE = MATERIAL_VALUE;
 /** Causes whose piece comes from their line when no mechanism named one. */
 const REPLY_TARGET: ReadonlySet<MistakeCauseKind> = new Set(['allowed-threat', 'ignored-threat', 'allowed-capture', 'allowed-tactic']);
 
@@ -244,7 +246,7 @@ export function fillsFor(input: MistakeLessonInput): Fills {
         } catch { id = null; }
       }
     }
-    if (id && id !== 'free-piece') f.motif = motifArticle(MOTIFS[id].word);
+    if (id && id !== 'free-piece') f.motif = withArticle(MOTIFS[id].word);
   }
   const d = cause.detail;
   if (d) {
@@ -399,13 +401,10 @@ function repairApplies(state: RepairState, x: RepairContext): Fills | null {
     case 'behind-in-development': {
       // Two minor pieces or more still at home, and more than they have.
       const b = before(x.quiet);
-      const atHome = (c: Color): Square[] => (c === 'w' ? ['b1', 'g1', 'c1', 'f1'] : ['b8', 'g8', 'c8', 'f8'])
-        .filter((sq) => { const p = b.get(sq as Square); return !!p && p.color === c && (p.type === 'n' || p.type === 'b'); }) as Square[];
-      const mine = atHome(x.student);
+      const mine = minorsAtHome(b, x.student);
       const moveNo = Number(x.quiet.split(' ')[5] ?? '1');
-      if (moveNo < 6 || mine.length < 2 || mine.length - atHome(them).length < 2 || x.phase === 'endgame') return null;
-      const first = b.get(mine[0]);
-      return first ? { tPiece: NAME[first.type], target: mine[0] } : null;
+      if (moveNo < 6 || mine.length < 2 || mine.length - minorsAtHome(b, them).length < 2 || x.phase === 'endgame') return null;
+      return { tPiece: NAME[mine[0].type], target: mine[0].square };
     }
     case 'piece-trapped': {
       const b = before(x.quiet);

@@ -624,6 +624,41 @@ export function renderStanding(v: { band: string; side: 'better' | 'worse'; reas
   return `${V} — ${why.join(v.level && why.length === 2 ? ', but ' : ', ')}.`;
 }
 
+/** THE STANDING'S EVIDENCE REASONS (2026-11-26) — the data each computer
+ *  hands over, worded here once. Seat words come in already chosen: `own` is
+ *  the side the reason favours ("your" / "their"), `foe` the other. */
+export type StandingReasonData =
+  | { kind: 'trapped'; foe: 'your' | 'their'; piece: string; square: string }
+  | { kind: 'mating-net'; own: 'your' | 'their'; foe: 'your' | 'their'; king: string; attackers: number }
+  | { kind: 'unstoppable-square'; own: 'your' | 'their'; foe: 'your' | 'their'; pawn: string; king: string }
+  | { kind: 'unstoppable-line'; own: 'your' | 'their'; pawn: string; queens: boolean }
+  | { kind: 'tempo'; foe: 'your' | 'their'; queen: string }
+  | { kind: 'clamp'; own: 'your' | 'their'; foe: 'your' | 'their'; pawns: readonly string[]; wing: 'kingside' | 'queenside'; squares: number }
+  | { kind: 'line-wins'; who: 'you' | 'they'; points: number }
+  | { kind: 'even'; pawns: number; middlegame: boolean };
+
+/** A standing reason as a clause after the verdict and as its own sentence. */
+export function renderStandingReason(d: StandingReasonData): { clause: string; sentence: string } {
+  const both = (clause: string, tail = ''): { clause: string; sentence: string } => ({ clause, sentence: `${openSentence(clause)}${tail}.` });
+  switch (d.kind) {
+    case 'trapped': return both(`${d.foe} ${d.piece} on ${d.square} is trapped: every square it has loses it`);
+    case 'mating-net': return both(`${d.foe} king on ${d.king} has no square to step to, and ${countWord(d.attackers)} of ${d.own} pieces bear on it`);
+    case 'unstoppable-square': return both(`${d.own} pawn on ${d.pawn} cannot be caught: ${d.foe} king on ${d.king} is outside its square`);
+    case 'unstoppable-line': return both(`${d.own} passed pawn on ${d.pawn} goes through: the best line ${d.queens ? 'queens' : 'promotes'} it`);
+    case 'tempo': return both(`${d.foe} queen on ${d.queen} can be hit with tempo`, ': it has to move again');
+    case 'clamp': return both(`${d.own} pawns on ${andList([...d.pawns])} clamp ${d.foe} ${d.wing}, taking ${countWord(d.squares)} squares in front of ${d.foe} king`);
+    case 'line-wins': {
+      const g = d.points;
+      const words = g === 1 ? 'a pawn' : g === 2 ? 'two pawns' : g <= 4 ? 'a piece' : g <= 7 ? "a rook's worth" : "a queen's worth";
+      return both(`${d.who} win ${words} in the best line`);
+    }
+    case 'even': {
+      const pawnWords = d.pawns === 0 ? 'no pawns left' : `${countWord(d.pawns)} pawn${d.pawns === 1 ? '' : 's'} each`;
+      return both(d.middlegame ? `material is level, ${pawnWords}, and both kings keep their pawn cover` : `material is level, with ${pawnWords} and the same pieces`);
+    }
+  }
+}
+
 /** How a move moved the standing (student seat, cp swing); null when it
  *  barely moved. */
 export function renderSwing(swing: number): string | null {
@@ -1187,7 +1222,7 @@ export const REPAIRS: Record<RepairState, RepairRecipe> = {
       'Their weak pawn is the target now; aim your pieces at it.',
       'Fix the weak pawn in place first, then win it.',
       'Put a piece in front of the weak pawn and bring more attackers.',
-      'Keep going after the weak pawn until it falls.',
+      'Keep going after the weak pawn until it is gone.',
     ],
     sources: ['Library: Nimzowitsch ms-12', 'concept:pos-weak-pawns'],
   },
@@ -1492,7 +1527,7 @@ export const RECIPES: Record<MistakeCauseKind, LessonRecipe> = {
       'Their {opPiece} takes the {tPiece} on {target}.',
       'The {tPiece} on {target} falls to their {opPiece}.',
       'Their {opPiece} just picks off the {tPiece} on {target}.',
-      'Their {opPiece} wins the {tPiece} on {target} for nothing.',
+      'Their {opPiece} takes the {tPiece} on {target}, and nothing takes back.',
       'The {tPiece} on {target} is lost to their {opPiece}.',
     ]),
     habit: HABIT.landing, family: 'loose', repairs: [],
@@ -1775,7 +1810,6 @@ export function materialWords(pawns: number): string | null {
   if (pawns === 1) return 'a pawn';
   return null;
 }
-export const motifArticle = (w: string): string => (/^[aeiou]|^x-/.test(w) ? `an ${w}` : `a ${w}`);
 export const COLOUR_NAME = { dark: 'dark', light: 'light' } as const;
 
 export const TECHNIQUE_RULE: Record<'key-square' | 'opposition' | 'rook-behind-passer', string> = {
@@ -2007,7 +2041,6 @@ export const POSITIONAL_THEM: Partial<Record<Exclude<MisconceptionTagId, 'other'
 export function fillStem(stem: string, fills: Fills): string {
   return stem.replace(/\{(\w+)\}/g, (_, k: string) => fills[k as FillKey] ?? `{${k}}`);
 }
-export const capitaliseStem = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
 
 /** Said one slot: rotated on `key`, skipping a stem the previous turn said
  *  (`avoid`), or null when a field it needs is missing. Returns the stem
@@ -2018,7 +2051,7 @@ export function renderMistakeSlot(r: SlotRecipe | null | undefined, fills: Fills
   for (let i = 0; i < r.stems.length; i += 1) {
     const stem = rotateStem(r.stems, key + i);
     if (avoid.has(stem) && i < r.stems.length - 1) continue;
-    return { text: capitaliseStem(fillStem(stem, fills)), stem };
+    return { text: openSentence(fillStem(stem, fills)), stem };
   }
   return null;
 }
