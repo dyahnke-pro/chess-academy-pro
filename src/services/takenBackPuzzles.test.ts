@@ -74,3 +74,30 @@ describe('a miss the coach stopped and the student took back is filed to the mis
     expect([filed.fen, filed.cpLoss, filed.bestSan, filed.gameId]).toEqual([FEN, 500, 'Nc6', GAME]);
   });
 });
+
+// A TAKEBACK FILES A PUZZLE ONLY WHEN THE MOVE TAKEN BACK WAS A MISTAKE (David,
+// the board bar decisions, 2026-11-24). The live grade can file its puzzle
+// before the takeback lands (any slip, an inaccuracy too); the takeback's own
+// grade is the one that decides, and a move it grades below a mistake keeps
+// no puzzle from that game at that board.
+describe('a move taken back keeps a puzzle only when it was a mistake', () => {
+  beforeEach(async () => { await db.mistakePuzzles.clear(); audit.rows.length = 0; });
+  const liveGradePuzzle = (san: string, gameId = GAME) => db.mistakePuzzles.add({
+    id: `live-${san}-${gameId}`, fen: FEN, playerMoveSan: san, playerMove: 'a7a6', bestMove: 'b8c6', bestMoveSan: 'Nc6',
+    sourceGameId: gameId, classification: 'inaccuracy', cpLoss: 60,
+  } as never);
+
+  it('an inaccuracy the live grade already filed is withdrawn by the takeback', async () => {
+    await liveGradePuzzle('a6');
+    await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'a6', gameId: GAME, spot: null }, reads(60));
+    expect(await puzzles()).toEqual([]);
+  });
+  it('twins: a mistake keeps its puzzle; another game, another board or another move is untouched', async () => {
+    await liveGradePuzzle('Qh4');
+    await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'Qh4', gameId: GAME, spot: null }, reads(500));
+    expect((await puzzles()).map((p) => p.playerMoveSan)).toEqual(['Qh4']);
+    await liveGradePuzzle('a6', 'other-game');
+    await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'a6', gameId: GAME, spot: null }, reads(60));
+    expect((await db.mistakePuzzles.where('sourceGameId').equals('other-game').toArray()).length).toBe(1);
+  });
+});

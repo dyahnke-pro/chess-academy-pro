@@ -318,8 +318,10 @@ async function main() {
   // Close chat if open by going back to play page.
   await gotoPlay(page);
   await page.waitForTimeout(2000);
+  // No Takeback button (2026-11-24): Back only looks; a different move on a
+  // looked-back board is the takeback.
   const takebackBtn = await page.locator('[data-testid="takeback-btn"]').count();
-  record('takeback-btn present', takebackBtn > 0, `count=${takebackBtn}`);
+  record('takeback-btn absent', takebackBtn === 0, `count=${takebackBtn}`);
   const restartBtn = await page.locator('[data-testid="restart-btn"]').count();
   record('restart-btn present', restartBtn > 0, `count=${restartBtn}`);
   const readPosBtn = await page.locator('[data-testid="read-position-btn"]').count();

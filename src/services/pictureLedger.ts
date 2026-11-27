@@ -487,8 +487,6 @@ export interface TargetCandidate {
 export interface Target {
   attacker: Color;
   best: TargetCandidate;
-  /** The next most vulnerable, the one it was compared against. */
-  runnerUp: TargetCandidate | null;
   /** Every candidate weighed, most vulnerable first. */
   candidates: TargetCandidate[];
 }
@@ -523,7 +521,7 @@ export function targetOf(led: Ledger, attacker: Color): Target | null {
   // sends it home). A pawn, a hole, or a piece with nowhere to go stays put.
   const live = cands.filter((c) => c.attackers > c.defenders && (c.entry.piece === null || c.entry.piece === 'p' || c.fixed));
   if (live.length === 0) return null;
-  return { attacker, best: live[0], runnerUp: cands.find((c) => c !== live[0]) ?? null, candidates: cands };
+  return { attacker, best: live[0], candidates: cands };
 }
 
 // ── the plan's target: a race of up to four moves ───────────────────────────
@@ -1073,11 +1071,14 @@ function worstWeakness(fen: string, weak: readonly LedgerEntry[]): LedgerEntry {
   return ranked[0].entry;
 }
 
-/** The target in words, with the comparison that chose it. */
+/** The target in words, with the count that makes it one. No "not X": the
+ *  next candidate was never the target (a pawn said against a hole read as
+ *  the old target, "The target is now the pawn on a4, not the hole on c5");
+ *  a target that changes names the old one in its cause (`tellPictureFacts`). */
 export function targetText(t: Target, student: Color, now: boolean = false): string {
   const thing = (c: TargetCandidate): string => (c.entry.piece === null ? `the hole on ${c.entry.square}` : `the ${NAME[c.entry.piece]} on ${c.entry.square}`);
   return renderTarget({
-    mine: t.attacker === student, now, thing: thing(t.best), runnerUp: t.runnerUp ? thing(t.runnerUp) : null,
+    mine: t.attacker === student, now, thing: thing(t.best),
     attackers: t.best.attackers, defenders: t.best.defenders, levers: t.best.levers > 0,
     stem: stemKeyOf(`${t.best.entry.object}|${t.attacker}`),
   });

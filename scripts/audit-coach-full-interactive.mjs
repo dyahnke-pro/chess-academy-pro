@@ -691,7 +691,7 @@ async function driveTeachSurface(page) {
   });
 
   // Teach controls visible?
-  for (const c of ['teach-takeback', 'teach-restart', 'teach-resign', 'teach-pace-toggle']) {
+  for (const c of ['teach-restart', 'teach-resign', 'teach-pace-toggle']) {
     await scenario(page, `teach-control-${c}-visible-or-absent`, async () => {
       const loc = page.locator(`[data-testid="${c}"]`);
       const ct = await loc.count();

@@ -253,12 +253,22 @@ const INFRA = new Set(['learnTranscript',
   // (with `db`, `storage`, `masterPlayCache`, `amateurPlayCache`). It stores
   // and returns trees; it computes none.
   'sharedOpeningCache',
+  // `lookBackMove` is NAVIGATION (the board bar, 2026-11-24: "Back only looks;
+  // playing a different move there is the takeback"): which plies of the
+  // game's own history a move on a looked-back board replaces. It imports
+  // nothing and judges nothing — a replay helper, checked as one below.
+  'lookBackMove',
+  // `engineStrength` is the OPPONENT'S STRENGTH (one rated-move door): the
+  // number the engine plays at, from ratings — the same class as
+  // `coachGameEngine` and `stockfishEngine` above. It computes no chess or
+  // teaching fact; the rating's job is strength, never what the coach says.
+  'engineStrength',
 ]);
 
 /** Record helpers: zero imports, no chess vocabulary in code. */
 const PURE_RECORD_HELPERS = ['fixtureGames', 'studentResult'];
 /** Replay helpers: chess.js is the only import; no JUDGEMENT vocabulary. */
-const REPLAY_HELPERS = ['lastMoveOfLine', 'gamePgnReplay', 'spokenMove'];
+const REPLAY_HELPERS = ['lastMoveOfLine', 'gamePgnReplay', 'spokenMove', 'lookBackMove'];
 /** Phrasers: zero imports. */
 const PHRASERS = ['spokenSquares', 'markPacing'];
 /** The vocabulary of a chess JUDGEMENT proper — what a replay helper must

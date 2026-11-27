@@ -27,7 +27,7 @@ describe('boardComputers — the one registry', () => {
           // Learn packs the priority to the hint dial's register, so it calls the computer itself.
           priorityFirst: /buildPriorityFirst\(/,
           // The record files these through the computer's own function.
-          kingReadsBestLine: /kingReadsForBestLine\(/, castleByHand: /castleByHand\(/, wingWithoutPieces: /wingWithoutPieces\(/, tensionReleased: /tensionReleased\(/, kingSquares: /kingSquareOutcome\(/, tacticGeometry: /geometryMotif\(/,
+          kingReadsBestLine: /kingReadsForBestLine\(/, castleByHand: /castleByHand\(/, wingWithoutPieces: /wingWithoutPieces\(/, ownThreat: /standingThreat\(/, tensionReleased: /tensionReleased\(/, kingSquares: /kingSquareOutcome\(/, tacticGeometry: /geometryMotif\(/,
           // The record reads the target and the counterplay off the picture's one
           // computation, the function both rows read (`pictureConclusions`).
           pictureTarget: /pictureConclusions\(/, pictureCounterplay: /pictureConclusions\(/,

@@ -234,7 +234,7 @@ describe('one coach, unlocked', () => {
     expect(read('services/positionReadComposer.ts')).toMatch(/boardReadOffThread\(\{/);
     expect(read('services/boardReadWorkerCore.ts')).toMatch(/boardReadFacts\(full\)/);
     expect(read('services/boardReadOffThread.ts')).toMatch(/return boardReadFacts\(i\)/);
-    expect(read('hooks/usePositionNarration.ts')).toMatch(/composePositionRead\(/);
+    expect(read('hooks/usePositionNarration.ts')).toMatch(/composePositionReadStaged\(/);
     for (const f of ['components/Coach/CoachGamePage.tsx', 'components/Coach/CoachGameReview.tsx', 'components/Puzzles/PuzzleBoard.tsx', 'components/Puzzles/MistakePuzzleBoard.tsx', 'components/Tactics/TacticSetupBoard.tsx', 'components/Coach/CoachTeachPage.tsx']) {
       expect(read(f), f).toMatch(/usePositionNarration\(\{/);
     }

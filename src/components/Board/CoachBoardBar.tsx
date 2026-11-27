@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { ChevronLeft, ChevronRight, Lightbulb, Volume2, Loader2, HelpCircle } from 'lucide-react';
-import { BOARD_BUTTON_CLASS, PlayLineButton } from './PlayLineButton';
+import { BOARD_BUTTON_CLASS, PlayLineButton, TheoryButton } from './PlayLineButton';
 
 /** The six core buttons — the same six, in the same order, on every board. */
 type BoardBarButton = 'back' | 'forward' | 'hint' | 'read' | 'why' | 'line';
@@ -16,6 +16,9 @@ export interface CoachBoardBarProps {
   onWhy: (() => void) | null;
   /** Walks the line the coach last proved — only on this press. */
   onPlayLine: (() => void) | null;
+  /** DURING THE OPENING the line slot is Theory (David, the board bar
+   *  decisions, 2026-11-24): given, it replaces the Play-line button. */
+  theory?: { onTheory: (() => void) | null; playing: boolean; onStop: () => void } | null;
   /** True while the position is being read aloud. */
   reading?: boolean;
   /** The hint's current step, when the surface ladders its hints. */
@@ -74,7 +77,11 @@ export function CoachBoardBar(props: CoachBoardBarProps): JSX.Element {
         {order.map((b) => {
           const on = handler[b];
           // The line button is THE one Play-line button every board shares.
-          if (b === 'line') return <PlayLineButton key={b} onPlay={on} testId={props.testIds?.line ?? 'board-bar-line'} />;
+          if (b === 'line') {
+            return props.theory
+              ? <TheoryButton key={b} onTheory={props.theory.onTheory} playing={props.theory.playing} onStop={props.theory.onStop} />
+              : <PlayLineButton key={b} onPlay={on} testId={props.testIds?.line ?? 'board-bar-line'} />;
+          }
           return (
             <button
               key={b}

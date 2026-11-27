@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**940 lines · 4 exports · 9 importers · 8 tests · 0 audits**
+**942 lines · 4 exports · 9 importers · 8 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **The standard post-deploy ritual** (CLAUDE.md:7097) — names `useDiscussionPractice`
+- **The standard post-deploy ritual** (CLAUDE.md:7078) — names `useDiscussionPractice`
 
 ## Who calls in
 
@@ -33,10 +33,10 @@
 ### `DiscussionPrompt` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `useDiscussionPractice` (function) — 37 call sites
+### `useDiscussionPractice` (function) — 38 call sites
 - `src/components/Coach/CoachGamePage.tsx:511`
-- `src/components/Coach/CoachGameReview.tsx:1045`
-- `src/components/Coach/CoachTeachPage.tsx:1817`
+- `src/components/Coach/CoachGameReview.tsx:1044`
+- `src/components/Coach/CoachTeachPage.tsx:1838`
 - `src/components/Openings/MiddlegamePractice.tsx:162`
 - `src/components/Openings/OpeningPlayMode.tsx:317`
 - `src/components/Openings/PlayableLinePlayer.tsx:214`
@@ -64,13 +64,14 @@
 - `src/hooks/useDiscussionPractice.test.ts:305`
 - `src/hooks/useDiscussionPractice.test.ts:334`
 - `src/hooks/useDiscussionPractice.test.ts:349`
-- `src/hooks/useDiscussionPractice.test.ts:364`
-- `src/hooks/useDiscussionPractice.test.ts:389`
-- `src/hooks/useDiscussionPractice.test.ts:406`
-- `src/hooks/useDiscussionPractice.test.ts:419`
-- `src/hooks/useDiscussionPractice.test.ts:432`
-- `src/hooks/useDiscussionPractice.test.ts:448`
-- `src/hooks/useDiscussionPractice.test.ts:454`
+- `src/hooks/useDiscussionPractice.test.ts:360`
+- `src/hooks/useDiscussionPractice.test.ts:375`
+- `src/hooks/useDiscussionPractice.test.ts:400`
+- `src/hooks/useDiscussionPractice.test.ts:417`
+- `src/hooks/useDiscussionPractice.test.ts:430`
+- `src/hooks/useDiscussionPractice.test.ts:443`
+- `src/hooks/useDiscussionPractice.test.ts:459`
+- `src/hooks/useDiscussionPractice.test.ts:465`
 
 ## Tests
 

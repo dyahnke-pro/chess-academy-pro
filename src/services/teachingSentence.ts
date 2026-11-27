@@ -23,7 +23,7 @@ import { DEFENDER_RULE_TECHNIQUE, type DefenderRuleId } from './endgameDefenderR
 import { CAPTURE_VALUE } from './pieceValues';
 import { Chess, type Square } from 'chess.js';
 import { rotateStem } from '../utils/rotateStem';
-import { andList, orList, countWord, withArticle } from '../utils/andList';
+import { andList, orList, countWord } from '../utils/andList';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { evalBandWords, type EvalBand } from './evalBand';
 import type { MistakeCauseKind } from './mistakeCause';
@@ -535,6 +535,22 @@ export function renderQuietThreat(q: { san: string; follow: string; mates: boole
     : `${san} is quiet: it prepares ${q.follow}.`;
 }
 
+/** THE "WATCH FOR" LINE (Read this position): their likeliest reply to the
+ *  best move, and the answer that refutes it — a try, so it is said as an
+ *  "if": "After c7, watch for …Rd4: you play c8=Q — …". `because` is the
+ *  refutation alone (`TemptingRefuted.because`). Rotated on the board. */
+export function renderWatchFor(w: { best: string; reply: string; because: string;
+  /** REQUIRED — the side that plays the best move: the reply is the other side's. */
+  mover: 'w' | 'b'; key: number }): string {
+  const best = w.mover === 'b' && !w.best.startsWith('…') ? `…${w.best}` : w.best;
+  const reply = w.mover === 'w' && !w.reply.startsWith('…') ? `…${w.reply}` : w.reply;
+  const because = w.because.replace(/\.$/, '');
+  return rotateStem([
+    `After ${best}, watch for ${reply}: ${because}.`,
+    `Watch for ${reply} after ${best}: ${because}.`,
+  ], w.key);
+}
+
 /** A move's one-move threat (`detectNewThreat` on the briefing): the
  *  participle and the predicate forms. */
 export function renderAspectThreat(san: string, detail: string): { text: string; verb: string } {
@@ -623,6 +639,41 @@ export function renderStanding(v: { band: string; side: 'better' | 'worse'; reas
   const squaresIn = (t: string): number => new Set(t.match(/\b[a-h][1-8]\b/g) ?? []).size;
   if (why.length > 1 && squaresIn(why.join(' ')) > 2) return `${V} — ${why[0]}. ${why.slice(1).map((w) => `${openSentence(w)}.`).join(' ')}`;
   return `${V} — ${why.join(v.level && why.length === 2 ? ', but ' : ', ')}.`;
+}
+
+/** THE STANDING'S EVIDENCE REASONS (2026-11-26) — the data each computer
+ *  hands over, worded here once. Seat words come in already chosen: `own` is
+ *  the side the reason favours ("your" / "their"), `foe` the other. */
+export type StandingReasonData =
+  | { kind: 'trapped'; foe: 'your' | 'their'; piece: string; square: string }
+  | { kind: 'mating-net'; own: 'your' | 'their'; foe: 'your' | 'their'; king: string; attackers: number }
+  | { kind: 'unstoppable-square'; own: 'your' | 'their'; foe: 'your' | 'their'; pawn: string; king: string }
+  | { kind: 'unstoppable-line'; own: 'your' | 'their'; pawn: string; queens: boolean }
+  | { kind: 'tempo'; foe: 'your' | 'their'; queen: string }
+  | { kind: 'clamp'; own: 'your' | 'their'; foe: 'your' | 'their'; pawns: readonly string[]; wing: 'kingside' | 'queenside'; squares: number }
+  | { kind: 'line-wins'; who: 'you' | 'they'; points: number }
+  | { kind: 'even'; pawns: number; middlegame: boolean };
+
+/** A standing reason as a clause after the verdict and as its own sentence. */
+export function renderStandingReason(d: StandingReasonData): { clause: string; sentence: string } {
+  const both = (clause: string, tail = ''): { clause: string; sentence: string } => ({ clause, sentence: `${openSentence(clause)}${tail}.` });
+  switch (d.kind) {
+    case 'trapped': return both(`${d.foe} ${d.piece} on ${d.square} is trapped: every square it has loses it`);
+    case 'mating-net': return both(`${d.foe} king on ${d.king} has no square to step to, and ${countWord(d.attackers)} of ${d.own} pieces bear on it`);
+    case 'unstoppable-square': return both(`${d.own} pawn on ${d.pawn} cannot be caught: ${d.foe} king on ${d.king} is outside its square`);
+    case 'unstoppable-line': return both(`${d.own} passed pawn on ${d.pawn} goes through: the best line ${d.queens ? 'queens' : 'promotes'} it`);
+    case 'tempo': return both(`${d.foe} queen on ${d.queen} can be hit with tempo`, ': it has to move again');
+    case 'clamp': return both(`${d.own} pawns on ${andList([...d.pawns])} clamp ${d.foe} ${d.wing}, taking ${countWord(d.squares)} squares in front of ${d.foe} king`);
+    case 'line-wins': {
+      const g = d.points;
+      const words = g === 1 ? 'a pawn' : g === 2 ? 'two pawns' : g <= 4 ? 'a piece' : g <= 7 ? "a rook's worth" : "a queen's worth";
+      return both(`${d.who} win ${words} in the best line`);
+    }
+    case 'even': {
+      const pawnWords = d.pawns === 0 ? 'no pawns left' : `${countWord(d.pawns)} pawn${d.pawns === 1 ? '' : 's'} each`;
+      return both(d.middlegame ? `material is level, ${pawnWords}, and both kings keep their pawn cover` : `material is level, with ${pawnWords} and the same pieces`);
+    }
+  }
 }
 
 /** How a move moved the standing (student seat, cp swing); null when it
@@ -729,12 +780,12 @@ export function renderLedger(l: { fen: string; key: number; sides: ReadonlyArray
 }
 
 /** The target, with the count that chose it. */
-export function renderTarget(t: { mine: boolean; now: boolean; thing: string; runnerUp: string | null; attackers: number; defenders: number; levers: boolean; stem: number }): string {
+export function renderTarget(t: { mine: boolean; now: boolean; thing: string; attackers: number; defenders: number; levers: boolean; stem: number }): string {
   const units = t.levers ? 'pieces and pawns' : 'pieces';
   const why = `${countOf(t.attackers)} ${t.mine ? `of your ${units}` : `of their ${units}`} can get at it, and only ${countOf(t.defenders)} ${t.mine ? 'of theirs' : 'of yours'} can guard it`;
   const lead = t.now ? (t.mine ? 'The target is now' : 'Their target is now')
     : t.mine ? rotateStem(['The target is', 'Aim at'], t.stem) : rotateStem(['Their target is', 'They will aim at'], t.stem);
-  return t.runnerUp ? `${lead} ${t.thing}, not ${t.runnerUp}: ${why}.` : `${lead} ${t.thing}: ${why}.`;
+  return `${lead} ${t.thing}: ${why}.`;
 }
 
 /** The plan's target: the piece that wins the race and its way there, then
@@ -1069,6 +1120,9 @@ export type RepairState =
   | 'leave-a-square'
   | 'attack-their-king'
   | 'down-material-queens-off'
+  // THE BOARD STATES (2026-11-26, the recovery checks round): what to do
+  // after a mistake when the board — not the material — is the problem.
+  | 'king-in-centre' | 'behind-in-development' | 'piece-trapped' | 'pinned-piece' | 'pawn-lever' | 'loose-pieces'
   // The plan computer's plan, when no state above applies (`planRepair`).
   | 'plan';
 
@@ -1084,6 +1138,72 @@ export interface RepairRecipe {
 export const REPAIRS: Record<RepairState, RepairRecipe> = {
   // Worded by the plan computer (`structurePlanWords`); never rendered from here.
   plan: { needs: [], stems: [], sources: ['concept:pos-activity', 'https://en.wikipedia.org/wiki/Chess_strategy'] },
+  'king-in-centre': {
+    needs: ['target'],
+    stems: [
+      'Your king on {target} is still in the middle: tuck it away first.',
+      'Get your king off {target} and castled before the lines open.',
+      'The king on {target} is your first worry: castle it to safety.',
+      'With your king still on {target}, safety comes first: castle soon.',
+      'Bring the king on {target} to safety before you go after anything.',
+    ],
+    sources: ['Library: Capablanca cf-31', 'concept:pos-king-safety', 'https://www.chess.com/article/view/king-safety'],
+  },
+  'behind-in-development': {
+    needs: ['tPiece', 'target'],
+    stems: [
+      'You are behind in development: bring out the {tPiece} on {target} first.',
+      'Develop before you attack: your {tPiece} on {target} is still at home.',
+      'Get the {tPiece} on {target} into play. They have more pieces out.',
+      'First catch up: the {tPiece} on {target} has not moved yet.',
+      'Your {tPiece} on {target} is still asleep: develop it before anything else.',
+    ],
+    sources: ['Library: Capablanca cf-6', 'concept:pos-development', 'https://www.chess.com/article/view/chess-opening-principles'],
+  },
+  'piece-trapped': {
+    needs: ['tPiece', 'target'],
+    stems: [
+      'Your {tPiece} on {target} is trapped: get the most you can for it.',
+      'The {tPiece} on {target} has no safe square. Make them pay for it.',
+      'Your {tPiece} on {target} cannot escape: take something with it if you can.',
+      'Before the trapped {tPiece} on {target} falls, sell it for the most material.',
+      'No square saves the {tPiece} on {target}: cash it in now.',
+    ],
+    sources: ['concept:tac-trap', 'https://www.chess.com/terms/trapped-piece-chess'],
+  },
+  'pinned-piece': {
+    needs: ['tPiece', 'target', 'opPiece', 'opSq'],
+    stems: [
+      'Break the pin: their {opPiece} on {opSq} pins your {tPiece} on {target}.',
+      'The {opPiece} on {opSq} pins your {tPiece} on {target}: add a guard.',
+      'Unpin first: the {opPiece} on {opSq} holds your {tPiece} on {target}.',
+      'The {tPiece} on {target} cannot move freely while the {opPiece} on {opSq} pins it.',
+      'Guard the pinned {tPiece} on {target}, then break the line from {opSq}.',
+    ],
+    sources: ['concept:tac-pin', 'https://www.chess.com/terms/pin-chess'],
+  },
+  'pawn-lever': {
+    needs: ['pawn'],
+    stems: [
+      'Their pawn on {pawn} cramps you: strike at it with a pawn.',
+      'Hit back at the pawn on {pawn} with one of your pawns.',
+      'The pawn on {pawn} takes your space; challenge it with a pawn break.',
+      'Undermine the pawn on {pawn}: a pawn of yours can attack it.',
+      'Answer the pawn on {pawn} with a pawn break before it cramps you more.',
+    ],
+    sources: ['Library: Nimzowitsch ms-70', 'https://www.chess.com/article/view/pawn-breaks'],
+  },
+  'loose-pieces': {
+    needs: ['a', 'b'],
+    stems: [
+      'Your {a} and {b} have no guard: give each a defender.',
+      'Two loose pieces, the {a} and the {b}: tie them together.',
+      'Nothing guards your {a} or your {b}. Fix that before it costs you.',
+      'Guard the {a} and the {b}: loose pieces drop off.',
+      'Your {a} and {b} stand unprotected: cover them first.',
+    ],
+    sources: ['https://www.chess.com/article/view/loose-pieces-drop-off'],
+  },
   'colour-conceded': {
     needs: ['colour'],
     stems: [
@@ -1711,7 +1831,6 @@ export function materialWords(pawns: number): string | null {
   if (pawns === 1) return 'a pawn';
   return pawns > 2 ? `${MISTAKE_NUMBER_WORDS[pawns] ?? String(pawns)} points of material` : null;
 }
-export const motifArticle = (w: string): string => withArticle(w);
 export const COLOUR_NAME = { dark: 'dark', light: 'light' } as const;
 
 /** An ending's rule in words: every defender rule (`DEFENDER_RULE_TECHNIQUE`),
@@ -1990,7 +2109,6 @@ export const POSITIONAL_THEM: Partial<Record<Exclude<MisconceptionTagId, 'other'
 export function fillStem(stem: string, fills: Fills): string {
   return stem.replace(/\{(\w+)\}/g, (_, k: string) => fills[k as FillKey] ?? `{${k}}`);
 }
-export const capitaliseStem = (s: string): string => openSentence(s);
 
 /** Said one slot: rotated on `key`, skipping a stem the previous turn said
  *  (`avoid`), or null when a field it needs is missing. Returns the stem
@@ -2001,7 +2119,7 @@ export function renderMistakeSlot(r: SlotRecipe | null | undefined, fills: Fills
   for (let i = 0; i < r.stems.length; i += 1) {
     const stem = rotateStem(r.stems, key + i);
     if (avoid.has(stem) && i < r.stems.length - 1) continue;
-    return { text: capitaliseStem(fillStem(stem, fills)), stem };
+    return { text: openSentence(fillStem(stem, fills)), stem };
   }
   return null;
 }
@@ -2126,4 +2244,76 @@ const PIECE_WORD: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop'
  *  …c5." `brk` is the move, or the pawn when the student's move is held. */
 export function mastersBreakPlanWords(mine: boolean, brk: string): string {
   return `${mine ? 'Your' : 'Their'} plan in the master games: the break ${brk}.`;
+}
+
+// ── THE THREE THREAT COMPUTERS (rebuilt 2026-11-27): the discovered attack,
+// the answering move, your own threat. Each computer returns data; the words
+// are written here. `names`: the move may be named (a read the student asked
+// for, Review, a lesson); Learn passes false for a move of the student's that
+// is still to play, and the sentence says the idea with no move in it.
+const THREAT_PIECE: Readonly<Record<string, string>> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+
+/** A discovered attack that wins by force (`discoveredAttack`), from the
+ *  student's seat. `mine`: the student plays it. */
+export function discoveredAttackWords(
+  d: { san: string; uncovered: { square: string; piece: string }; target: { square: string; piece: string }; mate: boolean },
+  mine: boolean, names: boolean, key: number,
+): string {
+  const own = mine ? 'your' : 'their';
+  const foe = mine ? 'their' : 'your';
+  const opens = `${own} ${THREAT_PIECE[d.uncovered.piece]} on ${d.uncovered.square} at ${foe} ${THREAT_PIECE[d.target.piece]} on ${d.target.square}`;
+  const holds = d.mate ? 'every reply runs into mate' : mine ? 'every reply still loses them material' : 'every reply still loses you material';
+  if (!mine) {
+    return rotateStem([
+      `Watch for their discovered attack: ${d.san} would uncover ${opens}, and ${holds}.`,
+      `Their ${d.san} is a discovered attack. It uncovers ${opens}, and ${holds}.`,
+    ], key);
+  }
+  return names
+    ? rotateStem([
+      `${d.san} is a discovered attack. It uncovers ${opens}, and ${holds}.`,
+      `A discovered attack is here: ${d.san} opens ${opens}, and ${holds}.`,
+    ], key)
+    : rotateStem([
+      `A discovered attack is here. One move opens ${opens}, and ${holds}.`,
+      `Look for the discovered attack: one move opens ${opens}, and ${holds}.`,
+    ], key);
+}
+
+/** The one answer to a threat (`answeringMove`), from the student's seat.
+ *  `mine`: the student must answer it. */
+export function answeringMoveWords(
+  a: { san: string; target: { square: string; piece: string }; failed: number },
+  mine: boolean, names: boolean, key: number,
+): string {
+  const piece = `${mine ? 'your' : 'their'} ${THREAT_PIECE[a.target.piece]} on ${a.target.square}`;
+  const others = a.failed === 1 ? 'The other natural answer loses it.' : `The other ${countWord(a.failed)} natural answers all lose it.`;
+  return names
+    ? rotateStem([`Only ${a.san} saves ${piece}. ${others}`, `${a.san} is the one answer for ${piece}. ${others}`], key)
+    : rotateStem([`Only one move saves ${piece}. ${others}`, `${openSentence(piece)} has one answer. ${others}`], key);
+}
+
+/** What the student's move now threatens (`ownThreat`), with the move that
+ *  carries it out. */
+export function ownThreatWords(
+  o: { carry: { san: string }; won: { square: string; piece: string } | null; mate: boolean },
+  names: boolean, key: number,
+): string {
+  if (o.mate) {
+    return names
+      ? rotateStem([`Your move now threatens mate with ${o.carry.san}.`, `Your move sets up ${o.carry.san}, and that is mate.`], key)
+      : rotateStem(['Your move now threatens mate in one.', 'Your move sets up a mate in one.'], key);
+  }
+  const won = o.won ? `their ${THREAT_PIECE[o.won.piece]} on ${o.won.square}` : 'material';
+  // The carrying move takes the piece it wins: the capture is said once, in
+  // piece words — "Nxf2, winning their queen on f2" says it twice (SAY A
+  // CAPTURE ONCE, `captureSaidOnce.gate`).
+  if (o.won && o.carry.san.includes('x') && o.carry.san.replace(/[+#]$/, '').replace(/=[QRBN]$/, '').endsWith(o.won.square)) {
+    return names
+      ? rotateStem([`Your move now threatens ${o.carry.san}, and ${won} falls.`, `Your move sets up ${o.carry.san}, and ${won} is lost.`], key)
+      : rotateStem([`Your move now threatens to take ${won}.`, `Your move sets up a capture of ${won}.`], key);
+  }
+  return names
+    ? rotateStem([`Your move now threatens ${o.carry.san}, winning ${won}.`, `Your move sets up ${o.carry.san}, and that wins ${won}.`], key)
+    : rotateStem([`Your move now threatens to win ${won}.`, `Your move sets up a win of ${won}.`], key);
 }

@@ -902,13 +902,13 @@ test.describe('Coach-Teach FULL PLAY audit', () => {
       `${infoBars} player-info-bar element(s) rendered (expect 2: coach + player).`);
 
     // ─── R15: takeback button ──────────────────────────────────────
+    // No Takeback button (2026-11-24): Back only looks; a different move on a
+    // looked-back board is the takeback.
     const takeback = page.getByTestId('teach-takeback');
     if (await safeBool(() => takeback.isVisible({ timeout: 1000 }), false)) {
-      await takeback.click();
-      await page.waitForTimeout(300);
-      audit('R15', 'Takeback', 'PASS', 'teach-takeback clicked.');
+      audit('R15', 'Takeback', 'FAIL', 'teach-takeback is back on the bar.');
     } else {
-      audit('R15', 'Takeback', 'WARN', 'teach-takeback not visible (may require a played move first).');
+      audit('R15', 'Takeback', 'PASS', 'no Takeback button.');
     }
 
     // ─── R16: chat input + R19: line picker ─────────────────────────

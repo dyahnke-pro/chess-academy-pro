@@ -46,6 +46,9 @@ import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { phaseOfFen, type Phase } from './boardConcepts';
 import { MATERIAL_VALUE, materialBalance } from './pieceValues';
 import { capturesWinMaterial, kingSafetyRead } from './positionReadingService';
+import { trappedAt } from './trappedPiece';
+import { withArticle } from '../utils/andList';
+import { minorsAtHome } from './development';
 import { onlyMove } from './thoughtReads';
 import { findProphylaxis } from './prophylaxis';
 import { detectTacticLine } from './missedTacticService';
@@ -55,7 +58,7 @@ import { DECIDED_EVAL_CP, INACCURACY_CP, MISTAKE_CP } from './engineConstants';
 import { logAppAudit } from './appAuditor';
 import {
   BETTER_JOBS, CAUSE_READER_LESSONS, COLOUR_NAME, EMPTY_CHECK_LESSON, FORK_LESSON, GOOD_DECISION, MISSED_MOTIF, THEIR_MOVE_CONSEQUENCE, HABIT_SHORT, LESSON_SLOTS, MISTAKE_NUMBER_WORDS, POSITIONAL, POSITIONAL_THEM, RECIPES, REPAIRS, TECHNIQUE_RULE, THEIR_SEAT, TRAPPED_LESSON,
-  materialWords, motifArticle, renderMistakeSlot, tradeWords,
+  materialWords, renderMistakeSlot, tradeWords,
   type BetterJob, type GoodDecision, type Fills, type LessonSlot, type RepairState, type SlotRecipe,
 } from './teachingSentence';
 
@@ -280,7 +283,7 @@ export function fillsFor(input: MistakeLessonInput): Fills {
         } catch { id = null; }
       }
     }
-    if (id && id !== 'free-piece') f.motif = motifArticle(MOTIFS[id].word);
+    if (id && id !== 'free-piece') f.motif = withArticle(MOTIFS[id].word);
   }
   const d = cause.detail;
   if (d) {
@@ -430,6 +433,74 @@ function repairApplies(state: RepairState, x: RepairContext): Fills | null {
     // The plan is read by `planRepair`, never through this switch.
     case 'plan':
       return null;
+    case 'king-in-centre': {
+      // A king still on its home square in the d- or e-file, with a right to
+      // castle left, queens on and a middlegame's pieces on the board.
+      const b = before(x.quiet);
+      const k = b.findPiece({ type: 'k', color: x.student })[0];
+      const home = x.student === 'w' ? '1' : '8';
+      const rights = (x.quiet.split(' ')[2] ?? '-').split('').filter((ch) => (x.student === 'w' ? /[KQ]/ : /[kq]/).test(ch));
+      // Only once it matters: past the first moves, or with the centre open in
+      // front of it (no pawn of its own on its file).
+      const moveNo = Number(x.quiet.split(' ')[5] ?? '1');
+      const fileOpen = k ? !b.findPiece({ type: 'p', color: x.student }).some((p) => p[0] === k[0]) : false;
+      return k && 'de'.includes(k[0]) && k[1] === home && rights.length > 0 && queensOn(x.quiet) && x.phase !== 'endgame' && officersOn(b) >= 8
+        && (moveNo >= 10 || fileOpen) ? { target: k } : null;
+    }
+    case 'behind-in-development': {
+      // Two minor pieces or more still at home, and more than they have.
+      const b = before(x.quiet);
+      const mine = minorsAtHome(b, x.student);
+      const moveNo = Number(x.quiet.split(' ')[5] ?? '1');
+      if (moveNo < 6 || mine.length < 2 || mine.length - minorsAtHome(b, them).length < 2 || x.phase === 'endgame') return null;
+      return { tPiece: NAME[mine[0].type], target: mine[0].square };
+    }
+    case 'piece-trapped': {
+      const b = before(x.quiet);
+      for (const cell of b.board().flat()) {
+        if (!cell || cell.color !== x.student || cell.type === 'p' || cell.type === 'k') continue;
+        if (b.attackers(cell.square, them).length && trappedAt(x.quiet, cell.square)) return { tPiece: NAME[cell.type], target: cell.square };
+      }
+      return null;
+    }
+    case 'pinned-piece': {
+      const pin = pinOn(before(x.quiet), x.student);
+      return pin ? { tPiece: NAME[pin.piece], target: pin.square, opPiece: NAME[pin.byPiece], opSq: pin.by } : null;
+    }
+    case 'pawn-lever': {
+      // Their centre pawn deep in the student's half, that a pawn of the
+      // student's can hit in one push.
+      const b = before(x.quiet);
+      const deep = them === 'w' ? '5' : '4';
+      const dir = x.student === 'w' ? 1 : -1;
+      for (const sq of b.findPiece({ type: 'p', color: them })) {
+        if (!'cdef'.includes(sq[0]) || sq[1] !== deep) continue;
+        const f = sq.charCodeAt(0) - 97;
+        const hitFrom = Number(sq[1]) - dir; // the square a lever lands on
+        const lever = [f - 1, f + 1].filter((g) => g >= 0 && g <= 7).some((g) => {
+          const land = `${String.fromCharCode(97 + g)}${hitFrom}` as Square;
+          const one = `${String.fromCharCode(97 + g)}${hitFrom - dir}` as Square;
+          const two = `${String.fromCharCode(97 + g)}${hitFrom - 2 * dir}` as Square;
+          if (b.get(land)) return false;
+          const p1 = b.get(one); const p2 = b.get(two);
+          const startRank = x.student === 'w' ? '2' : '7';
+          return (p1?.type === 'p' && p1.color === x.student) || (!p1 && p2?.type === 'p' && p2.color === x.student && two[1] === startRank);
+        });
+        if (lever) return { pawn: sq };
+      }
+      return null;
+    }
+    case 'loose-pieces': {
+      const b = before(x.quiet);
+      if (x.phase === 'endgame') return null;
+      // Pieces out in play (off their first rank), past the opening's first
+      // moves: a rook at home is not loose.
+      const firstRank = x.student === 'w' ? '1' : '8';
+      if (Number(x.quiet.split(' ')[5] ?? '1') < 8) return null;
+      const loose = b.board().flat().flatMap((p) => (p && p.color === x.student && p.type !== 'p' && p.type !== 'k'
+        && p.square[1] !== firstRank && b.attackers(p.square, x.student).length === 0 ? [p] : []));
+      return loose.length >= 2 ? { a: `${NAME[loose[0].type]} on ${loose[0].square}`, b: `${NAME[loose[1].type]} on ${loose[1].square}` } : null;
+    }
     case 'initiative-lost':
     case 'initiative-won': {
       if (!x.replyLineUci.length) return null;
@@ -450,6 +521,57 @@ const CAUSE_STATE: Partial<Record<MistakeCauseKind, RepairState>> = {
   'colour-conceded': 'colour-conceded', 'traded-into-target': 'weak-pawn', 'passer-handed': 'passer-against',
 };
 const LEDGER_STATES: readonly RepairState[] = ['down-queen', 'down-exchange', 'down-piece-middlegame', 'down-material-queens-off', 'down-piece-endgame', 'down-pawn-middlegame', 'down-pawn-endgame', 'up-material'];
+/** THE BOARD STATES, after the ledger's: on the student's own mistake, what
+ *  the board asks of them when the material is not the problem — the trapped
+ *  piece first (it is lost otherwise), then the pin, the loose pieces, the
+ *  king in the middle, the development, the cramping pawn. */
+const BOARD_STATES: readonly RepairState[] = ['piece-trapped', 'pinned-piece', 'loose-pieces', 'king-in-centre', 'behind-in-development', 'pawn-lever'];
+
+/** A board state's own check, on one board (`student`'s seat): the fills its
+ *  repair names, or null when the board does not show it. */
+export function boardStateFills(state: RepairState, fen: string, student: Color): Fills | null {
+  try {
+    return repairApplies(state, { student, fenBefore: fen, fenAfter: fen, quiet: fen, cause: { kind: 'unexplained', motif: null, tag: null } as unknown as MistakeCause, seat: 'you', replyLineUci: [], phase: phaseOfFen(fen) });
+  } catch { return null; }
+}
+
+function officersOn(b: Chess): number {
+  return b.board().flat().filter((p) => !!p && p.type !== 'p' && p.type !== 'k').length;
+}
+
+/** A piece of `side` (knight, bishop or rook) pinned by a slider of the
+ *  other side to its king or queen standing behind it on the same line. */
+export function pinOn(b: Chess, side: Color): { square: Square; piece: PieceSymbol; by: Square; byPiece: PieceSymbol } | null {
+  const foe: Color = side === 'w' ? 'b' : 'w';
+  const DIRS: Array<[number, number, 'diag' | 'line']> = [[1, 0, 'line'], [-1, 0, 'line'], [0, 1, 'line'], [0, -1, 'line'], [1, 1, 'diag'], [1, -1, 'diag'], [-1, 1, 'diag'], [-1, -1, 'diag']];
+  for (const cell of b.board().flat()) {
+    if (!cell || cell.color !== foe || !['b', 'r', 'q'].includes(cell.type)) continue;
+    for (const [df, dr, kind] of DIRS) {
+      if (cell.type === 'b' && kind === 'line') continue;
+      if (cell.type === 'r' && kind === 'diag') continue;
+      let f = cell.square.charCodeAt(0) - 97 + df; let r = Number(cell.square[1]) + dr;
+      let front: { sq: Square; type: PieceSymbol } | null = null;
+      while (f >= 0 && f <= 7 && r >= 1 && r <= 8) {
+        const sq = `${String.fromCharCode(97 + f)}${r}` as Square;
+        const p = b.get(sq);
+        if (p) {
+          if (p.color !== side) break;
+          if (!front) {
+            if (!['n', 'b', 'r'].includes(p.type)) break;
+            front = { sq, type: p.type };
+          } else {
+            // A pinned piece that can take the pinner is not held.
+            const takes = b.attackers(cell.square, side).includes(front.sq);
+            if (!takes && (p.type === 'k' || (p.type === 'q' && cell.type !== 'q'))) return { square: front.sq, piece: front.type, by: cell.square, byPiece: cell.type };
+            break;
+          }
+        }
+        f += df; r += dr;
+      }
+    }
+  }
+  return null;
+}
 
 function repairFor(input: MistakeLessonInput, recipeRepairs: readonly RepairState[], key: number): { text: string; stem: string; state: RepairState } | null {
   let after: Chess; let mover: Color;
@@ -466,7 +588,7 @@ function repairFor(input: MistakeLessonInput, recipeRepairs: readonly RepairStat
   const seated = input.seat === 'you' ? own : own.map((s) => MIRROR[s] ?? s);
   // On their mistake the ledger's only repair is the conversion: the
   // student's own deficit is not what their mistake changed.
-  const ledgerStates = input.seat === 'you' ? LEDGER_STATES : (['up-material'] as const);
+  const ledgerStates = input.seat === 'you' ? [...LEDGER_STATES, ...BOARD_STATES] : (['up-material'] as const);
   for (const state of [...seated, ...ledgerStates]) {
     const fills = repairApplies(state, ctx);
     if (!fills) continue;
@@ -549,6 +671,10 @@ function repairStillHolds(state: RepairState, fen: string, student: Color): bool
     case 'attack-their-king': { const k = kingSafetyRead(fen, them); return !!k && k.shieldPawns <= 1; }
     // A plan is no state to hold: the next mistake reads the board afresh.
     case 'plan': return false;
+    // The board states: while the board still shows them (their own check,
+    // on this board), so a pin broken and set again is said again.
+    case 'king-in-centre': case 'behind-in-development': case 'piece-trapped': case 'pinned-piece': case 'pawn-lever': case 'loose-pieces':
+      return boardStateFills(state, fen, student) !== null;
     default: return true;
   }
 }

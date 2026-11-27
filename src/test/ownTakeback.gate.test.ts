@@ -10,11 +10,10 @@ import { resolve } from 'node:path';
 const PAGE = readFileSync(resolve(__dirname, '../components/Coach/CoachTeachPage.tsx'), 'utf8');
 
 describe('the student\'s own takeback is marked exactly', () => {
-  it('the bar\'s Takeback marks every ply it undoes as the student\'s own', () => {
-    // The button takes back through takeBackMine (its move and the coach's
-    // answer, 2026-10-23), which marks each ply through takeBackPlies.
-    expect(PAGE).toMatch(/data-testid="teach-takeback"/);
-    expect(PAGE.split('\n').find((l) => l.includes('data-testid="teach-takeback"'))).toMatch(/takeBackMine\(\)/);
+  it('a move played on a looked-back board marks every ply it undoes as the student\'s own', () => {
+    // No Takeback button (2026-11-24): the different move is the takeback,
+    // through takeBackPlies(n, true), which marks each ply.
+    expect(PAGE).toMatch(/takeBackPlies\(play\.plies, true\)/);
     expect(PAGE).toMatch(/return n > 0 \? takeBackPlies\(n, true\)/);
     expect(PAGE).toMatch(/for \(let i = 0; i < count; i\+\+\) \{\s*noteUndonePly\(pliesBefore - i, own\);/);
   });
