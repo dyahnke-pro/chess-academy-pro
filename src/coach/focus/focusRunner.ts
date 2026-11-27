@@ -46,7 +46,7 @@ import { PHASES } from './focusRotation';
 import { judgeOpeningMove, NO_OPENING_JUDGE, type OpeningJudgeState, type SkillVerdict } from './openingJudge';
 import type { HeatState } from '../../services/holdRate';
 import { momentDial, type MomentDial } from '../../services/coachMoment';
-import { carryHeads, NO_PLANTS, plantAsk, presents, type FocusPlantAsk, type OwedPattern, type PlantState } from './focusPlant';
+import { carryHeads, isMotifChance, NO_PLANTS, plantAsk, presents, type FocusPlantAsk, type OwedPattern, type PlantState } from './focusPlant';
 import { RUNG_TIERS, rungFrom, rungProgressLine, rungUpLine, type RungGame, type TacticsRung } from './focusRung';
 import {
   CASTLE_LOSING_CP, CASTLE_REMINDER_LINE, castleRewindAsk, castleProbe, castleReady, castleStopLine, castleVerdict,
@@ -811,7 +811,9 @@ function onMoved(s0: FocusRunState, m: FocusMove): FocusStep {
   const carried = verdicts.filter((x) => x.v === 'exempt').map((x) => ({ key: x.chance.key, prompted, steered: halfOf(x.chance), asked: b?.askedChance === x.chance.key }));
   // A miss on your side asks the next plant for the same pattern.
   let plant = s.plant;
-  for (const x of verdicts) if (x.chance.seat === 'exploit' && x.v === 'missed') plant = { ...plant, need: x.chance.tag };
+  // The next plant poses the pattern you missed — a real motif only (a missed
+  // free piece is the board's, never the game's practice).
+  for (const x of verdicts) if (isMotifChance(x.chance) && x.v === 'missed') plant = { ...plant, need: x.chance.tag };
   // Every first-try miss the coach can set up again is owed to the next
   // game, yours and theirs alike (David 2026-11-09: their tactics you did not
   // stop carry too); a piece your own move left loose cannot be set up.
@@ -983,7 +985,8 @@ function row(s: FocusRunState, chance: FocusChance, ply: number, outcome: Chance
  *  decision, never outside a focus game. */
 export function focusPlantAsk(s: FocusRunState, ply: number, fen: string): FocusPlantAsk | null {
   if (!s.setup || s.pause || s.castle.probe) return null;
-  return plantAsk(s.plant, { rung: s.setup.rung, posed: s.tally.exploit.posed, targetPly: s.setup.targetPly }, ply, fen);
+  const mg = s.setup.phases.middlegame;
+  return plantAsk(s.plant, { rung: s.setup.rung, posed: s.tally.exploit.posed, targetPly: s.setup.targetPly, pick: mg.focus === 'tactics' ? mg.skill : null }, ply, fen);
 }
 
 /** The runner reads the user's moves now (a focus game is on). */
