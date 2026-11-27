@@ -29,34 +29,34 @@
 
 ### `__resetStockfishCacheForTests` (const) — 2 call sites
 - `src/hooks/usePositionNarration.degrade.test.ts:78`
-- `src/hooks/usePositionNarration.test.ts:125`
+- `src/hooks/usePositionNarration.test.ts:140`
 
 ### `dropInventedQuestions` (function) — 3 call sites
-- `src/hooks/usePositionNarration.test.ts:419`
-- `src/hooks/usePositionNarration.test.ts:422`
-- `src/hooks/usePositionNarration.test.ts:424`
+- `src/hooks/usePositionNarration.test.ts:434`
+- `src/hooks/usePositionNarration.test.ts:437`
+- `src/hooks/usePositionNarration.test.ts:439`
 
 ### `usePositionNarration` (function) — 21 call sites
 - `src/components/Coach/CoachGamePage.tsx:1588`
 - `src/components/Coach/CoachGameReview.tsx:2202`
-- `src/components/Coach/CoachTeachPage.tsx:8791`
+- `src/components/Coach/CoachTeachPage.tsx:8790`
 - `src/components/Openings/OpeningPlayMode.tsx:625`
 - `src/components/Puzzles/MistakePuzzleBoard.tsx:714`
 - `src/components/Puzzles/PuzzleBoard.tsx:303`
 - `src/components/Tactics/TacticSetupBoard.tsx:321`
 - `src/hooks/usePositionNarration.degrade.test.ts:85`
-- `src/hooks/usePositionNarration.staged.test.ts:43`
-- `src/hooks/usePositionNarration.test.ts:134`
-- `src/hooks/usePositionNarration.test.ts:151`
-- `src/hooks/usePositionNarration.test.ts:176`
-- `src/hooks/usePositionNarration.test.ts:204`
-- `src/hooks/usePositionNarration.test.ts:228`
-- `src/hooks/usePositionNarration.test.ts:252`
-- `src/hooks/usePositionNarration.test.ts:269`
-- `src/hooks/usePositionNarration.test.ts:291`
-- `src/hooks/usePositionNarration.test.ts:330`
-- `src/hooks/usePositionNarration.test.ts:363`
-- `src/hooks/usePositionNarration.test.ts:404`
+- `src/hooks/usePositionNarration.staged.test.ts:45`
+- `src/hooks/usePositionNarration.test.ts:149`
+- `src/hooks/usePositionNarration.test.ts:166`
+- `src/hooks/usePositionNarration.test.ts:191`
+- `src/hooks/usePositionNarration.test.ts:219`
+- `src/hooks/usePositionNarration.test.ts:243`
+- `src/hooks/usePositionNarration.test.ts:267`
+- `src/hooks/usePositionNarration.test.ts:284`
+- `src/hooks/usePositionNarration.test.ts:306`
+- `src/hooks/usePositionNarration.test.ts:345`
+- `src/hooks/usePositionNarration.test.ts:378`
+- `src/hooks/usePositionNarration.test.ts:419`
 - `src/test/corpusScope.test.ts:67`
 
 ## Tests

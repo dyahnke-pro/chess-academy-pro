@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**79 lines · 3 exports · 3 importers · 1 tests · 0 audits**
+**99 lines · 4 exports · 3 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -21,15 +21,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `LectureIo` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `theoryViewSteps` (function) — 4 call sites
-- `src/hooks/useTheoryView.ts:107`
+### `theoryViewSteps` (function) — 3 call sites
 - `src/services/theoryPlayback.test.ts:19`
 - `src/services/theoryPlayback.test.ts:22`
 - `src/services/theoryPlayback.test.ts:23`
 
 ### `performLecture` (function) — 2 call sites
 - `src/components/Coach/CoachGameReview.tsx:1926`
-- `src/hooks/useTheoryView.ts:109`
+- `src/hooks/useTheoryView.ts:98`
+
+### `theoryLectureFor` (function) — 1 call site
+- `src/hooks/useTheoryView.ts:91`
 
 ## Tests
 

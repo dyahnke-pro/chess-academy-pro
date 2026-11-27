@@ -36,7 +36,7 @@
 ### `useDiscussionPractice` (function) — 38 call sites
 - `src/components/Coach/CoachGamePage.tsx:511`
 - `src/components/Coach/CoachGameReview.tsx:1044`
-- `src/components/Coach/CoachTeachPage.tsx:1839`
+- `src/components/Coach/CoachTeachPage.tsx:1838`
 - `src/components/Openings/MiddlegamePractice.tsx:162`
 - `src/components/Openings/OpeningPlayMode.tsx:317`
 - `src/components/Openings/PlayableLinePlayer.tsx:214`

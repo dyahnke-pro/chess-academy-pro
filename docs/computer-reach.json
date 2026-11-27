@@ -1,42 +1,42 @@
 {
  "about": "Which teaching computer reaches which surface, by a static call path from each surface root (scripts/computer-reach.mjs; the list is scripts/computer-reach/computers.json). learn: yes = through the focus runner, door = computed in a Learn turn and decided by Learn's turn door (spoken when the door keeps it); a door-only row says why in `door` (an adapter of computers the other surfaces read, or Learn-only by design).",
  "graph": {
-  "files": 1806,
-  "nodes": 18532
+  "files": 1805,
+  "nodes": 18529
  },
  "totals": {
-  "computers": 344,
-  "offTheSixSurfaces": 29,
+  "computers": 343,
+  "offTheSixSurfaces": 28,
   "learnDoorOnly": 18,
   "learnDoorOnlyUnexplained": 1,
   "otherScreensOnly": 9,
-  "dead": 2,
+  "dead": 1,
   "missingFromCode": 0,
   "surfaces": {
    "learn": {
     "yes": 31,
     "door": 233,
-    "no": 80
+    "no": 79
    },
    "review": {
     "yes": 240,
-    "no": 104
+    "no": 103
    },
    "lesson": {
     "yes": 184,
-    "no": 160
+    "no": 159
    },
    "chat": {
     "yes": 229,
-    "no": 115
+    "no": 114
    },
    "tapped": {
     "yes": 192,
-    "no": 152
+    "no": 151
    },
    "tactics": {
     "yes": 200,
-    "no": 144
+    "no": 143
    }
   }
  },
@@ -73,7 +73,6 @@
    "services/tacticAlertService.ts#detectGameplayTactic"
   ],
   "dead": [
-   "services/coachTemplates.ts#(module)",
    "services/reviewTeachingPoints.ts#explainTemptingCapture"
   ]
  },
@@ -740,23 +739,6 @@
    "app": true,
    "other": [],
    "learnOverride": "greeting bubble on page open (CoachTeachPage 13452-13661), voice muted when the focus game starts"
-  },
-  {
-   "key": "services/coachTemplates.ts#(module)",
-   "name": "coachTemplates",
-   "file": "services/coachTemplates.ts",
-   "fn": "(module)",
-   "says": "",
-   "origin": "extra",
-   "learn": "no",
-   "review": "no",
-   "lesson": "no",
-   "chat": "no",
-   "tapped": "no",
-   "tactics": "no",
-   "app": false,
-   "other": [],
-   "where": "dead (no production caller)"
   },
   {
    "key": "services/coachTrainingService.ts#getCoachGreeting",

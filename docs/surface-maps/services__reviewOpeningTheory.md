@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1203 lines · 12 exports · 6 importers · 5 tests · 0 audits**
+**1203 lines · 12 exports · 5 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -13,7 +13,6 @@
 ## Who calls in
 
 - `src/components/Coach/CoachGameReview.tsx`
-- `src/hooks/useTheoryView.ts`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts`
 - `src/services/reviewOpeningTheory.test.ts`
 - `src/services/theoryPlayback.test.ts`
@@ -26,7 +25,6 @@
 
 ### `resolveCuratedOpeningIdeas` (function) — 12 call sites
 - `src/components/Coach/CoachGameReview.tsx:2348`
-- `src/hooks/useTheoryView.ts:105`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:49`
 - `src/services/reviewOpeningTheory.test.ts:84`
 - `src/services/reviewOpeningTheory.test.ts:85`
@@ -37,13 +35,13 @@
 - `src/services/reviewOpeningTheory.test.ts:391`
 - `src/services/reviewOpeningTheory.test.ts:392`
 - `src/services/reviewOpeningTheory.test.ts:524`
+- `src/services/theoryPlayback.ts:95`
 
 ### `warmLectureSources` (function) — 1 call site
 - `src/components/Coach/CoachGameReview.tsx:2331`
 
 ### `buildOpeningTheoryLecture` (function) — 23 call sites
 - `src/components/Coach/CoachGameReview.tsx:2339`
-- `src/hooks/useTheoryView.ts:99`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:46`
 - `src/services/reviewOpeningTheory.test.ts:35`
 - `src/services/reviewOpeningTheory.test.ts:64`
@@ -64,6 +62,7 @@
 - `src/services/reviewOpeningTheory.test.ts:474`
 - `src/services/reviewOpeningTheory.test.ts:502`
 - `src/services/reviewOpeningTheory.test.ts:518`
+- `src/services/theoryPlayback.ts:93`
 - `src/test/corpusScope.test.ts:94`
 
 ### `enrichLectureWithEngine` (function) — 2 call sites
@@ -80,7 +79,6 @@
 
 ### `buildTheoryLectureBeats` (function) — 18 call sites
 - `src/components/Coach/CoachGameReview.tsx:2347`
-- `src/hooks/useTheoryView.ts:105`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:49`
 - `src/services/reviewOpeningTheory.test.ts:129`
 - `src/services/reviewOpeningTheory.test.ts:146`
@@ -96,26 +94,27 @@
 - `src/services/reviewOpeningTheory.test.ts:434`
 - `src/services/reviewOpeningTheory.test.ts:454`
 - `src/services/reviewOpeningTheory.test.ts:475`
+- `src/services/theoryPlayback.ts:95`
 - `src/test/corpusScope.test.ts:95`
 
 ### `lectureNoteSelector` (function) — 4 call sites
 - `src/components/Coach/CoachGameReview.tsx:2348`
-- `src/hooks/useTheoryView.ts:105`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:49`
+- `src/services/theoryPlayback.ts:95`
 - `src/test/corpusScope.test.ts:95`
 
 ### `loadLectureCorpus` (function) — 2 call sites
 - `src/components/Coach/CoachGameReview.tsx:2352`
-- `src/hooks/useTheoryView.ts:98`
+- `src/services/theoryPlayback.ts:92`
 
 ### `LectureStep` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `lectureSequence` (function) — 4 call sites
 - `src/components/Coach/CoachGameReview.tsx:1926`
-- `src/hooks/useTheoryView.ts:107`
 - `src/services/reviewOpeningTheory.davidGames.measure.test.ts:52`
 - `src/services/reviewOpeningTheory.test.ts:476`
+- `src/services/theoryPlayback.ts:97`
 
 ## Tests
 

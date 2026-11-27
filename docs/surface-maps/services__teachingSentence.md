@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2322 lines · 120 exports · 38 importers · 8 tests · 431 audits**
+**2320 lines · 118 exports · 38 importers · 8 tests · 431 audits**
 
 ## Locked rules that govern this surface
 
@@ -454,8 +454,8 @@
 
 ### `nowBoard` (function) — 7 call sites
 - `src/services/boardReadFacts.ts:145`
-- `src/services/boardReadFacts.ts:579`
-- `src/services/boardReadFacts.ts:595`
+- `src/services/boardReadFacts.ts:582`
+- `src/services/boardReadFacts.ts:598`
 - `src/services/planOfTheBoard.test.ts:11`
 - `src/services/readDecider.picture.test.ts:4`
 - `src/services/readDecider.speaks.test.ts:18`
@@ -600,7 +600,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `isForcingThreat` (function) — 3 call sites
-- `src/services/boardReadFacts.ts:437`
+- `src/services/boardReadFacts.ts:440`
 - `src/services/teachingSentence.test.ts:10`
 - `src/services/teachingSentence.test.ts:12`
 
@@ -632,7 +632,7 @@
 - `src/services/weighedMoves.ts:1032`
 
 ### `renderTryGroup` (function) — 1 call site
-- `src/services/boardReadFacts.ts:371`
+- `src/services/boardReadFacts.ts:374`
 
 ### `jobClause` (function) — 1 call site
 - `src/services/readDecider.ts:530`
@@ -715,12 +715,12 @@
 - `src/services/latentDanger.ts:247`
 
 ### `renderQuietThreat` (function) — 3 call sites
-- `src/services/boardReadFacts.ts:439`
+- `src/services/boardReadFacts.ts:442`
 - `src/services/teachingSentence.test.ts:74`
 - `src/services/teachingSentence.test.ts:75`
 
 ### `renderWatchFor` (function) — 3 call sites
-- `src/services/boardReadFacts.ts:511`
+- `src/services/boardReadFacts.ts:514`
 - `src/services/positionReadComposer.staged.test.ts:132`
 - `src/services/positionReadComposer.staged.test.ts:134`
 
@@ -914,9 +914,6 @@
 - `src/services/lineCalc.ts:230`
 - `src/services/mistakeLesson.ts:296`
 
-### `motifArticle` (const) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
 ### `COLOUR_NAME` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
@@ -957,9 +954,6 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `fillStem` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
-
-### `capitaliseStem` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `renderMistakeSlot` (function) — 3 call sites

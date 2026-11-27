@@ -104,8 +104,8 @@
 - `scripts/pro-repertoire/build-pro-sublines.mjs:63`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:157`
 - `scripts/pro-repertoire/build-pro-sublines.mjs:178`
-- `src/components/Coach/CoachTeachPage.tsx:8702`
-- `src/components/Coach/CoachTeachPage.tsx:8726`
+- `src/components/Coach/CoachTeachPage.tsx:8701`
+- `src/components/Coach/CoachTeachPage.tsx:8725`
 - `src/components/Coach/MoveListPanel.tsx:18`
 - `src/components/Coach/MoveListPanel.tsx:98`
 - `src/hooks/useAcceptableMoves.ts:38`
@@ -155,8 +155,8 @@
 - `src/services/tacticClassifierService.ts:539`
 - `src/services/wrongTryRefutation.ts:69`
 - `src/services/wrongTryRefutation.ts:94`
-- `src/test/everySurfaceSpeaks.test.ts:47`
-- `src/test/everySurfaceSpeaks.test.ts:92`
+- `src/test/everySurfaceSpeaks.test.ts:54`
+- `src/test/everySurfaceSpeaks.test.ts:99`
 
 ### `replayPgnToFens` (function) — 19 call sites
 - `src/components/Coach/CoachReviewSessionPage.oddsGame.test.ts:47`
@@ -295,7 +295,7 @@
 - `src/services/recordReprice.test.ts:123`
 
 ### `gradeMistakePuzzle` (function) — 14 call sites
-- `src/components/Coach/CoachTeachPage.tsx:3388`
+- `src/components/Coach/CoachTeachPage.tsx:3387`
 - `src/components/Puzzles/MyMistakesPage.tsx:289`
 - `src/components/Tactics/TacticCreatePage.tsx:201`
 - `src/services/conceptSchedule.test.ts:41`
