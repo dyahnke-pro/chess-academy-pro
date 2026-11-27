@@ -73,7 +73,7 @@ import { buildPositionalRead } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { cheaperAttackerHit, kingPawnUnderFire, type CheaperHit, mistakeTurnLine, NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, namesPlayableStudentMove, studentMovesInLine, type NamesStudentMove } from '../../services/learnBoardTeaching';
-import { habitSaidKey, learnMoveReason, learnReasonDue, learnReplyWait, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, promiseEvent, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, foundMoveTeaching, namedMoveArrows, openingBreakFor, cheaperAttackerLine, learnHangingWarning, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, studentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, tacticStakesFor, refutedAlternativeClaims, type TeachingFact, type ThreatProducer } from '../../services/learnBoardTeaching';
+import { habitSaidKey, learnMoveReason, learnReasonDue, learnReplyWait, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, promiseEvent, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, foundMoveTeaching, namedMoveArrows, openingBreakFor, cheaperAttackerLine, learnHangingWarning, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, learnStudentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, tacticStakesFor, refutedAlternativeClaims, type TeachingFact, type ThreatProducer } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, slipAnswerText, gainedBishopPair, BISHOP_PAIR_POINT, BISHOP_PAIR_CLAIMS } from '../../services/playCommentary';
 import { captureRunAfterMove, captureRunOfPgn, NO_PREV_CAPTURE } from '../../services/captureRun';
 
@@ -309,8 +309,7 @@ import { stripDisprovenSentences } from '../../services/boardClaimValidator';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { voiceService } from '../../services/voiceService';
 import { mateContext } from '../../utils/mateContext';
-import { isFault, learnGoodDecision, learnMistakeTurn, type LearnMistakeInput } from '../../services/learnMistakeTurn';
-import { NEW_GAME_MEMORY, nextGameMemory, withStems } from '../../services/mistakeLesson';
+import { learnMistakeTurns, type PendingTheirMistake } from '../../services/learnMistakeTurn';
 import { speakLearn, registerLearnVoiceOwner, learnVoiceAllows, learnVoiceOwner } from '../../services/learnVoice';
 import { heldFoundText, heldVerdictText } from '../../services/deliberation';
 import { applyCoachSetting } from '../../services/coachSettingsAction';
@@ -347,7 +346,6 @@ import { findHangingBySee, signedLegalSeeFor, signedCaptureRead } from '../../se
 import { BehaviorScheduler, detectBehaviors, WISH_KEY_PREFIX, WISHES_A_GAME } from '../../services/danyaBehaviors';
 import { stockfishCache } from '../../services/stockfishCache';
 import { COACH_TURN_DEPTH, INACCURACY_CP, MISTAKE_CP, NEXT_BOARD_READ_MS } from '../../services/engineConstants';
-import { writerFor } from '../../services/writerRegister';
 import type { StockfishAnalysis } from '../../types';
 import { fetchLichessExplorer } from '../../services/lichessExplorerService';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, replyMadeAChance, studentPlayingRating } from '../../services/coachGameEngine';
@@ -2134,7 +2132,7 @@ export function CoachTeachPage({ mode }: {
   /** THE COACH'S MOVE, read and priced, waiting for the student's reply: its
    *  mistake lesson is said after that reply (`learnMistakeTurn`, seat
    *  'them'), so no move the student could still play is ever named. */
-  const theirMistakeRef = useRef<(Omit<LearnMistakeInput, 'seat' | 'theirReplySan' | 'studentReplySan' | 'holdOf' | 'memory' | 'seatLed'> & { fenAfter: string }) | null>(null);
+  const theirMistakeRef = useRef<PendingTheirMistake | null>(null);
   /** The moment Stockfish reports a forced mate FOR the student, the async engine
    *  pass flags it here (keyed by the FEN it read) so the instant package can call
    *  the mating NET at mate-in-N — not wait for the board to reach mate-in-1
@@ -12688,27 +12686,20 @@ export function CoachTeachPage({ mode }: {
                     try {
                       const studentW: 'w' | 'b' = playerColor === 'white' ? 'w' : 'b';
                       const holdOf = (tag: string) => studentRecordRef.current.capabilities?.get(tag as MisconceptionTagId)?.hold;
-                      let mem = learnMemRef.current.mistakes() ?? NEW_GAME_MEMORY;
                       const pend = theirMistakeRef.current;
                       theirMistakeRef.current = null;
-                      let theirsText: string | null = null;
-                      if (pend && samePosition(pend.fenAfter, fenBefore)) {
-                        const { fenAfter: theirBoard, ...pendIn } = pend;
-                        const t = learnMistakeTurn({ ...pendIn, seat: 'them', theirReplySan: null, studentReplySan: move.san, holdOf, memory: mem, seatLed: false });
-                        mem = nextGameMemory(mem, t, theirBoard, studentW);
-                        theirsText = t.text;
-                      }
-                      const yours = learnMistakeTurn({
-                        seat: 'you', fenBefore, playedSan: move.san, moverColor: playerColor, before: preStudentRead, after: mid,
-                        costCp: cpLoss, bestSan: studentBestSan, priorMove: fenBefore ? priorMoveLeadingTo(lastBoardMoveRef.current, fenBefore) : null,
-                        theirReplySan: reply ? reply.replace(/^…/, '') : null, studentReplySan: null, holdOf, memory: mem, ply: move.history.length, seatLed: !!theirsText,
+                      const turn = learnMistakeTurns({
+                        pending: pend, pendingOnBoard: !!pend && samePosition(pend.fenAfter, fenBefore),
+                        yours: {
+                          fenBefore, playedSan: move.san, moverColor: playerColor, before: preStudentRead, after: mid,
+                          costCp: cpLoss, bestSan: studentBestSan, priorMove: fenBefore ? priorMoveLeadingTo(lastBoardMoveRef.current, fenBefore) : null,
+                          theirReplySan: reply ? reply.replace(/^…/, '') : null, ply: move.history.length,
+                        },
+                        fenAfterReply, student: studentW, holdOf, memory: learnMemRef.current.mistakes() ?? null, focusOwnsMove: ownsTheMoveForFocus,
                       });
-                      let next = nextGameMemory(mem, yours, fenAfterReply, studentW);
-                      let yoursText = yours.text;
-                      if (!yoursText && cpLoss !== null && !isFault(cpLoss)) {
-                        const good = learnGoodDecision({ fenBefore, playedSan: move.san, before: preStudentRead, holdOf, memory: mem, ply: move.history.length, priorMove: fenBefore ? priorMoveLeadingTo(lastBoardMoveRef.current, fenBefore) : null, seatLed: !!theirsText, focusOwnsMove: ownsTheMoveForFocus });
-                        if (good) { yoursText = good.text; next = withStems(next, [good.stem]); }
-                      }
+                      const next = turn.memory;
+                      const theirsText = turn.theirs;
+                      const yoursText = turn.yours;
                       learnMemRef.current.noteMistakes(move.history.length, next);
                       for (const line of [theirsText, yoursText]) {
                         if (line) chainLine(line, () => speakLearn(line, { channel: 'mistake', forced: true, intent: 'learn-live' }));
@@ -12726,7 +12717,7 @@ export function CoachTeachPage({ mode }: {
                       const tie = readBoard('tiedDefender', { fenBefore, fenAfterMove: move.fen, fenAfterReply, student: playerColor === 'white' ? 'w' : 'b' });
                       if (tie) queueSpokenHint(fenAfterReply, { computer: tie.computer, text: tie.text, lane: 'movePoint', proof: tie.proof, namesStudentMove: false, squares: tie.squares, claims: tie.claims });
                     }
-                    for (const h of studentMoveTeaching({ theory: true, namesStudentMoves: false, unpricedCredit: writerFor('learn').unpricedCredit,
+                    for (const h of learnStudentMoveTeaching({ theory: true, namesStudentMoves: false,
                       fenBefore, san: move.san, history: move.history, cpLoss, bothCp: bothCp && cpLoss !== null,
                       bestSan: studentBestSan, bestLine: preStudentRead.topLines?.[0], topLines: preStudentRead.topLines, reply: reply ?? null,
                       linesAfter: (mid?.topLines ?? []).map((l) => l.moves),

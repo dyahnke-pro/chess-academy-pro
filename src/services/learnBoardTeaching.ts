@@ -188,6 +188,12 @@ function lineArrowsOf(f: CoachFact, student: 'w' | 'b', source: string): ArrowCl
 
 /** Everything the student's move teaches on the board, in no particular order —
  *  the Learn door ranks. */
+/** Learn's own read of the student's move: the register's credit rule comes
+ *  from the Learn writer, decided once here, never by the page. */
+export function learnStudentMoveTeaching(i: Omit<StudentMoveInput, 'unpricedCredit'>): TeachingFact[] {
+  return studentMoveTeaching({ ...i, unpricedCredit: LEARN_WRITER.unpricedCredit });
+}
+
 export function studentMoveTeaching(i: StudentMoveInput): TeachingFact[] {
   const out: TeachingFact[] = [];
   // Every fact here is about the student's move, computed on the board after

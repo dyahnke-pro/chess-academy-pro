@@ -325,7 +325,7 @@ const SURFACES = [
 //    call through the composer. NEVER raise one.
 const TOTAL_CEILING = 229; // 2026-11-20: 229 once a type-only import stopped counting (it computes nothing). 2026-11-08: 238 measured once the mark schedule was named infrastructure (it replaced narrationSegments' reveal); 2026-10-20: one price — Play prices and labels through moveRating, the finished-game record is one autoAnalyzeGame entry
 const PER_FILE_CEILING: Record<string, number> = {
-  'components/Coach/CoachTeachPage.tsx': 59,
+  'components/Coach/CoachTeachPage.tsx': 58,
   'components/Coach/CoachGamePage.tsx': 31,
   'components/Coach/CoachGameReview.tsx': 32,
 };

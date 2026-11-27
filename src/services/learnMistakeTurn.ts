@@ -15,7 +15,7 @@
 // PURE: no Dexie, no engine. The page passes the reads it already has.
 import { Chess } from 'chess.js';
 import { errorWhy, secondReadsOf, type PriorMove } from './inaccuracyCall';
-import { composeGoodDecision, composeMistakeLesson, type MistakeGameMemory, type MistakeLesson } from './mistakeLesson';
+import { composeGoodDecision, composeMistakeLesson, NEW_GAME_MEMORY, nextGameMemory, withStems, type MistakeGameMemory, type MistakeLesson } from './mistakeLesson';
 import { mateContext } from '../utils/mateContext';
 import { lineProofFromUci, type Proof } from './proof';
 import { lineSeatAt } from '../utils/andList';
@@ -120,4 +120,40 @@ export function learnGoodDecision(i: {
   const lines = (i.before.topLines ?? []).map((l) => ({ evaluation: l.evaluation, mate: l.mate ?? null, moves: l.moves }));
   if (lines.length < 2) return null;
   return composeGoodDecision({ fenBefore: i.fenBefore, playedSan: i.playedSan, lines, holdOf: i.holdOf, ply: i.ply, memory: i.memory, priorMove: i.priorMove, seatLed: i.seatLed });
+}
+
+/** THE PENDING LESSON of their last move, waiting for the student's reply. */
+export type PendingTheirMistake = Omit<LearnMistakeInput, 'seat' | 'theirReplySan' | 'studentReplySan' | 'holdOf' | 'memory' | 'seatLed'> & { fenAfter: string };
+
+/** THE LEARN TURN, whole: their mistake (the coach's last move, said after the
+ *  student's reply), then the student's own, or one good-decision line — and
+ *  the game's mistake memory carried through all three. The one door the Learn
+ *  page asks; the memory rules (`nextGameMemory`, `withStems`) stay here. */
+export function learnMistakeTurns(i: {
+  pending: PendingTheirMistake | null;
+  /** The pending lesson belongs to the board the student just moved from. */
+  pendingOnBoard: boolean;
+  yours: Omit<LearnMistakeInput, 'seat' | 'studentReplySan' | 'holdOf' | 'memory' | 'seatLed'>;
+  fenAfterReply: string;
+  student: 'w' | 'b';
+  holdOf: (tag: string) => HoldRecord | undefined;
+  memory: MistakeGameMemory | null;
+  focusOwnsMove: boolean;
+}): { theirs: string | null; yours: string | null; memory: MistakeGameMemory } {
+  let mem = i.memory ?? NEW_GAME_MEMORY;
+  let theirs: string | null = null;
+  if (i.pending && i.pendingOnBoard) {
+    const { fenAfter: theirBoard, ...pendIn } = i.pending;
+    const t = learnMistakeTurn({ ...pendIn, seat: 'them', theirReplySan: null, studentReplySan: i.yours.playedSan, holdOf: i.holdOf, memory: mem, seatLed: false });
+    mem = nextGameMemory(mem, t, theirBoard, i.student);
+    theirs = t.text;
+  }
+  const y = learnMistakeTurn({ ...i.yours, seat: 'you', studentReplySan: null, holdOf: i.holdOf, memory: mem, seatLed: !!theirs });
+  let next = nextGameMemory(mem, y, i.fenAfterReply, i.student);
+  let yours = y.text;
+  if (!yours && i.yours.costCp !== null && !isFault(i.yours.costCp)) {
+    const good = learnGoodDecision({ fenBefore: i.yours.fenBefore, playedSan: i.yours.playedSan, before: i.yours.before, holdOf: i.holdOf, memory: mem, ply: i.yours.ply, priorMove: i.yours.priorMove, seatLed: !!theirs, focusOwnsMove: i.focusOwnsMove });
+    if (good) { yours = good.text; next = withStems(next, [good.stem]); }
+  }
+  return { theirs, yours, memory: next };
 }
