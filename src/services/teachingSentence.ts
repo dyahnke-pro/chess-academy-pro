@@ -764,12 +764,12 @@ export function renderLedger(l: { fen: string; key: number; sides: ReadonlyArray
 }
 
 /** The target, with the count that chose it. */
-export function renderTarget(t: { mine: boolean; now: boolean; thing: string; runnerUp: string | null; attackers: number; defenders: number; levers: boolean; stem: number }): string {
+export function renderTarget(t: { mine: boolean; now: boolean; thing: string; attackers: number; defenders: number; levers: boolean; stem: number }): string {
   const units = t.levers ? 'pieces and pawns' : 'pieces';
   const why = `${countOf(t.attackers)} ${t.mine ? `of your ${units}` : `of their ${units}`} can get at it, and only ${countOf(t.defenders)} ${t.mine ? 'of theirs' : 'of yours'} can guard it`;
   const lead = t.now ? (t.mine ? 'The target is now' : 'Their target is now')
     : t.mine ? rotateStem(['The target is', 'Aim at'], t.stem) : rotateStem(['Their target is', 'They will aim at'], t.stem);
-  return t.runnerUp ? `${lead} ${t.thing}, not ${t.runnerUp}: ${why}.` : `${lead} ${t.thing}: ${why}.`;
+  return `${lead} ${t.thing}: ${why}.`;
 }
 
 /** The plan's target: the piece that wins the race and its way there, then
@@ -2230,4 +2230,66 @@ const PIECE_WORD: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop'
  *  …c5." `brk` is the move, or the pawn when the student's move is held. */
 export function mastersBreakPlanWords(mine: boolean, brk: string): string {
   return `${mine ? 'Your' : 'Their'} plan in the master games: the break ${brk}.`;
+// ── THE THREE THREAT COMPUTERS (rebuilt 2026-11-27): the discovered attack,
+// the answering move, your own threat. Each computer returns data; the words
+// are written here. `names`: the move may be named (a read the student asked
+// for, Review, a lesson); Learn passes false for a move of the student's that
+// is still to play, and the sentence says the idea with no move in it.
+const THREAT_PIECE: Readonly<Record<string, string>> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+
+/** A discovered attack that wins by force (`discoveredAttack`), from the
+ *  student's seat. `mine`: the student plays it. */
+export function discoveredAttackWords(
+  d: { san: string; uncovered: { square: string; piece: string }; target: { square: string; piece: string }; mate: boolean },
+  mine: boolean, names: boolean, key: number,
+): string {
+  const own = mine ? 'your' : 'their';
+  const foe = mine ? 'their' : 'your';
+  const opens = `${own} ${THREAT_PIECE[d.uncovered.piece]} on ${d.uncovered.square} at ${foe} ${THREAT_PIECE[d.target.piece]} on ${d.target.square}`;
+  const holds = d.mate ? 'every reply runs into mate' : mine ? 'every reply still loses them material' : 'every reply still loses you material';
+  if (!mine) {
+    return rotateStem([
+      `Watch for their discovered attack: ${d.san} would uncover ${opens}, and ${holds}.`,
+      `Their ${d.san} is a discovered attack. It uncovers ${opens}, and ${holds}.`,
+    ], key);
+  }
+  return names
+    ? rotateStem([
+      `${d.san} is a discovered attack. It uncovers ${opens}, and ${holds}.`,
+      `A discovered attack is here: ${d.san} opens ${opens}, and ${holds}.`,
+    ], key)
+    : rotateStem([
+      `A discovered attack is here. One move opens ${opens}, and ${holds}.`,
+      `Look for the discovered attack: one move opens ${opens}, and ${holds}.`,
+    ], key);
+}
+
+/** The one answer to a threat (`answeringMove`), from the student's seat.
+ *  `mine`: the student must answer it. */
+export function answeringMoveWords(
+  a: { san: string; target: { square: string; piece: string }; failed: number },
+  mine: boolean, names: boolean, key: number,
+): string {
+  const piece = `${mine ? 'your' : 'their'} ${THREAT_PIECE[a.target.piece]} on ${a.target.square}`;
+  const others = a.failed === 1 ? 'The other natural answer loses it.' : `The other ${countWord(a.failed)} natural answers all lose it.`;
+  return names
+    ? rotateStem([`Only ${a.san} saves ${piece}. ${others}`, `${a.san} is the one answer for ${piece}. ${others}`], key)
+    : rotateStem([`Only one move saves ${piece}. ${others}`, `${openSentence(piece)} has one answer. ${others}`], key);
+}
+
+/** What the student's move now threatens (`ownThreat`), with the move that
+ *  carries it out. */
+export function ownThreatWords(
+  o: { carry: { san: string }; won: { square: string; piece: string } | null; mate: boolean },
+  names: boolean, key: number,
+): string {
+  if (o.mate) {
+    return names
+      ? rotateStem([`Your move now threatens mate with ${o.carry.san}.`, `Your move sets up ${o.carry.san}, and that is mate.`], key)
+      : rotateStem(['Your move now threatens mate in one.', 'Your move sets up a mate in one.'], key);
+  }
+  const won = o.won ? `their ${THREAT_PIECE[o.won.piece]} on ${o.won.square}` : 'material';
+  return names
+    ? rotateStem([`Your move now threatens ${o.carry.san}, winning ${won}.`, `Your move sets up ${o.carry.san}, and that wins ${won}.`], key)
+    : rotateStem([`Your move now threatens to win ${won}.`, `Your move sets up a win of ${won}.`], key);
 }
