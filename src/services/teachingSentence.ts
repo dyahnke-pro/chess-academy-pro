@@ -2307,6 +2307,14 @@ export function ownThreatWords(
       : rotateStem(['Your move now threatens mate in one.', 'Your move sets up a mate in one.'], key);
   }
   const won = o.won ? `their ${THREAT_PIECE[o.won.piece]} on ${o.won.square}` : 'material';
+  // The carrying move takes the piece it wins: the capture is said once, in
+  // piece words — "Nxf2, winning their queen on f2" says it twice (SAY A
+  // CAPTURE ONCE, `captureSaidOnce.gate`).
+  if (o.won && o.carry.san.includes('x') && o.carry.san.replace(/[+#]$/, '').replace(/=[QRBN]$/, '').endsWith(o.won.square)) {
+    return names
+      ? rotateStem([`Your move now threatens ${o.carry.san}, and ${won} falls.`, `Your move sets up ${o.carry.san}, and ${won} is lost.`], key)
+      : rotateStem([`Your move now threatens to take ${won}.`, `Your move sets up a capture of ${won}.`], key);
+  }
   return names
     ? rotateStem([`Your move now threatens ${o.carry.san}, winning ${won}.`, `Your move sets up ${o.carry.san}, and that wins ${won}.`], key)
     : rotateStem([`Your move now threatens to win ${won}.`, `Your move sets up a win of ${won}.`], key);
