@@ -255,7 +255,7 @@ function board(fen: string): Chess | null {
 }
 
 /** A line's value for `side`, cp (a mate is ±100 000). */
-function pov(l: ReadLine, side: Color): number {
+export function pov(l: ReadLine, side: Color): number {
   const v = l.mate !== null ? Math.sign(l.mate) * 100000 : l.evaluation;
   return side === 'w' ? v : -v;
 }

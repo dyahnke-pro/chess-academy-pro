@@ -15,7 +15,9 @@
 import type { MisconceptionTagId } from '../../data/misconceptionTags';
 import { holdState, type HeatState, type HoldRecord } from '../../services/holdRate';
 import { MOTIF_LEVELS, levelTags, motifsAt, openLevels, tagsOfMotif, type MotifLevel } from '../../data/tacticMotifs';
-import { PREGAME_LINE, openSeatTags, type FocusId, type FocusSeat } from './focusCard';
+import { openSeatTags, type FocusId, type FocusSeat } from './focusCard';
+import { planPhases, pregameLine, type PhasePlan } from './focusRotation';
+import type { MissionPhase } from '../../missions/missionCard';
 import { rungFrom, SEED_RUNG, type RungGame, type TacticsRung } from './focusRung';
 import type { OwedPattern } from './focusPlant';
 
@@ -32,6 +34,9 @@ export interface FocusSetupInput {
    *  recent miss first, each with its seat (its row's `carry`); empty when
    *  none. */
   carry: readonly OwedPattern[];
+  /** The skill each phase taught in the last focus game (its row's
+   *  `phases`) — the rotation never repeats it; empty with none. */
+  lastPicks: Partial<Record<MissionPhase, MisconceptionTagId>>;
 }
 
 export interface FocusSetup {
@@ -52,7 +57,10 @@ export interface FocusSetup {
   /** The board ply (1-based, the runner's count) from which the coach makes
    *  sure your first chance lands. */
   targetPly: number;
-  /** The one line said before move 1. */
+  /** ONE FOCUS PER PHASE (`focusRotation`): the skill each phase teaches
+   *  out loud this game, rotated through the record's red and grey skills. */
+  phases: PhasePlan;
+  /** The one line said before move 1 — it names the game's foci. */
   line: string;
   /** The longest tempo run before this game — the recap's "new best" bar. */
   tempoBest: number;
@@ -106,6 +114,7 @@ export function setUpFocusGame(input: FocusSetupInput): FocusSetup {
     exploit: holdState(pooledHold(openSeatTags('tactics', 'exploit', levels), input.holds)),
   };
   const r = rungFrom(input.games, SEED_RUNG[seatStates.exploit]);
+  const phases = planPhases(input.holds, levels, input.lastPicks);
   const span = TARGET_LAST_PLY - TARGET_FIRST_PLY + 1;
   const targetPly = TARGET_FIRST_PLY + Math.min(span - 1, Math.floor(Math.max(0, input.rand()) * span));
   return {
@@ -116,7 +125,8 @@ export function setUpFocusGame(input: FocusSetupInput): FocusSetup {
     seatStates,
     levels: MOTIF_LEVELS.filter((l) => levels.has(l)),
     targetPly,
-    line: PREGAME_LINE,
+    phases,
+    line: pregameLine(phases),
     tempoBest: input.tempoBest,
     carry: [...input.carry],
     tagStates: Object.fromEntries([...input.holds].map(([tag, h]) => [tag, holdState(h)])) as Partial<Record<MisconceptionTagId, HeatState>>,

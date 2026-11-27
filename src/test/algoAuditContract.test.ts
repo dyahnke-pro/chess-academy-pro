@@ -54,6 +54,9 @@ type AlgoEmissionKind =
   | 'learn-focus-question'
   | 'focus-plant'
   | 'castle-watch'
+  | 'learn-focus-skill'
+  | 'focus-trade'
+  | 'focus-attack-plant'
   | 'taken-back-puzzle'
   | 'club-replies-ordered';
 
@@ -92,6 +95,21 @@ const CONTRACTS: Record<AlgoEmissionKind, Contract> = {
     script: 'scripts/audit-learn-focus-prod.mjs',
     contractMarker: 'F14 the castling watch blames the king only on the read',
     emittedBy: 'src/coach/focus/useFocusRunner.ts (the runner\'s castle-row effect: castlingWatch.castleLookAhead on the board\'s read (a hold is an ahead-quiet row), or castleProbe → the page\'s what-if read → castleVerdict)',
+  },
+  'learn-focus-skill': {
+    script: 'scripts/audit-learn-focus-prod.mjs',
+    contractMarker: 'F25 one focus per phase, scored both ways, only the pick spoke',
+    emittedBy: 'src/coach/focus/useFocusRunner.ts (the runner\'s record-skill effect: openingJudge / kingAttackJudge / endgameTechniqueJudge on the phase the ONE detector says, the pick from focusRotation)',
+  },
+  'focus-trade': {
+    script: 'scripts/audit-learn-focus-prod.mjs',
+    contractMarker: 'F26 the coach trades in the ending only while the student leads',
+    emittedBy: 'src/services/coachGameEngine.ts (applyMoveScorers, the focusTrades scorer inside the coach\'s window)',
+  },
+  'focus-attack-plant': {
+    script: 'scripts/audit-learn-focus-prod.mjs',
+    contractMarker: 'F27 the attack plant only in an attack middlegame, a real slip, once',
+    emittedBy: 'src/services/coachGameEngine.ts (applyMissionDials, the runner\'s focusAttackAsk → attackPlant.findAttackPlant)',
   },
   'taken-back-puzzle': {
     script: 'scripts/audit-learn-focus-prod.mjs',

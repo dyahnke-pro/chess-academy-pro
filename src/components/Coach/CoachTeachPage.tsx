@@ -8665,7 +8665,10 @@ export function CoachTeachPage({ mode }: {
             // record still needs — red or grey, never faded (green → silent,
             // amber → short) — which the coach sets up with its natural moves.
             const needs = STEER_SKILLS.filter((t) => !provenTagsRef.current?.has(t));
-            return { dials: FOCUS_DIALS, studentColor: playerColorRef.current, plantArmed: false, lineReply: null, pattern: null, phase: null, boss: null, focus: { id: focusId, punish, levels: focusRef.current.levels(), rung: focusRung, plant, needs } };
+            // THE ATTACK PLANT (`attackPlant`): a middlegame whose focus is
+            // the attack on the king — the coach may open its own king once.
+            const attackPlant = !punish && !plant && focusRef.current.attackAsk(plyOfFen(fen) + 2, fen);
+            return { dials: FOCUS_DIALS, studentColor: playerColorRef.current, plantArmed: false, lineReply: null, pattern: null, phase: null, boss: null, focus: { id: focusId, punish, levels: focusRef.current.levels(), rung: focusRung, plant, attackPlant, needs } };
           }
           const own = missionRef.current.dials(plyOfFen(fen));
           const dials = own ? { ...own, strengthOffset: own.strengthOffset + onRampRef.current } : null;

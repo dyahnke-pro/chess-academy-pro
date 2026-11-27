@@ -20,9 +20,11 @@ import { hasActiveWeights, scoreCandidates, weightsForDials, type ScorerWeights,
 // Every scorer module registers itself (WO-CAMPAIGN-MASTER).
 import '../missions/scorers';
 import { posesDefendSeat } from '../missions/scorers/focus';
+import { focusTradesScorer } from '../missions/scorers/focusTrades';
 import { neededSkillAlong } from '../missions/scorers/skillSteer';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { findFocusPlant, type FocusPlantAsk, type FocusPlantPick, type FocusPlantReject } from '../coach/focus/focusPlant';
+import { findAttackPlant, type AttackPlantReject } from '../coach/focus/attackPlant';
 import type { FocusId, FocusSeat } from '../coach/focus/focusCard';
 import type { ReadLine } from '../coach/focus/focusChances';
 import type { TacticsRung } from '../coach/focus/focusRung';
@@ -504,7 +506,11 @@ export interface MissionDialsOpt {
     /** REQUIRED — the runner's plant ask (`focusPlant.plantAsk`): the coach
      *  may play one real slip that leaves the student's side of the focus on
      *  the board (the asked pattern, when there is one), or null. */
-    plant: FocusPlantAsk | null } | null;
+    plant: FocusPlantAsk | null;
+    /** REQUIRED — the runner's attack ask (`focusAttackAsk`): the coach may
+     *  play one real slip that opens its own king to the student's attack
+     *  (`attackPlant`), the middlegame's attack focus. */
+    attackPlant: boolean } | null;
 }
 
 /** How the coach picks its move, and for whom. */
@@ -660,6 +666,23 @@ async function applyMissionDials(
     });
     if (pick) return { move: pick.uci, analysis: { ...FALLBACK_ANALYSIS, bestMove: pick.uci }, source: 'focus-plant', focusPlanted: pick.seat, focusPlantLines: pick.lines };
   }
+  // THE COACH OPENS ITS OWN KING (`attackPlant`): when the runner asks, one
+  // real slip after which the student's best move attacks the king — read by
+  // the same question the student's move is scored by.
+  if (mission.focus?.attackPlant && !mission.focus.plant) {
+    const { pick, scan } = await withSlipReads(fen, (lines, read) => findAttackPlant(fen, lines, read), { pick: null, scan: { 'no-read': 1 } as Partial<Record<AttackPlantReject, number>> });
+    void logAppAudit({
+      kind: 'focus-attack-plant',
+      category: 'subsystem',
+      source: 'coachGameEngine.applyMissionDials',
+      summary: pick
+        ? `${mission.focus.id}: planted ${pick.uci} (−${pick.dropCp}cp) — the attack ${pick.attackUci} (instead of ${chosen.move || 'none'})`
+        : `${mission.focus.id}: no attack plant — ${Object.entries(scan).map(([k, n]) => `${k} ${n}`).join(', ') || 'nothing read'}`,
+      fen,
+      details: JSON.stringify({ planted: pick?.uci ?? null, attack: pick?.attackUci ?? null, dropCp: pick?.dropCp ?? null, scan, replaced: chosen.move }),
+    });
+    if (pick) return { move: pick.uci, analysis: { ...FALLBACK_ANALYSIS, bestMove: pick.uci }, source: 'focus-plant', focusPlanted: 'exploit', focusPlantLines: pick.lines };
+  }
   // ALONG THE LINE (§6a): the student is on the slip's winning line and it is
   // the coach's turn in it — the coach answers as the line says (its best
   // defence), so the shot the student found is the shot that lands.
@@ -779,7 +802,7 @@ async function applyMoveScorers(
 ): Promise<AdaptiveMoveResult> {
   // The focus leads; the skill steer (WO-SET-WEAKNESS-01) is the lighter pull
   // toward a positional question the record still needs.
-  const weights: ScorerWeights = { ...weightsForDials(mission.dials), ...(mission.boss?.weights ?? {}), ...(mission.focus ? { focus: 1, ...(mission.focus.needs.length ? { skillSteer: SKILL_STEER_WEIGHT } : {}) } : {}) };
+  const weights: ScorerWeights = { ...weightsForDials(mission.dials), ...(mission.boss?.weights ?? {}), ...(mission.focus ? { focus: 1, focusTrades: 1, ...(mission.focus.needs.length ? { skillSteer: SKILL_STEER_WEIGHT } : {}) } : {}) };
   if (!hasActiveWeights(weights)) return chosen;
   const analysis = await withBudget(stockfishEngine.holdForQuestion(async (engine) => {
     try { stockfishEngine.setMultiPv(DIAL_READ_LINES); } catch { /* not ready → the default lines */ }
@@ -820,6 +843,18 @@ async function applyMoveScorers(
     summary: `${chosen.move || 'none'} → ${pick.uci} score=${pick.score.toFixed(2)} cpLoss=${pick.cpLoss} weights=${JSON.stringify(weights)}`,
     fen,
   });
+  // THE FOCUS'S TRADE PREFERENCE (`focusTrades`): an ending the student
+  // leads by a piece, and the coach chose an equal trade over its own move.
+  if (mission.focus && focusTradesScorer(pick, ctx) > 0) {
+    void logAppAudit({
+      kind: 'focus-trade',
+      category: 'subsystem',
+      source: 'coachGameEngine.applyMoveScorers',
+      summary: `${chosen.move || 'none'} → ${pick.uci}: an equal trade in an ending the student leads (coach ${ctx.coachEvalCp}cp, cpLoss=${pick.cpLoss}, window=${ctx.windowCp})`,
+      details: JSON.stringify({ replaced: chosen.move, played: pick.uci, coachEvalCp: ctx.coachEvalCp, cpLoss: pick.cpLoss, windowCp: ctx.windowCp }),
+      fen,
+    });
+  }
   // THE FOCUS STEER (WO-LEARN-FOCUS-01): the swap set the focus's defend
   // question — recorded so the user's answer to it counts as steered.
   const focusSteer = !!mission.focus && posesDefendSeat(mission.focus.id, fen, pick.uci, coach, new Set(mission.focus.levels));

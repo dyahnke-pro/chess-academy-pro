@@ -107,6 +107,12 @@ function walk(game: MissionGame): Walk {
   return { status: { state: 'pending' }, out: out(), castled };
 }
 
+/** THE MISS, IN FIXED WORDS — one phrase for the card and the Learn focus's
+ *  opening (repetition builds the habit; never rotated). */
+export const DEVELOP_MISS_PHRASE = 'One move per piece — bring out a new one.';
+/** Giving up castling, in fixed words. */
+export const CASTLING_LOST_PHRASE = 'That gave up castling. Keep your king and rooks home until you castle.';
+
 /** The mission's verdict on the game so far. */
 export function checkDevelopAndCastle(game: MissionGame): MissionStatus {
   return walk(game).status;

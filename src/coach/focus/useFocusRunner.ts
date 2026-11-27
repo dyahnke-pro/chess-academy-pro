@@ -16,7 +16,7 @@ import { fileTakenBack } from '../../services/takenBackPuzzles';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import type { Color } from 'chess.js';
 import { logAppAudit } from '../../services/appAuditor';
-import { FOCUS_IDLE, focusOwnsGame, focusPlantAsk, stepFocus, type FocusEffect, type FocusEvent, type FocusResult, type FocusRunState, type PlantedSeat, type SayLine } from './focusRunner';
+import { FOCUS_IDLE, focusAttackAsk, focusOwnsGame, focusPlantAsk, stepFocus, type FocusEffect, type FocusEvent, type FocusResult, type FocusRunState, type PlantedSeat, type SayLine } from './focusRunner';
 import type { FocusPlantAsk } from './focusPlant';
 import type { CastleProbe } from './castlingWatch';
 import type { FocusChance, FocusMove, ReadLine } from './focusChances';
@@ -103,6 +103,9 @@ export interface FocusRunner {
   /** May the coach plant a chance before board `ply`, from board `fen`, and
    *  what pattern (`focusPlant`); null = play its own move. */
   plantAsk: (ply: number, fen: string) => FocusPlantAsk | null;
+  /** May the coach open its own king to the student's attack before board
+   *  `ply` (`attackPlant`, the middlegame's attack focus)? */
+  attackAsk: (ply: number, fen: string) => boolean;
   /** The student's own chances posed on this board (the exploit seat): what the
    *  Learn door holds until the student has moved (`ChanceHold`). */
   chancesToFind: (fen: string) => FocusChance[];
@@ -126,7 +129,7 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
   const writeResult = useCallback((result: FocusResult) => {
     void writeLearnFocusResult({
       gameId: handsRef.current.gameId() ?? `learn-${Date.now()}`, focus: result.focus, rung: result.rung,
-      tally: result.tally, atRung: result.atRung, presented: result.presented, tempoRun: result.tempo.longest, carry: result.carry, at: Date.now(),
+      tally: result.tally, atRung: result.atRung, presented: result.presented, tempoRun: result.tempo.longest, carry: result.carry, phases: result.phases, at: Date.now(),
     });
   }, []);
 
@@ -144,6 +147,17 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
           for (const tag of e.chance.setupTag ? [e.chance.tag, e.chance.setupTag] : [e.chance.tag]) {
             recordFocusAnswer({ tag, outcome: e.outcome, fen: e.fen, san: e.san, prompted: e.prompted, steered: e.steered, takenBack: e.takenBack, gameId: h.gameId(), studentSeat: h.studentSeat() });
           }
+          break;
+        case 'record-skill':
+          recordFocusAnswer({ tag: e.tag, outcome: e.outcome, fen: e.fen, san: e.san, prompted: false, steered: e.steered, takenBack: false, gameId: h.gameId() });
+          void logAppAudit({
+            kind: 'learn-focus-skill',
+            category: 'subsystem',
+            source: 'useFocusRunner',
+            summary: `${e.phase} ${e.tag}: ${e.outcome}${e.steered ? ' (steered)' : ''}${e.spoke ? ' — spoke' : ''}`,
+            details: JSON.stringify({ phase: e.phase, tag: e.tag, outcome: e.outcome, steered: e.steered, spoke: e.spoke, san: e.san }),
+            fen: e.fen,
+          });
           break;
         case 'record-deciding':
           recordDecidingMiss({ fen: e.fen, san: e.san, bestUci: h.bestUciAt(e.fen), gameId: h.gameId(), studentSeat: h.studentSeat() });
@@ -203,7 +217,7 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
       kind: 'learn-focus-chosen',
       category: 'subsystem',
       source: 'useFocusRunner',
-      summary: `${setup.focus} rung ${setup.rung} (${RUNG_TIERS[setup.rung].title}) — ${setup.reason}; window ${setup.window.length} game(s); defend ${setup.seatStates.defend}, exploit ${setup.seatStates.exploit}; levels ${setup.levels.join('+')}; target ply ${setup.targetPly}`,
+      summary: `${setup.focus} rung ${setup.rung} (${RUNG_TIERS[setup.rung].title}) — ${setup.reason}; phases ${setup.phases.opening.skill} / ${setup.phases.middlegame.skill} / ${setup.phases.endgame.skill}; window ${setup.window.length} game(s); defend ${setup.seatStates.defend}, exploit ${setup.seatStates.exploit}; levels ${setup.levels.join('+')}; target ply ${setup.targetPly}`,
       details: JSON.stringify(setup),
     });
     dispatch({ kind: 'start', setup }, { replyIsInline: true });
@@ -235,6 +249,7 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
   const paused = useCallback(() => waiting(stateRef.current), []);
   const rung = useCallback((): TacticsRung | null => stateRef.current.setup?.rung ?? null, []);
   const plantAsk = useCallback((ply: number, fen: string): FocusPlantAsk | null => focusPlantAsk(stateRef.current, ply, fen), []);
+  const attackAsk = useCallback((ply: number, fen: string): boolean => focusAttackAsk(stateRef.current, ply, fen), []);
   /** Every chance posed to the student on this board, both seats — what the
    *  Learn door holds until the student has moved (`chanceHoldOf`, EXPLAIN AT
    *  THE MISS). */
@@ -243,6 +258,6 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
     return b && samePosition(b.fen, fen) ? [...b.chances] : [];
   }, []);
 
-  return useMemo(() => ({ view, setUp, start, stop, board, read, moved, castleRead, tryAgain, playOn, showMe, gameOver, ownsGame, focusId, levels, paused, rung, plantAsk, chancesToFind }),
-    [view, setUp, start, stop, board, read, moved, castleRead, tryAgain, playOn, showMe, gameOver, ownsGame, focusId, levels, paused, rung, plantAsk, chancesToFind]);
+  return useMemo(() => ({ view, setUp, start, stop, board, read, moved, castleRead, tryAgain, playOn, showMe, gameOver, ownsGame, focusId, levels, paused, rung, plantAsk, attackAsk, chancesToFind }),
+    [view, setUp, start, stop, board, read, moved, castleRead, tryAgain, playOn, showMe, gameOver, ownsGame, focusId, levels, paused, rung, plantAsk, attackAsk, chancesToFind]);
 }

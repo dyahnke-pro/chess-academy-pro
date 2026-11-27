@@ -20,10 +20,13 @@ and left for Review. The coach plays to the user's level, punishes a miss
 that stands, steers toward its own tactics, and leaves at least one chance on
 the user's side every game.
 
-Before every game, one fixed line (David's words): "Today's focus is tactics,
-finding and preventing them! You will have at least one chance this game for a
-winning tactic, but your opponent will also be trying to set up its own
-tactics. Stay vigilant!"
+ONE FOCUS PER PHASE (Coach Build Board "4. Focuses", David 2026-11-24): the
+tactics focus runs every game, both seats, and each phase also teaches ONE
+skill of its own — §5a. Before every game, one line names the game's foci and
+rotates with them (`focusRotation.pregameLine`): "Today's focus: in the
+opening, castling early; in the middlegame, forks; in the endgame, an active
+king. You will have at least one chance this game for a winning tactic, but
+your opponent will also be trying to set up its own tactics. Stay vigilant!"
 
 UNTOUCHED: opening walkthroughs ("teach me X"), chat Q&A (asked), special
 sessions (Learn how to think, matchups, plans, player games), a named opening
@@ -164,6 +167,43 @@ as a REQUIRED answer: the chances (`chancesAt`), the coach's steering
 (`posesDefendSeat`). A locked motif is still recorded and Review still names
 it; it is not asked and not steered toward.
 
+## 5a. One focus per phase, rotated by the record (`focusRotation.ts`)
+
+| phase | focus | skills (the record tags its judge writes) | judge |
+|---|---|---|---|
+| opening | develop and castle | `neglected-development`, `king-stuck-center` | the Campaign card's own rule, one board (`breaksDevelopRule`, `openingJudge`) |
+| middlegame | tactics, or attack the king | every motif's your-side row except the free piece; `missed-king-attack` | the chance reader; `kingAttackJudge` (the one `kingAttack` reader) |
+| endgame | endgame technique | `passed-pawn-neglected`, `passive-rook`, `passive-king-endgame` | `endgameTechniqueJudge` |
+
+- **THE ROTATION:** each phase's skills, worst first by the one hold rate
+  (red by its hold, then grey, then amber, then green); the pool is the red
+  and grey ones (every skill when none is); the pick is the one after the last
+  game's pick, round the list — never the same twice running. The picks ride
+  the game's `learnFocusResults` row (`phases`, only phases the game reached).
+- **THE PHASE** is the ONE detector's (`detectPhaseTransition`) on the
+  student's moves.
+- **SCORED BOTH WAYS:** every move in a phase is judged by that phase's judge
+  and every verdict reaches the lane-evidence door (`record-skill`, audit row
+  `learn-focus-skill`). The attack and the endgame read the engine's lines on
+  the board (`moveKindJudge`): POSED when the best move is the kind and beats
+  every other kind by 75 cp, HELD with a move of the kind within 50 cp,
+  MISSED with another kind costing 100 cp; anything between is no verdict.
+  The opening misses on the card's rule and holds once a game (castled; the
+  last minor out with no repeat).
+- **ONE FOCUS SPEAKS A PHASE:** only the pick's miss is said, in fixed words
+  (the habit, never the move), never on a green skill, never on top of a line
+  already said about the move. Every other skill is recorded silently.
+- **THE ATTACK PLANT** (`attackPlant.ts`): in a middlegame whose focus is the
+  attack, until an attack has been on the board, the coach may play one of its
+  own slips (≥ `SLIP_DROP_CP`, hanging nothing) after which the student's best
+  move attacks the king (`posesKind`, the question the move is scored by),
+  spaced like every plant and never on a move the tactics plant asks for.
+  `focus-attack-plant` row. A find there counts half.
+- **THE ENDGAME'S TRADES** (`scorers/focusTrades.ts`): once the board is an
+  ending and the student leads by a piece (`TRADE_LEAD_CP`), the coach likes an
+  equal trade among the moves of its own window — same strength.
+  `focus-trade` row.
+
 ## 6. The rung — the record decides, never the rating (`focusRung.ts`, `focusSetup.ts`)
 
 One scale, `TacticsRung` 0–3, read by the chance reader, the plant and the
@@ -215,7 +255,14 @@ the Campaign's slip reads in `coachGameEngine.tryFocusPlant`): one of its
 engine candidates costing it at least `SLIP_DROP_CP`, after which the lesson's
 OWN chance reader (`chancesAt`) poses your side at the asked rung — with
 nothing EASIER beside it (a free piece next to the intended shot would be
-taken instead, and the harder chance never asked).
+taken instead, and the harder chance never asked). 🔒 **IT IS A REAL MOTIF,
+NEVER JUST A FREE PIECE** (David 2026-11-24): a shot the one classifier names
+or a forced mate (`isMotifChance`); at rung 0 a mate in one or a two-move shot
+(`motifDifficulties`). A free piece on the board is still a chance and still
+scored; it never meets the guarantee (`presents`) and is never the plant —
+except a carried free-piece miss, which is that pattern. The guarantee asks
+the middlegame's rotated motif when no missed pattern is owed. A slip whose own
+line mates ranks first (`shownRank`).
 
 | rule | where |
 |---|---|
@@ -478,7 +525,7 @@ lines — "That lost the tempo." / "You have the tempo back! Now keep it!" —
 the clean version fired about once every four games on his record (David: "I
 don't want in the opening tempo statements every move" → "I think there's a
 better way … at the start of an attack"), so it was rebuilt as the run.
-Next: endgame technique, then piece activity (the most proof owed). Still owed
+Endgame technique is built (§5a). Next: piece activity (the most proof owed). Still owed
 from the old list: pawn structure (needs a computer that proves a hold),
 the fight (waits on David's ~20 graded positions), opening theory.
 
@@ -498,4 +545,5 @@ means for every lesson built from here:
 - the lines-per-game target becomes lines per phase; the announce, the end
   line and the record row are per lesson, and silence holds between phases;
 - each lesson keeps its own rung.
-Not built yet — the tactics focus is made solid first.
+BUILT 2026-11-27 as §5a: one focus per phase in one game, the phase from the
+ONE detector, each phase's skill rotated by the record.

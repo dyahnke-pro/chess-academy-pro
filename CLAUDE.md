@@ -201,10 +201,20 @@ chance for the user to find the focus."
   — a free piece, a shot (a forcing line that wins), a forced mate; their
   side — your piece to save, their fork / pin / skewer / discovery, their mate
   threat, and the piece your move left loose. The record's rows never changed;
-  only the lesson grouping did. Before every game, one fixed line: "Today's
-  focus is tactics, finding and preventing them! You will have at least one
-  chance this game for a winning tactic, but your opponent will also be trying
-  to set up its own tactics. Stay vigilant!"
+  only the lesson grouping did.
+- 🔒 **AND ONE FOCUS PER PHASE, ROTATED BY THE RECORD** (`focusRotation.ts`,
+  David 2026-11-24, docs/LEARN-FOCUS.md §5a): develop and castle in the
+  opening (the Campaign card's rule, `openingJudge`), tactics or attack the
+  king in the middlegame (`kingAttackJudge`), endgame technique in the endgame
+  (`endgameTechniqueJudge`); the phase is the ONE detector's. Each phase
+  rotates through the record's red and grey skills, worst first by the hold
+  rate, never the last game's pick (`learnFocusResults.phases`). Every move is
+  scored both ways (`record-skill`); only the pick's miss is said, in fixed
+  words. The pre-game line names the game's foci and rotates with them,
+  closing on the tactics promise. In a middlegame whose focus is the attack,
+  the coach may open its own king once (`attackPlant`); in an ending the
+  student leads by a piece, it prefers equal trades inside its own window
+  (`focusTrades`, same strength).
 - 🔒 **LEARN SPEAKS ONLY AFTER A MISTAKE, AS ONE LESSON** (WO-LEARN-MISTAKES-ONLY,
   David 2026-11-23/24; spec `docs/plans/2026-11-23-learn-mistakes-only.md`). 🔴
   This REPLACES "THE QUESTION BEFORE THE MOVE FOLLOWS THE RECORD", DELETED (the
@@ -252,6 +262,8 @@ chance for the user to find the focus."
   each game draws a target ply between move 6 and move 12; from it, until a
   chance on your side at your rung has been on the board, the coach plays one
   of its own real slips that leaves one — never stopped by a decided game.
+  The chance is a REAL MOTIF (a named shot or a forced mate), never just a free
+  piece (David 2026-11-24, `isMotifChance`).
   From move 20 it looks one rung easier, and rung 3 — measured: a 3–4 move
   shot was plantable before move 20 in 11 of 21 of David's games — asks at
   rung 2 five moves past its target. Extras by rung (3 / 2 / 1 / 1, one a
@@ -259,7 +271,7 @@ chance for the user to find the focus."
   spaced 8 plies; a miss brings the same pattern back. 🔒 **KEEP MISSING →
   MORE, EASIER CHANCES** (David 2026-10-23): while your chances are missed in
   a row at the first try, the next comes two moves after the last plant, one
-  rung easier per miss (down to a free piece), past the game's extra budget,
+  rung easier per miss (down to the plainest motif), past the game's extra budget,
   until a first-try find ends the streak (`PlantState.missStreak`,
   `MISS_SPACING_PLIES`). 🔒 A MISS CARRIES TO THE NEXT GAME (#158, David
   2026-11-09: "This is what build habits and pattern recognition!" → their

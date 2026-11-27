@@ -39,7 +39,7 @@
  */
 import { Chess, type Color } from 'chess.js';
 import type { MisconceptionTagId } from '../../data/misconceptionTags';
-import type { MotifLevel } from '../../data/tacticMotifs';
+import { motifOfTag, type MotifLevel } from '../../data/tacticMotifs';
 import { DECIDED_EVAL_CP } from '../../services/engineConstants';
 import { isEndgameByMaterial } from '../../services/gamePhaseService';
 import { completesExchange, midExchange, PLANT_VERIFY_MAX, slipCandidates, type CoachLine, type SlipCandidate, type SlipRead } from '../../missions/earnedSlip';
@@ -54,7 +54,7 @@ export const PLANT_SPACING_PLIES = 8;
  *  present more frequent and easier chances if user keeps missing"): while
  *  your chances are being missed in a row, the next comes two moves after the
  *  last plant instead of four, one rung easier per miss in the streak (down
- *  to the plainest, a free piece), and the game's extra budget and the
+ *  to the plainest motif), and the game's extra budget and the
  *  one-a-phase floors lift until you find one. A first-try find ends it. */
 export const MISS_SPACING_PLIES = 4;
 /** From this board ply (move 20) with nothing presented at your rung, the
@@ -83,9 +83,44 @@ export function wantedDifficulty(rung: TacticsRung, ply: number, targetPly: numb
   return ply >= PLANT_EASIER_FROM_PLY && rung > 0 ? ((rung - 1) as ChanceDifficulty) : rung;
 }
 
-/** Whether this chance presents the focus on your side at your rung. */
+/** A REAL MOTIF (Coach Build Board "4. Focuses", David 2026-11-24: "a
+ *  tactics practice plant every game, and it's a real motif, never just a free
+ *  piece"): on your side, a shot the ONE classifier names — a fork, a pin, a
+ *  skewer, a discovery… — or a forced mate. A free piece and a shot the
+ *  classifier cannot name are chances, never the game's practice. */
+export function isMotifChance(c: FocusChance): boolean {
+  if (c.seat !== 'exploit') return false;
+  if (c.kind === 'mate-for-you') return true;
+  if (c.kind !== 'shot') return false;
+  const m = motifOfTag(c.tag);
+  return m !== null && m !== 'free-piece';
+}
+
+/** The difficulties a planted motif may have for an ask at `d`: the rung's
+ *  own, and at rung 0 also a two-move shot — a beginner's motif is a mate in
+ *  one or a fork that takes next move (no shot is easier than 1). */
+export function motifDifficulties(d: ChanceDifficulty): readonly ChanceDifficulty[] {
+  return d === 0 ? [0, 1] : [d];
+}
+
+/** Whether this chance presents the focus on your side at your rung: a real
+ *  motif, never a free piece. */
 export function presents(chance: FocusChance, rung: TacticsRung, ply: number, targetPly: number): boolean {
-  return chance.seat === 'exploit' && chance.difficulty >= wantedDifficulty(rung, ply, targetPly);
+  return isMotifChance(chance) && chance.difficulty >= wantedDifficulty(rung, ply, targetPly);
+}
+
+/** Whether an ask must plant a real motif: every plant on your side, except
+ *  a carried free-piece miss (the pattern a past game left owed is that
+ *  pattern). */
+function wantsMotif(ask: FocusPlantAsk): boolean {
+  return !(ask.carried && ask.tag !== null && motifOfTag(ask.tag) === 'free-piece');
+}
+
+/** The chances on your side that fit the ask's rung, plainest first. */
+function atAskedStep(yours: readonly FocusChance[], ask: FocusPlantAsk): FocusChance[] {
+  const motif = wantsMotif(ask);
+  const ds = motif ? motifDifficulties(ask.difficulty) : [ask.difficulty];
+  return yours.filter((c) => ds.includes(c.difficulty) && (!motif || isMotifChance(c))).sort((a, b) => a.difficulty - b.difficulty);
 }
 
 /** A PATTERN OWED TO A LATER GAME (#158): a tactic missed at its first try,
@@ -163,7 +198,11 @@ export function carryHeads(owed: readonly OwedPattern[]): OwedPattern[] {
  *  your own move. */
 export function plantAsk(
   plant: PlantState,
-  seat: { rung: TacticsRung; posed: number; targetPly: number },
+  seat: { rung: TacticsRung; posed: number; targetPly: number;
+    /** The motif the middlegame teaches this game (`focusRotation`), asked by
+     *  the guarantee when no missed pattern is owed; absent off the tactics
+     *  focus. */
+    pick?: MisconceptionTagId | null },
   ply: number,
   fen: string,
 ): FocusPlantAsk | null {
@@ -175,7 +214,7 @@ export function plantAsk(
     // pattern you just missed, else the one of yours a past game left owed
     // (#158).
     const yours = plant.carry.find((c) => c.seat === 'exploit')?.tag ?? null;
-    return ply >= seat.targetPly ? { tag: plant.need ?? yours, seat: 'exploit', difficulty, extra: false, missStreak: plant.missStreak, carried: false } : null;
+    return ply >= seat.targetPly ? { tag: plant.need ?? yours ?? seat.pick ?? null, seat: 'exploit', difficulty, extra: false, missStreak: plant.missStreak, carried: false } : null;
   }
   // THE MISSES THAT CAME BACK (#158): the guarantee was met, so each carried
   // pattern gets its own plant — every move until it is on the board, budget
@@ -278,9 +317,9 @@ export async function findFocusPlant(
     if (!lines) { bump('no-read'); continue; }
     const yours = yourChancesAt({ fen: slip.fenAfter, prevFen: null, beforeTheirMove: fen, student: studentOf(slip.fenAfter), lines }, open);
     if (yours.length === 0) { bump('no-chance'); continue; }
-    const atStep = yours.filter((c) => c.difficulty === ask.difficulty);
+    const atStep = atAskedStep(yours, ask);
     if (atStep.length === 0) { bump('wrong-difficulty'); continue; }
-    if (yours.some((c) => c.difficulty < ask.difficulty)) { bump('easier-too'); continue; }
+    if (yours.some((c) => c.difficulty < atStep[0].difficulty)) { bump('easier-too'); continue; }
     const fit = ask.tag ? atStep.find((c) => c.tag === ask.tag || c.setupTag === ask.tag) : atStep[0];
     if (!fit) {
       bump('wrong-pattern');
@@ -336,14 +375,31 @@ export function shownRank(fen: string, slip: SlipCandidate, line: CoachLine | un
   if (!line || line.pv.length < 2 || line.pv[0] !== slip.uci) return 2;
   const student = studentOf(slip.fenAfter);
   const moves = line.pv.slice(1);
+  // A LINE THAT MATES is the plainest motif there is (Fool's mate: …g4 lets
+  // …Qh4#): its first move takes nothing, so the material read alone ranked
+  // it last and its slip was never read.
+  const mateIn = studentMateIn(slip.fenAfter, moves);
   const gain = pvGain(slip.fenAfter, moves, student, SHOT_PLIES);
-  if (gain === null ? !capturesFirst(slip.fenAfter, moves[0]) : gain < 1) return 2;
+  if (mateIn === null && (gain === null ? !capturesFirst(slip.fenAfter, moves[0]) : gain < 1)) return 2;
   const coachWhite = fen.split(' ')[1] === 'w';
-  const shown: ReadLine = { moves, evaluation: line.coachCp * (coachWhite ? 1 : -1), mate: null };
+  const shown: ReadLine = { moves, evaluation: line.coachCp * (coachWhite ? 1 : -1), mate: mateIn === null ? null : (student === 'w' ? mateIn : -mateIn) };
   const yours = yourChancesAt({ fen: slip.fenAfter, prevFen: null, beforeTheirMove: fen, student, lines: [shown] }, open);
   if (yours.length === 0) return 2;
-  const fits = (c: FocusChance): boolean => c.difficulty === ask.difficulty && (!ask.tag || c.tag === ask.tag || c.setupTag === ask.tag);
-  return yours.some(fits) && !yours.some((c) => c.difficulty < ask.difficulty) ? 0 : 1;
+  const atStep = atAskedStep(yours, ask);
+  const fits = (c: FocusChance): boolean => !ask.tag || c.tag === ask.tag || c.setupTag === ask.tag;
+  return atStep.some(fits) && !yours.some((c) => c.difficulty < atStep[0].difficulty) ? 0 : 1;
+}
+
+/** The student's moves until the line mates (the student to move first on
+ *  `fen`), or null when it does not mate. */
+function studentMateIn(fen: string, uci: readonly string[]): number | null {
+  let c: Chess;
+  try { c = new Chess(fen); } catch { return null; }
+  for (let i = 0; i < uci.length; i += 1) {
+    try { c.move({ from: uci[i].slice(0, 2), to: uci[i].slice(2, 4), promotion: uci[i][4] }); } catch { return null; }
+    if (c.isCheckmate()) return i % 2 === 0 ? i / 2 + 1 : null;
+  }
+  return null;
 }
 
 /** The line's first move takes something (a one-move line has no `pvGain`). */

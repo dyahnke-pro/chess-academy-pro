@@ -91,7 +91,7 @@ export const THINKING_STEPS: Record<ThinkingStep, ThinkingStepDef> = {
   },
   candidates: {
     order: 8, name: 'Find the candidates', shortName: 'candidates', tier: 4, layer: 'plan',
-    tags: ['no-plan', 'bad-trade', 'overvalued-attack'],
+    tags: ['no-plan', 'bad-trade', 'overvalued-attack', 'missed-king-attack'],
   },
   calculate: {
     order: 9, name: 'Calculate to the end', shortName: 'calculate', tier: 3, layer: 'safety',
@@ -187,6 +187,7 @@ export const TAG_STEP: Record<MisconceptionTagId, ThinkingStep | null> = {
   // A quiet set-up: the tactic was a move or two past the first one.
   'missed-set-up': 'calculate',
   'overvalued-attack': 'calculate',
+  'missed-king-attack': 'candidates',
   'bad-trade-material': 'calculate',
   'bad-trade': 'candidates',
   // "no plan" leads through CANDIDATES (not assess) because its habit is "you

@@ -90,9 +90,6 @@ export const FOCUS_DIALS: CoachDials = {
 /** How sharply a focus chance posed its question (clears the green bar). */
 export const FOCUS_POSED_IMPORTANCE = 90;
 
-/** Said before EVERY focus game (David 2026-10-22, his words). */
-export const PREGAME_LINE = "Today's focus is tactics, finding and preventing them! You will have at least one chance this game for a winning tactic, but your opponent will also be trying to set up its own tactics. Stay vigilant!";
-
 /** The one exception outside the focus, once a game (rungs 0–1). */
 export const DECIDING_LINE = 'That one decides the game. Want it back?';
 

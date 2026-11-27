@@ -6,7 +6,8 @@ import { FOCUS_IDLE, focusPlantAsk, stepFocus, type FocusEffect, type FocusEvent
 import type { FocusSetup } from './focusSetup';
 import type { OwedPattern } from './focusPlant';
 import type { FocusMove } from './focusChances';
-import { DECIDING_LINE, PREGAME_LINE } from './focusCard';
+import { DECIDING_LINE } from './focusCard';
+import { planPhases, pregameLine } from './focusRotation';
 import type { RungGame, TacticsRung } from './focusRung';
 
 // Scenario tests: the runner is sequence-dependent, so each test walks a game.
@@ -21,9 +22,11 @@ const move = (fen: string, san: string, cpLoss: number | null = null): FocusMove
  *  tests were written against). */
 const ALL_TAGS = MISCONCEPTION_TAGS.map((t) => t.id);
 const statesAll = (st: HeatState): FocusSetup['tagStates'] => Object.fromEntries(ALL_TAGS.map((t) => [t, st])) as FocusSetup['tagStates'];
+const PHASES0 = planPhases(new Map(), new Set(['beginner']), {});
+const PREGAME_LINE = pregameLine(PHASES0);
 const setup = (over: Partial<FocusSetup> = {}): FocusSetup => ({
   focus: 'tactics', rung: 0, reason: 'seed', window: [],
-  seatStates: { defend: 'red', exploit: 'red' }, levels: ['beginner'], targetPly: 12, line: PREGAME_LINE, tempoBest: 0, carry: [],
+  seatStates: { defend: 'red', exploit: 'red' }, levels: ['beginner'], targetPly: 12, phases: PHASES0, line: PREGAME_LINE, tempoBest: 0, carry: [],
   tagStates: statesAll('short'), ...over,
 });
 const at = (rung: TacticsRung, over: Partial<FocusSetup> = {}): FocusSetup => setup({ rung, ...over });
@@ -38,6 +41,11 @@ function run(events: FocusEvent[], start: FocusRunState = FOCUS_IDLE): { state: 
 const kinds = (es: FocusEffect[]): string[] => es.filter((e) => e.kind !== 'reward' && e.kind !== 'question').map((e) => (e.kind === 'say' ? `say:${e.line}` : e.kind));
 const questionRow = (es: FocusEffect[]) => es.find((e): e is Extract<FocusEffect, { kind: 'question' }> => e.kind === 'question')?.row;
 const board = (fen: string, ply: number, steered = false, planted: PlantedSeat = null, prevFen: string | null = null): FocusEvent => ({ kind: 'board', fen, prevFen, beforeTheirMove: null, ply, student: fen.split(' ')[1] === 'w' ? 'w' : 'b', lines: null, steered, planted, plantLines: null });
+/** FOOL'S MATE, a real game (1.f3 e5 2.g4): Black to move, …Qh4# — a real
+ *  motif (a mate in one), rung 0. */
+const FOOL_MATE = 'rnbqkbnr/pppp1ppp/8/4p3/6P1/5P2/PPPPP2P/RNBQKBNR b KQkq - 0 2';
+const MATE_LINES = [{ moves: ['d8h4'], evaluation: -30000, mate: -1 }, { moves: ['g8f6'], evaluation: 0, mate: null }];
+const foolBoard = (ply: number, planted: PlantedSeat = null): FocusEvent => ({ kind: 'board', fen: FOOL_MATE, prevFen: null, beforeTheirMove: null, ply, student: 'b', lines: MATE_LINES, steered: false, planted, plantLines: null });
 const turnRow = (es: FocusEffect[]) => es.find((e): e is Extract<FocusEffect, { kind: 'turn' }> => e.kind === 'turn')?.row;
 const rewards = (es: FocusEffect[]) => es.filter((e): e is Extract<FocusEffect, { kind: 'reward' }> => e.kind === 'reward');
 
@@ -524,12 +532,16 @@ describe('planted chances', () => {
     const { effects } = run([...opened(), board(KNIGHT_HIT, 13, false, 'defend'), { kind: 'moved', move: move(KNIGHT_HIT, 'Nc3') }]);
     expect(turnRow(effects[4])).toMatchObject({ seat: 'defend', planted: true, steered: true });
   });
-  it('a miss on your side asks the next plant for the same pattern — sooner and easier while the misses run', () => {
+  it('a missed free piece runs the streak — sooner and easier — but the next plant is a real motif, never that free piece', () => {
     const { state } = run([...opened(at(2)), board(LOOSE_KNIGHT, 33, false, 'exploit'), { kind: 'moved', move: move(LOOSE_KNIGHT, 'Kf1') }]);
-    expect(state.plant.need).toBe('missed-your-free-piece');
+    expect(state.plant.need).toBeNull();
     expect(state.plant.missStreak).toBe(1);
     expect(focusPlantAsk(state, 36, LOOSE_KNIGHT), 'two moves apart').toBeNull();
-    expect(focusPlantAsk(state, 37, LOOSE_KNIGHT), 'the guarantee is still owed: asked one rung easier').toEqual({ tag: 'missed-your-free-piece', seat: 'exploit', difficulty: 1, extra: false, missStreak: 1, carried: false });
+    expect(focusPlantAsk(state, 37, LOOSE_KNIGHT), 'the guarantee is still owed: asked one rung easier, the middlegame\'s motif').toEqual({ tag: PHASES0.middlegame.skill, seat: 'exploit', difficulty: 1, extra: false, missStreak: 1, carried: false });
+  });
+  it('a missed mate is the pattern the next plant poses', () => {
+    const { state } = run([{ kind: 'start', setup: at(2) }, foolBoard(4), { kind: 'moved', move: move(FOOL_MATE, 'Nf6', 3000) }]);
+    expect(state.plant.need).toBe('missed-your-mate');
   });
   it('a find at the first try ends the streak; a find after the clue does not', () => {
     const missed = run([...opened(at(2)), board(LOOSE_KNIGHT, 33, false, 'exploit'), { kind: 'moved', move: move(LOOSE_KNIGHT, 'Kf1') }]).state;
@@ -573,16 +585,16 @@ describe('planted chances', () => {
       const st = run([{ kind: 'start', setup: at(2, { targetPly: 16, carry: [Y('missed-your-fork'), Y('missed-your-free-piece')] }) }]).state;
       expect(st.plant).toMatchObject({ carry: [Y('missed-your-fork')], owed: [Y('missed-your-fork'), Y('missed-your-free-piece')], need: null });
       expect(focusPlantAsk(st, 16, LOOSE_KNIGHT)).toEqual({ tag: 'missed-your-fork', seat: 'exploit', difficulty: 2, extra: false, missStreak: 0, carried: false });
-      expect(focusPlantAsk(run([{ kind: 'start', setup: at(2, { targetPly: 16 }) }]).state, 16, LOOSE_KNIGHT)?.tag, 'twin: nothing owed, any pattern').toBeNull();
+      expect(focusPlantAsk(run([{ kind: 'start', setup: at(2, { targetPly: 16 }) }]).state, 16, LOOSE_KNIGHT)?.tag, 'twin: nothing owed, the middlegame\'s motif').toBe(PHASES0.middlegame.skill);
     });
     it('the guarantee met by another pattern, the carried one gets its own plant — and once it is on the board, it is done', () => {
-      const met = run([{ kind: 'start', setup: at(0, { carry: [Y('missed-your-fork')] }) }, board(LOOSE_KNIGHT, 9)]).state;
-      expect(met.plant.presented, 'a free piece presented the focus').not.toBeNull();
-      expect(met.plant.carry, 'a free piece is not the fork').toEqual([Y('missed-your-fork')]);
+      const met = run([{ kind: 'start', setup: at(0, { carry: [Y('missed-your-fork')] }) }, foolBoard(9)]).state;
+      expect(met.plant.presented, 'a mate presented the focus').not.toBeNull();
+      expect(met.plant.carry, 'a mate is not the fork').toEqual([Y('missed-your-fork')]);
       expect(focusPlantAsk(met, 20, LOOSE_KNIGHT)).toMatchObject({ tag: 'missed-your-fork', seat: 'exploit', extra: true, carried: true });
-      const posed = run([{ kind: 'start', setup: at(0, { carry: [Y('missed-your-free-piece')] }) }, board(LOOSE_KNIGHT, 9)]).state;
+      const posed = run([{ kind: 'start', setup: at(0, { carry: [Y('missed-your-mate')] }) }, foolBoard(9)]).state;
       expect(posed.plant.carry, 'the carried pattern came back on the board').toEqual([]);
-      expect(posed.plant.owed, 'and stays owed until it is answered').toEqual([Y('missed-your-free-piece')]);
+      expect(posed.plant.owed, 'and stays owed until it is answered').toEqual([Y('missed-your-mate')]);
     });
 
     // THEIR TACTICS CARRY TOO (David 2026-11-09: "yes"): one of theirs you did
@@ -618,9 +630,9 @@ describe('planted chances', () => {
       it('the next game sets it up against you once the guarantee is met, and it leaves the list once it is on the board', () => {
         const tag = theirTag(missedTheirs()) as MisconceptionTagId;
         const owed: OwedPattern[] = [{ seat: 'defend', tag }, Y('missed-your-fork')];
-        const st = run([{ kind: 'start', setup: at(0, { carry: owed }) }, board(LOOSE_KNIGHT, 9)]).state;
+        const st = run([{ kind: 'start', setup: at(0, { carry: owed }) }, foolBoard(9)]).state;
         expect(st.plant.carry, 'the head of each seat').toEqual([Y('missed-your-fork'), { seat: 'defend', tag }]);
-        expect(st.plant.presented, 'a free piece met the guarantee').not.toBeNull();
+        expect(st.plant.presented, 'a mate met the guarantee').not.toBeNull();
         const asks = [20, 22].map((ply) => focusPlantAsk(st, ply, LOOSE_KNIGHT));
         expect(asks, 'the two carried patterns take the moves in turn').toEqual(expect.arrayContaining([
           expect.objectContaining({ seat: 'exploit', tag: 'missed-your-fork', carried: true }),
@@ -635,15 +647,19 @@ describe('planted chances', () => {
   it('THE GUARANTEE: until a chance at the rung has been on the board, the coach plants from the target ply', () => {
     const fresh = run([{ kind: 'start', setup: at(2, { targetPly: 16 }) }]).state;
     expect(focusPlantAsk(fresh, 15, LOOSE_KNIGHT)).toBeNull();
-    expect(focusPlantAsk(fresh, 16, LOOSE_KNIGHT)).toEqual({ tag: null, seat: 'exploit', difficulty: 2, extra: false, missStreak: 0, carried: false });
-    const lowChance = run([{ kind: 'start', setup: at(2) }, board(LOOSE_KNIGHT, 9)]).state;
-    expect(lowChance.plant.presented, 'a rung-1 piece does not present rung 2').toBeNull();
-    const late = run([{ kind: 'start', setup: at(2) }, board(LOOSE_KNIGHT, 41)]).state;
-    expect(late.plant.presented, 'from move 20 one rung easier counts').toEqual({ ply: 41, difficulty: 1 });
+    expect(focusPlantAsk(fresh, 16, LOOSE_KNIGHT)).toEqual({ tag: PHASES0.middlegame.skill, seat: 'exploit', difficulty: 2, extra: false, missStreak: 0, carried: false });
+    const lowChance = run([{ kind: 'start', setup: at(2) }, foolBoard(9)]).state;
+    expect(lowChance.plant.presented, 'a rung-0 mate does not present rung 2').toBeNull();
+    const mate = run([{ kind: 'start', setup: at(0) }, foolBoard(9)]).state;
+    expect(mate.plant.presented, 'a mate in one presents rung 0').toEqual({ ply: 9, difficulty: 0 });
+    const free = run([{ kind: 'start', setup: at(0) }, board(LOOSE_KNIGHT, 41)]).state;
+    expect(free.plant.presented, 'a free piece never presents: the practice is a real motif').toBeNull();
   });
   it('the result says whether the focus was presented', () => {
     const { effects } = run([...opened(), { kind: 'game-over', at: 100 }]);
-    expect(effects[effects.length - 1].find((e) => e.kind === 'end')).toMatchObject({ result: { rung: 0, presented: { ply: 7, difficulty: 1 } } });
+    expect(effects[effects.length - 1].find((e) => e.kind === 'end'), 'a free piece found presents nothing').toMatchObject({ result: { rung: 0, presented: null } });
+    const mated = run([{ kind: 'start', setup: at(0) }, foolBoard(4), { kind: 'game-over', at: 100 }]);
+    expect(mated.effects[mated.effects.length - 1].find((e) => e.kind === 'end')).toMatchObject({ result: { presented: { ply: 4, difficulty: 0 } } });
   });
   it('never while the board waits on Try again / Play on', () => {
     const held = run([...opened(), board(KNIGHT_HIT, 13), { kind: 'moved', move: move(KNIGHT_HIT, 'Kd2') }]).state;
@@ -814,7 +830,9 @@ describe('the planted board is read with the read that proved the plant', () => 
   it('with no read of its own yet, the board poses the planted chance from the plant\'s read', () => {
     const { state } = run([{ kind: 'start', setup: at(2, { targetPly: 11 }) }, planted(plantRead)]);
     expect(state.board?.chances.some((ch) => ch.key === 'take:c6')).toBe(true);
-    expect(state.plant.presented?.ply).toBe(11);
+    // A knight to take is a chance, never the game's practice: the guarantee
+    // still waits for a real motif.
+    expect(state.plant.presented).toBeNull();
   });
   it('the board\'s own read lands later and cannot take the planted chance away', () => {
     const own = [{ moves: ['b1c3', 'e6d5'], evaluation: 30, mate: null }, { moves: ['e3e4', 'e6d5'], evaluation: 10, mate: null }];

@@ -87,17 +87,40 @@ describe('plantAsk — a chance every game at a varied point, more for beginners
   it('KEEP MISSING while the guarantee is owed: easier, from the target ply', () => {
     expect(plantAsk({ ...NO_PLANTS, missStreak: 1 }, { rung: 2, posed: 0, targetPly: 12 }, 20, MIDDLEGAME)).toEqual({ tag: null, seat: 'exploit', difficulty: 1, extra: false, missStreak: 1, carried: false });
   });
-  it('presents: your side at or above the rung counts; their side never does', () => {
-    const take = { seat: 'exploit', difficulty: 1 } as FocusChance;
-    expect(presents(take, 1, 20, 12)).toBe(true);
-    expect(presents(take, 2, 20, 12)).toBe(false);
-    expect(presents(take, 2, PLANT_EASIER_FROM_PLY, 12), 'the easier rung').toBe(true);
-    expect(presents({ seat: 'defend', difficulty: 3 } as FocusChance, 0, 20, 12)).toBe(false);
+  it('presents: a real motif of yours at or above the rung counts; a free piece and their side never do', () => {
+    const fork = { seat: 'exploit', kind: 'shot', tag: 'missed-your-fork', difficulty: 1 } as FocusChance;
+    expect(presents(fork, 1, 20, 12)).toBe(true);
+    expect(presents(fork, 2, 20, 12)).toBe(false);
+    expect(presents(fork, 2, PLANT_EASIER_FROM_PLY, 12), 'the easier rung').toBe(true);
+    expect(presents({ seat: 'exploit', kind: 'take', tag: 'missed-your-free-piece', difficulty: 1 } as FocusChance, 1, 20, 12), 'a free piece is never the practice').toBe(false);
+    expect(presents({ seat: 'exploit', kind: 'shot', tag: 'missed-tactic', difficulty: 1 } as FocusChance, 1, 20, 12), 'nor a shot nobody can name').toBe(false);
+    expect(presents({ seat: 'defend', kind: 'motif', tag: 'missed-their-fork', difficulty: 3 } as FocusChance, 0, 20, 12)).toBe(false);
   });
 });
 
 const ask = (a: Partial<FocusPlantAsk> = {}): FocusPlantAsk => ({ tag: null, seat: 'exploit', difficulty: 0, extra: false, missStreak: 0, carried: false, ...a });
 const BEGINNER = { levels: ['beginner' as const] };
+
+// FOOL'S MATE, a real game's board (1.f3 e5): White (the coach) to move.
+// 2.g4?? is the slip, and …Qh4# the plainest motif — a mate in one.
+const FOOL = 'rnbqkbnr/pppp1ppp/8/4p3/8/5P2/PPPPP1PP/RNBQKBNR w KQkq - 0 2';
+const FOOL_AFTER = 'rnbqkbnr/pppp1ppp/8/4p3/6P1/5P2/PPPPP2P/RNBQKBNR';
+const foolLines: CoachLine[] = [
+  { uci: 'e2e4', coachCp: 0, pv: ['e2e4', 'g8f6'] },
+  { uci: 'g2g4', coachCp: -2000, pv: ['g2g4', 'd8h4'] },
+];
+const foolRead: SlipRead = (fen) => Promise.resolve(fen.startsWith(FOOL_AFTER)
+  ? { topLines: [{ moves: ['d8h4'], evaluation: -30000, mate: -1 }, { moves: ['g8f6'], evaluation: 0, mate: null }] }
+  : { topLines: [] });
+
+describe('THE PLANT IS A REAL MOTIF — Fool\'s mate', () => {
+  it('2.g4?? is planted: the student\'s mate in one, a real motif at rung 0', async () => {
+    const { pick } = await findFocusPlant(FOOL, foolLines, BEGINNER, ask(), foolRead);
+    expect(pick).toMatchObject({ uci: 'g2g4', seat: 'exploit', dropCp: 2000 });
+    expect(pick?.chance).toMatchObject({ kind: 'mate-for-you', tag: 'missed-your-mate', difficulty: 0 });
+    expect(pick && presents(pick.chance, 0, 20, 12)).toBe(true);
+  });
+});
 
 describe('findFocusPlant — a real slip that leaves your side a chance at your rung', () => {
   // Black (the coach) to move: …Nb6 keeps the knight; …Nf4 drops it to the f1 rook.
@@ -111,10 +134,14 @@ describe('findFocusPlant — a real slip that leaves your side a chance at your 
     ? { topLines: [{ moves: ['f1f4', 'a8a2'], evaluation: 300, mate: null }, { moves: ['e1e2', 'f4d5'], evaluation: 0, mate: null }] }
     : { topLines: [] });
 
-  it('the coach leaves a piece to take, and the lesson\'s own reader poses it', async () => {
-    const { pick } = await findFocusPlant(FEN, coachLines, BEGINNER, ask(), read);
-    expect(pick).toMatchObject({ uci: 'd5f4', seat: 'exploit', dropCp: 300 });
-    expect(pick?.chance).toMatchObject({ kind: 'take', seat: 'exploit', tag: 'missed-your-free-piece', difficulty: 0 });
+  it('A REAL MOTIF, NEVER A FREE PIECE (David 2026-11-24): the coach does not plant a piece to take', async () => {
+    const { pick, scan } = await findFocusPlant(FEN, coachLines, BEGINNER, ask(), read);
+    expect(pick).toBeNull();
+    expect(scan['wrong-difficulty']).toBe(1);
+  });
+  it('twin: a carried free-piece miss is that pattern, and the coach plants it', async () => {
+    const { pick } = await findFocusPlant(FEN, coachLines, BEGINNER, ask({ tag: 'missed-your-free-piece', extra: true, carried: true }), read);
+    expect(pick?.chance).toMatchObject({ kind: 'take', tag: 'missed-your-free-piece', difficulty: 0 });
   });
   it('the rung decides: the piece that just moved is rung 0, never a rung-1 chance', async () => {
     const { pick, scan } = await findFocusPlant(FEN, coachLines, BEGINNER, ask({ difficulty: 1 }), read);
@@ -122,14 +149,14 @@ describe('findFocusPlant — a real slip that leaves your side a chance at your 
     expect(scan['wrong-difficulty']).toBe(1);
   });
   it('after a miss, an extra plants only the same pattern', async () => {
-    const { pick, scan } = await findFocusPlant(FEN, coachLines, BEGINNER, ask({ tag: 'missed-your-fork', extra: true }), read);
+    const { pick, scan } = await findFocusPlant(FOOL, foolLines, BEGINNER, ask({ tag: 'missed-your-fork', extra: true }), foolRead);
     expect(pick).toBeNull();
     expect(scan['wrong-pattern']).toBe(1);
   });
   it('THE GUARANTEE OUTRANKS THE PATTERN (#158): a carried pattern the board cannot pose still leaves the game its chance', async () => {
-    const { pick, scan } = await findFocusPlant(FEN, coachLines, BEGINNER, ask({ tag: 'missed-your-fork' }), read);
-    expect(pick).toMatchObject({ uci: 'd5f4', seat: 'exploit' });
-    expect(pick?.chance.tag).toBe('missed-your-free-piece');
+    const { pick, scan } = await findFocusPlant(FOOL, foolLines, BEGINNER, ask({ tag: 'missed-your-fork' }), foolRead);
+    expect(pick).toMatchObject({ uci: 'g2g4', seat: 'exploit' });
+    expect(pick?.chance.tag).toBe('missed-your-mate');
     expect(scan['wrong-pattern'], 'the pattern was tried first').toBe(1);
   });
   it('the carried pattern\'s own plant is your side only: way ahead it never flips, and it plants only that pattern', async () => {
@@ -140,10 +167,10 @@ describe('findFocusPlant — a real slip that leaves your side a chance at your 
     expect((await findFocusPlant(FEN, coachLines, BEGINNER, ask({ tag: 'missed-your-fork', extra: true, carried: true }), read)).pick, 'no fallback').toBeNull();
   });
   it('the guarantee is never stopped by a decided game — ahead or behind (David: MUST)', async () => {
-    const won = coachLines.map((l) => ({ ...l, coachCp: l.coachCp + 900 }));
-    expect((await findFocusPlant(FEN, won, BEGINNER, ask(), read)).pick?.uci).toBe('d5f4');
-    const lost = coachLines.map((l) => ({ ...l, coachCp: l.coachCp - 1200 }));
-    expect((await findFocusPlant(FEN, lost, BEGINNER, ask(), read)).pick?.seat, 'the guarantee never flips').toBe('exploit');
+    const won = foolLines.map((l) => ({ ...l, coachCp: l.coachCp + 900 }));
+    expect((await findFocusPlant(FOOL, won, BEGINNER, ask(), foolRead)).pick?.uci).toBe('g2g4');
+    const lost = foolLines.map((l) => ({ ...l, coachCp: l.coachCp - 1200 }));
+    expect((await findFocusPlant(FOOL, lost, BEGINNER, ask(), foolRead)).pick?.seat, 'the guarantee never flips').toBe('exploit');
   });
 
   // THE READS GO WHERE THE COACH'S OWN LINE SHOWS A CHANCE (prod rung2 game 2,
@@ -151,18 +178,16 @@ describe('findFocusPlant — a real slip that leaves your side a chance at your 
   // were quiet moves that posed nothing. Measured on 12 of David's games, a
   // rung-2 ask from move 7 to 20: this order planted on 73 of 119 boards and
   // reached 11 of 12 games; smallest drop first, 29 and 8.
-  it('the two reads go to the slip whose own line wins a piece, ahead of smaller quiet slips', async () => {
+  it('the two reads go to the slip whose own line shows the motif, ahead of smaller quiet slips — a mate too', async () => {
     const lines: CoachLine[] = [
-      { uci: 'e8d7', coachCp: 300, pv: ['e8d7', 'e1e2'] },
-      { uci: 'a8b8', coachCp: 100, pv: ['a8b8', 'e1e2'] },
-      { uci: 'a8c8', coachCp: 90, pv: ['a8c8', 'e1e2'] },
-      { uci: 'd5f4', coachCp: 0, pv: ['d5f4', 'f1f4', 'a8a2'] },
+      { uci: 'e2e4', coachCp: 300, pv: ['e2e4', 'g8f6'] },
+      { uci: 'a2a3', coachCp: 100, pv: ['a2a3', 'g8f6'] },
+      { uci: 'h2h3', coachCp: 90, pv: ['h2h3', 'g8f6'] },
+      { uci: 'g2g4', coachCp: -2000, pv: ['g2g4', 'd8h4'] },
     ];
-    const quiet: SlipRead = (fen) => Promise.resolve(fen.startsWith('r3k3/8/8/8/5n2/')
-      ? { topLines: [{ moves: ['f1f4', 'a8a2'], evaluation: 300, mate: null }, { moves: ['e1e2', 'f4d5'], evaluation: 0, mate: null }] }
-      : { topLines: [{ moves: ['e1e2'], evaluation: 0, mate: null }] });
-    const { pick, scan } = await findFocusPlant(FEN, lines, BEGINNER, ask(), quiet);
-    expect(pick?.uci, `scan ${JSON.stringify(scan)}`).toBe('d5f4');
+    const quiet: SlipRead = (fen) => (fen.startsWith(FOOL_AFTER) ? foolRead(fen) : Promise.resolve({ topLines: [{ moves: ['g8f6'], evaluation: 0, mate: null }] }));
+    const { pick, scan } = await findFocusPlant(FOOL, lines, BEGINNER, ask(), quiet);
+    expect(pick?.uci, `scan ${JSON.stringify(scan)}`).toBe('g2g4');
     expect(scan['no-chance'] ?? 0, 'the quiet slips were never read').toBe(0);
   });
   it('twin: a line that shows nothing keeps the smallest drop first', async () => {
@@ -187,14 +212,17 @@ describe('findFocusPlant — a real slip that leaves your side a chance at your 
   const twoRead: SlipRead = (fen) => Promise.resolve(fen.startsWith('r3k3/8/1b6/8/5n2/')
     ? { topLines: [{ moves: ['f1f4', 'a8a2'], evaluation: 300, mate: null }, { moves: ['b1b6', 'a8a2'], evaluation: 280, mate: null }] }
     : { topLines: [] });
-  it('a plant with an EASIER chance beside the asked one is refused', async () => {
-    const { pick, scan } = await findFocusPlant(TWO, twoLines, BEGINNER, ask({ difficulty: 1 }), twoRead);
+  it('two free pieces are no motif: refused at every rung', async () => {
+    for (const difficulty of [0, 1] as const) {
+      const { pick, scan } = await findFocusPlant(TWO, twoLines, BEGINNER, ask({ difficulty }), twoRead);
+      expect(pick).toBeNull();
+      expect(scan['wrong-difficulty']).toBe(1);
+    }
+  });
+  it('a carried free piece with an EASIER chance beside it is refused', async () => {
+    const { pick, scan } = await findFocusPlant(TWO, twoLines, BEGINNER, ask({ difficulty: 1, tag: 'missed-your-free-piece', extra: true, carried: true }), twoRead);
     expect(pick).toBeNull();
     expect(scan['easier-too']).toBe(1);
-  });
-  it('twin: asked at rung 0, the same slip plants the knight', async () => {
-    const { pick } = await findFocusPlant(TWO, twoLines, BEGINNER, ask({ difficulty: 0 }), twoRead);
-    expect(pick?.chance).toMatchObject({ kind: 'take', piece: { square: 'f4' }, difficulty: 0 });
   });
 });
 
@@ -221,7 +249,8 @@ describe('mid-exchange — the coach takes what is on offer, and its slip is in 
     expect(completesExchange('4k3/8/8/8/8/8/4r3/R3K3 w - - 0 1', 'e1d1'), 'in check, every legal reply answers it').toBe(true);
   });
   it('prod record g2: the coach plants by HOW it takes — …Nxb4 leaves the bishop its knight was guarding', async () => {
-    const { pick, scan } = await findFocusPlant(FEN, lines, BEGINNER, ask({ difficulty: 1 }), read);
+    // A carried free-piece miss (a free piece is never the game's practice).
+    const { pick, scan } = await findFocusPlant(FEN, lines, BEGINNER, ask({ difficulty: 1, tag: 'missed-your-free-piece', extra: true, carried: true }), read);
     expect(scan['mid-exchange'], 'the old bail').toBeUndefined();
     expect(pick).toMatchObject({ uci: 'd5b4', seat: 'exploit', dropCp: 300 });
     expect(pick?.chance).toMatchObject({ kind: 'take', tag: 'missed-your-free-piece' });

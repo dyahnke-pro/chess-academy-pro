@@ -21,6 +21,9 @@ const CHANGED_SINCE: Partial<Record<MisconceptionTagId, MethodHabit>> = {
   // A tag newer than the snapshot (2026-11-08): a quiet set-up is found by
   // calculating past the first move — the calculate step's habit.
   'missed-set-up': 'candidates',
+  // Newer still (2026-11-27, the attack-the-king focus): the attacking move is
+  // a candidate to look for first.
+  'missed-king-attack': 'candidates',
 };
 const OLD_COACH_TAG_HABIT: Partial<Record<MisconceptionTagId, MethodHabit | null>> = {
   'missed-opponents-threat': 'opponent-threat', 'hung-material': 'opponent-threat',
