@@ -93,7 +93,7 @@ async function main() {
       } catch (err) {
         row.error = String(err).slice(0, 200);
       }
-      console.log(`${row.id.padEnd(42)} first ${row.firstMs ?? '-'}ms  last ${row.lastMs ?? '-'}ms  gap ${row.worstGapMs ?? '-'}ms  watchFor ${row.watchFor ? 'yes' : 'no'}${row.error ? `  ERR ${row.error}` : ''}`);
+      console.log(`${row.id.padEnd(42)} parts ${JSON.stringify(row.kinds?.ms ?? null)} first ${row.firstMs ?? '-'}ms  last ${row.lastMs ?? '-'}ms  gap ${row.worstGapMs ?? '-'}ms  watchFor ${row.watchFor ? 'yes' : 'no'}${row.error ? `  ERR ${row.error}` : ''}`);
       rows.push(row);
       await ctx.close();
     }

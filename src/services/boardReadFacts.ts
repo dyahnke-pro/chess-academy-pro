@@ -48,7 +48,7 @@ import { tellPictureFacts } from './planThread';
 import { threadsOfRead, type ReadStory } from './gameStory';
 import { evalBand } from './evalBand';
 import type { TrySource } from './tryReadBudget';
-import { boardAfter, isForcingThreat, nowBoard, renderQuietThreat, renderTryGroup } from './teachingSentence';
+import { boardAfter, isForcingThreat, nowBoard, renderQuietThreat, renderTryGroup, renderWatchFor } from './teachingSentence';
 
 /** A read the student asked for ("read this position"): the asked answer's
  *  writer settings (`writerRegister`). */
@@ -137,7 +137,10 @@ type DraftFact = Omit<BoardFact, 'board'>;
  *  about the board on screen; a tempting move's refutation about the board
  *  after that try; what the best move does about the board after it. */
 export function stampBoard(fen: string, f: DraftFact, best: string | null): BoardFact {
-  const path = f.from === 'tempting' && f.move ? [f.move] : f.from === 'bestMove' && best ? [best] : [];
+  // Their reply after the best move (the "watch for") is about the board
+  // after both: a try, two moves on.
+  const path = f.kind === 'watch-for' && f.move && best ? [best, f.move]
+    : f.from === 'tempting' && f.move ? [f.move] : f.from === 'bestMove' && best ? [best] : [];
   const board = path.length ? boardAfter(fen, path, f.from === 'tempting' ? 'try' : 'line') : null;
   return { ...f, board: board ?? nowBoard(fen) };
 }
@@ -482,11 +485,28 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
       }
       if (theirs.length > 0) {
         const theirRefuted = temptingOnBoard({ fen: fenB, student: i.studentColor, rating: i.rating, reads: theirs, priorMove: { fenBefore: i.fen, san } });
-        for (const t of theirRefuted) {
-          facts.push({ from: 'tempting', kind: 'their-refuted', text: t.text, computer: 'temptingOnBoard', squares: [t.uci.slice(0, 2), t.uci.slice(2, 4)] });
+        // THE "WATCH FOR": their likeliest reply that fails, with its answer —
+        // read first among their replies (`TRY_RANK`), said as an "if".
+        // A reply ruled out by what it does to the result says its answer and
+        // the material that answer wins; one with no material is not a
+        // "watch for" (its reason is said about the other seat's board).
+        const theirStanding = standingRefutations({ fen: fenB, student: i.studentColor, rating: i.rating, reads: theirs }).filter((x) => !theirRefuted.some((r) => r.uci === x.uci));
+        const order = (uci: string): number => { const k = theirs.findIndex((r) => r.moves[0] === uci); return k < 0 ? theirs.length : k; };
+        const watch = mine ? [
+          ...theirRefuted.filter((t) => !!t.because).map((t) => ({ uci: t.uci, san: t.san, because: t.because })),
+          ...theirStanding.filter((t) => !!t.data.material && t.data.materialWho === 'You').map((t) => ({ uci: t.uci, san: t.san, because: `you play ${t.reply.replace(/^…/, '')} — you win ${t.data.material}` })),
+          // …or what the answer does for the student, in the student's own
+          // seat ("your c-pawn runs through and queens on c8").
+          ...theirStanding.filter((t) => !t.data.material && !!t.data.why && /^Your\b/.test(t.data.why) && !t.data.whyPath).map((t) => ({ uci: t.uci, san: t.san, because: `you play ${t.reply.replace(/^…/, '')}, and ${(t.data.why as string).replace(/^Your\b/, 'your').replace(/\.$/, '')}` })),
+        ].sort((x, y) => order(x.uci) - order(y.uci))[0] : undefined;
+        if (watch) {
+          facts.push({ from: 'tempting', kind: 'watch-for', text: renderWatchFor({ best: san, reply: watch.san, because: watch.because, mover: side, key: stemKeyOf(`${i.fen}|watch|${watch.uci}`) }), computer: 'temptingOnBoard', squares: [watch.uci.slice(0, 2), watch.uci.slice(2, 4)], move: watch.uci, claims: [`their-try:${watch.uci}`] });
         }
-        for (const t of standingRefutations({ fen: fenB, student: i.studentColor, rating: i.rating, reads: theirs }).filter((x) => !theirRefuted.some((r) => r.uci === x.uci))) {
-          facts.push({ from: 'tempting', kind: 'their-refuted', text: t.text, computer: 'temptingOnBoard', squares: t.squares });
+        for (const t of theirRefuted) {
+          facts.push({ from: 'tempting', kind: 'their-refuted', text: t.text, computer: 'temptingOnBoard', squares: [t.uci.slice(0, 2), t.uci.slice(2, 4)], claims: [`their-try:${t.uci}`] });
+        }
+        for (const t of theirStanding) {
+          facts.push({ from: 'tempting', kind: 'their-refuted', text: t.text, computer: 'temptingOnBoard', squares: t.squares, claims: [`their-try:${t.uci}`] });
         }
       }
     }

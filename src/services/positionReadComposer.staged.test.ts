@@ -57,6 +57,24 @@ it.skipIf(!process.env.READ_DUMP)('dump', async () => {
   }
 }, 300_000);
 
+it.skipIf(!process.env.READ_THEIRS)('their tries: produced vs decided (native engine)', async () => {
+  const { spawn } = await import('node:child_process');
+  const { boardReadFacts } = await import('./boardReadFacts');
+  const { decideRead, readContextOf } = await import('./readDecider');
+  const p = spawn('/usr/games/stockfish'); let buf = ''; let waiter: ((l: string[]) => void) | null = null; let acc: string[] = [];
+  p.stdout.on('data', (d: Buffer) => { buf += d.toString(); let k; while ((k = buf.indexOf('\n')) >= 0) { const l = buf.slice(0, k); buf = buf.slice(k + 1); acc.push(l); if (l.startsWith('bestmove') && waiter) { const w = waiter; waiter = null; const a = acc; acc = []; w(a); } } });
+  const send = (x: string) => p.stdin.write(x + '\n'); send('uci');
+  let chain: Promise<unknown> = Promise.resolve();
+  const read = (fen: string): Promise<{ rank: number; evaluation: number; moves: string[]; mate: number | null }[]> => { const r = chain.then(() => new Promise<{ rank: number; evaluation: number; moves: string[]; mate: number | null }[]>((res) => { acc = []; waiter = (lines) => { const best = new Map<number, { rank: number; evaluation: number; moves: string[]; mate: number | null }>(); for (const l of lines) { const m = l.match(/ depth (\d+) .*multipv (\d+) score (cp|mate) (-?\d+).* pv (.+)$/); if (!m || Number(m[1]) < 10) continue; const v = Number(m[4]); const w = fen.split(' ')[1] === 'w' ? 1 : -1; const mate = m[3] === 'mate' ? v * w : null; best.set(Number(m[2]), { rank: Number(m[2]), evaluation: mate != null ? (mate > 0 ? 100000 : -100000) : v * w, moves: m[5].split(' '), mate }); } res([...best.values()].sort((a, b) => a.rank - b.rank)); }; send('setoption name MultiPV value 3'); send(`position fen ${fen}`); send('go depth 10'); })); chain = r.catch(() => null); return r; };
+  for (const b of BOARDS) {
+    const a = analysisOf(b);
+    const set = await boardReadFacts({ stage: 'full', fen: b.fen, studentColor: b.fen.split(' ')[1] as 'w' | 'b', rating: 1600, before: a.topLines, read: (f) => read(f), withhold: false, tense: 'now', history: [], theory: true, readTempting: true, engineFutures: false, studentNeedContext: null, story: null });
+    const d = decideRead(set.facts, readContextOf({ fen: b.fen, top: { evaluation: a.topLines[0].evaluation, mate: a.topLines[0].mate ?? null }, bestUci: a.topLines[0].moves[0], withheld: null, studentShot: false, said: null, line: a.topLines[0].moves }));
+    console.log('THEIRS', b.id, 'produced', set.facts.filter((f) => f.kind === 'their-refuted').map((f) => f.text).join(' | ') || '-', '|| decided', d.facts.filter((f) => f.kind === 'their-refuted' || f.kind === 'watch-for').map((f) => f.text).join(' | ') || 0);
+  }
+  p.kill();
+}, 900_000);
+
 describe('Read this position: the opening never waits on another board', () => {
   beforeEach(() => { engine.hang = true; });
 
@@ -106,4 +124,14 @@ describe('Read this position: the opening never waits on another board', () => {
     }
     expect(deepSaid).toBeGreaterThan(0);
   }, 400_000);
+});
+
+describe('the "watch for" line is said as an "if", from the student\'s seat', () => {
+  it('names the best move, their reply with its "…", and the answer', async () => {
+    const { renderWatchFor } = await import('./teachingSentence');
+    const t = renderWatchFor({ best: 'Rd3', reply: 'd4', because: 'you play Rxd4 — you win a pawn.', mover: 'w', key: 0 });
+    expect(t).toBe('After Rd3, watch for …d4: you play Rxd4 — you win a pawn.');
+    const b = renderWatchFor({ best: 'Be6', reply: 'c4', because: 'you play Bxc4+', mover: 'b', key: 1 });
+    expect(b).toBe('Watch for c4 after …Be6: you play Bxc4+.');
+  });
 });

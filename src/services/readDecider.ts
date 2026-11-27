@@ -51,10 +51,10 @@ import type { FactKind } from './reviewFacetRank';
  *  shortener reads their layer. Null: never shortened by its layer (the
  *  standing, the position's character, a mate — the read's conclusions). */
 /** The read's danger facts: shortened, never silenced. */
-const DANGER_KINDS: ReadonlySet<string> = new Set(['refuted', 'their-refuted', 'refuted-positional', 'must-defend']);
+const DANGER_KINDS: ReadonlySet<string> = new Set(['refuted', 'their-refuted', 'watch-for', 'refuted-positional', 'must-defend']);
 
 const READ_KIND_AS_FACT: Readonly<Record<string, FactKind | null>> = {
-  'their-refuted': 'refuted', tries: 'refuted', 'refuted-positional': 'refuted',
+  'their-refuted': 'refuted', 'watch-for': 'refuted', tries: 'refuted', 'refuted-positional': 'refuted',
   'switch-wing': 'plan-steps', siege: 'plan-steps', 'their-plan': 'plan-steps',
   standing: null, character: null, 'mate-pattern': null, target: null, 'their-target': null,
 };
@@ -243,7 +243,7 @@ export const READ_STEPS: readonly StepRow[] = [
     from: ['bestMove'], positionKinds: ['timing', 'move-order', 'not-yet', 'king-read'],
   },
   { step: 'tempting', kinds: ['refuted', 'refuted-positional', 'deliberation'], firstFrom: ['tempting'] },
-  { step: 'their-try', kinds: ['their-refuted'] },
+  { step: 'their-try', kinds: ['watch-for', 'their-refuted'] },
   // THE PLAN: the board's one plan (`planOfTheBoard` — a goal and a way the
   // best line plays) when the board has one; else the plan computers' own.
   { step: 'plan', kinds: ['siege', 'plan-steps', 'plan-race', 'structure-plan'], sayOnce: true, first: ['planOfTheBoard'] },
@@ -271,7 +271,7 @@ export const PICTURE_STEPS: readonly StepRow[] = [
   READ_STEPS.find((r) => r.step === 'best-move') as StepRow,
   { step: 'character', kinds: ['character'] },
   { step: 'their-plan', kinds: ['their-target', 'their-plan'], sayOnce: true },
-  { step: 'their-try', kinds: ['their-refuted'] },
+  { step: 'their-try', kinds: ['watch-for', 'their-refuted'] },
   { step: 'concept', kinds: ['concept', 'speedrun-read'], sayOnce: true },
 ];
 

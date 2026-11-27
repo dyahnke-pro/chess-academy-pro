@@ -16,6 +16,7 @@ import type { StockfishAnalysis } from '../types';
 import { DEFAULT_STUDENT_RATING } from '../services/ratingBands';
 import { useStudentNeed } from './useStudentNeed';
 import { composePositionReadStaged, READ_SEAT } from '../services/positionReadComposer';
+import { warmBoardReadOffThread } from '../services/boardReadOffThread';
 import type { ReadSurface } from '../services/tryReadBudget';
 import type { ReadStory } from '../services/gameStory';
 
@@ -161,6 +162,9 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
   // call becomes a no-op at its next checkpoint, stop audio, clear
   // state. State setters on an unmounted component are silent no-ops
   // in React 18+, so this is safe.
+  // The board read's worker loads while the board is on screen, so the tap
+  // does not wait for it (the first word in about half a second).
+  useEffect(() => { warmBoardReadOffThread(); }, []);
   useEffect(() => {
     return () => {
       activeTokenRef.current += 1;
@@ -231,6 +235,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
       }
       if (token !== activeTokenRef.current) return;
 
+      const engineMs = Date.now() - tapTs;
       const profile = await db.profiles.get('main');
       const rating = profile?.currentRating ?? DEFAULT_STUDENT_RATING;
 
@@ -351,8 +356,12 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
         speak(text, part);
         return true;
       };
-      if (!(await sayPart(await staged.first, 'first'))) return;
-      if (!(await sayPart(await staged.deep, 'deep'))) return;
+      const firstFacts = await staged.first;
+      const firstMs = Date.now() - tapTs;
+      if (!(await sayPart(firstFacts, 'first'))) return;
+      const deepFacts = await staged.deep;
+      const deepMs = Date.now() - tapTs;
+      if (!(await sayPart(deepFacts, 'deep'))) return;
       // What each part said, and when the first word went out (the read's
       // audit row: the latency audit asserts on it).
       void staged.kinds.then((k) => logAppAudit({
@@ -360,7 +369,9 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
         category: 'subsystem',
         source: 'usePositionNarration',
         summary: `read: ${k.first.length} opening fact(s), ${k.deep.length} deep`,
-        details: JSON.stringify({ first: k.first, deep: k.deep, surface: args.surface }),
+        // When each part was ready, from the tap: the engine's read of the
+        // board, the opening composed, the deep part composed.
+        details: JSON.stringify({ first: k.first, deep: k.deep, surface: args.surface, ms: { engine: engineMs, first: firstMs, deep: deepMs } }),
         fen: args.fen,
       }));
       if (said.length === 0) {
