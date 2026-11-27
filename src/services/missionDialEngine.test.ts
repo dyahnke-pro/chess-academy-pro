@@ -343,7 +343,9 @@ describe('the Learn focus punish (WO-LEARN-FOCUS-01)', () => {
   });
 
   // THE COACH LEAVES A CHANCE (focusPlant): asked by the runner, the coach
-  // plays its slip — …Nf4 drops the knight to the f1 rook — and says so.
+  // plays its slip — …Nf4 drops the knight to the f1 rook — and says so. A free
+  // piece is never the game's practice (a real motif is), so this is the
+  // carried free-piece miss, the one ask that plants that pattern.
   it('a plant asked: the coach plays the slip the lesson reader poses, and the row says so', async () => {
     const FEN = 'r3k3/8/8/3n4/8/8/8/4KR2 b - - 0 30';
     pickBookMoveMock.mockResolvedValue(null);
@@ -356,10 +358,10 @@ describe('the Learn focus punish (WO-LEARN-FOCUS-01)', () => {
         { rank: 1, moves: ['f1f4', 'a8a2'], evaluation: 300, mate: null },
         { rank: 2, moves: ['e1e2', 'f4d5'], evaluation: 0, mate: null },
       ] })) as never);
-    const r = await getAdaptiveMove(FEN, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: { ...FOCUS, studentColor: 'white', focus: { id: 'tactics', needs: [], rung: 0, punish: false, levels: ['beginner'], plant: { tag: null, seat: 'exploit', difficulty: 0, extra: false, missStreak: 0, carried: false }, attackPlant: false } } });
+    const r = await getAdaptiveMove(FEN, 1200, { bookPolicy: 'most-played', studentElo: 1200, missionDials: { ...FOCUS, studentColor: 'white', focus: { id: 'tactics', needs: [], rung: 0, punish: false, levels: ['beginner'], plant: { tag: 'missed-your-free-piece', seat: 'exploit', difficulty: 0, extra: true, missStreak: 0, carried: true }, attackPlant: false } } });
     expect(r).toMatchObject({ move: 'd5f4', source: 'focus-plant', focusPlanted: 'exploit' });
     const row = auditMock.mock.calls.map(([e]) => e as { kind: string; details?: string }).find((e) => e.kind === 'focus-plant');
-    expect(JSON.parse(row?.details ?? '{}')).toMatchObject({ focus: 'tactics', planted: 'd5f4', seat: 'exploit', tag: 'missed-your-free-piece', rung: 0, extra: false });
+    expect(JSON.parse(row?.details ?? '{}')).toMatchObject({ focus: 'tactics', planted: 'd5f4', seat: 'exploit', tag: 'missed-your-free-piece', rung: 0, extra: true, carried: true });
   });
   it('NEGATIVE CONTROL — no plant asked: the coach keeps its knight', async () => {
     const FEN = 'r3k3/8/8/3n4/8/8/8/4KR2 b - - 0 30';

@@ -30,7 +30,7 @@ describe('the Learn focus is wired at every place it needs a hand', () => {
     ["the coach's reply hands over the next board", /focusRef\.current\.board\(/],
     ['a late engine read reaches it', /focusRef\.current\.read\(/],
     // …and the skills the record still needs set up (WO-SET-WEAKNESS-01).
-    ["the coach's move choice carries the focus dials, the open motif levels, the rung, the plant ask and the needed skills", /focus: \{ id: focusId, punish, levels: focusRef\.current\.levels\(\), rung: focusRung, plant, needs \}/],
+    ["the coach's move choice carries the focus dials, the open motif levels, the rung, the plant ask, the attack plant ask and the needed skills", /focus: \{ id: focusId, punish, levels: focusRef\.current\.levels\(\), rung: focusRung, plant, attackPlant, needs \}/],
     ['the plant is asked at the board ply the runner counts, from the board the coach moves on', /focusRef\.current\.plantAsk\(plyOfFen\(fen\) \+ 2, fen\)/],
     ['a steered reply is remembered', /if \(adaptive\.focusSteered\) focusSteerPendingRef\.current = true/],
     // The plant's own read rides with it (F13, 2026-11-09): the board poses
