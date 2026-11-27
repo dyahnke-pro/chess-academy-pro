@@ -103,7 +103,7 @@ function netAfterReply(b: Chess, took: number, back: number): { gain: number; wi
   for (const m of b.moves({ verbose: true })) {
     if (m.san.endsWith('#')) return { gain: MATE_GAIN, win: m.san, mate: true };
     if (!m.captured) continue;
-    const g = legalSeeGain(fen, m.to as Square);
+    const g = legalSeeGain(fen, m.to);
     if (g <= 0) continue;
     const c2 = new Chess(fen);
     c2.move(m.san);

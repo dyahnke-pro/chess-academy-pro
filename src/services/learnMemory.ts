@@ -44,7 +44,6 @@
 
 /** "No think-aloud has fired yet." Far enough below any real ply that the
  *  first gap test passes. */
-import type { Proof } from './proof';
 import type { MistakeGameMemory } from './mistakeLesson';
 import type { LastSaid } from './whyAnswers';
 import type { LooseSpells } from './conceptKey';

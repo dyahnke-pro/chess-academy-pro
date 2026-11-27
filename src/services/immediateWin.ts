@@ -6,7 +6,7 @@
 // a board, so they count it the same way.
 //
 // PURE: chess.js and the legal exchange count.
-import { Chess, type Square } from 'chess.js';
+import { Chess } from 'chess.js';
 import { legalSeeGain } from './positionReadingService';
 import { MATERIAL_VALUE } from './pieceValues';
 
@@ -46,14 +46,14 @@ export function immediateWin(fen: string, except: string | null = null): Immedia
     if (m.promotion) {
       const b = new Chess(fen);
       b.move(m.san);
-      if (b.attackers(m.to as Square, b.turn()).length === 0) {
+      if (b.attackers(m.to, b.turn()).length === 0) {
         const g = (MATERIAL_VALUE[m.promotion] ?? 0) - 1 + (m.captured ? MATERIAL_VALUE[m.captured] ?? 0 : 0);
         if (g > best.gain) best = { gain: g, san: m.san, from: m.from, to: m.to, mate: false, won: { square: m.to, piece: m.promotion } };
       }
     }
     if (!m.captured || m.to === except || seen.has(m.to)) continue;
     seen.add(m.to);
-    const g = legalSeeGain(fen, m.to as Square);
+    const g = legalSeeGain(fen, m.to);
     if (g > best.gain) best = { gain: g, san: m.san, from: m.from, to: m.to, mate: false, won: { square: m.to, piece: m.captured } };
   }
   return best;

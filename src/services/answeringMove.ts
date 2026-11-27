@@ -67,7 +67,7 @@ export function answeringMove(fen: string): AnsweringMove | null {
   const all = c.moves({ verbose: true });
   const natural = all.filter((m) => {
     if (m.from === at) return true;
-    if (m.captured && attackers.includes(m.to as Square)) return true;
+    if (m.captured && attackers.includes(m.to)) return true;
     const b = new Chess(fen);
     b.move(m.san);
     if (b.attackers(at, me).length > guards) return true;
