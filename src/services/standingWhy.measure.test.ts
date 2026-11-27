@@ -58,5 +58,5 @@ describe.runIf(RUN)('the standing carries its why on Danya boards', () => {
     writeFileSync('audit-reports/standing-why.json', JSON.stringify({ share, kinds, said, bare }, null, 2));
     console.log(JSON.stringify({ share, kinds }, null, 2));
     expect(reads.size).toBeGreaterThan(100);
-  });
+  }, 600_000);
 });

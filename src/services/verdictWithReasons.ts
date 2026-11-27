@@ -43,7 +43,7 @@ import { MATERIAL_VALUE } from './pieceValues';
 export type ReasonKind =
   | 'material' | 'king-shelter' | 'king-centre' | 'king-attack' | 'activity' | 'initiative'
   | 'passer' | 'bishop-pair' | 'space' | 'minor' | 'weak-pawn' | 'guarded-pawn'
-  | 'tempo' | 'clamp' | 'trapped' | 'mating-net' | 'unstoppable' | 'even';
+  | 'tempo' | 'clamp' | 'trapped' | 'mating-net' | 'unstoppable' | 'even' | 'line-wins';
 
 /** A SOFT reason is a quiet plus the engine weighs in tenths of a pawn; a
  *  concrete one (material, a passer, the kings, a pawn falling, the
@@ -52,7 +52,7 @@ const SOFT_REASON: Record<ReasonKind, boolean> = {
   material: false, 'king-shelter': false, 'king-centre': false, 'king-attack': false, initiative: false,
   passer: false, 'weak-pawn': false,
   activity: true, 'bishop-pair': true, space: true, minor: true, 'guarded-pawn': true,
-  trapped: false, 'mating-net': false, unstoppable: false,
+  trapped: false, 'mating-net': false, unstoppable: false, 'line-wins': false,
   tempo: true, clamp: true, even: true,
 };
 
@@ -296,7 +296,11 @@ export function boardReasons(fen: string, student: Color, lines: readonly Initia
   const evidence = evidenceReasons(board, fen, student, lines, officers);
   // A mating net says the king attack's count with more: one claim, said once.
   const nets = new Set(evidence.filter((r) => r.kind === 'mating-net').map((r) => r.side));
-  return [...out.filter((r) => !(r.kind === 'king-attack' && nets.has(r.side))), ...evidence];
+  // The material a line wins off a trapped piece or a queening pawn is that
+  // piece's or that pawn's story: the reason is the trap or the run.
+  const whys = new Set(evidence.filter((r) => r.kind === 'trapped' || r.kind === 'unstoppable').map((r) => r.side));
+  return [...out.filter((r) => !(r.kind === 'king-attack' && nets.has(r.side))),
+    ...evidence.filter((r) => !(r.kind === 'line-wins' && whys.has(r.side)))];
 }
 
 const PIECE_WORD: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
@@ -369,6 +373,31 @@ function evidenceReasons(board: Chess, fen: string, student: Color, lines: reado
   const played = top ? playLine(fen, top) : [];
   const toMove = board.turn();
 
+  // ── MATERIAL THE LINE WINS ── (the engine's best line, played to its end,
+  // leaves one side material ahead of where the board stands now: the line
+  // is the proof, drawn to its last capture)
+  if (played.length >= 2) {
+    const now = quietBalance(fen);
+    const lastCap = played.map((m, i) => (m.captured ? i : -1)).filter((i) => i >= 0).pop() ?? -1;
+    if (lastCap >= 0) {
+      // Read at the line's own end, settled: a capture mid-exchange is not
+      // a win.
+      const end = Math.sign(quietBalance(played[played.length - 1].fenAfter) - now) === Math.sign(quietBalance(played[lastCap].fenAfter) - now)
+        ? Math.abs(quietBalance(played[played.length - 1].fenAfter) - now) < Math.abs(quietBalance(played[lastCap].fenAfter) - now)
+          ? quietBalance(played[played.length - 1].fenAfter) : quietBalance(played[lastCap].fenAfter)
+        : now;
+      const gain = Math.round(end - now);
+      if (Math.abs(gain) >= 1) {
+        const x: Color = gain > 0 ? 'w' : 'b';
+        const g = Math.abs(gain);
+        const words = g === 1 ? 'a pawn' : g === 2 ? 'two pawns' : g <= 4 ? 'a piece' : g <= 7 ? "a rook's worth" : "a queen's worth";
+        const clause = `${WHO(x, student)} win ${words} in the best line`;
+        out.push({ kind: 'line-wins', side: x, weight: g * 100, clause, sentence: `${cap(clause)}.`,
+          squares: [played[lastCap].to as Square], line: top!.slice(0, lastCap + 1) });
+      }
+    }
+  }
+
   for (const x of ['w', 'b'] as const) {
     const y = other(x);
     const own = OWN(x, student); const foe = OWN(y, student);
@@ -378,6 +407,7 @@ function evidenceReasons(board: Chess, fen: string, student: Color, lines: reado
     // engine's line does)
     for (const cell of board.board().flat()) {
       if (!cell || cell.color !== y || cell.type === 'p' || cell.type === 'k') continue;
+      if (board.attackers(cell.square, x).length === 0) continue;
       const t = trappedAt(fen, cell.square);
       if (!t) continue;
       const word = PIECE_WORD[cell.type];
@@ -441,7 +471,7 @@ function evidenceReasons(board: Chess, fen: string, student: Color, lines: reado
         return sq;
       })() : null;
       if (origin && passers.includes(origin as Square)) {
-        const clause = `${own} passed pawn on ${origin} goes through: the best line queens it`;
+        const clause = `${own} passed pawn on ${origin} goes through: the best line ${played[q].promotion === 'q' ? 'queens' : 'promotes'} it`;
         out.push({ kind: 'unstoppable', side: x, weight: 320, clause, sentence: `${cap(clause)}.`, squares: [origin as Square, played[q].to as Square], line: top!.slice(0, q + 1) });
       }
     }
@@ -452,11 +482,12 @@ function evidenceReasons(board: Chess, fen: string, student: Color, lines: reado
     if (toMove === x && officers >= 4) {
       const q = board.findPiece({ type: 'q', color: y })[0];
       if (q && !board.inCheck()) {
+        const c = new Chess(fen);
         const hits = board.moves({ verbose: true }).filter((m) => !m.captured && m.piece !== 'q' && m.piece !== 'k').filter((m) => {
-          const c = new Chess(fen);
           c.move(m);
-          if (c.isCheckmate()) return false;
-          return c.attackers(q, x).includes(m.to) && !loose(c, m.to as Square, x);
+          const hit = c.attackers(q, x).includes(m.to) && !loose(c, m.to as Square, x);
+          c.undo();
+          return hit;
         });
         const lineHit = top ? hits.find((m) => `${m.from}${m.to}` === top[0].slice(0, 4)) : undefined;
         if (hits.length) {
@@ -469,17 +500,21 @@ function evidenceReasons(board: Chess, fen: string, student: Color, lines: reado
     }
 
     // ── A CLAMP ── (two pawns or more of x on its fifth rank or beyond, on
-    // the wing their king lives on, that no pawn of theirs can ever hit)
-    if (officers >= 6 && ky && board.findPiece({ type: 'k', color: y }).length) {
+    // the wing their king lives on, none hit by a pawn of theirs and one
+    // guarded by another: the squares in front of their king are x's)
+    if (officers >= 6 && ky) {
       const wing = fileOf(ky) >= 4 ? [4, 5, 6, 7] : [0, 1, 2, 3];
       const deep = (sq: string): boolean => (x === 'w' ? rankOf(sq) >= 5 : rankOf(sq) <= 4);
-      const theirPawns = board.findPiece({ type: 'p', color: y });
-      const safe = (sq: string): boolean => !theirPawns.some((p) => Math.abs(fileOf(p) - fileOf(sq)) === 1 && (x === 'w' ? rankOf(p) > rankOf(sq) : rankOf(p) < rankOf(sq)));
-      const clampers = board.findPiece({ type: 'p', color: x }).filter((sq) => wing.includes(fileOf(sq)) && deep(sq) && safe(sq)).sort();
-      if (clampers.length >= 2) {
+      const clampers = board.findPiece({ type: 'p', color: x })
+        .filter((sq) => wing.includes(fileOf(sq)) && deep(sq) && !board.attackers(sq, y).some((a) => board.get(a)?.type === 'p'))
+        .sort();
+      const chained = clampers.some((sq) => board.attackers(sq, x).some((a) => board.get(a)?.type === 'p'));
+      if (clampers.length >= 2 && chained) {
         const side = wing[0] === 4 ? 'kingside' : 'queenside';
-        const clause = `${own} pawns on ${andList(clampers)} clamp ${foe} ${side}: no pawn of ${OWN(y, student) === 'your' ? 'yours' : 'theirs'} can ever hit them`;
-        out.push({ kind: 'clamp', side: x, weight: 55 + 15 * clampers.length, clause, sentence: `${cap(clause)}.`, squares: clampers });
+        const covered = new Set(clampers.flatMap((sq) => [fileOf(sq) - 1, fileOf(sq) + 1].filter((f) => f >= 0 && f <= 7)
+          .map((f) => squareOf(f, rankOf(sq) + (x === 'w' ? 1 : -1)))));
+        const clause = `${own} pawns on ${andList(clampers)} clamp ${foe} ${side}, taking ${count(covered.size)} squares in front of ${foe} king`;
+        out.push({ kind: 'clamp', side: x, weight: 55 + 15 * clampers.length, clause, sentence: `${cap(clause)}.`, squares: [...clampers, ...covered] });
       }
     }
   }
@@ -642,12 +677,13 @@ export function verdictWithReasons(input: {
     if (material) {
       // Down material and still level: what pays for it.
       const down = other(material.side);
-      const pays = sayable.filter((r) => r.side === down && r.kind !== 'material' && r.kind !== 'guarded-pawn').sort(byWeight);
+      const pays = sayable.filter((r) => r.side === down && r.kind !== 'material' && r.kind !== 'guarded-pawn' && r.kind !== 'line-wins').sort(byWeight);
       if (pays.length) picked = [pays[0]];
     } else if (ini) {
       picked = [ini];
     } else {
-      const plus = (c: Color): VerdictReason | undefined => sayable.filter((r) => r.side === c && r.kind !== 'guarded-pawn').sort(byWeight)[0];
+      // Material a line wins is no plus on a level board: it is given back.
+      const plus = (c: Color): VerdictReason | undefined => sayable.filter((r) => r.side === c && r.kind !== 'guarded-pawn' && r.kind !== 'line-wins').sort(byWeight)[0];
       const a = plus(input.student); const b = plus(other(input.student));
       if (a && b) picked = [a, b];
     }
@@ -660,7 +696,9 @@ export function verdictWithReasons(input: {
   }
   if (picked.length === 0) return null;
   const squares = [...new Set(picked.flatMap((r) => [...r.squares, ...(r.line ?? []).flatMap((u) => [u.slice(0, 2), u.slice(2, 4)] as Square[])]))];
-  const arrows = picked.flatMap((r) => (r.line ?? []).map((u): [Square, Square] => [u.slice(0, 2) as Square, u.slice(2, 4) as Square]));
+  const arrowKeys = new Set<string>();
+  const arrows = picked.flatMap((r) => (r.line ?? []).map((u): [Square, Square] => [u.slice(0, 2) as Square, u.slice(2, 4) as Square]))
+    .filter(([a, b]) => (arrowKeys.has(a + b) ? false : (arrowKeys.add(a + b), true)));
   const proofLines = picked.flatMap((r) => {
     if (!r.line?.length) return [];
     const c = new Chess(input.fen);

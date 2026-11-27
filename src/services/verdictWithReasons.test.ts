@@ -57,7 +57,9 @@ describe('verdictWithReasons', () => {
 
   it('negative controls: no reason fits → silence; a mate → no reasons', () => {
     const start = new Chess().fen();
-    expect(verdictWithReasons({ fen: start, evalCp: 30, mate: null, lines: null, student: 'w', lastMove: null, said: NONE })).toBeNull();
+    // A level board says why it is level, with its count (2026-11-26).
+    expect(verdictWithReasons({ fen: start, evalCp: 30, mate: null, lines: null, student: 'w', lastMove: null, said: NONE })?.text)
+      .toBe('Material is level, eight pawns each, and both kings keep their pawn cover.');
     // An eval the board shows no reason for is not given one.
     expect(verdictWithReasons({ fen: start, evalCp: 200, mate: null, lines: null, student: 'w', lastMove: null, said: NONE })).toBeNull();
     expect(verdictWithReasons({ fen: start, evalCp: 100000, mate: 3, lines: null, student: 'w', lastMove: null, said: NONE })).toBeNull();
@@ -69,9 +71,8 @@ describe('the reasons reach the surfaces', () => {
     // 1.e4: a band change with no board reason → the verdict alone (the old
     // fallback said "your pieces are the more active" here).
     const c = new Chess(); c.move('e4');
-    const text = evalReading(c.fen(), 0, 100, null, 'w', null, null)!;
-    expect(text).not.toMatch(/more active/);
-    expect(text).toBe("You're slightly better.");
+    // …and, since 2026-11-26, never bare: no reason → not said at all.
+    expect(evalReading(c.fen(), 0, 100, null, 'w', null, null)).toBeNull();
   });
 
   it('the position read carries the reason (the-knockout-blow #2)', () => {

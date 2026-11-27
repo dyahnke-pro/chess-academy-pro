@@ -1066,7 +1066,10 @@ export type RepairState =
   | 'technique-key-square' | 'technique-opposition' | 'technique-rook'
   | 'leave-a-square'
   | 'attack-their-king'
-  | 'down-material-queens-off';
+  | 'down-material-queens-off'
+  // THE BOARD STATES (2026-11-26, the recovery checks round): what to do
+  // after a mistake when the board — not the material — is the problem.
+  | 'king-in-centre' | 'behind-in-development' | 'piece-trapped' | 'pinned-piece' | 'pawn-lever' | 'loose-pieces';
 
 export interface RepairRecipe {
   needs: readonly FillKey[];
@@ -1078,6 +1081,72 @@ export interface RepairRecipe {
 /** Every repair, worded to the STUDENT (never swapped). The check that it
  *  applies on this board is `repairApplies`. */
 export const REPAIRS: Record<RepairState, RepairRecipe> = {
+  'king-in-centre': {
+    needs: ['target'],
+    stems: [
+      'Your king on {target} is still in the middle: tuck it away first.',
+      'Get your king off {target} and castled before the lines open.',
+      'The king on {target} is your first worry: castle it to safety.',
+      'With your king still on {target}, safety comes first: castle soon.',
+      'Bring the king on {target} to safety before you go after anything.',
+    ],
+    sources: ['Library: Capablanca cf-31', 'concept:pos-king-safety', 'https://www.chess.com/article/view/king-safety'],
+  },
+  'behind-in-development': {
+    needs: ['tPiece', 'target'],
+    stems: [
+      'You are behind in development: bring out the {tPiece} on {target} first.',
+      'Develop before you attack: your {tPiece} on {target} is still at home.',
+      'Get the {tPiece} on {target} into play; they have more pieces out.',
+      'First catch up: the {tPiece} on {target} has not moved yet.',
+      'Your {tPiece} on {target} is still asleep: develop it before anything else.',
+    ],
+    sources: ['Library: Capablanca cf-6', 'concept:pos-development', 'https://www.chess.com/article/view/chess-opening-principles'],
+  },
+  'piece-trapped': {
+    needs: ['tPiece', 'target'],
+    stems: [
+      'Your {tPiece} on {target} is trapped: get the most you can for it.',
+      'The {tPiece} on {target} has no safe square; make them pay for it.',
+      'Your {tPiece} on {target} cannot escape: take something with it if you can.',
+      'Before the trapped {tPiece} on {target} falls, sell it for the most material.',
+      'No square saves the {tPiece} on {target}: cash it in now.',
+    ],
+    sources: ['concept:tac-trap', 'https://www.chess.com/terms/trapped-piece-chess'],
+  },
+  'pinned-piece': {
+    needs: ['tPiece', 'target', 'opPiece', 'opSq'],
+    stems: [
+      'Break the pin: their {opPiece} on {opSq} pins your {tPiece} on {target}.',
+      'The {opPiece} on {opSq} pins your {tPiece} on {target}: add a guard.',
+      'Unpin first: the {opPiece} on {opSq} holds your {tPiece} on {target}.',
+      'The {tPiece} on {target} cannot move freely while the {opPiece} on {opSq} pins it.',
+      'Guard the pinned {tPiece} on {target}, then break the line from {opSq}.',
+    ],
+    sources: ['concept:tac-pin', 'https://www.chess.com/terms/pin-chess'],
+  },
+  'pawn-lever': {
+    needs: ['pawn'],
+    stems: [
+      'Their pawn on {pawn} cramps you: strike at it with a pawn.',
+      'Hit back at the pawn on {pawn} with one of your pawns.',
+      'The pawn on {pawn} takes your space; challenge it with a pawn break.',
+      'Undermine the pawn on {pawn}: a pawn of yours can attack it.',
+      'Answer the pawn on {pawn} with a pawn break before it cramps you more.',
+    ],
+    sources: ['Library: Nimzowitsch ms-70', 'https://www.chess.com/article/view/pawn-breaks'],
+  },
+  'loose-pieces': {
+    needs: ['a', 'b'],
+    stems: [
+      'Your {a} and {b} have no guard: give each a defender.',
+      'Two loose pieces, the {a} and the {b}: tie them together.',
+      'Nothing guards your {a} or your {b}; fix that before it costs you.',
+      'Guard the {a} and the {b}: loose pieces drop off.',
+      'Your {a} and {b} stand unprotected: cover them first.',
+    ],
+    sources: ['https://www.chess.com/article/view/loose-pieces-drop-off'],
+  },
   'colour-conceded': {
     needs: ['colour'],
     stems: [
