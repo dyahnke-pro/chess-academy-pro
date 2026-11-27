@@ -1,6 +1,6 @@
-// FOUR MORE RECOVERY CHECKS (mistakes round 2): each repair state holds at the
-// quiet end of the reply line AND not on the board the move was played from —
-// the state the move left. Boards from real master games
+// THE OPENED FILE (mistakes round 2, beside main's six board states): the
+// file a move opened is the student's — a rook belongs there — held at the
+// quiet end of the reply line AND closed on the board the move was played from. Boards from real master games
 // (`src/data/model-games.json`), the reply line as the game played it.
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
@@ -25,28 +25,7 @@ const at = (id: string, i: number): { fenBefore: string; playedSan: string; repl
 };
 const cause = (kind: MistakeCause['kind']): MistakeCause => ({ kind, detail: null, motif: null, tag: null } as unknown as MistakeCause);
 
-describe('the board states a move leaves', () => {
-  it('pinned-now: Fischer–Petrosian, 12…Qd7 Re1 pins the bishop on e7 to the king', () => {
-    const x = at('mg-fischer-petrosian', 23);
-    expect(x.playedSan).toBe('Qd7');
-    expect(repairFillsFor('pinned-now', { ...x, seat: 'you', cause: cause('positional') })).toEqual({ tPiece: 'bishop', target: 'e7', opPiece: 'rook' });
-    // The move before it left no pin of its own.
-    expect(repairFillsFor('pinned-now', { ...at('mg-fischer-petrosian', 21), seat: 'you', cause: cause('positional') })).toBeNull();
-  });
-
-  it('castling-lost: the Caro Exchange, 8…Nxe5 Bb5+ Kd8 — the king gave up castling', () => {
-    const x = at('mg-caro-exchange', 15);
-    expect(x.playedSan).toBe('Nxe5');
-    expect(repairFillsFor('castling-lost', { ...x, seat: 'you', cause: cause('positional') })).toEqual({});
-  });
-
-  it('development-behind: three minor pieces at home after a move that wasted time', () => {
-    const x = at('mg-rubinstein-four-knights-game', 9);
-    expect(repairFillsFor('development-behind', { ...x, seat: 'you', cause: cause('tempo-wasted') })).toEqual({ n: 'three' });
-    // Only on a move that wasted time (or the queen out early).
-    expect(repairFillsFor('development-behind', { ...x, seat: 'you', cause: cause('positional') })).toBeNull();
-  });
-
+describe('the file a move opens', () => {
   it('file-opened: Fischer–Petrosian, 10.exd5 exd5 opens the e-file for a rook', () => {
     const x = at('mg-fischer-petrosian', 18);
     expect(x.playedSan).toBe('exd5');

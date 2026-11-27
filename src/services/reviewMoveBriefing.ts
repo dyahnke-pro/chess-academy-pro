@@ -164,16 +164,15 @@ export const signedBand = (cp: number): string => `${evalBand(cp)}${evalBand(cp)
  *  balanced / tipping"). None that fits → none said: the old fallback "your
  *  pieces are the more active" counted no piece. `lines`: the engine's lines
  *  from `fen` (the initiative), or null. */
-function evalWhy(fen: string, studentPovCp: number, studentWB: 'w' | 'b', lastMove: LastMove | null, lines: readonly InitiativeLine[] | null): { clauses: string[]; level: boolean; squares: string[] } {
+interface EvalWhy { clauses: string[]; level: boolean; squares: string[]; proofLines: Array<{ fen: string; sans: string[] }>; kinds: ReasonKind[] }
+function evalWhy(fen: string, studentPovCp: number, studentWB: 'w' | 'b', lastMove: LastMove | null, lines: readonly InitiativeLine[] | null): EvalWhy {
   const whiteCp = studentWB === 'w' ? studentPovCp : -studentPovCp;
   const v = verdictWithReasons({ fen, evalCp: whiteCp, mate: null, lines, student: studentWB, lastMove, said: NOTHING_SAID });
-  return v ? { clauses: reasonClauses(v), level: v.favoured === null, squares: [...v.squares] } : { clauses: [], level: false, squares: [] };
+  return v ? { clauses: reasonClauses(v), level: v.favoured === null, squares: [...v.squares], proofLines: v.proofLines, kinds: v.reasons.map((r) => r.kind) } : { clauses: [], level: false, squares: [], proofLines: [], kinds: [] };
 }
 const NOTHING_SAID: ReadonlySet<ReasonKind> = new Set<ReasonKind>();
 /** The eval VERDICT + WHY as a lead sentence. */
-function explainEval(fen: string, studentPovCp: number, studentWB: 'w' | 'b', lastMove: LastMove | null, lines: readonly InitiativeLine[] | null): string {
-  return explainEvalOf(evalWhy(fen, studentPovCp, studentWB, lastMove, lines), studentPovCp);
-}
+
 function explainEvalOf(read: { clauses: string[]; level: boolean }, studentPovCp: number): string {
   const band = evalBand(studentPovCp);
   return renderStanding({ band, side: studentPovCp > 0 ? 'better' : 'worse', reasons: read.clauses, level: read.level });
@@ -184,19 +183,29 @@ function explainEvalOf(read: { clauses: string[]; level: boolean }, studentPovCp
  *  composer (WO-OPENINGS-REWRITE-01: the writers said it on 15% of beats the
  *  lesson composer never had it for). Null when the standing did not move. */
 export function evalReading(fenAfter: string, povBeforeCp: number | null, povAfterCp: number, swingCp: number | null, studentWB: 'w' | 'b', lastMove: LastMove | null, lines: readonly InitiativeLine[] | null): string | null {
+  return evalReadingEvidence(fenAfter, povBeforeCp, povAfterCp, swingCp, studentWB, lastMove, lines)?.text ?? null;
+}
+/** The standing when it moved, WITH ITS EVIDENCE: the sentence, the squares
+ *  its reason rests on (lit) and the line that proves it (played out,
+ *  arrowed). Null when it did not move, or when the board shows no reason. */
+export function evalReadingEvidence(fenAfter: string, povBeforeCp: number | null, povAfterCp: number, swingCp: number | null, studentWB: 'w' | 'b', lastMove: LastMove | null, lines: readonly InitiativeLine[] | null): { text: string; squares: string[]; proofLines: Array<{ fen: string; sans: string[] }> } | null {
   const swing = swingCp ?? (povBeforeCp != null ? povAfterCp - povBeforeCp : 0);
   const bandChanged = povBeforeCp != null && signedBand(povAfterCp) !== signedBand(povBeforeCp);
   if (!bandChanged && Math.abs(swing) < 40) return null;
-  return explainEval(fenAfter, povAfterCp, studentWB, lastMove, lines);
+  const read = evalWhy(fenAfter, povAfterCp, studentWB, lastMove, lines);
+  if (!read.clauses.length) return null;
+  return { text: explainEvalOf(read, povAfterCp), squares: read.squares, proofLines: read.proofLines };
 }
 /** THE STANDING OF A BOARD — who stands better and why, read off the board
  *  itself rather than off a move that changed it (the read's verdict, David
  *  2026-11-18: his read of a board opens on it), and whether the board gave
  *  it a reason — a bare "You're winning." says nothing a player can act on (the read decider says
  *  a verdict only with its reason). */
-export function standingRead(fen: string, studentPovCp: number, studentWB: 'w' | 'b', lines: readonly InitiativeLine[] | null): { text: string; reasoned: boolean; reasonSquares: string[] } {
+export function standingRead(fen: string, studentPovCp: number, studentWB: 'w' | 'b', lines: readonly InitiativeLine[] | null): { text: string; reasoned: boolean; reasonSquares: string[]; countOnly: boolean } {
   const read = evalWhy(fen, studentPovCp, studentWB, null, lines);
-  return { text: explainEvalOf(read, studentPovCp), reasoned: read.clauses.length > 0, reasonSquares: read.squares };
+  // `countOnly`: a level board's only reason is its even count — a verdict
+  // read off the tries says more, and leads without it.
+  return { text: explainEvalOf(read, studentPovCp), reasoned: read.clauses.length > 0, reasonSquares: read.squares, countOnly: read.kinds.length > 0 && read.kinds.every((k) => k === 'even') };
 }
 /** The DELTA — how this move moved the eval (student POV cp swing). Null when it
  *  barely moved (a quiet move keeps its silence rather than "held the balance"

@@ -56,7 +56,8 @@ try {
 
   // out-of-order / illegal at the boundaries
   before = errSnapshot();
-  await spam('takeback-btn', 5);   // takeback spam
+  // No Takeback button (2026-11-24): a move on a looked-back board is the takeback.
+  await spam('nav-prev', 3); await sq('g1'); await sq('f3');
   await spam('restart-btn', 5);    // restart spam
   await spam('nav-first', 4); await spam('nav-prev', 4); await spam('nav-next', 4); await spam('nav-last', 4);
   // illegal moves: pawn 3 squares, knight to nonsense, click same square twice
@@ -68,7 +69,7 @@ try {
   await sq('e2'); await sq('e4');
   await page.locator(sel('restart-btn')).first().click({ timeout: 600, force: true }).catch(() => {});
   await sq('d2'); await sq('d4');
-  await page.locator(sel('takeback-btn')).first().click({ timeout: 600, force: true }).catch(() => {});
+  await page.locator(sel('nav-prev')).first().click({ timeout: 600, force: true }).catch(() => {}); await sq('b1'); await sq('c3');
   await spam('difficulty-hard', 3); // toggle difficulty mid-think
   await page.waitForTimeout(1500);
   note('mid-action interrupt (move→restart→move→takeback→toggle)', errSnapshot() > before, `+${errSnapshot() - before} errors`);

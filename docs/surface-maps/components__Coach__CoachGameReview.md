@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4236 lines · 2 exports · 3 importers · 21 tests · 6 audits**
+**4197 lines · 2 exports · 3 importers · 22 tests · 6 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:4506) — names `CoachGameReview`
+- **🔒🔒 TWO DISTINCT NARRATION REGISTERS — POST-GAME REVIEW ≠ IN-GAME/WATCH/LEARN. Do NOT conflate them (David 2026-07-19, LOCKED, said heading to bed: "his post game review is different from his in game narrations. Don't just copy everything post game review has into watch and learn narrations").** (CLAUDE.md:4508) — names `CoachGameReview`
 
 ## Who calls in
 
@@ -40,6 +40,7 @@
 - `src/services/reviewLedgerCounters.test.ts`
 - `src/services/reviewNarrationBuild.test.ts`
 - `src/test/algoAuditContract.test.ts`
+- `src/test/boardBarDecisions.gate.test.ts`
 - `src/test/corpusScope.test.ts`
 - `src/test/criticalMomentReach.test.ts`
 - `src/test/moveIntentReads.gate.test.ts`

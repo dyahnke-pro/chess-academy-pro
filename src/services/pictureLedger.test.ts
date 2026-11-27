@@ -173,14 +173,21 @@ describe('the counterplay', () => {
 });
 
 describe('the target', () => {
-  it('endgame-attacks #3: b5, not d5 — three units reach it, two guard it, and it cannot run', () => {
+  it('endgame-attacks #3: b5 — three units reach it, two guard it, and it cannot run', () => {
     const facts = factsOn(ENDGAME);
     const t = pictureConclusions(facts, ENDGAME.fen, ENDGAME.lines)?.target.w;
     expect(t?.best.entry.object).toBe('bP@b5');
     expect([t?.best.attackers, t?.best.defenders, t?.best.fixed]).toEqual([3, 2, true]);
-    expect(t?.runnerUp?.entry.object).toBe('-@d5');
     const [f] = readBoardAll('pictureTarget', { fen: ENDGAME.fen, student: 'w', lines: ENDGAME.lines, facts });
-    expect(f.text).toMatch(/pawn on b5, not the hole on d5: three of your pieces and pawns can get at it, and only two of theirs can guard it\./);
+    expect(f.text).toMatch(/pawn on b5: three of your pieces and pawns can get at it, and only two of theirs can guard it\./);
+    // "Not X" only when X really was the target before: the hole on d5 was the
+    // next candidate, never the target — said beside it, a pawn compared with a
+    // hole read as the old target ("The target is now the pawn on a4, not the
+    // hole on c5"). Neither the first statement nor the change says it.
+    expect(f.text).not.toMatch(/\bnot the\b/);
+    expect(f.conclusion?.changedText).toMatch(/^The target is now the pawn on b5: /);
+    expect(f.conclusion?.changedText).not.toMatch(/\bnot the\b/);
+    expect(f.squares).not.toContain('d5');
   });
 
   it('negative control: where no weakness is outnumbered there is no target', () => {

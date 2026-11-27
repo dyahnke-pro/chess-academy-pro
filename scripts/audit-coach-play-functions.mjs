@@ -147,7 +147,8 @@ try {
   }
 
   // takeback + restart
-  rec('takeback', (await visible('takeback-btn')) ? (await click('takeback-btn').then(() => 'pass').catch(() => 'fail')) : 'fail');
+  // No Takeback button (2026-11-24): its absence is the contract.
+  rec('takeback', (await visible('takeback-btn')) ? 'fail' : 'pass');
   await page.waitForTimeout(800);
 
   // ── Blunder interception: hang material on purpose ────────────────────────

@@ -46,10 +46,11 @@ import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { phaseOfFen, type Phase } from './boardConcepts';
 import { MATERIAL_VALUE, materialBalance } from './pieceValues';
 import { capturesWinMaterial, kingSafetyRead } from './positionReadingService';
+import { trappedAt } from './trappedPiece';
+import { withArticle } from '../utils/andList';
+import { minorsAtHome } from './development';
 import { onlyMove } from './thoughtReads';
 import { findProphylaxis } from './prophylaxis';
-import { findPins } from './pinGeometry';
-import type { TacticPattern } from '../types/tacticTypes';
 import { detectTacticLine } from './missedTacticService';
 import { initiativeRead } from './initiativeRead';
 import { bestJobReason, positionalReason } from './positionalReason';
@@ -57,7 +58,7 @@ import { DECIDED_EVAL_CP, INACCURACY_CP, MISTAKE_CP } from './engineConstants';
 import { logAppAudit } from './appAuditor';
 import {
   BETTER_JOBS, CAUSE_READER_LESSONS, COLOUR_NAME, EMPTY_CHECK_LESSON, FORK_LESSON, GOOD_DECISION, MISSED_MOTIF, THEIR_MOVE_CONSEQUENCE, HABIT_SHORT, LESSON_SLOTS, MISTAKE_NUMBER_WORDS, POSITIONAL, POSITIONAL_THEM, RECIPES, REPAIRS, TECHNIQUE_RULE, THEIR_SEAT, TRAPPED_LESSON,
-  materialWords, motifArticle, renderMistakeSlot, tradeWords,
+  materialWords, renderMistakeSlot, tradeWords,
   type BetterJob, type GoodDecision, type Fills, type LessonSlot, type RepairState, type SlotRecipe,
 } from './teachingSentence';
 
@@ -282,7 +283,7 @@ export function fillsFor(input: MistakeLessonInput): Fills {
         } catch { id = null; }
       }
     }
-    if (id && id !== 'free-piece') f.motif = motifArticle(MOTIFS[id].word);
+    if (id && id !== 'free-piece') f.motif = withArticle(MOTIFS[id].word);
   }
   const d = cause.detail;
   if (d) {
@@ -325,7 +326,7 @@ export function fillsFor(input: MistakeLessonInput): Fills {
 }
 
 // ── repair: which state, and its board check ───────────────────────────────
-interface RepairContext { student: Color; fenBefore: string; fenAfter: string; quiet: string; cause: MistakeCause; seat: 'you' | 'them'; replyLineUci: readonly string[]; phase: Phase | null; playedSan: string }
+interface RepairContext { student: Color; fenBefore: string; fenAfter: string; quiet: string; cause: MistakeCause; seat: 'you' | 'them'; replyLineUci: readonly string[]; phase: Phase | null }
 
 function queensOn(fen: string): boolean { return /q/i.test(fen.split(' ')[0]); }
 function countOf(fen: string, side: Color, type: PieceSymbol): number { try { return new Chess(fen).findPiece({ type, color: side }).length; } catch { return 0; } }
@@ -432,43 +433,73 @@ function repairApplies(state: RepairState, x: RepairContext): Fills | null {
     // The plan is read by `planRepair`, never through this switch.
     case 'plan':
       return null;
-    case 'pinned-now': {
-      // A piece (not a pawn) pinned to the king or the queen.
-      const pinsOn = (fen: string): TacticPattern[] => {
-        try {
-          const c = new Chess(fen);
-          return findPins(c).filter((p) => {
-            if (p.beneficiary !== them) return false;
-            const front = c.get(p.involvedSquares[1] as Square); const back = c.get(p.involvedSquares[2] as Square);
-            return !!front && front.type !== 'p' && !!back && (back.type === 'k' || back.type === 'q');
-          });
-        } catch { return []; }
-      };
-      const was = new Set(pinsOn(x.fenBefore).map((p) => p.involvedSquares[1]));
-      const pin = pinsOn(x.quiet).find((p) => !was.has(p.involvedSquares[1]));
-      if (!pin) return null;
+    case 'king-in-centre': {
+      // A king still on its home square in the d- or e-file, with a right to
+      // castle left, queens on and a middlegame's pieces on the board.
       const b = before(x.quiet);
-      const pinner = b.get(pin.involvedSquares[0] as Square);
-      const pinned = b.get(pin.involvedSquares[1] as Square);
-      return pinner && pinned ? { tPiece: NAME[pinned.type], target: pin.involvedSquares[1], opPiece: NAME[pinner.type] } : null;
+      const k = b.findPiece({ type: 'k', color: x.student })[0];
+      const home = x.student === 'w' ? '1' : '8';
+      const rights = (x.quiet.split(' ')[2] ?? '-').split('').filter((ch) => (x.student === 'w' ? /[KQ]/ : /[kq]/).test(ch));
+      // Only once it matters: past the first moves, or with the centre open in
+      // front of it (no pawn of its own on its file).
+      const moveNo = Number(x.quiet.split(' ')[5] ?? '1');
+      const fileOpen = k ? !b.findPiece({ type: 'p', color: x.student }).some((p) => p[0] === k[0]) : false;
+      return k && 'de'.includes(k[0]) && k[1] === home && rights.length > 0 && queensOn(x.quiet) && x.phase !== 'endgame' && officersOn(b) >= 8
+        && (moveNo >= 10 || fileOpen) ? { target: k } : null;
     }
-    case 'castling-lost': {
-      // The move (or its line) took the last castling right while the king
-      // still stands on its home file, queens on.
-      const rights = (fen: string): string => (fen.split(' ')[2] ?? '-').split('').filter((c) => (x.student === 'w' ? /[KQ]/ : /[kq]/).test(c)).join('');
-      if (!rights(x.fenBefore) || rights(x.quiet) || !queensOn(x.quiet)) return null;
-      const king = before(x.quiet).findPiece({ type: 'k', color: x.student })[0];
-      return king && /^[de]/.test(king) ? {} : null;
+    case 'behind-in-development': {
+      // Two minor pieces or more still at home, and more than they have.
+      const b = before(x.quiet);
+      const mine = minorsAtHome(b, x.student);
+      const moveNo = Number(x.quiet.split(' ')[5] ?? '1');
+      if (moveNo < 6 || mine.length < 2 || mine.length - minorsAtHome(b, them).length < 2 || x.phase === 'endgame') return null;
+      return { tPiece: NAME[mine[0].type], target: mine[0].square };
     }
-    case 'development-behind': {
-      if (x.phase !== 'opening' || (x.cause.kind !== 'tempo-wasted' && !/^Q/.test(x.playedSan))) return null;
-      const home = (side: Color): number => {
-        const b = before(x.quiet);
-        const rank = side === 'w' ? '1' : '8';
-        return ['b', 'c', 'f', 'g'].filter((f) => { const p = b.get(`${f}${rank}` as Square); return !!p && p.color === side && (p.type === 'n' || p.type === 'b'); }).length;
-      };
-      const mine = home(x.student);
-      return mine >= 2 && mine >= home(them) + 2 ? { n: MISTAKE_NUMBER_WORDS[mine] ?? String(mine) } : null;
+    case 'piece-trapped': {
+      const b = before(x.quiet);
+      for (const cell of b.board().flat()) {
+        if (!cell || cell.color !== x.student || cell.type === 'p' || cell.type === 'k') continue;
+        if (b.attackers(cell.square, them).length && trappedAt(x.quiet, cell.square)) return { tPiece: NAME[cell.type], target: cell.square };
+      }
+      return null;
+    }
+    case 'pinned-piece': {
+      const pin = pinOn(before(x.quiet), x.student);
+      return pin ? { tPiece: NAME[pin.piece], target: pin.square, opPiece: NAME[pin.byPiece], opSq: pin.by } : null;
+    }
+    case 'pawn-lever': {
+      // Their centre pawn deep in the student's half, that a pawn of the
+      // student's can hit in one push.
+      const b = before(x.quiet);
+      const deep = them === 'w' ? '5' : '4';
+      const dir = x.student === 'w' ? 1 : -1;
+      for (const sq of b.findPiece({ type: 'p', color: them })) {
+        if (!'cdef'.includes(sq[0]) || sq[1] !== deep) continue;
+        const f = sq.charCodeAt(0) - 97;
+        const hitFrom = Number(sq[1]) - dir; // the square a lever lands on
+        const lever = [f - 1, f + 1].filter((g) => g >= 0 && g <= 7).some((g) => {
+          const land = `${String.fromCharCode(97 + g)}${hitFrom}` as Square;
+          const one = `${String.fromCharCode(97 + g)}${hitFrom - dir}` as Square;
+          const two = `${String.fromCharCode(97 + g)}${hitFrom - 2 * dir}` as Square;
+          if (b.get(land)) return false;
+          const p1 = b.get(one); const p2 = b.get(two);
+          const startRank = x.student === 'w' ? '2' : '7';
+          return (p1?.type === 'p' && p1.color === x.student) || (!p1 && p2?.type === 'p' && p2.color === x.student && two[1] === startRank);
+        });
+        if (lever) return { pawn: sq };
+      }
+      return null;
+    }
+    case 'loose-pieces': {
+      const b = before(x.quiet);
+      if (x.phase === 'endgame') return null;
+      // Pieces out in play (off their first rank), past the opening's first
+      // moves: a rook at home is not loose.
+      const firstRank = x.student === 'w' ? '1' : '8';
+      if (Number(x.quiet.split(' ')[5] ?? '1') < 8) return null;
+      const loose = b.board().flat().flatMap((p) => (p && p.color === x.student && p.type !== 'p' && p.type !== 'k'
+        && p.square[1] !== firstRank && b.attackers(p.square, x.student).length === 0 ? [p] : []));
+      return loose.length >= 2 ? { a: `${NAME[loose[0].type]} on ${loose[0].square}`, b: `${NAME[loose[1].type]} on ${loose[1].square}` } : null;
     }
     case 'file-opened': {
       const pawnOn = (fen: string, file: string): boolean => { try { return new Chess(fen).findPiece({ type: 'p', color: 'w' }).concat(new Chess(fen).findPiece({ type: 'p', color: 'b' })).some((s) => s[0] === file); } catch { return true; } };
@@ -508,14 +539,61 @@ const CAUSE_STATE: Partial<Record<MistakeCauseKind, RepairState>> = {
   'colour-conceded': 'colour-conceded', 'traded-into-target': 'weak-pawn', 'passer-handed': 'passer-against',
 };
 const LEDGER_STATES: readonly RepairState[] = ['down-queen', 'down-exchange', 'down-piece-middlegame', 'down-material-queens-off', 'down-piece-endgame', 'down-pawn-middlegame', 'down-pawn-endgame', 'up-material'];
-/** The board states a move can leave, read after the cause's and the
- *  ledger's (round 2). Each checks it holds at the quiet end AND did not hold
- *  on the board the move was played from — the mistake left it. The opened
- *  file is the student's chance on either seat; the rest are the student's own. */
-const BOARD_STATES: Record<'you' | 'them', readonly RepairState[]> = {
-  you: ['pinned-now', 'castling-lost', 'development-behind', 'file-opened'],
-  them: ['file-opened'],
-};
+/** THE BOARD STATES, after the ledger's: on the student's own mistake, what
+ *  the board asks of them when the material is not the problem — the trapped
+ *  piece first (it is lost otherwise), then the pin, the loose pieces, the
+ *  king in the middle, the development, the cramping pawn. */
+const BOARD_STATES: readonly RepairState[] = ['piece-trapped', 'pinned-piece', 'loose-pieces', 'king-in-centre', 'behind-in-development', 'pawn-lever'];
+
+/** A board state's own check, on one board (`student`'s seat): the fills its
+ *  repair names, or null when the board does not show it. */
+export function boardStateFills(state: RepairState, fen: string, student: Color): Fills | null {
+  try {
+    return repairApplies(state, { student, fenBefore: fen, fenAfter: fen, quiet: fen, cause: { kind: 'unexplained', motif: null, tag: null } as unknown as MistakeCause, seat: 'you', replyLineUci: [], phase: phaseOfFen(fen) });
+  } catch { return null; }
+}
+
+function officersOn(b: Chess): number {
+  return b.board().flat().filter((p) => !!p && p.type !== 'p' && p.type !== 'k').length;
+}
+
+/** A piece of `side` (knight, bishop or rook) pinned by a slider of the
+ *  other side to its king or queen standing behind it on the same line. */
+export function pinOn(b: Chess, side: Color): { square: Square; piece: PieceSymbol; by: Square; byPiece: PieceSymbol } | null {
+  const foe: Color = side === 'w' ? 'b' : 'w';
+  const DIRS: Array<[number, number, 'diag' | 'line']> = [[1, 0, 'line'], [-1, 0, 'line'], [0, 1, 'line'], [0, -1, 'line'], [1, 1, 'diag'], [1, -1, 'diag'], [-1, 1, 'diag'], [-1, -1, 'diag']];
+  for (const cell of b.board().flat()) {
+    if (!cell || cell.color !== foe || !['b', 'r', 'q'].includes(cell.type)) continue;
+    for (const [df, dr, kind] of DIRS) {
+      if (cell.type === 'b' && kind === 'line') continue;
+      if (cell.type === 'r' && kind === 'diag') continue;
+      let f = cell.square.charCodeAt(0) - 97 + df; let r = Number(cell.square[1]) + dr;
+      let front: { sq: Square; type: PieceSymbol } | null = null;
+      while (f >= 0 && f <= 7 && r >= 1 && r <= 8) {
+        const sq = `${String.fromCharCode(97 + f)}${r}` as Square;
+        const p = b.get(sq);
+        if (p) {
+          if (p.color !== side) break;
+          if (!front) {
+            if (!['n', 'b', 'r'].includes(p.type)) break;
+            front = { sq, type: p.type };
+          } else {
+            // A pinned piece that can take the pinner is not held.
+            const takes = b.attackers(cell.square, side).includes(front.sq);
+            if (!takes && (p.type === 'k' || (p.type === 'q' && cell.type !== 'q'))) return { square: front.sq, piece: front.type, by: cell.square, byPiece: cell.type };
+            break;
+          }
+        }
+        f += df; r += dr;
+      }
+    }
+  }
+  return null;
+}
+
+/** The file a move opened is the student's chance on either seat (round 2):
+ *  read after the ledger's and the board's states. */
+const OPENED_FILE: readonly RepairState[] = ['file-opened'];
 
 /** A repair state's own board check for a move, the way the composer reads
  *  it (the quiet end of the reply line): its fills, or null. For the board
@@ -525,7 +603,7 @@ export function repairFillsFor(state: RepairState, x: { fenBefore: string; playe
   try { after = new Chess(x.fenBefore); mover = after.turn(); if (!after.move(x.playedSan)) return null; } catch { return null; }
   const student: Color = x.seat === 'you' ? mover : (mover === 'w' ? 'b' : 'w');
   const quiet = x.replyLineUci.length ? quietEnd(after.fen(), x.replyLineUci) : after.fen();
-  return repairApplies(state, { student, fenBefore: x.fenBefore, fenAfter: after.fen(), quiet, cause: x.cause, seat: x.seat, replyLineUci: x.replyLineUci, phase: phaseOfFen(quiet), playedSan: x.playedSan });
+  return repairApplies(state, { student, fenBefore: x.fenBefore, fenAfter: after.fen(), quiet, cause: x.cause, seat: x.seat, replyLineUci: x.replyLineUci, phase: phaseOfFen(quiet) });
 }
 
 function repairFor(input: MistakeLessonInput, recipeRepairs: readonly RepairState[], key: number): { text: string; stem: string; state: RepairState } | null {
@@ -533,7 +611,7 @@ function repairFor(input: MistakeLessonInput, recipeRepairs: readonly RepairStat
   try { after = new Chess(input.fenBefore); mover = after.turn(); if (!after.move(input.playedSan)) return null; } catch { return null; }
   const student: Color = input.seat === 'you' ? mover : (mover === 'w' ? 'b' : 'w');
   const quiet = input.replyLineUci.length ? quietEnd(after.fen(), input.replyLineUci) : after.fen();
-  const ctx: RepairContext = { student, fenBefore: input.fenBefore, fenAfter: after.fen(), quiet, cause: input.ew.cause, seat: input.seat, replyLineUci: input.replyLineUci, phase: phaseOfFen(quiet), playedSan: input.playedSan };
+  const ctx: RepairContext = { student, fenBefore: input.fenBefore, fenAfter: after.fen(), quiet, cause: input.ew.cause, seat: input.seat, replyLineUci: input.replyLineUci, phase: phaseOfFen(quiet) };
   const own: RepairState[] = [];
   const cs = CAUSE_STATE[input.ew.cause.kind];
   if (cs) own.push(cs);
@@ -543,8 +621,8 @@ function repairFor(input: MistakeLessonInput, recipeRepairs: readonly RepairStat
   const seated = input.seat === 'you' ? own : own.map((s) => MIRROR[s] ?? s);
   // On their mistake the ledger's only repair is the conversion: the
   // student's own deficit is not what their mistake changed.
-  const ledgerStates = input.seat === 'you' ? LEDGER_STATES : (['up-material'] as const);
-  for (const state of [...seated, ...ledgerStates, ...BOARD_STATES[input.seat]]) {
+  const ledgerStates = input.seat === 'you' ? [...LEDGER_STATES, ...BOARD_STATES] : (['up-material'] as const);
+  for (const state of [...seated, ...ledgerStates, ...OPENED_FILE]) {
     const fills = repairApplies(state, ctx);
     if (!fills) continue;
     const said = renderMistakeSlot(REPAIRS[state], fills, key, recentStemsOf(input.memory));
@@ -626,6 +704,10 @@ function repairStillHolds(state: RepairState, fen: string, student: Color): bool
     case 'attack-their-king': { const k = kingSafetyRead(fen, them); return !!k && k.shieldPawns <= 1; }
     // A plan is no state to hold: the next mistake reads the board afresh.
     case 'plan': return false;
+    // The board states: while the board still shows them (their own check,
+    // on this board), so a pin broken and set again is said again.
+    case 'king-in-centre': case 'behind-in-development': case 'piece-trapped': case 'pinned-piece': case 'pawn-lever': case 'loose-pieces':
+      return boardStateFills(state, fen, student) !== null;
     default: return true;
   }
 }

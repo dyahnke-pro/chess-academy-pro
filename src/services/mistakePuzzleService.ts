@@ -1210,6 +1210,21 @@ export async function addMistakePuzzleFromCapture(
   return puzzle;
 }
 
+/** A MOVE TAKEN BACK THAT WAS NOT A MISTAKE KEEPS NO PUZZLE (David, the board
+ *  bar decisions, 2026-11-24: "A takeback files a puzzle only when the move
+ *  you took back was a mistake"). The live grade can file its puzzle before
+ *  the takeback lands; the takeback's own grade decides, so the puzzle this
+ *  game filed for this board and move goes. Returns how many went. */
+export async function withdrawTakenBackPuzzle(gameId: string, fen: string, playedSan: string): Promise<number> {
+  const key = puzzlePositionKey(fen);
+  const rows = (await db.mistakePuzzles.where('sourceGameId').equals(gameId).toArray())
+    .filter((p) => puzzlePositionKey(p.fen) === key && p.playerMoveSan === playedSan);
+  if (rows.length === 0) return 0;
+  await db.mistakePuzzles.bulkDelete(rows.map((p) => p.id));
+  emitWeaknessModelChanged();
+  return rows.length;
+}
+
 /** A board's position (pieces, side, castling, en passant), the clocks aside. */
 export function puzzlePositionKey(fen: string): string {
   return fen.split(' ').slice(0, 4).join(' ');

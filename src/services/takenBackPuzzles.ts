@@ -4,7 +4,9 @@
  * the student's own Takeback too: "A move you took back yourself with the
  * Takeback button — this one I think should"). The coach's rewind (Try again,
  * Go back and castle) files through the runners' hooks; the student's own
- * Takeback through `discussionPractice.takeBackOwnMove`. Never an inaccuracy.
+ * Takeback through `discussionPractice.takeBackOwnMove`. Never an inaccuracy:
+ * a move taken back below a mistake keeps no puzzle, even one the live grade
+ * filed before the takeback landed (`withdrawTakenBackPuzzle`).
  *
  * Neither puzzle writer could see it. The game record never holds a move that
  * was taken back, so the end-of-game analysis does not; and a move the coach
@@ -21,7 +23,7 @@ import { COACH_TURN_DEPTH } from './engineConstants';
 import { detectSlip, type SlipSeverity } from './slipDetector';
 import { liveMovePrice, mateSwingCostCp, uciOfSan } from './playedMoveGrade';
 import type { MovePrice } from './moveCost';
-import { addTakenBackMistakePuzzle } from './mistakePuzzleService';
+import { addTakenBackMistakePuzzle, withdrawTakenBackPuzzle } from './mistakePuzzleService';
 import { classifyPhase } from './gamePhaseService';
 import { logAppAudit } from './appAuditor';
 import { isStudentsMove, type StudentSeat } from './recordSeat';
@@ -167,7 +169,12 @@ async function gradeTakenBack(m: TakenBackMove, reads: TakenBackReads): Promise<
   if (!bestSan) return end('unpriced');
   const slip = detectSlip({ inBook: false, playedSan: m.playedSan, cpLoss, evalBeforeCp: evalBefore, evalAfterCp: evalAfter, learned: false, bestMoveSan: bestSan });
   row.severity = slip.isSlip ? slip.severity ?? null : null;
-  if (!slip.isSlip || !slip.severity || !PUZZLE_SEVERITY[slip.severity]) return end('not-a-mistake');
+  if (!slip.isSlip || !slip.severity || !PUZZLE_SEVERITY[slip.severity]) {
+    // Not a mistake: no puzzle — and none the live grade filed before the
+    // takeback landed (the takeback's grade is the one that decides).
+    await withdrawTakenBackPuzzle(m.gameId, m.fenBefore, m.playedSan);
+    return end('not-a-mistake');
+  }
   const puzzle = await addTakenBackMistakePuzzle({
     fen: m.fenBefore,
     studentSeat: m.studentSeat,

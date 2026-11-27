@@ -31,7 +31,7 @@ describe('kingSiegeNow — the siege as the board stands', () => {
     expect(readBoardAll('kingSiegeNow', { fen: MASS, student: 'w', studentCp: -200 })).toEqual([]);
   });
   it('is one of the read\'s board facts', async () => {
-    const r = await boardReadFacts({ fen: MASS, studentColor: 'w', rating: 1400, before: [MASS_LINE], read: async () => null, withhold: false, tense: 'now', history: [], theory: false, readTempting: false, engineFutures: false, studentNeedContext: null, story: null });
+    const r = await boardReadFacts({ stage: 'full', fen: MASS, studentColor: 'w', rating: 1400, before: [MASS_LINE], read: async () => null, withhold: false, tense: 'now', history: [], theory: false, readTempting: false, engineFutures: false, studentNeedContext: null, story: null });
     expect(r.facts.some((f) => f.kind === 'king-read' && f.computer === 'kingSiege' && f.from === 'position')).toBe(true);
   });
 });

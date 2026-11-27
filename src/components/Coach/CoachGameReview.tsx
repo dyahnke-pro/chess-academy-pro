@@ -11,7 +11,6 @@ import { RotateCcw, Home, ArrowLeft, MessageCircle, Loader2, Target, Crosshair, 
 import { ChessBoard } from '../Board/ChessBoard';
 import { voiceService } from '../../services/voiceService';
 import { scheduleMarks } from '../../services/markPacing';
-import { buildVoicePackage } from '../../services/voicePackage';
 
 /** Candidate lines the LIVE surfaces run at — the engine's shipped default. */
 const LIVE_MULTIPV = 3;
@@ -59,7 +58,7 @@ import { createStoryStore, planArcAt, storyOf, storyTurn, type GameStory } from 
 import { registerFor } from '../../coach/surfaceContract';
 import { buildOpeningTheoryLecture, buildTheoryLectureBeats, lectureSequence, lectureNoteSelector, loadLectureCorpus, resolveCuratedOpeningIdeas, enrichLectureWithEngine, warmLectureSources, type TheoryLectureBeat, type ExploreLine } from '../../services/reviewOpeningTheory';
 import { reviewTheoryLookup } from '../../services/reviewOpeningsSource';
-import { sanToSpeech } from '../../utils/sanToSpeech';
+import { performLecture } from '../../services/theoryPlayback';
 import { captureEvent } from '../../services/analytics';
 import { reward } from '../../services/rewardService';
 import { detectMissedTactics } from '../../services/missedTacticService';
@@ -1917,13 +1916,6 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     // theory beats, and the lecture cut off at its fourth beat).
     walkPlayback.pause('theory');
     voiceService.stop();
-    const waitIdle = async (maxMs = 12000): Promise<void> => {
-      const start = performance.now();
-      while (voiceService.isPlaying() && performance.now() - start < maxMs) {
-        if (theoryLectureTokenRef.current !== token || !walkMountedRef.current) return;
-        await new Promise((r) => setTimeout(r, 120));
-      }
-    };
     // IMMEDIATE feedback (David 2026-07-21: "the pieces never moved on the
     // board"). Show the first position + its line at once, so the button never
     // looks dead while the first line is prepared.
@@ -1932,46 +1924,15 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       setWalkExplorationArrows(null);
       setTheoryCaption(beats[0].fact);
     }
-    // ONE SEQUENCE, MOVE THEN WORDS (David 2026-10-19: "the narrations behind
-    // the theory button are mostly spoken before a move is even made"). The
-    // lecture is performed in the order `lectureSequence` computes: a move is
-    // on the board before any line about it is said, each line voice-gated.
-    const steps = lectureSequence(beats);
-    for (const step of steps) {
-      if (theoryLectureTokenRef.current !== token || !walkMountedRef.current) break;
-      if (step.kind === 'position') {
-        setWalkExplorationFen(step.fen);
-        setWalkExplorationSan(null);
-        setWalkExplorationArrows(null);
-        continue;
-      }
-      if (step.kind === 'move') {
-        await waitIdle();
-        if (theoryLectureTokenRef.current !== token || !walkMountedRef.current) break;
-        setWalkExplorationArrows(lineArrow(step.fenBefore, step.uci, playerColor));
-        setWalkExplorationFen(step.fenAfter);
-        setWalkExplorationSan(step.san);
-        playMoveSound(step.san);
-        await new Promise((r) => setTimeout(r, 600));
-        continue;
-      }
-      // A walked move is said by name, then its why (Danya walks theory out
-      // loud: "bishop b5, a6, bishop a4…").
-      const raw = step.text ? await voiceFacts(step.text, { preferRaw: true, intent: 'review-theory' }).catch(() => step.text) : '';
-      const words = (raw && raw.trim()) || step.text;
-      const spoken = step.moveSan ? `${sanToSpeech(step.moveSan)}.${words ? ` ${words}` : ''}` : words;
-      if (!spoken) continue;
-      setTheoryCaption(step.moveSan ? `${step.moveSan}${words ? ` — ${words}` : ''}` : words);
-      const t0 = performance.now();
-      // PACKAGED, judged against the board it is said on (the move is made).
-      try { await voiceService.speakPackage(buildVoicePackage([{ kind: 'computed', text: spoken, fen: step.fen }])); } catch { /* voice off */ }
-      await waitIdle();
-      // MUTED-DEVICE PACING: with voice off the speak resolves at once, so
-      // hold long enough to read the caption and see the position.
-      const dwell = Math.min(4500, (step.moveSan && !step.text ? 1400 : 1200) + spoken.length * 22);
-      const elapsed = performance.now() - t0;
-      if (elapsed < dwell) await new Promise((r) => setTimeout(r, dwell - elapsed));
-    }
+    // ONE SEQUENCE, MOVE THEN WORDS, through THE ONE THEORY RUNNER — the board
+    // bar's Theory view on Learn and Play performs the same way.
+    await performLecture(lectureSequence(beats), {
+      alive: () => theoryLectureTokenRef.current === token && walkMountedRef.current,
+      show: (fen, san, arrows) => { setWalkExplorationFen(fen); setWalkExplorationSan(san); setWalkExplorationArrows(arrows); },
+      arrowFor: (fenBefore, uci) => lineArrow(fenBefore, uci, playerColor),
+      sound: playMoveSound,
+      caption: setTheoryCaption,
+    });
     setWalkExplorationFen(null);
     setWalkExplorationSan(null);
     setWalkExplorationArrows(null);

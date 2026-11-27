@@ -4,13 +4,13 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**4835 lines · 3 exports · 4 importers · 22 tests · 9 audits**
+**4883 lines · 3 exports · 4 importers · 24 tests · 9 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5760) — names `BLUNDER_CARD_ENABLED`, `CoachGamePage`
-- **The standard post-deploy ritual** (CLAUDE.md:7033) — names `CoachGamePage`
-- **🔒🔒 THE FULL-GAME AUDIT STANDARD (David 2026-07-13, LOCKED: "Save this audit format plz. This is the new standard.")** (CLAUDE.md:7189) — names `BLUNDER_CARD_ENABLED`, `PLAY_VOLUNTEERS_COACHING`
+- **🔒🔒 THE APP'S COACH VOICE — LOCKED, SUPREME VOICE LAW (David 2026-07-06, emphatic: "LOCK ALL OF THIS IN!!! THIS IS THE NEW VOICE OF THE APP!!!")** (CLAUDE.md:5762) — names `BLUNDER_CARD_ENABLED`, `CoachGamePage`
+- **The standard post-deploy ritual** (CLAUDE.md:7014) — names `CoachGamePage`
+- **🔒🔒 THE FULL-GAME AUDIT STANDARD (David 2026-07-13, LOCKED: "Save this audit format plz. This is the new standard.")** (CLAUDE.md:7170) — names `BLUNDER_CARD_ENABLED`, `PLAY_VOLUNTEERS_COACHING`
 
 ## Who calls in
 
@@ -48,11 +48,13 @@
 - `src/services/positionFacts.liveFundamental.test.ts`
 - `src/services/prepareReview.test.ts`
 - `src/test/adventureBookWired.gate.test.ts`
+- `src/test/boardBarDecisions.gate.test.ts`
 - `src/test/flipIsAViewNotASideSwap.test.ts`
 - `src/test/oneCoachDoor.gate.test.ts`
 - `src/test/oneCoachUnlocked.gate.test.ts`
 - `src/test/onePrice.gate.test.ts`
 - `src/test/oneRatedMoveDoor.gate.test.ts`
+- `src/test/playLookBack.gate.test.ts`
 - `src/test/playRecordsCapability.test.ts`
 
 ## Audits that reach it

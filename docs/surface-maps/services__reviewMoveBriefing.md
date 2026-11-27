@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**750 lines · 16 exports · 35 importers · 24 tests · 0 audits**
+**759 lines · 17 exports · 36 importers · 25 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **⏰ Standing notes** (CLAUDE.md:3283) — names `buildReviewMoveBriefing`
-- **The standard post-deploy ritual** (CLAUDE.md:7054) — names `Aspect`
+- **⏰ Standing notes** (CLAUDE.md:3285) — names `buildReviewMoveBriefing`
+- **The standard post-deploy ritual** (CLAUDE.md:7035) — names `Aspect`
 
 ## Who calls in
 
@@ -39,6 +39,7 @@
 - `src/services/pieceRoute.test.ts`
 - `src/services/reviewMoveBriefing.test.ts`
 - `src/services/reviewMoveThought.test.ts`
+- `src/services/standingEvidence.test.ts`
 - `src/services/thoughtReads.ts`
 - `src/services/threeFacts.briefing.test.ts`
 - `src/services/verdictWithReasons.test.ts`
@@ -58,22 +59,26 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `signedBand` (const) — 3 call sites
-- `src/services/boardComputers.ts:3130`
-- `src/services/boardComputers.ts:6493`
-- `src/services/boardReadFacts.ts:196`
+- `src/services/boardComputers.ts:3159`
+- `src/services/boardComputers.ts:6535`
+- `src/services/boardReadFacts.ts:209`
 
 ### `evalReading` (function) — 5 call sites
-- `src/services/boardComputers.ts:6491`
 - `src/services/evalReading.test.ts:11`
 - `src/services/evalReading.test.ts:17`
 - `src/services/evalReading.test.ts:23`
-- `src/services/verdictWithReasons.test.ts:72`
+- `src/services/standingEvidence.test.ts:65`
+- `src/services/verdictWithReasons.test.ts:77`
+
+### `evalReadingEvidence` (function) — 2 call sites
+- `src/services/boardComputers.ts:6533`
+- `src/services/standingEvidence.test.ts:70`
 
 ### `standingRead` (function) — 1 call site
-- `src/services/boardReadFacts.ts:195`
+- `src/services/boardReadFacts.ts:208`
 
 ### `moveAspects` (function) — 13 call sites
-- `src/services/boardComputers.ts:6137`
+- `src/services/boardComputers.ts:6177`
 - `src/services/captureLeadsTo.test.ts:26`
 - `src/services/countedWhenTradeEnds.test.ts:38`
 - `src/services/countedWhenTradeEnds.test.ts:52`
@@ -131,11 +136,11 @@
 ### `LessonVoice` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `newLessonVoice` (function) — 48 call sites
+### `newLessonVoice` (function) — 49 call sites
 - `src/hooks/useTeachWalkthrough.ts:903`
 - `src/hooks/useTeachWalkthrough.ts:904`
 - `src/services/danyaBench.measure.test.ts:468`
-- `src/services/decisionStakes.test.ts:51`
+- `src/services/decisionStakes.test.ts:52`
 - `src/services/exchangeNotFinished.test.ts:281`
 - `src/services/gamesCourse.ts:368`
 - `src/services/kingGroupReads.test.ts:14`
@@ -160,17 +165,18 @@
 - `src/services/moveThoughtFacts.test.ts:269`
 - `src/services/moveThoughtFacts.test.ts:272`
 - `src/services/moveThoughtFacts.test.ts:295`
-- `src/services/moveThoughtFacts.test.ts:320`
-- `src/services/moveThoughtFacts.test.ts:364`
-- `src/services/moveThoughtFacts.test.ts:374`
-- `src/services/moveThoughtFacts.test.ts:394`
-- `src/services/moveThoughtFacts.test.ts:409`
-- `src/services/moveThoughtFacts.test.ts:424`
-- `src/services/moveThoughtFacts.test.ts:439`
-- `src/services/moveThoughtFacts.test.ts:454`
-- `src/services/moveThoughtFacts.test.ts:467`
-- `src/services/moveThoughtFacts.ts:1051`
-- `src/services/moveThoughtFacts.ts:1163`
+- `src/services/moveThoughtFacts.test.ts:302`
+- `src/services/moveThoughtFacts.test.ts:327`
+- `src/services/moveThoughtFacts.test.ts:371`
+- `src/services/moveThoughtFacts.test.ts:381`
+- `src/services/moveThoughtFacts.test.ts:401`
+- `src/services/moveThoughtFacts.test.ts:416`
+- `src/services/moveThoughtFacts.test.ts:431`
+- `src/services/moveThoughtFacts.test.ts:446`
+- `src/services/moveThoughtFacts.test.ts:461`
+- `src/services/moveThoughtFacts.test.ts:474`
+- `src/services/moveThoughtFacts.ts:1077`
+- `src/services/moveThoughtFacts.ts:1189`
 - `src/services/openingGenerator.ts:2059`
 - `src/services/openingGenerator.ts:2629`
 - `src/services/pieceRoute.test.ts:52`
@@ -217,6 +223,7 @@
 - `src/services/pieceRoute.test.ts`
 - `src/services/reviewMoveBriefing.test.ts`
 - `src/services/reviewMoveThought.test.ts`
+- `src/services/standingEvidence.test.ts`
 - `src/services/threeFacts.briefing.test.ts`
 - `src/services/verdictWithReasons.test.ts`
 - `src/services/writtenVsComputed.measure.test.ts`

@@ -50,7 +50,7 @@ export function benchInput(r: Row, counter?: { reads: number }): BoardReadInput 
     } catch { /* a stored line that does not play is not a read */ }
   }
   return {
-    fen: r.fen,
+    stage: 'full', fen: r.fen,
     studentColor: r.fen.split(' ')[1] === 'b' ? 'b' : 'w',
     rating: 1500,
     before: r.reads.slice(0, 3).map((l, k) => line(k + 1, l.evaluation, l.mate, l.moves, 14)),

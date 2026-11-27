@@ -44,6 +44,7 @@ export const MEMORY_LIFETIMES: Record<string, MemoryLifetimeRow> = {
   'src/components/Coach/CoachGamePage.tsx::announcedHangingRef': { lifetime: 'per-game', what: 'loose pieces already named this game' },
   'src/components/Coach/CoachGamePage.tsx::tacticAnimTimersRef': { lifetime: 'per-board', what: 'timers' },
   'src/components/Coach/CoachGamePage.tsx::clockHistoryRef': { lifetime: 'per-game', what: 'clock per move, saved on db.games at game end' },
+  'src/components/Coach/CoachGamePage.tsx::toldBoardsRef': { lifetime: 'per-game', what: 'boards a hint or Why told the move on (keyed by game id): the move played there is prompted, never proof' },
   'src/hooks/useLiveCoach.ts::saidRef': { lifetime: 'per-game', what: 'say-once ledger' },
   'src/hooks/useLiveCoach.ts::evalHistoryRef': { lifetime: 'per-game', what: 'eval trace this game' },
 
