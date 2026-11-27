@@ -2246,6 +2246,8 @@ const PIECE_WORD: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop'
  *  …c5." `brk` is the move, or the pawn when the student's move is held. */
 export function mastersBreakPlanWords(mine: boolean, brk: string): string {
   return `${mine ? 'Your' : 'Their'} plan in the master games: the break ${brk}.`;
+}
+
 // ── THE THREE THREAT COMPUTERS (rebuilt 2026-11-27): the discovered attack,
 // the answering move, your own threat. Each computer returns data; the words
 // are written here. `names`: the move may be named (a read the student asked
