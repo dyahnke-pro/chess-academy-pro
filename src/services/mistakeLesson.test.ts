@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 const logged: Array<{ kind: string; context?: string }> = [];
 vi.mock('./appAuditor', () => ({ logAppAudit: (e: { kind: string; context?: string }) => { logged.push(e); return Promise.resolve(); } }));
 
-import { allSlots, composeGoodDecision, composeMistakeLesson, nextGameMemory, NEW_GAME_MEMORY, withStems, RECIPES, REPAIRS, POSITIONAL, type MistakeLessonInput } from './mistakeLesson';
+import { allSlotsForTests, composeGoodDecision, composeMistakeLesson, nextGameMemory, NEW_GAME_MEMORY, withStems, RECIPES, REPAIRS, POSITIONAL, type MistakeLessonInput } from './mistakeLesson';
 import { errorWhy, NO_SECOND_READ } from './inaccuracyCall';
 import type { HoldRecord } from './holdRate';
 
@@ -95,7 +95,7 @@ describe('the table gate', () => {
   const SAN = /\b(?:[KQRBN][a-h]?[1-8]?x?[a-h][1-8]|[a-h]x[a-h][1-8]|O-O(?:-O)?)\b/;
   const words = (s: string): number => s.replace(/\{\w+\}/g, 'X').split(/\s+/).filter(Boolean).length;
   const blank = (s: string): string => s.toLowerCase().replace(/\{\w+\}/g, '_').replace(/\b(pawn|knight|bishop|rook|queen|king|[a-h][1-8])\b/g, '_').replace(/[^a-z_ ]/g, '').trim();
-  for (const { where, stems } of allSlots()) {
+  for (const { where, stems } of allSlotsForTests()) {
     it(`${where}: 5 phrasings, ≤14 words, no move, none the same`, () => {
       expect(stems.length).toBeGreaterThanOrEqual(5);
       for (const s of stems) {
@@ -116,7 +116,7 @@ describe('the table gate', () => {
     // their missed tempo, whose square holds the STUDENT's own piece (what
     // they could have hit), never a square the student strikes.
     const PAST_OR_OWN = new Set(['them:ignored-threat.lesson', 'reader-them:missed-tempo']);
-    for (const { where, stems, seat } of allSlots()) {
+    for (const { where, stems, seat } of allSlotsForTests()) {
       if (seat !== 'them' || PAST_OR_OWN.has(where)) continue;
       for (const st of stems) expect(st, where).not.toMatch(/\{(target|sq|opSq|king|pawn|checkSq|file|opPiece)\}/);
     }

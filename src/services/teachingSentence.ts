@@ -23,7 +23,7 @@ import { DEFENDER_RULE_TECHNIQUE, type DefenderRuleId } from './endgameDefenderR
 import { CAPTURE_VALUE } from './pieceValues';
 import { Chess, type Square } from 'chess.js';
 import { rotateStem } from '../utils/rotateStem';
-import { andList, orList, countWord } from '../utils/andList';
+import { andList, orList, countWord, withArticle } from '../utils/andList';
 import { openSentence, continueSentence } from '../utils/openSentence';
 import { evalBandWords, type EvalBand } from './evalBand';
 import type { MistakeCauseKind } from './mistakeCause';
@@ -1708,7 +1708,7 @@ export function materialWords(pawns: number): string | null {
   if (pawns === 1) return 'a pawn';
   return null;
 }
-export const motifArticle = (w: string): string => (/^[aeiou]|^x-/.test(w) ? `an ${w}` : `a ${w}`);
+export const motifArticle = (w: string): string => withArticle(w);
 export const COLOUR_NAME = { dark: 'dark', light: 'light' } as const;
 
 /** An ending's rule in words: every defender rule (`DEFENDER_RULE_TECHNIQUE`),
@@ -1987,7 +1987,7 @@ export const POSITIONAL_THEM: Partial<Record<Exclude<MisconceptionTagId, 'other'
 export function fillStem(stem: string, fills: Fills): string {
   return stem.replace(/\{(\w+)\}/g, (_, k: string) => fills[k as FillKey] ?? `{${k}}`);
 }
-export const capitaliseStem = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
+export const capitaliseStem = (s: string): string => openSentence(s);
 
 /** Said one slot: rotated on `key`, skipping a stem the previous turn said
  *  (`avoid`), or null when a field it needs is missing. Returns the stem
@@ -2043,3 +2043,82 @@ export const GOOD_DECISION: Record<GoodDecision, SlotRecipe> = {
     'Their idea against your {victim} never gets started now.',
   ]),
 };
+
+// ── THE STRUCTURE'S PLANS (`structureOf` → `planOf`) ───────────────────────
+/** One structural plan in players' words, rotated on the board. `whose` is
+ *  "your"/"their"; `names` false keeps the student's own move unnamed (the
+ *  square and the target only). `later`: said as a plan for later. */
+export function structurePlanWords(
+  p: { kind: 'chain' | 'minority' | 'expansion' | 'majority' | 'isolani' | 'square' | 'bad-bishop'; key: { from: string; to: string; hits: string | null } | null; first: { from: string; to: string } | null; target: string | null; piece?: { type: string; square: string }; owns?: boolean },
+  whose: 'your' | 'their',
+  names: boolean,
+  key: number,
+  later = false,
+): string | null {
+  const Whose = whose === 'your' ? 'Your' : 'Their';
+  const theirs = whose === 'your' ? 'their' : 'your';
+  const pawnOf = (from: string): string => `${from[0]}-pawn`;
+  const lead = later ? `${Whose} plan for later` : `${Whose} plan`;
+  switch (p.kind) {
+    case 'chain': {
+      if (!p.key?.hits) return null;
+      const how = names ? `${p.key.to}` : `the ${pawnOf(p.key.from)}`;
+      return rotateStem([
+        `${lead}: strike at the base of ${theirs} pawn chain, ${how} hitting ${p.key.hits}.`,
+        `${lead} is to hit the chain at its base: ${how} against ${p.key.hits}.`,
+        `${lead}: the pawn on ${p.key.hits} holds ${theirs} chain up, so ${how} goes after it.`,
+      ], key);
+    }
+    case 'minority': {
+      if (!p.key?.hits) return null;
+      return rotateStem([
+        `${lead} is the minority attack: the b-pawn runs to ${p.key.to} at the pawn on ${p.key.hits}.`,
+        `${lead}: two pawns against three, the b-pawn to ${p.key.to} to break up ${p.key.hits}.`,
+      ], key);
+    }
+    case 'expansion': {
+      if (!p.key?.hits || !p.first) return null;
+      const brk = names ? `${p.key.to}` : `the ${pawnOf(p.key.from)}`;
+      const gain = names ? `${p.first.to}` : `the ${pawnOf(p.first.from)}`;
+      return rotateStem([
+        `${lead}: the break ${brk} at ${p.key.hits}, once ${gain} has taken queenside space.`,
+        `${lead} is the break at ${p.key.hits} with ${brk}, after ${gain} gains space.`,
+      ], key);
+    }
+    case 'majority': {
+      if (!p.key) return null;
+      const wing = p.key.from.charCodeAt(0) <= 99 ? 'queenside' : 'kingside';
+      return rotateStem([
+        `${lead}: push the ${wing} majority, the ${pawnOf(p.key.from)} first, to make a passed pawn.`,
+        `${lead} is a passed pawn from the ${wing} majority, starting with the ${pawnOf(p.key.from)}.`,
+      ], key);
+    }
+    case 'isolani': {
+      if (!p.target) return null;
+      return p.owns
+        ? rotateStem([`${lead}: use the open lines around the isolated pawn on ${p.target}, and keep pieces on.`, `${lead}: activity first, with the isolated pawn on ${p.target} backing the pieces.`], key)
+        : rotateStem([`${lead}: blockade the isolated pawn on ${p.target}, then trade pieces toward it.`, `${lead}: hold the square in front of the isolated pawn on ${p.target}, then win it.`], key);
+    }
+    case 'square': {
+      if (!p.target || !p.piece) return null;
+      return rotateStem([
+        `${lead}: the fight for ${p.target}. No pawn of ${theirs} can cover it, and ${whose} ${PIECE_WORD[p.piece.type] ?? 'piece'} on ${p.piece.square} wants it.`,
+        `${lead} is ${p.target}: ${whose} pieces cover it more, and the ${PIECE_WORD[p.piece.type] ?? 'piece'} on ${p.piece.square} can land there.`,
+      ], key);
+    }
+    case 'bad-bishop': {
+      if (!p.piece) return null;
+      return rotateStem([
+        `${Whose} bishop on ${p.piece.square} is bad: its own pawns are fixed on its colour. Trade it off.`,
+        `${Whose} bishop on ${p.piece.square} is stuck behind its own pawns. ${lead}: trade it, or free its colour.`,
+      ], key);
+    }
+  }
+}
+const PIECE_WORD: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+
+/** The masters' break as a plan: "Their plan in the master games: the break
+ *  …c5." `brk` is the move, or the pawn when the student's move is held. */
+export function mastersBreakPlanWords(mine: boolean, brk: string): string {
+  return `${mine ? 'Your' : 'Their'} plan in the master games: the break ${brk}.`;
+}

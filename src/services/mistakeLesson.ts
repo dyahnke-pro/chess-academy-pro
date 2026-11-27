@@ -43,7 +43,7 @@ import { MOTIFS, MOTIF_OF_TACTIC } from '../data/tacticMotifs';
 import { holdState, type HeatState, type HoldRecord } from './holdRate';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { phaseOfFen, type Phase } from './boardConcepts';
-import { materialBalance } from './pieceValues';
+import { MATERIAL_VALUE, materialBalance } from './pieceValues';
 import { capturesWinMaterial, kingSafetyRead } from './positionReadingService';
 import { onlyMove } from './thoughtReads';
 import { findProphylaxis } from './prophylaxis';
@@ -66,7 +66,6 @@ export {
 const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
 
 
-const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
 /** Causes whose piece comes from their line when no mechanism named one. */
 const REPLY_TARGET: ReadonlySet<MistakeCauseKind> = new Set(['allowed-threat', 'ignored-threat', 'allowed-capture', 'allowed-tactic']);
 
@@ -204,7 +203,7 @@ export function fillsFor(input: MistakeLessonInput): Fills {
     const won: Array<{ sq: string; t: string }> = []; const back: string[] = [];
     for (const u of line.uci) { const m = play(c, u); if (!m) break; if (!m.captured) continue; if (m.color === taker) won.push({ sq: m.to, t: m.captured }); else back.push(m.captured); }
     for (let i = won.length - 1; i >= 0; i -= 1) { const j = back.indexOf(won[i].t); if (j >= 0) { won.splice(i, 1); back.splice(j, 1); } }
-    const best = won.sort((x, y) => VALUE[y.t] - VALUE[x.t])[0];
+    const best = won.sort((x, y) => MATERIAL_VALUE[y.t] - MATERIAL_VALUE[x.t])[0];
     return best ? { sq: best.sq, piece: NAME[best.t] } : null;
   };
   const them: Color = mover === 'w' ? 'b' : 'w';
@@ -239,7 +238,7 @@ export function fillsFor(input: MistakeLessonInput): Fills {
       for (const u of input.ew.missedReasonLine.uci) {
         const m = play(c, u); if (!m) break;
         if (m.color !== mover) continue;
-        const worth = (t: string): number => (t === 'k' ? 99 : VALUE[t]);
+        const worth = (t: string): number => (t === 'k' ? 99 : MATERIAL_VALUE[t]);
         const hit = c.board().flat().flatMap((p) => (p && p.color === them && worth(p.type) >= 3 && c.attackers(p.square, mover).includes(m.to) ? [p.type] : []))
           .sort((x, y) => worth(y) - worth(x));
         if (hit.length >= 2) { f.a = NAME[hit[0]]; f.b = NAME[hit[1]]; break; }
@@ -837,7 +836,7 @@ function logMistakeLesson(input: MistakeLessonInput, out: MistakeLesson): void {
 }
 
 /** Every stem in the table, for the gate. `seat` says which seat reads it. */
-export function allSlots(): Array<{ where: string; stems: readonly string[]; seat: 'you' | 'them' | 'student' }> {
+export function allSlotsForTests(): Array<{ where: string; stems: readonly string[]; seat: 'you' | 'them' | 'student' }> {
   const out: Array<{ where: string; stems: readonly string[]; seat: 'you' | 'them' | 'student' }> = [];
   for (const [k, r] of Object.entries(RECIPES)) {
     for (const sl of ['lesson', 'consequence', 'habit'] as const) { const x = r[sl]; if (x) out.push({ where: `${k}.${sl}`, stems: x.stems, seat: 'you' }); }

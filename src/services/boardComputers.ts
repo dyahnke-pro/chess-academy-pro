@@ -77,7 +77,8 @@ import { costStakes } from './factStakes';
 import { pawnBreak } from './pawnBreak';
 import { oppositeBishops } from './oppositeBishops';
 import { planSteps, planStepsText, planStepsKey, planStepsHeld } from './planSteps';
-import { planOfTheBoard } from './planOfTheBoard';
+import { planOf } from './planOf';
+import { masterMovesCachedSync } from './masterPlayLookup';
 import { compensation } from './compensation';
 import { openingTheoryFacts } from './openingTheory';
 import { moveStops } from './moveStops';
@@ -3694,17 +3695,25 @@ export const BOARD_COMPUTERS = {
     // Re1-e3-b3", "b4 then b5 to dislodge the c6 knight", "build the gun on
     // the d-file"), never a state ("their rook is well placed"): the one plan
     // the board's best line starts, both seats.
+    // THE PLAN COMPUTER (`planOf`): the line's plan, the structure's and the
+    // masters', ranked by evidence — the top said, a second within 30%, and a
+    // plan for later once the best line plays it.
     read: ({ fen, lines, student, namesMoves }, fact) => safe(() => {
-      const p = planOfTheBoard({ fen, lines, student, namesMoves });
-      if (!p) return null;
+      const out = planOf({ fen, lines, student, namesMoves, movesAt: masterMovesCachedSync });
+      const said = [...out.mover, ...(out.later ? [out.later] : [])];
+      if (!said.length) return null;
       const mover: Color = fen.split(' ')[1] === 'b' ? 'b' : 'w';
       const mine = mover === student;
-      const key = `plan-of-board:${mover}:${p.kind}:${p.target ?? p.squares[0] ?? ''}`;
       const proof = legalLineProof(fen, lines[0]?.moves ?? [], lineSeatAt(fen, student)) ?? NO_PROOF.description;
-      // The step that led to the plan is one claim with its own computer's
-      // fact (their break the best move takes away is `breakStopped`'s).
-      return fact({ key, claims: [key, ...(p.why?.claims ?? []), ...p.claims], text: p.text, proof, squares: p.squares, stakes: null,
-        seat: mine ? 'student' : 'opponent', namesStudentMove: mine && namesMoves, thread: LOCAL_THREAD, fen });
+      return said.map((c) => {
+        const p = c.board;
+        const key = p ? `plan-of-board:${mover}:${p.kind}:${p.target ?? p.squares[0] ?? ''}` : c.claim;
+        // The step that led to the plan is one claim with its own computer's
+        // fact (their break the best move takes away is `breakStopped`'s).
+        const claims = p ? [key, ...(p.why?.claims ?? []), ...p.claims] : [key];
+        return fact({ key, claims, text: c.text, proof, squares: c.squares, stakes: null,
+          seat: mine ? 'student' : 'opponent', namesStudentMove: mine && namesMoves, thread: LOCAL_THREAD, fen });
+      });
     }),
     computer: 'planOfTheBoard',
     kind: 'plan-steps',
