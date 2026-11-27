@@ -68,7 +68,7 @@ describe('desperado: one piece lost anyway', () => {
 
 describe('the one composer says it', () => {
   it('a lesson or Review move from the fork board carries the sale', () => {
-    const facts = moveThoughtFacts({ moveReads: writerFor('review').moveReads, namesPlayedMove: true,
+    const facts = moveThoughtFacts({ register: 'review', soundPlies: new Set<number>(), unpricedCredit: 'refused', moveReads: writerFor('review').moveReads, namesPlayedMove: true,
       plainThreatsSeen: false, story: false, theory: false, tense: 'past', fenBefore: FEN, san: 'Bd2', moverIsStudent: true,
       prev: NO_PREV_CAPTURE, line: null, history: [], theirLast: null, phrases: null, costCp: 300,
       reads: { before: [{ rank: 1, evaluation: -150, moves: ['c3b5'], mate: null }, { rank: 2, evaluation: -450, moves: ['e3d2'], mate: null }] as never, after: [], passBefore: [], passAfter: [] },

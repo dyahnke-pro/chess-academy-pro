@@ -101,7 +101,7 @@ describe('a move the line goes on to play was not stopped', () => {
 });
 
 describe('the fundamentals’ "prepares e5" is said only when a line plays it', () => {
-  const facts = (line: readonly string[] | null, after: string[] | null) => moveThoughtFacts({ moveReads: writerFor('lesson').moveReads, namesPlayedMove: true, plainThreatsSeen: false, story: false,
+  const facts = (line: readonly string[] | null, after: string[] | null) => moveThoughtFacts({ register: 'live', soundPlies: new Set<number>(), unpricedCredit: 'refused', moveReads: writerFor('lesson').moveReads, namesPlayedMove: true, plainThreatsSeen: false, story: false,
     fenBefore: BENKO_D6, san: 'd6', tense: 'now', moverIsStudent: true, prev: NO_PREV_CAPTURE, line, theirLast: null, history: [],
     phrases: null, costCp: null, theory: true,
     reads: after ? { before: [L(['d7d6'], -40)], passBefore: [], after: [L(after, -40)], passAfter: [] } : null,

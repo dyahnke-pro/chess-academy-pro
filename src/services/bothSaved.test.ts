@@ -41,7 +41,7 @@ describe('bothSaved: two hanging, one move saves both', () => {
 
 describe('the one composer says them', () => {
   it('a lesson or Review move from the hanging board carries the save', () => {
-    const facts = moveThoughtFacts({ moveReads: writerFor('review').moveReads, namesPlayedMove: true,
+    const facts = moveThoughtFacts({ register: 'review', soundPlies: new Set<number>(), unpricedCredit: 'refused', moveReads: writerFor('review').moveReads, namesPlayedMove: true,
       plainThreatsSeen: false, story: false, theory: false, tense: 'past', fenBefore: FEN, san: 'Ne7', moverIsStudent: true,
       prev: NO_PREV_CAPTURE, line: null, history: [], theirLast: null, phrases: null, costCp: 0,
       reads: { before: [{ rank: 1, evaluation: 541, moves: ['d5e7'], mate: null }], after: REPLIES.map((l, k) => ({ rank: k + 1, evaluation: l.cp, moves: [...l.moves], mate: null })), passBefore: [], passAfter: [] } as never,

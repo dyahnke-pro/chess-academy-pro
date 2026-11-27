@@ -63,7 +63,7 @@ describe('the wiring', () => {
     expect(f?.seat).toBe('student');
     const theirs = readBoardAll('practicalChance', { fenBefore: KASPAROV, san: 'Qe3', student: 'w', reads: { moverCp: -112, costCp: 0, after: AFTER_QE3 } })[0];
     expect(theirs?.seat).toBe('opponent');
-    const facts = moveThoughtFacts({ moveReads: writerFor('review').moveReads, namesPlayedMove: true,
+    const facts = moveThoughtFacts({ register: 'review', soundPlies: new Set<number>(), unpricedCredit: 'refused', moveReads: writerFor('review').moveReads, namesPlayedMove: true,
       plainThreatsSeen: false, story: false, theory: false, tense: 'past', fenBefore: KASPAROV, san: 'Qe3', moverIsStudent: true,
       prev: NO_PREV_CAPTURE, line: null, history: [], theirLast: null, phrases: null, costCp: 0,
       reads: { before: [l(112, 'b6e3 c6d6 b8e8', 1), l(372, 'b6c6 d5c6 b8c8', 2), l(514, 'b6a6 c6a6 f7e7', 3)], after: AFTER_QE3, passBefore: [], passAfter: [] },
