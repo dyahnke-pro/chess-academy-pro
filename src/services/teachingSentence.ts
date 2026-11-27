@@ -2239,3 +2239,11 @@ export function standingReasonWords(
     case 'balance': return { clause: 'material is level and neither king is under fire', sentence: 'Material is level, and neither king is under fire.' };
   }
 }
+
+// ── READ THIS POSITION'S FIRST WORDS (`readFirstWords`) ────────────────────
+/** Their threat on the board, said first: the move, and what it wins. */
+export function readThreatWords(t: { san: string; piece: string | null; square: string; mate: boolean }, key: number): string {
+  if (t.mate) return rotateStem([`Their threat first: ${t.san} is mate.`, `Watch out: they threaten mate with ${t.san}.`], key);
+  const what = t.piece ? `your ${t.piece} on ${t.square}` : `the piece on ${t.square}`;
+  return rotateStem([`Their threat first: ${t.san} wins ${what}.`, `Watch out: ${t.san} would take ${what}.`], key);
+}

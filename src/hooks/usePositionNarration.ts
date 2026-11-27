@@ -16,6 +16,7 @@ import type { StockfishAnalysis } from '../types';
 import { DEFAULT_STUDENT_RATING } from '../services/ratingBands';
 import { useStudentNeed } from './useStudentNeed';
 import { composePositionRead, READ_SEAT } from '../services/positionReadComposer';
+import { readFirstWords, saidAlready } from '../services/readFirstWords';
 import type { ReadSurface } from '../services/tryReadBudget';
 import type { ReadStory } from '../services/gameStory';
 
@@ -201,6 +202,8 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
       // student re-reads a tense middlegame a few seconds apart) skip
       // the engine cycle entirely.
       const cachedAnalysis = getCachedStockfish(args.fen);
+      let speechChain: Promise<void> = Promise.resolve();
+      let firstSaid: string[] = [];
       let stockfishAnalysis: StockfishAnalysis | null;
       if (cachedAnalysis) {
         void logAppAudit({
@@ -231,6 +234,37 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
       }
       if (token !== activeTokenRef.current) return;
 
+      // ── THE FIRST WORDS (Coach Build Board: first word in about half a
+      //    second, one order): their threat, the standing with its why, both
+      //    plans — off the one read, said while the deep part (the tempting
+      //    moves' reads, the look-ahead) is composed. The deep part follows on
+      //    the same speech chain, so there is no gap, and nothing already said
+      //    is said again.
+      {
+        const studentWB = args.playerColor === 'white' ? 'w' : 'b';
+        const pov = stockfishAnalysis && !stockfishAnalysis.isMate ? (studentWB === 'w' ? stockfishAnalysis.evaluation : -stockfishAnalysis.evaluation) : null;
+        firstSaid = (() => { try { return readFirstWords({ fen: args.fen, student: studentWB, studentPovCp: pov, lines: stockfishAnalysis?.topLines ?? [], names: !args.withhold }); } catch { return []; } })();
+        if (firstSaid.length) {
+          void logAppAudit({
+            kind: 'narration-latency',
+            category: 'subsystem',
+            source: 'usePositionNarration.firstWords',
+            summary: `tap-to-first-words ${Date.now() - tapTs}ms`,
+            details: JSON.stringify({ tapToFirstWordsMs: Date.now() - tapTs, sentences: firstSaid.length, cached: !!cachedAnalysis }),
+            fen: args.fen,
+          });
+          setCurrentText(firstSaid.join(' '));
+          for (const sentence of firstSaid) {
+            speechChain = speechChain
+              .then(() => {
+                const pkg = buildVoicePackage([{ kind: 'computed', text: sentence, fen: args.fen }]);
+                return pkg.spoken ? voiceService.speakReadAloud(pkg.spoken) : undefined;
+              })
+              .catch(() => undefined);
+          }
+        }
+      }
+
       const profile = await db.profiles.get('main');
       const rating = profile?.currentRating ?? DEFAULT_STUDENT_RATING;
 
@@ -258,7 +292,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
       });
       if (token !== activeTokenRef.current) return;
       if (!facts) {
-        setCurrentText('');
+        setCurrentText(firstSaid.join(' '));
         return;
       }
 
@@ -304,8 +338,8 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
       }
       if (token !== activeTokenRef.current) return;
       spoken = dropInventedQuestions(spoken, facts) || speakableFacts(facts).trim();
-      if (!spoken) return;
-      setCurrentText(spoken);
+      if (!spoken && !firstSaid.length) return;
+      setCurrentText([...firstSaid, spoken].filter(Boolean).join(' '));
 
       // ── THE VOICE. Sentence by sentence through the package (truth) and
       //    speakReadAloud (the G5 read-aloud carve-out — the student TAPPED to
@@ -314,8 +348,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
       //    dead on Silent/Brief again). Packaging governs TRUTH; the carve-out
       //    governs WHETHER a tapped read is allowed to speak at all.
       const { sentences, rest } = splitSpeakableSentences(spoken);
-      const utterances = [...sentences, rest].map((t) => t.trim()).filter(Boolean);
-      let speechChain: Promise<void> = Promise.resolve();
+      const utterances = [...sentences, rest].map((t) => t.trim()).filter(Boolean).filter((t) => !saidAlready(t, firstSaid));
       let sentenceCount = 0;
       for (const sentence of utterances) {
         sentenceCount += 1;
@@ -346,7 +379,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
       // (David 2026-07-06) — same treatment as phase-transition narration.
       // The banner is the live subtitle; the chat is the durable copy the
       // student can scroll back and reread.
-      args.onReport?.(spoken);
+      args.onReport?.([...firstSaid, spoken].filter(Boolean).join(' '));
 
       // Block isNarrating true until the speech chain drains — preserves
       // the "board frozen while main voice speaks" invariant from
