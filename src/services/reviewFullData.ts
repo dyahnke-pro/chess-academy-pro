@@ -1436,6 +1436,8 @@ export function computeMoveFacets(
       add(readBoardAll('frozenTarget', { fen: fenAfter, student: studentColorWB })[0]);
       add(readBoardAll('theirWorstPiece', { fen: fenAfter, student: studentColorWB, bestLine: ctx.playedLineUci.length ? ctx.playedLineUci : null })[0]);
       add(readBoardAll('seventhRankMate', { fen: fenAfter, lines: null, student: studentColorWB })[0]);
+      add(readBoardAll('checkCensus', { fen: fenAfter, lines: null, student: studentColorWB })[0]);
+      for (const f of readBoardAll('deflection', { fen: fenAfter, student: studentColorWB, namesMoves: REVIEW_WRITER.namesPlayedMove })) add(f);
       add(readBoardAll('pieceTempo', { fen: fenAfter, lines: null, student: studentColorWB })[0]);
       if (ctx.evaluation != null && !isMateEval(ctx.evaluation) && ctx.playedLineUci.length) {
         const lines = [{ moves: ctx.playedLineUci, cp: ctx.evaluation, mate: null }];
@@ -1454,7 +1456,11 @@ export function computeMoveFacets(
         add(readBoardAll('queenKnightNet', { fen: fenAfter, lines, student: studentColorWB })[0]);
         add(readBoardAll('selfBlock', { fen: fenAfter, lines, student: studentColorWB })[0]);
         add(readBoardAll('mateThreatLever', { fen: fenAfter, lines, student: studentColorWB })[0]);
+        add(readBoardAll('attackLeader', { fen: fenAfter, lines, student: studentColorWB, namesMoves: REVIEW_WRITER.namesPlayedMove })[0]);
       }
+      // The defender too late for the mate: the record's one line, played
+      // out to mate on the board (unscored: the line's own mate proves it).
+      if (ctx.playedLineUci.length) add(readBoardAll('defenderArrival', { fen: fenAfter, lines: [{ moves: ctx.playedLineUci, cp: null, mate: null }], student: studentColorWB })[0]);
       add(readBoardAll('inaccessibleHole', { fenBefore, san, student: studentColorWB })[0]);
       // Both seats, worded from the student's: the box shrunk, the promotion
       // that comes with check, the lever with no pieces near it, and the

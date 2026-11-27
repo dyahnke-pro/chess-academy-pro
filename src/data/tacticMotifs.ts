@@ -13,8 +13,10 @@
 // (attraction → decoy → deflection here, undermining → removing the guard,
 // cross-pin → pin, underpromotion → promotion, back-rank mate → mate) — on a
 // club player's record a split that fine would never fill. Motifs with no
-// reader yet (desperado, windmill, perpetual check, the stalemate save) join when their reader does (M3); a row nothing can fill is a tile
-// that can only lie.
+// reader yet (windmill, perpetual check, the stalemate save) join when their reader does (M3); a row nothing can fill is a tile
+// that can only lie. The desperado has its reader (`desperadoAt`) and its
+// own tag (`missed-your-desperado`, filed by `moveInsight.positionPosed`),
+// but no row: the puzzle set carries no desperado theme to drill it.
 
 import type { TacticType } from '../types';
 import type { MisconceptionTagId } from './misconceptionTags';
@@ -88,7 +90,7 @@ export const MOTIFS: Record<MotifId, MotifDef> = {
   // No overloading theme in our puzzle set; an overloaded defender is the one
   // a deflection pulls away, so its drills share that theme.
   overload: { id: 'overload', word: 'overloaded defender', label: 'Overloaded defenders', level: 'intermediate', theirs: 'missed-their-overload', yours: 'missed-your-overload', themes: ['deflection'] },
-  deflection: { id: 'deflection', word: 'deflection', label: 'Deflections', level: 'intermediate', theirs: null, yours: 'missed-your-deflection', themes: ['deflection', 'attraction'] },
+  deflection: { id: 'deflection', word: 'deflection', label: 'Deflections', level: 'intermediate', theirs: 'missed-their-deflection', yours: 'missed-your-deflection', themes: ['deflection', 'attraction'] },
   zwischenzug: { id: 'zwischenzug', word: 'in-between move', label: 'In-between moves', level: 'intermediate', theirs: null, yours: 'missed-your-zwischenzug', themes: ['intermezzo'] },
   'trapped-piece': { id: 'trapped-piece', word: 'trapped piece', label: 'Trapped pieces', level: 'intermediate', theirs: 'missed-their-trap', yours: 'missed-your-trapped-piece', themes: ['trappedPiece'] },
   // ── Advanced ─────────────────────────────────────────────────────────
@@ -168,6 +170,8 @@ export function parentSkillTag(tag: string): MisconceptionTagId | null {
     if (m.yours === tag) return 'missed-tactic';
     if (m.theirs === tag) return 'missed-opponents-threat';
   }
+  // The desperado: a shot of yours with its own tag and no row (see the head).
+  if (tag === 'missed-your-desperado') return 'missed-tactic';
   return null;
 }
 

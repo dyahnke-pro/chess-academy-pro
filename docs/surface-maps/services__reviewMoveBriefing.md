@@ -59,8 +59,8 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `signedBand` (const) — 3 call sites
-- `src/services/boardComputers.ts:3159`
-- `src/services/boardComputers.ts:6535`
+- `src/services/boardComputers.ts:3171`
+- `src/services/boardComputers.ts:6547`
 - `src/services/boardReadFacts.ts:209`
 
 ### `evalReading` (function) — 5 call sites
@@ -71,14 +71,14 @@
 - `src/services/verdictWithReasons.test.ts:77`
 
 ### `evalReadingEvidence` (function) — 2 call sites
-- `src/services/boardComputers.ts:6533`
+- `src/services/boardComputers.ts:6545`
 - `src/services/standingEvidence.test.ts:70`
 
 ### `standingRead` (function) — 1 call site
 - `src/services/boardReadFacts.ts:208`
 
 ### `moveAspects` (function) — 13 call sites
-- `src/services/boardComputers.ts:6177`
+- `src/services/boardComputers.ts:6189`
 - `src/services/captureLeadsTo.test.ts:26`
 - `src/services/countedWhenTradeEnds.test.ts:38`
 - `src/services/countedWhenTradeEnds.test.ts:52`
@@ -175,8 +175,8 @@
 - `src/services/moveThoughtFacts.test.ts:446`
 - `src/services/moveThoughtFacts.test.ts:461`
 - `src/services/moveThoughtFacts.test.ts:474`
-- `src/services/moveThoughtFacts.ts:1077`
-- `src/services/moveThoughtFacts.ts:1189`
+- `src/services/moveThoughtFacts.ts:1085`
+- `src/services/moveThoughtFacts.ts:1197`
 - `src/services/openingGenerator.ts:2059`
 - `src/services/openingGenerator.ts:2629`
 - `src/services/pieceRoute.test.ts:52`

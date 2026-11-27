@@ -158,6 +158,7 @@ export const TAG_STEP: Record<MisconceptionTagId, ThinkingStep | null> = {
   'missed-their-double-check': 'their-move-changed',
   'missed-their-guard-removal': 'their-move-changed',
   'missed-their-overload': 'their-move-changed',
+  'missed-their-deflection': 'their-move-changed',
   // Your tactic, per motif (WO-MOTIFS-01): the shot was forcing, like the
   // catch-all — except the free piece (their targets) and the fork (hit two).
   'missed-your-free-piece': 'their-targets',
@@ -173,6 +174,7 @@ export const TAG_STEP: Record<MisconceptionTagId, ThinkingStep | null> = {
   'missed-your-guard-removal': 'forcing-moves',
   'missed-your-overload': 'forcing-moves',
   'missed-your-deflection': 'forcing-moves',
+  'missed-your-desperado': 'forcing-moves',
   'missed-your-zwischenzug': 'forcing-moves',
   'missed-your-trapped-piece': 'forcing-moves',
   'missed-your-clearance': 'forcing-moves',

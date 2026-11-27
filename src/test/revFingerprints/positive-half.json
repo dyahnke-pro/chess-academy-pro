@@ -1,7 +1,7 @@
 {
-  "rev": "2026-11-27-threats",
+  "rev": "2026-11-27-attack",
   "parts": {
-    "chesscom-1038626480": "73989dbb7be9508f",
+    "chesscom-1038626480": "3e4ac51e72ba4c22",
     "chesscom-1042725180": "5ca519e7ced8c128",
     "chesscom-1044361526": "37cb7f2511337dcf",
     "lichess-motifs": "00a4d5e683e564f4"

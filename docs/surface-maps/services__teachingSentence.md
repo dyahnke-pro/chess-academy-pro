@@ -4,28 +4,29 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**2320 lines · 118 exports · 38 importers · 8 tests · 431 audits**
+**2463 lines · 122 exports · 39 importers · 8 tests · 431 audits**
 
 ## Locked rules that govern this surface
 
 - **🎯 § MISSIONS — CAMPAIGN TEACHES ONE HABIT PER PHASE (David 2026-10-21, WO-MISSIONS-01)** (CLAUDE.md:74) — names `HABIT`, `Surface`
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:233) — names `HABIT`
-- **🔗 CAPABILITY PARITY — IF ONE SIGNAL CARRIES IT, THEY ALL DO (David 2026-09-16: "if tactics and puzzles have something so should everything else. The goal is one coach with the same structure and capabilities everywhere, just used differently depending on the tab or functions it's performing").** (CLAUDE.md:733) — names `HABIT`
-- **🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").** (CLAUDE.md:778) — names `Surface`
-- **G4.5.16 TEACH THE METHOD, NOT ONLY THE BOARD (David 2026-09-16: "Calling out pins and forks isn't teaching. Future moves, how to think, threat identification, that is teaching").** (CLAUDE.md:1616) — names `HABIT`
-- **G7. Playwright audits MUST be INTERACTIVE. No exceptions.** (CLAUDE.md:1860) — names `Surface`
-- **STEP 12 — Add common-mistakes entries (pitfalls)** (CLAUDE.md:2639) — names `Surface`
-- **🔒🔒 EVERY SPOKEN CONCLUSION CARRIES ITS PROOF — the proof is the thinking out loud (David 2026-10-07: "Anything that gets proven is stated out loud?" → "Yes. I have a feeling it will backfire but I think a decent starting spot.")** (CLAUDE.md:2901) — names `Rendered`
-- **🧠 Operate at full depth (non-negotiable)** (CLAUDE.md:2999) — names `Surface`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3865) — names `Surface`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4856) — names `Surface`
-- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5516) — names `Surface`
-- **🔒🔒 LEARN SPEAKS ON A MOMENT, AND IS QUIET OTHERWISE (David 2026-11-18: "So learn narrations are needed only when the player makes an error of some kind … And it knows when not to say anything. Like a chess coach." → "Or it can be used to reenforce proper move behavior" → "It gets more quiet if you make all the right moves. But it speaks on errors").** (CLAUDE.md:5936) — names `Surface`
-- **Shared types / services** (CLAUDE.md:6169) — names `fenAfter`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:243) — names `HABIT`
+- **🔗 CAPABILITY PARITY — IF ONE SIGNAL CARRIES IT, THEY ALL DO (David 2026-09-16: "if tactics and puzzles have something so should everything else. The goal is one coach with the same structure and capabilities everywhere, just used differently depending on the tab or functions it's performing").** (CLAUDE.md:745) — names `HABIT`
+- **🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").** (CLAUDE.md:790) — names `Surface`
+- **G4.5.16 TEACH THE METHOD, NOT ONLY THE BOARD (David 2026-09-16: "Calling out pins and forks isn't teaching. Future moves, how to think, threat identification, that is teaching").** (CLAUDE.md:1628) — names `HABIT`
+- **G7. Playwright audits MUST be INTERACTIVE. No exceptions.** (CLAUDE.md:1872) — names `Surface`
+- **STEP 12 — Add common-mistakes entries (pitfalls)** (CLAUDE.md:2651) — names `Surface`
+- **🔒🔒 EVERY SPOKEN CONCLUSION CARRIES ITS PROOF — the proof is the thinking out loud (David 2026-10-07: "Anything that gets proven is stated out loud?" → "Yes. I have a feeling it will backfire but I think a decent starting spot.")** (CLAUDE.md:2913) — names `Rendered`
+- **🧠 Operate at full depth (non-negotiable)** (CLAUDE.md:3011) — names `Surface`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3877) — names `Surface`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4868) — names `Surface`
+- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5528) — names `Surface`
+- **🔒🔒 LEARN SPEAKS ON A MOMENT, AND IS QUIET OTHERWISE (David 2026-11-18: "So learn narrations are needed only when the player makes an error of some kind … And it knows when not to say anything. Like a chess coach." → "Or it can be used to reenforce proper move behavior" → "It gets more quiet if you make all the right moves. But it speaks on errors").** (CLAUDE.md:5948) — names `Surface`
+- **Shared types / services** (CLAUDE.md:6181) — names `fenAfter`
 
 ## Who calls in
 
 - `src/services/askedLineDeparture.test.ts`
+- `src/services/attackReads.ts`
 - `src/services/boardComputers.ts`
 - `src/services/boardReadFacts.ts`
 - `src/services/boardUrgency.ts`
@@ -85,7 +86,7 @@
 - `scripts/rewrite-trap-pgns-from-start.mjs:61`
 - `scripts/rewrite-trap-pgns-from-start.mjs:64`
 - `scripts/rewrite-trap-pgns-from-start.mjs:85`
-- `src/coach/focus/focusRunner.ts:549`
+- `src/coach/focus/focusRunner.ts:576`
 - `src/coach/focus/tempoRun.measure.test.ts:58`
 - `src/coach/focus/tempoRun.ts:97`
 - `src/coach/tools/cerebrum/setBoardPosition.provenance.test.ts:67`
@@ -462,8 +463,8 @@
 - `src/services/readDecider.test.ts:6`
 
 ### `boardAfter` (function) — 133 call sites
-- `src/coach/focus/focusRunner.ts:236`
-- `src/coach/focus/focusRunner.ts:548`
+- `src/coach/focus/focusRunner.ts:253`
+- `src/coach/focus/focusRunner.ts:575`
 - `src/missions/checks/wrongRookPawn.test.ts:41`
 - `src/missions/checks/wrongRookPawn.test.ts:77`
 - `src/missions/checks/wrongRookPawn.test.ts:103`
@@ -472,107 +473,107 @@
 - `src/missions/checks/wrongRookPawn.test.ts:251`
 - `src/missions/scorers/steer.test.ts:8`
 - `src/missions/scorers/steer.test.ts:15`
-- `src/services/boardComputers.ts:1637`
-- `src/services/boardComputers.ts:1684`
-- `src/services/boardComputers.ts:1851`
-- `src/services/boardComputers.ts:2206`
-- `src/services/boardComputers.ts:2459`
-- `src/services/boardComputers.ts:2504`
-- `src/services/boardComputers.ts:2581`
-- `src/services/boardComputers.ts:2622`
-- `src/services/boardComputers.ts:2651`
-- `src/services/boardComputers.ts:2679`
-- `src/services/boardComputers.ts:2742`
-- `src/services/boardComputers.ts:2840`
-- `src/services/boardComputers.ts:3073`
-- `src/services/boardComputers.ts:3251`
-- `src/services/boardComputers.ts:3356`
-- `src/services/boardComputers.ts:3376`
-- `src/services/boardComputers.ts:3393`
-- `src/services/boardComputers.ts:3408`
-- `src/services/boardComputers.ts:3655`
-- `src/services/boardComputers.ts:3672`
-- `src/services/boardComputers.ts:3694`
-- `src/services/boardComputers.ts:3854`
-- `src/services/boardComputers.ts:3877`
-- `src/services/boardComputers.ts:3901`
-- `src/services/boardComputers.ts:3940`
-- `src/services/boardComputers.ts:3962`
-- `src/services/boardComputers.ts:3994`
-- `src/services/boardComputers.ts:4025`
-- `src/services/boardComputers.ts:4043`
-- `src/services/boardComputers.ts:4075`
-- `src/services/boardComputers.ts:4103`
-- `src/services/boardComputers.ts:4191`
-- `src/services/boardComputers.ts:4223`
-- `src/services/boardComputers.ts:4247`
-- `src/services/boardComputers.ts:4270`
+- `src/services/boardComputers.ts:1654`
+- `src/services/boardComputers.ts:1701`
+- `src/services/boardComputers.ts:1868`
+- `src/services/boardComputers.ts:2223`
+- `src/services/boardComputers.ts:2476`
+- `src/services/boardComputers.ts:2521`
+- `src/services/boardComputers.ts:2598`
+- `src/services/boardComputers.ts:2639`
+- `src/services/boardComputers.ts:2668`
+- `src/services/boardComputers.ts:2696`
+- `src/services/boardComputers.ts:2759`
+- `src/services/boardComputers.ts:2857`
+- `src/services/boardComputers.ts:3090`
+- `src/services/boardComputers.ts:3294`
+- `src/services/boardComputers.ts:3399`
+- `src/services/boardComputers.ts:3419`
+- `src/services/boardComputers.ts:3436`
+- `src/services/boardComputers.ts:3451`
+- `src/services/boardComputers.ts:3698`
+- `src/services/boardComputers.ts:3715`
+- `src/services/boardComputers.ts:3737`
+- `src/services/boardComputers.ts:3897`
+- `src/services/boardComputers.ts:3920`
+- `src/services/boardComputers.ts:3944`
+- `src/services/boardComputers.ts:3983`
+- `src/services/boardComputers.ts:4005`
+- `src/services/boardComputers.ts:4037`
+- `src/services/boardComputers.ts:4068`
+- `src/services/boardComputers.ts:4086`
+- `src/services/boardComputers.ts:4118`
+- `src/services/boardComputers.ts:4146`
+- `src/services/boardComputers.ts:4234`
+- `src/services/boardComputers.ts:4266`
 - `src/services/boardComputers.ts:4290`
-- `src/services/boardComputers.ts:4315`
-- `src/services/boardComputers.ts:4344`
-- `src/services/boardComputers.ts:4369`
-- `src/services/boardComputers.ts:4395`
-- `src/services/boardComputers.ts:4417`
-- `src/services/boardComputers.ts:4830`
-- `src/services/boardComputers.ts:4853`
-- `src/services/boardComputers.ts:4872`
-- `src/services/boardComputers.ts:4885`
-- `src/services/boardComputers.ts:4901`
-- `src/services/boardComputers.ts:4917`
-- `src/services/boardComputers.ts:4941`
-- `src/services/boardComputers.ts:4953`
-- `src/services/boardComputers.ts:4966`
-- `src/services/boardComputers.ts:4981`
-- `src/services/boardComputers.ts:4991`
-- `src/services/boardComputers.ts:5008`
+- `src/services/boardComputers.ts:4313`
+- `src/services/boardComputers.ts:4333`
+- `src/services/boardComputers.ts:4358`
+- `src/services/boardComputers.ts:4387`
+- `src/services/boardComputers.ts:4412`
+- `src/services/boardComputers.ts:4438`
+- `src/services/boardComputers.ts:4460`
+- `src/services/boardComputers.ts:4873`
+- `src/services/boardComputers.ts:4896`
+- `src/services/boardComputers.ts:4915`
+- `src/services/boardComputers.ts:4928`
+- `src/services/boardComputers.ts:4944`
+- `src/services/boardComputers.ts:4960`
+- `src/services/boardComputers.ts:4984`
+- `src/services/boardComputers.ts:4996`
+- `src/services/boardComputers.ts:5009`
 - `src/services/boardComputers.ts:5024`
-- `src/services/boardComputers.ts:5047`
-- `src/services/boardComputers.ts:5068`
-- `src/services/boardComputers.ts:5084`
-- `src/services/boardComputers.ts:5096`
-- `src/services/boardComputers.ts:5118`
-- `src/services/boardComputers.ts:5142`
-- `src/services/boardComputers.ts:5266`
-- `src/services/boardComputers.ts:5329`
-- `src/services/boardComputers.ts:5487`
-- `src/services/boardComputers.ts:5564`
-- `src/services/boardComputers.ts:5888`
-- `src/services/boardComputers.ts:6030`
-- `src/services/boardComputers.ts:6049`
-- `src/services/boardComputers.ts:6068`
-- `src/services/boardComputers.ts:6119`
-- `src/services/boardComputers.ts:6265`
-- `src/services/boardComputers.ts:6288`
-- `src/services/boardComputers.ts:6370`
-- `src/services/boardComputers.ts:6480`
-- `src/services/boardComputers.ts:6527`
-- `src/services/boardComputers.ts:6606`
-- `src/services/boardComputers.ts:6628`
+- `src/services/boardComputers.ts:5034`
+- `src/services/boardComputers.ts:5051`
+- `src/services/boardComputers.ts:5067`
+- `src/services/boardComputers.ts:5090`
+- `src/services/boardComputers.ts:5111`
+- `src/services/boardComputers.ts:5127`
+- `src/services/boardComputers.ts:5139`
+- `src/services/boardComputers.ts:5161`
+- `src/services/boardComputers.ts:5185`
+- `src/services/boardComputers.ts:5309`
+- `src/services/boardComputers.ts:5372`
+- `src/services/boardComputers.ts:5530`
+- `src/services/boardComputers.ts:5607`
+- `src/services/boardComputers.ts:5931`
+- `src/services/boardComputers.ts:6073`
+- `src/services/boardComputers.ts:6092`
+- `src/services/boardComputers.ts:6111`
+- `src/services/boardComputers.ts:6162`
+- `src/services/boardComputers.ts:6308`
+- `src/services/boardComputers.ts:6331`
+- `src/services/boardComputers.ts:6413`
+- `src/services/boardComputers.ts:6523`
+- `src/services/boardComputers.ts:6570`
 - `src/services/boardComputers.ts:6649`
-- `src/services/boardComputers.ts:6745`
-- `src/services/boardComputers.ts:6769`
-- `src/services/boardComputers.ts:6794`
-- `src/services/boardComputers.ts:6848`
-- `src/services/boardComputers.ts:6869`
-- `src/services/boardComputers.ts:6890`
-- `src/services/boardComputers.ts:6908`
-- `src/services/boardComputers.ts:6931`
-- `src/services/boardComputers.ts:6955`
-- `src/services/boardComputers.ts:6984`
-- `src/services/boardComputers.ts:7010`
-- `src/services/boardComputers.ts:7026`
-- `src/services/boardComputers.ts:7043`
-- `src/services/boardComputers.ts:7061`
-- `src/services/boardComputers.ts:7084`
-- `src/services/boardComputers.ts:7108`
-- `src/services/boardComputers.ts:7136`
-- `src/services/boardComputers.ts:7154`
-- `src/services/boardComputers.ts:7336`
-- `src/services/boardComputers.ts:7358`
-- `src/services/boardComputers.ts:7378`
-- `src/services/boardComputers.ts:7398`
-- `src/services/boardComputers.ts:7501`
-- `src/services/boardComputers.ts:8020`
+- `src/services/boardComputers.ts:6671`
+- `src/services/boardComputers.ts:6692`
+- `src/services/boardComputers.ts:6788`
+- `src/services/boardComputers.ts:6812`
+- `src/services/boardComputers.ts:6837`
+- `src/services/boardComputers.ts:6891`
+- `src/services/boardComputers.ts:6912`
+- `src/services/boardComputers.ts:6933`
+- `src/services/boardComputers.ts:6951`
+- `src/services/boardComputers.ts:6974`
+- `src/services/boardComputers.ts:6998`
+- `src/services/boardComputers.ts:7027`
+- `src/services/boardComputers.ts:7053`
+- `src/services/boardComputers.ts:7069`
+- `src/services/boardComputers.ts:7086`
+- `src/services/boardComputers.ts:7104`
+- `src/services/boardComputers.ts:7127`
+- `src/services/boardComputers.ts:7151`
+- `src/services/boardComputers.ts:7179`
+- `src/services/boardComputers.ts:7197`
+- `src/services/boardComputers.ts:7379`
+- `src/services/boardComputers.ts:7401`
+- `src/services/boardComputers.ts:7421`
+- `src/services/boardComputers.ts:7441`
+- `src/services/boardComputers.ts:7544`
+- `src/services/boardComputers.ts:8176`
 - `src/services/boardReadFacts.ts:144`
 - `src/services/movePurposeEngine.tempting.test.ts:22`
 - `src/services/openingRoads.ts:39`
@@ -684,16 +685,16 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `renderNewThreat` (function) — 1 call site
-- `src/services/boardComputers.ts:6137`
+- `src/services/boardComputers.ts:6180`
 
 ### `MustDefendData` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `renderMustDefendHit` (function) — 1 call site
-- `src/services/boardComputers.ts:3157`
+- `src/services/boardComputers.ts:3174`
 
 ### `renderMustDefend` (function) — 1 call site
-- `src/services/boardComputers.ts:3153`
+- `src/services/boardComputers.ts:3170`
 
 ### `ThreatAnswerData` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -733,6 +734,18 @@
 ### `renderMateThreatTwoJobs` (function) — 2 call sites
 - `src/services/practicalReads.ts:253`
 - `src/services/practicalReads.ts:266`
+
+### `renderCheckCensus` (function) — 1 call site
+- `src/services/attackReads.ts:105`
+
+### `renderAttackLeader` (function) — 1 call site
+- `src/services/attackReads.ts:221`
+
+### `renderDeflection` (function) — 1 call site
+- `src/services/boardComputers.ts:8106`
+
+### `renderDefenderArrival` (function) — 1 call site
+- `src/services/attackReads.ts:274`
 
 ### `STEP_WORD` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -957,9 +970,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `renderMistakeSlot` (function) — 3 call sites
-- `src/services/mistakeLesson.ts:595`
-- `src/services/mistakeLesson.ts:800`
-- `src/services/mistakeLesson.ts:931`
+- `src/services/mistakeLesson.ts:628`
+- `src/services/mistakeLesson.ts:833`
+- `src/services/mistakeLesson.ts:964`
 
 ### `THEIR_MOVE_CONSEQUENCE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -973,21 +986,22 @@
 ### `GOOD_DECISION` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `structurePlanWords` (function) — 2 call sites
-- `src/services/planOf.ts:143`
-- `src/services/planOf.ts:150`
+### `structurePlanWords` (function) — 3 call sites
+- `src/services/planOf.ts:194`
+- `src/services/planOf.ts:201`
+- `src/services/planOf.ts:239`
 
 ### `mastersBreakPlanWords` (function) — 1 call site
-- `src/services/planOf.ts:169`
+- `src/services/planOf.ts:220`
 
 ### `discoveredAttackWords` (function) — 1 call site
-- `src/services/boardComputers.ts:7446`
+- `src/services/boardComputers.ts:7489`
 
 ### `answeringMoveWords` (function) — 1 call site
-- `src/services/boardComputers.ts:7475`
+- `src/services/boardComputers.ts:7518`
 
 ### `ownThreatWords` (function) — 1 call site
-- `src/services/boardComputers.ts:7508`
+- `src/services/boardComputers.ts:7551`
 
 ## Tests
 

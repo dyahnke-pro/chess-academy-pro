@@ -4,16 +4,19 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**208 lines · 5 exports · 4 importers · 3 tests · 0 audits**
+**323 lines · 7 exports · 7 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5485) — names `PlanSource`
+- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5500) — names `PlanSource`
 
 ## Who calls in
 
 - `src/services/boardComputers.ts`
+- `src/services/learnBoardTeaching.ts`
 - `src/services/mistakeLesson.ts`
+- `src/services/planAnswer.test.ts`
+- `src/services/planOf.round3.test.ts`
 - `src/services/planOf.test.ts`
 - `src/services/theoryReads.ts`
 
@@ -31,9 +34,12 @@
 ### `PlanOfOut` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `planOf` (function) — 10 call sites
-- `src/services/boardComputers.ts:3702`
-- `src/services/mistakeLesson.ts:890`
+### `planOf` (function) — 13 call sites
+- `src/services/boardComputers.ts:3758`
+- `src/services/mistakeLesson.ts:1049`
+- `src/services/planOf.round3.test.ts:43`
+- `src/services/planOf.round3.test.ts:51`
+- `src/services/planOf.round3.test.ts:58`
 - `src/services/planOf.test.ts:39`
 - `src/services/planOf.test.ts:44`
 - `src/services/planOf.test.ts:48`
@@ -43,8 +49,19 @@
 - `src/services/planOf.test.ts:66`
 - `src/services/theoryReads.ts:671`
 
+### `PLAN_KIND_TAG` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `planKindAnswer` (function) — 4 call sites
+- `src/services/learnBoardTeaching.ts:593`
+- `src/services/planAnswer.test.ts:31`
+- `src/services/planAnswer.test.ts:33`
+- `src/services/planAnswer.test.ts:35`
+
 ## Tests
 
+- `src/services/planAnswer.test.ts`
+- `src/services/planOf.round3.test.ts`
 - `src/services/planOf.surfaces.test.ts`
 - `src/services/planOf.test.ts`
 - `src/services/planOfTheBoard.test.ts`

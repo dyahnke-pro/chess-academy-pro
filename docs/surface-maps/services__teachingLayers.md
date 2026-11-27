@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**165 lines · 7 exports · 17 importers · 9 tests · 0 audits**
+**169 lines · 7 exports · 17 importers · 9 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -48,9 +48,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `layerStandings` (function) — 11 call sites
-- `src/services/coachFeatureService.ts:1699`
-- `src/services/positionFacts.ts:1399`
-- `src/services/positionReadComposer.ts:257`
+- `src/services/coachFeatureService.ts:1701`
+- `src/services/positionFacts.ts:1405`
+- `src/services/positionReadComposer.ts:259`
 - `src/services/puzzleMethod.ts:56`
 - `src/services/teachingLayers.test.ts:22`
 - `src/services/teachingLayers.test.ts:29`

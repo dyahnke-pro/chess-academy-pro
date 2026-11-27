@@ -65,6 +65,7 @@ export const METER_OF_TAG: Record<Exclude<MisconceptionTagId, 'other'>, SkillMet
   'missed-their-double-check': 'threats',
   'missed-their-guard-removal': 'threats',
   'missed-their-overload': 'threats',
+  'missed-their-deflection': 'threats',
   // Your tactic, per motif (WO-MOTIFS-01) — the same skill the catch-all was.
   'missed-your-free-piece': 'tactics',
   'missed-your-fork': 'tactics',
@@ -79,6 +80,7 @@ export const METER_OF_TAG: Record<Exclude<MisconceptionTagId, 'other'>, SkillMet
   'missed-your-guard-removal': 'tactics',
   'missed-your-overload': 'tactics',
   'missed-your-deflection': 'tactics',
+  'missed-your-desperado': 'tactics',
   'missed-your-zwischenzug': 'tactics',
   'missed-your-trapped-piece': 'tactics',
   'missed-your-clearance': 'tactics',

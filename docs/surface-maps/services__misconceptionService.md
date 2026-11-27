@@ -4,12 +4,12 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**416 lines · 15 exports · 31 importers · 21 tests · 4 audits**
+**426 lines · 15 exports · 32 importers · 22 tests · 4 audits**
 
 ## Locked rules that govern this surface
 
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:354) — names `takebackWeight`
-- **The standard post-deploy ritual** (CLAUDE.md:7098) — names `misconceptionService`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:368) — names `takebackWeight`
+- **The standard post-deploy ritual** (CLAUDE.md:7091) — names `misconceptionService`
 
 ## Who calls in
 
@@ -36,6 +36,7 @@
 - `src/services/misconceptionService.test.ts`
 - `src/services/ownTakeback.test.ts`
 - `src/services/puzzleMissService.ts`
+- `src/services/recordSeat.test.ts`
 - `src/services/thinkingLessonStart.ts`
 - `src/services/trainingPlanSelector.test.ts`
 - `src/services/weaknessAnalyzer.ts`
@@ -53,84 +54,85 @@
 ### `isMisconceptionDue` (function) — 5 call sites
 - `src/services/bucketPipelineAudit.ts:253`
 - `src/services/heatMap.ts:73`
-- `src/services/misconceptionService.test.ts:113`
-- `src/services/misconceptionService.test.ts:148`
-- `src/services/weaknessSpine.ts:490`
+- `src/services/misconceptionService.test.ts:114`
+- `src/services/misconceptionService.test.ts:149`
+- `src/services/weaknessSpine.ts:492`
 
 ### `newMisconceptionId` (function) — 1 call site
-- `src/services/autoAnalyzeGame.ts:1002`
+- `src/services/autoAnalyzeGame.ts:1008`
 
-### `logMisconception` (function) — 61 call sites
-- `src/components/Coach/FundamentalsPage.test.tsx:92`
-- `src/components/Coach/FundamentalsPage.test.tsx:129`
+### `logMisconception` (function) — 62 call sites
+- `src/components/Coach/FundamentalsPage.test.tsx:93`
 - `src/components/Coach/FundamentalsPage.test.tsx:130`
 - `src/components/Coach/FundamentalsPage.test.tsx:131`
-- `src/components/Coach/FundamentalsPage.test.tsx:141`
-- `src/services/bucketPipelineAudit.test.ts:64`
-- `src/services/bucketPipelineAudit.test.ts:92`
-- `src/services/discussionPractice.ts:345`
-- `src/services/discussionPractice.ts:348`
-- `src/services/drillJoinDivergence.test.ts:46`
-- `src/services/drillJoinDivergence.test.ts:55`
-- `src/services/drillJoinDivergence.test.ts:62`
-- `src/services/fixtureGames.test.tsx:115`
-- `src/services/fixtureGames.test.tsx:124`
-- `src/services/fundamentalReachesDecider.test.ts:68`
+- `src/components/Coach/FundamentalsPage.test.tsx:132`
+- `src/components/Coach/FundamentalsPage.test.tsx:142`
+- `src/services/bucketPipelineAudit.test.ts:65`
+- `src/services/bucketPipelineAudit.test.ts:93`
+- `src/services/discussionPractice.ts:350`
+- `src/services/discussionPractice.ts:353`
+- `src/services/drillJoinDivergence.test.ts:47`
+- `src/services/drillJoinDivergence.test.ts:56`
+- `src/services/drillJoinDivergence.test.ts:63`
+- `src/services/fixtureGames.test.tsx:116`
+- `src/services/fixtureGames.test.tsx:125`
 - `src/services/fundamentalReachesDecider.test.ts:69`
 - `src/services/fundamentalReachesDecider.test.ts:70`
-- `src/services/fundamentalReachesDecider.test.ts:106`
-- `src/services/fundamentalReachesDecider.test.ts:109`
-- `src/services/fundamentalsCatalog.test.ts:48`
+- `src/services/fundamentalReachesDecider.test.ts:71`
+- `src/services/fundamentalReachesDecider.test.ts:107`
+- `src/services/fundamentalReachesDecider.test.ts:110`
 - `src/services/fundamentalsCatalog.test.ts:49`
-- `src/services/fundamentalsCatalog.test.ts:53`
-- `src/services/learnTranscript.test.ts:45`
-- `src/services/misconceptionDrill.test.ts:38`
-- `src/services/misconceptionDrill.test.ts:46`
+- `src/services/fundamentalsCatalog.test.ts:50`
+- `src/services/fundamentalsCatalog.test.ts:54`
+- `src/services/learnTranscript.test.ts:46`
+- `src/services/misconceptionDrill.test.ts:39`
 - `src/services/misconceptionDrill.test.ts:47`
-- `src/services/misconceptionDrill.test.ts:53`
-- `src/services/misconceptionDrill.test.ts:58`
+- `src/services/misconceptionDrill.test.ts:48`
+- `src/services/misconceptionDrill.test.ts:54`
 - `src/services/misconceptionDrill.test.ts:59`
-- `src/services/misconceptionRulesBackfill.test.ts:46`
-- `src/services/misconceptionService.playedAt.test.ts:14`
-- `src/services/misconceptionService.playedAt.test.ts:18`
-- `src/services/misconceptionService.playedAt.test.ts:23`
-- `src/services/misconceptionService.test.ts:20`
-- `src/services/misconceptionService.test.ts:36`
-- `src/services/misconceptionService.test.ts:46`
-- `src/services/misconceptionService.test.ts:48`
-- `src/services/misconceptionService.test.ts:62`
-- `src/services/misconceptionService.test.ts:64`
-- `src/services/misconceptionService.test.ts:73`
+- `src/services/misconceptionDrill.test.ts:60`
+- `src/services/misconceptionRulesBackfill.test.ts:47`
+- `src/services/misconceptionService.playedAt.test.ts:15`
+- `src/services/misconceptionService.playedAt.test.ts:19`
+- `src/services/misconceptionService.playedAt.test.ts:24`
+- `src/services/misconceptionService.test.ts:21`
+- `src/services/misconceptionService.test.ts:37`
+- `src/services/misconceptionService.test.ts:47`
+- `src/services/misconceptionService.test.ts:49`
+- `src/services/misconceptionService.test.ts:63`
+- `src/services/misconceptionService.test.ts:65`
 - `src/services/misconceptionService.test.ts:74`
 - `src/services/misconceptionService.test.ts:75`
-- `src/services/misconceptionService.test.ts:85`
+- `src/services/misconceptionService.test.ts:76`
 - `src/services/misconceptionService.test.ts:86`
 - `src/services/misconceptionService.test.ts:87`
-- `src/services/misconceptionService.test.ts:96`
-- `src/services/misconceptionService.test.ts:104`
-- `src/services/misconceptionService.test.ts:122`
-- `src/services/misconceptionService.test.ts:138`
-- `src/services/misconceptionService.test.ts:159`
-- `src/services/misconceptionService.test.ts:167`
-- `src/services/puzzleMissService.ts:102`
-- `src/services/weaknessSpine.fundamentals.test.ts:45`
-- `src/services/weaknessSpine.fundamentals.test.ts:60`
-- `src/services/weaknessSpine.fundamentals.test.ts:73`
+- `src/services/misconceptionService.test.ts:88`
+- `src/services/misconceptionService.test.ts:97`
+- `src/services/misconceptionService.test.ts:105`
+- `src/services/misconceptionService.test.ts:123`
+- `src/services/misconceptionService.test.ts:139`
+- `src/services/misconceptionService.test.ts:160`
+- `src/services/misconceptionService.test.ts:168`
+- `src/services/puzzleMissService.ts:104`
+- `src/services/recordSeat.test.ts:69`
+- `src/services/weaknessSpine.fundamentals.test.ts:46`
+- `src/services/weaknessSpine.fundamentals.test.ts:61`
 - `src/services/weaknessSpine.fundamentals.test.ts:74`
 - `src/services/weaknessSpine.fundamentals.test.ts:75`
-- `src/services/weaknessSpine.fundamentals.test.ts:115`
-- `src/services/weaknessSpine.test.ts:278`
-- `src/services/weaknessSpine.test.ts:328`
+- `src/services/weaknessSpine.fundamentals.test.ts:76`
+- `src/services/weaknessSpine.fundamentals.test.ts:116`
+- `src/services/weaknessSpine.test.ts:279`
+- `src/services/weaknessSpine.test.ts:329`
 - `src/services/wrongTapTag.ts:86`
 
 ### `markSlipTakenBack` (function) — 1 call site
-- `src/services/discussionPractice.ts:407`
+- `src/services/discussionPractice.ts:413`
 
 ### `markSlipHinted` (function) — 1 call site
-- `src/services/discussionPractice.ts:417`
+- `src/services/discussionPractice.ts:423`
 
 ### `getMisconceptionsForGame` (function) — 1 call site
-- `src/services/thinkingLessonStart.ts:687`
+- `src/services/thinkingLessonStart.ts:690`
 
 ### `hasCountedMisconceptionsForGame` (function) — 1 call site
 - `src/components/Coach/GameReviewWeaknessCapture.tsx:154`
@@ -144,22 +146,22 @@
 - `src/services/bucketPipelineAudit.ts:158`
 - `src/services/coachApi.ts:1985`
 - `src/services/coachApi.ts:4840`
-- `src/services/fixtureGames.test.tsx:116`
-- `src/services/fixtureGames.test.tsx:125`
+- `src/services/fixtureGames.test.tsx:117`
+- `src/services/fixtureGames.test.tsx:126`
 - `src/services/fundamentalsPipeline.realGame.test.ts:228`
 - `src/services/fundamentalsPipeline.realGame.test.ts:229`
 - `src/services/fundamentalsPipeline.realGame.test.ts:347`
-- `src/services/misconceptionService.test.ts:66`
-- `src/services/misconceptionService.test.ts:77`
-- `src/services/misconceptionService.test.ts:89`
-- `src/services/misconceptionService.test.ts:97`
-- `src/services/misconceptionService.test.ts:115`
+- `src/services/misconceptionService.test.ts:67`
+- `src/services/misconceptionService.test.ts:78`
+- `src/services/misconceptionService.test.ts:90`
+- `src/services/misconceptionService.test.ts:98`
+- `src/services/misconceptionService.test.ts:116`
 - `src/services/weaknessAnalyzer.ts:996`
 - `src/services/weaknessesMemory.measure.test.ts:49`
 - `src/services/weaknessesReadOnce.test.ts:66`
 
 ### `aggregateMisconceptions` (function) — 3 call sites
-- `src/services/weaknessSpine.ts:1032`
+- `src/services/weaknessSpine.ts:1034`
 - `src/services/weaknessesMemory.measure.test.ts:50`
 - `src/services/weaknessesReadOnce.test.ts:65`
 
@@ -171,11 +173,11 @@
 - `src/components/Puzzles/WeaknessTagDrillPage.tsx:77`
 - `src/services/answerRecord.ts:55`
 - `src/services/answerRecord.ts:56`
-- `src/services/misconceptionService.test.ts:106`
-- `src/services/misconceptionService.test.ts:123`
-- `src/services/misconceptionService.test.ts:129`
-- `src/services/misconceptionService.test.ts:139`
-- `src/services/misconceptionService.test.ts:143`
+- `src/services/misconceptionService.test.ts:107`
+- `src/services/misconceptionService.test.ts:124`
+- `src/services/misconceptionService.test.ts:130`
+- `src/services/misconceptionService.test.ts:140`
+- `src/services/misconceptionService.test.ts:144`
 
 ### `slipWeight` (function) — 7 call sites
 - `src/services/heatMap.ts:75`
@@ -183,8 +185,8 @@
 - `src/services/ownTakeback.test.ts:76`
 - `src/services/ownTakeback.test.ts:79`
 - `src/services/ownTakeback.test.ts:82`
-- `src/services/weaknessSpine.ts:492`
-- `src/services/weaknessSpine.ts:503`
+- `src/services/weaknessSpine.ts:494`
+- `src/services/weaknessSpine.ts:505`
 
 ### `OWN_TAKEBACK_WEIGHT` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -210,6 +212,7 @@
 - `src/services/misconceptionService.playedAt.test.ts`
 - `src/services/misconceptionService.test.ts`
 - `src/services/ownTakeback.test.ts`
+- `src/services/recordSeat.test.ts`
 - `src/services/trainingPlanSelector.test.ts`
 - `src/services/weaknessSpine.fundamentals.test.ts`
 - `src/services/weaknessSpine.test.ts`

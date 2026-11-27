@@ -48,6 +48,7 @@ export const TAG_LAYER: Record<MisconceptionTagId, TeachingLayer> = {
   'missed-their-double-check': 'safety',
   'missed-their-guard-removal': 'safety',
   'missed-their-overload': 'safety',
+  'missed-their-deflection': 'safety',
   // Your tactic, per motif (WO-MOTIFS-01) — the layer the catch-all was in.
   'missed-your-free-piece': 'safety',
   'missed-your-fork': 'safety',
@@ -62,6 +63,7 @@ export const TAG_LAYER: Record<MisconceptionTagId, TeachingLayer> = {
   'missed-your-guard-removal': 'safety',
   'missed-your-overload': 'safety',
   'missed-your-deflection': 'safety',
+  'missed-your-desperado': 'safety',
   'missed-your-zwischenzug': 'safety',
   'missed-your-trapped-piece': 'safety',
   'missed-your-clearance': 'safety',

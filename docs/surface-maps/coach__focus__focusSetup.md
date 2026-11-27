@@ -4,18 +4,22 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**125 lines · 7 exports · 5 importers · 3 tests · 1 audits**
+**135 lines · 7 exports · 9 importers · 6 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:264) — names `FocusSetup`, `focusSetup`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:287) — names `FocusSetup`, `focusSetup`
 
 ## Who calls in
 
+- `src/coach/focus/endgameTechniqueJudge.test.ts`
+- `src/coach/focus/focusRotation.test.ts`
 - `src/coach/focus/focusRunner.test.ts`
 - `src/coach/focus/focusRunner.ts`
 - `src/coach/focus/focusSetup.test.ts`
+- `src/coach/focus/kingAttackJudge.test.ts`
 - `src/coach/focus/useFocusRunner.ts`
+- `src/services/beginnerRegister.ts`
 - `src/services/learnFocusRecord.ts`
 
 ## Exports and every call site
@@ -26,11 +30,11 @@
 ### `FocusSetup` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `pooledHold` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+### `pooledHold` (function) — 1 call site
+- `src/services/beginnerRegister.ts:52`
 
-### `openMotifLevels` (function) — 0 call sites
-- _no call sites outside this file — unused, or reached only through a re-export_
+### `openMotifLevels` (function) — 1 call site
+- `src/services/beginnerRegister.ts:54`
 
 ### `TARGET_FIRST_PLY` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -38,22 +42,27 @@
 ### `TARGET_LAST_PLY` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `setUpFocusGame` (function) — 10 call sites
-- `src/coach/focus/focusSetup.test.ts:14`
-- `src/coach/focus/focusSetup.test.ts:19`
-- `src/coach/focus/focusSetup.test.ts:20`
+### `setUpFocusGame` (function) — 12 call sites
+- `src/coach/focus/focusRotation.test.ts:48`
+- `src/coach/focus/focusRotation.test.ts:49`
+- `src/coach/focus/focusSetup.test.ts:15`
 - `src/coach/focus/focusSetup.test.ts:21`
-- `src/coach/focus/focusSetup.test.ts:24`
-- `src/coach/focus/focusSetup.test.ts:29`
-- `src/coach/focus/focusSetup.test.ts:32`
-- `src/coach/focus/focusSetup.test.ts:33`
+- `src/coach/focus/focusSetup.test.ts:22`
+- `src/coach/focus/focusSetup.test.ts:23`
+- `src/coach/focus/focusSetup.test.ts:26`
+- `src/coach/focus/focusSetup.test.ts:31`
 - `src/coach/focus/focusSetup.test.ts:34`
-- `src/coach/focus/useFocusRunner.ts:195`
+- `src/coach/focus/focusSetup.test.ts:35`
+- `src/coach/focus/focusSetup.test.ts:36`
+- `src/coach/focus/useFocusRunner.ts:214`
 
 ## Tests
 
+- `src/coach/focus/endgameTechniqueJudge.test.ts`
+- `src/coach/focus/focusRotation.test.ts`
 - `src/coach/focus/focusRunner.test.ts`
 - `src/coach/focus/focusSetup.test.ts`
+- `src/coach/focus/kingAttackJudge.test.ts`
 - `src/test/algoAuditContract.test.ts`
 
 ## Audits that reach it

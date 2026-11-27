@@ -4,15 +4,15 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**699 lines · 16 exports · 59 importers · 24 tests · 0 audits**
+**703 lines · 16 exports · 59 importers · 24 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
 - **❤️ THE HEART OF THE APP — the coach THINKS OUT LOUD FOR the student (David 2026-10-07: "THIS IS THE HEART AND SOUL OF THE APP! THIS IS THE BEHAVIOR THAT TEACHES. THIS IS WHAT ALL THE COMPUTERS ARE BUILT FOR! SO WE CAN THINK OUT LOUD FOR THE USER!")** (CLAUDE.md:31) — names `coachFact`
-- **🔒🔒 ONE COACH, HOW TO THINK INCLUDED — every computer answers for every surface (David 2026-11-17: "Make sure how to think gets these computers. It should because we have a unified coach structure. That is a non negotiable rule.")** (CLAUDE.md:423) — names `COMPUTER_CATALOG`
-- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1567) — names `coachFact`
-- **🔒🔒 THE WHY STANDARD — FOUR MEASURES, NOT ONE NUMBER (David 2026-10-14: "Do we need 90%?" → "I like both plans")** (CLAUDE.md:2864) — names `FACT_GROUP`
-- **The standard post-deploy ritual** (CLAUDE.md:7034) — names `coachFact`
+- **🔒🔒 ONE COACH, HOW TO THINK INCLUDED — every computer answers for every surface (David 2026-11-17: "Make sure how to think gets these computers. It should because we have a unified coach structure. That is a non negotiable rule.")** (CLAUDE.md:435) — names `COMPUTER_CATALOG`
+- **G4.5.15 ONE DECIDING COMPUTER — `coachDecider.decide()` is the only door (David 2026-09-16: "I want one unified deciding computer. Merge them if possible").** (CLAUDE.md:1579) — names `coachFact`
+- **🔒🔒 THE WHY STANDARD — FOUR MEASURES, NOT ONE NUMBER (David 2026-10-14: "Do we need 90%?" → "I like both plans")** (CLAUDE.md:2876) — names `FACT_GROUP`
+- **The standard post-deploy ritual** (CLAUDE.md:7046) — names `coachFact`
 
 ## Who calls in
 
@@ -120,11 +120,11 @@
 - `src/services/pictureVerdict.ts:445`
 
 ### `placeFact` (function) — 15 call sites
-- `src/services/boardComputers.ts:3313`
-- `src/services/boardComputers.ts:8294`
+- `src/services/boardComputers.ts:3356`
+- `src/services/boardComputers.ts:8450`
 - `src/services/learnTurnDoor.ts:809`
-- `src/services/moveThoughtFacts.ts:1335`
-- `src/services/moveThoughtFacts.ts:1352`
+- `src/services/moveThoughtFacts.ts:1343`
+- `src/services/moveThoughtFacts.ts:1360`
 - `src/services/openingStory.ts:422`
 - `src/services/positionFacts.ts:503`
 - `src/services/reviewFacet.ts:85`
@@ -137,14 +137,14 @@
 - `src/test/doorFact.ts:22`
 
 ### `stakesOf` (function) — 14 call sites
-- `src/services/boardComputers.ts:3314`
-- `src/services/boardComputers.ts:8294`
+- `src/services/boardComputers.ts:3357`
+- `src/services/boardComputers.ts:8450`
 - `src/services/coachFact.test.ts:116`
 - `src/services/coachFact.test.ts:122`
 - `src/services/coachFact.test.ts:123`
 - `src/services/learnTurnDoor.ts:810`
-- `src/services/moveThoughtFacts.ts:1336`
-- `src/services/moveThoughtFacts.ts:1353`
+- `src/services/moveThoughtFacts.ts:1344`
+- `src/services/moveThoughtFacts.ts:1361`
 - `src/services/openingStory.ts:423`
 - `src/services/positionFacts.ts:511`
 - `src/services/reviewFacet.ts:96`

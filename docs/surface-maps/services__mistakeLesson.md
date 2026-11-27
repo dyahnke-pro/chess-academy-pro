@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1025 lines · 29 exports · 7 importers · 6 tests · 1 audits**
+**1058 lines · 30 exports · 8 importers · 7 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -19,6 +19,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakeLesson.test.ts`
 - `src/services/planOf.surfaces.test.ts`
 - `src/services/recoveryChecks.test.ts`
+- `src/services/repairStates.round2.test.ts`
 
 ## Exports and every call site
 
@@ -57,6 +58,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `pinOn` (function) — 1 call site
 - `src/services/recoveryChecks.test.ts:23`
+
+### `repairFillsFor` (function) — 1 call site
+- `src/services/repairStates.round2.test.ts:32`
 
 ### `habitTag` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -150,6 +154,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/mistakeLesson.test.ts`
 - `src/services/planOf.surfaces.test.ts`
 - `src/services/recoveryChecks.test.ts`
+- `src/services/repairStates.round2.test.ts`
 
 ## Audits that reach it
 

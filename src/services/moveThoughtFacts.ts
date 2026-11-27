@@ -765,6 +765,10 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
             ...readBoardAll('queenlessMate', { fen: after, student }).map((f) => ({ f, idea: 'mate' as IdeaKind, weight: 66 })),
             // The king with no square and a mate there; the weak pawn that falls, frozen.
             ...readBoardAll('matingNet', { fen: after, student }).map((f) => ({ f, idea: 'mate' as IdeaKind, weight: 66 })),
+            // The guard pulled off its job, both seats, proven against every answer.
+            ...readBoardAll('deflection', { fen: after, student, namesMoves: true }).map((f) => ({ f, idea: 'tactic' as IdeaKind, weight: 64 })),
+            // Every check leaving the king one square: the mating-square census.
+            ...readBoardAll('checkCensus', { fen: after, lines: lines.length ? lines : null, student }).map((f) => ({ f, idea: 'attack-king' as IdeaKind, weight: 58 })),
             ...readBoardAll('frozenTarget', { fen: after, student }).map((f) => ({ f, idea: 'weakness' as IdeaKind, weight: 52 })),
             // The siege as the board stands, both kings (the one fact set reads it too).
             ...readBoardAll('kingSiegeNow', { fen: after, student, studentCp: lines[0] && lines[0].mate === null ? (student === 'w' ? lines[0].cp : -lines[0].cp) : null }).map((f) => ({ f, idea: 'attack-king' as IdeaKind, weight: 58 })),
@@ -791,6 +795,10 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
             ...readBoardAll('queenKnightNet', { fen: after, lines, student }).map((f) => ({ f, idea: 'attack-king' as IdeaKind, weight: 60 })),
             ...readBoardAll('selfBlock', { fen: after, lines, student }).map((f) => ({ f, idea: 'king-activity' as IdeaKind, weight: 60 })),
             ...readBoardAll('mateThreatLever', { fen: after, lines, student }).map((f) => ({ f, idea: 'mate' as IdeaKind, weight: 62 })),
+            // The attack questions (`attackReads`): which piece leads, and the
+            // defender too far to arrive before the mate.
+            ...readBoardAll('attackLeader', { fen: after, lines, student, namesMoves: true }).map((f) => ({ f, idea: 'attack-king' as IdeaKind, weight: 58 })),
+            ...readBoardAll('defenderArrival', { fen: after, lines, student }).map((f) => ({ f, idea: 'mate' as IdeaKind, weight: 62 })),
           );
           for (const { f, idea, weight } of batch) facts.push({ ...f, source: 'teachingMove', idea, weight });
         }

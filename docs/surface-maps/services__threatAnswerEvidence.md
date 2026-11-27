@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**260 lines · 7 exports · 6 importers · 3 tests · 0 audits**
+**264 lines · 7 exports · 6 importers · 3 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -42,21 +42,21 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `threatAnswersForGame` (function) — 3 call sites
-- `src/services/autoAnalyzeGame.ts:832`
+- `src/services/autoAnalyzeGame.ts:838`
 - `src/services/recordRevs.gate.test.ts:101`
 - `src/services/threatAnswerEvidence.measure.test.ts:47`
 
 ### `newThreatsAtTurn` (function) — 7 call sites
 - `src/coach/focus/focusChances.ts:345`
 - `src/coach/focus/focusChances.ts:723`
-- `src/services/learnBoardTeaching.ts:1087`
+- `src/services/learnBoardTeaching.ts:1118`
 - `src/services/threatAnswerEvidence.measure.test.ts:58`
 - `src/services/threatAnswerEvidence.test.ts:38`
 - `src/services/threatAnswerEvidence.test.ts:42`
 - `src/services/threatAnswerEvidence.test.ts:52`
 
 ### `recordThreatAnswer` (function) — 1 call site
-- `src/services/learnBoardTeaching.ts:1088`
+- `src/services/learnBoardTeaching.ts:1119`
 
 ## Tests
 

@@ -4,15 +4,18 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**931 lines · 18 exports · 5 importers · 3 tests · 1 audits**
+**1020 lines · 19 exports · 8 importers · 6 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:208) — names `FocusResult`, `focusRunner`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:211) — names `FocusResult`
 
 ## Who calls in
 
+- `src/coach/focus/endgameTechniqueJudge.test.ts`
+- `src/coach/focus/focusRotation.test.ts`
 - `src/coach/focus/focusRunner.test.ts`
+- `src/coach/focus/kingAttackJudge.test.ts`
 - `src/coach/focus/useFocusRunner.ts`
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/components/Coach/TeachGameOverCard.tsx`
@@ -65,29 +68,49 @@
 ### `chanceDial` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `stepFocus` (function) — 2 call sites
-- `src/coach/focus/focusRunner.test.ts:34`
-- `src/coach/focus/useFocusRunner.ts:129`
+### `stepFocus` (function) — 12 call sites
+- `src/coach/focus/endgameTechniqueJudge.test.ts:65`
+- `src/coach/focus/endgameTechniqueJudge.test.ts:68`
+- `src/coach/focus/endgameTechniqueJudge.test.ts:70`
+- `src/coach/focus/focusRotation.test.ts:66`
+- `src/coach/focus/focusRotation.test.ts:72`
+- `src/coach/focus/focusRotation.test.ts:74`
+- `src/coach/focus/focusRotation.test.ts:96`
+- `src/coach/focus/focusRunner.test.ts:37`
+- `src/coach/focus/kingAttackJudge.test.ts:53`
+- `src/coach/focus/kingAttackJudge.test.ts:55`
+- `src/coach/focus/kingAttackJudge.test.ts:59`
+- `src/coach/focus/useFocusRunner.ts:137`
 
 ### `focusPlantAsk` (function) — 11 call sites
-- `src/coach/focus/focusRunner.test.ts:531`
-- `src/coach/focus/focusRunner.test.ts:532`
-- `src/coach/focus/focusRunner.test.ts:575`
-- `src/coach/focus/focusRunner.test.ts:576`
-- `src/coach/focus/focusRunner.test.ts:582`
-- `src/coach/focus/focusRunner.test.ts:624`
-- `src/coach/focus/focusRunner.test.ts:637`
-- `src/coach/focus/focusRunner.test.ts:638`
-- `src/coach/focus/focusRunner.test.ts:651`
-- `src/coach/focus/focusRunner.test.ts:673`
-- `src/coach/focus/useFocusRunner.ts:231`
+- `src/coach/focus/focusRunner.test.ts:539`
+- `src/coach/focus/focusRunner.test.ts:540`
+- `src/coach/focus/focusRunner.test.ts:587`
+- `src/coach/focus/focusRunner.test.ts:588`
+- `src/coach/focus/focusRunner.test.ts:594`
+- `src/coach/focus/focusRunner.test.ts:636`
+- `src/coach/focus/focusRunner.test.ts:649`
+- `src/coach/focus/focusRunner.test.ts:650`
+- `src/coach/focus/focusRunner.test.ts:667`
+- `src/coach/focus/focusRunner.test.ts:689`
+- `src/coach/focus/useFocusRunner.ts:251`
+
+### `focusAttackAsk` (function) — 5 call sites
+- `src/coach/focus/kingAttackJudge.test.ts:57`
+- `src/coach/focus/kingAttackJudge.test.ts:64`
+- `src/coach/focus/kingAttackJudge.test.ts:65`
+- `src/coach/focus/kingAttackJudge.test.ts:67`
+- `src/coach/focus/useFocusRunner.ts:252`
 
 ### `focusOwnsGame` (function) — 1 call site
-- `src/coach/focus/useFocusRunner.ts:226`
+- `src/coach/focus/useFocusRunner.ts:246`
 
 ## Tests
 
+- `src/coach/focus/endgameTechniqueJudge.test.ts`
+- `src/coach/focus/focusRotation.test.ts`
 - `src/coach/focus/focusRunner.test.ts`
+- `src/coach/focus/kingAttackJudge.test.ts`
 - `src/components/Coach/TeachGameOverCard.test.tsx`
 - `src/test/algoAuditContract.test.ts`
 

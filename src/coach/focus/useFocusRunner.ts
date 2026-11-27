@@ -149,7 +149,7 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
           }
           break;
         case 'record-skill':
-          recordFocusAnswer({ tag: e.tag, outcome: e.outcome, fen: e.fen, san: e.san, prompted: false, steered: e.steered, takenBack: false, gameId: h.gameId() });
+          recordFocusAnswer({ tag: e.tag, outcome: e.outcome, fen: e.fen, san: e.san, prompted: false, steered: e.steered, takenBack: false, gameId: h.gameId(), studentSeat: h.studentSeat() });
           void logAppAudit({
             kind: 'learn-focus-skill',
             category: 'subsystem',

@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**399 lines · 20 exports · 8 importers · 3 tests · 2 audits**
+**455 lines · 22 exports · 8 importers · 3 tests · 2 audits**
 
 ## Locked rules that govern this surface
 
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:251) — names `MISS_SPACING_PLIES`, `OwedPattern`, `PlantState`, `focusPlant`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:260) — names `MISS_SPACING_PLIES`, `OwedPattern`, `PlantState`, `focusPlant`, `isMotifChance`
 
 ## Who calls in
 
@@ -52,13 +52,22 @@
 - `src/coach/focus/focusPlant.test.ts:31`
 - `src/coach/focus/focusPlant.test.ts:75`
 
-### `presents` (function) — 6 call sites
+### `isMotifChance` (function) — 1 call site
+- `src/coach/focus/focusRunner.ts:825`
+
+### `motifDifficulties` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `presents` (function) — 9 call sites
 - `src/coach/focus/focusPlant.test.ts:92`
 - `src/coach/focus/focusPlant.test.ts:93`
 - `src/coach/focus/focusPlant.test.ts:94`
 - `src/coach/focus/focusPlant.test.ts:95`
-- `src/coach/focus/focusRunner.ts:421`
-- `src/coach/focus/focusRunner.ts:435`
+- `src/coach/focus/focusPlant.test.ts:96`
+- `src/coach/focus/focusPlant.test.ts:97`
+- `src/coach/focus/focusPlant.test.ts:121`
+- `src/coach/focus/focusRunner.ts:444`
+- `src/coach/focus/focusRunner.ts:461`
 
 ### `OwedPattern` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -73,7 +82,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `carryHeads` (function) — 1 call site
-- `src/coach/focus/focusRunner.ts:569`
+- `src/coach/focus/focusRunner.ts:596`
 
 ### `plantAsk` (function) — 35 call sites
 - `src/coach/focus/focusPlant.test.ts:15`
@@ -109,8 +118,8 @@
 - `src/coach/focus/focusPlant.test.ts:84`
 - `src/coach/focus/focusPlant.test.ts:85`
 - `src/coach/focus/focusPlant.test.ts:88`
-- `src/coach/focus/focusRunner.ts:924`
-- `src/components/Coach/CoachTeachPage.tsx:8603`
+- `src/coach/focus/focusRunner.ts:1001`
+- `src/components/Coach/CoachTeachPage.tsx:8663`
 
 ### `FocusPlantReject` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -118,33 +127,35 @@
 ### `FocusPlantPick` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `findFocusPlant` (function) — 23 call sites
+### `findFocusPlant` (function) — 25 call sites
 - `src/coach/focus/focusPlant.arrival.measure.test.ts:139`
-- `src/coach/focus/focusPlant.test.ts:115`
-- `src/coach/focus/focusPlant.test.ts:120`
-- `src/coach/focus/focusPlant.test.ts:125`
-- `src/coach/focus/focusPlant.test.ts:130`
+- `src/coach/focus/focusPlant.test.ts:118`
 - `src/coach/focus/focusPlant.test.ts:138`
-- `src/coach/focus/focusPlant.test.ts:139`
-- `src/coach/focus/focusPlant.test.ts:140`
-- `src/coach/focus/focusPlant.test.ts:144`
-- `src/coach/focus/focusPlant.test.ts:146`
-- `src/coach/focus/focusPlant.test.ts:164`
-- `src/coach/focus/focusPlant.test.ts:176`
-- `src/coach/focus/focusPlant.test.ts:191`
-- `src/coach/focus/focusPlant.test.ts:196`
-- `src/coach/focus/focusPlant.test.ts:224`
-- `src/coach/focus/focusPlant.test.ts:231`
-- `src/coach/focus/focusPlant.test.ts:248`
-- `src/coach/focus/focusPlant.test.ts:254`
-- `src/coach/focus/focusPlant.test.ts:261`
-- `src/coach/focus/focusPlant.test.ts:265`
-- `src/coach/focus/focusPlant.test.ts:266`
-- `src/coach/focus/focusPlant.test.ts:267`
-- `src/services/coachGameEngine.ts:918`
+- `src/coach/focus/focusPlant.test.ts:143`
+- `src/coach/focus/focusPlant.test.ts:147`
+- `src/coach/focus/focusPlant.test.ts:152`
+- `src/coach/focus/focusPlant.test.ts:157`
+- `src/coach/focus/focusPlant.test.ts:165`
+- `src/coach/focus/focusPlant.test.ts:166`
+- `src/coach/focus/focusPlant.test.ts:167`
+- `src/coach/focus/focusPlant.test.ts:171`
+- `src/coach/focus/focusPlant.test.ts:173`
+- `src/coach/focus/focusPlant.test.ts:189`
+- `src/coach/focus/focusPlant.test.ts:201`
+- `src/coach/focus/focusPlant.test.ts:217`
+- `src/coach/focus/focusPlant.test.ts:223`
+- `src/coach/focus/focusPlant.test.ts:253`
+- `src/coach/focus/focusPlant.test.ts:260`
+- `src/coach/focus/focusPlant.test.ts:277`
+- `src/coach/focus/focusPlant.test.ts:283`
+- `src/coach/focus/focusPlant.test.ts:290`
+- `src/coach/focus/focusPlant.test.ts:294`
+- `src/coach/focus/focusPlant.test.ts:295`
+- `src/coach/focus/focusPlant.test.ts:296`
+- `src/services/coachGameEngine.ts:957`
 
 ### `readOrder` (function) — 1 call site
-- `src/coach/focus/focusPlant.test.ts:278`
+- `src/coach/focus/focusPlant.test.ts:307`
 
 ### `QUEEN_GIFT_CP` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

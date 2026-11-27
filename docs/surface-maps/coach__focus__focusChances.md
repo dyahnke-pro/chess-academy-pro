@@ -4,17 +4,19 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**938 lines · 26 exports · 19 importers · 9 tests · 1 audits**
+**938 lines · 27 exports · 23 importers · 9 tests · 3 audits**
 
 ## Locked rules that govern this surface
 
-- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:268) — names `PLANTABLE`, `chanceHoldOf`, `chancesAt`, `focusChances`
-- **🔒🔒 LEARN SPEAKS ON A MOMENT, AND IS QUIET OTHERWISE (David 2026-11-18: "So learn narrations are needed only when the player makes an error of some kind … And it knows when not to say anything. Like a chess coach." → "Or it can be used to reenforce proper move behavior" → "It gets more quiet if you make all the right moves. But it speaks on errors").** (CLAUDE.md:5922) — names `focusChances`, `walkedInto`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:279) — names `PLANTABLE`, `chanceHoldOf`, `chancesAt`, `focusChances`
+- **🔒🔒 LEARN SPEAKS ON A MOMENT, AND IS QUIET OTHERWISE (David 2026-11-18: "So learn narrations are needed only when the player makes an error of some kind … And it knows when not to say anything. Like a chess coach." → "Or it can be used to reenforce proper move behavior" → "It gets more quiet if you make all the right moves. But it speaks on errors").** (CLAUDE.md:5936) — names `focusChances`, `walkedInto`
 
 ## Who calls in
 
+- `src/coach/focus/attackPlant.ts`
 - `src/coach/focus/castlingWatch.test.ts`
 - `src/coach/focus/castlingWatch.ts`
+- `src/coach/focus/endgameTechniqueJudge.ts`
 - `src/coach/focus/focusChances.test.ts`
 - `src/coach/focus/focusLines.spot.test.ts`
 - `src/coach/focus/focusLines.ts`
@@ -22,7 +24,9 @@
 - `src/coach/focus/focusPlant.ts`
 - `src/coach/focus/focusRunner.test.ts`
 - `src/coach/focus/focusRunner.ts`
+- `src/coach/focus/kingAttackJudge.ts`
 - `src/coach/focus/leftLoose.trade.test.ts`
+- `src/coach/focus/moveKindJudge.ts`
 - `src/coach/focus/tempoRun.measure.test.ts`
 - `src/coach/focus/tempoRun.test.ts`
 - `src/coach/focus/tempoRun.ts`
@@ -64,7 +68,7 @@
 - `src/coach/focus/focusChances.test.ts:512`
 - `src/coach/focus/focusChances.test.ts:516`
 - `src/coach/focus/focusChances.test.ts:519`
-- `src/components/Coach/CoachTeachPage.tsx:2436`
+- `src/components/Coach/CoachTeachPage.tsx:2470`
 
 ### `FocusMove` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -80,6 +84,53 @@
 
 ### `motifPatterns` (function) — 1 call site
 - `src/missions/scorers/focus.ts:62`
+
+### `pov` (function) — 45 call sites
+- `scripts/all-openings/mine-club-gems.mjs:172`
+- `scripts/all-openings/mine-club-gems.mjs:173`
+- `scripts/all-openings/mine-club-gems.mjs:179`
+- `scripts/all-openings/mine-club-gems.mjs:181`
+- `scripts/all-openings/mine-club-gems.mjs:182`
+- `scripts/all-openings/mine-club-gems.mjs:185`
+- `scripts/all-openings/mine-club-gems.mjs:189`
+- `scripts/all-openings/mine-club-gems.mjs:200`
+- `scripts/all-openings/mine-club-gems.mjs:201`
+- `scripts/all-openings/mine-club-gems.mjs:385`
+- `scripts/all-openings/mine-club-gems.mjs:392`
+- `scripts/all-openings/mine-club-gems.mjs:394`
+- `scripts/all-openings/mine-club-gems.mjs:395`
+- `scripts/all-openings/mine-club-gems.mjs:407`
+- `scripts/all-openings/mine-club-gems.mjs:432`
+- `scripts/all-openings/mine-club-gems.mjs:435`
+- `scripts/all-openings/mine-club-gems.mjs:437`
+- `scripts/all-openings/mine-club-gems.mjs:439`
+- `src/coach/focus/moveKindJudge.ts:46`
+- `src/coach/focus/moveKindJudge.ts:59`
+- `src/coach/focus/moveKindJudge.ts:79`
+- `src/coach/focus/moveKindJudge.ts:80`
+- `src/missions/earnedSlip.ts:275`
+- `src/missions/earnedSlip.ts:279`
+- `src/missions/earnedSlip.ts:283`
+- `src/services/boardComputers.ts:6576`
+- `src/services/boardComputers.ts:6578`
+- `src/services/coachApi.ts:6084`
+- `src/services/coachApi.ts:6085`
+- `src/services/coachApi.ts:6086`
+- `src/services/coachApi.ts:6263`
+- `src/services/coachApi.ts:6264`
+- `src/services/coachApi.ts:6265`
+- `src/services/drillReasons.ts:52`
+- `src/services/drillReasons.ts:53`
+- `src/services/drillReasons.ts:92`
+- `src/services/drillReasons.ts:93`
+- `src/services/gambitIdea.ts:94`
+- `src/services/gambitIdea.ts:120`
+- `src/services/gambitIdea.ts:139`
+- `src/services/gameThemeClassifier.ts:60`
+- `src/services/lessonSteer.ts:84`
+- `src/services/moveThreat.ts:95`
+- `src/services/planJudgement.ts:284`
+- `src/services/setUpChance.ts:304`
 
 ### `cpLossFromLines` (function) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -100,12 +151,12 @@
 - `src/coach/focus/focusChances.test.ts:212`
 - `src/coach/focus/focusChances.test.ts:217`
 - `src/coach/focus/focusChances.test.ts:460`
-- `src/coach/focus/focusRunner.ts:791`
+- `src/coach/focus/focusRunner.ts:818`
 - `src/coach/focus/leftLoose.trade.test.ts:14`
 - `src/coach/focus/leftLoose.trade.test.ts:22`
 
 ### `walkedInto` (function) — 4 call sites
-- `src/coach/focus/focusRunner.ts:791`
+- `src/coach/focus/focusRunner.ts:818`
 - `src/coach/focus/walkedInto.test.ts:20`
 - `src/coach/focus/walkedInto.test.ts:27`
 - `src/coach/focus/walkedInto.test.ts:30`
@@ -151,13 +202,13 @@
 - `src/coach/focus/focusChances.test.ts:505`
 - `src/coach/focus/focusChances.test.ts:515`
 - `src/coach/focus/focusChances.test.ts:531`
-- `src/coach/focus/focusPlant.ts:377`
-- `src/coach/focus/focusRunner.ts:429`
+- `src/coach/focus/focusPlant.ts:433`
+- `src/coach/focus/focusRunner.ts:455`
 
 ### `yourChancesAt` (function) — 3 call sites
 - `src/coach/focus/focusChances.test.ts:532`
-- `src/coach/focus/focusPlant.ts:279`
-- `src/coach/focus/focusPlant.ts:343`
+- `src/coach/focus/focusPlant.ts:318`
+- `src/coach/focus/focusPlant.ts:386`
 
 ### `judgeChance` (function) — 25 call sites
 - `src/coach/focus/focusChances.test.ts:133`
@@ -181,9 +232,9 @@
 - `src/coach/focus/focusChances.test.ts:334`
 - `src/coach/focus/focusChances.test.ts:342`
 - `src/coach/focus/focusChances.test.ts:346`
-- `src/coach/focus/focusRunner.ts:731`
-- `src/coach/focus/focusRunner.ts:747`
-- `src/coach/focus/focusRunner.ts:790`
+- `src/coach/focus/focusRunner.ts:758`
+- `src/coach/focus/focusRunner.ts:774`
+- `src/coach/focus/focusRunner.ts:817`
 - `src/coach/focus/walkedInto.test.ts:24`
 
 ### `decidingBlunder` (function) — 8 call sites
@@ -194,29 +245,29 @@
 - `src/coach/focus/focusChances.test.ts:368`
 - `src/coach/focus/focusChances.test.ts:371`
 - `src/coach/focus/focusChances.test.ts:375`
-- `src/coach/focus/focusRunner.ts:883`
+- `src/coach/focus/focusRunner.ts:912`
 
 ### `solvePlies` (function) — 4 call sites
 - `src/coach/focus/focusChances.test.ts:469`
 - `src/coach/focus/focusChances.test.ts:475`
 - `src/coach/focus/focusChances.test.ts:477`
-- `src/coach/focus/focusRunner.ts:410`
+- `src/coach/focus/focusRunner.ts:433`
 
 ### `lineSans` (function) — 17 call sites
 - `src/coach/focus/focusChances.test.ts:470`
 - `src/coach/focus/focusChances.test.ts:480`
 - `src/coach/focus/focusChances.test.ts:481`
-- `src/components/Coach/CoachTeachPage.tsx:14121`
-- `src/services/boardBundle.ts:158`
-- `src/services/boardBundle.ts:386`
-- `src/services/boardBundle.ts:440`
-- `src/services/boardBundle.ts:441`
-- `src/services/boardBundle.ts:481`
-- `src/services/boardBundle.ts:482`
-- `src/services/boardBundle.ts:483`
-- `src/services/boardBundle.ts:492`
-- `src/services/inaccuracyCall.ts:235`
-- `src/services/inaccuracyCall.ts:250`
+- `src/components/Coach/CoachTeachPage.tsx:14287`
+- `src/services/boardBundle.ts:161`
+- `src/services/boardBundle.ts:389`
+- `src/services/boardBundle.ts:443`
+- `src/services/boardBundle.ts:444`
+- `src/services/boardBundle.ts:485`
+- `src/services/boardBundle.ts:486`
+- `src/services/boardBundle.ts:487`
+- `src/services/boardBundle.ts:496`
+- `src/services/inaccuracyCall.ts:241`
+- `src/services/inaccuracyCall.ts:256`
 - `src/services/lessonFacts.measure.test.ts:190`
 - `src/services/lessonFacts.measure.test.ts:217`
 - `src/services/lessonFacts.measure.test.ts:267`
@@ -239,4 +290,6 @@ _Matched by NAME: audits that textually reference this file or its exports.
 A browser-driven prod audit that exercises this surface through the UI will NOT
 appear here — check the post-deploy matrix in CLAUDE.md for those._
 
+- `scripts/audit-coach-narration-stress.mjs`
 - `scripts/audit-learn-focus-prod.mjs`
+- `scripts/audit-punish-gems-loop.mjs`

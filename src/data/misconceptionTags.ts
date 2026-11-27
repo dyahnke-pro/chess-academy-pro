@@ -370,6 +370,22 @@ export const MISCONCEPTION_TAGS = [
     drill: { kind: 'tactic', puzzleThemes: ['defensiveMove', 'capturingDefender'] },
   },
   {
+    id: 'missed-their-deflection',
+    label: 'Let a defender be deflected',
+    bucket: 'tactical',
+    blurb: 'One of your pieces was guarding something, and they could make it take or answer something else, leaving its job undone.',
+    coachCue: "An opponent's deflection was on the board at your turn — a forcing move whose every answer loses material, the recapture pulling your guard off the square it held — and your reply let it win.",
+    drill: { kind: 'tactic', puzzleThemes: ['defensiveMove', 'deflection'] },
+  },
+  {
+    id: 'missed-your-desperado',
+    label: 'Missed a desperado',
+    bucket: 'tactical',
+    blurb: 'A piece of yours was lost anyway, and it could have taken something on its way out.',
+    coachCue: 'A piece of the student could not be saved (or one of two hanging pieces was lost), the best move was a capture by that piece, and the played move let it go for nothing.',
+    drill: { kind: 'tactic', puzzleThemes: ['hangingPiece'] },
+  },
+  {
     id: 'missed-their-overload',
     label: 'Left a defender overloaded',
     bucket: 'tactical',
@@ -648,7 +664,7 @@ export const MISCONCEPTION_RULES_REV = '2026-11-19-round3';
  *  producers (L5) change what one sample game poses — the castling and
  *  loose-piece reads follow the board (castling that drops a piece, the
  *  centre fork trick and a sound sacrifice are not those questions). */
-export const POSITIVE_HALF_REV = '2026-11-27-threats'; // 2026-11-27 the four merges: the three threat reads (discovered attack, answering move, own threat) pose their skills, the standing evidence; before: 2026-11-21 the one shortener + habits owed by the record (the fingerprint had moved on the 11-21 commits; the constant had not); before: 2026-11-19 the red-test fixes (the fingerprint had moved with the picture/tries merges and the chain-base idea; the constant had not); before: 2026-11-19 the read fixes (the fingerprint moved in 9f3a91d; the constant had not); before: 2026-11-19 round 3: the tension released and the lever pushed with no pieces near it filed broken where the move ignored them at a cost; before: 2026-11-19 round 2: the quiet stop filed held/broken by the move, the move's structure judgements file their held tag on a clean move, checks that give the piece away under a threat and the king race pose their skills; before: 2026-11-19 both ways: the registry's standing reads pose their skill to the record (latent fork either seat, the pin in waiting either seat, the trade into a pin, the king in the centre, the king's shelter, the queen grab trap, a trapped piece either seat, the won game to convert); before: 2026-11-17 the speedrun regrade's producer fixes: a rescue that throws the queen away is no rescue (trapped piece), a kick that drops more than it hits is no tempo, a forked major that trades off the forker is no fork. Before: a rook that doubles, unmasks or lands on an outpost is a rook-activity find (`moveFundamentals`); before: the in-between move needs a sound waiting capture and a new threat (task 172), so a shot that was only a kick is filed under its own name; before: the quiet set-up (`missed-set-up`) is posed on every analysed move
+export const POSITIVE_HALF_REV = '2026-11-27-attack'; // 2026-11-27 the attack questions (census, attack leader, defender too late), the deflection both seats (missed-their-deflection) and the desperado (missed-your-desperado) pose their skills; before: 2026-11-27 the four merges: the three threat reads (discovered attack, answering move, own threat) pose their skills, the standing evidence; before: 2026-11-21 the one shortener + habits owed by the record (the fingerprint had moved on the 11-21 commits; the constant had not); before: 2026-11-19 the red-test fixes (the fingerprint had moved with the picture/tries merges and the chain-base idea; the constant had not); before: 2026-11-19 the read fixes (the fingerprint moved in 9f3a91d; the constant had not); before: 2026-11-19 round 3: the tension released and the lever pushed with no pieces near it filed broken where the move ignored them at a cost; before: 2026-11-19 round 2: the quiet stop filed held/broken by the move, the move's structure judgements file their held tag on a clean move, checks that give the piece away under a threat and the king race pose their skills; before: 2026-11-19 both ways: the registry's standing reads pose their skill to the record (latent fork either seat, the pin in waiting either seat, the trade into a pin, the king in the centre, the king's shelter, the queen grab trap, a trapped piece either seat, the won game to convert); before: 2026-11-17 the speedrun regrade's producer fixes: a rescue that throws the queen away is no rescue (trapped piece), a kick that drops more than it hits is no tempo, a forked major that trades off the forker is no fork. Before: a rook that doubles, unmasks or lands on an outpost is a rook-activity find (`moveFundamentals`); before: the in-between move needs a sound waiting capture and a new threat (task 172), so a shot that was only a kick is filed under its own name; before: the quiet set-up (`missed-set-up`) is posed on every analysed move
 // 2026-10-20: the rev fingerprint gate (recordRevs.gate.test.ts) found the
 // recorded held-skill rows of a real game had changed since 10-19 with this rev
 // unmoved, so devices kept the old green rows; then the one-price re-price moved
