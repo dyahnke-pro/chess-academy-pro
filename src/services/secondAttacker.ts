@@ -105,11 +105,13 @@ const NUMBER = ['no', 'one', 'two', 'three', 'four', 'five'];
 const count = (n: number): string => NUMBER[n] ?? String(n);
 const ORDINAL: Record<number, string> = { 3: 'third', 4: 'fourth', 5: 'fifth' };
 
-function wins(gain: number): string {
-  if (gain >= 5) return 'a rook';
-  if (gain >= 3) return 'a piece';
+/** What the capture nets, by count alone (`countWords.test`): the target
+ *  itself when it is won outright, else its points. */
+function wins(gain: number, target: PieceSymbol, own: 'your' | 'their'): string {
+  if (gain >= (MATERIAL_VALUE[target] ?? 99)) return `${own === 'your' ? 'the' : 'your'} ${NAME[target]}`;
   if (gain === 2) return 'two pawns';
-  return 'a pawn';
+  if (gain === 1) return 'a pawn';
+  return `${count(gain)} points of material`;
 }
 
 /** Said from the mover's seat (`own`: your / their), one idea a sentence,
@@ -140,7 +142,7 @@ export function secondAttackerLine(s: SecondAttacker, own: 'your' | 'their', fen
   // piece" about their bishop read as advice to the student).
   const point = s.mate
     ? `${unmarked(s.mate)} would be mate.`
-    : own === 'your' ? `Taking on ${s.target} now wins ${wins(s.gain)}.` : `They threaten to take on ${s.target} and win ${wins(s.gain)}.`;
+    : own === 'your' ? `Taking on ${s.target} now wins ${wins(s.gain, s.targetPiece, own)}.` : `They threaten to take on ${s.target} and win ${wins(s.gain, s.targetPiece, own)}.`;
   return `${join} ${tally} ${point}`;
 }
 

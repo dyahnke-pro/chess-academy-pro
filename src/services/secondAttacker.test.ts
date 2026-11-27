@@ -34,7 +34,7 @@ describe('secondAttacker — a second attacker makes the count', () => {
     const a = secondAttacker(BB4, 'Bb4');
     expect(a).not.toBeNull();
     const line = secondAttackerLine(a!, 'their', BB4);
-    expect(line).toMatch(/They threaten to take on c3 and win a piece\./);
+    expect(line).toMatch(/They threaten to take on c3 and win your knight\./);
     expect(line).not.toMatch(/^.*Taking on c3/);
     const NC6 = 'rnb1r1k1/pppp1p2/5q1p/2b3p1/3N4/2P3B1/P1P1BPPP/R2QK2R b KQ - 2 12'; // _4xbS0Crtic 12…Nc6
     const b = secondAttacker(NC6, 'Nc6');

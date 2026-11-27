@@ -1705,12 +1705,11 @@ export const POSITIONAL: Partial<Record<Exclude<MisconceptionTagId, 'other'>, { 
 export const MISTAKE_NUMBER_WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven'];
 /** Material in words for a count of pawns (the ledger's units). */
 export function materialWords(pawns: number): string | null {
-  if (pawns >= 9) return 'the queen';
-  if (pawns >= 5) return 'a rook';
-  if (pawns >= 3) return 'a piece';
+  // By count alone (`countWords.test`): a point total never names a piece —
+  // three points may be a knight or three pawns.
   if (pawns === 2) return 'two pawns';
   if (pawns === 1) return 'a pawn';
-  return null;
+  return pawns > 2 ? `${MISTAKE_NUMBER_WORDS[pawns] ?? String(pawns)} points of material` : null;
 }
 export const motifArticle = (w: string): string => withArticle(w);
 export const COLOUR_NAME = { dark: 'dark', light: 'light' } as const;
