@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**297 lines · 2 exports · 3 importers · 2 tests · 1 audits**
+**307 lines · 2 exports · 4 importers · 3 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -15,10 +15,11 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/components/Coach/CoachTeachPage.tsx`
 - `src/services/coachSessionRouter.ts`
 - `src/services/coachSettingsAction.test.ts`
+- `src/services/rewardEffectsOff.test.ts`
 
 ## Exports and every call site
 
-### `resolveSettingsCommand` (function) — 26 call sites
+### `resolveSettingsCommand` (function) — 28 call sites
 - `src/services/coachSettingsAction.test.ts:9`
 - `src/services/coachSettingsAction.test.ts:10`
 - `src/services/coachSettingsAction.test.ts:11`
@@ -45,14 +46,17 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/coachSettingsAction.test.ts:59`
 - `src/services/coachSettingsAction.test.ts:60`
 - `src/services/coachSettingsAction.test.ts:61`
+- `src/services/rewardEffectsOff.test.ts:16`
+- `src/services/rewardEffectsOff.test.ts:19`
 
 ### `applyCoachSetting` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:4939`
+- `src/components/Coach/CoachTeachPage.tsx:5054`
 - `src/services/coachSessionRouter.ts:126`
 
 ## Tests
 
 - `src/services/coachSettingsAction.test.ts`
+- `src/services/rewardEffectsOff.test.ts`
 - `src/services/spokenLanguage.live.test.ts`
 
 ## Audits that reach it

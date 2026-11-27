@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**245 lines · 5 exports · 5 importers · 1 tests · 0 audits**
+**264 lines · 5 exports · 6 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -14,6 +14,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 - `src/services/boardReadFacts.ts`
 - `src/services/inaccuracyCall.ts`
+- `src/services/mistakeLesson.ts`
 - `src/services/positionalReason.test.ts`
 - `src/services/slipCause.ts`
 - `src/services/weighedMoves.ts`
@@ -38,11 +39,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/slipCause.ts:144`
 - `src/services/weighedMoves.ts:770`
 
-### `bestJobReason` (function) — 1 call site
+### `bestJobReason` (function) — 4 call sites
+- `src/services/mistakeLesson.ts:606`
+- `src/services/positionalReason.test.ts:85`
+- `src/services/positionalReason.test.ts:87`
 - `src/services/slipCause.ts:144`
 
-### `positionalReason` (function) — 4 call sites
-- `src/services/inaccuracyCall.ts:1558`
+### `positionalReason` (function) — 6 call sites
+- `src/services/inaccuracyCall.ts:1616`
+- `src/services/inaccuracyCall.ts:1632`
+- `src/services/mistakeLesson.ts:299`
 - `src/services/positionalReason.test.ts:16`
 - `src/services/positionalReason.test.ts:20`
 - `src/services/positionalReason.test.ts:24`

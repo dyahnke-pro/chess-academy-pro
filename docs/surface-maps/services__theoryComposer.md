@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**253 lines · 18 exports · 7 importers · 4 tests · 1 audits**
+**257 lines · 18 exports · 7 importers · 4 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -48,8 +48,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `withoutCastleTail` (const) — 3 call sites
 - `src/services/openingTheory.ts:151`
-- `src/services/theoryReads.ts:340`
-- `src/services/theoryReads.ts:617`
+- `src/services/theoryReads.ts:341`
+- `src/services/theoryReads.ts:618`
 
 ### `keyMovesOf` (function) — 1 call site
 - `src/services/theoryComposer.test.ts:11`
@@ -94,12 +94,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/theoryComposer.test.ts:70`
 - `src/services/theoryComposer.test.ts:78`
 - `src/services/theoryComposer.test.ts:87`
-- `src/services/theoryReads.ts:692`
+- `src/services/theoryReads.ts:725`
 - `src/services/theorySheets.measure.test.ts:75`
 
 ### `roadsFrom` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8670`
-- `src/components/Coach/CoachTeachPage.tsx:8678`
+- `src/components/Coach/CoachTeachPage.tsx:8677`
+- `src/components/Coach/CoachTeachPage.tsx:8685`
 - `src/services/branchExplorer.roads.test.ts:16`
 - `src/services/branchExplorer.roads.test.ts:26`
 - `src/services/branchExplorer.roads.test.ts:28`

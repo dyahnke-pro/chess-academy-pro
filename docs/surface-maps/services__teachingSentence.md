@@ -4,21 +4,24 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**986 lines · 73 exports · 33 importers · 7 tests · 35 audits**
+**2129 lines · 114 exports · 37 importers · 7 tests · 430 audits**
 
 ## Locked rules that govern this surface
 
-- **🎯 § MISSIONS — CAMPAIGN TEACHES ONE HABIT PER PHASE (David 2026-10-21, WO-MISSIONS-01)** (CLAUDE.md:84) — names `Surface`
-- **🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").** (CLAUDE.md:776) — names `Surface`
-- **G7. Playwright audits MUST be INTERACTIVE. No exceptions.** (CLAUDE.md:1858) — names `Surface`
-- **STEP 12 — Add common-mistakes entries (pitfalls)** (CLAUDE.md:2637) — names `Surface`
-- **🔒🔒 EVERY SPOKEN CONCLUSION CARRIES ITS PROOF — the proof is the thinking out loud (David 2026-10-07: "Anything that gets proven is stated out loud?" → "Yes. I have a feeling it will backfire but I think a decent starting spot.")** (CLAUDE.md:2899) — names `Rendered`
-- **🧠 Operate at full depth (non-negotiable)** (CLAUDE.md:2997) — names `Surface`
-- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3863) — names `Surface`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4854) — names `Surface`
-- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5514) — names `Surface`
-- **🔒🔒 LEARN SPEAKS ON A MOMENT, AND IS QUIET OTHERWISE (David 2026-11-18: "So learn narrations are needed only when the player makes an error of some kind … And it knows when not to say anything. Like a chess coach." → "Or it can be used to reenforce proper move behavior" → "It gets more quiet if you make all the right moves. But it speaks on errors").** (CLAUDE.md:5934) — names `Surface`
-- **Shared types / services** (CLAUDE.md:6188) — names `fenAfter`
+- **🎯 § MISSIONS — CAMPAIGN TEACHES ONE HABIT PER PHASE (David 2026-10-21, WO-MISSIONS-01)** (CLAUDE.md:74) — names `HABIT`, `Surface`
+- **🎯 § LEARN FOCUS — LEARN FREE PLAY IS ONE ALWAYS-ON TACTICS FOCUS, AT A RUNG THE RECORD SETS (David 2026-10-22, WO-FOCUS-TACTICS-01)** (CLAUDE.md:233) — names `HABIT`
+- **🔗 CAPABILITY PARITY — IF ONE SIGNAL CARRIES IT, THEY ALL DO (David 2026-09-16: "if tactics and puzzles have something so should everything else. The goal is one coach with the same structure and capabilities everywhere, just used differently depending on the tab or functions it's performing").** (CLAUDE.md:730) — names `HABIT`
+- **🧭 BEFORE ANY COACH BUILD — read the two coach docs first (David 2026-09-08, LOCKED: "I want you referring to the file every time you start a new build").** (CLAUDE.md:775) — names `Surface`
+- **G4.5.16 TEACH THE METHOD, NOT ONLY THE BOARD (David 2026-09-16: "Calling out pins and forks isn't teaching. Future moves, how to think, threat identification, that is teaching").** (CLAUDE.md:1613) — names `HABIT`
+- **G7. Playwright audits MUST be INTERACTIVE. No exceptions.** (CLAUDE.md:1857) — names `Surface`
+- **STEP 12 — Add common-mistakes entries (pitfalls)** (CLAUDE.md:2636) — names `Surface`
+- **🔒🔒 EVERY SPOKEN CONCLUSION CARRIES ITS PROOF — the proof is the thinking out loud (David 2026-10-07: "Anything that gets proven is stated out loud?" → "Yes. I have a feeling it will backfire but I think a decent starting spot.")** (CLAUDE.md:2898) — names `Rendered`
+- **🧠 Operate at full depth (non-negotiable)** (CLAUDE.md:2996) — names `Surface`
+- **🔒 DON'T BREAK THESE — Learn build, locked 2026-05-08** (CLAUDE.md:3862) — names `Surface`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4853) — names `Surface`
+- **🔒🔒 INSTRUCTIONAL CONTENT IS FIRST-CLASS — teach what they TEACH, not only what they PLAY (David 2026-07-02, LOCKED)** (CLAUDE.md:5513) — names `Surface`
+- **🔒🔒 LEARN SPEAKS ON A MOMENT, AND IS QUIET OTHERWISE (David 2026-11-18: "So learn narrations are needed only when the player makes an error of some kind … And it knows when not to say anything. Like a chess coach." → "Or it can be used to reenforce proper move behavior" → "It gets more quiet if you make all the right moves. But it speaks on errors").** (CLAUDE.md:5933) — names `Surface`
+- **Shared types / services** (CLAUDE.md:6166) — names `fenAfter`
 
 ## Who calls in
 
@@ -36,9 +39,12 @@
 - `src/services/groundedAnswer.ts`
 - `src/services/latentDanger.ts`
 - `src/services/mateThreatLever.ts`
+- `src/services/mistakeCause.ts`
+- `src/services/mistakeLesson.ts`
 - `src/services/moveThreat.ts`
 - `src/services/pictureLedger.ts`
 - `src/services/pictureVerdict.ts`
+- `src/services/planOf.ts`
 - `src/services/planOfTheBoard.test.ts`
 - `src/services/planSteps.ts`
 - `src/services/positionReadingService.ts`
@@ -55,6 +61,7 @@
 - `src/services/teachingSentence.test.ts`
 - `src/services/temptingHope.test.ts`
 - `src/services/weighedMoves.ts`
+- `src/services/whyItFailed.ts`
 
 ## Exports and every call site
 
@@ -83,20 +90,20 @@
 - `src/coach/tools/cerebrum/setBoardPosition.provenance.test.ts:67`
 - `src/services/futures.ts:255`
 - `src/services/futures.ts:256`
-- `src/services/gemCrushLines.ts:37`
-- `src/services/gemCrushLines.ts:70`
-- `src/services/gemCrushLines.ts:108`
-- `src/services/gemCrushLines.ts:123`
-- `src/services/gemCrushLines.ts:222`
-- `src/services/gemCrushLines.ts:225`
-- `src/services/gemCrushLines.ts:251`
+- `src/services/gemCrushLines.ts:38`
+- `src/services/gemCrushLines.ts:71`
+- `src/services/gemCrushLines.ts:109`
+- `src/services/gemCrushLines.ts:124`
+- `src/services/gemCrushLines.ts:223`
+- `src/services/gemCrushLines.ts:226`
+- `src/services/gemCrushLines.ts:252`
 - `src/services/openingDetectionService.ts:190`
 - `src/services/openingDetectionService.ts:194`
 - `src/services/positionProvenance.ts:57`
 - `src/services/positionProvenance.ts:69`
 - `src/services/positionProvenance.ts:84`
 
-### `fenAfter` (function) — 336 call sites
+### `fenAfter` (function) — 339 call sites
 - `scripts/_gen-dragon-models.mjs:29`
 - `scripts/_gen-dragon-models.mjs:47`
 - `scripts/_gen-dragon-models.mjs:54`
@@ -225,9 +232,9 @@
 - `src/services/kingTopicAnswer.test.ts:9`
 - `src/services/kingTopicAnswer.test.ts:14`
 - `src/services/kingTopicAnswer.test.ts:18`
-- `src/services/knownSlips.review.test.ts:71`
-- `src/services/knownSlips.review.test.ts:133`
-- `src/services/knownSlips.review.test.ts:157`
+- `src/services/knownSlips.review.test.ts:74`
+- `src/services/knownSlips.review.test.ts:136`
+- `src/services/knownSlips.review.test.ts:160`
 - `src/services/lastMoveOfLine.test.ts:23`
 - `src/services/lastMoveOfLine.test.ts:24`
 - `src/services/lastMoveOfLine.test.ts:35`
@@ -322,6 +329,8 @@
 - `src/services/openingTheory.test.ts:29`
 - `src/services/openingTheory.test.ts:30`
 - `src/services/openingTheory.test.ts:33`
+- `src/services/openingTheory.test.ts:39`
+- `src/services/openingTheory.test.ts:47`
 - `src/services/pawnJudgement.formationChoice.test.ts:9`
 - `src/services/pawnJudgement.formationChoice.test.ts:11`
 - `src/services/pawnJudgement.formationChoice.test.ts:17`
@@ -350,12 +359,13 @@
 - `src/services/reviewSacrifice.test.ts:40`
 - `src/services/reviewSacrifice.test.ts:52`
 - `src/services/reviewSacrifice.test.ts:66`
-- `src/services/reviewSacrifice.test.ts:78`
-- `src/services/reviewSacrifice.test.ts:89`
-- `src/services/reviewSacrifice.test.ts:91`
+- `src/services/reviewSacrifice.test.ts:74`
+- `src/services/reviewSacrifice.test.ts:82`
+- `src/services/reviewSacrifice.test.ts:93`
 - `src/services/reviewSacrifice.test.ts:95`
-- `src/services/reviewSacrifice.test.ts:96`
-- `src/services/reviewSacrifice.test.ts:102`
+- `src/services/reviewSacrifice.test.ts:99`
+- `src/services/reviewSacrifice.test.ts:100`
+- `src/services/reviewSacrifice.test.ts:106`
 - `src/services/reviewTeachingPoints.test.ts:12`
 - `src/services/reviewTeachingPoints.test.ts:21`
 - `src/services/reviewTeachingPoints.test.ts:31`
@@ -436,8 +446,8 @@
 
 ### `nowBoard` (function) — 7 call sites
 - `src/services/boardReadFacts.ts:135`
-- `src/services/boardReadFacts.ts:526`
-- `src/services/boardReadFacts.ts:542`
+- `src/services/boardReadFacts.ts:528`
+- `src/services/boardReadFacts.ts:544`
 - `src/services/planOfTheBoard.test.ts:11`
 - `src/services/readDecider.picture.test.ts:4`
 - `src/services/readDecider.speaks.test.ts:18`
@@ -454,106 +464,106 @@
 - `src/missions/checks/wrongRookPawn.test.ts:251`
 - `src/missions/scorers/steer.test.ts:8`
 - `src/missions/scorers/steer.test.ts:15`
-- `src/services/boardComputers.ts:1608`
-- `src/services/boardComputers.ts:1655`
-- `src/services/boardComputers.ts:1822`
-- `src/services/boardComputers.ts:2177`
-- `src/services/boardComputers.ts:2430`
-- `src/services/boardComputers.ts:2475`
-- `src/services/boardComputers.ts:2552`
-- `src/services/boardComputers.ts:2593`
-- `src/services/boardComputers.ts:2622`
-- `src/services/boardComputers.ts:2650`
-- `src/services/boardComputers.ts:2713`
-- `src/services/boardComputers.ts:2811`
-- `src/services/boardComputers.ts:3044`
-- `src/services/boardComputers.ts:3222`
-- `src/services/boardComputers.ts:3327`
-- `src/services/boardComputers.ts:3347`
-- `src/services/boardComputers.ts:3364`
-- `src/services/boardComputers.ts:3379`
-- `src/services/boardComputers.ts:3626`
-- `src/services/boardComputers.ts:3643`
-- `src/services/boardComputers.ts:3665`
-- `src/services/boardComputers.ts:3817`
-- `src/services/boardComputers.ts:3840`
+- `src/services/boardComputers.ts:1624`
+- `src/services/boardComputers.ts:1671`
+- `src/services/boardComputers.ts:1838`
+- `src/services/boardComputers.ts:2193`
+- `src/services/boardComputers.ts:2446`
+- `src/services/boardComputers.ts:2491`
+- `src/services/boardComputers.ts:2568`
+- `src/services/boardComputers.ts:2609`
+- `src/services/boardComputers.ts:2638`
+- `src/services/boardComputers.ts:2666`
+- `src/services/boardComputers.ts:2729`
+- `src/services/boardComputers.ts:2827`
+- `src/services/boardComputers.ts:3060`
+- `src/services/boardComputers.ts:3238`
+- `src/services/boardComputers.ts:3343`
+- `src/services/boardComputers.ts:3363`
+- `src/services/boardComputers.ts:3380`
+- `src/services/boardComputers.ts:3395`
+- `src/services/boardComputers.ts:3642`
+- `src/services/boardComputers.ts:3659`
+- `src/services/boardComputers.ts:3681`
+- `src/services/boardComputers.ts:3841`
 - `src/services/boardComputers.ts:3864`
-- `src/services/boardComputers.ts:3903`
-- `src/services/boardComputers.ts:3925`
-- `src/services/boardComputers.ts:3957`
-- `src/services/boardComputers.ts:3988`
-- `src/services/boardComputers.ts:4006`
-- `src/services/boardComputers.ts:4038`
-- `src/services/boardComputers.ts:4066`
-- `src/services/boardComputers.ts:4154`
-- `src/services/boardComputers.ts:4186`
+- `src/services/boardComputers.ts:3888`
+- `src/services/boardComputers.ts:3927`
+- `src/services/boardComputers.ts:3949`
+- `src/services/boardComputers.ts:3981`
+- `src/services/boardComputers.ts:4012`
+- `src/services/boardComputers.ts:4030`
+- `src/services/boardComputers.ts:4062`
+- `src/services/boardComputers.ts:4090`
+- `src/services/boardComputers.ts:4178`
 - `src/services/boardComputers.ts:4210`
-- `src/services/boardComputers.ts:4233`
-- `src/services/boardComputers.ts:4253`
-- `src/services/boardComputers.ts:4278`
-- `src/services/boardComputers.ts:4307`
-- `src/services/boardComputers.ts:4332`
-- `src/services/boardComputers.ts:4358`
-- `src/services/boardComputers.ts:4380`
-- `src/services/boardComputers.ts:4793`
-- `src/services/boardComputers.ts:4816`
-- `src/services/boardComputers.ts:4835`
-- `src/services/boardComputers.ts:4848`
-- `src/services/boardComputers.ts:4864`
-- `src/services/boardComputers.ts:4880`
-- `src/services/boardComputers.ts:4903`
-- `src/services/boardComputers.ts:4915`
+- `src/services/boardComputers.ts:4234`
+- `src/services/boardComputers.ts:4257`
+- `src/services/boardComputers.ts:4277`
+- `src/services/boardComputers.ts:4302`
+- `src/services/boardComputers.ts:4331`
+- `src/services/boardComputers.ts:4356`
+- `src/services/boardComputers.ts:4382`
+- `src/services/boardComputers.ts:4404`
+- `src/services/boardComputers.ts:4817`
+- `src/services/boardComputers.ts:4840`
+- `src/services/boardComputers.ts:4859`
+- `src/services/boardComputers.ts:4872`
+- `src/services/boardComputers.ts:4888`
+- `src/services/boardComputers.ts:4904`
 - `src/services/boardComputers.ts:4928`
-- `src/services/boardComputers.ts:4943`
+- `src/services/boardComputers.ts:4940`
 - `src/services/boardComputers.ts:4953`
-- `src/services/boardComputers.ts:4970`
-- `src/services/boardComputers.ts:4986`
-- `src/services/boardComputers.ts:5007`
-- `src/services/boardComputers.ts:5028`
-- `src/services/boardComputers.ts:5044`
-- `src/services/boardComputers.ts:5056`
-- `src/services/boardComputers.ts:5078`
-- `src/services/boardComputers.ts:5102`
-- `src/services/boardComputers.ts:5226`
-- `src/services/boardComputers.ts:5289`
-- `src/services/boardComputers.ts:5447`
-- `src/services/boardComputers.ts:5524`
-- `src/services/boardComputers.ts:5848`
-- `src/services/boardComputers.ts:5990`
-- `src/services/boardComputers.ts:6009`
-- `src/services/boardComputers.ts:6028`
-- `src/services/boardComputers.ts:6079`
-- `src/services/boardComputers.ts:6225`
-- `src/services/boardComputers.ts:6248`
-- `src/services/boardComputers.ts:6330`
-- `src/services/boardComputers.ts:6440`
-- `src/services/boardComputers.ts:6487`
-- `src/services/boardComputers.ts:6564`
-- `src/services/boardComputers.ts:6586`
-- `src/services/boardComputers.ts:6606`
-- `src/services/boardComputers.ts:6702`
-- `src/services/boardComputers.ts:6726`
-- `src/services/boardComputers.ts:6751`
-- `src/services/boardComputers.ts:6805`
-- `src/services/boardComputers.ts:6826`
-- `src/services/boardComputers.ts:6847`
-- `src/services/boardComputers.ts:6865`
-- `src/services/boardComputers.ts:6888`
-- `src/services/boardComputers.ts:6912`
-- `src/services/boardComputers.ts:6941`
-- `src/services/boardComputers.ts:6967`
-- `src/services/boardComputers.ts:6983`
-- `src/services/boardComputers.ts:7000`
-- `src/services/boardComputers.ts:7018`
-- `src/services/boardComputers.ts:7041`
-- `src/services/boardComputers.ts:7065`
+- `src/services/boardComputers.ts:4968`
+- `src/services/boardComputers.ts:4978`
+- `src/services/boardComputers.ts:4995`
+- `src/services/boardComputers.ts:5011`
+- `src/services/boardComputers.ts:5034`
+- `src/services/boardComputers.ts:5055`
+- `src/services/boardComputers.ts:5071`
+- `src/services/boardComputers.ts:5083`
+- `src/services/boardComputers.ts:5105`
+- `src/services/boardComputers.ts:5129`
+- `src/services/boardComputers.ts:5253`
+- `src/services/boardComputers.ts:5316`
+- `src/services/boardComputers.ts:5474`
+- `src/services/boardComputers.ts:5551`
+- `src/services/boardComputers.ts:5875`
+- `src/services/boardComputers.ts:6017`
+- `src/services/boardComputers.ts:6036`
+- `src/services/boardComputers.ts:6055`
+- `src/services/boardComputers.ts:6106`
+- `src/services/boardComputers.ts:6252`
+- `src/services/boardComputers.ts:6275`
+- `src/services/boardComputers.ts:6357`
+- `src/services/boardComputers.ts:6467`
+- `src/services/boardComputers.ts:6514`
+- `src/services/boardComputers.ts:6591`
+- `src/services/boardComputers.ts:6613`
+- `src/services/boardComputers.ts:6634`
+- `src/services/boardComputers.ts:6730`
+- `src/services/boardComputers.ts:6754`
+- `src/services/boardComputers.ts:6779`
+- `src/services/boardComputers.ts:6833`
+- `src/services/boardComputers.ts:6854`
+- `src/services/boardComputers.ts:6875`
+- `src/services/boardComputers.ts:6893`
+- `src/services/boardComputers.ts:6916`
+- `src/services/boardComputers.ts:6940`
+- `src/services/boardComputers.ts:6969`
+- `src/services/boardComputers.ts:6995`
+- `src/services/boardComputers.ts:7011`
+- `src/services/boardComputers.ts:7028`
+- `src/services/boardComputers.ts:7046`
+- `src/services/boardComputers.ts:7069`
 - `src/services/boardComputers.ts:7093`
-- `src/services/boardComputers.ts:7111`
-- `src/services/boardComputers.ts:7293`
-- `src/services/boardComputers.ts:7315`
-- `src/services/boardComputers.ts:7335`
-- `src/services/boardComputers.ts:7355`
-- `src/services/boardComputers.ts:7878`
+- `src/services/boardComputers.ts:7121`
+- `src/services/boardComputers.ts:7139`
+- `src/services/boardComputers.ts:7321`
+- `src/services/boardComputers.ts:7343`
+- `src/services/boardComputers.ts:7363`
+- `src/services/boardComputers.ts:7383`
+- `src/services/boardComputers.ts:7906`
 - `src/services/boardReadFacts.ts:134`
 - `src/services/movePurposeEngine.tempting.test.ts:22`
 - `src/services/openingRoads.ts:39`
@@ -564,10 +574,10 @@
 - `src/services/openingStory.ts:243`
 - `src/services/openingStory.ts:300`
 - `src/services/openingStory.ts:387`
-- `src/services/positionalReason.ts:46`
-- `src/services/positionalReason.ts:142`
-- `src/services/positionalReason.ts:143`
-- `src/services/positionalReason.ts:203`
+- `src/services/positionalReason.ts:58`
+- `src/services/positionalReason.ts:154`
+- `src/services/positionalReason.ts:155`
+- `src/services/positionalReason.ts:216`
 - `src/services/slipCause.ts:56`
 - `src/services/slipCause.ts:87`
 - `src/services/slipCause.ts:105`
@@ -665,16 +675,16 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `renderNewThreat` (function) — 1 call site
-- `src/services/boardComputers.ts:6097`
+- `src/services/boardComputers.ts:6124`
 
 ### `MustDefendData` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `renderMustDefendHit` (function) — 1 call site
-- `src/services/boardComputers.ts:3128`
+- `src/services/boardComputers.ts:3144`
 
 ### `renderMustDefend` (function) — 1 call site
-- `src/services/boardComputers.ts:3124`
+- `src/services/boardComputers.ts:3140`
 
 ### `ThreatAnswerData` (type) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -820,6 +830,134 @@
 - `src/services/reviewTeachingPoints.ts:125`
 - `src/services/reviewTeachingPoints.ts:150`
 
+### `renderWalkedIntoFork` (function) — 1 call site
+- `src/services/whyItFailed.ts:433`
+
+### `LessonSlot` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `LESSON_SLOTS` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `FillKey` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `SlotRecipe` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `LessonRecipe` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `S` (const) — 1 call site
+- `src/services/skillDifficultyCalibrate.measure.test.ts:40`
+
+### `Fills` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `HabitFamily` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `HABIT_SHORT` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `RepairState` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `RepairRecipe` (interface) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `REPAIRS` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `HABIT` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `RECIPES` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `POSITIONAL` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `MISTAKE_NUMBER_WORDS` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `materialWords` (function) — 3 call sites
+- `src/services/lineCalc.ts:116`
+- `src/services/lineCalc.ts:230`
+- `src/services/mistakeLesson.ts:293`
+
+### `motifArticle` (const) — 1 call site
+- `src/services/mistakeLesson.ts:283`
+
+### `COLOUR_NAME` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `TechniqueRule` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `TECHNIQUE_RULE` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `tradeWords` (function) — 1 call site
+- `src/services/mistakeLesson.ts:266`
+
+### `MISSED_MOTIF` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `TRAPPED_LESSON` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `CauseReaderKey` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `CAUSE_READER_LESSONS` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `FORK_LESSON` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `BetterJob` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `BETTER_JOBS` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `THEIR_SEAT` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `POSITIONAL_THEM` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `fillStem` (function) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `capitaliseStem` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `renderMistakeSlot` (function) — 3 call sites
+- `src/services/mistakeLesson.ts:473`
+- `src/services/mistakeLesson.ts:674`
+- `src/services/mistakeLesson.ts:805`
+
+### `THEIR_MOVE_CONSEQUENCE` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `EMPTY_CHECK_LESSON` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `GoodDecision` (type) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `GOOD_DECISION` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `structurePlanWords` (function) — 2 call sites
+- `src/services/planOf.ts:143`
+- `src/services/planOf.ts:150`
+
+### `mastersBreakPlanWords` (function) — 1 call site
+- `src/services/planOf.ts:169`
+
 ## Tests
 
 - `src/services/askedLineDeparture.test.ts`
@@ -836,38 +974,433 @@ _Matched by NAME: audits that textually reference this file or its exports.
 A browser-driven prod audit that exercises this surface through the UI will NOT
 appear here — check the post-deploy matrix in CLAUDE.md for those._
 
+- `scripts/audit-48h-work.mjs`
+- `scripts/audit-academy-courses.mjs`
+- `scripts/audit-ai-consent-persist.mjs`
+- `scripts/audit-all-line-accuracy.mjs`
+- `scripts/audit-all-openings-page-prod.mjs`
 - `scripts/audit-all.ts`
+- `scripts/audit-aman-prorep-prod.mjs`
+- `scripts/audit-analyse-comprehensive.mjs`
+- `scripts/audit-analysis-pool-engine-prod.mjs`
 - `scripts/audit-analysis-practice-loop.mjs`
+- `scripts/audit-anti-parity-prod.mjs`
+- `scripts/audit-app-sweep.mjs`
+- `scripts/audit-arrow-parity-prod.mjs`
+- `scripts/audit-as-david-would.mjs`
+- `scripts/audit-authored-tier-prod.mjs`
+- `scripts/audit-back-from-review.mjs`
+- `scripts/audit-bare-name-routing-prod.mjs`
+- `scripts/audit-batch-a-weaknesses-prod.mjs`
+- `scripts/audit-batch-cd-prod.mjs`
+- `scripts/audit-board-bar-fold.mjs`
+- `scripts/audit-board-touch-prod.mjs`
+- `scripts/audit-board-verdict-triage.mjs`
+- `scripts/audit-book-reader-prod.mjs`
+- `scripts/audit-bucket-delivery-loop.mjs`
+- `scripts/audit-calc-from-games.mjs`
+- `scripts/audit-campaign-gate1.mjs`
+- `scripts/audit-campaign-tracks-prod.mjs`
+- `scripts/audit-carlsen-plans.mjs`
+- `scripts/audit-carlsen-watch-depth.mjs`
+- `scripts/audit-caruana-prorep-prod.mjs`
+- `scripts/audit-changed-surfaces.mjs`
+- `scripts/audit-chat-comprehensive.mjs`
+- `scripts/audit-chat-hard-prod.mjs`
+- `scripts/audit-chat-replay-prod.mjs`
+- `scripts/audit-chat-surfaces-prod.mjs`
+- `scripts/audit-cluster-layers-prod.mjs`
+- `scripts/audit-coach-all-questions-prod.mjs`
+- `scripts/audit-coach-answers-questions-prod.mjs`
+- `scripts/audit-coach-battery-prod.mjs`
+- `scripts/audit-coach-beginner-questions-prod.mjs`
+- `scripts/audit-coach-bestmove-grounding.mjs`
 - `scripts/audit-coach-board-grind.mjs`
+- `scripts/audit-coach-board-questions-prod.mjs`
+- `scripts/audit-coach-byhand.mjs`
+- `scripts/audit-coach-capability-matrix.mjs`
 - `scripts/audit-coach-chat.mjs`
+- `scripts/audit-coach-control-prod.mjs`
+- `scripts/audit-coach-discovery-prod.mjs`
+- `scripts/audit-coach-drill-stress.mjs`
+- `scripts/audit-coach-endgame-live-prod.mjs`
+- `scripts/audit-coach-free-tier-prod.mjs`
+- `scripts/audit-coach-full-game.mjs`
+- `scripts/audit-coach-full-games.mjs`
 - `scripts/audit-coach-full-interactive.mjs`
+- `scripts/audit-coach-full.mjs`
+- `scripts/audit-coach-functions-prod.mjs`
+- `scripts/audit-coach-fundamentals-prod.mjs`
+- `scripts/audit-coach-grounded-loop.mjs`
+- `scripts/audit-coach-grounding-coverage.mjs`
+- `scripts/audit-coach-hands-prod.mjs`
+- `scripts/audit-coach-isolated-repro.mjs`
+- `scripts/audit-coach-kia-teach-prod.mjs`
+- `scripts/audit-coach-master-integration.mjs`
+- `scripts/audit-coach-middlegame-endgame.mjs`
+- `scripts/audit-coach-misc-surfaces.mjs`
+- `scripts/audit-coach-move-command.mjs`
+- `scripts/audit-coach-move-dictation-prod.mjs`
+- `scripts/audit-coach-move-grounding.mjs`
+- `scripts/audit-coach-multilingual-prod.mjs`
+- `scripts/audit-coach-narration-stress.mjs`
+- `scripts/audit-coach-new-lanes-prod.mjs`
+- `scripts/audit-coach-opening-accuracy-grounding.mjs`
+- `scripts/audit-coach-opening-traps-grounding.mjs`
 - `scripts/audit-coach-plan.mjs`
+- `scripts/audit-coach-play-attack.mjs`
+- `scripts/audit-coach-play-breakpoints.mjs`
+- `scripts/audit-coach-play-full.mjs`
+- `scripts/audit-coach-play-functions.mjs`
+- `scripts/audit-coach-play-gaps.mjs`
+- `scripts/audit-coach-play-grounding-adversarial.mjs`
+- `scripts/audit-coach-play-listen.mjs`
+- `scripts/audit-coach-play-resume.mjs`
 - `scripts/audit-coach-play.mjs`
+- `scripts/audit-coach-player-game.mjs`
+- `scripts/audit-coach-player-games.mjs`
+- `scripts/audit-coach-polyglot-loop.mjs`
+- `scripts/audit-coach-qa-4surface-prod.mjs`
 - `scripts/audit-coach-response-loop.mjs`
+- `scripts/audit-coach-review-due-grounding.mjs`
+- `scripts/audit-coach-review-functional.mjs`
 - `scripts/audit-coach-review-gaps.mjs`
 - `scripts/audit-coach-review.mjs`
+- `scripts/audit-coach-rigor-probes.mjs`
+- `scripts/audit-coach-session-2026-09-01-prod.mjs`
+- `scripts/audit-coach-settings-qa-loop.mjs`
+- `scripts/audit-coach-stats-strengths-grounding.mjs`
+- `scripts/audit-coach-stress.mjs`
+- `scripts/audit-coach-surface-parity-prod.mjs`
+- `scripts/audit-coach-tab-prod.mjs`
+- `scripts/audit-coach-tactic-narration.mjs`
+- `scripts/audit-coach-tactical-awareness.mjs`
+- `scripts/audit-coach-teach-explore.mjs`
+- `scripts/audit-coach-teach-faucet.mjs`
+- `scripts/audit-coach-teach-functional.mjs`
+- `scripts/audit-coach-teach-gaps.mjs`
+- `scripts/audit-coach-teach-interactive.mjs`
+- `scripts/audit-coach-teach-loop.mjs`
+- `scripts/audit-coach-teach-middlegame-plans.mjs`
+- `scripts/audit-coach-teach-unknown-line.mjs`
+- `scripts/audit-coach-track1-accuracy-prod.mjs`
+- `scripts/audit-coach-training-recommendation.mjs`
+- `scripts/audit-coach-turn-truth-prod.mjs`
+- `scripts/audit-coach-varied-prod.mjs`
+- `scripts/audit-coach-verify-fixes-prod.mjs`
+- `scripts/audit-coach-watch-matchup.mjs`
+- `scripts/audit-coach-weakness-adversarial.mjs`
+- `scripts/audit-coach-weakness-metrics-grounding.mjs`
+- `scripts/audit-coach-weakness-selfassessment-prod.mjs`
+- `scripts/audit-coach-why-reasoning.mjs`
+- `scripts/audit-coaches-library.mjs`
+- `scripts/audit-coldstart-opener-prod.mjs`
+- `scripts/audit-concept-engine-prod.mjs`
+- `scripts/audit-concept-gameplay-prod.mjs`
+- `scripts/audit-corpus-lazy-boot.mjs`
+- `scripts/audit-counter-academy-prod.mjs`
+- `scripts/audit-counter-repertoire.mjs`
+- `scripts/audit-course-line-accuracy.mjs`
+- `scripts/audit-course-progress-prod.mjs`
+- `scripts/audit-course-replies-prod.mjs`
 - `scripts/audit-curated-narrations.mjs`
+- `scripts/audit-danya-match-learn.mjs`
+- `scripts/audit-danya-viewer-questions-prod.mjs`
 - `scripts/audit-dashboard.mjs`
+- `scripts/audit-data-quality.mjs`
+- `scripts/audit-davids-bowdler-repro.mjs`
+- `scripts/audit-db-taught-opening-prod.mjs`
+- `scripts/audit-dragodorf-prod.mjs`
+- `scripts/audit-drill-why-prod.mjs`
+- `scripts/audit-drive-dump.mjs`
+- `scripts/audit-drive.mjs`
+- `scripts/audit-elite-roster-prod.mjs`
+- `scripts/audit-endgame-comprehensive.mjs`
+- `scripts/audit-endgame-results.mjs`
+- `scripts/audit-endgame-review-prod.mjs`
+- `scripts/audit-engine-worker-census-prod.mjs`
 - `scripts/audit-engine.mjs`
+- `scripts/audit-ericrosen-prod.mjs`
+- `scripts/audit-ericrosen-stafford-prod.mjs`
+- `scripts/audit-every-route.mjs`
+- `scripts/audit-every-variation.mjs`
 - `scripts/audit-everything.mjs`
 - `scripts/audit-fantasy-caro-walkthrough.mjs`
+- `scripts/audit-farmed-corpus-prod.mjs`
+- `scripts/audit-faucet-live.mjs`
 - `scripts/audit-featured-narrations.mjs`
+- `scripts/audit-find-square-interactive.mjs`
+- `scripts/audit-fix-proof-prod.mjs`
+- `scripts/audit-freemium-gate.mjs`
+- `scripts/audit-fullplay-prod.mjs`
 - `scripts/audit-fundamentals-tab-prod.mjs`
+- `scripts/audit-gambit-gems-prod.mjs`
+- `scripts/audit-gambit-kings.mjs`
+- `scripts/audit-gambit-plans.mjs`
+- `scripts/audit-gambit-tab-interactive.mjs`
+- `scripts/audit-gem-watch-learn-handoff-prod.mjs`
+- `scripts/audit-glek-system-prod.mjs`
+- `scripts/audit-glek-traditional-plan-prod.mjs`
+- `scripts/audit-gotham-prorep-interactive.mjs`
+- `scripts/audit-gotham-variation-watch-prod.mjs`
+- `scripts/audit-gotham-watch-depth-prod.mjs`
 - `scripts/audit-hanging-pieces.mjs`
+- `scripts/audit-hidden-tabs-prod.mjs`
+- `scripts/audit-hikaru-gems-unlock-prod.mjs`
+- `scripts/audit-hikaru-prorep-prod.mjs`
+- `scripts/audit-hint.mjs`
+- `scripts/audit-home-opening-prod.mjs`
+- `scripts/audit-import-settings-kid-prod.mjs`
+- `scripts/audit-isolation-repro.mjs`
+- `scripts/audit-italian-rebuild-prod.mjs`
+- `scripts/audit-kid-comprehensive.mjs`
+- `scripts/audit-kid-functional.mjs`
+- `scripts/audit-kid-llm-hallucination.mjs`
+- `scripts/audit-kid-play-coach-loop.mjs`
+- `scripts/audit-kid-puzzle-realism.mjs`
+- `scripts/audit-kid-puzzles-static.mjs`
+- `scripts/audit-kid-static.mjs`
+- `scripts/audit-kid-walkthrough.mjs`
+- `scripts/audit-kids-deep.mjs`
+- `scripts/audit-kids-section.mjs`
+- `scripts/audit-launch-smoke.mjs`
+- `scripts/audit-leadeye-plans.mjs`
+- `scripts/audit-leaf-stagemenu.mjs`
 - `scripts/audit-learn-comprehensive.mjs`
+- `scripts/audit-learn-designed-probes-prod.mjs`
+- `scripts/audit-learn-escalating-questions.mjs`
 - `scripts/audit-learn-focus-prod.mjs`
+- `scripts/audit-learn-full-game.mjs`
 - `scripts/audit-learn-how-to-think-prod.mjs`
+- `scripts/audit-learn-ios-engine.mjs`
+- `scripts/audit-learn-live-game-prod.mjs`
+- `scripts/audit-learn-replay.mjs`
+- `scripts/audit-learn-teach-gems-prod.mjs`
+- `scripts/audit-lesson-autoplay-resume.mjs`
+- `scripts/audit-lesson-walkin.mjs`
+- `scripts/audit-lib/audit-listener.mjs`
+- `scripts/audit-lib/audit-lock.mjs`
+- `scripts/audit-lib/auto-dismiss.mjs`
+- `scripts/audit-lib/best-answer.mjs`
+- `scripts/audit-lib/block-tts-network.mjs`
+- `scripts/audit-lib/board-claims.mjs`
+- `scripts/audit-lib/board-drive.mjs`
+- `scripts/audit-lib/chat-replay-cases.mjs`
+- `scripts/audit-lib/chromium.mjs`
+- `scripts/audit-lib/coach-question-matrix.mjs`
+- `scripts/audit-lib/coach-tab-graders.mjs`
 - `scripts/audit-lib/collect-moves.mjs`
+- `scripts/audit-lib/cpu-profile-map.mjs`
+- `scripts/audit-lib/critical-moment-voice.mjs`
+- `scripts/audit-lib/degrade.mjs`
+- `scripts/audit-lib/enable-audit-capture.mjs`
+- `scripts/audit-lib/engine-at.mjs`
+- `scripts/audit-lib/engine-student.mjs`
+- `scripts/audit-lib/engine.mjs`
+- `scripts/audit-lib/env.mjs`
+- `scripts/audit-lib/event-attribution.mjs`
+- `scripts/audit-lib/fixture-loader.mjs`
+- `scripts/audit-lib/grade-learn-replay.mjs`
+- `scripts/audit-lib/hand-driver.mjs`
+- `scripts/audit-lib/hand-page.mjs`
+- `scripts/audit-lib/hand-step.mjs`
+- `scripts/audit-lib/hard-positions.mjs`
+- `scripts/audit-lib/idb-unlock.mjs`
+- `scripts/audit-lib/mate-leads.mjs`
+- `scripts/audit-lib/mission-lines.mjs`
+- `scripts/audit-lib/mute-tts.mjs`
+- `scripts/audit-lib/narrationAuditor.test.ts`
+- `scripts/audit-lib/narrationAuditor.ts`
+- `scripts/audit-lib/os-sample.mjs`
+- `scripts/audit-lib/prod-api-relay.mjs`
+- `scripts/audit-lib/prod-bridge.mjs`
+- `scripts/audit-lib/proxy-intercept.mjs`
+- `scripts/audit-lib/review-explore.mjs`
+- `scripts/audit-lib/review-reuse.mjs`
+- `scripts/audit-lib/review-voice-listener.mjs`
+- `scripts/audit-lib/seat-reattribution.mjs`
+- `scripts/audit-lib/seed-profile-games.mjs`
+- `scripts/audit-lib/seed-weakness-profile.mjs`
+- `scripts/audit-lib/source-real-game.mjs`
+- `scripts/audit-lib/spoken-stats.mjs`
+- `scripts/audit-lib/stall-probe.mjs`
+- `scripts/audit-lib/student-player.mjs`
+- `scripts/audit-lib/trace-main-thread.mjs`
+- `scripts/audit-lib/trap-bar.mjs`
+- `scripts/audit-lib/viewer-question-forms.mjs`
+- `scripts/audit-lib/wedge-tracer.mjs`
+- `scripts/audit-lib/wedge-watch.mjs`
+- `scripts/audit-lib/why-count.mjs`
+- `scripts/audit-library-board-render.mjs`
+- `scripts/audit-library-board-sweep.mjs`
+- `scripts/audit-library-content.mjs`
+- `scripts/audit-lichess-lines.mjs`
+- `scripts/audit-lichess-match.mjs`
+- `scripts/audit-line-picker-popularity-prod.mjs`
 - `scripts/audit-llm-claims.mjs`
 - `scripts/audit-llm.mjs`
+- `scripts/audit-loop-closes-prod.mjs`
+- `scripts/audit-loop-green-prod.mjs`
+- `scripts/audit-masterclass-coach-grounding.mjs`
+- `scripts/audit-masterclass-endgame-modelgames-prod.mjs`
+- `scripts/audit-masterclass-postdeploy.mjs`
+- `scripts/audit-masterclass-variation-watch-prod.mjs`
+- `scripts/audit-mic-diagnostics.mjs`
+- `scripts/audit-missions-01.mjs`
+- `scripts/audit-missions-02.mjs`
+- `scripts/audit-mistakes-quality-loop.mjs`
+- `scripts/audit-model-games-cluster.mjs`
 - `scripts/audit-model-games.mjs`
+- `scripts/audit-modified-openings-smoke.mjs`
+- `scripts/audit-money-loop.mjs`
 - `scripts/audit-monkey.mjs`
+- `scripts/audit-my-weaknesses-merge-prod.mjs`
+- `scripts/audit-named-traps.mjs`
+- `scripts/audit-narration-coverage.mjs`
+- `scripts/audit-narration-deep.mjs`
+- `scripts/audit-narration-latency-prod.mjs`
+- `scripts/audit-narration-quality-prod.mjs`
+- `scripts/audit-nav-hubs-functional.mjs`
+- `scripts/audit-nav-plans.mjs`
+- `scripts/audit-new-user-journey.mjs`
+- `scripts/audit-noncoach-tabs.mjs`
+- `scripts/audit-ondemand-read-marks-prod.mjs`
+- `scripts/audit-one-opening.mjs`
 - `scripts/audit-opener-markers-smoke-prod.mjs`
+- `scripts/audit-opening-sale.mjs`
+- `scripts/audit-opening-trap-tiles.mjs`
+- `scripts/audit-opening-walkthrough.mjs`
+- `scripts/audit-openings-chat-runtime.mjs`
+- `scripts/audit-openings-deep-walkthrough.mjs`
+- `scripts/audit-openings-full.mjs`
+- `scripts/audit-openings-functional-deep.mjs`
 - `scripts/audit-openings-interactive-loop.mjs`
+- `scripts/audit-openings-interactive-sample.mjs`
 - `scripts/audit-openings-narration.mjs`
+- `scripts/audit-openings-narration.test.ts`
+- `scripts/audit-openings-teach.mjs`
+- `scripts/audit-openings-ui.mjs`
+- `scripts/audit-openings.mjs`
 - `scripts/audit-opponent-strength-prod.mjs`
+- `scripts/audit-ota.mjs`
+- `scripts/audit-pattern-school-prod.mjs`
+- `scripts/audit-pgn-db-anchor.mjs`
+- `scripts/audit-pgn-vs-masters.mjs`
+- `scripts/audit-pitfalls-prod.mjs`
+- `scripts/audit-plan-comprehensive.mjs`
+- `scripts/audit-plan-line-themes.mjs`
 - `scripts/audit-play-comprehensive.mjs`
+- `scripts/audit-play-silent-prod.mjs`
+- `scripts/audit-play-vienna-live.mjs`
+- `scripts/audit-pro-fork-prod.mjs`
+- `scripts/audit-pro-gothamchess-prod.mjs`
+- `scripts/audit-pro-naroditsky-alapin-prod.mjs`
+- `scripts/audit-pro-naroditsky-full-9.mjs`
+- `scripts/audit-pro-naroditsky-full-walk.mjs`
+- `scripts/audit-pro-naroditsky-prod.mjs`
+- `scripts/audit-pro-naroditsky.mjs`
+- `scripts/audit-pro-slate-wipe-prod.mjs`
+- `scripts/audit-pro-tab-wiring-prod.mjs`
+- `scripts/audit-punish-callout-prod.mjs`
 - `scripts/audit-punish-gems-loop.mjs`
+- `scripts/audit-reach-ladder-prod.mjs`
+- `scripts/audit-read-position-prod.mjs`
+- `scripts/audit-reading-upgrades-loop.mjs`
+- `scripts/audit-record-grid.mjs`
+- `scripts/audit-referral-bell-prod.mjs`
+- `scripts/audit-refuted-alternative-prod.mjs`
+- `scripts/audit-repertoire-orientation.mjs`
+- `scripts/audit-review-card-prod.mjs`
+- `scripts/audit-review-comprehensive.mjs`
+- `scripts/audit-review-explore-chips.mjs`
+- `scripts/audit-review-fleet-newgames.mjs`
+- `scripts/audit-review-functions-probe.mjs`
+- `scripts/audit-review-functions.mjs`
+- `scripts/audit-review-loop.mjs`
+- `scripts/audit-review-mobile-layout.mjs`
+- `scripts/audit-review-noise-walk.mjs`
+- `scripts/audit-review-overhaul-prod.mjs`
+- `scripts/audit-review-prep-timing.mjs`
+- `scripts/audit-review-reopen-probe.mjs`
+- `scripts/audit-review-theory-probe.mjs`
+- `scripts/audit-review-theory-prod.mjs`
+- `scripts/audit-review-voice-toggle.mjs`
+- `scripts/audit-review-walkout-freeze.mjs`
+- `scripts/audit-reward-layer-prod.mjs`
+- `scripts/audit-rolodex-deep-links.mjs`
+- `scripts/audit-routing-stress.mjs`
+- `scripts/audit-safe-area-layout.mjs`
+- `scripts/audit-samay-deep-prod.mjs`
+- `scripts/audit-samay-lines-correctness.mjs`
+- `scripts/audit-samay-walk-prod.mjs`
+- `scripts/audit-samayraina-prod.mjs`
+- `scripts/audit-search-depth-prod.mjs`
+- `scripts/audit-second-game-memory-prod.mjs`
+- `scripts/audit-settings-behavior.mjs`
+- `scripts/audit-settings-functional.mjs`
+- `scripts/audit-settings.mjs`
+- `scripts/audit-show-morra.mjs`
+- `scripts/audit-smoke.mjs`
+- `scripts/audit-speedrun-chat-prod.mjs`
+- `scripts/audit-stage-gen-prod.mjs`
+- `scripts/audit-storage-persistence.mjs`
+- `scripts/audit-stream-optin-prod.mjs`
+- `scripts/audit-strength-calibration.mjs`
+- `scripts/audit-structural.mjs`
+- `scripts/audit-subline-soundness.mjs`
+- `scripts/audit-subline-watch-prod.mjs`
+- `scripts/audit-sw-handover-prod.mjs`
+- `scripts/audit-sw-two-deploy-prod.mjs`
+- `scripts/audit-tactic-drill-flow-prod.mjs`
+- `scripts/audit-tactic-type-backfill-prod.mjs`
+- `scripts/audit-tactics-analysis-practice.mjs`
+- `scripts/audit-tactics-deep.mjs`
+- `scripts/audit-tactics-drive.mjs`
+- `scripts/audit-tactics-functional.mjs`
+- `scripts/audit-tactics-record-prod.mjs`
+- `scripts/audit-tactics-schools-prod.mjs`
 - `scripts/audit-tactics.mjs`
+- `scripts/audit-teach-bridge-prod.mjs`
+- `scripts/audit-teach-corpus-spoken-prod.mjs`
+- `scripts/audit-teach-corpus-traps-prod.mjs`
+- `scripts/audit-teach-forkdive-all-prod.mjs`
+- `scripts/audit-teach-forkdive-prod.mjs`
+- `scripts/audit-teach-glek-corpus-spoken-prod.mjs`
+- `scripts/audit-teach-leaf-deepdive-prod.mjs`
+- `scripts/audit-teach-memory-prod.mjs`
+- `scripts/audit-teach-no-silent-plies-prod.mjs`
+- `scripts/audit-teach-on-topic-prod.mjs`
+- `scripts/audit-teach-picker-bar-prod.mjs`
+- `scripts/audit-teach-play-picker-prod.mjs`
+- `scripts/audit-teach-tiers-spoken-prod.mjs`
+- `scripts/audit-this-review.mjs`
+- `scripts/audit-training-aid-routing.mjs`
+- `scripts/audit-training-loop-streamed.mjs`
+- `scripts/audit-trap-orientation.mjs`
+- `scripts/audit-traps-stockfish.mjs`
+- `scripts/audit-unified-coach-prod.mjs`
 - `scripts/audit-untouched-surfaces.mjs`
 - `scripts/audit-up-next-prod.mjs`
+- `scripts/audit-upload-games-reminder-prod.mjs`
+- `scripts/audit-vacuity-check.mjs`
+- `scripts/audit-vienna-modelgames-prod.mjs`
+- `scripts/audit-vienna-practice-scope.mjs`
+- `scripts/audit-vienna-spanish-prod.mjs`
+- `scripts/audit-vienna-walkthrough.mjs`
+- `scripts/audit-voice-coverage.js`
+- `scripts/audit-voiced-teach-prod.mjs`
+- `scripts/audit-walkthrough-narration.mjs`
+- `scripts/audit-walkthrough-rapid-advance.mjs`
+- `scripts/audit-weaknesses-freeze-prod.mjs`
+- `scripts/audit-weaknesses-functional.mjs`
+- `scripts/audit-weaknesses-interactive-deep.mjs`
+- `scripts/audit-weaknesses-interactive.mjs`
+- `scripts/audit-weaknesses-loop.mjs`
+- `scripts/audit-weaknesses-memory.mjs`
+- `scripts/audit-weaknesses-visual.mjs`
+- `scripts/audit-weaknesses.mjs`
+- `scripts/audit-weapon-checkoff-prod.mjs`
+- `scripts/audit-why-button-prod.mjs`
+- `scripts/audit-why-faucet.mjs`
+- `scripts/audit-wlpp-ladder.mjs`
+- `scripts/audit-wlpp-unlock-budget.mjs`

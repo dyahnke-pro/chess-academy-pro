@@ -8,11 +8,11 @@
 
 ## Locked rules that govern this surface
 
-- **Why determinism** (CLAUDE.md:455) — names `coachFeatureService`
-- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4850) — names `coachFeatureService`
-- **🔒🔒 LEARN SPEAKS ON A MOMENT, AND IS QUIET OTHERWISE (David 2026-11-18: "So learn narrations are needed only when the player makes an error of some kind … And it knows when not to say anything. Like a chess coach." → "Or it can be used to reenforce proper move behavior" → "It gets more quiet if you make all the right moves. But it speaks on errors").** (CLAUDE.md:5936) — names `dropHeardInLearn`
-- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5971) — names `coachFeatureService`
-- **The standard post-deploy ritual** (CLAUDE.md:7038) — names `coachFeatureService`
+- **Why determinism** (CLAUDE.md:454) — names `coachFeatureService`
+- **🔒🔒 NARRATION IS SELECTED BY THE STUDENT'S COMPUTED NEED — the app standard (David 2026-09-15, LOCKED: "Make it algo based. Narrate where the data tells us the user needs narration/teaching." → "New app standard?" → yes).** (CLAUDE.md:4849) — names `coachFeatureService`
+- **🔒🔒 LEARN SPEAKS ON A MOMENT, AND IS QUIET OTHERWISE (David 2026-11-18: "So learn narrations are needed only when the player makes an error of some kind … And it knows when not to say anything. Like a chess coach." → "Or it can be used to reenforce proper move behavior" → "It gets more quiet if you make all the right moves. But it speaks on errors").** (CLAUDE.md:5935) — names `dropHeardInLearn`
+- **🔒🔒 LEARN NAMES NO MOVE UNASKED — ITS WHY IS SAID, THE MOVE WAITS FOR THE ASK (David 2026-10-10: "I do not want the better move stated in learn free play unless the user asks for it" → "Unify"; carve-out 3 2026-10-20: the better move once it is past).** (CLAUDE.md:5970) — names `coachFeatureService`
+- **The standard post-deploy ritual** (CLAUDE.md:7016) — names `coachFeatureService`
 
 ## Who calls in
 
@@ -107,7 +107,7 @@
 - `src/services/coachFeatureService.test.ts:262`
 - `src/services/coachFeatureService.test.ts:282`
 - `src/services/coachFeatureService.test.ts:294`
-- `src/services/gameAnalysisService.ts:2510`
+- `src/services/gameAnalysisService.ts:2537`
 
 ### `NarrativeMoveData` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -257,9 +257,9 @@
 - `src/services/danyaBench.measure.test.ts:426`
 - `src/services/gradeGatesTeachingCost.test.ts:31`
 - `src/services/gradeGatesTeachingCost.test.ts:36`
-- `src/services/habitBothSeats.test.ts:29`
-- `src/services/habitBothSeats.test.ts:35`
-- `src/services/habitBothSeats.test.ts:42`
+- `src/services/habitBothSeats.test.ts:46`
+- `src/services/habitBothSeats.test.ts:52`
+- `src/services/habitBothSeats.test.ts:59`
 - `src/services/loopCloses.review.integration.test.ts:90`
 - `src/services/loosePattern.test.ts:17`
 - `src/services/methodBeat.test.ts:82`

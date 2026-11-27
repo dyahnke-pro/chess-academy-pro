@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**849 lines · 22 exports · 4 importers · 4 tests · 0 audits**
+**882 lines · 22 exports · 5 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,6 +12,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
+- `src/services/planOf.surfaces.test.ts`
 - `src/services/reviewOpeningTheory.ts`
 - `src/services/theoryReads.roads.test.ts`
 - `src/services/theoryReads.test.ts`
@@ -116,7 +117,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/theoryReads.roads.test.ts:299`
 - `src/services/theorySheets.measure.test.ts:85`
 
-### `theoryExtras` (function) — 5 call sites
+### `theoryExtras` (function) — 6 call sites
+- `src/services/planOf.surfaces.test.ts:13`
 - `src/services/reviewOpeningTheory.ts:819`
 - `src/services/theoryReads.roads.test.ts:212`
 - `src/services/theoryReads.roads.test.ts:292`
@@ -162,6 +164,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ## Tests
 
 - `src/services/gemCrushLines.computed.test.ts`
+- `src/services/planOf.surfaces.test.ts`
 - `src/services/theoryReads.roads.test.ts`
 - `src/services/theoryReads.test.ts`
 - `src/services/theorySheets.measure.test.ts`
