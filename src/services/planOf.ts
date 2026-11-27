@@ -16,11 +16,13 @@
 // side's from the pass read (`passLines`, the board with the other side to
 // move) when the surface has one — so "their plan" is never a guess.
 // Round 3: ONLY THE BEST-SUPPORTED PLAN is said (the second plan guessed: 41%
-// of said plans matched a source). A plan with no pawn move (two weaknesses,
-// regroup, the king's own blocker, the isolani, the square) is evidenced by a
+// of said plans matched a source). A round-3 plan with no pawn move (two
+// weaknesses, regroup, the king's own blocker) is evidenced by a
 // near-best line whose mover's first moves play it — a piece onto or at its
 // squares, the blocker moved or the king castled, only piece moves for the
-// regroup. Down two pawns or more with no forcing move in the best line, the
+// regroup. (The isolani, the square and the bad bishop stay as before: said
+// only beside a line's plan — on the baseline a piece landing on the square
+// was the move itself, said back as a plan.) Down two pawns or more with no forcing move in the best line, the
 // plan is PASSIVE DEFENCE. A passer race the other side wins (`planRace`)
 // takes the mover's own push off the list: the plan is to stop theirs.
 // A plan whose first step is 50–100 cp off the best, played by a near-best
@@ -158,7 +160,6 @@ function pieceEvidence(fen: string, lines: readonly AnalysisLine[], mover: Color
         case 'two-weaknesses': return hitsWeakness;
         case 'regroup': return moves.length > 0 && moves.every((m) => m.piece !== 'p' && !m.captured && !/[+#]/.test(m.san));
         case 'king-blocked': return moves.some((m) => m.from === s.target || /^O-O/.test(m.san));
-        case 'isolani': case 'square': case 'bad-bishop': return moves.some((m) => m.piece !== 'p' && s.squares.includes(m.to));
         default: return false;
       }
     })();

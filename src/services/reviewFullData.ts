@@ -863,7 +863,11 @@ export function computeMoveFacets(
     // ── 3c. IF YOU HAD PASSED — the threat their last move left, and that
     // this move answered it (mistakes round 2): the reason a quiet defence was
     // right, said with the square it saved.
-    basketFacet(readBoard('passThreat', { fenBefore: ctx.fenBefore, san, student: ctx.studentColorWB }));
+    // A move that cost something is the error computer's to explain: "it
+    // stopped their threat" beside "it was a mistake" says two things at once.
+    if (ctx.classification !== 'mistake' && ctx.classification !== 'blunder' && ctx.classification !== 'inaccuracy') {
+      basketFacet(readBoard('passThreat', { fenBefore: ctx.fenBefore, san, student: ctx.studentColorWB }));
+    }
   }
 
   // ── 4. POSITIONAL VERDICT + THE FULL ASSET LIST (no cap) ──

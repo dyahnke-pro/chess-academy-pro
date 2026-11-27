@@ -87,6 +87,6 @@ const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 export function passThreatSentence(t: PassThreat, square: Square | string = t.square): string | null {
   if (!t.answered) return null;
   return t.kind === 'mate'
-    ? `If you had passed, their ${t.attacker} to ${square} was mate. Your move stopped it.`
-    : `If you had passed, their ${t.attacker} took your ${t.victim} on ${square}. Your move stopped it.`;
+    ? `If you had passed, their ${t.attacker} to ${square} would have been mate. Your move stopped it.`
+    : `If you had passed, their ${t.attacker} would have taken your ${t.victim} on ${square}. Your move stopped it.`;
 }
