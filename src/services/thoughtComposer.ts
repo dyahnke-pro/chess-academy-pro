@@ -28,7 +28,7 @@ import { fadeText, type FadeLevels } from './fadeText';
 import { stripThink } from '../utils/thinkPause';
 import type { SaidSet } from './gameStory';
 import { emitEverything, everythingListening } from './everythingEvents';
-import { stakeValue } from './factStakes';
+import { isStaked, stakeValue } from './factStakes';
 import { placeFact, type CoachFact } from './coachFact';
 import thoughtPolicy from '../data/thought-policy.json';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
@@ -609,7 +609,15 @@ export function composeThought(
   const said = new Set<string>(memory?.keys ?? []);
   const kept: ThoughtFact[] = [];
   const keptVoice: VoiceFact[] = [];
+  const named = new Map<string, number>();
   for (const f of picked) {
+    // THE FULL NAME ONCE (voice rule 3): a description that names only squares
+    // this thought has already said twice adds nothing a student can look at —
+    // a third "g8" in one turn is the robotic line, not a new fact.
+    if (!isStaked(f.stakes) && f.squares.length > 0 && f.squares.every((sq) => (named.get(sq) ?? 0) >= 2)) {
+      held.push({ fact: f, why: 'already-said' });
+      continue;
+    }
     const pkg = buildVoicePackage([{ kind: 'computed', text: f.text, fen: f.fen, altFen: f.altFen, squares: f.squares, claims: f.claims, lines: f.lines, proof: f.proof }], undefined, said);
     if (pkg.kept.length === 0) {
       held.push({ fact: f, why: pkg.dropped[0]?.said ? 'already-said' : 'refused' });
@@ -617,6 +625,7 @@ export function composeThought(
     }
     const k = pkg.kept[0];
     for (const key of spokenSentenceKeys(pkg)) said.add(key);
+    for (const sq of k.text.match(/\b[a-h][1-8]\b/g) ?? []) named.set(sq, (named.get(sq) ?? 0) + 1);
     kept.push({ ...f, text: k.text, lines: k.lines });
     keptVoice.push(k);
   }
