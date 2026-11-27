@@ -236,7 +236,10 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     // THE THREAT COMPUTERS ON THE BOARD (rebuilt 2026-11-27): a discovered
     // attack that wins against every reply (the student's chance, and theirs
     // if it were their move), and the one move that holds against their threat.
-    for (const f of [...readBoardAll('discoveredAttack', { fen: i.fen, student: i.studentColor, namesMoves: true }), ...readBoardAll('answeringMove', { fen: i.fen, student: i.studentColor, namesMoves: true })]) {
+    // The read names the move as an asked read does, except on a board whose
+    // answer is still the student's to find (`withhold`).
+    const namesMoves = ASKED_WRITER.namesStudentMoves && !i.withhold;
+    for (const f of [...readBoardAll('discoveredAttack', { fen: i.fen, student: i.studentColor, namesMoves }), ...readBoardAll('answeringMove', { fen: i.fen, student: i.studentColor, namesMoves })]) {
       facts.push({ from: 'position', kind: f.kind, text: f.text, computer: f.computer, squares: f.squares, claims: f.claims, stakes: stakeValue(f.stakes) });
     }
     const siege = siegeOf(i.fen, i.before, whose);

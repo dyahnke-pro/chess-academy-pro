@@ -8,7 +8,12 @@
  * shows the lecture and whether the run is still alive.
  */
 import type { BoardArrow } from '../types';
-import type { LectureStep } from './reviewOpeningTheory';
+import {
+  buildOpeningTheoryLecture, buildTheoryLectureBeats, lectureNoteSelector, lectureSequence,
+  loadLectureCorpus, resolveCuratedOpeningIdeas, type LectureStep,
+} from './reviewOpeningTheory';
+import { reviewTheoryLookup } from './reviewOpeningsSource';
+import { detectOpening } from './openingDetectionService';
 import { voiceService } from './voiceService';
 import { voiceFacts } from './coachApi';
 import { buildVoicePackage } from './voicePackage';
@@ -75,4 +80,19 @@ export async function performLecture(steps: readonly LectureStep[], io: LectureI
     const elapsed = performance.now() - t0;
     if (elapsed < dwell) await sleep(dwell - elapsed);
   }
+}
+
+/** The theory view's steps for a game: the opening named off its moves, the
+ *  masters walk along the game's own boards, and the lecture from where the
+ *  game left book (`theoryViewSteps`). Null when there is no lecture. */
+export async function theoryLectureFor(
+  boards: readonly string[], sans: readonly string[], studentColor: 'white' | 'black',
+): Promise<{ openingName: string; departurePly: number | null; steps: LectureStep[] } | { openingName: string; departurePly: null; steps: null }> {
+  const openingName = detectOpening([...sans])?.name ?? 'this opening';
+  await loadLectureCorpus().catch(() => undefined);
+  const lecture = await buildOpeningTheoryLecture([...boards], [...sans], openingName, { lookup: reviewTheoryLookup, studentColor });
+  if (!lecture) return { openingName, departurePly: null, steps: null };
+  const beats = buildTheoryLectureBeats(lecture, resolveCuratedOpeningIdeas(openingName, studentColor) ?? [], studentColor, lectureNoteSelector(openingName, studentColor));
+  const departureFen = lecture.departurePly ? boards[lecture.departurePly - 1] ?? null : null;
+  return { openingName, departurePly: lecture.departurePly ?? null, steps: theoryViewSteps(lectureSequence(beats), departureFen) };
 }

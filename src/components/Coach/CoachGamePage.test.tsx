@@ -92,10 +92,6 @@ vi.mock('../../services/coachApi', () => ({
   getCoachChatResponse: vi.fn().mockResolvedValue('Sure, I can help with that position.'),
 }));
 
-vi.mock('../../services/coachTemplates', () => ({
-  getScenarioTemplate: vi.fn().mockReturnValue('Sure, take it back.'),
-}));
-
 vi.mock('../../services/coachPrompts', () => ({
   EXPLORE_REACTION_ADDITION: 'Test explore reaction prompt',
   SYSTEM_PROMPT: 'Test system prompt',

@@ -326,13 +326,6 @@
   }
  },
  {
-  "name": "coachTemplates",
-  "file": "services/coachTemplates.ts",
-  "fn": "(module)",
-  "says": "",
-  "origin": "extra"
- },
- {
   "name": "getCoachGreeting",
   "file": "services/coachTrainingService.ts",
   "fn": "getCoachGreeting",

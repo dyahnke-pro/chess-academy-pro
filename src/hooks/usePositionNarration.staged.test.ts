@@ -6,12 +6,14 @@ import { renderHook, act, waitFor } from '@testing-library/react';
 // still being read, and the deep part follows on the same speech chain.
 
 const spoken: string[] = [];
-vi.mock('../services/voiceService', () => ({
-  voiceService: {
-    speakReadAloud: vi.fn((text: string) => { spoken.push(text); return Promise.resolve(); }),
-    stop: vi.fn(),
-  },
-}));
+vi.mock('../services/voiceService', async () => {
+  const { buildVoiceServiceMock } = await import('../test/mocks/voice-service');
+  return {
+    voiceService: buildVoiceServiceMock({
+      speakReadAloud: vi.fn((text: string) => { spoken.push(text); return Promise.resolve(); }),
+    }),
+  };
+});
 vi.mock('../services/stockfishEngine', () => ({
   stockfishEngine: {
     analyzeWithBudget: vi.fn(() => Promise.resolve({ bestMove: 'e2e4', evaluation: 20, isMate: false, mateIn: null, depth: 10, nodesPerSecond: 0, topLines: [{ rank: 1, evaluation: 20, mate: null, moves: ['e2e4'] }] })),

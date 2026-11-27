@@ -361,10 +361,9 @@ import { markItems } from '../../services/markAnchors';
 import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent, ownTakebackPlies } from '../../services/coachSessionRouter';
 import { lookBackPlay, studentMovesAtView } from '../../services/lookBackMove';
-import { lastSaidOfTurn, whyAnswer } from '../../services/whyAnswers';
+import { hintWhyDetail, lastSaidOfTurn, whyAnswer } from '../../services/whyAnswers';
 import { useTheoryView } from '../../hooks/useTheoryView';
 import { usePieceSound } from '../../hooks/usePieceSound';
-import { computeWhyBestMoveDetail } from '../../services/whyBestMove';
 import { actionForCommand, actuate } from '../../services/coachActuator';
 import { readSpokenSquares } from '../../services/spokenSquares';
 import { isCounterRepertoireQuestion, isCandidateMoveQuestion, isLastGameMistakeQuestion, isBestMoveQuestion, isWhyBestMoveQuestion, isTacticsQuestion, isOpponentMoveQuestion, isNameOpeningQuestion, isTheoryQuestion, isEndgameQuestion, isTeachingMethodQuestion, isPlayerGamesQuestion, isPositionAssessmentQuestion, positionalTopic, looksLikeQuestionNotAnOpeningName, looksLikeConversationalReply, isStopCommand, LETS_PLAY_RE } from '../../coach/questionIntents';
@@ -14398,9 +14397,8 @@ export function CoachTeachPage({ mode }: {
       void (async () => {
         try {
           const read = await stockfishEngine.analyzePosition(fen, 15);
-          const detail = await computeWhyBestMoveDetail({
-            fen, studentColor: playerColorRef.current, analysis: { ...read, bestMove: uci },
-            rating: activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING, pgn: gameRef.current.pgn, studentNeedContext: null,
+          const detail = await hintWhyDetail({ fen, uci }, read, {
+            studentColor: playerColorRef.current, rating: activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING, pgn: gameRef.current.pgn,
           });
           if (liveFenRef.current !== fen || !detail.text) return;
           if (detail.arrows.length > 0) setLineWalkArrows(detail.arrows);

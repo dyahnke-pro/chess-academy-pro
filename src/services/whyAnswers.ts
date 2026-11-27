@@ -9,6 +9,8 @@
  * answers exactly that or nothing.
  */
 import { isProof, type FactProof, type Proof } from './proof';
+import { computeWhyBestMoveDetail } from './whyBestMove';
+import type { StockfishAnalysis } from '../types';
 
 export type LastSaid =
   /** A conclusion with its proof: Why says the proof. */
@@ -37,4 +39,17 @@ export function whyAnswer(last: LastSaid, liveFen: string): Exclude<LastSaid, nu
   if (!last) return null;
   if (last.kind === 'hint') return position(last.fen) === position(liveFen) ? last : null;
   return last;
+}
+
+/** The hint's Why: the hinted move named with its reason, computed on the
+ *  board the hint was given on (`whyBestMove`, the one reason computer). The
+ *  page hands the engine read; the Why door words it. */
+export async function hintWhyDetail(
+  hint: { fen: string; uci: string }, read: StockfishAnalysis,
+  ctx: { studentColor: 'white' | 'black'; rating: number; pgn: string },
+): ReturnType<typeof computeWhyBestMoveDetail> {
+  return computeWhyBestMoveDetail({
+    fen: hint.fen, studentColor: ctx.studentColor, analysis: { ...read, bestMove: hint.uci },
+    rating: ctx.rating, pgn: ctx.pgn, studentNeedContext: null,
+  });
 }

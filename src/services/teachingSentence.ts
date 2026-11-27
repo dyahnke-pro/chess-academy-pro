@@ -1831,7 +1831,6 @@ export function materialWords(pawns: number): string | null {
   if (pawns === 1) return 'a pawn';
   return pawns > 2 ? `${MISTAKE_NUMBER_WORDS[pawns] ?? String(pawns)} points of material` : null;
 }
-export const motifArticle = (w: string): string => withArticle(w);
 export const COLOUR_NAME = { dark: 'dark', light: 'light' } as const;
 
 /** An ending's rule in words: every defender rule (`DEFENDER_RULE_TECHNIQUE`),
@@ -2110,7 +2109,6 @@ export const POSITIONAL_THEM: Partial<Record<Exclude<MisconceptionTagId, 'other'
 export function fillStem(stem: string, fills: Fills): string {
   return stem.replace(/\{(\w+)\}/g, (_, k: string) => fills[k as FillKey] ?? `{${k}}`);
 }
-export const capitaliseStem = (s: string): string => openSentence(s);
 
 /** Said one slot: rotated on `key`, skipping a stem the previous turn said
  *  (`avoid`), or null when a field it needs is missing. Returns the stem

@@ -13,13 +13,7 @@ import { useCallback, useMemo, useRef, useState } from 'react';
 import { Chess } from 'chess.js';
 import type { BoardArrow } from '../types';
 import { classifyPhase } from '../services/gamePhaseService';
-import { detectOpening } from '../services/openingDetectionService';
-import {
-  buildOpeningTheoryLecture, buildTheoryLectureBeats, lectureNoteSelector, lectureSequence,
-  loadLectureCorpus, resolveCuratedOpeningIdeas,
-} from '../services/reviewOpeningTheory';
-import { reviewTheoryLookup } from '../services/reviewOpeningsSource';
-import { performLecture, theoryViewSteps } from '../services/theoryPlayback';
+import { performLecture, theoryLectureFor } from '../services/theoryPlayback';
 import { admitArrow } from '../services/arrowDoor';
 import { voiceService } from '../services/voiceService';
 import { logAppAudit } from '../services/appAuditor';
@@ -88,24 +82,19 @@ export function useTheoryView(o: TheoryViewInput): TheoryView {
     const token = ++tokenRef.current;
     const alive = (): boolean => tokenRef.current === token;
     const sans = o.sans.slice();
-    const openingName = detectOpening(sans)?.name ?? 'this opening';
     setPlaying(true);
     voiceService.stop();
     // The game pauses at once: the walker's board shows the game as it stands.
     setWalkFen(boards[boards.length - 1] ?? START);
     setWalkArrows([]);
     try {
-      await loadLectureCorpus().catch(() => undefined);
-      const lecture = await buildOpeningTheoryLecture(boards, sans, openingName, { lookup: reviewTheoryLookup, studentColor });
+      const { openingName, departurePly, steps } = await theoryLectureFor(boards, sans, studentColor);
       if (!alive()) return;
-      if (!lecture) {
+      if (!steps) {
         void logAppAudit({ kind: 'theory-view', category: 'subsystem', source: 'useTheoryView', summary: `${surface}: no lecture (${openingName}, ${sans.length} plies)` });
         return;
       }
-      const beats = buildTheoryLectureBeats(lecture, resolveCuratedOpeningIdeas(openingName, studentColor) ?? [], studentColor, lectureNoteSelector(openingName, studentColor));
-      const departureFen = lecture.departurePly ? boards[lecture.departurePly - 1] ?? null : null;
-      const steps = theoryViewSteps(lectureSequence(beats), departureFen);
-      void logAppAudit({ kind: 'theory-view', category: 'subsystem', source: 'useTheoryView', summary: `${surface}: ${openingName}, ${steps.length} steps from ${lecture.departurePly ? `ply ${lecture.departurePly}` : 'the start'}` });
+      void logAppAudit({ kind: 'theory-view', category: 'subsystem', source: 'useTheoryView', summary: `${surface}: ${openingName}, ${steps.length} steps from ${departurePly ? `ply ${departurePly}` : 'the start'}` });
       await performLecture(steps, {
         alive,
         show: (fen, _san, arrows) => { setWalkFen(fen); setWalkArrows(arrows ?? []); },

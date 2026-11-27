@@ -43,7 +43,6 @@ describe('no narration service rolls its phrasing', () => {
   // scanned by heuristic: a heuristic would either miss a renamed file or drag
   // in the puzzle sampler and force a false exemption.
   const NARRATION_SERVICES = [
-    'coachTemplates.ts',
     'endgameRecapService.ts',
     'tacticNarrationService.ts',
     'methodBeat.ts',

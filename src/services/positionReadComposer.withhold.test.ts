@@ -1,6 +1,13 @@
 import { describe, it, expect } from 'vitest';
-import { composePositionRead } from './positionReadComposer';
+import { composePositionReadStaged } from './positionReadComposer';
 import type { StockfishAnalysis } from '../types';
+
+/** The whole read as one string: the opening, then the deep part. */
+async function composePositionRead(i: Parameters<typeof composePositionReadStaged>[0]): Promise<string> {
+  const r = composePositionReadStaged(i);
+  const [a, b] = await Promise.all([r.first, r.deep]);
+  return [a, b].filter(Boolean).join(' ');
+}
 
 // "Teach me this position" on a puzzle (David 2026-10-01): the read teaches
 // the POSITION before the student answers and never gives the move away.

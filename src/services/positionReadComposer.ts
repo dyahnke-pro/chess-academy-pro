@@ -209,17 +209,6 @@ export interface StagedRead {
   kinds: Promise<{ first: string[]; deep: string[] }>;
 }
 
-/**
- * Every computed sentence of the read, most-important-first, joined for the
- * phraser: the opening, then the deep part. Empty when the board says nothing
- * worth a word — the caller then stays silent rather than inventing.
- */
-export async function composePositionRead(i: PositionReadInput): Promise<string> {
-  const r = composePositionReadStaged(i);
-  const [a, b] = await Promise.all([r.first, r.deep]);
-  return [a, b].filter(Boolean).join(' ');
-}
-
 export function composePositionReadStaged(i: PositionReadInput): StagedRead {
   const studentCC: 'w' | 'b' = i.playerColor === 'white' ? 'w' : 'b';
   const sans = sansOfPgn(i.pgn);
@@ -245,21 +234,17 @@ export function composePositionReadStaged(i: PositionReadInput): StagedRead {
     i.tacticsSkill,
   ).catch(() => undefined).then((t) => t ?? null);
 
-  const input = (stage: 'first' | 'full', read: BoardReader): BoardReadInput => ({
+  // What both reads share; each call hands the student model itself (B3), so
+  // the call site states the contract (`liveNeedWire.test`).
+  const shared = (stage: 'first' | 'full', read: BoardReader): Omit<BoardReadInput, 'studentNeedContext' | 'extra'> => ({
     stage,
     fen: i.fen, studentColor: studentCC, rating: i.rating, before, history: sans, theory: true, tense: 'now',
     withhold: !!marks, readTempting: i.readTempting && !marks, engineFutures: tryReadBudget(i.surface).engineFutures,
     read,
     story: i.story,
-    // THE HEAT MAP + THE NEED TERM (B3): the student's record and the
-    // last move on each side when the PGN produces this board.
-    studentNeedContext: i.studentNeedContext,
-    extra: {
-      evalBoard: i.evalBoard, studentWeaknesses: i.studentWeaknesses,
-      lastMove: lastMoveIfStudent(sans, i.playerColor, i.fen) ?? undefined,
-      opponentLastMove: lastMoveIfOpponent(sans, i.playerColor, i.fen) ?? undefined,
-    },
   });
+  const lastMove = lastMoveIfStudent(sans, i.playerColor, i.fen) ?? undefined;
+  const opponentLastMove = lastMoveIfOpponent(sans, i.playerColor, i.fen) ?? undefined;
   const contextOf = async (said: readonly string[] | null) => {
     const tactics = await tacticsP;
     return readContextOf({
@@ -299,7 +284,13 @@ export function composePositionReadStaged(i: PositionReadInput): StagedRead {
   const firstP: Promise<{ text: string; said: string[]; habit: boolean; kinds: string[] }> = (async () => {
     if (!before.length) return { text: clean([noteLine]), said: [], habit: false, kinds: [] };
     try {
-      const read = await boardReadOffThread(input('first', () => Promise.resolve(null)));
+      const read = await boardReadOffThread({
+        ...shared('first', () => Promise.resolve(null)),
+        // THE HEAT MAP + THE NEED TERM (B3): the student's record, and the
+        // last move on each side when the PGN produces this board.
+        studentNeedContext: i.studentNeedContext,
+        extra: { evalBoard: i.evalBoard, studentWeaknesses: i.studentWeaknesses, lastMove, opponentLastMove },
+      });
       const decided = decideRead(read.facts, await contextOf(i.story?.claims ?? null));
       const opening = decided.facts
         .map((f, k) => ({ f, k, step: FIRST_STEP_OF.get(f.kind) }))
@@ -327,7 +318,10 @@ export function composePositionReadStaged(i: PositionReadInput): StagedRead {
     try {
       reader = await readerP;
       if (i.isCancelled()) return '';
-      const read = await boardReadOffThread(input('full', reader.read));
+      const read = await boardReadOffThread({
+        ...shared('full', reader.read), studentNeedContext: i.studentNeedContext,
+        extra: { evalBoard: i.evalBoard, studentWeaknesses: i.studentWeaknesses, lastMove, opponentLastMove },
+      });
       const opening = await firstP;
       if (i.isCancelled()) return '';
       const decided = decideRead(read.facts, await contextOf(opening.said));

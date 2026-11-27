@@ -30,6 +30,7 @@ import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } f
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
+import { until } from './audit-lib/wedge-watch.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:4173';
 const N = Number(process.env.AUDIT_BOARDS ?? 11);
@@ -72,11 +73,10 @@ async function main() {
           .sort((x, y) => x.receivedAt - y.receivedAt);
         // Until the read is over: 4 s of silence after the last line's
         // (simulated) end, or 180 s.
-        while (Date.now() - t0 < 180000) {
-          await page.waitForTimeout(150);
+        await until(() => {
           const last = spoken().at(-1);
-          if (last && Date.now() > last.receivedAt + spokenMs(last.narrationText) + 4000) break;
-        }
+          return !!last && Date.now() > last.receivedAt + spokenMs(last.narrationText) + 4000;
+        }, 180000, 150);
         const s = spoken();
         row.firstMs = s[0] ? s[0].receivedAt - t0 : null;
         row.lastMs = s.at(-1) ? s.at(-1).receivedAt - t0 : null;
