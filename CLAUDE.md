@@ -343,8 +343,11 @@ chance for the user to find the focus."
   🔴 This REPLACES "never your own Takeback (… a puzzle already filed is
   withdrawn)", DELETED (the Lake Butler rule). Try again, "want it back?", Go
   back and castle, and the Campaign's Try again hand the move to one door
-  (`takenBackPuzzles.fileTakenBack`, called by the runners' hooks); the bar's
-  Takeback and "take that back" in chat hand it to the same door through
+  (`takenBackPuzzles.fileTakenBack`, called by the runners' hooks). The bar
+  has no Takeback button (David 2026-11-24: "Back only looks; playing a
+  different move there is the takeback"): a different move on a board looked
+  back at with Back (`lookBackMove.lookBackPlay`, Learn and Play) and "take
+  that back" in chat hand it to the same door through
   `discussionPractice.takeBackOwnMove` — the page holds no copy. A taken-back
   move never reaches the end-of-game analysis, so it is graded there (the one
   price + `detectSlip`) for the PUZZLE only and filed to My Mistakes when it
