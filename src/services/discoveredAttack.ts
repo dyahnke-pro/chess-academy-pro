@@ -16,6 +16,7 @@ import { Chess, type Color, type Square } from 'chess.js';
 import { MATERIAL_VALUE } from './pieceValues';
 import { legalSeeGain } from './positionReadingService';
 import { immediateWin, MATE_GAIN } from './immediateWin';
+import { flipSideToMove } from './threatOut';
 
 export interface DiscoveredAttack {
   /** The discovering move, SAN. */
@@ -59,17 +60,33 @@ function firstOnRay(c: Chess, from: string, df: number, dr: number): { square: S
 /** The line a move uncovers onto an enemy king or piece of a minor's worth or
  *  more: a line piece of the mover's behind `from`, the target in front once
  *  the piece has gone (never the moved piece's own landing). */
-function uncoveredLine(before: Chess, after: Chess, from: string, to: string, me: Color): { uncovered: { square: string; piece: string }; target: { square: string; piece: string } } | null {
+function uncoveredLine(before: Chess, from: string, to: string, me: Color): { uncovered: { square: string; piece: string }; target: { square: string; piece: string } } | null {
   for (const [df, dr] of SLIDES.q) {
     const back = firstOnRay(before, from, -df, -dr);
     if (!back || back.color !== me) continue;
     if (!SLIDES[back.type]?.some(([a, b]) => a === df && b === dr)) continue;
-    const front = firstOnRay(after, back.square, df, dr);
-    if (!front || front.color === me || front.square === to) continue;
+    const front = firstOnRay(before, from, df, dr);
+    if (!front || front.color === me) continue;
+    // The piece moving along the line still blocks it (or takes the target).
+    if (onSegment(from, front.square, to, df, dr)) continue;
     if (front.type !== 'k' && (MATERIAL_VALUE[front.type] ?? 0) < 3) continue;
     return { uncovered: { square: back.square, piece: back.type }, target: { square: front.square, piece: front.type } };
   }
   return null;
+}
+
+/** Captures and checks first. */
+const forcing = (m: { san: string; captured?: string }): number => (m.captured ? 2 : 0) + (/[+#]/.test(m.san) ? 1 : 0);
+
+/** Is `to` on the ray from `from` (exclusive) up to `end` (inclusive)? */
+function onSegment(from: string, end: string, to: string, df: number, dr: number): boolean {
+  let f = from.charCodeAt(0) - 97 + df;
+  let r = Number(from[1]) + dr;
+  for (let s = sqOf(f, r); s; s = sqOf(f += df, r += dr)) {
+    if (s === to) return true;
+    if (s === end) return false;
+  }
+  return false;
 }
 
 /** What the discovering side has won once the reply `b` is on the board: what
@@ -84,12 +101,12 @@ function netAfterReply(b: Chess, took: number, back: number): { gain: number; wi
   // Every winning capture, each net of what the other side then wins
   // elsewhere: the capture that leaves nothing hanging is the proof.
   for (const m of b.moves({ verbose: true })) {
-    const c2 = new Chess(fen);
-    c2.move(m.san);
-    if (c2.isCheckmate()) return { gain: MATE_GAIN, win: m.san, mate: true };
+    if (m.san.endsWith('#')) return { gain: MATE_GAIN, win: m.san, mate: true };
     if (!m.captured) continue;
     const g = legalSeeGain(fen, m.to as Square);
     if (g <= 0) continue;
+    const c2 = new Chess(fen);
+    c2.move(m.san);
     const counter = immediateWin(c2.fen(), m.to);
     const net = took + g - back - (counter.mate ? MATE_GAIN : counter.gain);
     if (net > best.gain) best = { gain: net, win: m.san, mate: false };
@@ -104,15 +121,26 @@ export function discoveredAttacks(fen: string): DiscoveredAttack[] {
   try { c = new Chess(fen); } catch { return []; }
   if (c.inCheck() || c.isGameOver()) return [];
   const me = c.turn();
-  // What is already there to take: the discovery must win more than that.
-  const already = immediateWin(fen);
+  // What is already there to take: the discovery must win more than that
+  // (read once, only when a line is uncovered).
+  let already: ReturnType<typeof immediateWin> | null = null;
   const out: DiscoveredAttack[] = [];
   for (const m of c.moves({ verbose: true })) {
+    const found = uncoveredLine(c, m.from, m.to, me);
+    if (!found) continue;
+    already ??= immediateWin(fen);
     const after = new Chess(fen);
     after.move(m.san);
-    const found = uncoveredLine(c, after, m.from, m.to, me);
-    if (!found) continue;
-    const replies = after.moves({ verbose: true });
+    // The quick bar first: given another move at once, would the mover win
+    // more than was already there? If not, no reply needs reading.
+    if (!after.inCheck()) {
+      const again = flipSideToMove(after.fen());
+      const threat = again ? immediateWin(again) : null;
+      if (threat && !threat.mate && (threat.gain + (m.captured ? MATERIAL_VALUE[m.captured] ?? 0 : 0) < DISCOVERY_MIN_GAIN || threat.gain <= already.gain)) continue;
+    }
+    // Captures and checks first: the reply that refutes is usually one, and the
+    // read stops at the first reply that holds.
+    const replies = after.moves({ verbose: true }).sort((a, b) => forcing(b) - forcing(a));
     if (replies.length === 0) continue; // a mate or a stalemate is not this read
     const took = m.captured ? MATERIAL_VALUE[m.captured] ?? 0 : 0;
     // EVERY REPLY STILL LOSES MATERIAL: their best defence is the reply after

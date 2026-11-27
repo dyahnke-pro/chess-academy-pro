@@ -1031,21 +1031,19 @@ export function answeringMoveWords(
     : rotateStem([`Only one move saves ${piece}. ${others}`, `${openSentence(piece)} has one answer. ${others}`], key);
 }
 
-/** What a move now threatens (`ownThreat`), with the move that carries it
- *  out. `mine`: the student played the move. */
+/** What the student's move now threatens (`ownThreat`), with the move that
+ *  carries it out. */
 export function ownThreatWords(
   o: { carry: { san: string }; won: { square: string; piece: string } | null; mate: boolean },
-  mine: boolean, names: boolean, key: number,
+  names: boolean, key: number,
 ): string {
-  const who = mine ? 'Your move' : 'Their move';
-  const foe = mine ? 'their' : 'your';
   if (o.mate) {
     return names
-      ? rotateStem([`${who} now threatens mate with ${o.carry.san}.`, `${who} sets up ${o.carry.san}, and that is mate.`], key)
-      : rotateStem([`${who} now threatens mate in one.`, `${who} sets up a mate in one.`], key);
+      ? rotateStem([`Your move now threatens mate with ${o.carry.san}.`, `Your move sets up ${o.carry.san}, and that is mate.`], key)
+      : rotateStem(['Your move now threatens mate in one.', 'Your move sets up a mate in one.'], key);
   }
-  const won = o.won ? `${foe} ${THREAT_PIECE[o.won.piece]} on ${o.won.square}` : 'material';
+  const won = o.won ? `their ${THREAT_PIECE[o.won.piece]} on ${o.won.square}` : 'material';
   return names
-    ? rotateStem([`${who} now threatens ${o.carry.san}, winning ${won}.`, `${who} sets up ${o.carry.san}, and that wins ${won}.`], key)
-    : rotateStem([`${who} now threatens to win ${won}.`, `${who} sets up a win of ${won}.`], key);
+    ? rotateStem([`Your move now threatens ${o.carry.san}, winning ${won}.`, `Your move sets up ${o.carry.san}, and that wins ${won}.`], key)
+    : rotateStem([`Your move now threatens to win ${won}.`, `Your move sets up a win of ${won}.`], key);
 }

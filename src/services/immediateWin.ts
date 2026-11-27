@@ -37,16 +37,22 @@ export function immediateWin(fen: string, except: string | null = null): Immedia
   // The cheapest capturer first: the exchange count takes with it, so the move
   // named is the one the count is about.
   const moves = c.moves({ verbose: true }).sort((a, b) => (MATERIAL_VALUE[a.piece] ?? 0) - (MATERIAL_VALUE[b.piece] ?? 0) || (a.piece === 'k' ? 1 : 0) - (b.piece === 'k' ? 1 : 0));
+  // One exchange count per square (the cheapest capturer comes first).
+  const seen = new Set<string>();
   for (const m of moves) {
-    const b = new Chess(fen);
-    b.move(m.san);
-    if (b.isCheckmate()) return { gain: MATE_GAIN, san: m.san, from: m.from, to: m.to, mate: true, won: null };
+    // chess.js marks a mate in the SAN itself: no board is built for the read.
+    if (m.san.endsWith('#')) return { gain: MATE_GAIN, san: m.san, from: m.from, to: m.to, mate: true, won: null };
     // A promotion they cannot take back at once wins the new queen's worth.
-    if (m.promotion && b.attackers(m.to as Square, b.turn()).length === 0) {
-      const g = (MATERIAL_VALUE[m.promotion] ?? 0) - 1 + (m.captured ? MATERIAL_VALUE[m.captured] ?? 0 : 0);
-      if (g > best.gain) best = { gain: g, san: m.san, from: m.from, to: m.to, mate: false, won: { square: m.to, piece: m.promotion } };
+    if (m.promotion) {
+      const b = new Chess(fen);
+      b.move(m.san);
+      if (b.attackers(m.to as Square, b.turn()).length === 0) {
+        const g = (MATERIAL_VALUE[m.promotion] ?? 0) - 1 + (m.captured ? MATERIAL_VALUE[m.captured] ?? 0 : 0);
+        if (g > best.gain) best = { gain: g, san: m.san, from: m.from, to: m.to, mate: false, won: { square: m.to, piece: m.promotion } };
+      }
     }
-    if (!m.captured || m.to === except) continue;
+    if (!m.captured || m.to === except || seen.has(m.to)) continue;
+    seen.add(m.to);
     const g = legalSeeGain(fen, m.to as Square);
     if (g > best.gain) best = { gain: g, san: m.san, from: m.from, to: m.to, mate: false, won: { square: m.to, piece: m.captured } };
   }

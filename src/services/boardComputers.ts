@@ -7461,24 +7461,23 @@ export const BOARD_COMPUTERS = {
     },
   },
   ownThreat: {
-    // "Your move now threatens Nxd6, winning their pawn on d6": what the move
-    // threatens, and the move that carries it out.
+    // "Your move now threatens Nxd6, winning their pawn on d6": what the
+    // student's move threatens, and the move that carries it out. The other
+    // side's new threat is the threat lane's (`detectNewThreat`, the must-defend
+    // read): this read speaks the student's move only.
     read: ({ fenBefore, san, student, namesMoves }, fact) => safe(() => {
       const o = ownThreat(fenBefore, san);
-      if (!o) return null;
-      const mine = o.side === student;
-      // The carrying move is the mover's NEXT move: the student's is named
-      // only where the surface may; theirs always.
-      const names = !mine || namesMoves;
+      if (!o || o.side !== student) return null;
       const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
       const target = o.won?.square ?? o.carry.to;
       const key = `own-threat:${o.carry.from}${o.carry.to}`;
-      const text = ownThreatWords(o, mine, names, stemKeyOf(key));
-      const squares = names ? [o.carry.from, o.carry.to, target] : [o.carry.from, target];
-      return fact({ key, claims: [key, `threat:${o.carry.to}`], text, proof: squaresProof(text, [...new Set(squares)]) ?? NO_PROOF.description, squares: [...new Set(squares)],
-        stakes: o.mate ? mateStakes(mine ? 'you' : 'them', 2, false) : { points: o.gain * 100, plies: 2 },
-        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter,
-        ...(names ? { marks: mine ? { play: { from: o.carry.from, to: o.carry.to } } : { theirs: { from: o.carry.from, to: o.carry.to } } } : {}) });
+      // The carrying move is the student's NEXT move: named only where the surface may.
+      const text = ownThreatWords(o, namesMoves, stemKeyOf(key));
+      const squares = [...new Set(namesMoves ? [o.carry.from, o.carry.to, target] : [o.carry.from, target])];
+      return fact({ key, claims: [key, `threat:${o.carry.to}`], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares,
+        stakes: o.mate ? mateStakes('you', 2, false) : { points: o.gain * 100, plies: 2 },
+        seat: 'student', namesStudentMove: namesMoves, thread: LOCAL_THREAD, fen: fenAfter,
+        ...(namesMoves ? { marks: { play: { from: o.carry.from, to: o.carry.to } } } : {}) });
     }),
     computer: 'ownThreat',
     kind: 'threat',
