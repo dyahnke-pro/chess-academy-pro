@@ -39,6 +39,26 @@ function uciOf(fen: string, san: string): string | null {
   try { const m = new Chess(fen).move(san); return `${m.from}${m.to}${m.promotion ?? ''}`; } catch { return null; }
 }
 
+/** The read, best first for the side to move (null under two lines). */
+function rankedLines(fen: string, lines: readonly ReadLine[] | null): ReadLine[] | null {
+  if (!lines || lines.length < 2) return null;
+  const side: Color = fen.split(' ')[1] === 'b' ? 'b' : 'w';
+  return [...lines].filter((l) => l.moves.length > 0).sort((a, b) => pov(b, side) - pov(a, side));
+}
+
+/** Does the board POSE the kind — the engine's best move is of it, and beats
+ *  the best move of any other kind by the margin? The best move (UCI), or
+ *  null. The same question the coach's plant asks of the board it leaves. */
+export function posesKind(fen: string, lines: readonly ReadLine[] | null, isKind: (fen: string, uci: string) => boolean): string | null {
+  const ranked = rankedLines(fen, lines);
+  if (!ranked) return null;
+  const side: Color = fen.split(' ')[1] === 'b' ? 'b' : 'w';
+  const best = ranked[0];
+  if (!best || !isKind(fen, best.moves[0])) return null;
+  const other = ranked.find((l) => !isKind(fen, l.moves[0]));
+  return other && pov(best, side) - pov(other, side) >= POSED_MARGIN_CP ? best.moves[0] : null;
+}
+
 /**
  * The verdict for the move `san` on `fenBefore`, the student to move, given
  * the engine's lines on that board and the kind's reader (`isKind(fen, uci)`).
@@ -49,13 +69,10 @@ export function judgeMoveKind(
   lines: readonly ReadLine[] | null,
   isKind: (fen: string, uci: string) => boolean,
 ): KindVerdict | null {
-  if (!lines || lines.length < 2) return null;
+  const ranked = rankedLines(fenBefore, lines);
+  if (!ranked || !posesKind(fenBefore, ranked, isKind)) return null;
   const side: Color = fenBefore.split(' ')[1] === 'b' ? 'b' : 'w';
-  const ranked = [...lines].filter((l) => l.moves.length > 0).sort((a, b) => pov(b, side) - pov(a, side));
   const best = ranked[0];
-  if (!best || !isKind(fenBefore, best.moves[0])) return null;
-  const other = ranked.find((l) => !isKind(fenBefore, l.moves[0]));
-  if (!other || pov(best, side) - pov(other, side) < POSED_MARGIN_CP) return null;
   const uci = uciOf(fenBefore, san);
   if (!uci) return null;
   const listed = ranked.find((l) => l.moves[0] === uci);

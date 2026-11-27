@@ -16,7 +16,7 @@ import { fileTakenBack } from '../../services/takenBackPuzzles';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import type { Color } from 'chess.js';
 import { logAppAudit } from '../../services/appAuditor';
-import { FOCUS_IDLE, focusOwnsGame, focusPlantAsk, stepFocus, type FocusEffect, type FocusEvent, type FocusResult, type FocusRunState, type PlantedSeat, type SayLine } from './focusRunner';
+import { FOCUS_IDLE, focusAttackAsk, focusOwnsGame, focusPlantAsk, stepFocus, type FocusEffect, type FocusEvent, type FocusResult, type FocusRunState, type PlantedSeat, type SayLine } from './focusRunner';
 import type { FocusPlantAsk } from './focusPlant';
 import type { CastleProbe } from './castlingWatch';
 import type { FocusChance, FocusMove, ReadLine } from './focusChances';
@@ -100,6 +100,9 @@ export interface FocusRunner {
   /** May the coach plant a chance before board `ply`, from board `fen`, and
    *  what pattern (`focusPlant`); null = play its own move. */
   plantAsk: (ply: number, fen: string) => FocusPlantAsk | null;
+  /** May the coach open its own king to the student's attack before board
+   *  `ply` (`attackPlant`, the middlegame's attack focus)? */
+  attackAsk: (ply: number, fen: string) => boolean;
   /** The student's own chances posed on this board (the exploit seat): what the
    *  Learn door holds until the student has moved (`ChanceHold`). */
   chancesToFind: (fen: string) => FocusChance[];
@@ -243,6 +246,7 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
   const paused = useCallback(() => waiting(stateRef.current), []);
   const rung = useCallback((): TacticsRung | null => stateRef.current.setup?.rung ?? null, []);
   const plantAsk = useCallback((ply: number, fen: string): FocusPlantAsk | null => focusPlantAsk(stateRef.current, ply, fen), []);
+  const attackAsk = useCallback((ply: number, fen: string): boolean => focusAttackAsk(stateRef.current, ply, fen), []);
   /** Every chance posed to the student on this board, both seats — what the
    *  Learn door holds until the student has moved (`chanceHoldOf`, EXPLAIN AT
    *  THE MISS). */
@@ -251,6 +255,6 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
     return b && samePosition(b.fen, fen) ? [...b.chances] : [];
   }, []);
 
-  return useMemo(() => ({ view, setUp, start, stop, board, read, moved, castleRead, tryAgain, playOn, showMe, gameOver, ownsGame, focusId, levels, paused, rung, plantAsk, chancesToFind }),
-    [view, setUp, start, stop, board, read, moved, castleRead, tryAgain, playOn, showMe, gameOver, ownsGame, focusId, levels, paused, rung, plantAsk, chancesToFind]);
+  return useMemo(() => ({ view, setUp, start, stop, board, read, moved, castleRead, tryAgain, playOn, showMe, gameOver, ownsGame, focusId, levels, paused, rung, plantAsk, attackAsk, chancesToFind }),
+    [view, setUp, start, stop, board, read, moved, castleRead, tryAgain, playOn, showMe, gameOver, ownsGame, focusId, levels, paused, rung, plantAsk, attackAsk, chancesToFind]);
 }

@@ -45,9 +45,11 @@ import { createPhaseTransitionState, detectPhaseTransition, type PhaseTransition
 import { PHASES } from './focusRotation';
 import { judgeOpeningMove, NO_OPENING_JUDGE, type OpeningJudgeState, type SkillVerdict } from './openingJudge';
 import { judgeEndgameMove } from './endgameTechniqueJudge';
+import { judgeKingAttackMove } from './kingAttackJudge';
+import { attackPosed } from './attackPlant';
 import type { HeatState } from '../../services/holdRate';
 import { momentDial, type MomentDial } from '../../services/coachMoment';
-import { carryHeads, isMotifChance, NO_PLANTS, plantAsk, presents, type FocusPlantAsk, type OwedPattern, type PlantState } from './focusPlant';
+import { carryHeads, isMotifChance, NO_PLANTS, PLANT_SPACING_PLIES, plantAsk, presents, type FocusPlantAsk, type OwedPattern, type PlantState } from './focusPlant';
 import { RUNG_TIERS, rungFrom, rungProgressLine, rungUpLine, type RungGame, type TacticsRung } from './focusRung';
 import {
   CASTLE_LOSING_CP, CASTLE_REMINDER_LINE, castleRewindAsk, castleProbe, castleReady, castleStopLine, castleVerdict,
@@ -213,6 +215,9 @@ export interface FocusRunState {
   phaseFlags: PhaseTransitionState;
   /** The opening focus's scores so far (`openingJudge`). */
   opening: OpeningJudgeState;
+  /** An attack on their king has been on the board this middlegame (natural
+   *  or the coach's plant, `attackPlant`): the attack focus's plant is met. */
+  attackShown: boolean;
 }
 
 /** What a focus find pays, by what was found — the same reward vocabulary
@@ -256,7 +261,7 @@ const EMPTY_TALLY = (): Record<FocusSeat, SeatTally> => ({
 
 const NO_CASTLE: CastleState = { reminded: false, boards: [], probe: null };
 
-export const FOCUS_IDLE: FocusRunState = { setup: null, found: {}, board: null, pause: null, decidingUsed: false, carried: [], tally: EMPTY_TALLY(), atRung: { found: 0, missed: 0 }, missed: [], plant: NO_PLANTS, castle: NO_CASTLE, tempo: NO_RUN, stood: [], lastMove: null, spoke: false, phase: 'opening', phaseFlags: createPhaseTransitionState(), opening: NO_OPENING_JUDGE };
+export const FOCUS_IDLE: FocusRunState = { setup: null, found: {}, board: null, pause: null, decidingUsed: false, carried: [], tally: EMPTY_TALLY(), atRung: { found: 0, missed: 0 }, missed: [], plant: NO_PLANTS, castle: NO_CASTLE, tempo: NO_RUN, stood: [], lastMove: null, spoke: false, phase: 'opening', phaseFlags: createPhaseTransitionState(), opening: NO_OPENING_JUDGE, attackShown: false };
 
 export type FocusEvent =
   | { kind: 'start'; setup: FocusSetup }
@@ -443,6 +448,9 @@ function poses(c: FocusChance, o: OwedPattern, rung: TacticsRung, ply: number, t
 function onBoard(s: FocusRunState, b: BoardState): FocusStep {
   const setup = s.setup;
   if (!setup) return { state: s, effects: [] };
+  // THE ATTACK ON THE KING has been on the board (the middlegame's attack
+  // focus, `attackPlant`): read by the same question the move is scored by.
+  if (!s.attackShown && s.phase === 'middlegame' && (attackPosed(b.fen, b.lines) || attackPosed(b.fen, b.plantLines))) s = { ...s, attackShown: true };
   const open = new Set(setup.levels);
   const read = (lines: readonly ReadLine[] | null): FocusChance[] => chancesAt({ fen: b.fen, prevFen: b.prevFen, beforeTheirMove: b.beforeTheirMove, student: b.student, lines }, open);
   const own = read(b.lines);
@@ -941,6 +949,7 @@ function judgePhase(s: FocusRunState, m: FocusMove): { verdicts: SkillVerdict[];
   }
   const lines = m.lines ?? (s.board && sameBoard(s.board.fen, m.fenBefore) ? s.board.lines : null);
   if (s.phase === 'endgame') return { verdicts: judgeEndgameMove(m.fenBefore, m.san, lines), state: {} };
+  if (s.phase === 'middlegame') return { verdicts: judgeKingAttackMove(m.fenBefore, m.san, lines), state: {} };
   return { verdicts: [], state: {} };
 }
 
@@ -990,6 +999,18 @@ export function focusPlantAsk(s: FocusRunState, ply: number, fen: string): Focus
   if (!s.setup || s.pause || s.castle.probe) return null;
   const mg = s.setup.phases.middlegame;
   return plantAsk(s.plant, { rung: s.setup.rung, posed: s.tally.exploit.posed, targetPly: s.setup.targetPly, pick: mg.focus === 'tactics' ? mg.skill : null }, ply, fen);
+}
+
+/** THE ATTACK PLANT (`attackPlant`): may the coach, on the move before board
+ *  `ply`, play a slip that opens its own king to the student's attack? Only in
+ *  a middlegame whose focus is the attack, until one has been on the board,
+ *  never while the board waits, never on a move the tactics plant asks for
+ *  (the game's motif comes first), and spaced like every plant. */
+export function focusAttackAsk(s: FocusRunState, ply: number, fen: string): boolean {
+  if (!s.setup || s.pause || s.castle.probe || s.attackShown) return false;
+  if (s.phase !== 'middlegame' || s.setup.phases.middlegame.focus !== 'attack-king') return false;
+  if (s.plant.lastPly !== null && ply - s.plant.lastPly < PLANT_SPACING_PLIES) return false;
+  return focusPlantAsk(s, ply, fen) === null;
 }
 
 /** The runner reads the user's moves now (a focus game is on). */

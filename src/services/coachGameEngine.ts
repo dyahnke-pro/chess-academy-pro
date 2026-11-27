@@ -24,6 +24,7 @@ import { focusTradesScorer } from '../missions/scorers/focusTrades';
 import { neededSkillAlong } from '../missions/scorers/skillSteer';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { findFocusPlant, type FocusPlantAsk, type FocusPlantPick, type FocusPlantReject } from '../coach/focus/focusPlant';
+import { findAttackPlant, type AttackPlantReject } from '../coach/focus/attackPlant';
 import type { FocusId, FocusSeat } from '../coach/focus/focusCard';
 import type { ReadLine } from '../coach/focus/focusChances';
 import type { TacticsRung } from '../coach/focus/focusRung';
@@ -505,7 +506,11 @@ export interface MissionDialsOpt {
     /** REQUIRED — the runner's plant ask (`focusPlant.plantAsk`): the coach
      *  may play one real slip that leaves the student's side of the focus on
      *  the board (the asked pattern, when there is one), or null. */
-    plant: FocusPlantAsk | null } | null;
+    plant: FocusPlantAsk | null;
+    /** REQUIRED — the runner's attack ask (`focusAttackAsk`): the coach may
+     *  play one real slip that opens its own king to the student's attack
+     *  (`attackPlant`), the middlegame's attack focus. */
+    attackPlant: boolean } | null;
 }
 
 /** How the coach picks its move, and for whom. */
@@ -660,6 +665,23 @@ async function applyMissionDials(
       details: JSON.stringify({ focus: mission.focus.id, rung: mission.focus.rung, ask: mission.focus.plant.tag, askSeat: mission.focus.plant.seat, difficulty: mission.focus.plant.difficulty, extra: mission.focus.plant.extra, carried: mission.focus.plant.carried, missStreak: mission.focus.plant.missStreak, planted: pick?.uci ?? null, seat: pick?.seat ?? null, chance: pick?.chance.key ?? null, tag: pick?.chance.tag ?? null, dropCp: pick?.dropCp ?? null, scan, replaced: chosen.move }),
     });
     if (pick) return { move: pick.uci, analysis: { ...FALLBACK_ANALYSIS, bestMove: pick.uci }, source: 'focus-plant', focusPlanted: pick.seat, focusPlantLines: pick.lines };
+  }
+  // THE COACH OPENS ITS OWN KING (`attackPlant`): when the runner asks, one
+  // real slip after which the student's best move attacks the king — read by
+  // the same question the student's move is scored by.
+  if (mission.focus?.attackPlant && !mission.focus.plant) {
+    const { pick, scan } = await withSlipReads(fen, (lines, read) => findAttackPlant(fen, lines, read), { pick: null, scan: { 'no-read': 1 } as Partial<Record<AttackPlantReject, number>> });
+    void logAppAudit({
+      kind: 'focus-attack-plant',
+      category: 'subsystem',
+      source: 'coachGameEngine.applyMissionDials',
+      summary: pick
+        ? `${mission.focus.id}: planted ${pick.uci} (−${pick.dropCp}cp) — the attack ${pick.attackUci} (instead of ${chosen.move || 'none'})`
+        : `${mission.focus.id}: no attack plant — ${Object.entries(scan).map(([k, n]) => `${k} ${n}`).join(', ') || 'nothing read'}`,
+      fen,
+      details: JSON.stringify({ planted: pick?.uci ?? null, attack: pick?.attackUci ?? null, dropCp: pick?.dropCp ?? null, scan, replaced: chosen.move }),
+    });
+    if (pick) return { move: pick.uci, analysis: { ...FALLBACK_ANALYSIS, bestMove: pick.uci }, source: 'focus-plant', focusPlanted: 'exploit', focusPlantLines: pick.lines };
   }
   // ALONG THE LINE (§6a): the student is on the slip's winning line and it is
   // the coach's turn in it — the coach answers as the line says (its best
