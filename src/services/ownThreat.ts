@@ -29,8 +29,9 @@ export interface OwnThreat {
   mate: boolean;
 }
 
-/** A threat worth naming wins at least this much (pawns), or mates. */
-export const OWN_THREAT_MIN = 1;
+/** A threat worth naming wins at least this much (pawns: more than a pawn —
+ *  a pawn attacked is on almost every move), or mates. */
+export const OWN_THREAT_MIN = 2;
 
 /** What the side to move on `fen` can win at once — the threat standing for
  *  them on the board (a mate, a promotion, a capture that wins). */
@@ -47,6 +48,10 @@ export function ownThreat(fenBefore: string, san: string): OwnThreat | null {
   let played;
   try { played = c.move(san); } catch { return null; }
   if (!played || c.inCheck() || c.isGameOver()) return null;
+  // A capture they take back is the exchange going on, not a threat: what the
+  // piece would hit next is answered by the recapture (10.Nxd5 "threatening"
+  // the queen on e7 while …exd5 is there).
+  if (played.captured && c.attackers(played.to, c.turn()).length > 0) return null;
   const again = sideToMoveAs(c.fen(), me);
   if (!again) return null;
   const now = standingThreat(again);

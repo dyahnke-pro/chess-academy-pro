@@ -112,6 +112,10 @@ import { harmlessWeakPawns } from './harmlessWeakPawns';
 import { wingWithoutPieces } from './wingWithoutPieces';
 import type { EngineLine } from './engineLineRead';
 import { urgentStrike } from './urgentStrike';
+import { discoveredAttacks } from './discoveredAttack';
+import { answeringMove } from './answeringMove';
+import { ownThreat } from './ownThreat';
+import { discoveredAttackWords, answeringMoveWords, ownThreatWords } from './teachingSentence';
 import { misplacedQueen } from './misplacedQueen';
 import { theirWorstPiece } from './theirWorstPiece';
 import { kingInOpen } from './kingInOpen';
@@ -1325,6 +1329,15 @@ export interface BoardContexts {
    *  engine's top lines on `fen` (White's view, UCI), best first or not. The
    *  strike that has to come now, before their reply closes it. */
   urgentStrike: { fen: string; lines: readonly EngineLine[]; student: Color };
+  /** THE THREE THREAT COMPUTERS (rebuilt 2026-11-27). `namesMoves`: a move of
+   *  the student's still to play may be named (Review, a lesson, chat, a read
+   *  the student asked for); Learn passes false and the words name no move.
+   *  The discovered attack that wins by force, both seats, on `fen`. */
+  discoveredAttack: { fen: string; student: Color; namesMoves: boolean };
+  /** The one move that holds against the threat the side to move faces. */
+  answeringMove: { fen: string; student: Color; namesMoves: boolean };
+  /** What `san`, played on `fenBefore`, now threatens, with its carrying move. */
+  ownThreat: { fenBefore: string; san: string; student: Color; namesMoves: boolean };
   /** A queen doing little, and the square the engine's line gives it. */
   misplacedQueen: { fen: string; lines: readonly EngineLine[]; student: Color };
   /** The other side's worst piece, staying out of the game in the engine's
@@ -7383,6 +7396,100 @@ export const BOARD_COMPUTERS = {
       weaknesses: { not: 'its question needs the engine\'s other top lines on the board, and the record keeps one line a move' },
     },
   },
+  discoveredAttack: {
+    // "Nf2+ uncovers the bishop on g6 at the queen on d3": a discovery that
+    // wins against every reply, with the line. Both seats: the side to move's,
+    // and the other side's on the board handed to them.
+    read: ({ fen, student, namesMoves }, fact) => safe(() => {
+      const toMove = sideToMove(fen);
+      const passFen = flipSideToMove(fen);
+      const out: CoachFact[] = [];
+      for (const [board, side] of [[fen, toMove], [passFen, toMove === 'w' ? 'b' : 'w']] as const) {
+        if (!board) continue;
+        const d = discoveredAttacks(board)[0];
+        if (!d) continue;
+        const mine = side === student;
+        // The student's own discovery is their move to find: named only where
+        // the surface may name it; theirs is named (their move, not the student's).
+        const names = !mine || namesMoves;
+        const key = `discovered:${d.from}${d.to}:${d.target.square}`;
+        const text = discoveredAttackWords(d, mine, names, stemKeyOf(key));
+        const squares = [d.from, d.to, d.uncovered.square, d.target.square];
+        const proof = legalLineProof(board, d.line, lineSeatAt(board, student), true) ?? squaresProof(text, squares) ?? NO_PROOF.description;
+        out.push(fact({ key, claims: [key, `threat:${d.target.square}`], text, proof, squares,
+          stakes: d.mate ? mateStakes(mine ? 'you' : 'them', 3, true) : { points: d.gain * 100, plies: 3 },
+          seat: mine ? 'student' : 'opponent', namesStudentMove: mine && names, thread: LOCAL_THREAD, fen: board,
+          ...(names ? { lines: [{ fen: board, sans: d.line }] } : {}),
+          skill: mine ? 'missed-your-discovery' : 'missed-their-discovery' }));
+      }
+      return out.length ? out : null;
+    }),
+    computer: 'discoveredAttacks',
+    kind: 'tactic',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { wired: 'services/moveInsight.ts' },
+    },
+  },
+  answeringMove: {
+    // "Only Bb3 saves your bishop on a4": every natural answer tried, one holds.
+    read: ({ fen, student, namesMoves }, fact) => safe(() => {
+      const a = answeringMove(fen);
+      if (!a) return null;
+      const mine = a.side === student;
+      const names = !mine || namesMoves;
+      const key = `answer:${a.target.square}:${a.from}${a.to}`;
+      const text = answeringMoveWords(a, mine, names, stemKeyOf(key));
+      const squares = names ? [a.from, a.to, a.target.square, a.threat.from] : [a.target.square, a.threat.from];
+      const proof = a.refuted && names ? legalLineProof(fen, [a.refuted.san, a.refuted.win], lineSeatAt(fen, student), true) ?? squaresProof(text, squares) ?? NO_PROOF.description
+        : squaresProof(text, squares) ?? NO_PROOF.description;
+      return fact({ key, claims: [key, `threat:${a.target.square}`], text, proof, squares, stakes: exchangeStakes(flipSideToMove(fen) ?? fen, [a.target.square]),
+        seat: mine ? 'opponent' : 'student', namesStudentMove: mine && names, thread: LOCAL_THREAD, fen,
+        ...(mine ? { skill: 'missed-opponents-threat' } : {}) });
+    }),
+    computer: 'answeringMove',
+    kind: 'must-defend',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { wired: 'services/moveInsight.ts' },
+    },
+  },
+  ownThreat: {
+    // "Your move now threatens Nxd6, winning their pawn on d6": what the move
+    // threatens, and the move that carries it out.
+    read: ({ fenBefore, san, student, namesMoves }, fact) => safe(() => {
+      const o = ownThreat(fenBefore, san);
+      if (!o) return null;
+      const mine = o.side === student;
+      // The carrying move is the mover's NEXT move: the student's is named
+      // only where the surface may; theirs always.
+      const names = !mine || namesMoves;
+      const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
+      const target = o.won?.square ?? o.carry.to;
+      const key = `own-threat:${o.carry.from}${o.carry.to}`;
+      const text = ownThreatWords(o, mine, names, stemKeyOf(key));
+      const squares = names ? [o.carry.from, o.carry.to, target] : [o.carry.from, target];
+      return fact({ key, claims: [key, `threat:${o.carry.to}`], text, proof: squaresProof(text, [...new Set(squares)]) ?? NO_PROOF.description, squares: [...new Set(squares)],
+        stakes: o.mate ? mateStakes(mine ? 'you' : 'them', 2, false) : { points: o.gain * 100, plies: 2 },
+        seat: mine ? 'student' : 'opponent', namesStudentMove: false, thread: LOCAL_THREAD, fen: fenAfter,
+        ...(names ? { marks: mine ? { play: { from: o.carry.from, to: o.carry.to } } : { theirs: { from: o.carry.from, to: o.carry.to } } } : {}) });
+    }),
+    computer: 'ownThreat',
+    kind: 'threat',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { wired: 'services/moveInsight.ts' },
+    },
+  },
   misplacedQueen: {
     // "The passive queen on e2": a queen doing little, and the square the engine's line gives it. Both seats.
     read: (ctx, fact) => safe(() => {
@@ -8080,7 +8187,7 @@ export const BOARD_COMPUTERS = {
       if (!t && !planText) return null;
       const text = [t ? targetText(t, ctx.student) : null, planText].filter((x): x is string => !!x).join(' ');
       const planSquares = p && planText ? [p.best.entry.square, ...(p.best.decisive?.route ?? [])] : [];
-      const squares = [...new Set([...(t ? [t.best.entry.square, ...(t.runnerUp ? [t.runnerUp.entry.square] : [])] : []), ...planSquares])];
+      const squares = [...new Set([...(t ? [t.best.entry.square] : []), ...planSquares])];
       const first = ctx.lines[0]?.moves[0];
       // The row the record files the answer under (`pictureLedger.pictureAnswers`):
       // the target now when the best move goes at it, else the plan's route.

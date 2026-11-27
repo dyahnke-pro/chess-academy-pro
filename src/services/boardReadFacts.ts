@@ -220,6 +220,12 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     for (const f of readBoardAll('kingSiegeNow', { fen: i.fen, student: i.studentColor, studentCp: povCp })) {
       facts.push({ from: 'position', kind: f.kind, text: f.text, computer: f.computer, squares: f.squares, claims: f.claims });
     }
+    // THE THREAT COMPUTERS ON THE BOARD (rebuilt 2026-11-27): a discovered
+    // attack that wins against every reply (the student's chance, and theirs
+    // if it were their move), and the one move that holds against their threat.
+    for (const f of [...readBoardAll('discoveredAttack', { fen: i.fen, student: i.studentColor, namesMoves: true }), ...readBoardAll('answeringMove', { fen: i.fen, student: i.studentColor, namesMoves: true })]) {
+      facts.push({ from: 'position', kind: f.kind, text: f.text, computer: f.computer, squares: f.squares, claims: f.claims, stakes: stakeValue(f.stakes) });
+    }
     const siege = siegeOf(i.fen, i.before, whose);
     if (siege) facts.push({ from: 'position', kind: 'siege', text: siege.text, computer: 'siege', squares: siege.squares });
     const steps = stepsOf(i.fen, i.before, whose);

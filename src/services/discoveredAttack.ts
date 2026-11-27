@@ -14,6 +14,7 @@
 // PURE: chess.js, the legal exchange count and the one immediate-win read.
 import { Chess, type Color, type Square } from 'chess.js';
 import { MATERIAL_VALUE } from './pieceValues';
+import { legalSeeGain } from './positionReadingService';
 import { immediateWin, MATE_GAIN } from './immediateWin';
 
 export interface DiscoveredAttack {
@@ -71,6 +72,31 @@ function uncoveredLine(before: Chess, after: Chess, from: string, to: string, me
   return null;
 }
 
+/** What the discovering side has won once the reply `b` is on the board: what
+ *  its move took, plus its best capture now (counted to the end of the trades
+ *  on that square), less what the reply took and less what the other side
+ *  then wins elsewhere — so a piece left hanging by the win, or a check that
+ *  leaves nothing to take, is no win. */
+function netAfterReply(b: Chess, took: number, back: number): { gain: number; win: string | null; mate: boolean } {
+  if (b.isCheckmate()) return { gain: -MATE_GAIN, win: null, mate: false };
+  const fen = b.fen();
+  let best: { gain: number; win: string | null; mate: boolean } = { gain: -MATE_GAIN, win: null, mate: false };
+  // Every winning capture, each net of what the other side then wins
+  // elsewhere: the capture that leaves nothing hanging is the proof.
+  for (const m of b.moves({ verbose: true })) {
+    const c2 = new Chess(fen);
+    c2.move(m.san);
+    if (c2.isCheckmate()) return { gain: MATE_GAIN, win: m.san, mate: true };
+    if (!m.captured) continue;
+    const g = legalSeeGain(fen, m.to as Square);
+    if (g <= 0) continue;
+    const counter = immediateWin(c2.fen(), m.to);
+    const net = took + g - back - (counter.mate ? MATE_GAIN : counter.gain);
+    if (net > best.gain) best = { gain: net, win: m.san, mate: false };
+  }
+  return best;
+}
+
 /** THE DISCOVERED ATTACKS of the side to move on `fen` that win by force,
  *  most won first. */
 export function discoveredAttacks(fen: string): DiscoveredAttack[] {
@@ -96,13 +122,12 @@ export function discoveredAttacks(fen: string): DiscoveredAttack[] {
       const b = new Chess(after.fen());
       b.move(r.san);
       const back = r.captured ? MATERIAL_VALUE[r.captured] ?? 0 : 0;
-      const w = immediateWin(b.fen());
-      const net = w.mate ? MATE_GAIN : took + w.gain - back;
-      if (!worst || net < worst.gain) worst = { gain: net, reply: r.san, win: w.san, mate: w.mate };
+      const net = netAfterReply(b, took, back);
+      if (!worst || net.gain < worst.gain) worst = { gain: net.gain, reply: r.san, win: net.win, mate: net.mate };
       if (worst.gain < DISCOVERY_MIN_GAIN) break;
     }
     if (!worst || worst.gain < DISCOVERY_MIN_GAIN) continue;
-    if (!worst.win && !m.captured) continue;
+    if (!worst.win) continue; // the proof is the capture that wins
     // A piece that simply hung already is no discovery.
     if (!worst.mate && worst.gain <= already.gain) continue;
     out.push({

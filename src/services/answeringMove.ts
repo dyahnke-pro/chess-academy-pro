@@ -17,6 +17,7 @@
 import { Chess, type Color, type Square } from 'chess.js';
 import { flipSideToMove } from './threatOut';
 import { immediateWin } from './immediateWin';
+import { MATERIAL_VALUE } from './pieceValues';
 
 export interface AnsweringMove {
   /** The one move that holds, SAN. */
@@ -36,6 +37,14 @@ export interface AnsweringMove {
 
 /** A threat worth answering wins this much (pawns): more than a pawn. */
 export const ANSWER_THREAT_MIN = 2;
+
+/** What the other side wins after `san` on `fen`, less what `san` took. */
+function netLoss(fen: string, m: { san: string; captured?: string }): { loss: number; win: string | null } {
+  const b = new Chess(fen);
+  b.move(m.san);
+  const w = immediateWin(b.fen());
+  return { loss: w.mate ? w.gain : w.gain - (m.captured ? MATERIAL_VALUE[m.captured] ?? 0 : 0), win: w.san };
+}
 
 /** THE ONE ANSWER to the threat the side to move faces on `fen`, or null. */
 export function answeringMove(fen: string): AnsweringMove | null {
@@ -68,11 +77,9 @@ export function answeringMove(fen: string): AnsweringMove | null {
   const holds: typeof natural = [];
   let refuted: AnsweringMove['refuted'] = null;
   for (const m of natural) {
-    const b = new Chess(fen);
-    b.move(m.san);
-    const w = immediateWin(b.fen());
-    if (w.gain < ANSWER_THREAT_MIN) holds.push(m);
-    else if (!refuted && w.san) refuted = { san: m.san, win: w.san };
+    const w = netLoss(fen, m);
+    if (w.loss < ANSWER_THREAT_MIN) holds.push(m);
+    else if (!refuted && w.win) refuted = { san: m.san, win: w.win };
   }
   if (holds.length !== 1) return null;
   // No quiet move elsewhere holds either: a counter-threat or a check would be
@@ -82,7 +89,7 @@ export function answeringMove(fen: string): AnsweringMove | null {
     const b = new Chess(fen);
     b.move(m.san);
     if (b.inCheck()) return null;
-    if (immediateWin(b.fen()).gain < ANSWER_THREAT_MIN) return null;
+    if (netLoss(fen, m).loss < ANSWER_THREAT_MIN) return null;
   }
   const one = holds[0];
   return { san: one.san, from: one.from, to: one.to, side: me, target: { square: at, piece: target.type }, threat: { san: threat.san, from: threat.from }, failed: natural.length - 1, refuted };

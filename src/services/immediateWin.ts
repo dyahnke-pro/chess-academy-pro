@@ -27,8 +27,9 @@ export interface ImmediateWin {
 
 const NOTHING: ImmediateWin = { gain: 0, san: null, from: null, to: null, mate: false, won: null };
 
-/** THE MOST THE SIDE TO MOVE WINS WITH ONE MOVE on `fen`. */
-export function immediateWin(fen: string): ImmediateWin {
+/** THE MOST THE SIDE TO MOVE WINS WITH ONE MOVE on `fen`. `except`: a square
+ *  whose capture is already counted (an exchange the caller summed there). */
+export function immediateWin(fen: string, except: string | null = null): ImmediateWin {
   let c: Chess;
   try { c = new Chess(fen); } catch { return NOTHING; }
   if (c.isGameOver()) return NOTHING;
@@ -45,7 +46,7 @@ export function immediateWin(fen: string): ImmediateWin {
       const g = (MATERIAL_VALUE[m.promotion] ?? 0) - 1 + (m.captured ? MATERIAL_VALUE[m.captured] ?? 0 : 0);
       if (g > best.gain) best = { gain: g, san: m.san, from: m.from, to: m.to, mate: false, won: { square: m.to, piece: m.promotion } };
     }
-    if (!m.captured) continue;
+    if (!m.captured || m.to === except) continue;
     const g = legalSeeGain(fen, m.to as Square);
     if (g > best.gain) best = { gain: g, san: m.san, from: m.from, to: m.to, mate: false, won: { square: m.to, piece: m.captured } };
   }
