@@ -242,7 +242,10 @@ function unguardable(c: Chess, owner: Color, p: string): boolean {
 }
 function twoWeaknesses(c: Chess, side: Color): StructurePlanRead | null {
   const them = other(side);
-  const weak = pawns(c, them).filter((p) => unguardable(c, them, p));
+  // Weak: no pawn of theirs can ever guard it, and it stands on a file this
+  // side has no pawn on — open to its rooks.
+  const mine = pawns(c, side);
+  const weak = pawns(c, them).filter((p) => unguardable(c, them, p) && !mine.some((q) => q[0] === p[0]));
   for (const a of weak) {
     for (const b of weak) {
       if (fileOf(b) - fileOf(a) < 4) continue;
@@ -283,6 +286,10 @@ function kingBlocked(c: Chess, side: Color): StructurePlanRead | null {
     { right: side === 'w' ? 'K' : 'k', between: ['f', 'g'] },
     { right: side === 'w' ? 'Q' : 'q', between: ['b', 'c', 'd'] },
   ];
+  // Said only when it is the last piece at home: the rest are developed, so
+  // this one piece is all that stands between the king and castling.
+  const homeMinors = ['b', 'c', 'f', 'g'].filter((f) => { const p = c.get(`${f}${rank}` as Square); return !!p && p.color === side && (p.type === 'n' || p.type === 'b'); });
+  if (homeMinors.length > 1) return null;
   for (const w of wings) {
     if (!rights.includes(w.right)) continue;
     const blockers = w.between.map((f) => `${f}${rank}`).filter((s) => !!c.get(s as Square));

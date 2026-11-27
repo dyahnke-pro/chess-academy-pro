@@ -433,7 +433,17 @@ function repairApplies(state: RepairState, x: RepairContext): Fills | null {
     case 'plan':
       return null;
     case 'pinned-now': {
-      const pinsOn = (fen: string): TacticPattern[] => { try { return findPins(new Chess(fen)).filter((p) => p.beneficiary === them); } catch { return []; } };
+      // A piece (not a pawn) pinned to the king or the queen.
+      const pinsOn = (fen: string): TacticPattern[] => {
+        try {
+          const c = new Chess(fen);
+          return findPins(c).filter((p) => {
+            if (p.beneficiary !== them) return false;
+            const front = c.get(p.involvedSquares[1] as Square); const back = c.get(p.involvedSquares[2] as Square);
+            return !!front && front.type !== 'p' && !!back && (back.type === 'k' || back.type === 'q');
+          });
+        } catch { return []; }
+      };
       const was = new Set(pinsOn(x.fenBefore).map((p) => p.involvedSquares[1]));
       const pin = pinsOn(x.quiet).find((p) => !was.has(p.involvedSquares[1]));
       if (!pin) return null;
@@ -506,6 +516,17 @@ const BOARD_STATES: Record<'you' | 'them', readonly RepairState[]> = {
   you: ['pinned-now', 'castling-lost', 'development-behind', 'file-opened'],
   them: ['file-opened'],
 };
+
+/** A repair state's own board check for a move, the way the composer reads
+ *  it (the quiet end of the reply line): its fills, or null. For the board
+ *  checks' tests and the recovery audit. */
+export function repairFillsFor(state: RepairState, x: { fenBefore: string; playedSan: string; seat: 'you' | 'them'; replyLineUci: readonly string[]; cause: MistakeCause }): Fills | null {
+  let after: Chess; let mover: Color;
+  try { after = new Chess(x.fenBefore); mover = after.turn(); if (!after.move(x.playedSan)) return null; } catch { return null; }
+  const student: Color = x.seat === 'you' ? mover : (mover === 'w' ? 'b' : 'w');
+  const quiet = x.replyLineUci.length ? quietEnd(after.fen(), x.replyLineUci) : after.fen();
+  return repairApplies(state, { student, fenBefore: x.fenBefore, fenAfter: after.fen(), quiet, cause: x.cause, seat: x.seat, replyLineUci: x.replyLineUci, phase: phaseOfFen(quiet), playedSan: x.playedSan });
+}
 
 function repairFor(input: MistakeLessonInput, recipeRepairs: readonly RepairState[], key: number): { text: string; stem: string; state: RepairState } | null {
   let after: Chess; let mover: Color;
