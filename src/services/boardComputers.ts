@@ -3727,7 +3727,7 @@ export const BOARD_COMPUTERS = {
     // the d-file"), never a state ("their rook is well placed"): the one plan
     // the board's best line starts, both seats.
     // THE PLAN COMPUTER (`planOf`): the line's plan, the structure's and the
-    // masters', ranked by evidence — the top said, a second within 30%, and a
+    // masters', ranked by evidence — only the best-supported said, and a
     // plan for later once the best line plays it.
     read: ({ fen, lines, student, namesMoves }, fact) => safe(() => {
       const out = planOf({ fen, lines, student, namesMoves, movesAt: masterMovesCachedSync });

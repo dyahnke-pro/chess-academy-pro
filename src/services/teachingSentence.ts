@@ -2099,7 +2099,7 @@ export const GOOD_DECISION: Record<GoodDecision, SlotRecipe> = {
  *  "your"/"their"; `names` false keeps the student's own move unnamed (the
  *  square and the target only). `later`: said as a plan for later. */
 export function structurePlanWords(
-  p: { kind: 'chain' | 'minority' | 'expansion' | 'majority' | 'isolani' | 'square' | 'bad-bishop'; key: { from: string; to: string; hits: string | null } | null; first: { from: string; to: string } | null; target: string | null; piece?: { type: string; square: string }; owns?: boolean },
+  p: { kind: 'chain' | 'minority' | 'expansion' | 'majority' | 'isolani' | 'square' | 'bad-bishop' | 'two-weaknesses' | 'regroup' | 'king-blocked' | 'passive-defence'; squares?: readonly string[]; key: { from: string; to: string; hits: string | null } | null; first: { from: string; to: string } | null; target: string | null; piece?: { type: string; square: string }; owns?: boolean },
   whose: 'your' | 'their',
   names: boolean,
   key: number,
@@ -2163,6 +2163,34 @@ export function structurePlanWords(
       return rotateStem([
         `${Whose} bishop on ${p.piece.square} is bad: its own pawns are fixed on its colour. Trade it off.`,
         `${Whose} bishop on ${p.piece.square} is stuck behind its own pawns. ${lead}: trade it, or free its colour.`,
+      ], key);
+    }
+    case 'two-weaknesses': {
+      const [a, b] = p.squares ?? [];
+      if (!a || !b) return null;
+      return rotateStem([
+        `${lead}: two weak pawns, on ${a} and ${b}. Press ${a} first, then switch to ${b}.`,
+        `${lead} is the second weakness: tie ${theirs} pieces to ${a}, then go after ${b}.`,
+      ], key);
+    }
+    case 'regroup': {
+      return rotateStem([
+        `${lead}: the centre is locked and no pawn break works yet. Improve the pieces first.`,
+        `${lead}: no break is ready, so regroup the pieces to better squares before opening lines.`,
+      ], key);
+    }
+    case 'king-blocked': {
+      if (!p.piece) return null;
+      const w = PIECE_WORD[p.piece.type] ?? 'piece';
+      return rotateStem([
+        `${lead}: move the ${w} off ${p.piece.square}, then castle. It is the one piece in the king's way.`,
+        `${Whose} own ${w} on ${p.piece.square} blocks castling. ${lead}: develop it, then castle.`,
+      ], key);
+    }
+    case 'passive-defence': {
+      return rotateStem([
+        `${lead}: defend. Keep every piece guarded and trade off the attackers.`,
+        `${lead} is to hold: no loose pieces, and swap the pieces that attack.`,
       ], key);
     }
   }

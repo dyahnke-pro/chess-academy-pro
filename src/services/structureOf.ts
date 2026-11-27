@@ -15,12 +15,21 @@
 //   isolani    — the isolated queen's pawn: blockade d5 (or push d5);
 //   square     — the fight for a central square both sides cover;
 //   bad-bishop — a bishop with two or more of its own pawns fixed on its colour.
+// Round 3:
+//   two-weaknesses — two of their pawns no pawn can ever guard, on wings far
+//                apart: press one, then switch to the other;
+//   regroup    — a locked centre with no pawn break for this side: improve the
+//                pieces first, the break comes later;
+//   king-blocked — the king could castle but its own piece stands in the way:
+//                move that piece, then castle.
+// (`passive-defence` is the plan computer's own, off the engine's score.)
 // "No default big centre": a centre is never a plan by itself.
 // PURE: chess.js and the existing structure reads.
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { isolaniStructure } from './nextPlans';
 
-export type StructureKind = 'chain' | 'minority' | 'expansion' | 'majority' | 'isolani' | 'square' | 'bad-bishop';
+export type StructureKind = 'chain' | 'minority' | 'expansion' | 'majority' | 'isolani' | 'square' | 'bad-bishop'
+  | 'two-weaknesses' | 'regroup' | 'king-blocked' | 'passive-defence';
 
 export interface StructurePlanRead {
   side: Color;
@@ -225,6 +234,66 @@ function badBishop(c: Chess, side: Color): StructurePlanRead | null {
   return null;
 }
 
+// ── two weaknesses ───────────────────────────────────────────────────────────
+/** A pawn of `owner` no pawn of its own can ever guard: no pawn of `owner` on
+ *  an adjacent file level with it or behind it. */
+function unguardable(c: Chess, owner: Color, p: string): boolean {
+  return !pawns(c, owner).some((q) => Math.abs(fileOf(q) - fileOf(p)) === 1 && (owner === 'w' ? rankOf(q) <= rankOf(p) : rankOf(q) >= rankOf(p)));
+}
+function twoWeaknesses(c: Chess, side: Color): StructurePlanRead | null {
+  const them = other(side);
+  const weak = pawns(c, them).filter((p) => unguardable(c, them, p));
+  for (const a of weak) {
+    for (const b of weak) {
+      if (fileOf(b) - fileOf(a) < 4) continue;
+      // The one this side already hits more is pressed first.
+      const [first, second] = c.attackers(b as Square, side).length > c.attackers(a as Square, side).length ? [b, a] : [a, b];
+      return { side, kind: 'two-weaknesses', key: null, first: null, squares: [first, second], target: first };
+    }
+  }
+  return null;
+}
+
+// ── no progress: regroup ────────────────────────────────────────────────────
+/** The centre locked — two or more of this side's pawns stand head to head
+ *  with an enemy pawn — and no pawn break of this side's stands. */
+function regroup(c: Chess, side: Color, hasBreak: boolean): StructurePlanRead | null {
+  if (hasBreak) return null;
+  const them = other(side);
+  const locked = pawns(c, side).filter((p) => {
+    const front = sq(fileOf(p), rankOf(p) + fwd(side));
+    const b = front ? c.get(front as Square) : null;
+    return !!b && b.type === 'p' && b.color === them;
+  });
+  if (locked.length < 2) return null;
+  // Pieces still on the board to regroup: at least two minor or major pieces.
+  const pieces = c.board().flat().filter((p) => p && p.color === side && p.type !== 'p' && p.type !== 'k');
+  if (pieces.length < 2) return null;
+  return { side, kind: 'regroup', key: null, first: null, squares: locked, target: null };
+}
+
+// ── your own piece blocking your king ───────────────────────────────────────
+/** The king at home with a castling right whose road is clear except for its
+ *  own minor piece or queen: that piece moves, then the king castles. */
+function kingBlocked(c: Chess, side: Color): StructurePlanRead | null {
+  const rank = side === 'w' ? '1' : '8';
+  if (c.get(`e${rank}` as Square)?.type !== 'k') return null;
+  const rights = c.fen().split(' ')[2] ?? '-';
+  const wings: Array<{ right: string; between: string[] }> = [
+    { right: side === 'w' ? 'K' : 'k', between: ['f', 'g'] },
+    { right: side === 'w' ? 'Q' : 'q', between: ['b', 'c', 'd'] },
+  ];
+  for (const w of wings) {
+    if (!rights.includes(w.right)) continue;
+    const blockers = w.between.map((f) => `${f}${rank}`).filter((s) => !!c.get(s as Square));
+    if (blockers.length !== 1) continue;
+    const p = c.get(blockers[0] as Square);
+    if (!p || p.color !== side || p.type === 'r') continue;
+    return { side, kind: 'king-blocked', key: null, first: null, squares: [blockers[0], `e${rank}`], target: blockers[0], piece: { type: p.type, square: blockers[0] } };
+  }
+  return null;
+}
+
 /** EVERY STRUCTURAL PLAN of `side` on this board, in the readers' order. */
 export function structureOf(fen: string, side: Color): StructurePlanRead[] {
   let c: Chess;
@@ -233,8 +302,15 @@ export function structureOf(fen: string, side: Color): StructurePlanRead[] {
   for (const r of [
     () => chain(c, side), () => minority(c, side), () => expansion(c, side), () => majority(c, side),
     () => isolani(fen, side), () => square(c, side), () => badBishop(c, side),
+    () => twoWeaknesses(c, side), () => kingBlocked(c, side),
   ]) {
     try { const x = r(); if (x) out.push(x); } catch { /* a reader that cannot read says nothing */ }
   }
+  // No progress: read last, off whether any break above stands.
+  try {
+    const hasBreak = out.some((x) => x.kind === 'chain' || x.kind === 'minority' || x.kind === 'expansion' || x.kind === 'majority');
+    const x = regroup(c, side, hasBreak);
+    if (x) out.push(x);
+  } catch { /* a reader that cannot read says nothing */ }
   return out;
 }

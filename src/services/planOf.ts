@@ -15,23 +15,31 @@
 // Every first move is PRICED for its side: the mover's from `lines`, the other
 // side's from the pass read (`passLines`, the board with the other side to
 // move) when the surface has one — so "their plan" is never a guess.
-// The top plan is said; a second only within 30% of it. A plan whose first
-// step is 50–100 cp off the best, played by a near-best line later, is a PLAN
-// FOR LATER. PURE: no engine — the reads come in.
-import { Chess, type Color } from 'chess.js';
+// Round 3: ONLY THE BEST-SUPPORTED PLAN is said (the second plan guessed: 41%
+// of said plans matched a source). A plan with no pawn move (two weaknesses,
+// regroup, the king's own blocker, the isolani, the square) is evidenced by a
+// near-best line whose mover's first moves play it — a piece onto or at its
+// squares, the blocker moved or the king castled, only piece moves for the
+// regroup. Down two pawns or more with no forcing move in the best line, the
+// plan is PASSIVE DEFENCE. A passer race the other side wins (`planRace`)
+// takes the mover's own push off the list: the plan is to stop theirs.
+// A plan whose first step is 50–100 cp off the best, played by a near-best
+// line later, is a PLAN FOR LATER. PURE: no engine — the reads come in.
+import { Chess, type Color, type Square } from 'chess.js';
 import type { AnalysisLine } from '../types';
 import { planOfTheBoard, type BoardPlan } from './planOfTheBoard';
 import { structureOf, type StructurePlanRead } from './structureOf';
 import { mastersPlanRead, type MovesAt } from './mastersPlanRead';
 import { mastersBreakPlanWords, structurePlanWords } from './teachingSentence';
 import { stemKeyOf } from '../utils/rotateStem';
+import { detectPlanRace } from './planRace';
 
 /** How far down a line the mover's key move may come and still count. */
 const KEY_WITHIN_MOVES = 3;
 /** A line more than this far off the best is no evidence for its plan. */
 const EVIDENCE_GAP_CP = 100;
-/** The second plan is said only within this share of the first's evidence. */
-const SECOND_PLAN_SHARE = 0.7;
+/** Down this much (mover POV) with nothing forcing in the best line: defend. */
+const PASSIVE_DEFENCE_CP = -200;
 /** A first step this far off the best is a plan for later, not for now. */
 const LATER_MIN_CP = 50;
 const LATER_MAX_CP = 100;
@@ -69,7 +77,7 @@ export interface PlanOfIn {
 }
 
 export interface PlanOfOut {
-  /** The plans said for the side to move: the top, and a second within 30%. */
+  /** The plan said for the side to move: the best-supported one only. */
   mover: PlanCandidate[];
   /** The other side's top plan, when its evidence is in (pass read or games). */
   other: PlanCandidate | null;
@@ -121,6 +129,46 @@ function lineEvidence(lines: readonly AnalysisLine[], mover: Color, roads: reado
   return out;
 }
 
+/** THE EVIDENCE FOR A PLAN WITH NO PAWN MOVE: the best near-best line whose
+ *  mover's first moves play it, by the plan's own test. */
+function pieceEvidence(fen: string, lines: readonly AnalysisLine[], mover: Color, s: StructurePlanRead): number | null {
+  if (!lines.length) return null;
+  const best = scoreOf(lines[0], mover);
+  let out: number | null = null;
+  for (const l of lines) {
+    const gap = Math.max(0, best - scoreOf(l, mover));
+    if (gap > EVIDENCE_GAP_CP) continue;
+    let c: Chess;
+    try { c = new Chess(fen); } catch { return null; }
+    const moves: Array<{ piece: string; from: string; to: string; san: string; captured?: string }> = [];
+    // A piece of the mover's that lands hitting one of the weak pawns.
+    let hitsWeakness = false;
+    for (let k = 0; k < Math.min(l.moves.length, KEY_WITHIN_MOVES * 2); k += 1) {
+      const u = l.moves[k];
+      let m;
+      try { m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { break; }
+      if (!m) break;
+      if (k % 2 !== 0) continue;
+      moves.push(m);
+      const to = m.to;
+      if (m.piece !== 'p' && s.squares.some((x) => c.attackers(x as Square, mover).includes(to))) hitsWeakness = true;
+    }
+    const plays = ((): boolean => {
+      switch (s.kind) {
+        case 'two-weaknesses': return hitsWeakness;
+        case 'regroup': return moves.length > 0 && moves.every((m) => m.piece !== 'p' && !m.captured && !/[+#]/.test(m.san));
+        case 'king-blocked': return moves.some((m) => m.from === s.target || /^O-O/.test(m.san));
+        case 'isolani': case 'square': case 'bad-bishop': return moves.some((m) => m.piece !== 'p' && s.squares.includes(m.to));
+        default: return false;
+      }
+    })();
+    if (!plays) continue;
+    const e = Math.max(0, 1 - gap / (2 * EVIDENCE_GAP_CP)) * 0.9;
+    if (out === null || e > out) out = e;
+  }
+  return out;
+}
+
 function structureCandidates(i: PlanOfIn, side: Color, lines: readonly AnalysisLine[], key: number): { now: PlanCandidate[]; later: PlanCandidate[] } {
   const now: PlanCandidate[] = []; const later: PlanCandidate[] = [];
   const mine = side === i.student;
@@ -145,10 +193,10 @@ function structureCandidates(i: PlanOfIn, side: Color, lines: readonly AnalysisL
         continue;
       }
     }
-    const ev = roads.length ? lineEvidence(lines, side, roads) : null;
-    if (ev) {
+    const ev = roads.length ? lineEvidence(lines, side, roads)?.e ?? null : pieceEvidence(i.fen, lines, side, s);
+    if (ev !== null) {
       const text = structurePlanWords(s, whose, names, key);
-      if (text) now.push({ source: 'structure', side, text, squares: s.squares, target: s.target, claim, evidence: ev.e, structure: s });
+      if (text) now.push({ source: 'structure', side, text, squares: s.squares, target: s.target, claim, evidence: ev, structure: s });
     }
   }
   return { now, later };
@@ -168,6 +216,25 @@ function mastersCandidate(i: PlanOfIn, side: Color, lines: readonly AnalysisLine
   const brkWord = names ? brk.san.replace(/^…/, '') : `the ${brk.from[0]}-pawn`;
   const text = mastersBreakPlanWords(mine, brkWord);
   return { source: 'masters', side, text, squares: [brk.square], target: brk.square, claim: `plan:${side}:break:${brk.square}`, evidence: brk.share, structure: read };
+}
+
+/** PASSIVE DEFENCE: the mover is down two pawns or more and the best line
+ *  forces nothing in its first moves — no check, no capture. */
+function passiveDefence(i: PlanOfIn, mover: Color, key: number): PlanCandidate | null {
+  const best = i.lines[0];
+  if (!best || scoreOf(best, mover) > PASSIVE_DEFENCE_CP || best.mate != null) return null;
+  let c: Chess;
+  try { c = new Chess(i.fen); } catch { return null; }
+  for (let k = 0; k < Math.min(best.moves.length, KEY_WITHIN_MOVES * 2); k += 1) {
+    const u = best.moves[k];
+    let m;
+    try { m = c.move({ from: u.slice(0, 2), to: u.slice(2, 4), promotion: u[4] }); } catch { return null; }
+    if (!m) return null;
+    if (k % 2 === 0 && (m.captured || /[+#]/.test(m.san))) return null;
+  }
+  const s: StructurePlanRead = { side: mover, kind: 'passive-defence', key: null, first: null, squares: [], target: null };
+  const text = structurePlanWords(s, mover === i.student ? 'your' : 'their', i.namesMoves || mover !== i.student, key);
+  return text ? { source: 'line', side: mover, text, squares: [], target: null, claim: `plan:${mover}:passive-defence`, evidence: 0.8, structure: s } : null;
 }
 
 /** Same plan twice (one claim, or one square): keep the stronger. */
@@ -192,9 +259,15 @@ export function planOf(i: PlanOfIn): PlanOfOut {
   cands.push(...st.now);
   const m = mastersCandidate(i, mover, i.lines);
   if (m) cands.push(m);
-  const ranked = dedupe(cands);
+  const pd = passiveDefence(i, mover, key);
+  if (pd) cands.push(pd);
+  // THE RACE THEY WIN: their passed pawn queens first, so pushing ours is not
+  // the plan — stopping theirs is (the race itself is `planRaceClause`'s).
+  const race = (() => { try { return detectPlanRace(i.fen, mover); } catch { return null; } })();
+  const lostRace = race?.kind === 'passer-race' && !race.youQueenFirst;
+  const ranked = dedupe(cands.filter((c) => !(lostRace && c.structure?.kind === 'majority')));
+  // Only the best-supported plan is said.
   const said = ranked.slice(0, 1);
-  if (ranked[1] && ranked[1].evidence >= SECOND_PLAN_SHARE * ranked[0].evidence) said.push(ranked[1]);
   // The other side's plan, priced on the pass read; else the games only.
   const otherSide = flip(mover);
   const pass = i.passLines ?? [];
