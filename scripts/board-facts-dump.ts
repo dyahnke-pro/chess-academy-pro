@@ -99,7 +99,7 @@ async function main(): Promise<void> {
       const before = await read(r.fen);
       out.lines = before.map((l) => ({ moves: l.moves.slice(0, 10), cp: l.evaluation, mate: l.mate }));
       // The SAME facts the app reads (`boardReadFacts`), built 'past' as the fitter's tables were.
-      const pf = await boardReadFacts({ fen: r.fen, studentColor: side, rating: 1800, before, read, withhold: false, readTempting: true, story: null,
+      const pf = await boardReadFacts({ stage: 'full', fen: r.fen, studentColor: side, rating: 1800, before, read, withhold: false, readTempting: true, story: null,
         tense: 'now', history: [], theory: false, studentNeedContext: null });
       const facts = pf.facts.map((f) => ({ ...f, codes: codes(f.kind) }));
       const bestUci = before[0]?.moves[0];

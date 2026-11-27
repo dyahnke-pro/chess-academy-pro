@@ -58,8 +58,28 @@ export interface SurfaceReadBudget {
    *  engine-backed computers on its futures (`changeReasonWithEngine`): a
    *  dozen extra reads a try, so only where the read runs in the background. */
   engineFutures: boolean;
+  /** How long after the read starts a try may still START its search, or
+   *  null for no deadline (Review reads in the background). The tries are read
+   *  likeliest first (`TRY_RANK`, then the order they were asked in), so the
+   *  deadline decides how many are read, never which: a live board answers
+   *  while the student listens (Coach Build Board, "Read this position"). */
+  deadlineMs: number | null;
   reads: Record<TrySource, ReadBudget>;
 }
+
+/** Which tries are read first when the engines are busy: the moves a player
+ *  is drawn to (theirs too, after the best move — the "watch for" line),
+ *  then the plan's try, then the moves weighed for a reason, then the boards
+ *  down a line. A `Record`: a new source says its place. */
+export const TRY_RANK: Record<TrySource, number> = {
+  eye: 0, 'their-eye': 0, 'best-after': 0, 'quiet-threat': 0,
+  plan: 1,
+  capture: 2, check: 2, passer: 2, king: 2, threat: 2, defence: 2, 'mate-threat': 2, lever: 2, double: 2, reroute: 2,
+  future: 3,
+};
+
+/** A live board's deadline for starting a try's read. */
+const LIVE_DEADLINE_MS = 3_000;
 
 /** Today's live read (`positionReadComposer`'s depth and budget, 2026-09). */
 const LIVE: ReadBudget = { depth: 12, budgetMs: 300 };
@@ -77,11 +97,11 @@ function every(tempting: ReadBudget, theirs: ReadBudget, bestAfter: ReadBudget):
 }
 
 export const TRY_READ_BUDGET: Record<ReadSurface, SurfaceReadBudget> = {
-  learn: { pool: true, engineFutures: false, reads: every(LIVE, LIVE, LIVE) },
-  play: { pool: true, engineFutures: false, reads: every(LIVE, LIVE, LIVE) },
-  openings: { pool: true, engineFutures: false, reads: every(LIVE, LIVE, LIVE) },
-  puzzle: { pool: true, engineFutures: false, reads: every(LIVE, LIVE, LIVE) },
-  review: { pool: true, engineFutures: true, reads: every(DEEP, REVIEW, REVIEW) },
+  learn: { pool: true, engineFutures: false, deadlineMs: LIVE_DEADLINE_MS, reads: every(LIVE, LIVE, LIVE) },
+  play: { pool: true, engineFutures: false, deadlineMs: LIVE_DEADLINE_MS, reads: every(LIVE, LIVE, LIVE) },
+  openings: { pool: true, engineFutures: false, deadlineMs: LIVE_DEADLINE_MS, reads: every(LIVE, LIVE, LIVE) },
+  puzzle: { pool: true, engineFutures: false, deadlineMs: LIVE_DEADLINE_MS, reads: every(LIVE, LIVE, LIVE) },
+  review: { pool: true, engineFutures: true, deadlineMs: null, reads: every(DEEP, REVIEW, REVIEW) },
 };
 
 export function tryReadBudget(surface: ReadSurface): SurfaceReadBudget {
@@ -101,18 +121,35 @@ export interface PoolReadEngine {
 
 /**
  * Spreads reads over the pool's engines: each engine runs one search at a time
- * (a worker cannot run two), a read goes to the engine with the fewest waiting,
- * so N reads on K engines cost about N/K searches. Pure: the engines are
- * handed in.
+ * (a worker cannot run two); a free engine takes the waiting read with the
+ * lowest rank, the earliest asked first, so N reads on K engines cost about
+ * N/K searches and the likeliest are read first. A read still waiting when the
+ * deadline passes answers null without a search. Pure: the engines and the
+ * clock are handed in.
  */
-export function poolDispatcher(engines: readonly PoolReadEngine[]): (fen: string, budget: ReadBudget) => Promise<readonly AnalysisLine[] | null> {
-  const lanes = engines.map((e) => ({ e, waiting: 0, tail: Promise.resolve() as Promise<unknown> }));
-  return (fen, budget) => {
-    if (lanes.length === 0) return Promise.resolve(null);
-    const lane = lanes.reduce((x, y) => (y.waiting < x.waiting ? y : x));
-    lane.waiting += 1;
-    const run = lane.tail.then(() => lane.e.read(fen, budget));
-    lane.tail = run.catch(() => undefined);
-    return run.finally(() => { lane.waiting -= 1; });
+export function poolDispatcher(
+  engines: readonly PoolReadEngine[],
+  deadline: { at: number | null; now: () => number } = { at: null, now: () => Date.now() },
+): (fen: string, budget: ReadBudget, rank?: number) => Promise<readonly AnalysisLine[] | null> {
+  interface Waiting { fen: string; budget: ReadBudget; rank: number; seq: number; resolve: (v: readonly AnalysisLine[] | null) => void; reject: (e: unknown) => void }
+  const queue: Waiting[] = [];
+  const idle = [...engines];
+  let seq = 0;
+  const pump = (): void => {
+    while (idle.length > 0 && queue.length > 0) {
+      let k = 0;
+      for (let j = 1; j < queue.length; j++) if (queue[j].rank < queue[k].rank || (queue[j].rank === queue[k].rank && queue[j].seq < queue[k].seq)) k = j;
+      const w = queue.splice(k, 1)[0];
+      if (deadline.at !== null && deadline.now() >= deadline.at) { w.resolve(null); continue; }
+      const e = idle.shift() as PoolReadEngine;
+      e.read(w.fen, w.budget).then(w.resolve, w.reject).finally(() => { idle.push(e); pump(); });
+    }
+  };
+  return (fen, budget, rank = 0) => {
+    if (engines.length === 0) return Promise.resolve(null);
+    return new Promise((resolve, reject) => {
+      queue.push({ fen, budget, rank, seq: seq++, resolve, reject });
+      pump();
+    });
   };
 }

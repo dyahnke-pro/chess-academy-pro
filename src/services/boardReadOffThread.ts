@@ -48,6 +48,8 @@ interface Pending {
 
 export interface BoardReadClient {
   read(i: BoardReadInput): Promise<BoardFactSet>;
+  /** Start the worker now, so its module is loaded before the first read. */
+  warm(): void;
 }
 
 /** A client over the worker `make` gives (null: no worker here). The worker is
@@ -112,6 +114,7 @@ export function createBoardReadClient(
   };
 
   return {
+    warm(): void { ensure(); },
     read(i: BoardReadInput): Promise<BoardFactSet> {
       const w = ensure();
       if (!w) return fallback(failed ? 'worker-failed' : 'no-worker', failed ? 'the worker failed earlier this session' : 'no Worker in this environment', i);
@@ -144,4 +147,12 @@ let shared: BoardReadClient | null = null;
 export function boardReadOffThread(i: BoardReadInput): Promise<BoardFactSet> {
   shared ??= createBoardReadClient(browserWorker);
   return shared.read(i);
+}
+
+/** Start the board-read worker before the student taps (a "Read this
+ *  position" mount): its module loads while the board is on screen, not
+ *  between the tap and the first word. */
+export function warmBoardReadOffThread(): void {
+  shared ??= createBoardReadClient(browserWorker);
+  shared.warm();
 }

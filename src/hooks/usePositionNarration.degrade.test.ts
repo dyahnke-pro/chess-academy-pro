@@ -87,12 +87,14 @@ describe('read this position — the provider is dead', () => {
     await waitFor(() => expect(speakRecords.length).toBeGreaterThan(0), { timeout: 15_000 });
     await waitFor(() => expect(result.current.isNarrating).toBe(false), { timeout: 15_000 });
 
-    // The real voiceFacts was called ONCE with the computed bundle, fork
-    // clause included, in the one seat the facts were computed in.
-    expect(voiceFactsSpy).toHaveBeenCalledTimes(1);
-    const [facts, opts] = voiceFactsSpy.mock.calls[0] as [string, { perspective?: { mode: string } }];
-    expect(facts).toMatch(/a fork hits two targets at once/);
-    expect(opts.perspective?.mode).toBe('student');
+    // The real voiceFacts was called once per part of the read (the opening,
+    // then the deep part) with the computed facts, fork clause included, in
+    // the one seat the facts were computed in.
+    expect(voiceFactsSpy.mock.calls.length).toBeGreaterThanOrEqual(1);
+    expect(voiceFactsSpy.mock.calls.length).toBeLessThanOrEqual(2);
+    const calls = voiceFactsSpy.mock.calls as Array<[string, { perspective?: { mode: string } }]>;
+    expect(calls.map(([f]) => f).join(' ')).toMatch(/a fork hits two targets at once/);
+    for (const [, opts] of calls) expect(opts.perspective?.mode).toBe('student');
 
     // The provider 401'd; what was SPOKEN is the raw computed register.
     const spoken = speakRecords.join(' ');

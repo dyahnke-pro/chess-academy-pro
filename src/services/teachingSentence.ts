@@ -535,6 +535,22 @@ export function renderQuietThreat(q: { san: string; follow: string; mates: boole
     : `${san} is quiet: it prepares ${q.follow}.`;
 }
 
+/** THE "WATCH FOR" LINE (Read this position): their likeliest reply to the
+ *  best move, and the answer that refutes it — a try, so it is said as an
+ *  "if": "After c7, watch for …Rd4: you play c8=Q — …". `because` is the
+ *  refutation alone (`TemptingRefuted.because`). Rotated on the board. */
+export function renderWatchFor(w: { best: string; reply: string; because: string;
+  /** REQUIRED — the side that plays the best move: the reply is the other side's. */
+  mover: 'w' | 'b'; key: number }): string {
+  const best = w.mover === 'b' && !w.best.startsWith('…') ? `…${w.best}` : w.best;
+  const reply = w.mover === 'w' && !w.reply.startsWith('…') ? `…${w.reply}` : w.reply;
+  const because = w.because.replace(/\.$/, '');
+  return rotateStem([
+    `After ${best}, watch for ${reply}: ${because}.`,
+    `Watch for ${reply} after ${best}: ${because}.`,
+  ], w.key);
+}
+
 /** A move's one-move threat (`detectNewThreat` on the briefing): the
  *  participle and the predicate forms. */
 export function renderAspectThreat(san: string, detail: string): { text: string; verb: string } {
