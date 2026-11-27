@@ -89,15 +89,15 @@ describe('a move taken back keeps a puzzle only when it was a mistake', () => {
 
   it('an inaccuracy the live grade already filed is withdrawn by the takeback', async () => {
     await liveGradePuzzle('a6');
-    await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'a6', gameId: GAME, spot: null }, reads(60));
+    await fileTakenBackMiss({ fenBefore: FEN, studentSeat: 'black', playedSan: 'a6', gameId: GAME, spot: null }, reads(60));
     expect(await puzzles()).toEqual([]);
   });
   it('twins: a mistake keeps its puzzle; another game, another board or another move is untouched', async () => {
     await liveGradePuzzle('Qh4');
-    await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'Qh4', gameId: GAME, spot: null }, reads(500));
+    await fileTakenBackMiss({ fenBefore: FEN, studentSeat: 'black', playedSan: 'Qh4', gameId: GAME, spot: null }, reads(500));
     expect((await puzzles()).map((p) => p.playerMoveSan)).toEqual(['Qh4']);
     await liveGradePuzzle('a6', 'other-game');
-    await fileTakenBackMiss({ fenBefore: FEN, playedSan: 'a6', gameId: GAME, spot: null }, reads(60));
+    await fileTakenBackMiss({ fenBefore: FEN, studentSeat: 'black', playedSan: 'a6', gameId: GAME, spot: null }, reads(60));
     expect((await db.mistakePuzzles.where('sourceGameId').equals('other-game').toArray()).length).toBe(1);
   });
 });
