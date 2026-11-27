@@ -109,4 +109,6 @@ async function main() {
   writeFileSync(OUT, JSON.stringify({ summary, rows }, null, 2));
 }
 
-main().catch((e) => { console.error(e); process.exit(1); });
+// An open handle (the listener's socket, a browser pipe) can keep node alive
+// after the report is written: exit once it is.
+main().then(() => process.exit(0), (e) => { console.error(e); process.exit(1); });
