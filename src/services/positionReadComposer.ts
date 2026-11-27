@@ -14,7 +14,7 @@ import { buildFedTacticsContext } from './liveTacticsContext';
 import { sharpGap, SHARP_GAP_CP } from './positionCharacter';
 import type { BoardReader, BoardReadInput } from './boardReadFacts';
 import { boardReadOffThread } from './boardReadOffThread';
-import { tryReadBudget, poolBudgetMs, poolDispatcher, type ReadSurface, type ReadBudget, SINGLETON_SOURCES } from './tryReadBudget';
+import { tryReadBudget, poolBudgetMs, poolDispatcher, TRY_RANK, type ReadSurface, type ReadBudget, SINGLETON_SOURCES } from './tryReadBudget';
 import { decideRead, readContextOf, READ_STEPS, storyKeys } from './readDecider';
 import { stockfishEngine } from './stockfishEngine';
 import type { EvalBoardFn } from './perturbation';
@@ -48,15 +48,23 @@ export async function surfaceBoardReader(
 ): Promise<{ read: BoardReader; release: () => void }> {
   const budget = tryReadBudget(surface);
   const pool = budget.pool && readsTries ? await acquire(POOL_WANT, poolBudgetMs(surface)).catch(() => null) : null;
+  // The surface's deadline runs from now: a try not started by then is not read.
+  const deadline = { at: budget.deadlineMs === null ? null : Date.now() + budget.deadlineMs, now: () => Date.now() };
   const pooled = pool && pool.engines.length > 0
-    ? poolDispatcher(pool.engines.map((e) => ({ read: async (fen: string, b: ReadBudget) => (await e.analyzeDeep(fen, b.depth, b.budgetMs)).topLines ?? null })))
+    ? poolDispatcher(pool.engines.map((e) => ({ read: async (fen: string, b: ReadBudget) => (await e.analyzeDeep(fen, b.depth, b.budgetMs)).topLines ?? null })), deadline)
     : null;
+  // With no pool the tries share the singleton, one at a time, in the same
+  // order and under the same deadline.
+  const queued = poolDispatcher([{ read: async (fen: string, b: ReadBudget) => (await single(fen, b.depth, b.budgetMs)).topLines ?? null }], deadline);
   const read: BoardReader = (fen, source) => {
     const b = budget.reads[source];
     const viaPool = !!pooled && !SINGLETON_SOURCES.has(source);
+    const direct = SINGLETON_SOURCES.has(source);
     // A pool worker answers one line, the singleton its MultiPV fan: the route is part of the read.
     return cachedTryRead(`${viaPool ? 'pool' : 'single'}|${b.depth}|${b.budgetMs}|${fen}`, async () => (
-      pooled && viaPool ? pooled(fen, b) : (await single(fen, b.depth, b.budgetMs)).topLines ?? null
+      pooled && viaPool ? pooled(fen, b, TRY_RANK[source])
+        : direct ? (await single(fen, b.depth, b.budgetMs)).topLines ?? null
+          : queued(fen, b, TRY_RANK[source])
     ));
   };
   return { read, release: () => pool?.release() };

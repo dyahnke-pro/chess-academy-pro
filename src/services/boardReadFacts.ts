@@ -261,6 +261,12 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
   // central counterplay and a dead bishop".
   // The tries read here are the picture's input too (WO-PICTURE-01 P6): the
   // best move's facts read the verdict and plan off them (`reads.tries`).
+  // THE BOARD AFTER THE BEST MOVE AND THEIR LIKELY REPLIES THERE are asked
+  // for now, beside the tempting moves, not after them: under a live
+  // deadline the reads go likeliest first (`tryReadBudget.TRY_RANK`), and
+  // their likeliest replies — the "watch for" — rank with the moves a player
+  // is drawn to, ahead of the moves weighed only for a reason.
+  const afterP = bestAfterReads(i, top.moves[0] ?? null, mine);
   let triesRead: WeighRead[] | null = null;
   if (!i.withhold && i.readTempting && mine) {
     const tempting: WeighRead[] = [{ evaluation: top.evaluation, mate: top.mate, moves: top.moves, root: true }];
@@ -448,38 +454,14 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
   // What the best move does, read on the board after it; and their best try
   // there, refuted by its own line (his "…Nd8 would have led to immediate
   // calamity, as Black cannot stop the rook penetration to c7").
-  const uci = top.moves[0];
-  if (uci) {
-    const board = new Chess(i.fen);
-    let san: string;
-    try { san = board.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] ?? 'q' }).san; } catch { return done(); }
-    const fenB = board.fen();
-    const after = await i.read(fenB, 'best-after').catch(() => null);
+  const reads = await afterP;
+  if (reads) {
+    const { san, fenB, after, theirs } = reads;
     // The game behind the board (one-coach unlock, 2026-11-19): the best move's
     // facts read the moves played to reach it (the opening, a piece moved
     // again, the queen chased, the habits) — never an empty game on a board
     // that has one. A puzzle hands no moves.
     const game = gameBehind(i.history, i.fen);
-    // THEIR LIKELY REPLIES, each read to its own line (the moves the eye weighs
-    // for them on the board after our best move, and the engine's best): the
-    // tempting try of theirs refuted below, and the reply tree the best move's
-    // facts read (`ifTheyPlay`: his "if Black plays …Nxe3, you take back and
-    // the d5-square is yours") — read ONCE for both.
-    const theirs: WeighRead[] = [];
-    if (after?.[0] && !i.withhold && i.readTempting && mine) {
-      theirs.push({ evaluation: after[0].evaluation, mate: after[0].mate, moves: after[0].moves });
-      const replies = candidateMoves(fenB, i.rating, { played: null, scored: null }).flatMap((c) => {
-        if (c.uci === after[0].moves[0]) return [];
-        const b2 = new Chess(fenB);
-        try { b2.move({ from: c.from, to: c.to, promotion: c.uci[4] }); } catch { return []; }
-        return b2.isGameOver() ? [] : [{ uci: c.uci, fen: b2.fen() }];
-      });
-      const replyReads = await Promise.all(replies.map((r) => i.read(r.fen, 'their-eye').catch(() => null)));
-      replies.forEach((r, k) => {
-        const t = replyReads[k]?.[0];
-        if (t) theirs.push({ evaluation: t.evaluation, mate: t.mate, moves: [r.uci, ...t.moves], earlier: t.earlier?.moves ? [r.uci, ...t.earlier.moves] : null });
-      });
-    }
     const replier: 'w' | 'b' = side === 'w' ? 'b' : 'w';
     const everyAfter = theirs.length >= 2
       ? { replies: theirs.map((r) => ({ uci: r.moves[0], cp: foldScore(seatCp(r, replier), r.mate === null ? null : replier === 'w' ? r.mate : -r.mate), mate: r.mate === null ? null : replier === 'w' ? r.mate : -r.mate, pv: r.moves })), rating: i.rating }
@@ -510,6 +492,37 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     }
   }
   return done();
+}
+
+/** What the best move does, read on the board after it; and their likely
+ *  replies there, each read to its own line (the moves the eye weighs for
+ *  them on the board after our best move, and the engine's best): the
+ *  tempting try of theirs refuted, and the reply tree the best move's facts
+ *  read (`ifTheyPlay`: his "if Black plays …Nxe3, you take back and the
+ *  d5-square is yours") — read ONCE for both. Null when there is no best move. */
+async function bestAfterReads(i: BoardReadInput, uci: string | null, mine: boolean): Promise<{ san: string; fenB: string; after: readonly AnalysisLine[] | null; theirs: WeighRead[] } | null> {
+  if (!uci) return null;
+  const board = new Chess(i.fen);
+  let san: string;
+  try { san = board.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] ?? 'q' }).san; } catch { return null; }
+  const fenB = board.fen();
+  const after = await i.read(fenB, 'best-after').catch(() => null);
+  const theirs: WeighRead[] = [];
+  if (after?.[0] && !i.withhold && i.readTempting && mine) {
+    theirs.push({ evaluation: after[0].evaluation, mate: after[0].mate, moves: after[0].moves });
+    const replies = candidateMoves(fenB, i.rating, { played: null, scored: null }).flatMap((c) => {
+      if (c.uci === after[0].moves[0]) return [];
+      const b2 = new Chess(fenB);
+      try { b2.move({ from: c.from, to: c.to, promotion: c.uci[4] }); } catch { return []; }
+      return b2.isGameOver() ? [] : [{ uci: c.uci, fen: b2.fen() }];
+    });
+    const replyReads = await Promise.all(replies.map((r) => i.read(r.fen, 'their-eye').catch(() => null)));
+    replies.forEach((r, k) => {
+      const t = replyReads[k]?.[0];
+      if (t) theirs.push({ evaluation: t.evaluation, mate: t.mate, moves: [r.uci, ...t.moves], earlier: t.earlier?.moves ? [r.uci, ...t.earlier.moves] : null });
+    });
+  }
+  return { san, fenB, after, theirs };
 }
 
 const PIECE_POINTS: Readonly<Record<string, number>> = MATERIAL_VALUE;

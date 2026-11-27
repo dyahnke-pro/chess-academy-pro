@@ -87,6 +87,40 @@ describe('poolDispatcher — N reads on K engines cost about N/K searches', () =
   });
 });
 
+describe('poolDispatcher — the likeliest first, the deadline decides how many', () => {
+  it('a free engine takes the lowest-ranked waiting read, the earliest asked first', async () => {
+    const order: string[] = [];
+    const engine = { read: async (fen: string) => { order.push(fen); await new Promise((r) => setTimeout(r, 1)); return analysis(fen, 12).topLines; } };
+    const read = poolDispatcher([engine]);
+    await Promise.all([
+      read('a1 w', { depth: 12, budgetMs: 300 }, 0),
+      read('reason1 w', { depth: 12, budgetMs: 300 }, 2),
+      read('reason2 w', { depth: 12, budgetMs: 300 }, 2),
+      read('their-reply w', { depth: 12, budgetMs: 300 }, 0),
+      read('future w', { depth: 12, budgetMs: 300 }, 3),
+    ]);
+    // The first read starts at once; then their reply (rank 0) jumps the
+    // moves weighed only for a reason.
+    expect(order).toEqual(['a1 w', 'their-reply w', 'reason1 w', 'reason2 w', 'future w']);
+  });
+
+  it('a read still waiting at the deadline answers null without a search', async () => {
+    let clock = 0;
+    const searched: string[] = [];
+    const engine = { read: async (fen: string) => { searched.push(fen); clock += 1000; return analysis(fen, 12).topLines; } };
+    const read = poolDispatcher([engine], { at: 2500, now: () => clock });
+    const out = await Promise.all(['b1 w', 'b2 w', 'b3 w', 'b4 w', 'b5 w'].map((f) => read(f, { depth: 12, budgetMs: 300 }, 0)));
+    // Each search takes 1 s on the clock: three start before 2.5 s.
+    expect(searched).toEqual(['b1 w', 'b2 w', 'b3 w']);
+    expect(out.map((l) => (l ? 'read' : null))).toEqual(['read', 'read', 'read', null, null]);
+  });
+
+  it('live boards have a deadline; Review reads every try', () => {
+    for (const s of ['learn', 'play', 'openings', 'puzzle'] as const) expect(tryReadBudget(s).deadlineMs).toBeGreaterThan(0);
+    expect(tryReadBudget('review').deadlineMs).toBeNull();
+  });
+});
+
 describe('surfaceBoardReader — the tries on the pool, the best move\'s board on the singleton', () => {
   it('reads a try on the pool at the surface\'s depth, the board after the best move on the singleton', async () => {
     const pooled: Array<[string, number, number | undefined]> = [];
