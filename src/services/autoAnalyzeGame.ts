@@ -13,6 +13,7 @@ import { newMisconceptionId } from './misconceptionService';
 import { gameDateMs } from '../utils/gameDate';
 import { plyOfFen } from '../utils/plyOfFen';
 import { recordCapabilityEvidence, type CapabilityMoveArgs } from './capabilityEvidence';
+import { isStudentsMove } from './recordSeat';
 import { db } from '../db/schema';
 import { reportTeachingEffects } from './teachingEffectService';
 import { useAppStore } from '../stores/appStore';
@@ -110,8 +111,10 @@ interface AutoAnalyzeOptions {
    *  evidence to file (an imported game with no per-ply data, say) — an honest
    *  absence, never a reason to invent one. */
   capabilityPlies?: readonly CapabilityPly[];
-  /** Which side the student played — required to attribute the positive half. */
-  playerColor?: 'white' | 'black';
+  /** REQUIRED — which side the student played. Every slip and every ply is
+   *  checked against it (`recordSeat`): the record holds the student's moves
+   *  only, never the coach's. */
+  playerColor: 'white' | 'black';
   /** When the game was PLAYED (ms). Evidence from a game is dated by the game,
    *  never by when it was re-read: a backfill over old games stamped them
    *  "now" and an old slip reset a current streak (David's record, 2026-10-19). */
@@ -183,6 +186,7 @@ export async function autoAnalyzeBlunders(
       attributionPending: b.bestSan === undefined,
       context: {
         fen: b.fen,
+        studentSeat: opts.playerColor,
         playedSan: b.playedSan,
         bestSan: b.bestSan,
         cpLoss: b.cpLoss,
@@ -224,11 +228,12 @@ export async function autoAnalyzeBlunders(
   // than in the component is also what stops a UI surface importing a fact
   // computer directly (surfaceComposition.scan).
   let capabilitiesHeld = 0;
-  if (opts.capabilityPlies?.length && opts.playerColor) {
+  if (opts.capabilityPlies?.length) {
     for (const [plyIndex, ply] of opts.capabilityPlies.entries()) {
       if (plyIndex > 0 || blunders.length > 0) await opts.betweenRows?.();
       capabilitiesHeld += await recordCapabilityEvidence({
         ...plyScoringArgs(ply, opts.playerColor),
+        studentSeat: opts.playerColor,
         origin: 'review',
         // Unaided by default — this sweep runs afterwards over what they did
         // alone. EXCEPT where Learn announced the moment first (T3, 2026-09-20):
@@ -716,7 +721,7 @@ async function writeGameRecord(gameId: string, username: string | undefined, opt
   // An imported library's inaccuracies are leaks to RECORD, not puzzles: a
   // half-pawn choice has no single move to find, and a 300-game import would
   // bury My Mistakes under them. The drill pool stays mistakes and blunders.
-  if (from) await persistMistakePuzzlesForBlunders(gameId, blunders.filter((b) => b.grade !== 'inaccuracy'), from);
+  if (from) await persistMistakePuzzlesForBlunders(gameId, blunders.filter((b) => b.grade !== 'inaccuracy'), from, playerColor);
 
   // The dossier "builds on each game" (P7, David 2026-09-08): a freshly analyzed
   // game changed the weakness picture, so recompute the persistent snapshot.
@@ -752,7 +757,8 @@ async function writeGameRecord(gameId: string, username: string | undefined, opt
       learned: !!opts.reviewed,
       // The game's date dates BOTH halves: its slips and its answers.
       playedAt: gamePlayedAt(game),
-      ...(positive ? { capabilityPlies: positive, playerColor } : {}),
+      playerColor,
+      ...(positive ? { capabilityPlies: positive } : {}),
       ...(opts.betweenRows ? { betweenRows: opts.betweenRows } : {}),
     });
     await stampPositiveHalf(gameId);
@@ -773,7 +779,7 @@ async function writeGameRecord(gameId: string, username: string | undefined, opt
   // them — once each, matched by the board and the move.
   const missing = blunders.filter((b) => !existing.some((r) => r.fen === b.fen && r.playedSan === b.playedSan));
   if (missing.length > 0) {
-    await autoAnalyzeBlunders(missing, { openingId: game.openingId ?? undefined, sourceGameId: gameId, learned: !!opts.reviewed, playedAt: gamePlayedAt(game), ...(opts.betweenRows ? { betweenRows: opts.betweenRows } : {}) });
+    await autoAnalyzeBlunders(missing, { openingId: game.openingId ?? undefined, sourceGameId: gameId, playerColor, learned: !!opts.reviewed, playedAt: gamePlayedAt(game), ...(opts.betweenRows ? { betweenRows: opts.betweenRows } : {}) });
   }
   let countedUpgraded = 0;
   if (opts.reviewed) countedUpgraded = await upgradeToCounted(existing);
@@ -829,7 +835,7 @@ export function threatPliesFromAnnotations(
 async function recordThreatHalf(game: GameRecord, playerColor: 'white' | 'black', fens: readonly string[]): Promise<number> {
   if (game.threatHalfRev === THREAT_HALF_REV) return 0;
   const plies = threatPliesFromAnnotations(game.annotations ?? [], playerColor, fens, game.promptedPlies ?? [], game.steeredPlies ?? []);
-  const answers = threatAnswersForGame(plies);
+  const answers = threatAnswersForGame(plies).filter((a) => isStudentsMove(a.fen, playerColor, 'capability-evidence', a.playedSan));
   const base = gamePlayedAt(game) ?? Date.now();
   try {
     await db.capabilityEvidence.where('sourceGameId').equals(game.id).filter((r) => r.origin === 'review' && THREAT_MOTIF_TAGS.has(r.tag)).delete();
@@ -1037,6 +1043,8 @@ async function persistMistakePuzzlesForBlunders(
   /** REQUIRED: the game's provenance (source / opponent / date), so the
    *  rows carry the game's facts and never the builder's defaults. */
   from: MistakePuzzleProvenance,
+  /** REQUIRED: the seat the student played (`recordSeat`). */
+  studentSeat: 'white' | 'black',
 ): Promise<void> {
   // ONE PUZZLE PER POSITION PER GAME: a miss the coach stopped and the student
   // took back is filed live (`addTakenBackMistakePuzzle`); a retry at the same
@@ -1051,6 +1059,7 @@ async function persistMistakePuzzlesForBlunders(
     seen.add(key);
     const puzzle = buildMistakePuzzleFromCapture({
       fen: b.fen,
+      studentSeat,
       playedSan: b.playedSan,
       bestSan: b.bestSan,
       cpLoss: b.cpLoss,

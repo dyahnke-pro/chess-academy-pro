@@ -77,7 +77,7 @@ describe('fundamentals record→drill loop — the whole chain fires (no mocks)'
     expect(b.evalAfterPlayed).toBe(-550);
 
     // 2) autoAnalyzeBlunders → classify → log into Dexie.
-    const res = await autoAnalyzeBlunders(blunders, { learned: true, sourceGameId: 'game-1' });
+    const res = await autoAnalyzeBlunders(blunders, { learned: true, sourceGameId: 'game-1', playerColor: 'white' });
     expect(res.logged).toBeGreaterThanOrEqual(1);
 
     // 3) the tag actually landed in the weakness store — WITH the specific

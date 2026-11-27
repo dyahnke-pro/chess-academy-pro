@@ -108,7 +108,7 @@ describe('the one scoring of a move', () => {
 describe('prompted counts neither way', () => {
   beforeEach(async () => { await db.delete(); await db.open(); });
   it('a held row the coach prompted is written, and the profile does not read it', async () => {
-    const n = await recordCapabilityEvidence({
+    const n = await recordCapabilityEvidence({ studentSeat: 'black',
       fenBefore: BREAK, playedSan: 'd4', moverColor: 'black', cpLoss: 0, bestSan: 'd4', origin: 'play', prompted: true,
       alsoPosed: [{ tag: 'allowed-counterplay', posedImportance: 65 }],
     });

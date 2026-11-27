@@ -860,6 +860,7 @@ export function MistakePuzzleBoard({ puzzle, onResolved, onComplete, skipReplayC
           fenBefore: puzzle.fen,
           playedSan: puzzle.bestMoveSan,
           moverColor: puzzle.playerColor,
+          studentSeat: puzzle.playerColor,
           cpLoss: hasMadeMistakeRef.current ? puzzle.cpLoss : 0,
           origin: 'drill',
           prompted: toldBeforeAnswerRef.current,

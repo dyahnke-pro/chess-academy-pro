@@ -36,6 +36,9 @@ export interface FocusRunnerHands {
   steered: (ply: number) => void;
   /** The id of the game being played (the record's join key). */
   gameId: () => string | null;
+  /** The seat the student plays: every record write is checked against it
+   *  (`recordSeat`). */
+  studentSeat: () => 'white' | 'black';
   /** The engine's best move on this board, when the page holds a read of it. */
   bestUciAt: (fen: string) => string | null;
   /** Take back the user's last move (only theirs — the coach has not replied). */
@@ -139,22 +142,22 @@ export function useFocusRunner(hands: FocusRunnerHands): FocusRunner {
         case 'steered': h.steered(e.ply); break;
         case 'record':
           for (const tag of e.chance.setupTag ? [e.chance.tag, e.chance.setupTag] : [e.chance.tag]) {
-            recordFocusAnswer({ tag, outcome: e.outcome, fen: e.fen, san: e.san, prompted: e.prompted, steered: e.steered, takenBack: e.takenBack, gameId: h.gameId() });
+            recordFocusAnswer({ tag, outcome: e.outcome, fen: e.fen, san: e.san, prompted: e.prompted, steered: e.steered, takenBack: e.takenBack, gameId: h.gameId(), studentSeat: h.studentSeat() });
           }
           break;
         case 'record-deciding':
-          recordDecidingMiss({ fen: e.fen, san: e.san, bestUci: h.bestUciAt(e.fen), gameId: h.gameId() });
+          recordDecidingMiss({ fen: e.fen, san: e.san, bestUci: h.bestUciAt(e.fen), gameId: h.gameId(), studentSeat: h.studentSeat() });
           break;
         case 'hold': break;
         case 'reward': h.reward(e.reward, e.square, e.ply, e.label); break;
         case 'undo': h.undo(); break;
-        case 'taken-back': fileTakenBack(e.fen, e.san, h.gameId(), e.spot); break;
+        case 'taken-back': fileTakenBack(e.fen, e.san, h.gameId(), e.spot, h.studentSeat()); break;
         case 'rewind': h.rewind(e.ply); break;
         case 'probe': break;
         case 'record-castle':
           // THE KING IN THE MIDDLE COST THE EVAL: one vocabulary — the miss
           // reddens the Weaknesses tile and feeds the drills.
-          recordFocusAnswer({ tag: 'king-stuck-center', outcome: 'broken', fen: e.fen, san: e.san, prompted: false, steered: false, takenBack: false, gameId: h.gameId() });
+          recordFocusAnswer({ tag: 'king-stuck-center', outcome: 'broken', fen: e.fen, san: e.san, prompted: false, steered: false, takenBack: false, gameId: h.gameId(), studentSeat: h.studentSeat() });
           break;
         case 'castle-row':
           void logAppAudit({

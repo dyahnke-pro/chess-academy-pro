@@ -27,6 +27,7 @@ import { autoAnalyzeGameMisconceptions } from './autoAnalyzeGame';
 import { isFixtureGame, isFixtureGameId, isFixtureDerived } from './fixtureGames';
 import { ReviewGameCard } from '../components/Coach/ReviewGameCard';
 import type { GameRecord } from '../types';
+import { seatOf } from '../test/seatOf';
 
 vi.mock('../hooks/useSettings', () => ({
   useSettings: () => ({ settings: { glowBrightness: 100 } }),
@@ -112,7 +113,7 @@ describe('fixtureGames — the readers (D5)', () => {
   it('SPINE: rows derived from a sample game never reach the weakness profile', async () => {
     const fen = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
     await db.mistakePuzzles.add(buildMistakePuzzle({ id: 'mp-fixture', sourceGameId: 'sample-vienna-amateur-1', fen, playerMoveSan: 'Qh5', bestMoveSan: 'Nf3' }));
-    await logMisconception({ tag: 'hung-material', source: 'game-review', fen, playedSan: 'Qh5', bestSan: 'Nf3', sourceGameId: 'sample-vienna-amateur-1' });
+    await logMisconception({ studentSeat: seatOf(fen), tag: 'hung-material', source: 'game-review', fen, playedSan: 'Qh5', bestSan: 'Nf3', sourceGameId: 'sample-vienna-amateur-1' });
     expect(await getMisconceptionProfile()).toEqual([]);
     const profile = await getUnifiedWeaknessProfile();
     expect(profile.filter((w) => w.positions.some((p) => p.from.gameId?.startsWith('sample-')))).toEqual([]);
@@ -121,7 +122,7 @@ describe('fixtureGames — the readers (D5)', () => {
     // Control: the same two rows on a real game id DO reach it.
     await Promise.all([db.mistakePuzzles.clear(), db.misconceptionTags.clear()]);
     await db.mistakePuzzles.add(buildMistakePuzzle({ id: 'mp-real', sourceGameId: 'real-1', fen, playerMoveSan: 'Qh5', bestMoveSan: 'Nf3' }));
-    await logMisconception({ tag: 'hung-material', source: 'game-review', fen, playedSan: 'Qh5', bestSan: 'Nf3', sourceGameId: 'real-1' });
+    await logMisconception({ studentSeat: seatOf(fen), tag: 'hung-material', source: 'game-review', fen, playedSan: 'Qh5', bestSan: 'Nf3', sourceGameId: 'real-1' });
     expect((await getMisconceptionProfile()).map((r) => r.tag)).toContain('hung-material');
     expect((await getUnifiedWeaknessProfile()).length).toBeGreaterThan(0);
   });

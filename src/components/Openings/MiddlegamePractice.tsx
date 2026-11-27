@@ -331,6 +331,7 @@ export function MiddlegamePractice({
       fenAfter: moveResult.fen,
       playedSan: moveResult.san,
       playerColor,
+      studentSeat: playerColor,
       inBook: false,
       learned: true,
       prompted: hintUsedRef.current,

@@ -17,6 +17,7 @@ import type { TimeTroubleHit } from './timeTroubleDetector';
 import { buildMistakePuzzle, buildGameRecord } from '../test/factories';
 import type { ClassifiedTactic, MistakePuzzle, OpeningWeakSpot } from '../types';
 import type { ConversionFailure } from './conversionDetector';
+import { seatOf } from '../test/seatOf';
 
 async function reset(): Promise<void> {
   await db.mistakePuzzles.clear();
@@ -275,7 +276,7 @@ describe('aggregateBoardVision (was read only by its own page)', () => {
 
 describe('getUnifiedWeaknessProfile', () => {
   it('merges both pipelines into one ranked list', async () => {
-    await logMisconception({ tag: 'hung-material', source: 'game-review', fen: FEN_B, playedSan: 'Qh5' });
+    await logMisconception({ studentSeat: seatOf(FEN_B), tag: 'hung-material', source: 'game-review', fen: FEN_B, playedSan: 'Qh5' });
     await db.mistakePuzzles.add(buildMistakePuzzle({ fen: FEN_A, playerMoveSan: 'Nf6', tacticType: 'fork', status: 'unsolved' }));
 
     const profile = await getUnifiedWeaknessProfile();
@@ -325,7 +326,7 @@ describe('getUnifiedWeaknessProfile', () => {
 
   it('counts a mistake caught by BOTH pipelines once (dedup by position)', async () => {
     // Coach captured this exact position+move...
-    await logMisconception({ tag: 'missed-tactic', source: 'game-review', fen: FEN_A, playedSan: 'Nf6' });
+    await logMisconception({ studentSeat: seatOf(FEN_A), tag: 'missed-tactic', source: 'game-review', fen: FEN_A, playedSan: 'Nf6' });
     // ...and so did the Analyze pass.
     await db.mistakePuzzles.add(buildMistakePuzzle({ fen: FEN_A, playerMoveSan: 'Nf6', tacticType: 'fork' }));
 

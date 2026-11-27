@@ -24,6 +24,7 @@ import type { MovePrice } from './moveCost';
 import { addTakenBackMistakePuzzle } from './mistakePuzzleService';
 import { classifyPhase } from './gamePhaseService';
 import { logAppAudit } from './appAuditor';
+import { isStudentsMove, type StudentSeat } from './recordSeat';
 import type { MistakeGamePhase, MistakePuzzle, StockfishAnalysis } from '../types';
 
 /** The severities that make a puzzle: a mistake or worse, never an inaccuracy. */
@@ -41,6 +42,9 @@ export interface TakenBackMove {
   playedSan: string;
   /** The game's id (the record's join key); no game, no puzzle. */
   gameId: string | null;
+  /** REQUIRED — the seat the student played: only the student's own move is
+   *  ever filed (`recordSeat`). */
+  studentSeat: StudentSeat;
   gamePhase?: MistakeGamePhase;
   moveNumber?: number;
   /** How to spot it next time, read off the live board by the runner that
@@ -76,9 +80,9 @@ function sanLine(fen: string, ucis: readonly string[] | undefined, max: number):
  *  `taken-back` effect, `useMissionRunner` on Try again's undo — never a
  *  surface, or the student's own Takeback): the board, the move and the
  *  game; the phase and the move number are read off the board. */
-export function fileTakenBack(fenBefore: string, playedSan: string, gameId: string | null, spot: string | null): void {
+export function fileTakenBack(fenBefore: string, playedSan: string, gameId: string | null, spot: string | null, studentSeat: StudentSeat): void {
   const fullMove = Number(fenBefore.split(' ')[5]) || 1;
-  void fileTakenBackMiss({ fenBefore, playedSan, gameId, gamePhase: classifyPhase(fenBefore, { fullMove }), moveNumber: fullMove, spot }).catch(() => undefined);
+  void fileTakenBackMiss({ fenBefore, playedSan, gameId, studentSeat, gamePhase: classifyPhase(fenBefore, { fullMove }), moveNumber: fullMove, spot }).catch(() => undefined);
 }
 
 /** What the grader decided about one taken-back move — every call ends in
@@ -95,7 +99,9 @@ export type TakenBackVerdict =
   /** The engine could not price it: never a guess. */
   | 'unpriced'
   | 'no-game'
-  | 'illegal';
+  | 'illegal'
+  /** The move was the other side's, not the student's: never theirs to drill. */
+  | 'not-the-students';
 
 export interface TakenBackRow {
   verdict: TakenBackVerdict;
@@ -129,6 +135,7 @@ async function gradeTakenBack(m: TakenBackMove, reads: TakenBackReads): Promise<
   const row: TakenBackRow = { verdict: 'unpriced', fen: m.fenBefore, san: m.playedSan, gameId: m.gameId, severity: null, cpLoss: null, evalBefore: null, evalAfter: null, bestSan: null };
   const end = (verdict: TakenBackVerdict, puzzle: MistakePuzzle | null = null) => ({ row: { ...row, verdict }, puzzle });
   if (!m.gameId) return end('no-game');
+  if (!isStudentsMove(m.fenBefore, m.studentSeat, 'taken-back', m.playedSan)) return end('not-the-students');
   const playedUci = uciOfSan(m.fenBefore, m.playedSan);
   if (!playedUci) return end('illegal');
   let fenAfter: string;
@@ -163,6 +170,7 @@ async function gradeTakenBack(m: TakenBackMove, reads: TakenBackReads): Promise<
   if (!slip.isSlip || !slip.severity || !PUZZLE_SEVERITY[slip.severity]) return end('not-a-mistake');
   const puzzle = await addTakenBackMistakePuzzle({
     fen: m.fenBefore,
+    studentSeat: m.studentSeat,
     playedSan: m.playedSan,
     bestSan,
     cpLoss,

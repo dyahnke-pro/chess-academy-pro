@@ -14,6 +14,7 @@
  * per-game duplicate guard) under the motif's own tag (`THREAT_SKILL.motifTag`),
  * which the heat map lists, so each motif can turn green on its own.
  */
+import type { StudentSeat } from './recordSeat';
 import { Chess, type Color, type Square } from 'chess.js';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { recordLaneEvidence, type CapabilityEvidenceRecord, type CapabilityOutcome } from './capabilityEvidence';
@@ -240,11 +241,14 @@ export async function recordThreatAnswer(args: ThreatAnswerArgs & {
   sourceGameId?: string;
   /** The coach steered the game into this motif (a Learn focus game). */
   steered?: boolean;
+  /** REQUIRED — the student's seat (`recordSeat`). */
+  studentSeat: StudentSeat;
 }): Promise<ThreatAnswer | null> {
   const verdict = threatAnswerOutcome(args);
   if (!verdict) return null;
   await recordLaneEvidence({
     lane: 'threat-answer',
+    studentSeat: args.studentSeat,
     tag: verdict.tag,
     outcome: verdict.outcome,
     fen: args.fen,

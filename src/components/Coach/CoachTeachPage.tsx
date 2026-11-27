@@ -1963,7 +1963,7 @@ export function CoachTeachPage({ mode }: {
   const ownTakenBackRef = useRef(new Set<number>());
   /** The last move the student took back themselves: Hint pressed at its
    *  board makes that miss weigh in full. */
-  const lastOwnTakebackRef = useRef<{ gameId: string; fen: string; playedSan: string } | null>(null);
+  const lastOwnTakebackRef = useRef<{ gameId: string; fen: string; playedSan: string; studentSeat: 'white' | 'black' } | null>(null);
   const takeBackOwnRef = useRef(discussion.takeBackOwn);
   takeBackOwnRef.current = discussion.takeBackOwn;
   const takebackHintedRef = useRef(discussion.takebackHinted);
@@ -1976,7 +1976,7 @@ export function CoachTeachPage({ mode }: {
     if (!own) return;
     ownTakenBackRef.current.add(played.serial);
     if (played.gameId) {
-      const move = { gameId: played.gameId, fen: played.fen, playedSan: played.playedSan };
+      const move = { gameId: played.gameId, fen: played.fen, playedSan: played.playedSan, studentSeat: playerColorRef.current };
       lastOwnTakebackRef.current = move;
       takeBackOwnRef.current(move);
     }
@@ -2392,6 +2392,7 @@ export function CoachTeachPage({ mode }: {
     prompt: (ply) => { announcedPliesRef.current.add(ply); },
     steered: (ply) => { steeredPliesRef.current.add(ply); },
     gameId: () => learnMemRef.current.gameId,
+    studentSeat: () => playerColorRef.current,
     bestUciAt: (fen) => {
       // The deciding blunder was taken back: the record files it under the
       // skill the engine's best move names.
@@ -3707,7 +3708,7 @@ export function CoachTeachPage({ mode }: {
         // when the move works as well as the key, broken otherwise.
         if (!cur.graded) {
           recordDrillEvidence({
-            fenBefore, playedSan: move.san, moverColor: fenBefore.split(' ')[1] === 'b' ? 'black' : 'white',
+            fenBefore, playedSan: move.san, moverColor: fenBefore.split(' ')[1] === 'b' ? 'black' : 'white', studentSeat: cur.drill.playerColor,
             clean: verdict === 'accept', bestSan: expected, missTag: missed?.tag ?? null, prompted: cur.hintUsed || !!cur.drill.told,
           });
         }
@@ -3750,7 +3751,7 @@ export function CoachTeachPage({ mode }: {
     if (!cur.graded) {
       const fenB = liveFenRef.current;
       recordDrillEvidence({
-        fenBefore: fenB, playedSan: move.san, moverColor: fenB.split(' ')[1] === 'b' ? 'black' : 'white',
+        fenBefore: fenB, playedSan: move.san, moverColor: fenB.split(' ')[1] === 'b' ? 'black' : 'white', studentSeat: cur.drill.playerColor,
         clean: true, bestSan: expected, prompted: cur.hintUsed || !!cur.drill.told,
       });
     }
@@ -10918,6 +10919,7 @@ export function CoachTeachPage({ mode }: {
         // motif touching its squares is a prompted answer.
         said: { fen: fenBefore, squares: [...keysUnder(learnMemRef.current.story.current().said.keys(), ALERT_KEY.threatOn(fenBefore, ''))] },
         gameId: learnMemRef.current.gameId,
+        studentSeat: playerColorRef.current,
       });
     } catch { /* the record is a bonus, never a blocker */ }
     prevStudentTurnFenRef.current = fenBefore;
@@ -10932,6 +10934,7 @@ export function CoachTeachPage({ mode }: {
         fenAfter: move.fen,
         playedSan: move.san,
         playerColor,
+        studentSeat: playerColorRef.current,
         inBook: studentMoveInBook,
         bookMoveSan: studentMoveInBook ? move.san : undefined,
         learned: !!openingName,
@@ -12731,7 +12734,7 @@ export function CoachTeachPage({ mode }: {
                       queueSpokenHint(fenAfterReply, { computer: h.computer, text: h.text, lane: h.lane, proof: h.proof, namesStudentMove: h.namesStudentMove, squares: h.squares, claims: h.claims, gradeFen: move.fen, arrows: h.arrows, stakes: h.stakes ?? undefined });
                       if (h.event) captureEvent(h.event.name, h.event.props);
                       // DUAL-USE (P4): the lane that teaches it also records it.
-                      recordTeachingEvidence(h, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId });
+                      recordTeachingEvidence(h, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId, studentSeat: playerColorRef.current });
                     }
                     // WHAT THEIR LAST MOVE WAS AIMED AT, AND HOW YOURS ANSWERS IT
                     // (the three facts, WO-THINK-01) — a reason for your move.
@@ -13045,7 +13048,7 @@ export function CoachTeachPage({ mode }: {
                           queueHint(fenAfterReply, foundPraise ? { ...found, text: `${foundPraise} ${found.text}` } : found, fenBefore);
                           // DUAL-USE (P4): a found only-move is calculation proven — unless
                           // the coach had just announced the critical moment (prompted).
-                          recordTeachingEvidence(found, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId });
+                          recordTeachingEvidence(found, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId, studentSeat: playerColorRef.current });
                         }
                       } catch { /* the verdict is a bonus, never a blocker */ }
                       if (gambitLine) queueSpokenHint(fenAfterReply, { computer: 'gambitPoint', text: gambitLine, lane: 'movePoint', proof: NO_PROOF.description, namesStudentMove: false, squares: [], claims: [`gambit:${move.to}`] });
@@ -13104,7 +13107,7 @@ export function CoachTeachPage({ mode }: {
                         if (order) {
                           // The follow-up that works NOW, as the move to play.
                           // DUAL-USE (P4): the right order played is calculation answered.
-                          recordHeld('calculation-depth', 80, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId });
+                          recordHeld('calculation-depth', 80, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId, studentSeat: playerColorRef.current });
                           queueSpokenHint(fenAfterReply, { computer: 'moveOrder', text: order.text, lane: 'moveOrder', proof: squaresProof(order.text, order.squares) ?? NO_PROOF.description, namesStudentMove: namesPlayableStudentMove(order.held ? NAMES_NO_MOVE : namesMoves((playerColor === 'white' ? 'w' : 'b'), fenAfterReply, { from: order.followUp.uci.slice(0, 2), to: order.followUp.uci.slice(2, 4) })), squares: order.squares, claims: [`order:${order.followUp.uci}`, `stops:${order.answer.uci}`], arrows: // A held order names neither move, so it draws neither.
                             order.held ? [] : [
                               { from: order.followUp.uci.slice(0, 2), to: order.followUp.uci.slice(2, 4), role: 'play', source: 'learn.moveOrder' },
@@ -13172,7 +13175,7 @@ export function CoachTeachPage({ mode }: {
                           if (move.history[move.history.length - 2] === test.prior && move.san === test.san) {
                             // A question without its answer is not a prompt: finding it is
                             // proof — unless the move itself was announced.
-                            recordHeld('calculation-depth', 90, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId });
+                            recordHeld('calculation-depth', 90, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId, studentSeat: playerColorRef.current });
                           }
                         } else if (test && move.history.length > test.ply) mateTestRef.current = null;
                         const playedUci = (() => { try { const m = new Chess(fenBefore).move(move.san); return `${m.from}${m.to}${m.promotion ?? ''}`; } catch { return null; } })();
@@ -13193,12 +13196,12 @@ export function CoachTeachPage({ mode }: {
                         // showed. Held here; a miss reaches the record through
                         // the game sweep (lane rows are held-only).
                         if (learned?.posed) {
-                          recordHeld(learned.posed.tag, learned.posed.posedImportance, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length) || toldBoards(learnMemRef.current.story.current(), 'student').has(fenBefore.split(' ').slice(0, 2).join(' ')), gameId: learnMemRef.current.gameId });
+                          recordHeld(learned.posed.tag, learned.posed.posedImportance, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length) || toldBoards(learnMemRef.current.story.current(), 'student').has(fenBefore.split(' ').slice(0, 2).join(' ')), gameId: learnMemRef.current.gameId, studentSeat: playerColorRef.current });
                         }
                         if (intent) {
                           // DUAL-USE (P4): an engine-proven purpose (prevents / prepares)
                           // is the no-plan question answered.
-                          recordHeld('no-plan', 60, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length) || toldBoards(learnMemRef.current.story.current(), 'student').has(fenBefore.split(' ').slice(0, 2).join(' ')), gameId: learnMemRef.current.gameId });
+                          recordHeld('no-plan', 60, { fen: fenBefore, playedSan: move.san, prompted: announcedPliesRef.current.has(move.history.length) || toldBoards(learnMemRef.current.story.current(), 'student').has(fenBefore.split(' ').slice(0, 2).join(' ')), gameId: learnMemRef.current.gameId, studentSeat: playerColorRef.current });
                           // B1: the rule behind what the move prepares, once a game
                           // (the same ledger the principle lines use).
                           // Its keys ride as `principle:` claims, committed once the door keeps the line.
@@ -13693,6 +13696,39 @@ export function CoachTeachPage({ mode }: {
         // No legal coach reply (game over) — narrate the student's move only,
         // still with play_move disabled (the LLM never moves).
         setOpponentThinking(false);
+        // THE MISTAKE TURN STILL HAPPENS WHEN NO REPLY COMES. The student's
+        // move ended the game (a stalemate or repetition that threw a win
+        // away), so the reply branch above — where the turn is composed —
+        // never runs. The turn is composed here on the same reads: their
+        // pending lesson, then the student's, with no reply to name. The
+        // `mistake-lesson` row is written (one per mistake turn, spoken or not).
+        try {
+          const mid = await midTurnRead;
+          const price = await priceRead;
+          if (preStudentRead && mid) {
+            const bothCp = !preStudentRead.isMate && !mid.isMate;
+            const pend = theirMistakeRef.current;
+            theirMistakeRef.current = null;
+            const turn = learnMistakeTurns({
+              pending: pend, pendingOnBoard: !!pend && samePosition(pend.fenAfter, fenBefore),
+              yours: {
+                fenBefore, playedSan: move.san, moverColor: playerColor, before: preStudentRead, after: mid,
+                costCp: bothCp ? price?.costCp ?? null : 0,
+                bestSan: preStudentRead.bestMove ? uciMoveToSan(preStudentRead.bestMove, fenBefore) : null,
+                priorMove, theirReplySan: null, ply: move.history.length,
+              },
+              fenAfterReply: move.fen, student: playerColor === 'white' ? 'w' : 'b',
+              holdOf: (tag: string) => studentRecordRef.current.capabilities?.get(tag as MisconceptionTagId)?.hold,
+              memory: learnMemRef.current.mistakes() ?? null, focusOwnsMove: ownsTheMoveForFocus,
+            });
+            learnMemRef.current.noteMistakes(move.history.length, turn.memory);
+            for (const line of [turn.theirs, turn.yours]) {
+              if (line) speechChainRef.current = speechChainRef.current
+                .then(() => speakLearn(line, { channel: 'mistake', forced: true, intent: 'learn-live' }))
+                .catch(() => undefined);
+            }
+          }
+        } catch { /* the lesson never blocks the end of the game */ }
         if (learnVoiceOwner() === 'open') void handleSubmit(`I played ${move.san}. Your move.`, {
           fenOverride: move.fen,
           gameOverStep: true,

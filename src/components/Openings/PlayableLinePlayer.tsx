@@ -546,6 +546,8 @@ export function PlayableLinePlayer({
               fenAfter: temp.fen(),
               playedSan: attempted.san,
               playerColor: sideToMove === 'w' ? 'white' : 'black',
+              // The line is drilled from the student's side of the board.
+              studentSeat: boardOrientation,
               inBook: false,
               learned: true,
               // Told? Only if the student asked for the hint on this move.

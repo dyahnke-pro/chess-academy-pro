@@ -517,7 +517,7 @@ export function PuzzleBoard({
         void recordPuzzleMiss({ puzzleId: puzzle.id, themes: puzzle.themes, fen: solveFen, rating: puzzle.rating, surface });
         // …and into the misconception bucket the moment it fails, as Game
         // Review logs a fall-off (display row; the spine weight is the miss).
-        void logPuzzleMisconception({ puzzleId: puzzle.id, themes: puzzle.themes, fen: solveFen, bestSan: solverFirstSan });
+        void logPuzzleMisconception({ puzzleId: puzzle.id, themes: puzzle.themes, fen: solveFen, bestSan: solverFirstSan, solverSeat: userColor });
       }
     }
     const outcome: PuzzleOutcome = {
@@ -591,7 +591,7 @@ export function PuzzleBoard({
     answeredRef.current = true;
     if (firstAnswer && isCorrect) {
       void recordCapabilityEvidence({
-        fenBefore: fenBeforeAttempt, playedSan: move.san, moverColor: userColor,
+        fenBefore: fenBeforeAttempt, playedSan: move.san, moverColor: userColor, studentSeat: userColor,
         cpLoss: 0, origin: 'puzzle', prompted: hintUsedRef.current,
         // Both ways: what the insight computer says this position asked.
         alsoPosed: positionPosed(fenBeforeAttempt, { bestSan: move.san, lastMove: moveIndex > 0 ? lastMoveAlong(puzzle.fen, allMoves.slice(0, moveIndex)) ?? undefined : undefined }),
@@ -687,7 +687,7 @@ export function PuzzleBoard({
         // that still wins ("also good") is not a failure and is not recorded.
         if (firstAnswer && read?.kind !== 'also-good') {
           void recordCapabilityEvidence({
-            fenBefore: fenBeforeAttempt, playedSan: move.san, moverColor: userColor,
+            fenBefore: fenBeforeAttempt, playedSan: move.san, moverColor: userColor, studentSeat: userColor,
             cpLoss: cpFromThemes(puzzle.themes) ?? MISTAKE_CP, origin: 'puzzle', prompted: hintUsedRef.current,
             alsoPosed: positionPosed(fenBeforeAttempt, { bestSan: expectedSan, lastMove: moveIndex > 0 ? lastMoveAlong(puzzle.fen, allMoves.slice(0, moveIndex)) ?? undefined : undefined }),
           });

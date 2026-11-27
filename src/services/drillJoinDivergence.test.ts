@@ -22,6 +22,7 @@ import { db } from '../db/schema';
 import { logMisconception } from './misconceptionService';
 import { getMisconceptionDrillPuzzles } from './mistakePuzzleService';
 import { auditBucketPipeline, type BucketAuditCode } from './bucketPipelineAudit';
+import { seatOf } from '../test/seatOf';
 
 /** After 1.e4 c5 — White to move. `Nf3` is legal here; `Nxe5` is NOT. */
 const FEN = 'rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
@@ -43,7 +44,7 @@ describe('the audit grades the drill route the student actually takes', () => {
   });
 
   it('FIRES when the student would see the empty state (no best move, no themes)', async () => {
-    await logMisconception({ tag: OWN_POSITIONS_ONLY, source: 'auto-analysis', fen: FEN, playedSan: 'h3' });
+    await logMisconception({ studentSeat: seatOf(FEN), tag: OWN_POSITIONS_ONLY, source: 'auto-analysis', fen: FEN, playedSan: 'h3' });
 
     // What the student gets: nothing.
     expect(await getMisconceptionDrillPuzzles(OWN_POSITIONS_ONLY)).toHaveLength(0);
@@ -52,14 +53,14 @@ describe('the audit grades the drill route the student actually takes', () => {
   });
 
   it('STAYS SILENT when the row really does build a drill', async () => {
-    await logMisconception({ tag: OWN_POSITIONS_ONLY, source: 'auto-analysis', fen: FEN, playedSan: 'h3', bestSan: 'Nf3' });
+    await logMisconception({ studentSeat: seatOf(FEN), tag: OWN_POSITIONS_ONLY, source: 'auto-analysis', fen: FEN, playedSan: 'h3', bestSan: 'Nf3' });
 
     expect(await getMisconceptionDrillPuzzles(OWN_POSITIONS_ONLY)).toHaveLength(1);
     expect(await drillEmptyCodes()).not.toContain('DRILL_PLAN_EMPTY');
   });
 
   it('STAYS SILENT for a themed tag even with no own positions — the other real route', async () => {
-    await logMisconception({ tag: THEMED, source: 'auto-analysis', fen: FEN, playedSan: 'h3' });
+    await logMisconception({ studentSeat: seatOf(FEN), tag: THEMED, source: 'auto-analysis', fen: FEN, playedSan: 'h3' });
 
     expect(await getMisconceptionDrillPuzzles(THEMED)).toHaveLength(0);
     expect(await drillEmptyCodes()).not.toContain('DRILL_PLAN_EMPTY');

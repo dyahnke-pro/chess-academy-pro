@@ -44,6 +44,7 @@ import type {
 } from '../types';
 import { positionOf } from '../utils/samePosition';
 import { oneAtATime, type KeyedQueue } from '../utils/oneAtATime';
+import { isStudentsMove, moverOf, type StudentSeat } from './recordSeat';
 
 // ─── Game context helpers ──────────────────────────────────────────────────
 
@@ -244,6 +245,14 @@ export function mistakeProvenanceFromGame(
  *  was captured — the answer is the honest one: a coach game, opponent and
  *  date unknown, never a guess. `playerColor` is used only when the record
  *  does not declare its own seat. */
+/** The seat the student played in a stored game, or null when the game is
+ *  not stored (a live game is saved at its end) or declares no seat. */
+export async function seatForGameId(gameId: string | undefined): Promise<StudentSeat | null> {
+  if (!gameId) return null;
+  const game = await db.games.get(gameId).catch(() => undefined);
+  return game ? determinePlayerColor(game) : null;
+}
+
 export async function provenanceForGameId(
   gameId: string | undefined,
   playerColor?: 'white' | 'black',
@@ -1120,6 +1129,10 @@ function capturePosKey(fen: string, san: string): string {
 
 interface CapturePuzzleInput {
   fen: string;
+  /** REQUIRED — the seat the student played. A capture whose move (the one
+   *  played from `fen`) is the other side's is refused: puzzles are made from
+   *  the student's mistakes only, never the coach's (`recordSeat`). */
+  studentSeat: StudentSeat;
   playedSan: string;
   bestSan: string;
   cpLoss?: number;
@@ -1306,6 +1319,7 @@ export function buildMistakePuzzleFromCapture(
 ): MistakePuzzle | null {
   const { fen, playedSan, bestSan } = input;
   if (!fen || !playedSan || !bestSan) return null;
+  if (!isStudentsMove(fen, input.studentSeat, 'mistake-puzzle', playedSan)) return null;
 
   // Derive UCI for both moves from the position-before fen.
   let playerMove: string;
@@ -1313,7 +1327,7 @@ export function buildMistakePuzzleFromCapture(
   let playerColor: 'white' | 'black';
   try {
     const c1 = new Chess(fen);
-    playerColor = c1.turn() === 'w' ? 'white' : 'black';
+    playerColor = input.studentSeat;
     const pm = c1.move(playedSan);
     playerMove = `${pm.from}${pm.to}${pm.promotion ?? ''}`;
     const c2 = new Chess(fen);
@@ -1415,8 +1429,14 @@ export async function getMisconceptionDrillPuzzles(
     const gameKey = r.sourceGameId ?? '';
     let from = provenance.get(gameKey);
     if (!from) { from = await provenanceForGameId(r.sourceGameId); provenance.set(gameKey, from); }
+    // The game's own seat when it is stored, so a row an older build wrote for
+    // the coach's move never comes back as a drill; a row with no stored game
+    // was seat-checked when it was written.
+    const studentSeat = (await seatForGameId(r.sourceGameId)) ?? moverOf(r.fen);
+    if (!studentSeat) continue;
     const puzzle = buildMistakePuzzleFromCapture({
       fen: r.fen,
+      studentSeat,
       playedSan: r.playedSan,
       bestSan: r.bestSan,
       cpLoss: r.cpLoss,

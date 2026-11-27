@@ -8,6 +8,7 @@ import {
 } from './misconceptionService';
 import { getMisconceptionDrillPuzzles } from './mistakePuzzleService';
 import { getMisconceptionTag } from '../data/misconceptionTags';
+import { seatOf } from '../test/seatOf';
 
 const FEN = 'rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
 
@@ -17,7 +18,7 @@ beforeEach(async () => {
 
 describe('logMisconception', () => {
   it('stores a valid closed-set tag', async () => {
-    const rec = await logMisconception({
+    const rec = await logMisconception({ studentSeat: seatOf(FEN),
       tag: 'overvalued-attack',
       source: 'discussion-practice',
       fen: FEN,
@@ -33,7 +34,7 @@ describe('logMisconception', () => {
   });
 
   it('rejects a tag outside the closed set (LLM hallucination guard)', async () => {
-    const rec = await logMisconception({
+    const rec = await logMisconception({ studentSeat: seatOf(FEN),
       tag: 'totally-made-up-tag',
       source: 'auto-analysis',
       fen: FEN,
@@ -43,9 +44,9 @@ describe('logMisconception', () => {
   });
 
   it("requires a customLabel for the 'other' catch-all", async () => {
-    const bad = await logMisconception({ tag: 'other', source: 'game-review', fen: FEN });
+    const bad = await logMisconception({ studentSeat: seatOf(FEN), tag: 'other', source: 'game-review', fen: FEN });
     expect(bad).toBeNull();
-    const good = await logMisconception({
+    const good = await logMisconception({ studentSeat: seatOf(FEN),
       tag: 'other',
       source: 'game-review',
       fen: FEN,
@@ -59,9 +60,9 @@ describe('logMisconception', () => {
 describe('getMisconceptionProfile', () => {
   it('ranks by due count, sinks well-spaced tags', async () => {
     for (let i = 0; i < 3; i++) {
-      await logMisconception({ tag: 'hung-material', source: 'auto-analysis', fen: FEN });
+      await logMisconception({ studentSeat: seatOf(FEN), tag: 'hung-material', source: 'auto-analysis', fen: FEN });
     }
-    await logMisconception({ tag: 'no-plan', source: 'auto-analysis', fen: FEN });
+    await logMisconception({ studentSeat: seatOf(FEN), tag: 'no-plan', source: 'auto-analysis', fen: FEN });
 
     const profile = await getMisconceptionProfile();
     expect(profile[0].tag).toBe('hung-material');
@@ -70,9 +71,9 @@ describe('getMisconceptionProfile', () => {
   });
 
   it("keeps distinct 'other' free-text labels separate", async () => {
-    await logMisconception({ tag: 'other', source: 'game-review', fen: FEN, customLabel: 'wrong rook' });
-    await logMisconception({ tag: 'other', source: 'game-review', fen: FEN, customLabel: 'wrong rook' });
-    await logMisconception({ tag: 'other', source: 'game-review', fen: FEN, customLabel: 'premature resignation' });
+    await logMisconception({ studentSeat: seatOf(FEN), tag: 'other', source: 'game-review', fen: FEN, customLabel: 'wrong rook' });
+    await logMisconception({ studentSeat: seatOf(FEN), tag: 'other', source: 'game-review', fen: FEN, customLabel: 'wrong rook' });
+    await logMisconception({ studentSeat: seatOf(FEN), tag: 'other', source: 'game-review', fen: FEN, customLabel: 'premature resignation' });
 
     const profile = await getMisconceptionProfile();
     const others = profile.filter((r) => r.tag === 'other');
@@ -82,9 +83,9 @@ describe('getMisconceptionProfile', () => {
   });
 
   it("files an 'other' fallback under its PHASE bucket, not Uncategorized", async () => {
-    await logMisconception({ tag: 'other', source: 'auto-analysis', fen: FEN, customLabel: 'Endgame slip', gamePhase: 'endgame' });
-    await logMisconception({ tag: 'other', source: 'auto-analysis', fen: FEN, customLabel: 'Opening slip', gamePhase: 'opening' });
-    await logMisconception({ tag: 'other', source: 'auto-analysis', fen: FEN, customLabel: 'Middlegame slip', gamePhase: 'middlegame' });
+    await logMisconception({ studentSeat: seatOf(FEN), tag: 'other', source: 'auto-analysis', fen: FEN, customLabel: 'Endgame slip', gamePhase: 'endgame' });
+    await logMisconception({ studentSeat: seatOf(FEN), tag: 'other', source: 'auto-analysis', fen: FEN, customLabel: 'Opening slip', gamePhase: 'opening' });
+    await logMisconception({ studentSeat: seatOf(FEN), tag: 'other', source: 'auto-analysis', fen: FEN, customLabel: 'Middlegame slip', gamePhase: 'middlegame' });
 
     const profile = await getMisconceptionProfile();
     expect(profile.find((r) => r.label === 'Endgame slip')?.bucket).toBe('endgame');
@@ -93,7 +94,7 @@ describe('getMisconceptionProfile', () => {
   });
 
   it("leaves a phase-less 'other' row Uncategorized", async () => {
-    await logMisconception({ tag: 'other', source: 'game-review', fen: FEN, customLabel: 'wrong rook' });
+    await logMisconception({ studentSeat: seatOf(FEN), tag: 'other', source: 'game-review', fen: FEN, customLabel: 'wrong rook' });
     const profile = await getMisconceptionProfile();
     expect(profile.find((r) => r.label === 'wrong rook')?.bucket).toBe('uncategorized');
   });
@@ -101,7 +102,7 @@ describe('getMisconceptionProfile', () => {
 
 describe('recordTagDrillResult — SRS spacing, never graduate out', () => {
   it('spaces a tag further out on success but never removes it', async () => {
-    await logMisconception({ tag: 'missed-tactic', source: 'discussion-practice', fen: FEN });
+    await logMisconception({ studentSeat: seatOf(FEN), tag: 'missed-tactic', source: 'discussion-practice', fen: FEN });
     // One success spaces it into the future — due count drops to 0 today.
     await recordTagDrillResult('missed-tactic', true);
 
@@ -119,7 +120,7 @@ describe('recordTagDrillResult — SRS spacing, never graduate out', () => {
   });
 
   it('the interval lengthens with each consecutive success', async () => {
-    await logMisconception({ tag: 'missed-tactic', source: 'discussion-practice', fen: FEN });
+    await logMisconception({ studentSeat: seatOf(FEN), tag: 'missed-tactic', source: 'discussion-practice', fen: FEN });
     await recordTagDrillResult('missed-tactic', true);
     const afterOne = (await db.misconceptionTags.toArray())[0];
     const gapOne = (afterOne.dueAt ?? 0) - Date.now();
@@ -135,7 +136,7 @@ describe('recordTagDrillResult — SRS spacing, never graduate out', () => {
   });
 
   it('a miss snaps the instance back to due so you see it sooner', async () => {
-    await logMisconception({ tag: 'missed-tactic', source: 'discussion-practice', fen: FEN });
+    await logMisconception({ studentSeat: seatOf(FEN), tag: 'missed-tactic', source: 'discussion-practice', fen: FEN });
     await recordTagDrillResult('missed-tactic', true);
     // Make it due again to drill it, then miss.
     const rec = (await db.misconceptionTags.toArray())[0];
@@ -156,7 +157,7 @@ describe('a tag drills through the path the student actually takes', () => {
   // 'Nxe5', which is ILLEGAL in this position — the dead join never validated
   // it, which is its own small proof of the problem.
   it("builds a drill from the student's own flubbed position", async () => {
-    await logMisconception({ tag: 'missed-tactic', source: 'auto-analysis', fen: FEN, playedSan: 'h3', bestSan: 'Nf3' });
+    await logMisconception({ studentSeat: seatOf(FEN), tag: 'missed-tactic', source: 'auto-analysis', fen: FEN, playedSan: 'h3', bestSan: 'Nf3' });
     const puzzles = await getMisconceptionDrillPuzzles('missed-tactic');
     expect(puzzles).toHaveLength(1);
     expect(puzzles[0].fen).toBe(FEN);
@@ -164,7 +165,7 @@ describe('a tag drills through the path the student actually takes', () => {
   });
 
   it('yields nothing when the row has no best move — the surface shows the empty state', async () => {
-    await logMisconception({ tag: 'missed-tactic', source: 'auto-analysis', fen: FEN, playedSan: 'h3' });
+    await logMisconception({ studentSeat: seatOf(FEN), tag: 'missed-tactic', source: 'auto-analysis', fen: FEN, playedSan: 'h3' });
     expect(await getMisconceptionDrillPuzzles('missed-tactic')).toHaveLength(0);
   });
 

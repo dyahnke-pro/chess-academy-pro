@@ -3,6 +3,7 @@ import { db } from '../db/schema';
 import { logMisconception } from './misconceptionService';
 import { auditBucketPipeline, type BucketAuditCode } from './bucketPipelineAudit';
 import type { MisconceptionTagRecord, MistakePuzzle } from '../types';
+import { seatOf } from '../test/seatOf';
 
 // Black to move; 'a6' is a legal (quiet) played move, 'd5' a legal best.
 const FEN = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1';
@@ -61,7 +62,7 @@ beforeEach(clearStores);
 
 describe('auditBucketPipeline — clean delivery', () => {
   it('a counted slip with a matching drill passes with zero violations', async () => {
-    await logMisconception({
+    await logMisconception({ studentSeat: seatOf(FEN),
       tag: 'missed-tactic',
       source: 'discussion-practice',
       fen: FEN,
@@ -89,7 +90,7 @@ describe('auditBucketPipeline — clean delivery', () => {
 
 describe('auditBucketPipeline — DELIVERY violations', () => {
   it('COUNTED_NO_DRILL — counted slip with a legal move + best, but no drill', async () => {
-    await logMisconception({
+    await logMisconception({ studentSeat: seatOf(FEN),
       tag: 'missed-tactic',
       source: 'discussion-practice',
       fen: FEN,

@@ -70,7 +70,7 @@ describe('capabilitiesShown — both halves computed', () => {
 
 describe('the record FIRES — a wire that does not fire is not a wire', () => {
   it('writes a real held row and reads it back in the profile', async () => {
-    const wrote = await recordCapabilityEvidence({
+    const wrote = await recordCapabilityEvidence({ studentSeat: 'white',
       fenBefore: AFTER_1E4_E5, playedSan: 'Nf3', moverColor: 'white',
       cpLoss: 0, origin: 'play', prompted: false,
     });
@@ -87,7 +87,7 @@ describe('the record FIRES — a wire that does not fire is not a wire', () => {
   });
 
   it('ABSENT means UNKNOWN — never held, never broken', async () => {
-    await recordCapabilityEvidence({
+    await recordCapabilityEvidence({ studentSeat: 'white',
       fenBefore: AFTER_1E4_E5, playedSan: 'Nf3', moverColor: 'white',
       cpLoss: 0, origin: 'play', prompted: false,
     });
@@ -110,7 +110,7 @@ describe('the record FIRES — a wire that does not fire is not a wire', () => {
     // skill it was about is broken, every other posed skill is left alone.
     const posed = capabilitiesPosed(AFTER_1E4_E5, 'Nf3', 'white');
     expect(posed.length).toBeGreaterThan(0);
-    const wrote = await recordCapabilityEvidence({
+    const wrote = await recordCapabilityEvidence({ studentSeat: 'white',
       fenBefore: AFTER_1E4_E5, playedSan: 'Nf3', moverColor: 'white',
       cpLoss: 400, origin: 'play', prompted: false, slipTag: posed[0].tag,
     });
@@ -126,7 +126,7 @@ describe('the record FIRES — a wire that does not fire is not a wire', () => {
     // Told-then-found is not evidence they can do it unaided. The row is still
     // written (it happened), but the profile skips it, so the tag stays GREY
     // and the ranker keeps teaching it.
-    const wrote = await recordCapabilityEvidence({
+    const wrote = await recordCapabilityEvidence({ studentSeat: 'white',
       fenBefore: AFTER_1E4_E5, playedSan: 'Nf3', moverColor: 'white',
       cpLoss: 0, origin: 'learn', prompted: true,
     });
@@ -139,11 +139,11 @@ describe('the record FIRES — a wire that does not fire is not a wire', () => {
 
   it('alsoPosed (the insight computer) files rows in BOTH directions', async () => {
     const posed = [{ tag: 'tempo-handed' as MisconceptionTagId, posedImportance: 80 }];
-    await recordCapabilityEvidence({
+    await recordCapabilityEvidence({ studentSeat: 'white',
       fenBefore: AFTER_1E4_E5, playedSan: 'Nf3', moverColor: 'white',
       cpLoss: 0, origin: 'drill', prompted: false, alsoPosed: posed,
     });
-    await recordCapabilityEvidence({
+    await recordCapabilityEvidence({ studentSeat: 'white',
       fenBefore: AFTER_1E4_E5, playedSan: 'Nf3', moverColor: 'white',
       cpLoss: 300, origin: 'drill', prompted: false, alsoPosed: posed, slipTag: 'tempo-handed',
     });
@@ -153,7 +153,7 @@ describe('the record FIRES — a wire that does not fire is not a wire', () => {
 
   it('NEGATIVE CONTROL: a costly move about ANOTHER skill breaks nothing it was not about', async () => {
     const posed = [{ tag: 'tempo-handed' as MisconceptionTagId, posedImportance: 80 }];
-    await recordCapabilityEvidence({
+    await recordCapabilityEvidence({ studentSeat: 'white',
       fenBefore: AFTER_1E4_E5, playedSan: 'Nf3', moverColor: 'white',
       cpLoss: 300, origin: 'drill', prompted: false, alsoPosed: posed, slipTag: 'hung-material',
     });
@@ -161,7 +161,7 @@ describe('the record FIRES — a wire that does not fire is not a wire', () => {
   });
 
   it('never throws into the caller, whatever it is handed', async () => {
-    await expect(recordCapabilityEvidence({
+    await expect(recordCapabilityEvidence({ studentSeat: 'white',
       fenBefore: 'not a fen', playedSan: '??', moverColor: 'white',
       cpLoss: null, origin: 'review', prompted: false,
     })).resolves.toBe(0);
@@ -247,7 +247,7 @@ describe('the review capture actually feeds it — a real game, real rows', () =
 
     let wrote = 0;
     for (const ply of capabilityPliesFromAnnotations(annotations, 'white', fens)) {
-      wrote += await recordCapabilityEvidence({
+      wrote += await recordCapabilityEvidence({ studentSeat: 'white',
         fenBefore: ply.fenBefore, playedSan: ply.playedSan,
         moverColor: 'white', cpLoss: ply.cpLoss, origin: 'review', prompted: false,
       });
@@ -365,12 +365,12 @@ describe('the heat-map row — once per change, not once per read (walk 2026-10-
     let now = 1_000_000;
     nowSpy.mockImplementation(() => now);
     try {
-      await recordCapabilityEvidence({ fenBefore: AFTER_1E4_E5, playedSan: 'Nf3', moverColor: 'white', cpLoss: 0, origin: 'play', prompted: false });
+      await recordCapabilityEvidence({ studentSeat: 'white', fenBefore: AFTER_1E4_E5, playedSan: 'Nf3', moverColor: 'white', cpLoss: 0, origin: 'play', prompted: false });
       for (let i = 0; i < 16; i += 1) await getCapabilityProfile();
       expect(heatRows()).toBe(1);
 
       // New evidence changes the map — that is the signal, it always emits.
-      await recordCapabilityEvidence({ fenBefore: AFTER_1E4_E5, playedSan: 'Nf3', moverColor: 'white', cpLoss: 0, origin: 'drill', prompted: false });
+      await recordCapabilityEvidence({ studentSeat: 'white', fenBefore: AFTER_1E4_E5, playedSan: 'Nf3', moverColor: 'white', cpLoss: 0, origin: 'drill', prompted: false });
       await getCapabilityProfile();
       expect(heatRows()).toBe(2);
 

@@ -4,6 +4,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { db } from '../db/schema';
 import { logMisconception } from './misconceptionService';
+import { seatOf } from '../test/seatOf';
 
 const FEN = 'r1bqk1nr/pp2ppbp/2np2p1/1Bp5/3PPP2/1P6/PBP3PP/RN1QK1NR b KQkq - 0 6';
 
@@ -11,16 +12,16 @@ describe('logMisconception — a slip from a stored game is dated by the game', 
   beforeEach(async () => { await db.delete(); await db.open(); });
   it('a review slip of a game played 2025.03.04 carries that day (plus its ply), not today', async () => {
     await db.games.put({ id: 'g-old', date: '2025.03.04', pgn: '', white: 'a', black: 'b', result: '1-0' } as never);
-    const r = await logMisconception({ tag: 'tempo-handed', source: 'game-review', fen: FEN, sourceGameId: 'g-old' });
+    const r = await logMisconception({ studentSeat: seatOf(FEN), tag: 'tempo-handed', source: 'game-review', fen: FEN, sourceGameId: 'g-old' });
     expect(r?.playedAt).toBe(Date.parse('2025-03-04') + 11);
   });
   it('a live game not yet stored keeps its capture time (no playedAt)', async () => {
-    const r = await logMisconception({ tag: 'tempo-handed', source: 'discussion-practice', fen: FEN, sourceGameId: 'live-1' });
+    const r = await logMisconception({ studentSeat: seatOf(FEN), tag: 'tempo-handed', source: 'discussion-practice', fen: FEN, sourceGameId: 'live-1' });
     expect(r?.playedAt).toBeUndefined();
   });
   it('a caller that knows the date wins', async () => {
     await db.games.put({ id: 'g-old', date: '2025.03.04', pgn: '', white: 'a', black: 'b', result: '1-0' } as never);
-    const r = await logMisconception({ tag: 'tempo-handed', source: 'auto-analysis', fen: FEN, sourceGameId: 'g-old', playedAt: 42 });
+    const r = await logMisconception({ studentSeat: seatOf(FEN), tag: 'tempo-handed', source: 'auto-analysis', fen: FEN, sourceGameId: 'g-old', playedAt: 42 });
     expect(r?.playedAt).toBe(42);
   });
 });

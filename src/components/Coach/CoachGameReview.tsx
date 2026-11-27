@@ -1611,10 +1611,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     { const w = revealWalk(criticalCard); if (w && questionPlyRef.current != null) setReviewWhy({ ply: questionPlyRef.current, line: w }); }
     setCriticalCard(null);
     setCriticalReveal({ correct, text });
-    void recordPromptedFind({
+    // The student's own seat: a turning point that was the opponent's move is
+    // theirs to learn from, never the student's record (`recordSeat`).
+    if (playerColor) void recordPromptedFind({
       fenBefore: criticalCard.fenBefore,
       playedSan: san,
-      moverColor: playerColor ?? 'white',
+      moverColor: criticalCard.fenBefore.split(' ')[1] === 'b' ? 'black' : 'white',
+      studentSeat: playerColor,
       held: correct,
       ...(props.gameId ? { sourceGameId: props.gameId } : {}),
     }).catch(() => undefined);

@@ -24,6 +24,7 @@ import {
 } from './mistakePuzzleService';
 import { buildGameRecord } from '../test/factories';
 import type { GameRecord, MoveAnnotation } from '../types';
+import { seatOf } from '../test/seatOf';
 
 // A real lichess-style export: Black's 2...Nc6 is tagged a blunder by the
 // eval curve (+0.1 → +4.0). The analysis sweep is what fills `bestMove`
@@ -113,7 +114,7 @@ describe('C9 — the live capture path resolves provenance by game id', () => {
 
   it('addMistakePuzzleFromCapture writes exactly the provenance it was handed', async () => {
     const FEN = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2';
-    const p = await addMistakePuzzleFromCapture({
+    const p = await addMistakePuzzleFromCapture({ studentSeat: seatOf(FEN),
       fen: FEN, playedSan: 'Nc6', bestSan: 'Nf6', cpLoss: 120,
       from: { origin: 'game', gameId: 'cc-7', source: 'chesscom', opponentName: 'Someone', gameDate: '2025-02-03' },
     });

@@ -95,6 +95,8 @@ export async function logPuzzleMisconception(args: {
   themes: string[];
   fen: string;
   bestSan: string | null;
+  /** The seat the student solves the puzzle from (`recordSeat`). */
+  solverSeat: 'white' | 'black';
 }): Promise<boolean> {
   const tag = puzzleMisconceptionTag(args.themes);
   if (!tag) return false;
@@ -103,6 +105,7 @@ export async function logPuzzleMisconception(args: {
       tag,
       source: 'puzzle',
       fen: args.fen,
+      studentSeat: args.solverSeat,
       bestSan: args.bestSan ?? undefined,
       counted: false,
       coachNote: `Puzzle ${args.puzzleId} unsolved (${args.themes.join(', ')})`,

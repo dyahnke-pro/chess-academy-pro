@@ -4,6 +4,7 @@ import { autoAnalyzeGameMisconceptions, backfillMisconceptionsFromAnalyzedGames 
 import { buildGameRecord } from '../test/factories';
 import { addTakenBackMistakePuzzle } from './mistakePuzzleService';
 import type { MoveAnnotation } from '../types';
+import { seatOf } from '../test/seatOf';
 
 // Integration: the BULK faucet that fills the Thinking-Errors bucket from a
 // game's annotations (David 2026-06-11). Real deterministic classifier, real
@@ -59,14 +60,14 @@ describe('autoAnalyzeGameMisconceptions', () => {
   it('one puzzle per position per game: a miss taken back and filed live is not filed again by the move that stood (2026-10-23)', async () => {
     // The coach stopped 3.Qd1?? (taken back, filed live); the retry 3.Qxe5+?? stood.
     const before = 'r1bqkbnr/pppp1ppp/2n5/4p2Q/4P3/8/PPPP1PPP/RNB1KBNR w KQkq - 2 3';
-    const live = await addTakenBackMistakePuzzle({ fen: before, playedSan: 'Qd1', bestSan: 'Nf3', cpLoss: 250 }, 'g-retry');
+    const live = await addTakenBackMistakePuzzle({ studentSeat: seatOf(before), fen: before, playedSan: 'Qd1', bestSan: 'Nf3', cpLoss: 250 }, 'g-retry');
     expect(live?.playerMoveSan).toBe('Qd1');
     await db.games.put(buildGameRecord({ id: 'g-retry', source: 'coach', white: 'David', black: 'Stockfish Bot', pgn: PGN, annotations: blunderAnnotations() }));
     await autoAnalyzeGameMisconceptions('g-retry');
     const puzzles = await db.mistakePuzzles.where('sourceGameId').equals('g-retry').toArray();
     expect(puzzles.map((p) => p.playerMoveSan)).toEqual(['Qd1']);
     // The live write is one per position too.
-    expect(await addTakenBackMistakePuzzle({ fen: before, playedSan: 'Qxe5+', bestSan: 'Nf3', cpLoss: 700 }, 'g-retry')).toBeNull();
+    expect(await addTakenBackMistakePuzzle({ studentSeat: seatOf(before), fen: before, playedSan: 'Qxe5+', bestSan: 'Nf3', cpLoss: 700 }, 'g-retry')).toBeNull();
   });
 
   it('a slip at a ply the coach announced is filed PROMPTED — the hold rate skips it (WO-LEARN-FOCUS-01)', async () => {

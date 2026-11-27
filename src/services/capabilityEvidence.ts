@@ -43,6 +43,7 @@
 import { db } from '../db/schema';
 import { MISTAKE_CP, INACCURACY_CP } from './engineConstants';
 import { logAppAudit } from './appAuditor';
+import { isStudentsMove, type StudentSeat } from './recordSeat';
 import { emitWeaknessModelChanged } from './weaknessModelEvents';
 import { leadingFundamentals, MOVE_FUNDAMENTAL_TAG } from './moveFundamentals';
 import { skillQuestions } from './skillQuestions';
@@ -767,6 +768,10 @@ export function capabilityOutcomes(args: CapabilityMoveArgs): Array<{ tag: Misco
 }
 
 export async function recordCapabilityEvidence(args: CapabilityMoveArgs & {
+  /** REQUIRED — the seat the student played (in a puzzle, the solver's). A
+   *  move by the other side is refused (`recordSeat`): evidence is about the
+   *  student's own moves only. */
+  studentSeat: StudentSeat;
   origin: CapabilityEvidenceRecord['origin'];
   /** See `CapabilityEvidenceRecord.prompted` — required, never inferred. */
   prompted: boolean;
@@ -780,6 +785,7 @@ export async function recordCapabilityEvidence(args: CapabilityMoveArgs & {
    *  Omitted = now (a live move). */
   playedAt?: number;
 }): Promise<number> {
+  if (args.moverColor !== args.studentSeat || !isStudentsMove(args.fenBefore, args.studentSeat, 'capability-evidence', args.playedSan)) return 0;
   try {
     const shown = capabilityOutcomes(args);
     if (shown.length === 0) return 0;
@@ -835,6 +841,9 @@ export async function recordCapabilityEvidence(args: CapabilityMoveArgs & {
 type EvidenceLane = 'teaching' | 'threat-answer' | 'focus';
 type LaneEvidenceArgs = {
   lane: EvidenceLane;
+  /** REQUIRED — the seat the student played; a row for the other side's move
+   *  (the one played from `fen`) is refused (`recordSeat`). */
+  studentSeat: StudentSeat;
   tag: MisconceptionTagId;
   outcome: CapabilityOutcome;
   fen: string;
@@ -857,6 +866,7 @@ export function recordLaneEvidence(args: LaneEvidenceArgs): Promise<boolean> {
   return run;
 }
 async function writeLaneEvidence(raw: LaneEvidenceArgs): Promise<boolean> {
+  if (!isStudentsMove(raw.fen, raw.studentSeat, 'lane-evidence', raw.playedSan)) return false;
   // THE SHOT, NAMED (WO-MOTIFS-01): a lane that credits a FOUND shot (the
   // gem, the tactic, the played concept, the decisive reason) writes the
   // catch-all; the move played WAS the shot, so it names the motif's row.
@@ -948,6 +958,10 @@ export function answerEvidenceOutcome(a: {
  * `autoAnalyzeGame`'s "this game already recorded its positive half" guard, so
  * a reading answer stamped with it would silently stop the game's real
  * evidence from ever being written. The KNOW source is the position.
+ *
+ * NOT a move: the question may be about either side's pieces ("what is their
+ * threat?"), so it carries no seat — the answer is the student's by
+ * construction (`recordSeat` guards the move writers).
  */
 export async function recordAnswerEvidence(args: {
   tag: MisconceptionTagId;

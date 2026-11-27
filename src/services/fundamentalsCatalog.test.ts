@@ -9,6 +9,7 @@ import {
 } from './fundamentalsCatalog';
 import { assembleFundamentalsAnswer } from './groundedAnswer';
 import { logMisconception } from './misconceptionService';
+import { seatOf } from '../test/seatOf';
 
 // Iterate the ONE list the catalog exports — a hand-copied section array here
 // is the drifting-constant class this repo bans.
@@ -45,12 +46,12 @@ describe('getFundamentalCounts — reads the student\'s own slips by fundamental
   beforeEach(async () => { await db.misconceptionTags.clear(); });
 
   it('counts recorded fundamentals INCLUDING analyzed/display-only slips (David 2026-09-08)', async () => {
-    await logMisconception({ tag: 'poisoned-pawn', fundamentalId: 'poisoned-pawn', source: 'auto-analysis', fen: '8/8/8/8/8/8/8/K6k w - - 0 1', counted: true });
-    await logMisconception({ tag: 'poisoned-pawn', fundamentalId: 'poisoned-pawn', source: 'auto-analysis', fen: '8/8/8/8/8/8/8/K6k w - - 0 1', counted: true });
+    await logMisconception({ studentSeat: seatOf('8/8/8/8/8/8/8/K6k w - - 0 1'), tag: 'poisoned-pawn', fundamentalId: 'poisoned-pawn', source: 'auto-analysis', fen: '8/8/8/8/8/8/8/K6k w - - 0 1', counted: true });
+    await logMisconception({ studentSeat: seatOf('8/8/8/8/8/8/8/K6k w - - 0 1'), tag: 'poisoned-pawn', fundamentalId: 'poisoned-pawn', source: 'auto-analysis', fen: '8/8/8/8/8/8/8/K6k w - - 0 1', counted: true });
     // An imported/analyzed game logs counted:false to avoid double-counting the
     // weakness PROFILE — but it MUST still feed the fundamentals scorecard
     // (otherwise a heavy importer sees an empty fundamentals view).
-    await logMisconception({ tag: 'tempo-handed', fundamentalId: 'tempo-handed', source: 'auto-analysis', fen: '8/8/8/8/8/8/8/K6k w - - 0 1', counted: false });
+    await logMisconception({ studentSeat: seatOf('8/8/8/8/8/8/8/K6k w - - 0 1'), tag: 'tempo-handed', fundamentalId: 'tempo-handed', source: 'auto-analysis', fen: '8/8/8/8/8/8/8/K6k w - - 0 1', counted: false });
     const counts = await getFundamentalCounts();
     expect(counts['poisoned-pawn']?.count).toBe(2);
     expect(counts['tempo-handed']?.count).toBe(1);           // analyzed game now counts

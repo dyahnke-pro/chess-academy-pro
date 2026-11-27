@@ -46,13 +46,15 @@ export { lastMoveFromPgn, moveMissed, positionAsk } from './moveInsight';
  *  answer only (the caller gates it), like every other evidence door. */
 export function recordDrillEvidence(args: {
   fenBefore: string; playedSan: string; moverColor: 'white' | 'black';
+  /** REQUIRED — the student's seat in the drill (`recordSeat`). */
+  studentSeat: 'white' | 'black';
   clean: boolean; bestSan: string; missTag?: MisconceptionTagId | null; prompted: boolean;
 }): void {
   const cpLoss = args.clean ? 0 : MISTAKE_CP_DRILL;
   const posed = positionPosed(args.fenBefore, { bestSan: args.bestSan, played: { san: args.playedSan, cpLoss } });
   if (args.missTag && !posed.some((p) => p.tag === args.missTag)) posed.push({ tag: args.missTag, posedImportance: 80 });
   void recordCapabilityEvidence({
-    fenBefore: args.fenBefore, playedSan: args.playedSan, moverColor: args.moverColor,
+    fenBefore: args.fenBefore, playedSan: args.playedSan, moverColor: args.moverColor, studentSeat: args.studentSeat,
     cpLoss, origin: 'drill', prompted: args.prompted, alsoPosed: posed,
   });
 }

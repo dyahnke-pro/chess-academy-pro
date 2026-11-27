@@ -1252,6 +1252,8 @@ export async function recordPromptedFind(args: {
   fenBefore: string;
   playedSan: string;
   moverColor: 'white' | 'black';
+  /** REQUIRED — the seat the student played in the reviewed game (`recordSeat`). */
+  studentSeat: 'white' | 'black';
   /** Whether the answer HELD. The record is grey either way — this only decides
    *  which outcome the row carries, for when a later policy reads them. */
   held: boolean;
@@ -1261,6 +1263,7 @@ export async function recordPromptedFind(args: {
     fenBefore: args.fenBefore,
     playedSan: args.playedSan,
     moverColor: args.moverColor,
+    studentSeat: args.studentSeat,
     // `movePlayedCleanly` turns cpLoss into the outcome; a held answer costs
     // nothing by definition, a missed one is at least a mistake.
     cpLoss: args.held ? 0 : MISTAKE_CP,

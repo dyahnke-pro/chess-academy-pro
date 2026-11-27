@@ -28,6 +28,7 @@ import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { teachingFact, type TeachingFact } from './teachingFact';
 export type { TeachingFact } from './teachingFact';
 import { recordLaneEvidence } from './capabilityEvidence';
+import type { StudentSeat } from './recordSeat';
 import { recordTermForThreat, seesPlainThreats, threatInputFor, threatVisibility, threatVoice, type RecordTerm, type ThreatPattern, type ThreatProducer, type ThreatVoice, type VisibilityTerm } from './learnRecordTerms';
 import type { HeatState } from './heatMap';
 import { newThreatsAtTurn, recordThreatAnswer } from './threatAnswerEvidence';
@@ -564,7 +565,7 @@ export function namedMoveArrows(text: string, fen: string, student: 'w' | 'b', p
 
 /** A held row for a lane the page composes itself (moveOrder, moveIntent, a
  *  plan arriving) — the same writer, the same honesty about `prompted`. */
-export function recordHeld(tag: MisconceptionTagId, posedImportance: number, ctx: { fen: string; playedSan: string; prompted: boolean; gameId: string | null }): void {
+export function recordHeld(tag: MisconceptionTagId, posedImportance: number, ctx: { fen: string; playedSan: string; prompted: boolean; gameId: string | null; studentSeat: StudentSeat }): void {
   recordTeachingEvidence({ evidence: { tag, posedImportance } }, ctx);
 }
 
@@ -572,10 +573,10 @@ export function recordHeld(tag: MisconceptionTagId, posedImportance: number, ctx
  *  impure export here: the page hands every queued hint through it so a lane
  *  that teaches also records. `prompted` = the student was told the moment
  *  before they moved (the critical-moment announcement). */
-export function recordTeachingEvidence(h: Pick<TeachingFact, 'evidence'>, ctx: { fen: string; playedSan: string; prompted: boolean; gameId: string | null }): void {
+export function recordTeachingEvidence(h: Pick<TeachingFact, 'evidence'>, ctx: { fen: string; playedSan: string; prompted: boolean; gameId: string | null; studentSeat: StudentSeat }): void {
   if (!h.evidence) return;
   void recordLaneEvidence({
-    lane: 'teaching', tag: h.evidence.tag, outcome: 'held', fen: ctx.fen, playedSan: ctx.playedSan,
+    lane: 'teaching', studentSeat: ctx.studentSeat, tag: h.evidence.tag, outcome: 'held', fen: ctx.fen, playedSan: ctx.playedSan,
     posedImportance: h.evidence.posedImportance, origin: 'learn', prompted: ctx.prompted,
     ...(ctx.gameId ? { sourceGameId: ctx.gameId } : {}),
   });
@@ -1092,11 +1093,13 @@ export function recordThreatAnswersAtMove(a: {
   engine?: { evalBeforeCp: number | null; cpLoss: number | null };
   said: { fen: string; squares: readonly string[] } | null;
   gameId: string | null;
+  /** REQUIRED — the student's seat (`recordSeat`). */
+  studentSeat: StudentSeat;
 }): void {
   const said = a.said && a.said.fen.split(' ').slice(0, 4).join(' ') === a.fen.split(' ').slice(0, 4).join(' ') ? new Set(a.said.squares) : new Set<string>();
   for (const t of newThreatsAtTurn(a.fen, a.prevFen)) {
     void recordThreatAnswer({
-      fen: a.fen, playedSan: a.playedSan, pattern: t.pattern, targets: t.targets,
+      fen: a.fen, studentSeat: a.studentSeat, playedSan: a.playedSan, pattern: t.pattern, targets: t.targets,
       prompted: t.targets.some((sq) => said.has(sq)) || said.has(t.attacker),
       origin: 'learn',
       ...(a.engine ? { engine: a.engine } : {}),

@@ -22,6 +22,7 @@ import { buildWeaknessSignals, matchClauseKind, matchFundamental, matchTag } fro
 import { FUNDAMENTAL_TAG } from './principleAttribution';
 import { getMisconceptionTag } from '../data/misconceptionTags';
 import { buildMistakePuzzle } from '../test/factories';
+import { seatOf } from '../test/seatOf';
 
 // Two real positions (fen BEFORE the move) — distinct so posKey never collides.
 const FEN_A = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
@@ -42,7 +43,7 @@ describe('weaknessSpine — a batch-analyzed slip is not lost on both sides', ()
 
   it('a counted:false row plus its mistakePuzzle twin → the slip appears ONCE, on the analysis side', async () => {
     // The exact shape autoAnalyzeGame writes: display-only misconception + drillable twin.
-    await logMisconception({ tag: 'hung-material', source: 'auto-analysis', fen: FEN_A, playedSan: 'Nc3', counted: false, sourceGameId: 'g1' });
+    await logMisconception({ studentSeat: seatOf(FEN_A), tag: 'hung-material', source: 'auto-analysis', fen: FEN_A, playedSan: 'Nc3', counted: false, sourceGameId: 'g1' });
     await db.mistakePuzzles.add(buildMistakePuzzle({ fen: FEN_A, playerMoveSan: 'Nc3', tacticType: 'fork', sourceGameId: 'g1' }));
 
     const profile = await getUnifiedWeaknessProfile();
@@ -57,7 +58,7 @@ describe('weaknessSpine — a batch-analyzed slip is not lost on both sides', ()
   });
 
   it('negative control: a COUNTED coach row still owns its position and the twin is deduped away', async () => {
-    await logMisconception({ tag: 'missed-tactic', source: 'game-review', fen: FEN_A, playedSan: 'Nc3' });
+    await logMisconception({ studentSeat: seatOf(FEN_A), tag: 'missed-tactic', source: 'game-review', fen: FEN_A, playedSan: 'Nc3' });
     await db.mistakePuzzles.add(buildMistakePuzzle({ fen: FEN_A, playerMoveSan: 'Nc3', tacticType: 'fork' }));
     const profile = await getUnifiedWeaknessProfile();
     expect(profile.map((p) => p.tag)).toContain('missed-tactic');
@@ -70,9 +71,9 @@ describe('weaknessSpine — attributed fundamentals reach the ranker', () => {
 
   it('rows carrying fundamentalId become fundamental:<id> rows, counted or not; tag rows are untouched', async () => {
     // Two batch rows (counted:false) on the same fundamental, one live row (counted) on another.
-    await logMisconception({ tag: FUNDAMENTAL_TAG['loose-piece'], fundamentalId: 'loose-piece', source: 'auto-analysis', fen: FEN_A, playedSan: 'Nc3', counted: false, sourceGameId: 'g1' });
-    await logMisconception({ tag: FUNDAMENTAL_TAG['loose-piece'], fundamentalId: 'loose-piece', source: 'auto-analysis', fen: FEN_B, playedSan: 'd5', counted: false, sourceGameId: 'g2' });
-    await logMisconception({ tag: FUNDAMENTAL_TAG['tempo-handed'], fundamentalId: 'tempo-handed', source: 'game-review', fen: FEN_B, playedSan: 'a3' });
+    await logMisconception({ studentSeat: seatOf(FEN_A), tag: FUNDAMENTAL_TAG['loose-piece'], fundamentalId: 'loose-piece', source: 'auto-analysis', fen: FEN_A, playedSan: 'Nc3', counted: false, sourceGameId: 'g1' });
+    await logMisconception({ studentSeat: seatOf(FEN_B), tag: FUNDAMENTAL_TAG['loose-piece'], fundamentalId: 'loose-piece', source: 'auto-analysis', fen: FEN_B, playedSan: 'd5', counted: false, sourceGameId: 'g2' });
+    await logMisconception({ studentSeat: seatOf(FEN_B), tag: FUNDAMENTAL_TAG['tempo-handed'], fundamentalId: 'tempo-handed', source: 'game-review', fen: FEN_B, playedSan: 'a3' });
 
     const profile = await getUnifiedWeaknessProfile();
     const loose = profile.find((p) => p.key === fundamentalClusterId('loose-piece'));
@@ -112,7 +113,7 @@ describe('weaknessSpine — attributed fundamentals reach the ranker', () => {
   });
 
   it('the ranker can JOIN them: matchFundamental is exact, matchClauseKind(fundamental) reaches them, matchTag by cluster id', async () => {
-    await logMisconception({ tag: FUNDAMENTAL_TAG['loose-piece'], fundamentalId: 'loose-piece', source: 'auto-analysis', fen: FEN_A, playedSan: 'Nc3', counted: false });
+    await logMisconception({ studentSeat: seatOf(FEN_A), tag: FUNDAMENTAL_TAG['loose-piece'], fundamentalId: 'loose-piece', source: 'auto-analysis', fen: FEN_A, playedSan: 'Nc3', counted: false });
     const signals = buildWeaknessSignals(await getUnifiedWeaknessProfile(), null);
     expect(matchFundamental('loose-piece', signals)?.clusterId).toBe('fundamental:loose-piece');
     expect(matchFundamental('tempo-handed', signals)).toBeNull(); // grey, never guessed

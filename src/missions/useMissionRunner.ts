@@ -82,7 +82,7 @@ export function useMissionRunner(hands: MissionRunnerHands): MissionRunner {
   const [view, setView] = useState<RunnerState>(IDLE);
   const handsRef = useRef(hands);
   /** The move the mission is holding (its miss), for Try again's take-back. */
-  const heldRef = useRef<{ fenBefore: string; san: string } | null>(null);
+  const heldRef = useRef<{ fenBefore: string; san: string; studentSeat: 'white' | 'black' } | null>(null);
   handsRef.current = hands;
 
   const dispatch = useCallback((event: RunnerEvent, opts: { replyIsInline: boolean }): RunnerEffect[] => {
@@ -140,7 +140,7 @@ export function useMissionRunner(hands: MissionRunnerHands): MissionRunner {
           // (`takenBackPuzzles`, David 2026-10-23).
           const held = heldRef.current;
           heldRef.current = null;
-          if (held) fileTakenBack(held.fenBefore, held.san, h.gameId(), null);
+          if (held) fileTakenBack(held.fenBefore, held.san, h.gameId(), null, held.studentSeat);
           h.undo();
           break;
         }
@@ -160,7 +160,7 @@ export function useMissionRunner(hands: MissionRunnerHands): MissionRunner {
     const effects = dispatch({ kind: 'moved', game, fenBefore, candidatesUci }, { replyIsInline: true });
     if (effects.some((e) => e.kind === 'hold')) {
       const san = game.sans[game.sans.length - 1];
-      heldRef.current = san ? { fenBefore, san } : null;
+      heldRef.current = san ? { fenBefore, san, studentSeat: game.studentColor === 'w' ? 'white' : 'black' } : null;
       return 'hold';
     }
     return effects.some((e) => e.kind === 'load-position') ? 'board-replaced' : 'reply';

@@ -329,6 +329,8 @@ export async function recordCalculationFirstAnswer(answer: CalculationAnswer): P
     fenBefore: answer.fen,
     playedSan: san,
     moverColor,
+    // A calculation puzzle is asked of the side to move: that is the solver.
+    studentSeat: moverColor,
     cpLoss: answer.accepted ? 0 : (cpFromThemes(answer.themes) ?? MISTAKE_CP),
     origin: 'puzzle',
     prompted: answer.prompted,

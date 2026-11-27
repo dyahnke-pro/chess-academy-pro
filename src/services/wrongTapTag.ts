@@ -87,6 +87,7 @@ export async function recordWrongTapMisconceptions(args: {
         tag,
         source: args.source,
         fen: args.fen,
+        studentSeat: 'answer',
         playedSan: args.taps.join(' '),
         coachNote: args.help === 'none' ? undefined : `answered with help: ${args.help}`,
       });

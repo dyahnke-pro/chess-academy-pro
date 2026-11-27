@@ -3,6 +3,7 @@ import { db } from '../db/schema';
 import { logAppAudit } from './appAuditor';
 import { startLearnTranscript, stopLearnTranscript, learnTranscriptFor, noteLearnEntry } from './learnTranscript';
 import { buildLearnGameRecord } from './learnGameRecord';
+import { seatOf } from '../test/seatOf';
 
 describe('a Learn game keeps its own transcript (David 2026-10-19: full observability)', () => {
   beforeEach(async () => { stopLearnTranscript(); await db.delete(); await db.open(); });
@@ -42,9 +43,9 @@ describe('a taken-back move stays on the record, marked (David 2026-10-19)', () 
     const { logMisconception } = await import('./misconceptionService');
     const { recordCapabilityEvidence } = await import('./capabilityEvidence');
     const fen = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
-    const row = await logMisconception({ tag: 'hung-material', source: 'discussion-practice', fen, playedSan: 'Ng5', bestSan: 'Bb5', cpLoss: 150, sourceGameId: 'teach-t', takenBack: true });
+    const row = await logMisconception({ studentSeat: seatOf(fen), tag: 'hung-material', source: 'discussion-practice', fen, playedSan: 'Ng5', bestSan: 'Bb5', cpLoss: 150, sourceGameId: 'teach-t', takenBack: true });
     expect(row?.takenBack).toBe(true);
-    await recordCapabilityEvidence({ fenBefore: fen, playedSan: 'Bb5', moverColor: 'white', cpLoss: 0, origin: 'learn', prompted: false, sourceGameId: 'teach-t', takenBack: true, alsoPosed: [{ tag: 'hung-material', posedImportance: 90 }] });
+    await recordCapabilityEvidence({ studentSeat: 'white', fenBefore: fen, playedSan: 'Bb5', moverColor: 'white', cpLoss: 0, origin: 'learn', prompted: false, sourceGameId: 'teach-t', takenBack: true, alsoPosed: [{ tag: 'hung-material', posedImportance: 90 }] });
     const ev = await db.capabilityEvidence.toArray();
     expect(ev.length).toBeGreaterThan(0);
     expect(ev.every((r) => r.takenBack === true)).toBe(true);

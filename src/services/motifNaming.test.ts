@@ -5,6 +5,7 @@ import { classifyMisconceptionNow } from './misconceptionClassifier';
 import { THREAT_SKILL } from './learnRecordTerms';
 import { FOCUS_CARDS } from '../coach/focus/focusCard';
 import { db } from '../db/schema';
+import { seatOf } from '../test/seatOf';
 
 // White knight d5, black king e8 and rook a8: Nc7+ forks king and rook.
 const FORK = 'r3k3/8/8/3N4/8/8/8/2K5 w - - 0 1';
@@ -78,7 +79,7 @@ describe('count both (David 2026-10-22, WO-MOTIFS-01 M3d)', () => {
 describe('a lane that credits a found shot names it', () => {
   beforeEach(async () => { await db.delete(); await db.open(); });
   it('writes the motif row, not the catch-all', async () => {
-    await recordLaneEvidence({ lane: 'teaching', tag: 'missed-tactic', outcome: 'held', fen: FORK, playedSan: 'Nc7+', posedImportance: 90, origin: 'learn', prompted: false });
+    await recordLaneEvidence({ studentSeat: seatOf(FORK), lane: 'teaching', tag: 'missed-tactic', outcome: 'held', fen: FORK, playedSan: 'Nc7+', posedImportance: 90, origin: 'learn', prompted: false });
     const rows = await db.capabilityEvidence.toArray();
     expect(rows.map((r) => r.tag)).toEqual(['missed-your-fork']);
   });

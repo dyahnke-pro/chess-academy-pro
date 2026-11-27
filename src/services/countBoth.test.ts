@@ -103,7 +103,7 @@ describe('a missed shot whose line opens with a set-up files a second slip row',
     await captureMisconception({
       classifyInput: { fen: MATE, playedSan: 'b3', bestSan: 'Rxh7+', pvAfterBest: ['Kxh7', 'Qh5#'] },
       source: 'auto-analysis', shouldCount: true,
-      context: { fen: MATE, playedSan: 'b3', bestSan: 'Rxh7+', cpLoss: 900, grade: 'blunder', gamePhase: 'middlegame', moveNumber: 21, sourceGameId: 'g1' },
+      context: { fen: MATE, studentSeat: 'white', playedSan: 'b3', bestSan: 'Rxh7+', cpLoss: 900, grade: 'blunder', gamePhase: 'middlegame', moveNumber: 21, sourceGameId: 'g1' },
     });
     const rows = await db.misconceptionTags.toArray();
     expect(rows.map((r) => r.tag).sort()).toEqual(['missed-your-deflection', 'missed-your-mate']);
@@ -117,7 +117,7 @@ describe('a missed shot whose line opens with a set-up files a second slip row',
     await captureMisconception({
       classifyInput: { fen: MATE, playedSan: 'b3', bestSan: 'Rxh7+' },
       source: 'auto-analysis', shouldCount: true,
-      context: { fen: MATE, playedSan: 'b3', bestSan: 'Rxh7+', cpLoss: 900, grade: 'blunder', gamePhase: 'middlegame', moveNumber: 21, sourceGameId: 'g1' },
+      context: { fen: MATE, studentSeat: 'white', playedSan: 'b3', bestSan: 'Rxh7+', cpLoss: 900, grade: 'blunder', gamePhase: 'middlegame', moveNumber: 21, sourceGameId: 'g1' },
     });
     // Rxh7+ alone mates nothing: named from its first move, the shot is the
     // catch-all, and there is no line to read a set-up from.

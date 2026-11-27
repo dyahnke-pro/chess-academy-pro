@@ -9,6 +9,7 @@ import { db } from '../db/schema';
 import { gameDateMs } from '../utils/gameDate';
 import { plyOfFen } from '../utils/plyOfFen';
 import { logAppAudit } from './appAuditor';
+import { isStudentsMove, type StudentSeat } from './recordSeat';
 import { emitWeaknessModelChanged } from './weaknessModelEvents';
 import { captureEvent } from './analytics';
 import { isFixtureDerived } from './fixtureGames';
@@ -64,6 +65,11 @@ interface LogMisconceptionInput {
   tag: string;
   source: MisconceptionSource;
   fen: string;
+  /** REQUIRED — the seat the student played. A slip whose move (the one played
+   *  from `fen`) is the other side's is refused (`recordSeat`): the record
+   *  holds the student's mistakes only, never the coach's. `'answer'` marks a
+   *  wrong answer to a coach's question, which is not a move. */
+  studentSeat: StudentSeat | 'answer';
   /** The specific fundamental the attributor proved (FundamentalId), when known
    *  — finer than `tag`, for the per-fundamental scorecard. */
   fundamentalId?: string;
@@ -116,6 +122,10 @@ export async function logMisconception(
 ): Promise<MisconceptionTagRecord | null> {
   if (!isMisconceptionTagId(input.tag)) return null;
   if (input.tag === 'other' && !input.customLabel?.trim()) return null;
+  // 'answer': a wrong answer to a question the coach asked (a lesson tap) is
+  // not a move, and may be about either side's pieces — the student's by
+  // construction, as `recordAnswerEvidence` is.
+  if (input.studentSeat !== 'answer' && !isStudentsMove(input.fen, input.studentSeat, 'misconception', input.playedSan)) return null;
   // DATED BY ITS GAME (the lead, 2026-10-20). A slip read from a stored game —
   // a review of last week's game, the import sweep — was played on that game's
   // day, not today; the hold rate orders the record by it. A live game is not

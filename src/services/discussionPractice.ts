@@ -26,6 +26,7 @@ import { logMisconception, markSlipHinted, markSlipTakenBack } from './misconcep
 import { recordMoveQuestionAnswer } from './answerRecord';
 import { addMistakePuzzleFromCapture, provenanceForGameId } from './mistakePuzzleService';
 import { fileTakenBack } from './takenBackPuzzles';
+import type { StudentSeat } from './recordSeat';
 import { pvUciToSan } from './principleAttribution';
 import type { MisconceptionSource, MisconceptionTagRecord } from '../types';
 import { markEvidenceHinted, markEvidenceTakenBack, recordCapabilityEvidence, type CapabilityEvidenceRecord } from './capabilityEvidence';
@@ -228,6 +229,9 @@ interface CaptureMisconceptionArgs {
   /** Position + move context to persist with the tag. */
   context: {
     fen: string;
+    /** REQUIRED — the seat the student played. A slip by the other side is
+     *  never filed, neither as a tag nor as a puzzle (`recordSeat`). */
+    studentSeat: StudentSeat;
     playedSan?: string;
     bestSan?: string;
     cpLoss?: number;
@@ -324,6 +328,7 @@ export async function captureMisconception(
     customLabel: classification.customLabel,
     source: args.source,
     fen: args.context.fen,
+    studentSeat: args.context.studentSeat,
     playedSan: args.context.playedSan,
     bestSan: args.context.bestSan,
     cpLoss: typeof args.context.cpLoss === 'number' ? Math.min(args.context.cpLoss, FILED_COST_CAP) : args.context.cpLoss,
@@ -363,6 +368,7 @@ export async function captureMisconception(
     void provenanceForGameId(ctx.sourceGameId)
       .then((from) => (ownTakenBack(ctx.sourceGameId, ctx.fen, ctx.playedSan) ? null : addMistakePuzzleFromCapture({
         fen: ctx.fen,
+        studentSeat: ctx.studentSeat,
         playedSan: ctx.playedSan ?? '',
         bestSan: ctx.bestSan ?? '',
         cpLoss: ctx.cpLoss,
@@ -400,9 +406,9 @@ function ownTakenBack(gameId: string | undefined, fen: string | undefined, playe
  *  move you took back yourself with the Takeback button — this one I think
  *  should" → "weighted 0.5 if back button is pressed and full weight if back
  *  and hint are pressed"). This game, this board, this move only. */
-export async function takeBackOwnMove(args: { gameId: string; fen: string; playedSan: string }): Promise<{ slips: number; evidence: number }> {
+export async function takeBackOwnMove(args: { gameId: string; fen: string; playedSan: string; studentSeat: StudentSeat }): Promise<{ slips: number; evidence: number }> {
   OWN_TAKEN_BACK.add(takenBackKey(args.gameId, args.fen, args.playedSan));
-  fileTakenBack(args.fen, args.playedSan, args.gameId, null);
+  fileTakenBack(args.fen, args.playedSan, args.gameId, null, args.studentSeat);
   const [slips, evidence] = await Promise.all([
     markSlipTakenBack(args.gameId, args.fen, args.playedSan),
     markEvidenceTakenBack(args.gameId, args.fen, args.playedSan),
@@ -488,6 +494,9 @@ export async function recordMoveEvidence(args: {
   fenBefore: string;
   playedSan: string;
   moverColor: 'white' | 'black';
+  /** REQUIRED — the seat the student played; a move by the other side records
+   *  nothing (`recordSeat`). */
+  studentSeat: StudentSeat;
   cpLoss: number | null;
   origin: CapabilityOrigin;
   prompted: boolean;

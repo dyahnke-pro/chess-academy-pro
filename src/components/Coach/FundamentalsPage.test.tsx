@@ -17,6 +17,7 @@ vi.mock('../Search/SmartSearchBar', () => ({ SmartSearchBar: () => <div data-tes
 // puzzle set, or the student's own mistakes). A wire that does not fire is not a
 // wire — prove the sections render, Listen/Drill exist, and Drill routes right.
 import { FUNDAMENTAL_SECTION_IDS } from '../../services/fundamentalsCatalog';
+import { seatOf } from '../../test/seatOf';
 const SECTION_IDS = FUNDAMENTAL_SECTION_IDS;
 
 describe('FundamentalsPage', () => {
@@ -89,7 +90,7 @@ describe('FundamentalsPage — the scorecard', () => {
 
   it('shows the student\'s own recorded slip count, and "not yet" otherwise', async () => {
     const { logMisconception } = await import('../../services/misconceptionService');
-    await logMisconception({ tag: 'poisoned-pawn', fundamentalId: 'poisoned-pawn', source: 'auto-analysis', fen: '8/8/8/8/8/8/8/K6k w - - 0 1', counted: true });
+    await logMisconception({ studentSeat: seatOf('8/8/8/8/8/8/8/K6k w - - 0 1'), tag: 'poisoned-pawn', fundamentalId: 'poisoned-pawn', source: 'auto-analysis', fen: '8/8/8/8/8/8/8/K6k w - - 0 1', counted: true });
     render(<FundamentalsPage />);
     const badge = await screen.findByTestId('fundamental-status-poisoned-pawn');
     await vi.waitFor(() => expect(badge.textContent).toMatch(/slipped 1/i));
@@ -126,9 +127,9 @@ describe('FundamentalsPage — the pillar join fires', () => {
     const fen = '8/8/8/8/8/8/8/K6k w - - 0 1';
     // Two development-pillar fundamentals, filed under DIFFERENT sections
     // (opening-play + development) — only the PILLAR join can add them up.
-    await logMisconception({ tag: 'neglected-development', fundamentalId: 'early-queen-sortie', source: 'auto-analysis', fen, counted: false });
-    await logMisconception({ tag: 'neglected-development', fundamentalId: 'early-queen-sortie', source: 'auto-analysis', fen, counted: false });
-    await logMisconception({ tag: 'misplaced-piece', fundamentalId: 'knight-to-the-rim', source: 'auto-analysis', fen, counted: false });
+    await logMisconception({ studentSeat: seatOf(fen), tag: 'neglected-development', fundamentalId: 'early-queen-sortie', source: 'auto-analysis', fen, counted: false });
+    await logMisconception({ studentSeat: seatOf(fen), tag: 'neglected-development', fundamentalId: 'early-queen-sortie', source: 'auto-analysis', fen, counted: false });
+    await logMisconception({ studentSeat: seatOf(fen), tag: 'misplaced-piece', fundamentalId: 'knight-to-the-rim', source: 'auto-analysis', fen, counted: false });
     render(<FundamentalsPage />);
     const line = await screen.findByTestId('fundamental-pillar-standing-development');
     expect(line.textContent).toMatch(/3 times/);
@@ -138,7 +139,7 @@ describe('FundamentalsPage — the pillar join fires', () => {
   it('NEGATIVE CONTROL — grey stays silent: no slips under a pillar, no standing line; a null-pillar slip lights nothing', async () => {
     const { logMisconception } = await import('../../services/misconceptionService');
     // lost-the-opposition is an explicit NULL pillar: it must not reach any pillar card.
-    await logMisconception({ tag: 'passive-king-endgame', fundamentalId: 'lost-the-opposition', source: 'auto-analysis', fen: '8/8/8/8/8/8/8/K6k w - - 0 1', counted: false });
+    await logMisconception({ studentSeat: seatOf('8/8/8/8/8/8/8/K6k w - - 0 1'), tag: 'passive-king-endgame', fundamentalId: 'lost-the-opposition', source: 'auto-analysis', fen: '8/8/8/8/8/8/8/K6k w - - 0 1', counted: false });
     render(<FundamentalsPage />);
     // Let the Dexie read settle by waiting for a row status to appear.
     await screen.findByTestId('fundamental-status-lost-the-opposition');

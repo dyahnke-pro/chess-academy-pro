@@ -17,7 +17,7 @@ describe('recordCalculationFirstAnswer — the Calculation drill writes the stud
   it('an accepted first answer is a clean (held) puzzle row with the played SAN', async () => {
     await recordCalculationFirstAnswer({ fen: START, from: 'e2', to: 'e4', accepted: true, themes: ['mateIn2'], prompted: false });
     expect(recordCapabilityEvidence).toHaveBeenCalledWith({
-      fenBefore: START, playedSan: 'e4', moverColor: 'white', cpLoss: 0, origin: 'puzzle', prompted: false,
+      fenBefore: START, playedSan: 'e4', moverColor: 'white', studentSeat: 'white', cpLoss: 0, origin: 'puzzle', prompted: false,
     });
   });
 

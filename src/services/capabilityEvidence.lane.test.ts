@@ -7,6 +7,7 @@ import { db } from '../db/schema';
 import { recordLaneEvidence, getCapabilityProfile, capabilityProven } from './capabilityEvidence';
 import { recordTeachingEvidence } from './learnBoardTeaching';
 import { teachingFact, type TeachingFact } from './teachingFact';
+import { seatOf } from '../test/seatOf';
 
 vi.mock('./appAuditor', () => ({ logAppAudit: vi.fn(() => Promise.resolve()) }));
 
@@ -21,13 +22,13 @@ const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
 describe('recordLaneEvidence', () => {
   it('eight unprompted finds turn the tag GREEN (the hold rate), seven do not', async () => {
     for (let i = 1; i <= 8; i++) {
-      await recordLaneEvidence({ lane: 'teaching', tag: 'calculation-depth', outcome: 'held', fen: FEN, playedSan: 'Bb5', posedImportance: 90, origin: 'learn', prompted: false, sourceGameId: `g${i}` });
+      await recordLaneEvidence({ studentSeat: seatOf(FEN), lane: 'teaching', tag: 'calculation-depth', outcome: 'held', fen: FEN, playedSan: 'Bb5', posedImportance: 90, origin: 'learn', prompted: false, sourceGameId: `g${i}` });
       expect(capabilityProven((await getCapabilityProfile()).get('calculation-depth'))).toBe(i === 8);
     }
   });
   it('prompted finds never prove anything', async () => {
     for (const g of ['g1', 'g2', 'g3']) {
-      await recordLaneEvidence({ lane: 'teaching', tag: 'calculation-depth', outcome: 'held', fen: FEN, playedSan: 'Bb5', posedImportance: 90, origin: 'learn', prompted: true, sourceGameId: g });
+      await recordLaneEvidence({ studentSeat: seatOf(FEN), lane: 'teaching', tag: 'calculation-depth', outcome: 'held', fen: FEN, playedSan: 'Bb5', posedImportance: 90, origin: 'learn', prompted: true, sourceGameId: g });
     }
     const p = await getCapabilityProfile();
     expect(capabilityProven(p.get('calculation-depth'))).toBe(false);
@@ -38,8 +39,8 @@ describe('recordTeachingEvidence — the lane wire', () => {
   it('writes a held row for a hint that carries evidence, nothing for one that does not', async () => {
     const withEv: TeachingFact = teachingFact('foundMove', { computer: 'criticalMomentFound', kind: 'quality', seat: 'student', fen: FEN, names: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'x', squares: [], claims: [] }, { event: null, arrows: [], evidence: { tag: 'calculation-depth', posedImportance: 90 } });
     const without: TeachingFact = teachingFact('tempo', { computer: 'tempoCount', kind: 'opp-dev', seat: 'opponent', fen: FEN, names: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'y', squares: [], claims: [] }, { event: null, arrows: [] });
-    recordTeachingEvidence(without, { fen: FEN, playedSan: 'Bb5', prompted: false, gameId: 'g1' });
-    recordTeachingEvidence(withEv, { fen: FEN, playedSan: 'Bb5', prompted: false, gameId: 'g1' });
+    recordTeachingEvidence(without, { fen: FEN, playedSan: 'Bb5', prompted: false, gameId: 'g1', studentSeat: seatOf(FEN) });
+    recordTeachingEvidence(withEv, { fen: FEN, playedSan: 'Bb5', prompted: false, gameId: 'g1', studentSeat: seatOf(FEN) });
     await vi.waitFor(async () => { expect(await db.capabilityEvidence.count()).toBe(1); });
     const row = (await db.capabilityEvidence.toArray())[0];
     expect(row).toMatchObject({ tag: 'calculation-depth', outcome: 'held', origin: 'learn', prompted: false, sourceGameId: 'g1' });
@@ -47,9 +48,9 @@ describe('recordTeachingEvidence — the lane wire', () => {
 
   it('one move credits a skill once, however many lanes name it in the same tick (2026-10-17)', async () => {
     const h: TeachingFact = teachingFact('foundMove', { computer: 'criticalMomentFound', kind: 'quality', seat: 'student', fen: FEN, names: NAMES_NO_MOVE, proof: NO_PROOF.stated, text: 'x', squares: [], claims: [] }, { event: null, arrows: [], evidence: { tag: 'missed-tactic', posedImportance: 90 } });
-    recordTeachingEvidence(h, { fen: FEN, playedSan: 'Nd5', prompted: false, gameId: 'g9' });
+    recordTeachingEvidence(h, { fen: FEN, playedSan: 'Nd5', prompted: false, gameId: 'g9', studentSeat: seatOf(FEN) });
     const sameMove: TeachingFact = { ...h, lane: 'movePoint' };
-    recordTeachingEvidence(sameMove, { fen: FEN, playedSan: 'Nd5', prompted: false, gameId: 'g9' });
+    recordTeachingEvidence(sameMove, { fen: FEN, playedSan: 'Nd5', prompted: false, gameId: 'g9', studentSeat: seatOf(FEN) });
     await vi.waitFor(async () => { expect(await db.capabilityEvidence.where('tag').equals('missed-tactic').count()).toBe(1); });
     await new Promise((r) => setTimeout(r, 50));
     expect(await db.capabilityEvidence.where('tag').equals('missed-tactic').count()).toBe(1);
@@ -61,7 +62,7 @@ describe('each row names the lane that wrote it (Learn audit LE1, 2026-10-21)', 
   it('the audit row carries its lane, so a broken threat answer is not read as a teaching lane gone wrong', async () => {
     const { logAppAudit } = await import('./appAuditor');
     vi.mocked(logAppAudit).mockClear();
-    await recordLaneEvidence({ lane: 'threat-answer', tag: 'calculation-depth', outcome: 'broken', fen: FEN, playedSan: 'Bb5', posedImportance: 90, origin: 'learn', prompted: false, sourceGameId: 'g9' });
+    await recordLaneEvidence({ studentSeat: seatOf(FEN), lane: 'threat-answer', tag: 'calculation-depth', outcome: 'broken', fen: FEN, playedSan: 'Bb5', posedImportance: 90, origin: 'learn', prompted: false, sourceGameId: 'g9' });
     const row = vi.mocked(logAppAudit).mock.calls.map((c) => c[0]).find((e) => e.kind === 'lane-evidence');
     expect(JSON.parse(row?.details ?? '{}')).toMatchObject({ lane: 'threat-answer', outcome: 'broken' });
   });

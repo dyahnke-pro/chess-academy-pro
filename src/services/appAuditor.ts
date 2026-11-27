@@ -375,6 +375,9 @@ export type AuditKind =
   /** A move the coach stopped and the student took back: the grader's
    *  verdict (filed / duplicate / not a mistake / unpriced …), with the evals. */
   | 'taken-back-puzzle'
+  /** A record writer turned away a row whose move was the coach's, not the
+   *  student's (`recordSeat.isStudentsMove`). A backup that should never fire. */
+  | 'record-seat-refused'
   /** WO-COURSE-01 D: the club replies a tab's reply tree shows, in the order
    *  the student's band and their own games put them (`ReplyTree`). */
   | 'club-replies-ordered'

@@ -77,6 +77,10 @@ interface EvaluatePlayerMoveArgs {
   fenAfter: string;
   playedSan: string;
   playerColor: 'white' | 'black';
+  /** REQUIRED — the seat the student plays in this game (or drill). Every
+   *  record write checks the move against it (`recordSeat`): a move by the
+   *  coach's side is never filed as the student's. */
+  studentSeat: 'white' | 'black';
   inBook: boolean;
   bookMoveSan?: string;
   learned: boolean;
@@ -128,6 +132,9 @@ interface EvaluatePlayerMoveArgs {
 
 interface RaiseSlipPromptArgs {
   fenBefore: string;
+  /** REQUIRED — the seat the student played (`recordSeat`): a review prompt on
+   *  the coach's move never files a row. */
+  studentSeat: 'white' | 'black';
   fenAfter: string;
   playedSan: string;
   bestSan?: string;
@@ -195,7 +202,7 @@ interface UseDiscussionPracticeResult {
   /** The student took a move back THEMSELVES: its slip and evidence are
    *  marked their own takeback (half a miss) and a mistake or worse goes to
    *  the puzzles through the taken-back door (`takeBackOwnMove`). */
-  takeBackOwn: (args: { gameId: string; fen: string; playedSan: string }) => void;
+  takeBackOwn: (args: { gameId: string; fen: string; playedSan: string; studentSeat: 'white' | 'black' }) => void;
   /** After that takeback they pressed Hint at the same board: the miss weighs
    *  in full (`takebackHinted`). */
   takebackHinted: (args: { gameId: string; fen: string; playedSan: string }) => void;
@@ -217,6 +224,8 @@ interface GradedMoveArgs {
   fenBefore: string;
   playedSan: string;
   moverColor: 'white' | 'black';
+  /** REQUIRED — the seat the student plays (`recordSeat`). */
+  studentSeat: 'white' | 'black';
   /** The caller's own capped cpLoss. `null` means they could not grade it —
    *  unknown is never read as clean, so nothing is recorded. */
   cpLoss: number | null;
@@ -535,6 +544,7 @@ export function useDiscussionPractice(
         fenBefore: args.fenBefore,
         playedSan: args.playedSan,
         moverColor: args.playerColor,
+        studentSeat: args.studentSeat,
         cpLoss,
         origin: opts.capabilityOrigin,
         // DYNAMIC, from the surface (2026-09-30): this hook's own reveals fire
@@ -600,6 +610,7 @@ export function useDiscussionPractice(
           shouldCount: slip.shouldCount,
           context: {
             fen: args.fenBefore,
+            studentSeat: args.studentSeat,
             playedSan: args.playedSan,
             bestSan,
             cpLoss,
@@ -735,6 +746,7 @@ export function useDiscussionPractice(
           shouldCount: ctx.shouldCount,
           context: {
             fen: ctx.args.fenBefore,
+            studentSeat: ctx.args.studentSeat,
             playedSan: ctx.args.playedSan,
             bestSan: ctx.bestSan,
             cpLoss: ctx.cpLoss,
@@ -833,7 +845,7 @@ export function useDiscussionPractice(
     ctxRef.current = {
       args: {
         fenBefore: args.fenBefore, fenAfter: args.fenAfter, playedSan: args.playedSan,
-        playerColor: moverChar === 'w' ? 'white' : 'black', inBook: false,
+        playerColor: moverChar === 'w' ? 'white' : 'black', studentSeat: args.studentSeat, inBook: false,
         learned: args.shouldCount, gamePhase: args.gamePhase, moveNumber: args.moveNumber,
         openingId: args.openingId, openingName: args.openingName, studentRating: args.studentRating,
         // The review asks about a move already played in a real game, where
@@ -901,6 +913,7 @@ export function useDiscussionPractice(
       fenBefore: args.fenBefore,
       playedSan: args.playedSan,
       moverColor: args.moverColor,
+      studentSeat: args.studentSeat,
       cpLoss: args.cpLoss,
       origin: opts.capabilityOrigin,
       // Unprompted: this fires on the student's own move, before any reveal
@@ -911,7 +924,7 @@ export function useDiscussionPractice(
     });
   }, [recording, opts.capabilityOrigin, advanceLive]);
 
-  const takeBackOwn = useCallback((args: { gameId: string; fen: string; playedSan: string }): void => {
+  const takeBackOwn = useCallback((args: { gameId: string; fen: string; playedSan: string; studentSeat: 'white' | 'black' }): void => {
     void takeBackOwnMove(args).catch(() => undefined);
   }, []);
   const markTakebackHinted = useCallback((args: { gameId: string; fen: string; playedSan: string }): void => {

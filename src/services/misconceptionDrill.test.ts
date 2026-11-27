@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { db } from '../db/schema';
 import { logMisconception } from './misconceptionService';
 import { getMisconceptionDrillPuzzles, buildMistakePuzzleFromCapture, type MistakePuzzleProvenance } from './mistakePuzzleService';
+import { seatOf } from '../test/seatOf';
 
 // Provenance is REQUIRED on every capture (C9) — a live coach slip, honestly unknown.
 const FROM: MistakePuzzleProvenance = { origin: 'game', gameId: 'g-live', source: 'coach', opponentName: null, gameDate: null };
@@ -20,7 +21,7 @@ beforeEach(async () => {
 
 describe('buildMistakePuzzleFromCapture (pure)', () => {
   it('builds a solvable puzzle from fen + playedSan + bestSan, no persistence', () => {
-    const p = buildMistakePuzzleFromCapture({ fen: HANG, playedSan: 'Qxe5+', bestSan: 'Nf3', from: FROM });
+    const p = buildMistakePuzzleFromCapture({ studentSeat: seatOf(HANG), fen: HANG, playedSan: 'Qxe5+', bestSan: 'Nf3', from: FROM });
     expect(p).not.toBeNull();
     expect(p!.fen).toBe(HANG);
     expect(p!.playerMoveSan).toBe('Qxe5+');
@@ -29,13 +30,13 @@ describe('buildMistakePuzzleFromCapture (pure)', () => {
   });
 
   it('returns null on an illegal/ambiguous best move', () => {
-    expect(buildMistakePuzzleFromCapture({ fen: HANG, playedSan: 'Qxe5+', bestSan: 'Zz9', from: FROM })).toBeNull();
+    expect(buildMistakePuzzleFromCapture({ studentSeat: seatOf(HANG), fen: HANG, playedSan: 'Qxe5+', bestSan: 'Zz9', from: FROM })).toBeNull();
   });
 });
 
 describe('getMisconceptionDrillPuzzles', () => {
   it('turns a tag’s positions into a puzzle queue', async () => {
-    await logMisconception({ tag: 'hung-material', source: 'auto-analysis', fen: HANG, playedSan: 'Qxe5+', bestSan: 'Nf3' });
+    await logMisconception({ studentSeat: seatOf(HANG), tag: 'hung-material', source: 'auto-analysis', fen: HANG, playedSan: 'Qxe5+', bestSan: 'Nf3' });
     const q = await getMisconceptionDrillPuzzles('hung-material');
     expect(q).toHaveLength(1);
     expect(q[0].fen).toBe(HANG);
@@ -43,20 +44,20 @@ describe('getMisconceptionDrillPuzzles', () => {
   });
 
   it('dedups the same position', async () => {
-    await logMisconception({ tag: 'hung-material', source: 'auto-analysis', fen: HANG, playedSan: 'Qxe5+', bestSan: 'Nf3' });
-    await logMisconception({ tag: 'hung-material', source: 'auto-analysis', fen: HANG, playedSan: 'Qxe5+', bestSan: 'Nf3' });
+    await logMisconception({ studentSeat: seatOf(HANG), tag: 'hung-material', source: 'auto-analysis', fen: HANG, playedSan: 'Qxe5+', bestSan: 'Nf3' });
+    await logMisconception({ studentSeat: seatOf(HANG), tag: 'hung-material', source: 'auto-analysis', fen: HANG, playedSan: 'Qxe5+', bestSan: 'Nf3' });
     const q = await getMisconceptionDrillPuzzles('hung-material');
     expect(q).toHaveLength(1);
   });
 
   it('skips positions with no recorded best move', async () => {
-    await logMisconception({ tag: 'hung-material', source: 'auto-analysis', fen: HANG, playedSan: 'Qxe5+' });
+    await logMisconception({ studentSeat: seatOf(HANG), tag: 'hung-material', source: 'auto-analysis', fen: HANG, playedSan: 'Qxe5+' });
     expect(await getMisconceptionDrillPuzzles('hung-material')).toHaveLength(0);
   });
 
   it("scopes the 'other' catch-all to one phase via customLabel", async () => {
-    await logMisconception({ tag: 'other', source: 'auto-analysis', fen: HANG, playedSan: 'Qxe5+', bestSan: 'Nf3', customLabel: 'Endgame slip', gamePhase: 'endgame' });
-    await logMisconception({ tag: 'other', source: 'auto-analysis', fen: HANG, playedSan: 'Qe2', bestSan: 'Nf3', customLabel: 'Opening slip', gamePhase: 'opening' });
+    await logMisconception({ studentSeat: seatOf(HANG), tag: 'other', source: 'auto-analysis', fen: HANG, playedSan: 'Qxe5+', bestSan: 'Nf3', customLabel: 'Endgame slip', gamePhase: 'endgame' });
+    await logMisconception({ studentSeat: seatOf(HANG), tag: 'other', source: 'auto-analysis', fen: HANG, playedSan: 'Qe2', bestSan: 'Nf3', customLabel: 'Opening slip', gamePhase: 'opening' });
 
     const endgame = await getMisconceptionDrillPuzzles('other', 'Endgame slip');
     expect(endgame).toHaveLength(1);

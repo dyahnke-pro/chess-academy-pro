@@ -33,6 +33,7 @@ import {
 import { FUNDAMENTAL_TAG } from './principleAttribution';
 import { getFundamentalCounts } from './fundamentalsCatalog';
 import { computeNeed, coldStudent, type NeedPlyInput, type StudentNeedContext } from './needScore';
+import { seatOf } from '../test/seatOf';
 
 const FEN_A = 'r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3';
 const FEN_B = 'rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2';
@@ -65,9 +66,9 @@ describe('the heat map and the spine read ONE record', () => {
   beforeEach(reset);
 
   it('every fundamental the tab counts is a signal the decider can match', async () => {
-    await logMisconception({ tag: FUNDAMENTAL_TAG['loose-piece'], fundamentalId: 'loose-piece', source: 'auto-analysis', fen: FEN_A, playedSan: 'Nc3', counted: false, sourceGameId: 'g1' });
-    await logMisconception({ tag: FUNDAMENTAL_TAG['loose-piece'], fundamentalId: 'loose-piece', source: 'auto-analysis', fen: FEN_B, playedSan: 'd5', counted: false, sourceGameId: 'g2' });
-    await logMisconception({ tag: FUNDAMENTAL_TAG['tempo-handed'], fundamentalId: 'tempo-handed', source: 'game-review', fen: FEN_C, playedSan: 'a3', sourceGameId: 'g3' });
+    await logMisconception({ studentSeat: seatOf(FEN_A), tag: FUNDAMENTAL_TAG['loose-piece'], fundamentalId: 'loose-piece', source: 'auto-analysis', fen: FEN_A, playedSan: 'Nc3', counted: false, sourceGameId: 'g1' });
+    await logMisconception({ studentSeat: seatOf(FEN_B), tag: FUNDAMENTAL_TAG['loose-piece'], fundamentalId: 'loose-piece', source: 'auto-analysis', fen: FEN_B, playedSan: 'd5', counted: false, sourceGameId: 'g2' });
+    await logMisconception({ studentSeat: seatOf(FEN_C), tag: FUNDAMENTAL_TAG['tempo-handed'], fundamentalId: 'tempo-handed', source: 'game-review', fen: FEN_C, playedSan: 'a3', sourceGameId: 'g3' });
 
     const counts = await getFundamentalCounts();          // what the TAB shows
     const signals = buildWeaknessSignals(await getUnifiedWeaknessProfile(), null); // what the DECIDER sees
@@ -103,10 +104,10 @@ describe('the exact fundamental reaches the need score, precise before coarse', 
    */
   async function mixedProfile(): Promise<readonly WeaknessSignal[]> {
     // ONE loose-piece slip — the exact hole this move broke. Weak on purpose.
-    await logMisconception({ tag: FUNDAMENTAL_TAG['loose-piece'], fundamentalId: 'loose-piece', source: 'auto-analysis', fen: FEN_A, playedSan: 'Nc3', counted: false, sourceGameId: 'g1' });
+    await logMisconception({ studentSeat: seatOf(FEN_A), tag: FUNDAMENTAL_TAG['loose-piece'], fundamentalId: 'loose-piece', source: 'auto-analysis', fen: FEN_A, playedSan: 'Nc3', counted: false, sourceGameId: 'g1' });
     // FIVE slips on an unrelated positional fundamental — the bucket's leader.
     for (let i = 0; i < 5; i++) {
-      await logMisconception({
+      await logMisconception({ studentSeat: seatOf(`${FEN_B.slice(0, -1)}${i + 1}`),
         tag: FUNDAMENTAL_TAG['space-conceded'], fundamentalId: 'space-conceded',
         source: 'auto-analysis', fen: `${FEN_B.slice(0, -1)}${i + 1}`, playedSan: `a${i + 3}`,
         counted: false, sourceGameId: `g${i + 2}`,

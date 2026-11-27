@@ -387,7 +387,7 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
     const isCorrect = move.from === expected.from && move.to === expected.to;
     if (firstAnswer && isCorrect) {
       void recordCapabilityEvidence({
-        fenBefore: fenBeforeAttempt, playedSan: move.san, moverColor: orientation,
+        fenBefore: fenBeforeAttempt, playedSan: move.san, moverColor: orientation, studentSeat: orientation,
         cpLoss: 0, origin: 'puzzle', prompted: promptedRef.current,
         alsoPosed: positionPosed(fenBeforeAttempt, { bestSan: move.san }),
       });
@@ -446,7 +446,7 @@ export function TacticSetupBoard({ puzzle, sequence, onComplete }: TacticSetupBo
       // same honesty gate PuzzleBoard applies to an also-good try.
       if (firstAnswer && r?.kind !== 'not-best') {
         void recordCapabilityEvidence({
-          fenBefore, playedSan: move.san, moverColor: orientation,
+          fenBefore, playedSan: move.san, moverColor: orientation, studentSeat: orientation,
           cpLoss: MISTAKE_CP, origin: 'puzzle', prompted: promptedAtTry,
           alsoPosed: positionPosed(fenBefore, { bestSan: (() => { try { return new Chess(fenBefore).move({ from: expected.from, to: expected.to, promotion: 'q' })?.san; } catch { return undefined; } })() }),
         });

@@ -85,12 +85,12 @@ describe('the Learn focus is wired at every place it needs a hand', () => {
     // bar's button, a "take that back" in chat) cannot file one.
     const FOCUS_HOOK = strip(readFileSync(resolve(__dirname, '../coach/focus/useFocusRunner.ts'), 'utf8'));
     const MISSION_HOOK = strip(readFileSync(resolve(__dirname, '../missions/useMissionRunner.ts'), 'utf8'));
-    expect(FOCUS_HOOK).toMatch(/case 'taken-back': fileTakenBack\(e\.fen, e\.san, h\.gameId\(\), e\.spot\); break;/);
-    expect(MISSION_HOOK).toMatch(/case 'undo': \{[\s\S]*?if \(held\) fileTakenBack\(held\.fenBefore, held\.san, h\.gameId\(\), null\);[\s\S]*?h\.undo\(\);/);
+    expect(FOCUS_HOOK).toMatch(/case 'taken-back': fileTakenBack\(e\.fen, e\.san, h\.gameId\(\), e\.spot, h\.studentSeat\(\)\); break;/);
+    expect(MISSION_HOOK).toMatch(/case 'undo': \{[\s\S]*?if \(held\) fileTakenBack\(held\.fenBefore, held\.san, h\.gameId\(\), null, held\.studentSeat\);[\s\S]*?h\.undo\(\);/);
     expect(PAGE).not.toMatch(/takenBackPuzzles|fileTakenBack/);
     const DOOR = strip(readFileSync(resolve(__dirname, '../services/discussionPractice.ts'), 'utf8'));
     const own = DOOR.slice(DOOR.indexOf('export async function takeBackOwnMove'));
-    expect(own.slice(0, own.indexOf('\n}\n'))).toMatch(/fileTakenBack\(args\.fen, args\.playedSan, args\.gameId, null\)/);
+    expect(own.slice(0, own.indexOf('\n}\n'))).toMatch(/fileTakenBack\(args\.fen, args\.playedSan, args\.gameId, null, args\.studentSeat\)/);
   });
 });
 

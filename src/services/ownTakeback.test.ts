@@ -26,7 +26,7 @@ const capture = (gameId = GAME) => captureMisconception({
   classifyInput: { fen: FEN, playedSan: 'Qh4', bestSan: 'Nc6', userReason: '(not asked)' },
   source: 'discussion-practice',
   shouldCount: true,
-  context: { fen: FEN, playedSan: 'Qh4', bestSan: 'Nc6', cpLoss: 300, grade: 'blunder', sourceGameId: gameId },
+  context: { fen: FEN, studentSeat: 'black', playedSan: 'Qh4', bestSan: 'Nc6', cpLoss: 300, grade: 'blunder', sourceGameId: gameId },
 });
 const puzzles = (gameId = GAME) => db.mistakePuzzles.where('sourceGameId').equals(gameId).toArray();
 const slips = (gameId = GAME) => db.misconceptionTags.where('sourceGameId').equals(gameId).toArray();
@@ -41,21 +41,21 @@ describe('your own takeback goes to the puzzles through the taken-back door', ()
   });
 
   it('the takeback files the move through the door that grades it (mistake or worse)', async () => {
-    await takeBackOwnMove({ gameId: GAME, fen: FEN, playedSan: 'Qh4' });
-    expect(fileDoor).toHaveBeenCalledWith(FEN, 'Qh4', GAME, null);
+    await takeBackOwnMove({ gameId: GAME, fen: FEN, playedSan: 'Qh4', studentSeat: 'black' });
+    expect(fileDoor).toHaveBeenCalledWith(FEN, 'Qh4', GAME, null, 'black');
   });
 
   it('taken back AFTER its grade: the slip stays on the record, marked as your own takeback, and a filed puzzle stays', async () => {
     await capture('g-after');
     await settle();
     expect(await puzzles('g-after')).toHaveLength(1);
-    await takeBackOwnMove({ gameId: 'g-after', fen: FEN, playedSan: 'Qh4' });
+    await takeBackOwnMove({ gameId: 'g-after', fen: FEN, playedSan: 'Qh4', studentSeat: 'black' });
     expect(await puzzles('g-after')).toHaveLength(1);
     expect((await slips('g-after')).map((s) => [s.takenBack, s.ownTakeback])).toEqual([[true, true]]);
   });
 
   it('taken back while its grade is still being filed: the capture reads the mark, and the door files the puzzle once', async () => {
-    await takeBackOwnMove({ gameId: 'g-late', fen: FEN, playedSan: 'Qh4' });
+    await takeBackOwnMove({ gameId: 'g-late', fen: FEN, playedSan: 'Qh4', studentSeat: 'black' });
     await capture('g-late');
     await settle();
     expect((await slips('g-late')).map((s) => s.ownTakeback)).toEqual([true]);
@@ -74,7 +74,7 @@ describe('the weight: half a miss for your own takeback, a full miss once you pr
     await capture('g-w');
     const [kept] = await slips('g-w');
     expect(slipWeight(kept)).toBe(1);
-    await takeBackOwnMove({ gameId: 'g-w', fen: FEN, playedSan: 'Qh4' });
+    await takeBackOwnMove({ gameId: 'g-w', fen: FEN, playedSan: 'Qh4', studentSeat: 'black' });
     const [back] = await slips('g-w');
     expect(slipWeight(back)).toBe(OWN_TAKEBACK_WEIGHT);
     await takebackHinted({ gameId: 'g-w', fen: FEN, playedSan: 'Qh4' });

@@ -11,6 +11,7 @@
  * reads: the USE capability profile (its hold rate per tag — the open motif
  * levels, and a first game's seed rung) and the rung rows.
  */
+import type { StudentSeat } from './recordSeat';
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { getCapabilityProfile, recordLaneEvidence, type CapabilityProfile } from './capabilityEvidence';
@@ -95,9 +96,11 @@ export async function loadFocusSetupInput(): Promise<Omit<FocusSetupInput, 'rand
 export function recordFocusAnswer(r: {
   tag: MisconceptionTagId; outcome: 'held' | 'broken'; fen: string; san: string;
   prompted: boolean; steered: boolean; takenBack: boolean; gameId: string | null;
+  /** REQUIRED — the student's seat (`recordSeat`). */
+  studentSeat: StudentSeat;
 }): void {
   void recordLaneEvidence({
-    lane: 'focus', tag: r.tag, outcome: r.outcome, fen: r.fen, playedSan: r.san,
+    lane: 'focus', studentSeat: r.studentSeat, tag: r.tag, outcome: r.outcome, fen: r.fen, playedSan: r.san,
     posedImportance: FOCUS_POSED_IMPORTANCE, origin: 'learn', prompted: r.prompted, steered: r.steered,
     takenBack: r.takenBack, ...(r.gameId ? { sourceGameId: r.gameId } : {}),
   });
@@ -105,7 +108,7 @@ export function recordFocusAnswer(r: {
 
 /** The deciding blunder was taken back, so the game record never holds it:
  *  filed here, unprompted, under the skill the record's own classifier names. */
-export function recordDecidingMiss(r: { fen: string; san: string; bestUci: string | null; gameId: string | null }): void {
+export function recordDecidingMiss(r: { fen: string; san: string; bestUci: string | null; gameId: string | null; studentSeat: StudentSeat }): void {
   try {
     let bestSan: string | undefined;
     if (r.bestUci) {
@@ -113,6 +116,6 @@ export function recordDecidingMiss(r: { fen: string; san: string; bestUci: strin
     }
     const tag = classifyMisconceptionNow({ fen: r.fen, playedSan: r.san, ...(bestSan ? { bestSan } : {}) })?.tag;
     if (!tag || !isMisconceptionTagId(tag) || tag === 'other') return;
-    recordFocusAnswer({ tag, outcome: 'broken', fen: r.fen, san: r.san, prompted: false, steered: false, takenBack: true, gameId: r.gameId });
+    recordFocusAnswer({ tag, outcome: 'broken', fen: r.fen, san: r.san, prompted: false, steered: false, takenBack: true, gameId: r.gameId, studentSeat: r.studentSeat });
   } catch { /* a record, never a blocker */ }
 }

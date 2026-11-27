@@ -919,6 +919,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
       fenAfter: moveResult.fen,
       playedSan: moveResult.san,
       playerColor,
+      studentSeat: playerColor,
       inBook: inOpeningPhase,
       bookMoveSan,
       learned: opening.isRepertoire,

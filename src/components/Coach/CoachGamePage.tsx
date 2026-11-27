@@ -3089,6 +3089,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       fenBefore: preFen,
       playedSan: moveResult.san,
       moverColor: playerColor,
+      studentSeat: playerColor,
       cpLoss: movePriced ? evalLoss : null,
       sourceGameId: gameState.gameId,
       // STRENGTH MATCHED IN REAL TIME (WO-LAYERS-01 step 8): the same graded
@@ -3156,6 +3157,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       const inBook = !!bookMoves && ply - 1 < bookMoves.length;
       discussion.raiseSlipPrompt({
         fenBefore: preFen,
+        studentSeat: playerColor,
         fenAfter: moveResult.fen,
         playedSan: moveResult.san,
         bestSan: engineBestMoveSan === '?' ? undefined : engineBestMoveSan,

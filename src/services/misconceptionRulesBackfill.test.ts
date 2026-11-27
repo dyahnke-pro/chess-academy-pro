@@ -5,6 +5,7 @@ import { MISCONCEPTION_RULES_REV } from '../data/misconceptionTags';
 import { IMMEDIATE_BACKFILL_SCHEDULE } from './backfillSchedule';
 import { gamesBehindRules, reconcileMisconceptionRules } from './misconceptionRulesBackfill';
 import type { MisconceptionTagRecord } from '../types';
+import { seatOf } from '../test/seatOf';
 
 // 2026-10-13: a classifier rules change reached new rows only; the stored
 // record kept the old tags. Rows behind the rules revision are re-read once.
@@ -43,7 +44,7 @@ describe('misconception rows follow the classifier rules', () => {
 
   it('a newly logged row carries the current revision', async () => {
     const { logMisconception } = await import('./misconceptionService');
-    const rec = await logMisconception({ tag: 'hung-material', source: 'auto-analysis', fen: row({}).fen, sourceGameId: 'g9' });
+    const rec = await logMisconception({ studentSeat: seatOf(row({}).fen), tag: 'hung-material', source: 'auto-analysis', fen: row({}).fen, sourceGameId: 'g9' });
     expect(rec?.rulesRev).toBe(MISCONCEPTION_RULES_REV);
   });
 });
