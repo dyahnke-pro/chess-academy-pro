@@ -132,14 +132,16 @@ function minority(c: Chess, side: Color): StructurePlanRead | null {
 }
 
 // ── the queenside expansion (the Meran) ─────────────────────────────────────
-/** b-pawn and c-pawn at home (or the c-pawn on c6), their d-pawn on d4: b5
+/** The b-pawn at home and the c-pawn on c6 (c3), their d-pawn on d4: b5
  *  first, then the break c5 at d4 — said break first. */
 function expansion(c: Chess, side: Color): StructurePlanRead | null {
   const them = other(side);
   const home = side === 'w' ? 2 : 7;
   const mine = pawns(c, side);
   const b = mine.find((p) => p[0] === 'b' && (rankOf(p) === home || rankOf(p) === home + fwd(side)));
-  const cp = mine.find((p) => p[0] === 'c' && (rankOf(p) === home || rankOf(p) === home + fwd(side)));
+  // The Meran shape: the c-pawn already on its third rank (…c6), so the
+  // break needs the b-pawn's space first; a c-pawn at home just breaks.
+  const cp = mine.find((p) => p[0] === 'c' && rankOf(p) === home + fwd(side));
   const dTheirs = sq(3, side === 'w' ? 5 : 4)!;
   if (!b || !cp || c.get(dTheirs as Square)?.type !== 'p' || c.get(dTheirs as Square)?.color !== them) return null;
   const bTo = sq(1, side === 'w' ? 4 : 5)!;

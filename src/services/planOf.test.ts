@@ -26,6 +26,9 @@ describe('structureOf: the plan the pawns earn', () => {
     expect(e?.first).toEqual({ from: 'b7', to: 'b5' });
     expect(e?.key).toEqual({ from: 'c6', to: 'c5', hits: 'd4' });
   });
+  it('the Queen\'s Gambit is no Meran: the c-pawn at home just breaks', () => {
+    expect(structureOf(fenOf('d4 d5'), 'w').find((p) => p.kind === 'expansion')).toBeUndefined();
+  });
   it('no default big centre: the start position has no structural plan', () => {
     expect(structureOf(new Chess().fen(), 'w')).toEqual([]);
   });

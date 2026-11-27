@@ -127,6 +127,9 @@ export interface TheoryTurnIn {
   /** The plan, with whose it is — REQUIRED: a plan read for the other side is
    *  theirs, never "your plan". */
   plan?: { goal: KeyMove; goalSquare: string; lead: readonly KeyMove[]; whose: Whose } | null;
+  /** The plan computer's plan (`planOf`: the structure's or the line's, ranked
+   *  by evidence), said when the masters' read gives no plan. */
+  boardPlan?: { text: string; squares: string[] } | null;
   piece?: PlacedPiece | null;
   castle?: { side: 'short' | 'long' } | null;
   said: ReadonlySet<string>;
@@ -156,6 +159,7 @@ export function composeTheoryTurn(i: TheoryTurnIn): TheorySentence[] {
   if (i.choiceAhead) out.push({ kind: 'decision', text: i.choiceAhead.text, squares: i.choiceAhead.squares });
   if (i.namedRoads) out.push({ kind: 'decision', text: i.namedRoads.text, squares: i.namedRoads.squares });
   if (i.plan) out.push({ kind: 'plan', text: planGoalLine({ whose: i.plan.whose, goal: i.plan.goal, lead: i.plan.lead }), squares: [i.plan.goalSquare] });
+  else if (i.boardPlan) out.push({ kind: 'plan', text: i.boardPlan.text, squares: i.boardPlan.squares });
   if (i.piece) {
     // The piece is said from its own seat: the other side's piece is theirs.
     const whose: Whose = i.piece.color === i.mover ? i.whose : (i.whose === 'your' ? 'their' : 'your');

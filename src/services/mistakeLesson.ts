@@ -38,6 +38,7 @@
 import { Chess, type Color, type PieceSymbol, type Square } from 'chess.js';
 import { causeReaderKey, type MistakeCause, type MistakeCauseKind } from './mistakeCause';
 import { queenNet } from './queenNet';
+import { planOf } from './planOf';
 import type { ErrorWhy } from './inaccuracyCall';
 import { MOTIFS, MOTIF_OF_TACTIC } from '../data/tacticMotifs';
 import { holdState, type HeatState, type HoldRecord } from './holdRate';
@@ -426,6 +427,9 @@ function repairApplies(state: RepairState, x: RepairContext): Fills | null {
       const k = kingSafetyRead(x.quiet, x.student);
       return k && k.shieldPawns <= 1 && queensOn(x.quiet) ? {} : null;
     }
+    // The plan is read by `planRepair`, never through this switch.
+    case 'plan':
+      return null;
     case 'initiative-lost':
     case 'initiative-won': {
       if (!x.replyLineUci.length) return null;
@@ -543,6 +547,8 @@ function repairStillHolds(state: RepairState, fen: string, student: Color): bool
     case 'up-material': return l >= 1;
     case 'king-exposed': { const k = kingSafetyRead(fen, student); return !!k && k.shieldPawns <= 1; }
     case 'attack-their-king': { const k = kingSafetyRead(fen, them); return !!k && k.shieldPawns <= 1; }
+    // A plan is no state to hold: the next mistake reads the board afresh.
+    case 'plan': return false;
     default: return true;
   }
 }
@@ -687,7 +693,8 @@ function composeInner(input: MistakeLessonInput): MistakeLesson {
     // sentence must make sense): its piece, square or target — else silent.
     if (job && betterRelevant(job.job, cause, posTag)) say('better', yours ? BETTER_JOBS[job.job].yours : BETTER_JOBS[job.job].theirs, job.fills);
   }
-  const repair = repairFor(input, posTag ? POSITIONAL[posTag]?.repairs ?? [] : recipe.repairs, keyOf('repair'));
+  const repair = repairFor(input, posTag ? POSITIONAL[posTag]?.repairs ?? [] : recipe.repairs, keyOf('repair'))
+    ?? (yours ? planRepair(input) : null);
   if (!repair) return { ...silent('no-recovery', slots, heat), dropped };
   // The repair is said when the state begins, not on every mistake inside it
   // (refinement 3): a state already said this game and still holding is quiet.
@@ -864,7 +871,28 @@ export function allSlotsForTests(): Array<{ where: string; stems: readonly strin
   out.push({ where: 'empty-check', stems: EMPTY_CHECK_LESSON.stems, seat: 'you' });
   out.push({ where: 'their-move.consequence', stems: THEIR_MOVE_CONSEQUENCE.stems, seat: 'you' });
   for (const [k, r] of Object.entries(GOOD_DECISION)) out.push({ where: `good:${k}`, stems: r.stems, seat: 'you' });
-  for (const [k, r] of Object.entries(REPAIRS)) out.push({ where: `repair:${k}`, stems: r.stems, seat: 'student' });
+  for (const [k, r] of Object.entries(REPAIRS)) if (k !== 'plan') out.push({ where: `repair:${k}`, stems: r.stems, seat: 'student' });
   for (const [k, r] of Object.entries(HABIT_SHORT)) out.push({ where: `habit-short:${k}`, stems: r, seat: 'you' });
   return out;
 }
+
+/** THE PLAN AS THE RECOVERY (`planOf`): on the student's own mistake with no
+ *  recovery state, the plan the board offers them next — on the board after
+ *  their reply, the line's own moves as evidence, no move named. */
+function planRepair(input: MistakeLessonInput): { text: string; stem: string; state: RepairState } | null {
+  if (input.replyLineUci.length < 2) return null;
+  try {
+    const c = new Chess(input.fenBefore);
+    const mv = c.move(input.playedSan);
+    if (!mv) return null;
+    const reply = input.replyLineUci[0];
+    if (!c.move({ from: reply.slice(0, 2), to: reply.slice(2, 4), promotion: reply[4] })) return null;
+    const top = planOf({ fen: c.fen(), lines: [{ rank: 1, evaluation: 0, moves: [...input.replyLineUci.slice(1)], mate: null }], student: mv.color, namesMoves: false }).mover[0];
+    // The line's plan names the student's next moves; only the structure's
+    // plan (said by its pawn, never its move) is the recovery.
+    return top && top.source === 'structure' ? { text: top.text, stem: top.claim, state: 'plan' } : null;
+  } catch { return null; }
+}
+
+/** Tests only: the plan recovery on its own. */
+export const planRepairForTests = planRepair;

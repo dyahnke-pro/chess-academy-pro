@@ -1068,7 +1068,9 @@ export type RepairState =
   | 'technique-key-square' | 'technique-opposition' | 'technique-rook'
   | 'leave-a-square'
   | 'attack-their-king'
-  | 'down-material-queens-off';
+  | 'down-material-queens-off'
+  // The plan computer's plan, when no state above applies (`planRepair`).
+  | 'plan';
 
 export interface RepairRecipe {
   needs: readonly FillKey[];
@@ -1080,6 +1082,8 @@ export interface RepairRecipe {
 /** Every repair, worded to the STUDENT (never swapped). The check that it
  *  applies on this board is `repairApplies`. */
 export const REPAIRS: Record<RepairState, RepairRecipe> = {
+  // Worded by the plan computer (`structurePlanWords`); never rendered from here.
+  plan: { needs: [], stems: [], sources: ['concept:pos-activity', 'https://en.wikipedia.org/wiki/Chess_strategy'] },
   'colour-conceded': {
     needs: ['colour'],
     stems: [

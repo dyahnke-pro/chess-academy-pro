@@ -4,6 +4,7 @@
 // own each fact: `namedStructure`, `boardStructure`, `openingEquivalence`. A
 // reader returns a sentence only when the move CHANGED the board that way —
 // never a standing description repeated every move.
+import { planOf } from './planOf';
 import { famousTrapRead, famousTrapName } from './famousTraps';
 import { MATERIAL_VALUE } from './pieceValues';
 import { homeSquaresOf } from './development';
@@ -641,6 +642,35 @@ interface MoveReads {
   choice: ReturnType<typeof choiceAheadRead>;
   structure: TheoryRead | null; gambit: TheoryRead | null; endgame: TheoryRead | null;
   namedRoads: TheoryRead | null; moveOrder: TheoryRead | null; trap: TheoryRead | null; pieceJob: TheoryRead | null;
+  /** The plan computer's top plan for the mover (`planOf`). */
+  boardPlan: { text: string; squares: string[]; claim: string } | null;
+}
+
+/** The masters' most-played road from `fen`, as UCI, a few moves deep. */
+function mastersRoadUci(fen: string, movesAt: (fen: string) => readonly LocalDbMove[] | null, plies: number): string[] {
+  const out: string[] = [];
+  try {
+    const c = new Chess(fen);
+    for (let k = 0; k < plies; k += 1) {
+      const ms = movesAt(c.fen()) ?? [];
+      const top = [...ms].sort((a, b) => b.games - a.games)[0];
+      if (!top) break;
+      const m = c.move(top.san);
+      out.push(`${m.from}${m.to}${m.promotion ?? ''}`);
+    }
+  } catch { /* the playable road */ }
+  return out;
+}
+
+/** THE PLAN COMPUTER ON THE THEORY LINE: `planOf` on the board before the
+ *  move, the move and the masters' road after it as the evidence line. */
+function theoryBoardPlan(i: { fenBefore: string; san: string; mover: Color; movesAt: (fen: string) => readonly LocalDbMove[] | null }): MoveReads['boardPlan'] {
+  try {
+    const c = new Chess(i.fenBefore); const m = c.move(i.san);
+    const road = [`${m.from}${m.to}${m.promotion ?? ''}`, ...mastersRoadUci(c.fen(), i.movesAt, 7)];
+    const top = planOf({ fen: i.fenBefore, lines: [{ rank: 1, evaluation: 0, moves: road, mate: null }], student: i.mover, namesMoves: true, movesAt: i.movesAt }).mover[0];
+    return top ? { text: top.text, squares: top.squares, claim: top.claim } : null;
+  } catch { return null; }
 }
 const readsMemo = new Map<string, MoveReads>();
 function movesReads(i: { history: readonly string[]; fenBefore: string; san: string; mover: Color; movesAt: (fen: string) => readonly LocalDbMove[] | null; slipsAt: (fen: string) => readonly ClubGem[] }): MoveReads {
@@ -659,6 +689,7 @@ function movesReads(i: { history: readonly string[]; fenBefore: string; san: str
     moveOrder: moveOrderRead({ history: [...i.history, i.san], student: i.mover }) ?? transpositionRead({ history: [...i.history, i.san], movesAt: i.movesAt }),
     trap: trapRead({ ...m, slipsAt: i.slipsAt, movesAt: i.movesAt }),
     pieceJob: pieceJobRead(m),
+    boardPlan: theoryBoardPlan({ ...m, movesAt: i.movesAt }),
   };
   // Remembered only once every table it reads is in memory: a read taken
   // while one is still loading is not the answer the loaded table gives.
@@ -689,8 +720,10 @@ export function theoryExtras(i: {
   const plan = planText && !i.said.has(planText) ? (i.said.add(planText), r.ahead.plan) : null;
   const piece = pieceText && !i.said.has(pieceText) ? (i.said.add(pieceText), r.ahead.piece) : null;
   const choiceAhead = r.choice && !i.said.has(r.choice.claim) ? (i.said.add(r.choice.claim), r.choice) : null;
+  // The plan computer's plan, said once per plan, when the masters' gave none.
+  const boardPlan = !plan && r.boardPlan && !i.said.has(r.boardPlan.claim) ? (i.said.add(r.boardPlan.claim), r.boardPlan) : null;
   const turn = composeTheoryTurn({
-    fen: i.fenBefore, san: i.san, mover: i.mover, whose: 'your', roads: [], plan, piece, choiceAhead,
+    fen: i.fenBefore, san: i.san, mover: i.mover, whose: 'your', roads: [], plan, boardPlan, piece, choiceAhead,
     structure: once('structure', r.structure),
     gambit: once('gambit', r.gambit),
     endgame: once('endgame', r.endgame),
