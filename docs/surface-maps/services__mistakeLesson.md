@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**899 lines · 27 exports · 7 importers · 5 tests · 1 audits**
+**899 lines · 27 exports · 6 importers · 5 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -12,7 +12,6 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ## Who calls in
 
-- `src/components/Coach/CoachTeachPage.tsx`
 - `src/services/learnMemory.ts`
 - `src/services/learnMistakeTurn.test.ts`
 - `src/services/learnMistakeTurn.ts`
@@ -38,7 +37,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `withStems` (function) — 3 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12710`
+- `src/services/learnMistakeTurn.ts:156`
 - `src/services/mistakeLesson.boardTruth.test.ts:47`
 - `src/services/mistakeLesson.test.ts:143`
 
@@ -55,9 +54,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `nextGameMemory` (function) — 5 call sites
-- `src/components/Coach/CoachTeachPage.tsx:12698`
-- `src/components/Coach/CoachTeachPage.tsx:12706`
 - `src/services/learnMistakeTurn.test.ts:54`
+- `src/services/learnMistakeTurn.ts:148`
+- `src/services/learnMistakeTurn.ts:152`
 - `src/services/mistakeLesson.boardTruth.test.ts:63`
 - `src/services/mistakeLesson.test.ts:151`
 
