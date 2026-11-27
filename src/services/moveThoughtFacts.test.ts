@@ -181,7 +181,7 @@ describe('their move says what it aims at', () => {
     expect(moveThoughtFacts(input(['Qe2'])).some((f) => f.computer === 'theirTarget')).toBe(false);
   });
   it('the idea is said once on the move, whichever computer leads it', () => {
-    const text = lessonThought({ register: 'review', ...input(['O-O']) }, newLessonVoice(), null);
+    const text = lessonThought({ ...input(['O-O']) }, newLessonVoice(), null);
     expect(text.match(/bishop on c4/g)?.length).toBe(1);
   });
 });
@@ -269,7 +269,7 @@ describe('what the move prepares reaches the lesson, proven against the pass rea
     const voice = newLessonVoice();
     expect(lessonThought(input, voice, null)).toMatch(/so that f4|prepares f4/);
     // Without the pass reads there is no proof, and no purpose line.
-    expect(lessonThought({ register: 'review', ...input, reads: { ...reads, passBefore: [], passAfter: [] } }, newLessonVoice(), null)).not.toMatch(/so that f4|prepares f4/);
+    expect(lessonThought({ ...input, reads: { ...reads, passBefore: [], passAfter: [] } }, newLessonVoice(), null)).not.toMatch(/so that f4|prepares f4/);
   });
 });
 

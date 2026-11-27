@@ -193,7 +193,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     // A standing with no reason on the board is its own kind: the decider says
     // a verdict only with its reason.
     const st = standingRead(i.fen, povCp, i.studentColor, i.before);
-    facts.push({ from: 'position', kind: st.reasoned ? 'standing' : 'standing-bare', text: st.text, squares: [], reasonSquares: st.reasonSquares, claims: [`standing:${signedBand(povCp)}`] });
+    facts.push({ from: 'position', kind: st.reasoned ? 'standing' : 'standing-bare', text: st.text, squares: [], reasonSquares: st.reasonSquares, claims: [`standing:${signedBand(povCp)}`], ...(st.countOnly ? { countOnly: true } : {}) });
     const k = boardKind(i.fen, i.studentColor, povCp, i.before);
     if (k) facts.push({ from: 'position', kind: 'character', text: k.text, squares: [] });
   }
@@ -363,7 +363,7 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     const memory = i.story ? threadsOfRead(i.story) : null;
     const told = <F extends Parameters<typeof tellPictureFacts>[0][number]>(fs: readonly F[]): F[] => (memory ? tellPictureFacts(fs, memory, i.studentColor) : [...fs]);
     for (const f of told(readBoardAll('pictureVerdict', picture))) {
-      const merged = standing0 && sameBand && conc?.verdict.joined ? `${standing0.text} ${conc.verdict.joined}` : f.text;
+      const merged = standing0 && !standing0.countOnly && sameBand && conc?.verdict.joined ? `${standing0.text} ${conc.verdict.joined}` : f.text;
       facts.push({ from: 'position', kind: f.kind, text: merged, computer: f.computer, squares: f.squares, claims: f.claims, tries: conc?.but.map((t) => t.uci) ?? [], ...(merged !== f.text && standing0?.reasonSquares ? { reasonSquares: standing0.reasonSquares } : {}), ...(f.conclusion ? { conclusion: f.conclusion } : {}),
         ...(conc ? { afterStanding: conc.verdict.afterStanding } : {}) });
     }
