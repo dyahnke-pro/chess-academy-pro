@@ -35,20 +35,20 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/planBeatShape.test.ts:78`
 
 ### `buildMiddlegameOrientation` (function) — 15 call sites
-- `src/services/boardComputers.ts:2026`
+- `src/services/boardComputers.ts:2041`
 - `src/services/reviewStrategicOrientation.test.ts:4`
 - `src/services/reviewStrategicOrientation.test.ts:8`
 - `src/services/reviewStrategicOrientation.test.ts:19`
 - `src/services/reviewStrategicOrientation.test.ts:27`
 - `src/services/reviewStrategicOrientation.test.ts:37`
-- `src/services/reviewStrategicOrientation.test.ts:45`
-- `src/services/reviewStrategicOrientation.test.ts:46`
-- `src/services/reviewStrategicOrientation.test.ts:50`
-- `src/services/reviewStrategicOrientation.test.ts:55`
-- `src/services/reviewStrategicOrientation.test.ts:67`
-- `src/services/reviewStrategicOrientation.test.ts:68`
-- `src/services/reviewStrategicOrientation.test.ts:75`
-- `src/services/reviewStrategicOrientation.test.ts:77`
+- `src/services/reviewStrategicOrientation.test.ts:48`
+- `src/services/reviewStrategicOrientation.test.ts:49`
+- `src/services/reviewStrategicOrientation.test.ts:53`
+- `src/services/reviewStrategicOrientation.test.ts:58`
+- `src/services/reviewStrategicOrientation.test.ts:70`
+- `src/services/reviewStrategicOrientation.test.ts:71`
+- `src/services/reviewStrategicOrientation.test.ts:78`
+- `src/services/reviewStrategicOrientation.test.ts:80`
 - `src/services/reviewWalk900.test.ts:33`
 
 ## Tests

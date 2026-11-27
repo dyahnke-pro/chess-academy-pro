@@ -4,11 +4,11 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**784 lines · 25 exports · 66 importers · 18 tests · 0 audits**
+**792 lines · 25 exports · 69 importers · 18 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
-- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1416) — names `exchangeLedger`
+- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1415) — names `exchangeLedger`
 
 ## Who calls in
 
@@ -32,6 +32,7 @@
 - `src/services/exchangeNotFinished.test.ts`
 - `src/services/exchangeSacrifice.ts`
 - `src/services/factStakes.ts`
+- `src/services/famousTraps.ts`
 - `src/services/gambitIdea.ts`
 - `src/services/gemCrushLines.ts`
 - `src/services/giftedMaterialIsNotWon.test.ts`
@@ -71,6 +72,8 @@
 - `src/services/reviewWalkOct2a.test.ts`
 - `src/services/slipDepth.ts`
 - `src/services/tacticGeometry.ts`
+- `src/services/theoryComposer.ts`
+- `src/services/theoryReads.ts`
 - `src/services/thinkAloud.ts`
 - `src/services/thoughtReads.ts`
 - `src/services/threatProof.ts`
@@ -87,11 +90,11 @@
 ### `ExchangeLedger` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `computeExchangeLedger` (function) — 29 call sites
+### `computeExchangeLedger` (function) — 30 call sites
 - `src/coach/boardTurnAnswer.ts:441`
 - `src/coach/chatTurnAnswers.ts:492`
 - `src/coach/chatTurnAnswers.ts:662`
-- `src/services/exchangeIdeas.ts:617`
+- `src/services/exchangeIdeas.ts:646`
 - `src/services/exchangeLedger.promotion.test.ts:11`
 - `src/services/exchangeLedger.promotion.test.ts:15`
 - `src/services/exchangeLedger.test.ts:13`
@@ -109,43 +112,48 @@
 - `src/services/exchangeLedger.test.ts:247`
 - `src/services/exchangeLedger.test.ts:267`
 - `src/services/exchangeLedger.test.ts:273`
+- `src/services/famousTraps.ts:78`
 - `src/services/gambitIdea.ts:126`
-- `src/services/gemCrushLines.ts:171`
-- `src/services/knownSlips.ts:189`
+- `src/services/gemCrushLines.ts:172`
+- `src/services/knownSlips.ts:202`
 - `src/services/moveThreat.ts:115`
 - `src/services/patternFails.ts:129`
 - `src/services/planChoice.ts:162`
 - `src/services/threatProof.ts:61`
-- `src/services/weighedMoves.ts:937`
+- `src/services/weighedMoves.ts:964`
 
-### `netPieceWords` (function) — 11 call sites
+### `netPieceWords` (function) — 12 call sites
 - `src/coach/chatTurnAnswers.ts:494`
 - `src/services/decisiveReason.ts:117`
-- `src/services/exchangeIdeas.ts:619`
-- `src/services/groundedAnswer.ts:2428`
-- `src/services/knownSlips.ts:194`
+- `src/services/exchangeIdeas.ts:648`
+- `src/services/famousTraps.ts:84`
+- `src/services/groundedAnswer.ts:2436`
+- `src/services/knownSlips.ts:207`
 - `src/services/patternFails.ts:130`
 - `src/services/principleAttribution.ts:848`
-- `src/services/reviewMoveBriefing.ts:397`
+- `src/services/reviewMoveBriefing.ts:408`
 - `src/services/reviewPositionalAssessment.ts:147`
 - `src/services/tacticGeometry.ts:552`
-- `src/services/whyItFailed.ts:266`
+- `src/services/whyItFailed.ts:271`
 
-### `gainWords` (function) — 4 call sites
+### `gainWords` (function) — 7 call sites
 - `src/services/deepCombination.ts:222`
 - `src/services/exchangeLedger.test.ts:269`
 - `src/services/exchangeLedger.test.ts:278`
+- `src/services/exchangeLedger.test.ts:281`
+- `src/services/exchangeLedger.test.ts:282`
+- `src/services/exchangeLedger.test.ts:283`
 - `src/services/lineCalc.ts:231`
 
 ### `materialGainWords` (function) — 3 call sites
 - `src/services/gambitIdea.ts:127`
 - `src/services/moveThreat.ts:116`
-- `src/services/weighedMoves.ts:937`
+- `src/services/weighedMoves.ts:964`
 
 ### `promotedIn` (function) — 4 call sites
 - `src/services/costReason.ts:327`
 - `src/services/deepCombination.ts:227`
-- `src/services/deepCombination.ts:253`
+- `src/services/deepCombination.ts:256`
 - `src/services/lineCalc.ts:112`
 
 ### `gainAfterLine` (function) — 2 call sites
@@ -180,8 +188,8 @@
 - `src/services/moveThreat.ts:111`
 - `src/services/pictureVerdict.ts:456`
 - `src/services/thinkAloud.ts:99`
-- `src/services/weighedMoves.ts:742`
-- `src/services/weighedMoves.ts:922`
+- `src/services/weighedMoves.ts:745`
+- `src/services/weighedMoves.ts:949`
 
 ### `GAIN_HOLDS_PLIES` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
@@ -194,15 +202,15 @@
 
 ### `gainHoldsInLine` (function) — 2 call sites
 - `src/services/bookMoveWhy.ts:716`
-- `src/services/reviewMoveBriefing.ts:379`
+- `src/services/reviewMoveBriefing.ts:390`
 
 ### `materialDeficit` (function) — 3 call sites
 - `src/services/bookMoveWhy.ts:720`
 - `src/services/moveIntent.ts:502`
-- `src/services/reviewMoveBriefing.ts:393`
+- `src/services/reviewMoveBriefing.ts:404`
 
 ### `settledExchange` (function) — 5 call sites
-- `src/services/boardComputers.ts:2223`
+- `src/services/boardComputers.ts:2238`
 - `src/services/playCommentary.ts:899`
 - `src/services/reviewConcepts.ts:94`
 - `src/services/reviewWalkOct2a.test.ts:15`
@@ -212,24 +220,24 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `proofCut` (function) — 45 call sites
-- `src/services/coachFeatureService.ts:4881`
-- `src/services/coachFeatureService.ts:4884`
+- `src/services/coachFeatureService.ts:4897`
+- `src/services/coachFeatureService.ts:4900`
 - `src/services/costReason.ts:142`
 - `src/services/costReason.ts:180`
 - `src/services/costReason.ts:183`
-- `src/services/gemCrushLines.ts:162`
+- `src/services/gemCrushLines.ts:163`
 - `src/services/giftedMaterialIsNotWon.test.ts:14`
 - `src/services/giftedMaterialIsNotWon.test.ts:30`
 - `src/services/giftedMaterialIsNotWon.test.ts:45`
 - `src/services/giftedMaterialIsNotWon.test.ts:56`
-- `src/services/inaccuracyCall.ts:239`
-- `src/services/inaccuracyCall.ts:420`
-- `src/services/inaccuracyCall.ts:478`
-- `src/services/inaccuracyCall.ts:1061`
-- `src/services/inaccuracyCall.ts:1818`
-- `src/services/inaccuracyCall.ts:1958`
-- `src/services/inaccuracyCall.ts:2053`
-- `src/services/inaccuracyCall.ts:2104`
+- `src/services/inaccuracyCall.ts:242`
+- `src/services/inaccuracyCall.ts:423`
+- `src/services/inaccuracyCall.ts:481`
+- `src/services/inaccuracyCall.ts:1094`
+- `src/services/inaccuracyCall.ts:1920`
+- `src/services/inaccuracyCall.ts:2060`
+- `src/services/inaccuracyCall.ts:2155`
+- `src/services/inaccuracyCall.ts:2206`
 - `src/services/lineProof.test.ts:13`
 - `src/services/lineProof.test.ts:24`
 - `src/services/lineProof.test.ts:32`
@@ -256,7 +264,7 @@
 - `src/services/slipDepth.ts:62`
 - `src/services/threeFacts.ts:230`
 - `src/services/threeFacts.ts:247`
-- `src/services/whyItFailed.ts:219`
+- `src/services/whyItFailed.ts:224`
 
 ### `lineGiftIndex` (function) — 4 call sites
 - `src/services/giftedMaterialIsNotWon.test.ts:19`
@@ -267,8 +275,8 @@
 ### `describeProofResult` (function) — 12 call sites
 - `src/coach/boardTurnAnswer.ts:442`
 - `src/coach/chatTurnAnswers.ts:705`
-- `src/services/coachFeatureService.ts:4853`
-- `src/services/coachFeatureService.ts:4909`
+- `src/services/coachFeatureService.ts:4869`
+- `src/services/coachFeatureService.ts:4925`
 - `src/services/decisiveReason.ts:141`
 - `src/services/exchangeLedger.promotion.test.ts:12`
 - `src/services/exchangeLedger.promotion.test.ts:16`
@@ -302,14 +310,14 @@
 - `src/services/deliberation.ts:329`
 - `src/services/exchangeLedger.horizon.test.ts:16`
 - `src/services/exchangeLedger.horizon.test.ts:21`
-- `src/services/exchangeLedger.test.ts:288`
-- `src/services/exchangeLedger.test.ts:292`
+- `src/services/exchangeLedger.test.ts:293`
+- `src/services/exchangeLedger.test.ts:297`
 - `src/services/hardWalk.mates.test.ts:43`
 
 ### `moverLineProof` (function) — 12 call sites
 - `src/coach/boardTurnAnswer.ts:368`
-- `src/services/boardComputers.ts:2299`
-- `src/services/boardComputers.ts:3076`
+- `src/services/boardComputers.ts:2314`
+- `src/services/boardComputers.ts:3091`
 - `src/services/countedWhenTradeEnds.test.ts:69`
 - `src/services/countedWhenTradeEnds.test.ts:70`
 - `src/services/deliberation.ts:352`
@@ -318,7 +326,7 @@
 - `src/services/exchangeLedger.test.ts:256`
 - `src/services/exchangeNotFinished.test.ts:210`
 - `src/services/exchangeNotFinished.test.ts:219`
-- `src/services/groundedAnswer.ts:2349`
+- `src/services/groundedAnswer.ts:2357`
 
 ## Tests
 

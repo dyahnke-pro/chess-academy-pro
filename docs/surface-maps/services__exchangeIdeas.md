@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**882 lines · 24 exports · 7 importers · 4 tests · 0 audits**
+**912 lines · 25 exports · 7 importers · 4 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -29,6 +29,9 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `IDEA_KIND` (const) — 0 call sites
+- _no call sites outside this file — unused, or reached only through a re-export_
+
+### `PRAISES_THE_MOVE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `ExchangeIdea` (interface) — 0 call sites
@@ -117,8 +120,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/exchangeIdeas.test.ts:187`
 - `src/services/exchangeIdeas.test.ts:194`
 - `src/services/exchangeIdeas.test.ts:199`
-- `src/services/learnBoardTruth.realGame.test.ts:52`
 - `src/services/learnBoardTruth.realGame.test.ts:53`
+- `src/services/learnBoardTruth.realGame.test.ts:54`
 
 ### `cPawnBlock` (function) — 5 call sites
 - `src/services/capabilityEvidence.ts:567`
@@ -130,15 +133,16 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `ExchangeIdeasInput` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `exchangeIdeas` (function) — 8 call sites
-- `src/services/boardComputers.ts:2106`
-- `src/services/exchangeIdeas.replied.test.ts:15`
-- `src/services/exchangeIdeas.replied.test.ts:19`
+### `exchangeIdeas` (function) — 9 call sites
+- `src/services/boardComputers.ts:2121`
+- `src/services/exchangeIdeas.replied.test.ts:17`
+- `src/services/exchangeIdeas.replied.test.ts:21`
 - `src/services/exchangeIdeas.test.ts:169`
 - `src/services/exchangeIdeas.test.ts:188`
 - `src/services/exchangeIdeas.test.ts:218`
 - `src/services/exchangeIdeas.test.ts:219`
 - `src/services/exchangeIdeas.test.ts:223`
+- `src/services/exchangeIdeas.test.ts:304`
 
 ## Tests
 

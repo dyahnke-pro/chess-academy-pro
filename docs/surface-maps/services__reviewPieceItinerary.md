@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**142 lines · 4 exports · 2 importers · 1 tests · 0 audits**
+**152 lines · 4 exports · 2 importers · 1 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -20,19 +20,22 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `PieceItinerary` (interface) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_
 
-### `detectPieceItineraries` (function) — 6 call sites
+### `detectPieceItineraries` (function) — 9 call sites
 - `src/services/reviewPieceItinerary.test.ts:11`
 - `src/services/reviewPieceItinerary.test.ts:23`
 - `src/services/reviewPieceItinerary.test.ts:35`
 - `src/services/reviewPieceItinerary.test.ts:45`
 - `src/services/reviewPieceItinerary.test.ts:55`
 - `src/services/reviewPieceItinerary.test.ts:56`
+- `src/services/reviewPieceItinerary.test.ts:89`
+- `src/services/reviewPieceItinerary.test.ts:91`
+- `src/services/reviewPieceItinerary.test.ts:102`
 
 ### `itineraryAt` (function) — 1 call site
-- `src/services/boardComputers.ts:4353`
+- `src/services/boardComputers.ts:4368`
 
 ### `itineraryLine` (function) — 1 call site
-- `src/services/boardComputers.ts:4356`
+- `src/services/boardComputers.ts:4371`
 
 ## Tests
 
