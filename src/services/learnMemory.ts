@@ -44,7 +44,7 @@
 
 /** "No think-aloud has fired yet." Far enough below any real ply that the
  *  first gap test passes. */
-import type { Proof } from './proof';
+import type { LastSaid } from './whyAnswers';
 import type { LooseSpells } from './conceptKey';
 import { createStoryStore, identityHeard, noteOpening, openingAt, type StoryStore } from './gameStory';
 
@@ -81,9 +81,9 @@ export interface LearnMemory {
   lastReplyDictated: string | null;
   /** The last computed line, so two consecutive plies never repeat it. */
   lastComputed: string;
-  /** The proof behind the last conclusion the coach SPOKE — what "Why?" says
-   *  in full (proof.ts). Null until a proof-bearing conclusion is spoken. */
-  lastProof: Proof | null;
+  /** WHAT THE COACH SAID LAST, as "Why?" answers it (`whyAnswers`): a
+   *  conclusion's proof, a hint on its board, or nothing Why can answer. */
+  lastSaid: LastSaid;
   /** The tactic lane's last spoken KEY, so a standing tactic alerts once, not
    *  every ply (its words, and the threat lane's key and words, are the story's
    *  — `STORY_KEY`). This lived as a hand ref on the page, cleared inside ONE
@@ -194,7 +194,7 @@ export function createLearnMemory(opts: { livePlies: () => number; onNewGame?: (
     story,
     get gameId(): string { return story.current().gameId; },
     stemCounts: new Map<string, number>(),
-    lastProof: null,
+    lastSaid: null,
     motifLastSpoken,
     lastTacticKey: '',
     looseSpells: new Map(),
@@ -218,7 +218,7 @@ export function createLearnMemory(opts: { livePlies: () => number; onNewGame?: (
     },
     newGame(): void {
       mem.stemCounts.clear();
-      mem.lastProof = null;
+      mem.lastSaid = null;
       motifLastSpoken.clear();
       mem.lastTacticKey = '';
       mem.looseSpells = new Map();

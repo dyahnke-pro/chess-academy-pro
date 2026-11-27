@@ -360,6 +360,10 @@ import { markItems } from '../../services/markAnchors';
 import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent, ownTakebackPlies } from '../../services/coachSessionRouter';
 import { lookBackPlay, studentMovesAtView } from '../../services/lookBackMove';
+import { lastSaidOfTurn, whyAnswer } from '../../services/whyAnswers';
+import { useTheoryView } from '../../hooks/useTheoryView';
+import { usePieceSound } from '../../hooks/usePieceSound';
+import { computeWhyBestMoveDetail } from '../../services/whyBestMove';
 import { actionForCommand, actuate } from '../../services/coachActuator';
 import { readSpokenSquares } from '../../services/spokenSquares';
 import { isCounterRepertoireQuestion, isCandidateMoveQuestion, isLastGameMistakeQuestion, isBestMoveQuestion, isWhyBestMoveQuestion, isTacticsQuestion, isOpponentMoveQuestion, isNameOpeningQuestion, isTheoryQuestion, isEndgameQuestion, isTeachingMethodQuestion, isPlayerGamesQuestion, isPositionAssessmentQuestion, positionalTopic, looksLikeQuestionNotAnOpeningName, looksLikeConversationalReply, isStopCommand, LETS_PLAY_RE } from '../../coach/questionIntents';
@@ -1708,10 +1712,12 @@ export function CoachTeachPage({ mode }: {
    *  door keeps it on the spoken fact and this records the latest one. */
   const [whyReady, setWhyReady] = useState(false);
   const noteSpokenProofs = useCallback((kept: readonly { proof?: FactProof }[]): void => {
+    // Why answers the LAST thing said (2026-11-24): a turn without a proof
+    // replaces an older one.
+    learnMemRef.current.lastSaid = lastSaidOfTurn(kept);
+    setWhyReady(learnMemRef.current.lastSaid !== null);
     for (const f of kept) {
       if (isProof(f.proof)) {
-        learnMemRef.current.lastProof = f.proof;
-        setWhyReady(true);
         const pl = f.proof.line && f.proof.line.sans.length > 0 ? walkableLine(f.proof.line.fen, f.proof.line.sans, f.proof.line.sans[0]) : null;
         if (pl) stateLines([pl]);
       }
@@ -1720,6 +1726,10 @@ export function CoachTeachPage({ mode }: {
   const { walkFen: lineWalkFen, walkArrows: lineWalkArrows, tokenRef: lineWalkTokenRef,
     setWalkFen: setLineWalkFen, setWalkArrows: setLineWalkArrows, arrowsOf: lineArrowsOf,
     clear: clearLineWalk, walk: walkLine } = lineWalk;
+  /** DURING THE OPENING the bar's line slot is Theory (2026-11-24): the game
+   *  paused, the idea played forward from where it left book, then back. */
+  const { playMoveSound: playTheorySound } = usePieceSound();
+  const theoryView = useTheoryView({ sans: game.history, studentColor: playerColor, setWalkFen: setLineWalkFen, setWalkArrows: setLineWalkArrows, playMoveSound: playTheorySound, surface: 'learn' });
   // Read by the stable queue callback (named-move arrows need the seat).
   const playerColorRef = useRef(playerColor);
   playerColorRef.current = playerColor;
@@ -14315,15 +14325,36 @@ export function CoachTeachPage({ mode }: {
    *  The arrows are drawn and stay; the chat message carries the Play-out
    *  button, and the line only moves when it is pressed. */
   const handleWhy = useCallback((): void => {
-    const proof = learnMemRef.current.lastProof;
-    if (!proof) return;
+    // WHY? ANSWERS THE LAST THING THE COACH SAID (David, the board bar
+    // decisions, 2026-11-24): a conclusion's proof, or after a hint the move
+    // with its reason — and that move is then told (prompted).
+    const answer = whyAnswer(learnMemRef.current.lastSaid, liveFenRef.current);
+    if (!answer) return;
+    if (answer.kind === 'hint') {
+      const { fen, uci } = answer;
+      announcedBoardsRef.current.add(fen.split(' ').slice(0, 2).join(' '));
+      void (async () => {
+        try {
+          const read = await stockfishEngine.analyzePosition(fen, 15);
+          const detail = await computeWhyBestMoveDetail({
+            fen, studentColor: playerColorRef.current, analysis: { ...read, bestMove: uci },
+            rating: activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING, pgn: gameRef.current.pgn, studentNeedContext: null,
+          });
+          if (liveFenRef.current !== fen || !detail.text) return;
+          if (detail.arrows.length > 0) setLineWalkArrows(detail.arrows);
+          await coachDrillSay(detail.text, detail.lines.length > 0 ? { lines: detail.lines } : undefined);
+        } catch { /* engine unavailable — nothing rather than a guess */ }
+      })();
+      return;
+    }
+    const { proof } = answer;
     // Full only for an exact proof — an engine line is never recited (proof.ts).
     const body = proof.exact ? proof.full : proof.short;
     const said = `${body.charAt(0).toUpperCase()}${body.slice(1)}${/[.!?]$/.test(body) ? '' : '.'}`;
     const line = proof.line && proof.line.sans.length > 0 ? walkableLine(proof.line.fen, proof.line.sans, proof.line.sans[0]) : null;
     if (line) setLineWalkArrows(lineArrowsOf(line));
     void coachDrillSay(said, line ? { lines: [line] } : undefined);
-  }, [coachDrillSay, lineArrowsOf, setLineWalkArrows]);
+  }, [coachDrillSay, lineArrowsOf, setLineWalkArrows, activeProfile?.currentRating]);
   const handleReadPosition = useCallback(() => {
     void positionNarration.narrate();
   }, [positionNarration]);
@@ -14401,6 +14432,8 @@ export function CoachTeachPage({ mode }: {
         // The arrow IS the answer: the move played from this board was told,
         // never proof (it must not turn the heat map green).
         if (hint) announcedBoardsRef.current.add(fen.split(' ').slice(0, 2).join(' '));
+        // The hint is what was said last: Why names its move with the reason.
+        if (hint) { learnMemRef.current.lastSaid = { kind: 'hint', fen, uci }; setWhyReady(true); }
         // THE IDEA BEHIND THE ARROW (David 2026-10-05: "I need an explanation
         // of the position with the main ideas") — a drill hint already spoke.
         if (!activeDrillRef.current) {
@@ -15352,11 +15385,13 @@ export function CoachTeachPage({ mode }: {
             hintLabel={hintBusy ? 'Thinking…' : heldMoveFen ? 'Show me' : undefined}
             onRead={handleReadPosition}
             reading={positionNarration.isNarrating}
-            onWhy={whyReady && learnMemRef.current.lastProof ? handleWhy : null}
+            onWhy={whyReady && whyAnswer(learnMemRef.current.lastSaid, game.fen) ? handleWhy : null}
             onPlayLine={playStated}
+            theory={theoryView.inOpening || theoryView.playing ? { onTheory: theoryView.play, playing: theoryView.playing, onStop: theoryView.stop } : null}
             testIds={{ back: 'teach-nav-prev', forward: 'teach-nav-next', hint: 'teach-hint-btn', read: 'teach-read-position-btn', why: 'teach-why-btn', line: 'teach-play-line-btn' }}
             extras={<>
               <button onClick={goToFirstMove} disabled={!canStepBack} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-cyan-500/30 text-cyan-400" aria-label="First move" data-testid="teach-nav-first"><ChevronsLeft size={12} /></button>
+              {theoryView.caption && <span className="w-full text-center text-[11px] text-theme-text-muted" data-testid="theory-caption">{theoryView.caption}</span>}
               <span className="px-1 text-xs text-theme-text-muted tabular-nums" data-testid="teach-nav-status">
                 {reviewing ? `Move ${reviewIndex === -1 ? 0 : reviewIndex + 1} / ${game.history.length}` : 'Live'}
               </span>

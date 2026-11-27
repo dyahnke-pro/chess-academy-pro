@@ -31,4 +31,18 @@ describe('CoachBoardBar — the one bar on every board', () => {
     expect(row.className).not.toMatch(/overflow-x-(auto|scroll)/);
     expect([...row.children].map((c) => c.tagName)).toEqual(['BUTTON', 'BUTTON']);
   });
+
+  // 2026-11-24: "Play line becomes Theory during the opening" — same slot,
+  // same look; a press opens the theory view, a press while it plays returns.
+  it('during the opening the line slot is Theory; while it plays it returns to the game', () => {
+    const onTheory = vi.fn(); const onStop = vi.fn();
+    const { rerender } = render(<CoachBoardBar onBack={null} onForward={null} onHint={null} onRead={null} onWhy={null} onPlayLine={() => undefined} theory={{ onTheory, playing: false, onStop }} />);
+    expect(screen.queryByTestId('board-bar-line')).toBeNull();
+    fireEvent.click(screen.getByTestId('board-bar-theory'));
+    expect(onTheory).toHaveBeenCalledTimes(1);
+    rerender(<CoachBoardBar onBack={null} onForward={null} onHint={null} onRead={null} onWhy={null} onPlayLine={() => undefined} theory={{ onTheory: null, playing: true, onStop }} />);
+    expect(screen.getByTestId('board-bar-theory')).toHaveTextContent('Back to game');
+    fireEvent.click(screen.getByTestId('board-bar-theory'));
+    expect(onStop).toHaveBeenCalledTimes(1);
+  });
 });

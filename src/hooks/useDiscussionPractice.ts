@@ -229,6 +229,10 @@ interface GradedMoveArgs {
    *  was priced off; null when there was none — the strength estimate counts
    *  only contested boards, and an unknown board is not known to be one. */
   evalBeforeMover: number | null;
+  /** WAS THE STUDENT TOLD the move from this board (a hint, or Why naming it,
+   *  David 2026-11-24: "that counts as shown")? REQUIRED: a told move is never
+   *  unaided evidence. */
+  prompted: boolean;
 }
 
 interface UseDiscussionPracticeOptions {
@@ -892,9 +896,9 @@ export function useDiscussionPractice(
   // `evaluatePlayerMove`, so a surface that opts out of recording stays inert.
   const recordGradedMove = useCallback((args: GradedMoveArgs): void => {
     // The opponent's strength moves on every graded move, recorded or not.
-    // Play says nothing before a move and makes no chances: never prompted,
-    // never coach-made.
-    advanceLive(args.sourceGameId, args.seedRating, { fenBefore: args.fenBefore, playedSan: args.playedSan, cpLoss: args.cpLoss, evalBeforeMover: args.evalBeforeMover, prompted: false, coachMade: false });
+    // Play makes no chances (never coach-made); a move from a board the coach
+    // told (a hint, Why) is prompted.
+    advanceLive(args.sourceGameId, args.seedRating, { fenBefore: args.fenBefore, playedSan: args.playedSan, cpLoss: args.cpLoss, evalBeforeMover: args.evalBeforeMover, prompted: args.prompted, coachMade: false });
     if (!recording) return;
     if (args.cpLoss === null) return;   // unknown is not clean
     void recordMoveEvidence({
@@ -903,10 +907,8 @@ export function useDiscussionPractice(
       moverColor: args.moverColor,
       cpLoss: args.cpLoss,
       origin: opts.capabilityOrigin,
-      // Unprompted: this fires on the student's own move, before any reveal
-      // this hook delivers. The critical-moment announcement is the one thing
-      // that would change that, and it does not run on this path.
-      prompted: false,
+      // Told before the move (a hint, Why naming it) is prompted.
+      prompted: args.prompted,
       sourceGameId: args.sourceGameId,
     });
   }, [recording, opts.capabilityOrigin, advanceLive]);

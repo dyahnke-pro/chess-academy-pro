@@ -8,6 +8,7 @@ import { ArrowLeft, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight,
 import { AnimatePresence, motion } from 'framer-motion';
 import { Chess, type Color } from 'chess.js';
 import { lookBackPlay, studentMovesAtView } from '../../services/lookBackMove';
+import { useTheoryView } from '../../hooks/useTheoryView';
 import { createStoryStore } from '../../services/gameStory';
 import { planFromUci, stepBothArcs } from '../../services/lookaheadPlan';
 import { useChessGame } from '../../hooks/useChessGame';
@@ -916,6 +917,9 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   // move handler reads the LATEST hinted move at move time, not a stale closure
   // value — used to ground the blunder flash (David 2026-07-10).
   const hintResolvedMoveRef = useRef<{ fen: string; uci: string } | null>(null);
+  /** Boards (this game) where the coach told the student a move — a hint, or
+   *  Why naming it: the move played from one is prompted, never proof. */
+  const toldBoardsRef = useRef(new Set<string>());
   useEffect(() => {
     hintResolvedMoveRef.current = hintState.resolvedBestMove;
   }, [hintState.resolvedBestMove]);
@@ -1549,6 +1553,8 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   // THE LINE JUST STATED (the one Play-line button plays it): the tip's tactic
   // while its bubble is up, else the line Why proved.
   const { state: stateLines, playStated } = lineWalk;
+  /** DURING THE OPENING the bar's line slot is Theory (2026-11-24). */
+  const theoryView = useTheoryView({ sans: game.history, studentColor: playerColor, setWalkFen: lineWalk.setWalkFen, setWalkArrows: lineWalk.setWalkArrows, playMoveSound, surface: 'play' });
   useEffect(() => {
     stateLines(tipWalkable ? [tipWalkable] : whyLine ? [whyLine] : []);
   }, [stateLines, tipWalkable, whyLine]);
@@ -3095,6 +3101,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     // games with — rows without one can never prove a capability.
     discussion.recordGradedMove({
       fenBefore: preFen,
+      prompted: toldBoardsRef.current.has(`${gameState.gameId}|${preFen.split(' ').slice(0, 4).join(' ')}`),
       playedSan: moveResult.san,
       moverColor: playerColor,
       cpLoss: movePriced ? evalLoss : null,
@@ -3784,13 +3791,15 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
 
   // Hint request — uses 3-tier visual hint system
   const handleHint = useCallback(() => {
+    // A hint is told: the move played from this board is prompted.
+    toldBoardsRef.current.add(`${gameState.gameId}|${game.fen.split(' ').slice(0, 4).join(' ')}`);
     requestHint();
     setGameState((prev) => ({
       ...prev,
       currentHintLevel: Math.min(prev.currentHintLevel + 1, 3) as 0 | 1 | 2 | 3,
       hintsUsed: prev.hintsUsed + 1,
     }));
-  }, [requestHint]);
+  }, [requestHint, game.fen, gameState.gameId]);
 
   // Takeback — undo only enough plies to revert the STUDENT's most
   // recent move. Production audit: user reported "Taking back a move
@@ -3810,8 +3819,16 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     if (whyLoadingRef.current) return;
     whyLoadingRef.current = true;
     const fen = game.fen;
+    // WHY? ANSWERS THE LAST THING THE COACH SAID (David, the board bar
+    // decisions, 2026-11-24): after a hint on this board, the hinted move with
+    // its reason. Either way the answer names a move, so the move played from
+    // this board is told (prompted), never unaided evidence.
+    const hinted = hintResolvedMoveRef.current;
+    const hintUci = hinted && hinted.fen.split(' ').slice(0, 4).join(' ') === fen.split(' ').slice(0, 4).join(' ') ? hinted.uci : null;
+    toldBoardsRef.current.add(`${gameState.gameId}|${fen.split(' ').slice(0, 4).join(' ')}`);
     try {
-      const analysis = await stockfishEngine.analyzePosition(fen, 16, undefined, 'brain');
+      const read = await stockfishEngine.analyzePosition(fen, 16, undefined, 'brain');
+      const analysis = hintUci ? { ...read, bestMove: hintUci } : read;
       const detail = await computeWhyBestMoveDetail({ fen, studentColor: playerColor, analysis, rating: playerRating, pgn: game.pgn, studentWeaknesses: weaknessSignalsRef.current, studentNeedContext: studentNeedRef.current });
       const why = detail.text;
       const answer = why || 'No single best move stands out here — the position is roughly balanced.';
@@ -3829,7 +3846,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     } finally {
       whyLoadingRef.current = false;
     }
-  }, [game.fen, playerColor, playerRating]);
+  }, [game.fen, playerColor, playerRating, gameState.gameId]);
 
   /** THE STUDENT'S OWN TAKEBACK, `count` plies off the end (the look-back
    *  move below). Each student move it undoes goes through the own-takeback
@@ -4739,8 +4756,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
               reading={positionNarration.isNarrating}
               onWhy={live && !isCoachThinking ? () => { void askWhy(); } : null}
               onPlayLine={live ? playLine : null}
+              theory={live && (theoryView.inOpening || theoryView.playing) ? { onTheory: theoryView.play, playing: theoryView.playing, onStop: theoryView.stop } : null}
               testIds={{ back: 'nav-prev', forward: 'nav-next', hint: 'hint-button', read: 'read-position-btn', why: 'why-button', line: 'show-tactic-line-btn' }}
               extras={<>
+                {theoryView.caption && <span className="w-full text-center text-[11px] text-theme-text-muted" data-testid="theory-caption">{theoryView.caption}</span>}
                 <button onClick={goToFirstMove} disabled={gameState.moves.length === 0 || viewedMoveIndex === -1} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-cyan-500/30 text-cyan-400" aria-label="First move" data-testid="nav-first"><ChevronsLeft size={12} /></button>
                 <button onClick={goToLastMove} disabled={gameState.moves.length === 0 || viewedMoveIndex === null} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-cyan-500/30 text-cyan-400" aria-label="Last move" data-testid="nav-last"><ChevronsRight size={12} /></button>
                 {live && (<>
