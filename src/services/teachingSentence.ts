@@ -629,6 +629,9 @@ export function renderAttackLeader(t: {
 export function renderDeflection(t: {
   mine: boolean; names: boolean; now: boolean; move: string; defender: string; from: string; target: string; square: string; follow: string; stem: number;
 }): string {
+  // The board fact, never the outcome word (the ledger's): the recapture
+  // leaves the target without its guard, and the capture there comes next —
+  // its SAN said once, with nothing after it that says the capture again.
   const D = PIECE_WORD[t.defender]; const T = PIECE_WORD[t.target];
   if (!t.now) {
     if (t.mine && !t.names) {
@@ -636,29 +639,29 @@ export function renderDeflection(t: {
     }
     if (t.mine) {
       return rotateStem([
-        `Your move threatens ${t.move}: if their ${D} takes back, it leaves the ${T} on ${t.square}, and ${t.follow} would win it.`,
-        `Next you threaten ${t.move}, pulling their ${D} off ${t.square}. Then ${t.follow} would win the ${T} there.`,
+        `Your move threatens ${t.move}: if their ${D} takes back, the ${T} on ${t.square} loses its guard, and ${t.follow} comes next.`,
+        `Next you threaten ${t.move}, pulling their ${D} off ${t.square}. That leaves the ${T} there for ${t.follow}.`,
       ], t.stem);
     }
     return rotateStem([
-      `Watch their ${t.move}: if your ${D} takes back, it leaves the ${T} on ${t.square}, and ${t.follow} wins it.`,
+      `Watch their ${t.move}: if your ${D} takes back, your ${T} on ${t.square} loses its guard, and ${t.follow} comes next.`,
       `Your ${D} on ${t.from} is guarding the ${T} on ${t.square}. Their ${t.move} would pull it away, and ${t.follow} would follow.`,
     ], t.stem);
   }
   if (t.mine) {
     if (!t.names) {
       return rotateStem([
-        `Their ${D} on ${t.from} is guarding the ${T} on ${t.square}. Give it something to take, and the ${T} falls.`,
+        `Their ${D} on ${t.from} is guarding the ${T} on ${t.square}. Give it something to take, and the ${T} loses its guard.`,
         `One job holds their ${T} on ${t.square}: the ${D} on ${t.from} guards it. Pull that ${D} away with a forcing move.`,
       ], t.stem);
     }
     return rotateStem([
-      `${t.move} pulls their ${D} off ${t.square}: once it takes back, ${t.follow} wins the ${T} there. Every answer loses material.`,
+      `${t.move} pulls their ${D} off ${t.square}: once it takes back, the ${T} there has lost its guard, and ${t.follow} follows. Every answer loses material.`,
       `Their ${D} on ${t.from} guards the ${T} on ${t.square}. ${t.move} drags it away, and ${t.follow} follows. Every answer loses material.`,
     ], t.stem);
   }
   return rotateStem([
-    `Their ${t.move} pulls your ${D} off ${t.square}: if it takes back, ${t.follow} wins the ${T} there. Every answer loses material.`,
+    `Their ${t.move} pulls your ${D} off ${t.square}: if it takes back, your ${T} there loses its guard, and ${t.follow} follows. Every answer loses material.`,
     `Your ${D} on ${t.from} is guarding the ${T} on ${t.square}. Their ${t.move} pulls it away, and ${t.follow} follows. Every answer loses material.`,
   ], t.stem);
 }
