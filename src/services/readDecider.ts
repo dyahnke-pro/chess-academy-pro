@@ -91,6 +91,9 @@ export interface ReadFact {
   /** The squares the standing's reason is about ("your passed pawn on c6"),
    *  where the fact says a standing with its reason. */
   reasonSquares?: readonly string[];
+  /** The standing's only reason is a level board's even count: a verdict
+   *  read off the tries says more and leads without it. */
+  countOnly?: boolean;
   /** The defender's checks the read weighed as tries (uci). */
   checksRead?: readonly string[];
   /** Other tries this one fact refutes for the same reason (uci). */

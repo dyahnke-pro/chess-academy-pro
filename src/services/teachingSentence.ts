@@ -625,6 +625,41 @@ export function renderStanding(v: { band: string; side: 'better' | 'worse'; reas
   return `${V} — ${why.join(v.level && why.length === 2 ? ', but ' : ', ')}.`;
 }
 
+/** THE STANDING'S EVIDENCE REASONS (2026-11-26) — the data each computer
+ *  hands over, worded here once. Seat words come in already chosen: `own` is
+ *  the side the reason favours ("your" / "their"), `foe` the other. */
+export type StandingReasonData =
+  | { kind: 'trapped'; foe: 'your' | 'their'; piece: string; square: string }
+  | { kind: 'mating-net'; own: 'your' | 'their'; foe: 'your' | 'their'; king: string; attackers: number }
+  | { kind: 'unstoppable-square'; own: 'your' | 'their'; foe: 'your' | 'their'; pawn: string; king: string }
+  | { kind: 'unstoppable-line'; own: 'your' | 'their'; pawn: string; queens: boolean }
+  | { kind: 'tempo'; foe: 'your' | 'their'; queen: string }
+  | { kind: 'clamp'; own: 'your' | 'their'; foe: 'your' | 'their'; pawns: readonly string[]; wing: 'kingside' | 'queenside'; squares: number }
+  | { kind: 'line-wins'; who: 'you' | 'they'; points: number }
+  | { kind: 'even'; pawns: number; middlegame: boolean };
+
+/** A standing reason as a clause after the verdict and as its own sentence. */
+export function renderStandingReason(d: StandingReasonData): { clause: string; sentence: string } {
+  const both = (clause: string, tail = ''): { clause: string; sentence: string } => ({ clause, sentence: `${openSentence(clause)}${tail}.` });
+  switch (d.kind) {
+    case 'trapped': return both(`${d.foe} ${d.piece} on ${d.square} is trapped: every square it has loses it`);
+    case 'mating-net': return both(`${d.foe} king on ${d.king} has no square to step to, and ${countWord(d.attackers)} of ${d.own} pieces bear on it`);
+    case 'unstoppable-square': return both(`${d.own} pawn on ${d.pawn} cannot be caught: ${d.foe} king on ${d.king} is outside its square`);
+    case 'unstoppable-line': return both(`${d.own} passed pawn on ${d.pawn} goes through: the best line ${d.queens ? 'queens' : 'promotes'} it`);
+    case 'tempo': return both(`${d.foe} queen on ${d.queen} can be hit with tempo`, ': it has to move again');
+    case 'clamp': return both(`${d.own} pawns on ${andList([...d.pawns])} clamp ${d.foe} ${d.wing}, taking ${countWord(d.squares)} squares in front of ${d.foe} king`);
+    case 'line-wins': {
+      const g = d.points;
+      const words = g === 1 ? 'a pawn' : g === 2 ? 'two pawns' : g <= 4 ? 'a piece' : g <= 7 ? "a rook's worth" : "a queen's worth";
+      return both(`${d.who} win ${words} in the best line`);
+    }
+    case 'even': {
+      const pawnWords = d.pawns === 0 ? 'no pawns left' : `${countWord(d.pawns)} pawn${d.pawns === 1 ? '' : 's'} each`;
+      return both(d.middlegame ? `material is level, ${pawnWords}, and both kings keep their pawn cover` : `material is level, with ${pawnWords} and the same pieces`);
+    }
+  }
+}
+
 /** How a move moved the standing (student seat, cp swing); null when it
  *  barely moved. */
 export function renderSwing(swing: number): string | null {
@@ -1069,6 +1104,9 @@ export type RepairState =
   | 'leave-a-square'
   | 'attack-their-king'
   | 'down-material-queens-off'
+  // THE BOARD STATES (2026-11-26, the recovery checks round): what to do
+  // after a mistake when the board — not the material — is the problem.
+  | 'king-in-centre' | 'behind-in-development' | 'piece-trapped' | 'pinned-piece' | 'pawn-lever' | 'loose-pieces'
   // The plan computer's plan, when no state above applies (`planRepair`).
   | 'plan';
 
@@ -1084,6 +1122,72 @@ export interface RepairRecipe {
 export const REPAIRS: Record<RepairState, RepairRecipe> = {
   // Worded by the plan computer (`structurePlanWords`); never rendered from here.
   plan: { needs: [], stems: [], sources: ['concept:pos-activity', 'https://en.wikipedia.org/wiki/Chess_strategy'] },
+  'king-in-centre': {
+    needs: ['target'],
+    stems: [
+      'Your king on {target} is still in the middle: tuck it away first.',
+      'Get your king off {target} and castled before the lines open.',
+      'The king on {target} is your first worry: castle it to safety.',
+      'With your king still on {target}, safety comes first: castle soon.',
+      'Bring the king on {target} to safety before you go after anything.',
+    ],
+    sources: ['Library: Capablanca cf-31', 'concept:pos-king-safety', 'https://www.chess.com/article/view/king-safety'],
+  },
+  'behind-in-development': {
+    needs: ['tPiece', 'target'],
+    stems: [
+      'You are behind in development: bring out the {tPiece} on {target} first.',
+      'Develop before you attack: your {tPiece} on {target} is still at home.',
+      'Get the {tPiece} on {target} into play. They have more pieces out.',
+      'First catch up: the {tPiece} on {target} has not moved yet.',
+      'Your {tPiece} on {target} is still asleep: develop it before anything else.',
+    ],
+    sources: ['Library: Capablanca cf-6', 'concept:pos-development', 'https://www.chess.com/article/view/chess-opening-principles'],
+  },
+  'piece-trapped': {
+    needs: ['tPiece', 'target'],
+    stems: [
+      'Your {tPiece} on {target} is trapped: get the most you can for it.',
+      'The {tPiece} on {target} has no safe square. Make them pay for it.',
+      'Your {tPiece} on {target} cannot escape: take something with it if you can.',
+      'Before the trapped {tPiece} on {target} falls, sell it for the most material.',
+      'No square saves the {tPiece} on {target}: cash it in now.',
+    ],
+    sources: ['concept:tac-trap', 'https://www.chess.com/terms/trapped-piece-chess'],
+  },
+  'pinned-piece': {
+    needs: ['tPiece', 'target', 'opPiece', 'opSq'],
+    stems: [
+      'Break the pin: their {opPiece} on {opSq} pins your {tPiece} on {target}.',
+      'The {opPiece} on {opSq} pins your {tPiece} on {target}: add a guard.',
+      'Unpin first: the {opPiece} on {opSq} holds your {tPiece} on {target}.',
+      'The {tPiece} on {target} cannot move freely while the {opPiece} on {opSq} pins it.',
+      'Guard the pinned {tPiece} on {target}, then break the line from {opSq}.',
+    ],
+    sources: ['concept:tac-pin', 'https://www.chess.com/terms/pin-chess'],
+  },
+  'pawn-lever': {
+    needs: ['pawn'],
+    stems: [
+      'Their pawn on {pawn} cramps you: strike at it with a pawn.',
+      'Hit back at the pawn on {pawn} with one of your pawns.',
+      'The pawn on {pawn} takes your space; challenge it with a pawn break.',
+      'Undermine the pawn on {pawn}: a pawn of yours can attack it.',
+      'Answer the pawn on {pawn} with a pawn break before it cramps you more.',
+    ],
+    sources: ['Library: Nimzowitsch ms-70', 'https://www.chess.com/article/view/pawn-breaks'],
+  },
+  'loose-pieces': {
+    needs: ['a', 'b'],
+    stems: [
+      'Your {a} and {b} have no guard: give each a defender.',
+      'Two loose pieces, the {a} and the {b}: tie them together.',
+      'Nothing guards your {a} or your {b}. Fix that before it costs you.',
+      'Guard the {a} and the {b}: loose pieces drop off.',
+      'Your {a} and {b} stand unprotected: cover them first.',
+    ],
+    sources: ['https://www.chess.com/article/view/loose-pieces-drop-off'],
+  },
   'colour-conceded': {
     needs: ['colour'],
     stems: [
@@ -2001,7 +2105,7 @@ export function renderMistakeSlot(r: SlotRecipe | null | undefined, fills: Fills
   for (let i = 0; i < r.stems.length; i += 1) {
     const stem = rotateStem(r.stems, key + i);
     if (avoid.has(stem) && i < r.stems.length - 1) continue;
-    return { text: capitaliseStem(fillStem(stem, fills)), stem };
+    return { text: openSentence(fillStem(stem, fills)), stem };
   }
   return null;
 }

@@ -316,7 +316,7 @@ import { sayIdea } from '../utils/phraseMemory';
 import type { FollowLines } from './exchangeLedger';
 import type { IntentReads } from './moveIntent';
 import { moveIntent, intentRule } from './moveIntent';
-import { moveAspects, evalReading, signedBand } from './reviewMoveBriefing';
+import { moveAspects, evalReadingEvidence, signedBand } from './reviewMoveBriefing';
 import { moveJob, isBareJob, MINE } from './bookMoveWhy';
 import { BOOK_JOB_IDEA, FUNDAMENTAL_IDEA } from './ideaKind';
 import { computeMoveFundamentals } from './moveFundamentals';
@@ -6515,9 +6515,11 @@ export const BOARD_COMPUTERS = {
       if (!fenAfter) return null;
       const pov = (cp: number): number => cp * (student === 'w' ? 1 : -1);
       const m = (() => { try { return new Chess(w.fenBefore).move(w.san); } catch { return null; } })();
-      const text = evalReading(fenAfter, pov(before.evaluation), pov(after.evaluation), null, student, m ? { to: m.to, captured: m.captured ?? null } : null, lines);
-      if (!text) return null;
-      return moveIdeaFact(fact, w, { kind: 'eval', idea: 'eval', weight: 45, text, squares: [], extraClaims: [`standing:${signedBand(pov(after.evaluation))}`] });
+      // The standing with its evidence: the squares its reason rests on are
+      // lit, and the engine line that carries it out is played and arrowed.
+      const read = evalReadingEvidence(fenAfter, pov(before.evaluation), pov(after.evaluation), null, student, m ? { to: m.to, captured: m.captured ?? null } : null, lines);
+      if (!read) return null;
+      return moveIdeaFact(fact, w, { kind: 'eval', idea: 'eval', weight: 45, text: read.text, squares: read.squares, lines: read.proofLines, extraClaims: [`standing:${signedBand(pov(after.evaluation))}`] });
     }),
     computer: 'evalReading',
     kind: 'eval',
