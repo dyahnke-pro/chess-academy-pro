@@ -1085,7 +1085,6 @@ export function namedPawnStructure(
   }
   const w = (s: string): boolean => wp.has(s);
   const b = (s: string): boolean => bp.has(s);
-  const fileCount = (set: Set<string>, file: string): number => [...set].filter((s) => s[0] === file).length;
   // FRENCH / ADVANCE CHAIN — White d4+e5 vs Black d5+e6, the locked chain.
   // A lever is named only while Black still has the pawn to pull it (tabia
   // read 2026-10-29: "you hit d4 with …c5" on a board where …cxd4 cxd4 had

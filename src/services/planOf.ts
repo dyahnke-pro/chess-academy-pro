@@ -156,7 +156,7 @@ function structureCandidates(i: PlanOfIn, side: Color, lines: readonly AnalysisL
 
 function mastersCandidate(i: PlanOfIn, side: Color, lines: readonly AnalysisLine[]): PlanCandidate | null {
   if (!i.movesAt) return null;
-  const r = (() => { try { return mastersPlanRead(i.fen, i.movesAt!); } catch { return null; } })();
+  const r = (() => { try { return mastersPlanRead(i.fen, i.movesAt); } catch { return null; } })();
   const brk = side === 'w' ? r?.white : r?.black;
   if (!brk) return null;
   const mine = side === i.student;

@@ -2065,7 +2065,7 @@ export function structurePlanWords(
   switch (p.kind) {
     case 'chain': {
       if (!p.key?.hits) return null;
-      const how = names ? `${p.key.to}` : `the ${pawnOf(p.key.from)}`;
+      const how = names ? p.key.to : `the ${pawnOf(p.key.from)}`;
       return rotateStem([
         `${lead}: strike at the base of ${theirs} pawn chain, ${how} hitting ${p.key.hits}.`,
         `${lead} is to hit the chain at its base: ${how} against ${p.key.hits}.`,
@@ -2081,8 +2081,8 @@ export function structurePlanWords(
     }
     case 'expansion': {
       if (!p.key?.hits || !p.first) return null;
-      const brk = names ? `${p.key.to}` : `the ${pawnOf(p.key.from)}`;
-      const gain = names ? `${p.first.to}` : `the ${pawnOf(p.first.from)}`;
+      const brk = names ? p.key.to : `the ${pawnOf(p.key.from)}`;
+      const gain = names ? p.first.to : `the ${pawnOf(p.first.from)}`;
       return rotateStem([
         `${lead}: the break ${brk} at ${p.key.hits}, once ${gain} has taken queenside space.`,
         `${lead} is the break at ${p.key.hits} with ${brk}, after ${gain} gains space.`,

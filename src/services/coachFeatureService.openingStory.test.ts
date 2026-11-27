@@ -92,7 +92,7 @@ describe('review walk — both seats, captures included (BACKLOG §6)', () => {
     expect(at(11)).toMatch(new RegExp(MOVE_HEAD + String.raw`hits your queen on d8 and your rook on h8 at once\.`));
     expect(at(12)).toMatch(new RegExp(MOVE_HEAD + String.raw`gets you a knight for the pawn they took, but your king has left its back rank to do it, out in the open — that is what they gave the knight for\.`));
     // The count reads it (`secondAttacker`): the third attacker, the guards, the threat.
-    expect(at(15)).toMatch(new RegExp(MOVE_HEAD + String.raw`adds a third attacker on your knight on d5\. That's three attackers, and the queen on d8 and the king guard it\. They threaten to take on d5 and win a piece, so it needs an answer this move\.`));
+    expect(at(15)).toMatch(new RegExp(MOVE_HEAD + String.raw`adds a third attacker on your knight on d5\. That's three attackers, and the queen on d8 and the king guard it\. They threaten to take on d5 and win your knight, so it needs an answer this move\.`));
     // The pin was said with 7…Ke6's guard; 8…Nb4 says only its own guard.
     // 8…Nb4 hits c2 AND holds the pinned knight: both halves — the rule says
     // c2, the move's thought the guard (WO-ONE-COACH-01 Build 5).

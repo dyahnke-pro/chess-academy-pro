@@ -11,7 +11,7 @@ import { newLessonVoice } from '../services/reviewMoveBriefing';
 const game: ReplayGame = { ...(JSON.parse(readFileSync('src/test/fixtures/gotham-jelena.json', 'utf8')) as ReplayGame) };
 function said(ply: number): string {
   const p = replayPlies(game)[ply - 1];
-  return lessonThought({ namesPlayedMove: true, story: false, theory: true, fenBefore: p.fenBefore, san: p.san, prev: p.prev, moverIsStudent: p.own, line: p.line, theirLast: p.theirLast, history: p.history,
+  return lessonThought({ register: 'live', namesPlayedMove: true, story: false, theory: true, fenBefore: p.fenBefore, san: p.san, prev: p.prev, moverIsStudent: p.own, line: p.line, theirLast: p.theirLast, history: p.history,
     reads: p.before.length || p.after.length ? { before: linesOf(p.before), after: linesOf(p.after), passBefore: [], passAfter: [] } : null, costCp: p.costCp }, newLessonVoice(), null);
 }
 

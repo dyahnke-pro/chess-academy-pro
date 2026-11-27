@@ -14,7 +14,7 @@ const afterOf = (fen: string, san: string): string => { const c = new Chess(fen)
 describe('learnBoardTeaching — every lane reaches the door', () => {
   it('rule→exception comes out with its claim and event', () => {
     const p = (ruleFx as { key: string; fen: string; san: string; history: string[] }[]).find((x) => x.key === 'UVJ75kdDdt8:14')!;
-    const out = studentMoveTeaching({ namesStudentMoves: false, theory: true, ...base, fenBefore: p.fen, san: p.san, history: [...p.history, p.san] });
+    const out = studentMoveTeaching({ unpricedCredit: 'refused', namesStudentMoves: false, theory: true, ...base, fenBefore: p.fen, san: p.san, history: [...p.history, p.san] });
     const rx = out.find((h) => h.lane === 'ruleException');
     expect(rx?.text).toMatch(/hits the pawn on g2/);
     expect(rx?.claims[0]).toMatch(/^rule-twice-/);
@@ -25,11 +25,11 @@ describe('learnBoardTeaching — every lane reaches the door', () => {
     const pre = ['e4', 'e6', 'Nc3', 'a6', 'Nf3', 'e5'];
     const c = new Chess();
     for (const m of pre) c.move(m);
-    const out = studentMoveTeaching({ namesStudentMoves: false, theory: true, ...base, fenBefore: c.fen(), san: 'Nd5', history: [...pre, 'Nd5'] });
+    const out = studentMoveTeaching({ unpricedCredit: 'refused', namesStudentMoves: false, theory: true, ...base, fenBefore: c.fen(), san: 'Nd5', history: [...pre, 'Nd5'] });
     const t = out.find((h) => h.lane === 'timing');
     expect(t?.text).toBe('The timing of Nd5 matters — a move earlier, their pawn would have taken on d5 and won your knight.');
     expect(t?.claims).toEqual(['timing:Nd5']);
-    const bad = studentMoveTeaching({ namesStudentMoves: false, theory: true, ...base, cpLoss: 80, fenBefore: c.fen(), san: 'Nd5', history: [...pre, 'Nd5'] });
+    const bad = studentMoveTeaching({ unpricedCredit: 'refused', namesStudentMoves: false, theory: true, ...base, cpLoss: 80, fenBefore: c.fen(), san: 'Nd5', history: [...pre, 'Nd5'] });
     expect(bad.some((h) => h.lane === 'timing')).toBe(false);
   });
 
@@ -37,20 +37,20 @@ describe('learnBoardTeaching — every lane reaches the door', () => {
     const p = (kingFx as { key: string; fen: string; san: string }[]).find((x) => x.key === 'xoS71OW-Re0:21')!;
     // The engine's line after Qe1 (depth 16) plays the hop: …Nxb3 axb3 …Re8 Qg3.
     const linesAfter = [['c5b3', 'a2b3', 'f8e8', 'e1g3', 'd6d5', 'e4e5', 'f6e4', 'c3e4', 'd5e4', 'f3d2']];
-    const good = studentMoveTeaching({ namesStudentMoves: false, theory: true, ...base, linesAfter, fenBefore: p.fen, san: p.san, history: [p.san] });
+    const good = studentMoveTeaching({ unpricedCredit: 'refused', namesStudentMoves: false, theory: true, ...base, linesAfter, fenBefore: p.fen, san: p.san, history: [p.san] });
     // Learn holds the next hop (LEARN NAMES NO MOVE UNASKED): the idea speaks, Qg3 is not named.
     expect(good.some((h) => h.lane === 'kingAttack' && /heads for their king — one more move brings it to bear/.test(h.text) && !/Qg3/.test(h.text))).toBe(true);
-    const bad = studentMoveTeaching({ namesStudentMoves: false, theory: true, ...base, linesAfter, cpLoss: 150, fenBefore: p.fen, san: p.san, history: [p.san] });
+    const bad = studentMoveTeaching({ unpricedCredit: 'refused', namesStudentMoves: false, theory: true, ...base, linesAfter, cpLoss: 150, fenBefore: p.fen, san: p.san, history: [p.san] });
     expect(bad.some((h) => h.lane === 'kingAttack')).toBe(false);
     // …and with no line read after the move, no hop is claimed.
-    const blind = studentMoveTeaching({ namesStudentMoves: false, theory: true, ...base, fenBefore: p.fen, san: p.san, history: [p.san] });
+    const blind = studentMoveTeaching({ unpricedCredit: 'refused', namesStudentMoves: false, theory: true, ...base, fenBefore: p.fen, san: p.san, history: [p.san] });
     expect(blind.some((h) => h.lane === 'kingAttack' && /heads for their king/.test(h.text))).toBe(false);
   });
 
   it('don\'t panic needs the student to have played the engine\'s move', () => {
     const p = (falseFx as { key: string; fenBefore: string; fenAfter: string; best: { cp: number; pv: string[] } }[]).find((x) => x.key === 'uJro3yCDEgk:25')!;
     // No history that leads to this board → nothing is said (the replay guard).
-    const out = studentMoveTeaching({ namesStudentMoves: false, theory: true,
+    const out = studentMoveTeaching({ unpricedCredit: 'refused', namesStudentMoves: false, theory: true,
       ...base, fenBefore: p.fenAfter, san: 'Qxd5', history: ['e4', 'Qxd5'], bestSan: 'Qxd5',
       bestLine: { rank: 1, evaluation: p.best.cp, moves: p.best.pv, mate: null },
     });
@@ -59,7 +59,7 @@ describe('learnBoardTeaching — every lane reaches the door', () => {
 
   it('push or hold reaches the door in a close ending', () => {
     // Rook ending, White a pawn up, the student plays a quiet king move.
-    const out = studentMoveTeaching({ namesStudentMoves: false, theory: true, ...base, fenBefore: 'r5k1/5ppp/8/8/8/8/4PPPP/R5K1 w - - 0 1', san: 'Kf1', history: ['Kf1'], cpAfter: 90 });
+    const out = studentMoveTeaching({ unpricedCredit: 'refused', namesStudentMoves: false, theory: true, ...base, fenBefore: 'r5k1/5ppp/8/8/8/8/4PPPP/R5K1 w - - 0 1', san: 'Kf1', history: ['Kf1'], cpAfter: 90 });
     expect(out.find((h) => h.lane === 'pushOrHold')?.claims).toEqual(['ending-rook-endgame-up']);
   });
 
@@ -74,7 +74,7 @@ describe('learnBoardTeaching — every lane reaches the door', () => {
     const p = (kingFx as { key: string; fen: string; san: string }[]).find((x) => x.key === 'xoS71OW-Re0:21')!;
     // The engine's line after Qe1 (depth 16): …Nxb3 axb3 …Re8 Qg3 — the hop it plays.
     const linesAfter = [['c5b3', 'a2b3', 'f8e8', 'e1g3', 'd6d5', 'e4e5', 'f6e4', 'c3e4', 'd5e4', 'f3d2']];
-    const [h] = studentMoveTeaching({ namesStudentMoves: false, theory: true, ...base, linesAfter, fenBefore: p.fen, san: p.san, history: [p.san] }).filter((x) => x.lane === 'kingAttack');
+    const [h] = studentMoveTeaching({ unpricedCredit: 'refused', namesStudentMoves: false, theory: true, ...base, linesAfter, fenBefore: p.fen, san: p.san, history: [p.san] }).filter((x) => x.lane === 'kingAttack');
     expect(h.arrows).toEqual([]);
     expect(h.text).not.toMatch(/g3/);
   });

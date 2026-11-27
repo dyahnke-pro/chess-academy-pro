@@ -122,7 +122,8 @@ function minority(c: Chess, side: Color): StructurePlanRead | null {
   if (!cPawn || !dPawn || rankOf(cPawn) !== (them === 'w' ? 3 : 6)) return null;
   const b = mine.find((p) => p[0] === 'b');
   if (!b) return null;
-  const goal = sq(1, them === 'w' ? 4 : 5)!;
+  const goal = sq(1, them === 'w' ? 4 : 5);
+  if (!goal) return null;
   // The road from b2/b7 to b5/b4: clear of pawns.
   for (let r = rankOf(b) + fwd(side); r !== rankOf(goal) + fwd(side); r += fwd(side)) {
     const s = sq(1, r);
@@ -142,10 +143,12 @@ function expansion(c: Chess, side: Color): StructurePlanRead | null {
   // The Meran shape: the c-pawn already on its third rank (…c6), so the
   // break needs the b-pawn's space first; a c-pawn at home just breaks.
   const cp = mine.find((p) => p[0] === 'c' && rankOf(p) === home + fwd(side));
-  const dTheirs = sq(3, side === 'w' ? 5 : 4)!;
+  const dTheirs = sq(3, side === 'w' ? 5 : 4);
+  if (!dTheirs) return null;
   if (!b || !cp || c.get(dTheirs as Square)?.type !== 'p' || c.get(dTheirs as Square)?.color !== them) return null;
-  const bTo = sq(1, side === 'w' ? 4 : 5)!;
-  const cTo = sq(2, side === 'w' ? 4 : 5)!;
+  const bTo = sq(1, side === 'w' ? 4 : 5);
+  const cTo = sq(2, side === 'w' ? 4 : 5);
+  if (!bTo || !cTo) return null;
   // b5 needs its road; c5 needs c5 empty and hits d4.
   for (let r = rankOf(b) + fwd(side); r !== rankOf(bTo) + fwd(side); r += fwd(side)) { const s = sq(1, r); if (!s || c.get(s as Square)) return null; }
   for (let r = rankOf(cp) + fwd(side); r !== rankOf(cTo) + fwd(side); r += fwd(side)) { const s = sq(2, r); if (!s || c.get(s as Square)) return null; }

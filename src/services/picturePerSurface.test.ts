@@ -40,7 +40,7 @@ const fan: AnalysisLine[] = READS.map(([evaluation, moves], k) => ({ rank: k + 1
 const afterBf7: AnalysisLine[] = [{ rank: 1, depth: 16, evaluation: 279, mate: null, moves: fan[0].moves.slice(1) }];
 const reads = { before: fan, after: afterBf7, passBefore: [], passAfter: [] };
 
-const lessonInput = (r: MoveThoughtInput['reads']): MoveThoughtInput => ({
+const lessonInput = (r: MoveThoughtInput['reads']): MoveThoughtInput => ({ unpricedCredit: 'refused', soundPlies: new Set<number>(),
   ...thoughtSettings(writerFor('lesson')), plainThreatsSeen: false, tense: 'now', phrases: null,
   fenBefore: FEN, san: 'Bf7', moverIsStudent: true, prev: NO_PREV_CAPTURE, line: null, theirLast: null, history: [], reads: r, costCp: 0,
 });
@@ -74,7 +74,7 @@ describe('the picture reaches every surface through the one fact set', { timeout
 
   it('Learn: the student\'s move hands the picture to the door on the thought lane', () => {
     const fenNow = (() => { const b = new Chess(FEN); b.move('Bf7'); b.move('f4'); return b.fen(); })();
-    const out = learnThoughtTurn({ studentMove: { fenBefore: FEN, san: 'Bf7', history: [], prev: NO_PREV_CAPTURE, theirLast: null, reads, costCp: 0 }, reply: null, fenNow, student: 'w', story: createStoryStore('t') });
+    const out = learnThoughtTurn({ soundPlies: new Set<number>(), studentMove: { fenBefore: FEN, san: 'Bf7', history: [], prev: NO_PREV_CAPTURE, theirLast: null, reads, costCp: 0 }, reply: null, fenNow, student: 'w', story: createStoryStore('t') });
     const v = out.find((f) => f.computer === 'pictureVerdict');
     expect(v?.lane).toBe('thought');
     // The plan names the student's move: the door holds it unless asked.

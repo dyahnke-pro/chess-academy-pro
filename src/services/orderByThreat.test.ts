@@ -61,7 +61,7 @@ describe('the order and the stop on one reply are one idea (colle800 16.e5)', ()
     const { composeThought } = await import('./thoughtComposer');
     const { NO_PREV_CAPTURE } = await import('./captureRun');
     const sans = ['d4', 'd5', 'Nf3', 'Nf6', 'e3', 'e6', 'Bd3', 'c5', 'c3', 'Nc6', 'O-O', 'Be7', 'Nbd2', 'a6', 'e4', 'O-O'];
-    const facts = moveThoughtFacts({ moveReads: writerFor('review').moveReads, namesPlayedMove: true, fenBefore: after(sans), san: 'e5', plainThreatsSeen: false, tense: 'past', moverIsStudent: true,
+    const facts = moveThoughtFacts({ register: 'review', soundPlies: new Set<number>(), unpricedCredit: 'refused', moveReads: writerFor('review').moveReads, namesPlayedMove: true, fenBefore: after(sans), san: 'e5', plainThreatsSeen: false, tense: 'past', moverIsStudent: true,
       prev: NO_PREV_CAPTURE, line: ['Nd7', 'Re1', 'b5'], theirLast: null, story: false, history: sans, phrases: null, reads: null, costCp: null, theory: false });
     expect(facts.some((f) => f.computer === 'orderByThreat' && /…c4/.test(f.text))).toBe(true);
     expect(facts.some((f) => f.computer === 'moveStops' && /…c4/.test(f.text))).toBe(true);

@@ -108,7 +108,7 @@ const ORDINAL: Record<number, string> = { 3: 'third', 4: 'fourth', 5: 'fifth' };
 /** What the capture nets, by count alone (`countWords.test`): the target
  *  itself when it is won outright, else its points. */
 function wins(gain: number, target: PieceSymbol, own: 'your' | 'their'): string {
-  if (gain >= (MATERIAL_VALUE[target] ?? 99)) return `${own === 'your' ? 'the' : 'your'} ${NAME[target]}`;
+  if (target !== 'p' && gain >= (MATERIAL_VALUE[target] ?? 99)) return `${own === 'your' ? 'the' : 'your'} ${NAME[target]}`;
   if (gain === 2) return 'two pawns';
   if (gain === 1) return 'a pawn';
   return `${count(gain)} points of material`;
