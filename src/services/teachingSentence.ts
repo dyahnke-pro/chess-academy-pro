@@ -2082,7 +2082,9 @@ export function structurePlanWords(
     case 'expansion': {
       if (!p.key?.hits || !p.first) return null;
       const brk = names ? p.key.to : `the ${pawnOf(p.key.from)}`;
-      const gain = names ? p.first.to : `the ${pawnOf(p.first.from)}`;
+      // The pawn that gains the space is named by its file, never its square:
+      // the break and its target are the two squares the plan is about.
+      const gain = `the ${pawnOf(p.first.from)}`;
       return rotateStem([
         `${lead}: the break ${brk} at ${p.key.hits}, once ${gain} has taken queenside space.`,
         `${lead} is the break at ${p.key.hits} with ${brk}, after ${gain} gains space.`,
