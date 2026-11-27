@@ -1,8 +1,8 @@
 {
  "about": "Which teaching computer reaches which surface, by a static call path from each surface root (scripts/computer-reach.mjs; the list is scripts/computer-reach/computers.json). learn: yes = through the focus runner, door = computed in a Learn turn and decided by Learn's turn door (spoken when the door keeps it); a door-only row says why in `door` (an adapter of computers the other surfaces read, or Learn-only by design).",
  "graph": {
-  "files": 1774,
-  "nodes": 18137
+  "files": 1786,
+  "nodes": 18256
  },
  "totals": {
   "computers": 344,
@@ -2933,24 +2933,6 @@
     "playSilent",
     "insights",
     "endgame"
-   ]
-  },
-  {
-   "key": "services/mastersPlanRead.ts#mastersPlanLine",
-   "name": "mastersPlanLine (the plan sentence)",
-   "file": "services/mastersPlanRead.ts",
-   "fn": "mastersPlanLine",
-   "says": "'The plan in this structure: your break is …c5 — masters from here usually play it, and theirs is d5' (or your piece's usual square + castli",
-   "origin": "map",
-   "learn": "no",
-   "review": "yes",
-   "lesson": "no",
-   "chat": "no",
-   "tapped": "no",
-   "tactics": "no",
-   "app": true,
-   "other": [
-    "playSilent"
    ]
   },
   {
@@ -6729,6 +6711,24 @@
     "playSilent",
     "insights",
     "endgame"
+   ]
+  },
+  {
+   "key": "services/theoryComposer.ts#mastersPlanLine",
+   "name": "mastersPlanLine (the plan sentence)",
+   "file": "services/theoryComposer.ts",
+   "fn": "mastersPlanLine",
+   "says": "'Your plan: b4 and a4, to break with c5. Their plan builds to d5.' (goal plus at most two key moves; a piece the plan brings in its own sentence with its job; castli",
+   "origin": "map",
+   "learn": "no",
+   "review": "yes",
+   "lesson": "no",
+   "chat": "no",
+   "tapped": "no",
+   "tactics": "no",
+   "app": true,
+   "other": [
+    "playSilent"
    ]
   },
   {

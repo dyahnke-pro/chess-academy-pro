@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { slipHeading } from '../../services/trapWords';
 import { useParams, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { Chess } from 'chess.js';
 import { sanitizeForTTS, voiceService } from '../../services/voiceService';
@@ -2471,7 +2472,7 @@ export function OpeningDetailPage(): JSX.Element {
           <div className="flex items-center gap-2 mb-3">
             <Sparkles size={14} className="text-amber-400" />
             <h3 className="text-sm font-semibold text-theme-text">
-              {theirSlips.length === 1 ? 'Their known mistake' : 'Their known mistakes'}
+              {slipHeading('opponent', theirSlips.length)}
             </h3>
           </div>
           <div className="space-y-3">

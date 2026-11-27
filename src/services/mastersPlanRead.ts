@@ -13,7 +13,6 @@
 import { Chess, type Square } from 'chess.js';
 import { introWithPredicate } from '../utils/moveIntro.ts';
 import type { LocalDbMove } from './masterPlayLookup';
-import { shareAdverb } from '../utils/shareWords.ts';
 import { positionOf } from '../utils/samePosition.ts';
 
 export type MovesAt = (fen: string) => readonly LocalDbMove[] | null;
@@ -27,6 +26,9 @@ export interface PlanBreak {
   from: string;
   /** Share of the weighted master games from here that play it, 0..1. */
   share: number;
+  /** The mover's own moves on the heaviest path to it (the plan's key moves —
+   *  `theoryComposer.keyMovesOf` picks what is said). */
+  lead?: Array<{ san: string; piece: string; color: 'w' | 'b' }>;
 }
 
 export interface PieceHome {
@@ -36,6 +38,9 @@ export interface PieceHome {
   to: string;
   san: string;
   share: number;
+  /** The board the move is played on and its colour — the job is read there. */
+  fen?: string;
+  color?: 'w' | 'b';
 }
 
 export interface MastersPlanRead {
@@ -82,13 +87,19 @@ function isBreak(c: Chess, m: { piece: string; captured?: string; to: string; co
   return false;
 }
 
-export function mastersPlanRead(fen: string, movesAt: MovesAt): MastersPlanRead | null {
+export function mastersPlanRead(fen: string, movesAt: MovesAt, opts?: {
+  /** The share a break must reach to be the plan (default `MIN_BREAK_SHARE`). A
+   *  theory surface that SAYS "a plan" for the board's leading break passes a
+   *  lower bar; "usually" wording stays on the default. */
+  minBreakShare?: number;
+}): MastersPlanRead | null {
+  const minBreak = opts?.minBreakShare ?? MIN_BREAK_SHARE;
   const root = movesAt(fen);
   const rootGames = root?.reduce((n, m) => n + m.games, 0) ?? 0;
   if (!root || rootGames < MIN_ROOT_GAMES) return null;
   // side → break key → { weight, san, square, from }
-  const tally: Record<'w' | 'b', Map<string, { weight: number; san: string; square: string; from: string }>> = { w: new Map(), b: new Map() };
-  const pieces: Record<'w' | 'b', Map<string, { weight: number; piece: string; from: string; to: string; san: string }>> = { w: new Map(), b: new Map() };
+  const tally: Record<'w' | 'b', Map<string, { weight: number; san: string; square: string; from: string; lead: PlanBreak['lead']; best: number }>> = { w: new Map(), b: new Map() };
+  const pieces: Record<'w' | 'b', Map<string, { weight: number; piece: string; from: string; to: string; san: string; fen: string }>> = { w: new Map(), b: new Map() };
   const castles: Record<'w' | 'b', Record<'short' | 'long', number>> = { w: { short: 0, long: 0 }, b: { short: 0, long: 0 } };
   const seen = new Set<string>();
   // THE PIECE IS NAMED WHERE IT STANDS NOW (clean-pass walk 2026-10-03, G3
@@ -98,7 +109,7 @@ export function mastersPlanRead(fen: string, movesAt: MovesAt): MastersPlanRead 
   // landed on that square.
   let rootBoard: Chess | null = null;
   try { rootBoard = new Chess(fen); } catch { rootBoard = null; }
-  const walk = (at: string, weight: number, depth: number, found: Set<string>, lastCaptureOn: string | null, lastTo: string | null, touched: ReadonlySet<string> = new Set()): void => {
+  const walk = (at: string, weight: number, depth: number, found: Set<string>, lastCaptureOn: string | null, lastTo: string | null, touched: ReadonlySet<string> = new Set(), path: ReadonlyArray<{ san: string; piece: string; color: 'w' | 'b' }> = []): void => {
     if (depth >= DEPTH) return;
     const moves = movesAt(at);
     const total = moves?.reduce((n, m) => n + m.games, 0) ?? 0;
@@ -131,8 +142,9 @@ export function mastersPlanRead(fen: string, movesAt: MovesAt): MastersPlanRead 
         // the same plan, not a second vote.
         const id = `${m.color}:${m.from}${m.to}`;
         if (!found.has(id)) {
-          const cur = tally[m.color].get(id) ?? { weight: 0, san: m.san, square: m.to, from: m.from };
+          const cur = tally[m.color].get(id) ?? { weight: 0, san: m.san, square: m.to, from: m.from, lead: [], best: 0 };
           cur.weight += w;
+          if (w > cur.best) { cur.best = w; cur.lead = path.filter((p) => p.color === m.color); }
           tally[m.color].set(id, cur);
           next = new Set(found); next.add(id);
         }
@@ -149,24 +161,24 @@ export function mastersPlanRead(fen: string, movesAt: MovesAt): MastersPlanRead 
         && rootBoard?.get(m.from)?.type === m.piece && rootBoard?.get(m.from)?.color === m.color) {
         const id = `${m.color}:piece:${m.from}`;
         const pid = `${m.from}${m.to}`;
-        const cur = pieces[m.color].get(pid) ?? { weight: 0, piece: m.piece, from: m.from, to: m.to, san: m.san };
+        const cur = pieces[m.color].get(pid) ?? { weight: 0, piece: m.piece, from: m.from, to: m.to, san: m.san, fen: at };
         cur.weight += w;
         pieces[m.color].set(pid, cur);
         next = new Set(next); next.add(id);
       }
-      walk(c.fen(), w, depth + 1, next, m.captured ? m.to : null, m.to, new Set([...touched, m.from, m.to]));
+      walk(c.fen(), w, depth + 1, next, m.captured ? m.to : null, m.to, new Set([...touched, m.from, m.to]), [...path, { san: m.san, piece: m.piece, color: m.color }]);
     }
   };
   walk(fen, 1, 0, new Set(), null, null);
   const top = (side: 'w' | 'b'): PlanBreak | null => {
     const best = [...tally[side].values()].sort((a, b) => b.weight - a.weight)[0];
-    if (!best || best.weight < MIN_BREAK_SHARE) return null;
-    return { san: best.san, square: best.square, from: best.from, share: Math.min(1, best.weight) };
+    if (!best || best.weight < minBreak) return null;
+    return { san: best.san, square: best.square, from: best.from, share: Math.min(1, best.weight), lead: best.lead };
   };
   const white = top('w'); const black = top('b');
   const piece = (side: 'w' | 'b'): PieceHome | null => {
     const best = [...pieces[side].values()].sort((a, b) => b.weight - a.weight)[0];
-    return best && best.weight >= MIN_PIECE_SHARE ? { piece: best.piece, from: best.from, to: best.to, san: best.san, share: Math.min(1, best.weight) } : null;
+    return best && best.weight >= MIN_PIECE_SHARE ? { piece: best.piece, from: best.from, to: best.to, san: best.san, share: Math.min(1, best.weight), fen: best.fen, color: side } : null;
   };
   const castle = (side: 'w' | 'b'): { side: 'short' | 'long'; share: number } | null => {
     const { short, long } = castles[side];
@@ -193,7 +205,16 @@ export function planStillAhead(read: MastersPlanRead | null, fen: string): Maste
     if (!x) return null;
     const p = at(x.from);
     const land = at(x.square);
-    return p && p.type === 'p' && p.color === side && land?.color !== side ? x : null;
+    if (!(p && p.type === 'p' && p.color === side && land?.color !== side)) return null;
+    // A key move already on the board is no longer ahead: its piece stands on
+    // the square the move lands on.
+    const lead = x.lead?.filter((m) => {
+      const to = m.san.replace(/[+#!?]+$/, '').match(/([a-h][1-8])(?:=[QRBN])?$/)?.[1];
+      if (!to) return true;
+      const there = at(to);
+      return !(there && there.type === m.piece && there.color === m.color);
+    });
+    return lead && x.lead && lead.length !== x.lead.length ? { ...x, lead } : x;
   };
   const pieceAhead = (x: PieceHome | null, side: 'w' | 'b'): PieceHome | null => {
     if (!x) return null;
@@ -202,54 +223,6 @@ export function planStillAhead(read: MastersPlanRead | null, fen: string): Maste
   };
   const out = { ...read, white: breakAhead(read.white, 'w'), black: breakAhead(read.black, 'b'), whitePiece: pieceAhead(read.whitePiece, 'w'), blackPiece: pieceAhead(read.blackPiece, 'b') };
   return out.white || out.black || out.whitePiece || out.blackPiece ? out : null;
-}
-
-/** The sentence, from the student's seat. Null when neither side has a break
- *  master games agree on. */
-export function mastersPlanLine(
-  read: MastersPlanRead | null,
-  student: 'w' | 'b',
-  /** REQUIRED — the board a live surface speaks on, or null where the move may
-   *  be named (review: the game is over). On a live board a step of the
-   *  student's that is LEGAL right now is their next move, so it is held
-   *  (David's Smith-Morra replay 2026-10-19, move 3: "your bishop on f1 usually
-   *  goes to c4 (Bc4)" with Bc4 legal — LEARN NAMES NO MOVE UNASKED). */
-  holdPlayableOn: string | null,
-): { text: string; squares: string[]; arrows: Array<{ from: string; to: string }> } | null {
-  if (!read) return null;
-  const playable = (step: { from: string; square?: string; to?: string } | null | undefined): boolean => {
-    if (!step || !holdPlayableOn) return false;
-    try {
-      const c = new Chess(holdPlayableOn);
-      if (c.turn() !== student) return false;
-      return c.moves({ verbose: true }).some((m) => m.from === step.from && m.to === (step.to ?? step.square));
-    } catch { return false; }
-  };
-  const them: 'w' | 'b' = student === 'w' ? 'b' : 'w';
-  const mineRaw = student === 'w' ? read.white : read.black;
-  const mine = playable(mineRaw) ? null : mineRaw;
-  const theirs = student === 'w' ? read.black : read.white;
-  const myPieceRaw = student === 'w' ? read.whitePiece : read.blackPiece;
-  const myPiece = playable(myPieceRaw) ? null : myPieceRaw;
-  const myCastle = student === 'w' ? read.whiteCastle : read.blackCastle;
-  const dot = (san: string, side: 'w' | 'b'): string => `${side === 'b' ? '…' : ''}${san}`;
-  const NAME: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
-  const parts: string[] = [];
-  const squares: string[] = [];
-  const arrows: Array<{ from: string; to: string }> = [];
-  if (mine) {
-    parts.push(`your break is ${dot(mine.san, student)} — masters from here ${shareAdverb(Math.round(mine.share * 100))} play it`);
-    squares.push(mine.square); arrows.push({ from: mine.from, to: mine.square });
-  } else if (myPiece) {
-    parts.push(`your ${NAME[myPiece.piece] ?? 'piece'} on ${myPiece.from} usually goes to ${myPiece.to} (${dot(myPiece.san, student)})${myCastle ? `, and you castle ${myCastle.side}` : ''}`);
-    squares.push(myPiece.to); arrows.push({ from: myPiece.from, to: myPiece.to });
-  }
-  if (theirs) {
-    parts.push(`${parts.length ? 'theirs is' : 'their break is'} ${dot(theirs.san, them)}`);
-    squares.push(theirs.square); arrows.push({ from: theirs.from, to: theirs.square });
-  }
-  if (!parts.length) return null;
-  return { text: `The plan in this structure: ${parts.join(', and ')}.`, squares, arrows };
 }
 
 /** The walk's own rules, so a prefetch can look up exactly the tree the read
@@ -292,7 +265,7 @@ export function mastersBreakIdea(
   if (!br && home) {
     const NAME: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
     return {
-      text: `The key piece in this structure is your ${NAME[home.piece] ?? 'piece'} on ${home.from}: master games from here ${shareAdverb(Math.round(home.share * 100))} bring it to ${home.to}.`,
+      text: `The key piece in this structure is your ${NAME[home.piece] ?? 'piece'} on ${home.from}: it belongs on ${home.to}.`,
       squares: [home.to, home.from], move: { from: home.from, to: home.to }, aim: `plan-aim:route:${home.from}-${home.to}`, share: home.share,
     };
   }
@@ -311,7 +284,7 @@ export function mastersBreakIdea(
         : null;
   if (!what) return null;
   return {
-    text: `The break that changes this structure is ${dot}: ${what}. Masters from here ${shareAdverb(Math.round(br.share * 100))} get it in.`,
+    text: `The break that changes this structure is ${dot}: ${what}.`,
     squares: [br.square, br.from, ...struck],
     move: { from: br.from, to: br.square },
     aim: `plan-aim:break:${br.square}`,
@@ -347,10 +320,9 @@ export function preparesBreakClause(
   const coverers = b.attackers(brk.square as Square, moved.color);
   if (!coverers.includes(moved.to)) return null;
   const whose = moverIsStudent ? 'your' : 'their';
-  const pct = Math.round(brk.share * 100);
   // The break's square is said once ("prepares d4: their knight on f3
   // covers d4, and masters push d4" said it three times, 2026-11-12).
-  return { clause: `prepares ${brk.san}: ${whose} ${PIECE_NAME[moved.piece]} on ${moved.to} covers the square, and masters push it in ${pct}% of their games from here`, squares: [moved.to, brk.square] };
+  return { clause: `prepares ${brk.san}: ${whose} ${PIECE_NAME[moved.piece]} on ${moved.to} covers the square the break lands on`, squares: [moved.to, brk.square] };
 }
 
 /** The break-prep said as the move's whole beat (the opening brief). */

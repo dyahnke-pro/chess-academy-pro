@@ -1,0 +1,647 @@
+{
+ "meta": {
+  "depth": 22,
+  "built": "2026-11-26",
+  "traps": 37
+ },
+ "traps": [
+  {
+   "order": 0,
+   "name": "Fool's Mate",
+   "source": "opening index: Barnes Opening: Fool's Mate",
+   "line": "f3 e5",
+   "board": "rnbqkbnr/pppp1ppp/8/4p3/8/5P2/PPPPP1PP/RNBQKBNR w KQkq -",
+   "slip": "g4",
+   "by": "w",
+   "punish": [
+    "Qh4#"
+   ],
+   "endCp": 0,
+   "mate": true
+  },
+  {
+   "order": 1,
+   "name": "Beginner's Trap",
+   "source": "opening index: Kádas Opening: Beginner's Trap",
+   "line": "h4 d5",
+   "board": "rnbqkbnr/ppp1pppp/8/3p4/7P/8/PPPPPPP1/RNBQKBNR w KQkq -",
+   "slip": "Rh3",
+   "by": "w",
+   "punish": [
+    "Bxh3",
+    "Nxh3",
+    "e5",
+    "g3"
+   ],
+   "endCp": 251,
+   "mate": false
+  },
+  {
+   "order": 2,
+   "name": "Meadow Hay Trap",
+   "source": "opening index: Ware Opening: Meadow Hay Trap",
+   "line": "a4 e5",
+   "board": "rnbqkbnr/pppp1ppp/8/4p3/P7/8/1PPPPPPP/RNBQKBNR w KQkq -",
+   "slip": "Ra3",
+   "by": "w",
+   "punish": [
+    "Bxa3",
+    "Nxa3",
+    "Nf6",
+    "e3"
+   ],
+   "endCp": 235,
+   "mate": false
+  },
+  {
+   "order": 3,
+   "name": "Brigg's Trap",
+   "source": "opening index: Zukertort Opening: Tennison Gambit, Brigg's Trap",
+   "line": "e4 d5 Nf3 dxe4 Ng5 Nf6 Nc3 Bf5 Qe2",
+   "board": "rn1qkb1r/ppp1pppp/5n2/5bN1/4p3/2N5/PPPPQPPP/R1B1KB1R b KQkq -",
+   "slip": "Qd4",
+   "by": "b",
+   "punish": [
+    "Qb5+",
+    "Nbd7",
+    "Qxf5",
+    "g6",
+    "Qf4",
+    "e5",
+    "Qe3",
+    "Nc5",
+    "f3",
+    "exf3",
+    "Nxf3",
+    "Qxe3+",
+    "dxe3",
+    "O-O-O",
+    "Nxe5",
+    "Re8",
+    "Nc4",
+    "a6",
+    "Bd2",
+    "Nfe4",
+    "Nxe4",
+    "Nxe4"
+   ],
+   "endCp": 382,
+   "mate": false
+  },
+  {
+   "order": 8,
+   "name": "Sea-Cadet Mate",
+   "source": "opening index: Scotch Game: Sea-Cadet Mate",
+   "line": "e4 e5 Nf3 Nc6 d4 exd4 c3 dxc3 Nxc3 d6 Bc4 Bg4 O-O",
+   "board": "r2qkbnr/ppp2ppp/2np4/8/2B1P1b1/2N2N2/PP3PPP/R1BQ1RK1 b kq -",
+   "slip": "Ne5",
+   "by": "b",
+   "punish": [
+    "Nxe5",
+    "Bxd1",
+    "Bxf7+",
+    "Ke7",
+    "Nd5#"
+   ],
+   "endCp": 526,
+   "mate": false
+  },
+  {
+   "order": 9,
+   "name": "Mortimer Trap",
+   "source": "opening index: Ruy Lopez: Berlin Defense, Anti-Berlin Variation, Mortimer Trap",
+   "line": "e4 e5 Nf3 Nc6 Bb5 Nf6 d3 Ne7",
+   "board": "r1bqkb1r/ppppnppp/5n2/1B2p3/4P3/3P1N2/PPP2PPP/RNBQK2R w KQkq -",
+   "slip": "Nxe5",
+   "by": "w",
+   "punish": [
+    "c6",
+    "Nxf7",
+    "Kxf7",
+    "Ba4"
+   ],
+   "endCp": 145,
+   "mate": false
+  },
+  {
+   "order": 10,
+   "name": "Tarrasch Trap",
+   "source": "opening index: Ruy Lopez: Berlin Defense, Tarrasch Trap",
+   "line": "e4 e5 Nf3 Nc6 Bb5 d6 d4 Bd7 Nc3 Nf6 O-O Be7 Re1",
+   "board": "r2qk2r/pppbbppp/2np1n2/1B2p3/3PP3/2N2N2/PPP2PPP/R1BQR1K1 b kq -",
+   "slip": "O-O",
+   "by": "b",
+   "punish": [
+    "Bxc6",
+    "Bxc6",
+    "dxe5",
+    "dxe5",
+    "Qxd8",
+    "Rfxd8",
+    "Nxe5",
+    "Be8"
+   ],
+   "endCp": 132,
+   "mate": false
+  },
+  {
+   "order": 11,
+   "name": "Noah's Ark Trap",
+   "source": "opening index: Ruy Lopez: Noah's Ark Trap",
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 b5 Bb3 d6 d4 Nxd4 Nxd4 exd4",
+   "board": "r1bqkbnr/2p2ppp/p2p4/1p6/3pP3/1B6/PPP2PPP/RNBQK2R w KQkq -",
+   "slip": "Qxd4",
+   "by": "w",
+   "punish": [
+    "c5",
+    "Qd3",
+    "c4",
+    "Bxc4",
+    "bxc4",
+    "Qg3"
+   ],
+   "endCp": 286,
+   "mate": false
+  },
+  {
+   "order": 12,
+   "name": "Tarrasch Trap",
+   "source": "opening index: Ruy Lopez: Open, Tarrasch Trap",
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Nxe4 d4 b5 Bb3 d5 dxe5 Be6 c3 Be7 Re1 O-O Nd4",
+   "board": "r2q1rk1/2p1bppp/p1n1b3/1p1pP3/3Nn3/1BP5/PP3PPP/RNBQR1K1 b - -",
+   "slip": "Qd7",
+   "by": "b",
+   "punish": [
+    "Nxe6",
+    "fxe6",
+    "Rxe4",
+    "g5",
+    "Re1"
+   ],
+   "endCp": 378,
+   "mate": false
+  },
+  {
+   "order": 13,
+   "name": "Noah's Ark Trap",
+   "source": "opening index: Ruy Lopez: Noah's Ark Trap",
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 d4 Nxd4 Nxd4 exd4",
+   "board": "r1bqk2r/2p1bppp/p2p1n2/1p6/3pP3/1B6/PPP2PPP/RNBQR1K1 w kq -",
+   "slip": "Qxd4",
+   "by": "w",
+   "punish": [
+    "c5",
+    "Qd3",
+    "c4",
+    "Bxc4",
+    "bxc4",
+    "Qxc4",
+    "Be6"
+   ],
+   "endCp": 322,
+   "mate": false
+  },
+  {
+   "order": 19,
+   "name": "Légal's Mate",
+   "source": "lesson: legals-mate",
+   "line": "e4 e5 Nf3 Nc6 Bc4 d6 Nc3 Bg4 h3 Bh5 Nxe5",
+   "board": "r2qkbnr/ppp2ppp/2np4/4N2b/2B1P3/2N4P/PPPP1PP1/R1BQK2R b KQkq -",
+   "slip": "Bxd1",
+   "by": "b",
+   "punish": [
+    "Bxf7+",
+    "Ke7",
+    "Nd5#"
+   ],
+   "endCp": 0,
+   "mate": true
+  },
+  {
+   "order": 22,
+   "name": "Scholar's Mate",
+   "source": "famous-trap-lines: https://en.wikipedia.org/wiki/Scholar%27s_mate",
+   "line": "e4 e5 Bc4 Nc6 Qh5",
+   "board": "r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq -",
+   "slip": "Nf6",
+   "by": "b",
+   "punish": [
+    "Qxf7#"
+   ],
+   "endCp": 0,
+   "mate": true
+  },
+  {
+   "order": 23,
+   "name": "Légal Trap",
+   "source": "famous-trap-lines: https://en.wikipedia.org/wiki/L%C3%A9gal_Trap",
+   "line": "e4 e5 Nf3 d6 Bc4 Bg4 Nc3 g6 Nxe5",
+   "board": "rn1qkbnr/ppp2p1p/3p2p1/4N3/2B1P1b1/2N5/PPPP1PPP/R1BQK2R b KQkq -",
+   "slip": "Bxd1",
+   "by": "b",
+   "punish": [
+    "Bxf7+",
+    "Ke7",
+    "Nd5#"
+   ],
+   "endCp": 0,
+   "mate": true
+  },
+  {
+   "order": 24,
+   "name": "Damiano Defense trap",
+   "source": "famous-trap-lines: https://en.wikipedia.org/wiki/Damiano_Defence",
+   "line": "e4 e5 Nf3 f6 Nxe5",
+   "board": "rnbqkbnr/pppp2pp/5p2/4N3/4P3/8/PPPP1PPP/RNBQKB1R b KQkq -",
+   "slip": "fxe5",
+   "by": "b",
+   "punish": [
+    "Qh5+",
+    "Ke7",
+    "Qxe5+"
+   ],
+   "endCp": 301,
+   "mate": false
+  },
+  {
+   "order": 25,
+   "name": "Petrov's Defense trap",
+   "source": "famous-trap-lines: https://en.wikipedia.org/wiki/Petrov%27s_Defence",
+   "line": "e4 e5 Nf3 Nf6 Nxe5 Nxe4 Qe2",
+   "board": "rnbqkb1r/pppp1ppp/8/4N3/4n3/8/PPPPQPPP/RNB1KB1R b KQkq -",
+   "slip": "Nf6",
+   "by": "b",
+   "punish": [
+    "Nc6+",
+    "Qe7",
+    "Nxe7"
+   ],
+   "endCp": 479,
+   "mate": false
+  },
+  {
+   "order": 26,
+   "name": "Owen Defense trap",
+   "source": "famous-trap-lines: https://en.wikipedia.org/wiki/Owen%27s_Defence",
+   "line": "e4 b6 d4 Bb7 Bd3 f5 exf5",
+   "board": "rn1qkbnr/pbppp1pp/1p6/5P2/3P4/3B4/PPP2PPP/RNBQK1NR b KQkq -",
+   "slip": "Bxg2",
+   "by": "b",
+   "punish": [
+    "Qh5+",
+    "g6",
+    "fxg6"
+   ],
+   "endCp": 287,
+   "mate": false
+  },
+  {
+   "order": 27,
+   "name": "Queen's Gambit Accepted b5 trap",
+   "source": "famous-trap-lines: https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted",
+   "line": "d4 d5 c4 dxc4 e3 b5 a4 c6 axb5",
+   "board": "rnbqkbnr/p3pppp/2p5/1P6/2pP4/4P3/1P3PPP/RNBQKBNR b KQkq -",
+   "slip": "cxb5",
+   "by": "b",
+   "punish": [
+    "Qf3",
+    "Qc7",
+    "Qxa8"
+   ],
+   "endCp": 323,
+   "mate": false
+  },
+  {
+   "order": 28,
+   "name": "Halosar Trap",
+   "source": "famous-trap-lines: https://en.wikipedia.org/wiki/Halosar_Trap",
+   "line": "d4 d5 e4 dxe4 Nc3 Nf6 f3 exf3 Qxf3 Qxd4 Be3 Qb4 O-O-O",
+   "board": "rnb1kb1r/ppp1pppp/5n2/8/1q6/2N1BQ2/PPP3PP/2KR1BNR b kq -",
+   "slip": "Bg4",
+   "by": "b",
+   "punish": [
+    "Nb5",
+    "Na6",
+    "Qxb7"
+   ],
+   "endCp": 326,
+   "mate": false
+  },
+  {
+   "order": 29,
+   "name": "Rubinstein Trap",
+   "source": "famous-trap-lines: https://en.wikipedia.org/wiki/Rubinstein_Trap",
+   "line": "d4 d5 Nf3 Nf6 c4 e6 Bg5 Nbd7 e3 Be7 Nc3 O-O Rc1 Re8 Qc2 a6 cxd5 exd5 Bd3 c6 O-O Ne4 Bf4",
+   "board": "r1bqr1k1/1p1nbppp/p1p5/3p4/3PnB2/2NBPN2/PPQ2PPP/2R2RK1 b - -",
+   "slip": "f5",
+   "by": "b",
+   "punish": [
+    "Nxd5",
+    "Bd6",
+    "Qb3"
+   ],
+   "endCp": 298,
+   "mate": false
+  },
+  {
+   "order": 30,
+   "name": "Englund Gambit trap",
+   "source": "famous-trap-lines: https://en.wikipedia.org/wiki/Englund_Gambit",
+   "line": "d4 e5 dxe5 Nc6 Nf3 Qe7 Bf4 Qb4+ Bd2 Qxb2",
+   "board": "r1b1kbnr/pppp1ppp/2n5/4P3/8/5N2/PqPBPPPP/RN1QKB1R w KQkq -",
+   "slip": "Bc3",
+   "by": "w",
+   "punish": [
+    "Bb4",
+    "Bd2",
+    "Qxa1"
+   ],
+   "endCp": 378,
+   "mate": false
+  },
+  {
+   "order": 31,
+   "name": "Kieninger Trap",
+   "source": "famous-trap-lines: https://en.wikipedia.org/wiki/Budapest_Gambit",
+   "line": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3 Bb4+ Nbd2 Qe7 a3 Ngxe5",
+   "board": "r1b1k2r/ppppqppp/2n5/4n3/1bP2B2/P4N2/1P1NPPPP/R2QKB1R w KQkq -",
+   "slip": "axb4",
+   "by": "w",
+   "punish": [
+    "Nd3#"
+   ],
+   "endCp": 0,
+   "mate": true
+  },
+  {
+   "order": 32,
+   "name": "Blackburne Shilling Gambit",
+   "source": "famous-trap-lines: https://en.wikipedia.org/wiki/Blackburne_Shilling_Gambit",
+   "line": "e4 e5 Nf3 Nc6 Bc4",
+   "board": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq -",
+   "slip": "Nd4",
+   "by": "b",
+   "punish": [
+    "Nxd4",
+    "exd4",
+    "O-O",
+    "c6"
+   ],
+   "endCp": 129,
+   "mate": false
+  },
+  {
+   "order": 33,
+   "name": "Fried Liver Attack",
+   "source": "famous-trap-lines: https://en.wikipedia.org/wiki/Fried_liver_attack",
+   "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5",
+   "board": "r1bqkb1r/ppp2ppp/2n2n2/3Pp1N1/2B5/8/PPPP1PPP/RNBQK2R b KQkq -",
+   "slip": "Nxd5",
+   "by": "b",
+   "punish": [
+    "Nxf7",
+    "Kxf7",
+    "Qf3+",
+    "Ke6",
+    "Nc3"
+   ],
+   "endCp": 81,
+   "mate": false
+  },
+  {
+   "order": 33,
+   "name": "Blackburne Shilling Gambit",
+   "source": "famous-trap-lines: https://en.wikipedia.org/wiki/Blackburne_Shilling_Gambit",
+   "line": "e4 e5 Nf3 Nc6 Bc4 Nd4",
+   "board": "r1bqkbnr/pppp1ppp/8/4p3/2BnP3/5N2/PPPP1PPP/RNBQK2R w KQkq -",
+   "slip": "Nxe5",
+   "by": "w",
+   "punish": [
+    "Qg5",
+    "O-O",
+    "Qxe5"
+   ],
+   "endCp": 62,
+   "mate": false
+  },
+  {
+   "order": 34,
+   "name": "Fishing Pole Trap",
+   "source": "famous-trap-lines: https://en.wikipedia.org/wiki/Fishing_Pole_Trap",
+   "line": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Ng4 h3 h5",
+   "board": "r1bqkb1r/pppp1pp1/2n5/1B2p2p/4P1n1/5N1P/PPPP1PP1/RNBQ1RK1 w kq -",
+   "slip": "hxg4",
+   "by": "w",
+   "punish": [
+    "hxg4",
+    "c3",
+    "a6"
+   ],
+   "endCp": 295,
+   "mate": false
+  },
+  {
+   "order": 35,
+   "name": "Siberian Trap",
+   "source": "famous-trap-lines: https://en.wikipedia.org/wiki/Siberian_Trap",
+   "line": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 e6 Bc4 Qc7 O-O Nf6 Qe2 Ng4",
+   "board": "r1b1kb1r/ppqp1ppp/2n1p3/8/2B1P1n1/2N2N2/PP2QPPP/R1B2RK1 w kq -",
+   "slip": "h3",
+   "by": "w",
+   "punish": [
+    "Nd4",
+    "hxg4",
+    "Nxe2+",
+    "Bxe2",
+    "Bc5",
+    "e5"
+   ],
+   "endCp": 276,
+   "mate": false
+  },
+  {
+   "order": 36,
+   "name": "Caro-Kann smothered mate",
+   "source": "famous-trap-lines: https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence",
+   "line": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Nd7 Qe2",
+   "board": "r1bqkbnr/pp1npppp/2p5/8/3PN3/8/PPP1QPPP/R1B1KBNR b KQkq -",
+   "slip": "Ngf6",
+   "by": "b",
+   "punish": [
+    "Nd6#"
+   ],
+   "endCp": 0,
+   "mate": true
+  },
+  {
+   "order": 37,
+   "name": "Stafford Gambit trap",
+   "source": "famous-trap-lines: https://en.wikipedia.org/wiki/Petrov%27s_Defence",
+   "line": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5",
+   "board": "r1bqk2r/ppp2ppp/2p2n2/2b5/4P3/3P4/PPP2PPP/RNBQKB1R w KQkq -",
+   "slip": "Bg5",
+   "by": "w",
+   "punish": [
+    "Nxe4",
+    "Qe2",
+    "Qxg5"
+   ],
+   "endCp": 398,
+   "mate": false
+  },
+  {
+   "order": 38,
+   "name": "Magnus Smith Trap",
+   "source": "famous-trap-lines: https://en.wikipedia.org/wiki/Magnus_Smith_Trap",
+   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6 Bc4 g6 Nxc6 bxc6 e5",
+   "board": "r1bqkb1r/p3pp1p/2pp1np1/4P3/2B5/2N5/PPP2PPP/R1BQK2R b KQkq -",
+   "slip": "dxe5",
+   "by": "b",
+   "punish": [
+    "Bxf7+",
+    "Kxf7",
+    "Qxd8",
+    "Bg7",
+    "Qd3"
+   ],
+   "endCp": 528,
+   "mate": false
+  },
+  {
+   "order": 40,
+   "name": "Lasker Trap",
+   "source": "famous-trap-lines: https://en.wikipedia.org/wiki/Lasker_Trap",
+   "line": "d4 d5 c4 e5 dxe5 d4 e3 Bb4+ Bd2 dxe3",
+   "board": "rnbqk1nr/ppp2ppp/8/4P3/1bP5/4p3/PP1B1PPP/RN1QKBNR w KQkq -",
+   "slip": "Bxb4",
+   "by": "w",
+   "punish": [
+    "exf2+",
+    "Ke2",
+    "fxg1=N+"
+   ],
+   "endCp": 537,
+   "mate": false
+  },
+  {
+   "order": 40,
+   "name": "Würzburger Trap",
+   "source": "famous-trap-lines: https://en.wikipedia.org/wiki/W%C3%BCrzburger_Trap",
+   "line": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 d3 Qh4+ g3 Nxg3 Nf3 Qh5 Nxd5",
+   "board": "rnb1kb1r/ppp2ppp/8/3NP2q/8/3P1Nn1/PPP4P/R1BQKB1R b KQkq -",
+   "slip": "Nxh1",
+   "by": "b",
+   "punish": [
+    "Nxc7+",
+    "Kd8",
+    "Nxa8"
+   ],
+   "endCp": 0,
+   "mate": false
+  },
+  {
+   "order": 42,
+   "name": "Marshall Trap",
+   "source": "famous-trap-lines: https://en.wikipedia.org/wiki/Marshall_Trap",
+   "line": "e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 d4 d5 Bd3 Bd6 O-O O-O c4 Bg4 cxd5 f5",
+   "board": "rn1q1rk1/ppp3pp/3b4/3P1p2/3Pn1b1/3B1N2/PP3PPP/RNBQ1RK1 w - -",
+   "slip": "Re1",
+   "by": "w",
+   "punish": [
+    "Bxh2+",
+    "Kf1",
+    "Qe8"
+   ],
+   "endCp": 63,
+   "mate": false
+  },
+  {
+   "order": 42,
+   "name": "Monticelli Trap",
+   "source": "famous-trap-lines: https://en.wikipedia.org/wiki/Monticelli_Trap",
+   "line": "d4 Nf6 c4 e6 Nf3 Bb4+ Bd2 Bxd2+ Qxd2 b6 g3 Bb7 Bg2 O-O Nc3 Ne4",
+   "board": "rn1q1rk1/pbpp1ppp/1p2p3/8/2PPn3/2N2NP1/PP1QPPBP/R3K2R w KQ -",
+   "slip": "Qc2",
+   "by": "w",
+   "punish": [
+    "Nxc3",
+    "Ng5",
+    "Ne4"
+   ],
+   "endCp": -38,
+   "mate": false
+  },
+  {
+   "order": 43,
+   "name": "Elephant Trap",
+   "source": "repertoire: Elephant Trap",
+   "line": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Nbd7 cxd5 exd5",
+   "board": "r1bqkb1r/pppn1ppp/5n2/3p2B1/3P4/2N5/PP2PPPP/R2QKBNR w KQkq -",
+   "slip": "Nxd5",
+   "by": "w",
+   "punish": [
+    "Nxd5",
+    "Bxd8",
+    "Bb4+",
+    "Qd2",
+    "Bxd2+",
+    "Kxd2",
+    "Kxd8",
+    "e4",
+    "Ne7"
+   ],
+   "endCp": 379,
+   "mate": false
+  },
+  {
+   "order": 49,
+   "name": "Fishing Pole Trap",
+   "source": "pro-repertoires: Fishing Pole Trap",
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Ng4 h3 h5",
+   "board": "r1bqkb1r/1ppp1pp1/p1n5/4p2p/B3P1n1/5N1P/PPPP1PP1/RNBQ1RK1 w kq -",
+   "slip": "hxg4",
+   "by": "w",
+   "punish": [
+    "hxg4",
+    "Ne1",
+    "Qh4",
+    "f4",
+    "g3"
+   ],
+   "endCp": 310,
+   "mate": false
+  },
+  {
+   "order": 51,
+   "name": "Smothered Mate",
+   "source": "pro-repertoires: The Smothered Mate — …Ngf6??",
+   "line": "e4 c6 Nc3 d5 Nf3 dxe4 Nxe4 Nd7 Qe2",
+   "board": "r1bqkbnr/pp1npppp/2p5/8/4N3/5N2/PPPPQPPP/R1B1KB1R b KQkq -",
+   "slip": "Ngf6",
+   "by": "b",
+   "punish": [
+    "Nd6#"
+   ],
+   "endCp": 0,
+   "mate": true
+  },
+  {
+   "order": 54,
+   "name": "Scandinavian Bishop Trap",
+   "source": "anti-openings: Scandinavian Bishop Trap (…Qh5?)",
+   "line": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bg4 h3",
+   "board": "rn2kb1r/ppp1pppp/5n2/q7/3P2b1/2N2N1P/PPP2PP1/R1BQKB1R b KQkq -",
+   "slip": "Qh5",
+   "by": "b",
+   "punish": [
+    "hxg4",
+    "Qxg4",
+    "Rh4",
+    "Qd7",
+    "Ne5"
+   ],
+   "endCp": 407,
+   "mate": false
+  }
+ ]
+}

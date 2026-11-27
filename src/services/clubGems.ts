@@ -42,6 +42,8 @@ export interface ClubGem {
   won: number;
   endCp: number;
   juice: number;
+  /** A FAMOUS trap's name (`famousTraps`): the board's slip is said by it. */
+  name?: string;
 }
 
 interface ClubGemFile { meta: { gems: number }; boards: Record<string, ClubGem[]> }

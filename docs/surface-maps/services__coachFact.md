@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**696 lines · 16 exports · 55 importers · 24 tests · 0 audits**
+**696 lines · 16 exports · 59 importers · 24 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -36,6 +36,7 @@
 - `src/services/engineComputers.ts`
 - `src/services/factRelations.test.ts`
 - `src/services/factSelector.ts`
+- `src/services/famousTraps.ts`
 - `src/services/futures.relations.test.ts`
 - `src/services/futures.ts`
 - `src/services/gameStory.ts`
@@ -63,11 +64,14 @@
 - `src/services/reviewFullData.ts`
 - `src/services/teachingFact.ts`
 - `src/services/teachingMoves.ts`
+- `src/services/theoryComposer.ts`
 - `src/services/thinkingComputers.gate.test.ts`
 - `src/services/thinkingComputers.ts`
 - `src/services/thoughtComposer.ts`
 - `src/services/thoughtReads.ts`
 - `src/services/tradeComputers.test.ts`
+- `src/services/trapLine.ts`
+- `src/services/trapWords.ts`
 - `src/test/chatAnswersInFull.gate.test.ts`
 - `src/test/doorFact.ts`
 - `src/test/learnDoorFixtures.ts`

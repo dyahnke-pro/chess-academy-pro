@@ -367,8 +367,8 @@ describe('the departure judged — cost and the punishing line (Danya reviews, 2
   });
 });
 
-describe('the lecture never teaches a gem (gems are taught on the opening pages only, David 2026-10-29)', () => {
-  it('Vienna: a real gem board (4.Qh5 …g6??) gets no trap and no punishment', async () => {
+describe('the lecture says a gem board\'s trap through the one trap computer (David 2026-11-12: the coach says them everywhere)', () => {
+  it('Vienna: a real gem board (4.Qh5 …g6??) names the trap in the approved shape, never the old wording', async () => {
     const line = ['e4', 'e5', 'Nc3', 'Nf6', 'Bc4', 'Nxe4', 'Qh5', 'Nd6'];
     const { fens, sans } = chain(line);
     const lookup = async (fen: string): Promise<MasterPlayResult> => {
@@ -381,7 +381,7 @@ describe('the lecture never teaches a gem (gems are taught on the opening pages 
     // Non-vacuous: the lecture ran on this line.
     expect(beats.length).toBeGreaterThan(0);
     const said = beats.map((b) => b.fact).join(' ');
-    expect(said).not.toMatch(/A trap to know here|known mistake|Qxe5/);
+    expect(said).not.toMatch(/A trap to know here/);
   });
 });
 
@@ -452,7 +452,7 @@ describe('the review opening section in his style (David 2026-10-19)', () => {
       whitePiece: null, blackPiece: null, whiteCastle: { side: 'long', share: 0.7 }, blackCastle: { side: 'short', share: 0.8 },
     };
     const outro = buildTheoryLectureBeats(lec!, ['a seat-blind curated idea'], 'black').find((b) => b.kind === 'outro');
-    expect(outro?.fact).toBe('The plan in this structure: your break is …f5 — masters from here usually play it, and theirs is d4. Masters castle on opposite wings here — you short, they long — so the middlegame is a race: each side throws its pawns at the other king.');
+    expect(outro?.fact).toBe('Your plan builds to …f5. Their plan builds to d4. Masters castle on opposite wings here — you short, they long — so the middlegame is a race: each side throws its pawns at the other king.');
   });
 });
 

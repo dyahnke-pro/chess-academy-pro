@@ -31,7 +31,11 @@ import { readBoard, sayOnce } from './boardComputers';
 import repertoire from '../data/repertoire.json';
 import { bookMoveWhy } from './bookMoveWhy';
 import { openingEquivalence } from './openingEquivalence';
-import { mastersPlanRead, mastersPlanLine, planStillAhead, type MastersPlanRead, type MovesAt } from './mastersPlanRead';
+import { mastersPlanLine } from './theoryComposer';
+import { theoryExtras, nameRelativeTo } from './theoryReads';
+import { knownSlipsAt, knownSlipIndexNow } from './knownSlips';
+import { masterMovesCachedSync } from './masterPlayLookup';
+import { mastersPlanRead, planStillAhead, type MastersPlanRead, type MovesAt } from './mastersPlanRead';
 import { ensureMastersDbLoaded, mastersMovesSync } from './masterPlayLookup';
 import { noteArrowSourceAt } from './openingGenerator';
 import { loadFarmedCorpora } from './farmedCorpusData';
@@ -691,34 +695,6 @@ export function familyName(prefixSans: readonly string[], san: string, current: 
   return after && after !== here ? nameRelativeTo(after, here) : null;
 }
 
-/** An opening name said relative to the one the game is in: the family part
- *  dropped when shared ("the Mieses Variation"), with its article. Null when
- *  it is the current opening itself. */
-function nameRelativeTo(name: string, current: string): string | null {
-  const n = name.trim();
-  let base = current.trim();
-  if (!n || n === base) return null;
-  // The longest part of the current name the new one extends: "Vienna Game:
-  // Stanley Variation, Meitner-Mieses Gambit" under "Vienna Game: Stanley
-  // Variation" is "the Meitner-Mieses Gambit".
-  let short = n;
-  for (;;) {
-    if (n.startsWith(`${base},`) || n.startsWith(`${base}:`)) { short = n.slice(base.length + 1).trim(); break; }
-    const cut = Math.max(base.lastIndexOf(','), base.lastIndexOf(':'));
-    if (cut <= 0) break;
-    base = base.slice(0, cut).trim();
-  }
-  // The road's own name is its last part ("Stanley Variation, Three Knights
-  // Variation" → "Three Knights Variation").
-  short = short.split(',').pop()?.trim() ?? '';
-  if (!short) return null;
-  // A bare adjective is said with its family ("Closed" → "Closed Sicilian").
-  if (!/(?:Variation|Defen[cs]e|Gambit|Attack|System|Line|Opening|Game|Countergambit|Trap)$/i.test(short)) {
-    const head = n.split(':')[0].replace(/\s+(?:Defen[cs]e|Opening|Game)$/i, '').trim();
-    if (head && !short.split(/\s+/).includes(head)) short = `${short} ${head}`;
-  }
-  return /^\S+['’]s\b/.test(short) ? short : `the ${short}`;
-}
 
 /** Moves listed with the family each one commits to, when the DB names one
  *  and the names tell the moves apart. */
@@ -833,6 +809,18 @@ export function buildTheoryLectureBeats(
     return ` ${w}`;
   };
 
+  // WHAT ELSE THE THEORY SAYS (theoryReads): the structure the move makes, a
+  // gambit, the transposition, the queens coming off, a trap around it — each
+  // news once.
+  const extrasSaid = new Set<string>();
+  const theoryExtrasFor = (prefixSans: readonly string[], fenBefore: string, san: string, withPieceJob: boolean): string => {
+    try {
+      const mover = new Chess(fenBefore).turn();
+      const lines = theoryExtras({ history: prefixSans, fenBefore, san, mover, movesAt: (f) => masterMovesCachedSync(f), slipsAt: (f) => knownSlipsAt(knownSlipIndexNow(), f), said: extrasSaid, withPieceJob });
+      return lines.length ? ` ${lines.join(' ')}` : '';
+    } catch { return ''; }
+  };
+
   // The teaching for a move: the voiced note at the board it reaches, else the
   // computed why (deduped as above).
   const teach = (prefixSans: readonly string[], fenBefore: string, san: string): string => {
@@ -844,7 +832,8 @@ export function buildTheoryLectureBeats(
         if (note) return ` ${note.trim()}`;
       } catch { /* no note — computed */ }
     }
-    return freshWhy(fenBefore, san);
+    const why = freshWhy(fenBefore, san);
+    return `${why}${theoryExtrasFor(prefixSans, fenBefore, san, why === '')}`;
   };
 
   // The masters line walked from the book move, each step's teaching the
@@ -1121,8 +1110,10 @@ export function buildTheoryLectureBeats(
   // name the moves: the game is over. The curated idea (seat-matched by the
   // caller) speaks only when the masters' data says nothing.
   const seat: 'w' | 'b' = studentColor === 'black' ? 'b' : 'w';
-  const planText = studentColor ? mastersPlanLine(lecture.planRead, seat, null)?.text ?? null : null;
   const character = studentColor ? characterLine(lecture.planRead, seat) : null;
+  // Castling is said once: the character line carries it where it speaks.
+  const castlingSaid = new Set(character && /castle/i.test(character) ? ['castle:your', 'castle:their'] : []);
+  const planText = studentColor ? mastersPlanLine(lecture.planRead, seat, null, castlingSaid)?.text ?? null : null;
   const computed = [planText, character].filter(Boolean).join(' ');
   const curated = ideas[0] ? `The takeaway for this opening: ${ideas[0].replace(/[.!?]?\s*$/, '.')}` : '';
   // The summary closes it: did the student get the break this opening is for?

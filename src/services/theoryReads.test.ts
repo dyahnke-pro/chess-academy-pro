@@ -1,0 +1,81 @@
+import { describe, expect, it } from 'vitest';
+import { Chess } from 'chess.js';
+import { hangRead, endgameRead, gambitRead, pieceJobRead, structureRead, theoryExtras, trapRead } from './theoryReads';
+import type { ClubGem } from './clubGems';
+
+const fenOf = (sans: string[]): string => { const c = new Chess(); for (const s of sans) c.move(s); return c.fen(); };
+
+describe('theoryReads — what the move changed on the board', () => {
+  it('a structure is said when the move makes it, and not before', () => {
+    const before = fenOf(['e4', 'e6', 'd4', 'd5']);
+    expect(structureRead({ fenBefore: before, san: 'e5', mover: 'w' })?.text).toMatch(/^That makes it the French pawn chain\. Your plan is to /);
+    expect(structureRead({ fenBefore: fenOf(['e4', 'e6']), san: 'd4', mover: 'w' })).toBeNull();
+  });
+  it('a pawn the opponent can take for nothing is a gambit', () => {
+    const r = gambitRead({ fenBefore: fenOf(['d4', 'd5']), san: 'c4', mover: 'w' });
+    expect(r?.text).toBe('It offers the pawn on c4: a gambit, the pawn given for time and open lines.');
+    expect(gambitRead({ fenBefore: fenOf(['e4', 'e5']), san: 'Nf3', mover: 'w' })).toBeNull();
+  });
+  it('the last queen coming off turns toward an endgame', () => {
+    expect(endgameRead({ fenBefore: '3Qk3/8/8/8/8/8/8/4K3 b - - 0 1', san: 'Kxd8' })?.text).toMatch(/endgame/);
+    expect(endgameRead({ fenBefore: fenOf(['e4', 'e5']), san: 'Nf3' })).toBeNull();
+  });
+  it('a piece is said by its job, and a fianchetto by the diagonal', () => {
+    expect(pieceJobRead({ fenBefore: fenOf(['e4', 'e5']), san: 'Nf3', mover: 'w' })?.text).toMatch(/^Knight on f3: it /);
+    expect(pieceJobRead({ fenBefore: fenOf(['Nf3', 'Nf6']), san: 'g3', mover: 'w' })?.text).toMatch(/fianchetto.*long diagonal from g2/);
+  });
+  const gem = (slip: string, punish: string, endCp: number, mate = false): ClubGem => ({ tier: 'trap', line: '', slip, by: 'black', best: null, games: 100, share: 10, moverScore: null, punish, mate, won: 0, endCp, juice: 0 });
+  const at = (sans: string[], gems: ClubGem[]) => (f: string): readonly ClubGem[] => (f.split(' ').slice(0, 4).join(' ') === fenOf(sans).split(' ').slice(0, 4).join(' ') ? gems : []);
+  it('a trap around the move is replayed by trapLine, seat-correct', () => {
+    // A board no famous trap is filed on (Scholar's Mate itself is named by
+    // the famous index — famousTraps.test).
+    const slipsAt = at(['e4', 'e5', 'Bc4', 'Bc5', 'Qh5'], [gem('Nf6', 'Qxf7#', 0, true)]);
+    const r = trapRead({ fenBefore: fenOf(['e4', 'e5', 'Bc4', 'Bc5']), san: 'Qh5', mover: 'w', slipsAt, movesAt: () => null });
+    expect(r?.text).toBe('A trap is set here. If they play …Nf6, Qxf7 is mate. Your queen mates on f7. The pattern: f7 is guarded only by their king. When your queen sits on h5, every slow move they make lets you look at f7.');
+  });
+  it('a slip under the trap bar is a known mistake, never a trap; under the floor, nothing', () => {
+    const fenBefore = fenOf(['e4', 'e5', 'Bc4', 'Bc5']);
+    const known = trapRead({ fenBefore, san: 'Qh5', mover: 'w', slipsAt: at(['e4', 'e5', 'Bc4', 'Bc5', 'Qh5'], [gem('Nf6', 'Qxf7#', 120)]), movesAt: () => null });
+    expect(known?.text).toMatch(/^A known mistake is on offer here\. /);
+    expect(trapRead({ fenBefore, san: 'Qh5', mover: 'w', slipsAt: at(['e4', 'e5', 'Bc4', 'Bc5', 'Qh5'], [gem('Nf6', 'Qxf7#', 20)]), movesAt: () => null })).toBeNull();
+  });
+  it('a famous trap is named first, with its blow and the pattern behind it', () => {
+    const r = trapRead({ fenBefore: fenOf(['e4', 'e5', 'Bc4', 'Nc6']), san: 'Qh5', mover: 'w', slipsAt: () => [], movesAt: () => null });
+    expect(r?.text).toBe("This is Scholar's Mate: if they play …Nf6, Qxf7 leads to mate. The pattern: f7 is guarded only by their king. When your queen sits on h5, every slow move they make lets you look at f7.");
+  });
+  it('a reply the masters play that ignores the attack on a piece is the off-line hang', () => {
+    const fen = fenOf(['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'd4']);
+    const r = hangRead({ fen, mover: 'w', movesAt: () => [{ san: 'd6', games: 50 }, { san: 'exd4', games: 900 }] });
+    expect(r?.text).toBe('Before …d6, if they ignore the attack on c5, dxc5 takes the bishop.');
+    expect(hangRead({ fen, mover: 'w', movesAt: () => [{ san: 'exd4', games: 900 }] })).toBeNull();
+  });
+  it('a structure, a gambit or an endgame turn is news once a game', () => {
+    const said = new Set<string>();
+    const a = theoryExtras({ history: ['d4', 'd5'], fenBefore: fenOf(['d4', 'd5']), san: 'c4', mover: 'w', movesAt: () => null, slipsAt: () => [], said, withPieceJob: false });
+    expect(a.length).toBe(1);
+    const b = theoryExtras({ history: ['d4', 'd5'], fenBefore: fenOf(['d4', 'd5']), san: 'c4', mover: 'w', movesAt: () => null, slipsAt: () => [], said, withPieceJob: false });
+    expect(b).toEqual([]);
+  });
+});
+
+describe('trapRead — the slip the move keeps clear of', () => {
+  it('a known slip on the same board that the move did not play is said as one to avoid', () => {
+    const fenBefore = fenOf(['e4', 'e5', 'Bc4', 'Nc6', 'Qh5']);
+    const slipsAt = (f: string) => (f.split(' ').slice(0, 4).join(' ') === fenBefore.split(' ').slice(0, 4).join(' ')
+      ? [{ tier: 'trap', line: '', slip: 'Nf6', by: 'black', best: 'g6', games: 1, share: 1, moverScore: null, punish: 'Qxf7#', mate: true, won: 0, endCp: 0, juice: 0 } as never] : []);
+    const r = trapRead({ fenBefore, san: 'g6', mover: 'b', slipsAt, movesAt: () => null });
+    expect(r?.text).toBe('The move keeps clear of a known mistake. Watch out: …Nf6 allows Qxf7, and it is mate. Their queen mates on f7. The pattern: f7 is guarded only by your king. When their queen sits on h5, every slow move you make lets them look at f7.');
+  });
+});
+
+describe('trapRead — a slip two moves down a road', () => {
+  it('their slip after a reply and your answer is said with the road', () => {
+    const fenBefore = fenOf(['e4', 'e5']);
+    const target = fenOf(['e4', 'e5', 'Bc4', 'Nc6', 'Qh5']).split(' ').slice(0, 4).join(' ');
+    const slipsAt = (f: string) => (f.split(' ').slice(0, 4).join(' ') === target ? [{ tier: 'trap', line: '', slip: 'Nf6', by: 'black', best: 'g6', games: 1, share: 1, moverScore: null, punish: 'Qxf7#', mate: true, won: 0, endCp: 0, juice: 0 } as never] : []);
+    const plies = (f: string): number => (Number(f.split(' ')[5]) - 1) * 2 + (f.split(' ')[1] === 'b' ? 1 : 0);
+    const chain: Record<number, string> = { 3: 'Nc6', 4: 'Qh5' };
+    const r = trapRead({ fenBefore, san: 'Bc4', mover: 'w', slipsAt, movesAt: (f) => (chain[plies(f)] ? [{ san: chain[plies(f)], games: 50 } as never] : null) });
+    expect(r?.text).toMatch(/^If play goes …Nc6 and Qh5, a trap is waiting\. If they play …Nf6, Qxf7 is mate\./);
+  });
+});

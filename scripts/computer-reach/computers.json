@@ -1334,12 +1334,12 @@
  },
  {
   "name": "mastersPlanLine (the plan sentence)",
-  "file": "services/mastersPlanRead.ts",
+  "file": "services/theoryComposer.ts",
   "fn": "mastersPlanLine",
-  "says": "'The plan in this structure: your break is …c5 — masters from here usually play it, and theirs is d5' (or your piece's usual square + castli",
+  "says": "'Your plan: b4 and a4, to break with c5. Their plan builds to d5.' (goal plus at most two key moves; a piece the plan brings in its own sentence with its job; castli",
   "origin": "map",
   "nodes": [
-   "services/mastersPlanRead.ts#mastersPlanLine"
+   "services/theoryComposer.ts#mastersPlanLine"
   ]
  },
  {

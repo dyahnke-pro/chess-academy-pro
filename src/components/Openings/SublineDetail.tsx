@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { slipChip } from '../../services/trapWords';
 import { Chess } from 'chess.js';
 import { ArrowLeft, Brain, Check, PlayCircle, Swords, BookOpen as LearnIcon, Repeat } from 'lucide-react';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
@@ -73,7 +74,7 @@ export function SublineDetail({ opening, subline, tabLabel, isTopOfGroup, onBack
       <p className="text-sm text-theme-text mb-3" data-testid="subline-idea">{replyIdea(opening.id, subline)}</p>
       {gem && (tag === 'trap' || tag === 'mistake') && (
         <p className="text-xs mb-3 px-3 py-2 rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-200" data-testid="subline-known-mistake">
-          {tag === 'trap' ? 'A trap for them' : 'A known mistake'} — {gem.punish} punishes it ({gemWinLabel(gem)}).
+          {slipChip(tag === 'trap' ? 'trap' : 'known-mistake', 'opponent')} — {gem.punish} punishes it ({gemWinLabel(gem)}).
         </p>
       )}
       <div className="w-full max-w-[360px] self-center mb-4">

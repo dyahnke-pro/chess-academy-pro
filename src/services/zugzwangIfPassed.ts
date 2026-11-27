@@ -43,17 +43,15 @@ function keyOf(b: KP): string {
   return `${b.turn}${b.k[0]},${b.k[1]}|${[...b.p[0]].sort((x, y) => x - y).join(',')}|${[...b.p[1]].sort((x, y) => x - y).join(',')}`;
 }
 
-/** The score for the side to move: material (own minus other) after best play. */
-function search(b: KP, depth: number, tt: Map<string, number>): number {
+/** The children of a board, captures and promotions first (the moves that
+ *  settle a window soonest): a promotion is a leaf with its score, every
+ *  other move the board it reaches. */
+type Child = { leaf: number } | { board: KP };
+function children(b: KP): Child[] {
   const me = b.turn; const op = (1 - me) as 0 | 1;
-  if (depth === 0) return b.p[me].length - b.p[op].length;
-  const key = `${keyOf(b)}|${depth}`;
-  const hit = tt.get(key);
-  if (hit !== undefined) return hit;
   const occupied = new Set<number>([b.k[0], b.k[1], ...b.p[0], ...b.p[1]]);
   const inCheck = attackedByPawns(b.k[me], b.p[op], op);
-  let best = -Infinity;
-  const take = (v: number): void => { if (v > best) best = v; };
+  const loud: Child[] = []; const quiet: Child[] = [];
   // King steps.
   for (let df = -1; df <= 1; df++) for (let dr = -1; dr <= 1; dr++) {
     if (!df && !dr) continue;
@@ -63,7 +61,7 @@ function search(b: KP, depth: number, tt: Map<string, number>): number {
     if (b.p[me].includes(t) || near(t, b.k[op]) || attackedByPawns(t, b.p[op].filter((x) => x !== t), op)) continue;
     const k: [number, number] = [b.k[0], b.k[1]]; k[me] = t;
     const p: [number[], number[]] = [b.p[0], b.p[1]]; p[op] = b.p[op].filter((x) => x !== t);
-    take(-search({ k, p, turn: op }, depth - 1, tt));
+    (p[op].length < b.p[op].length ? loud : quiet).push({ board: { k, p, turn: op } });
   }
   // Pawn moves (in check from a pawn, only the capture of the checker).
   const checker = inCheck ? b.p[op].find((x) => pawnHits(x, op).includes(b.k[me])) : undefined;
@@ -85,15 +83,44 @@ function search(b: KP, depth: number, tt: Map<string, number>): number {
       if (rankOf(to) === (me === 0 ? 7 : 0)) {
         // A promotion ends the line: a queen, unless their king takes it at once.
         const lost = near(to, b.k[op]) && !near(to, b.k[me]);
-        take(mine.length - theirs.length + (lost ? 0 : QUEEN));
+        loud.push({ leaf: mine.length - theirs.length + (lost ? 0 : QUEEN) });
         continue;
       }
       const p: [number[], number[]] = [b.p[0], b.p[1]]; p[me] = [...mine, to]; p[op] = theirs;
-      take(-search({ k: b.k, p, turn: op }, depth - 1, tt));
+      (capture ? loud : quiet).push({ board: { k: b.k, p, turn: op } });
     }
   }
+  return [...loud, ...quiet];
+}
+
+interface Bound { v: number; flag: 0 | 1 | 2 } // 0 exact, 1 lower, 2 upper
+/** The score for the side to move — material (own minus other) after best
+ *  play to `depth` — read inside the window (alpha, beta): exact inside it, a
+ *  bound outside (fail-soft). The same answer as a full minimax wherever the
+ *  window decides it; a window around the one value a caller compares with is
+ *  all the reads below need, and it prunes the race boards that a full search
+ *  spent seconds on (review's king-and-pawn race, 2026-11-26). */
+function search(b: KP, depth: number, alpha: number, beta: number, tt: Map<string, Bound>): number {
+  const me = b.turn; const op = (1 - me) as 0 | 1;
+  if (depth === 0) return b.p[me].length - b.p[op].length;
+  const key = `${keyOf(b)}|${depth}`;
+  const hit = tt.get(key);
+  if (hit) {
+    if (hit.flag === 0) return hit.v;
+    if (hit.flag === 1 && hit.v >= beta) return hit.v;
+    if (hit.flag === 2 && hit.v <= alpha) return hit.v;
+  }
+  const alpha0 = alpha;
+  let best = -Infinity;
+  const kids = children(b);
+  for (const ch of kids) {
+    const v = 'leaf' in ch ? ch.leaf : -search(ch.board, depth - 1, -beta, -alpha, tt);
+    if (v > best) best = v;
+    if (v > alpha) alpha = v;
+    if (alpha >= beta) break;
+  }
   if (best === -Infinity) best = 0; // stalemate (a pawn cannot mate a king here)
-  tt.set(key, best);
+  tt.set(key, { v: best, flag: best <= alpha0 ? 2 : best >= beta ? 1 : 0 });
   return best;
 }
 
@@ -118,17 +145,21 @@ export function zugzwangIfPassed(fen: string, student: Color): ZugzwangIfPassed 
   const side = c.turn(); const victim = other(side);
   const passed: KP = { k: b.k, p: b.p, turn: (1 - b.turn) as 0 | 1 };
   if (attackedByPawns(passed.k[passed.turn], passed.p[b.turn], b.turn)) return null;
-  const tt = new Map<string, number>();
+  const tt = new Map<string, Bound>();
   const victimNow = passed.p[passed.turn].length - passed.p[b.turn].length;
-  // The fewest plies in which every move they have drops material.
+  // The fewest plies in which every move they have drops material: the first
+  // depth whose score falls below what they have now (a window at that value),
+  // then that depth's exact score for how much.
   let plies = 0; let drops = 0;
   for (let d = 2; d <= MAX_DEPTH; d++) {
-    const v = search(passed, d, tt);
-    if (v < victimNow) { plies = d; drops = victimNow - v; break; }
+    if (search(passed, d, victimNow - 1, victimNow, tt) <= victimNow - 1) {
+      plies = d; drops = victimNow - search(passed, d, -Infinity, Infinity, tt);
+      break;
+    }
   }
   if (!plies) return null;
   // Moving now, the side to move wins nothing in one ply more: a tempo short.
-  if (search(b, plies + 1, tt) > -victimNow) return null;
+  if (search(b, plies + 1, -victimNow, -victimNow + 1, tt) >= -victimNow + 1) return null;
   const what = drops === 1 ? 'a pawn' : 'material';
   const text = side === student
     ? `If it were their move here, every move they have would drop ${what}: they would be in zugzwang. So give them the move — lose a tempo with your king and come back to this position with them to move.`

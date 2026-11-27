@@ -11,6 +11,7 @@
 import { Chess, type Color } from 'chess.js';
 import { masterMovesCachedSync, type LocalDbMove } from './masterPlayLookup';
 import { moveJob, MINE, THEIRS } from './bookMoveWhy';
+import { keyDecisionLine, withoutCastleTail } from './theoryComposer';
 import { NO_FOLLOW } from './exchangeLedger';
 import { shareAdverb } from '../utils/shareWords';
 import { scoreWords } from './explorerTranslate';
@@ -99,8 +100,11 @@ export function openingTheoryFacts(fenBefore: string, san: string, mine: boolean
   const top = here.moves[0];
   const topSaid = dotted(top.san, mover);
   if (played && clean(top.san) === clean(san) && played.pct >= MAIN_SHARE) {
-    const how = played.pct >= 45 ? `masters ${shareAdverb(played.pct)} play it` : 'masters play it most, though the field is split';
-    out.push({ kind: 'book-standing', clause: `is the main move here — ${how}`, sentence: rotateStem([`It's the main move here — ${how}.`, `That's the main line: ${how}.`], key), squares: [to], names: [san] });
+    // NEVER BY POPULARITY (round 9): how many masters play it is only why it
+    // is known. Its job is the move's own fact, said once by the move (the
+    // standing carrying it too said "attacks their bishop on f5 … kicks their
+    // bishop off f5" — composerSaysOnce).
+    out.push({ kind: 'book-standing', clause: 'is the main move here', sentence: rotateStem(["It's the main move here.", "That's the main line."], key), squares: [to], names: [san] });
   } else if (played && played.pct >= MAIN_SHARE) {
     out.push({ kind: 'book-standing', clause: `is one of the main moves here, beside ${topSaid}`, sentence: `It's one of the main moves here, beside ${topSaid}.`, squares: [to, top.to], names: [san, top.san] });
   } else if (played && played.pct < RARE_SHARE) {
@@ -114,9 +118,13 @@ export function openingTheoryFacts(fenBefore: string, san: string, mine: boolean
   // that ("Masters also play …Nc6 here, with the same idea") — never its aim
   // in the same words again (the voice gate, 2026-11-12: "d6 prepares e5 …
   // …Nc6, which prepares e5").
+  // THE KEY DECISION (theoryComposer): on the move that made it, each road by
+  // its job. The road it names is not said again below.
+  const decision = keyDecisionLine({ fen: fenBefore, san, mover, whose: mine ? 'your' : 'their', roads: here.moves.map((m) => ({ san: m.san, pct: m.pct })), sayChosen: false });
+  if (decision) out.push({ kind: 'book-alternatives', clause: decision.text.replace(/^The key decision: /, 'is the key decision here. '), sentence: decision.text, squares: [to, ...here.moves.filter((m) => decision.names.includes(m.san) && clean(m.san) !== clean(san)).map((m) => m.to)], names: decision.names });
   const ownAim = aimOf(fenBefore, san, mover, mine);
   const aimKey = (a: string): string => a.split(/[,—:]/)[0].trim();
-  for (const m of here.moves.filter((x) => clean(x.san) !== clean(san) && x.pct >= ALT_SHARE)) {
+  for (const m of here.moves.filter((x) => clean(x.san) !== clean(san) && x.pct >= ALT_SHARE && !(decision && decision.names.includes(x.san)))) {
     const aim = aimOf(fenBefore, m.san, mover, mine);
     if (!aim) continue;
     const alt = dotted(m.san, mover);
@@ -138,7 +146,12 @@ export function openingTheoryFacts(fenBefore: string, san: string, mine: boolean
   if (next && next.moves[0].pct >= 45) {
     const reply = next.moves[0];
     const r = dotted(reply.san, them);
-    out.push({ kind: 'book-reply', clause: `is ${shareAdverb(reply.pct)} met by ${r} in master games`, sentence: `Masters ${shareAdverb(reply.pct)} answer with ${r}.`, squares: [reply.to], names: [reply.san] });
+    // The reply by its JOB (round 9); the share only tells which reply it is.
+    const replyRaw = aimOf(fenAfter, reply.san, them, !mine);
+    const replyAim = replyRaw ? withoutCastleTail(replyRaw) : null;
+    out.push(replyAim
+      ? { kind: 'book-reply', clause: `is met by ${r}, which ${replyAim}`, sentence: `The usual reply is ${r}. It ${replyAim}.`, squares: [reply.to], names: [reply.san] }
+      : { kind: 'book-reply', clause: `is ${shareAdverb(reply.pct)} met by ${r} in master games`, sentence: `Masters ${shareAdverb(reply.pct)} answer with ${r}.`, squares: [reply.to], names: [reply.san] });
   }
   return out;
 }

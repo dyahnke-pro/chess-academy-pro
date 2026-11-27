@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
-import { mastersPlanRead, mastersPlanLine, type MovesAt } from './mastersPlanRead';
+import { mastersPlanRead, type MovesAt } from './mastersPlanRead';
+import { mastersPlanLine } from './theoryComposer';
 
 // Clean-pass walk 2026-10-03, G3 ply 8 (lichess mZ1GOTOw, Berlin): "your
 // knight on d6 usually goes to f5" — the knight stood on e4; d6 is where it

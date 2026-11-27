@@ -32,6 +32,8 @@ describe('Review says the known slip ahead, both seats, on his Scotch Gambit gam
     // have rotated by here.
     expect(walk.get(6)).toContain('Here, Ng5 is a known mistake at club level: after …Be7 you have the better game.');
     expect(walk.get(8)).toContain('Nxd4 is a known trap on this board, and after …Bxd4 you win two knights for a bishop and a pawn.');
+    // The trap sentence rides on it (trapLine): what the winning move hits, read off the board.
+    expect(walk.get(8)).toMatch(/Your bishop (?:attacks|takes|forks|pins|gives)/);
   });
   it('their slip ahead is the student\'s chance ("you"), the student\'s own is "they"', () => {
     expect(walk.get(10)).toContain('Here, Qd5 is a known mistake at club level: after …Qe7 you have the better game.');
@@ -49,19 +51,20 @@ describe('Review says the known slip ahead, both seats, on his Scotch Gambit gam
 });
 
 describe('Review says the slip that was played, as why it was a mistake', () => {
-  // The Scholar's-mate board: 3…Nf6?? is the index's most-played trap there.
+  // The Scholar's-mate board: 3…Nf6?? is the index's most-played trap there,
+  // and a famous one — said by its name (`famousTraps`).
   const SANS = ['e4', 'e5', 'Qh5', 'Nc6', 'Bc4', 'Nf6', 'Qxf7#'];
-  it('the student\'s own slip (Black): a known trap, and the mate — said on the move that played it', () => {
+  it('the student\'s own slip (Black): named, and the mate — said on the move that played it', () => {
     const walk = said({ sans: SANS, studentSide: 'black', reads: [] });
-    expect(walk.get(6)).toContain('Club players go wrong with …Nf6 here — a known trap: Qxf7 is mate.');
-    expect(walk.get(5)).not.toMatch(/known trap|go wrong with/);
+    expect(walk.get(6)).toContain("That is Scholar's Mate: Qxf7 is mate.");
+    expect(walk.get(5)).not.toMatch(/known (?:trap|mistake)|go wrong with/);
     // A trap's material is counted off its line: g6?? Qxe5+ wins a rook, a
     // knight and a pawn — never "the queen" for nine points.
-    expect(walk.get(3)).toContain('A known trap here: …g6, and after Qxe5+ they win a rook, a knight and a pawn.');
+    expect(walk.get(3)).toContain('A known mistake here: …g6, and after Qxe5+ they win a rook, a knight and a pawn.');
   });
   it('their slip (the student is White): the same trap, said to the student who punishes it', () => {
     const walk = said({ sans: SANS, studentSide: 'white', reads: [] });
-    expect(walk.get(6)).toContain('Club players go wrong with …Nf6 here — a known trap: Qxf7 is mate.');
+    expect(walk.get(6)).toContain("That is Scholar's Mate: Qxf7 is mate.");
     expect(walk.get(3)).toContain('after Qxe5+ you win a rook, a knight and a pawn.');
   });
 });

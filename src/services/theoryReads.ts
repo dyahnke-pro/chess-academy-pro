@@ -1,0 +1,848 @@
+// THE THEORY READERS the composer speaks beside the plan and the decision
+// (round 10, David 2026-11-26: structure, move order, gambit, endgame on the
+// theory surfaces too). Pure over chess.js and the one computers that already
+// own each fact: `namedStructure`, `boardStructure`, `openingEquivalence`. A
+// reader returns a sentence only when the move CHANGED the board that way —
+// never a standing description repeated every move.
+import { famousTrapRead, famousTrapName } from './famousTraps';
+import { MATERIAL_VALUE } from './pieceValues';
+import { homeSquaresOf } from './development';
+import { openSentence } from '../utils/openSentence';
+import { sideToMoveAs } from './threatOut';
+import { Chess, type Color, type Move, type Square } from 'chess.js';
+import { namedStructureFormed, namedStructureLine } from './namedStructure';
+import { lockedPawnPairs, structureSignature } from './boardStructure';
+import { openingEquivalence } from './openingEquivalence';
+import { pawnMajority } from './pawnMajority';
+import { inFluxAfter } from './boardState';
+import { findHangingBySee, bishopHemmedByOwnPawns, findWeakPawns } from './positionReadingService';
+import { openingAtPosition, openingPositionsLoaded } from './openingPositions';
+import { transposedOpening } from './openingPositions';
+import { detectOpeningByOrder } from './openingDetectionService';
+import { mastersDbLoaded, type LocalDbMove } from './masterPlayLookup';
+import { knownSlipIndexLoaded } from './knownSlips';
+import { moveJob, MINE, THEIRS } from './bookMoveWhy';
+import { NO_FOLLOW } from './exchangeLedger';
+import { hangLine, trapLine } from './trapLine';
+import { slipNoun, knownLead } from './trapWords';
+import { classifySlip, type SlipKind } from './trapComputer';
+import { MATE_CP } from './mateScale';
+import type { ClubGem } from './clubGems';
+import { withoutCastleTail, composeTheoryTurn, type KeyMove, type PlacedPiece } from './theoryComposer';
+import { mastersPlanRead, planStillAhead, type MastersPlanRead } from './mastersPlanRead';
+import { positionOf } from '../utils/samePosition';
+import { andList, orList, fileList } from '../utils/andList';
+
+export interface TheoryRead {
+  text: string;
+  squares: string[];
+  /** A trap read about the move itself being a known slip: the move's offer
+   *  is then the mistake, never a gambit. */
+  slipPlayed?: boolean;
+  /** The sentence also says each side's plan (a named structure's plans). */
+  saysPlan?: boolean;
+}
+
+/** THE ROADS AHEAD — the one walk the theory reads share (transpositions,
+ *  a gambit ahead, the queens coming off): the masters' moves from `fen`,
+ *  shallowest first, up to three moves deep. A road at the next move counts
+ *  from 2% of their games (the named-roads bar), a deeper one from 5%. `visit`
+ *  sees each step with the moves that reach it (said with their "…") and the
+ *  board before it; the first sentence it returns is the read. */
+const ROAD_BAR_NEXT = 0.02;
+const ROAD_BAR_DEEPER = 0.05;
+export function walkRoadsAhead<T>(
+  fen: string,
+  history: readonly string[],
+  movesAt: (fen: string) => readonly LocalDbMove[] | null,
+  visit: (step: { move: Move; before: string; after: Chess; sans: string[]; history: string[]; share: number }) => T | null,
+): T | null {
+  type Node = { fen: string; sans: string[]; history: string[] };
+  let frontier: Node[] = [{ fen, sans: [], history: [...history] }];
+  for (let depth = 1; depth <= 3; depth += 1) {
+    const next: Node[] = [];
+    for (const node of frontier) {
+      const roads = movesAt(node.fen) ?? [];
+      const total = roads.reduce((n, m) => n + m.games, 0);
+      for (const r of [...roads].sort((a, b) => b.games - a.games)) {
+        if (total === 0 || r.games / total < (depth === 1 ? ROAD_BAR_NEXT : ROAD_BAR_DEEPER)) break;
+        const c = new Chess(node.fen);
+        let mv: Move;
+        try { mv = c.move(r.san); } catch { continue; }
+        const sans = [...node.sans, `${mv.color === 'b' ? '…' : ''}${r.san.replace(/[+#]$/, '')}`];
+        const hist = [...node.history, r.san];
+        const hit = visit({ move: mv, before: node.fen, after: c, sans, history: hist, share: r.games / total });
+        if (hit) return hit;
+        next.push({ fen: c.fen(), sans, history: hist });
+      }
+    }
+    frontier = next;
+  }
+  return null;
+}
+
+
+/** The pawn structure the move made: a NAMED one (Carlsbad, Maroczy…), else a
+ *  locked centre, an isolated central pawn, doubled pawns or a newly open file. */
+export function structureRead(i: { fenBefore: string; san: string; mover: Color;
+  /** The move before this one (its board and SAN), so a recapture is read
+   *  against the board before the trade began. */
+  prior?: { fenBefore: string; san: string } | null;
+}): TheoryRead | null {
+  const named = namedStructureFormed(i.fenBefore, i.san);
+  if (named) return { text: namedStructureLine(named, i.mover), squares: named.squares, saysPlan: true };
+  let after: Chess;
+  try { after = new Chess(i.fenBefore); after.move(i.san); } catch { return null; }
+  const was = structureSignature(i.fenBefore);
+  const now = structureSignature(after.fen());
+  if (!was || !now) return null;
+  if (now.lockedCenter && !was.lockedCenter) {
+    const pairs = lockedPawnPairs(after).filter((p) => 'cdef'.includes(p.white[0]));
+    return { text: `The centre is locked: ${pairs.map((p) => `${p.white} and ${p.black}`).join(' and ')} face each other, so neither side can push there and the play moves to the wings.`, squares: pairs.flatMap((p) => [p.white, p.black]) };
+  }
+  // A capture the other side takes back at once is an exchange in flight: the
+  // doubled or isolated pawn it shows is not on the board after the recapture.
+  const inFlight = inFluxAfter(i.fenBefore, i.san) !== null;
+  if (now.iqp && !was.iqp && !inFlight) return { text: 'That leaves an isolated pawn in the centre: it grips the squares in front of it, but it has no pawn to guard it, so its pieces must.', squares: [] };
+  if (now.doubled && !was.doubled && !inFlight) return { text: 'That doubles a pawn: a weakness to aim at, paid for with an open file.', squares: [] };
+  const opened = now.openFiles.filter((f) => !was.openFiles.includes(f));
+  if (opened.length) return { text: openSentence(`${fileList(opened)} ${opened.length > 1 ? 'are' : 'is'} open now: that is where rooks belong.`), squares: [] };
+  // A pawn majority the move made: more pawns on a wing (or in the centre)
+  // than the other side has there — the passed pawn of the long run.
+  const pawnsOn = (c: Chess, f: string, col: Color): string[] => ['1', '2', '3', '4', '5', '6', '7', '8'].map((r) => `${f}${r}`).filter((sq) => { const p = c.get(sq as never); return !!p && p.type === 'p' && p.color === col; });
+  const before = new Chess(i.fenBefore);
+  const centre = (c: Chess, col: Color): number => pawnsOn(c, 'd', col).length + pawnsOn(c, 'e', col).length;
+  // A capture in flight whose every pawn recapture doubles the recapturer's
+  // pawns: the structure the trade is about (Nxf6, …exf6 or …gxf6).
+  if (inFlight) {
+    const mvx = after.history({ verbose: true }).pop();
+    const takers = after.moves({ verbose: true }).filter((m) => m.to === mvx?.to && m.piece === 'p');
+    const doubles = (m: { san: string }): boolean => { const x = new Chess(after.fen()); x.move(m.san); const s = structureSignature(x.fen()); return !!s?.doubled && !now.doubled; };
+    if (mvx && takers.length > 0 && takers.every(doubles)) {
+      const side = after.turn() === 'w' ? 'White' : 'Black';
+      const byPiece = after.moves({ verbose: true }).some((m) => m.to === mvx.to && m.piece !== 'p');
+      return { text: byPiece
+        ? `Taking back on ${mvx.to} with a pawn doubles ${side}'s pawns. A piece can take back instead.`
+        : `${side} can only take back on ${mvx.to} with a pawn, and that doubles their pawns.`, squares: [mvx.to] };
+    }
+  }
+  // A BACKWARD PAWN the move makes (the one weak-pawn reader, `findWeakPawns`):
+  // a pawn its neighbours have left behind, said with the file it stands on.
+  if (!inFlight) {
+    for (const col of [i.mover === 'w' ? 'b' : 'w', i.mover] as Color[]) {
+      const was = new Set(findWeakPawns(i.fenBefore, col).backward);
+      const fresh = findWeakPawns(after.fen(), col).backward.filter((s) => !was.has(s));
+      if (fresh.length) {
+        const sq = fresh[0];
+        const foe: Color = col === 'w' ? 'b' : 'w';
+        const halfOpen = !after.board().flat().some((p) => p && p.type === 'p' && p.color === foe && p.square[0] === sq[0]);
+        return { text: `That leaves ${col === 'w' ? 'White' : 'Black'} a backward pawn on ${sq}: no pawn can guard it${halfOpen ? ', and it stands on a half-open file for the other side\'s rooks' : ''}.`, squares: [sq] };
+      }
+    }
+  }
+  // A BISHOP OUT BEFORE ITS PAWNS SHUT IT IN (the London's Bf4 before e3, the
+  // Slav's …Bf5 before …e6): the bishop leaves home, and the pawn move that
+  // would have shut it in there is still to come.
+  {
+    const mvb = after.history({ verbose: true }).pop();
+    if (mvb?.piece === 'b' && homeSquaresOf('b', i.mover).includes(mvb.from)) {
+      const b0 = new Chess(i.fenBefore);
+      const pushes = b0.moves({ verbose: true }).filter((m) => m.piece === 'p' && ['d', 'e'].includes(m.from[0]) && Math.abs(Number(m.to[1]) - Number(m.from[1])) === 1);
+      const shuts = pushes.find((m) => { const x = new Chess(i.fenBefore); x.move(m.san); return bishopHemmedByOwnPawns(x, mvb.from, i.mover); });
+      if (shuts) {
+        return { text: `The bishop gets out before ${i.mover === 'b' ? '…' : ''}${shuts.san} would shut it in: it stands outside the pawn chain.`, squares: [mvb.to, shuts.to] };
+      }
+    }
+  }
+  // A pawn move that shuts the mover's own bishop in behind its pawns.
+  {
+    const mvp = after.history({ verbose: true }).pop();
+    if (mvp?.piece === 'p') {
+      for (const row of after.board()) for (const p of row) {
+        if (!p || p.type !== 'b' || p.color !== i.mover) continue;
+        if (bishopHemmedByOwnPawns(after, p.square, i.mover) && !bishopHemmedByOwnPawns(new Chess(i.fenBefore), p.square, i.mover)) {
+          return { text: `That shuts the bishop on ${p.square} in behind its own pawns: a bad bishop until it gets out.`, squares: [p.square, mvp.to] };
+        }
+      }
+    }
+  }
+  // A recapture is read against the board before the trade began.
+  const base = i.prior && inFluxAfter(i.prior.fenBefore, i.prior.san) ? new Chess(i.prior.fenBefore) : before;
+  let majority: string | null = null;
+  for (const col of ['w', 'b'] as Color[]) {
+    const foe: Color = col === 'w' ? 'b' : 'w';
+    if (!majority && !inFlight && centre(after, col) > centre(after, foe) && !(centre(base, col) > centre(base, foe))) {
+      majority = `${col === 'w' ? 'White' : 'Black'} has the central pawn majority now: more pawns on the d- and e-files to build the centre with.`;
+    }
+  }
+  // A wing majority made: the one majority computer (`pawnMajority`), read
+  // against the board before the trade began.
+  if (!majority) {
+    const made = pawnMajority(i.fenBefore, i.san, i.prior ?? null);
+    if (made?.event === 'created' && made.majority.healthy) {
+      majority = `${made.majority.side === 'w' ? 'White' : 'Black'} has the ${made.majority.wing} pawn majority now: in the long run it makes a passed pawn there.`;
+    }
+  }
+  // A file half-open for one side (its own pawn gone, theirs still there): the
+  // rook's file, aimed at that pawn. The mover's file first.
+  for (const col of [i.mover, i.mover === 'w' ? 'b' : 'w'] as Color[]) {
+    const foe: Color = col === 'w' ? 'b' : 'w';
+    for (const f of 'abcdefgh') {
+      if (pawnsOn(before, f, col).length === 0 || pawnsOn(after, f, col).length > 0) continue;
+      const target = pawnsOn(after, f, foe);
+      if (!target.length || pawnsOn(before, f, foe).length === 0) continue;
+      const aim = col === 'w' ? target[0] : target[target.length - 1];
+      return { text: `The ${f}-file is half-open for ${col === 'w' ? 'White' : 'Black'} now: a rook there bears down on the pawn on ${aim}.${majority ? ` ${majority}` : ''}`, squares: [aim] };
+    }
+  }
+  if (majority) return { text: majority, squares: [] };
+  // A PAWN CHAIN the move makes: the moved pawn joins a diagonal of three or
+  // more of the mover's pawns. Its base (the pawn nearest home) is where the
+  // other side strikes at it.
+  const mv = after.history({ verbose: true }).pop();
+  if (mv?.piece === 'p') {
+    const mine = (c: Chess, sq: string): boolean => { const p = c.get(sq as never); return !!p && p.type === 'p' && p.color === i.mover; };
+    const chainThrough = (c: Chess, sq: string): string[] => {
+      const best: string[][] = [];
+      for (const df of [1, -1]) {
+        const line = [sq];
+        for (const dir of [1, -1]) {
+          let f = sq.charCodeAt(0); let r = Number(sq[1]);
+          for (;;) {
+            f += df * dir; r += dir;
+            const s = `${String.fromCharCode(f)}${r}`;
+            if (f < 97 || f > 104 || r < 1 || r > 8 || !mine(c, s)) break;
+            line.push(s);
+          }
+        }
+        best.push(line);
+      }
+      return best.sort((a, b) => b.length - a.length)[0];
+    };
+    const chain = chainThrough(after, mv.to);
+    if (chain.length >= 3 && chainThrough(before, mv.from).length < 3) {
+      const sorted = [...chain].sort((a, b) => (i.mover === 'w' ? Number(a[1]) - Number(b[1]) : Number(b[1]) - Number(a[1])));
+      return { text: `That makes a pawn chain, ${andList(sorted)}: solid, and its base on ${sorted[0]} is where it can be attacked.`, squares: sorted };
+    }
+    // SPACE: a centre pawn on the fifth rank no pawn of theirs can take.
+    const fifth = i.mover === 'w' ? '5' : '4';
+    if ('cdef'.includes(mv.to[0]) && mv.to[1] === fifth && after.attackers(mv.to as never, i.mover === 'w' ? 'b' : 'w').every((s) => after.get(s)?.type !== 'p')) {
+      return { text: `The pawn on ${mv.to} takes space: it cramps their pieces behind it and splits the board.`, squares: [mv.to] };
+    }
+  }
+  return null;
+}
+
+/** A pawn the move offers: the opponent can take it and nothing takes back. */
+export function gambitRead(i: { fenBefore: string; san: string; mover: Color }): TheoryRead | null {
+  let c: Chess;
+  try { c = new Chess(i.fenBefore); c.move(i.san); } catch { return null; }
+  const them: Color = i.mover === 'w' ? 'b' : 'w';
+  for (const m of c.moves({ verbose: true })) {
+    if (m.captured !== 'p' || m.color !== them) continue;
+    const t = new Chess(c.fen());
+    t.move(m.san);
+    if (t.attackers(m.to, i.mover).length === 0) {
+      return { text: `It offers the pawn on ${m.to}: a gambit, the pawn given for time and open lines.`, squares: [m.to] };
+    }
+  }
+  return null;
+}
+
+/** The queens come off: the game turns toward an endgame. Said when the move
+ *  takes the last queen off, when the queens are already off (an opening that
+ *  goes straight to an ending, the Berlin's), or when the masters' usual reply
+ *  trades them. */
+export function endgameRead(i: { fenBefore: string; san: string; movesAt?: (fen: string) => readonly LocalDbMove[] | null }): TheoryRead | null {
+  const was = structureSignature(i.fenBefore);
+  let after: string;
+  try { const c = new Chess(i.fenBefore); c.move(i.san); after = c.fen(); } catch { return null; }
+  const now = structureSignature(after);
+  if (!was || !now) return null;
+  if (was.queensOn && !now.queensOn) return { text: 'The queens come off, so the game heads for an endgame: the pawn structure and an active king decide it now.', squares: [] };
+  if (!was.queensOn && !now.queensOn) return { text: 'With the queens off the board, this is already an endgame in spirit: the pawn structure and the king\'s activity matter more than an attack.', squares: [] };
+  // The queens trade on a road masters play, up to three moves ahead.
+  if (!i.movesAt) return null;
+  return walkRoadsAhead(after, [], i.movesAt, ({ move, sans, share }) => {
+    if (move.captured !== 'q' || move.piece !== 'q') return null;
+    const said = sans[sans.length - 1];
+    return sans.length === 1 && share >= 0.3
+      ? { text: `The usual reply ${said} trades the queens: the game is heading for an endgame.`, squares: [move.to] }
+      : { text: `${sans.length > 1 ? `After ${andList(sans.slice(0, -1))}, ` : ''}${said} trades the queens: an early endgame is one of the roads from here.`, squares: [move.to] };
+  });
+}
+
+/** The board is a named opening reached another way, or the same one with the
+ *  colours reversed — the move order matters. */
+export function moveOrderRead(i: { history: readonly string[]; student: Color }): TheoryRead | null {
+  const eq = openingEquivalence(i.history, i.student);
+  return eq ? { text: eq.text, squares: eq.squares } : null;
+}
+
+/** A TRANSPOSITION, said where the move order matters: the board IS a named
+ *  opening the move order did not reach, or the masters' usual reply lands on
+ *  one. "If they answer …c5, it transposes into the Sicilian Defense." */
+/** A name with its article: "the Sicilian Defense", "Petrov's Defense". */
+const theName = (name: string): string => (/^(?!King|Queen)\S+['’]s\b/.test(name) ? name : `the ${name}`);
+
+export function transpositionRead(i: { history: readonly string[]; movesAt: (fen: string) => readonly LocalDbMove[] | null }): TheoryRead | null {
+  const c = new Chess();
+  try { for (const s of i.history) c.move(s); } catch { return null; }
+  const now = (openingAtPosition(c.fen())?.plies ?? 0) >= i.history.length ? transposedOpening(c.fen(), i.history.length, detectOpeningByOrder([...i.history])) : null;
+  if (now) return { text: `This transposes into ${theName(now)}: the same position by another move order.`, squares: [] };
+  // The masters' roads ahead (`walkRoadsAhead`).
+  return walkRoadsAhead(c.fen(), i.history, i.movesAt, ({ move, after, sans, history }) => {
+    // A named board the index reaches in fewer moves than the road takes is
+    // the same board with tempi wasted, not a transposition.
+    const into = (openingAtPosition(after.fen())?.plies ?? 0) >= history.length ? transposedOpening(after.fen(), history.length, detectOpeningByOrder(history)) : null;
+    if (!into) return null;
+    return sans.length === 1
+      ? { text: `If the reply is ${sans[0]}, the game transposes into ${theName(into)}.`, squares: [move.to] }
+      : { text: `After ${andList(sans)}, the game transposes into ${theName(into)}.`, squares: [move.to] };
+  });
+}
+
+const PIECE_NAME: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
+
+/** What the piece that just moved DOES where it stands (a piece move), or the
+ *  fianchetto a pawn move prepares. Said by its job; no job, no sentence. */
+export function pieceJobRead(i: { fenBefore: string; san: string; mover: Color }): TheoryRead | null {
+  let c: Chess;
+  let mv;
+  try { c = new Chess(i.fenBefore); mv = c.move(i.san); } catch { return null; }
+  const home = i.mover === 'w' ? '1' : '8';
+  if (mv.piece === 'p' && ['g3', 'b3', 'g6', 'b6'].includes(mv.to) && c.get(`${mv.to[0] === 'g' ? 'f' : 'c'}${home}` as never)?.type === 'b') {
+    return { text: `It prepares the fianchetto: the bishop will own the long diagonal from ${mv.to[0] === 'g' ? 'g' : 'b'}${home === '1' ? '2' : '7'}.`, squares: [mv.to], saysPlan: true };
+  }
+  // A pawn move that opens lines: the mover's bishops, rooks and queen that
+  // reach at least two more squares now, because the pawn left their path.
+  if (mv.piece === 'p') {
+    const reach = (c: Chess, sq: string): number => {
+      const p = c.get(sq as never);
+      if (!p) return 0;
+      const turned = sideToMoveAs(c.fen(), p.color);
+      if (!turned) return 0;
+      try { return new Chess(turned).moves({ square: sq as never }).length; } catch { return 0; }
+    };
+    const before = new Chess(i.fenBefore);
+    const opened: string[] = [];
+    for (const row of c.board()) for (const p of row) {
+      if (!p || p.color !== i.mover || !['b', 'r', 'q'].includes(p.type)) continue;
+      if (reach(c, p.square) - reach(before, p.square) >= 2) opened.push(`the ${PIECE_NAME[p.type]} on ${p.square}`);
+    }
+    if (opened.length) return { text: `It opens lines for ${andList(opened)}.`, squares: [mv.to] };
+    return null;
+  }
+  if (!PIECE_NAME[mv.piece]) return null;
+  let job: ReturnType<typeof moveJob> = null;
+  try { job = moveJob(i.fenBefore, i.san, i.mover, MINE, null, NO_FOLLOW); } catch { job = null; }
+  if (!job?.clause) return null;
+  const clause = withoutCastleTail(job.clause);
+  // A job that names the move it prepares states the plan behind the move.
+  return { text: `${openSentence(PIECE_NAME[mv.piece])} to ${mv.to}. It ${clause.replace(/^it /, '')}.`.replace(/^(\w+) to (\w+)\. It /, '$1 on $2: it '), squares: [mv.to], ...(/\bprepares\b/.test(clause) ? { saysPlan: true } : {}) };
+}
+
+const PIECE_WORD: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
+/** The move leaves one of the mover's pieces to be won by the exchange count. */
+/** A piece of the mover's the move leaves to be won by the exchange count
+ *  (a minor piece or the exchange), that was not so before the move. Checks
+ *  count (a sacrifice with check still gives the piece); a trade in flight does
+ *  not. */
+function piecesGiven(fenBefore: string, san: string, mover: Color, withCheck: boolean): { square: Square; piece: string; gain: number; defended: boolean; takes: Move } | null {
+  let a: Chess; let mv: Move;
+  try { a = new Chess(fenBefore); mv = a.move(san); } catch { return null; }
+  // A plain trade in flight gives nothing; a sacrifice (`withCheck`) is read
+  // net of what its capture took.
+  if (!withCheck && (a.inCheck() || inFluxAfter(fenBefore, san))) return null;
+  const took = withCheck && mv.captured ? (MATERIAL_VALUE[mv.captured] ?? 0) : 0;
+  const was = new Set(findHangingBySee(fenBefore).filter((h) => h.color === mover).map((h) => h.square));
+  const now = findHangingBySee(a.fen()).map((h) => (h.square === mv.to ? { ...h, gain: h.gain - took } : h))
+    .filter((h) => h.color === mover && h.gain >= 2 && !was.has(h.square));
+  const h = now.sort((x, y) => y.gain - x.gain)[0];
+  if (!h) return null;
+  const them: Color = mover === 'w' ? 'b' : 'w';
+  const takes = a.moves({ verbose: true }).filter((m) => m.to === h.square && m.color === them)
+    .sort((x, y) => (x.piece === 'k' ? 10 : MATERIAL_VALUE[x.piece] ?? 10) - (y.piece === 'k' ? 10 : MATERIAL_VALUE[y.piece] ?? 10))[0];
+  if (!takes) return null;
+  return { square: h.square, piece: h.piece, gain: h.gain, defended: h.defended, takes };
+}
+
+/** A SACRIFICE: a move masters play (the roads bar, 2% of their games) that
+ *  gives a piece or the exchange by the exchange count. Played on purpose,
+ *  so said as a sacrifice — never as a piece left hanging. */
+export function sacrificeRead(i: { fenBefore: string; san: string; mover: Color; movesAt: (fen: string) => readonly LocalDbMove[] | null }): TheoryRead | null {
+  // Played on purpose: masters play it, or the opening index names the board
+  // it reaches a gambit (the Halloween's Nxe5, the Jerome's Bxf7+).
+  if (!mastersPlay(i.fenBefore, i.san, i.movesAt) && !namedGambitAfter(i.fenBefore, i.san)) return null;
+  const g = piecesGiven(i.fenBefore, i.san, i.mover, true);
+  if (!g) return null;
+  // Net of what it took: a minor piece for a pawn, or a rook for a minor piece.
+  const what = g.piece === 'r' && g.gain < 4 ? 'the exchange' : `the ${PIECE_WORD[g.piece]}`;
+  return { text: `${i.mover === 'b' ? '…' : ''}${i.san.replace(/[+#]$/, '')} gives up ${what}: a sacrifice, played for the attack and the time it wins.`, squares: [g.square] };
+}
+
+/** Does the opening index name the board this move reaches a gambit? */
+function namedGambitAfter(fen: string, san: string): boolean {
+  try { const c = new Chess(fen); c.move(san); return /Gambit/.test(openingAtPosition(c.fen())?.name ?? ''); } catch { return false; }
+}
+
+/** Do the masters play this move here (2% of their games)? */
+function mastersPlay(fen: string, san: string, movesAt: (fen: string) => readonly LocalDbMove[] | null): boolean {
+  const roads = movesAt(fen) ?? [];
+  const total = roads.reduce((n, m) => n + m.games, 0);
+  const r = roads.find((m) => m.san.replace(/[+#]$/, '') === san.replace(/[+#]$/, ''));
+  return !!r && total > 0 && r.games / total >= ROAD_BAR_NEXT;
+}
+
+export function hangsRead(fenBefore: string, san: string, mover: Color, movesAt?: (fen: string) => readonly LocalDbMove[] | null): TheoryRead | null {
+  // A move masters play, or a named gambit, is a sacrifice, never a piece
+  // left hanging.
+  if ((movesAt && mastersPlay(fenBefore, san, movesAt)) || namedGambitAfter(fenBefore, san)) return null;
+  const g = piecesGiven(fenBefore, san, mover, false);
+  if (!g) return null;
+  const said = `${g.takes.color === 'b' ? '…' : ''}${g.takes.san.replace(/[+#]$/, '')}`;
+  // A rook for a minor piece is the exchange.
+  const what = g.gain < 3 ? (g.piece === 'r' && MATERIAL_VALUE[g.takes.piece] === 3 ? 'the exchange' : null) : `the ${PIECE_WORD[g.piece]} on ${g.square}`;
+  if (!what) return null;
+  // A guarded piece that loses the exchange is "won", never "hanging".
+  return { text: g.defended || g.gain < 3 ? `That lets ${said} win ${what}.` : `That leaves the ${PIECE_WORD[g.piece]} on ${g.square} hanging: ${said} wins it.`, squares: [g.square] };
+}
+
+/** THE TRAPS AROUND THE MOVE, from the one known-slip index (`slipsAt` —
+ *  `knownSlips.knownSlipsAt`: the club index, the curated gems where it holds
+ *  none): the move played IS a known slip; a slip is available on this board;
+ *  or one waits behind a road masters play. Each slip is classified by the one
+ *  trap computer (`classifySlip`: a trap, a known mistake, or nothing to say)
+ *  and worded by the seat (`trapWords`); every line is replayed by `trapLine`
+ *  (a blow that hits, checks, mates or takes nothing is not said). */
+/** The masters' moves on the board after a move, most played first. */
+function roadsAfter(fenBefore: string, san: string, movesAt: (fen: string) => readonly LocalDbMove[] | null): string[] {
+  try { const c = new Chess(fenBefore); c.move(san); return (movesAt(c.fen()) ?? []).map((m) => m.san); } catch { return []; }
+}
+
+export function trapRead(i: { fenBefore: string; san: string; mover: Color; slipsAt: (fen: string) => readonly ClubGem[]; movesAt: (fen: string) => readonly LocalDbMove[] | null }): TheoryRead | null {
+  const them: Color = i.mover === 'w' ? 'b' : 'w';
+  const slipBy = (slipper: Color): 'student' | 'opponent' => (slipper === i.mover ? 'student' : 'opponent');
+  // A famous trap is always said (by its name); its kind is what it wins.
+  const kindOf = (fen: string, g: ClubGem): SlipKind | null => classifySlip({ engineCp: g.mate ? MATE_CP : g.endCp, line: { fen, slip: g.slip, punish: g.punish.split(/\s+/).filter(Boolean) } }) ?? (g.name ? 'known-mistake' : null);
+  const say = (fen: string, g: ClubGem, slipper: Color, lead: (kind: SlipKind) => string): TheoryRead | null => {
+    const kind = kindOf(fen, g);
+    if (!kind) return null;
+    const t = trapLine({ fen, slip: g.slip, punish: g.punish.split(/\s+/).filter(Boolean), slipBy: slipBy(slipper) });
+    if (!t) return null;
+    return { text: slipBy(slipper) === 'student' ? t.text : `${lead(kind)}${t.text}`, squares: t.squares };
+  };
+  // F. A FAMOUS TRAP, by name (`famousTrapRead`): the slip played, on offer
+  // here, or one move away — always named, saying what the engine says it wins.
+  const famous = famousTrapRead({ fenBefore: i.fenBefore, san: i.san, mover: i.mover, student: i.mover, roads: roadsAfter(i.fenBefore, i.san, i.movesAt) });
+  if (famous) return famous;
+  // 0. The move itself leaves a piece hanging: a piece of the mover's that the
+  // other side wins by the exchange count (a minor piece's worth or more), and
+  // that was not hanging before the move. Never on a check or a trade in flight.
+  const hung = hangsRead(i.fenBefore, i.san, i.mover, i.movesAt);
+  if (hung) return { ...hung, slipPlayed: true };
+  // 1. The move played is a known slip.
+  const slipHere = i.slipsAt(i.fenBefore).find((g) => g.slip.replace(/[+#]$/, '') === i.san.replace(/[+#]$/, ''));
+  if (slipHere) {
+    const kind = kindOf(i.fenBefore, slipHere);
+    const r = kind ? say(i.fenBefore, slipHere, i.mover, () => '') : null;
+    if (kind && r) return { text: `That is ${knownLead(kind, 'student')}. ${r.text}`, squares: r.squares, slipPlayed: true };
+  }
+  // 1b. The move played keeps clear of a known slip on the same board: the
+  // natural alternative that loses.
+  for (const g of i.slipsAt(i.fenBefore)) {
+    if (g.slip.replace(/[+#]$/, '') === i.san.replace(/[+#]$/, '')) continue;
+    const r = say(i.fenBefore, g, i.mover, () => '');
+    if (r) return { text: `The move keeps clear of ${knownLead(kindOf(i.fenBefore, g) ?? 'known-mistake', 'student')}. ${r.text}`, squares: r.squares };
+  }
+  let after: Chess;
+  try { after = new Chess(i.fenBefore); after.move(i.san); } catch { return null; }
+  // 2. A slip is on offer on this board.
+  for (const g of i.slipsAt(after.fen())) {
+    const r = say(after.fen(), g, them, (kind) => (slipNoun(kind, 'opponent') === 'trap' ? 'A trap is set here. ' : 'A known mistake is on offer here. '));
+    if (r) return r;
+  }
+  // 2b. The move attacks something, and a reply masters play ignores it.
+  const hang = hangRead({ fen: after.fen(), mover: i.mover, movesAt: i.movesAt });
+  if (hang) return hang;
+  // 3. One waits down a road masters play, up to three moves on (`walkRoadsAhead`):
+  // the slip of whoever moves on that board — the mover's own a "Watch out".
+  return walkRoadsAhead(after.fen(), [], i.movesAt, ({ after: board, sans }) => {
+    // Every board the road walk reaches (three moves deep).
+    const slipper = board.turn();
+    const pre = sans.length === 1 ? `If they answer ${sans[0]}, ` : `If play goes ${andList(sans)}, `;
+    for (const g of i.slipsAt(board.fen())) {
+      const r = say(board.fen(), g, slipper, (kind) => `${pre}${g.name ? `${famousTrapName(g.name)} is waiting` : slipNoun(kind, 'opponent') === 'trap' ? 'a trap is waiting' : 'a known mistake is waiting'}. `);
+      if (r) return r;
+    }
+    return null;
+  });
+}
+
+/** A GAMBIT ON OFFER: one of the masters' moves here reaches a position the
+ *  opening index names a gambit ("Budapest Gambit", "Benko Gambit"). */
+export function gambitAheadRead(i: { fen: string; movesAt: (fen: string) => readonly LocalDbMove[] | null }): TheoryRead | null {
+  const here = openingAtPosition(i.fen)?.name ?? '';
+  // The gambit a board is named for: the last part of its name, or its family
+  // ("Budapest Gambit"), never the Queen's or King's Gambit Accepted/Declined
+  // (a name, not a pawn offered) and never one the board is already in.
+  const gambitOf = (fen: string): string | null => {
+    const name = openingAtPosition(fen)?.name;
+    if (!name) return null;
+    const parts = name.split(/[:,]/).map((p) => p.trim());
+    const g = [...parts].reverse().find((p) => /Gambit(?: (?:Accepted|Declined))?$/.test(p));
+    if (!g || /^(?:Queen|King)['’]s Gambit(?: (?:Accepted|Declined))?$/.test(g) || here.includes(g)) return null;
+    return g;
+  };
+  const said = (m: { color: Color; san: string }): string => `${m.color === 'b' ? '…' : ''}${m.san.replace(/[+#]$/, '')}`;
+  // The pawn the move itself offers, when it does; else the line's offer.
+  const tail = (offer: string | null): string => (offer ? `: it gives up the pawn on ${offer} for time and open lines.` : ', a line where a pawn is offered for time and open lines.');
+  const offerOf = (fen: string, san: string, color: Color): string | null => gambitRead({ fenBefore: fen, san, mover: color })?.squares[0] ?? null;
+  const roads = i.movesAt(i.fen) ?? [];
+  // Where masters' games are thin, any legal move the opening index names a
+  // gambit ("5.Nd5!? is the Belgrade gambit").
+  if (!roads.length) {
+    let c: Chess;
+    try { c = new Chess(i.fen); } catch { return null; }
+    for (const m of c.moves({ verbose: true })) {
+      c.move(m.san);
+      const g = gambitOf(c.fen());
+      c.undo();
+      if (!g) continue;
+      const offer = offerOf(i.fen, m.san, m.color);
+      return { text: `${said(m)} is the ${g}${tail(offer)}`, squares: [m.to, ...(offer ? [offer] : [])] };
+    }
+    return null;
+  }
+  // The masters' roads ahead (`walkRoadsAhead`).
+  return walkRoadsAhead(i.fen, [], i.movesAt, ({ move, before, after, sans }) => {
+    const g = gambitOf(after.fen());
+    if (!g) return null;
+    const offer = offerOf(before, move.san, move.color);
+    return sans.length === 1
+      ? { text: `${sans[0]} is the ${g}${tail(offer)}`, squares: [move.to, ...(offer ? [offer] : [])] }
+      : { text: `After ${andList(sans.slice(0, -1))}, ${sans[sans.length - 1]} is the ${g}${tail(offer)}`, squares: [move.to, ...(offer ? [offer] : [])] };
+  });
+}
+
+const CENTRE: string[] = ['d4', 'e4', 'd5', 'e5'];
+/** THE CENTRE, said when the move changes it: who holds it with pawns, or the
+ *  tension between them. */
+export function centreRead(i: { fenBefore: string; san: string; mover: Color }): TheoryRead | null {
+  let b: Chess; let a: Chess;
+  try { b = new Chess(i.fenBefore); a = new Chess(i.fenBefore); a.move(i.san); } catch { return null; }
+  const held = (c: Chess, col: Color): string[] => CENTRE.filter((sq) => { const p = c.get(sq as never); return !!p && p.type === 'p' && p.color === col; });
+  const sw = (col: Color): string => (col === 'w' ? 'White' : 'Black');
+  const mine = held(a, i.mover); const myBefore = held(b, i.mover);
+  const them: Color = i.mover === 'w' ? 'b' : 'w';
+  if (mine.length >= 2 && myBefore.length < mine.length) return { text: `${sw(i.mover)} takes the centre with pawns on ${mine.join(' and ')}: space, and the pieces get room behind them.`, squares: mine };
+  const theirs = held(a, them);
+  if (mine.length && theirs.length) {
+    const faced = mine.filter((sq) => theirs.some((t) => t[0] === sq[0]) || theirs.some((t) => Math.abs(t.charCodeAt(0) - sq.charCodeAt(0)) === 1 && Number(t[1]) !== Number(sq[1])));
+    if (faced.length && held(b, i.mover).join() !== mine.join()) return { text: `The centre is tense: ${mine[0]} and ${theirs[0]} face each other, and a capture there can open the position.`, squares: [mine[0], theirs[0]] };
+  }
+  return null;
+}
+
+/** EVERYTHING ELSE THE THEORY SAYS ABOUT A MOVE, composed in order by
+ *  `composeTheoryTurn`: the pawn structure it makes (or the centre it takes), a
+ *  gambit it offers or one on offer, the transposition, the queens coming off,
+ *  and a trap around it. A structure, an endgame turn or a gambit is news once a
+ *  game (`said`). The piece's own job is said only when `withPieceJob` (the
+ *  caller has no why of its own for the move). */
+const planMemo = new Map<string, MastersPlanRead | null>();
+/** THE PLAN AHEAD, for the theory composer: the masters' plan read at the
+ *  deepest position on the line with games enough to read one (the theory
+ *  surfaces' break bar, `THEORY_BREAK_SHARE`), keeping what still lies ahead on
+ *  the board the move reaches (`planStillAhead`). The mover's own break is the
+ *  plan when it has one, else the other side's, each with its seat; the piece
+ *  the plan brings likewise. Reads are remembered by board. */
+const THEORY_BREAK_SHARE = 0.2;
+export function planAheadRead(i: { history: readonly string[]; san: string; mover: Color; whose: 'your' | 'their'; movesAt: (fen: string) => readonly LocalDbMove[] | null }): {
+  plan: { goal: KeyMove; goalSquare: string; lead: readonly KeyMove[]; whose: 'your' | 'their' } | null;
+  piece: PlacedPiece | null;
+} {
+  const none = { plan: null, piece: null };
+  const walk = new Chess();
+  const fens: string[] = [walk.fen()];
+  try { for (const s of [...i.history, i.san]) { walk.move(s); fens.push(walk.fen()); } } catch { return none; }
+  const fenAfter = fens[fens.length - 1];
+  const flip = (w: 'your' | 'their'): 'your' | 'their' => (w === 'your' ? 'their' : 'your');
+  for (let k = fens.length - 1; k >= 0; k -= 1) {
+    const key = positionOf(fens[k]);
+    let read = planMemo.get(key);
+    if (read === undefined) {
+      read = mastersPlanRead(fens[k], (f) => i.movesAt(f), { minBreakShare: THEORY_BREAK_SHARE });
+      if (planMemo.size > 400) planMemo.clear();
+      planMemo.set(key, read);
+    }
+    if (!read) continue;
+    const ahead = planStillAhead(read, fenAfter);
+    if (!ahead) return none;
+    const mineBrk = i.mover === 'w' ? ahead.white : ahead.black;
+    const theirBrk = i.mover === 'w' ? ahead.black : ahead.white;
+    const brk = mineBrk ?? theirBrk;
+    const goalColor: Color = mineBrk ? i.mover : (i.mover === 'w' ? 'b' : 'w');
+    const home = (i.mover === 'w' ? ahead.whitePiece : ahead.blackPiece) ?? (i.mover === 'w' ? ahead.blackPiece : ahead.whitePiece);
+    return {
+      plan: brk ? { goal: { san: brk.san, piece: 'p', color: goalColor }, goalSquare: brk.square, lead: brk.lead ?? [], whose: mineBrk ? i.whose : flip(i.whose) } : null,
+      piece: home?.fen && home.color ? { piece: home.piece, to: home.to, san: home.san, color: home.color, fen: home.fen } : null,
+    };
+  }
+  return none;
+}
+
+/** THE CHOICE AHEAD (Wikibooks' "Black has two main responses: …"): on the
+ *  board the move reaches, the masters' real roads (10% of their games each,
+ *  none at 85% or more), each said by what it does. Silent where one move is
+ *  plainly the move or a road has no job to say. Its claim is the board's
+ *  decision, so the decision is said once. */
+export function choiceAheadRead(i: { fenBefore: string; san: string; mover: Color; movesAt: (fen: string) => readonly LocalDbMove[] | null }): (TheoryRead & { claim: string }) | null {
+  let c: Chess;
+  try { c = new Chess(i.fenBefore); c.move(i.san); } catch { return null; }
+  const fen = c.fen();
+  const them = c.turn();
+  const roads = i.movesAt(fen) ?? [];
+  const total = roads.reduce((n, m) => n + m.games, 0);
+  if (total === 0) return null;
+  const real = [...roads].sort((a, b) => b.games - a.games).filter((r) => r.games / total >= 0.1);
+  if (real.length < 2 || real[0].games / total >= 0.85) return null;
+  const names: string[] = []; const jobs: string[] = []; const squares: string[] = [];
+  let partial = false;
+  for (const r of real) {
+    let job: ReturnType<typeof moveJob> = null;
+    try { job = moveJob(fen, r.san, them, THEIRS, null, NO_FOLLOW); } catch { job = null; }
+    // A road with no job to say is left out, and the list says it is not all.
+    if (!job?.clause) { partial = true; continue; }
+    const clause = withoutCastleTail(job.clause).replace(/^it /, '');
+    // Two roads that do the same job are one road, not a choice.
+    if (jobs.includes(clause)) continue;
+    const m = new Chess(fen).move(r.san);
+    const said = `${them === 'b' ? '…' : ''}${r.san.replace(/[+#]$/, '')}`;
+    names.push(said); jobs.push(clause); squares.push(m.to);
+  }
+  if (names.length < 2) return null;
+  // One idea a sentence: the roads, then what each does.
+  const head = partial ? `Among their main choices: ${andList(names)}.` : `Next, the choice is theirs: ${orList(names)}.`;
+  return { text: `${head} ${names.map((n, k) => `${n} ${jobs[k]}.`).join(' ')}`, squares, claim: `decision:${positionOf(fen)}` };
+}
+
+/** The move before the last of `history`, with its board. */
+function priorOf(history: readonly string[]): { fenBefore: string; san: string } | null {
+  if (!history.length) return null;
+  try { const c = new Chess(); for (const s of history.slice(0, -1)) c.move(s); return { fenBefore: c.fen(), san: history[history.length - 1] }; } catch { return null; }
+}
+
+/** The reads of one move, pure over the board and the tables: remembered by
+ *  the line, so the Review's lecture — built again when the corpus and the
+ *  engine land — reads each move once. */
+interface MoveReads {
+  ahead: ReturnType<typeof planAheadRead>;
+  choice: ReturnType<typeof choiceAheadRead>;
+  structure: TheoryRead | null; gambit: TheoryRead | null; endgame: TheoryRead | null;
+  namedRoads: TheoryRead | null; moveOrder: TheoryRead | null; trap: TheoryRead | null; pieceJob: TheoryRead | null;
+}
+const readsMemo = new Map<string, MoveReads>();
+function movesReads(i: { history: readonly string[]; fenBefore: string; san: string; mover: Color; movesAt: (fen: string) => readonly LocalDbMove[] | null; slipsAt: (fen: string) => readonly ClubGem[] }): MoveReads {
+  const key = `${i.history.join(' ')}|${i.san}`;
+  const hit = readsMemo.get(key);
+  if (hit) return hit;
+  const after = (() => { const c = new Chess(i.fenBefore); c.move(i.san); return c.fen(); })();
+  const m = { fenBefore: i.fenBefore, san: i.san, mover: i.mover };
+  const reads: MoveReads = {
+    ahead: planAheadRead({ history: i.history, san: i.san, mover: i.mover, whose: 'your', movesAt: i.movesAt }),
+    choice: choiceAheadRead({ ...m, movesAt: i.movesAt }),
+    structure: structureRead({ ...m, prior: priorOf(i.history) }) ?? centreRead(m),
+    gambit: gambitRead(m) ?? sacrificeRead({ ...m, movesAt: i.movesAt }) ?? gambitAcceptedRead(m) ?? gambitDeclinedRead(m) ?? gambitAheadRead({ fen: after, movesAt: i.movesAt }) ?? gambitStandingRead(m),
+    endgame: endgameRead({ fenBefore: i.fenBefore, san: i.san, movesAt: i.movesAt }),
+    namedRoads: namedRoadsRead({ fen: after, movesAt: i.movesAt }),
+    moveOrder: moveOrderRead({ history: [...i.history, i.san], student: i.mover }) ?? transpositionRead({ history: [...i.history, i.san], movesAt: i.movesAt }),
+    trap: trapRead({ ...m, slipsAt: i.slipsAt, movesAt: i.movesAt }),
+    pieceJob: pieceJobRead(m),
+  };
+  // Remembered only once every table it reads is in memory: a read taken
+  // while one is still loading is not the answer the loaded table gives.
+  if (mastersDbLoaded() && openingPositionsLoaded() && knownSlipIndexLoaded()) {
+    if (readsMemo.size > 300) readsMemo.clear();
+    readsMemo.set(key, reads);
+  }
+  return reads;
+}
+
+export function theoryExtras(i: {
+  history: readonly string[]; fenBefore: string; san: string; mover: Color;
+  movesAt: (fen: string) => readonly LocalDbMove[] | null;
+  slipsAt: (fen: string) => readonly ClubGem[];
+  said: Set<string>;
+  withPieceJob: boolean;
+}): string[] {
+  const once = (kind: string, r: TheoryRead | null): TheoryRead | null => {
+    if (!r || i.said.has(r.text) || i.said.has(`kind:${kind}`)) return null;
+    i.said.add(`kind:${kind}`); i.said.add(r.text);
+    return r;
+  };
+  const fresh = (r: TheoryRead | null): TheoryRead | null => { if (!r || i.said.has(r.text)) return null; i.said.add(r.text); return r; };
+  const r = movesReads(i);
+  // The plan and the piece it brings are news when they change.
+  const planText = r.ahead.plan ? `plan:${r.ahead.plan.whose}:${r.ahead.plan.goal.san}:${r.ahead.plan.lead.map((m) => m.san).join(',')}` : null;
+  const pieceText = r.ahead.piece ? `piece:${r.ahead.piece.color}:${r.ahead.piece.san}` : null;
+  const plan = planText && !i.said.has(planText) ? (i.said.add(planText), r.ahead.plan) : null;
+  const piece = pieceText && !i.said.has(pieceText) ? (i.said.add(pieceText), r.ahead.piece) : null;
+  const choiceAhead = r.choice && !i.said.has(r.choice.claim) ? (i.said.add(r.choice.claim), r.choice) : null;
+  const turn = composeTheoryTurn({
+    fen: i.fenBefore, san: i.san, mover: i.mover, whose: 'your', roads: [], plan, piece, choiceAhead,
+    structure: once('structure', r.structure),
+    gambit: once('gambit', r.gambit),
+    endgame: once('endgame', r.endgame),
+    namedRoads: fresh(r.namedRoads),
+    moveOrder: fresh(r.moveOrder),
+    trapSaid: fresh(r.trap),
+    pieceJob: i.withPieceJob ? fresh(r.pieceJob) : null,
+    said: i.said,
+  });
+  return turn.map((t) => t.text);
+}
+
+/** An opening name said relative to the one the game is in: the family part
+ *  dropped when shared ("the Mieses Variation"), with its article. Null when
+ *  it is the current opening itself. */
+export function nameRelativeTo(name: string, current: string): string | null {
+  const n = name.trim();
+  let base = current.trim();
+  if (!n || n === base) return null;
+  // The longest part of the current name the new one extends: "Vienna Game:
+  // Stanley Variation, Meitner-Mieses Gambit" under "Vienna Game: Stanley
+  // Variation" is "the Meitner-Mieses Gambit".
+  let short = n;
+  for (;;) {
+    if (n.startsWith(`${base},`) || n.startsWith(`${base}:`)) { short = n.slice(base.length + 1).trim(); break; }
+    const cut = Math.max(base.lastIndexOf(','), base.lastIndexOf(':'));
+    if (cut <= 0) break;
+    base = base.slice(0, cut).trim();
+  }
+  // The road's own name is its last part ("Stanley Variation, Three Knights
+  // Variation" → "Three Knights Variation").
+  short = short.split(',').pop()?.trim() ?? '';
+  if (!short) return null;
+  // A bare adjective is said with its family ("Closed" → "Closed Sicilian").
+  if (!/(?:Variation|Defen[cs]e|Gambit|Attack|System|Line|Opening|Game|Countergambit|Trap)$/i.test(short)) {
+    const head = n.split(':')[0].replace(/\s+(?:Defen[cs]e|Opening|Game)$/i, '').trim();
+    if (head && !short.includes(head)) short = `${short} ${head}`;
+  }
+  return /^\S+['’]s\b/.test(short) ? short : `the ${short}`;
+}
+
+/** THE ROADS BY NAME (Wikibooks' way: "5.Nd5!? is the Belgrade gambit"). The
+ *  side to move's legal moves that reach a position the opening index names,
+ *  each said by its name relative to where the game is. Masters' moves first.
+ *  A gambit road is left to `gambitAheadRead`. Null with no named road. */
+export function namedRoadsRead(i: { fen: string; movesAt: (fen: string) => readonly LocalDbMove[] | null; skip?: ReadonlySet<string> }): TheoryRead | null {
+  let c: Chess;
+  try { c = new Chess(i.fen); } catch { return null; }
+  const here = openingAtPosition(i.fen)?.name ?? '';
+  const share = new Map((i.movesAt(i.fen) ?? []).map((m) => [m.san.replace(/[+#]$/, ''), m.games]));
+  const roads: Array<{ san: string; to: string; said: string; games: number }> = [];
+  const names = new Set<string>();
+  for (const m of c.moves({ verbose: true })) {
+    c.move(m.san);
+    const name = openingAtPosition(c.fen())?.name;
+    c.undo();
+    if (!name || name === here || names.has(name)) continue;
+    if (/Gambit/.test(name.split(',').pop() ?? '')) continue;
+    const said = here ? nameRelativeTo(name, here) : `the ${name}`;
+    if (!said || i.skip?.has(said)) continue;
+    names.add(name);
+    roads.push({ san: m.san, to: m.to, said, games: share.get(m.san.replace(/[+#]$/, '')) ?? 0 });
+  }
+  // A bar, never a count: the named roads masters play (2% of their games
+  // here) — a road nobody plays is a name, not theory.
+  const total = [...share.values()].reduce((n, g) => n + g, 0);
+  const said = roads.filter((r) => total > 0 && r.games / total >= ROAD_BAR_NEXT).sort((a, b) => b.games - a.games);
+  if (!said.length) return null;
+  const mover = c.turn();
+  const parts = said.map((r) => `${mover === 'b' ? '…' : ''}${r.san.replace(/[+#]$/, '')} ${r.said}`);
+  const text = parts.length === 1
+    ? `${parts[0].replace(/ (the |\S+['’]s )/, ' is $1')}.`
+    : `The roads from here have names: ${andList(parts)}.`;
+  return { text, squares: said.map((r) => r.to) };
+}
+
+
+function balance(c: Chess): { pawns: number; pieces: number } {
+  let pawns = 0; let pieces = 0;
+  for (const row of c.board()) for (const p of row) {
+    if (!p) continue;
+    const s = p.color === 'w' ? 1 : -1;
+    if (p.type === 'p') pawns += s; else pieces += s * MATERIAL_VALUE[p.type];
+  }
+  return { pawns, pieces };
+}
+/** THE GAMBIT ACCEPTED: the move takes a pawn with the material level before
+ *  it, and nothing takes back on that square — the pawn was offered. */
+export function gambitAcceptedRead(i: { fenBefore: string; san: string; mover: Color }): TheoryRead | null {
+  let b: Chess; let a: Chess; let mv;
+  try { b = new Chess(i.fenBefore); a = new Chess(i.fenBefore); mv = a.move(i.san); } catch { return null; }
+  if (mv.captured !== 'p') return null;
+  const was = balance(b);
+  if (was.pawns !== 0 || was.pieces !== 0) return null;
+  const them: Color = i.mover === 'w' ? 'b' : 'w';
+  if (a.attackers(mv.to as never, them).length > 0) return null;
+  const said = `${i.mover === 'b' ? '…' : ''}${mv.san.replace(/[+#]$/, '')}`;
+  return { text: `${said} takes the offered pawn: the gambit accepted. Now ${them === 'w' ? 'White' : 'Black'} plays for the time and the open lines it paid for.`, squares: [mv.to] };
+}
+
+/** THE GAMBIT DECLINED: the board offered the mover a pawn — one it could
+ *  take with nothing taking back — and the move leaves it. */
+export function gambitDeclinedRead(i: { fenBefore: string; san: string; mover: Color }): TheoryRead | null {
+  let b: Chess; let mv;
+  try { b = new Chess(i.fenBefore); mv = new Chess(i.fenBefore).move(i.san); } catch { return null; }
+  const them: Color = i.mover === 'w' ? 'b' : 'w';
+  const offered = b.moves({ verbose: true }).filter((m) => m.captured === 'p' && (() => { const t = new Chess(i.fenBefore); t.move(m.san); return t.attackers(m.to as never, them).length === 0; })());
+  if (!offered.length || offered.some((m) => m.san === mv.san)) return null;
+  const sq = offered[0].to;
+  return { text: `It leaves the offered pawn on ${sq} alone: the gambit declined.`, squares: [sq] };
+}
+
+/** THE GAMBIT STANDING: one side is a pawn or two down, the pieces level, and
+ *  it was so before the move too (a capture waiting to be taken back is not a
+ *  standing). Said from the board: who gave the pawn and what it buys. */
+export function gambitStandingRead(i: { fenBefore: string; san: string; mover: Color }): TheoryRead | null {
+  let b: Chess; let a: Chess;
+  try { b = new Chess(i.fenBefore); a = new Chess(i.fenBefore); a.move(i.san); } catch { return null; }
+  const was = balance(b); const now = balance(a);
+  if (now.pieces !== 0 || was.pieces !== 0) return null;
+  if (Math.abs(now.pawns) < 1 || Math.abs(now.pawns) > 2 || Math.sign(was.pawns) !== Math.sign(now.pawns)) return null;
+  // A pawn the side down can take back at once is an exchange in flight.
+  const down: Color = now.pawns > 0 ? 'b' : 'w';
+  if (a.turn() === down && a.moves({ verbose: true }).some((m) => m.captured === 'p' && a.attackers(m.to, down === 'w' ? 'b' : 'w').length === 0)) return null;
+  const n = Math.abs(now.pawns);
+  const Side = down === 'w' ? 'White' : 'Black';
+  return { text: `${Side} is ${n === 1 ? 'a pawn' : 'two pawns'} down here: that is the gambit's price, paid for time, development and open lines.`, squares: [] };
+}
+
+/** A REPLY THAT IGNORES THE ATTACK: the move just played attacks a piece (worth
+ *  more than the attacker, or undefended), a reply the masters really play
+ *  leaves it there, and the capture wins it. Said as the approved off-line hang. */
+export function hangRead(i: { fen: string; mover: Color; movesAt: (fen: string) => readonly LocalDbMove[] | null }): TheoryRead | null {
+  const them: Color = i.mover === 'w' ? 'b' : 'w';
+  const roads = i.movesAt(i.fen) ?? [];
+  const total = roads.reduce((n, m) => n + m.games, 0);
+  if (total === 0) return null;
+  for (const road of [...roads].sort((a, b) => b.games - a.games)) {
+    if (road.games / total < ROAD_BAR_NEXT) break;
+    const c = new Chess(i.fen);
+    try { c.move(road.san); } catch { continue; }
+    for (const cap of c.moves({ verbose: true })) {
+      if (cap.color !== i.mover || !cap.captured || cap.captured === 'p') continue;
+      const worth = (MATERIAL_VALUE[cap.captured] ?? 0) - (cap.piece === 'k' ? 9 : MATERIAL_VALUE[cap.piece] ?? 9);
+      const t = new Chess(c.fen());
+      t.move(cap.san);
+      const defended = t.attackers(cap.to, them).length > 0;
+      if (defended && worth <= 0) continue;
+      const line = hangLine({ fen: i.fen, ignore: road.san, takes: cap.san, ignoredBy: 'opponent' });
+      if (line) return line;
+    }
+  }
+  return null;
+}
+
