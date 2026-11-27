@@ -356,6 +356,7 @@ export const PICTURE_ROLE: Record<ComputerName, PictureRole> = {
   queenlessMate: 'threat',
   matingNet: 'threat',
   checkCensus: 'threat',
+  deflectionOn: 'threat',
   attackLeader: 'plan',
   defenderArrival: 'threat',
   frozenTarget: 'weakness',

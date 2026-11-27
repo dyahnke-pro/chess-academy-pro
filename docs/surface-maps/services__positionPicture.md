@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**462 lines · 10 exports · 10 importers · 5 tests · 0 audits**
+**466 lines · 10 exports · 10 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -71,12 +71,12 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/positionPicture.test.ts:22`
 - `src/services/positionPicture.test.ts:31`
 - `src/services/positionPicture.test.ts:39`
-- `src/services/thoughtComposer.ts:647`
+- `src/services/thoughtComposer.ts:656`
 
 ### `isDetailOf` (function) — 3 call sites
 - `src/services/coachDecider.ts:565`
-- `src/services/thoughtComposer.ts:649`
-- `src/services/thoughtComposer.ts:654`
+- `src/services/thoughtComposer.ts:658`
+- `src/services/thoughtComposer.ts:663`
 
 ## Tests
 

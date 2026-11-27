@@ -37,6 +37,7 @@ export const PRINCIPLE_DEVICES: Readonly<Partial<Record<MisconceptionTagId, stri
   'missed-their-trap': "The device: before you go in, count your piece's way back — a piece with no safe square is lost however good its post looks.",
   'missed-their-double-check': "The device: when their piece stands in front of their own line piece AND can check you as it moves, both checks come at once — only the king can answer, so make room for it before it happens.",
   'missed-their-guard-removal': "The device: for each of your pieces with one guard, ask what happens if that guard is taken or chased — if the piece then falls, give it a second guard now.",
+  'missed-their-deflection': "The device: before you answer a forcing move, ask what the piece that takes back is guarding — if taking pulls it off its job, find another answer or guard the square twice first.",
   'missed-their-overload': "The device: count the jobs of each defender — a piece guarding two things can only keep one, so give one of the jobs to another piece.",
   // Your side of each motif (WO-MOTIFS-01): the habit that finds it.
   'missed-your-free-piece': "The device: before your move, look at every piece of theirs and count its guards — one with none, or fewer guards than attackers, is yours for the taking.",
@@ -51,6 +52,7 @@ export const PRINCIPLE_DEVICES: Readonly<Partial<Record<MisconceptionTagId, stri
   'missed-your-double-check': "The device: when your piece in front of your own line piece can give check as it moves, both pieces check at once and only the king can answer.",
   'missed-your-guard-removal': "The device: find their piece with one guard, then take or chase that guard — what it protected falls next.",
   'missed-your-overload': "The device: count the jobs of each defender — make one guarding two things choose, and take whichever it lets go.",
+  'missed-your-desperado': "The device: when a piece of yours is lost anyway, look at what it can take before it goes — a piece that dies for nothing is the only real loss.",
   'missed-your-deflection': "The device: when one defender holds their position together, give it something it must take or answer — once it leaves, strike what it guarded.",
   'missed-your-zwischenzug': "The device: before the obvious recapture, look for a check or a bigger threat first — the expected move is still there afterwards.",
   'missed-your-trapped-piece': "The device: count the safe squares of their far-advanced piece — when it has none, attack it and it is lost.",

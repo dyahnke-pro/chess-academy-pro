@@ -1429,6 +1429,7 @@ export function computeMoveFacets(
       add(readBoardAll('theirWorstPiece', { fen: fenAfter, student: studentColorWB, bestLine: ctx.playedLineUci.length ? ctx.playedLineUci : null })[0]);
       add(readBoardAll('seventhRankMate', { fen: fenAfter, lines: null, student: studentColorWB })[0]);
       add(readBoardAll('checkCensus', { fen: fenAfter, lines: null, student: studentColorWB })[0]);
+      for (const f of readBoardAll('deflection', { fen: fenAfter, student: studentColorWB, namesMoves: REVIEW_WRITER.namesPlayedMove })) add(f);
       add(readBoardAll('pieceTempo', { fen: fenAfter, lines: null, student: studentColorWB })[0]);
       if (ctx.evaluation != null && !isMateEval(ctx.evaluation) && ctx.playedLineUci.length) {
         const lines = [{ moves: ctx.playedLineUci, cp: ctx.evaluation, mate: null }];

@@ -7,6 +7,8 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
 import { checkCensus, attackLeader, defenderArrival } from './attackReads';
 import type { EngineLine } from './engineLineRead';
+import { deflectionOn } from './deflection';
+import { sideToMoveAs } from './threatOut';
 
 type Reads = Record<string, Array<{ evaluation: number; mate: number | null; moves: string[] }>>;
 
@@ -14,7 +16,7 @@ describe.skipIf(!process.env.ATTACK_MEASURE)('attack reads on the Danya boards',
   it('counts and samples', () => {
     const R = JSON.parse(readFileSync('src/services/__fixtures__/danyaBoards209.reads.json', 'utf8')) as Reads;
     const out: Record<string, { n: number; samples: Array<{ fen: string; text: string; line?: string[] }> }> = {
-      census: { n: 0, samples: [] }, leader: { n: 0, samples: [] }, arrival: { n: 0, samples: [] },
+      census: { n: 0, samples: [] }, deflection: { n: 0, samples: [] }, deflectionPass: { n: 0, samples: [] }, leader: { n: 0, samples: [] }, arrival: { n: 0, samples: [] },
     };
     let boards = 0;
     for (const [key, ls] of Object.entries(R)) {
@@ -31,8 +33,13 @@ describe.skipIf(!process.env.ATTACK_MEASURE)('attack reads on the Danya boards',
       push('census', checkCensus(fen, lines, student));
       push('leader', attackLeader(fen, lines, student, true));
       push('arrival', defenderArrival(fen, lines, student));
+      const d = deflectionOn(fen);
+      push('deflection', d ? { text: `${d.move} pulls the ${d.defender.piece} on ${d.defender.from} off ${d.target.square}; gain ${d.gain}`, line: d.line } : null);
+      const pass = sideToMoveAs(fen, student === 'w' ? 'b' : 'w');
+      const dp = pass ? deflectionOn(pass) : null;
+      push('deflectionPass', dp ? { text: `${dp.move} pulls the ${dp.defender.piece} on ${dp.defender.from} off ${dp.target.square}; gain ${dp.gain}`, line: dp.line } : null);
     }
     writeFileSync('audit-reports/attack-reads-measure.json', JSON.stringify({ boards, ...out }, null, 1));
-    console.log(boards, out.census.n, out.leader.n, out.arrival.n);
+    console.log(boards, Object.fromEntries(Object.entries(out).map(([k, v]) => [k, v.n])));
   }, 600_000);
 });

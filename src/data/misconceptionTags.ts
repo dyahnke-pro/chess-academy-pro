@@ -356,6 +356,22 @@ export const MISCONCEPTION_TAGS = [
     drill: { kind: 'tactic', puzzleThemes: ['defensiveMove', 'capturingDefender'] },
   },
   {
+    id: 'missed-their-deflection',
+    label: 'Let a defender be deflected',
+    bucket: 'tactical',
+    blurb: 'One of your pieces was guarding something, and they could make it take or answer something else, leaving its job undone.',
+    coachCue: "An opponent's deflection was on the board at your turn — a forcing move whose every answer loses material, the recapture pulling your guard off the square it held — and your reply let it win.",
+    drill: { kind: 'tactic', puzzleThemes: ['defensiveMove', 'deflection'] },
+  },
+  {
+    id: 'missed-your-desperado',
+    label: 'Missed a desperado',
+    bucket: 'tactical',
+    blurb: 'A piece of yours was lost anyway, and it could have taken something on its way out.',
+    coachCue: 'A piece of the student could not be saved (or one of two hanging pieces was lost), the best move was a capture by that piece, and the played move let it go for nothing.',
+    drill: { kind: 'tactic', puzzleThemes: ['hangingPiece'] },
+  },
+  {
     id: 'missed-their-overload',
     label: 'Left a defender overloaded',
     bucket: 'tactical',

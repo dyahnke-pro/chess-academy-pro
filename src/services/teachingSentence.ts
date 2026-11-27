@@ -606,6 +606,30 @@ export function renderAttackLeader(t: {
   ], t.stem);
 }
 
+/** A deflection (`deflection.ts`): the forcing move, the guard it pulls off
+ *  its square, and what lands there. */
+export function renderDeflection(t: {
+  mine: boolean; names: boolean; move: string; defender: string; from: string; target: string; square: string; follow: string; stem: number;
+}): string {
+  const D = PIECE_WORD[t.defender]; const T = PIECE_WORD[t.target];
+  if (t.mine) {
+    if (!t.names) {
+      return rotateStem([
+        `Their ${D} on ${t.from} is guarding the ${T} on ${t.square}. Give it something to take, and the ${T} falls.`,
+        `One job holds their ${T} on ${t.square}: the ${D} on ${t.from} guards it. Pull that ${D} away with a forcing move.`,
+      ], t.stem);
+    }
+    return rotateStem([
+      `${t.move} pulls their ${D} off ${t.square}: once it takes back, ${t.follow} wins the ${T} there. Every answer loses material.`,
+      `Their ${D} on ${t.from} guards the ${T} on ${t.square}. ${t.move} drags it away, and ${t.follow} follows. Every answer loses material.`,
+    ], t.stem);
+  }
+  return rotateStem([
+    `Watch their ${t.move}: if your ${D} takes back, it leaves the ${T} on ${t.square}, and ${t.follow} wins it. Every answer loses material.`,
+    `Your ${D} on ${t.from} is guarding the ${T} on ${t.square}. Their ${t.move} pulls it away, and ${t.follow} follows. Every answer loses material.`,
+  ], t.stem);
+}
+
 /** The defender's nearest piece is too far to arrive before the mate. */
 export function renderDefenderArrival(t: { mine: boolean; king: string; piece: string; square: string; moves: number | null; mateIn: number; stem: number }): string {
   const P = PIECE_WORD[t.piece];

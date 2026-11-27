@@ -56,6 +56,7 @@ import type { CoachFact } from './coachFact';
 import type { EngineLine } from './engineLineRead';
 import { pictureConclusions, pictureAnswers, PICTURE_ANSWER_POSED } from './pictureLedger';
 import { baseFactsOf } from './boardBundle';
+import { desperadoAt } from './desperado';
 
 /** Which capability each king read POSES — exhaustive over the reads, so a new
  *  read fails to compile until someone decides. Null: a standing fact the
@@ -836,10 +837,20 @@ export function positionPosed(
         if (out.some((o) => o.tag === a.skill)) continue;
         out.push({ tag: a.skill, posedImportance: PICTURE_ANSWER_POSED[a.skill], ...(a.outcome === 'broken' ? { outcome: 'broken' as const } : {}) });
       }
+      // THE DESPERADO, both ways: a piece lost anyway (or one of two hanging)
+      // and the best move its sale (`desperadoAt`, the same read that teaches
+      // it). Played: held. Let go for nothing at a pawn's cost or more: broken.
+      const d = lines.length ? desperadoAt(fen, opts.played.san, lines[0].moves[0] ?? null) : null;
+      if (d && !out.some((o) => o.tag === 'missed-your-desperado')) {
+        out.push({ tag: 'missed-your-desperado', posedImportance: DESPERADO_POSED, ...(!d.found && (opts.played.cpLoss ?? 0) >= 100 ? { outcome: 'broken' as const } : {}) });
+      }
     }
   } catch { /* an unreadable board posed nothing */ }
   return out;
 }
+
+/** How sharply the desperado question is asked, on the heat map's scale. */
+const DESPERADO_POSED = 75;
 
 /** The best move as a one-move UCI line, when only its SAN is known. */
 function bestUciOf(fen: string, bestSan: string | undefined): string[] {
@@ -857,7 +868,7 @@ type RegistryPosedComputer = 'detectLatentFork' | 'detectLatentDanger' | 'detect
   | 'findTrappedPiece' | 'readConversion' | 'noSafeChecks' | 'kingRace' | 'kingActivityGap' | 'zugzwangIfPassed' | 'mateLine' | 'kingInOpen' | 'seventhRankMate'
   | 'queenlessMate' | 'selfBlock' | 'mateThreatLever' | 'queenKnightNet' | 'lateralRookDefence' | 'kingSiege'
   | 'keySquaresOn' | 'kpDrawReason' | 'wonEnding' | 'shoulderOn' | 'connectedPassersOn' | 'matingNet' | 'frozenTarget'
-  | 'pictureLedger' | 'checkCensus' | 'attackLeader' | 'defenderArrival';
+  | 'pictureLedger' | 'deflectionOn' | 'checkCensus' | 'attackLeader' | 'defenderArrival';
 
 /** How sharply each posed question is asked, on the heat map's scale. */
 const REGISTRY_POSED_WEIGHT: Record<RegistryPosedComputer, number> = {
@@ -890,6 +901,7 @@ const REGISTRY_POSED_WEIGHT: Record<RegistryPosedComputer, number> = {
   matingNet: 90,
   frozenTarget: 60,
   pictureLedger: 65,
+  deflectionOn: 80,
   checkCensus: 70,
   attackLeader: 65,
   defenderArrival: 85,
@@ -964,6 +976,8 @@ function registryReads(fen: string, me: 'w' | 'b', bestLineUci: readonly string[
     // Every check leaving a king one square (yours to take away, or yours to
     // keep open): the mating-square census.
     ...readBoardAll('checkCensus', { fen, lines: null, student: me }),
+    // A deflection on the board: yours to play, or theirs (handed the move) to stop.
+    ...readBoardAll('deflection', { fen, student: me, namesMoves: false }),
     ...readBoardAll('frozenTarget', { fen, student: me }).filter((f) => f.skill),
     // Your king under siege as the board stands (the count of attackers and
     // defenders, unscored here: the engine's agreement is the teaching half's).

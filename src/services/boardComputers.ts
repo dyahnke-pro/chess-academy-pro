@@ -133,6 +133,7 @@ import { pieceTempo } from './pieceTempo';
 import { kingBoxMove } from './kingBox';
 import { matingNet } from './matingNet';
 import { checkCensus, attackLeader, defenderArrival } from './attackReads';
+import { deflectionOn } from './deflection';
 import { frozenTarget } from './frozenTarget';
 import { pictureLedger, pictureCounterplay, pictureTarget, ledgerKey, ledgerText, ledgerSquares, counterplayText, targetText, moveAnswersTarget, planTargetText, moveWorksOnPlan } from './pictureLedger';
 import { centreDuo } from './centreDuo';
@@ -311,7 +312,7 @@ import { countWarning } from './countMethod';
 import { oppositeWingsRace } from './planRace';
 // THE ONE FACT SET'S READS (the basket, 2026-11-19).
 import { moveIdeaFact, moveLead, moveGerund, moveSeat, closeSentence, placedAs, castlePrepClaim, linePlays, followPvOf, orderMatters, horizonSaid, replyAnswers, boardTeacherThought, deepThought, FACT_SET_SURFACES, JOB_WEIGHT, STOCK_PHRASE, onlyMove, type MoveWords, type FactSetMultiKind } from './thoughtReads';
-import { renderMustDefend, renderMustDefendHit, renderNewThreat } from './teachingSentence';
+import { renderMustDefend, renderMustDefendHit, renderNewThreat, renderDeflection } from './teachingSentence';
 import type { PhraseMemory } from '../utils/phraseMemory';
 import { sayIdea } from '../utils/phraseMemory';
 import type { FollowLines } from './exchangeLedger';
@@ -1403,6 +1404,10 @@ export interface BoardContexts {
   checkCensus: { fen: string; lines: readonly EngineLine[] | null; student: Color };
   attackLeader: { fen: string; lines: readonly EngineLine[]; student: Color; namesMoves: boolean };
   defenderArrival: { fen: string; lines: readonly EngineLine[]; student: Color };
+  /** THE DEFLECTION, read on the board (`deflection.ts`): a forcing move
+   *  whose recapture pulls a guard off its square, proven against every
+   *  answer. Both seats: the side to move's, the other's handed the move. */
+  deflection: { fen: string; student: Color; namesMoves: boolean };
   /** A weak pawn that cannot move, no pawn able to come to its aid, and more
    *  pieces able to reach it than to guard it within two moves. */
   frozenTarget: { fen: string; student: Color };
@@ -7931,6 +7936,41 @@ export const BOARD_COMPUTERS = {
     }),
     computer: 'defenderArrival',
     kind: 'king-read',
+    phase: ANY,
+    surfaces: {
+      lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
+      learn: LEARN_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      weaknesses: { wired: 'services/moveInsight.ts' },
+    },
+  },
+  // "Watch their Rxd5: if your queen takes back, it leaves f7": the guard
+  // pulled off its job, both seats, proven against every answer. One claim
+  // with the line's own deflection read (`tacticGeometry`, geo:deflection).
+  deflection: {
+    read: ({ fen, student, namesMoves }, fact) => safe(() => {
+      const toMove = sideToMove(fen);
+      const out: CoachFact[] = [];
+      for (const [board, side] of [[fen, toMove], [flipSideToMove(fen), toMove === 'w' ? 'b' : 'w']] as const) {
+        if (!board) continue;
+        const d = deflectionOn(board);
+        if (!d) continue;
+        const mine = side === student;
+        const names = !mine || namesMoves;
+        const claim = `geo:deflection:${d.defender.from}${d.target.square}`;
+        const text = renderDeflection({ mine, names, move: d.move, defender: d.defender.piece, from: d.defender.from, target: d.target.piece, square: d.target.square, follow: d.follow, stem: stemKeyOf(claim) });
+        const squares = names ? [d.bait, d.defender.from, d.target.square] : [d.defender.from, d.target.square];
+        const proof = names ? legalLineProof(board, d.line, lineSeatAt(board, student), true) ?? squaresProof(text, squares) ?? NO_PROOF.description
+          : squaresProof(text, squares) ?? NO_PROOF.description;
+        out.push(fact({ key: `deflection:${d.bait}:${d.defender.from}${d.target.square}`, claims: [claim, `threat:${d.target.square}`], text, proof, squares,
+          stakes: { points: d.gain * 100, plies: 3 }, seat: mine ? 'student' : 'opponent', namesStudentMove: mine && names, thread: LOCAL_THREAD, fen: board,
+          ...(names ? { lines: [{ fen: board, sans: [...d.line] }] } : {}),
+          skill: mine ? 'missed-your-deflection' : 'missed-their-deflection' }));
+      }
+      return out.length ? out : null;
+    }),
+    computer: 'deflectionOn',
+    kind: 'tactic',
     phase: ANY,
     surfaces: {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, review: REVIEW, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,

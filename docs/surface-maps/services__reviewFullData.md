@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1703 lines · 12 exports · 24 importers · 34 tests · 0 audits**
+**1709 lines · 12 exports · 24 importers · 34 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -129,12 +129,12 @@
 - `src/services/reviewVerdictSentence.test.ts:30`
 
 ### `positionalVerdictLine` (re-export) — 3 call sites
-- `src/services/boardComputers.ts:2082`
+- `src/services/boardComputers.ts:2094`
 - `src/services/coachFeatureService.ts:3079`
 - `src/services/reviewPositionalAssessment.ts:380`
 
 ### `correctionAgainstHeard` (re-export) — 6 call sites
-- `src/services/boardComputers.ts:2180`
+- `src/services/boardComputers.ts:2192`
 - `src/services/heardCorrection.ts:13`
 - `src/services/reviewHeardCorrection.test.ts:7`
 - `src/services/reviewHeardCorrection.test.ts:12`
@@ -142,13 +142,13 @@
 - `src/services/reviewHeardCorrection.test.ts:18`
 
 ### `seatMoveSubject` (re-export) — 4 call sites
-- `src/services/boardComputers.ts:2095`
+- `src/services/boardComputers.ts:2107`
 - `src/services/pvPlayback.ts:1038`
 - `src/services/reviewVerdictSentence.test.ts:15`
 - `src/test/captureSaidOnce.gate.test.ts:207`
 
 ### `describeMoveInfluence` (re-export) — 11 call sites
-- `src/services/boardComputers.ts:2164`
+- `src/services/boardComputers.ts:2176`
 - `src/services/moveInfluence.ts:23`
 - `src/services/reviewFullData.test.ts:671`
 - `src/services/reviewFullData.test.ts:676`

@@ -312,6 +312,7 @@ export const THINK_STEP: Record<ComputerName, ThinkAnswer> = {
   connectedPassersOn: 'calculate',
   matingNet: 'forcing-moves',
   checkCensus: 'forcing-moves',
+  deflectionOn: 'forcing-moves',
   attackLeader: 'candidates',
   defenderArrival: 'calculate',
   frozenTarget: 'assess',
