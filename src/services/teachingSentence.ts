@@ -1069,6 +1069,9 @@ export type RepairState =
   | 'leave-a-square'
   | 'attack-their-king'
   | 'down-material-queens-off'
+  // Board states the mistake LEFT (round 2): held at the quiet end, absent
+  // on the board the move was played from.
+  | 'pinned-now' | 'castling-lost' | 'development-behind' | 'file-opened'
   // The plan computer's plan, when no state above applies (`planRepair`).
   | 'plan';
 
@@ -1314,6 +1317,50 @@ export const REPAIRS: Record<RepairState, RepairRecipe> = {
       'Their shield is gone, so attack the king with everything.',
     ],
     sources: ['concept:pos-king-safety', 'Library: Capablanca cf-31'],
+  },
+  'pinned-now': {
+    needs: ['tPiece', 'target', 'opPiece'],
+    stems: [
+      'Break the pin on your {tPiece} on {target}: guard it, or block their {opPiece}.',
+      'Your {tPiece} on {target} is pinned now. Unpin it before anything else.',
+      'Free your {tPiece} on {target}: step out of the {opPiece}\'s line or guard it twice.',
+      'The {opPiece} pins your {tPiece} on {target}. Add a defender, then unpin.',
+      'Pinned on {target}, your {tPiece} can\'t move. Break the pin first.',
+    ],
+    sources: ['https://en.wikipedia.org/wiki/Pin_(chess)', 'https://www.chess.com/terms/pin-chess'],
+  },
+  'castling-lost': {
+    needs: [],
+    stems: [
+      'Your king can\'t castle now. Walk it to safety and connect the rooks.',
+      'Castling is gone: tuck the king away by hand, then link the rooks.',
+      'No castling now. Keep the centre closed and move the king to the side.',
+      'Without castling, close the centre first, then walk your king to the wing.',
+      'Your king lost castling: keep files shut near it and find it a corner.',
+    ],
+    sources: ['concept:pos-king-safety', 'https://www.chess.com/terms/castling-chess'],
+  },
+  'development-behind': {
+    needs: ['n'],
+    stems: [
+      'You have {n} minor pieces still at home. Develop them before anything else.',
+      'Get your {n} sleeping minor pieces out before you attack.',
+      'Behind in development: bring out your last {n} minor pieces first.',
+      'Develop first: {n} of your minor pieces have not moved yet.',
+      'Every move now should develop: {n} minor pieces are still home.',
+    ],
+    sources: ['Library: Capablanca cf-6', 'https://www.chess.com/article/view/chess-opening-principles'],
+  },
+  'file-opened': {
+    needs: ['file'],
+    stems: [
+      'The {file}-file is open now. Put a rook on it first.',
+      'An open {file}-file: the first rook there owns it.',
+      'Take the open {file}-file with a rook before they do.',
+      'Get a rook to the {file}-file. Open files belong to rooks.',
+      'The {file}-file just opened. Your rook belongs there.',
+    ],
+    sources: ['Library: Nimzowitsch ms-3 (open files)', 'https://www.chess.com/terms/open-file-chess'],
   },
   'leave-a-square': {
     needs: [],

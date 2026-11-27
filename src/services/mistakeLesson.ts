@@ -48,6 +48,8 @@ import { MATERIAL_VALUE, materialBalance } from './pieceValues';
 import { capturesWinMaterial, kingSafetyRead } from './positionReadingService';
 import { onlyMove } from './thoughtReads';
 import { findProphylaxis } from './prophylaxis';
+import { findPins } from './pinGeometry';
+import type { TacticPattern } from '../types/tacticTypes';
 import { detectTacticLine } from './missedTacticService';
 import { initiativeRead } from './initiativeRead';
 import { bestJobReason, positionalReason } from './positionalReason';
@@ -323,7 +325,7 @@ export function fillsFor(input: MistakeLessonInput): Fills {
 }
 
 // ── repair: which state, and its board check ───────────────────────────────
-interface RepairContext { student: Color; fenBefore: string; fenAfter: string; quiet: string; cause: MistakeCause; seat: 'you' | 'them'; replyLineUci: readonly string[]; phase: Phase | null }
+interface RepairContext { student: Color; fenBefore: string; fenAfter: string; quiet: string; cause: MistakeCause; seat: 'you' | 'them'; replyLineUci: readonly string[]; phase: Phase | null; playedSan: string }
 
 function queensOn(fen: string): boolean { return /q/i.test(fen.split(' ')[0]); }
 function countOf(fen: string, side: Color, type: PieceSymbol): number { try { return new Chess(fen).findPiece({ type, color: side }).length; } catch { return 0; } }
@@ -430,6 +432,52 @@ function repairApplies(state: RepairState, x: RepairContext): Fills | null {
     // The plan is read by `planRepair`, never through this switch.
     case 'plan':
       return null;
+    case 'pinned-now': {
+      const pinsOn = (fen: string): TacticPattern[] => { try { return findPins(new Chess(fen)).filter((p) => p.beneficiary === them); } catch { return []; } };
+      const was = new Set(pinsOn(x.fenBefore).map((p) => p.involvedSquares[1]));
+      const pin = pinsOn(x.quiet).find((p) => !was.has(p.involvedSquares[1]));
+      if (!pin) return null;
+      const b = before(x.quiet);
+      const pinner = b.get(pin.involvedSquares[0] as Square);
+      const pinned = b.get(pin.involvedSquares[1] as Square);
+      return pinner && pinned ? { tPiece: NAME[pinned.type], target: pin.involvedSquares[1], opPiece: NAME[pinner.type] } : null;
+    }
+    case 'castling-lost': {
+      // The move (or its line) took the last castling right while the king
+      // still stands on its home file, queens on.
+      const rights = (fen: string): string => (fen.split(' ')[2] ?? '-').split('').filter((c) => (x.student === 'w' ? /[KQ]/ : /[kq]/).test(c)).join('');
+      if (!rights(x.fenBefore) || rights(x.quiet) || !queensOn(x.quiet)) return null;
+      const king = before(x.quiet).findPiece({ type: 'k', color: x.student })[0];
+      return king && /^[de]/.test(king) ? {} : null;
+    }
+    case 'development-behind': {
+      if (x.phase !== 'opening' || (x.cause.kind !== 'tempo-wasted' && !/^Q/.test(x.playedSan))) return null;
+      const home = (side: Color): number => {
+        const b = before(x.quiet);
+        const rank = side === 'w' ? '1' : '8';
+        return ['b', 'c', 'f', 'g'].filter((f) => { const p = b.get(`${f}${rank}` as Square); return !!p && p.color === side && (p.type === 'n' || p.type === 'b'); }).length;
+      };
+      const mine = home(x.student);
+      return mine >= 2 && mine >= home(them) + 2 ? { n: MISTAKE_NUMBER_WORDS[mine] ?? String(mine) } : null;
+    }
+    case 'file-opened': {
+      const pawnOn = (fen: string, file: string): boolean => { try { return new Chess(fen).findPiece({ type: 'p', color: 'w' }).concat(new Chess(fen).findPiece({ type: 'p', color: 'b' })).some((s) => s[0] === file); } catch { return true; } };
+      const b = before(x.quiet);
+      const rookOn = (file: string): boolean => b.board().flat().some((p) => !!p && p.type === 'r' && p.square[0] === file);
+      const mine = b.findPiece({ type: 'r', color: x.student });
+      for (const file of 'abcdefgh') {
+        if (pawnOn(x.quiet, file)) continue;
+        if (!pawnOn(x.fenBefore, file) || rookOn(file)) continue;
+        // A rook of the student's reaches it along its rank, nothing between.
+        const reaches = mine.some((r) => {
+          const lo = Math.min(r.charCodeAt(0), file.charCodeAt(0)); const hi = Math.max(r.charCodeAt(0), file.charCodeAt(0));
+          for (let c = lo + 1; c < hi; c++) if (b.get(`${String.fromCharCode(c)}${r[1]}` as Square)) return false;
+          return !b.get(`${file}${r[1]}` as Square);
+        });
+        if (reaches) return { file };
+      }
+      return null;
+    }
     case 'initiative-lost':
     case 'initiative-won': {
       if (!x.replyLineUci.length) return null;
@@ -450,13 +498,21 @@ const CAUSE_STATE: Partial<Record<MistakeCauseKind, RepairState>> = {
   'colour-conceded': 'colour-conceded', 'traded-into-target': 'weak-pawn', 'passer-handed': 'passer-against',
 };
 const LEDGER_STATES: readonly RepairState[] = ['down-queen', 'down-exchange', 'down-piece-middlegame', 'down-material-queens-off', 'down-piece-endgame', 'down-pawn-middlegame', 'down-pawn-endgame', 'up-material'];
+/** The board states a move can leave, read after the cause's and the
+ *  ledger's (round 2). Each checks it holds at the quiet end AND did not hold
+ *  on the board the move was played from — the mistake left it. The opened
+ *  file is the student's chance on either seat; the rest are the student's own. */
+const BOARD_STATES: Record<'you' | 'them', readonly RepairState[]> = {
+  you: ['pinned-now', 'castling-lost', 'development-behind', 'file-opened'],
+  them: ['file-opened'],
+};
 
 function repairFor(input: MistakeLessonInput, recipeRepairs: readonly RepairState[], key: number): { text: string; stem: string; state: RepairState } | null {
   let after: Chess; let mover: Color;
   try { after = new Chess(input.fenBefore); mover = after.turn(); if (!after.move(input.playedSan)) return null; } catch { return null; }
   const student: Color = input.seat === 'you' ? mover : (mover === 'w' ? 'b' : 'w');
   const quiet = input.replyLineUci.length ? quietEnd(after.fen(), input.replyLineUci) : after.fen();
-  const ctx: RepairContext = { student, fenBefore: input.fenBefore, fenAfter: after.fen(), quiet, cause: input.ew.cause, seat: input.seat, replyLineUci: input.replyLineUci, phase: phaseOfFen(quiet) };
+  const ctx: RepairContext = { student, fenBefore: input.fenBefore, fenAfter: after.fen(), quiet, cause: input.ew.cause, seat: input.seat, replyLineUci: input.replyLineUci, phase: phaseOfFen(quiet), playedSan: input.playedSan };
   const own: RepairState[] = [];
   const cs = CAUSE_STATE[input.ew.cause.kind];
   if (cs) own.push(cs);
@@ -467,7 +523,7 @@ function repairFor(input: MistakeLessonInput, recipeRepairs: readonly RepairStat
   // On their mistake the ledger's only repair is the conversion: the
   // student's own deficit is not what their mistake changed.
   const ledgerStates = input.seat === 'you' ? LEDGER_STATES : (['up-material'] as const);
-  for (const state of [...seated, ...ledgerStates]) {
+  for (const state of [...seated, ...ledgerStates, ...BOARD_STATES[input.seat]]) {
     const fills = repairApplies(state, ctx);
     if (!fills) continue;
     const said = renderMistakeSlot(REPAIRS[state], fills, key, recentStemsOf(input.memory));
