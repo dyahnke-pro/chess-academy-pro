@@ -1,4 +1,4 @@
-import { Play } from 'lucide-react';
+import { BookOpen, Play } from 'lucide-react';
 
 /** The board bar's button look — one source, so the line button reads the
  *  same in the bar and under a board that has no bar. */
@@ -39,6 +39,38 @@ export function PlayLineButton({ onPlay, testId = 'board-bar-line', wide = false
     >
       <Play size={16} />
       <span className="text-[11px] leading-none whitespace-nowrap">Play line</span>
+    </button>
+  );
+}
+
+interface TheoryButtonProps {
+  /** Opens the theory view, or null (greyed). */
+  onTheory: (() => void) | null;
+  /** True while the theory view plays: a press stops it. */
+  playing: boolean;
+  onStop: () => void;
+  testId?: string;
+}
+
+/**
+ * THE LINE SLOT DURING THE OPENING (David, the board bar decisions,
+ * 2026-11-24: "Play line becomes Theory during the opening"). Same place, same
+ * look as the Play-line button; it opens the theory view (`useTheoryView`).
+ */
+export function TheoryButton({ onTheory, playing, onStop, testId = 'board-bar-theory' }: TheoryButtonProps): JSX.Element {
+  const on = playing ? onStop : onTheory;
+  return (
+    <button
+      type="button"
+      onClick={on ?? undefined}
+      disabled={!on}
+      className={BOARD_BUTTON_CLASS}
+      data-testid={testId}
+      data-playing={playing ? 'true' : undefined}
+      aria-label={playing ? 'Stop the theory and return to the game' : 'Opening theory: the idea played forward from where the game left book'}
+    >
+      <BookOpen size={16} />
+      <span className="text-[11px] leading-none whitespace-nowrap">{playing ? 'Back to game' : 'Theory'}</span>
     </button>
   );
 }

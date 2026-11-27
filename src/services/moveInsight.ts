@@ -26,7 +26,9 @@ import { walkableLine } from './proof';
 import type { WalkableLine } from '../types';
 import { CAPTURE_VALUE, sideMaterial } from './pieceValues';
 import { PIECE_NAMES } from '../types/tacticTypes';
-import { computeMustDefend } from './threatOut';
+import { computeMustDefend, sideToMoveAs } from './threatOut';
+import { standingThreat } from './ownThreat';
+import { namedShotTags } from './motifNaming';
 import { countKingAttack } from './kingSafety';
 import { settledNetForLine } from './exchangeLedger';
 import { sayMoveClause } from './spokenMove';
@@ -822,6 +824,17 @@ export function positionPosed(
     // the skill the board asked for. The fact carries its skill
     // (`CoachFact.skill`), so teaching and the record speak one vocabulary.
     for (const f of registryPosedFacts(fen, me, opts.bestLine ?? [])) if (f.skill) add(f.skill as MisconceptionTagId, REGISTRY_POSED_WEIGHT[f.computer as RegistryPosedComputer] ?? 60);
+    // YOUR OWN THREAT, CARRIED OUT (`ownThreat`, both ways): a threat of the
+    // student's that stood before their reply and still stands after it — the
+    // reply ignored it — asks to be carried out. Filed under the shot the
+    // carrying move names (`namedShotTags`): held when a clean move takes it,
+    // missed when a costly move leaves it.
+    if (opts.lastMove && opts.lastMove.fenBefore.split(' ')[1] !== me) {
+      const now = standingThreat(fen);
+      const beforeFen = sideToMoveAs(opts.lastMove.fenBefore, me);
+      const was = now && beforeFen ? standingThreat(beforeFen) : null;
+      if (now && was && now.from === was.from && now.to === was.to && now.san) add(namedShotTags(fen, now.san)[0], OWN_THREAT_POSED);
+    }
     // THE PICTURE'S CONCLUSIONS, BOTH WAYS (WO-PICTURE-01): spoken by
     // `pictureTarget` / `pictureCounterplay`, filed here off the move played.
     if (opts.played) {
@@ -868,7 +881,8 @@ type RegistryPosedComputer = 'detectLatentFork' | 'detectLatentDanger' | 'detect
   | 'findTrappedPiece' | 'readConversion' | 'noSafeChecks' | 'kingRace' | 'kingActivityGap' | 'zugzwangIfPassed' | 'mateLine' | 'kingInOpen' | 'seventhRankMate'
   | 'queenlessMate' | 'selfBlock' | 'mateThreatLever' | 'queenKnightNet' | 'lateralRookDefence' | 'kingSiege'
   | 'keySquaresOn' | 'kpDrawReason' | 'wonEnding' | 'shoulderOn' | 'connectedPassersOn' | 'matingNet' | 'frozenTarget'
-  | 'pictureLedger' | 'deflectionOn' | 'checkCensus' | 'attackLeader' | 'defenderArrival';
+  | 'pictureLedger' | 'deflectionOn' | 'checkCensus' | 'attackLeader' | 'defenderArrival'
+  | 'discoveredAttacks' | 'answeringMove';
 
 /** How sharply each posed question is asked, on the heat map's scale. */
 const REGISTRY_POSED_WEIGHT: Record<RegistryPosedComputer, number> = {
@@ -905,7 +919,13 @@ const REGISTRY_POSED_WEIGHT: Record<RegistryPosedComputer, number> = {
   checkCensus: 70,
   attackLeader: 65,
   defenderArrival: 85,
+  discoveredAttacks: 85,
+  answeringMove: 85,
 };
+
+/** How sharply a threat of the student's own, left standing by their reply,
+ *  asks to be carried out (`ownThreat`'s follow-through). */
+const OWN_THREAT_POSED = 80;
 
 /** The registry's reads of the board the student moves on, each fact with
  *  the skill it poses (`skill`) — the knight fork two moves away (theirs or
@@ -982,6 +1002,10 @@ function registryReads(fen: string, me: 'w' | 'b', bestLineUci: readonly string[
     // Your king under siege as the board stands (the count of attackers and
     // defenders, unscored here: the engine's agreement is the teaching half's).
     ...readBoardAll('kingSiegeNow', { fen, student: me, studentCp: null }).filter((f) => f.skill),
+    // A discovered attack that wins against every reply (yours to play, theirs
+    // to stop), and the one move that holds against their threat.
+    ...readBoardAll('discoveredAttack', { fen, student: me, namesMoves: false }),
+    ...readBoardAll('answeringMove', { fen, student: me, namesMoves: false }).filter((f) => f.skill),
     ...((): ReturnType<typeof readBoardAll> => {
       if (!bestLineUci.length) return [];
       const lines = [{ moves: bestLineUci, cp: null, mate: null }];

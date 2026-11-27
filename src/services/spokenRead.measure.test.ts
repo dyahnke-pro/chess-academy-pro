@@ -44,7 +44,7 @@ it.skipIf(!process.env.SPOKEN_READ)('spoken', async () => {
       rec[k] = v; return v;
     };
     const before = await get(b.fen, 8, 12);
-    const r = await boardReadFacts({ fen: b.fen, studentColor: b.fen.split(' ')[1], rating: 1600, before, read: (fen) => get(fen, 3, 11), withhold: false, tense: 'now' as never, history: [], theory: false, readTempting: true, engineFutures: true, studentNeedContext: null, story: null });
+    const r = await boardReadFacts({ stage: 'full', fen: b.fen, studentColor: b.fen.split(' ')[1], rating: 1600, before, read: (fen) => get(fen, 3, 11), withhold: false, tense: 'now' as never, history: [], theory: false, readTempting: true, engineFutures: true, studentNeedContext: null, story: null });
     const ctx = readContextOf({ fen: b.fen, top: before[0] ?? null, bestUci: before[0]?.moves[0] ?? null, withheld: null, studentShot: false, said: null, line: before[0]?.moves });
     const d = decideRead(r.facts, ctx);
     if (process.env.RECORD) fs.writeFileSync(file, JSON.stringify(rec));

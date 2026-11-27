@@ -563,7 +563,17 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
           for (const f of readBoardAll('minority', onBoard)) add(f, 'plan', 52);
           for (const f of readBoardAll('colourComplex', onBoard)) add(f, 'weakness', 50);
           for (const f of readBoardAll('raceOfPlans', { ...onBoard, register: i.register })) add(f, 'plan', 60);
+          // The threat computers (rebuilt 2026-11-27), both seats: a discovered
+          // attack that wins against every reply, and the one move that holds
+          // against the threat the side to move now faces. A move of the
+          // student's still to play is named only where the surface may.
+          for (const f of readBoardAll('discoveredAttack', { ...onBoard, namesMoves: i.namesPlayedMove })) add(f, 'tactic', 82);
+          for (const f of readBoardAll('answeringMove', { ...onBoard, namesMoves: i.namesPlayedMove })) add(f, 'rescue', 78);
         }
+      }
+      // What the move now threatens, with the move that carries it out.
+      for (const f of readBoardAll('ownThreat', { fenBefore: i.fenBefore, san: i.san, student, namesMoves: i.namesPlayedMove })) {
+        facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'threat', weight: 72 });
       }
       // What their move cost them, for the student to use.
       for (const f of readBoardAll('theirCost', { fenBefore: i.fenBefore, san: i.san, student })) {

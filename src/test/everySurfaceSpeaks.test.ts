@@ -26,9 +26,16 @@ import { buildPlayCommentary } from '../services/playCommentary';
 import { buildTacticsLiveContext } from '../services/liveTacticsContext';
 import { assemblePositionAssessment, assembleTacticsAnswer } from '../services/groundedAnswer';
 import { boardStateAfter } from '../services/boardState';
-import { composePositionRead } from '../services/positionReadComposer';
+import { composePositionReadStaged } from '../services/positionReadComposer';
 import { Chess } from 'chess.js';
 import type { StockfishAnalysis } from '../types';
+
+/** The whole read as one string: the opening, then the deep part. */
+async function composePositionRead(i: Parameters<typeof composePositionReadStaged>[0]): Promise<string> {
+  const r = composePositionReadStaged(i);
+  const [a, b] = await Promise.all([r.first, r.deep]);
+  return [a, b].filter(Boolean).join(' ');
+}
 
 interface Line { rank: number; evaluation: number; mate: number | null; moves: string[] }
 interface Read { evaluation: number; topLines: Line[] }

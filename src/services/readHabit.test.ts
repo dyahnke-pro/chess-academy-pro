@@ -18,9 +18,11 @@ describe('readHabit', () => {
 });
 
 describe('the board read closes on it', () => {
-  it('composePositionRead ends on the habit the read decider picks', () => {
+  it('composePositionRead closes its opening on the habit the read decider picks (the deep part follows)', () => {
     const src = readFileSync('src/services/positionReadComposer.ts', 'utf8');
-    expect(src).toMatch(/habitLine = decided\.habit;/);
-    expect(src).toMatch(/\.\.\.readLines, habitLine \?\? ''\]/);
+    // One order: their threat, the standing, both plans, the habit, then the deep part.
+    expect(src).toMatch(/clean\(\[noteLine, \.\.\.opening\.map\(\(f\) => f\.text\), decided\.habit\]\)/);
+    // The deep part says the habit only when the opening had none.
+    expect(src).toMatch(/opening\.habit \? null : decided\.habit/);
   });
 });

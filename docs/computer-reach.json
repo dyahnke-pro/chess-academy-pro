@@ -1,42 +1,42 @@
 {
  "about": "Which teaching computer reaches which surface, by a static call path from each surface root (scripts/computer-reach.mjs; the list is scripts/computer-reach/computers.json). learn: yes = through the focus runner, door = computed in a Learn turn and decided by Learn's turn door (spoken when the door keeps it); a door-only row says why in `door` (an adapter of computers the other surfaces read, or Learn-only by design).",
  "graph": {
-  "files": 1798,
-  "nodes": 18465
+  "files": 1805,
+  "nodes": 18529
  },
  "totals": {
-  "computers": 344,
-  "offTheSixSurfaces": 29,
+  "computers": 343,
+  "offTheSixSurfaces": 28,
   "learnDoorOnly": 18,
   "learnDoorOnlyUnexplained": 1,
-  "otherScreensOnly": 10,
+  "otherScreensOnly": 9,
   "dead": 1,
   "missingFromCode": 0,
   "surfaces": {
    "learn": {
     "yes": 31,
-    "door": 228,
-    "no": 85
+    "door": 233,
+    "no": 79
    },
    "review": {
     "yes": 240,
-    "no": 104
+    "no": 103
    },
    "lesson": {
-    "yes": 183,
-    "no": 161
+    "yes": 184,
+    "no": 159
    },
    "chat": {
-    "yes": 228,
-    "no": 116
+    "yes": 229,
+    "no": 114
    },
    "tapped": {
     "yes": 192,
-    "no": 152
+    "no": 151
    },
    "tactics": {
-    "yes": 199,
-    "no": 145
+    "yes": 200,
+    "no": 143
    }
   }
  },
@@ -64,7 +64,6 @@
   "otherScreensOnly": [
    "missions/patterns/index.ts#(module)",
    "services/bookMoveQuestion.ts#(module)",
-   "services/coachTemplates.ts#(module)",
    "services/coachTrainingService.ts#getCoachGreeting",
    "services/gemCrushLines.ts#(module)",
    "services/kidBoardAnswers.ts#(module)",
@@ -740,25 +739,6 @@
    "app": true,
    "other": [],
    "learnOverride": "greeting bubble on page open (CoachTeachPage 13452-13661), voice muted when the focus game starts"
-  },
-  {
-   "key": "services/coachTemplates.ts#(module)",
-   "name": "coachTemplates",
-   "file": "services/coachTemplates.ts",
-   "fn": "(module)",
-   "says": "",
-   "origin": "extra",
-   "learn": "no",
-   "review": "no",
-   "lesson": "no",
-   "chat": "no",
-   "tapped": "no",
-   "tactics": "no",
-   "app": true,
-   "other": [
-    "playSilent"
-   ],
-   "where": "components/Coach/CoachGamePage.tsx#CoachGamePage"
   },
   {
    "key": "services/coachTrainingService.ts#getCoachGreeting",
@@ -3178,14 +3158,17 @@
    "origin": "map",
    "learn": "yes",
    "review": "yes",
-   "lesson": "no",
-   "chat": "no",
+   "lesson": "yes",
+   "chat": "yes",
    "tapped": "no",
-   "tactics": "no",
+   "tactics": "yes",
    "app": true,
    "other": [
     "openingsPage",
-    "playSilent"
+    "kid",
+    "campaign",
+    "playSilent",
+    "endgame"
    ]
   },
   {
@@ -5874,7 +5857,7 @@
    "fn": "buildOpeningTheoryLecture",
    "says": "Walks the game's opening through the masters DB (≤24 plies): per branch the mainline (most played), ≤2 sidelines, the played move, sideline/",
    "origin": "map",
-   "learn": "no",
+   "learn": "door",
    "review": "yes",
    "lesson": "no",
    "chat": "no",
@@ -5895,7 +5878,7 @@
    "fn": "buildTheoryLectureBeats",
    "says": "Intro (sample size + identity), fast-forward of consensus moves, the naming beat, departure (bookMoveWhy for the student's own), sideline (b",
    "origin": "map",
-   "learn": "no",
+   "learn": "door",
    "review": "yes",
    "lesson": "no",
    "chat": "no",
@@ -5917,7 +5900,7 @@
    "fn": "familyName",
    "says": "The DB name each alternative commits to, said relative to the current opening ('…c5 (the Mieses Variation)'); 'The main alternative is X, wh",
    "origin": "map",
-   "learn": "no",
+   "learn": "door",
    "review": "yes",
    "lesson": "no",
    "chat": "no",
@@ -5935,7 +5918,7 @@
    "fn": "resolveCuratedOpeningIdeas",
    "says": "repertoire.json keyIdeas for the student's seat when every identifying token of the entry is in the game's name.",
    "origin": "map",
-   "learn": "no",
+   "learn": "door",
    "review": "yes",
    "lesson": "no",
    "chat": "no",
@@ -6720,7 +6703,7 @@
    "fn": "mastersPlanLine",
    "says": "'Your plan: b4 and a4, to break with c5. Their plan builds to d5.' (goal plus at most two key moves; a piece the plan brings in its own sentence with its job; castli",
    "origin": "map",
-   "learn": "no",
+   "learn": "door",
    "review": "yes",
    "lesson": "no",
    "chat": "no",

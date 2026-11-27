@@ -12,10 +12,10 @@ import { recordLevels } from './recordShortening';
 import { layerStandings } from './teachingLayers';
 import { buildFedTacticsContext } from './liveTacticsContext';
 import { sharpGap, SHARP_GAP_CP } from './positionCharacter';
-import type { BoardReader } from './boardReadFacts';
+import type { BoardReader, BoardReadInput } from './boardReadFacts';
 import { boardReadOffThread } from './boardReadOffThread';
-import { tryReadBudget, poolBudgetMs, poolDispatcher, type ReadSurface, type ReadBudget, SINGLETON_SOURCES } from './tryReadBudget';
-import { decideRead, readContextOf } from './readDecider';
+import { tryReadBudget, poolBudgetMs, poolDispatcher, TRY_RANK, type ReadSurface, type ReadBudget, SINGLETON_SOURCES } from './tryReadBudget';
+import { decideRead, readContextOf, READ_STEPS, storyKeys } from './readDecider';
 import { stockfishEngine } from './stockfishEngine';
 import type { EvalBoardFn } from './perturbation';
 import { teachingSourceForBoard, generalizedTeaching, spokenBeatText } from './danyaTeachingService';
@@ -48,15 +48,23 @@ export async function surfaceBoardReader(
 ): Promise<{ read: BoardReader; release: () => void }> {
   const budget = tryReadBudget(surface);
   const pool = budget.pool && readsTries ? await acquire(POOL_WANT, poolBudgetMs(surface)).catch(() => null) : null;
+  // The surface's deadline runs from now: a try not started by then is not read.
+  const deadline = { at: budget.deadlineMs === null ? null : Date.now() + budget.deadlineMs, now: () => Date.now() };
   const pooled = pool && pool.engines.length > 0
-    ? poolDispatcher(pool.engines.map((e) => ({ read: async (fen: string, b: ReadBudget) => (await e.analyzeDeep(fen, b.depth, b.budgetMs)).topLines ?? null })))
+    ? poolDispatcher(pool.engines.map((e) => ({ read: async (fen: string, b: ReadBudget) => (await e.analyzeDeep(fen, b.depth, b.budgetMs)).topLines ?? null })), deadline)
     : null;
+  // With no pool the tries share the singleton, one at a time, in the same
+  // order and under the same deadline.
+  const queued = poolDispatcher([{ read: async (fen: string, b: ReadBudget) => (await single(fen, b.depth, b.budgetMs)).topLines ?? null }], deadline);
   const read: BoardReader = (fen, source) => {
     const b = budget.reads[source];
     const viaPool = !!pooled && !SINGLETON_SOURCES.has(source);
+    const direct = SINGLETON_SOURCES.has(source);
     // A pool worker answers one line, the singleton its MultiPV fan: the route is part of the read.
     return cachedTryRead(`${viaPool ? 'pool' : 'single'}|${b.depth}|${b.budgetMs}|${fen}`, async () => (
-      pooled && viaPool ? pooled(fen, b) : (await single(fen, b.depth, b.budgetMs)).topLines ?? null
+      pooled && viaPool ? pooled(fen, b, TRY_RANK[source])
+        : direct ? (await single(fen, b.depth, b.budgetMs)).topLines ?? null
+          : queued(fen, b, TRY_RANK[source])
     ));
   };
   return { read, release: () => pool?.release() };
@@ -179,28 +187,85 @@ function reveals(text: string, marks: { san: string; squares: string[] } | null)
   return marks.squares.some((sq) => new RegExp(`\\b${sq}\\b`).test(text));
 }
 
-/**
- * Every computed sentence of the read, most-important-first, joined for the
- * phraser. Empty when the board says nothing worth a word — the caller then
- * stays silent rather than inventing.
- */
-export async function composePositionRead(i: PositionReadInput): Promise<string> {
+/** THE READ'S OPENING, IN ONE ORDER (Coach Build Board, "Read this
+ *  position"): their threat, the standing with its why (and the kind of
+ *  position), both plans — then the habit, then the deep part. Every step is a
+ *  row of the one decider's table (`READ_STEPS`); this only says which steps
+ *  open the read, and in what order. */
+export const FIRST_WORDS_STEPS = ['their-move', 'verdict', 'character', 'plan', 'their-plan'] as const;
+const FIRST_STEP_OF: ReadonlyMap<string, number> = new Map(
+  FIRST_WORDS_STEPS.flatMap((step, k) => (READ_STEPS.find((r) => r.step === step)?.kinds ?? []).map((kind) => [kind, k] as const)),
+);
+
+/** The read in two parts: the opening, off this board's own engine lines (no
+ *  other board is read, so it is ready about as soon as the engine's first
+ *  read is), and the deep part — the tempting moves refuted, their best try,
+ *  what the best move does — which never repeats what the opening said
+ *  (the decider's own said-claims). */
+export interface StagedRead {
+  first: Promise<string>;
+  deep: Promise<string>;
+  /** The kinds of fact each part said, in order (the audit row). */
+  kinds: Promise<{ first: string[]; deep: string[] }>;
+}
+
+export function composePositionReadStaged(i: PositionReadInput): StagedRead {
   const studentCC: 'w' | 'b' = i.playerColor === 'white' ? 'w' : 'b';
   const sans = sansOfPgn(i.pgn);
   const marks = withheldMarks(i.fen, i.withhold);
+  const before = [...(i.analysis?.topLines ?? [])].sort((x, y) => x.rank - y.rank);
+  // The tries are read only on the student's own turn, never on a puzzle
+  // still being solved: no tries, no pool.
+  const readsTries = i.readTempting && !marks && i.fen.split(' ')[1] === studentCC;
+  // The pool is asked for at once, while the opening is composed.
+  const readerP = before.length
+    ? surfaceBoardReader(
+      i.surface, readsTries,
+      async (size, budgetMs) => (await import('./gameAnalysisService')).acquirePvEngines(size, budgetMs),
+      (fen, depth, budgetMs) => stockfishEngine.analyzeWithBudget(fen, depth, budgetMs),
+    )
+    : null;
 
   // The bounded tactics context — the habit that closes the read reads it.
-  // Reuses the analysis the caller already took (no extra engine
-  // read); falls back to a FEN-only scan if that analysis is thin.
-  const tactics = (await buildFedTacticsContext(
-    i.fen,
-    studentCC,
-    i.rating,
-    i.analysis,
+  // Reuses the analysis the caller already took (no extra engine read).
+  const tacticsP = buildFedTacticsContext(
+    i.fen, studentCC, i.rating, i.analysis,
     () => Promise.resolve(null), // latency-safe: reuse the cached analysis, no extra engine read
     i.tacticsSkill,
-  ).catch(() => undefined)) ?? null;
-  if (i.isCancelled()) return '';
+  ).catch(() => undefined).then((t) => t ?? null);
+
+  // What both reads share; each call hands the student model itself (B3), so
+  // the call site states the contract (`liveNeedWire.test`).
+  const shared = (stage: 'first' | 'full', read: BoardReader): Omit<BoardReadInput, 'studentNeedContext' | 'extra'> => ({
+    stage,
+    fen: i.fen, studentColor: studentCC, rating: i.rating, before, history: sans, theory: true, tense: 'now',
+    withhold: !!marks, readTempting: i.readTempting && !marks, engineFutures: tryReadBudget(i.surface).engineFutures,
+    read,
+    story: i.story,
+  });
+  const lastMove = lastMoveIfStudent(sans, i.playerColor, i.fen) ?? undefined;
+  const opponentLastMove = lastMoveIfOpponent(sans, i.playerColor, i.fen) ?? undefined;
+  const contextOf = async (said: readonly string[] | null) => {
+    const tactics = await tacticsP;
+    return readContextOf({
+      fen: i.fen,
+      top: before[0] ? { evaluation: before[0].evaluation, mate: before[0].mate ?? null } : null,
+      bestUci: before[0]?.moves[0] ?? null,
+      withheld: marks?.squares ?? null,
+      studentShot: readHasShot(i.fen, studentCC, before, (tactics?.immediate ?? []).some((t) => t.side === 'student')),
+      said,
+      // The one shortener's levels, from the reader's own record.
+      levels: i.studentNeedContext
+        ? recordLevels(i.studentNeedContext.heat, layerStandings(i.studentNeedContext.signals, i.studentNeedContext.capabilities))
+        : null,
+      line: before[0]?.moves ?? [],
+    });
+  };
+  const clean = (lines: readonly (string | null)[]): string => lines
+    .map((t) => (t ?? '').trim())
+    .filter(Boolean)
+    .filter((t) => !reveals(t, marks))
+    .join(' ');
 
   // 1. THE CORPUS LEADS (David 2026-08-13: "narrations follow the corpus,
   //    hand written, computed note format"). A read of the board starts from a
@@ -213,59 +278,63 @@ export async function composePositionRead(i: PositionReadInput): Promise<string>
     if (src) noteLine = generalizedTeaching(src.origin, spokenBeatText(src.note)).trim();
   } catch { /* corpus unavailable — the computed read stands alone */ }
 
-  // 2. THE READ — every fact the computers make about this board, and the
-  //    ones his order asks for, one a step (`readDecider`: the story, the
-  //    calm answer, the tempting move refuted). The habit closes it below.
-  let readLines: string[] = [];
-  let habitLine: string | null = null;
-  const before = [...(i.analysis?.topLines ?? [])].sort((x, y) => x.rank - y.rank);
-  if (before.length) try {
-    // The tries are read only on the student's own turn, never on a puzzle
-    // still being solved: no tries, no pool.
-    const readsTries = i.readTempting && !marks && i.fen.split(' ')[1] === studentCC;
-    const reader = await surfaceBoardReader(
-      i.surface, readsTries,
-      async (size, budgetMs) => (await import('./gameAnalysisService')).acquirePvEngines(size, budgetMs),
-      (fen, depth, budgetMs) => stockfishEngine.analyzeWithBudget(fen, depth, budgetMs),
-    );
-    const read = await boardReadOffThread({
-      fen: i.fen, studentColor: studentCC, rating: i.rating, before, history: sans, theory: true, tense: 'now',
-      withhold: !!marks, readTempting: i.readTempting && !marks, engineFutures: tryReadBudget(i.surface).engineFutures,
-      read: reader.read,
-      story: i.story,
-      // THE HEAT MAP + THE NEED TERM (B3): the student's record and the
-      // last move on each side when the PGN produces this board.
-      studentNeedContext: i.studentNeedContext,
-      extra: {
-        evalBoard: i.evalBoard, studentWeaknesses: i.studentWeaknesses,
-        lastMove: lastMoveIfStudent(sans, i.playerColor, i.fen) ?? undefined,
-        opponentLastMove: lastMoveIfOpponent(sans, i.playerColor, i.fen) ?? undefined,
-      },
-    }).finally(reader.release);
-    // 3. THE DECIDER picks the facts and THE HABIT THAT CLOSES THE READ
-    //    (WO-DANYA-READS-01 group 9): the routine that finds this board's
-    //    point next time — on a puzzle being solved, the attacking scan.
-    const decided = decideRead(read.facts, readContextOf({
-      fen: i.fen,
-      top: before[0] ? { evaluation: before[0].evaluation, mate: before[0].mate ?? null } : null,
-      bestUci: before[0]?.moves[0] ?? null,
-      withheld: marks?.squares ?? null,
-      studentShot: readHasShot(i.fen, studentCC, before, (tactics?.immediate ?? []).some((t) => t.side === 'student')),
-      said: i.story?.claims ?? null,
-      // The one shortener's levels, from the reader's own record.
-      levels: i.studentNeedContext
-        ? recordLevels(i.studentNeedContext.heat, layerStandings(i.studentNeedContext.signals, i.studentNeedContext.capabilities))
-        : null,
-      line: before[0]?.moves ?? [],
-    }));
-    readLines = decided.facts.map((f) => f.text);
-    habitLine = decided.habit;
-  } catch { readLines = []; }
-  if (i.isCancelled()) return '';
+  // 2. THE OPENING — the board's own facts, decided by the one decider, said
+  //    in the opening's order, then the habit (WO-DANYA-READS-01 group 9: the
+  //    routine that finds this board's point next time).
+  const firstP: Promise<{ text: string; said: string[]; habit: boolean; kinds: string[] }> = (async () => {
+    if (!before.length) return { text: clean([noteLine]), said: [], habit: false, kinds: [] };
+    try {
+      const read = await boardReadOffThread({
+        ...shared('first', () => Promise.resolve(null)),
+        // THE HEAT MAP + THE NEED TERM (B3): the student's record, and the
+        // last move on each side when the PGN produces this board.
+        studentNeedContext: i.studentNeedContext,
+        extra: { evalBoard: i.evalBoard, studentWeaknesses: i.studentWeaknesses, lastMove, opponentLastMove },
+      });
+      const decided = decideRead(read.facts, await contextOf(i.story?.claims ?? null));
+      const opening = decided.facts
+        .map((f, k) => ({ f, k, step: FIRST_STEP_OF.get(f.kind) }))
+        .filter((x): x is { f: (typeof decided.facts)[number]; k: number; step: number } => x.step !== undefined)
+        .sort((a, b) => a.step - b.step || a.k - b.k)
+        .map((x) => x.f);
+      // What the opening said, so the deep part never says it again: the
+      // decider's own keys for the facts said, the habit, and the story's.
+      const said = [...(i.story?.claims ?? []), ...opening.flatMap(storyKeys), ...(decided.habit ? decided.said.filter((c) => c.startsWith('habit:')) : [])];
+      return { text: clean([noteLine, ...opening.map((f) => f.text), decided.habit]), said, habit: !!decided.habit, kinds: [...opening.map((f) => f.kind), ...(decided.habit ? ['habit'] : [])] };
+    } catch {
+      return { text: clean([noteLine]), said: [], habit: false, kinds: [] };
+    }
+  })();
+  const first = firstP.then((r) => (i.isCancelled() ? '' : r.text));
 
-  return [noteLine, ...readLines, habitLine ?? '']
-    .map((t) => t.trim())
-    .filter(Boolean)
-    .filter((t) => !reveals(t, marks))
-    .join(' ');
+  // 3. THE DEEP PART — every fact the computers make about this board, and
+  //    the ones his order asks for, one a step (`readDecider`: the story, the
+  //    calm answer, the tempting move refuted), told against what the opening
+  //    said.
+  let deepKinds: string[] = [];
+  const deep = (async (): Promise<string> => {
+    if (!before.length || !readerP) return '';
+    let reader: { read: BoardReader; release: () => void } | null = null;
+    try {
+      reader = await readerP;
+      if (i.isCancelled()) return '';
+      const read = await boardReadOffThread({
+        ...shared('full', reader.read), studentNeedContext: i.studentNeedContext,
+        extra: { evalBoard: i.evalBoard, studentWeaknesses: i.studentWeaknesses, lastMove, opponentLastMove },
+      });
+      const opening = await firstP;
+      if (i.isCancelled()) return '';
+      const decided = decideRead(read.facts, await contextOf(opening.said));
+      const openingText = new Set(opening.text.split(/(?<=[.!?])\s+/).map((t) => t.trim()));
+      const kept = decided.facts.filter((f) => !openingText.has(f.text.trim()));
+      deepKinds = [...kept.map((f) => f.kind), ...(!opening.habit && decided.habit ? ['habit'] : [])];
+      return clean([...kept.map((f) => f.text), opening.habit ? null : decided.habit]);
+    } catch {
+      return '';
+    } finally {
+      reader?.release();
+    }
+  })();
+  const kinds = Promise.all([firstP, deep]).then(([f]) => ({ first: f.kinds, deep: deepKinds }));
+  return { first, deep, kinds };
 }

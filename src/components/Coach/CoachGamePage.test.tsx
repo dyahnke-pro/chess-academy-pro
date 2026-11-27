@@ -92,10 +92,6 @@ vi.mock('../../services/coachApi', () => ({
   getCoachChatResponse: vi.fn().mockResolvedValue('Sure, I can help with that position.'),
 }));
 
-vi.mock('../../services/coachTemplates', () => ({
-  getScenarioTemplate: vi.fn().mockReturnValue('Sure, take it back.'),
-}));
-
 vi.mock('../../services/coachPrompts', () => ({
   EXPLORE_REACTION_ADDITION: 'Test explore reaction prompt',
   SYSTEM_PROMPT: 'Test system prompt',
@@ -200,9 +196,10 @@ describe('CoachGamePage', () => {
     expect(screen.getByTestId('hint-button')).toBeInTheDocument();
   });
 
-  it('renders takeback button', () => {
+  it('has no Takeback button — Back only looks; a different move there is the takeback (2026-11-24)', () => {
     render(<CoachGamePage />);
-    expect(screen.getByTestId('takeback-btn')).toBeInTheDocument();
+    expect(screen.queryByTestId('takeback-btn')).toBeNull();
+    expect(screen.getByTestId('nav-prev')).toBeInTheDocument();
   });
 
   it('renders the game chat panel', () => {
@@ -219,12 +216,6 @@ describe('CoachGamePage', () => {
   it('hint button displays Hint text at level 0', () => {
     render(<CoachGamePage />);
     expect(screen.getByTestId('hint-button')).toHaveTextContent('Hint');
-  });
-
-  it('takeback button is disabled when no moves have been made', () => {
-    render(<CoachGamePage />);
-    const takebackBtn = screen.getByTestId('takeback-btn');
-    expect(takebackBtn).toBeDisabled();
   });
 
   it('chat panel shows placeholder text', () => {

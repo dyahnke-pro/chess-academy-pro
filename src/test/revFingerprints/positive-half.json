@@ -1,8 +1,8 @@
 {
-  "rev": "2026-11-21-shortener",
+  "rev": "2026-11-27-threats",
   "parts": {
-    "chesscom-1038626480": "61d661ea0bbc4722",
-    "chesscom-1042725180": "9230bf8a561de273",
+    "chesscom-1038626480": "73989dbb7be9508f",
+    "chesscom-1042725180": "5ca519e7ced8c128",
     "chesscom-1044361526": "37cb7f2511337dcf",
     "lichess-motifs": "00a4d5e683e564f4"
   }

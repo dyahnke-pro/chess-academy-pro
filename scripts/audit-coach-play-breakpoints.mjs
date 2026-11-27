@@ -76,7 +76,6 @@ try {
   await bp('nav-next — overflow', async () => spam('nav-next', 15), async () => (await disabled('nav-next')) || (await mounted()), '15× past the last move');
   await bp('nav→move (branch from history)', async () => { await spam('nav-prev', 2); await move('b1', 'c3'); }, mounted, 'navigate into history, then move');
 
-  await bp('takeback — underflow', async () => spam('takeback-btn', 20), async () => (await disabled('takeback-btn')) || (await mounted()), '20× past move 0');
   await bp('restart — spam', async () => spam('restart-btn', 8), mounted, '8× rapid');
 
   // chat sub-commands (real LLM path): play / illegal / reset / takeback
@@ -104,7 +103,7 @@ try {
 
   // resign: cancel path, then confirm + try to move
   if (await page.locator(sel('restart-btn')).first().isVisible({ timeout: 800 }).catch(() => false)) { await page.locator(sel('restart-btn')).click({ force: true }).catch(() => {}); await page.waitForTimeout(600); await move('e2', 'e4'); }
-  await bp('resign — cancel keeps the game', async () => { await page.locator(sel('resign-btn')).first().click({ force: true }).catch(() => {}); await page.locator(sel('resign-no')).first().click({ timeout: 1500, force: true }).catch(() => {}); }, async () => !(await disabled('takeback-btn')), 'open resign then cancel — game must continue');
+  await bp('resign — cancel keeps the game', async () => { await page.locator(sel('resign-btn')).first().click({ force: true }).catch(() => {}); await page.locator(sel('resign-no')).first().click({ timeout: 1500, force: true }).catch(() => {}); }, async () => !(await disabled('restart-btn')), 'open resign then cancel — game must continue');
   await bp('resign — confirm then move blocked', async () => { await page.locator(sel('resign-btn')).first().click({ force: true }).catch(() => {}); await page.locator(sel('resign-yes')).first().click({ timeout: 1500, force: true }).catch(() => page.locator(sel('resign-confirm')).first().click({ force: true }).catch(() => {})); await page.waitForTimeout(1200); await move('d2', 'd4'); }, mounted, 'resign, then try to keep moving');
 
   out.push({ fn: 'totals', held: cErr.length === 0 && pErr.length === 0, consoleErrors: cErr.length, pageErrors: pErr.length });

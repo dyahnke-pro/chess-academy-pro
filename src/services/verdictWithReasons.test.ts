@@ -38,7 +38,9 @@ describe('verdictWithReasons', () => {
     expect(all.some((r) => r.kind === 'initiative' && r.side === 'b')).toBe(true);
     const v = verdictWithReasons({ fen, evalCp: 201, mate: null, lines: lines('d5d4 c3d4 a5d2 e1d2 g7h6 d2d1 h6c1 d1c1'), student: 'b', lastMove: null, said: NONE })!;
     expect(v.reasons.every((r) => r.side === 'w')).toBe(true);
-    expect(v.text).toBe("They're up material: a piece for a pawn.");
+    // The piece leads; the engine's line, which ends with them a pawn further
+    // up, is its evidence (2026-11-26).
+    expect(v.text).toBe("They're up material: a piece for a pawn. They win a pawn in the best line.");
   });
 
   it('on a level board, the initiative (the-greek-gift-sacrifice-lives-on #3, +0.34)', () => {
@@ -57,7 +59,9 @@ describe('verdictWithReasons', () => {
 
   it('negative controls: no reason fits → silence; a mate → no reasons', () => {
     const start = new Chess().fen();
-    expect(verdictWithReasons({ fen: start, evalCp: 30, mate: null, lines: null, student: 'w', lastMove: null, said: NONE })).toBeNull();
+    // A level board says why it is level, with its count (2026-11-26).
+    expect(verdictWithReasons({ fen: start, evalCp: 30, mate: null, lines: null, student: 'w', lastMove: null, said: NONE })?.text)
+      .toBe('Material is level, eight pawns each, and both kings keep their pawn cover.');
     // An eval the board shows no reason for is not given one.
     expect(verdictWithReasons({ fen: start, evalCp: 200, mate: null, lines: null, student: 'w', lastMove: null, said: NONE })).toBeNull();
     expect(verdictWithReasons({ fen: start, evalCp: 100000, mate: 3, lines: null, student: 'w', lastMove: null, said: NONE })).toBeNull();
@@ -69,9 +73,8 @@ describe('the reasons reach the surfaces', () => {
     // 1.e4: a band change with no board reason → the verdict alone (the old
     // fallback said "your pieces are the more active" here).
     const c = new Chess(); c.move('e4');
-    const text = evalReading(c.fen(), 0, 100, null, 'w', null, null)!;
-    expect(text).not.toMatch(/more active/);
-    expect(text).toBe("You're slightly better.");
+    // …and, since 2026-11-26, never bare: no reason → not said at all.
+    expect(evalReading(c.fen(), 0, 100, null, 'w', null, null)).toBeNull();
   });
 
   it('the position read carries the reason (the-knockout-blow #2)', () => {

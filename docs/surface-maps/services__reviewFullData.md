@@ -8,7 +8,7 @@
 
 ## Locked rules that govern this surface
 
-- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1453) — names `reviewFullData`
+- **G4.5 NO HARD CAPS ON WHAT THE COACH SAYS — a CAP never decides, the RANKING COMPUTER decides (David 2026-09-16: "I DONT WANT ANYTHING LIMITED!!! We cannot set hard caps!!!" → 2026-09-17, correcting this section: "G4.5 is not correct. If the ranking computer decides it's important for the user to hear, they hear it").** (CLAUDE.md:1456) — names `reviewFullData`
 
 ## Who calls in
 
@@ -129,12 +129,12 @@
 - `src/services/reviewVerdictSentence.test.ts:30`
 
 ### `positionalVerdictLine` (re-export) — 3 call sites
-- `src/services/boardComputers.ts:2094`
+- `src/services/boardComputers.ts:2107`
 - `src/services/coachFeatureService.ts:3079`
 - `src/services/reviewPositionalAssessment.ts:380`
 
 ### `correctionAgainstHeard` (re-export) — 6 call sites
-- `src/services/boardComputers.ts:2192`
+- `src/services/boardComputers.ts:2205`
 - `src/services/heardCorrection.ts:13`
 - `src/services/reviewHeardCorrection.test.ts:7`
 - `src/services/reviewHeardCorrection.test.ts:12`
@@ -142,13 +142,13 @@
 - `src/services/reviewHeardCorrection.test.ts:18`
 
 ### `seatMoveSubject` (re-export) — 4 call sites
-- `src/services/boardComputers.ts:2107`
+- `src/services/boardComputers.ts:2120`
 - `src/services/pvPlayback.ts:1038`
 - `src/services/reviewVerdictSentence.test.ts:15`
 - `src/test/captureSaidOnce.gate.test.ts:207`
 
 ### `describeMoveInfluence` (re-export) — 11 call sites
-- `src/services/boardComputers.ts:2176`
+- `src/services/boardComputers.ts:2189`
 - `src/services/moveInfluence.ts:23`
 - `src/services/reviewFullData.test.ts:671`
 - `src/services/reviewFullData.test.ts:676`

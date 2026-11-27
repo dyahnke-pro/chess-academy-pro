@@ -154,6 +154,7 @@ export type AuditKind =
   | 'phase-transition-suppressed'
   // Narration latency (WO-POLISH-03)
   | 'narration-latency'
+  | 'position-read-composed'
   // Phase narration latency (WO-PHASE-LAG-01)
   | 'phase-narration-latency'
   // Walk-the-game review trail (WO-REVIEW-02)
@@ -375,6 +376,8 @@ export type AuditKind =
   /** A move the coach stopped and the student took back: the grader's
    *  verdict (filed / duplicate / not a mistake / unpriced …), with the evals. */
   | 'taken-back-puzzle'
+  /** The board bar's Theory view on Learn / Play: the lecture it played (or why none). */
+  | 'theory-view'
   /** WO-COURSE-01 D: the club replies a tab's reply tree shows, in the order
    *  the student's band and their own games put them (`ReplyTree`). */
   | 'club-replies-ordered'
