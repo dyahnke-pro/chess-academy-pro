@@ -860,6 +860,10 @@ export function computeMoveFacets(
   // threat this move CREATED: mate-in-one / safe royal fork / clean win.
   if (ctx.studentColorWB && ctx.moverColor === ctx.playerColor) {
     basketFacet(readBoard('newThreat', { fenBefore: ctx.fenBefore, fenAfter, mover: ctx.studentColorWB, student: ctx.studentColorWB, answerSan: null }));
+    // ── 3c. IF YOU HAD PASSED — the threat their last move left, and that
+    // this move answered it (mistakes round 2): the reason a quiet defence was
+    // right, said with the square it saved.
+    basketFacet(readBoard('passThreat', { fenBefore: ctx.fenBefore, san, student: ctx.studentColorWB }));
   }
 
   // ── 4. POSITIONAL VERDICT + THE FULL ASSET LIST (no cap) ──

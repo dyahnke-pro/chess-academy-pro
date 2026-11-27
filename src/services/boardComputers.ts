@@ -145,6 +145,7 @@ import { threatPurpose } from './threatPurpose';
 import { temptingCaptureRead, attackerDefenderCount, countSaid, royalDefenderTarget, rookOnSeventh, badEnemyBishop } from './reviewTeachingPoints';
 import { nameEndgamePhase } from './reviewMoveTeaching';
 import { passedPawnPush, findTrappedPiece } from './reviewTeachingPoints';
+import { passThreat, passThreatSentence } from './passThreat';
 import { enemyKingStuckInCenter, sacrificeCompensation, describeSacBreaksKingShield } from './reviewSacrifice';
 import { findMinorityAttack, findColorComplexWeakness } from './positionReadingService';
 import { planRaceClause, planRaceProof, pawnSquareTaken, pawnSquareRaceProof } from './planRace';
@@ -693,6 +694,10 @@ export interface BoardContexts {
   /** What the student must defend now — the null-move probe's read, said
    *  here (`looseSpells`: the spells of their loose pieces this game). */
   mustDefend: { fen: string; student: Color; read: MustDefend; studentToMove: boolean; studentCp: number; looseSpells: LooseSpells | null };
+  /** What they had if the student had passed on the board the move was played
+   *  from (the null-move probe and their mate in one), and that the move
+   *  answered it (`passThreat`). Review's reason for a good defensive move. */
+  passThreat: { fenBefore: string; san: string; student: Color };
   /** The habit to run on this board, present tense (`ply` rotates its stems,
    *  `said` its say-once ledger). */
   liveMethod: { fen: string; signals: LiveMethodSignals; ply: number; said: ReadonlySet<string> | undefined };
@@ -3155,6 +3160,32 @@ export const BOARD_COMPUTERS = {
     kind: 'must-defend',
     phase: ANY,
     surfaces: LIVE_READ,
+  },
+  passThreat: {
+    read: ({ fenBefore, san, student }, fact) => safe(() => {
+      const t = passThreat(fenBefore, san, student);
+      if (!t) return null;
+      const text = passThreatSentence(t);
+      if (!text) return null;
+      return fact({ key: `pass-threat:${fenBefore.split(' ')[0]}:${t.san}`, claims: [`pass-threat:${t.square}`], text,
+        // The proof is their move on the pass board, marked where it lands.
+        proof: NO_PROOF.description, squares: [t.square],
+        stakes: { points: t.kind === 'mate' ? 100 : 3, plies: 1 },
+        seat: 'student', namesStudentMove: true, thread: LOCAL_THREAD, fen: fenBefore });
+    }),
+    computer: 'computeMustDefend',
+    kind: 'must-defend',
+    phase: ANY,
+    surfaces: {
+      review: REVIEW,
+      learn: { not: 'Learn speaks only after a mistake; a threat the move answered is no mistake' },
+      lesson: { not: 'a taught line is a model line: the threat it answers is the lesson beat\'s own' },
+      play: { not: 'Play volunteers nothing' },
+      chat: { not: 'chat answers about the board in front of it; the pass read is about a move already played' },
+      tactics: { not: 'a puzzle asks for the shot, not for the threat a past move answered' },
+      weaknesses: { not: 'the record files the threat answered through threatAnswerEvidence, once' },
+      think: { not: 'a step board has no move played yet to have answered it' },
+    },
   },
   liveMethod: {
     // The key carries the habit (`liveMethodKey`): a habit is said once a game,
