@@ -20,6 +20,7 @@ import { hasActiveWeights, scoreCandidates, weightsForDials, type ScorerWeights,
 // Every scorer module registers itself (WO-CAMPAIGN-MASTER).
 import '../missions/scorers';
 import { posesDefendSeat } from '../missions/scorers/focus';
+import { focusTradesScorer } from '../missions/scorers/focusTrades';
 import { neededSkillAlong } from '../missions/scorers/skillSteer';
 import type { MisconceptionTagId } from '../data/misconceptionTags';
 import { findFocusPlant, type FocusPlantAsk, type FocusPlantPick, type FocusPlantReject } from '../coach/focus/focusPlant';
@@ -779,7 +780,7 @@ async function applyMoveScorers(
 ): Promise<AdaptiveMoveResult> {
   // The focus leads; the skill steer (WO-SET-WEAKNESS-01) is the lighter pull
   // toward a positional question the record still needs.
-  const weights: ScorerWeights = { ...weightsForDials(mission.dials), ...(mission.boss?.weights ?? {}), ...(mission.focus ? { focus: 1, ...(mission.focus.needs.length ? { skillSteer: SKILL_STEER_WEIGHT } : {}) } : {}) };
+  const weights: ScorerWeights = { ...weightsForDials(mission.dials), ...(mission.boss?.weights ?? {}), ...(mission.focus ? { focus: 1, focusTrades: 1, ...(mission.focus.needs.length ? { skillSteer: SKILL_STEER_WEIGHT } : {}) } : {}) };
   if (!hasActiveWeights(weights)) return chosen;
   const analysis = await withBudget(stockfishEngine.holdForQuestion(async (engine) => {
     try { stockfishEngine.setMultiPv(DIAL_READ_LINES); } catch { /* not ready → the default lines */ }
@@ -820,6 +821,18 @@ async function applyMoveScorers(
     summary: `${chosen.move || 'none'} → ${pick.uci} score=${pick.score.toFixed(2)} cpLoss=${pick.cpLoss} weights=${JSON.stringify(weights)}`,
     fen,
   });
+  // THE FOCUS'S TRADE PREFERENCE (`focusTrades`): an ending the student
+  // leads by a piece, and the coach chose an equal trade over its own move.
+  if (mission.focus && focusTradesScorer(pick, ctx) > 0) {
+    void logAppAudit({
+      kind: 'focus-trade',
+      category: 'subsystem',
+      source: 'coachGameEngine.applyMoveScorers',
+      summary: `${chosen.move || 'none'} → ${pick.uci}: an equal trade in an ending the student leads (coach ${ctx.coachEvalCp}cp, cpLoss=${pick.cpLoss}, window=${ctx.windowCp})`,
+      details: JSON.stringify({ replaced: chosen.move, played: pick.uci, coachEvalCp: ctx.coachEvalCp, cpLoss: pick.cpLoss, windowCp: ctx.windowCp }),
+      fen,
+    });
+  }
   // THE FOCUS STEER (WO-LEARN-FOCUS-01): the swap set the focus's defend
   // question — recorded so the user's answer to it counts as steered.
   const focusSteer = !!mission.focus && posesDefendSeat(mission.focus.id, fen, pick.uci, coach, new Set(mission.focus.levels));

@@ -44,6 +44,7 @@ import type { MissionPhase } from '../../missions/missionCard';
 import { createPhaseTransitionState, detectPhaseTransition, type PhaseTransitionState } from '../../services/phaseTransitionDetector';
 import { PHASES } from './focusRotation';
 import { judgeOpeningMove, NO_OPENING_JUDGE, type OpeningJudgeState, type SkillVerdict } from './openingJudge';
+import { judgeEndgameMove } from './endgameTechniqueJudge';
 import type { HeatState } from '../../services/holdRate';
 import { momentDial, type MomentDial } from '../../services/coachMoment';
 import { carryHeads, isMotifChance, NO_PLANTS, plantAsk, presents, type FocusPlantAsk, type OwedPattern, type PlantState } from './focusPlant';
@@ -938,6 +939,8 @@ function judgePhase(s: FocusRunState, m: FocusMove): { verdicts: SkillVerdict[];
     const r = judgeOpeningMove(m.fenBefore, m.san, s.opening);
     return { verdicts: r.verdicts, state: { opening: r.state } };
   }
+  const lines = m.lines ?? (s.board && sameBoard(s.board.fen, m.fenBefore) ? s.board.lines : null);
+  if (s.phase === 'endgame') return { verdicts: judgeEndgameMove(m.fenBefore, m.san, lines), state: {} };
   return { verdicts: [], state: {} };
 }
 
