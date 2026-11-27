@@ -403,8 +403,12 @@ describe('the COMPUTED CONCEPT reaches "Read this position" (P4c — a wire that
     } as unknown as Awaited<ReturnType<typeof stockfishEngine.analyzeWithBudget>>);
     const { result } = renderHook(() => usePositionNarration({ ...defaultArgs(), fen: FORK_FEN, pgn: '', moveNumber: 40, playerColor: 'white' }));
     act(() => { void result.current.narrate(); });
+    // The read comes in two parts (the opening, then the deep part): what the
+    // best move lands is the deep part's, phrased once the opening is.
     await waitFor(() => expect(voiceCalls.length).toBe(1), READ_WAIT);
-    expect(voiceCalls[0].facts, 'the concept clause never reached the phraser').toMatch(/a fork hits two targets at once/);
+    await act(async () => { voiceResolver?.(null); await Promise.resolve(); });
+    await waitFor(() => expect(voiceCalls.length).toBe(2), READ_WAIT);
+    expect(voiceCalls.map((c) => c.facts).join(' '), 'the concept clause never reached the phraser').toMatch(/a fork hits two targets at once/);
   });
 });
 

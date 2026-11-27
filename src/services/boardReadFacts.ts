@@ -99,6 +99,13 @@ export interface BoardReadInput {
    *  standalone board (a puzzle, Play, Review's Read, a lesson). Plain data:
    *  the read runs in a worker. */
   story: ReadStory | null;
+  /** REQUIRED — how much of the read: `first` is the read's opening, off
+   *  this board's own engine lines alone (the standing, the kind of position,
+   *  the targets, their threat, both plans) — no other board is read and the
+   *  engine is never asked, so it answers while the student waits for the
+   *  first word ("Read this position", Coach Build Board). `full` reads every
+   *  try and the board after the best move too. */
+  stage: 'first' | 'full';
   /** Passed through to the board's reads: the record, and the last move on each side. */
   extra?: Pick<PositionFactsInput, 'studentWeaknesses' | 'evalBoard' | 'lastMove' | 'opponentLastMove'>;
 }
@@ -149,6 +156,9 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
     theory: i.theory, namesPlayedMove: ASKED_WRITER.namesPlayedMove, boardComputers: 'composer', posture: momentPosture('chat'), namesBestMove: !i.withhold,
     fen: i.fen, moverColor: side, studentColor: i.studentColor, rating: i.rating, analysis: asAnalysis(i.before), history: [...i.history],
     studentNeedContext: i.studentNeedContext, ...(i.extra ?? {}),
+    // The read's opening asks the engine nothing: the leans-on probes are
+    // engine reads, said with the deep part.
+    ...(i.stage === 'first' ? { evalBoard: undefined } : {}),
   });
   const them: 'w' | 'b' = i.studentColor === 'w' ? 'b' : 'w';
   const mine = side === i.studentColor;
@@ -241,6 +251,8 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
       } catch { /* an unplayable line shows no plan */ }
     }
   }
+  // The read's opening stops here: everything below reads another board.
+  if (i.stage === 'first') return done();
 
   // The tempting moves, each read to its own line — the student's turn only,
   // never on a puzzle still being solved (ruling a move out narrows the answer).

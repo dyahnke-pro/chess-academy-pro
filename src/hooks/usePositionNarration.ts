@@ -15,7 +15,7 @@ import {
 import type { StockfishAnalysis } from '../types';
 import { DEFAULT_STUDENT_RATING } from '../services/ratingBands';
 import { useStudentNeed } from './useStudentNeed';
-import { composePositionRead, READ_SEAT } from '../services/positionReadComposer';
+import { composePositionReadStaged, READ_SEAT } from '../services/positionReadComposer';
 import type { ReadSurface } from '../services/tryReadBudget';
 import type { ReadStory } from '../services/gameStory';
 
@@ -234,11 +234,15 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
       const profile = await db.profiles.get('main');
       const rating = profile?.currentRating ?? DEFAULT_STUDENT_RATING;
 
-      // ── THE FACTS, IN CODE — composed in ONE place (positionReadComposer):
-      //    the note, the phase, the position facts, the positional read and
-      //    the deepest look-ahead, most-important-first. This hook owns the
-      //    engine read above and the voice below; it composes nothing.
-      const facts = await composePositionRead({
+      // ── THE FACTS, IN CODE — composed in ONE place (positionReadComposer),
+      //    in two parts: the OPENING off this board's own lines (their threat,
+      //    the standing with its why, both plans, the habit), ready as soon as
+      //    the engine's first read is in, and the DEEP part (the tries, their
+      //    best try, what the best move does), composed while the opening is
+      //    spoken. Both go on ONE speech chain, so the deep part follows with
+      //    no gap. This hook owns the engine read above and the voice below;
+      //    it composes nothing.
+      const staged = composePositionReadStaged({
         fen: args.fen,
         pgn: args.pgn,
         playerColor: args.playerColor,
@@ -256,56 +260,46 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
         surface: args.surface,
         story: storyRef.current ? storyRef.current() : null,
       });
-      if (token !== activeTokenRef.current) return;
-      if (!facts) {
-        setCurrentText('');
-        return;
-      }
 
-      // ── THE PHRASING — one call through the one chokepoint, in the SAME
-      //    seat the facts were computed in ("you / they"). It used to ask for
-      //    the coach-is-opponent seat, which made the model convert every
-      //    "they" into "I" — and on prod it converted the wrong way ("you're
-      //    threatening to win my bishop on c4" to the owner of that bishop).
-      //    A timeout or a dead provider serves the computed facts raw
-      //    (speakableFacts) — the correct read exists before the model is
-      //    asked, so nothing can race it away (David 2026-07-04).
-      let spoken: string;
-      try {
-        spoken = (await withTimeout(
-          voiceFacts(facts, {
-            intent: 'position-read',
-            // COMPUTED PROSE SPEAKS (G0). The warm pass added a conclusion of
-            // its own on a mate-in-two ("Let's not overthink it: contain the
-            // runner…", 2026-10-01) — the model deciding what the position
-            // means. The read is computed; the model only phrases, so it gets
-            // no room to add. (`warm` overrides `preferRaw`, so it is off.)
-            preferRaw: true,
-            perspective: { mode: READ_SEAT, studentSide: args.playerColor },
-            directives: 'The student tapped "read this position" and is listening to you live. Speak every fact given, most important first; the first sentence must stand alone. Do not suggest a move. Do not recap the last move.',
-          }),
-          NARRATION_API_TIMEOUT_MS,
-          'narration-api',
-        )) ?? speakableFacts(facts);
-      } catch (err: unknown) {
-        const msg = err instanceof Error ? err.message : String(err);
-        setError(msg);
-        if (msg.endsWith('-timeout')) {
-          void logAppAudit({
-            kind: 'llm-error',
-            category: 'subsystem',
-            source: 'usePositionNarration',
-            summary: 'narration phrasing timed out — speaking the computed facts raw',
-            details: msg,
-            fen: args.fen,
-          });
+      // ── THE PHRASING — through the one chokepoint, in the SAME seat the
+      //    facts were computed in ("you / they"). It used to ask for the
+      //    coach-is-opponent seat, which made the model convert every "they"
+      //    into "I" — and on prod it converted the wrong way. A timeout or a
+      //    dead provider serves the computed facts raw (speakableFacts) — the
+      //    correct read exists before the model is asked (David 2026-07-04).
+      const phrase = async (facts: string): Promise<string> => {
+        let out: string;
+        try {
+          out = (await withTimeout(
+            voiceFacts(facts, {
+              intent: 'position-read',
+              // COMPUTED PROSE SPEAKS (G0). The warm pass added a conclusion of
+              // its own on a mate-in-two (2026-10-01) — the model deciding what
+              // the position means. (`warm` overrides `preferRaw`, so it is off.)
+              preferRaw: true,
+              perspective: { mode: READ_SEAT, studentSide: args.playerColor },
+              directives: 'The student tapped "read this position" and is listening to you live. Speak every fact given, most important first; the first sentence must stand alone. Do not suggest a move. Do not recap the last move.',
+            }),
+            NARRATION_API_TIMEOUT_MS,
+            'narration-api',
+          )) ?? speakableFacts(facts);
+        } catch (err: unknown) {
+          const msg = err instanceof Error ? err.message : String(err);
+          setError(msg);
+          if (msg.endsWith('-timeout')) {
+            void logAppAudit({
+              kind: 'llm-error',
+              category: 'subsystem',
+              source: 'usePositionNarration',
+              summary: 'narration phrasing timed out — speaking the computed facts raw',
+              details: msg,
+              fen: args.fen,
+            });
+          }
+          out = speakableFacts(facts);
         }
-        spoken = speakableFacts(facts);
-      }
-      if (token !== activeTokenRef.current) return;
-      spoken = dropInventedQuestions(spoken, facts) || speakableFacts(facts).trim();
-      if (!spoken) return;
-      setCurrentText(spoken);
+        return dropInventedQuestions(out, facts) || speakableFacts(facts).trim();
+      };
 
       // ── THE VOICE. Sentence by sentence through the package (truth) and
       //    speakReadAloud (the G5 read-aloud carve-out — the student TAPPED to
@@ -313,34 +307,57 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
       //    speakPackage would silently re-apply the gate and make the button
       //    dead on Silent/Brief again). Packaging governs TRUTH; the carve-out
       //    governs WHETHER a tapped read is allowed to speak at all.
-      const { sentences, rest } = splitSpeakableSentences(spoken);
-      const utterances = [...sentences, rest].map((t) => t.trim()).filter(Boolean);
       let speechChain: Promise<void> = Promise.resolve();
       let sentenceCount = 0;
-      for (const sentence of utterances) {
-        sentenceCount += 1;
-        if (sentenceCount === 1) {
-          const firstDispatchMs = Date.now() - tapTs;
-          void logAppAudit({
-            kind: 'narration-latency',
-            category: 'subsystem',
-            source: 'usePositionNarration',
-            summary: `tap-to-first-dispatch ${firstDispatchMs}ms`,
-            details: JSON.stringify({
-              tapToFirstDispatchMs: firstDispatchMs,
-              firstSentenceChars: sentence.length,
-              stockfishResolved: stockfishAnalysis !== null,
-            }),
-            fen: args.fen,
-          });
+      const said: string[] = [];
+      const speak = (text: string, part: 'first' | 'deep'): void => {
+        const { sentences, rest } = splitSpeakableSentences(text);
+        const utterances = [...sentences, rest].map((t) => t.trim()).filter(Boolean).filter((t) => !said.includes(t));
+        for (const sentence of utterances) {
+          said.push(sentence);
+          sentenceCount += 1;
+          if (sentenceCount === 1) {
+            const firstDispatchMs = Date.now() - tapTs;
+            void logAppAudit({
+              kind: 'narration-latency',
+              category: 'subsystem',
+              source: 'usePositionNarration',
+              summary: `tap-to-first-dispatch ${firstDispatchMs}ms`,
+              details: JSON.stringify({
+                tapToFirstDispatchMs: firstDispatchMs,
+                firstSentenceChars: sentence.length,
+                stockfishResolved: stockfishAnalysis !== null,
+                part,
+              }),
+              fen: args.fen,
+            });
+          }
+          speechChain = speechChain
+            .then(() => {
+              const pkg = buildVoicePackage([{ kind: 'computed', text: sentence, fen: args.fen }]);
+              return pkg.spoken ? voiceService.speakReadAloud(pkg.spoken) : undefined;
+            })
+            .catch(() => undefined);
         }
-        speechChain = speechChain
-          .then(() => {
-            const pkg = buildVoicePackage([{ kind: 'computed', text: sentence, fen: args.fen }]);
-            return pkg.spoken ? voiceService.speakReadAloud(pkg.spoken) : undefined;
-          })
-          .catch(() => undefined);
+        setCurrentText(said.join(' '));
+      };
+
+      // Each part is phrased, then spoken only if this read is still the
+      // student's (a cancel or a newer tap while the phrasing was out).
+      const sayPart = async (facts: string, part: 'first' | 'deep'): Promise<boolean> => {
+        if (!facts) return token === activeTokenRef.current;
+        const text = await phrase(facts);
+        if (token !== activeTokenRef.current) return false;
+        speak(text, part);
+        return true;
+      };
+      if (!(await sayPart(await staged.first, 'first'))) return;
+      if (!(await sayPart(await staged.deep, 'deep'))) return;
+      if (said.length === 0) {
+        setCurrentText('');
+        return;
       }
+      const spoken = said.join(' ');
 
       // Mirror the finished read into the CHAT transcript below the board
       // (David 2026-07-06) — same treatment as phase-transition narration.

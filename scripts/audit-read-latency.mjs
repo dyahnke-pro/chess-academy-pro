@@ -24,6 +24,7 @@
  *   AUDIT_OUT=<file> to keep the JSON somewhere else.
  */
 import { chromium } from 'playwright';
+import { Chess } from 'chess.js';
 import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
@@ -34,7 +35,10 @@ const BASE = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:4173';
 const N = Number(process.env.AUDIT_BOARDS ?? 11);
 const OUT = process.env.AUDIT_OUT ?? `audit-reports/read-latency-${new Date().toISOString().replace(/[:.]/g, '-')}.json`;
 const boards = readFileSync('audit-reports/danya-havecheck/board-facts-2026-11-19-unlocked.jsonl', 'utf8')
-  .trim().split('\n').map((l) => JSON.parse(l)).slice(0, N);
+  .trim().split('\n').map((l) => JSON.parse(l))
+  // A board in check opens no read on /coach/play (nothing to read but the
+  // escape): the next real board takes its place.
+  .filter((b) => !new Chess(b.fen).inCheck()).slice(0, N);
 
 /** The muted line's simulated length (voiceService.simulateSpeechDuration). */
 const spokenMs = (t) => { const w = t.trim().split(/\s+/).filter(Boolean).length; return Math.min(12000, Math.max(400, Math.round((w / 150) * 60000))); };
@@ -66,12 +70,12 @@ async function main() {
         const spoken = () => listener.getCapturedEvents()
           .filter((e) => e.kind === 'coach-narration-spoken' && e.receivedAt >= t0 && e.narrationText)
           .sort((x, y) => x.receivedAt - y.receivedAt);
-        // Until the read is over: the button stops saying "Restart", or 60 s.
-        let quietSince = 0;
+        // Until the read is over: 4 s of silence after the last line's
+        // (simulated) end, or 60 s.
         while (Date.now() - t0 < 60000) {
           await page.waitForTimeout(150);
-          const reading = await btn.getAttribute('aria-label').then((a) => /Restart/i.test(a ?? '')).catch(() => false);
-          if (!reading && spoken().length > 0) { if (!quietSince) quietSince = Date.now(); if (Date.now() - quietSince > 1500) break; } else quietSince = 0;
+          const last = spoken().at(-1);
+          if (last && Date.now() > last.receivedAt + spokenMs(last.narrationText) + 4000) break;
         }
         const s = spoken();
         row.firstMs = s[0] ? s[0].receivedAt - t0 : null;

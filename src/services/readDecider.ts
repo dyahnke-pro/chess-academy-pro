@@ -548,7 +548,8 @@ function sameFact(a: ReadFact, b: ReadFact): boolean { return a === b || factId(
 /** A fact's keys in the story's ledger: its claims, or — for a fact with
  *  none — its computer and the squares it is about (the same general line on
  *  the same squares is the same idea). */
-function storyKeys(f: ReadFact): string[] {
+/** A fact's said-keys: its claims, or its computer and squares. */
+export function storyKeys(f: ReadFact): string[] {
   return f.claims?.length ? [...f.claims] : [`fact:${f.computer ?? f.kind}:${[...f.squares].sort().join(',')}`];
 }
 

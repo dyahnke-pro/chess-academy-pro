@@ -97,7 +97,7 @@ describe('the picture reaches every surface through the one fact set', { timeout
       b.move({ from: l.moves[0].slice(0, 2), to: l.moves[0].slice(2, 4) });
       byFen.set(b.fen(), [{ rank: 1, depth: 16, evaluation: l.evaluation, mate: null, moves: l.moves.slice(1) }]);
     }
-    const set = await boardReadFacts({ fen: FEN, studentColor: 'w', rating: 1800, before: fan.slice(0, 3), read: async (f) => byFen.get(f) ?? null,
+    const set = await boardReadFacts({ stage: 'full', fen: FEN, studentColor: 'w', rating: 1800, before: fan.slice(0, 3), read: async (f) => byFen.get(f) ?? null,
       withhold: false, tense: 'now', history: [], theory: false, readTempting: true, engineFutures: false, studentNeedContext: null, story: null });
     const pics = set.facts.filter((f) => f.computer === 'pictureVerdict' || f.computer === 'picturePlan');
     expect(pics.map((f) => f.computer).sort()).toEqual(['picturePlan', 'pictureVerdict']);
@@ -113,7 +113,7 @@ describe('the picture reaches every surface through the one fact set', { timeout
       b.move({ from: l.moves[0].slice(0, 2), to: l.moves[0].slice(2, 4) });
       byFen.set(b.fen(), [{ rank: 1, depth: 16, evaluation: l.evaluation, mate: null, moves: l.moves.slice(1) }]);
     }
-    const input = { fen: FEN, studentColor: 'w' as const, rating: 1800, before: fan.slice(0, 3), read: async (f: string) => byFen.get(f) ?? null,
+    const input = { stage: 'full' as const, fen: FEN, studentColor: 'w' as const, rating: 1800, before: fan.slice(0, 3), read: async (f: string) => byFen.get(f) ?? null,
       withhold: false, tense: 'now' as const, history: [], theory: false, readTempting: true, engineFutures: false, studentNeedContext: null };
     const fresh = await boardReadFacts({ ...input, story: null });
     const pics = fresh.facts.filter((f) => f.computer === 'pictureVerdict' || f.computer === 'picturePlan');
@@ -130,7 +130,7 @@ describe('the picture reaches every surface through the one fact set', { timeout
   });
 
   it('NEGATIVE: a puzzle still being solved never hears the verdict (it names the tries)', async () => {
-    const set = await boardReadFacts({ fen: FEN, studentColor: 'w', rating: 1800, before: fan.slice(0, 3), read: async () => null,
+    const set = await boardReadFacts({ stage: 'full', fen: FEN, studentColor: 'w', rating: 1800, before: fan.slice(0, 3), read: async () => null,
       withhold: true, tense: 'now', history: [], theory: false, readTempting: true, engineFutures: false, studentNeedContext: null, story: null });
     expect(set.facts.some((f) => f.computer === 'pictureVerdict' || f.computer === 'picturePlan')).toBe(false);
   });
