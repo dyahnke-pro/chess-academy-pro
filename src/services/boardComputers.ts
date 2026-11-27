@@ -3174,7 +3174,7 @@ export const BOARD_COMPUTERS = {
         seat: 'student', namesStudentMove: true, thread: LOCAL_THREAD, fen: fenBefore });
     }),
     computer: 'computeMustDefend',
-    kind: 'must-defend',
+    kind: 'threat',
     phase: ANY,
     surfaces: {
       review: REVIEW,

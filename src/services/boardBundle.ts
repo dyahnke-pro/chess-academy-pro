@@ -475,6 +475,7 @@ export const BUNDLE_ADAPTERS: { [K in ComputerId]: Adapter<K> } = {
   timing: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, history: b.history, student: b.student } : null; },
   bluff: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, san: MOVE.san, reply: replySan(b), student: b.student } : null; },
   contrast: (b) => { const MOVE = moveOf(b); const best = priorBest(b); return MOVE && best ? { fenBefore: MOVE.fenBefore, san: MOVE.san, bestSan: best, student: b.student, costCp: cpLossOf(b), unpricedCredit: 'refused' } : null; },
+  passThreat: (b) => { const MOVE = moveOf(b); return MOVE && MOVE.mover === b.student ? { fenBefore: MOVE.fenBefore, san: MOVE.san, student: b.student } : null; },
   newThreat: (b) => { const MOVE = moveOf(b); return MOVE ? { fenBefore: MOVE.fenBefore, fenAfter: b.fen, mover: MOVE.mover, student: b.student, answerSan: MOVE.mover !== b.student ? replySan(b) : null } : null; },
   moveAspect: (b) => { const words = wordsOf(b); const caps = capturesOf(b); return words && caps ? { words, prev: caps.before, follow: followOf(b), phrases: null } : null; },
   moveThreatDeep: { needs: ["reads.passAfter: a null-move engine read of the board after the move — made where an engine is at hand, `engineComputers.readEngineComputers`"] },

@@ -1323,7 +1323,7 @@ export const REPAIRS: Record<RepairState, RepairRecipe> = {
     stems: [
       'Break the pin on your {tPiece} on {target}: guard it, or block their {opPiece}.',
       'Your {tPiece} on {target} is pinned now. Unpin it before anything else.',
-      'Free your {tPiece} on {target}: step out of the {opPiece}\'s line or guard it twice.',
+      'Free your {tPiece} on {target}: guard it twice, then break the {opPiece}\'s pin.',
       'The {opPiece} pins your {tPiece} on {target}. Add a defender, then unpin.',
       'Pinned on {target}, your {tPiece} can\'t move. Break the pin first.',
     ],
