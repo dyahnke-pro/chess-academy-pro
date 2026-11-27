@@ -3203,12 +3203,17 @@ export const BOARD_COMPUTERS = {
     phase: ANY,
     surfaces: {
       review: REVIEW,
-      learn: { not: 'Learn speaks only after a mistake; a threat the move answered is no mistake' },
-      lesson: { not: 'a taught line is a model line: the threat it answers is the lesson beat\'s own' },
-      play: { not: 'Play volunteers nothing' },
-      chat: { not: 'chat answers about the board in front of it; the pass read is about a move already played' },
-      tactics: { not: 'a puzzle asks for the shot, not for the threat a past move answered' },
-      weaknesses: { not: 'the record files the threat answered through threatAnswerEvidence, once' },
+      // ONE COACH, UNLOCKED: the move's own facts carry it on every surface
+      // that reads a move; the decider says whether it speaks (Learn on a
+      // correction or a decision, Play only when the student taps).
+      learn: { wired: 'services/moveThoughtFacts.ts' },
+      lesson: { not: 'a lesson\'s line is a model line: the threat it answers is the lesson beat\'s own' },
+      play: PLAY_READ,
+      chat: CHAT_VIA_THOUGHT,
+      tactics: TACTICS_READ,
+      // BOTH WAYS: the record files the threat answered, once per motif
+      // (`threatAnswersForGame`, read by the game sweep).
+      weaknesses: { wired: 'services/threatAnswerEvidence.ts' },
       think: { not: 'a step board has no move played yet to have answered it' },
     },
   },

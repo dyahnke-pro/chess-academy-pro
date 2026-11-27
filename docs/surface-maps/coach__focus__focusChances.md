@@ -111,8 +111,8 @@
 - `src/missions/earnedSlip.ts:275`
 - `src/missions/earnedSlip.ts:279`
 - `src/missions/earnedSlip.ts:283`
-- `src/services/boardComputers.ts:6576`
-- `src/services/boardComputers.ts:6578`
+- `src/services/boardComputers.ts:6581`
+- `src/services/boardComputers.ts:6583`
 - `src/services/coachApi.ts:6084`
 - `src/services/coachApi.ts:6085`
 - `src/services/coachApi.ts:6086`

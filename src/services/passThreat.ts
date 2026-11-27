@@ -9,7 +9,11 @@
  * check has no pass (the probe would take a king) and returns null.
  */
 import { Chess, type Color } from 'chess.js';
-import { mustDefendPieces } from './threatOut';
+import { mustDefendPieces, flipSideToMove } from './threatOut';
+import { renderPassThreat } from './teachingSentence';
+// ONE PIECE-VALUE TABLE (`onePieceValueTable`): the cheapest capturer, so a
+// king must sort last — the CAPTURE semantic (k: 100), never a local copy.
+import { CAPTURE_VALUE } from './pieceValues';
 
 export interface PassThreat {
   kind: 'mate' | 'wins';
@@ -30,14 +34,12 @@ const NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: '
 /** The board with the other side to move, en passant cleared; null when the
  *  side to move is in check (no legal pass). */
 function passBoard(fen: string): Chess | null {
-  try {
-    const c = new Chess(fen);
-    if (c.inCheck()) return null;
-    const f = fen.split(' ');
-    f[1] = f[1] === 'w' ? 'b' : 'w';
-    f[3] = '-';
-    return new Chess(f.join(' '));
-  } catch { return null; }
+  // ONE NULL-MOVE RULE (`oneNullMove.gate`, census 2026-10-10): the one flip
+  // carries the rule — a side in check cannot pass, and en passant goes with
+  // it — so this never clears a FEN field by hand.
+  const flipped = flipSideToMove(fen);
+  if (!flipped) return null;
+  try { return new Chess(flipped); } catch { return null; }
 }
 
 /** Their mate in one on the pass board, as SAN. */
@@ -72,21 +74,19 @@ export function passThreat(fenBefore: string, playedSan: string, student: Color)
   // Their capture of it on the pass board.
   const take = pass.moves({ verbose: true })
     .filter((m) => m.to === hit.square && !!m.captured)
-    .sort((a, b) => (VAL[a.piece] ?? 9) - (VAL[b.piece] ?? 9))[0];
+    .sort((a, b) => (CAPTURE_VALUE[a.piece] ?? 9) - (CAPTURE_VALUE[b.piece] ?? 9))[0];
   if (!take) return null;
   const after3 = mustDefendPieces(after, student);
   const answered = !after3.some((p) => p.value >= 3);
   return { kind: 'wins', san: take.san, square: hit.square, attacker: NAME[take.piece], victim: NAME[hit.piece.toLowerCase()] ?? 'piece', answered };
 }
 
-const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
-
 /** The Review sentence for an answered threat, past tense: what they had if
  *  the student passed, and that the move stopped it. Null when the move did
  *  not answer it (the error computer says that miss). */
 export function passThreatSentence(t: PassThreat, square: string = t.square): string | null {
   if (!t.answered) return null;
-  return t.kind === 'mate'
-    ? `If you had passed, their ${t.attacker} to ${square} would have been mate. Your move stopped it.`
-    : `If you had passed, their ${t.attacker} would have taken your ${t.victim} on ${square}. Your move stopped it.`;
+  // ONE RENDERER WRITES THE TEACHING SENTENCE (CLAUDE.md rule 2): the
+  // computer hands over the facts, the renderer words them.
+  return renderPassThreat({ kind: t.kind, attacker: t.attacker, victim: t.victim, square, stem: square.charCodeAt(0) });
 }

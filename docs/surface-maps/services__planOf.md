@@ -35,7 +35,7 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `planOf` (function) — 13 call sites
-- `src/services/boardComputers.ts:3758`
+- `src/services/boardComputers.ts:3763`
 - `src/services/mistakeLesson.ts:1050`
 - `src/services/planOf.round3.test.ts:43`
 - `src/services/planOf.round3.test.ts:51`

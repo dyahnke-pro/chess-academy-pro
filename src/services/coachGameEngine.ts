@@ -676,7 +676,7 @@ async function applyMissionDials(
       category: 'subsystem',
       source: 'coachGameEngine.applyMissionDials',
       summary: pick
-        ? `${mission.focus.id}: planted ${pick.uci} (−${pick.dropCp}cp) — the attack ${pick.attackUci} (instead of ${chosen.move || 'none'})`
+        ? `${mission.focus.id}: planted ${pick.uci} (−${pick.dropCp}cp, attack=${pick.attackUci}, instead-of=${chosen.move || 'none'})`
         : `${mission.focus.id}: no attack plant — ${Object.entries(scan).map(([k, n]) => `${k} ${n}`).join(', ') || 'nothing read'}`,
       fen,
       details: JSON.stringify({ planted: pick?.uci ?? null, attack: pick?.attackUci ?? null, dropCp: pick?.dropCp ?? null, scan, replaced: chosen.move }),
@@ -850,7 +850,7 @@ async function applyMoveScorers(
       kind: 'focus-trade',
       category: 'subsystem',
       source: 'coachGameEngine.applyMoveScorers',
-      summary: `${chosen.move || 'none'} → ${pick.uci}: an equal trade in an ending the student leads (coach ${ctx.coachEvalCp}cp, cpLoss=${pick.cpLoss}, window=${ctx.windowCp})`,
+      summary: `${chosen.move || 'none'} → ${pick.uci}: equal-trade-ending, student-ahead (coach ${ctx.coachEvalCp}cp, cpLoss=${pick.cpLoss}, window=${ctx.windowCp})`,
       details: JSON.stringify({ replaced: chosen.move, played: pick.uci, coachEvalCp: ctx.coachEvalCp, cpLoss: pick.cpLoss, windowCp: ctx.windowCp }),
       fen,
     });

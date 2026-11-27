@@ -45,7 +45,7 @@ export function isStudentsMove(fenBefore: string, studentSeat: StudentSeat, writ
     kind: 'record-seat-refused',
     category: 'subsystem',
     source: `recordSeat.${writer}`,
-    summary: `${writer}: refused ${playedSan ?? 'a move'} by ${mover ?? 'an unreadable board'} — the student plays ${studentSeat}`,
+    summary: `${writer}: refused ${playedSan ?? 'a move'} by ${mover ?? 'an unreadable board'} (studentSeat=${studentSeat})`,
     fen: fenBefore,
     details: JSON.stringify({ writer, mover, studentSeat, playedSan: playedSan ?? null }),
   })).catch(() => undefined);

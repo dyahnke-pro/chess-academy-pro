@@ -2460,3 +2460,18 @@ export function ownThreatWords(
     ? rotateStem([`Your move now threatens ${o.carry.san}, winning ${won}.`, `Your move sets up ${o.carry.san}, and that wins ${won}.`], key)
     : rotateStem([`Your move now threatens to win ${won}.`, `Your move sets up a win of ${won}.`], key);
 }
+
+/** THE PASS THREAT (`passThreat`): what they had if the student had passed,
+ *  and that the move played stopped it. Past tense — Review's register; the
+ *  piece words and the square come from the computer, never the prose. */
+export function renderPassThreat(t: { kind: 'mate' | 'wins'; attacker: string; victim: string | null; square: string; stem: number }): string {
+  return t.kind === 'mate'
+    ? rotateStem([
+      `If you had passed, their ${t.attacker} to ${t.square} would have been mate. Your move stopped it.`,
+      `Pass there and their ${t.attacker} mates on ${t.square}. Your move took that away.`,
+    ], t.stem)
+    : rotateStem([
+      `If you had passed, their ${t.attacker} would have taken your ${t.victim} on ${t.square}. Your move stopped it.`,
+      `Pass there and their ${t.attacker} takes your ${t.victim} on ${t.square}. Your move answered it.`,
+    ], t.stem);
+}

@@ -137,6 +137,8 @@ export function skillWords(tag: MisconceptionTagId): string {
  *  2026-11-24). The tactics promise closes it every game: a real motif is
  *  planted whatever the middlegame's pick. */
 export function pregameLine(plan: PhasePlan): string {
-  return `Today's focus: in the opening, ${skillWords(plan.opening.skill)}; in the middlegame, ${skillWords(plan.middlegame.skill)}; in the endgame, ${skillWords(plan.endgame.skill)}. `
+  return `Today's focus: in the opening, ${skillWords(plan.opening.skill)}. `
+    + `Then in the middlegame, ${skillWords(plan.middlegame.skill)}. `
+    + `And in the endgame, ${skillWords(plan.endgame.skill)}. `
     + 'You will have at least one chance this game for a winning tactic, but your opponent will also be trying to set up its own tactics. Stay vigilant!';
 }

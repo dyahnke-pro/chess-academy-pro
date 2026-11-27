@@ -8,7 +8,7 @@
  * student holds it or lets it go (`missed-king-attack`), scored by the one
  * shape (`moveKindJudge`). A miss is taught as the habit, never the move.
  */
-import { kingAttack } from '../../services/kingAttack';
+import { isKingAttackMove } from '../../services/kingAttack';
 import type { ReadLine } from './focusChances';
 import { judgeMoveKind, sanOf } from './moveKindJudge';
 import type { SkillVerdict } from './openingJudge';
@@ -19,9 +19,7 @@ export const KING_ATTACK_MISS_LINE = 'Their king was open there. Before a quiet 
  *  heads for is never claimed without a line, so none is passed)? */
 export function isAttackingMove(fen: string, uci: string): boolean {
   const san = sanOf(fen, uci);
-  if (!san) return false;
-  const student = fen.split(' ')[1] === 'b' ? 'b' : 'w';
-  return kingAttack(fen, san, false, false, [], student) !== null;
+  return san ? isKingAttackMove(fen, san) : false;
 }
 
 export function judgeKingAttackMove(fenBefore: string, san: string, lines: readonly ReadLine[] | null): SkillVerdict[] {

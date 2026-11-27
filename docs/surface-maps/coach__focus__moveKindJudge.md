@@ -109,7 +109,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 
 ### `judgeMoveKind` (function) — 2 call sites
 - `src/coach/focus/endgameTechniqueJudge.ts:83`
-- `src/coach/focus/kingAttackJudge.ts:28`
+- `src/coach/focus/kingAttackJudge.ts:26`
 
 ## Tests
 

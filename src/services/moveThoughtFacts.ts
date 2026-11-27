@@ -575,6 +575,12 @@ export function moveThoughtFacts(i: MoveThoughtInput): ThoughtFact[] {
       for (const f of readBoardAll('ownThreat', { fenBefore: i.fenBefore, san: i.san, student, namesMoves: i.namesPlayedMove })) {
         facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'threat', weight: 72 });
       }
+      // What they had if the student had passed, and that the move stopped it
+      // — the reason a sound defensive move was sound (ONE COACH, UNLOCKED:
+      // every surface reads it; the decider says whether it speaks).
+      for (const f of readBoardAll('passThreat', { fenBefore: i.fenBefore, san: i.san, student })) {
+        facts.push({ ...f, source: 'teachingMove', idea: 'prevent', weight: 60 });
+      }
       // What their move cost them, for the student to use.
       for (const f of readBoardAll('theirCost', { fenBefore: i.fenBefore, san: i.san, student })) {
         facts.push({ ...f, namesStudentMove: false, source: 'teachingMove', idea: 'weakness', weight: 58 });

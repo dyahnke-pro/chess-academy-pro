@@ -198,3 +198,13 @@ export function kingAttack(
   }
   return null;
 }
+
+/** IS THE MOVE AN ATTACKING MOVE ON THEIR KING — the one reader as a plain
+ *  predicate, so a judge or a surface never calls the reader for itself
+ *  (`oneCoachUnlocked` (c)): no words are built, only the yes/no the mission
+ *  scorers need. `student` is the side that played `san`. */
+export function isKingAttackMove(fen: string, san: string): boolean {
+  const student: 'w' | 'b' = fen.split(' ')[1] === 'b' ? 'b' : 'w';
+  // The hop it heads for is never claimed without a line, so none is passed.
+  return kingAttack(fen, san, false, false, [], student) !== null;
+}
