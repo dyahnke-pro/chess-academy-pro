@@ -414,12 +414,12 @@ export function whyItFailed(args: {
     try {
       const c = new Chess(after.fen());
       c.move({ from: forkReply.from, to: forkReply.to, promotion: forkReply.promotion });
-      nowHit = forked(c, forkReply.to as Square);
+      nowHit = forked(c, forkReply.to);
     } catch { nowHit = []; }
     try {
       const h = new Chess(sideToMoveAs(before.fen(), them) ?? before.fen());
       h.move({ from: forkReply.from, to: forkReply.to, promotion: forkReply.promotion });
-      homeHit = forked(h, forkReply.to as Square);
+      homeHit = forked(h, forkReply.to);
     } catch { homeHit = []; }
     const wins = nowHit.some((sq) => lineTakes(sq));
     if (nowHit.length >= 2 && homeHit.length < nowHit.length && wins) {

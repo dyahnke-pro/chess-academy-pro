@@ -108,7 +108,7 @@ describe('the table gate', () => {
   }
   it('every cause has a row, every positional row a lesson', () => {
     expect(Object.keys(RECIPES)).toHaveLength(24);
-    for (const r of Object.values(POSITIONAL)) expect(r!.lesson.stems.length).toBeGreaterThanOrEqual(5);
+    for (const r of Object.values(POSITIONAL)) expect(r.lesson.stems.length).toBeGreaterThanOrEqual(5);
   });
   it('their seat never names a square the student can now strike', () => {
     for (const { where, stems, seat } of allSlots()) {

@@ -143,7 +143,7 @@ export function midTradeSquare(fen: string, subjectColor: 'w' | 'b', justMoved: 
     const foe: 'w' | 'b' = subjectColor === 'w' ? 'b' : 'w';
     if (before.turn() !== foe) return null;
     if (!before.moves({ verbose: true }).some((x) => x.to === m.to && !!x.captured)) return null;
-    return signedLegalSeeFor(fen, m.to as Square, foe) >= 0 ? m.to : null;
+    return signedLegalSeeFor(fen, m.to, foe) >= 0 ? m.to : null;
   } catch { return null; }
 }
 

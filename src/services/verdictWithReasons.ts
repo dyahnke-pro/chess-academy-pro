@@ -392,7 +392,7 @@ function evidenceReasons(board: Chess, fen: string, student: Color, lines: reado
         const words = g === 1 ? 'a pawn' : g === 2 ? 'two pawns' : g <= 4 ? 'a piece' : g <= 7 ? "a rook's worth" : "a queen's worth";
         const clause = `${WHO(x, student)} win ${words} in the best line`;
         out.push({ kind: 'line-wins', side: x, weight: g * 100, clause, sentence: `${cap(clause)}.`,
-          squares: [played[lastCap].to as Square], line: top!.slice(0, lastCap + 1) });
+          squares: [played[lastCap].to as Square], line: played.slice(0, lastCap + 1).map((m) => m.uci) });
       }
     }
   }
@@ -414,7 +414,7 @@ function evidenceReasons(board: Chess, fen: string, student: Color, lines: reado
       const clause = `${foe} ${word} on ${cell.square} is trapped: every square it has loses it`;
       const cut = taken ? played.findIndex((m) => m.color === x && m.captured) : -1;
       out.push({ kind: 'trapped', side: x, weight: (MATERIAL_VALUE[cell.type] ?? 3) * 80 * (taken ? 1.25 : 1), clause, sentence: `${cap(clause)}.`,
-        squares: [cell.square, t.attackerSquare as Square], ...(taken && cut >= 0 ? { line: top!.slice(0, cut + 1) } : {}) });
+        squares: [cell.square, t.attackerSquare as Square], ...(taken && cut >= 0 ? { line: played.slice(0, cut + 1).map((m) => m.uci) } : {}) });
       break;
     }
 
@@ -432,7 +432,7 @@ function evidenceReasons(board: Chess, fen: string, student: Color, lines: reado
         const clause = `${foe} king on ${k} has no square to step to, and ${count(atk.length)} of ${own} pieces bear on it`;
         const last = lineChecks.length ? played.indexOf(lineChecks[lineChecks.length - 1]) : -1;
         out.push({ kind: 'mating-net', side: x, weight: 170 + 40 * atk.length + 30 * lineChecks.length, clause, sentence: `${cap(clause)}.`,
-          squares: [k, ...atk], ...(last >= 0 ? { line: top!.slice(0, last + 1) } : {}) });
+          squares: [k, ...atk], ...(last >= 0 ? { line: played.slice(0, last + 1).map((m) => m.uci) } : {}) });
       }
     }
 
@@ -471,7 +471,7 @@ function evidenceReasons(board: Chess, fen: string, student: Color, lines: reado
       })() : null;
       if (origin && passers.includes(origin as Square)) {
         const clause = `${own} passed pawn on ${origin} goes through: the best line ${played[q].promotion === 'q' ? 'queens' : 'promotes'} it`;
-        out.push({ kind: 'unstoppable', side: x, weight: 320, clause, sentence: `${cap(clause)}.`, squares: [origin as Square, played[q].to as Square], line: top!.slice(0, q + 1) });
+        out.push({ kind: 'unstoppable', side: x, weight: 320, clause, sentence: `${cap(clause)}.`, squares: [origin as Square, played[q].to as Square], line: played.slice(0, q + 1).map((m) => m.uci) });
       }
     }
 
@@ -484,7 +484,7 @@ function evidenceReasons(board: Chess, fen: string, student: Color, lines: reado
         const c = new Chess(fen);
         const hits = board.moves({ verbose: true }).filter((m) => !m.captured && m.piece !== 'q' && m.piece !== 'k').filter((m) => {
           c.move(m);
-          const hit = c.attackers(q, x).includes(m.to) && !loose(c, m.to as Square, x);
+          const hit = c.attackers(q, x).includes(m.to) && !loose(c, m.to, x);
           c.undo();
           return hit;
         });
@@ -493,7 +493,7 @@ function evidenceReasons(board: Chess, fen: string, student: Color, lines: reado
           const h = lineHit ?? hits[0];
           const clause = `${foe} queen on ${q} can be hit with tempo`;
           out.push({ kind: 'tempo', side: x, weight: lineHit ? 95 : 60, clause, sentence: `${cap(clause)}: it has to move again.`,
-            squares: [q, h.to as Square], ...(lineHit ? { line: [top![0]] } : {}) });
+            squares: [q, h.to], ...(lineHit ? { line: [played[0].uci] } : {}) });
         }
       }
     }
@@ -588,7 +588,7 @@ function materialBalanceOf(fen: string): number {
  *  shows no such evidence (an even count beside an open king is no balance). */
 function evenReason(board: Chess, student: Color): VerdictReason | null {
   const pieces = (c: Color): number => board.board().flat().filter((p) => p && p.color === c && p.type !== 'k' && p.type !== 'p')
-    .reduce((t, p) => t + (MATERIAL_VALUE[p!.type] ?? 0), 0);
+    .reduce((t, p) => t + (p ? MATERIAL_VALUE[p.type] ?? 0 : 0), 0);
   const pawns = (c: Color): number => board.findPiece({ type: 'p', color: c }).length;
   if (pieces('w') !== pieces('b') || pawns('w') !== pawns('b')) return null;
   const officers = board.board().flat().filter((p) => p && p.type !== 'p' && p.type !== 'k').length;

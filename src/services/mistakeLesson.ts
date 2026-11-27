@@ -404,7 +404,8 @@ function repairApplies(state: RepairState, x: RepairContext): Fills | null {
       const mine = atHome(x.student);
       const moveNo = Number(x.quiet.split(' ')[5] ?? '1');
       if (moveNo < 6 || mine.length < 2 || mine.length - atHome(them).length < 2 || x.phase === 'endgame') return null;
-      return { tPiece: NAME[b.get(mine[0])!.type], target: mine[0] };
+      const first = b.get(mine[0]);
+      return first ? { tPiece: NAME[first.type], target: mine[0] } : null;
     }
     case 'piece-trapped': {
       const b = before(x.quiet);
@@ -448,8 +449,8 @@ function repairApplies(state: RepairState, x: RepairContext): Fills | null {
       // moves: a rook at home is not loose.
       const firstRank = x.student === 'w' ? '1' : '8';
       if (Number(x.quiet.split(' ')[5] ?? '1') < 8) return null;
-      const loose = b.board().flat().filter((p) => !!p && p.color === x.student && p.type !== 'p' && p.type !== 'k'
-        && p.square[1] !== firstRank && b.attackers(p.square, x.student).length === 0).map((p) => p!);
+      const loose = b.board().flat().flatMap((p) => (p && p.color === x.student && p.type !== 'p' && p.type !== 'k'
+        && p.square[1] !== firstRank && b.attackers(p.square, x.student).length === 0 ? [p] : []));
       return loose.length >= 2 ? { a: `${NAME[loose[0].type]} on ${loose[0].square}`, b: `${NAME[loose[1].type]} on ${loose[1].square}` } : null;
     }
     case 'initiative-lost':
