@@ -8,8 +8,8 @@
 
 ## Locked rules that govern this surface
 
-- **⏰ Standing notes** (CLAUDE.md:3282) — names `buildReviewMoveBriefing`
-- **The standard post-deploy ritual** (CLAUDE.md:7032) — names `Aspect`
+- **⏰ Standing notes** (CLAUDE.md:3285) — names `buildReviewMoveBriefing`
+- **The standard post-deploy ritual** (CLAUDE.md:7035) — names `Aspect`
 
 ## Who calls in
 
@@ -59,9 +59,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `signedBand` (const) — 3 call sites
-- `src/services/boardComputers.ts:3145`
-- `src/services/boardComputers.ts:6513`
-- `src/services/boardReadFacts.ts:196`
+- `src/services/boardComputers.ts:3159`
+- `src/services/boardComputers.ts:6535`
+- `src/services/boardReadFacts.ts:209`
 
 ### `evalReading` (function) — 5 call sites
 - `src/services/evalReading.test.ts:11`
@@ -71,14 +71,14 @@
 - `src/services/verdictWithReasons.test.ts:77`
 
 ### `evalReadingEvidence` (function) — 2 call sites
-- `src/services/boardComputers.ts:6511`
+- `src/services/boardComputers.ts:6533`
 - `src/services/standingEvidence.test.ts:70`
 
 ### `standingRead` (function) — 1 call site
-- `src/services/boardReadFacts.ts:195`
+- `src/services/boardReadFacts.ts:208`
 
 ### `moveAspects` (function) — 13 call sites
-- `src/services/boardComputers.ts:6155`
+- `src/services/boardComputers.ts:6177`
 - `src/services/captureLeadsTo.test.ts:26`
 - `src/services/countedWhenTradeEnds.test.ts:38`
 - `src/services/countedWhenTradeEnds.test.ts:52`
@@ -140,7 +140,7 @@
 - `src/hooks/useTeachWalkthrough.ts:903`
 - `src/hooks/useTeachWalkthrough.ts:904`
 - `src/services/danyaBench.measure.test.ts:468`
-- `src/services/decisionStakes.test.ts:51`
+- `src/services/decisionStakes.test.ts:52`
 - `src/services/exchangeNotFinished.test.ts:281`
 - `src/services/gamesCourse.ts:368`
 - `src/services/kingGroupReads.test.ts:14`
@@ -175,8 +175,8 @@
 - `src/services/moveThoughtFacts.test.ts:446`
 - `src/services/moveThoughtFacts.test.ts:461`
 - `src/services/moveThoughtFacts.test.ts:474`
-- `src/services/moveThoughtFacts.ts:1067`
-- `src/services/moveThoughtFacts.ts:1179`
+- `src/services/moveThoughtFacts.ts:1077`
+- `src/services/moveThoughtFacts.ts:1189`
 - `src/services/openingGenerator.ts:2059`
 - `src/services/openingGenerator.ts:2629`
 - `src/services/pieceRoute.test.ts:52`

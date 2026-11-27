@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**462 lines · 10 exports · 10 importers · 5 tests · 0 audits**
+**465 lines · 10 exports · 10 importers · 5 tests · 0 audits**
 
 ## Locked rules that govern this surface
 
@@ -60,23 +60,23 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/pictureLedger.test.ts:148`
 - `src/services/pictureLedger.test.ts:156`
 - `src/services/pictureLedger.test.ts:166`
-- `src/services/pictureLedger.test.ts:220`
-- `src/services/pictureLedger.test.ts:238`
-- `src/services/pictureLedger.test.ts:264`
-- `src/services/pictureLedger.test.ts:278`
-- `src/services/pictureLedger.test.ts:283`
-- `src/services/pictureLedger.test.ts:288`
-- `src/services/pictureLedger.test.ts:296`
-- `src/services/pictureLedger.ts:998`
+- `src/services/pictureLedger.test.ts:227`
+- `src/services/pictureLedger.test.ts:245`
+- `src/services/pictureLedger.test.ts:271`
+- `src/services/pictureLedger.test.ts:285`
+- `src/services/pictureLedger.test.ts:290`
+- `src/services/pictureLedger.test.ts:295`
+- `src/services/pictureLedger.test.ts:303`
+- `src/services/pictureLedger.ts:996`
 - `src/services/positionPicture.test.ts:22`
 - `src/services/positionPicture.test.ts:31`
 - `src/services/positionPicture.test.ts:39`
-- `src/services/thoughtComposer.ts:647`
+- `src/services/thoughtComposer.ts:656`
 
 ### `isDetailOf` (function) — 3 call sites
 - `src/services/coachDecider.ts:565`
-- `src/services/thoughtComposer.ts:649`
-- `src/services/thoughtComposer.ts:654`
+- `src/services/thoughtComposer.ts:658`
+- `src/services/thoughtComposer.ts:663`
 
 ## Tests
 
