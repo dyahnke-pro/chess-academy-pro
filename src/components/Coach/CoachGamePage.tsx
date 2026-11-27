@@ -4,9 +4,10 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { uid } from '../../utils/uid';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Undo2, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, Lightbulb, AlertTriangle, GraduationCap, Compass, RotateCcw, MessageCircle, Timer } from 'lucide-react';
+import { ArrowLeft, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, Lightbulb, AlertTriangle, GraduationCap, Compass, RotateCcw, MessageCircle, Timer } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Chess, type Color } from 'chess.js';
+import { lookBackPlay, studentMovesAtView } from '../../services/lookBackMove';
 import { createStoryStore } from '../../services/gameStory';
 import { planFromUci, stepBothArcs } from '../../services/lookaheadPlan';
 import { useChessGame } from '../../hooks/useChessGame';
@@ -65,7 +66,6 @@ import { buildTacticVisuals } from '../../services/tacticVisuals';
 import { isCriticalThreat } from '../../services/tacticAlertService';
 import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
 import { stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
-import { getScenarioTemplate } from '../../services/coachTemplates';
 import { isSpokenSentenceGrounded } from '../../services/coachAnswerGates';
 import {
   loadCoachPlayState,
@@ -1556,12 +1556,20 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     ? (): void => { if (tipWalkable) handleShowTactic(); playStated(); }
     : null;
 
+  /** A looked-back board the student may move on (Back only looks; a
+   *  different move there is the takeback). */
+  const lookBackMovable = studentMovesAtView(
+    viewedMoveIndex, game.history.length,
+    viewedMoveIndex === null ? null : viewedMoveIndex === -1 ? (initialGameFen ?? START_FEN) : gameState.moves[viewedMoveIndex]?.fen ?? null,
+    playerColor,
+  );
+
   // Compute the displayed FEN based on navigation state
   const displayFen = practicePosition?.fen
     ?? lineWalk.walkFen
     ?? temporaryFen
     ?? (viewedMoveIndex !== null
-      ? (viewedMoveIndex === -1 ? START_FEN : gameState.moves[viewedMoveIndex]?.fen ?? game.fen)
+      ? (viewedMoveIndex === -1 ? (initialGameFen ?? START_FEN) : gameState.moves[viewedMoveIndex]?.fen ?? game.fen)
       : game.fen);
 
   // Opening detection — recalculated when move history changes
@@ -3823,35 +3831,57 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     }
   }, [game.fen, playerColor, playerRating]);
 
-  const handleTakeback = useCallback(() => {
+  /** THE STUDENT'S OWN TAKEBACK, `count` plies off the end (the look-back
+   *  move below). Each student move it undoes goes through the own-takeback
+   *  door (`takeBackOwn`): its slip and evidence weigh half, and it becomes a
+   *  puzzle only when it was a mistake — the same door as Learn's. */
+  const takeBackPlays = useCallback((count: number): boolean => {
     const moves = gameState.moves;
-    if (moves.length === 0) return;
-    const lastMove = moves[moves.length - 1];
-    const lastWasCoach = lastMove.isCoachMove;
-    // Coach just replied → undo coach + student. Student's move was
-    // the most recent → undo student only. Either way, anything
-    // before the student's most recent move stays untouched.
-    const undoCount = lastWasCoach ? Math.min(2, moves.length) : 1;
-
-    for (let i = 0; i < undoCount; i++) {
-      game.undoMove();
+    const n = Math.min(count, moves.length, game.history.length);
+    if (n <= 0) return false;
+    for (let k = 0; k < n; k++) {
+      const i = moves.length - 1 - k;
+      const undone = moves[i];
+      const fenBefore = i === 0 ? (initialGameFen ?? START_FEN) : moves[i - 1]?.fen;
+      if (undone && !undone.isCoachMove && fenBefore) discussion.takeBackOwn({ gameId: gameState.gameId, fen: fenBefore, playedSan: undone.san });
     }
-    moveCountRef.current = Math.max(0, moveCountRef.current - undoCount);
+    for (let i = 0; i < n; i++) game.undoMove();
+    moveCountRef.current = Math.max(0, moveCountRef.current - n);
     resetHints();
     prevNudgeRef.current = null;
-
     setGameState((prev) => ({
       ...prev,
-      moves: prev.moves.slice(0, -undoCount),
+      moves: prev.moves.slice(0, -n),
       takebacksUsed: prev.takebacksUsed + 1,
     }));
+    return true;
+  }, [game, resetHints, gameState.moves, gameState.gameId, discussion, initialGameFen]);
 
-    // Keyed on HOW MANY takebacks they have used: the first one always reads
-    // the same way, the second says it differently, and replaying the moment
-    // does not re-roll the sentence.
-    const msg = getScenarioTemplate('takeback_allowed', gameState.takebacksUsed + 1);
-    coachSay(msg);
-  }, [game, coachSay, resetHints, gameState.moves]);
+  /** BACK ONLY LOOKS; A DIFFERENT MOVE THERE IS THE TAKEBACK (David, the board
+   *  bar decisions, 2026-11-24). On a looked-back board that is the student's
+   *  to move: the game's own move steps forward; a different move takes back
+   *  every ply after that board and is then played as the student's move,
+   *  once the game stands on that board again (`pendingLookBackRef`). */
+  const pendingLookBackRef = useRef<{ fenBefore: string; move: MoveResult } | null>(null);
+  const handleLookBackMove = useCallback((moveResult: MoveResult): void => {
+    const fenAtView = viewedMoveIndex === null ? null : viewedMoveIndex === -1 ? (initialGameFen ?? START_FEN) : gameState.moves[viewedMoveIndex]?.fen ?? null;
+    const play = lookBackPlay(viewedMoveIndex, game.history, fenAtView, playerColor, moveResult.san);
+    if (play.kind === 'same') { setViewedMoveIndex(play.nextIndex); return; }
+    if (play.kind !== 'replace' || !fenAtView) return;
+    if (!takeBackPlays(play.plies)) return;
+    pendingLookBackRef.current = { fenBefore: fenAtView, move: moveResult };
+    setViewedMoveIndex(null);
+  }, [viewedMoveIndex, gameState.moves, game.history, playerColor, takeBackPlays, initialGameFen]);
+
+  /** The looked-back move waits for the takeback to land on the board, then
+   *  goes through the one move path (`handleBoardMoveRouted`). */
+  useEffect(() => {
+    const pending = pendingLookBackRef.current;
+    if (!pending || viewedMoveIndex !== null) return;
+    if (game.fen.split(' ').slice(0, 4).join(' ') !== pending.fenBefore.split(' ').slice(0, 4).join(' ')) return;
+    pendingLookBackRef.current = null;
+    handleBoardMoveRouted(pending.move);
+  }, [game.fen, viewedMoveIndex, handleBoardMoveRouted]);
 
   // ─── Blunder Interception Handlers ──────────────────────────────────────
   const handleBlunderContinue = useCallback(() => {
@@ -4536,8 +4566,8 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
               // by the move handler if they move (David 2026-06-10: "play a
               // move as soon as the opponent's turn is over" + "these two
               // surfaces need to mirror each other").
-              interactive={(gameState.status === 'playing' && !isCoachThinking && !temporaryFen && !lineWalk.walkFen && viewedMoveIndex === null) || !!practicePosition || isExploreMode}
-              onMove={handleBoardMoveRouted}
+              interactive={(gameState.status === 'playing' && !isCoachThinking && !temporaryFen && !lineWalk.walkFen && (viewedMoveIndex === null || lookBackMovable)) || !!practicePosition || isExploreMode}
+              onMove={viewedMoveIndex !== null && lookBackMovable && !practicePosition && !isExploreMode ? handleLookBackMove : handleBoardMoveRouted}
               showEvalBar={showEvalBarEffective || isExploreMode}
               evaluation={isExploreMode && exploreEval !== null ? exploreEval : latestEval}
               isMate={isExploreMode ? exploreIsMate : latestIsMate}
@@ -4714,7 +4744,6 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
                 <button onClick={goToFirstMove} disabled={gameState.moves.length === 0 || viewedMoveIndex === -1} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-cyan-500/30 text-cyan-400" aria-label="First move" data-testid="nav-first"><ChevronsLeft size={12} /></button>
                 <button onClick={goToLastMove} disabled={gameState.moves.length === 0 || viewedMoveIndex === null} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-cyan-500/30 text-cyan-400" aria-label="Last move" data-testid="nav-last"><ChevronsRight size={12} /></button>
                 {live && (<>
-                  <button onClick={handleTakeback} disabled={gameState.moves.length === 0} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-amber-500/30 text-amber-400" aria-label="Take back your last move" data-testid="takeback-btn"><Undo2 size={12} /><span>Takeback</span></button>
                   <button onClick={() => handleRestart()} disabled={gameState.moves.length === 0} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-cyan-500/30 text-cyan-400" aria-label="Restart game" data-testid="restart-btn"><RotateCcw size={12} /><span>Restart</span></button>
                   <ResignButton compact onResign={handleResign} disabled={gameState.moves.length === 0} />
                 </>)}

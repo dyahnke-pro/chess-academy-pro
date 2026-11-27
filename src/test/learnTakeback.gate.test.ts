@@ -13,12 +13,13 @@ import { describe, expect, it } from 'vitest';
 const PAGE = readFileSync(join(process.cwd(), 'src/components/Coach/CoachTeachPage.tsx'), 'utf8');
 
 describe('Learn\'s Takeback lands on the student\'s turn', () => {
-  it('the bar\'s Takeback button takes back through takeBackMine, never a bare undo', () => {
-    const button = PAGE.split('\n').find((l) => l.includes('data-testid="teach-takeback"'));
-    expect(button).toBeDefined();
-    expect(button).toMatch(/onClick=\{\(\) => \{[^}]*takeBackMine\(\)/);
-    expect(button).not.toMatch(/undoMove\(/);
-    expect(button).toMatch(/disabled=\{[^}]*ownTakebackPlies\(/);
+  it('there is no Takeback button: a different move on a looked-back board is the takeback, through takeBackPlies(n, true) (2026-11-24)', () => {
+    expect(PAGE).not.toMatch(/data-testid="teach-takeback"/);
+    const fn = PAGE.slice(PAGE.indexOf('const handleLookBackMove = useCallback('), PAGE.indexOf('const handleLookBackMove = useCallback(') + 900);
+    expect(fn).toContain('lookBackPlay(');
+    expect(fn).toContain('takeBackPlies(play.plies, true)');
+    expect(fn).not.toMatch(/undoMove\(/);
+    expect(PAGE).toMatch(/onMove=\{handleLookBackMove\}/);
   });
 
   it('the typed "take that back" step takes back through takeBackMine', () => {

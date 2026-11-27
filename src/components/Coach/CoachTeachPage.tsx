@@ -26,7 +26,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Chess } from 'chess.js';
 import type { Square } from 'chess.js';
 import { registerCoachHands } from '../../services/coachActuator';
-import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, ChevronLeft, ChevronsLeft, ChevronsRight, X, Check, MessageCircle, Zap, Undo2, RotateCcw, Volume2, Swords } from 'lucide-react';
+import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, ChevronLeft, ChevronsLeft, ChevronsRight, X, Check, MessageCircle, Zap, RotateCcw, Volume2, Swords } from 'lucide-react';
 import { TeachGameOverCard, type TeachGameResult } from './TeachGameOverCard';
 import { boardInPlay, holdBackground, nextBoardGate, replyWait, VERDICT_HOLD_MS } from '../../services/foregroundActivity';
 import { LearnRewardBar } from './LearnRewardBar';
@@ -359,6 +359,7 @@ import { scheduleMarks } from '../../services/markPacing';
 import { markItems } from '../../services/markAnchors';
 import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent, ownTakebackPlies } from '../../services/coachSessionRouter';
+import { lookBackPlay, studentMovesAtView } from '../../services/lookBackMove';
 import { actionForCommand, actuate } from '../../services/coachActuator';
 import { readSpokenSquares } from '../../services/spokenSquares';
 import { isCounterRepertoireQuestion, isCandidateMoveQuestion, isLastGameMistakeQuestion, isBestMoveQuestion, isWhyBestMoveQuestion, isTacticsQuestion, isOpponentMoveQuestion, isNameOpeningQuestion, isTheoryQuestion, isEndgameQuestion, isTeachingMethodQuestion, isPlayerGamesQuestion, isPositionAssessmentQuestion, positionalTopic, looksLikeQuestionNotAnOpeningName, looksLikeConversationalReply, isStopCommand, LETS_PLAY_RE } from '../../coach/questionIntents';
@@ -1870,6 +1871,17 @@ export function CoachTeachPage({ mode }: {
   const reviewing = reviewIndex !== null;
   const canStepBack = game.history.length > 0 && reviewIndex !== -1;
   const canStepForward = reviewing;
+  const reviewFen = reviewing
+    ? (reviewIndex === -1 ? STARTING_FEN : historyFens[reviewIndex] ?? game.fen)
+    : null;
+  /** BACK ONLY LOOKS; A DIFFERENT MOVE THERE IS THE TAKEBACK (David, the board
+   *  bar decisions, 2026-11-24). A looked-back board that is the student's to
+   *  move takes a move on its own game — the live game is untouched until the
+   *  move is played (`handleLookBackMove`). */
+  const lookBackGame = useChessGame(reviewFen ?? STARTING_FEN, playerColor);
+  const { setOrientation: setLookBackOrientation } = lookBackGame;
+  useEffect(() => { setLookBackOrientation(playerColor); }, [playerColor, setLookBackOrientation]);
+  const lookBackMovable = studentMovesAtView(reviewIndex, game.history.length, reviewFen, playerColor);
   const goToPrevMove = useCallback(() => {
     if (game.history.length === 0) return;
     setReviewIndex((prev) => (prev === null ? game.history.length - 2 : Math.max(-1, prev - 1)));
@@ -1887,9 +1899,6 @@ export function CoachTeachPage({ mode }: {
    *  detour, never a state the game can be left stranded in. */
   useEffect(() => { setReviewIndex(null); }, [game.history.length]);
 
-  const reviewFen = reviewing
-    ? (reviewIndex === -1 ? STARTING_FEN : historyFens[reviewIndex] ?? game.fen)
-    : null;
 
   /** A CALCULATED LINE ON THE BOARD (WO-DANYA-01 C, David 2026-09-24: "arrows
    *  draw the lines, button press to walk it"). While an answer that calculated
@@ -3044,6 +3053,22 @@ export function CoachTeachPage({ mode }: {
     return n > 0 ? takeBackPlies(n, true) : { ok: false, reason: 'There is nothing to take back.' };
   }, [takeBackPlies]);
   focusTakeBackRef.current = (count: number) => takeBackPlies(count, false);
+  /** A MOVE PLAYED ON A LOOKED-BACK BOARD: the game's own move there steps
+   *  forward; a different move takes back every ply after that board — the
+   *  student's own takeback, through the same door as every other
+   *  (`takeBackPlies(n, true)`) — and plays it as the student's move. */
+  const handleLookBackMove = useCallback((move: MoveResult): void => {
+    const play = lookBackPlay(reviewIndex, gameRef.current.history, reviewFen, playerColorRef.current, move.san);
+    if (play.kind === 'same') { setReviewIndex(play.nextIndex); return; }
+    if (play.kind !== 'replace') return;
+    if (!takeBackPlies(play.plies, true).ok) return;
+    setReviewIndex(null);
+    setMissionArrow(null);
+    const result = gameRef.current.makeMove(move.from, move.to, move.promotion);
+    if (!result) return;
+    liveFenRef.current = result.fen;
+    handleStudentMoveRef.current?.(result);
+  }, [reviewIndex, reviewFen, takeBackPlies]);
 
   /** SWAP THE COMPUTER'S LAST MOVE for another — ONE path for the typed
    *  correction ("no, play Nc3 instead", David 2026-09-17) and the adventure
@@ -15020,6 +15045,17 @@ export function CoachTeachPage({ mode }: {
                   onStop={thinkingLesson.stop}
                   onChoose={thinkingLesson.choose}
                 />
+              ) : !lineWalkFen && reviewFen && lookBackMovable ? (
+                <ConsistentChessboard
+                  game={lookBackGame}
+                  interactive={!opponentThinking && !generationStatus && !kickoffStatus && mission.view.phase !== 'paused' && !focus.view.paused && !focus.view.probing && !pendingCampaign && !missionBriefing && !pendingBoss}
+                  showFlipButton={false}
+                  showUndoButton={false}
+                  showResetButton={false}
+                  showVoiceMic={false}
+                  showLastMoveHighlight
+                  onMove={handleLookBackMove}
+                />
               ) : (lineWalkFen ?? reviewFen) ? (
                 <>
                 {/* Observable: a calculated line is on the board (audits wait on it). */}
@@ -15328,7 +15364,6 @@ export function CoachTeachPage({ mode }: {
               {drillOnBoard && (
                 <button onClick={() => skipDrillRef.current()} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-sky-500/30 text-sky-400" aria-label="Next position — skip this one; it comes back later" data-testid="teach-drill-next-btn"><ChevronRight size={12} /><span>Next</span></button>
               )}
-              <button onClick={() => { if (takeBackMine().ok) setMissionArrow(null); }} disabled={busy || ownTakebackPlies(game.history.length, game.turn === (playerColor === 'white' ? 'w' : 'b') ? 'coach' : 'user') === 0 || !!focus.view.paused || focus.view.probing} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-amber-500/30 text-amber-400" aria-label="Take back last move" data-testid="teach-takeback"><Undo2 size={12} /><span>Takeback</span></button>
               <button onClick={() => { void handleResetBoard(); }} disabled={busy} className="flex items-center gap-1 px-2 py-1 rounded-md border text-[11px] font-medium whitespace-nowrap disabled:opacity-30 transition-colors border-cyan-500/30 text-cyan-400" aria-label="Restart" data-testid="teach-restart"><RotateCcw size={12} /><span>Restart</span></button>
               <button
                 onClick={() => {

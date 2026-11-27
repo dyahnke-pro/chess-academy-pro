@@ -205,9 +205,8 @@ async function main() {
       rec('D back-then-type: Takeback then "play Bf4" puts the bishop on f4', false,
         'the coach never replied, so there was nothing to take back');
     } else {
-      const tb = page.locator('[data-testid="teach-takeback"]');
-      await tb.waitFor({ state: 'visible', timeout: 15_000 });
-      await tb.click({ timeout: 30_000, force: true });
+      // No Takeback button (2026-11-24): the typed takeback is the way back.
+      await say(page, 'take that back');
       await sleep(1500);
       await say(page, 'play Bf4');
       const dOk = await waitForPiece(page, 'f4', 'wB');
