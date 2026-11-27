@@ -73,7 +73,7 @@ import { buildPositionalRead } from '../../services/positionalRead';
 import { intentRule, intentWithFallback, nullMoveFen } from '../../services/movePurpose';
 import { followUpOf, moveOrder } from '../../services/moveOrder';
 import { cheaperAttackerHit, kingPawnUnderFire, type CheaperHit, mistakeTurnLine, NAMES_NO_MOVE, namesMoves, namedSan, namesFromArrows, namesPlayableStudentMove, studentMovesInLine, type NamesStudentMove } from '../../services/learnBoardTeaching';
-import { habitSaidKey, learnMoveReason, learnReasonDue, learnReplyWait, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, promiseEvent, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, foundMoveTeaching, namedMoveArrows, openingBreakFor, cheaperAttackerLine, learnHangingWarning, learnThreatVoice, recordThreatAnswersAtMove, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, learnStudentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, tacticStakesFor, refutedAlternativeClaims, type TeachingFact, type ThreatProducer } from '../../services/learnBoardTeaching';
+import { habitSaidKey, learnMoveReason, learnReasonDue, learnReplyWait, preventsNamedIdea, preventStakes, STOPPED_THEIR_IDEA, warmOpeningIdentity, warmOpeningStory, notePromise, promiseEvent, payoffFor, noteSlip, announcesTheMove, studentMoveIsPrompted, lineArrowClaims, checkMethodTeaching, zugzwangTeaching, kingCourseTeaching, planChoiceTeaching, foundMoveTeaching, namedMoveArrows, openingBreakFor, cheaperAttackerLine, learnHangingWarning, learnThreatVoice, recordThreatAnswersAtMove, recordPlanAnswer, boardTeacherPoint, theirBoardPoint, theirDeepFactTeaching, bindingTeaching, studentDeepFactPromise, spokenIdeaCounts, slipQuestion, answerDangerQuestion, BLUNDER_CHECK_QUESTION, openingSummaryLine, recordHeld, recordTeachingEvidence, stalemateTeaching, learnStudentMoveTeaching, tempoTeaching, theirMoveTeaching, counterThreatTeaching, playedConceptTeaching, loadProvenConcepts, recordConceptPlayed, tacticStakesFor, refutedAlternativeClaims, type TeachingFact, type ThreatProducer } from '../../services/learnBoardTeaching';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, studentMovePoint, studentMovePointFact, slipAnswerText, gainedBishopPair, BISHOP_PAIR_POINT, BISHOP_PAIR_CLAIMS } from '../../services/playCommentary';
 import { captureRunAfterMove, captureRunOfPgn, NO_PREV_CAPTURE } from '../../services/captureRun';
 
@@ -12427,6 +12427,13 @@ export function CoachTeachPage({ mode }: {
                 if (settledPrice) {
                   studentCpLoss = settledPrice.costCp; studentPriceSettled = settledPrice.settled; studentPriceSearch = settledPrice.search ?? null;
                   turnSlipCp = studentMoveInBook ? null : saidSlipCp(settledPrice, { studentColor: playerColor, fenBefore, playedSan: move.san, bestSan: preStudentRead?.bestMove ? uciMoveToSan(preStudentRead.bestMove, fenBefore) : null, historySans: move.history, rating: activeProfile?.currentRating ?? DEFAULT_STUDENT_RATING });
+                  // THE BOARD'S PLAN, ANSWERED (plans round 3): two weaknesses,
+                  // regroup, passive defence, the king's own blocker — held or
+                  // missed by this move, on its settled price.
+                  if (preStudentRead?.topLines?.length) recordPlanAnswer({
+                    fen: fenBefore, playedSan: move.san, lines: preStudentRead.topLines, cpLoss: settledPrice.costCp,
+                    prompted: announcedPliesRef.current.has(move.history.length), gameId: learnMemRef.current.gameId, studentSeat: playerColorRef.current,
+                  });
                 }
                 if (liveFenRef.current !== fenAfterReply) { noteLateDropped('moved-before-price'); return; }
                 // ONE LATE WAVE, SPOKEN (OS-18): the door decides it and the voice says it

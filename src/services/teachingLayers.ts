@@ -87,6 +87,7 @@ export const TAG_LAYER: Record<MisconceptionTagId, TeachingLayer> = {
   'misplaced-piece': 'principle',
   // — the plan, the structure, the judgement —
   'no-plan': 'plan',
+  'missed-second-weakness': 'plan', 'forced-a-locked-centre': 'plan', 'abandoned-defence': 'plan', 'castling-left-blocked': 'principle',
   'space-conceded': 'plan',
   'created-pawn-weakness': 'plan',
   'overextended-pawn': 'plan',

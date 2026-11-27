@@ -90,6 +90,7 @@ export const METER_OF_TAG: Record<Exclude<MisconceptionTagId, 'other'>, SkillMet
   'calculation-depth': 'calculation',
   'overvalued-attack': 'calculation',
   'no-plan': 'planning',
+  'missed-second-weakness': 'planning', 'forced-a-locked-centre': 'planning', 'abandoned-defence': 'planning', 'castling-left-blocked': 'king-safety',
   'created-pawn-weakness': 'planning',
   'overextended-pawn': 'planning',
   'mistimed-pawn-break': 'planning',

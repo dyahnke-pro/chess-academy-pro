@@ -522,6 +522,41 @@ export const MISCONCEPTION_TAGS = [
     coachCue: 'Use sparingly, only when no more specific tag fits: an aimless move with no concrete idea, target, or piece improvement behind it.',
     drill: { kind: 'principle' },
   },
+  // ── THE PLAN COMPUTER'S PLANS, both ways (plans round 3) ─────────
+  // Each is posed when `planOf` says it as the board's plan, held by the
+  // move that plays it, missed by a costly move that does not.
+  {
+    id: 'missed-second-weakness',
+    label: 'Missed the second weakness',
+    bucket: 'general',
+    blurb: "They had two weak pawns far apart: the plan was to press one and switch to the other.",
+    coachCue: 'The board held two unguardable pawns on distant wings and the move did nothing to tie them down or switch targets.',
+    drill: { kind: 'principle' },
+  },
+  {
+    id: 'forced-a-locked-centre',
+    label: 'Forced a locked position',
+    bucket: 'general',
+    blurb: "The centre was locked with no break ready: the plan was to regroup the pieces first.",
+    coachCue: 'A locked centre with no pawn break: the move pushed or captured instead of improving a piece.',
+    drill: { kind: 'principle' },
+  },
+  {
+    id: 'abandoned-defence',
+    label: 'Lashed out when defence was the plan',
+    bucket: 'general',
+    blurb: "Down material with nothing forcing, the plan was to defend — not to hit out.",
+    coachCue: 'Clearly worse with no forcing line: the move gave a check or took something that loosened the defence.',
+    drill: { kind: 'principle' },
+  },
+  {
+    id: 'castling-left-blocked',
+    label: 'Left castling blocked',
+    bucket: 'general',
+    blurb: "One piece stood between the king and castling, and it stayed there.",
+    coachCue: 'Everything else was developed; the one piece in the king\'s way did not move and the king did not castle.',
+    drill: { kind: 'principle' },
+  },
 
   // ── UNCATEGORIZED ────────────────────────────────────────────────
   // Catch-all holding pen (David 2026-05-21). When a real error exists

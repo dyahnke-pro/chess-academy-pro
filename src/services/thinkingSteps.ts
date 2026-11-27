@@ -192,6 +192,8 @@ export const TAG_STEP: Record<MisconceptionTagId, ThinkingStep | null> = {
   // "no plan" leads through CANDIDATES (not assess) because its habit is "you
   // picked before you compared" — re-keying must not change what the coach says.
   'no-plan': 'candidates',
+  // The plan computer's round-3 rows lead no step, as the picture's positional rows.
+  'missed-second-weakness': null, 'forced-a-locked-centre': null, 'abandoned-defence': null, 'castling-left-blocked': null,
   // — the moment deserved more clock than you gave it (knowing the position) —
   'botched-conversion': 'assess',
   'mistimed-pawn-break': 'assess',

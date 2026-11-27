@@ -77,6 +77,10 @@ export const PRINCIPLE_DEVICES: Readonly<Partial<Record<MisconceptionTagId, stri
   'passive-rook': 'The device: put your rook where it works — the seventh rank or an open file, behind a passed pawn, never sitting passive in front of one.',
   // ── general ──
   'no-plan': 'The device: name the target before you touch a piece — if the move serves no plan you can say in one sentence, it is not your move.',
+  'missed-second-weakness': 'The device: one weakness can be defended — two cannot. Tie their pieces to the first, then switch to the second.',
+  'forced-a-locked-centre': 'The device: in a locked centre, improve your worst piece first — the break comes once every piece is ready for it.',
+  'abandoned-defence': 'The device: when you are worse and nothing is forcing, defend first — guard every piece and trade off the attackers.',
+  'castling-left-blocked': 'The device: get the last piece out of the king\'s way, then castle — a king left in the middle is the target.',
 };
 
 /** The curated device for a tag, or null (unknown tag / the `other` pen). */

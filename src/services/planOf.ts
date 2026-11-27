@@ -35,6 +35,8 @@ import { mastersPlanRead, type MovesAt } from './mastersPlanRead';
 import { mastersBreakPlanWords, structurePlanWords } from './teachingSentence';
 import { stemKeyOf } from '../utils/rotateStem';
 import { detectPlanRace } from './planRace';
+import type { MisconceptionTagId } from '../data/misconceptionTags';
+import type { StructureKind } from './structureOf';
 
 /** How far down a line the mover's key move may come and still count. */
 const KEY_WITHIN_MOVES = 3;
@@ -278,4 +280,43 @@ export function planOf(i: PlanOfIn): PlanOfOut {
   ]);
   const laterPick = st.later.find((l) => !said.some((s) => s.claim === l.claim || s.target === l.target)) ?? null;
   return { mover: said, other: otherCands[0] ?? null, later: laterPick };
+}
+
+/** THE PLAN COMPUTER'S OWN PLANS, BOTH WAYS (plans round 3, capability
+ *  parity): each round-3 plan kind has its own record tag, posed when it is the
+ *  board's said plan for the student. */
+export const PLAN_KIND_TAG: Partial<Record<StructureKind, MisconceptionTagId>> = {
+  'two-weaknesses': 'missed-second-weakness',
+  regroup: 'forced-a-locked-centre',
+  'passive-defence': 'abandoned-defence',
+  'king-blocked': 'castling-left-blocked',
+};
+/** A move that cost this much skipped the plan; under it a move off the plan
+ *  answers a different question (the `planPosed` bar). */
+const PLAN_MISSED_CP = 50;
+const PLAN_KIND_POSED = 65;
+
+/** The move played against the board's round-3 plan: held when it plays the
+ *  plan (by the plan's own test) at no cost, broken when it cost at least half
+ *  a pawn and did not play it. Null when the board's plan for the student is
+ *  not one of these kinds, or the move answers neither way. PURE. */
+export function planKindAnswer(i: { fen: string; lines: readonly AnalysisLine[]; student: Color; playedUci: string; cpLoss: number | null }):
+  { tag: MisconceptionTagId; outcome: 'held' | 'broken'; posedImportance: number } | null {
+  if (i.cpLoss === null || !i.lines.length) return null;
+  let mover: Color;
+  try { mover = new Chess(i.fen).turn(); } catch { return null; }
+  if (mover !== i.student) return null;
+  const top = planOf({ fen: i.fen, lines: i.lines, student: i.student, namesMoves: true }).mover[0];
+  const s = top?.structure;
+  const tag = s ? PLAN_KIND_TAG[s.kind] : undefined;
+  if (!s || !tag) return null;
+  const plays = ((): boolean => {
+    if (s.kind === 'passive-defence') {
+      try { const m = new Chess(i.fen).move({ from: i.playedUci.slice(0, 2), to: i.playedUci.slice(2, 4), promotion: i.playedUci[4] }); return !!m && !m.captured && !/[+#]/.test(m.san); } catch { return false; }
+    }
+    return pieceEvidence(i.fen, [{ rank: 1, evaluation: 0, mate: null, moves: [i.playedUci] }], mover, s) !== null;
+  })();
+  if (plays && i.cpLoss < PLAN_MISSED_CP) return { tag, outcome: 'held', posedImportance: PLAN_KIND_POSED };
+  if (!plays && i.cpLoss >= PLAN_MISSED_CP) return { tag, outcome: 'broken', posedImportance: PLAN_KIND_POSED };
+  return null;
 }

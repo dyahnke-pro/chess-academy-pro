@@ -838,7 +838,7 @@ export async function recordCapabilityEvidence(args: CapabilityMoveArgs & {
  *  question and the student's move answered it either way (OS-4). Learn audit
  *  2026-10-21: the contract said "held only" for every row and failed a
  *  correct broken threat answer. */
-type EvidenceLane = 'teaching' | 'threat-answer' | 'focus';
+type EvidenceLane = 'teaching' | 'threat-answer' | 'focus' | 'plan';
 type LaneEvidenceArgs = {
   lane: EvidenceLane;
   /** REQUIRED — the seat the student played; a row for the other side's move

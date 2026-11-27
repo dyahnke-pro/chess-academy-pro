@@ -29,6 +29,7 @@ import { teachingFact, type TeachingFact } from './teachingFact';
 export type { TeachingFact } from './teachingFact';
 import { recordLaneEvidence } from './capabilityEvidence';
 import type { StudentSeat } from './recordSeat';
+import { planKindAnswer } from './planOf';
 import { recordTermForThreat, seesPlainThreats, threatInputFor, threatVisibility, threatVoice, type RecordTerm, type ThreatPattern, type ThreatProducer, type ThreatVoice, type VisibilityTerm } from './learnRecordTerms';
 import type { HeatState } from './heatMap';
 import { newThreatsAtTurn, recordThreatAnswer } from './threatAnswerEvidence';
@@ -580,6 +581,23 @@ export function recordTeachingEvidence(h: Pick<TeachingFact, 'evidence'>, ctx: {
     posedImportance: h.evidence.posedImportance, origin: 'learn', prompted: ctx.prompted,
     ...(ctx.gameId ? { sourceGameId: ctx.gameId } : {}),
   });
+}
+
+/** THE PLAN, ANSWERED (plans round 3): the board's round-3 plan (two
+ *  weaknesses, regroup, passive defence, the king's own blocker) recorded held
+ *  or broken by the move played, through the lane door with the student's
+ *  seat. Fire-and-forget; a record, never a blocker. */
+export function recordPlanAnswer(ctx: { fen: string; playedSan: string; lines: readonly AnalysisLine[]; cpLoss: number | null; prompted: boolean; gameId: string | null; studentSeat: StudentSeat }): void {
+  try {
+    const m = new Chess(ctx.fen).move(ctx.playedSan);
+    const ans = planKindAnswer({ fen: ctx.fen, lines: ctx.lines, student: ctx.studentSeat === 'white' ? 'w' : 'b', playedUci: `${m.from}${m.to}${m.promotion ?? ''}`, cpLoss: ctx.cpLoss });
+    if (!ans) return;
+    void recordLaneEvidence({
+      lane: 'plan', studentSeat: ctx.studentSeat, tag: ans.tag, outcome: ans.outcome, fen: ctx.fen, playedSan: ctx.playedSan,
+      posedImportance: ans.posedImportance, origin: 'learn', prompted: ctx.prompted,
+      ...(ctx.gameId ? { sourceGameId: ctx.gameId } : {}),
+    });
+  } catch { /* an unreadable move records nothing */ }
 }
 
 /** THE PLAN LEARN READS (2026-10-14). The live walk over the masters file

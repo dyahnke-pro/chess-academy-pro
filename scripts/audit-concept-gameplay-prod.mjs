@@ -893,12 +893,14 @@ async function main() {
     // (2026-10-21: the old "held only, every row" rule failed a correct broken
     // threat answer.)
     const evidence = laneEvidenceRows(listener);
-    const MAY_BREAK = new Set(['threat-answer']);
-    const dishonest = evidence.filter((r) => !['teaching', 'threat-answer'].includes(r.lane)
+    // A PLAN ANSWER (plans round 3) records both halves too: the plan
+    // computer posed the plan, and the move played it or a costly one did not.
+    const MAY_BREAK = new Set(['threat-answer', 'plan']);
+    const dishonest = evidence.filter((r) => !['teaching', 'threat-answer', 'plan'].includes(r.lane)
       || !['held', 'broken'].includes(r.outcome) || (r.outcome === 'broken' && !MAY_BREAK.has(r.lane))
       || typeof r.prompted !== 'boolean' || !Array.isArray(r.tags) || r.tags.length !== 1);
     const byLane = {}; for (const r of evidence) { const k = `${r.lane ?? '?'}:${r.outcome}`; byLane[k] = (byLane[k] ?? 0) + 1; }
-    record('LE1. LANE EVIDENCE rows name their lane; only threat answers record a miss; prompted is answered', dishonest.length === 0,
+    record('LE1. LANE EVIDENCE rows name their lane; only threat and plan answers record a miss; prompted is answered', dishonest.length === 0,
       `${evidence.length} rows ${JSON.stringify(byLane)} (${evidence.filter((r) => r.prompted).length} prompted), ${dishonest.length} malformed${dishonest.length ? ` — ${dishonest.slice(0, 3).map((r) => JSON.stringify(r)).join(' | ')}` : ''}`);
 
     // THE REASON COMPUTER (David 2026-10-17: "wired into the algos"). Every
