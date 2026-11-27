@@ -7469,18 +7469,24 @@ export const BOARD_COMPUTERS = {
       const o = ownThreat(fenBefore, san);
       if (!o || o.side !== student) return null;
       const fenAfter = boardAfter(fenBefore, san) ?? fenBefore;
+      // One computer per claim: a mate or a fork the move threatens is the new
+      // threat's (`detectNewThreat`, said in the move's aspects).
+      if (detectNewThreat(fenBefore, fenAfter, student)?.landing === o.carry.to) return null;
       const target = o.won?.square ?? o.carry.to;
       const key = `own-threat:${o.carry.from}${o.carry.to}`;
       // The carrying move is the student's NEXT move: named only where the surface may.
       const text = ownThreatWords(o, namesMoves, stemKeyOf(key));
       const squares = [...new Set(namesMoves ? [o.carry.from, o.carry.to, target] : [o.carry.from, target])];
-      return fact({ key, claims: [key, `threat:${o.carry.to}`], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares,
+      // The hit on the piece is one claim whoever says it: the move's own
+      // "kicks their knight off f6" and "threatens exf6, winning it" are one
+      // idea (`ideaClaim('tempo', …)`, the say-once ledger keeps one).
+      return fact({ key, claims: [key, `threat:${o.carry.to}`, ideaClaim('tempo', [target])], text, proof: squaresProof(text, squares) ?? NO_PROOF.description, squares,
         stakes: o.mate ? mateStakes('you', 2, false) : { points: o.gain * 100, plies: 2 },
         seat: 'student', namesStudentMove: namesMoves, thread: LOCAL_THREAD, fen: fenAfter,
         ...(namesMoves ? { marks: { play: { from: o.carry.from, to: o.carry.to } } } : {}) });
     }),
     computer: 'ownThreat',
-    kind: 'threat',
+    kind: 'point',
     phase: ANY,
     surfaces: {
       lesson: { wired: 'services/moveThoughtFacts.ts' }, review: { wired: 'services/moveThoughtFacts.ts' }, play: PLAY_READ, chat: CHAT_VIA_THOUGHT, think: THINK,
