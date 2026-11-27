@@ -56,8 +56,15 @@ export function noSafeChecks(fen: string, student: Color): NoSafeChecks | null {
   const you = side === student;
   const theirSans = theirs.safe.map((m) => m.san);
   const n = mine.all.length;
+  // A MATE IS NOT A "SAFE CHECK" (learn-mistakes-only bug 10: "while you
+  // still have Qxg7#" listed a mate in one among checks): said as the mate.
+  const mates = theirs.safe.filter((m) => m.san.includes('#')).map((m) => m.san);
+  const quiet = theirs.safe.filter((m) => !m.san.includes('#')).map((m) => m.san);
+  const mateWords = mates.length ? `mate in one with ${mates.length === 1 ? mates[0] : andList(mates)}` : '';
+  const theirParts = [quiet.length ? `${quiet.length === 1 ? 'a safe check' : 'safe checks'} in ${andList(quiet)}` : '', mateWords].filter(Boolean).join(' and ');
+  const yourParts = [quiet.length ? andList(quiet) : '', mateWords].filter(Boolean).join(' and ');
   const text = you
-    ? `They have ${theirSans.length === 1 ? 'a safe check' : 'safe checks'} in ${andList(theirSans)}, and you are out of useful ones: your ${n === 1 ? 'only check gives' : `${countWord(n)} checks all give`} the checking piece away. Checks will not save you here — look for a quiet move or a deeper idea.`
-    : `${n === 1 ? 'Their only check gives' : n === 2 ? 'Both of their checks give' : `All ${countWord(n)} of their checks give`} the checking piece away, while you still have ${andList(theirSans)}.`;
+    ? `They have ${theirParts}, and you are out of useful checks: your ${n === 1 ? 'only check gives' : `${countWord(n)} checks all give`} the checking piece away. Checks will not save you here — look for a quiet move or a deeper idea.`
+    : `${n === 1 ? 'Their only check gives' : n === 2 ? 'Both of their checks give' : `All ${countWord(n)} of their checks give`} the checking piece away, while you still have ${yourParts}.`;
   return { side, yourChecks: mine.all.map((m) => m.san), theirSafeChecks: theirSans, text, squares: theirs.safe.map((m) => m.to) };
 }

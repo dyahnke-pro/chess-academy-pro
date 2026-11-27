@@ -47,7 +47,11 @@ export function emptyCheckLine(e: EmptyCheck, own: 'your' | 'their', fen: string
   const who = own === 'your' ? 'they' : 'you';
   const Who = openSentence(who);
   const p = NAME[e.piece];
-  const ans = e.kind === 'block' ? `block it with ${e.reply}` : `step aside with ${e.reply}`;
+  // On THEIR check the answer is the student's next move: never named (LEARN
+  // NAMES NO MOVE UNASKED — learn-mistakes-only bug 2), only its kind.
+  const ans = own === 'their'
+    ? (e.kind === 'block' ? 'block it' : 'step your king aside')
+    : e.kind === 'block' ? `block it with ${e.reply}` : `step aside with ${e.reply}`;
   const Own = openSentence(own);
   return rotateStem([
     `${Own} ${p}'s check goes nowhere: ${who} simply ${ans}. Now the ${p} has to move again. A check only helps when it wins something.`,

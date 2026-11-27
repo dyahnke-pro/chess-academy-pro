@@ -2479,7 +2479,7 @@ function* reviewSegmentSteps(
       if (moverColor === playerColor && studentColorWB && typeof m.preMoveEval === 'number' && typeof m.evaluation === 'number') {
         const sign = moverColor === 'white' ? 1 : -1;
         const bothCp = Math.abs(m.preMoveEval) < 5000 && Math.abs(m.evaluation) < 5000;
-        const hints = studentMoveTeaching({ theory: REVIEW_WALK_TEACHES_THEORY, namesStudentMoves: REVIEW_WRITER.namesStudentMoves,
+        const hints = studentMoveTeaching({ theory: REVIEW_WALK_TEACHES_THEORY, namesStudentMoves: REVIEW_WRITER.namesStudentMoves, unpricedCredit: REVIEW_WRITER.unpricedCredit,
           fenBefore: fenPair.fenBefore,
           san: m.san,
           history: sansForRun.slice(0, m.ply),
@@ -2765,9 +2765,9 @@ function* reviewSegmentSteps(
           sources: new Set<string>(skipJob ? ['moveJob'] : []),
           sourceIdeas: [{ source: 'briefing', ideas: REVIEW_OWNS_IDEA }],
         } };
-        const thoughtFacts = moveThoughtFacts({ namesPlayedMove: REVIEW_WRITER.namesPlayedMove, theory: REVIEW_WALK_TEACHES_THEORY, story: REVIEW_WRITER.story, moveReads: REVIEW_WRITER.moveReads, tense: REVIEW_WRITER.tense,
+        const thoughtFacts = moveThoughtFacts({ namesPlayedMove: REVIEW_WRITER.namesPlayedMove, theory: REVIEW_WALK_TEACHES_THEORY, story: REVIEW_WRITER.story, moveReads: REVIEW_WRITER.moveReads, register: REVIEW_WRITER.register, unpricedCredit: REVIEW_WRITER.unpricedCredit, tense: REVIEW_WRITER.tense,
           plainThreatsSeen: plainThreatsSeenFor(REVIEW_WRITER, seesPlainThreats(reviewRecord.plainThreats)),
-          fenBefore: fenPair.fenBefore, san: m.san, moverIsStudent: mine, prev: prevCap,
+          fenBefore: fenPair.fenBefore, san: m.san, moverIsStudent: mine, prev: prevCap, soundPlies,
           line: moves.slice(i + 1, i + 1 + BRIEFING_LINE_PLIES).map((x) => x.san),
           theirLast: i > 0 ? { fenBefore: fenChain[i - 1].fenBefore, san: moves[i - 1].san } : null,
           history: moves.slice(0, i).map((x) => x.san),
@@ -3926,7 +3926,7 @@ function* reviewSegmentSteps(
       // Never the why of a sac the grade says failed (review walk 2026-10-01, ply 38).
       const sacFailed = m.classification === 'mistake' || m.classification === 'blunder' || m.classification === 'miss';
       const kingShield = isStudentSac && !mechanismFact && !sacFailed
-        ? readBoard('sacShield', { fenBefore: fenPair.fenBefore, san: m.san })
+        ? readBoard('sacShield', { fenBefore: fenPair.fenBefore, san: m.san, student: playerColor === 'white' ? 'w' : 'b' })
         : null;
       if (piece === 'queen') {
         // The peak. A queen sacrifice the engine rates top is the point of the

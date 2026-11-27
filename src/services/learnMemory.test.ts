@@ -337,3 +337,17 @@ describe('the mate run is said once (Learn prod audit 2026-11-14)', () => {
     expect(mateRunContinues('', 'mate:3')).toBe(false);
   });
 });
+
+// learn-mistakes-only bug 1: the game's graded sound plies live with the game.
+describe('soundPlies — the habit computer\'s evidence rule', () => {
+  it('is cleared by a new game and trimmed by a takeback', () => {
+    let plies = 0;
+    const mem = createLearnMemory({ livePlies: () => plies });
+    mem.soundPlies.add(3); mem.soundPlies.add(5); mem.soundPlies.add(7);
+    mem.rewind(5);
+    expect([...mem.soundPlies].sort()).toEqual([3, 5]);
+    plies = 0;
+    mem.newGame();
+    expect(mem.soundPlies.size).toBe(0);
+  });
+});

@@ -189,6 +189,16 @@ export function resolveSettingsCommand(text: string): ResolvedCommand | null {
     }
   }
 
+  // ── Coins, star bursts and celebrations (David 2026-11-24) ────────────
+  if (/\b(coins?|stars?|star\s*bursts?|bursts?|fireworks|confetti|celebrations?|sparkles?|rewards?|jackpot|animations?)\b/.test(t) && (onWord || offWord)) {
+    const on = onWord && !offWord;
+    return {
+      key: 'rewardEffectsOn',
+      confirmation: on ? 'Coins and celebrations are on again.' : 'Coins and celebrations are off. Your progress still counts.',
+      prefsPatch: { rewardEffectsOn: on },
+    };
+  }
+
   // ── Hints ─────────────────────────────────────────────────────────────
   if (/\bhints?\b/.test(t) && (onWord || offWord)) {
     const on = onWord && !offWord;

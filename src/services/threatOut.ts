@@ -14,7 +14,7 @@
 // best line) is deliberately NOT here: it costs a search and is gated behind
 // criticality at the call site per the cost architecture.
 import { Chess, type Square } from 'chess.js';
-import { findHangingBySee } from './positionReadingService';
+import { findHangingBySee, signedLegalSeeFor } from './positionReadingService';
 import { liteMoves, makeLite, undoLite } from './liteMoves';
 import { CAPTURE_VALUE } from './pieceValues';
 import { withMover } from '../utils/sideToMove';
@@ -119,10 +119,42 @@ function boardFact(probeFen: string, square: Square, subject: 'w' | 'b'): { atta
   } catch { return { attacker: null, attackerSquare: null, defenders: 0 }; }
 }
 
-export function computeMustDefend(fen: string, subjectColor: 'w' | 'b'): MustDefend {
+/** The move that reached a board, where the caller holds it: the mid-trade
+ *  guard reads it. */
+export interface JustMoved { fenBefore: string; san: string }
+
+/** A TRADE IN PROGRESS IS NOT A HANGING PIECE (learn-mistakes-only bug 4: Bxf6
+ *  "hangs to the g7 pawn", Bxf8 "hangs" with …Rxf8 the recapture). The piece
+ *  that just captured something worth at least itself, with the other side to
+ *  move and able to take it back without losing material: the trade completes
+ *  there, nothing is lost. The same test `detectNewThreat` applies to a threat
+ *  made from the middle of a trade. A piece that took LESS than itself (a
+ *  knight taking a pawn) can still be lost. */
+export function midTradeSquare(fen: string, subjectColor: 'w' | 'b', justMoved: JustMoved | null | undefined): string | null {
+  if (!justMoved) return null;
+  try {
+    const before = new Chess(justMoved.fenBefore);
+    const m = before.move(justMoved.san);
+    if (!m || m.color !== subjectColor || !m.captured) return null;
+    if (before.fen().split(' ').slice(0, 2).join(' ') !== fen.split(' ').slice(0, 2).join(' ')) return null;
+    const took = VALUE[m.captured] ?? 0;
+    const own = VALUE[m.promotion ?? m.piece] ?? 99;
+    if (took < own) return null;
+    const foe: 'w' | 'b' = subjectColor === 'w' ? 'b' : 'w';
+    if (before.turn() !== foe) return null;
+    if (!before.moves({ verbose: true }).some((x) => x.to === m.to && !!x.captured)) return null;
+    return signedLegalSeeFor(fen, m.to as Square, foe) >= 0 ? m.to : null;
+  } catch { return null; }
+}
+
+export function computeMustDefend(fen: string, subjectColor: 'w' | 'b',
+  /** The move that reached `fen`, where the caller holds it: the piece in the
+   *  middle of a trade it started is not reported (`midTradeSquare`). */
+  justMoved?: JustMoved | null): MustDefend {
   const read = mustDefendRead(fen, subjectColor);
   if (!read) return { net: 0, pieces: [] };
-  const pieces = read.pieces.map((h) => ({ ...h, ...boardFact(read.probeFen, h.square, subjectColor) }));
+  const trade = midTradeSquare(fen, subjectColor, justMoved);
+  const pieces = read.pieces.filter((h) => h.square !== trade).map((h) => ({ ...h, ...boardFact(read.probeFen, h.square, subjectColor) }));
   return { net: pieces[0]?.value ?? 0, pieces };
 }
 

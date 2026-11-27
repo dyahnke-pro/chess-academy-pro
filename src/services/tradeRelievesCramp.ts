@@ -88,6 +88,15 @@ export function tradeRelievesCramp(fen: string, lines: readonly EngineLine[], st
       const v = (t: string): number => (t === 'b' ? MATERIAL_VALUE.n : MATERIAL_VALUE[t]);
       if (v(m.piece) !== v(m.captured)) continue;
       if (!byPawns && !intruders.includes(m.to)) continue;
+      // THE BOARD SAID, NOT THE LINE'S (learn-mistakes-only bug 5: "Bxf3 would
+      // take off your knight on f3" with the QUEEN on f3 now; the knight
+      // reaches f3 later in the line). The sentence names the target and the
+      // trading piece as they stand NOW, so both must stand there now.
+      const now = new Chess(fen);
+      const target = now.get(m.to as Square);
+      const trader = now.get(m.from as Square);
+      if (!target || target.type !== m.captured || target.color === cramped) continue;
+      if (!trader || trader.type !== m.piece || trader.color !== cramped) continue;
       const you = cramped === student;
       const key = stemKeyOf(`${fen}|cramp-trade`);
       const theirPiece = `${you ? 'their' : 'your'} ${PIECE_NAME[m.captured]} on ${m.to}`;

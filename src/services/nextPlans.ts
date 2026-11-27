@@ -1115,18 +1115,39 @@ export function namedPawnStructure(
   }
   const iso = isolaniStructure(fen, studentColor);
   if (iso) return { name: iso.name, plan: iso.plan };
-  // HANGING PAWNS — c- and d-pawns abreast on the 4th/5th with no b/e neighbours.
-  if (w('c4') && w('d4') && fileCount(wp, 'b') === 0 && fileCount(wp, 'e') === 0) {
+  // HANGING PAWNS — the one reader (`hangingPawns`), both seats.
+  const hang = hangingPawns(fen);
+  if (hang.includes('w')) {
     return studentColor === 'w'
       ? { name: 'You have the hanging pawns', plan: 'they grip the centre and can lunge with d5 or c5 — but if they’re fixed and blockaded they turn into two weaknesses' }
       : { name: 'They have the hanging pawns', plan: 'they grip the centre and threaten a d5 or c5 lunge — provoke and blockade them to make them targets' };
   }
-  if (b('c5') && b('d5') && fileCount(bp, 'b') === 0 && fileCount(bp, 'e') === 0) {
+  if (hang.includes('b')) {
     return studentColor === 'w'
       ? { name: 'They have the hanging pawns', plan: 'they grip the centre and threaten a …d4 or …c4 lunge — provoke and blockade them to make them targets' }
       : { name: 'You have the hanging pawns', plan: 'they grip the centre and can lunge with …d4 or …c4 — but if they’re fixed and blockaded they turn into two weaknesses' };
   }
   return null;
+}
+
+/** HANGING PAWNS — THE ONE DEFINITION, BOTH SEATS: the c- and d-pawns abreast
+ *  on the side's 4th rank (c4+d4 for White, c5+d5 for Black) with no pawn of
+ *  theirs on the b- or e-file beside them. The sides that have them, White
+ *  first. Read by the named structure and by the cause readers
+ *  (`causeReaders`). */
+export function hangingPawns(fen: string): Color[] {
+  let c: Chess;
+  try { c = new Chess(fen); } catch { return []; }
+  const pawns = { w: new Set<string>(), b: new Set<string>() };
+  for (const row of c.board()) for (const cell of row) if (cell && cell.type === 'p') pawns[cell.color].add(cell.square);
+  const onFile = (set: Set<string>, file: string): boolean => [...set].some((sq) => sq[0] === file);
+  const out: Color[] = [];
+  for (const side of ['w', 'b'] as const) {
+    const r = side === 'w' ? '4' : '5';
+    const set = pawns[side];
+    if (set.has(`c${r}`) && set.has(`d${r}`) && !onFile(set, 'b') && !onFile(set, 'e')) out.push(side);
+  }
+  return out;
 }
 
 /** THE ISOLATED QUEEN'S PAWN — the one definition (a lone d-pawn on d4/d5 with

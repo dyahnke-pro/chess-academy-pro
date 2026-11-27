@@ -40,7 +40,9 @@ describe('boardEdgeWords — the one board namer', () => {
     expect(boardEdgeWords('r3k3/8/8/8/8/8/8/3QK3 w - - 0 1', 'w', 4)).toBe('material: a queen for a rook');
     expect(boardEdgeWords('4k3/8/8/8/8/8/PPP5/4K3 w - - 0 1', 'w', 3)).toBe('three pawns');
     // A settled lead the board does not show yet is said by count.
-    expect(boardEdgeWords('4k3/8/8/8/8/8/8/4K3 w - - 0 1', 'w', 3)).toBe('3 points');
+    // learn-mistakes-only bug 6: no point count spoken — "material".
+    expect(boardEdgeWords('4k3/8/8/8/8/8/8/4K3 w - - 0 1', 'w', 3)).toBe('material');
+    expect(boardEdgeWords('4k3/8/8/8/8/8/8/4K3 w - - 0 1', 'w', 5)).not.toMatch(/points/);
     expect(boardEdgeWords('4k3/8/8/3n4/8/8/8/4K3 w - - 0 1', 'b', 3)).toBe('a piece');
   });
 });

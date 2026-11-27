@@ -5,7 +5,9 @@ import { Chess } from 'chess.js';
 import { readBoard, readBoardAll, positionReadKind, minorityLever } from './boardComputers';
 import { detectKingExposure, kingExposureClause } from './kingSafety';
 import { findMinorityAttack } from './positionReadingService';
-import { NO_SOUND_PLIES } from './thinkAloud';
+
+/** Every ply graded, none called sound. */
+const NO_SOUND_PLIES: ReadonlySet<number> = new Set<number>();
 
 const EXPOSED = '5rk1/8/8/8/7q/8/7P/5RK1 w - - 0 1';
 

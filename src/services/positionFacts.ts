@@ -273,6 +273,10 @@ export interface PositionFactsInput {
    *
    *  OPTIONAL + inert: omitted → identical behaviour to before. */
   studentNeedContext?: StudentNeedContext | null;
+  /** The plies (1-based, of `history`) the grader called sound, where the
+   *  surface holds the game's grades (Learn's prices). Absent: ungraded, so no
+   *  move is a loose-piece habit's evidence (a sound sacrifice looks loose). */
+  soundPlies?: ReadonlySet<number> | null;
 }
 
 export interface PositionFactsResult {
@@ -635,7 +639,9 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
   const said = asked ? undefined : input.alreadySaid;
 
   // Cheap facts (no search): what the STUDENT must defend + the sharpness score.
-  const mustDefend = computeMustDefend(fen, studentColor);
+  // The student's move that reached this board, where it did: a piece in the
+  // middle of the trade it started is not "hanging" (`midTradeSquare`).
+  const mustDefend = computeMustDefend(fen, studentColor, input.lastMove ? { fenBefore: input.lastMove.fenBefore, san: input.lastMove.san } : null);
   const criticality = computeCriticality(
     criticalitySignalsFromAnalysis(analysis, { looseMaterial: input.looseNow ?? 0, threatNet: mustDefend.net }),
   );
@@ -1268,6 +1274,7 @@ export async function computePositionFacts(input: PositionFactsInput): Promise<P
     fen,
     theory: input.theory,
     history: input.history ?? [],
+    sound: input.soundPlies ?? null,
     topLines: input.analysis?.topLines ?? [],
     studentColor: studentSeat === 'white' ? 'w' : 'b',
     // "Why?" names the move anyway; elsewhere a held move stays held.

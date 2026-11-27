@@ -74,6 +74,16 @@ export function detectPieceItineraries(
       continue;
     }
 
+    // A CAPTURE ENDS THE JOURNEY (learn-mistakes-only bug 8): the piece went
+    // there to take, so no route passes through the capture square — any
+    // journey from here starts on it ("by way of e6" said of a bishop that
+    // took on e6 was a trade, not a reroute).
+    if (mv.captured) {
+      bySquare.delete(mv.from);
+      bySquare.set(mv.to, { pieceType: mv.piece, color: mv.color, squares: [mv.to] });
+      continue;
+    }
+
     // Continue an existing route if this piece stepped off its last square.
     const prior = bySquare.get(mv.from);
     let route: ActiveRoute;
@@ -105,7 +115,7 @@ export function detectPieceItineraries(
         ply,
         pieceType: route.pieceType,
         route: route.squares.slice(),
-        text: `Follow the ${label}'s journey: by way of ${via}, it reaches ${mv.to}. It reroutes instead of settling for its first square, and that patience is the whole idea.`,
+        text: `Follow the ${label}'s journey: by way of ${via}, it reaches ${mv.to}.`,
       });
     }
   }

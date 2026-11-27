@@ -23,3 +23,18 @@ describe('noSafeChecks', () => {
     expect(noSafeChecks('4k3/8/8/8/8/8/4r3/4K3 w - - 0 1', 'w')).toBeNull();
   });
 });
+
+// learn-mistakes-only bug 10: a mate in one is said as the mate, never listed
+// as "a safe check".
+describe('noSafeChecks — their mate is not a "safe check"', () => {
+  it('back-rank Ra1# is named as mate in one', () => {
+    // White to move: Ne7+ (…Bxe7) and Nf6+ (…gxf6) both lose the knight, and
+    // Black threatens …Ra1#.
+    const fen = 'r2b2k1/5ppp/8/3N4/8/8/5PPP/6K1 w - - 0 1';
+    const mine = noSafeChecks(fen, 'w');
+    expect(mine?.text).toMatch(/mate in one with Ra1#/);
+    expect(mine?.text).not.toMatch(/safe checks? in [^,]*Ra1#/);
+    const theirs = noSafeChecks(fen, 'b');
+    expect(theirs?.text).toMatch(/while you still have mate in one with Ra1#/);
+  });
+});

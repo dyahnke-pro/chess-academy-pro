@@ -194,3 +194,17 @@ describe('a pinned knight has no route (hand walk 2340, move 7)', () => {
     expect(f?.from).not.toBe('c3');
   });
 });
+
+// learn-mistakes-only bug 10: "their both rooks" — the owner goes where
+// English puts it.
+describe('latentForkClause — the owner of a pair', () => {
+  it('"both their rooks", "their queen and both rooks", never "their both"', () => {
+    const base = { square: 'c7', from: 'a6', moves: 2, via: 'b5' } as const;
+    const two = { ...base, forker: 'white' as const, targets: [{ square: 'a8', piece: 'r' }, { square: 'e8', piece: 'r' }] };
+    expect(latentForkClause(two, 'white')).toMatch(/hit both their rooks/);
+    expect(latentForkClause(two, 'black')).toMatch(/forks both your rooks/);
+    const mix = { ...base, forker: 'white' as const, targets: [{ square: 'e8', piece: 'q' }, { square: 'a8', piece: 'r' }, { square: 'h8', piece: 'r' }] };
+    expect(latentForkClause(mix, 'white')).toMatch(/hit their queen and both rooks/);
+    for (const f of [two, mix]) for (const s of ['white', 'black'] as const) expect(latentForkClause(f, s)).not.toMatch(/(their|your) both/);
+  });
+});

@@ -105,10 +105,14 @@ export function learnThoughtTurn(args: {
    *  is said as the change), and each is OFFERED on `fenNow` as its thread
    *  stated, written only when the door keeps its line (`commitKept`). */
   story: StoryStore;
+  /** REQUIRED: the game's graded sound plies (`LearnMemory.soundPlies`) — a
+   *  sound sacrifice is never a loose-piece habit's evidence. */
+  soundPlies: ReadonlySet<number> | null;
 }): Array<LearnFactParts & { gradeFen: string }> {
   const read = (m: LearnTurnMove, moverIsStudent: boolean): ThoughtFact[] => moveThoughtFacts({
-    fenBefore: m.fenBefore, san: m.san, moverIsStudent, namesPlayedMove: namesPlayedMoveFor(LEARN_WRITER, moverIsStudent), plainThreatsSeen: plainThreatsSeenFor(LEARN_WRITER, false), tense: LEARN_WRITER.tense, theory: LEARN_WRITER.theory, story: LEARN_WRITER.story, moveReads: LEARN_WRITER.moveReads,
+    fenBefore: m.fenBefore, san: m.san, moverIsStudent, namesPlayedMove: namesPlayedMoveFor(LEARN_WRITER, moverIsStudent), plainThreatsSeen: plainThreatsSeenFor(LEARN_WRITER, false), tense: LEARN_WRITER.tense, theory: LEARN_WRITER.theory, story: LEARN_WRITER.story, moveReads: LEARN_WRITER.moveReads, register: LEARN_WRITER.register, unpricedCredit: LEARN_WRITER.unpricedCredit,
     prev: m.prev, line: null, history: [...m.history], theirLast: m.theirLast, phrases: null, reads: m.reads, costCp: m.costCp,
+    soundPlies: args.soundPlies,
   });
   const facts = tellPictureFacts([...read(args.studentMove, true), ...(args.reply ? read(args.reply, false) : [])], args.story.current(), args.student);
   for (const f of facts) if (f.conclusion && f.text.trim()) args.story.offer(args.fenNow, { text: f.text, thread: conclusionLine(f.conclusion) });

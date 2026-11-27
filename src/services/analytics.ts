@@ -81,6 +81,9 @@ export function posthogHostFor(auditPage: boolean, envHost: string | undefined):
  */
 const AUDIT_EVENT_MAP: Partial<Record<AuditKind, string>> = {
   'app-boot': 'app_opened',
+  // Every mistake turn Learn speaks or holds (WO-LEARN-MISTAKES-ONLY): rank the
+  // silent ones by cause / tag / phase to say which computer to build next.
+  'mistake-lesson': 'mistake_lesson',
   // How the door READ each student question (kind, what it pointed at, valid
   // or asked back) — without it a misread and a missing answer look the same
   // from the answer text alone (2026-10-08).
@@ -332,6 +335,16 @@ export function buildEventProps(entry: AuditEntry): Record<string, unknown> {
   // to an invalid address in practice (emails are far under 200 chars).
   if (entry.feedbackEmail) props.feedback_email = entry.feedbackEmail.slice(0, 200);
   if (typeof entry.feedbackRating === 'number') props.feedback_rating = entry.feedbackRating;
+  // A mistake-lesson row carries its props as JSON in `context` (seat, cost,
+  // phase, surface, cause, motif, tag, spoken, silent_why, slots_filled):
+  // spread whole, never the 200-char slice, so each one is a PostHog column.
+  if (entry.kind === 'mistake-lesson' && entry.context) {
+    try {
+      const row = JSON.parse(entry.context) as Record<string, unknown>;
+      delete props.context;
+      for (const [k, v] of Object.entries(row)) props[k] = v;
+    } catch { /* a malformed row keeps its context slice */ }
+  }
   return props;
 }
 

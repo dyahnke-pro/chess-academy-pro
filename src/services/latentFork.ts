@@ -259,13 +259,24 @@ export function latentForkClause(fork: LatentFork, studentSide: 'white' | 'black
   // (David 2026-11-05: "naming a bunch of squares … sounds too robotic").
   const byPiece = new Map<string, number>();
   for (const t of fork.targets) byPiece.set(t.piece, (byPiece.get(t.piece) ?? 0) + 1);
-  const names = [...byPiece.entries()].map(([p, n]) => (n === 1 ? PIECE_WORD[p] : `${n === 2 ? 'both' : 'all three'} ${PIECE_WORD[p]}s`));
-  const list = names.length === 1 ? names[0] : `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
+  // The owner goes where English puts it: "their queen and both rooks", "both
+  // their rooks", "all three of your knights" — never "their both rooks"
+  // (learn-mistakes-only bug 10).
+  const groups = [...byPiece.entries()];
+  const owned = (own: 'their' | 'your'): string => {
+    const names = groups.map(([p, n], k) => {
+      const w = PIECE_WORD[p];
+      if (n === 1) return k === 0 ? `${own} ${w}` : w;
+      const head = n === 2 ? 'both' : 'all three';
+      return k === 0 ? (n === 2 ? `${head} ${own} ${w}s` : `${head} of ${own} ${w}s`) : `${head} ${w}s`;
+    });
+    return names.length === 1 ? names[0] : `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
+  };
   return fork.forker === studentSide
     // THE ROUTE IS WITHHELD (OS-10, David's record 2026-10-19, move 27: "your
     // knight has a fork waiting on c7 — via b5, then c7" named his next move).
     // LEARN NAMES NO MOVE UNASKED replaced the 2026-09-24 "Learn names the
     // move": the square and the targets are said, the way there is his to find.
-    ? `Your knight has a fork waiting on ${fork.square} — it would hit their ${list}. Find the way there.`
-    : `Watch ${fork.square} — a knight lands there in ${fork.moves} and forks your ${list}, so take the square away before it arrives.`;
+    ? `Your knight has a fork waiting on ${fork.square} — it would hit ${owned('their')}. Find the way there.`
+    : `Watch ${fork.square} — a knight lands there in ${fork.moves} and forks ${owned('your')}, so take the square away before it arrives.`;
 }

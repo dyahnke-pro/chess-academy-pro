@@ -291,9 +291,16 @@ describe("Learn's student-move lanes reach the lesson (WO-STORY-MATRIX-01 P1-9c)
     for (const s of sans) { fens.push(c.fen()); c.move(s); }
     const text = lessonThought({ namesPlayedMove: true, story: false, theory: true,
       fenBefore: fens[7], san: 'exd5', prev: captureContextsAlong(fens[0], sans)[7], moverIsStudent: true,
-      line: ['Bg5', 'Be7'], history: sans.slice(0, 7), theirLast: { fenBefore: fens[6], san: 'cxd5' }, reads: null, costCp: null,
+      line: ['Bg5', 'Be7'], history: sans.slice(0, 7), theirLast: { fenBefore: fens[6], san: 'cxd5' }, reads: null, costCp: 0,
     }, newLessonVoice(), null);
     expect(text).toMatch(/Qxd5 would just lose the queen to Nxd5/);
+    // A lesson's move is a taught book line: credited unpriced, as before
+    // (the one praise rule's `taught-line`).
+    const unpriced = lessonThought({ namesPlayedMove: true, story: false, theory: true,
+      fenBefore: fens[7], san: 'exd5', prev: captureContextsAlong(fens[0], sans)[7], moverIsStudent: true,
+      line: ['Bg5', 'Be7'], history: sans.slice(0, 7), theirLast: { fenBefore: fens[6], san: 'cxd5' }, reads: null, costCp: null,
+    }, newLessonVoice(), null);
+    expect(unpriced).toMatch(/Qxd5 would just lose the queen to Nxd5/);
   });
 });
 

@@ -95,6 +95,17 @@ describe('bishopOffPlan — their bishop against their own setup', () => {
   });
 });
 
+// learn-mistakes-only bug 5: a recapture is a trade, never "looked free".
+describe('wronglyExpected — their recapture in a queen trade is no grab', () => {
+  it('g chesscom-1002984876 ply 12 …Kxd8 is silent, with or without the student\'s Qxd8+ in hand', () => {
+    const prevFen = after(['e4', 'e5', 'Nf3', 'd6', 'd4', 'Bg4', 'Be2', 'Nf6', 'dxe5', 'dxe5']);
+    const fen = 'rn1Qkb1r/ppp2ppp/5n2/4p3/4P1b1/5N2/PPP1BPPP/RNB1K2R b KQkq - 0 6';
+    const lines = [line(['f3e5', 'g4e6', 'f2f3', 'f6d7', 'e5d3', 'b8c6'], 209)];
+    expect(wronglyExpected(fen, 'Kxd8', 'w', lines, { fenBefore: prevFen, san: 'Qxd8+' })).toBeNull();
+    expect(wronglyExpected(fen, 'Kxd8', 'w', lines)).toBeNull();
+  });
+});
+
 describe('wronglyExpected — the grab that was not free', () => {
   const FEN = '6k1/pp3ppp/1q6/8/8/2N5/PP3PPP/3R2K1 b - - 0 1';
   it('their queen takes b2; the engine says the rook to b1 hits back', () => {

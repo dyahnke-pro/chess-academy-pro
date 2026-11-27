@@ -37,6 +37,7 @@ import { detectLatentFork } from './latentFork';
 import { gambitFile } from './inaccuracyCall';
 import { proofCut } from './exchangeLedger';
 import { Chess, type Square, type Color, type Move } from 'chess.js';
+import { renderWalkedIntoFork } from './teachingSentence';
 
 interface WhyItFailed {
   /** One sentence, past tense — the move has already been played. */
@@ -53,14 +54,18 @@ interface WhyItFailed {
    *  (walk 900, 17…Bg1 — "the rook on f1 just takes it" after they played
    *  Nxg4). The caller that knows the reply chooses. */
   missed?: string;
-  kind:
-    | 'held-by-defender'    // the capture loses the exchange after recaptures
-    | 'answered-by-tactic'  // an in-between check hits the attacker
-    | 'lost-the-piece'      // the moved piece itself is taken for too little
-    | 'abandoned-defender'  // moving it undefended one of your own pieces
-    | 'abandoned-square'    // moving it left a square their knight forks from
-    | 'walks-into-fork';    // the move let a reply hit two of your pieces
+  kind: WhyItFailedKind;
 }
+
+/** The mechanism by which a move failed — one `MistakeCause` each
+ *  (`mistakeCause.FAILED_KIND`). */
+export type WhyItFailedKind =
+  | 'held-by-defender'    // the capture loses the exchange after recaptures
+  | 'answered-by-tactic'  // an in-between check hits the attacker
+  | 'lost-the-piece'      // the moved piece itself is taken for too little
+  | 'abandoned-defender'  // moving it undefended one of your own pieces
+  | 'abandoned-square'    // moving it left a square their knight forks from
+  | 'walks-into-fork';    // the move let a reply hit two of your pieces
 
 const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 const NAME: Record<string, string> = {
@@ -377,6 +382,56 @@ export function whyItFailed(args: {
           line: `Your ${NAME[mv.piece]} was guarding ${fork.square} — once it left, ${them === 'b' ? '…' : ''}${now.san} puts their knight two moves from ${fork.square}, where it forks ${list}.`,
         };
       }
+    }
+  }
+
+  // ── WALKED INTO A FORK (their first reply hits two of yours) ─────────────
+  //
+  // Declared since the kind list was written and never returned (teaching
+  // cards C/D, 2026-11-23). Their engine reply lands on a square from which it
+  // attacks two or more of the mover's pieces (the king counts; a target worth
+  // less than the forker counts only when nothing guards it), the line then
+  // takes one of them and the student comes out down, and the same reply on
+  // the board before the move forks fewer. All three halves are read, none
+  // guessed: no line, no fork.
+  const forkReply = lineMoves[0];
+  if (forkReply && studentDown > 0) {
+    const forked = (board: Chess, from: Square): Square[] => {
+      const forker = board.get(from);
+      if (!forker) return [];
+      const fv = VALUE[forker.type] ?? 0;
+      const hits = attackedFrom(board, from, them).filter((sq) => {
+        const p = board.get(sq);
+        if (!p || p.color !== me) return false;
+        return (VALUE[p.type] ?? 0) > fv || board.attackers(sq, me).length === 0;
+      });
+      // `attackedFrom` skips kings: a fork with check counts the king.
+      const king = board.inCheck() ? board.findPiece({ type: 'k', color: me })[0] : undefined;
+      return king && board.attackers(king, them).includes(from) ? [king, ...hits] : hits;
+    };
+    let nowHit: Square[] = [];
+    let homeHit: Square[] = [];
+    try {
+      const c = new Chess(after.fen());
+      c.move({ from: forkReply.from, to: forkReply.to, promotion: forkReply.promotion });
+      nowHit = forked(c, forkReply.to as Square);
+    } catch { nowHit = []; }
+    try {
+      const h = new Chess(sideToMoveAs(before.fen(), them) ?? before.fen());
+      h.move({ from: forkReply.from, to: forkReply.to, promotion: forkReply.promotion });
+      homeHit = forked(h, forkReply.to as Square);
+    } catch { homeHit = []; }
+    const wins = nowHit.some((sq) => lineTakes(sq));
+    if (nowHit.length >= 2 && homeHit.length < nowHit.length && wins) {
+      const forkerType = forkReply.piece;
+      const hit = nowHit.map((sq) => `your ${NAME[after.get(sq)?.type ?? 'p']} on ${sq}`);
+      const taken = nowHit.find((sq) => lineTakes(sq)) ?? null;
+      return {
+        kind: 'walks-into-fork',
+        squares: [forkReply.to, ...nowHit],
+        lost: taken,
+        line: renderWalkedIntoFork({ forker: NAME[forkerType], square: forkReply.to, targets: hit }),
+      };
     }
   }
 

@@ -12,6 +12,7 @@ import { finishesTrade } from './criticalMoment';
 import { captureRunOfMoves } from './captureRun';
 import { kingAttack } from './kingAttack';
 import { boardStructure, theirMoveStructure } from './structureReads';
+const moverOf = (fen: string): 'w' | 'b' => (fen.split(' ')[1] === 'b' ? 'b' : 'w');
 
 const GAME = 'e4 c5 Ne2 Nc6 Nbc3 e5 Ng3 Nf6 Bc4 d6 h3 Be7 Bb5 O-O O-O Nd4 Bc4 Be6 d3 Nd7 Nd5 Bh4 Bb3 Nxb3 axb3 Bxg3 fxg3 Nb8 Qh5 a5 Ne3 b6 Qh4 Nc6 Ra3 Qxh4 gxh4 Rfd8 h5 Nd4 Rf2 Ra7 Rxa5 Rxa5 Bd2 Ra7 h6 gxh6 Nf1 Kg7 Ng3 Rg8 Nh5+ Kf8 Nf6 Rg6 h4 Kg7 Ne8+ Kf8 Nxd6 Nxc2 h5 Rg8 Ne8 Kxe8'.split(' ');
 /** The board after `ply` half-moves of the game. */
@@ -64,8 +65,8 @@ describe('Learn board truth — the real game', () => {
       ['f7f6', 'f1f2', 'b8c6', 'g3g4', 'c6d4', 'c1d2', 'd6d5', 'e4d5', 'e6d5', 'e3d5'],
       ['b7b5', 'c1d2', 'b8c6', 'g3g4', 'f7f6', 'f1f2', 'c6d4', 'a1f1', 'b5b4', 'h5h4'],
     ];
-    expect(kingAttack(at(30), 'Ne3', true, true, lines)?.kind).not.toBe('heads-for-king');
-    expect(kingAttack(at(30), 'Ne3', false, false, lines)?.kind).not.toBe('heads-for-king');
+    expect(kingAttack(at(30), 'Ne3', true, true, lines, moverOf(at(30)))?.kind).not.toBe('heads-for-king');
+    expect(kingAttack(at(30), 'Ne3', false, false, lines, moverOf(at(30)))?.kind).not.toBe('heads-for-king');
   });
 
   it('20…Nd4: the masked hole and the unmoved pawn hold c3', () => {

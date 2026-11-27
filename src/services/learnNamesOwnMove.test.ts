@@ -11,6 +11,7 @@ import { decisiveReason } from './decisiveReason';
 import { moveIntent, type IntentReads } from './moveIntent';
 import { intentWithFallback } from './movePurpose';
 import type { AnalysisLine } from '../types';
+const moverOf = (fen: string): 'w' | 'b' => (fen.split(' ')[1] === 'b' ? 'b' : 'w');
 
 const R = JSON.parse(readFileSync('src/services/__fixtures__/decisiveReason.walk.reads.json', 'utf8')) as Record<string, IntentReads>;
 const L = (cp: number, pv: string[], rank = 1): AnalysisLine => ({ rank, evaluation: cp, moves: pv, mate: null });
@@ -73,8 +74,8 @@ describe('every producer of a played move\'s reason says "your move" in Learn', 
     const { kingAttack } = await import('./kingAttack');
     const fixture = (await import('./__fixtures__/kingAttack-his.json')).default as Array<{ key: string; fen: string; san: string }>;
     const p = fixture.find((x) => x.key === 'TNaKFN65B5o:26')!;
-    expect(kingAttack(p.fen, p.san, false, false, [])?.text).toMatch(/^Your move brings your queen into the attack on their king/);
-    expect(kingAttack(p.fen, p.san, false, true, [])?.text).toMatch(/^…Qh4 brings your queen/);
+    expect(kingAttack(p.fen, p.san, false, false, [], moverOf(p.fen))?.text).toMatch(/^Your move brings your queen into the attack on their king/);
+    expect(kingAttack(p.fen, p.san, false, true, [], moverOf(p.fen))?.text).toMatch(/^…Qh4 brings your queen/);
   });
   it('the plan-step credit', async () => {
     const { Chess } = await import('chess.js');

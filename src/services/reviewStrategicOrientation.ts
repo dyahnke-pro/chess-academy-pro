@@ -258,7 +258,7 @@ export function buildMiddlegameOrientation(
     if (!oppositeCastling) pairs.push(...majorityArrows(all, studentColorWB, studentWing, PLAN_MINE));
   }
   if (enemyWing && seat !== 'student' && (!raceSaid || enemyWing === studentKingWingNow)) {
-    parts.push(`your opponent's plan is to push on the ${enemyWing}, where they hold the majority`);
+    parts.push(`their plan is to push on the ${enemyWing}, where they hold the majority`);
     if (!oppositeCastling) pairs.push(...majorityArrows(all, enemyWB, enemyWing, PLAN_THEIRS));
   }
 
