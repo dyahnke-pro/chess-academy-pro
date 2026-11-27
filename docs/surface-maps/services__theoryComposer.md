@@ -98,8 +98,8 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/theorySheets.measure.test.ts:75`
 
 ### `roadsFrom` (function) — 9 call sites
-- `src/components/Coach/CoachTeachPage.tsx:8677`
-- `src/components/Coach/CoachTeachPage.tsx:8685`
+- `src/components/Coach/CoachTeachPage.tsx:8675`
+- `src/components/Coach/CoachTeachPage.tsx:8683`
 - `src/services/branchExplorer.roads.test.ts:16`
 - `src/services/branchExplorer.roads.test.ts:26`
 - `src/services/branchExplorer.roads.test.ts:28`

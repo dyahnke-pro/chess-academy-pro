@@ -50,7 +50,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 - `src/services/rewardEffectsOff.test.ts:19`
 
 ### `applyCoachSetting` (function) — 2 call sites
-- `src/components/Coach/CoachTeachPage.tsx:5054`
+- `src/components/Coach/CoachTeachPage.tsx:5052`
 - `src/services/coachSessionRouter.ts:126`
 
 ## Tests

@@ -127,8 +127,8 @@
 - `src/services/conversionMethod.ts:73`
 - `src/services/forkTrick.ts:144`
 - `src/services/inaccuracyCall.ts:1021`
-- `src/services/learnBoardTeaching.ts:518`
-- `src/services/learnBoardTeaching.ts:536`
+- `src/services/learnBoardTeaching.ts:524`
+- `src/services/learnBoardTeaching.ts:542`
 - `src/services/liveTacticsContext.ts:503`
 - `src/services/liveTacticsContext.ts:923`
 - `src/services/moveIntent.ts:210`
