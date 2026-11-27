@@ -3,27 +3,28 @@
     "base": "http://localhost:4174",
     "boards": 11,
     "spoke": 11,
-    "medianFirstMs": 4197,
-    "worstFirstMs": 7318,
+    "medianFirstMs": 1247,
+    "worstFirstMs": 6175,
     "watchFor": 0,
-    "worstGapMs": 3700
+    "worstGapMs": 682
   },
   "rows": [
     {
       "id": "a-guide-to-underpromotion#0",
       "fen": "8/8/1KP5/3r4/8/8/8/k7 w - - 0 1",
-      "firstMs": 4591,
-      "lastMs": 42522,
-      "worstGapMs": 1641,
+      "firstMs": 915,
+      "lastMs": 45561,
+      "worstGapMs": 451,
       "lines": [
-        "+4591ms You're clearly better — your passed pawn on c6 is two steps from queening.",
-        "+11832ms Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.",
-        "+21381ms The direct way works now: c7.",
-        "+23806ms King to c7 looks natural, but rook to c5 meets it.",
-        "+28260ms Once your king takes on c6, only the kings are left: a draw.",
-        "+33491ms After king to c7 your edge is gone.",
-        "+36709ms You go c7, which pushes your passed pawn — passed pawns must be pushed.",
-        "+42522ms It also takes d8 away from their rook on d5."
+        "+915ms You're clearly better — your passed pawn on c6 is two steps from queening.",
+        "+6966ms Habit for positions like this: when no check or capture works, look for the quiet move that makes a threat they cannot meet.",
+        "+16207ms The direct way works now: c7.",
+        "+18620ms King to c7, king to a6 and king to a7 all fail the same way: rook to c5 meets each.",
+        "+26671ms Once your king takes on c6, only the kings are left: a draw.",
+        "+31976ms You go c7, which pushes your passed pawn — passed pawns must be pushed.",
+        "+37739ms It also takes d8 away from their rook on d5.",
+        "+41930ms Their rook starts checking with rook to d6, check.",
+        "+45561ms Your king answers with king to b5 and keeps walking — after 3 checks it is out on c3."
       ],
       "kinds": {
         "first": [
@@ -33,100 +34,59 @@
         "deep": [
           "verdict",
           "refuted",
-          "fundamental"
+          "fundamental",
+          "technique",
+          "watch-for"
         ],
-        "surface": "play"
+        "surface": "play",
+        "ms": {
+          "engine": 1,
+          "first": 721,
+          "deep": 4137
+        }
       },
       "watchFor": false
     },
     {
       "id": "alekhines-gun2#1",
       "fen": "3r2k1/pp2bpp1/1qr1b2p/3p4/8/P1B1PB2/1P2QPPP/3R1RK1 w - - 0 22",
-      "firstMs": 4450,
-      "lastMs": 58040,
-      "worstGapMs": 772,
+      "firstMs": 1993,
+      "lastMs": 1993,
+      "worstGapMs": 0,
       "lines": [
-        "+4450ms They hold the isolated queen’s pawn — blockade it on d4, ideally with a knight, and trade pieces — every trade makes the pawn weaker, and in the endgame it becomes a target.",
-        "+17222ms Your rook on d1 is your best-placed piece — it presses down the d-file on their pawn on d5.",
-        "+24999ms You're slightly better, but breaking through is another matter.",
-        "+28625ms Bishop to b4 fails.",
-        "+30240ms Bishop to b4 looks natural, but bishop takes b4 meets it.",
-        "+34697ms After rook to c4, their rook to c4 is aimed at your pawn on b4.",
-        "+40823ms Bishop to b4 leaves you slightly worse.",
-        "+43685ms So the quiet rook to d3 instead.",
-        "+46559ms Your rook to d3 prepares f-rook to d1, to take the half-open d-file.",
-        "+51909ms Your rook steps up the d-file against their pawn on d5, making room behind it.",
-        "+58040ms It is isolated, so no pawn can ever guard it — pieces have to."
+        "+1993ms They hold the isolated queen’s pawn — blockade it on d4, ideally with a knight, and trade pieces — every trade makes the pawn weaker, and in the endgame it becomes a target."
       ],
-      "kinds": {
-        "first": [
-          "structure-plan",
-          "structure-plan"
-        ],
-        "deep": [
-          "verdict",
-          "refuted",
-          "plan-now",
-          "siege",
-          "move-job",
-          "structure-plan",
-          "concept",
-          "move-job"
-        ],
-        "surface": "play"
-      },
+      "kinds": null,
       "watchFor": false
     },
     {
       "id": "blunders-a-grandmasters-perspective#2",
       "fen": "3rr3/p5kp/1p4p1/n3n3/2P3P1/P1P1B1R1/3NK2P/5R2 w - - 0 32",
-      "firstMs": 4580,
-      "lastMs": 52149,
-      "worstGapMs": 3700,
+      "firstMs": 1286,
+      "lastMs": 1286,
+      "worstGapMs": 0,
       "lines": [
-        "+4580ms Roughly balanced — your isolated pawn on c4 is attacked twice and guarded only once.",
-        "+14280ms The direct tries get nowhere.",
-        "+16288ms Knight to f3, bishop to d4 and bishop to g5 all fail.",
-        "+21139ms Knight to f3 is tempting here, but it fails: they play e-knight takes c4 — they win a pawn.",
-        "+28868ms Bishop to d4 is the obvious try, but king to g8 is the answer: they win a pawn in the line.",
-        "+37791ms Bishop to g5 is the obvious try, but it doesn't hold up: they play e-knight takes c4, check — they win a pawn.",
-        "+47224ms So the slower way: the rook lift, starting with rook to f4.",
-        "+52149ms On f4 the rook guards your c-pawn on c4, which e-knight takes c4 or e-knight takes c4 with check takes after knight to f3 or bishop to g5."
+        "+1286ms Roughly balanced — your isolated pawn on c4 is attacked twice and guarded only once."
       ],
-      "kinds": {
-        "first": [
-          "standing"
-        ],
-        "deep": [
-          "verdict",
-          "refuted",
-          "refuted",
-          "refuted",
-          "plan-now",
-          "structure-plan",
-          "their-target",
-          "move-job",
-          "technique"
-        ],
-        "surface": "play"
-      },
+      "kinds": null,
       "watchFor": false
     },
     {
       "id": "desperado-defense#0",
       "fen": "rnq2rk1/1pn3bp/p2p2p1/2pPp1PP/P1P1Pp2/2N2N2/1P1B1P2/R2QK2R b KQ - 0 16",
-      "firstMs": 4369,
-      "lastMs": 47291,
-      "worstGapMs": 362,
+      "firstMs": 1030,
+      "lastMs": 45188,
+      "worstGapMs": 405,
       "lines": [
-        "+4369ms You're clearly worse — your knight on b8 and knight on c7 each have one safe square.",
-        "+11496ms The active tries only make it worse.",
-        "+14325ms Knight takes d5 and h6 both fail.",
-        "+17196ms Knight takes d5 is the obvious try, but it doesn't hold up: they play knight takes d5 — they win a knight for a pawn.",
-        "+27490ms h6 looks natural, but it doesn't work: they play g-pawn takes h6 and you answer bishop to f6 — they win a pawn.",
-        "+36909ms So first knight to d7.",
-        "+38929ms You go knight to d7, which completes your development — every minor piece is out, so the rooks come next.",
-        "+47291ms Their pieces work together: every one is guarded and in the game."
+        "+1030ms You're clearly worse — your knight on b8 and knight on c7 each have one safe square.",
+        "+8235ms The active tries only make it worse.",
+        "+11076ms Knight takes d5 and h6 both fail.",
+        "+13881ms Knight takes d5 is the obvious try, but it doesn't hold up: they play knight takes d5 — they win a knight for a pawn.",
+        "+23920ms h6 looks natural, but g-pawn takes h6 meets it: they win a pawn in the line.",
+        "+30339ms So first knight to d7.",
+        "+32349ms You go knight to d7, which completes your development — every minor piece is out, so the rooks come next.",
+        "+40372ms Their pieces work together: every one is guarded and in the game.",
+        "+45188ms After knight to d7, watch for knight takes e5: you play knight takes e5 — you win a knight for a pawn."
       ],
       "kinds": {
         "first": [
@@ -138,30 +98,37 @@
           "refuted",
           "plan-now",
           "fundamental",
-          "judgement"
+          "judgement",
+          "watch-for"
         ],
-        "surface": "play"
+        "surface": "play",
+        "ms": {
+          "engine": 1,
+          "first": 705,
+          "deep": 6128
+        }
       },
       "watchFor": false
     },
     {
       "id": "endgame-attacks-part-2#0",
       "fen": "6k1/p4pp1/2p5/1pp1P3/3q1PPp/P3NQ1P/b1P1K3/8 b - - 0 30",
-      "firstMs": 4197,
-      "lastMs": 59607,
-      "worstGapMs": 450,
+      "firstMs": 1753,
+      "lastMs": 58082,
+      "worstGapMs": 95,
       "lines": [
-        "+4197ms You're clearly better — you're up a pawn.",
-        "+7517ms Their f4 pawn is the key pawn: it guards e5, and if f4 drops, e5 goes with it.",
-        "+14832ms It is hard to finish them off.",
-        "+17654ms Queen to c3, f6, queen to a4, queen to b2, bishop to b1 and f5 all fail.",
-        "+24594ms Queen to c3, going straight at the pawn on a3, fails: they play queen takes c6 — they win a pawn.",
-        "+33386ms Bishop to b1, f6 and queen to b2 all fail the same way: queen takes c6 meets each.",
-        "+40640ms Queen to a4 goes straight at the pawn on a3, but g5 meets it.",
-        "+46345ms Queen to a4 achieves nothing, and gives back part of your edge.",
-        "+51146ms f5 is tempting here, but it fails: they play knight takes f5 — they win a pawn.",
-        "+58396ms So first b4.",
-        "+59607ms On b4 the pawn adds an attacker on their a-pawn, which queen takes c6 or g5 holds after queen to c3, queen to a4 or queen to b2."
+        "+1753ms You're clearly better — you're up a pawn.",
+        "+5048ms Their f4 pawn is the key pawn: it guards e5, and if f4 drops, e5 goes with it.",
+        "+12276ms It is hard to finish them off.",
+        "+15089ms Queen to c3, f6, queen to a4, queen to b2, bishop to b1 and f5 all fail.",
+        "+21915ms Queen to c3 and f6 both fail the same way: queen takes c6 meets either.",
+        "+27966ms They win a pawn in the line.",
+        "+30781ms Queen to a4 goes straight at the pawn on a3, but g5 meets it.",
+        "+36409ms Queen to a4 achieves nothing, and gives back part of your edge.",
+        "+41222ms Queen to b2, going straight at the pawn on a3, fails: they play queen takes c6 — they win a pawn.",
+        "+49648ms Bishop to b1 to hit the pawn on c2 directly runs into queen takes c6.",
+        "+55665ms Their pawn on c2 still stands.",
+        "+58082ms After bishop to b1 your edge is gone."
       ],
       "kinds": {
         "first": [
@@ -170,6 +137,7 @@
         ],
         "deep": [
           "verdict",
+          "refuted",
           "refuted",
           "refuted",
           "refuted",
@@ -182,33 +150,40 @@
           "king-read",
           "structure-plan",
           "contrast",
-          "structure-plan"
+          "structure-plan",
+          "watch-for"
         ],
-        "surface": "play"
+        "surface": "play",
+        "ms": {
+          "engine": 1,
+          "first": 1548,
+          "deep": 6751
+        }
       },
       "watchFor": false
     },
     {
       "id": "endgame-attacks-part-2#3",
       "fen": "6k1/1q3pp1/5n1p/1p3P2/p2Qp3/2P1P1P1/1P5P/5BK1 w - - 0 29",
-      "firstMs": 2834,
-      "lastMs": 54506,
-      "worstGapMs": 376,
+      "firstMs": 1151,
+      "lastMs": 59076,
+      "worstGapMs": 93,
       "lines": [
-        "+2834ms Their b5 pawn is the key pawn: it guards a4, and if b5 drops, a4 goes with it.",
-        "+10410ms It's level, and there is no direct way in.",
-        "+14110ms Queen to e5, c4 and queen to b4 all fail.",
-        "+18160ms Queen to e5 to hit the pawn on b5 directly runs into b4.",
-        "+23523ms Queen to e5 leaves you slightly worse.",
-        "+26398ms c4 is tempting, but b4 takes the sting out of it.",
-        "+31146ms Your bishop on f1 reaches 4 fewer squares after c4 than after the better move.",
-        "+37133ms c4 leaves you slightly worse.",
-        "+39165ms Queen to b4 to hit the pawn on b5 directly runs into queen to d7.",
-        "+45216ms Queen to b4 leaves you slightly worse.",
-        "+48034ms So first bishop to e2.",
-        "+50040ms What's the priority here?",
-        "+51652ms ‖ Their pawn on b5 is backward.",
-        "+54506ms The pawns beside it have gone past it, and your pawn covers the square in front of it."
+        "+1151ms Their b5 pawn is the key pawn: it guards a4, and if b5 drops, a4 goes with it.",
+        "+8424ms It's level, and there is no direct way in.",
+        "+12045ms Queen to e5, c4 and queen to b4 all fail.",
+        "+16067ms Queen to e5 to hit the pawn on b5 directly runs into b4.",
+        "+21292ms Queen to e5 leaves you slightly worse.",
+        "+24101ms c4 is tempting, but b4 takes the sting out of it.",
+        "+28510ms Your bishop on f1 reaches 4 fewer squares after c4 than after the better move.",
+        "+34529ms c4 leaves you slightly worse.",
+        "+36538ms Queen to b4 to hit the pawn on b5 directly runs into queen to d7.",
+        "+42559ms Queen to b4 leaves you slightly worse.",
+        "+45365ms So first bishop to e2.",
+        "+47370ms What's the priority here?",
+        "+48975ms ‖ Their pawn on b5 is backward.",
+        "+51783ms The pawns beside it have gone past it, and your pawn covers the square in front of it.",
+        "+59076ms Aim at it: bishop to e2 does."
       ],
       "kinds": {
         "first": [
@@ -221,30 +196,36 @@
           "refuted",
           "plan-now",
           "priority",
-          "fundamental"
+          "fundamental",
+          "watch-for"
         ],
-        "surface": "play"
+        "surface": "play",
+        "ms": {
+          "engine": 1,
+          "first": 968,
+          "deep": 4087
+        }
       },
       "watchFor": false
     },
     {
       "id": "how-to-avoid-blunders-part-1#2",
       "fen": "r4r1k/q5pp/p1Qp4/5n2/5P2/N1P5/PP4PP/R4R1K b - - 0 20",
-      "firstMs": 2572,
-      "lastMs": 59757,
-      "worstGapMs": 399,
+      "firstMs": 1397,
+      "lastMs": 58603,
+      "worstGapMs": 228,
       "lines": [
-        "+2572ms You're slightly worse — you're down two pawns.",
-        "+5988ms Your pawns on a6 and d6 are isolated — no friendly pawn can ever defend them, so a piece has to.",
-        "+14430ms The active tries only make it worse.",
-        "+17290ms A-rook to c8, queen to c5, f-rook to c8, queen to b8 and knight to g3 with check all fail.",
-        "+25473ms A-rook to c8 and rook to f6 both fail the same way: queen to f3 meets either.",
-        "+32672ms Queen to c5 is tempting, but queen takes c5 takes the sting out of it.",
-        "+38719ms Then their resource is the knight: from c4 it hits your pawn on d6.",
-        "+44430ms But your d-pawn taking on c5 stops it.",
-        "+47686ms Queen to c5 makes your position a lot harder.",
-        "+51298ms F-rook to c8 and queen to b8 both fail the same way: queen to f3 or knight to c4 meets either.",
-        "+59757ms Your rook on a8 reaches 3 fewer squares after either than after the better move."
+        "+1397ms You're slightly worse — you're down two pawns.",
+        "+4640ms Your pawns on a6 and d6 are isolated — no friendly pawn can ever defend them, so a piece has to.",
+        "+13067ms The active tries only make it worse.",
+        "+15901ms A-rook to c8, queen to c5, f-rook to c8, queen to b8, knight to g3, check and knight to e7 all fail.",
+        "+24929ms A-rook to c8 and rook to f6 both fail the same way: queen to f3 meets either.",
+        "+31743ms Queen to c5 is tempting, but queen takes c5 takes the sting out of it.",
+        "+37756ms Then their resource is the knight: from c4 it hits your pawn on d6.",
+        "+43369ms But your d-pawn taking on c5 stops it.",
+        "+46577ms Queen to c5 makes your position a lot harder.",
+        "+50185ms F-rook to c8 and queen to b8 both fail the same way: queen to f3 or knight to c4 meets either.",
+        "+58603ms Your rook on a8 reaches 3 fewer squares after either than after the better move."
       ],
       "kinds": {
         "first": [
@@ -257,32 +238,39 @@
           "refuted",
           "refuted",
           "refuted",
+          "refuted",
           "plan-now",
           "structure-plan",
           "their-target",
           "plan-steps",
           "aspect-threat",
-          "board-teacher"
+          "board-teacher",
+          "watch-for"
         ],
-        "surface": "play"
+        "surface": "play",
+        "ms": {
+          "engine": 1,
+          "first": 1194,
+          "deep": 8765
+        }
       },
       "watchFor": false
     },
     {
       "id": "how-to-beat-magnus-carlsen#1",
       "fen": "r2qr1k1/1b1n1pbp/p2p1np1/1p1Pp1B1/P1p1P3/2P2NNP/1PBQ1PP1/R3R1K1 b - - 0 18",
-      "firstMs": 3492,
-      "lastMs": 55809,
-      "worstGapMs": 188,
+      "firstMs": 1247,
+      "lastMs": 53330,
+      "worstGapMs": 129,
       "lines": [
-        "+3492ms Their e4 pawn is the key pawn: it guards d5, and if e4 drops, d5 goes with it.",
-        "+10880ms Their knight sits in front of their own f-pawn, so while it stays there no pawn can come up to back up e4 — and you are already hitting it.",
-        "+23030ms You're slightly worse, and the active tries only make it worse.",
-        "+27467ms Knight takes e4, b-pawn takes a4, bishop takes d5, h6 and b4 all fail.",
-        "+33113ms Knight takes e4 is the obvious try, but it doesn't hold up: they play knight takes e4 — they win a knight for a pawn.",
-        "+43297ms B-pawn takes a4 is tempting, but rook takes a4 takes the sting out of it.",
-        "+49337ms It wins nothing: the trades leave the material level, and it makes your position harder still.",
-        "+55809ms Bishop takes d5 is tempting here, but it fails: they play e-pawn takes d5 — they win a bishop for a pawn."
+        "+1247ms Their e4 pawn is the key pawn: it guards d5, and if e4 drops, d5 goes with it.",
+        "+8576ms Their knight sits in front of their own f-pawn, so while it stays there no pawn can come up to back up e4 — and you are already hitting it.",
+        "+20691ms You're slightly worse, and the active tries only make it worse.",
+        "+25196ms Knight takes e4, b-pawn takes a4, bishop takes d5, h6 and b4 all fail.",
+        "+30825ms Knight takes e4 is the obvious try, but it doesn't hold up: they play knight takes e4 — they win a knight for a pawn.",
+        "+40870ms B-pawn takes a4 is tempting, but rook takes a4 takes the sting out of it.",
+        "+46910ms It wins nothing: the trades leave the material level, and it makes your position harder still.",
+        "+53330ms Bishop takes d5 is tempting here, but it fails: they play e-pawn takes d5 — they win a bishop for a pawn."
       ],
       "kinds": {
         "first": [
@@ -299,29 +287,37 @@
           "plan-now",
           "stopped",
           "fundamental",
-          "judgement"
+          "judgement",
+          "watch-for"
         ],
-        "surface": "play"
+        "surface": "play",
+        "ms": {
+          "engine": 1,
+          "first": 1150,
+          "deep": 5073
+        }
       },
       "watchFor": false
     },
     {
       "id": "how-to-ignore-a-threat-and-win#2",
       "fen": "2b3k1/4b1pp/5p2/p7/Pp1p1P2/1N1Pq1P1/1Q2P1BP/5K2 b - - 0 29",
-      "firstMs": 2998,
-      "lastMs": 52567,
-      "worstGapMs": 150,
+      "firstMs": 1083,
+      "lastMs": 55928,
+      "worstGapMs": 682,
       "lines": [
-        "+2998ms Your passed pawn on b4 is a trump, but their knight blockades it — challenge or dislodge that blockader before it can run.",
-        "+12348ms It's level, and the direct tries get nowhere.",
-        "+15606ms Bishop to g4, bishop to d7 and g5 all fail.",
-        "+19706ms Bishop to g4 to hit the pawn on e2 directly doesn't work: they play knight takes a5 — they win a pawn.",
-        "+28615ms Bishop to d7 goes straight at the pawn on a4, but knight takes a5 meets it.",
-        "+35090ms Their pawn on a4 still stands.",
-        "+37547ms Bishop to d7 hands them two pawns in the line.",
-        "+41603ms g5 is the obvious try, but it doesn't hold up: they play knight takes a5 — they win a pawn.",
-        "+49695ms So the quiet bishop to d8 instead.",
-        "+52567ms On d8 the bishop guards your a-pawn, which knight takes a5 takes after bishop to g4, bishop to d7 or g5."
+        "+1083ms Your passed pawn on b4 is a trump, but their knight blockades it — challenge or dislodge that blockader before it can run.",
+        "+10965ms It's level, and the direct tries get nowhere.",
+        "+14182ms Bishop to g4, bishop to d7 and g5 all fail.",
+        "+18189ms Bishop to g4 to hit the pawn on e2 directly doesn't work: they play knight takes a5 — they win a pawn.",
+        "+27019ms Bishop to d7 goes straight at the pawn on a4, but knight takes a5 meets it.",
+        "+33468ms Their pawn on a4 still stands.",
+        "+35878ms Bishop to d7 hands them two pawns in the line.",
+        "+39885ms g5 looks natural, but knight takes a5 meets it.",
+        "+43493ms The knight heads for c6, where it hits your dark-squared bishop, your b-pawn and your d-pawn.",
+        "+49906ms g5 hands them a pawn in the line.",
+        "+53115ms So the quiet bishop to d8 instead.",
+        "+55928ms On d8 the bishop guards your a-pawn, which knight takes a5 takes after bishop to g4, bishop to d7 or g5."
       ],
       "kinds": {
         "first": [
@@ -337,25 +333,35 @@
           "their-target",
           "move-job",
           "judgement",
-          "technique"
+          "technique",
+          "watch-for",
+          "structure-plan"
         ],
-        "surface": "play"
+        "surface": "play",
+        "ms": {
+          "engine": 2,
+          "first": 893,
+          "deep": 4779
+        }
       },
       "watchFor": false
     },
     {
       "id": "how-to-play-a-brilliancy#2",
       "fen": "r4rk1/1p3pp1/pPp4p/P1Pp3q/3P1Pn1/2N5/2Q2PB1/R4RK1 w - - 0 27",
-      "firstMs": 3785,
-      "lastMs": 38889,
-      "worstGapMs": 225,
+      "firstMs": 1113,
+      "lastMs": 54734,
+      "worstGapMs": 500,
       "lines": [
-        "+3785ms You're clearly better — you're up material: a piece for a pawn.",
-        "+8739ms Their passed pawn on h6 is a long-term trump for them — still five pushes from queening.",
-        "+15598ms You play f-rook to d1 — it stops queen to h2, which would be mate, and now your king has f1.",
-        "+24223ms It also puts the rook behind your d4 pawn — it guards it now, and owns the d-file when it opens.",
-        "+32806ms You go f-rook to d1, sending the rook on to h3, by way of d3.",
-        "+38889ms With the pawns locked, the chances here are tactical: this line keeps a sacrifice in the air — knight takes d5 comes later, and they take it."
+        "+1113ms You're clearly better — you're up material: a piece for a pawn.",
+        "+6413ms Their passed pawn on h6 is a long-term trump for them — still five pushes from queening.",
+        "+13229ms You play f-rook to d1 — it stops queen to h2, which would be mate, and now your king has f1.",
+        "+21647ms It also puts the rook behind your d4 pawn — it guards it now, and owns the d-file when it opens.",
+        "+30258ms You go f-rook to d1, sending the rook on to h3, by way of d3.",
+        "+36280ms Their queen checks with queen to h2, check, and your king walks out to f1.",
+        "+42293ms Then they play f5.",
+        "+43909ms With the pawns locked, the chances here are tactical: this line keeps a sacrifice in the air — knight takes d5 comes later, and they take it.",
+        "+54734ms After f-rook to d1, watch for knight takes f2: you play queen takes f2 — you win a knight for a pawn."
       ],
       "kinds": {
         "first": [
@@ -365,30 +371,39 @@
         "deep": [
           "stop",
           "route",
-          "judgement"
+          "technique",
+          "judgement",
+          "watch-for",
+          "structure-plan"
         ],
-        "surface": "play"
+        "surface": "play",
+        "ms": {
+          "engine": 1,
+          "first": 996,
+          "deep": 6023
+        }
       },
       "watchFor": false
     },
     {
       "id": "how-to-ruin-your-pawn-structure#1",
       "fen": "1r2k2r/4bp2/p2pbp2/1p2p2p/4P1P1/P3BP2/1PPR3P/1K3B1R w k - 0 18",
-      "firstMs": 7318,
-      "lastMs": 56552,
-      "worstGapMs": 273,
+      "firstMs": 6175,
+      "lastMs": 58415,
+      "worstGapMs": 51,
       "lines": [
-        "+7318ms It's level, and there is no direct way in.",
-        "+10932ms g5, c4, f4 and bishop to a7 all fail.",
-        "+14557ms g5 to hit the pawn on f6 directly doesn't work: they play f-pawn takes g5 — they win a pawn.",
-        "+22651ms c4 is the obvious try, but it doesn't hold up: they play b-pawn takes c4 — they win a pawn.",
-        "+30818ms Bishop to d3, f4 and h3 all fail the same way: h-pawn takes g4 meets each.",
-        "+37260ms They win a pawn in the line.",
-        "+40082ms Bishop to a7 is tempting, but rook to a8 takes the sting out of it.",
-        "+46126ms The rook hits your dark-squared bishop and sends it packing.",
-        "+50257ms Bishop to a7 hands them a pawn in the line.",
-        "+54530ms So first g-pawn takes h5.",
-        "+56552ms Your plan is to kick their bishop off e6."
+        "+6175ms It's level, and there is no direct way in.",
+        "+9779ms g5, c4, f4 and bishop to a7 all fail.",
+        "+13423ms g5 to hit the pawn on f6 directly doesn't work: they play f-pawn takes g5 — they win a pawn.",
+        "+21474ms c4 is the obvious try, but it doesn't hold up: they play b-pawn takes c4 — they win a pawn.",
+        "+29517ms Bishop to d3, f4 and h3 all fail the same way: h-pawn takes g4 meets each.",
+        "+35943ms They win a pawn in the line.",
+        "+38750ms Bishop to a7 is tempting, but rook to b7 takes the sting out of it.",
+        "+44768ms The rook hits your dark-squared bishop and sends it packing.",
+        "+48777ms Bishop to a7 hands them a pawn in the line.",
+        "+52789ms So first g-pawn takes h5.",
+        "+54792ms Your plan is to kick their bishop off e6.",
+        "+58415ms The f-pawn does it: f4, then f5."
       ],
       "kinds": {
         "first": [],
@@ -402,7 +417,12 @@
           "plan-steps",
           "pawn-break"
         ],
-        "surface": "play"
+        "surface": "play",
+        "ms": {
+          "engine": 0,
+          "first": 1470,
+          "deep": 6054
+        }
       },
       "watchFor": false
     }

@@ -71,8 +71,8 @@ async function main() {
           .filter((e) => e.kind === 'coach-narration-spoken' && e.receivedAt >= t0 && e.narrationText)
           .sort((x, y) => x.receivedAt - y.receivedAt);
         // Until the read is over: 4 s of silence after the last line's
-        // (simulated) end, or 60 s.
-        while (Date.now() - t0 < 60000) {
+        // (simulated) end, or 180 s.
+        while (Date.now() - t0 < 180000) {
           await page.waitForTimeout(150);
           const last = spoken().at(-1);
           if (last && Date.now() > last.receivedAt + spokenMs(last.narrationText) + 4000) break;
@@ -89,7 +89,7 @@ async function main() {
         const composed = listener.getCapturedEvents().filter((e) => e.kind === 'position-read-composed' && e.receivedAt >= t0).at(-1);
         const kinds = composed ? JSON.parse(composed.details ?? '{}') : null;
         row.kinds = kinds;
-        row.watchFor = !!kinds && (kinds.deep ?? []).includes('their-refuted');
+        row.watchFor = !!kinds && (kinds.deep ?? []).includes('watch-for');
       } catch (err) {
         row.error = String(err).slice(0, 200);
       }
