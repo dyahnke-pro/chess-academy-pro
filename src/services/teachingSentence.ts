@@ -1068,10 +1068,7 @@ export type RepairState =
   | 'technique-key-square' | 'technique-opposition' | 'technique-rook'
   | 'leave-a-square'
   | 'attack-their-king'
-  | 'down-material-queens-off'
-  // The six recovery states read on the board the mistake leaves (Coach Build
-  // Board, Mistakes round 1): each with its own check in `repairApplies`.
-  | 'develop-pieces' | 'castle-now' | 'contest-file' | 'misplaced-back' | 'cramped' | 'connect-rooks';
+  | 'down-material-queens-off';
 
 export interface RepairRecipe {
   needs: readonly FillKey[];
@@ -1083,72 +1080,6 @@ export interface RepairRecipe {
 /** Every repair, worded to the STUDENT (never swapped). The check that it
  *  applies on this board is `repairApplies`. */
 export const REPAIRS: Record<RepairState, RepairRecipe> = {
-  'develop-pieces': {
-    needs: [],
-    stems: [
-      'Bring out your last pieces before starting anything.',
-      'Finish developing first: two pieces still sit at home.',
-      'Get your pieces off the back rank before you attack.',
-      'Develop the rest of your army, then make plans.',
-      'Pieces at home do nothing. Bring them out now.',
-    ],
-    sources: ['concept:pos-activity', 'https://en.wikipedia.org/wiki/Development_(chess)'],
-  },
-  'castle-now': {
-    needs: [],
-    stems: [
-      'Get your king castled while you still can.',
-      'Castle soon: your king is still in the middle.',
-      'Tuck your king away before the centre opens.',
-      'King safety next: castle on the next quiet move.',
-      'Your king wants to castle. Do it before it\'s too late.',
-    ],
-    sources: ['concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Castling'],
-  },
-  'contest-file': {
-    needs: ['file'],
-    stems: [
-      'Put a rook on the open {file}-file and challenge theirs.',
-      'Contest the {file}-file: their rook owns it now.',
-      'Bring a rook to the {file}-file before theirs gets in.',
-      'The open {file}-file needs a rook of yours on it.',
-      'Challenge the {file}-file with a rook, then trade if you must.',
-    ],
-    sources: ['concept:pos-activity', 'https://en.wikipedia.org/wiki/Open_file'],
-  },
-  'misplaced-back': {
-    needs: ['piece'],
-    stems: [
-      'Bring your {piece} back into play.',
-      'Your {piece} does little where it stands. Reroute it.',
-      'Find your {piece} a better square, toward the centre.',
-      'Improve your worst piece: the {piece}.',
-      'Put the {piece} where it does a job.',
-    ],
-    sources: ['concept:pos-activity', 'https://www.chess.com/article/view/improve-your-worst-piece'],
-  },
-  cramped: {
-    needs: [],
-    stems: [
-      'You\'re short of space: trade a pair of pieces to breathe.',
-      'In a cramped position, swap pieces to free your game.',
-      'Less space means fewer squares: trade off a piece.',
-      'Ease the cramp with a trade, then look for a break.',
-      'Their space is a vice. Trade pieces to loosen it.',
-    ],
-    sources: ['concept:pos-activity', 'https://en.wikipedia.org/wiki/Chess_strategy'],
-  },
-  'connect-rooks': {
-    needs: [],
-    stems: [
-      'Connect your rooks: clear the back rank between them.',
-      'Your rooks should see each other. Finish clearing the back rank.',
-      'Clear the last piece off the back rank and link the rooks.',
-      'Rooks work in pairs: get them connected.',
-      'Free the back rank so both rooks join the game.',
-    ],
-    sources: ['concept:pos-activity', 'https://en.wikipedia.org/wiki/Glossary_of_chess'],
-  },
   'colour-conceded': {
     needs: ['colour'],
     stems: [
