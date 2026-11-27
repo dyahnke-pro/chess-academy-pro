@@ -44,7 +44,8 @@ import { holdState, type HeatState, type HoldRecord } from './holdRate';
 import { rotateStem, stemKeyOf } from '../utils/rotateStem';
 import { phaseOfFen, type Phase } from './boardConcepts';
 import { MATERIAL_VALUE, materialBalance } from './pieceValues';
-import { capturesWinMaterial, kingSafetyRead } from './positionReadingService';
+import { capturesWinMaterial, findOpenFiles, kingSafetyRead, ownsMoreSpace } from './positionReadingService';
+import { findWorstPlacedPiece } from './nextPlans';
 import { onlyMove } from './thoughtReads';
 import { findProphylaxis } from './prophylaxis';
 import { detectTacticLine } from './missedTacticService';
@@ -433,6 +434,48 @@ function repairApplies(state: RepairState, x: RepairContext): Fills | null {
       const side = state === 'initiative-lost' ? them : x.student;
       return ini?.side === side ? {} : null;
     }
+    // ── the six board states (each read on the quiet end) ──
+    case 'develop-pieces': {
+      if (x.phase === 'endgame' || !queensOn(x.quiet)) return null;
+      const b = before(x.quiet);
+      const home = x.student === 'w' ? { n: ['b1', 'g1'], b: ['c1', 'f1'] } : { n: ['b8', 'g8'], b: ['c8', 'f8'] };
+      const idle = [...home.n.filter((sq) => b.get(sq as Square)?.type === 'n' && b.get(sq as Square)?.color === x.student),
+        ...home.b.filter((sq) => b.get(sq as Square)?.type === 'b' && b.get(sq as Square)?.color === x.student)];
+      return idle.length >= 2 ? {} : null;
+    }
+    case 'castle-now': {
+      if (x.phase === 'endgame' || !queensOn(x.quiet)) return null;
+      const b = before(x.quiet);
+      const k = b.findPiece({ type: 'k', color: x.student })[0];
+      const rights = b.getCastlingRights(x.student);
+      return k && k[0] === 'e' && (rights.k || rights.q) && !b.inCheck() ? {} : null;
+    }
+    case 'contest-file': {
+      const b = before(x.quiet);
+      const open = findOpenFiles(x.quiet).open;
+      const heavy = (side: Color, f: string): boolean => b.board().flat().some((p) => !!p && p.color === side && (p.type === 'r' || p.type === 'q') && p.square[0] === f);
+      if (!b.findPiece({ type: 'r', color: x.student }).length) return null;
+      const file = open.find((f) => heavy(them, f) && !heavy(x.student, f));
+      return file ? { file } : null;
+    }
+    case 'misplaced-back': {
+      const w = findWorstPlacedPiece(before(x.quiet), x.student);
+      return w && (w.kind === 'rim-knight' || w.kind === 'stuck') ? { piece: NAME[w.type] } : null;
+    }
+    case 'cramped':
+      return ownsMoreSpace(x.quiet, them) && countOf(x.quiet, x.student, 'n') + countOf(x.quiet, x.student, 'b') + countOf(x.quiet, x.student, 'r') >= 3 ? {} : null;
+    case 'connect-rooks': {
+      if (x.phase === 'endgame') return null;
+      const b = before(x.quiet);
+      const rank = x.student === 'w' ? '1' : '8';
+      const rooks = b.findPiece({ type: 'r', color: x.student }).filter((sq) => sq[1] === rank);
+      const k = b.findPiece({ type: 'k', color: x.student })[0];
+      if (rooks.length !== 2 || !k || k[0] === 'e') return null;
+      const [a, c] = rooks.map((sq) => sq.charCodeAt(0)).sort((p, q) => p - q);
+      let blocked = false;
+      for (let f = a + 1; f < c; f += 1) { const p = b.get(`${String.fromCharCode(f)}${rank}` as Square); if (p && p.type !== 'k') blocked = true; }
+      return blocked ? {} : null;
+    }
   }
 }
 
@@ -446,6 +489,9 @@ const CAUSE_STATE: Partial<Record<MistakeCauseKind, RepairState>> = {
   'colour-conceded': 'colour-conceded', 'traded-into-target': 'weak-pawn', 'passer-handed': 'passer-against',
 };
 const LEDGER_STATES: readonly RepairState[] = ['down-queen', 'down-exchange', 'down-piece-middlegame', 'down-material-queens-off', 'down-piece-endgame', 'down-pawn-middlegame', 'down-pawn-endgame', 'up-material'];
+/** The board states read after the cause's and the ledger's, on the
+ *  student's own mistake (their mistake's repair is the conversion). */
+const BOARD_STATES: readonly RepairState[] = ['castle-now', 'develop-pieces', 'contest-file', 'misplaced-back', 'cramped', 'connect-rooks'];
 
 function repairFor(input: MistakeLessonInput, recipeRepairs: readonly RepairState[], key: number): { text: string; stem: string; state: RepairState } | null {
   let after: Chess; let mover: Color;
@@ -463,7 +509,8 @@ function repairFor(input: MistakeLessonInput, recipeRepairs: readonly RepairStat
   // On their mistake the ledger's only repair is the conversion: the
   // student's own deficit is not what their mistake changed.
   const ledgerStates = input.seat === 'you' ? LEDGER_STATES : (['up-material'] as const);
-  for (const state of [...seated, ...ledgerStates]) {
+  const boardStates = input.seat === 'you' ? BOARD_STATES : [];
+  for (const state of [...seated, ...ledgerStates, ...boardStates]) {
     const fills = repairApplies(state, ctx);
     if (!fills) continue;
     const said = renderMistakeSlot(REPAIRS[state], fills, key, recentStemsOf(input.memory));
@@ -543,6 +590,11 @@ function repairStillHolds(state: RepairState, fen: string, student: Color): bool
     case 'up-material': return l >= 1;
     case 'king-exposed': { const k = kingSafetyRead(fen, student); return !!k && k.shieldPawns <= 1; }
     case 'attack-their-king': { const k = kingSafetyRead(fen, them); return !!k && k.shieldPawns <= 1; }
+    // The board states hold while their own check still reads true.
+    case 'develop-pieces': case 'castle-now': case 'contest-file': case 'misplaced-back': case 'cramped': case 'connect-rooks': {
+      const none: MistakeCause = { kind: 'unexplained', motif: null, tag: null, causedByMove: false, detail: null };
+      try { return repairApplies(state, { student, fenBefore: fen, fenAfter: fen, quiet: fen, cause: none, seat: 'you', replyLineUci: [], phase: phaseOfFen(fen) }) !== null; } catch { return false; }
+    }
     default: return true;
   }
 }
@@ -867,4 +919,10 @@ export function allSlotsForTests(): Array<{ where: string; stems: readonly strin
   for (const [k, r] of Object.entries(REPAIRS)) out.push({ where: `repair:${k}`, stems: r.stems, seat: 'student' });
   for (const [k, r] of Object.entries(HABIT_SHORT)) out.push({ where: `habit-short:${k}`, stems: r, seat: 'you' });
   return out;
+}
+
+/** Tests only: the repair's own board check. */
+export function repairAppliesForTests(state: RepairState, fen: string, student: Color): Fills | null {
+  const none: MistakeCause = { kind: 'unexplained', motif: null, tag: null, causedByMove: false, detail: null };
+  return repairApplies(state, { student, fenBefore: fen, fenAfter: fen, quiet: fen, cause: none, seat: 'you', replyLineUci: [], phase: phaseOfFen(fen) });
 }

@@ -37,10 +37,17 @@ import { boardEdgeWords } from '../utils/countWords';
 import { andList } from '../utils/andList';
 import { stemKeyOf } from '../utils/rotateStem';
 import { evalBand } from './evalBand';
+import { mateThreatsAgainst } from './threatOut';
+import { trappedAt } from './trappedPiece';
+import { MATERIAL_VALUE } from './pieceValues';
 
 export type ReasonKind =
   | 'material' | 'king-shelter' | 'king-centre' | 'king-attack' | 'activity' | 'initiative'
-  | 'passer' | 'bishop-pair' | 'space' | 'minor' | 'weak-pawn' | 'guarded-pawn';
+  | 'passer' | 'bishop-pair' | 'space' | 'minor' | 'weak-pawn' | 'guarded-pawn'
+  // The reasons the Danya standing read missed (Coach Build Board, "why one
+  // side is better"): a mate threat, a trapped piece, a queen hit with tempo,
+  // and — on a level board — why it is level.
+  | 'mate-threat' | 'trapped' | 'tempo' | 'balance';
 
 /** A SOFT reason is a quiet plus the engine weighs in tenths of a pawn; a
  *  concrete one (material, a passer, the kings, a pawn falling, the
@@ -49,7 +56,13 @@ const SOFT_REASON: Record<ReasonKind, boolean> = {
   material: false, 'king-shelter': false, 'king-centre': false, 'king-attack': false, initiative: false,
   passer: false, 'weak-pawn': false,
   activity: true, 'bishop-pair': true, space: true, minor: true, 'guarded-pawn': true,
+  'mate-threat': false, trapped: false, tempo: true, balance: true,
 };
+/** A reason the engine's best line plays on (its moves touch the reason's
+ *  squares in the first plies) is evidenced by the line: it ranks higher. */
+const LINE_EVIDENCE_PLIES = 6;
+const LINE_EVIDENCE_WEIGHT = 40;
+const PIECE_NAME: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen' };
 
 export interface VerdictReason {
   kind: ReasonKind;
@@ -245,6 +258,23 @@ export function boardReasons(fen: string, student: Color, lines: readonly Initia
     }
   }
 
+  // ── A CLAMPED KINGSIDE ── (space on one wing: two pawns of x past the middle
+  // on the f–h files, each blocked by a pawn of y — the engine's space on
+  // the wing it attacks, which the centre count does not see)
+  if (!spaceSide) {
+    for (const x of ['w', 'b'] as const) {
+      const y = other(x);
+      const deep = board.findPiece({ type: 'p', color: x }).filter((sq) => 'fgh'.includes(sq[0]) && (x === 'w' ? Number(sq[1]) >= 5 : Number(sq[1]) <= 4))
+        .filter((sq) => { const front = `${sq[0]}${Number(sq[1]) + (x === 'w' ? 1 : -1)}` as Square; const p = board.get(front); return !!p && p.type === 'p' && p.color === y; })
+        .sort();
+      if (deep.length >= 2) {
+        const clause = `${OWN(x, student)} pawns on ${andList(deep)} clamp ${OWN(y, student)} kingside`;
+        out.push({ kind: 'space', side: x, weight: 60, clause, sentence: `${cap(clause)}.`, squares: deep as Square[] });
+        break;
+      }
+    }
+  }
+
   // ── KNIGHT AGAINST BISHOP ──
   const mm = (() => { try { return minorMatchupOn(fen); } catch { return null; } })();
   if (mm) {
@@ -276,6 +306,60 @@ export function boardReasons(fen: string, student: Color, lines: readonly Initia
   if (ini) {
     out.push({ kind: 'initiative', side: ini.side, weight: 130, clause: `${WHO(ini.side, student)} have the initiative`,
       sentence: initiativeLine(ini, student, stemKeyOf(fen)), squares: ini.squares });
+  }
+
+  for (const x of ['w', 'b'] as const) {
+    const y = other(x);
+    const own = OWN(x, student); const foe = OWN(y, student);
+    // ── A MATE THREAT ── (x mates next if it were x's move: `threatOut`)
+    const mate = (() => { try { return mateThreatsAgainst(fen, y).moves[0] ?? null; } catch { return null; } })();
+    if (mate && !board.inCheck()) {
+      const piece = board.get(mate.from as Square);
+      if (piece) {
+        const clause = `${own} ${PIECE_NAME[piece.type] ?? 'pawn'} threatens mate on ${mate.to}`;
+        out.push({ kind: 'mate-threat', side: x, weight: 220, clause, sentence: `${cap(clause)}.`, squares: [mate.from as Square, mate.to as Square] });
+      }
+    }
+    // ── A TRAPPED PIECE ── (one of y's pieces with no safe square: `trappedPiece`)
+    for (const cell of board.board().flat()) {
+      if (!cell || cell.color !== y || !PIECE_NAME[cell.type]) continue;
+      const t = (() => { try { return trappedAt(fen, cell.square); } catch { return null; } })();
+      if (!t) continue;
+      const clause = `${foe} ${PIECE_NAME[cell.type]} on ${cell.square} is trapped`;
+      out.push({ kind: 'trapped', side: x, weight: (MATERIAL_VALUE[cell.type] ?? 3) * 80, clause,
+        sentence: `${cap(clause)}: it has no safe square.`, squares: [cell.square, t.attackerSquare as Square] });
+      break;
+    }
+  }
+  // ── A QUEEN HIT WITH TEMPO ── (the side to move has a safe quiet move that
+  // attacks their queen with a lesser piece: the queen must move again)
+  {
+    const x = board.turn(); const y = other(x);
+    const q = board.findPiece({ type: 'q', color: y })[0];
+    if (q && !board.inCheck()) {
+      // The hit the best line plays first, when it is one: that is the evidence.
+      const lineFirst = lines?.[0]?.moves?.[0]?.slice(0, 4) ?? '';
+      const moves = board.moves({ verbose: true }).sort((a, b) => Number(`${b.from}${b.to}` === lineFirst) - Number(`${a.from}${a.to}` === lineFirst));
+      for (const m of moves) {
+        if (m.captured || m.piece === 'k' || (MATERIAL_VALUE[m.piece] ?? 9) >= 9) continue;
+        const b = new Chess(fen); b.move(m.san);
+        if (b.inCheck() || !b.attackers(q as Square, x).includes(m.to as Square)) continue;
+        // Safe where it lands: nothing of theirs takes it for free.
+        const defended = b.attackers(m.to as Square, x).length > 0;
+        const attacked = b.attackers(m.to as Square, y).length > 0;
+        if (attacked && !defended) continue;
+        const own = OWN(x, student); const foe = OWN(y, student);
+        const clause = `${own} ${PIECE_NAME[m.piece] ?? 'pawn'} can hit ${foe} queen on ${q} with tempo`;
+        out.push({ kind: 'tempo', side: x, weight: 50, clause, sentence: `${cap(clause)}.`, squares: [m.from as Square, m.to as Square, q as Square] });
+        break;
+      }
+    }
+  }
+  // ── RANKED BY THE LINE ── a reason the best line plays on carries more.
+  const line = lines?.[0]?.moves?.slice(0, LINE_EVIDENCE_PLIES) ?? [];
+  if (line.length) {
+    const touched = new Set(line.flatMap((u) => [u.slice(0, 2), u.slice(2, 4)]));
+    for (const r of out) if (r.squares.some((sq) => touched.has(sq))) r.weight += LINE_EVIDENCE_WEIGHT;
   }
   return out;
 }
@@ -358,6 +442,18 @@ export function verdictWithReasons(input: {
       const plus = (c: Color): VerdictReason | undefined => sayable.filter((r) => r.side === c && r.kind !== 'guarded-pawn').sort(byWeight)[0];
       const a = plus(input.student); const b = plus(other(input.student));
       if (a && b) picked = [a, b];
+    }
+    // WHY A LEVEL BOARD IS LEVEL (Coach Build Board: "equal positions say why
+    // they are equal"): with nothing of the kind above, the board's own
+    // counts — material level, and neither king under fire.
+    if (picked.length === 0 && !material && !input.said.has('balance')) {
+      const kingsQuiet = !all.some((r) => r.kind === 'king-attack' || r.kind === 'king-shelter' || r.kind === 'king-centre' || r.kind === 'mate-threat');
+      if (kingsQuiet) {
+        let kings: Square[] = [];
+        try { const b = new Chess(input.fen); kings = [...b.findPiece({ type: 'k', color: 'w' }), ...b.findPiece({ type: 'k', color: 'b' })]; } catch { kings = []; }
+        picked = [{ kind: 'balance', side: input.student, weight: 0, clause: 'material is level and neither king is under fire',
+          sentence: 'Material is level, and neither king is under fire.', squares: kings }];
+      }
     }
   }
   if (picked.length === 0) return null;
