@@ -44,6 +44,9 @@ import type { IntroTense } from '../utils/moveIntro';
 import type { ImportanceTier } from './narrationImportance';
 import { writerFor, momentPosture, plainThreatsSeenFor } from './writerRegister';
 import { readBoardAll, pictureConclusionsOf } from './boardComputers';
+import { discoveredAttacks } from './discoveredAttack';
+import { answeringMove } from './answeringMove';
+import { answeringMoveWords, discoveredAttackWords } from './teachingSentence';
 import { tellPictureFacts } from './planThread';
 import { threadsOfRead, type ReadStory } from './gameStory';
 import { evalBand } from './evalBand';
@@ -203,6 +206,22 @@ export async function boardReadFacts(i: BoardReadInput): Promise<BoardFactSet> {
   if (target) facts.push({ from: 'position', kind: 'target', text: targetLine(target, i.fen, 'your'), squares: [target.square] });
   const theirTarget = opponentTargets(i.fen, them).find((t) => t.attackers.length + t.reachers.length > t.guards.length);
   if (theirTarget) facts.push({ from: 'position', kind: 'their-target', text: targetLine(theirTarget, i.fen, 'their'), squares: [theirTarget.square] });
+
+  // THE DISCOVERED ATTACK, PROVEN (`discoveredAttack`): the side to move's,
+  // and theirs on the board handed to them — each only when every reply still
+  // loses material, with its line. THE ANSWERING MOVE (`answeringMove`): the
+  // one move that holds against their threat, every natural other failing.
+  {
+    const key = stemKeyOf(`read|${i.fen.split(' ').slice(0, 2).join(' ')}`);
+    const names = !i.withhold;
+    const ownDisc = (() => { try { return discoveredAttacks(i.fen)[0] ?? null; } catch { return null; } })();
+    if (ownDisc) facts.push({ from: 'position', kind: mine ? 'priority' : 'must-defend', text: discoveredAttackWords(ownDisc, mine, names, key), computer: 'discoveredAttack', squares: [ownDisc.from, ownDisc.to, ownDisc.uncovered.square, ownDisc.target.square], line: lineUcis(i.fen, ownDisc.line) });
+    const passFen = flipSideToMove(i.fen);
+    const theirDisc = passFen && mine ? (() => { try { return discoveredAttacks(passFen)[0] ?? null; } catch { return null; } })() : null;
+    if (theirDisc) facts.push({ from: 'position', kind: 'must-defend', text: discoveredAttackWords(theirDisc, false, true, key), computer: 'discoveredAttack', squares: [theirDisc.from, theirDisc.to, theirDisc.uncovered.square, theirDisc.target.square] });
+    const answer = mine ? (() => { try { return answeringMove(i.fen); } catch { return null; } })() : null;
+    if (answer) facts.push({ from: 'position', kind: 'must-defend', text: answeringMoveWords(answer, true, names, key), computer: 'answeringMove', squares: [answer.from, answer.to, answer.target.square] });
+  }
 
   for (const c of pf.candidates) {
     if (i.withhold && c.kind === 'deliberation') continue;
@@ -574,4 +593,11 @@ export function gameBehind(history: readonly string[], fen: string): { history: 
   try { for (const san of history) { before = b.fen(); b.move(san); } } catch { return { history: [], theirLast: null }; }
   if (b.fen().split(' ').slice(0, 4).join(' ') !== fen.split(' ').slice(0, 4).join(' ')) return { history: [], theirLast: null };
   return { history: [...history], theirLast: { fenBefore: before, san: history[history.length - 1] } };
+}
+
+/** SAN moves played from `fen` as UCI (a fact's line). */
+function lineUcis(fen: string, sans: readonly string[]): string[] {
+  const out: string[] = [];
+  try { const c = new Chess(fen); for (const san of sans) { const m = c.move(san); out.push(`${m.from}${m.to}${m.promotion ?? ''}`); } } catch { /* the playable prefix */ }
+  return out;
 }

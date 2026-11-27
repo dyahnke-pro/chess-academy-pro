@@ -2191,3 +2191,51 @@ const PIECE_WORD: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop'
 export function mastersBreakPlanWords(mine: boolean, brk: string): string {
   return `${mine ? 'Your' : 'Their'} plan in the master games: the break ${brk}.`;
 }
+
+// ── THE DISCOVERED ATTACK AND THE ANSWERING MOVE ───────────────────────────
+const PIECE_NAMES: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+/** A discovered attack that wins by force (`discoveredAttack`), from the
+ *  student's seat. `names`: the move may be named (a read the student asked
+ *  for, a lesson); otherwise the pieces only. */
+export function discoveredAttackWords(
+  d: { san: string; uncovered: { square: string; piece: string }; target: { square: string; piece: string }; mate: boolean },
+  mine: boolean, names: boolean, key: number,
+): string {
+  const own = mine ? 'your' : 'their'; const foe = mine ? 'their' : 'your';
+  const opens = `${own} ${PIECE_NAMES[d.uncovered.piece]} on ${d.uncovered.square} at ${foe} ${PIECE_NAMES[d.target.piece]} on ${d.target.square}`;
+  const holds = d.mate ? 'and every reply runs into mate' : 'and every reply still loses material';
+  if (!mine) return rotateStem([`Watch for their discovered attack, ${d.san}: it uncovers ${opens}.`, `Their ${d.san} would uncover ${opens}, ${holds}.`], key);
+  return names
+    ? rotateStem([`${d.san} is a discovered attack: it uncovers ${opens}, ${holds}.`, `A discovered attack is here: ${d.san} opens ${opens}, ${holds}.`], key)
+    : rotateStem([`A discovered attack is here: one move opens ${opens}, ${holds}.`, `Look for the discovered attack that opens ${opens}.`], key);
+}
+/** The one answer to a threat (`answeringMove`), from the student's seat. */
+export function answeringMoveWords(
+  a: { san: string; target: { square: string; piece: string }; failed: number },
+  mine: boolean, names: boolean, key: number,
+): string {
+  const own = mine ? 'your' : 'their';
+  const piece = `${own} ${PIECE_NAMES[a.target.piece]} on ${a.target.square}`;
+  if (!names) return rotateStem([`Only one move holds ${piece}: every other answer loses it.`, `${openSentence(piece)} has one answer, and the natural others all fail.`], key);
+  return rotateStem([`Only ${a.san} holds ${piece}: every other answer loses it.`, `${a.san} is the one answer for ${piece}. The natural others all fail.`], key);
+}
+
+// ── THE STANDING'S NEW REASONS (`verdictWithReasons`) ──────────────────────
+/** A reason as a clause (after a verdict) and as its own sentence, from the
+ *  student's seat. `own`/`foe`: "your"/"their" for the side the reason
+ *  favours and the other side. */
+export function standingReasonWords(
+  r: { kind: 'mate-threat'; own: string; piece: string; square: string }
+    | { kind: 'trapped'; foe: string; piece: string; square: string }
+    | { kind: 'tempo'; own: string; foe: string; piece: string; queen: string }
+    | { kind: 'clamp'; own: string; foe: string; pawns: string }
+    | { kind: 'balance' },
+): { clause: string; sentence: string } {
+  switch (r.kind) {
+    case 'mate-threat': { const c = `${r.own} ${r.piece} threatens mate on ${r.square}`; return { clause: c, sentence: `${openSentence(c)}.` }; }
+    case 'trapped': { const c = `${r.foe} ${r.piece} on ${r.square} is trapped`; return { clause: c, sentence: `${openSentence(c)}: it has no safe square.` }; }
+    case 'tempo': { const c = `${r.own} ${r.piece} can hit ${r.foe} queen on ${r.queen} with tempo`; return { clause: c, sentence: `${openSentence(c)}.` }; }
+    case 'clamp': { const c = `${r.own} pawns on ${r.pawns} clamp ${r.foe} kingside`; return { clause: c, sentence: `${openSentence(c)}.` }; }
+    case 'balance': return { clause: 'material is level and neither king is under fire', sentence: 'Material is level, and neither king is under fire.' };
+  }
+}

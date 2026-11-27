@@ -38,6 +38,7 @@ import { andList } from '../utils/andList';
 import { stemKeyOf } from '../utils/rotateStem';
 import { evalBand } from './evalBand';
 import { mateThreatsAgainst } from './threatOut';
+import { standingReasonWords } from './teachingSentence';
 import { trappedAt } from './trappedPiece';
 import { MATERIAL_VALUE } from './pieceValues';
 
@@ -268,8 +269,8 @@ export function boardReasons(fen: string, student: Color, lines: readonly Initia
         .filter((sq) => { const front = `${sq[0]}${Number(sq[1]) + (x === 'w' ? 1 : -1)}` as Square; const p = board.get(front); return !!p && p.type === 'p' && p.color === y; })
         .sort();
       if (deep.length >= 2) {
-        const clause = `${OWN(x, student)} pawns on ${andList(deep)} clamp ${OWN(y, student)} kingside`;
-        out.push({ kind: 'space', side: x, weight: 60, clause, sentence: `${cap(clause)}.`, squares: deep as Square[] });
+        const w = standingReasonWords({ kind: 'clamp', own: OWN(x, student), foe: OWN(y, student), pawns: andList(deep) });
+        out.push({ kind: 'space', side: x, weight: 60, clause: w.clause, sentence: w.sentence, squares: deep as Square[] });
         break;
       }
     }
@@ -316,8 +317,8 @@ export function boardReasons(fen: string, student: Color, lines: readonly Initia
     if (mate && !board.inCheck()) {
       const piece = board.get(mate.from as Square);
       if (piece) {
-        const clause = `${own} ${PIECE_NAME[piece.type] ?? 'pawn'} threatens mate on ${mate.to}`;
-        out.push({ kind: 'mate-threat', side: x, weight: 220, clause, sentence: `${cap(clause)}.`, squares: [mate.from as Square, mate.to as Square] });
+        const w = standingReasonWords({ kind: 'mate-threat', own, piece: PIECE_NAME[piece.type] ?? 'pawn', square: mate.to });
+        out.push({ kind: 'mate-threat', side: x, weight: 220, clause: w.clause, sentence: w.sentence, squares: [mate.from as Square, mate.to as Square] });
       }
     }
     // ── A TRAPPED PIECE ── (one of y's pieces with no safe square: `trappedPiece`)
@@ -325,9 +326,9 @@ export function boardReasons(fen: string, student: Color, lines: readonly Initia
       if (!cell || cell.color !== y || !PIECE_NAME[cell.type]) continue;
       const t = (() => { try { return trappedAt(fen, cell.square); } catch { return null; } })();
       if (!t) continue;
-      const clause = `${foe} ${PIECE_NAME[cell.type]} on ${cell.square} is trapped`;
-      out.push({ kind: 'trapped', side: x, weight: (MATERIAL_VALUE[cell.type] ?? 3) * 80, clause,
-        sentence: `${cap(clause)}: it has no safe square.`, squares: [cell.square, t.attackerSquare as Square] });
+      const w = standingReasonWords({ kind: 'trapped', foe, piece: PIECE_NAME[cell.type], square: cell.square });
+      out.push({ kind: 'trapped', side: x, weight: (MATERIAL_VALUE[cell.type] ?? 3) * 80, clause: w.clause,
+        sentence: w.sentence, squares: [cell.square, t.attackerSquare as Square] });
       break;
     }
   }
@@ -349,8 +350,8 @@ export function boardReasons(fen: string, student: Color, lines: readonly Initia
         const attacked = b.attackers(m.to as Square, y).length > 0;
         if (attacked && !defended) continue;
         const own = OWN(x, student); const foe = OWN(y, student);
-        const clause = `${own} ${PIECE_NAME[m.piece] ?? 'pawn'} can hit ${foe} queen on ${q} with tempo`;
-        out.push({ kind: 'tempo', side: x, weight: 50, clause, sentence: `${cap(clause)}.`, squares: [m.from as Square, m.to as Square, q as Square] });
+        const w = standingReasonWords({ kind: 'tempo', own, foe, piece: PIECE_NAME[m.piece] ?? 'pawn', queen: q });
+        out.push({ kind: 'tempo', side: x, weight: 50, clause: w.clause, sentence: w.sentence, squares: [m.from as Square, m.to as Square, q as Square] });
         break;
       }
     }
@@ -451,8 +452,8 @@ export function verdictWithReasons(input: {
       if (kingsQuiet) {
         let kings: Square[] = [];
         try { const b = new Chess(input.fen); kings = [...b.findPiece({ type: 'k', color: 'w' }), ...b.findPiece({ type: 'k', color: 'b' })]; } catch { kings = []; }
-        picked = [{ kind: 'balance', side: input.student, weight: 0, clause: 'material is level and neither king is under fire',
-          sentence: 'Material is level, and neither king is under fire.', squares: kings }];
+        const w = standingReasonWords({ kind: 'balance' });
+        picked = [{ kind: 'balance', side: input.student, weight: 0, clause: w.clause, sentence: w.sentence, squares: kings }];
       }
     }
   }
