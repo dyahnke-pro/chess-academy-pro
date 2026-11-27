@@ -7958,7 +7958,7 @@ export const BOARD_COMPUTERS = {
         const mine = side === student;
         const names = !mine || namesMoves;
         const claim = `geo:deflection:${d.defender.from}${d.target.square}`;
-        const text = renderDeflection({ mine, names, move: d.move, defender: d.defender.piece, from: d.defender.from, target: d.target.piece, square: d.target.square, follow: d.follow, stem: stemKeyOf(claim) });
+        const text = renderDeflection({ mine, names, now: board === fen, move: d.move, defender: d.defender.piece, from: d.defender.from, target: d.target.piece, square: d.target.square, follow: d.follow, stem: stemKeyOf(claim) });
         const squares = names ? [d.bait, d.defender.from, d.target.square] : [d.defender.from, d.target.square];
         const proof = names ? legalLineProof(board, d.line, lineSeatAt(board, student), true) ?? squaresProof(text, squares) ?? NO_PROOF.description
           : squaresProof(text, squares) ?? NO_PROOF.description;

@@ -607,11 +607,28 @@ export function renderAttackLeader(t: {
 }
 
 /** A deflection (`deflection.ts`): the forcing move, the guard it pulls off
- *  its square, and what lands there. */
+ *  its square, and what lands there. `now`: the side has the move on the
+ *  board on screen (every answer loses); otherwise it is the side's threat
+ *  (read handed the move), said as "would" — the other side moves first. */
 export function renderDeflection(t: {
-  mine: boolean; names: boolean; move: string; defender: string; from: string; target: string; square: string; follow: string; stem: number;
+  mine: boolean; names: boolean; now: boolean; move: string; defender: string; from: string; target: string; square: string; follow: string; stem: number;
 }): string {
   const D = PIECE_WORD[t.defender]; const T = PIECE_WORD[t.target];
+  if (!t.now) {
+    if (t.mine && !t.names) {
+      return `Their ${D} on ${t.from} now has a second job: it guards the ${T} on ${t.square}. A forcing move of yours could pull it away.`;
+    }
+    if (t.mine) {
+      return rotateStem([
+        `Your move threatens ${t.move}: if their ${D} takes back, it leaves the ${T} on ${t.square}, and ${t.follow} would win it.`,
+        `Next you threaten ${t.move}, pulling their ${D} off ${t.square}. Then ${t.follow} would win the ${T} there.`,
+      ], t.stem);
+    }
+    return rotateStem([
+      `Watch their ${t.move}: if your ${D} takes back, it leaves the ${T} on ${t.square}, and ${t.follow} wins it.`,
+      `Your ${D} on ${t.from} is guarding the ${T} on ${t.square}. Their ${t.move} would pull it away, and ${t.follow} would follow.`,
+    ], t.stem);
+  }
   if (t.mine) {
     if (!t.names) {
       return rotateStem([
@@ -625,7 +642,7 @@ export function renderDeflection(t: {
     ], t.stem);
   }
   return rotateStem([
-    `Watch their ${t.move}: if your ${D} takes back, it leaves the ${T} on ${t.square}, and ${t.follow} wins it. Every answer loses material.`,
+    `Their ${t.move} pulls your ${D} off ${t.square}: if it takes back, ${t.follow} wins the ${T} there. Every answer loses material.`,
     `Your ${D} on ${t.from} is guarding the ${T} on ${t.square}. Their ${t.move} pulls it away, and ${t.follow} follows. Every answer loses material.`,
   ], t.stem);
 }

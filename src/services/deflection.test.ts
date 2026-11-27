@@ -39,6 +39,9 @@ describe('the deflection, wired both ways', () => {
     const f = fs.find((x) => x.seat === 'opponent');
     expect(f?.text).toMatch(/Rxd8\+/);
     expect(f?.text).toMatch(/Your queen|your queen/);
+    // Handed the move: it is their threat, the defender moves first — never
+    // "every answer loses" (decision baseline, Colle 800 move 17).
+    expect(f?.text).not.toMatch(/Every answer/);
     expect(f?.skill).toBe('missed-their-deflection');
     expect(isProof(f?.proof)).toBe(true);
     expect(registryPosedFacts(THEIRS, 'b', []).some((x) => x.computer === 'deflectionOn' && x.skill === 'missed-their-deflection')).toBe(true);
@@ -48,6 +51,11 @@ describe('the deflection, wired both ways', () => {
     expect(f?.text).not.toMatch(/Ne7|Qxd8/);
     expect(f?.skill).toBe('missed-your-deflection');
     expect(f?.claims).toContain('geo:deflection:d7d8');
+  });
+  it('on the board with the move, the proof against every answer is said', () => {
+    const f = readBoardAll('deflection', { fen: MINE, student: 'w', namesMoves: true }).find((x) => x.seat === 'student');
+    expect(f?.text).toMatch(/Ne7\+/);
+    expect(f?.text).toMatch(/Every answer loses material/);
   });
   it('the motif row has its their-side tag at last', () => {
     expect(MOTIFS.deflection.theirs).toBe('missed-their-deflection');
