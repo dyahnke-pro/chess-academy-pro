@@ -55,6 +55,6 @@ describe('learnThreatVoice', () => {
 
 describe('recordThreatAnswersAtMove', () => {
   it('never throws, whatever the board', () => {
-    expect(() => recordThreatAnswersAtMove({ fen: 'not a fen', prevFen: null, playedSan: 'e4', said: null, gameId: null })).not.toThrow();
+    expect(() => recordThreatAnswersAtMove({ fen: 'not a fen', prevFen: null, playedSan: 'e4', said: null, gameId: null, studentSeat: 'white' })).not.toThrow();
   });
 });

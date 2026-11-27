@@ -596,9 +596,10 @@ export function pinOn(b: Chess, side: Color): { square: Square; piece: PieceSymb
 const OPENED_FILE: readonly RepairState[] = ['file-opened'];
 
 /** A repair state's own board check for a move, the way the composer reads
- *  it (the quiet end of the reply line): its fills, or null. For the board
- *  checks' tests and the recovery audit. */
-export function repairFillsFor(state: RepairState, x: { fenBefore: string; playedSan: string; seat: 'you' | 'them'; replyLineUci: readonly string[]; cause: MistakeCause }): Fills | null {
+ *  it (the quiet end of the reply line): its fills, or null. A test seam onto
+ *  the private `repairApplies`, so each board check is proven on real boards;
+ *  production reads them through `repairFor`. */
+export function repairFillsForTests(state: RepairState, x: { fenBefore: string; playedSan: string; seat: 'you' | 'them'; replyLineUci: readonly string[]; cause: MistakeCause }): Fills | null {
   let after: Chess; let mover: Color;
   try { after = new Chess(x.fenBefore); mover = after.turn(); if (!after.move(x.playedSan)) return null; } catch { return null; }
   const student: Color = x.seat === 'you' ? mover : (mover === 'w' ? 'b' : 'w');

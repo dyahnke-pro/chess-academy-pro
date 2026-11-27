@@ -399,7 +399,7 @@ describe('an inaccuracy no skill names is not logged (2026-10-18)', () => {
     const quiet = await captureMisconception({
       classifyInput: { fen: '8/8/4k3/8/8/4K3/8/8 w - - 0 50', playedSan: 'Kd3' },
       source: 'auto-analysis', shouldCount: false,
-      context: { fen: '8/8/4k3/8/8/4K3/8/8 w - - 0 50', playedSan: 'Kd3', grade: 'inaccuracy' },
+      context: { studentSeat: 'white', fen: '8/8/4k3/8/8/4K3/8/8 w - - 0 50', playedSan: 'Kd3', grade: 'inaccuracy' },
     });
     expect(quiet.classification?.tag).toBe('other');
     expect(quiet.logged).toBe(false);

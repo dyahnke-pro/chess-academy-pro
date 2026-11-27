@@ -4,7 +4,7 @@
 > regenerates this and fails the push if it differs, which is how the map is
 > proven FRESH rather than merely present. Read it before you change the file.
 
-**1058 lines · 30 exports · 8 importers · 7 tests · 1 audits**
+**1059 lines · 30 exports · 8 importers · 7 tests · 1 audits**
 
 ## Locked rules that govern this surface
 
@@ -59,7 +59,7 @@ _No CLAUDE.md section names this file or its exports. That is itself worth knowi
 ### `pinOn` (function) — 1 call site
 - `src/services/recoveryChecks.test.ts:23`
 
-### `repairFillsFor` (function) — 1 call site
+### `repairFillsForTests` (function) — 1 call site
 - `src/services/repairStates.round2.test.ts:32`
 
 ### `habitTag` (function) — 0 call sites

@@ -1,8 +1,8 @@
 {
  "about": "Which teaching computer reaches which surface, by a static call path from each surface root (scripts/computer-reach.mjs; the list is scripts/computer-reach/computers.json). learn: yes = through the focus runner, door = computed in a Learn turn and decided by Learn's turn door (spoken when the door keeps it); a door-only row says why in `door` (an adapter of computers the other surfaces read, or Learn-only by design).",
  "graph": {
-  "files": 1805,
-  "nodes": 18529
+  "files": 1816,
+  "nodes": 18630
  },
  "totals": {
   "computers": 343,
@@ -14,8 +14,8 @@
   "missingFromCode": 0,
   "surfaces": {
    "learn": {
-    "yes": 31,
-    "door": 233,
+    "yes": 34,
+    "door": 230,
     "no": 79
    },
    "review": {
@@ -1765,7 +1765,7 @@
    "fn": "classifyPhase",
    "says": "Opening / middlegame / endgame for a position (openingEnd for opening; queens off or bare king + piece for endgame)",
    "origin": "map",
-   "learn": "door",
+   "learn": "yes",
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
@@ -2401,7 +2401,7 @@
    "fn": "kingAttack",
    "says": "Attackers vs defenders of the enemy king zone (pin-aware), and whether the student's move is an attacking move (takes a shield pawn, removes",
    "origin": "map",
-   "learn": "door",
+   "learn": "yes",
    "review": "yes",
    "lesson": "yes",
    "chat": "yes",
@@ -4424,7 +4424,7 @@
    "fn": "detectPhaseTransition",
    "says": "The ply the game crosses into middlegame or endgame (fires once per boundary per game)",
    "origin": "map",
-   "learn": "door",
+   "learn": "yes",
    "review": "yes",
    "lesson": "no",
    "chat": "no",

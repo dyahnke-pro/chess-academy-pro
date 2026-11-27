@@ -48,6 +48,7 @@ const move = (over: Record<string, unknown> = {}) => ({
   gamePhase: 'opening' as const,
   moveNumber: 2,
   playerColor: 'black' as const,
+  studentSeat: 'black' as const,
   inBook: false,
   learned: true,
   ...over,

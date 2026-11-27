@@ -20,7 +20,7 @@ describe('autoAnalyzeBlunders', () => {
         { fen: FEN, playedSan: 'Ng4', bestSan: 'Bb5', cpLoss: 250, gamePhase: 'opening', moveNumber: 3 },
         { fen: FEN, playedSan: 'Bxf7+', bestSan: 'O-O', cpLoss: 320, gamePhase: 'middlegame', moveNumber: 12 },
       ],
-      { openingId: 'ruy-lopez', sourceGameId: 'g1', learned: true },
+      { openingId: 'ruy-lopez', sourceGameId: 'g1', learned: true, playerColor: 'white' },
     );
 
     expect(r.classified).toBe(2);
@@ -34,14 +34,14 @@ describe('autoAnalyzeBlunders', () => {
 
   it("counts a 'none' classification as neither classified nor logged", async () => {
     mocked.mockResolvedValueOnce({ classification: { tag: 'none', coachNote: 'fine' }, coachNote: 'fine', logged: false });
-    const r = await autoAnalyzeBlunders([{ fen: FEN, playedSan: 'Bb5' }], { learned: true });
+    const r = await autoAnalyzeBlunders([{ fen: FEN, playedSan: 'Bb5' }], { learned: true, playerColor: 'white' });
     expect(r.classified).toBe(0);
     expect(r.logged).toBe(0);
   });
 
   it('classifies but does not log on an unlearned line (count-against gate)', async () => {
     mocked.mockResolvedValueOnce({ classification: { tag: 'missed-tactic', coachNote: 'z' }, coachNote: 'z', logged: false });
-    const r = await autoAnalyzeBlunders([{ fen: FEN, playedSan: 'h3' }], { learned: false });
+    const r = await autoAnalyzeBlunders([{ fen: FEN, playedSan: 'h3' }], { learned: false, playerColor: 'white' });
     expect(r.classified).toBe(1);
     expect(r.logged).toBe(0);
     expect(mocked.mock.calls[0][0].shouldCount).toBe(false);
@@ -50,7 +50,7 @@ describe('autoAnalyzeBlunders', () => {
   it('a slip is dated by the game it was played in (game date + ply), never the analysis time', async () => {
     mocked.mockResolvedValueOnce({ classification: { tag: 'hung-material', coachNote: 'x' }, coachNote: 'x', logged: true });
     const played = Date.parse('2025-03-04');
-    await autoAnalyzeBlunders([{ fen: FEN, playedSan: 'Ng4', bestSan: 'Bb5', cpLoss: 250 }], { sourceGameId: 'g1', learned: true, playedAt: played });
+    await autoAnalyzeBlunders([{ fen: FEN, playedSan: 'Ng4', bestSan: 'Bb5', cpLoss: 250 }], { sourceGameId: 'g1', learned: true, playedAt: played, playerColor: 'white' });
     expect(mocked.mock.calls[0][0].context.playedAt).toBe(played + 4);
   });
 });
@@ -64,14 +64,14 @@ describe('a background pass hands the thread back between rows (the Learn freeze
     });
     await autoAnalyzeBlunders(
       [{ fen: FEN, playedSan: 'Ng4' }, { fen: FEN, playedSan: 'h3' }, { fen: FEN, playedSan: 'a3' }],
-      { learned: true, betweenRows: async () => { order.push('yield'); } },
+      { learned: true, playerColor: 'white', betweenRows: async () => { order.push('yield'); } },
     );
     expect(order).toEqual(['row Ng4', 'yield', 'row h3', 'yield', 'row a3']);
   });
 
   it('NEGATIVE: a foreground caller passes no hook and nothing waits', async () => {
     mocked.mockResolvedValue({ classification: { tag: 'hung-material', coachNote: 'x' }, coachNote: 'x', logged: true });
-    const r = await autoAnalyzeBlunders([{ fen: FEN, playedSan: 'Ng4' }, { fen: FEN, playedSan: 'h3' }], { learned: true });
+    const r = await autoAnalyzeBlunders([{ fen: FEN, playedSan: 'Ng4' }, { fen: FEN, playedSan: 'h3' }], { learned: true, playerColor: 'white' });
     expect(r.logged).toBe(2);
   });
 });

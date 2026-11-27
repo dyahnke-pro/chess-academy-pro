@@ -95,7 +95,7 @@ describe('useDiscussionPractice — Play stays pure (non-interruptive)', () => {
         prompted: false,
         coachMade: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
-        playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening',
+        playerColor: 'white', studentSeat: 'white', inBook: false, learned: true, gamePhase: 'opening',
       });
     });
     expect(result.current.phase).toBe('idle');
@@ -115,7 +115,7 @@ describe('useDiscussionPractice — Learn (interruptive)', () => {
         prompted: false,
         coachMade: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
-        playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening',
+        playerColor: 'white', studentSeat: 'white', inBook: false, learned: true, gamePhase: 'opening',
         studentRating: 1200,
       });
     });
@@ -154,7 +154,7 @@ describe('useDiscussionPractice — Learn (interruptive)', () => {
         prompted: false,
         coachMade: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
-        playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening',
+        playerColor: 'white', studentSeat: 'white', inBook: false, learned: true, gamePhase: 'opening',
         studentRating: 1200,
       });
     });
@@ -177,7 +177,7 @@ describe('useDiscussionPractice — Learn (interruptive)', () => {
         prompted: false,
         coachMade: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
-        playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening',
+        playerColor: 'white', studentSeat: 'white', inBook: false, learned: true, gamePhase: 'opening',
         studentRating: 1200,
       });
     });
@@ -194,7 +194,7 @@ describe('useDiscussionPractice — Learn (interruptive)', () => {
         prompted: false,
         coachMade: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
-        playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening',
+        playerColor: 'white', studentSeat: 'white', inBook: false, learned: true, gamePhase: 'opening',
         studentRating: 1200,
       });
     });
@@ -211,7 +211,7 @@ describe('useDiscussionPractice — Learn (interruptive)', () => {
     const { result } = renderHook(() => useDiscussionPractice(true, { ...opts, source: 'game-review' }));
     act(() => {
       result.current.raiseSlipPrompt({
-        fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
+        fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4', studentSeat: 'white',
         bestSan: 'd4', cpLoss: 200, shouldCount: true, gamePhase: 'opening',
         studentRating: 1500,
       });
@@ -235,7 +235,7 @@ describe('useDiscussionPractice — Learn (interruptive)', () => {
         prompted: false,
         coachMade: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
-        playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening',
+        playerColor: 'white', studentSeat: 'white', inBook: false, learned: true, gamePhase: 'opening',
         studentRating: 800,
       });
     });
@@ -249,7 +249,7 @@ describe('useDiscussionPractice — Learn (interruptive)', () => {
         prompted: false,
         coachMade: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
-        playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening',
+        playerColor: 'white', studentSeat: 'white', inBook: false, learned: true, gamePhase: 'opening',
         studentRating: 1200,
       });
     });
@@ -273,7 +273,7 @@ describe('capability evidence is recorded from LIVE play', () => {
         prompted: false,
         coachMade: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
-        playerColor: 'white', inBook: false, learned: true,
+        playerColor: 'white', studentSeat: 'white', inBook: false, learned: true,
         gamePhase: 'opening', moveNumber: 1, sourceGameId: 'teach-abc',
       });
     });
@@ -293,7 +293,7 @@ describe('capability evidence is recorded from LIVE play', () => {
         prompted: true,
         coachMade: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
-        playerColor: 'white', inBook: false, learned: true,
+        playerColor: 'white', studentSeat: 'white', inBook: false, learned: true,
         gamePhase: 'opening', moveNumber: 1, sourceGameId: 'teach-abc',
       });
     });
@@ -308,7 +308,7 @@ describe('capability evidence is recorded from LIVE play', () => {
         prompted: false,
         coachMade: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
-        playerColor: 'white', inBook: false, learned: true,
+        playerColor: 'white', studentSeat: 'white', inBook: false, learned: true,
         gamePhase: 'opening', moveNumber: 1,
       });
     });
@@ -334,13 +334,13 @@ describe('recordGradedMove — the door for an already-graded move', () => {
     const { result } = renderHook(() => useDiscussionPractice(true, { capabilityOrigin: 'play' }));
     act(() => {
       result.current.recordGradedMove({
-        fenBefore: FEN_BEFORE, playedSan: 'e4', moverColor: 'white',
+        fenBefore: FEN_BEFORE, playedSan: 'e4', moverColor: 'white', studentSeat: 'white',
         cpLoss: 0, sourceGameId: 'game-123', seedRating: 400, evalBeforeMover: 20, prompted: false,
       });
     });
     expect(recordMoveEvidence).toHaveBeenCalledTimes(1);
     expect(vi.mocked(recordMoveEvidence).mock.calls[0][0]).toMatchObject({
-      fenBefore: FEN_BEFORE, playedSan: 'e4', moverColor: 'white',
+      fenBefore: FEN_BEFORE, playedSan: 'e4', moverColor: 'white', studentSeat: 'white',
       cpLoss: 0, origin: 'play', prompted: false, sourceGameId: 'game-123',
     });
   });
@@ -349,7 +349,7 @@ describe('recordGradedMove — the door for an already-graded move', () => {
     const { result } = renderHook(() => useDiscussionPractice(true, { capabilityOrigin: 'play' }));
     act(() => {
       result.current.recordGradedMove({
-        fenBefore: FEN_BEFORE, playedSan: 'e4', moverColor: 'white',
+        fenBefore: FEN_BEFORE, playedSan: 'e4', moverColor: 'white', studentSeat: 'white',
         cpLoss: 0, sourceGameId: 'game-123', seedRating: 400, evalBeforeMover: 20, prompted: true,
       });
     });
@@ -360,7 +360,7 @@ describe('recordGradedMove — the door for an already-graded move', () => {
     const { result } = renderHook(() => useDiscussionPractice(true, { capabilityOrigin: 'play' }));
     act(() => {
       result.current.recordGradedMove({
-        fenBefore: FEN_BEFORE, playedSan: 'e4', moverColor: 'white',
+        fenBefore: FEN_BEFORE, playedSan: 'e4', moverColor: 'white', studentSeat: 'white',
         cpLoss: null, sourceGameId: 'game-123', seedRating: 400, evalBeforeMover: 20, prompted: false,
       });
     });
@@ -375,7 +375,7 @@ describe('recordGradedMove — the door for an already-graded move', () => {
       useDiscussionPractice(false, { capabilityOrigin: 'play' }));
     act(() => {
       result.current.recordGradedMove({
-        fenBefore: FEN_BEFORE, playedSan: 'e4', moverColor: 'white',
+        fenBefore: FEN_BEFORE, playedSan: 'e4', moverColor: 'white', studentSeat: 'white',
         cpLoss: 0, sourceGameId: 'game-123', seedRating: 400, evalBeforeMover: 20, prompted: false,
       });
     });
@@ -401,7 +401,7 @@ describe('evaluatePlayerMove moves the student\'s strength estimate', () => {
     await act(async () => {
       await result.current.evaluatePlayerMove({
         prompted: false, coachMade: false, fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
-        playerColor: 'white', inBook: false, learned: false, gamePhase: 'opening',
+        playerColor: 'white', studentSeat: 'white', inBook: false, learned: false, gamePhase: 'opening',
         studentRating: 900, sourceGameId: 'learn-game-1',
       });
     });
@@ -418,7 +418,7 @@ describe('evaluatePlayerMove moves the student\'s strength estimate', () => {
     await act(async () => {
       await result.current.evaluatePlayerMove({
         prompted: true, coachMade: true, fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
-        playerColor: 'white', inBook: false, learned: false, gamePhase: 'opening',
+        playerColor: 'white', studentSeat: 'white', inBook: false, learned: false, gamePhase: 'opening',
         studentRating: 900, sourceGameId: 'learn-game-2',
       });
     });
@@ -431,7 +431,7 @@ describe('evaluatePlayerMove moves the student\'s strength estimate', () => {
     await act(async () => {
       await result.current.evaluatePlayerMove({
         prompted: false, coachMade: false, fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
-        playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening',
+        playerColor: 'white', studentSeat: 'white', inBook: false, learned: true, gamePhase: 'opening',
         studentRating: 1200, liveSessionId: 'opening-play:1',
       });
     });
@@ -444,7 +444,7 @@ describe('evaluatePlayerMove moves the student\'s strength estimate', () => {
     await act(async () => {
       await result.current.evaluatePlayerMove({
         prompted: false, coachMade: false, fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
-        playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening',
+        playerColor: 'white', studentSeat: 'white', inBook: false, learned: true, gamePhase: 'opening',
       });
     });
     expect(recordStrengthMove).not.toHaveBeenCalled();
@@ -468,7 +468,7 @@ describe('useDiscussionPractice — ONE hint dial across surfaces and sessions (
         prompted: false,
         coachMade: false,
         fenBefore: FEN_BEFORE, fenAfter: FEN_AFTER, playedSan: 'e4',
-        playerColor: 'white', inBook: false, learned: true, gamePhase: 'opening', studentRating: 1500,
+        playerColor: 'white', studentSeat: 'white', inBook: false, learned: true, gamePhase: 'opening', studentRating: 1500,
       });
     });
     await waitFor(async () => expect((await recallData('hint-dial', 'student'))?.recent).toEqual([false]));

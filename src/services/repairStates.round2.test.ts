@@ -5,7 +5,7 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
 import games from '../data/model-games.json';
-import { repairFillsFor } from './mistakeLesson';
+import { repairFillsForTests } from './mistakeLesson';
 import type { MistakeCause } from './mistakeCause';
 
 const game = (id: string): string[] => {
@@ -29,6 +29,6 @@ describe('the file a move opens', () => {
   it('file-opened: Fischer–Petrosian, 10.exd5 exd5 opens the e-file for a rook', () => {
     const x = at('mg-fischer-petrosian', 18);
     expect(x.playedSan).toBe('exd5');
-    expect(repairFillsFor('file-opened', { ...x, seat: 'you', cause: cause('positional') })).toEqual({ file: 'e' });
+    expect(repairFillsForTests('file-opened', { ...x, seat: 'you', cause: cause('positional') })).toEqual({ file: 'e' });
   });
 });

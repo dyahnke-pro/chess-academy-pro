@@ -970,9 +970,9 @@
 - _no call sites outside this file — unused, or reached only through a re-export_
 
 ### `renderMistakeSlot` (function) — 3 call sites
-- `src/services/mistakeLesson.ts:628`
-- `src/services/mistakeLesson.ts:833`
-- `src/services/mistakeLesson.ts:964`
+- `src/services/mistakeLesson.ts:629`
+- `src/services/mistakeLesson.ts:834`
+- `src/services/mistakeLesson.ts:965`
 
 ### `THEIR_MOVE_CONSEQUENCE` (const) — 0 call sites
 - _no call sites outside this file — unused, or reached only through a re-export_

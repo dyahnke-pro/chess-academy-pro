@@ -67,6 +67,7 @@ const SLIP = {
   gamePhase: 'opening' as const,
   moveNumber: 2,
   playerColor: 'black' as const,
+  studentSeat: 'black' as const,
   inBook: false,
   learned: true,
 };
@@ -266,6 +267,7 @@ describe('the record prices the move in ONE search (Kg5)', () => {
     gamePhase: 'endgame' as const,
     moveNumber: 39,
     playerColor: 'white' as const,
+    studentSeat: 'white' as const,
     inBook: false,
     learned: true,
   };

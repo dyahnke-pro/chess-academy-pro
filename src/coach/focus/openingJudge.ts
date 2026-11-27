@@ -11,7 +11,7 @@
  *     without a repeat (`neglected-development`).
  * Pure: chess.js only.
  */
-import { Chess, type Color, type Square } from 'chess.js';
+import { Chess, type Color } from 'chess.js';
 import type { MisconceptionTagId } from '../../data/misconceptionTags';
 import { breaksDevelopRule, CASTLING_LOST_PHRASE, DEVELOP_MISS_PHRASE } from '../../missions/checks/developAndCastle';
 import { homeSquaresOf } from '../../services/development';
@@ -40,7 +40,7 @@ export const OPENING_MISS_LINE: Record<'neglected-development' | 'king-stuck-cen
 function allMinorsOut(fen: string, me: Color): boolean {
   const c = new Chess(fen);
   return [...homeSquaresOf('n', me), ...homeSquaresOf('b', me)].every((sq) => {
-    const p = c.get(sq as Square);
+    const p = c.get(sq);
     return !p || p.color !== me || (p.type !== 'n' && p.type !== 'b');
   });
 }
@@ -65,7 +65,7 @@ export function judgeOpeningMove(fenBefore: string, san: string, st: OpeningJudg
     held.add('king-stuck-center');
     verdicts.push({ tag: 'king-stuck-center', outcome: 'held', line: null });
   }
-  const minorLeftHome = (mv.piece === 'n' || mv.piece === 'b') && homeSquaresOf(mv.piece, me).includes(mv.from as Square);
+  const minorLeftHome = (mv.piece === 'n' || mv.piece === 'b') && homeSquaresOf(mv.piece, me).includes(mv.from);
   if (minorLeftHome && !missed.has('neglected-development') && !held.has('neglected-development') && allMinorsOut(c.fen(), me)) {
     held.add('neglected-development');
     verdicts.push({ tag: 'neglected-development', outcome: 'held', line: null });

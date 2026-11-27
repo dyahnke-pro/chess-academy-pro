@@ -45,7 +45,7 @@ describe('captureMisconception', () => {
       classifyInput: { fen: FEN, playedSan: 'Bxf7+', userReason: 'I wanted to attack the king' },
       source: 'discussion-practice',
       shouldCount: true,
-      context: { fen: FEN, playedSan: 'Bxf7+', openingId: 'ruy-lopez' },
+      context: { studentSeat: 'white', fen: FEN, playedSan: 'Bxf7+', openingId: 'ruy-lopez' },
     });
 
     expect(r.logged).toBe(true);
@@ -61,7 +61,7 @@ describe('captureMisconception', () => {
       classifyInput: { fen: FEN, playedSan: 'Ng4' },
       source: 'discussion-practice',
       shouldCount: false,
-      context: { fen: FEN, playedSan: 'Ng4' },
+      context: { studentSeat: 'white', fen: FEN, playedSan: 'Ng4' },
     });
     expect(r.coachNote).toContain('undefended');
     // Now it LOGS so it shows in Thinking Errors — but counted=false, so the
@@ -77,7 +77,7 @@ describe('captureMisconception', () => {
       classifyInput: { fen: FEN, playedSan: 'Bb5' },
       source: 'discussion-practice',
       shouldCount: true,
-      context: { fen: FEN, playedSan: 'Bb5' },
+      context: { studentSeat: 'white', fen: FEN, playedSan: 'Bb5' },
     });
     expect(r.logged).toBe(false);
     expect(mockedLog).not.toHaveBeenCalled();
@@ -89,7 +89,7 @@ describe('captureMisconception', () => {
       classifyInput: { fen: FEN, playedSan: 'a3' },
       source: 'discussion-practice',
       shouldCount: true,
-      context: { fen: FEN },
+      context: { studentSeat: 'white', fen: FEN },
     });
     expect(r.classification).toBeNull();
     expect(r.coachNote).toBe('');

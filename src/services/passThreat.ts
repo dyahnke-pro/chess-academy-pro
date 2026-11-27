@@ -8,7 +8,7 @@
  * Deterministic and pure (chess.js only). A board where the student is in
  * check has no pass (the probe would take a king) and returns null.
  */
-import { Chess, type Color, type Square } from 'chess.js';
+import { Chess, type Color } from 'chess.js';
 import { mustDefendPieces } from './threatOut';
 
 export interface PassThreat {
@@ -84,7 +84,7 @@ const VAL: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
 /** The Review sentence for an answered threat, past tense: what they had if
  *  the student passed, and that the move stopped it. Null when the move did
  *  not answer it (the error computer says that miss). */
-export function passThreatSentence(t: PassThreat, square: Square | string = t.square): string | null {
+export function passThreatSentence(t: PassThreat, square: string = t.square): string | null {
   if (!t.answered) return null;
   return t.kind === 'mate'
     ? `If you had passed, their ${t.attacker} to ${square} would have been mate. Your move stopped it.`
