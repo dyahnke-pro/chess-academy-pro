@@ -68,15 +68,33 @@ describe('the runner in an attack middlegame', () => {
   });
 });
 
-describe('the attack plant', () => {
-  // The H7 game one move earlier is not stored; the plant is read on the H7
-  // board's predecessor as the coach (Black) — two of its moves, one keeps
-  // everything, the other walks into Bxh7+.
-  it('keeps a slip only when the board it leaves poses the attack', async () => {
-    const BEFORE = 'r2qrbk1/pp1n1ppp/2p1pn2/6B1/3P3Q/3B1N2/PPP2PPP/R3R1K1 b - - 8 12';
-    const lines: CoachLine[] = [{ uci: 'h7h6', coachCp: 100, pv: ['h7h6'] }, { uci: 'a7a6', coachCp: -495, pv: ['a7a6', 'd3h7'] }];
-    const read: SlipRead = (fen) => Promise.resolve(fen.startsWith('r2qrbk1/1p1n1ppp/p1p1pn2/') ? { topLines: H7_READ } : { topLines: [] });
-    const { pick, scan } = await findAttackPlant(BEFORE, lines, read);
-    expect(pick, JSON.stringify(scan)).toMatchObject({ uci: 'a7a6', attackUci: 'd3h7' });
+describe('the attack plant — a real slip that opens the coach\'s own king', () => {
+  // The same game, move 12: Black (the coach) played …Bf8 (the H7 board
+  // follows), a slip hanging nothing that leaves Bxh7+. Native Stockfish,
+  // depth 11, on both boards — the reads are stored here.
+  const BF8_BEFORE = 'r2qr1k1/pp1nbppp/2p1pn2/6B1/3P3Q/3B1N2/PPP2PPP/R3R1K1 b - - 8 12';
+  const BF8_AFTER = 'r2qrbk1/pp1n1ppp/2p1pn2/6B1/3P3Q/3B1N2/PPP2PPP/R3R1K1 w - - 9 13';
+  const lines: CoachLine[] = [
+    { uci: 'h7h6', coachCp: -21, pv: ['h7h6', 'g5d2', 'c6c5', 'h4g3', 'f6h5', 'g3h3', 'h5f6', 'd2e3', 'd8c7', 'a1d1', 'c5c4'] },
+    { uci: 'e7f8', coachCp: -459, pv: ['e7f8', 'd3h7', 'f6h7', 'g5d8', 'a8d8', 'f3g5', 'h7g5', 'h4g5', 'd7f6', 'g5a5'] },
+  ];
+  const AFTER_READ = [
+    { moves: ['d3h7', 'f6h7', 'g5d8', 'a8d8'], evaluation: 459, mate: null },
+    { moves: ['d4d5', 'd8b6', 'd5e6', 'e8e6'], evaluation: 167, mate: null },
+    { moves: ['g2g4', 'h7h6', 'g5d2', 'g7g6'], evaluation: 108, mate: null },
+    { moves: ['a1d1', 'h7h6', 'g5c1', 'c6c5'], evaluation: 87, mate: null },
+    { moves: ['c2c4', 'f8e7', 'e1e3', 'd7f8'], evaluation: 81, mate: null },
+  ];
+  const read: SlipRead = (fen) => Promise.resolve(fen.split(' ').slice(0, 2).join(' ') === BF8_AFTER.split(' ').slice(0, 2).join(' ') ? { topLines: AFTER_READ } : { topLines: [] });
+  it('…Bf8 is planted: the board it leaves poses Bxh7+', async () => {
+    expect(new Chess(BF8_BEFORE).move('Bf8').after).toBe(BF8_AFTER);
+    const { pick, scan } = await findAttackPlant(BF8_BEFORE, lines, read);
+    expect(pick, JSON.stringify(scan)).toMatchObject({ uci: 'e7f8', attackUci: 'd3h7', dropCp: 438 });
+  });
+  it('twin: a read that poses no attack plants nothing', async () => {
+    const quiet: SlipRead = () => Promise.resolve({ topLines: AFTER_READ.slice(1) });
+    const { pick, scan } = await findAttackPlant(BF8_BEFORE, lines, quiet);
+    expect(pick).toBeNull();
+    expect(scan['no-attack']).toBe(1);
   });
 });

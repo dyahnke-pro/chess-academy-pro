@@ -82,6 +82,15 @@
  *   F20 a plant asked during a miss streak is easier by one rung per miss;
  *   F21 every paid find shows its burst on screen (the reward canvas painted
  *      within seconds of it), and a rung-up its banner;
+ *   F25 one focus per phase (`focusRotation`): every `learn-focus-skill`
+ *      row's skill belongs to its phase's focus, a row spoke only for the
+ *      phase's pick and only on a miss, one phase-miss line heard per spoken
+ *      row, and every scored skill reached the record (capabilityEvidence);
+ *   F26 the coach's endgame trades (`focus-trade`): only while the student
+ *      leads by a piece, and inside the coach's own window (same strength);
+ *   F27 the attack plant (`focus-attack-plant`): only in a game whose
+ *      middlegame focus is the attack, a planted slip cost at least the slip
+ *      bar and left an attack, and at most one was planted;
  *   F22 the question before the move follows the record (C2/C3): every
  *      `learn-focus-question` row's dial is its state's (red/grey ask, amber
  *      after only, green silent) after the in-game fade (two finds), it was
@@ -187,8 +196,28 @@ const ASKS = new Set([
   'What does their last move threaten?', 'What is their last move aiming at?', 'How safe is your king right now?',
   'Look at their king — what do your checks do?',
 ].map(norm));
+// The phase foci's fixed miss lines (openingJudge / developAndCastle,
+// endgameTechniqueJudge, kingAttackJudge), normalised.
+const PHASE_MISS = new Set([
+  'One move per piece — bring out a new one.',
+  'That gave up castling. Keep your king and rooks home until you castle.',
+  'A passed pawn has to be pushed. In the endgame, ask first whether your passed pawn can move up.',
+  'Rooks belong on the seventh rank and behind passed pawns. Before a quiet move, find your rook its most active square.',
+  'In the endgame the king is a fighting piece. Bring it toward the centre and the pawns.',
+  'Their king was open there. Before a quiet move, ask which piece can join the attack on their king.',
+].map(norm));
+/** Each phase focus's skills (focusRotation.FOCUS_SKILLS); tactics is every
+ *  your-side motif row but the free piece. */
+const PHASE_SKILLS = {
+  opening: new Set(['neglected-development', 'king-stuck-center']),
+  endgame: new Set(['passive-king-endgame', 'passed-pawn-neglected', 'passive-rook']),
+  middlegame: new Set(['missed-king-attack']),
+};
+const SLIP_DROP_CP = 200;
+const TRADE_LEAD_CP = 300;
 function lineKind(text, pregame) {
   const n = norm(text);
+  if (PHASE_MISS.has(n)) return 'phase-miss';
   if (pregame && n === norm(pregame)) return 'announce';
   if (ASKS.has(n)) return 'ask';
   if (n.startsWith('tactics today') && n.endsWith('review has the rest')) return 'end';
@@ -674,12 +703,17 @@ async function playGame(context, listener, engine, student, phase, index) {
   tape.punishes = events.filter((e) => e.kind === 'focus-punish').map((e) => ({ fen: e.fen, ...(parse(e.details) ?? {}) }));
   tape.plants = events.filter((e) => e.kind === 'focus-plant').map((e) => ({ fen: e.fen, ...(parse(e.details) ?? {}) }));
   tape.castle = events.filter((e) => e.kind === 'castle-watch').map((e) => parse(e.details)).filter(Boolean);
+  tape.skillRows = events.filter((e) => e.kind === 'learn-focus-skill').map((e) => parse(e.details)).filter(Boolean);
+  tape.trades = events.filter((e) => e.kind === 'focus-trade').map((e) => parse(e.details)).filter(Boolean);
+  tape.attackPlants = events.filter((e) => e.kind === 'focus-attack-plant').map((e) => parse(e.details)).filter(Boolean);
   tape.doorRows = events.filter((e) => e.kind === 'learn-turn-decision').flatMap((e) => parse(e.details)?.rows ?? []);
   tape.dropRows = events.filter((e) => e.kind === 'learn-turn-dropped').map((e) => parse(e.details)).filter(Boolean);
   tape.moveReads = events.filter((e) => e.kind === 'learn-move-read').map((e) => parse(e.details)).filter(Boolean);
   tape.heldFreePlay = events.filter((e) => e.source === 'learnVoice.held').map((e) => String(e.summary ?? '').slice(0, 160));
   const pickLine = tape.chosen[0]?.line ?? null;
-  tape.kingRows = (await readStore(page, 'capabilityEvidence')).filter((r) => r.tag === 'king-stuck-center' && (r.recordedAt ?? 0) >= startedAt).length;
+  const evidence = (await readStore(page, 'capabilityEvidence')).filter((r) => (r.recordedAt ?? 0) >= startedAt);
+  tape.kingRows = evidence.filter((r) => r.tag === 'king-stuck-center').length;
+  tape.evidenceTags = [...new Set(evidence.map((r) => r.tag))];
   // A drill move is judged by the engine before it is answered (up to ~14s
   // with the second tap): its answer is still a reply to that tap.
   const tapped = (at) => tape.taps.some((t) => at >= t.at && at <= t.at + (t.what === 'replay-move' ? 16_000 : 6_000));
@@ -1063,6 +1097,34 @@ async function main() {
     const rewindOk = backs.every(() => stops.some((c) => c.rewindPly !== null));
     check(`${g} F14 the castling watch blames the king only on the read`, badStops.length === 0 && askBad.length === 0 && quietBad.length === 0 && aheadBad.length === 0 && stopTexts.length === stops.length && reminders.length <= 1 && reminderLines === reminders.length && lateReminder.length === 0 && t.kingRows >= stops.length && rewindOk,
       `${castle.length} row(s): ${castle.map((c) => `ply ${c.ply} ${c.verdict}${c.why ? `/${c.why}` : ''}${c.verdict === 'ahead-quiet' ? ` castling ${c.drop >= 0 ? 'ahead' : 'behind'} by ${Math.abs(c.drop)}` : c.drop !== null ? ` cost ${c.drop}${c.gain !== null ? ` held ${c.gain}` : ''}` : ''}${c.verdict === 'stop' ? ` ${c.losing ? 'losing' : 'cost'}/${c.attack ? 'attack' : 'quiet'} rewind ${c.rewindPly ?? '—'}${c.rewindMoves ? ` (${c.rewindMoves} move${c.rewindMoves > 1 ? 's' : ''})` : ''}` : ''}`).join('; ') || '— (not posed this game)'}; ${stopTexts.length} STOP line(s), ${reminderLines} reminder(s), ${t.kingRows} king-stuck-center row(s); ${backs.length} castle pause(s): ${backs.map((p) => p.chose).join(',') || '—'}${t.noCastle ? '; this game never castled' : ''}${badStops.length ? `; BAD STOP ${badStops.map((c) => c.ply)}` : ''}${askBad.length ? `; THE ASK DOES NOT NAME THE COUNT ${askBad.map((c) => c.ply)}` : ''}${quietBad.length ? `; A QUIET ROW THAT SHOULD HAVE STOPPED ${quietBad.map((c) => c.ply)}` : ''}${aheadBad.length ? `; A LOOK-AHEAD HOLD OVER THE BAR ${aheadBad.map((c) => c.ply)}` : ''}`);
+    // F25 — one focus per phase: the right skills, only the pick spoke, all recorded.
+    {
+      const phases = t.chosen[0]?.phases ?? null;
+      const rows = t.skillRows ?? [];
+      const wrongSkill = rows.filter((r) => !(PHASE_SKILLS[r.phase]?.has(r.tag) || (r.phase === 'middlegame' && /^missed-your-/.test(r.tag))));
+      const badSpoke = rows.filter((r) => r.spoke && (!phases || phases[r.phase]?.skill !== r.tag || r.outcome !== 'broken'));
+      const heard = t.spoken.filter((l) => l.kind === 'phase-miss').length;
+      const spokeRows = rows.filter((r) => r.spoke).length;
+      const unrecorded = rows.filter((r) => !(t.evidenceTags ?? []).includes(r.tag));
+      check(`${g} F25 one focus per phase, scored both ways, only the pick spoke`, !!phases && wrongSkill.length === 0 && badSpoke.length === 0 && heard === spokeRows && unrecorded.length === 0,
+        `phases ${phases ? `${phases.opening?.skill} / ${phases.middlegame?.skill} / ${phases.endgame?.skill}` : 'MISSING'}; ${rows.length} row(s) (${rows.filter((r) => r.outcome === 'held').length} held, ${rows.filter((r) => r.outcome === 'broken').length} missed), ${spokeRows} spoke, ${heard} heard${wrongSkill.length ? `; WRONG SKILL ${wrongSkill.map((r) => `${r.phase}/${r.tag}`)}` : ''}${badSpoke.length ? `; SPOKE OFF THE PICK ${badSpoke.map((r) => r.tag)}` : ''}${unrecorded.length ? `; NOT ON THE RECORD ${unrecorded.map((r) => r.tag)}` : ''}`);
+    }
+    // F26 — the endgame trades: only while the student leads, inside the window.
+    {
+      const trades = t.trades ?? [];
+      const bad = trades.filter((r) => !(typeof r.coachEvalCp === 'number' && r.coachEvalCp <= -TRADE_LEAD_CP && r.cpLoss <= r.windowCp));
+      check(`${g} F26 the coach trades in the ending only while the student leads`, bad.length === 0,
+        `${trades.length} trade(s)${trades.length ? `: ${trades.map((r) => `${r.played} (coach ${r.coachEvalCp}, cpLoss ${r.cpLoss}/${r.windowCp})`).join(', ')}` : ' — (not posed this game)'}${bad.length ? `; OUT OF BOUNDS ${bad.map((r) => r.played)}` : ''}`);
+    }
+    // F27 — the attack plant: only in an attack middlegame, a real slip, once.
+    {
+      const plants = t.attackPlants ?? [];
+      const attackGame = t.chosen[0]?.phases?.middlegame?.focus === 'attack-king';
+      const planted = plants.filter((r) => r.planted);
+      const bad = planted.filter((r) => !(typeof r.dropCp === 'number' && r.dropCp >= SLIP_DROP_CP && typeof r.attack === 'string'));
+      check(`${g} F27 the attack plant only in an attack middlegame, a real slip, once`, (attackGame || plants.length === 0) && bad.length === 0 && planted.length <= 1,
+        `${attackGame ? 'attack' : 'tactics'} middlegame; ${plants.length} ask(s), ${planted.length} planted${planted.length ? `: ${planted.map((r) => `${r.planted} (−${r.dropCp}) → ${r.attack}`).join(', ')}` : ''}${bad.length ? `; NOT A REAL SLIP ${bad.map((r) => r.planted)}` : ''}${!attackGame && plants.length ? '; ASKED OUTSIDE AN ATTACK MIDDLEGAME' : ''}`);
+    }
     // F15 — the tier is the rung.
     const missPauses = t.pauses.filter((p) => p.kind === 'miss' || p.kind === 'show-me');
     const showMe = t.pauses.filter((p) => p.kind === 'show-me');
