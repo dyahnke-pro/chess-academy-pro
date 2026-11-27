@@ -205,6 +205,8 @@ const FIRST_STEP_OF: ReadonlyMap<string, number> = new Map(
 export interface StagedRead {
   first: Promise<string>;
   deep: Promise<string>;
+  /** The kinds of fact each part said, in order (the audit row). */
+  kinds: Promise<{ first: string[]; deep: string[] }>;
 }
 
 /**
@@ -294,8 +296,8 @@ export function composePositionReadStaged(i: PositionReadInput): StagedRead {
   // 2. THE OPENING — the board's own facts, decided by the one decider, said
   //    in the opening's order, then the habit (WO-DANYA-READS-01 group 9: the
   //    routine that finds this board's point next time).
-  const firstP: Promise<{ text: string; said: string[]; habit: boolean }> = (async () => {
-    if (!before.length) return { text: clean([noteLine]), said: [], habit: false };
+  const firstP: Promise<{ text: string; said: string[]; habit: boolean; kinds: string[] }> = (async () => {
+    if (!before.length) return { text: clean([noteLine]), said: [], habit: false, kinds: [] };
     try {
       const read = await boardReadOffThread(input('first', () => Promise.resolve(null)));
       const decided = decideRead(read.facts, await contextOf(i.story?.claims ?? null));
@@ -307,9 +309,9 @@ export function composePositionReadStaged(i: PositionReadInput): StagedRead {
       // What the opening said, so the deep part never says it again: the
       // decider's own keys for the facts said, the habit, and the story's.
       const said = [...(i.story?.claims ?? []), ...opening.flatMap(storyKeys), ...(decided.habit ? decided.said.filter((c) => c.startsWith('habit:')) : [])];
-      return { text: clean([noteLine, ...opening.map((f) => f.text), decided.habit]), said, habit: !!decided.habit };
+      return { text: clean([noteLine, ...opening.map((f) => f.text), decided.habit]), said, habit: !!decided.habit, kinds: [...opening.map((f) => f.kind), ...(decided.habit ? ['habit'] : [])] };
     } catch {
-      return { text: clean([noteLine]), said: [], habit: false };
+      return { text: clean([noteLine]), said: [], habit: false, kinds: [] };
     }
   })();
   const first = firstP.then((r) => (i.isCancelled() ? '' : r.text));
@@ -318,6 +320,7 @@ export function composePositionReadStaged(i: PositionReadInput): StagedRead {
   //    the ones his order asks for, one a step (`readDecider`: the story, the
   //    calm answer, the tempting move refuted), told against what the opening
   //    said.
+  let deepKinds: string[] = [];
   const deep = (async (): Promise<string> => {
     if (!before.length || !readerP) return '';
     let reader: { read: BoardReader; release: () => void } | null = null;
@@ -329,12 +332,15 @@ export function composePositionReadStaged(i: PositionReadInput): StagedRead {
       if (i.isCancelled()) return '';
       const decided = decideRead(read.facts, await contextOf(opening.said));
       const openingText = new Set(opening.text.split(/(?<=[.!?])\s+/).map((t) => t.trim()));
-      return clean([...decided.facts.map((f) => f.text).filter((t) => !openingText.has(t.trim())), opening.habit ? null : decided.habit]);
+      const kept = decided.facts.filter((f) => !openingText.has(f.text.trim()));
+      deepKinds = [...kept.map((f) => f.kind), ...(!opening.habit && decided.habit ? ['habit'] : [])];
+      return clean([...kept.map((f) => f.text), opening.habit ? null : decided.habit]);
     } catch {
       return '';
     } finally {
       reader?.release();
     }
   })();
-  return { first, deep };
+  const kinds = Promise.all([firstP, deep]).then(([f]) => ({ first: f.kinds, deep: deepKinds }));
+  return { first, deep, kinds };
 }

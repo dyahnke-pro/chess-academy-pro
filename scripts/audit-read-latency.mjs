@@ -84,7 +84,12 @@ async function main() {
         for (let k = 1; k < s.length; k++) worst = Math.max(worst, s[k].receivedAt - (s[k - 1].receivedAt + spokenMs(s[k - 1].narrationText)));
         row.worstGapMs = worst;
         row.lines = s.map((e) => `+${e.receivedAt - t0}ms ${e.narrationText}`);
-        row.watchFor = s.some((e) => /^Watch for\b/i.test(e.narrationText));
+        // The read's own row: the kinds each part said. The "watch for" is
+        // their likeliest try after the best move (the their-try step).
+        const composed = listener.getCapturedEvents().filter((e) => e.kind === 'position-read-composed' && e.receivedAt >= t0).at(-1);
+        const kinds = composed ? JSON.parse(composed.details ?? '{}') : null;
+        row.kinds = kinds;
+        row.watchFor = !!kinds && (kinds.deep ?? []).includes('their-refuted');
       } catch (err) {
         row.error = String(err).slice(0, 200);
       }

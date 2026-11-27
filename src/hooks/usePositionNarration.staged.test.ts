@@ -32,6 +32,7 @@ vi.mock('../services/positionReadComposer', () => ({
   composePositionReadStaged: () => ({
     first: Promise.resolve("You're clearly better — you're up a pawn. Their plan: push the pawn to b4."),
     deep: new Promise<string>((r) => { deep.resolve = r; }),
+    kinds: Promise.resolve({ first: ['standing'], deep: ['their-refuted'] }),
   }),
 }));
 

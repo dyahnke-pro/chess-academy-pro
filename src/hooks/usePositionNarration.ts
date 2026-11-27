@@ -353,6 +353,16 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
       };
       if (!(await sayPart(await staged.first, 'first'))) return;
       if (!(await sayPart(await staged.deep, 'deep'))) return;
+      // What each part said, and when the first word went out (the read's
+      // audit row: the latency audit asserts on it).
+      void staged.kinds.then((k) => logAppAudit({
+        kind: 'position-read-composed',
+        category: 'subsystem',
+        source: 'usePositionNarration',
+        summary: `read: ${k.first.length} opening fact(s), ${k.deep.length} deep`,
+        details: JSON.stringify({ first: k.first, deep: k.deep, surface: args.surface }),
+        fen: args.fen,
+      }));
       if (said.length === 0) {
         setCurrentText('');
         return;
